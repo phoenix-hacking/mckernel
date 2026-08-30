@@ -48,6 +48,14 @@ REVIEWED_RUST_ESCAPE_BLOCKS = {
 mod abi;''',
         ),
         (
+            "IHK SMP provider init callback type",
+            '''type IhkSmpProviderInitV2 = extern "C" fn() -> i32;''',
+        ),
+        (
+            "IHK SMP provider exit callback type",
+            '''type IhkSmpProviderExitV2 = extern "C" fn();''',
+        ),
+        (
             "IHK lifecycle value export",
             '''#[export_name = "ihk_provider_lifecycle_v1"]
 pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;''',
@@ -103,6 +111,52 @@ pub static IHK_SMP_PROVIDER_DETACH_V1_EXPORT: IhkExportSymbolRecord = IhkExportS
 };''',
         ),
         (
+            "IHK SMP provider attach v2 ABI",
+            '''#[export_name = "ihk_smp_provider_attach_v2"]
+// SAFETY: The exact nullable function-pointer ABI is validated before either
+// callback is invoked; no Rust object or caller-owned data crosses the export.
+pub extern "C" fn ihk_smp_provider_attach_v2(
+    callback_abi: u32,
+    flags: u32,
+    init: Option<IhkSmpProviderInitV2>,
+    exit: Option<IhkSmpProviderExitV2>,
+) -> i64 {''',
+        ),
+        (
+            "IHK SMP provider attach v2 export record",
+            '''#[export_name = "__export_symbol_ihk_smp_provider_attach_v2"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_ATTACH_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\\0",
+    namespace: *b"MCKERNEL_IHK_V1\\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_attach_v2 as *const () as *const u8,
+};''',
+        ),
+        (
+            "IHK SMP provider detach v2 ABI",
+            '''#[export_name = "ihk_smp_provider_detach_v2"]
+// SAFETY: The token and exact retained exit identity name the sole live v2
+// lease; invariant violations fail stop before provider retirement can return.
+pub extern "C" fn ihk_smp_provider_detach_v2(
+    token: i64,
+    exit: Option<IhkSmpProviderExitV2>,
+) {''',
+        ),
+        (
+            "IHK SMP provider detach v2 export record",
+            '''#[export_name = "__export_symbol_ihk_smp_provider_detach_v2"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_DETACH_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\\0",
+    namespace: *b"MCKERNEL_IHK_V1\\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_detach_v2 as *const () as *const u8,
+};''',
+        ),
+        (
             "IHK loadable version metadata",
             '''#[link_section = ".modinfo"]
 #[used(compiler)]
@@ -117,15 +171,36 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
     ),
     "host-kernel/native-rust/ihk_smp_x86_64.rs": (
         (
+            "IHK SMP init callback type",
+            '''type IhkSmpProviderInitV2 = extern "C" fn() -> i32;''',
+        ),
+        (
+            "IHK SMP exit callback type",
+            '''type IhkSmpProviderExitV2 = extern "C" fn();''',
+        ),
+        (
             "IHK SMP three-symbol provider import",
             '''extern "C" {
     #[link_name = "ihk_provider_lifecycle_v1"]
     static IHK_PROVIDER_LIFECYCLE_V1: u8;
-    #[link_name = "ihk_smp_provider_attach_v1"]
-    fn ihk_smp_provider_attach_v1() -> i64;
-    #[link_name = "ihk_smp_provider_detach_v1"]
-    fn ihk_smp_provider_detach_v1(token: i64);
+    #[link_name = "ihk_smp_provider_attach_v2"]
+    fn ihk_smp_provider_attach_v2(
+        callback_abi: u32,
+        flags: u32,
+        init: Option<IhkSmpProviderInitV2>,
+        exit: Option<IhkSmpProviderExitV2>,
+    ) -> i64;
+    #[link_name = "ihk_smp_provider_detach_v2"]
+    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);
 }''',
+        ),
+        (
+            "IHK SMP init callback ABI",
+            '''extern "C" fn ihk_smp_provider_init_v2() -> i32 {''',
+        ),
+        (
+            "IHK SMP exit callback ABI",
+            '''extern "C" fn ihk_smp_provider_exit_v2() {''',
         ),
         (
             "IHK SMP parameter descriptor section",
@@ -173,6 +248,12 @@ static MCCTRL_BUILTIN_IHK_IMPORT_NAMESPACE: [u8; 33] =
 REVIEWED_RUST_BLOCK_PREFIXES = {
     "IHK locked x86_64 ABI module path": '''#[allow(dead_code, unreachable_pub)]
 ''',
+    "IHK SMP provider init callback type": '''// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and
+// returns only a scalar status consumed before provider publication.
+''',
+    "IHK SMP provider exit callback type": '''// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and
+// returns only after the dependent has completed its scalar lifecycle exit.
+''',
     "IHK lifecycle value export": '''#[doc(hidden)]
 // SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers
 // must import it through MCKERNEL_IHK_V1 and may not treat its value as state.
@@ -200,11 +281,47 @@ REVIEWED_RUST_BLOCK_PREFIXES = {
 // SAFETY: Linux modpost consumes this immutable relocation record to publish
 // the scalar detach function in MCKERNEL_IHK_V1 for the provider lifetime.
 ''',
+    "IHK SMP provider attach v2 ABI": '''#[doc(hidden)]
+// SAFETY: This C ABI accepts only scalars and nullable C-ABI function pointers.
+// The reviewed SMP dependent owns both callback targets for the full returned
+// lease lifetime.  Initialization runs while the registry slot is Publishing;
+// only a zero result permits publication.  Every failed path aborts or retires
+// its reservation and leaves no retained callback identity.
+''',
+    "IHK SMP provider attach v2 export record": '''#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the callback-bound attach function in MCKERNEL_IHK_V1 for the provider lifetime.
+''',
+    "IHK SMP provider detach v2 ABI": '''#[doc(hidden)]
+// SAFETY: The exact callback identity was retained before the named token was
+// published.  The unregister guard first makes the provider Unpublishing and
+// rejects new references.  The callback executes only after all existing open
+// and OS references have drained, remains bound throughout the call, and is
+// cleared only after exit completes and the slot commits to Vacant.
+''',
+    "IHK SMP provider detach v2 export record": '''#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the callback-bound detach function in MCKERNEL_IHK_V1 for the provider lifetime.
+''',
     "IHK loadable version metadata": '''#[cfg(MODULE)]
 #[doc(hidden)]
 ''',
     "IHK built-in version metadata": '''#[cfg(not(MODULE))]
 #[doc(hidden)]
+''',
+    "IHK SMP init callback type": '''// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
+''',
+    "IHK SMP exit callback type": '''// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
+''',
+    "IHK SMP init callback ABI": '''// These callbacks deliberately own lifecycle only.  Returning success from
+// init does not advertise any device operation, OS lease, CPU, memory, IKC, or
+// McKernel behavior.  The IHK provider invokes them before publication and
+// while holding an unpublishing guard respectively.
+// SAFETY: The callback owns no foreign state and returns only a literal errno
+// status through the exact v2 function-pointer ABI.
+''',
+    "IHK SMP exit callback ABI": '''// SAFETY: The callback owns no foreign state and returns only after its local
+// lifecycle diagnostic completes through the exact v2 function-pointer ABI.
 ''',
     "IHK SMP parameter descriptor section": '''#[doc(hidden)]
         ''',
@@ -225,15 +342,25 @@ REVIEWED_RUST_BLOCK_PREFIXES = {
 REVIEWED_RUST_OUTER_BLOCKS = frozenset(
     (
         "IHK locked x86_64 ABI module path",
+        "IHK SMP provider init callback type",
+        "IHK SMP provider exit callback type",
         "IHK lifecycle value export",
         "IHK lifecycle export record",
         "IHK SMP provider attach ABI",
         "IHK SMP provider attach export record",
         "IHK SMP provider detach ABI",
         "IHK SMP provider detach export record",
+        "IHK SMP provider attach v2 ABI",
+        "IHK SMP provider attach v2 export record",
+        "IHK SMP provider detach v2 ABI",
+        "IHK SMP provider detach v2 export record",
         "IHK loadable version metadata",
         "IHK built-in version metadata",
+        "IHK SMP init callback type",
+        "IHK SMP exit callback type",
         "IHK SMP three-symbol provider import",
+        "IHK SMP init callback ABI",
+        "IHK SMP exit callback ABI",
         "IHK SMP parameter descriptor section",
         "IHK SMP loadable parameter metadata",
         "IHK SMP built-in parameter metadata",

@@ -78,8 +78,8 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(
             [
                 "ihk_provider_lifecycle_v1",
-                "ihk_smp_provider_attach_v1",
-                "ihk_smp_provider_detach_v1",
+                "ihk_smp_provider_attach_v2",
+                "ihk_smp_provider_detach_v2",
             ],
             summary["provider_symbols"],
         )
@@ -270,20 +270,20 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         original = source_path.read_text(encoding="utf-8")
         cases = (
             (
-                '#[link_name = "ihk_smp_provider_attach_v1"]',
+                '#[link_name = "ihk_smp_provider_attach_v2"]',
                 '#[link_name = "wrong_attach"]',
             ),
             (
-                "fn ihk_smp_provider_attach_v1() -> i64;",
-                "fn ihk_smp_provider_attach_v1() -> i32;",
+                "        flags: u32,",
+                "        flags: u64,",
             ),
             (
-                '#[link_name = "ihk_smp_provider_detach_v1"]',
+                '#[link_name = "ihk_smp_provider_detach_v2"]',
                 '#[link_name = "wrong_detach"]',
             ),
             (
-                "fn ihk_smp_provider_detach_v1(token: i64);",
-                "fn ihk_smp_provider_detach_v1(token: u64);",
+                "fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);",
+                "fn ihk_smp_provider_detach_v2(token: u64, exit: Option<IhkSmpProviderExitV2>);",
             ),
         )
         for old, new in cases:
@@ -376,8 +376,8 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
         )
-        old = '''        // SAFETY: This non-Copy owner calls the matching provider function\n        // exactly once with the positive token returned by attach.  The\n        // provider fails stop rather than returning with a live entry.\n        unsafe { ihk_smp_provider_detach_v1(self.token) };'''
-        new = '''        /*\n+        // SAFETY: This non-Copy owner calls the matching provider function\n+        // exactly once with the positive token returned by attach.  The\n+        // provider fails stop rather than returning with a live entry.\n+        unsafe { ihk_smp_provider_detach_v1(self.token) };\n+        */'''
+        old = '''        // SAFETY: This non-Copy owner calls the matching provider function\n        // exactly once with the positive token returned by attach and the\n        // retained exit identity.  The provider fails stop rather than\n        // returning with a live entry or callback.\n        unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };'''
+        new = '''        /*\n+        // SAFETY: This non-Copy owner calls the matching provider function\n+        // exactly once with the positive token returned by attach and the\n+        // retained exit identity.  The provider fails stop rather than\n+        // returning with a live entry or callback.\n+        unsafe {\n+            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n+        };\n+        */'''
         self.assertIn(old, source)
         with self.assertRaisesRegex(
             lifecycle.ValidationError, "ownership path|call each imported"
@@ -391,9 +391,9 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             encoding="utf-8"
         )
         mutated = source.replace(
-            'unsafe { ihk_smp_provider_detach_v1(self.token) };',
+            'unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };',
             'pr_err!("provider_lease=raw token={}\\n", self.token);\n'
-            '        unsafe { ihk_smp_provider_detach_v1(self.token) };',
+            '        unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };',
             1,
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "raw token"):

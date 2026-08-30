@@ -76,19 +76,35 @@ EXPECTED_RESOURCE_FOUNDATION = {
     "status": "private-source-bound-policy-foundation",
 }
 EXPECTED_PROVIDER_LEASE = {
-    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
     "callback_payload_reachable": False,
+    "compatibility_exports": [
+        "ihk_smp_provider_attach_v1",
+        "ihk_smp_provider_detach_v1",
+    ],
     "credit_eligible": False,
-    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "detach_symbol": "ihk_smp_provider_detach_v2",
     "device_node_reachable": False,
     "errno_statuses": [-2, -12, -16, -22, -75, -116, -117],
     "gate_status": "TODO",
     "minor": 0,
     "namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+        "arguments": "none",
+        "exit_before_vacate": True,
+        "exit_identity_retained": True,
+        "exit_symbol": "ihk_smp_provider_exit_v2",
+        "init_before_publish": True,
+        "init_symbol": "ihk_smp_provider_init_v2",
+        "operation_callbacks_reachable": False,
+        "raw_data_pointer": False,
+        "unpublishing_guard_across_exit": True,
+    },
     "raw_token_logged": False,
     "rocky_runtime_validated": False,
     "runtime_behavior_proven": False,
-    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
     "token_version": 1,
     "tracker_credit": False,
     "unknown_status_errno": -117,
@@ -717,9 +733,14 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f'    #[link_name = "{anchor}"]\n'
         "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
         f'    #[link_name = "{attach}"]\n'
-        f"    fn {attach}() -> i64;\n"
+        f"    fn {attach}(\n"
+        "        callback_abi: u32,\n"
+        "        flags: u32,\n"
+        "        init: Option<IhkSmpProviderInitV2>,\n"
+        "        exit: Option<IhkSmpProviderExitV2>,\n"
+        "    ) -> i64;\n"
         f'    #[link_name = "{detach}"]\n'
-        f"    fn {detach}(token: i64);\n"
+        f"    fn {detach}(token: i64, exit: Option<IhkSmpProviderExitV2>);\n"
         "}"
     )
 
@@ -753,9 +774,38 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         text, code, provider_import, 1,
         "Rust exact audited three-symbol provider-symbol import",
     )
+    callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+    callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
+    callback_init = 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
+    callback_exit = 'extern "C" fn ihk_smp_provider_exit_v2() {'
     _validate_rust_escape_hatches(
-        text, "Rust lifecycle", allowed_extern_blocks=(provider_import,)
+        text,
+        "Rust lifecycle",
+        allowed_extern_blocks=(
+            callback_init_type,
+            callback_exit_type,
+            provider_import,
+            callback_init,
+            callback_exit,
+        ),
     )
+    callback_bodies = (
+        '''extern "C" fn ihk_smp_provider_init_v2() -> i32 {
+    pr_info!("provider_callback=init status=complete callback_abi=1\\n");
+    0
+}''',
+        '''extern "C" fn ihk_smp_provider_exit_v2() {
+    pr_info!("provider_callback=exit status=complete callback_abi=1\\n");
+}''',
+    )
+    for callback_body in callback_bodies:
+        _require_active_count(
+            text,
+            code,
+            callback_body,
+            1,
+            "Rust scalar-only provider lifecycle callback",
+        )
 
     expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
     let errno = match status {
@@ -789,12 +839,16 @@ struct ProviderLease {
     required_lease_fragments = (
         "impl ProviderLease {",
         "fn attach() -> Result<Self>",
-        "let token = unsafe { ihk_smp_provider_attach_v1() };",
+        "let token = unsafe {\n            ihk_smp_provider_attach_v2(",
+        "IHK_SMP_PROVIDER_CALLBACK_ABI_V1,",
+        "IHK_SMP_PROVIDER_FLAG_SHARED,",
+        "Some(ihk_smp_provider_init_v2),",
+        "Some(ihk_smp_provider_exit_v2),",
         "if token <= 0 {",
         "return Err(provider_status_error(token));",
         "Ok(Self { token })",
         "impl Drop for ProviderLease {",
-        "unsafe { ihk_smp_provider_detach_v1(self.token) };",
+        "unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };",
     )
     for fragment in required_lease_fragments:
         if code.count(fragment) != 1:
@@ -806,6 +860,12 @@ struct ProviderLease {
     if code.count(f"{attach_symbol}(") != 2 or code.count(f"{detach_symbol}(") != 2:
         raise ValidationError(
             "Rust provider lease must call each imported scalar function exactly once"
+        )
+    if code.count("ihk_smp_provider_init_v2") != 2 or code.count(
+        "ihk_smp_provider_exit_v2"
+    ) != 3:
+        raise ValidationError(
+            "Rust provider lifecycle callback definitions and exact retained identities differ"
         )
     for diagnostic in re.finditer(
         r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
@@ -1042,6 +1102,9 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     code = _mask_rust_comments_and_literals(text)
     symbol, attach_symbol, detach_symbol = _provider_symbols(contract)
+    compatibility_attach, compatibility_detach = contract["provider_lease"][
+        "compatibility_exports"
+    ]
     export_record_layout = """pub struct IhkExportSymbolRecord {
     license: [u8; 4],
     namespace: [u8; 16],
@@ -1061,15 +1124,31 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         f'#[export_name = "{symbol}"]',
         f'#[export_name = "__export_symbol_{symbol}"]',
         "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)",
-        "use self::device_registry::IHK_DEVICE_REGISTRY;",
-        f'#[export_name = "{attach_symbol}"]',
-        f'pub extern "C" fn {attach_symbol}() -> i64',
+        "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
+        f'#[export_name = "{compatibility_attach}"]',
+        f'pub extern "C" fn {compatibility_attach}() -> i64',
         "IHK_DEVICE_REGISTRY.attach_provider_token()",
+        f'#[export_name = "__export_symbol_{compatibility_attach}"]',
+        f"symbol: {compatibility_attach} as *const () as *const u8",
+        f'#[export_name = "{compatibility_detach}"]',
+        f'pub extern "C" fn {compatibility_detach}(token: i64)',
+        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        f'#[export_name = "__export_symbol_{compatibility_detach}"]',
+        f"symbol: {compatibility_detach} as *const () as *const u8",
+        'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;',
+        'type IhkSmpProviderExitV2 = extern "C" fn();',
+        f'#[export_name = "{attach_symbol}"]',
+        f'pub extern "C" fn {attach_symbol}(',
+        "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
+        "let init_status = provider_init_status(init());",
+        "reservation.publish()",
         f'#[export_name = "__export_symbol_{attach_symbol}"]',
         f"symbol: {attach_symbol} as *const () as *const u8",
         f'#[export_name = "{detach_symbol}"]',
-        f'pub extern "C" fn {detach_symbol}(token: i64)',
-        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        f'pub extern "C" fn {detach_symbol}(',
+        "let unregister = IHK_DEVICE_REGISTRY\n        .begin_unregister(handle)",
+        "IHK_DEVICE_REGISTRY.snapshot(handle)",
+        "    exit();\n    unregister.commit()",
         f'#[export_name = "__export_symbol_{detach_symbol}"]',
         f"symbol: {detach_symbol} as *const () as *const u8",
     )
@@ -1077,7 +1156,12 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         _require_active_count(
             text, code, fragment, 1, "native IHK provider required fragment"
         )
-    for lease_symbol in (attach_symbol, detach_symbol):
+    for lease_symbol in (
+        compatibility_attach,
+        compatibility_detach,
+        attach_symbol,
+        detach_symbol,
+    ):
         _require_active_count(
             text, code, f'#[export_name = "{lease_symbol}"]', 1,
             "native IHK provider lease symbol",
@@ -1087,27 +1171,42 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
             "native IHK provider lease export record",
         )
     _require_active_count(
-        text, code, '#[link_section = ".export_symbol"]', 3,
+        text, code, '#[link_section = ".export_symbol"]', 5,
         "native IHK provider export_symbol record",
     )
     _require_active_count(
-        text, code, 'license: *b"GPL\\0"', 3,
+        text, code, 'license: *b"GPL\\0"', 5,
         "native IHK provider GPL export",
     )
     _require_active_count(
-        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 3,
+        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 5,
         "native IHK provider versioned namespace",
     )
-    attach_extern = f'pub extern "C" fn {attach_symbol}() -> i64'
-    detach_extern = f'pub extern "C" fn {detach_symbol}(token: i64)'
+    callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+    callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
+    compatibility_attach_extern = (
+        f'pub extern "C" fn {compatibility_attach}() -> i64'
+    )
+    compatibility_detach_extern = (
+        f'pub extern "C" fn {compatibility_detach}(token: i64)'
+    )
+    attach_extern = f'pub extern "C" fn {attach_symbol}('
+    detach_extern = f'pub extern "C" fn {detach_symbol}('
     _validate_rust_escape_hatches(
         text,
         "native IHK provider",
-        allowed_extern_blocks=(attach_extern, detach_extern),
+        allowed_extern_blocks=(
+            callback_init_type,
+            callback_exit_type,
+            compatibility_attach_extern,
+            compatibility_detach_extern,
+            attach_extern,
+            detach_extern,
+        ),
     )
-    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2:
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 4:
         raise ValidationError(
-            "native IHK provider must expose exactly two reviewed C-ABI functions"
+            "native IHK provider must expose exactly four reviewed C-ABI functions"
         )
     for diagnostic in re.finditer(
         r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",

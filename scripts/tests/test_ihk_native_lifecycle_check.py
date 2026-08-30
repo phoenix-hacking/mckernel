@@ -78,6 +78,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_provider_lifecycle_v1",
                 "ihk_smp_provider_attach_v1",
                 "ihk_smp_provider_detach_v1",
+                "ihk_smp_provider_attach_v2",
+                "ihk_smp_provider_detach_v2",
             ],
             summary["provider_symbols"],
         )
@@ -476,7 +478,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         original = source.read_text(encoding="utf-8")
         for old, new in (
             (
-                "use self::device_registry::IHK_DEVICE_REGISTRY;",
+                "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
                 "use self::device_registry::MISSING_DEVICE_REGISTRY;",
             ),
             (
@@ -643,10 +645,10 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         symbols = reviewed_artifact_symbols(summary["provider_symbols"])
         symbols.update(
             {
-                "ihk_smp_provider_attach_v2",
-                "__ksymtab_ihk_smp_provider_attach_v2",
-                "__kstrtab_ihk_smp_provider_attach_v2",
-                "__kstrtabns_ihk_smp_provider_attach_v2",
+                "ihk_smp_provider_attach_v3",
+                "__ksymtab_ihk_smp_provider_attach_v3",
+                "__kstrtab_ihk_smp_provider_attach_v3",
+                "__kstrtabns_ihk_smp_provider_attach_v3",
             }
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed export metadata"):

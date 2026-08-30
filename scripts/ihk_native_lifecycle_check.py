@@ -70,15 +70,29 @@ EXPECTED_SUPPORT_SOURCES = (
     },
 )
 EXPECTED_PROVIDER_LEASE = {
-    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
     "callback_payload_reachable": False,
+    "compatibility_exports": [
+        "ihk_smp_provider_attach_v1",
+        "ihk_smp_provider_detach_v1",
+    ],
     "credit_eligible": False,
-    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "detach_symbol": "ihk_smp_provider_detach_v2",
     "device_node_reachable": False,
     "import_namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+        "arguments": "none",
+        "exit_before_vacate": True,
+        "exit_identity_retained": True,
+        "init_before_publish": True,
+        "operation_callbacks_reachable": False,
+        "raw_data_pointer": False,
+        "unpublishing_guard_across_exit": True,
+    },
     "registry_static": "IHK_DEVICE_REGISTRY",
     "rocky_runtime_validated": False,
-    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
     "token_version": 1,
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -300,6 +314,45 @@ def _require_active_count(text, code, fragment, expected, label):
         )
 
 
+def _require_active_order(text, code, fragments, label):
+    cursor = -1
+    for fragment in fragments:
+        positions = [
+            position
+            for position in _active_fragment_positions(text, code, fragment)
+            if position > cursor
+        ]
+        if not positions:
+            raise ValidationError(f"{label} lacks ordered fragment: {fragment}")
+        cursor = positions[0]
+
+
+def _active_function_body(text, code, signature, label):
+    positions = _active_fragment_positions(text, code, signature)
+    if len(positions) != 1:
+        raise ValidationError(f"{label} signature is not unique active code")
+    opening = code.find("{", positions[0] + len(signature))
+    if opening < 0:
+        raise ValidationError(f"{label} lacks an opening brace")
+    depth = 0
+    for position in range(opening, len(code)):
+        if code[position] == "{":
+            depth += 1
+        elif code[position] == "}":
+            depth -= 1
+            if depth == 0:
+                return code[opening + 1 : position]
+    raise ValidationError(f"{label} lacks a closing brace")
+
+
+def _require_order(text, fragments, label):
+    cursor = -1
+    for fragment in fragments:
+        cursor = text.find(fragment, cursor + 1)
+        if cursor < 0:
+            raise ValidationError(f"{label} lacks ordered fragment: {fragment}")
+
+
 def _rust_string_constant(text: str, name: str) -> str:
     code = _mask_rust_comments_and_literals(text)
     matches = list(re.finditer(
@@ -517,20 +570,36 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     lease = contract["provider_lease"]
     attach = lease["attach_symbol"]
     detach = lease["detach_symbol"]
+    compatibility_attach, compatibility_detach = lease["compatibility_exports"]
     namespace = lease["import_namespace"]
     registry = lease["registry_static"]
     required_provider_fragments = (
-        f"use self::device_registry::{registry};",
-        f'#[export_name = "{attach}"]',
-        f'pub extern "C" fn {attach}() -> i64 {{',
+        f"use self::device_registry::{{{registry}, SharePolicy}};",
+        f'#[export_name = "{compatibility_attach}"]',
+        f'pub extern "C" fn {compatibility_attach}() -> i64 {{',
         f"match {registry}.attach_provider_token()",
         'pr_info!("provider_lease=attach status=live minor=0\\n");',
+        f'#[export_name = "__export_symbol_{compatibility_attach}"]',
+        f"symbol: {compatibility_attach} as *const () as *const u8,",
+        f'#[export_name = "{compatibility_detach}"]',
+        f'pub extern "C" fn {compatibility_detach}(token: i64) {{',
+        f"{registry}.retire_owned_provider_token(token)",
+        '"provider_lease=detach status=vacant minor={} generation={}\\n",',
+        f'#[export_name = "__export_symbol_{compatibility_detach}"]',
+        f"symbol: {compatibility_detach} as *const () as *const u8,",
+        "type IhkSmpProviderInitV2 = extern \"C\" fn() -> i32;",
+        "type IhkSmpProviderExitV2 = extern \"C\" fn();",
+        "static IHK_SMP_PROVIDER_EXIT_V2: AtomicPtr<()>",
+        f'#[export_name = "{attach}"]',
+        f'pub extern "C" fn {attach}(',
+        f"{registry}.reserve(SharePolicy::Shared)",
+        'pr_info!("provider_lease=attach status=live minor=0 callback_abi=1\\n");',
         f'#[export_name = "__export_symbol_{attach}"]',
         f"symbol: {attach} as *const () as *const u8,",
         f'#[export_name = "{detach}"]',
-        f'pub extern "C" fn {detach}(token: i64) {{',
-        f"{registry}.retire_owned_provider_token(token)",
-        '"provider_lease=detach status=vacant minor={} generation={}\\n",',
+        f'pub extern "C" fn {detach}(',
+        f"{registry}.snapshot(handle)",
+        '"provider_lease=detach status=vacant minor={} generation={} callback_abi=1\\n",',
         f'#[export_name = "__export_symbol_{detach}"]',
         f"symbol: {detach} as *const () as *const u8,",
         f"match {registry}.active_count() {{",
@@ -540,22 +609,54 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         _require_active_count(
             text, code, fragment, 1, "IHK provider-lease exact reviewed boundary"
         )
-    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2 or len(
+    attach_body = _active_function_body(
+        text, code, f'pub extern "C" fn {attach}(', "IHK v2 attach"
+    )
+    _require_order(
+        attach_body,
+        (
+            "let init_status = provider_init_status(init());",
+            "reservation.abort()",
+            "IHK_SMP_PROVIDER_EXIT_V2",
+            ".compare_exchange(",
+            "reservation.publish()",
+            f"{registry}.encode_provider_token(handle)",
+        ),
+        "IHK v2 init-before-publish and failed-init rollback",
+    )
+    detach_body = _active_function_body(
+        text, code, f'pub extern "C" fn {detach}(', "IHK v2 detach"
+    )
+    _require_order(
+        detach_body,
+        (
+            "IHK_SMP_PROVIDER_EXIT_V2.load(Ordering::Acquire)",
+            ".decode_provider_token(token)",
+            ".begin_unregister(handle)",
+            f"{registry}.snapshot(handle)",
+            "snapshot.provider_references != 0 || snapshot.os_references != 0",
+            "exit();",
+            "unregister.commit()",
+            ".compare_exchange(",
+        ),
+        "IHK v2 unpublish-exit-vacate ordering",
+    )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 4 or len(
         _active_fragment_positions(text, code, 'extern "C"')
-    ) != 2:
+    ) != 6:
         raise ValidationError("IHK provider-lease source has an unreviewed C ABI boundary")
     _require_active_count(
-        text, code, '#[link_section = ".export_symbol"]', 3,
+        text, code, '#[link_section = ".export_symbol"]', 5,
         "IHK provider relocation record",
     )
     _require_active_count(
-        text, code, f'namespace: *b"{namespace}\\0",', 3,
+        text, code, f'namespace: *b"{namespace}\\0",', 5,
         "IHK provider import namespace",
     )
     _require_active_count(
-        text, code, 'license: *b"GPL\\0",', 3, "IHK provider GPL export"
+        text, code, 'license: *b"GPL\\0",', 5, "IHK provider GPL export"
     )
-    if code.count(registry) != 4:
+    if code.count(registry) != 10:
         raise ValidationError("IHK provider registry singleton has unexpected reachability")
     if re.search(
         r"pr_(?:info|err|warn)!\s*\([^;]*\btoken\b",
@@ -586,7 +687,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     for match in re.finditer(r"^\s*use\s+([^;]+);", code, re.MULTILINE):
         imported = match.group(1).strip()
         if not imported.startswith(("kernel::", "core::")) and imported != (
-            "self::device_registry::IHK_DEVICE_REGISTRY"
+            "self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy}"
         ):
             raise ValidationError(f"unreviewed Rust dependency in lifecycle source: {imported}")
 
@@ -651,7 +752,7 @@ def _validate_support_sources(
     if device_contract.get("gate_id") != "IHK-004-device-registry-foundation":
         raise ValidationError("device registry support contract identity differs")
     if device_contract.get("foundation_status") != (
-            "production-crate-owned-allocation-free-device-registry-provider-lease-only"):
+            "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only"):
         raise ValidationError("device registry support contract differs from the provider-lease boundary")
     if (device_source.get("path") != device_item["path"] or
             device_source.get("sha256") != device_item["sha256"]):
@@ -664,6 +765,8 @@ def _validate_support_sources(
             "private_module_edge_validated": True,
             "production_registry_static": contract["provider_lease"]["registry_static"],
             "provider_lease_exports": [
+                contract["provider_lease"]["compatibility_exports"][0],
+                contract["provider_lease"]["compatibility_exports"][1],
                 contract["provider_lease"]["attach_symbol"],
                 contract["provider_lease"]["detach_symbol"],
             ],
@@ -674,6 +777,9 @@ def _validate_support_sources(
         device_lease.get("detach_symbol") != contract["provider_lease"]["detach_symbol"]
     ) or device_lease.get("import_namespace") != contract["provider_lease"]["import_namespace"] or (
         device_lease.get("minor") != 0
+        or device_lease.get("callback_abi") != contract["provider_lease"]["callback_abi"]
+        or device_lease.get("compatibility_exports") != contract["provider_lease"]["compatibility_exports"]
+        or device_lease.get("lifecycle_callbacks") != contract["provider_lease"]["lifecycle_callbacks"]
         or device_lease.get("token", {}).get("version") != contract["provider_lease"]["token_version"]
         or device_lease.get("callback_payload_reachable") is not False
         or device_lease.get("device_node_reachable") is not False
@@ -950,6 +1056,8 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         "provider_lease_validated": True,
         "provider_symbols": [
             "ihk_provider_lifecycle_v1",
+            contract["provider_lease"]["compatibility_exports"][0],
+            contract["provider_lease"]["compatibility_exports"][1],
             contract["provider_lease"]["attach_symbol"],
             contract["provider_lease"]["detach_symbol"],
         ],

@@ -6,8 +6,8 @@ fixture to the exact legacy registration/open/release/unregister oracle.  It
 also verifies the bounded production integration: the crate root owns one
 const registry and exposes only the versioned scalar SMP provider-lease ABI,
 while the ioctl contract still rejects device registration.  Source agreement
-here cannot prove a Linux cdev adapter, provider callbacks, exact Kbuild, or
-runtime behavior.
+here cannot prove a Linux cdev adapter, provider operation callbacks, exact
+Kbuild, or runtime behavior.
 """
 
 from __future__ import print_function
@@ -27,8 +27,12 @@ FIXTURE_PATH = "scripts/tests/fixtures/ihk_device_registry_compile.rs"
 CRATE_ROOT_PATH = "host-kernel/native-rust/ihk.rs"
 IOCTL_CONTRACT_PATH = "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json"
 CONTRACT_PATH = "host-kernel/contracts/ihk-device-registry-foundation-v1.json"
-PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v1"
-PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v1"
+PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v2"
+PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v2"
+PROVIDER_COMPATIBILITY_EXPORTS = (
+    "ihk_smp_provider_attach_v1",
+    "ihk_smp_provider_detach_v1",
+)
 REFERENCE_INVENTORY_PATH = "host-kernel/reference/legacy-host-modules-f2eb7352.json"
 REFERENCE_INVENTORY_SIZE = 246393
 REFERENCE_INVENTORY_SHA256 = (
@@ -121,10 +125,10 @@ ERRNO_MAP = {
 }
 
 READINESS_BLOCKERS = (
-    "the production registry exposes only an SMP provider-presence lease; it has no Linux cdev or file-operations adapter",
+    "the production registry exposes only an SMP provider lifecycle-callback lease; it has no Linux cdev or file-operations adapter",
     "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-    "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership remain unmodeled",
-    "the provider lease proves module dependency ownership but not callback module-owner pinning or unload drainage",
+    "provider operation payload, open/create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled",
+    "the lifecycle callback lease proves one retained exit identity but not general callback module-owner pinning or in-flight operation drainage",
     "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
     "legacy-stable first-fit and full-table results require an audited outer serialization adapter",
     "the nullable legacy registration return and callback errno surface have no audited Rust ABI bridge",
@@ -1180,9 +1184,11 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
     if crate_root.count(_rust_code_view(declaration, "device-registry declaration")) != 1:
         raise ContractError("IHK crate root lacks the private device-registry edge")
     required = (
-        "use self::device_registry::IHK_DEVICE_REGISTRY;",
+        "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
         "IHK_DEVICE_REGISTRY.attach_provider_token()",
         "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
+        ".decode_provider_token(token)",
         "IHK_DEVICE_REGISTRY.active_count()",
     )
     for fragment in required:
@@ -1195,7 +1201,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
                     fragment
                 )
             )
-    if crate_root.count("IHK_DEVICE_REGISTRY") != 4:
+    if crate_root.count("IHK_DEVICE_REGISTRY") != 10:
         raise ContractError("IHK crate root has an unreviewed production-registry use")
     if len(re.findall(r"\bdevice_registry\b", crate_root)) != 2:
         raise ContractError("IHK crate root has an unreviewed device-registry alias")
@@ -1213,7 +1219,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
             )
 
     attach_signature = _rust_code_view(
-        'pub extern "C" fn {0}()'.format(PROVIDER_ATTACH_SYMBOL),
+        'pub extern "C" fn {0}('.format(PROVIDER_ATTACH_SYMBOL),
         "IHK SMP provider attach signature",
     )
     attach = _function_body(
@@ -1224,23 +1230,27 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
     _require_order(
         attach,
         (
-            "IHK_DEVICE_REGISTRY.attach_provider_token()",
-            "Ok(token) => token,",
-            "Err(error) => return error.errno() as i64,",
+            "callback_abi != IHK_SMP_PROVIDER_CALLBACK_ABI_V1",
+            "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
+            "let init_status = provider_init_status(init());",
+            "reservation.abort()",
+            "compare_exchange(",
+            "reservation.publish()",
+            "IHK_DEVICE_REGISTRY.encode_provider_token(handle)",
             "pr_info!(",
             "token",
         ),
-        "IHK scalar provider attach export",
+        "IHK callback-bound provider attach export",
     )
     _require_active_count(
         source,
         crate_root,
-        'pr_info!("provider_lease=attach status=live minor=0\\n");',
+        'pr_info!("provider_lease=attach status=live minor=0 callback_abi=1\\n");',
         1,
         "IHK provider attach diagnostic",
     )
     detach_signature = _rust_code_view(
-        'pub extern "C" fn {0}(token: i64)'.format(PROVIDER_DETACH_SYMBOL),
+        'pub extern "C" fn {0}('.format(PROVIDER_DETACH_SYMBOL),
         "IHK SMP provider detach signature",
     )
     detach = _function_body(
@@ -1251,21 +1261,31 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
     _require_order(
         detach,
         (
-            "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+            "IHK_SMP_PROVIDER_EXIT_V2.load(Ordering::Acquire)",
+            "IHK_DEVICE_REGISTRY",
+            ".decode_provider_token(token)",
+            ".begin_unregister(handle)",
+            "IHK_DEVICE_REGISTRY.snapshot(handle)",
+            "exit();",
+            "unregister.commit()",
+            "compare_exchange(",
             "pr_info!(",
             "handle.minor(),",
             "handle.generation(),",
         ),
-        "IHK scalar provider detach export",
+        "IHK callback-bound provider detach export",
     )
     _require_active_count(
         source,
         crate_root,
-        '"provider_lease=detach status=vacant minor={} generation={}\\n",',
+        '"provider_lease=detach status=vacant minor={} generation={} callback_abi=1\\n",',
         1,
         "IHK provider detach diagnostic",
     )
-    for symbol in (PROVIDER_ATTACH_SYMBOL, PROVIDER_DETACH_SYMBOL):
+    for symbol in PROVIDER_COMPATIBILITY_EXPORTS + (
+        PROVIDER_ATTACH_SYMBOL,
+        PROVIDER_DETACH_SYMBOL,
+    ):
         required_export = (
             '#[export_name = "{0}"]'.format(symbol),
             '#[export_name = "__export_symbol_{0}"]'.format(symbol),
@@ -1282,7 +1302,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
             'pub extern "C" fn ',
             "IHK C-ABI export",
         )
-    ) != 2:
+    ) != 4:
         raise ContractError("IHK crate root contains an unreviewed C-ABI export")
 
     ioctl_contract = _load_json_bytes(ioctl_contract_data, "ioctl contract")
@@ -1341,6 +1361,8 @@ def derive_contract(
             "private_module_edge_validated": True,
             "production_registry_static": "IHK_DEVICE_REGISTRY",
             "provider_lease_exports": [
+                PROVIDER_COMPATIBILITY_EXPORTS[0],
+                PROVIDER_COMPATIBILITY_EXPORTS[1],
                 PROVIDER_ATTACH_SYMBOL,
                 PROVIDER_DETACH_SYMBOL,
             ],
@@ -1386,7 +1408,7 @@ def derive_contract(
             "path": FIXTURE_PATH,
             "sha256": _sha(fixture),
         },
-        "foundation_status": "production-crate-owned-allocation-free-device-registry-provider-lease-only",
+        "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only",
         "gate_id": "IHK-004-device-registry-foundation",
         "intentional_safety_deltas": list(INTENTIONAL_DELTAS),
         "ioctl_boundary": {
@@ -1457,12 +1479,23 @@ def derive_contract(
         "provider_lease_boundary": {
             "attach_return": "positive-i64-token-or-negative-errno",
             "attach_symbol": PROVIDER_ATTACH_SYMBOL,
+            "callback_abi": 1,
             "callback_payload_reachable": False,
+            "compatibility_exports": list(PROVIDER_COMPATIBILITY_EXPORTS),
             "credit_eligible": False,
             "detach_return": "infallible-owned-token-retirement-or-fail-stop",
             "detach_symbol": PROVIDER_DETACH_SYMBOL,
             "device_node_reachable": False,
             "import_namespace": "MCKERNEL_IHK_V1",
+            "lifecycle_callbacks": {
+                "arguments": "none",
+                "exit_before_vacate": True,
+                "exit_identity_retained": True,
+                "init_before_publish": True,
+                "operation_callbacks_reachable": False,
+                "raw_data_pointer": False,
+                "unpublishing_guard_across_exit": True,
+            },
             "minor": 0,
             "runtime_validated": False,
             "token": {

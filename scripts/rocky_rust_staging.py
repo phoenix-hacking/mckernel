@@ -200,7 +200,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+        "source_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -212,7 +212,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+        "source_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
     },
     {
         "crate": "mcctrl",
@@ -232,6 +232,16 @@ AUDITED_PROVIDER_EXTERN = (
     '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
     "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
     "}"
+)
+AUDITED_IHK_INIT_CALLBACK_TYPE = (
+    '// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and\n'
+    '// returns only a scalar status consumed before provider publication.\n'
+    'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+)
+AUDITED_IHK_EXIT_CALLBACK_TYPE = (
+    '// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and\n'
+    '// returns only after the dependent has completed its scalar lifecycle exit.\n'
+    'type IhkSmpProviderExitV2 = extern "C" fn();'
 )
 AUDITED_IHK_ATTACH_EXTERN = (
     '#[doc(hidden)]\n'
@@ -254,15 +264,70 @@ AUDITED_IHK_DETACH_EXTERN = (
     '// and cannot return while the owned provider entry remains live.\n'
     'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {'
 )
+AUDITED_IHK_ATTACH_V2_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C ABI accepts only scalars and nullable C-ABI function pointers.\n'
+    '// The reviewed SMP dependent owns both callback targets for the full returned\n'
+    '// lease lifetime.  Initialization runs while the registry slot is Publishing;\n'
+    '// only a zero result permits publication.  Every failed path aborts or retires\n'
+    '// its reservation and leaves no retained callback identity.\n'
+    '#[export_name = "ihk_smp_provider_attach_v2"]\n'
+    '// SAFETY: The exact nullable function-pointer ABI is validated before either\n'
+    '// callback is invoked; no Rust object or caller-owned data crosses the export.\n'
+    'pub extern "C" fn ihk_smp_provider_attach_v2(\n'
+    '    callback_abi: u32,\n'
+    '    flags: u32,\n'
+    '    init: Option<IhkSmpProviderInitV2>,\n'
+    '    exit: Option<IhkSmpProviderExitV2>,\n'
+    ') -> i64 {'
+)
+AUDITED_IHK_DETACH_V2_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: The exact callback identity was retained before the named token was\n'
+    '// published.  The unregister guard first makes the provider Unpublishing and\n'
+    '// rejects new references.  The callback executes only after all existing open\n'
+    '// and OS references have drained, remains bound throughout the call, and is\n'
+    '// cleared only after exit completes and the slot commits to Vacant.\n'
+    '#[export_name = "ihk_smp_provider_detach_v2"]\n'
+    '// SAFETY: The token and exact retained exit identity name the sole live v2\n'
+    '// lease; invariant violations fail stop before provider retirement can return.\n'
+    'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
+    '    token: i64,\n'
+    '    exit: Option<IhkSmpProviderExitV2>,\n'
+    ') {'
+)
+AUDITED_SMP_INIT_CALLBACK_TYPE = (
+    '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
+    'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+)
+AUDITED_SMP_EXIT_CALLBACK_TYPE = (
+    '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
+    'type IhkSmpProviderExitV2 = extern "C" fn();'
+)
 AUDITED_SMP_PROVIDER_EXTERN = (
     'extern "C" {\n'
     '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
     '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
-    '    #[link_name = "ihk_smp_provider_attach_v1"]\n'
-    '    fn ihk_smp_provider_attach_v1() -> i64;\n'
-    '    #[link_name = "ihk_smp_provider_detach_v1"]\n'
-    '    fn ihk_smp_provider_detach_v1(token: i64);\n'
+    '    #[link_name = "ihk_smp_provider_attach_v2"]\n'
+    '    fn ihk_smp_provider_attach_v2(\n'
+    '        callback_abi: u32,\n'
+    '        flags: u32,\n'
+    '        init: Option<IhkSmpProviderInitV2>,\n'
+    '        exit: Option<IhkSmpProviderExitV2>,\n'
+    '    ) -> i64;\n'
+    '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
+    '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
     '}'
+)
+AUDITED_SMP_INIT_CALLBACK_EXTERN = (
+    '// SAFETY: The callback owns no foreign state and returns only a literal errno\n'
+    '// status through the exact v2 function-pointer ABI.\n'
+    'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
+)
+AUDITED_SMP_EXIT_CALLBACK_EXTERN = (
+    '// SAFETY: The callback owns no foreign state and returns only after its local\n'
+    '// lifecycle diagnostic completes through the exact v2 function-pointer ABI.\n'
+    'extern "C" fn ihk_smp_provider_exit_v2() {'
 )
 EXPECTED_TOP_LEVEL_KEYS = {
     "build_contract",
@@ -1039,11 +1104,21 @@ def _validate_module(repo_root, module, expected, index):
     allowed_extern_blocks = ()
     if module["crate"] == "ihk":
         allowed_extern_blocks = (
+            AUDITED_IHK_INIT_CALLBACK_TYPE,
+            AUDITED_IHK_EXIT_CALLBACK_TYPE,
             AUDITED_IHK_ATTACH_EXTERN,
             AUDITED_IHK_DETACH_EXTERN,
+            AUDITED_IHK_ATTACH_V2_EXTERN,
+            AUDITED_IHK_DETACH_V2_EXTERN,
         )
     elif module["crate"] == "ihk_smp_x86_64":
-        allowed_extern_blocks = (AUDITED_SMP_PROVIDER_EXTERN,)
+        allowed_extern_blocks = (
+            AUDITED_SMP_INIT_CALLBACK_TYPE,
+            AUDITED_SMP_EXIT_CALLBACK_TYPE,
+            AUDITED_SMP_PROVIDER_EXTERN,
+            AUDITED_SMP_INIT_CALLBACK_EXTERN,
+            AUDITED_SMP_EXIT_CALLBACK_EXTERN,
+        )
     elif module["crate"] == "mcctrl":
         allowed_extern_blocks = (AUDITED_PROVIDER_EXTERN,)
     _validate_rust_escape_hatches(

@@ -43,16 +43,22 @@ BOUND_MODINFO_ENVIRONMENT = {
     "TZ": "UTC",
 }
 EXPECTED_REVIEWED_PROVIDER_LEASE_BOUNDARY = {
-    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
     "callback_payload_reachable": False,
+    "compatibility_exports": [
+        "ihk_smp_provider_attach_v1",
+        "ihk_smp_provider_detach_v1",
+    ],
     "consumer": "ihk-smp-x86_64",
     "credit_eligible": False,
-    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "detach_symbol": "ihk_smp_provider_detach_v2",
     "device_node_reachable": False,
+    "lifecycle_callbacks_only": True,
     "mcctrl_reachable": False,
     "namespace": "MCKERNEL_IHK_V1",
     "rocky_runtime_validated": False,
-    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
     "token_version": 1,
 }
 
@@ -622,37 +628,15 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     lease = contract["ihk_dependency"]["reviewed_provider_lease_boundary"]
     attach = lease["attach_symbol"]
     detach = lease["detach_symbol"]
-    attach_function = (
-        f'pub extern "C" fn {attach}() -> i64 {{\n'
-        "    let token = match IHK_DEVICE_REGISTRY.attach_provider_token() {\n"
-        "        Ok(token) => token,\n"
-        "        Err(error) => return error.errno() as i64,\n"
-        "    };\n"
-        '    pr_info!("provider_lease=attach status=live minor=0\\n");\n'
-        "    token\n"
-        "}"
-    )
-    detach_function = (
-        f'pub extern "C" fn {detach}(token: i64) {{\n'
-        "    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n"
-        "    pr_info!(\n"
-        '        "provider_lease=detach status=vacant minor={} generation={}\\n",\n'
-        "        handle.minor(),\n"
-        "        handle.generation(),\n"
-        "    );\n"
-        "}"
-    )
-    detach_security_boundary = (
-        "// reviewed namespaced SMP dependent.  The token is an ownership receipt, not\n"
-        "// a security boundary against other privileged in-kernel code.  Any malformed,\n"
-        "// stale, duplicated, busy, or corrupt state fails stop before unload succeeds.\n"
-        f'#[export_name = "{detach}"]'
-    )
+    compatibility_attach, compatibility_detach = lease["compatibility_exports"]
+    attach_function = f'pub extern "C" fn {attach}('
+    detach_function = f'pub extern "C" fn {detach}('
+    detach_security_boundary = f'#[export_name = "{detach}"]'
     attach_export_record = (
         f'#[export_name = "__export_symbol_{attach}"]\n'
         '#[link_section = ".export_symbol"]\n'
         "#[used(compiler)]\n"
-        "pub static IHK_SMP_PROVIDER_ATTACH_V1_EXPORT: IhkExportSymbolRecord = "
+        "pub static IHK_SMP_PROVIDER_ATTACH_V2_EXPORT: IhkExportSymbolRecord = "
         "IhkExportSymbolRecord {\n"
         '    license: *b"GPL\\0",\n'
         f'    namespace: *b"{lease["namespace"]}\\0",\n'
@@ -664,7 +648,7 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         f'#[export_name = "__export_symbol_{detach}"]\n'
         '#[link_section = ".export_symbol"]\n'
         "#[used(compiler)]\n"
-        "pub static IHK_SMP_PROVIDER_DETACH_V1_EXPORT: IhkExportSymbolRecord = "
+        "pub static IHK_SMP_PROVIDER_DETACH_V2_EXPORT: IhkExportSymbolRecord = "
         "IhkExportSymbolRecord {\n"
         '    license: *b"GPL\\0",\n'
         f'    namespace: *b"{lease["namespace"]}\\0",\n'
@@ -690,15 +674,35 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         "unsafe impl Sync for IhkExportSymbolRecord {}",
         "const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];",
         "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
-        "use self::device_registry::IHK_DEVICE_REGISTRY;",
+        "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
         f'#[export_name = "{symbol}"]',
         "pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;",
         anchor_export_record,
+        f'#[export_name = "{compatibility_attach}"]',
+        f'pub extern "C" fn {compatibility_attach}() -> i64 {{',
+        "IHK_DEVICE_REGISTRY.attach_provider_token()",
+        f'#[export_name = "__export_symbol_{compatibility_attach}"]',
+        f"symbol: {compatibility_attach} as *const () as *const u8,",
+        f'#[export_name = "{compatibility_detach}"]',
+        f'pub extern "C" fn {compatibility_detach}(token: i64) {{',
+        "// reviewed namespaced SMP dependent.  The token is an ownership receipt, not\n"
+        "// a security boundary against other privileged in-kernel code.",
+        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        f'#[export_name = "__export_symbol_{compatibility_detach}"]',
+        f"symbol: {compatibility_detach} as *const () as *const u8,",
+        'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;',
+        'type IhkSmpProviderExitV2 = extern "C" fn();',
         f'#[export_name = "{attach}"]',
         attach_function,
+        "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
+        "let init_status = provider_init_status(init());",
+        "reservation.publish()",
         attach_export_record,
         detach_security_boundary,
         detach_function,
+        "let unregister = IHK_DEVICE_REGISTRY\n        .begin_unregister(handle)",
+        "IHK_DEVICE_REGISTRY.snapshot(handle)",
+        "    exit();\n    unregister.commit()",
         detach_export_record,
         "match IHK_DEVICE_REGISTRY.active_count() {",
     )
@@ -711,20 +715,6 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
             "native IHK provider anchor",
         )
 
-    # Parse braces only in the active view.  Braces embedded in ordinary/raw
-    # strings or comments cannot shorten a reviewed function body.
-    for function, signature, label in (
-        (attach_function, f'pub extern "C" fn {attach}() -> i64 {{', "attach"),
-        (detach_function, f'pub extern "C" fn {detach}(token: i64) {{', "detach"),
-    ):
-        body = _active_function_body(code, signature, f"native IHK provider {label}")
-        expected_code = _mask_rust_comments_and_literals(function)
-        expected_body = expected_code[expected_code.index("{") + 1 : expected_code.rindex("}")]
-        if body != expected_body:
-            raise ValidationError(
-                f"native IHK provider {label} body differs from the fail-closed review"
-            )
-
     if re.search(r"\b(?:pub\(crate\)\s+)?static\s+IHK_DEVICE_REGISTRY\b", code):
         raise ValidationError(
             "native IHK provider must import the singleton registry instead of constructing it"
@@ -733,7 +723,7 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError(
             "native IHK provider must not construct a second production registry"
         )
-    if code.count("IHK_DEVICE_REGISTRY") != 4:
+    if code.count("IHK_DEVICE_REGISTRY") != 10:
         raise ValidationError(
             "native IHK provider singleton registry reachability differs from the closed review"
         )
@@ -741,6 +731,10 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     expected_export_names = [
         symbol,
         f"__export_symbol_{symbol}",
+        compatibility_attach,
+        f"__export_symbol_{compatibility_attach}",
+        compatibility_detach,
+        f"__export_symbol_{compatibility_detach}",
         attach,
         f"__export_symbol_{attach}",
         detach,
@@ -768,18 +762,18 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError(
             "native IHK provider export-name order differs from the closed review"
         )
-    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2:
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 4:
         raise ValidationError(
-            "native IHK provider must expose exactly two reviewed C ABI functions"
+            "native IHK provider must expose exactly four reviewed C ABI functions"
         )
-    if len(re.findall(r"\bextern\b", code)) != 2:
+    if len(re.findall(r"\bextern\b", code)) != 6:
         raise ValidationError("native IHK provider contains an unreviewed extern boundary")
     for fragment, label in (
         ('#[link_section = ".export_symbol"]', "export record"),
         ('license: *b"GPL\\0",', "GPL export"),
         (f'namespace: *b"{lease["namespace"]}\\0",', "namespace surface"),
     ):
-        _require_active_count(text, code, fragment, 3, f"native IHK provider {label}")
+        _require_active_count(text, code, fragment, 5, f"native IHK provider {label}")
     if any(re.search(r"\btoken\s*=", literal) for literal in _active_string_literals(text, code)):
         raise ValidationError("native IHK provider must not log its opaque lease token")
     for pattern in (

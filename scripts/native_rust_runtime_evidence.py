@@ -64,14 +64,23 @@ PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 PROVIDER_LEASE_ATTACH_DIAGNOSTIC = (
-    "ihk: provider_lease=attach status=live minor=0"
+    "ihk: provider_lease=attach status=live minor=0 callback_abi=1"
 )
 PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN = (
-    r"ihk: provider_lease=detach status=vacant minor=0 generation=([1-9][0-9]*)"
+    r"ihk: provider_lease=detach status=vacant minor=0 "
+    r"generation=([1-9][0-9]*) callback_abi=1"
+)
+PROVIDER_CALLBACK_ABI = 1
+PROVIDER_CALLBACK_INIT_DIAGNOSTIC = (
+    "ihk_smp_x86_64: provider_callback=init status=complete callback_abi=1"
+)
+PROVIDER_CALLBACK_EXIT_DIAGNOSTIC = (
+    "ihk_smp_x86_64: provider_callback=exit status=complete callback_abi=1"
 )
 PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC = "ihk: provider_registry=empty active=0"
 PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS = (
     "ihk_smp_x86_64: provider_lease=detach-failed",
+    "ihk: provider_callback=not-empty",
     "ihk: provider_registry=not-empty",
     "ihk: provider_registry=corrupt",
 )
@@ -80,14 +89,25 @@ RAW_OPAQUE_TOKEN_FIELD = re.compile(
     re.IGNORECASE,
 )
 PROVIDER_ANCHOR_SYMBOL = "ihk_provider_lifecycle_v1"
-PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v1"
-PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v1"
+PROVIDER_COMPAT_ATTACH_SYMBOL = "ihk_smp_provider_attach_v1"
+PROVIDER_COMPAT_DETACH_SYMBOL = "ihk_smp_provider_detach_v1"
+PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v2"
+PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v2"
 PROVIDER_EXPORT_NAMESPACE = "MCKERNEL_IHK_V1"
-PROVIDER_SYMBOLS = (
+PROVIDER_DEFINED_SYMBOLS = (
+    PROVIDER_ANCHOR_SYMBOL,
+    PROVIDER_COMPAT_ATTACH_SYMBOL,
+    PROVIDER_COMPAT_DETACH_SYMBOL,
+    PROVIDER_ATTACH_SYMBOL,
+    PROVIDER_DETACH_SYMBOL,
+)
+PROVIDER_SMP_IMPORT_SYMBOLS = (
     PROVIDER_ANCHOR_SYMBOL,
     PROVIDER_ATTACH_SYMBOL,
     PROVIDER_DETACH_SYMBOL,
 )
+# Retain the public helper name for the complete provider definition/export set.
+PROVIDER_SYMBOLS = PROVIDER_DEFINED_SYMBOLS
 PROVIDER_SYMBOL_PATTERN = re.compile(r"^ihk(?:_smp)?_provider_[A-Za-z0-9_]+$")
 EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
 EXPECTED_KERNEL_LOCALVERSION = "-211.44.1.el10_2.mckernel1.x86_64"
@@ -2066,10 +2086,10 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
 
     expected_modules = [
         {
-            "defined_provider_symbols": list(PROVIDER_SYMBOLS),
+            "defined_provider_symbols": list(PROVIDER_DEFINED_SYMBOLS),
             "depends": [],
             "file": "ihk.ko",
-            "gpl_exported_provider_symbols": list(PROVIDER_SYMBOLS),
+            "gpl_exported_provider_symbols": list(PROVIDER_DEFINED_SYMBOLS),
             "import_namespace": None,
             "name": "ihk",
             "provider_export_namespace": PROVIDER_EXPORT_NAMESPACE,
@@ -2079,7 +2099,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "file": "ihk-smp-x86_64.ko",
             "import_namespace": PROVIDER_EXPORT_NAMESPACE,
             "name": "ihk_smp_x86_64",
-            "undefined_provider_symbols": list(PROVIDER_SYMBOLS),
+            "undefined_provider_symbols": list(PROVIDER_SMP_IMPORT_SYMBOLS),
         },
         {
             "depends": ["ihk"],
@@ -2096,16 +2116,23 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "provider_lease": {
             "attach_after_ihk_load": True,
             "attach_diagnostic": PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            "callback_abi": PROVIDER_CALLBACK_ABI,
+            "callback_payload_reachable": False,
             "credit_eligible": False,
             "detach_before_smp_unload_completion": True,
             "detach_diagnostic_pattern": (
                 "ihk: provider_lease=detach status=vacant minor=0 "
-                "generation=[1-9][0-9]*"
+                "generation=[1-9][0-9]* callback_abi=1"
             ),
+            "exit_callback_before_detach": True,
+            "exit_callback_diagnostic": PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
             "forbidden_diagnostic_prefixes": list(
                 PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS
             ),
             "gate_status": "TODO",
+            "init_callback_before_attach": True,
+            "init_callback_diagnostic": PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+            "operation_callbacks_reachable": False,
             "raw_token_logged": False,
             "registry_empty_before_ihk_unload_completion": True,
             "registry_empty_diagnostic": PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
@@ -3084,7 +3111,11 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     lines = text.splitlines()
     allowed_provider_diagnostic = re.compile(
         r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?(?:"
+        + re.escape(PROVIDER_CALLBACK_INIT_DIAGNOSTIC)
+        + r"|"
         + re.escape(PROVIDER_LEASE_ATTACH_DIAGNOSTIC)
+        + r"|"
+        + re.escape(PROVIDER_CALLBACK_EXIT_DIAGNOSTIC)
         + r"|"
         + PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN
         + r"|"
@@ -3092,7 +3123,11 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         + r")$"
     )
     for line in lines:
-        if "provider_lease" in line or "provider_registry" in line:
+        if (
+            "provider_callback" in line
+            or "provider_lease" in line
+            or "provider_registry" in line
+        ):
             if any(marker in line for marker in PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS):
                 raise EvidenceError(
                     "provider lease runtime contains a fail-closed diagnostic"
@@ -3342,9 +3377,25 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         re.escape(PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC),
         "provider registry empty",
     )
+    init_callback_position, _ = _unique_kernel_diagnostic(
+        dmesg_lines,
+        re.escape(PROVIDER_CALLBACK_INIT_DIAGNOSTIC),
+        "provider init callback",
+    )
+    exit_callback_position, _ = _unique_kernel_diagnostic(
+        dmesg_lines,
+        re.escape(PROVIDER_CALLBACK_EXIT_DIAGNOSTIC),
+        "provider exit callback",
+    )
     if not (
-        lifecycle_positions[0] < attach_position < lifecycle_positions[1]
-        and lifecycle_positions[3] < detach_position < lifecycle_positions[4]
+        lifecycle_positions[0]
+        < init_callback_position
+        < attach_position
+        < lifecycle_positions[1]
+        and lifecycle_positions[3]
+        < exit_callback_position
+        < detach_position
+        < lifecycle_positions[4]
         and lifecycle_positions[4]
         < registry_empty_position
         < lifecycle_positions[5]
@@ -3355,7 +3406,10 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         "negative_unload_status": int(negative_records[0].group(1)),
         "provider_lease": {
             "attach_observed": True,
+            "callback_abi": PROVIDER_CALLBACK_ABI,
             "detach_observed": True,
+            "exit_callback_observed": True,
+            "init_callback_observed": True,
             "raw_token_logged": False,
             "registry_empty_observed": True,
         },
@@ -3447,16 +3501,16 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     _require_keys(modules, {"ihk", "ihk_smp_x86_64", "mcctrl"}, "capture modules")
     expected_module_facts = {
         "ihk": {
-            "defined_provider_symbols": list(PROVIDER_SYMBOLS),
+            "defined_provider_symbols": list(PROVIDER_DEFINED_SYMBOLS),
             "depends": [],
-            "gpl_exported_provider_symbols": list(PROVIDER_SYMBOLS),
+            "gpl_exported_provider_symbols": list(PROVIDER_DEFINED_SYMBOLS),
             "import_namespaces": [],
             "provider_export_namespace": PROVIDER_EXPORT_NAMESPACE,
         },
         "ihk_smp_x86_64": {
             "depends": ["ihk"],
             "import_namespaces": [PROVIDER_EXPORT_NAMESPACE],
-            "undefined_provider_symbols": list(PROVIDER_SYMBOLS),
+            "undefined_provider_symbols": list(PROVIDER_SMP_IMPORT_SYMBOLS),
         },
         "mcctrl": {
             "depends": ["ihk"],
@@ -3559,7 +3613,10 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         raise EvidenceError("capture negative unload status differs")
     if runtime["provider_lease"] != {
         "attach_observed": True,
+        "callback_abi": PROVIDER_CALLBACK_ABI,
         "detach_observed": True,
+        "exit_callback_observed": True,
+        "init_callback_observed": True,
         "raw_token_logged": False,
         "registry_empty_observed": True,
     }:

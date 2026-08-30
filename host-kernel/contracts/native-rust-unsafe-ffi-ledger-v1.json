@@ -1,21 +1,21 @@
 {
   "coverage": {
     "by_crate": {
-      "ihk": 20,
-      "ihk_smp_x86_64": 6,
+      "ihk": 28,
+      "ihk_smp_x86_64": 10,
       "mcctrl": 2
     },
     "by_kind": {
-      "extern_function": 2,
-      "ffi_export": 6,
+      "extern_function": 10,
+      "ffi_export": 10,
       "foreign_block": 2,
       "mutable_static": 1,
       "unsafe_block": 12,
       "unsafe_function": 1,
       "unsafe_impl": 4
     },
-    "site_count": 28,
-    "site_ids_sha256": "b0072c4df656bdd4605eb7d73c8601b357777ef0566e2b8958e9314652dceae3",
+    "site_count": 40,
+    "site_ids_sha256": "658844ede05c312e44fc8e598bc9c6567c213f80d61e4092b8c9b811eff7a1c4",
     "source_input_count": 12,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
@@ -24,7 +24,7 @@
       "crate": "ihk",
       "destination": "ihk.rs",
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "transitive_inputs": [
         "host-kernel/native-rust/abi/x86_64.rs",
         "host-kernel/native-rust/device_registry.rs",
@@ -42,7 +42,7 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "transitive_inputs": [
         "host-kernel/native-rust/ihk_smp_x86_64.rs",
         "host-kernel/native-rust/smp_resource.rs"
@@ -67,7 +67,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "1197120c93117e73246f572a9c4d383714d09049452e5ef2b088e3b50b12fcda",
+  "ledger_sha256": "73e4a712d955bdcee041a3eb851feac858c71dd299ceb623fc0732eb292a6831",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -92,7 +92,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "dc71b0717b68b4b3904c07337d045ea1f0c3c29e7432bd462e9353b7589ead50"
+      "sha256": "f97ac7978a6db03c0982a25a4404a5695cd5985677e543f5f0751f3ff11d90d6"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -120,8 +120,102 @@
   },
   "sites": [
     {
-      "byte_end": 1616,
-      "byte_start": 1571,
+      "byte_end": 1434,
+      "byte_start": 1411,
+      "caller_obligations": [
+        "The callback target must be a module-resident extern \"C\" fn() -> i32 with no arguments, alternate calling convention, or return-width drift.",
+        "The target must remain executable for the synchronous attach call and must not unwind across the C ABI."
+      ],
+      "column_end": 51,
+      "column_start": 29,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The provider invokes the callback in process-context module initialization while the registry slot is Publishing and before token publication.",
+        "The callback borrows no caller memory; its scalar status is normalized before publication can occur."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "7225d7e2bc614732c9ff4078d01e360b4321df0698cb126d9c6b115096b74201",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0021",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 44,
+      "line_start": 44,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-abi"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 43,
+        "line_start": 42,
+        "source_sha256": "566a4f7df92bb1468ca1f70b96ad187710b88f0d8ed6858d0bb1825461880cd3",
+        "text": "SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and returns only a scalar status consumed before provider publication."
+      },
+      "source_sha256": "4149a416240d2ad461a73341610a942f087f8e1a238807177a462b8b24016416"
+    },
+    {
+      "byte_end": 1635,
+      "byte_start": 1619,
+      "caller_obligations": [
+        "The callback target must be a module-resident extern \"C\" fn() with no arguments or alternate calling convention.",
+        "The same target must remain executable through matching detach and must not unwind across the C ABI."
+      ],
+      "column_end": 44,
+      "column_start": 29,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The provider invokes the callback in process-context teardown after provider and OS references drain while the slot is Unpublishing.",
+        "No arguments or caller data are passed, and callback return precedes the Vacant commit."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "4ddd55b22c2c4cf5ee0531eae7c79cd406e85963614a5f9e057946dd3c5c60ce",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0022",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 47,
+      "line_start": 47,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-abi"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 46,
+        "line_start": 45,
+        "source_sha256": "7eafc3505e6a488719bd1058dc56f607179e0e366b3f95e3e03c3f90d5d87f07",
+        "text": "SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and returns only after the dependent has completed its scalar lifecycle exit."
+      },
+      "source_sha256": "8da3628398700d5d4341eec0f1d32dc2b44286312f9763150522af9dcbfe4e7b"
+    },
+    {
+      "byte_end": 2830,
+      "byte_start": 2785,
       "caller_obligations": [
         "Constructors must keep the record fields and target pointer immutable after publication.",
         "The target pointer must reference module-static storage for every possible reader."
@@ -141,7 +235,7 @@
         "ihk"
       ],
       "expression_sha256": "778d5e4bea5080d53eaf135993572f31d8510d804f2a9034179df6a8f0b5aa32",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -150,8 +244,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 50,
-      "line_start": 50,
+      "line_end": 78,
+      "line_start": 78,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK module owner",
@@ -159,16 +253,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 49,
-        "line_start": 49,
+        "line_end": 77,
+        "line_start": 77,
         "source_sha256": "20da20cad5e54e309d04f6e577c361c603cbb066b582b6e647eb9ab960bd4098",
         "text": "SAFETY: The record and its target are immutable for the module lifetime."
       },
       "source_sha256": "4050dbb78cd5aced2f7deee385329cd1087395c149f62bad6ff12a129fbcd5a5"
     },
     {
-      "byte_end": 2031,
-      "byte_start": 1941,
+      "byte_end": 3245,
+      "byte_start": 3155,
       "caller_obligations": [
         "Consumers must import MCKERNEL_IHK_V1 and hold the provider module dependency.",
         "Consumers may only read the anchor byte and must not assign behavioral meaning to its value."
@@ -188,7 +282,7 @@
         "ihk"
       ],
       "expression_sha256": "a5e5090b3a7542300bfaeac36e845705f4be4a6a57a371a86770f7a6b3a74ee4",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -197,8 +291,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 59,
-      "line_start": 58,
+      "line_end": 87,
+      "line_start": 86,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -206,16 +300,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 57,
-        "line_start": 56,
+        "line_end": 85,
+        "line_start": 84,
         "source_sha256": "3762992c52c6ffb0f1fc5074186ca8c3ea7c245538b816fcc7b20b8db94d11de",
         "text": "SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers must import it through MCKERNEL_IHK_V1 and may not treat its value as state."
       },
       "source_sha256": "695ff689567b02209f0f71eab292e5412d0d2b3714d5b36a661df9715d250663"
     },
     {
-      "byte_end": 2558,
-      "byte_start": 2206,
+      "byte_end": 3772,
+      "byte_start": 3420,
       "caller_obligations": [
         "The record layout, namespace bytes, and target relocation must remain compatible with the selected Linux export format.",
         "Only Linux modpost/module-loader machinery may interpret the .export_symbol record."
@@ -235,7 +329,7 @@
         "ihk"
       ],
       "expression_sha256": "96c863cef3a97c75e2354b852f98ea0f6fc8c1baf6be15f6c033218e52a91641",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -244,8 +338,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 72,
-      "line_start": 64,
+      "line_end": 100,
+      "line_start": 92,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -253,19 +347,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 63,
-        "line_start": 62,
+        "line_end": 91,
+        "line_start": 90,
         "source_sha256": "57b9cad46030f1540a9952cc472d494d55417d72dcdcebc0958c2b44b33aa5d0",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the namespaced anchor; neither the record nor its target is mutated in Rust."
       },
       "source_sha256": "d6de54b6a3714dd82390c702f296c461113682632793a7aab6bd2b5f44974127"
     },
     {
-      "byte_end": 3270,
-      "byte_start": 2808,
+      "byte_end": 4583,
+      "byte_start": 4022,
       "caller_obligations": [
-        "Consumers must resolve ihk_smp_provider_attach_v1 through MCKERNEL_IHK_V1 and hold the ihk provider dependency for the call and the full lifetime of any returned lease.",
-        "A caller must treat a positive result as one opaque owned lease token, a negative result as errno, and pair each successful token with exactly one detach without inspection, alteration, duplication, or replay."
+        "Compatibility callers must resolve ihk_smp_provider_attach_v1 through MCKERNEL_IHK_V1, hold the IHK dependency, and have no retained v2 callback identity.",
+        "A positive scalar token must be passed unchanged to exactly one v1 detach; a negative errno creates no ownership."
       ],
       "column_end": 1,
       "column_start": 1,
@@ -275,14 +369,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "Modpost and the module loader resolve the namespaced function relocation before consumer initialization and keep the target valid until dependents drain.",
-        "The reviewed consumer invokes attach during module initialization in process context; interrupt and NMI invocation are outside this reviewed boundary."
+        "No active native SMP consumer uses v1; a live v2 callback identity makes compatibility attach fail closed.",
+        "The compatibility boundary runs in process context and crosses no callback, caller data pointer, or Rust object."
       ],
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "83855b9c480b1c5f0edaf41e53d9068ec7328da055ca01129b6c25afaea2d611",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "expression_sha256": "758886c0b70f99e25171cec814ccccfaf789009d549c9a2a420bd7749a8f9f4d",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0015",
       "independent_review": {
         "evidence_sha256": null,
@@ -291,8 +385,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 88,
-      "line_start": 78,
+      "line_end": 119,
+      "line_start": 106,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK provider ABI owner",
@@ -300,19 +394,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 77,
-        "line_start": 75,
+        "line_end": 105,
+        "line_start": 103,
         "source_sha256": "666fcec3a6b31a4d2b201fdb00cd611fa6d5c47354eb84151d2ae885783c7a79",
         "text": "SAFETY: This C-ABI scalar boundary owns no caller memory.  A positive return is a versioned opaque token for the single published minor-zero provider; every failure is a negative errno and leaves no live reservation behind."
       },
-      "source_sha256": "bd5e6fb127dadb68f9ed534903615eed1a09f61f72d6c2ddb664090beb491123"
+      "source_sha256": "c05b6f1e52aa9573af3294308400170a167e2ba063c77ca2b0cd071439bed6a3"
     },
     {
-      "byte_end": 3270,
-      "byte_start": 2992,
+      "byte_end": 4583,
+      "byte_start": 4206,
       "caller_obligations": [
-        "The caller must accept only a positive production-registry token or an exact negative registry errno; no token bits may be interpreted as borrowed state.",
-        "A successful result creates one lease obligation that must be retained by a non-Copy owner, while a failed result creates no ownership."
+        "A compatibility caller must hold the exact namespaced dependency, have no retained v2 callback identity, and treat the positive result as an opaque owned token.",
+        "Every negative status is an errno and requires no v1 detach; a successful token requires exactly one v1 detach."
       ],
       "column_end": 1,
       "column_start": 5,
@@ -322,14 +416,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "Concurrent calls may race, but the fixed minor-zero registry transition must permit at most one successful live provider and roll back every unsuccessful reservation.",
-        "No caller pointer, allocation, callback, or borrowed reference crosses this scalar C-ABI boundary; all registry state remains inside ihk.ko."
+        "No active native SMP consumer uses v1, and v2 overlap fails closed before a compatibility reservation is returned.",
+        "Only scalar state crosses this process-context ABI; callbacks and caller-owned data remain unreachable."
       ],
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "6588845a3c9dc75e3f0262fe14302061be608fa361884994e6c471d182cafabe",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "expression_sha256": "39adf1bb21b035015f62a3a90aa393dffc2ea2fd062f1dfe74aea9d834d48a5b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0016",
       "independent_review": {
         "evidence_sha256": null,
@@ -338,8 +432,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 88,
-      "line_start": 81,
+      "line_end": 119,
+      "line_start": 109,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK device-registry owner",
@@ -347,16 +441,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 80,
-        "line_start": 79,
+        "line_end": 108,
+        "line_start": 107,
         "source_sha256": "9705d74143f64a431d403ff7e3fc2b0479d2462e3187db515db66ad365284504",
         "text": "SAFETY: This exported C ABI accepts no caller-owned state and returns only the registry-owned scalar token or a negative errno."
       },
-      "source_sha256": "a61c5c632f9028b2e7637eee586f8117b06d2a311b2b8ee0675dc60e2374d73f"
+      "source_sha256": "5a433e55e9d0dc3998cbc60c3ac3933f7f3b7d7d2d39094f5a7b9080a3607bd8"
     },
     {
-      "byte_end": 3801,
-      "byte_start": 3441,
+      "byte_end": 5114,
+      "byte_start": 4754,
       "caller_obligations": [
         "The record layout, GPL license bytes, MCKERNEL_IHK_V1 namespace, and target signature extern C fn() -> i64 must remain compatible with the selected Linux export format.",
         "Only Linux modpost and module-loader machinery may interpret the .export_symbol record, whose relocation must target the exact attach function."
@@ -376,7 +470,7 @@
         "ihk"
       ],
       "expression_sha256": "c99c129824b0e574627dc4ae71dd6782044727a7d331f98a584bbc5f56f08884",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0017",
       "independent_review": {
         "evidence_sha256": null,
@@ -385,8 +479,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 101,
-      "line_start": 93,
+      "line_end": 132,
+      "line_start": 124,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK provider ABI owner",
@@ -394,19 +488,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 92,
-        "line_start": 91,
+        "line_end": 123,
+        "line_start": 122,
         "source_sha256": "625a32ec6de9186e56a53c66d155a32be6bdfed525f689b5610e7607f476085f",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the scalar attach function in MCKERNEL_IHK_V1 for the provider lifetime."
       },
       "source_sha256": "77dbda96c4ab020493c4f1dc7b3bd3161e3cee7f2c080459e72ece5598d475ef"
     },
     {
-      "byte_end": 4605,
-      "byte_start": 4135,
+      "byte_end": 6075,
+      "byte_start": 5448,
       "caller_obligations": [
-        "Consumers must call ihk_smp_provider_detach_v1 through MCKERNEL_IHK_V1 while holding the ihk dependency and owning the exact positive token returned by attach.",
-        "The token may be submitted at most once after dependent activity is quiescent; a nonzero result must not be treated as a released lease."
+        "A compatibility caller must own the exact positive v1 token, quiesce all references, retain the IHK dependency, and have no live v2 callback identity.",
+        "The token may be submitted once; the void boundary fails stop rather than returning a status that could falsely attest release."
       ],
       "column_end": 1,
       "column_start": 1,
@@ -416,14 +510,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "The reviewed consumer invokes detach during module teardown in process context before its provider dependency is released.",
-        "The boundary exchanges no pointers; forged, stale, duplicate, busy, and corrupt requests fail closed, and an unsuccessful unregister transaction does not transfer ownership."
+        "No active native SMP consumer uses v1; compatibility detach runs in process-context teardown.",
+        "Malformed, stale, busy, corrupt, or v2-overlap state fails stop before provider retirement can be reported."
       ],
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "80e64b83c604b1208909d3e600abee0abc08cb4bdd5c63b02abad4531e3d062f",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "expression_sha256": "d84709e2f6fca166d4003d1bad25ae3312b6fb58210c047fd43510df61df4ffd",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0018",
       "independent_review": {
         "evidence_sha256": null,
@@ -432,8 +526,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 118,
-      "line_start": 108,
+      "line_end": 152,
+      "line_start": 139,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK provider ABI owner",
@@ -441,19 +535,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 107,
-        "line_start": 104,
+        "line_end": 138,
+        "line_start": 135,
         "source_sha256": "ca83dcf57157b72bb45def5b8451a15c886ba81cf0025c94d970a798da3ad2e8",
         "text": "SAFETY: This C-ABI scalar boundary consumes the exact v1 token owned by the reviewed namespaced SMP dependent.  The token is an ownership receipt, not a security boundary against other privileged in-kernel code.  Any malformed, stale, duplicated, busy, or corrupt state fails stop before unload succeeds."
       },
-      "source_sha256": "304deb16f27abc223ff7191656585181dd25d5d4c70f70a81348e5181d392d24"
+      "source_sha256": "454714d0e02879a4ad469856616123095da9bb7eb30934564c9eaf9fa1f7048f"
     },
     {
-      "byte_end": 4605,
-      "byte_start": 4330,
+      "byte_end": 6075,
+      "byte_start": 5643,
       "caller_obligations": [
-        "The caller must supply the unmodified positive token it exclusively owns and must quiesce all provider open and OS references before detach.",
-        "Success consumes the lease; on any nonzero errno the caller retains release responsibility and may not claim the provider vacant."
+        "The compatibility caller must supply its unmodified exclusively owned v1 token after provider and OS references are quiescent.",
+        "No retained v2 callback identity may exist; any invalid state fails stop and the void boundary cannot be treated as a recoverable release result."
       ],
       "column_end": 1,
       "column_start": 5,
@@ -463,14 +557,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "Token decode, generation resolution, unregister transition, and commit operate only on registry-owned atomic state; rejected requests expose no borrowed memory.",
-        "A failed commit rolls the slot back to Live, while a successful commit retires the exact generation before any later slot reuse."
+        "Token decode and exact-owner retirement operate only on registry-owned scalar state during process-context teardown.",
+        "Malformed, stale, duplicate, busy, corrupt, or v2-overlap state panics before falsely reporting Vacant."
       ],
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "d1894de8987aa91df3c4b54d57f04ee431dee125b3c9542fbba354d02c6d6914",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "expression_sha256": "2a81654ddfd26dd5ba3516616859e1f1b5416bdb99db267c8f7ce6677cf6b42e",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0019",
       "independent_review": {
         "evidence_sha256": null,
@@ -479,8 +573,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 118,
-      "line_start": 111,
+      "line_end": 152,
+      "line_start": 142,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK device-registry owner",
@@ -488,19 +582,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 110,
-        "line_start": 109,
+        "line_end": 141,
+        "line_start": 140,
         "source_sha256": "a58cd7060f9dd154f78e9ad4180ef2f6a949bdb4171f95506221f9e924b2e8a7",
         "text": "SAFETY: This exported C ABI accepts only the opaque scalar issued by attach and cannot return while the owned provider entry remains live."
       },
-      "source_sha256": "6f84005923b308a6b2cde3778b71387f51fa4008f0306e2511b86c83bfcc6473"
+      "source_sha256": "007ee8e45267173ee561b23a53301c83b0f1cb1d4b4ed767b276da2f109b6370"
     },
     {
-      "byte_end": 5136,
-      "byte_start": 4776,
+      "byte_end": 6606,
+      "byte_start": 6246,
       "caller_obligations": [
-        "The record layout, GPL license bytes, MCKERNEL_IHK_V1 namespace, and target signature extern C fn(i64) -> i32 must remain compatible with the selected Linux export format.",
-        "Only Linux modpost and module-loader machinery may interpret the .export_symbol record, whose relocation must target the exact detach function."
+        "The record layout, GPL bytes, MCKERNEL_IHK_V1 namespace, and extern C fn(i64) void target signature must remain exact.",
+        "Only Linux modpost and module-loader machinery may interpret the .export_symbol relocation."
       ],
       "column_end": 2,
       "column_start": 1,
@@ -510,14 +604,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "The record is consumed during module post-processing and load-time relocation.",
-        "The record and function target remain immutable and resident for the provider lifetime, and unload waits for dependent modules to drain."
+        "The immutable record is consumed during post-processing and load-time relocation.",
+        "The function target remains resident until every dependent module drains."
       ],
       "crate_roots": [
         "ihk"
       ],
       "expression_sha256": "b0aaa7e024a2dd7cdf12cb5e9fb563eaf9c0970442374897e7011a843c1ae6ac",
-      "file_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
       "id": "RS011-IHK-0020",
       "independent_review": {
         "evidence_sha256": null,
@@ -526,8 +620,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 131,
-      "line_start": 123,
+      "line_end": 165,
+      "line_start": 157,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK provider ABI owner",
@@ -535,19 +629,19 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 122,
-        "line_start": 121,
+        "line_end": 156,
+        "line_start": 155,
         "source_sha256": "2b48ba059712a137c110131fb90c091b6ed1e012ed87dbfc34840440de640dc0",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the scalar detach function in MCKERNEL_IHK_V1 for the provider lifetime."
       },
       "source_sha256": "eedecc6e37adf2e9f5e6c3696be8ec278e649374b164b6b66549016bb567de64"
     },
     {
-      "byte_end": 1513,
-      "byte_start": 1223,
+      "byte_end": 10489,
+      "byte_start": 7003,
       "caller_obligations": [
-        "Every access or call must hold the ihk module dependency, use MCKERNEL_IHK_V1, and preserve the declared byte, no-argument attach, and i64-token detach signatures.",
-        "The byte is read-only; a positive attach result is an opaque owned lease token that must be passed unchanged to exactly one detach, while negative statuses are errno values."
+        "The caller must hold the namespaced IHK dependency, pass callback ABI 1, the shared flag, and two non-null module-resident callbacks that cannot unwind.",
+        "A positive token must be paired exactly once with v2 detach and the same exit callback; a negative result creates no caller ownership."
       ],
       "column_end": 1,
       "column_start": 1,
@@ -557,14 +651,390 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "The module loader resolves all three relocations before SMP initialization and keeps their targets resident through SMP teardown.",
-        "The anchor read and attach occur during process-context init and detach occurs during process-context Drop; no pointer crosses the ABI and registry state remains private to ihk.ko."
+        "The process-context module-init path reserves Publishing, invokes init, retains the exit address, and publishes only after all checks succeed.",
+        "Only scalars and function-code identities cross this boundary; no Rust object, provider payload, or caller data pointer crosses it."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "64c91d1b1ecd8dcebb49f8feb0b9b9541afc522db8ad655c612bd879875b386f",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0023",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 280,
+      "line_start": 173,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-lease-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 172,
+        "line_start": 168,
+        "source_sha256": "4ee3a1df208ae691520e2e74a1e762e513ccb60b38ac5c8336a50b75f42343a9",
+        "text": "SAFETY: This C ABI accepts only scalars and nullable C-ABI function pointers. The reviewed SMP dependent owns both callback targets for the full returned lease lifetime.  Initialization runs while the registry slot is Publishing; only a zero result permits publication.  Every failed path aborts or retires its reservation and leaves no retained callback identity."
+      },
+      "source_sha256": "67355a712e3005fc5e707bfff0a5aae67c0cc74bc419d776beb737a932c38ee0"
+    },
+    {
+      "byte_end": 10489,
+      "byte_start": 7211,
+      "caller_obligations": [
+        "The implementation must validate ABI, flags, and both nullable callback options before invocation; both callbacks remain resident and cannot unwind.",
+        "The caller must preserve the returned opaque token and exact reviewed-build exit target for matching detach."
+      ],
+      "column_end": 1,
+      "column_start": 5,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The singleton registry admits one Publishing or Live minor-zero generation at a time.",
+        "Init failure aborts the reservation, and every post-init integrity failure retires the reservation or fails stop without returning an untracked live lease."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "7fd0f9afb4e022b5c813eab7584aa6287a3179c5dc0b34db0deb067a810544da",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0024",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 280,
+      "line_start": 176,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK device-registry owner",
+        "component": "native-rust/ihk-provider-callback-lease-attach"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 175,
+        "line_start": 174,
+        "source_sha256": "c2c9930a549443abe295378214357b32d2b46890ef4ed38e59be760775c654bf",
+        "text": "SAFETY: The exact nullable function-pointer ABI is validated before either callback is invoked; no Rust object or caller-owned data crosses the export."
+      },
+      "source_sha256": "720c69a9bec6a22b4acb0ad28b8025e6b0db7e2de41d8e997db6af14a9d9ea20"
+    },
+    {
+      "byte_end": 11028,
+      "byte_start": 10668,
+      "caller_obligations": [
+        "The GPL record, MCKERNEL_IHK_V1 namespace, and target must preserve extern C fn(u32, u32, Option<extern C fn() -> i32>, Option<extern C fn()>) -> i64.",
+        "Only Linux modpost and module-loader machinery may interpret the .export_symbol record."
+      ],
+      "column_end": 2,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The immutable relocation is consumed during post-processing and load-time relocation.",
+        "The function target remains resident until all dependent modules drain."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "8b1c4e931e2c144c7b5f3e4baec29e73019dceaa6deb61947b44f524411e07e6",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0025",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 293,
+      "line_start": 285,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-lease-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 284,
+        "line_start": 283,
+        "source_sha256": "15c9095fd2c9ac4e2e78644ee127a7e5fed33487b62c56e46adc5c2ba8061f40",
+        "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the callback-bound attach function in MCKERNEL_IHK_V1 for the provider lifetime."
+      },
+      "source_sha256": "099f500ae7f9f07a11928c89186d21c07f174e139c7a1394cce7fa64fdfd0d4b"
+    },
+    {
+      "byte_end": 13427,
+      "byte_start": 11427,
+      "caller_obligations": [
+        "The caller must own the exact positive v2 token and pass the same resident exit target exactly once after provider and OS references are quiescent.",
+        "The callback must not unwind, and a successful return consumes the complete callback-bound lease."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Process-context teardown blocks new references, verifies zero references, invokes exit, commits Vacant, and then clears retained identity.",
+        "A callback mismatch or registry invariant violation fails stop before retirement can be reported."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "cc6d6834cdda126c55528f0d8061211f999cacacf5d0bbbdd35bbbd1e3a16e4a",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0026",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 352,
+      "line_start": 301,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-lease-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 300,
+        "line_start": 296,
+        "source_sha256": "f16be5614fb597120eeec6cf3eeb4cfedc8f6b238190dd3093d3b6b178a036be",
+        "text": "SAFETY: The exact callback identity was retained before the named token was published.  The unregister guard first makes the provider Unpublishing and rejects new references.  The callback executes only after all existing open and OS references have drained, remains bound throughout the call, and is cleared only after exit completes and the slot commits to Vacant."
+      },
+      "source_sha256": "313d0c5fc9ecbbb4d49e46d6b7d2de1073a70df921d989a5d734d53ad2ce0975"
+    },
+    {
+      "byte_end": 13427,
+      "byte_start": 11633,
+      "caller_obligations": [
+        "The non-null exit target must match the retained address for the exact token in this locked build and reviewed consumer, remain resident through the call, and must not unwind.",
+        "All provider and OS references must be zero before the callback executes."
+      ],
+      "column_end": 1,
+      "column_start": 5,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Token decode, begin-unregister, snapshot, callback, commit, and identity clear operate on the sole live generation.",
+        "Every mismatch or failed invariant panics before falsely reporting retirement."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "0000acc0b166b2b82abe615a767320d13fd7ba17ed7253c9a5a48517398809fe",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0027",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 352,
+      "line_start": 304,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK device-registry owner",
+        "component": "native-rust/ihk-provider-callback-lease-detach"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 303,
+        "line_start": 302,
+        "source_sha256": "b4fba208825547f04a1a68701cbd86f383f530f3d118400c53ef778786e1b99c",
+        "text": "SAFETY: The token and exact retained exit identity name the sole live v2 lease; invariant violations fail stop before provider retirement can return."
+      },
+      "source_sha256": "a28f340fd30f6317f6af0ee1a4c6b9c0762f9cbf538e65836edd94934c531d24"
+    },
+    {
+      "byte_end": 13966,
+      "byte_start": 13606,
+      "caller_obligations": [
+        "The GPL record, MCKERNEL_IHK_V1 namespace, relocation, and extern C fn(i64, Option<extern C fn()>) void signature must remain exact.",
+        "Only Linux modpost and module-loader machinery may interpret the .export_symbol record."
+      ],
+      "column_end": 2,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The immutable record is consumed during post-processing and load-time relocation.",
+        "The detach target remains resident until all dependent modules drain."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "81fbca50f48521b3901fc5db97ad8d75099c4e35a6a38164666558abf454ee44",
+      "file_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+      "id": "RS011-IHK-0028",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 365,
+      "line_start": 357,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK provider ABI owner",
+        "component": "native-rust/ihk-provider-callback-lease-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 356,
+        "line_start": 355,
+        "source_sha256": "1744102985d346c67746c709393599ad64e74da7c273fc74bce2a5d4f41761c0",
+        "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the callback-bound detach function in MCKERNEL_IHK_V1 for the provider lifetime."
+      },
+      "source_sha256": "a64c20fe2ab407b0b4f2e3e5a008575f821b97ae402f8002d12634bbd738c1d8"
+    },
+    {
+      "byte_end": 1237,
+      "byte_start": 1214,
+      "caller_obligations": [
+        "The alias must exactly match the provider extern \"C\" fn() -> i32 type and remain module-resident for the lease.",
+        "The selected callback must not unwind across the C ABI."
+      ],
+      "column_end": 51,
+      "column_start": 29,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The selected callback body runs during process-context initialization before provider publication.",
+        "No caller data or borrowed memory is passed."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "439e656dea993f44897a8c8d4920eb33615c6095d2884e4c74e6815d29110558",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "expression_sha256": "7225d7e2bc614732c9ff4078d01e360b4321df0698cb126d9c6b115096b74201",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+      "id": "RS011-SMP-0008",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 27,
+      "line_start": 27,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP provider-callback owner",
+        "component": "native-rust/ihk-smp-provider-callback-abi"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 26,
+        "line_start": 26,
+        "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
+        "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
+      },
+      "source_sha256": "4149a416240d2ad461a73341610a942f087f8e1a238807177a462b8b24016416"
+    },
+    {
+      "byte_end": 1358,
+      "byte_start": 1342,
+      "caller_obligations": [
+        "The alias must exactly match the provider extern \"C\" fn() type and remain module-resident through detach.",
+        "The selected callback must not unwind across the C ABI."
+      ],
+      "column_end": 44,
+      "column_start": 29,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The selected callback body runs during process-context teardown after reference drain while the provider is Unpublishing.",
+        "No caller data or borrowed memory is passed."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "4ddd55b22c2c4cf5ee0531eae7c79cd406e85963614a5f9e057946dd3c5c60ce",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+      "id": "RS011-SMP-0009",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 29,
+      "line_start": 29,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP provider-callback owner",
+        "component": "native-rust/ihk-smp-provider-callback-abi"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 28,
+        "line_start": 28,
+        "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
+        "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
+      },
+      "source_sha256": "8da3628398700d5d4341eec0f1d32dc2b44286312f9763150522af9dcbfe4e7b"
+    },
+    {
+      "byte_end": 2132,
+      "byte_start": 1666,
+      "caller_obligations": [
+        "Every access must hold the IHK dependency, use MCKERNEL_IHK_V1, and preserve the anchor plus v2 attach and detach signatures.",
+        "Attach must pass ABI 1, the shared flag, and exact nullable init/exit callback identities; a positive token must be passed unchanged once to detach with the same exit callback."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The loader resolves all three relocations before SMP initialization and keeps IHK resident through ProviderLease::drop.",
+        "Anchor read and attach occur in init, detach occurs in Drop, and only scalars plus function-code identities cross; no provider data pointer or Rust layout crosses."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "4a5e7db35800222f988166292c18b863f99cfa909a6aa7cf1b843f92558d9942",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -573,8 +1043,8 @@
         "status": "pending"
       },
       "kind": "foreign_block",
-      "line_end": 34,
-      "line_start": 27,
+      "line_end": 47,
+      "line_start": 35,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -582,21 +1052,115 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 26,
-        "line_start": 24,
-        "source_sha256": "9b8349d08c7345e3f048b6fb1087088201572914a9bf405ba12a13bb58cff3bc",
-        "text": "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalar values and retain all registry state inside ihk.ko."
+        "line_end": 34,
+        "line_start": 31,
+        "source_sha256": "6f8108b14810919d86bde15245e31db802a264e9fd2a567f7fd6d366cf79fed9",
+        "text": "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalars and scalar-only callback function identities.  No provider object, private data pointer, operation callback, or Rust layout crosses this boundary."
       },
-      "source_sha256": "8e29b5365a557cc0bec39d398d85b00f6865c8ee3f7ac63d05dea6a3ae05a263"
+      "source_sha256": "c8660cdb4ac5fb1c4f46292ac2e988d2fec1d35a7a8aa520b354085d6dfc8f55"
     },
     {
-      "byte_end": 2234,
-      "byte_start": 2195,
+      "byte_end": 2681,
+      "byte_start": 2551,
       "caller_obligations": [
-        "The exact provider dependency, namespace, and extern C fn() -> i64 relocation must be valid before the call.",
-        "Initialization must call attach once, map every permitted negative errno exactly, and immediately store a positive result in the non-Copy ProviderLease owner."
+        "The callback body must preserve the exact no-argument i32 ABI, return only the reviewed scalar status, and never unwind.",
+        "It must not access foreign state or claim device, OS, CPU, memory, IKC, or McKernel behavior."
       ],
-      "column_end": 59,
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The provider invokes it once before publication in process-context init while the SMP module text is resident.",
+        "Its diagnostic-only completion does not establish any resource or runtime capability."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "02409a56a90f02b954fd61d49bb478333e1ee9ca878192b254a3158516db9c9d",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+      "id": "RS011-SMP-0010",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 58,
+      "line_start": 55,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP provider-callback owner",
+        "component": "native-rust/ihk-smp-provider-callback-init"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 54,
+        "line_start": 49,
+        "source_sha256": "ca6165f069de5bf11989c41c3c37562582d3e945436ffb329ebd938fb99b9c46",
+        "text": "SAFETY: The callback owns no foreign state and returns only a literal errno status through the exact v2 function-pointer ABI."
+      },
+      "source_sha256": "6fd33526df7a45bda9938be1408dae0252bf9687eef33f5f204673179f2e3765"
+    },
+    {
+      "byte_end": 2956,
+      "byte_start": 2839,
+      "caller_obligations": [
+        "The callback body must preserve the exact no-argument void ABI, avoid foreign state, and never unwind.",
+        "It may emit only the reviewed lifecycle diagnostic and must return synchronously."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The provider invokes it in process-context teardown after reference drain while the SMP module text is resident and before the Vacant commit.",
+        "Its diagnostic-only completion does not establish any resource or runtime capability."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "7490269917ae5c724b09396ce55b5fc49086a74428c4b748e3a69255884ee328",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+      "id": "RS011-SMP-0011",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 64,
+      "line_start": 62,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP provider-callback owner",
+        "component": "native-rust/ihk-smp-provider-callback-exit"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 61,
+        "line_start": 60,
+        "source_sha256": "8a024aa30418e2a9105daf8fdd74116a0759f3ff9f01db2f9c02cd8210443571",
+        "text": "SAFETY: The callback owns no foreign state and returns only after its local lifecycle diagnostic completes through the exact v2 function-pointer ABI."
+      },
+      "source_sha256": "b7913fb2320e736fe3dfd8195e57832ceb7a35035a8b933cfe4204f15bce6603"
+    },
+    {
+      "byte_end": 3925,
+      "byte_start": 3661,
+      "caller_obligations": [
+        "The exact v2 relocation must be valid before the call, which passes ABI 1, the shared flag, and the exact resident init and exit callbacks.",
+        "Initialization must map every permitted negative errno and immediately store a positive token in the non-Copy ProviderLease owner."
+      ],
+      "column_end": 9,
       "column_start": 21,
       "compiler_capture": {
         "evidence_sha256": null,
@@ -604,14 +1168,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "The call executes in process-context module init after the dependency-anchor read and before the module instance or load-success log is published.",
-        "No pointer crosses the call; a failed status returns an init error without constructing a lease owner."
+        "The call executes after the dependency-anchor read and before module publication in process context.",
+        "A failed status constructs no lease owner; successful ownership includes the unchanged token and exit callback identity."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "a808f63184b63b4a0d146a9c5951ceef9976bbaf20140e8ec08ae3be8e98dfd6",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "expression_sha256": "d0650a2d2d34d3508f9e291830cebd349ca7d48875f585cc17476c5ea3790a1c",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0006",
       "independent_review": {
         "evidence_sha256": null,
@@ -620,8 +1184,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 57,
-      "line_start": 57,
+      "line_end": 94,
+      "line_start": 87,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -629,21 +1193,21 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 56,
-        "line_start": 54,
-        "source_sha256": "db541f1668983a2a3f6866e048b0b2ff60aef59724057ff6edddc5c5df5c9c4e",
-        "text": "SAFETY: ihk.ko owns the exact namespaced C-ABI function for the dependency lifetime.  It accepts no pointers and returns either a positive opaque token or a negative errno."
+        "line_end": 86,
+        "line_start": 84,
+        "source_sha256": "fca98ec5e91d39b427216db98ddcbce2e8e9b4f99dbbe11cf42d63e9b9d78a3f",
+        "text": "SAFETY: ihk.ko owns the exact namespaced C-ABI function for the dependency lifetime.  The exact callbacks accept no arguments, own no caller memory, and remain resident until the matching detach."
       },
-      "source_sha256": "a1edd75a8eae37a422875c25fecc5074ce92c1bb0d0e41b08047d36f28509b40"
+      "source_sha256": "7bffe2c5c55f3d29a1b016081a5d4655b275594f777f5e9d7275389861eaa5d5"
     },
     {
-      "byte_end": 2693,
-      "byte_start": 2644,
+      "byte_end": 4490,
+      "byte_start": 4389,
       "caller_obligations": [
-        "Only the non-Copy ProviderLease owner may call the exact extern C fn(i64) -> i32 target, once, with its unmodified positive attach token.",
-        "All dependent operations and registry references must be quiescent first; a nonzero status remains a failed release and must not support teardown-success evidence."
+        "The non-Copy owner must pass its unchanged positive token and the same resident exit callback exactly once after all references quiesce.",
+        "The exact v2 detach target has void return and fails stop instead of returning with a live provider entry or callback."
       ],
-      "column_end": 57,
+      "column_end": 9,
       "column_start": 9,
       "compiler_capture": {
         "evidence_sha256": null,
@@ -651,14 +1215,14 @@
         "status": "not_captured"
       },
       "context_constraints": [
-        "The call executes from ProviderLease::drop after Option::take, before the unload-success log and before the ihk dependency can be released.",
-        "The call runs in process context, crosses no pointer or callback, and any error is logged as fail-closed evidence rather than converted into success."
+        "ProviderLease::drop invokes detach before the unload-success log and before the IHK dependency is released.",
+        "The process-context call completes callback exit and provider retirement while the SMP module text remains resident."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "92a0fd378a0cae3d5bbbe5c98b763a0602366390d13a83b71353c161701849c6",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "expression_sha256": "4266823b75c5d7752aa78415ee7ca34ca2c0a50b1bc4658789e9ee74105e1849",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0007",
       "independent_review": {
         "evidence_sha256": null,
@@ -667,8 +1231,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 70,
-      "line_start": 70,
+      "line_end": 110,
+      "line_start": 108,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -676,16 +1240,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 69,
-        "line_start": 67,
-        "source_sha256": "335dd4bb5453107172697edd5d91cbb2ef50e9c314de342305d7e4dd3267f33b",
-        "text": "SAFETY: This non-Copy owner calls the matching provider function exactly once with the positive token returned by attach.  The provider fails stop rather than returning with a live entry."
+        "line_end": 107,
+        "line_start": 104,
+        "source_sha256": "2e8a178d6e70c2291416a441ce0b7eb89e481eff9ea40eb56935341d377dc7ae",
+        "text": "SAFETY: This non-Copy owner calls the matching provider function exactly once with the positive token returned by attach and the retained exit identity.  The provider fails stop rather than returning with a live entry or callback."
       },
-      "source_sha256": "0202e9d96084d24a32d84e6183bd850de537b577aeaf8c9630ea7420e25c2bf8"
+      "source_sha256": "ba85c607c295a61ccb52e16f5ff8f4484773aba589d7523e13f16767d8f661b4"
     },
     {
-      "byte_end": 3544,
-      "byte_start": 3505,
+      "byte_end": 5341,
+      "byte_start": 5302,
       "caller_obligations": [
         "Every KernelParameter instance must remain immutable after relocation.",
         "Pointers must name module-static parameter storage and selected-kernel parameter operations with matching types."
@@ -705,7 +1269,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -714,8 +1278,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 97,
-      "line_start": 97,
+      "line_end": 137,
+      "line_start": 137,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -723,16 +1287,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 96,
-        "line_start": 94,
+        "line_end": 136,
+        "line_start": 134,
         "source_sha256": "68f329188c795513648285f37e10728cb4b6d17f27e75e51c69d9e98fdf5be8f",
         "text": "SAFETY: Each instance is immutable after relocation.  Linux owns access to the pointed-to parameter storage and serializes writes with its parameter subsystem; Rust code never dereferences these pointers."
       },
       "source_sha256": "8b15f4f88f64705a55f48fd4acaaab6113cbf1073f86c8946aac19b4b987fc80"
     },
     {
-      "byte_end": 4425,
-      "byte_start": 4382,
+      "byte_end": 6222,
+      "byte_start": 6179,
       "caller_obligations": [
         "Rust code must not directly read or write the mutable storage after publication.",
         "Each macro expansion must give its descriptor a unique, type-matched pointer to module-static storage."
@@ -752,7 +1316,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -761,8 +1325,8 @@
         "status": "pending"
       },
       "kind": "mutable_static",
-      "line_end": 119,
-      "line_start": 119,
+      "line_end": 159,
+      "line_start": 159,
       "macro_context": "numeric_parameter",
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -770,16 +1334,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 118,
-        "line_start": 117,
+        "line_end": 158,
+        "line_start": 157,
         "source_sha256": "2c725c36e7e796d5ad9874c306ead7272df73149400633a5614d736ea067fe7d",
         "text": "SAFETY: Linux's parameter subsystem is the only writer after module publication and serializes access; Rust never reads this storage."
       },
       "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
     },
     {
-      "byte_end": 11480,
-      "byte_start": 11377,
+      "byte_end": 13277,
+      "byte_start": 13174,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -799,7 +1363,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
+      "file_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -808,8 +1372,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 340,
-      "line_start": 338,
+      "line_end": 380,
+      "line_start": 378,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP lifecycle owner",
@@ -817,8 +1381,8 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 337,
-        "line_start": 335,
+        "line_end": 377,
+        "line_start": 375,
         "source_sha256": "f87c1314a28fa1c8c36d4411879cf6e4d13b8b423e959c9e8fa239f15ca7adc0",
         "text": "SAFETY: The provider exports this immutable byte in the declared namespace.  The volatile read keeps the relocation as an actual module dependency; the value itself has no behavioral meaning."
       },
@@ -1436,7 +2000,7 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     }
   ],
-  "source_closure_sha256": "5d477f1ae232f4d9cb71353812c19d9951525c1e318ef2dce782f0d3a88b3ecd",
+  "source_closure_sha256": "88594d6009b8e642d80adf4f665b54c6f0910f5f1284e10340c5e28495694466",
   "source_inputs": [
     {
       "bytes": 19740,
@@ -1455,12 +2019,12 @@
       "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7"
     },
     {
-      "bytes": 6838,
+      "bytes": 15820,
       "crate_roots": [
         "ihk"
       ],
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b"
+      "sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de"
     },
     {
       "bytes": 9977,
@@ -1471,12 +2035,12 @@
       "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
     },
     {
-      "bytes": 12163,
+      "bytes": 13960,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9"
+      "sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9"
     },
     {
       "bytes": 26419,

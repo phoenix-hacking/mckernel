@@ -20,17 +20,47 @@ mod smp_resource;
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
 const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";
+const IHK_SMP_PROVIDER_CALLBACK_ABI_V1: u32 = 1;
+const IHK_SMP_PROVIDER_FLAG_SHARED: u32 = 1;
+
+// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
+type IhkSmpProviderInitV2 = extern "C" fn() -> i32;
+// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
+type IhkSmpProviderExitV2 = extern "C" fn();
 
 // SAFETY: The provider owns these namespaced symbols for its full module
-// lifetime.  The byte is read-only; the C-ABI functions exchange only scalar
-// values and retain all registry state inside ihk.ko.
+// lifetime.  The byte is read-only; the C-ABI functions exchange only scalars
+// and scalar-only callback function identities.  No provider object, private
+// data pointer, operation callback, or Rust layout crosses this boundary.
 extern "C" {
     #[link_name = "ihk_provider_lifecycle_v1"]
     static IHK_PROVIDER_LIFECYCLE_V1: u8;
-    #[link_name = "ihk_smp_provider_attach_v1"]
-    fn ihk_smp_provider_attach_v1() -> i64;
-    #[link_name = "ihk_smp_provider_detach_v1"]
-    fn ihk_smp_provider_detach_v1(token: i64);
+    #[link_name = "ihk_smp_provider_attach_v2"]
+    fn ihk_smp_provider_attach_v2(
+        callback_abi: u32,
+        flags: u32,
+        init: Option<IhkSmpProviderInitV2>,
+        exit: Option<IhkSmpProviderExitV2>,
+    ) -> i64;
+    #[link_name = "ihk_smp_provider_detach_v2"]
+    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);
+}
+
+// These callbacks deliberately own lifecycle only.  Returning success from
+// init does not advertise any device operation, OS lease, CPU, memory, IKC, or
+// McKernel behavior.  The IHK provider invokes them before publication and
+// while holding an unpublishing guard respectively.
+// SAFETY: The callback owns no foreign state and returns only a literal errno
+// status through the exact v2 function-pointer ABI.
+extern "C" fn ihk_smp_provider_init_v2() -> i32 {
+    pr_info!("provider_callback=init status=complete callback_abi=1\n");
+    0
+}
+
+// SAFETY: The callback owns no foreign state and returns only after its local
+// lifecycle diagnostic completes through the exact v2 function-pointer ABI.
+extern "C" fn ihk_smp_provider_exit_v2() {
+    pr_info!("provider_callback=exit status=complete callback_abi=1\n");
 }
 
 fn provider_status_error(status: i64) -> Error {
@@ -52,9 +82,16 @@ struct ProviderLease {
 impl ProviderLease {
     fn attach() -> Result<Self> {
         // SAFETY: ihk.ko owns the exact namespaced C-ABI function for the
-        // dependency lifetime.  It accepts no pointers and returns either a
-        // positive opaque token or a negative errno.
-        let token = unsafe { ihk_smp_provider_attach_v1() };
+        // dependency lifetime.  The exact callbacks accept no arguments, own
+        // no caller memory, and remain resident until the matching detach.
+        let token = unsafe {
+            ihk_smp_provider_attach_v2(
+                IHK_SMP_PROVIDER_CALLBACK_ABI_V1,
+                IHK_SMP_PROVIDER_FLAG_SHARED,
+                Some(ihk_smp_provider_init_v2),
+                Some(ihk_smp_provider_exit_v2),
+            )
+        };
         if token <= 0 {
             return Err(provider_status_error(token));
         }
@@ -65,9 +102,12 @@ impl ProviderLease {
 impl Drop for ProviderLease {
     fn drop(&mut self) {
         // SAFETY: This non-Copy owner calls the matching provider function
-        // exactly once with the positive token returned by attach.  The
-        // provider fails stop rather than returning with a live entry.
-        unsafe { ihk_smp_provider_detach_v1(self.token) };
+        // exactly once with the positive token returned by attach and the
+        // retained exit identity.  The provider fails stop rather than
+        // returning with a live entry or callback.
+        unsafe {
+            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))
+        };
     }
 }
 

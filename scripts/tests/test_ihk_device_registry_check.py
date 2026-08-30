@@ -83,7 +83,8 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
             ]
         )
         self.assertEqual(
-            [registry.PROVIDER_ATTACH_SYMBOL, registry.PROVIDER_DETACH_SYMBOL],
+            list(registry.PROVIDER_COMPATIBILITY_EXPORTS)
+            + [registry.PROVIDER_ATTACH_SYMBOL, registry.PROVIDER_DETACH_SYMBOL],
             contract["attachment_boundary"]["provider_lease_exports"],
         )
         self.assertFalse(contract["provider_lease_boundary"]["credit_eligible"])

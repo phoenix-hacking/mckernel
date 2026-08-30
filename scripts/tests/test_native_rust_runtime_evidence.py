@@ -40,7 +40,8 @@ def valid_serial() -> str:
         f"{protocol} STATE_END label=initial-clean",
         f"{protocol} LOAD module=ihk status=ok",
         "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
-        "ihk: provider_lease=attach status=live minor=0",
+        "ihk_smp_x86_64: provider_callback=init status=complete callback_abi=1",
+        "ihk: provider_lease=attach status=live minor=0 callback_abi=1",
         f"{protocol} LOAD module=ihk_smp_x86_64 status=ok",
         "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
@@ -71,7 +72,8 @@ def valid_serial() -> str:
         f"{protocol} UNLOAD module=mcctrl status=ok",
         f"{protocol} REFCOUNT module=ihk phase=after-mcctrl-unload references=1 "
         "users=ihk_smp_x86_64,",
-        "ihk: provider_lease=detach status=vacant minor=0 generation=1",
+        "ihk_smp_x86_64: provider_callback=exit status=complete callback_abi=1",
+        "ihk: provider_lease=detach status=vacant minor=0 generation=1 callback_abi=1",
         "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok",
@@ -83,14 +85,16 @@ def valid_serial() -> str:
         f"{protocol} STATE_END label=final-clean",
         f"{protocol} DMESG_BEGIN",
         "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
-        "ihk: provider_lease=attach status=live minor=0",
+        "ihk_smp_x86_64: provider_callback=init status=complete callback_abi=1",
+        "ihk: provider_lease=attach status=live minor=0 callback_abi=1",
         "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
         "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
         "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
         "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
-        "ihk: provider_lease=detach status=vacant minor=0 generation=1",
+        "ihk_smp_x86_64: provider_callback=exit status=complete callback_abi=1",
+        "ihk: provider_lease=detach status=vacant minor=0 generation=1 callback_abi=1",
         "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         "ihk: provider_registry=empty active=0",
@@ -103,7 +107,7 @@ def valid_serial() -> str:
 
 def provider_global_nm(symbols=None) -> str:
     if symbols is None:
-        symbols = evidence.PROVIDER_SYMBOLS
+        symbols = evidence.PROVIDER_DEFINED_SYMBOLS
     return "".join(
         "0000000000000100 T {0}\n".format(symbol) for symbol in symbols
     )
@@ -111,7 +115,7 @@ def provider_global_nm(symbols=None) -> str:
 
 def provider_all_defined_nm(symbols=None) -> str:
     if symbols is None:
-        symbols = evidence.PROVIDER_SYMBOLS
+        symbols = evidence.PROVIDER_DEFINED_SYMBOLS
     records = [
         "0000000000000000 r __ksymtab_gpl\n",
         "0000000000000000 r __ksymtab_strings\n",
@@ -281,7 +285,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             if module.name == "ihk.ko" and arguments == ["-a", "--defined-only"]:
                 return provider_all_defined_nm()
             if module.name == "ihk-smp-x86_64.ko" and arguments == ["-u"]:
-                return provider_undefined_nm(evidence.PROVIDER_SYMBOLS)
+                return provider_undefined_nm(evidence.PROVIDER_SMP_IMPORT_SYMBOLS)
             if module.name == "mcctrl.ko" and arguments == ["-u"]:
                 return provider_undefined_nm((evidence.PROVIDER_ANCHOR_SYMBOL,))
             self.fail("unexpected nm request: {0} {1}".format(module, arguments))
@@ -295,15 +299,20 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 modules["mcctrl"], items["mcctrl"]
             )
         self.assertEqual(4, nm.call_count)
-        self.assertEqual(list(evidence.PROVIDER_SYMBOLS), ihk["defined_provider_symbols"])
         self.assertEqual(
-            list(evidence.PROVIDER_SYMBOLS), ihk["gpl_exported_provider_symbols"]
+            list(evidence.PROVIDER_DEFINED_SYMBOLS),
+            ihk["defined_provider_symbols"],
+        )
+        self.assertEqual(
+            list(evidence.PROVIDER_DEFINED_SYMBOLS),
+            ihk["gpl_exported_provider_symbols"],
         )
         self.assertEqual(
             evidence.PROVIDER_EXPORT_NAMESPACE, ihk["provider_export_namespace"]
         )
         self.assertEqual(
-            list(evidence.PROVIDER_SYMBOLS), smp["undefined_provider_symbols"]
+            list(evidence.PROVIDER_SMP_IMPORT_SYMBOLS),
+            smp["undefined_provider_symbols"],
         )
         self.assertEqual(
             [evidence.PROVIDER_ANCHOR_SYMBOL], mcctrl["undefined_provider_symbols"]
@@ -365,7 +374,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         globals_without_attach = provider_global_nm(
             tuple(
                 symbol
-                for symbol in evidence.PROVIDER_SYMBOLS
+                for symbol in evidence.PROVIDER_DEFINED_SYMBOLS
                 if symbol != evidence.PROVIDER_ATTACH_SYMBOL
             )
         )
@@ -393,12 +402,16 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         item = contract["modules"][1]
         module = self.root / "ihk-smp-x86_64.ko"
         module.write_bytes(b"smp")
-        for missing in evidence.PROVIDER_SYMBOLS:
+        for missing in evidence.PROVIDER_SMP_IMPORT_SYMBOLS:
             with self.subTest(missing=missing), mock.patch.object(
                 evidence,
                 "_nm",
                 return_value=provider_undefined_nm(
-                    tuple(symbol for symbol in evidence.PROVIDER_SYMBOLS if symbol != missing)
+                    tuple(
+                        symbol
+                        for symbol in evidence.PROVIDER_SMP_IMPORT_SYMBOLS
+                        if symbol != missing
+                    )
                 ),
             ):
                 with self.assertRaisesRegex(
@@ -605,10 +618,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "kernel_release": release,
                 "modules": {
                     "ihk": {
-                        "defined_provider_symbols": list(evidence.PROVIDER_SYMBOLS),
+                        "defined_provider_symbols": list(
+                            evidence.PROVIDER_DEFINED_SYMBOLS
+                        ),
                         "depends": [],
                         "gpl_exported_provider_symbols": list(
-                            evidence.PROVIDER_SYMBOLS
+                            evidence.PROVIDER_DEFINED_SYMBOLS
                         ),
                         "import_namespaces": [],
                         "provider_export_namespace": (
@@ -621,7 +636,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                         "import_namespaces": [evidence.PROVIDER_EXPORT_NAMESPACE],
                         "sha256": digest,
                         "undefined_provider_symbols": list(
-                            evidence.PROVIDER_SYMBOLS
+                            evidence.PROVIDER_SMP_IMPORT_SYMBOLS
                         ),
                     },
                     "mcctrl": {
@@ -651,7 +666,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "negative_unload_status": 1,
                 "provider_lease": {
                     "attach_observed": True,
+                    "callback_abi": evidence.PROVIDER_CALLBACK_ABI,
                     "detach_observed": True,
+                    "exit_callback_observed": True,
+                    "init_callback_observed": True,
                     "raw_token_logged": False,
                     "registry_empty_observed": True,
                 },
@@ -688,6 +706,15 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             (0, "provider_export_namespace", "MCKERNEL_IHK_V2"),
             (1, "undefined_provider_symbols", [evidence.PROVIDER_ANCHOR_SYMBOL]),
             (
+                1,
+                "undefined_provider_symbols",
+                [
+                    evidence.PROVIDER_ANCHOR_SYMBOL,
+                    evidence.PROVIDER_COMPAT_ATTACH_SYMBOL,
+                    evidence.PROVIDER_COMPAT_DETACH_SYMBOL,
+                ],
+            ),
+            (
                 2,
                 "undefined_provider_symbols",
                 [evidence.PROVIDER_ANCHOR_SYMBOL, evidence.PROVIDER_ATTACH_SYMBOL],
@@ -721,6 +748,15 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "ihk_smp_x86_64",
                 "undefined_provider_symbols",
                 [evidence.PROVIDER_ANCHOR_SYMBOL],
+            ),
+            (
+                "ihk_smp_x86_64",
+                "undefined_provider_symbols",
+                [
+                    evidence.PROVIDER_ANCHOR_SYMBOL,
+                    evidence.PROVIDER_COMPAT_ATTACH_SYMBOL,
+                    evidence.PROVIDER_COMPAT_DETACH_SYMBOL,
+                ],
             ),
             (
                 "mcctrl",
@@ -877,12 +913,17 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
 
     def test_provider_lease_contract_cannot_promote_runtime_gate_or_credit(self) -> None:
         mutations = (
+            ("callback_abi", 2),
+            ("callback_payload_reachable", True),
             ("runtime_behavior_proven", True),
             ("rocky_runtime_validated", True),
             ("gate_status", "PASS"),
             ("credit_eligible", True),
             ("tracker_credit", True),
             ("raw_token_logged", True),
+            ("init_callback_before_attach", False),
+            ("exit_callback_before_detach", False),
+            ("operation_callbacks_reachable", True),
         )
         for field, value in mutations:
             with self.subTest(field=field):
@@ -1574,7 +1615,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(
             {
                 "attach_observed": True,
+                "callback_abi": evidence.PROVIDER_CALLBACK_ABI,
                 "detach_observed": True,
+                "exit_callback_observed": True,
+                "init_callback_observed": True,
                 "raw_token_logged": False,
                 "registry_empty_observed": True,
             },
@@ -1592,14 +1636,16 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             serial = serial.replace(row, row + " (E)")
         for marker in (
             "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
-            "ihk: provider_lease=attach status=live minor=0",
+            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
             "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
             "import_namespace=MCKERNEL_IHK_V1",
             "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
             "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
-            "ihk: provider_lease=detach status=vacant minor=0 generation=1",
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1 callback_abi=1",
             "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
             "import_namespace=MCKERNEL_IHK_V1",
             "ihk: provider_registry=empty active=0",
@@ -1611,8 +1657,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
 
     def test_provider_lease_events_are_required_once_in_runtime_dmesg(self) -> None:
         markers = (
+            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
             evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
-            "ihk: provider_lease=detach status=vacant minor=0 generation=1",
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1 callback_abi=1",
             evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
         )
         dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
@@ -1643,7 +1691,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
         )
-        detach = "ihk: provider_lease=detach status=vacant minor=0 generation=1"
+        init_callback = evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC
+        exit_callback = evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC
+        detach = (
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1 "
+            "callback_abi=1"
+        )
         smp_unload = (
             "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
             "import_namespace=MCKERNEL_IHK_V1"
@@ -1651,32 +1704,34 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         ihk_unload = "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
         mutations = (
             (
-                "attach-before-ihk-load",
-                ihk_load + "\n" + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
-                evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC + "\n" + ihk_load,
+                "init-callback-before-ihk-load",
+                ihk_load + "\n" + init_callback,
+                init_callback + "\n" + ihk_load,
+            ),
+            (
+                "init-callback-after-attach",
+                init_callback + "\n" + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+                evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC + "\n" + init_callback,
             ),
             (
                 "attach-after-smp-load",
-                ihk_load
-                + "\n"
-                + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC
-                + "\n"
-                + smp_load,
-                ihk_load
-                + "\n"
-                + smp_load
-                + "\n"
-                + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+                evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC + "\n" + smp_load,
+                smp_load + "\n" + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
             ),
             (
-                "detach-before-mcctrl-unload",
-                mcctrl_unload + "\n" + detach + "\n" + smp_unload,
-                detach + "\n" + mcctrl_unload + "\n" + smp_unload,
+                "exit-callback-before-mcctrl-unload",
+                mcctrl_unload + "\n" + exit_callback,
+                exit_callback + "\n" + mcctrl_unload,
+            ),
+            (
+                "exit-callback-after-detach",
+                exit_callback + "\n" + detach,
+                detach + "\n" + exit_callback,
             ),
             (
                 "detach-after-smp-unload",
-                mcctrl_unload + "\n" + detach + "\n" + smp_unload,
-                mcctrl_unload + "\n" + smp_unload + "\n" + detach,
+                detach + "\n" + smp_unload,
+                smp_unload + "\n" + detach,
             ),
             (
                 "registry-empty-before-smp-unload",
@@ -1720,6 +1775,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
         for diagnostic in (
             "ihk_smp_x86_64: provider_lease=detach-failed status=-16",
+            "ihk: provider_callback=not-empty callback_abi=1",
             "ihk: provider_registry=not-empty active=1",
             "ihk: provider_registry=corrupt errno=-117",
         ):
@@ -1751,8 +1807,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
     def test_unrecognized_provider_lease_success_diagnostics_are_rejected(self) -> None:
         dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
         for diagnostic in (
+            "ihk: provider_lease=attach status=live minor=0",
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1",
             "ihk: provider_lease=attach status=live minor=1",
             "ihk: provider_lease=detach status=vacant minor=0 generation=0",
+            "ihk_smp_x86_64: provider_callback=init status=complete callback_abi=2",
+            "ihk_smp_x86_64: provider_callback=exit status=wrong callback_abi=1",
             "ihk: provider_registry=empty active=00",
         ):
             with self.subTest(diagnostic=diagnostic):
@@ -2052,7 +2112,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
     def test_capture_provider_lease_summary_is_exact_and_nonpromotable(self) -> None:
         for field, value in (
             ("attach_observed", False),
+            ("callback_abi", 2),
             ("detach_observed", False),
+            ("exit_callback_observed", False),
+            ("init_callback_observed", False),
             ("raw_token_logged", True),
             ("registry_empty_observed", False),
         ):

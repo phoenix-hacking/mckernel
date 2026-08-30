@@ -47,7 +47,7 @@ REUSED_MODULE_BINDINGS = {
         46054, "7a708375beb168f95ce6f6c76b96d47e70176a7f1654645aa99ca1275c9d7984"
     ),
     "rocky_kernel_rk007_build_review.py": (
-        138176, "a280a8d04c6b4b1725eada2c39f8b2fda4ca22377d8bbf0234c5f80867026903"
+        138177, "e27d931103f3b675971d06a8df6cc8c37ce09fafcaf90ca6bde8a136a03d46c9"
     ),
 }
 
@@ -239,7 +239,7 @@ REVIEW_GLOB = "rk007-native-build-review-*-v2.json"
 SCHEMA_VERSION = 2
 REVIEW_ID = "rk-007-native-rust-exact-build-review-ef58860e-v2"
 # Filled after the exact ef58860e artifact was downloaded and reviewed.
-REVIEW_SHA256 = "3bed528090b767a07efbcfcd745f0f6753bf96fdee465038f2869479ab84f0ce"
+REVIEW_SHA256 = "91d845395792adfdff31df36a3528c00df5cacfcbf739027c27302d2679e0542"
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
 )
@@ -378,8 +378,8 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 30870,
     },
     {
-        "current_git_blob_sha1": "161320e38f4415e67ea03afa1f6a8f06ad8a6513",
-        "current_sha256": "dc71b0717b68b4b3904c07337d045ea1f0c3c29e7432bd462e9353b7589ead50",
+        "current_git_blob_sha1": "b168723aafc64a1706b60edaeba701d9678f65db",
+        "current_sha256": "f97ac7978a6db03c0982a25a4404a5695cd5985677e543f5f0751f3ff11d90d6",
         "current_size": 6231,
         "mode": "100644",
         "path": "host-kernel/kbuild/stage-manifest.json",
@@ -398,9 +398,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 18796,
     },
     {
-        "current_git_blob_sha1": "6d075a17ab86e92fa1a1fccd2c89ba098c399d9f",
-        "current_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
-        "current_size": 6838,
+        "current_git_blob_sha1": "c6200c520eddb497d2d37e35553645a4551c9e2b",
+        "current_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+        "current_size": 15820,
         "mode": "100644",
         "path": "host-kernel/native-rust/ihk.rs",
         "runtime_git_blob_sha1": "9bccef539ec17fb91a2920cb0ca81486adcd2b33",
@@ -408,9 +408,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 3818,
     },
     {
-        "current_git_blob_sha1": "aadff5dae0ab22c51a7a95c7ed9b9683b23a56fb",
-        "current_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
-        "current_size": 12163,
+        "current_git_blob_sha1": "b99b3cc135c8e223102f752c942e9fa34cedc027",
+        "current_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+        "current_size": 13960,
         "mode": "100644",
         "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
         "runtime_git_blob_sha1": "fc3d63b0396fb09470b14b48c016bb246f93b493",
@@ -418,9 +418,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 10271,
     },
     {
-        "current_git_blob_sha1": "23c2abf9b04b0fbc542004c9128af6df94449b72",
-        "current_sha256": "4ddfc6c5d9f8e3da686aa0de37934b1381b7c3af93ce43318dabd25148012cd6",
-        "current_size": 62267,
+        "current_git_blob_sha1": "1b0ca8418a61936bf58af651c569305f4e6e5035",
+        "current_sha256": "3f62d0df60b685990fc7a0d72c7adbd0b2b8d9acc6f3bce91bdc26140c96c71f",
+        "current_size": 66001,
         "mode": "100644",
         "path": "scripts/rocky_rust_staging.py",
         "runtime_git_blob_sha1": "529e790c2037caf334517983afd489e16f9882cf",
@@ -448,9 +448,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 46054,
     },
     {
-        "current_git_blob_sha1": "aab6ec12d7ef5315bd3ccd49e6c7adb7bb5809e0",
-        "current_sha256": "a280a8d04c6b4b1725eada2c39f8b2fda4ca22377d8bbf0234c5f80867026903",
-        "current_size": 138176,
+        "current_git_blob_sha1": "7e05df3f48a1f9ead25f1a203a880c2c62bd346c",
+        "current_sha256": "e27d931103f3b675971d06a8df6cc8c37ce09fafcaf90ca6bde8a136a03d46c9",
+        "current_size": 138177,
         "mode": "100644",
         "path": "scripts/rocky_kernel_rk007_build_review.py",
         "runtime_git_blob_sha1": "4842e2e3f58a842de707565bd50a6f710eba4c55",

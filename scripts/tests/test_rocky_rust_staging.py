@@ -222,9 +222,17 @@ macro_rules! áinclude { () => {} }
 
     def test_exact_provider_lease_extern_items_are_closed(self):
         for exact in (
+            staging.AUDITED_IHK_INIT_CALLBACK_TYPE,
+            staging.AUDITED_IHK_EXIT_CALLBACK_TYPE,
             staging.AUDITED_IHK_ATTACH_EXTERN,
             staging.AUDITED_IHK_DETACH_EXTERN,
+            staging.AUDITED_IHK_ATTACH_V2_EXTERN,
+            staging.AUDITED_IHK_DETACH_V2_EXTERN,
+            staging.AUDITED_SMP_INIT_CALLBACK_TYPE,
+            staging.AUDITED_SMP_EXIT_CALLBACK_TYPE,
             staging.AUDITED_SMP_PROVIDER_EXTERN,
+            staging.AUDITED_SMP_INIT_CALLBACK_EXTERN,
+            staging.AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         ):
             with self.subTest(exact=exact.splitlines()[-1]):
                 staging._validate_rust_escape_hatches(
@@ -252,8 +260,27 @@ macro_rules! áinclude { () => {} }
             (
                 staging.AUDITED_SMP_PROVIDER_EXTERN,
                 staging.AUDITED_SMP_PROVIDER_EXTERN.replace(
-                    "ihk_smp_provider_detach_v1(token: i64)",
-                    "ihk_smp_provider_detach_v1(token: u64)",
+                    "ihk_smp_provider_detach_v2(token: i64",
+                    "ihk_smp_provider_detach_v2(token: u64",
+                ),
+            ),
+            (
+                staging.AUDITED_IHK_ATTACH_V2_EXTERN,
+                staging.AUDITED_IHK_ATTACH_V2_EXTERN.replace(
+                    "callback_abi: u32", "callback_abi: u64"
+                ),
+            ),
+            (
+                staging.AUDITED_IHK_DETACH_V2_EXTERN,
+                staging.AUDITED_IHK_DETACH_V2_EXTERN.replace(
+                    "exit: Option<IhkSmpProviderExitV2>",
+                    "exit: IhkSmpProviderExitV2",
+                ),
+            ),
+            (
+                staging.AUDITED_SMP_INIT_CALLBACK_EXTERN,
+                staging.AUDITED_SMP_INIT_CALLBACK_EXTERN.replace(
+                    "() -> i32", "(minor: u32) -> i32"
                 ),
             ),
         ):

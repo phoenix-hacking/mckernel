@@ -45,11 +45,20 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 12)
-        self.assertEqual(len(discovery["sites"]), 28)
+        self.assertEqual(len(discovery["sites"]), 40)
         self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 20,
-            "ihk_smp_x86_64": 6,
+            "ihk": 28,
+            "ihk_smp_x86_64": 10,
             "mcctrl": 2,
+        })
+        self.assertEqual(value["coverage"]["by_kind"], {
+            "extern_function": 10,
+            "ffi_export": 10,
+            "foreign_block": 2,
+            "mutable_static": 1,
+            "unsafe_block": 12,
+            "unsafe_function": 1,
+            "unsafe_impl": 4,
         })
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
         self.assertFalse(value["readiness"]["technical_complete"])
@@ -79,8 +88,10 @@ class CurrentLedgerTests(unittest.TestCase):
         ]
         self.assertEqual(
             ihk_sites,
-            ["RS011-IHK-%04d" % index for index in range(1, 4)]
-            + ["RS011-IHK-%04d" % index for index in range(15, 21)],
+            ["RS011-IHK-0021", "RS011-IHK-0022"]
+            + ["RS011-IHK-%04d" % index for index in range(1, 4)]
+            + ["RS011-IHK-%04d" % index for index in range(15, 21)]
+            + ["RS011-IHK-%04d" % index for index in range(23, 29)],
         )
         smp_sites = [
             site["id"]
@@ -90,7 +101,11 @@ class CurrentLedgerTests(unittest.TestCase):
         self.assertEqual(
             smp_sites,
             [
+                "RS011-SMP-0008",
+                "RS011-SMP-0009",
                 "RS011-SMP-0001",
+                "RS011-SMP-0010",
+                "RS011-SMP-0011",
                 "RS011-SMP-0006",
                 "RS011-SMP-0007",
                 "RS011-SMP-0002",
@@ -123,10 +138,52 @@ class CurrentLedgerTests(unittest.TestCase):
         )
         self.assertEqual(
             [item["id"] for item in value["sites"] if "ihk" in item["crate_roots"]],
-            ["RS011-IHK-%04d" % index for index in range(1, 4)]
+            ["RS011-IHK-0021", "RS011-IHK-0022"]
+            + ["RS011-IHK-%04d" % index for index in range(1, 4)]
             + ["RS011-IHK-%04d" % index for index in range(15, 21)]
+            + ["RS011-IHK-%04d" % index for index in range(23, 29)]
             + ["RS011-IHK-%04d" % index for index in range(4, 15)],
         )
+
+        sites = {item["id"]: item for item in value["sites"]}
+        self.assertEqual(
+            value["coverage"]["site_ids_sha256"],
+            "658844ede05c312e44fc8e598bc9c6567c213f80d61e4092b8c9b811eff7a1c4",
+        )
+        for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
+            joined = " ".join(
+                sites[site_id]["caller_obligations"]
+                + sites[site_id]["context_constraints"]
+            )
+            self.assertIn("compatibility", joined)
+            self.assertIn("no active native smp consumer uses v1", joined.lower())
+        for site_id in (
+            "RS011-IHK-0021",
+            "RS011-IHK-0022",
+            "RS011-IHK-0023",
+            "RS011-IHK-0024",
+            "RS011-IHK-0026",
+            "RS011-IHK-0027",
+            "RS011-SMP-0008",
+            "RS011-SMP-0009",
+            "RS011-SMP-0010",
+            "RS011-SMP-0011",
+        ):
+            joined = " ".join(
+                sites[site_id]["caller_obligations"]
+                + sites[site_id]["context_constraints"]
+            )
+            self.assertIn("callback", joined.lower())
+            self.assertTrue(
+                "resident" in joined.lower() or "residency" in joined.lower(),
+                site_id,
+            )
+            self.assertIn("unwind", joined.lower())
+        zero_ref_text = " ".join(
+            sites["RS011-IHK-0027"]["caller_obligations"]
+            + sites["RS011-IHK-0027"]["context_constraints"]
+        )
+        self.assertIn("must be zero", zero_ref_text)
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (

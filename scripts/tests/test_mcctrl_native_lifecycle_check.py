@@ -217,16 +217,7 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle.validate_repository(self.repo)
 
     def test_commented_out_provider_attach_cannot_satisfy_boundary(self) -> None:
-        function = (
-            'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {\n'
-            "    let token = match IHK_DEVICE_REGISTRY.attach_provider_token() {\n"
-            "        Ok(token) => token,\n"
-            "        Err(error) => return error.errno() as i64,\n"
-            "    };\n"
-            '    pr_info!("provider_lease=attach status=live minor=0\\n");\n'
-            "    token\n"
-            "}"
-        )
+        function = 'pub extern "C" fn ihk_smp_provider_attach_v2('
         source = self.repo / self.contract["provider_source"]
         text = source.read_text(encoding="utf-8")
         self.assertEqual(1, text.count(function))
@@ -235,16 +226,7 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle.validate_repository(self.repo)
 
     def test_commented_out_provider_detach_cannot_satisfy_boundary(self) -> None:
-        function = (
-            'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {\n'
-            "    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n"
-            "    pr_info!(\n"
-            '        "provider_lease=detach status=vacant minor={} generation={}\\n",\n'
-            "        handle.minor(),\n"
-            "        handle.generation(),\n"
-            "    );\n"
-            "}"
-        )
+        function = 'pub extern "C" fn ihk_smp_provider_detach_v2('
         source = self.repo / self.contract["provider_source"]
         text = source.read_text(encoding="utf-8")
         self.assertEqual(1, text.count(function))
@@ -321,15 +303,15 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
     def test_provider_lease_export_pointers_cannot_be_swapped(self) -> None:
         source = self.repo / self.contract["provider_source"]
         text = source.read_text(encoding="utf-8")
-        attach = "symbol: ihk_smp_provider_attach_v1 as *const () as *const u8,"
-        detach = "symbol: ihk_smp_provider_detach_v1 as *const () as *const u8,"
+        attach = "symbol: ihk_smp_provider_attach_v2 as *const () as *const u8,"
+        detach = "symbol: ihk_smp_provider_detach_v2 as *const () as *const u8,"
         self.assertIn(attach, text)
         self.assertIn(detach, text)
         text = text.replace(attach, "symbol: IHK_PROVIDER_SWAP_SENTINEL,", 1)
         text = text.replace(detach, attach, 1)
         text = text.replace("symbol: IHK_PROVIDER_SWAP_SENTINEL,", detach, 1)
         source.write_text(text, encoding="utf-8")
-        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "native IHK provider"):
             lifecycle.validate_repository(self.repo)
 
     def test_provider_lease_export_namespace_drift_is_rejected(self) -> None:
@@ -342,14 +324,14 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             '    license: *b"GPL\\0",\n'
             '    namespace: *b"UNVERSIONED_____\\0",',
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "native IHK provider"):
             lifecycle.validate_repository(self.repo)
 
     def test_unreviewed_provider_c_abi_export_is_rejected(self) -> None:
         source = self.repo / self.contract["provider_source"]
         with source.open("a", encoding="utf-8") as stream:
             stream.write('pub extern "C" fn ihk_unreviewed() -> i32 { 0 }\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "exactly two reviewed"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "exactly four reviewed"):
             lifecycle.validate_repository(self.repo)
 
     def test_unreviewed_provider_foreign_block_is_rejected(self) -> None:

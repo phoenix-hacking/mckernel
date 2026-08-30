@@ -118,10 +118,15 @@
   ],
   "production_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
   "provider_lease": {
-    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
     "callback_payload_reachable": false,
+    "compatibility_exports": [
+      "ihk_smp_provider_attach_v1",
+      "ihk_smp_provider_detach_v1"
+    ],
     "credit_eligible": false,
-    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "detach_symbol": "ihk_smp_provider_detach_v2",
     "device_node_reachable": false,
     "errno_statuses": [
       -2,
@@ -135,10 +140,21 @@
     "gate_status": "TODO",
     "minor": 0,
     "namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+      "arguments": "none",
+      "exit_before_vacate": true,
+      "exit_identity_retained": true,
+      "exit_symbol": "ihk_smp_provider_exit_v2",
+      "init_before_publish": true,
+      "init_symbol": "ihk_smp_provider_init_v2",
+      "operation_callbacks_reachable": false,
+      "raw_data_pointer": false,
+      "unpublishing_guard_across_exit": true
+    },
     "raw_token_logged": false,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
     "token_version": 1,
     "tracker_credit": false,
     "unknown_status_errno": -117

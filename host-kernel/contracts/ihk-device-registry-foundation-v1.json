@@ -2,13 +2,15 @@
   "attachment_boundary": {
     "crate_root_constructs_registry_instance": true,
     "crate_root_path": "host-kernel/native-rust/ihk.rs",
-    "crate_root_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
-    "crate_root_size": 6838,
+    "crate_root_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+    "crate_root_size": 15820,
     "private_module_edge_validated": true,
     "production_registry_static": "IHK_DEVICE_REGISTRY",
     "provider_lease_exports": [
       "ihk_smp_provider_attach_v1",
-      "ihk_smp_provider_detach_v1"
+      "ihk_smp_provider_detach_v1",
+      "ihk_smp_provider_attach_v2",
+      "ihk_smp_provider_detach_v2"
     ]
   },
   "behavior": {
@@ -106,7 +108,7 @@
     "path": "scripts/tests/fixtures/ihk_device_registry_compile.rs",
     "sha256": "1d49b35baa181938eadfa2a918da6f63a8aa33bc2af32c3bd32036f02baf4717"
   },
-  "foundation_status": "production-crate-owned-allocation-free-device-registry-provider-lease-only",
+  "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only",
   "gate_id": "IHK-004-device-registry-foundation",
   "intentional_safety_deltas": [
     "generation-tagged handles and a nonwrapping registry identity reject recycled-minor and cross-registry ABA",
@@ -207,13 +209,27 @@
   },
   "provider_lease_boundary": {
     "attach_return": "positive-i64-token-or-negative-errno",
-    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
     "callback_payload_reachable": false,
+    "compatibility_exports": [
+      "ihk_smp_provider_attach_v1",
+      "ihk_smp_provider_detach_v1"
+    ],
     "credit_eligible": false,
     "detach_return": "infallible-owned-token-retirement-or-fail-stop",
-    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "detach_symbol": "ihk_smp_provider_detach_v2",
     "device_node_reachable": false,
     "import_namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+      "arguments": "none",
+      "exit_before_vacate": true,
+      "exit_identity_retained": true,
+      "init_before_publish": true,
+      "operation_callbacks_reachable": false,
+      "raw_data_pointer": false,
+      "unpublishing_guard_across_exit": true
+    },
     "minor": 0,
     "runtime_validated": false,
     "token": {
@@ -240,10 +256,10 @@
   },
   "readiness": {
     "blockers": [
-      "the production registry exposes only an SMP provider-presence lease; it has no Linux cdev or file-operations adapter",
+      "the production registry exposes only an SMP provider lifecycle-callback lease; it has no Linux cdev or file-operations adapter",
       "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-      "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership remain unmodeled",
-      "the provider lease proves module dependency ownership but not callback module-owner pinning or unload drainage",
+      "provider operation payload, open/create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled",
+      "the lifecycle callback lease proves one retained exit identity but not general callback module-owner pinning or in-flight operation drainage",
       "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
       "legacy-stable first-fit and full-table results require an audited outer serialization adapter",
       "the nullable legacy registration return and callback errno surface have no audited Rust ABI bridge",

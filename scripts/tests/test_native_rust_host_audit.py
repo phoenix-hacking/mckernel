@@ -120,6 +120,32 @@ class NativeRustHostAuditTests(unittest.TestCase):
                 'pub static IHK_SMP_PROVIDER_DETACH_V1_EXPORT: IhkExportSymbolRecord',
                 'pub static IHK_SMP_PROVIDER_DETACH_V2_EXPORT: IhkExportSymbolRecord',
             ),
+            (
+                'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;',
+                'type IhkSmpProviderInitV2 = extern "system" fn() -> i32;',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_attach_v2(\n'
+                '    callback_abi: u32,',
+                'pub extern "C" fn ihk_smp_provider_attach_v2(\n'
+                '    callback_abi: u64,',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
+                '    token: i64,\n'
+                '    exit: Option<IhkSmpProviderExitV2>,',
+                'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
+                '    token: i64,\n'
+                '    exit: IhkSmpProviderExitV2,',
+            ),
+            (
+                'symbol: ihk_smp_provider_attach_v2 as *const () as *const u8,',
+                'symbol: ihk_smp_provider_detach_v2 as *const () as *const u8,',
+            ),
+            (
+                '#[export_name = "__export_symbol_ihk_smp_provider_detach_v2"]',
+                '#[export_name = "__export_symbol_ihk_smp_provider_detach_v3"]',
+            ),
         )
         for old, new in mutations:
             with self.subTest(old=old):
@@ -142,7 +168,7 @@ class NativeRustHostAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "block order differs"):
             host_audit.main()
 
-    def test_reviewed_smp_three_symbol_c_import_is_exact(self):
+    def test_reviewed_smp_v2_callback_c_abi_is_exact(self):
         relative = "host-kernel/native-rust/ihk_smp_x86_64.rs"
         mutations = (
             ('extern "C" {', 'extern "Rust" {'),
@@ -151,17 +177,31 @@ class NativeRustHostAuditTests(unittest.TestCase):
                 'static IHK_PROVIDER_LIFECYCLE_V1: i8;',
             ),
             (
-                'fn ihk_smp_provider_attach_v1() -> i64;',
-                'fn ihk_smp_provider_attach_v1(token: i64) -> i64;',
+                'fn ihk_smp_provider_attach_v2(\n'
+                '        callback_abi: u32,',
+                'fn ihk_smp_provider_attach_v2(\n'
+                '        callback_abi: u64,',
             ),
             (
-                'fn ihk_smp_provider_detach_v1(token: i64);',
-                'fn ihk_smp_provider_detach_v1(token: u64);',
+                'fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);',
+                'fn ihk_smp_provider_detach_v2(token: u64, exit: Option<IhkSmpProviderExitV2>);',
             ),
             (
-                '    fn ihk_smp_provider_detach_v1(token: i64);\n}',
-                '    fn ihk_smp_provider_detach_v1(token: i64);\n'
+                '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n}',
+                '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
                 '    fn unreviewed_provider_call();\n}',
+            ),
+            (
+                'type IhkSmpProviderExitV2 = extern "C" fn();',
+                'type IhkSmpProviderExitV2 = extern "system" fn();',
+            ),
+            (
+                'extern "C" fn ihk_smp_provider_init_v2() -> i32 {',
+                'extern "C" fn ihk_smp_provider_init_v2(minor: u32) -> i32 {',
+            ),
+            (
+                'extern "C" fn ihk_smp_provider_exit_v2() {',
+                'extern "C" fn ihk_smp_provider_exit_v2() -> i32 {',
             ),
         )
         for old, new in mutations:
