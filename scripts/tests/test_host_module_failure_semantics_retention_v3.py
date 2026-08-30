@@ -2,8 +2,14 @@ import ast
 import json
 import os
 from pathlib import Path
+import sys
 import tempfile
 import unittest
+
+
+SCRIPTS_ROOT = Path(__file__).resolve().parent.parent
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import host_module_failure_semantics_retention_v3 as retention
 import host_module_failure_semantics_v3 as semantics

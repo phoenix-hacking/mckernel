@@ -47,15 +47,19 @@ after
 
 
 class MacroTableTests(unittest.TestCase):
-    def test_header_guard_cannot_consume_following_valued_macro(self) -> None:
+    def test_frozen_v1_whitespace_replay_excludes_consumed_prepare_image(
+        self,
+    ) -> None:
         path = "executer/include/uprotocol.h"
         source = """#ifndef HEADER_UPROTOCOL_H
 #define HEADER_UPROTOCOL_H
 #define MCEXEC_UP_PREPARE_IMAGE 0x30a02900
+
+#define MCEXEC_UP_TRANSFER 0x30a02901
 #endif
 """
         with mock.patch.object(inventory, "text_blob", return_value=source):
-            macros = inventory.macro_table(
+            macros = inventory.legacy_v1_macro_table(
                 Path("/unused"), path, ("MCEXEC_UP_",)
             )
 
@@ -63,12 +67,12 @@ class MacroTableTests(unittest.TestCase):
             macros,
             [
                 {
-                    "name": "MCEXEC_UP_PREPARE_IMAGE",
-                    "value": 0x30A02900,
-                    "hex": "0x30a02900",
-                    "expression": "0x30a02900",
+                    "name": "MCEXEC_UP_TRANSFER",
+                    "value": 0x30A02901,
+                    "hex": "0x30a02901",
+                    "expression": "0x30a02901",
                     "source": path,
-                    "line": 3,
+                    "line": 4,
                 }
             ],
         )
@@ -96,6 +100,21 @@ class FrozenInventoryTests(unittest.TestCase):
         )
         self.assertEqual(digest, inventory.BINARY_CAPTURE_SHA256)
         inventory.validate_cross_capture(self.golden)
+
+    def test_complete_frozen_v1_render_matches_unchanged_golden(self) -> None:
+        regenerated = inventory.build_inventory(
+            REPO_ROOT, None, self.golden["binary_capture"]
+        )
+        self.assertEqual(
+            inventory.render(regenerated), inventory.render(self.golden)
+        )
+
+        operation_names = {
+            row["name"]
+            for row in regenerated["ioctls"]["mcctrl_operation_constants"]
+        }
+        self.assertNotIn("MCEXEC_UP_PREPARE_IMAGE", operation_names)
+        self.assertIn("MCEXEC_UP_TRANSFER", operation_names)
 
 
 if __name__ == "__main__":

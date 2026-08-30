@@ -1081,8 +1081,10 @@ class IsolatedEntrypointTests(unittest.TestCase):
 
     def test_v3_generators_and_tests_are_in_commit_bound_authority_closure(self):
         expected = {
+            "host_module_failure_semantics_retention_v3": "scripts/host_module_failure_semantics_retention_v3.py",
             "host_module_failure_semantics_v3": "scripts/host_module_failure_semantics_v3.py",
             "host_module_failure_contract_review_v3": "scripts/host_module_failure_contract_review_v3.py",
+            "scripts.tests.test_host_module_failure_semantics_retention_v3": "scripts/tests/test_host_module_failure_semantics_retention_v3.py",
             "scripts.tests.test_host_module_failure_semantics_v3": "scripts/tests/test_host_module_failure_semantics_v3.py",
             "scripts.tests.test_host_module_failure_contract_review_v3": "scripts/tests/test_host_module_failure_contract_review_v3.py",
         }

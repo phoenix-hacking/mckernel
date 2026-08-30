@@ -509,20 +509,28 @@ def parse_c_integer(
     return IntEvaluator(names).visit(tree)
 
 
-def macro_table(
+def legacy_v1_macro_table(
     repo: Path,
     path: str,
     prefixes: Tuple[str, ...],
     defines: Optional[Set[str]] = None,
 ) -> List[Dict[str, object]]:
+    r"""Replay the exact macro grammar used by the frozen v1 inventory.
+
+    The v1 capture predates a newline-safe preprocessor parser.  In
+    particular, ``\s`` may consume a newline after a valueless header-guard
+    define, and the leading ``^\s*`` may anchor a reported line at preceding
+    whitespace.  Those quirks are part of the byte identity of
+    ``legacy-host-modules-f2eb7352.json``.  A corrected grammar requires a new
+    versioned inventory; it must not silently reinterpret this historical
+    authority.
+    """
     text = text_blob(repo, path)
     text = filter_simple_cpp(text, defines or set())
     text = strip_c_comments(text)
     results: List[Dict[str, object]] = []
     for match in re.finditer(
-        r"^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)[ \t]+([^\r\n]+)$",
-        text,
-        re.MULTILINE,
+        r"^\s*#\s*define\s+([A-Za-z_]\w*)\s+([^\n]+)$", text, re.MULTILINE
     ):
         name, expression = match.group(1), match.group(2).strip()
         if not name.startswith(prefixes):
@@ -582,7 +590,7 @@ def enum_table(
 
 
 def ioctl_inventory(repo: Path) -> Dict[str, object]:
-    ihk_macros = macro_table(
+    ihk_macros = legacy_v1_macro_table(
         repo,
         "ihk/linux/include/ihk/ihk_host_user.h",
         ("IHK_DEVICE_", "IHK_OS_"),
@@ -604,7 +612,7 @@ def ioctl_inventory(repo: Path) -> Dict[str, object]:
             or 0x11290100 <= int(item["value"]) <= 0x112901FF
         )
     ]
-    mcctrl = macro_table(
+    mcctrl = legacy_v1_macro_table(
         repo, "executer/include/uprotocol.h", ("MCEXEC_UP_",), CPP_DEFINES
     )
 
@@ -889,23 +897,23 @@ def dynamic_symbol_lookups(
 
 
 def ikc_inventory(repo: Path) -> Dict[str, object]:
-    master = macro_table(
+    master = legacy_v1_macro_table(
         repo, "ihk/ikc/include/ikc/msg.h", ("IHK_IKC_MASTER_MSG_",), CPP_DEFINES
     )
-    queue_constants = macro_table(
+    queue_constants = legacy_v1_macro_table(
         repo,
         "ihk/ikc/include/ikc/queue.h",
         ("IKC_NO_NOTIFY",),
         CPP_DEFINES,
     )
-    max_port = macro_table(
+    max_port = legacy_v1_macro_table(
         repo, "ihk/ikc/include/ikc/master.h", ("IHK_IKC_MAX_PORT",), CPP_DEFINES
     )
     flags = enum_table(repo, "ihk/ikc/include/ikc/queue.h", "ihk_ikc_channel_flag")
-    scd_mcctrl = macro_table(
+    scd_mcctrl = legacy_v1_macro_table(
         repo, "executer/kernel/mcctrl/mcctrl.h", ("SCD_MSG_",), CPP_DEFINES
     )
-    scd_kernel = macro_table(
+    scd_kernel = legacy_v1_macro_table(
         repo, "kernel/include/syscall.h", ("SCD_MSG_",), CPP_DEFINES
     )
     mcctrl_map = {str(item["name"]): int(item["value"]) for item in scd_mcctrl}

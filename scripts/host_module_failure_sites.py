@@ -155,6 +155,7 @@ FRESH_MAIN_AUTHORITY_PATHS = (
     "scripts/host_module_failure_contract_review_v3.py",
     "scripts/host_module_failure_flows.py",
     "scripts/host_module_failure_flows_v2.py",
+    "scripts/host_module_failure_semantics_retention_v3.py",
     "scripts/host_module_failure_semantics_v3.py",
     "scripts/host_module_failure_sites.py",
     "scripts/host_module_inventory.py",
@@ -167,6 +168,7 @@ FRESH_MAIN_AUTHORITY_PATHS = (
     "scripts/tests/test_host_module_failure_contract_review_v3.py",
     "scripts/tests/test_host_module_failure_flows.py",
     "scripts/tests/test_host_module_failure_flows_v2.py",
+    "scripts/tests/test_host_module_failure_semantics_retention_v3.py",
     "scripts/tests/test_host_module_failure_semantics_v3.py",
     "scripts/tests/test_host_module_failure_sites.py",
 )
@@ -182,6 +184,7 @@ AUTHORITY_MODULE_PATHS = {
     "host_module_failure_contract_review_v3": "scripts/host_module_failure_contract_review_v3.py",
     "host_module_failure_flows": "scripts/host_module_failure_flows.py",
     "host_module_failure_flows_v2": "scripts/host_module_failure_flows_v2.py",
+    "host_module_failure_semantics_retention_v3": "scripts/host_module_failure_semantics_retention_v3.py",
     "host_module_failure_semantics_v3": "scripts/host_module_failure_semantics_v3.py",
     "host_module_inventory": "scripts/host_module_inventory.py",
     "record_compiler_argv": "scripts/record_compiler_argv.py",
@@ -191,6 +194,7 @@ AUTHORITY_MODULE_PATHS = {
     "scripts.tests.test_host_module_failure_contract_review_v3": "scripts/tests/test_host_module_failure_contract_review_v3.py",
     "scripts.tests.test_host_module_failure_flows": "scripts/tests/test_host_module_failure_flows.py",
     "scripts.tests.test_host_module_failure_flows_v2": "scripts/tests/test_host_module_failure_flows_v2.py",
+    "scripts.tests.test_host_module_failure_semantics_retention_v3": "scripts/tests/test_host_module_failure_semantics_retention_v3.py",
     "scripts.tests.test_host_module_failure_semantics_v3": "scripts/tests/test_host_module_failure_semantics_v3.py",
     "scripts.tests.test_host_module_failure_sites": "scripts/tests/test_host_module_failure_sites.py",
 }
