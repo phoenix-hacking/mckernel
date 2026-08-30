@@ -329,6 +329,43 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             "the external closure must not be assumed to equal the authority fixture closure",
         )
 
+    def test_patch_log_cardinality_binds_vendor_plus_every_authority_patch(self):
+        apply_rows = [{"kind": "vendor-apply"}] + [
+            {"id": row["id"]} for row in self.authority["patches"]
+        ]
+        second_rows = [
+            {"id": row["id"], "returncode": 1}
+            for row in self.authority["patches"]
+        ]
+        self.assertEqual(27, len(apply_rows))
+        self.assertEqual(26, len(second_rows))
+        capture._validate_patch_log_cardinality(
+            apply_rows, second_rows, self.authority
+        )
+
+        mutations = (
+            ("missing-apply", apply_rows[:-1], second_rows),
+            ("extra-apply", apply_rows + [dict(apply_rows[-1])], second_rows),
+            (
+                "wrong-vendor-kind",
+                [dict(apply_rows[0], kind="apply")] + apply_rows[1:],
+                second_rows,
+            ),
+            ("missing-second", apply_rows, second_rows[:-1]),
+            ("extra-second", apply_rows, second_rows + [dict(second_rows[-1])]),
+            (
+                "successful-second",
+                apply_rows,
+                [dict(second_rows[0], returncode=0)] + second_rows[1:],
+            ),
+        )
+        for label, mutated_apply, mutated_second in mutations:
+            with self.subTest(label=label):
+                with self.assertRaises(capture.CaptureError):
+                    capture._validate_patch_log_cardinality(
+                        mutated_apply, mutated_second, self.authority
+                    )
+
     def test_replay_relationships_bind_closures_continuity_and_parent_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             source = self._fixture_source(Path(directory))

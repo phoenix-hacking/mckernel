@@ -2200,7 +2200,26 @@ def _validate_patch_log_row(row, kind, identifier, command, require_success):
         raise CaptureError("second application log lacks a normal rejection")
 
 
+def _validate_patch_log_cardinality(apply_rows, second_rows, authority):
+    authority_patch_count = len(authority["patches"])
+    if (
+        len(apply_rows) != authority_patch_count + 1
+        or any(type(row) is not dict for row in apply_rows)
+        or apply_rows[0].get("kind") != "vendor-apply"
+    ):
+        raise CaptureError(
+            "patch apply log does not bind vendor plus all authority patches"
+        )
+    if (
+        len(second_rows) != authority_patch_count
+        or any(type(row) is not dict for row in second_rows)
+        or any(row.get("returncode") == 0 for row in second_rows)
+    ):
+        raise CaptureError("second application rejection evidence differs")
+
+
 def _validate_patch_logs(apply_rows, second_rows, authority, repo, vendor_filename):
+    _validate_patch_log_cardinality(apply_rows, second_rows, authority)
     patch_program = shutil.which("patch", path=CAPTURE_ENV["PATH"])
     if patch_program is None:
         raise CaptureError("GNU patch is unavailable while verifying patch logs")
@@ -2562,18 +2581,7 @@ def verify_capture(repo, capture_dir):
         _canonical_json(row) for row in second_rows
     ):
         raise CaptureError("second application log is not canonical JSONL")
-    if (
-        len(apply_rows) != 26
-        or any(type(row) is not dict for row in apply_rows)
-        or apply_rows[0].get("kind") != "vendor-apply"
-    ):
-        raise CaptureError("patch apply log does not bind vendor plus 26 authority patches")
-    if (
-        len(second_rows) != 26
-        or any(type(row) is not dict for row in second_rows)
-        or any(row.get("returncode") == 0 for row in second_rows)
-    ):
-        raise CaptureError("second application rejection evidence differs")
+    _validate_patch_log_cardinality(apply_rows, second_rows, authority)
     expected_ids = [row["id"] for row in authority["patches"]]
     if [row.get("id") for row in apply_rows[1:]] != expected_ids:
         raise CaptureError("patch apply log order differs")
