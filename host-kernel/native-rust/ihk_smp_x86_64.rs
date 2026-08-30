@@ -9,7 +9,11 @@
 //! names are emitted explicitly.  No project-owned C object participates in
 //! this crate.
 
-use kernel::prelude::*;
+use kernel::{
+    c_str,
+    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},
+    prelude::*,
+};
 
 // Allocation-free policy core for the future Linux CPU/memory/IKC adapter.
 // It is deliberately private and dead-code-only until the versioned IHK OS
@@ -22,6 +26,7 @@ const IHK_SMP_DEPENDENCY: &str = "ihk";
 const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";
 const IHK_SMP_PROVIDER_CALLBACK_ABI_V1: u32 = 1;
 const IHK_SMP_PROVIDER_FLAG_SHARED: u32 = 1;
+const IHK_SMP_CONTROL_DEVICE_MINOR: u32 = 0;
 
 // SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
 type IhkSmpProviderInitV2 = extern "C" fn() -> i32;
@@ -44,6 +49,10 @@ extern "C" {
     ) -> i64;
     #[link_name = "ihk_smp_provider_detach_v2"]
     fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);
+    #[link_name = "ihk_smp_provider_open_v1"]
+    fn ihk_smp_provider_open_v1(minor: u32) -> i64;
+    #[link_name = "ihk_smp_provider_close_v1"]
+    fn ihk_smp_provider_close_v1(receipt: i64);
 }
 
 // These callbacks deliberately own lifecycle only.  Returning success from
@@ -108,6 +117,71 @@ impl Drop for ProviderLease {
         unsafe {
             ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))
         };
+    }
+}
+
+#[must_use = "the provider-open receipt must remain owned until file release"]
+struct ProviderOpenLease {
+    receipt: i64,
+}
+
+impl ProviderOpenLease {
+    fn acquire() -> Result<Self> {
+        // SAFETY: ihk.ko owns this exact namespaced scalar function for the
+        // dependency lifetime.  Minor zero is the only published provider
+        // slot in this bounded shell, and no pointer or Rust layout crosses
+        // the boundary.
+        let receipt = unsafe {
+            ihk_smp_provider_open_v1(IHK_SMP_CONTROL_DEVICE_MINOR)
+        };
+        if receipt <= 0 {
+            return Err(provider_status_error(receipt));
+        }
+        Ok(Self { receipt })
+    }
+}
+
+impl Drop for ProviderOpenLease {
+    fn drop(&mut self) {
+        // SAFETY: This non-Copy per-file owner calls the matching scalar close
+        // exactly once with the positive opaque receipt returned by open.  The
+        // shared scalar is not a unique per-file identity, so this trusted
+        // non-Copy wrapper is the count-balance authority.  ihk.ko fails stop
+        // on a nonpositive, stale, or zero-reference release.
+        unsafe { ihk_smp_provider_close_v1(self.receipt) };
+    }
+}
+
+struct IhkSmpControlDevice;
+
+#[vtable]
+impl MiscDevice for IhkSmpControlDevice {
+    type Ptr = Box<ProviderOpenLease>;
+
+    const MODULE: &'static ThisModule = &THIS_MODULE;
+
+    fn open() -> Result<Self::Ptr> {
+        // Linux 6.12's `BoxExt::new` takes ownership before allocation.  If
+        // allocation fails, the temporary ProviderOpenLease is dropped and
+        // closes the already-acquired scalar receipt before ENOMEM is returned.
+        Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)
+    }
+
+    fn ioctl(
+        _device: &ProviderOpenLease,
+        _cmd: u32,
+        _arg: usize,
+    ) -> Result<isize> {
+        Err(EINVAL)
+    }
+
+    #[cfg(CONFIG_COMPAT)]
+    fn compat_ioctl(
+        _device: &ProviderOpenLease,
+        _cmd: u32,
+        _arg: usize,
+    ) -> Result<isize> {
+        Err(EINVAL)
     }
 }
 
@@ -367,6 +441,9 @@ module! {
 }
 
 struct IhkSmpModule {
+    control_device: Option<
+        core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>,
+    >,
     provider_lease: Option<ProviderLease>,
 }
 
@@ -378,7 +455,18 @@ impl kernel::Module for IhkSmpModule {
         let _ = unsafe {
             core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))
         };
+        // Publish the provider before misc_register makes /dev/mcd0 visible.
+        // If registration fails, this local non-Copy lease drops and rolls the
+        // provider publication back before module initialization returns.
         let provider_lease = ProviderLease::attach()?;
+        let control_device = Box::pin_init(
+            MiscDeviceRegistration::<IhkSmpControlDevice>::register(
+                MiscDeviceOptions {
+                    name: c_str!("mcd0"),
+                },
+            ),
+            GFP_KERNEL,
+        )?;
         pr_info!(
             "lifecycle=load parameters={} dependency={} import_namespace={}\n",
             IHK_SMP_PARAMETER_COUNT,
@@ -386,6 +474,7 @@ impl kernel::Module for IhkSmpModule {
             IHK_SMP_IMPORT_NAMESPACE,
         );
         Ok(Self {
+            control_device: Some(control_device),
             provider_lease: Some(provider_lease),
         })
     }
@@ -393,6 +482,7 @@ impl kernel::Module for IhkSmpModule {
 
 impl Drop for IhkSmpModule {
     fn drop(&mut self) {
+        drop(self.control_device.take());
         drop(self.provider_lease.take());
         pr_info!(
             "lifecycle=unload parameters={} dependency={} import_namespace={}\n",

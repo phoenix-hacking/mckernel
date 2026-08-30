@@ -2,15 +2,17 @@
   "attachment_boundary": {
     "crate_root_constructs_registry_instance": true,
     "crate_root_path": "host-kernel/native-rust/ihk.rs",
-    "crate_root_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
-    "crate_root_size": 15820,
+    "crate_root_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
+    "crate_root_size": 18434,
     "private_module_edge_validated": true,
     "production_registry_static": "IHK_DEVICE_REGISTRY",
     "provider_lease_exports": [
       "ihk_smp_provider_attach_v1",
       "ihk_smp_provider_detach_v1",
       "ihk_smp_provider_attach_v2",
-      "ihk_smp_provider_detach_v2"
+      "ihk_smp_provider_detach_v2",
+      "ihk_smp_provider_open_v1",
+      "ihk_smp_provider_close_v1"
     ]
   },
   "behavior": {
@@ -60,8 +62,8 @@
   "fixture": {
     "edition": "2021",
     "expected_fixture_tests": 8,
-    "expected_in_file_tests": 29,
-    "expected_total_tests": 37,
+    "expected_in_file_tests": 31,
+    "expected_total_tests": 39,
     "fixture_test_names": [
       "success_path_publishes_counts_and_unregisters",
       "failed_external_publication_aborts_without_reusing_handle",
@@ -96,6 +98,8 @@
       "unregister_before_open_excludes_new_references",
       "concurrent_publications_claim_unique_slots",
       "production_registry_token_round_trip_is_positive_and_exact",
+      "provider_open_tokens_count_shared_files_and_release_once_each",
+      "owned_open_token_release_fails_stop_on_unbalanced_receipt",
       "provider_token_header_version_and_generation_fail_closed",
       "provider_token_is_stale_after_unregister_and_slot_reuse",
       "dynamic_registry_cannot_issue_or_accept_production_tokens",
@@ -108,7 +112,7 @@
     "path": "scripts/tests/fixtures/ihk_device_registry_compile.rs",
     "sha256": "1d49b35baa181938eadfa2a918da6f63a8aa33bc2af32c3bd32036f02baf4717"
   },
-  "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only",
+  "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-and-open-receipt-boundary",
   "gate_id": "IHK-004-device-registry-foundation",
   "intentional_safety_deltas": [
     "generation-tagged handles and a nonwrapping registry identity reject recycled-minor and cross-registry ABA",
@@ -118,7 +122,9 @@
     "new opens and OS attachments are rejected after unpublishing linearizes while existing OS leases may drain",
     "concurrent lock-free reserve scans are observational until a Linux adapter supplies legacy-stable outer serialization",
     "typed internal errors are richer than the legacy nullable registration handle and require a later ABI adapter",
-    "a magic/version/generation-tagged positive scalar token rejects malformed, cross-registry, and recycled-minor leases"
+    "a magic/version/generation-tagged positive scalar token rejects malformed, cross-registry, and recycled-minor leases",
+    "scalar open receipts transfer only counted ownership; identical shared-provider tokens require one count-balanced non-Copy owner per successful trusted call",
+    "malformed, stale, and zero-reference owned-open releases fail stop, while same-generation duplicate closes are not individually detectable with shared tokens"
   ],
   "ioctl_boundary": {
     "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
@@ -204,8 +210,8 @@
     "ffi_free": true,
     "minimum_compare_exchange_sites": 10,
     "path": "host-kernel/native-rust/device_registry.rs",
-    "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
-    "size": 56395
+    "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+    "size": 60221
   },
   "provider_lease_boundary": {
     "attach_return": "positive-i64-token-or-negative-errno",
@@ -231,6 +237,17 @@
       "unpublishing_guard_across_exit": true
     },
     "minor": 0,
+    "open_close": {
+      "close_return": "void-or-fail-stop",
+      "close_symbol": "ihk_smp_provider_close_v1",
+      "concurrent_shared_receipts": true,
+      "duplicate_close_detectable_while_other_references_exist": false,
+      "open_return": "positive-generation-token-or-negative-errno",
+      "open_symbol": "ihk_smp_provider_open_v1",
+      "raw_pointer": false,
+      "source_validated": true,
+      "trusted_noncopy_owner_balance_required": true
+    },
     "runtime_validated": false,
     "token": {
       "generation_bits": [
@@ -256,9 +273,9 @@
   },
   "readiness": {
     "blockers": [
-      "the production registry exposes only an SMP provider lifecycle-callback lease; it has no Linux cdev or file-operations adapter",
-      "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-      "provider operation payload, open/create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled",
+      "the scalar lifecycle/open-receipt boundary does not by itself prove the SMP miscdevice registration, module-owner pinning, or userspace reachability",
+      "the source-only mcd0 adapter still requires independent SMP-contract, exact-Kbuild, and hosted-runtime validation",
+      "provider operation payload, create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled; every ioctl is intentionally invalid",
       "the lifecycle callback lease proves one retained exit identity but not general callback module-owner pinning or in-flight operation drainage",
       "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
       "legacy-stable first-fit and full-table results require an audited outer serialization adapter",

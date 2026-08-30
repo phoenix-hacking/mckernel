@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import ast
 import contextlib
 import copy
 import hashlib
@@ -12,7 +13,9 @@ from pathlib import Path
 import re
 import shutil
 import shlex
+import stat
 import subprocess
+import struct
 import sys
 import tempfile
 import unittest
@@ -31,7 +34,7 @@ from scripts import native_rust_runtime_evidence as evidence
 KERNEL_RELEASE = "6.12.0-211.44.1.el10_2.mckernel1.x86_64"
 
 
-def valid_serial() -> str:
+def _valid_serial_lifecycle_only() -> str:
     protocol = evidence.PROTOCOL
     records = [
         f"{protocol} BEGIN",
@@ -103,6 +106,303 @@ def valid_serial() -> str:
         f"{protocol} COMPLETE status=technical-capture-unreviewed credit=forbidden",
     ]
     return "\n".join(records) + "\n"
+
+
+def valid_serial() -> str:
+    protocol = evidence.PROTOCOL
+    acquire = evidence.PROVIDER_OPEN_ACQUIRE_DIAGNOSTIC
+    release_open = evidence.PROVIDER_OPEN_RELEASE_DIAGNOSTIC
+    first_open_trace = (
+        [acquire, release_open] * evidence.MCD0_SEQUENTIAL_OPEN_COUNT
+        + [acquire] * evidence.MCD0_OVERLAPPING_OPEN_COUNT
+        + [release_open] * evidence.MCD0_OVERLAPPING_OPEN_COUNT
+        + [acquire, release_open] * 2
+        + [acquire, release_open]
+    )
+    reload_open_trace = [acquire, release_open] * evidence.MCD0_RELOAD_OPEN_COUNT
+    ihk_load = "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+    smp_load = (
+        "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
+        "import_namespace=MCKERNEL_IHK_V1"
+    )
+    mcctrl_load = (
+        "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
+        "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
+    )
+    mcctrl_unload = (
+        "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
+        "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
+    )
+    smp_unload = (
+        "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
+        "import_namespace=MCKERNEL_IHK_V1"
+    )
+    ihk_unload = (
+        "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+    )
+    detach = (
+        "ihk: provider_lease=detach status=vacant minor=0 generation=1 "
+        "callback_abi=1"
+    )
+    first_kernel_trace = (
+        [
+            ihk_load,
+            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            smp_load,
+            mcctrl_load,
+        ]
+        + first_open_trace
+        + [
+            mcctrl_unload,
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            detach,
+            smp_unload,
+            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            ihk_unload,
+        ]
+    )
+    reload_kernel_trace = (
+        [
+            ihk_load,
+            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            smp_load,
+            mcctrl_load,
+        ]
+        + reload_open_trace
+        + [
+            mcctrl_unload,
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            detach,
+            smp_unload,
+            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            ihk_unload,
+        ]
+    )
+    records = [
+        f"{protocol} BEGIN",
+        f"{protocol} KERNEL_RELEASE actual={KERNEL_RELEASE} expected={KERNEL_RELEASE}",
+        f"{protocol} STATE_BEGIN label=initial-clean",
+        f"{protocol} STATE_END label=initial-clean",
+        ihk_load,
+        f"{protocol} LOAD module=ihk status=ok",
+        evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+        evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+        smp_load,
+        f"{protocol} LOAD module=ihk_smp_x86_64 status=ok",
+        mcctrl_load,
+        f"{protocol} LOAD module=mcctrl status=ok",
+        f"{protocol} STATE_BEGIN label=all-loaded",
+        f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+        f"{protocol} MODULE ihk_smp_x86_64 1 0 - Live 0x0",
+        f"{protocol} MODULE mcctrl 1 0 - Live 0x0",
+        f"{protocol} STATE_END label=all-loaded",
+        f"{protocol} REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,ihk_smp_x86_64,",
+        f"{protocol} MCD0 NODE status=present dev=10:42",
+    ]
+    records.extend([acquire, release_open] * evidence.MCD0_SEQUENTIAL_OPEN_COUNT)
+    records.append(
+        f"{protocol} MCD0 OPEN_CLOSE mode=sequential count=4 status=ok"
+    )
+    records.extend([acquire] * evidence.MCD0_OVERLAPPING_OPEN_COUNT)
+    records.extend([release_open] * evidence.MCD0_OVERLAPPING_OPEN_COUNT)
+    records.append(
+        f"{protocol} MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok"
+    )
+    records.extend(
+        [
+            acquire,
+            release_open,
+            f"{protocol} MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok",
+            acquire,
+            release_open,
+            f"{protocol} MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok",
+            acquire,
+            f"{protocol} MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
+            f"{protocol} MCD0 NEGATIVE_OUTPUT_BEGIN",
+            "rmmod: ERROR: Module ihk_smp_x86_64 is in use",
+            f"{protocol} MCD0 NEGATIVE_OUTPUT_END",
+            release_open,
+            f"{protocol} MCD0 CLOSE phase=after-module-owner-negative status=ok",
+            f"{protocol} NEGATIVE operation=unload-provider-first status=1",
+            f"{protocol} NEGATIVE_OUTPUT_BEGIN",
+            "rmmod: ERROR: Module ihk is in use by: mcctrl ihk_smp_x86_64",
+            f"{protocol} NEGATIVE_OUTPUT_END",
+            f"{protocol} REFCOUNT module=ihk phase=after-negative references=2 users=mcctrl,ihk_smp_x86_64,",
+            f"{protocol} STATE_BEGIN label=after-negative",
+            f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+            f"{protocol} MODULE ihk_smp_x86_64 1 0 - Live 0x0",
+            f"{protocol} MODULE mcctrl 1 0 - Live 0x0",
+            f"{protocol} STATE_END label=after-negative",
+            mcctrl_unload,
+            f"{protocol} UNLOAD module=mcctrl status=ok",
+            f"{protocol} REFCOUNT module=ihk phase=after-mcctrl-unload references=1 users=ihk_smp_x86_64,",
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            detach,
+            smp_unload,
+            f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok",
+            f"{protocol} MCD0 NODE status=removed",
+            f"{protocol} REFCOUNT module=ihk phase=after-smp-unload references=0 users=-",
+            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            ihk_unload,
+            f"{protocol} UNLOAD module=ihk status=ok",
+            f"{protocol} STATE_BEGIN label=first-cycle-clean",
+            f"{protocol} STATE_END label=first-cycle-clean",
+            f"{protocol} RELOAD cycle=1 phase=begin",
+            ihk_load,
+            f"{protocol} RELOAD_LOAD cycle=1 module=ihk status=ok",
+            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
+            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            smp_load,
+            f"{protocol} RELOAD_LOAD cycle=1 module=ihk_smp_x86_64 status=ok",
+            mcctrl_load,
+            f"{protocol} RELOAD_LOAD cycle=1 module=mcctrl status=ok",
+            f"{protocol} REFCOUNT module=ihk phase=reload-all-loaded references=2 users=mcctrl,ihk_smp_x86_64,",
+        ]
+    )
+    records.extend(reload_open_trace)
+    records.extend(
+        [
+            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok",
+            mcctrl_unload,
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=mcctrl status=ok",
+            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
+            detach,
+            smp_unload,
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk_smp_x86_64 status=ok",
+            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            ihk_unload,
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk status=ok",
+            f"{protocol} RELOAD cycle=1 status=ok",
+            f"{protocol} STATE_BEGIN label=final-clean",
+            f"{protocol} STATE_END label=final-clean",
+            f"{protocol} DMESG_BEGIN",
+        ]
+    )
+    records.extend(first_kernel_trace + reload_kernel_trace)
+    records.extend(
+        [
+            f"{protocol} DMESG_END",
+            f"{protocol} COMPLETE status=technical-capture-unreviewed credit=forbidden",
+        ]
+    )
+    return "\n".join(records) + "\n"
+
+
+def minimal_elf(elf_class: int, elf_type: int, machine: int) -> bytes:
+    if elf_type == 2:
+        name = (
+            "native-rust-runtime-mcd0-ioctl-i386"
+            if elf_class == 1
+            else "native-rust-runtime-mcd0-ioctl-x86_64"
+        )
+        return semantic_probe_elf(name)
+    size = 52 if elf_class == 1 else 64
+    data = bytearray(size)
+    data[:4] = b"\x7fELF"
+    data[4] = elf_class
+    data[5] = 1
+    data[6] = 1
+    data[16:18] = elf_type.to_bytes(2, "little")
+    data[18:20] = machine.to_bytes(2, "little")
+    data[20:24] = (1).to_bytes(4, "little")
+    offset = 40 if elf_class == 1 else 52
+    data[offset : offset + 2] = size.to_bytes(2, "little")
+    return bytes(data)
+
+
+def semantic_probe_elf(name: str) -> bytes:
+    if name.endswith("i386"):
+        elf_class = 1
+        machine = 3
+        header_format = "<16sHHIIIIIHHHHHH"
+        program_format = "<IIIIIIII"
+        section_format = "<IIIIIIIIII"
+        header_size, program_size, section_size = 52, 32, 40
+        text_address, rodata_address = 0x08049000, 0x0804A000
+    else:
+        elf_class = 2
+        machine = 62
+        header_format = "<16sHHIQQQIHHHHHH"
+        program_format = "<IIQQQQQQ"
+        section_format = "<IIQQQQIIQQ"
+        header_size, program_size, section_size = 64, 56, 64
+        text_address, rodata_address = 0x401000, 0x402000
+    prefix, suffix = evidence.RUNTIME_PROBE_TEXT_TEMPLATE[name]
+    if elf_class == 1:
+        address = struct.pack("<I", rodata_address)
+    else:
+        address = struct.pack(
+            "<i", rodata_address - (text_address + len(prefix) + 4)
+        )
+    text_bytes = prefix + address + suffix
+    rodata = b"/dev/mcd0\0"
+    names = b"\0.shstrtab\0.text\0.rodata\0"
+    text_offset, rodata_offset = 0x1000, 0x2000
+    names_offset = rodata_offset + len(rodata)
+    alignment = 8 if elf_class == 2 else 4
+    section_offset = (names_offset + len(names) + alignment - 1) // alignment * alignment
+    data = bytearray(section_offset + 4 * section_size)
+    ident = b"\x7fELF" + bytes((elf_class, 1, 1)) + b"\0" * 9
+    header = (
+        ident,
+        2,
+        machine,
+        1,
+        text_address,
+        header_size,
+        section_offset,
+        0,
+        header_size,
+        program_size,
+        4,
+        section_size,
+        4,
+        3,
+    )
+    data[:header_size] = struct.pack(header_format, *header)
+    base = text_address - text_offset
+    programs = [
+        (1, 4, 0, base, base, header_size + 4 * program_size,
+         header_size + 4 * program_size, 0x1000),
+        (1, 5, text_offset, text_address, text_address,
+         len(text_bytes), len(text_bytes), 0x1000),
+        (1, 4, rodata_offset, rodata_address, rodata_address,
+         len(rodata), len(rodata), 0x1000),
+        (0x6474E551, 6, 0, 0, 0, 0, 0, 0x10),
+    ]
+    for index, program in enumerate(programs):
+        if elf_class == 1:
+            kind, mode, offset, virtual, physical, file_size, memory_size, align = program
+            packed = struct.pack(
+                program_format,
+                kind,
+                offset,
+                virtual,
+                physical,
+                file_size,
+                memory_size,
+                mode,
+                align,
+            )
+        else:
+            packed = struct.pack(program_format, *program)
+        start = header_size + index * program_size
+        data[start : start + program_size] = packed
+    sections = [
+        (0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        (11, 1, 6, text_address, text_offset, len(text_bytes), 0, 0, 1, 0),
+        (17, 1, 2, rodata_address, rodata_offset, len(rodata), 0, 0, 1, 0),
+        (1, 3, 0, 0, names_offset, len(names), 0, 0, 1, 0),
+    ]
+    for index, section in enumerate(sections):
+        start = section_offset + index * section_size
+        data[start : start + section_size] = struct.pack(section_format, *section)
+    data[text_offset : text_offset + len(text_bytes)] = text_bytes
+    data[rodata_offset : rodata_offset + len(rodata)] = rodata
+    data[names_offset : names_offset + len(names)] = names
+    return bytes(data)
 
 
 def provider_global_nm(symbols=None) -> str:
@@ -263,6 +563,273 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 run.call_args.kwargs["env"],
             )
 
+    def test_runtime_tool_replay_pins_both_tool_and_module_descriptors(self) -> None:
+        module = self.root / "module.ko"
+        module.write_bytes(b"fixture")
+        tool_fd = os.open("/bin/true", os.O_RDONLY)
+        module_fd = os.open(str(module), os.O_RDONLY)
+        tool_sha256 = hashlib.sha256(Path("/bin/true").read_bytes()).hexdigest()
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+        try:
+            completed = subprocess.CompletedProcess(
+                [], 0, stdout="ihk\n", stderr=""
+            )
+            with mock.patch.object(
+                evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+            ), mock.patch.object(
+                evidence.subprocess, "run", return_value=completed
+            ) as run:
+                self.assertEqual(
+                    ["ihk"],
+                    evidence._run_field(
+                        module,
+                        "depends",
+                        modinfo_fd=tool_fd,
+                        module_fd=module_fd,
+                        modinfo_sha256=tool_sha256,
+                        module_sha256=module_sha256,
+                    ),
+                )
+                self.assertEqual(
+                    "/proc/self/fd/{0}".format(module_fd),
+                    run.call_args.args[0][-1],
+                )
+                self.assertEqual(
+                    "/proc/self/fd/{0}".format(tool_fd),
+                    run.call_args.kwargs["executable"],
+                )
+                self.assertEqual(
+                    tuple(sorted((tool_fd, module_fd))),
+                    run.call_args.kwargs["pass_fds"],
+                )
+            completed = subprocess.CompletedProcess(
+                [], 0, stdout="symbol\n", stderr=""
+            )
+            with mock.patch.object(
+                evidence, "NM_EXECUTABLE", "/attacker/replaced-nm"
+            ), mock.patch.object(
+                evidence.subprocess, "run", return_value=completed
+            ) as run:
+                self.assertEqual(
+                    "symbol\n",
+                    evidence._nm(
+                        module,
+                        ["-g"],
+                        nm_fd=tool_fd,
+                        module_fd=module_fd,
+                        nm_sha256=tool_sha256,
+                        module_sha256=module_sha256,
+                    ),
+                )
+                self.assertEqual(
+                    "/proc/self/fd/{0}".format(module_fd),
+                    run.call_args.args[0][-1],
+                )
+                self.assertEqual(
+                    "/proc/self/fd/{0}".format(tool_fd),
+                    run.call_args.kwargs["executable"],
+                )
+                self.assertEqual(
+                    tuple(sorted((tool_fd, module_fd))),
+                    run.call_args.kwargs["pass_fds"],
+                )
+        finally:
+            os.close(module_fd)
+            os.close(tool_fd)
+
+    def test_runtime_tools_reject_transient_same_inode_mutate_restore(self) -> None:
+        tool = self.root / "bound-tool"
+        tool.write_bytes(b"#!/bin/sh\nexit 0\n")
+        tool.chmod(0o755)
+        module = self.root / "module.ko"
+        module.write_bytes(b"module-fixture\n")
+        tool_sha256 = hashlib.sha256(tool.read_bytes()).hexdigest()
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+
+        def mutate_and_restore(path):
+            original = path.read_bytes()
+            mutated = bytes((original[0] ^ 1,)) + original[1:]
+            descriptor = os.open(str(path), os.O_WRONLY | os.O_NOFOLLOW)
+            try:
+                self.assertEqual(len(mutated), os.pwrite(descriptor, mutated, 0))
+                os.fsync(descriptor)
+                self.assertEqual(len(original), os.pwrite(descriptor, original, 0))
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+            self.assertEqual(original, path.read_bytes())
+
+        for operation, expected_label in (
+            ("modinfo", "modinfo descriptor changed"),
+            ("nm", "nm descriptor changed"),
+        ):
+            with self.subTest(operation=operation, target="tool"):
+                tool_fd = os.open(str(tool), os.O_RDONLY)
+                module_fd = os.open(str(module), os.O_RDONLY)
+                try:
+                    completed = subprocess.CompletedProcess(
+                        [], 0, stdout="expected\n", stderr=""
+                    )
+
+                    def mutate_tool(*_args, **_kwargs):
+                        mutate_and_restore(tool)
+                        return completed
+
+                    modinfo_lock = (
+                        mock.patch.object(
+                            evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+                        )
+                        if operation == "modinfo"
+                        else contextlib.nullcontext()
+                    )
+                    with modinfo_lock, mock.patch.object(
+                        evidence.subprocess, "run", side_effect=mutate_tool
+                    ):
+                        with self.assertRaisesRegex(
+                            evidence.EvidenceError, expected_label
+                        ):
+                            if operation == "modinfo":
+                                evidence._run_field(
+                                    module,
+                                    "depends",
+                                    modinfo_fd=tool_fd,
+                                    module_fd=module_fd,
+                                    modinfo_sha256=tool_sha256,
+                                    module_sha256=module_sha256,
+                                )
+                            else:
+                                evidence._nm(
+                                    module,
+                                    ["-g"],
+                                    nm_fd=tool_fd,
+                                    module_fd=module_fd,
+                                    nm_sha256=tool_sha256,
+                                    module_sha256=module_sha256,
+                                )
+                finally:
+                    os.close(module_fd)
+                    os.close(tool_fd)
+
+        tool_fd = os.open(str(tool), os.O_RDONLY)
+        module_fd = os.open(str(module), os.O_RDONLY)
+        try:
+            completed = subprocess.CompletedProcess(
+                [], 0, stdout="expected\n", stderr=""
+            )
+
+            def mutate_module(*_args, **_kwargs):
+                mutate_and_restore(module)
+                return completed
+
+            with mock.patch.object(
+                evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+            ), mock.patch.object(
+                evidence.subprocess, "run", side_effect=mutate_module
+            ):
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "module descriptor changed"
+                ):
+                    evidence._run_field(
+                        module,
+                        "depends",
+                        modinfo_fd=tool_fd,
+                        module_fd=module_fd,
+                        modinfo_sha256=tool_sha256,
+                        module_sha256=module_sha256,
+                    )
+        finally:
+            os.close(module_fd)
+            os.close(tool_fd)
+
+    def test_runtime_tools_and_module_reject_preentry_same_inode_mutation(self) -> None:
+        tool = self.root / "bound-tool-preentry"
+        tool.write_bytes(b"#!/bin/sh\nexit 0\n")
+        tool.chmod(0o755)
+        module = self.root / "module-preentry.ko"
+        module.write_bytes(b"module-fixture-preentry\n")
+        trusted_tool = tool.read_bytes()
+        trusted_module = module.read_bytes()
+        tool_sha256 = hashlib.sha256(trusted_tool).hexdigest()
+        module_sha256 = hashlib.sha256(trusted_module).hexdigest()
+
+        def overwrite_same_inode(path: Path, value: bytes) -> None:
+            descriptor = os.open(str(path), os.O_WRONLY | os.O_NOFOLLOW)
+            try:
+                os.ftruncate(descriptor, 0)
+                self.assertEqual(len(value), os.pwrite(descriptor, value, 0))
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+
+        attacker_tool = b"#!/bin/sh\nprintf forged-output\\n\n"
+        for operation in ("modinfo", "nm"):
+            with self.subTest(target=operation):
+                tool_fd = os.open(str(tool), os.O_RDONLY)
+                module_fd = os.open(str(module), os.O_RDONLY)
+                try:
+                    overwrite_same_inode(tool, attacker_tool)
+                    lock = (
+                        mock.patch.object(
+                            evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+                        )
+                        if operation == "modinfo"
+                        else contextlib.nullcontext()
+                    )
+                    with lock, mock.patch.object(
+                        evidence.subprocess, "run"
+                    ) as run:
+                        with self.assertRaisesRegex(
+                            evidence.EvidenceError,
+                            "{0} descriptor digest differs".format(operation),
+                        ):
+                            if operation == "modinfo":
+                                evidence._run_field(
+                                    module,
+                                    "depends",
+                                    modinfo_fd=tool_fd,
+                                    module_fd=module_fd,
+                                    modinfo_sha256=tool_sha256,
+                                    module_sha256=module_sha256,
+                                )
+                            else:
+                                evidence._nm(
+                                    module,
+                                    ["-g"],
+                                    nm_fd=tool_fd,
+                                    module_fd=module_fd,
+                                    nm_sha256=tool_sha256,
+                                    module_sha256=module_sha256,
+                                )
+                    run.assert_not_called()
+                finally:
+                    overwrite_same_inode(tool, trusted_tool)
+                    os.close(module_fd)
+                    os.close(tool_fd)
+
+        tool_fd = os.open(str(tool), os.O_RDONLY)
+        module_fd = os.open(str(module), os.O_RDONLY)
+        try:
+            overwrite_same_inode(module, b"attacker-module\n")
+            with mock.patch.object(
+                evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+            ), mock.patch.object(evidence.subprocess, "run") as run:
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "module descriptor digest differs"
+                ):
+                    evidence._run_field(
+                        module,
+                        "depends",
+                        modinfo_fd=tool_fd,
+                        module_fd=module_fd,
+                        modinfo_sha256=tool_sha256,
+                        module_sha256=module_sha256,
+                    )
+            run.assert_not_called()
+        finally:
+            overwrite_same_inode(module, trusted_module)
+            os.close(module_fd)
+            os.close(tool_fd)
+
     def test_runtime_module_symbol_graph_accepts_only_the_exact_three_edges(self) -> None:
         contract = json.loads(
             (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
@@ -279,7 +846,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         modules["ihk_smp_x86_64"].write_bytes(b"smp")
         modules["mcctrl"].write_bytes(b"mcctrl")
 
-        def nm_output(module, arguments):
+        def nm_output(module, arguments, **_kwargs):
             if module.name == "ihk.ko" and arguments == ["-g", "--defined-only"]:
                 return provider_global_nm()
             if module.name == "ihk.ko" and arguments == ["-a", "--defined-only"]:
@@ -395,7 +962,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(evidence.EvidenceError, "namespace bytes"):
                 evidence._validate_module_symbol_graph(module, item)
 
-    def test_smp_runtime_symbol_graph_requires_all_three_undefined_relocations(self) -> None:
+    def test_smp_runtime_symbol_graph_requires_all_five_undefined_relocations(self) -> None:
         contract = json.loads(
             (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
         )
@@ -448,6 +1015,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             if name in {"SHA256SUMS", "capture.json"}:
                 continue
             (directory / name).write_bytes((name + "\n").encode("ascii"))
+        for name, elf_spec in evidence.RUNTIME_HELPER_ELF_SPEC.items():
+            (directory / name).write_bytes(minimal_elf(*elf_spec))
         (directory / "serial.log").write_text(valid_serial(), encoding="ascii")
         (directory / "environment.txt").write_text(
             "container_image={0}\n"
@@ -485,12 +1054,71 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         (directory / "workflow-state").write_text(
             "technical-capture-unreviewed\ncredit=forbidden\n", encoding="ascii"
         )
+        runtime_workflow = (
+            REPO_ROOT
+            / ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        ).read_bytes()
+        (directory / "executed-caller-workflow.yml").write_bytes(runtime_workflow)
+        (directory / "executed-runtime-workflow.yml").write_bytes(runtime_workflow)
+        workflow_identity = evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+            "runtime_workflow"
+        ]
+        workflow_ref = (
+            "phoenix-hacking/mckernel/.github/workflows/"
+            "native-rust-host-modules-exact-runtime.yml@refs/heads/development"
+        )
+        provenance = {
+            "candidate_sha": "2" * 40,
+            "github": {
+                "event_name": "workflow_dispatch",
+                "ref": "refs/heads/development",
+                "sha": "2" * 40,
+                "workflow_ref": workflow_ref,
+                "workflow_sha": "2" * 40,
+            },
+            "job": {
+                "workflow_file_path": (
+                    ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+                ),
+                "workflow_ref": workflow_ref,
+                "workflow_repository": "phoenix-hacking/mckernel",
+                "workflow_sha": "2" * 40,
+            },
+            "schema": "mckernel-native-rust-runtime-workflow-provenance-v1",
+            "workflow_blobs": {
+                key: {
+                    "candidate_git_blob_sha1": workflow_identity["git_blob_sha1"],
+                    "evidence_file": evidence_file,
+                    "executed_git_blob_sha1": workflow_identity["git_blob_sha1"],
+                    "path": (
+                        ".github/workflows/"
+                        "native-rust-host-modules-exact-runtime.yml"
+                    ),
+                    "sha256": workflow_identity["sha256"],
+                    "size": workflow_identity["size"],
+                }
+                for key, evidence_file in (
+                    ("caller", "executed-caller-workflow.yml"),
+                    ("job", "executed-runtime-workflow.yml"),
+                )
+            },
+        }
+        (directory / "runtime-workflow-provenance.json").write_text(
+            evidence._pretty(provenance), encoding="ascii"
+        )
         capture = self.valid_capture_unsigned()
+        build_bzimage = self.root / "bzImage"
+        build_bzimage.write_bytes(b"bootable fixture\n")
+        capture["build"]["bzimage_sha256"] = hashlib.sha256(
+            build_bzimage.read_bytes()
+        ).hexdigest()
         capture["contract_sha256"] = evidence._sha256_file(
             REPO_ROOT / evidence.DEFAULT_CONTRACT
         )
         runtime_files = {
             "environment_sha256": "environment.txt",
+            "executed_caller_workflow_sha256": "executed-caller-workflow.yml",
+            "executed_runtime_workflow_sha256": "executed-runtime-workflow.yml",
             "initramfs_sha256": "initramfs.cpio.gz",
             "initramfs_sha256_record": "initramfs.sha256",
             "qemu_command_sha256": "qemu-command.txt",
@@ -498,6 +1126,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "qemu_log_sha256": "qemu.log",
             "qemu_version_sha256": "qemu-version.txt",
             "serial_sha256": "serial.log",
+            "workflow_provenance_sha256": "runtime-workflow-provenance.json",
         }
         for field, name in runtime_files.items():
             capture["runtime"][field] = hashlib.sha256(
@@ -517,6 +1146,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         capture = json.loads((directory / "capture.json").read_text(encoding="utf-8"))
         fields = {
             "environment.txt": "environment_sha256",
+            "executed-caller-workflow.yml": "executed_caller_workflow_sha256",
+            "executed-runtime-workflow.yml": "executed_runtime_workflow_sha256",
             "initramfs.cpio.gz": "initramfs_sha256",
             "initramfs.sha256": "initramfs_sha256_record",
             "qemu-command.txt": "qemu_command_sha256",
@@ -524,6 +1155,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "qemu.log": "qemu_log_sha256",
             "qemu-version.txt": "qemu_version_sha256",
             "serial.log": "serial_sha256",
+            "runtime-workflow-provenance.json": "workflow_provenance_sha256",
         }
         if name in fields:
             capture["runtime"][fields[name]] = hashlib.sha256(data).hexdigest()
@@ -555,7 +1187,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         )
         with mock.patch.object(
             evidence,
-            "_validate_build_evidence_directory",
+            "_validate_bound_build_evidence_directory",
             return_value=(copy.deepcopy(capture["build"]), {}),
         ):
             return evidence.validate_runtime_evidence_directory(
@@ -568,7 +1200,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         contract = json.loads(
             (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
         )
-        return evidence._validate_runtime_files(
+        arguments = [
             contract,
             directory / "serial.log",
             directory / "qemu.log",
@@ -578,8 +1210,103 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             directory / "environment.txt",
             directory / "initramfs.cpio.gz",
             directory / "initramfs.sha256",
-            expected_build_bzimage,
+        ]
+        if expected_build_bzimage is not None:
+            arguments.extend(
+                [
+                    expected_build_bzimage,
+                    hashlib.sha256(expected_build_bzimage.read_bytes()).hexdigest(),
+                    expected_build_bzimage,
+                    directory,
+                ]
+            )
+        return evidence._validate_runtime_files(*arguments)
+
+    def prepare_capture_directories(self):
+        source = self.write_runtime_evidence_artifact()
+        parent = self.root / "capture-parent"
+        parent.mkdir()
+        runtime_dir = parent / "native-rust-runtime-evidence"
+        source.rename(runtime_dir)
+        (runtime_dir / "capture.json").unlink()
+        build_dir = parent / "native-rust-build-evidence"
+        build_dir.mkdir()
+        (build_dir / "bzImage").write_bytes(b"bootable capture fixture\n")
+        template = self.valid_capture_unsigned()
+        return parent, build_dir, runtime_dir, template
+
+    def run_mocked_capture(
+        self,
+        build_dir: Path,
+        runtime_dir: Path,
+        template: dict,
+        build_side_effect=None,
+        runtime_side_effect=None,
+    ) -> dict:
+        output = runtime_dir / "capture.json"
+        build_mock = (
+            build_side_effect
+            if build_side_effect is not None
+            else mock.DEFAULT
         )
+        runtime_mock = (
+            runtime_side_effect
+            if runtime_side_effect is not None
+            else mock.DEFAULT
+        )
+        with mock.patch.object(
+            evidence,
+            "_validate_bound_build_evidence_directory",
+            side_effect=build_mock if build_mock is not mock.DEFAULT else None,
+            return_value=(copy.deepcopy(template["build"]), {}),
+        ), mock.patch.object(
+            evidence,
+            "_validate_runtime_files",
+            side_effect=runtime_mock if runtime_mock is not mock.DEFAULT else None,
+            return_value=copy.deepcopy(template["runtime"]),
+        ):
+            return evidence.capture(
+                REPO_ROOT,
+                evidence.DEFAULT_CONTRACT,
+                build_dir,
+                runtime_dir / "serial.log",
+                runtime_dir / "qemu.log",
+                runtime_dir / "qemu-command.txt",
+                runtime_dir / "qemu-version.txt",
+                runtime_dir / "qemu.exit-code",
+                runtime_dir / "environment.txt",
+                runtime_dir / "initramfs.cpio.gz",
+                runtime_dir / "initramfs.sha256",
+                "2" * 40,
+                "phoenix-hacking/mckernel",
+                "1",
+                "1",
+                "workflow_dispatch",
+                "refs/heads/development",
+                "2" * 40,
+                (
+                    "phoenix-hacking/mckernel/.github/workflows/"
+                    "native-rust-host-modules-exact-runtime.yml"
+                    "@refs/heads/development"
+                ),
+                "2" * 40,
+                evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+                    "runtime_workflow"
+                ]["git_blob_sha1"],
+                (
+                    "phoenix-hacking/mckernel/.github/workflows/"
+                    "native-rust-host-modules-exact-runtime.yml"
+                    "@refs/heads/development"
+                ),
+                "2" * 40,
+                "phoenix-hacking/mckernel",
+                ".github/workflows/native-rust-host-modules-exact-runtime.yml",
+                evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+                    "runtime_workflow"
+                ]["git_blob_sha1"],
+                runtime_dir / "runtime-workflow-provenance.json",
+                output=output,
+            )
 
     def valid_capture_unsigned(self) -> dict:
         digest = "1" * 64
@@ -590,6 +1317,37 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "contract_sha256": digest,
             "identity": {
                 "candidate_sha": "2" * 40,
+                "execution_workflow": {
+                    "github_event_name": "workflow_dispatch",
+                    "github_ref": "refs/heads/development",
+                    "github_sha": "2" * 40,
+                    "github_workflow_blob_sha1": (
+                        evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+                            "runtime_workflow"
+                        ]["git_blob_sha1"]
+                    ),
+                    "github_workflow_ref": (
+                        "phoenix-hacking/mckernel/.github/workflows/"
+                        "native-rust-host-modules-exact-runtime.yml"
+                        "@refs/heads/development"
+                    ),
+                    "github_workflow_sha": "2" * 40,
+                    "job_workflow_file_path": (
+                        ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+                    ),
+                    "job_workflow_blob_sha1": (
+                        evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+                            "runtime_workflow"
+                        ]["git_blob_sha1"]
+                    ),
+                    "job_workflow_ref": (
+                        "phoenix-hacking/mckernel/.github/workflows/"
+                        "native-rust-host-modules-exact-runtime.yml"
+                        "@refs/heads/development"
+                    ),
+                    "job_workflow_repository": "phoenix-hacking/mckernel",
+                    "job_workflow_sha": "2" * 40,
+                },
                 "github_repository": "phoenix-hacking/mckernel",
                 "github_run_attempt": "1",
                 "github_run_id": "1",
@@ -660,18 +1418,70 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             },
             "runtime": {
                 "environment_sha256": digest,
+                "executed_caller_workflow_sha256": digest,
+                "executed_runtime_workflow_sha256": digest,
                 "initramfs_sha256": digest,
                 "initramfs_sha256_record": digest,
                 "kernel_release": release,
+                "mcd0": {
+                    "capture_can_claim_pass": False,
+                    "compat_abi": "i386",
+                    "compat_unknown_ioctl_errno": -22,
+                    "credit_eligible": False,
+                    "device_node_identity_match_observed": True,
+                    "diagnostic_segments": 2,
+                    "first_cycle_open_count": evidence.MCD0_FIRST_CYCLE_OPEN_COUNT,
+                    "first_device_major": 10,
+                    "first_device_minor": 42,
+                    "gate_status": "TODO",
+                    "module_owner_unload_status": 1,
+                    "native_abi": "x86_64",
+                    "native_unknown_ioctl_errno": -22,
+                    "node_present_observed": True,
+                    "node_removed_observed": True,
+                    "operation_callbacks_reachable": False,
+                    "open_receipt_scope": {
+                        "duplicate_close_detectable_while_other_references_exist": False,
+                        "same_generation_token_may_repeat": True,
+                        "trusted_noncopy_owner_balance_required": True,
+                    },
+                    "os_operations_reachable": False,
+                    "overlapping_open_count": evidence.MCD0_OVERLAPPING_OPEN_COUNT,
+                    "provider_open_acquire_count_per_trace": (
+                        evidence.MCD0_PROVIDER_OPEN_COUNT_PER_TRACE
+                    ),
+                    "provider_open_release_count_per_trace": (
+                        evidence.MCD0_PROVIDER_OPEN_COUNT_PER_TRACE
+                    ),
+                    "provider_registry_minor": 0,
+                    "reload_cycles": evidence.MCD0_RELOAD_CYCLES,
+                    "reload_device_major": 10,
+                    "reload_device_minor": 43,
+                    "reload_open_count": evidence.MCD0_RELOAD_OPEN_COUNT,
+                    "resource_operations_reachable": False,
+                    "rocky_runtime_validated": False,
+                    "runtime_behavior_proven": False,
+                    "sequential_open_count": evidence.MCD0_SEQUENTIAL_OPEN_COUNT,
+                    "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
+                    "tracker_credit": False,
+                    "unknown_ioctl_command": "0xdeadbeef",
+                    "valid_ioctl_commands": [],
+                },
                 "negative_unload_status": 1,
                 "provider_lease": {
                     "attach_observed": True,
+                    "attach_count_per_trace": 2,
                     "callback_abi": evidence.PROVIDER_CALLBACK_ABI,
+                    "complete_cycles_observed": 2,
                     "detach_observed": True,
+                    "detach_count_per_trace": 2,
                     "exit_callback_observed": True,
+                    "exit_callback_count_per_trace": 2,
                     "init_callback_observed": True,
+                    "init_callback_count_per_trace": 2,
                     "raw_token_logged": False,
                     "registry_empty_observed": True,
+                    "registry_empty_count_per_trace": 2,
                 },
                 "provider_refcount": 2,
                 "provider_users": ["ihk_smp_x86_64", "mcctrl"],
@@ -680,6 +1490,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "qemu_log_sha256": digest,
                 "qemu_version_sha256": digest,
                 "serial_sha256": digest,
+                "workflow_provenance_sha256": digest,
             },
             "readiness": {
                 "credit_eligible": False,
@@ -698,6 +1509,299 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(evidence.CONTRACT_ID, summary["contract_id"])
         self.assertEqual(["IHK-001", "SMP-001", "MCC-001"], summary["gate_ids"])
         self.assertEqual("tcg", summary["runtime"]["qemu_accelerator"])
+
+    def test_contract_schema_version_is_an_exact_integer(self) -> None:
+        for value in (True, 1.0):
+            with self.subTest(value=value):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["schema_version"] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "unsupported runtime contract schema"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_capture_run_ids_are_canonical_ascii_positive_decimals(self) -> None:
+        for field in ("github_run_id", "github_run_attempt"):
+            for value in ("01", "0", "١", True, 1):
+                with self.subTest(field=field, value=value):
+                    unsigned = self.valid_capture_unsigned()
+                    unsigned["identity"][field] = value
+                    capture = copy.deepcopy(unsigned)
+                    capture["capture_sha256"] = evidence._sha256_bytes(
+                        evidence._canonical_bytes(unsigned)
+                    )
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError, "capture {0} differs".format(field)
+                    ):
+                        evidence.validate_capture(capture)
+
+    def test_capture_execution_workflow_identity_is_closed_and_event_bound(self) -> None:
+        def seal(unsigned):
+            capture = copy.deepcopy(unsigned)
+            capture["capture_sha256"] = evidence._sha256_bytes(
+                evidence._canonical_bytes(unsigned)
+            )
+            return capture
+
+        valid = self.valid_capture_unsigned()
+        evidence.validate_capture(seal(valid))
+        execution = valid["identity"]["execution_workflow"]
+        mutations = (
+            ("github_event_name", "schedule"),
+            ("github_ref", "refs/heads/../development"),
+            ("github_sha", True),
+            ("github_workflow_sha", "3" * 40),
+            ("github_workflow_ref", execution["github_workflow_ref"] + "/extra"),
+            ("github_workflow_blob_sha1", "f" * 40),
+            ("job_workflow_sha", "3" * 40),
+            ("job_workflow_ref", execution["job_workflow_ref"] + "/extra"),
+            ("job_workflow_repository", "attacker/repository"),
+            ("job_workflow_file_path", ".github/workflows/attacker.yml"),
+            ("job_workflow_blob_sha1", "f" * 40),
+        )
+        for field, value in mutations:
+            with self.subTest(field=field):
+                unsigned = self.valid_capture_unsigned()
+                unsigned["identity"]["execution_workflow"][field] = value
+                with self.assertRaisesRegex(evidence.EvidenceError, "workflow|execution|dispatch"):
+                    evidence.validate_capture(seal(unsigned))
+
+        unsigned = self.valid_capture_unsigned()
+        merge_sha = "3" * 40
+        pull_ref = "refs/pull/17/merge"
+        execution = unsigned["identity"]["execution_workflow"]
+        execution.update(
+            {
+                "github_event_name": "pull_request",
+                "github_ref": pull_ref,
+                "github_sha": merge_sha,
+                "github_workflow_blob_sha1": (
+                    evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+                        "runtime_pr_workflow"
+                    ]["git_blob_sha1"]
+                ),
+                "github_workflow_ref": (
+                    "phoenix-hacking/mckernel/.github/workflows/"
+                    "native-rust-host-modules-exact-runtime-pr.yml@" + pull_ref
+                ),
+                "github_workflow_sha": merge_sha,
+                "job_workflow_ref": (
+                    "phoenix-hacking/mckernel/.github/workflows/"
+                    "native-rust-host-modules-exact-runtime.yml@" + pull_ref
+                ),
+                "job_workflow_sha": merge_sha,
+            }
+        )
+        evidence.validate_capture(seal(unsigned))
+        execution["github_ref"] = "refs/pull/017/merge"
+        with self.assertRaisesRegex(evidence.EvidenceError, "pull-request ref"):
+            evidence.validate_capture(seal(unsigned))
+
+    def test_runtime_workflow_provenance_binds_exact_receipt_and_workflow_bytes(self) -> None:
+        def validate(directory):
+            identity = self.valid_capture_unsigned()["identity"]
+            return evidence._validate_runtime_workflow_provenance(
+                directory / "runtime-workflow-provenance.json",
+                directory / "executed-caller-workflow.yml",
+                directory / "executed-runtime-workflow.yml",
+                identity["execution_workflow"],
+                identity["candidate_sha"],
+                identity["github_repository"],
+            )
+
+        directory = self.write_runtime_evidence_artifact()
+        result = validate(directory)
+        self.assertEqual(
+            hashlib.sha256(
+                (directory / "runtime-workflow-provenance.json").read_bytes()
+            ).hexdigest(),
+            result["workflow_provenance_sha256"],
+        )
+        for mutation in (
+            "noncanonical-receipt",
+            "candidate-blob",
+            "executed-blob",
+            "evidence-file",
+            "workflow-path",
+            "workflow-sha256",
+            "workflow-size-bool",
+            "github-context",
+            "job-context",
+            "caller-bytes",
+            "job-bytes",
+        ):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                receipt_path = directory / "runtime-workflow-provenance.json"
+                receipt = json.loads(receipt_path.read_text(encoding="ascii"))
+                if mutation == "noncanonical-receipt":
+                    receipt_path.write_bytes(b" " + receipt_path.read_bytes())
+                elif mutation == "caller-bytes":
+                    (directory / "executed-caller-workflow.yml").write_bytes(
+                        b"attacker caller workflow\n"
+                    )
+                elif mutation == "job-bytes":
+                    (directory / "executed-runtime-workflow.yml").write_bytes(
+                        b"attacker runtime workflow\n"
+                    )
+                else:
+                    if mutation == "candidate-blob":
+                        receipt["workflow_blobs"]["caller"][
+                            "candidate_git_blob_sha1"
+                        ] = "f" * 40
+                    elif mutation == "executed-blob":
+                        receipt["workflow_blobs"]["job"][
+                            "executed_git_blob_sha1"
+                        ] = "f" * 40
+                    elif mutation == "evidence-file":
+                        receipt["workflow_blobs"]["caller"][
+                            "evidence_file"
+                        ] = "attacker.yml"
+                    elif mutation == "workflow-path":
+                        receipt["workflow_blobs"]["job"]["path"] = "attacker.yml"
+                    elif mutation == "workflow-sha256":
+                        receipt["workflow_blobs"]["job"]["sha256"] = "f" * 64
+                    elif mutation == "workflow-size-bool":
+                        receipt["workflow_blobs"]["job"]["size"] = True
+                    elif mutation == "github-context":
+                        receipt["github"]["sha"] = "f" * 40
+                    else:
+                        receipt["job"]["workflow_repository"] = "attacker/repo"
+                    receipt_path.write_text(
+                        evidence._pretty(receipt), encoding="ascii"
+                    )
+                with self.assertRaises(evidence.EvidenceError):
+                    validate(directory)
+
+    def test_build_workflow_provenance_binds_runtime_identity_and_exact_bytes(self) -> None:
+        identity = self.valid_capture_unsigned()["identity"]
+        execution = identity["execution_workflow"]
+        build_identity = evidence.EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES[
+            "build_workflow"
+        ]
+        build_path = ".github/workflows/native-rust-host-modules-exact-build.yml"
+
+        def fixture():
+            directory = Path(
+                tempfile.mkdtemp(prefix="build-provenance-", dir=str(self.root))
+            )
+            workflow = (REPO_ROOT / build_path).read_bytes()
+            (directory / "executed-build-workflow.yml").write_bytes(workflow)
+            receipt = {
+                "caller": {
+                    "event_name": execution["github_event_name"],
+                    "ref": execution["github_ref"],
+                    "repository": identity["github_repository"],
+                    "sha": execution["github_sha"],
+                    "workflow_ref": execution["github_workflow_ref"],
+                    "workflow_sha": execution["github_workflow_sha"],
+                },
+                "candidate": {
+                    "sha": identity["candidate_sha"],
+                    "workflow_file_git_blob_sha1": build_identity["git_blob_sha1"],
+                    "workflow_file_path": build_path,
+                    "workflow_file_sha256": build_identity["sha256"],
+                },
+                "claims": {
+                    "credit_granted": False,
+                    "gate_passed": False,
+                    "production_ready": False,
+                    "release_ready": False,
+                },
+                "defining_job": {
+                    "evidence_file": "executed-build-workflow.yml",
+                    "workflow_file_git_blob_sha1": build_identity["git_blob_sha1"],
+                    "workflow_file_path": build_path,
+                    "workflow_file_sha256": build_identity["sha256"],
+                    "workflow_ref": "{0}/{1}@{2}".format(
+                        identity["github_repository"],
+                        build_path,
+                        execution["github_ref"],
+                    ),
+                    "workflow_repository": identity["github_repository"],
+                    "workflow_sha": execution["job_workflow_sha"],
+                },
+                "direct_workflow_dispatch": False,
+                "github_run_attempt": identity["github_run_attempt"],
+                "github_run_id": identity["github_run_id"],
+                "schema_version": 1,
+                "workflow_file_bytes_equal": True,
+            }
+            (directory / "workflow-provenance.json").write_bytes(
+                evidence._canonical_bytes(receipt)
+            )
+            records = {
+                name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+                for name in (
+                    "executed-build-workflow.yml",
+                    "workflow-provenance.json",
+                )
+            }
+            return directory, receipt, records
+
+        directory, _receipt, records = fixture()
+        evidence._validate_build_workflow_provenance(
+            directory, records, identity["candidate_sha"], identity
+        )
+        for mutation in (
+            "receipt-whitespace",
+            "executed-bytes",
+            "candidate-blob",
+            "defining-blob",
+            "evidence-file",
+            "claims",
+            "direct-dispatch",
+            "run-id",
+            "caller",
+            "defining-ref",
+            "bool-schema",
+        ):
+            with self.subTest(mutation=mutation):
+                directory, receipt, records = fixture()
+                receipt_path = directory / "workflow-provenance.json"
+                if mutation == "receipt-whitespace":
+                    receipt_path.write_bytes(b" " + receipt_path.read_bytes())
+                elif mutation == "executed-bytes":
+                    (directory / "executed-build-workflow.yml").write_bytes(
+                        b"attacker build workflow\n"
+                    )
+                else:
+                    if mutation == "candidate-blob":
+                        receipt["candidate"]["workflow_file_git_blob_sha1"] = "f" * 40
+                    elif mutation == "defining-blob":
+                        receipt["defining_job"]["workflow_file_git_blob_sha1"] = "f" * 40
+                    elif mutation == "evidence-file":
+                        receipt["defining_job"]["evidence_file"] = "attacker.yml"
+                    elif mutation == "claims":
+                        receipt["claims"]["gate_passed"] = True
+                    elif mutation == "direct-dispatch":
+                        receipt["direct_workflow_dispatch"] = True
+                    elif mutation == "run-id":
+                        receipt["github_run_id"] = "01"
+                    elif mutation == "caller":
+                        receipt["caller"]["sha"] = "f" * 40
+                    elif mutation == "defining-ref":
+                        receipt["defining_job"]["workflow_ref"] += "/attacker"
+                    else:
+                        receipt["schema_version"] = True
+                    receipt_path.write_bytes(evidence._canonical_bytes(receipt))
+                records = {
+                    name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+                    for name in records
+                }
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence._validate_build_workflow_provenance(
+                        directory,
+                        records,
+                        identity["candidate_sha"],
+                        identity,
+                    )
 
     def test_runtime_module_symbol_graph_contract_is_exact(self) -> None:
         mutations = (
@@ -941,6 +2045,321 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 ):
                     evidence.validate_contract(repo)
 
+    def test_mcd0_contract_is_type_strict_and_nonpromotable(self) -> None:
+        mutations = (
+            ("credit_eligible", 0),
+            ("device_node_identity_policy", "sysfs-only"),
+            ("gate_pass", 0),
+            ("module_owner_unload_expected_status", True),
+            ("reload_cycles", True),
+            ("sequential_open_count", False),
+            ("operation_callbacks_reachable", True),
+            ("resource_operations_reachable", True),
+            ("os_operations_reachable", True),
+            ("rocky_runtime_validated", True),
+            ("runtime_behavior_proven", True),
+            ("tracker_credit", True),
+            ("gate_status", "PASS"),
+            ("valid_operation_commands", ["boot"]),
+        )
+        for field, value in mutations:
+            with self.subTest(field=field, value=value):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["protocol"]["mcd0"][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "load/refcount/unload protocol"
+                ):
+                    evidence.validate_contract(repo)
+
+        receipt_mutations = (
+            ("duplicate_close_detectable_while_other_references_exist", 0),
+            ("same_generation_token_may_repeat", 1),
+            ("trusted_noncopy_owner_balance_required", 1),
+        )
+        for field, value in receipt_mutations:
+            with self.subTest(receipt_field=field, value=value):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["protocol"]["mcd0"]["open_receipt"][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "load/refcount/unload protocol"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_mcd0_helper_source_semantics_and_identity_are_immutable(self) -> None:
+        mutations = (
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+                'asciz "/dev/mcd0"',
+                'asciz "/dev/mcd1"',
+            ),
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+                "mov $16, %eax",
+                "mov $15, %eax",
+            ),
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+                "mov $54, %eax",
+                "mov $53, %eax",
+            ),
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+                "mov $0xdeadbeef, %esi",
+                "mov $0xdeadbeee, %esi",
+            ),
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+                "cmp $-22, %eax",
+                "cmp $0, %eax",
+            ),
+            (
+                "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+                "xor %edi, %edi",
+                "mov $1, %edi",
+            ),
+        )
+        for relative, old, new in mutations:
+            with self.subTest(relative=relative, mutation=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "helper byte identity"
+                ):
+                    evidence.validate_contract(repo)
+
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["repository_helper_identities"]["mcd0_ioctl_i386"]["size"] += 1
+        path.write_text(
+            json.dumps(contract, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "helper identities"):
+            evidence.validate_contract(repo)
+
+    def test_semantic_authority_contract_and_bytes_are_immutable(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            evidence.EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES,
+            contract["repository_semantic_authority_identities"],
+        )
+        for key in sorted(evidence.EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES):
+            with self.subTest(key=key):
+                repo = self.copy_contract_repository()
+                authority = repo / contract["repository_inputs"][key]
+                authority.write_bytes(authority.read_bytes() + b"# attacker\n")
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "semantic authority byte identity",
+                ):
+                    evidence.validate_contract(repo)
+
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        mutated = json.loads(path.read_text(encoding="utf-8"))
+        mutated["repository_semantic_authority_identities"]["kconfig_solver"][
+            "size"
+        ] += 1
+        path.write_text(
+            json.dumps(mutated, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "semantic authority identities"
+        ):
+            evidence.validate_contract(repo)
+
+    def test_semantic_authority_is_verified_before_import_execution(self) -> None:
+        checker = REPO_ROOT / "scripts/native_rust_runtime_evidence.py"
+        authorities = {
+            key: REPO_ROOT / "scripts" / filename
+            for key, filename in evidence._SEMANTIC_AUTHORITY_FILENAMES.items()
+        }
+        for key in sorted(authorities):
+            with self.subTest(key=key):
+                root = self.root / ("bootstrap-" + key)
+                scripts = root / "scripts"
+                scripts.mkdir(parents=True)
+                shutil.copyfile(checker, scripts / checker.name)
+                for other_key, source in authorities.items():
+                    shutil.copyfile(source, scripts / source.name)
+                sentinel = root / "executed"
+                target = scripts / authorities[key].name
+                with target.open("a", encoding="utf-8") as stream:
+                    stream.write(
+                        "\nopen({0}, 'w').write('executed')\n".format(
+                            repr(str(sentinel))
+                        )
+                    )
+                program = (
+                    "import sys\n"
+                    "sys.path.insert(0, {0})\n"
+                    "import scripts.native_rust_runtime_evidence\n"
+                ).format(repr(str(root)))
+                completed = subprocess.run(
+                    [sys.executable, "-B", "-c", program],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    env={"PYTHONDONTWRITEBYTECODE": "1"},
+                    check=False,
+                )
+                self.assertNotEqual(0, completed.returncode)
+                self.assertFalse(sentinel.exists())
+                self.assertRegex(
+                    completed.stderr,
+                    r"semantic authority (?:file shape|byte identity) differs",
+                )
+
+    def test_isolated_checker_normalized_self_digest_is_exact(self) -> None:
+        source = (REPO_ROOT / "scripts/native_rust_runtime_evidence.py").read_bytes()
+        normalized, count = re.subn(
+            br"ISOLATED_SELF_DIGEST:[0-9a-f]{64}",
+            b"ISOLATED_SELF_DIGEST:" + b"0" * 64,
+            source,
+        )
+        self.assertEqual(1, count)
+        self.assertEqual(
+            evidence.ISOLATED_SELF_DIGEST,
+            hashlib.sha256(normalized).hexdigest(),
+        )
+
+    def test_isolated_worker_rejects_checker_and_authority_disk_replacement(self) -> None:
+        checker = REPO_ROOT / "scripts/native_rust_runtime_evidence.py"
+        authorities = {
+            key: REPO_ROOT / "scripts" / filename
+            for key, filename in evidence._SEMANTIC_AUTHORITY_FILENAMES.items()
+        }
+        config_b64 = __import__("base64").b64encode(
+            (REPO_ROOT / "host-kernel/rocky/configs/native-rust-evidence.config").read_bytes()
+        ).decode("ascii")
+        for key in ["checker"] + sorted(authorities):
+            with self.subTest(key=key):
+                root = self.root / ("worker-replacement-" + key)
+                scripts = root / "scripts"
+                scripts.mkdir(parents=True)
+                shutil.copyfile(checker, scripts / checker.name)
+                for source in authorities.values():
+                    shutil.copyfile(source, scripts / source.name)
+                target = (
+                    scripts / checker.name
+                    if key == "checker"
+                    else scripts / authorities[key].name
+                )
+                program = "\n".join(
+                    (
+                        "import sys",
+                        "sys.path.insert(0, {0})".format(repr(str(root))),
+                        "from scripts import native_rust_runtime_evidence as e",
+                        "with open({0}, 'ab') as stream: stream.write(b'# attacker\\n')".format(
+                            repr(str(target))
+                        ),
+                        "try:",
+                        "    e._run_isolated_semantic_worker('config', {{'config_b64': {0}}})".format(
+                            repr(config_b64)
+                        ),
+                        "except e.EvidenceError as error:",
+                        "    print(str(error))",
+                        "    raise SystemExit(0)",
+                        "raise SystemExit(2)",
+                        "",
+                    )
+                )
+                completed = subprocess.run(
+                    [sys.executable, "-B", "-c", program],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    env={"PYTHONDONTWRITEBYTECODE": "1"},
+                    check=False,
+                )
+                self.assertEqual(0, completed.returncode, completed.stderr)
+                self.assertRegex(
+                    completed.stdout,
+                    r"isolated (?:runtime checker normalized SHA-256|semantic authority .* differs)",
+                )
+
+    def test_mcd0_init_identity_helpers_and_teardown_guards_are_immutable(self) -> None:
+        relative = "scripts/native-rust-runtime-init.sh"
+        mutations = (
+            ("valid_mcd0_dev_identity() {", "valid_mcd0_dev_identity() { return 0;"),
+            ("*[!0-9]*) return 1 ;;", "*) return 0 ;;"),
+            (
+                "[ ! -e /dev/mcd0 ] && [ ! -L /dev/mcd0 ] || {",
+                "[ ! -e /dev/mcd0 ] || {",
+            ),
+            (
+                "[ ! -e /sys/class/misc/mcd0 ] && [ ! -L /sys/class/misc/mcd0 ] || {",
+                "[ ! -e /sys/class/misc/mcd0 ] || {",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(mutation=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_contract(repo)
+
+    def test_mcd0_devtmpfs_node_must_match_the_sysfs_device_identity(self) -> None:
+        relative = "scripts/native-rust-runtime-init.sh"
+        mutations = (
+            (
+                'expected="$(printf \'a:%x\' "$minor")" || return 1',
+                'expected="$(printf \'a:%x\' 0)" || return 1',
+            ),
+            (
+                'actual="$(/bin/stat -c \'%t:%T\' /dev/mcd0)" || return 1',
+                'actual="$expected"',
+            ),
+            ('[ "$actual" = "$expected" ]', "return 0"),
+            (
+                'mcd0_node_matches_identity "$mcd0_dev"',
+                'valid_mcd0_dev_identity "$mcd0_dev"',
+            ),
+            (
+                'mcd0_node_matches_identity "$mcd0_reload_dev"',
+                'valid_mcd0_dev_identity "$mcd0_reload_dev"',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(mutation=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "mcd0 node identity binding|runtime init identity|lacks evidence marker",
+                ):
+                    evidence.validate_contract(repo)
+
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            "copy_executable /usr/bin/stat /bin/stat",
+            "copy_executable /usr/bin/uname /bin/stat",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "required boundary|stat helper binding|workflow byte identity",
+        ):
+            evidence.validate_contract(repo)
+
     def test_full_module_tree_claim_mutation_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         path = repo / evidence.DEFAULT_CONTRACT
@@ -1019,7 +2438,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         document = yaml.safe_load((REPO_ROOT / workflow).read_text(encoding="utf-8"))
         protected_names = {
             "Verify immutable build inputs and native module link contracts",
-            "Assemble a deterministic lifecycle-only initramfs",
+            "Assemble a deterministic lifecycle and mcd0 initramfs",
             "Boot the exact kernel under QEMU TCG and capture serial diagnostics",
             "Create a credit-forbidden technical capture",
         }
@@ -1263,6 +2682,34 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         ):
             evidence.validate_contract(repo)
 
+    def test_mcd0_runtime_kernel_prerequisites_are_exact_and_required(self) -> None:
+        symbols = (
+            "CONFIG_COMPAT",
+            "CONFIG_DEVTMPFS",
+            "CONFIG_IA32_EMULATION",
+            "CONFIG_MISC_DEVICES",
+        )
+        for symbol in symbols:
+            with self.subTest(symbol=symbol, source="contract"):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["runtime"]["required_kernel_config"]["enabled"].remove(
+                    symbol
+                )
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "runtime identity"):
+                    evidence.validate_contract(repo)
+            with self.subTest(symbol=symbol, source="workflow"):
+                repo = self.copy_contract_repository()
+                workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+                self.mutate_text(repo, workflow, symbol, "CONFIG_ATTACKER")
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_contract(repo)
+
     def test_workflow_must_check_resolved_modules_prerequisite(self) -> None:
         repo = self.copy_contract_repository()
         workflow = ".github/workflows/native-rust-host-modules-exact-build.yml"
@@ -1286,11 +2733,106 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "artifact file set differs"):
             evidence.validate_contract(repo)
 
+    def test_artifact_mode_contract_is_exact(self) -> None:
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["artifact_contract"]["evidence_file_mode"] = "0755"
+        path.write_text(
+            json.dumps(contract, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "uncaptured and unreviewed"):
+            evidence.validate_contract(repo)
+
+    def test_artifact_size_limit_contract_is_exact_typed(self) -> None:
+        for field, value in (
+            ("build_evidence_file_max", True),
+            ("runtime_evidence_file_max", 0),
+            ("runtime_helper_file_max", evidence.MAX_RUNTIME_HELPER_FILE_SIZE + 1),
+            ("runtime_text_file_max", float(evidence.MAX_RUNTIME_TEXT_FILE_SIZE)),
+            ("tool_executable_file_max", evidence.MAX_TOOL_EXECUTABLE_FILE_SIZE + 1),
+        ):
+            with self.subTest(field=field, value=value):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["artifact_contract"]["size_limits_bytes"][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "artifact size limits"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_runtime_tool_digest_authority_is_exact_typed(self) -> None:
+        mutations = (
+            ("modinfo", "expected_sha256", "f" * 64),
+            ("modinfo", "package_nevra", "kmod-attacker"),
+            ("modules", "policy", "self-asserted"),
+            ("nm", "file_digest_algorithm", True),
+            ("nm", "package_nevra", "binutils-attacker"),
+            ("nm", "package_path", "/tmp/nm"),
+            ("nm", "policy", "mutable-file-sha256"),
+        )
+        for section, field, value in mutations:
+            with self.subTest(section=section, field=field):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["artifact_contract"]["tool_digest_authority"][section][
+                    field
+                ] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "tool digest authority"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_runtime_artifact_contract_member_list_is_exact_typed_and_ordered(self) -> None:
+        for mutation in (
+            "duplicate",
+            "non-list",
+            "non-string",
+            "path-alias",
+            "reordered",
+        ):
+            with self.subTest(mutation=mutation):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                members = contract["artifact_contract"]["runtime_evidence_files"]
+                if mutation == "duplicate":
+                    members.append(members[-1])
+                elif mutation == "non-list":
+                    contract["artifact_contract"]["runtime_evidence_files"] = {
+                        name: True for name in members
+                    }
+                elif mutation == "non-string":
+                    members[0] = 0
+                elif mutation == "path-alias":
+                    members[members.index("serial.log")] = "./serial.log"
+                else:
+                    members.reverse()
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "artifact file set differs"
+                ):
+                    evidence.validate_contract(repo)
+
     def test_runtime_artifact_exact_member_set_is_reconciled(self) -> None:
         directory = self.write_runtime_evidence_artifact()
         records = self.validate_runtime_artifact(directory)
         self.assertIn("native-rust-runtime-poweroff.o", records)
-        self.assertEqual(12, len(records) + 1)
+        self.assertEqual(19, len(records) + 1)
 
     def test_runtime_artifact_missing_or_extra_member_is_rejected(self) -> None:
         for mutation in ("missing-poweroff", "extra"):
@@ -1303,6 +2845,319 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 self.rewrite_runtime_manifest(directory)
                 with self.assertRaisesRegex(
                     evidence.EvidenceError, "artifact file set differs"
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_all_mcd0_helper_artifacts_are_regular_exact_members(self) -> None:
+        helper_names = (
+            "native-rust-runtime-mcd0-ioctl-i386",
+            "native-rust-runtime-mcd0-ioctl-i386.o",
+            "native-rust-runtime-mcd0-ioctl-x86_64",
+            "native-rust-runtime-mcd0-ioctl-x86_64.o",
+        )
+        for name in helper_names:
+            with self.subTest(name=name, mutation="missing"):
+                directory = self.write_runtime_evidence_artifact()
+                (directory / name).unlink()
+                self.rewrite_runtime_manifest(directory)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "artifact file set differs"
+                ):
+                    self.validate_runtime_artifact(directory)
+            with self.subTest(name=name, mutation="symlink"):
+                directory = self.write_runtime_evidence_artifact()
+                path = directory / name
+                identical_target = self.root / (name + ".identical-target")
+                identical_target.write_bytes(path.read_bytes())
+                path.unlink()
+                path.symlink_to(identical_target)
+                self.rewrite_runtime_manifest(directory)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "regular file|symlink|digest differs|non-regular",
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_every_runtime_artifact_member_requires_mode_0644(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        for name in contract["artifact_contract"]["runtime_evidence_files"]:
+            with self.subTest(name=name):
+                directory = self.write_runtime_evidence_artifact()
+                (directory / name).chmod(0o600)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "non-0644|mode must be 0644"
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_runtime_artifact_hard_link_aliases_fail_closed(self) -> None:
+        directory = self.write_runtime_evidence_artifact()
+        aliased = directory / "native-rust-runtime-poweroff.o"
+        aliased.unlink()
+        os.link(directory / "qemu.log", aliased)
+        self.rewrite_runtime_manifest(directory)
+        with self.assertRaisesRegex(evidence.EvidenceError, "hard-link aliases"):
+            self.validate_runtime_artifact(directory)
+
+    def test_runtime_helper_artifacts_require_exact_nonempty_elf_shape(self) -> None:
+        for name, elf_spec in evidence.RUNTIME_HELPER_ELF_SPEC.items():
+            canonical = bytearray(minimal_elf(*elf_spec))
+            mutations = (
+                b"",
+                b"attacker\n",
+                bytes(canonical[:19]),
+                bytes(canonical[:4] + b"X" + canonical[5:]),
+            )
+            for data in mutations:
+                with self.subTest(name=name, size=len(data)):
+                    directory = self.write_runtime_evidence_artifact()
+                    self.reseal_runtime_file(directory, name, data)
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError, "runtime helper ELF identity differs"
+                    ):
+                        self.validate_runtime_artifact(directory)
+
+    def test_resealed_valid_elf_probe_substitutions_fail_semantic_validation(self) -> None:
+        name = "native-rust-runtime-mcd0-ioctl-x86_64"
+        canonical = semantic_probe_elf(name)
+        mutations = []
+        text = bytearray(canonical)
+        compare_offset = text.find(bytes.fromhex("4883f8ea"), 0x1000)
+        self.assertGreaterEqual(compare_offset, 0x1000)
+        text[compare_offset + 3] = 0xEB
+        mutations.append(("errno", bytes(text)))
+        rodata = bytearray(canonical)
+        rodata[0x2000 + len(b"/dev/mcd")] = ord("1")
+        mutations.append(("device", bytes(rodata)))
+        entry = bytearray(canonical)
+        entry[24:32] = (0x401001).to_bytes(8, "little")
+        mutations.append(("entry", bytes(entry)))
+        section_flags = bytearray(canonical)
+        section_offset = int.from_bytes(section_flags[40:48], "little")
+        section_flags[section_offset + 64 + 8 : section_offset + 64 + 16] = (
+            0x7
+        ).to_bytes(8, "little")
+        mutations.append(("section-flags", bytes(section_flags)))
+        program_flags = bytearray(canonical)
+        second_program = 64 + 56
+        program_flags[second_program + 4 : second_program + 8] = (7).to_bytes(
+            4, "little"
+        )
+        mutations.append(("load-flags", bytes(program_flags)))
+        malformed_name = bytearray(canonical)
+        section_offset = int.from_bytes(malformed_name[40:48], "little")
+        shstr_header = section_offset + 3 * 64
+        shstr_size = int.from_bytes(
+            malformed_name[shstr_header + 32 : shstr_header + 40], "little"
+        )
+        malformed_name[section_offset + 64 : section_offset + 68] = (
+            shstr_size + 1
+        ).to_bytes(4, "little")
+        mutations.append(("section-name-offset", bytes(malformed_name)))
+        duplicate_name = bytearray(canonical)
+        text_name_offset = duplicate_name[section_offset + 64 : section_offset + 68]
+        duplicate_name[section_offset + 128 : section_offset + 132] = text_name_offset
+        mutations.append(("duplicate-section-name", bytes(duplicate_name)))
+        extra_section = bytearray(canonical)
+        extra_section[60:62] = (5).to_bytes(2, "little")
+        extra_section.extend(b"\0" * 64)
+        mutations.append(("extra-section", bytes(extra_section)))
+        for label, data in mutations:
+            with self.subTest(label=label):
+                directory = self.write_runtime_evidence_artifact()
+                self.reseal_runtime_file(directory, name, data)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "runtime helper executable",
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_workflow_exact_assembler_and_linker_outputs_pass_probe_semantics(self) -> None:
+        assembler = Path("/usr/bin/as")
+        linker = Path("/usr/bin/ld")
+        if not assembler.is_file() or not linker.is_file():
+            self.skipTest("hosted assembler/linker are unavailable")
+        cases = (
+            (
+                "native-rust-runtime-mcd0-ioctl-x86_64",
+                "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+                "--64",
+                "elf_x86_64",
+                2,
+                62,
+            ),
+            (
+                "native-rust-runtime-mcd0-ioctl-i386",
+                "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+                "--32",
+                "elf_i386",
+                1,
+                3,
+            ),
+        )
+        for name, source, as_mode, ld_mode, elf_class, machine in cases:
+            with self.subTest(name=name):
+                object_path = self.root / (name + ".o")
+                executable_path = self.root / name
+                subprocess.run(
+                    [str(assembler), as_mode, source, "-o", str(object_path)],
+                    cwd=str(REPO_ROOT),
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                subprocess.run(
+                    [
+                        str(linker),
+                        "-m",
+                        ld_mode,
+                        "-nostdlib",
+                        "-static",
+                        "-s",
+                        "-z",
+                        "noexecstack",
+                        "-o",
+                        str(executable_path),
+                        str(object_path),
+                    ],
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                evidence._validate_runtime_probe_elf(
+                    name,
+                    executable_path.read_bytes(),
+                    elf_class,
+                    machine,
+                )
+
+    def test_runtime_helper_semantics_contract_is_exact_typed(self) -> None:
+        for field, value in (
+            ("object_files_shape_only", 1),
+            ("allocated_sections", [".rodata", ".text"]),
+            ("device_path_bytes", "/dev/mcd1\0"),
+        ):
+            with self.subTest(field=field):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["artifact_contract"]["runtime_helper_semantics"][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "helper executable semantics",
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_artifact_scanner_enforces_explicit_per_file_size_caps(self) -> None:
+        directory = self.root / "size-cap"
+        directory.mkdir()
+        payload = directory / "payload"
+        payload.write_bytes(b"12")
+        digest = hashlib.sha256(payload.read_bytes()).hexdigest()
+        sums = directory / "SHA256SUMS"
+        sums.write_text("{0}  payload\n".format(digest), encoding="ascii")
+        records = {"payload": digest}
+        with self.assertRaisesRegex(evidence.EvidenceError, "size limit"):
+            evidence._validate_exact_build_artifact_files(
+                directory,
+                records,
+                ["SHA256SUMS", "payload"],
+                max_file_size=1024,
+                per_file_max={"payload": 1},
+            )
+
+    def test_runtime_manifest_grammar_and_integrity_fail_closed(self) -> None:
+        for mutation in (
+            "missing-row",
+            "duplicate-row",
+            "extra-row",
+            "uppercase-digest",
+            "wrong-digest",
+            "single-space",
+            "binary-marker",
+            "path-alias",
+        ):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                manifest = directory / "SHA256SUMS"
+                rows = manifest.read_text(encoding="ascii").splitlines()
+                serial_index = next(
+                    index
+                    for index, row in enumerate(rows)
+                    if row.endswith("  serial.log")
+                )
+                serial_row = rows[serial_index]
+                if mutation == "missing-row":
+                    del rows[serial_index]
+                elif mutation == "duplicate-row":
+                    rows.insert(serial_index, serial_row)
+                elif mutation == "extra-row":
+                    rows.append("{0}  absent.bin".format("0" * 64))
+                    rows.sort()
+                elif mutation == "uppercase-digest":
+                    rows[serial_index] = serial_row[:64].upper() + serial_row[64:]
+                elif mutation == "wrong-digest":
+                    rows[serial_index] = "0" * 64 + serial_row[64:]
+                elif mutation == "single-space":
+                    rows[serial_index] = serial_row.replace("  serial.log", " serial.log")
+                elif mutation == "binary-marker":
+                    rows[serial_index] = serial_row.replace("  serial.log", " *serial.log")
+                else:
+                    rows[serial_index] = serial_row.replace("serial.log", "./serial.log")
+                manifest.write_text("\n".join(rows) + "\n", encoding="ascii")
+                with self.assertRaises(evidence.EvidenceError):
+                    self.validate_runtime_artifact(directory)
+
+        for mutation in ("crlf", "missing-final-lf", "nel", "line-separator"):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                manifest = directory / "SHA256SUMS"
+                data = manifest.read_bytes()
+                if mutation == "crlf":
+                    data = data.replace(b"\n", b"\r\n")
+                elif mutation == "missing-final-lf":
+                    data = data[:-1]
+                elif mutation == "nel":
+                    data = data.replace(b"\n", b"\xc2\x85", 1)
+                else:
+                    data = data.replace(b"\n", b"\xe2\x80\xa8", 1)
+                manifest.write_bytes(data)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "strict ASCII|canonical LF-terminated",
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_initramfs_digest_record_grammar_and_value_fail_closed(self) -> None:
+        for mutation in (
+            "uppercase-digest",
+            "wrong-digest",
+            "binary-marker",
+            "extra-row",
+        ):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                digest = hashlib.sha256(
+                    (directory / "initramfs.cpio.gz").read_bytes()
+                ).hexdigest()
+                if mutation == "uppercase-digest":
+                    record = digest.upper() + "  initramfs.cpio.gz\n"
+                elif mutation == "wrong-digest":
+                    record = "0" * 64 + "  initramfs.cpio.gz\n"
+                elif mutation == "binary-marker":
+                    record = digest + " *initramfs.cpio.gz\n"
+                else:
+                    record = digest + "  initramfs.cpio.gz\nextra\n"
+                self.reseal_runtime_file(
+                    directory, "initramfs.sha256", record.encode("ascii")
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "initramfs digest record differs"
                 ):
                     self.validate_runtime_artifact(directory)
 
@@ -1412,6 +3267,183 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     self.validate_runtime_files(runtime_dir, bzimage)
         command_path.write_text(command, encoding="ascii")
 
+    def test_capture_writes_exact_output_through_held_runtime_directory(self) -> None:
+        _parent, build_dir, runtime_dir, template = self.prepare_capture_directories()
+        value = self.run_mocked_capture(build_dir, runtime_dir, template)
+        output = runtime_dir / "capture.json"
+        self.assertEqual(evidence._pretty(value).encode("utf-8"), output.read_bytes())
+        metadata = output.stat()
+        self.assertEqual(0o644, stat.S_IMODE(metadata.st_mode))
+        self.assertEqual(1, metadata.st_nlink)
+
+    def test_capture_inputs_and_output_survive_parent_swap_and_restore(self) -> None:
+        parent, build_dir, runtime_dir, template = self.prepare_capture_directories()
+        parked = self.root / "capture-parent-parked"
+        swapped = [False]
+
+        def swap_after_both_bindings(*args, **_kwargs):
+            bound_build = Path(args[1])
+            self.assertEqual(
+                b"bootable capture fixture\n",
+                (bound_build / "bzImage").read_bytes(),
+            )
+            parent.rename(parked)
+            (parent / "native-rust-build-evidence").mkdir(parents=True)
+            (parent / "native-rust-runtime-evidence").mkdir()
+            swapped[0] = True
+            return copy.deepcopy(template["build"]), {}
+
+        def inspect_bound_runtime(*args, **_kwargs):
+            bound_inputs = [Path(item) for item in args[1:9]]
+            self.assertTrue(
+                all(str(item).startswith("/proc/self/fd/") for item in bound_inputs)
+            )
+            self.assertEqual(valid_serial().encode("ascii"), bound_inputs[0].read_bytes())
+            self.assertEqual(
+                b"bootable capture fixture\n",
+                Path(args[9]).read_bytes(),
+            )
+            return copy.deepcopy(template["runtime"])
+
+        try:
+            value = self.run_mocked_capture(
+                build_dir,
+                runtime_dir,
+                template,
+                build_side_effect=swap_after_both_bindings,
+                runtime_side_effect=inspect_bound_runtime,
+            )
+            self.assertTrue(swapped[0])
+            trusted_output = (
+                parked / "native-rust-runtime-evidence" / "capture.json"
+            )
+            attacker_output = parent / "native-rust-runtime-evidence" / "capture.json"
+            self.assertEqual(evidence._pretty(value), trusted_output.read_text())
+            self.assertFalse(attacker_output.exists())
+        finally:
+            if swapped[0]:
+                shutil.rmtree(parent)
+                parked.rename(parent)
+
+    def test_capture_late_runtime_input_mutation_removes_published_output(self) -> None:
+        _parent, build_dir, runtime_dir, template = self.prepare_capture_directories()
+        serial = runtime_dir / "serial.log"
+        before = serial.stat()
+        original = serial.read_bytes()
+        self.assertTrue(original)
+        mutated = bytes((original[0] ^ 1,)) + original[1:]
+        real_validate = evidence.validate_capture
+        real_write = evidence._write_capture_output
+        mutation_pending = [False]
+
+        def validate_then_schedule(value):
+            real_validate(value)
+            mutation_pending[0] = True
+
+        def mutate_before_publication_check(*args, **kwargs):
+            self.assertTrue(mutation_pending[0])
+            descriptor = os.open(str(serial), os.O_WRONLY | os.O_NOFOLLOW)
+            try:
+                self.assertEqual(len(mutated), os.pwrite(descriptor, mutated, 0))
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+            return real_write(*args, **kwargs)
+
+        with mock.patch.object(
+            evidence, "validate_capture", side_effect=validate_then_schedule
+        ), mock.patch.object(
+            evidence,
+            "_write_capture_output",
+            side_effect=mutate_before_publication_check,
+        ):
+            with self.assertRaisesRegex(
+                evidence.EvidenceError,
+                "capture runtime input changed: serial.log",
+            ):
+                self.run_mocked_capture(build_dir, runtime_dir, template)
+        after = serial.stat()
+        self.assertEqual(before.st_ino, after.st_ino)
+        self.assertEqual(before.st_size, after.st_size)
+        self.assertEqual(mutated, serial.read_bytes())
+        self.assertFalse((runtime_dir / "capture.json").exists())
+        self.assertEqual([], list(runtime_dir.glob(".capture.json.tmp.*")))
+
+    def test_capture_output_preidentity_failure_cleans_both_links(self) -> None:
+        _parent, _build_dir, runtime_dir, _template = self.prepare_capture_directories()
+        directory_fd = os.open(
+            str(runtime_dir), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        )
+        original_unlink = os.unlink
+        failed = [False]
+
+        def fail_first_temporary_unlink(path, *args, **kwargs):
+            if (
+                not failed[0]
+                and isinstance(path, str)
+                and path.startswith(".capture.json.tmp.")
+            ):
+                failed[0] = True
+                raise OSError("injected temporary unlink failure")
+            return original_unlink(path, *args, **kwargs)
+
+        try:
+            with mock.patch.object(
+                evidence.os,
+                "unlink",
+                side_effect=fail_first_temporary_unlink,
+            ):
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "cannot publish capture output",
+                ):
+                    evidence._write_capture_output(
+                        directory_fd,
+                        runtime_dir / "capture.json",
+                        runtime_dir,
+                        {"capture_sha256": "0" * 64},
+                    )
+            self.assertTrue(failed[0])
+            self.assertFalse((runtime_dir / "capture.json").exists())
+            self.assertEqual([], list(runtime_dir.glob(".capture.json.tmp.*")))
+        finally:
+            os.close(directory_fd)
+
+    def test_capture_input_parent_names_aliases_and_output_scope_fail_closed(self) -> None:
+        _parent, _build_dir, runtime_dir, _template = self.prepare_capture_directories()
+        paths = {
+            field: runtime_dir / basename
+            for field, basename in evidence.CAPTURE_RUNTIME_INPUT_BASENAMES.items()
+        }
+        outside = self.root / "outside"
+        outside.mkdir()
+        (outside / "qemu.log").write_bytes(b"")
+        divergent = dict(paths)
+        divergent["qemu_log"] = outside / "qemu.log"
+        with self.assertRaisesRegex(evidence.EvidenceError, "share one parent"):
+            with evidence._bound_capture_runtime_inputs(divergent):
+                self.fail("divergent capture input parent was accepted")
+
+        aliased = dict(paths)
+        alias = runtime_dir / "qemu-version.txt"
+        alias.unlink()
+        os.link(runtime_dir / "environment.txt", alias)
+        with self.assertRaisesRegex(evidence.EvidenceError, "hard-link aliases"):
+            with evidence._bound_capture_runtime_inputs(aliased):
+                self.fail("capture hard-link alias was accepted")
+
+        directory_fd = os.open(str(runtime_dir), os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            with self.assertRaisesRegex(evidence.EvidenceError, "runtime input parent"):
+                evidence._write_capture_output(
+                    directory_fd,
+                    outside / "capture.json",
+                    runtime_dir,
+                    {"capture_sha256": "0" * 64},
+                )
+        finally:
+            os.close(directory_fd)
+
     def test_check_runtime_evidence_requires_same_run_build_directory(self) -> None:
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
@@ -1441,7 +3473,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 ]
             )
         self.assertEqual(1, status)
-        self.assertIn("and --modinfo-fd", stderr.getvalue())
+        self.assertIn("both tool fds and digests", stderr.getvalue())
 
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
@@ -1475,7 +3507,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.rewrite_runtime_manifest(directory)
         with mock.patch.object(
             evidence,
-            "_validate_build_evidence_directory",
+            "_validate_bound_build_evidence_directory",
             return_value=(replayed_build, {}),
         ):
             with self.assertRaisesRegex(
@@ -1493,6 +3525,64 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         manifest.write_text("".join(reversed(rows)), encoding="ascii")
         with self.assertRaisesRegex(evidence.EvidenceError, "canonical-order"):
             self.validate_runtime_artifact(directory)
+
+    def test_runtime_capture_document_requires_exact_canonical_pretty_bytes(self) -> None:
+        for mutation in (
+            "leading-whitespace",
+            "reordered",
+            "missing-final-lf",
+            "extra-final-lf",
+            "equivalent-escape",
+            "duplicate-key",
+            "nonfinite",
+        ):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                path = directory / "capture.json"
+                canonical = path.read_bytes()
+                parsed = json.loads(canonical.decode("ascii"))
+                if mutation == "leading-whitespace":
+                    replacement = b" " + canonical
+                elif mutation == "reordered":
+                    replacement = (
+                        json.dumps(
+                            {key: parsed[key] for key in reversed(list(parsed))},
+                            indent=2,
+                            sort_keys=False,
+                        )
+                        + "\n"
+                    ).encode("ascii")
+                elif mutation == "missing-final-lf":
+                    replacement = canonical[:-1]
+                elif mutation == "extra-final-lf":
+                    replacement = canonical + b"\n"
+                elif mutation == "equivalent-escape":
+                    replacement = canonical.replace(
+                        b'"CAPTURED_UNREVIEWED"',
+                        b'"\\u0043APTURED_UNREVIEWED"',
+                        1,
+                    )
+                elif mutation == "duplicate-key":
+                    replacement = canonical.replace(
+                        b"{\n", b'{\n  "schema_version": 1,\n', 1
+                    )
+                else:
+                    replacement = canonical.replace(b'"schema_version": 1', b'"schema_version": NaN', 1)
+                self.assertNotEqual(canonical, replacement)
+                path.write_bytes(replacement)
+                self.rewrite_runtime_manifest(directory)
+                with mock.patch.object(
+                    evidence,
+                    "validate_contract",
+                    return_value={
+                        "contract_sha256": parsed["contract_sha256"],
+                    },
+                ):
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError,
+                        "(?:canonical pretty JSON|duplicate JSON key|non-finite JSON)",
+                    ):
+                        self.validate_runtime_artifact(directory)
 
     def test_capture_build_environment_digest_is_canonical(self) -> None:
         value = self.valid_capture_unsigned()
@@ -1615,12 +3705,18 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(
             {
                 "attach_observed": True,
+                "attach_count_per_trace": 2,
                 "callback_abi": evidence.PROVIDER_CALLBACK_ABI,
+                "complete_cycles_observed": 2,
                 "detach_observed": True,
+                "detach_count_per_trace": 2,
                 "exit_callback_observed": True,
+                "exit_callback_count_per_trace": 2,
                 "init_callback_observed": True,
+                "init_callback_count_per_trace": 2,
                 "raw_token_logged": False,
                 "registry_empty_observed": True,
+                "registry_empty_count_per_trace": 2,
             },
             result["provider_lease"],
         )
@@ -1655,7 +3751,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         result = evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
         self.assertEqual(1, result["negative_unload_status"])
 
-    def test_provider_lease_events_are_required_once_in_runtime_dmesg(self) -> None:
+    def test_provider_lease_events_are_required_twice_in_runtime_dmesg(self) -> None:
         markers = (
             evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
             evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
@@ -1667,10 +3763,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         for marker in markers:
             with self.subTest(marker=marker, mutation="missing"):
                 serial = valid_serial()
-                first = serial.index(marker)
-                second = serial.index(marker, first + len(marker))
-                serial = serial[:second] + serial[second:].replace(marker + "\n", "", 1)
-                with self.assertRaisesRegex(evidence.EvidenceError, "missing or duplicated"):
+                dmesg_begin = serial.index(f"{evidence.PROTOCOL} DMESG_BEGIN")
+                prefix = serial[:dmesg_begin]
+                dmesg = serial[dmesg_begin:]
+                self.assertEqual(2, dmesg.count(marker))
+                serial = prefix + dmesg.replace(marker + "\n", "", 1)
+                with self.assertRaises(evidence.EvidenceError):
                     evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
             with self.subTest(marker=marker, mutation="duplicate"):
                 serial = valid_serial().replace(
@@ -1678,7 +3776,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     marker + "\n" + dmesg_end,
                     1,
                 )
-                with self.assertRaisesRegex(evidence.EvidenceError, "missing or duplicated"):
+                with self.assertRaises(evidence.EvidenceError):
                     evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_provider_lease_runtime_order_is_fail_closed(self) -> None:
@@ -1766,9 +3864,270 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 dmesg_begin = serial.index(f"{evidence.PROTOCOL} DMESG_BEGIN")
                 prefix = serial[:dmesg_begin]
                 dmesg = serial[dmesg_begin:]
-                self.assertEqual(1, dmesg.count(before))
+                self.assertEqual(2, dmesg.count(before))
                 serial = prefix + dmesg.replace(before, after, 1)
-                with self.assertRaisesRegex(evidence.EvidenceError, "out of order"):
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_mcd0_and_reload_protocol_records_are_exact_once(self) -> None:
+        protocol = evidence.PROTOCOL
+        records = (
+            f"{protocol} MCD0 NODE status=present dev=10:42",
+            f"{protocol} MCD0 OPEN_CLOSE mode=sequential count=4 status=ok",
+            f"{protocol} MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok",
+            f"{protocol} MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok",
+            f"{protocol} MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok",
+            f"{protocol} MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
+            f"{protocol} MCD0 NEGATIVE_OUTPUT_BEGIN",
+            f"{protocol} MCD0 NEGATIVE_OUTPUT_END",
+            f"{protocol} MCD0 CLOSE phase=after-module-owner-negative status=ok",
+            f"{protocol} MCD0 NODE status=removed",
+            f"{protocol} RELOAD cycle=1 phase=begin",
+            f"{protocol} RELOAD_LOAD cycle=1 module=ihk status=ok",
+            f"{protocol} RELOAD_LOAD cycle=1 module=ihk_smp_x86_64 status=ok",
+            f"{protocol} RELOAD_LOAD cycle=1 module=mcctrl status=ok",
+            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok",
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=mcctrl status=ok",
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk_smp_x86_64 status=ok",
+            f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk status=ok",
+            f"{protocol} RELOAD cycle=1 status=ok",
+        )
+        for record in records:
+            for mutation, replacement in (
+                ("missing", ""),
+                ("duplicate", record + "\n" + record + "\n"),
+                ("prefixed", "ATTACKER " + record + "\n"),
+                ("suffixed", record + " attacker\n"),
+            ):
+                with self.subTest(record=record, mutation=mutation):
+                    serial = valid_serial()
+                    self.assertEqual(1, serial.count(record + "\n"))
+                    serial = serial.replace(record + "\n", replacement, 1)
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence.validate_serial(
+                            self.write_serial(serial), KERNEL_RELEASE
+                        )
+
+    def test_additive_protocol_claims_and_prefixed_frame_decoys_fail_closed(self) -> None:
+        protocol = evidence.PROTOCOL
+        complete = (
+            f"{protocol} COMPLETE "
+            "status=technical-capture-unreviewed credit=forbidden"
+        )
+        for injected in (
+            f"{protocol} COMPLETE status=PASS credit=eligible",
+            f"{protocol} GATE status=PASS credit=eligible",
+            f"{protocol} RUNTIME behavior=proven",
+        ):
+            with self.subTest(injected=injected):
+                serial = valid_serial().replace(
+                    complete,
+                    injected + "\n" + complete,
+                    1,
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "unrecognized runtime protocol"
+                ):
+                    evidence.validate_serial(
+                        self.write_serial(serial), KERNEL_RELEASE
+                    )
+
+        final_frame = (
+            f"{protocol} STATE_BEGIN label=final-clean\n"
+            f"{protocol} STATE_END label=final-clean"
+        )
+        hostile_frame = (
+            f"{protocol} STATE_BEGIN label=final-clean\n"
+            f"ATTACKER {protocol} STATE_END label=final-clean\n"
+            f"{protocol} MODULE ihk 1 0 - Live 0x0\n"
+            f"{protocol} STATE_END label=final-clean"
+        )
+        serial = valid_serial().replace(final_frame, hostile_frame, 1)
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "prefixed or embedded runtime protocol|clean runtime state",
+        ):
+            evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_native_diagnostics_outside_windows_and_unknown_lifecycle_fail_closed(self) -> None:
+        complete = (
+            f"{evidence.PROTOCOL} COMPLETE "
+            "status=technical-capture-unreviewed credit=forbidden"
+        )
+        for diagnostic in (
+            evidence.PROVIDER_OPEN_ACQUIRE_DIAGNOSTIC,
+            "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+        ):
+            with self.subTest(post_complete=diagnostic):
+                serial = valid_serial().replace(
+                    complete,
+                    complete + "\n" + diagnostic,
+                    1,
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "outside the authorized trace windows"
+                ):
+                    evidence.validate_serial(
+                        self.write_serial(serial), KERNEL_RELEASE
+                    )
+
+        unknown = "ihk_smp_x86_64: lifecycle=load status=failed"
+        serial = valid_serial().replace(complete, unknown + "\n" + complete, 1)
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "native lifecycle diagnostic grammar"
+        ):
+            evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_protocol_numeric_fields_are_canonical_decimal(self) -> None:
+        for old, new in (
+            (
+                "MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
+                "MCD0 NEGATIVE operation=unload-smp-with-open-file status=01",
+            ),
+            (
+                "NEGATIVE operation=unload-provider-first status=1",
+                "NEGATIVE operation=unload-provider-first status=01",
+            ),
+            (
+                "phase=all-loaded references=2",
+                "phase=all-loaded references=02",
+            ),
+        ):
+            with self.subTest(mutation=new):
+                serial = valid_serial().replace(old, new, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(
+                        self.write_serial(serial), KERNEL_RELEASE
+                    )
+
+    def test_mcd0_device_identity_and_serial_bytes_are_canonical(self) -> None:
+        for original, mutation in (
+            ("dev=10:42", "dev=10:042"),
+            ("dev=10:42", "dev=11:42"),
+            ("dev=10:42", "dev=10:42suffix"),
+            ("dev=10:42", "dev=10:1048576"),
+            ("dev=10:43", "dev=10:-1"),
+            ("dev=10:43", "dev=10:000"),
+        ):
+            with self.subTest(mutation=mutation):
+                serial = valid_serial().replace(original, mutation, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+        canonical_max = valid_serial().replace("dev=10:42", "dev=10:1048575", 1)
+        canonical_max = canonical_max.replace("dev=10:43", "dev=10:1048575", 1)
+        evidence.validate_serial(self.write_serial(canonical_max), KERNEL_RELEASE)
+
+        invalid_bytes = self.root / "invalid-utf8.log"
+        invalid_bytes.write_bytes(valid_serial().encode("utf-8") + b"\xff")
+        with self.assertRaisesRegex(evidence.EvidenceError, "strict UTF-8"):
+            evidence.validate_serial(invalid_bytes, KERNEL_RELEASE)
+        for label, character in (
+            ("nul", "\0"),
+            ("tab", "\t"),
+            ("bare-cr", "\rX"),
+            ("nel", "\x85"),
+            ("del", "\x7f"),
+            ("c1-control", "\x9f"),
+            ("line-separator", "\u2028"),
+            ("paragraph-separator", "\u2029"),
+        ):
+            with self.subTest(label=label):
+                serial = valid_serial().replace(
+                    f"{evidence.PROTOCOL} BEGIN\n",
+                    f"{evidence.PROTOCOL} BEGIN{character}\n",
+                    1,
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "noncanonical control"
+                ):
+                    evidence.validate_serial(
+                        self.write_serial(serial), KERNEL_RELEASE
+                    )
+
+    def test_provider_open_release_counts_partition_and_replay_are_exact(self) -> None:
+        acquire = evidence.PROVIDER_OPEN_ACQUIRE_DIAGNOSTIC
+        release_open = evidence.PROVIDER_OPEN_RELEASE_DIAGNOSTIC
+        protocol = evidence.PROTOCOL
+        mutations = []
+        serial = valid_serial()
+        mutations.append(("live-17-acquire", serial.replace(acquire + "\n", "", 1)))
+        mutations.append(
+            (
+                "live-19-acquire",
+                serial.replace(
+                    f"{protocol} MCD0 NODE status=present dev=10:42\n",
+                    f"{protocol} MCD0 NODE status=present dev=10:42\n{acquire}\n",
+                    1,
+                ),
+            )
+        )
+        mutations.append(
+            (
+                "release-before-acquire",
+                serial.replace(
+                    acquire + "\n" + release_open + "\n",
+                    release_open + "\n" + acquire + "\n",
+                    1,
+                ),
+            )
+        )
+        dmesg_begin = serial.index(f"{protocol} DMESG_BEGIN")
+        prefix = serial[:dmesg_begin]
+        dmesg = serial[dmesg_begin:]
+        mutations.append(
+            ("dmesg-17-release", prefix + dmesg.replace(release_open + "\n", "", 1))
+        )
+        mutations.append(
+            (
+                "outside-cycle",
+                serial.replace(
+                    f"{protocol} STATE_END label=initial-clean\n",
+                    f"{protocol} STATE_END label=initial-clean\n{acquire}\n",
+                    1,
+                ),
+            )
+        )
+        for label, mutation in mutations:
+            with self.subTest(label=label), self.assertRaises(evidence.EvidenceError):
+                evidence.validate_serial(self.write_serial(mutation), KERNEL_RELEASE)
+
+    def test_mcd0_module_owner_negative_frame_is_exact_and_ordered(self) -> None:
+        protocol = evidence.PROTOCOL
+        diagnostic = "rmmod: ERROR: Module ihk_smp_x86_64 is in use"
+        mutations = (
+            valid_serial().replace("status=1\n", "status=0\n", 1),
+            valid_serial().replace(diagnostic, "ATTACKER " + diagnostic, 1),
+            valid_serial().replace(diagnostic, diagnostic + "\n" + diagnostic, 1),
+            valid_serial().replace(diagnostic, "rmmod: ERROR: Module ihk is in use", 1),
+            valid_serial().replace(
+                f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok\n"
+                f"{protocol} MCD0 NODE status=removed\n",
+                f"{protocol} MCD0 NODE status=removed\n"
+                f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok\n",
+                1,
+            ),
+        )
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index), self.assertRaises(evidence.EvidenceError):
+                evidence.validate_serial(self.write_serial(mutation), KERNEL_RELEASE)
+
+    def test_provider_open_grammar_and_raw_receipts_fail_closed(self) -> None:
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        diagnostics = (
+            "ihk: provider_open=acquire status=live minor=1",
+            "ihk: provider_open=release status=complete minor=00",
+            "ihk: provider_open=acquire status=live minor=0 receipt=7",
+            "ihk: provider_open=release status=complete minor=0 raw_receipt=0x7",
+            f"{evidence.PROTOCOL} MCD0 OPERATION command=valid status=ok",
+            f"{evidence.PROTOCOL} RELOAD cycle=2 status=ok",
+        )
+        for diagnostic in diagnostics:
+            with self.subTest(diagnostic=diagnostic):
+                serial = valid_serial().replace(
+                    dmesg_end, diagnostic + "\n" + dmesg_end, 1
+                )
+                with self.assertRaises(evidence.EvidenceError):
                     evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_provider_lease_failure_diagnostics_are_rejected(self) -> None:
@@ -1851,10 +4210,11 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
         )
         serial = valid_serial()
-        first = serial.index(lifecycle)
-        second = serial.index(lifecycle, first + len(lifecycle))
-        serial = serial[:second] + "ATTACKER-DECOY " + serial[second:]
-        with self.assertRaisesRegex(evidence.EvidenceError, "lifecycle diagnostics"):
+        dmesg_begin = serial.index(f"{evidence.PROTOCOL} DMESG_BEGIN")
+        prefix = serial[:dmesg_begin]
+        dmesg = serial[dmesg_begin:]
+        serial = prefix + dmesg.replace(lifecycle, "ATTACKER-DECOY " + lifecycle, 1)
+        with self.assertRaises(evidence.EvidenceError):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_negative_diagnostic_requires_one_exact_bounded_line(self) -> None:
@@ -1875,7 +4235,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "NEGATIVE operation=unload-provider-first status=0",
             1,
         )
-        with self.assertRaisesRegex(evidence.EvidenceError, "negative test did not fail"):
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "negative test did not fail|unrecognized runtime protocol record",
+        ):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_wrong_provider_first_unload_diagnostic_is_rejected(self) -> None:
@@ -1922,7 +4285,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
     def test_noncanonical_proc_modules_users_are_rejected(self) -> None:
         canonical = "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0"
         serial = valid_serial().replace(canonical, canonical.replace(", Live", " Live"), 1)
-        with self.assertRaisesRegex(evidence.EvidenceError, "provider user grammar"):
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "provider user grammar|unrecognized runtime protocol record",
+        ):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_proc_modules_provider_row_mutations_fail_closed(self) -> None:
@@ -2097,7 +4463,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
             "ihk: lifecycle=unload version=wrong",
         )
-        with self.assertRaisesRegex(evidence.EvidenceError, "lifecycle diagnostics"):
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "diagnostic count differs|lifecycle diagnostics|lifecycle diagnostic grammar",
+        ):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_capture_readiness_cannot_be_mutated(self) -> None:
@@ -2112,12 +4481,18 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
     def test_capture_provider_lease_summary_is_exact_and_nonpromotable(self) -> None:
         for field, value in (
             ("attach_observed", False),
+            ("attach_count_per_trace", 1),
             ("callback_abi", 2),
+            ("complete_cycles_observed", 1),
             ("detach_observed", False),
+            ("detach_count_per_trace", 1),
             ("exit_callback_observed", False),
+            ("exit_callback_count_per_trace", 1),
             ("init_callback_observed", False),
+            ("init_callback_count_per_trace", 1),
             ("raw_token_logged", True),
             ("registry_empty_observed", False),
+            ("registry_empty_count_per_trace", 1),
         ):
             with self.subTest(field=field):
                 unsigned = self.valid_capture_unsigned()
@@ -2130,6 +4505,58 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     evidence.EvidenceError,
                     "provider lease lifecycle",
                 ):
+                    evidence.validate_capture(capture)
+
+    def test_capture_mcd0_summary_is_exact_typed_and_nonpromotable(self) -> None:
+        mutations = (
+            ("capture_can_claim_pass", True),
+            ("credit_eligible", 0),
+            ("device_node_identity_match_observed", 1),
+            ("first_cycle_open_count", True),
+            ("first_device_major", 11),
+            ("first_device_minor", -1),
+            ("first_device_minor", 1 << 20),
+            ("gate_status", "PASS"),
+            ("module_owner_unload_status", True),
+            ("native_unknown_ioctl_errno", 0),
+            ("compat_unknown_ioctl_errno", -25),
+            ("operation_callbacks_reachable", True),
+            ("resource_operations_reachable", True),
+            ("os_operations_reachable", True),
+            ("provider_open_acquire_count_per_trace", 17),
+            ("provider_open_release_count_per_trace", 19),
+            ("reload_cycles", True),
+            ("reload_device_minor", 1 << 20),
+            ("rocky_runtime_validated", True),
+            ("runtime_behavior_proven", True),
+            ("tracker_credit", True),
+            ("valid_ioctl_commands", [0xDEADBEEF]),
+        )
+        for field, value in mutations:
+            with self.subTest(field=field, value=value):
+                unsigned = self.valid_capture_unsigned()
+                unsigned["runtime"]["mcd0"][field] = value
+                capture = copy.deepcopy(unsigned)
+                capture["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(unsigned)
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "capture mcd0"):
+                    evidence.validate_capture(capture)
+
+        receipt_mutations = (
+            ("duplicate_close_detectable_while_other_references_exist", 0),
+            ("same_generation_token_may_repeat", 1),
+            ("trusted_noncopy_owner_balance_required", 1),
+        )
+        for field, value in receipt_mutations:
+            with self.subTest(receipt_field=field, value=value):
+                unsigned = self.valid_capture_unsigned()
+                unsigned["runtime"]["mcd0"]["open_receipt_scope"][field] = value
+                capture = copy.deepcopy(unsigned)
+                capture["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(unsigned)
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "capture mcd0"):
                     evidence.validate_capture(capture)
 
     def test_capture_rejects_omitted_or_positive_phase2_summaries(self) -> None:
@@ -2184,8 +4611,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "canonical-order"):
             evidence._parse_sums(directory)
 
-    def test_precheck_manifest_exact_26_member_closure_is_enforced(self) -> None:
-        self.assertEqual(26, len(evidence.EXPECTED_PRECHECK_BUILD_MEMBERS))
+    def test_precheck_manifest_exact_28_member_closure_is_enforced(self) -> None:
+        self.assertEqual(28, len(evidence.EXPECTED_PRECHECK_BUILD_MEMBERS))
         self.assertIn(
             "build.environment", evidence.EXPECTED_PRECHECK_BUILD_MEMBERS
         )
@@ -2224,6 +4651,26 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     content, encoding="ascii"
                 )
                 with self.assertRaises(evidence.EvidenceError):
+                    evidence._parse_precheck_sums(
+                        base,
+                        final_records,
+                        evidence.EXPECTED_PRECHECK_BUILD_MEMBERS,
+                    )
+        for label, data in (
+            ("crlf", canonical.replace("\n", "\r\n").encode("ascii")),
+            ("missing-final-lf", canonical[:-1].encode("ascii")),
+            ("nel", canonical.encode("ascii").replace(b"\n", b"\xc2\x85", 1)),
+            (
+                "line-separator",
+                canonical.encode("ascii").replace(b"\n", b"\xe2\x80\xa8", 1),
+            ),
+        ):
+            with self.subTest(label=label):
+                (base / "PRECHECK_SHA256SUMS").write_bytes(data)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "strict ASCII|canonical LF-terminated",
+                ):
                     evidence._parse_precheck_sums(
                         base,
                         final_records,
@@ -2272,6 +4719,86 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 self.root / "real" / ".." / "real" / "artifact",
                 "build evidence directory",
             )
+
+    def test_bound_directories_survive_ancestor_swap_and_restore(self) -> None:
+        for operation in ("build", "runtime"):
+            with self.subTest(operation=operation):
+                parent = self.root / (operation + "-parent")
+                build_dir = parent / "build"
+                runtime_dir = parent / "runtime"
+                build_dir.mkdir(parents=True)
+                runtime_dir.mkdir()
+                (build_dir / "sentinel").write_bytes(b"trusted-build\n")
+                (runtime_dir / "sentinel").write_bytes(b"trusted-runtime\n")
+                parked = self.root / (operation + "-parked")
+                swapped = [False]
+
+                def swap_build(_contract, bound_build, *_args):
+                    parent.rename(parked)
+                    (parent / "build").mkdir(parents=True)
+                    (parent / "runtime").mkdir()
+                    swapped[0] = True
+                    self.assertEqual(
+                        b"trusted-build\n",
+                        (Path(bound_build) / "sentinel").read_bytes(),
+                    )
+                    return {}, {}
+
+                def swap_runtime(_repo, bound_runtime, bound_build, *_args):
+                    parent.rename(parked)
+                    (parent / "build").mkdir(parents=True)
+                    (parent / "runtime").mkdir()
+                    swapped[0] = True
+                    self.assertEqual(
+                        b"trusted-build\n",
+                        (Path(bound_build) / "sentinel").read_bytes(),
+                    )
+                    self.assertEqual(
+                        b"trusted-runtime\n",
+                        (Path(bound_runtime) / "sentinel").read_bytes(),
+                    )
+                    return {}
+
+                try:
+                    if operation == "build":
+                        with mock.patch.object(
+                            evidence,
+                            "_validate_bound_build_evidence_directory",
+                            side_effect=swap_build,
+                        ):
+                            evidence._validate_build_evidence_directory(
+                                {}, build_dir, "2" * 40
+                            )
+                    else:
+                        with mock.patch.object(
+                            evidence,
+                            "_validate_bound_runtime_evidence_directory",
+                            side_effect=swap_runtime,
+                        ):
+                            evidence.validate_runtime_evidence_directory(
+                                REPO_ROOT, runtime_dir, build_dir
+                            )
+                    self.assertTrue(swapped[0])
+                finally:
+                    if swapped[0]:
+                        shutil.rmtree(parent)
+                        parked.rename(parent)
+
+    def test_bound_file_and_directory_recheck_identity_after_body_exception(self) -> None:
+        directory = self.root / "identity-directory"
+        directory.mkdir()
+        leaf = directory / "leaf"
+        leaf.write_bytes(b"before\n")
+        with self.assertRaisesRegex(evidence.EvidenceError, "changed while it was validated"):
+            with evidence._bound_evidence_file(leaf, "identity leaf"):
+                leaf.write_bytes(b"after\n")
+                raise RuntimeError("body failure")
+        with self.assertRaisesRegex(evidence.EvidenceError, "changed while it was validated"):
+            with evidence._bound_evidence_directory(
+                directory, "identity directory"
+            ):
+                (directory / "new-leaf").write_bytes(b"mutation\n")
+                raise RuntimeError("body failure")
 
     def test_phase2_reports_cross_bind_config_kconfig_and_stage_lock(self) -> None:
         directory = self.root / "phase2"
@@ -2338,6 +4865,182 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             matrix["inputs"]["staged_kconfig"]["sha256"] = "5" * 64
             with self.assertRaisesRegex(evidence.EvidenceError, "identities diverge"):
                 evidence._validate_phase2_build_evidence(directory, records)
+
+    def test_bound_phase2_snapshot_survives_ancestor_swap(self) -> None:
+        from scripts.tests.test_native_rust_kbuild_link_closure import (
+            NativeRustKbuildLinkClosureTests,
+        )
+
+        fixture = NativeRustKbuildLinkClosureTests(
+            "test_valid_closure_is_exact_canonical_and_credit_forbidden"
+        )
+        fixture.setUp()
+        parent = self.root / "trusted-parent"
+        source = parent / "native-rust-build-evidence"
+        source.mkdir(parents=True)
+        link = evidence._link_closure_module.validate_kbuild_link_closure(
+            fixture.records, stage_lock_path=fixture.stage_lock_path
+        )
+        evidence._link_closure_module.write_kbuild_link_closure(
+            fixture.records,
+            fixture.output,
+            stage_lock_path=fixture.stage_lock_path,
+        )
+        members = tuple(evidence.EXPECTED_RAW_RECORD_NAMES) + (
+            "stage-lock.json",
+            "kbuild-link-closure.json",
+        )
+        for name in members:
+            shutil.copyfile(Path(fixture.records) / name, source / name)
+        trusted = {name: (source / name).read_bytes() for name in members}
+        records = {
+            name: hashlib.sha256(value).hexdigest()
+            for name, value in trusted.items()
+        }
+        source_fd = os.open(
+            str(source), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        )
+        parked = self.root / "parked-parent"
+        swapped = [False]
+        original_read = evidence._read_phase2_bound_file
+
+        def read_and_swap(*args, **kwargs):
+            if not swapped[0]:
+                parent.rename(parked)
+                attacker = parent / "native-rust-build-evidence"
+                attacker.mkdir(parents=True)
+                for name in members:
+                    (attacker / name).write_bytes(b"attacker\n")
+                swapped[0] = True
+            return original_read(*args, **kwargs)
+
+        try:
+            with mock.patch.object(
+                evidence, "_read_phase2_bound_file", side_effect=read_and_swap
+            ), mock.patch.object(
+                evidence,
+                "check_kbuild_link_closure",
+                side_effect=AssertionError("pathname checker must not be called"),
+            ):
+                self.assertEqual(
+                    link,
+                    evidence._validate_link_closure_from_bound_snapshot(
+                        source_fd, records
+                    ),
+                )
+            self.assertTrue(swapped[0])
+            for name, value in trusted.items():
+                self.assertEqual(value, (parked / source.name / name).read_bytes())
+        finally:
+            os.close(source_fd)
+            if swapped[0]:
+                shutil.rmtree(parent)
+                parked.rename(parent)
+            fixture.tearDown()
+
+    def test_bound_phase2_replay_rejects_resealed_output_substitution(self) -> None:
+        from scripts.tests.test_native_rust_kbuild_link_closure import (
+            NativeRustKbuildLinkClosureTests,
+        )
+
+        fixture = NativeRustKbuildLinkClosureTests(
+            "test_valid_closure_is_exact_canonical_and_credit_forbidden"
+        )
+        fixture.setUp()
+        try:
+            evidence._link_closure_module.write_kbuild_link_closure(
+                fixture.records,
+                fixture.output,
+                stage_lock_path=fixture.stage_lock_path,
+            )
+            directory = Path(fixture.records)
+            substituted = {"claims": {"credit_eligible": False}}
+            (directory / "kbuild-link-closure.json").write_bytes(
+                evidence._link_closure_module.canonical_bytes(substituted)
+            )
+            members = tuple(evidence.EXPECTED_RAW_RECORD_NAMES) + (
+                "stage-lock.json",
+                "kbuild-link-closure.json",
+            )
+            records = {
+                name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+                for name in members
+            }
+            descriptor = os.open(
+                str(directory), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+            )
+            try:
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "link closure output differs",
+                ):
+                    evidence._validate_link_closure_from_bound_snapshot(
+                        descriptor, records
+                    )
+            finally:
+                os.close(descriptor)
+        finally:
+            fixture.tearDown()
+
+    def test_phase2_worker_rejects_postimport_parser_replacement(self) -> None:
+        from scripts.tests.test_native_rust_kbuild_link_closure import (
+            NativeRustKbuildLinkClosureTests,
+        )
+
+        fixture = NativeRustKbuildLinkClosureTests(
+            "test_valid_closure_is_exact_canonical_and_credit_forbidden"
+        )
+        fixture.setUp()
+        try:
+            evidence._link_closure_module.write_kbuild_link_closure(
+                fixture.records,
+                fixture.output,
+                stage_lock_path=fixture.stage_lock_path,
+            )
+            directory = Path(fixture.records)
+            name = ".ihk-smp-x86_64.ko.cmd"
+            path = directory / name
+            original_bytes = path.read_bytes()
+            self.assertIn(b"ld.lld", original_bytes)
+            path.write_bytes(original_bytes.replace(b"ld.lld", b"evilld", 1))
+            members = tuple(evidence.EXPECTED_RAW_RECORD_NAMES) + (
+                "stage-lock.json",
+                "kbuild-link-closure.json",
+            )
+            records = {
+                member: hashlib.sha256((directory / member).read_bytes()).hexdigest()
+                for member in members
+            }
+            original_parser = evidence._link_closure_module._parse_final_link
+
+            def attacker_parser(record_name, target, command, module):
+                return original_parser(
+                    record_name,
+                    target,
+                    command.replace("evilld", "ld.lld", 1),
+                    module,
+                )
+
+            descriptor = os.open(
+                str(directory), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+            )
+            try:
+                with mock.patch.object(
+                    evidence._link_closure_module,
+                    "_parse_final_link",
+                    side_effect=attacker_parser,
+                ):
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError,
+                        "isolated semantic worker failed",
+                    ):
+                        evidence._validate_link_closure_from_bound_snapshot(
+                            descriptor, records
+                        )
+            finally:
+                os.close(descriptor)
+        finally:
+            fixture.tearDown()
 
     def write_build_scope_artifacts(self) -> tuple[Path, dict[str, str]]:
         directory = Path(tempfile.mkdtemp(prefix="scope-", dir=str(self.root)))
@@ -2594,6 +5297,14 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     evidence.EvidenceError, "native module config contract"
                 ):
                     evidence._validate_resolved_config(path, mutation)
+
+    def test_runtime_evidence_checker_preserves_python36_grammar(self) -> None:
+        path = REPO_ROOT / "scripts/native_rust_runtime_evidence.py"
+        source = path.read_text(encoding="utf-8")
+        try:
+            ast.parse(source, filename=str(path), feature_version=(3, 6))
+        except TypeError:
+            ast.parse(source, filename=str(path), feature_version=6)
 
 
 if __name__ == "__main__":

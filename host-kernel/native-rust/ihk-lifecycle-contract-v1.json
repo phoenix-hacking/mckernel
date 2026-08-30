@@ -14,7 +14,7 @@
     {
       "destination": "device_registry.rs",
       "path": "host-kernel/native-rust/device_registry.rs",
-      "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7"
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
     },
     {
       "destination": "ikc_master.rs",
@@ -48,7 +48,7 @@
   },
   "parameter_count": 0,
   "production_source": "host-kernel/native-rust/ihk.rs",
-  "production_source_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+  "production_source_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
   "provider_lease": {
     "attach_symbol": "ihk_smp_provider_attach_v2",
     "callback_abi": 1,
@@ -70,9 +70,27 @@
       "raw_data_pointer": false,
       "unpublishing_guard_across_exit": true
     },
+    "open_lease": {
+      "acquire_failure": "negative-errno",
+      "acquire_symbol": "ihk_smp_provider_open_v1",
+      "close_failure": "fail-stop",
+      "close_symbol": "ihk_smp_provider_close_v1",
+      "credit_eligible": false,
+      "device_node_reachable": false,
+      "duplicate_close_detectable_while_other_references_exist": false,
+      "exactly_once_close_owner": "non-Copy-per-file-wrapper",
+      "file_operations_reachable": false,
+      "minor": 0,
+      "multiple_shared_opens": true,
+      "raw_pointer": false,
+      "receipt": "positive-i64-provider-generation-token",
+      "rocky_runtime_validated": false,
+      "rust_layout": false,
+      "trusted_noncopy_owner_balance_required": true
+    },
     "registry_static": "IHK_DEVICE_REGISTRY",
     "rocky_runtime_validated": false,
-    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
+    "scope": "scalar minor-zero module-lifetime provider lease, scalar-only init/exit callbacks, and scalar open-reference receipts; no device registration or provider operation payload",
     "token_version": 1
   },
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
@@ -97,11 +115,11 @@
     },
     {
       "contract_path": "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
-      "contract_sha256": "273749784dd7a9b6ff01e1ae48cd090b7b54140690e4015dacbed4f8315c9180",
+      "contract_sha256": "8f3428436536d8f1b691105f45acb2a5c6b41d9331eb4e40d487adf73946a329",
       "destination": "device_registry.rs",
       "kind": "rust_support_module",
       "path": "host-kernel/native-rust/device_registry.rs",
-      "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7"
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
     },
     {
       "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",

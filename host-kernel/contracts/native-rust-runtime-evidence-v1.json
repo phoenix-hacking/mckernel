@@ -25,6 +25,7 @@
       "built-module-artifacts.txt",
       "bzImage",
       "commit.sha",
+      "executed-build-workflow.yml",
       "ihk-smp-x86_64.ko",
       "ihk-smp-x86_64.ko.modinfo",
       "ihk-smp-x86_64.ko.modinfo-section",
@@ -49,25 +50,76 @@
       "module-targets.txt",
       "resolved.config",
       "stage-lock.json",
+      "workflow-provenance.json",
       "workflow-state"
     ],
     "capture_status": "required-missing",
+    "evidence_file_mode": "0644",
     "immutable_artifact_digest_required": true,
     "independent_review_status": "required-missing",
     "runtime_evidence_files": [
       "SHA256SUMS",
       "capture.json",
       "environment.txt",
+      "executed-caller-workflow.yml",
+      "executed-runtime-workflow.yml",
       "initramfs.cpio.gz",
       "initramfs.sha256",
+      "native-rust-runtime-mcd0-ioctl-i386",
+      "native-rust-runtime-mcd0-ioctl-i386.o",
+      "native-rust-runtime-mcd0-ioctl-x86_64",
+      "native-rust-runtime-mcd0-ioctl-x86_64.o",
       "native-rust-runtime-poweroff.o",
       "qemu-command.txt",
       "qemu-version.txt",
       "qemu.exit-code",
       "qemu.log",
+      "runtime-workflow-provenance.json",
       "serial.log",
       "workflow-state"
-    ]
+    ],
+    "runtime_helper_semantics": {
+      "allocated_sections": [
+        ".text",
+        ".rodata"
+      ],
+      "device_path_bytes": "/dev/mcd0\u0000",
+      "entry_section": ".text",
+      "executable_sections": [
+        ".text"
+      ],
+      "executed_probe_files": [
+        "native-rust-runtime-mcd0-ioctl-i386",
+        "native-rust-runtime-mcd0-ioctl-x86_64"
+      ],
+      "instruction_policy": "exact-v1-with-only-device-address-derived-field",
+      "object_files_shape_only": true,
+      "poweroff_executable_replay": false,
+      "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack"
+    },
+    "size_limits_bytes": {
+      "build_evidence_file_max": 1073741824,
+      "runtime_evidence_file_max": 536870912,
+      "runtime_helper_file_max": 1048576,
+      "runtime_text_file_max": 67108864,
+      "tool_executable_file_max": 134217728
+    },
+    "tool_digest_authority": {
+      "modinfo": {
+        "expected_sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "package_nevra": "kmod-31-13.el10.x86_64",
+        "policy": "fixed-locked-sha256"
+      },
+      "modules": {
+        "policy": "exact-build-SHA256SUMS-record"
+      },
+      "nm": {
+        "file_digest_algorithm": 8,
+        "package_nevra": "binutils-2.41-63.el10.x86_64",
+        "package_path": "/usr/bin/nm",
+        "policy": "unique-rpm-FILEDIGESTS-row"
+      }
+    }
   },
   "build_scope": {
     "builds_full_module_tree": false,
@@ -102,7 +154,9 @@
         "ihk_smp_provider_attach_v1",
         "ihk_smp_provider_detach_v1",
         "ihk_smp_provider_attach_v2",
-        "ihk_smp_provider_detach_v2"
+        "ihk_smp_provider_detach_v2",
+        "ihk_smp_provider_open_v1",
+        "ihk_smp_provider_close_v1"
       ],
       "depends": [],
       "file": "ihk.ko",
@@ -111,7 +165,9 @@
         "ihk_smp_provider_attach_v1",
         "ihk_smp_provider_detach_v1",
         "ihk_smp_provider_attach_v2",
-        "ihk_smp_provider_detach_v2"
+        "ihk_smp_provider_detach_v2",
+        "ihk_smp_provider_open_v1",
+        "ihk_smp_provider_close_v1"
       ],
       "import_namespace": null,
       "name": "ihk",
@@ -127,7 +183,9 @@
       "undefined_provider_symbols": [
         "ihk_provider_lifecycle_v1",
         "ihk_smp_provider_attach_v2",
-        "ihk_smp_provider_detach_v2"
+        "ihk_smp_provider_detach_v2",
+        "ihk_smp_provider_open_v1",
+        "ihk_smp_provider_close_v1"
       ]
     },
     {
@@ -148,6 +206,48 @@
       "ihk_smp_x86_64",
       "mcctrl"
     ],
+    "mcd0": {
+      "compat_abi": "i386",
+      "compat_ioctl_expected_errno": "EINVAL",
+      "credit_eligible": false,
+      "device_node_identity_policy": "st_rdev-equals-sysfs-major-minor",
+      "device_path": "/dev/mcd0",
+      "diagnostic_segments": 2,
+      "first_cycle_open_count": 15,
+      "gate_pass": false,
+      "gate_status": "TODO",
+      "ioctl_command": "0xdeadbeef",
+      "ioctl_return": -22,
+      "misc_device_major": 10,
+      "misc_device_minor_policy": "dynamic-canonical-decimal",
+      "module_owner_unload_expected_diagnostic": "Module ihk_smp_x86_64 is in use",
+      "module_owner_unload_expected_status": 1,
+      "native_abi": "x86_64",
+      "native_ioctl_expected_errno": "EINVAL",
+      "node_removed_after_smp_unload": true,
+      "operation_callbacks_reachable": false,
+      "os_operations_reachable": false,
+      "open_receipt": {
+        "duplicate_close_detectable_while_other_references_exist": false,
+        "same_generation_token_may_repeat": true,
+        "trusted_noncopy_owner_balance_required": true
+      },
+      "overlapping_open_count": 8,
+      "provider_registry_minor": 0,
+      "provider_open_acquire_count_per_trace": 18,
+      "provider_open_acquire_diagnostic": "ihk: provider_open=acquire status=live minor=0",
+      "provider_open_release_count_per_trace": 18,
+      "provider_open_release_diagnostic": "ihk: provider_open=release status=complete minor=0",
+      "reload_cycles": 1,
+      "reload_open_count": 3,
+      "resource_operations_reachable": false,
+      "rocky_runtime_validated": false,
+      "runtime_behavior_proven": false,
+      "sequential_open_count": 4,
+      "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
+      "tracker_credit": false,
+      "valid_operation_commands": []
+    },
     "provider_lease": {
       "attach_after_ihk_load": true,
       "attach_diagnostic": "ihk: provider_lease=attach status=live minor=0 callback_abi=1",
@@ -180,11 +280,23 @@
       "after_load": 2,
       "after_mcctrl_unload": 1,
       "after_negative": 2,
-      "after_smp_unload": 0
+      "after_smp_unload": 0,
+      "reload_all_loaded": 2
     },
     "provider_unload_expected_diagnostic": "Module ihk is in use",
     "provider_unload_expected_status": 1,
     "provider_unload_while_referenced_must_fail": true,
+    "reload_cycles": 1,
+    "reload_load_order": [
+      "ihk",
+      "ihk_smp_x86_64",
+      "mcctrl"
+    ],
+    "reload_unload_order": [
+      "mcctrl",
+      "ihk_smp_x86_64",
+      "ihk"
+    ],
     "serial_protocol": "MCKERNEL_NATIVE_RUST_RUNTIME_V1",
     "unload_order": [
       "mcctrl",
@@ -197,11 +309,43 @@
     "config_fragment": "host-kernel/rocky/configs/native-rust-evidence.config",
     "init": "scripts/native-rust-runtime-init.sh",
     "kbuild_link_closure": "scripts/native_rust_kbuild_link_closure.py",
+    "kconfig_policy": "scripts/native_rust_kconfig_policy.py",
     "kconfig_solver": "scripts/native_rust_kconfig_solver.py",
+    "mcd0_ioctl_i386": "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+    "mcd0_ioctl_x86_64": "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
     "poweroff": "scripts/native-rust-runtime-poweroff.S",
     "runtime_pr_workflow": ".github/workflows/native-rust-host-modules-exact-runtime-pr.yml",
     "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
     "source_lock": "host-kernel/rocky/source-lock.json"
+  },
+  "repository_helper_identities": {
+    "mcd0_ioctl_i386": {
+      "git_blob_sha1": "852f6b986cc325774dce93b550ebd29446ace5e9",
+      "sha256": "128b63dba75cdbfc367a69054a95f079818e7c0e4a42071010bad1125e823ad7",
+      "size": 936
+    },
+    "mcd0_ioctl_x86_64": {
+      "git_blob_sha1": "962972031ee0101defcef2d9bc9d01c5bc585b45",
+      "sha256": "82f4599faaf083eece40840be62d8da5ceb314123449fdec71e57998e36fdf18",
+      "size": 927
+    }
+  },
+  "repository_semantic_authority_identities": {
+    "kbuild_link_closure": {
+      "git_blob_sha1": "7f0b49c36d183b3201ba29458f8096bc9d9beb30",
+      "sha256": "827a19ffb5a86450dcf280de5163c561ebf09da4a25273fef8da97e0d267a293",
+      "size": 53921
+    },
+    "kconfig_policy": {
+      "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
+      "sha256": "9ad866896a98cfa223978748dec998d8ede51b0a042dfee8776fe77080fd4ba8",
+      "size": 7506
+    },
+    "kconfig_solver": {
+      "git_blob_sha1": "095bd7b985f05c540696bb614df06a66843e64ad",
+      "sha256": "fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4",
+      "size": 46669
+    }
   },
   "reproducible_build_identity": {
     "authority": {
@@ -223,9 +367,9 @@
   },
   "repository_workflow_identities": {
     "build_workflow": {
-      "git_blob_sha1": "00491ca68573cec33b79b84be257e220b27c3cf4",
-      "sha256": "a9b85eac8389b2b3c93f1f45955a0624609e55013da54cb609be7b8765687307",
-      "size": 71916
+      "git_blob_sha1": "510644de44b322e2938e05da21669cb35ef343d5",
+      "sha256": "c24b1e107a75da00afcb4ebf1945e249c611af8459fdeb90635a561199a33250",
+      "size": 90656
     },
     "runtime_pr_workflow": {
       "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -233,9 +377,9 @@
       "size": 754
     },
     "runtime_workflow": {
-      "git_blob_sha1": "0b4685b5142e8162a4cb84fd4fae8b6e57465b5c",
-      "sha256": "22ee9651e907bbc45b9f6b02b63981beb61d8e38c23976272535b0608218d150",
-      "size": 19359
+      "git_blob_sha1": "3517e4fc182d2e47d713f11806c2b201745fe420",
+      "sha256": "bb6ac70461a8bb743de63e38c68240615b60251c119a0c2fc14b6e65f49958e4",
+      "size": 35959
     }
   },
   "runtime": {
@@ -252,6 +396,10 @@
       "enabled": [
         "CONFIG_BINFMT_ELF",
         "CONFIG_BLK_DEV_INITRD",
+        "CONFIG_COMPAT",
+        "CONFIG_DEVTMPFS",
+        "CONFIG_IA32_EMULATION",
+        "CONFIG_MISC_DEVICES",
         "CONFIG_MODULES",
         "CONFIG_MODULE_UNLOAD",
         "CONFIG_PRINTK",
@@ -271,7 +419,7 @@
   },
   "runtime_verifier_scope": {
     "initramfs_cpio_replay": false,
-    "policy": "Offline validation binds the exact initramfs bytes and checksum record but does not independently replay cpio membership or the embedded module, init, and poweroff bytes. Build-to-guest correlation therefore depends on the sealed exact workflow and outer same-run artifact provenance; this residual cannot support gate, runtime, durability, or credit claims."
+    "policy": "Offline validation binds the exact helper sources, top-level helper binaries, initramfs bytes, and checksum record but does not independently rebuild the helpers or replay cpio membership and embedded module/init/helper bytes. Build-to-guest correlation therefore depends on the sealed exact workflow and outer same-run artifact provenance; this residual cannot support gate, runtime, durability, or credit claims."
   },
   "schema_version": 1,
   "selected_kernel": {

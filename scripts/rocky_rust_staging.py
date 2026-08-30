@@ -99,7 +99,7 @@ EXPECTED_INPUTS = (
         "destination": "device_registry.rs",
         "kind": "rust_support_module",
         "repository_path": "host-kernel/native-rust/device_registry.rs",
-        "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
+        "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
     },
     {
         "destination": "ikc_master.rs",
@@ -200,7 +200,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
+        "source_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -212,7 +212,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
+        "source_sha256": "5845c349e83835f27d1ed84031debac8cfd8448c2aa482c7be394124d2be8afe",
     },
     {
         "crate": "mcctrl",
@@ -296,6 +296,28 @@ AUDITED_IHK_DETACH_V2_EXTERN = (
     '    exit: Option<IhkSmpProviderExitV2>,\n'
     ') {'
 )
+AUDITED_IHK_OPEN_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI boundary accepts only the scalar device minor and returns\n'
+    '// either a positive opaque provider-generation receipt or a negative errno.\n'
+    '// The receipt does not encode a pointer or Rust layout.  Its open reference is\n'
+    '// owned exactly once by the caller\'s non-Copy per-file wrapper.\n'
+    '#[export_name = "ihk_smp_provider_open_v1"]\n'
+    '// SAFETY: This exported C ABI carries only a u32 argument and i64 result;\n'
+    '// every expected failure becomes a negative errno and no unwind may cross it.\n'
+    'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {'
+)
+AUDITED_IHK_CLOSE_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI boundary accepts only a positive scalar generation token\n'
+    '// returned by open.  Shared opens intentionally receive the same scalar, so\n'
+    '// the trusted caller\'s non-Copy per-file owners must keep calls count-balanced;\n'
+    '// malformed, stale, and zero-reference closes fail stop.\n'
+    '#[export_name = "ihk_smp_provider_close_v1"]\n'
+    '// SAFETY: This exported C ABI carries only an i64 receipt; detectable ownership\n'
+    '// faults fail stop inside the kernel and no unwind may cross the module boundary.\n'
+    'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {'
+)
 AUDITED_SMP_INIT_CALLBACK_TYPE = (
     '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
     'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
@@ -317,6 +339,10 @@ AUDITED_SMP_PROVIDER_EXTERN = (
     '    ) -> i64;\n'
     '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
     '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
+    '    #[link_name = "ihk_smp_provider_open_v1"]\n'
+    '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
+    '    #[link_name = "ihk_smp_provider_close_v1"]\n'
+    '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
     '}'
 )
 AUDITED_SMP_INIT_CALLBACK_EXTERN = (
@@ -1110,6 +1136,8 @@ def _validate_module(repo_root, module, expected, index):
             AUDITED_IHK_DETACH_EXTERN,
             AUDITED_IHK_ATTACH_V2_EXTERN,
             AUDITED_IHK_DETACH_V2_EXTERN,
+            AUDITED_IHK_OPEN_EXTERN,
+            AUDITED_IHK_CLOSE_EXTERN,
         )
     elif module["crate"] == "ihk_smp_x86_64":
         allowed_extern_blocks = (
@@ -1144,13 +1172,22 @@ def _validate_module(repo_root, module, expected, index):
                     )
                 )
     elif module["crate"] == "ihk_smp_x86_64":
-        fragment = "#[allow(dead_code)]\nmod smp_resource;"
-        if text.count(fragment) != 1:
-            raise ValidationError(
-                "{0}.source does not bind the staged SMP resource policy: {1}".format(
-                    label, fragment
+        for fragment in (
+            "#[allow(dead_code)]\nmod smp_resource;",
+            "use kernel::{\n    c_str,\n    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},\n    prelude::*,\n};",
+            "struct ProviderOpenLease {",
+            "impl MiscDevice for IhkSmpControlDevice {",
+            "const MODULE: &'static ThisModule = &THIS_MODULE;",
+            'name: c_str!("mcd0"),',
+            "drop(self.control_device.take());",
+            "drop(self.provider_lease.take());",
+        ):
+            if text.count(fragment) != 1:
+                raise ValidationError(
+                    "{0}.source does not bind the staged SMP control-device graph: {1}".format(
+                        label, fragment
+                    )
                 )
-            )
     return {
         "destination": source["destination"],
         "path": path,

@@ -30,7 +30,7 @@ REVIEW_DIRECTORY = Path("host-kernel/rocky/evidence")
 REVIEW_GLOB = "rk007-native-build-review-*-v1.json"
 SCHEMA_VERSION = 1
 REVIEW_ID = "rk-007-native-rust-exact-build-review-bc60eed5-v1"
-REVIEW_SHA256 = "50206402e35f3b70f2625d2473be9fa590d5eaca409059e00d8b03a3d0f265f2"
+REVIEW_SHA256 = "5db339d7df17cfad4de4fc12dd5c1b79ff1aa513de9d3bffd92ddd813ee7c054"
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "ead3785b11e5ec04840978e09c972050fb9ee5ea6d946e5f0efba2c58a11f61d"
 )
@@ -203,9 +203,9 @@ EXPECTED_COMMITTED_INPUTS = [
 # only the current descendant; every historical runtime record above stays fixed.
 EXPECTED_CURRENT_OVERRIDES = [
     {
-        "current_git_blob_sha1": "00491ca68573cec33b79b84be257e220b27c3cf4",
-        "current_sha256": "a9b85eac8389b2b3c93f1f45955a0624609e55013da54cb609be7b8765687307",
-        "current_size": 71916,
+        "current_git_blob_sha1": "510644de44b322e2938e05da21669cb35ef343d5",
+        "current_sha256": "c24b1e107a75da00afcb4ebf1945e249c611af8459fdeb90635a561199a33250",
+        "current_size": 90656,
         "mode": "100644",
         "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
         "runtime_git_blob_sha1": "b35eb64a336adcfc048bb73ff1bb8a7f0e044ab9",
@@ -223,8 +223,8 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 823,
     },
     {
-        "current_git_blob_sha1": "b168723aafc64a1706b60edaeba701d9678f65db",
-        "current_sha256": "f97ac7978a6db03c0982a25a4404a5695cd5985677e543f5f0751f3ff11d90d6",
+        "current_git_blob_sha1": "b030e1bb8960b6d459e47a1f38d7933985232e58",
+        "current_sha256": "f87762f064a5a17bd0673204aead15e487464a0ce031857d0fa1f565e25677e7",
         "current_size": 6231,
         "mode": "100644",
         "path": "host-kernel/kbuild/stage-manifest.json",
@@ -243,9 +243,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 18796,
     },
     {
-        "current_git_blob_sha1": "c6200c520eddb497d2d37e35553645a4551c9e2b",
-        "current_sha256": "bb27c3fd9159ac191078336745e444cdd8d5bdb85a7d0328ecf98a71b90101de",
-        "current_size": 15820,
+        "current_git_blob_sha1": "1dae134d5edfafcbea6981815300b29505401b0d",
+        "current_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
+        "current_size": 18434,
         "mode": "100644",
         "path": "host-kernel/native-rust/ihk.rs",
         "runtime_git_blob_sha1": "9bccef539ec17fb91a2920cb0ca81486adcd2b33",
@@ -253,9 +253,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 3818,
     },
     {
-        "current_git_blob_sha1": "b99b3cc135c8e223102f752c942e9fa34cedc027",
-        "current_sha256": "4d36f03568f42fcd5b6e304849140c70a6b7e64ebea03ed0d3eb9edc455c65f9",
-        "current_size": 13960,
+        "current_git_blob_sha1": "4fe5980e97c3d2525395d1a3d15d91aed77af61d",
+        "current_sha256": "5845c349e83835f27d1ed84031debac8cfd8448c2aa482c7be394124d2be8afe",
+        "current_size": 17027,
         "mode": "100644",
         "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
         "runtime_git_blob_sha1": "fc3d63b0396fb09470b14b48c016bb246f93b493",
@@ -273,9 +273,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 268,
     },
     {
-        "current_git_blob_sha1": "1b0ca8418a61936bf58af651c569305f4e6e5035",
-        "current_sha256": "3f62d0df60b685990fc7a0d72c7adbd0b2b8d9acc6f3bce91bdc26140c96c71f",
-        "current_size": 66001,
+        "current_git_blob_sha1": "c401bf57962b9e5f17b6838d5eff155d7583af96",
+        "current_sha256": "76de15af995601a0339547616c8f2d9953498f63852d8a5eee96d0138d099609",
+        "current_size": 68157,
         "mode": "100644",
         "path": "scripts/rocky_rust_staging.py",
         "runtime_git_blob_sha1": "b4986af5b20b8b4e6d8193f31f338734f25e7297",

@@ -468,6 +468,49 @@ impl DeviceRegistry {
         }
     }
 
+    /// Acquires one open reference and transfers it across the module ABI as
+    /// the exact generation-tagged provider token.
+    ///
+    /// The trusted receiving module must retain one non-Copy owner for every
+    /// successful call and balance each owner with one
+    /// `release_owned_open_token` call.  Multiple shared opens intentionally
+    /// receive the same token: the registry reference count, rather than a
+    /// uniquely identifiable Rust value crossing the ABI, is the authority.
+    pub(crate) fn acquire_open_token(
+        &self,
+        minor: usize,
+    ) -> Result<i64, DeviceRegistryError> {
+        let handle = self.resolve_minor(minor)?;
+        let lease = self.acquire_open(handle)?;
+        match self.encode_provider_token(lease.handle()) {
+            Ok(token) => {
+                core::mem::forget(lease);
+                Ok(token)
+            }
+            Err(error) => Err(error),
+        }
+    }
+
+    /// Releases one exact open reference owned by the reviewed SMP adapter.
+    ///
+    /// Invalid, stale, and zero-reference releases are internal ownership
+    /// violations.  Because concurrent shared opens carry the same scalar, a
+    /// duplicate close cannot be distinguished while another reference is
+    /// live; the reviewed non-Copy caller must therefore remain count-balanced.
+    /// Failing stop prevents teardown after a detectable accounting divergence.
+    pub(crate) fn release_owned_open_token(&self, token: i64) -> DeviceHandle {
+        let release = self
+            .decode_provider_token(token)
+            .and_then(|handle| self.release_open_checked(handle).map(|()| handle));
+        match release {
+            Ok(handle) => handle,
+            Err(error) => panic!(
+                "provider open ownership invariant violated: errno={}",
+                error.errno(),
+            ),
+        }
+    }
+
     /// Acquires the provider ownership reference retained by one OS object.
     pub(crate) fn acquire_os(
         &self,
@@ -587,18 +630,12 @@ impl DeviceRegistry {
         }
     }
 
-    fn release_open(&self, handle: DeviceHandle) {
-        let Ok(slot) = self.slot_by_handle(handle) else {
-            return;
-        };
+    fn release_open_checked(&self, handle: DeviceHandle) -> Result<(), DeviceRegistryError> {
+        let slot = self.slot_by_handle(handle)?;
         loop {
-            let current = slot.word.load(Ordering::Acquire);
-            if validate_slot_word(current).is_err()
-                || generation(current) != handle.generation
-                || phase(current) != PHASE_LIVE
-                || provider_references(current) == 0
-            {
-                return;
+            let current = checked_live_word(slot, handle)?;
+            if provider_references(current) == 0 {
+                return Err(DeviceRegistryError::Corrupt);
             }
             if slot
                 .word
@@ -610,9 +647,13 @@ impl DeviceRegistry {
                 )
                 .is_ok()
             {
-                return;
+                return Ok(());
             }
         }
+    }
+
+    fn release_open(&self, handle: DeviceHandle) {
+        let _ = self.release_open_checked(handle);
     }
 
     fn release_os(&self, handle: DeviceHandle) {
@@ -1447,6 +1488,50 @@ mod tests {
         drop(os);
         assert_eq!(handle, registry.detach_provider_token(token).unwrap());
         assert_eq!(0, registry.active_count().unwrap());
+    }
+
+    #[test]
+    fn provider_open_tokens_count_shared_files_and_release_once_each() {
+        let registry = DeviceRegistry::production();
+        let provider_token = registry.attach_provider_token().unwrap();
+        let handle = registry.decode_provider_token(provider_token).unwrap();
+
+        let first = registry.acquire_open_token(0).unwrap();
+        let second = registry.acquire_open_token(0).unwrap();
+        assert_eq!(provider_token, first);
+        assert_eq!(first, second);
+        assert_eq!(2, registry.snapshot(handle).unwrap().provider_references);
+        assert_eq!(handle, registry.release_owned_open_token(first));
+        assert_eq!(1, registry.snapshot(handle).unwrap().provider_references);
+        assert_eq!(
+            DeviceRegistryError::Busy,
+            registry.detach_provider_token(provider_token).unwrap_err()
+        );
+        assert_eq!(handle, registry.release_owned_open_token(second));
+        assert_eq!(0, registry.snapshot(handle).unwrap().provider_references);
+        assert_eq!(handle, registry.detach_provider_token(provider_token).unwrap());
+    }
+
+    #[test]
+    fn owned_open_token_release_fails_stop_on_unbalanced_receipt() {
+        let registry = DeviceRegistry::production();
+        let provider_token = registry.attach_provider_token().unwrap();
+        let receipt = registry.acquire_open_token(0).unwrap();
+        registry.release_owned_open_token(receipt);
+
+        let duplicate = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            registry.release_owned_open_token(receipt);
+        }));
+        assert!(duplicate.is_err());
+        assert_eq!(
+            registry.decode_provider_token(provider_token).unwrap(),
+            registry.detach_provider_token(provider_token).unwrap()
+        );
+
+        let malformed = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            registry.release_owned_open_token(-1);
+        }));
+        assert!(malformed.is_err());
     }
 
     #[test]

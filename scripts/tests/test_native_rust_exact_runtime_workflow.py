@@ -28,6 +28,10 @@ PR_WORKFLOW = (
 )
 INIT = REPO_ROOT / "scripts/native-rust-runtime-init.sh"
 POWEROFF = REPO_ROOT / "scripts/native-rust-runtime-poweroff.S"
+MCD0_IOCTL_X86_64 = (
+    REPO_ROOT / "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S"
+)
+MCD0_IOCTL_I386 = REPO_ROOT / "scripts/native-rust-runtime-mcd0-ioctl-i386.S"
 
 
 class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
@@ -81,6 +85,142 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertNotIn("secrets:", self.pr_workflow)
         self.assertNotIn("contents: write", self.pr_workflow)
 
+    def test_executed_workflow_provenance_is_exact_and_manifest_bound(self) -> None:
+        runtime_evidence._validate_runtime_workflow_provenance_boundary(
+            self.workflow
+        )
+        document = yaml.safe_load(self.workflow)
+        steps = document["jobs"]["exact-runtime"]["steps"]
+        verify = next(
+            step
+            for step in steps
+            if step.get("name")
+            == "Verify immutable build inputs and native module link contracts"
+        )
+        capture = next(
+            step
+            for step in steps
+            if step.get("name") == "Create a credit-forbidden technical capture"
+        )
+        expected_env = {
+            "CALLER_WORKFLOW_REF": "${{ github.workflow_ref }}",
+            "CALLER_WORKFLOW_SHA": "${{ github.workflow_sha }}",
+            "DEFINING_WORKFLOW_FILE_PATH": "${{ job.workflow_file_path }}",
+            "DEFINING_WORKFLOW_REF": "${{ job.workflow_ref }}",
+            "DEFINING_WORKFLOW_REPOSITORY": "${{ job.workflow_repository }}",
+            "DEFINING_WORKFLOW_SHA": "${{ job.workflow_sha }}",
+        }
+        for step in (verify, capture):
+            for name, value in expected_env.items():
+                self.assertEqual(value, step["env"][name])
+
+        verify_script = verify["run"]
+        sequence = (
+            '[[ "$CALLER_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]]',
+            'test "$GITHUB_SHA" = "$CALLER_WORKFLOW_SHA"',
+            'test "$CALLER_WORKFLOW_SHA" = "$DEFINING_WORKFLOW_SHA"',
+            'case "$GITHUB_EVENT_NAME" in',
+            'test "$EXPECTED_HEAD_SHA" = "$CALLER_WORKFLOW_SHA"',
+            'workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"',
+            'candidate_caller_workflow_blob="$(workflow_git rev-parse --verify',
+            'executed_caller_workflow_blob="$(workflow_git rev-parse --verify',
+            'candidate_job_workflow_blob="$(workflow_git rev-parse --verify',
+            'executed_job_workflow_blob="$(workflow_git rev-parse --verify',
+            'test "$candidate_caller_workflow_blob" =',
+            'test "$candidate_job_workflow_blob" = "$executed_job_workflow_blob"',
+            'executed-caller-workflow.yml',
+            'executed-runtime-workflow.yml',
+            '/usr/bin/cmp -- "$GITHUB_WORKSPACE/$caller_workflow_path"',
+            '/usr/bin/cmp -- "$GITHUB_WORKSPACE/$runtime_workflow_path"',
+            'runtime-workflow-provenance.json',
+            '"schema": "mckernel-native-rust-runtime-workflow-provenance-v1"',
+        )
+        positions = [verify_script.index(fragment) for fragment in sequence]
+        self.assertEqual(positions, sorted(positions))
+        for filename in (
+            "executed-caller-workflow.yml",
+            "executed-runtime-workflow.yml",
+            "runtime-workflow-provenance.json",
+        ):
+            self.assertGreaterEqual(self.workflow.count(filename), 2)
+
+        required_flags = (
+            "--github-event-name",
+            "--github-ref",
+            "--github-sha",
+            "--github-workflow-ref",
+            "--github-workflow-sha",
+            "--github-workflow-blob-sha1",
+            "--job-workflow-ref",
+            "--job-workflow-sha",
+            "--job-workflow-repository",
+            "--job-workflow-file-path",
+            "--job-workflow-blob-sha1",
+            "--workflow-provenance",
+        )
+        for flag in required_flags:
+            self.assertEqual(2, capture["run"].count(flag), flag)
+
+        mutations = [
+            (
+                '          test "$GITHUB_SHA" = "$CALLER_WORKFLOW_SHA"\n',
+                "",
+            ),
+            (
+                '          test "$CALLER_WORKFLOW_SHA" = "$DEFINING_WORKFLOW_SHA"\n',
+                "",
+            ),
+            (
+                '              test "$EXPECTED_HEAD_SHA" = "$CALLER_WORKFLOW_SHA"\n',
+                "",
+            ),
+            (
+                '            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"\n',
+                '            workflow_git fetch origin "$GITHUB_REF" || true\n',
+            ),
+            (
+                '          test "$candidate_caller_workflow_blob" = \\\n'
+                '            "$executed_caller_workflow_blob"\n',
+                "",
+            ),
+            (
+                '          test "$candidate_job_workflow_blob" = "$executed_job_workflow_blob"\n',
+                "",
+            ),
+            (
+                '          /usr/bin/cmp -- "$GITHUB_WORKSPACE/$runtime_workflow_path" \\\n'
+                '            "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml"\n',
+                "",
+            ),
+            (
+                '              "schema": "mckernel-native-rust-runtime-workflow-provenance-v1",\n',
+                '              "schema": "unreviewed",\n',
+            ),
+            (
+                '          CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}\n',
+                "",
+            ),
+            (
+                '          DEFINING_WORKFLOW_SHA: ${{ job.workflow_sha }}\n',
+                "",
+            ),
+        ]
+        for flag in required_flags:
+            mutations.append(
+                (
+                    '            {0} '.format(flag),
+                    '            --removed-provenance-field ',
+                )
+            )
+        for old, new in mutations:
+            mutation = self.workflow.replace(old, new, 1)
+            self.assertNotEqual(self.workflow, mutation)
+            with self.subTest(old=old.strip()):
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_runtime_workflow_provenance_boundary(
+                        mutation
+                    )
+
     def test_external_actions_and_rocky_runtime_are_immutable(self) -> None:
         image = (
             "rockylinux/rockylinux:10.2@sha256:"
@@ -108,6 +248,10 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         for symbol in (
             "CONFIG_BINFMT_ELF",
             "CONFIG_BLK_DEV_INITRD",
+            "CONFIG_COMPAT",
+            "CONFIG_DEVTMPFS",
+            "CONFIG_IA32_EMULATION",
+            "CONFIG_MISC_DEVICES",
             "CONFIG_MODULES",
             "CONFIG_MODULE_UNLOAD",
             "CONFIG_PRINTK",
@@ -122,7 +266,13 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
     def test_initramfs_is_local_minimal_and_deterministic(self) -> None:
         for fragment in (
             "scripts/native-rust-runtime-init.sh",
+            "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+            "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
             "scripts/native-rust-runtime-poweroff.S",
+            "chmod 1777 \"$INITRAMFS_ROOT/tmp\"",
+            "copy_executable /usr/bin/stat /bin/stat",
+            "--32 scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+            "-m elf_i386 -nostdlib -static -s -z noexecstack",
             "touch -h -d '@0'",
             "LC_ALL=C sort -z",
             "cpio --null --create --format=newc --owner=0:0 --reproducible",
@@ -159,29 +309,94 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             'insmod "$SMP" || { fail load-ihk-smp-x86-64; exit 1; }',
             'insmod "$MCCTRL" || { fail load-mcctrl; exit 1; }',
             'phase=all-loaded references=$references users=$users',
+            'MCD0 NODE status=present dev=$mcd0_dev',
+            'MCD0 OPEN_CLOSE mode=sequential count=4 status=ok',
+            'MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok',
+            'MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok',
+            'MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok',
+            'MCD0 NEGATIVE operation=unload-smp-with-open-file status=$mcd0_negative_status',
+            'MCD0 CLOSE phase=after-module-owner-negative status=ok',
             'negative_output="$(rmmod ihk 2>&1)"',
             'phase=after-negative references=$references users=$users',
             'rmmod mcctrl || { fail unload-mcctrl; exit 1; }',
             'phase=after-mcctrl-unload references=$references users=$users',
             'rmmod ihk_smp_x86_64 || { fail unload-ihk-smp-x86-64; exit 1; }',
+            'MCD0 NODE status=removed',
             'phase=after-smp-unload references=$references users=$users',
             'rmmod ihk || { fail unload-ihk; exit 1; }',
+            'emit_state first-cycle-clean',
+            'RELOAD cycle=1 phase=begin',
+            'RELOAD_LOAD cycle=1 module=ihk status=ok',
+            'RELOAD_LOAD cycle=1 module=ihk_smp_x86_64 status=ok',
+            'RELOAD_LOAD cycle=1 module=mcctrl status=ok',
+            'MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok',
+            'RELOAD_UNLOAD cycle=1 module=mcctrl status=ok',
+            'RELOAD_UNLOAD cycle=1 module=ihk_smp_x86_64 status=ok',
+            'RELOAD_UNLOAD cycle=1 module=ihk status=ok',
+            'RELOAD cycle=1 status=ok',
             'emit_state final-clean',
         )
         positions = [self.init.index(value) for value in ordered]
         self.assertEqual(sorted(positions), positions)
         self.assertIn('[ "$negative_status" -eq 1 ]', self.init)
         self.assertIn('"Module ihk is in use"', self.init)
+        self.assertIn('[ "$mcd0_negative_status" -eq 1 ]', self.init)
+        self.assertIn('"Module ihk_smp_x86_64 is in use"', self.init)
+        self.assertIn("mount -n -t devtmpfs devtmpfs /dev", self.init)
+        self.assertIn("valid_mcd0_dev_identity() {", self.init)
+        self.assertIn("mcd0_node_matches_identity() {", self.init)
+        self.assertIn("*[!0-9]*) return 1", self.init)
+        self.assertEqual(2, self.init.count('valid_mcd0_dev_identity "$mcd0'))
+        self.assertEqual(2, self.init.count('mcd0_node_matches_identity "$mcd0'))
+        self.assertIn("[ \"$minor\" -le 1048575 ]", self.init)
+        self.assertIn("/bin/stat -c '%t:%T' /dev/mcd0", self.init)
+        self.assertNotIn("/bin/stat -L", self.init)
+        self.assertIn("expected=\"$(printf 'a:%x' \"$minor\")\"", self.init)
+        self.assertNotIn("10:[0-9]*)", self.init)
+        self.assertIn("for worker in 1 2 3 4 5 6 7 8", self.init)
+        self.assertIn("[ ! -e /dev/mcd0 ]", self.init)
+        self.assertIn("[ ! -e /sys/class/misc/mcd0 ]", self.init)
+        self.assertEqual(5, self.init.count("[ ! -L /dev/mcd0 ]"))
+        self.assertEqual(2, self.init.count("[ ! -L /sys/class/misc/mcd0 ]"))
+        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_NATIVE"'))
+        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_COMPAT"'))
         self.assertIn('[ "$references" = 1 ]', self.init)
         self.assertIn('[ "$references" = 0 ]', self.init)
         self.assertEqual(
-            2,
+            3,
             self.init.count(
                 "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;"
             ),
         )
         self.assertIn('[ "$users" = \'ihk_smp_x86_64,\' ]', self.init)
         self.assertNotIn('[ "$users" = ihk_smp_x86_64 ]', self.init)
+
+    @unittest.skipUnless(shutil.which("bash"), "bash required")
+    def test_mcd0_device_identity_parser_is_canonical_decimal_only(self) -> None:
+        start = self.init.index("valid_mcd0_dev_identity() {")
+        end = self.init.index(
+            "\n}\n\nmcd0_node_matches_identity()", start
+        ) + len("\n}")
+        function = self.init[start:end]
+        script = function + r'''
+for value in 10:0 10:1 10:9 10:10 10:255 10:1048575; do
+    valid_mcd0_dev_identity "$value" || exit 81
+done
+for value in 9:1 11:1 10: 10:00 10:01 10:-1 10:+1 10:1x 10:x1 \
+    10:1048576 10:9999999 10:999999999999999999999; do
+    if valid_mcd0_dev_identity "$value"; then
+        exit 82
+    fi
+done
+'''
+        completed = subprocess.run(
+            [shutil.which("bash"), "--noprofile", "--norc"],
+            input=script,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(0, completed.returncode, completed.stderr)
 
     def test_capture_is_unreviewed_and_cannot_claim_credit(self) -> None:
         self.assertIn("technical-capture-unreviewed", self.workflow)
@@ -268,6 +483,46 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertIn("assert_modinfo_binding() {", capture_script)
         self.assertIn('exec {modinfo_fd}<"$modinfo_target"', capture_script)
         self.assertIn("exec {modinfo_fd}<&-", capture_script)
+        nm_sequence = (
+            "expected_nm_nevra=binutils-2.41-63.el10.x86_64",
+            'expected_nm_digest_algorithm="$(/usr/bin/rpm -q --qf \'%{FILEDIGESTALGO}\\n\' binutils)"',
+            'test "$expected_nm_digest_algorithm" = 8',
+            "nm_path=/usr/bin/nm",
+            'expected_nm_inventory="$(' ,
+            "/usr/bin/rpm -q --qf '[%{FILENAMES}\\t%{FILEDIGESTS}\\n]' binutils",
+            'test "${#expected_nm_inventory}" -gt 0',
+            'test "${#expected_nm_inventory}" -le 1048576',
+            "expected_nm_sha256=",
+            "expected_nm_rows=0",
+            "while IFS=$'\\t' read -r rpm_filename rpm_digest; do",
+            'done <<< "$expected_nm_inventory"',
+            'test "$expected_nm_rows" -eq 1',
+            "verify_nm_package() {",
+            'exec {nm_fd}<"$nm_path"',
+            'nm_exec="/proc/self/fd/$nm_fd"',
+            'test "$(/usr/bin/sha256sum -- "$nm_exec")" = \\',
+            "assert_nm_binding() {",
+            '--modinfo-sha256 "$expected_modinfo_sha256"',
+            '--nm-fd "$nm_fd"',
+            '--nm-sha256 "$expected_nm_sha256"',
+            "exec {nm_fd}<&-",
+        )
+        nm_positions = [capture_script.index(item) for item in nm_sequence]
+        self.assertEqual(nm_positions, sorted(nm_positions))
+        self.assertEqual(2, capture_script.count('--nm-fd "$nm_fd"'))
+        self.assertEqual(
+            2,
+            capture_script.count(
+                '--modinfo-sha256 "$expected_modinfo_sha256"'
+            ),
+        )
+        self.assertEqual(
+            2, capture_script.count('--nm-sha256 "$expected_nm_sha256"')
+        )
+        self.assertGreaterEqual(capture_script.count("assert_nm_binding"), 5)
+        self.assertIn("verification=\"$(/usr/bin/rpm -V binutils)\" || return 1", capture_script)
+        self.assertIn('test "$nm_path" -ef "$nm_exec"', capture_script)
+        self.assertIn('"$expected_nm_sha256  $nm_exec"', capture_script)
 
         mutations = (
             (
@@ -305,6 +560,81 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
                 "",
             ),
             (
+                "          test ! -L \"$nm_path\"\n",
+                "          test -e \"$nm_path\"\n",
+            ),
+            (
+                (
+                    '          test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' binutils)" = \\\n'
+                    '            "$expected_nm_nevra"\n'
+                ),
+                "",
+            ),
+            (
+                '          test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$nm_path")" = binutils\n',
+                "",
+            ),
+            (
+                '          test "$expected_nm_digest_algorithm" = 8\n',
+                '          test -n "$expected_nm_digest_algorithm"\n',
+            ),
+            (
+                "            /usr/bin/rpm -q --qf '[%{FILENAMES}\\t%{FILEDIGESTS}\\n]' binutils\n",
+                "            /usr/bin/rpm -ql binutils\n",
+            ),
+            (
+                '          test "${#expected_nm_inventory}" -le 1048576\n',
+                "",
+            ),
+            (
+                '          done <<< "$expected_nm_inventory"\n',
+                '          done < <(printf \'%s\\n\' "$expected_nm_inventory")\n',
+            ),
+            (
+                '          test "$expected_nm_rows" -eq 1\n',
+                '          test "$expected_nm_rows" -ge 1\n',
+            ),
+            (
+                '          [[ "$expected_nm_sha256" =~ ^[0-9a-f]{64}$ ]]\n',
+                '          test -n "$expected_nm_sha256"\n',
+            ),
+            (
+                (
+                    "          verify_nm_package() {\n"
+                    "            local verification\n"
+                    '            verification="$(/usr/bin/rpm -V binutils)" || return 1\n'
+                    '            test -z "$verification"\n'
+                    "          }\n"
+                ),
+                "",
+            ),
+            (
+                '              test "$nm_path" -ef "$nm_exec" &&\n',
+                "",
+            ),
+            (
+                (
+                    '              test "$(/usr/bin/sha256sum -- "$nm_exec")" = \\\n'
+                    '              "$expected_nm_sha256  $nm_exec" &&\n'
+                ),
+                "",
+            ),
+            (
+                (
+                    '              test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' binutils)" = \\\n'
+                    '              "$expected_nm_nevra" &&\n'
+                ),
+                "",
+            ),
+            (
+                '              test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$nm_path")" = binutils &&\n',
+                "",
+            ),
+            (
+                "              verify_nm_package\n",
+                "",
+            ),
+            (
                 '            --modinfo-fd "$modinfo_fd"\n',
                 "",
             ),
@@ -314,14 +644,44 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             ),
             (
                 (
+                    '            sha256sum --check --strict SHA256SUMS\n'
+                    '          )\n'
+                    '          assert_modinfo_binding\n'
+                    '          assert_nm_binding\n'
+                    '          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin '
+                    'PYTHONHASHSEED=0 TZ=UTC \\\n'
+                    '            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \\\n'
                     '            --repo "$GITHUB_WORKSPACE" \\\n'
                     '            --modinfo-fd "$modinfo_fd" \\\n'
-                    '            --check-runtime-evidence \\\n'
+                    '            --modinfo-sha256 "$expected_modinfo_sha256" \\\n'
+                    '            --nm-fd "$nm_fd" \\\n'
+                    '            --nm-sha256 "$expected_nm_sha256" \\\n'
                 ),
                 (
+                    '            sha256sum --check --strict SHA256SUMS\n'
+                    '          )\n'
+                    '          assert_modinfo_binding\n'
+                    '          assert_nm_binding\n'
+                    '          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin '
+                    'PYTHONHASHSEED=0 TZ=UTC \\\n'
+                    '            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \\\n'
                     '            --repo "$GITHUB_WORKSPACE" \\\n'
-                    '            --check-runtime-evidence \\\n'
+                    '            --modinfo-sha256 "$expected_modinfo_sha256" \\\n'
+                    '            --nm-fd "$nm_fd" \\\n'
+                    '            --nm-sha256 "$expected_nm_sha256" \\\n'
                 ),
+            ),
+            (
+                '            --nm-fd "$nm_fd" \\\n',
+                "",
+            ),
+            (
+                '            --modinfo-sha256 "$expected_modinfo_sha256" \\\n',
+                "",
+            ),
+            (
+                '            --nm-sha256 "$expected_nm_sha256" \\\n',
+                "",
             ),
             (
                 (
@@ -348,10 +708,14 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
                 (
                     '            --build-evidence-dir "$BUILD_EVIDENCE"\n'
                     '          assert_modinfo_binding\n'
+                    '          assert_nm_binding\n'
+                    '          exec {nm_fd}<&-\n'
                     '          exec {modinfo_fd}<&-\n'
                 ),
                 (
                     '            --build-evidence-dir "$BUILD_EVIDENCE"\n'
+                    '          assert_nm_binding\n'
+                    '          exec {nm_fd}<&-\n'
                     '          exec {modinfo_fd}<&-\n'
                 ),
             ),
@@ -360,12 +724,14 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
                     '            sha256sum --check --strict SHA256SUMS\n'
                     '          )\n'
                     '          assert_modinfo_binding\n'
+                    '          assert_nm_binding\n'
                     '          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin '
                 ),
                 (
                     '            sha256sum --check --strict SHA256SUMS\n'
                     '          )\n'
                     '          exec {modinfo_fd}<&-\n'
+                    '          assert_nm_binding\n'
                     '          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin '
                 ),
             ),
@@ -380,6 +746,7 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             with self.subTest(new=new.strip()):
                 with self.assertRaises(runtime_evidence.EvidenceError):
                     runtime_evidence._validate_runtime_modinfo_boundary(mutation)
+                    runtime_evidence._validate_runtime_nm_boundary(mutation)
 
     def test_retained_modinfo_descriptor_rejects_namespace_content_and_argv0_attacks(self) -> None:
         shell = r"""
@@ -498,6 +865,21 @@ int main(int argc, char **argv) {
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
+            trusted_modinfo_sha256 = runtime_evidence._sha256_file(target)
+
+            def runtime_modinfo_call(descriptor_number):
+                with mock.patch.object(
+                    runtime_evidence,
+                    "EXPECTED_MODINFO_SHA256",
+                    trusted_modinfo_sha256,
+                ):
+                    return runtime_evidence._run_field(
+                        module,
+                        "name",
+                        descriptor_number,
+                        modinfo_sha256=trusted_modinfo_sha256,
+                    )
+
             alias.symlink_to(target.name)
             descriptor = os.open(str(target), os.O_RDONLY)
             try:
@@ -515,7 +897,7 @@ int main(int argc, char **argv) {
                     lambda: ihk_lifecycle._modinfo(module, "name", descriptor),
                     lambda: smp_lifecycle._modinfo(module, "name", descriptor),
                     lambda: mcctrl_lifecycle._modinfo(module, "name", descriptor),
-                    lambda: runtime_evidence._run_field(module, "name", descriptor),
+                    lambda: runtime_modinfo_call(descriptor),
                 )
                 expected_values = (
                     "bound-descriptor",
@@ -600,11 +982,28 @@ int main(int argc, char **argv) {
             invalid_format.chmod(0o755)
             invalid_format_fd = os.open(str(invalid_format), os.O_RDONLY)
             try:
+                invalid_format_sha256 = runtime_evidence._sha256_file(
+                    invalid_format
+                )
+
+                def runtime_invalid_format_call():
+                    with mock.patch.object(
+                        runtime_evidence,
+                        "EXPECTED_MODINFO_SHA256",
+                        invalid_format_sha256,
+                    ):
+                        return runtime_evidence._run_field(
+                            module,
+                            "name",
+                            invalid_format_fd,
+                            modinfo_sha256=invalid_format_sha256,
+                        )
+
                 invalid_calls = (
                     (lambda: ihk_lifecycle._modinfo(module, "name", invalid_format_fd), ihk_lifecycle.ValidationError),
                     (lambda: smp_lifecycle._modinfo(module, "name", invalid_format_fd), smp_lifecycle.ValidationError),
                     (lambda: mcctrl_lifecycle._modinfo(module, "name", invalid_format_fd), mcctrl_lifecycle.ValidationError),
-                    (lambda: runtime_evidence._run_field(module, "name", invalid_format_fd), runtime_evidence.EvidenceError),
+                    (runtime_invalid_format_call, runtime_evidence.EvidenceError),
                 )
                 for call, error in invalid_calls:
                     with self.subTest(failure="exec-format", error=error.__name__):
@@ -687,6 +1086,66 @@ int main(int argc, char **argv) {
             self.assertIn(
                 "Machine:                           Advanced Micro Devices X86-64", output
             )
+
+    @unittest.skipUnless(shutil.which("as") and shutil.which("ld"), "binutils required")
+    def test_mcd0_ioctl_helpers_are_static_native_and_compat_executables(self) -> None:
+        cases = (
+            (
+                MCD0_IOCTL_X86_64,
+                "--64",
+                "elf_x86_64",
+                "ELF64",
+                "Advanced Micro Devices X86-64",
+            ),
+            (MCD0_IOCTL_I386, "--32", "elf_i386", "ELF32", "Intel 80386"),
+        )
+        with tempfile.TemporaryDirectory(prefix="native-rust-mcd0-ioctl-") as temporary:
+            root = Path(temporary)
+            for source, as_mode, ld_mode, elf_class, machine in cases:
+                with self.subTest(source=source.name):
+                    obj = root / (source.stem + ".o")
+                    executable = root / source.stem
+                    subprocess.run(
+                        ["as", as_mode, str(source), "-o", str(obj)], check=True
+                    )
+                    subprocess.run(
+                        [
+                            "ld",
+                            "-m",
+                            ld_mode,
+                            "-nostdlib",
+                            "-static",
+                            "-s",
+                            "-z",
+                            "noexecstack",
+                            "-o",
+                            str(executable),
+                            str(obj),
+                        ],
+                        check=True,
+                    )
+                    output = subprocess.run(
+                        ["readelf", "-h", str(executable)],
+                        check=True,
+                        stdout=subprocess.PIPE,
+                        text=True,
+                    ).stdout
+                    self.assertIn("Class:                             " + elf_class, output)
+                    self.assertIn("Machine:                           " + machine, output)
+
+                    program = source.read_text(encoding="utf-8")
+                    self.assertIn("/dev/mcd0", program)
+                    self.assertIn("cmp $-22", program)
+                    self.assertIn(".note.GNU-stack", program)
+
+        expected_retained_modes = (
+            "chmod 0644 \\\n"
+            '            "$RUNTIME_EVIDENCE/'
+            'native-rust-runtime-mcd0-ioctl-x86_64" \\\n'
+            '            "$RUNTIME_EVIDENCE/'
+            'native-rust-runtime-mcd0-ioctl-i386"'
+        )
+        self.assertIn(expected_retained_modes, self.workflow)
 
 
 if __name__ == "__main__":

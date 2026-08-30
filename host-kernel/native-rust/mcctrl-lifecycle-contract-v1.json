@@ -27,23 +27,31 @@
     },
     "required_import_namespace": "MCKERNEL_IHK_V1",
     "reviewed_provider_lease_boundary": {
-      "attach_symbol": "ihk_smp_provider_attach_v2",
-      "callback_abi": 1,
-      "callback_payload_reachable": false,
-      "compatibility_exports": [
+        "attach_symbol": "ihk_smp_provider_attach_v2",
+        "callback_abi": 1,
+        "callback_payload_reachable": false,
+        "close_symbol": "ihk_smp_provider_close_v1",
+        "compatibility_exports": [
         "ihk_smp_provider_attach_v1",
         "ihk_smp_provider_detach_v1"
-      ],
-      "consumer": "ihk-smp-x86_64",
-      "credit_eligible": false,
-      "detach_symbol": "ihk_smp_provider_detach_v2",
-      "device_node_reachable": false,
-      "lifecycle_callbacks_only": true,
-      "mcctrl_reachable": false,
-      "namespace": "MCKERNEL_IHK_V1",
-      "rocky_runtime_validated": false,
-      "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
-      "token_version": 1
+        ],
+        "consumer": "ihk-smp-x86_64",
+        "control_device_open_close_only": true,
+        "credit_eligible": false,
+        "detach_symbol": "ihk_smp_provider_detach_v2",
+        "device_node_runtime_proven": false,
+        "device_node_source_reachable": true,
+        "duplicate_close_detectable_while_other_references_exist": false,
+        "lifecycle_callbacks_only": false,
+        "mcctrl_reachable": false,
+        "namespace": "MCKERNEL_IHK_V1",
+        "open_symbol": "ihk_smp_provider_open_v1",
+        "operation_callbacks_reachable": false,
+        "rocky_runtime_validated": false,
+        "scope": "scalar minor-zero module-lifetime provider lease, scalar-only init/exit callbacks, and shared per-file scalar open receipts for the uniformly rejecting mcd0 shell; no provider operation payload",
+        "shared_open_receipts": true,
+        "trusted_noncopy_owner_balance_required": true,
+        "token_version": 1
     }
   },
   "kbuild": {

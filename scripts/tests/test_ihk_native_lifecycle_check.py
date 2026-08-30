@@ -80,6 +80,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v1",
                 "ihk_smp_provider_attach_v2",
                 "ihk_smp_provider_detach_v2",
+                "ihk_smp_provider_open_v1",
+                "ihk_smp_provider_close_v1",
             ],
             summary["provider_symbols"],
         )
@@ -406,6 +408,61 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "crate-root attachment"):
             lifecycle.validate_repository(self.repo)
 
+    def test_device_registry_support_contract_cannot_weaken_open_receipts(self) -> None:
+        support = self.contract["support_sources"][2]
+        contract_path = self.repo / support["contract_path"]
+        lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+        original_device = contract_path.read_text(encoding="utf-8")
+        mutations = (
+            ("close_symbol", "ihk_smp_provider_detach_v1"),
+            ("concurrent_shared_receipts", False),
+            ("raw_pointer", True),
+            ("source_validated", False),
+        )
+        for field, replacement in mutations:
+            with self.subTest(field=field):
+                value = json.loads(original_device)
+                value["provider_lease_boundary"]["open_close"][field] = replacement
+                contract_path.write_text(
+                    json.dumps(value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                self.contract["support_sources"][2]["contract_sha256"] = (
+                    lifecycle._sha256(contract_path)
+                )
+                lifecycle_contract.write_text(
+                    json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "provider-lease boundary differs or overclaims readiness",
+                ):
+                    lifecycle.validate_repository(self.repo)
+                contract_path.write_text(original_device, encoding="utf-8")
+
+    def test_device_registry_attachment_cannot_omit_open_exports(self) -> None:
+        support = self.contract["support_sources"][2]
+        contract_path = self.repo / support["contract_path"]
+        value = json.loads(contract_path.read_text(encoding="utf-8"))
+        value["attachment_boundary"]["provider_lease_exports"].remove(
+            "ihk_smp_provider_close_v1"
+        )
+        contract_path.write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        self.contract["support_sources"][2]["contract_sha256"] = lifecycle._sha256(
+            contract_path
+        )
+        lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+        lifecycle_contract.write_text(
+            json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "crate-root attachment"):
+            lifecycle.validate_repository(self.repo)
+
     def test_provider_lease_contract_cannot_claim_runtime_or_credit(self) -> None:
         contract_path = self.repo / lifecycle.DEFAULT_CONTRACT
         for field in ("rocky_runtime_validated", "credit_eligible"):
@@ -423,6 +480,36 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                     lifecycle.validate_repository(self.repo)
                 shutil.copyfile(REPO_ROOT / lifecycle.DEFAULT_CONTRACT, contract_path)
 
+    def test_provider_open_contract_remains_scalar_and_noncrediting(self) -> None:
+        contract_path = self.repo / lifecycle.DEFAULT_CONTRACT
+        mutations = (
+            ("rocky_runtime_validated", True),
+            ("credit_eligible", True),
+            ("device_node_reachable", True),
+            ("duplicate_close_detectable_while_other_references_exist", True),
+            ("file_operations_reachable", True),
+            ("raw_pointer", True),
+            ("rust_layout", True),
+            ("multiple_shared_opens", False),
+            ("trusted_noncopy_owner_balance_required", False),
+            ("exactly_once_close_owner", "untracked-scalar-copy"),
+        )
+        original = contract_path.read_text(encoding="utf-8")
+        for field, replacement in mutations:
+            with self.subTest(field=field):
+                value = json.loads(original)
+                value["provider_lease"]["open_lease"][field] = replacement
+                contract_path.write_text(
+                    json.dumps(value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "provider-lease contract differs or overclaims readiness",
+                ):
+                    lifecycle.validate_repository(self.repo)
+                contract_path.write_text(original, encoding="utf-8")
+
     def test_provider_lease_symbols_and_signatures_are_exact(self) -> None:
         mutations = (
             (
@@ -436,6 +523,14 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             (
                 'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {',
                 'pub extern "C" fn ihk_smp_provider_detach_v1(token: u64) {',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {',
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: *const u32) -> i64 {',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {',
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: u64) {',
             ),
         )
         source = self.repo / self.contract["production_source"]
@@ -465,6 +560,11 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 "symbol: core::ptr::null(),",
                 "exact reviewed boundary",
             ),
+            (
+                "symbol: ihk_smp_provider_open_v1 as *const () as *const u8,",
+                "symbol: ihk_smp_provider_close_v1 as *const () as *const u8,",
+                "exact reviewed boundary",
+            ),
         ):
             with self.subTest(old=old):
                 self.assertIn(old, original)
@@ -472,6 +572,123 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 with self.assertRaisesRegex(lifecycle.ValidationError, error):
                     lifecycle.validate_repository(self.repo)
                 source.write_text(original, encoding="utf-8")
+
+    def test_provider_open_acquire_and_fail_stop_close_are_exact(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        original = source.read_text(encoding="utf-8")
+        mutations = (
+            (
+                "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+                "IHK_DEVICE_REGISTRY.encode_provider_token(handle)",
+                "exact reviewed boundary",
+            ),
+            (
+                '''    let receipt = match IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize) {
+        Ok(receipt) => receipt,
+        Err(error) => {
+            return error.errno() as i64;
+        }
+    };''',
+                '''    let receipt = match IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize) {
+        Ok(receipt) => receipt,
+        Err(_error) => {
+            return 1;
+        }
+    };''',
+                "acquire-or-negative-errno ordering",
+            ),
+            (
+                "let _ = IHK_DEVICE_REGISTRY.release_owned_open_token(receipt);",
+                "let _ = IHK_DEVICE_REGISTRY.decode_provider_token(receipt);",
+                "exact reviewed boundary",
+            ),
+            (
+                '''    let _ = IHK_DEVICE_REGISTRY.release_owned_open_token(receipt);
+    pr_info!("provider_open=release status=complete minor=0\\n");''',
+                '''    pr_info!("provider_open=release status=complete minor=0\\n");
+    let _ = IHK_DEVICE_REGISTRY.release_owned_open_token(receipt);''',
+                "close-before-success ordering",
+            ),
+        )
+        for old, new, error in mutations:
+            with self.subTest(old=old):
+                self.assertIn(old, original)
+                mutated = original.replace(old, new, 1)
+                with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                    lifecycle._validate_rust_source(mutated, self.contract)
+
+    def test_provider_open_sites_require_distinct_immediate_safety_annotations(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        mutations = (
+            (
+                lifecycle.EXPECTED_PROVIDER_OPEN_FFI_SITE,
+                '#[export_name = "ihk_smp_provider_open_v1"]\n'
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {',
+            ),
+            (
+                lifecycle.EXPECTED_PROVIDER_CLOSE_FFI_SITE,
+                '#[export_name = "ihk_smp_provider_close_v1"]\n'
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {',
+            ),
+            (
+                lifecycle.EXPECTED_PROVIDER_CLOSE_FFI_SITE,
+                '#[export_name = "ihk_smp_provider_close_v1"]\n'
+                "// SAFETY: This exported C ABI carries only a u32 argument and i64 result;\n"
+                "// every expected failure becomes a negative errno and no unwind may cross it.\n"
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {',
+            ),
+            (
+                lifecycle.EXPECTED_PROVIDER_OPEN_FFI_SITE,
+                "// SAFETY: This exported C ABI carries only a u32 argument and i64 result;\n"
+                "// every expected failure becomes a negative errno and no unwind may cross it.\n"
+                '#[export_name = "ihk_smp_provider_open_v1"]\n'
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(replacement=new):
+                self.assertIn(old, source)
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "exact reviewed boundary",
+                ):
+                    lifecycle._validate_rust_source(
+                        source.replace(old, new, 1), self.contract
+                    )
+
+    def test_provider_open_boundary_rejects_local_unsafe_receipt_storage(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        injected = source.replace(
+            "use core::sync::atomic::{AtomicPtr, Ordering};",
+            "use core::cell::UnsafeCell;\n"
+            "use core::mem::MaybeUninit;\n"
+            "use core::sync::atomic::{AtomicPtr, Ordering};",
+            1,
+        )
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError,
+            "stateless scalar adapter",
+        ):
+            lifecycle._validate_rust_source(injected, self.contract)
+
+    def test_provider_open_receipt_cannot_be_logged(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        needle = 'pr_info!("provider_open=acquire status=live minor=0\\n");'
+        replacement = 'pr_info!("provider_open=acquire receipt={}\\n", receipt);'
+        self.assertIn(needle, source)
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError,
+            "exact reviewed boundary|must not disclose opaque",
+        ):
+            lifecycle._validate_rust_source(
+                source.replace(needle, replacement, 1), self.contract
+            )
 
     def test_provider_registry_singleton_and_unload_check_are_exact(self) -> None:
         source = self.repo / self.contract["production_source"]
@@ -556,6 +773,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         module = self.repo / "ihk.ko"
         module.write_bytes(
             b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_open=acquire\0provider_open=release\0"
             b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
         )
         summary = lifecycle.validate_repository(REPO_ROOT)
@@ -587,6 +805,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         module = self.repo / "ihk.ko"
         module.write_bytes(
             b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_open=acquire\0provider_open=release\0"
             b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
         )
         summary = lifecycle.validate_repository(REPO_ROOT)
@@ -660,6 +879,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         module = self.repo / "ihk.ko"
         module.write_bytes(
             b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_open=acquire\0provider_open=release\0"
             b"provider_registry=empty\0lifecycle=unload\0"
         )
         summary = lifecycle.validate_repository(REPO_ROOT)

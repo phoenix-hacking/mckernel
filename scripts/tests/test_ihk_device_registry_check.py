@@ -69,9 +69,9 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         self.assertEqual(28, contract["behavior"]["generation_bits"])
         self.assertEqual(16, contract["behavior"]["reference_bits"]["provider_open"])
         self.assertEqual(16, contract["behavior"]["reference_bits"]["os"])
-        self.assertEqual(29, contract["fixture"]["expected_in_file_tests"])
+        self.assertEqual(31, contract["fixture"]["expected_in_file_tests"])
         self.assertEqual(8, contract["fixture"]["expected_fixture_tests"])
-        self.assertEqual(37, contract["fixture"]["expected_total_tests"])
+        self.assertEqual(39, contract["fixture"]["expected_total_tests"])
         self.assertEqual("TODO", contract["readiness"]["status"])
         self.assertFalse(contract["readiness"]["credit_eligible"])
         self.assertFalse(contract["evidence_policy"]["credit_eligible"])
@@ -84,13 +84,38 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         )
         self.assertEqual(
             list(registry.PROVIDER_COMPATIBILITY_EXPORTS)
-            + [registry.PROVIDER_ATTACH_SYMBOL, registry.PROVIDER_DETACH_SYMBOL],
+            + [
+                registry.PROVIDER_ATTACH_SYMBOL,
+                registry.PROVIDER_DETACH_SYMBOL,
+                registry.PROVIDER_OPEN_SYMBOL,
+                registry.PROVIDER_CLOSE_SYMBOL,
+            ],
             contract["attachment_boundary"]["provider_lease_exports"],
         )
         self.assertFalse(contract["provider_lease_boundary"]["credit_eligible"])
         self.assertFalse(contract["provider_lease_boundary"]["runtime_validated"])
         self.assertFalse(
             contract["provider_lease_boundary"]["device_node_reachable"]
+        )
+        self.assertTrue(
+            contract["provider_lease_boundary"]["open_close"][
+                "source_validated"
+            ]
+        )
+        self.assertTrue(
+            contract["provider_lease_boundary"]["open_close"][
+                "concurrent_shared_receipts"
+            ]
+        )
+        self.assertFalse(
+            contract["provider_lease_boundary"]["open_close"][
+                "duplicate_close_detectable_while_other_references_exist"
+            ]
+        )
+        self.assertTrue(
+            contract["provider_lease_boundary"]["open_close"][
+                "trusted_noncopy_owner_balance_required"
+            ]
         )
         self.assertEqual(registry.READINESS_BLOCKERS,
                          tuple(contract["readiness"]["blockers"]))
@@ -230,6 +255,29 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
              b"if references > MAX_REFERENCES {"),
             (b"current + PROVIDER_REFERENCE_ONE,",
              b"current + OS_REFERENCE_ONE,"),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
+                self.rejected_rust_semantic_mutation(old, new)
+
+    def test_scalar_open_receipt_transfer_and_owned_release_are_exact(self):
+        mutations = (
+            (b"let handle = self.resolve_minor(minor)?;",
+             b"let handle = self.resolve_minor(0)?;"),
+            (b"let lease = self.acquire_open(handle)?;",
+             b"let lease = self.acquire_open(self.resolve_minor(0)?)?;"),
+            (b"match self.encode_provider_token(lease.handle())",
+             b"match self.encode_provider_token(handle)"),
+            (b"core::mem::forget(lease);", b"drop(lease);"),
+            (b".decode_provider_token(token)",
+             b".decode_provider_token(1)"),
+            (b".and_then(|handle| self.release_open_checked(handle).map(|()| handle));",
+             b".map(|handle| handle);"),
+            (b"let current = checked_live_word(slot, handle)?;",
+             b"let current = slot.word.load(Ordering::Acquire);"),
+            (b"if provider_references(current) == 0 {",
+             b"if provider_references(current) == 1 {"),
+            (b"let _ = self.release_open_checked(handle);", b"return;"),
         )
         for old, new in mutations:
             with self.subTest(old=old):
@@ -438,7 +486,7 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
             listed = subprocess.check_output([tests, "--list"], cwd=REPO_ROOT)
             test_lines = [line for line in listed.decode("utf-8").splitlines()
                           if line.endswith(": test")]
-            self.assertEqual(37, len(test_lines))
+            self.assertEqual(39, len(test_lines))
             subprocess.check_call([tests, "--test-threads=1"], cwd=REPO_ROOT)
 
 

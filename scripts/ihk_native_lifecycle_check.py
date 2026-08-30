@@ -90,11 +90,41 @@ EXPECTED_PROVIDER_LEASE = {
         "raw_data_pointer": False,
         "unpublishing_guard_across_exit": True,
     },
+    "open_lease": {
+        "acquire_failure": "negative-errno",
+        "acquire_symbol": "ihk_smp_provider_open_v1",
+        "close_failure": "fail-stop",
+        "close_symbol": "ihk_smp_provider_close_v1",
+        "credit_eligible": False,
+        "device_node_reachable": False,
+        "duplicate_close_detectable_while_other_references_exist": False,
+        "exactly_once_close_owner": "non-Copy-per-file-wrapper",
+        "file_operations_reachable": False,
+        "minor": 0,
+        "multiple_shared_opens": True,
+        "raw_pointer": False,
+        "receipt": "positive-i64-provider-generation-token",
+        "rocky_runtime_validated": False,
+        "rust_layout": False,
+        "trusted_noncopy_owner_balance_required": True,
+    },
     "registry_static": "IHK_DEVICE_REGISTRY",
     "rocky_runtime_validated": False,
-    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
+    "scope": "scalar minor-zero module-lifetime provider lease, scalar-only init/exit callbacks, and scalar open-reference receipts; no device registration or provider operation payload",
     "token_version": 1,
 }
+EXPECTED_PROVIDER_OPEN_FFI_SITE = (
+    '#[export_name = "ihk_smp_provider_open_v1"]\n'
+    "// SAFETY: This exported C ABI carries only a u32 argument and i64 result;\n"
+    "// every expected failure becomes a negative errno and no unwind may cross it.\n"
+    'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {'
+)
+EXPECTED_PROVIDER_CLOSE_FFI_SITE = (
+    '#[export_name = "ihk_smp_provider_close_v1"]\n'
+    "// SAFETY: This exported C ABI carries only an i64 receipt; detectable ownership\n"
+    "// faults fail stop inside the kernel and no unwind may cross the module boundary.\n"
+    'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {'
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 BOUND_MODINFO_ENVIRONMENT = {
     "LANG": "C",
@@ -474,7 +504,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "device_registry.rs",
             "path": "host-kernel/native-rust/device_registry.rs",
-            "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
+            "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
         },
         {
             "destination": "ikc_master.rs",
@@ -571,6 +601,9 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     attach = lease["attach_symbol"]
     detach = lease["detach_symbol"]
     compatibility_attach, compatibility_detach = lease["compatibility_exports"]
+    open_lease = lease["open_lease"]
+    acquire = open_lease["acquire_symbol"]
+    close = open_lease["close_symbol"]
     namespace = lease["import_namespace"]
     registry = lease["registry_static"]
     required_provider_fragments = (
@@ -602,6 +635,20 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         '"provider_lease=detach status=vacant minor={} generation={} callback_abi=1\\n",',
         f'#[export_name = "__export_symbol_{detach}"]',
         f"symbol: {detach} as *const () as *const u8,",
+        f'#[export_name = "{acquire}"]',
+        EXPECTED_PROVIDER_OPEN_FFI_SITE,
+        f'pub extern "C" fn {acquire}(minor: u32) -> i64 {{',
+        f"match {registry}.acquire_open_token(minor as usize)",
+        'pr_info!("provider_open=acquire status=live minor=0\\n");',
+        f'#[export_name = "__export_symbol_{acquire}"]',
+        f"symbol: {acquire} as *const () as *const u8,",
+        f'#[export_name = "{close}"]',
+        EXPECTED_PROVIDER_CLOSE_FFI_SITE,
+        f'pub extern "C" fn {close}(receipt: i64) {{',
+        f"let _ = {registry}.release_owned_open_token(receipt);",
+        'pr_info!("provider_open=release status=complete minor=0\\n");',
+        f'#[export_name = "__export_symbol_{close}"]',
+        f"symbol: {close} as *const () as *const u8,",
         f"match {registry}.active_count() {{",
         'Ok(0) => pr_info!("provider_registry=empty active=0\\n"),',
     )
@@ -641,25 +688,77 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         ),
         "IHK v2 unpublish-exit-vacate ordering",
     )
-    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 4 or len(
+    acquire_body = _active_function_body(
+        text, code, f'pub extern "C" fn {acquire}(', "IHK provider open"
+    )
+    _require_order(
+        acquire_body,
+        (
+            f"{registry}.acquire_open_token(minor as usize)",
+            "Err(error)",
+            "return error.errno() as i64;",
+        ),
+        "IHK provider open acquire-or-negative-errno ordering",
+    )
+    _require_active_order(
+        text,
+        code,
+        (
+            f'pub extern "C" fn {acquire}(',
+            f"{registry}.acquire_open_token(minor as usize)",
+            'pr_info!("provider_open=acquire status=live minor=0\\n");',
+            f'#[export_name = "__export_symbol_{acquire}"]',
+        ),
+        "IHK provider open acquire-before-success ordering",
+    )
+    close_body = _active_function_body(
+        text, code, f'pub extern "C" fn {close}(', "IHK provider close"
+    )
+    _require_order(
+        close_body,
+        (f"{registry}.release_owned_open_token(receipt)",),
+        "IHK provider fail-stop close-before-success ordering",
+    )
+    _require_active_order(
+        text,
+        code,
+        (
+            f'pub extern "C" fn {close}(',
+            f"{registry}.release_owned_open_token(receipt)",
+            'pr_info!("provider_open=release status=complete minor=0\\n");',
+            f'#[export_name = "__export_symbol_{close}"]',
+        ),
+        "IHK provider fail-stop close-before-success ordering",
+    )
+    for forbidden in (
+        "UnsafeCell",
+        "MaybeUninit",
+        "OpenLease<'",
+        "core::mem::forget",
+    ):
+        if forbidden in code:
+            raise ValidationError(
+                "IHK provider open boundary must remain a stateless scalar adapter"
+            )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 6 or len(
         _active_fragment_positions(text, code, 'extern "C"')
-    ) != 6:
+    ) != 8:
         raise ValidationError("IHK provider-lease source has an unreviewed C ABI boundary")
     _require_active_count(
-        text, code, '#[link_section = ".export_symbol"]', 5,
+        text, code, '#[link_section = ".export_symbol"]', 7,
         "IHK provider relocation record",
     )
     _require_active_count(
-        text, code, f'namespace: *b"{namespace}\\0",', 5,
+        text, code, f'namespace: *b"{namespace}\\0",', 7,
         "IHK provider import namespace",
     )
     _require_active_count(
-        text, code, 'license: *b"GPL\\0",', 5, "IHK provider GPL export"
+        text, code, 'license: *b"GPL\\0",', 7, "IHK provider GPL export"
     )
-    if code.count(registry) != 10:
+    if code.count(registry) != 12:
         raise ValidationError("IHK provider registry singleton has unexpected reachability")
     if re.search(
-        r"pr_(?:info|err|warn)!\s*\([^;]*\btoken\b",
+        r"pr_(?:info|err|warn)!\s*\([^;]*\b(?:token|receipt)\b",
         code,
         re.MULTILINE | re.DOTALL,
     ):
@@ -752,7 +851,7 @@ def _validate_support_sources(
     if device_contract.get("gate_id") != "IHK-004-device-registry-foundation":
         raise ValidationError("device registry support contract identity differs")
     if device_contract.get("foundation_status") != (
-            "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only"):
+            "production-crate-owned-allocation-free-device-registry-lifecycle-and-open-receipt-boundary"):
         raise ValidationError("device registry support contract differs from the provider-lease boundary")
     if (device_source.get("path") != device_item["path"] or
             device_source.get("sha256") != device_item["sha256"]):
@@ -769,6 +868,8 @@ def _validate_support_sources(
                 contract["provider_lease"]["compatibility_exports"][1],
                 contract["provider_lease"]["attach_symbol"],
                 contract["provider_lease"]["detach_symbol"],
+                contract["provider_lease"]["open_lease"]["acquire_symbol"],
+                contract["provider_lease"]["open_lease"]["close_symbol"],
             ],
     }:
         raise ValidationError("device registry contract differs from crate-root attachment")
@@ -780,6 +881,17 @@ def _validate_support_sources(
         or device_lease.get("callback_abi") != contract["provider_lease"]["callback_abi"]
         or device_lease.get("compatibility_exports") != contract["provider_lease"]["compatibility_exports"]
         or device_lease.get("lifecycle_callbacks") != contract["provider_lease"]["lifecycle_callbacks"]
+        or device_lease.get("open_close") != {
+            "close_return": "void-or-fail-stop",
+            "close_symbol": contract["provider_lease"]["open_lease"]["close_symbol"],
+            "concurrent_shared_receipts": contract["provider_lease"]["open_lease"]["multiple_shared_opens"],
+            "duplicate_close_detectable_while_other_references_exist": contract["provider_lease"]["open_lease"]["duplicate_close_detectable_while_other_references_exist"],
+            "open_return": "positive-generation-token-or-negative-errno",
+            "open_symbol": contract["provider_lease"]["open_lease"]["acquire_symbol"],
+            "raw_pointer": contract["provider_lease"]["open_lease"]["raw_pointer"],
+            "source_validated": True,
+            "trusted_noncopy_owner_balance_required": contract["provider_lease"]["open_lease"]["trusted_noncopy_owner_balance_required"],
+        }
         or device_lease.get("token", {}).get("version") != contract["provider_lease"]["token_version"]
         or device_lease.get("callback_payload_reachable") is not False
         or device_lease.get("device_node_reachable") is not False
@@ -1060,6 +1172,8 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
             contract["provider_lease"]["compatibility_exports"][1],
             contract["provider_lease"]["attach_symbol"],
             contract["provider_lease"]["detach_symbol"],
+            contract["provider_lease"]["open_lease"]["acquire_symbol"],
+            contract["provider_lease"]["open_lease"]["close_symbol"],
         ],
         "source_sha256": _sha256(source_path),
         "transitive_module_count": len(module_paths),
@@ -1250,6 +1364,8 @@ def validate_module_artifact(
         "lifecycle=load",
         "provider_lease=attach",
         "provider_lease=detach",
+        "provider_open=acquire",
+        "provider_open=release",
         "provider_registry=empty",
         "lifecycle=unload",
     ):

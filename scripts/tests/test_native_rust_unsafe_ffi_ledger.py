@@ -45,18 +45,18 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 12)
-        self.assertEqual(len(discovery["sites"]), 40)
+        self.assertEqual(len(discovery["sites"]), 48)
         self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 28,
-            "ihk_smp_x86_64": 10,
+            "ihk": 34,
+            "ihk_smp_x86_64": 12,
             "mcctrl": 2,
         })
         self.assertEqual(value["coverage"]["by_kind"], {
-            "extern_function": 10,
-            "ffi_export": 10,
+            "extern_function": 12,
+            "ffi_export": 14,
             "foreign_block": 2,
             "mutable_static": 1,
-            "unsafe_block": 12,
+            "unsafe_block": 14,
             "unsafe_function": 1,
             "unsafe_impl": 4,
         })
@@ -91,7 +91,7 @@ class CurrentLedgerTests(unittest.TestCase):
             ["RS011-IHK-0021", "RS011-IHK-0022"]
             + ["RS011-IHK-%04d" % index for index in range(1, 4)]
             + ["RS011-IHK-%04d" % index for index in range(15, 21)]
-            + ["RS011-IHK-%04d" % index for index in range(23, 29)],
+            + ["RS011-IHK-%04d" % index for index in range(23, 35)],
         )
         smp_sites = [
             site["id"]
@@ -108,6 +108,8 @@ class CurrentLedgerTests(unittest.TestCase):
                 "RS011-SMP-0011",
                 "RS011-SMP-0006",
                 "RS011-SMP-0007",
+                "RS011-SMP-0012",
+                "RS011-SMP-0013",
                 "RS011-SMP-0002",
                 "RS011-SMP-0003",
                 "RS011-SMP-0005",
@@ -141,14 +143,14 @@ class CurrentLedgerTests(unittest.TestCase):
             ["RS011-IHK-0021", "RS011-IHK-0022"]
             + ["RS011-IHK-%04d" % index for index in range(1, 4)]
             + ["RS011-IHK-%04d" % index for index in range(15, 21)]
-            + ["RS011-IHK-%04d" % index for index in range(23, 29)]
+            + ["RS011-IHK-%04d" % index for index in range(23, 35)]
             + ["RS011-IHK-%04d" % index for index in range(4, 15)],
         )
 
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "658844ede05c312e44fc8e598bc9c6567c213f80d61e4092b8c9b811eff7a1c4",
+            "0a62ed983423ed897ea20eeced06fea6864e67cfa4fa14676cb352592e6a1c85",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
@@ -184,6 +186,29 @@ class CurrentLedgerTests(unittest.TestCase):
             + sites["RS011-IHK-0027"]["context_constraints"]
         )
         self.assertIn("must be zero", zero_ref_text)
+        self.assertIn(
+            "all five relocations",
+            " ".join(sites["RS011-SMP-0001"]["context_constraints"]),
+        )
+        for site_id in (
+            "RS011-IHK-0029",
+            "RS011-IHK-0030",
+            "RS011-IHK-0032",
+            "RS011-IHK-0033",
+        ):
+            joined = " ".join(
+                sites[site_id]["caller_obligations"]
+                + sites[site_id]["context_constraints"]
+            ).lower()
+            self.assertIn("receipt" if site_id != "RS011-IHK-0029" else "open reference", joined)
+            self.assertIn("unwind", joined)
+        for site_id in ("RS011-SMP-0012", "RS011-SMP-0013"):
+            joined = " ".join(
+                sites[site_id]["caller_obligations"]
+                + sites[site_id]["context_constraints"]
+            ).lower()
+            self.assertIn("non-copy", joined)
+            self.assertIn("receipt", joined)
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (

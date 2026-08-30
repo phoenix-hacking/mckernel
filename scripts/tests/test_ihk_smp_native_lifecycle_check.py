@@ -3,6 +3,7 @@ import io
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -42,6 +43,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             (
                 self.contract["resource_foundation"]["fixture"]["positive_path"],
                 self.contract["resource_foundation"]["fixture"]["negative_path"],
+                self.contract["control_device_shell"]["noncopy_fixture"]["path"],
             )
         )
         for relative in relative_paths:
@@ -80,6 +82,8 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_provider_lifecycle_v1",
                 "ihk_smp_provider_attach_v2",
                 "ihk_smp_provider_detach_v2",
+                "ihk_smp_provider_open_v1",
+                "ihk_smp_provider_close_v1",
             ],
             summary["provider_symbols"],
         )
@@ -89,6 +93,11 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertFalse(summary["resource_foundation_linux_reachable"])
         self.assertEqual(29, summary["resource_foundation_tests"])
+        self.assertEqual("mcd0", summary["control_device_name"])
+        self.assertTrue(summary["control_device_source_reachable"])
+        self.assertEqual("TODO", summary["control_device_gate_status"])
+        self.assertFalse(summary["control_device_credit_eligible"])
+        self.assertFalse(summary["control_device_runtime_proven"])
 
     def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
         resource = self.contract["crate_modules"][0]
@@ -140,6 +149,9 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertIn("SOURCE-CONTRACT-VERIFIED", rendered)
         self.assertIn("provider_lease=TODO", rendered)
         self.assertIn("provider_lease_runtime=NOT_PROVEN", rendered)
+        self.assertIn("control_device=mcd0", rendered)
+        self.assertIn("control_device_gate=TODO", rendered)
+        self.assertIn("control_device_runtime=NOT_PROVEN", rendered)
         self.assertIn("tracker_credit=FORBIDDEN", rendered)
         self.assertIn("rocky_build_load=NOT_EVALUATED", rendered)
         self.assertNotIn("PASS", rendered)
@@ -290,7 +302,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             with self.subTest(mutation=old):
                 source_path.write_text(original.replace(old, new, 1), encoding="utf-8")
                 with self.assertRaisesRegex(
-                    lifecycle.ValidationError, "three-symbol provider-symbol import"
+                    lifecycle.ValidationError, "five-symbol provider-symbol import"
                 ):
                     lifecycle._validate_rust_source(
                         source_path.read_text(encoding="utf-8"), self.contract
@@ -335,7 +347,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             (
                 "provider_lease: Option<ProviderLease>,",
                 "provider_lease: ProviderLease,",
-                "optional provider lease owner",
+                "pinned mcd0/provider owners",
             ),
             (
                 "provider_lease: Some(provider_lease),",
@@ -345,7 +357,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             (
                 "drop(self.provider_lease.take());",
                 "let _ = self.provider_lease.take();",
-                "retire the provider lease",
+                "registration lifecycle differs",
             ),
         )
         for old, new, error in cases:
@@ -369,7 +381,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             + detach
             + without_detach[unload_end:]
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "before its unload log"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "before provider detach"):
             lifecycle._validate_rust_source(reordered, self.contract)
 
     def test_commented_provider_detach_cannot_authorize_a_noop_drop(self) -> None:
@@ -396,7 +408,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             '        unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };',
             1,
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "raw token"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease scalar"):
             lifecycle._validate_rust_source(mutated, self.contract)
 
     def test_provider_lease_contract_cannot_promote_credit_or_runtime(self) -> None:
@@ -418,6 +430,280 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                     lifecycle.ValidationError, "provider lease differs or overclaims"
                 ):
                     lifecycle._validate_contract(contract)
+
+    def test_control_device_contract_is_bounded_and_noncrediting(self) -> None:
+        cases = (
+            ("credit_eligible", True),
+            ("gate_status", "PASS"),
+            ("rocky_runtime_validated", True),
+            ("runtime_behavior_proven", True),
+            ("tracker_credit", True),
+            ("provider_operation_callbacks_reachable", True),
+            ("provider_attach_before_registration", False),
+            ("raw_data_pointer", True),
+            ("registration_failure_releases_provider_lease", False),
+            ("usercopy_reachable", True),
+            ("valid_ioctl_commands", [1]),
+        )
+        for field, value in cases:
+            with self.subTest(field=field):
+                contract = json.loads(json.dumps(self.contract))
+                contract["control_device_shell"][field] = value
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError, "control-device shell differs or overclaims"
+                ):
+                    lifecycle._validate_contract(contract)
+        for gate in ("IHK-003", "IHK-004", "RS-006"):
+            with self.subTest(gate=gate):
+                contract = json.loads(json.dumps(self.contract))
+                contract["control_device_shell"]["gate_claims"][gate] = True
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError, "control-device shell differs or overclaims"
+                ):
+                    lifecycle._validate_contract(contract)
+        for field, value in (
+            ("concurrent_shared_opens", False),
+            ("duplicate_close_detectable_while_other_references_exist", True),
+            ("same_generation_token_may_repeat", False),
+            ("provider_policy", "single-outstanding-receipt"),
+            ("trusted_noncopy_owner_balance_required", False),
+        ):
+            with self.subTest(open_receipt=field):
+                contract = json.loads(json.dumps(self.contract))
+                contract["control_device_shell"]["open_receipt"][field] = value
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError, "control-device shell differs or overclaims"
+                ):
+                    lifecycle._validate_contract(contract)
+
+    def test_control_device_scalar_imports_are_exact(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            (
+                '#[link_name = "ihk_smp_provider_open_v1"]',
+                '#[link_name = "wrong_open"]',
+            ),
+            (
+                "fn ihk_smp_provider_open_v1(minor: u32) -> i64;",
+                "fn ihk_smp_provider_open_v1(minor: u64) -> i64;",
+            ),
+            (
+                '#[link_name = "ihk_smp_provider_close_v1"]',
+                '#[link_name = "wrong_close"]',
+            ),
+            (
+                "fn ihk_smp_provider_close_v1(receipt: i64);",
+                "fn ihk_smp_provider_close_v1(receipt: u64);",
+            ),
+        )
+        for old, new in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(
+                lifecycle.ValidationError, "five-symbol provider-symbol import"
+            ):
+                lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+
+    def test_control_device_receipt_and_fops_owner_are_fail_closed(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            (
+                '#[must_use = "the provider-open receipt must remain owned until file release"]',
+                '#[derive(Copy, Clone)]\n#[must_use = "the provider-open receipt must remain owned until file release"]',
+                "ProviderOpenLease may not implement Copy or Clone",
+            ),
+            (
+                "const MODULE: &'static ThisModule = &THIS_MODULE;",
+                "const MODULE: &'static ThisModule = &OTHER_MODULE;",
+                "open-receipt ownership path",
+            ),
+            (
+                'name: c_str!("mcd0"),',
+                'name: c_str!("mcd1"),',
+                "pinned literal mcd0 registration",
+            ),
+            (
+                "Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)",
+                "Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| EIO)",
+                "open-receipt ownership path",
+            ),
+            (
+                "Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)",
+                "Box::new(ProviderOpenLease::acquire()?, GFP_ATOMIC).map_err(|_| ENOMEM)",
+                "open-receipt ownership path",
+            ),
+        )
+        for old, new, error in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(
+                lifecycle.ValidationError, error
+            ):
+                lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+
+        close = "unsafe { ihk_smp_provider_close_v1(self.receipt) };"
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "open-receipt ownership path|call each imported"
+        ):
+            lifecycle._validate_rust_source(
+                source.replace(close, "/* {0} */".format(close), 1), self.contract
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease scalar"):
+            lifecycle._validate_rust_source(
+                source.replace(
+                    close,
+                    'pr_err!("provider_open receipt={}\\n", self.receipt);\n        '
+                    + close,
+                    1,
+                ),
+                self.contract,
+            )
+
+    def test_control_device_ioctl_surface_is_uniformly_rejecting(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        first = source.index("        Err(EINVAL)", source.index("fn ioctl("))
+        with self.assertRaisesRegex(lifecycle.ValidationError, "rejecting native ioctl"):
+            lifecycle._validate_rust_source(
+                source[:first] + source[first:].replace("Err(EINVAL)", "Ok(0)", 1),
+                self.contract,
+            )
+        compat = source.index("        Err(EINVAL)", source.index("fn compat_ioctl("))
+        with self.assertRaisesRegex(lifecycle.ValidationError, "explicit compat ioctl"):
+            lifecycle._validate_rust_source(
+                source[:compat] + source[compat:].replace("Err(EINVAL)", "Ok(0)", 1),
+                self.contract,
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unsupported file operation"):
+            lifecycle._validate_rust_source(
+                source + "\nfn read() -> Result<usize> { Ok(0) }\n", self.contract
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "forbidden usercopy"):
+            lifecycle._validate_rust_source(
+                source + "\nfn hidden_usercopy() { let _ = UserSlice; }\n",
+                self.contract,
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "implicit compat"):
+            lifecycle._validate_rust_source(
+                source + "\nfn hidden_fallback() { let _ = compat_ptr_ioctl; }\n",
+                self.contract,
+            )
+        custom_release = source.replace(
+            "    fn ioctl(\n",
+            "    fn release(device: Box<ProviderOpenLease>) {\n"
+            "        core::mem::forget(device);\n"
+            "    }\n\n"
+            "    fn ioctl(\n",
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "default release"):
+            lifecycle._validate_rust_source(custom_release, self.contract)
+        forgotten = source.replace(
+            "    fn acquire() -> Result<Self> {\n",
+            "    fn acquire() -> Result<Self> {\n"
+            "        core::mem::forget(ProviderOpenLease { receipt: 1 });\n",
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "forgets an owned receipt"):
+            lifecycle._validate_rust_source(forgotten, self.contract)
+        raw_pointer = source.replace(
+            "struct IhkSmpControlDevice;",
+            "fn hidden_raw_pointer(_pointer: *mut core::ffi::c_void) {}\n\n"
+            "struct IhkSmpControlDevice;",
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw pointer"):
+            lifecycle._validate_rust_source(raw_pointer, self.contract)
+
+    def test_control_device_registration_rollback_and_teardown_order_are_exact(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        attach_start = source.index("        let provider_lease = ProviderLease::attach()?;")
+        attach_end = attach_start + len(
+            "        let provider_lease = ProviderLease::attach()?;\n"
+        )
+        register_start = source.index("        let control_device = Box::pin_init(")
+        register_end = source.index("        pr_info!(", register_start)
+        registration = source[register_start:register_end]
+        attach = source[attach_start:attach_end]
+        reordered = (
+            source[:attach_start]
+            + registration
+            + attach
+            + source[register_end:]
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "attach, register mcd0"):
+            lifecycle._validate_rust_source(reordered, self.contract)
+
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "pinned literal mcd0 registration"
+        ):
+            lifecycle._validate_rust_source(
+                source.replace(
+                    "            GFP_KERNEL,\n        )?;",
+                    "            GFP_ATOMIC,\n        )?;",
+                    1,
+                ),
+                self.contract,
+            )
+
+        registration_tail = "            GFP_KERNEL,\n        )?;"
+        fallible_after_registration = source.replace(
+            registration_tail,
+            registration_tail
+            + "\n        let _late = Box::new(0_u8, GFP_KERNEL).map_err(|_| ENOMEM)?;",
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "final fallible"):
+            lifecycle._validate_rust_source(
+                fallible_after_registration, self.contract
+            )
+
+        ordered_drop = (
+            "drop(self.control_device.take());\n"
+            "        drop(self.provider_lease.take());"
+        )
+        reversed_drop = (
+            "drop(self.provider_lease.take());\n"
+            "        drop(self.control_device.take());"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "deregister mcd0"):
+            lifecycle._validate_rust_source(
+                source.replace(ordered_drop, reversed_drop, 1), self.contract
+            )
+
+    def test_control_device_noncopy_fixture_is_bound_and_compile_fails(self) -> None:
+        fixture = self.contract["control_device_shell"]["noncopy_fixture"]
+        self.assertEqual(
+            self.repo / fixture["path"],
+            lifecycle._validate_control_device_fixture(self.repo, self.contract),
+        )
+        self.mutate_text(fixture["path"], "_second_owner", "_second_ownez")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "fixture identity differs"):
+            lifecycle._validate_control_device_fixture(self.repo, self.contract)
+
+        rustc = shutil.which("rustc")
+        if rustc is None:
+            self.skipTest("rustc is unavailable for the compile-fail ownership fixture")
+        with tempfile.TemporaryDirectory(prefix="ihk-smp-open-noncopy-rustc-") as temporary:
+            result = subprocess.run(
+                [
+                    rustc,
+                    "--edition=2021",
+                    str(REPO_ROOT / fixture["path"]),
+                    "--crate-name",
+                    "ihk_smp_provider_open_lease_compile_fail",
+                    "--out-dir",
+                    temporary,
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("use of moved value", result.stderr)
 
     def test_manual_dependency_modinfo_is_rejected(self) -> None:
         source = self.repo / self.contract["production_source"]
@@ -490,7 +776,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             'pr_info!("provider_lease=attach token={} status=live minor=0\\n", token);',
             1,
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease token"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease scalar"):
             lifecycle._validate_provider_source(mutated, self.contract)
 
     def test_provider_source_rejects_additional_ffi_boundaries(self) -> None:

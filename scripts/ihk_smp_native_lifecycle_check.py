@@ -109,6 +109,76 @@ EXPECTED_PROVIDER_LEASE = {
     "tracker_credit": False,
     "unknown_status_errno": -117,
 }
+EXPECTED_CONTROL_DEVICE_SHELL = {
+    "close_symbol": "ihk_smp_provider_close_v1",
+    "compat_ioctl": {
+        "all_commands_errno": -22,
+        "explicit_when_config_compat": True,
+        "implicit_pointer_conversion_fallback": False,
+    },
+    "credit_eligible": False,
+    "default_release_drops_receipt": True,
+    "device_name": "mcd0",
+    "device_node_source_reachable": True,
+    "file_operations_owner": "THIS_MODULE",
+    "gate_claims": {
+        "IHK-003": False,
+        "IHK-004": False,
+        "RS-006": False,
+    },
+    "gate_status": "TODO",
+    "minor": 0,
+    "native_ioctl": {
+        "all_commands_errno": -22,
+        "explicit": True,
+    },
+    "noncopy_fixture": {
+        "claim_scope": "Rust language compile-fail shape only; not a kernel build or runtime result",
+        "minimum_rustc": "1.92.0",
+        "path": "scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs",
+        "sha256": "eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a",
+        "size": 541,
+    },
+    "open_allocation_failure_releases_receipt": True,
+    "open_close_abi": "scalar-only",
+    "open_receipt": {
+        "close_exactly_once": True,
+        "concurrent_shared_opens": True,
+        "duplicate_close_detectable_while_other_references_exist": False,
+        "non_copy": True,
+        "non_clone": True,
+        "positive": True,
+        "provider_policy": "shared-reference-counted-generation-receipts",
+        "raw_value_logged": False,
+        "same_generation_token_may_repeat": True,
+        "trusted_noncopy_owner_balance_required": True,
+    },
+    "open_symbol": "ihk_smp_provider_open_v1",
+    "pinned_registration": True,
+    "provider_operation_callbacks_reachable": False,
+    "provider_attach_before_registration": True,
+    "raw_data_pointer": False,
+    "registration_failure_releases_provider_lease": True,
+    "rocky_runtime_validated": False,
+    "runtime_behavior_proven": False,
+    "scope": "pinned SMP-owned mcd0 shell with scalar per-file open receipt and uniformly rejecting native and compat ioctls; no valid device operation",
+    "teardown_order": [
+        "deregister-control-device",
+        "detach-provider-lease",
+        "emit-unload-diagnostic",
+    ],
+    "tracker_credit": False,
+    "unsupported_file_operations": [
+        "read",
+        "read_iter",
+        "write",
+        "write_iter",
+        "mmap",
+        "poll",
+    ],
+    "usercopy_reachable": False,
+    "valid_ioctl_commands": [],
+}
 
 
 class ValidationError(Exception):
@@ -551,6 +621,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         contract,
         {
             "artifact_policy",
+            "control_device_shell",
             "crate_modules",
             "dependency_contract",
             "gate_id",
@@ -584,6 +655,8 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("SMP resource foundation differs or overclaims readiness")
     if contract["provider_lease"] != EXPECTED_PROVIDER_LEASE:
         raise ValidationError("SMP provider lease differs or overclaims readiness")
+    if contract["control_device_shell"] != EXPECTED_CONTROL_DEVICE_SHELL:
+        raise ValidationError("SMP mcd0 control-device shell differs or overclaims readiness")
 
     _require_keys(
         contract["artifact_policy"],
@@ -717,17 +790,20 @@ def _expected_modinfo(contract: dict[str, Any]) -> tuple[set[str], set[str]]:
     return loadable, builtin
 
 
-def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str]:
+def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str]:
     lease = contract["provider_lease"]
+    control = contract["control_device_shell"]
     return (
         contract["dependency_contract"]["provider_symbol"],
         lease["attach_symbol"],
         lease["detach_symbol"],
+        control["open_symbol"],
+        control["close_symbol"],
     )
 
 
 def _provider_import(contract: dict[str, Any]) -> str:
-    anchor, attach, detach = _provider_symbols(contract)
+    anchor, attach, detach, open_symbol, close_symbol = _provider_symbols(contract)
     return (
         'extern "C" {\n'
         f'    #[link_name = "{anchor}"]\n'
@@ -741,6 +817,10 @@ def _provider_import(contract: dict[str, Any]) -> str:
         "    ) -> i64;\n"
         f'    #[link_name = "{detach}"]\n'
         f"    fn {detach}(token: i64, exit: Option<IhkSmpProviderExitV2>);\n"
+        f'    #[link_name = "{open_symbol}"]\n'
+        f"    fn {open_symbol}(minor: u32) -> i64;\n"
+        f'    #[link_name = "{close_symbol}"]\n'
+        f"    fn {close_symbol}(receipt: i64);\n"
         "}"
     )
 
@@ -772,7 +852,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     provider_import = _provider_import(contract)
     _require_active_count(
         text, code, provider_import, 1,
-        "Rust exact audited three-symbol provider-symbol import",
+        "Rust exact audited five-symbol provider-symbol import",
     )
     callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
     callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
@@ -872,8 +952,153 @@ struct ProviderLease {
         code,
         re.DOTALL,
     ):
-        if re.search(r"\btoken\b", diagnostic.group("body")):
-            raise ValidationError("Rust provider lease diagnostics may not expose the raw token")
+        if re.search(r"\b(?:token|receipt)\b", diagnostic.group("body")):
+            raise ValidationError("Rust provider diagnostics may not expose a raw lease scalar")
+
+    control = contract["control_device_shell"]
+    open_symbol = control["open_symbol"]
+    close_symbol = control["close_symbol"]
+    expected_open_owner = '''#[must_use = "the provider-open receipt must remain owned until file release"]
+struct ProviderOpenLease {
+    receipt: i64,
+}'''
+    _require_active_count(
+        text, code, expected_open_owner, 1,
+        "Rust exact non-Copy per-file provider-open receipt owner",
+    )
+    if re.search(
+        r"#\[derive\([^\]]*(?:Copy|Clone)[^\]]*\)\]\s*"
+        r"(?:#\[[^\]]+\]\s*)*struct\s+ProviderOpenLease\b",
+        code,
+    ) or re.search(r"\bimpl\s+(?:Copy|Clone)\s+for\s+ProviderOpenLease\b", code):
+        raise ValidationError("Rust ProviderOpenLease may not implement Copy or Clone")
+
+    required_open_fragments = (
+        "impl ProviderOpenLease {",
+        "fn acquire() -> Result<Self>",
+        f"{open_symbol}(IHK_SMP_CONTROL_DEVICE_MINOR)",
+        "if receipt <= 0 {",
+        "return Err(provider_status_error(receipt));",
+        "Ok(Self { receipt })",
+        "impl Drop for ProviderOpenLease {",
+        f"unsafe {{ {close_symbol}(self.receipt) }};",
+        "type Ptr = Box<ProviderOpenLease>;",
+        "const MODULE: &'static ThisModule = &THIS_MODULE;",
+        "Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)",
+    )
+    for fragment in required_open_fragments:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                "Rust mcd0 open-receipt ownership path differs at: {0}".format(fragment)
+            )
+    if code.count(f"{open_symbol}(") != 2 or code.count(f"{close_symbol}(") != 2:
+        raise ValidationError(
+            "Rust mcd0 shell must call each imported scalar open/close function exactly once"
+        )
+    exact_open_method = '''fn open() -> Result<Self::Ptr> {
+        // Linux 6.12's `BoxExt::new` takes ownership before allocation.  If
+        // allocation fails, the temporary ProviderOpenLease is dropped and
+        // closes the already-acquired scalar receipt before ENOMEM is returned.
+        Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)
+    }'''
+    _require_active_count(
+        text, code, exact_open_method, 1,
+        "Rust exact fallible mcd0 open allocation/rollback method",
+    )
+    if _literal_usize_constant(text, "IHK_SMP_PARAMETER_COUNT") != len(parameters):
+        raise ValidationError("Rust parameter count differs from the six-parameter contract")
+    control_minor_matches = list(re.finditer(
+        r"^const IHK_SMP_CONTROL_DEVICE_MINOR:\s*u32\s*=\s*([0-9]+);$",
+        code,
+        re.MULTILINE,
+    ))
+    if len(control_minor_matches) != 1 or int(control_minor_matches[0].group(1)) != control["minor"]:
+        raise ValidationError("Rust mcd0 shell minor differs from exact scalar minor zero")
+
+    native_ioctl = '''fn ioctl(
+        _device: &ProviderOpenLease,
+        _cmd: u32,
+        _arg: usize,
+    ) -> Result<isize> {
+        Err(EINVAL)
+    }'''
+    compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
+    fn compat_ioctl(
+        _device: &ProviderOpenLease,
+        _cmd: u32,
+        _arg: usize,
+    ) -> Result<isize> {
+        Err(EINVAL)
+    }'''
+    _require_active_count(
+        text, code, native_ioctl, 1,
+        "Rust mcd0 uniformly rejecting native ioctl",
+    )
+    _require_active_count(
+        text, code, compat_ioctl, 1,
+        "Rust mcd0 uniformly rejecting explicit compat ioctl",
+    )
+    if "compat_ptr_ioctl" in code:
+        raise ValidationError("Rust mcd0 shell may not use implicit compat pointer conversion")
+    unsupported = "|".join(
+        re.escape(name) for name in control["unsupported_file_operations"]
+    )
+    if re.search(r"\bfn\s+(?:{0})\s*\(".format(unsupported), code):
+        raise ValidationError("Rust mcd0 shell exposes an unsupported file operation")
+    if re.search(r"\bfn\s+release\s*\(", code):
+        raise ValidationError(
+            "Rust mcd0 shell must use the default release that drops its receipt owner"
+        )
+    usercopy = re.search(
+        r"\b(?:User(?:Ptr|Slice[A-Za-z0-9_]*)|uaccess|copy_(?:from|to)_user)\b",
+        code,
+    )
+    if usercopy:
+        raise ValidationError(
+            "Rust mcd0 shell exposes forbidden usercopy: {0}".format(
+                usercopy.group(0)
+            )
+        )
+    control_start = _active_fragment_positions(text, code, expected_open_owner)[0]
+    control_end = code.index("union KernelParameterValue", control_start)
+    control_code = code[control_start:control_end]
+    if re.search(r"\*(?:const|mut)\b|\bmem::forget\b", control_code):
+        raise ValidationError(
+            "Rust mcd0 shell exposes a raw pointer or forgets an owned receipt"
+        )
+    if code.count("impl MiscDevice for IhkSmpControlDevice") != 1:
+        raise ValidationError("Rust source must contain one exact mcd0 MiscDevice implementation")
+
+    registration = '''let control_device = Box::pin_init(
+            MiscDeviceRegistration::<IhkSmpControlDevice>::register(
+                MiscDeviceOptions {
+                    name: c_str!("mcd0"),
+                },
+            ),
+            GFP_KERNEL,
+        )?;'''
+    _require_active_count(
+        text, code, registration, 1,
+        "Rust exact pinned literal mcd0 registration",
+    )
+    control_owner = '''struct IhkSmpModule {
+    control_device: Option<
+        core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>,
+    >,
+    provider_lease: Option<ProviderLease>,
+}'''
+    if code.count(control_owner) != 1:
+        raise ValidationError("Rust SMP module lacks the exact pinned mcd0/provider owners")
+    required_control_lifecycle = (
+        "control_device: Some(control_device),",
+        "drop(self.control_device.take());",
+        "drop(self.provider_lease.take());",
+    )
+    for fragment in required_control_lifecycle:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                "Rust mcd0 registration lifecycle differs at: {0}".format(fragment)
+            )
 
     required_abi_fragments = (
         '#[link_section = "__param"]',
@@ -978,11 +1203,6 @@ struct ProviderLease {
 
     if "impl kernel::Module for IhkSmpModule" not in code or "impl Drop for IhkSmpModule" not in code:
         raise ValidationError("Rust source lacks paired module init/drop lifecycle")
-    module_owner = """struct IhkSmpModule {
-    provider_lease: Option<ProviderLease>,
-}"""
-    if code.count(module_owner) != 1:
-        raise ValidationError("Rust SMP module lacks the exact optional provider lease owner")
     if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code:
         raise ValidationError("Rust SMP lifecycle lacks its initialization path")
     if code.count("let provider_lease = ProviderLease::attach()?;") != 1:
@@ -998,21 +1218,35 @@ struct ProviderLease {
             f"Rust stable {phase} lifecycle diagnostic",
         )
     attach_at = code.index("let provider_lease = ProviderLease::attach()?;")
+    register_at = code.index("let control_device = Box::pin_init(")
     load_at = _active_fragment_positions(
         text, code, f'"{contract["lifecycle_logs"]["load"]}\\n"'
     )[0]
+    retain_control_at = code.index("control_device: Some(control_device),")
     retain_at = code.index("provider_lease: Some(provider_lease),")
+    deregister_at = code.index("drop(self.control_device.take());")
     detach_at = code.index("drop(self.provider_lease.take());")
     unload_at = _active_fragment_positions(
         text, code, f'"{contract["lifecycle_logs"]["unload"]}\\n"'
     )[0]
-    if not attach_at < load_at < retain_at:
+    if not attach_at < register_at < load_at < retain_control_at < retain_at:
         raise ValidationError(
-            "Rust SMP initialization must acquire, log, then retain the provider lease"
+            "Rust SMP initialization must attach, register mcd0, log, then retain both owners"
         )
-    if not detach_at < unload_at:
+    construction_at = code.index("Ok(Self {", attach_at)
+    attach_end = attach_at + len("let provider_lease = ProviderLease::attach()?;")
+    if code[attach_end:register_at].strip():
         raise ValidationError(
-            "Rust SMP teardown must detach the provider lease before its unload log"
+            "Rust SMP provider attach must immediately precede mcd0 registration"
+        )
+    register_end = register_at + len(registration)
+    if "?" in code[register_end:construction_at]:
+        raise ValidationError(
+            "Rust SMP mcd0 registration must remain the final fallible initialization step"
+        )
+    if not deregister_at < detach_at < unload_at:
+        raise ValidationError(
+            "Rust SMP teardown must deregister mcd0 before provider detach and unload log"
         )
     for constant in (
         "IHK_SMP_PARAMETER_COUNT",
@@ -1101,7 +1335,9 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
 
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     code = _mask_rust_comments_and_literals(text)
-    symbol, attach_symbol, detach_symbol = _provider_symbols(contract)
+    symbol, attach_symbol, detach_symbol, open_symbol, close_symbol = _provider_symbols(
+        contract
+    )
     compatibility_attach, compatibility_detach = contract["provider_lease"][
         "compatibility_exports"
     ]
@@ -1151,6 +1387,16 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         "    exit();\n    unregister.commit()",
         f'#[export_name = "__export_symbol_{detach_symbol}"]',
         f"symbol: {detach_symbol} as *const () as *const u8",
+        f'#[export_name = "{open_symbol}"]',
+        f'pub extern "C" fn {open_symbol}(minor: u32) -> i64',
+        "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+        f'#[export_name = "__export_symbol_{open_symbol}"]',
+        f"symbol: {open_symbol} as *const () as *const u8",
+        f'#[export_name = "{close_symbol}"]',
+        f'pub extern "C" fn {close_symbol}(receipt: i64)',
+        "IHK_DEVICE_REGISTRY.release_owned_open_token(receipt)",
+        f'#[export_name = "__export_symbol_{close_symbol}"]',
+        f"symbol: {close_symbol} as *const () as *const u8",
     )
     for fragment in required:
         _require_active_count(
@@ -1161,6 +1407,8 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         compatibility_detach,
         attach_symbol,
         detach_symbol,
+        open_symbol,
+        close_symbol,
     ):
         _require_active_count(
             text, code, f'#[export_name = "{lease_symbol}"]', 1,
@@ -1171,15 +1419,15 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
             "native IHK provider lease export record",
         )
     _require_active_count(
-        text, code, '#[link_section = ".export_symbol"]', 5,
+        text, code, '#[link_section = ".export_symbol"]', 7,
         "native IHK provider export_symbol record",
     )
     _require_active_count(
-        text, code, 'license: *b"GPL\\0"', 5,
+        text, code, 'license: *b"GPL\\0"', 7,
         "native IHK provider GPL export",
     )
     _require_active_count(
-        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 5,
+        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 7,
         "native IHK provider versioned namespace",
     )
     callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
@@ -1192,6 +1440,8 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     )
     attach_extern = f'pub extern "C" fn {attach_symbol}('
     detach_extern = f'pub extern "C" fn {detach_symbol}('
+    open_extern = f'pub extern "C" fn {open_symbol}(minor: u32) -> i64'
+    close_extern = f'pub extern "C" fn {close_symbol}(receipt: i64)'
     _validate_rust_escape_hatches(
         text,
         "native IHK provider",
@@ -1202,20 +1452,22 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
             compatibility_detach_extern,
             attach_extern,
             detach_extern,
+            open_extern,
+            close_extern,
         ),
     )
-    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 4:
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 6:
         raise ValidationError(
-            "native IHK provider must expose exactly four reviewed C-ABI functions"
+            "native IHK provider must expose exactly six reviewed C-ABI functions"
         )
     for diagnostic in re.finditer(
         r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
         code,
         re.DOTALL,
     ):
-        if re.search(r"\btoken\b", diagnostic.group("body")):
+        if re.search(r"\b(?:token|receipt)\b", diagnostic.group("body")):
             raise ValidationError(
-                "native IHK provider diagnostics may not expose the raw lease token"
+                "native IHK provider diagnostics may not expose a raw lease scalar"
             )
 
 
@@ -1310,6 +1562,36 @@ def _validate_stage_manifest(
         raise ValidationError("stage manifest redirects the SMP resource policy")
     if resource.get("sha256") != _sha256(resource_path):
         raise ValidationError("stage manifest SMP resource policy digest is stale")
+
+
+def _validate_control_device_fixture(repo: Path, contract: dict[str, Any]) -> Path:
+    fixture = contract["control_device_shell"]["noncopy_fixture"]
+    path = _repo_file(repo, fixture["path"], "SMP provider-open non-Copy fixture")
+    try:
+        size = path.stat().st_size
+    except OSError as error:
+        raise ValidationError(
+            "cannot stat SMP provider-open non-Copy fixture: {0}".format(error)
+        ) from error
+    if size != fixture["size"] or _sha256(path) != fixture["sha256"]:
+        raise ValidationError("SMP provider-open non-Copy fixture identity differs")
+    text = _read_text(path, "SMP provider-open non-Copy fixture")
+    required = (
+        "struct ProviderOpenLease {\n    receipt: i64,\n}",
+        "impl Drop for ProviderOpenLease {",
+        "let _first_owner = owner;",
+        "let _second_owner = owner;",
+    )
+    for fragment in required:
+        if text.count(fragment) != 1:
+            raise ValidationError(
+                "SMP provider-open non-Copy fixture lacks exact marker: {0}".format(
+                    fragment
+                )
+            )
+    if re.search(r"\b(?:derive\s*\([^)]*(?:Copy|Clone)|impl\s+(?:Copy|Clone))", text):
+        raise ValidationError("SMP provider-open fixture may not make the receipt copyable")
+    return path
 
 
 def _validate_reference_inventory(
@@ -1407,6 +1689,7 @@ def validate_repository(
     source_path = _repo_file(repo, contract["production_source"], "production SMP Rust source")
     _validate_rust_source(_read_text(source_path, "production SMP Rust source"), contract)
     resource_path = _validate_resource_foundation(repo, contract)
+    control_fixture_path = _validate_control_device_fixture(repo, contract)
     provider_path = _repo_file(repo, contract["provider_source"], "native IHK provider source")
     _validate_provider_source(_read_text(provider_path, "native IHK provider source"), contract)
     _validate_kconfig(
@@ -1442,6 +1725,12 @@ def validate_repository(
         "provider_lease_gate_status": contract["provider_lease"]["gate_status"],
         "provider_lease_runtime_proven": False,
         "provider_symbols": list(_provider_symbols(contract)),
+        "control_device_credit_eligible": False,
+        "control_device_gate_status": contract["control_device_shell"]["gate_status"],
+        "control_device_name": contract["control_device_shell"]["device_name"],
+        "control_device_runtime_proven": False,
+        "control_device_source_reachable": True,
+        "control_device_noncopy_fixture_sha256": _sha256(control_fixture_path),
         "rocky_build_load_validated": False,
         "resource_foundation_credit_eligible": False,
         "resource_foundation_linux_reachable": False,
@@ -1727,6 +2016,8 @@ def main(argv: list[str] | None = None) -> int:
             "ihk-smp-native-lifecycle-check: "
             f"{level} module={summary['module']} parameters={summary['parameters']} "
             "provider_lease=TODO provider_lease_runtime=NOT_PROVEN "
+            "control_device=mcd0 control_device_gate=TODO "
+            "control_device_runtime=NOT_PROVEN "
             "tracker_credit=FORBIDDEN rocky_build_load=NOT_EVALUATED "
             "runtime_symbol_reference=NOT_PROVEN"
         )

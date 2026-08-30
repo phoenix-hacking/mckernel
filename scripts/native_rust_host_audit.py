@@ -157,6 +157,44 @@ pub static IHK_SMP_PROVIDER_DETACH_V2_EXPORT: IhkExportSymbolRecord = IhkExportS
 };''',
         ),
         (
+            "IHK SMP provider open ABI",
+            '''#[export_name = "ihk_smp_provider_open_v1"]
+// SAFETY: This exported C ABI carries only a u32 argument and i64 result;
+// every expected failure becomes a negative errno and no unwind may cross it.
+pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {''',
+        ),
+        (
+            "IHK SMP provider open export record",
+            '''#[export_name = "__export_symbol_ihk_smp_provider_open_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_OPEN_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\\0",
+    namespace: *b"MCKERNEL_IHK_V1\\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_open_v1 as *const () as *const u8,
+};''',
+        ),
+        (
+            "IHK SMP provider close ABI",
+            '''#[export_name = "ihk_smp_provider_close_v1"]
+// SAFETY: This exported C ABI carries only an i64 receipt; detectable ownership
+// faults fail stop inside the kernel and no unwind may cross the module boundary.
+pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {''',
+        ),
+        (
+            "IHK SMP provider close export record",
+            '''#[export_name = "__export_symbol_ihk_smp_provider_close_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_CLOSE_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\\0",
+    namespace: *b"MCKERNEL_IHK_V1\\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_close_v1 as *const () as *const u8,
+};''',
+        ),
+        (
             "IHK loadable version metadata",
             '''#[link_section = ".modinfo"]
 #[used(compiler)]
@@ -179,7 +217,7 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
             '''type IhkSmpProviderExitV2 = extern "C" fn();''',
         ),
         (
-            "IHK SMP three-symbol provider import",
+            "IHK SMP five-symbol provider import",
             '''extern "C" {
     #[link_name = "ihk_provider_lifecycle_v1"]
     static IHK_PROVIDER_LIFECYCLE_V1: u8;
@@ -192,6 +230,10 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
     ) -> i64;
     #[link_name = "ihk_smp_provider_detach_v2"]
     fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);
+    #[link_name = "ihk_smp_provider_open_v1"]
+    fn ihk_smp_provider_open_v1(minor: u32) -> i64;
+    #[link_name = "ihk_smp_provider_close_v1"]
+    fn ihk_smp_provider_close_v1(receipt: i64);
 }''',
         ),
         (
@@ -303,6 +345,26 @@ REVIEWED_RUST_BLOCK_PREFIXES = {
 // SAFETY: Linux modpost consumes this immutable relocation record to publish
 // the callback-bound detach function in MCKERNEL_IHK_V1 for the provider lifetime.
 ''',
+    "IHK SMP provider open ABI": '''#[doc(hidden)]
+// SAFETY: This C-ABI boundary accepts only the scalar device minor and returns
+// either a positive opaque provider-generation receipt or a negative errno.
+// The receipt does not encode a pointer or Rust layout.  Its open reference is
+// owned exactly once by the caller's non-Copy per-file wrapper.
+''',
+    "IHK SMP provider open export record": '''#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the scalar open function in MCKERNEL_IHK_V1 for the provider lifetime.
+''',
+    "IHK SMP provider close ABI": '''#[doc(hidden)]
+// SAFETY: This C-ABI boundary accepts only a positive scalar generation token
+// returned by open.  Shared opens intentionally receive the same scalar, so
+// the trusted caller's non-Copy per-file owners must keep calls count-balanced;
+// malformed, stale, and zero-reference closes fail stop.
+''',
+    "IHK SMP provider close export record": '''#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the scalar close function in MCKERNEL_IHK_V1 for the provider lifetime.
+''',
     "IHK loadable version metadata": '''#[cfg(MODULE)]
 #[doc(hidden)]
 ''',
@@ -354,11 +416,15 @@ REVIEWED_RUST_OUTER_BLOCKS = frozenset(
         "IHK SMP provider attach v2 export record",
         "IHK SMP provider detach v2 ABI",
         "IHK SMP provider detach v2 export record",
+        "IHK SMP provider open ABI",
+        "IHK SMP provider open export record",
+        "IHK SMP provider close ABI",
+        "IHK SMP provider close export record",
         "IHK loadable version metadata",
         "IHK built-in version metadata",
         "IHK SMP init callback type",
         "IHK SMP exit callback type",
-        "IHK SMP three-symbol provider import",
+        "IHK SMP five-symbol provider import",
         "IHK SMP init callback ABI",
         "IHK SMP exit callback ABI",
         "IHK SMP parameter descriptor section",

@@ -4,10 +4,10 @@
 The checker binds the allocation-free Rust state machine and its standalone
 fixture to the exact legacy registration/open/release/unregister oracle.  It
 also verifies the bounded production integration: the crate root owns one
-const registry and exposes only the versioned scalar SMP provider-lease ABI,
-while the ioctl contract still rejects device registration.  Source agreement
-here cannot prove a Linux cdev adapter, provider operation callbacks, exact
-Kbuild, or runtime behavior.
+const registry and exposes only versioned scalar SMP lifecycle and open-receipt
+ABIs, while the ioctl contract still rejects valid operations.  Source
+agreement here cannot prove Linux device-node reachability, provider operation
+callbacks, exact Kbuild, or runtime behavior.
 """
 
 from __future__ import print_function
@@ -29,6 +29,8 @@ IOCTL_CONTRACT_PATH = "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.js
 CONTRACT_PATH = "host-kernel/contracts/ihk-device-registry-foundation-v1.json"
 PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v2"
 PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v2"
+PROVIDER_OPEN_SYMBOL = "ihk_smp_provider_open_v1"
+PROVIDER_CLOSE_SYMBOL = "ihk_smp_provider_close_v1"
 PROVIDER_COMPATIBILITY_EXPORTS = (
     "ihk_smp_provider_attach_v1",
     "ihk_smp_provider_detach_v1",
@@ -91,6 +93,8 @@ IN_FILE_TESTS = (
     "unregister_before_open_excludes_new_references",
     "concurrent_publications_claim_unique_slots",
     "production_registry_token_round_trip_is_positive_and_exact",
+    "provider_open_tokens_count_shared_files_and_release_once_each",
+    "owned_open_token_release_fails_stop_on_unbalanced_receipt",
     "provider_token_header_version_and_generation_fail_closed",
     "provider_token_is_stale_after_unregister_and_slot_reuse",
     "dynamic_registry_cannot_issue_or_accept_production_tokens",
@@ -125,9 +129,9 @@ ERRNO_MAP = {
 }
 
 READINESS_BLOCKERS = (
-    "the production registry exposes only an SMP provider lifecycle-callback lease; it has no Linux cdev or file-operations adapter",
-    "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-    "provider operation payload, open/create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled",
+    "the scalar lifecycle/open-receipt boundary does not by itself prove the SMP miscdevice registration, module-owner pinning, or userspace reachability",
+    "the source-only mcd0 adapter still requires independent SMP-contract, exact-Kbuild, and hosted-runtime validation",
+    "provider operation payload, create/destroy/resource callback lifetime, and external teardown ownership remain unmodeled; every ioctl is intentionally invalid",
     "the lifecycle callback lease proves one retained exit identity but not general callback module-owner pinning or in-flight operation drainage",
     "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
     "legacy-stable first-fit and full-table results require an audited outer serialization adapter",
@@ -144,6 +148,8 @@ INTENTIONAL_DELTAS = (
     "concurrent lock-free reserve scans are observational until a Linux adapter supplies legacy-stable outer serialization",
     "typed internal errors are richer than the legacy nullable registration handle and require a later ABI adapter",
     "a magic/version/generation-tagged positive scalar token rejects malformed, cross-registry, and recycled-minor leases",
+    "scalar open receipts transfer only counted ownership; identical shared-provider tokens require one count-balanced non-Copy owner per successful trusted call",
+    "malformed, stale, and zero-reference owned-open releases fail stop, while same-generation duplicate closes are not individually detectable with shared tokens",
 )
 
 
@@ -708,6 +714,41 @@ def _validate_native_transactions(production):
         "native provider-open sharing and overflow transaction",
     )
 
+    acquire_open_token = _function_body(
+        production,
+        "pub(crate) fn acquire_open_token(",
+        "DeviceRegistry::acquire_open_token",
+    )
+    _require_order(
+        acquire_open_token,
+        (
+            "let handle = self.resolve_minor(minor)?;",
+            "let lease = self.acquire_open(handle)?;",
+            "match self.encode_provider_token(lease.handle())",
+            "core::mem::forget(lease);",
+            "Ok(token)",
+            "Err(error) => Err(error),",
+        ),
+        "native scalar provider-open receipt transaction",
+    )
+
+    release_owned_open = _function_body(
+        production,
+        "pub(crate) fn release_owned_open_token(",
+        "DeviceRegistry::release_owned_open_token",
+    )
+    _require_order(
+        release_owned_open,
+        (
+            ".decode_provider_token(token)",
+            ".and_then(|handle| self.release_open_checked(handle).map(|()| handle));",
+            "Ok(handle) => handle,",
+            "Err(error) => panic!(",
+            "error.errno(),",
+        ),
+        "native fail-stop scalar provider-open receipt release",
+    )
+
     acquire_os = _function_body(
         production, "pub(crate) fn acquire_os(", "DeviceRegistry::acquire_os"
     )
@@ -745,19 +786,30 @@ def _validate_native_transactions(production):
         "native unregister exclusion transaction",
     )
 
+    release_open_checked = _function_body(
+        production,
+        "fn release_open_checked(",
+        "DeviceRegistry::release_open_checked",
+    )
+    _require_order(
+        release_open_checked,
+        (
+            "let current = checked_live_word(slot, handle)?;",
+            "provider_references(current) == 0",
+            "return Err(DeviceRegistryError::Corrupt);",
+            "current - PROVIDER_REFERENCE_ONE,",
+            "return Ok(());",
+        ),
+        "native checked provider-open lease release",
+    )
+
     release_open = _function_body(
         production, "fn release_open(", "DeviceRegistry::release_open"
     )
     _require_order(
         release_open,
-        (
-            "validate_slot_word(current).is_err()",
-            "generation(current) != handle.generation",
-            "phase(current) != PHASE_LIVE",
-            "provider_references(current) == 0",
-            "current - PROVIDER_REFERENCE_ONE,",
-        ),
-        "native provider-open lease release",
+        ("let _ = self.release_open_checked(handle);",),
+        "native infallible provider-open RAII release",
     )
 
     release_os = _function_body(
@@ -1123,6 +1175,9 @@ def _validate_rust(data):
         "pub(crate) fn attach_provider_token(",
         "pub(crate) fn detach_provider_token(",
         "pub(crate) fn retire_owned_provider_token(",
+        "pub(crate) fn acquire_open_token(",
+        "pub(crate) fn release_owned_open_token(",
+        "fn release_open_checked(",
         "impl Drop for ReservationGuard",
         "impl Drop for OpenLease",
         "impl Drop for DeviceOsLease",
@@ -1190,6 +1245,8 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
         "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
         ".decode_provider_token(token)",
         "IHK_DEVICE_REGISTRY.active_count()",
+        "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+        "IHK_DEVICE_REGISTRY.release_owned_open_token(receipt)",
     )
     for fragment in required:
         _require_active_count(
@@ -1201,7 +1258,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
                     fragment
                 )
             )
-    if crate_root.count("IHK_DEVICE_REGISTRY") != 10:
+    if crate_root.count("IHK_DEVICE_REGISTRY") != 12:
         raise ContractError("IHK crate root has an unreviewed production-registry use")
     if len(re.findall(r"\bdevice_registry\b", crate_root)) != 2:
         raise ContractError("IHK crate root has an unreviewed device-registry alias")
@@ -1282,9 +1339,62 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
         1,
         "IHK provider detach diagnostic",
     )
+
+    open_signature = _rust_code_view(
+        'pub extern "C" fn {0}('.format(PROVIDER_OPEN_SYMBOL),
+        "IHK SMP provider open signature",
+    )
+    open_export = _function_body(
+        crate_root,
+        open_signature,
+        "IHK SMP provider open export",
+    )
+    _require_order(
+        open_export,
+        (
+            "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+            "Ok(receipt) => receipt,",
+            "return error.errno() as i64;",
+            "receipt",
+        ),
+        "IHK scalar provider-open receipt export",
+    )
+    _require_active_count(
+        source,
+        crate_root,
+        'pr_info!("provider_open=acquire status=live minor=0\\n");',
+        1,
+        "IHK provider-open acquire diagnostic",
+    )
+
+    close_signature = _rust_code_view(
+        'pub extern "C" fn {0}('.format(PROVIDER_CLOSE_SYMBOL),
+        "IHK SMP provider close signature",
+    )
+    close_export = _function_body(
+        crate_root,
+        close_signature,
+        "IHK SMP provider close export",
+    )
+    _require_order(
+        close_export,
+        (
+            "IHK_DEVICE_REGISTRY.release_owned_open_token(receipt)",
+        ),
+        "IHK fail-stop provider-open receipt release export",
+    )
+    _require_active_count(
+        source,
+        crate_root,
+        'pr_info!("provider_open=release status=complete minor=0\\n");',
+        1,
+        "IHK provider-open release diagnostic",
+    )
     for symbol in PROVIDER_COMPATIBILITY_EXPORTS + (
         PROVIDER_ATTACH_SYMBOL,
         PROVIDER_DETACH_SYMBOL,
+        PROVIDER_OPEN_SYMBOL,
+        PROVIDER_CLOSE_SYMBOL,
     ):
         required_export = (
             '#[export_name = "{0}"]'.format(symbol),
@@ -1302,7 +1412,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
             'pub extern "C" fn ',
             "IHK C-ABI export",
         )
-    ) != 4:
+    ) != 6:
         raise ContractError("IHK crate root contains an unreviewed C-ABI export")
 
     ioctl_contract = _load_json_bytes(ioctl_contract_data, "ioctl contract")
@@ -1365,6 +1475,8 @@ def derive_contract(
                 PROVIDER_COMPATIBILITY_EXPORTS[1],
                 PROVIDER_ATTACH_SYMBOL,
                 PROVIDER_DETACH_SYMBOL,
+                PROVIDER_OPEN_SYMBOL,
+                PROVIDER_CLOSE_SYMBOL,
             ],
         },
         "behavior": {
@@ -1408,7 +1520,7 @@ def derive_contract(
             "path": FIXTURE_PATH,
             "sha256": _sha(fixture),
         },
-        "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-callback-lease-only",
+        "foundation_status": "production-crate-owned-allocation-free-device-registry-lifecycle-and-open-receipt-boundary",
         "gate_id": "IHK-004-device-registry-foundation",
         "intentional_safety_deltas": list(INTENTIONAL_DELTAS),
         "ioctl_boundary": {
@@ -1497,6 +1609,17 @@ def derive_contract(
                 "unpublishing_guard_across_exit": True,
             },
             "minor": 0,
+            "open_close": {
+                "close_return": "void-or-fail-stop",
+                "close_symbol": PROVIDER_CLOSE_SYMBOL,
+                "concurrent_shared_receipts": True,
+                "duplicate_close_detectable_while_other_references_exist": False,
+                "open_return": "positive-generation-token-or-negative-errno",
+                "open_symbol": PROVIDER_OPEN_SYMBOL,
+                "raw_pointer": False,
+                "source_validated": True,
+                "trusted_noncopy_owner_balance_required": True,
+            },
             "runtime_validated": False,
             "token": {
                 "generation_bits": [6, 33],

@@ -4,8 +4,10 @@ from __future__ import print_function
 
 import hashlib
 import json
+import os
 import re
 import shutil
+import stat
 import subprocess
 import tempfile
 import unittest
@@ -28,12 +30,722 @@ RK006_CAPTURE_CONTRACT = (
     / "host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json"
 )
 
+PROVENANCE_STEP_NAME = "Validate built metadata and capture immutable diagnostics"
+PROVENANCE_WORKFLOW_PATH = (
+    ".github/workflows/native-rust-host-modules-exact-build.yml"
+)
+PROVENANCE_ENV_BINDINGS = {
+    "PROVENANCE_CALLER_EVENT_NAME": "${{ github.event_name }}",
+    "PROVENANCE_CALLER_REF": "${{ github.ref }}",
+    "PROVENANCE_CALLER_REPOSITORY": "${{ github.repository }}",
+    "PROVENANCE_CALLER_SHA": "${{ github.sha }}",
+    "PROVENANCE_CALLER_WORKFLOW_REF": "${{ github.workflow_ref }}",
+    "PROVENANCE_CALLER_WORKFLOW_SHA": "${{ github.workflow_sha }}",
+    "PROVENANCE_CANDIDATE_SHA": (
+        "${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}"
+    ),
+    "PROVENANCE_DEFINING_WORKFLOW_FILE_PATH": "${{ job.workflow_file_path }}",
+    "PROVENANCE_DEFINING_WORKFLOW_REF": "${{ job.workflow_ref }}",
+    "PROVENANCE_DEFINING_WORKFLOW_REPOSITORY": "${{ job.workflow_repository }}",
+    "PROVENANCE_DEFINING_WORKFLOW_SHA": "${{ job.workflow_sha }}",
+}
+PROVENANCE_DEFAULT_ENV_FIELDS = ("GITHUB_RUN_ATTEMPT", "GITHUB_RUN_ID")
+
+
+def provenance_step(workflow_text):
+    workflow = yaml.safe_load(workflow_text)
+    matches = [
+        step
+        for step in workflow["jobs"]["exact-build"]["steps"]
+        if step.get("name") == PROVENANCE_STEP_NAME
+    ]
+    if len(matches) != 1:
+        raise ValueError("provenance step count differs")
+    return matches[0]
+
+
+def provenance_python_source(workflow_text):
+    run = provenance_step(workflow_text)["run"]
+    marker = 'EVIDENCE_DIR="$EVIDENCE_DIR" /usr/bin/python3 -E -s <<\'PY\'\n'
+    if run.count(marker) != 1:
+        raise ValueError("provenance Python marker count differs")
+    source = run.split(marker, 1)[1]
+    if source.count("\nPY\n") != 1:
+        raise ValueError("provenance Python terminator count differs")
+    return source.split("\nPY\n", 1)[0] + "\n"
+
+
+def validate_provenance_structure(workflow_text):
+    step = provenance_step(workflow_text)
+    observed = {
+        name: value
+        for name, value in step.get("env", {}).items()
+        if name.startswith("PROVENANCE_")
+    }
+    if observed != PROVENANCE_ENV_BINDINGS:
+        raise ValueError("provenance context bindings differ")
+    source = provenance_python_source(workflow_text)
+    required_fragments = (
+        '"caller": {',
+        '"candidate": {',
+        '"claims": {',
+        '"defining_job": {',
+        '"evidence_file": executed_workflow_name',
+        '"direct_workflow_dispatch": direct_workflow_dispatch',
+        '"github_run_attempt": github_run_attempt',
+        '"github_run_id": github_run_id',
+        '"workflow_file_bytes_equal": True',
+        '"fetch",',
+        '"--no-tags",',
+        '"--depth=1",',
+        '"--no-recurse-submodules",',
+        '"FETCH_HEAD^{commit}"',
+        'fetched_commit == defining_workflow_sha',
+        'git_environment["GIT_NO_REPLACE_OBJECTS"] = "1"',
+        "caller_event_name in ACCEPTED_EVENT_NAMES",
+        "caller_repository == defining_repository",
+        "caller_sha == caller_workflow_sha == defining_workflow_sha",
+        "caller_workflow_git_ref == caller_ref",
+        "defining_workflow_git_ref == caller_ref",
+        "PULL_REQUEST_REF_RE.match(value)",
+        "BRANCH_OR_TAG_REF_RE.match(value)",
+        'candidate_blob_sha1 == defining_blob_sha1',
+        'candidate_file_sha256 == defining_file_sha256',
+        'candidate_bytes == defining_bytes',
+        'candidate_sha == caller_workflow_sha == defining_workflow_sha',
+        'required_environment("GITHUB_RUN_ATTEMPT")',
+        'required_environment("GITHUB_RUN_ID")',
+        "POSITIVE_DECIMAL_RE.match(value)",
+        'separators=(",", ":")',
+        "sort_keys=True",
+        '"workflow-provenance.json"',
+        '"executed-build-workflow.yml"',
+    )
+    for fragment in required_fragments:
+        if fragment not in source:
+            raise ValueError("provenance fragment missing: " + fragment)
+    run = step["run"]
+    receipt = run.index('"workflow-provenance.json"')
+    precheck = run.index("sha256sum --check --strict PRECHECK_SHA256SUMS")
+    final = run.index("sha256sum --check --strict SHA256SUMS")
+    if not receipt < precheck < final:
+        raise ValueError("provenance receipt is not manifest-bound")
+    return source
+
 
 class NativeRustExactBuildWorkflowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
         cls.source_workflow = SOURCE_WORKFLOW.read_text(encoding="utf-8")
+
+    def provenance_git(self, repository, *arguments):
+        completed = subprocess.run(
+            ["git", "-C", str(repository)] + list(arguments),
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return completed.stdout.decode("ascii").strip()
+
+    def make_provenance_repository(self, root, matching_workflow_bytes=True):
+        repository = root / "repository"
+        repository.mkdir()
+        self.provenance_git(repository, "init", "-q")
+        self.provenance_git(repository, "config", "user.name", "Provenance fixture")
+        self.provenance_git(
+            repository,
+            "config",
+            "user.email",
+            "provenance-fixture@example.invalid",
+        )
+        workflow_path = repository / PROVENANCE_WORKFLOW_PATH
+        workflow_path.parent.mkdir(parents=True)
+        workflow_path.write_bytes(b"name: exact fixture\n")
+        self.provenance_git(repository, "add", "--", PROVENANCE_WORKFLOW_PATH)
+        self.provenance_git(repository, "commit", "-q", "-m", "definition")
+        defining_sha = self.provenance_git(repository, "rev-parse", "HEAD")
+        if matching_workflow_bytes:
+            (repository / "candidate.txt").write_bytes(b"candidate\n")
+            self.provenance_git(repository, "add", "--", "candidate.txt")
+        else:
+            workflow_path.write_bytes(b"name: mutated candidate fixture\n")
+            self.provenance_git(repository, "add", "--", PROVENANCE_WORKFLOW_PATH)
+        self.provenance_git(repository, "commit", "-q", "-m", "candidate")
+        candidate_sha = self.provenance_git(repository, "rev-parse", "HEAD")
+        return repository, candidate_sha, defining_sha
+
+    def provenance_environment(self, root, repository, candidate_sha, defining_sha):
+        evidence = root / "evidence"
+        evidence.mkdir()
+        environment = dict(os.environ)
+        environment.update(
+            {
+                "EVIDENCE_DIR": str(evidence),
+                "GITHUB_RUN_ATTEMPT": "1",
+                "GITHUB_RUN_ID": "32192199024",
+                "GITHUB_WORKSPACE": str(repository),
+                "PROVENANCE_CALLER_EVENT_NAME": "pull_request",
+                "PROVENANCE_CALLER_REF": "refs/pull/7/merge",
+                "PROVENANCE_CALLER_REPOSITORY": "example/project",
+                "PROVENANCE_CALLER_SHA": defining_sha,
+                "PROVENANCE_CALLER_WORKFLOW_REF": (
+                    "example/project/.github/workflows/caller.yml@refs/pull/7/merge"
+                ),
+                "PROVENANCE_CALLER_WORKFLOW_SHA": defining_sha,
+                "PROVENANCE_CANDIDATE_SHA": candidate_sha,
+                "PROVENANCE_DEFINING_WORKFLOW_FILE_PATH": PROVENANCE_WORKFLOW_PATH,
+                "PROVENANCE_DEFINING_WORKFLOW_REF": (
+                    "example/project/"
+                    + PROVENANCE_WORKFLOW_PATH
+                    + "@refs/pull/7/merge"
+                ),
+                "PROVENANCE_DEFINING_WORKFLOW_REPOSITORY": "example/project",
+                "PROVENANCE_DEFINING_WORKFLOW_SHA": defining_sha,
+            }
+        )
+        return environment, evidence
+
+    def run_provenance_source(self, source, environment, evidence):
+        receipt = evidence / "workflow-provenance.json"
+        if receipt.exists() or receipt.is_symlink():
+            receipt.unlink()
+        return subprocess.run(
+            ["/usr/bin/python3", "-E", "-s", "-"],
+            input=source.encode("utf-8"),
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+    def test_workflow_provenance_context_bindings_are_exact_and_omission_closed(self):
+        source = validate_provenance_structure(self.workflow)
+        compile(source, "workflow-provenance.py", "exec")
+        for name, binding in sorted(PROVENANCE_ENV_BINDINGS.items()):
+            line = "          {0}: {1}\n".format(name, binding)
+            self.assertEqual(self.workflow.count(line), 1, name)
+            with self.subTest(name=name, attack="omitted"):
+                mutation = self.workflow.replace(line, "", 1)
+                with self.assertRaisesRegex(ValueError, "context bindings"):
+                    validate_provenance_structure(mutation)
+            with self.subTest(name=name, attack="retargeted"):
+                mutation = self.workflow.replace(
+                    line,
+                    "          {0}: ${{{{ github.actor }}}}\n".format(name),
+                    1,
+                )
+                with self.assertRaisesRegex(ValueError, "context bindings"):
+                    validate_provenance_structure(mutation)
+
+    def test_workflow_provenance_receipt_is_canonical_byte_bound_and_noncrediting(self):
+        source = validate_provenance_structure(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            completed = self.run_provenance_source(source, environment, evidence)
+            self.assertEqual(
+                completed.returncode,
+                0,
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+            receipt_bytes = (evidence / "workflow-provenance.json").read_bytes()
+            receipt = json.loads(receipt_bytes)
+            self.assertEqual(
+                receipt_bytes,
+                (
+                    json.dumps(
+                        receipt,
+                        allow_nan=False,
+                        ensure_ascii=True,
+                        separators=(",", ":"),
+                        sort_keys=True,
+                    )
+                    + "\n"
+                ).encode("ascii"),
+            )
+            self.assertEqual(receipt["candidate"]["sha"], candidate_sha)
+            self.assertEqual(
+                receipt["defining_job"]["workflow_sha"], defining_sha
+            )
+            self.assertEqual(receipt["caller"]["sha"], defining_sha)
+            self.assertEqual(receipt["caller"]["workflow_sha"], defining_sha)
+            self.assertEqual(
+                receipt["caller"]["repository"],
+                receipt["defining_job"]["workflow_repository"],
+            )
+            self.assertTrue(
+                receipt["caller"]["workflow_ref"].endswith(
+                    "@" + receipt["caller"]["ref"]
+                )
+            )
+            self.assertTrue(
+                receipt["defining_job"]["workflow_ref"].endswith(
+                    "@" + receipt["caller"]["ref"]
+                )
+            )
+            self.assertNotEqual(candidate_sha, defining_sha)
+            self.assertEqual(
+                receipt["candidate"]["workflow_file_git_blob_sha1"],
+                receipt["defining_job"]["workflow_file_git_blob_sha1"],
+            )
+            self.assertEqual(
+                receipt["candidate"]["workflow_file_sha256"],
+                receipt["defining_job"]["workflow_file_sha256"],
+            )
+            executed_workflow = evidence / "executed-build-workflow.yml"
+            self.assertEqual(
+                executed_workflow.read_bytes(),
+                (repository / PROVENANCE_WORKFLOW_PATH).read_bytes(),
+            )
+            self.assertEqual(
+                stat.S_IMODE(executed_workflow.stat().st_mode), 0o644
+            )
+            self.assertEqual(
+                hashlib.sha256(executed_workflow.read_bytes()).hexdigest(),
+                receipt["defining_job"]["workflow_file_sha256"],
+            )
+            self.assertEqual(
+                receipt["defining_job"]["evidence_file"],
+                "executed-build-workflow.yml",
+            )
+            self.assertIs(receipt["workflow_file_bytes_equal"], True)
+            self.assertIs(receipt["direct_workflow_dispatch"], False)
+            self.assertEqual(receipt["github_run_id"], 32192199024)
+            self.assertEqual(receipt["github_run_attempt"], 1)
+            self.assertTrue(
+                all(value is False for value in receipt["claims"].values())
+            )
+
+    def test_workflow_provenance_rejects_every_missing_runtime_field(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            for name in sorted(
+                tuple(PROVENANCE_ENV_BINDINGS) + PROVENANCE_DEFAULT_ENV_FIELDS
+            ):
+                with self.subTest(name=name):
+                    mutation = dict(environment)
+                    del mutation[name]
+                    completed = self.run_provenance_source(
+                        source, mutation, evidence
+                    )
+                    self.assertNotEqual(completed.returncode, 0)
+                    self.assertFalse((evidence / "workflow-provenance.json").exists())
+
+    def test_workflow_provenance_requires_canonical_positive_run_identity(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            for name in PROVENANCE_DEFAULT_ENV_FIELDS:
+                for value in ("0", "01", "+1", "1 "):
+                    with self.subTest(name=name, value=value):
+                        mutation = dict(environment)
+                        mutation[name] = value
+                        completed = self.run_provenance_source(
+                            source, mutation, evidence
+                        )
+                        self.assertNotEqual(completed.returncode, 0)
+                        self.assertFalse(
+                            (evidence / "workflow-provenance.json").exists()
+                        )
+
+    def test_workflow_provenance_rejects_sha_ref_repository_and_path_attacks(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            mutations = []
+            for name in (
+                "PROVENANCE_CANDIDATE_SHA",
+                "PROVENANCE_CALLER_SHA",
+                "PROVENANCE_CALLER_WORKFLOW_SHA",
+                "PROVENANCE_DEFINING_WORKFLOW_SHA",
+            ):
+                mutations.extend(
+                    (
+                        (name + "-short", name, "0" * 39),
+                        (name + "-nonhex", name, "g" * 40),
+                        (name + "-uppercase", name, "A" * 40),
+                    )
+                )
+            mutations.extend(
+                (
+                    (
+                        "event-shape",
+                        "PROVENANCE_CALLER_EVENT_NAME",
+                        "pull-request",
+                    ),
+                    ("caller-ref-shape", "PROVENANCE_CALLER_REF", "development"),
+                    (
+                        "caller-repository-shape",
+                        "PROVENANCE_CALLER_REPOSITORY",
+                        "example/caller/extra",
+                    ),
+                    (
+                        "caller-workflow-repository",
+                        "PROVENANCE_CALLER_WORKFLOW_REF",
+                        "attacker/repo/.github/workflows/caller.yml@refs/pull/7/merge",
+                    ),
+                    (
+                        "defining-path-traversal",
+                        "PROVENANCE_DEFINING_WORKFLOW_FILE_PATH",
+                        "../workflow.yml",
+                    ),
+                    (
+                        "defining-path-retarget",
+                        "PROVENANCE_DEFINING_WORKFLOW_FILE_PATH",
+                        ".github/workflows/other.yml",
+                    ),
+                    (
+                        "defining-ref-repository",
+                        "PROVENANCE_DEFINING_WORKFLOW_REF",
+                        "attacker/repo/"
+                        + PROVENANCE_WORKFLOW_PATH
+                        + "@refs/pull/7/merge",
+                    ),
+                    (
+                        "defining-repository-retarget",
+                        "PROVENANCE_DEFINING_WORKFLOW_REPOSITORY",
+                        "attacker/repo",
+                    ),
+                )
+            )
+            for label, name, value in mutations:
+                with self.subTest(attack=label):
+                    mutation = dict(environment)
+                    mutation[name] = value
+                    completed = self.run_provenance_source(
+                        source, mutation, evidence
+                    )
+                    self.assertNotEqual(completed.returncode, 0)
+                    self.assertFalse((evidence / "workflow-provenance.json").exists())
+
+    def test_workflow_provenance_rejects_nonlocal_event_alignment(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            attacks = (
+                ("unsupported-event", {"PROVENANCE_CALLER_EVENT_NAME": "schedule"}),
+                (
+                    "pull-head-ref",
+                    {
+                        "PROVENANCE_CALLER_REF": "refs/pull/7/head",
+                        "PROVENANCE_CALLER_WORKFLOW_REF": (
+                            "example/project/.github/workflows/caller.yml"
+                            "@refs/pull/7/head"
+                        ),
+                        "PROVENANCE_DEFINING_WORKFLOW_REF": (
+                            "example/project/"
+                            + PROVENANCE_WORKFLOW_PATH
+                            + "@refs/pull/7/head"
+                        ),
+                    },
+                ),
+                (
+                    "pull-leading-zero",
+                    {
+                        "PROVENANCE_CALLER_REF": "refs/pull/07/merge",
+                        "PROVENANCE_CALLER_WORKFLOW_REF": (
+                            "example/project/.github/workflows/caller.yml"
+                            "@refs/pull/07/merge"
+                        ),
+                        "PROVENANCE_DEFINING_WORKFLOW_REF": (
+                            "example/project/"
+                            + PROVENANCE_WORKFLOW_PATH
+                            + "@refs/pull/07/merge"
+                        ),
+                    },
+                ),
+                ("push-pr-ref", {"PROVENANCE_CALLER_EVENT_NAME": "push"}),
+                (
+                    "dispatch-pr-ref",
+                    {"PROVENANCE_CALLER_EVENT_NAME": "workflow_dispatch"},
+                ),
+                (
+                    "repository-mismatch",
+                    {
+                        "PROVENANCE_CALLER_REPOSITORY": "attacker/project",
+                        "PROVENANCE_CALLER_WORKFLOW_REF": (
+                            "attacker/project/.github/workflows/caller.yml"
+                            "@refs/pull/7/merge"
+                        ),
+                    },
+                ),
+                ("caller-sha-mismatch", {"PROVENANCE_CALLER_SHA": "3" * 40}),
+                (
+                    "caller-workflow-sha-mismatch",
+                    {"PROVENANCE_CALLER_WORKFLOW_SHA": "3" * 40},
+                ),
+                (
+                    "defining-workflow-sha-mismatch",
+                    {"PROVENANCE_DEFINING_WORKFLOW_SHA": candidate_sha},
+                ),
+                (
+                    "caller-workflow-ref-mismatch",
+                    {
+                        "PROVENANCE_CALLER_WORKFLOW_REF": (
+                            "example/project/.github/workflows/caller.yml"
+                            "@refs/heads/development"
+                        )
+                    },
+                ),
+                (
+                    "defining-workflow-ref-mismatch",
+                    {
+                        "PROVENANCE_DEFINING_WORKFLOW_REF": (
+                            "example/project/"
+                            + PROVENANCE_WORKFLOW_PATH
+                            + "@refs/heads/development"
+                        )
+                    },
+                ),
+            )
+            for label, changes in attacks:
+                with self.subTest(attack=label):
+                    mutation = dict(environment)
+                    mutation.update(changes)
+                    completed = self.run_provenance_source(
+                        source, mutation, evidence
+                    )
+                    self.assertNotEqual(completed.returncode, 0)
+                    self.assertFalse((evidence / "workflow-provenance.json").exists())
+
+    def test_workflow_provenance_direct_dispatch_requires_one_commit(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            direct_ref = (
+                "example/project/"
+                + PROVENANCE_WORKFLOW_PATH
+                + "@refs/heads/development"
+            )
+            environment.update(
+                {
+                    "PROVENANCE_CALLER_EVENT_NAME": "workflow_dispatch",
+                    "PROVENANCE_CALLER_REF": "refs/heads/development",
+                    "PROVENANCE_CALLER_REPOSITORY": "example/project",
+                    "PROVENANCE_CALLER_SHA": candidate_sha,
+                    "PROVENANCE_CALLER_WORKFLOW_REF": direct_ref,
+                    "PROVENANCE_CALLER_WORKFLOW_SHA": candidate_sha,
+                    "PROVENANCE_DEFINING_WORKFLOW_REF": direct_ref,
+                    "PROVENANCE_DEFINING_WORKFLOW_SHA": candidate_sha,
+                }
+            )
+            completed = self.run_provenance_source(source, environment, evidence)
+            self.assertEqual(
+                completed.returncode,
+                0,
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+            receipt = json.loads(
+                (evidence / "workflow-provenance.json").read_text(encoding="ascii")
+            )
+            self.assertIs(receipt["direct_workflow_dispatch"], True)
+            for name, value in (
+                ("PROVENANCE_CANDIDATE_SHA", defining_sha),
+                ("PROVENANCE_CALLER_WORKFLOW_SHA", defining_sha),
+                ("PROVENANCE_DEFINING_WORKFLOW_SHA", defining_sha),
+                (
+                    "PROVENANCE_CALLER_WORKFLOW_REF",
+                    "example/project/"
+                    + PROVENANCE_WORKFLOW_PATH
+                    + "@refs/heads/other",
+                ),
+            ):
+                with self.subTest(name=name):
+                    mutation = dict(environment)
+                    mutation[name] = value
+                    completed = self.run_provenance_source(
+                        source, mutation, evidence
+                    )
+                    self.assertNotEqual(completed.returncode, 0)
+
+    def test_workflow_provenance_rejects_candidate_definition_byte_drift(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root, matching_workflow_bytes=False
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            completed = self.run_provenance_source(source, environment, evidence)
+            self.assertNotEqual(completed.returncode, 0)
+            self.assertIn(
+                "blob IDs differ",
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+
+    def test_workflow_provenance_fetches_and_verifies_missing_definition_commit(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            definition = root / "definition"
+            definition.mkdir()
+            self.provenance_git(definition, "init", "-q")
+            self.provenance_git(definition, "config", "user.name", "Definition")
+            self.provenance_git(
+                definition,
+                "config",
+                "user.email",
+                "definition@example.invalid",
+            )
+            definition_workflow = definition / PROVENANCE_WORKFLOW_PATH
+            definition_workflow.parent.mkdir(parents=True)
+            definition_workflow.write_bytes(b"name: exact fixture\n")
+            self.provenance_git(definition, "add", "--", PROVENANCE_WORKFLOW_PATH)
+            self.provenance_git(definition, "commit", "-q", "-m", "definition")
+            defining_sha = self.provenance_git(definition, "rev-parse", "HEAD")
+            self.provenance_git(
+                definition, "update-ref", "refs/pull/7/merge", defining_sha
+            )
+
+            candidate = root / "candidate"
+            candidate.mkdir()
+            self.provenance_git(candidate, "init", "-q")
+            self.provenance_git(candidate, "config", "user.name", "Candidate")
+            self.provenance_git(
+                candidate,
+                "config",
+                "user.email",
+                "candidate@example.invalid",
+            )
+            candidate_workflow = candidate / PROVENANCE_WORKFLOW_PATH
+            candidate_workflow.parent.mkdir(parents=True)
+            candidate_workflow.write_bytes(b"name: exact fixture\n")
+            self.provenance_git(candidate, "add", "--", PROVENANCE_WORKFLOW_PATH)
+            self.provenance_git(candidate, "commit", "-q", "-m", "candidate")
+            candidate_sha = self.provenance_git(candidate, "rev-parse", "HEAD")
+            self.assertNotEqual(candidate_sha, defining_sha)
+            missing = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(candidate),
+                    "cat-file",
+                    "-e",
+                    defining_sha + "^{commit}",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertNotEqual(missing.returncode, 0)
+            self.provenance_git(
+                candidate,
+                "config",
+                "url.file://{0}.insteadOf".format(definition),
+                "https://github.com/example/project.git",
+            )
+            environment, evidence = self.provenance_environment(
+                root, candidate, candidate_sha, defining_sha
+            )
+            completed = self.run_provenance_source(source, environment, evidence)
+            self.assertEqual(
+                completed.returncode,
+                0,
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+            self.assertEqual(
+                self.provenance_git(
+                    candidate, "rev-parse", "--verify", defining_sha + "^{commit}"
+                ),
+                defining_sha,
+            )
+            forged = dict(environment)
+            forged["PROVENANCE_CALLER_SHA"] = "f" * 40
+            forged["PROVENANCE_CALLER_WORKFLOW_SHA"] = "f" * 40
+            forged["PROVENANCE_DEFINING_WORKFLOW_SHA"] = "f" * 40
+            completed = self.run_provenance_source(source, forged, evidence)
+            self.assertNotEqual(completed.returncode, 0)
+            self.assertIn(
+                "fetched defining workflow commit differs",
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+
+    def test_workflow_provenance_ignores_git_redirection_environment(self):
+        source = provenance_python_source(self.workflow)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repository, candidate_sha, defining_sha = self.make_provenance_repository(
+                root
+            )
+            environment, evidence = self.provenance_environment(
+                root, repository, candidate_sha, defining_sha
+            )
+            attacker = root / "attacker"
+            attacker.mkdir()
+            self.provenance_git(attacker, "init", "-q")
+            environment.update(
+                {
+                    "GIT_CONFIG_COUNT": "1",
+                    "GIT_CONFIG_KEY_0": "core.repositoryformatversion",
+                    "GIT_CONFIG_VALUE_0": "999",
+                    "GIT_DIR": str(attacker / ".git"),
+                    "GIT_INDEX_FILE": str(attacker / "index"),
+                    "GIT_REPLACE_REF_BASE": "refs/attacker/replace/",
+                    "GIT_WORK_TREE": str(attacker),
+                }
+            )
+            completed = self.run_provenance_source(source, environment, evidence)
+            self.assertEqual(
+                completed.returncode,
+                0,
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+
+    def test_workflow_provenance_is_in_both_evidence_manifests(self):
+        validate_provenance_structure(self.workflow)
+        run = provenance_step(self.workflow)["run"]
+        receipt = run.index('"workflow-provenance.json"')
+        executed_workflow = run.index('"executed-build-workflow.yml"')
+        precheck_write = run.index("> PRECHECK_SHA256SUMS")
+        final_write = run.index("> SHA256SUMS")
+        self.assertLess(receipt, precheck_write)
+        self.assertLess(executed_workflow, precheck_write)
+        self.assertLess(precheck_write, final_write)
+        self.assertIn(
+            "! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS",
+            run[receipt:precheck_write],
+        )
+        self.assertIn(
+            "find . -maxdepth 1 -type f ! -name SHA256SUMS",
+            run[precheck_write:final_write],
+        )
 
     def test_runtime_and_actions_are_digest_pinned(self):
         image = (

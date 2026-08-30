@@ -195,6 +195,36 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
             lifecycle.validate_repository(self.repo)
 
+    def test_provider_open_and_close_scalar_boundaries_are_exact(self) -> None:
+        mutations = (
+            (
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {',
+                'pub extern "C" fn ihk_smp_provider_open_v1(minor: u64) -> i64 {',
+            ),
+            (
+                "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+                "IHK_DEVICE_REGISTRY.resolve_minor(minor as usize)",
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {',
+                'pub extern "C" fn ihk_smp_provider_close_v1(receipt: u64) {',
+            ),
+            (
+                "IHK_DEVICE_REGISTRY.release_owned_open_token(receipt)",
+                "IHK_DEVICE_REGISTRY.retire_owned_provider_token(receipt)",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                shutil.copytree(self.repo, repo)
+                source = repo / self.contract["provider_source"]
+                text = source.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(old))
+                source.write_text(text.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+                    lifecycle.validate_repository(repo)
+
     def test_provider_registry_must_be_the_imported_singleton(self) -> None:
         source = self.repo / self.contract["provider_source"]
         with source.open("a", encoding="utf-8") as stream:
@@ -245,6 +275,14 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             (
                 "ihk_smp_provider_detach_v1",
                 "IHK_SMP_PROVIDER_DETACH_V1_EXPORT",
+            ),
+            (
+                "ihk_smp_provider_open_v1",
+                "IHK_SMP_PROVIDER_OPEN_V1_EXPORT",
+            ),
+            (
+                "ihk_smp_provider_close_v1",
+                "IHK_SMP_PROVIDER_CLOSE_V1_EXPORT",
             ),
         )
         for symbol, static_name in records:
@@ -331,7 +369,7 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         source = self.repo / self.contract["provider_source"]
         with source.open("a", encoding="utf-8") as stream:
             stream.write('pub extern "C" fn ihk_unreviewed() -> i32 { 0 }\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "exactly four reviewed"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "exactly six reviewed"):
             lifecycle.validate_repository(self.repo)
 
     def test_unreviewed_provider_foreign_block_is_rejected(self) -> None:
@@ -359,7 +397,7 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         source = self.repo / self.contract["provider_source"]
         with source.open("a", encoding="utf-8") as stream:
             stream.write('const BAD_LOG: &str = "token={}";\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "opaque lease token"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "opaque lease scalar"):
             lifecycle.validate_repository(self.repo)
 
     def test_missing_namespace_metadata_is_rejected(self) -> None:
@@ -498,13 +536,34 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         for field in (
             "callback_payload_reachable",
             "credit_eligible",
-            "device_node_reachable",
+            "device_node_runtime_proven",
+            "duplicate_close_detectable_while_other_references_exist",
             "mcctrl_reachable",
+            "operation_callbacks_reachable",
             "rocky_runtime_validated",
         ):
             with self.subTest(field=field):
                 contract = json.loads(json.dumps(original))
                 contract["ihk_dependency"]["reviewed_provider_lease_boundary"][field] = True
+                self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "provider-lease boundary differs or overclaims",
+                ):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_provider_open_close_source_claims_cannot_be_removed(self) -> None:
+        path = self.repo / lifecycle.DEFAULT_CONTRACT
+        original = json.loads(path.read_text(encoding="utf-8"))
+        for field in (
+            "control_device_open_close_only",
+            "device_node_source_reachable",
+            "shared_open_receipts",
+            "trusted_noncopy_owner_balance_required",
+        ):
+            with self.subTest(field=field):
+                contract = json.loads(json.dumps(original))
+                contract["ihk_dependency"]["reviewed_provider_lease_boundary"][field] = False
                 self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
                 with self.assertRaisesRegex(
                     lifecycle.ValidationError,

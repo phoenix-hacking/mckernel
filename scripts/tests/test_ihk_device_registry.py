@@ -96,7 +96,7 @@ class IhkDeviceRegistryTests(unittest.TestCase):
         self.assertNotIn("wrapping_add", self.production)
 
     def test_in_file_unit_suite_is_large_and_covers_required_boundaries(self):
-        self.assertEqual(29, self.source.count("#[test]"))
+        self.assertEqual(31, self.source.count("#[test]"))
         required_tests = (
             "exact_capacity_first_fit_generation_reuse_and_stale_rejection",
             "dropping_reservation_aborts_and_consumes_generation",
@@ -113,6 +113,8 @@ class IhkDeviceRegistryTests(unittest.TestCase):
             "lease_drop_does_not_rewrite_corrupt_slot_words",
             "concurrent_publications_claim_unique_slots",
             "production_registry_token_round_trip_is_positive_and_exact",
+            "provider_open_tokens_count_shared_files_and_release_once_each",
+            "owned_open_token_release_fails_stop_on_unbalanced_receipt",
             "provider_token_header_version_and_generation_fail_closed",
             "provider_token_is_stale_after_unregister_and_slot_reuse",
             "dynamic_registry_cannot_issue_or_accept_production_tokens",
