@@ -1466,6 +1466,94 @@ class DirectCtuGraphTests(unittest.TestCase):
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "duplicate strong"):
             self.graph(overrides=duplicate)
 
+    def test_duplicate_analyzed_external_definitions_are_inline_blocked(self):
+        external_inline = {
+            number: [
+                {
+                    "name": "fortified_helper", "number": 1,
+                    "definition": True, "global": False,
+                    "visibility": ("external", "public"),
+                }
+            ]
+            for number in (1, 2)
+        }
+        graph = self.graph(overrides=external_inline)
+        helpers = [
+            item for item in graph["definitions"]
+            if item["function"]["name"] == "fortified_helper"
+        ]
+        self.assertEqual(len(helpers), 2)
+        self.assertTrue(all(item["traits"] == ["inline"] for item in helpers))
+        self.assertIn(
+            "cross_translation_unit_call_graph_not_linked",
+            semantics.blockers_for_direct_ctu(graph),
+        )
+
+    def test_external_visibility_only_blocks_analyzed_definitions(self):
+        parsed = semantics.parse_initial_cgraph(
+            synthetic_cgraph(
+                [
+                    {
+                        "name": "external_declaration", "number": 1,
+                        "definition": False, "global": False,
+                        "visibility": ("external", "public"),
+                    },
+                    {
+                        "name": "external_inline", "number": 2,
+                        "definition": True, "global": False,
+                        "visibility": ("external", "public"),
+                    },
+                    {
+                        "name": "ordinary_definition", "number": 3,
+                        "definition": True, "global": True,
+                    },
+                ]
+            ),
+            "fixture.c",
+        )
+        by_name = {item["name"]: item for item in parsed}
+        self.assertEqual(by_name["external_declaration"]["traits"], [])
+        self.assertEqual(by_name["external_inline"]["traits"], ["inline"])
+        self.assertEqual(by_name["ordinary_definition"]["traits"], [])
+
+    def test_local_roots_do_not_capture_propagated_name_prefixes(self):
+        graph = self.graph(
+            overrides={
+                0: [
+                    {
+                        "name": "foo", "number": 1,
+                        "definition": True, "global": True,
+                        "address_taken": True,
+                    },
+                    {
+                        "name": "foo_suffix", "number": 2,
+                        "definition": True, "global": True,
+                        "address_taken": True,
+                        "calls": (("foo", 1),),
+                    },
+                ]
+            }
+        )
+        foo = [
+            item for item in graph["function_reachability"]
+            if item["function"]["name"] == "foo"
+        ][0]
+        expected_local = [
+            "callback:mcctrl:fixture/c0.c:foo",
+            "external:mcctrl:foo",
+        ]
+        self.assertEqual(foo["local_roots"], expected_local)
+        self.assertEqual(
+            foo["propagated_roots"],
+            sorted(
+                expected_local
+                + [
+                    "callback:mcctrl:fixture/c0.c:foo_suffix",
+                    "external:mcctrl:foo_suffix",
+                ]
+            ),
+        )
+
     def test_every_blocked_caller_trait_poisons_each_direct_call(self):
         cases = {
             "alias": {"alias": True},
@@ -1883,7 +1971,9 @@ class DirectCtuGraphTests(unittest.TestCase):
         complete = baseline.replace(b"  Visibility:\n", complete_row)
         complete_parsed = semantics.parse_initial_cgraph(complete, "fixture.c")
         self.assertTrue(complete_parsed[0]["global"])
-        self.assertEqual(complete_parsed[0]["traits"], ["comdat", "weak"])
+        self.assertEqual(
+            complete_parsed[0]["traits"], ["comdat", "inline", "weak"]
+        )
 
         hostile_rows = (
             baseline.replace(b"  Visibility:\n", b""),

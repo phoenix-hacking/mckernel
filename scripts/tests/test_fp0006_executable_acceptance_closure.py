@@ -215,6 +215,49 @@ class AcceptanceClosureTests(unittest.TestCase):
             {"gate_id": "FP-0006", "points_awarded": 0, "status": "IN_PROGRESS"},
         )
 
+    def test_semantic_source_markers_bind_extern_inline_policy(self):
+        metadata = self.contract["frozen_inputs"]["semantic_evidence_authority"]
+        generator = (ROOT / metadata["generator"]["path"]).read_bytes()
+        reviewer = (
+            ROOT / metadata["independent_review_generator"]["path"]
+        ).read_bytes()
+        marker = (
+            b'    if (\n'
+            b'        type_text.startswith("function definition analyzed")\n'
+            b'        and "external" in visibility\n'
+            b'    ):\n'
+            b'        traits.add("inline")'
+        )
+        self.assertEqual(generator.count(marker), 1)
+        self.assertEqual(reviewer.count(marker), 1)
+        closure.validate_semantic_sources(generator, reviewer, metadata)
+
+        hostile_marker = marker.replace(b'        and ', b'        or ', 1)
+        with self.assertRaisesRegex(closure.ClosureError, "generator marker"):
+            closure.validate_semantic_sources(
+                generator.replace(marker, hostile_marker, 1), reviewer, metadata
+            )
+        with self.assertRaisesRegex(
+            closure.ClosureError, "independent-review marker"
+        ):
+            closure.validate_semantic_sources(
+                generator, reviewer.replace(marker, hostile_marker, 1), metadata
+            )
+
+        disabled_marker = marker.replace(
+            b'    if (\n', b'    if False and (\n', 1
+        )
+        with self.assertRaisesRegex(closure.ClosureError, "generator marker"):
+            closure.validate_semantic_sources(
+                generator.replace(marker, disabled_marker, 1), reviewer, metadata
+            )
+        with self.assertRaisesRegex(
+            closure.ClosureError, "independent-review marker"
+        ):
+            closure.validate_semantic_sources(
+                generator, reviewer.replace(marker, disabled_marker, 1), metadata
+            )
+
     def test_duplicate_json_key_is_rejected(self):
         with self.assertRaisesRegex(closure.ClosureError, "duplicate JSON key"):
             closure.load_json(b'{"a":1,"a":2}\n', "duplicate")
@@ -387,7 +430,7 @@ class AcceptanceClosureTests(unittest.TestCase):
             result = self.run_public()
         self.assertEqual(
             result["contract"]["sha256"],
-            "347b73a7d7a1658b3642325330b533c1586a2638e7e28a4c71663f365915ad5f",
+            "17e0e3fd73befbc56809f4235f0630436e0a154a5ade23e17f5f27232f2cf928",
         )
         self.assertEqual(result["contract"]["size"], 5938)
 

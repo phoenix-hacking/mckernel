@@ -2322,6 +2322,16 @@ def _cgraph_record_traits(record):
         for line in lines
     ):
         traits.add("inline")
+    # GCC 8.5 represents an analyzed extern-inline body as a definition whose
+    # symtab visibility contains ``external``.  Such a body is discardable in
+    # favor of the external definition and therefore cannot be counted as a
+    # strong cross-translation-unit definition.  Preserve ordinary external
+    # declarations: only an analyzed definition receives the blocked trait.
+    if (
+        type_text.startswith("function definition analyzed")
+        and "external" in visibility
+    ):
+        traits.add("inline")
     if "weak" in visibility or "weakref" in visibility or "weak" in type_text:
         traits.add("weak")
     return sorted(traits)
@@ -2838,12 +2848,14 @@ def derive_direct_ctu_call_graph(
                     blocked_edges.append(blocked)
 
     roots = {}
+    local_roots = {}
     for key, record in definition_records.items():
         local = []
         if record["global"] and not record["traits"]:
             local.append("external:{0}:{1}".format(key[0], key[2]))
         if record["address_taken"]:
             local.append("callback:{0}:{1}:{2}".format(key[0], key[1], key[2]))
+        local_roots[key] = sorted(local)
         roots[key] = set(local)
     changed = True
     while changed:
@@ -2856,13 +2868,7 @@ def derive_direct_ctu_call_graph(
     reachability = [
         {
             "function": _cgraph_function_identity(*key),
-            "local_roots": sorted(
-                item for item in roots[key]
-                if item.startswith("external:{0}:{1}".format(key[0], key[2]))
-                or item.startswith(
-                    "callback:{0}:{1}:{2}".format(key[0], key[1], key[2])
-                )
-            ),
+            "local_roots": local_roots[key],
             "propagated_roots": sorted(roots[key]),
         }
         for key in sorted(definition_records)

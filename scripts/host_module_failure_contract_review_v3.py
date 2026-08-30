@@ -137,6 +137,11 @@ def _review_traits(record):
         for line in lines
     ):
         traits.add("inline")
+    if (
+        type_text.startswith("function definition analyzed")
+        and "external" in visibility
+    ):
+        traits.add("inline")
     if "weak" in visibility or "weakref" in visibility or "weak" in type_text:
         traits.add("weak")
     return sorted(traits)

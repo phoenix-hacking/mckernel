@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = "347b73a7d7a1658b3642325330b533c1586a2638e7e28a4c71663f365915ad5f"
+EXPECTED_CONTRACT_SHA256 = "17e0e3fd73befbc56809f4235f0630436e0a154a5ade23e17f5f27232f2cf928"
 EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -853,6 +853,11 @@ def validate_semantic_sources(generator_data, review_data, metadata):
         '"fresh_execution_authority": False,',
         'reason = caller_record["traits"][0] + "_caller"',
         'reason = declared["traits"][0] + "_declaration"',
+        '    if (\n'
+        '        type_text.startswith("function definition analyzed")\n'
+        '        and "external" in visibility\n'
+        '    ):\n'
+        '        traits.add("inline")',
     )
     required_review_markers = (
         "def independently_derive_direct_graph",
@@ -864,6 +869,11 @@ def validate_semantic_sources(generator_data, review_data, metadata):
         'if caller["traits"]:',
         'if declared["traits"] or not declared["global"]:',
         "independent normalized cgraph retains a raw or misplaced allocator address",
+        '    if (\n'
+        '        type_text.startswith("function definition analyzed")\n'
+        '        and "external" in visibility\n'
+        '    ):\n'
+        '        traits.add("inline")',
     )
     if any(
         generator_text.count(marker) != 1
@@ -1238,7 +1248,7 @@ class _CliCensusEmitter(object):
                 source_data,
             )
             expected_self = (
-                "SELF_DIGEST:039dd5ace2ad74eb304d50dc468d756128fb5b15beb3368f9660d083ca1160b8"
+                "SELF_DIGEST:e642eb188883f789394b0c48a6fc13dfbb38f85691dc3a7d2451ee659f53f717"
             ).split(":", 1)[1]
             if sha256_bytes(normalized) != expected_self:
                 raise ClosureError("isolated checker normalized SHA-256 changed")

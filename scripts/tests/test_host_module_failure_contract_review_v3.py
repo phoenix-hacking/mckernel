@@ -627,7 +627,9 @@ class ReviewV3Tests(unittest.TestCase):
         complete = baseline.replace(b"  Visibility:\n", complete_row)
         complete_parsed = review.independent_parse_cgraph(complete, "fixture.c")
         self.assertTrue(complete_parsed[0]["global"])
-        self.assertEqual(complete_parsed[0]["traits"], ["comdat", "weak"])
+        self.assertEqual(
+            complete_parsed[0]["traits"], ["comdat", "inline", "weak"]
+        )
 
         hostile_rows = (
             (
@@ -1003,6 +1005,127 @@ class ReviewV3Tests(unittest.TestCase):
         )
         review.validate_independent_direct_graph(
             generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+
+    def test_independent_analyzed_external_definitions_are_inline_blocked(self):
+        external_inline = [
+            {
+                "name": "fortified_helper", "number": 1,
+                "definition": True, "global": False,
+                "visibility": ("external", "public"),
+            }
+        ]
+        inputs, invocations, payloads = independent_ctu_fixture(
+            external_inline, copy.deepcopy(external_inline)
+        )
+        independent = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        helpers = [
+            item for item in independent["definitions"]
+            if item["function"]["name"] == "fortified_helper"
+        ]
+        self.assertEqual(len(helpers), 2)
+        self.assertTrue(all(item["traits"] == ["inline"] for item in helpers))
+        generated = semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+        )
+        review.validate_independent_direct_graph(
+            generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+
+        ordinary = [
+            {
+                "name": "fortified_helper", "number": 1,
+                "definition": True,
+            }
+        ]
+        inputs, invocations, payloads = independent_ctu_fixture(
+            ordinary, copy.deepcopy(ordinary)
+        )
+        with self.assertRaisesRegex(review.ReviewV3Error, "duplicate strong"):
+            review.independently_derive_direct_graph(
+                inputs, invocations, payloads
+            )
+
+    def test_independent_external_declaration_remains_resolvable(self):
+        source_zero = [
+            {
+                "name": "callee", "number": 1,
+                "global": False,
+                "visibility": ("external", "public"),
+            },
+            {
+                "name": "caller", "number": 2,
+                "definition": True, "calls": (("callee", 1),),
+            },
+        ]
+        inputs, invocations, payloads = independent_ctu_fixture(source_zero)
+        independent = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        self.assertTrue(
+            any(
+                item["callee"]["name"] == "callee"
+                and item["edge_kind"]
+                == "same_module_cross_translation_unit_direct"
+                for item in independent["direct_edges"]
+            )
+        )
+        generated = semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+        )
+        review.validate_independent_direct_graph(
+            generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+
+    def test_independent_local_roots_match_exact_names_not_prefixes(self):
+        source_zero = [
+            {
+                "name": "foo", "number": 1,
+                "definition": True, "address_taken": True,
+            },
+            {
+                "name": "foo_suffix", "number": 2,
+                "definition": True, "address_taken": True,
+                "calls": (("foo", 1),),
+            },
+        ]
+        inputs, invocations, payloads = independent_ctu_fixture(source_zero)
+        independent = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        generated = semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+        )
+        review.validate_independent_direct_graph(
+            generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+        foo = [
+            item for item in generated["function_reachability"]
+            if item["function"]["name"] == "foo"
+        ][0]
+        self.assertEqual(
+            foo["local_roots"],
+            [
+                "callback:mcctrl:fixture/review_0.c:foo",
+                "external:mcctrl:foo",
+            ],
+        )
+        self.assertIn(
+            "external:mcctrl:foo_suffix", foo["propagated_roots"]
         )
 
     def test_independent_printable_call_binds_to_assembler_identity(self):
