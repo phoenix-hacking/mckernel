@@ -18,7 +18,25 @@ use core::sync::atomic::{AtomicU64, Ordering};
 
 pub(crate) const DEVICE_CAPACITY: usize = 64;
 
-static NEXT_DEVICE_REGISTRY_ID: AtomicU64 = AtomicU64::new(1);
+// Registry identity one is reserved for the single production IHK provider
+// registry.  Dynamically constructed test/policy registries start at two so a
+// handle can never cross the static/dynamic boundary by identity collision.
+const PRODUCTION_DEVICE_REGISTRY_ID: u64 = 1;
+static NEXT_DEVICE_REGISTRY_ID: AtomicU64 = AtomicU64::new(2);
+
+// Positive v1 provider tokens are self-identifying without exposing a Rust
+// layout across the module ABI.  Bits 0..5 carry the minor, bits 6..33 the
+// nonzero 28-bit generation, bits 34..38 the ABI version, and bits 39..62 the
+// ASCII magic "IHK".  Bit 63 is always clear, leaving negative i64 values for
+// errno returns from the exported attach function.
+const PROVIDER_TOKEN_MINOR_BITS: u32 = 6;
+const PROVIDER_TOKEN_GENERATION_SHIFT: u32 = PROVIDER_TOKEN_MINOR_BITS;
+const PROVIDER_TOKEN_HEADER_SHIFT: u32 = 34;
+const PROVIDER_TOKEN_VERSION: u64 = 1;
+const PROVIDER_TOKEN_MAGIC: u64 = 0x49_48_4b;
+const PROVIDER_TOKEN_HEADER: u64 = (PROVIDER_TOKEN_MAGIC << 5) | PROVIDER_TOKEN_VERSION;
+const PROVIDER_TOKEN_MINOR_MASK: u64 = (1 << PROVIDER_TOKEN_MINOR_BITS) - 1;
+const PROVIDER_TOKEN_GENERATION_MASK: u64 = MAX_GENERATION;
 
 // Internal errno bridge for a future Linux adapter.  The legacy registration
 // API itself returns a nullable handle, so these richer failures are not a
@@ -80,6 +98,7 @@ pub(crate) enum DeviceRegistryError {
     Capacity,
     Busy,
     InvalidMinor,
+    InvalidToken,
     RegistryIdentityExhausted,
     GenerationExhausted,
     ProviderReferenceOverflow,
@@ -94,7 +113,7 @@ impl DeviceRegistryError {
             Self::NotFound => -ENOENT,
             Self::Capacity => -ENOMEM,
             Self::Busy => -EBUSY,
-            Self::InvalidMinor => -EINVAL,
+            Self::InvalidMinor | Self::InvalidToken => -EINVAL,
             Self::RegistryIdentityExhausted
             | Self::GenerationExhausted
             | Self::ProviderReferenceOverflow
@@ -155,7 +174,20 @@ pub(crate) struct DeviceRegistry {
     slots: [Slot; DEVICE_CAPACITY],
 }
 
+// The production identity exists exactly once in the compiled IHK provider.
+// Test-only registries may exercise the private constructor from this module,
+// but no sibling module can create another registry with identity one.
+pub(crate) static IHK_DEVICE_REGISTRY: DeviceRegistry = DeviceRegistry::production();
+
 impl DeviceRegistry {
+    /// Constructs the one module-lifetime production registry in const space.
+    const fn production() -> Self {
+        Self {
+            registry_id: PRODUCTION_DEVICE_REGISTRY_ID,
+            slots: [const { Slot::new() }; DEVICE_CAPACITY],
+        }
+    }
+
     pub(crate) fn new() -> Result<Self, DeviceRegistryError> {
         Ok(Self {
             registry_id: next_registry_id()?,
@@ -291,6 +323,117 @@ impl DeviceRegistry {
             provider_references: provider_references(current),
             os_references: os_references(current),
         })
+    }
+
+    /// Encodes an exact handle as a positive, versioned scalar module token.
+    ///
+    /// The handle must still identify a live slot in this registry.  The
+    /// resulting value is architecture-neutral for the locked x86_64 ABI and
+    /// never aliases a negative errno return.
+    pub(crate) fn encode_provider_token(
+        &self,
+        handle: DeviceHandle,
+    ) -> Result<i64, DeviceRegistryError> {
+        if self.registry_id != PRODUCTION_DEVICE_REGISTRY_ID {
+            return Err(DeviceRegistryError::InvalidToken);
+        }
+        let snapshot = self.snapshot(handle)?;
+        if snapshot.phase != ActiveDevicePhase::Live {
+            return Err(DeviceRegistryError::Busy);
+        }
+        let token = (PROVIDER_TOKEN_HEADER << PROVIDER_TOKEN_HEADER_SHIFT)
+            | (handle.generation << PROVIDER_TOKEN_GENERATION_SHIFT)
+            | handle.minor as u64;
+        if token == 0 || token > i64::MAX as u64 {
+            return Err(DeviceRegistryError::Corrupt);
+        }
+        Ok(token as i64)
+    }
+
+    /// Decodes only the exact v1 token shape for this production registry.
+    ///
+    /// Slot phase and generation are checked by the requested registry
+    /// operation after decoding, so old but well-formed tokens become stale or
+    /// not-found rather than being reinterpreted as a current handle.
+    pub(crate) fn decode_provider_token(
+        &self,
+        token: i64,
+    ) -> Result<DeviceHandle, DeviceRegistryError> {
+        if self.registry_id != PRODUCTION_DEVICE_REGISTRY_ID || token <= 0 {
+            return Err(DeviceRegistryError::InvalidToken);
+        }
+        let raw = token as u64;
+        if raw >> PROVIDER_TOKEN_HEADER_SHIFT != PROVIDER_TOKEN_HEADER {
+            return Err(DeviceRegistryError::InvalidToken);
+        }
+        let minor = raw & PROVIDER_TOKEN_MINOR_MASK;
+        let handle_generation =
+            (raw >> PROVIDER_TOKEN_GENERATION_SHIFT) & PROVIDER_TOKEN_GENERATION_MASK;
+        if minor >= DEVICE_CAPACITY as u64 || handle_generation == 0 {
+            return Err(DeviceRegistryError::InvalidToken);
+        }
+        Ok(DeviceHandle {
+            registry_id: self.registry_id,
+            minor: minor as u8,
+            generation: handle_generation,
+        })
+    }
+
+    /// Publishes the single minor-zero provider lease used by the SMP module.
+    ///
+    /// Concurrent or duplicate attach attempts may reserve another minor
+    /// transiently, but they abort that reservation and fail with `Busy`.
+    /// Thus no unsuccessful call leaves an additional live provider.
+    pub(crate) fn attach_provider_token(&self) -> Result<i64, DeviceRegistryError> {
+        let reservation = self.reserve(SharePolicy::Shared)?;
+        let reserved = reservation.handle();
+        if reserved.minor() != 0 {
+            reservation.abort()?;
+            return Err(DeviceRegistryError::Busy);
+        }
+        let handle = reservation.publish()?;
+        match self.encode_provider_token(handle) {
+            Ok(token) => Ok(token),
+            Err(error) => {
+                let cleanup = self
+                    .begin_unregister(handle)
+                    .and_then(|unregister| unregister.commit());
+                match cleanup {
+                    Ok(()) => Err(error),
+                    Err(cleanup_error) => Err(cleanup_error),
+                }
+            }
+        }
+    }
+
+    /// Retires exactly the provider generation named by a v1 token.
+    ///
+    /// A failed commit drops its armed guard and restores the live phase, so
+    /// child OS references can drain before the same token is retried.
+    pub(crate) fn detach_provider_token(
+        &self,
+        token: i64,
+    ) -> Result<DeviceHandle, DeviceRegistryError> {
+        let handle = self.decode_provider_token(token)?;
+        self.begin_unregister(handle)?.commit()?;
+        Ok(handle)
+    }
+
+    /// Retires the exact token owned by the reviewed SMP module destructor.
+    ///
+    /// The namespaced caller keeps this token in one non-Copy owner and never
+    /// exposes child references.  Reaching an invalid, stale, busy, or corrupt
+    /// state is therefore an internal ownership invariant violation, not a
+    /// recoverable module-exit result.  Failing stop prevents teardown from
+    /// silently succeeding while a live provider entry is abandoned.
+    pub(crate) fn retire_owned_provider_token(&self, token: i64) -> DeviceHandle {
+        match self.detach_provider_token(token) {
+            Ok(handle) => handle,
+            Err(error) => panic!(
+                "provider lease ownership invariant violated: errno={}",
+                error.errno(),
+            ),
+        }
     }
 
     /// Acquires the provider reference owned by one successfully opened file.
@@ -1279,6 +1422,150 @@ mod tests {
     }
 
     #[test]
+    fn production_registry_token_round_trip_is_positive_and_exact() {
+        let registry = DeviceRegistry::production();
+        let token = registry.attach_provider_token().unwrap();
+        assert!(token > 0);
+        let handle = registry.decode_provider_token(token).unwrap();
+        assert_eq!(handle, registry.decode_provider_token(token).unwrap());
+        assert_eq!(0, handle.minor());
+        assert_eq!(1, handle.generation());
+
+        let open = registry.acquire_open(handle).unwrap();
+        assert_eq!(
+            DeviceRegistryError::Busy,
+            registry.detach_provider_token(token).unwrap_err()
+        );
+        drop(open);
+
+        let os = registry.acquire_os(handle).unwrap();
+        assert_eq!(
+            DeviceRegistryError::Busy,
+            registry.detach_provider_token(token).unwrap_err()
+        );
+        assert_eq!(ActiveDevicePhase::Live, registry.snapshot(handle).unwrap().phase);
+        drop(os);
+        assert_eq!(handle, registry.detach_provider_token(token).unwrap());
+        assert_eq!(0, registry.active_count().unwrap());
+    }
+
+    #[test]
+    fn provider_token_header_version_and_generation_fail_closed() {
+        let registry = DeviceRegistry::production();
+        let handle = publish(&registry, SharePolicy::Shared);
+        let token = registry.encode_provider_token(handle).unwrap();
+        let zero_generation = (PROVIDER_TOKEN_HEADER << PROVIDER_TOKEN_HEADER_SHIFT) as i64;
+        for malformed in [0, -1, i64::MAX, token ^ (1_i64 << 34), zero_generation] {
+            assert_eq!(
+                DeviceRegistryError::InvalidToken,
+                registry.decode_provider_token(malformed).unwrap_err()
+            );
+        }
+    }
+
+    #[test]
+    fn provider_token_is_stale_after_unregister_and_slot_reuse() {
+        let registry = DeviceRegistry::production();
+        let token = registry.attach_provider_token().unwrap();
+        let first = registry.decode_provider_token(token).unwrap();
+        assert_eq!(first, registry.detach_provider_token(token).unwrap());
+        let decoded = registry.decode_provider_token(token).unwrap();
+        assert_eq!(DeviceRegistryError::NotFound, registry.snapshot(decoded).unwrap_err());
+
+        let replacement_token = registry.attach_provider_token().unwrap();
+        let replacement = registry.decode_provider_token(replacement_token).unwrap();
+        assert_eq!(first.minor(), replacement.minor());
+        assert!(replacement.generation() > first.generation());
+        assert_eq!(
+            DeviceRegistryError::StaleHandle,
+            registry.snapshot(decoded).unwrap_err()
+        );
+    }
+
+    #[test]
+    fn dynamic_registry_cannot_issue_or_accept_production_tokens() {
+        let production = DeviceRegistry::production();
+        let token = production.attach_provider_token().unwrap();
+        let dynamic = registry();
+        let dynamic_handle = publish(&dynamic, SharePolicy::Shared);
+        assert_eq!(
+            DeviceRegistryError::InvalidToken,
+            dynamic.encode_provider_token(dynamic_handle).unwrap_err()
+        );
+        assert_eq!(
+            DeviceRegistryError::InvalidToken,
+            dynamic.decode_provider_token(token).unwrap_err()
+        );
+    }
+
+    #[test]
+    fn concurrent_provider_attaches_publish_exactly_one_minor_zero_lease() {
+        const WORKERS: usize = 16;
+        let registry = Arc::new(DeviceRegistry::production());
+        let start = Arc::new(Barrier::new(WORKERS));
+        let mut workers = std::vec::Vec::new();
+        for _ in 0..WORKERS {
+            let registry = Arc::clone(&registry);
+            let start = Arc::clone(&start);
+            workers.push(thread::spawn(move || {
+                start.wait();
+                registry.attach_provider_token()
+            }));
+        }
+        let results: std::vec::Vec<_> = workers
+            .into_iter()
+            .map(|worker| worker.join().unwrap())
+            .collect();
+        let tokens: std::vec::Vec<_> = results
+            .iter()
+            .filter_map(|result| result.as_ref().ok().copied())
+            .collect();
+        assert_eq!(1, tokens.len());
+        assert_eq!(
+            WORKERS - 1,
+            results
+                .iter()
+                .filter(|result| **result == Err(DeviceRegistryError::Busy))
+                .count()
+        );
+        assert_eq!(1, registry.live_count().unwrap());
+        assert_eq!(
+            0,
+            registry
+                .decode_provider_token(tokens[0])
+                .unwrap()
+                .minor()
+        );
+        registry.detach_provider_token(tokens[0]).unwrap();
+    }
+
+    #[test]
+    fn concurrent_duplicate_detach_has_one_winner_and_no_live_slot() {
+        const WORKERS: usize = 8;
+        let registry = Arc::new(DeviceRegistry::production());
+        let token = registry.attach_provider_token().unwrap();
+        let start = Arc::new(Barrier::new(WORKERS));
+        let mut workers = std::vec::Vec::new();
+        for _ in 0..WORKERS {
+            let registry = Arc::clone(&registry);
+            let start = Arc::clone(&start);
+            workers.push(thread::spawn(move || {
+                start.wait();
+                registry.detach_provider_token(token)
+            }));
+        }
+        let results: std::vec::Vec<_> = workers
+            .into_iter()
+            .map(|worker| worker.join().unwrap())
+            .collect();
+        assert_eq!(1, results.iter().filter(|result| result.is_ok()).count());
+        assert!(results.iter().filter_map(|result| result.as_ref().err()).all(
+            |error| matches!(error, DeviceRegistryError::Busy | DeviceRegistryError::NotFound)
+        ));
+        assert_eq!(0, registry.active_count().unwrap());
+    }
+
+    #[test]
     fn errno_mapping_and_minor_bounds_fail_closed() {
         let registry = registry();
         assert_eq!(
@@ -1290,6 +1577,7 @@ mod tests {
             (DeviceRegistryError::Capacity, -12),
             (DeviceRegistryError::Busy, -16),
             (DeviceRegistryError::InvalidMinor, -22),
+            (DeviceRegistryError::InvalidToken, -22),
             (DeviceRegistryError::RegistryIdentityExhausted, -75),
             (DeviceRegistryError::GenerationExhausted, -75),
             (DeviceRegistryError::ProviderReferenceOverflow, -75),

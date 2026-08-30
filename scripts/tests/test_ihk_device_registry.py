@@ -44,9 +44,15 @@ class IhkDeviceRegistryTests(unittest.TestCase):
             "const OS_REFERENCE_SHIFT: u32 = 20;",
             "const GENERATION_SHIFT: u32 = 36;",
             "const MAX_GENERATION: u64 = u64::MAX >> GENERATION_SHIFT;",
+            "const PROVIDER_TOKEN_MAGIC: u64 = 0x49_48_4b;",
+            "const PROVIDER_TOKEN_VERSION: u64 = 1;",
             "old_generation == MAX_GENERATION",
             ".checked_add(1)",
             "handle.registry_id != self.registry_id",
+            "const fn production() -> Self",
+            "pub(crate) static IHK_DEVICE_REGISTRY: DeviceRegistry = DeviceRegistry::production();",
+            "pub(crate) fn encode_provider_token(",
+            "pub(crate) fn decode_provider_token(",
         )
         for token in required:
             with self.subTest(token=token):
@@ -90,7 +96,7 @@ class IhkDeviceRegistryTests(unittest.TestCase):
         self.assertNotIn("wrapping_add", self.production)
 
     def test_in_file_unit_suite_is_large_and_covers_required_boundaries(self):
-        self.assertEqual(23, self.source.count("#[test]"))
+        self.assertEqual(29, self.source.count("#[test]"))
         required_tests = (
             "exact_capacity_first_fit_generation_reuse_and_stale_rejection",
             "dropping_reservation_aborts_and_consumes_generation",
@@ -106,13 +112,19 @@ class IhkDeviceRegistryTests(unittest.TestCase):
             "malformed_packed_words_fail_closed_as_corrupt",
             "lease_drop_does_not_rewrite_corrupt_slot_words",
             "concurrent_publications_claim_unique_slots",
+            "production_registry_token_round_trip_is_positive_and_exact",
+            "provider_token_header_version_and_generation_fail_closed",
+            "provider_token_is_stale_after_unregister_and_slot_reuse",
+            "dynamic_registry_cannot_issue_or_accept_production_tokens",
+            "concurrent_provider_attaches_publish_exactly_one_minor_zero_lease",
+            "concurrent_duplicate_detach_has_one_winner_and_no_live_slot",
         )
         for name in required_tests:
             with self.subTest(name=name):
                 self.assertIn("fn " + name, self.source)
 
     def test_fixture_has_deterministic_success_rollback_and_interleavings(self):
-        self.assertEqual(6, self.fixture.count("#[test]"))
+        self.assertEqual(8, self.fixture.count("#[test]"))
         required_tests = (
             "success_path_publishes_counts_and_unregisters",
             "failed_external_publication_aborts_without_reusing_handle",
@@ -120,6 +132,8 @@ class IhkDeviceRegistryTests(unittest.TestCase):
             "deterministic_open_first_interleaving_blocks_unregister",
             "deterministic_unregister_first_interleaving_blocks_references",
             "simultaneous_publishers_get_unique_generation_tagged_slots",
+            "production_token_adapter_round_trips_and_detaches",
+            "malformed_and_replayed_production_tokens_fail_closed",
         )
         for name in required_tests:
             with self.subTest(name=name):
@@ -147,7 +161,7 @@ class IhkDeviceRegistryTests(unittest.TestCase):
                 [tests, "--list"], cwd=str(REPO_ROOT), env=environment
             ).decode("utf-8")
             discovered = [line for line in listed.splitlines() if line.endswith(": test")]
-            self.assertEqual(29, len(discovered))
+            self.assertEqual(37, len(discovered))
             subprocess.check_call(
                 [tests, "--test-threads=1"], cwd=str(REPO_ROOT), env=environment
             )

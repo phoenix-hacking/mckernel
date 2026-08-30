@@ -42,6 +42,19 @@ BOUND_MODINFO_ENVIRONMENT = {
     "PATH": "/usr/bin:/bin",
     "TZ": "UTC",
 }
+EXPECTED_REVIEWED_PROVIDER_LEASE_BOUNDARY = {
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": False,
+    "consumer": "ihk-smp-x86_64",
+    "credit_eligible": False,
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": False,
+    "mcctrl_reachable": False,
+    "namespace": "MCKERNEL_IHK_V1",
+    "rocky_runtime_validated": False,
+    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "token_version": 1,
+}
 
 
 class ValidationError(Exception):
@@ -117,6 +130,187 @@ def _require_keys(value: Any, expected: set[str], label: str) -> None:
 def _require_nonempty_string(value: Any, label: str) -> None:
     if not isinstance(value, str) or not value.strip():
         raise ValidationError(f"{label} must be a non-empty string")
+
+
+def _blank_rust_span(
+    masked: list[str],
+    text: str,
+    start: int,
+    end: int,
+    preserved: tuple[int, ...] = (),
+) -> None:
+    preserved_offsets = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved_offsets and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text: str, start: int) -> int | None:
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text: str) -> str:
+    """Return active Rust syntax with comments and literal contents blanked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    break
+                else:
+                    end += 1
+            else:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _active_fragment_positions(text: str, code: str, fragment: str) -> list[int]:
+    fragment_code = _mask_rust_comments_and_literals(fragment)
+    positions = []
+    search_from = 0
+    while True:
+        position = text.find(fragment, search_from)
+        if position < 0:
+            return positions
+        if code[position : position + len(fragment)] == fragment_code:
+            positions.append(position)
+        search_from = position + 1
+
+
+def _require_active_count(
+    text: str,
+    code: str,
+    fragment: str,
+    expected: int,
+    label: str,
+) -> list[int]:
+    positions = _active_fragment_positions(text, code, fragment)
+    if len(positions) != expected:
+        raise ValidationError(
+            f"{label} active occurrence count differs for {fragment}: "
+            f"expected {expected}, got {len(positions)}"
+        )
+    return positions
+
+
+def _active_function_body(code: str, signature: str, label: str) -> str:
+    masked_signature = _mask_rust_comments_and_literals(signature)
+    starts = [match.start() for match in re.finditer(re.escape(masked_signature), code)]
+    if len(starts) != 1:
+        raise ValidationError(f"{label} signature must occur exactly once in active code")
+    opening = code.find("{", starts[0] + len(masked_signature) - 1)
+    if opening < 0:
+        raise ValidationError(f"{label} lacks an opening brace")
+    depth = 0
+    for position in range(opening, len(code)):
+        if code[position] == "{":
+            depth += 1
+        elif code[position] == "}":
+            depth -= 1
+            if depth == 0:
+                return code[opening + 1 : position]
+    raise ValidationError(f"{label} lacks a closing brace")
+
+
+def _active_string_literals(text: str, code: str) -> list[str]:
+    quotes = [offset for offset, character in enumerate(code) if character == '"']
+    if len(quotes) % 2:
+        raise ValidationError("Rust active view contains an unmatched string delimiter")
+    return [text[start : end + 1] for start, end in zip(quotes[::2], quotes[1::2])]
 
 
 def _rust_string_constant(text: str, name: str) -> str:
@@ -215,7 +409,12 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 
     _require_keys(
         contract["ihk_dependency"],
-        {"legacy_inter_module_import_count", "native_symbol_import", "required_import_namespace"},
+        {
+            "legacy_inter_module_import_count",
+            "native_symbol_import",
+            "required_import_namespace",
+            "reviewed_provider_lease_boundary",
+        },
         "contract.ihk_dependency",
     )
     dependency = contract["ihk_dependency"]
@@ -223,6 +422,13 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("frozen mcctrl IHK import count must be 32")
     if dependency["required_import_namespace"] != "MCKERNEL_IHK_V1":
         raise ValidationError("mcctrl must declare the production IHK namespace")
+    if (
+        dependency["reviewed_provider_lease_boundary"]
+        != EXPECTED_REVIEWED_PROVIDER_LEASE_BOUNDARY
+    ):
+        raise ValidationError(
+            "reviewed provider-lease boundary differs or overclaims mcctrl reachability"
+        )
     _require_keys(
         dependency["native_symbol_import"],
         {
@@ -411,33 +617,180 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
+    code = _mask_rust_comments_and_literals(text)
     symbol = contract["ihk_dependency"]["native_symbol_import"]["provider_symbol"]
-    required = (
+    lease = contract["ihk_dependency"]["reviewed_provider_lease_boundary"]
+    attach = lease["attach_symbol"]
+    detach = lease["detach_symbol"]
+    attach_function = (
+        f'pub extern "C" fn {attach}() -> i64 {{\n'
+        "    let token = match IHK_DEVICE_REGISTRY.attach_provider_token() {\n"
+        "        Ok(token) => token,\n"
+        "        Err(error) => return error.errno() as i64,\n"
+        "    };\n"
+        '    pr_info!("provider_lease=attach status=live minor=0\\n");\n'
+        "    token\n"
+        "}"
+    )
+    detach_function = (
+        f'pub extern "C" fn {detach}(token: i64) {{\n'
+        "    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n"
+        "    pr_info!(\n"
+        '        "provider_lease=detach status=vacant minor={} generation={}\\n",\n'
+        "        handle.minor(),\n"
+        "        handle.generation(),\n"
+        "    );\n"
+        "}"
+    )
+    detach_security_boundary = (
+        "// reviewed namespaced SMP dependent.  The token is an ownership receipt, not\n"
+        "// a security boundary against other privileged in-kernel code.  Any malformed,\n"
+        "// stale, duplicated, busy, or corrupt state fails stop before unload succeeds.\n"
+        f'#[export_name = "{detach}"]'
+    )
+    attach_export_record = (
+        f'#[export_name = "__export_symbol_{attach}"]\n'
+        '#[link_section = ".export_symbol"]\n'
+        "#[used(compiler)]\n"
+        "pub static IHK_SMP_PROVIDER_ATTACH_V1_EXPORT: IhkExportSymbolRecord = "
+        "IhkExportSymbolRecord {\n"
+        '    license: *b"GPL\\0",\n'
+        f'    namespace: *b"{lease["namespace"]}\\0",\n'
+        "    padding: [0; 4],\n"
+        f"    symbol: {attach} as *const () as *const u8,\n"
+        "};"
+    )
+    detach_export_record = (
+        f'#[export_name = "__export_symbol_{detach}"]\n'
+        '#[link_section = ".export_symbol"]\n'
+        "#[used(compiler)]\n"
+        "pub static IHK_SMP_PROVIDER_DETACH_V1_EXPORT: IhkExportSymbolRecord = "
+        "IhkExportSymbolRecord {\n"
+        '    license: *b"GPL\\0",\n'
+        f'    namespace: *b"{lease["namespace"]}\\0",\n'
+        "    padding: [0; 4],\n"
+        f"    symbol: {detach} as *const () as *const u8,\n"
+        "};"
+    )
+    anchor_export_record = (
+        f'#[export_name = "__export_symbol_{symbol}"]\n'
+        '#[link_section = ".export_symbol"]\n'
+        "#[used(compiler)]\n"
+        "pub static IHK_PROVIDER_LIFECYCLE_V1_EXPORT: IhkExportSymbolRecord = "
+        "IhkExportSymbolRecord {\n"
+        '    license: *b"GPL\\0",\n'
+        f'    namespace: *b"{lease["namespace"]}\\0",\n'
+        "    padding: [0; 4],\n"
+        "    symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1),\n"
+        "};"
+    )
+    required_once = (
         '#[repr(C, align(8))]',
         "pub struct IhkExportSymbolRecord",
         "unsafe impl Sync for IhkExportSymbolRecord {}",
         "const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];",
         "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
+        "use self::device_registry::IHK_DEVICE_REGISTRY;",
         f'#[export_name = "{symbol}"]',
-        f'#[export_name = "__export_symbol_{symbol}"]',
-        '#[link_section = ".export_symbol"]',
-        'license: *b"GPL\\0"',
-        'namespace: *b"MCKERNEL_IHK_V1\\0"',
-        "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)",
+        "pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;",
+        anchor_export_record,
+        f'#[export_name = "{attach}"]',
+        attach_function,
+        attach_export_record,
+        detach_security_boundary,
+        detach_function,
+        detach_export_record,
+        "match IHK_DEVICE_REGISTRY.active_count() {",
     )
-    for fragment in required:
-        if fragment not in text:
+    for fragment in required_once:
+        _require_active_count(
+            text,
+            code,
+            fragment,
+            1,
+            "native IHK provider anchor",
+        )
+
+    # Parse braces only in the active view.  Braces embedded in ordinary/raw
+    # strings or comments cannot shorten a reviewed function body.
+    for function, signature, label in (
+        (attach_function, f'pub extern "C" fn {attach}() -> i64 {{', "attach"),
+        (detach_function, f'pub extern "C" fn {detach}(token: i64) {{', "detach"),
+    ):
+        body = _active_function_body(code, signature, f"native IHK provider {label}")
+        expected_code = _mask_rust_comments_and_literals(function)
+        expected_body = expected_code[expected_code.index("{") + 1 : expected_code.rindex("}")]
+        if body != expected_body:
             raise ValidationError(
-                f"native IHK provider anchor lacks required fragment: {fragment}"
+                f"native IHK provider {label} body differs from the fail-closed review"
             )
-    if text.count(f'#[export_name = "{symbol}"]') != 1:
-        raise ValidationError("native IHK provider anchor symbol is not unique")
-    if text.count(f'#[export_name = "__export_symbol_{symbol}"]') != 1:
-        raise ValidationError("native IHK provider export record is not unique")
-    lowered = text.lower()
-    for forbidden in ('extern "c"', "include_bytes!", "include!", "global_asm!", "asm!("):
-        if forbidden in lowered:
-            raise ValidationError(f"native IHK provider contains forbidden boundary: {forbidden}")
+
+    if re.search(r"\b(?:pub\(crate\)\s+)?static\s+IHK_DEVICE_REGISTRY\b", code):
+        raise ValidationError(
+            "native IHK provider must import the singleton registry instead of constructing it"
+        )
+    if "DeviceRegistry::production()" in code:
+        raise ValidationError(
+            "native IHK provider must not construct a second production registry"
+        )
+    if code.count("IHK_DEVICE_REGISTRY") != 4:
+        raise ValidationError(
+            "native IHK provider singleton registry reachability differs from the closed review"
+        )
+
+    expected_export_names = [
+        symbol,
+        f"__export_symbol_{symbol}",
+        attach,
+        f"__export_symbol_{attach}",
+        detach,
+        f"__export_symbol_{detach}",
+    ]
+    export_name_count = len(
+        re.findall(r"^\s*#\[\s*export_name\s*=", code, re.MULTILINE)
+    )
+    if export_name_count != len(expected_export_names):
+        raise ValidationError(
+            "native IHK provider export-name surface differs from the closed review"
+        )
+    export_positions = []
+    for name in expected_export_names:
+        export_positions.extend(
+            _require_active_count(
+                text,
+                code,
+                f'#[export_name = "{name}"]',
+                1,
+                "native IHK provider export-name surface",
+            )
+        )
+    if export_positions != sorted(export_positions):
+        raise ValidationError(
+            "native IHK provider export-name order differs from the closed review"
+        )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2:
+        raise ValidationError(
+            "native IHK provider must expose exactly two reviewed C ABI functions"
+        )
+    if len(re.findall(r"\bextern\b", code)) != 2:
+        raise ValidationError("native IHK provider contains an unreviewed extern boundary")
+    for fragment, label in (
+        ('#[link_section = ".export_symbol"]', "export record"),
+        ('license: *b"GPL\\0",', "GPL export"),
+        (f'namespace: *b"{lease["namespace"]}\\0",', "namespace surface"),
+    ):
+        _require_active_count(text, code, fragment, 3, f"native IHK provider {label}")
+    if any(re.search(r"\btoken\s*=", literal) for literal in _active_string_literals(text, code)):
+        raise ValidationError("native IHK provider must not log its opaque lease token")
+    for pattern in (
+        r"\bextern\s+crate\b",
+        r"\blink_name\b",
+        r"\bno_mangle\b",
+        r"\binclude(?:_bytes)?!\s*\(",
+        r"\b(?:global_asm|asm)!\s*\(",
+    ):
+        if re.search(pattern, code, re.MULTILINE):
+            raise ValidationError(f"native IHK provider contains forbidden boundary: {pattern}")
 
 
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
@@ -606,6 +959,7 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     )
     _validate_reference_inventory(_load_json(inventory_path), contract)
     _validate_selected_kernel(_load_json(source_lock_path), contract)
+    provider_lease = contract["ihk_dependency"]["reviewed_provider_lease_boundary"]
     return {
         "binfmt_status": contract["binfmt"]["native_registration_status"],
         "dependencies": len(contract["dependencies"]),
@@ -620,6 +974,10 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         "provider_symbol": contract["ihk_dependency"]["native_symbol_import"][
             "provider_symbol"
         ],
+        "provider_lease_consumer": provider_lease["consumer"],
+        "provider_lease_credit_eligible": False,
+        "provider_lease_mcctrl_reachable": False,
+        "provider_lease_runtime_validated": False,
         "required_import_namespace": contract["ihk_dependency"]["required_import_namespace"],
         "rocky_build_load_validated": False,
         "runtime_symbol_reference_proven": False,

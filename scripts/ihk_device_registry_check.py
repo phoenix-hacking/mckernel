@@ -3,10 +3,11 @@
 
 The checker binds the allocation-free Rust state machine and its standalone
 fixture to the exact legacy registration/open/release/unregister oracle.  It
-also verifies the current negative integration boundaries: the crate root does
-not construct a registry instance and the scalar ioctl contract still rejects
-device registration.  Source agreement here cannot prove a Linux cdev adapter,
-provider callback ownership, exact Kbuild, or runtime behavior.
+also verifies the bounded production integration: the crate root owns one
+const registry and exposes only the versioned scalar SMP provider-lease ABI,
+while the ioctl contract still rejects device registration.  Source agreement
+here cannot prove a Linux cdev adapter, provider callbacks, exact Kbuild, or
+runtime behavior.
 """
 
 from __future__ import print_function
@@ -26,6 +27,8 @@ FIXTURE_PATH = "scripts/tests/fixtures/ihk_device_registry_compile.rs"
 CRATE_ROOT_PATH = "host-kernel/native-rust/ihk.rs"
 IOCTL_CONTRACT_PATH = "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json"
 CONTRACT_PATH = "host-kernel/contracts/ihk-device-registry-foundation-v1.json"
+PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v1"
+PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v1"
 REFERENCE_INVENTORY_PATH = "host-kernel/reference/legacy-host-modules-f2eb7352.json"
 REFERENCE_INVENTORY_SIZE = 246393
 REFERENCE_INVENTORY_SHA256 = (
@@ -83,6 +86,12 @@ IN_FILE_TESTS = (
     "open_before_unregister_excludes_unregister",
     "unregister_before_open_excludes_new_references",
     "concurrent_publications_claim_unique_slots",
+    "production_registry_token_round_trip_is_positive_and_exact",
+    "provider_token_header_version_and_generation_fail_closed",
+    "provider_token_is_stale_after_unregister_and_slot_reuse",
+    "dynamic_registry_cannot_issue_or_accept_production_tokens",
+    "concurrent_provider_attaches_publish_exactly_one_minor_zero_lease",
+    "concurrent_duplicate_detach_has_one_winner_and_no_live_slot",
     "errno_mapping_and_minor_bounds_fail_closed",
 )
 
@@ -93,6 +102,8 @@ FIXTURE_TESTS = (
     "deterministic_open_first_interleaving_blocks_unregister",
     "deterministic_unregister_first_interleaving_blocks_references",
     "simultaneous_publishers_get_unique_generation_tagged_slots",
+    "production_token_adapter_round_trips_and_detaches",
+    "malformed_and_replayed_production_tokens_fail_closed",
 )
 
 ERRNO_MAP = {
@@ -101,6 +112,7 @@ ERRNO_MAP = {
     "Corrupt": -117,
     "GenerationExhausted": -75,
     "InvalidMinor": -22,
+    "InvalidToken": -22,
     "NotFound": -2,
     "OsReferenceOverflow": -75,
     "ProviderReferenceOverflow": -75,
@@ -109,10 +121,10 @@ ERRNO_MAP = {
 }
 
 READINESS_BLOCKERS = (
-    "ihk.rs imports the private module but constructs and owns no DeviceRegistry instance",
+    "the production registry exposes only an SMP provider-presence lease; it has no Linux cdev or file-operations adapter",
     "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-    "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership are not modeled",
-    "provider callback module-owner pinning and unload drainage are not implemented",
+    "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership remain unmodeled",
+    "the provider lease proves module dependency ownership but not callback module-owner pinning or unload drainage",
     "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
     "legacy-stable first-fit and full-table results require an audited outer serialization adapter",
     "the nullable legacy registration return and callback errno surface have no audited Rust ABI bridge",
@@ -127,6 +139,7 @@ INTENTIONAL_DELTAS = (
     "new opens and OS attachments are rejected after unpublishing linearizes while existing OS leases may drain",
     "concurrent lock-free reserve scans are observational until a Linux adapter supplies legacy-stable outer serialization",
     "typed internal errors are richer than the legacy nullable registration handle and require a later ABI adapter",
+    "a magic/version/generation-tagged positive scalar token rejects malformed, cross-registry, and recycled-minor leases",
 )
 
 
@@ -396,6 +409,32 @@ def _require_order(text, fragments, label):
             )
 
 
+def _active_fragment_positions(source, code, fragment, label):
+    """Return exact fragment occurrences whose Rust syntax is active code."""
+
+    fragment_code = _rust_code_view(fragment, label + " fragment")
+    positions = []
+    search_from = 0
+    while True:
+        position = source.find(fragment, search_from)
+        if position < 0:
+            return positions
+        end = position + len(fragment)
+        if code[position:end] == fragment_code:
+            positions.append(position)
+        search_from = position + 1
+
+
+def _require_active_count(source, code, fragment, expected, label):
+    actual = len(_active_fragment_positions(source, code, fragment, label))
+    if actual != expected:
+        raise ContractError(
+            "{0} active occurrence count differs for {1}: expected {2}, got {3}".format(
+                label, fragment, expected, actual
+            )
+        )
+
+
 def _function_body(source, signature, label):
     start = source.find(signature)
     if start < 0:
@@ -416,6 +455,11 @@ def _function_body(source, signature, label):
 
 
 def _validate_native_transactions(production):
+    # Every structural transaction check below operates on active Rust syntax.
+    # Keeping byte offsets/newlines stable prevents braces and required text in
+    # comments or literals from changing function extraction or satisfying an
+    # authority fragment.
+    production = _rust_code_view(production, "device registry production source")
     slot_by_handle = _function_body(
         production, "fn slot_by_handle(", "DeviceRegistry::slot_by_handle"
     )
@@ -532,6 +576,113 @@ def _validate_native_transactions(production):
             "PHASE_VACANT | PHASE_RETIRED => Err(DeviceRegistryError::NotFound)",
         ),
         "native live-only minor resolution",
+    )
+
+    production_constructor = _function_body(
+        production, "const fn production(", "DeviceRegistry::production"
+    )
+    _require_order(
+        production_constructor,
+        (
+            "registry_id: PRODUCTION_DEVICE_REGISTRY_ID,",
+            "slots: [const { Slot::new() }; DEVICE_CAPACITY],",
+        ),
+        "native const production registry",
+    )
+
+    encode_token = _function_body(
+        production,
+        "pub(crate) fn encode_provider_token(",
+        "DeviceRegistry::encode_provider_token",
+    )
+    _require_order(
+        encode_token,
+        (
+            "self.registry_id != PRODUCTION_DEVICE_REGISTRY_ID",
+            "return Err(DeviceRegistryError::InvalidToken);",
+            "let snapshot = self.snapshot(handle)?;",
+            "snapshot.phase != ActiveDevicePhase::Live",
+            "return Err(DeviceRegistryError::Busy);",
+            "PROVIDER_TOKEN_HEADER << PROVIDER_TOKEN_HEADER_SHIFT",
+            "handle.generation << PROVIDER_TOKEN_GENERATION_SHIFT",
+            "handle.minor as u64",
+            "token == 0 || token > i64::MAX as u64",
+            "Ok(token as i64)",
+        ),
+        "native provider-token encoding",
+    )
+
+    decode_token = _function_body(
+        production,
+        "pub(crate) fn decode_provider_token(",
+        "DeviceRegistry::decode_provider_token",
+    )
+    _require_order(
+        decode_token,
+        (
+            "self.registry_id != PRODUCTION_DEVICE_REGISTRY_ID || token <= 0",
+            "return Err(DeviceRegistryError::InvalidToken);",
+            "raw >> PROVIDER_TOKEN_HEADER_SHIFT != PROVIDER_TOKEN_HEADER",
+            "let minor = raw & PROVIDER_TOKEN_MINOR_MASK;",
+            "PROVIDER_TOKEN_GENERATION_MASK;",
+            "minor >= DEVICE_CAPACITY as u64 || handle_generation == 0",
+            "registry_id: self.registry_id,",
+            "generation: handle_generation,",
+        ),
+        "native provider-token decoding",
+    )
+
+    attach_token = _function_body(
+        production,
+        "pub(crate) fn attach_provider_token(",
+        "DeviceRegistry::attach_provider_token",
+    )
+    _require_order(
+        attach_token,
+        (
+            "let reservation = self.reserve(SharePolicy::Shared)?;",
+            "let reserved = reservation.handle();",
+            "reserved.minor() != 0",
+            "reservation.abort()?;",
+            "return Err(DeviceRegistryError::Busy);",
+            "let handle = reservation.publish()?;",
+            "match self.encode_provider_token(handle)",
+            ".begin_unregister(handle)",
+            ".and_then(|unregister| unregister.commit());",
+            "Err(cleanup_error) => Err(cleanup_error),",
+        ),
+        "native minor-zero provider attach transaction",
+    )
+
+    detach_token = _function_body(
+        production,
+        "pub(crate) fn detach_provider_token(",
+        "DeviceRegistry::detach_provider_token",
+    )
+    _require_order(
+        detach_token,
+        (
+            "let handle = self.decode_provider_token(token)?;",
+            "self.begin_unregister(handle)?.commit()?;",
+            "Ok(handle)",
+        ),
+        "native exact-token provider detach transaction",
+    )
+
+    retire_owned = _function_body(
+        production,
+        "pub(crate) fn retire_owned_provider_token(",
+        "DeviceRegistry::retire_owned_provider_token",
+    )
+    _require_order(
+        retire_owned,
+        (
+            "match self.detach_provider_token(token)",
+            "Ok(handle) => handle,",
+            "Err(error) => panic!(",
+            "error.errno(),",
+        ),
+        "native fail-stop owned-provider retirement",
     )
 
     acquire_open = _function_body(
@@ -742,7 +893,7 @@ def _validate_native_transactions(production):
             "Self::NotFound => -ENOENT,",
             "Self::Capacity => -ENOMEM,",
             "Self::Busy => -EBUSY,",
-            "Self::InvalidMinor => -EINVAL,",
+            "Self::InvalidMinor | Self::InvalidToken => -EINVAL,",
             "Self::RegistryIdentityExhausted",
             "| Self::GenerationExhausted",
             "| Self::ProviderReferenceOverflow",
@@ -932,7 +1083,11 @@ def _validate_rust(data):
     required = (
         "use core::sync::atomic::{AtomicU64, Ordering};",
         "pub(crate) const DEVICE_CAPACITY: usize = 64;",
-        "static NEXT_DEVICE_REGISTRY_ID: AtomicU64 = AtomicU64::new(1);",
+        "const PRODUCTION_DEVICE_REGISTRY_ID: u64 = 1;",
+        "static NEXT_DEVICE_REGISTRY_ID: AtomicU64 = AtomicU64::new(2);",
+        "const PROVIDER_TOKEN_VERSION: u64 = 1;",
+        "const PROVIDER_TOKEN_MAGIC: u64 = 0x49_48_4b;",
+        "const PROVIDER_TOKEN_HEADER_SHIFT: u32 = 34;",
         "slots: [Slot; DEVICE_CAPACITY]",
         "const PHASE_VACANT: u64 = 0;",
         "const PHASE_PUBLISHING: u64 = 1;",
@@ -957,6 +1112,13 @@ def _validate_rust(data):
         ".checked_add(1)",
         "handle.registry_id != self.registry_id",
         "generation(current) != handle.generation",
+        "pub(crate) static IHK_DEVICE_REGISTRY: DeviceRegistry = DeviceRegistry::production();",
+        "const fn production() -> Self",
+        "pub(crate) fn encode_provider_token(",
+        "pub(crate) fn decode_provider_token(",
+        "pub(crate) fn attach_provider_token(",
+        "pub(crate) fn detach_provider_token(",
+        "pub(crate) fn retire_owned_provider_token(",
         "impl Drop for ReservationGuard",
         "impl Drop for OpenLease",
         "impl Drop for DeviceOsLease",
@@ -966,13 +1128,21 @@ def _validate_rust(data):
         "os_references(current) == MAX_REFERENCES",
         "provider_references(current) != 0 || os_references(current) != 0",
         "PHASE_LIVE | PHASE_UNPUBLISHING",
-        "pin the provider module behind every callback table",
-        "compensate any",
     )
     for fragment in required:
-        if fragment not in production:
+        if fragment not in production_code:
             raise ContractError(
                 "device registry lacks locked marker: {0}".format(fragment)
+            )
+    for fragment in (
+        "pin the provider module behind every callback table",
+        "compensate any",
+    ):
+        if fragment not in production:
+            raise ContractError(
+                "device registry lacks locked safety documentation: {0}".format(
+                    fragment
+                )
             )
     if production_code.count("compare_exchange(") < 10:
         raise ContractError("device registry lacks the reviewed atomic transition surface")
@@ -1001,15 +1171,119 @@ def _validate_fixture(data):
 
 
 def _validate_boundaries(crate_root_data, ioctl_contract_data):
-    crate_root = _rust_code_view(
-        _text(crate_root_data, "IHK crate root"), "IHK crate root"
-    )
+    source = _text(crate_root_data, "IHK crate root")
+    crate_root = _rust_code_view(source, "IHK crate root")
     declaration = "#[allow(dead_code)]\nmod device_registry;"
-    if crate_root.count(declaration) != 1:
+    _require_active_count(
+        source, crate_root, declaration, 1, "IHK private device-registry edge"
+    )
+    if crate_root.count(_rust_code_view(declaration, "device-registry declaration")) != 1:
         raise ContractError("IHK crate root lacks the private device-registry edge")
-    remainder = crate_root.replace(declaration, "", 1)
-    if re.search(r"\b(?:device_registry|DeviceRegistry)\b", remainder):
-        raise ContractError("IHK crate root unexpectedly uses the device registry")
+    required = (
+        "use self::device_registry::IHK_DEVICE_REGISTRY;",
+        "IHK_DEVICE_REGISTRY.attach_provider_token()",
+        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        "IHK_DEVICE_REGISTRY.active_count()",
+    )
+    for fragment in required:
+        _require_active_count(
+            source, crate_root, fragment, 1, "IHK provider-lease boundary"
+        )
+        if crate_root.count(_rust_code_view(fragment, "provider-lease fragment")) != 1:
+            raise ContractError(
+                "IHK crate root lacks exact provider-lease boundary: {0}".format(
+                    fragment
+                )
+            )
+    if crate_root.count("IHK_DEVICE_REGISTRY") != 4:
+        raise ContractError("IHK crate root has an unreviewed production-registry use")
+    if len(re.findall(r"\bdevice_registry\b", crate_root)) != 2:
+        raise ContractError("IHK crate root has an unreviewed device-registry alias")
+    for forbidden in (
+        ".acquire_open(",
+        ".acquire_os(",
+        ".resolve_minor(",
+        "miscdevice",
+        "cdev",
+        "file_operations",
+    ):
+        if forbidden in crate_root:
+            raise ContractError(
+                "IHK provider lease reaches forbidden adapter: {0}".format(forbidden)
+            )
+
+    attach_signature = _rust_code_view(
+        'pub extern "C" fn {0}()'.format(PROVIDER_ATTACH_SYMBOL),
+        "IHK SMP provider attach signature",
+    )
+    attach = _function_body(
+        crate_root,
+        attach_signature,
+        "IHK SMP provider attach export",
+    )
+    _require_order(
+        attach,
+        (
+            "IHK_DEVICE_REGISTRY.attach_provider_token()",
+            "Ok(token) => token,",
+            "Err(error) => return error.errno() as i64,",
+            "pr_info!(",
+            "token",
+        ),
+        "IHK scalar provider attach export",
+    )
+    _require_active_count(
+        source,
+        crate_root,
+        'pr_info!("provider_lease=attach status=live minor=0\\n");',
+        1,
+        "IHK provider attach diagnostic",
+    )
+    detach_signature = _rust_code_view(
+        'pub extern "C" fn {0}(token: i64)'.format(PROVIDER_DETACH_SYMBOL),
+        "IHK SMP provider detach signature",
+    )
+    detach = _function_body(
+        crate_root,
+        detach_signature,
+        "IHK SMP provider detach export",
+    )
+    _require_order(
+        detach,
+        (
+            "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+            "pr_info!(",
+            "handle.minor(),",
+            "handle.generation(),",
+        ),
+        "IHK scalar provider detach export",
+    )
+    _require_active_count(
+        source,
+        crate_root,
+        '"provider_lease=detach status=vacant minor={} generation={}\\n",',
+        1,
+        "IHK provider detach diagnostic",
+    )
+    for symbol in (PROVIDER_ATTACH_SYMBOL, PROVIDER_DETACH_SYMBOL):
+        required_export = (
+            '#[export_name = "{0}"]'.format(symbol),
+            '#[export_name = "__export_symbol_{0}"]'.format(symbol),
+            "symbol: {0} as *const () as *const u8,".format(symbol),
+        )
+        for fragment in required_export:
+            _require_active_count(
+                source, crate_root, fragment, 1, "IHK provider lease export"
+            )
+    if len(
+        _active_fragment_positions(
+            source,
+            crate_root,
+            'pub extern "C" fn ',
+            "IHK C-ABI export",
+        )
+    ) != 2:
+        raise ContractError("IHK crate root contains an unreviewed C-ABI export")
 
     ioctl_contract = _load_json_bytes(ioctl_contract_data, "ioctl contract")
     implementation = ioctl_contract.get("implementation", {})
@@ -1063,8 +1337,13 @@ def derive_contract(
             "crate_root_path": CRATE_ROOT_PATH,
             "crate_root_sha256": _sha(crate_root),
             "crate_root_size": len(crate_root),
-            "crate_root_constructs_registry_instance": False,
+            "crate_root_constructs_registry_instance": True,
             "private_module_edge_validated": True,
+            "production_registry_static": "IHK_DEVICE_REGISTRY",
+            "provider_lease_exports": [
+                PROVIDER_ATTACH_SYMBOL,
+                PROVIDER_DETACH_SYMBOL,
+            ],
         },
         "behavior": {
             "capacity": 64,
@@ -1107,7 +1386,7 @@ def derive_contract(
             "path": FIXTURE_PATH,
             "sha256": _sha(fixture),
         },
-        "foundation_status": "private-crate-attached-allocation-free-device-registry",
+        "foundation_status": "production-crate-owned-allocation-free-device-registry-provider-lease-only",
         "gate_id": "IHK-004-device-registry-foundation",
         "intentional_safety_deltas": list(INTENTIONAL_DELTAS),
         "ioctl_boundary": {
@@ -1174,6 +1453,27 @@ def derive_contract(
             "path": RUST_PATH,
             "sha256": _sha(rust),
             "size": len(rust),
+        },
+        "provider_lease_boundary": {
+            "attach_return": "positive-i64-token-or-negative-errno",
+            "attach_symbol": PROVIDER_ATTACH_SYMBOL,
+            "callback_payload_reachable": False,
+            "credit_eligible": False,
+            "detach_return": "infallible-owned-token-retirement-or-fail-stop",
+            "detach_symbol": PROVIDER_DETACH_SYMBOL,
+            "device_node_reachable": False,
+            "import_namespace": "MCKERNEL_IHK_V1",
+            "minor": 0,
+            "runtime_validated": False,
+            "token": {
+                "generation_bits": [6, 33],
+                "magic": "IHK",
+                "magic_bits": [39, 62],
+                "minor_bits": [0, 5],
+                "positive_i64": True,
+                "version": 1,
+                "version_bits": [34, 38],
+            },
         },
         "readiness": {
             "blockers": list(READINESS_BLOCKERS),

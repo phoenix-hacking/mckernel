@@ -69,6 +69,18 @@ EXPECTED_SUPPORT_SOURCES = (
         "path": "host-kernel/native-rust/page_owner_registry.rs",
     },
 )
+EXPECTED_PROVIDER_LEASE = {
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": False,
+    "credit_eligible": False,
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": False,
+    "import_namespace": "MCKERNEL_IHK_V1",
+    "registry_static": "IHK_DEVICE_REGISTRY",
+    "rocky_runtime_validated": False,
+    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "token_version": 1,
+}
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 BOUND_MODINFO_ENVIRONMENT = {
     "LANG": "C",
@@ -146,40 +158,214 @@ def _require_keys(value: dict[str, Any], expected: set[str], label: str) -> None
         )
 
 
+def _blank_rust_span(masked, text, start, end, preserved=()):
+    preserved = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text, start):
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text):
+    """Return active Rust syntax with comments/literal contents blanked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    break
+                else:
+                    end += 1
+            else:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _active_fragment_positions(text, code, fragment):
+    fragment_code = _mask_rust_comments_and_literals(fragment)
+    positions = []
+    search_from = 0
+    while True:
+        position = text.find(fragment, search_from)
+        if position < 0:
+            return positions
+        if code[position : position + len(fragment)] == fragment_code:
+            positions.append(position)
+        search_from = position + 1
+
+
+def _require_active_count(text, code, fragment, expected, label):
+    actual = len(_active_fragment_positions(text, code, fragment))
+    if actual != expected:
+        raise ValidationError(
+            f"{label} active occurrence count differs for {fragment}: "
+            f"expected {expected}, got {actual}"
+        )
+
+
 def _rust_string_constant(text: str, name: str) -> str:
-    match = re.search(
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
         rf'^const {re.escape(name)}:\s*&str\s*=\s*"([^"\\]*)";$',
         text,
         re.MULTILINE,
-    )
-    if not match:
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    if len(matches) != 1:
         raise ValidationError(f"Rust source must define literal {name}: &str")
-    return match.group(1)
+    return matches[0].group(1)
 
 
 def _rust_integer_constant(text: str, name: str) -> int:
-    match = re.search(
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
         rf"^const {re.escape(name)}:\s*(?:u16|usize)\s*=\s*([0-9]+);$",
         text,
         re.MULTILINE,
-    )
-    if not match:
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()] == match.group(0)
+    ]
+    if len(matches) != 1:
         raise ValidationError(f"Rust source must define literal integer {name}")
-    return int(match.group(1))
+    return int(matches[0].group(1))
 
 
 def _module_metadata(text: str, field: str) -> str:
-    block = re.search(r"module!\s*\{(?P<body>.*?)^\}", text, re.MULTILINE | re.DOTALL)
-    if not block:
+    code = _mask_rust_comments_and_literals(text)
+    starts = list(re.finditer(r"\bmodule!\s*\{", code))
+    if len(starts) != 1:
         raise ValidationError("Rust source lacks a module! entry point")
-    match = re.search(
+    opening = code.find("{", starts[0].start())
+    depth = 0
+    closing = None
+    for position in range(opening, len(code)):
+        if code[position] == "{":
+            depth += 1
+        elif code[position] == "}":
+            depth -= 1
+            if depth == 0:
+                closing = position
+                break
+    if closing is None:
+        raise ValidationError("Rust module! entry point lacks a closing brace")
+    body = text[opening + 1 : closing]
+    body_code = code[opening + 1 : closing]
+    matches = list(re.finditer(
         rf'^\s*{re.escape(field)}:\s*"([^"\\]*)",$',
-        block.group("body"),
+        body,
         re.MULTILINE,
-    )
-    if not match:
+    ))
+    matches = [
+        match for match in matches
+        if body_code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    if len(matches) != 1:
         raise ValidationError(f"module! metadata lacks literal {field}")
-    return match.group(1)
+    return matches[0].group(1)
 
 
 def _validate_contract(contract: dict[str, Any]) -> None:
@@ -197,6 +383,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "parameter_count",
             "production_source",
             "production_source_sha256",
+            "provider_lease",
             "reference_inventory",
             "schema_version",
             "stage_manifest",
@@ -214,6 +401,8 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("ihk core must match the legacy zero-parameter surface")
     if contract["production_source"] != "host-kernel/native-rust/ihk.rs":
         raise ValidationError("IHK lifecycle contract redirects the crate root")
+    if contract["provider_lease"] != EXPECTED_PROVIDER_LEASE:
+        raise ValidationError("IHK provider-lease contract differs or overclaims readiness")
     if not isinstance(contract["production_source_sha256"], str) or not HEX64.fullmatch(
         contract["production_source_sha256"]
     ):
@@ -232,7 +421,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "device_registry.rs",
             "path": "host-kernel/native-rust/device_registry.rs",
-            "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb",
+            "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
         },
         {
             "destination": "ikc_master.rs",
@@ -269,6 +458,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 
 
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+    code = _mask_rust_comments_and_literals(text)
     for fragment in (
         '#[path = "abi/x86_64.rs"]\nmod abi;',
         "mod ikc_queue;",
@@ -278,10 +468,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         "mod page_allocator;",
         "mod page_owner_registry;",
     ):
-        if text.count(fragment) != 1:
-            raise ValidationError(
-                f"IHK crate root lacks the exact staged module edge: {fragment}"
-            )
+        _require_active_count(text, code, fragment, 1, "IHK staged module edge")
     module = contract["module"]
     expected_metadata = {
         "name": module["name"],
@@ -307,33 +494,100 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
 
     version = module["version"]
     for record in (f'version={version}\\0', f'ihk.version={version}\\0'):
-        if f'*b"{record}"' not in text:
-            raise ValidationError(f"Rust source lacks version modinfo record: {record}")
-    if '#[cfg(MODULE)]' not in text or '#[cfg(not(MODULE))]' not in text:
+        _require_active_count(
+            text, code, f'*b"{record}"', 1, "IHK version modinfo record"
+        )
+    if '#[cfg(MODULE)]' not in code or '#[cfg(not(MODULE))]' not in code:
         raise ValidationError("version metadata must cover loadable and built-in forms")
 
-    if "impl kernel::Module for IhkModule" not in text or "impl Drop for IhkModule" not in text:
+    if "impl kernel::Module for IhkModule" not in code or "impl Drop for IhkModule" not in code:
         raise ValidationError("Rust source lacks paired module init and exit lifecycle")
-    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in text or "Ok(Self)" not in text:
+    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code or "Ok(Self)" not in code:
         raise ValidationError("ihk init must expose an unconditional dependency-free success path")
     for phase in ("load", "unload"):
         expected = contract["lifecycle_logs"][phase]
-        if f'"{expected}\\n"' not in text:
-            raise ValidationError(f"Rust source lacks stable {phase} lifecycle log")
+        _require_active_count(
+            text,
+            code,
+            f'"{expected}\\n"',
+            1,
+            f"IHK stable {phase} lifecycle log",
+        )
+
+    lease = contract["provider_lease"]
+    attach = lease["attach_symbol"]
+    detach = lease["detach_symbol"]
+    namespace = lease["import_namespace"]
+    registry = lease["registry_static"]
+    required_provider_fragments = (
+        f"use self::device_registry::{registry};",
+        f'#[export_name = "{attach}"]',
+        f'pub extern "C" fn {attach}() -> i64 {{',
+        f"match {registry}.attach_provider_token()",
+        'pr_info!("provider_lease=attach status=live minor=0\\n");',
+        f'#[export_name = "__export_symbol_{attach}"]',
+        f"symbol: {attach} as *const () as *const u8,",
+        f'#[export_name = "{detach}"]',
+        f'pub extern "C" fn {detach}(token: i64) {{',
+        f"{registry}.retire_owned_provider_token(token)",
+        '"provider_lease=detach status=vacant minor={} generation={}\\n",',
+        f'#[export_name = "__export_symbol_{detach}"]',
+        f"symbol: {detach} as *const () as *const u8,",
+        f"match {registry}.active_count() {{",
+        'Ok(0) => pr_info!("provider_registry=empty active=0\\n"),',
+    )
+    for fragment in required_provider_fragments:
+        _require_active_count(
+            text, code, fragment, 1, "IHK provider-lease exact reviewed boundary"
+        )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2 or len(
+        _active_fragment_positions(text, code, 'extern "C"')
+    ) != 2:
+        raise ValidationError("IHK provider-lease source has an unreviewed C ABI boundary")
+    _require_active_count(
+        text, code, '#[link_section = ".export_symbol"]', 3,
+        "IHK provider relocation record",
+    )
+    _require_active_count(
+        text, code, f'namespace: *b"{namespace}\\0",', 3,
+        "IHK provider import namespace",
+    )
+    _require_active_count(
+        text, code, 'license: *b"GPL\\0",', 3, "IHK provider GPL export"
+    )
+    if code.count(registry) != 4:
+        raise ValidationError("IHK provider registry singleton has unexpected reachability")
+    if re.search(
+        r"pr_(?:info|err|warn)!\s*\([^;]*\btoken\b",
+        code,
+        re.MULTILINE | re.DOTALL,
+    ):
+        raise ValidationError("IHK provider diagnostics must not disclose opaque tokens")
+    registry_check = code.index(f"match {registry}.active_count() {{")
+    unload_positions = _active_fragment_positions(
+        text, code, f'"{contract["lifecycle_logs"]["unload"]}\\n"'
+    )
+    if len(unload_positions) != 1:
+        raise ValidationError("IHK unload lifecycle diagnostic is not unique active code")
+    unload_log = unload_positions[0]
+    if registry_check >= unload_log:
+        raise ValidationError("IHK provider registry must be checked before unload completion")
 
     for pattern in (
-        r'extern\s+"C"',
         r"\bextern\s+crate\b",
+        r'extern\s+"C"\s*\{',
         r"\binclude(?:_bytes)?!\s*\(",
         r"\b(?:global_asm|asm)!\s*\(",
         r"\bmodule_param(?:_named)?\s*!?\s*\(",
         r"^\s*params\s*:",
     ):
-        if re.search(pattern, text, re.MULTILINE):
+        if re.search(pattern, code, re.MULTILINE):
             raise ValidationError(f"Rust lifecycle source contains forbidden boundary: {pattern}")
-    for match in re.finditer(r"^\s*use\s+([^;]+);", text, re.MULTILINE):
+    for match in re.finditer(r"^\s*use\s+([^;]+);", code, re.MULTILINE):
         imported = match.group(1).strip()
-        if not imported.startswith(("kernel::", "core::")):
+        if not imported.startswith(("kernel::", "core::")) and imported != (
+            "self::device_registry::IHK_DEVICE_REGISTRY"
+        ):
             raise ValidationError(f"unreviewed Rust dependency in lifecycle source: {imported}")
 
 
@@ -397,19 +651,36 @@ def _validate_support_sources(
     if device_contract.get("gate_id") != "IHK-004-device-registry-foundation":
         raise ValidationError("device registry support contract identity differs")
     if device_contract.get("foundation_status") != (
-            "private-crate-attached-allocation-free-device-registry"):
-        raise ValidationError("device registry support contract overclaims attachment readiness")
+            "production-crate-owned-allocation-free-device-registry-provider-lease-only"):
+        raise ValidationError("device registry support contract differs from the provider-lease boundary")
     if (device_source.get("path") != device_item["path"] or
             device_source.get("sha256") != device_item["sha256"]):
         raise ValidationError("device registry contract does not bind the staged source")
     if device_attachment != {
-            "crate_root_constructs_registry_instance": False,
+            "crate_root_constructs_registry_instance": True,
             "crate_root_path": contract["production_source"],
             "crate_root_sha256": contract["production_source_sha256"],
             "crate_root_size": len(source_text.encode("utf-8")),
             "private_module_edge_validated": True,
+            "production_registry_static": contract["provider_lease"]["registry_static"],
+            "provider_lease_exports": [
+                contract["provider_lease"]["attach_symbol"],
+                contract["provider_lease"]["detach_symbol"],
+            ],
     }:
-        raise ValidationError("device registry contract overclaims crate-root attachment")
+        raise ValidationError("device registry contract differs from crate-root attachment")
+    device_lease = device_contract.get("provider_lease_boundary", {})
+    if device_lease.get("attach_symbol") != contract["provider_lease"]["attach_symbol"] or (
+        device_lease.get("detach_symbol") != contract["provider_lease"]["detach_symbol"]
+    ) or device_lease.get("import_namespace") != contract["provider_lease"]["import_namespace"] or (
+        device_lease.get("minor") != 0
+        or device_lease.get("token", {}).get("version") != contract["provider_lease"]["token_version"]
+        or device_lease.get("callback_payload_reachable") is not False
+        or device_lease.get("device_node_reachable") is not False
+        or device_lease.get("runtime_validated") is not False
+        or device_lease.get("credit_eligible") is not False
+    ):
+        raise ValidationError("device registry provider-lease boundary differs or overclaims readiness")
     if device_evidence != {
             "credit_eligible": False,
             "exact_kbuild_validated": False,
@@ -676,6 +947,12 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         "gate_id": contract["gate_id"],
         "module": contract["module"]["name"],
         "parameters": contract["parameter_count"],
+        "provider_lease_validated": True,
+        "provider_symbols": [
+            "ihk_provider_lifecycle_v1",
+            contract["provider_lease"]["attach_symbol"],
+            contract["provider_lease"]["detach_symbol"],
+        ],
         "source_sha256": _sha256(source_path),
         "transitive_module_count": len(module_paths),
         "support_sources": len(support_paths),
@@ -746,6 +1023,92 @@ def _artifact_modinfo(
     return _modinfo(module_path, field, modinfo_fd=modinfo_fd)
 
 
+def _defined_symbols(module_path: Path) -> set[str]:
+    executable = shutil.which("nm")
+    if executable is None:
+        raise ValidationError("nm is required for built-module provider validation")
+    result = subprocess.run(
+        [executable, "-a", "--defined-only", str(module_path)],
+        check=False,
+        capture_output=True,
+        env=dict(BOUND_MODINFO_ENVIRONMENT),
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValidationError(
+            "nm defined-symbol scan failed "
+            f"({result.returncode}): {result.stderr.strip() or result.stdout.strip()}"
+        )
+    return {line.split()[-1] for line in result.stdout.splitlines() if line.split()}
+
+
+def _validate_provider_export_symbols(
+    defined_symbols: set[str], provider_symbols: set[str]
+) -> None:
+    missing_provider_symbols = sorted(provider_symbols - defined_symbols)
+    if missing_provider_symbols:
+        raise ValidationError(
+            "built ihk.ko lacks provider definitions: "
+            + ", ".join(missing_provider_symbols)
+        )
+
+    if "__ksymtab" in defined_symbols:
+        raise ValidationError("built ihk.ko contains a non-GPL __ksymtab section")
+
+    expected_ksymtab = {f"__ksymtab_{symbol}" for symbol in provider_symbols}
+    expected_kstrtab = {f"__kstrtab_{symbol}" for symbol in provider_symbols}
+    expected_kstrtabns = {f"__kstrtabns_{symbol}" for symbol in provider_symbols}
+    required_export_symbols = (
+        expected_ksymtab
+        | expected_kstrtab
+        | expected_kstrtabns
+        | {"__ksymtab_gpl", "__ksymtab_strings"}
+    )
+    missing_export_symbols = sorted(required_export_symbols - defined_symbols)
+    if missing_export_symbols:
+        raise ValidationError(
+            "built ihk.ko lacks provider GPL export metadata: "
+            + ", ".join(missing_export_symbols)
+        )
+
+    actual_ksymtab = {
+        symbol
+        for symbol in defined_symbols
+        if symbol.startswith("__ksymtab_")
+        and symbol not in {"__ksymtab_gpl", "__ksymtab_strings"}
+    }
+    actual_kstrtab = {
+        symbol for symbol in defined_symbols if symbol.startswith("__kstrtab_")
+    }
+    actual_kstrtabns = {
+        symbol for symbol in defined_symbols if symbol.startswith("__kstrtabns_")
+    }
+    unexpected_export_symbols = sorted(
+        (actual_ksymtab - expected_ksymtab)
+        | (actual_kstrtab - expected_kstrtab)
+        | (actual_kstrtabns - expected_kstrtabns)
+    )
+    if unexpected_export_symbols:
+        raise ValidationError(
+            "built ihk.ko contains unreviewed export metadata: "
+            + ", ".join(unexpected_export_symbols)
+        )
+
+    provider_definition_pattern = re.compile(
+        r"^ihk(?:_smp)?_provider_[A-Za-z0-9_]+$"
+    )
+    unexpected_provider_definitions = sorted(
+        symbol
+        for symbol in defined_symbols - provider_symbols
+        if provider_definition_pattern.fullmatch(symbol)
+    )
+    if unexpected_provider_definitions:
+        raise ValidationError(
+            "built ihk.ko contains unreviewed provider definitions: "
+            + ", ".join(unexpected_provider_definitions)
+        )
+
+
 def validate_module_artifact(
     module_path: Path, summary: dict[str, Any], modinfo_fd: int | None = None
 ) -> None:
@@ -766,8 +1129,22 @@ def validate_module_artifact(
             )
     if _artifact_modinfo(module_path, None, modinfo_fd) != "":
         raise ValidationError("built ihk.ko unexpectedly exposes module parameters")
+    _validate_provider_export_symbols(
+        _defined_symbols(module_path), set(summary["provider_symbols"])
+    )
     data = module_path.read_bytes()
-    for phase in ("lifecycle=load", "lifecycle=unload"):
+    namespace_record = (
+        EXPECTED_PROVIDER_LEASE["import_namespace"].encode("ascii") + b"\0"
+    )
+    if namespace_record not in data:
+        raise ValidationError("built ihk.ko lacks the reviewed provider namespace bytes")
+    for phase in (
+        "lifecycle=load",
+        "provider_lease=attach",
+        "provider_lease=detach",
+        "provider_registry=empty",
+        "lifecycle=unload",
+    ):
         if phase.encode("ascii") not in data:
             raise ValidationError(f"built ihk.ko lacks {phase} diagnostic string")
 

@@ -21,11 +21,54 @@ const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
 const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";
 
-// SAFETY: The provider owns this immutable namespaced byte for its full module
-// lifetime. Access is restricted to the dependency-establishing init read.
-extern "Rust" {
+// SAFETY: The provider owns these namespaced symbols for its full module
+// lifetime.  The byte is read-only; the C-ABI functions exchange only scalar
+// values and retain all registry state inside ihk.ko.
+extern "C" {
     #[link_name = "ihk_provider_lifecycle_v1"]
     static IHK_PROVIDER_LIFECYCLE_V1: u8;
+    #[link_name = "ihk_smp_provider_attach_v1"]
+    fn ihk_smp_provider_attach_v1() -> i64;
+    #[link_name = "ihk_smp_provider_detach_v1"]
+    fn ihk_smp_provider_detach_v1(token: i64);
+}
+
+fn provider_status_error(status: i64) -> Error {
+    let errno = match status {
+        -2 | -12 | -16 | -22 | -75 | -116 | -117 => status as i32,
+        _ => -117,
+    };
+    match kernel::error::to_result(errno) {
+        Err(error) => error,
+        Ok(()) => EIO,
+    }
+}
+
+#[must_use = "the provider lease must remain owned until SMP module teardown"]
+struct ProviderLease {
+    token: i64,
+}
+
+impl ProviderLease {
+    fn attach() -> Result<Self> {
+        // SAFETY: ihk.ko owns the exact namespaced C-ABI function for the
+        // dependency lifetime.  It accepts no pointers and returns either a
+        // positive opaque token or a negative errno.
+        let token = unsafe { ihk_smp_provider_attach_v1() };
+        if token <= 0 {
+            return Err(provider_status_error(token));
+        }
+        Ok(Self { token })
+    }
+}
+
+impl Drop for ProviderLease {
+    fn drop(&mut self) {
+        // SAFETY: This non-Copy owner calls the matching provider function
+        // exactly once with the positive token returned by attach.  The
+        // provider fails stop rather than returning with a live entry.
+        unsafe { ihk_smp_provider_detach_v1(self.token) };
+    }
 }
 
 // This is the x86_64 layout of Linux 6.12's `struct kernel_param`.  Keeping a
@@ -283,7 +326,9 @@ module! {
     license: "Dual BSD/GPL",
 }
 
-struct IhkSmpModule;
+struct IhkSmpModule {
+    provider_lease: Option<ProviderLease>,
+}
 
 impl kernel::Module for IhkSmpModule {
     fn init(_module: &'static ThisModule) -> Result<Self> {
@@ -293,18 +338,22 @@ impl kernel::Module for IhkSmpModule {
         let _ = unsafe {
             core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))
         };
+        let provider_lease = ProviderLease::attach()?;
         pr_info!(
             "lifecycle=load parameters={} dependency={} import_namespace={}\n",
             IHK_SMP_PARAMETER_COUNT,
             IHK_SMP_DEPENDENCY,
             IHK_SMP_IMPORT_NAMESPACE,
         );
-        Ok(Self)
+        Ok(Self {
+            provider_lease: Some(provider_lease),
+        })
     }
 }
 
 impl Drop for IhkSmpModule {
     fn drop(&mut self) {
+        drop(self.provider_lease.take());
         pr_info!(
             "lifecycle=unload parameters={} dependency={} import_namespace={}\n",
             IHK_SMP_PARAMETER_COUNT,

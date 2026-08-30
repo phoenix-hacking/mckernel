@@ -1,10 +1,15 @@
 {
   "attachment_boundary": {
-    "crate_root_constructs_registry_instance": false,
+    "crate_root_constructs_registry_instance": true,
     "crate_root_path": "host-kernel/native-rust/ihk.rs",
-    "crate_root_sha256": "c53ed495f8dfd1b0e4876c99b6be8cf8a3589cf42e2d40cec75d5d8a56d38fb7",
-    "crate_root_size": 3859,
-    "private_module_edge_validated": true
+    "crate_root_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+    "crate_root_size": 6838,
+    "private_module_edge_validated": true,
+    "production_registry_static": "IHK_DEVICE_REGISTRY",
+    "provider_lease_exports": [
+      "ihk_smp_provider_attach_v1",
+      "ihk_smp_provider_detach_v1"
+    ]
   },
   "behavior": {
     "capacity": 64,
@@ -35,6 +40,7 @@
     "Corrupt": -117,
     "GenerationExhausted": -75,
     "InvalidMinor": -22,
+    "InvalidToken": -22,
     "NotFound": -2,
     "OsReferenceOverflow": -75,
     "ProviderReferenceOverflow": -75,
@@ -51,16 +57,18 @@
   },
   "fixture": {
     "edition": "2021",
-    "expected_fixture_tests": 6,
-    "expected_in_file_tests": 23,
-    "expected_total_tests": 29,
+    "expected_fixture_tests": 8,
+    "expected_in_file_tests": 29,
+    "expected_total_tests": 37,
     "fixture_test_names": [
       "success_path_publishes_counts_and_unregisters",
       "failed_external_publication_aborts_without_reusing_handle",
       "registry_state_rollback_restores_live_before_external_commit",
       "deterministic_open_first_interleaving_blocks_unregister",
       "deterministic_unregister_first_interleaving_blocks_references",
-      "simultaneous_publishers_get_unique_generation_tagged_slots"
+      "simultaneous_publishers_get_unique_generation_tagged_slots",
+      "production_token_adapter_round_trips_and_detaches",
+      "malformed_and_replayed_production_tokens_fail_closed"
     ],
     "in_file_test_names": [
       "exact_capacity_first_fit_generation_reuse_and_stale_rejection",
@@ -85,14 +93,20 @@
       "open_before_unregister_excludes_unregister",
       "unregister_before_open_excludes_new_references",
       "concurrent_publications_claim_unique_slots",
+      "production_registry_token_round_trip_is_positive_and_exact",
+      "provider_token_header_version_and_generation_fail_closed",
+      "provider_token_is_stale_after_unregister_and_slot_reuse",
+      "dynamic_registry_cannot_issue_or_accept_production_tokens",
+      "concurrent_provider_attaches_publish_exactly_one_minor_zero_lease",
+      "concurrent_duplicate_detach_has_one_winner_and_no_live_slot",
       "errno_mapping_and_minor_bounds_fail_closed"
     ],
     "minimum_rustc": "1.92.0",
     "no_std_library_mode": true,
     "path": "scripts/tests/fixtures/ihk_device_registry_compile.rs",
-    "sha256": "bd80a91c387417a9b46adce89be8ee83911948daa9cb937faf8e2ca9ca820bd6"
+    "sha256": "1d49b35baa181938eadfa2a918da6f63a8aa33bc2af32c3bd32036f02baf4717"
   },
-  "foundation_status": "private-crate-attached-allocation-free-device-registry",
+  "foundation_status": "production-crate-owned-allocation-free-device-registry-provider-lease-only",
   "gate_id": "IHK-004-device-registry-foundation",
   "intentional_safety_deltas": [
     "generation-tagged handles and a nonwrapping registry identity reject recycled-minor and cross-registry ABA",
@@ -101,7 +115,8 @@
     "publishing, live, and unpublishing phases make reservation and unregister rollback explicit",
     "new opens and OS attachments are rejected after unpublishing linearizes while existing OS leases may drain",
     "concurrent lock-free reserve scans are observational until a Linux adapter supplies legacy-stable outer serialization",
-    "typed internal errors are richer than the legacy nullable registration handle and require a later ABI adapter"
+    "typed internal errors are richer than the legacy nullable registration handle and require a later ABI adapter",
+    "a magic/version/generation-tagged positive scalar token rejects malformed, cross-registry, and recycled-minor leases"
   ],
   "ioctl_boundary": {
     "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
@@ -187,15 +202,48 @@
     "ffi_free": true,
     "minimum_compare_exchange_sites": 10,
     "path": "host-kernel/native-rust/device_registry.rs",
-    "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb",
-    "size": 44193
+    "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
+    "size": 56395
+  },
+  "provider_lease_boundary": {
+    "attach_return": "positive-i64-token-or-negative-errno",
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": false,
+    "credit_eligible": false,
+    "detach_return": "infallible-owned-token-retirement-or-fail-stop",
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": false,
+    "import_namespace": "MCKERNEL_IHK_V1",
+    "minor": 0,
+    "runtime_validated": false,
+    "token": {
+      "generation_bits": [
+        6,
+        33
+      ],
+      "magic": "IHK",
+      "magic_bits": [
+        39,
+        62
+      ],
+      "minor_bits": [
+        0,
+        5
+      ],
+      "positive_i64": true,
+      "version": 1,
+      "version_bits": [
+        34,
+        38
+      ]
+    }
   },
   "readiness": {
     "blockers": [
-      "ihk.rs imports the private module but constructs and owns no DeviceRegistry instance",
+      "the production registry exposes only an SMP provider-presence lease; it has no Linux cdev or file-operations adapter",
       "no supported Linux cdev, miscdevice, file-operations, or mcd minor adapter reserves and publishes registry slots",
-      "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership are not modeled",
-      "provider callback module-owner pinning and unload drainage are not implemented",
+      "provider payload, callback-table lifetime, init/exit compensation, and external teardown ownership remain unmodeled",
+      "the provider lease proves module dependency ownership but not callback module-owner pinning or unload drainage",
       "DeviceOsLease is not coupled to canonical os_registry create/destroy ownership",
       "legacy-stable first-fit and full-table results require an audited outer serialization adapter",
       "the nullable legacy registration return and callback errno surface have no audited Rust ABI bridge",

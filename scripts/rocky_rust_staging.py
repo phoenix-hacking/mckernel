@@ -99,7 +99,7 @@ EXPECTED_INPUTS = (
         "destination": "device_registry.rs",
         "kind": "rust_support_module",
         "repository_path": "host-kernel/native-rust/device_registry.rs",
-        "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb",
+        "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7",
     },
     {
         "destination": "ikc_master.rs",
@@ -200,7 +200,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "c53ed495f8dfd1b0e4876c99b6be8cf8a3589cf42e2d40cec75d5d8a56d38fb7",
+        "source_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -212,7 +212,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "28c68abd4887f7990ae50a5ab198806d61518dd304e5c4be50f15451e3aa4cd8",
+        "source_sha256": "2442c4511ac9bf5b032c691a0f560e87a22352720c3d07df60b927335149ebb9",
     },
     {
         "crate": "mcctrl",
@@ -232,6 +232,37 @@ AUDITED_PROVIDER_EXTERN = (
     '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
     "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
     "}"
+)
+AUDITED_IHK_ATTACH_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI scalar boundary owns no caller memory.  A positive return\n'
+    '// is a versioned opaque token for the single published minor-zero provider;\n'
+    '// every failure is a negative errno and leaves no live reservation behind.\n'
+    '#[export_name = "ihk_smp_provider_attach_v1"]\n'
+    '// SAFETY: This exported C ABI accepts no caller-owned state and returns only\n'
+    '// the registry-owned scalar token or a negative errno.\n'
+    'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {'
+)
+AUDITED_IHK_DETACH_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI scalar boundary consumes the exact v1 token owned by the\n'
+    '// reviewed namespaced SMP dependent.  The token is an ownership receipt, not\n'
+    '// a security boundary against other privileged in-kernel code.  Any malformed,\n'
+    '// stale, duplicated, busy, or corrupt state fails stop before unload succeeds.\n'
+    '#[export_name = "ihk_smp_provider_detach_v1"]\n'
+    '// SAFETY: This exported C ABI accepts only the opaque scalar issued by attach\n'
+    '// and cannot return while the owned provider entry remains live.\n'
+    'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {'
+)
+AUDITED_SMP_PROVIDER_EXTERN = (
+    'extern "C" {\n'
+    '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+    '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
+    '    #[link_name = "ihk_smp_provider_attach_v1"]\n'
+    '    fn ihk_smp_provider_attach_v1() -> i64;\n'
+    '    #[link_name = "ihk_smp_provider_detach_v1"]\n'
+    '    fn ihk_smp_provider_detach_v1(token: i64);\n'
+    '}'
 )
 EXPECTED_TOP_LEVEL_KEYS = {
     "build_contract",
@@ -454,20 +485,27 @@ def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
     allowed_starts = set()
     for exact in allowed_extern_blocks:
         starts = []
+        extern_offset = exact.find("extern")
+        if extern_offset < 0:
+            raise ValidationError(
+                "{0} audited extern allowlist item lacks extern".format(label)
+            )
         search_from = 0
         while True:
-            start = text.find(exact, search_from)
-            if start < 0:
+            exact_start = text.find(exact, search_from)
+            if exact_start < 0:
                 break
-            if start in extern_starts:
-                starts.append(start)
-            search_from = start + 1
+            extern_start = exact_start + extern_offset
+            if extern_start in extern_starts:
+                starts.append((exact_start, extern_start))
+            search_from = exact_start + 1
         if len(starts) != 1:
             raise ValidationError(
                 "{0} lacks one exact audited extern boundary".format(label)
             )
-        _validate_bare_audited_extern(masked, starts[0], label)
-        allowed_starts.add(starts[0])
+        exact_start, extern_start = starts[0]
+        _validate_bare_audited_extern(masked, exact_start, label)
+        allowed_starts.add(extern_start)
     if any(start not in allowed_starts for start in extern_starts):
         raise ValidationError(
             "{0} contains an additional unreviewed extern boundary".format(label)
@@ -999,7 +1037,14 @@ def _validate_module(repo_root, module, expected, index):
     _validate_digest(path, source["sha256"], label + ".source")
     text = _read_text(path, label + ".source")
     allowed_extern_blocks = ()
-    if module["crate"] in ("ihk_smp_x86_64", "mcctrl"):
+    if module["crate"] == "ihk":
+        allowed_extern_blocks = (
+            AUDITED_IHK_ATTACH_EXTERN,
+            AUDITED_IHK_DETACH_EXTERN,
+        )
+    elif module["crate"] == "ihk_smp_x86_64":
+        allowed_extern_blocks = (AUDITED_SMP_PROVIDER_EXTERN,)
+    elif module["crate"] == "mcctrl":
         allowed_extern_blocks = (AUDITED_PROVIDER_EXTERN,)
     _validate_rust_escape_hatches(
         text, label + ".source", allowed_extern_blocks=allowed_extern_blocks

@@ -40,6 +40,7 @@ def valid_serial() -> str:
         f"{protocol} STATE_END label=initial-clean",
         f"{protocol} LOAD module=ihk status=ok",
         "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+        "ihk: provider_lease=attach status=live minor=0",
         f"{protocol} LOAD module=ihk_smp_x86_64 status=ok",
         "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
@@ -70,29 +71,65 @@ def valid_serial() -> str:
         f"{protocol} UNLOAD module=mcctrl status=ok",
         f"{protocol} REFCOUNT module=ihk phase=after-mcctrl-unload references=1 "
         "users=ihk_smp_x86_64,",
+        "ihk: provider_lease=detach status=vacant minor=0 generation=1",
         "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok",
         f"{protocol} REFCOUNT module=ihk phase=after-smp-unload references=0 users=-",
+        "ihk: provider_registry=empty active=0",
         "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
         f"{protocol} UNLOAD module=ihk status=ok",
         f"{protocol} STATE_BEGIN label=final-clean",
         f"{protocol} STATE_END label=final-clean",
         f"{protocol} DMESG_BEGIN",
         "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+        "ihk: provider_lease=attach status=live minor=0",
         "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
         "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
         "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
         "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
+        "ihk: provider_lease=detach status=vacant minor=0 generation=1",
         "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
+        "ihk: provider_registry=empty active=0",
         "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
         f"{protocol} DMESG_END",
         f"{protocol} COMPLETE status=technical-capture-unreviewed credit=forbidden",
     ]
     return "\n".join(records) + "\n"
+
+
+def provider_global_nm(symbols=None) -> str:
+    if symbols is None:
+        symbols = evidence.PROVIDER_SYMBOLS
+    return "".join(
+        "0000000000000100 T {0}\n".format(symbol) for symbol in symbols
+    )
+
+
+def provider_all_defined_nm(symbols=None) -> str:
+    if symbols is None:
+        symbols = evidence.PROVIDER_SYMBOLS
+    records = [
+        "0000000000000000 r __ksymtab_gpl\n",
+        "0000000000000000 r __ksymtab_strings\n",
+    ]
+    for symbol in symbols:
+        records.extend(
+            (
+                "0000000000000000 r __ksymtab_{0}\n".format(symbol),
+                "0000000000000000 r __kstrtab_{0}\n".format(symbol),
+                "0000000000000000 r __kstrtabns_{0}\n".format(symbol),
+                "0000000000000100 T {0}\n".format(symbol),
+            )
+        )
+    return "".join(records)
+
+
+def provider_undefined_nm(symbols) -> str:
+    return "".join("                 U {0}\n".format(symbol) for symbol in symbols)
 
 
 class NativeRustRuntimeEvidenceTests(unittest.TestCase):
@@ -221,6 +258,170 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 evidence.BOUND_ROCKY_TOOL_ENVIRONMENT,
                 run.call_args.kwargs["env"],
             )
+
+    def test_runtime_module_symbol_graph_accepts_only_the_exact_three_edges(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        items = {item["name"]: item for item in contract["modules"]}
+        modules = {
+            "ihk": self.root / "ihk.ko",
+            "ihk_smp_x86_64": self.root / "ihk-smp-x86_64.ko",
+            "mcctrl": self.root / "mcctrl.ko",
+        }
+        modules["ihk"].write_bytes(
+            b"prefix\0" + evidence.PROVIDER_EXPORT_NAMESPACE.encode("ascii") + b"\0suffix"
+        )
+        modules["ihk_smp_x86_64"].write_bytes(b"smp")
+        modules["mcctrl"].write_bytes(b"mcctrl")
+
+        def nm_output(module, arguments):
+            if module.name == "ihk.ko" and arguments == ["-g", "--defined-only"]:
+                return provider_global_nm()
+            if module.name == "ihk.ko" and arguments == ["-a", "--defined-only"]:
+                return provider_all_defined_nm()
+            if module.name == "ihk-smp-x86_64.ko" and arguments == ["-u"]:
+                return provider_undefined_nm(evidence.PROVIDER_SYMBOLS)
+            if module.name == "mcctrl.ko" and arguments == ["-u"]:
+                return provider_undefined_nm((evidence.PROVIDER_ANCHOR_SYMBOL,))
+            self.fail("unexpected nm request: {0} {1}".format(module, arguments))
+
+        with mock.patch.object(evidence, "_nm", side_effect=nm_output) as nm:
+            ihk = evidence._validate_module_symbol_graph(modules["ihk"], items["ihk"])
+            smp = evidence._validate_module_symbol_graph(
+                modules["ihk_smp_x86_64"], items["ihk_smp_x86_64"]
+            )
+            mcctrl = evidence._validate_module_symbol_graph(
+                modules["mcctrl"], items["mcctrl"]
+            )
+        self.assertEqual(4, nm.call_count)
+        self.assertEqual(list(evidence.PROVIDER_SYMBOLS), ihk["defined_provider_symbols"])
+        self.assertEqual(
+            list(evidence.PROVIDER_SYMBOLS), ihk["gpl_exported_provider_symbols"]
+        )
+        self.assertEqual(
+            evidence.PROVIDER_EXPORT_NAMESPACE, ihk["provider_export_namespace"]
+        )
+        self.assertEqual(
+            list(evidence.PROVIDER_SYMBOLS), smp["undefined_provider_symbols"]
+        )
+        self.assertEqual(
+            [evidence.PROVIDER_ANCHOR_SYMBOL], mcctrl["undefined_provider_symbols"]
+        )
+
+    def test_ihk_runtime_symbol_graph_rejects_non_gpl_and_unexported_definitions(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = contract["modules"][0]
+        module = self.root / "ihk.ko"
+        module.write_bytes(evidence.PROVIDER_EXPORT_NAMESPACE.encode("ascii") + b"\0")
+        all_defined = provider_all_defined_nm()
+        mutations = (
+            (
+                "non-gpl",
+                all_defined + "0000000000000000 r __ksymtab\n",
+                "non-GPL __ksymtab",
+            ),
+            (
+                "defined-but-unexported",
+                all_defined.replace(
+                    "0000000000000000 r __ksymtab_{0}\n".format(
+                        evidence.PROVIDER_ATTACH_SYMBOL
+                    ),
+                    "",
+                    1,
+                ),
+                "GPL export metadata",
+            ),
+            (
+                "missing-namespace-record",
+                all_defined.replace(
+                    "0000000000000000 r __kstrtabns_{0}\n".format(
+                        evidence.PROVIDER_DETACH_SYMBOL
+                    ),
+                    "",
+                    1,
+                ),
+                "GPL export metadata",
+            ),
+        )
+        for label, local_symbols, diagnostic in mutations:
+            with self.subTest(label=label), mock.patch.object(
+                evidence,
+                "_nm",
+                side_effect=(provider_global_nm(), local_symbols),
+            ):
+                with self.assertRaisesRegex(evidence.EvidenceError, diagnostic):
+                    evidence._validate_module_symbol_graph(module, item)
+
+    def test_ihk_runtime_symbol_graph_requires_global_definitions_and_namespace_bytes(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = contract["modules"][0]
+        module = self.root / "ihk.ko"
+        module.write_bytes(evidence.PROVIDER_EXPORT_NAMESPACE.encode("ascii") + b"\0")
+        globals_without_attach = provider_global_nm(
+            tuple(
+                symbol
+                for symbol in evidence.PROVIDER_SYMBOLS
+                if symbol != evidence.PROVIDER_ATTACH_SYMBOL
+            )
+        )
+        with mock.patch.object(
+            evidence,
+            "_nm",
+            side_effect=(globals_without_attach, provider_all_defined_nm()),
+        ):
+            with self.assertRaisesRegex(evidence.EvidenceError, "global definitions"):
+                evidence._validate_module_symbol_graph(module, item)
+
+        module.write_bytes(b"namespace-is-absent")
+        with mock.patch.object(
+            evidence,
+            "_nm",
+            side_effect=(provider_global_nm(), provider_all_defined_nm()),
+        ):
+            with self.assertRaisesRegex(evidence.EvidenceError, "namespace bytes"):
+                evidence._validate_module_symbol_graph(module, item)
+
+    def test_smp_runtime_symbol_graph_requires_all_three_undefined_relocations(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = contract["modules"][1]
+        module = self.root / "ihk-smp-x86_64.ko"
+        module.write_bytes(b"smp")
+        for missing in evidence.PROVIDER_SYMBOLS:
+            with self.subTest(missing=missing), mock.patch.object(
+                evidence,
+                "_nm",
+                return_value=provider_undefined_nm(
+                    tuple(symbol for symbol in evidence.PROVIDER_SYMBOLS if symbol != missing)
+                ),
+            ):
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "undefined relocation graph"
+                ):
+                    evidence._validate_module_symbol_graph(module, item)
+
+    def test_mcctrl_runtime_symbol_graph_rejects_provider_lease_relocations(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = contract["modules"][2]
+        module = self.root / "mcctrl.ko"
+        module.write_bytes(b"mcctrl")
+        with mock.patch.object(
+            evidence,
+            "_nm",
+            return_value=provider_undefined_nm(
+                (evidence.PROVIDER_ANCHOR_SYMBOL, evidence.PROVIDER_ATTACH_SYMBOL)
+            ),
+        ):
+            with self.assertRaisesRegex(evidence.EvidenceError, "undefined relocation graph"):
+                evidence._validate_module_symbol_graph(module, item)
 
     def write_runtime_evidence_artifact(self) -> Path:
         directory = Path(
@@ -404,19 +605,32 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "kernel_release": release,
                 "modules": {
                     "ihk": {
+                        "defined_provider_symbols": list(evidence.PROVIDER_SYMBOLS),
                         "depends": [],
+                        "gpl_exported_provider_symbols": list(
+                            evidence.PROVIDER_SYMBOLS
+                        ),
                         "import_namespaces": [],
+                        "provider_export_namespace": (
+                            evidence.PROVIDER_EXPORT_NAMESPACE
+                        ),
                         "sha256": digest,
                     },
                     "ihk_smp_x86_64": {
                         "depends": ["ihk"],
-                        "import_namespaces": ["MCKERNEL_IHK_V1"],
+                        "import_namespaces": [evidence.PROVIDER_EXPORT_NAMESPACE],
                         "sha256": digest,
+                        "undefined_provider_symbols": list(
+                            evidence.PROVIDER_SYMBOLS
+                        ),
                     },
                     "mcctrl": {
                         "depends": ["ihk"],
-                        "import_namespaces": ["MCKERNEL_IHK_V1"],
+                        "import_namespaces": [evidence.PROVIDER_EXPORT_NAMESPACE],
                         "sha256": digest,
+                        "undefined_provider_symbols": [
+                            evidence.PROVIDER_ANCHOR_SYMBOL
+                        ],
                     },
                 },
                 "scope": {
@@ -435,6 +649,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "initramfs_sha256_record": digest,
                 "kernel_release": release,
                 "negative_unload_status": 1,
+                "provider_lease": {
+                    "attach_observed": True,
+                    "detach_observed": True,
+                    "raw_token_logged": False,
+                    "registry_empty_observed": True,
+                },
                 "provider_refcount": 2,
                 "provider_users": ["ihk_smp_x86_64", "mcctrl"],
                 "qemu_command_sha256": digest,
@@ -460,6 +680,65 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(evidence.CONTRACT_ID, summary["contract_id"])
         self.assertEqual(["IHK-001", "SMP-001", "MCC-001"], summary["gate_ids"])
         self.assertEqual("tcg", summary["runtime"]["qemu_accelerator"])
+
+    def test_runtime_module_symbol_graph_contract_is_exact(self) -> None:
+        mutations = (
+            (0, "defined_provider_symbols", [evidence.PROVIDER_ANCHOR_SYMBOL]),
+            (0, "gpl_exported_provider_symbols", [evidence.PROVIDER_ANCHOR_SYMBOL]),
+            (0, "provider_export_namespace", "MCKERNEL_IHK_V2"),
+            (1, "undefined_provider_symbols", [evidence.PROVIDER_ANCHOR_SYMBOL]),
+            (
+                2,
+                "undefined_provider_symbols",
+                [evidence.PROVIDER_ANCHOR_SYMBOL, evidence.PROVIDER_ATTACH_SYMBOL],
+            ),
+        )
+        for index, field, value in mutations:
+            with self.subTest(index=index, field=field):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["modules"][index][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "runtime module graph differs"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_capture_module_symbol_graph_is_exact(self) -> None:
+        mutations = (
+            ("ihk", "defined_provider_symbols", [evidence.PROVIDER_ANCHOR_SYMBOL]),
+            (
+                "ihk",
+                "gpl_exported_provider_symbols",
+                [evidence.PROVIDER_ANCHOR_SYMBOL],
+            ),
+            ("ihk", "provider_export_namespace", "MCKERNEL_IHK_V2"),
+            (
+                "ihk_smp_x86_64",
+                "undefined_provider_symbols",
+                [evidence.PROVIDER_ANCHOR_SYMBOL],
+            ),
+            (
+                "mcctrl",
+                "undefined_provider_symbols",
+                [evidence.PROVIDER_ANCHOR_SYMBOL, evidence.PROVIDER_ATTACH_SYMBOL],
+            ),
+        )
+        for module, field, mutation in mutations:
+            with self.subTest(module=module, field=field):
+                value = self.valid_capture_unsigned()
+                value["build"]["modules"][module][field] = mutation
+                value["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(value)
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "capture module metadata differs"
+                ):
+                    evidence.validate_capture(value)
 
     def test_selected_custom_kernel_identity_mutations_fail_closed(self) -> None:
         mutations = (
@@ -595,6 +874,31 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         with self.assertRaisesRegex(evidence.EvidenceError, "credit/review boundary"):
             evidence.validate_contract(repo)
+
+    def test_provider_lease_contract_cannot_promote_runtime_gate_or_credit(self) -> None:
+        mutations = (
+            ("runtime_behavior_proven", True),
+            ("rocky_runtime_validated", True),
+            ("gate_status", "PASS"),
+            ("credit_eligible", True),
+            ("tracker_credit", True),
+            ("raw_token_logged", True),
+        )
+        for field, value in mutations:
+            with self.subTest(field=field):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["protocol"]["provider_lease"][field] = value
+                path.write_text(
+                    json.dumps(contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "load/refcount/unload protocol",
+                ):
+                    evidence.validate_contract(repo)
 
     def test_full_module_tree_claim_mutation_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
@@ -1267,6 +1571,15 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(2, result["provider_refcount"])
         self.assertEqual(["ihk_smp_x86_64", "mcctrl"], result["provider_users"])
         self.assertEqual(1, result["negative_unload_status"])
+        self.assertEqual(
+            {
+                "attach_observed": True,
+                "detach_observed": True,
+                "raw_token_logged": False,
+                "registry_empty_observed": True,
+            },
+            result["provider_lease"],
+        )
 
     def test_timestamped_lifecycle_and_module_taint_grammar_is_accepted(self) -> None:
         serial = valid_serial()
@@ -1279,19 +1592,186 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             serial = serial.replace(row, row + " (E)")
         for marker in (
             "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+            "ihk: provider_lease=attach status=live minor=0",
             "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
             "import_namespace=MCKERNEL_IHK_V1",
             "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
             "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1",
             "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
             "import_namespace=MCKERNEL_IHK_V1",
+            "ihk: provider_registry=empty active=0",
             "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
         ):
             serial = serial.replace(marker, "[    4.110654] " + marker)
         result = evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
         self.assertEqual(1, result["negative_unload_status"])
+
+    def test_provider_lease_events_are_required_once_in_runtime_dmesg(self) -> None:
+        markers = (
+            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            "ihk: provider_lease=detach status=vacant minor=0 generation=1",
+            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+        )
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        for marker in markers:
+            with self.subTest(marker=marker, mutation="missing"):
+                serial = valid_serial()
+                first = serial.index(marker)
+                second = serial.index(marker, first + len(marker))
+                serial = serial[:second] + serial[second:].replace(marker + "\n", "", 1)
+                with self.assertRaisesRegex(evidence.EvidenceError, "missing or duplicated"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+            with self.subTest(marker=marker, mutation="duplicate"):
+                serial = valid_serial().replace(
+                    dmesg_end,
+                    marker + "\n" + dmesg_end,
+                    1,
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "missing or duplicated"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_provider_lease_runtime_order_is_fail_closed(self) -> None:
+        ihk_load = "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+        smp_load = (
+            "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
+            "import_namespace=MCKERNEL_IHK_V1"
+        )
+        mcctrl_unload = (
+            "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
+            "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
+        )
+        detach = "ihk: provider_lease=detach status=vacant minor=0 generation=1"
+        smp_unload = (
+            "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
+            "import_namespace=MCKERNEL_IHK_V1"
+        )
+        ihk_unload = "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+        mutations = (
+            (
+                "attach-before-ihk-load",
+                ihk_load + "\n" + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+                evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC + "\n" + ihk_load,
+            ),
+            (
+                "attach-after-smp-load",
+                ihk_load
+                + "\n"
+                + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC
+                + "\n"
+                + smp_load,
+                ihk_load
+                + "\n"
+                + smp_load
+                + "\n"
+                + evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            ),
+            (
+                "detach-before-mcctrl-unload",
+                mcctrl_unload + "\n" + detach + "\n" + smp_unload,
+                detach + "\n" + mcctrl_unload + "\n" + smp_unload,
+            ),
+            (
+                "detach-after-smp-unload",
+                mcctrl_unload + "\n" + detach + "\n" + smp_unload,
+                mcctrl_unload + "\n" + smp_unload + "\n" + detach,
+            ),
+            (
+                "registry-empty-before-smp-unload",
+                smp_unload
+                + "\n"
+                + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
+                + "\n"
+                + ihk_unload,
+                evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
+                + "\n"
+                + smp_unload
+                + "\n"
+                + ihk_unload,
+            ),
+            (
+                "registry-empty-after-ihk-unload",
+                smp_unload
+                + "\n"
+                + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
+                + "\n"
+                + ihk_unload,
+                smp_unload
+                + "\n"
+                + ihk_unload
+                + "\n"
+                + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            ),
+        )
+        for label, before, after in mutations:
+            with self.subTest(label=label):
+                serial = valid_serial()
+                dmesg_begin = serial.index(f"{evidence.PROTOCOL} DMESG_BEGIN")
+                prefix = serial[:dmesg_begin]
+                dmesg = serial[dmesg_begin:]
+                self.assertEqual(1, dmesg.count(before))
+                serial = prefix + dmesg.replace(before, after, 1)
+                with self.assertRaisesRegex(evidence.EvidenceError, "out of order"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_provider_lease_failure_diagnostics_are_rejected(self) -> None:
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        for diagnostic in (
+            "ihk_smp_x86_64: provider_lease=detach-failed status=-16",
+            "ihk: provider_registry=not-empty active=1",
+            "ihk: provider_registry=corrupt errno=-117",
+        ):
+            with self.subTest(diagnostic=diagnostic):
+                serial = valid_serial().replace(
+                    dmesg_end,
+                    diagnostic + "\n" + dmesg_end,
+                    1,
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "fail-closed"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_provider_lease_raw_opaque_token_disclosure_is_rejected(self) -> None:
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        for diagnostic in (
+            "ihk: provider_lease=debug token=123456",
+            "ihk: provider_lease=debug raw_token=0x1234",
+            "ihk: provider_lease opaque-token=secret",
+        ):
+            with self.subTest(diagnostic=diagnostic):
+                serial = valid_serial().replace(
+                    dmesg_end,
+                    diagnostic + "\n" + dmesg_end,
+                    1,
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "raw opaque token"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_unrecognized_provider_lease_success_diagnostics_are_rejected(self) -> None:
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        for diagnostic in (
+            "ihk: provider_lease=attach status=live minor=1",
+            "ihk: provider_lease=detach status=vacant minor=0 generation=0",
+            "ihk: provider_registry=empty active=00",
+        ):
+            with self.subTest(diagnostic=diagnostic):
+                serial = valid_serial().replace(
+                    dmesg_end,
+                    diagnostic + "\n" + dmesg_end,
+                    1,
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "grammar differs"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_unrelated_token_field_does_not_alias_provider_diagnostics(self) -> None:
+        dmesg_end = f"{evidence.PROTOCOL} DMESG_END"
+        serial = valid_serial().replace(
+            dmesg_end,
+            "unrelated_subsystem: token=bounded\n" + dmesg_end,
+            1,
+        )
+        evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_prefixed_protocol_and_lifecycle_decoys_are_rejected(self) -> None:
         protocol = evidence.PROTOCOL
@@ -1568,6 +2048,26 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         capture["readiness"]["credit_eligible"] = True
         with self.assertRaisesRegex(evidence.EvidenceError, "bypass independent review"):
             evidence.validate_capture(capture)
+
+    def test_capture_provider_lease_summary_is_exact_and_nonpromotable(self) -> None:
+        for field, value in (
+            ("attach_observed", False),
+            ("detach_observed", False),
+            ("raw_token_logged", True),
+            ("registry_empty_observed", False),
+        ):
+            with self.subTest(field=field):
+                unsigned = self.valid_capture_unsigned()
+                unsigned["runtime"]["provider_lease"][field] = value
+                capture = copy.deepcopy(unsigned)
+                capture["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(unsigned)
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "provider lease lifecycle",
+                ):
+                    evidence.validate_capture(capture)
 
     def test_capture_rejects_omitted_or_positive_phase2_summaries(self) -> None:
         mutations = []

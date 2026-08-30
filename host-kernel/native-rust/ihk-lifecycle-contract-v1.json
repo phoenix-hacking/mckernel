@@ -14,7 +14,7 @@
     {
       "destination": "device_registry.rs",
       "path": "host-kernel/native-rust/device_registry.rs",
-      "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb"
+      "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7"
     },
     {
       "destination": "ikc_master.rs",
@@ -48,7 +48,19 @@
   },
   "parameter_count": 0,
   "production_source": "host-kernel/native-rust/ihk.rs",
-  "production_source_sha256": "c53ed495f8dfd1b0e4876c99b6be8cf8a3589cf42e2d40cec75d5d8a56d38fb7",
+  "production_source_sha256": "3988cd5a4eca902f945fd2c75dcb157a426d174390212d1e8c5f42aea04b7a9b",
+  "provider_lease": {
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": false,
+    "credit_eligible": false,
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": false,
+    "import_namespace": "MCKERNEL_IHK_V1",
+    "registry_static": "IHK_DEVICE_REGISTRY",
+    "rocky_runtime_validated": false,
+    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "token_version": 1
+  },
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json",
@@ -71,11 +83,11 @@
     },
     {
       "contract_path": "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
-      "contract_sha256": "43a11496e72059d4334e418f2d8552f9f11c12dc6dfa96f6057a3a39e6499557",
+      "contract_sha256": "db60e8866b7de8996d6fa781043306bdc8158ebbd5312caf0d6bd44f36b939b0",
       "destination": "device_registry.rs",
       "kind": "rust_support_module",
       "path": "host-kernel/native-rust/device_registry.rs",
-      "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb"
+      "sha256": "1e301c29c018f2ad7cc8dba121513b3d4e50707be500c70c631d53c83809dac7"
     },
     {
       "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",

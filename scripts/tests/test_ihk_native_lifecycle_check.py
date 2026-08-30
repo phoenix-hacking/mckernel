@@ -2,6 +2,7 @@ import ast
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -13,6 +14,20 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts import ihk_native_lifecycle_check as lifecycle
+
+
+def reviewed_artifact_symbols(provider_symbols):
+    symbols = set(provider_symbols)
+    for provider_symbol in provider_symbols:
+        symbols.update(
+            {
+                f"__ksymtab_{provider_symbol}",
+                f"__kstrtab_{provider_symbol}",
+                f"__kstrtabns_{provider_symbol}",
+            }
+        )
+    symbols.update({"__ksymtab_gpl", "__ksymtab_strings"})
+    return symbols
 
 
 class IhkNativeLifecycleCheckTests(unittest.TestCase):
@@ -57,6 +72,15 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, summary["dependencies"])
         self.assertEqual(4, summary["transitive_module_count"])
         self.assertEqual(6, summary["support_sources"])
+        self.assertTrue(summary["provider_lease_validated"])
+        self.assertEqual(
+            [
+                "ihk_provider_lifecycle_v1",
+                "ihk_smp_provider_attach_v1",
+                "ihk_smp_provider_detach_v1",
+            ],
+            summary["provider_symbols"],
+        )
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
         self.mutate_text(
@@ -208,7 +232,10 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         source = self.repo / self.contract["production_source"]
         with source.open("a", encoding="utf-8") as stream:
             stream.write('extern "C" { fn legacy_ihk_init(); }\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "forbidden boundary"):
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError,
+            "unreviewed C ABI boundary|forbidden boundary",
+        ):
             lifecycle.validate_repository(self.repo)
 
     def test_core_kconfig_module_dependency_is_rejected(self) -> None:
@@ -360,11 +387,11 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                     lifecycle.validate_repository(self.repo)
                 contract_path.write_text(original, encoding="utf-8")
 
-    def test_device_registry_support_contract_cannot_hide_an_instance(self) -> None:
+    def test_device_registry_support_contract_cannot_hide_production_instance(self) -> None:
         support = self.contract["support_sources"][2]
         contract_path = self.repo / support["contract_path"]
         value = json.loads(contract_path.read_text(encoding="utf-8"))
-        value["attachment_boundary"]["crate_root_constructs_registry_instance"] = True
+        value["attachment_boundary"]["crate_root_constructs_registry_instance"] = False
         contract_path.write_text(
             json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
@@ -376,6 +403,122 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "crate-root attachment"):
             lifecycle.validate_repository(self.repo)
+
+    def test_provider_lease_contract_cannot_claim_runtime_or_credit(self) -> None:
+        contract_path = self.repo / lifecycle.DEFAULT_CONTRACT
+        for field in ("rocky_runtime_validated", "credit_eligible"):
+            with self.subTest(field=field):
+                value = json.loads(contract_path.read_text(encoding="utf-8"))
+                value["provider_lease"][field] = True
+                contract_path.write_text(
+                    json.dumps(value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "provider-lease contract differs or overclaims readiness",
+                ):
+                    lifecycle.validate_repository(self.repo)
+                shutil.copyfile(REPO_ROOT / lifecycle.DEFAULT_CONTRACT, contract_path)
+
+    def test_provider_lease_symbols_and_signatures_are_exact(self) -> None:
+        mutations = (
+            (
+                '#[export_name = "ihk_smp_provider_attach_v1"]',
+                '#[export_name = "ihk_smp_provider_attach_v2"]',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {',
+                'pub extern "C" fn ihk_smp_provider_attach_v1(minor: u32) -> i64 {',
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {',
+                'pub extern "C" fn ihk_smp_provider_detach_v1(token: u64) {',
+            ),
+        )
+        source = self.repo / self.contract["production_source"]
+        original = source.read_text(encoding="utf-8")
+        for old, new in mutations:
+            with self.subTest(old=old):
+                self.assertIn(old, original)
+                source.write_text(original.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "exact reviewed boundary",
+                ):
+                    lifecycle.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
+
+    def test_provider_lease_export_namespace_and_pointer_are_exact(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        original = source.read_text(encoding="utf-8")
+        for old, new, error in (
+            (
+                'namespace: *b"MCKERNEL_IHK_V1\\0",',
+                'namespace: *b"MCKERNEL_BAD_V1\\0",',
+                "import namespace",
+            ),
+            (
+                "symbol: ihk_smp_provider_attach_v1 as *const () as *const u8,",
+                "symbol: core::ptr::null(),",
+                "exact reviewed boundary",
+            ),
+        ):
+            with self.subTest(old=old):
+                self.assertIn(old, original)
+                source.write_text(original.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                    lifecycle.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
+
+    def test_provider_registry_singleton_and_unload_check_are_exact(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        original = source.read_text(encoding="utf-8")
+        for old, new in (
+            (
+                "use self::device_registry::IHK_DEVICE_REGISTRY;",
+                "use self::device_registry::MISSING_DEVICE_REGISTRY;",
+            ),
+            (
+                "match IHK_DEVICE_REGISTRY.active_count() {",
+                "match Ok(0) {",
+            ),
+        ):
+            with self.subTest(old=old):
+                source.write_text(original.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "exact reviewed boundary",
+                ):
+                    lifecycle.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
+
+    def test_provider_lease_token_cannot_be_logged(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        original = source.read_text(encoding="utf-8")
+        needle = 'pr_info!("provider_lease=attach status=live minor=0\\n");'
+        replacement = 'pr_info!("provider_lease=attach token={}\\n", token);'
+        self.assertIn(needle, original)
+        source.write_text(original.replace(needle, replacement, 1), encoding="utf-8")
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError,
+            "exact reviewed boundary|must not disclose opaque tokens",
+        ):
+            lifecycle.validate_repository(self.repo)
+
+    def test_commented_detach_body_cannot_authorize_a_noop_export(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        old = '''    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n    pr_info!(\n        "provider_lease=detach status=vacant minor={} generation={}\\n",\n        handle.minor(),\n        handle.generation(),\n    );'''
+        new = '''    /*\n+    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n+    pr_info!(\n+        "provider_lease=detach status=vacant minor={} generation={}\\n",\n+        handle.minor(),\n+        handle.generation(),\n+    );\n+    */'''
+        self.assertIn(old, source)
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "exact reviewed boundary"
+        ):
+            lifecycle._validate_rust_source(
+                source.replace(old, new, 1), self.contract
+            )
 
     def test_ioctl_dispatch_registration_overclaim_is_rejected(self) -> None:
         support = self.contract["support_sources"][3]
@@ -409,7 +552,41 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
 
     def test_built_artifact_contract_checks_modinfo_and_logs(self) -> None:
         module = self.repo / "ihk.ko"
-        module.write_bytes(b"lifecycle=load\0lifecycle=unload\0")
+        module.write_bytes(
+            b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
+        )
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        artifact_symbols = reviewed_artifact_symbols(summary["provider_symbols"])
+        values = {
+            "name": "ihk",
+            "version": "1.7.0rc4",
+            "license": "GPL v2",
+            "depends": "",
+            None: "",
+        }
+        with mock.patch.object(
+            lifecycle, "_modinfo", side_effect=lambda _path, field=None: values[field]
+        ), mock.patch.object(
+            lifecycle, "_defined_symbols", return_value=artifact_symbols
+        ):
+            lifecycle.validate_module_artifact(module, summary)
+
+        values["depends"] = "legacy_ihk"
+        with mock.patch.object(
+            lifecycle, "_modinfo", side_effect=lambda _path, field=None: values[field]
+        ), mock.patch.object(
+            lifecycle, "_defined_symbols", return_value=artifact_symbols
+        ):
+            with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
+                lifecycle.validate_module_artifact(module, summary)
+
+    def test_built_artifact_requires_all_provider_definitions(self) -> None:
+        module = self.repo / "ihk.ko"
+        module.write_bytes(
+            b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
+        )
         summary = lifecycle.validate_repository(REPO_ROOT)
         values = {
             "name": "ihk",
@@ -420,15 +597,98 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         }
         with mock.patch.object(
             lifecycle, "_modinfo", side_effect=lambda _path, field=None: values[field]
+        ), mock.patch.object(
+            lifecycle,
+            "_defined_symbols",
+            return_value={"ihk_provider_lifecycle_v1"},
         ):
-            lifecycle.validate_module_artifact(module, summary)
+            with self.assertRaisesRegex(
+                lifecycle.ValidationError,
+                "lacks provider definitions",
+            ):
+                lifecycle.validate_module_artifact(module, summary)
 
-        values["depends"] = "legacy_ihk"
+    def test_built_artifact_rejects_defined_but_unexported_providers(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "lacks provider GPL export metadata"
+        ):
+            lifecycle._validate_provider_export_symbols(
+                set(summary["provider_symbols"]), set(summary["provider_symbols"])
+            )
+
+    def test_built_artifact_rejects_non_gpl_export_section(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        symbols = reviewed_artifact_symbols(summary["provider_symbols"])
+        symbols.remove("__ksymtab_gpl")
+        symbols.add("__ksymtab")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "non-GPL __ksymtab"):
+            lifecycle._validate_provider_export_symbols(
+                symbols, set(summary["provider_symbols"])
+            )
+
+    def test_built_artifact_requires_every_namespace_record(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        symbols = reviewed_artifact_symbols(summary["provider_symbols"])
+        symbols.remove(f'__kstrtabns_{summary["provider_symbols"][1]}')
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "lacks provider GPL export metadata"
+        ):
+            lifecycle._validate_provider_export_symbols(
+                symbols, set(summary["provider_symbols"])
+            )
+
+    def test_built_artifact_rejects_unreviewed_provider_export(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        symbols = reviewed_artifact_symbols(summary["provider_symbols"])
+        symbols.update(
+            {
+                "ihk_smp_provider_attach_v2",
+                "__ksymtab_ihk_smp_provider_attach_v2",
+                "__kstrtab_ihk_smp_provider_attach_v2",
+                "__kstrtabns_ihk_smp_provider_attach_v2",
+            }
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed export metadata"):
+            lifecycle._validate_provider_export_symbols(
+                symbols, set(summary["provider_symbols"])
+            )
+
+    def test_built_artifact_requires_namespace_bytes(self) -> None:
+        module = self.repo / "ihk.ko"
+        module.write_bytes(
+            b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
+            b"provider_registry=empty\0lifecycle=unload\0"
+        )
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        values = {
+            "name": "ihk",
+            "version": "1.7.0rc4",
+            "license": "GPL v2",
+            "depends": "",
+            None: "",
+        }
         with mock.patch.object(
             lifecycle, "_modinfo", side_effect=lambda _path, field=None: values[field]
+        ), mock.patch.object(
+            lifecycle,
+            "_defined_symbols",
+            return_value=reviewed_artifact_symbols(summary["provider_symbols"]),
         ):
-            with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
+            with self.assertRaisesRegex(lifecycle.ValidationError, "namespace bytes"):
                 lifecycle.validate_module_artifact(module, summary)
+
+    def test_defined_symbol_scan_includes_local_export_records(self) -> None:
+        completed = subprocess.CompletedProcess(
+            args=[], returncode=0, stdout="00000000 r __ksymtab_gpl\n", stderr=""
+        )
+        with mock.patch.object(lifecycle.shutil, "which", return_value="/usr/bin/nm"), \
+                mock.patch.object(lifecycle.subprocess, "run", return_value=completed) as run:
+            self.assertEqual({"__ksymtab_gpl"}, lifecycle._defined_symbols(Path("ihk.ko")))
+        self.assertEqual(
+            ["/usr/bin/nm", "-a", "--defined-only", "ihk.ko"],
+            run.call_args.args[0],
+        )
 
 
 if __name__ == "__main__":

@@ -75,6 +75,17 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["rocky_build_load_validated"])
         self.assertTrue(summary["source_symbol_reference_present"])
         self.assertFalse(summary["runtime_symbol_reference_proven"])
+        self.assertEqual(
+            [
+                "ihk_provider_lifecycle_v1",
+                "ihk_smp_provider_attach_v1",
+                "ihk_smp_provider_detach_v1",
+            ],
+            summary["provider_symbols"],
+        )
+        self.assertEqual("TODO", summary["provider_lease_gate_status"])
+        self.assertFalse(summary["provider_lease_credit_eligible"])
+        self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertFalse(summary["resource_foundation_linux_reachable"])
         self.assertEqual(29, summary["resource_foundation_tests"])
@@ -127,6 +138,9 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, result)
         rendered = output.getvalue()
         self.assertIn("SOURCE-CONTRACT-VERIFIED", rendered)
+        self.assertIn("provider_lease=TODO", rendered)
+        self.assertIn("provider_lease_runtime=NOT_PROVEN", rendered)
+        self.assertIn("tracker_credit=FORBIDDEN", rendered)
         self.assertIn("rocky_build_load=NOT_EVALUATED", rendered)
         self.assertNotIn("PASS", rendered)
 
@@ -251,6 +265,160 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "provider-symbol import"):
             lifecycle.validate_repository(self.repo)
 
+    def test_provider_lease_import_symbols_and_signatures_are_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        cases = (
+            (
+                '#[link_name = "ihk_smp_provider_attach_v1"]',
+                '#[link_name = "wrong_attach"]',
+            ),
+            (
+                "fn ihk_smp_provider_attach_v1() -> i64;",
+                "fn ihk_smp_provider_attach_v1() -> i32;",
+            ),
+            (
+                '#[link_name = "ihk_smp_provider_detach_v1"]',
+                '#[link_name = "wrong_detach"]',
+            ),
+            (
+                "fn ihk_smp_provider_detach_v1(token: i64);",
+                "fn ihk_smp_provider_detach_v1(token: u64);",
+            ),
+        )
+        for old, new in cases:
+            with self.subTest(mutation=old):
+                source_path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError, "three-symbol provider-symbol import"
+                ):
+                    lifecycle._validate_rust_source(
+                        source_path.read_text(encoding="utf-8"), self.contract
+                    )
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_provider_lease_errno_mapping_is_exact_and_fail_closed(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            ("_ => -117,", "_ => -22,"),
+            ("status as i32", "-117"),
+            ("kernel::error::to_result(errno)", "kernel::error::to_result(-117)"),
+            ("Ok(()) => EIO,", "Ok(()) => EINVAL,"),
+        )
+        for old, new in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(
+                lifecycle.ValidationError, "errno adapter"
+            ):
+                lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+        status_line = "-2 | -12 | -16 | -22 | -75 | -116 | -117"
+        for status in self.contract["provider_lease"]["errno_statuses"]:
+            with self.subTest(missing_status=status), self.assertRaisesRegex(
+                lifecycle.ValidationError, "errno adapter"
+            ):
+                lifecycle._validate_rust_source(
+                    source.replace(status_line, status_line.replace(str(status), "-999", 1), 1),
+                    self.contract,
+                )
+
+    def test_provider_lease_raii_owner_and_teardown_order_are_fail_closed(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            (
+                '#[must_use = "the provider lease must remain owned until SMP module teardown"]',
+                '#[derive(Copy, Clone)]\n#[must_use = "the provider lease must remain owned until SMP module teardown"]',
+                "Copy or Clone",
+            ),
+            (
+                "provider_lease: Option<ProviderLease>,",
+                "provider_lease: ProviderLease,",
+                "optional provider lease owner",
+            ),
+            (
+                "provider_lease: Some(provider_lease),",
+                "provider_lease: None,",
+                "retain the provider lease",
+            ),
+            (
+                "drop(self.provider_lease.take());",
+                "let _ = self.provider_lease.take();",
+                "retire the provider lease",
+            ),
+        )
+        for old, new, error in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(
+                lifecycle.ValidationError, error
+            ):
+                lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+
+        unload_log = f'"{self.contract["lifecycle_logs"]["unload"]}\\n"'
+        detach = "drop(self.provider_lease.take());"
+        detach_start = source.index(detach)
+        detach_end = detach_start + len(detach)
+        without_detach = source[:detach_start] + source[detach_end:]
+        unload_literal_start = without_detach.index(unload_log)
+        unload_end = without_detach.index("        );", unload_literal_start) + len(
+            "        );"
+        )
+        reordered = (
+            without_detach[:unload_end]
+            + "\n        "
+            + detach
+            + without_detach[unload_end:]
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "before its unload log"):
+            lifecycle._validate_rust_source(reordered, self.contract)
+
+    def test_commented_provider_detach_cannot_authorize_a_noop_drop(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        old = '''        // SAFETY: This non-Copy owner calls the matching provider function\n        // exactly once with the positive token returned by attach.  The\n        // provider fails stop rather than returning with a live entry.\n        unsafe { ihk_smp_provider_detach_v1(self.token) };'''
+        new = '''        /*\n+        // SAFETY: This non-Copy owner calls the matching provider function\n+        // exactly once with the positive token returned by attach.  The\n+        // provider fails stop rather than returning with a live entry.\n+        unsafe { ihk_smp_provider_detach_v1(self.token) };\n+        */'''
+        self.assertIn(old, source)
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "ownership path|call each imported"
+        ):
+            lifecycle._validate_rust_source(
+                source.replace(old, new, 1), self.contract
+            )
+
+    def test_provider_lease_raw_token_diagnostics_are_rejected(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        mutated = source.replace(
+            'unsafe { ihk_smp_provider_detach_v1(self.token) };',
+            'pr_err!("provider_lease=raw token={}\\n", self.token);\n'
+            '        unsafe { ihk_smp_provider_detach_v1(self.token) };',
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw token"):
+            lifecycle._validate_rust_source(mutated, self.contract)
+
+    def test_provider_lease_contract_cannot_promote_credit_or_runtime(self) -> None:
+        cases = (
+            ("credit_eligible", True),
+            ("gate_status", "PASS"),
+            ("rocky_runtime_validated", True),
+            ("runtime_behavior_proven", True),
+            ("tracker_credit", True),
+            ("callback_payload_reachable", True),
+            ("device_node_reachable", True),
+            ("raw_token_logged", True),
+        )
+        for field, value in cases:
+            with self.subTest(field=field):
+                contract = json.loads(json.dumps(self.contract))
+                contract["provider_lease"][field] = value
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError, "provider lease differs or overclaims"
+                ):
+                    lifecycle._validate_contract(contract)
+
     def test_manual_dependency_modinfo_is_rejected(self) -> None:
         source = self.repo / self.contract["production_source"]
         with source.open("a", encoding="utf-8") as stream:
@@ -264,8 +432,81 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             'namespace: *b"MCKERNEL_IHK_V1\\0"',
             'namespace: *b"UNVERSIONED_____\\0"',
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "provider anchor|versioned namespace"
+        ):
             lifecycle.validate_repository(self.repo)
+
+    def test_provider_lease_exports_are_exact_and_namespaced(self) -> None:
+        provider = (self.repo / self.contract["provider_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            (
+                '#[export_name = "ihk_smp_provider_attach_v1"]',
+                '#[export_name = "wrong_attach"]',
+                "required fragment",
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64',
+                'pub extern "C" fn ihk_smp_provider_attach_v1() -> i32',
+                "required fragment",
+            ),
+            (
+                "symbol: ihk_smp_provider_attach_v1 as *const () as *const u8",
+                "symbol: core::ptr::null()",
+                "required fragment",
+            ),
+            (
+                '#[export_name = "ihk_smp_provider_detach_v1"]',
+                '#[export_name = "wrong_detach"]',
+                "required fragment",
+            ),
+            (
+                'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64)',
+                'pub extern "C" fn ihk_smp_provider_detach_v1(token: u64)',
+                "required fragment",
+            ),
+            (
+                "symbol: ihk_smp_provider_detach_v1 as *const () as *const u8",
+                "symbol: core::ptr::null()",
+                "required fragment",
+            ),
+        )
+        for old, new, error in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(
+                lifecycle.ValidationError, error
+            ):
+                lifecycle._validate_provider_source(
+                    provider.replace(old, new, 1), self.contract
+                )
+
+    def test_provider_source_rejects_raw_token_logging(self) -> None:
+        provider = (self.repo / self.contract["provider_source"]).read_text(
+            encoding="utf-8"
+        )
+        mutated = provider.replace(
+            'pr_info!("provider_lease=attach status=live minor=0\\n");',
+            'pr_info!("provider_lease=attach token={} status=live minor=0\\n", token);',
+            1,
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease token"):
+            lifecycle._validate_provider_source(mutated, self.contract)
+
+    def test_provider_source_rejects_additional_ffi_boundaries(self) -> None:
+        provider = (self.repo / self.contract["provider_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            'extern "C" { fn hidden_provider(); }',
+            'pub extern "C" fn hidden_provider() {}',
+            'extern crate hidden_dependency;',
+        )
+        for extra in cases:
+            with self.subTest(extra=extra), self.assertRaisesRegex(
+                lifecycle.ValidationError, "extern boundary"
+            ):
+                lifecycle._validate_provider_source(provider + "\n" + extra, self.contract)
 
     def test_provider_export_record_field_order_drift_is_rejected(self) -> None:
         self.mutate_text(
@@ -367,13 +608,7 @@ macro_rules! áinclude { () => {} }
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
         )
-        symbol = self.contract["dependency_contract"]["provider_symbol"]
-        provider_import = (
-            'extern "Rust" {\n'
-            f'    #[link_name = "{symbol}"]\n'
-            "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
-            "}"
-        )
+        provider_import = lifecycle._provider_import(self.contract)
         self.assertEqual(1, source.count(provider_import))
         for prefix in (
             '#[link(name = "unreviewed")]\n',
@@ -514,12 +749,29 @@ macro_rules! áinclude { () => {} }
         ), mock.patch.object(
             lifecycle,
             "_undefined_symbols",
-            return_value={"ihk_provider_lifecycle_v1"},
+            return_value=set(lifecycle._provider_symbols(contract)),
         ):
             lifecycle.validate_module_artifact(module, summary, contract)
         self.assertTrue(summary["artifact_validated"])
         self.assertTrue(summary["built_symbol_reference_validated"])
         self.assertFalse(summary["rocky_build_load_validated"])
+
+        expected_symbols = set(lifecycle._provider_symbols(contract))
+        for missing in sorted(expected_symbols):
+            with self.subTest(missing_provider_symbol=missing), mock.patch.object(
+                lifecycle, "_modinfo", side_effect=lambda _path, field: values[field]
+            ), mock.patch.object(
+                lifecycle, "_raw_modinfo_records", return_value=raw_records
+            ), mock.patch.object(
+                lifecycle,
+                "_undefined_symbols",
+                return_value=expected_symbols - {missing},
+            ):
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "lacks provider relocations: {0}".format(missing),
+                ):
+                    lifecycle.validate_module_artifact(module, summary, contract)
 
         canonical_parm = list(values["parm"])
         first = parameters[0]
@@ -533,7 +785,7 @@ macro_rules! áinclude { () => {} }
                 ), mock.patch.object(
                     lifecycle,
                     "_undefined_symbols",
-                    return_value={"ihk_provider_lifecycle_v1"},
+                    return_value=set(lifecycle._provider_symbols(contract)),
                 ):
                     with self.assertRaisesRegex(
                         lifecycle.ValidationError,
@@ -550,7 +802,7 @@ macro_rules! áinclude { () => {} }
         ), mock.patch.object(
             lifecycle,
             "_undefined_symbols",
-            return_value={"ihk_provider_lifecycle_v1"},
+            return_value=set(lifecycle._provider_symbols(contract)),
         ):
             with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
                 lifecycle.validate_module_artifact(module, summary, contract)

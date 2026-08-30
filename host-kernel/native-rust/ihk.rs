@@ -26,6 +26,7 @@ mod page_allocator;
 mod page_owner_registry;
 
 use kernel::prelude::*;
+use self::device_registry::IHK_DEVICE_REGISTRY;
 
 const IHK_VERSION: &str = "1.7.0rc4";
 const IHK_ABI_VERSION: u16 = 1;
@@ -70,6 +71,65 @@ pub static IHK_PROVIDER_LIFECYCLE_V1_EXPORT: IhkExportSymbolRecord = IhkExportSy
     symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1),
 };
 
+#[doc(hidden)]
+// SAFETY: This C-ABI scalar boundary owns no caller memory.  A positive return
+// is a versioned opaque token for the single published minor-zero provider;
+// every failure is a negative errno and leaves no live reservation behind.
+#[export_name = "ihk_smp_provider_attach_v1"]
+// SAFETY: This exported C ABI accepts no caller-owned state and returns only
+// the registry-owned scalar token or a negative errno.
+pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {
+    let token = match IHK_DEVICE_REGISTRY.attach_provider_token() {
+        Ok(token) => token,
+        Err(error) => return error.errno() as i64,
+    };
+    pr_info!("provider_lease=attach status=live minor=0\n");
+    token
+}
+
+#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the scalar attach function in MCKERNEL_IHK_V1 for the provider lifetime.
+#[export_name = "__export_symbol_ihk_smp_provider_attach_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_ATTACH_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_attach_v1 as *const () as *const u8,
+};
+
+#[doc(hidden)]
+// SAFETY: This C-ABI scalar boundary consumes the exact v1 token owned by the
+// reviewed namespaced SMP dependent.  The token is an ownership receipt, not
+// a security boundary against other privileged in-kernel code.  Any malformed,
+// stale, duplicated, busy, or corrupt state fails stop before unload succeeds.
+#[export_name = "ihk_smp_provider_detach_v1"]
+// SAFETY: This exported C ABI accepts only the opaque scalar issued by attach
+// and cannot return while the owned provider entry remains live.
+pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {
+    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);
+    pr_info!(
+        "provider_lease=detach status=vacant minor={} generation={}\n",
+        handle.minor(),
+        handle.generation(),
+    );
+}
+
+#[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the scalar detach function in MCKERNEL_IHK_V1 for the provider lifetime.
+#[export_name = "__export_symbol_ihk_smp_provider_detach_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub static IHK_SMP_PROVIDER_DETACH_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_smp_provider_detach_v1 as *const () as *const u8,
+};
+
 // Linux 6.12's Rust `module!` macro does not accept a `version` field. Emit the
 // same `.modinfo` record that `MODULE_VERSION()` emits for a loadable module.
 #[cfg(MODULE)]
@@ -110,6 +170,14 @@ impl kernel::Module for IhkModule {
 
 impl Drop for IhkModule {
     fn drop(&mut self) {
+        match IHK_DEVICE_REGISTRY.active_count() {
+            Ok(0) => pr_info!("provider_registry=empty active=0\n"),
+            Ok(active) => pr_err!("provider_registry=not-empty active={}\n", active),
+            Err(error) => pr_err!(
+                "provider_registry=corrupt errno={}\n",
+                error.errno(),
+            ),
+        }
         pr_info!(
             "lifecycle=unload version={} abi={} parameters={} dependencies={}\n",
             IHK_VERSION,

@@ -45,10 +45,10 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 12)
-        self.assertEqual(len(discovery["sites"]), 20)
+        self.assertEqual(len(discovery["sites"]), 28)
         self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 14,
-            "ihk_smp_x86_64": 4,
+            "ihk": 20,
+            "ihk_smp_x86_64": 6,
             "mcctrl": 2,
         })
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
@@ -71,6 +71,34 @@ class CurrentLedgerTests(unittest.TestCase):
             [site["id"] for site in queue_sites],
             ["RS011-IHK-%04d" % index for index in range(4, 15)],
         )
+        ihk_sites = [
+            site["id"]
+            for site in value["sites"]
+            if "ihk" in site["crate_roots"]
+            and site["path"] == "host-kernel/native-rust/ihk.rs"
+        ]
+        self.assertEqual(
+            ihk_sites,
+            ["RS011-IHK-%04d" % index for index in range(1, 4)]
+            + ["RS011-IHK-%04d" % index for index in range(15, 21)],
+        )
+        smp_sites = [
+            site["id"]
+            for site in value["sites"]
+            if site["path"] == "host-kernel/native-rust/ihk_smp_x86_64.rs"
+        ]
+        self.assertEqual(
+            smp_sites,
+            [
+                "RS011-SMP-0001",
+                "RS011-SMP-0006",
+                "RS011-SMP-0007",
+                "RS011-SMP-0002",
+                "RS011-SMP-0003",
+                "RS011-SMP-0005",
+            ],
+        )
+        self.assertNotIn("RS011-SMP-0004", [site["id"] for site in value["sites"]])
         self.assertTrue(
             any(
                 "no remote dequeue owner" in obligation
@@ -95,7 +123,9 @@ class CurrentLedgerTests(unittest.TestCase):
         )
         self.assertEqual(
             [item["id"] for item in value["sites"] if "ihk" in item["crate_roots"]],
-            ["RS011-IHK-%04d" % index for index in range(1, 15)],
+            ["RS011-IHK-%04d" % index for index in range(1, 4)]
+            + ["RS011-IHK-%04d" % index for index in range(15, 21)]
+            + ["RS011-IHK-%04d" % index for index in range(4, 15)],
         )
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):

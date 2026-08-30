@@ -25,7 +25,20 @@
       "source_reference_required": true,
       "status": "source-bound"
     },
-    "required_import_namespace": "MCKERNEL_IHK_V1"
+    "required_import_namespace": "MCKERNEL_IHK_V1",
+    "reviewed_provider_lease_boundary": {
+      "attach_symbol": "ihk_smp_provider_attach_v1",
+      "callback_payload_reachable": false,
+      "consumer": "ihk-smp-x86_64",
+      "credit_eligible": false,
+      "detach_symbol": "ihk_smp_provider_detach_v1",
+      "device_node_reachable": false,
+      "mcctrl_reachable": false,
+      "namespace": "MCKERNEL_IHK_V1",
+      "rocky_runtime_validated": false,
+      "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+      "token_version": 1
+    }
   },
   "kbuild": {
     "config_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",

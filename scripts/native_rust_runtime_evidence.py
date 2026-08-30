@@ -63,6 +63,32 @@ CONTRACT_ID = "mckernel-native-rust-runtime-evidence-v1"
 PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+PROVIDER_LEASE_ATTACH_DIAGNOSTIC = (
+    "ihk: provider_lease=attach status=live minor=0"
+)
+PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN = (
+    r"ihk: provider_lease=detach status=vacant minor=0 generation=([1-9][0-9]*)"
+)
+PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC = "ihk: provider_registry=empty active=0"
+PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS = (
+    "ihk_smp_x86_64: provider_lease=detach-failed",
+    "ihk: provider_registry=not-empty",
+    "ihk: provider_registry=corrupt",
+)
+RAW_OPAQUE_TOKEN_FIELD = re.compile(
+    r"(?:^|[^A-Za-z0-9_])(?:raw[_-]?|opaque[_-]?)?token\s*=\s*\S+",
+    re.IGNORECASE,
+)
+PROVIDER_ANCHOR_SYMBOL = "ihk_provider_lifecycle_v1"
+PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v1"
+PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v1"
+PROVIDER_EXPORT_NAMESPACE = "MCKERNEL_IHK_V1"
+PROVIDER_SYMBOLS = (
+    PROVIDER_ANCHOR_SYMBOL,
+    PROVIDER_ATTACH_SYMBOL,
+    PROVIDER_DETACH_SYMBOL,
+)
+PROVIDER_SYMBOL_PATTERN = re.compile(r"^ihk(?:_smp)?_provider_[A-Za-z0-9_]+$")
 EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
 EXPECTED_KERNEL_LOCALVERSION = "-211.44.1.el10_2.mckernel1.x86_64"
 EXPECTED_KERNEL_RELEASE = "6.12.0" + EXPECTED_KERNEL_LOCALVERSION
@@ -2040,31 +2066,53 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
 
     expected_modules = [
         {
+            "defined_provider_symbols": list(PROVIDER_SYMBOLS),
             "depends": [],
             "file": "ihk.ko",
+            "gpl_exported_provider_symbols": list(PROVIDER_SYMBOLS),
             "import_namespace": None,
             "name": "ihk",
-            "provider_symbol_definition": "ihk_provider_lifecycle_v1",
+            "provider_export_namespace": PROVIDER_EXPORT_NAMESPACE,
         },
         {
             "depends": ["ihk"],
             "file": "ihk-smp-x86_64.ko",
-            "import_namespace": "MCKERNEL_IHK_V1",
+            "import_namespace": PROVIDER_EXPORT_NAMESPACE,
             "name": "ihk_smp_x86_64",
-            "undefined_provider_symbol": "ihk_provider_lifecycle_v1",
+            "undefined_provider_symbols": list(PROVIDER_SYMBOLS),
         },
         {
             "depends": ["ihk"],
             "file": "mcctrl.ko",
-            "import_namespace": "MCKERNEL_IHK_V1",
+            "import_namespace": PROVIDER_EXPORT_NAMESPACE,
             "name": "mcctrl",
-            "undefined_provider_symbol": "ihk_provider_lifecycle_v1",
+            "undefined_provider_symbols": [PROVIDER_ANCHOR_SYMBOL],
         },
     ]
     if contract["modules"] != expected_modules:
         raise EvidenceError("runtime module graph differs")
     if contract["protocol"] != {
         "load_order": ["ihk", "ihk_smp_x86_64", "mcctrl"],
+        "provider_lease": {
+            "attach_after_ihk_load": True,
+            "attach_diagnostic": PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
+            "credit_eligible": False,
+            "detach_before_smp_unload_completion": True,
+            "detach_diagnostic_pattern": (
+                "ihk: provider_lease=detach status=vacant minor=0 "
+                "generation=[1-9][0-9]*"
+            ),
+            "forbidden_diagnostic_prefixes": list(
+                PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS
+            ),
+            "gate_status": "TODO",
+            "raw_token_logged": False,
+            "registry_empty_before_ihk_unload_completion": True,
+            "registry_empty_diagnostic": PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
+            "rocky_runtime_validated": False,
+            "runtime_behavior_proven": False,
+            "tracker_credit": False,
+        },
         "provider_refcount_after_load": 2,
         "provider_refcounts": {
             "after_load": 2,
@@ -2799,6 +2847,81 @@ def _nm(module: Path, arguments: list[str]) -> str:
     return result.stdout
 
 
+def _nm_symbol_records(output: str) -> list[tuple[str, str]]:
+    records: list[tuple[str, str]] = []
+    for line in output.splitlines():
+        fields = line.split()
+        if len(fields) >= 2 and re.fullmatch(r"[A-Za-z?]", fields[-2]):
+            records.append((fields[-2], fields[-1]))
+    return records
+
+
+def _provider_metadata_symbols(records: list[tuple[str, str]]) -> list[str]:
+    result: list[str] = []
+    for _kind, name in records:
+        for prefix in ("__ksymtab_", "__kstrtab_", "__kstrtabns_"):
+            if name.startswith(prefix) and PROVIDER_SYMBOL_PATTERN.fullmatch(
+                name[len(prefix) :]
+            ):
+                result.append(name)
+                break
+    return result
+
+
+def _validate_module_symbol_graph(module: Path, item: dict[str, Any]) -> dict[str, Any]:
+    if "defined_provider_symbols" in item:
+        expected_definitions = item["defined_provider_symbols"]
+        expected_exports = item["gpl_exported_provider_symbols"]
+        global_records = _nm_symbol_records(_nm(module, ["-g", "--defined-only"]))
+        global_provider_definitions = [
+            name
+            for kind, name in global_records
+            if kind.isupper()
+            and kind != "U"
+            and PROVIDER_SYMBOL_PATTERN.fullmatch(name)
+        ]
+        if sorted(global_provider_definitions) != sorted(expected_definitions):
+            raise EvidenceError("ihk provider global definitions differ")
+
+        all_records = _nm_symbol_records(_nm(module, ["-a", "--defined-only"]))
+        all_names = [name for _kind, name in all_records]
+        if "__ksymtab" in all_names:
+            raise EvidenceError("ihk provider export uses non-GPL __ksymtab")
+        expected_metadata = {
+            "__{0}_{1}".format(kind, symbol)
+            for kind in ("ksymtab", "kstrtab", "kstrtabns")
+            for symbol in expected_exports
+        }
+        actual_metadata = _provider_metadata_symbols(all_records)
+        if (
+            sorted(actual_metadata) != sorted(expected_metadata)
+            or all_names.count("__ksymtab_gpl") != 1
+            or all_names.count("__ksymtab_strings") != 1
+        ):
+            raise EvidenceError("ihk provider GPL export metadata differs")
+        namespace = item["provider_export_namespace"]
+        if namespace.encode("ascii") + b"\0" not in module.read_bytes():
+            raise EvidenceError("ihk provider export namespace bytes are absent")
+        return {
+            "defined_provider_symbols": list(expected_definitions),
+            "gpl_exported_provider_symbols": list(expected_exports),
+            "provider_export_namespace": namespace,
+        }
+
+    expected_undefined = item["undefined_provider_symbols"]
+    undefined_records = _nm_symbol_records(_nm(module, ["-u"]))
+    undefined_provider_symbols = [
+        name
+        for kind, name in undefined_records
+        if kind == "U" and PROVIDER_SYMBOL_PATTERN.fullmatch(name)
+    ]
+    if sorted(undefined_provider_symbols) != sorted(expected_undefined):
+        raise EvidenceError(
+            "{0} provider undefined relocation graph differs".format(item["file"])
+        )
+    return {"undefined_provider_symbols": list(expected_undefined)}
+
+
 def _validate_resolved_config(path: Path, requirements: dict[str, Any]) -> dict[str, Any]:
     if path.is_symlink() or not path.is_file():
         raise EvidenceError("resolved kernel config must be a regular file")
@@ -2934,6 +3057,23 @@ def _unique_prefixed_line(lines: list[str], prefix: str, label: str) -> int:
     return positions[0]
 
 
+def _unique_kernel_diagnostic(
+    lines: list[str], body_pattern: str, label: str
+) -> tuple[int, re.Match[str]]:
+    expression = re.compile(
+        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?" + body_pattern + r"$"
+    )
+    matches = [
+        (index, match)
+        for index, line in enumerate(lines)
+        for match in (expression.fullmatch(line),)
+        if match is not None
+    ]
+    if len(matches) != 1:
+        raise EvidenceError("{0} diagnostic is missing or duplicated".format(label))
+    return matches[0]
+
+
 def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     if serial_path.is_symlink() or not serial_path.is_file():
         raise EvidenceError("serial log must be a regular non-symlink file")
@@ -2942,7 +3082,25 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         raise EvidenceError("serial log is empty")
     text = data.decode("utf-8", errors="replace").replace("\r\n", "\n")
     lines = text.splitlines()
+    allowed_provider_diagnostic = re.compile(
+        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?(?:"
+        + re.escape(PROVIDER_LEASE_ATTACH_DIAGNOSTIC)
+        + r"|"
+        + PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN
+        + r"|"
+        + re.escape(PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC)
+        + r")$"
+    )
     for line in lines:
+        if "provider_lease" in line or "provider_registry" in line:
+            if any(marker in line for marker in PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS):
+                raise EvidenceError(
+                    "provider lease runtime contains a fail-closed diagnostic"
+                )
+            if RAW_OPAQUE_TOKEN_FIELD.search(line) is not None:
+                raise EvidenceError("provider lease runtime discloses a raw opaque token")
+            if allowed_provider_diagnostic.fullmatch(line) is None:
+                raise EvidenceError("provider lease runtime diagnostic grammar differs")
         for label, expression in SERIAL_FATAL_PATTERNS:
             if expression.search(line) is not None:
                 raise EvidenceError(
@@ -3169,9 +3327,38 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         lifecycle_positions.append(matches[0])
     if lifecycle_positions != sorted(lifecycle_positions):
         raise EvidenceError("lifecycle diagnostics are missing or out of order")
+    attach_position, _ = _unique_kernel_diagnostic(
+        dmesg_lines,
+        re.escape(PROVIDER_LEASE_ATTACH_DIAGNOSTIC),
+        "provider lease attach",
+    )
+    detach_position, _ = _unique_kernel_diagnostic(
+        dmesg_lines,
+        PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN,
+        "provider lease detach",
+    )
+    registry_empty_position, _ = _unique_kernel_diagnostic(
+        dmesg_lines,
+        re.escape(PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC),
+        "provider registry empty",
+    )
+    if not (
+        lifecycle_positions[0] < attach_position < lifecycle_positions[1]
+        and lifecycle_positions[3] < detach_position < lifecycle_positions[4]
+        and lifecycle_positions[4]
+        < registry_empty_position
+        < lifecycle_positions[5]
+    ):
+        raise EvidenceError("provider lease lifecycle diagnostics are out of order")
     return {
         "kernel_release": kernel_release,
         "negative_unload_status": int(negative_records[0].group(1)),
+        "provider_lease": {
+            "attach_observed": True,
+            "detach_observed": True,
+            "raw_token_logged": False,
+            "registry_empty_observed": True,
+        },
         "provider_refcount": 2,
         "provider_users": ["ihk_smp_x86_64", "mcctrl"],
         "serial_sha256": _sha256_file(serial_path),
@@ -3259,22 +3446,28 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     modules = build["modules"]
     _require_keys(modules, {"ihk", "ihk_smp_x86_64", "mcctrl"}, "capture modules")
     expected_module_facts = {
-        "ihk": {"depends": [], "import_namespaces": []},
+        "ihk": {
+            "defined_provider_symbols": list(PROVIDER_SYMBOLS),
+            "depends": [],
+            "gpl_exported_provider_symbols": list(PROVIDER_SYMBOLS),
+            "import_namespaces": [],
+            "provider_export_namespace": PROVIDER_EXPORT_NAMESPACE,
+        },
         "ihk_smp_x86_64": {
             "depends": ["ihk"],
-            "import_namespaces": ["MCKERNEL_IHK_V1"],
+            "import_namespaces": [PROVIDER_EXPORT_NAMESPACE],
+            "undefined_provider_symbols": list(PROVIDER_SYMBOLS),
         },
         "mcctrl": {
             "depends": ["ihk"],
-            "import_namespaces": ["MCKERNEL_IHK_V1"],
+            "import_namespaces": [PROVIDER_EXPORT_NAMESPACE],
+            "undefined_provider_symbols": [PROVIDER_ANCHOR_SYMBOL],
         },
     }
     for name, expected in expected_module_facts.items():
         record = modules[name]
-        _require_keys(record, {"depends", "import_namespaces", "sha256"}, name)
-        if record["depends"] != expected["depends"] or record[
-            "import_namespaces"
-        ] != expected["import_namespaces"]:
+        _require_keys(record, set(expected) | {"sha256"}, name)
+        if any(record[key] != expected_value for key, expected_value in expected.items()):
             raise EvidenceError("capture module metadata differs for {0}".format(name))
         _require_sha256_value(record["sha256"], "capture module digest {0}".format(name))
 
@@ -3347,7 +3540,13 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     _require_keys(
         runtime,
         runtime_digests
-        | {"kernel_release", "negative_unload_status", "provider_refcount", "provider_users"},
+        | {
+            "kernel_release",
+            "negative_unload_status",
+            "provider_lease",
+            "provider_refcount",
+            "provider_users",
+        },
         "capture runtime",
     )
     for key in runtime_digests:
@@ -3358,6 +3557,13 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         "negative_unload_status"
     ] != 1:
         raise EvidenceError("capture negative unload status differs")
+    if runtime["provider_lease"] != {
+        "attach_observed": True,
+        "detach_observed": True,
+        "raw_token_logged": False,
+        "registry_empty_observed": True,
+    }:
+        raise EvidenceError("capture provider lease lifecycle differs")
     if type(runtime["provider_refcount"]) is not int or runtime[
         "provider_refcount"
     ] != 2:
@@ -3623,23 +3829,14 @@ def _validate_build_evidence_directory(
             raise EvidenceError(
                 "{0} vermagic/build release differs".format(item["file"])
             )
-        if "provider_symbol_definition" in item:
-            symbols = _nm(path, ["-g", "--defined-only"])
-            symbol = item["provider_symbol_definition"]
-            expression = r"\b[A-Z]\s+{0}$".format(re.escape(symbol))
-            diagnostic = "provider anchor definition is absent"
-        else:
-            symbols = _nm(path, ["-u"])
-            symbol = item["undefined_provider_symbol"]
-            expression = r"\bU\s+{0}$".format(re.escape(symbol))
-            diagnostic = "consumer provider-anchor relocation is absent"
-        if not re.search(expression, symbols, re.MULTILINE):
-            raise EvidenceError(diagnostic)
-        modules[item["name"]] = {
+        symbol_facts = _validate_module_symbol_graph(path, item)
+        module_facts = {
             "depends": depends,
             "import_namespaces": namespaces,
             "sha256": records[item["file"]],
         }
+        module_facts.update(symbol_facts)
+        modules[item["name"]] = module_facts
 
     build = {
         "artifact_manifest_sha256": _sha256_file(build_dir / "SHA256SUMS"),

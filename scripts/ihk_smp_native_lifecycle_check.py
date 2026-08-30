@@ -75,6 +75,24 @@ EXPECTED_RESOURCE_FOUNDATION = {
     "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
     "status": "private-source-bound-policy-foundation",
 }
+EXPECTED_PROVIDER_LEASE = {
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": False,
+    "credit_eligible": False,
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": False,
+    "errno_statuses": [-2, -12, -16, -22, -75, -116, -117],
+    "gate_status": "TODO",
+    "minor": 0,
+    "namespace": "MCKERNEL_IHK_V1",
+    "raw_token_logged": False,
+    "rocky_runtime_validated": False,
+    "runtime_behavior_proven": False,
+    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "token_version": 1,
+    "tracker_credit": False,
+    "unknown_status_errno": -117,
+}
 
 
 class ValidationError(Exception):
@@ -212,6 +230,31 @@ def _mask_rust_comments_and_literals(text):
     return "".join(masked)
 
 
+def _active_fragment_positions(text, code, fragment):
+    """Return exact fragment occurrences whose syntax remains active Rust."""
+
+    fragment_code = _mask_rust_comments_and_literals(fragment)
+    positions = []
+    search_from = 0
+    while True:
+        position = text.find(fragment, search_from)
+        if position < 0:
+            return positions
+        if code[position : position + len(fragment)] == fragment_code:
+            positions.append(position)
+        search_from = position + 1
+
+
+def _require_active_count(text, code, fragment, expected, label):
+    actual = len(_active_fragment_positions(text, code, fragment))
+    if actual != expected:
+        raise ValidationError(
+            "{0} active occurrence count differs for {1}: expected {2}, got {3}".format(
+                label, fragment, expected, actual
+            )
+        )
+
+
 def _rust_identifier_start(character):
     return character == "_" or character.isidentifier()
 
@@ -283,21 +326,37 @@ def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
     ]
     allowed_starts = set()
     for exact in allowed_extern_blocks:
+        exact_extern_offset = exact.find("extern")
+        if exact_extern_offset < 0:
+            raise ValidationError(
+                "{0} audited extern boundary description is invalid".format(label)
+            )
         starts = []
         search_from = 0
         while True:
-            start = text.find(exact, search_from)
-            if start < 0:
+            exact_start = text.find(exact, search_from)
+            if exact_start < 0:
                 break
-            if start in extern_starts:
-                starts.append(start)
-            search_from = start + 1
+            extern_start = exact_start + exact_extern_offset
+            if extern_start in extern_starts:
+                starts.append((exact_start, extern_start))
+            search_from = exact_start + 1
         if len(starts) != 1:
             raise ValidationError(
                 "{0} lacks one exact audited extern boundary".format(label)
             )
-        _validate_bare_audited_extern(masked, starts[0], label)
-        allowed_starts.add(starts[0])
+        exact_start, extern_start = starts[0]
+        if exact_extern_offset == 0:
+            _validate_bare_audited_extern(masked, extern_start, label)
+        else:
+            line_start = masked.rfind("\n", 0, exact_start) + 1
+            if masked[line_start:exact_start].strip():
+                raise ValidationError(
+                    "{0} exact audited extern boundary has an unreviewed modifier".format(
+                        label
+                    )
+                )
+        allowed_starts.add(extern_start)
     if any(start not in allowed_starts for start in extern_starts):
         raise ValidationError(
             "{0} contains an additional unreviewed extern boundary".format(label)
@@ -370,40 +429,74 @@ def _sha256(path: Path) -> str:
 
 
 def _module_block(text: str) -> dict[str, str]:
-    match = re.search(r"module!\s*\{(?P<body>.*?)^\}", text, re.MULTILINE | re.DOTALL)
-    if not match:
+    code = _mask_rust_comments_and_literals(text)
+    starts = list(re.finditer(r"\bmodule!\s*\{", code))
+    if len(starts) != 1:
         raise ValidationError("Rust source lacks a module! entry point")
-    fields = re.findall(
+    opening = code.find("{", starts[0].start())
+    depth = 0
+    closing = None
+    for position in range(opening, len(code)):
+        if code[position] == "{":
+            depth += 1
+        elif code[position] == "}":
+            depth -= 1
+            if depth == 0:
+                closing = position
+                break
+    if closing is None:
+        raise ValidationError("Rust module! entry point lacks a closing brace")
+    body = text[opening + 1 : closing]
+    body_code = code[opening + 1 : closing]
+    fields = list(re.finditer(
         r'^\s*([a-z_]+):\s*(?:"([^"\\]*)"|([A-Za-z_][A-Za-z0-9_]*)),$',
-        match.group("body"),
+        body,
         re.MULTILINE,
-    )
-    result = {name: string_value or identifier for name, string_value, identifier in fields}
+    ))
+    fields = [
+        match for match in fields
+        if body_code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    result = {
+        match.group(1): match.group(2) or match.group(3) for match in fields
+    }
     if len(result) != len(fields):
         raise ValidationError("module! metadata has duplicate or unparsable fields")
     return result
 
 
 def _literal_string_constant(text: str, name: str) -> str:
-    match = re.search(
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
         rf'^const {re.escape(name)}:\s*&str\s*=\s*"([^"\\]*)";$',
         text,
         re.MULTILINE,
-    )
-    if not match:
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    if len(matches) != 1:
         raise ValidationError(f"Rust source must define literal {name}: &str")
-    return match.group(1)
+    return matches[0].group(1)
 
 
 def _literal_usize_constant(text: str, name: str) -> int:
-    match = re.search(
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
         rf"^const {re.escape(name)}:\s*usize\s*=\s*([0-9]+);$",
         text,
         re.MULTILINE,
-    )
-    if not match:
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()] == match.group(0)
+    ]
+    if len(matches) != 1:
         raise ValidationError(f"Rust source must define literal {name}: usize")
-    return int(match.group(1))
+    return int(matches[0].group(1))
 
 
 PARAMETER_PATTERN = re.compile(
@@ -452,6 +545,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "module",
             "parameters",
             "production_source",
+            "provider_lease",
             "provider_source",
             "reference_inventory",
             "resource_foundation",
@@ -472,6 +566,8 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("SMP lifecycle transitive Rust module graph differs")
     if contract["resource_foundation"] != EXPECTED_RESOURCE_FOUNDATION:
         raise ValidationError("SMP resource foundation differs or overclaims readiness")
+    if contract["provider_lease"] != EXPECTED_PROVIDER_LEASE:
+        raise ValidationError("SMP provider lease differs or overclaims readiness")
 
     _require_keys(
         contract["artifact_policy"],
@@ -605,10 +701,35 @@ def _expected_modinfo(contract: dict[str, Any]) -> tuple[set[str], set[str]]:
     return loadable, builtin
 
 
+def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str]:
+    lease = contract["provider_lease"]
+    return (
+        contract["dependency_contract"]["provider_symbol"],
+        lease["attach_symbol"],
+        lease["detach_symbol"],
+    )
+
+
+def _provider_import(contract: dict[str, Any]) -> str:
+    anchor, attach, detach = _provider_symbols(contract)
+    return (
+        'extern "C" {\n'
+        f'    #[link_name = "{anchor}"]\n'
+        "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+        f'    #[link_name = "{attach}"]\n'
+        f"    fn {attach}() -> i64;\n"
+        f'    #[link_name = "{detach}"]\n'
+        f"    fn {detach}(token: i64);\n"
+        "}"
+    )
+
+
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+    code = _mask_rust_comments_and_literals(text)
     resource_edge = "#[allow(dead_code)]\nmod smp_resource;"
-    if text.count(resource_edge) != 1:
-        raise ValidationError("Rust SMP crate lacks the exact private resource-policy edge")
+    _require_active_count(
+        text, code, resource_edge, 1, "Rust SMP private resource-policy edge"
+    )
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",
@@ -627,18 +748,72 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError("Rust provider dependency constant differs")
     if _literal_string_constant(text, "IHK_SMP_IMPORT_NAMESPACE") != "MCKERNEL_IHK_V1":
         raise ValidationError("Rust provider import namespace constant differs")
-    provider_symbol = contract["dependency_contract"]["provider_symbol"]
-    provider_import = (
-        'extern "Rust" {\n'
-        f'    #[link_name = "{provider_symbol}"]\n'
-        "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
-        "}"
+    provider_import = _provider_import(contract)
+    _require_active_count(
+        text, code, provider_import, 1,
+        "Rust exact audited three-symbol provider-symbol import",
     )
-    if provider_import not in text:
-        raise ValidationError("Rust source lacks the exact audited provider-symbol import")
     _validate_rust_escape_hatches(
         text, "Rust lifecycle", allowed_extern_blocks=(provider_import,)
     )
+
+    expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
+    let errno = match status {
+        -2 | -12 | -16 | -22 | -75 | -116 | -117 => status as i32,
+        _ => -117,
+    };
+    match kernel::error::to_result(errno) {
+        Err(error) => error,
+        Ok(()) => EIO,
+    }
+}"""
+    if code.count(expected_status_adapter) != 1:
+        raise ValidationError(
+            "Rust provider lease errno adapter differs from the exact fail-closed map"
+        )
+
+    expected_lease_owner = """#[must_use = "the provider lease must remain owned until SMP module teardown"]
+struct ProviderLease {
+    token: i64,
+}"""
+    _require_active_count(
+        text, code, expected_lease_owner, 1, "Rust exact non-Copy provider lease owner"
+    )
+    if re.search(
+        r"#\[derive\([^\]]*(?:Copy|Clone)[^\]]*\)\]\s*"
+        r"(?:#\[[^\]]+\]\s*)*struct\s+ProviderLease\b",
+        code,
+    ) or re.search(r"\bimpl\s+(?:Copy|Clone)\s+for\s+ProviderLease\b", code):
+        raise ValidationError("Rust ProviderLease may not implement Copy or Clone")
+
+    required_lease_fragments = (
+        "impl ProviderLease {",
+        "fn attach() -> Result<Self>",
+        "let token = unsafe { ihk_smp_provider_attach_v1() };",
+        "if token <= 0 {",
+        "return Err(provider_status_error(token));",
+        "Ok(Self { token })",
+        "impl Drop for ProviderLease {",
+        "unsafe { ihk_smp_provider_detach_v1(self.token) };",
+    )
+    for fragment in required_lease_fragments:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                f"Rust provider lease ownership path differs at: {fragment}"
+            )
+    attach_symbol = contract["provider_lease"]["attach_symbol"]
+    detach_symbol = contract["provider_lease"]["detach_symbol"]
+    if code.count(f"{attach_symbol}(") != 2 or code.count(f"{detach_symbol}(") != 2:
+        raise ValidationError(
+            "Rust provider lease must call each imported scalar function exactly once"
+        )
+    for diagnostic in re.finditer(
+        r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
+        code,
+        re.DOTALL,
+    ):
+        if re.search(r"\btoken\b", diagnostic.group("body")):
+            raise ValidationError("Rust provider lease diagnostics may not expose the raw token")
 
     required_abi_fragments = (
         '#[link_section = "__param"]',
@@ -655,7 +830,11 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         "flags: 0",
     )
     for fragment in required_abi_fragments:
-        if fragment not in text:
+        if '"' in fragment:
+            _require_active_count(
+                text, code, fragment, 1, "Rust parameter ABI required fragment"
+            )
+        elif fragment not in code:
             raise ValidationError(f"Rust parameter ABI lacks required fragment: {fragment}")
 
     parameter_name_selection = """name: {
@@ -665,13 +844,17 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
                 const PARAMETER_NAME: &[u8] = $builtin_name_bytes;
                 PARAMETER_NAME.as_ptr() as *const core::ffi::c_char
             },"""
-    if text.count(parameter_name_selection) != 1:
+    if code.count(parameter_name_selection) != 1:
         raise ValidationError(
             "Rust parameter ABI must select Linux loadable/built-in descriptor names by MODULE"
         )
 
-    matches = list(PARAMETER_PATTERN.finditer(text))
-    invocation_count = len(re.findall(r"^numeric_parameter!\(", text, re.MULTILINE))
+    matches = [
+        match for match in PARAMETER_PATTERN.finditer(text)
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    invocation_count = len(re.findall(r"^numeric_parameter!\(", code, re.MULTILINE))
     if len(matches) != 6 or invocation_count != len(matches):
         raise ValidationError("Rust source must contain exactly six fully literal parameter descriptors")
     actual_parameters: dict[str, dict[str, str]] = {}
@@ -711,7 +894,11 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     if set(actual_parameters) != set(parameters):
         raise ValidationError("Rust parameter descriptor set is incomplete")
 
-    pairs = list(MODINFO_PATTERN.finditer(text))
+    pairs = [
+        match for match in MODINFO_PATTERN.finditer(text)
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
     expected_loadable, expected_builtin = _expected_modinfo(contract)
     loadable = [match.group("loadable") for match in pairs]
     builtin = [match.group("builtin") for match in pairs]
@@ -723,26 +910,59 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError("loadable Rust modinfo records differ from the exact SMP contract")
     if len(set(builtin)) != len(builtin) or set(builtin) != expected_builtin:
         raise ValidationError("built-in Rust modinfo records differ from the exact SMP contract")
-    if re.search(r'b"(?:ihk_smp_x86_64\.)?depends=', text):
-        raise ValidationError("Rust source must let modpost derive depends=ihk from the provider symbol")
+    for dependency in re.finditer(r'b"(?:ihk_smp_x86_64\.)?depends=', text):
+        if code[dependency.start() : dependency.start() + 2] == 'b"':
+            raise ValidationError(
+                "Rust source must let modpost derive depends=ihk from the provider symbol"
+            )
 
-    if "impl kernel::Module for IhkSmpModule" not in text or "impl Drop for IhkSmpModule" not in text:
+    if "impl kernel::Module for IhkSmpModule" not in code or "impl Drop for IhkSmpModule" not in code:
         raise ValidationError("Rust source lacks paired module init/drop lifecycle")
-    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in text or "Ok(Self)" not in text:
-        raise ValidationError("Rust SMP lifecycle lacks an unconditional initialization path")
+    module_owner = """struct IhkSmpModule {
+    provider_lease: Option<ProviderLease>,
+}"""
+    if code.count(module_owner) != 1:
+        raise ValidationError("Rust SMP module lacks the exact optional provider lease owner")
+    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code:
+        raise ValidationError("Rust SMP lifecycle lacks its initialization path")
+    if code.count("let provider_lease = ProviderLease::attach()?;") != 1:
+        raise ValidationError("Rust SMP initialization does not acquire exactly one provider lease")
+    if code.count("provider_lease: Some(provider_lease),") != 1:
+        raise ValidationError("Rust SMP initialization does not retain the provider lease")
+    if code.count("drop(self.provider_lease.take());") != 1:
+        raise ValidationError("Rust SMP teardown does not retire the provider lease exactly once")
     for phase in ("load", "unload"):
         expected = contract["lifecycle_logs"][phase]
-        if f'"{expected}\\n"' not in text:
-            raise ValidationError(f"Rust source lacks stable {phase} lifecycle diagnostic")
+        _require_active_count(
+            text, code, f'"{expected}\\n"', 1,
+            f"Rust stable {phase} lifecycle diagnostic",
+        )
+    attach_at = code.index("let provider_lease = ProviderLease::attach()?;")
+    load_at = _active_fragment_positions(
+        text, code, f'"{contract["lifecycle_logs"]["load"]}\\n"'
+    )[0]
+    retain_at = code.index("provider_lease: Some(provider_lease),")
+    detach_at = code.index("drop(self.provider_lease.take());")
+    unload_at = _active_fragment_positions(
+        text, code, f'"{contract["lifecycle_logs"]["unload"]}\\n"'
+    )[0]
+    if not attach_at < load_at < retain_at:
+        raise ValidationError(
+            "Rust SMP initialization must acquire, log, then retain the provider lease"
+        )
+    if not detach_at < unload_at:
+        raise ValidationError(
+            "Rust SMP teardown must detach the provider lease before its unload log"
+        )
     for constant in (
         "IHK_SMP_PARAMETER_COUNT",
         "IHK_SMP_DEPENDENCY",
         "IHK_SMP_IMPORT_NAMESPACE",
     ):
-        if text.count(constant) < 3:
+        if code.count(constant) < 3:
             raise ValidationError(f"lifecycle diagnostics do not consume {constant}")
 
-    for match in re.finditer(r"^\s*use\s+([^;]+);", text, re.MULTILINE):
+    for match in re.finditer(r"^\s*use\s+([^;]+);", code, re.MULTILINE):
         imported = match.group(1).strip()
         if not imported.startswith(("kernel::", "core::")):
             raise ValidationError(f"unreviewed Rust dependency: {imported}")
@@ -820,14 +1040,15 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
 
 
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
-    symbol = contract["dependency_contract"]["provider_symbol"]
+    code = _mask_rust_comments_and_literals(text)
+    symbol, attach_symbol, detach_symbol = _provider_symbols(contract)
     export_record_layout = """pub struct IhkExportSymbolRecord {
     license: [u8; 4],
     namespace: [u8; 16],
     padding: [u8; 4],
     symbol: *const u8,
 }"""
-    if text.count(export_record_layout) != 1:
+    if code.count(export_record_layout) != 1:
         raise ValidationError(
             "native IHK provider anchor lacks the exact x86_64 .export_symbol record layout"
         )
@@ -839,19 +1060,64 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
         f'#[export_name = "{symbol}"]',
         f'#[export_name = "__export_symbol_{symbol}"]',
-        '#[link_section = ".export_symbol"]',
-        'license: *b"GPL\\0"',
-        'namespace: *b"MCKERNEL_IHK_V1\\0"',
         "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)",
+        "use self::device_registry::IHK_DEVICE_REGISTRY;",
+        f'#[export_name = "{attach_symbol}"]',
+        f'pub extern "C" fn {attach_symbol}() -> i64',
+        "IHK_DEVICE_REGISTRY.attach_provider_token()",
+        f'#[export_name = "__export_symbol_{attach_symbol}"]',
+        f"symbol: {attach_symbol} as *const () as *const u8",
+        f'#[export_name = "{detach_symbol}"]',
+        f'pub extern "C" fn {detach_symbol}(token: i64)',
+        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        f'#[export_name = "__export_symbol_{detach_symbol}"]',
+        f"symbol: {detach_symbol} as *const () as *const u8",
     )
     for fragment in required:
-        if fragment not in text:
-            raise ValidationError(f"native IHK provider anchor lacks required fragment: {fragment}")
-    if text.count(f'#[export_name = "{symbol}"]') != 1:
-        raise ValidationError("native IHK provider anchor symbol is not unique")
-    if text.count(f'#[export_name = "__export_symbol_{symbol}"]') != 1:
-        raise ValidationError("native IHK provider export record is not unique")
-    _validate_rust_escape_hatches(text, "native IHK provider")
+        _require_active_count(
+            text, code, fragment, 1, "native IHK provider required fragment"
+        )
+    for lease_symbol in (attach_symbol, detach_symbol):
+        _require_active_count(
+            text, code, f'#[export_name = "{lease_symbol}"]', 1,
+            "native IHK provider lease symbol",
+        )
+        _require_active_count(
+            text, code, f'#[export_name = "__export_symbol_{lease_symbol}"]', 1,
+            "native IHK provider lease export record",
+        )
+    _require_active_count(
+        text, code, '#[link_section = ".export_symbol"]', 3,
+        "native IHK provider export_symbol record",
+    )
+    _require_active_count(
+        text, code, 'license: *b"GPL\\0"', 3,
+        "native IHK provider GPL export",
+    )
+    _require_active_count(
+        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 3,
+        "native IHK provider versioned namespace",
+    )
+    attach_extern = f'pub extern "C" fn {attach_symbol}() -> i64'
+    detach_extern = f'pub extern "C" fn {detach_symbol}(token: i64)'
+    _validate_rust_escape_hatches(
+        text,
+        "native IHK provider",
+        allowed_extern_blocks=(attach_extern, detach_extern),
+    )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 2:
+        raise ValidationError(
+            "native IHK provider must expose exactly two reviewed C-ABI functions"
+        )
+    for diagnostic in re.finditer(
+        r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
+        code,
+        re.DOTALL,
+    ):
+        if re.search(r"\btoken\b", diagnostic.group("body")):
+            raise ValidationError(
+                "native IHK provider diagnostics may not expose the raw lease token"
+            )
 
 
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
@@ -1073,6 +1339,10 @@ def validate_repository(
         "module": contract["module"]["name"],
         "output": contract["module"]["output"],
         "parameters": len(contract["parameters"]),
+        "provider_lease_credit_eligible": False,
+        "provider_lease_gate_status": contract["provider_lease"]["gate_status"],
+        "provider_lease_runtime_proven": False,
+        "provider_symbols": list(_provider_symbols(contract)),
         "rocky_build_load_validated": False,
         "resource_foundation_credit_eligible": False,
         "resource_foundation_linux_reachable": False,
@@ -1304,9 +1574,13 @@ def validate_module_artifact(
             "built SMP module parameter types differ: "
             f"expected {expected_parmtype}, got {parmtype}"
         )
-    provider_symbol = contract["dependency_contract"]["provider_symbol"]
-    if provider_symbol not in _undefined_symbols(module_path):
-        raise ValidationError("built SMP module lacks the provider anchor relocation")
+    undefined = _undefined_symbols(module_path)
+    missing_provider_symbols = sorted(set(_provider_symbols(contract)) - undefined)
+    if missing_provider_symbols:
+        raise ValidationError(
+            "built SMP module lacks provider relocations: "
+            + ", ".join(missing_provider_symbols)
+        )
     data = module_path.read_bytes()
     for phase in ("load", "unload"):
         prefix = f"lifecycle={phase} parameters=".encode("ascii")
@@ -1353,7 +1627,9 @@ def main(argv: list[str] | None = None) -> int:
         print(
             "ihk-smp-native-lifecycle-check: "
             f"{level} module={summary['module']} parameters={summary['parameters']} "
-            "rocky_build_load=NOT_EVALUATED runtime_symbol_reference=NOT_PROVEN"
+            "provider_lease=TODO provider_lease_runtime=NOT_PROVEN "
+            "tracker_credit=FORBIDDEN rocky_build_load=NOT_EVALUATED "
+            "runtime_symbol_reference=NOT_PROVEN"
         )
     return 0
 

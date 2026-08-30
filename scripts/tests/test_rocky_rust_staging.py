@@ -220,6 +220,53 @@ macro_rules! áinclude { () => {} }
                 allowed_extern_blocks=(staging.AUDITED_PROVIDER_EXTERN,),
             )
 
+    def test_exact_provider_lease_extern_items_are_closed(self):
+        for exact in (
+            staging.AUDITED_IHK_ATTACH_EXTERN,
+            staging.AUDITED_IHK_DETACH_EXTERN,
+            staging.AUDITED_SMP_PROVIDER_EXTERN,
+        ):
+            with self.subTest(exact=exact.splitlines()[-1]):
+                staging._validate_rust_escape_hatches(
+                    exact,
+                    "provider lease source",
+                    allowed_extern_blocks=(exact,),
+                )
+                with self.assertRaisesRegex(staging.ValidationError, "extern boundary"):
+                    staging._validate_rust_escape_hatches(
+                        exact + '\nextern "C" { fn injected(); }',
+                        "provider lease source",
+                        allowed_extern_blocks=(exact,),
+                    )
+
+    def test_provider_lease_extern_signatures_cannot_drift(self):
+        for exact, mutation in (
+            (
+                staging.AUDITED_IHK_ATTACH_EXTERN,
+                staging.AUDITED_IHK_ATTACH_EXTERN.replace("() -> i64", "(minor: u32) -> i64"),
+            ),
+            (
+                staging.AUDITED_IHK_DETACH_EXTERN,
+                staging.AUDITED_IHK_DETACH_EXTERN.replace("token: i64", "token: u64"),
+            ),
+            (
+                staging.AUDITED_SMP_PROVIDER_EXTERN,
+                staging.AUDITED_SMP_PROVIDER_EXTERN.replace(
+                    "ihk_smp_provider_detach_v1(token: i64)",
+                    "ihk_smp_provider_detach_v1(token: u64)",
+                ),
+            ),
+        ):
+            with self.subTest(exact=exact.splitlines()[-1]), self.assertRaisesRegex(
+                staging.ValidationError,
+                "exact audited extern boundary",
+            ):
+                staging._validate_rust_escape_hatches(
+                    mutation,
+                    "provider lease source",
+                    allowed_extern_blocks=(exact,),
+                )
+
     def test_audited_provider_extern_rejects_outer_attributes_and_modifiers(self):
         prefixes = (
             '#[link(name = "unreviewed")]\n',

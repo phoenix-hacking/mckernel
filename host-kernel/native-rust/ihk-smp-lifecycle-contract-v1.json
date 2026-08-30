@@ -117,6 +117,32 @@
     }
   ],
   "production_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+  "provider_lease": {
+    "attach_symbol": "ihk_smp_provider_attach_v1",
+    "callback_payload_reachable": false,
+    "credit_eligible": false,
+    "detach_symbol": "ihk_smp_provider_detach_v1",
+    "device_node_reachable": false,
+    "errno_statuses": [
+      -2,
+      -12,
+      -16,
+      -22,
+      -75,
+      -116,
+      -117
+    ],
+    "gate_status": "TODO",
+    "minor": 0,
+    "namespace": "MCKERNEL_IHK_V1",
+    "raw_token_logged": false,
+    "rocky_runtime_validated": false,
+    "runtime_behavior_proven": false,
+    "scope": "scalar minor-zero module-lifetime provider-presence lease only",
+    "token_version": 1,
+    "tracker_credit": false,
+    "unknown_status_errno": -117
+  },
   "provider_source": "host-kernel/native-rust/ihk.rs",
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
   "resource_foundation": {

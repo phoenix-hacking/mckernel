@@ -9,10 +9,13 @@ mod device_registry;
 mod fixture_tests {
     use super::device_registry::{
         ActiveDevicePhase, DeviceRegistry, DeviceRegistryError, SharePolicy,
+        IHK_DEVICE_REGISTRY,
     };
     use std::collections::HashSet;
-    use std::sync::{Arc, Barrier};
+    use std::sync::{Arc, Barrier, Mutex};
     use std::thread;
+
+    static PRODUCTION_REGISTRY_TEST_LOCK: Mutex<()> = Mutex::new(());
 
     fn registry() -> DeviceRegistry {
         DeviceRegistry::new().unwrap()
@@ -160,5 +163,33 @@ mod fixture_tests {
         assert_eq!(WORKERS, minors.len());
         assert_eq!(1, identities.len());
         assert_eq!(WORKERS, registry.live_count().unwrap());
+    }
+
+    #[test]
+    fn production_token_adapter_round_trips_and_detaches() {
+        let _serial = PRODUCTION_REGISTRY_TEST_LOCK.lock().unwrap();
+        let token = IHK_DEVICE_REGISTRY.attach_provider_token().unwrap();
+        assert!(token > 0);
+        let decoded = IHK_DEVICE_REGISTRY.decode_provider_token(token).unwrap();
+        assert_eq!(0, decoded.minor());
+        assert_eq!(decoded, IHK_DEVICE_REGISTRY.detach_provider_token(token).unwrap());
+        assert_eq!(0, IHK_DEVICE_REGISTRY.active_count().unwrap());
+    }
+
+    #[test]
+    fn malformed_and_replayed_production_tokens_fail_closed() {
+        let _serial = PRODUCTION_REGISTRY_TEST_LOCK.lock().unwrap();
+        let token = IHK_DEVICE_REGISTRY.attach_provider_token().unwrap();
+        assert_eq!(
+            DeviceRegistryError::InvalidToken,
+            IHK_DEVICE_REGISTRY
+                .decode_provider_token(token ^ (1_i64 << 34))
+                .unwrap_err()
+        );
+        IHK_DEVICE_REGISTRY.detach_provider_token(token).unwrap();
+        assert_eq!(
+            DeviceRegistryError::NotFound,
+            IHK_DEVICE_REGISTRY.detach_provider_token(token).unwrap_err()
+        );
     }
 }

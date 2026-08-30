@@ -69,14 +69,28 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         self.assertEqual(28, contract["behavior"]["generation_bits"])
         self.assertEqual(16, contract["behavior"]["reference_bits"]["provider_open"])
         self.assertEqual(16, contract["behavior"]["reference_bits"]["os"])
-        self.assertEqual(23, contract["fixture"]["expected_in_file_tests"])
-        self.assertEqual(6, contract["fixture"]["expected_fixture_tests"])
-        self.assertEqual(29, contract["fixture"]["expected_total_tests"])
+        self.assertEqual(29, contract["fixture"]["expected_in_file_tests"])
+        self.assertEqual(8, contract["fixture"]["expected_fixture_tests"])
+        self.assertEqual(37, contract["fixture"]["expected_total_tests"])
         self.assertEqual("TODO", contract["readiness"]["status"])
         self.assertFalse(contract["readiness"]["credit_eligible"])
         self.assertFalse(contract["evidence_policy"]["credit_eligible"])
         self.assertFalse(contract["ioctl_boundary"]["registration_supported"])
         self.assertFalse(contract["ioctl_boundary"]["user_copy_reachable"])
+        self.assertTrue(
+            contract["attachment_boundary"][
+                "crate_root_constructs_registry_instance"
+            ]
+        )
+        self.assertEqual(
+            [registry.PROVIDER_ATTACH_SYMBOL, registry.PROVIDER_DETACH_SYMBOL],
+            contract["attachment_boundary"]["provider_lease_exports"],
+        )
+        self.assertFalse(contract["provider_lease_boundary"]["credit_eligible"])
+        self.assertFalse(contract["provider_lease_boundary"]["runtime_validated"])
+        self.assertFalse(
+            contract["provider_lease_boundary"]["device_node_reachable"]
+        )
         self.assertEqual(registry.READINESS_BLOCKERS,
                          tuple(contract["readiness"]["blockers"]))
 
@@ -250,6 +264,15 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
             with self.subTest(old=old):
                 self.rejected_rust_semantic_mutation(old, new)
 
+    def test_string_brace_decoy_cannot_authorize_a_noop_provider_detach(self):
+        old = b'''    pub(crate) fn detach_provider_token(\n        &self,\n        token: i64,\n    ) -> Result<DeviceHandle, DeviceRegistryError> {\n        let handle = self.decode_provider_token(token)?;\n        self.begin_unregister(handle)?.commit()?;\n        Ok(handle)\n    }'''
+        new = b'''    pub(crate) fn detach_provider_token(\n        &self,\n        token: i64,\n    ) -> Result<DeviceHandle, DeviceRegistryError> {\n        let _authority_decoy = "let handle = self.decode_provider_token(token)?; self.begin_unregister(handle)?.commit()?; Ok(handle) }";\n        Err(DeviceRegistryError::InvalidToken)\n    }'''
+        self.assertIn(old, self.rust)
+        with self.assertRaisesRegex(
+                registry.ContractError, "native exact-token provider detach"):
+            registry.derive_contract(
+                REPO_ROOT, rust_override=self.rust.replace(old, new, 1))
+
     def test_drop_cleanup_stale_handles_and_identity_cannot_be_resigned_away(self):
         mutations = (
             (b"let _ = self.abort_inner();", b"let _ = Ok::<(), ()>(());"),
@@ -325,16 +348,16 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         boundary = contract["attachment_boundary"]
         self.assertEqual(sha256(self.crate_root), boundary["crate_root_sha256"])
         self.assertEqual(len(self.crate_root), boundary["crate_root_size"])
-        self.assertFalse(boundary["crate_root_constructs_registry_instance"])
+        self.assertTrue(boundary["crate_root_constructs_registry_instance"])
         alias = self.crate_root + b"\nuse self::device_registry as hidden_registry;\n"
-        with self.assertRaisesRegex(registry.ContractError, "unexpectedly uses"):
+        with self.assertRaisesRegex(registry.ContractError, "unreviewed device-registry alias"):
             registry.derive_contract(REPO_ROOT, crate_root_override=alias)
         string_comment_evasion = (
             self.crate_root
             + b'\nconst MASK: &str = "//"; fn hidden_registry_use() {'
               b' let _ = device_registry::DEVICE_CAPACITY; }\n'
         )
-        with self.assertRaisesRegex(registry.ContractError, "unexpectedly uses"):
+        with self.assertRaisesRegex(registry.ContractError, "unreviewed device-registry alias"):
             registry.derive_contract(
                 REPO_ROOT, crate_root_override=string_comment_evasion
             )
@@ -348,7 +371,7 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         decoy_contract = registry.derive_contract(
             REPO_ROOT, crate_root_override=harmless_decoys
         )
-        self.assertFalse(
+        self.assertTrue(
             decoy_contract["attachment_boundary"][
                 "crate_root_constructs_registry_instance"
             ]
@@ -380,7 +403,10 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
                 (("evidence_policy",), "credit_eligible", True),
                 (("evidence_policy",), "linux_adapter_validated", True),
                 (("evidence_policy",), "exact_kbuild_validated", True),
-                (("evidence_policy",), "rocky_runtime_validated", True)):
+                (("evidence_policy",), "rocky_runtime_validated", True),
+                (("provider_lease_boundary",), "credit_eligible", True),
+                (("provider_lease_boundary",), "runtime_validated", True),
+                (("provider_lease_boundary",), "device_node_reachable", True)):
             with self.subTest(path=path, key=key):
                 decoded = json.loads(self.contract.decode("utf-8"))
                 target = decoded
@@ -411,7 +437,7 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
             listed = subprocess.check_output([tests, "--list"], cwd=REPO_ROOT)
             test_lines = [line for line in listed.decode("utf-8").splitlines()
                           if line.endswith(": test")]
-            self.assertEqual(29, len(test_lines))
+            self.assertEqual(37, len(test_lines))
             subprocess.check_call([tests, "--test-threads=1"], cwd=REPO_ROOT)
 
 

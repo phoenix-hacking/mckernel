@@ -66,6 +66,10 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["rocky_build_load_validated"])
         self.assertFalse(summary["runtime_symbol_reference_proven"])
         self.assertFalse(summary["gate_credit_eligible"])
+        self.assertEqual("ihk-smp-x86_64", summary["provider_lease_consumer"])
+        self.assertFalse(summary["provider_lease_mcctrl_reachable"])
+        self.assertFalse(summary["provider_lease_runtime_validated"])
+        self.assertFalse(summary["provider_lease_credit_eligible"])
 
     def test_cli_deliberately_does_not_report_gate_pass(self) -> None:
         output = io.StringIO()
@@ -143,7 +147,7 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             'namespace: *b"MCKERNEL_IHK_V1\\0"',
             'namespace: *b"UNVERSIONED_____\\0"',
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "native IHK provider"):
             lifecycle.validate_repository(self.repo)
 
     def test_provider_export_symbol_drift_is_rejected(self) -> None:
@@ -153,6 +157,227 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
             '#[export_name = "wrong_provider_symbol"]',
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_attach_signature_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {',
+            'pub extern "C" fn ihk_smp_provider_attach_v1(minor: u32) -> i64 {',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_attach_registry_call_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "IHK_DEVICE_REGISTRY.attach_provider_token()",
+            "Ok(1_i64)",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_detach_signature_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {',
+            'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) -> i32 {',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_detach_registry_call_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+            "IHK_DEVICE_REGISTRY.detach_provider_token(token).unwrap()",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_registry_must_be_the_imported_singleton(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write(
+                "static IHK_DEVICE_REGISTRY: DeviceRegistry = "
+                "DeviceRegistry::production();\n"
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "import the singleton"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_detach_security_boundary_wording_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "The token is an ownership receipt, not\n"
+            "// a security boundary against other privileged in-kernel code.",
+            "The token is an ownership receipt and\n"
+            "// a security capability for privileged in-kernel code.",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_commented_out_provider_attach_cannot_satisfy_boundary(self) -> None:
+        function = (
+            'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {\n'
+            "    let token = match IHK_DEVICE_REGISTRY.attach_provider_token() {\n"
+            "        Ok(token) => token,\n"
+            "        Err(error) => return error.errno() as i64,\n"
+            "    };\n"
+            '    pr_info!("provider_lease=attach status=live minor=0\\n");\n'
+            "    token\n"
+            "}"
+        )
+        source = self.repo / self.contract["provider_source"]
+        text = source.read_text(encoding="utf-8")
+        self.assertEqual(1, text.count(function))
+        source.write_text(text.replace(function, "/*\n" + function + "\n*/", 1), encoding="utf-8")
+        with self.assertRaises(lifecycle.ValidationError):
+            lifecycle.validate_repository(self.repo)
+
+    def test_commented_out_provider_detach_cannot_satisfy_boundary(self) -> None:
+        function = (
+            'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {\n'
+            "    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n"
+            "    pr_info!(\n"
+            '        "provider_lease=detach status=vacant minor={} generation={}\\n",\n'
+            "        handle.minor(),\n"
+            "        handle.generation(),\n"
+            "    );\n"
+            "}"
+        )
+        source = self.repo / self.contract["provider_source"]
+        text = source.read_text(encoding="utf-8")
+        self.assertEqual(1, text.count(function))
+        source.write_text(text.replace(function, "/*\n" + function + "\n*/", 1), encoding="utf-8")
+        with self.assertRaises(lifecycle.ValidationError):
+            lifecycle.validate_repository(self.repo)
+
+    def test_commented_out_provider_export_records_cannot_satisfy_boundary(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        original = source.read_text(encoding="utf-8")
+        records = (
+            (
+                "ihk_smp_provider_attach_v1",
+                "IHK_SMP_PROVIDER_ATTACH_V1_EXPORT",
+            ),
+            (
+                "ihk_smp_provider_detach_v1",
+                "IHK_SMP_PROVIDER_DETACH_V1_EXPORT",
+            ),
+        )
+        for symbol, static_name in records:
+            with self.subTest(symbol=symbol):
+                start_marker = f'#[export_name = "__export_symbol_{symbol}"]\n'
+                start = original.index(start_marker)
+                end = original.index("\n};", start) + len("\n};")
+                record = original[start:end]
+                self.assertIn(f"pub static {static_name}", record)
+                source.write_text(
+                    original[:start] + "/*\n" + record + "\n*/" + original[end:],
+                    encoding="utf-8",
+                )
+                with self.assertRaises(lifecycle.ValidationError):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_raw_string_function_decoy_cannot_replace_active_detach(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        text = source.read_text(encoding="utf-8")
+        valid_call = "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)"
+        self.assertIn(valid_call, text)
+        decoy = (
+            'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {\n'
+            "    let handle = IHK_DEVICE_REGISTRY.retire_owned_provider_token(token);\n"
+            "    pr_info!(\n"
+            '        "provider_lease=detach status=vacant minor={} generation={}\\n",\n'
+            "        handle.minor(),\n"
+            "        handle.generation(),\n"
+            "    );\n"
+            "}"
+        )
+        text = text.replace(valid_call, "IHK_DEVICE_REGISTRY.detach_provider_token(token)?", 1)
+        text += '\nconst DETACH_DECOY: &str = r###"' + decoy + '"###;\n'
+        source.write_text(text, encoding="utf-8")
+        with self.assertRaises(lifecycle.ValidationError):
+            lifecycle.validate_repository(self.repo)
+
+    def test_string_braces_do_not_change_active_function_extent(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('const BRACE_DECOY: &str = "} { }} {{";\n')
+        lifecycle._validate_provider_source(
+            source.read_text(encoding="utf-8"),
+            self.contract,
+        )
+
+    def test_provider_attach_export_pointer_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "symbol: ihk_smp_provider_attach_v1 as *const () as *const u8,",
+            "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1),",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_lease_export_pointers_cannot_be_swapped(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        text = source.read_text(encoding="utf-8")
+        attach = "symbol: ihk_smp_provider_attach_v1 as *const () as *const u8,"
+        detach = "symbol: ihk_smp_provider_detach_v1 as *const () as *const u8,"
+        self.assertIn(attach, text)
+        self.assertIn(detach, text)
+        text = text.replace(attach, "symbol: IHK_PROVIDER_SWAP_SENTINEL,", 1)
+        text = text.replace(detach, attach, 1)
+        text = text.replace("symbol: IHK_PROVIDER_SWAP_SENTINEL,", detach, 1)
+        source.write_text(text, encoding="utf-8")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_lease_export_namespace_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "pub static IHK_SMP_PROVIDER_ATTACH_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {\n"
+            '    license: *b"GPL\\0",\n'
+            '    namespace: *b"MCKERNEL_IHK_V1\\0",',
+            "pub static IHK_SMP_PROVIDER_ATTACH_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {\n"
+            '    license: *b"GPL\\0",\n'
+            '    namespace: *b"UNVERSIONED_____\\0",',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_unreviewed_provider_c_abi_export_is_rejected(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('pub extern "C" fn ihk_unreviewed() -> i32 { 0 }\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "exactly two reviewed"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_unreviewed_provider_foreign_block_is_rejected(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('extern "Rust" { static IHK_UNREVIEWED: u8; }\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed extern boundary"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_unreviewed_provider_no_mangle_escape_is_rejected(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write("#[no_mangle]\npub fn ihk_unreviewed() {}\n")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "forbidden boundary"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_unreviewed_provider_export_record_is_rejected(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('#[export_name = "__export_symbol_ihk_unreviewed"]\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "export-name surface"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_must_not_log_opaque_token(self) -> None:
+        source = self.repo / self.contract["provider_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('const BAD_LOG: &str = "token={}";\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "opaque lease token"):
             lifecycle.validate_repository(self.repo)
 
     def test_missing_namespace_metadata_is_rejected(self) -> None:
@@ -284,6 +509,26 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
         with self.assertRaisesRegex(lifecycle.ValidationError, "credit is forbidden"):
             lifecycle.validate_repository(self.repo)
+
+    def test_provider_lease_contract_cannot_claim_mcctrl_or_runtime_readiness(self) -> None:
+        path = self.repo / lifecycle.DEFAULT_CONTRACT
+        original = json.loads(path.read_text(encoding="utf-8"))
+        for field in (
+            "callback_payload_reachable",
+            "credit_eligible",
+            "device_node_reachable",
+            "mcctrl_reachable",
+            "rocky_runtime_validated",
+        ):
+            with self.subTest(field=field):
+                contract = json.loads(json.dumps(original))
+                contract["ihk_dependency"]["reviewed_provider_lease_boundary"][field] = True
+                self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    "provider-lease boundary differs or overclaims",
+                ):
+                    lifecycle.validate_repository(self.repo)
 
     def test_contract_cannot_claim_built_or_runtime_symbol_proof(self) -> None:
         path = self.repo / lifecycle.DEFAULT_CONTRACT
