@@ -174,6 +174,42 @@ CGRAPH_HEADER = re.compile(
     r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
 CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
+CGRAPH_NON_LF_SEPARATORS = ("\r", "\v", "\f", "\x85", "\u2028", "\u2029")
+CGRAPH_VISIBILITY_VALUE = re.compile(r"^[!-~]+$")
+CGRAPH_VISIBILITY_TOKEN_RANKS = {
+    "in_other_partition": 0,
+    "used_from_other_partition": 1,
+    "force_output": 2,
+    "forced_by_abi": 3,
+    "externally_visible": 4,
+    "no_reorder": 5,
+    "undef": 6,
+    "prevailing_def": 6,
+    "prevailing_def_ironly": 6,
+    "preempted_reg": 6,
+    "preempted_ir": 6,
+    "resolved_ir": 6,
+    "resolved_exec": 6,
+    "resolved_dyn": 6,
+    "prevailing_def_ironly_exp": 6,
+    "asm_written": 7,
+    "external": 8,
+    "public": 9,
+    "common": 10,
+    "weak": 11,
+    "dll_import": 12,
+    "comdat": 13,
+    "one_only": 15,
+    "(implicit_section)": 17,
+    "visibility_specified": 18,
+    "visibility:protected": 19,
+    "visibility:hidden": 19,
+    "visibility:internal": 19,
+    "virtual": 20,
+    "artificial": 21,
+    "constructor": 22,
+    "destructor": 23,
+}
 CGRAPH_REFERENCE = re.compile(
     r"(?<![A-Za-z0-9_$.*-])(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/"
     r"(?P<number>[0-9]+)(?=\s|\(|$)"
@@ -2390,6 +2426,39 @@ def _parse_cgraph_calls_payload(payload):
     return calls
 
 
+def _parse_cgraph_visibility_row(line):
+    """Parse one exact GCC symtab visibility row, including its empty form."""
+
+    if line == "  Visibility:":
+        return []
+    prefix = "  Visibility: "
+    if not line.startswith(prefix):
+        raise SemanticsV3Error("GCC cgraph Visibility row syntax is malformed")
+    payload = line[len(prefix):]
+    if not payload or payload.startswith(" ") or payload.endswith(" "):
+        raise SemanticsV3Error("GCC cgraph Visibility row syntax is malformed")
+    tokens = payload.split(" ")
+    ranks = []
+    for token in tokens:
+        rank = CGRAPH_VISIBILITY_TOKEN_RANKS.get(token)
+        if token.startswith("comdat_group:"):
+            value = token[len("comdat_group:"):]
+            rank = 14 if CGRAPH_VISIBILITY_VALUE.fullmatch(value) else None
+        elif token.startswith("section:"):
+            value = token[len("section:"):]
+            rank = 16 if CGRAPH_VISIBILITY_VALUE.fullmatch(value) else None
+        if rank is None:
+            raise SemanticsV3Error(
+                "GCC cgraph Visibility row contains an unknown token"
+            )
+        ranks.append(rank)
+    if any(left >= right for left, right in zip(ranks, ranks[1:])):
+        raise SemanticsV3Error(
+            "GCC cgraph Visibility row tokens are duplicated or out of order"
+        )
+    return tokens
+
+
 def _parse_initial_cgraph_section(lines, source):
     records = []
     current = None
@@ -2406,6 +2475,7 @@ def _parse_initial_cgraph_section(lines, source):
                 "number": int(match.group("number")),
                 "saw_aux": False,
                 "saw_calls": False,
+                "saw_visibility": False,
                 "type": None,
                 "visibility": [],
             }
@@ -2425,12 +2495,13 @@ def _parse_initial_cgraph_section(lines, source):
             if current["type"] is not None:
                 raise SemanticsV3Error("GCC cgraph symbol has duplicate Type rows")
             current["type"] = stripped.split(":", 1)[1].strip()
-        elif stripped.startswith("Visibility:"):
-            if current["visibility"]:
+        elif line.startswith("  Visibility:"):
+            if current["saw_visibility"]:
                 raise SemanticsV3Error(
                     "GCC cgraph symbol has duplicate Visibility rows"
                 )
-            current["visibility"] = stripped.split(":", 1)[1].strip().split()
+            current["saw_visibility"] = True
+            current["visibility"] = _parse_cgraph_visibility_row(line)
         elif stripped == "Address is taken.":
             current["address_taken"] = True
         elif stripped == "Aux: @0xADDR":
@@ -2458,7 +2529,7 @@ def _parse_initial_cgraph_section(lines, source):
             continue
         if not record["saw_calls"]:
             raise SemanticsV3Error("GCC cgraph function omits its Calls row")
-        if not record["visibility"]:
+        if not record["saw_visibility"]:
             raise SemanticsV3Error("GCC cgraph function omits its Visibility row")
         definition = record["type"].startswith("function definition analyzed")
         result.append(
@@ -2484,6 +2555,10 @@ def parse_initial_cgraph(data, source):
 
     validate_normalized_cgraph_dump(data)
     text = compiler_text(data, "GCC IPA cgraph")
+    if any(separator in text for separator in CGRAPH_NON_LF_SEPARATORS):
+        raise SemanticsV3Error(
+            "GCC IPA cgraph contains a non-LF line separator"
+        )
     lines = text.splitlines()
     starts = [
         index for index, line in enumerate(lines)

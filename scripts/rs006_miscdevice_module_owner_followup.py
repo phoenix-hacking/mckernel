@@ -22,7 +22,7 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json"
-EXPECTED_CONTRACT_SHA256 = "38b596aa0e69805a5a8cd745cf56d97e216e1b8f7c8e9e943e241dbc8af8ba94"
+EXPECTED_CONTRACT_SHA256 = "b05d09fb2deba32531be03fd6d69d67d49aee2bf7a2e8bc6129657df4eda2dbe"
 ACTIVE_PATCH_PATH = "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch"
 COMPILE_FIXTURE_PATH = "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs"
 REPLAY_FIXTURE_PATH = "scripts/tests/fixtures/rust-core-rocky-6.12"

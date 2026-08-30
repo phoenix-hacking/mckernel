@@ -5,7 +5,9 @@ from __future__ import print_function
 import hashlib
 import json
 import re
+import shutil
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -249,7 +251,6 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "LD_PRELOAD",
             "LD_PROFILE",
             "LD_PROFILE_OUTPUT",
-            "LD_SHOW_AUXV",
         }
         exact_names = {
             "Verify source-only contracts without claiming readiness",
@@ -274,6 +275,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 with self.subTest(job=job_name, step=name):
                     environment = steps[name]["env"]
                     self.assertEqual({key: "" for key in loader_keys}, {key: environment[key] for key in loader_keys})
+                    self.assertNotIn("LD_SHOW_AUXV", environment)
                     self.assertEqual("/usr/sbin:/usr/bin:/sbin:/bin", environment["PATH"])
                     run_lines = [
                         line.strip()
@@ -288,6 +290,11 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
         for old, new in (
             ('          LD_AUDIT: ""\n', '          LD_AUDIT: /tmp/attacker.so\n'),
+            (
+                '          LD_PROFILE_OUTPUT: ""\n',
+                '          LD_PROFILE_OUTPUT: ""\n'
+                '          LD_SHOW_AUXV: ""\n',
+            ),
             ('          PATH: /usr/sbin:/usr/bin:/sbin:/bin\n', '          PATH: /tmp/attacker\n'),
             (
                 "          set -euo pipefail\n          unset LD_SHOW_AUXV\n",
@@ -303,6 +310,244 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.assertNotEqual(self.workflow, mutation)
             with self.assertRaises(runtime_evidence.EvidenceError):
                 runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_empty_ld_show_auxv_is_startup_active_not_neutral(self):
+        command = [
+            "/usr/bin/env",
+            "-i",
+            "PATH=/usr/bin:/bin",
+            "/usr/bin/bash",
+            "--noprofile",
+            "--norc",
+            "-p",
+            "-c",
+            "unset LD_SHOW_AUXV; printf 'payload-only\\n'",
+        ]
+        clean = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=True,
+        )
+        contaminated = subprocess.run(
+            command[:3] + ["LD_SHOW_AUXV="] + command[3:],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=True,
+        )
+        self.assertEqual(b"payload-only\n", clean.stdout)
+        self.assertIn(b"AT_EXECFN:", contaminated.stdout)
+        self.assertTrue(contaminated.stdout.endswith(b"payload-only\n"))
+
+    def test_packaged_modinfo_symlink_is_exact_and_owner_bound(self):
+        document = yaml.safe_load(self.workflow)
+        step = next(
+            step
+            for step in document["jobs"]["exact-build"]["steps"]
+            if step.get("name")
+            == "Validate built metadata and capture immutable diagnostics"
+        )
+        script = step["run"]
+        sequence = [
+            "expected_modinfo_nevra=kmod-31-13.el10.x86_64",
+            "expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+            'modinfo_path="$(command -v modinfo)"',
+            "modinfo_target=/usr/bin/kmod",
+            'test "$modinfo_path" = /usr/sbin/modinfo',
+            "test -x /usr/sbin/modinfo",
+            "test -L /usr/sbin/modinfo",
+            'test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod',
+            'test -x "$modinfo_target"',
+            'test ! -L "$modinfo_target"',
+            'exec {modinfo_fd}<"$modinfo_target"',
+            'modinfo_exec="/proc/self/fd/$modinfo_fd"',
+            'test -r "$modinfo_exec"',
+            "assert_modinfo_binding() {",
+            'test "$modinfo_path" -ef "$modinfo_exec" &&',
+            'test "$modinfo_target" -ef "$modinfo_exec" &&',
+            'test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \\',
+            "run_modinfo() (",
+            'exec -a modinfo "$modinfo_exec" "$@"',
+            'test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = "$expected_modinfo_nevra"',
+            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_path")" = kmod',
+            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_target")" = kmod',
+        ]
+        positions = [script.index(fragment) for fragment in sequence]
+        self.assertEqual(positions, sorted(positions))
+        self.assertEqual(
+            1,
+            script.count(
+                'run_modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"'
+            ),
+        )
+        self.assertEqual(
+            1,
+            script.count('vermagic="$(run_modinfo -F vermagic "$module")"'),
+        )
+        self.assertNotIn('"$modinfo_path" "$module"', script)
+        self.assertNotIn('"$modinfo_path" -F vermagic', script)
+        owner_lookup = script.index("/usr/bin/rpm -q --qf")
+        binding_calls = [
+            match.start()
+            for match in re.finditer(r"(?m)^assert_modinfo_binding$", script)
+        ]
+        self.assertEqual(3, len(binding_calls))
+        self.assertLess(binding_calls[0], owner_lookup)
+        self.assertLess(owner_lookup, binding_calls[1])
+        final_recheck = script.rindex("assert_modinfo_binding")
+        close_descriptor = script.index("exec {modinfo_fd}<&-")
+        self.assertLess(script.index("vermagic=\"$(run_modinfo"), final_recheck)
+        self.assertLess(final_recheck, close_descriptor)
+
+        mutations = (
+            (
+                "          test -L /usr/sbin/modinfo\n",
+                "          test -e /usr/sbin/modinfo\n",
+            ),
+            (
+                '          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod\n',
+                '          test -n "$(/usr/bin/readlink -- /usr/sbin/modinfo)"\n',
+            ),
+            (
+                '              test "$modinfo_path" -ef "$modinfo_exec" &&\n',
+                "",
+            ),
+            (
+                '              test "$modinfo_target" -ef "$modinfo_exec" &&\n',
+                "",
+            ),
+            (
+                (
+                    '              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \\\n'
+                    '              "$expected_modinfo_sha256  $modinfo_exec"\n'
+                ),
+                "",
+            ),
+            (
+                '              exec -a modinfo "$modinfo_exec" "$@"\n',
+                '              "$modinfo_path" "$@"\n',
+            ),
+            (
+                '            run_modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"\n',
+                '            "$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"\n',
+            ),
+            (
+                '          test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = "$expected_modinfo_nevra"\n',
+                "",
+            ),
+        )
+        for old, new in mutations:
+            mutation = self.workflow.replace(old, new, 1)
+            self.assertNotEqual(self.workflow, mutation)
+            with self.subTest(new=new.strip()):
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_retained_modinfo_descriptor_rejects_namespace_and_content_attacks(self):
+        shell = r"""
+set -euo pipefail
+root=$1
+attack=$2
+modinfo_path="$root/usr/sbin/modinfo"
+modinfo_target="$root/usr/bin/kmod"
+attacker="$root/usr/bin/attacker"
+exec {modinfo_fd}<"$modinfo_target"
+modinfo_exec="/proc/self/fd/$modinfo_fd"
+expected_sha256="$(/usr/bin/sha256sum -- "$modinfo_exec")"
+assert_binding() {
+  test -L "$modinfo_path" &&
+  test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+  test ! -L "$modinfo_target" &&
+  test "$modinfo_path" -ef "$modinfo_exec" &&
+  test "$modinfo_target" -ef "$modinfo_exec" &&
+  test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = "$expected_sha256"
+}
+assert_binding
+case "$attack" in
+  pre-owner-alias-retarget)
+    /usr/bin/ln -sfn ../bin/attacker "$modinfo_path"
+    ;;
+  post-owner-target-replacement)
+    : simulated-owner-lookup-complete
+    /usr/bin/mv -- "$attacker" "$modinfo_target"
+    ;;
+  post-owner-content-replacement)
+    : simulated-owner-lookup-complete
+    /usr/bin/cp -- /usr/bin/false "$modinfo_target"
+    ;;
+  *) exit 80 ;;
+esac
+if assert_binding; then
+  exit 81
+fi
+if test "$attack" != post-owner-content-replacement; then
+  (exec -a modinfo "$modinfo_exec")
+  if "$modinfo_path"; then
+    exit 82
+  fi
+fi
+exec {modinfo_fd}<&-
+"""
+        for attack in (
+            "pre-owner-alias-retarget",
+            "post-owner-target-replacement",
+            "post-owner-content-replacement",
+        ):
+            with self.subTest(attack=attack), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                binary = root / "usr/bin"
+                sbin = root / "usr/sbin"
+                binary.mkdir(parents=True)
+                sbin.mkdir(parents=True)
+                shutil.copy2("/usr/bin/true", binary / "kmod")
+                shutil.copy2("/usr/bin/false", binary / "attacker")
+                (sbin / "modinfo").symlink_to("../bin/kmod")
+                completed = subprocess.run(
+                    [
+                        "/usr/bin/bash",
+                        "--noprofile",
+                        "--norc",
+                        "-p",
+                        "-c",
+                        shell,
+                        "descriptor-test",
+                        str(root),
+                        attack,
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                self.assertEqual(
+                    0,
+                    completed.returncode,
+                    completed.stderr.decode("utf-8", errors="replace"),
+                )
+
+    def test_retained_descriptor_exec_preserves_modinfo_argv0(self):
+        shell = r"""
+set -euo pipefail
+exec {modinfo_fd}</usr/bin/bash
+modinfo_exec="/proc/self/fd/$modinfo_fd"
+(exec -a modinfo "$modinfo_exec" --noprofile --norc -p -c 'test "$0" = modinfo')
+exec {modinfo_fd}<&-
+"""
+        completed = subprocess.run(
+            [
+                "/usr/bin/bash",
+                "--noprofile",
+                "--norc",
+                "-p",
+                "-c",
+                shell,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(
+            0,
+            completed.returncode,
+            completed.stderr.decode("utf-8", errors="replace"),
+        )
 
     def test_each_later_boundary_rejects_prior_github_env_override(self):
         injections = (
@@ -1098,7 +1343,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             'sha256sum --check --strict PRECHECK_SHA256SUMS', validation
         )
         vermagic = self.workflow.index(
-            'vermagic="$("$modinfo_path" -F vermagic "$module")"', validation
+            'vermagic="$(run_modinfo -F vermagic "$module")"', validation
         )
         copied_module = self.workflow.index(
             'module="$EVIDENCE_DIR/$name"', precheck
@@ -1110,7 +1355,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             '/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD',
             '> "$EVIDENCE_DIR/commit.sha"',
             'cp "$module" "$EVIDENCE_DIR/$name"',
-            '"$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"',
+            'run_modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"',
             '/usr/bin/readelf -p .modinfo "$module" '
             '> "$EVIDENCE_DIR/$name.modinfo-section"',
             '/usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"',

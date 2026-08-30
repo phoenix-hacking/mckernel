@@ -49,6 +49,42 @@ REVIEW_CGRAPH_HEADER = re.compile(
     r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
 REVIEW_CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
+REVIEW_NON_LF_SEPARATORS = ("\r", "\v", "\f", "\x85", "\u2028", "\u2029")
+REVIEW_VISIBILITY_VALUE = re.compile(r"^[!-~]+$")
+REVIEW_VISIBILITY_TOKEN_RANKS = {
+    "in_other_partition": 0,
+    "used_from_other_partition": 1,
+    "force_output": 2,
+    "forced_by_abi": 3,
+    "externally_visible": 4,
+    "no_reorder": 5,
+    "undef": 6,
+    "prevailing_def": 6,
+    "prevailing_def_ironly": 6,
+    "preempted_reg": 6,
+    "preempted_ir": 6,
+    "resolved_ir": 6,
+    "resolved_exec": 6,
+    "resolved_dyn": 6,
+    "prevailing_def_ironly_exp": 6,
+    "asm_written": 7,
+    "external": 8,
+    "public": 9,
+    "common": 10,
+    "weak": 11,
+    "dll_import": 12,
+    "comdat": 13,
+    "one_only": 15,
+    "(implicit_section)": 17,
+    "visibility_specified": 18,
+    "visibility:protected": 19,
+    "visibility:hidden": 19,
+    "visibility:internal": 19,
+    "virtual": 20,
+    "artificial": 21,
+    "constructor": 22,
+    "destructor": 23,
+}
 REVIEW_CGRAPH_EDGE = re.compile(
     r"(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+)"
     r"(?P<edge_metadata>"
@@ -159,6 +195,39 @@ def _review_scan_calls(payload):
     return calls
 
 
+def _review_visibility_row(line):
+    """Independently parse GCC's exact, possibly token-empty visibility row."""
+
+    if line == "  Visibility:":
+        return []
+    marker = "  Visibility: "
+    if line[:len(marker)] != marker:
+        raise ReviewV3Error("independent cgraph Visibility syntax is malformed")
+    payload = line[len(marker):]
+    pieces = payload.split(" ")
+    if not payload or any(piece == "" for piece in pieces):
+        raise ReviewV3Error("independent cgraph Visibility syntax is malformed")
+    previous = -1
+    for piece in pieces:
+        rank = REVIEW_VISIBILITY_TOKEN_RANKS.get(piece)
+        if piece.startswith("comdat_group:"):
+            suffix = piece.partition(":")[2]
+            rank = 14 if REVIEW_VISIBILITY_VALUE.fullmatch(suffix) else None
+        elif piece.startswith("section:"):
+            suffix = piece.partition(":")[2]
+            rank = 16 if REVIEW_VISIBILITY_VALUE.fullmatch(suffix) else None
+        if rank is None:
+            raise ReviewV3Error(
+                "independent cgraph Visibility contains an unknown token"
+            )
+        if rank <= previous:
+            raise ReviewV3Error(
+                "independent cgraph Visibility is duplicated or out of order"
+            )
+        previous = rank
+    return pieces
+
+
 def _review_initial_section(lines, source):
     records = []
     current = None
@@ -173,6 +242,7 @@ def _review_initial_section(lines, source):
                 "number": int(match.group("number")),
                 "saw_aux": False,
                 "saw_calls": False,
+                "saw_visibility": False,
                 "type": None,
                 "visibility": [],
             }
@@ -190,10 +260,11 @@ def _review_initial_section(lines, source):
             if current["type"] is not None:
                 raise ReviewV3Error("independent cgraph Type row is duplicated")
             current["type"] = stripped.split(":", 1)[1].strip()
-        elif stripped.startswith("Visibility:"):
-            if current["visibility"]:
+        elif line.startswith("  Visibility:"):
+            if current["saw_visibility"]:
                 raise ReviewV3Error("independent cgraph Visibility row is duplicated")
-            current["visibility"] = stripped.split(":", 1)[1].strip().split()
+            current["saw_visibility"] = True
+            current["visibility"] = _review_visibility_row(line)
         elif stripped == "Address is taken.":
             current["address_taken"] = True
         elif stripped == "Aux: @0xADDR":
@@ -215,7 +286,7 @@ def _review_initial_section(lines, source):
             raise ReviewV3Error("independent cgraph symbol omits Type")
         if not record["type"].startswith("function"):
             continue
-        if not record["visibility"] or not record["saw_calls"]:
+        if not record["saw_visibility"] or not record["saw_calls"]:
             raise ReviewV3Error("independent cgraph function metadata is incomplete")
         result.append(
             {
@@ -239,6 +310,8 @@ def independent_parse_cgraph(data, source):
         text = data.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise ReviewV3Error("independent cgraph is not UTF-8: {0}".format(exc))
+    if any(separator in text for separator in REVIEW_NON_LF_SEPARATORS):
+        raise ReviewV3Error("independent cgraph contains a non-LF line separator")
     lines = text.splitlines()
     for line in lines:
         header = REVIEW_CGRAPH_HEADER.fullmatch(line)

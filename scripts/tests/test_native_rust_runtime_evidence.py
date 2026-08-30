@@ -678,8 +678,30 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             for step in document["jobs"]["exact-runtime"]["steps"]
             if "run" in step
         }
+        loader_keys = {
+            "GLIBC_TUNABLES",
+            "LD_ASSUME_KERNEL",
+            "LD_AUDIT",
+            "LD_BIND_NOW",
+            "LD_DEBUG",
+            "LD_DEBUG_OUTPUT",
+            "LD_DYNAMIC_WEAK",
+            "LD_HWCAP_MASK",
+            "LD_LIBRARY_PATH",
+            "LD_ORIGIN_PATH",
+            "LD_PREFER_MAP_32BIT_EXEC",
+            "LD_PRELOAD",
+            "LD_PROFILE",
+            "LD_PROFILE_OUTPUT",
+        }
         self.assertTrue(protected_names.issubset(steps))
         for name in protected_names:
+            environment = steps[name]["env"]
+            self.assertEqual(
+                {key: "" for key in loader_keys},
+                {key: environment[key] for key in loader_keys},
+            )
+            self.assertNotIn("LD_SHOW_AUXV", environment)
             run_lines = [
                 line.strip()
                 for line in steps[name]["run"].splitlines()
@@ -695,6 +717,11 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "shell: bash",
             ),
             ('          LD_AUDIT: ""\n', ""),
+            (
+                '          LD_PROFILE_OUTPUT: ""\n',
+                '          LD_PROFILE_OUTPUT: ""\n'
+                '          LD_SHOW_AUXV: ""\n',
+            ),
             (
                 "          PATH=/usr/sbin:/usr/bin:/sbin:/bin\n"
                 "          export PATH\n",

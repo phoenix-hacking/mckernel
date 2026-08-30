@@ -1172,11 +1172,17 @@ def synthetic_cgraph(records, second_records=None):
                     record.get("type_suffix", ""),
                 )
             )
-            visibility = ["semantic_interposition"]
-            visibility.extend(record.get("visibility", ()))
-            if record.get("global", True):
-                visibility.append("public")
-            rows.append("  Visibility: " + " ".join(visibility))
+            if record.get("empty_visibility"):
+                rows.append("  Visibility:")
+            else:
+                visibility = []
+                if record.get("global", True):
+                    visibility.append("public")
+                visibility.extend(record.get("visibility", ()))
+                rows.append(
+                    "  Visibility:"
+                    + ((" " + " ".join(visibility)) if visibility else "")
+                )
             if record.get("address_taken"):
                 rows.append("  Address is taken.")
             if record.get("alias"):
@@ -1698,6 +1704,109 @@ class DirectCtuGraphTests(unittest.TestCase):
             synthetic_cgraph(records), "fixture.c"
         )
         self.assertEqual(parsed[0]["traits"], ["inline"])
+
+    def test_gcc_85_token_empty_visibility_row_is_exact_and_local(self):
+        baseline = synthetic_cgraph(
+            [
+                {
+                    "name": "local_fn", "number": 1,
+                    "definition": True, "empty_visibility": True,
+                }
+            ]
+        )
+        parsed = semantics.parse_initial_cgraph(baseline, "fixture.c")
+        self.assertEqual(len(parsed), 1)
+        self.assertFalse(parsed[0]["global"])
+        self.assertEqual(parsed[0]["traits"], [])
+
+        complete_row = (
+            b"  Visibility: in_other_partition used_from_other_partition "
+            b"force_output forced_by_abi externally_visible no_reorder "
+            b"prevailing_def asm_written external public common weak "
+            b"dll_import comdat comdat_group:group one_only section:.text "
+            b"(implicit_section) visibility_specified visibility:hidden "
+            b"virtual artificial constructor destructor\n"
+        )
+        complete = baseline.replace(b"  Visibility:\n", complete_row)
+        complete_parsed = semantics.parse_initial_cgraph(complete, "fixture.c")
+        self.assertTrue(complete_parsed[0]["global"])
+        self.assertEqual(complete_parsed[0]["traits"], ["comdat", "weak"])
+
+        hostile_rows = (
+            baseline.replace(b"  Visibility:\n", b""),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility:\n  Visibility:\n",
+            ),
+            baseline.replace(b"  Visibility:\n", b"  Visibility: \n"),
+            baseline.replace(b"  Visibility:\n", b"  Visibility:\t\n"),
+            baseline.replace(b"  Visibility:\n", b" Visibility:\n"),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: attacker\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: public public\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: undef prevailing_def\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility: visibility:hidden visibility:internal\n",
+            ),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility: weak public\n",
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: public  weak\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: comdat_group:\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility: comdat_group:group comdat_group:other\n",
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: section:\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility: section:.text one_only\n",
+            ),
+            baseline.replace(
+                b"  Visibility:\n", "  Visibility: section:\u2603\n".encode("utf-8")
+            ),
+            baseline.replace(
+                b"  Visibility:\n",
+                b"  Visibility: semantic_interposition\n",
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: visibility:default\n"
+            ),
+            baseline.replace(
+                b"  Visibility:\n", b"  Visibility: ifunc_resolver\n"
+            ),
+        )
+        for hostile in hostile_rows:
+            with self.subTest(hostile=hostile):
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "Visibility"
+                ):
+                    semantics.parse_initial_cgraph(hostile, "fixture.c")
+
+        for separator in (
+            b"\r\n", b"\r", b"\v", b"\f", b"\xc2\x85",
+            b"\xe2\x80\xa8", b"\xe2\x80\xa9",
+        ):
+            with self.subTest(separator=separator):
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "non-LF line separator"
+                ):
+                    semantics.parse_initial_cgraph(
+                        baseline.replace(b"\n", separator), "fixture.c"
+                    )
 
     def test_real_normalizer_canonicalizes_header_and_aux_allocator_addresses(self):
         records = [

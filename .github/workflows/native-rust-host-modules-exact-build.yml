@@ -343,7 +343,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           PATH: /usr/sbin:/usr/bin:/sbin:/bin
           PYTHONHOME: ""
           PYTHONPATH: ""
@@ -427,7 +426,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           MAKEFILES: ""
           MAKEFLAGS: ""
           MAKEOVERRIDES: ""
@@ -542,7 +540,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           MAKEFILES: ""
           MAKEFLAGS: ""
           MAKEOVERRIDES: ""
@@ -657,7 +654,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           MAKEFILES: ""
           MAKEFLAGS: ""
           MAKEOVERRIDES: ""
@@ -798,7 +794,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           MAKEFILES: ""
           MAKEFLAGS: ""
           MAKEOVERRIDES: ""
@@ -860,18 +855,44 @@ jobs:
             > "$EVIDENCE_DIR/commit.sha"
           # Preserve the exact binaries and both rendered and raw module
           # metadata before any semantic checker can fail closed.
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
           modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
           test "$modinfo_path" = /usr/sbin/modinfo
           test -x /usr/sbin/modinfo
-          test ! -L /usr/sbin/modinfo
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec"
+          }
+          run_modinfo() (
+            assert_modinfo_binding &&
+              exec -a modinfo "$modinfo_exec" "$@"
+          )
+          assert_modinfo_binding
+          test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = "$expected_modinfo_nevra"
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          assert_modinfo_binding
           test -x /usr/bin/nm
           test ! -L /usr/bin/nm
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
           for module in "$ihk" "$smp" "$mcctrl"; do
             name="$(basename "$module")"
             cp "$module" "$EVIDENCE_DIR/$name"
-            "$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"
+            run_modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
             /usr/bin/readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"
             /usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
             /usr/bin/nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
@@ -885,11 +906,13 @@ jobs:
           )
           for name in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
             module="$EVIDENCE_DIR/$name"
-            vermagic="$("$modinfo_path" -F vermagic "$module")"
+            vermagic="$(run_modinfo -F vermagic "$module")"
             test -n "$vermagic"
             test "$(printf '%s\n' "$vermagic" | wc -l)" = 1
             test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"
           done
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
@@ -1215,7 +1238,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           PATH: /usr/sbin:/usr/bin:/sbin:/bin
           PYTHONHOME: ""
           PYTHONPATH: ""
@@ -1259,7 +1281,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           PATH: /usr/sbin:/usr/bin:/sbin:/bin
           PYTHONHOME: ""
           PYTHONPATH: ""
@@ -1327,7 +1348,6 @@ jobs:
           LD_PRELOAD: ""
           LD_PROFILE: ""
           LD_PROFILE_OUTPUT: ""
-          LD_SHOW_AUXV: ""
           PATH: /usr/sbin:/usr/bin:/sbin:/bin
           PYTHONHOME: ""
           PYTHONPATH: ""
