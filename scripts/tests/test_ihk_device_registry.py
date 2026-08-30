@@ -163,7 +163,7 @@ class IhkDeviceRegistryTests(unittest.TestCase):
                 [tests, "--list"], cwd=str(REPO_ROOT), env=environment
             ).decode("utf-8")
             discovered = [line for line in listed.splitlines() if line.endswith(": test")]
-            self.assertEqual(37, len(discovered))
+            self.assertEqual(39, len(discovered))
             subprocess.check_call(
                 [tests, "--test-threads=1"], cwd=str(REPO_ROOT), env=environment
             )
