@@ -237,19 +237,30 @@ class IhkSmpResourceTests(unittest.TestCase):
                         len([line for line in listing.splitlines()
                              if line.endswith(": test")]))
                 subprocess.check_call(command, cwd=REPO_ROOT)
-            negative = subprocess.run(
-                [rustc, "--edition=2021", "-Dwarnings", ALIAS_FIXTURE_PATH,
-                 "-o", os.path.join(temporary, "must-not-build")],
+            private_token = subprocess.run(
+                [rustc, "--edition=2021", "-Dwarnings", "--cfg",
+                 "os_token_forge", ALIAS_FIXTURE_PATH, "-o",
+                 os.path.join(temporary, "must-not-forge-token")],
                 cwd=REPO_ROOT,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True)
-            self.assertNotEqual(0, negative.returncode)
-            self.assertIn("private", negative.stderr, negative.stderr)
+            self.assertNotEqual(0, private_token.returncode)
+            self.assertIn("private", private_token.stderr, private_token.stderr)
+
+            workspace_alias = subprocess.run(
+                [rustc, "--edition=2021", "-Dwarnings", "--cfg",
+                 "workspace_alias", ALIAS_FIXTURE_PATH, "-o",
+                 os.path.join(temporary, "must-not-alias-workspace")],
+                cwd=REPO_ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True)
+            self.assertNotEqual(0, workspace_alias.returncode)
             self.assertTrue(
-                "mismatched types" in negative.stderr
-                or "cannot borrow" in negative.stderr,
-                negative.stderr)
+                "mismatched types" in workspace_alias.stderr
+                or "cannot borrow" in workspace_alias.stderr,
+                workspace_alias.stderr)
 
 
 if __name__ == "__main__":

@@ -59,7 +59,7 @@ EXPECTED_RESOURCE_FOUNDATION = {
         "expected_total_tests": 29,
         "minimum_rustc": "1.92.0",
         "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
-        "negative_sha256": "9e2f1296eec2008edc87d88fef56d3f9924248815c73c7da3d3d0690d345c6f0",
+        "negative_sha256": "fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5",
         "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
         "positive_sha256": "f2861831b6456600225a3d84a26fdaec618683a33263bb811d74d3c88ce39a91",
     },
@@ -810,8 +810,8 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
     ):
         raise ValidationError("SMP resource fixture total is not additive")
     for fragment in (
-        "fn forge_os_token() -> OsToken",
-        "OsToken {",
+        "fn forge_os_token() -> smp_resource::OsToken",
+        "smp_resource::OsToken {",
         "&mut memory",
     ):
         if fragment not in negative:
