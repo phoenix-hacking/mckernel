@@ -824,6 +824,22 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             "        run: |\n"
             "          set -euo pipefail\n"
         )
+        legacy_raw_outer_if = self._replace_once(
+            self.legacy_workflow,
+            '          if test -d "$BUILD_DIR"; then\n',
+            '          if false; then\n'
+            '          if test -d "$BUILD_DIR"; then\n',
+        )
+        legacy_raw_outer_if = self._replace_once(
+            legacy_raw_outer_if,
+            "          printf 'status=%s\\ncredit=forbidden\\n'",
+            "          fi\n"
+            "          printf 'status=%s\\ncredit=forbidden\\n'",
+        )
+        legacy_raw_upload = (
+            "      - name: Upload Rocky build evidence\n"
+            "        if: ${{ always() }}\n"
+        )
         legacy_mutations = (
             (policy["legacy_boot_step"], "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256", legacy_boot_if),
             (
@@ -878,6 +894,68 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                     self.legacy_workflow,
                     legacy_finalize_start,
                     legacy_finalize_start + "          return 0\n",
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                legacy_raw_outer_if,
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    '          test "$raw_collection_status" = '
+                    'complete-checksum-verified || exit 1\n',
+                    "",
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    '                  install -m 0644 "$raw_sidecar_path" '
+                    'evidence/ && \\\n',
+                    "",
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    '            if test -f "$raw_bundle_path" && '
+                    'test ! -L "$raw_bundle_path" && \\\n',
+                    '            if test -f "$raw_bundle_path" && \\\n',
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    "                  cmp -s \\\n",
+                    "                  test -s \\\n",
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    "credit=forbidden\\n' \"$raw_collection_status\"",
+                    "credit=permitted\\n' \"$raw_collection_status\"",
+                ),
+            ),
+            (
+                policy["legacy_boot_step"],
+                "EXPECTED_LEGACY_BOOT_ACTIVE_SHA256",
+                self._replace_once(
+                    self.legacy_workflow,
+                    legacy_raw_upload,
+                    legacy_raw_upload.replace("always()", "success()"),
                 ),
             ),
         )

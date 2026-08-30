@@ -1085,6 +1085,9 @@ jobs:
         run: |
           set +e
           mkdir -p evidence
+          raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"
+          raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"
+          raw_collection_status=absent-before-raw-capture
           runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
@@ -1094,6 +1097,39 @@ jobs:
             ' > evidence/worktree.txt 2>&1
 
           if test -d "$BUILD_DIR"; then
+            if test -f "$raw_bundle_path" && test ! -L "$raw_bundle_path" && \
+              test -f "$raw_sidecar_path" && test ! -L "$raw_sidecar_path"
+            then
+              raw_bundle_bytes="$(stat -c '%s' -- "$raw_bundle_path")"
+              raw_sidecar_bytes="$(stat -c '%s' -- "$raw_sidecar_path")"
+              if test "$raw_bundle_bytes" -gt 0 && \
+                test "$raw_bundle_bytes" -le 805306368 && \
+                test "$raw_sidecar_bytes" -gt 0 && \
+                test "$raw_sidecar_bytes" -le 4096
+              then
+                if install -m 0644 "$raw_bundle_path" evidence/ && \
+                  install -m 0644 "$raw_sidecar_path" evidence/ && \
+                  (
+                    cd evidence && \
+                      sha256sum host-module-failure-semantics-v3-raw.tar \
+                        > host-module-failure-semantics-v3-raw.tar.observed.sha256
+                  ) && \
+                  cmp -s \
+                  evidence/host-module-failure-semantics-v3-raw.tar.observed.sha256 \
+                  evidence/host-module-failure-semantics-v3-raw.tar.sha256
+                then
+                  raw_collection_status=complete-checksum-verified
+                else
+                  raw_collection_status=complete-checksum-invalid
+                fi
+              else
+                raw_collection_status=unsafe-size-pair-not-copied
+              fi
+            elif test -e "$raw_bundle_path" || test -L "$raw_bundle_path" || \
+              test -e "$raw_sidecar_path" || test -L "$raw_sidecar_path"
+            then
+              raw_collection_status=incomplete-or-unsafe-pair-not-copied
+            fi
             for evidence_file in \
               mckernel.img.map \
               mckernel-linked-text-ownership.json \
@@ -1121,6 +1157,9 @@ jobs:
                 --files-from="$GITHUB_WORKSPACE/evidence/build-products.list0"
             )
           fi
+          printf 'status=%s\ncredit=forbidden\n' "$raw_collection_status" \
+            > evidence/host-module-failure-semantics-v3-raw-collection.txt
+          test "$raw_collection_status" = complete-checksum-verified || exit 1
 
       - name: Upload Rocky build evidence
         if: ${{ always() }}

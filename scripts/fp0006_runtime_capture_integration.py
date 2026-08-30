@@ -33,9 +33,9 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "396182c29a62e22d7f4e30f3e62c0f35706cf3616ea2d0c61b6a42de34a67b32"
+EXPECTED_CONTRACT_SHA256 = "4b1950655483d8bf3372b481998f7006a251cd18383ec9157c14b594df9daa16"
 EXPECTED_CONTRACT_SIZE = 8780
-EXPECTED_LEGACY_WORKFLOW_SHA256 = "67dd306a2ce36c023dd139d71d3871f32412d43e504cb3bf873bf6e146f9e516"
+EXPECTED_LEGACY_WORKFLOW_SHA256 = "b38e50bcd0d119f5fa7650264bdb0b7fda7fdc0c9de54142fd09917d6f397726"
 EXPECTED_NATIVE_WORKFLOW_SHA256 = "3ac4dd4716144e015fbe8b0db8d1365e47fc6f162ee27c50db2b3dff3f63d2bf"
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
@@ -360,9 +360,143 @@ def _active_digest(step: str) -> str:
     return _sha256(("\n".join(_active_lines(step)) + "\n").encode("utf-8"))
 
 
+def _validate_legacy_raw_diagnostic_upload(text: str) -> None:
+    job = _extract_job(text, "rocky-build", "legacy workflow")
+    order, steps = _extract_steps(job, "legacy Rocky build job")
+    collect_name = "Collect build evidence"
+    upload_name = "Upload Rocky build evidence"
+    if collect_name not in steps or upload_name not in steps:
+        raise CaptureError("legacy raw diagnostic collection steps are missing")
+    if order.index(collect_name) + 1 != order.index(upload_name):
+        raise CaptureError("legacy raw diagnostic collection/upload order differs")
+
+    collect = steps[collect_name]
+    expected_prefix = (
+        "        if: ${{ always() }}\n"
+        "        run: |\n"
+        "          set +e\n"
+        "          mkdir -p evidence\n"
+        "          raw_bundle_path=\"$BUILD_DIR/host-module-failure-semantics-v3-raw.tar\"\n"
+        "          raw_sidecar_path=\"$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256\"\n"
+        "          raw_collection_status=absent-before-raw-capture\n"
+        "          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \\\n"
+    )
+    if not collect.startswith(expected_prefix):
+        raise CaptureError("legacy raw diagnostic collection preamble differs")
+
+    expected_raw_block = (
+        "          if test -d \"$BUILD_DIR\"; then\n"
+        "            if test -f \"$raw_bundle_path\" && test ! -L \"$raw_bundle_path\" && \\\n"
+        "              test -f \"$raw_sidecar_path\" && test ! -L \"$raw_sidecar_path\"\n"
+        "            then\n"
+        "              raw_bundle_bytes=\"$(stat -c '%s' -- \"$raw_bundle_path\")\"\n"
+        "              raw_sidecar_bytes=\"$(stat -c '%s' -- \"$raw_sidecar_path\")\"\n"
+        "              if test \"$raw_bundle_bytes\" -gt 0 && \\\n"
+        "                test \"$raw_bundle_bytes\" -le 805306368 && \\\n"
+        "                test \"$raw_sidecar_bytes\" -gt 0 && \\\n"
+        "                test \"$raw_sidecar_bytes\" -le 4096\n"
+        "              then\n"
+        "                if install -m 0644 \"$raw_bundle_path\" evidence/ && \\\n"
+        "                  install -m 0644 \"$raw_sidecar_path\" evidence/ && \\\n"
+        "                  (\n"
+        "                    cd evidence && \\\n"
+        "                      sha256sum host-module-failure-semantics-v3-raw.tar \\\n"
+        "                        > host-module-failure-semantics-v3-raw.tar.observed.sha256\n"
+        "                  ) && \\\n"
+        "                  cmp -s \\\n"
+        "                  evidence/host-module-failure-semantics-v3-raw.tar.observed.sha256 \\\n"
+        "                  evidence/host-module-failure-semantics-v3-raw.tar.sha256\n"
+        "                then\n"
+        "                  raw_collection_status=complete-checksum-verified\n"
+        "                else\n"
+        "                  raw_collection_status=complete-checksum-invalid\n"
+        "                fi\n"
+        "              else\n"
+        "                raw_collection_status=unsafe-size-pair-not-copied\n"
+        "              fi\n"
+        "            elif test -e \"$raw_bundle_path\" || test -L \"$raw_bundle_path\" || \\\n"
+        "              test -e \"$raw_sidecar_path\" || test -L \"$raw_sidecar_path\"\n"
+        "            then\n"
+        "              raw_collection_status=incomplete-or-unsafe-pair-not-copied\n"
+        "            fi\n"
+        "            for evidence_file in \\\n"
+    )
+    if collect.count(expected_raw_block) != 1:
+        raise CaptureError("legacy raw diagnostic bounded-copy scope differs")
+
+    active = _active_lines(collect)
+    outer_guard = 'if test -d "$BUILD_DIR"; then'
+    if active.count(outer_guard) != 1:
+        raise CaptureError("legacy raw diagnostic build-directory guard differs")
+    outer_index = active.index(outer_guard)
+    expected_pre_guard = (
+        "if: ${{ always() }}", "run: |", "set +e", "mkdir -p evidence",
+        'raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"',
+        'raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"',
+        "raw_collection_status=absent-before-raw-capture",
+        "runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \\",
+        "HOME=/home/validator \\",
+        "GITHUB_WORKSPACE=\"$GITHUB_WORKSPACE\" \\",
+        "bash -c '", 'cd "$GITHUB_WORKSPACE"',
+        "git status --short --branch --ignore-submodules=none",
+        "' > evidence/worktree.txt 2>&1",
+    )
+    if active[:outer_index] != expected_pre_guard:
+        raise CaptureError("legacy raw diagnostic pre-guard control scope differs")
+
+    depth = 0
+    outer_depth = None  # type: Optional[int]
+    status_depth = None  # type: Optional[int]
+    for line in active:
+        if line == outer_guard:
+            outer_depth = depth
+        if line == (
+            "> evidence/host-module-failure-semantics-v3-raw-collection.txt"
+        ):
+            status_depth = depth
+        if re.match(r"^if(?:\s|$)", line) is not None:
+            depth += 1
+        elif line == "fi":
+            depth -= 1
+            if depth < 0:
+                raise CaptureError("legacy raw diagnostic guards are unbalanced")
+    if depth != 0 or outer_depth != 0 or status_depth != 0:
+        raise CaptureError("legacy raw diagnostic execution is conditionally guarded")
+    if sum(
+        1 for line in active if line.startswith("raw_collection_status=")
+    ) != 5:
+        raise CaptureError("legacy raw diagnostic status assignments differ")
+
+    expected_status = (
+        "          fi\n"
+        "          printf 'status=%s\\ncredit=forbidden\\n' \"$raw_collection_status\" \\\n"
+        "            > evidence/host-module-failure-semantics-v3-raw-collection.txt\n"
+        "          test \"$raw_collection_status\" = complete-checksum-verified || exit 1\n"
+        "\n"
+    )
+    if not collect.endswith(expected_status):
+        raise CaptureError("legacy raw diagnostic status boundary differs")
+
+    expected_upload = (
+        "        if: ${{ always() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: rocky-rust-build-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: |\n"
+        "            evidence/\n"
+        "            VALIDATION_PROGRESS.MD\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "\n"
+    )
+    if steps[upload_name] != expected_upload:
+        raise CaptureError("legacy raw diagnostic upload scope differs")
+
+
 def _validate_legacy_workflow(text: str, policy: Dict[str, Any]) -> None:
     if _sha256(text.encode("utf-8")) != EXPECTED_LEGACY_WORKFLOW_SHA256:
         raise CaptureError("legacy workflow exact active scope differs")
+    _validate_legacy_raw_diagnostic_upload(text)
     job_name = policy["legacy_job"]
     job = _extract_job(text, job_name, "legacy workflow")
     _require_job_keys(job, 1, "legacy capture job")
