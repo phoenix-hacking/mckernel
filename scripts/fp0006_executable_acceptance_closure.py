@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = "c22be468e7f69d67c607f62157a217ff922ee832b17ed1d6086e5b017e8b962a"
+EXPECTED_CONTRACT_SHA256 = "9d59ca1d356f6a4d4e87c649749f570148bba194221279c69e4db9f304badb83"
 EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -1248,7 +1248,7 @@ class _CliCensusEmitter(object):
                 source_data,
             )
             expected_self = (
-                "SELF_DIGEST:558142459a6e9c6a346c3602e6f066334b13856841a34e18e0af4aa5861c593a"
+                "SELF_DIGEST:dfb3ca15dae1a0daccaf9a597906a42d07ab46d65f6091eb5dd99dd2976fcee9"
             ).split(":", 1)[1]
             if sha256_bytes(normalized) != expected_self:
                 raise ClosureError("isolated checker normalized SHA-256 changed")

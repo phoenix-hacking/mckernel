@@ -51,6 +51,15 @@ REVIEW_CGRAPH_HEADER = re.compile(
 REVIEW_CGRAPH_PRINTABLE_NAME = re.compile(
     r"^\*?[A-Za-z_][A-Za-z0-9_$.-]*$"
 )
+REVIEW_RUST_MIR_STAGE_SUFFIXES = (
+    ".built.after.mir",
+    ".runtime-optimized.after.mir",
+)
+REVIEW_RUST_SOURCE_CAST_TO_MIR = {
+    "c_long": "i64",
+    "i64": "i64",
+    "isize": "isize",
+}
 REVIEW_CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
 REVIEW_NON_LF_SEPARATORS = ("\r", "\v", "\f", "\x85", "\u2028", "\u2029")
 REVIEW_VISIBILITY_VALUE = re.compile(r"^[!-~]+$")
@@ -800,6 +809,23 @@ def validate_semantics(capture, expected):
             raise ReviewV3Error("Rust MIR site overclaims semantic resolution")
         if type(record["errno_negative_value"]) is not int or record["errno_negative_value"] >= 0:
             raise ReviewV3Error("Rust MIR errno value is not negative")
+        token_span = semantics.require_exact_keys(
+            record["token_span"],
+            {"column", "end_column", "line", "source_sha256"},
+            "Rust HFS token span",
+        )
+        semantics.require_digest(
+            token_span["source_sha256"], "Rust HFS token source digest"
+        )
+        for field in ("column", "end_column", "line"):
+            semantics.require_integer(
+                token_span[field], "Rust HFS token span " + field, minimum=1
+            )
+        if token_span["end_column"] <= token_span["column"]:
+            raise ReviewV3Error("Rust HFS token span is empty or reversed")
+        source = semantics.require_safe_relative_path(
+            record["source"], "Rust HFS source"
+        )
         candidates = record["candidates"]
         if type(candidates) is not list or not candidates:
             raise ReviewV3Error("Rust MIR site has no structural mapping")
@@ -808,9 +834,20 @@ def validate_semantics(capture, expected):
                 candidate,
                 {
                     "basic_block", "body_id", "cfg_sha256", "errno_negative_value",
-                    "mir_span", "owner", "reachable_from_bb0", "stage",
+                    "mir_span", "mir_witness", "owner", "reachable_from_bb0",
+                    "source_span_binding", "stage",
                 },
                 "Rust MIR candidate",
+            )
+            semantics.require_integer(
+                candidate["basic_block"], "Rust MIR candidate basic block", minimum=0
+            )
+            body_id = semantics.require_safe_relative_path(
+                candidate["body_id"], "Rust MIR candidate body_id"
+            )
+            semantics.require_string(candidate["owner"], "Rust MIR candidate owner")
+            stage = semantics.require_string(
+                candidate["stage"], "Rust MIR candidate stage"
             )
             if (
                 candidate["reachable_from_bb0"] is not True
@@ -818,6 +855,176 @@ def validate_semantics(capture, expected):
             ):
                 raise ReviewV3Error("Rust MIR candidate reachability/value binding differs")
             semantics.require_digest(candidate["cfg_sha256"], "Rust MIR CFG digest")
+            if (
+                Path(body_id).name != stage
+                or not stage.endswith(REVIEW_RUST_MIR_STAGE_SUFFIXES)
+            ):
+                raise ReviewV3Error("Rust MIR body/stage identity differs")
+
+            mir_span = semantics.require_exact_keys(
+                candidate["mir_span"],
+                {
+                    "end_column", "end_line", "path", "start_column",
+                    "start_line",
+                },
+                "Rust MIR candidate span",
+            )
+            semantics.require_string(mir_span["path"], "Rust MIR candidate span path")
+            for field in ("end_column", "end_line", "start_column", "start_line"):
+                semantics.require_integer(
+                    mir_span[field], "Rust MIR candidate span " + field, minimum=1
+                )
+            if (
+                mir_span["end_line"] < mir_span["start_line"]
+                or (
+                    mir_span["end_line"] == mir_span["start_line"]
+                    and mir_span["end_column"] <= mir_span["start_column"]
+                )
+                or mir_span["path"] != "$REPO/" + source
+            ):
+                raise ReviewV3Error("Rust MIR candidate span differs from its exact source")
+
+            authority = semantics.require_exact_keys(
+                candidate["source_span_binding"],
+                {"grammar", "mir_type", "source_span", "source_type"},
+                "Rust source span binding",
+            )
+            grammar = semantics.require_enum(
+                authority["grammar"],
+                {"direct_assignment", "exact_hfs_token", "parenthesized_cast"},
+                "Rust source span grammar",
+            )
+            source_span = semantics.require_exact_keys(
+                authority["source_span"],
+                {"end_column", "end_line", "start_column", "start_line"},
+                "Rust source span binding span",
+            )
+            for field in ("end_column", "end_line", "start_column", "start_line"):
+                semantics.require_integer(
+                    source_span[field],
+                    "Rust source span binding " + field,
+                    minimum=1,
+                )
+            if (
+                source_span["start_line"] != token_span["line"]
+                or source_span["end_line"] != token_span["line"]
+                or source_span["start_column"] > token_span["column"]
+                or source_span["end_column"] < token_span["end_column"]
+                or source_span["end_column"] <= source_span["start_column"]
+                or {
+                    key: value for key, value in mir_span.items() if key != "path"
+                } != source_span
+            ):
+                raise ReviewV3Error("Rust source/MIR span binding differs")
+            if grammar == "exact_hfs_token":
+                if (
+                    authority["mir_type"] is not None
+                    or authority["source_type"] is not None
+                    or source_span["start_column"] != token_span["column"]
+                    or source_span["end_column"] != token_span["end_column"]
+                ):
+                    raise ReviewV3Error("exact Rust HFS token binding changed")
+            elif grammar == "direct_assignment":
+                if (
+                    authority["mir_type"] is not None
+                    or authority["source_type"] is not None
+                    or source_span["start_column"] >= token_span["column"]
+                    or source_span["end_column"] != token_span["end_column"]
+                ):
+                    raise ReviewV3Error("Rust assignment span binding changed")
+            else:
+                source_type = semantics.require_enum(
+                    authority["source_type"],
+                    set(REVIEW_RUST_SOURCE_CAST_TO_MIR),
+                    "Rust source cast type",
+                )
+                mir_type = semantics.require_string(
+                    authority["mir_type"], "Rust source cast MIR type"
+                )
+                if (
+                    mir_type != REVIEW_RUST_SOURCE_CAST_TO_MIR[source_type]
+                    or source_span["start_column"] != token_span["column"]
+                    or source_span["end_column"] <= token_span["end_column"]
+                ):
+                    raise ReviewV3Error("Rust cast span/type binding changed")
+
+            witness = candidate["mir_witness"]
+            if type(witness) is not dict:
+                raise ReviewV3Error("Rust MIR witness is not an exact object")
+            kind = semantics.require_enum(
+                witness.get("kind"),
+                {
+                    "cast_const_then_negative_move", "negative_const_operand",
+                    "negative_numeric_literal",
+                },
+                "Rust MIR witness kind",
+            )
+            if kind == "cast_const_then_negative_move":
+                semantics.require_exact_keys(
+                    witness,
+                    {
+                        "cast_span", "cast_statement_sha256", "kind", "mir_type",
+                        "negative_statement_sha256", "span",
+                    },
+                    "Rust MIR cast witness",
+                )
+                witness_type = semantics.require_string(
+                    witness["mir_type"], "Rust MIR cast witness type"
+                )
+                for field in ("cast_statement_sha256", "negative_statement_sha256"):
+                    semantics.require_digest(
+                        witness[field], "Rust MIR cast witness " + field
+                    )
+                cast_span = semantics.require_exact_keys(
+                    witness["cast_span"],
+                    {
+                        "end_column", "end_line", "path", "start_column",
+                        "start_line",
+                    },
+                    "Rust MIR cast witness span",
+                )
+                for field in ("end_column", "end_line", "start_column", "start_line"):
+                    semantics.require_integer(
+                        cast_span[field], "Rust MIR cast span " + field, minimum=1
+                    )
+                semantics.require_string(
+                    cast_span["path"], "Rust MIR cast witness span path"
+                )
+                if (
+                    grammar != "parenthesized_cast"
+                    or witness_type != authority["mir_type"]
+                    or cast_span["path"] != mir_span["path"]
+                    or cast_span["start_line"] != mir_span["start_line"]
+                    or cast_span["end_line"] != mir_span["end_line"]
+                    or cast_span["start_column"] != mir_span["start_column"] + 1
+                    or cast_span["end_column"] != mir_span["end_column"]
+                ):
+                    raise ReviewV3Error("Rust MIR cast witness binding differs")
+            else:
+                semantics.require_exact_keys(
+                    witness,
+                    {"kind", "mir_type", "span", "statement_sha256"},
+                    "Rust MIR direct witness",
+                )
+                semantics.require_digest(
+                    witness["statement_sha256"], "Rust MIR witness statement digest"
+                )
+                if kind == "negative_const_operand":
+                    if witness["mir_type"] is not None:
+                        raise ReviewV3Error("Rust MIR const witness type changed")
+                else:
+                    witness_type = semantics.require_string(
+                        witness["mir_type"], "Rust MIR literal witness type"
+                    )
+                    if (
+                        grammar == "parenthesized_cast"
+                        and witness_type != authority["mir_type"]
+                    ):
+                        raise ReviewV3Error("Rust MIR literal/cast type binding differs")
+                if grammar == "parenthesized_cast" and kind != "negative_numeric_literal":
+                    raise ReviewV3Error("Rust MIR cast authority has an invalid witness")
+            if not semantics.strict_equal(witness["span"], mir_span):
+                raise ReviewV3Error("Rust MIR witness span differs from its candidate")
         mapping_counts[record["mapping_status"]] += 1
     return {
         "c_function_count": len(c_functions),

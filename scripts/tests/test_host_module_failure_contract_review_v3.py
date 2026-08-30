@@ -78,8 +78,31 @@ def rust_record(number):
             "start_column": 5,
             "start_line": number + 1,
         },
+        "mir_witness": {
+            "kind": "negative_numeric_literal",
+            "mir_type": "i32",
+            "span": {
+                "end_column": 12,
+                "end_line": number + 1,
+                "path": "$REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+                "start_column": 5,
+                "start_line": number + 1,
+            },
+            "statement_sha256": "5" * 64,
+        },
         "owner": "body{0}".format(number),
         "reachable_from_bb0": True,
+        "source_span_binding": {
+            "grammar": "exact_hfs_token",
+            "mir_type": None,
+            "source_span": {
+                "end_column": 12,
+                "end_line": number + 1,
+                "start_column": 5,
+                "start_line": number + 1,
+            },
+            "source_type": None,
+        },
         "stage": "crate.body{0}.built.after.mir".format(number),
     }
     return {
@@ -418,6 +441,181 @@ class ReviewV3Tests(unittest.TestCase):
         capture["rust_mir_sites"][0]["candidates"][0]["errno_negative_value"] = -14
         with self.assertRaisesRegex(review.ReviewV3Error, "binding"):
             review.validate_semantics(capture, copy.deepcopy(capture))
+
+    def test_rust_candidate_requires_exact_witness_and_source_binding_schema(self):
+        for label, mutation in (
+            (
+                "missing-witness",
+                lambda candidate: candidate.pop("mir_witness"),
+            ),
+            (
+                "extra-source-binding-field",
+                lambda candidate: candidate["source_span_binding"].update(
+                    {"unreviewed": False}
+                ),
+            ),
+            (
+                "missing-statement-digest",
+                lambda candidate: candidate["mir_witness"].pop(
+                    "statement_sha256"
+                ),
+            ),
+        ):
+            with self.subTest(label=label):
+                capture = copy.deepcopy(self.capture)
+                mutation(capture["rust_mir_sites"][0]["candidates"][0])
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "schema changed"
+                ):
+                    review.validate_semantics(capture, copy.deepcopy(capture))
+
+    def test_rust_candidate_witness_and_source_binding_mutations_fail(self):
+        mutations = (
+            (
+                "witness-span",
+                lambda candidate: candidate["mir_witness"]["span"].update(
+                    {"start_column": 6}
+                ),
+                "witness span",
+            ),
+            (
+                "source-span",
+                lambda candidate: candidate["source_span_binding"][
+                    "source_span"
+                ].update({"end_column": 13}),
+                "source/MIR span",
+            ),
+            (
+                "source-grammar",
+                lambda candidate: candidate["source_span_binding"].update(
+                    {"grammar": "parenthesized_cast"}
+                ),
+                "must be a non-empty string",
+            ),
+            (
+                "statement-digest",
+                lambda candidate: candidate["mir_witness"].update(
+                    {"statement_sha256": "not-a-digest"}
+                ),
+                "digest",
+            ),
+            (
+                "candidate-path",
+                lambda candidate: candidate["mir_span"].update(
+                    {"path": "$REPO/executer/kernel/mcctrl/rust/other.rs"}
+                ),
+                "exact source",
+            ),
+            (
+                "body-stage",
+                lambda candidate: candidate.update({"stage": "other.after.mir"}),
+                "body/stage",
+            ),
+        )
+        for label, mutation, diagnostic in mutations:
+            with self.subTest(label=label):
+                capture = copy.deepcopy(self.capture)
+                mutation(capture["rust_mir_sites"][0]["candidates"][0])
+                with self.assertRaisesRegex(
+                    (review.ReviewV3Error, semantics.SemanticsV3Error), diagnostic
+                ):
+                    review.validate_semantics(capture, copy.deepcopy(capture))
+
+    def test_rust_cast_move_witness_is_exactly_bound(self):
+        capture = copy.deepcopy(self.capture)
+        record = capture["rust_mir_sites"][0]
+        record["token_span"]["end_column"] = 12
+        candidate = record["candidates"][0]
+        candidate["mir_span"]["end_column"] = 20
+        candidate["mir_witness"] = {
+            "cast_span": {
+                "end_column": 20,
+                "end_line": 1,
+                "path": "$REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+                "start_column": 6,
+                "start_line": 1,
+            },
+            "cast_statement_sha256": "6" * 64,
+            "kind": "cast_const_then_negative_move",
+            "mir_type": "i64",
+            "negative_statement_sha256": "7" * 64,
+            "span": copy.deepcopy(candidate["mir_span"]),
+        }
+        candidate["source_span_binding"] = {
+            "grammar": "parenthesized_cast",
+            "mir_type": "i64",
+            "source_span": {
+                "end_column": 20,
+                "end_line": 1,
+                "start_column": 5,
+                "start_line": 1,
+            },
+            "source_type": "c_long",
+        }
+        review.validate_semantics(capture, copy.deepcopy(capture))
+        original_cast_map = semantics.RUST_SOURCE_CAST_TO_MIR
+        semantics.RUST_SOURCE_CAST_TO_MIR = {
+            "c_long": "attacker",
+            "i64": "attacker",
+            "isize": "attacker",
+        }
+        try:
+            review.validate_semantics(capture, copy.deepcopy(capture))
+        finally:
+            semantics.RUST_SOURCE_CAST_TO_MIR = original_cast_map
+        for label, mutation in (
+            (
+                "cast-start",
+                lambda value: value["mir_witness"]["cast_span"].update(
+                    {"start_column": 7}
+                ),
+            ),
+            (
+                "cast-type",
+                lambda value: value["source_span_binding"].update(
+                    {"mir_type": "isize"}
+                ),
+            ),
+            (
+                "cast-digest",
+                lambda value: value["mir_witness"].update(
+                    {"cast_statement_sha256": "0"}
+                ),
+            ),
+        ):
+            with self.subTest(label=label):
+                hostile = copy.deepcopy(capture)
+                mutation(hostile["rust_mir_sites"][0]["candidates"][0])
+                with self.assertRaises(
+                    (review.ReviewV3Error, semantics.SemanticsV3Error)
+                ):
+                    review.validate_semantics(hostile, copy.deepcopy(hostile))
+
+    def test_rust_body_stage_and_source_paths_are_confined(self):
+        capture = copy.deepcopy(self.capture)
+        candidate = capture["rust_mir_sites"][0]["candidates"][0]
+        candidate["body_id"] = "nested/" + candidate["stage"]
+        review.validate_semantics(capture, copy.deepcopy(capture))
+
+        hostile = copy.deepcopy(capture)
+        record = hostile["rust_mir_sites"][0]
+        candidate = record["candidates"][0]
+        record["source"] = "../evil.rs"
+        candidate["mir_span"]["path"] = "$REPO/../evil.rs"
+        candidate["mir_witness"]["span"]["path"] = "$REPO/../evil.rs"
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "safe relative path"
+        ):
+            review.validate_semantics(hostile, copy.deepcopy(hostile))
+
+        hostile = copy.deepcopy(capture)
+        hostile["rust_mir_sites"][0]["candidates"][0]["body_id"] = (
+            "../" + candidate["stage"]
+        )
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "safe relative path"
+        ):
+            review.validate_semantics(hostile, copy.deepcopy(hostile))
 
     def test_duplicate_hfs_binding_fails(self):
         capture = copy.deepcopy(self.capture)
