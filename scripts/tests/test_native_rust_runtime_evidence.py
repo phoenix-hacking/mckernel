@@ -648,10 +648,29 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             completed = subprocess.CompletedProcess(
                 [], 0, stdout="ihk\n", stderr=""
             )
+            aliases = []
+
+            def inspect_alias(arguments, **kwargs):
+                alias = Path(arguments[-1])
+                self.assertEqual("module.ko", alias.name)
+                self.assertTrue(alias.is_symlink())
+                self.assertEqual(
+                    "/proc/self/fd/{0}".format(module_fd), os.readlink(alias)
+                )
+                self.assertEqual(module.read_bytes(), alias.read_bytes())
+                directory_fd = int(alias.parent.name)
+                self.assertIn(directory_fd, kwargs["pass_fds"])
+                self.assertEqual(0o700, stat.S_IMODE(alias.parent.stat().st_mode))
+                self.assertEqual(os.geteuid(), alias.parent.stat().st_uid)
+                directory = Path(os.readlink(alias.parent))
+                self.assertEqual(["module.ko"], os.listdir(directory_fd))
+                aliases.append((alias, directory, directory_fd))
+                return completed
+
             with mock.patch.object(
                 evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
             ), mock.patch.object(
-                evidence.subprocess, "run", return_value=completed
+                evidence.subprocess, "run", side_effect=inspect_alias
             ) as run:
                 self.assertEqual(
                     ["ihk"],
@@ -664,16 +683,17 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                         module_sha256=module_sha256,
                     ),
                 )
-                self.assertEqual(
-                    "/proc/self/fd/{0}".format(module_fd),
-                    run.call_args.args[0][-1],
-                )
+                alias, directory, directory_fd = aliases[0]
+                self.assertEqual(str(alias), run.call_args.args[0][-1])
+                self.assertFalse(directory.exists())
+                with self.assertRaises(OSError):
+                    os.fstat(directory_fd)
                 self.assertEqual(
                     "/proc/self/fd/{0}".format(tool_fd),
                     run.call_args.kwargs["executable"],
                 )
                 self.assertEqual(
-                    tuple(sorted((tool_fd, module_fd))),
+                    tuple(sorted((tool_fd, module_fd, directory_fd))),
                     run.call_args.kwargs["pass_fds"],
                 )
             completed = subprocess.CompletedProcess(
@@ -710,6 +730,138 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         finally:
             os.close(module_fd)
             os.close(tool_fd)
+
+    def test_modinfo_descriptor_alias_rejects_replacement_and_retargeting(self) -> None:
+        module = self.root / "alias-module.ko"
+        module.write_bytes(b"module bytes retained by descriptor")
+        other = self.root / "other-module.ko"
+        other.write_bytes(module.read_bytes())
+        tool = Path("/bin/true")
+        tool_sha256 = hashlib.sha256(tool.read_bytes()).hexdigest()
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+        with tool.open("rb") as tool_handle, module.open("rb") as module_handle, other.open("rb") as other_handle:
+            for mutation in ("regular-file", "other-descriptor", "restore-same-target"):
+                directories = []
+
+                def replace_alias(arguments, **_kwargs):
+                    alias = Path(arguments[-1])
+                    directories.append(Path(os.readlink(alias.parent)))
+                    original = os.readlink(alias)
+                    alias.unlink()
+                    if mutation == "regular-file":
+                        alias.write_bytes(module.read_bytes())
+                    else:
+                        alias.symlink_to(
+                            original if mutation == "restore-same-target"
+                            else "/proc/self/fd/{0}".format(other_handle.fileno())
+                        )
+                    return subprocess.CompletedProcess([], 0, stdout="ihk\n", stderr="")
+
+                with self.subTest(mutation=mutation), mock.patch.object(
+                    evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+                ), mock.patch.object(evidence.subprocess, "run", side_effect=replace_alias):
+                    with self.assertRaisesRegex(evidence.EvidenceError, "modinfo alias"):
+                        evidence._run_field(
+                            module, "depends", tool_handle.fileno(), module_handle.fileno(),
+                            tool_sha256, module_sha256,
+                        )
+                self.assertTrue(directories)
+                self.assertTrue(all(not path.exists() for path in directories))
+
+    def test_modinfo_descriptor_alias_rejects_directory_changes_without_recursive_cleanup(self) -> None:
+        module = self.root / "alias-directory-module.ko"
+        module.write_bytes(b"module bytes")
+        tool = Path("/bin/true")
+        tool_sha256 = hashlib.sha256(tool.read_bytes()).hexdigest()
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+        with tool.open("rb") as tool_handle, module.open("rb") as module_handle:
+            for mutation in ("extra-entry", "replacement-directory"):
+                cleanup = []
+
+                def change_directory(arguments, **_kwargs):
+                    alias = Path(arguments[-1])
+                    directory = Path(os.readlink(alias.parent))
+                    cleanup.append(directory)
+                    if mutation == "replacement-directory":
+                        moved = directory.with_name(directory.name + "-moved")
+                        directory.rename(moved)
+                        cleanup.append(moved)
+                        directory.mkdir(mode=0o700)
+                    (directory / "keep.txt").write_bytes(b"unrelated entry")
+                    return subprocess.CompletedProcess([], 0, stdout="ihk\n", stderr="")
+
+                try:
+                    with self.subTest(mutation=mutation), mock.patch.object(
+                        evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+                    ), mock.patch.object(evidence.subprocess, "run", side_effect=change_directory):
+                        with self.assertRaisesRegex(evidence.EvidenceError, "modinfo alias"):
+                            evidence._run_field(
+                                module, "depends", tool_handle.fileno(), module_handle.fileno(),
+                                tool_sha256, module_sha256,
+                            )
+                    self.assertEqual(b"unrelated entry", (cleanup[0] / "keep.txt").read_bytes())
+                    self.assertTrue(all(not (path / "module.ko").is_symlink() for path in cleanup))
+                finally:
+                    for directory in cleanup:
+                        for entry in directory.iterdir():
+                            entry.unlink()
+                        directory.rmdir()
+
+    def test_modinfo_descriptor_alias_cleans_up_on_subprocess_errors(self) -> None:
+        module = self.root / "alias-error-module.ko"
+        module.write_bytes(b"module bytes")
+        tool = Path("/bin/true")
+        tool_sha256 = hashlib.sha256(tool.read_bytes()).hexdigest()
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+        with tool.open("rb") as tool_handle, module.open("rb") as module_handle:
+            for failure in ("nonzero", "launch-error"):
+                observed = []
+
+                def fail_tool(arguments, **_kwargs):
+                    alias = Path(arguments[-1])
+                    observed.append((Path(os.readlink(alias.parent)), int(alias.parent.name)))
+                    if failure == "launch-error":
+                        raise OSError("injected launch failure")
+                    return subprocess.CompletedProcess([], 1, stdout="", stderr="injected failure")
+
+                with self.subTest(failure=failure), mock.patch.object(
+                    evidence, "EXPECTED_MODINFO_SHA256", tool_sha256
+                ), mock.patch.object(evidence.subprocess, "run", side_effect=fail_tool):
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence._run_field(
+                            module, "depends", tool_handle.fileno(), module_handle.fileno(),
+                            tool_sha256, module_sha256,
+                        )
+                directory, directory_fd = observed[0]
+                self.assertFalse(directory.exists())
+                with self.assertRaises(OSError):
+                    os.fstat(directory_fd)
+                self.assertEqual(module.read_bytes(), os.pread(module_handle.fileno(), module.stat().st_size, 0))
+
+    def test_modinfo_descriptor_alias_rejects_changed_entry_before_launch(self) -> None:
+        module = self.root / "alias-prelaunch-module.ko"
+        module.write_bytes(b"module bytes")
+        module_sha256 = hashlib.sha256(module.read_bytes()).hexdigest()
+        symlink = os.symlink
+        directories = []
+
+        def substitute(target, name, *, dir_fd):
+            symlink(target, name, dir_fd=dir_fd)
+            alias = Path("/proc/self/fd/{0}/{1}".format(dir_fd, name))
+            directories.append(Path(os.readlink(alias.parent)))
+            alias.unlink()
+            alias.write_bytes(module.read_bytes())
+
+        with module.open("rb") as module_handle, mock.patch.object(
+            evidence.os, "symlink", side_effect=substitute
+        ), mock.patch.object(evidence.subprocess, "run") as run:
+            with self.assertRaisesRegex(evidence.EvidenceError, "modinfo alias"):
+                evidence._run_field(
+                    module, "depends", module_fd=module_handle.fileno(),
+                    module_sha256=module_sha256,
+                )
+            run.assert_not_called()
+        self.assertTrue(all(not path.exists() for path in directories))
 
     def test_runtime_tools_reject_transient_same_inode_mutate_restore(self) -> None:
         tool = self.root / "bound-tool"

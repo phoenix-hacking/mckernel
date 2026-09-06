@@ -20,6 +20,7 @@ import stat
 import struct
 import subprocess
 import sys
+import tempfile
 import types
 from typing import Any
 
@@ -41,7 +42,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:0d817ed792e4326e612378985d4c2758c10e28cbdeed4514a3c7df642d556a54"
+    "ISOLATED_SELF_DIGEST:80c9c3b329fe454b086155d20bb9b873ae3a842cd5313bb4079705115ebdac1c"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -5517,6 +5518,90 @@ def _recheck_subprocess_bindings(bindings: list[dict[str, Any]]) -> None:
             )
 
 
+@contextlib.contextmanager
+def _modinfo_module_alias(
+    module_argument: str, module_binding: dict[str, Any] | None
+):
+    if module_binding is None:
+        yield module_argument, ()
+        return
+    # kmod 31 treats an extensionless /proc/self/fd/N as a module name.
+    # Keep its .ko dispatch while resolving only the retained module descriptor.
+    directory = Path(tempfile.mkdtemp(prefix="mckernel-modinfo-"))
+    directory_fd = None
+    created_identity = _stat_identity(directory.lstat())
+    alias_name = "module.ko"
+    try:
+        if not hasattr(os, "O_DIRECTORY") or not hasattr(os, "O_NOFOLLOW"):
+            raise EvidenceError("modinfo alias requires directory no-follow support")
+        flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        if hasattr(os, "O_CLOEXEC"):
+            flags |= os.O_CLOEXEC
+        directory_fd = os.open(str(directory), flags)
+        metadata = os.fstat(directory_fd)
+        if (
+            _stat_identity(metadata) != created_identity
+            or not stat.S_ISDIR(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != 0o700
+            or metadata.st_uid != os.geteuid()
+        ):
+            raise EvidenceError("modinfo alias directory is not private")
+        os.set_inheritable(directory_fd, False)
+        os.symlink(module_argument, alias_name, dir_fd=directory_fd)
+        alias = Path("/proc/self/fd/{0}/{1}".format(directory_fd, alias_name))
+        # Creating the entry changes directory timestamps and size.
+        directory_identity = _stat_identity(os.fstat(directory_fd))
+        alias_identity = _stat_identity(alias.lstat())
+
+        def recheck_alias() -> None:
+            _recheck_subprocess_bindings([module_binding])
+            try:
+                if (
+                    _stat_identity(os.fstat(directory_fd)) != directory_identity
+                    or _stat_identity(directory.lstat()) != directory_identity
+                    or os.listdir(directory_fd) != [alias_name]
+                    or _stat_identity(alias.lstat()) != alias_identity
+                    or not stat.S_ISLNK(alias.lstat().st_mode)
+                    or os.readlink(alias) != module_argument
+                ):
+                    raise EvidenceError("modinfo alias identity or target changed")
+                if _stat_identity(alias.stat()) != module_binding["identity"]:
+                    raise EvidenceError("modinfo alias module descriptor changed")
+            except OSError as error:
+                raise EvidenceError("modinfo alias is unavailable or changed") from error
+
+        recheck_alias()
+        try:
+            yield str(alias), (directory_fd,)
+        finally:
+            recheck_alias()
+    except OSError as error:
+        raise EvidenceError("cannot prepare modinfo descriptor alias: {0}".format(error)) from error
+    finally:
+        failed = sys.exc_info()[0] is not None
+        cleanup_error = None
+        try:
+            if directory_fd is not None:
+                try:
+                    os.unlink(alias_name, dir_fd=directory_fd)
+                except FileNotFoundError:
+                    pass
+            try:
+                current = directory.lstat()
+                if (current.st_dev, current.st_ino) == created_identity[:2]:
+                    # Never recursively remove injected entries or another directory.
+                    os.rmdir(directory)
+            except FileNotFoundError:
+                pass
+        except OSError as error:
+            cleanup_error = error
+        finally:
+            if directory_fd is not None:
+                os.close(directory_fd)
+        if cleanup_error is not None and not failed:
+            raise EvidenceError("cannot clean modinfo descriptor alias") from cleanup_error
+
+
 def _run_field(
     module: Path,
     field: str,
@@ -5536,25 +5621,27 @@ def _run_field(
         binding for binding in (tool_binding, module_binding) if binding is not None
     ]
     try:
-        try:
-            result = subprocess.run(
-                ["modinfo", "-F", field, module_argument],
-                check=False,
-                env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
-                executable=executable,
-                pass_fds=pass_fds,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-        except OSError as error:
-            raise EvidenceError(
-                "bound Rocky modinfo is unavailable: {0}".format(error)
-            ) from error
-        _recheck_subprocess_bindings(bindings)
-        if result.returncode != 0:
-            raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
-        return [line for line in result.stdout.splitlines() if line]
+        with _modinfo_module_alias(module_argument, module_binding) as alias:
+            alias_argument, alias_fds = alias
+            try:
+                result = subprocess.run(
+                    ["modinfo", "-F", field, alias_argument],
+                    check=False,
+                    env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+                    executable=executable,
+                    pass_fds=tuple(sorted(set(pass_fds + alias_fds))),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
+            except OSError as error:
+                raise EvidenceError(
+                    "bound Rocky modinfo is unavailable: {0}".format(error)
+                ) from error
+            _recheck_subprocess_bindings(bindings)
+            if result.returncode != 0:
+                raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
+            return [line for line in result.stdout.splitlines() if line]
     finally:
         _recheck_subprocess_bindings(bindings)
 
