@@ -111,10 +111,33 @@ jobs:
             EXPECTED_RUSTC_VERSION="$EXPECTED_RUSTC_VERSION" \
             bash -c '
               set -euo pipefail
-              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs |
-                sh -s -- -y --profile minimal --default-toolchain "$RUST_TOOLCHAIN"
-              test "$(rustc --version)" = "$EXPECTED_RUSTC_VERSION"
-              rustc -Vv
+              # Match the existing compiler-provenance launcher identity.
+              rustup_init_sha256=4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10
+              rustup_bootstrap_dir="$(mktemp -d)"
+              trap "rm -rf -- \"$rustup_bootstrap_dir\"" EXIT
+              rustup_init="$rustup_bootstrap_dir/rustup-init"
+              /usr/bin/curl --proto "=https" --tlsv1.2 --fail --silent --show-error \
+                --output "$rustup_init" \
+                https://static.rust-lang.org/rustup/archive/1.29.0/x86_64-unknown-linux-gnu/rustup-init
+              test "$(stat -c %s -- "$rustup_init")" = 20838840
+              printf "%s  %s\n" "$rustup_init_sha256" "$rustup_init" |
+                /usr/bin/sha256sum --check --strict
+              chmod 0755 "$rustup_init"
+              "$rustup_init" -y --profile minimal --default-toolchain none \
+                --default-host x86_64-unknown-linux-gnu --no-modify-path
+              verify_rustup_launchers() {
+                printf "%s  %s\n" \
+                  "$rustup_init_sha256" "$CARGO_HOME/bin/rustup" \
+                  "$rustup_init_sha256" "$CARGO_HOME/bin/rustc" |
+                  /usr/bin/sha256sum --check --strict
+              }
+              verify_rustup_launchers
+              "$CARGO_HOME/bin/rustup" set auto-self-update disable
+              "$CARGO_HOME/bin/rustup" toolchain install "$RUST_TOOLCHAIN" --profile minimal
+              "$CARGO_HOME/bin/rustup" default "$RUST_TOOLCHAIN"
+              verify_rustup_launchers
+              test "$("$CARGO_HOME/bin/rustc" --version)" = "$EXPECTED_RUSTC_VERSION"
+              "$CARGO_HOME/bin/rustc" -Vv
             '
 
       - name: Record provenance and check development ancestry

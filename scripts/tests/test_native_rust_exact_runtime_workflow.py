@@ -271,7 +271,8 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             "scripts/native-rust-runtime-poweroff.S",
             "chmod 1777 \"$INITRAMFS_ROOT/tmp\"",
             "copy_executable /usr/bin/stat /bin/stat",
-            "--32 scripts/native-rust-runtime-mcd0-ioctl-i386.S",
+            "/usr/bin/as --64 -mx86-used-note=no scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
+            "/usr/bin/as --32 -mx86-used-note=no scripts/native-rust-runtime-mcd0-ioctl-i386.S",
             "-m elf_x86_64 -nostdlib -static -s -z noexecstack -z separate-code",
             "-m elf_i386 -nostdlib -static -s -z noexecstack -z separate-code",
             "touch -h -d '@0'",
@@ -1107,7 +1108,11 @@ int main(int argc, char **argv) {
                     obj = root / (source.stem + ".o")
                     executable = root / source.stem
                     subprocess.run(
-                        ["as", as_mode, str(source), "-o", str(obj)], check=True
+                        [
+                            "as", as_mode, "-mx86-used-note=yes",
+                            "-mx86-used-note=no", str(source), "-o", str(obj),
+                        ],
+                        check=True,
                     )
                     subprocess.run(
                         [

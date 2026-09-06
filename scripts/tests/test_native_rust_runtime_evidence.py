@@ -3000,8 +3000,14 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             with self.subTest(name=name):
                 object_path = self.root / (name + ".o")
                 executable_path = self.root / name
+                # Rocky enables used-ISA notes by default. Force the opposing
+                # setting first to prove our explicit option wins without
+                # weakening the executable's exact section/segment boundary.
                 subprocess.run(
-                    [str(assembler), as_mode, source, "-o", str(object_path)],
+                    [
+                        str(assembler), as_mode, "-mx86-used-note=yes",
+                        "-mx86-used-note=no", source, "-o", str(object_path),
+                    ],
                     cwd=str(REPO_ROOT),
                     check=True,
                     stdout=subprocess.PIPE,
