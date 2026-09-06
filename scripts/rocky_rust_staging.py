@@ -13,6 +13,7 @@ import os
 import re
 import shutil
 import stat
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -37,6 +38,11 @@ PRODUCTION_STAGE_ENABLED = False
 EVIDENCE_STAGE_PURPOSE = "compiler-evidence-only"
 PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
 DEFAULT_MANIFEST = "host-kernel/kbuild/stage-manifest.json"
+COMPAT_BUILD_ID_FILE = "ihk-compat-build-id.bin"
+IHK_COMPAT_CMAKE_SHA256 = "7d91805dac7ed1fb0514e536383dd6cde43b91fe8b4114fe6ed00ba3e4b0e65d"
+COMPAT_BUILD_ID_INCLUDE = (
+    'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
+)
 EXPECTED_DESTINATION = {
     "kernel_relative_root": "drivers/misc/mckernel",
     "parent_kbuild_integration": "drivers/misc/Makefile",
@@ -212,7 +218,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "5845c349e83835f27d1ed84031debac8cfd8448c2aa482c7be394124d2be8afe",
+        "source_sha256": "93f0c5810fb61b7e8b1bcfb7b157685a04a971f8f830440b6d25b27b6253aea1",
     },
     {
         "crate": "mcctrl",
@@ -1149,8 +1155,13 @@ def _validate_module(repo_root, module, expected, index):
         )
     elif module["crate"] == "mcctrl":
         allowed_extern_blocks = (AUDITED_PROVIDER_EXTERN,)
+    escape_text = text
+    if module["crate"] == "ihk_smp_x86_64":
+        if text.count(COMPAT_BUILD_ID_INCLUDE) != 1:
+            raise ValidationError("SMP compatibility build identity must use the exact generated metadata input")
+        escape_text = text.replace(COMPAT_BUILD_ID_INCLUDE, "", 1)
     _validate_rust_escape_hatches(
-        text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
+        escape_text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
     )
     if "module!" not in text or "impl kernel::Module" not in text:
         raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
@@ -1294,13 +1305,89 @@ def validate_manifest(repo_root, manifest_path):
     }
 
 
+def _compatibility_build_identity(repo_root):
+    """Reproduce the unchanged IHK consumer's BUILDID, including its width.
+
+    ihkconfig allocates sizeof(BUILDID); substituting a longer native-source
+    digest would violate that buffer contract.  The native candidate remains
+    identified independently by the staging manifest and input digests.
+    """
+    source = _repo_regular_file(repo_root, "ihk/CMakeLists.txt", "IHK consumer BUILDID rule")
+    _validate_digest(source, IHK_COMPAT_CMAKE_SHA256, "IHK consumer BUILDID rule")
+    cmake = _read_text(source, "IHK consumer BUILDID rule")
+    version = re.search(r'^set\(IHK_VERSION "([A-Za-z0-9.+_-]{1,40})"\)$', cmake, re.MULTILINE)
+    command = "git --git-dir=${PROJECT_SOURCE_DIR}/.git rev-parse --short HEAD"
+    if version is None or cmake.count(command) != 1 or "set(BUILDID ${IHK_VERSION})" not in cmake:
+        raise ValidationError("IHK consumer BUILDID rule differs from the reviewed git/version rule")
+    git_dir = os.path.join(repo_root, "ihk", ".git")
+    try:
+        process = subprocess.Popen(
+            ["git", "--git-dir=" + git_dir, "rev-parse", "--short", "HEAD"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        output, unused_error = process.communicate()
+        del unused_error
+    except OSError as error:
+        raise ValidationError("cannot execute IHK consumer BUILDID command: {0}".format(error))
+    value = output.rstrip(b"\r\n") if process.returncode == 0 else b""
+    origin = "ihk-git-short-head"
+    if value:
+        if re.match(br"^[0-9a-f]{4,40}$", value) is None:
+            raise ValidationError("IHK consumer git BUILDID is not one lowercase abbreviated object identity")
+        # Match the unchanged consumer command, then independently require the
+        # reviewed default abbreviation policy.  An inherited core.abbrev or
+        # GIT_* override must not silently change this size-sensitive payload.
+        # Fail on a mismatch instead of changing the value returned to clients.
+        git_environment = {
+            key: item for key, item in os.environ.items()
+            if not key.startswith("GIT_")
+        }
+        git_environment["GIT_CONFIG_GLOBAL"] = os.devnull
+        git_environment["GIT_CONFIG_SYSTEM"] = os.devnull
+        git_environment["LC_ALL"] = "C"
+        try:
+            pinned = subprocess.check_output(
+                ["git", "-c", "core.abbrev=7", "--git-dir=" + git_dir,
+                 "rev-parse", "--short=7", "HEAD"],
+                stderr=subprocess.PIPE, env=git_environment,
+            ).rstrip(b"\r\n")
+            full = subprocess.check_output(
+                ["git", "--git-dir=" + git_dir, "rev-parse", "--verify", "HEAD^{commit}"],
+                stderr=subprocess.PIPE, env=git_environment,
+            ).rstrip(b"\r\n")
+        except (OSError, subprocess.CalledProcessError) as error:
+            raise ValidationError("cannot bind IHK consumer BUILDID to sanitized Git authority: {0}".format(error))
+        if (value != pinned or re.match(br"^[0-9a-f]{40}$", full) is None
+                or not full.startswith(value)):
+            raise ValidationError("IHK consumer BUILDID differs from the pinned default Git abbreviation recipe")
+    else:
+        if os.path.lexists(git_dir):
+            raise ValidationError("IHK Git checkout has no usable consumer BUILDID; refusing an unbound version fallback")
+        value = version.group(1).encode("ascii")
+        origin = "ihk-version-fallback"
+    payload = value + b"\0"
+    return {
+        "path": COMPAT_BUILD_ID_FILE,
+        "value": value.decode("ascii"),
+        "origin": origin,
+        "source_rule_path": "ihk/CMakeLists.txt",
+        "source_rule_sha256": sha256_file(source),
+        "sha256": sha256_bytes(payload),
+        "bytes": len(payload),
+    }
+
+
 def _stage_lock(plan):
     parent = plan["parent_integration"]
+    identity = _compatibility_build_identity(plan["repo_root"])
+    files = [
+        {"path": item["destination"], "sha256": item["sha256"]}
+        for item in plan["files"]
+    ]
+    files.append({"path": identity["path"], "sha256": identity["sha256"]})
     return {
-        "files": [
-            {"path": item["destination"], "sha256": item["sha256"]}
-            for item in sorted(plan["files"], key=lambda value: value["destination"])
-        ],
+        "files": sorted(files, key=lambda value: value["path"]),
+        "compatibility_build_identity": identity,
         "manifest_sha256": plan["manifest_sha256"],
         "parent_integration": {
             "bundle_sha256": parent["bundle_sha256"],
@@ -1412,11 +1499,17 @@ def _stage_locked(plan, kernel_tree, lock):
             with open(item["path"], "rb") as source, open(destination, "wb") as output:
                 shutil.copyfileobj(source, output)
             os.chmod(destination, 0o644)
+        identity = lock["compatibility_build_identity"]
+        metadata_path = os.path.join(temporary, COMPAT_BUILD_ID_FILE)
+        with open(metadata_path, "wb") as stream:
+            stream.write(identity["value"].encode("ascii") + b"\0")
+        os.chmod(metadata_path, 0o644)
         lock_path = os.path.join(temporary, "stage-lock.json")
         with open(lock_path, "wb") as stream:
             stream.write(canonical_json_bytes(lock))
         os.chmod(lock_path, 0o644)
         expected = {item["destination"]: item["sha256"] for item in plan["files"]}
+        expected[COMPAT_BUILD_ID_FILE] = identity["sha256"]
         expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
         for name, digest in expected.items():
             if sha256_file(os.path.join(temporary, name)) != digest:
@@ -1442,6 +1535,7 @@ def _verify_locked_stage(plan, kernel_tree, lock):
     if stat.S_IMODE(info.st_mode) != 0o755:
         raise ValidationError("staged destination mode must be 0755")
     expected = {item["destination"]: item["sha256"] for item in plan["files"]}
+    expected[COMPAT_BUILD_ID_FILE] = lock["compatibility_build_identity"]["sha256"]
     expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
     actual = []
     actual_directories = []

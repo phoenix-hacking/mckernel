@@ -92,7 +92,32 @@
         "native-rust-runtime-mcd0-ioctl-i386",
         "native-rust-runtime-mcd0-ioctl-x86_64"
       ],
-      "instruction_policy": "exact-v1-with-only-device-address-derived-field",
+      "get_buildid_policy": {
+        "expected_identity_argument": 1,
+        "expected_identity_maximum_characters": 40,
+        "expected_identity_minimum_characters": 1,
+        "fault_errno": "EFAULT",
+        "fault_pointers": [
+          "null",
+          "all-ones",
+          "read-only-rodata",
+          "one-writable-byte-before-prot-none-page"
+        ],
+        "guard_byte": 165,
+        "leading_guard_bytes": 8,
+        "output_check": "exact-identity-plus-nul-and-all-remaining-buffer-guards",
+        "output_storage_bytes": 64,
+        "partial_copy_prefix_length_asserted": false,
+        "protected_page_unchanged": true,
+        "request": 1124619,
+        "success_return": 0,
+        "unknown_errno": "EINVAL",
+        "unknown_request_arguments": [
+          "null",
+          "all-ones"
+        ]
+      },
+      "instruction_policy": "exact-v2-with-only-device-address-derived-field",
       "object_files_shape_only": true,
       "poweroff_executable_replay": false,
       "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack"
@@ -216,6 +241,14 @@
       "first_cycle_open_count": 15,
       "gate_pass": false,
       "gate_status": "TODO",
+      "get_buildid": {
+        "command": "0x11290b",
+        "expected_identity": "stage-lock.compatibility_build_identity.value",
+        "fault_errno": "EFAULT",
+        "fault_return": -14,
+        "nul_and_guard_validation": true,
+        "success_return": 0
+      },
       "ioctl_command": "0xdeadbeef",
       "ioctl_return": -22,
       "misc_device_major": 10,
@@ -225,19 +258,19 @@
       "native_abi": "x86_64",
       "native_ioctl_expected_errno": "EINVAL",
       "node_removed_after_smp_unload": true,
-      "operation_callbacks_reachable": false,
-      "os_operations_reachable": false,
       "open_receipt": {
         "duplicate_close_detectable_while_other_references_exist": false,
         "same_generation_token_may_repeat": true,
         "trusted_noncopy_owner_balance_required": true
       },
+      "operation_callbacks_reachable": false,
+      "os_operations_reachable": false,
       "overlapping_open_count": 8,
-      "provider_registry_minor": 0,
       "provider_open_acquire_count_per_trace": 18,
       "provider_open_acquire_diagnostic": "ihk: provider_open=acquire status=live minor=0",
       "provider_open_release_count_per_trace": 18,
       "provider_open_release_diagnostic": "ihk: provider_open=release status=complete minor=0",
+      "provider_registry_minor": 0,
       "reload_cycles": 1,
       "reload_open_count": 3,
       "resource_operations_reachable": false,
@@ -246,7 +279,9 @@
       "sequential_open_count": 4,
       "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
       "tracker_credit": false,
-      "valid_operation_commands": []
+      "valid_operation_commands": [
+        "IHK_DEVICE_GET_BUILDID"
+      ]
     },
     "provider_lease": {
       "attach_after_ihk_load": true,
@@ -304,6 +339,18 @@
       "ihk"
     ]
   },
+  "repository_helper_identities": {
+    "mcd0_ioctl_i386": {
+      "git_blob_sha1": "2d8442bae91ffd797f2ae6f2d37aeb52a41ce87a",
+      "sha256": "4e12ca97688950d464a06ee3e12f866c50e78bedba4865ce44db65a2ff1d5d0d",
+      "size": 4130
+    },
+    "mcd0_ioctl_x86_64": {
+      "git_blob_sha1": "b56bf216ee875a9a3b1451282da6a627485cafbf",
+      "sha256": "69d2e95dd5e1429b59d8f8ff734b9fe5094361bf2853f37a137f2ebb745322c7",
+      "size": 4118
+    }
+  },
   "repository_inputs": {
     "build_workflow": ".github/workflows/native-rust-host-modules-exact-build.yml",
     "config_fragment": "host-kernel/rocky/configs/native-rust-evidence.config",
@@ -318,23 +365,11 @@
     "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
     "source_lock": "host-kernel/rocky/source-lock.json"
   },
-  "repository_helper_identities": {
-    "mcd0_ioctl_i386": {
-      "git_blob_sha1": "852f6b986cc325774dce93b550ebd29446ace5e9",
-      "sha256": "128b63dba75cdbfc367a69054a95f079818e7c0e4a42071010bad1125e823ad7",
-      "size": 936
-    },
-    "mcd0_ioctl_x86_64": {
-      "git_blob_sha1": "962972031ee0101defcef2d9bc9d01c5bc585b45",
-      "sha256": "82f4599faaf083eece40840be62d8da5ceb314123449fdec71e57998e36fdf18",
-      "size": 927
-    }
-  },
   "repository_semantic_authority_identities": {
     "kbuild_link_closure": {
-      "git_blob_sha1": "7f0b49c36d183b3201ba29458f8096bc9d9beb30",
-      "sha256": "827a19ffb5a86450dcf280de5163c561ebf09da4a25273fef8da97e0d267a293",
-      "size": 53921
+      "git_blob_sha1": "4e57d21fd66ca238f1bf323d6b0f53d0ae515860",
+      "sha256": "657b6d9cfe416bc1c0f790a51b1775d5c3f18622c96e80474979f515b1fbc37f",
+      "size": 57558
     },
     "kconfig_policy": {
       "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
@@ -345,6 +380,23 @@
       "git_blob_sha1": "095bd7b985f05c540696bb614df06a66843e64ad",
       "sha256": "fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4",
       "size": 46669
+    }
+  },
+  "repository_workflow_identities": {
+    "build_workflow": {
+      "git_blob_sha1": "c369bac941e2c4138aef390a13f344bef609f3d1",
+      "sha256": "b21cd97cb2dfe019467a45c71eda07b2698e7557273e227e163e41d27c5a9850",
+      "size": 91486
+    },
+    "runtime_pr_workflow": {
+      "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
+      "sha256": "628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265",
+      "size": 754
+    },
+    "runtime_workflow": {
+      "git_blob_sha1": "5670a3e9880d628921966957ec95ac11d2fd73dd",
+      "sha256": "91dab732d8402edd0f74cf26e0b5be9cfed984a0c7cf8bc8bf1ce1192eb3ab44",
+      "size": 36459
     }
   },
   "reproducible_build_identity": {
@@ -365,23 +417,6 @@
     },
     "policy": "The fixed Kbuild identity is derived from the locked source-repository primary-metadata timestamp and applies to every exact-build phase, including reusable-workflow builds. This removes run-specific builder and wall-clock bytes but does not prove cross-run reproducibility, runtime behavior, durability, or gate credit."
   },
-  "repository_workflow_identities": {
-    "build_workflow": {
-      "git_blob_sha1": "510644de44b322e2938e05da21669cb35ef343d5",
-      "sha256": "c24b1e107a75da00afcb4ebf1945e249c611af8459fdeb90635a561199a33250",
-      "size": 90656
-    },
-    "runtime_pr_workflow": {
-      "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
-      "sha256": "628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265",
-      "size": 754
-    },
-    "runtime_workflow": {
-      "git_blob_sha1": "29f1a68a30b503ff9dbb9ee69877ec20100570ad",
-      "sha256": "d615f9b7d82a9e20ac965261864b30e6252c69b491039a367c23a2c9b7f7e137",
-      "size": 36031
-    }
-  },
   "runtime": {
     "architecture": "x86_64",
     "boot_medium": "deterministic initramfs",
@@ -389,6 +424,7 @@
     "distribution": "Rocky Linux",
     "os_release_sha256": "2ac9f7b21412a20a1b30dba66be466a21abd87e4cddad00841374d7bfae89084",
     "qemu_accelerator": "tcg",
+    "release": "10.2",
     "required_kernel_config": {
       "disabled": [
         "CONFIG_MODULE_SIG_FORCE"
@@ -414,8 +450,7 @@
         "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
         "CONFIG_MCKERNEL_MCCTRL_RUST": "m"
       }
-    },
-    "release": "10.2"
+    }
   },
   "runtime_verifier_scope": {
     "initramfs_cpio_replay": false,

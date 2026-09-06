@@ -6,6 +6,7 @@ set -uo pipefail
 
 readonly PROTOCOL=MCKERNEL_NATIVE_RUST_RUNTIME_V1
 readonly EXPECTED_KERNEL_RELEASE=@EXPECTED_KERNEL_RELEASE@
+readonly EXPECTED_IHK_BUILD_ID=@EXPECTED_IHK_BUILD_ID@
 readonly IHK=/modules/ihk.ko
 readonly SMP=/modules/ihk-smp-x86_64.ko
 readonly MCCTRL=/modules/mcctrl.ko
@@ -244,10 +245,11 @@ record "MCD0 OPEN_CLOSE mode=sequential count=4 status=ok"
 concurrent_mcd0_opens || { fail mcd0-concurrent-open; exit 1; }
 record "MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok"
 
-"$MCD0_IOCTL_NATIVE" || { fail mcd0-native-negative-ioctl; exit 1; }
-record "MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok"
-"$MCD0_IOCTL_COMPAT" || { fail mcd0-compat-negative-ioctl; exit 1; }
-record "MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok"
+record "MCD0 BUILDID expected=$EXPECTED_IHK_BUILD_ID"
+"$MCD0_IOCTL_NATIVE" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-native-buildid-ioctl; exit 1; }
+record "MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok"
+"$MCD0_IOCTL_COMPAT" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-compat-buildid-ioctl; exit 1; }
+record "MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok"
 
 exec 9<>/dev/mcd0 || { fail mcd0-held-open; exit 1; }
 set +e
@@ -369,9 +371,9 @@ mcd0_node_matches_identity "$mcd0_reload_dev" || {
 }
 exec 8<>/dev/mcd0 || { fail mcd0-open-after-reload; exit 1; }
 exec 8>&-
-"$MCD0_IOCTL_NATIVE" || { fail mcd0-native-ioctl-after-reload; exit 1; }
-"$MCD0_IOCTL_COMPAT" || { fail mcd0-compat-ioctl-after-reload; exit 1; }
-record "MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok"
+"$MCD0_IOCTL_NATIVE" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-native-ioctl-after-reload; exit 1; }
+"$MCD0_IOCTL_COMPAT" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-compat-ioctl-after-reload; exit 1; }
+record "MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok"
 rmmod mcctrl || { fail unload-reloaded-mcctrl; exit 1; }
 record "RELOAD_UNLOAD cycle=1 module=mcctrl status=ok"
 rmmod ihk_smp_x86_64 || { fail unload-reloaded-ihk-smp-x86-64; exit 1; }

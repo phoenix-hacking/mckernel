@@ -44,6 +44,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 self.contract["resource_foundation"]["fixture"]["positive_path"],
                 self.contract["resource_foundation"]["fixture"]["negative_path"],
                 self.contract["control_device_shell"]["noncopy_fixture"]["path"],
+                self.contract["control_device_shell"]["get_buildid"]["source_fixture"]["path"],
             )
         )
         for relative in relative_paths:
@@ -98,6 +99,11 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual("TODO", summary["control_device_gate_status"])
         self.assertFalse(summary["control_device_credit_eligible"])
         self.assertFalse(summary["control_device_runtime_proven"])
+        self.assertTrue(summary["control_device_usercopy_source_reachable"])
+        self.assertEqual(
+            ["IHK_DEVICE_GET_BUILDID"], summary["control_device_valid_ioctl_commands"]
+        )
+        self.assertEqual(6, summary["get_buildid_source_fixture_tests"])
 
     def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
         resource = self.contract["crate_modules"][0]
@@ -388,7 +394,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
         )
-        old = '''        // SAFETY: This non-Copy owner calls the matching provider function\n        // exactly once with the positive token returned by attach and the\n        // retained exit identity.  The provider fails stop rather than\n        // returning with a live entry or callback.\n        unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };'''
+        old = '''        // SAFETY: This non-Copy owner calls the matching provider function\n        // exactly once with the positive token returned by attach and the\n        // retained exit identity.  The provider fails stop rather than\n        // returning with a live entry or callback.\n        unsafe { ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2)) };'''
         new = '''        /*\n+        // SAFETY: This non-Copy owner calls the matching provider function\n+        // exactly once with the positive token returned by attach and the\n+        // retained exit identity.  The provider fails stop rather than\n+        // returning with a live entry or callback.\n+        unsafe {\n+            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n+        };\n+        */'''
         self.assertIn(old, source)
         with self.assertRaisesRegex(
@@ -403,9 +409,9 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             encoding="utf-8"
         )
         mutated = source.replace(
-            'unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };',
+            'unsafe { ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2)) };',
             'pr_err!("provider_lease=raw token={}\\n", self.token);\n'
-            '        unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };',
+            '        unsafe { ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2)) };',
             1,
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "raw lease scalar"):
@@ -442,7 +448,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             ("provider_attach_before_registration", False),
             ("raw_data_pointer", True),
             ("registration_failure_releases_provider_lease", False),
-            ("usercopy_reachable", True),
+            ("usercopy_reachable", False),
             ("valid_ioctl_commands", [1]),
         )
         for field, value in cases:
@@ -559,22 +565,24 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 self.contract,
             )
 
-    def test_control_device_ioctl_surface_is_uniformly_rejecting(self) -> None:
+    def test_control_device_ioctl_surface_is_bounded_to_get_buildid(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
         )
-        first = source.index("        Err(EINVAL)", source.index("fn ioctl("))
-        with self.assertRaisesRegex(lifecycle.ValidationError, "rejecting native ioctl"):
+        native_dispatch = "control_device_ioctl(cmd, arg)"
+        with self.assertRaisesRegex(lifecycle.ValidationError, "exact native ioctl dispatch"):
             lifecycle._validate_rust_source(
-                source[:first] + source[first:].replace("Err(EINVAL)", "Ok(0)", 1),
+                source.replace(native_dispatch, "Ok(0)", 1),
                 self.contract,
             )
-        compat = source.index("        Err(EINVAL)", source.index("fn compat_ioctl("))
-        with self.assertRaisesRegex(lifecycle.ValidationError, "explicit compat ioctl"):
-            lifecycle._validate_rust_source(
-                source[:compat] + source[compat:].replace("Err(EINVAL)", "Ok(0)", 1),
-                self.contract,
-            )
+        compat_dispatch = "control_device_ioctl(cmd, arg as u32 as usize)"
+        for changed in ("Ok(0)", native_dispatch, "control_device_ioctl(cmd, arg as i32 as usize)"):
+            with self.subTest(compat=changed), self.assertRaisesRegex(
+                lifecycle.ValidationError, "explicit compat ioctl dispatch"
+            ):
+                lifecycle._validate_rust_source(
+                    source.replace(compat_dispatch, changed, 1), self.contract
+                )
         with self.assertRaisesRegex(lifecycle.ValidationError, "unsupported file operation"):
             lifecycle._validate_rust_source(
                 source + "\nfn read() -> Result<usize> { Ok(0) }\n", self.contract
@@ -590,11 +598,11 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 self.contract,
             )
         custom_release = source.replace(
-            "    fn ioctl(\n",
+            "    fn ioctl(",
             "    fn release(device: Box<ProviderOpenLease>) {\n"
             "        core::mem::forget(device);\n"
             "    }\n\n"
-            "    fn ioctl(\n",
+            "    fn ioctl(",
             1,
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "default release"):
@@ -615,6 +623,98 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "raw pointer"):
             lifecycle._validate_rust_source(raw_pointer, self.contract)
+
+    def test_get_buildid_command_copy_and_error_semantics_are_exact(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(encoding="utf-8")
+        cases = (
+            ("0x0011_290b", "0x0011_290c", "exact GET_BUILDID command"),
+            (".len())", ".len() - 1)", "safe usercopy dispatcher"),
+            (".write_slice(IHK_COMPAT_BUILD_ID)?;", ".write_slice(IHK_COMPAT_BUILD_ID);", "safe usercopy dispatcher"),
+            ("_ => Err(EINVAL),", "_ => Ok(0),", "safe usercopy dispatcher"),
+            ("UserSlice::new(arg,", "UserSlice::new(0,", "safe usercopy dispatcher"),
+        )
+        for old, new, error in cases:
+            with self.subTest(mutation=old), self.assertRaisesRegex(lifecycle.ValidationError, error):
+                self.assertIn(old, source)
+                lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+
+    def test_generated_get_buildid_include_cannot_redirect_or_hide(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(encoding="utf-8")
+        for replacement in (
+            lifecycle.EXPECTED_BUILDID_INCLUDE.replace("ihk-compat-build-id.bin", "other.bin"),
+            'const IHK_COMPAT_BUILD_ID: &[u8] = b"repository-constant\\0";',
+            "/* " + lifecycle.EXPECTED_BUILDID_INCLUDE + " */",
+            "#[cfg(any())]\n" + lifecycle.EXPECTED_BUILDID_INCLUDE,
+            "mod hidden {\n" + lifecycle.EXPECTED_BUILDID_INCLUDE + "\n}",
+        ):
+            with self.subTest(replacement=replacement), self.assertRaisesRegex(
+                lifecycle.ValidationError, "GET_BUILDID metadata include"
+            ):
+                lifecycle._validate_rust_source(
+                    source.replace(lifecycle.EXPECTED_BUILDID_INCLUDE, replacement, 1), self.contract
+                )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "GET_BUILDID dispatcher"):
+            lifecycle._validate_rust_source(
+                source.replace("fn control_device_ioctl(", "#[cfg(any())]\nfn control_device_ioctl(", 1),
+                self.contract,
+            )
+
+    def test_get_buildid_contract_cannot_hide_pointer_or_copy_semantics(self) -> None:
+        for area, field, value in (
+            ("get_buildid", "copies_nul_terminator", False),
+            ("get_buildid", "copy_failure_errno", -22),
+            ("get_buildid", "generated_metadata_file", "repository-constant.bin"),
+            ("get_buildid", "success_result", 1),
+            ("compat_ioctl", "pointer_conversion", "arg as i32 as usize"),
+            ("native_ioctl", "unsupported_commands_errno", 0),
+        ):
+            contract = json.loads(json.dumps(self.contract))
+            contract["control_device_shell"][area][field] = value
+            with self.subTest(area=area, field=field), self.assertRaisesRegex(
+                lifecycle.ValidationError, "control-device shell differs or overclaims"
+            ):
+                lifecycle._validate_contract(contract)
+
+    def test_get_buildid_command_cannot_be_cfg_hidden_or_modified(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(encoding="utf-8")
+        command = "const IHK_DEVICE_GET_BUILDID: u32 = 0x0011_290b;"
+        for prefix in ("#[cfg(any())]\n", "#[cfg_attr(all(), cfg(any()))]\n", "pub "):
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(
+                lifecycle.ValidationError, "GET_BUILDID command.*unreviewed"
+            ):
+                lifecycle._validate_rust_source(
+                    source.replace(command, prefix + command, 1), self.contract
+                )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "GET_BUILDID command.*top-level"):
+            lifecycle._validate_rust_source(
+                source.replace(command, "mod hidden {\n" + command + "\n}", 1), self.contract
+            )
+
+    def test_get_buildid_callbacks_cannot_hide_behind_extra_attributes(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(encoding="utf-8")
+        for marker, label in (
+            ("    fn ioctl(", "native ioctl dispatch"),
+            ("    #[cfg(CONFIG_COMPAT)]\n    fn compat_ioctl(", "explicit compat ioctl dispatch"),
+        ):
+            for prefix in (
+                "    #[cfg(any())]\n", "    #[cfg_attr(all(), cfg(any()))]\n",
+                "    #[inline]\n", "    pub ",
+            ):
+                with self.subTest(callback=label, prefix=prefix), self.assertRaisesRegex(
+                    lifecycle.ValidationError, label + ".*unreviewed"
+                ):
+                    lifecycle._validate_rust_source(
+                        source.replace(marker, prefix + marker, 1), self.contract
+                    )
+
+    def test_get_buildid_fixture_cannot_drift_from_reviewed_source_test(self) -> None:
+        fixture = self.contract["control_device_shell"]["get_buildid"]["source_fixture"]
+        self.assertEqual(
+            self.repo / fixture["path"], lifecycle._validate_get_buildid_fixture(self.repo, self.contract)
+        )
+        self.mutate_text(fixture["path"], "PRODUCTION_BUILDID_DISPATCH", "PRODUCTION_BUILDID_DISPATCX")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "GET_BUILDID source fixture identity"):
+            lifecycle._validate_get_buildid_fixture(self.repo, self.contract)
 
     def test_control_device_registration_rollback_and_teardown_order_are_exact(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(
@@ -852,6 +952,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         cases = (
             ("include", 'include \n ! \n ("hidden.rs");'),
             ("include_bytes", 'include_bytes /* gap */ ! ["payload.bin"];'),
+            ("include_str", 'include_str!("unreviewed.txt");'),
             ("asm", 'core::arch::asm\t!\n("nop");'),
             ("global_asm", 'global_asm /* gap */ ! {".byte 0"}'),
             (

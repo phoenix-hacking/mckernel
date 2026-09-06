@@ -439,10 +439,19 @@ jobs:
           copy_executable /usr/sbin/rmmod /sbin/rmmod
           copy_executable /usr/bin/dmesg /bin/dmesg
 
-          kernel_release="$(cat "$BUILD_EVIDENCE/kernel.release")"
-          test -n "$kernel_release"
-          sed "s/@EXPECTED_KERNEL_RELEASE@/$kernel_release/g" \
-            scripts/native-rust-runtime-init.sh > "$INITRAMFS_ROOT/init"
+          python3 - <<'PY' > "$INITRAMFS_ROOT/init"
+          import os
+          from pathlib import Path
+          import sys
+          from scripts.native_rust_runtime_evidence import render_runtime_init
+          evidence = Path(os.environ["BUILD_EVIDENCE"])
+          release = (evidence / "kernel.release").read_bytes().decode("ascii")
+          if not release.endswith("\n") or release.count("\n") != 1 or "\r" in release:
+              raise SystemExit("kernel.release must contain one LF-terminated release")
+          sys.stdout.buffer.write(render_runtime_init(
+              Path.cwd(), evidence / "stage-lock.json", release[:-1]
+          ))
+          PY
           chmod 0755 "$INITRAMFS_ROOT/init"
           /usr/bin/as --64 scripts/native-rust-runtime-poweroff.S \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"

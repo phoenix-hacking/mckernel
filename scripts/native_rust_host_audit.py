@@ -209,6 +209,10 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
     ),
     "host-kernel/native-rust/ihk_smp_x86_64.rs": (
         (
+            "IHK exact generated compatibility build identity",
+            'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");',
+        ),
+        (
             "IHK SMP init callback type",
             '''type IhkSmpProviderInitV2 = extern "C" fn() -> i32;''',
         ),

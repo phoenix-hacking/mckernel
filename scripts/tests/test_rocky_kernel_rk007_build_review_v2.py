@@ -327,7 +327,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 "link_closure": (
                     "git-blob:8b571f2c122ae8a6102e8ed83129f584701feea2"
                 ),
-                "v1_review": "repository-file",
+                "v1_review": "git-blob:a69c488f1a8690ce37ea16d13f7a0cd97ba4e629",
             },
         )
 
@@ -336,6 +336,10 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             (
                 "_mckernel_rk007_v2_mutated_link_closure",
                 "native_rust_kbuild_link_closure.py",
+            ),
+            (
+                "_mckernel_rk007_v2_mutated_v1_review",
+                "rocky_kernel_rk007_build_review.py",
             ),
             (
                 "_mckernel_rk007_v2_mutated_solver",

@@ -10,9 +10,10 @@
   "control_device_shell": {
     "close_symbol": "ihk_smp_provider_close_v1",
     "compat_ioctl": {
-      "all_commands_errno": -22,
       "explicit_when_config_compat": true,
-      "implicit_pointer_conversion_fallback": false
+      "implicit_pointer_conversion_fallback": false,
+      "pointer_conversion": "arg as u32 as usize",
+      "unsupported_commands_errno": -22
     },
     "credit_eligible": false,
     "default_release_drops_receipt": true,
@@ -25,10 +26,26 @@
       "RS-006": false
     },
     "gate_status": "TODO",
+    "get_buildid": {
+      "build_identity_semantics": "unchanged IHK consumer compatibility identity; native source candidate provenance is separate",
+      "command": "0x0011290b",
+      "copies_nul_terminator": true,
+      "copy_failure_errno": -14,
+      "generated_metadata_file": "ihk-compat-build-id.bin",
+      "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
+      "source_fixture": {
+        "expected_tests": 6,
+        "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
+        "sha256": "d983e67f36ba2ba30f66c68c26e0bb631a9b7ebdb17aed7faec78873fcbf4bd6",
+        "size": 5388
+      },
+      "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
+      "success_result": 0
+    },
     "minor": 0,
     "native_ioctl": {
-      "all_commands_errno": -22,
-      "explicit": true
+      "explicit": true,
+      "unsupported_commands_errno": -22
     },
     "noncopy_fixture": {
       "claim_scope": "Rust language compile-fail shape only; not a kernel build or runtime result",
@@ -43,8 +60,8 @@
       "close_exactly_once": true,
       "concurrent_shared_opens": true,
       "duplicate_close_detectable_while_other_references_exist": false,
-      "non_copy": true,
       "non_clone": true,
+      "non_copy": true,
       "positive": true,
       "provider_policy": "shared-reference-counted-generation-receipts",
       "raw_value_logged": false,
@@ -53,13 +70,13 @@
     },
     "open_symbol": "ihk_smp_provider_open_v1",
     "pinned_registration": true,
-    "provider_operation_callbacks_reachable": false,
     "provider_attach_before_registration": true,
+    "provider_operation_callbacks_reachable": false,
     "raw_data_pointer": false,
     "registration_failure_releases_provider_lease": true,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "pinned SMP-owned mcd0 shell with scalar per-file open receipt and uniformly rejecting native and compat ioctls; no valid device operation",
+    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt and native/compat GET_BUILDID safe usercopy; all other ioctls reject; no OS or resource operation",
     "teardown_order": [
       "deregister-control-device",
       "detach-provider-lease",
@@ -74,8 +91,10 @@
       "mmap",
       "poll"
     ],
-    "usercopy_reachable": false,
-    "valid_ioctl_commands": []
+    "usercopy_reachable": true,
+    "valid_ioctl_commands": [
+      "IHK_DEVICE_GET_BUILDID"
+    ]
   },
   "crate_modules": [
     {
@@ -208,8 +227,6 @@
       -117
     ],
     "gate_status": "TODO",
-    "minor": 0,
-    "namespace": "MCKERNEL_IHK_V1",
     "lifecycle_callbacks": {
       "arguments": "none",
       "exit_before_vacate": true,
@@ -221,6 +238,8 @@
       "raw_data_pointer": false,
       "unpublishing_guard_across_exit": true
     },
+    "minor": 0,
+    "namespace": "MCKERNEL_IHK_V1",
     "raw_token_logged": false,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,

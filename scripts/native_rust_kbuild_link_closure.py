@@ -4,7 +4,9 @@
 The validator deliberately consumes only copied ``.cmd`` and ``.mod`` files.
 It therefore remains usable after a CI artifact has been detached from the
 kernel source and output trees.  A copied evidence ``stage-lock.json`` may be
-supplied to bind the compiler dependency closure to the staged Rust inputs.
+supplied to bind the compiler dependency closure to the staged Rust inputs
+and generated IHK compatibility metadata.  The latter preserves the legacy
+consumer handshake; it is not the native module's source provenance.
 
 This is compiler/link provenance only.  It cannot prove that a module loaded,
 ran, is production ready, or is eligible for tracker credit.
@@ -29,6 +31,9 @@ HEX64 = re.compile(r"^[0-9a-f]{64}$")
 MAX_RECORD_BYTES = 2 * 1024 * 1024
 MAX_STAGE_LOCK_BYTES = 1024 * 1024
 STAGE_PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
+COMPATIBILITY_BUILD_ID_PATH = "ihk-compat-build-id.bin"
+COMPATIBILITY_BUILD_ID_RULE_PATH = "ihk/CMakeLists.txt"
+EXPECTED_GENERATED_METADATA_INPUTS = (COMPATIBILITY_BUILD_ID_PATH,)
 
 MODULES = (
     {
@@ -62,6 +67,7 @@ EXPECTED_STAGED_FILES = (
     "Kconfig",
     "abi/x86_64.rs",
     "device_registry.rs",
+    "ihk-compat-build-id.bin",
     "ihk.rs",
     "ihk_ioctl.rs",
     "ihk_smp_x86_64.rs",
@@ -109,6 +115,11 @@ _PROJECT_DEPENDENCIES = {
         "page_owner_registry.rs",
     ),
     "ihk-smp-x86_64": ("smp_resource.rs",),
+    "mcctrl": (),
+}
+_GENERATED_METADATA_DEPENDENCIES = {
+    "ihk": (),
+    "ihk-smp-x86_64": EXPECTED_GENERATED_METADATA_INPUTS,
     "mcctrl": (),
 }
 _KERNEL_RUST_DEPENDENCIES = (
@@ -192,6 +203,7 @@ _CODE_INPUT_SUFFIXES = (
     ".a",
     ".asm",
     ".bc",
+    ".bin",
     ".c",
     ".cc",
     ".cpp",
@@ -443,6 +455,52 @@ def _ascii_lf_bytes(path, label, maximum):
     return raw, text, binding
 
 
+def _validate_compatibility_build_identity(identity, digests):
+    """Bind the legacy handshake's generated NUL-terminated bytes to the lock.
+
+    Detached evidence contains the value and its generation-rule digest, not
+    the source tree.  This validates internal byte/digest consistency; the
+    authoritative stager is responsible for reading the IHK identity rule.
+    """
+    label = "stage lock compatibility build identity"
+    _require_keys(
+        identity,
+        (
+            "bytes",
+            "origin",
+            "path",
+            "sha256",
+            "source_rule_path",
+            "source_rule_sha256",
+            "value",
+        ),
+        label,
+    )
+    if identity["path"] != COMPATIBILITY_BUILD_ID_PATH:
+        raise LinkClosureError("{0} generated path differs".format(label))
+    if identity["source_rule_path"] != COMPATIBILITY_BUILD_ID_RULE_PATH:
+        raise LinkClosureError("{0} source rule path differs".format(label))
+    patterns = {
+        "ihk-git-short-head": r"[0-9a-f]{4,40}",
+        "ihk-version-fallback": r"[A-Za-z0-9.+_-]{1,40}",
+    }
+    origin = identity["origin"]
+    if not isinstance(origin, str) or origin not in patterns:
+        raise LinkClosureError("{0} origin differs".format(label))
+    value = identity["value"]
+    if not isinstance(value, str) or re.fullmatch(patterns[origin], value) is None:
+        raise LinkClosureError("{0} value differs from its origin grammar".format(label))
+    for field in ("sha256", "source_rule_sha256"):
+        if not isinstance(identity[field], str) or HEX64.fullmatch(identity[field]) is None:
+            raise LinkClosureError("{0} {1} must be lowercase SHA-256".format(label, field))
+    payload = value.encode("ascii") + b"\0"
+    if type(identity["bytes"]) is not int or identity["bytes"] != len(payload):
+        raise LinkClosureError("{0} NUL-inclusive byte count differs".format(label))
+    digest = _sha256(payload)
+    if identity["sha256"] != digest or digests.get(COMPATIBILITY_BUILD_ID_PATH) != digest:
+        raise LinkClosureError("{0} payload and staged digest differ".format(label))
+
+
 def _load_stage_lock(path):
     raw, text, binding = _ascii_lf_bytes(path, "stage lock", MAX_STAGE_LOCK_BYTES)
     try:
@@ -454,6 +512,7 @@ def _load_stage_lock(path):
     _require_keys(
         value,
         (
+            "compatibility_build_identity",
             "credit_eligible",
             "files",
             "manifest_sha256",
@@ -532,6 +591,7 @@ def _load_stage_lock(path):
         digests[relative] = digest
     if tuple(normalized) != EXPECTED_STAGED_FILES:
         raise LinkClosureError("stage lock staged file set or order differs")
+    _validate_compatibility_build_identity(value["compatibility_build_identity"], digests)
     return raw, value, digests, binding
 
 
@@ -698,6 +758,8 @@ def _project_references(text, label):
 
 def _validate_reference_surface(name, references, module):
     known = set(EXPECTED_STAGED_RUST_SOURCES)
+    if name == _cmd_name(module["rust_object"]):
+        known.update(_GENERATED_METADATA_DEPENDENCIES[module["name"]])
     for item in MODULES:
         known.update(
             (
@@ -760,7 +822,9 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
 
     staged_root = "{0}/{1}/".format(source_prefix, MODULE_ROOT)
     project_dependencies = _PROJECT_DEPENDENCIES[module["name"]]
-    expected = [staged_root + item for item in project_dependencies]
+    metadata_dependencies = _GENERATED_METADATA_DEPENDENCIES[module["name"]]
+    compiler_dependencies = project_dependencies + metadata_dependencies
+    expected = [staged_root + item for item in compiler_dependencies]
     expected.extend(_KERNEL_RUST_DEPENDENCIES)
     if dependencies != expected:
         raise LinkClosureError(
@@ -768,7 +832,7 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
                 name, expected, dependencies
             )
         )
-    for index, relative in enumerate(project_dependencies):
+    for index, relative in enumerate(compiler_dependencies):
         parsed, prefix = _project_relative(
             dependencies[index],
             "{0} project dependency".format(name),
@@ -1164,6 +1228,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             stage_lock_path
         )
         stage_binding = {
+            "compatibility_build_identity": stage_value["compatibility_build_identity"],
             "manifest_sha256": stage_value["manifest_sha256"],
             "profile_id": stage_value["profile_id"],
             "schema_version": stage_value["schema_version"],
@@ -1246,6 +1311,9 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
                 "crate_root": module["crate_root"],
                 "final_link_inputs": final_inputs,
                 "final_module": final_target,
+                "generated_metadata_inputs": list(
+                    _GENERATED_METADATA_DEPENDENCIES[module["name"]]
+                ),
                 "module": module["name"],
                 "module_object": "{0}/{1}".format(MODULE_ROOT, module["module_object"]),
                 "raw_object_list": ["{0}/{1}".format(MODULE_ROOT, module["rust_object"])],
@@ -1308,6 +1376,14 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             "object_postprocessor": "./tools/objtool/objtool",
             "project_source": "rustc",
         },
+        "generated_metadata_inputs": [
+            {"path": path, "stage_sha256": stage_digests[path]}
+            for path in EXPECTED_GENERATED_METADATA_INPUTS
+        ],
+        "generated_metadata_scope": (
+            "generated NUL-terminated IHK consumer compatibility identity named by "
+            "the SMP rustc dependency record; separate from native source provenance"
+        ),
         "modules": module_results,
         "purpose": "detached compiler and final-link provenance; no runtime or gate credit",
         "raw_record_names": list(EXPECTED_RAW_RECORD_NAMES),

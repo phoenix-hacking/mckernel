@@ -96,6 +96,7 @@ on:
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_device_registry_compile.rs
       - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_buildid_compile.rs
       - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
@@ -117,10 +118,14 @@ on:
       - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_ihk_native_lifecycle_check.py
       - scripts/tests/test_ihk_smp_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_buildid.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_native_rust_build_surface_audit.py
       - scripts/tests/test_native_rust_exact_build_workflow.py
       - scripts/tests/test_native_rust_kbuild_link_closure.py
+      - scripts/tests/test_native_rust_runtime_link_metadata.py
+      - scripts/tests/test_native_rust_runtime_probe_execution.py
+      - scripts/tests/test_native_rust_runtime_buildid.py
       - scripts/tests/test_native_rust_kconfig_policy.py
       - scripts/tests/test_native_rust_kconfig_solver.py
       - scripts/tests/test_native_rust_runtime_evidence.py
@@ -227,6 +232,7 @@ on:
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_device_registry_compile.rs
       - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_buildid_compile.rs
       - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
@@ -248,10 +254,14 @@ on:
       - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_ihk_native_lifecycle_check.py
       - scripts/tests/test_ihk_smp_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_buildid.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_native_rust_build_surface_audit.py
       - scripts/tests/test_native_rust_exact_build_workflow.py
       - scripts/tests/test_native_rust_kbuild_link_closure.py
+      - scripts/tests/test_native_rust_runtime_link_metadata.py
+      - scripts/tests/test_native_rust_runtime_probe_execution.py
+      - scripts/tests/test_native_rust_runtime_buildid.py
       - scripts/tests/test_native_rust_kconfig_policy.py
       - scripts/tests/test_native_rust_kconfig_solver.py
       - scripts/tests/test_native_rust_runtime_evidence.py
@@ -424,6 +434,9 @@ jobs:
             check-contract --repo "$GITHUB_WORKSPACE"
           /usr/bin/python3 -E -s -m unittest -v \
             scripts.tests.test_native_rust_kbuild_link_closure \
+            scripts.tests.test_native_rust_runtime_link_metadata \
+            scripts.tests.test_native_rust_runtime_probe_execution \
+            scripts.tests.test_native_rust_runtime_buildid \
             scripts.tests.test_native_rust_kconfig_policy \
             scripts.tests.test_native_rust_kconfig_solver \
             scripts.tests.test_native_rust_build_surface_audit \
@@ -433,6 +446,7 @@ jobs:
             scripts.tests.test_rocky_kernel_rk006_full_source_build_capture \
             scripts.tests.test_ihk_native_lifecycle_check \
             scripts.tests.test_ihk_smp_native_lifecycle_check \
+            scripts.tests.test_ihk_smp_buildid \
             scripts.tests.test_mcctrl_native_lifecycle_check
           /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92=/usr/bin/rustc \

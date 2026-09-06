@@ -62,10 +62,19 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             return stream.read()
 
     def make_stage_lock(self):
+        compatibility_identity = self.make_compatibility_identity()
         return {
+            "compatibility_build_identity": compatibility_identity,
             "credit_eligible": False,
             "files": [
-                {"path": path, "sha256": "{0:064x}".format(index + 1)}
+                {
+                    "path": path,
+                    "sha256": (
+                        compatibility_identity["sha256"]
+                        if path == closure.COMPATIBILITY_BUILD_ID_PATH
+                        else "{0:064x}".format(index + 1)
+                    ),
+                }
                 for index, path in enumerate(closure.EXPECTED_STAGED_FILES)
             ],
             "manifest_sha256": "f" * 64,
@@ -94,6 +103,27 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             "schema_version": 2,
             "target": copy.deepcopy(closure.EXPECTED_STAGE_TARGET),
         }
+
+    @staticmethod
+    def make_compatibility_identity(value="a1b2c3d", origin="ihk-git-short-head"):
+        payload = value.encode("ascii") + b"\0"
+        return {
+            "bytes": len(payload),
+            "origin": origin,
+            "path": closure.COMPATIBILITY_BUILD_ID_PATH,
+            "sha256": closure._sha256(payload),
+            "source_rule_path": "ihk/CMakeLists.txt",
+            "source_rule_sha256": "8" * 64,
+            "value": value,
+        }
+
+    def write_stage_identity(self, identity):
+        stage_lock = copy.deepcopy(self.stage_lock)
+        stage_lock["compatibility_build_identity"] = identity
+        for item in stage_lock["files"]:
+            if item["path"] == closure.COMPATIBILITY_BUILD_ID_PATH:
+                item["sha256"] = identity["sha256"]
+        self.write_bytes("stage-lock.json", closure.canonical_bytes(stage_lock))
 
     def rust_record(self, module, dependencies):
         target = "{0}/{1}".format(closure.MODULE_ROOT, module["rust_object"])
@@ -226,7 +256,10 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
 
     def make_records(self):
         source_groups = {
-            module["name"]: closure._PROJECT_DEPENDENCIES[module["name"]]
+            module["name"]: (
+                closure._PROJECT_DEPENDENCIES[module["name"]]
+                + closure._GENERATED_METADATA_DEPENDENCIES[module["name"]]
+            )
             for module in closure.MODULES
         }
         for module in closure.MODULES:
@@ -329,6 +362,25 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             [item["path"] for item in value["source_closure"]],
         )
         self.assertTrue(all(item["stage_sha256"] for item in value["source_closure"]))
+        self.assertEqual(
+            self.stage_lock["compatibility_build_identity"],
+            value["stage_lock"]["compatibility_build_identity"],
+        )
+        self.assertEqual(
+            [{
+                "path": closure.COMPATIBILITY_BUILD_ID_PATH,
+                "stage_sha256": self.stage_lock["compatibility_build_identity"]["sha256"],
+            }],
+            value["generated_metadata_inputs"],
+        )
+        self.assertIn("separate from native source provenance", value["generated_metadata_scope"])
+        for module in value["modules"]:
+            self.assertEqual(
+                [closure.COMPATIBILITY_BUILD_ID_PATH]
+                if module["module"] == "ihk-smp-x86_64" else [],
+                module["generated_metadata_inputs"],
+            )
+            self.assertTrue(all(path.endswith(".rs") for path in module["source_dependencies"]))
         closure.write_kbuild_link_closure(
             self.records, self.output, stage_lock_path=self.stage_lock_path
         )
@@ -344,6 +396,10 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         self.assertIsNone(value["stage_lock"])
         self.assertTrue(
             all(item["stage_sha256"] is None for item in value["source_closure"])
+        )
+        self.assertEqual(
+            [{"path": closure.COMPATIBILITY_BUILD_ID_PATH, "stage_sha256": None}],
+            value["generated_metadata_inputs"],
         )
 
     def test_cli_round_trip_and_exact_check_output(self):
@@ -775,6 +831,122 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             "",
         )
 
+    def test_generated_compatibility_metadata_dependency_is_exact_and_smp_only(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        dependency = SOURCE_PREFIX + closure.COMPATIBILITY_BUILD_ID_PATH
+        alternatives = (
+            "",
+            SOURCE_PREFIX + "arbitrary.bin",
+            SOURCE_PREFIX + "unbound.dat",
+            SOURCE_PREFIX + "smp_resource.rs",
+            SOURCE_PREFIX + "../" + closure.COMPATIBILITY_BUILD_ID_PATH,
+            "/different/source/drivers/misc/mckernel/" + closure.COMPATIBILITY_BUILD_ID_PATH,
+            "/tmp/" + closure.COMPATIBILITY_BUILD_ID_PATH,
+        )
+        for alternative in alternatives:
+            with self.subTest(alternative=alternative):
+                self.mutate_once(name, dependency, alternative)
+        self.mutate_once(name, dependency + " \\\n", dependency + " \\\n  " + dependency + " \\\n")
+
+        for module in (closure.MODULES[0], closure.MODULES[2]):
+            target = "{0}/{1}".format(closure.MODULE_ROOT, module["rust_object"])
+            head = "deps_{0} := \\\n".format(target)
+            with self.subTest(module=module["name"]):
+                self.mutate_once(
+                    closure._cmd_name(target), head, head + "  " + dependency + " \\\n"
+                )
+
+        # A known metadata path is still not a compiler command-line input.
+        self.mutate_once(
+            name,
+            "--sysroot=/dev/null",
+            "--sysroot=/dev/null " + dependency,
+        )
+        self.mutate_once(
+            ".ihk-smp-x86_64.ko.cmd", " .module-common.o", " " + dependency + " .module-common.o"
+        )
+
+    def test_compatibility_identity_payload_grammar_and_boundaries(self):
+        for value, origin in (
+            ("abcd", "ihk-git-short-head"),
+            ("0123456789abcdef" * 2 + "01234567", "ihk-git-short-head"),
+            ("v1.2-rc_3+test", "ihk-version-fallback"),
+            ("A", "ihk-version-fallback"),
+            ("v" * 40, "ihk-version-fallback"),
+        ):
+            with self.subTest(value=value, origin=origin):
+                identity = self.make_compatibility_identity(value, origin)
+                self.write_stage_identity(identity)
+                result = closure.validate_kbuild_link_closure(
+                    self.records, stage_lock_path=self.stage_lock_path
+                )
+                self.assertEqual(identity, result["stage_lock"]["compatibility_build_identity"])
+                self.assertEqual("f" * 64, result["stage_lock"]["manifest_sha256"])
+
+    def test_compatibility_identity_rejects_malformed_or_unbound_metadata(self):
+        original = copy.deepcopy(self.stage_lock)
+        mutations = []
+        fields = (
+            ("bytes", 7),
+            ("bytes", True),
+            ("bytes", 8.0),
+            ("origin", "native-manifest-digest"),
+            ("origin", []),
+            ("path", "../ihk-compat-build-id.bin"),
+            ("path", "another.bin"),
+            ("source_rule_path", "CMakeLists.txt"),
+            ("source_rule_path", "ihk/../ihk/CMakeLists.txt"),
+            ("source_rule_sha256", "a" * 64 + "\n"),
+            ("source_rule_sha256", "A" * 64),
+            ("source_rule_sha256", None),
+            ("sha256", "a" * 64),
+            ("sha256", closure._sha256(b"a1b2c3d")),
+            ("sha256", "A" * 64),
+            ("sha256", None),
+            ("value", "a1b2c3e"),
+            ("value", "abc"),
+            ("value", "A1B2C3D"),
+            ("value", "a1b2c3d\0"),
+            ("value", "a1b2c3d\n"),
+            ("value", "a" * 41),
+            ("value", 12345),
+        )
+        for field, value in fields:
+            changed = copy.deepcopy(original)
+            changed["compatibility_build_identity"][field] = value
+            mutations.append(changed)
+        for value in ("", "v1/a", "v1 a", "v1\n", "v1\0", "v1é", "v" * 41):
+            changed = copy.deepcopy(original)
+            changed["compatibility_build_identity"]["origin"] = "ihk-version-fallback"
+            changed["compatibility_build_identity"]["value"] = value
+            mutations.append(changed)
+        for field in original["compatibility_build_identity"]:
+            changed = copy.deepcopy(original)
+            del changed["compatibility_build_identity"][field]
+            mutations.append(changed)
+        changed = copy.deepcopy(original)
+        changed["compatibility_build_identity"]["native_source_provenance"] = True
+        mutations.append(changed)
+        changed = copy.deepcopy(original)
+        del changed["compatibility_build_identity"]
+        mutations.append(changed)
+        changed = copy.deepcopy(original)
+        for item in changed["files"]:
+            if item["path"] == closure.COMPATIBILITY_BUILD_ID_PATH:
+                item["sha256"] = "d" * 64
+        mutations.append(changed)
+        changed = copy.deepcopy(original)
+        changed["compatibility_build_identity"]["sha256"] = "d" * 64
+        for item in changed["files"]:
+            if item["path"] == closure.COMPATIBILITY_BUILD_ID_PATH:
+                item["sha256"] = "d" * 64
+        mutations.append(changed)
+
+        for index, stage_lock in enumerate(mutations):
+            with self.subTest(index=index):
+                self.write_bytes("stage-lock.json", closure.canonical_bytes(stage_lock))
+                self.assert_rejected()
+
     def test_stage_lock_is_canonical_exact_and_claims_nothing(self):
         original = copy.deepcopy(self.stage_lock)
         mutations = []
@@ -836,7 +1008,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.write_bytes("stage-lock.json", closure.canonical_bytes(original))
 
         duplicate = closure.canonical_bytes(original).replace(
-            b'{"credit_eligible":false,', b'{"credit_eligible":false,"credit_eligible":false,', 1
+            b'"credit_eligible":false,', b'"credit_eligible":false,"credit_eligible":false,', 1
         )
         self.write_bytes("stage-lock.json", duplicate)
         try:

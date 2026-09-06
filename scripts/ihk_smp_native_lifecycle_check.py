@@ -112,9 +112,10 @@ EXPECTED_PROVIDER_LEASE = {
 EXPECTED_CONTROL_DEVICE_SHELL = {
     "close_symbol": "ihk_smp_provider_close_v1",
     "compat_ioctl": {
-        "all_commands_errno": -22,
         "explicit_when_config_compat": True,
         "implicit_pointer_conversion_fallback": False,
+        "pointer_conversion": "arg as u32 as usize",
+        "unsupported_commands_errno": -22,
     },
     "credit_eligible": False,
     "default_release_drops_receipt": True,
@@ -127,10 +128,26 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
         "RS-006": False,
     },
     "gate_status": "TODO",
+    "get_buildid": {
+        "build_identity_semantics": "unchanged IHK consumer compatibility identity; native source candidate provenance is separate",
+        "command": "0x0011290b",
+        "copies_nul_terminator": True,
+        "copy_failure_errno": -14,
+        "generated_metadata_file": "ihk-compat-build-id.bin",
+        "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
+        "source_fixture": {
+            "expected_tests": 6,
+            "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
+            "sha256": "d983e67f36ba2ba30f66c68c26e0bb631a9b7ebdb17aed7faec78873fcbf4bd6",
+            "size": 5388,
+        },
+        "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
+        "success_result": 0,
+    },
     "minor": 0,
     "native_ioctl": {
-        "all_commands_errno": -22,
         "explicit": True,
+        "unsupported_commands_errno": -22,
     },
     "noncopy_fixture": {
         "claim_scope": "Rust language compile-fail shape only; not a kernel build or runtime result",
@@ -161,7 +178,7 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
     "registration_failure_releases_provider_lease": True,
     "rocky_runtime_validated": False,
     "runtime_behavior_proven": False,
-    "scope": "pinned SMP-owned mcd0 shell with scalar per-file open receipt and uniformly rejecting native and compat ioctls; no valid device operation",
+    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt and native/compat GET_BUILDID safe usercopy; all other ioctls reject; no OS or resource operation",
     "teardown_order": [
         "deregister-control-device",
         "detach-provider-lease",
@@ -176,9 +193,24 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
         "mmap",
         "poll",
     ],
-    "usercopy_reachable": False,
-    "valid_ioctl_commands": [],
+    "usercopy_reachable": True,
+    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
 }
+
+EXPECTED_BUILDID_INCLUDE = (
+    'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
+)
+EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> Result<isize> {
+    match cmd {
+        IHK_DEVICE_GET_BUILDID => {
+            kernel::uaccess::UserSlice::new(arg, IHK_COMPAT_BUILD_ID.len())
+                .writer()
+                .write_slice(IHK_COMPAT_BUILD_ID)?;
+            Ok(0)
+        }
+        _ => Err(EINVAL),
+    }
+}'''
 
 
 class ValidationError(Exception):
@@ -186,7 +218,7 @@ class ValidationError(Exception):
 
 
 _RUST_FORBIDDEN_CAPABILITIES = frozenset(
-    ("include", "include_bytes", "asm", "global_asm")
+    ("include", "include_bytes", "include_str", "asm", "global_asm")
 )
 
 
@@ -389,14 +421,27 @@ def _validate_bare_audited_extern(masked, start, label):
         )
 
 
-def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
+def _validate_rust_escape_hatches(
+    text, label, allowed_extern_blocks=(), allow_buildid_include=False
+):
     """Reject unreviewed Rust source inclusion, assembly, and extern edges."""
 
     masked = _mask_rust_comments_and_literals(text)
     identifiers = list(_rust_identifiers(masked))
+    allowed_include_start = None
+    if allow_buildid_include:
+        _require_active_count(
+            text, masked, EXPECTED_BUILDID_INCLUDE, 1,
+            "Rust exact generated GET_BUILDID metadata include",
+        )
+        include_start = _active_fragment_positions(
+            text, masked, EXPECTED_BUILDID_INCLUDE
+        )[0]
+        _validate_top_level_item(masked, include_start, "GET_BUILDID metadata include")
+        allowed_include_start = include_start + EXPECTED_BUILDID_INCLUDE.index("include_bytes")
     forbidden = next(
-        (name for name, _start, _end, _raw in identifiers
-         if name in _RUST_FORBIDDEN_CAPABILITIES),
+        (name for name, start, _end, _raw in identifiers
+         if name in _RUST_FORBIDDEN_CAPABILITIES and start != allowed_include_start),
         None,
     )
     if forbidden is not None:
@@ -448,6 +493,26 @@ def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
             "{0} contains an additional unreviewed extern boundary".format(label)
         )
     return masked
+
+
+def _validate_top_level_item(code, start, label):
+    """Keep reviewed generated data and usercopy outside cfg/macros/nested scopes."""
+
+    prefix = code[:start]
+    if prefix.count("{") != prefix.count("}"):
+        raise ValidationError("Rust {0} must be a top-level item".format(label))
+    _validate_item_prefix(code, start, label)
+
+
+def _validate_item_prefix(code, start, label):
+    """Reject attributes or modifiers outside an item's exact reviewed spelling."""
+
+    prefix = code[:start]
+    line_start = prefix.rfind("\n") + 1
+    if prefix[line_start:].strip():
+        raise ValidationError("Rust {0} has an unreviewed modifier".format(label))
+    if prefix.rstrip() and prefix.rstrip()[-1] not in ";}":
+        raise ValidationError("Rust {0} has an unreviewed outer attribute".format(label))
 
 
 def _object_without_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -868,6 +933,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             callback_init,
             callback_exit,
         ),
+        allow_buildid_include=True,
     )
     callback_bodies = (
         '''extern "C" fn ihk_smp_provider_init_v2() -> i32 {
@@ -928,7 +994,7 @@ struct ProviderLease {
         "return Err(provider_status_error(token));",
         "Ok(Self { token })",
         "impl Drop for ProviderLease {",
-        "unsafe {\n            ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2))\n        };",
+        "unsafe { ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2)) };",
     )
     for fragment in required_lease_fragments:
         if code.count(fragment) != 1:
@@ -1015,29 +1081,42 @@ struct ProviderOpenLease {
     if len(control_minor_matches) != 1 or int(control_minor_matches[0].group(1)) != control["minor"]:
         raise ValidationError("Rust mcd0 shell minor differs from exact scalar minor zero")
 
-    native_ioctl = '''fn ioctl(
-        _device: &ProviderOpenLease,
-        _cmd: u32,
-        _arg: usize,
-    ) -> Result<isize> {
-        Err(EINVAL)
+    buildid_command = "const IHK_DEVICE_GET_BUILDID: u32 = 0x0011_290b;"
+    _require_active_count(
+        text, code, buildid_command, 1,
+        "Rust exact GET_BUILDID command",
+    )
+    command_start = _active_fragment_positions(text, code, buildid_command)[0]
+    _validate_top_level_item(code, command_start, "GET_BUILDID command")
+    _require_active_count(
+        text, code, EXPECTED_BUILDID_DISPATCH, 1,
+        "Rust exact GET_BUILDID safe usercopy dispatcher",
+    )
+    dispatch_start = _active_fragment_positions(text, code, EXPECTED_BUILDID_DISPATCH)[0]
+    _validate_top_level_item(code, dispatch_start, "GET_BUILDID dispatcher")
+    native_ioctl = '''fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        control_device_ioctl(cmd, arg)
     }'''
     compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
-    fn compat_ioctl(
-        _device: &ProviderOpenLease,
-        _cmd: u32,
-        _arg: usize,
-    ) -> Result<isize> {
-        Err(EINVAL)
+    fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        // This command takes a userspace pointer.  On x86_64 compat callers
+        // supply a 32-bit address; zero extension matches compat_ptr().
+        control_device_ioctl(cmd, arg as u32 as usize)
     }'''
     _require_active_count(
         text, code, native_ioctl, 1,
-        "Rust mcd0 uniformly rejecting native ioctl",
+        "Rust mcd0 exact native ioctl dispatch",
     )
     _require_active_count(
         text, code, compat_ioctl, 1,
-        "Rust mcd0 uniformly rejecting explicit compat ioctl",
+        "Rust mcd0 exact explicit compat ioctl dispatch",
     )
+    for item, label in (
+        (native_ioctl, "native ioctl dispatch"),
+        (compat_ioctl, "explicit compat ioctl dispatch"),
+    ):
+        item_start = _active_fragment_positions(text, code, item)[0]
+        _validate_item_prefix(code, item_start, label)
     if "compat_ptr_ioctl" in code:
         raise ValidationError("Rust mcd0 shell may not use implicit compat pointer conversion")
     unsupported = "|".join(
@@ -1049,13 +1128,19 @@ struct ProviderOpenLease {
         raise ValidationError(
             "Rust mcd0 shell must use the default release that drops its receipt owner"
         )
+    # Exempt only the previously validated dispatcher body, retaining offsets
+    # and scanning every other active token for additional usercopy boundaries.
+    usercopy_code = (
+        code[:dispatch_start] + " " * len(EXPECTED_BUILDID_DISPATCH)
+        + code[dispatch_start + len(EXPECTED_BUILDID_DISPATCH):]
+    )
     usercopy = re.search(
         r"\b(?:User(?:Ptr|Slice[A-Za-z0-9_]*)|uaccess|copy_(?:from|to)_user)\b",
-        code,
+        usercopy_code,
     )
     if usercopy:
         raise ValidationError(
-            "Rust mcd0 shell exposes forbidden usercopy: {0}".format(
+            "Rust mcd0 exposes forbidden usercopy outside GET_BUILDID: {0}".format(
                 usercopy.group(0)
             )
         )
@@ -1070,11 +1155,9 @@ struct ProviderOpenLease {
         raise ValidationError("Rust source must contain one exact mcd0 MiscDevice implementation")
 
     registration = '''let control_device = Box::pin_init(
-            MiscDeviceRegistration::<IhkSmpControlDevice>::register(
-                MiscDeviceOptions {
-                    name: c_str!("mcd0"),
-                },
-            ),
+            MiscDeviceRegistration::<IhkSmpControlDevice>::register(MiscDeviceOptions {
+                name: c_str!("mcd0"),
+            }),
             GFP_KERNEL,
         )?;'''
     _require_active_count(
@@ -1082,9 +1165,7 @@ struct ProviderOpenLease {
         "Rust exact pinned literal mcd0 registration",
     )
     control_owner = '''struct IhkSmpModule {
-    control_device: Option<
-        core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>,
-    >,
+    control_device: Option<core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>>,
     provider_lease: Option<ProviderLease>,
 }'''
     if code.count(control_owner) != 1:
@@ -1594,6 +1675,23 @@ def _validate_control_device_fixture(repo: Path, contract: dict[str, Any]) -> Pa
     return path
 
 
+def _validate_get_buildid_fixture(repo: Path, contract: dict[str, Any]) -> Path:
+    fixture = contract["control_device_shell"]["get_buildid"]["source_fixture"]
+    path = _repo_file(repo, fixture["path"], "SMP GET_BUILDID source fixture")
+    if path.stat().st_size != fixture["size"] or _sha256(path) != fixture["sha256"]:
+        raise ValidationError("SMP GET_BUILDID source fixture identity differs")
+    text = _read_text(path, "SMP GET_BUILDID source fixture")
+    for marker in (
+        "// PRODUCTION_BUILDID_CONSTANTS", "// PRODUCTION_BUILDID_DISPATCH",
+        "// PRODUCTION_NATIVE_IOCTL", "// PRODUCTION_COMPAT_IOCTL",
+    ):
+        if text.count(marker) != 1:
+            raise ValidationError("SMP GET_BUILDID source fixture lacks production insertion marker")
+    if text.count("#[test]") != fixture["expected_tests"]:
+        raise ValidationError("SMP GET_BUILDID source fixture test count differs")
+    return path
+
+
 def _validate_reference_inventory(
     inventory: dict[str, Any], contract: dict[str, Any], repo: Path
 ) -> None:
@@ -1690,6 +1788,7 @@ def validate_repository(
     _validate_rust_source(_read_text(source_path, "production SMP Rust source"), contract)
     resource_path = _validate_resource_foundation(repo, contract)
     control_fixture_path = _validate_control_device_fixture(repo, contract)
+    buildid_fixture_path = _validate_get_buildid_fixture(repo, contract)
     provider_path = _repo_file(repo, contract["provider_source"], "native IHK provider source")
     _validate_provider_source(_read_text(provider_path, "native IHK provider source"), contract)
     _validate_kconfig(
@@ -1730,7 +1829,11 @@ def validate_repository(
         "control_device_name": contract["control_device_shell"]["device_name"],
         "control_device_runtime_proven": False,
         "control_device_source_reachable": True,
+        "control_device_valid_ioctl_commands": contract["control_device_shell"]["valid_ioctl_commands"],
+        "control_device_usercopy_source_reachable": True,
         "control_device_noncopy_fixture_sha256": _sha256(control_fixture_path),
+        "get_buildid_source_fixture_sha256": _sha256(buildid_fixture_path),
+        "get_buildid_source_fixture_tests": contract["control_device_shell"]["get_buildid"]["source_fixture"]["expected_tests"],
         "rocky_build_load_validated": False,
         "resource_foundation_credit_eligible": False,
         "resource_foundation_linux_reachable": False,

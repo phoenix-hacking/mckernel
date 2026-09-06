@@ -3,9 +3,11 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -29,6 +31,11 @@ class RockyRustStagingTests(unittest.TestCase):
         os.makedirs(os.path.join(self.repo, "host-kernel", "kbuild", "patches"))
         os.makedirs(os.path.join(self.repo, "host-kernel", "rocky"))
         os.makedirs(os.path.join(self.repo, "host-kernel", "native-rust"))
+        os.makedirs(os.path.join(self.repo, "ihk"))
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, "ihk", "CMakeLists.txt"),
+            os.path.join(self.repo, "ihk", "CMakeLists.txt"),
+        )
         for item in staging.EXPECTED_INPUTS:
             source = os.path.join(REPO_ROOT, item["repository_path"])
             destination = os.path.join(self.repo, item["repository_path"])
@@ -390,9 +397,87 @@ macro_rules! áinclude { () => {} }
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
+                "ihk-compat-build-id.bin",
             },
             paths,
         )
+
+    def test_generated_identity_reproduces_unchanged_ihk_consumer_git_rule(self):
+        identity = staging._compatibility_build_identity(REPO_ROOT)
+        expected = subprocess.check_output([
+            "git", "--git-dir=" + os.path.join(REPO_ROOT, "ihk", ".git"),
+            "rev-parse", "--short", "HEAD",
+        ]).rstrip(b"\r\n")
+        self.assertEqual(expected.decode("ascii"), identity["value"])
+        self.assertEqual("ihk-git-short-head", identity["origin"])
+        self.assertEqual(len(expected) + 1, identity["bytes"])
+        self.assertEqual(hashlib.sha256(expected + b"\0").hexdigest(), identity["sha256"])
+
+    def test_generated_identity_uses_consumer_version_for_source_archive(self):
+        identity = staging._compatibility_build_identity(self.repo)
+        self.assertEqual("1.7.0rc4", identity["value"])
+        self.assertEqual("ihk-version-fallback", identity["origin"])
+        self.assertEqual(9, identity["bytes"])
+
+    def test_generated_identity_rejects_unreviewed_consumer_rule(self):
+        path = os.path.join(self.repo, "ihk", "CMakeLists.txt")
+        with open(path, "r") as stream:
+            original = stream.read()
+        with open(path, "w") as stream:
+            stream.write(original.replace("rev-parse --short HEAD", "rev-parse HEAD"))
+        with self.assertRaisesRegex(staging.ValidationError, "consumer BUILDID rule"):
+            staging._compatibility_build_identity(self.repo)
+
+    def test_generated_identity_rejects_non_scalar_git_output(self):
+        for output in (b"deadbeef\nother\n", b"deadbeef\0\n", b"../outside\n", b"DEADBEEF\n"):
+            process = mock.Mock(returncode=0)
+            process.communicate.return_value = (output, b"")
+            with self.subTest(output=output), mock.patch.object(staging.subprocess, "Popen", return_value=process):
+                with self.assertRaisesRegex(staging.ValidationError, "git BUILDID"):
+                    staging._compatibility_build_identity(self.repo)
+
+    def test_generated_identity_rejects_mutable_git_abbreviation_override(self):
+        process = mock.Mock(returncode=0)
+        process.communicate.return_value = (b"deadbeef\n", b"")
+        with mock.patch.object(staging.subprocess, "Popen", return_value=process), \
+                mock.patch.object(staging.subprocess, "check_output", side_effect=[
+                    b"deadbee\n", b"deadbeef" + b"0" * 32 + b"\n",
+                ]):
+            with self.assertRaisesRegex(staging.ValidationError, "pinned default Git abbreviation"):
+                staging._compatibility_build_identity(self.repo)
+
+    def test_generated_identity_sanitizes_git_authority_without_rewriting_consumer_value(self):
+        process = mock.Mock(returncode=0)
+        process.communicate.return_value = (b"deadbee\n", b"")
+        with mock.patch.object(staging.subprocess, "Popen", return_value=process), \
+                mock.patch.object(staging.subprocess, "check_output", side_effect=[
+                    b"deadbee\n", b"deadbee" + b"0" * 33 + b"\n",
+                ]) as check, mock.patch.dict(os.environ, {"GIT_CONFIG_PARAMETERS": "untrusted"}):
+            identity = staging._compatibility_build_identity(self.repo)
+        self.assertEqual("deadbee", identity["value"])
+        self.assertIn("--short=7", check.call_args_list[0][0][0])
+        authority_env = check.call_args_list[0][1]["env"]
+        self.assertNotIn("GIT_CONFIG_PARAMETERS", authority_env)
+        self.assertEqual(os.devnull, authority_env["GIT_CONFIG_GLOBAL"])
+
+    def test_generated_identity_refuses_fallback_for_broken_git_checkout(self):
+        with open(os.path.join(self.repo, "ihk", ".git"), "w") as stream:
+            stream.write("invalid git file\n")
+        with self.assertRaisesRegex(staging.ValidationError, "unbound version fallback"):
+            staging._compatibility_build_identity(self.repo)
+
+    def test_staging_binds_generated_payload_and_rejects_tampering(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "identity-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        metadata = os.path.join(target, staging.COMPAT_BUILD_ID_FILE)
+        with open(metadata, "rb") as stream:
+            self.assertEqual(b"1.7.0rc4\0", stream.read())
+        with open(metadata, "wb") as stream:
+            stream.write(b"1.7.0rc4\n")
+        with self.assertRaisesRegex(staging.ValidationError, "digest mismatch"):
+            staging.verify_evidence_stage(plan, kernel)
 
     def test_shared_abi_is_staged_at_its_import_path_and_is_not_credit(self):
         plan = self.plan()

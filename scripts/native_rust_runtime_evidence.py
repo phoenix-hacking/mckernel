@@ -25,9 +25,9 @@ from typing import Any
 
 EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     "kbuild_link_closure": {
-        "git_blob_sha1": "7f0b49c36d183b3201ba29458f8096bc9d9beb30",
-        "sha256": "827a19ffb5a86450dcf280de5163c561ebf09da4a25273fef8da97e0d267a293",
-        "size": 53921,
+        "git_blob_sha1": "4e57d21fd66ca238f1bf323d6b0f53d0ae515860",
+        "sha256": "657b6d9cfe416bc1c0f790a51b1775d5c3f18622c96e80474979f515b1fbc37f",
+        "size": 57558,
     },
     "kconfig_policy": {
         "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
@@ -41,7 +41,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:bbf966785adddb346158fa36f220795288b0eb940204726eca547eaa26f8ed41"
+    "ISOLATED_SELF_DIGEST:1c761759f155daa6d5d7f5d3edaa2c188e07ada44550259326fe1319221b7834"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -542,21 +542,55 @@ RUNTIME_HELPER_ELF_SPEC = {
 }
 RUNTIME_PROBE_TEXT_TEMPLATE = {
     "native-rust-runtime-mcd0-ioctl-x86_64": (
-        bytes.fromhex("b802000000488d3d"),
+        bytes.fromhex("488d2d"),
         bytes.fromhex(
-            "be0200000031d20f054885c0783e4989c4b8100000004c89e7"
-            "beefbeadde31d20f054883f8ea7513b8030000004c89e70f0548"
-            "85c0781c31ffeb1db8030000004c89e70f05bf0b000000eb0cbf"
-            "0a000000eb05bf0c000000b83c0000000f05"
+            "48833c24020f85700200004c8b7424104531ff43803c3e00740f41ffc74183ff"
+            "280f8754020000ebea4585ff0f844902000041ffc74883ec4031dbb802000000"
+            "4889efbe0200000031d20f054885c00f88180200004989c44889e7b940000000"
+            "b8a5000000fcf3aab8100000004c89e7be0b291100488d5424080f054885c00f"
+            "85af010000813c24a5a5a5a50f85a2010000817c2404a5a5a5a50f8594010000"
+            "4c89f6488d7c24084489f9f3a60f8581010000b9380000004429f9b8a5000000"
+            "f3ae0f856c010000b8100000004c89e7be0b29110031d20f054883f8f20f8551"
+            "010000b8100000004c89e7be0b29110048c7c2ffffffff0f054883f8f20f8531"
+            "010000b8100000004c89e7be0b2911004889ea0f054883f8f20f851501000081"
+            "7d002f6465760f8508010000817d042f6d63640f85fb00000066837d08300f85"
+            "f0000000b80900000031ffbe00200000ba0300000041ba2200000049c7c0ffff"
+            "ffff4531c90f05483d01f0ffff0f83c10000004889c3c783fb0f0000a5a5a5a5"
+            "c683ff0f0000a5b80a000000488dbb00100000be0010000031d20f054885c00f"
+            "858f000000b8100000004c89e7be0b291100488d93ff0f00000f054883f8f275"
+            "7381bbfb0f0000a5a5a5a57567b80a000000488dbb00100000be00100000ba01"
+            "0000000f054885c0754a488dbb00100000b90010000031c0f3ae7538b8100000"
+            "004c89e7beefbeadde31d20f054883f8ea7521b8100000004c89e7beefbeadde"
+            "48c7c2ffffffff0f054883f8ea75054531edeb0641bd0b0000004885db741ab8"
+            "0b0000004889dfbe002000000f054885c0740641bd0b000000b8030000004c89"
+            "e70f054885c0780c4489efeb13bf0a000000eb0cbf0c000000eb05bf0d000000"
+            "b83c0000000f05"
         ),
     ),
     "native-rust-runtime-mcd0-ioctl-i386": (
-        bytes.fromhex("b805000000bb"),
+        bytes.fromhex("bd"),
         bytes.fromhex(
-            "b90200000031d2cd8085c0783889c6b83600000089f3b9efbead"
-            "de31d2cd8083f8ea7511b80600000089f3cd8085c0781b31dbeb"
-            "1cb80600000089f3cd80bb0b000000eb0cbb0a000000eb05bb0c"
-            "000000b801000000cd80"
+            "833c24020f85750200008b74240831c9803c0e00740c4183f9280f875f020000"
+            "ebee85c90f84550200004183ec6089742408894c240cc744240400000000b805"
+            "00000089ebb90200000031d2cd8085c00f881b0200008904248d7c2420b94000"
+            "0000b8a5000000fcf3aab8360000008b1c24b90b2911008d542428cd8085c00f"
+            "85b0010000817c2420a5a5a5a50f85a2010000817c2424a5a5a5a50f85940100"
+            "008b7424088d7c24288b4c240cf3a60f8580010000b9380000002b4c240cb8a5"
+            "000000f3ae0f856a010000b8360000008b1c24b90b29110031d2cd8083f8f20f"
+            "8550010000b8360000008b1c24b90b291100baffffffffcd8083f8f20f853301"
+            "0000b8360000008b1c24b90b29110089eacd8083f8f20f8519010000817d002f"
+            "6465760f850c010000817d042f6d63640f85ff00000066837d08300f85f40000"
+            "00b8c000000031dbb900200000ba03000000be22000000bfffffffff5531edcd"
+            "805d3d01f0ffff0f83c800000089442404c780fb0f0000a5a5a5a5c680ff0f00"
+            "00a58d9800100000b87d000000b90010000031d2cd8085c00f85970000008b54"
+            "240481c2ff0f0000b8360000008b1c24b90b291100cd8083f8f275798b542404"
+            "81bafb0f0000a5a5a5a575698d9a00100000b87d000000b900100000ba010000"
+            "00cd8085c0754e8b7c240481c700100000b90010000031c0f3ae7539b8360000"
+            "008b1c24b9efbeadde31d2cd8083f8ea7523b8360000008b1c24b9efbeaddeba"
+            "ffffffffcd8083f8ea750ac744241000000000eb08c74424100b0000008b5c24"
+            "0485db7418b85b000000b900200000cd8085c07408c74424100b000000b80600"
+            "00008b1c24cd8085c0780d8b5c2410eb13bb0a000000eb0cbb0c000000eb05bb"
+            "0d000000b801000000cd80"
         ),
     ),
 }
@@ -569,7 +603,29 @@ EXPECTED_RUNTIME_HELPER_SEMANTICS = {
         "native-rust-runtime-mcd0-ioctl-i386",
         "native-rust-runtime-mcd0-ioctl-x86_64",
     ],
-    "instruction_policy": "exact-v1-with-only-device-address-derived-field",
+    "get_buildid_policy": {
+        "expected_identity_argument": 1,
+        "expected_identity_maximum_characters": 40,
+        "expected_identity_minimum_characters": 1,
+        "fault_errno": "EFAULT",
+        "fault_pointers": [
+            "null",
+            "all-ones",
+            "read-only-rodata",
+            "one-writable-byte-before-prot-none-page",
+        ],
+        "guard_byte": 165,
+        "leading_guard_bytes": 8,
+        "output_check": "exact-identity-plus-nul-and-all-remaining-buffer-guards",
+        "output_storage_bytes": 64,
+        "partial_copy_prefix_length_asserted": False,
+        "protected_page_unchanged": True,
+        "request": 1124619,
+        "success_return": 0,
+        "unknown_errno": "EINVAL",
+        "unknown_request_arguments": ["null", "all-ones"],
+    },
+    "instruction_policy": "exact-v2-with-only-device-address-derived-field",
     "object_files_shape_only": True,
     "poweroff_executable_replay": False,
     "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack",
@@ -588,15 +644,15 @@ CAPTURE_RUNTIME_INPUT_BASENAMES = {
     "executed_runtime_workflow": "executed-runtime-workflow.yml",
 }
 EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
-    "254b0a4e4d9afa2c9e49426cd5dce48193d20b55b4a650f4649d05563dd57c80"
+    "07bd7811fcecb936d1bba93e0f35e9eaa35c5b993d1f7c953fc65be9a6c86327"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
-    "444b53ca8ec050184e1d1fe478afc58e6e71e33c658e79a094232118ee5ced31"
+    "1aeba5e6aa024e0fe3e3bd5a5a25fac5f7086299b721e4116443d98a19fc8e2d"
 )
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {
     "Refuse the wrong runtime and install exact build tools": "acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420",
     "Check out the exact candidate without credentials": "4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc",
-    "Verify source-only contracts without claiming readiness": "480014d26bc2759e11a6609cf5b9b58f3a2d00d603c135193f9ae932d907fecd",
+    "Verify source-only contracts without claiming readiness": "4ef6cb649098f9d023b395ed54cec63a719418f79f64bfc00784d109d099ec2f",
     "Acquire, patch, and credit-forbidden-stage the exact source": "421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000",
     "Resolve the evidence-only module configuration twice": "e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943",
     "Compile the exact kernel and native Rust modules": "17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a",
@@ -613,13 +669,13 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = (
-    "8abb51802ca0ed3e222f5f2799c3c589f38d35545f4b65693e56fbff44908865"
+    "a464c10e82e932adec3eea46f9d1c0f3ed61afe37bd160c76e359110f5894ae9"
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "510644de44b322e2938e05da21669cb35ef343d5",
-        "sha256": "c24b1e107a75da00afcb4ebf1945e249c611af8459fdeb90635a561199a33250",
-        "size": 90656,
+        "git_blob_sha1": "c369bac941e2c4138aef390a13f344bef609f3d1",
+        "sha256": "b21cd97cb2dfe019467a45c71eda07b2698e7557273e227e163e41d27c5a9850",
+        "size": 91486,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -627,21 +683,21 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "29f1a68a30b503ff9dbb9ee69877ec20100570ad",
-        "sha256": "d615f9b7d82a9e20ac965261864b30e6252c69b491039a367c23a2c9b7f7e137",
-        "size": 36031,
+        "git_blob_sha1": "5670a3e9880d628921966957ec95ac11d2fd73dd",
+        "sha256": "91dab732d8402edd0f74cf26e0b5be9cfed984a0c7cf8bc8bf1ce1192eb3ab44",
+        "size": 36459,
     },
 }
 EXPECTED_REPOSITORY_HELPER_IDENTITIES = {
     "mcd0_ioctl_i386": {
-        "git_blob_sha1": "852f6b986cc325774dce93b550ebd29446ace5e9",
-        "sha256": "128b63dba75cdbfc367a69054a95f079818e7c0e4a42071010bad1125e823ad7",
-        "size": 936,
+        "git_blob_sha1": "2d8442bae91ffd797f2ae6f2d37aeb52a41ce87a",
+        "sha256": "4e12ca97688950d464a06ee3e12f866c50e78bedba4865ce44db65a2ff1d5d0d",
+        "size": 4130,
     },
     "mcd0_ioctl_x86_64": {
-        "git_blob_sha1": "962972031ee0101defcef2d9bc9d01c5bc585b45",
-        "sha256": "82f4599faaf083eece40840be62d8da5ceb314123449fdec71e57998e36fdf18",
-        "size": 927,
+        "git_blob_sha1": "b56bf216ee875a9a3b1451282da6a627485cafbf",
+        "sha256": "69d2e95dd5e1429b59d8f8ff734b9fe5094361bf2853f37a137f2ebb745322c7",
+        "size": 4118,
     },
 }
 BUILD_KERNEL_TARGETS = ["bzImage"]
@@ -3352,6 +3408,14 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "first_cycle_open_count": MCD0_FIRST_CYCLE_OPEN_COUNT,
             "gate_pass": False,
             "gate_status": "TODO",
+            "get_buildid": {
+                "command": "0x11290b",
+                "expected_identity": "stage-lock.compatibility_build_identity.value",
+                "fault_errno": "EFAULT",
+                "fault_return": -14,
+                "nul_and_guard_validation": True,
+                "success_return": 0,
+            },
             "ioctl_command": "0xdeadbeef",
             "ioctl_return": -22,
             "misc_device_major": 10,
@@ -3388,7 +3452,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "sequential_open_count": MCD0_SEQUENTIAL_OPEN_COUNT,
             "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
             "tracker_credit": False,
-            "valid_operation_commands": [],
+            "valid_operation_commands": ["IHK_DEVICE_GET_BUILDID"],
         },
         "provider_lease": {
             "attach_after_ihk_load": True,
@@ -3678,6 +3742,23 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     _validate_runtime_modinfo_boundary(runtime_workflow)
     _validate_runtime_nm_boundary(runtime_workflow)
     _validate_runtime_workflow_provenance_boundary(runtime_workflow)
+    expected_init_render = (
+        '          python3 - <<\'PY\' > "$INITRAMFS_ROOT/init"\n'
+        '          import os\n'
+        '          from pathlib import Path\n'
+        '          import sys\n'
+        '          from scripts.native_rust_runtime_evidence import render_runtime_init\n'
+        '          evidence = Path(os.environ["BUILD_EVIDENCE"])\n'
+        '          release = (evidence / "kernel.release").read_bytes().decode("ascii")\n'
+        '          if not release.endswith("\\n") or release.count("\\n") != 1 or "\\r" in release:\n'
+        '              raise SystemExit("kernel.release must contain one LF-terminated release")\n'
+        '          sys.stdout.buffer.write(render_runtime_init(\n'
+        '              Path.cwd(), evidence / "stage-lock.json", release[:-1]\n'
+        '          ))\n'
+        '          PY\n'
+    )
+    if runtime_workflow.count(expected_init_render) != 1:
+        raise EvidenceError("runtime workflow compatibility build identity rendering differs")
     init = _read_text(_repo_file(repo, inputs["init"], "runtime init"), "runtime init")
     poweroff = _read_text(
         _repo_file(repo, inputs["poweroff"], "runtime poweroff"), "runtime poweroff"
@@ -3841,7 +3922,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         'insmod "$SMP" || { fail reload-ihk-smp-x86-64; exit 1; }',
         'insmod "$MCCTRL" || { fail reload-mcctrl; exit 1; }',
         'record "MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 '
-        'ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok"',
+        'buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok"',
         'rmmod mcctrl || { fail unload-reloaded-mcctrl; exit 1; }',
         'rmmod ihk_smp_x86_64 || { fail unload-reloaded-ihk-smp-x86-64; exit 1; }',
         'rmmod ihk || { fail unload-reloaded-ihk; exit 1; }',
@@ -3862,8 +3943,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "MCD0 NODE status=present dev=$mcd0_dev",
         "MCD0 OPEN_CLOSE mode=sequential count=4 status=ok",
         "MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok",
-        "MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok",
-        "MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok",
+        "MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
+        "MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
         "MCD0 NEGATIVE operation=unload-smp-with-open-file",
         "MCD0 CLOSE phase=after-module-owner-negative status=ok",
         "MCD0 NODE status=removed",
@@ -3886,6 +3967,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "STATE_BEGIN label=$label",
         "DMESG_BEGIN",
         "@EXPECTED_KERNEL_RELEASE@",
+        "@EXPECTED_IHK_BUILD_ID@",
+        'record "MCD0 BUILDID expected=$EXPECTED_IHK_BUILD_ID"',
     ):
         if fragment not in init:
             raise EvidenceError("runtime init lacks evidence marker: {0}".format(fragment))
@@ -3902,6 +3985,11 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     ):
         if init.count(fragment) != 1:
             raise EvidenceError("runtime init mcd0 node identity binding differs")
+    if init.count("readonly EXPECTED_IHK_BUILD_ID=@EXPECTED_IHK_BUILD_ID@") != 1:
+        raise EvidenceError("runtime init compatibility build identity binding differs")
+    for probe in ("MCD0_IOCTL_NATIVE", "MCD0_IOCTL_COMPAT"):
+        if init.count('"${0}" "$EXPECTED_IHK_BUILD_ID"'.format(probe)) != 2:
+            raise EvidenceError("runtime init probe compatibility identity arguments differ")
     active_init = _active_shell_lines(init)
     for teardown_guard in (
         '[ ! -e /dev/mcd0 ] && [ ! -L /dev/mcd0 ] || {',
@@ -3932,6 +4020,41 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "gate_ids": contract["gate"]["gate_ids"],
         "runtime": contract["runtime"],
     }
+
+
+def render_runtime_init(
+    repo: Path, stage_lock_path: Path, kernel_release: str
+) -> bytes:
+    """Render the reviewed guest init using the bound compatibility identity.
+
+    This constructs input bytes only. It does not prove those bytes were packed
+    into an initramfs, executed, or granted any runtime or tracker credit.
+    """
+    if type(kernel_release) is not str or kernel_release != EXPECTED_KERNEL_RELEASE:
+        raise EvidenceError("runtime init kernel release differs from the exact target")
+    stage_raw = _read_regular_evidence_bytes(Path(stage_lock_path), "runtime init stage lock")
+    try:
+        stage, _ = _parse_link_stage_lock_bytes(stage_raw)
+    except LinkClosureError as error:
+        raise EvidenceError("runtime init stage lock is invalid: {0}".format(error)) from error
+    buildid = stage["compatibility_build_identity"]["value"]
+    if type(buildid) is not str or re.fullmatch(r"[A-Za-z0-9.+_-]{1,40}", buildid) is None:
+        raise EvidenceError("runtime init compatibility identity is not a safe scalar")
+    init_path = _repo_file(Path(repo), "scripts/native-rust-runtime-init.sh", "runtime init template")
+    template = _read_regular_evidence_bytes(init_path, "runtime init template")
+    if _sha256_bytes(template) != EXPECTED_RUNTIME_INIT_SHA256:
+        raise EvidenceError("runtime init template identity differs")
+    replacements = (
+        (b"@EXPECTED_KERNEL_RELEASE@", kernel_release.encode("ascii")),
+        (b"@EXPECTED_IHK_BUILD_ID@", buildid.encode("ascii")),
+    )
+    for marker, value in replacements:
+        if template.count(marker) != 1:
+            raise EvidenceError("runtime init template placeholder count differs: {0}".format(marker.decode("ascii")))
+        template = template.replace(marker, value)
+    if re.search(br"@[A-Za-z0-9_]+@", template) is not None:
+        raise EvidenceError("runtime init template contains an unreviewed placeholder")
+    return template
 
 
 def _strict_ascii_lf_lines(path: Path, label: str) -> list[str]:
@@ -4475,6 +4598,7 @@ def _parse_link_stage_lock_bytes(raw: bytes) -> tuple[dict[str, Any], dict[str, 
     _link_closure_module._require_keys(
         value,
         (
+            "compatibility_build_identity",
             "credit_eligible",
             "files",
             "manifest_sha256",
@@ -4556,6 +4680,9 @@ def _parse_link_stage_lock_bytes(raw: bytes) -> tuple[dict[str, Any], dict[str, 
         digests[relative] = digest
     if tuple(normalized) != _link_closure_module.EXPECTED_STAGED_FILES:
         raise LinkClosureError("stage lock staged file set or order differs")
+    _link_closure_module._validate_compatibility_build_identity(
+        value["compatibility_build_identity"], digests
+    )
     return value, digests
 
 
@@ -4574,6 +4701,7 @@ def _validate_kbuild_link_closure_bytes(
     }
     stage_value, stage_digests = _parse_link_stage_lock_bytes(stage_raw)
     stage_binding = {
+        "compatibility_build_identity": stage_value["compatibility_build_identity"],
         "manifest_sha256": stage_value["manifest_sha256"],
         "profile_id": stage_value["profile_id"],
         "schema_version": stage_value["schema_version"],
@@ -4671,6 +4799,9 @@ def _validate_kbuild_link_closure_bytes(
                 "crate_root": module["crate_root"],
                 "final_link_inputs": final_inputs,
                 "final_module": final_target,
+                "generated_metadata_inputs": list(
+                    _link_closure_module._GENERATED_METADATA_DEPENDENCIES[module["name"]]
+                ),
                 "module": module["name"],
                 "module_object": "{0}/{1}".format(
                     _link_closure_module.MODULE_ROOT, module["module_object"]
@@ -4714,6 +4845,14 @@ def _validate_kbuild_link_closure_bytes(
             "object_postprocessor": "./tools/objtool/objtool",
             "project_source": "rustc",
         },
+        "generated_metadata_inputs": [
+            {"path": path, "stage_sha256": stage_digests[path]}
+            for path in _link_closure_module.EXPECTED_GENERATED_METADATA_INPUTS
+        ],
+        "generated_metadata_scope": (
+            "generated NUL-terminated IHK consumer compatibility identity named by "
+            "the SMP rustc dependency record; separate from native source provenance"
+        ),
         "modules": module_results,
         "purpose": "detached compiler and final-link provenance; no runtime or gate credit",
         "raw_record_names": list(EXPECTED_RAW_RECORD_NAMES),
@@ -4907,6 +5046,7 @@ def _validate_phase2_build_evidence(
             "raw_record_count": len(link["raw_record_names"]),
             "sha256": records["kbuild-link-closure.json"],
             "stage_lock_sha256": records["stage-lock.json"],
+            "compatibility_build_identity": link["stage_lock"]["compatibility_build_identity"],
         },
         "kconfig_solver": {
             "claims": matrix["claims"],
@@ -5903,13 +6043,13 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         ),
         (
             "mcd0 native ioctl",
-            "{0} MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok".format(
+            "{0} MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok".format(
                 PROTOCOL
             ),
         ),
         (
             "mcd0 compat ioctl",
-            "{0} MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok".format(
+            "{0} MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok".format(
                 PROTOCOL
             ),
         ),
@@ -6043,6 +6183,13 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
             raise EvidenceError("{0} runtime record differs".format(label))
         return matches[0]
 
+    mcd0_buildid_expression = re.compile(
+        r"^" + re.escape(PROTOCOL) + r" MCD0 BUILDID expected=([A-Za-z0-9.+_-]{1,40})$"
+    )
+    mcd0_buildid_position, mcd0_buildid = unique_regex_line(
+        mcd0_buildid_expression, "mcd0 buildid"
+    )
+    marker_positions["mcd0 buildid"] = mcd0_buildid_position
     mcd0_present_expression = re.compile(
         r"^"
         + re.escape(PROTOCOL)
@@ -6067,7 +6214,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         r"^"
         + re.escape(PROTOCOL)
         + r" MCD0 RELOAD cycle=1 dev=(10:(?:0|[1-9][0-9]*)) "
-        r"open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok$"
+        r"open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok$"
     )
     mcd0_reload_position, mcd0_reload = unique_regex_line(
         mcd0_reload_expression,
@@ -6101,6 +6248,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     )
     exact_protocol_lines = {marker for _label, marker in exact_runtime_markers}
     dynamic_protocol_expressions = (
+        mcd0_buildid_expression,
         mcd0_present_expression,
         mcd0_negative_expression,
         mcd0_reload_expression,
@@ -6148,6 +6296,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         "mcd0 node present",
         "mcd0 sequential",
         "mcd0 overlapping",
+        "mcd0 buildid",
         "mcd0 native ioctl",
         "mcd0 compat ioctl",
         "mcd0 negative",
@@ -6468,6 +6617,10 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
             "capture_can_claim_pass": False,
             "compat_abi": "i386",
             "compat_unknown_ioctl_errno": -22,
+            "compatibility_build_id": mcd0_buildid.group(1),
+            "get_buildid_command": "0x11290b",
+            "get_buildid_fault_errno": -14,
+            "get_buildid_nul_and_guards_observed": True,
             "credit_eligible": False,
             "device_node_identity_match_observed": True,
             "diagnostic_segments": 2,
@@ -6506,7 +6659,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
             "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
             "tracker_credit": False,
             "unknown_ioctl_command": "0xdeadbeef",
-            "valid_ioctl_commands": [],
+            "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
         },
         "negative_unload_status": int(negative_records[0].group(1)),
         "provider_lease": {
@@ -6928,7 +7081,7 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     link = build["kbuild_link_closure"]
     _require_keys(
         link,
-        {"claims", "module_count", "raw_record_count", "sha256", "stage_lock_sha256"},
+        {"claims", "compatibility_build_identity", "module_count", "raw_record_count", "sha256", "stage_lock_sha256"},
         "capture Kbuild link closure",
     )
     if link["claims"] != EXPECTED_LINK_CLAIMS or any(
@@ -6943,6 +7096,17 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         raise EvidenceError("capture Kbuild raw record count differs")
     _require_sha256_value(link["sha256"], "capture Kbuild link digest")
     _require_sha256_value(link["stage_lock_sha256"], "capture stage-lock digest")
+    compatibility_identity = link["compatibility_build_identity"]
+    try:
+        _link_closure_module._validate_compatibility_build_identity(
+            compatibility_identity,
+            {_link_closure_module.COMPATIBILITY_BUILD_ID_PATH: (
+                compatibility_identity.get("sha256")
+                if type(compatibility_identity) is dict else None
+            )},
+        )
+    except _link_closure_module.LinkClosureError as error:
+        raise EvidenceError("capture compatibility build identity differs: {0}".format(error)) from error
 
     runtime = value["runtime"]
     runtime_digests = {
@@ -7007,6 +7171,10 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         "capture_can_claim_pass": False,
         "compat_abi": "i386",
         "compat_unknown_ioctl_errno": -22,
+        "compatibility_build_id": compatibility_identity["value"],
+        "get_buildid_command": "0x11290b",
+        "get_buildid_fault_errno": -14,
+        "get_buildid_nul_and_guards_observed": True,
         "credit_eligible": False,
         "device_node_identity_match_observed": True,
         "diagnostic_segments": 2,
@@ -7041,7 +7209,7 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
         "tracker_credit": False,
         "unknown_ioctl_command": "0xdeadbeef",
-        "valid_ioctl_commands": [],
+        "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
     }
     if not _exact_typed_equal(mcd0, expected_mcd0):
         raise EvidenceError("capture mcd0 runtime summary differs")

@@ -34,6 +34,19 @@ from scripts import native_rust_runtime_evidence as evidence
 KERNEL_RELEASE = "6.12.0-211.44.1.el10_2.mckernel1.x86_64"
 
 
+def compatibility_build_identity():
+    value = "a1b2c3d"
+    return {
+        "bytes": len(value) + 1,
+        "origin": "ihk-git-short-head",
+        "path": "ihk-compat-build-id.bin",
+        "sha256": hashlib.sha256(value.encode("ascii") + b"\0").hexdigest(),
+        "source_rule_path": "ihk/CMakeLists.txt",
+        "source_rule_sha256": "8" * 64,
+        "value": value,
+    }
+
+
 def _valid_serial_lifecycle_only() -> str:
     protocol = evidence.PROTOCOL
     records = [
@@ -212,12 +225,13 @@ def valid_serial() -> str:
     )
     records.extend(
         [
+            f"{protocol} MCD0 BUILDID expected=a1b2c3d",
             acquire,
             release_open,
-            f"{protocol} MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok",
+            f"{protocol} MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
             acquire,
             release_open,
-            f"{protocol} MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok",
+            f"{protocol} MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
             acquire,
             f"{protocol} MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
             f"{protocol} MCD0 NEGATIVE_OUTPUT_BEGIN",
@@ -264,7 +278,7 @@ def valid_serial() -> str:
     records.extend(reload_open_trace)
     records.extend(
         [
-            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok",
+            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok",
             mcctrl_unload,
             f"{protocol} RELOAD_UNLOAD cycle=1 module=mcctrl status=ok",
             evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
@@ -1360,6 +1374,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 ),
                 "config_sha256": digest,
                 "kbuild_link_closure": {
+                    "compatibility_build_identity": compatibility_build_identity(),
                     "claims": copy.deepcopy(evidence.EXPECTED_LINK_CLAIMS),
                     "module_count": 3,
                     "raw_record_count": len(evidence.EXPECTED_RAW_RECORD_NAMES),
@@ -1427,6 +1442,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     "capture_can_claim_pass": False,
                     "compat_abi": "i386",
                     "compat_unknown_ioctl_errno": -22,
+                    "compatibility_build_id": "a1b2c3d",
+                    "get_buildid_command": "0x11290b",
+                    "get_buildid_fault_errno": -14,
+                    "get_buildid_nul_and_guards_observed": True,
                     "credit_eligible": False,
                     "device_node_identity_match_observed": True,
                     "diagnostic_segments": 2,
@@ -1465,7 +1484,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
                     "tracker_credit": False,
                     "unknown_ioctl_command": "0xdeadbeef",
-                    "valid_ioctl_commands": [],
+                    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
                 },
                 "negative_unload_status": 1,
                 "provider_lease": {
@@ -2997,53 +3016,70 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             ),
         )
         for name, source, as_mode, ld_mode, elf_class, machine in cases:
-            with self.subTest(name=name):
-                object_path = self.root / (name + ".o")
-                executable_path = self.root / name
-                # Rocky enables used-ISA notes by default. Force the opposing
-                # setting first to prove our explicit option wins without
-                # weakening the executable's exact section/segment boundary.
-                subprocess.run(
-                    [
-                        str(assembler), as_mode, "-mx86-used-note=yes",
-                        "-mx86-used-note=no", source, "-o", str(object_path),
-                    ],
-                    cwd=str(REPO_ROOT),
-                    check=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-                # Model both configured GNU ld defaults. The workflow must
-                # request the layout required by the strict ELF validator even
-                # when the distribution defaults to -z noseparate-code.
-                for defaults in ([], ["-z", "noseparate-code"]):
-                    with self.subTest(linker_defaults=defaults):
+            for as_default in ("-mx86-used-note=no", "-mx86-used-note=yes"):
+                for ld_default in ("separate-code", "noseparate-code"):
+                    with self.subTest(
+                        name=name, as_default=as_default, ld_default=ld_default
+                    ):
+                        object_path = self.root / (name + ".o")
+                        executable_path = self.root / name
+                        # Explicit workflow flags must override either GNU
+                        # binutils configuration; Rocky emits GNU property
+                        # notes by default, unlike the local Debian toolchain.
                         subprocess.run(
                             [
-                                str(linker),
-                                *defaults,
-                                "-m",
-                                ld_mode,
-                                "-nostdlib",
-                                "-static",
-                                "-s",
-                                "-z",
-                                "noexecstack",
-                                "-z",
-                                "separate-code",
-                                "-o",
-                                str(executable_path),
-                                str(object_path),
+                                str(assembler), as_mode, as_default,
+                                "-mx86-used-note=no", source,
+                                "-o", str(object_path),
+                            ],
+                            cwd=str(REPO_ROOT),
+                            check=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        )
+                        subprocess.run(
+                            [
+                                str(linker), "-z", ld_default,
+                                "-m", ld_mode, "-nostdlib", "-static", "-s",
+                                "-z", "noexecstack", "-z", "separate-code",
+                                "-o", str(executable_path), str(object_path),
                             ],
                             check=True,
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                         )
                         evidence._validate_runtime_probe_elf(
-                            name,
-                            executable_path.read_bytes(),
-                            elf_class,
-                            machine,
+                            name, executable_path.read_bytes(), elf_class, machine
+                        )
+
+    def test_get_buildid_probe_machine_checks_cannot_be_resealed_away(self) -> None:
+        for arch, elf_class, machine in (("x86_64", 2, 62), ("i386", 1, 3)):
+            name = "native-rust-runtime-mcd0-ioctl-" + arch
+            canonical = semantic_probe_elf(name)
+            evidence._validate_runtime_probe_elf(name, canonical, elf_class, machine)
+            cases = (
+                ("get-buildid-request", "0b291100", "0c291100"),
+                ("full-output-comparison", "f3a6", "f3a7"),
+                ("output-guard", "a5a5a5a5", "a4a5a5a5"),
+                ("efault-result", "83f8f2", "83f8ea"),
+                ("unknown-command-result", "83f8ea", "83f8f2"),
+                ("protected-page-check", "f3ae", "f3af"),
+            )
+            for label, before_hex, after_hex in cases:
+                with self.subTest(arch=arch, label=label):
+                    before, after = bytes.fromhex(before_hex), bytes.fromhex(after_hex)
+                    if label == "protected-page-check":
+                        offset = canonical.rfind(before, 0x1000, 0x2000)
+                    else:
+                        offset = canonical.find(before, 0x1000, 0x2000)
+                    self.assertGreaterEqual(offset, 0x1000)
+                    changed = bytearray(canonical)
+                    changed[offset : offset + len(before)] = after
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError, "instruction semantics"
+                    ):
+                        evidence._validate_runtime_probe_elf(
+                            name, bytes(changed), elf_class, machine
                         )
 
     def test_runtime_helper_semantics_contract_is_exact_typed(self) -> None:
@@ -3889,8 +3925,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             f"{protocol} MCD0 NODE status=present dev=10:42",
             f"{protocol} MCD0 OPEN_CLOSE mode=sequential count=4 status=ok",
             f"{protocol} MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok",
-            f"{protocol} MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok",
-            f"{protocol} MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok",
+            f"{protocol} MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
+            f"{protocol} MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
             f"{protocol} MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
             f"{protocol} MCD0 NEGATIVE_OUTPUT_BEGIN",
             f"{protocol} MCD0 NEGATIVE_OUTPUT_END",
@@ -3900,7 +3936,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             f"{protocol} RELOAD_LOAD cycle=1 module=ihk status=ok",
             f"{protocol} RELOAD_LOAD cycle=1 module=ihk_smp_x86_64 status=ok",
             f"{protocol} RELOAD_LOAD cycle=1 module=mcctrl status=ok",
-            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok",
+            f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok",
             f"{protocol} RELOAD_UNLOAD cycle=1 module=mcctrl status=ok",
             f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk_smp_x86_64 status=ok",
             f"{protocol} RELOAD_UNLOAD cycle=1 module=ihk status=ok",
@@ -4860,6 +4896,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "modules": [{}, {}, {}],
             "raw_record_names": [str(index) for index in range(16)],
             "stage_lock": {
+                "compatibility_build_identity": compatibility_build_identity(),
                 "manifest_sha256": "3" * 64,
                 "sha256": records["stage-lock.json"],
             },

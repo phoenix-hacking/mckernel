@@ -265,7 +265,7 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
 
     def test_initramfs_is_local_minimal_and_deterministic(self) -> None:
         for fragment in (
-            "scripts/native-rust-runtime-init.sh",
+            "from scripts.native_rust_runtime_evidence import render_runtime_init",
             "scripts/native-rust-runtime-mcd0-ioctl-x86_64.S",
             "scripts/native-rust-runtime-mcd0-ioctl-i386.S",
             "scripts/native-rust-runtime-poweroff.S",
@@ -314,8 +314,9 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             'MCD0 NODE status=present dev=$mcd0_dev',
             'MCD0 OPEN_CLOSE mode=sequential count=4 status=ok',
             'MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok',
-            'MCD0 IOCTL abi=x86_64 expected_errno=EINVAL status=ok',
-            'MCD0 IOCTL abi=i386 expected_errno=EINVAL status=ok',
+            'MCD0 BUILDID expected=$EXPECTED_IHK_BUILD_ID',
+            'MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok',
+            'MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok',
             'MCD0 NEGATIVE operation=unload-smp-with-open-file status=$mcd0_negative_status',
             'MCD0 CLOSE phase=after-module-owner-negative status=ok',
             'negative_output="$(rmmod ihk 2>&1)"',
@@ -331,7 +332,7 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             'RELOAD_LOAD cycle=1 module=ihk status=ok',
             'RELOAD_LOAD cycle=1 module=ihk_smp_x86_64 status=ok',
             'RELOAD_LOAD cycle=1 module=mcctrl status=ok',
-            'MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 ioctl_x86_64=EINVAL ioctl_i386=EINVAL status=ok',
+            'MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok',
             'RELOAD_UNLOAD cycle=1 module=mcctrl status=ok',
             'RELOAD_UNLOAD cycle=1 module=ihk_smp_x86_64 status=ok',
             'RELOAD_UNLOAD cycle=1 module=ihk status=ok',
@@ -360,8 +361,8 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertIn("[ ! -e /sys/class/misc/mcd0 ]", self.init)
         self.assertEqual(5, self.init.count("[ ! -L /dev/mcd0 ]"))
         self.assertEqual(2, self.init.count("[ ! -L /sys/class/misc/mcd0 ]"))
-        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_NATIVE"'))
-        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_COMPAT"'))
+        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_NATIVE" "$EXPECTED_IHK_BUILD_ID"'))
+        self.assertEqual(2, self.init.count('"$MCD0_IOCTL_COMPAT" "$EXPECTED_IHK_BUILD_ID"'))
         self.assertIn('[ "$references" = 1 ]', self.init)
         self.assertIn('[ "$references" = 0 ]', self.init)
         self.assertEqual(
