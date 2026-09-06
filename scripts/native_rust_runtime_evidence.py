@@ -41,7 +41,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:e17311b690788d1f99bfb3d9e53bf44e1ca64a954226507dd6a24675333dcfea"
+    "ISOLATED_SELF_DIGEST:0d817ed792e4326e612378985d4c2758c10e28cbdeed4514a3c7df642d556a54"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -683,9 +683,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "50f120561a58fcc89a3312c9176979416b1ff27e",
-        "sha256": "8fe63a296e7ce5e93daa297dfdb33a54274ebc0caac800f05c40f10d4c23ccb2",
-        "size": 36590,
+        "git_blob_sha1": "3615a1192707100600079cd766051bddd94660c4",
+        "sha256": "16cac72d13fd7346af2f5b8df35bc8999ea179724497015a5f8a4fabf0da6ab9",
+        "size": 36570,
     },
 }
 EXPECTED_REPOSITORY_HELPER_IDENTITIES = {
@@ -714,7 +714,6 @@ EXPECTED_RUNTIME_REQUIRED_CONFIG = {
         "CONFIG_COMPAT",
         "CONFIG_DEVTMPFS",
         "CONFIG_IA32_EMULATION",
-        "CONFIG_MISC_DEVICES",
         "CONFIG_MODULES",
         "CONFIG_MODULE_UNLOAD",
         "CONFIG_PRINTK",
@@ -5268,8 +5267,12 @@ def _validate_build_workflow_provenance(
         {"event_name", "ref", "repository", "sha", "workflow_ref", "workflow_sha"},
         "exact build caller provenance",
     )
-    if not _is_canonical_positive_decimal(receipt["github_run_id"]) or not (
-        _is_canonical_positive_decimal(receipt["github_run_attempt"])
+    # The sealed build producer serializes validated run IDs as JSON integers.
+    # Runtime CLI identities retain canonical decimal text; keep both schemas
+    # strict and convert only after independently validating the CLI values.
+    if any(
+        type(receipt[field]) is not int or receipt[field] <= 0
+        for field in ("github_run_id", "github_run_attempt")
     ):
         raise EvidenceError("exact build provenance run identity differs")
     if runtime_identity is not None:
@@ -5284,6 +5287,13 @@ def _validate_build_workflow_provenance(
             },
             "runtime identity for build provenance",
         )
+        if any(
+            not _is_canonical_positive_decimal(runtime_identity[field])
+            for field in ("github_run_id", "github_run_attempt")
+        ):
+            raise EvidenceError("runtime identity for build provenance run identity differs")
+        expected_run_id = int(runtime_identity["github_run_id"], 10)
+        expected_run_attempt = int(runtime_identity["github_run_attempt"], 10)
         execution = runtime_identity["execution_workflow"]
         expected_caller = {
             "event_name": execution["github_event_name"],
@@ -5310,9 +5320,8 @@ def _validate_build_workflow_provenance(
             runtime_identity["candidate_sha"] != candidate_sha
             or not _exact_typed_equal(caller, expected_caller)
             or not _exact_typed_equal(defining, expected_defining)
-            or receipt["github_run_id"] != runtime_identity["github_run_id"]
-            or receipt["github_run_attempt"]
-            != runtime_identity["github_run_attempt"]
+            or receipt["github_run_id"] != expected_run_id
+            or receipt["github_run_attempt"] != expected_run_attempt
         ):
             raise EvidenceError("exact build/runtime workflow provenance diverges")
 
@@ -5865,7 +5874,7 @@ def _unique_kernel_diagnostic(
     lines: list[str], body_pattern: str, label: str
 ) -> tuple[int, re.Match[str]]:
     expression = re.compile(
-        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?" + body_pattern + r"$"
+        r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?" + body_pattern + r"$"
     )
     matches = [
         (index, match)
@@ -5882,7 +5891,7 @@ def _kernel_diagnostic_matches(
     lines: list[str], body_pattern: str, label: str, expected_count: int
 ) -> list[tuple[int, re.Match[str]]]:
     expression = re.compile(
-        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?" + body_pattern + r"$"
+        r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?" + body_pattern + r"$"
     )
     matches = [
         (index, match)
@@ -5900,7 +5909,7 @@ def _kernel_diagnostic_matches(
 
 
 def _provider_open_events(lines: list[str]) -> list[tuple[int, str]]:
-    prefix = re.compile(r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?")
+    prefix = re.compile(r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?")
     result = []
     for index, line in enumerate(lines):
         body = prefix.sub("", line, count=1)
@@ -5928,13 +5937,27 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         or "\x85" in text
         or "\u2028" in text
         or "\u2029" in text
-        or any(ord(character) < 32 and character != "\n" for character in text)
+        or any(ord(character) < 32 and character not in "\n\t" for character in text)
         or any(0x7F <= ord(character) <= 0x9F for character in text)
     ):
         raise EvidenceError("serial log contains a noncanonical control character")
     lines = text.split("\n")
+    # These timestamped RCU boot messages contain literal indentation tabs in
+    # the selected kernel and recur in the bounded dmesg copy. Preserve the raw
+    # bytes and permit tabs only in these complete diagnostic forms; native
+    # lifecycle/provider records and protocol records still forbid every tab.
+    rcu_tab_diagnostic = re.compile(
+        r"^\[ *[0-9]+(?:\.[0-9]+)?\] (?:"
+        r"rcu: \t(?:RCU event tracing is enabled\."
+        r"|RCU restricting CPUs from NR_CPUS=[1-9][0-9]{0,8} "
+        r"to nr_cpu_ids=[1-9][0-9]{0,8}\."
+        r"|Max phase no-delay instances is [1-9][0-9]{0,8}\.)"
+        r"|\t(?:Trampoline|Rude|Tracing) variant of Tasks RCU enabled\.)$"
+    )
+    if any("\t" in line and rcu_tab_diagnostic.fullmatch(line) is None for line in lines):
+        raise EvidenceError("serial log contains a noncanonical control character")
     allowed_provider_diagnostic = re.compile(
-        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?(?:"
+        r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?(?:"
         + re.escape(PROVIDER_CALLBACK_INIT_DIAGNOSTIC)
         + r"|"
         + re.escape(PROVIDER_LEASE_ATTACH_DIAGNOSTIC)
@@ -5973,7 +5996,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         ),
     }
     allowed_lifecycle_diagnostic = re.compile(
-        r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?(?:"
+        r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?(?:"
         + "|".join(re.escape(body) for body in lifecycle_bodies.values())
         + r")$"
     )
@@ -6580,7 +6603,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     if lifecycle_positions["ihk unload"][0] >= lifecycle_positions["ihk load"][1]:
         raise EvidenceError("provider reload lifecycle diagnostics are out of order")
 
-    timestamp_prefix = re.compile(r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?")
+    timestamp_prefix = re.compile(r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?")
     exact_lifecycle_bodies = set(lifecycle_bodies.values())
     detach_expression = re.compile(r"^" + PROVIDER_LEASE_DETACH_DIAGNOSTIC_PATTERN + r"$")
 

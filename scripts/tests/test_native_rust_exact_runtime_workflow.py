@@ -330,7 +330,6 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             "CONFIG_COMPAT",
             "CONFIG_DEVTMPFS",
             "CONFIG_IA32_EMULATION",
-            "CONFIG_MISC_DEVICES",
             "CONFIG_MODULES",
             "CONFIG_MODULE_UNLOAD",
             "CONFIG_PRINTK",
@@ -341,6 +340,71 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         ):
             self.assertIn(symbol, self.workflow)
         self.assertIn("# CONFIG_MODULE_SIG_FORCE is not set", self.workflow)
+
+    @unittest.skipUnless(shutil.which("bash") and shutil.which("grep"), "bash and grep required")
+    def test_config_preflight_accepts_captured_linux_612_misc_core(self) -> None:
+        # The pinned Rocky archive has no MISC_DEVICES Kconfig symbol. Its
+        # drivers/char/Makefile unconditionally includes misc.o (member SHA256
+        # 54bef22a9ad2ea1e0bb5ce9783138b5501d003f603c588e331b094d445589c64).
+        # This literal excerpt is from the actual 065b1792 build's config,
+        # full SHA256 106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474;
+        # it is deliberately not generated from the workflow's symbol list.
+        source_lock = yaml.safe_load(
+            (REPO_ROOT / "host-kernel/rocky/source-lock.json").read_text()
+        )
+        archive = next(
+            record for record in source_lock["embedded_objects"]
+            if record["role"] == "Rocky-derived Linux source archive"
+        )
+        self.assertEqual(
+            "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+            archive["sha256"],
+        )
+        captured_config = """CONFIG_BLK_DEV_INITRD=y
+CONFIG_RD_GZIP=y
+CONFIG_PRINTK=y
+CONFIG_IA32_EMULATION=y
+CONFIG_COMPAT=y
+CONFIG_MODULES=y
+CONFIG_MODULE_UNLOAD=y
+# CONFIG_MODULE_SIG_FORCE is not set
+CONFIG_BINFMT_ELF=y
+CONFIG_DEVTMPFS=y
+CONFIG_SERIAL_8250=y
+CONFIG_SERIAL_8250_CONSOLE=y
+CONFIG_PROC_FS=y
+CONFIG_SYSFS=y
+"""
+        steps = yaml.safe_load(self.workflow)["jobs"]["exact-runtime"]["steps"]
+        verification = next(
+            step["run"] for step in steps
+            if step.get("name") == "Verify immutable build inputs and native module link contracts"
+        )
+        start = verification.index("for symbol in \\\n")
+        end = verification.index("/usr/bin/env -i ", start)
+        preflight = verification[start:end]
+        cases = [("captured", captured_config, True)]
+        for symbol in ("CONFIG_IA32_EMULATION", "CONFIG_DEVTMPFS", "CONFIG_MODULE_UNLOAD"):
+            cases.append((symbol, captured_config.replace(symbol + "=y", symbol + "=n"), False))
+        cases.append((
+            "forced-signatures",
+            captured_config.replace("# CONFIG_MODULE_SIG_FORCE is not set", "CONFIG_MODULE_SIG_FORCE=y"),
+            False,
+        ))
+        with tempfile.TemporaryDirectory() as temporary:
+            for label, config, accepted in cases:
+                with self.subTest(label=label):
+                    (Path(temporary) / "resolved.config").write_text(config, encoding="ascii")
+                    result = subprocess.run(
+                        [shutil.which("bash"), "--noprofile", "--norc", "-euo", "pipefail"],
+                        input=preflight + "printf '%s\\n' config-ready\n",
+                        text=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        env={"BUILD_EVIDENCE": temporary, "PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"},
+                    )
+                    self.assertEqual(accepted, result.returncode == 0, result.stderr)
+                    self.assertEqual("config-ready\n" if accepted else "", result.stdout)
 
     def test_initramfs_is_local_minimal_and_deterministic(self) -> None:
         for fragment in (

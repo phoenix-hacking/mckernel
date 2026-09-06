@@ -526,6 +526,66 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             self.write_serial(serial.replace("\n", "\r\n")), KERNEL_RELEASE
         )
 
+    def test_observed_rcu_boot_tabs_are_preserved_and_accepted(self) -> None:
+        # Exact six HT-containing messages from local replay of published
+        # 065b1792; the raw serial SHA256 is
+        # f99f68c78720396e2908ff506a88aa5b2da373d71a29d8e44eac7f126369bded.
+        rows = (
+            "[    0.096749] rcu: \tRCU event tracing is enabled.",
+            "[    0.096769] rcu: \tRCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.",
+            "[    0.096895] \tTrampoline variant of Tasks RCU enabled.",
+            "[    0.096902] \tRude variant of Tasks RCU enabled.",
+            "[    0.096908] \tTracing variant of Tasks RCU enabled.",
+            "[    0.503279] rcu: \tMax phase no-delay instances is 400.",
+        )
+        boot = "\n".join(rows) + "\n"
+        serial = boot + valid_serial().replace(
+            evidence.PROTOCOL + " DMESG_BEGIN\n",
+            evidence.PROTOCOL + " DMESG_BEGIN\n" + boot,
+            1,
+        )
+        for newline in ("\n", "\r\n"):
+            with self.subTest(newline=newline):
+                raw = serial.replace("\n", newline).encode("ascii")
+                path = self.root / "rcu-tabs.log"
+                path.write_bytes(raw)
+                result = evidence.validate_serial(path, KERNEL_RELEASE)
+                self.assertEqual(path.read_bytes(), raw)
+                self.assertEqual(result["serial_sha256"], hashlib.sha256(raw).hexdigest())
+
+    def test_tabs_remain_forbidden_in_protocol_and_native_diagnostics(self) -> None:
+        protocol = evidence.PROTOCOL
+        native = "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+        provider = evidence.PROVIDER_OPEN_ACQUIRE_DIAGNOSTIC
+        rows = (
+            protocol + "\tBEGIN",
+            protocol + " BEGIN\t",
+            "\t" + protocol + " BEGIN",
+            native.replace(" ", "\t", 1),
+            "[\t1.0] " + native,
+            "[ 1.0]\t" + native,
+            "[ 1.0] \t" + native,
+            "[ 1.0] \t" + provider,
+            "[ 1.0] rcu: \t" + native,
+            "[ 1.0] rcu: \tRCU event tracing is enabled.\t",
+            "[ 1.0] rcu:\tRCU event tracing is enabled.",
+            "[ 1.0] rcu: \tRCU event tracing is enabled. extra",
+            "[ 1.0] rcu: \tRCU restricting CPUs from NR_CPUS=01 to nr_cpu_ids=2.",
+            "[ 1.0] rcu: \tRCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=0.",
+            "[ 1.0] rcu: \tMax phase no-delay instances is 1000000000.",
+            "rcu: \tRCU event tracing is enabled.",
+            "[ 1.0] \tUnknown variant of Tasks RCU enabled.",
+        )
+        for row in rows:
+            with self.subTest(row=row):
+                with self.assertRaisesRegex(evidence.EvidenceError, "noncanonical control"):
+                    evidence.validate_serial(self.write_serial(row + "\n" + valid_serial()), KERNEL_RELEASE)
+        for control in ("\0", "\x1b", "\v", "\f", "\r", "\x7f", "\x85"):
+            with self.subTest(control=repr(control)):
+                row = "[ 1.0] rcu: \tRCU event tracing is enabled" + control + ".\n"
+                with self.assertRaisesRegex(evidence.EvidenceError, "noncanonical control"):
+                    evidence.validate_serial(self.write_serial(row + valid_serial()), KERNEL_RELEASE)
+
     def test_runtime_tool_replay_ignores_hostile_path_and_loader_environment(self) -> None:
         hostile = self.root / "hostile-bin"
         hostile.mkdir()
@@ -1747,8 +1807,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     "workflow_sha": execution["job_workflow_sha"],
                 },
                 "direct_workflow_dispatch": False,
-                "github_run_attempt": identity["github_run_attempt"],
-                "github_run_id": identity["github_run_id"],
+                "github_run_attempt": int(identity["github_run_attempt"], 10),
+                "github_run_id": int(identity["github_run_id"], 10),
                 "schema_version": 1,
                 "workflow_file_bytes_equal": True,
             }
@@ -1768,6 +1828,35 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         evidence._validate_build_workflow_provenance(
             directory, records, identity["candidate_sha"], identity
         )
+        for field in ("github_run_id", "github_run_attempt"):
+            for invalid in (True, False, 1.0, "1", "01", 0, -1, None, [], {}):
+                with self.subTest(receipt_field=field, invalid=invalid):
+                    directory, receipt, records = fixture()
+                    receipt[field] = invalid
+                    raw = evidence._canonical_bytes(receipt)
+                    (directory / "workflow-provenance.json").write_bytes(raw)
+                    records["workflow-provenance.json"] = hashlib.sha256(raw).hexdigest()
+                    for expected_identity in (None, identity):
+                        with self.assertRaisesRegex(evidence.EvidenceError, "run identity differs"):
+                            evidence._validate_build_workflow_provenance(
+                                directory, records, identity["candidate_sha"], expected_identity
+                            )
+            directory, receipt, records = fixture()
+            changed_identity = copy.deepcopy(identity)
+            changed_identity[field] = str(receipt[field] + 1)
+            with self.assertRaisesRegex(evidence.EvidenceError, "workflow provenance diverges"):
+                evidence._validate_build_workflow_provenance(
+                    directory, records, identity["candidate_sha"], changed_identity
+                )
+            for invalid in (True, False, 1, 1.0, "+1", "01", "0", "-1", "1\n", " 1", "١", None):
+                with self.subTest(runtime_field=field, invalid=invalid):
+                    changed_identity = copy.deepcopy(identity)
+                    changed_identity[field] = invalid
+                    with self.assertRaisesRegex(evidence.EvidenceError, "run identity differs"):
+                        evidence._validate_build_workflow_provenance(
+                            directory, records, identity["candidate_sha"], changed_identity
+                        )
+
         for mutation in (
             "receipt-whitespace",
             "executed-bytes",
@@ -1821,6 +1910,58 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                         identity["candidate_sha"],
                         identity,
                     )
+
+    def test_actual_build_provenance_producer_receipt_is_accepted(self) -> None:
+        from scripts.tests.test_native_rust_exact_build_workflow import (
+            NativeRustExactBuildWorkflowTests,
+            PROVENANCE_WORKFLOW_PATH,
+            provenance_python_source,
+        )
+
+        producer = NativeRustExactBuildWorkflowTests()
+        root = self.root / "actual-producer"
+        root.mkdir()
+        repository, _candidate, _defining = producer.make_provenance_repository(root)
+        workflow = (REPO_ROOT / PROVENANCE_WORKFLOW_PATH).read_bytes()
+        (repository / PROVENANCE_WORKFLOW_PATH).write_bytes(workflow)
+        producer.provenance_git(repository, "add", "--", PROVENANCE_WORKFLOW_PATH)
+        producer.provenance_git(repository, "commit", "-q", "-m", "exact workflow")
+        candidate = producer.provenance_git(repository, "rev-parse", "HEAD")
+        environment, directory = producer.provenance_environment(
+            root, repository, candidate, candidate
+        )
+        # Exact values observed in the immutable 065b1792 native build artifact;
+        # the real workflow producer determines the serialized JSON types.
+        environment["GITHUB_RUN_ID"] = "34022313568"
+        environment["GITHUB_RUN_ATTEMPT"] = "1"
+        completed = producer.run_provenance_source(
+            provenance_python_source(workflow.decode("utf-8")), environment, directory
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8"))
+        receipt = json.loads((directory / "workflow-provenance.json").read_bytes())
+        for field, expected in (("github_run_id", 34022313568), ("github_run_attempt", 1)):
+            self.assertIs(type(receipt[field]), int)
+            self.assertEqual(receipt[field], expected)
+        records = {
+            name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+            for name in ("workflow-provenance.json", "executed-build-workflow.yml")
+        }
+        identity = {
+            "candidate_sha": candidate,
+            "github_repository": environment["PROVENANCE_CALLER_REPOSITORY"],
+            "github_run_id": environment["GITHUB_RUN_ID"],
+            "github_run_attempt": environment["GITHUB_RUN_ATTEMPT"],
+            "execution_workflow": {
+                "github_event_name": environment["PROVENANCE_CALLER_EVENT_NAME"],
+                "github_ref": environment["PROVENANCE_CALLER_REF"],
+                "github_sha": environment["PROVENANCE_CALLER_SHA"],
+                "github_workflow_ref": environment["PROVENANCE_CALLER_WORKFLOW_REF"],
+                "github_workflow_sha": environment["PROVENANCE_CALLER_WORKFLOW_SHA"],
+                "job_workflow_sha": environment["PROVENANCE_DEFINING_WORKFLOW_SHA"],
+            },
+        }
+        evidence._validate_build_workflow_provenance(directory, records, candidate)
+        evidence._validate_build_workflow_provenance(directory, records, candidate, identity)
 
     def test_runtime_module_symbol_graph_contract_is_exact(self) -> None:
         mutations = (
@@ -2701,12 +2842,46 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         ):
             evidence.validate_contract(repo)
 
+    def test_captured_native_config_has_no_misc_devices_boolean(self) -> None:
+        # Literal required rows from the actual 065b1792 resolved.config:
+        # 106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474.
+        # The pinned SRPM's 1852 Kconfig members contain no MISC_DEVICES symbol;
+        # drivers/char/Makefile links misc.o unconditionally (obj-y).
+        captured = (
+            "CONFIG_BINFMT_ELF=y\n"
+            "CONFIG_BLK_DEV_INITRD=y\n"
+            "CONFIG_COMPAT=y\n"
+            "CONFIG_DEVTMPFS=y\n"
+            "CONFIG_IA32_EMULATION=y\n"
+            "CONFIG_MODULES=y\n"
+            "CONFIG_MODULE_UNLOAD=y\n"
+            "CONFIG_PRINTK=y\n"
+            "CONFIG_PROC_FS=y\n"
+            "CONFIG_RD_GZIP=y\n"
+            "CONFIG_SERIAL_8250=y\n"
+            "CONFIG_SERIAL_8250_CONSOLE=y\n"
+            "CONFIG_SYSFS=y\n"
+            "# CONFIG_MODULE_SIG_FORCE is not set\n"
+            "CONFIG_MCKERNEL_IHK_RUST=m\n"
+            "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m\n"
+            "CONFIG_MCKERNEL_MCCTRL_RUST=m\n"
+        )
+        path = self.root / "captured-required.config"
+        path.write_text(captured, encoding="ascii")
+        required = evidence.EXPECTED_RUNTIME_REQUIRED_CONFIG
+        self.assertNotIn("CONFIG_MISC_DEVICES", required["enabled"])
+        self.assertEqual(evidence._validate_resolved_config(path, required), required)
+        for symbol in required["enabled"]:
+            with self.subTest(symbol=symbol):
+                path.write_text(captured.replace(symbol + "=y\n", ""), encoding="ascii")
+                with self.assertRaisesRegex(evidence.EvidenceError, "lacks required built-in"):
+                    evidence._validate_resolved_config(path, required)
+
     def test_mcd0_runtime_kernel_prerequisites_are_exact_and_required(self) -> None:
         symbols = (
             "CONFIG_COMPAT",
             "CONFIG_DEVTMPFS",
             "CONFIG_IA32_EMULATION",
-            "CONFIG_MISC_DEVICES",
         )
         for symbol in symbols:
             with self.subTest(symbol=symbol, source="contract"):
