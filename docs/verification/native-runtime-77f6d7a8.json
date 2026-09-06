@@ -1,0 +1,1001 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": 9989249628,
+      "bytes": 6635079,
+      "expires_at": "2026-10-06T12:25:48Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "native-rust-exact-runtime-34031532341-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532341,
+      "scope": "Original downloaded artifact and public runtime/build evidence validation; no independent kernel recompilation claim.",
+      "sha256": "043bb0dcf28b77d78963ac1d6204c836dce788168d2527f1e9554f2f1375ec6c"
+    },
+    {
+      "artifact_id": 9989235748,
+      "bytes": 662363,
+      "expires_at": "2026-10-06T12:24:56Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "rk006-full-source-build-capture-34031532341-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532341,
+      "scope": "outer identity, safe paths and CRC; CI semantic outcome recorded separately",
+      "sha256": "c80cc79e9f40123f45021db24e83b5101d049c08f663575d6a1698092fa903b9"
+    },
+    {
+      "artifact_id": 9989215745,
+      "bytes": 20652,
+      "expires_at": "2026-10-06T12:23:41Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "fp0006-native-rust-source-fixture-34031532341-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532341,
+      "scope": "outer identity, safe paths and CRC; CI semantic outcome recorded separately",
+      "sha256": "19956c89e47b08c46fe8abb8911bab805b6fdedb9e0979fc5f592b614ea2150a"
+    },
+    {
+      "artifact_id": 9989193504,
+      "bytes": 23372229,
+      "expires_at": "2026-10-06T12:22:12Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "native-rust-exact-build-34031532341-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532341,
+      "scope": "Original downloaded artifact and public runtime/build evidence validation; no independent kernel recompilation claim.",
+      "sha256": "30e16b2b32fa2753a2d7f776e1cfe365da6234f6d92a9e82f9c61decaee4217c"
+    },
+    {
+      "artifact_id": 9989099184,
+      "bytes": 434079,
+      "expires_at": "2026-12-05T11:53:42Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "hosted-rocky-boot-34031532066-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532066,
+      "scope": "legacy guest receipts and checksums; guest image bytes absent",
+      "sha256": "fc49a728469d2c7dd7008416c4fb08c2a90460145042af91fbc1e63d3eb2eedc"
+    },
+    {
+      "artifact_id": 9988971268,
+      "bytes": 16738587,
+      "expires_at": "2026-10-06T12:07:40Z",
+      "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+      "local_outer_identity_verified": true,
+      "name": "rocky-rust-build-34031532066-1",
+      "repository": "phoenix-hacking/mckernel",
+      "run_attempt": 1,
+      "run_id": 34031532066,
+      "scope": "seven companion build products; image differs from guest record",
+      "sha256": "2386a4e1ad2c62152cb430336a652d7b853a72226417e1756a29390d6d4f411c"
+    }
+  ],
+  "candidate": {
+    "commit": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+    "implementation_branch": "codex/rocky-rust-validation",
+    "implementation_head_held_fixed": true,
+    "local_test_commit": "92dc65dac6f73c4b1fff58319de9890df6a496d0",
+    "repository": "phoenix-hacking/mckernel",
+    "tested_tree_equals_published_tree": true,
+    "tree": "ca22ecde5b50246ecb045f86890885009f1414fa"
+  },
+  "ci": {
+    "metadata_refs": [
+      "native_ci",
+      "native_pr_retry",
+      "secondary_ci"
+    ],
+    "native_pr": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "compile_and_rk006": "success",
+          "conclusion": "failure",
+          "diagnostic": "DNF Error downloading packages: No URLs in mirrorlist",
+          "failed_job_id": 101485006858,
+          "failed_step": 3,
+          "failure_ref": "original_pr_fixture_failure"
+        },
+        {
+          "attempt": 2,
+          "compile_and_rk006_carried_forward": true,
+          "conclusion": "success",
+          "only_failed_job_rerun": true,
+          "package_pins_changed": false,
+          "retried_job_id": 101485589694,
+          "retry_ref": "native_pr_retry"
+        }
+      ],
+      "run_id": 34031532103
+    },
+    "native_push": {
+      "conclusion": "success",
+      "run_attempt": 1,
+      "run_id": 34031530224,
+      "scope": "compile, FP fixture and RK006"
+    },
+    "native_runtime": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "conclusion": "success",
+          "id": 101481824032,
+          "log_ref": "native_job_101481824032",
+          "name": "Capture exact lifecycle in QEMU (credit forbidden) / Produce exact kernel and modules (credit forbidden) / Compile three native modules (credit forbidden)"
+        },
+        {
+          "conclusion": "success",
+          "id": 101485631477,
+          "log_ref": "native_job_101485631477",
+          "name": "Capture exact lifecycle in QEMU (credit forbidden) / Produce exact kernel and modules (credit forbidden) / Capture FP-0006 native Rust fixture (credit forbidden)"
+        },
+        {
+          "conclusion": "success",
+          "id": 101485631646,
+          "log_ref": "native_job_101485631646",
+          "name": "Capture exact lifecycle in QEMU (credit forbidden) / Produce exact kernel and modules (credit forbidden) / Bind RK-006 full-source replay to the exact build (credit forbidden)"
+        },
+        {
+          "conclusion": "success",
+          "id": 101485997780,
+          "log_ref": "native_job_101485997780",
+          "name": "Capture exact lifecycle in QEMU (credit forbidden) / Capture exact QEMU lifecycle (technical-capture-unreviewed; credit=forbidden)"
+        }
+      ],
+      "run_attempt": 1,
+      "run_id": 34031532341
+    },
+    "secondary_job_log_ledger": [
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823185.log"
+          }
+        ],
+        "bytes": 79450,
+        "conclusion": "failure",
+        "job_id": 101481823185,
+        "path": "current-verification-logs/job-101481823185.log",
+        "run_id": 34031532098,
+        "sha256": "79e26a3289d986017b189e1624bc237dadebdd166e20bbe7a9abb094c1bbece6"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823367.log"
+          }
+        ],
+        "bytes": 45234,
+        "conclusion": "success",
+        "job_id": 101481823367,
+        "path": "current-verification-logs/job-101481823367.log",
+        "run_id": 34031532051,
+        "sha256": "c7de308d1d080f1bf8cbb65a738a83e56789922138d193d82f5629728a2ec857"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823528.log"
+          }
+        ],
+        "bytes": 49767,
+        "conclusion": "failure",
+        "job_id": 101481823528,
+        "path": "current-verification-logs/job-101481823528.log",
+        "run_id": 34031532051,
+        "sha256": "11df98544cca68487577a59216d03a65b13afa6071d9a2a9517084982eca9afb"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823263.log"
+          }
+        ],
+        "bytes": 562664,
+        "conclusion": "success",
+        "job_id": 101481823263,
+        "path": "current-verification-logs/job-101481823263.log",
+        "run_id": 34031532091,
+        "sha256": "23e7f73b4704d43b7db8886f55331165f6d99a712d842288f8b9f14628024d2c"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823163.log"
+          }
+        ],
+        "bytes": 182679,
+        "conclusion": "success",
+        "job_id": 101481823163,
+        "path": "current-verification-logs/job-101481823163.log",
+        "run_id": 34031532099,
+        "sha256": "03fb06776adc2e4ba8e7770190b9f8b60253c95d145261da29b3315cc58a4847"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823160.log"
+          }
+        ],
+        "bytes": 180612,
+        "conclusion": "success",
+        "job_id": 101481823160,
+        "path": "current-verification-logs/job-101481823160.log",
+        "run_id": 34031532056,
+        "sha256": "2471e639b989040df995d5036eb679484bfe69259e900db432384fbd998b6088"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823094.log"
+          }
+        ],
+        "bytes": 433148,
+        "conclusion": "success",
+        "job_id": 101481823094,
+        "path": "current-verification-logs/job-101481823094.log",
+        "run_id": 34031532066,
+        "sha256": "9d5faae0081588dedaa26126899aecc96e108a371a29f7290aa306d2213f6220"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481823066.log"
+          }
+        ],
+        "bytes": 92239,
+        "conclusion": "success",
+        "job_id": 101481823066,
+        "path": "current-verification-logs/job-101481823066.log",
+        "run_id": 34031532062,
+        "sha256": "47d94a4c8981f039824cbbd08590f6be1e5765d00e2e25a430bdae5cd495b196"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101481817772.log"
+          }
+        ],
+        "bytes": 562657,
+        "conclusion": "success",
+        "job_id": 101481817772,
+        "path": "current-verification-logs/job-101481817772.log",
+        "run_id": 34031530225,
+        "sha256": "4576d5d1aee9c4ce71f7621f7ec19ad66cd8bf83f2f0c2883e3c8e2888cd4a02"
+      },
+      {
+        "archive_locations": [
+          {
+            "member": "official-job-logs/job-101483648235.log"
+          }
+        ],
+        "bytes": 570962,
+        "conclusion": "success",
+        "job_id": 101483648235,
+        "path": "current-verification-logs/job-101483648235.log",
+        "run_id": 34031532066,
+        "sha256": "26bacd01f73674b2657c9d5c4da18c840a22dbd6171ee1f3f333244b61993e4b"
+      }
+    ],
+    "secondary_qualifications": {
+      "config_captures": "successful, noncrediting",
+      "license_inventory": "ran successfully; all 115268 classifications remain unresolved",
+      "snapshot_offline_replay": "skipped despite successful wrapper workflow"
+    },
+    "secondary_workflows": [
+      {
+        "conclusion": "failure",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rocky 10.2 kernel platform evidence",
+        "run_id": 34031532098,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:54:31Z"
+      },
+      {
+        "conclusion": "failure",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rocky 10.2 kernel source evidence",
+        "run_id": 34031532051,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:55:57Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Final push completion tracker",
+        "run_id": 34031532091,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:56:59Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rocky 10.2 deterministic kernel config resolution v2",
+        "run_id": 34031532099,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:57:15Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rocky 10.2 deterministic kernel config resolution",
+        "run_id": 34031532056,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:59:13Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rust x86_64 validation",
+        "run_id": 34031532066,
+        "status": "completed",
+        "updated_at": "2026-09-06T12:16:01Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "pull_request",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Rocky 10.2 snapshot-backed RPM closure and offline replay",
+        "run_id": 34031532062,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:54:14Z"
+      },
+      {
+        "conclusion": "success",
+        "event": "push",
+        "head_sha": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+        "name": "Final push completion tracker",
+        "run_id": 34031530225,
+        "status": "completed",
+        "updated_at": "2026-09-06T11:56:50Z"
+      }
+    ]
+  },
+  "claims": {
+    "fully_functioning_native_os": false,
+    "gate_credit_awarded": false,
+    "gate_pass": false,
+    "production_ready": false,
+    "release_ready": false,
+    "tracker_changed": false,
+    "tracker_percent": 3.5,
+    "tracker_points": 350,
+    "tracker_total_points": 10000
+  },
+  "compatibility": {
+    "checksum_closure": {
+      "fp_envelope_rows": 9,
+      "guest_manifest_rows": 24,
+      "nested_guest_files": 26,
+      "observation_rows": 6,
+      "zip_regular_members": 42
+    },
+    "companion_image": {
+      "elf": "ELF64 little-endian x86_64 ET_EXEC",
+      "entry": "0xfffffffffe845de0",
+      "path": "/workspace/scratch/b84a595d190b/native-artifact-retrieval/77f6-compatibility-build/products/kernel/mckernel.img",
+      "sha256": "68d7f6e7dbac77451e0fb97bcce1c0514b754e0a7d40f77ba6340f101baa230e",
+      "size": 7937976
+    },
+    "companion_ref": "compatibility_products_review",
+    "conclusion": "success",
+    "fp0006": {
+      "claims_all_false": true,
+      "current_matching_guard_path_reached_capture_without_shell_errors": true,
+      "gate_credit": false,
+      "preflight_execution_provenance_validated": false,
+      "preflight_shell_hash_guard_errors": [],
+      "result_authority": "required-missing",
+      "workflow_candidate_aligned": false,
+      "workflow_sha": "ebf48854d4882d4a336d96536c4ec67edeb1e4b2"
+    },
+    "guest_and_companion_same_image_bytes_proven": false,
+    "guest_image_bytes_present": false,
+    "guest_recorded_image_sha256": "af06d3a87530315204a027353f9d60c011b3ca0118280b1b4a2cafe70bd1fd89",
+    "job_id": 101483648235,
+    "limitations": [
+      "The McKernel image SHA is a checksum-bound captured product record; image bytes are not included in this artifact.",
+      "This review corroborates the legacy Rocky 8.10 guest only and makes no native McKernel image boot claim.",
+      "Cleanup proof is the captured successful guest and host validation receipts; a separate post-restore IRQ table is not retained.",
+      "Independent FP-0006 result authority remains missing and every existing credit claim remains false.",
+      "The separately rehashed companion build image differs from the checksum-bound guest image record; no same-image claim is made.",
+      "The repaired matching hash-guard path completed without shell diagnostics; this does not replace missing independent FP result authority."
+    ],
+    "observed_scope": "Legacy Rocky 8.10 guest boot, four mcexec workloads/eight deterministic markers, clean source-policy fatal scans, guest/host cleanup receipts and backing-image preservation.",
+    "review_ref": "compatibility_archive_review",
+    "run_id": 34031532066
+  },
+  "compiler_identity": {
+    "authenticated_packages": 6,
+    "authenticated_regular_payload_files": 454,
+    "authenticated_symlink_targets": 380,
+    "common_manifest_compiler_identity_gap_closed": false,
+    "dynamic_execution_dependency_closure_verified": false,
+    "limitations": [
+      "Authenticated package payload identity is reconstructed from retained RPM bytes; it does not prove the original b427 or77 CI processes executed these exact files.",
+      "The selected compiler drivers use shared libraries; package file records are included, but this is not a resolved dynamic runtime dependency closure.",
+      "Symlink identities are verified against signed RPMFILELINKTOS and actual CPIO link bytes; RPMFILEDIGESTS is empty for symlinks.",
+      "No compiler, linker, or package installation was executed, and no historical gate credit is asserted."
+    ],
+    "observed_ci_executed_compiler_file_hashes": false,
+    "packages_installed": false,
+    "payload_executed": false,
+    "prior_parser_failure_ref": "compiler_payload_first_attempt",
+    "ref": "compiler_payload_review"
+  },
+  "durable_archive": {
+    "acceptance_record": {
+      "local_metadata_applied": true,
+      "scope": "Archive storage and local exact-byte/191-member roundtrip verification only; no gate or release acceptance.",
+      "upload_status": "succeeded"
+    },
+    "accepted": true,
+    "access": "Owner-authorized access; this is not a public sharing URL.",
+    "bytes": 64971312,
+    "file_id": "file_00000000b7d081f7b863c440781b5bd5",
+    "library_file_id": "libfile_f6cd430915688191b80eaec734dbb297",
+    "member_count": 191,
+    "member_manifest_sha256": "8d8d18466c0b41bb1ff73974852f020e4e06da2af8bbd8ed091576eeabecd0f0",
+    "provider": "ChatGPT Library",
+    "retention_policy": "Owner-controlled persistent file; no fixed retention duration is claimed.",
+    "sha256": "ee80a42e0a57fef985d03f39e8d1477da460a1eaaa42a3d52fa397100e011f05",
+    "status": "stored-and-byte-manifest-verified",
+    "uri": "https://chatgpt.com/api/library/files/libfile_f6cd430915688191b80eaec734dbb297/download",
+    "version": 0
+  },
+  "evidence_files": {
+    "build_archive": {
+      "archive_locations": [
+        {
+          "member": "original-archives/native-rust-exact-build-34031532341-1.zip"
+        }
+      ],
+      "bytes": 23372229,
+      "path": "native-artifact-retrieval/native-rust-exact-build-34031532341-1.zip",
+      "sha256": "30e16b2b32fa2753a2d7f776e1cfe365da6234f6d92a9e82f9c61decaee4217c"
+    },
+    "build_outer_review": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-initial-artifact-outer-review.json"
+        }
+      ],
+      "bytes": 760,
+      "path": "current-verification-logs/77f6-initial-artifact-outer-review.json",
+      "sha256": "51546051e247c67bf0fe472d255623c2ea539e0cb473bf6f8869f56dffda213c"
+    },
+    "compatibility_archive_review": {
+      "archive_locations": [
+        {
+          "member": "review/current-77f6-compatibility-archive-review.json"
+        }
+      ],
+      "bytes": 45240,
+      "path": "current-verification-logs/current-77f6-compatibility-archive-review.json",
+      "sha256": "eb2d6b1351ba877d8db1054e4b5694f34849cca6424614413ce19f362f052255"
+    },
+    "compatibility_build_outer_review": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-compatibility-build-outer-review.json"
+        }
+      ],
+      "bytes": 7482,
+      "path": "current-verification-logs/77f6-compatibility-build-outer-review.json",
+      "sha256": "379998a03ea096121e80a61cafeea732bba47e395c04e9800a7f611c462f9601"
+    },
+    "compatibility_products_review": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-compatibility-products-review.json"
+        }
+      ],
+      "bytes": 4010,
+      "path": "current-verification-logs/77f6-compatibility-products-review.json",
+      "sha256": "75f435d3af93d2818552d662a34f6a06d57ee99ecd0fefe3ca752bddda85ebe4"
+    },
+    "compiler_payload_first_attempt": {
+      "archive_locations": [
+        {
+          "member": "review/rocky-compiler-payload-identities.first-attempt.json"
+        }
+      ],
+      "bytes": 185,
+      "path": "current-verification-logs/rocky-compiler-payload-identities.first-attempt.json",
+      "sha256": "1e69b5365dd5b99c83eb89347e2f2154b468b978841218dc600a368843cb7d07"
+    },
+    "compiler_payload_review": {
+      "archive_locations": [
+        {
+          "member": "review/rocky-compiler-payload-identities.json"
+        }
+      ],
+      "bytes": 804693,
+      "path": "current-verification-logs/rocky-compiler-payload-identities.json",
+      "sha256": "ba8bcc6af97ccca47498ce716c0c856b902933d94a38c5d4d43ff67654382da2"
+    },
+    "hosted_test_pr_log": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101481823263.log"
+        }
+      ],
+      "bytes": 562664,
+      "path": "current-verification-logs/job-101481823263.log",
+      "sha256": "23e7f73b4704d43b7db8886f55331165f6d99a712d842288f8b9f14628024d2c"
+    },
+    "hosted_test_push_log": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101481817772.log"
+        }
+      ],
+      "bytes": 562657,
+      "path": "current-verification-logs/job-101481817772.log",
+      "sha256": "4576d5d1aee9c4ce71f7621f7ec19ad66cd8bf83f2f0c2883e3c8e2888cd4a02"
+    },
+    "initramfs_review": {
+      "archive_locations": [
+        {
+          "member": "initramfs-review/77f6-initramfs-review.json"
+        }
+      ],
+      "bytes": 20409,
+      "path": "current-verification-logs/77f6-initramfs-review/77f6-initramfs-review.json",
+      "sha256": "9065cb8459f01111c5e0b93fab72cc6c3ddcc475212342e1eb457c666b6d7d99"
+    },
+    "local_test_log": {
+      "archive_locations": [
+        {
+          "member": "repair-verification/local-rust-1.92-suite-bound-capture-closeout.log"
+        }
+      ],
+      "bytes": 448680,
+      "path": "current-verification-logs/local-rust-1.92-suite-bound-capture-closeout.log",
+      "sha256": "d7b73212cc245da26c4d9aff027ca9ee21b14563d4ab8414837027d1ce10cf3d"
+    },
+    "local_tests": {
+      "archive_locations": [
+        {
+          "member": "repair-verification/local-verification-context-77f6d7a8.json"
+        },
+        {
+          "member": "review/local-verification-context-77f6d7a8.json"
+        }
+      ],
+      "bytes": 1953,
+      "path": "current-verification-logs/local-verification-context-77f6d7a8.json",
+      "sha256": "82975c1402fb15ab90cb4290308bff81b6ea322226664fd454e59656ba3ed5ad"
+    },
+    "native_ci": {
+      "archive_locations": [
+        {
+          "member": "review/current-77f6-native-jobs.json"
+        }
+      ],
+      "bytes": 23524,
+      "path": "current-verification-logs/current-77f6-native-jobs.json",
+      "sha256": "ff92d2f5e83995769ef6f82a96bfe1f113456460ccf15f553c898fe0b55838b9"
+    },
+    "native_job_101481824032": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101481824032.log"
+        }
+      ],
+      "bytes": 915813,
+      "path": "current-verification-logs/job-101481824032.log",
+      "sha256": "5017a42bacca3fe0be57dea46e969a90c70cefe53b029b3529ec17ccebc94699"
+    },
+    "native_job_101485631477": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101485631477.log"
+        }
+      ],
+      "bytes": 64707,
+      "path": "current-verification-logs/job-101485631477.log",
+      "sha256": "21b540cc47307c473dbe68a882621f57e132973f9867c6d52e727c636554284a"
+    },
+    "native_job_101485631646": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101485631646.log"
+        }
+      ],
+      "bytes": 216047,
+      "path": "current-verification-logs/job-101485631646.log",
+      "sha256": "b1d5a7e187f6b6dabf63b94545e6aba9412b486e1f6108761f57fca0d9496d40"
+    },
+    "native_job_101485997780": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101485997780.log"
+        }
+      ],
+      "bytes": 118465,
+      "path": "current-verification-logs/job-101485997780.log",
+      "sha256": "7cc7329e08d0c7c00efbbefd26e2086b356b38bfc568f6199a9dc45320536af2"
+    },
+    "native_pr_retry": {
+      "archive_locations": [
+        {
+          "member": "review/current-77f6-native-pr-retry2.json"
+        }
+      ],
+      "bytes": 29775,
+      "path": "current-verification-logs/current-77f6-native-pr-retry2.json",
+      "sha256": "9b76f39cb2744ccc70407aacf37cd5237aebeef30064e808430b392cc13a3a0f"
+    },
+    "official_capture": {
+      "archive_locations": [
+        {
+          "member": "original-archives/native-rust-exact-runtime-34031532341-1.zip",
+          "zip_member": "capture.json"
+        }
+      ],
+      "bytes": 10520,
+      "path": "native-artifact-retrieval/77f6-runtime/native-rust-runtime-evidence/capture.json",
+      "sha256": "dd16803000a8f2fca7a17ee3e5817695a8f9466170219fda5f0552d705515aa0"
+    },
+    "official_runtime_manifest": {
+      "archive_locations": [
+        {
+          "member": "original-archives/native-rust-exact-runtime-34031532341-1.zip",
+          "zip_member": "SHA256SUMS"
+        }
+      ],
+      "bytes": 1611,
+      "path": "native-artifact-retrieval/77f6-runtime/native-rust-runtime-evidence/SHA256SUMS",
+      "sha256": "4bee8f33d00c4163a76656d5084abb5a9c3720d3d69e3345b0c269b409ff6418"
+    },
+    "official_serial": {
+      "archive_locations": [
+        {
+          "member": "original-archives/native-rust-exact-runtime-34031532341-1.zip",
+          "zip_member": "serial.log"
+        }
+      ],
+      "bytes": 67506,
+      "path": "native-artifact-retrieval/77f6-runtime/native-rust-runtime-evidence/serial.log",
+      "sha256": "7bbaa25abb609a403ebac9b6f0c07386a55179c8f879242bbf77feb089f94abb"
+    },
+    "original_pr_fixture_failure": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101485006858.log"
+        }
+      ],
+      "bytes": 16462,
+      "path": "current-verification-logs/job-101485006858.log",
+      "sha256": "dc88752fc5620c37b66c7ee067ec2115deac6fd3b8455214c341fd0488b671bd"
+    },
+    "rk006_fp_outer_review": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-rk006-fp-outer-review.json"
+        }
+      ],
+      "bytes": 559,
+      "path": "current-verification-logs/77f6-rk006-fp-outer-review.json",
+      "sha256": "e64fb53dffa029e5cd43ee12e3891949f0c65e338216af5a45c7b978e0c324d1"
+    },
+    "runtime_archive": {
+      "archive_locations": [
+        {
+          "member": "original-archives/native-rust-exact-runtime-34031532341-1.zip"
+        }
+      ],
+      "bytes": 6635079,
+      "path": "native-artifact-retrieval/native-rust-exact-runtime-34031532341-1.zip",
+      "sha256": "043bb0dcf28b77d78963ac1d6204c836dce788168d2527f1e9554f2f1375ec6c"
+    },
+    "runtime_outer_review": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-runtime-artifact-outer-review.json"
+        }
+      ],
+      "bytes": 3258,
+      "path": "current-verification-logs/77f6-runtime-artifact-outer-review.json",
+      "sha256": "6c4f0a6f09b8cb49e767ce6d5da160a90988debc392ef91698c7d24f47d957d3"
+    },
+    "runtime_public_cli_log": {
+      "archive_locations": [
+        {
+          "member": "review/77f6-official-runtime-artifact-review.log"
+        }
+      ],
+      "bytes": 90,
+      "path": "current-verification-logs/77f6-official-runtime-artifact-review.log",
+      "sha256": "a8d60415d01978f6f187e7dff70fed089b7ab75401907eb248897ceeba1006fd"
+    },
+    "secondary_ci": {
+      "archive_locations": [
+        {
+          "member": "review/current-77f6-secondary-jobs.json"
+        }
+      ],
+      "bytes": 43787,
+      "path": "current-verification-logs/current-77f6-secondary-jobs.json",
+      "sha256": "a600cc239f6c4a43a3cdf95ef88a819d6b1fe0b4aa4ae557d4d2e93d89f19e0b"
+    },
+    "successful_pr_fixture_retry": {
+      "archive_locations": [
+        {
+          "member": "official-job-logs/job-101485589694.log"
+        }
+      ],
+      "bytes": 63391,
+      "path": "current-verification-logs/job-101485589694.log",
+      "sha256": "5a4d18095d1f220f082acb5f1140351eb9febaa52378b7f49a5ba1e03f1dc648"
+    },
+    "supplemental_environment_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/environment.json"
+        }
+      ],
+      "bytes": 34710,
+      "path": "local-native-environment-replay-77f6/environment.json",
+      "sha256": "856477c554b89950d6c1a8c1fef92d18b2f86116e790f88b38257e6841b8daf9"
+    },
+    "supplemental_kernel_notes_binding_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/kernel-notes-binding.json"
+        }
+      ],
+      "bytes": 1130,
+      "path": "local-native-environment-replay-77f6/kernel-notes-binding.json",
+      "sha256": "171781fe6a04fb81310760b25a8d4fd4c72f9f8009735ee9f64feb65a5cb0b45"
+    },
+    "supplemental_lifecycle_validation_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/lifecycle-validation.json"
+        }
+      ],
+      "bytes": 2346,
+      "path": "local-native-environment-replay-77f6/lifecycle-validation.json",
+      "sha256": "24598eae66240c4a2665fd22220296680cb97b96943286a2f77d17f93a8bc4b2"
+    },
+    "supplemental_provenance_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/provenance.json"
+        }
+      ],
+      "bytes": 16684,
+      "path": "local-native-environment-replay-77f6/provenance.json",
+      "sha256": "c4c9e3498df75e97b7a8892cccef54db87a893044c122f620ffdade49db9306d"
+    },
+    "supplemental_replay_inputs_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/replay-inputs.json"
+        }
+      ],
+      "bytes": 683,
+      "path": "local-native-environment-replay-77f6/replay-inputs.json",
+      "sha256": "67601da23194d12070a8b80fa9249eb199f0100869a93c4369a5e5e476f4dc99"
+    },
+    "supplemental_serial_log": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/serial.log"
+        }
+      ],
+      "bytes": 92430,
+      "path": "local-native-environment-replay-77f6/serial.log",
+      "sha256": "2754567cce615182d0429c7a22f819df421172a7aadcf8b1702fe1d9f9f95114"
+    },
+    "supplemental_tool_provenance_json": {
+      "archive_locations": [
+        {
+          "member": "supplemental-guest/tool-provenance.json"
+        }
+      ],
+      "bytes": 14104,
+      "path": "local-native-environment-replay-77f6/tool-provenance.json",
+      "sha256": "7dc34063fa69e2dfffe1a453d580c86dc90bd2e92c778e92b49a4b26652e53f1"
+    }
+  },
+  "evidence_path_basis": "Workspace-relative paths identify reviewed snapshots. archive_locations identify exact retained bundle members or an explicit ZIP member within an original archived ZIP.",
+  "gate_decision": "not-awarded",
+  "initramfs_and_helper_review": {
+    "all_three_helper_rebuilds_equal_original_artifact_and_guest": true,
+    "cpio_members": 40,
+    "dynamic_dependency_closure_inspected": true,
+    "embedded_kmod_equals_signed_payload": true,
+    "embedded_modules_equal_same_run_build": true,
+    "ref": "initramfs_review",
+    "rendered_init_sha256": "6765867f02df69f1a46ce62e326ea3497e88c4000191b48778bebde8460a1071",
+    "scope": "Independent original initramfs bytes and same-source helper rebuilds; this does not identify the compiler executable actually used by CI."
+  },
+  "native_observations": {
+    "bzimage": {
+      "path": "/workspace/scratch/b84a595d190b/native-artifact-retrieval/77f6-runtime/native-rust-build-evidence/bzImage",
+      "sha256": "74f01e57d10b227d763d7eb3704474dd7a0ca8f4fcf98a064cefb6b3f8107bb5",
+      "size": 16130048
+    },
+    "exact_build_member_count": 51,
+    "exact_runtime_member_count": 19,
+    "excluded_behaviors": [
+      "Native OS operations and resource operations remain unreachable.",
+      "Only IHK_DEVICE_GET_BUILDID is accepted as a valid ioctl; broader control-device behavior is incomplete.",
+      "Native McKernel image boot, CPU/memory assignment and mcctrl binfmt/syscall execution are not established."
+    ],
+    "independent_public_cli_tools": {
+      "kmod": {
+        "scope": "Exact signed Rocky executable, retained FD",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55"
+      },
+      "nm": {
+        "scope": "Explicitly hashed host executable, retained FD; distinct from original CI tool observation",
+        "sha256": "096b96ed1dbeee61397773d3f5858cca10da7004792213569a78237356c15e98"
+      }
+    },
+    "kernel_config_sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+    "kernel_gnu_build_id": "a8b9513ff7e13c1af74040371f0b16391fd2ee89",
+    "kernel_release": "6.12.0-211.44.1.el10_2.mckernel1.x86_64",
+    "module_sha256": {
+      "ihk-smp-x86_64.ko": "2b3a0d731e56d03bcc9295ec84251fb6e7011eafc14c68fd66e3be34487767c2",
+      "ihk.ko": "1db9773fddf65aab8986ca9f13e7b8704f68bddc342fd307f8344b409cf5429b",
+      "mcctrl.ko": "1f4538d0c3ffc44ac85b90c04e91c0b41fdf8698b488b7b35d3c7392d2513ad5"
+    },
+    "observed_behaviors": [
+      "Three native Rust modules load with the checked dependency/export graph.",
+      "Provider-first unload is refused while consumers hold references; provider reference count is 2.",
+      "mcd0 opens and releases balance across sequential, overlapping and reload cycles.",
+      "x86_64 and i386 GET_BUILDID observe the exact NUL-terminated compatibility identity and guard behavior; bad-pointer and unknown-ioctl negative probes are checked.",
+      "Consumer/provider teardown, node removal and reload complete; runtime serial and all 19 artifact members pass the published checker."
+    ],
+    "official_capture_declared_sha256": "1761ba973ab10379d017a62876bac605459ca8a6d17ab4cf9c5d31bf04616b64",
+    "official_capture_file_ref": "official_capture",
+    "official_runtime_manifest_ref": "official_runtime_manifest",
+    "official_serial_ref": "official_serial",
+    "public_cli_ref": "runtime_public_cli_log",
+    "public_runtime_artifact_cli": "verified; credit forbidden; review required",
+    "qemu_accelerator": "tcg",
+    "qemu_exit_code": 0,
+    "refs": [
+      "native_ci",
+      "runtime_outer_review",
+      "build_outer_review"
+    ],
+    "runtime_contract_sha256": "1b93608aee9abbc169ab1f9edc27717e086a4c82f04c395320e32fa8f952838e",
+    "source_rpm": {
+      "bytes": 159328372,
+      "nvr": "kernel-0:6.12.0-211.44.1.el10_2.src",
+      "sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+    },
+    "stage_lock_sha256": "fbac97820eef22958c3072ef44b8120c444a3606dffd86597d100fbd549ef177"
+  },
+  "next_os_tranche": {
+    "completion_claim": "planned; not implemented or verified by this review",
+    "dependent_later_work": [
+      "CPU reservation/assignment and exact restoration (SMP-003/SMP-004).",
+      "NUMA memory reservation/assignment, failure rollback and release (IHK-006/SMP-005/SMP-006).",
+      "Native McKernel image validation, placement and startup (SMP-007 onward).",
+      "mcctrl binfmt ownership, process creation and syscall offload with mcexec workloads."
+    ],
+    "scope": "Wire native IHK OS-instance create/query/status/destroy and reference ownership through audited mcd0/driver dispatch using the existing Rust registry foundation. Preserve current GET_BUILDID compatibility and module lifecycle.",
+    "target_gates": [
+      "IHK-005"
+    ],
+    "verification": [
+      "Exact published kernel/module build and symbol/ABI checks.",
+      "Disposable guest success and negative cases for duplicate/stale identifiers, lookup lifetime, failed creation rollback, destroy refusal while referenced and empty-registry teardown.",
+      "Repeated create/query/destroy cycles followed by clean module unload; preserve immutable raw diagnostics and execute public artifact verification."
+    ]
+  },
+  "publication": {
+    "evidence_branch": "codex/rocky-77-runtime-evidence-review",
+    "implementation_head": "77f6d7a8bab8c0d3abc5d21a512609e10ec2a561",
+    "review_commit_binding": "Enclosing Git commit; the manifest does not embed its own commit SHA.",
+    "scope": "Documentation-only review alongside kernel.log on a separate evidence-review branch.",
+    "source_contracts_and_trackers_modified": false
+  },
+  "remaining_blockers": [
+    {
+      "detail": "Bind the actual executed CI compiler/tool file hashes and dependency identity into the required common evidence manifest; authenticated RPM payload reconstruction alone cannot supply an observation absent from the original run.",
+      "id": "common-evidence-manifest"
+    },
+    {
+      "detail": "Current source/platform evidence runs reject changed live repomd.xml against historical locks. Historical pins were not refreshed and these workflows remain failed.",
+      "id": "source-platform-metadata"
+    },
+    {
+      "detail": "Inventory execution succeeded; unresolved license classification does not constitute license clearance.",
+      "id": "license-inventory",
+      "items": 115268,
+      "unresolved": 115268
+    },
+    {
+      "detail": "Legacy capture retains missing independent result authority and nonaligned frozen workflow provenance; all existing FP claims remain false.",
+      "id": "fp0006-authority"
+    },
+    {
+      "detail": "Durable archive publication is complete. Formal gate registration/decision is not awarded while the common compiler-execution identity binding and relevant acceptance requirements remain incomplete.",
+      "id": "formal-gate-acceptance"
+    }
+  ],
+  "review_scope": {
+    "method": "Independent CI monitoring and source/interface review, reconciled with separately produced raw-artifact, public-CLI, initramfs/helper, supplemental guest, compiler payload and compatibility reviews. The evidence ledger records the exact report bytes.",
+    "raw_original_captures_modified": false,
+    "target": "Rocky Linux 10.2-derived x86_64 control-plane kernel and three native Rust host modules; the legacy Rocky 8.10 compatibility lane is separate.",
+    "technical_capture_promoted_to_gate_pass": false
+  },
+  "schema": "mckernel-native-runtime-independent-technical-review-v1",
+  "status": "technical-review-complete",
+  "supplemental_guest": {
+    "environment_records": 75,
+    "kernel_gnu_build_id": "a8b9513ff7e13c1af74040371f0b16391fd2ee89",
+    "kernel_note_bytes_equal_actual_bzimage": true,
+    "kernel_note_bytes_sha256": "fd81e297a8a44001b6df4f94b6644a845b81775edfe181aa7c167300f45fd2df",
+    "refs": [
+      "supplemental_replay_inputs_json",
+      "supplemental_environment_json",
+      "supplemental_provenance_json",
+      "supplemental_lifecycle_validation_json",
+      "supplemental_kernel_notes_binding_json",
+      "supplemental_serial_log",
+      "supplemental_tool_provenance_json"
+    ],
+    "same_run_build_artifact_id": 9989193504,
+    "scope": "Separate local disposable QEMU observation using mixed userland; never substituted for the official exact-container capture."
+  },
+  "tests": {
+    "hosted": [
+      {
+        "failures": 0,
+        "job_id": 101481823263,
+        "log_ref": "hosted_test_pr_log",
+        "passed": 2117,
+        "run_id": 34031532091,
+        "seconds": 166.148,
+        "skipped": 168,
+        "total": 2285
+      },
+      {
+        "failures": 0,
+        "job_id": 101481817772,
+        "log_ref": "hosted_test_push_log",
+        "passed": 2117,
+        "run_id": 34031530225,
+        "seconds": 156.873,
+        "skipped": 168,
+        "total": 2285
+      }
+    ],
+    "local": {
+      "errors": 0,
+      "failures": 0,
+      "passed": 2120,
+      "refs": [
+        "local_tests",
+        "local_test_log"
+      ],
+      "seconds": 121.589,
+      "skipped": 165,
+      "total": 2285
+    },
+    "skips_are_not_passes": true
+  }
+}
