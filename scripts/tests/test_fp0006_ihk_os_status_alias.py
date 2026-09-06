@@ -849,7 +849,6 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
             capture = Path(directory) / "capture"
             write_capture(capture, "legacy-live-ioctl")
             before = set(os.listdir("/proc/self/fd"))
-            pids = []
             for _ in range(3):
                 execution = run_cli(
                     [
@@ -858,11 +857,13 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
                     ]
                 )
                 require_success(self, execution)
-                pids.append(execution[3])
+                # procfs may expose an ancestor PID namespace, where this
+                # child's numeric PID names an unrelated process. waitpid
+                # checks our actual child relationship in our own namespace.
+                with self.assertRaises(ChildProcessError):
+                    os.waitpid(execution[3], os.WNOHANG)
             after = set(os.listdir("/proc/self/fd"))
             self.assertEqual(before, after)
-            for pid in pids:
-                self.assertFalse(Path("/proc/{0}".format(pid)).exists())
 
     def test_invalid_surface_and_unknown_command_fail_without_output(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -77,7 +77,7 @@ It performs no allocation, FFI, C dispatch, registration, or userspace copy.
 An audit of the unmodified, byte-exact Rocky Linux 6.12 Rust sources found
 ioctl-number helpers and safe `UserSlice` copy wrappers, but no Rust
 `miscdevice`, `cdev`, `file_operations`, or ioctl-callback registration layer.
-The reviewed kernel patch series now supplies a Rust miscdevice adapter used
+The repository kernel patch series now supplies a Rust miscdevice adapter used
 by the SMP module's `/dev/mcd0` shell. The scalar dispatcher remains private:
 OS-state ownership, provider callbacks, kmsg storage, per-instance device
 publication, and teardown must be implemented before create/destroy/status
