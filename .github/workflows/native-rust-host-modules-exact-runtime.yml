@@ -451,12 +451,12 @@ jobs:
             "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"
           /usr/bin/as --64 scripts/native-rust-runtime-mcd0-ioctl-x86_64.S \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64.o"
-          /usr/bin/ld -m elf_x86_64 -nostdlib -static -s -z noexecstack \
+          /usr/bin/ld -m elf_x86_64 -nostdlib -static -s -z noexecstack -z separate-code \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
             "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64.o"
           /usr/bin/as --32 scripts/native-rust-runtime-mcd0-ioctl-i386.S \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386.o"
-          /usr/bin/ld -m elf_i386 -nostdlib -static -s -z noexecstack \
+          /usr/bin/ld -m elf_i386 -nostdlib -static -s -z noexecstack -z separate-code \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386" \
             "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386.o"
           /usr/bin/readelf -h \

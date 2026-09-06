@@ -3007,30 +3007,38 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 )
-                subprocess.run(
-                    [
-                        str(linker),
-                        "-m",
-                        ld_mode,
-                        "-nostdlib",
-                        "-static",
-                        "-s",
-                        "-z",
-                        "noexecstack",
-                        "-o",
-                        str(executable_path),
-                        str(object_path),
-                    ],
-                    check=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-                evidence._validate_runtime_probe_elf(
-                    name,
-                    executable_path.read_bytes(),
-                    elf_class,
-                    machine,
-                )
+                # Model both configured GNU ld defaults. The workflow must
+                # request the layout required by the strict ELF validator even
+                # when the distribution defaults to -z noseparate-code.
+                for defaults in ([], ["-z", "noseparate-code"]):
+                    with self.subTest(linker_defaults=defaults):
+                        subprocess.run(
+                            [
+                                str(linker),
+                                *defaults,
+                                "-m",
+                                ld_mode,
+                                "-nostdlib",
+                                "-static",
+                                "-s",
+                                "-z",
+                                "noexecstack",
+                                "-z",
+                                "separate-code",
+                                "-o",
+                                str(executable_path),
+                                str(object_path),
+                            ],
+                            check=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        )
+                        evidence._validate_runtime_probe_elf(
+                            name,
+                            executable_path.read_bytes(),
+                            elf_class,
+                            machine,
+                        )
 
     def test_runtime_helper_semantics_contract_is_exact_typed(self) -> None:
         for field, value in (

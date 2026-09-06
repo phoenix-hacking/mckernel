@@ -6,6 +6,22 @@ Linux remains the Rocky-derived control-plane kernel; only these project-owned h
 
 Behavioral implementation is evidence-gated against `host-kernel/contracts/legacy-behavior-contract-f2eb7352.json`. Before any implementation gate is credited, the exact Rocky-derived `CONFIG_RUST` kernel must compile the module and the relevant acceptance tests must pass on immutable CI evidence.
 
+## Current production boundary
+
+The SMP module registers `/dev/mcd0` through the applied Rust miscdevice
+adapter. Each open owns a provider lease; close releases it, and module
+teardown removes the registration before detaching the provider. Native and
+compatibility ioctl callbacks currently return `EINVAL` for every request.
+The private resource, OS-registry, and ioctl foundations are not yet connected
+to userspace operations. Native CPU/memory reservation, McKernel creation and
+boot, and the mcctrl process/offload path remain unimplemented.
+
+`final-push.txt` is the production completion tracker. The Rocky 8.10
+boot/mcexec smoke validates the legacy compatibility path. It does not prove
+these native Rust modules can run that workload. Likewise, a green snapshot
+workflow that skips archive download and offline replay proves only its
+executed contract checks.
+
 ## Unsafe and FFI ledger
 
 Every reachable project Rust input and every explicit unsafe/FFI source site is
@@ -58,12 +74,14 @@ rollback-safe registry transactions, preserves the legacy subset's errno and
 direct-return semantics, and uses generation-tagged OS identities for status.
 It performs no allocation, FFI, C dispatch, registration, or userspace copy.
 
-An audit of the byte-exact Rocky Linux 6.12 Rust sources found ioctl-number
-helpers and safe `UserSlice` copy wrappers, but no Rust `miscdevice`, `cdev`,
-`file_operations`, or ioctl-callback registration layer. The dispatcher is
-therefore not userspace reachable. It must not be wired through raw bindings or
-hand-written unstable FFI; a supported kernel registration adapter is an
-explicit blocker. Validate the frozen IHK behavior, exact Rocky API capture,
+An audit of the unmodified, byte-exact Rocky Linux 6.12 Rust sources found
+ioctl-number helpers and safe `UserSlice` copy wrappers, but no Rust
+`miscdevice`, `cdev`, `file_operations`, or ioctl-callback registration layer.
+The reviewed kernel patch series now supplies a Rust miscdevice adapter used
+by the SMP module's `/dev/mcd0` shell. The scalar dispatcher remains private:
+OS-state ownership, provider callbacks, kmsg storage, per-instance device
+publication, and teardown must be implemented before create/destroy/status
+can be exposed. Validate the frozen IHK behavior, exact Rocky API capture,
 mutation defenses, and standalone Rust 1.92 fixture with:
 
 ```sh
