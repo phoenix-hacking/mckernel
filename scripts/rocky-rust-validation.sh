@@ -2032,9 +2032,9 @@ capture_fp0006_legacy_negative_dispatch() {
 	if [ "$FP0006_NEGATIVE_CAPTURE" -ne 1 ]; then
 		return
 	fi
-	if [ "$(sha256sum "$FP0006_PREFLIGHT_MANIFEST" | awk '{ print $1 }')" !=
+	if [ "$(sha256sum "$FP0006_PREFLIGHT_MANIFEST" | awk '{ print $1 }')" != \
 		"$FP0006_PREFLIGHT_MANIFEST_SHA256" ] ||
-		[ "$(sha256sum "$FP0006_PRODUCER_BINARY" | awk '{ print $1 }')" !=
+		[ "$(sha256sum "$FP0006_PRODUCER_BINARY" | awk '{ print $1 }')" != \
 		"$FP0006_PRODUCER_BINARY_SHA256" ]
 	then
 		echo 'error: FP-0006 preflight authority or producer changed before live execution.' >&2
@@ -2046,7 +2046,7 @@ capture_fp0006_legacy_negative_dispatch() {
 	fi
 	overlay_host_driver_sha256="$(sha256sum \
 		"$ROOT_DIR/ihk/linux/core/host_driver.c" | awk '{ print $1 }')"
-	if [ "$overlay_host_driver_sha256" !=
+	if [ "$overlay_host_driver_sha256" != \
 		f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e ]
 	then
 		echo 'error: FP-0006 live compatibility-overlay observation digest differs.' >&2

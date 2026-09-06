@@ -42,7 +42,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:80c9c3b329fe454b086155d20bb9b873ae3a842cd5313bb4079705115ebdac1c"
+    "ISOLATED_SELF_DIGEST:e20baf6e27c59a53d38688dea17442ec91d3fd05f2a1111558ff82939ef545a7"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -2058,7 +2058,31 @@ def _validate_exact_build_workflow(text: str) -> str:
     return text
 
 
-def _regular_evidence_file(path: Path, label: str, nonempty: bool = True) -> Path:
+def _regular_evidence_file(
+    path: Path, label: str, nonempty: bool = True,
+    *, bound_descriptor: int | None = None,
+) -> Path:
+    if bound_descriptor is not None:
+        if (
+            type(bound_descriptor) is not int
+            or bound_descriptor < 3
+            or str(path) != "/proc/self/fd/{0}".format(bound_descriptor)
+        ):
+            raise EvidenceError("{0} bound descriptor path differs".format(label))
+        try:
+            held = os.fstat(bound_descriptor)
+            if (
+                not stat.S_ISREG(held.st_mode)
+                or stat.S_IMODE(held.st_mode) != 0o644
+                or held.st_nlink != 1
+                or _stat_identity(path.stat()) != _stat_identity(held)
+            ):
+                raise EvidenceError("{0} bound descriptor shape differs".format(label))
+            if nonempty and not held.st_size:
+                raise EvidenceError("{0} is empty".format(label))
+        except OSError as error:
+            raise EvidenceError("{0} bound descriptor is unavailable".format(label)) from error
+        return path
     if path.is_symlink() or not path.is_file():
         raise EvidenceError("{0} must be a regular non-symlink file".format(label))
     if nonempty and not path.stat().st_size:
@@ -2333,6 +2357,10 @@ def _bound_capture_runtime_inputs(paths: dict[str, Path]):
                 bound_helpers,
                 recheck,
                 state,
+                {
+                    field: leaf_fds[basename]
+                    for field, basename in CAPTURE_RUNTIME_INPUT_BASENAMES.items()
+                },
             )
             recheck()
         except BaseException:
@@ -6007,10 +6035,16 @@ def _provider_open_events(lines: list[str]) -> list[tuple[int, str]]:
     return result
 
 
-def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
-    if serial_path.is_symlink() or not serial_path.is_file():
-        raise EvidenceError("serial log must be a regular non-symlink file")
-    data = serial_path.read_bytes()
+def validate_serial(
+    serial_path: Path, kernel_release: str, *, serial_fd: int | None = None
+) -> dict[str, Any]:
+    _regular_evidence_file(serial_path, "serial log", bound_descriptor=serial_fd)
+    if serial_fd is None:
+        data = serial_path.read_bytes()
+    else:
+        data, _identity = _read_bound_descriptor_bytes(
+            serial_fd, MAX_RUNTIME_TEXT_FILE_SIZE, "serial log"
+        )
     if not data:
         raise EvidenceError("serial log is empty")
     try:
@@ -6791,7 +6825,7 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         },
         "provider_refcount": 2,
         "provider_users": ["ihk_smp_x86_64", "mcctrl"],
-        "serial_sha256": _sha256_file(serial_path),
+        "serial_sha256": _sha256_bytes(data),
     }
 
 
@@ -7389,28 +7423,48 @@ def _validate_runtime_files(
     expected_build_bzimage_sha256: Any = None,
     expected_command_build_bzimage: Any = None,
     expected_command_runtime_parent: Any = None,
+    runtime_input_fds: dict[str, int] | None = None,
 ) -> dict[str, Any]:
-    serial_log = _regular_evidence_file(serial_log, "runtime serial log")
-    initramfs = _regular_evidence_file(initramfs, "deterministic initramfs")
-    runtime = validate_serial(serial_log, EXPECTED_KERNEL_RELEASE)
+    if runtime_input_fds is not None:
+        _require_keys(
+            runtime_input_fds,
+            {"serial_log", "qemu_log", "qemu_command", "qemu_version",
+             "qemu_exit_code", "environment_log", "initramfs", "initramfs_sha256"},
+            "bound runtime input descriptors",
+        )
+
+    def regular(path: Path, label: str, field: str, nonempty: bool = True) -> Path:
+        descriptor = None if runtime_input_fds is None else runtime_input_fds[field]
+        return _regular_evidence_file(
+            path, label, nonempty=nonempty, bound_descriptor=descriptor
+        )
+
+    serial_log = regular(serial_log, "runtime serial log", "serial_log")
+    initramfs = regular(initramfs, "deterministic initramfs", "initramfs")
+    if runtime_input_fds is None:
+        runtime = validate_serial(serial_log, EXPECTED_KERNEL_RELEASE)
+    else:
+        runtime = validate_serial(
+            serial_log, EXPECTED_KERNEL_RELEASE, serial_fd=runtime_input_fds["serial_log"]
+        )
     paths = {
-        "environment_sha256": _regular_evidence_file(
-            environment_log, "runtime environment"
+        "environment_sha256": regular(
+            environment_log, "runtime environment", "environment_log"
         ),
-        "qemu_command_sha256": _regular_evidence_file(
-            qemu_command, "QEMU command"
+        "qemu_command_sha256": regular(
+            qemu_command, "QEMU command", "qemu_command"
         ),
-        "qemu_version_sha256": _regular_evidence_file(
-            qemu_version, "QEMU version"
+        "qemu_version_sha256": regular(
+            qemu_version, "QEMU version", "qemu_version"
         ),
-        "qemu_exit_code_sha256": _regular_evidence_file(
-            qemu_exit_code, "QEMU exit code"
+        "qemu_exit_code_sha256": regular(
+            qemu_exit_code, "QEMU exit code", "qemu_exit_code"
         ),
     }
     ancillary = {
         name: _sha256_file(path) for name, path in paths.items()
     }
-    qemu_log = _regular_evidence_file(qemu_log, "QEMU log", nonempty=False)
+    qemu_log = regular(qemu_log, "QEMU log", "qemu_log", nonempty=False)
     ancillary["qemu_log_sha256"] = _sha256_file(qemu_log)
 
     environment = _read_text(paths["environment_sha256"], "runtime environment")
@@ -7538,8 +7592,8 @@ def _validate_runtime_files(
     if _read_text(paths["qemu_exit_code_sha256"], "QEMU exit code") != "0\n":
         raise EvidenceError("QEMU did not exit cleanly after guest poweroff")
 
-    initramfs_sha256 = _regular_evidence_file(
-        initramfs_sha256, "initramfs digest"
+    initramfs_sha256 = regular(
+        initramfs_sha256, "initramfs digest", "initramfs_sha256"
     )
     digest_record = _read_text(initramfs_sha256, "initramfs digest")
     digest_match = re.fullmatch(
@@ -7982,6 +8036,7 @@ def capture(
                 bound_runtime_helpers,
                 recheck_runtime_inputs,
                 capture_state,
+                runtime_input_fds,
             ) = bound_runtime
             build, _build_records = _validate_bound_build_evidence_directory(
                 contract,
@@ -8023,6 +8078,13 @@ def capture(
                 build["bzimage_sha256"],
                 build_dir / "bzImage",
                 runtime_parent,
+                runtime_input_fds={
+                    field: runtime_input_fds[field]
+                    for field in (
+                        "serial_log", "qemu_log", "qemu_command", "qemu_version",
+                        "qemu_exit_code", "environment_log", "initramfs", "initramfs_sha256",
+                    )
+                },
             )
             runtime.update(
                 _validate_runtime_workflow_provenance(

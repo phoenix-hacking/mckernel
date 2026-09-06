@@ -1468,6 +1468,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         template: dict,
         build_side_effect=None,
         runtime_side_effect=None,
+        real_runtime=False,
     ) -> dict:
         output = runtime_dir / "capture.json"
         build_mock = (
@@ -1480,17 +1481,18 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             if runtime_side_effect is not None
             else mock.DEFAULT
         )
+        runtime_context = contextlib.nullcontext() if real_runtime else mock.patch.object(
+            evidence,
+            "_validate_runtime_files",
+            side_effect=runtime_mock if runtime_mock is not mock.DEFAULT else None,
+            return_value=copy.deepcopy(template["runtime"]),
+        )
         with mock.patch.object(
             evidence,
             "_validate_bound_build_evidence_directory",
             side_effect=build_mock if build_mock is not mock.DEFAULT else None,
             return_value=(copy.deepcopy(template["build"]), {}),
-        ), mock.patch.object(
-            evidence,
-            "_validate_runtime_files",
-            side_effect=runtime_mock if runtime_mock is not mock.DEFAULT else None,
-            return_value=copy.deepcopy(template["runtime"]),
-        ):
+        ), runtime_context:
             return evidence.capture(
                 REPO_ROOT,
                 evidence.DEFAULT_CONTRACT,
@@ -3643,6 +3645,105 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 ):
                     self.validate_runtime_files(runtime_dir, bzimage)
         command_path.write_text(command, encoding="ascii")
+
+    def prepare_real_capture_directories(self):
+        parent, build_dir, runtime_dir, template = self.prepare_capture_directories()
+        command = runtime_dir / "qemu-command.txt"
+        command.write_text(
+            command.read_text().replace(
+                "/tmp/native-rust-build-evidence/", str(build_dir) + "/"
+            ).replace(
+                "/tmp/native-rust-runtime-evidence/", str(runtime_dir) + "/"
+            ), encoding="ascii",
+        )
+        template["build"]["bzimage_sha256"] = hashlib.sha256(
+            (build_dir / "bzImage").read_bytes()
+        ).hexdigest()
+        return parent, build_dir, runtime_dir, template
+
+    def test_public_capture_reads_bound_runtime_and_replays_complete_artifact(self) -> None:
+        _parent, build_dir, runtime_dir, template = self.prepare_real_capture_directories()
+        value = self.run_mocked_capture(build_dir, runtime_dir, template, real_runtime=True)
+        self.assertEqual("CAPTURED_UNREVIEWED", value["readiness"]["status"])
+        self.assertIs(False, value["readiness"]["credit_eligible"])
+        for field, name in (
+            ("serial_sha256", "serial.log"),
+            ("environment_sha256", "environment.txt"),
+            ("workflow_provenance_sha256", "runtime-workflow-provenance.json"),
+            ("qemu_log_sha256", "qemu.log"),
+        ):
+            self.assertEqual(hashlib.sha256((runtime_dir / name).read_bytes()).hexdigest(), value["runtime"][field])
+        self.assertEqual(b"", (runtime_dir / "qemu.log").read_bytes())
+        self.assertEqual(evidence._pretty(value).encode(), (runtime_dir / "capture.json").read_bytes())
+        self.rewrite_runtime_manifest(runtime_dir)
+        self.assertEqual(19, len(list(runtime_dir.iterdir())))
+        with mock.patch.object(
+            evidence, "_validate_bound_build_evidence_directory",
+            return_value=(copy.deepcopy(value["build"]), {}),
+        ):
+            result = evidence.validate_runtime_evidence_directory(REPO_ROOT, runtime_dir, build_dir)
+        self.assertEqual(
+            hashlib.sha256((runtime_dir / "capture.json").read_bytes()).hexdigest(),
+            result["capture.json"],
+        )
+
+    def test_public_capture_detects_late_serial_ancillary_and_provenance_mutation(self) -> None:
+        real_write = evidence._write_capture_output
+        for name in ("serial.log", "environment.txt", "runtime-workflow-provenance.json"):
+            parent, build_dir, runtime_dir, template = self.prepare_real_capture_directories()
+            path = runtime_dir / name
+            original = path.read_bytes()
+
+            def mutate_and_restore_before_publication(*args, **kwargs):
+                with path.open("r+b") as stream:
+                    stream.write(bytes((original[0] ^ 1,)))
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                    stream.seek(0)
+                    stream.write(original)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                return real_write(*args, **kwargs)
+
+            try:
+                with self.subTest(name=name), mock.patch.object(
+                    evidence, "_write_capture_output", side_effect=mutate_and_restore_before_publication
+                ):
+                    with self.assertRaisesRegex(evidence.EvidenceError, "capture runtime input changed"):
+                        self.run_mocked_capture(build_dir, runtime_dir, template, real_runtime=True)
+                self.assertEqual(original, path.read_bytes())
+                self.assertFalse((runtime_dir / "capture.json").exists())
+                self.assertEqual([], list(runtime_dir.glob(".capture.json.tmp.*")))
+            finally:
+                shutil.rmtree(parent)
+
+    def test_public_capture_still_rejects_caller_supplied_symlinks(self) -> None:
+        for name in ("serial.log", "environment.txt", "runtime-workflow-provenance.json"):
+            parent, build_dir, runtime_dir, template = self.prepare_real_capture_directories()
+            original = runtime_dir / name
+            moved = parent / name
+            original.rename(moved)
+            original.symlink_to(moved)
+            try:
+                with self.subTest(name=name), self.assertRaises(evidence.EvidenceError):
+                    self.run_mocked_capture(build_dir, runtime_dir, template, real_runtime=True)
+                self.assertFalse((runtime_dir / "capture.json").exists())
+            finally:
+                shutil.rmtree(parent)
+
+    def test_serial_descriptor_requires_explicit_exact_binding(self) -> None:
+        serial = self.write_serial(valid_serial())
+        other = self.root / "other-serial.log"
+        other.write_bytes(serial.read_bytes())
+        with serial.open("rb") as stream, other.open("rb") as other_stream:
+            path = Path("/proc/self/fd/{0}".format(stream.fileno()))
+            with self.assertRaisesRegex(evidence.EvidenceError, "non-symlink"):
+                evidence.validate_serial(path, KERNEL_RELEASE)
+            for bad_descriptor in (True, -1, other_stream.fileno()):
+                with self.subTest(descriptor=bad_descriptor), self.assertRaisesRegex(evidence.EvidenceError, "descriptor path differs"):
+                    evidence.validate_serial(path, KERNEL_RELEASE, serial_fd=bad_descriptor)
+            value = evidence.validate_serial(path, KERNEL_RELEASE, serial_fd=stream.fileno())
+            self.assertEqual(hashlib.sha256(serial.read_bytes()).hexdigest(), value["serial_sha256"])
 
     def test_capture_writes_exact_output_through_held_runtime_directory(self) -> None:
         _parent, build_dir, runtime_dir, template = self.prepare_capture_directories()
