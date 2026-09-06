@@ -148,7 +148,7 @@ ORACLE_BINDINGS = {
     ),
     "rocky_kernel_rk007_build_review_v2.py": (
         75801,
-        "46fc919caf1c96852832db8de56af50d8f594fb5544aa1e940c09602db745329",
+        "0d569241e721a4025a9d94208c6fd43cdd38b7ff0021585bcce8d945511b6bc2",
     ),
 }
 

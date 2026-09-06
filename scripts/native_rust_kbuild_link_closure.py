@@ -122,6 +122,13 @@ _GENERATED_METADATA_DEPENDENCIES = {
     "ihk-smp-x86_64": EXPECTED_GENERATED_METADATA_INPUTS,
     "mcctrl": (),
 }
+# Rocky fixdep scans the crate root before its other dependencies.  The SMP
+# root alone uses CONFIG_COMPAT, producing this exact four-space Make record.
+_FIXDEP_CONFIG_DEPENDENCIES = {
+    "ihk": (),
+    "ihk-smp-x86_64": ("$(wildcard include/config/COMPAT)",),
+    "mcctrl": (),
+}
 _KERNEL_RUST_DEPENDENCIES = (
     "./rust/libcore.rmeta",
     "./rust/libkernel.rmeta",
@@ -783,6 +790,15 @@ def _validate_reference_surface(name, references, module):
                 raise LinkClosureError("{0} references project C outside generated mod.c".format(name))
 
 
+def _dependency_entry_detail(value):
+    if value is None:
+        return "<end of dependency block>"
+    detail = repr(value[:160])
+    if len(value) > 160:
+        detail += " ... ({0} characters)".format(len(value))
+    return detail
+
+
 def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, module):
     lines = text.splitlines()
     source_line = "source_{0} := {1}".format(target, root_token)
@@ -792,13 +808,27 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
 
     cursor = 5
     dependencies = []
+    config_dependencies = _FIXDEP_CONFIG_DEPENDENCIES[module["name"]]
+    config_lines = {"    {0} \\".format(item): item for item in config_dependencies}
     while cursor < len(lines) and lines[cursor]:
         line = lines[cursor]
-        if not line.startswith("  ") or not line.endswith(" \\"):
-            raise LinkClosureError("{0} dependency entry grammar differs".format(name))
-        dependency = line[2:-2]
-        if not dependency or any(character.isspace() for character in dependency):
-            raise LinkClosureError("{0} dependency entry is not one path".format(name))
+        if line in config_lines:
+            dependency = config_lines[line]
+        else:
+            if not line.startswith("  ") or not line.endswith(" \\"):
+                raise LinkClosureError(
+                    "{0} dependency entry grammar differs: {1}".format(
+                        name, _dependency_entry_detail(line)
+                    )
+                )
+            dependency = line[2:-2]
+            if not dependency or any(character.isspace() for character in dependency):
+                raise LinkClosureError(
+                    "{0} dependency entry is not one path or the exact module "
+                    "configuration record: {1}".format(
+                        name, _dependency_entry_detail(line)
+                    )
+                )
         dependencies.append(dependency)
         cursor += 1
     if cursor >= len(lines) or not dependencies:
@@ -824,17 +854,33 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
     project_dependencies = _PROJECT_DEPENDENCIES[module["name"]]
     metadata_dependencies = _GENERATED_METADATA_DEPENDENCIES[module["name"]]
     compiler_dependencies = project_dependencies + metadata_dependencies
-    expected = [staged_root + item for item in compiler_dependencies]
+    expected = list(config_dependencies)
+    expected.extend(staged_root + item for item in compiler_dependencies)
     expected.extend(_KERNEL_RUST_DEPENDENCIES)
     if dependencies != expected:
+        mismatch = next(
+            (
+                index for index, pair in enumerate(zip(expected, dependencies))
+                if pair[0] != pair[1]
+            ),
+            min(len(expected), len(dependencies)),
+        )
+        wanted = expected[mismatch] if mismatch < len(expected) else None
+        actual = dependencies[mismatch] if mismatch < len(dependencies) else None
         raise LinkClosureError(
-            "{0} compiler dependency closure differs: expected={1}, actual={2}".format(
-                name, expected, dependencies
+            "{0} compiler dependency closure differs at entry {1}: expected={2}, "
+            "actual={3} (expected {4} entries, actual {5})".format(
+                name,
+                mismatch,
+                _dependency_entry_detail(wanted),
+                _dependency_entry_detail(actual),
+                len(expected),
+                len(dependencies),
             )
         )
     for index, relative in enumerate(compiler_dependencies):
         parsed, prefix = _project_relative(
-            dependencies[index],
+            dependencies[len(config_dependencies) + index],
             "{0} project dependency".format(name),
             require_absolute=True,
         )

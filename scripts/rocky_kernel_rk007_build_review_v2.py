@@ -243,7 +243,7 @@ REVIEW_GLOB = "rk007-native-build-review-*-v2.json"
 SCHEMA_VERSION = 2
 REVIEW_ID = "rk-007-native-rust-exact-build-review-ef58860e-v2"
 # Filled after the exact ef58860e artifact was downloaded and reviewed.
-REVIEW_SHA256 = "096a9ba3e6fea9a2db182c94317a081a72c23d2377e90a629070d460a3646389"
+REVIEW_SHA256 = "7ec0d25eb21a5468b473feef8855133de6e326874dd06416c85b87c1e607e5ee"
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
 )
@@ -372,9 +372,9 @@ EXPECTED_HISTORICAL_ORACLE_SOURCE = EXPECTED_INPUT_BY_PATH[
 # must agree across HEAD, index, and worktree.
 EXPECTED_CURRENT_OVERRIDES = [
     {
-        "current_git_blob_sha1": "c369bac941e2c4138aef390a13f344bef609f3d1",
-        "current_sha256": "b21cd97cb2dfe019467a45c71eda07b2698e7557273e227e163e41d27c5a9850",
-        "current_size": 91486,
+        "current_git_blob_sha1": "b0d5b0f7875a3607175f870d866ec4bd8ced6dc0",
+        "current_sha256": "1d771f60386d7e5ea2df8ee64b4e95054420584fc02473eeafe3f803045a437d",
+        "current_size": 91482,
         "mode": "100644",
         "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
         "runtime_git_blob_sha1": "3780ba2239d4b365f5d8bb92e6fbaa505b287c30",
@@ -432,9 +432,9 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 49797,
     },
     {
-        "current_git_blob_sha1": "4e57d21fd66ca238f1bf323d6b0f53d0ae515860",
-        "current_sha256": "657b6d9cfe416bc1c0f790a51b1775d5c3f18622c96e80474979f515b1fbc37f",
-        "current_size": 57558,
+        "current_git_blob_sha1": "6f1a77abbfa91756b8310c294c1b37edf7eb3197",
+        "current_sha256": "87c8bba60aba0ee2c3628925096672bf35b299044928baca41d3317fbe9a4f57",
+        "current_size": 59345,
         "mode": "100644",
         "path": "scripts/native_rust_kbuild_link_closure.py",
         "runtime_git_blob_sha1": "8b571f2c122ae8a6102e8ed83129f584701feea2",
@@ -452,8 +452,8 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 46054,
     },
     {
-        "current_git_blob_sha1": "5f97f566a3ae0e2ae9a34fb7574585eb1a489424",
-        "current_sha256": "d46afd6725310a85e449e186477e2b34581fb4a1e951c1fbcfbf099fecf2d86c",
+        "current_git_blob_sha1": "368e0a2b93243ae7fbaaef0a3ee2dcd1ffe5ccda",
+        "current_sha256": "f098b6977a771c1f4b2c28e9fba4e2b0c0c30c601b2424831e8410a1898c9d35",
         "current_size": 138177,
         "mode": "100644",
         "path": "scripts/rocky_kernel_rk007_build_review.py",

@@ -99,6 +99,7 @@ def validate_provenance_structure(workflow_text):
         '"--no-tags",',
         '"--depth=1",',
         '"--no-recurse-submodules",',
+        'defining_repository_url,\n            defining_workflow_sha,',
         '"FETCH_HEAD^{commit}"',
         'fetched_commit == defining_workflow_sha',
         'git_environment["GIT_NO_REPLACE_OBJECTS"] = "1"',
@@ -611,7 +612,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 completed.stderr.decode("utf-8", errors="replace"),
             )
 
-    def test_workflow_provenance_fetches_and_verifies_missing_definition_commit(self):
+    def test_workflow_provenance_fetches_recorded_commit_after_merge_ref_moves(self):
         source = provenance_python_source(self.workflow)
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -634,6 +635,14 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.provenance_git(
                 definition, "update-ref", "refs/pull/7/merge", defining_sha
             )
+            definition_workflow.write_bytes(b"name: newer workflow definition\n")
+            self.provenance_git(definition, "add", "--", PROVENANCE_WORKFLOW_PATH)
+            self.provenance_git(definition, "commit", "-q", "-m", "newer merge")
+            newer_sha = self.provenance_git(definition, "rev-parse", "HEAD")
+            self.provenance_git(
+                definition, "update-ref", "refs/pull/7/merge", newer_sha
+            )
+            self.assertNotEqual(newer_sha, defining_sha)
 
             candidate = root / "candidate"
             candidate.mkdir()
@@ -674,11 +683,28 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             environment, evidence = self.provenance_environment(
                 root, candidate, candidate_sha, defining_sha
             )
+            mutable_fetch = source.replace(
+                "defining_repository_url,\n            defining_workflow_sha,",
+                "defining_repository_url,\n            defining_workflow_git_ref,",
+                1,
+            )
+            self.assertNotEqual(source, mutable_fetch)
+            raced = self.run_provenance_source(mutable_fetch, environment, evidence)
+            self.assertNotEqual(raced.returncode, 0)
+            self.assertIn(
+                "fetched defining workflow commit differs",
+                raced.stderr.decode("utf-8", errors="replace"),
+            )
+            self.assertFalse((evidence / "workflow-provenance.json").exists())
             completed = self.run_provenance_source(source, environment, evidence)
             self.assertEqual(
                 completed.returncode,
                 0,
                 completed.stderr.decode("utf-8", errors="replace"),
+            )
+            self.assertEqual(
+                self.provenance_git(candidate, "rev-parse", "FETCH_HEAD"),
+                defining_sha,
             )
             self.assertEqual(
                 self.provenance_git(
@@ -693,9 +719,10 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             completed = self.run_provenance_source(source, forged, evidence)
             self.assertNotEqual(completed.returncode, 0)
             self.assertIn(
-                "fetched defining workflow commit differs",
+                "git command failed: fetch",
                 completed.stderr.decode("utf-8", errors="replace"),
             )
+            self.assertFalse((evidence / "workflow-provenance.json").exists())
 
     def test_workflow_provenance_ignores_git_redirection_environment(self):
         source = provenance_python_source(self.workflow)

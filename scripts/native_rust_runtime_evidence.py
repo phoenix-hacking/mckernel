@@ -25,9 +25,9 @@ from typing import Any
 
 EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     "kbuild_link_closure": {
-        "git_blob_sha1": "4e57d21fd66ca238f1bf323d6b0f53d0ae515860",
-        "sha256": "657b6d9cfe416bc1c0f790a51b1775d5c3f18622c96e80474979f515b1fbc37f",
-        "size": 57558,
+        "git_blob_sha1": "6f1a77abbfa91756b8310c294c1b37edf7eb3197",
+        "sha256": "87c8bba60aba0ee2c3628925096672bf35b299044928baca41d3317fbe9a4f57",
+        "size": 59345,
     },
     "kconfig_policy": {
         "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
@@ -41,7 +41,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:1c761759f155daa6d5d7f5d3edaa2c188e07ada44550259326fe1319221b7834"
+    "ISOLATED_SELF_DIGEST:f392eb28378a9bffaaed495f68b7f0a3fb00978c21e774206d9d200d117c0beb"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -656,7 +656,7 @@ EXPECTED_EXACT_BUILD_STEP_SHA256 = {
     "Acquire, patch, and credit-forbidden-stage the exact source": "421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000",
     "Resolve the evidence-only module configuration twice": "e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943",
     "Compile the exact kernel and native Rust modules": "17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a",
-    "Validate built metadata and capture immutable diagnostics": "3af1b3d4105d41a359efbfaa3c0673865e14404c200b451b02a6612a40bdc285",
+    "Validate built metadata and capture immutable diagnostics": "156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c",
     "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
 }
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
@@ -673,9 +673,9 @@ EXPECTED_RUNTIME_INIT_SHA256 = (
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "c369bac941e2c4138aef390a13f344bef609f3d1",
-        "sha256": "b21cd97cb2dfe019467a45c71eda07b2698e7557273e227e163e41d27c5a9850",
-        "size": 91486,
+        "git_blob_sha1": "b0d5b0f7875a3607175f870d866ec4bd8ced6dc0",
+        "sha256": "1d771f60386d7e5ea2df8ee64b4e95054420584fc02473eeafe3f803045a437d",
+        "size": 91482,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -683,9 +683,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "5670a3e9880d628921966957ec95ac11d2fd73dd",
-        "sha256": "91dab732d8402edd0f74cf26e0b5be9cfed984a0c7cf8bc8bf1ce1192eb3ab44",
-        "size": 36459,
+        "git_blob_sha1": "d6722d1237d6704b7639c860aa2d31ab064e5989",
+        "sha256": "174a7784343ed3376eee8ed3855c24b7d3abbc99793dc64e2b723e15a3721639",
+        "size": 36470,
     },
 }
 EXPECTED_REPOSITORY_HELPER_IDENTITIES = {
@@ -3137,7 +3137,7 @@ def _validate_runtime_workflow_provenance_boundary(text: str) -> None:
         "          workflow_git() {\n",
         '          if ! workflow_git cat-file -e \\\n',
         '            "$DEFINING_WORKFLOW_SHA^{commit}" 2>/dev/null; then\n',
-        '            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"\n',
+        '            workflow_git fetch --no-tags --depth=1 origin "$DEFINING_WORKFLOW_SHA"\n',
         '            test "$(workflow_git rev-parse FETCH_HEAD)" = "$DEFINING_WORKFLOW_SHA"\n',
         '          candidate_caller_workflow_blob="$(workflow_git rev-parse --verify \\\n',
         '          executed_caller_workflow_blob="$(workflow_git rev-parse --verify \\\n',

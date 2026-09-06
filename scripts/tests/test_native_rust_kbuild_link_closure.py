@@ -25,6 +25,35 @@ SOURCE_ROOT = "/build/native-rust-source/linux"
 SOURCE_PREFIX = SOURCE_ROOT + "/drivers/misc/mckernel/"
 
 
+# Recorded from the pinned Rocky SRPM's unmodified scripts/basic/fixdep.c
+# (SHA256 512a85c24ca2cdd44d1d652e071abc6650cf4776e21979e0a08b421178f59590).
+# Its input was a constructed Rust dep-info list and byte-exact staged sources;
+# only the absolute source-root prefix is normalized here. This is generator
+# grammar evidence, not a captured kernel compiler invocation or runtime proof.
+ROCKY_FIXDEP_SMP_RECORD = (
+    'savedcmd_drivers/misc/mckernel/ihk_smp_x86_64.o := rustc --emit=obj=drivers/misc/mckernel/ihk_smp_x86_64.o /build/native-rust-source/linux/drivers/misc/mckernel/ihk_smp_x86_64.rs\n'
+    '\n'
+    'source_drivers/misc/mckernel/ihk_smp_x86_64.o := /build/native-rust-source/linux/drivers/misc/mckernel/ihk_smp_x86_64.rs\n'
+    '\n'
+    'deps_drivers/misc/mckernel/ihk_smp_x86_64.o := \\\n'
+    '    $(wildcard include/config/COMPAT) \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_resource.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk-compat-build-id.bin \\\n'
+    '  ./rust/libcore.rmeta \\\n'
+    '  ./rust/libkernel.rmeta \\\n'
+    '  ./rust/liballoc.rmeta \\\n'
+    '  ./rust/libcompiler_builtins.rmeta \\\n'
+    '  ./rust/libmacros.so \\\n'
+    '  ./rust/libbindings.rmeta \\\n'
+    '  ./rust/libuapi.rmeta \\\n'
+    '  ./rust/libbuild_error.rmeta \\\n'
+    '\n'
+    'drivers/misc/mckernel/ihk_smp_x86_64.o: $(deps_drivers/misc/mckernel/ihk_smp_x86_64.o)\n'
+    '\n'
+    '$(deps_drivers/misc/mckernel/ihk_smp_x86_64.o):\n'
+)
+
+
 def objtool(target):
     return " ".join(
         ["./tools/objtool/objtool"] + list(closure._OBJTOOL_FLAGS) + [target]
@@ -166,6 +195,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             "",
             "deps_{0} := \\".format(target),
         ]
+        if module["name"] == "ihk-smp-x86_64":
+            body.append("    $(wildcard include/config/COMPAT) \\")
         body.extend("  {0}{1} \\".format(SOURCE_PREFIX, item) for item in dependencies)
         body.extend(
             "  {0} \\".format(item) for item in closure._KERNEL_RUST_DEPENDENCIES
@@ -830,6 +861,114 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             SOURCE_PREFIX + "smp_resource.rs " + "\\",
             "",
         )
+
+    def test_exact_rocky_fixdep_smp_record_preserves_source_closure(self):
+        module = closure.MODULES[1]
+        target = "drivers/misc/mckernel/ihk_smp_x86_64.o"
+        name = ".ihk_smp_x86_64.o.cmd"
+        self.assertEqual(
+            ROCKY_FIXDEP_SMP_RECORD.splitlines()[1:],
+            self.read_text(name).splitlines()[1:],
+        )
+        self.assertEqual(
+            ["ihk_smp_x86_64.rs", "smp_resource.rs"],
+            closure._parse_rust_dependency_body(
+                name,
+                target,
+                ROCKY_FIXDEP_SMP_RECORD,
+                SOURCE_PREFIX + "ihk_smp_x86_64.rs",
+                SOURCE_ROOT,
+                module,
+            ),
+        )
+
+    def test_fixdep_config_record_is_required_exact_and_smp_only(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        line = "    $(wildcard include/config/COMPAT) \\\n"
+        alternatives = (
+            "",
+            line + line,
+            line.replace("    ", "  ", 1),
+            line.replace("    ", "     ", 1),
+            line.replace("    ", "\t", 1),
+            line.replace("wildcard ", "wildcard  "),
+            line.replace("COMPAT)", "COMPAT )"),
+            line.replace("COMPAT)", "COMPAT.h)"),
+            line.replace("COMPAT)", "IA32_EMULATION)"),
+            line.replace("COMPAT)", "*)"),
+            line.replace("include/config/", "./include/config/"),
+            line.replace("include/config/", "/tmp/config/"),
+            line.replace("$(wildcard include/config/COMPAT)", "${wildcard include/config/COMPAT}"),
+            line.replace("$(wildcard include/config/COMPAT)", "$(CONFIG_COMPAT)"),
+            line.replace(" \\\n", "\\\n"),
+        )
+        for alternative in alternatives:
+            with self.subTest(alternative=alternative):
+                self.mutate_once(name, line, alternative)
+
+        for module in (closure.MODULES[0], closure.MODULES[2]):
+            target = "{0}/{1}".format(closure.MODULE_ROOT, module["rust_object"])
+            head = "deps_{0} := \\\n".format(target)
+            with self.subTest(module=module["name"]):
+                self.mutate_once(closure._cmd_name(target), head, head + line)
+
+    def test_fixdep_config_record_order_and_extra_dependencies_are_rejected(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        original = self.read_text(name)
+        config = "    $(wildcard include/config/COMPAT) \\\n"
+        resource = "  " + SOURCE_PREFIX + "smp_resource.rs \\\n"
+        metadata = "  " + SOURCE_PREFIX + "ihk-compat-build-id.bin \\\n"
+        kernel = "  ./rust/libcore.rmeta \\\n"
+        self.mutate_once(name, config + resource, resource + config)
+        self.mutate_once(name, resource + metadata, metadata + resource)
+        for anchor in (resource, metadata, kernel):
+            with self.subTest(anchor=anchor):
+                moved = original.replace(config, "", 1).replace(anchor, anchor + config, 1)
+                self.write_text(name, moved)
+                try:
+                    self.assert_rejected()
+                finally:
+                    self.write_text(name, original)
+        for extra in (
+            "    $(wildcard include/config/IA32_EMULATION) \\\n",
+            "  ./include/config/COMPAT \\\n",
+            "  /tmp/unbound.rmeta \\\n",
+        ):
+            with self.subTest(extra=extra):
+                self.mutate_once(name, config, config + extra)
+
+    def test_dependency_errors_identify_a_bounded_offending_entry(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        original = self.read_text(name)
+        config = "    $(wildcard include/config/COMPAT) \\\n"
+        malformed = "    $(wildcard include/config/UNKNOWN) \\\n"
+        cases = (
+            (config, malformed, repr(malformed.rstrip("\n")), None),
+            (config, "", repr(SOURCE_PREFIX + "smp_resource.rs"), None),
+            (
+                "  ./rust/libcore.rmeta \\\n",
+                "  ./rust/" + "x" * 2000 + ".rmeta \\\n",
+                repr(("./rust/" + "x" * 2000 + ".rmeta")[:160]),
+                "2013 characters",
+            ),
+            (config, " " + "x" * 2000 + "\n", repr((" " + "x" * 2000)[:160]), "2001 characters"),
+        )
+        for old, new, expected, truncated in cases:
+            with self.subTest(new=new[:80]):
+                self.write_text(name, original.replace(old, new, 1))
+                try:
+                    with self.assertRaises(closure.LinkClosureError) as caught:
+                        closure.validate_kbuild_link_closure(
+                            self.records, stage_lock_path=self.stage_lock_path
+                        )
+                    diagnostic = str(caught.exception)
+                    self.assertIn(name, diagnostic)
+                    self.assertIn(expected, diagnostic)
+                    self.assertLess(len(diagnostic), 700)
+                    if truncated is not None:
+                        self.assertIn(truncated, diagnostic)
+                finally:
+                    self.write_text(name, original)
 
     def test_generated_compatibility_metadata_dependency_is_exact_and_smp_only(self):
         name = ".ihk_smp_x86_64.o.cmd"

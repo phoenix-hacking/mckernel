@@ -121,7 +121,7 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
             'test "$CALLER_WORKFLOW_SHA" = "$DEFINING_WORKFLOW_SHA"',
             'case "$GITHUB_EVENT_NAME" in',
             'test "$EXPECTED_HEAD_SHA" = "$CALLER_WORKFLOW_SHA"',
-            'workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"',
+            'workflow_git fetch --no-tags --depth=1 origin "$DEFINING_WORKFLOW_SHA"',
             'candidate_caller_workflow_blob="$(workflow_git rev-parse --verify',
             'executed_caller_workflow_blob="$(workflow_git rev-parse --verify',
             'candidate_job_workflow_blob="$(workflow_git rev-parse --verify',
@@ -175,8 +175,12 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
                 "",
             ),
             (
-                '            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"\n',
+                '            workflow_git fetch --no-tags --depth=1 origin "$DEFINING_WORKFLOW_SHA"\n',
                 '            workflow_git fetch origin "$GITHUB_REF" || true\n',
+            ),
+            (
+                '            workflow_git fetch --no-tags --depth=1 origin "$DEFINING_WORKFLOW_SHA"\n',
+                '            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"\n',
             ),
             (
                 '          test "$candidate_caller_workflow_blob" = \\\n'
@@ -220,6 +224,81 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
                     runtime_evidence._validate_runtime_workflow_provenance_boundary(
                         mutation
                     )
+
+    def test_provenance_fetch_uses_recorded_commit_after_merge_ref_moves(self) -> None:
+        document = yaml.safe_load(self.workflow)
+        verify = next(
+            step
+            for step in document["jobs"]["exact-runtime"]["steps"]
+            if step.get("name")
+            == "Verify immutable build inputs and native module link contracts"
+        )["run"]
+        start = verify.index("workflow_git() {\n")
+        end = verify.index('candidate_caller_workflow_blob="', start)
+        fetch_script = "set -euo pipefail\n" + verify[start:end]
+
+        def git(repository, *arguments):
+            return subprocess.run(
+                ["/usr/bin/git", "-C", str(repository)] + list(arguments),
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            ).stdout.strip()
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            definition = root / "definition"
+            candidate = root / "candidate"
+            definition.mkdir()
+            candidate.mkdir()
+            git(definition, "init", "-q")
+            git(definition, "config", "user.name", "Workflow fixture")
+            git(definition, "config", "user.email", "fixture@example.invalid")
+            (definition / "workflow.yml").write_text("name: recorded\n")
+            git(definition, "add", "workflow.yml")
+            git(definition, "commit", "-q", "-m", "recorded definition")
+            recorded_sha = git(definition, "rev-parse", "HEAD")
+            git(definition, "update-ref", "refs/pull/7/merge", recorded_sha)
+            (definition / "workflow.yml").write_text("name: newer\n")
+            git(definition, "commit", "-qam", "newer merge")
+            newer_sha = git(definition, "rev-parse", "HEAD")
+            git(definition, "update-ref", "refs/pull/7/merge", newer_sha)
+            self.assertNotEqual(recorded_sha, newer_sha)
+            git(candidate, "init", "-q")
+            git(candidate, "remote", "add", "origin", definition.as_uri())
+            environment = dict(os.environ)
+            environment.update({
+                "DEFINING_WORKFLOW_SHA": recorded_sha,
+                "GITHUB_REF": "refs/pull/7/merge",
+                "GITHUB_WORKSPACE": str(candidate),
+            })
+            mutable_script = fetch_script.replace(
+                'origin "$DEFINING_WORKFLOW_SHA"', 'origin "$GITHUB_REF"', 1
+            )
+            self.assertNotEqual(fetch_script, mutable_script)
+            raced = subprocess.run(
+                ["/usr/bin/bash", "-c", mutable_script],
+                cwd=candidate,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertNotEqual(raced.returncode, 0)
+            self.assertEqual(git(candidate, "rev-parse", "FETCH_HEAD"), newer_sha)
+            completed = subprocess.run(
+                ["/usr/bin/bash", "-c", fetch_script],
+                cwd=candidate,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertEqual(git(candidate, "rev-parse", "FETCH_HEAD"), recorded_sha)
+            self.assertEqual(
+                git(candidate, "rev-parse", recorded_sha + "^{commit}"),
+                recorded_sha,
+            )
 
     def test_external_actions_and_rocky_runtime_are_immutable(self) -> None:
         image = (

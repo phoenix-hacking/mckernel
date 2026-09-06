@@ -156,7 +156,7 @@ jobs:
           }
           if ! workflow_git cat-file -e \
             "$DEFINING_WORKFLOW_SHA^{commit}" 2>/dev/null; then
-            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"
+            workflow_git fetch --no-tags --depth=1 origin "$DEFINING_WORKFLOW_SHA"
             test "$(workflow_git rev-parse FETCH_HEAD)" = "$DEFINING_WORKFLOW_SHA"
           fi
           test "$(workflow_git rev-parse "$DEFINING_WORKFLOW_SHA^{commit}")" = \
