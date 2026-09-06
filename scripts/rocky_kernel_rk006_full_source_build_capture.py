@@ -69,6 +69,7 @@ REQUIRED_BUILD_MEMBERS = [
     "built-module-artifacts.txt",
     "bzImage",
     "commit.sha",
+    "executed-build-workflow.yml",
     "ihk-smp-x86_64.ko",
     "ihk-smp-x86_64.ko.modinfo",
     "ihk-smp-x86_64.ko.modinfo-section",
@@ -93,6 +94,7 @@ REQUIRED_BUILD_MEMBERS = [
     "module-targets.txt",
     "resolved.config",
     "stage-lock.json",
+    "workflow-provenance.json",
     "workflow-state",
 ]
 PRECHECK_BUILD_MEMBERS = [
@@ -104,6 +106,7 @@ PRECHECK_BUILD_MEMBERS = [
     "build.phase",
     "built-module-artifacts.txt",
     "commit.sha",
+    "executed-build-workflow.yml",
     "ihk-smp-x86_64.ko",
     "ihk-smp-x86_64.ko.modinfo",
     "ihk-smp-x86_64.ko.modinfo-section",
@@ -121,6 +124,7 @@ PRECHECK_BUILD_MEMBERS = [
     "mcctrl.ko.nm",
     "mcctrl.ko.readelf",
     "module-targets.txt",
+    "workflow-provenance.json",
     "workflow-state",
 ]
 REPRODUCIBLE_BUILD_ENVIRONMENT = {
@@ -1840,6 +1844,19 @@ def _parse_checksum_manifest(data, label):
     return rows
 
 
+def _member_set_difference(expected, actual):
+    def bounded(names):
+        displayed = [repr(name[:80]) + ("..." if len(name) > 80 else "") for name in names[:4]]
+        return "[{}] ({} total)".format(
+            ", ".join(displayed) + (", ..." if len(names) > 4 else ""), len(names)
+        )
+
+    return "missing={}, extra={}".format(
+        bounded(sorted(set(expected) - set(actual))),
+        bounded(sorted(set(actual) - set(expected))),
+    )
+
+
 def _build_binding(build_dir, capture_document):
     build_dir = _safe_directory(build_dir, "build evidence")
     initial_directory_identity = _metadata_identity(build_dir.lstat())
@@ -1858,11 +1875,20 @@ def _build_binding(build_dir, capture_document):
         if path.name != "SHA256SUMS"
     )
     if actual_names != sorted(manifest):
-        raise CaptureError("build evidence member set differs from SHA256SUMS")
-    if sorted(manifest) != [
+        raise CaptureError(
+            "build evidence member set differs from SHA256SUMS: {}".format(
+                _member_set_difference(manifest, actual_names)
+            )
+        )
+    expected_names = [
         name for name in REQUIRED_BUILD_MEMBERS if name != "SHA256SUMS"
-    ]:
-        raise CaptureError("build evidence exact member set differs")
+    ]
+    if sorted(manifest) != expected_names:
+        raise CaptureError(
+            "build evidence exact member set differs: {}".format(
+                _member_set_difference(expected_names, manifest)
+            )
+        )
     precheck_data, precheck_metadata = _read_rooted(
         build_dir, "PRECHECK_SHA256SUMS", "build precheck checksum manifest"
     )
@@ -1876,7 +1902,11 @@ def _build_binding(build_dir, capture_document):
         precheck_data, "build precheck checksum manifest"
     )
     if sorted(precheck) != PRECHECK_BUILD_MEMBERS:
-        raise CaptureError("build precheck member set differs")
+        raise CaptureError(
+            "build precheck member set differs: {}".format(
+                _member_set_difference(PRECHECK_BUILD_MEMBERS, precheck)
+            )
+        )
     for name, digest in precheck.items():
         if manifest.get(name) != digest:
             raise CaptureError(

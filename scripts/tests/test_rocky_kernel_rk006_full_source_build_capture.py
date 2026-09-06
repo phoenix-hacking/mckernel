@@ -26,6 +26,95 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = REPO_ROOT / capture.CONTRACT_PATH
 
 
+# Filename inventories independently transcribed from successful checksum checks
+# in native compiler job 101446716523, run 34018534884, candidate 61c19af7.
+# The raw job log SHA256 is
+# 5e813b6e6ee193223dda79fc787bf7bb4796dbf665771c440d510aed00cb2938.
+# These names are producer evidence; payload bytes below remain synthetic.
+RECORDED_PRECHECK_BUILD_MEMBERS = (
+    "build-log.exit-code",
+    "build.commands",
+    "build.environment",
+    "build.exit-code",
+    "build.log",
+    "build.phase",
+    "built-module-artifacts.txt",
+    "commit.sha",
+    "executed-build-workflow.yml",
+    "ihk-smp-x86_64.ko",
+    "ihk-smp-x86_64.ko.modinfo",
+    "ihk-smp-x86_64.ko.modinfo-section",
+    "ihk-smp-x86_64.ko.nm",
+    "ihk-smp-x86_64.ko.readelf",
+    "ihk.ko",
+    "ihk.ko.modinfo",
+    "ihk.ko.modinfo-section",
+    "ihk.ko.nm",
+    "ihk.ko.readelf",
+    "kconfig-solver-matrix.json",
+    "mcctrl.ko",
+    "mcctrl.ko.modinfo",
+    "mcctrl.ko.modinfo-section",
+    "mcctrl.ko.nm",
+    "mcctrl.ko.readelf",
+    "module-targets.txt",
+    "workflow-provenance.json",
+    "workflow-state",
+)
+RECORDED_FINAL_MANIFEST_MEMBERS = (
+    ".ihk-smp-x86_64.ko.cmd",
+    ".ihk-smp-x86_64.mod.cmd",
+    ".ihk-smp-x86_64.mod.o.cmd",
+    ".ihk-smp-x86_64.o.cmd",
+    ".ihk.ko.cmd",
+    ".ihk.mod.cmd",
+    ".ihk.mod.o.cmd",
+    ".ihk.o.cmd",
+    ".ihk_smp_x86_64.o.cmd",
+    ".mcctrl.ko.cmd",
+    ".mcctrl.mod.cmd",
+    ".mcctrl.mod.o.cmd",
+    ".mcctrl.o.cmd",
+    "PRECHECK_SHA256SUMS",
+    "build-log.exit-code",
+    "build.commands",
+    "build.environment",
+    "build.exit-code",
+    "build.log",
+    "build.phase",
+    "built-module-artifacts.txt",
+    "bzImage",
+    "commit.sha",
+    "executed-build-workflow.yml",
+    "ihk-smp-x86_64.ko",
+    "ihk-smp-x86_64.ko.modinfo",
+    "ihk-smp-x86_64.ko.modinfo-section",
+    "ihk-smp-x86_64.ko.nm",
+    "ihk-smp-x86_64.ko.readelf",
+    "ihk-smp-x86_64.mod",
+    "ihk.ko",
+    "ihk.ko.modinfo",
+    "ihk.ko.modinfo-section",
+    "ihk.ko.nm",
+    "ihk.ko.readelf",
+    "ihk.mod",
+    "kbuild-link-closure.json",
+    "kconfig-solver-matrix.json",
+    "kernel.release",
+    "mcctrl.ko",
+    "mcctrl.ko.modinfo",
+    "mcctrl.ko.modinfo-section",
+    "mcctrl.ko.nm",
+    "mcctrl.ko.readelf",
+    "mcctrl.mod",
+    "module-targets.txt",
+    "resolved.config",
+    "stage-lock.json",
+    "workflow-provenance.json",
+    "workflow-state",
+)
+
+
 class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -117,10 +206,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
 
     def _build_evidence(self, directory, head="a" * 40):
         contents = {}
-        names = sorted(
-            set(capture.REQUIRED_BUILD_MEMBERS)
-            | set(capture.PRECHECK_BUILD_MEMBERS)
-        )
+        names = RECORDED_FINAL_MANIFEST_MEMBERS
         for name in names:
             if name in ("PRECHECK_SHA256SUMS", "SHA256SUMS"):
                 continue
@@ -133,7 +219,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         contents["workflow-state"] = b"bootstrap-complete\n"
         contents["PRECHECK_SHA256SUMS"] = "".join(
             "{}  {}\n".format(hashlib.sha256(contents[name]).hexdigest(), name)
-            for name in capture.PRECHECK_BUILD_MEMBERS
+            for name in RECORDED_PRECHECK_BUILD_MEMBERS
         ).encode("ascii")
         for name, data in contents.items():
             path = directory / name
@@ -1414,6 +1500,93 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         capture._validate_final_build_evidence_rows(
             document, binding["build_evidence"], binding["build_artifact"]
         )
+
+    def test_actual_compiler_member_inventories_match_both_binding_phases(self):
+        self.assertEqual(50, len(RECORDED_FINAL_MANIFEST_MEMBERS))
+        self.assertEqual(28, len(RECORDED_PRECHECK_BUILD_MEMBERS))
+        self.assertEqual(
+            sorted(RECORDED_FINAL_MANIFEST_MEMBERS + ("SHA256SUMS",)),
+            capture.REQUIRED_BUILD_MEMBERS,
+        )
+        self.assertEqual(
+            list(RECORDED_PRECHECK_BUILD_MEMBERS), capture.PRECHECK_BUILD_MEMBERS
+        )
+
+    def test_workflow_provenance_members_keep_exact_presence_and_hash_binding(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        for name in ("executed-build-workflow.yml", "workflow-provenance.json"):
+            for mutation in ("missing", "missing-precheck", "checksum", "final-only"):
+                with self.subTest(name=name, mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self._build_evidence(root)
+                    manifests = {
+                        filename: capture._parse_checksum_manifest(
+                            (root / filename).read_bytes(), filename
+                        )
+                        for filename in ("PRECHECK_SHA256SUMS", "SHA256SUMS")
+                    }
+                    if mutation == "missing":
+                        (root / name).unlink()
+                        del manifests["SHA256SUMS"][name]
+                        del manifests["PRECHECK_SHA256SUMS"][name]
+                        expected = "exact member set differs"
+                    elif mutation == "missing-precheck":
+                        del manifests["PRECHECK_SHA256SUMS"][name]
+                        expected = "precheck member set differs"
+                    else:
+                        replacement = b"changed workflow evidence\n"
+                        (root / name).write_bytes(replacement)
+                        if mutation == "final-only":
+                            manifests["SHA256SUMS"][name] = hashlib.sha256(replacement).hexdigest()
+                            expected = "precheck/final checksum differs"
+                        else:
+                            expected = "evidence checksum differs"
+                    for filename in ("PRECHECK_SHA256SUMS", "SHA256SUMS"):
+                        rows = manifests[filename]
+                        if filename == "SHA256SUMS":
+                            rows["PRECHECK_SHA256SUMS"] = hashlib.sha256(
+                                (root / "PRECHECK_SHA256SUMS").read_bytes()
+                            ).hexdigest()
+                        (root / filename).write_text(
+                            "".join("{}  {}\n".format(rows[key], key) for key in sorted(rows)),
+                            encoding="ascii",
+                        )
+                    with self.assertRaisesRegex(capture.CaptureError, expected) as caught:
+                        capture._build_binding(root, document)
+                    self.assertIn(name, str(caught.exception))
+
+    def test_member_set_diagnostics_bound_missing_and_extra_names(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._build_evidence(root)
+            missing = "workflow-provenance.json"
+            extra = "unbound-workflow-provenance.json"
+            (root / missing).rename(root / extra)
+            manifest = (root / "SHA256SUMS").read_text(encoding="ascii")
+            rows = manifest.replace("  " + missing + "\n", "  " + extra + "\n").splitlines(True)
+            (root / "SHA256SUMS").write_text(
+                "".join(sorted(rows, key=lambda row: row[66:])), encoding="ascii"
+            )
+            with self.assertRaisesRegex(capture.CaptureError, "exact member set differs") as caught:
+                capture._build_binding(root, document)
+            self.assertIn("missing=['workflow-provenance.json']", str(caught.exception))
+            self.assertIn("extra=['unbound-workflow-provenance.json']", str(caught.exception))
+
+        diagnostic = capture._member_set_difference(
+            ["missing-{:03d}-{}".format(index, "m" * 200) for index in range(100)],
+            ["extra-{:03d}-{}".format(index, "x" * 200) for index in range(100)],
+        )
+        self.assertLess(len(diagnostic), 800)
+        self.assertEqual(2, diagnostic.count("(100 total)"))
+        self.assertIn("missing-000-", diagnostic)
+        self.assertIn("extra-000-", diagnostic)
+        self.assertNotIn("missing-004-", diagnostic)
+        self.assertNotIn("x" * 100, diagnostic)
 
     def test_final_verifier_rejects_self_resealed_fixed_build_rows(self):
         document = {
