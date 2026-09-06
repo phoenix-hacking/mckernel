@@ -41,7 +41,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:f392eb28378a9bffaaed495f68b7f0a3fb00978c21e774206d9d200d117c0beb"
+    "ISOLATED_SELF_DIGEST:e17311b690788d1f99bfb3d9e53bf44e1ca64a954226507dd6a24675333dcfea"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -683,9 +683,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "d6722d1237d6704b7639c860aa2d31ab064e5989",
-        "sha256": "174a7784343ed3376eee8ed3855c24b7d3abbc99793dc64e2b723e15a3721639",
-        "size": 36470,
+        "git_blob_sha1": "50f120561a58fcc89a3312c9176979416b1ff27e",
+        "sha256": "8fe63a296e7ce5e93daa297dfdb33a54274ebc0caac800f05c40f10d4c23ccb2",
+        "size": 36590,
     },
 }
 EXPECTED_REPOSITORY_HELPER_IDENTITIES = {
@@ -3831,10 +3831,12 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
         "            coreutils\n"
         "          dnf -y --setopt=install_weak_deps=False install \\\n"
-        "            bash binutils cpio findutils gawk git-core gzip kmod \\\n"
+        "            bash binutils cpio diffutils findutils gawk git-core gzip kmod \\\n"
         "            qemu-kvm-core python3 sed util-linux which\n"
         "          ! /usr/bin/rpm -q coreutils-single\n"
         "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
+        "          test -x /usr/bin/cmp\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/cmp)\" = diffutils\n"
     )
     if runtime_workflow.count(coreutils_replacement) != 1:
         raise EvidenceError("runtime workflow coreutils replacement transaction differs")

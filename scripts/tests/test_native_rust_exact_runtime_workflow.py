@@ -501,7 +501,7 @@ done
         self.assertIn("! /usr/bin/rpm -q coreutils-single", self.workflow)
         self.assertIn(
             "dnf -y --setopt=install_weak_deps=False install \\\n"
-            "            bash binutils cpio findutils gawk git-core gzip kmod \\\n"
+            "            bash binutils cpio diffutils findutils gawk git-core gzip kmod \\\n"
             "            qemu-kvm-core python3 sed util-linux which",
             self.workflow,
         )
@@ -516,6 +516,55 @@ done
         self.assertLess(checkout, recursive)
         self.assertEqual(1, self.workflow[bootstrap:checkout].count("git-core"))
         self.assertEqual(1, self.workflow.count("git-core"))
+
+    @unittest.skipUnless(shutil.which("bash"), "bash is required")
+    def test_bootstrap_installs_and_checks_cmp_before_workflow_comparison(self) -> None:
+        steps = yaml.safe_load(self.workflow)["jobs"]["exact-runtime"]["steps"]
+        bootstrap = steps[0]["run"]
+        self.assertIn("bash binutils cpio diffutils findutils", bootstrap)
+        preflight = (
+            "test -x /usr/bin/cmp\n"
+            "test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/cmp)\" = diffutils\n"
+        )
+        self.assertEqual(1, bootstrap.count(preflight))
+        self.assertLess(bootstrap.index(" install "), bootstrap.index(preflight))
+        self.assertLess(
+            self.workflow.index(preflight.splitlines()[0]),
+            self.workflow.index('/usr/bin/cmp -- "$GITHUB_WORKSPACE/'),
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            cmp_path = directory / "cmp"
+            rpm_path = directory / "rpm"
+            fixture = preflight.replace("/usr/bin/cmp", str(cmp_path)).replace(
+                "/usr/bin/rpm", str(rpm_path)
+            )
+            for present, owner, accepted in (
+                (True, "diffutils", True),
+                (False, "diffutils", False),
+                (True, "coreutils", False),
+            ):
+                with self.subTest(present=present, owner=owner):
+                    cmp_path.write_text("#!/bin/sh\nexit 0\n", encoding="ascii")
+                    cmp_path.chmod(0o755)
+                    if not present:
+                        cmp_path.unlink()
+                    rpm_path.write_text(
+                        "#!/bin/sh\nprintf '%s\\n' " + owner + "\n", encoding="ascii"
+                    )
+                    rpm_path.chmod(0o755)
+                    completed = subprocess.run(
+                        [shutil.which("bash"), "--noprofile", "--norc", "-e"],
+                        input=fixture + "printf '%s\\n' prerequisite-ready\n",
+                        text=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        env={"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"},
+                    )
+                    self.assertEqual(accepted, completed.returncode == 0)
+                    self.assertEqual(
+                        "prerequisite-ready\n" if accepted else "", completed.stdout
+                    )
 
     def test_packaged_modinfo_symlink_is_descriptor_and_owner_bound(self) -> None:
         runtime_evidence._validate_runtime_modinfo_boundary(self.workflow)
