@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: McKernel Rust Port <mckernel-rust@localhost>
+Date: Wed, 12 Aug 2026 17:18:00 -0700
+Subject: [PATCH] x86/pvh: annotate the direct PVH entry as no-ENDBR
+
+The exact Rocky 10.2 kernel reaches the final vmlinux.o objtool pass with
+IBT enabled and reports a relocation from pvh_start_xen address arithmetic
+to the same direct Xen PVH ABI entry.  The relocation is never used as an
+indirect branch target.
+
+Classify that relocation with ANNOTATE_NOENDBR, whose contract is precisely
+to suppress relocation-to-!ENDBR diagnostics when the relocation cannot be
+used for an indirect call.  startup_xen uses the same annotation pattern.
+This adds only objtool discard metadata and changes no executed PVH bytes.
+
+This is a local Rocky compatibility annotation, not a backport of upstream
+commit 5c6808d1a9dd83853ff39684aeb812be39e108e8, which later removes the
+absolute relocation as part of a broader PVH cleanup.
+
+Local-Origin: McKernel Rocky 10.2 exact-build compatibility
+Rocky-Base: linux-6.12.0-211.44.1.el10_2
+Failure-Run: 31605746750
+Failure-Job: 94144112731
+Failure-Artifact: 9145918955
+Failure-Commit: 80a07871b81aa3d05378eb07b3d4cd9d8b922ef0
+Failure-Phase: bzImage
+Failure-Exit-Code: 2
+Failure-Log-SHA256: 614f179c466c2721817fbc9b44c1dbaa9e45f4d638ed489e2b31c2c5beb69f6f
+Failure-Log-Bytes: 232963
+License: GPL-2.0-only
+Signed-off-by: McKernel Rust Port <mckernel-rust@localhost>
+---
+ arch/x86/platform/pvh/head.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
+index 409b3b9fb0c5a..939f18f37d74a 100644
+--- a/arch/x86/platform/pvh/head.S
++++ b/arch/x86/platform/pvh/head.S
+@@ -54,6 +54,7 @@
+ 
+ SYM_CODE_START(pvh_start_xen)
+ 	UNWIND_HINT_END_OF_STACK
++	ANNOTATE_NOENDBR
+ 	cld
+ 
+ 	/*
+-- 
+2.47.3

@@ -1,0 +1,251 @@
+name: Rocky 10.2 snapshot-backed RPM closure and offline replay
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit shared with the snapshot capture
+        required: true
+        type: string
+      snapshot_run_id:
+        description: Exact repository-snapshot-capture-v2 run ID
+        required: true
+        type: string
+      snapshot_run_attempt:
+        description: Exact repository-snapshot-capture-v2 run attempt
+        required: true
+        type: string
+      snapshot_tar_sha256:
+        description: Independently recorded SHA-256 of payload/snapshot.tar
+        required: true
+        type: string
+      snapshot_workflow_ref:
+        description: Exact GITHUB_WORKFLOW_REF recorded by the snapshot run
+        required: true
+        type: string
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rocky-kernel-closure-offline.yml
+      - .github/workflows/rocky-kernel-platform-evidence.yml
+      - .github/workflows/rocky-repository-snapshot-capture-v2.yml
+      - host-kernel/rocky/**
+      - scripts/rocky_kernel_closure_offline.py
+      - scripts/rocky_kernel_platform_evidence.py
+      - scripts/rocky_kernel_platform_lock.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_repository_snapshot_capture.py
+      - scripts/tests/test_rocky_kernel_closure_offline.py
+      - scripts/tests/test_rocky_repository_snapshot_capture.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/rocky-kernel-closure-offline.yml
+      - .github/workflows/rocky-kernel-platform-evidence.yml
+      - .github/workflows/rocky-repository-snapshot-capture-v2.yml
+      - host-kernel/rocky/**
+      - scripts/rocky_kernel_closure_offline.py
+      - scripts/rocky_kernel_platform_evidence.py
+      - scripts/rocky_kernel_platform_lock.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_repository_snapshot_capture.py
+      - scripts/tests/test_rocky_kernel_closure_offline.py
+      - scripts/tests/test_rocky_repository_snapshot_capture.py
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  RK_PLATFORM_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  SNAPSHOT_RUN_ID: ${{ inputs.snapshot_run_id }}
+  SNAPSHOT_RUN_ATTEMPT: ${{ inputs.snapshot_run_attempt }}
+  SNAPSHOT_TAR_SHA256: ${{ inputs.snapshot_tar_sha256 }}
+  SNAPSHOT_WORKFLOW_REF: ${{ inputs.snapshot_workflow_ref }}
+
+jobs:
+  closure-offline:
+    name: Snapshot-backed closure and offline probes (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Reject mutable or ambiguous dispatch identities
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$SNAPSHOT_RUN_ID" =~ ^[1-9][0-9]{0,18}$ ]]
+          [[ "$SNAPSHOT_RUN_ATTEMPT" =~ ^[1-9][0-9]{0,18}$ ]]
+          [[ "$SNAPSHOT_TAR_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-kernel-closure-offline.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-kernel-closure-offline.yml@refs/tags/"*) ;;
+            *) echo "unexpected closure workflow ref" >&2; exit 1 ;;
+          esac
+          case "$SNAPSHOT_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/tags/"*) ;;
+            *) echo "unexpected snapshot workflow ref" >&2; exit 1 ;;
+          esac
+
+      - name: Check out the bootstrap contract at the exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          set-safe-directory: false
+
+      - name: Install the checksum-locked bootstrap with repositories disabled
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk003-closure-offline-evidence
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          test ! -e "$EVIDENCE_ROOT"
+          test ! -L "$EVIDENCE_ROOT"
+          mkdir -m 700 "$EVIDENCE_ROOT"
+          python3 scripts/rocky_kernel_platform_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --bootstrap \
+            --output-dir "$EVIDENCE_ROOT/bootstrap" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK_PLATFORM_CONTAINER_IMAGE"
+          (cd "$EVIDENCE_ROOT/bootstrap" && sha256sum --check --strict SHA256SUMS)
+
+      - name: Re-check out the exact candidate with pinned Git
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          set-safe-directory: true
+
+      - name: Verify bounded contracts and focused tests without gate credit
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(python3 -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          test -n "$canonical_workspace"
+          test "$(git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          required_tools=(chroot cmp dnf git gpg gpgv python3 readlink rpm rpmkeys rpmspec sha256sum stat zstd)
+          for tool in "${required_tools[@]}"; do
+            command -v "$tool" >/dev/null
+          done
+          python3 scripts/rocky_kernel_platform_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+          snapshot_check=(
+            python3 scripts/rocky_repository_snapshot_capture.py
+            --repo "$GITHUB_WORKSPACE"
+            --check
+          )
+          if test "$GITHUB_EVENT_NAME" = workflow_dispatch; then
+            snapshot_check+=(
+              --source-commit "$EXPECTED_HEAD_SHA"
+              --workflow-ref "$SNAPSHOT_WORKFLOW_REF"
+            )
+          fi
+          "${snapshot_check[@]}"
+          python3 scripts/rocky_kernel_closure_offline.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
+            scripts.tests.test_rocky_kernel_closure_offline
+
+      - name: Require an empty snapshot artifact landing directory
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          SNAPSHOT_DOWNLOAD: ${{ runner.temp }}/rk003-snapshot-download
+        run: |
+          set -euo pipefail
+          test ! -e "$SNAPSHOT_DOWNLOAD"
+          test ! -L "$SNAPSHOT_DOWNLOAD"
+
+      - name: Download the exact cross-run snapshot artifact
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: rocky-repository-snapshot-v2-${{ inputs.snapshot_run_id }}-${{ inputs.snapshot_run_attempt }}
+          path: ${{ runner.temp }}/rk003-snapshot-download
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.snapshot_run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Bind the downloaded snapshot to the external digest
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk003-closure-offline-evidence
+          SNAPSHOT_DOWNLOAD: ${{ runner.temp }}/rk003-snapshot-download
+        run: |
+          set -euo pipefail
+          snapshot_tar="$SNAPSHOT_DOWNLOAD/payload/snapshot.tar"
+          snapshot_self_digest="$SNAPSHOT_DOWNLOAD/payload/snapshot.tar.sha256"
+          test -d "$SNAPSHOT_DOWNLOAD"
+          test ! -L "$SNAPSHOT_DOWNLOAD"
+          test -d "$SNAPSHOT_DOWNLOAD/payload"
+          test ! -L "$SNAPSHOT_DOWNLOAD/payload"
+          test -f "$snapshot_tar"
+          test ! -L "$snapshot_tar"
+          test -f "$snapshot_self_digest"
+          test ! -L "$snapshot_self_digest"
+          artifact_size="$(stat -c '%s' -- "$snapshot_tar")"
+          [[ "$artifact_size" =~ ^[1-9][0-9]*$ ]]
+          test "$artifact_size" -le 4328521728
+          actual_sha256="$(sha256sum --binary "$snapshot_tar")"
+          test "${actual_sha256%% *}" = "$SNAPSHOT_TAR_SHA256"
+          printf '%s  snapshot.tar\n' "$SNAPSHOT_TAR_SHA256" \
+            > "$EVIDENCE_ROOT/expected-snapshot.tar.sha256"
+          cmp "$EVIDENCE_ROOT/expected-snapshot.tar.sha256" "$snapshot_self_digest"
+
+      - name: Capture complete closure from the verified snapshot and replay offline
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk003-closure-offline-evidence
+          SNAPSHOT_DOWNLOAD: ${{ runner.temp }}/rk003-snapshot-download
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_closure_offline.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture \
+            --phase closure-offline \
+            --bootstrap-manifest "$EVIDENCE_ROOT/bootstrap/bootstrap.json" \
+            --snapshot-artifact "$SNAPSHOT_DOWNLOAD/payload/snapshot.tar" \
+            --snapshot-sha256 "$SNAPSHOT_TAR_SHA256" \
+            --snapshot-source-commit "$EXPECTED_HEAD_SHA" \
+            --snapshot-workflow-ref "$SNAPSHOT_WORKFLOW_REF" \
+            --snapshot-run-id "$SNAPSHOT_RUN_ID" \
+            --snapshot-run-attempt "$SNAPSHOT_RUN_ATTEMPT" \
+            --output-dir "$EVIDENCE_ROOT/closure-offline" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK_PLATFORM_CONTAINER_IMAGE"
+          (cd "$EVIDENCE_ROOT/closure-offline" && sha256sum --check --strict SHA256SUMS)
+
+      - name: Upload closure, replay, and probe evidence
+        if: ${{ always() && github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk003-snapshot-backed-closure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk003-closure-offline-evidence/closure-offline/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

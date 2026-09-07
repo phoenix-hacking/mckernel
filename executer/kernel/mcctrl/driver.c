@@ -128,6 +128,17 @@ void refcount_dec(refcount_t *r)
 #ifdef MCCTRL_RUST_HELPERS
 #define MCCTRL_IKC_INLINE_FREE_ADDRS 4
 
+/*
+ * Host IHK implements ihk_ikc_get_processor_id as a function-like macro, not
+ * an exported symbol. Rust cannot expand that macro, so define its legacy link
+ * name inside mcctrl. Parenthesizing the declarator prevents macro expansion;
+ * the body deliberately retains the pinned host-side CPU mapping semantics.
+ */
+int (ihk_ikc_get_processor_id)(void)
+{
+	return ihk_ikc_get_processor_id();
+}
+
 int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 		long int timeout, struct mcctrl_wakeup_desc *desc,
 		int *do_frees, int free_addrs_count, ...)

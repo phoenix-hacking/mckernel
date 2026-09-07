@@ -1,0 +1,76 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: McKernel Rust Port <mckernel-rust@localhost>
+Date: Mon, 17 Aug 2026 17:35:00 -0700
+Subject: [PATCH] rust: update the no-allocator-shim marker for Rust 1.92
+
+Rust 1.92's `alloc` crate calls a function named
+`__rust_no_alloc_shim_is_unstable_v2` before the global allocation entry
+points.  Rust upstream changed this compatibility marker from an unmangled
+static to an internally mangled Rust function in rust-lang/rust#141061.
+
+Linux 6.12 still provides the old static marker because its allocator glue
+predates that Rust change.  Define the exact function form tested by Rust
+upstream and enable the internal compiler attribute in the kernel crate.  The
+function is deliberately compiled into `rust/kernel.o`; it is not a linker
+stub supplied by the validation workflow.
+
+Rust 1.92 warns that `rustc_attrs` is an internal feature.  The exact build
+promotes warnings to errors, so narrowly allow `internal_features` immediately
+next to this one required crate feature rather than weakening build warnings.
+
+Current upstream Linux removed the standard `alloc` crate and `GlobalAlloc`
+in 392e34b6bc22077ef63abf62387ea3e9f39418c1.  That larger allocator rewrite
+is not suitable for this frozen Linux 6.12 source, so this is a local
+compatibility adaptation rather than a backport of that commit.
+
+Observed-Repository-Commit: 6f662225cbb4067800b2a16cbcce81e85924a6bc
+Observed-Workflow: Native Rust host modules exact Rocky build
+Observed-Run-ID: 32082343363
+Observed-Job-ID: 95547626904
+Observed-Artifact-ID: 9305826810
+Observed-Artifact-Zip-Bytes: 235955
+Observed-Artifact-Zip-SHA256: c262ff48d96d1f3d8a9dc577b7cbfc52f6186bfc7c95a83c5db2634ca8f8749b
+Observed-Rustc: 1.92.0
+Observed-Failure-Phase: bzImage
+Observed-Build-Log-Bytes: 234697
+Observed-Build-Log-SHA256: beb8153582de991449fed2958746210cd060d4887cad79fe777d8cfe4b3d4b50
+Observed-Diagnostic: undefined symbol: __rustc::__rust_no_alloc_shim_is_unstable_v2
+Rust-Reference-PR: 141061
+Rust-Reference-Commit: 6f935a044d1ddeb6160494a6320d008d7c311aef
+Local-Origin: McKernel Rocky 10.2 exact-build compatibility
+Rocky-Base: linux-6.12.0-211.44.1.el10_2
+License: GPL-2.0-only
+Signed-off-by: McKernel Rust Port <mckernel-rust@localhost>
+---
+ rust/kernel/alloc/allocator.rs | 5 +++--
+ rust/kernel/lib.rs             | 2 ++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/rust/kernel/alloc/allocator.rs b/rust/kernel/alloc/allocator.rs
+index e6ea601f38c6..457cc6e1fcee 100644
+--- a/rust/kernel/alloc/allocator.rs
++++ b/rust/kernel/alloc/allocator.rs
+@@ -72,6 +72,7 @@ unsafe impl GlobalAlloc for KernelAllocator {
+ #[global_allocator]
+ static ALLOCATOR: KernelAllocator = KernelAllocator;
+ 
+ // See <https://github.com/rust-lang/rust/pull/86844>.
+-#[no_mangle]
+-static __rust_no_alloc_shim_is_unstable: u8 = 0;
++// See <https://github.com/rust-lang/rust/pull/141061>.
++#[rustc_std_internal_symbol]
++fn __rust_no_alloc_shim_is_unstable_v2() {}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -16,6 +16,8 @@
+ #![feature(coerce_unsized)]
+ #![feature(dispatch_from_dyn)]
+ #![feature(new_uninit)]
++#![allow(internal_features)]
++#![feature(rustc_attrs)]
+ #![feature(unsize)]
+ #![feature(used_with_arg)]
+ 
+-- 
+2.47.3

@@ -111,10 +111,36 @@ ABI_ASSERT(ABI_OFFSET(struct ikc_scd_init_param, post_page) == 24,
 	   "Rust/C ikc_scd_init_param post_page offset mismatch");
 ABI_ASSERT(sizeof(struct syscall_request) == 72,
 	   "Rust/C syscall_request size mismatch");
+ABI_ASSERT(__alignof__(struct syscall_request) == 8,
+	   "Rust/C syscall_request alignment mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_request, rtid) == 0,
+	   "Rust/C syscall_request rtid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_request, ttid) == 4,
+	   "Rust/C syscall_request ttid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_request, valid) == 8,
+	   "Rust/C syscall_request valid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_request, number) == 16,
+	   "Rust/C syscall_request number offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct syscall_request, args) == 24,
 	   "Rust/C syscall_request args offset mismatch");
 ABI_ASSERT(sizeof(struct syscall_response) == 48,
 	   "Rust/C syscall_response size mismatch");
+ABI_ASSERT(__alignof__(struct syscall_response) == 8,
+	   "Rust/C syscall_response alignment mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, ttid) == 0,
+	   "Rust/C syscall_response ttid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, stid) == 4,
+	   "Rust/C syscall_response stid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, status) == 8,
+	   "Rust/C syscall_response status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, req_thread_status) == 16,
+	   "Rust/C syscall_response req_thread_status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, ret) == 24,
+	   "Rust/C syscall_response ret offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, fault_address) == 32,
+	   "Rust/C syscall_response fault_address offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct syscall_response, pde_data) == 40,
+	   "Rust/C syscall_response pde_data offset mismatch");
 ABI_ASSERT(sizeof(struct syscall_post) == 64,
 	   "Rust/C syscall_post size mismatch");
 ABI_ASSERT(sizeof(struct coretable) == 16,
@@ -245,6 +271,28 @@ ABI_ASSERT(sizeof(struct ihk_ikc_packet_header) == 8,
 	   "Rust/C ihk_ikc_packet_header size mismatch");
 ABI_ASSERT(sizeof(struct ikc_scd_packet) == 128,
 	   "Rust/C ikc_scd_packet size mismatch");
+ABI_ASSERT(__alignof__(struct ikc_scd_packet) == 8,
+	   "Rust/C ikc_scd_packet alignment mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, header) == 0,
+	   "Rust/C ikc_scd_packet header offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, msg) == 8,
+	   "Rust/C ikc_scd_packet msg offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, err) == 12,
+	   "Rust/C ikc_scd_packet err offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, reply) == 16,
+	   "Rust/C ikc_scd_packet reply offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, ref) == 24,
+	   "Rust/C ikc_scd_packet traditional ref offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, osnum) == 28,
+	   "Rust/C ikc_scd_packet traditional osnum offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, pid) == 32,
+	   "Rust/C ikc_scd_packet traditional pid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, arg) == 40,
+	   "Rust/C ikc_scd_packet traditional arg offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, req) == 48,
+	   "Rust/C ikc_scd_packet traditional req offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ikc_scd_packet, resp_pa) == 120,
+	   "Rust/C ikc_scd_packet traditional resp_pa offset mismatch");
 ABI_ASSERT(sizeof(struct x86_basic_regs) == 168,
 	   "Rust/C x86_basic_regs size mismatch");
 ABI_ASSERT(sizeof(struct x86_sregs) == 48,
@@ -869,12 +917,16 @@ ABI_ASSERT(sizeof(struct thread) == 5568,
 	   "Rust/C thread size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, cpu_id) == 16,
 	   "Rust/C thread cpu_id offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, tid) == 20,
+	   "Rust/C thread tid offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, status) == 4184,
 	   "Rust/C thread status offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, vm) == 4200,
 	   "Rust/C thread vm offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, ctx) == 4208,
 	   "Rust/C thread ctx offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, uctx) == 4296,
+	   "Rust/C thread uctx offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, proc) == 4304,
 	   "Rust/C thread proc offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, sched_list) == 4328,
@@ -913,6 +965,8 @@ ABI_ASSERT(ABI_OFFSET(struct thread, coredump_regs) == 5480,
 	   "Rust/C thread coredump_regs offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, rpf_backlog) == 5520,
 	   "Rust/C thread rpf_backlog offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, rpf_arg) == 5528,
+	   "Rust/C thread rpf_arg offset mismatch");
 #ifdef ENABLE_TOFU
 ABI_ASSERT(ABI_OFFSET(struct thread, fd_path_in_open) == 5536,
 	   "Rust/C thread fd_path_in_open offset mismatch");
@@ -1157,14 +1211,22 @@ ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_vm) == 23744,
 	   "Rust/C cpu_local_var idle_vm offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_asp) == 24120,
 	   "Rust/C cpu_local_var idle_asp offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq_lock) == 24288,
+	   "Rust/C cpu_local_var runq_lock offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, current) == 24304,
 	   "Rust/C cpu_local_var current offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq) == 24328,
 	   "Rust/C cpu_local_var runq offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq_len) == 24344,
+	   "Rust/C cpu_local_var runq_len offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, ikc2linux) == 24360,
+	   "Rust/C cpu_local_var ikc2linux offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, status) == 24376,
 	   "Rust/C cpu_local_var status offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, pending_free_pages) == 24384,
 	   "Rust/C cpu_local_var pending_free_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, flags) == 24400,
+	   "Rust/C cpu_local_var flags offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, migq) == 24408,
 	   "Rust/C cpu_local_var migq offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, no_preempt) == 24432,
@@ -1184,14 +1246,22 @@ ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_vm) == 7360,
 	   "Rust/C cpu_local_var idle_vm offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_asp) == 7664,
 	   "Rust/C cpu_local_var idle_asp offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq_lock) == 7832,
+	   "Rust/C cpu_local_var runq_lock offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, current) == 7848,
 	   "Rust/C cpu_local_var current offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq) == 7872,
 	   "Rust/C cpu_local_var runq offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq_len) == 7888,
+	   "Rust/C cpu_local_var runq_len offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, ikc2linux) == 7904,
+	   "Rust/C cpu_local_var ikc2linux offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, status) == 7920,
 	   "Rust/C cpu_local_var status offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, pending_free_pages) == 7928,
 	   "Rust/C cpu_local_var pending_free_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, flags) == 7944,
+	   "Rust/C cpu_local_var flags offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, migq) == 7952,
 	   "Rust/C cpu_local_var migq offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, no_preempt) == 7976,

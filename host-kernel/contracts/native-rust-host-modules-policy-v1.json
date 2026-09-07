@@ -1,0 +1,250 @@
+{
+  "architecture": "x86_64",
+  "completion_definition": {
+    "assembly_is_not_rust": true,
+    "distinct_native_modules": true,
+    "legacy_behavioral_compatibility_required": true,
+    "production_link_graph_project_c_objects": 0,
+    "production_module_project_c_dispatch_targets": 0,
+    "production_module_project_c_implementation_bodies": 0,
+    "required_evidence": [
+      "exact source and binary provenance",
+      "zero-project-C build and link manifests",
+      "ABI and behavior differential results",
+      "failure, concurrency, teardown, and restoration results",
+      "production benchmark and stress manifests"
+    ]
+  },
+  "conversion_scope": {
+    "included_modules": [
+      {
+        "crate": "ihk",
+        "filename": "ihk.ko",
+        "normalized_name": "ihk",
+        "permitted_project_module_dependencies": []
+      },
+      {
+        "crate": "ihk_smp_x86_64",
+        "filename": "ihk-smp-x86_64.ko",
+        "normalized_name": "ihk_smp_x86_64",
+        "permitted_project_module_dependencies": [
+          "ihk"
+        ]
+      },
+      {
+        "crate": "mcctrl",
+        "filename": "mcctrl.ko",
+        "normalized_name": "mcctrl",
+        "permitted_project_module_dependencies": [
+          "ihk"
+        ]
+      }
+    ],
+    "required_implementation_language": "Rust-for-Linux",
+    "required_module_properties": [
+      "native Rust module entry and exit",
+      "native Kconfig and Kbuild integration",
+      "exact module dependency declarations",
+      "signed exact-kernel .ko artifact",
+      "standalone Rust implementation of project-owned behavior"
+    ]
+  },
+  "dependency_rules": {
+    "load_order": [
+      "ihk",
+      "ihk_smp_x86_64",
+      "mcctrl"
+    ],
+    "no_undeclared_runtime_symbol_lookup": true,
+    "no_project_c_companion_module": true,
+    "no_prebuilt_project_object": true,
+    "symbol_namespaces_required": true,
+    "unload_order": [
+      "mcctrl",
+      "ihk_smp_x86_64",
+      "ihk"
+    ]
+  },
+  "module_oracles": {
+    "comparison_identity_fields": [
+      "kernel_nvr",
+      "kernel_build_id",
+      "kernel_config_sha256",
+      "toolchain_manifest_sha256",
+      "vermagic",
+      "signing_policy",
+      "dependency_names",
+      "symbol_signatures"
+    ],
+    "profiles": {
+      "R0": {
+        "implementation": "frozen legacy C and Rust-helper reference artifacts",
+        "kernel_specific_metadata": "provenance only",
+        "required_bindings": [
+          "source_commit",
+          "ihk_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "Rocky 8.10 regression-continuity oracle"
+      },
+      "R1": {
+        "implementation": "legacy C modules rebuilt from the frozen source",
+        "kernel_specific_metadata": "production comparison baseline",
+        "required_bindings": [
+          "source_commit",
+          "ihk_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "selected custom Rocky kernel legacy baseline"
+      },
+      "R2": {
+        "implementation": "native standalone Rust-for-Linux modules",
+        "kernel_specific_metadata": "must equal R1",
+        "required_bindings": [
+          "source_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "selected custom Rocky kernel production candidate"
+      }
+    },
+    "production_comparison": "R1 and R2 must use the exact same selected custom Rocky kernel, config, toolchain, and signing policy; R0 kernel-specific metadata must never satisfy an R2 requirement",
+    "r0_stable_surfaces": [
+      "module filename",
+      "normalized module name",
+      "compatible license",
+      "public UAPI",
+      "observable behavior"
+    ]
+  },
+  "module_symbol_contract": {
+    "modversions": {
+      "config_source": "the selected custom Rocky kernel .config bound by SHA-256",
+      "disabled": "R1 and R2 must both omit symbol CRC entries; exact-NVR artifacts must be deployed atomically and consumer link/load validation remains mandatory",
+      "enabled": "every shared R1/R2 export must have an equal same-kernel CRC and every consumer build must use the resulting Module.symvers",
+      "r0_crc_policy": "informational provenance only"
+    },
+    "production_namespaces": {
+      "ihk": "MCKERNEL_IHK_V1"
+    },
+    "required_imports": {
+      "ihk_smp_x86_64": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "mcctrl": [
+        "MCKERNEL_IHK_V1"
+      ]
+    },
+    "r0_namespace_policy": "the frozen ihk exports are unnamespaced; adding MCKERNEL_IHK_V1 is an intentional production-only hardening delta, not an R0 parity failure"
+  },
+  "evidence_invalidation_rules": [
+    {
+      "change": "policy manifest bytes or schema",
+      "invalidates": "FP-0001, FP-0002, FP-0006 and every downstream WS10-WS80 PASS gate",
+      "reason": "the approved production definition changed"
+    },
+    {
+      "change": "frozen reference commit, IHK commit, module artifact, or inventory digest",
+      "invalidates": "FP-0003 through FP-0006 plus all differential, compatibility, benchmark, and release evidence",
+      "reason": "the legacy oracle changed"
+    },
+    {
+      "change": "Rocky release, kernel source, kernel config, NVR, toolchain, or signing identity",
+      "invalidates": "affected RK, RS, module-build, integration, benchmark, and release PASS gates",
+      "reason": "the exact kernel ABI or trusted artifact set changed"
+    },
+    {
+      "change": "module source, unsafe ledger, assembly allowlist, dependency graph, UAPI, IKC, or link graph",
+      "invalidates": "the affected module gate and all dependent integration, qualification, and release PASS gates",
+      "reason": "implementation, safety, ABI, or executable provenance changed"
+    },
+    {
+      "change": "acceptance test definition, workload, threshold, seed policy, harness, or hardware-class definition",
+      "invalidates": "the affected validation or benchmark PASS gate and every release gate consuming it",
+      "reason": "the meaning of the evidence changed"
+    },
+    {
+      "change": "evidence becomes unavailable, unverifiable, corrupt, expired, or loses exact artifact provenance",
+      "invalidates": "the PASS gate naming that evidence",
+      "reason": "PASS credit requires durable independently checkable evidence"
+    }
+  ],
+  "forbidden_production_inputs": [
+    "project-authored C implementation body",
+    "project-authored C compatibility helper",
+    "project-authored C fallback",
+    "project-authored C companion shim",
+    "project-authored C or C++ object",
+    "project-authored C or C++ archive member",
+    "prebuilt project implementation object",
+    "runtime dispatch into a reference C implementation"
+  ],
+  "host_platform": {
+    "config_rust_required": true,
+    "distribution_core": "Rocky Linux",
+    "kernel_core_conversion_target": false,
+    "kernel_source_policy": "version-pinned Rocky-derived custom build",
+    "rocky_kabi_support_claimed": false
+  },
+  "out_of_scope": [
+    "Linux kernel core implementation language",
+    "Rocky user space",
+    "McKernel co-kernel image implementation language",
+    "mcexec",
+    "ihklib",
+    "ihkconfig",
+    "ihkosctl",
+    "ihkmond",
+    "mcstat",
+    "other host user-space tools",
+    "arm64",
+    "MIC",
+    "Tofu"
+  ],
+  "permitted_non_rust_boundaries": [
+    {
+      "boundary": "Linux kernel core and kernel-provided symbols",
+      "conditions": "called through reviewed Rust abstractions or a narrowly audited Rust FFI declaration"
+    },
+    {
+      "boundary": "public C UAPI headers",
+      "conditions": "declarations and generated bindings only; no project implementation body"
+    },
+    {
+      "boundary": "generated Kbuild metadata, module metadata, linker scripts, and kernel headers",
+      "conditions": "generated or declarative build boundary only"
+    },
+    {
+      "boundary": "x86 machine instructions",
+      "conditions": "Rust asm or global_asm preferred; standalone assembly separately hashed, reviewed, justified, and allowlisted"
+    }
+  ],
+  "policy_id": "native-rust-host-modules-v1",
+  "reference_isolation": {
+    "allowed_uses": [
+      "frozen behavioral oracle",
+      "differential A/B testing",
+      "test-only artifact inspection"
+    ],
+    "forbidden_locations": [
+      "production package payload",
+      "production initramfs",
+      "production installed module tree",
+      "production module link graph",
+      "production runtime dispatch graph"
+    ],
+    "reference_profile": "rocky-8.10-x86_64-rust-helper-reference"
+  },
+  "schema_version": 1
+}

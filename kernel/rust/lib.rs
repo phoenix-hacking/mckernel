@@ -70,6 +70,9 @@ mod zeroobj;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    unsafe {
+        x86_setup::early_panic();
+    }
     loop {
         core::hint::spin_loop();
     }

@@ -118,6 +118,18 @@ static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 #undef	SYSCALL_DELEGATED
 };
 
+#ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
+long syscall_dispatch_context_bridge(int num, ihk_mc_user_context_t *ctx)
+{
+	int ns = sizeof(syscall_table) / sizeof(syscall_table[0]);
+
+	if (num < 0 || num >= ns || !syscall_table[num])
+		return -ENOSYS;
+
+	return syscall_table[num](num, ctx);
+}
+#endif
+
 /* generate syscall_name[] */
 #define	MCKERNEL_UNUSED	__attribute__ ((unused))
 char *syscall_name[] MCKERNEL_UNUSED = {
@@ -1163,6 +1175,7 @@ extern int syscall_send_prepare_result(struct syscall_request *req,
 		struct syscall_response *res);
 extern int syscall_request_copy_result(struct syscall_request *dst,
 		const struct syscall_request *src);
+extern int syscall_request_publish_result(struct syscall_request *req);
 extern long syscall_generic_forwarding_body_result(struct syscall_request *req,
 		int n, unsigned long arg0, unsigned long arg1,
 		unsigned long arg2, unsigned long arg3, unsigned long arg4,
@@ -2593,6 +2606,8 @@ SYSCALL_POLICY_HELPER_PROTO int syscall_send_prepare_result(
 		struct syscall_request *req, struct syscall_response *res);
 SYSCALL_POLICY_HELPER_PROTO int syscall_request_copy_result(
 		struct syscall_request *dst, const struct syscall_request *src);
+SYSCALL_POLICY_HELPER_PROTO int syscall_request_publish_result(
+		struct syscall_request *req);
 SYSCALL_POLICY_HELPER_PROTO long syscall_generic_forwarding_body_result(
 		struct syscall_request *req, int n, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2, unsigned long arg3,
@@ -3966,6 +3981,7 @@ long (*linux_wait_event)(void *_resp, unsigned long nsec_timeout);
 int (*linux_printk)(const char *fmt, ...);
 int (*linux_clock_gettime)(clockid_t clk_id, struct timespec *tp);
 
+#ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
 static void send_syscall(struct syscall_request *req, int cpu,
 			 struct syscall_response *res)
 {
@@ -3992,8 +4008,12 @@ static void send_syscall(struct syscall_request *req, int cpu,
 		return;
 	}
 
-	barrier();
-	smp_store_release_ulong(&packet.req.valid, 1);
+	prep_rc = syscall_request_publish_result(&packet.req);
+	if (prep_rc) {
+		kprintf("%s: ERROR: publishing syscall request failed: %d\n",
+				__func__, prep_rc);
+		return;
+	}
 
 #ifdef SYSCALL_BY_IKC
 	prep_rc = syscall_packet_traditional_prepare_result(&packet,
@@ -4020,6 +4040,12 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	}
 #endif
 }
+#else
+extern void send_syscall(struct syscall_request *req, int cpu,
+		struct syscall_response *res);
+extern void syscall_offload_wait_reply(struct syscall_request *req,
+		struct syscall_response *res, int cpu, struct thread *thread);
+#endif
 
 long do_syscall(struct syscall_request *req, int cpu)
 {
@@ -4087,6 +4113,9 @@ long do_syscall(struct syscall_request *req, int cpu)
 	dkprintf("%s: syscall num: %d waiting for Linux.. \n",
 		__FUNCTION__, req->number);
 
+#ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
+	syscall_offload_wait_reply(req, &res, cpu, thread);
+#else
 #define	STATUS_IN_PROGRESS	0
 #define	STATUS_COMPLETED	1
 #define	STATUS_PAGE_FAULT	3
@@ -4248,6 +4277,7 @@ schedule:
 			send_syscall(&req2, cpu, &res);
 		}
 	}
+#endif
 	if (syscall_preempt_disable_needed_result(req->rtid)) {
 		preempt_enable();
 	}
@@ -4321,6 +4351,7 @@ schedule:
 	return rc;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
 long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
@@ -4332,6 +4363,7 @@ long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
 			ihk_mc_syscall_arg4(ctx), ihk_mc_syscall_arg5(ctx),
 			ihk_mc_get_processor_id(), do_syscall);
 }
+#endif
 
 static int wait_stopped(struct thread *thread, struct process *child, struct thread *c_thread, int *status, int options)
 {
@@ -8371,6 +8403,17 @@ syscall_request_copy_result(struct syscall_request *dst,
 		return -EINVAL;
 
 	memcpy(dst, src, sizeof(*dst));
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_request_publish_result(struct syscall_request *req)
+{
+	if (!req)
+		return -EINVAL;
+
+	__atomic_store_n(&req->valid, 1, __ATOMIC_RELEASE);
 
 	return 0;
 }

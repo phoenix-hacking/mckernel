@@ -1,0 +1,208 @@
+{
+  "attachment_status": {
+    "ihk_crate_mod_edge": false,
+    "kernel_build_surface": false,
+    "native_stage_manifest": false,
+    "rs011_ledger": false,
+    "validation_workflows": false
+  },
+  "checker": {
+    "path": "scripts/ihk_mapping_check.py",
+    "sha256": "be7387a90610fc1810b06f25b2670dd05bebbfb74ebc9b73258fb48d94ad7258",
+    "size": 26942
+  },
+  "compile_fixture": {
+    "compile_arguments": [
+      "--edition=2021",
+      "--test",
+      "-Dwarnings",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "compiler_environment": "IHK_MAPPING_RUSTC",
+    "compiler_version_first_line": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "expected_test_count": 22,
+    "path": "scripts/tests/fixtures/ihk_mapping_compile.rs",
+    "sha256": "b4cf480694f92950e05269bd2f48c1864d58fd62e34a7ca7a1f4db11f1608c93",
+    "test_names": [
+      "ihk_mapping::tests::mapped_translation_requires_nonzero_aligned_local_address",
+      "ihk_mapping::tests::page_geometry_and_range_edges_are_checked",
+      "ihk_mapping::tests::rollback_state_cannot_be_replayed",
+      "tests::adapter_errno_range_and_local_mapping_are_checked",
+      "tests::aligned_range_constructor_rejects_partial_pages",
+      "tests::authorized_physical_window_is_end_exclusive",
+      "tests::cache_policy_values_match_frozen_ihk_flags_only",
+      "tests::error_classes_map_to_stable_negative_errno_values",
+      "tests::kernel_mapping_descriptor_covers_pages_and_preserves_offset",
+      "tests::kernel_mapping_descriptor_checks_the_full_page_padded_virtual_extent",
+      "tests::live_mapping_close_is_terminal_without_failure_errno",
+      "tests::metadata_failure_orders_user_then_device_rollback",
+      "tests::page_offset_conversion_rejects_numeric_overflow",
+      "tests::pre_mapping_failure_has_no_cleanup_and_preserves_errno",
+      "tests::property_covering_range_is_aligned_minimal_and_contains_input",
+      "tests::property_page_requests_round_trip_without_overlap_or_truncation",
+      "tests::protection_policy_is_explicit_and_fail_closed",
+      "tests::rejected_live_rollback_preserves_the_required_close_cleanup",
+      "tests::remap_failure_releases_device_mapping_once",
+      "tests::transaction_rejects_mapping_for_another_request",
+      "tests::user_vma_alignment_length_and_order_fail_closed",
+      "tests::valid_user_mmap_descriptor_preserves_exact_ranges"
+    ]
+  },
+  "evidence_policy": {
+    "differential_legacy_parity_validated": false,
+    "exact_kernel_compile_validated": false,
+    "gate_credit_eligible": false,
+    "linux_adapter_validated": false,
+    "rocky_runtime_validated": false,
+    "unmap_cleanup_validated": false,
+    "user_mmap_runtime_validated": false
+  },
+  "foundation_status": "unattached-allocation-free-mapping-validation-core",
+  "gate_id": "IHK-007",
+  "legacy_oracle": {
+    "gitlink_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "gitlink_path": "ihk",
+    "inputs": [
+      {
+        "path": "ihk/linux/core/mm.c",
+        "required_markers": [
+          "ihk_host_map_generic",
+          "ihk_host_unmap_generic",
+          "not implemented",
+          "return NULL;",
+          "return -ENOSYS;"
+        ],
+        "sha256": "5e69019ddab24581ae1edb819b05a6c063ce3f4b5e5fc40ea0db7ffffb91b504",
+        "size": 895
+      },
+      {
+        "path": "ihk/linux/core/host_driver.c",
+        "required_markers": [
+          "ihk_host_device_mmap",
+          "vma->vm_pgoff << PAGE_SHIFT",
+          "remap_pfn_range",
+          "kzalloc(sizeof(*md), GFP_KERNEL)",
+          "ihk_device_unmap_memory"
+        ],
+        "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+        "size": 69863
+      },
+      {
+        "path": "ihk/linux/core/ops_wrappers.h",
+        "required_markers": [
+          "IHK_DEV_OPS_BEGIN(unsigned long, map_memory",
+          "IHK_DEV_OPS_BEGIN(int, unmap_memory",
+          "IHK_DEV_OPS_BEGIN(void *, map_virtual",
+          "IHK_DEV_OPS_BEGIN(int, unmap_virtual"
+        ],
+        "sha256": "cfd2acae5e82d22f1d51d781bacf527b555e3dddeda1f2ff757a8085f4ae117e",
+        "size": 6114
+      },
+      {
+        "path": "ihk/linux/include/ihk/ihk_host_driver.h",
+        "required_markers": [
+          "#define IHK_MAP_FLAG_CACHE  0",
+          "#define IHK_MAP_FLAG_NOCACHE  1",
+          "void *(*map_virtual)",
+          "int (*unmap_virtual)"
+        ],
+        "sha256": "924c4a99f25d9fe832146ee21dd1f0b64b7cbf5d350c59f7f075dbc934a50d85",
+        "size": 31132
+      },
+      {
+        "path": "ihk/linux/include/ihk/ihk_host_user.h",
+        "required_markers": [
+          "IHK_DEVICE_CREATE_OS",
+          "IHK_DEVICE_DEBUG_START",
+          "struct ihk_mem_req",
+          "PHYS_CHUNKS_DESC_SIZE"
+        ],
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "size": 5704
+      },
+      {
+        "path": "ihk/linux/driver/smp/smp-driver.c",
+        "required_markers": [
+          "ihk_smp_map_virtual",
+          "phys_to_virt",
+          "ihk_smp_unmap_virtual",
+          "smp_ihk_map_virtual"
+        ],
+        "sha256": "90fefdcb66ecd49cff6d43d2f5b8c13ce28010be2bde8043400cb2baebfa2544",
+        "size": 138442
+      },
+      {
+        "path": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+        "required_markers": [
+          "smp_ihk_os_map_memory",
+          "return remote_phys;",
+          "smp_ihk_map_memory",
+          "smp_ihk_unmap_memory"
+        ],
+        "sha256": "6ec820741ce6e77e4f60ce4c6b6577ed215a42ecf1a7e30207390ed6d0cbb745",
+        "size": 52592
+      }
+    ],
+    "observations": [
+      "generic fixed-virtual-address map and unmap helpers are explicitly unimplemented and return NULL or -ENOSYS",
+      "device mmap derives the remote physical byte address from vm_pgoff and PAGE_SHIFT, maps device memory, then calls remap_pfn_range",
+      "legacy mmap performs unchecked shift/add range arithmetic and allocates VMA metadata after remap without a checked allocation or explicit remap-failure unmap in that function",
+      "VMA close reference-counts private metadata and calls device unmap on the final close",
+      "the frozen internal driver API assigns cache flag 0 and no-cache flag 1",
+      "the frozen user header defines no dedicated mmap request structure; the device-file mmap offset and VMA describe the request",
+      "the SMP device map is identity translation while virtual lookup accepts only ranges contained in a used memory chunk"
+    ]
+  },
+  "must_use_probe": {
+    "compile_arguments": [
+      "--edition=2021",
+      "-Dunused-must-use"
+    ],
+    "diagnostic_fragments": [
+      "unused `MmapTransaction` that must be used",
+      "mapping transactions must reach rollback, live, or close",
+      "unused `RollbackPlan` that must be used",
+      "mapping cleanup plans must be executed by the Linux adapter"
+    ],
+    "path": "scripts/tests/fixtures/ihk_mapping_must_use_compile_fail.rs",
+    "sha256": "ce088992a56b04f2a9c86bc3361331fb0a2bab520d24c39ba12fcaf06a08a419"
+  },
+  "production_source": {
+    "allocation_model": "core-only fixed-capacity values; no heap or Linux API calls",
+    "path": "host-kernel/native-rust/ihk_mapping.rs",
+    "sha256": "d5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687",
+    "size": 21132
+  },
+  "protocol": {
+    "address_width_bits": 64,
+    "cache_flags": {
+      "cached": 0,
+      "uncached": 1
+    },
+    "cleanup_consumption": "each fixed-capacity cleanup step is removed when read so one plan cannot replay it",
+    "cleanup_order_after_user_remap": [
+      "unmap-user",
+      "unmap-device"
+    ],
+    "desired_virtual_extent": "page-aligned virtual base plus full page-covered mapped length uses checked addition",
+    "errno_policy": "validation errors use deterministic negative Linux errno values; valid adapter errno in -4095..=-1 is preserved",
+    "page_shift_range": [
+      12,
+      63
+    ],
+    "physical_ranges": "non-empty checked half-open u64 byte ranges",
+    "protection_policy": "supplied explicitly by the future adapter; the core does not infer Linux VMA permissions",
+    "user_offset": "page offset multiplied by the exact adapter-supplied base page size with checked arithmetic"
+  },
+  "schema_version": 1,
+  "unproven": [
+    "Linux 6.12.0-211.44.1.el10_2 VMA, remap_pfn_range, vm_flags, pgprot, pinning, refcount, fork, split, mremap, and close adapters",
+    "attachment to ihk.rs, the authoritative Kbuild/staging surface, RS-011 unsafe ledger, lifecycle contracts, and validation workflows",
+    "device-specific map_memory, unmap_memory, map_virtual, and unmap_virtual calls and exact cache-policy translation",
+    "rollback execution after partial remap or metadata-allocation failure and exact VMA teardown ordering",
+    "reserved-memory ownership lookup across multiple physical chunks and concurrent release exclusion",
+    "successful exact Rocky kernel compile, modpost, module load/unload, user mmap runtime, negative-path fault injection, and differential legacy parity",
+    "IHK-007 completion, PASS status, or tracker credit"
+  ]
+}

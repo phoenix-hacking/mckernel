@@ -1,0 +1,91 @@
+{
+  "behavior": {
+    "allocation_policy": "sleepable GFP_KERNEL plus ZERO COMP NORETRY NOWARN; no spinlock held",
+    "capacity": 64,
+    "create_argument": "scalar ignored by the frozen SMP create path",
+    "create_command": "0x00112900",
+    "destroy_command": "0x00112901",
+    "destroy_order": [
+      "exclude new opens",
+      "remove node",
+      "free kmsg",
+      "release provider owners",
+      "recycle minor"
+    ],
+    "destroy_with_open_files_errno": -16,
+    "file_owner": "ihk.ko .owner plus one generation-checked OS lease per open file",
+    "image_boot": false,
+    "instance_owner": "one DeviceOsLease and one Linux SMP module reference",
+    "kmsg_bytes": 4194304,
+    "kmsg_initialization": "zeroed allocation and in-place ABI length; no large stack temporary",
+    "kmsg_order": 10,
+    "linux_major": "dynamic",
+    "linux_minor": "OS index 0 through 63",
+    "minor_allocation": "first-free generation-checked registry transaction",
+    "missing_or_out_of_range_destroy_errno": -22,
+    "node_family": "/dev/mcosN",
+    "node_publication": "only after kmsg and provider owners exist; open excluded until registry commit",
+    "project_c_dispatch": false,
+    "resource_assignment": false,
+    "shared_kmsg_readers": false,
+    "status_commands": [
+      "0x00112a03",
+      "0x00112a14"
+    ],
+    "status_return": 0,
+    "unknown_ioctl_errno": -22
+  },
+  "gate": {
+    "credit_eligible": false,
+    "status": "TODO",
+    "tracker_credit": false
+  },
+  "gate_id": "IHK-005-unbooted-adapter",
+  "inputs": [
+    {
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
+      "size": 17841
+    },
+    {
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
+      "size": 17706
+    },
+    {
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221
+    },
+    {
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958",
+      "size": 9739
+    },
+    {
+      "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+      "sha256": "9c5a8912f5164c7fae22d2d905beefe2f6493111dcc83b788781c67bafe1a846",
+      "size": 15071
+    },
+    {
+      "path": "scripts/tests/test_ihk_os_runtime.py",
+      "sha256": "98413911087ddf8d834721f9cdff30c6589afacb4e9529d4472d29bb16321d21",
+      "size": 2294
+    }
+  ],
+  "schema_version": 1,
+  "scope": "native unbooted create/status/destroy and Linux character-device ownership",
+  "verification_requirements": {
+    "adapter_cases": 10,
+    "broader_provider_and_booted_teardown_required": true,
+    "embedded_provider_registry_cases": 31,
+    "exact_rocky_build_and_guest_required": true,
+    "host_fixture": "complete production source with fault-injectable mocked Linux calls",
+    "kernel_abi_layout_proven_by_mock": false
+  }
+}

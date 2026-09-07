@@ -50,8 +50,10 @@ const STARTED_MSG: &[u8] = b"IHK/McKernel started.\n\0";
 const RAISED_LIST_ERROR: &[u8] = b"error: mapping Linux IRQ raised list head\n\0";
 const EMPTY_PANIC: &[u8] = b"\0";
 
+const BOOT_STACK_SIZE: usize = 64 * 1024;
+
 #[repr(C, align(4096))]
-struct BootStack([u8; 8192]);
+struct BootStack([u8; BOOT_STACK_SIZE]);
 
 #[repr(C)]
 pub struct IhkMcCpuInfo {
@@ -193,7 +195,7 @@ pub static mut ihk_ikc_irq_apicid: u32 = 0;
 #[cfg_attr(not(mckernel_equivalence), no_mangle)]
 pub static mut dump_page: *mut IhkDumpPage = null_mut();
 
-static mut STACK: BootStack = BootStack([0; 8192]);
+static mut STACK: BootStack = BootStack([0; BOOT_STACK_SIZE]);
 static mut IHK_CPU_INFO: *mut IhkMcCpuInfo = null_mut();
 
 static mut PERF_MAP_NEHALEM: [u32; PERFCTR_MAX_TYPE + 1] = {
@@ -273,6 +275,54 @@ unsafe fn distance_table() -> *mut CInt {
         .cast()
 }
 
+#[cfg(not(mckernel_equivalence))]
+static mut EARLY_PHASE: u8 = b'?';
+
+#[cfg(not(mckernel_equivalence))]
+#[inline(always)]
+unsafe fn debugcon_byte(value: u8) {
+    core::arch::asm!(
+        "out 0xe9, al",
+        in("al") value,
+        options(nostack, preserves_flags),
+    );
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[inline(always)]
+pub(crate) unsafe fn early_phase(phase: u8) {
+    core::ptr::write_volatile(&raw mut EARLY_PHASE, phase);
+    debugcon_byte(phase);
+    debugcon_byte(b'\n');
+}
+
+#[cfg(mckernel_equivalence)]
+#[inline(always)]
+pub(crate) unsafe fn early_phase(_phase: u8) {}
+
+#[cfg(not(mckernel_equivalence))]
+pub(crate) unsafe fn early_panic() {
+    debugcon_byte(b'!');
+    let phase = core::ptr::read_volatile(&raw const EARLY_PHASE);
+    debugcon_byte(phase);
+    debugcon_byte(b'\n');
+}
+
+#[cfg(mckernel_equivalence)]
+pub(crate) unsafe fn early_panic() {}
+
+#[inline(never)]
+unsafe extern "C" fn arch_start_on_stack() -> ! {
+    early_phase(b'A');
+    init_boot_processor_local();
+    early_phase(b'B');
+    main();
+
+    loop {
+        core::hint::spin_loop();
+    }
+}
+
 #[cfg_attr(not(mckernel_equivalence), no_mangle)]
 pub unsafe extern "C" fn arch_start(
     param_addr: CULong,
@@ -288,15 +338,16 @@ pub unsafe extern "C" fn arch_start(
     boot_param_size = (*boot_param).param_size;
     linux_page_offset_base = (*boot_param).page_offset_base;
 
+    early_phase(b'@');
     let stack_top = (&raw mut STACK.0).cast::<u8>().add(size_of::<BootStack>());
-    core::arch::asm!("mov rsp, {}", in(reg) stack_top, options(nostack, preserves_flags));
-
-    init_boot_processor_local();
-    main();
-
-    loop {
-        core::hint::spin_loop();
-    }
+    core::arch::asm!(
+        "mov rsp, {stack_top}",
+        "call {entry}",
+        "ud2",
+        stack_top = in(reg) stack_top,
+        entry = sym arch_start_on_stack,
+        options(noreturn),
+    )
 }
 
 unsafe fn build_ihk_cpu_info() {
@@ -356,6 +407,7 @@ pub unsafe extern "C" fn arch_init() {
     let mut msg_buffer_size = 0;
 
     (*boot_param).status = 1;
+    early_phase(b'C');
 
     if !strstr(
         (*boot_param).kernel_args.as_ptr(),
@@ -365,8 +417,10 @@ pub unsafe extern "C" fn arch_init() {
     {
         no_turbo = 0;
     }
+    early_phase(b'D');
 
     setup_x86_phase1();
+    early_phase(b'E');
     kprintf(
         BOOT_PARAM_SIZE_FMT.as_ptr().cast(),
         boot_param_size as CULong,
@@ -379,10 +433,12 @@ pub unsafe extern "C" fn arch_init() {
         0,
     )
     .cast();
+    early_phase(b'F');
 
     ihk_get_kmsg_buf(&mut msg_buffer, &mut msg_buffer_size);
     kmsg_buf = map_fixed_area(msg_buffer, msg_buffer_size, 0);
     kmsg_init();
+    early_phase(b'G');
     kputs(STARTED_MSG.as_ptr().cast());
 
     setup_x86_phase2();

@@ -1,0 +1,227 @@
+name: Rocky 10.2 kernel source evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rocky-kernel-source-evidence.yml
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/**
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/kbuild/stage-manifest.json
+      - host-kernel/native-rust/ihk.rs
+      - host-kernel/native-rust/ihk-page-allocator-contract-v1.json
+      - host-kernel/native-rust/ihk-page-owner-registry-contract-v1.json
+      - host-kernel/native-rust/page_allocator.rs
+      - host-kernel/native-rust/page_owner_registry.rs
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_license_inventory.py
+      - scripts/rocky_kernel_source_lock.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/rocky-kernel-source-evidence.yml
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/**
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/kbuild/stage-manifest.json
+      - host-kernel/native-rust/ihk.rs
+      - host-kernel/native-rust/ihk-page-allocator-contract-v1.json
+      - host-kernel/native-rust/ihk-page-owner-registry-contract-v1.json
+      - host-kernel/native-rust/page_allocator.rs
+      - host-kernel/native-rust/page_owner_registry.rs
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_license_inventory.py
+      - scripts/rocky_kernel_source_lock.py
+
+permissions:
+  contents: read
+
+env:
+  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  capture:
+    name: Exact source, signature, metadata, and dist-git replay
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      # Official Rocky 10.2 linux/amd64 OCI manifest, not a mutable tag or
+      # multi-platform index. The capture script also rejects non-x86_64 and
+      # non-Rocky-10.2 runtime identities.
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install required verification tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install \
+            cpio git-core gnupg2 gzip python3 rpm rust xz
+          dnf clean all
+          for tool in cpio git gpg gpgv gzip python3 rpm rpm2cpio rpmkeys xz; do
+            command -v "$tool" >/dev/null
+          done
+
+      - name: Check out the exact candidate commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: recursive
+
+      - name: Verify capture contract without claiming gate credit
+        run: |
+          set -euo pipefail
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test "$(git -C ihk rev-parse HEAD)" = \
+            "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          test "$(rustc --version)" = \
+            "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
+          PYTHONDONTWRITEBYTECODE=1 \
+            IHK_PAGE_ALLOCATOR_RUSTC="$(command -v rustc)" \
+            python3 scripts/ihk_page_allocator_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
+          PYTHONDONTWRITEBYTECODE=1 \
+            IHK_PAGE_OWNER_REGISTRY_RUSTC="$(command -v rustc)" \
+            python3 scripts/ihk_page_owner_registry_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
+          python3 scripts/rocky_kernel_source_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+
+      - name: Capture exact RK-001 replay evidence
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/rk001-source-evidence
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_source_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --run \
+            --output-dir "$EVIDENCE_DIR" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK001_CONTAINER_IMAGE"
+          (
+            cd "$EVIDENCE_DIR"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload canonical source evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk001-source-evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+  license-inventory:
+    # This job intentionally has no `needs` edge to the mutable repository-
+    # metadata replay above. It captures the independently checksum-locked
+    # SRPM/source inventory even when that sibling job fails closed on drift.
+    name: Exact-head exhaustive source and license inventory
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install exact license-capture tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install \
+            cpio git-core gnupg2 gzip python3 rpm xz
+          dnf clean all
+          for tool in cpio git gpg gpgv gzip python3 rpm rpm2cpio rpmkeys sha256sum xz; do
+            command -v "$tool" >/dev/null
+          done
+
+      - name: Check out the exact candidate commit for license capture
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: recursive
+
+      - name: Verify source and license contracts without claiming gate credit
+        run: |
+          set -euo pipefail
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test "$GITHUB_REPOSITORY" = "phoenix-hacking/mckernel"
+          python3 scripts/rocky_kernel_source_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+          python3 scripts/rocky_kernel_license_inventory.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+
+      - name: Capture exhaustive source and license inventory
+        env:
+          LICENSE_CACHE_ROOT: ${{ runner.temp }}/rk001-license-cache
+          LICENSE_EVIDENCE_DIR: ${{ runner.temp }}/rk001-license-inventory
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_license_inventory.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture \
+            --cache-root "$LICENSE_CACHE_ROOT" \
+            --output-dir "$LICENSE_EVIDENCE_DIR" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK001_CONTAINER_IMAGE"
+          python3 scripts/rocky_kernel_license_inventory.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --verify-capture "$LICENSE_EVIDENCE_DIR"
+          (
+            cd "$LICENSE_EVIDENCE_DIR"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload exhaustive license inventory capture
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk001-license-inventory-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk001-license-inventory/
+          if-no-files-found: error
+          retention-days: 30

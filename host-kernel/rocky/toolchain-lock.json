@@ -1,0 +1,818 @@
+{
+  "closure": {
+    "all_archives_verified": false,
+    "all_signatures_verified": false,
+    "blocker": "Resolve and archive the complete direct and transitive RPM closure, verify every RPM header signature with the pinned Rocky Linux 10 key, and retain an offline-install replay.",
+    "direct_nevras": [
+      "bindgen-cli-0:0.72.1-1.el10.x86_64",
+      "bpftool-0:7.7.0-2.el10.x86_64",
+      "cargo-0:1.92.0-1.el10.x86_64",
+      "clang-0:21.1.8-1.el10.x86_64",
+      "clang-libs-0:21.1.8-1.el10.x86_64",
+      "clippy-0:1.92.0-1.el10.x86_64",
+      "dwarves-0:1.31-1.el10.x86_64",
+      "kernel-rpm-macros-0:205-27.el10.noarch",
+      "kmod-0:31-13.el10.x86_64",
+      "lld-0:21.1.8-1.el10.x86_64",
+      "llvm-0:21.1.8-1.el10.x86_64",
+      "llvm-libs-0:21.1.8-1.el10.x86_64",
+      "pesign-0:116-6.el10.x86_64",
+      "redhat-rpm-config-0:295-1.el10.rocky.0.2.noarch",
+      "rpm-0:4.19.1.1-23.el10.x86_64",
+      "rpm-build-0:4.19.1.1-23.el10.x86_64",
+      "rpm-sign-0:4.19.1.1-23.el10.x86_64",
+      "rust-0:1.92.0-1.el10.x86_64",
+      "rust-src-0:1.92.0-1.el10.noarch",
+      "rustfmt-0:1.92.0-1.el10.x86_64"
+    ],
+    "resolution_scope": "The full Rocky-effective kernel.spec BuildRequires set after the reviewed Rocky Rust/LLVM spec change, plus every transitive dependency; closure is not limited to direct_nevras.",
+    "manifest_path": null,
+    "manifest_sha256": null,
+    "offline_install_verified": false,
+    "package_count": null,
+    "required": true,
+    "rpm_set_sha256": null,
+    "status": "required-missing",
+    "unresolved_dependencies": null
+  },
+  "direct_artifacts": [
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "rust",
+      "nevra": "rust-0:1.92.0-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/r/rust-1.92.0-1.el10.x86_64.rpm",
+      "role": "rustc",
+      "sha256": "ffb092cbb80e6fbffed7ab3a9bfc23c65eb5ee7d22ef80b27f4c9432c9493abb",
+      "size": 31573199,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.92.0"
+    },
+    {
+      "arch": "noarch",
+      "epoch": 0,
+      "name": "rust-src",
+      "nevra": "rust-src-0:1.92.0-1.el10.noarch",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/r/rust-src-1.92.0-1.el10.noarch.rpm",
+      "role": "rust-src",
+      "sha256": "c25e7051905b0f77caf324ec6ba9215f9d5fccbeb38bf192e1df05c3eb9683b9",
+      "size": 4360888,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.92.0"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "rustfmt",
+      "nevra": "rustfmt-0:1.92.0-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/r/rustfmt-1.92.0-1.el10.x86_64.rpm",
+      "role": "rustfmt",
+      "sha256": "c1de122dfafe9ebafe0bb2b7cc1ee3ffd66b2057ca2441895497b6247361163a",
+      "size": 2073460,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.92.0"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "clippy",
+      "nevra": "clippy-0:1.92.0-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/c/clippy-1.92.0-1.el10.x86_64.rpm",
+      "role": "clippy",
+      "sha256": "ce0220083c1c429d2a47194c52adb1358a62d650168c3934ed9b23023029ba87",
+      "size": 3785869,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.92.0"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "cargo",
+      "nevra": "cargo-0:1.92.0-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/c/cargo-1.92.0-1.el10.x86_64.rpm",
+      "role": "cargo",
+      "sha256": "5c462cec175396b46e05bfbd1215dcf13573e1530dc44443ae72b7d5d38df758",
+      "size": 8421744,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.92.0"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "bindgen-cli",
+      "nevra": "bindgen-cli-0:0.72.1-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "crb",
+      "repository_location": "Packages/b/bindgen-cli-0.72.1-1.el10.x86_64.rpm",
+      "role": "bindgen",
+      "sha256": "bda54668cc6c32b272e212777fa00fb57ae0921c5af30ee136e5e3236f37c6d4",
+      "size": 2019952,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "0.72.1"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "clang",
+      "nevra": "clang-0:21.1.8-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/c/clang-21.1.8-1.el10.x86_64.rpm",
+      "role": "clang",
+      "sha256": "c64d0f6daaf7e84c70e147da1fc20eb4b92fc87301d40ce8a7802e8663592138",
+      "size": 7644624,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "21.1.8"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "clang-libs",
+      "nevra": "clang-libs-0:21.1.8-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/c/clang-libs-21.1.8-1.el10.x86_64.rpm",
+      "role": "libclang",
+      "sha256": "7a37c942c580e7eecba79c28a824e61c3cbd317dbec94e649cdce900b03b1953",
+      "size": 31889783,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "21.1.8"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "llvm",
+      "nevra": "llvm-0:21.1.8-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/l/llvm-21.1.8-1.el10.x86_64.rpm",
+      "role": "llvm",
+      "sha256": "02d755b89d9863b4837b2f83e0a8244c070b59fde96cf0f1518d210c52bdb12e",
+      "size": 25226832,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "21.1.8"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "llvm-libs",
+      "nevra": "llvm-libs-0:21.1.8-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/l/llvm-libs-21.1.8-1.el10.x86_64.rpm",
+      "role": "llvm-libs",
+      "sha256": "a6f0a86b87d8f350defc0aab3e15dec6a17a8fb43eb082eabe535d0ea33a8673",
+      "size": 32095351,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "21.1.8"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "lld",
+      "nevra": "lld-0:21.1.8-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/l/lld-21.1.8-1.el10.x86_64.rpm",
+      "role": "lld",
+      "sha256": "f7bf6691d17bbc29513e1a45301ecf001ac663a9af4b55924697f0f76289e907",
+      "size": 40091,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "21.1.8"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "dwarves",
+      "nevra": "dwarves-0:1.31-1.el10.x86_64",
+      "release": "1.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/d/dwarves-1.31-1.el10.x86_64.rpm",
+      "role": "pahole",
+      "sha256": "b3cc43abc989cccce298e5514537eb0abc8c9ebc98799ab7da0590cc7c8bdc27",
+      "size": 154184,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "1.31"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "bpftool",
+      "nevra": "bpftool-0:7.7.0-2.el10.x86_64",
+      "release": "2.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/b/bpftool-7.7.0-2.el10.x86_64.rpm",
+      "role": "bpftool",
+      "sha256": "4ffe6aa9dbf1e23cf233b8570c8b41de668be2f3dddf8e806104eb438f53f50c",
+      "size": 335690,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "7.7.0"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "rpm",
+      "nevra": "rpm-0:4.19.1.1-23.el10.x86_64",
+      "release": "23.el10",
+      "repository_id": "baseos",
+      "repository_location": "Packages/r/rpm-4.19.1.1-23.el10.x86_64.rpm",
+      "role": "rpm",
+      "sha256": "4006fa906fd9a438a6d3636d2033fa9a106fa024d8076c87e735dc0ccc48fcc6",
+      "size": 555595,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "4.19.1.1"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "rpm-build",
+      "nevra": "rpm-build-0:4.19.1.1-23.el10.x86_64",
+      "release": "23.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/r/rpm-build-4.19.1.1-23.el10.x86_64.rpm",
+      "role": "rpm-build",
+      "sha256": "06b8eee98d6b0190c70eb42ff95315bae6df96dc3748acc38901e31da9bb62b6",
+      "size": 77763,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "4.19.1.1"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "rpm-sign",
+      "nevra": "rpm-sign-0:4.19.1.1-23.el10.x86_64",
+      "release": "23.el10",
+      "repository_id": "baseos",
+      "repository_location": "Packages/r/rpm-sign-4.19.1.1-23.el10.x86_64.rpm",
+      "role": "rpm-sign",
+      "sha256": "aba651ce57ef5448a0662c2907005c21ad317ffc75e487e182c9a1eb234d3379",
+      "size": 20597,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "4.19.1.1"
+    },
+    {
+      "arch": "noarch",
+      "epoch": 0,
+      "name": "redhat-rpm-config",
+      "nevra": "redhat-rpm-config-0:295-1.el10.rocky.0.2.noarch",
+      "release": "1.el10.rocky.0.2",
+      "repository_id": "appstream",
+      "repository_location": "Packages/r/redhat-rpm-config-295-1.el10.rocky.0.2.noarch.rpm",
+      "role": "rpm-macros",
+      "sha256": "9d43b695c70ed2c5a9d7918cd2b827a63f045f76245d6932e98d08e97ae0bdee",
+      "size": 79335,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "295"
+    },
+    {
+      "arch": "noarch",
+      "epoch": 0,
+      "name": "kernel-rpm-macros",
+      "nevra": "kernel-rpm-macros-0:205-27.el10.noarch",
+      "release": "27.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/k/kernel-rpm-macros-205-27.el10.noarch.rpm",
+      "role": "kernel-rpm-macros",
+      "sha256": "2c6cc046a2bfa48e7410277d112bcedc1b96fe1f3fd254b840f4dd3f2b4e26fa",
+      "size": 22956,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "205"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "pesign",
+      "nevra": "pesign-0:116-6.el10.x86_64",
+      "release": "6.el10",
+      "repository_id": "appstream",
+      "repository_location": "Packages/p/pesign-116-6.el10.x86_64.rpm",
+      "role": "pesign",
+      "sha256": "962e97b904acd93a776770f8e657726b38a2b2dad54909c99fef8e9ec80de8d6",
+      "size": 199229,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "116"
+    },
+    {
+      "arch": "x86_64",
+      "epoch": 0,
+      "name": "kmod",
+      "nevra": "kmod-0:31-13.el10.x86_64",
+      "release": "13.el10",
+      "repository_id": "baseos",
+      "repository_location": "Packages/k/kmod-31-13.el10.x86_64.rpm",
+      "role": "kmod",
+      "sha256": "d6c6c04731a0a010fd63b14a82a1625509356b6e12cbfea982fe498b02c3ef1f",
+      "size": 139985,
+      "verification": {
+        "archive_path": null,
+        "archive_verified": false,
+        "blocker": "This tuple is an unverified search observation; the originating metadata snapshot, archive bytes, and rpmkeys signature evidence are missing.",
+        "metadata_observed": false,
+        "signature_algorithm": null,
+        "signature_evidence_path": null,
+        "signature_evidence_sha256": null,
+        "signature_verified": false,
+        "signer_fingerprint": null
+      },
+      "version": "31"
+    }
+  ],
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-003",
+    "policy": "Credit is forbidden until every direct and transitive RPM is archived and signature-verified, repository snapshots are durable, every required version probe is captured, the exact RPM build environment is replayable, and make LLVM=1 rustavailable passes there."
+  },
+  "kernel_requirements": {
+    "build_command_prefix": [
+      "make",
+      "LLVM=1"
+    ],
+    "minimum_source": {
+      "path": "scripts/min-tool-version.sh",
+      "sha256": "24b28bb8c3aaef69c00aac6273bf2b914c7bc452f68f9c4dc671d6670c1a3ffe"
+    },
+    "minimum_versions": [
+      {
+        "reason": "scripts/min-tool-version.sh rustc",
+        "role": "rustc",
+        "version": "1.78.0"
+      },
+      {
+        "reason": "scripts/min-tool-version.sh bindgen",
+        "role": "bindgen",
+        "version": "0.65.1"
+      },
+      {
+        "reason": "scripts/min-tool-version.sh llvm on x86_64",
+        "role": "llvm",
+        "version": "13.0.1"
+      },
+      {
+        "reason": "CONFIG_RUST with CONFIG_DEBUG_INFO_BTF requires PAHOLE_HAS_LANG_EXCLUDE",
+        "role": "pahole",
+        "version": "1.24"
+      }
+    ]
+  },
+  "lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+  "observed_at": "2026-08-11",
+  "probe_evidence": {
+    "blocker": "Run every required probe inside the exact archived Rocky buildroot and retain parsed versions, binary hashes, command output hashes, and the environment-manifest hash.",
+    "environment_manifest_sha256": null,
+    "evidence_path": null,
+    "evidence_sha256": null,
+    "required": true,
+    "results": null,
+    "status": "required-missing"
+  },
+  "release_key": {
+    "fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+    "key_id": "5B106C736FEDFC85",
+    "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+  },
+  "repositories": [
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/x86_64/os/",
+      "blocker": "Persist and signature-verify this exact binary repomd snapshot and its primary metadata.",
+      "id": "baseos",
+      "metadata_observed": false,
+      "primary_metadata_sha256": null,
+      "repomd_sha256": null,
+      "repomd_signature_verified": false,
+      "snapshot_evidence_path": null,
+      "snapshot_evidence_sha256": null
+    },
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/",
+      "blocker": "Persist and signature-verify this exact binary repomd snapshot and its primary metadata.",
+      "id": "appstream",
+      "metadata_observed": false,
+      "primary_metadata_sha256": null,
+      "repomd_sha256": null,
+      "repomd_signature_verified": false,
+      "snapshot_evidence_path": null,
+      "snapshot_evidence_sha256": null
+    },
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/CRB/x86_64/os/",
+      "blocker": "Persist and signature-verify this exact binary repomd snapshot and its primary metadata.",
+      "id": "crb",
+      "metadata_observed": false,
+      "primary_metadata_sha256": null,
+      "repomd_sha256": null,
+      "repomd_signature_verified": false,
+      "snapshot_evidence_path": null,
+      "snapshot_evidence_sha256": null
+    }
+  ],
+  "required_probes": [
+    {
+      "artifact": "rust",
+      "command": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "expected_version": "1.92.0",
+      "id": "rustc",
+      "minimum_version": "1.78.0"
+    },
+    {
+      "artifact": "rust-src",
+      "command": [
+        "rpm",
+        "-qf",
+        "$(rustc --print sysroot)/lib/rustlib/src/rust/library/core/src/lib.rs"
+      ],
+      "expected_version": "1.92.0",
+      "id": "rust-src-core",
+      "minimum_version": "1.78.0",
+      "required_file": "$(rustc --print sysroot)/lib/rustlib/src/rust/library/core/src/lib.rs",
+      "required_file_sha256": null
+    },
+    {
+      "artifact": "cargo",
+      "command": [
+        "cargo",
+        "--version",
+        "--verbose"
+      ],
+      "expected_version": "1.92.0",
+      "id": "cargo",
+      "minimum_version": null
+    },
+    {
+      "artifact": "rustfmt",
+      "command": [
+        "rustfmt",
+        "--version"
+      ],
+      "expected_version": "1.92.0",
+      "id": "rustfmt",
+      "minimum_version": null
+    },
+    {
+      "artifact": "clippy",
+      "command": [
+        "clippy-driver",
+        "--version"
+      ],
+      "expected_version": "1.92.0",
+      "id": "clippy",
+      "minimum_version": null
+    },
+    {
+      "artifact": "bindgen-cli",
+      "command": [
+        "bindgen",
+        "--version",
+        "workaround-for-0.69.0"
+      ],
+      "expected_version": "0.72.1",
+      "id": "bindgen",
+      "minimum_version": "0.65.1"
+    },
+    {
+      "artifact": "clang-libs",
+      "command": [
+        "bindgen",
+        "scripts/rust_is_available_bindgen_libclang.h"
+      ],
+      "expected_version": null,
+      "id": "libclang-via-bindgen",
+      "minimum_version": null,
+      "required_result": "exit-zero while loading the archived clang-libs libclang; version and loaded-library path/hash are captured separately in probe evidence"
+    },
+    {
+      "artifact": "clang",
+      "command": [
+        "clang",
+        "--version"
+      ],
+      "expected_version": "21.1.8",
+      "id": "clang",
+      "minimum_version": "13.0.1"
+    },
+    {
+      "artifact": "llvm",
+      "command": [
+        "llvm-config",
+        "--version"
+      ],
+      "expected_version": "21.1.8",
+      "id": "llvm",
+      "minimum_version": "13.0.1"
+    },
+    {
+      "artifact": "lld",
+      "command": [
+        "ld.lld",
+        "--version"
+      ],
+      "expected_version": "21.1.8",
+      "id": "lld",
+      "minimum_version": "13.0.1"
+    },
+    {
+      "artifact": "dwarves",
+      "command": [
+        "pahole",
+        "--version"
+      ],
+      "expected_version": "1.31",
+      "id": "pahole",
+      "minimum_version": "1.24"
+    },
+    {
+      "artifact": "bpftool",
+      "command": [
+        "bpftool",
+        "version"
+      ],
+      "expected_version": "7.7.0",
+      "id": "bpftool",
+      "minimum_version": null
+    },
+    {
+      "artifact": "rpm",
+      "command": [
+        "rpm",
+        "--version"
+      ],
+      "expected_version": "4.19.1.1",
+      "id": "rpm",
+      "minimum_version": null
+    },
+    {
+      "artifact": "rpm-build",
+      "command": [
+        "rpmbuild",
+        "--version"
+      ],
+      "expected_version": "4.19.1.1",
+      "id": "rpmbuild",
+      "minimum_version": null
+    },
+    {
+      "artifact": "rpm-sign",
+      "command": [
+        "rpmsign",
+        "--version"
+      ],
+      "expected_version": "4.19.1.1",
+      "id": "rpmsign",
+      "minimum_version": null
+    }
+  ],
+  "rpm_build_environment_evidence": {
+    "blocker": "Capture a digest-pinned Rocky 10.2 x86_64 buildroot, signed repository snapshots, complete RPM macro state, an offline transaction replay, and Rocky-effective Rust BuildRequires. The selected source spec currently gates rust, rust-src, and bindgen behind a Fedora-only conditional.",
+    "buildroot_oci_digest": null,
+    "environment_manifest_sha256": null,
+    "evidence_path": null,
+    "evidence_sha256": null,
+    "offline_transaction_verified": false,
+    "repository_snapshot_manifest_sha256": null,
+    "required": true,
+    "rpm_macro_manifest_sha256": null,
+    "spec_rust_buildrequires_rocky_verified": false,
+    "status": "required-missing"
+  },
+  "rustavailable_evidence": {
+    "blocker": "Run make LLVM=1 rustavailable in the exact archived RPM build environment and retain its command, config, environment, stdout, and stderr digests.",
+    "command": [
+      "make",
+      "LLVM=1",
+      "rustavailable"
+    ],
+    "config_sha256": null,
+    "environment_manifest_sha256": null,
+    "evidence_path": null,
+    "evidence_sha256": null,
+    "exit_code": null,
+    "required": true,
+    "status": "required-missing",
+    "stderr_sha256": null,
+    "stdout_sha256": null
+  },
+  "schema_version": 1,
+  "source_lock": {
+    "dist_git_commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+    "kernel_source_nevra": "kernel-0:6.12.0-211.44.1.el10_2.src",
+    "lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "path": "host-kernel/rocky/source-lock.json",
+    "source_archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+  },
+  "source_spec_observation": {
+    "path": "SPECS/kernel.spec",
+    "rocky_rust_buildrequires_effective": false,
+    "rust_buildrequires_condition": "0%{?fedora}",
+    "sha256": "081eb3b79dbbd240d484c6b72ecc786abf9997f8040b88120165e9b32273fdfe"
+  },
+  "target": {
+    "architecture": "x86_64",
+    "distribution": "Rocky Linux",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2"
+  }
+}

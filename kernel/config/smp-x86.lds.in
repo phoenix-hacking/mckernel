@@ -46,7 +46,7 @@ SECTIONS
 	} : data = 0xf4
 
 	.bss : {
-		*(.bss .bss.*)
+		*(.bss .bss.* .lbss .lbss.*)
 	}
 	. = ALIGN(4096);
 	_end = .;

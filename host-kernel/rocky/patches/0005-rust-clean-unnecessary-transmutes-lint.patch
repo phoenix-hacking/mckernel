@@ -1,0 +1,85 @@
+From 376b73292a262124c8aed10026e9da23e92554b2 Mon Sep 17 00:00:00 2001
+From: Miguel Ojeda <ojeda@kernel.org>
+Date: Fri, 2 May 2025 16:02:35 +0200
+Subject: [PATCH] rust: clean Rust 1.88.0's `unnecessary_transmutes` lint
+
+Upstream-Commit: 7129ea6e242b00938532537da41ddf5fa3e21471
+Stable-Commit: 376b73292a262124c8aed10026e9da23e92554b2
+Upstream-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+Stable-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+License: GPL-2.0-only
+
+commit 7129ea6e242b00938532537da41ddf5fa3e21471 upstream.
+
+Starting with Rust 1.88.0 (expected 2025-06-26) [1][2], `rustc` may
+introduce a new lint that catches unnecessary transmutes, e.g.:
+
+     error: unnecessary transmute
+         --> rust/uapi/uapi_generated.rs:23242:18
+          |
+    23242 |         unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 1u8) as u8) }
+          |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace this with: `(self._bitfield_1.get(0usize, 1u8) as u8 == 1)`
+          |
+          = note: `-D unnecessary-transmutes` implied by `-D warnings`
+          = help: to override `-D warnings` add `#[allow(unnecessary_transmutes)]`
+
+There are a lot of them (at least 300), but luckily they are all in
+`bindgen`-generated code.
+
+Thus clean all up by allowing it there.
+
+Since unknown lints trigger a lint itself in older compilers, do it
+conditionally so that we can keep the `unknown_lints` lint enabled.
+
+Cc: stable@vger.kernel.org # Needed in 6.12.y and later (Rust is pinned in older LTSs).
+Link: https://github.com/rust-lang/rust/pull/136083 [1]
+Link: https://github.com/rust-lang/rust/issues/136067 [2]
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Link: https://lore.kernel.org/r/20250502140237.1659624-4-ojeda@kernel.org
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+[ Adapted the stable context to exact Rocky 6.12: place the compiler gate
+  immediately before PAHOLE_VERSION and the bindings allow on its generated
+  bindings module. ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ init/Kconfig         | 3 +++
+ rust/bindings/lib.rs | 1 +
+ rust/uapi/lib.rs     | 1 +
+ 3 files changed, 5 insertions(+)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 14c3acb28..1d85a81a7 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -124,5 +124,8 @@ config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+ 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+ 
++config RUSTC_HAS_UNNECESSARY_TRANSMUTES
++	def_bool RUSTC_VERSION >= 108800
++
+ config PAHOLE_VERSION
+ 	int
+ 	default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
+diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
+index 93a1a3fc9..e62d600ca 100644
+--- a/rust/bindings/lib.rs
++++ b/rust/bindings/lib.rs
+@@ -25,6 +25,7 @@
+ )]
+ 
+ #[allow(dead_code)]
++#[cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]
+ mod bindings_raw {
+     // Use glob import here to expose all helpers.
+     // Symbols defined within the module will take precedence to the glob import.
+diff --git a/rust/uapi/lib.rs b/rust/uapi/lib.rs
+index 80a00260e..1721b94e0 100644
+--- a/rust/uapi/lib.rs
++++ b/rust/uapi/lib.rs
+@@ -23,5 +23,6 @@
+     unreachable_pub,
+     unsafe_op_in_unsafe_fn
+ )]
++#![cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]
+ 
+ include!(concat!(env!("OBJTREE"), "/rust/uapi/uapi_generated.rs"));

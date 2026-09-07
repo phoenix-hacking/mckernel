@@ -1,0 +1,229 @@
+{
+  "claim_scope": "RK-003 snapshot-backed closure/offline evidence only; this contract never awards tracker or gate credit, does not accept the repository snapshot, and does not supersede the RK-006 compatibility-patch authority.",
+  "gate_claims": {
+    "RK-002": false,
+    "RK-003": false,
+    "RK-004": false,
+    "RK-005": false,
+    "RK-006": false,
+    "RS-001": false
+  },
+  "historical_review_anchor": {
+    "closure_contract_path": "host-kernel/rocky/evidence/closure-offline-contract-v1.json",
+    "closure_contract_sha256": "2fe1230ef9cd7901a3c660f3dfd26b2dadfb31b161ef047fedfda20d9936c013",
+    "repository_direct_artifact_sha256": "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef",
+    "repository_direct_head_sha": "dd6d1954538ca1adbaf335a1dd058aba26c28840",
+    "scope": "Historical provenance only; no repository-direct bytes are runtime inputs to v2."
+  },
+  "metadata_reconciliation": {
+    "claims": {
+      "closure_artifact_captured": false,
+      "closure_artifact_durable": false,
+      "closure_artifact_independently_reviewed": false,
+      "credit_eligible": false,
+      "gate_rk_003": false,
+      "runtime_evidence_captured": false,
+      "tracker_credit": false
+    },
+    "llvm_config_owner": {
+      "binary_path": "/usr/bin/llvm-config",
+      "command": [
+        "llvm-config",
+        "--version"
+      ],
+      "expected_package_nevra": "llvm-devel-0:21.1.8-1.el10.x86_64",
+      "historical_direct_artifact_name": "llvm",
+      "historical_direct_artifact_nevra": "llvm-0:21.1.8-1.el10.x86_64",
+      "probe_id": "llvm",
+      "scope": "RK-003 probe-owner metadata only; this does not prove that llvm-devel was captured in a complete closure, reviewed, durably archived, or eligible for gate or tracker credit."
+    },
+    "phase_plan": {
+      "historical_implemented": false,
+      "implementation_available": true,
+      "path": "host-kernel/rocky/evidence-plan-v1.json",
+      "phase_id": "closure-offline",
+      "sha256": "dbe0788250f363c4f387782511753d9e3dfe8604cb44196e83db64302e876926",
+      "scope": "The exact historical v1 plan remains byte-stable and records the phase as unimplemented; closure-v2 now has a local contract, checker, workflow, and tests, but no runtime capture is claimed."
+    },
+    "scope": "Local closure-v2 implementation-status and llvm-config owner reconciliation only; the historical v1 plan and toolchain lock remain unchanged, and no runtime, review, durability, gate, or tracker claim is made."
+  },
+  "network_contract": {
+    "metadata": "All DNF metadata comes from the fully verified canonical repository-snapshot-capture-v2 tar; no repository metadata is acquired during closure capture.",
+    "rpm_acquisition": "DNF configured network sources are limited to the three exact Rocky 10.2 binary base URLs after exact signed local metadata is installed. Every selected RPM is bounded, bound to signed primary metadata, and header-signature verified, but DNF redirect destinations are not claimed to be isolated.",
+    "scope": "This proves exact-snapshot local repository solving and repository-disabled explicit-file replay at the DNF transaction boundary. It is not kernel-level network isolation, and independent network-isolation review remains required before RK-003 credit.",
+    "source_input": "The exact kernel.spec is acquired from an immutable dist-git commit URL with no redirects and exact size and SHA-256 before resolution roots are derived."
+  },
+  "outputs": [
+    "closure.json",
+    "offline-replay.json",
+    "probes.json",
+    "rpm-macros.json",
+    "environment.json",
+    "resolution-input.json",
+    "snapshot-input.json",
+    "blockers.json",
+    "checkpoint.json",
+    "SHA256SUMS"
+  ],
+  "phase_id": "closure-offline",
+  "required_probe_ids": [
+    "rustc",
+    "rust-src-core",
+    "cargo",
+    "rustfmt",
+    "clippy",
+    "bindgen",
+    "libclang-via-bindgen",
+    "clang",
+    "llvm",
+    "lld",
+    "pahole",
+    "bpftool",
+    "rpm",
+    "rpmbuild",
+    "rpmsign"
+  ],
+  "resolution_authority": {
+    "direct_nevra_count": 20,
+    "direct_nevras_sha256": "c4bcb2064a304abcec63c6d8f7159475cfca12147f6d5e037a874862943feca0",
+    "effective_buildrequires_count": 86,
+    "kernel_spec": {
+      "dist_git_commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+      "path": "SPECS/kernel.spec",
+      "sha256": "081eb3b79dbbd240d484c6b72ecc786abf9997f8040b88120165e9b32273fdfe",
+      "size": 1855272
+    },
+    "resolution_inputs_sha256": "76f48ba1bc273ed71880efccc42a127fee646c274a7a70167ced8ed4ac6df2a4",
+    "resolution_root_count": 109,
+    "reviewed_rocky_rust_additions": [
+      "bindgen",
+      "rust",
+      "rust-src"
+    ],
+    "reviewed_rocky_rust_count": 3,
+    "rpmspec_command": [
+      "rpmspec",
+      "-q",
+      "--buildrequires",
+      "--target",
+      "x86_64-linux-gnu",
+      "kernel.spec"
+    ]
+  },
+  "schema_version": 2,
+  "snapshot_authority": {
+    "artifact_digest_source": "required exact lowercase SHA-256 workflow-dispatch input",
+    "binary_repository_ids": [
+      "baseos",
+      "appstream",
+      "crb"
+    ],
+    "capture_id": "rocky-10.2-x86_64-repository-metadata-capture-v2",
+    "claims_must_remain_false": true,
+    "current_source_commit_required": true,
+    "git_authority": {
+      "config_overrides": [
+        "advice.graftFileDeprecated=false",
+        "core.attributesFile=/dev/null",
+        "core.fsmonitor=false",
+        "core.hooksPath=/dev/null",
+        "core.pager=cat",
+        "core.sshCommand=/usr/bin/false",
+        "credential.helper=",
+        "diff.external=",
+        "fetch.recurseSubmodules=false",
+        "interactive.diffFilter=",
+        "protocol.allow=never",
+        "submodule.recurse=false"
+      ],
+      "environment": {
+        "GIT_ATTR_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_GRAFT_FILE": "/dev/null",
+        "GIT_NO_REPLACE_OBJECTS": "1",
+        "GIT_OPTIONAL_LOCKS": "0",
+        "GIT_PAGER": "cat",
+        "GIT_TERMINAL_PROMPT": "0",
+        "HOME": "/nonexistent",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PAGER": "cat",
+        "PATH": "/usr/bin:/bin",
+        "XDG_CONFIG_HOME": "/nonexistent"
+      },
+      "executable": "/usr/bin/git",
+      "inherit_environment": false
+    },
+    "release_key": {
+      "fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4",
+      "size": 1688
+    },
+    "repositories": [
+      {
+        "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/",
+        "id": "source-baseos",
+        "kind": "source"
+      },
+      {
+        "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/x86_64/os/",
+        "id": "baseos",
+        "kind": "binary"
+      },
+      {
+        "base_url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/",
+        "id": "appstream",
+        "kind": "binary"
+      },
+      {
+        "base_url": "https://download.rockylinux.org/pub/rocky/10.2/CRB/x86_64/os/",
+        "id": "crb",
+        "kind": "binary"
+      }
+    ],
+    "required_repository_inputs": [
+      {
+        "path": ".github/workflows/rocky-repository-snapshot-capture-v2.yml",
+        "role": "workflow",
+        "sha256": "203c705f854eb3ceaa8726eb7884dc7d932521ab581d24b25fe7525f3e8c753b",
+        "size": 11098
+      },
+      {
+        "path": "host-kernel/rocky/evidence/repository-snapshot-capture-contract-v2.json",
+        "role": "contract",
+        "sha256": "3ff5fc2a625c827c94571799a0e6162cb0b8789e6512aba6c3223f17a05116fd",
+        "size": 5476
+      },
+      {
+        "path": "scripts/rocky_repository_snapshot_capture.py",
+        "role": "checker",
+        "sha256": "2d76d669d49be1d87938b886a3771b6740d5bfe21dd701d395ff99c6daabecbc",
+        "size": 108535
+      },
+      {
+        "path": "scripts/tests/test_rocky_repository_snapshot_capture.py",
+        "role": "tests",
+        "sha256": "1cc9cfcabcfcb5cf8666f79c942fa114322fc16a6396aa537a29f5dd742863d4",
+        "size": 74625
+      }
+    ],
+    "schema_version": 2,
+    "source_repository_id": "source-baseos",
+    "workflow_ref_prefix": "phoenix-hacking/mckernel/.github/workflows/rocky-repository-snapshot-capture-v2.yml@"
+  },
+  "success_blockers": [
+    "The snapshot-backed closure/offline artifact still requires independent review and durable archival before it may be bound into the toolchain lock.",
+    "Kernel-level network isolation was not proved; repository-disabled file-only replay and proxy-loopback defense are narrower evidence.",
+    "The repository-snapshot-capture-v2 artifact is a runtime input and is not accepted or durable merely because this bridge verifies it.",
+    "The minimal requested config has not been resolved twice by the exact Rocky process_configs.sh and olddefconfig pipeline.",
+    "make LLVM=1 rustavailable has not run in the reviewed offline buildroot against the exact source and resolved config.",
+    "A production kernel build has not bound its final .config to the independently resolved config.",
+    "The RK-006 compatibility patch series remains independently governed and receives no credit from this evidence."
+  ],
+  "toolchain_lock": {
+    "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+    "path": "host-kernel/rocky/toolchain-lock.json",
+    "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  }
+}

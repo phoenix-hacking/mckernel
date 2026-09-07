@@ -1,0 +1,46 @@
+From 5d2d34f36724585801937e76f81a69ab97cd045b Mon Sep 17 00:00:00 2001
+From: Miguel Ojeda <ojeda@kernel.org>
+Date: Sat, 12 Jul 2025 19:10:38 +0200
+Subject: [PATCH] rust: init: allow `dead_code` warnings for Rust >= 1.89.0
+
+Stable-Commit: 5d2d34f36724585801937e76f81a69ab97cd045b
+Stable-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+License: GPL-2.0-only
+
+Starting with Rust 1.89.0, the compiler may warn that the local
+`MustNotImplDrop` trait emitted by `#[pin_data]` is never used. The
+kernel's `-D warnings` policy promotes that warning to an error.
+
+Allow `dead_code` on both local traits emitted by the macro. This patch
+was sent directly to 6.12.y because newer trees moved the macro to a
+different crate and older LTS releases pin an earlier compiler.
+
+Acked-by: Benno Lossin <lossin@kernel.org>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+[ Adapted the stable context to exact Rocky 6.12, whose macro uses
+  `allow` attributes where the later stable preimage uses `expect`. ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ rust/kernel/init/macros.rs | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+index 9a0c4650e..b09fa914b 100644
+--- a/rust/kernel/init/macros.rs
++++ b/rust/kernel/init/macros.rs
+@@ -922,6 +922,7 @@ macro_rules! __pin_data {
+         // We prevent this by creating a trait that will be implemented for all types implementing
+         // `Drop`. Additionally we will implement this trait for the struct leading to a conflict,
+         // if it also implements `Drop`
++        #[allow(dead_code)]
+         trait MustNotImplDrop {}
+         #[allow(drop_bounds)]
+         impl<T: ::core::ops::Drop> MustNotImplDrop for T {}
+@@ -930,6 +931,7 @@ macro_rules! __pin_data {
+         // We also take care to prevent users from writing a useless `PinnedDrop` implementation.
+         // They might implement `PinnedDrop` correctly for the struct, but forget to give
+         // `PinnedDrop` as the parameter to `#[pin_data]`.
++        #[allow(dead_code)]
+         #[allow(non_camel_case_types)]
+         trait UselessPinnedDropImpl_you_need_to_specify_PinnedDrop {}
+         impl<T: $crate::init::PinnedDrop>

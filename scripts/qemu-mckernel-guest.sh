@@ -21,6 +21,8 @@ Options:
   --ssh-port PORT       Host port forwarded to guest SSH. Default: 2222
   --memory SIZE         QEMU memory. Default: 4096M
   --cpus N              QEMU vCPU count. Default: 4
+  --disk-size SIZE      Expand the disposable overlay before boot, for example
+                        24G. Default: keep the backing image virtual size.
   --accel MODE          auto, kvm, or tcg. Default: auto
   --timeout SEC         Guest SSH wait timeout. Default: 300
   --runtime SEC         Max time to let QEMU run after SSH/command. Default: 0
@@ -32,6 +34,9 @@ Options:
                         QEMU exits. Default: stop McKernel if installed.
   --guest-cleanup-timeout SEC
                         Watchdog for guest cleanup. Default: 30
+  --guest-evidence-dir PATH
+                        Copy this guest /tmp child into LOG_DIR/guest-evidence
+                        after --guest-cmd, including on command failure.
   --ssh-key PATH        Existing private key to use for guest SSH. Default:
                         generate a temporary key in the log directory.
   --kernel PATH         Optional external kernel image to boot with QEMU.
@@ -63,6 +68,7 @@ USER_NAME=mcktest
 SSH_PORT=2222
 MEMORY=4096M
 CPUS=4
+DISK_SIZE=
 ACCEL_REQUEST=auto
 TIMEOUT=300
 RUNTIME=0
@@ -71,6 +77,7 @@ GUEST_CMD_TIMEOUT=0
 GUEST_CLEANUP=1
 GUEST_CLEANUP_CMD='if [ -x /opt/mckernel-rust/sbin/mcstop+release.sh ]; then sudo /opt/mckernel-rust/sbin/mcstop+release.sh -k || true; fi'
 GUEST_CLEANUP_TIMEOUT=30
+GUEST_EVIDENCE_DIR=
 SHARED_DIR=
 STAGE_DIRS=()
 LOG_DIR="/tmp/mckernel-qemu-$(date +%Y%m%d-%H%M%S)"
@@ -108,6 +115,10 @@ while [ "$#" -gt 0 ]; do
 			CPUS="${2:?missing value for --cpus}"
 			shift 2
 			;;
+		--disk-size)
+			DISK_SIZE="${2:?missing value for --disk-size}"
+			shift 2
+			;;
 		--accel)
 			ACCEL_REQUEST="${2:?missing value for --accel}"
 			shift 2
@@ -134,6 +145,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--guest-cleanup-timeout)
 			GUEST_CLEANUP_TIMEOUT="${2:?missing value for --guest-cleanup-timeout}"
+			shift 2
+			;;
+		--guest-evidence-dir)
+			GUEST_EVIDENCE_DIR="${2:?missing value for --guest-evidence-dir}"
 			shift 2
 			;;
 		--ssh-key)
@@ -232,10 +247,23 @@ case "$IMAGE" in
 		;;
 esac
 
+if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
+	echo "error: --disk-size must be a positive byte count with an optional K, M, G, or T suffix" >&2
+	exit 2
+fi
+
+if [ -n "$GUEST_EVIDENCE_DIR" ]; then
+	if [[ ! "$GUEST_EVIDENCE_DIR" =~ ^/tmp/[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+		echo 'error: --guest-evidence-dir must be one safe directory directly under /tmp' >&2
+		exit 2
+	fi
+fi
+
 if [ ! -f "$IMAGE" ]; then
 	echo "error: image not found: $IMAGE" >&2
 	exit 1
 fi
+IMAGE="$(cd "$(dirname "$IMAGE")" && pwd)/$(basename "$IMAGE")"
 
 if [ -n "$SHARED_DIR" ] && [ ! -d "$SHARED_DIR" ]; then
 	echo "error: shared directory not found: $SHARED_DIR" >&2
@@ -309,41 +337,245 @@ require_uint guest-cleanup-timeout "$GUEST_CLEANUP_TIMEOUT"
 if [ -n "$GDB_PORT" ]; then
 	require_uint gdb "$GDB_PORT"
 fi
-
 mkdir -p "$LOG_DIR"
 
-BASE_FORMAT="$(qemu-img info --output=json "$IMAGE" |
-	sed -n 's/.*"format": *"\([^"]*\)".*/\1/p' | head -n1)"
+BASE_FORMAT="$(LC_ALL=C qemu-img info "$IMAGE" |
+	sed -n 's/^file format: //p' | head -n1)"
 if [ -z "$BASE_FORMAT" ]; then
-	BASE_FORMAT=qcow2
+	echo "error: could not determine backing image format: $IMAGE" >&2
+	exit 1
 fi
 
 OVERLAY="$LOG_DIR/guest-overlay.qcow2"
 SEED="$LOG_DIR/seed.iso"
 SSH_KEY="$LOG_DIR/id_ed25519"
 PIDFILE="$LOG_DIR/qemu.pid"
+STARTED_PIDFILE="$LOG_DIR/qemu-started.pid"
 SERIAL_LOG="$LOG_DIR/serial.log"
+DEBUGCON_LOG="$LOG_DIR/debugcon.log"
+STARTUP_LOG="$LOG_DIR/qemu-startup.log"
+QMP_SOCKET="$LOG_DIR/qmp.sock"
+QMP_LOG="$LOG_DIR/qmp-status.jsonl"
 GUEST_CMD_LOG="$LOG_DIR/guest-command.log"
 GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
+GUEST_EVIDENCE_ARCHIVE="$LOG_DIR/guest-evidence.tar"
+GUEST_EVIDENCE_ARCHIVE_SHA256="$LOG_DIR/guest-evidence.tar.sha256"
+GUEST_EVIDENCE_HOST_DIR="$LOG_DIR/guest-evidence"
+CPU_MODEL_FILE="$LOG_DIR/qemu-cpu-model.txt"
 
 print_serial_tail() {
+	local crash_end
+	local crash_line
+	local crash_match
+	local crash_start
+
 	if [ -f "$SERIAL_LOG" ]; then
+		# A kdump reboot can put hundreds of recovery-kernel lines after the
+		# original panic. Prefer the panic endpoint so the preceding BUG, RIP,
+		# and call trace remain visible in the CI log.
+		crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+			'Kernel panic|not syncing:' "$SERIAL_LOG" 2>/dev/null || true)"
+		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -F \
+				'IHK: OS does not become ready, kernel msg:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+				'BUG:|Oops:|general protection fault|Unable to handle kernel|#PF:|RIP:|Call Trace:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		crash_line="${crash_match%%:*}"
+		case "$crash_line" in
+			''|*[!0-9]*)
+				;;
+			*)
+				crash_start=$((crash_line > 300 ? crash_line - 300 : 1))
+				crash_end=$((crash_line + 500))
+				echo "serial failure context (lines ${crash_start}-${crash_end}, marker at ${crash_line}):" >&2
+				LC_ALL=C sed -n "${crash_start},${crash_end}p" "$SERIAL_LOG" >&2 || true
+				;;
+		esac
 		echo "recent serial log:" >&2
 		tail -n 80 "$SERIAL_LOG" >&2 || true
 	fi
+	if [ -s "$DEBUGCON_LOG" ]; then
+		echo "McKernel early debugcon phases:" >&2
+		tail -c 4096 "$DEBUGCON_LOG" >&2 || true
+		echo >&2
+	else
+		echo "McKernel early debugcon phases: empty" >&2
+	fi
+}
+
+qemu_pid_is_owned() {
+	local pid="$1"
+	local qemu_exe
+	local pidfile_verified=0
+	local i
+	local -a qemu_argv=()
+
+	if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+		return 1
+	fi
+	qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
+	if [[ "$qemu_exe" != qemu-system-x86_64* ]]; then
+		return 1
+	fi
+	mapfile -d '' -t qemu_argv <"/proc/$pid/cmdline" || return 1
+	for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+		if [ "${qemu_argv[$i]}" = -pidfile ] &&
+			[ "${qemu_argv[$((i + 1))]}" = "$PIDFILE" ]; then
+			pidfile_verified=1
+			break
+		fi
+	done
+	[ "$pidfile_verified" -eq 1 ]
 }
 
 qemu_is_running() {
 	local pid
 
 	if [ ! -f "$PIDFILE" ]; then
-		return 0
+		return 1
 	fi
 	pid="$(cat "$PIDFILE" 2>/dev/null || true)"
 	if [ -z "$pid" ]; then
+		return 1
+	fi
+	qemu_pid_is_owned "$pid"
+}
+
+record_qemu_process_sample() {
+	local label="$1"
+	local pid="$2"
+	local process_state
+	local process_ticks
+	local serial_bytes=0
+
+	if [ -f "$SERIAL_LOG" ]; then
+		serial_bytes="$(stat -c %s "$SERIAL_LOG")"
+	fi
+	if ! qemu_pid_is_owned "$pid"; then
+		printf '%s pid=%s owned=no serial_bytes=%s\n' \
+			"$label" "$pid" "$serial_bytes" >>"$STARTUP_LOG"
+		return 1
+	fi
+	read -r process_state process_ticks < <(
+		awk '{ print $3, ($14 + $15) }' "/proc/$pid/stat"
+	)
+	printf '%s pid=%s owned=yes state=%s ticks=%s serial_bytes=%s\n' \
+		"$label" "$pid" "$process_state" "$process_ticks" "$serial_bytes" \
+		>>"$STARTUP_LOG"
+}
+
+record_qmp_status() {
+	local label="$1"
+
+	if ! command -v python3 >/dev/null 2>&1 || [ ! -S "$QMP_SOCKET" ]; then
+		printf '{"label":"%s","error":"QMP unavailable"}\n' "$label" \
+			>>"$QMP_LOG"
 		return 0
 	fi
-	kill -0 "$pid" 2>/dev/null
+	python3 - "$QMP_SOCKET" "$label" >>"$QMP_LOG" 2>&1 <<'PY' || true
+import json
+import socket
+import sys
+
+socket_path, label = sys.argv[1:]
+try:
+    client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    client.settimeout(5)
+    client.connect(socket_path)
+    stream = client.makefile("rwb", buffering=0)
+
+    def read_response():
+        while True:
+            line = stream.readline()
+            if not line:
+                raise RuntimeError("QMP socket closed")
+            message = json.loads(line)
+            if "event" not in message:
+                return message
+
+    greeting = read_response()
+    print(json.dumps({"label": label, "greeting": greeting}, sort_keys=True))
+    for command in ("qmp_capabilities", "query-status", "query-cpus-fast"):
+        stream.write((json.dumps({"execute": command}) + "\r\n").encode())
+        print(json.dumps({
+            "label": label,
+            "command": command,
+            "response": read_response(),
+        }, sort_keys=True))
+except Exception as error:
+    print(json.dumps({
+        "label": label,
+        "error": f"{type(error).__name__}: {error}",
+    }, sort_keys=True))
+PY
+}
+
+collect_guest_evidence() {
+	local archive_sha
+	local file_count
+	local remote_cmd
+
+	if [ -z "$GUEST_EVIDENCE_DIR" ]; then
+		return
+	fi
+	remote_cmd="$(printf 'test -d %q && test ! -L %q && tar -C %q -cf - .' \
+		"$GUEST_EVIDENCE_DIR" "$GUEST_EVIDENCE_DIR" \
+		"$GUEST_EVIDENCE_DIR")"
+	if ! timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
+		ssh "${SSH_ARGS[@]}" "$remote_cmd" >"$GUEST_EVIDENCE_ARCHIVE"
+	then
+		echo "error: could not collect guest evidence directory: $GUEST_EVIDENCE_DIR" >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_ARCHIVE" ]; then
+		echo 'error: collected guest evidence archive is empty' >&2
+		return 1
+	fi
+	if ! mkdir -p "$GUEST_EVIDENCE_HOST_DIR"; then
+		echo 'error: could not create the host guest-evidence directory' >&2
+		return 1
+	fi
+	if ! tar --no-same-owner --no-same-permissions \
+		-C "$GUEST_EVIDENCE_HOST_DIR" -xf "$GUEST_EVIDENCE_ARCHIVE"
+	then
+		echo 'error: could not extract the guest evidence archive' >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_HOST_DIR/SHA256SUMS" ]; then
+		echo 'error: guest evidence is missing SHA256SUMS' >&2
+		return 1
+	fi
+	if ! (
+		cd "$GUEST_EVIDENCE_HOST_DIR"
+		sha256sum -c SHA256SUMS
+	); then
+		echo 'error: guest evidence SHA256SUMS verification failed' >&2
+		return 1
+	fi
+	if ! (
+		cd "$LOG_DIR"
+		sha256sum "$(basename "$GUEST_EVIDENCE_ARCHIVE")" \
+			>"$(basename "$GUEST_EVIDENCE_ARCHIVE_SHA256")"
+	)
+	then
+		echo 'error: could not hash the guest evidence archive' >&2
+		return 1
+	fi
+	file_count="$(find "$GUEST_EVIDENCE_HOST_DIR" -type f | wc -l)" || return 1
+	archive_sha="$(awk '{ print $1 }' "$GUEST_EVIDENCE_ARCHIVE_SHA256")" || return 1
+	if [[ ! "$file_count" =~ ^[1-9][0-9]*$ ]] ||
+		[[ ! "$archive_sha" =~ ^[0-9a-f]{64}$ ]]
+	then
+		echo 'error: invalid guest evidence count or archive digest' >&2
+		return 1
+	fi
+	printf 'guest-evidence: collected files=%s archive_sha256=%s\n' \
+		"$file_count" "$archive_sha"
 }
 
 cleanup() {
@@ -351,20 +583,29 @@ cleanup() {
 
 	if [ "$KEEP_RUNNING" -eq 0 ] && [ "$SSH_READY" -eq 1 ] &&
 		[ "$GUEST_CLEANUP" -eq 1 ]; then
-		timeout --foreground "$GUEST_CLEANUP_TIMEOUT" \
+		timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
 			ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" \
 			>>"$GUEST_CLEANUP_LOG" 2>&1 || true
 	fi
 
-	if [ "$KEEP_RUNNING" -eq 0 ] && [ -f "$PIDFILE" ]; then
+	if [ "$KEEP_RUNNING" -eq 0 ]; then
 		pid="$(cat "$PIDFILE" 2>/dev/null || true)"
-		if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+		if [ -z "$pid" ]; then
+			pid="$(cat "$STARTED_PIDFILE" 2>/dev/null || true)"
+		fi
+		if qemu_pid_is_owned "$pid"; then
 			kill "$pid" 2>/dev/null || true
 			for _ in $(seq 1 20); do
-				kill -0 "$pid" 2>/dev/null || break
+				qemu_pid_is_owned "$pid" || break
 				sleep 0.2
 			done
-			kill -9 "$pid" 2>/dev/null || true
+			if qemu_pid_is_owned "$pid"; then
+				kill -9 "$pid" 2>/dev/null || true
+			elif [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+				echo "refusing to SIGKILL reused PID $pid" >&2
+			fi
+		elif [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+			echo "refusing to kill PID $pid because QEMU identity did not verify" >&2
 		fi
 	fi
 
@@ -376,6 +617,9 @@ trap cleanup EXIT
 
 say "Preparing disposable guest overlay"
 qemu-img create -f qcow2 -F "$BASE_FORMAT" -b "$IMAGE" "$OVERLAY" >/dev/null
+if [ -n "$DISK_SIZE" ]; then
+	qemu-img resize "$OVERLAY" "$DISK_SIZE" >/dev/null
+fi
 
 if [ -n "$SSH_KEY_INPUT" ]; then
 	if [ ! -f "$SSH_KEY_INPUT" ]; then
@@ -430,25 +674,38 @@ elif [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
 	ACCEL=kvm
 fi
 
-CPU_MODEL=max
+# McKernel's x86_64 boot path uses four-level page tables. Keep that invariant
+# under both emulation and host passthrough so accelerator selection cannot
+# expose LA57 merely because the runner or QEMU model supports it.
+CPU_MODEL=max,la57=off
 if [ "$ACCEL" = "kvm" ]; then
-	CPU_MODEL=host
+	CPU_MODEL=host,la57=off
 fi
 
 QEMU_ARGS=(
 	qemu-system-x86_64
 	-accel "$ACCEL"
-	-machine q35
+	# With graphics disabled SeaBIOS redirects its own output to ttyS0, so an
+	# empty serial log proves failure before the Rocky kernel console starts.
+	-machine q35,graphics=off
 	-cpu "$CPU_MODEL"
 	-smp "$CPUS"
 	-m "$MEMORY"
 	-no-reboot
 	-display none
 	-serial "file:$SERIAL_LOG"
+	-chardev "file,id=mckdebug,path=$DEBUGCON_LOG"
+	-device "isa-debugcon,iobase=0xe9,chardev=mckdebug"
+	-qmp "unix:$QMP_SOCKET,server=on,wait=off"
 	-pidfile "$PIDFILE"
 	-daemonize
-	-drive "if=virtio,file=$OVERLAY,format=qcow2,cache=unsafe"
-	-drive "if=virtio,file=$SEED,format=raw,media=cdrom,readonly=on"
+	-drive "if=none,id=rocky_os,file=$OVERLAY,format=qcow2,cache=unsafe"
+	-device "virtio-blk-pci,drive=rocky_os,bootindex=1"
+	# NoCloud only needs a CIDATA-labelled block device.  virtio-blk does not
+	# support non-disk devices, so expose the read-only seed as a disk rather
+	# than requesting an unsupported virtio CD-ROM.
+	-drive "if=none,id=cloud_seed,file=$SEED,format=raw,readonly=on"
+	-device "virtio-blk-pci,drive=cloud_seed,bootindex=2"
 	-nic "user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:${SSH_PORT}-:22"
 )
 
@@ -477,8 +734,17 @@ fi
 
 printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
+printf '%s\n' "Debugcon log: $DEBUGCON_LOG"
+printf '%s\n' "QEMU startup log: $STARTUP_LOG"
+printf '%s\n' "QMP status log: $QMP_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
+printf '%s\n' "Backing image format: $BASE_FORMAT"
+if [ -n "$DISK_SIZE" ]; then
+	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
+fi
 printf '%s\n' "QEMU accel: $ACCEL"
+printf '%s\n' "QEMU cpu model: $CPU_MODEL"
+printf '%s\n' "$CPU_MODEL" > "$CPU_MODEL_FILE"
 if [ "$PAUSE_AT_RESET" -eq 1 ]; then
 	printf '%s\n' "QEMU pause-at-reset: enabled"
 fi
@@ -494,6 +760,53 @@ fi
 
 say "Starting guest"
 "${QEMU_ARGS[@]}"
+
+if [ ! -s "$PIDFILE" ]; then
+	echo "error: QEMU did not create a nonempty pidfile: $PIDFILE" >&2
+	exit 1
+fi
+qemu_started_pid="$(cat "$PIDFILE")"
+case "$qemu_started_pid" in
+	''|*[!0-9]*)
+		echo "error: QEMU wrote an invalid PID: $qemu_started_pid" >&2
+		exit 1
+		;;
+esac
+if ! qemu_pid_is_owned "$qemu_started_pid"; then
+	echo "error: started QEMU PID $qemu_started_pid failed identity verification" >&2
+	exit 1
+fi
+printf '%s\n' "$qemu_started_pid" >"$STARTED_PIDFILE"
+printf 'Verified QEMU startup PID: %s\n' "$qemu_started_pid"
+
+if [ "$PAUSE_AT_RESET" -eq 0 ]; then
+	record_qemu_process_sample start "$qemu_started_pid"
+	record_qmp_status start
+	for _ in $(seq 1 12); do
+		sleep 5
+		if ! qemu_pid_is_owned "$qemu_started_pid"; then
+			record_qemu_process_sample exited "$qemu_started_pid" || true
+			record_qmp_status exited
+			echo "error: guest exited before producing firmware serial output" >&2
+			print_serial_tail
+			exit 1
+		fi
+		if [ -s "$SERIAL_LOG" ]; then
+			break
+		fi
+	done
+	record_qemu_process_sample preflight "$qemu_started_pid"
+	record_qmp_status preflight
+	if [ ! -s "$SERIAL_LOG" ]; then
+		echo "error: guest produced no SeaBIOS/Rocky serial output within 60s" >&2
+		echo "startup diagnostics: $STARTUP_LOG" >&2
+		echo "QMP diagnostics: $QMP_LOG" >&2
+		exit 1
+	fi
+	printf 'QEMU firmware serial preflight: PASS\n'
+else
+	printf 'QEMU firmware serial preflight: skipped (pause-at-reset)\n'
+fi
 
 SSH_ARGS=(
 	-F /dev/null
@@ -518,7 +831,17 @@ until ssh "${SSH_ARGS[@]}" true >/dev/null 2>&1; do
 		print_serial_tail
 		exit 1
 	fi
+	if grep -Fq 'No bootable device.' "$SERIAL_LOG" 2>/dev/null; then
+		record_qemu_process_sample firmware-boot-failure "$qemu_started_pid" || true
+		record_qmp_status firmware-boot-failure
+		echo 'error: guest firmware reported that no bootable device exists' >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
+		exit 1
+	fi
 	if [ "$SECONDS" -ge "$deadline" ]; then
+		record_qemu_process_sample ssh-timeout "$qemu_started_pid" || true
+		record_qmp_status ssh-timeout
 		echo "error: guest SSH did not become ready within ${TIMEOUT}s" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
@@ -544,7 +867,7 @@ if [ -n "$GUEST_CMD" ]; then
 	say "Running guest command"
 	set +e
 	if [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		timeout --foreground "$GUEST_CMD_TIMEOUT" \
+		timeout --signal=TERM --kill-after=5s "$GUEST_CMD_TIMEOUT" \
 			ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
 	else
 		ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
@@ -552,8 +875,12 @@ if [ -n "$GUEST_CMD" ]; then
 	rc=$?
 	set -e
 	cat "$GUEST_CMD_LOG"
-	if [ "$rc" -eq 124 ] && [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog" >&2
+	evidence_rc=0
+	collect_guest_evidence || evidence_rc=$?
+	if { [ "$rc" -eq 124 ] || [ "$rc" -eq 137 ]; } &&
+		[ "$GUEST_CMD_TIMEOUT" -gt 0 ]
+	then
+		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog (status ${rc})" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
@@ -563,6 +890,10 @@ if [ -n "$GUEST_CMD" ]; then
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
+	fi
+	if [ "$evidence_rc" -ne 0 ]; then
+		echo "error: guest command passed but evidence collection failed with status $evidence_rc" >&2
+		exit "$evidence_rc"
 	fi
 fi
 
