@@ -489,6 +489,168 @@ impl BootPages {
         // its concurrently updated boot-parameter header.
         Ok(unsafe { ptr::read_volatile((self.address + offset as u64) as *const u64) })
     }
+
+    /// Only on a new private allocation, before handing its address to a peer.
+    fn initialize_queue(
+        &mut self,
+        channel_id: u32,
+        port: u16,
+    ) -> Result<*mut super::abi::IhkIkcQueueHead> {
+        // SAFETY: The original compound allocation is still exclusive. This
+        // temporary slice and queue view end before any raw endpoint attaches.
+        let storage =
+            unsafe { core::slice::from_raw_parts_mut(self.address as *mut u8, self.bytes) };
+        let queue = super::ikc_queue::SharedQueue::initialize(
+            storage,
+            1,
+            port,
+            super::smp_ikc::CONTROL_PACKET_BYTES as u16,
+        )
+        .map_err(|error| {
+            kernel::error::to_result(error.legacy_status())
+                .err()
+                .unwrap_or(EIO)
+        })?;
+        drop(queue);
+        self.put32(
+            offset_of!(super::abi::IhkIkcQueueHead, channel_id),
+            channel_id,
+        )?;
+        // All native boot IRQ routes currently target pinned Linux CPU 0.
+        self.put32(offset_of!(super::abi::IhkIkcQueueHead, read_cpu), 0)?;
+        Ok(self.address as *mut super::abi::IhkIkcQueueHead)
+    }
+}
+
+/// Endpoint views retire before the private allocation on any prepublication
+/// error. Once published, PreparedBoot retains both through every boot outcome.
+struct OwnedControlChannel {
+    channel: super::smp_ikc::ControlChannel,
+    pages: BootPages,
+}
+
+fn checked_guest_queue(
+    map: &MemoryMap<MAX_EXTENTS>,
+    owner: super::smp_resource::OsToken,
+    direct_map: u64,
+    physical: u64,
+    bytes: usize,
+) -> Result<*mut super::abi::IhkIkcQueueHead> {
+    let end = physical.checked_add(bytes as u64).ok_or(EINVAL)?;
+    if physical == 0 || physical % 4096 != 0 || bytes == 0 || end > IDENTITY_WINDOW_END {
+        return Err(EINVAL);
+    }
+    for index in 0..map.len() {
+        let extent = map.extent(index).ok_or(EIO)?;
+        if extent.owner() == Some(owner)
+            && extent.start() <= physical
+            && end <= extent.end().map_err(|_| EIO)?
+        {
+            return Ok(
+                direct_map.checked_add(physical).ok_or(EINVAL)? as *mut super::abi::IhkIkcQueueHead
+            );
+        }
+    }
+    Err(EINVAL)
+}
+
+fn accept_control_channel(
+    map: &MemoryMap<MAX_EXTENTS>,
+    owner: super::smp_resource::OsToken,
+    cpus: &[BootCpu],
+    channels: &mut Vec<OwnedControlChannel>,
+    direct_map: u64,
+    master_receive: u64,
+    master_send: u64,
+    master_bytes: usize,
+    offer: super::ikc_master::ConnectOffer,
+) -> Result<super::ikc_master::AcceptSuccess> {
+    use super::smp_ikc::{ControlChannel, CONTROL_QUEUE_BYTES};
+    if offer.receive_queue != 0
+        || offer.remote_channel_cookie == 0
+        || offer.reference == 0
+        || !matches!((offer.port, offer.interrupt_cpu), (501, -1) | (503, 0))
+    {
+        return Err(EINVAL);
+    }
+    let peer = checked_guest_queue(
+        map,
+        owner,
+        direct_map,
+        offer.send_queue,
+        CONTROL_QUEUE_BYTES,
+    )?;
+    let end = offer.send_queue + CONTROL_QUEUE_BYTES as u64;
+    for (physical, bytes) in [(master_receive, master_bytes), (master_send, master_bytes)] {
+        if offer.send_queue < physical + bytes as u64 && physical < end {
+            return Err(EINVAL);
+        }
+    }
+    // SAFETY: The entire peer queue mapping was proven inside this OS's owned
+    // memory. These fields are fixed before CONNECT publication; use raw reads
+    // without creating references to concurrently owned queue/header storage.
+    let (guest_cpu, channel_id, port) = unsafe {
+        (
+            ptr::read_volatile(ptr::addr_of!((*peer).read_cpu)),
+            ptr::read_volatile(ptr::addr_of!((*peer).channel_id)),
+            ptr::read_volatile(ptr::addr_of!((*peer).type_)),
+        )
+    };
+    if guest_cpu as usize >= cpus.len()
+        || channel_id != offer.reference
+        || port as i32 != offer.port
+    {
+        return Err(EINVAL);
+    }
+    for old in channels.iter() {
+        let old = &old.channel;
+        if old.owner != owner {
+            return Err(EIO);
+        }
+        if old.port == offer.port && (offer.port == 503 || old.guest_cpu == guest_cpu) {
+            return Err(EBUSY);
+        }
+        for physical in [old.send_physical, old.receive_physical] {
+            if offer.send_queue < physical + CONTROL_QUEUE_BYTES as u64 && physical < end {
+                return Err(EBUSY);
+            }
+        }
+    }
+    if channels.len() >= cpus.len() + 1 {
+        return Err(EBUSY);
+    }
+    // Cookies are local indices scoped by the exact OS generation. A received
+    // cookie is matched against these records and is never cast to a pointer.
+    let cookie = channels.len() as u64 + 1;
+    let mut pages = BootPages::allocate(CONTROL_QUEUE_BYTES, direct_map)?;
+    let receive = pages.initialize_queue(cookie as u32, offer.port as u16)?;
+    let physical = pages.physical();
+    // SAFETY: The checked peer's writer-CPU field is owned by this endpoint;
+    // geometry/reader identity remain unchanged. Publication occurs in reply.
+    unsafe { ptr::write_volatile(ptr::addr_of_mut!((*peer).write_cpu), 0) };
+    // SAFETY: The private receive allocation and checked disjoint peer queue
+    // have no aliases, use the version-2 protocol, and belong to this owner.
+    let channel = unsafe {
+        ControlChannel::new(
+            owner,
+            cookie,
+            offer.port,
+            guest_cpu,
+            physical,
+            offer.send_queue,
+            receive,
+            peer,
+        )?
+    };
+    // Store every owner before a reply can expose physical memory to McKernel.
+    channels.push(OwnedControlChannel { channel, pages }, GFP_KERNEL)?;
+    pr_info!("IHK-SMP: control accepted os={} generation={} port={} guest_cpu={} linux_cpu={} cookie={} receive={:x} send={:x} bytes={} reference={} remote_cookie={:x}\n",
+        owner.slot(), owner.generation(), offer.port, guest_cpu, cpus[guest_cpu as usize].linux_id,
+        cookie, physical, offer.send_queue, CONTROL_QUEUE_BYTES, offer.reference, offer.remote_channel_cookie);
+    Ok(super::ikc_master::AcceptSuccess {
+        receive_queue: physical,
+        accepted_channel_cookie: cookie,
+    })
 }
 
 struct PreparedBoot {
@@ -498,6 +660,7 @@ struct PreparedBoot {
     irq: BootIrqRoute,
     cpus: Vec<BootCpu>,
     master: Option<Box<super::smp_ikc::BootMaster>>,
+    channels: Vec<OwnedControlChannel>,
 }
 
 /// Turning started on is irreversible without an implemented stop/drain proof.
@@ -1473,6 +1636,7 @@ impl MemoryContext {
                 irq,
                 cpus,
                 master: None,
+                channels: Vec::new(),
             }),
             started: false,
         });
@@ -1532,72 +1696,109 @@ impl MemoryContext {
             boot.prepared.params.read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_receive))?,
             boot.prepared.params.read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_send))?);
         if last == 2 {
+            use super::ikc_master::{ExecutionContext, MasterRouter, RouteAction};
             core::sync::atomic::fence(Ordering::Acquire);
-            let receive = boot
-                .prepared
+            let prepared = &mut *boot.prepared;
+            let receive = prepared
                 .params
                 .read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_receive))?;
-            let send = boot
-                .prepared
+            let send = prepared
                 .params
                 .read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_send))?;
-            let queue_bytes = (4 * boot.prepared.cpus.len() * 56).div_ceil(4096) * 4096;
+            let queue_bytes = (4 * prepared.cpus.len() * 56).div_ceil(4096) * 4096;
             let direct_map = unsafe { bindings::page_offset_base };
-            let checked_queue = |physical: u64| -> Result<*mut super::abi::IhkIkcQueueHead> {
-                let end = physical.checked_add(queue_bytes as u64).ok_or(EINVAL)?;
-                if physical == 0 || physical % 4096 != 0 || end > IDENTITY_WINDOW_END {
-                    return Err(EINVAL);
-                }
-                let mut owned = false;
-                for index in 0..memory_map.len() {
-                    let extent = memory_map.extent(index).ok_or(EIO)?;
-                    if extent.owner() == Some(owner)
-                        && extent.start() <= physical
-                        && end <= extent.end().map_err(|_| EIO)?
-                    {
-                        owned = true;
-                        break;
-                    }
-                }
-                if !owned {
-                    return Err(EINVAL);
-                }
-                Ok(direct_map.checked_add(physical).ok_or(EINVAL)?
-                    as *mut super::abi::IhkIkcQueueHead)
-            };
-            let receive_pointer = checked_queue(receive)?;
-            let send_pointer = checked_queue(send)?;
+            let receive_pointer =
+                checked_guest_queue(memory_map, owner, direct_map, receive, queue_bytes)?;
+            let send_pointer =
+                checked_guest_queue(memory_map, owner, direct_map, send, queue_bytes)?;
             if receive < send + queue_bytes as u64 && send < receive + queue_bytes as u64 {
                 return Err(EINVAL);
             }
-            // SAFETY: Both complete disjoint queues belong to this exact
-            // permanently retained started generation; no mapping reference
-            // escapes and only this adapter owns the Linux endpoints.
+            // SAFETY: Complete disjoint queues belong to this permanently
+            // retained generation; preparation required native boot revision 2.
             let master = unsafe {
                 super::smp_ikc::BootMaster::new(owner, receive_pointer, send_pointer, queue_bytes)?
             };
-            boot.prepared.master = Some(Box::new(master, GFP_KERNEL)?);
-            let master = boot.prepared.master.as_ref().ok_or(EIO)?;
-            // SAFETY: Box gives a stable address already retained inside the
-            // started ManuallyDrop owner before IRQ-visible publication.
-            unsafe { boot.prepared.irq.publish_master(master)? };
+            prepared.master = Some(Box::new(master, GFP_KERNEL)?);
+            let master = prepared.master.as_ref().ok_or(EIO)?;
+            // SAFETY: The stable Box is already inside the retained started
+            // owner before the IRQ route can observe it.
+            unsafe { prepared.irq.publish_master(master)? };
             master.send_initial_ack(cpu.linux_id)?;
-            pr_info!("IHK-SMP: master INIT_ACK os={} generation={} target_cpu={} receive={:x} send={:x}; initial publication only\n", owner.slot(), owner.generation(), cpu.linux_id, receive, send);
-            for _ in 0..3000 {
+            pr_info!("IHK-SMP: master INIT_ACK os={} generation={} target_cpu={} receive={:x} send={:x}; revision-2 replies enabled\n", owner.slot(), owner.generation(), cpu.linux_id, receive, send);
+            let router = MasterRouter::new(super::smp_ikc::listeners());
+            'service: for _ in 0..3000 {
                 if master.error() != 0 {
                     return Err(EIO);
                 }
-                if master.packets() != 0 {
-                    let offer = master.first_connect()?;
-                    pr_info!("IHK-SMP: guest CONNECT os={} generation={} irq_events={} packets={} port={} packet_size={} receive={:x} send={:x} cookie={:x} magic={} cpu={}; listener integration pending\n", owner.slot(), owner.generation(), boot.prepared.irq.events(), master.packets(), offer.port, offer.packet_size, offer.receive_queue, offer.send_queue, offer.remote_channel_cookie, offer.magic, offer.interrupt_cpu);
-                    break;
+                let notified = master.take_notification();
+                // The shared ring itself retains pending packets. Always poll
+                // after a bounded drain, even if one IRQ covered many packets.
+                for _ in 0..16 {
+                    let Some(packet) = master.next_packet()? else {
+                        break;
+                    };
+                    let decision = router.route(&packet, ExecutionContext::Process);
+                    match decision.action {
+                        RouteAction::Accept(plan) => {
+                            let offer = plan.offer();
+                            pr_info!("IHK-SMP: guest CONNECT os={} generation={} irq_events={} packets={} port={} packet_size={} receive={:x} send={:x} cookie={:x} magic={} cpu={}; process listener notified={}\n", owner.slot(), owner.generation(), prepared.irq.events(), master.packets(), offer.port, offer.packet_size, offer.receive_queue, offer.send_queue, offer.remote_channel_cookie, offer.magic, offer.interrupt_cpu, notified);
+                            let result = accept_control_channel(
+                                memory_map,
+                                owner,
+                                &prepared.cpus,
+                                &mut prepared.channels,
+                                direct_map,
+                                receive,
+                                send,
+                                queue_bytes,
+                                offer,
+                            )
+                            .map_err(|error| error.to_errno());
+                            let reply = plan
+                                .connect_reply(result)
+                                .map_err(super::smp_ikc::master_error)?;
+                            master.send_packet(cpu.linux_id, &reply.packet())?;
+                            pr_info!("IHK-SMP: CONNECT_REPLY os={} generation={} port={} reference={} errno={} receive={:x} cookie={}\n", owner.slot(), owner.generation(), offer.port, reply.reference, reply.parameters[0], reply.parameters[1], reply.parameters[3]);
+                        }
+                        RouteAction::SendConnectError(reply) => {
+                            master.send_packet(cpu.linux_id, &reply.packet())?;
+                        }
+                        RouteAction::DeliverPacket { channel_cookie } => {
+                            if !prepared.channels.iter().any(|entry| {
+                                entry.channel.owner == owner
+                                    && entry.channel.cookie == channel_cookie
+                            }) {
+                                return Err(EINVAL);
+                            }
+                        }
+                        _ => {
+                            pr_info!("IHK-SMP: unserviced master message os={} generation={} message={:x} reference={}; resources retained\n", owner.slot(), owner.generation(), packet.message, packet.reference);
+                            break 'service;
+                        }
+                    }
                 }
-                // SAFETY: Process context retains all resource/CPU owners.
+                for entry in prepared.channels.iter_mut() {
+                    if let Some(packet) = entry.channel.next_packet()? {
+                        // Queue publication synchronizes the guest's preceding
+                        // write_cpu update. Validate the source before dispatch.
+                        if entry.pages.read64(56)? as u32 != entry.channel.guest_cpu {
+                            return Err(EIO);
+                        }
+                        let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
+                        let reference = i32::from_le_bytes(packet[24..28].try_into().unwrap());
+                        let argument = u64::from_le_bytes(packet[40..48].try_into().unwrap());
+                        pr_info!("IHK-SMP: regular request os={} generation={} port={} cookie={} packets={} message={:x} reference={} argument={:x} irq_events={}; host service pending, resources retained\n", owner.slot(), owner.generation(), entry.channel.port, entry.channel.cookie, entry.channel.received, message, reference, argument, prepared.irq.events());
+                        break 'service;
+                    }
+                }
+                // SAFETY: Sleepable BOOT retains all CPU, memory, channel and
+                // module owners. IRQ callbacks take none of these mutexes.
                 unsafe { bindings::msleep(10) };
             }
         }
         // No success is returned merely for AP entry or architecture readiness.
-        // The next integration must prove the actual host IKC handshake.
+        // Listener replies alone are insufficient: host services and runtime dispatch remain open.
         Err(kernel::error::to_result(-110).err().unwrap_or(EIO))
     }
 }

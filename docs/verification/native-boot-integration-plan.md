@@ -318,3 +318,38 @@ this is language attribution, not whole-OS readiness or production credit.
 See `native-ikc-completion-checkpoint-20260907.json`. Listener acceptance and
 subsequent service requests are still pending; no application execution or
 full boot/status 3 is claimed by this prerequisite.
+
+## Owned listener integration in progress
+
+Retain the current master receive `SharedQueue` as the bounded packet handoff:
+the real IRQ callback will only release-publish pending work; the serialized
+BOOT process will consume packets and run `MasterRouter` with Process context.
+This avoids another copied queue, interrupt allocations and recursive acquisition
+of BOOT's resource mutex. Initialize the existing fixed listener registry once
+before publishing the SMP control device, with the preserved port-501/503 specs.
+Registry owner IDs describe this module's service; each channel additionally
+retains its exact OS generation and validated guest queue mapping.
+
+Adapt `smp_memory.rs::BootPages` in place for the host receive allocation and
+store it with the typed queue endpoints in `PreparedBoot` before sending the
+accepted reply. Guest queue ranges must lie wholly in this OS's owned memory,
+remain disjoint from both master queues and accepted queue mappings, and have
+the requested immutable geometry and valid source CPU. Use generation-local
+opaque channel cookies with lookup under the owning BOOT context, never turn a
+remote packet cookie into a host pointer. Reuse `SharedProducer` for revision-2
+master sends under a nonblocking local producer claim. Keep all started channel
+owners retained on errors. Drain regular queues in the same bounded process
+loop, recording the actual next unsupported request before its host service is
+implemented. Full boot still requires those services and asynchronous runtime
+dispatch; no readiness success may be synthesized from successful connections.
+
+The initial listener prototype failed compilation because the retained receive
+physical identity was not yet consumed. The corrected overlap check now checks
+both ranges of each accepted channel. Both layout witnesses and all three
+native modules build and pass ELF/no-SIMD checks in prototype attempt 4; the
+failed attempt 3 is preserved. The source uses the existing shared master ring
+as the IRQ-to-process handoff, revision-2 producer claims, a module-lifetime
+listener registry, original receive-page owners and OS-scoped opaque cookies.
+The next guest capture will verify both real CONNECT_REPLY messages, four
+regular queue mappings and the first actual host-service request. Those runtime
+checks have not yet run; listener/full boot acceptance is not claimed here.

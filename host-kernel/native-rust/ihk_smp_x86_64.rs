@@ -695,6 +695,7 @@ impl kernel::Module for IhkSmpModule {
         let provider_lease = ProviderLease::attach()?;
         let cpu_controller = smp_cpu::CpuController::new()?;
         let memory_controller = smp_memory::MemoryController::new()?;
+        smp_ikc::initialize_listeners()?;
         let control_device = Box::pin_init(
             MiscDeviceRegistration::<IhkSmpControlDevice>::register(MiscDeviceOptions {
                 name: c_str!("mcd0"),

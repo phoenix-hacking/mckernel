@@ -33822,3 +33822,12 @@ mutated artifact and failed capture; fix extraction to an explicit scratch
 output and restore/rebuild the exact compiler image before retry. The queued
 module-build invocation was canceled at its sudo prompt before container work.
 No runtime validation or immutable artifact pass is claimed by this attempt.
+2026-09-07 23:24 UTC — native listener prototype attempt 3 FAILED compilation.
+Command: mckernel-container native python3 -B /work/build-native-ikc-prototype.py 3
+Environment: pinned Linux 6.12/native Rust 1.92, uid 1000, CPUs 2-5, four CPU /
+12 GiB limits. Evidence: /work/native-ikc-prototype-20260907-3.
+Both exact boot layout witnesses passed; the module build stopped under
+-Dwarnings because ControlChannel.receive_physical was never read. No guest
+test ran. Use that retained identity in accepted-channel overlap validation,
+checking both the send and receive ranges, then rebuild. Preserve the failed
+compiler inputs/logs; do not suppress the warning or claim a module pass.
