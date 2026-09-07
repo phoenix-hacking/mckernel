@@ -2,6 +2,26 @@
 
 Updated: 2026-06-02
 
+## Active goal and GitHub checkpoints (2026-09-07)
+
+Resume the interrupted McKernel work: restore the existing validation
+environment, continue verification, and work through the remaining native
+integration and Rust/assembly completion requirements below.
+
+The user explicitly authorizes environment setup and repair, continued
+implementation, isolated guest verification, and periodic commits and pushes
+to GitHub. Proceed without repeated confirmation for this work. This
+authorization supersedes older per-run approval language for isolated guest
+checks. Keep the established four-CPU and 12 GiB validation limits.
+
+Preserve progress on the current working branch in `origin` after each coherent
+implementation or verification checkpoint, before a long validation run, and
+before ending a work session. During sustained work, aim to commit and push
+new progress about every 30 minutes. Verify that GitHub contains the pushed
+commit. If work is unfinished, make an explicit WIP checkpoint with the exact
+checks passed, failures, and remaining work; saving it is not a production
+acceptance claim. Preserve existing history and evidence.
+
 ## Current accounting and Rust preservation (2026-09-06)
 
 Latest user clarification (2026-09-07): completing the active goal requires the
