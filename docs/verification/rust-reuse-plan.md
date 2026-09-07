@@ -14,6 +14,12 @@ to be entirely Rust or assembly. Existing Rust across all source groups must
 be preserved and integrated; completing native host connectivity alone is
 insufficient. See the [required language acceptance checks](mckernel-rust-assembly-completion.md).
 
+The current [file-level consumer review](rust-consumer-integration.md) separates
+active build paths from optional, comparison/test, and pending native sources.
+It accounts for all 130 current Rust files without removing or replacing the
+immutable baseline. It also records the verified `hash.rs` incremental-build
+dependency repair; complete native unification remains open.
+
 ## Architecture and implementation priority
 
 The user confirmed the intended architecture: Rocky Linux supplies a Linux 6.x

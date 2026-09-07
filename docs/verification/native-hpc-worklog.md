@@ -322,3 +322,26 @@ This is a subjective engineering estimate with substantial uncertainty, not
 an earned evidence score or a remaining-time ratio. The measured Rust share
 of the compatibility image remains 78.356795%; the formal native acceptance
 score remains separately 3.50%.
+
+## Rust consumer integration and incremental build repair — 2026-09-07
+
+Local commit `9e7b1f63` saves the verified native CPU adapter and its evidence.
+The subsequent [consumer record](rust-consumer-integration.md) accounts for all
+130 Rust files against the original 129-file baseline: 121 unchanged, eight
+modified, one added, none removed. The 64 core files share the McKernel crate;
+14 files are selected by native module graphs. Remaining native mapping and
+legacy mcctrl adaptation are explicit, as are optional, separate-tool and
+comparison/test consumers. Complete unification is still an acceptance task.
+
+The omitted `hash.rs` CMake dependency is repaired. Inside the four-CPU
+compatibility container, the original rule missed its rebuild, the corrected
+rule scheduled compilation, and a real incremental image rebuild passed. The
+Rust object and image hashes remained identical to the preserved ABI-repair
+artifacts. The existing 17 compiler warnings in other declarations remain;
+this build-only repair adds no runtime or language percentage credit. See the
+[source-bound verification](rust-consumer-verification-20260907.json).
+
+Next major work remains native memory reservation/query/release using the
+existing Rust map, allocation owners and OS lease model, followed by resource
+assignment and McKernel boot. Preserve the common ABI and existing consumers
+while retiring the remaining McKernel C implementation paths.

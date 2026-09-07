@@ -33410,3 +33410,15 @@ prefixes as trailing whitespace and space-before-tab. Preserve the exact patch
 bytes already replayed, built and guest-tested. Extend the existing patch-file
 whitespace treatment to this Kbuild patch directory, then recheck staged source.
 Command: bounded native runner git diff --cached --check. No runtime failure.
+2026-09-07 Rust consumer inventory and incremental hash dependency PASS
+Native four-CPU source audit accounts for 130 Rust files: 121 unchanged from the
+24a151fe preservation baseline, eight modified, one new, no baseline removal.
+All 64 core Rust source files occur in the crate and corrected CMake dependency
+list. Current native staging matches the 14-file module graph; pending mapping,
+legacy mcctrl, optional tools, comparison and fixture consumers are explicit.
+Compatibility four-CPU negative dry run reproduces the omitted hash.rs rebuild;
+the corrected generated Make rule schedules compilation, and touching hash.rs
+actually rebuilds mckernel_rust.o and mckernel.img. Both retain identical SHA-256
+bytes. Existing 17 compiler warnings remain. Source/recipe/build evidence is in
+rust-consumer-verification-20260907.json and its retained archive. No new boot,
+C retirement, complete unification, or production gate credit is claimed.

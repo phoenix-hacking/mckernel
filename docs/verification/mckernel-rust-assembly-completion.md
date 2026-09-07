@@ -40,6 +40,12 @@ relevant equivalence and runtime evidence. Reference C can remain during
 migration for comparison, but cannot participate in the final production
 McKernel implementation or its runtime dispatch paths.
 
+The [consumer integration record](rust-consumer-integration.md) tracks active,
+optional, comparison-only, and pending Rust sources. Completion requires
+resolving the pending production connections and preventing unexplained source
+orphans or competing implementations. Fixtures and optional features retain
+explicit consumers; they must not inflate default production coverage.
+
 ## Required acceptance checks
 
 These checks are additional to the native host-module tracker. They do not
@@ -54,6 +60,7 @@ completion. The active goal is incomplete until both sets of requirements pass.
 | MK-LANG-004 | Inspect the final image and dependency/dispatch closure; reject C-origin executable contributions, hidden C fallbacks, and unknown source origins. | TODO |
 | MK-LANG-005 | Pass ABI/equivalence checks and boot/workload/rollback/shutdown tests through the native Rocky/Linux 6.12 host modules. | TODO |
 | MK-LANG-006 | Package and reproduce the exact tested Rust/assembly McKernel and native host artifacts; retain source-to-binary evidence. | TODO |
+| MK-LANG-007 | Account for every existing Rust source and connect each required production component through verified builds, ABIs and native runtime paths; retain explicit optional/test consumers. | IN_PROGRESS: build boundaries and pending integration recorded; complete unification remains open. |
 
 The retained [source-24a151fe linked report](compat-24a151fe-linked-rust.json)
 records 614,183 Rust-owned executable bytes out of 783,847 (78.354960%). The

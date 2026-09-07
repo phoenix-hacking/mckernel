@@ -63,6 +63,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/futex.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/gencore.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/freeze.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/hash.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/hugefileobj.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/ikc_manycore.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/ikc_master.rs"
