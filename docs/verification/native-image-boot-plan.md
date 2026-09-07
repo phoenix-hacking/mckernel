@@ -162,3 +162,15 @@ The native image uses `MCKERNEL_HOST_IRQ_ABI=linux-6.12`. Its loader/startup-tab
 guest replay and full suite follow. Linux's private raised-list ownership,
 cross-kernel IPI delivery, boot parameters and CPU-start lifetime are still
 required; no McKernel CPU has started.
+
+The native-selected image now passes a fresh loader/startup-table guest with
+56 physical image readbacks, 56 table readbacks and 64 forced startup-allocation
+failures across both ABIs and module cycles. The corrected cleanup test counts
+Linux's free PCP pages with the same 4 MiB allowance. The full repository suite
+passes 2,315 tests (2,244 passed, 71 skipped); see
+`native-irq-final-validation-20260907.json`. All 139 Rust sources remain
+accounted for, including the 64 core and 19 native staged files. An intermittent
+Linux timer/RCU stall in a separate IRQ-module guest remains unresolved.
+Next retain owned trampoline/boot parameters and integrate native CPU wakeup
+and IRQ/IKC lifetimes; neither successful image loading nor the ABI fixture
+establishes an actual McKernel boot.

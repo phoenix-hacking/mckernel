@@ -671,3 +671,32 @@ These passes do not establish the cause or resolve the intermittent failure.
 The [runtime checkpoint](native-irq-runtime-checkpoint-20260907.json) retains
 31 artifacts, including every failed and passing capture and the current probe.
 No McKernel CPU has started, and no production gate receives credit.
+
+## 2026-09-07: final native IRQ image verification
+
+The corrected cleanup probe passes the fresh native-image guest 4 from source
+`3f740ba6`: all 56 image and 56 startup-table readbacks match their independent
+models, and all 64 forced startup-allocation failures recover across both ABIs
+and two module cycles. Combined buddy/PCP free-memory loss is 8, 12, 8 and
+12 KiB for the four groups of eight repeated loads, within the unchanged
+4 MiB allowance. Every CPU is restored and all modules unload. The image's
+production inputs and the exact guest probes still match the current source.
+
+After the retained fixture-formatting failure, the full suite passes on clean
+source `0d5cd7b0`: 2,315 tests in 305.095 seconds, with 2,244 passed and 71
+skipped. This includes the actual C/Rust producer comparison and the cleanup
+parser regression. The only source change between the passing image guest and
+this suite is declaration ordering in the separate IRQ module fixture, plus
+its failure log. The earlier IRQ module artifacts retain their original exact
+source binding.
+
+The [final record](native-irq-final-validation-20260907.json) separates these
+successful checks from the unresolved timer/RCU stall in IRQ guest 2 and the
+unavailable historical broad-equivalence prerequisites. All 73 earlier IRQ
+checkpoint artifacts pass their byte/hash and gzip checks; the final checkpoint
+retains another 16 verified artifacts. The updated
+[Rust inventory](rust-consumers-irq-20260907.json) accounts for 139 files:
+115 unchanged, 14 modified and 10 added relative to the immutable baseline;
+none removed, with all 64 core and 19 native staged consumers preserved.
+Real McKernel boot, IRQ/IKC, applications, complete Rust/assembly implementation
+and independent production acceptance remain open.

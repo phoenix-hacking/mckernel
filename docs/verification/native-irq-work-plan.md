@@ -98,3 +98,17 @@ PCP caches: the diagnostic measures 4,096 KiB fewer buddy pages and 4,088 KiB
 more free PCP pages. The test correction accounts for both sources of free
 pages without increasing its 4 MiB allowance. Final assertion replay and the
 full suite are pending; all captures are in the runtime WIP checkpoint.
+
+The final cleanup assertion now passes guest 4, with all 56 image/table pairs,
+64 forced startup-allocation failures and four cleanup measurements losing
+only 8-12 KiB each. The full repository suite subsequently passes 2,315 tests
+(2,244 passed, 71 skipped) on clean source `0d5cd7b0`; the initial formatting
+failure remains retained. See `native-irq-final-validation-20260907.json`.
+The intermittent IRQ guest stall and real cross-kernel transport remain open.
+
+For the next adapter, the exact native `Module.symvers` exports
+`irq_work_queue`, `irq_work_run` and `irq_work_sync`. Its `raised_list` is
+private, and `irq_work_queue_on` has no exported module symbol. The x86 IRQ-work
+vector is `0xf6`. Use these pinned boundaries when choosing the owned transport;
+do not infer module access from a declaration alone. Retain OS/module owners
+until the guest has stopped sending and every queued callback has drained.

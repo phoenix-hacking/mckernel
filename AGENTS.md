@@ -37,16 +37,21 @@ The historical broad equivalence harness cannot replay against the pinned IHK
 because three expected Rust crates are absent; its failure is preserved, with
 no pass claimed. The complete touched C/Rust producer passes its direct fixture.
 The new native image now passes 56 image and 56 startup-table readbacks plus
-64 forced startup-allocation failures in guest 3. Earlier cleanup probes
+64 forced startup-allocation failures in the final guest 4. Earlier cleanup probes
 miscounted free pages held in Linux's per-CPU caches; the corrected probe
-includes those pages while retaining the same 4 MiB allowance. Its final
-guest replay and the full suite remain pending at this WIP checkpoint.
+includes those pages while retaining the same 4 MiB allowance. The final
+cleanup measurements lose only 8-12 KiB per group of eight repeated loads.
+The full suite passes 2,315 tests in 305.095 seconds: 2,244 passed, 71 skipped,
+from clean source parent `0d5cd7b0`. See
+`docs/verification/native-irq-final-validation-20260907.json` and the updated
+Rust inventory: 139 files, 115 unchanged, 14 modified, 10 added, none removed;
+all 64 core and 19 native staged files retain their consumers.
 An IRQ guest repeat stalled in Linux's default-idle timer/RCU path after
 512 callbacks and module drop. Subsequent poll-idle and default-idle runs
 each pass 1,024 callbacks, but the intermittent stall remains unresolved.
 See `docs/verification/native-irq-runtime-checkpoint-20260907.json` for
-all captures. Next finish verification, then implement real CPU startup
-and cross-kernel IRQ/IKC.
+the intermediate captures. Next investigate the stall and implement owned
+boot parameters/trampoline, real CPU startup and cross-kernel IRQ/IKC.
 The IRQ module test uses mocked boot/guest context and a local Linux transport;
 it does not prove McKernel boot. Full Rust/assembly completion remains open.
 
