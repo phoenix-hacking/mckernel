@@ -5,6 +5,7 @@
 #include <linux/percpu.h>
 #include <linux/timekeeping.h>
 #include <linux/version.h>
+#include <asm/apic.h>
 #include <asm/numa.h>
 #include <asm/pgtable.h>
 #include <asm/smp.h>
@@ -29,6 +30,9 @@ static_assert(__builtin_types_compatible_p(typeof(&kernel_param_unlock),
 static_assert(__builtin_types_compatible_p(typeof(&__node_distance), int (*)(int, int)));
 static_assert(__builtin_types_compatible_p(typeof(&tsc_khz), unsigned int *));
 static_assert(sizeof(init_top_pgt[0]) == 8);
+static_assert(__builtin_types_compatible_p(typeof(&__SCT__apic_call_send_IPI_mask),
+              void (*)(const struct cpumask *, int)));
+static_assert(__builtin_types_compatible_p(typeof(apic), struct apic *));
 
 #define OFFSET(field) offsetof(struct smp_boot_param, field)
 const unsigned long long native_smp_boot_layout[]

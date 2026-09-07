@@ -24,6 +24,25 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Initial native IKC checkpoint (2026-09-07): the new APIC binding kernel and all
+three native prototype modules compile; seven queue and six master tests pass.
+SET_KARGS now retains the legacy bounded read/truncation semantics and exact
+OS generation. Both ABIs over two preparation cycles pass argument faults,
+truncation, preparation retirement, 32 forced allocations, four physical
+captures and full unstarted restoration. A cleanup fixture initially assumed a
+single 128 MiB contiguous chunk; its failure is retained and the corrected
+probe verifies all returned bytes/chunks before using the existing release API.
+Actual native and compat starts now receive INIT_ACK on McKernel and deliver a
+port-501 CONNECT back through real Linux IRQ-work. QMP confirms both queue
+counter transitions and exact packet fields. See
+`docs/verification/native-ikc-handshake-checkpoint-20260907.json`. Only the first
+master exchange is serviced; next implement listener acceptance and regular
+channels, then vDSO/sysfs/mcctrl, status 3 and applications. Repeated host sends
+need a compatible guest consumption contract; the initial publisher never
+reuses a slot. Started owners remain retained and native shutdown is unproven.
+Declared staging/contracts/full-suite integration, full Rust/assembly ownership
+and independent production acceptance remain open; no gate credit is claimed.
+
 Native boot entry checkpoint (2026-09-07): all three refreshed images are built;
 the current native image SHA is
 `3eb7b36b3ef1ee069dbfdb163bff9f7a39bf828af3635417cd708a9a6f011be8`.

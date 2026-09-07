@@ -389,6 +389,7 @@ struct MemoryContext {
     pages: Vec<PageOwner>,
     pin: Option<ResourceModulePin>,
     images: [Option<LoadedImage>; 64],
+    arguments: [Option<(super::smp_resource::OsToken, [u8; 256])>; 64],
 }
 
 // Loading does not publish a boot capability. The following AP-start adapter
@@ -496,6 +497,7 @@ struct PreparedBoot {
     trampoline: super::smp_trampoline::LowRegion,
     irq: BootIrqRoute,
     cpus: Vec<BootCpu>,
+    master: Option<Box<super::smp_ikc::BootMaster>>,
 }
 
 /// Turning started on is irreversible without an implemented stop/drain proof.
@@ -582,6 +584,7 @@ impl MemoryContext {
             pages: Vec::new(),
             pin: None,
             images: [const { None }; 64],
+            arguments: [const { None }; 64],
         }
     }
 
@@ -1279,6 +1282,12 @@ impl MemoryContext {
         put64!(linux_kernel_page_table_physical, linux_root);
         put64!(page_offset_base, direct_map);
         put64!(identity_table, root);
+        if let Some((argument_owner, bytes)) = &self.arguments[owner.slot() as usize] {
+            if *argument_owner != owner {
+                return Err(EIO);
+            }
+            params.put(offset_of!(abi::IhkSmpBootParam, kernel_args), bytes)?;
+        }
         // Same documented scaled nanoseconds-per-TSC fallback as the pinned
         // IHK calc_ns_per_tsc, using Linux's calibrated exported frequency.
         let khz = unsafe { bindings::tsc_khz };
@@ -1458,6 +1467,7 @@ impl MemoryContext {
                 trampoline,
                 irq,
                 cpus,
+                master: None,
             }),
             started: false,
         });
@@ -1471,6 +1481,7 @@ impl MemoryContext {
     ) -> Result {
         self.verify()?;
         self.require_unstarted(owner)?;
+        let memory_map = &self.map;
         let image = self.images[owner.slot() as usize].as_mut().ok_or(EINVAL)?;
         let boot = image.boot.as_mut().ok_or(EINVAL)?;
         if boot.prepared.cpus.as_slice() != topology.cpus() {
@@ -1515,6 +1526,71 @@ impl MemoryContext {
             owner.slot(), owner.generation(), last,
             boot.prepared.params.read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_receive))?,
             boot.prepared.params.read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_send))?);
+        if last == 2 {
+            core::sync::atomic::fence(Ordering::Acquire);
+            let receive = boot
+                .prepared
+                .params
+                .read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_receive))?;
+            let send = boot
+                .prepared
+                .params
+                .read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_send))?;
+            let queue_bytes = (4 * boot.prepared.cpus.len() * 56).div_ceil(4096) * 4096;
+            let direct_map = unsafe { bindings::page_offset_base };
+            let checked_queue = |physical: u64| -> Result<*mut super::abi::IhkIkcQueueHead> {
+                let end = physical.checked_add(queue_bytes as u64).ok_or(EINVAL)?;
+                if physical == 0 || physical % 4096 != 0 || end > IDENTITY_WINDOW_END {
+                    return Err(EINVAL);
+                }
+                let mut owned = false;
+                for index in 0..memory_map.len() {
+                    let extent = memory_map.extent(index).ok_or(EIO)?;
+                    if extent.owner() == Some(owner)
+                        && extent.start() <= physical
+                        && end <= extent.end().map_err(|_| EIO)?
+                    {
+                        owned = true;
+                        break;
+                    }
+                }
+                if !owned {
+                    return Err(EINVAL);
+                }
+                Ok(direct_map.checked_add(physical).ok_or(EINVAL)?
+                    as *mut super::abi::IhkIkcQueueHead)
+            };
+            let receive_pointer = checked_queue(receive)?;
+            let send_pointer = checked_queue(send)?;
+            if receive < send + queue_bytes as u64 && send < receive + queue_bytes as u64 {
+                return Err(EINVAL);
+            }
+            // SAFETY: Both complete disjoint queues belong to this exact
+            // permanently retained started generation; no mapping reference
+            // escapes and only this adapter owns the Linux endpoints.
+            let master = unsafe {
+                super::smp_ikc::BootMaster::new(owner, receive_pointer, send_pointer, queue_bytes)?
+            };
+            boot.prepared.master = Some(Box::new(master, GFP_KERNEL)?);
+            let master = boot.prepared.master.as_ref().ok_or(EIO)?;
+            // SAFETY: Box gives a stable address already retained inside the
+            // started ManuallyDrop owner before IRQ-visible publication.
+            unsafe { boot.prepared.irq.publish_master(master)? };
+            master.send_initial_ack(cpu.linux_id)?;
+            pr_info!("IHK-SMP: master INIT_ACK os={} generation={} target_cpu={} receive={:x} send={:x}; initial publication only\n", owner.slot(), owner.generation(), cpu.linux_id, receive, send);
+            for _ in 0..3000 {
+                if master.error() != 0 {
+                    return Err(EIO);
+                }
+                if master.packets() != 0 {
+                    let offer = master.first_connect()?;
+                    pr_info!("IHK-SMP: guest CONNECT os={} generation={} irq_events={} packets={} port={} packet_size={} receive={:x} send={:x} cookie={:x} magic={} cpu={}; listener integration pending\n", owner.slot(), owner.generation(), boot.prepared.irq.events(), master.packets(), offer.port, offer.packet_size, offer.receive_queue, offer.send_queue, offer.remote_channel_cookie, offer.magic, offer.interrupt_cpu);
+                    break;
+                }
+                // SAFETY: Process context retains all resource/CPU owners.
+                unsafe { bindings::msleep(10) };
+            }
+        }
         // No success is returned merely for AP entry or architecture readiness.
         // The next integration must prove the actual host IKC handshake.
         Err(kernel::error::to_result(-110).err().unwrap_or(EIO))
@@ -1652,7 +1728,31 @@ pub(super) fn release_os_resources(
         .commit()
         .unwrap_or_else(|_| panic!("OS memory cleanup invariant violated"));
     context.images[owner.slot() as usize] = None;
+    context.arguments[owner.slot() as usize] = None;
     Ok(())
+}
+
+/// Preserve the existing 1024-byte host read and 255-byte SMP argument payload.
+pub(super) fn set_kernel_arguments(
+    owner: super::smp_resource::OsToken,
+    argument: usize,
+) -> Result<isize> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: IHK's exact OS/module lease retains this mutex for the callback.
+    let mut context = unsafe { &*published }.lock();
+    context.verify()?;
+    context.require_unstarted(owner)?;
+    let supplied = super::smp_loader::read_user_string::<1024>(argument, false)?;
+    let mut bytes = [0_u8; 256];
+    bytes[..255].copy_from_slice(&supplied[..255]);
+    if let Some(image) = context.images[owner.slot() as usize].as_mut() {
+        image.boot.take();
+    }
+    context.arguments[owner.slot() as usize] = Some((owner, bytes));
+    Ok(0)
 }
 
 /// Invalidate any prior successful load before opening a replacement file.

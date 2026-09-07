@@ -8,6 +8,26 @@ use kernel::{bindings, prelude::*, uaccess::UserSlice};
 const MAX_IMAGE_FILE_BYTES: usize = 64 << 20;
 const MAX_FILENAME_BYTES: usize = 256;
 
+/// Retain bounded byte-wise user reads, stopping at NUL before a page boundary.
+pub(super) fn read_user_string<const N: usize>(
+    argument: usize,
+    require_nul: bool,
+) -> Result<[u8; N]> {
+    let mut bytes = [0_u8; N];
+    let mut reader = UserSlice::new(argument, N).reader();
+    for byte in &mut bytes {
+        *byte = reader.read::<u8>()?;
+        if *byte == 0 {
+            return Ok(bytes);
+        }
+    }
+    if require_nul {
+        Err(EINVAL)
+    } else {
+        Ok(bytes)
+    }
+}
+
 struct ImageFile {
     buffer: NonNull<c_void>,
     length: usize,
@@ -17,19 +37,7 @@ impl ImageFile {
     fn read(argument: usize) -> Result<Self> {
         // Match strndup_user(..., 256), stopping at NUL without touching the
         // rest of its page. Compat already normalized the top-level address.
-        let mut name = [0_u8; MAX_FILENAME_BYTES];
-        let mut reader = UserSlice::new(argument, name.len()).reader();
-        let mut terminated = false;
-        for byte in &mut name {
-            *byte = reader.read::<u8>()?;
-            if *byte == 0 {
-                terminated = true;
-                break;
-            }
-        }
-        if !terminated {
-            return Err(EINVAL);
-        }
+        let name = read_user_string::<MAX_FILENAME_BYTES>(argument, true)?;
         let mut raw = ptr::null_mut();
         // SAFETY: The checked filename is NUL-terminated stack storage. Linux
         // owns open/read/write-exclusion/close and returns a vmalloc buffer.

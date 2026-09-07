@@ -179,3 +179,49 @@ physical-flat implementation iterates the supplied CPU mask and uses the retaine
 per-CPU hardware ID without filtering against Linux's online mask. No new C
 function or copied APIC register driver is needed. Exact-header checks and a
 fresh kernel/module build must precede the real bidirectional guest check.
+
+Guest inspection also confirms the real control-channel setup is selected by
+its existing `hidos` kernel argument before vDSO/sysfs requests. Connect the
+unchanged SET_KARGS ioctl instead of inserting a synthetic default. Reuse the
+loader's bounded UserSlice string reader; match the retained host's 1024-byte
+read cap and SMP's 255-byte payload truncation. Store arguments with the IHK OS
+generation independently of image replacement, retire unstarted preparation
+on successful argument changes, and clear them on proven unbooted destruction.
+The next guest must exercise invalid pointers, truncation and both ABIs before
+using `hidos` for the real initial channel request.
+
+The APIC binding rebuild, both exact header witnesses, all prototype modules,
+seven queue tests and six master tests pass. The first new preparation guest
+completed argument checks and eight cycles, then failed a cleanup probe that
+requested one exact 128 MiB chunk on node 1. The existing release ABI matches
+returned contiguous chunks; reservation may yield several chunks with that
+total. Correct the fixture to query and assert the unchanged full 128 MiB per
+node, verify exact 128 MiB rejection when node 1 is fragmented, and reuse its
+existing `release_memory` helper for those actual chunks. Preserve the failure;
+the retry must print the restored ranges and prove a zero pool plus CPU/module
+restoration. No adapter release behavior or memory allowance is changed.
+
+The corrected preparation guest now passes both ABIs and both module lifetimes.
+Its independent queries show the full 128 MiB per node, including node-1 chunks
+of 4, 108 and 16 MiB; exact 128 MiB rejection preserves the pool, then the
+existing chunk release helper empties it. All four QMP captures verify the
+255-byte truncated argument payload, boot layout and zero unstarted status.
+
+Both native and compat actual-start guests now pass the first real exchange:
+McKernel consumes INIT_ACK, logs `Master channel init acked.`, and sends the
+port-501, 128-byte-packet CONNECT through Linux IRQ-work. Each Linux callback
+consumes exactly one master packet. Independent QMP snapshots verify both queue
+counter triples are (1,1,1), the acknowledgment and CONNECT wire bytes, guest
+code execution and retained physical owners. The decoded request is a legitimate
+one-way channel offer (`receive=0`, `send` owned by McKernel, magic 4905,
+interrupt CPU -1); the null direction is not an invalid bidirectional mapping.
+
+See `native-ikc-handshake-checkpoint-20260907.json` for retained source/build/
+guest evidence and the initial preparation failure. The next adapter must
+reuse the existing master listener/accept policy to establish this control
+channel, connect subsequent regular channels and service vDSO/sysfs/mcctrl.
+Full readiness requires status 3 and usable applications. Preserve the explicit
+initial-publication restriction until the guest's consumption protocol supports
+safe repeated slot reuse, then finish declared staging and current FFI/lifecycle/
+license/verification bindings and a fresh complete suite. No production gate or
+native shutdown evidence is promoted by the initial exchange.

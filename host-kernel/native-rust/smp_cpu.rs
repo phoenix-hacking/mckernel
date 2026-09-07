@@ -42,6 +42,8 @@ static ALLOWED_TASK: [AtomicPtr<bindings::task_struct>; SMP_MAX_CPUS] =
 static BOOT_IRQ_TARGET_USERS: AtomicU32 = AtomicU32::new(0);
 static BOOT_IRQ_GENERATIONS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
 static BOOT_IRQ_EVENTS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
+static BOOT_MASTER: [AtomicPtr<super::smp_ikc::BootMaster>; 64] =
+    [const { AtomicPtr::new(ptr::null_mut()) }; 64];
 
 // SAFETY: Registered at AP_ONLINE_DYN, before irreversible target teardown.
 // The CPUHP callback uses only one bounded atomic and never a resource mutex.
@@ -55,10 +57,20 @@ unsafe extern "C" fn allow_cpu_offline(cpu: u32) -> i32 {
 
 // SAFETY: Each monomorphized identity belongs to one pinned OS slot. A started
 // route cannot retire until guest senders stop and Linux drains every work
-// node. Hard IRQ only records pending work; no sleepable lock is acquired.
+// node. Hard IRQ drains bounded packets; no sleepable lock is acquired.
 unsafe extern "C" fn boot_irq_callback<const SLOT: usize>(_work: *mut core::ffi::c_void) {
-    if BOOT_IRQ_GENERATIONS[SLOT].load(Ordering::Acquire) != 0 {
+    let generation = BOOT_IRQ_GENERATIONS[SLOT].load(Ordering::Acquire);
+    if generation != 0 {
         BOOT_IRQ_EVENTS[SLOT].fetch_add(1, Ordering::Release);
+        let master = BOOT_MASTER[SLOT].load(Ordering::Acquire);
+        if !master.is_null() {
+            // SAFETY: Publication follows permanent retention in started boot
+            // storage. A started generation cannot retire or reuse this slot.
+            let master = unsafe { &*master };
+            if master.owner().generation() == generation && master.owner().slot() as usize == SLOT {
+                master.interrupt();
+            }
+        }
     }
 }
 
@@ -82,6 +94,7 @@ pub(super) struct BootIrqRoute {
 
 impl BootIrqRoute {
     pub(super) fn new(owner: OsToken, topology: &BootTopology<'_>) -> Result<Self> {
+        super::smp_ikc::validate_apic()?;
         if !topology.host_cpu(0)?.online {
             return Err(ENODEV);
         }
@@ -101,6 +114,23 @@ impl BootIrqRoute {
 
     pub(super) fn events(&self) -> u64 {
         BOOT_IRQ_EVENTS[self.owner.slot() as usize].load(Ordering::Acquire)
+    }
+
+    // SAFETY: master is already in stable heap storage retained permanently by
+    // this started boot. It cannot be dropped before sender stop and IRQ drain.
+    pub(super) unsafe fn publish_master(&self, master: &super::smp_ikc::BootMaster) -> Result {
+        if master.owner() != self.owner {
+            return Err(EINVAL);
+        }
+        BOOT_MASTER[self.owner.slot() as usize]
+            .compare_exchange(
+                ptr::null_mut(),
+                (master as *const super::smp_ikc::BootMaster).cast_mut(),
+                Ordering::Release,
+                Ordering::Acquire,
+            )
+            .map_err(|_| EBUSY)?;
+        Ok(())
     }
 }
 

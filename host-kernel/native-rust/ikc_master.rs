@@ -9,10 +9,10 @@
 use core::sync::atomic::{AtomicU32, AtomicU64, Ordering};
 
 use super::abi::{
-    IHK_IKC_MASTER_MSG_CONNECT, IHK_IKC_MASTER_MSG_CONNECT_REPLY,
-    IHK_IKC_MASTER_MSG_DISCONNECT, IHK_IKC_MASTER_MSG_PACKET_ON_CHANNEL,
-    IHK_IKC_MAX_PORT, IKC_FLAG_DESTROY_ACKED, IKC_FLAG_DESTROYING,
-    IKC_FLAG_ENABLED, IhkIkcMasterPacket, IhkIkcPacketHeader,
+    IhkIkcMasterPacket, IhkIkcPacketHeader, IHK_IKC_MASTER_MSG_CONNECT,
+    IHK_IKC_MASTER_MSG_CONNECT_REPLY, IHK_IKC_MASTER_MSG_DISCONNECT,
+    IHK_IKC_MASTER_MSG_PACKET_ON_CHANNEL, IHK_IKC_MAX_PORT, IKC_FLAG_DESTROYING,
+    IKC_FLAG_DESTROY_ACKED, IKC_FLAG_ENABLED,
 };
 
 const ENOENT: i32 = 2;
@@ -184,7 +184,11 @@ const fn control_generation(control: u64) -> u64 {
 
 const fn next_generation(current: u64) -> u64 {
     let next = (current + 1) & MAX_GENERATION;
-    if next == 0 { 1 } else { next }
+    if next == 0 {
+        1
+    } else {
+        next
+    }
 }
 
 /// Result of the two-phase explicit unregister operation.
@@ -379,7 +383,7 @@ pub(crate) struct ConnectOffer {
 }
 
 impl ConnectOffer {
-    fn decode(packet: &IhkIkcMasterPacket) -> Result<Self, MasterError> {
+    pub(crate) fn decode(packet: &IhkIkcMasterPacket) -> Result<Self, MasterError> {
         if packet.message != IHK_IKC_MASTER_MSG_CONNECT {
             return Err(MasterError::Protocol);
         }
@@ -460,8 +464,7 @@ impl ConnectRequest {
                 self.local_send_queue,
                 self.local_receive_queue,
                 self.local_channel_cookie,
-                (u64::from(self.interrupt_cpu as u32) << 32)
-                    | u64::from(self.magic as u32),
+                (u64::from(self.interrupt_cpu as u32) << 32) | u64::from(self.magic as u32),
             ],
         }
     }
@@ -658,7 +661,9 @@ pub(crate) enum ConnectPhase {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum ConnectAction {
     WaitForReply,
-    Cleanup { status: i32 },
+    Cleanup {
+        status: i32,
+    },
     Publish {
         remote_queue: u64,
         echoed_local_cookie: u64,
@@ -772,10 +777,12 @@ impl ChannelLifecycle {
                 return Err(MasterError::Busy);
             }
             let next = (current & !IKC_FLAG_ENABLED) | IKC_FLAG_DESTROYING;
-            match self
-                .flags
-                .compare_exchange_weak(current, next, Ordering::AcqRel, Ordering::Acquire)
-            {
+            match self.flags.compare_exchange_weak(
+                current,
+                next,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            ) {
                 Ok(_) if current & IKC_FLAG_DESTROY_ACKED == 0 => {
                     return Ok(DisconnectAction::SendAndWaitForAck);
                 }

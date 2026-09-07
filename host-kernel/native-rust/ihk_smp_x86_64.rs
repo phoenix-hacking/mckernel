@@ -31,6 +31,14 @@ mod smp_loader;
 mod smp_startup;
 mod smp_trampoline;
 mod smp_boot_code;
+#[allow(dead_code, unreachable_pub)]
+#[path = "abi/x86_64.rs"]
+mod abi;
+#[allow(dead_code)]
+mod ikc_queue;
+#[allow(dead_code)]
+mod ikc_master;
+mod smp_ikc;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -172,6 +180,8 @@ unsafe extern "C" fn ihk_smp_os_ioctl_v2(
     };
     let result = if command == 0x0011_2a00 {
         smp_loader::load(owner, argument as usize)
+    } else if command == abi::IHK_OS_SET_KARGS {
+        smp_memory::set_kernel_arguments(owner, argument as usize)
     } else if smp_cpu::handles_os(command) {
         smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)
     } else if smp_memory::handles_os(command) {

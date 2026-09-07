@@ -9,8 +9,8 @@ use core::cell::UnsafeCell;
 use core::hint::spin_loop;
 use core::marker::PhantomData;
 use core::mem::{align_of, size_of};
-use core::ptr::{addr_of, addr_of_mut, copy, read_volatile, write};
 use core::ptr::NonNull;
+use core::ptr::{addr_of, addr_of_mut, copy, read_volatile, write};
 use core::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 
 use super::abi::IhkIkcQueueHead;
@@ -156,10 +156,56 @@ impl<'mapping> SharedQueue<'mapping> {
         head: *mut IhkIkcQueueHead,
         mapping_bytes: usize,
     ) -> Result<Self, QueueError> {
+        // SAFETY: The caller supplies the mapping and sole-consumer contract
+        // above, which is stronger than the private storage-view requirement.
+        unsafe { Self::storage_view(head, mapping_bytes) }
+    }
+
+    /// Publish the first and only packet from an initial host endpoint.
+    ///
+    /// This entry also supports the preserved guest consumer that advances its
+    /// read counter before copying: this producer never reuses any packet slot.
+    /// A second publication, even after consumption, is rejected.
+    ///
+    /// # Safety
+    ///
+    /// Storage must remain mapped, aligned and free of Rust references during
+    /// this call. Metadata is immutable and the peer obeys atomic publication.
+    /// The caller is the sole producer for the queue's entire initial lifetime;
+    /// it cannot reset the counters or create another producer. A peer consumer
+    /// may run concurrently but cannot modify the payload or producer counters.
+    // SAFETY: The caller owns the one-publication endpoint and its live mapping.
+    pub(crate) unsafe fn publish_initial(
+        head: *mut IhkIkcQueueHead,
+        mapping_bytes: usize,
+        packet: &[u8],
+    ) -> Result<(), QueueError> {
+        // SAFETY: This view uses only producer operations. No dequeue method is
+        // exposed and the mapping/no-alias/metadata obligations are inherited.
+        let queue = unsafe { Self::storage_view(head, mapping_bytes)? };
+        let state = queue.snapshot()?;
+        if state.read != 0 || state.published != 0 || state.reserved != 0 {
+            return Err(QueueError::Busy);
+        }
+        // The sole producer cannot interrupt another producer or wait behind
+        // one. The complete slot copy precedes release publication, and no
+        // later local write can race a peer that claims before copying.
+        queue.try_enqueue(packet)
+    }
+
+    // SAFETY: The caller supplies live aligned shared storage and immutable
+    // metadata. It must enforce the endpoint-specific producer/consumer and
+    // no-alias contracts before invoking any operation on the returned view.
+    unsafe fn storage_view(
+        head: *mut IhkIkcQueueHead,
+        mapping_bytes: usize,
+    ) -> Result<Self, QueueError> {
         let head = NonNull::new(head).ok_or(QueueError::Invalid)?;
         if head.as_ptr() as usize % align_of::<IhkIkcQueueHead>() != 0
             || mapping_bytes < size_of::<IhkIkcQueueHead>()
-            || (head.as_ptr() as usize).checked_add(mapping_bytes).is_none()
+            || (head.as_ptr() as usize)
+                .checked_add(mapping_bytes)
+                .is_none()
         {
             return Err(QueueError::Invalid);
         }
@@ -210,10 +256,7 @@ impl<'mapping> SharedQueue<'mapping> {
     /// Capture and validate metadata plus the three monotonic counters.
     pub(crate) fn snapshot(&self) -> Result<QueueSnapshot, QueueError> {
         let (packet_size, packet_count, queue_size) = self.metadata();
-        if packet_size == 0
-            || packet_size % size_of::<u64>() != 0
-            || packet_count < 2
-        {
+        if packet_size == 0 || packet_size % size_of::<u64>() != 0 || packet_count < 2 {
             return Err(QueueError::Corrupt);
         }
         let payload_bytes = packet_size
@@ -242,9 +285,7 @@ impl<'mapping> SharedQueue<'mapping> {
         };
         let reserved_distance = reserved.wrapping_sub(read);
         let published_distance = published.wrapping_sub(read);
-        if reserved_distance >= packet_count
-            || published_distance > reserved_distance
-        {
+        if reserved_distance >= packet_count || published_distance > reserved_distance {
             return Err(QueueError::Corrupt);
         }
         Ok(QueueSnapshot {
@@ -415,6 +456,45 @@ mod internal_tests {
 
     #[repr(C, align(64))]
     struct Storage([u8; 320]);
+
+    #[test]
+    fn initial_packet_is_published_once_even_after_peer_consumption() {
+        let mut storage = Storage([0; 320]);
+        drop(SharedQueue::initialize(&mut storage.0, 0, 0, 56).unwrap());
+        let head = storage.0.as_mut_ptr().cast::<IhkIkcQueueHead>();
+        let packet = [0x5a; 56];
+        // SAFETY: This test owns the aligned mapping, publishes exactly once
+        // and switches endpoint roles only after the producer call ends.
+        unsafe { SharedQueue::publish_initial(head, 320, &packet) }.unwrap();
+        let mut copied = [0; 56];
+        // SAFETY: The producer is gone; this is now the sole dequeue owner.
+        let receiver = unsafe { SharedQueue::attach(head, 320) }.unwrap();
+        receiver.try_dequeue(&mut copied).unwrap();
+        assert_eq!(copied, packet);
+        drop(receiver);
+        let before = storage.0;
+        // SAFETY: The same exclusively owned storage is live. The used
+        // counters must reject this attempted reuse before touching payload.
+        assert_eq!(
+            unsafe { SharedQueue::publish_initial(head, 320, &[0xa5; 56]) },
+            Err(QueueError::Busy)
+        );
+        assert_eq!(storage.0, before);
+    }
+
+    #[test]
+    fn invalid_initial_packet_leaves_the_queue_unpublished() {
+        let mut storage = Storage([0; 320]);
+        drop(SharedQueue::initialize(&mut storage.0, 0, 0, 56).unwrap());
+        let head = storage.0.as_mut_ptr().cast::<IhkIkcQueueHead>();
+        let before = storage.0;
+        // SAFETY: Exclusive aligned storage, no peer and no other producer.
+        assert_eq!(
+            unsafe { SharedQueue::publish_initial(head, 320, &[0; 55]) },
+            Err(QueueError::Invalid)
+        );
+        assert_eq!(storage.0, before);
+    }
 
     #[test]
     fn consumer_claim_is_exclusive_and_released_on_every_error() {

@@ -33792,3 +33792,9 @@ Command: mckernel-container native python3 -B /work/retain-native-boot-start.py
 Environment: fixed native offline container after both corrected actual-start guest ABIs passed.
 First failure: the retained prototype's formatted ihk_ioctl.rs differs byte-for-byte from the current repository source. Kernel/module/guest artifacts and their recorded inputs/outputs passed hash checks first. Do not label these sources identical until the difference is inspected. Preserve the first retainer and partial archives, copy only verified formatting differences if appropriate, and replay retention in a new directory. Runtime captures remain their original results.
 Evidence: /work/native-boot-start-retained-20260907-1 and /work/native-boot-prototype-20260907-1/staged-source/ihk_ioctl.rs.
+
+[2026-09-07 22:22 UTC] Native IKC preparation guest attempt 1: FAIL at resource cleanup.
+Command: mckernel-container native python3 -B /work/run-native-ikc-guest.py prepare 1 1
+Environment: new APIC-binding kernel and native IKC prototype 1, unchanged native image 3eb7b36b, fixed four-CPU/12-GiB offline container and four-vCPU/two-NUMA guest.
+First failure: first x86_64 probe completed its repeated preparations and argument-change invalidation checks, then reported NATIVE_CPU_RESERVATION x86_64 FAIL line=85 during cleanup after destroying both OS instances. Stop this guest and inspect the exact probe line and resource state before running any actual ACK/start test. No preparation pass or IRQ-handshake claim is made for this run.
+Evidence: /work/native-ikc-guest-20260907-prepare-1/{record.json,serial.log,probe-source,capture-0}.

@@ -5,6 +5,7 @@
 #define OS_LOAD 0x112a00
 #define OS_BOOT 0x112a01
 #define OS_STATUS 0x112a03
+#define OS_KARGS 0x112a04
 #if defined(__x86_64__)
 #define SYS_NANOSLEEP 35
 #else
@@ -29,6 +30,10 @@ int main(void)
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 0);
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 1);
     int first = open_os(0), second = open_os(1);
+    char arguments[1024];
+    for (int i = 0; i < 1024; i++) arguments[i] = 'y';
+    require(call(SYS_IOCTL, first, OS_KARGS, (long)arguments) == 0);
+    require(call(SYS_IOCTL, second, OS_KARGS, (long)"second-os") == 0);
     require(request(first, OS_ASSIGN_CPU, first_cpus, 2) == 0);
     require(request(second, OS_ASSIGN_CPU, second_cpus, 1) == 0);
     require(mem_one(first, OS_ASSIGN_MEM, 64 * MIB, 1) == 0);
@@ -37,6 +42,7 @@ int main(void)
     require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);
     require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, second, OS_LOAD, (long)"/images/mckernel.img") == 0);
+    require(call(SYS_IOCTL, first, OS_KARGS, 1) == -EFAULT);
     for (int cycle = 0; cycle < 8; cycle++) {
         allocation_failure(0);
         put_value(FI "min-order", "1");
@@ -53,6 +59,14 @@ int main(void)
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
         require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+        // Failed argument reads preserve the held preparation. Successful
+        // changes retire it, making the exclusive trampoline available again.
+        require(call(SYS_IOCTL, first, OS_KARGS, 1) == -EFAULT);
+        require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EBUSY);
+        require(call(SYS_IOCTL, first, OS_KARGS, (long)arguments) == 0);
+        require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EAGAIN);
+        require(call(SYS_IOCTL, second, OS_KARGS, (long)"second-os") == 0);
+        require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
         online_mask(1);
         if (cycle == 0) capture_pause();
         // Changing CPU assignment retires the held preparation, retaining the
@@ -67,8 +81,20 @@ int main(void)
     require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EAGAIN);
     close_fd(second);
     require(destroy_os(control, 1) == 0);
-    require(mem_one(control, MEM_RELEASE, 128 * MIB, 0) == 0);
-    require(mem_one(control, MEM_RELEASE, 128 * MIB, 1) == 0);
+    int chunks = query_memory(control), node1_chunks = 0;
+    require(totals[0] == 128 * MIB && totals[1] == 128 * MIB);
+    for (int i = 0; i < chunks; i++) {
+        message("NATIVE_BOOT_RESTORED " ARCH_LABEL " node="); print_number(query_nodes[i]);
+        message(" bytes="); print_number(query_sizes[i]); message("\n");
+        if (query_nodes[i] == 1) node1_chunks++;
+    }
+    if (node1_chunks > 1) {
+        // Legacy exact release addresses one returned contiguous chunk.
+        // Reservation may legitimately return several chunks totaling 128 MiB.
+        require(mem_one(control, MEM_RELEASE, 128 * MIB, 1) == -EINVAL);
+        expect_memory(control, 128 * MIB, 128 * MIB);
+    }
+    release_memory(control);
     require(request(control, RELEASE, reserved, 3) == 0);
     online_mask(15);
     close_fd(control);
@@ -79,11 +105,13 @@ int main(void)
     require(mem_one(control, MEM_RESERVE, 128 * MIB, 0) == 0);
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 0);
     int os = open_os(0);
+    require(call(SYS_IOCTL, os, OS_KARGS, (long)"hidos") == 0);
     require(request(os, OS_ASSIGN_CPU, assigned, 1) == 0);
     require(mem_one(os, OS_ASSIGN_MEM, 128 * MIB, 0) == 0);
     require(call(SYS_IOCTL, os, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);
     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);
+    require(call(SYS_IOCTL, os, OS_KARGS, (long)"changed") == -EBUSY);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -EBUSY);
     require(request(os, OS_RELEASE_CPU, assigned, 1) == -EBUSY);
     require(mem_one(os, OS_RELEASE_MEM, 128 * MIB, 0) == -EBUSY);
