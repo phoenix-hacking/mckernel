@@ -24,6 +24,24 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Native control-channel checkpoint (2026-09-07): both actual-start ABIs now
+accept ports 501 and 503 and deliver McKernel's first real vDSO request over
+Linux IRQ-work. Independent QMP captures verify all four regular queue
+mappings, exact master packets, CPU/channel identities and disjoint ownership.
+Master receive counters reach (2,2,2), send counters reach (3,3,3), and port 503
+consumes SCD_MSG_GET_VDSO_INFO. The complete 88-byte descriptor is still busy
+while awaiting the actual host service. Both preparation ABIs also pass over
+two module lifetimes with 32 forced allocations and full unstarted restoration.
+Prototype 4 builds all three modules and passes exact layout/ELF/no-SIMD checks.
+See `docs/verification/native-control-channels-checkpoint-20260907.json` for
+27 retained artifacts, including the initial compiler and log-capture failures.
+All channel allocation and routing run in BOOT process context; the IRQ only
+signals. Started owners remain retained on incomplete BOOT. Next adapt the
+existing Rust vDSO service and guest consumers to the pinned Linux's generic
+vDSO layout, then sysfs/mcctrl, asynchronous runtime service, full status 3 and
+applications. Declared integration, native shutdown, complete Rust/assembly
+ownership and independent production acceptance remain open. No gate credit.
+
 Native queue completion checkpoint (2026-09-07): the native guest reader now
 releases slots after copying or handling, with a reserved-word claim excluding
 concurrent/reentrant readers. The host has a producer-only view requiring that

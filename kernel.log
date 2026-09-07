@@ -33831,3 +33831,14 @@ Both exact boot layout witnesses passed; the module build stopped under
 test ran. Use that retained identity in accepted-channel overlap validation,
 checking both the send and receive ranges, then rebuild. Preserve the failed
 compiler inputs/logs; do not suppress the warning or claim a module pass.
+2026-09-07 23:34:19 UTC — native control guest x86_64 attempt 1 FAILED capture validation.
+Command: mckernel-container native python3 -B /work/run-native-control-guest.py start-x86_64 4 1
+Environment: pinned native container/Linux, four vCPUs, two NUMA nodes,
+8 GiB QEMU / 12 GiB aggregate, CPUs 2-5. Evidence:
+/work/native-control-guest-20260907-start-x86_64-1.
+The guest completed both connection replies and sent a real vDSO request.
+All queue/physical/wire checks passed before a kmsg assertion requiring the
+literal contiguous string '(ikc2mckernel) Trying to connect host ...connected.'
+failed. Preserve the normal and emergency raw captures and inspect the actual
+message framing before correcting that assertion. No complete guest PASS is
+claimed for this failed capture.

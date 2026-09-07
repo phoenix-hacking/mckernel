@@ -353,3 +353,27 @@ listener registry, original receive-page owners and OS-scoped opaque cookies.
 The next guest capture will verify both real CONNECT_REPLY messages, four
 regular queue mappings and the first actual host-service request. Those runtime
 checks have not yet run; listener/full boot acceptance is not claimed here.
+
+Preparation now passes both ABIs over two module lifetimes with four physical
+captures, 32 forced allocations and full unstarted restoration. The first
+actual listener guest completes both successful CONNECT_REPLY operations and
+delivers SCD_MSG_GET_VDSO_INFO through port 503. Its independent physical/queue/
+wire checks pass, then the final kmsg assertion fails because each `kprintf`
+inserts a CPU prefix: `...host ...[  0]: connected.` is the actual framing.
+Retain this normal/emergency capture and use an explicit CPU-prefix-aware
+assertion for each completed message before replay. Neither the adapter nor
+the queue/counter expectations change. Full guest PASS awaits that replay.
+
+The corrected actual-start replays now pass both native and compat ABIs.
+Independent QMP captures verify the four 16 KiB regular queues and their whole
+physical extents, source/target CPU metadata, opaque cookies and guest channel
+references. Master receive counters reach (2,2,2), send counters reach (3,3,3),
+and the port-503 host receive queue reaches (1,1,1). Both guest connection logs
+match their actual framing. The first regular request is SCD_MSG_GET_VDSO_INFO;
+its argument lies wholly in assigned memory and the complete 88-byte descriptor
+contains busy=1 with an otherwise zeroed body. No service response is fabricated.
+BOOT remains -110/Failed with all started owners retained. See
+`native-control-channels-checkpoint-20260907.json` for 27 retained artifacts,
+including the failed captures and passing preparation/module/runtime replays.
+The next service must adapt the existing Rust vDSO implementation and guest
+consumers to the exact pinned Linux's generic data layout before releasing busy.
