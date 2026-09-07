@@ -549,3 +549,29 @@ the native mcctrl launch/syscall path work together. The
 Rust to retain and the missing adapters. Native McKernel has not booted;
 no delivery date or new completion percentage is established. The final
 McKernel must still be entirely Rust or reviewed assembly.
+
+## Restored image-loader checkpoint — 2026-09-07T14:54:37.193884+00:00
+
+The interrupted work is now on GitHub with periodic checkpoint instructions.
+The transient scratch mount and four-CPU/12-GiB/512-task controls are restored;
+both pinned container isolation profiles and three focused native tests pass.
+The [recovery record](local-recovery-20260907.md) preserves the initial failed
+authentication and incomplete host C check as historical attempts. The exact
+CPU hotplug binding was subsequently recovered and both guest probes compiled.
+
+The successful pre-crash loader build still matches all ten source overlays
+and five outputs. Fresh source/artifact, formatting, ELF64 and no-SIMD checks
+pass. A new four-vCPU/two-NUMA guest completes both ABIs over two module cycles,
+with all 24 physical image readbacks matching the independent ELF model.
+Malformed input, ownership prerequisites, reload, concurrent instances,
+generation cleanup and the earlier CPU/memory regressions pass. The original
+interrupted capture remains intact and receives no success credit.
+
+The [image-loader checkpoint](native-image-loader-checkpoint-20260907.json)
+retains 36 verified artifacts, including source/compiler records, built
+modules, boot image, guest initramfs, probes, captures and setup recipes.
+This is a source-bound loading prototype. Declared stage, lifecycle/unsafe-FFI
+and downstream verification integration remain next, followed by fresh
+declared-stage build/guest/full-suite checks. Native McKernel AP startup, IKC,
+native mcctrl workloads and final Rust/assembly completion remain pending.
+No production score changes.

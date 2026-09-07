@@ -1,5 +1,11 @@
 # Local recovery after the interrupted session
 
+The environment is restored and the resumed image-loader guest verification
+passed. The [retained checkpoint](native-image-loader-checkpoint-20260907.json)
+contains 36 artifacts, including the setup recipes, source/compiler records,
+built modules, Linux boot image, guest initramfs and complete capture logs.
+All retained bytes passed a SHA-256 and compression round-trip check.
+
 The recovered native image-loader work is preserved in commit `04a996fc`.
 The six earlier local commits and the GitHub checkpoint instructions in
 `14c3ff03` were pushed to `origin/codex/local-native-staging-repair`.
@@ -17,21 +23,30 @@ and OS runtime passed with the local upstream Rust 1.92.0 compiler, CPUs 2-5
 and a 12 GiB address-space limit. These checks were outside the pinned Rocky
 container and do not replace its native build or runtime evidence.
 
-The host C syntax check stopped at the fixture's required
-`CPUHP_FAILURE_STATE` definition. Recover that value from the exact kernel
-bindings before retrying; preserve the prerequisite guard. No 32-bit C check
-or guest validation followed. The original native loader build failure and
-this attempted check remain recorded in `kernel.log`.
+The initial host C syntax check stopped at the fixture's required
+`CPUHP_FAILURE_STATE` definition. Recovery found the exact binding value,
+234. Both probes subsequently compiled in the pinned native container with
+that definition and passed in the guest. The original native loader build
+failure and the incomplete host check remain recorded in `kernel.log`.
 
-The existing 60 GiB `scratch.ext4` file survived the restart, but the scratch
-mount is absent. The local setup notes specify restoring the transient
-cgroups and mount after a host reboot. Docker and the restore command require
-administrator authentication, which is unavailable to the current tool
-session. No privileged restoration has run yet.
+The existing 60 GiB `scratch.ext4` file survived the restart. The setup script
+restored its mount and the four-CPU, 12 GiB and 512-task controls without
+installing, upgrading or removing packages. Native and compatibility container
+isolation checks passed, followed by all three focused tests in the pinned
+Red Hat Rust 1.92.0 environment.
+
+All ten current source overlays and five compiled outputs matched the
+successful pre-crash native build. Fresh formatting, ELF64 and no-SIMD/x87
+checks passed. The new four-vCPU/two-NUMA guest capture completed at
+`2026-09-07T14:54:37.193884+00:00`, with exit code zero, no missing markers
+and no error markers. Both ABIs completed two module cycles; all 24 physical
+image readbacks matched the independent ELF model. CPU/memory ownership,
+rollback, allocation failure, concurrent OS and cleanup checks passed too.
+The original interrupted capture is retained separately.
 
 ## Prepared restart command
 
-Run this in an authenticated local terminal:
+The command used for restoration and initial checks was:
 
 ```bash
 sudo /usr/bin/bash /home/holden/mckernel/scripts/resume-local-verification.sh
@@ -43,8 +58,9 @@ then runs the focused native image and OS runtime tests. It preserves a fresh
 record directory under `mckernel-work/scratch/recovery-*` and stops at the first
 failed check. It does not execute guest helpers on the host or boot a guest.
 
-After the preflight, inspect the restored image-loader build script and its
-retained records, recover the exact CPU hotplug binding, and continue native
-Kbuild, staging and guest verification in the existing isolated runner. Keep
-the four-CPU, 12 GiB, 512-task and one-invocation-at-a-time limits. No production
-acceptance or native McKernel boot credit is claimed by this recovery record.
+Next integrate image loading into the declared stage, lifecycle contracts,
+unsafe/FFI inventory and downstream verification identities. Follow that with
+a fresh declared-stage build, guest replay and repository suite. Native AP
+startup, IKC, native mcctrl workloads and final Rust/assembly completion remain
+open. Keep the four-CPU, 12 GiB, 512-task and one-invocation-at-a-time limits.
+No production acceptance or native McKernel boot credit is claimed here.

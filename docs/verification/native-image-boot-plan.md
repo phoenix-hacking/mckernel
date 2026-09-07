@@ -6,6 +6,14 @@ Native McKernel has not booted. This document identifies the next implementation
 boundaries; it grants no boot, application, language-completion or production
 acceptance credit.
 
+The [source-bound image-loader checkpoint](native-image-loader-checkpoint-20260907.json)
+now passes a four-vCPU/two-NUMA guest with both ABIs and two module cycles.
+All 24 physical image readbacks match the independent ELF model, alongside
+the existing CPU, memory and OS resource regressions. The retained native
+build matches the current source bytes. Declared staging, lifecycle/FFI and
+downstream verification integration remain next, followed by an exact-stage
+rebuild and replay before AP startup. No native McKernel boot is claimed.
+
 First application checks require a repeatable native boot, working IKC channels,
 and the native mcctrl process-launch/syscall path. The first program should
 exercise output and a successful exit through the existing `mcexec` interface.

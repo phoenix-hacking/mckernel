@@ -149,6 +149,21 @@ application checks; see `docs/verification/native-image-boot-plan.md`.
 Native McKernel boot, full Rust/assembly completion and production
 acceptance remain open. No formal score changes.
 
+Post-crash recovery and image loading (2026-09-07): the scratch filesystem and
+four-CPU/12-GiB/512-task controls are restored. Both pinned container isolation
+checks and the three focused native image/OS tests pass. All ten source
+overlays and five artifacts match the successful pre-crash native loader
+build; fresh formatting and ELF/no-SIMD checks pass. A new four-vCPU/two-NUMA
+guest passes both ABIs over two module cycles, including all 24 physical image
+readbacks and the preserved CPU/memory/resource regressions. See
+`docs/verification/native-image-loader-checkpoint-20260907.json` and the local
+recovery note. The checkpoint retains 36 artifacts, including the interrupted
+capture, build/compiler inputs, modules, guest initramfs and setup recipes.
+Next integrate the loader into declared staging, lifecycle and unsafe/FFI
+contracts and downstream verification bindings, then run a fresh declared-stage
+build/guest/full suite. Native McKernel boot, IKC, workloads and final
+Rust/assembly completion remain pending; no production gate is promoted.
+
 ## Mission
 
 This repository is migrating McKernel from the traditional CentOS-based
