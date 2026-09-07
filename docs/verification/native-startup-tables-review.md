@@ -55,5 +55,8 @@ The declared graph now adds this source and its module edge. The unsafe/FFI
 queue preserves all prior IDs: RS011-SMP-0044 records the changed allocator
 call, and RS011-SMP-0073/0074 record the new table fill and readback blocks.
 Its 156 sites across 19 sources still require independent review and formal
-compiler capture. Declared-stage build/guest/full-suite validation follows
-this prototype; production gates and scores remain unchanged.
+compiler capture. The subsequent declared-stage build and guest pass, followed
+by the full repository suite: 2,242 passed and 71 skipped. See
+`native-startup-exact-stage-checkpoint-20260907.json` and
+`native-startup-final-validation-20260907.json`. Production gates and scores
+remain unchanged.

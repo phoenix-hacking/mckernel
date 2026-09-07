@@ -627,3 +627,12 @@ Intermediate failures and source overlays are retained in
 build/guest/full suite, then continue native trampoline, boot parameters, CPU
 wakeup and IRQ/IKC. Native McKernel boot, applications and complete Rust/assembly
 ownership remain open; no production gate or score is promoted.
+
+The subsequent declared startup build and fresh guest replay now pass. The
+full suite on clean source parent 938dfd92 passes 2,313 tests in 279.154 seconds
+(2,242 passed, 71 skipped), using the original historical artifact fixtures.
+All 73 artifacts and four references in the startup checkpoints pass SHA256,
+size and gzip round-trip checks. See `native-startup-final-validation-20260907.json`.
+The next boot work must also adapt the guest/Linux 6.12 IRQ-work layout mismatch
+recorded in `native-image-boot-plan.md`. No native McKernel CPU has started;
+IKC, workloads, full Rust/assembly completion and independent acceptance remain open.

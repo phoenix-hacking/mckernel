@@ -1,0 +1,103 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-startup-final-20260907-native-startup-full-suite-20260907-1.json.gz",
+      "sha256": "b5257737fa1bc56d97a618ce50a0255cc70ddaf6139750c609dff16f733a83e3",
+      "size": 718,
+      "uncompressed_sha256": "c9b4c673a42e73164350ea56094fac9f9c213ae87e29a42560ffcb88f00ce17e",
+      "uncompressed_size": 1817
+    },
+    {
+      "path": "docs/verification/evidence/native-startup-final-20260907-native-startup-full-suite-20260907-1.log.gz",
+      "sha256": "692e052f7a09ad14e9e6a2eef77b6d5b8559fd4496bf2bee912cb98c65d57896",
+      "size": 5204,
+      "uncompressed_sha256": "4a63542f28d805934a698bc3a3d49d6563b09230ea9972d24350d5dad92bad6e",
+      "uncompressed_size": 25684
+    },
+    {
+      "path": "docs/verification/evidence/native-startup-final-20260907-native-startup-retained-evidence-checks-20260907.json.gz",
+      "sha256": "f3dc694f0f4bb101fbf669cfe13d6cbbff68fb89052a20c476fc5ac9709e4399",
+      "size": 137,
+      "uncompressed_sha256": "fc50a65ee73d3b9a7fc70b19eba69c2cd64273c0235cf77fdd21d46182aa55a4",
+      "uncompressed_size": 158
+    },
+    {
+      "path": "docs/verification/evidence/native-startup-final-20260907-check-native-startup-retained-evidence.py.gz",
+      "sha256": "256abce70bfffb6611e6a8e662da1902f8e2f0d5dd11847e0d68d297084ebc7e",
+      "size": 812,
+      "uncompressed_sha256": "2c474de669d89d9f827a61378fd53b30f719501b89aa6f5f64c2e67a1c4e27a3",
+      "uncompressed_size": 1743
+    },
+    {
+      "path": "docs/verification/evidence/native-startup-final-20260907-retain-native-startup-final.py.gz",
+      "sha256": "888661420be707c433eee3e470fa098542a366dcb96a29f6e91d742367ab8d15",
+      "size": 1209,
+      "uncompressed_sha256": "0b834243d95836f1840410c1a0acf190a94726eb1d6d83d6489ab1a6f4489390",
+      "uncompressed_size": 2831
+    }
+  ],
+  "complete_rust_unification_claimed": false,
+  "full_repository_suite": {
+    "duration_seconds": 279.154,
+    "environment": {
+      "MCKERNEL_RK007_BUILD_ARTIFACT": "/work/artifacts/rk007-bc60-original.zip",
+      "MCKERNEL_RK007_V2_ARTIFACT": "/work/artifacts/rk007-ef58-original.zip",
+      "MCKERNEL_ROCKY_SOURCE_6_12": "/work/native-pristine-api-source",
+      "MCKERNEL_RUSTC_1_92": "/usr/bin/rustc",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/work/native-startup-full-integration-20260907-1/scripts",
+      "RUSTC": "/usr/bin/rustc"
+    },
+    "finished_utc": "2026-09-07T17:05:50.982407+00:00",
+    "passed": 2242,
+    "skipped": 71,
+    "started_utc": "2026-09-07T17:01:08.648891+00:00",
+    "status": "PASS",
+    "total": 2313,
+    "uncommitted_source_overlays": 0
+  },
+  "kind": "native-startup-tables-full-validation-checkpoint",
+  "native_mckernel_boot_proven": false,
+  "next_work": [
+    "Owned low-memory trampoline and exact boot parameters",
+    "Resolve the guest/Linux 6.12 IRQ-work layout and lifetime boundary",
+    "Native CPU wakeup, readiness and IKC",
+    "Native mcctrl/application verification",
+    "Complete McKernel and linked support in Rust or reviewed assembly",
+    "Independent production acceptance"
+  ],
+  "production_gate_credit": false,
+  "recorded_utc": "2026-09-07T17:07:52.893543+00:00",
+  "references": [
+    {
+      "path": "docs/verification/native-startup-tables-checkpoint-20260907.json",
+      "sha256": "3d5ec237808a5ab9dd28eec0817b52908206606a5c1365fded0c239120bd0e1a",
+      "size": 18228
+    },
+    {
+      "path": "docs/verification/native-startup-staging-integration-20260907.json",
+      "sha256": "7acf16e0b99ba4b13330b3a0131da4eaa3b0533d8fb55e389cb25e023034dea7",
+      "size": 19182
+    },
+    {
+      "path": "docs/verification/native-startup-exact-stage-checkpoint-20260907.json",
+      "sha256": "a0e71c63c0df6e0f844273d5649fe039ad723abbae241ad0330b3e44841a9f51",
+      "size": 11566
+    },
+    {
+      "path": "docs/verification/rust-consumers-startup-20260907.json",
+      "sha256": "8b1273e98e9eab5639829e37a68baebd06dbd02ed4787a8c764ab3b41dd5514f",
+      "size": 66685
+    }
+  ],
+  "retained_evidence": {
+    "artifacts": 73,
+    "gzip_roundtrips_verified": true,
+    "production_gate_credit": false,
+    "references": 4,
+    "status": "PASS",
+    "unique_artifacts": 73
+  },
+  "schema_version": 1,
+  "source_parent": "938dfd9224afe30ec6479244d652db6cbe573783"
+}

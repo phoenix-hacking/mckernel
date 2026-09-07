@@ -128,4 +128,27 @@ link closure and fresh guest replay with the same full startup/image/resource
 checks; see `native-startup-exact-stage-checkpoint-20260907.json`. Its five
 kernel/config/module artifacts match the corrected prototype byte for byte.
 All 137 Rust files are accounted for, including 64 core and 19 native staged
-files. The full repository suite is next; McKernel CPU startup remains open.
+files. The subsequent full suite passes 2,313 tests: 2,242 passed and 71 skipped
+in 279.154 seconds, from clean source parent 938dfd92. All 73 earlier checkpoint
+artifacts pass byte/hash and gzip round-trip checks. See
+`native-startup-final-validation-20260907.json`. McKernel CPU startup remains open.
+
+## Native IRQ ABI prerequisite found during startup verification
+
+The current guest Rust `kernel/rust/smp_ikc.rs::LinuxIrqWork` uses the preserved
+64-byte layout with an unsigned-long flags field at offset 0, list node at
+offset 8, and callback at offset 16. The exact Linux 6.12
+`include/linux/irq_work.h` instead embeds `__call_single_node`: its list node
+starts at offset 0 and its 32-bit flags field is at offset 8, followed by
+source/destination CPU fields. The generated native bindings confirm that
+node definition. Directly publishing the existing guest work items into a
+Linux 6.12 work list would therefore use incompatible offsets.
+
+Before CPU wakeup can lead into IKC, adapt and verify that guest/host interface
+for the selected native kernel while retaining existing legacy consumers.
+Do not use dummy work-list or callback addresses to make boot parameters look
+complete. The exact Linux `kernel/irq_work.c` keeps `raised_list` private; the
+old IHK driver discovers it through kallsyms. Native integration needs an
+explicitly owned transport/interrupt adapter using reviewed Linux services,
+with queue retirement and callback lifetime tests. Preserve the guest queue,
+master and packet policy bodies; an ABI adapter is required at this boundary.

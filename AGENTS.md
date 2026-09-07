@@ -186,7 +186,14 @@ forced allocation failures. All five kernel/config/module artifacts match
 the corrected prototype. The Rust inventory accounts for 137 files, none
 removed, with all 64 core files and 19 native staged files matched to consumers.
 See `docs/verification/native-startup-exact-stage-checkpoint-20260907.json`.
-The full repository suite remains the next check before continuing AP startup.
+The startup checkpoint now passes the full repository suite: 2,313 tests in
+279.154 seconds, with 2,242 passed and 71 skipped, from clean source parent
+938dfd92. All 73 artifacts and four references in its earlier checkpoints
+pass byte/hash and gzip round-trip checks. See
+`docs/verification/native-startup-final-validation-20260907.json`. Continue
+the real boot path next. In particular, the preserved guest LinuxIrqWork
+layout differs from Linux 6.12's __call_single_node layout; the boot plan
+records this required IRQ/IKC adaptation. No McKernel CPU has started yet.
 
 Image staging integration (2026-09-07): the recovered loader now appears in declared
 staging/link closure, lifecycle and mapping-reuse contracts, and the 154-site /
