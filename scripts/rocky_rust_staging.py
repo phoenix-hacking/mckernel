@@ -70,74 +70,54 @@ EXPECTED_TARGET = {
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
     "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
 }
-EXPECTED_INPUTS = (
-    {
-        "destination": "Kbuild",
-        "kind": "kbuild_template",
-        "repository_path": "host-kernel/kbuild/Kbuild.in",
-        "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
-    },
-    {
-        "destination": "Kconfig",
-        "kind": "kconfig",
-        "repository_path": "host-kernel/kbuild/Kconfig",
-        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
-    },
-    {
-        "destination": "abi/x86_64.rs",
-        "kind": "shared_rust_abi",
-        "repository_path": "host-kernel/native-rust/abi/x86_64.rs",
-        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
-    },
-    {
-        "destination": "ikc_queue.rs",
-        "kind": "rust_module",
-        "repository_path": "host-kernel/native-rust/ikc_queue.rs",
-        "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
-    },
-    {
-        "destination": "os_registry.rs",
-        "kind": "rust_support_module",
-        "repository_path": "host-kernel/native-rust/os_registry.rs",
-        "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
-    },
-    {
-        "destination": "device_registry.rs",
-        "kind": "rust_support_module",
-        "repository_path": "host-kernel/native-rust/device_registry.rs",
-        "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
-    },
-    {
-        "destination": "ikc_master.rs",
-        "kind": "rust_module",
-        "repository_path": "host-kernel/native-rust/ikc_master.rs",
-        "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
-    },
-    {
-        "destination": "ihk_ioctl.rs",
-        "kind": "rust_ioctl_dispatch",
-        "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
-        "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
-    },
-    {
-        "destination": "page_allocator.rs",
-        "kind": "rust_support_module",
-        "repository_path": "host-kernel/native-rust/page_allocator.rs",
-        "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
-    },
-    {
-        "destination": "page_owner_registry.rs",
-        "kind": "rust_support_module",
-        "repository_path": "host-kernel/native-rust/page_owner_registry.rs",
-        "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
-    },
-    {
-        "destination": "smp_resource.rs",
-        "kind": "rust_support_module",
-        "repository_path": "host-kernel/native-rust/smp_resource.rs",
-        "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b",
-    },
-)
+EXPECTED_INPUTS = ({'destination': 'Kbuild',
+  'kind': 'kbuild_template',
+  'repository_path': 'host-kernel/kbuild/Kbuild.in',
+  'sha256': 'f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3'},
+ {'destination': 'Kconfig',
+  'kind': 'kconfig',
+  'repository_path': 'host-kernel/kbuild/Kconfig',
+  'sha256': '48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f'},
+ {'destination': 'abi/x86_64.rs',
+  'kind': 'shared_rust_abi',
+  'repository_path': 'host-kernel/native-rust/abi/x86_64.rs',
+  'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
+ {'destination': 'ikc_queue.rs',
+  'kind': 'rust_module',
+  'repository_path': 'host-kernel/native-rust/ikc_queue.rs',
+  'sha256': '514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40'},
+ {'destination': 'os_registry.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/os_registry.rs',
+  'sha256': '29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d'},
+ {'destination': 'device_registry.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/device_registry.rs',
+  'sha256': '43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5'},
+ {'destination': 'ikc_master.rs',
+  'kind': 'rust_module',
+  'repository_path': 'host-kernel/native-rust/ikc_master.rs',
+  'sha256': 'f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e'},
+ {'destination': 'ihk_ioctl.rs',
+  'kind': 'rust_ioctl_dispatch',
+  'repository_path': 'host-kernel/native-rust/ihk_ioctl.rs',
+  'sha256': 'bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958'},
+ {'destination': 'page_allocator.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/page_allocator.rs',
+  'sha256': '8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5'},
+ {'destination': 'page_owner_registry.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/page_owner_registry.rs',
+  'sha256': '443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869'},
+ {'destination': 'smp_resource.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_resource.rs',
+  'sha256': 'b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b'},
+ {'destination': 'os_runtime.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/os_runtime.rs',
+  'sha256': '542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f'})
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -195,44 +175,36 @@ READINESS_BLOCKERS = [
     "production namespace and import metadata has not been proven from built modules",
     "zero-project-C final link manifests have not been captured",
 ]
-EXPECTED_MODULES = (
-    {
-        "crate": "ihk",
-        "normalized_name": "ihk",
-        "output": "ihk.ko",
-        "kconfig_symbol": "CONFIG_MCKERNEL_IHK_RUST",
-        "dependencies": [],
-        "production_namespace": "MCKERNEL_IHK_V1",
-        "required_import_namespaces": [],
-        "source_destination": "ihk.rs",
-        "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
-    },
-    {
-        "crate": "ihk_smp_x86_64",
-        "normalized_name": "ihk_smp_x86_64",
-        "output": "ihk-smp-x86_64.ko",
-        "kconfig_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
-        "dependencies": ["ihk"],
-        "production_namespace": None,
-        "required_import_namespaces": ["MCKERNEL_IHK_V1"],
-        "source_destination": "ihk_smp_x86_64.rs",
-        "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "93f0c5810fb61b7e8b1bcfb7b157685a04a971f8f830440b6d25b27b6253aea1",
-    },
-    {
-        "crate": "mcctrl",
-        "normalized_name": "mcctrl",
-        "output": "mcctrl.ko",
-        "kconfig_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",
-        "dependencies": ["ihk"],
-        "production_namespace": None,
-        "required_import_namespaces": ["MCKERNEL_IHK_V1"],
-        "source_destination": "mcctrl.rs",
-        "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
-        "source_sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
-    },
-)
+EXPECTED_MODULES = ({'crate': 'ihk',
+  'normalized_name': 'ihk',
+  'output': 'ihk.ko',
+  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_RUST',
+  'dependencies': [],
+  'production_namespace': 'MCKERNEL_IHK_V1',
+  'required_import_namespaces': [],
+  'source_destination': 'ihk.rs',
+  'source_repository_path': 'host-kernel/native-rust/ihk.rs',
+  'source_sha256': 'ea3720403482c66412b476d1e3dfeb1819f7397ba26f35d3aad62c47f1f0c73b'},
+ {'crate': 'ihk_smp_x86_64',
+  'normalized_name': 'ihk_smp_x86_64',
+  'output': 'ihk-smp-x86_64.ko',
+  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST',
+  'dependencies': ['ihk'],
+  'production_namespace': None,
+  'required_import_namespaces': ['MCKERNEL_IHK_V1'],
+  'source_destination': 'ihk_smp_x86_64.rs',
+  'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
+  'source_sha256': '051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01'},
+ {'crate': 'mcctrl',
+  'normalized_name': 'mcctrl',
+  'output': 'mcctrl.ko',
+  'kconfig_symbol': 'CONFIG_MCKERNEL_MCCTRL_RUST',
+  'dependencies': ['ihk'],
+  'production_namespace': None,
+  'required_import_namespaces': ['MCKERNEL_IHK_V1'],
+  'source_destination': 'mcctrl.rs',
+  'source_repository_path': 'host-kernel/native-rust/mcctrl.rs',
+  'source_sha256': '1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389'})
 AUDITED_PROVIDER_EXTERN = (
     'extern "Rust" {\n'
     '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
@@ -332,25 +304,7 @@ AUDITED_SMP_EXIT_CALLBACK_TYPE = (
     '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
     'type IhkSmpProviderExitV2 = extern "C" fn();'
 )
-AUDITED_SMP_PROVIDER_EXTERN = (
-    'extern "C" {\n'
-    '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
-    '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
-    '    #[link_name = "ihk_smp_provider_attach_v2"]\n'
-    '    fn ihk_smp_provider_attach_v2(\n'
-    '        callback_abi: u32,\n'
-    '        flags: u32,\n'
-    '        init: Option<IhkSmpProviderInitV2>,\n'
-    '        exit: Option<IhkSmpProviderExitV2>,\n'
-    '    ) -> i64;\n'
-    '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
-    '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
-    '    #[link_name = "ihk_smp_provider_open_v1"]\n'
-    '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
-    '    #[link_name = "ihk_smp_provider_close_v1"]\n'
-    '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
-    '}'
-)
+AUDITED_SMP_PROVIDER_EXTERN = 'extern "C" {\n    #[link_name = "ihk_provider_lifecycle_v1"]\n    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n    #[link_name = "ihk_smp_provider_attach_v2"]\n    fn ihk_smp_provider_attach_v2(\n        callback_abi: u32,\n        flags: u32,\n        init: Option<IhkSmpProviderInitV2>,\n        exit: Option<IhkSmpProviderExitV2>,\n    ) -> i64;\n    #[link_name = "ihk_smp_provider_detach_v2"]\n    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n    #[link_name = "ihk_smp_provider_open_v1"]\n    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n    #[link_name = "ihk_smp_provider_close_v1"]\n    fn ihk_smp_provider_close_v1(receipt: i64);\n    #[link_name = "ihk_os_create_unbooted_v1"]\n    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n        owner: *mut kernel::bindings::module, argument: u64) -> i64;\n    #[link_name = "ihk_os_destroy_unbooted_v1"]\n    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n}'
 AUDITED_SMP_INIT_CALLBACK_EXTERN = (
     '// SAFETY: The callback owns no foreign state and returns only a literal errno\n'
     '// status through the exact v2 function-pointer ABI.\n'
@@ -929,6 +883,7 @@ def _validate_input(repo_root, item, index):
         "page_allocator.rs",
         "page_owner_registry.rs",
         "smp_resource.rs",
+        "os_runtime.rs",
     ):
         expected_destination = item["destination"]
     if expected_destination is None:
@@ -938,7 +893,16 @@ def _validate_input(repo_root, item, index):
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
     text = _read_text(path, label)
-    if item["kind"] not in ("kbuild_template", "kconfig"):
+    if item["destination"] == "os_runtime.rs":
+        if __package__:
+            from .native_rust_host_audit import reject_unreviewed_rust_escapes
+        else:
+            from native_rust_host_audit import reject_unreviewed_rust_escapes
+        try:
+            reject_unreviewed_rust_escapes(item["repository_path"], text)
+        except SystemExit as error:
+            raise ValidationError("unbooted OS runtime boundary differs: {0}".format(error))
+    elif item["kind"] not in ("kbuild_template", "kconfig"):
         _validate_rust_escape_hatches(text, label)
     if item["kind"] == "kbuild_template":
         _validate_kbuild(text)
@@ -1068,12 +1032,18 @@ def _validate_input(repo_root, item, index):
         for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "os_runtime.rs":
+        for token in ("pub(crate) struct OsDeviceFamily;", "struct KmsgPages(usize);",
+                      "struct ProviderModule(*mut bindings::module);",
+                      "const OS_FOPS: bindings::file_operations"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks unbooted OS owner: {1}".format(label, token))
     else:
         required = (
             "pub(crate) struct IhkIoctlDispatcher",
             "pub(crate) fn prepare_device",
             "commit_after_external_success",
-            "NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = false",
+            "NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = true",
             "USER_COPY_REACHABLE_FROM_IOCTL: bool = false",
         )
         for token in required:
@@ -1175,6 +1145,7 @@ def _validate_module(repo_root, module, expected, index):
             "mod ihk_ioctl;",
             "mod page_allocator;",
             "mod page_owner_registry;",
+            "mod os_runtime;",
         ):
             if text.count(fragment) != 1:
                 raise ValidationError(
@@ -1259,11 +1230,12 @@ def validate_manifest(repo_root, manifest_path):
         "page_allocator.rs",
         "page_owner_registry.rs",
         "smp_resource.rs",
+        "os_runtime.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs"
+            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, os_runtime.rs"
         )
 
     modules = manifest["modules"]

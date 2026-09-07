@@ -137,7 +137,7 @@ class NativeRustRuntimeLinkMetadataTests(unittest.TestCase):
             unsigned["build"]["kbuild_link_closure"]["compatibility_build_identity"]["value"],
             serial["mcd0"]["compatibility_build_id"],
         )
-        self.assertEqual(["IHK_DEVICE_GET_BUILDID"], serial["mcd0"]["valid_ioctl_commands"])
+        self.assertEqual(["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"], serial["mcd0"]["valid_ioctl_commands"])
         self.assertTrue(serial["mcd0"]["get_buildid_nul_and_guards_observed"])
         self.assertFalse(serial["mcd0"]["runtime_behavior_proven"])
         self.assertFalse(serial["mcd0"]["credit_eligible"])
@@ -174,7 +174,7 @@ class NativeRustRuntimeLinkMetadataTests(unittest.TestCase):
             ("get_buildid_fault_errno", -22),
             ("get_buildid_nul_and_guards_observed", False),
             ("valid_ioctl_commands", ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS"]),
-            ("os_operations_reachable", True),
+            ("os_operations_reachable", False),
             ("resource_operations_reachable", True),
             ("runtime_behavior_proven", True),
             ("credit_eligible", True),

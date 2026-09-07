@@ -66,9 +66,9 @@ ERRNO_MAP = {
 
 READINESS_BLOCKERS = (
     "exact Rocky Linux 6.12 has no supported Rust miscdevice, cdev, file_operations, or ioctl callback registration API",
-    "the privately attached decoder has no userspace-reachable registration or file-operation adapter",
-    "safe UserSlice copy primitives exist, but no supported ioctl callback can supply a userspace argument to them",
-    "legacy provider callbacks, kmsg ownership, cdev publication, device-model publication, and teardown are not connected",
+    "the unbooted native adapter requires exact-kernel build and device-lifetime review",
+    "this scalar dispatcher implements no pointer-bearing OS operation or user-copy path",
+    "booted provider callbacks, shared kmsg readers and full OS teardown remain unimplemented",
     "exact Kbuild, module-load, ioctl, and teardown runtime evidence for this dispatcher is absent",
 )
 
@@ -251,12 +251,13 @@ def _validate_rust(data):
     for name in (
             "NATIVE_DEVICE_REGISTRATION_SUPPORTED",
             "NATIVE_FILE_OPERATIONS_SUPPORTED",
-            "NATIVE_IOCTL_CALLBACK_SUPPORTED",
-            "USER_COPY_REACHABLE_FROM_IOCTL"):
+            "NATIVE_IOCTL_CALLBACK_SUPPORTED"):
         _require(
             text,
-            r"^pub\(crate\) const {0}: bool = false;$".format(name),
-            "explicit unsupported marker {0}".format(name))
+            r"^pub\(crate\) const {0}: bool = true;$".format(name),
+            "native adapter attachment marker {0}".format(name))
+    _require(text, r"^pub\(crate\) const USER_COPY_REACHABLE_FROM_IOCTL: bool = false;$",
+             "scalar-only user-copy boundary")
     for name in COMMANDS:
         _require(text, r"\b{0}\b".format(name), "command import {0}".format(name))
     _require(text, r"argument >= OS_CAPACITY as u64", "fail-closed 0..63 minor range")
@@ -420,7 +421,7 @@ def derive_contract(repo_root, rust_override=None, abi_override=None,
             "attached_private": True,
             "ffi_free": True,
             "path": RUST_PATH,
-            "registration_supported": False,
+            "registration_supported": True,
             "sha256": _sha(rust),
             "size": len(rust),
             "user_copy_reachable": False,

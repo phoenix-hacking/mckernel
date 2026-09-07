@@ -21,6 +21,7 @@ std::thread_local! {
 }
 
 mod kernel {
+    pub mod bindings { pub struct module; }
     pub mod uaccess {
         pub struct UserSlice;
         pub struct UserSliceWriter;
@@ -63,6 +64,16 @@ mod kernel {
 
 // PRODUCTION_BUILDID_CONSTANTS
 // PRODUCTION_BUILDID_DISPATCH
+// PRODUCTION_DEVICE_REQUEST
+
+struct ThisModule;
+static THIS_MODULE: ThisModule = ThisModule;
+impl ThisModule { fn as_ptr(&self) -> *mut kernel::bindings::module { core::ptr::null_mut() } }
+fn provider_status_error(value: i64) -> i32 { value as i32 }
+// The device-request branch is present in the extracted production callback.
+// OS ownership is exercised by the separate complete-adapter fixture.
+unsafe fn ihk_os_create_unbooted_v1(_minor: u32, _owner: *mut kernel::bindings::module, _argument: u64) -> i64 { -12 }
+unsafe fn ihk_os_destroy_unbooted_v1(_provider: u32, _minor: u64) -> i64 { -22 }
 
 struct ProviderOpenLease;
 struct IhkSmpControlDevice;
@@ -130,8 +141,6 @@ fn unsupported_commands_do_not_construct_or_call_usercopy() {
     for cmd in [
         0,
         1,
-        0x0011_2900,
-        0x0011_2901,
         0x0011_290a,
         0x0011_290c,
         0x8011_290b,

@@ -51,9 +51,9 @@ mod tests {
         assert_eq!(0x0011_2901, IHK_DEVICE_DESTROY_OS);
         assert_eq!(0x0011_2a03, IHK_OS_QUERY_STATUS);
         assert_eq!(0x0011_2a14, IHK_OS_STATUS);
-        assert!(!NATIVE_DEVICE_REGISTRATION_SUPPORTED);
-        assert!(!NATIVE_FILE_OPERATIONS_SUPPORTED);
-        assert!(!NATIVE_IOCTL_CALLBACK_SUPPORTED);
+        assert!(NATIVE_DEVICE_REGISTRATION_SUPPORTED);
+        assert!(NATIVE_FILE_OPERATIONS_SUPPORTED);
+        assert!(NATIVE_IOCTL_CALLBACK_SUPPORTED);
         assert!(!USER_COPY_REACHABLE_FROM_IOCTL);
 
         assert_eq!(

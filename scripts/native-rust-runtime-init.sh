@@ -248,8 +248,10 @@ record "MCD0 OPEN_CLOSE mode=overlapping count=8 status=ok"
 record "MCD0 BUILDID expected=$EXPECTED_IHK_BUILD_ID"
 "$MCD0_IOCTL_NATIVE" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-native-buildid-ioctl; exit 1; }
 record "MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok"
+record "OS LIFECYCLE cycle=0 abi=x86_64 creates=3 destroys=3 status=not-booted busy_errno=EBUSY module_pin_errno=EWOULDBLOCK node_removed=1 minor_reused=1 result=ok"
 "$MCD0_IOCTL_COMPAT" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-compat-buildid-ioctl; exit 1; }
 record "MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok"
+record "OS LIFECYCLE cycle=0 abi=i386 creates=3 destroys=3 status=not-booted busy_errno=EBUSY module_pin_errno=EWOULDBLOCK node_removed=1 minor_reused=1 result=ok"
 
 exec 9<>/dev/mcd0 || { fail mcd0-held-open; exit 1; }
 set +e
@@ -372,7 +374,9 @@ mcd0_node_matches_identity "$mcd0_reload_dev" || {
 exec 8<>/dev/mcd0 || { fail mcd0-open-after-reload; exit 1; }
 exec 8>&-
 "$MCD0_IOCTL_NATIVE" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-native-ioctl-after-reload; exit 1; }
+record "OS LIFECYCLE cycle=1 abi=x86_64 creates=3 destroys=3 status=not-booted busy_errno=EBUSY module_pin_errno=EWOULDBLOCK node_removed=1 minor_reused=1 result=ok"
 "$MCD0_IOCTL_COMPAT" "$EXPECTED_IHK_BUILD_ID" || { fail mcd0-compat-ioctl-after-reload; exit 1; }
+record "OS LIFECYCLE cycle=1 abi=i386 creates=3 destroys=3 status=not-booted busy_errno=EBUSY module_pin_errno=EWOULDBLOCK node_removed=1 minor_reused=1 result=ok"
 record "MCD0 RELOAD cycle=1 dev=$mcd0_reload_dev open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok"
 rmmod mcctrl || { fail unload-reloaded-mcctrl; exit 1; }
 record "RELOAD_UNLOAD cycle=1 module=mcctrl status=ok"

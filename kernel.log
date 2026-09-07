@@ -32855,3 +32855,74 @@ Coordinated current-only reseal passed91focused tests (86FP/RS plus5real shellgu
 Scratch runner review-b427-compatibility-archive.py stopped after successful ZIP42member/CRC/outerSHA, nested26file byte equality and24+6+9checksum closures: its reconstructed original nine-row manifest SHA e1e0a1ab5c06e4b70a4923933e389cb250e5a04c1d5ef9c9284197e153f87672 differed from captured20aad5a699363feff117ae4715bb53b15aea8486a3e6320194f895abadb54136. Read-only diagnosis found the scratch runner imposed Python ASCII sorting; captured shell sort used locale collation (mckernel.img.map before mckernel-linked-text-ownership.json). Selecting the nine expected rows in their checksum-verified captured order exactly reproduces the recorded initial receipt. No source/artifact mutation or actual evidence drift; retain first-attempt JSON/log, correct only scratch runner ordering, then finish the bounded review. This diagnostic changes no source code or acceptance requirements.
 The same passive scratch review then stopped on an invented exactly-once full-line IHK/McKernel booted. assertion. Actual checksum-bound guest-command contains the exact line twice: explicit successful boot check at2346 and raw boot kmsg emission at2450. This is expected producer behavior; remaining required receipts occur once. Preserve the second scratch failure, derive the corrected boot count from those two known producer outputs and verify boot-kmsg presence. No observed guest failure or artifact mutation is established.
 The corrected bounded b427 compatibility artifact review completed PASS:42safe ZIPmembers,26nested guest-file byte matches,24+6+9checksum closures, originalnine-row receipt, observation/envelope equality, exactb427/run34028617122/attempt1, fourworkloads/eightmarkers, before/after/delta logs, zero source-policy fatal matches, RUNNING and guest/hostcleanupreceipts. Report42174bytes SHA2564694ca0afb04492e7a6ac06408b49e214b3bcfaf19fe080f42f90807312965c0. CapturedMcKernelimageidentity af06d3a87530315204a027353f9d60c011b3ca0118280b1b4a2cafe70bd1fd89 remains a verified manifest record because imagebinary is absent. All16FPclaims remainfalse; knownthreehashguarderrors remain in original logs. Both scratch-assumption failures and corrections are preserved independently.
+
+[2026-09-06T23:16:23.324918+00:00] Native unbooted OS continuation: local dependency setup unavailable
+Command: apt-get update -qq
+Environment: Ubuntu 24.04 container, clean implementation base 77f6d7a8; native-os-lifecycle worktree.
+Result: exit 100; APT cannot setgroups/setegid/seteuid to its package-download account in this container. No dependency installation or kernel test ran. Keep the container permission model unchanged; use verified tool archives in the work directory and the established Rocky CI build for exact-kernel validation. Rust 1.92.0 upstream archive SHA256 d2ccef59dd9f7439f2c694948069f789a044dc1addcc0803613232af8f88ee0c and the pinned Rocky source RPM/archive have been recovered and hash-verified.
+
+[2026-09-06T23:21:03.207882+00:00] Native OS adapter fixture: first validation failure
+Command: MCKERNEL_RUSTC_1_92=/workspace/scratch/b84a595d190b/toolchain/bin/rustc python3 -m unittest -v scripts.tests.test_ihk_os_runtime
+Environment: upstream Rust 1.92.0, Ubuntu 24.04, mocked Linux ABI with CONFIG_COMPAT; complete production adapter and registry sources compiled with warnings denied.
+Result: Python harness expected 10 Rust cases, but the unchanged device_registry source contributes 31 embedded cases. All 41 Rust cases passed, including the 10 new allocation, rollback, capacity and concurrent lifecycle cases; only the outer test-count assertion failed. Fix the expected complete fixture count to 41. This is host/mock behavior evidence, not Linux ABI or guest evidence.
+
+[2026-09-06T23:32:53.285147+00:00] Native OS integration source validation failure
+Command: IHK/SMP validate_repository then native Rust escape-surface checks; base 77f6d7a8 plus current adapter.
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/ihk_native_lifecycle_check.py", line 1162, in validate_repository
+    _validate_rust_source(source_text, contract)
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/ihk_native_lifecycle_check.py", line 595, in _validate_rust_source
+    raise ValidationError("ihk init must expose an unconditional dependency-free success path")
+scripts.ihk_native_lifecycle_check.ValidationError: ihk init must expose an unconditional dependency-free success path
+
+
+[2026-09-06T23:34:31.434809+00:00] Native OS unsafe ledger discovery failure
+Command: native_rust_unsafe_ffi_ledger.discover(current native tree).
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/native_rust_unsafe_ffi_ledger.py", line 819, in discover
+    sites, tokens, pairs, attrs = discover_sites(relative, raw, text)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/native_rust_unsafe_ffi_ledger.py", line 643, in discover_sites
+    raise LedgerError(
+scripts.native_rust_unsafe_ffi_ledger.LedgerError: host-kernel/native-rust/os_runtime.rs:89 unsafe_function lacks a unique nearby SAFETY comment
+
+
+[2026-09-06T23:35:04.674249+00:00] Native OS unsafe ledger discovery failure
+Command: native_rust_unsafe_ffi_ledger.discover(current native tree).
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/native_rust_unsafe_ffi_ledger.py", line 819, in discover
+    sites, tokens, pairs, attrs = discover_sites(relative, raw, text)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/b84a595d190b/native-os-lifecycle/scripts/native_rust_unsafe_ffi_ledger.py", line 643, in discover_sites
+    raise LedgerError(
+scripts.native_rust_unsafe_ffi_ledger.LedgerError: host-kernel/native-rust/os_runtime.rs:224 extern_function lacks a unique nearby SAFETY comment
+
+
+[2026-09-06 native unbooted OS lifecycle] First failing edit precondition: the helper extending IHK artifact symbol checks asserted one occurrence of the provider close-symbol list entry, but the source contains more than one. No helper edits were applied before this assertion; scope the change to validate_repository(). This is an edit precondition failure, not build/runtime evidence.
+
+[2026-09-06 native unbooted OS lifecycle] First failing focused validation: test_built_artifact_contract_checks_modinfo_and_logs (scripts.tests.test_ihk_native_lifecycle_check.IhkNativeLifecycleCheckTests.test_built_artifact_contract_checks_modinfo_and_logs) ... ERROR
+The extended lifecycle suite exposes stale artifact/test expectations for the two OS exports and changed control dispatch. Full diagnostic output is being collected before repair. No kernel/runtime result is claimed.
+
+[2026-09-06 native unbooted OS lifecycle] First runtime-contract validation failure after extending the probe: isolated runtime checker normalized SHA-256 differs. The self binding still names the pre-edit checker; refresh the binding only after preserving the new exact protocol/byte checks. No guest validation has run.
+
+[2026-09-06 native unbooted OS lifecycle] First full-suite failure: test_aggregate_replay_rejects_replaced_earlier_capture_directory in test_fp0006_ihk_device_negative_dispatch. A targeted replay identifies the prerequisite: WitnessError: frozen input digest ioctl_contract differs. The OS dispatcher contract changed; preserve FP-0006 historical claim boundaries while updating only its explicitly current input bindings.
+
+[2026-09-07 native unbooted OS lifecycle] First unsafe-ledger refresh failure: durable unsafe/FFI site IDs are duplicated: RS011-IHK-0057. The edit helper matched two distinct Box reclamation sites by their identical expression; include the unique SAFETY comment in the matching key. Restore the original new-adapter IDs 0035 through 0067 in their unchanged source order. This changes no source semantics or review/credit status.
+
+[2026-09-07 native unbooted OS lifecycle] Descendant-binding refresh stopped at the v2 historical review: its constant is EXPECTED_INPUTS, not the v1 EXPECTED_COMMITTED_INPUTS. The v1 historical projection remained byte-for-byte unchanged; adapt the helper to each existing schema before completing the dependent bindings. Staging integrity now passes with the new source, while its gate remains NOT_READY.
+
+[2026-09-07 OS adapter integration] First remaining integration failure: test_committed_ledger_is_exact_complete_and_fail_closed (scripts.tests.test_native_rust_unsafe_ffi_ledger.CurrentLedgerTests.test_committed_ledger_is_exact_complete_and_fail_closed) ... FAIL
+The formatter added a trailing comma to the create call; preserve its existing durable unsafe-site ID while updating the source-expression binding. Remaining failures include the license additive-count check and isolated status-witness identity seals.
+
+[2026-09-07 OS adapter integration] First final-focused failure: isolated status witness rejects the now-registered dispatcher with "ioctl registration boundary differs". Update that source-foundation expectation to true while preserving the standalone witness scope, booted-state fixture, missing independent result authority, and all false runtime/gate/credit claims.
+
+[2026-09-07 native OS committed discovery] First remaining failure: FP-0006 executable acceptance closure rejected the updated negative-dispatch reference SHA-256. Full committed suite at 459d012a ran 2239 tests: 18 failures, 4 errors, 175 skips. Remaining groups are downstream current-source digest bindings for FP-0006, license review consumers and RK-005/RK-007 consumers, plus two exact override-count expectations. Preserve historical records and all non-crediting claims while refreshing only reviewed source identities. Log: os-committed-suite.log. No kernel or guest success is implied.
+
+[2026-09-07 native OS local integration] Committed c686f385 full discovery passed: 2288 tests, 2102 passed, 186 explicit skips, zero failures/errors in 201.043 seconds, upstream Rust 1.92.0. Skipped facilities include unavailable exact Red Hat compiler/artifacts and restricted own-child ptrace. Historical RK007 projections were independently compared against 77f6d7a8 and remain unchanged. Before publication, exact-source ABI review found that rust/bindings/bindings_helper.h supplies GFP_KERNEL and __GFP_ZERO const helpers but none for COMP/NORETRY/NOWARN. The adapter now forms those three flags from generated gfp_types.h enum bits instead of relying on cast-macro translation. The mock uses the actual positions 18/16/13 and requires the exact 0x52dc0 allocation mask. This is preventive source-boundary hardening, not a claimed kernel build failure.
+
+[2026-09-07 native OS publication transport] 2026-09-07: git push origin HEAD:refs/heads/codex/rocky-rust-validation at 52bd3025710389e8b0fafcf14ba54771e75fb0d1 exited 128: fatal: could not read Username for https://github.com: No such device or address. No remote ref changed. Use the authorized GitHub connector to publish the identical reviewed tree after local validation; no credentials are sought from repository contents.
+
+[2026-09-07 native OS exact final tree discovery] Source commit 52bd3025710389e8b0fafcf14ba54771e75fb0d1, tree 784342590ed681b578a657bf44d9faee17931d72; Ran 2288 tests in 186.830s; OK (skipped=186). All 73 direct allocator/ledger/staging checks also passed without skips. This subsequent commit adds only these verification/publication notes; executable source and contracts remain identical. Publish through the authorized GitHub connector with final remote/local tree equality, then require fresh exact-Rocky compilation and native plus i386 disposable-guest execution. No new runtime or gate result is claimed yet.

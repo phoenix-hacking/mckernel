@@ -37,7 +37,8 @@ def extract_function(source: str, name: str) -> str:
 
 def render_fixture(source: str) -> str:
     constants = []
-    for name in ("IHK_DEVICE_GET_BUILDID", "IHK_COMPAT_BUILD_ID"):
+    for name in ("IHK_DEVICE_GET_BUILDID", "IHK_COMPAT_BUILD_ID",
+                 "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS", "IHK_SMP_CONTROL_DEVICE_MINOR"):
         matches = re.findall(r"(?m)^const " + name + r":[^\n]+;$", source)
         if len(matches) != 1:
             raise AssertionError(f"expected one production {name} constant")
@@ -46,6 +47,7 @@ def render_fixture(source: str) -> str:
     replacements = {
         "// PRODUCTION_BUILDID_CONSTANTS": "\n".join(constants),
         "// PRODUCTION_BUILDID_DISPATCH": extract_function(source, "control_device_ioctl"),
+        "// PRODUCTION_DEVICE_REQUEST": extract_function(source, "control_device_request"),
         "// PRODUCTION_NATIVE_IOCTL": extract_function(source, "ioctl"),
         "// PRODUCTION_COMPAT_IOCTL": "#[cfg(CONFIG_COMPAT)]\n" + extract_function(source, "compat_ioctl"),
     }

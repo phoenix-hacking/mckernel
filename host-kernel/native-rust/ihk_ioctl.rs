@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0
 //! Allocation-free decoder and transaction core for the first IHK ioctls.
 //!
-//! Rocky Linux 6.12 exposes Rust helpers for ioctl-number construction and
-//! user access, but its Rust kernel crate does not expose a file-operations,
-//! character-device, or misc-device registration API.  Consequently this
-//! module is deliberately not reachable from userspace.  It decodes only the
-//! frozen scalar create, destroy, and status commands and prepares rollback-
-//! safe registry transactions for a future supported registration adapter.
+//! The native os_runtime adapter connects this allocation-free transaction
+//! core to the frozen scalar create, destroy and status ioctls. The adapter
+//! owns Linux registration and memory; this core owns decoding and rollback.
 //!
-//! A caller must complete the provider, kmsg, cdev, and device-model work
+//! A caller must complete the provider, kmsg and device-model work
 //! before calling `commit_after_external_success`.  Dropping a transaction on
 //! any earlier failure restores the registry automatically.
 
@@ -28,11 +25,11 @@ const EOVERFLOW: i32 = 75;
 const ESTALE: i32 = 116;
 const EUCLEAN: i32 = 117;
 
-// These are evidence-gated blockers, not runtime feature probes.  They prevent
-// this source-only core from being mistaken for a registered ioctl surface.
-pub(crate) const NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = false;
-pub(crate) const NATIVE_FILE_OPERATIONS_SUPPORTED: bool = false;
-pub(crate) const NATIVE_IOCTL_CALLBACK_SUPPORTED: bool = false;
+// These describe the attached native adapter, not acceptance or gate credit.
+// Status/create/destroy are scalar operations and never dereference arguments.
+pub(crate) const NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = true;
+pub(crate) const NATIVE_FILE_OPERATIONS_SUPPORTED: bool = true;
+pub(crate) const NATIVE_IOCTL_CALLBACK_SUPPORTED: bool = true;
 pub(crate) const USER_COPY_REACHABLE_FROM_IOCTL: bool = false;
 
 const _: [(); 64] = [(); ABI_LONG_BITS as usize];

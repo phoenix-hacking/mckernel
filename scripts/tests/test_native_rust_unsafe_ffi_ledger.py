@@ -44,20 +44,20 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 12)
-        self.assertEqual(len(discovery["sites"]), 48)
+        self.assertEqual(len(discovery["inputs"]), 13)
+        self.assertEqual(len(discovery["sites"]), 83)
         self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 34,
-            "ihk_smp_x86_64": 12,
+            "ihk": 67,
+            "ihk_smp_x86_64": 14,
             "mcctrl": 2,
         })
         self.assertEqual(value["coverage"]["by_kind"], {
-            "extern_function": 12,
-            "ffi_export": 14,
-            "foreign_block": 2,
+            "extern_function": 17,
+            "ffi_export": 18,
+            "foreign_block": 3,
             "mutable_static": 1,
-            "unsafe_block": 14,
-            "unsafe_function": 1,
+            "unsafe_block": 37,
+            "unsafe_function": 3,
             "unsafe_impl": 4,
         })
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
@@ -101,6 +101,8 @@ class CurrentLedgerTests(unittest.TestCase):
         self.assertEqual(
             smp_sites,
             [
+                "RS011-SMP-0014",
+                "RS011-SMP-0015",
                 "RS011-SMP-0008",
                 "RS011-SMP-0009",
                 "RS011-SMP-0001",
@@ -134,6 +136,7 @@ class CurrentLedgerTests(unittest.TestCase):
                 "host-kernel/native-rust/ikc_master.rs",
                 "host-kernel/native-rust/ikc_queue.rs",
                 "host-kernel/native-rust/os_registry.rs",
+                "host-kernel/native-rust/os_runtime.rs",
                 "host-kernel/native-rust/page_allocator.rs",
                 "host-kernel/native-rust/page_owner_registry.rs",
             ],
@@ -144,13 +147,14 @@ class CurrentLedgerTests(unittest.TestCase):
             + ["RS011-IHK-%04d" % index for index in range(1, 4)]
             + ["RS011-IHK-%04d" % index for index in range(15, 21)]
             + ["RS011-IHK-%04d" % index for index in range(23, 35)]
-            + ["RS011-IHK-%04d" % index for index in range(4, 15)],
+            + ["RS011-IHK-%04d" % index for index in range(4, 15)]
+            + ["RS011-IHK-%04d" % index for index in range(35, 68)],
         )
 
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "0a62ed983423ed897ea20eeced06fea6864e67cfa4fa14676cb352592e6a1c85",
+            "68e5d0ad82019857199c82286b42bf3e90dfef7210af468eead790b56882b9d2",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
@@ -401,6 +405,7 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.NATIVE_SOURCE_ROOT + "/ikc_master.rs",
         ledger.NATIVE_SOURCE_ROOT + "/ikc_queue.rs",
         ledger.NATIVE_SOURCE_ROOT + "/os_registry.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/os_runtime.rs",
         ledger.NATIVE_SOURCE_ROOT + "/ihk_ioctl.rs",
         ledger.NATIVE_SOURCE_ROOT + "/page_allocator.rs",
         ledger.NATIVE_SOURCE_ROOT + "/page_owner_registry.rs",

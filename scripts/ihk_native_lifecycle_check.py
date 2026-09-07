@@ -68,6 +68,12 @@ EXPECTED_SUPPORT_SOURCES = (
         "kind": "rust_support_module",
         "path": "host-kernel/native-rust/page_owner_registry.rs",
     },
+    {
+        "contract_path": "host-kernel/contracts/ihk-os-runtime-v1.json",
+        "destination": "os_runtime.rs",
+        "kind": "rust_support_module",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+    },
 )
 EXPECTED_PROVIDER_LEASE = {
     "attach_symbol": "ihk_smp_provider_attach_v2",
@@ -585,8 +591,18 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
 
     if "impl kernel::Module for IhkModule" not in code or "impl Drop for IhkModule" not in code:
         raise ValidationError("Rust source lacks paired module init and exit lifecycle")
-    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code or "Ok(Self)" not in code:
-        raise ValidationError("ihk init must expose an unconditional dependency-free success path")
+    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code:
+        raise ValidationError("ihk init must expose its native module initialization path")
+    for fragment in (
+        "struct IhkModule {\n    os_devices: Option<os_runtime::OsDeviceFamily>,\n}",
+        "let os_devices = Some(os_runtime::OsDeviceFamily::register()?);",
+        "Ok(Self { os_devices })",
+        "drop(self.os_devices.take());",
+    ):
+        _require_active_count(text, code, fragment, 1, "IHK OS device-family ownership")
+    _require_active_count(text, code, "match IHK_DEVICE_REGISTRY.active_count() {", 1, "provider registry unload invariant")
+    if code.index("drop(self.os_devices.take());") > code.index("match IHK_DEVICE_REGISTRY.active_count() {"):
+        raise ValidationError("OS family must be removed before provider-empty and unload diagnostics")
     for phase in ("load", "unload"):
         expected = contract["lifecycle_logs"][phase]
         _require_active_count(
@@ -921,7 +937,7 @@ def _validate_support_sources(
             "contract_path": ioctl_item["contract_path"],
             "contract_sha256": ioctl_item["contract_sha256"],
             "contract_size": (repo / ioctl_item["contract_path"]).stat().st_size,
-            "registration_supported": False,
+            "registration_supported": True,
             "user_copy_reachable": False,
     }:
         raise ValidationError("device registry contract uses a different negative ioctl boundary")
@@ -933,8 +949,8 @@ def _validate_support_sources(
     if (ioctl_implementation.get("path") != ioctl_item["path"] or
             ioctl_implementation.get("sha256") != ioctl_item["sha256"]):
         raise ValidationError("ioctl dispatcher contract does not bind the staged source")
-    if ioctl_implementation.get("registration_supported") is not False:
-        raise ValidationError("ioctl dispatcher contract overclaims device registration")
+    if ioctl_implementation.get("registration_supported") is not True:
+        raise ValidationError("ioctl dispatcher contract omits the native OS adapter")
     if ioctl_implementation.get("user_copy_reachable") is not False:
         raise ValidationError("ioctl dispatcher contract overclaims reachable user copy")
     if ioctl_inputs.get("abi") != {
@@ -1003,10 +1019,19 @@ def _validate_support_sources(
         "#[allow(dead_code)]\nmod ihk_ioctl;",
         "#[allow(dead_code)]\nmod page_allocator;",
         "#[allow(dead_code)]\nmod page_owner_registry;",
+        "mod os_runtime;",
     )
     for declaration in declarations:
         if source_text.count(declaration) != 1:
             raise ValidationError(f"ihk crate root lacks unique support declaration: {declaration!r}")
+    if __package__:
+        from .ihk_os_runtime_check import validate_repository as validate_os_runtime
+    else:
+        from ihk_os_runtime_check import validate_repository as validate_os_runtime
+    try:
+        validate_os_runtime(repo)
+    except (ValueError, OSError) as error:
+        raise ValidationError(str(error)) from error
     return paths
 
 
@@ -1174,6 +1199,8 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
             contract["provider_lease"]["detach_symbol"],
             contract["provider_lease"]["open_lease"]["acquire_symbol"],
             contract["provider_lease"]["open_lease"]["close_symbol"],
+            "ihk_os_create_unbooted_v1",
+            "ihk_os_destroy_unbooted_v1",
         ],
         "source_sha256": _sha256(source_path),
         "transitive_module_count": len(module_paths),
@@ -1367,6 +1394,10 @@ def validate_module_artifact(
         "provider_open=acquire",
         "provider_open=release",
         "provider_registry=empty",
+        "os_family=registered",
+        "os_family=removed",
+        "os=create",
+        "os=destroy",
         "lifecycle=unload",
     ):
         if phase.encode("ascii") not in data:

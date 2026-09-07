@@ -28,9 +28,9 @@ CONTRACT_PATH = ROOT / "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json
 C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
 RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
 SECURITY_SOURCE = ROOT / "scripts/fp0006_ihk_device_negative_dispatch.py"
-EXPECTED_CHECKER_SHA256 = "7946f4d4a0fade9c0f2e18ad4297d5a60f81ee830ef18b9cc99c5a437ec3c1f1"
-EXPECTED_CHECKER_SIZE = 88014
-EXPECTED_NORMALIZED_SELF_SHA256 = "1d8d58d150d435337309df417c9372d925f20f865b58c416f8985ef5bdab4147"
+EXPECTED_CHECKER_SHA256 = '21043a953d46f1552ba86b3dadc893bae96d5def258c33b0a3e2295f3b3be38d'
+EXPECTED_CHECKER_SIZE = 88013
+EXPECTED_NORMALIZED_SELF_SHA256 = '84f6ca4a8cac9de303822c10a9f53845162547e7c0c659ff6dd8776d5dd8f532'
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
@@ -400,7 +400,7 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
     def test_frozen_identities_and_normalized_self_seal(self):
         expected = {
             CONTRACT_PATH: (
-                "369084c6af4184c20b40cce189dcca92f01711da82398a976d128f794d32c679",
+                "b27548d7f254abb10a214e509d4449d629cf12d23528fa8b258e9ed7b4bdc9f6",
                 10968,
             ),
             C_PRODUCER: (
@@ -412,7 +412,7 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
                 6800,
             ),
             SECURITY_SOURCE: (
-                "d03f035089f343a3e4767054631bd3ff381195e207b6bb0cde4b2f266690a30b",
+                "ecbcda61e5cf036a22fe064f47053224e46d22aecf7fc4845a04d8bcd5a6344a",
                 51627,
             ),
             CHECKER: (EXPECTED_CHECKER_SHA256, EXPECTED_CHECKER_SIZE),
@@ -532,7 +532,7 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
         )
         self.assertEqual("fp-0006-ihk-os-status-alias-v1", result["contract_id"])
         self.assertEqual(
-            "369084c6af4184c20b40cce189dcca92f01711da82398a976d128f794d32c679",
+            "b27548d7f254abb10a214e509d4449d629cf12d23528fa8b258e9ed7b4bdc9f6",
             result["contract_sha256"],
         )
         self.assertEqual("CONTRACT_VALIDATED_NONCREDITING", result["status"])

@@ -1419,7 +1419,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
     implementation = ioctl_contract.get("implementation", {})
     if ioctl_contract.get("gate_id") != "IHK-005-ioctl-dispatch-foundation":
         raise ContractError("ioctl boundary contract identity differs")
-    if implementation.get("registration_supported") is not False:
+    if implementation.get("registration_supported") is not True:
         raise ContractError("ioctl boundary overclaims device registration support")
     if implementation.get("user_copy_reachable") is not False:
         raise ContractError("ioctl boundary overclaims userspace reachability")
@@ -1527,7 +1527,7 @@ def derive_contract(
             "contract_path": IOCTL_CONTRACT_PATH,
             "contract_sha256": _sha(ioctl_contract),
             "contract_size": len(ioctl_contract),
-            "registration_supported": False,
+            "registration_supported": True,
             "user_copy_reachable": False,
         },
         "legacy_oracle": {

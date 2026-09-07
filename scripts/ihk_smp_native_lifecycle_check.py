@@ -138,8 +138,8 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
         "source_fixture": {
             "expected_tests": 6,
             "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-            "sha256": "d983e67f36ba2ba30f66c68c26e0bb631a9b7ebdb17aed7faec78873fcbf4bd6",
-            "size": 5388,
+            "sha256": "c8755402148266afcf363c87b6089ab40e8da2b1080b0ca0d14735a68118e22c",
+            "size": 5990,
         },
         "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
         "success_result": 0,
@@ -178,7 +178,7 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
     "registration_failure_releases_provider_lease": True,
     "rocky_runtime_validated": False,
     "runtime_behavior_proven": False,
-    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt and native/compat GET_BUILDID safe usercopy; all other ioctls reject; no OS or resource operation",
+    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt, native/compat GET_BUILDID, and unbooted OS create/destroy; no resource or boot operation",
     "teardown_order": [
         "deregister-control-device",
         "detach-provider-lease",
@@ -194,7 +194,7 @@ EXPECTED_CONTROL_DEVICE_SHELL = {
         "poll",
     ],
     "usercopy_reachable": True,
-    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
+    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
 }
 
 EXPECTED_BUILDID_INCLUDE = (
@@ -212,6 +212,8 @@ EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> 
     }
 }'''
 
+
+EXPECTED_OS_REQUEST = 'fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n    match cmd {\n        IHK_DEVICE_CREATE_OS => {\n            // SAFETY: This callback runs with the SMP control file pinning\n            // THIS_MODULE. IHK acquires its own module reference before the\n            // instance becomes live; the raw scalar argument is never a pointer.\n            let result = unsafe {\n                ihk_os_create_unbooted_v1(\n                    IHK_SMP_CONTROL_DEVICE_MINOR,\n                    THIS_MODULE.as_ptr(),\n                    arg as u64,\n                )\n            };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        IHK_DEVICE_DESTROY_OS => {\n            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n            // It validates the provider and minor and refuses open instances.\n            let result =\n                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        _ => control_device_ioctl(cmd, arg),\n    }\n}'
 
 class ValidationError(Exception):
     """Raised when the SMP lifecycle contract is incomplete or inconsistent."""
@@ -867,6 +869,10 @@ def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str
     )
 
 
+def _module_provider_symbols(contract: dict[str, Any]) -> tuple[str, ...]:
+    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v1", "ihk_os_destroy_unbooted_v1")
+
+
 def _provider_import(contract: dict[str, Any]) -> str:
     anchor, attach, detach, open_symbol, close_symbol = _provider_symbols(contract)
     return (
@@ -886,6 +892,11 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f"    fn {open_symbol}(minor: u32) -> i64;\n"
         f'    #[link_name = "{close_symbol}"]\n'
         f"    fn {close_symbol}(receipt: i64);\n"
+        '    #[link_name = "ihk_os_create_unbooted_v1"]\n'
+        "    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n"
+        "        owner: *mut kernel::bindings::module, argument: u64) -> i64;\n"
+        '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+        "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
         "}"
     )
 
@@ -917,7 +928,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     provider_import = _provider_import(contract)
     _require_active_count(
         text, code, provider_import, 1,
-        "Rust exact audited five-symbol provider-symbol import",
+        "Rust exact seven-symbol provider-symbol import",
     )
     callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
     callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
@@ -955,7 +966,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
 
     expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
     let errno = match status {
-        -2 | -12 | -16 | -22 | -75 | -116 | -117 => status as i32,
+        -2 | -12 | -16 | -19 | -22 | -75 | -116 | -117 => status as i32,
         _ => -117,
     };
     match kernel::error::to_result(errno) {
@@ -1086,6 +1097,15 @@ struct ProviderOpenLease {
         text, code, buildid_command, 1,
         "Rust exact GET_BUILDID command",
     )
+    _require_active_count(text, code, EXPECTED_OS_REQUEST, 1,
+                          "Rust exact unbooted OS request and module owner boundary")
+    request_start = _active_fragment_positions(text, code, EXPECTED_OS_REQUEST)[0]
+    _validate_top_level_item(code, request_start, "unbooted OS dispatcher")
+    for constant in (
+        "const IHK_DEVICE_CREATE_OS: u32 = 0x0011_2900;",
+        "const IHK_DEVICE_DESTROY_OS: u32 = 0x0011_2901;",
+    ):
+        _require_active_count(text, code, constant, 1, "Rust exact OS command")
     command_start = _active_fragment_positions(text, code, buildid_command)[0]
     _validate_top_level_item(code, command_start, "GET_BUILDID command")
     _require_active_count(
@@ -1095,13 +1115,13 @@ struct ProviderOpenLease {
     dispatch_start = _active_fragment_positions(text, code, EXPECTED_BUILDID_DISPATCH)[0]
     _validate_top_level_item(code, dispatch_start, "GET_BUILDID dispatcher")
     native_ioctl = '''fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
-        control_device_ioctl(cmd, arg)
+        control_device_request(cmd, arg)
     }'''
     compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
     fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
         // This command takes a userspace pointer.  On x86_64 compat callers
         // supply a 32-bit address; zero extension matches compat_ptr().
-        control_device_ioctl(cmd, arg as u32 as usize)
+        control_device_request(cmd, arg as u32 as usize)
     }'''
     _require_active_count(
         text, code, native_ioctl, 1,
@@ -1823,7 +1843,7 @@ def validate_repository(
         "provider_lease_credit_eligible": False,
         "provider_lease_gate_status": contract["provider_lease"]["gate_status"],
         "provider_lease_runtime_proven": False,
-        "provider_symbols": list(_provider_symbols(contract)),
+        "provider_symbols": list(_module_provider_symbols(contract)),
         "control_device_credit_eligible": False,
         "control_device_gate_status": contract["control_device_shell"]["gate_status"],
         "control_device_name": contract["control_device_shell"]["device_name"],
@@ -2066,7 +2086,7 @@ def validate_module_artifact(
             f"expected {expected_parmtype}, got {parmtype}"
         )
     undefined = _undefined_symbols(module_path)
-    missing_provider_symbols = sorted(set(_provider_symbols(contract)) - undefined)
+    missing_provider_symbols = sorted(set(_module_provider_symbols(contract)) - undefined)
     if missing_provider_symbols:
         raise ValidationError(
             "built SMP module lacks provider relocations: "

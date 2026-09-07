@@ -69,7 +69,7 @@
       "destination": "ihk_ioctl.rs",
       "kind": "rust_ioctl_dispatch",
       "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
-      "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
+      "sha256": "bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958"
     },
     {
       "destination": "page_allocator.rs",
@@ -88,6 +88,12 @@
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_resource.rs",
       "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b"
+    },
+    {
+      "destination": "os_runtime.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f"
     }
   ],
   "modules": [
@@ -103,7 +109,7 @@
       "source": {
         "destination": "ihk.rs",
         "repository_path": "host-kernel/native-rust/ihk.rs",
-        "sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36"
+        "sha256": "ea3720403482c66412b476d1e3dfeb1819f7397ba26f35d3aad62c47f1f0c73b"
       }
     },
     {
@@ -122,7 +128,7 @@
       "source": {
         "destination": "ihk_smp_x86_64.rs",
         "repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "sha256": "93f0c5810fb61b7e8b1bcfb7b157685a04a971f8f830440b6d25b27b6253aea1"
+        "sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01"
       }
     },
     {
@@ -151,14 +157,14 @@
   },
   "profile_id": "rocky-10.2-native-rust-host-modules-v1",
   "readiness": {
-    "checkpoint": "crate_roots_bound",
-    "credit_eligible": false,
     "blockers": [
       "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
       "upstream Rust-for-Linux sample has not built through this staging path",
       "production namespace and import metadata has not been proven from built modules",
       "zero-project-C final link manifests have not been captured"
-    ]
+    ],
+    "checkpoint": "crate_roots_bound",
+    "credit_eligible": false
   },
   "schema_version": 2,
   "target": {

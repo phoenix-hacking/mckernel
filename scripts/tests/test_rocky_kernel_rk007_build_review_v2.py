@@ -208,7 +208,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
     def test_current_input_port_is_closed_and_preserves_every_ef58_record(self):
         policy = self.review["current_repository_input_policy"]
         self.assertEqual(policy["bound_input_count"], len(reviewer.EXPECTED_INPUTS))
-        self.assertEqual(policy["current_override_count"], 9)
+        self.assertEqual(policy["current_override_count"], 10)
         self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
         self.assertIs(policy["historical_runtime_inputs_immutable"], True)
         self.assertIs(policy["require_head_index_worktree_equality"], True)
@@ -220,6 +220,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 "host-kernel/kbuild/stage-manifest.json",
                 "host-kernel/native-rust/abi/x86_64.rs",
                 "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_ioctl.rs",
                 "host-kernel/native-rust/ihk_smp_x86_64.rs",
                 "scripts/rocky_rust_staging.py",
                 "scripts/native_rust_kbuild_link_closure.py",

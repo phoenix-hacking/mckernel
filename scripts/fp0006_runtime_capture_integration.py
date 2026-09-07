@@ -33,10 +33,10 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "5fc33ae4211158b3228aa32240aa17c5848ed2143cb0a83897983ad604d47be8"
+EXPECTED_CONTRACT_SHA256 = 'ce3ba34156116cd13dab3baa73400d280756774ff1d2f9fff9aec15b7cb75a5c'
 EXPECTED_CONTRACT_SIZE = 9204
 EXPECTED_LEGACY_WORKFLOW_SHA256 = "1842c5f12f8a5a6cfbbd92f79452d7af80c6cdb6ecc4dd4178761dc79111ab38"
-EXPECTED_NATIVE_WORKFLOW_SHA256 = "1d771f60386d7e5ea2df8ee64b4e95054420584fc02473eeafe3f803045a437d"
+EXPECTED_NATIVE_WORKFLOW_SHA256 = '00c92532178894eb11bc0c39dd87cc9737ac34a606fc885bc19bb95b9baaf3e7'
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
 EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "bbeeaaf364713206fc439455491adb7cda7b1c9b5fd3f516f76565111c634340"
@@ -1290,33 +1290,21 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
     ]
     _require(contract["vectors"], expected_vectors, "fixed vectors")
 
-    expected_frozen = {
-        "contract": {
-            "path": "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json",
-            "sha256": "7f49a3459b8e3002b94e4ab47124501d879f7405f9037155cf7b83396627afd1",
-            "size": 19668,
-        },
-        "checker": {
-            "path": "scripts/fp0006_ihk_device_negative_dispatch.py",
-            "sha256": "d03f035089f343a3e4767054631bd3ff381195e207b6bb0cde4b2f266690a30b",
-            "size": 51627,
-        },
-        "tests": {
-            "path": "scripts/tests/test_fp0006_ihk_device_negative_dispatch.py",
-            "sha256": "7cca6c3bd2cf9be1285bed91ab597688bd28734b5bf56c4312a5d949694d8677",
-            "size": 54332,
-        },
-        "legacy_producer": {
-            "path": "scripts/smoke/fp0006-ihk-device-negative-dispatch.c",
-            "sha256": "7f500fba27ece9ad52fa52a81d7aa5f57649ad0152e907c17d421e368a279053",
-            "size": 7805,
-        },
-        "native_producer": {
-            "path": "scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs",
-            "sha256": "905e7cbdfb0655c2ef3fba3425bfa87057f473bb85ef669061d2b3523f2e8209",
-            "size": 6177,
-        },
-    }
+    expected_frozen = {'checker': {'path': 'scripts/fp0006_ihk_device_negative_dispatch.py',
+                 'sha256': 'ecbcda61e5cf036a22fe064f47053224e46d22aecf7fc4845a04d8bcd5a6344a',
+                 'size': 51627},
+     'contract': {'path': 'host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json',
+                  'sha256': '88d3892457d3b9ea268d385dae4ecdcb26d402d9fe47ad13602ddcb730c413f8',
+                  'size': 19668},
+     'legacy_producer': {'path': 'scripts/smoke/fp0006-ihk-device-negative-dispatch.c',
+                         'sha256': '7f500fba27ece9ad52fa52a81d7aa5f57649ad0152e907c17d421e368a279053',
+                         'size': 7805},
+     'native_producer': {'path': 'scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs',
+                         'sha256': '905e7cbdfb0655c2ef3fba3425bfa87057f473bb85ef669061d2b3523f2e8209',
+                         'size': 6177},
+     'tests': {'path': 'scripts/tests/test_fp0006_ihk_device_negative_dispatch.py',
+               'sha256': '7cca6c3bd2cf9be1285bed91ab597688bd28734b5bf56c4312a5d949694d8677',
+               'size': 54332}}
     _require(
         contract["base_witness"],
         {

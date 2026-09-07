@@ -75,7 +75,7 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         self.assertEqual("TODO", contract["readiness"]["status"])
         self.assertFalse(contract["readiness"]["credit_eligible"])
         self.assertFalse(contract["evidence_policy"]["credit_eligible"])
-        self.assertFalse(contract["ioctl_boundary"]["registration_supported"])
+        self.assertTrue(contract["ioctl_boundary"]["registration_supported"])
         self.assertFalse(contract["ioctl_boundary"]["user_copy_reachable"])
         self.assertTrue(
             contract["attachment_boundary"][
@@ -429,13 +429,13 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
         with self.assertRaisesRegex(registry.ContractError, "deterministic capture"):
             registry.check(REPO_ROOT, crate_root_override=harmless_drift)
 
-    def test_ioctl_boundary_is_hash_bound_and_remains_negative(self):
+    def test_ioctl_boundary_is_hash_bound_to_registered_dispatcher(self):
         contract = registry.derive_contract(REPO_ROOT)
         boundary = contract["ioctl_boundary"]
         self.assertEqual(sha256(self.ioctl_contract), boundary["contract_sha256"])
         self.assertEqual(len(self.ioctl_contract), boundary["contract_size"])
         decoded = json.loads(self.ioctl_contract.decode("utf-8"))
-        decoded["implementation"]["registration_supported"] = True
+        decoded["implementation"]["registration_supported"] = False
         mutated = registry.render_contract(decoded)
         with self.assertRaisesRegex(registry.ContractError, "registration support"):
             registry.derive_contract(REPO_ROOT, ioctl_contract_override=mutated)

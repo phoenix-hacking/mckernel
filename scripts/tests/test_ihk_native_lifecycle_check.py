@@ -49,6 +49,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         for item in self.contract["support_sources"]:
             relative_paths.add(item["path"])
             relative_paths.add(item["contract_path"])
+        from scripts.ihk_os_runtime_check import INPUTS
+        relative_paths.update(INPUTS)
         for relative in relative_paths:
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -71,7 +73,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
         self.assertEqual(4, summary["transitive_module_count"])
-        self.assertEqual(6, summary["support_sources"])
+        self.assertEqual(7, summary["support_sources"])
         self.assertTrue(summary["provider_lease_validated"])
         self.assertEqual(
             [
@@ -82,6 +84,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v2",
                 "ihk_smp_provider_open_v1",
                 "ihk_smp_provider_close_v1",
+                "ihk_os_create_unbooted_v1",
+                "ihk_os_destroy_unbooted_v1",
             ],
             summary["provider_symbols"],
         )
@@ -541,7 +545,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 source.write_text(original.replace(old, new, 1), encoding="utf-8")
                 with self.assertRaisesRegex(
                     lifecycle.ValidationError,
-                    "exact reviewed boundary",
+                    "exact reviewed boundary|provider registry unload invariant",
                 ):
                     lifecycle.validate_repository(self.repo)
                 source.write_text(original, encoding="utf-8")
@@ -707,7 +711,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 source.write_text(original.replace(old, new, 1), encoding="utf-8")
                 with self.assertRaisesRegex(
                     lifecycle.ValidationError,
-                    "exact reviewed boundary",
+                    "exact reviewed boundary|provider registry unload invariant",
                 ):
                     lifecycle.validate_repository(self.repo)
                 source.write_text(original, encoding="utf-8")
@@ -743,7 +747,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         support = self.contract["support_sources"][3]
         contract_path = self.repo / support["contract_path"]
         value = json.loads(contract_path.read_text(encoding="utf-8"))
-        value["implementation"]["registration_supported"] = True
+        value["implementation"]["registration_supported"] = False
         contract_path.write_text(
             json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
@@ -775,6 +779,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
             b"provider_open=acquire\0provider_open=release\0"
             b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
+            b"os_family=registered\0os_family=removed\0os=create\0os=destroy\0"
         )
         summary = lifecycle.validate_repository(REPO_ROOT)
         artifact_symbols = reviewed_artifact_symbols(summary["provider_symbols"])
@@ -807,6 +812,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             b"lifecycle=load\0provider_lease=attach\0provider_lease=detach\0"
             b"provider_open=acquire\0provider_open=release\0"
             b"provider_registry=empty\0lifecycle=unload\0MCKERNEL_IHK_V1\0"
+            b"os_family=registered\0os_family=removed\0os=create\0os=destroy\0"
         )
         summary = lifecycle.validate_repository(REPO_ROOT)
         values = {

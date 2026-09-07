@@ -46,7 +46,7 @@ class IhkIoctlDispatchContractTests(unittest.TestCase):
         self.assertEqual(10, contract["fixture"]["test_count"])
         self.assertTrue(contract["implementation"]["allocation_free"])
         self.assertTrue(contract["implementation"]["ffi_free"])
-        self.assertFalse(contract["implementation"]["registration_supported"])
+        self.assertTrue(contract["implementation"]["registration_supported"])
         self.assertFalse(contract["implementation"]["user_copy_reachable"])
         self.assertEqual("TODO", contract["readiness"]["status"])
         self.assertFalse(contract["readiness"]["credit_eligible"])
@@ -80,14 +80,16 @@ class IhkIoctlDispatchContractTests(unittest.TestCase):
         with self.assertRaisesRegex(dispatch.ContractError, "canonical ABI value"):
             dispatch.derive_contract(REPO_ROOT, abi_override=mutated)
 
-    def test_unsupported_registration_or_copy_markers_cannot_flip(self):
+    def test_registration_attachment_and_scalar_copy_markers_cannot_flip(self):
         for name in (
                 b"NATIVE_DEVICE_REGISTRATION_SUPPORTED",
                 b"NATIVE_FILE_OPERATIONS_SUPPORTED",
                 b"NATIVE_IOCTL_CALLBACK_SUPPORTED",
                 b"USER_COPY_REACHABLE_FROM_IOCTL"):
-            old = b"pub(crate) const " + name + b": bool = false;"
-            new = b"pub(crate) const " + name + b": bool = true;"
+            current = b"false" if name == b"USER_COPY_REACHABLE_FROM_IOCTL" else b"true"
+            changed = b"true" if current == b"false" else b"false"
+            old = b"pub(crate) const " + name + b": bool = " + current + b";"
+            new = b"pub(crate) const " + name + b": bool = " + changed + b";"
             with self.subTest(name=name):
                 self.rejected_rust_mutation(old, new)
 
@@ -164,7 +166,7 @@ class IhkIoctlDispatchContractTests(unittest.TestCase):
 
     def test_contract_cannot_self_attest_registration_credit_or_pass(self):
         contract = json.loads(self.contract.decode("utf-8"))
-        contract["implementation"]["registration_supported"] = True
+        contract["implementation"]["registration_supported"] = False
         contract["readiness"] = {
             "blockers": [],
             "credit_eligible": True,

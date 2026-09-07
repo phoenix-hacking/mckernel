@@ -125,14 +125,8 @@ def valid_serial() -> str:
     protocol = evidence.PROTOCOL
     acquire = evidence.PROVIDER_OPEN_ACQUIRE_DIAGNOSTIC
     release_open = evidence.PROVIDER_OPEN_RELEASE_DIAGNOSTIC
-    first_open_trace = (
-        [acquire, release_open] * evidence.MCD0_SEQUENTIAL_OPEN_COUNT
-        + [acquire] * evidence.MCD0_OVERLAPPING_OPEN_COUNT
-        + [release_open] * evidence.MCD0_OVERLAPPING_OPEN_COUNT
-        + [acquire, release_open] * 2
-        + [acquire, release_open]
-    )
-    reload_open_trace = [acquire, release_open] * evidence.MCD0_RELOAD_OPEN_COUNT
+    probe_trace = ([acquire] + evidence.OS_PROBE_TRACE[:3] + [release_open, acquire]
+                   + evidence.OS_PROBE_TRACE[3:] + [release_open])
     ihk_load = "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
     smp_load = (
         "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
@@ -156,42 +150,6 @@ def valid_serial() -> str:
     detach = (
         "ihk: provider_lease=detach status=vacant minor=0 generation=1 "
         "callback_abi=1"
-    )
-    first_kernel_trace = (
-        [
-            ihk_load,
-            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
-            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
-            smp_load,
-            mcctrl_load,
-        ]
-        + first_open_trace
-        + [
-            mcctrl_unload,
-            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
-            detach,
-            smp_unload,
-            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
-            ihk_unload,
-        ]
-    )
-    reload_kernel_trace = (
-        [
-            ihk_load,
-            evidence.PROVIDER_CALLBACK_INIT_DIAGNOSTIC,
-            evidence.PROVIDER_LEASE_ATTACH_DIAGNOSTIC,
-            smp_load,
-            mcctrl_load,
-        ]
-        + reload_open_trace
-        + [
-            mcctrl_unload,
-            evidence.PROVIDER_CALLBACK_EXIT_DIAGNOSTIC,
-            detach,
-            smp_unload,
-            evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
-            ihk_unload,
-        ]
     )
     records = [
         f"{protocol} BEGIN",
@@ -226,12 +184,12 @@ def valid_serial() -> str:
     records.extend(
         [
             f"{protocol} MCD0 BUILDID expected=a1b2c3d",
-            acquire,
-            release_open,
+            *probe_trace,
             f"{protocol} MCD0 IOCTL abi=x86_64 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
-            acquire,
-            release_open,
+            evidence.OS_LIFECYCLE_MARKERS[0][1],
+            *probe_trace,
             f"{protocol} MCD0 IOCTL abi=i386 buildid=exact_nul expected_errno=EFAULT unknown_errno=EINVAL status=ok",
+            evidence.OS_LIFECYCLE_MARKERS[1][1],
             acquire,
             f"{protocol} MCD0 NEGATIVE operation=unload-smp-with-open-file status=1",
             f"{protocol} MCD0 NEGATIVE_OUTPUT_BEGIN",
@@ -275,7 +233,9 @@ def valid_serial() -> str:
             f"{protocol} REFCOUNT module=ihk phase=reload-all-loaded references=2 users=mcctrl,ihk_smp_x86_64,",
         ]
     )
-    records.extend(reload_open_trace)
+    records.extend([acquire, release_open] + probe_trace
+                   + [evidence.OS_LIFECYCLE_MARKERS[2][1]] + probe_trace
+                   + [evidence.OS_LIFECYCLE_MARKERS[3][1]])
     records.extend(
         [
             f"{protocol} MCD0 RELOAD cycle=1 dev=10:43 open_close=1 buildid=exact_nul ioctl_x86_64=EFAULT ioctl_i386=EFAULT unknown_errno=EINVAL status=ok",
@@ -294,7 +254,17 @@ def valid_serial() -> str:
             f"{protocol} DMESG_BEGIN",
         ]
     )
-    records.extend(first_kernel_trace + reload_kernel_trace)
+    # Reproduce the kernel diagnostics already emitted in the live frame.
+    expanded = []
+    for line in records:
+        if line == ihk_load:
+            expanded.append(evidence.OS_FAMILY_REGISTER)
+        if line == evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC:
+            expanded.append(evidence.OS_FAMILY_REMOVE)
+        expanded.append(line)
+    records = expanded
+    records.extend([line for line in records
+                    if line.startswith(("ihk:", "ihk_smp_x86_64:", "mcctrl:"))])
     records.extend(
         [
             f"{protocol} DMESG_END",
@@ -351,7 +321,7 @@ def semantic_probe_elf(name: str) -> bytes:
             "<i", rodata_address - (text_address + len(prefix) + 4)
         )
     text_bytes = prefix + address + suffix
-    rodata = b"/dev/mcd0\0"
+    rodata = evidence.OS_RUNTIME_RODATA
     names = b"\0.shstrtab\0.text\0.rodata\0"
     text_offset, rodata_offset = 0x1000, 0x2000
     names_offset = rodata_offset + len(rodata)
@@ -1678,7 +1648,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                         "same_generation_token_may_repeat": True,
                         "trusted_noncopy_owner_balance_required": True,
                     },
-                    "os_operations_reachable": False,
+                    "os_operations_reachable": True,
+                    "unbooted_os": dict(evidence.OS_LIFECYCLE_POLICY),
                     "overlapping_open_count": evidence.MCD0_OVERLAPPING_OPEN_COUNT,
                     "provider_open_acquire_count_per_trace": (
                         evidence.MCD0_PROVIDER_OPEN_COUNT_PER_TRACE
@@ -1698,7 +1669,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
                     "tracker_credit": False,
                     "unknown_ioctl_command": "0xdeadbeef",
-                    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
+                    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
                 },
                 "negative_unload_status": 1,
                 "provider_lease": {
@@ -2369,7 +2340,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             ("sequential_open_count", False),
             ("operation_callbacks_reachable", True),
             ("resource_operations_reachable", True),
-            ("os_operations_reachable", True),
+            ("os_operations_reachable", False),
             ("rocky_runtime_validated", True),
             ("runtime_behavior_proven", True),
             ("tracker_credit", True),
@@ -4175,6 +4146,20 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "runtime init identity"):
             evidence.validate_contract(repo)
 
+    def test_unbooted_os_receipts_and_ownership_traces_are_required(self) -> None:
+        original = valid_serial()
+        for _label, marker in evidence.OS_LIFECYCLE_MARKERS:
+            for replacement in ("", marker + "\n" + marker,
+                                marker.replace("creates=3", "creates=2"),
+                                marker.replace("module_pin_errno=EWOULDBLOCK", "module_pin_errno=EBUSY")):
+                with self.subTest(marker=marker, replacement=replacement):
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence.validate_serial(self.write_serial(original.replace(marker, replacement)), KERNEL_RELEASE)
+        for diagnostic in [evidence.OS_FAMILY_REGISTER, evidence.OS_FAMILY_REMOVE] + evidence.OS_PROBE_TRACE:
+            with self.subTest(diagnostic=diagnostic):
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(original.replace(diagnostic, "", 1)), KERNEL_RELEASE)
+
     def test_complete_serial_protocol_is_accepted(self) -> None:
         result = evidence.validate_serial(self.write_serial(valid_serial()), KERNEL_RELEASE)
         self.assertEqual(2, result["provider_refcount"])
@@ -4312,25 +4297,25 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             (
                 "registry-empty-before-smp-unload",
                 smp_unload
-                + "\n"
+                + "\n" + evidence.OS_FAMILY_REMOVE + "\n"
                 + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
                 + "\n"
                 + ihk_unload,
                 evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
                 + "\n"
                 + smp_unload
-                + "\n"
+                + "\n" + evidence.OS_FAMILY_REMOVE + "\n"
                 + ihk_unload,
             ),
             (
                 "registry-empty-after-ihk-unload",
                 smp_unload
-                + "\n"
+                + "\n" + evidence.OS_FAMILY_REMOVE + "\n"
                 + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC
                 + "\n"
                 + ihk_unload,
                 smp_unload
-                + "\n"
+                + "\n" + evidence.OS_FAMILY_REMOVE + "\n"
                 + ihk_unload
                 + "\n"
                 + evidence.PROVIDER_REGISTRY_EMPTY_DIAGNOSTIC,
@@ -5000,7 +4985,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             ("compat_unknown_ioctl_errno", -25),
             ("operation_callbacks_reachable", True),
             ("resource_operations_reachable", True),
-            ("os_operations_reachable", True),
+            ("os_operations_reachable", False),
             ("provider_open_acquire_count_per_trace", 17),
             ("provider_open_release_count_per_trace", 19),
             ("reload_cycles", True),

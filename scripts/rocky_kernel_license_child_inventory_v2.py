@@ -103,8 +103,8 @@ EXPECTED_INPUTS = {
 CURRENT_IMPLEMENTATION_OVERRIDES = {
     EXPECTED_INPUTS["license_inventory_v1_checker"]["path"]: {
         "path": EXPECTED_INPUTS["license_inventory_v1_checker"]["path"],
-        "sha256": "e6aa0340364fb033a4a7fce78a1c232103449b1fa1398176ec9eaa4ad8dce4c7",
-        "size": 66347,
+        "sha256": "c57205015abf72fad45ca84c08d44b61059ab14d6798e509b0ad159df01d8c7c",
+        "size": 66482,
     },
     EXPECTED_INPUTS["source_lock"]["path"]: {
         "path": EXPECTED_INPUTS["source_lock"]["path"],

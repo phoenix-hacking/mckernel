@@ -106,6 +106,7 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/native-rust/ikc_queue.rs",
     "host-kernel/native-rust/mcctrl.rs",
     "host-kernel/native-rust/os_registry.rs",
+    "host-kernel/native-rust/os_runtime.rs",
     "host-kernel/native-rust/page_allocator.rs",
     "host-kernel/native-rust/page_owner_registry.rs",
     "host-kernel/native-rust/smp_resource.rs",
@@ -126,6 +127,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/native-rust/ikc_queue.rs",
     "host-kernel/native-rust/mcctrl.rs",
     "host-kernel/native-rust/os_registry.rs",
+    "host-kernel/native-rust/os_runtime.rs",
     "host-kernel/native-rust/page_allocator.rs",
     "host-kernel/native-rust/page_owner_registry.rs",
     "host-kernel/native-rust/smp_resource.rs",
@@ -218,6 +220,7 @@ LOCKED_CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
 CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v2"
 ADDITIVE_REPOSITORY_INPUT_PATHS = (
     "host-kernel/native-rust/device_registry.rs",
+    "host-kernel/native-rust/os_runtime.rs",
     "host-kernel/native-rust/smp_resource.rs",
 )
 CAPTURE_AUTHORITY_REGISTRATION = {

@@ -36,8 +36,8 @@
       "source_fixture": {
         "expected_tests": 6,
         "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-        "sha256": "d983e67f36ba2ba30f66c68c26e0bb631a9b7ebdb17aed7faec78873fcbf4bd6",
-        "size": 5388
+        "sha256": "c8755402148266afcf363c87b6089ab40e8da2b1080b0ca0d14735a68118e22c",
+        "size": 5990
       },
       "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
       "success_result": 0
@@ -76,7 +76,7 @@
     "registration_failure_releases_provider_lease": true,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt and native/compat GET_BUILDID safe usercopy; all other ioctls reject; no OS or resource operation",
+    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt, native/compat GET_BUILDID, and unbooted OS create/destroy; no resource or boot operation",
     "teardown_order": [
       "deregister-control-device",
       "detach-provider-lease",
@@ -93,7 +93,9 @@
     ],
     "usercopy_reachable": true,
     "valid_ioctl_commands": [
-      "IHK_DEVICE_GET_BUILDID"
+      "IHK_DEVICE_GET_BUILDID",
+      "IHK_DEVICE_CREATE_OS",
+      "IHK_DEVICE_DESTROY_OS"
     ]
   },
   "crate_modules": [

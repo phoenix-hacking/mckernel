@@ -24,6 +24,7 @@ mod ihk_ioctl;
 mod page_allocator;
 #[allow(dead_code)]
 mod page_owner_registry;
+mod os_runtime;
 
 use core::sync::atomic::{AtomicPtr, Ordering};
 
@@ -445,10 +446,13 @@ module! {
     license: "GPL v2",
 }
 
-struct IhkModule;
+struct IhkModule {
+    os_devices: Option<os_runtime::OsDeviceFamily>,
+}
 
 impl kernel::Module for IhkModule {
     fn init(_module: &'static ThisModule) -> Result<Self> {
+        let os_devices = Some(os_runtime::OsDeviceFamily::register()?);
         pr_info!(
             "lifecycle=load version={} abi={} parameters={} dependencies={}\n",
             IHK_VERSION,
@@ -456,12 +460,13 @@ impl kernel::Module for IhkModule {
             IHK_PARAMETER_COUNT,
             IHK_DEPENDENCY_COUNT,
         );
-        Ok(Self)
+        Ok(Self { os_devices })
     }
 }
 
 impl Drop for IhkModule {
     fn drop(&mut self) {
+        drop(self.os_devices.take());
         if !IHK_SMP_PROVIDER_EXIT_V2.load(Ordering::Acquire).is_null() {
             pr_err!("provider_callback=not-empty callback_abi=1\n");
         }

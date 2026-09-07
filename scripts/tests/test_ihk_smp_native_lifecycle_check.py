@@ -85,6 +85,8 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v2",
                 "ihk_smp_provider_open_v1",
                 "ihk_smp_provider_close_v1",
+                "ihk_os_create_unbooted_v1",
+                "ihk_os_destroy_unbooted_v1",
             ],
             summary["provider_symbols"],
         )
@@ -101,7 +103,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["control_device_runtime_proven"])
         self.assertTrue(summary["control_device_usercopy_source_reachable"])
         self.assertEqual(
-            ["IHK_DEVICE_GET_BUILDID"], summary["control_device_valid_ioctl_commands"]
+            ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"], summary["control_device_valid_ioctl_commands"]
         )
         self.assertEqual(6, summary["get_buildid_source_fixture_tests"])
 
@@ -308,7 +310,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             with self.subTest(mutation=old):
                 source_path.write_text(original.replace(old, new, 1), encoding="utf-8")
                 with self.assertRaisesRegex(
-                    lifecycle.ValidationError, "five-symbol provider-symbol import"
+                    lifecycle.ValidationError, "seven-symbol provider-symbol import"
                 ):
                     lifecycle._validate_rust_source(
                         source_path.read_text(encoding="utf-8"), self.contract
@@ -330,8 +332,9 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 lifecycle.ValidationError, "errno adapter"
             ):
                 lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
-        status_line = "-2 | -12 | -16 | -22 | -75 | -116 | -117"
-        for status in self.contract["provider_lease"]["errno_statuses"]:
+        status_line = "-2 | -12 | -16 | -19 | -22 | -75 | -116 | -117"
+        self.assertIn(status_line, source)
+        for status in self.contract["provider_lease"]["errno_statuses"] + [-19]:
             with self.subTest(missing_status=status), self.assertRaisesRegex(
                 lifecycle.ValidationError, "errno adapter"
             ):
@@ -506,7 +509,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         )
         for old, new in cases:
             with self.subTest(mutation=old), self.assertRaisesRegex(
-                lifecycle.ValidationError, "five-symbol provider-symbol import"
+                lifecycle.ValidationError, "seven-symbol provider-symbol import"
             ):
                 lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
 
@@ -565,18 +568,18 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 self.contract,
             )
 
-    def test_control_device_ioctl_surface_is_bounded_to_get_buildid(self) -> None:
+    def test_control_device_ioctl_surface_is_bounded_to_identity_and_unbooted_os(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
         )
-        native_dispatch = "control_device_ioctl(cmd, arg)"
+        native_dispatch = "control_device_request(cmd, arg)"
         with self.assertRaisesRegex(lifecycle.ValidationError, "exact native ioctl dispatch"):
             lifecycle._validate_rust_source(
                 source.replace(native_dispatch, "Ok(0)", 1),
                 self.contract,
             )
-        compat_dispatch = "control_device_ioctl(cmd, arg as u32 as usize)"
-        for changed in ("Ok(0)", native_dispatch, "control_device_ioctl(cmd, arg as i32 as usize)"):
+        compat_dispatch = "control_device_request(cmd, arg as u32 as usize)"
+        for changed in ("Ok(0)", native_dispatch, "control_device_request(cmd, arg as i32 as usize)"):
             with self.subTest(compat=changed), self.assertRaisesRegex(
                 lifecycle.ValidationError, "explicit compat ioctl dispatch"
             ):
@@ -1136,14 +1139,14 @@ macro_rules! áinclude { () => {} }
         ), mock.patch.object(
             lifecycle,
             "_undefined_symbols",
-            return_value=set(lifecycle._provider_symbols(contract)),
+            return_value=set(lifecycle._module_provider_symbols(contract)),
         ):
             lifecycle.validate_module_artifact(module, summary, contract)
         self.assertTrue(summary["artifact_validated"])
         self.assertTrue(summary["built_symbol_reference_validated"])
         self.assertFalse(summary["rocky_build_load_validated"])
 
-        expected_symbols = set(lifecycle._provider_symbols(contract))
+        expected_symbols = set(lifecycle._module_provider_symbols(contract))
         for missing in sorted(expected_symbols):
             with self.subTest(missing_provider_symbol=missing), mock.patch.object(
                 lifecycle, "_modinfo", side_effect=lambda _path, field: values[field]
@@ -1172,7 +1175,7 @@ macro_rules! áinclude { () => {} }
                 ), mock.patch.object(
                     lifecycle,
                     "_undefined_symbols",
-                    return_value=set(lifecycle._provider_symbols(contract)),
+                    return_value=set(lifecycle._module_provider_symbols(contract)),
                 ):
                     with self.assertRaisesRegex(
                         lifecycle.ValidationError,
@@ -1189,7 +1192,7 @@ macro_rules! áinclude { () => {} }
         ), mock.patch.object(
             lifecycle,
             "_undefined_symbols",
-            return_value=set(lifecycle._provider_symbols(contract)),
+            return_value=set(lifecycle._module_provider_symbols(contract)),
         ):
             with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
                 lifecycle.validate_module_artifact(module, summary, contract)

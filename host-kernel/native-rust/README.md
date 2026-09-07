@@ -7,7 +7,7 @@ Linux remains the Rocky-derived control-plane kernel; only these project-owned h
 Behavioral implementation is evidence-gated against `host-kernel/contracts/legacy-behavior-contract-f2eb7352.json`. Before any implementation gate is credited, the exact Rocky-derived `CONFIG_RUST` kernel must compile the module and the relevant acceptance tests must pass on immutable CI evidence.
 
 `final-push.txt` is the production completion tracker. Native CPU/memory
-reservation, McKernel creation and boot, and mcctrl process/offload integration
+reservation, McKernel image loading and boot, and mcctrl process/offload integration
 remain unfinished. The Rocky 8.10 boot/mcexec smoke validates the legacy
 compatibility path. A green snapshot workflow whose archive download and
 offline replay steps were skipped validates only the checks that executed.
@@ -19,9 +19,8 @@ leases. Its first supported command is `IHK_DEVICE_GET_BUILDID` (`0x11290b`):
 native and x86 compat callers receive the complete IHK compatibility BUILDID,
 including its trailing NUL. The callback uses the kernel's safe `UserSlice`
 writer and returns zero on success or `EFAULT` on failed user copy. Unsupported
-commands retain `EINVAL`; CPU reservation and OS creation are not implemented
-by this query. Open-file module references and provider teardown ordering are
-unchanged.
+commands retain `EINVAL`. The same control device also exposes the unbooted
+OS lifecycle described below; resource reservation remains unfinished.
 
 `ihkconfig` allocates `sizeof(BUILDID)`, and `mcexec` compares the corresponding
 OS identity to its own BUILDID. Consequently the UAPI payload must retain the
@@ -45,6 +44,39 @@ results remain required for runtime or gate credit.
 ```sh
 RUSTC=/path/to/rustc python3 -m unittest -v scripts.tests.test_ihk_smp_buildid
 python3 -m unittest -v scripts.tests.test_rocky_rust_staging
+```
+
+## Native unbooted OS lifecycle
+
+`IHK_DEVICE_CREATE_OS` and `IHK_DEVICE_DESTROY_OS` now connect the scalar
+dispatcher to `os_runtime.rs`. A created instance owns a generation-checked
+registry slot, a `/dev/mcosN` character-device node, a zeroed 4 MiB physically
+contiguous kmsg allocation, a provider lease, and a Linux SMP module reference.
+The Linux major is dynamic; minors are OS indices 0 through 63. Allocation or
+publication failure rolls back every owner before the minor becomes reusable.
+
+Each open file owns a separate OS lease and pins `ihk.ko`. The two status
+aliases return `NOT_BOOTED` (zero). Destroy returns `EBUSY` while an OS file is
+open, removes the node before freeing storage and provider references, and
+makes the minor reusable only after teardown completes. A live instance keeps
+SMP loaded even when all control and OS files are closed. Native and i386
+callers use the same scalar ABI. No project C implementation is called.
+
+This is an unbooted-instance adapter. CPU and memory assignment, image loading,
+boot, shared kmsg readers, provider boot callbacks, and booted teardown remain
+unfinished. The kmsg allocation runs in process context with bounded retry
+flags; fragmentation can return `ENOMEM`.
+
+The complete-source mock fixture exercises allocation/node failures, all 64
+slots, shared opens, provider ownership, minor reuse, and concurrent
+create/open/destroy. The guest probes additionally check status aliases, busy
+destruction, module pinning with all files closed, node removal, and reuse in
+both ABIs across unload/reload. Mock results do not establish Linux ABI or
+runtime correctness; the exact Rocky build and guest capture remain required.
+
+```sh
+python3 scripts/ihk_os_runtime_check.py
+RUSTC=/path/to/rustc python3 -m unittest -v scripts.tests.test_ihk_os_runtime
 ```
 
 ## Unsafe and FFI ledger
@@ -77,9 +109,9 @@ errno mapping, and a fail-closed transition graph. The authoritative staging
 manifest copies all five transitive sources to the paths named by the crate
 root, so Rust dep-info must include them in the exact compiler closure.
 
-The foundation does not expose create/destroy entry points, register character
-devices, allocate kmsg storage, or call a legacy C implementation. Validate its
-frozen-source contract and exact standalone Rust 1.92 fixture with:
+The registry foundation remains allocation-free. The separate unbooted runtime
+adapter now owns its Linux registration and kmsg storage. Validate the registry
+contract and exact standalone Rust 1.92 fixture with:
 
 ```sh
 python3 scripts/ihk_os_registry_check.py
@@ -101,11 +133,11 @@ It performs no allocation, FFI, C dispatch, registration, or userspace copy.
 
 An audit of the unmodified byte-exact Rocky Linux 6.12 Rust sources found ioctl-number
 helpers and safe `UserSlice` copy wrappers, but no Rust `miscdevice`, `cdev`,
-`file_operations`, or ioctl-callback registration layer. The dispatcher is
-not userspace reachable. The subsequently applied miscdevice backport supports
-the SMP-owned control-device shell and identity query above; it does not attach
-this OS transaction dispatcher or supply its missing provider, kmsg and
-per-instance device ownership. Validate the frozen IHK behavior, original Rocky API capture,
+`file_operations`, or ioctl-callback registration layer. The subsequently
+applied miscdevice backport supports the SMP control device; the new runtime
+adapter connects the dispatcher to per-instance character devices through
+explicitly inventoried Linux exports. Validate the frozen IHK behavior, original
+Rocky API capture,
 mutation defenses, and standalone Rust 1.92 fixture with:
 
 ```sh
@@ -115,7 +147,8 @@ python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
 
 Passing an unmodified exact Rocky source root through `--kernel-source` also
 replays the full Rust-tree absence audit. This remains an IHK-005 `TODO`
-checkpoint with no gate credit and no runtime create/destroy/status claim.
+checkpoint with no gate credit. The unbooted adapter has separate build and
+guest verification requirements; booted OS behavior remains unimplemented.
 
 ## IHK page-allocation attachment
 

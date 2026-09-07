@@ -363,6 +363,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/native-rust/ikc_queue.rs",
             "host-kernel/native-rust/ihk_ioctl.rs",
             "host-kernel/native-rust/os_registry.rs",
+            "host-kernel/native-rust/os_runtime.rs",
             "host-kernel/native-rust/page_allocator.rs",
             "host-kernel/native-rust/page_owner_registry.rs",
             "host-kernel/native-rust/smp_resource.rs",
@@ -387,6 +388,7 @@ class LicenseInventoryTests(unittest.TestCase):
     def test_repository_inventory_binds_new_foundations_without_review_credit(self):
         relatives = (
             "host-kernel/native-rust/device_registry.rs",
+            "host-kernel/native-rust/os_runtime.rs",
             "host-kernel/native-rust/smp_resource.rs",
         )
         self.assertEqual(

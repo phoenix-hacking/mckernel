@@ -38,9 +38,9 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:1d8d58d150d435337309df417c9372d925f20f865b58c416f8985ef5bdab4147
+# SELF_DIGEST:84f6ca4a8cac9de303822c10a9f53845162547e7c0c659ff6dd8776d5dd8f532
 SELF_SOURCE_MAXIMUM = 1024 * 1024
-SECURITY_SOURCE_SHA256 = "d03f035089f343a3e4767054631bd3ff381195e207b6bb0cde4b2f266690a30b"
+SECURITY_SOURCE_SHA256 = 'ecbcda61e5cf036a22fe064f47053224e46d22aecf7fc4845a04d8bcd5a6344a'
 SECURITY_SOURCE_SIZE = 51627
 
 
@@ -1607,7 +1607,7 @@ def _verify_current_semantics(inputs: Dict[str, bytes]) -> None:
     _require_exact_json(ioctl_foundation["behavior"].get("user_copy"),
                         "none-for-this-scalar-subset", "ioctl user-copy policy")
     _require_exact_json(ioctl_foundation["implementation"].get("registration_supported"),
-                        False, "ioctl registration boundary")
+                        True, "ioctl registration boundary")
     _require_exact_json(ioctl_foundation["readiness"].get("credit_eligible"),
                         False, "ioctl credit boundary")
 
@@ -1653,7 +1653,7 @@ def _load_authority(
     repo: Path, contract_path: Path = DEFAULT_CONTRACT
 ) -> Tuple[Dict[str, Any], bytes, Dict[str, Dict[str, Any]], List[Dict[str, Any]]]:
     expected_relative = "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json"
-    expected_contract_sha256 = "369084c6af4184c20b40cce189dcca92f01711da82398a976d128f794d32c679"
+    expected_contract_sha256 = 'b27548d7f254abb10a214e509d4449d629cf12d23528fa8b258e9ed7b4bdc9f6'
     expected_contract_size = 10968
     if Path(contract_path).as_posix() != expected_relative:
         raise WitnessError("status-alias contract path differs from fixed authority")

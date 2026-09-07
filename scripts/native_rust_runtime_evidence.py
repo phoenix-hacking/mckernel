@@ -42,7 +42,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:e20baf6e27c59a53d38688dea17442ec91d3fd05f2a1111558ff82939ef545a7"
+    "ISOLATED_SELF_DIGEST:f896ad4a647a2309a098e16cac8c2616b21735a8f1f69fecf78c74749141f069"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -325,10 +325,44 @@ PROVIDER_OPEN_RELEASE_DIAGNOSTIC = (
 )
 MCD0_SEQUENTIAL_OPEN_COUNT = 4
 MCD0_OVERLAPPING_OPEN_COUNT = 8
-MCD0_FIRST_CYCLE_OPEN_COUNT = 15
-MCD0_RELOAD_OPEN_COUNT = 3
-MCD0_PROVIDER_OPEN_COUNT_PER_TRACE = 18
+MCD0_FIRST_CYCLE_OPEN_COUNT = 17
+MCD0_RELOAD_OPEN_COUNT = 5
+MCD0_PROVIDER_OPEN_COUNT_PER_TRACE = 22
 MCD0_RELOAD_CYCLES = 1
+OS_RUNTIME_RODATA = b"/dev/mcd0\0/dev/mcos0\0ihk_smp_x86_64\0"
+OS_LIFECYCLE_POLICY = {
+    "scope": "unbooted create/status/destroy only",
+    "abis": ["x86_64", "i386"],
+    "cycles": 2,
+    "creates_per_trace": 12,
+    "destroys_per_trace": 12,
+    "status": 0,
+    "busy_destroy_errno": -16,
+    "module_pin_errno": -11,
+    "module_pin_checked_with_all_device_files_closed": True,
+    "node_removed_and_minor_reused": True,
+    "kmsg_bytes_per_instance": 4194304,
+    "booted_teardown_proven": False,
+    "resource_assignment_proven": False,
+    "tracker_credit": False,
+}
+OS_LIFECYCLE_MARKERS = tuple(
+    ("os cycle={0} abi={1}".format(cycle, abi),
+     "{0} OS LIFECYCLE cycle={1} abi={2} creates=3 destroys=3 status=not-booted "
+     "busy_errno=EBUSY module_pin_errno=EWOULDBLOCK node_removed=1 minor_reused=1 result=ok".format(
+         PROTOCOL, cycle, abi))
+    for cycle in range(2) for abi in ("x86_64", "i386")
+)
+OS_FAMILY_REGISTER = "ihk: os_family=registered minors=64"
+OS_FAMILY_REMOVE = "ihk: os_family=removed active=0"
+OS_PROBE_TRACE = [
+    "ihk: os=create minor=0 state=not-booted kmsg_bytes=4194304",
+    "ihk: os=create minor=1 state=not-booted kmsg_bytes=4194304",
+    "ihk: os=destroy minor=1 state=vacant",
+    "ihk: os=destroy minor=0 state=vacant",
+    "ihk: os=create minor=0 state=not-booted kmsg_bytes=4194304",
+    "ihk: os=destroy minor=0 state=vacant",
+]
 PROVIDER_LEASE_FORBIDDEN_DIAGNOSTICS = (
     "ihk_smp_x86_64: provider_lease=detach-failed",
     "ihk: provider_callback=not-empty",
@@ -350,6 +384,8 @@ PROVIDER_ATTACH_SYMBOL = "ihk_smp_provider_attach_v2"
 PROVIDER_DETACH_SYMBOL = "ihk_smp_provider_detach_v2"
 PROVIDER_OPEN_SYMBOL = "ihk_smp_provider_open_v1"
 PROVIDER_CLOSE_SYMBOL = "ihk_smp_provider_close_v1"
+OS_CREATE_SYMBOL = "ihk_os_create_unbooted_v1"
+OS_DESTROY_SYMBOL = "ihk_os_destroy_unbooted_v1"
 PROVIDER_EXPORT_NAMESPACE = "MCKERNEL_IHK_V1"
 PROVIDER_DEFINED_SYMBOLS = (
     PROVIDER_ANCHOR_SYMBOL,
@@ -359,6 +395,8 @@ PROVIDER_DEFINED_SYMBOLS = (
     PROVIDER_DETACH_SYMBOL,
     PROVIDER_OPEN_SYMBOL,
     PROVIDER_CLOSE_SYMBOL,
+    OS_CREATE_SYMBOL,
+    OS_DESTROY_SYMBOL,
 )
 PROVIDER_SMP_IMPORT_SYMBOLS = (
     PROVIDER_ANCHOR_SYMBOL,
@@ -366,10 +404,12 @@ PROVIDER_SMP_IMPORT_SYMBOLS = (
     PROVIDER_DETACH_SYMBOL,
     PROVIDER_OPEN_SYMBOL,
     PROVIDER_CLOSE_SYMBOL,
+    OS_CREATE_SYMBOL,
+    OS_DESTROY_SYMBOL,
 )
 # Retain the public helper name for the complete provider definition/export set.
 PROVIDER_SYMBOLS = PROVIDER_DEFINED_SYMBOLS
-PROVIDER_SYMBOL_PATTERN = re.compile(r"^ihk(?:_smp)?_provider_[A-Za-z0-9_]+$")
+PROVIDER_SYMBOL_PATTERN = re.compile(r"^(?:ihk(?:_smp)?_provider_[A-Za-z0-9_]+|ihk_os_[A-Za-z0-9_]+)$")
 EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
 EXPECTED_KERNEL_LOCALVERSION = "-211.44.1.el10_2.mckernel1.x86_64"
 EXPECTED_KERNEL_RELEASE = "6.12.0" + EXPECTED_KERNEL_LOCALVERSION
@@ -542,62 +582,103 @@ RUNTIME_HELPER_ELF_SPEC = {
     "native-rust-runtime-poweroff.o": (2, 1, 62),
 }
 RUNTIME_PROBE_TEXT_TEMPLATE = {
-    "native-rust-runtime-mcd0-ioctl-x86_64": (
-        bytes.fromhex("488d2d"),
+    'native-rust-runtime-mcd0-ioctl-x86_64': (
+        bytes.fromhex('488d2d'),
         bytes.fromhex(
-            "48833c24020f85700200004c8b7424104531ff43803c3e00740f41ffc74183ff"
-            "280f8754020000ebea4585ff0f844902000041ffc74883ec4031dbb802000000"
-            "4889efbe0200000031d20f054885c00f88180200004989c44889e7b940000000"
+            "48833c24020f850c0500004c8b7424104531ff43803c3e00740f41ffc74183ff"
+            "280f87f0040000ebea4585ff0f84e504000041ffc74883ec4031dbb802000000"
+            "4889efbe0200000031d20f054885c00f88b40400004989c44889e7b940000000"
             "b8a5000000fcf3aab8100000004c89e7be0b291100488d5424080f054885c00f"
-            "85af010000813c24a5a5a5a50f85a2010000817c2404a5a5a5a50f8594010000"
-            "4c89f6488d7c24084489f9f3a60f8581010000b9380000004429f9b8a5000000"
-            "f3ae0f856c010000b8100000004c89e7be0b29110031d20f054883f8f20f8551"
-            "010000b8100000004c89e7be0b29110048c7c2ffffffff0f054883f8f20f8531"
-            "010000b8100000004c89e7be0b2911004889ea0f054883f8f20f851501000081"
-            "7d002f6465760f8508010000817d042f6d63640f85fb00000066837d08300f85"
-            "f0000000b80900000031ffbe00200000ba0300000041ba2200000049c7c0ffff"
-            "ffff4531c90f05483d01f0ffff0f83c10000004889c3c783fb0f0000a5a5a5a5"
+            "8543040000813c24a5a5a5a50f8536040000817c2404a5a5a5a50f8528040000"
+            "4c89f6488d7c24084489f9f3a60f8515040000b9380000004429f9b8a5000000"
+            "f3ae0f8500040000b8100000004c89e7be0b29110031d20f054883f8f20f85e5"
+            "030000b8100000004c89e7be0b29110048c7c2ffffffff0f054883f8f20f85c5"
+            "030000b8100000004c89e7be0b2911004889ea0f054883f8f20f85a903000081"
+            "7d002f6465760f859c030000817d042f6d63640f858f03000066837d08300f85"
+            "84030000b80900000031ffbe00200000ba0300000041ba2200000049c7c0ffff"
+            "ffff4531c90f05483d01f0ffff0f83550300004889c3c783fb0f0000a5a5a5a5"
             "c683ff0f0000a5b80a000000488dbb00100000be0010000031d20f054885c00f"
-            "858f000000b8100000004c89e7be0b291100488d93ff0f00000f054883f8f275"
-            "7381bbfb0f0000a5a5a5a57567b80a000000488dbb00100000be00100000ba01"
-            "0000000f054885c0754a488dbb00100000b90010000031c0f3ae7538b8100000"
-            "004c89e7beefbeadde31d20f054883f8ea7521b8100000004c89e7beefbeadde"
-            "48c7c2ffffffff0f054883f8ea75054531edeb0641bd0b0000004885db741ab8"
-            "0b0000004889dfbe002000000f054885c0740641bd0b000000b8030000004c89"
-            "e70f054885c0780c4489efeb13bf0a000000eb0cbf0c000000eb05bf0d000000"
-            "b83c0000000f05"
+            "8523030000b8100000004c89e7be0b291100488d93ff0f00000f054883f8f20f"
+            "850303000081bbfb0f0000a5a5a5a50f85f3020000b80a000000488dbb001000"
+            "00be00100000ba010000000f054885c00f85d2020000488dbb00100000b90010"
+            "000031c0f3ae0f85bc020000b8100000004c89e7beefbeadde31d20f054883f8"
+            "ea0f85a1020000b8100000004c89e7beefbeadde48c7c2ffffffff0f054883f8"
+            "ea0f8581020000b8100000004c89e7be0029110048c7c2ffffffff0f054883f8"
+            "000f8561020000b8100000004c89e7be0029110048c7c2000000000f054883f8"
+            "010f8541020000b8100000004c89e7be0129110048c7c2010000000f054883f8"
+            "000f8521020000b8030000004c89e70f054885c00f855602000049c7c4ffffff"
+            "ffb8b0000000488d7d15be000800000f054883f8f50f85ed010000b802000000"
+            "488d7d00be0200000031d20f054885c00f88d20100004989c4b802000000488d"
+            "7d0abe0200000031d20f054885c00f88b40100004989c6b802000000488d7d0a"
+            "be0200000031d20f054885c00f88960100004989c7b8100000004c89f7be032a"
+            "110048c7c2ffffffff0f054883f8000f8573010000b8100000004c89ffbe142a"
+            "110048c7c2000000000f054883f8000f8553010000b8100000004c89f7be022a"
+            "110048c7c2000000000f054883f8ea0f8533010000b8100000004c89e7be0129"
+            "110048c7c2000000000f054883f8f00f8513010000b8030000004c89f70f0548"
+            "85c00f8548010000b8100000004c89e7be0129110048c7c2000000000f054883"
+            "f8f00f85e0000000b8030000004c89ff0f054885c00f8515010000b810000000"
+            "4c89e7be0129110048c7c2000000000f054883f8000f85ad000000b810000000"
+            "4c89e7be0129110048c7c2000000000f054883f8ea0f858d000000b810000000"
+            "4c89e7be0129110048c7c2400000000f054883f8ea7571b8100000004c89e7be"
+            "0129110048c7c2ffffffff0f054883f8ea7555b802000000488d7d0abe020000"
+            "0031d20f054883f8fe753db8100000004c89e7be0029110048c7c2000000000f"
+            "054883f8007521b8100000004c89e7be0129110048c7c2000000000f054883f8"
+            "0075054531edeb0641bd0b0000004885db741ab80b0000004889dfbe00200000"
+            "0f054885c0740641bd0b0000004489ef4d85e47827b8030000004c89e70f0548"
+            "85c0780c4489efeb13bf0a000000eb0cbf0c000000eb05bf0d000000b83c0000"
+            "000f05"
         ),
     ),
-    "native-rust-runtime-mcd0-ioctl-i386": (
-        bytes.fromhex("bd"),
+    'native-rust-runtime-mcd0-ioctl-i386': (
+        bytes.fromhex('bd'),
         bytes.fromhex(
-            "833c24020f85750200008b74240831c9803c0e00740c4183f9280f875f020000"
-            "ebee85c90f84550200004183ec6089742408894c240cc744240400000000b805"
-            "00000089ebb90200000031d2cd8085c00f881b0200008904248d7c2420b94000"
+            "833c24020f85e30400008b74240831c9803c0e00740c4183f9280f87cd040000"
+            "ebee85c90f84c30400004183ec6089742408894c240cc744240400000000b805"
+            "00000089ebb90200000031d2cd8085c00f88890400008904248d7c2420b94000"
             "0000b8a5000000fcf3aab8360000008b1c24b90b2911008d542428cd8085c00f"
-            "85b0010000817c2420a5a5a5a50f85a2010000817c2424a5a5a5a50f85940100"
-            "008b7424088d7c24288b4c240cf3a60f8580010000b9380000002b4c240cb8a5"
-            "000000f3ae0f856a010000b8360000008b1c24b90b29110031d2cd8083f8f20f"
-            "8550010000b8360000008b1c24b90b291100baffffffffcd8083f8f20f853301"
-            "0000b8360000008b1c24b90b29110089eacd8083f8f20f8519010000817d002f"
-            "6465760f850c010000817d042f6d63640f85ff00000066837d08300f85f40000"
+            "8514040000817c2420a5a5a5a50f8506040000817c2424a5a5a5a50f85f80300"
+            "008b7424088d7c24288b4c240cf3a60f85e4030000b9380000002b4c240cb8a5"
+            "000000f3ae0f85ce030000b8360000008b1c24b90b29110031d2cd8083f8f20f"
+            "85b4030000b8360000008b1c24b90b291100baffffffffcd8083f8f20f859703"
+            "0000b8360000008b1c24b90b29110089eacd8083f8f20f857d030000817d002f"
+            "6465760f8570030000817d042f6d63640f856303000066837d08300f85580300"
             "00b8c000000031dbb900200000ba03000000be22000000bfffffffff5531edcd"
-            "805d3d01f0ffff0f83c800000089442404c780fb0f0000a5a5a5a5c680ff0f00"
-            "00a58d9800100000b87d000000b90010000031d2cd8085c00f85970000008b54"
-            "240481c2ff0f0000b8360000008b1c24b90b291100cd8083f8f275798b542404"
-            "81bafb0f0000a5a5a5a575698d9a00100000b87d000000b900100000ba010000"
-            "00cd8085c0754e8b7c240481c700100000b90010000031c0f3ae7539b8360000"
-            "008b1c24b9efbeadde31d2cd8083f8ea7523b8360000008b1c24b9efbeaddeba"
-            "ffffffffcd8083f8ea750ac744241000000000eb08c74424100b0000008b5c24"
-            "0485db7418b85b000000b900200000cd8085c07408c74424100b000000b80600"
-            "00008b1c24cd8085c0780d8b5c2410eb13bb0a000000eb0cbb0c000000eb05bb"
-            "0d000000b801000000cd80"
+            "805d3d01f0ffff0f832c03000089442404c780fb0f0000a5a5a5a5c680ff0f00"
+            "00a58d9800100000b87d000000b90010000031d2cd8085c00f85fb0200008b54"
+            "240481c2ff0f0000b8360000008b1c24b90b291100cd8083f8f20f85d9020000"
+            "8b54240481bafb0f0000a5a5a5a50f85c50200008d9a00100000b87d000000b9"
+            "00100000ba01000000cd8085c00f85a60200008b7c240481c700100000b90010"
+            "000031c0f3ae0f858d020000b8360000008b1c24b9efbeadde31d2cd8083f8ea"
+            "0f8573020000b8360000008b1c24b9efbeaddebaffffffffcd8083f8ea0f8556"
+            "020000b8360000008b1c24b900291100baffffffffcd8083f8000f8539020000"
+            "b8360000008b1c24b900291100ba00000000cd8083f8010f851c020000b83600"
+            "00008b1c24b901291100ba01000000cd8083f8000f85ff010000b8060000008b"
+            "1c24cd8085c00f853a020000c70424ffffffffb8810000008d5d15b900080000"
+            "cd8083f8f50f85ce010000b8050000008d5d00b90200000031d2cd8085c00f88"
+            "b5010000890424b8050000008d5d0ab90200000031d2cd8085c00f8899010000"
+            "89442414b8050000008d5d0ab90200000031d2cd8085c00f887c010000894424"
+            "18b8360000008b5c2414b9032a1100baffffffffcd8083f8000f855a010000b8"
+            "360000008b5c2418b9142a1100ba00000000cd8083f8000f853c010000b83600"
+            "00008b5c2414b9022a1100ba00000000cd8083f8ea0f851e010000b836000000"
+            "8b1c24b901291100ba00000000cd8083f8f00f8501010000b8060000008b5c24"
+            "14cd8085c00f853b010000b8360000008b1c24b901291100ba00000000cd8083"
+            "f8f00f85d1000000b8060000008b5c2418cd8085c00f850b010000b836000000"
+            "8b1c24b901291100ba00000000cd8083f8000f85a1000000b8360000008b1c24"
+            "b901291100ba00000000cd8083f8ea0f8584000000b8360000008b1c24b90129"
+            "1100ba40000000cd8083f8ea756bb8360000008b1c24b901291100baffffffff"
+            "cd8083f8ea7552b8050000008d5d0ab90200000031d2cd8083f8fe753cb83600"
+            "00008b1c24b900291100ba00000000cd8083f8007523b8360000008b1c24b901"
+            "291100ba00000000cd8083f800750ac744241000000000eb08c74424100b0000"
+            "008b5c240485db7418b85b000000b900200000cd8085c07408c74424100b0000"
+            "008b5c2410833c24007827b8060000008b1c24cd8085c0780d8b5c2410eb13bb"
+            "0a000000eb0cbb0c000000eb05bb0d000000b801000000cd80"
         ),
     ),
 }
 EXPECTED_RUNTIME_HELPER_SEMANTICS = {
     "allocated_sections": [".text", ".rodata"],
-    "device_path_bytes": "/dev/mcd0\0",
+    "device_path_bytes": OS_RUNTIME_RODATA.decode("ascii"),
+    "unbooted_os": dict(OS_LIFECYCLE_POLICY),
     "entry_section": ".text",
     "executable_sections": [".text"],
     "executed_probe_files": [
@@ -626,7 +707,7 @@ EXPECTED_RUNTIME_HELPER_SEMANTICS = {
         "unknown_errno": "EINVAL",
         "unknown_request_arguments": ["null", "all-ones"],
     },
-    "instruction_policy": "exact-v2-with-only-device-address-derived-field",
+    "instruction_policy": "exact-v3-unbooted-os-with-only-base-device-address-derived-field",
     "object_files_shape_only": True,
     "poweroff_executable_replay": False,
     "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack",
@@ -650,16 +731,14 @@ EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
     "1aeba5e6aa024e0fe3e3bd5a5a25fac5f7086299b721e4116443d98a19fc8e2d"
 )
-EXPECTED_EXACT_BUILD_STEP_SHA256 = {
-    "Refuse the wrong runtime and install exact build tools": "acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420",
-    "Check out the exact candidate without credentials": "4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc",
-    "Verify source-only contracts without claiming readiness": "4ef6cb649098f9d023b395ed54cec63a719418f79f64bfc00784d109d099ec2f",
-    "Acquire, patch, and credit-forbidden-stage the exact source": "421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000",
-    "Resolve the evidence-only module configuration twice": "e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943",
-    "Compile the exact kernel and native Rust modules": "17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a",
-    "Validate built metadata and capture immutable diagnostics": "156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c",
-    "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
-}
+EXPECTED_EXACT_BUILD_STEP_SHA256 = {'Refuse the wrong runtime and install exact build tools': 'acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420',
+ 'Check out the exact candidate without credentials': '4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc',
+ 'Verify source-only contracts without claiming readiness': '15d39a8bccc409869d2a54b244bc8e81fefbd257b16732d282c50180f16fb512',
+ 'Acquire, patch, and credit-forbidden-stage the exact source': '421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000',
+ 'Resolve the evidence-only module configuration twice': 'e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943',
+ 'Compile the exact kernel and native Rust modules': '17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a',
+ 'Validate built metadata and capture immutable diagnostics': '156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c',
+ 'Upload compiler evidence or first-failure diagnostics': 'f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9'}
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Initialize non-durable capture and install exact tools": "a89bfbe988001115dbbe5c71135fa75f9ac0a1fe453c98c423e28795f16071ca",
     "Check out the exact capture candidate without credentials": "c7ec10a3531204c964e98632341afa709ad11f1dc7ce872df916beb03c64ab30",
@@ -669,38 +748,17 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Finalize the non-crediting build binding": "3fe1f786cd5e4020a7659a761bd431bf6ed185a15df19b44b5930c02aad6f750",
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
-EXPECTED_RUNTIME_INIT_SHA256 = (
-    "a464c10e82e932adec3eea46f9d1c0f3ed61afe37bd160c76e359110f5894ae9"
-)
-EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
-    "build_workflow": {
-        "git_blob_sha1": "b0d5b0f7875a3607175f870d866ec4bd8ced6dc0",
-        "sha256": "1d771f60386d7e5ea2df8ee64b4e95054420584fc02473eeafe3f803045a437d",
-        "size": 91482,
-    },
-    "runtime_pr_workflow": {
-        "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
-        "sha256": "628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265",
-        "size": 754,
-    },
-    "runtime_workflow": {
-        "git_blob_sha1": "3615a1192707100600079cd766051bddd94660c4",
-        "sha256": "16cac72d13fd7346af2f5b8df35bc8999ea179724497015a5f8a4fabf0da6ab9",
-        "size": 36570,
-    },
-}
-EXPECTED_REPOSITORY_HELPER_IDENTITIES = {
-    "mcd0_ioctl_i386": {
-        "git_blob_sha1": "2d8442bae91ffd797f2ae6f2d37aeb52a41ce87a",
-        "sha256": "4e12ca97688950d464a06ee3e12f866c50e78bedba4865ce44db65a2ff1d5d0d",
-        "size": 4130,
-    },
-    "mcd0_ioctl_x86_64": {
-        "git_blob_sha1": "b56bf216ee875a9a3b1451282da6a627485cafbf",
-        "sha256": "69d2e95dd5e1429b59d8f8ff734b9fe5094361bf2853f37a137f2ebb745322c7",
-        "size": 4118,
-    },
-}
+EXPECTED_RUNTIME_INIT_SHA256 = 'ee98e6536a7d75907eb08c3eb2eaacddc4ee651d46a8263bf36b3e3999f7a5a5'
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '00c92532178894eb11bc0c39dd87cc9737ac34a606fc885bc19bb95b9baaf3e7',
+                    'size': 91530,
+                    'git_blob_sha1': '124a8e90781a4cbf06664ff5175410f0a91e61dd'},
+ 'runtime_pr_workflow': {'git_blob_sha1': '64bb717852d36fc1021e2b61e83aca6415b184d5',
+                         'sha256': '628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265',
+                         'size': 754},
+ 'runtime_workflow': {'git_blob_sha1': '3615a1192707100600079cd766051bddd94660c4',
+                      'sha256': '16cac72d13fd7346af2f5b8df35bc8999ea179724497015a5f8a4fabf0da6ab9',
+                      'size': 36570}}
+EXPECTED_REPOSITORY_HELPER_IDENTITIES = {'mcd0_ioctl_x86_64': {'git_blob_sha1': '39d2845b0f43025d1a83b50edd04311b4807041e', 'sha256': 'd12b76eb3263b7133357a45005ec5e3ea60e2fb42e207617b98ecc112e22c1d0', 'size': 6982}, 'mcd0_ioctl_i386': {'git_blob_sha1': '252f2886b929a3e04c8fd5c6d6a50492cfae85f7', 'sha256': 'd6563cf8b0c6de7e4dcef862b02882372ba032524ce0632cd3a239841d6c2604', 'size': 7098}}
 BUILD_KERNEL_TARGETS = ["bzImage"]
 BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -3456,7 +3514,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "native_ioctl_expected_errno": "EINVAL",
             "node_removed_after_smp_unload": True,
             "operation_callbacks_reachable": False,
-            "os_operations_reachable": False,
+            "os_operations_reachable": True,
+            "unbooted_os": dict(OS_LIFECYCLE_POLICY),
             "open_receipt": {
                 "duplicate_close_detectable_while_other_references_exist": False,
                 "same_generation_token_may_repeat": True,
@@ -3480,7 +3539,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "sequential_open_count": MCD0_SEQUENTIAL_OPEN_COUNT,
             "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
             "tracker_credit": False,
-            "valid_operation_commands": ["IHK_DEVICE_GET_BUILDID"],
+            "valid_operation_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
         },
         "provider_lease": {
             "attach_after_ihk_load": True,
@@ -4035,6 +4094,11 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "{ fail wrong-users-after-mcctrl; exit 1; }"
     ) != 1:
         raise EvidenceError("runtime init sole-provider-user grammar differs")
+    for _label, marker in OS_LIFECYCLE_MARKERS:
+        command = 'record "' + marker.removeprefix(PROTOCOL + " ") + '"'
+        if init.count(command) != 1:
+            raise EvidenceError("runtime init OS lifecycle receipt differs")
+
     if _sha256_bytes(init.encode("utf-8")) != EXPECTED_RUNTIME_INIT_SHA256:
         raise EvidenceError("runtime init identity differs")
     if re.search(r"\bpass\b", init, re.IGNORECASE) or "credit=eligible" in init:
@@ -4444,7 +4508,7 @@ def _validate_runtime_probe_elf(
         or rodata_section[2] != 0x2
         or rodata_section[3] != layout["rodata_address"]
         or rodata_section[4] != 0x2000
-        or rodata_section[5] != 10
+        or rodata_section[5] != len(OS_RUNTIME_RODATA)
         or rodata_section[6:] != (0, 0, 1, 0)
         or shstr_section[1] != 3
         or shstr_section[2] != 0
@@ -4467,7 +4531,7 @@ def _validate_runtime_probe_elf(
     )
     prefix, suffix = RUNTIME_PROBE_TEXT_TEMPLATE[name]
     if (
-        rodata != b"/dev/mcd0\0"
+        rodata != OS_RUNTIME_RODATA
         or len(text) != len(prefix) + 4 + len(suffix)
         or text[: len(prefix)] != prefix
         or text[len(prefix) + 4 :] != suffix
@@ -6274,6 +6338,7 @@ def validate_serial(
         ("dmesg end", "{0} DMESG_END".format(PROTOCOL)),
         ("complete", complete),
     ]
+    exact_runtime_markers.extend(OS_LIFECYCLE_MARKERS)
     marker_positions = {
         label: _unique_exact_line(lines, marker, label)
         for label, marker in exact_runtime_markers
@@ -6444,7 +6509,9 @@ def validate_serial(
         "mcd0 overlapping",
         "mcd0 buildid",
         "mcd0 native ioctl",
+        "os cycle=0 abi=x86_64",
         "mcd0 compat ioctl",
+        "os cycle=0 abi=i386",
         "mcd0 negative",
         "mcd0 negative output begin",
         "mcd0 negative output end",
@@ -6468,6 +6535,8 @@ def validate_serial(
         "reload smp",
         "reload mcctrl",
         "reload refcount",
+        "os cycle=1 abi=x86_64",
+        "os cycle=1 abi=i386",
         "mcd0 reload",
         "reload unload mcctrl",
         "reload unload smp",
@@ -6578,7 +6647,7 @@ def validate_serial(
         ["acquire", "release"] * MCD0_SEQUENTIAL_OPEN_COUNT
         + ["acquire"] * MCD0_OVERLAPPING_OPEN_COUNT
         + ["release"] * MCD0_OVERLAPPING_OPEN_COUNT
-        + ["acquire", "release"] * 2
+        + ["acquire", "release"] * 4
         + ["acquire", "release"]
     )
     expected_reload_open_trace = ["acquire", "release"] * MCD0_RELOAD_OPEN_COUNT
@@ -6614,13 +6683,13 @@ def validate_serial(
             "native ioctl",
             marker_positions["mcd0 overlapping"],
             marker_positions["mcd0 native ioctl"],
-            ["acquire", "release"],
+            ["acquire", "release"] * 2,
         ),
         (
             "compat ioctl",
             marker_positions["mcd0 native ioctl"],
             marker_positions["mcd0 compat ioctl"],
-            ["acquire", "release"],
+            ["acquire", "release"] * 2,
         ),
         (
             "held open",
@@ -6644,6 +6713,29 @@ def validate_serial(
     for label, start, finish, expected in live_sections:
         if live_events_between(start, finish) != expected:
             raise EvidenceError("{0} provider open/release trace differs".format(label))
+
+    timestamp_prefix_os = re.compile(r"^(?:\[ *[0-9]+(?:\.[0-9]+)?\] +)?")
+
+    def os_trace(segment):
+        return [timestamp_prefix_os.sub("", line, count=1) for line in segment
+                if "ihk: os=" in line or "ihk: os_family=" in line]
+
+    expected_os_trace = ([OS_FAMILY_REGISTER] + OS_PROBE_TRACE * 2 + [OS_FAMILY_REMOVE]) * 2
+    if os_trace(lines[:dmesg_start]) != expected_os_trace or os_trace(dmesg_lines) != expected_os_trace:
+        raise EvidenceError("OS lifecycle live/dmesg ownership trace differs")
+    if os_trace(lines[:marker_positions["begin"]]) or os_trace(lines[dmesg_finish + 1:]):
+        raise EvidenceError("OS lifecycle diagnostics lie outside the capture windows")
+    os_probe_starts = ["mcd0 buildid", "os cycle=0 abi=x86_64", "reload refcount", "os cycle=1 abi=x86_64"]
+    for start_label, (end_label, _marker) in zip(os_probe_starts, OS_LIFECYCLE_MARKERS):
+        if os_trace(lines[marker_positions[start_label] + 1:marker_positions[end_label]]) != OS_PROBE_TRACE:
+            raise EvidenceError("OS lifecycle per-ABI probe trace differs")
+    for cycle, (load_label, unload_label) in enumerate((("ihk load", "ihk unload"), ("reload ihk", "reload unload ihk"))):
+        before_load = os_trace(lines[:marker_positions[load_label]])
+        before_unload = os_trace(lines[:marker_positions[unload_label]])
+        if len(before_load) != cycle * 14 + 1 or before_load[-1] != OS_FAMILY_REGISTER:
+            raise EvidenceError("OS character-device registration ordering differs")
+        if len(before_unload) != (cycle + 1) * 14 or before_unload[-1] != OS_FAMILY_REMOVE:
+            raise EvidenceError("OS character-device teardown ordering differs")
 
     lifecycle_positions = {
         label: [position for position, _match in _kernel_diagnostic_matches(
@@ -6785,7 +6877,8 @@ def validate_serial(
                 "same_generation_token_may_repeat": True,
                 "trusted_noncopy_owner_balance_required": True,
             },
-            "os_operations_reachable": False,
+            "os_operations_reachable": True,
+            "unbooted_os": dict(OS_LIFECYCLE_POLICY),
             "overlapping_open_count": MCD0_OVERLAPPING_OPEN_COUNT,
             "provider_open_acquire_count_per_trace": (
                 MCD0_PROVIDER_OPEN_COUNT_PER_TRACE
@@ -6805,7 +6898,7 @@ def validate_serial(
             "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
             "tracker_credit": False,
             "unknown_ioctl_command": "0xdeadbeef",
-            "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
+            "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
         },
         "negative_unload_status": int(negative_records[0].group(1)),
         "provider_lease": {
@@ -7339,7 +7432,8 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
             "same_generation_token_may_repeat": True,
             "trusted_noncopy_owner_balance_required": True,
         },
-        "os_operations_reachable": False,
+        "os_operations_reachable": True,
+            "unbooted_os": dict(OS_LIFECYCLE_POLICY),
         "overlapping_open_count": MCD0_OVERLAPPING_OPEN_COUNT,
         "provider_open_acquire_count_per_trace": MCD0_PROVIDER_OPEN_COUNT_PER_TRACE,
         "provider_open_release_count_per_trace": MCD0_PROVIDER_OPEN_COUNT_PER_TRACE,
@@ -7355,7 +7449,7 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
         "tracker_credit": False,
         "unknown_ioctl_command": "0xdeadbeef",
-        "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID"],
+        "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
     }
     if not _exact_typed_equal(mcd0, expected_mcd0):
         raise EvidenceError("capture mcd0 runtime summary differs")

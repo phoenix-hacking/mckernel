@@ -195,9 +195,9 @@ class NativeRustHostAuditTests(unittest.TestCase):
                 'fn ihk_smp_provider_close_v1(receipt: u64);',
             ),
             (
-                '    fn ihk_smp_provider_close_v1(receipt: i64);\n}',
+                '    fn ihk_smp_provider_close_v1(receipt: i64);',
                 '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
-                '    fn unreviewed_provider_call();\n}',
+                '    fn unreviewed_provider_call();',
             ),
             (
                 'type IhkSmpProviderExitV2 = extern "C" fn();',
@@ -286,7 +286,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
                     host_audit.main()
 
         smp_blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[smp])
-        provider_import = smp_blocks["IHK SMP five-symbol provider import"]
+        provider_import = smp_blocks["IHK SMP provider and OS import"]
         self.mutate_resealed_source(
             smp,
             provider_import,

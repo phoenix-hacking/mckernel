@@ -594,7 +594,7 @@ class Rk007BuildReviewTests(unittest.TestCase):
     def test_checked_policy_rejects_unreviewed_port_records(self):
         base = copy.deepcopy(self.review)
         policy = base["current_repository_input_policy"]
-        self.assertEqual(policy["current_override_count"], 8)
+        self.assertEqual(policy["current_override_count"], 9)
         self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
         self.assertEqual(
             [row["path"] for row in policy["current_overrides"]],
@@ -604,6 +604,7 @@ class Rk007BuildReviewTests(unittest.TestCase):
                 "host-kernel/kbuild/stage-manifest.json",
                 "host-kernel/native-rust/abi/x86_64.rs",
                 "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_ioctl.rs",
                 "host-kernel/native-rust/ihk_smp_x86_64.rs",
                 "host-kernel/rocky/configs/native-rust-evidence.config",
                 "scripts/rocky_rust_staging.py",

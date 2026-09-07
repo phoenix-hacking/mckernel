@@ -83,7 +83,7 @@
         ".text",
         ".rodata"
       ],
-      "device_path_bytes": "/dev/mcd0\u0000",
+      "device_path_bytes": "/dev/mcd0\u0000/dev/mcos0\u0000ihk_smp_x86_64\u0000",
       "entry_section": ".text",
       "executable_sections": [
         ".text"
@@ -117,10 +117,29 @@
           "all-ones"
         ]
       },
-      "instruction_policy": "exact-v2-with-only-device-address-derived-field",
+      "instruction_policy": "exact-v3-unbooted-os-with-only-base-device-address-derived-field",
       "object_files_shape_only": true,
       "poweroff_executable_replay": false,
-      "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack"
+      "program_header_policy": "three-exact-loads-plus-nonexecuting-gnu-stack",
+      "unbooted_os": {
+        "abis": [
+          "x86_64",
+          "i386"
+        ],
+        "booted_teardown_proven": false,
+        "busy_destroy_errno": -16,
+        "creates_per_trace": 12,
+        "cycles": 2,
+        "destroys_per_trace": 12,
+        "kmsg_bytes_per_instance": 4194304,
+        "module_pin_checked_with_all_device_files_closed": true,
+        "module_pin_errno": -11,
+        "node_removed_and_minor_reused": true,
+        "resource_assignment_proven": false,
+        "scope": "unbooted create/status/destroy only",
+        "status": 0,
+        "tracker_credit": false
+      }
     },
     "size_limits_bytes": {
       "build_evidence_file_max": 1073741824,
@@ -181,7 +200,9 @@
         "ihk_smp_provider_attach_v2",
         "ihk_smp_provider_detach_v2",
         "ihk_smp_provider_open_v1",
-        "ihk_smp_provider_close_v1"
+        "ihk_smp_provider_close_v1",
+        "ihk_os_create_unbooted_v1",
+        "ihk_os_destroy_unbooted_v1"
       ],
       "depends": [],
       "file": "ihk.ko",
@@ -192,7 +213,9 @@
         "ihk_smp_provider_attach_v2",
         "ihk_smp_provider_detach_v2",
         "ihk_smp_provider_open_v1",
-        "ihk_smp_provider_close_v1"
+        "ihk_smp_provider_close_v1",
+        "ihk_os_create_unbooted_v1",
+        "ihk_os_destroy_unbooted_v1"
       ],
       "import_namespace": null,
       "name": "ihk",
@@ -210,7 +233,9 @@
         "ihk_smp_provider_attach_v2",
         "ihk_smp_provider_detach_v2",
         "ihk_smp_provider_open_v1",
-        "ihk_smp_provider_close_v1"
+        "ihk_smp_provider_close_v1",
+        "ihk_os_create_unbooted_v1",
+        "ihk_os_destroy_unbooted_v1"
       ]
     },
     {
@@ -238,7 +263,7 @@
       "device_node_identity_policy": "st_rdev-equals-sysfs-major-minor",
       "device_path": "/dev/mcd0",
       "diagnostic_segments": 2,
-      "first_cycle_open_count": 15,
+      "first_cycle_open_count": 17,
       "gate_pass": false,
       "gate_status": "TODO",
       "get_buildid": {
@@ -264,23 +289,44 @@
         "trusted_noncopy_owner_balance_required": true
       },
       "operation_callbacks_reachable": false,
-      "os_operations_reachable": false,
+      "os_operations_reachable": true,
       "overlapping_open_count": 8,
-      "provider_open_acquire_count_per_trace": 18,
+      "provider_open_acquire_count_per_trace": 22,
       "provider_open_acquire_diagnostic": "ihk: provider_open=acquire status=live minor=0",
-      "provider_open_release_count_per_trace": 18,
+      "provider_open_release_count_per_trace": 22,
       "provider_open_release_diagnostic": "ihk: provider_open=release status=complete minor=0",
       "provider_registry_minor": 0,
       "reload_cycles": 1,
-      "reload_open_count": 3,
+      "reload_open_count": 5,
       "resource_operations_reachable": false,
       "rocky_runtime_validated": false,
       "runtime_behavior_proven": false,
       "sequential_open_count": 4,
       "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
       "tracker_credit": false,
+      "unbooted_os": {
+        "abis": [
+          "x86_64",
+          "i386"
+        ],
+        "booted_teardown_proven": false,
+        "busy_destroy_errno": -16,
+        "creates_per_trace": 12,
+        "cycles": 2,
+        "destroys_per_trace": 12,
+        "kmsg_bytes_per_instance": 4194304,
+        "module_pin_checked_with_all_device_files_closed": true,
+        "module_pin_errno": -11,
+        "node_removed_and_minor_reused": true,
+        "resource_assignment_proven": false,
+        "scope": "unbooted create/status/destroy only",
+        "status": 0,
+        "tracker_credit": false
+      },
       "valid_operation_commands": [
-        "IHK_DEVICE_GET_BUILDID"
+        "IHK_DEVICE_GET_BUILDID",
+        "IHK_DEVICE_CREATE_OS",
+        "IHK_DEVICE_DESTROY_OS"
       ]
     },
     "provider_lease": {
@@ -341,14 +387,14 @@
   },
   "repository_helper_identities": {
     "mcd0_ioctl_i386": {
-      "git_blob_sha1": "2d8442bae91ffd797f2ae6f2d37aeb52a41ce87a",
-      "sha256": "4e12ca97688950d464a06ee3e12f866c50e78bedba4865ce44db65a2ff1d5d0d",
-      "size": 4130
+      "git_blob_sha1": "252f2886b929a3e04c8fd5c6d6a50492cfae85f7",
+      "sha256": "d6563cf8b0c6de7e4dcef862b02882372ba032524ce0632cd3a239841d6c2604",
+      "size": 7098
     },
     "mcd0_ioctl_x86_64": {
-      "git_blob_sha1": "b56bf216ee875a9a3b1451282da6a627485cafbf",
-      "sha256": "69d2e95dd5e1429b59d8f8ff734b9fe5094361bf2853f37a137f2ebb745322c7",
-      "size": 4118
+      "git_blob_sha1": "39d2845b0f43025d1a83b50edd04311b4807041e",
+      "sha256": "d12b76eb3263b7133357a45005ec5e3ea60e2fb42e207617b98ecc112e22c1d0",
+      "size": 6982
     }
   },
   "repository_inputs": {
@@ -384,9 +430,9 @@
   },
   "repository_workflow_identities": {
     "build_workflow": {
-      "git_blob_sha1": "b0d5b0f7875a3607175f870d866ec4bd8ced6dc0",
-      "sha256": "1d771f60386d7e5ea2df8ee64b4e95054420584fc02473eeafe3f803045a437d",
-      "size": 91482
+      "git_blob_sha1": "124a8e90781a4cbf06664ff5175410f0a91e61dd",
+      "sha256": "00c92532178894eb11bc0c39dd87cc9737ac34a606fc885bc19bb95b9baaf3e7",
+      "size": 91530
     },
     "runtime_pr_workflow": {
       "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",

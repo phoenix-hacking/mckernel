@@ -102,9 +102,9 @@
   },
   "readiness": {
     "blockers": [
-      "the registry is privately attached to ihk.rs, but create/destroy entry points are not wired",
+      "the unbooted native adapter requires exact-kernel build and device-lifetime review",
       "exact Rocky Linux 6.12 Kbuild and module-load evidence for this source is absent",
-      "legacy create/destroy callbacks, cdev publication, kmsg ownership, and device teardown are not connected",
+      "booted provider callbacks, shared kmsg readers and full OS teardown remain unimplemented",
       "the transition graph and errno bridge require independent review against runtime provider behavior"
     ],
     "credit_eligible": false,

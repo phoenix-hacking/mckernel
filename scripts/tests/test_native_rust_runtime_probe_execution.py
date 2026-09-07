@@ -80,15 +80,17 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
         return result
 
     def _read_path(self, child, address):
-        buffer = ctypes.create_string_buffer(10)
-        local = _Iovec(ctypes.addressof(buffer), 10)
-        remote = _Iovec(address, 10)
+        buffer = ctypes.create_string_buffer(64)
+        local = _Iovec(ctypes.addressof(buffer), 64)
+        remote = _Iovec(address, 64)
         count = self.libc.process_vm_readv(child, ctypes.byref(local), 1,
                                          ctypes.byref(remote), 1, 0)
         if count < 0 and ctypes.get_errno() in (errno.EPERM, errno.ENOSYS):
             raise unittest.SkipTest("own-child process_vm_readv unavailable")
-        self.assertEqual(10, count, "cannot read traced probe's fixed device path")
-        return buffer.raw
+        self.assertGreater(count, 0, "cannot read traced probe's fixed path")
+        value = buffer.raw[:count]
+        self.assertIn(b"\0", value)
+        return value.split(b"\0", 1)[0]
 
     def _copy_payload(self, child, address, payload):
         buffer = ctypes.create_string_buffer(payload, len(payload))
@@ -142,8 +144,11 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
             entering = True
             override = None
             synthetic_fd = 900
+            descriptors = {}
+            instances = set()
+            next_fd = synthetic_fd
             get_count = 0
-            for unused in range(128):
+            for unused in range(256):
                 self._ptrace(24, child)  # PTRACE_SYSCALL
                 status = wait_status()
                 if os.WIFEXITED(status):
@@ -160,13 +165,53 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
                     override = None
                     number = registers.orig_rax
                     if number == 2:  # open: never dispatch to a real device
-                        self.assertEqual(b"/dev/mcd0\0", self._read_path(child, registers.rdi))
+                        path = self._read_path(child, registers.rdi)
+                        self.assertIn(path, (b"/dev/mcd0", b"/dev/mcos0"))
                         self.assertEqual(2, registers.rsi)
-                        override = -errno.EACCES if mutation == "open_errno" else synthetic_fd
-                        events.append(("open", override))
+                        if mutation == "open_errno":
+                            override = -errno.EACCES
+                        elif path == b"/dev/mcos0" and 0 not in instances:
+                            override = -errno.ENOENT
+                            if mutation == "node_remains":
+                                override = next_fd
+                        else:
+                            override = next_fd
+                        if override >= 0:
+                            descriptors[next_fd] = "control" if path == b"/dev/mcd0" else "os"
+                            next_fd += 1
+                        events.append(("open", override, path))
                     elif number == 16:  # ioctl on the synthetic descriptor
-                        self.assertEqual(synthetic_fd, registers.rdi)
-                        if registers.rsi == 0x11290b:
+                        self.assertIn(registers.rdi, descriptors)
+                        kind = descriptors[registers.rdi]
+                        if kind == "os":
+                            self.assertIn(registers.rsi, (0x112a03, 0x112a14, 0x112a02))
+                            override = -errno.EINVAL if registers.rsi == 0x112a02 else 0
+                            if mutation == "status" and registers.rsi != 0x112a02:
+                                override = 1
+                            if mutation == "boot_accepted" and registers.rsi == 0x112a02:
+                                override = 0
+                            events.append(("os_ioctl", registers.rsi, override))
+                        elif registers.rsi == 0x112900:
+                            override = next(index for index in range(64) if index not in instances)
+                            instances.add(override)
+                            if mutation == "wrong_minor":
+                                override += 1
+                            events.append(("create", override))
+                        elif registers.rsi == 0x112901:
+                            minor = registers.rdx
+                            if minor not in instances:
+                                override = -errno.EINVAL
+                                if mutation == "invalid_destroy":
+                                    override = 0
+                            elif minor == 0 and "os" in descriptors.values():
+                                override = -errno.EBUSY
+                                if mutation == "open_destroy":
+                                    override = 0
+                            else:
+                                instances.remove(minor)
+                                override = 0
+                            events.append(("destroy", minor, override))
+                        elif registers.rsi == 0x11290b:
                             get_count += 1
                             payload = identity.encode("ascii") + b"\0"
                             if get_count == 1:
@@ -188,9 +233,18 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
                             override = -errno.ENOTTY if mutation == "unknown_errno" else -errno.EINVAL
                             events.append(("unknown", override))
                     elif number == 3:  # close synthetic fd, never a real fd
-                        self.assertEqual(synthetic_fd, registers.rdi)
+                        self.assertIn(registers.rdi, descriptors)
                         override = -errno.EBADF if mutation == "close_errno" else 0
+                        if override == 0:
+                            del descriptors[registers.rdi]
                         events.append(("close", override))
+                    elif number == 176:  # delete_module: always suppressed, never touch host
+                        self.assertEqual(b"ihk_smp_x86_64", self._read_path(child, registers.rdi))
+                        self.assertEqual(0x800, registers.rsi)
+                        self.assertEqual({}, descriptors, "OS pin test still has an open file")
+                        self.assertEqual({0}, instances)
+                        override = 0 if mutation == "module_unpinned" else -errno.EWOULDBLOCK
+                        events.append(("unload", override))
                     else:
                         self.assertIn(number, (9, 10, 11, 60), "unexpected probe syscall")
                         events.append(("real", number))
@@ -222,7 +276,11 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
                 self.assertIn(gets[4][1], (-1, 1))
                 self.assertEqual(-errno.EFAULT, gets[4][3])
                 self.assertEqual(2, len([event for event in events if event[0] == "unknown"]))
-                self.assertEqual(1, len([event for event in events if event[0] == "close"]))
+                self.assertEqual(4, len([event for event in events if event[0] == "close"]))
+                self.assertEqual([0, 1, 0], [event[1] for event in events if event[0] == "create"])
+                self.assertEqual([1, 0, 0], [event[1] for event in events if event[0] == "destroy" and event[2] == 0])
+                self.assertEqual(2, len([event for event in events if event[0] == "destroy" and event[2] == -errno.EBUSY]))
+                self.assertIn(("unload", -errno.EWOULDBLOCK), events)
                 self.assertEqual([9, 10, 10, 11, 60], [event[1] for event in events if event[0] == "real"])
 
     def test_simulated_bad_copy_or_return_values_fail_the_executed_probe(self):
@@ -240,6 +298,13 @@ class NativeRustProbeSyscallSimulationTests(unittest.TestCase):
                 self.assertEqual(expected, code)
                 if mutation == "open_errno":
                     self.assertFalse(any(event[0] in ("get_buildid", "close") for event in events))
+
+    def test_simulated_lifecycle_regressions_fail_the_executed_probe(self):
+        for mutation in ("wrong_minor", "status", "boot_accepted", "open_destroy",
+                         "invalid_destroy", "node_remains", "module_unpinned"):
+            with self.subTest(mutation=mutation):
+                code, _events = self._simulate("a1b2c3d", mutation)
+                self.assertEqual(11, code)
 
 
 if __name__ == "__main__":

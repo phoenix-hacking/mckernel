@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
-/* Freestanding i386 compat mcd0 GET_BUILDID and error-boundary runtime probe.
+/* Freestanding i386 compat mcd0 GET_BUILDID, unbooted OS lifecycle and error-boundary probe.
  * argv[1] is the exact stage-lock IHK compatibility identity, without NUL.
  * Exit: 10 open, 11 ioctl/copy/guard/setup, 12 close, 13 bad expected identity.
  */
@@ -7,6 +7,10 @@
 	.section .rodata
 mcd0_path:
 	.asciz "/dev/mcd0"
+mcos0_path:
+	.asciz "/dev/mcos0"
+smp_module_name:
+	.asciz "ihk_smp_x86_64"
 
 	.section .text
 	.globl _start
@@ -162,6 +166,166 @@ _start:
 	int $0x80
 	cmp $-22, %eax
 	jne .Lioctl_failed
+
+	/* Create distinct unbooted instances; scalar create arguments are ignored. */
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112900, %ecx
+	mov $-1, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112900, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $1, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $1, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+
+	/* An instance pins SMP even with every control and OS file closed. */
+	mov $6, %eax
+	mov (%esp), %ebx
+	int $0x80
+	test %eax, %eax
+	jne .Lclose_failed
+	movl $-1, (%esp)
+	mov $129, %eax
+	lea 21(%ebp), %ebx
+	mov $0x800, %ecx
+	int $0x80
+	cmp $-11, %eax			/* -EWOULDBLOCK, Linux live-reference refusal. */
+	jne .Lioctl_failed
+	mov $5, %eax
+	lea 0(%ebp), %ebx
+	mov $2, %ecx
+	xor %edx, %edx
+	int $0x80
+	test %eax, %eax
+	js .Lioctl_failed
+	mov %eax, (%esp)
+
+	/* Two independent opens keep destruction busy until the final release. */
+	mov $5, %eax
+	lea 10(%ebp), %ebx
+	mov $2, %ecx
+	xor %edx, %edx
+	int $0x80
+	test %eax, %eax
+	js .Lioctl_failed
+	mov %eax, 20(%esp)
+	mov $5, %eax
+	lea 10(%ebp), %ebx
+	mov $2, %ecx
+	xor %edx, %edx
+	int $0x80
+	test %eax, %eax
+	js .Lioctl_failed
+	mov %eax, 24(%esp)
+	mov $54, %eax
+	mov 20(%esp), %ebx
+	mov $0x112a03, %ecx
+	mov $-1, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov 24(%esp), %ebx
+	mov $0x112a14, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov 20(%esp), %ebx
+	mov $0x112a02, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $-22, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $-16, %eax
+	jne .Lioctl_failed
+	mov $6, %eax
+	mov 20(%esp), %ebx
+	int $0x80
+	test %eax, %eax
+	jne .Lclose_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $-16, %eax
+	jne .Lioctl_failed
+	mov $6, %eax
+	mov 24(%esp), %ebx
+	int $0x80
+	test %eax, %eax
+	jne .Lclose_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+
+	/* Dead/invalid minors fail, the node disappears, and zero can be reused. */
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $-22, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $64, %edx
+	int $0x80
+	cmp $-22, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $-1, %edx
+	int $0x80
+	cmp $-22, %eax
+	jne .Lioctl_failed
+	mov $5, %eax
+	lea 10(%ebp), %ebx
+	mov $2, %ecx
+	xor %edx, %edx
+	int $0x80
+	cmp $-2, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112900, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+	mov $54, %eax
+	mov (%esp), %ebx
+	mov $0x112901, %ecx
+	mov $0, %edx
+	int $0x80
+	cmp $0, %eax
+	jne .Lioctl_failed
+
 	movl $0, 16(%esp)
 	jmp .Lclose_device
 
@@ -178,6 +342,9 @@ _start:
 	jz .Lclose_fd
 	movl $11, 16(%esp)
 .Lclose_fd:
+	mov 16(%esp), %ebx
+	cmpl $0, (%esp)
+	js .Lexit
 	mov $6, %eax			/* __NR_close */
 	mov (%esp), %ebx
 	int $0x80

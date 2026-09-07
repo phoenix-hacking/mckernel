@@ -43,7 +43,7 @@
     "minimum_rustc": "1.92.0",
     "no_std_library_mode": true,
     "path": "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
-    "sha256": "d8cf6958ab86b2251b74cb73581d513ae583ce18d5994854af5db41ae03c56bf",
+    "sha256": "b5d9f8f94c198ad09b40dac94e1b9460b8cc905062de314ce87fe314d55f65a0",
     "test_count": 10,
     "toolchain_identity": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
   },
@@ -53,9 +53,9 @@
     "attached_private": true,
     "ffi_free": true,
     "path": "host-kernel/native-rust/ihk_ioctl.rs",
-    "registration_supported": false,
-    "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
-    "size": 9977,
+    "registration_supported": true,
+    "sha256": "bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958",
+    "size": 9739,
     "user_copy_reachable": false
   },
   "legacy_capture": {
@@ -78,9 +78,9 @@
   "readiness": {
     "blockers": [
       "exact Rocky Linux 6.12 has no supported Rust miscdevice, cdev, file_operations, or ioctl callback registration API",
-      "the privately attached decoder has no userspace-reachable registration or file-operation adapter",
-      "safe UserSlice copy primitives exist, but no supported ioctl callback can supply a userspace argument to them",
-      "legacy provider callbacks, kmsg ownership, cdev publication, device-model publication, and teardown are not connected",
+      "the unbooted native adapter requires exact-kernel build and device-lifetime review",
+      "this scalar dispatcher implements no pointer-bearing OS operation or user-copy path",
+      "booted provider callbacks, shared kmsg readers and full OS teardown remain unimplemented",
       "exact Kbuild, module-load, ioctl, and teardown runtime evidence for this dispatcher is absent"
     ],
     "credit_eligible": false,
