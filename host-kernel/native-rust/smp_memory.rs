@@ -1178,6 +1178,11 @@ impl MemoryContext {
         self.require_unstarted(owner)?;
         let loaded = self.images[owner.slot() as usize].as_mut().ok_or(EINVAL)?;
         let boot_abi = loaded.native_boot_abi.ok_or(EINVAL)?;
+        // Older native images remain loadable, but cannot safely reuse reply
+        // slots. Reject them before taking the trampoline or preparing startup.
+        if !boot_abi.completed_queue_reads {
+            return Err(EINVAL);
+        }
         let (layout, entry, root) = (loaded.layout, loaded.entry, loaded.tables.plan.root());
         loaded.boot.take();
         if kmsg == 0

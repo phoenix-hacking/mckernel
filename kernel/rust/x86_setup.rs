@@ -181,7 +181,7 @@ static NATIVE_BOOT_NOTE: NativeBootNote = NativeBootNote {
     kind: 0x4d43_4b01,
     name: *b"MCKERNEL\0\0\0\0",
     descriptor: [
-        1,
+        crate::ikc_queue::NATIVE_QUEUE_ABI_VERSION,
         0x0006_0c00,
         core::mem::size_of::<SmpBootParam>() as u32,
         cfg!(enable_perf) as u32,

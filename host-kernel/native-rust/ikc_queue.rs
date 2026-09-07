@@ -82,6 +82,37 @@ unsafe impl Send for SharedQueue<'_> {}
 // producer cannot reuse a slot until its sole local consumer finishes copying.
 unsafe impl Sync for SharedQueue<'_> {}
 
+/// A producer-only view of a queue whose remote reader releases after copying.
+/// This capability cannot accidentally create a second local dequeue owner.
+pub(crate) struct SharedProducer<'mapping>(SharedQueue<'mapping>);
+
+impl<'mapping> SharedProducer<'mapping> {
+    /// # Safety
+    ///
+    /// The aligned mapping must stay live for `'mapping`, have immutable valid
+    /// metadata and no aliasing Rust references. All peer readers must serialize
+    /// their claims and release-publish consumption only after finishing packet
+    /// access (native boot note revision 2). Producers obey aligned atomic
+    /// reservation/publication and the non-sleeping, IRQ exclusion progress rule
+    /// of `try_enqueue`. No peer may reset counters or mutate a published slot.
+    // SAFETY: The caller supplies the mapping and compatible peer ownership.
+    pub(crate) unsafe fn attach(
+        head: *mut IhkIkcQueueHead,
+        mapping_bytes: usize,
+    ) -> Result<Self, QueueError> {
+        // SAFETY: Only producer operations are exposed on this private view.
+        unsafe { SharedQueue::storage_view(head, mapping_bytes).map(Self) }
+    }
+
+    pub(crate) fn snapshot(&self) -> Result<QueueSnapshot, QueueError> {
+        self.0.snapshot()
+    }
+
+    pub(crate) fn try_enqueue(&self, packet: &[u8]) -> Result<(), QueueError> {
+        self.0.try_enqueue(packet)
+    }
+}
+
 impl<'mapping> SharedQueue<'mapping> {
     /// Initialize a queue in exclusively owned, suitably aligned storage.
     pub(crate) fn initialize(

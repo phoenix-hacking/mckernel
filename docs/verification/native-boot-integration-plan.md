@@ -225,3 +225,49 @@ initial-publication restriction until the guest's consumption protocol supports
 safe repeated slot reuse, then finish declared staging and current FFI/lifecycle/
 license/verification bindings and a fresh complete suite. No production gate or
 native shutdown evidence is promoted by the initial exchange.
+
+## Repeated native queue exchange
+
+Before listener acceptance, adapt the existing guest
+`kernel/rust/ikc_queue.rs::{ihk_ikc_read_queue,ihk_ikc_read_queue_handler}`
+under the established `native_linux_irq_work_v6_12` selection. These bodies
+currently publish consumption before copying or invoking a borrowed-packet
+handler. Retain the legacy selection and C fallback. The native selection will
+claim the existing reserved header word at offset 60, hold the claim throughout
+the read/handler, then release-publish consumption. A contending or reentrant
+reader returns EBUSY instead of spinning in an interrupt. Shared native counter
+reads must use aligned atomics. Header sizes, exported functions, packet formats
+and existing caller ownership remain unchanged; callbacks cannot retain a slot
+pointer after returning.
+
+Reuse the host queue's existing private storage view and checked enqueue body
+through a producer-only `SharedProducer` capability. Its unsafe attachment
+contract requires the peer's copy-before-release consumption rule; it exposes
+no dequeue operation. Preserve the stricter existing `SharedQueue::attach`
+contract and the one-publication legacy adapter. Advertise this peer contract
+as native boot note revision 2, emitted by the existing guest ABI consumer.
+Keep revision 1 images loadable for historical comparisons, but reject their
+native boot preparation before any startup effect. Reuse `ImagePlan` parsing
+and fixtures for both supported revisions and unsupported-note rejection.
+
+Verify the actual guest Rust readers against the actual native host producer,
+including several producers/readers, tiny queues, repeated slot reuse and a
+paused borrowed-packet handler. Reuse the pinned complete C queue bodies and
+header with the same sequential driver as legacy/native Rust, then build
+fallback, legacy Rust and native
+Rust images. Only after this contract is demonstrated may the boot adapter use
+repeated sends and the existing `ikc_master` listener/accept policy. No new C
+implementation or Linux API is required by this queue adaptation.
+
+The source adaptation now passes the real queue peer fixture on native Rust
+1.92: all three sequential C/legacy Rust/native Rust drivers transfer 13,312
+packets with the same digest `5d3367a006a52b85`; four producers and four guest
+readers transfer 16,384 unique complete packets through eight slots. A paused
+borrowed-packet handler keeps all 1,024 attempted writes backpressured, rejects
+reentrant consumption, and permits 256 subsequent slot reuses after completion.
+Invalid geometry, overlap, corrupt counters and claim retirement are checked.
+The first C comparison compile omitted PIC and failed at the PIE link step;
+the failed source/logs remain in completion-tests attempt 1. Attempt 2 corrects
+only that flag and passes the peer check plus the existing queue/master/image
+policy fixtures. Refreshed revision-2 images, module integration and real guest
+replays are still pending. The host boot sender remains initial-only for now.

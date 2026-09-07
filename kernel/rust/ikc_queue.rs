@@ -1,5 +1,7 @@
 use core::ffi::c_void;
 use core::ptr::{copy_nonoverlapping, null_mut, write_bytes};
+#[cfg(native_linux_irq_work_v6_12)]
+use core::sync::atomic::AtomicU32;
 use core::sync::atomic::{compiler_fence, AtomicU64, Ordering};
 
 use crate::abi::{CInt, CULong, IhkSpinlock};
@@ -15,6 +17,11 @@ const IHK_IKC_WRITE_QUEUE_RETRY: CInt = 128;
 const PAGE_SHIFT: CInt = 12;
 const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
 const IHK_IKC_QUEUE_PT_ATTR: CULong = 0x8000_0000_0000_0002;
+
+// Revision 2 additionally promises copy-before-release consumption to the
+// native host. Keep the ELF capability coupled to this selected implementation.
+#[cfg(native_linux_irq_work_v6_12)]
+pub const NATIVE_QUEUE_ABI_VERSION: u32 = 2;
 
 pub type IkcPacketHandler =
     Option<unsafe extern "C" fn(*mut IhkIkcChannelDesc, *mut c_void, *mut c_void) -> CInt>;
@@ -105,6 +112,7 @@ const _: () = {
 
     assert!(size_of::<IhkIkcQueueHead>() == 64);
     assert!(align_of::<IhkIkcQueueHead>() == 8);
+    assert!(offset_of!(IhkIkcQueueHead, dummy2) == 60);
     assert!(size_of::<IhkIkcQueueDesc>() == 96);
     assert!(offset_of!(IhkIkcQueueDesc, intr_cpu) == 92);
     assert!(offset_of!(IhkIkcFreePacket, list) == 8);
@@ -123,6 +131,82 @@ unsafe fn cmpxchg_u64(slot: *mut u64, old: u64, new: u64) -> u64 {
     match (*atomic_u64(slot)).compare_exchange(old, new, Ordering::SeqCst, Ordering::SeqCst) {
         Ok(value) | Err(value) => value,
     }
+}
+
+#[inline(always)]
+unsafe fn load_queue_counter(slot: *mut u64) -> u64 {
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        (*atomic_u64(slot)).load(Ordering::Acquire)
+    }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
+        *slot
+    }
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+struct NativeConsumerClaim<'queue>(&'queue AtomicU32);
+
+#[cfg(native_linux_irq_work_v6_12)]
+impl Drop for NativeConsumerClaim<'_> {
+    fn drop(&mut self) {
+        self.0.store(0, Ordering::Release);
+    }
+}
+
+// The queue caller retains the complete mapping and immutable geometry; the
+// producer uses the aligned reservation/publication counters. All native guest
+// readers share this reserved-word claim, including the borrowed-slot handler.
+// A callback may use its slot only until it returns. Neither a reentrant IRQ
+// reader nor a remote CPU may advance consumption while that use is in flight.
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe fn consume_native(
+    q: *mut IhkIkcQueueHead,
+    consume: impl FnOnce(*mut c_void, usize) -> CInt,
+) -> CInt {
+    if q.is_null() || q as usize % core::mem::align_of::<IhkIkcQueueHead>() != 0 {
+        return -22;
+    }
+    let count = (*q).pktcount as u64;
+    let packet_size = (*q).pktsize as usize;
+    if count < 2
+        || packet_size == 0
+        || packet_size % core::mem::size_of::<CULong>() != 0
+        || (*q).queue_size != count * packet_size as u64
+        || (q as usize)
+            .checked_add(core::mem::size_of::<IhkIkcQueueHead>())
+            .and_then(|start| start.checked_add((*q).queue_size as usize))
+            .is_none()
+    {
+        return -22;
+    }
+    let active = AtomicU32::from_ptr(&raw mut (*q).dummy2);
+    if active
+        .compare_exchange(0, 1, Ordering::Acquire, Ordering::Relaxed)
+        .is_err()
+    {
+        return -16;
+    }
+    let _claim = NativeConsumerClaim(active);
+    let read = load_queue_counter(&raw mut (*q).read_off);
+    let published = load_queue_counter(&raw mut (*q).max_read_off);
+    if read == published {
+        return -1;
+    }
+    if published.wrapping_sub(read) >= count {
+        return -117;
+    }
+    let Some(offset) = queue_packet_offset(q, read) else {
+        return -22;
+    };
+    let result = consume((q as *mut u8).add(offset).cast(), packet_size);
+    if result == 0 {
+        // Keep the slot unavailable to producers throughout copying/handling.
+        // The next reader acquires the same claim after this release publication.
+        (*atomic_u64(&raw mut (*q).read_off)).store(read.wrapping_add(1), Ordering::Release);
+    }
+    result
 }
 
 #[inline(always)]
@@ -213,7 +297,8 @@ pub unsafe extern "C" fn ihk_ikc_queue_is_empty(q: *mut IhkIkcQueueHead) -> CInt
     if q.is_null() {
         return -22;
     }
-    ((*q).read_off == (*q).max_read_off) as CInt
+    (load_queue_counter(&raw mut (*q).read_off) == load_queue_counter(&raw mut (*q).max_read_off))
+        as CInt
 }
 
 #[no_mangle]
@@ -222,14 +307,15 @@ pub unsafe extern "C" fn ihk_ikc_queue_is_full(q: *mut IhkIkcQueueHead) -> CInt 
         return -22;
     }
 
-    let read = (*q).read_off;
-    let write = (*q).write_off;
+    let read = load_queue_counter(&raw mut (*q).read_off);
+    let write = load_queue_counter(&raw mut (*q).write_off);
     compiler_fence(Ordering::SeqCst);
 
     (write.wrapping_sub(read) == ((*q).pktcount as u64).wrapping_sub(1)) as CInt
 }
 
 #[no_mangle]
+#[cfg(not(native_linux_irq_work_v6_12))]
 pub unsafe extern "C" fn ihk_ikc_read_queue(
     q: *mut IhkIkcQueueHead,
     packet: *mut c_void,
@@ -267,6 +353,7 @@ pub unsafe extern "C" fn ihk_ikc_read_queue(
 }
 
 #[no_mangle]
+#[cfg(not(native_linux_irq_work_v6_12))]
 pub unsafe extern "C" fn ihk_ikc_read_queue_handler(
     q: *mut IhkIkcQueueHead,
     channel: *mut IhkIkcChannelDesc,
@@ -304,6 +391,51 @@ pub unsafe extern "C" fn ihk_ikc_read_queue_handler(
     }
 }
 
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn ihk_ikc_read_queue(
+    q: *mut IhkIkcQueueHead,
+    packet: *mut c_void,
+    _flag: CInt,
+) -> CInt {
+    if packet.is_null() || packet as usize % core::mem::align_of::<CULong>() != 0 {
+        return -22;
+    }
+    consume_native(q, |slot, packet_size| {
+        // The raw ABI requires a sufficiently large writable destination.
+        // Reject queue overlap before using the existing word-copy body.
+        let start = packet as usize;
+        let Some(end) = start.checked_add(packet_size) else {
+            return -22;
+        };
+        let mapping_end =
+            q as usize + core::mem::size_of::<IhkIkcQueueHead>() + (*q).queue_size as usize;
+        if start < mapping_end && (q as usize) < end {
+            return -22;
+        }
+        memcpyl(packet, slot, packet_size);
+        0
+    })
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn ihk_ikc_read_queue_handler(
+    q: *mut IhkIkcQueueHead,
+    channel: *mut IhkIkcChannelDesc,
+    handler: IkcPacketHandler,
+    harg: *mut c_void,
+    _flag: CInt,
+) -> CInt {
+    let Some(handler) = handler else {
+        return -22;
+    };
+    consume_native(q, |slot, _packet_size| {
+        handler(channel, slot, harg);
+        0
+    })
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn ihk_ikc_write_queue(
     q: *mut IhkIkcQueueHead,
@@ -319,8 +451,8 @@ pub unsafe extern "C" fn ihk_ikc_write_queue(
 
     let mut attempt = 0;
     loop {
-        let read = (*q).read_off;
-        let write = (*q).write_off;
+        let read = load_queue_counter(&raw mut (*q).read_off);
+        let write = load_queue_counter(&raw mut (*q).write_off);
         compiler_fence(Ordering::SeqCst);
 
         if write.wrapping_sub(read) == ((*q).pktcount as u64).wrapping_sub(1) {

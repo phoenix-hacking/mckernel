@@ -33798,3 +33798,14 @@ Command: mckernel-container native python3 -B /work/run-native-ikc-guest.py prep
 Environment: new APIC-binding kernel and native IKC prototype 1, unchanged native image 3eb7b36b, fixed four-CPU/12-GiB offline container and four-vCPU/two-NUMA guest.
 First failure: first x86_64 probe completed its repeated preparations and argument-change invalidation checks, then reported NATIVE_CPU_RESERVATION x86_64 FAIL line=85 during cleanup after destroying both OS instances. Stop this guest and inspect the exact probe line and resource state before running any actual ACK/start test. No preparation pass or IRQ-handshake claim is made for this run.
 Evidence: /work/native-ikc-guest-20260907-prepare-1/{record.json,serial.log,probe-source,capture-0}.
+2026-09-07 22:51 UTC — native IKC completion validation attempt 1 FAILED.
+Command: mckernel-container native python3 -B /work/check-native-ikc-completion.py 1
+Environment: pinned offline native container, Rust 1.92, uid 1000, CPUs 2-5,
+four CPU / 12 GiB limits. Evidence: /work/native-ikc-completion-tests-20260907-1.
+The actual legacy/native Rust sequential queue runs match; native 16,384-packet
+concurrency, paused-handler/backpressure and invalid-input checks pass. The C
+reference executable then fails linking: relocation R_X86_64_32 against
+.rodata.__FUNCTION__.0 cannot be used in a PIE executable; recompile with -fPIE.
+Validation stopped before queue/master/image policy tests. The fixture's C
+object omitted PIC; add -fPIC, retaining the identical original C bodies and
+all failed logs/source. This is a fixture compiler-flag failure, not a pass.
