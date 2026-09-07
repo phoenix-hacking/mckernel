@@ -77,6 +77,14 @@ artifacts reverified and 16 final artifacts retained. Mock guest context remains
 no executing McKernel CPU or IKC
 handshake is claimed, and the earlier intermittent Linux idle/RCU stall is open.
 
+Next trampoline-region prototype: `native-trampoline-region-plan.md` records
+why the pinned Linux's first-MiB reservation needs an explicit carve-out.
+The separate Rust fixture wraps existing exported E820/resource/mapping APIs;
+its exact-header witness, native module build and ELF/no-SIMD checks pass.
+Normal, ordinary-reserved and explicit-hole guest replays are next. No Linux
+source change, production SMP integration, assembly execution or CPU startup
+is claimed by this prerequisite.
+
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its
 linked support code and ABI/runtime bodies. Preserve and integrate the Rust

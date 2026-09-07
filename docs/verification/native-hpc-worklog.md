@@ -749,3 +749,15 @@ All CPUs return and all modules unload. The complete repository suite passes
 reverifies 33 earlier artifacts and retains 16 final artifacts. Actual McKernel
 boot, the intermittent Linux idle/RCU issue and full production acceptance
 remain open. Next verify ownership of the required low-memory trampoline.
+
+## 2026-09-07: explicit low-memory region WIP
+
+The [trampoline-region plan](native-trampoline-region-plan.md) retains the
+existing image, startup-table, CPU and IRQ bodies. Linux reserves its whole
+first MiB and marks every sub-MiB E820 descriptor busy. The proposed guest-only
+carve-out uses its existing map parser and requires complete original firmware
+RAM coverage, no current E820 overlap, and an exclusive Linux resource lease
+before mapping or writes. The new Rust fixture compiles against exact headers,
+passes the separate C data witness and ELF/no-SIMD checks, and needs no Linux
+patch. Normal, reserved and explicit-hole guest tests are next; no CPU executes
+this page and no production native boot is claimed.
