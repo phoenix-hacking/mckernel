@@ -72,3 +72,19 @@ using the pinned IHK instruction bodies. The source is a WIP: the first exact
 assembly comparison, extracted-owner build and repeated guests remain to run.
 The native OS boot callback and CPU startup are still being implemented; these
 files do not change the current declared stage or claim executable boot.
+
+The extraction now passes: both full native assembly bodies match the original
+IHK bytes in the Rust object and final module, and all three low-memory guest
+modes pass with the shared native owner. The explicit-hole guest additionally
+reads back the whole copied trampoline on all 128 leases. The initial final-ELF
+section extraction failure and corrected retry are preserved in
+`native-boot-code-checkpoint-20260907.json`. No assembly execution is claimed.
+
+Further reuse inspection found the complete existing native
+`abi/x86_64.rs::IhkSmpBootParam` and its CPU/NUMA/chunk/dump types. Retain these
+verified layouts directly instead of duplicating guest Rust types. The optional
+performance tail begins at the existing `hardware_event_map` field. Before boot,
+require an explicit native ELF note containing the host IRQ ABI and exact guest
+header size. Emit it from the existing guest Rust crate and preserve all legacy
+image consumers; images lacking the note remain loadable but cannot enter the
+native boot operation. Add checked note parsing to the existing `ImagePlan`.

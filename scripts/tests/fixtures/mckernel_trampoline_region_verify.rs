@@ -33,7 +33,9 @@ fn check(region: &LowRegion, cycle: usize) {
         let expected = (offset.wrapping_mul(13) ^ cycle.wrapping_mul(17)) as u8;
         assert_eq!(region.read_byte(offset).unwrap(), expected);
     }
-    assert!(region.read_byte(PAGE_BYTES).is_err_and(|error| error == EINVAL));
+    assert!(region
+        .read_byte(PAGE_BYTES)
+        .is_err_and(|error| error == EINVAL));
 }
 
 fn fill_and_check(region: &mut LowRegion, cycle: usize) {
@@ -41,7 +43,9 @@ fn fill_and_check(region: &mut LowRegion, cycle: usize) {
         let byte = (offset.wrapping_mul(13) ^ cycle.wrapping_mul(17)) as u8;
         region.write_byte(offset, byte).unwrap();
     }
-    assert!(region.write_byte(PAGE_BYTES, 0).is_err_and(|error| error == EINVAL));
+    assert!(region
+        .write_byte(PAGE_BYTES, 0)
+        .is_err_and(|error| error == EINVAL));
     check(region, cycle);
 }
 
@@ -64,7 +68,8 @@ impl kernel::Module for TrampolineRegionVerify {
         }
         // SAFETY: This fixed, nonempty bounded range is checked by Linux's
         // resident E820 overlap predicate without touching the target memory.
-        let mapped = unsafe { e820__mapped_any(TEST_PHYSICAL, TEST_PHYSICAL + PAGE_BYTES as u64, 0) };
+        let mapped =
+            unsafe { e820__mapped_any(TEST_PHYSICAL, TEST_PHYSICAL + PAGE_BYTES as u64, 0) };
         if mapped {
             assert!(LowRegion::acquire(TEST_PHYSICAL).is_err_and(|error| error == EBUSY));
             pr_info!("MCKERNEL_TRAMPOLINE_REGION REJECT mapped=1 writes=0 mckernel_boot=0\n");

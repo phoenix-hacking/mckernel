@@ -33768,3 +33768,9 @@ Command: mckernel-container native python3 -B /work/run-native-irq-transport-pol
 Environment: fixed unprivileged native container, CPUs 2-5, 12 GiB, network none; clean source parent 262a6b634bdbaeadc6c2d90f5e8ac95809c5e141.
 Error: test_active_patch_identity_and_path_vector_fail_closed encountered "integrated consumer scripts/tests/test_native_rust_exact_build_workflow.py exceeds its byte cap" before its intended patch-mutation assertion. The live RS-006 integrated-consumer row still binds the smaller pre-transport workflow test.
 Result: 444 tests in 101.142 seconds, one failure; formatting and diff checks pass. Preserve /work/native-irq-transport-policy-tests-20260907-1.{log,json} and its private source. Update only that current row and the contract byte binding before rerunning the affected group.
+
+[2026-09-07 native boot assembly extraction attempt 2]
+Command: /home/holden/mckernel-work/bin/mckernel-container native python3 -B /work/build-native-boot-code-module.py 2
+Environment: pinned Linux 6.12.0-211.44.1.el10_2 native Rust 1.92 container; uid 1000, CPUs 2-5, 12 GiB, no host kernel effects.
+First failure: exact assembly capture used objcopy --dump-section .rodata.mckernel_smp_trampoline on the final .ko; Linux module linking merges the input section into .rodata. The compiler, both original assembly objects, exact API witness and module link had passed. objcopy returned success while printing a missing-section error; subsequent native-trampoline.bin read raised FileNotFoundError. No assembly equivalence, guest or CPU start pass claimed.
+Evidence: /work/native-trampoline-region-module-20260907-2/{record.json,module-build.log,source/}; preserved. Correction: extract named native sections from the Rust object, and independently locate and compare the same symbol-delimited bytes in the linked module .rodata before guest testing.

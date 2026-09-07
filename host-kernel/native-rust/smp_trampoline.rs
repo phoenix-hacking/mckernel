@@ -120,7 +120,6 @@ impl LowRegion {
         // SAFETY: This complete mapping and exclusive reservation remain live.
         Ok(unsafe { ptr::read_volatile(self.mapping.as_ptr().add(offset)) })
     }
-
 }
 
 impl Drop for LowRegion {

@@ -93,6 +93,15 @@ SMP OS/CPU/IRQ lifetimes, exact boot parameters and preserved startup assembly.
 No Linux source change, production SMP integration, assembly execution or CPU
 startup is claimed by this prerequisite.
 
+Shared boot-code checkpoint: the low-memory owner now lives in native Rust
+and its existing fixture consumes that exact body. The preserved startup and
+trampoline assembly match the complete original IHK bytes before and after
+module linking. All three memory-map guest modes pass again, including 128
+carved-page leases and full template readbacks. See
+`docs/verification/native-boot-code-checkpoint-20260907.json` for 19 artifacts
+and the retained/fixed capture failure. The declared native stage still has
+19 Rust sources; boot integration and actual assembly execution remain open.
+
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its
 linked support code and ABI/runtime bodies. Preserve and integrate the Rust
