@@ -150,3 +150,32 @@ empty 56-byte master-packet queues. The retained low-page boot header matches
 the canonical addresses. Started resource mutations, destruction and module
 removal remain rejected after close. Full host IKC service, INIT_ACK and later
 readiness are the next implementation; no native shutdown is claimed.
+
+## Next host IKC adapter
+
+Reuse `host-kernel/native-rust/ikc_queue.rs::SharedQueue` for the host receive
+endpoint and its checked publication body for the initial master acknowledgment.
+Preserve the existing queue and master policy consumers. The legacy guest
+consumer advances its read counter before copying, so the initial acknowledgment
+adapter must publish only once into an empty queue and never reuse that slot;
+do not silently weaken `SharedQueue::attach`'s sole-consumer contract. Full
+subsequent host send support needs an explicit compatible consumption protocol.
+Retain `ikc_master.rs::ConnectOffer` for validating the first guest request;
+listener/channel allocation and sysfs/mcctrl dispatch remain later effects.
+
+Store the receive endpoint in stable heap storage retained by the started boot
+owner. Publish its pointer with release/acquire ordering into the existing
+per-OS, generation-bound IRQ route. The callback must drain a bounded number
+of packets using the existing queue body, perform no allocation or sleepable
+lock acquisition, and preserve the first request for process-context diagnosis.
+Publish this owner before sending INIT_ACK. Uncertain starts retain it forever
+until a separately proven sender-stop and Linux IRQ drain can be implemented.
+
+Use Linux's existing exported APIC static-call mask entry for the host-to-guest
+notification, preserving the original assigned offline Linux CPU identity.
+Include the existing x86 APIC header in Rust's generated binding closure so
+preparation can reject logical-destination drivers explicitly. The pinned
+physical-flat implementation iterates the supplied CPU mask and uses the retained
+per-CPU hardware ID without filtering against Linux's online mask. No new C
+function or copied APIC register driver is needed. Exact-header checks and a
+fresh kernel/module build must precede the real bidirectional guest check.
