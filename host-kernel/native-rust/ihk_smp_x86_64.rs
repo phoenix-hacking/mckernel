@@ -22,6 +22,12 @@ use kernel::{
 mod smp_resource;
 mod smp_cpu;
 mod smp_memory;
+// Reuse the existing checked mapping geometry for owned image destinations.
+#[allow(dead_code)]
+mod ihk_mapping;
+#[allow(dead_code)]
+mod smp_image;
+mod smp_loader;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -152,7 +158,9 @@ unsafe extern "C" fn ihk_smp_os_ioctl_v2(
         Ok(owner) => owner,
         Err(_) => return EINVAL.to_errno() as i64,
     };
-    let result = if smp_cpu::handles_os(command) {
+    let result = if command == 0x0011_2a00 {
+        smp_loader::load(owner, argument as usize)
+    } else if smp_cpu::handles_os(command) {
         smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)
     } else if smp_memory::handles_os(command) {
         smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)

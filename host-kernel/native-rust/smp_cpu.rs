@@ -710,3 +710,19 @@ pub(super) fn release_os_resources(owner: OsToken) -> Result {
     }
     result
 }
+
+/// Preserve CPU -> memory lock order while checking the first load prerequisite.
+/// The IHK operation lock excludes resource calls for this OS during file read.
+pub(super) fn load_os_image(owner: OsToken, image: &[u8]) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: The calling OS lease and provider-module owner pin this context;
+    // no CPU or memory guard escapes the synchronous load callback.
+    let mut context = unsafe { &*published }.lock();
+    if context.query_os(owner, None)? == 0 {
+        return Err(EINVAL);
+    }
+    super::smp_memory::load_os_image(owner, image)
+}

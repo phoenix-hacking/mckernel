@@ -23,8 +23,8 @@ use kernel::{
 
 use super::{
     abi::{
-        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_QUERY_STATUS,
-        IHK_OS_STATUS,
+        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_LOAD,
+        IHK_OS_QUERY_STATUS, IHK_OS_STATUS,
     },
     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
     ihk_ioctl::IhkIoctlDispatcher,
@@ -533,6 +533,12 @@ unsafe fn os_request(
     let Some(backend) = object.backend else {
         return EINVAL.to_errno() as core::ffi::c_long;
     };
+    let loading = command == IHK_OS_LOAD;
+    if loading {
+        if let Err(error) = OS_REGISTRY.transition(handle, OsStatus::Loading) {
+            return error.errno() as core::ffi::c_long;
+        }
+    }
     // SAFETY: This exact slot/generation is pinned by the file lease. The OS
     // operation mutex serializes its backend calls, the module owner pins the
     // code, and user addresses are only borrowed for this synchronous call.
@@ -545,6 +551,11 @@ unsafe fn os_request(
             u32::from(compat),
         )
     };
+    if loading {
+        if let Err(error) = OS_REGISTRY.transition(handle, OsStatus::NotBooted) {
+            return error.errno() as core::ffi::c_long;
+        }
+    }
     if status < -4095 {
         return EIO.to_errno() as core::ffi::c_long;
     }

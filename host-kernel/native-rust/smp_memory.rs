@@ -6,6 +6,7 @@
 //! allocation retains its original compound-page order until return to Linux.
 
 use super::smp_cpu::ResourceModulePin;
+use super::smp_image::{BootLayout, ImageError, ImagePlan};
 use super::smp_resource::{MemoryExtent, MemoryMap, MemoryWorkspace, USER_MEMORY_REQUEST_GRANULE};
 use core::{
     cell::UnsafeCell,
@@ -305,6 +306,27 @@ struct MemoryContext {
     staging: [Option<MemoryExtent>; MAX_EXTENTS],
     pages: Vec<PageOwner>,
     pin: Option<ResourceModulePin>,
+    images: [Option<LoadedImage>; 64],
+}
+
+// Loading does not publish a boot capability. The following AP-start adapter
+// must revalidate this generation and its layout under the same resource locks.
+#[allow(dead_code)]
+#[derive(Clone, Copy)]
+struct LoadedImage {
+    owner: super::smp_resource::OsToken,
+    layout: BootLayout,
+    entry: u64,
+    checksum: u64,
+}
+
+fn image_error(error: ImageError) -> Error {
+    match error {
+        ImageError::NoBootstrapMemory | ImageError::OutsideBootstrap => ENOMEM,
+        ImageError::InvalidOwnership => EIO,
+        ImageError::Overflow => overflow(),
+        _ => EINVAL,
+    }
 }
 
 impl MemoryContext {
@@ -314,6 +336,7 @@ impl MemoryContext {
             staging: [None; MAX_EXTENTS],
             pages: Vec::new(),
             pin: None,
+            images: [None; 64],
         }
     }
 
@@ -727,6 +750,7 @@ impl MemoryContext {
         transaction
             .commit()
             .unwrap_or_else(|_| panic!("OS memory assignment invariant violated"));
+        self.images[owner.slot() as usize] = None;
         Ok(0)
     }
 
@@ -765,7 +789,121 @@ impl MemoryContext {
         transaction
             .commit()
             .unwrap_or_else(|_| panic!("OS memory release invariant violated"));
+        self.images[owner.slot() as usize] = None;
         Ok(0)
+    }
+
+    fn invalidate_image(&mut self, owner: super::smp_resource::OsToken) -> Result {
+        let slot = self.images.get_mut(owner.slot() as usize).ok_or(EINVAL)?;
+        if slot.is_some_and(|image| image.owner != owner) {
+            return Err(EIO);
+        }
+        *slot = None;
+        Ok(())
+    }
+
+    /// Split access at original Linux allocation boundaries: logical adjacency
+    /// in MemoryMap does not create one Rust allocation spanning two PageOwners.
+    fn write_image_range(
+        &mut self,
+        direct_map: u64,
+        start: u64,
+        length: usize,
+        source: Option<&[u8]>,
+    ) -> Result {
+        let end = start.checked_add(length as u64).ok_or_else(overflow)?;
+        if source.is_some_and(|data| data.len() != length) {
+            return Err(EIO);
+        }
+        let mut cursor = start;
+        for page in &mut self.pages {
+            if page.end() <= cursor {
+                continue;
+            }
+            if cursor == end {
+                break;
+            }
+            if page.physical > cursor {
+                return Err(EIO);
+            }
+            let count = (end.min(page.end()) - cursor) as usize;
+            let address = direct_map.checked_add(cursor).ok_or_else(overflow)?;
+            address.checked_add(count as u64).ok_or_else(overflow)?;
+            // SAFETY: verify() proves the retained PageOwners exactly cover
+            // the canonical map. The caller holds CPU and memory locks for an
+            // unbooted OS and preflighted this range as exclusively assigned.
+            // This chunk lies in one original non-movable allocation's direct
+            // map. The immutable vmalloc input is a separate Linux allocation.
+            unsafe {
+                if let Some(data) = source {
+                    core::ptr::copy_nonoverlapping(
+                        data.as_ptr().add((cursor - start) as usize),
+                        address as *mut u8,
+                        count,
+                    );
+                } else {
+                    core::ptr::write_bytes(address as *mut u8, 0, count);
+                }
+            }
+            cursor += count as u64;
+        }
+        if cursor != end {
+            return Err(EIO);
+        }
+        Ok(())
+    }
+
+    fn load_image(&mut self, owner: super::smp_resource::OsToken, image: &[u8]) -> Result {
+        self.verify()?;
+        self.invalidate_image(owner)?;
+        let layout = BootLayout::select(&self.map, owner).map_err(image_error)?;
+        let plan = ImagePlan::parse(image, layout).map_err(image_error)?;
+        // SAFETY: The selected DYNAMIC_MEMORY_LAYOUT x86_64 kernel initializes
+        // this direct-map base before module loading; it is stable thereafter.
+        let direct_map = unsafe { bindings::page_offset_base };
+        direct_map
+            .checked_add(layout.extent().end().map_err(|_| EIO)?)
+            .ok_or_else(overflow)?;
+        // No physical write occurs before ALL ELF and startup-space checks.
+        // Zeroing the entire bounded image window also clears holes and BSS.
+        self.write_image_range(
+            direct_map,
+            layout.kernel().start(),
+            layout.kernel().length() as usize,
+            None,
+        )?;
+        for segment in plan.segments() {
+            self.write_image_range(
+                direct_map,
+                segment.destination,
+                segment.file.len(),
+                Some(segment.file),
+            )?;
+        }
+        let mut checksum = 0xcbf2_9ce4_8422_2325_u64;
+        let start = layout.kernel().start();
+        let end = layout.kernel().end();
+        for page in &self.pages {
+            let first = start.max(page.physical);
+            let last = end.min(page.end());
+            for physical in first..last {
+                // SAFETY: Same exclusive retained allocation and direct-map
+                // proof as the write path. Each actual byte is read back after
+                // loading; no reference spans separate compound allocations.
+                let byte = unsafe { ptr::read_volatile((direct_map + physical) as *const u8) };
+                checksum = (checksum ^ byte as u64).wrapping_mul(0x100_0000_01b3);
+            }
+        }
+        self.images[owner.slot() as usize] = Some(LoadedImage {
+            owner,
+            layout,
+            entry: plan.entry(),
+            checksum,
+        });
+        pr_info!("IHK-SMP: image loaded os={} generation={} segments={} window={} checksum={:016x}; CPUs not started\n",
+                 owner.slot(), owner.generation(), plan.load_segments(),
+                 layout.kernel().length(), checksum);
+        Ok(())
     }
 }
 
@@ -898,5 +1036,30 @@ pub(super) fn release_os_resources(
     transaction
         .commit()
         .unwrap_or_else(|_| panic!("OS memory cleanup invariant violated"));
+    context.images[owner.slot() as usize] = None;
     Ok(())
+}
+
+/// Invalidate any prior successful load before opening a replacement file.
+pub(super) fn invalidate_os_image(owner: super::smp_resource::OsToken) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: IHK pins this module and holds its OS operation mutex. This
+    // standalone memory lock is released before the later CPU -> memory pair.
+    let mut context = unsafe { &*published }.lock();
+    context.invalidate_image(owner)
+}
+
+/// Called under the CPU lock after checking an assigned, offline CPU exists.
+pub(super) fn load_os_image(owner: super::smp_resource::OsToken, image: &[u8]) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: IHK's operation/module owners and the caller's CPU lock retain
+    // this published controller. Loading never starts a CPU or exposes a map.
+    let mut context = unsafe { &*published }.lock();
+    context.load_image(owner, image)
 }

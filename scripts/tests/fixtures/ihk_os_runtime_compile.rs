@@ -372,6 +372,7 @@ fn chrdev_failure_never_creates_class_or_publishes_family() {
 static BACKEND_CALLS: Mutex<Vec<(u32, u64, u32, u64, u32)>> = Mutex::new(Vec::new());
 static BACKEND_RELEASES: Mutex<Vec<(u32, u64)>> = Mutex::new(Vec::new());
 static BACKEND_RELEASE_STATUS: AtomicI32 = AtomicI32::new(0);
+static BACKEND_LOAD_STATUS: AtomicI32 = AtomicI32::new(0);
 static BACKEND_ACTIVE: [AtomicI32; 64] = [const { AtomicI32::new(0) }; 64];
 
 unsafe extern "C" fn backend_ioctl(slot: u32, generation: u64, command: u32,
@@ -384,6 +385,13 @@ unsafe extern "C" fn backend_ioctl(slot: u32, generation: u64, command: u32,
     std::thread::sleep(std::time::Duration::from_millis(2));
     BACKEND_CALLS.lock().unwrap().push((slot, generation, command, address, compat));
     assert_eq!(BACKEND_ACTIVE[slot as usize].fetch_sub(1, Ordering::SeqCst), 1);
+    if command == abi::IHK_OS_LOAD {
+        let mut observer = open(slot).unwrap();
+        assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), 1);
+        assert_eq!(status(&mut observer, true, abi::IHK_OS_QUERY_STATUS), 1);
+        close(observer);
+        return BACKEND_LOAD_STATUS.load(Ordering::SeqCst) as i64;
+    }
     if command == 0x112a25 { -14 } else if command == u32::MAX { -4096 } else { 73 }
 }
 
@@ -407,6 +415,27 @@ fn reset_backend() {
     BACKEND_CALLS.lock().unwrap().clear();
     BACKEND_RELEASES.lock().unwrap().clear();
     BACKEND_RELEASE_STATUS.store(0, Ordering::SeqCst);
+    BACKEND_LOAD_STATUS.store(0, Ordering::SeqCst);
+}
+
+#[test]
+fn image_load_publishes_loading_and_restores_initial_state_after_every_result() {
+    with_family(|| {
+        reset_backend();
+        assert_eq!(create_backend(), 0);
+        let mut file = open(0).unwrap();
+        for compat in [false, true] {
+            for result in [0, -2, -5, -12, -14, -75, -4096] {
+                BACKEND_LOAD_STATUS.store(result, Ordering::SeqCst);
+                assert_eq!(status(&mut file, compat, abi::IHK_OS_LOAD),
+                           if result == -4096 { -5 } else { result as i64 });
+                assert_eq!(status(&mut file, compat, abi::IHK_OS_STATUS), 0);
+                assert_eq!(status(&mut file, compat, 0x112a22), 73);
+            }
+        }
+        close(file);
+        assert_eq!(destroy(0), 0);
+    });
 }
 
 #[test]

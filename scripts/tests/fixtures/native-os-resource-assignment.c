@@ -100,7 +100,10 @@ static void concurrent_os_memory(int control)
     }
     message("NATIVE_OS_RESOURCE " ARCH_LABEL " concurrent-instances=2x8 PASS\n");
 }
-int main(void)
+#ifndef NATIVE_OS_RESOURCE_MAIN
+#define NATIVE_OS_RESOURCE_MAIN main
+#endif
+int NATIVE_OS_RESOURCE_MAIN(void)
 {
     require(native_memory_reference_main() == 0);
     int control = open_control();
