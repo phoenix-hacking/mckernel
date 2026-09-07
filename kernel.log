@@ -33672,3 +33672,15 @@ Evidence: /work/native-startup-policy-tests-20260907-6.log/json.
 Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 7, remaining closure/license/RS006 groups; prior isolated controls unchanged.
 Result: FP closure and license groups passed; stopped after 189 tests in 24.583 seconds at the RS006 current integrated-consumer inventory. It still pins the preceding native runtime evidence contract. Review the inventory against the known changed current files, then refresh only those exact identities; preserve the module-owner patch and frozen predecessors.
 Evidence: /work/native-startup-policy-tests-20260907-7.log/json.
+
+2026-09-07 Native IRQ-work verification module, attempt 1: FAIL
+Command: mckernel-container native python3 -B /work/build-native-irq-work-module.py 1
+Environment: pinned Linux 6.12.0-211.44.1.el10_2 debug build, unprivileged offline native container, CPUs 2-5, 12 GiB/no swap, 512 tasks, dedicated scratch.
+Result: exact-header C layout witness compiled. Stopped before Rust compilation because the fixture Kbuild --check-cfg argument contained unquoted shell parentheses. Fix the test Kbuild quoting; preserve the captured command and source. No guest was started.
+Evidence: /work/native-irq-work-module-20260907-1/record.json and module-build.log.
+
+2026-09-07 Native IRQ-work verification module, attempt 2: FAIL
+Command: mckernel-container native python3 -B /work/build-native-irq-work-module.py 2
+Environment: same pinned Linux build and bounded native container as attempt 1.
+Result: header witness compiled; Rust rejected the module macro's MODULE cfg because enabling --check-cfg for the fixture had omitted Linux's MODULE condition. Stop and add that exact condition to the test Kbuild argument. No guest was started and no production source change follows from this harness error.
+Evidence: /work/native-irq-work-module-20260907-2/record.json and module-build.log.
