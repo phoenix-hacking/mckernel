@@ -75,6 +75,120 @@ mod image_tests {
         image
     }
 
+    fn with_native_note(header_bytes: u32, performance: u32) -> Vec<u8> {
+        let mut image = elf();
+        put16(&mut image, 56, 3);
+        put32(&mut image, 176, 4);
+        put64(&mut image, 184, 0x300);
+        put64(&mut image, 208, 40);
+        put64(&mut image, 216, 40);
+        put64(&mut image, 224, 4);
+        put32(&mut image, 0x300, 9);
+        put32(&mut image, 0x304, 16);
+        put32(&mut image, 0x308, 0x4d43_4b01);
+        image[0x30c..0x315].copy_from_slice(b"MCKERNEL\0");
+        put32(&mut image, 0x318, 1);
+        put32(&mut image, 0x31c, 0x0006_0c00);
+        put32(&mut image, 0x320, header_bytes);
+        put32(&mut image, 0x324, performance);
+        image
+    }
+
+    #[test]
+    fn native_boot_requires_explicit_layout_metadata_but_legacy_still_loads() {
+        let legacy = elf();
+        assert_eq!(
+            ImagePlan::parse(&legacy, layout())
+                .unwrap()
+                .native_boot_abi(),
+            None
+        );
+        for (header_bytes, flag) in [(6656, 0), (7616, 1)] {
+            let image = with_native_note(header_bytes, flag);
+            let plan = ImagePlan::parse(&image, layout()).unwrap();
+            assert_eq!(
+                plan.native_boot_abi(),
+                Some(NativeBootAbi {
+                    header_bytes: header_bytes as usize,
+                    performance: flag == 1,
+                })
+            );
+            assert_eq!(plan.load_segments(), 2);
+        }
+    }
+
+    #[test]
+    fn wrong_native_abi_version_layout_flags_and_duplicates_are_rejected() {
+        for (at, value) in [
+            (0x318, 2),
+            (0x31c, 0x0005_0000),
+            (0x320, 6656),
+            (0x320, 7615),
+            (0x324, 0),
+            (0x324, 3),
+        ] {
+            let mut image = with_native_note(7616, 1);
+            put32(&mut image, at, value);
+            assert!(
+                ImagePlan::parse(&image, layout()).is_err(),
+                "at={at:x} value={value}"
+            );
+        }
+        let mut image = with_native_note(7616, 1);
+        image.copy_within(0x300..0x328, 0x328);
+        put64(&mut image, 208, 80);
+        assert!(ImagePlan::parse(&image, layout()).is_err());
+        let mut image = with_native_note(7616, 1);
+        image.copy_within(176..232, 232);
+        put16(&mut image, 56, 4);
+        assert!(ImagePlan::parse(&image, layout()).is_err());
+    }
+
+    #[test]
+    fn note_extents_and_internal_lengths_are_checked_before_acceptance() {
+        for length in 1..40 {
+            let mut image = with_native_note(7616, 1);
+            put64(&mut image, 208, length);
+            assert!(
+                ImagePlan::parse(&image, layout()).is_err(),
+                "length={length}"
+            );
+        }
+        for length in [4097, u64::MAX] {
+            let mut image = with_native_note(7616, 1);
+            put64(&mut image, 208, length);
+            assert!(ImagePlan::parse(&image, layout()).is_err());
+        }
+        for at in [0x300, 0x304] {
+            let mut image = with_native_note(7616, 1);
+            put32(&mut image, at, u32::MAX);
+            assert!(ImagePlan::parse(&image, layout()).is_err());
+        }
+        let mut image = with_native_note(7616, 1);
+        put64(&mut image, 184, u64::MAX - 16);
+        assert!(ImagePlan::parse(&image, layout()).is_err());
+    }
+
+    #[test]
+    fn unrelated_notes_do_not_advertise_native_boot_compatibility() {
+        let mut image = with_native_note(7616, 1);
+        image[0x30c] = b'X';
+        assert_eq!(
+            ImagePlan::parse(&image, layout())
+                .unwrap()
+                .native_boot_abi(),
+            None
+        );
+        let mut image = with_native_note(7616, 1);
+        put32(&mut image, 0x308, 0x4d43_4b02);
+        assert_eq!(
+            ImagePlan::parse(&image, layout())
+                .unwrap()
+                .native_boot_abi(),
+            None
+        );
+    }
+
     #[test]
     fn selection_uses_only_exact_generation_before_numa_preference() {
         let mut map = MemoryMap::new();

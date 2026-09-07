@@ -1,0 +1,79 @@
+{
+  "artifact": {
+    "path": "docs/verification/evidence/native-boot-note-tests-20260907-1.tar.gz",
+    "sha256": "34d5ac0a9a74a6dbf31b8876e9742c00e3de48ff5c54c0fdbe68f2a3fba1243f",
+    "size": 3527681
+  },
+  "limits": [
+    "Native ELF descriptor and parser policy tests only; refreshed images and native boot integration still pending",
+    "No native boot or production gate pass"
+  ],
+  "tests": {
+    "commands": [
+      {
+        "command": [
+          "rustfmt",
+          "--edition",
+          "2021",
+          "--config",
+          "skip_children=true,reorder_modules=false",
+          "/work/native-boot-note-tests-20260907-1/source/host-kernel/native-rust/smp_image.rs",
+          "/work/native-boot-note-tests-20260907-1/source/scripts/tests/fixtures/ihk_smp_image_compile.rs",
+          "/work/native-boot-note-tests-20260907-1/source/kernel/rust/x86_setup.rs"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "rustc",
+          "--edition=2021",
+          "--test",
+          "-Dwarnings",
+          "/work/native-boot-note-tests-20260907-1/source/scripts/tests/fixtures/ihk_smp_image_compile.rs",
+          "-o",
+          "/work/native-boot-note-tests-20260907-1/image-tests"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/work/native-boot-note-tests-20260907-1/image-tests",
+          "--test-threads=1"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "finished_utc": "2026-09-07T20:49:11.921628+00:00",
+    "inputs": [
+      {
+        "path": "/work/native-boot-note-tests-20260907-1/source/host-kernel/native-rust/smp_image.rs",
+        "sha256": "a071b007e51903ba8ef84077b27ae11317ab36972f8abe287d320305e0c096bc",
+        "size": 13977
+      },
+      {
+        "path": "/work/native-boot-note-tests-20260907-1/source/host-kernel/native-rust/ihk_mapping.rs",
+        "sha256": "d5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687",
+        "size": 21132
+      },
+      {
+        "path": "/work/native-boot-note-tests-20260907-1/source/host-kernel/native-rust/smp_resource.rs",
+        "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3",
+        "size": 129861
+      },
+      {
+        "path": "/work/native-boot-note-tests-20260907-1/source/scripts/tests/fixtures/ihk_smp_image_compile.rs",
+        "sha256": "100f608380ca34475f65571d76a2ee5048ba976a182d49c6cecb7664c27dd7ea",
+        "size": 14760
+      },
+      {
+        "path": "/work/native-boot-note-tests-20260907-1/source/kernel/rust/x86_setup.rs",
+        "sha256": "e7e86dcabd82f6bb4c528630347e71f0a4f782716f9e5d7deb684f10d9a51597",
+        "size": 29088
+      }
+    ],
+    "production_gate_credit": false,
+    "source_parent": "9ff287ed15a2f8e566b4cb5e2720136d5271d21e",
+    "started_utc": "2026-09-07T20:49:06.724191+00:00",
+    "status": "PASS"
+  }
+}

@@ -158,6 +158,36 @@ pub struct SmpBootParam {
     ereg_idx: [CInt; PERF_EXTRA_REG_MAX],
 }
 
+// Native Linux must reject an image built for a different IRQ-work layout or
+// boot-parameter tail before publishing any work or starting an assigned CPU.
+// Keep this descriptor with the ABI consumer and compute its header size from
+// the actual selected Rust type. Legacy/fallback images retain their consumers.
+#[cfg(native_linux_irq_work_v6_12)]
+#[repr(C, align(4))]
+struct NativeBootNote {
+    name_bytes: u32,
+    descriptor_bytes: u32,
+    kind: u32,
+    name: [u8; 12],
+    descriptor: [u32; 4],
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+#[used]
+#[link_section = ".note.mckernel.boot"]
+static NATIVE_BOOT_NOTE: NativeBootNote = NativeBootNote {
+    name_bytes: 9,
+    descriptor_bytes: 16,
+    kind: 0x4d43_4b01,
+    name: *b"MCKERNEL\0\0\0\0",
+    descriptor: [
+        1,
+        0x0006_0c00,
+        core::mem::size_of::<SmpBootParam>() as u32,
+        cfg!(enable_perf) as u32,
+    ],
+};
+
 const _: () = {
     assert!(size_of::<IhkMcCpuInfo>() == 40);
     assert!(align_of::<IhkMcCpuInfo>() == 8);

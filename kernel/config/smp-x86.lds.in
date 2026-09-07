@@ -2,6 +2,7 @@ PHDRS
 {
 	text PT_LOAD FLAGS(5);
 	data PT_LOAD FLAGS(7);
+	bootnote PT_NOTE FLAGS(4);
 }
 SECTIONS
 {
@@ -24,6 +25,10 @@ SECTIONS
 	.rodata : {
 		*(.rodata .rodata.*)
 	} :data
+
+	.note.mckernel.boot : ALIGN(4) {
+		KEEP(*(.note.mckernel.boot))
+	} :data :bootnote
 
 	/* force build-id position somewhere not at start... */
 	.note.gnu.build-id : {

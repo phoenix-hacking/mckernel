@@ -137,6 +137,14 @@ pub(crate) struct Segment<'image> {
     pub(crate) executable: bool,
 }
 
+/// Describes the image's actual compiled boot ABI. This is compatibility
+/// metadata, not image authentication or permission to execute an image.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct NativeBootAbi {
+    pub(crate) header_bytes: usize,
+    pub(crate) performance: bool,
+}
+
 /// All program headers and destination ranges are checked before this exists.
 /// The immutable input borrow prevents header/segment changes between preflight
 /// and execution. No per-segment array occupies the Linux kernel stack.
@@ -147,6 +155,7 @@ pub(crate) struct ImagePlan<'image> {
     layout: BootLayout,
     entry: u64,
     load_segments: usize,
+    native_boot_abi: Option<NativeBootAbi>,
 }
 
 fn bytes<const N: usize>(input: &[u8], offset: usize) -> Result<[u8; N], ImageError> {
@@ -196,6 +205,7 @@ impl<'image> ImagePlan<'image> {
             layout,
             entry: u64_at(image, 24)?,
             load_segments: 0,
+            native_boot_abi: None,
         };
         let entry_offset = plan
             .entry
@@ -203,6 +213,9 @@ impl<'image> ImagePlan<'image> {
             .ok_or(ImageError::BadEntry)?;
         let mut entry_found = false;
         for (index, header) in headers.chunks_exact(PROGRAM_HEADER_BYTES).enumerate() {
+            if u32_at(header, 0)? == 4 {
+                plan.read_notes(header)?;
+            }
             let Some(segment) = plan.segment(header)? else {
                 continue;
             };
@@ -231,6 +244,59 @@ impl<'image> ImagePlan<'image> {
             return Err(ImageError::BadEntry);
         }
         Ok(plan)
+    }
+
+    fn read_notes(&mut self, header: &[u8]) -> Result<(), ImageError> {
+        let offset = usize::try_from(u64_at(header, 8)?).map_err(|_| ImageError::Overflow)?;
+        let length = usize::try_from(u64_at(header, 32)?).map_err(|_| ImageError::Overflow)?;
+        // Keep optional metadata bounded independently of image load segments.
+        if length > 4096 {
+            return Err(ImageError::BadElf);
+        }
+        let end = offset.checked_add(length).ok_or(ImageError::Overflow)?;
+        let notes = self.image.get(offset..end).ok_or(ImageError::BadElf)?;
+        let mut cursor = 0;
+        while cursor < notes.len() {
+            let name_bytes = u32_at(notes, cursor)? as usize;
+            let descriptor_bytes = u32_at(notes, cursor + 4)? as usize;
+            let kind = u32_at(notes, cursor + 8)?;
+            let name_start = cursor + 12;
+            let name_end = name_start
+                .checked_add(name_bytes)
+                .ok_or(ImageError::Overflow)?;
+            let descriptor_start = name_end.checked_add(3).ok_or(ImageError::Overflow)? & !3;
+            let descriptor_end = descriptor_start
+                .checked_add(descriptor_bytes)
+                .ok_or(ImageError::Overflow)?;
+            let next = descriptor_end.checked_add(3).ok_or(ImageError::Overflow)? & !3;
+            let name = notes.get(name_start..name_end).ok_or(ImageError::BadElf)?;
+            let descriptor = notes
+                .get(descriptor_start..descriptor_end)
+                .ok_or(ImageError::BadElf)?;
+            if next > notes.len() {
+                return Err(ImageError::BadElf);
+            }
+            if name == b"MCKERNEL\0" && kind == 0x4d43_4b01 {
+                if self.native_boot_abi.is_some()
+                    || descriptor_bytes != 16
+                    || u32_at(descriptor, 0)? != 1
+                    || u32_at(descriptor, 4)? != 0x0006_0c00
+                {
+                    return Err(ImageError::BadElf);
+                }
+                let header_bytes = u32_at(descriptor, 8)? as usize;
+                let flags = u32_at(descriptor, 12)?;
+                if !matches!((header_bytes, flags), (6656, 0) | (7616, 1)) {
+                    return Err(ImageError::BadElf);
+                }
+                self.native_boot_abi = Some(NativeBootAbi {
+                    header_bytes,
+                    performance: flags == 1,
+                });
+            }
+            cursor = next;
+        }
+        Ok(())
     }
 
     fn segment(&self, header: &[u8]) -> Result<Option<Segment<'image>>, ImageError> {
@@ -289,6 +355,10 @@ impl<'image> ImagePlan<'image> {
     }
     pub(crate) const fn load_segments(&self) -> usize {
         self.load_segments
+    }
+
+    pub(crate) const fn native_boot_abi(&self) -> Option<NativeBootAbi> {
+        self.native_boot_abi
     }
 
     pub(crate) fn segments(&self) -> impl Iterator<Item = Segment<'image>> + '_ {
