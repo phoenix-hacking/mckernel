@@ -56,3 +56,9 @@ license-input inventory. Refresh only their current verifier/dependency byte
 bindings. Preserve the historical source/config patch replay, predecessor
 contracts, and false production-credit flags. A fresh current-stage check and
 the focused downstream groups must precede the next boot implementation.
+
+That integration now passes its focused groups and fresh declared build,
+link closure, artifact checks and native-image guest. The full suite passes
+2,315 tests (2,244 passed, 71 skipped) on clean source `772ae63d`.
+See `native-irq-transport-final-validation-20260907.json`. These completed
+prerequisites still do not establish native McKernel boot or IKC.

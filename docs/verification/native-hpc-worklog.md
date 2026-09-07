@@ -738,3 +738,14 @@ binding. Formatting and diff checks pass. The
 retains both runs, the correction's source overlays and eight verified artifacts.
 A fresh declared build, module artifact check, native-image guest and full
 repository suite are next. Production and historical acceptance remain unchanged.
+
+The subsequent declared transport stage and native-image guest now pass with
+all 56 image and 56 startup-table readbacks, 64 forced allocation failures,
+both ABIs and two module cycles. Combined buddy/PCP cleanup loss is 8 KiB in
+each of the four repeated-load groups, within the unchanged 4 MiB allowance.
+All CPUs return and all modules unload. The complete repository suite passes
+2,315 tests in 372.896 seconds: 2,244 passed and 71 skipped, from clean source
+`772ae63d`. The [final transport record](native-irq-transport-final-validation-20260907.json)
+reverifies 33 earlier artifacts and retains 16 final artifacts. Actual McKernel
+boot, the intermittent Linux idle/RCU issue and full production acceptance
+remain open. Next verify ownership of the required low-memory trampoline.

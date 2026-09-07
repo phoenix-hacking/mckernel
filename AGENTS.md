@@ -68,8 +68,13 @@ additive license inventory now include patch 0005, with their current byte
 bindings refreshed. The focused coverage passes 443 runtime/workflow/FP-0006/
 license checks and all 27 RS-006 checks after correcting its current workflow
 test byte binding. The initial failure and passing retry are retained in
-`native-irq-transport-staging-integration-20260907.json`. A fresh declared-stage
-build/guest and the full suite remain next. Mock guest context remains: no executing McKernel CPU or IKC
+`native-irq-transport-staging-integration-20260907.json`. The fresh declared stage
+now builds, passes link closure/ELF checks and repeats all 56 image plus 56
+startup-table readbacks and 64 forced allocation failures. The full suite passes
+2,315 tests (2,244 passed, 71 skipped) in 372.896 seconds from clean source
+`772ae63d`. See `native-irq-transport-final-validation-20260907.json`: 33 earlier
+artifacts reverified and 16 final artifacts retained. Mock guest context remains:
+no executing McKernel CPU or IKC
 handshake is claimed, and the earlier intermittent Linux idle/RCU stall is open.
 
 Latest user clarification (2026-09-07): completing the active goal requires the
