@@ -33750,3 +33750,9 @@ Command: fixed native runner run-native-irq-image-load-guest.py, new capture nat
 Environment: unchanged modules/image and guest configuration; added before/after logging, same 4 MiB assertion.
 Result: the eight readback pairs again matched. Node-0 MemFree was 3,839,936 KiB before and 3,835,800 KiB after: a 4,136 KiB deficit, 40 KiB beyond the allowance. All eight startup allocations reuse the same physical root, so measure Linux per-CPU free-page caches and outstanding vmalloc storage before assigning this deficit to owned startup pages. Preserve the failed assertion and do not relax it to obtain a pass.
 Evidence: /work/native-irq-image-load-guest-20260907-2/local-run.json and serial.log.
+
+[2026-09-07T18:41:48.736267+00:00] Native IRQ final verification, full-suite attempt 1: FAIL
+Command: fixed native runner run-native-irq-completion-checks.py, step 3: run-native-irq-full-tests.py 1.
+Environment: clean source 3f740ba6, pinned native Rust 1.92, offline four-CPU/12-GiB container. The fresh image guest 4 and complete source-consumer inventory passed first.
+Result: git diff --check passed, then rustfmt stopped on the ordering of the two imported modules in the Linux IRQ verification fixture. The unittest suite did not begin. Apply the formatter-requested declaration order only; preserve the old module artifact and runtime captures as their exact original sources.
+Evidence: /work/native-irq-full-suite-20260907-1.log/json and /work/native-irq-completion-checks-20260907-1.

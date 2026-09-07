@@ -12,10 +12,10 @@ use core::ptr::null_mut;
 use core::sync::atomic::{AtomicBool, AtomicI32, AtomicPtr, AtomicU32, AtomicU64, Ordering};
 use kernel::prelude::*;
 
-#[path = "../../../kernel/rust/smp_ikc.rs"]
-mod smp_ikc;
 #[path = "../../../kernel/rust/llist.rs"]
 mod llist;
+#[path = "../../../kernel/rust/smp_ikc.rs"]
+mod smp_ikc;
 
 mod abi {
     pub type CInt = i32;
