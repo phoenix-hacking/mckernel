@@ -122,3 +122,10 @@ The declared graph and 156-site/19-source FFI inventory are now integrated;
 fresh declared-stage build/guest and full-suite verification remain next.
 Then implement the owned low-memory trampoline, exact boot parameters,
 CPU wakeup and IRQ/IKC lifetime required for real McKernel readiness.
+
+The declared startup stage subsequently passes its kernel/module build,
+link closure and fresh guest replay with the same full startup/image/resource
+checks; see `native-startup-exact-stage-checkpoint-20260907.json`. Its five
+kernel/config/module artifacts match the corrected prototype byte for byte.
+All 137 Rust files are accounted for, including 64 core and 19 native staged
+files. The full repository suite is next; McKernel CPU startup remains open.

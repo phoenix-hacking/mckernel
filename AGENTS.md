@@ -179,6 +179,15 @@ build/guest/full suite, then continue owned trampoline, boot parameters,
 CPU wakeup and IKC. Native McKernel boot and Rust/assembly completion remain
 open; no production gate or score changes.
 
+The subsequent declared startup stage now builds the kernel and all three
+modules, passes link closure and ELF/no-SIMD checks, and repeats the passing
+four-vCPU/two-NUMA guest with both ABIs/cycles and all 56+56 readbacks and 64
+forced allocation failures. All five kernel/config/module artifacts match
+the corrected prototype. The Rust inventory accounts for 137 files, none
+removed, with all 64 core files and 19 native staged files matched to consumers.
+See `docs/verification/native-startup-exact-stage-checkpoint-20260907.json`.
+The full repository suite remains the next check before continuing AP startup.
+
 Image staging integration (2026-09-07): the recovered loader now appears in declared
 staging/link closure, lifecycle and mapping-reuse contracts, and the 154-site /
 18-source unsafe/FFI queue. Existing site IDs are preserved. Source, lifecycle,
