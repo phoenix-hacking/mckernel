@@ -174,3 +174,15 @@ Linux timer/RCU stall in a separate IRQ-module guest remains unresolved.
 Next retain owned trampoline/boot parameters and integrate native CPU wakeup
 and IRQ/IKC lifetimes; neither successful image loading nor the ABI fixture
 establishes an actual McKernel boot.
+
+The direct Linux raised-queue/APIC transport now passes its declared build,
+native-image guest and full suite; see
+`native-irq-transport-final-validation-20260907.json`. The next low-memory
+prerequisite also passes: the separate Rust owner rejects ordinary and
+reserved mappings, and exclusively leases an explicit E820 carve-out through
+128 mapped reuse cycles, full-page readbacks and two module lifetimes.
+See `native-trampoline-region-plan.md` and its source-bound checkpoint.
+Reuse that tested owner in the native SMP adapter; its current fixture never
+executes the page. Exact OS/CPU/IRQ ownership, boot parameters, preserved
+trampoline/startup assembly, INIT/SIPI and bounded readiness remain required
+before a real McKernel boot can be claimed.

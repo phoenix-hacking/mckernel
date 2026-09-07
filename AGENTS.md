@@ -77,13 +77,21 @@ artifacts reverified and 16 final artifacts retained. Mock guest context remains
 no executing McKernel CPU or IKC
 handshake is claimed, and the earlier intermittent Linux idle/RCU stall is open.
 
-Next trampoline-region prototype: `native-trampoline-region-plan.md` records
+Trampoline-region prototype: `native-trampoline-region-plan.md` records
 why the pinned Linux's first-MiB reservation needs an explicit carve-out.
 The separate Rust fixture wraps existing exported E820/resource/mapping APIs;
 its exact-header witness, native module build and ELF/no-SIMD checks pass.
-Normal, ordinary-reserved and explicit-hole guest replays are next. No Linux
-source change, production SMP integration, assembly execution or CPU startup
-is claimed by this prerequisite.
+Normal and ordinary-reserved guests reject the page without writes. The
+explicit-hole guest passes 128 repeated mapped leases, overlap rejection,
+full-page readbacks and cleanup across two module lifetimes. See
+`native-trampoline-region-checkpoint-20260907.json` for 17 retained artifacts.
+The updated Rust inventory accounts for 140 sources: 115 unchanged, 14 modified,
+11 added and none removed; all 64 core and 19 native staged files retain their
+consumers. The previous full suite covers the transport checkpoint, before this
+fixture addition. Next integrate the tested low-memory owner with the native
+SMP OS/CPU/IRQ lifetimes, exact boot parameters and preserved startup assembly.
+No Linux source change, production SMP integration, assembly execution or CPU
+startup is claimed by this prerequisite.
 
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its

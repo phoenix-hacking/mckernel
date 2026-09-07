@@ -761,3 +761,23 @@ before mapping or writes. The new Rust fixture compiles against exact headers,
 passes the separate C data witness and ELF/no-SIMD checks, and needs no Linux
 patch. Normal, reserved and explicit-hole guest tests are next; no CPU executes
 this page and no production native boot is claimed.
+
+All three reservation modes subsequently pass, each across two module
+lifetimes. Normal RAM and an ordinary reserved E820 descriptor are rejected
+before writes. The explicit carve-out passes 128 repeated mapped leases,
+same-page overlap rejection, full 4 KiB pattern readbacks, claim-only cleanup,
+and final retained-mapping checks before both unloads release the resource.
+The [region checkpoint](native-trampoline-region-checkpoint-20260907.json)
+retains 17 verified artifacts, including exact compiler/header inputs,
+module, guest roots/initramfs, commands and complete serial captures.
+
+The [updated Rust inventory](rust-consumers-trampoline-region-20260907.json)
+accounts for 140 sources: 115 unchanged, 14 modified and 11 added against the
+immutable baseline; none removed, with all 64 core and 19 native staged
+consumers preserved. The new fixture is bound to its actual build/guest
+checkpoint. The preceding full suite remains scoped to the earlier transport
+checkpoint. Next reuse this tested region owner in native SMP, bind it to the
+exact OS/CPU/IRQ lifetime, prepare the existing startup assembly and exact boot
+parameters, then implement bounded CPU wakeup/readiness and real IKC. The
+intermittent Linux idle/RCU issue, actual McKernel boot, complete Rust/assembly
+ownership and independent production acceptance remain open.
