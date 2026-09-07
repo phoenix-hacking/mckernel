@@ -40,6 +40,12 @@ int main(void)
     require(mem_one(second, OS_ASSIGN_MEM, 64 * MIB, 0) == 0);
     require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/legacy.img") == 0);
     require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);
+    // Revision 1 advertises the correct IRQ/boot layout but releases queue
+    // slots before reading. It remains loadable and must fail before startup.
+    require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/native-v1.img") == 0);
+    require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);
+    require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+    online_mask(1);
     require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, second, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, first, OS_KARGS, 1) == -EFAULT);

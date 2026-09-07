@@ -271,3 +271,50 @@ the failed source/logs remain in completion-tests attempt 1. Attempt 2 corrects
 only that flag and passes the peer check plus the existing queue/master/image
 policy fixtures. Refreshed revision-2 images, module integration and real guest
 replays are still pending. The host boot sender remains initial-only for now.
+
+Further listener inspection fixes the next allocation boundary precisely:
+`kernel/rust/host_helpers.rs::host_init_ikc2mckernel_result` first requests port
+501 (128-byte packets, 16 KiB queue, magic 0x1329, interrupt CPU -1), followed
+by `host_init_ikc2linux_result` on port 503 (magic 0x1129 and the Linux CPU).
+Retain `ikc_master::{ListenerRegistry,MasterRouter,AcceptPlan,AcceptSuccess}`
+for validation/reply fields. The null receive address in CONNECT means the host
+must allocate that queue: even the Send listener needs an owned receive queue.
+The existing guest `ikc_master.rs::ihk_ikc_connect` unconditionally maps the
+reply's receive address and writes its queue header before enabling the channel.
+Returning a successful reply with receive address zero would fault the guest.
+Reuse original compound page owners for that retained allocation; validate the
+guest-provided 16 KiB send mapping and its source CPU against the exact OS's
+assigned memory and ordered CPUs before accepting. Preserve both queue owners,
+channel identity and generation before reply publication.
+
+The current IRQ callback retains only the first request for diagnosis. Before
+accepting and receiving subsequent requests, replace that diagnostic-only drain
+with a bounded owned packet handoff to process-context service using the existing
+queue primitive. An interrupt cannot allocate a channel or acquire the resource
+mutex held by BOOT. Outbound process operations also need one producer claim so
+same-CPU interrupt reentry cannot wait behind an interrupted reservation. The
+regular 501/503 channel adapters must precede their mcctrl/vDSO/sysfs dispatch;
+the initial acknowledgment alone does not enable those services.
+
+The revision-2 image checkpoint now passes all three image builds, the actual
+parser against all three new images and the retained revision-1 image, both
+boot-layout witnesses and all three native prototype modules. The initial
+independent note extraction used native binutils without an output filename and
+rewrote its input ELF. Its final hash check correctly failed. The exact original
+object files and compatibility linker reproduce the recorded image bytes;
+restoration and the corrected extraction with a separate output both pass.
+Preserve those distinct captures and the mutated image as failure evidence.
+
+Both preparation ABIs over two module cycles now additionally prove revision-1
+native images load but fail BOOT before preparation, leaving status/CPU owners
+unchanged. All 32 forced allocations, four physical snapshots and complete
+unstarted cleanup pass. Both actual-start ABIs execute the new native image,
+receive INIT_ACK and publish CONNECT through real Linux IRQ-work; QMP confirms
+both (1,1,1) counter triples and exact packet fields. Native image SHA is
+`8c7703327cca094c7c55664bca3288aea8e300371959ad630608c9d3c92722ca`, entry
+`0xfffffffffe845e10`, loaded-window FNV64 `c9af6a2dd84ebcc5`.
+Its revision-bound linked Rust text is 614,629 / 784,327 bytes (78.363871%);
+this is language attribution, not whole-OS readiness or production credit.
+See `native-ikc-completion-checkpoint-20260907.json`. Listener acceptance and
+subsequent service requests are still pending; no application execution or
+full boot/status 3 is claimed by this prerequisite.

@@ -24,6 +24,30 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Native queue completion checkpoint (2026-09-07): the native guest reader now
+releases slots after copying or handling, with a reserved-word claim excluding
+concurrent/reentrant readers. The host has a producer-only view requiring that
+contract; its previous sole-consumer and initial-only interfaces are preserved.
+Native boot note revision 2 advertises completed reads. Revision 1 stays
+loadable but native preparation rejects it before taking startup resources.
+Actual C/legacy/native sequential queue results match over 13,312 packets;
+four host producers and four guest readers pass 16,384 packets through eight
+slots, with paused-handler/backpressure and invalid-input coverage. Seven queue,
+six master and 56 image/resource policy tests pass. All three images and native
+prototype modules build. Both ABIs pass preparation over two module lifetimes
+and actual initial IKC replays with independent physical captures. See
+`docs/verification/native-ikc-completion-checkpoint-20260907.json` for the retained
+C/PIE fixture failure, image-extraction mutation, exact-byte restoration and
+passing retries. Current native image SHA is
+`8c7703327cca094c7c55664bca3288aea8e300371959ad630608c9d3c92722ca`.
+Runtime still sends only INIT_ACK and receives the first CONNECT; repeated
+exchange is currently proven in the actual-body fixture. Next implement owned
+listener acceptance, regular channels and host services, then full readiness
+and applications. The boot plan records why even the port-501 Send listener
+must allocate a receive queue and defer allocation outside IRQ context.
+Declared integration, full Rust/assembly completion, native shutdown and
+independent production acceptance remain open. No gate credit is claimed.
+
 Initial native IKC checkpoint (2026-09-07): the new APIC binding kernel and all
 three native prototype modules compile; seven queue and six master tests pass.
 SET_KARGS now retains the legacy bounded read/truncation semantics and exact

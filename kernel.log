@@ -33809,3 +33809,16 @@ reference executable then fails linking: relocation R_X86_64_32 against
 Validation stopped before queue/master/image policy tests. The fixture's C
 object omitted PIC; add -fPIC, retaining the identical original C bodies and
 all failed logs/source. This is a fixture compiler-flag failure, not a pass.
+2026-09-07 22:57 UTC — native IKC image verification attempt 1 FAILED.
+Command: mckernel-container native python3 -B /work/verify-native-ikc-completion-images.py 1
+Environment: pinned native container, Rust 1.92/native binutils, uid 1000,
+CPUs 2-5, four CPU / 12 GiB limits. Image build 11 itself passed all three
+variants with compatibility binutils. The note extraction and real parser
+passed, but final input revalidation found native-rust/kernel/mckernel.img had
+changed from recorded SHA-256 8c7703327cca094c7c55664bca3288aea8e300371959ad630608c9d3c92722ca.
+The inherited objcopy --dump-section invocation provided no separate output,
+allowing the native binutils tool to rewrite that input ELF. Preserve the
+mutated artifact and failed capture; fix extraction to an explicit scratch
+output and restore/rebuild the exact compiler image before retry. The queued
+module-build invocation was canceled at its sudo prompt before container work.
+No runtime validation or immutable artifact pass is claimed by this attempt.
