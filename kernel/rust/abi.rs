@@ -5,6 +5,8 @@ use core::ffi::c_void;
 pub type CInt = i32;
 pub type CLong = i64;
 pub type CULong = u64;
+// x86_64's C enum includes PTATTR_NO_EXECUTE at bit 63, so its ABI is u64.
+pub type IhkMcPtAttribute = CULong;
 pub type SizeT = usize;
 pub type SSizeT = isize;
 pub type OffT = i64;

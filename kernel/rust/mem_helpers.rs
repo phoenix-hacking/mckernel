@@ -5,7 +5,7 @@ use core::sync::atomic::{AtomicI32, AtomicI64, AtomicPtr, AtomicU64, Ordering};
 
 use crate::abi::{
     AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, IhkAtomic, IhkAtomic64,
-    IhkCpuInfo, IhkSpinlock, KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process,
+    IhkCpuInfo, IhkMcPtAttribute, IhkSpinlock, KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process,
     ProcessVm, RusagePercpu, SizeT, TlbFlushEntry, VmRange, CPU_SET_WORDS, IHK_MAX_NUM_CPUS,
     IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES, PROCESS_HASH_SIZE,
 };
@@ -157,8 +157,12 @@ unsafe extern "C" {
     fn mem_vmap_allocator_bridge() -> *mut c_void;
     fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong;
     fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt);
-    fn mem_pt_set_page_bridge(pt: *mut c_void, virt: *mut c_void, phys: CULong, attr: CInt)
-        -> CInt;
+    fn mem_pt_set_page_bridge(
+        pt: *mut c_void,
+        virt: *mut c_void,
+        phys: CULong,
+        attr: IhkMcPtAttribute,
+    ) -> CInt;
     fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt;
     fn mem_flush_tlb_single_bridge(addr: CULong);
     fn mem_barrier_bridge();
@@ -423,7 +427,7 @@ type MemVmapInitFn = unsafe extern "C" fn(CULong, CULong, CULong) -> *mut c_void
 type MemPtPrepareMapFn = unsafe extern "C" fn(*mut c_void, *mut c_void, CULong, CInt) -> CInt;
 type MemVmapAllocFn = unsafe extern "C" fn(*mut c_void, CInt, CInt) -> CULong;
 type MemVmapFreeFn = unsafe extern "C" fn(*mut c_void, CULong, CInt);
-type MemPtSetPageFn = unsafe extern "C" fn(*mut c_void, *mut c_void, CULong, CInt) -> CInt;
+type MemPtSetPageFn = unsafe extern "C" fn(*mut c_void, *mut c_void, CULong, IhkMcPtAttribute) -> CInt;
 type MemPtClearPageFn = unsafe extern "C" fn(*mut c_void, *mut c_void) -> CInt;
 type MemFlushTlbSingleFn = unsafe extern "C" fn(CULong);
 type MemFlushTlbAllFn = unsafe extern "C" fn();
@@ -2468,7 +2472,7 @@ pub unsafe extern "C" fn mem_map_virtual_body_result(
     vmap_allocator: *mut c_void,
     phys: CULong,
     npages: CInt,
-    attr: CInt,
+    attr: IhkMcPtAttribute,
     pagealloc_alloc_fn: Option<MemVmapAllocFn>,
     pt_set_page_fn: Option<MemPtSetPageFn>,
     pt_clear_page_fn: Option<MemPtClearPageFn>,
@@ -2559,7 +2563,11 @@ pub unsafe extern "C" fn mem_unmap_virtual_body_result(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CInt) -> *mut c_void {
+pub unsafe extern "C" fn ihk_mc_map_virtual(
+    phys: CULong,
+    npages: CInt,
+    attr: IhkMcPtAttribute,
+) -> *mut c_void {
     mem_map_virtual_body_result(
         mem_vmap_allocator_bridge(),
         phys,

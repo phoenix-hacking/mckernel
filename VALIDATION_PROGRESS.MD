@@ -23,6 +23,15 @@ seconds. RS-006 close-race checks now also reject changes when timestamps are
 equal. This remains scoped local validation; skipped checks and the native
 boot/workload acceptance gates are not treated as passed.
 
+The subsequent compatibility rebuild preserves the Rust image, mcctrl helpers,
+and tools. A discovered page-attribute ABI truncation is repaired in the
+existing Rust mapping and XPMEM components. The old object fails both regression
+probes, while the corrected object passes; the existing memory/init and XPMEM
+C/Rust equivalence cases also pass. Build linkage, no-SIMD, syscall composition,
+and 25 report tests pass. See the
+[repair record](docs/verification/page-attribute-abi-repair.md). This is local
+ABI integration evidence, not a new native boot or production gate result.
+
 **Current completion: 100% (10/10)**
 
 This percentage is evidence-gated. Runtime code checkpoint

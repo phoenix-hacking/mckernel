@@ -33204,3 +33204,40 @@ Exact pristine Linux replay subset, Rust 1.92, and both frozen RK-007 artifacts
 were configured. Whitespace and final-push tracker checks passed. Log:
 full-suite-cpu-effects-final.log. This closes the broad-suite repair checkpoint;
 the skipped tests and native production gates receive no pass credit.
+2026-09-07 wide page-attribute regression setup stopped at userspace link
+Command: mckernel_page_attribute_abi.py against the retained 496e2fc8 Rust object,
+inside the four-CPU compatibility container. The probe could not link because
+libc's time reference resolved to McKernel's exported time implementation,
+which needs kernel callbacks. Neither regression assertion executed. Use a
+minimal userspace write/exit entry without libc interposition; preserve the real
+Rust mapping/XPMEM functions and C header types. Log: page-attribute-baseline-probe.log.
+2026-09-07 corrected page-attribute build stopped at a typed Rust consumer
+The old object now fails both wide-attribute regression assertions as expected.
+The corrected build's first failure is Rust E0308: a direct ihk_mc_map_virtual
+caller still supplies its old i32 PTATTR_WRITABLE_ACTIVE constant. Update that
+existing consumer to the canonical 64-bit page-attribute type, then resume the
+same isolated build. Log: compat-pageattrs-build-20260907.log.
+2026-09-07 bounded memory equivalence stopped at read-only source staging
+Command: run_memory_equivalence.py --repo /workspace in the four-CPU offline
+compatibility container. C reference objects compiled, but rustc attempted a
+temporary rmeta directory in its read-only source working directory. No
+equivalence executable ran. Reuse the existing writable, private page-attribute
+build checkout instead; preserve the read-only workspace boundary and fixture
+commands. Log: memory-xpmem-equivalence-pageattrs.log.
+2026-09-07 page-attribute repair build and equivalence passed
+The corrected compatibility image/modules/tools build completed with the
+existing no-SIMD, Rust linkage, syscall composition, and configured retirement
+checks. Both actual-object page-map/XPMEM ABI probes pass; the saved pre-fix
+object fails both as expected. The reused memory/init and XPMEM equivalence
+fixtures pass in the writable private checkout, digests 00338ce95ffd5b5d and
+6674c6cafec0e555. This includes compilation of their existing C references.
+Logs: compat-pageattrs-build-20260907-resume.log, page-attribute-fixed-probe.log,
+page-attribute-baseline-probe-2.log, memory-xpmem-equivalence-pageattrs-2.log.
+All execution used the four-CPU offline compatibility container. The complete
+historical harness, native boot, live page-table mutation, and production
+acceptance are not established by these checks.
+2026-09-07 evidence packaging stopped at Python 3.6 gzip API
+The offline compatibility container's gzip.compress lacks the mtime keyword.
+Builds and tests had already passed; packaging stopped before producing its
+record. Use GzipFile with a byte buffer for deterministic gzip metadata and a
+new output directory. Command: python3 /work/retain-pageattrs-evidence.py.

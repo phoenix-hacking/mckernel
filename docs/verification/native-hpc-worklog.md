@@ -236,3 +236,21 @@ does not convert the 71 skipped cases into passes or establish native CPU
 reservation, McKernel boot, or HPC workload acceptance. The next build reuses
 the existing compatibility Rust image/tool recipe, retaining image, map,
 objects and compile commands for the Rust/assembly completion inventory.
+
+## Preserved McKernel rebuild and shared ABI repair — 2026-09-07
+
+Local checkpoint `496e2fc8` preserves the existing Rust implementation and the
+verified native lifecycle/resource work. Its full compatibility image, modules,
+and tool build passed in the bounded offline container. Compiler diagnostics
+then exposed inconsistent external declarations across existing Rust modules.
+The x86_64 page-attribute enum uses bit 63 for NX, but mapping and XPMEM paths
+still declared parts of that interface as a 32-bit integer.
+
+The [ABI repair](page-attribute-abi-repair.md) adapts those existing interfaces
+without replacing their algorithms. The saved pre-fix object fails both new
+real-object ABI probes, and the repaired object passes. Existing memory/init
+and XPMEM C/Rust equivalence cases pass with the strengthened full-width case.
+The corrected full compatibility build, existing linkage/no-SIMD/composition
+checks, and 25 report tests also pass. The retained record binds the dirty
+source changes separately from their parent commit. Other declaration warnings,
+native CPU/memory assignment, McKernel boot, and workloads remain open.

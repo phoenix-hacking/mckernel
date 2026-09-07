@@ -933,7 +933,7 @@ extern int mem_virtual_allocator_init_body_result(void **vmap_allocator_slot,
 		int first_level, mem_vmap_init_fn_t pagealloc_init_fn,
 		mem_pt_prepare_map_fn_t pt_prepare_map_fn);
 extern void *mem_map_virtual_body_result(void *vmap_allocator,
-		unsigned long phys, int npages, int attr,
+		unsigned long phys, int npages, unsigned long attr,
 		mem_vmap_alloc_fn_t pagealloc_alloc_fn,
 		mem_pt_set_page_fn_t pt_set_page_fn,
 		mem_pt_clear_page_fn_t pt_clear_page_fn,

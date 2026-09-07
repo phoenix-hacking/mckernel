@@ -85,7 +85,7 @@ const SYS_RT_SIGACTION: CInt = 13;
 const SYS_SCHED_SETAFFINITY: CULong = 203;
 const SYS_EPOLL_WAIT: CULong = 232;
 const SYS_SYSCALL_RESPONSE: CULong = 8001;
-const PTATTR_WRITABLE_ACTIVE: CInt = 0x3;
+const PTATTR_WRITABLE_ACTIVE: crate::abi::IhkMcPtAttribute = 0x3;
 
 const MCL_CURRENT: CInt = 0x01;
 const MCL_FUTURE: CInt = 0x02;

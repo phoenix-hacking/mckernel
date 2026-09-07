@@ -68,6 +68,10 @@ static void xpmem_att_deref(struct xpmem_attachment *att)
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
 
+ABI_ASSERT(sizeof(enum ihk_mc_pt_attribute) == sizeof(unsigned long),
+	"x86_64 page attributes must preserve all 64 bits");
+ABI_ASSERT(PTATTR_NO_EXECUTE == (1UL << 63), "x86_64 no-execute attribute bit");
+
 ABI_ASSERT(sizeof(struct user_desc) == 16,
 	   "Rust/C user_desc size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct user_desc, base_addr) == 4,

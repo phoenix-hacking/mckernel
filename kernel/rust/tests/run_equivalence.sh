@@ -2778,9 +2778,9 @@ extern int mem_virtual_allocator_init_body_result(void **, unsigned long,
 	unsigned long, unsigned long, int,
 	void *(*)(unsigned long, unsigned long, unsigned long),
 	int (*)(void *, void *, unsigned long, int));
-extern void *mem_map_virtual_body_result(void *, unsigned long, int, int,
+extern void *mem_map_virtual_body_result(void *, unsigned long, int, unsigned long,
 	unsigned long (*)(void *, int, int),
-	int (*)(void *, void *, unsigned long, int),
+	int (*)(void *, void *, unsigned long, unsigned long),
 	int (*)(void *, void *), void (*)(void *, unsigned long, int),
 	void (*)(unsigned long), void (*)(void));
 extern int mem_unmap_virtual_body_result(void *, void *, int,
@@ -3366,7 +3366,7 @@ static int vmap_set_count;
 static void *vmap_set_pt[8];
 static unsigned long vmap_set_virt[8];
 static unsigned long vmap_set_phys[8];
-static int vmap_set_attr[8];
+static unsigned long vmap_set_attr[8];
 static int vmap_set_fail_at;
 static int vmap_clear_count;
 static void *vmap_clear_pt[8];
@@ -4285,7 +4285,7 @@ static void fake_vmap_free(void *desc, unsigned long addr, int npages)
 }
 
 static int fake_vmap_set_page(void *pt, void *virt, unsigned long phys,
-			      int attr)
+			      unsigned long attr)
 {
 	int idx = vmap_set_count++;
 
@@ -4911,11 +4911,11 @@ int mem_virtual_allocator_init_body_result(void **vmap_allocator_slot,
 }
 
 void *mem_map_virtual_body_result(void *vmap_allocator, unsigned long phys,
-				  int npages, int attr,
+				  int npages, unsigned long attr,
 				  unsigned long (*pagealloc_alloc_fn)(void *,
 					int, int),
 				  int (*pt_set_page_fn)(void *, void *,
-					unsigned long, int),
+					unsigned long, unsigned long),
 				  int (*pt_clear_page_fn)(void *, void *),
 				  void (*pagealloc_free_fn)(void *,
 					unsigned long, int),
@@ -5244,7 +5244,7 @@ static unsigned long mem_runtime_orchestration_digest(void)
 		reset_vmap_trace();
 		vmap_alloc_return = 0x80000000UL;
 		ptr = mem_map_virtual_body_result(&vmap_allocator_token,
-			0x12345UL, 3, 0x55, fake_vmap_alloc,
+			0x12345UL, 3, 0x8000000000000055UL, fake_vmap_alloc,
 			fake_vmap_set_page, fake_vmap_clear_page,
 			fake_vmap_free, fake_vmap_flush, fake_vmap_barrier);
 		require(ptr == (void *)0x80000345UL);
@@ -5257,7 +5257,7 @@ static unsigned long mem_runtime_orchestration_digest(void)
 		require(vmap_set_virt[2] == 0x80002000UL);
 		require(vmap_set_phys[0] == 0x12000UL);
 		require(vmap_set_phys[2] == 0x14000UL);
-		require(vmap_set_attr[1] == 0x55);
+		require(vmap_set_attr[1] == 0x8000000000000055UL);
 		require(vmap_clear_count == 0);
 		require(vmap_flush_count == 3);
 		require(vmap_flush_addr[2] == 0x80002000UL);
@@ -142478,7 +142478,7 @@ __attribute__((weak)) void mem_vmap_free_bridge(void *desc,
 	(void)npages;
 }
 __attribute__((weak)) int mem_pt_set_page_bridge(void *pt, void *virt,
-		unsigned long phys, int attr)
+		unsigned long phys, unsigned long attr)
 {
 	(void)pt;
 	(void)virt;

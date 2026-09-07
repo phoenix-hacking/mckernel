@@ -19,6 +19,17 @@ docs/verification/native-cpu-additive-reuse.json. All 38 resource Rust tests and
 the incremental native module build/link checks pass. Native production gates
 remain unchanged while the Linux CPU/memory/boot adapters are completed.
 
+Local ABI repair checkpoint (2026-09-07): the compatibility rebuild of 496e2fc8
+plus the recorded page-attribute repair contains 614,235 Rust executable bytes
+out of 783,895 total (78.356795%). Existing Rust mapping/XPMEM bodies are retained
+and adapted to preserve 64-bit attributes across their shared ABI. Negative
+and positive real-object probes and the existing C/Rust equivalence cases pass
+their expected outcomes; see docs/verification/page-attribute-abi-repair.md and
+its evidence JSON. No C implementation is retired by this correction. The tiny
+byte-percentage change is code generation from a correctness fix, not a porting
+score increase. The earlier 127-identical/two-additive inventory describes its
+own CPU checkpoint; these later ABI adaptations are recorded separately.
+
 Scope: active smp-x86/x86_64 McKernel-owned C/header source retirement inventory. Arm64, deferred builtin/MIC/attached targets, third-party, generated, and test/fixture bundles are excluded from this per-file list because they are not active McKernel-owned source-retirement debt.
 
 Artifact conversion status (authoritative for implementation-language claims):
