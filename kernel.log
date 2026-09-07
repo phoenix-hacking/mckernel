@@ -33780,3 +33780,15 @@ Command: /home/holden/mckernel-work/bin/mckernel-container compat python3 -B /wo
 Environment: pinned Rocky 8 compatibility image compiler, four CPUs 2-5, 12 GiB, uid 1000.
 First failure: all three images compiled, but the native image note assertion matched readelf's presentation text. The pinned readelf sign-extends descriptor byte 0xc0 and prints ffffffc0. Exact expected text therefore failed despite matching displayed descriptor contents. Fallback and legacy builds and legacy linked ownership had passed; no final native artifact-validation pass claimed.
 Evidence: /work/mckernel-native-irq-images-20260907-10 contains source b6c5f792, all image/map/object outputs, commands, compiler identity and failing record. Preserve it. Correction: inspect the exact ELF note section bytes, then validate all three existing images with the actual ImagePlan parser and finish native linked-ownership accounting in a new capture. No image rebuild needed for a report-formatting failure.
+
+[2026-09-07 21:54 UTC] Native CPU-start guest attempt 1: FAIL at physical capture assertion.
+Command: mckernel-container native python3 -B /work/run-native-boot-guest.py start-x86_64 1 1
+Environment: pinned Linux 6.12 boot-export kernel and prototype native modules attempt 1, native image 3eb7b36b, four-vCPU/two-NUMA TCG guest, fixed four-CPU/12-GiB offline container; explicit 0x80000 trampoline carve-out.
+First failure: capture() line 119 expected the startup page's original root/trampoline/entry header to survive guest initialization. The real INIT/SIPI returned zero and McKernel progressed through status 1 to architectural status 2, publishing both master queue physical addresses. The independent startup-page assertion failed before queue/readiness assertions; no guest pass or full boot is claimed. Both ordinary and emergency physical snapshots, all CPU registers, serial and early debug-port output were retained before terminating the disposable VM. Inspect the guest's actual startup-page lifetime before correcting the probe or implementation. Host IKC integration remains open and started resources stayed retained.
+Evidence: /work/native-boot-guest-20260907-start-x86_64-1/{record.json,serial.log,debugcon.log,capture-0,capture-emergency}.
+
+[2026-09-07 22:01 UTC] Native boot evidence retention attempt 1: FAIL at compiler-source identity check.
+Command: mckernel-container native python3 -B /work/retain-native-boot-start.py
+Environment: fixed native offline container after both corrected actual-start guest ABIs passed.
+First failure: the retained prototype's formatted ihk_ioctl.rs differs byte-for-byte from the current repository source. Kernel/module/guest artifacts and their recorded inputs/outputs passed hash checks first. Do not label these sources identical until the difference is inspected. Preserve the first retainer and partial archives, copy only verified formatting differences if appropriate, and replay retention in a new directory. Runtime captures remain their original results.
+Evidence: /work/native-boot-start-retained-20260907-1 and /work/native-boot-prototype-20260907-1/staged-source/ihk_ioctl.rs.

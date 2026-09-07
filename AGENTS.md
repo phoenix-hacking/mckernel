@@ -24,6 +24,26 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Native boot entry checkpoint (2026-09-07): all three refreshed images are built;
+the current native image SHA is
+`3eb7b36b3ef1ee069dbfdb163bff9f7a39bf828af3635417cd708a9a6f011be8`.
+Patch 0006 and all three prototype native modules compile. Exact C witnesses
+match both boot layouts. Preparation passes both user ABIs across two module
+lifetimes, with 32 forced allocation failures, cleanup and four independent
+physical captures. Actual native and compat BOOT operations now execute the
+assigned McKernel AP through architectural status 2 and publish both master
+queues. Captured registers resolve to the guest's `post_init` host-ack wait.
+Incomplete boot remains Failed with resources retained after close; mutation,
+destruction and module removal are rejected. See
+`docs/verification/native-boot-start-checkpoint-20260907.json` and the boot
+integration plan. The initial started capture wrongly required the temporary
+startup page to survive guest allocator initialization; its failure and diagnosis
+are preserved with the corrected replays. Next connect actual host IRQ/IKC
+service and INIT_ACK, then finish readiness, mcctrl and applications. Declared
+staging, FFI/lifecycle/license bindings, full Rust/assembly completion and
+independent production acceptance remain open. No full boot or shutdown is
+claimed, and the earlier full suite does not cover these boot sources.
+
 Latest IRQ/image checkpoint (2026-09-07): the guest's existing Rust IRQ producer
 now has an explicit Linux 6.12 ABI selection. Exact-header checks, C/Rust
 producer equivalence, native concurrency and a native Linux module guest pass;

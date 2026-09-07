@@ -124,3 +124,29 @@ INIT/SIPI body verified byte-identical. Its first complete Linux rebuild is
 still running. The new SMP source and guest probes have not yet compiled or
 executed. This WIP checkpoint precedes those checks and is not declared-stage
 or production acceptance.
+
+The pinned Linux export rebuild and all three prototype native modules now
+compile. Independent C witnesses verify both complete boot layouts. The
+preparation-only guest passes both ABIs across two module lifetimes, including
+32 forced allocation failures, trampoline exclusion, CPU-change invalidation,
+cleanup and four independent physical snapshots.
+
+The first actual INIT/SIPI executes McKernel through architectural status 2;
+both master queues are published and the captured AP resolves to
+`kernel/rust/init.rs::post_init`, waiting for the host IKC acknowledgment.
+The capture itself failed because it incorrectly expected the temporary startup
+page to remain unchanged after execution. The existing `arch_start` switches to
+its own stack; `mem_numa_init_body_result` publishes the remaining bootstrap
+range and `page_alloc.rs::__ihk_numa_add_free_pages` clears it under
+`zero_at_free`. Kmsg reports that free range, which includes the startup page.
+Preserve the failed guest and diagnosis. Keep whole-byte assertions for
+preparation; a started capture must inspect the AP's real image/CR3, retained
+low-page header, queue contents and kmsg. The corrected replay is still pending.
+
+Both corrected actual-start guests now pass, one through the native ioctl ABI
+and one through compat. Their independently captured AP registers resolve to
+`post_init`; each uses an owned guest page table, has status 2 and two valid
+empty 56-byte master-packet queues. The retained low-page boot header matches
+the canonical addresses. Started resource mutations, destruction and module
+removal remain rejected after close. Full host IKC service, INIT_ACK and later
+readiness are the next implementation; no native shutdown is claimed.

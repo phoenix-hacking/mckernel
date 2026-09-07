@@ -405,7 +405,9 @@ struct LoadedImage {
 }
 
 impl LoadedImage {
-    fn started(&self) -> bool { self.boot.as_ref().is_some_and(|boot| boot.started) }
+    fn started(&self) -> bool {
+        self.boot.as_ref().is_some_and(|boot| boot.started)
+    }
 }
 
 impl Drop for LoadedImage {
@@ -430,30 +432,56 @@ struct BootPages {
 
 impl BootPages {
     fn allocate(bytes: usize, direct_map: u64) -> Result<Self> {
-        if bytes == 0 || bytes > (4096 << MAX_ORDER) { return Err(ENOMEM); }
+        if bytes == 0 || bytes > (4096 << MAX_ORDER) {
+            return Err(ENOMEM);
+        }
         let pages_needed = bytes.div_ceil(4096).next_power_of_two();
         let hotplug = MemoryHotplugGuard::lock();
         let pages = PageOwner::allocate_scope(pages_needed.trailing_zeros(), None, true, &hotplug)?;
-        if pages.end() > IDENTITY_WINDOW_END { return Err(EINVAL); }
-        let address = direct_map.checked_add(pages.physical).ok_or_else(overflow)?;
+        if pages.end() > IDENTITY_WINDOW_END {
+            return Err(EINVAL);
+        }
+        let address = direct_map
+            .checked_add(pages.physical)
+            .ok_or_else(overflow)?;
         address.checked_add(pages.len()).ok_or_else(overflow)?;
-        Ok(Self { pages, address, bytes })
+        Ok(Self {
+            pages,
+            address,
+            bytes,
+        })
     }
 
     fn put(&mut self, offset: usize, bytes: &[u8]) -> Result {
         let end = offset.checked_add(bytes.len()).ok_or_else(overflow)?;
-        if end > self.bytes { return Err(EINVAL); }
+        if end > self.bytes {
+            return Err(EINVAL);
+        }
         // SAFETY: This unstarted exclusive owner retains one complete Linux
         // allocation. The checked source/destination belong to distinct storage.
-        unsafe { ptr::copy_nonoverlapping(bytes.as_ptr(), (self.address as *mut u8).add(offset), bytes.len()) };
+        unsafe {
+            ptr::copy_nonoverlapping(
+                bytes.as_ptr(),
+                (self.address as *mut u8).add(offset),
+                bytes.len(),
+            )
+        };
         Ok(())
     }
-    fn put64(&mut self, offset: usize, value: u64) -> Result { self.put(offset, &value.to_le_bytes()) }
-    fn put32(&mut self, offset: usize, value: u32) -> Result { self.put(offset, &value.to_le_bytes()) }
-    fn physical(&self) -> u64 { self.pages.physical }
+    fn put64(&mut self, offset: usize, value: u64) -> Result {
+        self.put(offset, &value.to_le_bytes())
+    }
+    fn put32(&mut self, offset: usize, value: u32) -> Result {
+        self.put(offset, &value.to_le_bytes())
+    }
+    fn physical(&self) -> u64 {
+        self.pages.physical
+    }
 
     fn read64(&self, offset: usize) -> Result<u64> {
-        if offset % 8 != 0 || offset.checked_add(8).is_none_or(|end| end > self.bytes) { return Err(EINVAL); }
+        if offset % 8 != 0 || offset.checked_add(8).is_none_or(|end| end > self.bytes) {
+            return Err(EINVAL);
+        }
         // SAFETY: The owner retains this aligned ABI field for the full guest
         // lifetime. It is shared with the independently executing co-kernel;
         // only a single volatile scalar is read, without a Rust reference to
@@ -501,13 +529,23 @@ fn linux_boot_root() -> Result<u64> {
     // The preserved guest owns four-level mappings. Reject an active LA57
     // Linux root before exposing it to the guest's existing page-table walker.
     #[cfg(CONFIG_X86_5LEVEL)]
-    if unsafe { bindings::pgdir_shift } != 39 { return Err(EINVAL); }
-    let offset = (&raw const init_top_pgt as u64).checked_sub(0xffff_ffff_8000_0000).ok_or(EIO)?;
-    if offset >= 1 << 30 { return Err(EIO); }
+    if unsafe { bindings::pgdir_shift } != 39 {
+        return Err(EINVAL);
+    }
+    let offset = (&raw const init_top_pgt as u64)
+        .checked_sub(0xffff_ffff_8000_0000)
+        .ok_or(EIO)?;
+    if offset >= 1 << 30 {
+        return Err(EIO);
+    }
     // SAFETY: phys_base is Linux's boot-initialized __pa_symbol base. The
     // permanent assembly symbol uses the kernel-image mapping, not PAGE_OFFSET.
-    let physical = offset.checked_add(unsafe { bindings::phys_base }).ok_or(EIO)?;
-    if physical % 4096 != 0 || physical >= IDENTITY_WINDOW_END { return Err(EIO); }
+    let physical = offset
+        .checked_add(unsafe { bindings::phys_base })
+        .ok_or(EIO)?;
+    if physical % 4096 != 0 || physical >= IDENTITY_WINDOW_END {
+        return Err(EIO);
+    }
     Ok(physical)
 }
 
@@ -522,9 +560,18 @@ fn image_error(error: ImageError) -> Error {
 
 impl MemoryContext {
     fn require_unstarted(&self, owner: super::smp_resource::OsToken) -> Result {
-        if let Some(image) = self.images.get(owner.slot() as usize).ok_or(EINVAL)?.as_ref() {
-            if image.owner != owner { return Err(EIO); }
-            if image.started() { return Err(EBUSY); }
+        if let Some(image) = self
+            .images
+            .get(owner.slot() as usize)
+            .ok_or(EINVAL)?
+            .as_ref()
+        {
+            if image.owner != owner {
+                return Err(EIO);
+            }
+            if image.started() {
+                return Err(EBUSY);
+            }
         }
         Ok(())
     }
@@ -1116,15 +1163,27 @@ impl MemoryContext {
         Ok(())
     }
 
-    fn prepare_boot(&mut self, owner: super::smp_resource::OsToken, topology: &BootTopology<'_>, kmsg: u64, kmsg_bytes: u64, trampoline_physical: u64) -> Result {
+    fn prepare_boot(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+        topology: &BootTopology<'_>,
+        kmsg: u64,
+        kmsg_bytes: u64,
+        trampoline_physical: u64,
+    ) -> Result {
         self.verify()?;
         self.require_unstarted(owner)?;
         let loaded = self.images[owner.slot() as usize].as_mut().ok_or(EINVAL)?;
         let boot_abi = loaded.native_boot_abi.ok_or(EINVAL)?;
         let (layout, entry, root) = (loaded.layout, loaded.entry, loaded.tables.plan.root());
         loaded.boot.take();
-        if kmsg == 0 || kmsg % 4096 != 0 || kmsg_bytes != 4 << 20
-            || kmsg.checked_add(kmsg_bytes).is_none_or(|end| end > IDENTITY_WINDOW_END) {
+        if kmsg == 0
+            || kmsg % 4096 != 0
+            || kmsg_bytes != 4 << 20
+            || kmsg
+                .checked_add(kmsg_bytes)
+                .is_none_or(|end| end > IDENTITY_WINDOW_END)
+        {
             return Err(EINVAL);
         }
         // Default module configuration has no startup page. A real boot needs
@@ -1134,9 +1193,13 @@ impl MemoryContext {
         let mut cpus = Vec::with_capacity(topology.cpus().len(), GFP_KERNEL)?;
         let mut nodes = Vec::with_capacity(MAX_NODES, GFP_KERNEL)?;
         for &cpu in topology.cpus() {
-            if cpu.numa_node as usize >= MAX_NODES { return Err(EINVAL); }
+            if cpu.numa_node as usize >= MAX_NODES {
+                return Err(EINVAL);
+            }
             cpus.push(cpu, GFP_KERNEL)?;
-            if !nodes.contains(&cpu.numa_node) { nodes.push(cpu.numa_node, GFP_KERNEL)?; }
+            if !nodes.contains(&cpu.numa_node) {
+                nodes.push(cpu.numa_node, GFP_KERNEL)?;
+            }
         }
         let mut chunks = Vec::with_capacity(self.map.len(), GFP_KERNEL)?;
         let mut first = u64::MAX;
@@ -1144,37 +1207,73 @@ impl MemoryContext {
         let mut dump_bytes = 0_usize;
         for index in 0..self.map.len() {
             let range = self.map.extent(index).ok_or(EIO)?;
-            if range.owner() != Some(owner) { continue; }
+            if range.owner() != Some(owner) {
+                continue;
+            }
             let end = range.end().map_err(|_| EIO)?;
-            if end > IDENTITY_WINDOW_END { return Err(EINVAL); }
+            if end > IDENTITY_WINDOW_END {
+                return Err(EINVAL);
+            }
             first = first.min(range.start());
             last = last.max(end);
-            if !nodes.contains(&range.numa_node()) { nodes.push(range.numa_node(), GFP_KERNEL)?; }
+            if !nodes.contains(&range.numa_node()) {
+                nodes.push(range.numa_node(), GFP_KERNEL)?;
+            }
             chunks.push(range, GFP_KERNEL)?;
-            let words = usize::try_from(range.length().div_ceil(4096 * 64)).map_err(|_| overflow())?;
-            dump_bytes = dump_bytes.checked_add(size_of::<abi::IhkDumpPagePrefix>() + words.checked_mul(8).ok_or_else(overflow)?).ok_or_else(overflow)?;
+            let words =
+                usize::try_from(range.length().div_ceil(4096 * 64)).map_err(|_| overflow())?;
+            dump_bytes = dump_bytes
+                .checked_add(
+                    size_of::<abi::IhkDumpPagePrefix>()
+                        + words.checked_mul(8).ok_or_else(overflow)?,
+                )
+                .ok_or_else(overflow)?;
         }
-        if chunks.is_empty() || nodes.is_empty() || nodes.len() > MAX_NODES { return Err(EINVAL); }
+        if chunks.is_empty() || nodes.is_empty() || nodes.len() > MAX_NODES {
+            return Err(EINVAL);
+        }
         nodes.sort_unstable();
         // Preserve the pinned boot ABI's NUMA-major chunk ordering.
         chunks.sort_unstable_by_key(|range| (range.numa_node(), range.start()));
         let cpu_offset = boot_abi.header_bytes;
-        let node_offset = cpu_offset.checked_add(cpus.len() * size_of::<abi::IhkSmpBootParamCpu>()).ok_or_else(overflow)?;
-        let chunk_offset = node_offset.checked_add(nodes.len() * size_of::<abi::IhkSmpBootParamNumaNode>()).ok_or_else(overflow)?;
-        let distance_offset = chunk_offset.checked_add(chunks.len() * size_of::<abi::IhkSmpBootParamMemoryChunk>()).ok_or_else(overflow)?;
-        let param_bytes = distance_offset.checked_add(nodes.len() * nodes.len() * 4).ok_or_else(overflow)?.checked_add(4095).ok_or_else(overflow)? & !4095;
+        let node_offset = cpu_offset
+            .checked_add(cpus.len() * size_of::<abi::IhkSmpBootParamCpu>())
+            .ok_or_else(overflow)?;
+        let chunk_offset = node_offset
+            .checked_add(nodes.len() * size_of::<abi::IhkSmpBootParamNumaNode>())
+            .ok_or_else(overflow)?;
+        let distance_offset = chunk_offset
+            .checked_add(chunks.len() * size_of::<abi::IhkSmpBootParamMemoryChunk>())
+            .ok_or_else(overflow)?;
+        let param_bytes = distance_offset
+            .checked_add(nodes.len() * nodes.len() * 4)
+            .ok_or_else(overflow)?
+            .checked_add(4095)
+            .ok_or_else(overflow)?
+            & !4095;
         let dump_bytes = dump_bytes.checked_add(4095).ok_or_else(overflow)? & !4095;
         // SAFETY: Linux initializes this direct-map base before module loading.
         let direct_map = unsafe { bindings::page_offset_base };
         let mut params = BootPages::allocate(param_bytes, direct_map)?;
         let mut dump = BootPages::allocate(dump_bytes, direct_map)?;
         let irq = BootIrqRoute::new(owner, topology)?;
-        macro_rules! put64 { ($field:ident, $value:expr) => { params.put64(offset_of!(abi::IhkSmpBootParam, $field), $value)? }; }
-        macro_rules! put32 { ($field:ident, $value:expr) => { params.put32(offset_of!(abi::IhkSmpBootParam, $field), $value as u32)? }; }
+        macro_rules! put64 {
+            ($field:ident, $value:expr) => {
+                params.put64(offset_of!(abi::IhkSmpBootParam, $field), $value)?
+            };
+        }
+        macro_rules! put32 {
+            ($field:ident, $value:expr) => {
+                params.put32(offset_of!(abi::IhkSmpBootParam, $field), $value as u32)?
+            };
+        }
         put64!(start, first);
         put64!(end, last);
         put32!(parameter_size, param_bytes);
-        put64!(bootstrap_memory_end, layout.extent().end().map_err(|_| EIO)?);
+        put64!(
+            bootstrap_memory_end,
+            layout.extent().end().map_err(|_| EIO)?
+        );
         put64!(message_buffer, kmsg);
         put64!(message_buffer_size, kmsg_bytes);
         put64!(linux_kernel_page_table_physical, linux_root);
@@ -1183,18 +1282,24 @@ impl MemoryContext {
         // Same documented scaled nanoseconds-per-TSC fallback as the pinned
         // IHK calc_ns_per_tsc, using Linux's calibrated exported frequency.
         let khz = unsafe { bindings::tsc_khz };
-        if khz == 0 { return Err(EIO); }
+        if khz == 0 {
+            return Err(EIO);
+        }
         put64!(nanoseconds_per_tsc, 1_000_000_000 / khz as u64);
         let mut now = bindings::timespec64::default();
         // SAFETY: Linux fills a complete local timespec, without retaining it.
         unsafe { bindings::ktime_get_real_ts64(&mut now) };
-        if now.tv_sec < 0 || now.tv_nsec < 0 || now.tv_nsec >= 1_000_000_000 { return Err(EIO); }
+        if now.tv_sec < 0 || now.tv_nsec < 0 || now.tv_nsec >= 1_000_000_000 {
+            return Err(EIO);
+        }
         put64!(boot_seconds, now.tv_sec as u64);
         put64!(boot_nanoseconds, now.tv_nsec as u64);
         let low: u32;
         let high: u32;
         // SAFETY: RDTSC reads this x86 counter and has no memory side effect.
-        unsafe { core::arch::asm!("rdtsc", out("eax") low, out("edx") high, options(nomem, nostack)) };
+        unsafe {
+            core::arch::asm!("rdtsc", out("eax") low, out("edx") high, options(nomem, nostack))
+        };
         put64!(boot_tsc, (high as u64) << 32 | low as u64);
         put64!(ikc_irq_work_function, irq.callback() as u64);
         put32!(ikc_irq, 0xf6);
@@ -1207,29 +1312,61 @@ impl MemoryContext {
         // allocation capability or performance-event mapping is advertised here.
         put32!(linux_default_huge_page_shift, 21);
         let dump_set = offset_of!(abi::IhkSmpBootParam, dump_page_set);
-        params.put32(dump_set + offset_of!(abi::IhkDumpPageSet, count), chunks.len() as u32)?;
-        params.put64(dump_set + offset_of!(abi::IhkDumpPageSet, page_size), dump_bytes as u64)?;
-        params.put64(dump_set + offset_of!(abi::IhkDumpPageSet, physical_page), dump.physical())?;
+        params.put32(
+            dump_set + offset_of!(abi::IhkDumpPageSet, count),
+            chunks.len() as u32,
+        )?;
+        params.put64(
+            dump_set + offset_of!(abi::IhkDumpPageSet, page_size),
+            dump_bytes as u64,
+        )?;
+        params.put64(
+            dump_set + offset_of!(abi::IhkDumpPageSet, physical_page),
+            dump.physical(),
+        )?;
         for cpu in 0..topology.linux_cpus() {
-            let snapshot = match topology.host_cpu(cpu) { Ok(snapshot) => snapshot, Err(error) if error == ENODEV => continue, Err(error) => return Err(error) };
-            params.put32(offset_of!(abi::IhkSmpBootParam, ikc_irq_apic_ids) + cpu * 4, snapshot.hardware_id)?;
+            let snapshot = match topology.host_cpu(cpu) {
+                Ok(snapshot) => snapshot,
+                Err(error) if error == ENODEV => continue,
+                Err(error) => return Err(error),
+            };
+            params.put32(
+                offset_of!(abi::IhkSmpBootParam, ikc_irq_apic_ids) + cpu * 4,
+                snapshot.hardware_id,
+            )?;
             // SAFETY: The retained topology guard bounds the per-CPU offset
             // and keeps the resident Linux queue allocation stable. Integer
             // token arithmetic matches Linux per_cpu_ptr; no Rust object spans
             // the linker symbol and its per-CPU offset.
             let address = unsafe {
-                let offset = (&raw const bindings::__per_cpu_offset).cast::<u64>().add(cpu).read();
-                (&raw mut raised_list as usize).wrapping_add(offset as usize) as *mut core::ffi::c_void
+                let offset = (&raw const bindings::__per_cpu_offset)
+                    .cast::<u64>()
+                    .add(cpu)
+                    .read();
+                (&raw mut raised_list as usize).wrapping_add(offset as usize)
+                    as *mut core::ffi::c_void
             };
             // SAFETY: This is the exact resident per-CPU llist_head token.
             let physical = unsafe { per_cpu_ptr_to_phys(address) };
-            if physical == 0 || physical >= IDENTITY_WINDOW_END { return Err(EIO); }
-            params.put64(offset_of!(abi::IhkSmpBootParam, ikc_cpu_raised_list) + cpu * 8, physical)?;
+            if physical == 0 || physical >= IDENTITY_WINDOW_END {
+                return Err(EIO);
+            }
+            params.put64(
+                offset_of!(abi::IhkSmpBootParam, ikc_cpu_raised_list) + cpu * 8,
+                physical,
+            )?;
         }
         for (rank, cpu) in cpus.iter().enumerate() {
             let offset = cpu_offset + rank * size_of::<abi::IhkSmpBootParamCpu>();
             let node = nodes.binary_search(&cpu.numa_node).map_err(|_| EIO)?;
-            for (field, value) in [(0, node as u32), (4, cpu.hardware_id), (8, cpu.linux_id), (12, 0)] { params.put32(offset + field, value)?; }
+            for (field, value) in [
+                (0, node as u32),
+                (4, cpu.hardware_id),
+                (8, cpu.linux_id),
+                (12, 0),
+            ] {
+                params.put32(offset + field, value)?;
+            }
         }
         for (rank, &node) in nodes.iter().enumerate() {
             params.put32(node_offset + rank * 8, 1)?;
@@ -1238,8 +1375,13 @@ impl MemoryContext {
                 // SAFETY: Both bounded nodes come from retained CPU/page owners
                 // under topology exclusion; Linux owns the distance table.
                 let distance = unsafe { bindings::__node_distance(node as i32, other as i32) };
-                if distance <= 0 { return Err(EIO); }
-                params.put32(distance_offset + (rank * nodes.len() + other_rank) * 4, distance as u32)?;
+                if distance <= 0 {
+                    return Err(EIO);
+                }
+                params.put32(
+                    distance_offset + (rank * nodes.len() + other_rank) * 4,
+                    distance as u32,
+                )?;
             }
         }
         let mut dump_offset = 0;
@@ -1255,39 +1397,85 @@ impl MemoryContext {
             dump.put64(dump_offset + 8, words)?;
             for word in 0..words {
                 let bits = (pages - word * 64).min(64);
-                dump.put64(dump_offset + 16 + word as usize * 8, if bits == 64 { u64::MAX } else { (1_u64 << bits) - 1 })?;
+                dump.put64(
+                    dump_offset + 16 + word as usize * 8,
+                    if bits == 64 {
+                        u64::MAX
+                    } else {
+                        (1_u64 << bits) - 1
+                    },
+                )?;
             }
             dump_offset += 16 + words as usize * 8;
         }
         self.write_image_range(direct_map, layout.startup(), 4096, None)?;
         let code = super::smp_boot_code::startup();
         self.write_image_range(direct_map, layout.startup(), code.len(), Some(code))?;
-        for (offset, value) in [(16, root), (24, layout.stack()), (32, layout.kernel().start()), (40, trampoline.physical()), (48, entry)] {
-            self.write_image_range(direct_map, layout.startup() + offset, 8, Some(&value.to_le_bytes()))?;
+        for (offset, value) in [
+            (16, root),
+            (24, layout.stack()),
+            (32, layout.kernel().start()),
+            (40, trampoline.physical()),
+            (48, entry),
+        ] {
+            self.write_image_range(
+                direct_map,
+                layout.startup() + offset,
+                8,
+                Some(&value.to_le_bytes()),
+            )?;
         }
-        for (offset, &byte) in super::smp_boot_code::trampoline().iter().enumerate() { trampoline.write_byte(offset, byte)?; }
-        for (offset, value) in [(8, root), (16, layout.startup()), (24, layout.stack()), (32, params.physical())] {
-            for (byte_offset, byte) in value.to_le_bytes().iter().copied().enumerate() { trampoline.write_byte(offset + byte_offset, byte)?; }
+        for (offset, &byte) in super::smp_boot_code::trampoline().iter().enumerate() {
+            trampoline.write_byte(offset, byte)?;
+        }
+        for (offset, value) in [
+            (8, root),
+            (16, layout.startup()),
+            (24, layout.stack()),
+            (32, params.physical()),
+        ] {
+            for (byte_offset, byte) in value.to_le_bytes().iter().copied().enumerate() {
+                trampoline.write_byte(offset + byte_offset, byte)?;
+            }
         }
         let header = [root, layout.startup(), layout.stack(), params.physical()];
         for (offset, &template) in super::smp_boot_code::trampoline().iter().enumerate() {
-            let expected = if (8..40).contains(&offset) { header[(offset - 8) / 8].to_le_bytes()[(offset - 8) % 8] } else { template };
-            if trampoline.read_byte(offset)? != expected { return Err(EIO); }
+            let expected = if (8..40).contains(&offset) {
+                header[(offset - 8) / 8].to_le_bytes()[(offset - 8) % 8]
+            } else {
+                template
+            };
+            if trampoline.read_byte(offset)? != expected {
+                return Err(EIO);
+            }
         }
         pr_info!("IHK-SMP: boot prepared os={} generation={} params={:x} bytes={} trampoline={:x} startup={:x} cpus={} numa={} chunks={} kmsg={:x}; CPUs not started\n",
             owner.slot(), owner.generation(), params.physical(), param_bytes, trampoline.physical(), layout.startup(), cpus.len(), nodes.len(), chunks.len(), kmsg);
         self.images[owner.slot() as usize].as_mut().ok_or(EIO)?.boot = Some(BootStorage {
-            prepared: ManuallyDrop::new(PreparedBoot { params, _dump: dump, trampoline, irq, cpus }), started: false,
+            prepared: ManuallyDrop::new(PreparedBoot {
+                params,
+                _dump: dump,
+                trampoline,
+                irq,
+                cpus,
+            }),
+            started: false,
         });
         Ok(())
     }
 
-    fn start_boot(&mut self, owner: super::smp_resource::OsToken, topology: &BootTopology<'_>) -> Result {
+    fn start_boot(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+        topology: &BootTopology<'_>,
+    ) -> Result {
         self.verify()?;
         self.require_unstarted(owner)?;
         let image = self.images[owner.slot() as usize].as_mut().ok_or(EINVAL)?;
         let boot = image.boot.as_mut().ok_or(EINVAL)?;
-        if boot.prepared.cpus.as_slice() != topology.cpus() { return Err(EIO); }
+        if boot.prepared.cpus.as_slice() != topology.cpus() {
+            return Err(EIO);
+        }
         let cpu = *topology.cpus().first().ok_or(EINVAL)?;
         let trampoline = boot.prepared.trampoline.physical();
         // Retain every owner BEFORE the first INIT/SIPI effect. No future
@@ -1298,19 +1486,27 @@ impl MemoryContext {
         // remain pinned under both hotplug guards. Its owned startup page,
         // image, tables, parameters, kmsg and callback code are fully prepared
         // and retained for all outcomes. This calls Linux's unchanged routine.
-        let sent = unsafe { wakeup_secondary_cpu_via_init(cpu.hardware_id, trampoline, cpu.linux_id) };
+        let sent =
+            unsafe { wakeup_secondary_cpu_via_init(cpu.hardware_id, trampoline, cpu.linux_id) };
         pr_info!("IHK-SMP: CPU start os={} generation={} linux_cpu={} apic={} result={}; resources retained\n", owner.slot(), owner.generation(), cpu.linux_id, cpu.hardware_id, sent);
-        if sent != 0 { return Err(EIO); }
+        if sent != 0 {
+            return Err(EIO);
+        }
         let mut last = u64::MAX;
         for _ in 0..3000 {
-            let status = boot.prepared.params.read64(offset_of!(abi::IhkSmpBootParam, status))?;
+            let status = boot
+                .prepared
+                .params
+                .read64(offset_of!(abi::IhkSmpBootParam, status))?;
             if status != last {
                 pr_info!("IHK-SMP: guest boot progress os={} generation={} status={} irq_events={}; IKC readiness pending\n", owner.slot(), owner.generation(), status, boot.prepared.irq.events());
                 last = status;
             }
             // The existing guest reaches 2 before post_init/host IKC. Keep
             // this intermediate state distinct from full boot success.
-            if status >= 2 { break; }
+            if status >= 2 {
+                break;
+            }
             // SAFETY: Sleepable ioctl context; topology/resource mutexes are
             // sleepable and keep this guest's exact owners stable while waiting.
             unsafe { bindings::msleep(10) };
@@ -1486,26 +1682,43 @@ pub(super) fn load_os_image(owner: super::smp_resource::OsToken, image: &[u8]) -
 /// Called under CPU -> memory lock order before changing an OS CPU assignment.
 pub(super) fn retire_os_boot(owner: super::smp_resource::OsToken) -> Result {
     let published = PUBLISHED.load(Ordering::Acquire);
-    if published.is_null() { return Err(ENODEV); }
+    if published.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: The synchronous IHK backend call retains its module and lease.
     let mut context = unsafe { &*published }.lock();
     context.require_unstarted(owner)?;
-    if let Some(image) = context.images[owner.slot() as usize].as_mut() { image.boot.take(); }
+    if let Some(image) = context.images[owner.slot() as usize].as_mut() {
+        image.boot.take();
+    }
     Ok(())
 }
 
-pub(super) fn prepare_os_boot(owner: super::smp_resource::OsToken, topology: &BootTopology<'_>, kmsg: u64, kmsg_bytes: u64, trampoline: u64) -> Result {
+pub(super) fn prepare_os_boot(
+    owner: super::smp_resource::OsToken,
+    topology: &BootTopology<'_>,
+    kmsg: u64,
+    kmsg_bytes: u64,
+    trampoline: u64,
+) -> Result {
     let published = PUBLISHED.load(Ordering::Acquire);
-    if published.is_null() { return Err(ENODEV); }
+    if published.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: IHK's exact-generation lease, operation lock and module pin plus
     // the caller's CPU topology guards remain live throughout preparation.
     let mut context = unsafe { &*published }.lock();
     context.prepare_boot(owner, topology, kmsg, kmsg_bytes, trampoline)
 }
 
-pub(super) fn start_os_boot(owner: super::smp_resource::OsToken, topology: &BootTopology<'_>) -> Result {
+pub(super) fn start_os_boot(
+    owner: super::smp_resource::OsToken,
+    topology: &BootTopology<'_>,
+) -> Result {
     let published = PUBLISHED.load(Ordering::Acquire);
-    if published.is_null() { return Err(ENODEV); }
+    if published.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: Same IHK and topology owners as prepare, after Booting publication.
     // The native storage makes the lifetime irreversible before INIT/SIPI.
     let mut context = unsafe { &*published }.lock();

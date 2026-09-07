@@ -203,14 +203,22 @@ unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {
 
 // SAFETY: IHK holds its exact OS lease, per-OS operation mutex and SMP module
 // owner. kmsg scalars identify IHK's allocation, never an ioctl user pointer.
-unsafe extern "C" fn ihk_smp_prepare_boot_v3(slot: u32, generation: u64, kmsg: u64, kmsg_bytes: u64) -> i32 {
+unsafe extern "C" fn ihk_smp_prepare_boot_v3(
+    slot: u32,
+    generation: u64,
+    kmsg: u64,
+    kmsg_bytes: u64,
+) -> i32 {
     // SAFETY: The v3 callback retains the same trusted IHK generation proof.
     let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
-        Ok(owner) => owner, Err(_) => return EINVAL.to_errno(),
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno(),
     };
     // SAFETY: The diagnostic parameter is read-only after module init.
     let prepare_only = unsafe { NATIVE_BOOT_PREPARE_ONLY };
-    if prepare_only > 1 { return EINVAL.to_errno(); }
+    if prepare_only > 1 {
+        return EINVAL.to_errno();
+    }
     // SAFETY: Reuse the existing writable ihk_trampoline parameter. Linux's
     // parameter mutex excludes concurrent sysfs writes during this scalar
     // snapshot; no parameter lock crosses resource locking or CPU startup.
@@ -225,7 +233,8 @@ unsafe extern "C" fn ihk_smp_prepare_boot_v3(slot: u32, generation: u64, kmsg: u
             pr_info!("IHK-SMP: boot preparation held os={} generation={}; diagnostic mode, CPUs not started\n", slot, generation);
             -11
         }
-        Ok(()) => 0, Err(error) => error.to_errno(),
+        Ok(()) => 0,
+        Err(error) => error.to_errno(),
     }
 }
 
@@ -234,9 +243,13 @@ unsafe extern "C" fn ihk_smp_prepare_boot_v3(slot: u32, generation: u64, kmsg: u
 unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {
     // SAFETY: The v3 start callback carries the same exact-generation lease.
     let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
-        Ok(owner) => owner, Err(_) => return EINVAL.to_errno(),
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno(),
     };
-    match smp_cpu::start_os_boot(owner) { Ok(()) => 0, Err(error) => error.to_errno() }
+    match smp_cpu::start_os_boot(owner) {
+        Ok(()) => 0,
+        Err(error) => error.to_errno(),
+    }
 }
 
 // These callbacks deliberately own lifecycle only.  Returning success from

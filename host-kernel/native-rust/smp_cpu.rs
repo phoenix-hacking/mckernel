@@ -69,10 +69,9 @@ macro_rules! boot_irq_callbacks {
 }
 
 const BOOT_IRQ_CALLBACKS: [unsafe extern "C" fn(*mut core::ffi::c_void); 64] = boot_irq_callbacks!(
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
-    48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+    26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+    50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
 );
 
 /// Unstarted route owner. Active/uncertain boot retains this value without
@@ -109,7 +108,10 @@ impl Drop for BootIrqRoute {
     fn drop(&mut self) {
         // This destructor is reachable only before any CPU-start effect.
         // No guest work can still refer to the slot or this module callback.
-        assert_eq!(BOOT_IRQ_GENERATIONS[self.owner.slot() as usize].swap(0, Ordering::AcqRel), self.owner.generation());
+        assert_eq!(
+            BOOT_IRQ_GENERATIONS[self.owner.slot() as usize].swap(0, Ordering::AcqRel),
+            self.owner.generation()
+        );
         assert!(BOOT_IRQ_TARGET_USERS.fetch_sub(1, Ordering::AcqRel) > 0);
     }
 }
@@ -840,16 +842,25 @@ pub(super) struct BootTopology<'a> {
 }
 
 impl BootTopology<'_> {
-    pub(super) fn cpus(&self) -> &[BootCpu] { &self.cpus }
-    pub(super) fn linux_cpus(&self) -> usize { self.linux_cpus }
+    pub(super) fn cpus(&self) -> &[BootCpu] {
+        &self.cpus
+    }
+    pub(super) fn linux_cpus(&self) -> usize {
+        self.linux_cpus
+    }
     pub(super) fn host_cpu(&self, cpu: usize) -> Result<HostCpuSnapshot> {
         observed_cpu(cpu, self.read, self.hotplug)
     }
 }
 
-fn with_boot_topology<T>(owner: OsToken, operation: impl FnOnce(&BootTopology<'_>) -> Result<T>) -> Result<T> {
+fn with_boot_topology<T>(
+    owner: OsToken,
+    operation: impl FnOnce(&BootTopology<'_>) -> Result<T>,
+) -> Result<T> {
     let published = PUBLISHED.load(Ordering::Acquire);
-    if published.is_null() { return Err(ENODEV); }
+    if published.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: The IHK lease and provider module owner pin this synchronous
     // backend call and its published CPU context through operation completion.
     let mut guard = unsafe { &*published }.lock();
@@ -857,27 +868,57 @@ fn with_boot_topology<T>(owner: OsToken, operation: impl FnOnce(&BootTopology<'_
     let hotplug = DeviceHotplugGuard::lock();
     context.verify_owned(&hotplug)?;
     let read = CpuReadGuard::lock();
-    let count = context.table.assigned_cpus(owner, &mut context.requests).map_err(|_| EIO)?;
-    if count == 0 { return Err(EINVAL); }
+    let count = context
+        .table
+        .assigned_cpus(owner, &mut context.requests)
+        .map_err(|_| EIO)?;
+    if count == 0 {
+        return Err(EINVAL);
+    }
     let mut cpus = Vec::with_capacity(count, GFP_KERNEL)?;
     for &cpu in &context.requests[..count] {
         let slot = context.table.slot(cpu).map_err(|_| EIO)?;
         let actual = observed_cpu(cpu, &read, &hotplug)?;
-        if actual.online || slot.owner() != Some(owner) || actual.hardware_id != slot.hardware_id()
-            || actual.numa_node != slot.numa_node() || actual.hardware_id > i32::MAX as u32 {
+        if actual.online
+            || slot.owner() != Some(owner)
+            || actual.hardware_id != slot.hardware_id()
+            || actual.numa_node != slot.numa_node()
+            || actual.hardware_id > i32::MAX as u32
+        {
             return Err(EIO);
         }
-        cpus.push(BootCpu { linux_id: cpu as u32, hardware_id: actual.hardware_id, numa_node: actual.numa_node }, GFP_KERNEL)?;
+        cpus.push(
+            BootCpu {
+                linux_id: cpu as u32,
+                hardware_id: actual.hardware_id,
+                numa_node: actual.numa_node,
+            },
+            GFP_KERNEL,
+        )?;
     }
     // SAFETY: Linux fixes this bound under the retained CPU read guard.
     let linux_cpus = unsafe { bindings::nr_cpu_ids } as usize;
-    operation(&BootTopology { cpus, linux_cpus, hotplug: &hotplug, read: &read })
+    operation(&BootTopology {
+        cpus,
+        linux_cpus,
+        hotplug: &hotplug,
+        read: &read,
+    })
 }
 
-pub(super) fn prepare_os_boot(owner: OsToken, kmsg: u64, kmsg_bytes: u64, trampoline: u64) -> Result {
-    with_boot_topology(owner, |topology| super::smp_memory::prepare_os_boot(owner, topology, kmsg, kmsg_bytes, trampoline))
+pub(super) fn prepare_os_boot(
+    owner: OsToken,
+    kmsg: u64,
+    kmsg_bytes: u64,
+    trampoline: u64,
+) -> Result {
+    with_boot_topology(owner, |topology| {
+        super::smp_memory::prepare_os_boot(owner, topology, kmsg, kmsg_bytes, trampoline)
+    })
 }
 
 pub(super) fn start_os_boot(owner: OsToken) -> Result {
-    with_boot_topology(owner, |topology| super::smp_memory::start_os_boot(owner, topology))
+    with_boot_topology(owner, |topology| {
+        super::smp_memory::start_os_boot(owner, topology)
+    })
 }
