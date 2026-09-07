@@ -1,6 +1,20 @@
 McKernel Rust Migration Overview
 Updated: 2026-05-28
 
+Current source investment and reuse plan (2026-09-06)
+------------------------------------------------------------
+The existing Rust is accounted for in docs/verification/rust-reuse-plan.md and
+its source-revision-bound inventory: 129 tracked Rust files / 163,073 raw lines
+including fixtures, with 95 files / 154,291 lines outside scripts/tests.
+The build-path review confirms the compatibility build selects existing Rust
+mcctrl bodies; adaptation into native mcctrl remains separate work. The plan
+maps reusable sources to the remaining native capabilities and requires a
+source/symbol reuse record before adding replacement logic.
+The dashboard and mechanical audit figures below are historical scoped metrics,
+not a current source census or whole-OS completion estimate. No functional
+ownership percentage changes here. Use final-push.txt for native production
+acceptance and rust-source-retirement.txt for recorded guest-image ownership.
+
 Functional dashboard average, arm64 excluded: 96.7%
 McKernel-owned core row average, excluding build/host/user/Rocky/arm64: 100.0%
 Mechanical LOC audit share: 32.2% Rust implementation, not a progress score

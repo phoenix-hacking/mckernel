@@ -95,7 +95,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertFalse(summary["resource_foundation_linux_reachable"])
-        self.assertEqual(29, summary["resource_foundation_tests"])
+        self.assertEqual(38, summary["resource_foundation_tests"])
         self.assertEqual("mcd0", summary["control_device_name"])
         self.assertTrue(summary["control_device_source_reachable"])
         self.assertEqual("TODO", summary["control_device_gate_status"])

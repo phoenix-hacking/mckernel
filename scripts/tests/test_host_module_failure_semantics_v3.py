@@ -506,7 +506,17 @@ class CanonicalBundleTests(unittest.TestCase):
                                 else hooked_sidecar_bytes
                             ),
                         )
-                        with patcher:
+                        # Model a coarse clock deterministically: the namespace
+                        # checks still bind inode/type/size, but timestamps supply
+                        # no help detecting the post-decode in-place mutations.
+                        real_identity = semantics.object_identity
+                        def coarse_identity(metadata, leaf):
+                            identity = real_identity(metadata, leaf)
+                            return identity[:-2] if leaf else identity
+
+                        with patcher, mock.patch.object(
+                            semantics, "object_identity", side_effect=coarse_identity
+                        ):
                             with self.assertRaisesRegex(
                                 semantics.SemanticsV3Error,
                                 "identity changed|bytes changed|invalid size",

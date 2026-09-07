@@ -21,6 +21,11 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
+if __package__:
+    from .reviewed_repository_fixture import reviewed_checkout
+else:
+    from reviewed_repository_fixture import reviewed_checkout
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = REPO_ROOT / "scripts/rocky_kernel_rk007_build_review.py"
@@ -165,8 +170,21 @@ def rebound_module_facts(binary_name, data):
 class Rk007BuildReviewTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.review_path = reviewer.discover_review(REPO_ROOT)
-        cls.review = reviewer.load_review(cls.review_path)
+        # The review binds exact input blobs, not every future development
+        # tree. Exercise it against a fixed accepted descendant while loading
+        # the checker under test from the current source. Never refresh the
+        # historical manifest to bless unrelated new module/staging changes.
+        original_review = reviewer.discover_review(REPO_ROOT)
+        cls.review = reviewer.load_review(original_review)
+        paths = [row["path"] for row in cls.review["runtime_candidate"]["committed_inputs"]]
+        paths.append(original_review.relative_to(REPO_ROOT).as_posix())
+        cls.historical_checkout, cls.repo = reviewed_checkout(REPO_ROOT, paths)
+        try:
+            cls.review_path = reviewer.discover_review(cls.repo)
+            reviewer.load_review(cls.review_path)
+        except Exception:
+            cls.historical_checkout.cleanup()
+            raise
         artifact = os.environ.get("MCKERNEL_RK007_BUILD_ARTIFACT")
         cls.artifact_path = Path(artifact) if artifact else None
         cls.artifact_bytes = None
@@ -175,6 +193,10 @@ class Rk007BuildReviewTests(unittest.TestCase):
             cls.artifact_bytes = cls.artifact_path.read_bytes()
             with zipfile.ZipFile(io.BytesIO(cls.artifact_bytes), "r") as archive:
                 cls.artifact_files = {info.filename: archive.read(info) for info in archive.infolist()}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.historical_checkout.cleanup()
 
     def require_artifact(self):
         if self.artifact_bytes is None:
@@ -408,13 +430,13 @@ class Rk007BuildReviewTests(unittest.TestCase):
         with self.assertRaises(reviewer.BuildReviewError):
             reviewer.validate_review_object(mutated)
 
-    def test_current_repository_accepts_exact_reviewed_descendant(self):
+    def test_frozen_repository_accepts_exact_reviewed_descendant(self):
         expected_head = reviewer.run_git(
-            REPO_ROOT, ["rev-parse", "HEAD"]
+            self.repo, ["rev-parse", "HEAD"]
         ).stdout.decode("ascii").strip()
         self.assertEqual(
             reviewer.validate_repository(
-                REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+                self.repo, reviewer.validate_review_object(copy.deepcopy(self.review))
             ),
             expected_head,
         )
@@ -502,7 +524,7 @@ class Rk007BuildReviewTests(unittest.TestCase):
 
         with mock.patch.object(reviewer, "run_git", side_effect=no_ancestry):
             with self.assertRaisesRegex(reviewer.BuildReviewError, "not a descendant"):
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+                reviewer.validate_repository(self.repo, copy.deepcopy(self.review))
 
     def test_descendant_port_requires_current_head_to_be_a_commit(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -580,12 +602,12 @@ class Rk007BuildReviewTests(unittest.TestCase):
             "GIT_WORK_TREE": "/definitely/not/the/reviewed/worktree",
         }
         expected_head = reviewer.run_git(
-            REPO_ROOT, ["rev-parse", "HEAD"]
+            self.repo, ["rev-parse", "HEAD"]
         ).stdout.decode("ascii").strip()
         with mock.patch.dict(os.environ, redirected, clear=False):
             self.assertEqual(
                 reviewer.validate_repository(
-                    REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+                    self.repo, reviewer.validate_review_object(copy.deepcopy(self.review))
                 ),
                 expected_head,
             )
@@ -911,11 +933,11 @@ class Rk007BuildReviewTests(unittest.TestCase):
 
     def test_cli_check_mode_accepts_exact_reviewed_descendant(self):
         completed = subprocess.run(
-            [sys.executable, str(MODULE_PATH), "--repo", str(REPO_ROOT), "--check"],
+            [sys.executable, str(MODULE_PATH), "--repo", str(self.repo), "--check"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8", "replace"))
         self.assertEqual(completed.stderr, b"")
         result = json.loads(completed.stdout.decode("ascii"))
         self.assertEqual(result["review_id"], reviewer.REVIEW_ID)
@@ -934,7 +956,7 @@ class Rk007BuildReviewTests(unittest.TestCase):
                 sys.executable,
                 str(MODULE_PATH),
                 "--repo",
-                str(REPO_ROOT),
+                str(self.repo),
                 "--check",
                 "--verify-artifact",
                 str(self.artifact_path),

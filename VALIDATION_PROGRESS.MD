@@ -1,5 +1,28 @@
 # Rust x86_64 Validation Progress
 
+Source/reuse accounting reviewed 2026-09-06:
+[the reuse plan](docs/verification/rust-reuse-plan.md) records the existing Rust
+implementation and its native adaptation boundaries. The 10/10 result below
+remains the recorded historical smoke scope. Inventory review adds no runtime
+credit, and native host-module acceptance remains in `final-push.txt`.
+
+Local native checkpoint, 2026-09-07: the preserved Linux 6.12 kernel and three
+native Rust modules passed the four-CPU unbooted OS lifecycle capture and strict
+serial validation. [The work log](docs/verification/native-hpc-worklog.md) links
+the retained inputs/results and the current full-suite validation status. This adds
+technical runtime evidence; it does not promote the historical smoke score or
+the native production gates, and it does not establish booted McKernel.
+
+The local kernel/module rebuild also passed a second isolated guest run. The
+additive CPU effect executor passes all 38 Rust resource tests and native Kbuild
+link validation; its Linux ioctl/hotplug adapter is still pending. All existing
+Rust bodies are retained. The snapshot regression family now passes 54 tests,
+and the historical RK-007 artifact family passes all 110 tests without skips.
+The final local repository suite passes 2,298 tests with 71 skips in 360.409
+seconds. RS-006 close-race checks now also reject changes when timestamps are
+equal. This remains scoped local validation; skipped checks and the native
+boot/workload acceptance gates are not treated as passed.
+
 **Current completion: 100% (10/10)**
 
 This percentage is evidence-gated. Runtime code checkpoint

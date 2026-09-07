@@ -1307,6 +1307,9 @@ exec {modinfo_fd}<&-
                 sbin.mkdir(parents=True)
                 shutil.copy2("/usr/bin/true", binary / "kmod")
                 shutil.copy2("/usr/bin/false", binary / "attacker")
+                # Rocky installs coreutils binaries read-only. The fixture
+                # must permit the intended in-place attack as an ordinary user.
+                (binary / "kmod").chmod(0o755)
                 (sbin / "modinfo").symlink_to("../bin/kmod")
                 completed = subprocess.run(
                     [

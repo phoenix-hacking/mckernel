@@ -32934,3 +32934,273 @@ The formatter added a trailing comma to the create call; preserve its existing d
 [2026-09-07 FFI repair first focused integration failure] Command: python3 -m unittest -f -v scripts.tests.test_ihk_os_runtime scripts.tests.test_native_rust_host_audit scripts.tests.test_native_rust_unsafe_ffi_ledger scripts.tests.test_ihk_smp_native_lifecycle_check scripts.tests.test_ihk_native_lifecycle_check scripts.tests.test_rocky_rust_staging. The adapter and source audit passed; the ledger durable-ID assertion failed after 19 tests because the two crate-visibility export records received new IDs 0068/0069 instead of preserving 0066/0067. The source contains the same two export symbols with unchanged C linkage. Preserve their existing IDs by unique export-name identity, refresh mechanical bytes, and keep all review/credit statuses unchanged. Log: os-ffi-focused-suite.log.
 
 [2026-09-07 FFI repair focused verification] All 196 adapter, native source-audit, unsafe/FFI ledger, IHK/SMP lifecycle and staging tests passed without skips in 31.546 seconds. The ledger retains 13 source inputs, 83 sites and durable-ID digest 68e5d0ad82019857199c82286b42bf3e90dfef7210af468eead790b56882b9d2. Both RK007 historical projections remain identical to c7e7c413; only their current-source override identities change. Compiler lints, exported symbol names, Linux pointer/scalar ABI, ioctl behavior and non-crediting claims remain enforced. Original failed native artifact 10000612846 is retained byte-exact: 294643 bytes, SHA256 75956ff2259e142528e57f5ca53ed964a2386d12f8e500f86740ff0db24cd34b.
+[2026-09-07 04:13 UTC native HPC continuation / original artifact replay]
+First validation failure reproduced inside the isolated Rocky 10.2 container,
+CPU affinity 2-5, 4 CPU quota, 12 GiB memory ceiling. Command:
+python3 -B scripts/native_rust_kbuild_link_closure.py --records /work/artifacts/native-24a151fe/extracted --stage-lock /work/artifacts/native-24a151fe/extracted/stage-lock.json --output /work/artifacts/native-24a151fe/review-before.json
+Result: exit 1, "stage lock staged file set or order differs". Original GitHub
+artifact 10001359801 from run 34072696813 has verified ZIP SHA256
+adbf5105ed248d304c2f86f29a67f964670e26ca7688437641b75aa215400988.
+It contains successful kernel/module build records, including os_runtime.rs
+and its trailing CONFIG_COMPAT fixdep dependency in .ihk.o.cmd. The current
+validator omits that Rust source and assumes only the SMP crate has the config
+dependency. Preserve all original artifact bytes and repair the exact source
+and configuration dependency grammar; do not loosen accepted inputs or award
+runtime/gate credit. Original archive, extracted records, and replay-before.log
+are retained under mckernel-work/scratch/artifacts/native-24a151fe.
+[2026-09-07 native HPC staging regression before repair]
+The new test_real_stager_and_captured_os_runtime_dependency_record fails with
+the same staged-file-set error, using the real staging producer and original
+compiler record instead of deriving both inputs from validator constants.
+Command: python3 -B -m unittest -f -v scripts.tests.test_native_rust_kbuild_link_closure.NativeRustKbuildLinkClosureTests.test_real_stager_and_captured_os_runtime_dependency_record
+Isolated native container, CPUs 2-5; 1 test, 1 error, 0.399s. Log retained as
+mckernel-work/scratch/artifacts/native-24a151fe/regression-before.log.
+[2026-09-07 native HPC staging repair / first broad-suite failure]
+Command: python3 -B -m unittest discover -s scripts/tests -f -v
+Environment: isolated Rocky 10.2 native container, CPU IDs 2-5, 4 CPU quota,
+12 GiB limit, source read-only, temporary files on dedicated ext4 scratch.
+The suite stopped after 6 tests: test_aggregate_mutation_after_read_is_rejected
+in test_fp0006_executable_acceptance_closure did not raise the expected
+ClosureError("aggregate decision"). Investigate the mutation/recheck behavior
+before continuing unrelated changes. Full log:
+mckernel-work/scratch/artifacts/native-24a151fe/full-suite-after.log.
+The preceding 25 link-closure tests and original-artifact replay passed.
+[2026-09-07 native HPC validation byte-preservation repair]
+Ten isolated diagnostic trials reproduced equal file identity metadata with
+different bytes; none was rejected by the original snapshot finalizer. Added
+bounded original-descriptor content rechecks and a deterministic regression
+covering first/middle/last byte changes plus growth under unchanged identity.
+The focused suite now passes the original mutation case, then stops at
+test_cli_emits_noncrediting_result: "isolated checker normalized SHA-256 changed".
+Command: python3 -B -m unittest -f -v scripts.tests.test_fp0006_executable_acceptance_closure
+3 tests, 1 failure in 0.074s; isolated native container, CPUs 2-5. Refresh the
+checker's own normalized source binding after reviewing this byte-validation
+change; retain all false completion/runtime/credit claims. Log: snapshot-after.log.
+[2026-09-07 native HPC broad-suite second stop]
+After the byte-preservation fix and reviewed self-binding refresh, all 40
+FP-0006 executable-acceptance tests pass. Full discovery stops after 98 tests
+at StatusAliasIsolatedCliTests.test_check_contract_is_canonical_exact_and_noncrediting:
+"private exec start writer descriptor identity changed before raw close".
+Command: python3 -B -m unittest discover -s scripts/tests -f -v
+Isolated Rocky 10.2 container, CPUs 2-5; 1 failure, 1 explicit skip, 9.270s.
+Log: mckernel-work/scratch/artifacts/native-24a151fe/full-suite-after-2.log.
+[2026-09-07 native HPC private control-pipe identity repair]
+The status witness used file-content timestamps as the ownership identity of
+its private anonymous pipe. Writing the one-byte start token can change those
+timestamps on this host kernel. Reused the existing five-field stable namespace
+identity for both private pipe endpoints; inode/type/owner substitution remains
+rejected. The CLI contract test now passes. Focused validation then stops at
+the current-checker byte-seal test (old size 88013, new size 88283); update only
+that reviewed current source identity and retain historical contract identities.
+Command: python3 -B -m unittest -f -v scripts.tests.test_fp0006_ihk_os_status_alias
+12 tests, 1 failure, 2.713s, isolated native container. Log: status-alias-after.log.
+[2026-09-07 native HPC runtime authority binding stop]
+All 22 status-alias tests now pass, including pipe I/O and descriptor reuse.
+Full discovery stops at 117 tests while importing runtime capture integration:
+RuntimeError("semantic authority file shape differs: native_rust_kbuild_link_closure.py").
+Command: python3 -B -m unittest discover -s scripts/tests -f -v
+Isolated native container, CPUs 2-5, 12.724s, 1 error and 1 explicit skip.
+Refresh the runtime verifier's exact current link-validator identity for the
+reviewed os_runtime/CONFIG_COMPAT repair. Preserve historical parser bindings.
+Log: mckernel-work/scratch/artifacts/native-24a151fe/full-suite-after-3.log.
+[2026-09-07 native HPC runtime binding import retry]
+The focused runtime suite still stops at import with "semantic authority file
+shape differs: native_rust_kbuild_link_closure.py" after its content identity
+refresh. Inspect actual file mode/link count/size against the bootstrap shape
+requirements; do not relax the verifier. Command: python3 -B -m unittest -f -v
+scripts.tests.test_native_rust_runtime_evidence scripts.tests.test_fp0006_runtime_capture_integration
+Isolated native container; log: runtime-bindings-after.log.
+[2026-09-07 native HPC runtime suite timestamp regression]
+The semantic authority import now succeeds after restoring Git-declared 0644
+permissions (the local clone's umask had produced 0664 files). Runtime tests
+stop after 8 cases at test_bound_file_and_directory_recheck_identity_after_body_exception:
+the original RuntimeError("body failure") escapes instead of the expected
+identity-change error. Inspect the same-size/timestamp recheck assumptions in
+the runtime file context manager. Command: python3 -B -m unittest -f -v
+scripts.tests.test_native_rust_runtime_evidence scripts.tests.test_fp0006_runtime_capture_integration
+Isolated native container, CPUs 2-5, 1.544s; log: runtime-bindings-after-2.log.
+[2026-09-07 native HPC runtime alias replacement regression]
+The affected runtime suite now reaches 73 tests and stops at
+test_modinfo_descriptor_alias_rejects_replacement_and_retargeting, subcase
+restore-same-target: replacing a temporary symlink with the same target was
+not rejected. Inspect inode reuse with coarse timestamps and retain the alias
+inode while its ownership token is live. Command: python3 -B -m unittest -f -v
+scripts.tests.test_native_rust_runtime_evidence scripts.tests.test_fp0006_runtime_capture_integration
+Isolated native container, CPUs 2-5, 11.707s; log: runtime-bindings-after-3.log.
+2026-09-07T04:37:48Z — STOP at first failing validation (current-source binding)
+Environment: native Rocky container, 4 CPUs (2-5), 12 GiB, network disabled,
+repository read-only; original artifact native-24a151fe retained unchanged.
+Command: python3 -m unittest discover -s /workspace/scripts/tests -v -f
+Log: /work/artifacts/native-24a151fe/full-suite-after-6.log
+Result: 8 tests, first failure test_cli_emits_noncrediting_result in
+test_fp0006_executable_acceptance_closure: isolated census worker rejected
+"runtime capture reference SHA-256 changed" after the reviewed current runtime
+validator/integration contract update. The preceding runtime evidence and
+capture integration focused suites passed all 187 tests in 31.738 seconds.
+Next: inspect and update the current consumer's binding; preserve historical
+evidence, noncrediting results, and all existing Rust implementation sources.
+2026-09-07 — STOP at first failing validation (unprivileged fixture)
+Command/environment: native four-CPU offline container; python3 -B -m unittest
+discover -s scripts/tests -v -f; full-suite-after-7.log in native-24a151fe logs.
+Result: 905 tests, 22 skips, first failure in exact-build workflow retained
+modinfo descriptor attack test (post-owner-content-replacement). The test's
+attack command failed with Permission denied copying over its own read-only
+kmod fixture; the workflow check returned success because no mutation occurred.
+The preceding acceptance closure focused suite passed all 40 tests after its
+current runtime-reference binding was updated. Next: inspect the fixture's
+permissions and make the intended attack executable under the UID 1000 runner;
+do not grant the container elevated privileges or weaken rejection checks.
+2026-09-07 — Fixture repair retry
+The first two-file patch was rejected atomically because the runtime fixture
+copies bash rather than true. A premature focused run reproduced the already
+logged build-fixture Permission denied failure (45 tests); no full suite ran.
+Both fixture copies now explicitly allow owner writes (0755), preserving the
+intended content-mutation attack under UID 1000. Re-run the focused workflows
+before the full suite; preserve workflow-fixture-after.log from the failed run.
+2026-09-07T04:43:22Z — STOP at first failing validation (bundle content race)
+Native four-CPU offline UID 1000 container: full-suite-after-8.log; python3 -B
+-m unittest discover -s scripts/tests -v -f. Result: 274 tests, 19 skips, first
+failure in test_bundle_and_sidecar_path_and_inode_races_fail, bundle/in_place:
+expected SemanticsV3Error was not raised. All 89 focused exact-workflow tests
+passed first after the fixture permission correction. Next: inspect retained
+bundle content rechecks and the mutation fixture under coarse timestamp clocks.
+2026-09-07 — Focused bundle test invocation corrected
+The isolated focused command in bundle-content-after.log stopped at import:
+ModuleNotFoundError: host_module_failure_semantics_v3 (1 test loader error).
+This legacy suite imports sibling scripts as top-level modules and needs
+PYTHONPATH=/workspace/scripts when invoked independently. Correct the focused
+invocation; the full-suite discovery was not started after the import failure.
+2026-09-07T04:48:38Z — STOP at first failing validation (transient tool mutation)
+Native four-CPU offline UID 1000 container; full-suite-after-9.log; python3 -B
+-m unittest discover -s scripts/tests -v -f. Result: 1183 tests, 22 skips,
+first failure in test_runtime_tools_reject_transient_same_inode_mutate_restore
+(modinfo/tool): EvidenceError was not raised. The preceding bundle/integration/
+closure focused suites passed all 155 tests. Inspect the execution snapshot and
+transient-mutation fixture; equal restored bytes and coarse timestamps require
+careful distinction from a persistent content change. No guest has run yet.
+2026-09-07T04:55:28Z — STOP at first failing validation (writable test checkout)
+Native four-CPU offline UID 1000 container; full-suite-after-10.log; full unittest
+discovery with MCKERNEL_RUSTC_1_92=/usr/bin/rustc. Result: 1325 tests, 20 skips,
+first error in config-resolution contract mutation test: it creates a temporary
+fixture beneath REPO_ROOT, which is mounted read-only at /workspace (errno 30).
+Use a disposable complete copy under bounded /work for full-suite tests needing
+a writable repository root. Keep the original source mount read-only and retain
+all CPU/memory/network/device limits. No reason to relax the verifier or host
+permissions. The new clock-independent event/descriptor-cleanup test passed.
+2026-09-07 — STOP at first failing validation (copied namespace permissions)
+Native four-CPU offline UID 1000 container; full-suite-after-11.log; full unittest
+discovery in /work/native-validation-24a151fe with the pinned rustc. Result:
+1652 tests, 61 skips, first error in reviewer-registry repository namespace
+validation: the copied repository root inherited group-write permission from
+the original clone. Remove group/world write bits from the disposable copy,
+preserving owner writes and executable bits. Keep the original read-only mount
+and production authorization checks unchanged. Then resume verification.
+2026-09-07T05:03:10Z — STOP at first failing validation (offline snapshot path race)
+Native four-CPU offline UID 1000 container, private writable checkout with safe
+namespace permissions; full-suite-after-12.log. Result: 1274 tests, 20 skips,
+failure in test_held_snapshot_descriptor_rejects_path_swap_restore_matrix,
+scenario before_hash: expected snapshot namespace rejection was not raised.
+The broad suite has exposed another existing timestamp-sensitive transient
+namespace check. Inspect the exact held-snapshot boundary before deciding its
+repair scope; no claim that full discovery passes, and no production credit.
+2026-09-07 — Local initramfs interpreter preflight correction
+The pinned source RPM, embedded Linux archive, and original native build
+checksums verified; the workflow-derived initramfs assembled without elevated
+container capabilities. Inspection found this Rocky image's stat/uname are
+#!/usr/bin/coreutils wrappers. The original assembly recipe only copies ldd
+dependencies and omitted that interpreter (ldd said not a dynamic executable).
+Include the existing packaged coreutils ELF and its shared libraries, retaining
+the wrappers. Keep the first initramfs as a diagnostic and rebuild only the
+derived cpio; no reason to re-extract Linux or change Rust/kernel inputs.
+2026-09-07 local native CPU effects staging check stopped
+Environment: fixed Rocky 10.2 unprivileged container, CPUs 2-5, 12 GiB,
+network none, /workspace read-only. Command: python3 scripts/rocky_rust_staging.py
+--repo /workspace --check. Failure: inputs[10] digest mismatch; manifest still
+binds pre-change smp_resource.rs b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b,
+while the reviewed additive executor hashes to
+879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098.
+The nine Python resource checks and all 38 Rust tests passed before this check.
+No incremental module build or new CPU guest proceeds until the current staging
+input binding is updated and checked. The immutable Rust reuse baseline stays fixed.
+2026-09-07 local CPU source-binding validation stopped after the test command
+Environment: same four-CPU isolated native container. Source staging --check
+passed after updating the reviewed source digest. Command: MCKERNEL_RUSTC_1_92=
+/usr/bin/rustc PYTHONPATH=/workspace/scripts python3 -m unittest
+scripts.tests.test_ihk_smp_resource scripts.tests.test_ihk_smp_native_lifecycle_check
+scripts.tests.test_native_rust_unsafe_ffi_ledger -v. Result: 83 tests, two failures
+and one error: one summary assertion still expects 29 instead of 38 resource
+tests; the FFI ledger's aggregate source and document digests remain stale after
+the selected source/manifest edits. No new FFI sites were added. Refresh only
+these current computed ledger digests and the test-count assertion; preserve
+site ownership/review claims. Resume with fail-fast test execution.
+2026-09-07 local snapshot and CPU checks stopped at the next namespace regression
+Environment: isolated four-CPU Rocky native container, read-only source.
+Command: MCKERNEL_RUSTC_1_92=/usr/bin/rustc PYTHONPATH=/workspace/scripts python3
+-m unittest -f scripts.tests.test_ihk_smp_resource
+scripts.tests.test_ihk_smp_native_lifecycle_check
+scripts.tests.test_native_rust_unsafe_ffi_ledger
+scripts.tests.test_rocky_kernel_closure_offline.
+Result: 131 tests reached; new CPU binding checks and held-snapshot race matrix
+passed, then unchanged V2OutputTransactionTests.
+test_hidden_unlink_recreate_before_rename_is_rejected failed to reject a hidden
+output directory replacement. Broad-suite acceptance remains open; inspect this
+publication boundary before proceeding. Log: native-cpu-snapshot-tests.log.
+2026-09-07 full repository suite stopped at historical RK-007 descendant fixture
+Environment: fresh /work/native-validation-cpu-effects copy, permissions go-w,
+four CPUs, 12 GiB, no network, exact Rust 1.92 and pristine Linux API source
+subset configured. Command: python3 -m unittest discover -s scripts/tests
+-p 'test_*.py' -f. Result: 1911 tests in 175.898 seconds, 79 skips, failure in
+test_rocky_kernel_rk007_build_review.Rk007BuildReviewTests.
+test_cli_check_mode_accepts_exact_reviewed_descendant (CLI returned 1).
+Earlier repaired snapshot tests and all current CPU staging/FFI checks passed.
+Inspect the frozen review fixture and CLI stderr; do not refresh historical
+evidence to cover new unreviewed source. Log: full-suite-cpu-effects-1.log.
+2026-09-07 full suite stopped at the second frozen RK-007 review fixture
+Command/environment: full-suite-cpu-effects-2.log; same four-CPU isolated fresh
+copy, exact Rust/source, plus original RK-007 artifact. Result: 2012 tests in
+270.982 seconds, 72 skips; test_rocky_kernel_rk007_build_review_v2.
+test_cli_check_mode_accepts_exact_reviewed_descendant returned CLI status 1.
+The v1 historical family passed all 110 tests. Apply the same exact historical
+checkout fixture to v2 after checking its bound inputs; retain the production
+verifier and review records unchanged. Run affected remaining families before
+another complete-suite replay.
+2026-09-07 remaining-suite replay stopped at acquired v2 archive file mode
+Environment: isolated native container, repository-tail-cpu-effects.log, both
+original RK-007 archives configured. Fifteen tests into the 290-test remaining
+segment, test_exact_fresh_artifact_verifies_when_materialized rejected the
+downloaded v2 ZIP because its file mode was not the required 0644 (download
+inherited the local umask). Normalize archive metadata to 0644 without changing
+bytes or verifier policy, then resume. No production code issue is inferred.
+2026-09-07 remaining-suite replay stopped at RS-006 patch snapshot mutation
+Environment: isolated native container, exact source/compiler and both original
+RK-007 artifacts; repository-tail-cpu-effects-2.log. Result: 215 of 290 remaining
+tests reached in 23.071 seconds. The v2 historical artifact checks passed after
+normalizing archive mode. Failure: test_rs006_miscdevice_module_owner_followup.
+test_active_patch_close_hook_forged_after_read_is_rejected did not raise its
+expected ContractError. Inspect the existing held-input replay for another
+coarse-timestamp blind spot. Full-suite success remains unclaimed.
+2026-09-07 RS-006 focused replay stopped at stale active consumer identity
+Command: python3 -m unittest scripts.tests.test_rs006_miscdevice_module_owner_followup -f
+Environment: four-CPU offline native container, rs006-close-watch-tests.log.
+The deterministic coarse-timestamp close-mutation regression now passes. At
+test 3, active patch validation stopped earlier because the existing current
+consumer inventory still binds the pre-repair runtime evidence checker size.
+Inspect and refresh only this active integration contract's changed consumer
+identities; keep its historical evidence and false-credit claims intact.
+2026-09-07 full-suite preparation stopped before test execution
+The source refresh used cp -a over an existing disposable checkout. Git pack
+files are intentionally read-only, so overwriting those unchanged files failed.
+This is a checkout preparation error, not a test failure. Refresh working files
+while retaining the existing private .git database, normalize go-w, and rerun
+the source checks before starting the final full suite.
+The alternate shutil refresh also rejected pre-existing symlinks. Use a fresh,
+uniquely named disposable checkout for the final run; do not alter the original
+repository or relax file checks to accommodate the preparation commands.
+2026-09-07 final repository verification passed
+Fresh source copy: /work/native-validation-final-20260907. Command:
+python3 -m unittest discover -s scripts/tests -p 'test_*.py' -f
+Result: 2298 tests in 360.409 seconds, OK (skipped=71).
+Exact pristine Linux replay subset, Rust 1.92, and both frozen RK-007 artifacts
+were configured. Whitespace and final-push tracker checks passed. Log:
+full-suite-cpu-effects-final.log. This closes the broad-suite repair checkpoint;
+the skipped tests and native production gates receive no pass credit.

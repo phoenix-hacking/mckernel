@@ -44,7 +44,7 @@ EXPECTED_CRATE_MODULES = [
     {
         "destination": "smp_resource.rs",
         "path": "host-kernel/native-rust/smp_resource.rs",
-        "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b",
+        "sha256": "879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098",
     }
 ]
 EXPECTED_RESOURCE_FOUNDATION = {
@@ -54,14 +54,14 @@ EXPECTED_RESOURCE_FOUNDATION = {
         "memory": "poison-live-map-unless-compensated-rollback",
     },
     "fixture": {
-        "expected_fixture_tests": 5,
+        "expected_fixture_tests": 14,
         "expected_in_file_tests": 24,
-        "expected_total_tests": 29,
+        "expected_total_tests": 38,
         "minimum_rustc": "1.92.0",
         "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
         "negative_sha256": "fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5",
         "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
-        "positive_sha256": "f2861831b6456600225a3d84a26fdaec618683a33263bb811d74d3c88ce39a91",
+        "positive_sha256": "cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1",
     },
     "integration_blockers": [
         "no versioned IHK OS lease can mint an OsToken in production",

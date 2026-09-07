@@ -1006,6 +1006,9 @@ exec {modinfo_fd}<&-
                 sbin.mkdir(parents=True)
                 shutil.copy2("/usr/bin/bash", binary / "kmod")
                 shutil.copy2("/usr/bin/false", binary / "attacker")
+                # Permit the intended in-place attack as an ordinary user even
+                # when the packaged executable has read-only permissions.
+                (binary / "kmod").chmod(0o755)
                 (sbin / "modinfo").symlink_to("../bin/kmod")
                 completed = subprocess.run(
                     [

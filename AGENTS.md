@@ -2,6 +2,66 @@
 
 Updated: 2026-06-02
 
+## Current accounting and Rust preservation (2026-09-06)
+
+Latest user clarification (2026-09-07): completing the active goal requires the
+entire McKernel kernel implementation to be Rust or assembly, including its
+linked support code and ABI/runtime bodies. Preserve and integrate the Rust
+across all existing directories. Remaining C may serve as a temporary reference,
+but cannot implement the final production McKernel. See
+[`docs/verification/mckernel-rust-assembly-completion.md`](docs/verification/mckernel-rust-assembly-completion.md).
+This supersedes earlier exclusions of further McKernel C conversion. The native
+host-module score remains separately scoped; both integration and the kernel's
+Rust/assembly completion checks are required. Rocky/Linux is still the separate
+Linux control kernel, and supported application languages remain unchanged.
+
+User-confirmed architecture: Rocky Linux runs the Linux 6.x control kernel
+(the current native target is the pinned Rocky-derived Linux 6.12 build with
+CONFIG_RUST). The existing Rust-heavy McKernel is the HPC co-kernel, with its
+own execution environment on assigned CPUs/memory. Linux-side IHK/SMP/mcctrl
+modules connect it to Linux through the existing UAPI and IKC protocols.
+Preserve this division of responsibility. Linux core remains Linux; use its
+existing services and Rust support. Preserve McKernel's HPC implementation.
+
+Prioritize reuse in this order: retain working code in place; reuse existing
+Linux Rust APIs; adapt or extract existing project Rust bodies; implement only
+the missing integration. Share code only where ownership and execution-context
+requirements match. Linux CONFIG_RUST does not supply every adapter required by
+this project, so check the exact pinned kernel API before designing a new one.
+
+Start native implementation planning with
+[`docs/verification/rust-reuse-plan.md`](docs/verification/rust-reuse-plan.md)
+and its revision-bound source inventory. The current source baseline contains
+129 Rust files / 163,073 raw lines, including fixtures. The existing McKernel,
+mcctrl helpers, and user tools are part of the implementation investment;
+`host-kernel/native-rust` is only one part of it.
+
+Before adding or replacing native behavior, identify existing Rust source paths
+and symbols, their build selection, and the Linux/C-bridge dependencies that
+need adaptation. Record whether each body is retained, reused, extracted,
+adapted, or newly implemented, with a reason when existing Rust cannot serve.
+Preserve current consumers and fallback builds. Intentional retirement needs
+a replacement build/symbol path and relevant equivalence evidence. Use the
+existing fixtures after checking their pinned-source prerequisites.
+
+Report source inventory, native integration, and runtime acceptance separately.
+`final-push.txt` remains the native production evidence authority; its TODO
+gates do not imply that no reusable Rust exists. Historical 100% campaign
+scores and the older 35-45% estimate below are not current whole-OS completion
+estimates. Current linked-image language evidence is the revision-bound record
+in `rust-source-retirement.txt`. No score changes follow from this inventory.
+
+The native staging/link-closure mismatch is repaired locally. The preserved
+native modules passed an isolated four-CPU unbooted OS lifecycle run; see
+`docs/verification/native-hpc-worklog.md`. Next major work: finish the existing
+Rust resource model's Linux CPU/memory adapter, then integrate and test resource
+assignment and McKernel boot. Its additive CPU effect executor passes 38 Rust
+tests and the native Kbuild/link checks. The snapshot namespace regressions are
+repaired, including the RS-006 post-close boundary. The broad local suite passes
+2,298 tests with 71 skips, using fixed historical RK-007 fixtures and their
+original artifacts. No production gate is promoted.
+Follow the user's isolated four-CPU validation boundary.
+
 ## Mission
 
 This repository is migrating McKernel from the traditional CentOS-based

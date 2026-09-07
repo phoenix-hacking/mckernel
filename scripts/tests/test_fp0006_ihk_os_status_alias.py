@@ -28,9 +28,9 @@ CONTRACT_PATH = ROOT / "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json
 C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
 RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
 SECURITY_SOURCE = ROOT / "scripts/fp0006_ihk_device_negative_dispatch.py"
-EXPECTED_CHECKER_SHA256 = '21043a953d46f1552ba86b3dadc893bae96d5def258c33b0a3e2295f3b3be38d'
-EXPECTED_CHECKER_SIZE = 88013
-EXPECTED_NORMALIZED_SELF_SHA256 = '84f6ca4a8cac9de303822c10a9f53845162547e7c0c659ff6dd8776d5dd8f532'
+EXPECTED_CHECKER_SHA256 = '95f5e5a3157fcd701ea796ccf1b71734d05c9fd5051d83eacf171345047fb6ab'
+EXPECTED_CHECKER_SIZE = 88283
+EXPECTED_NORMALIZED_SELF_SHA256 = '08582dab26fb759ede67a0bdd4cc44487ff47cfd036a64ef9c8ed5ed298a3407'
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
@@ -175,6 +175,34 @@ def require_success(testcase, execution):
 
 
 class StatusAliasIsolatedCliTests(unittest.TestCase):
+    def test_private_pipe_identity_preserves_io_and_detects_fd_reuse(self):
+        imported_witness._load_exact_security_primitives(str(CHECKER))
+        reader, writer = os.pipe()
+        other_reader, other_writer = os.pipe()
+        try:
+            identity = imported_witness._owned_fd_identity(
+                writer, "test private pipe", identity_length=5
+            )
+            metadata = os.fstat(writer)
+            os.write(writer, b"G")
+            self.assertEqual(b"G", os.read(reader, 1))
+            # Force the timestamp change even on a coarse-clock filesystem.
+            os.utime(writer, ns=(metadata.st_atime_ns, metadata.st_mtime_ns + 1000000000))
+            self.assertEqual(
+                "owned", imported_witness._owned_fd_state(writer, identity, "test private pipe")
+            )
+            os.dup2(other_writer, writer)
+            retired, error = imported_witness._raw_close_owned_fd_once(
+                writer, identity, "test private pipe"
+            )
+            self.assertTrue(retired)
+            self.assertIsInstance(error, imported_witness.WitnessError)
+            self.assertIn("identity changed", str(error))
+            self.assertEqual(os.fstat(other_writer).st_ino, os.fstat(writer).st_ino)
+        finally:
+            for descriptor in (reader, writer, other_reader, other_writer):
+                os.close(descriptor)
+
     def _assert_raw_close_error_retires_reused_descriptor(self, replacement_kind):
         imported_witness._load_exact_security_primitives(str(CHECKER))
         original_close = os.close

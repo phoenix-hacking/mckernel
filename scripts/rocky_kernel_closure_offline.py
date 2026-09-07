@@ -1463,6 +1463,7 @@ class V2OutputTransaction:
         hidden_identity = None  # type: Optional[Tuple[int, int, int, int, int]]
         renamed = False
         committed = False
+        changes = None
         try:
             os.mkdir(hidden_name, 0o700, dir_fd=self.output_parent_descriptor)
             hidden_descriptor = os.open(
@@ -1475,6 +1476,10 @@ class V2OutputTransaction:
             hidden_copy_namespace = v2_copy_output_tree(
                 self.stage_descriptor, hidden_descriptor
             )
+            changes = PrivateEvidenceChangeWatch(
+                hidden_descriptor, allow_root_rename=True, label="hidden v2 output"
+            )
+            changes.watch_tree(hidden_descriptor)
             v2_compare_output_trees(self.stage_descriptor, hidden_descriptor)
             _, stage_after_copy, _ = v2_verify_checksum_directory(
                 self.stage_descriptor,
@@ -1567,6 +1572,7 @@ class V2OutputTransaction:
                 final_replay_namespace,
                 "published v2 output final namespace replay",
             )
+            changes.require_unchanged()
             committed = True
             self.published = True
         except ClosureError:
@@ -1574,6 +1580,8 @@ class V2OutputTransaction:
         except OSError as exc:
             raise ClosureError("v2 output publication failed: {}".format(exc)) from exc
         finally:
+            if changes is not None:
+                changes.close()
             cleanup_descriptor = (
                 final_descriptor
                 if final_descriptor >= 0
@@ -4187,6 +4195,100 @@ def validate_snapshot_checker_binding(
     require_exact(digest, row["sha256"], "snapshot checker source digest")
 
 
+class PrivateEvidenceChangeWatch:
+    """Supplement held bytes with Linux events across snapshot verification.
+
+    Directory move/delete events are armed before copying; the completed inode
+    is then watched for writes and attribute changes. This catches transient
+    restore attacks even on filesystems with coarse timestamps. Private
+    ownership and the existing descriptor/digest checks remain required;
+    inotify does not establish immutability against arbitrary writable mmap.
+    """
+
+    def __init__(self, stage_root, allow_root_rename=False, label="held snapshot") -> None:
+        self.descriptor = -1
+        self.label = label
+        self.allow_root_rename = allow_root_rename
+        directory = -1
+        try:
+            self.libc = ctypes.CDLL(None, use_errno=True)
+            initialize = self.libc.inotify_init1
+            initialize.argtypes = [ctypes.c_int]
+            initialize.restype = ctypes.c_int
+            self.add_watch = self.libc.inotify_add_watch
+            self.add_watch.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_uint32]
+            self.add_watch.restype = ctypes.c_int
+            self.descriptor = initialize(os.O_NONBLOCK | os.O_CLOEXEC)
+            if self.descriptor < 0:
+                raise OSError(ctypes.get_errno(), "inotify_init1")
+            directory = (os.dup(stage_root) if isinstance(stage_root, int) else
+                         os.open(str(stage_root), os.O_RDONLY | os.O_DIRECTORY |
+                                 os.O_NOFOLLOW | os.O_CLOEXEC))
+            # Creation and initial writes are expected during the private copy.
+            mask = 0x40 | 0x80 | 0x200 | 0x400 | 0x2000
+            self._watch(directory, mask | (0 if allow_root_rename else 0x800))
+        except (AttributeError, OSError) as exc:
+            self.close()
+            raise ClosureError("cannot watch {} namespace: {}".format(label, exc)) from exc
+        finally:
+            if directory >= 0:
+                os.close(directory)
+
+    def _watch(self, descriptor: int, mask: int) -> None:
+        path = "/proc/self/fd/{}".format(descriptor).encode("ascii")
+        if self.add_watch(self.descriptor, path, mask) < 0:
+            raise OSError(ctypes.get_errno(), "inotify_add_watch")
+
+    def watch_file(self, descriptor: int) -> None:
+        self.require_unchanged()
+        try:
+            # The held descriptor is O_RDWR. Closing a read-only consumer's dup
+            # still emits CLOSE_WRITE, so that event is deliberately excluded.
+            self._watch(descriptor, 0x2 | 0x4 | 0x400 | 0x800 | 0x2000)
+        except OSError as exc:
+            raise ClosureError("cannot watch {} inode: {}".format(self.label, exc)) from exc
+
+    def watch_tree(self, descriptor: int, root=True) -> None:
+        """Watch a completed private output tree through its publication rename."""
+        try:
+            # Directory watches also receive ordinary child-file modifications.
+            mask = 0x2 | 0x4 | 0x40 | 0x80 | 0x100 | 0x200 | 0x400 | 0x2000
+            if not root or not self.allow_root_rename:
+                mask |= 0x800
+            self._watch(descriptor, mask)
+            for name in os.listdir(descriptor):
+                metadata = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
+                if stat.S_ISDIR(metadata.st_mode):
+                    child = os.open(name, os.O_RDONLY | os.O_DIRECTORY |
+                                    os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=descriptor)
+                    try:
+                        self.watch_tree(child, root=False)
+                    finally:
+                        os.close(child)
+                elif not stat.S_ISREG(metadata.st_mode):
+                    raise ClosureError("{} tree contains a non-regular entry".format(self.label))
+        except OSError as exc:
+            raise ClosureError("cannot watch {} tree: {}".format(self.label, exc)) from exc
+
+    def require_unchanged(self) -> None:
+        try:
+            events = os.read(self.descriptor, 64 * 1024)
+        except BlockingIOError:
+            return
+        except OSError as exc:
+            raise ClosureError("cannot replay {} change events".format(self.label)) from exc
+        if events:
+            # Queue overflow, watch removal, and unmount also fail closed.
+            raise ClosureError("{} namespace or inode changed during verification".format(self.label))
+        raise ClosureError("{} change watch unexpectedly reached EOF".format(self.label))
+
+    def close(self) -> None:
+        if self.descriptor >= 0:
+            descriptor = self.descriptor
+            self.descriptor = -1
+            os.close(descriptor)
+
+
 def stage_verify_and_extract_snapshot(
     repo: Path,
     artifact: Path,
@@ -4199,6 +4301,7 @@ def stage_verify_and_extract_snapshot(
     stage_root = temporary / "snapshot-input"
     stage_root.mkdir(mode=0o700)
     staged_descriptor = -1
+    changes = PrivateEvidenceChangeWatch(stage_root)
     try:
         (
             staged,
@@ -4211,6 +4314,7 @@ def stage_verify_and_extract_snapshot(
             stage_root,
             snapshot_contract["limits"]["max_snapshot_tar_bytes"],
         )
+        changes.watch_file(staged_descriptor)
         require_exact(
             artifact_digest,
             runtime["artifact_sha256"],
@@ -4245,9 +4349,11 @@ def stage_verify_and_extract_snapshot(
             staged_identity,
             "held snapshot artifact path identity",
         )
+        changes.require_unchanged()
     finally:
         if staged_descriptor >= 0:
             os.close(staged_descriptor)
+        changes.close()
     validate_snapshot_manifest_bridge(manifest, contract, runtime)
     input_manifest = {
         "artifact": {

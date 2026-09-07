@@ -1,6 +1,24 @@
 McKernel Strict Rust Source Retirement Tracker
 Updated: 2026-08-17
 
+Source investment accounting update (2026-09-06):
+docs/verification/rust-reuse-plan.md and its revision-bound inventory now record
+the current Rust sources, their build paths, and native adaptation candidates.
+At revision 24a151fe the checkout contained 129 Rust files / 163,073 raw lines including
+fixtures. This source census preserves recognition of existing work; it is not
+a replacement for the artifact ownership metric below. No C body was retired,
+no ownership score changed, and no new runtime result is claimed by this update.
+
+Local reuse checkpoint (2026-09-07): the existing source-24a151fe compatibility
+build image and link map match docs/verification/compat-24a151fe-linked-rust.json.
+That report records 614,183 / 783,847 executable bytes from Rust (78.354960%).
+The image is retained for native integration; this is not a native boot result
+or a new C-body retirement. The additive CPU effect executor preserves all old
+Rust bodies, with 127 files byte-identical and two files extended; see
+docs/verification/native-cpu-additive-reuse.json. All 38 resource Rust tests and
+the incremental native module build/link checks pass. Native production gates
+remain unchanged while the Linux CPU/memory/boot adapters are completed.
+
 Scope: active smp-x86/x86_64 McKernel-owned C/header source retirement inventory. Arm64, deferred builtin/MIC/attached targets, third-party, generated, and test/fixture bundles are excluded from this per-file list because they are not active McKernel-owned source-retirement debt.
 
 Artifact conversion status (authoritative for implementation-language claims):
@@ -14405,3 +14423,9 @@ Instructions for completing the full Rust port
 10. Finish only when all scored rows are 100.0%, all remaining n/a rows are explicitly allowlisted boundaries, the strict Rust build compiles no McKernel-owned C implementation objects, and runtime validation passes without requiring host reboot paths.
 
 Total percentage points left: 0.0%
+Active goal clarification (2026-09-07): completing McKernel now explicitly means
+Rust or assembly for its entire kernel implementation, including linked support
+code and ABI/runtime bodies. Retained C references cannot participate in the
+final production implementation. Track the additional acceptance checks in
+docs/verification/mckernel-rust-assembly-completion.md. This requirement extends
+the active goal without awarding any historical ownership or native gate credit.

@@ -6,6 +6,25 @@ This file is intentionally dependency-ordered and evidence-gated. It contains
 no calendar estimates. Work is complete only when the measurable acceptance
 gates below pass on the exact production artifacts.
 
+EXISTING RUST INVESTMENT (source inventory reviewed 2026-09-06):
+The repository already contains 129 tracked Rust files / 163,073 raw lines,
+including fixtures. This includes 108,900 lines in kernel/rust, 13,526 in the
+existing mcctrl Rust helper source, and 10,149 in host-kernel/native-rust.
+These are inventory counts, not completion percentages or remaining-code
+estimates. TODO gates below still require their full native acceptance evidence;
+they do not mean all associated implementation must be written from scratch.
+Use docs/verification/rust-reuse-plan.md and its revision-bound inventory to
+retain existing consumers and adapt existing Rust bodies before replacing them.
+This accounting update awards no production gate credit.
+
+ACTIVE GOAL CLARIFICATION (2026-09-07): the final McKernel kernel implementation
+must be entirely Rust or assembly, with the existing Rust integrated and reused.
+The additional required acceptance checks are in
+docs/verification/mckernel-rust-assembly-completion.md. This tracker's 10,000
+points still measure the native host path; the active whole-system goal also
+requires those McKernel language checks. Earlier exclusions of further McKernel
+C conversion are superseded. No score or production gate is promoted here.
+
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)
 TRACKED GATES: 130 total; 6 PASS; 1 IN_PROGRESS; 0 BLOCKED; 123 TODO
@@ -38,8 +57,8 @@ or a release candidate.
    plane. The Linux kernel core is not being rewritten in Rust.
 2. The host runs a version-pinned, Rocky-derived custom kernel package with
    CONFIG_RUST enabled and the toolchain required by that exact kernel source.
-3. Only the three project-owned host kernel modules needed by the hybrid are
-   conversion targets:
+3. This tracker's host-module conversion score covers the three project-owned
+   host kernel modules needed by the hybrid:
 
    - ihk.ko
    - ihk-smp-x86_64.ko
@@ -67,12 +86,13 @@ or a release candidate.
 10. The C reference modules remain available only as test oracles in a clearly
     separated reference build. They are forbidden from production packages,
     initramfs contents, installed module trees, and the production link graph.
-11. The existing McKernel image, mcexec, ihklib, ihkconfig, ihkosctl, ihkmond,
-    mcstat, other host tools, Rocky user space, and Linux core are not new Rust
-    conversion targets. They remain compatibility consumers and test oracles.
-12. The existing Rust-first McKernel image is preserved and regression-tested;
-    this tracker does not require further conversion of its remaining C or
-    assembly primitives.
+11. Existing mcexec, ihklib, ihkconfig, ihkosctl, ihkmond, mcstat, other host tools,
+    Rocky user space, and Linux core remain compatibility consumers and test
+    oracles for this host-module score. Preserve existing Rust tool implementations.
+12. The active goal also requires McKernel's entire kernel implementation to be
+    Rust or assembly. Preserve and integrate its existing Rust; replace its
+    remaining C implementation, wrappers, and fallback dependencies. Verify the
+    final image and runtime closure using the additional McKernel language checks.
 13. x86_64 is the production architecture in this tracker. Arm64, MIC, and Tofu
     do not earn, consume, or dilute these 10,000 evidence points.
 14. Rocky kABI support is not claimed. Kernel packages and all three modules are

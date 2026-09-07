@@ -6,6 +6,7 @@ from __future__ import print_function
 import argparse
 import base64
 import contextlib
+import ctypes
 import copy
 import datetime
 import email.utils
@@ -26,9 +27,9 @@ from typing import Any
 
 EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     "kbuild_link_closure": {
-        "git_blob_sha1": "6f1a77abbfa91756b8310c294c1b37edf7eb3197",
-        "sha256": "87c8bba60aba0ee2c3628925096672bf35b299044928baca41d3317fbe9a4f57",
-        "size": 59345,
+        "git_blob_sha1": "bb19da767c8a422df36ef53c98d12f89b5547c11",
+        "sha256": "c9640b6b8c3fc6ee168cd875df2c79e00fb8fd1dfda9cf3e4aa48e052a430c7c",
+        "size": 59952,
     },
     "kconfig_policy": {
         "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
@@ -42,7 +43,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:f896ad4a647a2309a098e16cac8c2616b21735a8f1f69fecf78c74749141f069"
+    "ISOLATED_SELF_DIGEST:ce3e80898425f5985ca38ca02c11d9ee19234a0f41e4440b1147cc8d56b19d1c"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -2178,6 +2179,18 @@ def _regular_evidence_directory(path: Path, label: str) -> Path:
     return requested
 
 
+def _directory_entry_identities(descriptor: int) -> tuple[Any, ...]:
+    # Directory timestamps can remain equal across rapid namespace changes.
+    # Leaf contents are validated separately; retain names and object identity.
+    with os.scandir(descriptor) as entries:
+        result = []
+        for entry in entries:
+            metadata = entry.stat(follow_symlinks=False)
+            result.append((entry.name, metadata.st_dev, metadata.st_ino,
+                           stat.S_IFMT(metadata.st_mode)))
+    return tuple(sorted(result))
+
+
 @contextlib.contextmanager
 def _bound_evidence_directory(path: Path, label: str):
     requested = _regular_evidence_directory(path, label)
@@ -2195,6 +2208,7 @@ def _bound_evidence_directory(path: Path, label: str):
     except OSError as error:
         raise EvidenceError("cannot open {0}: {1}".format(label, error)) from error
     opened_identity = None
+    opened_entries = None
     try:
         opened = os.fstat(descriptor)
         opened_identity = _stat_identity(opened)
@@ -2212,13 +2226,16 @@ def _bound_evidence_directory(path: Path, label: str):
         bound = Path("/proc/self/fd/{0}".format(descriptor))
         if not bound.is_dir():
             raise EvidenceError("{0} lacks a descriptor-bound path".format(label))
+        opened_entries = _directory_entry_identities(descriptor)
         yield bound, descriptor
     finally:
         try:
             final = os.fstat(descriptor)
             if (
                 opened_identity is not None
-                and _stat_identity(final) != opened_identity
+                and (_stat_identity(final) != opened_identity
+                     or (opened_entries is not None and
+                         _directory_entry_identities(descriptor) != opened_entries))
             ):
                 raise EvidenceError(
                     "{0} changed while it was validated".format(label)
@@ -5611,6 +5628,63 @@ def _recheck_subprocess_bindings(bindings: list[dict[str, Any]]) -> None:
 
 
 @contextlib.contextmanager
+def _watch_subprocess_bindings(bindings: list[dict[str, Any]]):
+    """Reject observed writes/restores even within one filesystem clock tick.
+
+    Linux inotify supplements the retained-byte and namespace rechecks. It is
+    not an immutable snapshot or protection against arbitrary writable mmap.
+    Production tool/package inputs still require their confined ownership.
+    """
+    watches = []
+    try:
+        if bindings:
+            libc = ctypes.CDLL(None, use_errno=True)
+            initialize = libc.inotify_init1
+            initialize.argtypes = [ctypes.c_int]
+            initialize.restype = ctypes.c_int
+            add_watch = libc.inotify_add_watch
+            add_watch.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_uint32]
+            add_watch.restype = ctypes.c_int
+            # Linux UAPI: MODIFY, ATTRIB, CLOSE_WRITE, DELETE_SELF, MOVE_SELF,
+            # UNMOUNT. Any queued event (including overflow/ignored) rejects.
+            mask = (
+                0x00000002 | 0x00000004 | 0x00000008
+                | 0x00000400 | 0x00000800 | 0x00002000
+            )
+            for binding in bindings:
+                descriptor = initialize(os.O_NONBLOCK | os.O_CLOEXEC)
+                if descriptor < 0:
+                    raise EvidenceError("cannot create execution mutation watch")
+                watches.append((descriptor, binding["label"]))
+                path = "/proc/self/fd/{0}".format(binding["descriptor"])
+                if add_watch(descriptor, os.fsencode(path), mask) < 0:
+                    raise EvidenceError("cannot watch retained execution input")
+            _recheck_subprocess_bindings(bindings)
+        yield
+    finally:
+        failure = None
+        for descriptor, label in watches:
+            try:
+                try:
+                    events = os.read(descriptor, 65536)
+                except BlockingIOError:
+                    events = b""
+                if events and failure is None:
+                    failure = EvidenceError(
+                        "{0} descriptor changed during execution (filesystem event)".format(label)
+                    )
+            except OSError as error:
+                if failure is None:
+                    failure = EvidenceError(
+                        "cannot inspect execution mutation watch: {0}".format(error)
+                    )
+            finally:
+                os.close(descriptor)
+        if failure is not None:
+            raise failure
+
+
+@contextlib.contextmanager
 def _modinfo_module_alias(
     module_argument: str, module_binding: dict[str, Any] | None
 ):
@@ -5621,6 +5695,7 @@ def _modinfo_module_alias(
     # Keep its .ko dispatch while resolving only the retained module descriptor.
     directory = Path(tempfile.mkdtemp(prefix="mckernel-modinfo-"))
     directory_fd = None
+    alias_fd = None
     created_identity = _stat_identity(directory.lstat())
     alias_name = "module.ko"
     try:
@@ -5640,10 +5715,18 @@ def _modinfo_module_alias(
             raise EvidenceError("modinfo alias directory is not private")
         os.set_inheritable(directory_fd, False)
         os.symlink(module_argument, alias_name, dir_fd=directory_fd)
+        if not hasattr(os, "O_PATH"):
+            raise EvidenceError("modinfo alias requires an O_PATH inode lease")
+        # Pin the symlink inode so unlink/recreate cannot reuse its inode within
+        # one filesystem timestamp tick, even when the target is unchanged.
+        alias_fd = os.open(
+            alias_name, os.O_PATH | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0),
+            dir_fd=directory_fd,
+        )
         alias = Path("/proc/self/fd/{0}/{1}".format(directory_fd, alias_name))
         # Creating the entry changes directory timestamps and size.
         directory_identity = _stat_identity(os.fstat(directory_fd))
-        alias_identity = _stat_identity(alias.lstat())
+        alias_identity = _stat_identity(os.fstat(alias_fd))
 
         def recheck_alias() -> None:
             _recheck_subprocess_bindings([module_binding])
@@ -5652,6 +5735,7 @@ def _modinfo_module_alias(
                     _stat_identity(os.fstat(directory_fd)) != directory_identity
                     or _stat_identity(directory.lstat()) != directory_identity
                     or os.listdir(directory_fd) != [alias_name]
+                    or _stat_identity(os.fstat(alias_fd)) != alias_identity
                     or _stat_identity(alias.lstat()) != alias_identity
                     or not stat.S_ISLNK(alias.lstat().st_mode)
                     or os.readlink(alias) != module_argument
@@ -5688,6 +5772,8 @@ def _modinfo_module_alias(
         except OSError as error:
             cleanup_error = error
         finally:
+            if alias_fd is not None:
+                os.close(alias_fd)
             if directory_fd is not None:
                 os.close(directory_fd)
         if cleanup_error is not None and not failed:
@@ -5712,30 +5798,31 @@ def _run_field(
     bindings = [
         binding for binding in (tool_binding, module_binding) if binding is not None
     ]
-    try:
-        with _modinfo_module_alias(module_argument, module_binding) as alias:
-            alias_argument, alias_fds = alias
-            try:
-                result = subprocess.run(
-                    ["modinfo", "-F", field, alias_argument],
-                    check=False,
-                    env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
-                    executable=executable,
-                    pass_fds=tuple(sorted(set(pass_fds + alias_fds))),
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                )
-            except OSError as error:
-                raise EvidenceError(
-                    "bound Rocky modinfo is unavailable: {0}".format(error)
-                ) from error
+    with _watch_subprocess_bindings(bindings):
+        try:
+            with _modinfo_module_alias(module_argument, module_binding) as alias:
+                alias_argument, alias_fds = alias
+                try:
+                    result = subprocess.run(
+                        ["modinfo", "-F", field, alias_argument],
+                        check=False,
+                        env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+                        executable=executable,
+                        pass_fds=tuple(sorted(set(pass_fds + alias_fds))),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                    )
+                except OSError as error:
+                    raise EvidenceError(
+                        "bound Rocky modinfo is unavailable: {0}".format(error)
+                    ) from error
+                _recheck_subprocess_bindings(bindings)
+                if result.returncode != 0:
+                    raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
+                return [line for line in result.stdout.splitlines() if line]
+        finally:
             _recheck_subprocess_bindings(bindings)
-            if result.returncode != 0:
-                raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
-            return [line for line in result.stdout.splitlines() if line]
-    finally:
-        _recheck_subprocess_bindings(bindings)
 
 
 def _module_vermagic_release(
@@ -5777,28 +5864,29 @@ def _nm(
     bindings = [
         binding for binding in (tool_binding, module_binding) if binding is not None
     ]
-    try:
+    with _watch_subprocess_bindings(bindings):
         try:
-            result = subprocess.run(
-                [NM_EXECUTABLE] + arguments + [module_argument],
-                check=False,
-                env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
-                executable=executable,
-                pass_fds=pass_fds,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-        except OSError as error:
-            raise EvidenceError(
-                "bound Rocky nm is unavailable: {0}".format(error)
-            ) from error
-        _recheck_subprocess_bindings(bindings)
-        if result.returncode != 0:
-            raise EvidenceError("nm failed for {0}".format(module.name))
-        return result.stdout
-    finally:
-        _recheck_subprocess_bindings(bindings)
+            try:
+                result = subprocess.run(
+                    [NM_EXECUTABLE] + arguments + [module_argument],
+                    check=False,
+                    env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+                    executable=executable,
+                    pass_fds=pass_fds,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
+            except OSError as error:
+                raise EvidenceError(
+                    "bound Rocky nm is unavailable: {0}".format(error)
+                ) from error
+            _recheck_subprocess_bindings(bindings)
+            if result.returncode != 0:
+                raise EvidenceError("nm failed for {0}".format(module.name))
+            return result.stdout
+        finally:
+            _recheck_subprocess_bindings(bindings)
 
 
 def _nm_symbol_records(output: str) -> list[tuple[str, str]]:

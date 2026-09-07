@@ -38,7 +38,7 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:84f6ca4a8cac9de303822c10a9f53845162547e7c0c659ff6dd8776d5dd8f532
+# SELF_DIGEST:08582dab26fb759ede67a0bdd4cc44487ff47cfd036a64ef9c8ed5ed298a3407
 SELF_SOURCE_MAXIMUM = 1024 * 1024
 SECURITY_SOURCE_SHA256 = 'ecbcda61e5cf036a22fe064f47053224e46d22aecf7fc4845a04d8bcd5a6344a'
 SECURITY_SOURCE_SIZE = 51627
@@ -972,11 +972,14 @@ def _run_exec_seal(
         if expectation_identity is None:
             raise WitnessError("private exec expectation disappeared")
         start_read, start_write = os.pipe()
+        # Pipe I/O may update mtime/ctime. Reuse the stable namespace identity
+        # used for directory descriptors; it retains inode, type and owner
+        # without treating the start token itself as descriptor substitution.
         start_read_identity = _owned_fd_identity(
-            start_read, "private exec start reader"
+            start_read, "private exec start reader", identity_length=5
         )
         start_write_identity = _owned_fd_identity(
-            start_write, "private exec start writer"
+            start_write, "private exec start writer", identity_length=5
         )
         if start_read_identity is None or start_write_identity is None:
             raise WitnessError("private exec start pipe disappeared")

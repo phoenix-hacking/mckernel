@@ -218,7 +218,10 @@ class Rs006MiscdeviceModuleOwnerFollowupTests(unittest.TestCase):
                     followup._validate_integrated_consumers(contract, consumers)
 
     def test_active_patch_close_hook_forged_after_read_is_rejected(self):
-        with tempfile.TemporaryDirectory(prefix="rs006-owner-close-race-") as temporary:
+        real_identity = followup._identity
+        with tempfile.TemporaryDirectory(prefix="rs006-owner-close-race-") as temporary, \
+                mock.patch.object(followup, "_identity", side_effect=lambda info:
+                                  real_identity(info)[:-2] + (0, 0)):
             relative = followup.ACTIVE_PATCH_PATH
             target = os.path.join(temporary, *relative.split("/"))
             os.makedirs(os.path.dirname(target))
@@ -243,7 +246,10 @@ class Rs006MiscdeviceModuleOwnerFollowupTests(unittest.TestCase):
             self.assertTrue(triggered[0])
 
     def test_later_directory_close_cannot_forge_captured_active_patch(self):
-        with tempfile.TemporaryDirectory(prefix="rs006-owner-later-close-race-") as temporary:
+        real_identity = followup._identity
+        with tempfile.TemporaryDirectory(prefix="rs006-owner-later-close-race-") as temporary, \
+                mock.patch.object(followup, "_identity", side_effect=lambda info:
+                                  real_identity(info)[:-2] + (0, 0)):
             relative = followup.ACTIVE_PATCH_PATH
             target = os.path.join(temporary, *relative.split("/"))
             os.makedirs(os.path.dirname(target))
@@ -266,6 +272,15 @@ class Rs006MiscdeviceModuleOwnerFollowupTests(unittest.TestCase):
                 with self.assertRaises(followup.ContractError):
                     snapshot.close()
             self.assertTrue(triggered[0])
+
+    def test_unchanged_snapshot_closes_change_watch_and_all_inputs(self):
+        before = set(os.listdir("/proc/self/fd"))
+        snapshot = followup._AggregateSnapshot(REPO_ROOT)
+        snapshot.open_file(followup.ACTIVE_PATCH_PATH, "active patch", 1024 * 1024)
+        snapshot.close()
+        snapshot.close()
+        self.assertEqual(-1, snapshot._change_descriptor)
+        self.assertEqual(before, set(os.listdir("/proc/self/fd")))
 
     def test_active_patch_identity_and_path_vector_fail_closed(self):
         mutated = self.active_patch_bytes + b"\n"

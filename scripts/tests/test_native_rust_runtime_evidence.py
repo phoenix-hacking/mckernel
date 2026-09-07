@@ -833,6 +833,39 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             run.assert_not_called()
         self.assertTrue(all(not path.exists() for path in directories))
 
+    def test_execution_change_watch_ignores_reads_and_catches_restore_without_clock_help(self) -> None:
+        module = self.root / "watched-module.ko"
+        original = b"watched module bytes\n"
+        module.write_bytes(original)
+        digest = hashlib.sha256(original).hexdigest()
+        real_identity = evidence._stat_identity
+        with module.open("rb") as handle, mock.patch.object(
+            evidence, "_stat_identity", side_effect=lambda metadata: real_identity(metadata)[:-2]
+        ):
+            _, _, binding = evidence._subprocess_module_execution(
+                module, handle.fileno(), digest
+            )
+            before = set(os.listdir("/proc/self/fd"))
+            with evidence._watch_subprocess_bindings([binding]):
+                self.assertEqual(original, os.pread(handle.fileno(), len(original), 0))
+            self.assertEqual(before, set(os.listdir("/proc/self/fd")))
+            with self.assertRaisesRegex(RuntimeError, "body failure"):
+                with evidence._watch_subprocess_bindings([binding]):
+                    raise RuntimeError("body failure")
+            self.assertEqual(before, set(os.listdir("/proc/self/fd")))
+            with self.assertRaisesRegex(evidence.EvidenceError, "filesystem event"):
+                with evidence._watch_subprocess_bindings([binding]):
+                    with module.open("r+b") as writer:
+                        writer.write(b"X")
+                        writer.flush()
+                        writer.seek(0)
+                        writer.write(original)
+                        writer.flush()
+                    # Both byte and metadata checks pass; the queued write event
+                    # must still reject the restored input after the body exits.
+                    evidence._recheck_subprocess_bindings([binding])
+            self.assertEqual(before, set(os.listdir("/proc/self/fd")))
+
     def test_runtime_tools_reject_transient_same_inode_mutate_restore(self) -> None:
         tool = self.root / "bound-tool"
         tool.write_bytes(b"#!/bin/sh\nexit 0\n")
@@ -5262,6 +5295,28 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             ):
                 (directory / "new-leaf").write_bytes(b"mutation\n")
                 raise RuntimeError("body failure")
+
+    def test_directory_namespace_changes_are_rejected_with_equal_timestamps(self) -> None:
+        for operation in ("add", "remove", "replace"):
+            with self.subTest(operation=operation):
+                directory = self.root / ("namespace-" + operation)
+                directory.mkdir()
+                leaf = directory / "leaf"
+                leaf.write_bytes(b"original\n")
+                replacement = self.root / ("replacement-" + operation)
+                replacement.write_bytes(b"replacement\n")
+                with mock.patch.object(evidence, "_stat_identity", return_value=("same",)):
+                    with evidence._bound_evidence_directory(directory, "stable namespace"):
+                        pass
+                    with self.assertRaisesRegex(evidence.EvidenceError, "changed while it was validated"):
+                        with evidence._bound_evidence_directory(directory, "changed namespace"):
+                            if operation == "add":
+                                (directory / "new-leaf").write_bytes(b"new\n")
+                            elif operation == "remove":
+                                leaf.unlink()
+                            else:
+                                replacement.replace(leaf)
+                            raise RuntimeError("body failure")
 
     def test_phase2_reports_cross_bind_config_kconfig_and_stage_lock(self) -> None:
         directory = self.root / "phase2"

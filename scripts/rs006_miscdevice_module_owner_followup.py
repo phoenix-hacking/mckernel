@@ -10,6 +10,7 @@ gate/tracker credit.
 from __future__ import print_function
 
 import argparse
+import ctypes
 import hashlib
 import json
 import os
@@ -22,7 +23,7 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json"
-EXPECTED_CONTRACT_SHA256 = '8c328e08d679f8f52c3161861e361978c216892e0e68bbbe69f445546022c65e'
+EXPECTED_CONTRACT_SHA256 = 'c733458a8a90ae3d76c5fc39c94da78bb1987f096849f01f30d93351d8a9c021'
 ACTIVE_PATCH_PATH = "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch"
 COMPILE_FIXTURE_PATH = "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs"
 REPLAY_FIXTURE_PATH = "scripts/tests/fixtures/rust-core-rocky-6.12"
@@ -129,6 +130,8 @@ class _AggregateSnapshot(object):
         self._files = {}
         self._tree_specs = []
         self._closed = False
+        self._change_descriptor = -1
+        self._change_observed = False
         self._directory_flags = (
             os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) |
             getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_DIRECTORY", 0)
@@ -141,7 +144,18 @@ class _AggregateSnapshot(object):
             raise ContractError("descriptor-rooted O_NOFOLLOW/openat support is required")
         try:
             self._open_repository_chain()
-        except (ContractError, OSError) as error:
+            libc = ctypes.CDLL(None, use_errno=True)
+            initialize = libc.inotify_init1
+            initialize.argtypes = [ctypes.c_int]
+            initialize.restype = ctypes.c_int
+            self._add_change_watch = libc.inotify_add_watch
+            self._add_change_watch.argtypes = [
+                ctypes.c_int, ctypes.c_char_p, ctypes.c_uint32]
+            self._add_change_watch.restype = ctypes.c_int
+            self._change_descriptor = initialize(os.O_NONBLOCK | os.O_CLOEXEC)
+            if self._change_descriptor < 0:
+                raise OSError(ctypes.get_errno(), "inotify_init1")
+        except (ContractError, OSError, AttributeError) as error:
             while self._directories:
                 record = self._directories.pop()
                 try:
@@ -151,6 +165,29 @@ class _AggregateSnapshot(object):
             if isinstance(error, ContractError):
                 raise error
             raise ContractError("cannot retain repository root: {0}".format(error))
+
+    def _watch_file_changes(self, descriptor):
+        # Keep observing the captured inode after its last reader is closed.
+        # Timestamps alone can miss a same-size rewrite on coarse filesystems.
+        # Ordinary close/read events are excluded; writes, attributes, moves,
+        # deletion, watch loss, and overflow fail closed. This supplements the
+        # byte/descriptor replay, not a claim of immunity to writable mmap.
+        path = "/proc/self/fd/{0}".format(descriptor).encode("ascii")
+        mask = 0x2 | 0x4 | 0x400 | 0x800 | 0x2000
+        if self._add_change_watch(self._change_descriptor, path, mask) < 0:
+            raise OSError(ctypes.get_errno(), "inotify_add_watch")
+
+    def _replay_file_changes(self, label):
+        if self._change_observed:
+            raise ContractError("{0} captured file already changed during replay".format(label))
+        try:
+            events = os.read(self._change_descriptor, 65536)
+        except BlockingIOError:
+            return
+        if events:
+            self._change_observed = True
+            raise ContractError("{0} captured file changed during replay".format(label))
+        raise ContractError("{0} file change watch unexpectedly ended".format(label))
 
     def _open_repository_chain(self):
         named = os.lstat(os.sep)
@@ -236,6 +273,11 @@ class _AggregateSnapshot(object):
         if _identity(named) != identity:
             os.close(descriptor)
             raise ContractError("{0} named/descriptor identity differs".format(label))
+        try:
+            self._watch_file_changes(descriptor)
+        except OSError as error:
+            os.close(descriptor)
+            raise ContractError("{0} cannot watch captured file: {1}".format(label, error))
         first = _read_fd_exact(descriptor, retained.st_size, label)
         second = _read_fd_exact(descriptor, retained.st_size, label)
         if first != second or _identity(os.fstat(descriptor)) != identity:
@@ -491,6 +533,7 @@ class _AggregateSnapshot(object):
         try:
             self._replay_closed_state_once(label)
             self._replay_closed_state_once(label + " final")
+            self._replay_file_changes(label)
         except ContractError:
             raise
         except OSError as error:
@@ -560,6 +603,13 @@ class _AggregateSnapshot(object):
             if first_error is None:
                 first_error = error if isinstance(error, ContractError) else ContractError(
                     "aggregate final replay failed: {0}".format(error))
+        descriptor = self._change_descriptor
+        self._change_descriptor = -1
+        try:
+            os.close(descriptor)
+        except OSError as error:
+            if first_error is None:
+                first_error = ContractError("aggregate change watch close failed: {0}".format(error))
         if first_error is not None:
             raise first_error
 

@@ -4,6 +4,7 @@ import ast
 import copy
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from scripts import native_rust_kbuild_link_closure as closure
+from scripts import rocky_rust_staging as staging
 
 
 SCRIPT = os.path.join(REPO_ROOT, "scripts", "native_rust_kbuild_link_closure.py")
@@ -198,6 +200,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         if module["name"] == "ihk-smp-x86_64":
             body.append("    $(wildcard include/config/COMPAT) \\")
         body.extend("  {0}{1} \\".format(SOURCE_PREFIX, item) for item in dependencies)
+        if module["name"] == "ihk":
+            body.append("    $(wildcard include/config/COMPAT) \\")
         body.extend(
             "  {0} \\".format(item) for item in closure._KERNEL_RUST_DEPENDENCIES
         )
@@ -370,6 +374,57 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.assert_rejected()
         finally:
             self.write_text(name, original)
+
+    def test_real_stager_and_captured_os_runtime_dependency_record(self):
+        # Keep the producer independent of the validator's expected file list.
+        plan = staging.validate_manifest(
+            REPO_ROOT, os.path.join(REPO_ROOT, staging.DEFAULT_MANIFEST)
+        )
+        stage_lock = staging._evidence_stage_lock(plan)
+        self.write_bytes("stage-lock.json", closure.canonical_bytes(stage_lock))
+        # Original .ihk.o.cmd from Actions run 34072696813, artifact 10001359801
+        # (ZIP SHA256 adbf5105ed248d304c2f86f29a67f964670e26ca7688437641b75aa215400988).
+        # It proves fixdep emits CONFIG_COMPAT after os_runtime.rs, whereas the
+        # SMP root's CONFIG_COMPAT is emitted before its source dependencies.
+        fixture = os.path.join(
+            REPO_ROOT, "scripts", "tests", "fixtures",
+            "native-rust-kbuild-24a151fe-ihk.cmd",
+        )
+        with open(fixture, "rb") as stream:
+            captured = stream.read()
+        self.assertEqual(
+            "21d4f8f1acf23110f5d59e9add888d4385befc9f5a00342a2dcaf883ec9fb0c6",
+            closure._sha256(captured),
+        )
+        source_root = b"/__w/_temp/native-rust-source/linux-6.12.0-211.44.1.el10_2"
+        self.assertIn(source_root, captured)
+        self.write_bytes(".ihk.o.cmd", captured.replace(source_root, SOURCE_ROOT.encode("ascii")))
+        value = closure.validate_kbuild_link_closure(
+            self.records, stage_lock_path=self.stage_lock_path
+        )
+        source_paths = [item["path"] for item in value["source_closure"]]
+        self.assertIn("os_runtime.rs", source_paths)
+        self.assertEqual(
+            sorted(item["path"] for item in stage_lock["files"] if item["path"].endswith(".rs")),
+            source_paths,
+        )
+        self.assertFalse(value["claims"]["runtime_proven"])
+
+    def test_dependency_lists_match_the_actual_rust_crate_edges(self):
+        for module in closure.MODULES:
+            with self.subTest(module=module["name"]):
+                path = os.path.join(
+                    REPO_ROOT, "host-kernel", "native-rust", module["crate_root"]
+                )
+                with open(path, "r", encoding="utf-8") as stream:
+                    source = stream.read()
+                edges = re.findall(
+                    r'(?m)^(?:#\[path = "([^"]+)"\]\n)?mod ([a-z0-9_]+);$', source
+                )
+                self.assertEqual(
+                    tuple(path or name + ".rs" for path, name in edges),
+                    closure._PROJECT_DEPENDENCIES[module["name"]],
+                )
 
     def test_valid_closure_is_exact_canonical_and_credit_forbidden(self):
         value = closure.validate_kbuild_link_closure(
@@ -882,7 +937,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             ),
         )
 
-    def test_fixdep_config_record_is_required_exact_and_smp_only(self):
+    def test_fixdep_config_record_is_required_exact_and_module_specific(self):
         name = ".ihk_smp_x86_64.o.cmd"
         line = "    $(wildcard include/config/COMPAT) \\\n"
         alternatives = (
@@ -911,6 +966,21 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             head = "deps_{0} := \\\n".format(target)
             with self.subTest(module=module["name"]):
                 self.mutate_once(closure._cmd_name(target), head, head + line)
+
+    def test_os_runtime_dependency_and_config_position_are_exact(self):
+        name = ".ihk.o.cmd"
+        source = "  " + SOURCE_PREFIX + "os_runtime.rs \\\n"
+        config = "    $(wildcard include/config/COMPAT) \\\n"
+        self.mutate_once(name, source, "")
+        self.mutate_once(name, source, source + source)
+        self.mutate_once(name, source, source.replace("os_runtime.rs", "missing.rs"))
+        self.mutate_once(name, config, "")
+        self.mutate_once(name, config, config + config)
+        self.mutate_once(name, config, config.replace("    ", "  ", 1))
+        self.mutate_once(name, config, config.replace("COMPAT)", "IA32_EMULATION)"))
+        self.mutate_once(name, source + config, config + source)
+        kernel = "  ./rust/libcore.rmeta \\\n"
+        self.mutate_once(name, config + kernel, kernel + config)
 
     def test_fixdep_config_record_order_and_extra_dependencies_are_rejected(self):
         name = ".ihk_smp_x86_64.o.cmd"

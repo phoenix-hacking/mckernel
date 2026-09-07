@@ -20,6 +20,11 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
+if __package__:
+    from .reviewed_repository_fixture import reviewed_checkout
+else:
+    from reviewed_repository_fixture import reviewed_checkout
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "scripts"
@@ -66,6 +71,13 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
         cls.review = reviewer.read_json_bytes(
             cls.review_bytes, "checked review", require_canonical=True
         )
+        paths = [row["path"] for row in cls.review["runtime_candidate"]["committed_inputs"]]
+        paths.append(MANIFEST.relative_to(REPO_ROOT).as_posix())
+        cls.historical_checkout, cls.repo = reviewed_checkout(REPO_ROOT, paths)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.historical_checkout.cleanup()
 
     def artifact_path(self):
         candidates = []
@@ -271,13 +283,13 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 ):
                     reviewer.validate_review_object(mutated)
 
-    def test_current_repository_accepts_exact_reviewed_descendant(self):
+    def test_frozen_repository_accepts_exact_reviewed_descendant(self):
         expected_head = reviewer.v1_review.run_git(
-            REPO_ROOT, ["rev-parse", "HEAD"]
+            self.repo, ["rev-parse", "HEAD"]
         ).stdout.decode("ascii").strip()
         self.assertEqual(
             reviewer.validate_repository(
-                REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+                self.repo, reviewer.validate_review_object(copy.deepcopy(self.review))
             ),
             expected_head,
         )
@@ -288,7 +300,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
         altered["runtime_candidate"]["committed_inputs"][0]["sha256"] = "1" * 64
         for mutation in (empty, altered):
             with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "committed inputs"):
-                reviewer.validate_repository(REPO_ROOT, mutation)
+                reviewer.validate_repository(self.repo, mutation)
 
     def test_repository_validation_ignores_git_redirection_environment(self):
         redirected = {
@@ -298,11 +310,11 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             "GIT_WORK_TREE": "/not/the/worktree",
         }
         expected_head = reviewer.v1_review.run_git(
-            REPO_ROOT, ["rev-parse", "HEAD"]
+            self.repo, ["rev-parse", "HEAD"]
         ).stdout.decode("ascii").strip()
         with mock.patch.dict(os.environ, redirected, clear=False):
             self.assertEqual(
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review)),
+                reviewer.validate_repository(self.repo, copy.deepcopy(self.review)),
                 expected_head,
             )
             for name, item in redirected.items():
@@ -381,7 +393,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 [
                     sys.executable,
                     str(SCRIPTS / "rocky_kernel_rk007_build_review_v2.py"),
-                    "--repo", str(REPO_ROOT), "--check",
+                    "--repo", str(self.repo), "--check",
                 ],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=environment,
             )
@@ -683,11 +695,11 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
         completed = subprocess.run(
             [
                 sys.executable, str(SCRIPTS / "rocky_kernel_rk007_build_review_v2.py"),
-                "--repo", str(REPO_ROOT), "--check",
+                "--repo", str(self.repo), "--check",
             ],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8", "replace"))
         self.assertEqual(completed.stderr, b"")
         result = json.loads(completed.stdout.decode("ascii"))
         self.assertEqual(result["review_id"], reviewer.REVIEW_ID)

@@ -896,6 +896,184 @@ impl<const N: usize> Drop for CpuTransaction<'_, '_, N> {
     }
 }
 
+/// A host observation must identify the same physical CPU throughout a batch.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct HostCpuSnapshot {
+    pub(crate) hardware_id: u32,
+    pub(crate) numa_node: u32,
+    pub(crate) online: bool,
+}
+
+/// The Linux boundary for a sleepable, exclusively owned hotplug batch.
+///
+/// The adapter must hold the policy lock, keep CPU device identities alive,
+/// exclude competing transitions, and pin its module for outstanding resources
+/// and quarantined state. This trait supplies none of those Linux lifetimes.
+/// `observe` must reject an absent CPU. `set_online` succeeds only for an actual
+/// transition; an already-satisfied request is an error. An error may follow a
+/// partial effect, so observations, not errno alone, determine compensation.
+pub(crate) trait HostCpuHotplug {
+    type Error;
+
+    fn observe(&mut self, cpu: usize) -> Result<HostCpuSnapshot, Self::Error>;
+    fn set_online(&mut self, cpu: usize, online: bool) -> Result<(), Self::Error>;
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub(crate) enum CpuEffectCause<E> {
+    Policy(ResourceError),
+    Host { cpu: usize, error: E },
+    StateMismatch { cpu: usize },
+}
+
+/// A failed request retains its original error and the first rollback failure.
+/// A quarantined result must retain the adapter's resource/module lifetime.
+#[derive(Debug, Eq, PartialEq)]
+pub(crate) struct CpuEffectFailure<E> {
+    pub(crate) cause: CpuEffectCause<E>,
+    pub(crate) rollback_cause: Option<CpuEffectCause<E>>,
+    pub(crate) quarantined: bool,
+}
+
+impl CpuChange {
+    fn host_snapshot(&self, online: bool) -> HostCpuSnapshot {
+        HostCpuSnapshot {
+            hardware_id: self.before.hardware_id,
+            numa_node: self.before.numa_node,
+            online,
+        }
+    }
+}
+
+impl<const N: usize> CpuTransaction<'_, '_, N> {
+    /// Reuse the prepared journal for host reserve/return effects, without an
+    /// additional table, allocation, or capacity-sized stack workspace.
+    /// OS assign/release, APIC reset, and McKernel boot are separate operations.
+    pub(crate) fn execute_hotplug<H: HostCpuHotplug>(
+        mut self,
+        host: &mut H,
+    ) -> Result<(), CpuEffectFailure<H::Error>> {
+        let before_online = match self.operation {
+            CpuOperation::Reserve => true,
+            CpuOperation::ReturnToHost => false,
+            _ => {
+                return Err(CpuEffectFailure {
+                    cause: CpuEffectCause::Policy(ResourceError::InvalidState),
+                    rollback_cause: None,
+                    quarantined: self.external_effects_started,
+                });
+            }
+        };
+        if self.external_effects_started {
+            return Err(CpuEffectFailure {
+                cause: CpuEffectCause::Policy(ResourceError::ExternalEffectsPending),
+                rollback_cause: None,
+                quarantined: true,
+            });
+        }
+        // No host mutation is allowed until the entire batch is observed. A
+        // rejected preflight preserves prior policy and makes no host claim.
+        for change in self.changes.iter() {
+            if let Err(cause) = observe_cpu(host, change, before_online) {
+                return Err(CpuEffectFailure {
+                    cause,
+                    rollback_cause: None,
+                    quarantined: false,
+                });
+            }
+        }
+        if let Err(error) = self.begin_external_effects() {
+            return Err(CpuEffectFailure {
+                cause: CpuEffectCause::Policy(error),
+                rollback_cause: None,
+                quarantined: false,
+            });
+        }
+        for position in 0..self.changes.len() {
+            let change = self.changes[position];
+            let transition = host
+                .set_online(change.cpu, !before_online)
+                .map_err(|error| CpuEffectCause::Host { cpu: change.cpu, error });
+            let result = transition.and_then(|()| observe_cpu(host, &change, !before_online));
+            if let Err(cause) = result {
+                // Include the failing call: a negative errno does not prove
+                // that Linux left the CPU in its original physical state.
+                return Err(self.compensate_hotplug(host, position + 1, before_online, cause));
+            }
+        }
+        // Recheck the whole batch before publishing available/online policy.
+        for change in self.changes.iter() {
+            if let Err(cause) = observe_cpu(host, change, !before_online) {
+                let attempted = self.changes.len();
+                return Err(self.compensate_hotplug(host, attempted, before_online, cause));
+            }
+        }
+        self.commit().map_err(|error| CpuEffectFailure {
+            cause: CpuEffectCause::Policy(error),
+            rollback_cause: None,
+            quarantined: true,
+        })
+    }
+
+    fn compensate_hotplug<H: HostCpuHotplug>(
+        self,
+        host: &mut H,
+        attempted: usize,
+        before_online: bool,
+        cause: CpuEffectCause<H::Error>,
+    ) -> CpuEffectFailure<H::Error> {
+        let mut rollback_cause = None;
+        for change in self.changes[..attempted].iter().rev() {
+            let outcome = match host.observe(change.cpu) {
+                Ok(snapshot) if snapshot == change.host_snapshot(before_online) => Ok(()),
+                Ok(snapshot) if snapshot == change.host_snapshot(!before_online) => {
+                    // A failed inverse call can still have restored the CPU.
+                    // Require independent observation even when it returns 0.
+                    let _transition = host.set_online(change.cpu, before_online);
+                    observe_cpu(host, change, before_online)
+                }
+                Ok(_) => Err(CpuEffectCause::StateMismatch { cpu: change.cpu }),
+                Err(error) => Err(CpuEffectCause::Host { cpu: change.cpu, error }),
+            };
+            if rollback_cause.is_none() {
+                rollback_cause = outcome.err();
+            }
+            // Continue reversing the earlier known effects after a failure.
+        }
+        // Untouched requested CPUs are checked too; a changed identity or
+        // competing transition must not be hidden by a successful prefix undo.
+        for change in self.changes.iter() {
+            let outcome = observe_cpu(host, change, before_online);
+            if rollback_cause.is_none() {
+                rollback_cause = outcome.err();
+            }
+        }
+        if rollback_cause.is_none() {
+            if let Err(error) = self.compensated_rollback() {
+                rollback_cause = Some(CpuEffectCause::Policy(error));
+            }
+        }
+        // Otherwise Drop preserves the existing whole-batch quarantine rule.
+        CpuEffectFailure {
+            cause,
+            quarantined: rollback_cause.is_some(),
+            rollback_cause,
+        }
+    }
+}
+
+fn observe_cpu<H: HostCpuHotplug>(
+    host: &mut H,
+    change: &CpuChange,
+    online: bool,
+) -> Result<(), CpuEffectCause<H::Error>> {
+    match host.observe(change.cpu) {
+        Ok(snapshot) if snapshot == change.host_snapshot(online) => Ok(()),
+        Ok(_) => Err(CpuEffectCause::StateMismatch { cpu: change.cpu }),
+        Err(error) => Err(CpuEffectCause::Host { cpu: change.cpu, error }),
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct IkcPair {
     pub(crate) source: usize,

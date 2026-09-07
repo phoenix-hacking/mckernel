@@ -185,8 +185,8 @@ class IhkSmpResourceTests(unittest.TestCase):
 
     def test_test_and_fixture_surface_is_broad(self):
         self.assertEqual(24, self.source.count("#[test]"))
-        self.assertEqual(5, self.fixture.count("#[test]"))
-        self.assertEqual(29, self.source.count("#[test]") + self.fixture.count("#[test]"))
+        self.assertEqual(14, self.fixture.count("#[test]"))
+        self.assertEqual(38, self.source.count("#[test]") + self.fixture.count("#[test]"))
         self.assertIn(
             '#[path = "../../../host-kernel/native-rust/smp_resource.rs"]',
             self.fixture)
@@ -233,7 +233,7 @@ class IhkSmpResourceTests(unittest.TestCase):
                     listing = subprocess.check_output(
                         [tests, "--list"], cwd=REPO_ROOT).decode("utf-8")
                     self.assertEqual(
-                        29,
+                        38,
                         len([line for line in listing.splitlines()
                              if line.endswith(": test")]))
                 subprocess.check_call(command, cwd=REPO_ROOT)

@@ -733,6 +733,11 @@ def read_raw_bundle(bundle_path, sidecar_path):
                 )
             replay_raw_authority_pair(bundle_authority, sidecar_authority)
             result = decode_raw_bundle(bundle_data, sidecar_data)
+            # Decoding may span same-size writes within one filesystem clock
+            # tick. Reuse the retained-descriptor content check before accepting
+            # the pair; namespace metadata alone cannot establish byte identity.
+            bundle_authority.replay()
+            sidecar_authority.replay()
             replay_raw_authority_pair(bundle_authority, sidecar_authority)
             return result
 

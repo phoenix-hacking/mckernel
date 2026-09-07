@@ -75,6 +75,7 @@ EXPECTED_STAGED_FILES = (
     "ikc_queue.rs",
     "mcctrl.rs",
     "os_registry.rs",
+    "os_runtime.rs",
     "page_allocator.rs",
     "page_owner_registry.rs",
     "smp_resource.rs",
@@ -113,6 +114,7 @@ _PROJECT_DEPENDENCIES = {
         "ihk_ioctl.rs",
         "page_allocator.rs",
         "page_owner_registry.rs",
+        "os_runtime.rs",
     ),
     "ihk-smp-x86_64": ("smp_resource.rs",),
     "mcctrl": (),
@@ -122,12 +124,19 @@ _GENERATED_METADATA_DEPENDENCIES = {
     "ihk-smp-x86_64": EXPECTED_GENERATED_METADATA_INPUTS,
     "mcctrl": (),
 }
-# Rocky fixdep scans the crate root before its other dependencies.  The SMP
-# root alone uses CONFIG_COMPAT, producing this exact four-space Make record.
+# Rocky fixdep scans the crate root before its other dependencies and emits
+# configuration dependencies immediately after the source that mentions them.
+# The SMP root and IHK's os_runtime.rs each use CONFIG_COMPAT. Preserve both
+# the exact four-space Make grammar and the different positions in the records.
 _FIXDEP_CONFIG_DEPENDENCIES = {
-    "ihk": (),
+    "ihk": ("$(wildcard include/config/COMPAT)",),
     "ihk-smp-x86_64": ("$(wildcard include/config/COMPAT)",),
     "mcctrl": (),
+}
+_FIXDEP_CONFIG_AFTER_SOURCE = {
+    "ihk": "os_runtime.rs",
+    "ihk-smp-x86_64": "ihk_smp_x86_64.rs",
+    "mcctrl": None,
 }
 _KERNEL_RUST_DEPENDENCIES = (
     "./rust/libcore.rmeta",
@@ -854,8 +863,14 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
     project_dependencies = _PROJECT_DEPENDENCIES[module["name"]]
     metadata_dependencies = _GENERATED_METADATA_DEPENDENCIES[module["name"]]
     compiler_dependencies = project_dependencies + metadata_dependencies
-    expected = list(config_dependencies)
-    expected.extend(staged_root + item for item in compiler_dependencies)
+    expected = []
+    project_indices = []
+    for source in (module["crate_root"],) + compiler_dependencies:
+        if source != module["crate_root"]:
+            project_indices.append(len(expected))
+            expected.append(staged_root + source)
+        if source == _FIXDEP_CONFIG_AFTER_SOURCE[module["name"]]:
+            expected.extend(config_dependencies)
     expected.extend(_KERNEL_RUST_DEPENDENCIES)
     if dependencies != expected:
         mismatch = next(
@@ -880,7 +895,7 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
         )
     for index, relative in enumerate(compiler_dependencies):
         parsed, prefix = _project_relative(
-            dependencies[len(config_dependencies) + index],
+            dependencies[project_indices[index]],
             "{0} project dependency".format(name),
             require_absolute=True,
         )

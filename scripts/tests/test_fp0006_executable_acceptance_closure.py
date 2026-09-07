@@ -404,6 +404,30 @@ class AcceptanceClosureTests(unittest.TestCase):
                 with self.assertRaisesRegex(closure.ClosureError, "aggregate decision"):
                     snapshot.finalize()
 
+    def test_same_identity_content_change_is_rejected(self):
+        # Model filesystem timestamps shared by rapid equal-size writes. This
+        # must not depend on whether the test happens to cross a clock tick.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = root / "value.json"
+            original = b"A" * 131073
+            target.write_bytes(original)
+            with mock.patch.object(closure, "_identity", return_value=("unchanged",)):
+                with closure.RepositorySnapshot(root) as snapshot:
+                    snapshot.read("value.json", "value")
+                    snapshot.finalize()
+                    for offset in (0, 65536, len(original) - 1):
+                        with self.subTest(offset=offset):
+                            changed = bytearray(original)
+                            changed[offset] = ord("B")
+                            target.write_bytes(changed)
+                            with self.assertRaisesRegex(closure.ClosureError, "bytes changed before aggregate decision"):
+                                snapshot.finalize()
+                            target.write_bytes(original)
+                    target.write_bytes(original + b"B")
+                    with self.assertRaisesRegex(closure.ClosureError, "aggregate decision"):
+                        snapshot.finalize()
+
     def test_path_replacement_after_read_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -430,7 +454,7 @@ class AcceptanceClosureTests(unittest.TestCase):
             result = self.run_public()
         self.assertEqual(
             result["contract"]["sha256"],
-            "114a398baf774ab671745b24e5523b593644547151176c34c0a36d694f163bbc",
+            "fa98d6719697cf387adb11785c095013321ade8183aa6f244eddcb872d59ba10",
         )
         self.assertEqual(result["contract"]["size"], 5938)
 

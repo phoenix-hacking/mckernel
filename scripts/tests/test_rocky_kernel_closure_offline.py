@@ -588,6 +588,12 @@ class SnapshotBridgeTests(unittest.TestCase):
         return held
 
     def test_held_snapshot_descriptor_rejects_path_swap_restore_matrix(self):
+        original_identity = closure.v2_regular_identity
+
+        def coarse_identity(status):
+            identity = original_identity(status)
+            return identity[:-2] + (0, 0)
+
         scenarios = (
             "before_hash",
             "during_extract",
@@ -672,6 +678,8 @@ class SnapshotBridgeTests(unittest.TestCase):
                     closure.snapshot_v2,
                     "extract_canonical_tar_stream",
                     side_effect=extract_with_swap,
+                ), mock.patch.object(
+                    closure, "v2_regular_identity", side_effect=coarse_identity,
                 ):
                     with self.assertRaises(closure.ClosureError):
                         closure.stage_verify_and_extract_snapshot(
@@ -725,6 +733,54 @@ class SnapshotBridgeTests(unittest.TestCase):
                 ),
                 manifest,
             )
+
+    def test_snapshot_change_watch_closes_on_copy_and_extract_errors(self):
+        for phase in ("copy", "extract"):
+            with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                contract, _, _, manifest, artifact, runtime = self.held_snapshot_fixture(root)
+                work = root / "work"
+                work.mkdir(mode=0o700)
+                descriptors = []
+                original_watch = closure.PrivateEvidenceChangeWatch
+
+                def retain_watch(*args, **kwargs):
+                    watch = original_watch(*args, **kwargs)
+                    descriptors.append(watch.descriptor)
+                    return watch
+
+                target = closure if phase == "copy" else closure.snapshot_v2
+                operation = ("copy_snapshot_archive_held" if phase == "copy"
+                             else "extract_canonical_tar_stream")
+                with mock.patch.object(closure, "PrivateEvidenceChangeWatch", side_effect=retain_watch), \
+                        mock.patch.object(target, operation, side_effect=closure.ClosureError("injected")), \
+                        mock.patch.object(closure.snapshot_v2, "require_repository_head", return_value=None):
+                    with self.assertRaisesRegex(closure.ClosureError, "injected"):
+                        closure.stage_verify_and_extract_snapshot(
+                            REPO_ROOT, artifact, runtime, contract, work)
+                self.assertEqual(len(descriptors), 1)
+                with self.assertRaises(OSError):
+                    os.fstat(descriptors[0])
+
+    def test_completed_tree_watch_tracks_nested_write_after_root_rename(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "hidden"
+            nested = root / "nested"
+            nested.mkdir(parents=True)
+            (nested / "value").write_bytes(b"same bytes\n")
+            descriptor = os.open(str(root), os.O_RDONLY | os.O_DIRECTORY)
+            watch = closure.PrivateEvidenceChangeWatch(descriptor, allow_root_rename=True)
+            try:
+                watch.watch_tree(descriptor)
+                published = root.with_name("published")
+                root.rename(published)
+                watch.require_unchanged()
+                (published / "nested/value").write_bytes(b"same bytes\n")
+                with self.assertRaisesRegex(closure.ClosureError, "changed during verification"):
+                    watch.require_unchanged()
+            finally:
+                watch.close()
+                os.close(descriptor)
 
     def test_snapshot_checker_import_origin_and_source_are_exact(self):
         contract = self.contract_fixture()

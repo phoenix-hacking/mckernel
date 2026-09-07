@@ -2,6 +2,16 @@
 
 This directory is the production Rust-for-Linux staging area for the three project-owned host modules: `ihk.ko`, `ihk-smp-x86_64.ko`, and `mcctrl.ko`.
 
+Implementation must start with the
+[existing Rust reuse plan](../../docs/verification/rust-reuse-plan.md).
+This directory is only the new native integration surface: the compatibility
+path already has 13,526 raw lines of Rust mcctrl bodies/helpers, alongside the
+existing McKernel and user-tool Rust. Inventory those symbols and their C-bridge
+dependencies before implementing equivalent native behavior. Keep current
+consumers working while adapting useful bodies to the native Linux interfaces;
+the small native `mcctrl.rs` entry point does not represent all existing mcctrl
+Rust. The revision-bound inventory and reuse map claim no new runtime credit.
+
 Linux remains the Rocky-derived control-plane kernel; only these project-owned host modules are conversion targets. Production link lists may contain Rust module objects, generated kernel metadata, kernel-provided objects, and separately reviewed architecture assembly where required. They may not contain project-authored C implementation bodies, compatibility shims, fallback archives, prebuilt C objects, or dispatch tables that execute the legacy C implementation.
 
 Behavioral implementation is evidence-gated against `host-kernel/contracts/legacy-behavior-contract-f2eb7352.json`. Before any implementation gate is credited, the exact Rocky-derived `CONFIG_RUST` kernel must compile the module and the relevant acceptance tests must pass on immutable CI evidence.
@@ -11,6 +21,12 @@ reservation, McKernel image loading and boot, and mcctrl process/offload integra
 remain unfinished. The Rocky 8.10 boot/mcexec smoke validates the legacy
 compatibility path. A green snapshot workflow whose archive download and
 offline replay steps were skipped validates only the checks that executed.
+
+The [2026-09-07 local checkpoint](../../docs/verification/native-hpc-worklog.md)
+records a successful four-vCPU native unbooted lifecycle run and serial review
+using the original compiled modules. It adds no production gate credit.
+The next [CPU adapter review](../../docs/verification/native-cpu-adapter-review.md)
+starts from the existing Rust transaction model and ordinary Linux exports.
 
 ## Native control-device identity query
 

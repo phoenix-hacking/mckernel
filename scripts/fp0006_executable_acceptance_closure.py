@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = '114a398baf774ab671745b24e5523b593644547151176c34c0a36d694f163bbc'
+EXPECTED_CONTRACT_SHA256 = 'fa98d6719697cf387adb11785c095013321ade8183aa6f244eddcb872d59ba10'
 EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -286,6 +286,16 @@ class RepositorySnapshot(object):
         for item in self.inputs:
             retained = os.fstat(item.descriptor)
             if _identity(retained) != item.identity:
+                raise ClosureError("{0} changed before aggregate decision".format(item.path))
+            # Same-size writes may share mtime/ctime on coarse-clock filesystems.
+            # Recheck the bounded retained bytes through the original descriptor;
+            # metadata equality alone does not establish content preservation.
+            for offset in range(0, len(item.data), 65536):
+                expected = item.data[offset:offset + 65536]
+                if os.pread(item.descriptor, len(expected), offset) != expected:
+                    raise ClosureError("{0} bytes changed before aggregate decision".format(item.path))
+            if (os.pread(item.descriptor, 1, len(item.data))
+                    or _identity(os.fstat(item.descriptor)) != item.identity):
                 raise ClosureError("{0} changed before aggregate decision".format(item.path))
             if self._current_path_identity(item) != item.identity:
                 raise ClosureError("{0} path identity changed before decision".format(item.path))
@@ -1248,7 +1258,7 @@ class _CliCensusEmitter(object):
                 source_data,
             )
             expected_self = (
-                "SELF_DIGEST:a6b49e7269bce59e3705cb0ef85df210eeb2d57befc335e3174abfa431c4132c"
+                "SELF_DIGEST:ebcd68fdfbf10c8975efe5168b0b84bc12697d160a4e1fd0c0dafa2fa3ebef8f"
             ).split(":", 1)[1]
             if sha256_bytes(normalized) != expected_self:
                 raise ClosureError("isolated checker normalized SHA-256 changed")
