@@ -3,7 +3,17 @@
 // Compile the complete guest producer and its real intrusive-list operations.
 // Only allocation, CPU context, boot inputs and host delivery are test doubles.
 #[path = "../../../kernel/rust/smp_ikc.rs"]
+#[cfg(not(legacy_c_reference))]
 mod smp_ikc;
+#[cfg(legacy_c_reference)]
+mod smp_ikc {
+    #[repr(C, align(8))]
+    pub struct LinuxIrqWork([u8; 64]);
+    unsafe extern "C" {
+        pub static mut per_cpu_irq_work: *mut LinuxIrqWork;
+        pub fn ihk_mc_interrupt_host(cpu: i32, vector: i32) -> i32;
+    }
+}
 #[path = "../../../kernel/rust/llist.rs"]
 mod llist;
 
@@ -19,6 +29,12 @@ mod x86_local {
     pub unsafe fn ihk_mc_get_processor_id() -> i32 {
         super::CPU.with(|value| value.get())
     }
+}
+
+#[cfg(legacy_c_reference)]
+#[no_mangle]
+unsafe extern "C" fn ihk_mc_get_processor_id() -> i32 {
+    x86_local::ihk_mc_get_processor_id()
 }
 
 use core::ffi::c_void;

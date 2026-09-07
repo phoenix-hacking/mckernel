@@ -46,3 +46,44 @@ verification module builds and passes an isolated four-vCPU/two-NUMA guest:
 reused and Linux PENDING/BUSY bits cleared. The two intermediate fixture Kbuild
 failures remain in kernel.log and retained captures. The native-selected
 McKernel image build and real cross-kernel transport are next.
+
+The image validation additionally compares the exact pinned IHK C producer
+body with the legacy Rust producer using one fixture and checks identical
+observable results. The broad historical harness needs three Rust crates
+absent from pinned IHK 3114d9e; its failed replay remains recorded and is not
+counted as a pass. The current C fallback exposed a missing `LIST_HEAD` static
+initializer in `lib/include/list.h`. Restore that data declaration macro so
+the retained IHK manycore wait-list declaration compiles; keep existing Rust
+list execution bodies and consumers unchanged. No executable C body is added.
+
+The subsequent fallback compiler also requires the old list-entry and safe
+traversal macros in IHK's retained `ikc/master.c` and `queue.c`. Reuse the four
+dependent macros from `10c68621^:lib/include/list.h` under
+`!MCKERNEL_RUST_LIST_HELPERS`; the normal and native Rust image configurations
+exclude them. This is explicitly optional fallback C execution support, not a
+Rust retirement or language-completion claim. All existing Rust list bodies
+remain selected in the Rust image.
+
+The legacy IHK x86 setup also uses `CVAL`/`CVAL2` in static perf tables.
+Select constant encodings only for that C fallback translation unit through
+`MCKERNEL_IHK_STATIC_PERF_TABLES`. Preserve the normal header declarations,
+Rust runtime symbols and existing C runtime fallback functions. The encoding
+matches the retained Rust body and the original pre-conversion constants;
+the native and legacy Rust setup tables remain unchanged.
+
+The final fallback link requires the old IHK queue's generic `cmpxchg` name.
+For that C translation unit alone, adapt it to the existing x86
+`atomic_cmpxchg8` primitive, with a compile-time assertion that the offset is
+64 bits and one evaluation of each argument. Preserve both the Rust and C
+atomic implementations. This wrapper is absent from Rust image consumers.
+
+Image attempt 9 passes all three complete builds, ELF64 x86 checks and linked
+Rust attribution. The native-selected image is 7,947,616 bytes with SHA-256
+`fb7f5140c8a877b2f927c222332bf589ad70120849285e50b46c352bfcd79ad1`.
+Its Rust object contributes 614,450 of 784,119 executable bytes; the remaining
+contributions still require the full Rust/assembly completion work. The exact
+compiler is nightly 1.95.0 (`c04308580`, 2026-02-18). The native Rust flag is
+present only in the native build command. Both unsupported ABI configuration
+checks reject their inputs. All intermediate build failures and source overlays
+are retained in `native-irq-images-checkpoint-20260907.json`. Next run the new
+image through native loader/startup readback and the full repository suite.

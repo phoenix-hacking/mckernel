@@ -65,9 +65,19 @@
 #define MSR_PERF_CTL_0 0xc0010000
 #define MSR_PERF_CTR_0 0xc0010004
 
+#ifdef MCKERNEL_IHK_STATIC_PERF_TABLES
+/* Constant initializers in the retained IHK setup.c perf tables only. */
+#define CVAL(event, mask) \
+	((((unsigned long)(event) & 0xf00) << 24) | \
+	 ((unsigned long)(mask) << 8) | ((unsigned long)(event) & 0xff))
+#define CVAL2(event, mask, inv, count) \
+	(CVAL(event, mask) | (((unsigned long)(inv) & 1) << 23) | \
+	 (((unsigned long)(count) & 0xff) << 24))
+#else
 unsigned long CVAL(unsigned int event, unsigned int mask);
 unsigned long CVAL2(unsigned int event, unsigned int mask,
 		unsigned int inv, unsigned int count);
+#endif
 unsigned long xgetbv(unsigned int index);
 void xsetbv(unsigned int index, unsigned long val);
 void wrmsr(unsigned int idx, unsigned long value);

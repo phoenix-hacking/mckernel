@@ -33684,3 +33684,51 @@ Command: mckernel-container native python3 -B /work/build-native-irq-work-module
 Environment: same pinned Linux build and bounded native container as attempt 1.
 Result: header witness compiled; Rust rejected the module macro's MODULE cfg because enabling --check-cfg for the fixture had omitted Linux's MODULE condition. Stop and add that exact condition to the test Kbuild argument. No guest was started and no production source change follows from this harness error.
 Evidence: /work/native-irq-work-module-20260907-2/record.json and module-build.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 1: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 1
+Environment: pinned Rocky 8 compatibility compiler container, CPUs 2-5, 12 GiB/no swap, 512 tasks, dedicated scratch; source 6303ea9a, IHK 3114d9e.
+Result: source checkout and formatting passed. The new Python fixture failed before compilation because this container uses Python 3.6, which has no subprocess.run(capture_output=...). Stop and use the equivalent stdout/stderr PIPE plus universal_newlines arguments. No image build or equivalence run was started.
+Evidence: /work/mckernel-native-irq-images-20260907-1/record.json and producer-check.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 2: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 2
+Environment: same isolated compatibility compiler; source 6303ea9a with the recorded Python-3.6 fixture repair. The historical equivalence script's single /tmp template was redirected to dedicated scratch and retained.
+Result: formatting and both complete-producer fixtures passed, then the broad historical equivalence script stopped because the pinned IHK 3114d9e submodule contains no ihk/linux/core/rust/core_helpers.rs. The script targets a different historical IHK source. Its compiler warnings, first missing-source failure and retained scratch remain available. Resolve the historical fixture prerequisites explicitly before replay; do not fabricate Rust bodies in the current submodule. No image build was started.
+Evidence: /work/mckernel-native-irq-images-20260907-2/record.json and equivalence.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 3: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 3
+Environment: same isolated compatibility compiler and recorded source overlays.
+Result: both Rust producer variants passed. Linking the exact pinned C producer into the shared userspace fixture failed because the C object used absolute R_X86_64_32 relocations while Rust links a PIE. Compile this test-only C reference object with -fPIC, then retry. No image build was started; the reference producer body stays unchanged.
+Evidence: /work/mckernel-native-irq-images-20260907-3/record.json and producer-check.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 4: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 4
+Environment: same isolated compatibility compiler and recorded source overlays.
+Result: full producer C/Rust equivalence, native concurrency, and both negative CMake ABI selections passed. Fallback configuration stopped because the private checkout omitted the existing bundled libdwarf submodule, whose headers CMake configures even for the kernel-image target. Clone the exact locally pinned recursive submodules into subsequent private checkouts, preserving their revisions. No kernel compilation began.
+Evidence: /work/mckernel-native-irq-images-20260907-4/record.json and fallback-configure.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 5: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 5
+Environment: same isolated compiler, now with every exact locally pinned recursive submodule.
+Result: producer equivalence and ABI-selection checks passed; C fallback configured. Compilation stopped in the retained IHK manycore.c because LIST_HEAD(wait_list) has no macro definition, leaving wait_list undeclared. Inspect and repair the existing shared header/fallback integration before continuing. The native/Rust image stages were not run.
+Evidence: /work/mckernel-native-irq-images-20260907-5/record.json and fallback-build.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 6: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 6
+Environment: same bounded compatibility compiler and pinned submodules; recorded shared static-list declaration repair.
+Result: manycore.c now compiles. Compilation stopped in retained IHK master.c because its list_for_each_entry and list_for_each_entry_safe traversal macros are also absent from the converted shared list header. Inspect all actual fallback consumers and reuse the pre-conversion traversal declarations only where required; preserve the Rust implementation and record this additional fallback dependency. Native/Rust image stages were not run.
+Evidence: /work/mckernel-native-irq-images-20260907-6/record.json and fallback-build.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 7: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 7
+Environment: same pinned bounded compatibility compiler; fallback-only traversal macros are preprocessor-verified absent from Rust builds.
+Result: retained IHK list consumers now compile. Compilation stopped in x86_64/setup.c because CVAL/CVAL2 used by its static perf tables are declared functions rather than constant initializer macros. Inspect and restore only the required fallback compile-time encoding while retaining Rust runtime symbols. Native/Rust image stages were not run.
+Evidence: /work/mckernel-native-irq-images-20260907-7/record.json and fallback-build.log.
+
+2026-09-07 Native-ABI McKernel image verification, attempt 8: FAIL
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-images.py 8
+Environment: same pinned bounded compatibility compiler with per-source constant perf initializers.
+Result: all C fallback translation units compiled. Final link stopped at four IHK queue.c references to the removed generic cmpxchg wrapper. Inspect the existing size-aware x86 atomic primitive and adapt only the retained fallback's wrapper; do not add a second atomic implementation. Native/Rust image stages were not run.
+Evidence: /work/mckernel-native-irq-images-20260907-8/record.json and fallback-build.log.

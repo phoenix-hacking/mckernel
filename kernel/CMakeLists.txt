@@ -319,6 +319,12 @@ else()
 		rbtree.c
 		llist.c
 		"${PROJECT_SOURCE_DIR}/lib/list.c")
+	if ("${ARCH}" STREQUAL "x86_64")
+		set_source_files_properties("${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/setup.c"
+			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_IHK_STATIC_PERF_TABLES)
+		set_source_files_properties("${IHK_FULL_SOURCE_DIR}/ikc/queue.c"
+			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_IHK_QUEUE_ATOMICS)
+	endif()
 endif()
 
 if (ENABLE_TOFU)

@@ -24,6 +24,23 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Latest IRQ/image checkpoint (2026-09-07): the guest's existing Rust IRQ producer
+now has an explicit Linux 6.12 ABI selection. Exact-header checks, C/Rust
+producer equivalence, native concurrency and a native Linux module guest pass;
+Linux executes 1,024 callbacks across two module cycles. C fallback, legacy
+Rust and native-ABI Rust McKernel images all build after repairing the existing
+fallback header consumers. The native image SHA-256 is
+`fb7f5140c8a877b2f927c222332bf589ad70120849285e50b46c352bfcd79ad1`.
+See `docs/verification/native-irq-work-checkpoint-20260907.json`,
+`native-irq-images-checkpoint-20260907.json` and the reuse/adaptation plan.
+The historical broad equivalence harness cannot replay against the pinned IHK
+because three expected Rust crates are absent; its failure is preserved, with
+no pass claimed. The complete touched C/Rust producer passes its direct fixture.
+Next verify the newly built native image through the loader/startup-table guest
+and full suite, then implement real CPU startup and cross-kernel IRQ/IKC.
+The IRQ module test uses mocked boot/guest context and a local Linux transport;
+it does not prove McKernel boot. Full Rust/assembly completion remains open.
+
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its
 linked support code and ABI/runtime bodies. Preserve and integrate the Rust

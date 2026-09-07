@@ -152,3 +152,13 @@ old IHK driver discovers it through kallsyms. Native integration needs an
 explicitly owned transport/interrupt adapter using reviewed Linux services,
 with queue retirement and callback lifetime tests. Preserve the guest queue,
 master and packet policy bodies; an ABI adapter is required at this boundary.
+
+The explicit guest ABI adaptation now passes both complete producer fixtures,
+the exact pinned C producer comparison, concurrent initialization/reuse and a
+native Linux guest module run with 1,024 actual callbacks across two cycles.
+The C fallback, legacy Rust and native-ABI Rust McKernel images also build;
+see `native-irq-work-plan.md` and `native-irq-images-checkpoint-20260907.json`.
+The native image uses `MCKERNEL_HOST_IRQ_ABI=linux-6.12`. Its loader/startup-table
+guest replay and full suite follow. Linux's private raised-list ownership,
+cross-kernel IPI delivery, boot parameters and CPU-start lifetime are still
+required; no McKernel CPU has started.

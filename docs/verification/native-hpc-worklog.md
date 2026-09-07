@@ -636,3 +636,16 @@ size and gzip round-trip checks. See `native-startup-final-validation-20260907.j
 The next boot work must also adapt the guest/Linux 6.12 IRQ-work layout mismatch
 recorded in `native-image-boot-plan.md`. No native McKernel CPU has started;
 IKC, workloads, full Rust/assembly completion and independent acceptance remain open.
+
+The next guest IRQ-work adapter now passes exact Linux 6.12 layout verification,
+complete pinned C/Rust producer equivalence and concurrent initialization/reuse.
+A native Linux verification module executes 1,024 actual callbacks over two
+four-vCPU/two-NUMA load/unload cycles with both work slots fully drained.
+The mock boot/guest context and local Linux queue transport remain explicit
+limitations; this does not claim cross-kernel interrupt delivery or McKernel boot.
+All three McKernel image variants now build: C fallback, legacy Rust and native
+Linux 6.12 ABI Rust. Their records retain eight intermediate failures, the exact
+submodule/compiler inputs and fallback header repairs, with the Rust consumers
+preserved. See `native-irq-images-checkpoint-20260907.json`. Next verify the new
+native image's loader/startup readbacks and the full suite, then implement the
+owned trampoline, boot parameters, CPU wakeup and native IRQ/IKC adapter.
