@@ -55,6 +55,14 @@ boot parameters/trampoline, real CPU startup and cross-kernel IRQ/IKC.
 The IRQ module test uses mocked boot/guest context and a local Linux transport;
 it does not prove McKernel boot. Full Rust/assembly completion remains open.
 
+Next transport WIP: `native-irq-transport-plan.md` records reuse of the same
+producer/list bodies with Linux's real raised queues and cross-CPU APIC
+delivery. Patch 0005 exports the existing queue and per-CPU physical translator;
+it applies exactly without changing any C function body. The separate remote
+selection in the existing module fixture is prepared and formatted. A fresh
+kernel/module build and guest are pending; this patch is not yet integrated
+into the authoritative stage/workflow or production acceptance.
+
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its
 linked support code and ABI/runtime bodies. Preserve and integrate the Rust

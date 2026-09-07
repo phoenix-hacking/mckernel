@@ -700,3 +700,14 @@ retains another 16 verified artifacts. The updated
 none removed, with all 64 core and 19 native staged consumers preserved.
 Real McKernel boot, IRQ/IKC, applications, complete Rust/assembly implementation
 and independent production acceptance remain open.
+
+## 2026-09-07: direct IRQ transport WIP
+
+The [transport plan](native-irq-transport-plan.md) reuses the guest producer,
+list implementation and existing fixture. The new Linux patch exports the
+existing per-CPU `raised_list` and `per_cpu_ptr_to_phys`, with no changed C
+function body or project C bridge. Exact patch applicability and private
+fixture formatting pass. The prepared remote selection holds CPU topology
+exclusion, sends the real APIC IRQ-work vector to all three other CPUs, and
+checks actual callback CPU and final drain. Native kernel/module compilation
+and guest execution are next; no transport pass or boot is claimed yet.
