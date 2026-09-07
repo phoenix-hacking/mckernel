@@ -8,6 +8,7 @@
 use super::smp_cpu::ResourceModulePin;
 use super::smp_image::{BootLayout, ImageError, ImagePlan};
 use super::smp_resource::{MemoryExtent, MemoryMap, MemoryWorkspace, USER_MEMORY_REQUEST_GRANULE};
+use super::smp_startup::{PageTablePlan, TABLE_BYTES, TABLE_PAGES};
 use core::{
     cell::UnsafeCell,
     marker::PhantomData,
@@ -115,27 +116,56 @@ struct PageOwner {
 unsafe impl Send for PageOwner {}
 
 impl PageOwner {
-    fn allocate(order: u32, node: u32, _hotplug: &MemoryHotplugGuard) -> Result<Self> {
-        if order > MAX_ORDER || node as usize >= MAX_NODES {
+    fn allocate(order: u32, node: u32, hotplug: &MemoryHotplugGuard) -> Result<Self> {
+        Self::allocate_scope(order, Some(node), false, hotplug)
+    }
+
+    fn allocate_startup(hotplug: &MemoryHotplugGuard) -> Result<Self> {
+        // The real-mode entry loads a 32-bit CR3. A high-NUMA image may still
+        // use low Linux tables; do not force THISNODE on this separate owner.
+        const _: () = assert!(TABLE_BYTES <= 4096 << 9);
+        Self::allocate_scope(9, None, true, hotplug)
+    }
+
+    fn allocate_scope(
+        order: u32,
+        node: Option<u32>,
+        dma32: bool,
+        _hotplug: &MemoryHotplugGuard,
+    ) -> Result<Self> {
+        if order > MAX_ORDER || node.is_some_and(|node| node as usize >= MAX_NODES) {
             return Err(EINVAL);
         }
         // Reuse the existing KmsgPages ownership approach, adding strict NUMA
         // placement. Never consume atomic reserves or request OOM escalation.
-        let flags = bindings::GFP_KERNEL
+        let mut flags = bindings::GFP_KERNEL
             | bindings::__GFP_ZERO
             | (1 << bindings::___GFP_COMP_BIT)
             | (1 << bindings::___GFP_NORETRY_BIT)
-            | (1 << bindings::___GFP_NOWARN_BIT)
-            | (1 << bindings::___GFP_THISNODE_BIT);
-        // SAFETY: The node was checked under memory hotplug exclusion. The
-        // bounded order and Linux flags are valid; THISNODE prevents fallback.
-        let raw =
-            unsafe { bindings::__alloc_pages_noprof(flags, order, node as i32, ptr::null_mut()) };
+            | (1 << bindings::___GFP_NOWARN_BIT);
+        if node.is_some() {
+            flags |= 1 << bindings::___GFP_THISNODE_BIT;
+        }
+        if dma32 {
+            flags |= 1 << bindings::___GFP_DMA32_BIT;
+        }
+        // SAFETY: Memory hotplug is excluded. A requested node was checked;
+        // NUMA_NO_NODE (-1) lets Linux choose for separate startup ownership.
+        // The bounded order and Linux flags are valid; THISNODE is set only
+        // for ordinary strict-node resource reservations.
+        let raw = unsafe {
+            bindings::__alloc_pages_noprof(
+                flags,
+                order,
+                node.map_or(-1, |node| node as i32),
+                ptr::null_mut(),
+            )
+        };
         let page = NonNull::new(raw).ok_or(ENOMEM)?;
         let mut owner = Self {
             page,
             order,
-            node,
+            node: 0,
             physical: 0,
         };
         // SAFETY: The selected kernel uses SPARSEMEM_VMEMMAP. vmemmap_base is
@@ -153,7 +183,9 @@ impl PageOwner {
         // SAFETY: The newly allocated head page is exclusively owned. Linux
         // fixes its node field before return; the reviewed shift is 64-0-10.
         let page_flags = unsafe { ptr::read_volatile(ptr::addr_of!((*raw).flags)) };
-        if ((page_flags >> 54) & bindings::NODES_MASK as u64) != node as u64
+        owner.node = ((page_flags >> 54) & bindings::NODES_MASK as u64) as u32;
+        if node.is_some_and(|node| owner.node != node)
+            || owner.node as usize >= MAX_NODES
             || owner.physical % owner.len() != 0
         {
             return Err(EIO);
@@ -181,6 +213,54 @@ impl Drop for PageOwner {
         // SAFETY: Exactly one owning value retains this original allocation
         // and order. No guest may access a free-pool range selected for return.
         unsafe { bindings::__free_pages(self.page.as_ptr(), self.order) };
+    }
+}
+
+/// Linux owns the entire original compound allocation until this unbooted
+/// image is invalidated. No CPU or caller receives a pointer or capability.
+struct StartupTables {
+    _pages: PageOwner,
+    plan: PageTablePlan,
+    checksum: u64,
+}
+
+impl StartupTables {
+    fn new(layout: BootLayout, direct_map: u64) -> Result<Self> {
+        let hotplug = MemoryHotplugGuard::lock();
+        let pages = match PageOwner::allocate_startup(&hotplug) {
+            Ok(pages) => pages,
+            Err(error) => {
+                pr_info!("IHK-SMP: startup table allocation failed order=9; CPUs not started\n");
+                return Err(error);
+            }
+        };
+        let plan = PageTablePlan::new(pages.physical, layout).map_err(|_| EIO)?;
+        let address = direct_map
+            .checked_add(pages.physical)
+            .ok_or_else(overflow)?;
+        address
+            .checked_add(TABLE_BYTES as u64)
+            .ok_or_else(overflow)?;
+        // SAFETY: This newly owned, zeroed, non-movable compound allocation
+        // is private. The useful table extent fits inside that single Linux
+        // allocation and is aligned for u64. No alias or CPU sees the pages.
+        // fill writes only checked entries and retains no borrowed reference.
+        let entries =
+            unsafe { core::slice::from_raw_parts_mut(address as *mut u64, TABLE_BYTES / 8) };
+        plan.fill(entries).map_err(|_| EIO)?;
+        let mut checksum = 0xcbf2_9ce4_8422_2325_u64;
+        for offset in 0..TABLE_BYTES {
+            // SAFETY: The original allocation remains exclusively owned.
+            // Read actual initialized memory, wholly within its useful extent;
+            // the temporary mutable fill borrow has ended before this access.
+            let byte = unsafe { ptr::read_volatile((address as *const u8).add(offset)) };
+            checksum = (checksum ^ byte as u64).wrapping_mul(0x100_0000_01b3);
+        }
+        Ok(Self {
+            _pages: pages,
+            plan,
+            checksum,
+        })
     }
 }
 
@@ -312,12 +392,12 @@ struct MemoryContext {
 // Loading does not publish a boot capability. The following AP-start adapter
 // must revalidate this generation and its layout under the same resource locks.
 #[allow(dead_code)]
-#[derive(Clone, Copy)]
 struct LoadedImage {
     owner: super::smp_resource::OsToken,
     layout: BootLayout,
     entry: u64,
     checksum: u64,
+    tables: StartupTables,
 }
 
 fn image_error(error: ImageError) -> Error {
@@ -336,7 +416,7 @@ impl MemoryContext {
             staging: [None; MAX_EXTENTS],
             pages: Vec::new(),
             pin: None,
-            images: [None; 64],
+            images: [const { None }; 64],
         }
     }
 
@@ -795,7 +875,7 @@ impl MemoryContext {
 
     fn invalidate_image(&mut self, owner: super::smp_resource::OsToken) -> Result {
         let slot = self.images.get_mut(owner.slot() as usize).ok_or(EINVAL)?;
-        if slot.is_some_and(|image| image.owner != owner) {
+        if slot.as_ref().is_some_and(|image| image.owner != owner) {
             return Err(EIO);
         }
         *slot = None;
@@ -864,7 +944,10 @@ impl MemoryContext {
         direct_map
             .checked_add(layout.extent().end().map_err(|_| EIO)?)
             .ok_or_else(overflow)?;
-        // No physical write occurs before ALL ELF and startup-space checks.
+        // Allocate and fill tables before the first image write. On failure,
+        // the original page owner drops and no loaded image can be published.
+        let tables = StartupTables::new(layout, direct_map)?;
+        // No image write occurs before ALL ELF and startup-space checks.
         // Zeroing the entire bounded image window also clears holes and BSS.
         self.write_image_range(
             direct_map,
@@ -894,11 +977,15 @@ impl MemoryContext {
                 checksum = (checksum ^ byte as u64).wrapping_mul(0x100_0000_01b3);
             }
         }
+        pr_info!("IHK-SMP: startup tables os={} generation={} root={:x} image={:x} pages={} checksum={:016x}; CPUs not started\n",
+                 owner.slot(), owner.generation(), tables.plan.root(),
+                 layout.kernel().start(), TABLE_PAGES, tables.checksum);
         self.images[owner.slot() as usize] = Some(LoadedImage {
             owner,
             layout,
             entry: plan.entry(),
             checksum,
+            tables,
         });
         pr_info!("IHK-SMP: image loaded os={} generation={} segments={} window={} checksum={:016x}; CPUs not started\n",
                  owner.slot(), owner.generation(), plan.load_segments(),

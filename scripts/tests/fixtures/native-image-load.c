@@ -31,6 +31,21 @@ static void expect_load(int fd, const char *path, long expected)
     online_mask(1);
 }
 
+static void fail_startup_allocations(int fd)
+{
+    for (unsigned int attempt = 0; attempt < 8; attempt++) {
+        allocation_failure(0);
+        put_value(FI "min-order", "9");
+        /* All high orders fail; vmalloc may fall back, the mandatory owned
+         * order-9 startup allocation cannot. Only this task is affected. */
+        put_value(FI "times", "-1");
+        expect_load(fd, image_path, -ENOMEM);
+        put_value("/proc/self/make-it-fail", "0");
+        put_value(FI "times", "0");
+        put_value(FI "min-order", "10");
+    }
+}
+
 int main(void)
 {
     require(native_os_resource_reference_main() == 0);
@@ -74,7 +89,19 @@ int main(void)
     expect_os_memory(second, 64 * MIB, 0);
     message("NATIVE_IMAGE_LOAD " ARCH_LABEL " file-errors-atomic-preflight PASS\n");
 
+    unsigned long before_startup = node_free_kib(0);
+    for (unsigned int attempt = 0; attempt < 8; attempt++) {
+        expect_load(first, image_path, 0);
+        expect_load(first, "/images/late-filesz.elf", -EINVAL);
+    }
+    /* All eight low-memory table owners have been invalidated. A leaked
+     * order-9 allocation per load exceeds this metadata/cache allowance. */
+    require(node_free_kib(0) + 4096 >= before_startup);
+    message("NATIVE_IMAGE_LOAD " ARCH_LABEL " startup-owner-cleanup=8 PASS\n");
+    fail_startup_allocations(first);
     expect_load(first, image_path, 0);
+    fail_startup_allocations(first);
+    message("NATIVE_IMAGE_LOAD " ARCH_LABEL " startup-allocation-failures=16 PASS\n");
     expect_load(first, "/images/late-filesz.elf", -EINVAL);
     expect_load(first, image_path, 0);
     require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);

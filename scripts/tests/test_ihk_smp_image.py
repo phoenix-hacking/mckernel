@@ -15,6 +15,9 @@ class NativeSmpImageTests(unittest.TestCase):
     def test_bounded_linux_file_owner(self):
         self.compile_and_run("ihk_smp_loader_compile.rs")
 
+    def test_startup_page_tables_match_independent_address_translation(self):
+        self.compile_and_run("ihk_smp_startup_compile.rs")
+
     def compile_and_run(self, fixture):
         rustc = shutil.which("rustc")
         if rustc is None:

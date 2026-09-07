@@ -72,6 +72,26 @@ adaptation. Preserve the current user tools and their Rust helpers.
 
 ## Next observable milestones
 
+The next source prototype prepares owned x86 startup page tables during image
+loading. Retain `smp_memory.rs::PageOwner`, `MemoryMap`, `OsToken`, `BootLayout`
+and the existing ELF writer; adapt the Linux allocation owner to permit a
+bounded DMA32 allocation without forcing the image's NUMA node. Newly implement
+only the allocation-free `smp_startup.rs::PageTablePlan`, adapting the identity,
+straight-map and kernel-window geometry from the pinned
+`smp-arch-driver.c::smp_ihk_os_setup_startup`. Existing guest Rust consumers and
+legacy C/assembly fallback builds remain selected as before. Linux's exact
+generated `__alloc_pages_noprof`, DMA32 flags, vmemmap and direct-map bindings
+provide the backing allocation; no new C adapter is introduced.
+
+The useful 260 table pages fit in one order-9 compound allocation. Its original
+owner must remain attached to the exact loaded OS generation, with cleanup on
+failed/replaced loads, resource changes and unbooted destruction. Independent
+x86 page walking and actual guest readback must verify all mappings, including
+images above 4 GiB, and forced order-9 allocation failures must recover without
+publishing a loaded image. This preparation does not start a CPU. Trampoline,
+boot parameters, IRQ/IKC ownership, CPU wakeup and bounded readiness are still
+required for native McKernel boot; the prototype does not promote any gate.
+
 | Milestone | Required evidence |
 | --- | --- |
 | Load the existing kernel image | Owned bootstrap extent, checked ELF segments and entry, bounded writes/zeroing, and cleanup after every load failure; no CPU starts yet. |
@@ -85,3 +105,10 @@ OS goal still requires the entire McKernel implementation and linked support
 code to be Rust or reviewed assembly, as specified in
 `mckernel-rust-assembly-completion.md`. A successful early application check
 does not by itself satisfy that final requirement.
+
+The initial startup-table source checkpoint passes 14 focused Python checks
+(including the independent page walker and preserved OS/resource fixtures)
+in 29.205 seconds under the pinned four-CPU native runner. Raw output and
+source identities are retained in `artifacts/native-startup-policy-20260907-1.*.gz`.
+Native compilation and guest verification are next; declared staging and FFI
+bindings still describe the preceding accepted image-loader checkpoint.

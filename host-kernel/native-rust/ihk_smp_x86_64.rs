@@ -28,6 +28,7 @@ mod ihk_mapping;
 #[allow(dead_code)]
 mod smp_image;
 mod smp_loader;
+mod smp_startup;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
