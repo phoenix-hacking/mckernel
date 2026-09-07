@@ -729,3 +729,12 @@ license inventory. Their current runtime, FP-0006, license and RS-006 byte
 bindings have been updated without changing frozen source witnesses or credit
 flags. Next validate those focused groups and a fresh declared build/guest,
 then continue owned boot parameters/trampoline, CPU startup and IRQ/IKC.
+
+The focused integration coverage now passes: 443 runtime/workflow/FP-0006/
+license checks precede the stale RS-006 workflow-test identity failure, and all
+27 RS-006 checks pass after refreshing that exact current row and its contract
+binding. Formatting and diff checks pass. The
+[staging integration record](native-irq-transport-staging-integration-20260907.json)
+retains both runs, the correction's source overlays and eight verified artifacts.
+A fresh declared build, module artifact check, native-image guest and full
+repository suite are next. Production and historical acceptance remain unchanged.

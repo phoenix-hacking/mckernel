@@ -65,8 +65,11 @@ The remote module has no `irq_work_queue` import. See
 `docs/verification/native-irq-transport-checkpoint-20260907.json` for 25 retained
 artifacts, including the corrected compiler failure. The current workflow and
 additive license inventory now include patch 0005, with their current byte
-bindings refreshed. Focused validation and a fresh declared-stage build/guest
-remain pending. Mock guest context remains: no executing McKernel CPU or IKC
+bindings refreshed. The focused coverage passes 443 runtime/workflow/FP-0006/
+license checks and all 27 RS-006 checks after correcting its current workflow
+test byte binding. The initial failure and passing retry are retained in
+`native-irq-transport-staging-integration-20260907.json`. A fresh declared-stage
+build/guest and the full suite remain next. Mock guest context remains: no executing McKernel CPU or IKC
 handshake is claimed, and the earlier intermittent Linux idle/RCU stall is open.
 
 Latest user clarification (2026-09-07): completing the active goal requires the

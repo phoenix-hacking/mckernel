@@ -33762,3 +33762,9 @@ Command: fixed native runner run-native-irq-transport-validation.py, first step:
 Environment: source 5552d846; fresh Linux 6.12 export prototype kernel passed, unchanged debug config, native Rust 1.92, four CPUs/12 GiB/offline container.
 Result: the exact-header C transport/layout witness compiled. Rust rejected assert_eq!(bindings::nr_cpu_ids, 4), whose macro creates a shared reference to a mutable Linux static. Read the protected scalar into a local before asserting; retain the compiler rejection and keep static-mut-refs enabled. No guest or later validation step ran.
 Evidence: /work/native-irq-transport-module-20260907-remote-1/module-build.log and record.json; /work/native-irq-transport-validation-20260907-1.
+
+[2026-09-07 19:37 UTC] Native IRQ transport focused bindings: stopped at first failure.
+Command: mckernel-container native python3 -B /work/run-native-irq-transport-policy-tests.py 1
+Environment: fixed unprivileged native container, CPUs 2-5, 12 GiB, network none; clean source parent 262a6b634bdbaeadc6c2d90f5e8ac95809c5e141.
+Error: test_active_patch_identity_and_path_vector_fail_closed encountered "integrated consumer scripts/tests/test_native_rust_exact_build_workflow.py exceeds its byte cap" before its intended patch-mutation assertion. The live RS-006 integrated-consumer row still binds the smaller pre-transport workflow test.
+Result: 444 tests in 101.142 seconds, one failure; formatting and diff checks pass. Preserve /work/native-irq-transport-policy-tests-20260907-1.{log,json} and its private source. Update only that current row and the contract byte binding before rerunning the affected group.
