@@ -87,3 +87,14 @@ present only in the native build command. Both unsupported ABI configuration
 checks reject their inputs. All intermediate build failures and source overlays
 are retained in `native-irq-images-checkpoint-20260907.json`. Next run the new
 image through native loader/startup readback and the full repository suite.
+
+Runtime follow-up retains an intermittent default-idle Linux timer/RCU stall
+after the first 512 callbacks and drained module-drop marker. The later
+poll-idle and original-idle passes do not resolve its cause. Keep this failure
+open separately from successful ABI and image readbacks. Native image guest 3
+passes all 56 image/table pairs and 64 forced startup-allocation failures.
+The earlier cleanup failures are explained by free-page movement into Linux's
+PCP caches: the diagnostic measures 4,096 KiB fewer buddy pages and 4,088 KiB
+more free PCP pages. The test correction accounts for both sources of free
+pages without increasing its 4 MiB allowance. Final assertion replay and the
+full suite are pending; all captures are in the runtime WIP checkpoint.

@@ -33732,3 +33732,21 @@ Command: mckernel-container compat python3 -B /work/build-mckernel-native-irq-im
 Environment: same pinned bounded compatibility compiler with per-source constant perf initializers.
 Result: all C fallback translation units compiled. Final link stopped at four IHK queue.c references to the removed generic cmpxchg wrapper. Inspect the existing size-aware x86 atomic primitive and adapt only the retained fallback's wrapper; do not add a second atomic implementation. Native/Rust image stages were not run.
 Evidence: /work/mckernel-native-irq-images-20260907-8/record.json and fallback-build.log.
+
+2026-09-07 Fresh native IRQ-work guest repeat 2: FAIL, RCU stall
+Command: mckernel-container native python3 -B /work/run-native-irq-final-validation.py, step 2: /work/run-native-irq-work-guest.py 3 2.
+Environment: source 6b540a61, unchanged native verification module attempt 3 and debug Linux image, four-vCPU/two-NUMA TCG guest inside the fixed 12 GiB container.
+Result: 512 Linux callbacks and the first module drop completed, then module removal stalled. Serial reports CPU 1 receiving no timer ticks while idling at default_idle, and the RCU grace-period timer/kthread stalled. The second cycle did not begin. Stop this disposable guest and preserve the capture before diagnosing; no image-loader or full-suite checks ran. The cause is not yet established and the earlier passing run does not resolve this repeat failure.
+Evidence: /work/native-irq-work-guest-20260907-2/serial.log and record.json; /work/native-irq-final-validation-20260907-1.
+
+2026-09-07 Newly built native-ABI image loader guest, attempt 1: FAIL
+Command: mckernel-container native python3 -B /work/run-native-irq-remaining-validation.py, step 0: run-native-irq-image-load-guest.py with the exact startup module stage and native image fb7f5140.
+Environment: unchanged four-vCPU/two-NUMA debug Linux TCG guest, original idle settings, fixed container bounds.
+Result: CPU/memory/OS resource prerequisites and file-error checks passed. Eight physical native-image and startup-table readbacks matched their independent models (image FNV 1d518fe7d62bc1af). The repeated-load cleanup check failed at native-image-load.c:99: node-0 free memory did not recover within the existing 4 MiB allowance. Stop and measure the deficit and allocator cleanup before changing acceptance. No full suite ran, and no image/startup completion is claimed for this failed capture.
+Evidence: /work/native-irq-image-load-guest-20260907-1/local-run.json and serial.log; /work/native-irq-remaining-validation-20260907-1.
+
+2026-09-07 Native-ABI image loader guest, diagnostic attempt 2: FAIL
+Command: fixed native runner run-native-irq-image-load-guest.py, new capture native-irq-image-load-guest-20260907-2.
+Environment: unchanged modules/image and guest configuration; added before/after logging, same 4 MiB assertion.
+Result: the eight readback pairs again matched. Node-0 MemFree was 3,839,936 KiB before and 3,835,800 KiB after: a 4,136 KiB deficit, 40 KiB beyond the allowance. All eight startup allocations reuse the same physical root, so measure Linux per-CPU free-page caches and outstanding vmalloc storage before assigning this deficit to owned startup pages. Preserve the failed assertion and do not relax it to obtain a pass.
+Evidence: /work/native-irq-image-load-guest-20260907-2/local-run.json and serial.log.

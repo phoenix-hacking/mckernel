@@ -649,3 +649,25 @@ submodule/compiler inputs and fallback header repairs, with the Rust consumers
 preserved. See `native-irq-images-checkpoint-20260907.json`. Next verify the new
 native image's loader/startup readbacks and the full suite, then implement the
 owned trampoline, boot parameters, CPU wakeup and native IRQ/IKC adapter.
+
+## 2026-09-07: IRQ/image runtime WIP checkpoint
+
+The new native image passes 56 physical image readbacks and 56 independent
+startup-table checks, plus 64 forced startup-allocation failures, across both
+ABIs and two module cycles. Its loaded-window FNV is `1d518fe7d62bc1af`.
+Two preceding captures failed the cleanup probe's buddy-only free-page check.
+The diagnostic passing capture measures a 4,096 KiB reduction in buddy free
+pages alongside a 4,088 KiB increase in free per-CPU cached pages. Linux 6.12's
+`free_unref_page_commit` keeps those cached pages outside `NR_FREE_PAGES`.
+The corrected test now includes those free pages with the same 4 MiB allowance;
+its exact parser passes node/zone, short-read and malformed-input cases.
+A fresh guest replay of this final assertion and the complete suite remain next.
+
+The IRQ module's second default-idle guest stalled after 512 actual callbacks
+and the module's drained-drop marker. Linux reports a missed timer/RCU wakeup
+and an idle CPU without timer ticks. A poll-idle diagnostic and a subsequent
+original-default-idle repeat each complete 1,024 callbacks and two unloads.
+These passes do not establish the cause or resolve the intermittent failure.
+The [runtime checkpoint](native-irq-runtime-checkpoint-20260907.json) retains
+31 artifacts, including every failed and passing capture and the current probe.
+No McKernel CPU has started, and no production gate receives credit.
