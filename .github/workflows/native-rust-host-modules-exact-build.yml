@@ -115,6 +115,15 @@ on:
       - scripts/tests/test_ihk_device_registry.py
       - scripts/tests/test_ihk_device_registry_check.py
       - scripts/tests/test_ihk_smp_resource.py
+      - scripts/ihk_mapping_check.py
+      - scripts/ihk_os_runtime_check.py
+      - scripts/tests/test_ihk_mapping_check.py
+      - scripts/tests/test_ihk_smp_image.py
+      - scripts/tests/test_ihk_os_runtime.py
+      - scripts/tests/fixtures/ihk_mapping_compile.rs
+      - scripts/tests/fixtures/ihk_mapping_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_smp_image_compile.rs
+      - scripts/tests/fixtures/ihk_os_runtime_compile.rs
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
@@ -254,6 +263,15 @@ on:
       - scripts/tests/test_ihk_device_registry.py
       - scripts/tests/test_ihk_device_registry_check.py
       - scripts/tests/test_ihk_smp_resource.py
+      - scripts/ihk_mapping_check.py
+      - scripts/ihk_os_runtime_check.py
+      - scripts/tests/test_ihk_mapping_check.py
+      - scripts/tests/test_ihk_smp_image.py
+      - scripts/tests/test_ihk_os_runtime.py
+      - scripts/tests/fixtures/ihk_mapping_compile.rs
+      - scripts/tests/fixtures/ihk_mapping_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_smp_image_compile.rs
+      - scripts/tests/fixtures/ihk_os_runtime_compile.rs
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
@@ -427,9 +445,14 @@ jobs:
           IHK_PAGE_OWNER_REGISTRY_RUSTC=/usr/bin/rustc \
             /usr/bin/python3 -E -s scripts/ihk_page_owner_registry_check.py \
               --repo "$GITHUB_WORKSPACE" --require-rustc
+          /usr/bin/python3 -E -s scripts/ihk_mapping_check.py --repo "$GITHUB_WORKSPACE" \
+            --rustc /usr/bin/rustc --require-rustc
           /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
-            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
+            /usr/bin/python3 -E -s -m unittest -v \
+              scripts.tests.test_ihk_smp_resource \
+              scripts.tests.test_ihk_smp_image \
+              scripts.tests.test_ihk_os_runtime
           /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           /usr/bin/python3 -E -s scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
           /usr/bin/python3 -E -s -m unittest -v \
@@ -453,7 +476,7 @@ jobs:
             scripts.tests.test_ihk_native_lifecycle_check \
             scripts.tests.test_ihk_smp_native_lifecycle_check \
             scripts.tests.test_ihk_smp_buildid \
-            scripts.tests.test_ihk_os_runtime \
+            scripts.tests.test_ihk_mapping_check \
             scripts.tests.test_mcctrl_native_lifecycle_check
           /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
@@ -1451,7 +1474,10 @@ jobs:
             --module "$smp" --modinfo-fd "$modinfo_fd"
           assert_modinfo_binding
           "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
-            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
+            /usr/bin/python3 -E -s -m unittest -v \
+              scripts.tests.test_ihk_smp_resource \
+              scripts.tests.test_ihk_smp_image \
+              scripts.tests.test_ihk_os_runtime
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
             --module "$mcctrl" --modinfo-fd "$modinfo_fd"
