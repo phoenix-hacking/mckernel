@@ -5,7 +5,7 @@
 //! file owns a generation-checked lease; each instance owns its provider lease,
 //! a Linux module reference and a physically contiguous, zeroed kmsg buffer.
 //! The versioned backend receives only generation-checked, serialized calls.
-//! Image loading and boot are not implemented by this ownership adapter.
+//! The additive boot backend separates preparation from CPU-start effects.
 
 use core::{
     ffi::c_void,
@@ -23,7 +23,7 @@ use kernel::{
 
 use super::{
     abi::{
-        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_LOAD,
+        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_BOOT, IHK_OS_LOAD,
         IHK_OS_QUERY_STATUS, IHK_OS_STATUS,
     },
     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
@@ -148,6 +148,18 @@ impl KmsgPages {
         unsafe { ptr::addr_of_mut!((*buffer).length).write((KMSG_BYTES - 4096) as i32) };
         Ok(pages)
     }
+
+    fn physical(&self) -> Result<u64> {
+        // SAFETY: get_free_pages_noprof without HIGHMEM returned this owned
+        // x86 direct-map allocation. Linux fixes the base before module init.
+        let base = unsafe { bindings::page_offset_base };
+        let physical = (self.0 as u64).checked_sub(base).ok_or(EIO)?;
+        physical.checked_add(KMSG_BYTES as u64).ok_or(EIO)?;
+        if physical % 4096 != 0 {
+            return Err(EIO);
+        }
+        Ok(physical)
+    }
 }
 
 impl Drop for KmsgPages {
@@ -169,10 +181,26 @@ type OsBackendIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;
 // has no open references. Success returns its resources before minor reuse.
 type OsBackendReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
 
+// SAFETY: Preparation receives only a live OS identity and IHK-owned physical
+// kmsg scalars. It must finish every fallible preparation without starting a
+// CPU or publishing guest work. All retained storage belongs to this generation.
+type OsBackendPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;
+// SAFETY: IHK publishes Booting first. Success requires full backend readiness;
+// any other result retains all possibly reachable resources for proven cleanup.
+// This callback cannot permit unload, assignment or reuse after a start effect.
+type OsBackendStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
+
+#[derive(Clone, Copy)]
+struct OsBackendBootV3 {
+    prepare: OsBackendPrepareBootV3,
+    start: OsBackendStartBootV3,
+}
+
 #[derive(Clone, Copy)]
 struct OsBackend {
     ioctl: OsBackendIoctlV2,
     release: OsBackendReleaseV2,
+    boot: Option<OsBackendBootV3>,
 }
 
 struct OsObject {
@@ -290,11 +318,49 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v2(
     release: Option<OsBackendReleaseV2>,
 ) -> i64 {
     let backend = match (callback_abi, ioctl, release) {
-        (1, Some(ioctl), Some(release)) => OsBackend { ioctl, release },
+        (1, Some(ioctl), Some(release)) => OsBackend {
+            ioctl,
+            release,
+            boot: None,
+        },
         _ => return EINVAL.to_errno() as i64,
     };
     // SAFETY: The caller supplies pinned module-resident callbacks. The
     // object stores only their copied identities and its own module reference.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// Add boot preparation/start callbacks while retaining the v1/v2 contracts.
+///
+/// # Safety
+/// The caller pins `owner`; all four callbacks belong to that module and obey
+/// their exact generation, execution-context and resource-retention contracts.
+// SAFETY: No pointer or callback reaches publication until the complete ABI
+// tuple is checked and create_os has acquired the provider's module reference.
+#[export_name = "ihk_os_create_unbooted_v3"]
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v3(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+) -> i64 {
+    let backend = match (callback_abi, ioctl, release, prepare, start) {
+        (1, Some(ioctl), Some(release), Some(prepare), Some(start)) => OsBackend {
+            ioctl,
+            release,
+            boot: Some(OsBackendBootV3 { prepare, start }),
+        },
+        _ => return EINVAL.to_errno() as i64,
+    };
+    // SAFETY: The complete callback identities stay resident through the
+    // provider module owner acquired before any OS object is published.
     match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
@@ -533,6 +599,51 @@ unsafe fn os_request(
     let Some(backend) = object.backend else {
         return EINVAL.to_errno() as core::ffi::c_long;
     };
+    if command == IHK_OS_BOOT && backend.boot.is_some() {
+        let boot = backend.boot.unwrap();
+        let physical = match object._kmsg.physical() {
+            Ok(physical) => physical,
+            Err(error) => return error.to_errno() as core::ffi::c_long,
+        };
+        // SAFETY: The file lease and operation lock retain the exact OS,
+        // backend code and kmsg allocation. User ioctl arguments do not enter
+        // this callback. No CPU-start effect is allowed during preparation.
+        let prepared = unsafe {
+            (boot.prepare)(
+                handle.minor() as u32,
+                handle.generation(),
+                physical,
+                KMSG_BYTES as u64,
+            )
+        };
+        if prepared != 0 {
+            return if (-4095..0).contains(&prepared) {
+                prepared as core::ffi::c_long
+            } else {
+                EIO.to_errno() as core::ffi::c_long
+            };
+        }
+        if let Err(error) = OS_REGISTRY.transition(handle, OsStatus::Booting) {
+            return error.errno() as core::ffi::c_long;
+        }
+        // SAFETY: Booting is visible before the first possible CPU effect.
+        // This same operation lock excludes resource changes and subsequent
+        // starts. Every uncertain result leaves the instance non-destroyable.
+        let started = unsafe { (boot.start)(handle.minor() as u32, handle.generation()) };
+        let state = if started == 0 {
+            OsStatus::Ready
+        } else {
+            OsStatus::Failed
+        };
+        if let Err(error) = OS_REGISTRY.transition(handle, state) {
+            return error.errno() as core::ffi::c_long;
+        }
+        return if (-4095..=0).contains(&started) {
+            started as core::ffi::c_long
+        } else {
+            EIO.to_errno() as core::ffi::c_long
+        };
+    }
     let loading = command == IHK_OS_LOAD;
     if loading {
         if let Err(error) = OS_REGISTRY.transition(handle, OsStatus::Loading) {
@@ -597,6 +708,17 @@ pub(crate) static IHK_OS_CREATE_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymb
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_create_unbooted_v2 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_create_unbooted_v3"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_CREATE_V3_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v3 as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

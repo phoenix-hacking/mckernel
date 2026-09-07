@@ -88,3 +88,13 @@ require an explicit native ELF note containing the host IRQ ABI and exact guest
 header size. Emit it from the existing guest Rust crate and preserve all legacy
 image consumers; images lacking the note remain loadable but cannot enter the
 native boot operation. Add checked note parsing to the existing `ImagePlan`.
+
+The native boot note and parser now pass policy tests and all three refreshed
+images pass the actual loader parser. Native image SHA is
+`3eb7b36b3ef1ee069dbfdb163bff9f7a39bf828af3635417cd708a9a6f011be8`;
+loaded-window FNV64 is `cfcc0211e5daf7dd`. The IHK v3 callback pair passes
+51 ownership cases, including preparation cleanup and persistent started-state
+owners for native/compat calls. See the separate backend/image checkpoint.
+The SMP provider still uses v2 until its real preparation/start adapter is
+ready. Patch 0006 proposes existing Linux INIT/SIPI and init_top_pgt exports;
+its first apply/build and native SMP integration remain pending.

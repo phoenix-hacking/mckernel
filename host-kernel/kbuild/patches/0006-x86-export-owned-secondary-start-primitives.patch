@@ -1,0 +1,49 @@
+From: McKernel native Rust integration
+Subject: [PATCH] x86 SMP: export existing INIT/SIPI and permanent page-table root
+
+Expose existing Linux implementations to the native Rust SMP owner. Callers
+must own the exact offline CPU, exclude CPU/device hotplug, prepare an explicit
+low-memory reservation and retain all storage after any uncertain start.
+The immutable init_top_pgt address identifies Linux's permanent page-table root;
+no borrowed task address space or kallsyms lookup is used. No C function body
+changes and no project C bridge is introduced.
+
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -105,6 +105,7 @@
+ void native_smp_prepare_cpus(unsigned int max_cpus);
+ void native_smp_cpus_done(unsigned int max_cpus);
+ int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
++int wakeup_secondary_cpu_via_init(u32 phys_apicid, unsigned long start_eip, unsigned int cpu);
+ int native_kick_ap(unsigned int cpu, struct task_struct *tidle);
+ int native_cpu_disable(void);
+ void __noreturn hlt_play_dead(void);
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -713,7 +713,7 @@
+ /*
+  * Wake up AP by INIT, INIT, STARTUP sequence.
+  */
+-static int wakeup_secondary_cpu_via_init(u32 phys_apicid, unsigned long start_eip, unsigned int cpu)
++int wakeup_secondary_cpu_via_init(u32 phys_apicid, unsigned long start_eip, unsigned int cpu)
+ {
+ 	unsigned long send_status = 0, accept_status = 0;
+ 	int num_starts, j, maxlvt;
+@@ -794,6 +794,7 @@
+ 	preempt_enable();
+ 	return (send_status | accept_status);
+ }
++EXPORT_SYMBOL_GPL(wakeup_secondary_cpu_via_init);
+ 
+ /* reduce the number of lines printed when booting a large cpu count system */
+ static void announce_cpu(int cpu, int apicid)
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -700,6 +700,7 @@
+ /* This must match the first entry in level2_kernel_pgt */
+ SYM_DATA(phys_base, .quad 0x0)
+ EXPORT_SYMBOL(phys_base)
++EXPORT_SYMBOL_GPL(init_top_pgt)
+ 
+ #include "../xen/xen-head.S"
+ 

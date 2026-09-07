@@ -64,6 +64,9 @@ pub mod sync {
 #[macro_export] macro_rules! new_mutex { ($value:expr) => { $crate::sync::Mutex::new($value) }; }
 
 pub mod bindings {
+    // The mock allocation address is also its physical identity. Native Linux
+    // uses its actual initialized direct-map base through this same read.
+    pub static mut page_offset_base: u64 = 0;
     // CONFIG_LOCKDEP=n produces this empty C type in the exact Rocky bindings.
     // Typed foreign declarations that transitively expose it must fail linting.
     #[repr(C)] pub struct lockdep_map {}
@@ -416,6 +419,122 @@ fn reset_backend() {
     BACKEND_RELEASES.lock().unwrap().clear();
     BACKEND_RELEASE_STATUS.store(0, Ordering::SeqCst);
     BACKEND_LOAD_STATUS.store(0, Ordering::SeqCst);
+}
+
+static BOOT_PREPARE_STATUS: AtomicI32 = AtomicI32::new(0);
+static BOOT_START_STATUS: AtomicI32 = AtomicI32::new(0);
+static BOOT_START_CALLS: AtomicI32 = AtomicI32::new(0);
+
+unsafe extern "C" fn backend_prepare_boot(slot: u32, generation: u64, physical: u64, bytes: u64) -> i32 {
+    assert!(slot < 64 && generation > 0);
+    assert_eq!(PAGES.lock().unwrap().get(&(physical as usize)), Some(&(bytes as usize)));
+    assert_eq!(bytes, 4 << 20);
+    assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
+    let mut observer = open(slot).unwrap();
+    assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+    assert_eq!(status(&mut observer, true, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+    close(observer);
+    BOOT_PREPARE_STATUS.load(Ordering::SeqCst)
+}
+
+unsafe extern "C" fn backend_start_boot(slot: u32, generation: u64) -> i32 {
+    assert!(slot < 64 && generation > 0);
+    assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
+    let mut observer = open(slot).unwrap();
+    assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), abi::IHK_OS_STATUS_BOOTING as i64);
+    assert_eq!(status(&mut observer, true, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_BOOTING as i64);
+    close(observer);
+    BOOT_START_CALLS.fetch_add(1, Ordering::SeqCst);
+    BOOT_START_STATUS.load(Ordering::SeqCst)
+}
+
+fn create_boot_backend() -> i64 {
+    unsafe { os_runtime::ihk_os_create_unbooted_v3(0, THIS_MODULE.as_ptr().cast(),
+        u64::MAX, 1, Some(backend_ioctl), Some(backend_release),
+        Some(backend_prepare_boot), Some(backend_start_boot)) }
+}
+
+#[test]
+fn boot_prepare_failures_never_start_and_preserve_initial_cleanup() {
+    with_family(|| {
+        reset_backend();
+        BOOT_START_CALLS.store(0, Ordering::SeqCst);
+        for compat in [false, true] {
+            for result in [-2, -5, -12, -75, -4096, 1] {
+                BOOT_PREPARE_STATUS.store(result, Ordering::SeqCst);
+                assert_eq!(create_boot_backend(), 0);
+                let mut file = open(0).unwrap();
+                assert_eq!(status(&mut file, compat, abi::IHK_OS_BOOT),
+                    if (-4095..0).contains(&result) { result as i64 } else { -5 });
+                assert_eq!(status(&mut file, compat, abi::IHK_OS_STATUS), 0);
+                assert_eq!(BOOT_START_CALLS.load(Ordering::SeqCst), 0);
+                close(file);
+                assert_eq!(destroy(0), 0);
+            }
+        }
+    });
+}
+
+#[test]
+fn boot_v3_requires_every_callback_before_acquiring_owners() {
+    with_family(|| {
+        for (version, has_ioctl, has_release, has_prepare, has_start) in [
+            (0, true, true, true, true), (2, true, true, true, true),
+            (1, false, true, true, true), (1, true, false, true, true),
+            (1, true, true, false, true), (1, true, true, true, false),
+        ] {
+            let result = unsafe { os_runtime::ihk_os_create_unbooted_v3(0, THIS_MODULE.as_ptr().cast(),
+                0, version, has_ioctl.then_some(backend_ioctl), has_release.then_some(backend_release),
+                has_prepare.then_some(backend_prepare_boot), has_start.then_some(backend_start_boot)) };
+            assert_eq!(result, -22);
+            assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
+            assert!(NODES.lock().unwrap().is_empty());
+            assert!(PAGES.lock().unwrap().is_empty());
+        }
+    });
+}
+
+#[test]
+fn boot_started_generations_cannot_release_resources_or_repeat_start() {
+    // Started instances deliberately have no unsafe reset/cleanup escape hatch.
+    // Isolate each mock case in its own process so their retained owners do not
+    // contaminate the other adapter cases. This is not real shutdown evidence.
+    let Ok(case) = std::env::var("MCKERNEL_MOCK_BOOT_CASE") else {
+        for result in [0, -5, -12, -110, -4096, 1] {
+            for compat in [0, 1] {
+                let output = std::process::Command::new(std::env::current_exe().unwrap())
+                    .args(["--exact", "boot_started_generations_cannot_release_resources_or_repeat_start", "--test-threads=1"])
+                    .env("MCKERNEL_MOCK_BOOT_CASE", format!("{result},{compat}"))
+                    .output().unwrap();
+                assert!(output.status.success(), "{}{}", String::from_utf8_lossy(&output.stdout), String::from_utf8_lossy(&output.stderr));
+            }
+        }
+        return;
+    };
+    let (result, compat) = case.split_once(',').unwrap();
+    let result: i32 = result.parse().unwrap();
+    let compat = compat == "1";
+    let family = os_runtime::OsDeviceFamily::register().unwrap();
+    let _provider = device_registry::IHK_DEVICE_REGISTRY.attach_provider_token().unwrap();
+    BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
+    BOOT_START_STATUS.store(result, Ordering::SeqCst);
+    assert_eq!(create_boot_backend(), 0);
+    let mut file = open(0).unwrap();
+    assert_eq!(status(&mut file, compat, abi::IHK_OS_BOOT),
+        if (-4095..=0).contains(&result) { result as i64 } else { -5 });
+    assert_eq!(status(&mut file, !compat, abi::IHK_OS_QUERY_STATUS),
+        if result == 0 { abi::IHK_OS_STATUS_READY as i64 } else { abi::IHK_OS_STATUS_FAILED as i64 });
+    for request in [abi::IHK_OS_LOAD, abi::IHK_OS_BOOT, abi::IHK_OS_ASSIGN_CPU, abi::IHK_OS_ASSIGN_MEM] {
+        assert_eq!(status(&mut file, compat, request), -16);
+    }
+    assert_eq!(BOOT_START_CALLS.load(Ordering::SeqCst), 1);
+    close(file);
+    assert_eq!(destroy(0), -16);
+    assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 1);
+    assert_eq!(PAGES.lock().unwrap().len(), 1);
+    assert_eq!(NODES.lock().unwrap().len(), 1);
+    assert!(BACKEND_RELEASES.lock().unwrap().is_empty());
+    std::mem::forget(family);
 }
 
 #[test]
