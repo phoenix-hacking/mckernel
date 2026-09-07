@@ -2425,6 +2425,36 @@ exec {modinfo_fd}<&-
         ):
             self.assertIn("scripts.tests.test_ihk_smp_resource", scripts[name])
 
+    def test_image_loader_and_geometry_checks_are_mandatory(self):
+        for path in (
+            "scripts/ihk_mapping_check.py",
+            "scripts/tests/test_ihk_smp_image.py",
+            "scripts/tests/test_ihk_os_runtime.py",
+            "scripts/tests/fixtures/ihk_smp_image_compile.rs",
+            "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+        ):
+            self.assertEqual(2, self.workflow.count("      - " + path), path)
+        workflow = yaml.safe_load(self.workflow)
+        steps = {step.get("name"): step.get("run", "")
+                 for step in workflow["jobs"]["exact-build"]["steps"]}
+        for name in (
+            "Verify source-only contracts without claiming readiness",
+            "Validate built metadata and capture immutable diagnostics",
+        ):
+            for test in ("test_ihk_smp_image", "test_ihk_os_runtime"):
+                marker = "scripts.tests." + test
+                self.assertEqual(1, steps[name].count(marker))
+                start = self.workflow.index("      - name: " + name + "\n")
+                mutation = self.workflow[:start] + self.workflow[start:].replace(
+                    marker, "scripts.tests.test_ihk_smp_resource", 1)
+                self.assertNotEqual(self.workflow, mutation)
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+        self.assertIn(
+            'scripts/ihk_mapping_check.py --repo "$GITHUB_WORKSPACE" --rustc /usr/bin/rustc --require-rustc',
+            " ".join(steps["Verify source-only contracts without claiming readiness"].replace("\\\n", " ").split()),
+        )
+
     def test_exact_probe_and_shared_abi_checks_and_triggers_are_mandatory(self):
         for path in (
             "host-kernel/contracts/linux-api-exact-probe-v1.json",

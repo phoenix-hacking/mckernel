@@ -31,7 +31,7 @@ def derive_contract(repo):
     return {
         "schema_version": 1,
         "gate_id": "IHK-005-unbooted-adapter",
-        "scope": "native unbooted lifecycle, Linux character-device ownership and checked SMP resource callbacks",
+        "scope": "native unbooted lifecycle, Linux character-device ownership, checked SMP resource callbacks and bounded image-loading state",
         "inputs": inputs,
         "behavior": {
             "capacity": 64,
@@ -40,6 +40,7 @@ def derive_contract(repo):
             "destroy_command": "0x00112901",
             "status_commands": ["0x00112a03", "0x00112a14"],
             "status_return": 0,
+            "status_return_scope": "idle NotBooted state; an in-progress image load reports Loading=1",
             "create_argument": "scalar ignored by the frozen SMP create path",
             "destroy_with_open_files_errno": -16,
             "missing_or_out_of_range_destroy_errno": -22,
@@ -68,11 +69,20 @@ def derive_contract(repo):
                             "compat_normalization": "zero extend once",
                             "cleanup_failure": "keep node, generation and owners live"},
             "image_boot": False,
+            "image_load": {
+                "command": "0x00112a00",
+                "initial_state": "NotBooted",
+                "observable_inflight_state": "Loading",
+                "completion_state": "NotBooted after every backend result",
+                "serialization": "same per-OS operation mutex as resource assignment and destruction",
+                "backend_ownership": "existing IHK OS lease and SMP module reference",
+                "starts_cpus": False,
+            },
             "shared_kmsg_readers": False,
         },
         "verification_requirements": {
             "host_fixture": "complete production source with fault-injectable mocked Linux calls",
-            "adapter_cases": 16,
+            "adapter_cases": 17,
             "embedded_provider_registry_cases": 31,
             "kernel_abi_layout_proven_by_mock": False,
             "exact_rocky_build_and_guest_required": True,

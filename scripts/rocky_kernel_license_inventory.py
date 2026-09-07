@@ -112,6 +112,9 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/native-rust/smp_resource.rs",
     "host-kernel/native-rust/smp_cpu.rs",
     "host-kernel/native-rust/smp_memory.rs",
+    "host-kernel/native-rust/ihk_mapping.rs",
+    "host-kernel/native-rust/smp_image.rs",
+    "host-kernel/native-rust/smp_loader.rs",
 ])
 EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/parent-integration-v1.json",
@@ -137,6 +140,9 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/native-rust/smp_resource.rs",
     "host-kernel/native-rust/smp_cpu.rs",
     "host-kernel/native-rust/smp_memory.rs",
+    "host-kernel/native-rust/ihk_mapping.rs",
+    "host-kernel/native-rust/smp_image.rs",
+    "host-kernel/native-rust/smp_loader.rs",
     "host-kernel/rocky/configs/native-rust-evidence.config",
     "host-kernel/rocky/configs/rust-minimal.config",
     "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
@@ -232,6 +238,9 @@ ADDITIVE_REPOSITORY_INPUT_PATHS = ('host-kernel/kbuild/patches/0003-driver-core-
  'host-kernel/native-rust/smp_resource.rs',
  'host-kernel/native-rust/smp_cpu.rs',
  'host-kernel/native-rust/smp_memory.rs',
+ "host-kernel/native-rust/ihk_mapping.rs",
+ "host-kernel/native-rust/smp_image.rs",
+ "host-kernel/native-rust/smp_loader.rs",
  'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
 CAPTURE_AUTHORITY_REGISTRATION = {
     "authority_id": CAPTURE_AUTHORITY_ID,

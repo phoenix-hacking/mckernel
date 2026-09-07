@@ -166,6 +166,16 @@ Rust/assembly completion remain pending; no production gate is promoted.
 
 ## Mission
 
+Image staging WIP (2026-09-07): the recovered loader now appears in declared
+staging/link closure, lifecycle and mapping-reuse contracts, and the 154-site /
+18-source unsafe/FFI queue. Existing site IDs are preserved. Source, lifecycle,
+mapping and loader checks have passing captures; current workflow and license
+bindings are being verified. See
+`docs/verification/native-image-staging-integration-20260907.md` and its JSON
+record for the precise scope and retained failures. Finish downstream bindings,
+then run the fresh declared-stage build, guest and full suite. This WIP does
+not supersede the separate successful prototype guest or grant production credit.
+
 This repository is migrating McKernel from the traditional CentOS-based
 deployment to an exact Rocky Linux 10.2-derived production control-plane kernel
 while porting McKernel-owned implementation logic from C to Rust. The frozen

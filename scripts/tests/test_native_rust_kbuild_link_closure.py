@@ -29,9 +29,10 @@ SOURCE_PREFIX = SOURCE_ROOT + "/drivers/misc/mckernel/"
 
 # Recorded from the pinned Rocky SRPM's unmodified scripts/basic/fixdep.c
 # (SHA256 512a85c24ca2cdd44d1d652e071abc6650cf4776e21979e0a08b421178f59590).
-# Its input was a constructed Rust dep-info list and byte-exact staged sources;
-# only the absolute source-root prefix is normalized here. This is generator
-# grammar evidence, not a captured kernel compiler invocation or runtime proof.
+# Its dependency body also matches the recovered native image-loader Kbuild
+# capture in native-image-recovery-20260907-build-source-compiler.tar.gz after
+# normalizing the source-root prefix. The saved command here is synthetic;
+# this fixture tests generator grammar and grants no compiler/runtime credit.
 ROCKY_FIXDEP_SMP_RECORD = (
     'savedcmd_drivers/misc/mckernel/ihk_smp_x86_64.o := rustc --emit=obj=drivers/misc/mckernel/ihk_smp_x86_64.o /build/native-rust-source/linux/drivers/misc/mckernel/ihk_smp_x86_64.rs\n'
     '\n'
@@ -47,6 +48,9 @@ ROCKY_FIXDEP_SMP_RECORD = (
     '    $(wildcard include/config/SPARSEMEM_VMEMMAP) \\\n'
     '    $(wildcard include/config/MEMORY_HOTPLUG) \\\n'
     '    $(wildcard include/config/DYNAMIC_MEMORY_LAYOUT) \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk_mapping.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_image.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_loader.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk-compat-build-id.bin \\\n'
     '  ./rust/libcore.rmeta \\\n'
     '  ./rust/libkernel.rmeta \\\n'
@@ -950,7 +954,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.read_text(name).splitlines()[1:],
         )
         self.assertEqual(
-            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs"],
+            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
+             "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs"],
             closure._parse_rust_dependency_body(
                 name,
                 target,
@@ -1020,6 +1025,9 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         ) + "".join(
             "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
             for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
+        ) + "".join(
+            "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
+            for item in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs")
         )
         self.mutate_once(name, source_dependencies + metadata, metadata + source_dependencies)
         for anchor in (resource, metadata, kernel):
@@ -1066,6 +1074,15 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                     self.assert_rejected()
                 finally:
                     self.write_text(name, original)
+
+    def test_image_loader_dependencies_cannot_be_omitted_duplicated_or_substituted(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        for source in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs"):
+            line = "  " + SOURCE_PREFIX + source + " " + chr(92) + "\n"
+            with self.subTest(source=source):
+                self.mutate_once(name, line, "")
+                self.mutate_once(name, line, line + line)
+                self.mutate_once(name, line, line.replace(source, "unbound_image.rs"))
 
     def test_dependency_errors_identify_a_bounded_offending_entry(self):
         name = ".ihk_smp_x86_64.o.cmd"

@@ -117,15 +117,27 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'smp_cpu.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'b7b75d7beae39c8cfb98117b9f03d80d51d796024c1a10909920b022d7cce1c1'},
+  'sha256': 'e5bccbe0191d4330c7ea051f7569bab7368b6bbf34f703a869c7f2671ee812c7'},
  {'destination': 'smp_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '979e587bb7fe783caf2e455b6b50683fd74908861c1e70657b1b77b7a01bda0a'},
+  'sha256': 'f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
-  'sha256': '135d68740e79e2f3e5d7b218f201926678731e1b8c7406b5284ebde530f1bf75'})
+  'sha256': 'c66c8d6960f761bdbb393bd4edb416b60e04651a812f624563707bc030eebcea'},
+ {'destination': 'ihk_mapping.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/ihk_mapping.rs',
+  'sha256': 'd5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687'},
+ {'destination': 'smp_image.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_image.rs',
+  'sha256': '5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a'},
+ {'destination': 'smp_loader.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_loader.rs',
+  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'})
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -202,7 +214,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': '7071edb8abaf441bd8d6a4337bee81a69f3eb0547a8155995948f0b6130a3622'},
+  'source_sha256': '0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -927,6 +939,9 @@ def _validate_input(repo_root, item, index):
         "smp_cpu.rs",
         "smp_memory.rs",
         "os_runtime.rs",
+        "ihk_mapping.rs",
+        "smp_image.rs",
+        "smp_loader.rs",
     ):
         expected_destination = item["destination"]
     if expected_destination is None:
@@ -1100,6 +1115,27 @@ def _validate_input(repo_root, item, index):
                       "const OS_FOPS: bindings::file_operations"):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks unbooted OS owner: {1}".format(label, token))
+    elif item["destination"] == "ihk_mapping.rs":
+        for token in ("pub(crate) struct PageGeometry", "pub(crate) struct PhysicalRange",
+                      "pub(crate) struct AlignedPhysicalRange", "pub(crate) fn from_start_length"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks reused mapping geometry: {1}".format(label, token))
+    elif item["destination"] == "smp_image.rs":
+        for token in ("pub(crate) struct BootLayout", "pub(crate) struct ImagePlan<'image>",
+                      "pub(crate) const KERNEL_WINDOW_BYTES: u64 = 8 << 20;",
+                      "ImageError::SegmentOverlap", "ImageError::BadEntry"):
+            if token not in text:
+                raise ValidationError("{0} lacks image preflight boundary: {1}".format(label, token))
+    elif item["destination"] == "smp_loader.rs":
+        for token in ("struct ImageFile {", "impl Drop for ImageFile",
+                      "const MAX_IMAGE_FILE_BYTES: usize = 64 << 20;",
+                      "const MAX_FILENAME_BYTES: usize = 256;",
+                      "bindings::kernel_read_file_from_path(",
+                      "bindings::kvfree(self.buffer.as_ptr())",
+                      "super::smp_memory::invalidate_os_image(owner)?;",
+                      "super::smp_cpu::load_os_image(owner, image.bytes())?;"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks bounded image file owner: {1}".format(label, token))
     else:
         required = (
             "pub(crate) struct IhkIoctlDispatcher",
@@ -1224,6 +1260,9 @@ def _validate_module(repo_root, module, expected, index):
             "#[allow(dead_code)]\nmod smp_resource;",
             "mod smp_cpu;",
             "mod smp_memory;",
+            "#[allow(dead_code)]\nmod ihk_mapping;",
+            "#[allow(dead_code)]\nmod smp_image;",
+            "mod smp_loader;",
             "use kernel::{\n    c_str,\n    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},\n    prelude::*,\n};",
             "struct ProviderOpenLease {",
             "impl MiscDevice for IhkSmpControlDevice {",
@@ -1301,11 +1340,15 @@ def validate_manifest(repo_root, manifest_path):
         "smp_cpu.rs",
         "smp_memory.rs",
         "os_runtime.rs",
+        "ihk_mapping.rs",
+        "smp_image.rs",
+        "smp_loader.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, smp_memory.rs, os_runtime.rs"
+            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, "
+            "smp_memory.rs, os_runtime.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs"
         )
 
     modules = manifest["modules"]

@@ -1,15 +1,16 @@
 {
   "attachment_status": {
     "ihk_crate_mod_edge": false,
-    "kernel_build_surface": false,
-    "native_stage_manifest": false,
-    "rs011_ledger": false,
-    "validation_workflows": false
+    "kernel_build_surface": true,
+    "native_stage_manifest": true,
+    "rs011_ledger": true,
+    "smp_crate_mod_edge": true,
+    "validation_workflows": true
   },
   "checker": {
     "path": "scripts/ihk_mapping_check.py",
-    "sha256": "be7387a90610fc1810b06f25b2670dd05bebbfb74ebc9b73258fb48d94ad7258",
-    "size": 26942
+    "sha256": "0535c407c57b4e3586543b730f779c1036329331da79fe334aa090ed02a8bab0",
+    "size": 30481
   },
   "compile_fixture": {
     "compile_arguments": [
@@ -58,8 +59,30 @@
     "unmap_cleanup_validated": false,
     "user_mmap_runtime_validated": false
   },
-  "foundation_status": "unattached-allocation-free-mapping-validation-core",
+  "evidence_policy_scope": "IHK-007 Linux user-mmap adapter only; SMP image geometry reuse grants no mapping gate credit",
+  "foundation_status": "allocation-free-mapping-core-with-smp-image-geometry-reuse",
   "gate_id": "IHK-007",
+  "geometry_reuse": {
+    "purpose": "checked physical image placement in the SMP crate; no Linux VMA mapping",
+    "sources": [
+      {
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+        "size": 23320
+      },
+      {
+        "path": "host-kernel/native-rust/smp_image.rs",
+        "sha256": "5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a",
+        "size": 10902
+      }
+    ],
+    "types": [
+      "AlignedPhysicalRange",
+      "MappingError",
+      "PageGeometry",
+      "PhysicalRange"
+    ]
+  },
   "legacy_oracle": {
     "gitlink_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
     "gitlink_path": "ihk",
@@ -198,11 +221,11 @@
   "schema_version": 1,
   "unproven": [
     "Linux 6.12.0-211.44.1.el10_2 VMA, remap_pfn_range, vm_flags, pgprot, pinning, refcount, fork, split, mremap, and close adapters",
-    "attachment to ihk.rs, the authoritative Kbuild/staging surface, RS-011 unsafe ledger, lifecycle contracts, and validation workflows",
+    "IHK user-mmap adapter attachment to ihk.rs and its lifecycle/runtime validation; SMP image geometry reuse is declared separately",
     "device-specific map_memory, unmap_memory, map_virtual, and unmap_virtual calls and exact cache-policy translation",
     "rollback execution after partial remap or metadata-allocation failure and exact VMA teardown ordering",
-    "reserved-memory ownership lookup across multiple physical chunks and concurrent release exclusion",
-    "successful exact Rocky kernel compile, modpost, module load/unload, user mmap runtime, negative-path fault injection, and differential legacy parity",
+    "reserved-memory ownership lookup and concurrent release exclusion for Linux user VMAs; image-copy ownership does not establish VMA lifetime",
+    "successful exact Rocky kernel compile, modpost, module load/unload, user mmap runtime, negative-path fault injection, and differential legacy parity for the IHK-007 Linux mapping adapter",
     "IHK-007 completion, PASS status, or tracker credit"
   ]
 }

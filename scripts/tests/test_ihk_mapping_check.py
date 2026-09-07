@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed tests for the unattached IHK-007 mapping foundation."""
+"""Fail-closed tests for IHK-007 geometry reuse without mapping gate credit."""
 
 from __future__ import print_function
 
@@ -48,6 +48,7 @@ class IhkMappingCheckTests(unittest.TestCase):
             ".github/workflows/rocky-kernel-source-evidence.yml",
         }
         paths.update(row["path"] for row in self.contract["legacy_oracle"]["inputs"])
+        paths.update(row["path"] for row in self.contract["geometry_reuse"]["sources"])
         for relative in paths:
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -136,10 +137,11 @@ class IhkMappingCheckTests(unittest.TestCase):
         compiler.chmod(0o755)
         return compiler
 
-    def test_repository_contract_is_valid_unattached_and_credit_forbidden(self):
+    def test_repository_geometry_is_staged_but_user_mapping_credit_is_forbidden(self):
         contract = mapping_check.validate_contract(REPO_ROOT)
         self.assertEqual(contract["gate_id"], "IHK-007")
-        self.assertFalse(any(contract["attachment_status"].values()))
+        self.assertEqual(contract["attachment_status"], mapping_check.EXPECTED_ATTACHMENT)
+        self.assertFalse(contract["attachment_status"]["ihk_crate_mod_edge"])
         self.assertFalse(any(contract["evidence_policy"].values()))
         self.assertIn("IHK-007 completion", contract["unproven"][-1])
 
@@ -151,7 +153,7 @@ class IhkMappingCheckTests(unittest.TestCase):
         rendered = output.getvalue()
         self.assertIn("SOURCE-CONTRACT-VERIFIED", rendered)
         self.assertIn("fixture=SKIPPED_NO_CONFIGURED_RUSTC", rendered)
-        self.assertIn("attachment=ABSENT", rendered)
+        self.assertIn("geometry_reuse=SMP_IMAGE user_mmap_adapter=ABSENT", rendered)
         self.assertIn("gate_credit=FORBIDDEN", rendered)
         self.assertNotIn("PASS", rendered)
 
@@ -250,7 +252,7 @@ class IhkMappingCheckTests(unittest.TestCase):
             for field in self.contract[section]:
                 with self.subTest(section=section, field=field):
                     mutated = copy.deepcopy(self.contract)
-                    mutated[section][field] = True
+                    mutated[section][field] = not mutated[section][field]
                     self.write_contract(mutated)
                     with self.assertRaisesRegex(mapping_check.ValidationError, "differs"):
                         mapping_check.validate_contract(self.repo)
@@ -288,12 +290,10 @@ class IhkMappingCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(mapping_check.ValidationError, "gitlink index"):
             mapping_check.validate_contract(self.repo)
 
-    def test_ihk_source_stage_ledger_and_workflow_attachment_fail(self):
+    def test_undeclared_direct_mapping_attachment_fails(self):
         surfaces = [
             "host-kernel/native-rust/ihk.rs",
             "host-kernel/kbuild/Kbuild.in",
-            "host-kernel/kbuild/stage-manifest.json",
-            "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
             ".github/workflows/native-rust-host-modules-exact-build.yml",
             ".github/workflows/rocky-kernel-source-evidence.yml",
         ]
@@ -303,6 +303,44 @@ class IhkMappingCheckTests(unittest.TestCase):
                 original = path.read_text(encoding="utf-8")
                 path.write_text(original + "\nihk_mapping\n", encoding="utf-8")
                 with self.assertRaisesRegex(mapping_check.ValidationError, "production surface"):
+                    mapping_check.validate_contract(self.repo)
+                path.write_text(original, encoding="utf-8")
+
+    def test_geometry_stage_and_ledger_cannot_omit_duplicate_or_substitute_source(self):
+        for relative, field, key in (
+            ("host-kernel/kbuild/stage-manifest.json", "inputs", "repository_path"),
+            ("host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json", "source_inputs", "path"),
+        ):
+            path = self.repo / relative
+            original = path.read_text(encoding="utf-8")
+            value = json.loads(original)
+            row = next(row for row in value[field] if row[key] == mapping_check.EXPECTED_SOURCE)
+            for mutation in ("omit", "duplicate", "substitute"):
+                with self.subTest(relative=relative, mutation=mutation):
+                    changed = copy.deepcopy(value)
+                    changed[field].remove(row)
+                    if mutation == "duplicate":
+                        changed[field].extend([row, row])
+                    elif mutation == "substitute":
+                        changed[field].append(dict(row, sha256="0" * 64))
+                    path.write_text(json.dumps(changed), encoding="utf-8")
+                    with self.assertRaisesRegex(mapping_check.ValidationError, "mapping (stage|ledger) binding"):
+                        mapping_check.validate_contract(self.repo)
+            path.write_text(original, encoding="utf-8")
+
+    def test_resigned_consumer_cannot_replace_geometry_with_vma_transaction(self):
+        binding = self.contract["geometry_reuse"]["sources"][1]
+        self.mutate_and_resign(binding["path"], "MappingError, PageGeometry", "MmapTransaction, PageGeometry", binding)
+        with self.assertRaisesRegex(mapping_check.ValidationError, "image geometry import"):
+            mapping_check.validate_contract(self.repo)
+
+    def test_geometry_consumer_source_drift_is_rejected(self):
+        for row in self.contract["geometry_reuse"]["sources"]:
+            with self.subTest(path=row["path"]):
+                path = self.repo / row["path"]
+                original = path.read_text(encoding="utf-8")
+                path.write_text(original + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(mapping_check.ValidationError, "geometry source size"):
                     mapping_check.validate_contract(self.repo)
                 path.write_text(original, encoding="utf-8")
 

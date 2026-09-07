@@ -44,14 +44,14 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 15)
-        self.assertEqual(len(discovery["sites"]), 145)
-        self.assertEqual(value["coverage"]["by_crate"], {'ihk': 81, 'ihk_smp_x86_64': 62, 'mcctrl': 2})
+        self.assertEqual(len(discovery["inputs"]), 18)
+        self.assertEqual(len(discovery["sites"]), 154)
+        self.assertEqual(value["coverage"]["by_crate"], {'ihk': 81, 'ihk_smp_x86_64': 71, 'mcctrl': 2})
         self.assertEqual(value["coverage"]["by_kind"], {'extern_function': 26,
  'ffi_export': 20,
  'foreign_block': 4,
  'mutable_static': 1,
- 'unsafe_block': 81,
+ 'unsafe_block': 90,
  'unsafe_function': 5,
  'unsafe_impl': 8})
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
@@ -227,7 +227,7 @@ class CurrentLedgerTests(unittest.TestCase):
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "a31e0303a217372b885d4fe0e285b947fa6ea4ead5d0e3f407df81fc2e2cda3e",
+            "481a0bf5d5953fa17d0c483374e0c6395aeab79bde24209356743b999c39d95d",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
@@ -498,6 +498,9 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.NATIVE_SOURCE_ROOT + "/smp_resource.rs",
         ledger.NATIVE_SOURCE_ROOT + "/smp_cpu.rs",
         ledger.NATIVE_SOURCE_ROOT + "/smp_memory.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/ihk_mapping.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/smp_image.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/smp_loader.rs",
     )
 
     def setUp(self):

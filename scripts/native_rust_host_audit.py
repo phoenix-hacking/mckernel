@@ -972,11 +972,15 @@ def main():
         "smp_cpu.rs",
         "smp_memory.rs",
         "os_runtime.rs",
+        "ihk_mapping.rs",
+        "smp_image.rs",
+        "smp_loader.rs",
     ]:
         die(
             "Rust support input closure differs from the locked ABI, queue, "
             "OS registry, device registry, IKC master, IHK ioctl dispatcher, page allocator, "
-            "page-owner registry, SMP resource policy, and unbooted OS runtime"
+            "page-owner registry, SMP resource policy, unbooted OS runtime, "
+            "mapping geometry, image policy and bounded file loader"
         )
     for item in support:
         relative = item.get("repository_path")

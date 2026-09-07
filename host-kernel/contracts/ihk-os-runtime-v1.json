@@ -31,6 +31,15 @@
     "destroy_with_open_files_errno": -16,
     "file_owner": "ihk.ko .owner plus one generation-checked OS lease per open file",
     "image_boot": false,
+    "image_load": {
+      "backend_ownership": "existing IHK OS lease and SMP module reference",
+      "command": "0x00112a00",
+      "completion_state": "NotBooted after every backend result",
+      "initial_state": "NotBooted",
+      "observable_inflight_state": "Loading",
+      "serialization": "same per-OS operation mutex as resource assignment and destruction",
+      "starts_cpus": false
+    },
     "instance_owner": "one DeviceOsLease and one Linux SMP module reference",
     "kmsg_bytes": 4194304,
     "kmsg_initialization": "zeroed allocation and in-place ABI length; no large stack temporary",
@@ -49,6 +58,7 @@
       "0x00112a14"
     ],
     "status_return": 0,
+    "status_return_scope": "idle NotBooted state; an in-progress image load reports Loading=1",
     "unknown_ioctl_errno": -22
   },
   "gate": {
@@ -60,8 +70,8 @@
   "inputs": [
     {
       "path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "135d68740e79e2f3e5d7b218f201926678731e1b8c7406b5284ebde530f1bf75",
-      "size": 24424
+      "sha256": "c66c8d6960f761bdbb393bd4edb416b60e04651a812f624563707bc030eebcea",
+      "size": 24817
     },
     {
       "path": "host-kernel/native-rust/abi/x86_64.rs",
@@ -85,19 +95,19 @@
     },
     {
       "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
-      "sha256": "82a5ace93fa6c5fad3a58fa6dad1fa34bfe9f71382035cfea7bdda735f3bf994",
-      "size": 23878
+      "sha256": "5ec8a9469e22af3e9efe69cc804d8b212b647250d7382dfc6484b602bdcde0b2",
+      "size": 25097
     },
     {
       "path": "scripts/tests/test_ihk_os_runtime.py",
-      "sha256": "9b16e2f94946235db24f47075406879436189b676c7b30ddb2771ed16909f47d",
+      "sha256": "d29d2d882e6074799d7f30abf6710fe2332e10865f06506ee852b2b794709e3e",
       "size": 2294
     }
   ],
   "schema_version": 1,
-  "scope": "native unbooted lifecycle, Linux character-device ownership and checked SMP resource callbacks",
+  "scope": "native unbooted lifecycle, Linux character-device ownership, checked SMP resource callbacks and bounded image-loading state",
   "verification_requirements": {
-    "adapter_cases": 16,
+    "adapter_cases": 17,
     "broader_provider_and_booted_teardown_required": true,
     "embedded_provider_registry_cases": 31,
     "exact_rocky_build_and_guest_required": true,

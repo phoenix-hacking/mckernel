@@ -45,13 +45,22 @@ EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'sha256': 'd8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'b7b75d7beae39c8cfb98117b9f03d80d51d796024c1a10909920b022d7cce1c1'},
+  'sha256': 'e5bccbe0191d4330c7ea051f7569bab7368b6bbf34f703a869c7f2671ee812c7'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '979e587bb7fe783caf2e455b6b50683fd74908861c1e70657b1b77b7a01bda0a'}]
+  'sha256': 'f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04'},
+ {'destination': 'ihk_mapping.rs',
+  'path': 'host-kernel/native-rust/ihk_mapping.rs',
+  'sha256': 'd5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687'},
+ {'destination': 'smp_image.rs',
+  'path': 'host-kernel/native-rust/smp_image.rs',
+  'sha256': '5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a'},
+ {'destination': 'smp_loader.rs',
+  'path': 'host-kernel/native-rust/smp_loader.rs',
+  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'}]
 EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
  'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
                                     'memory': 'poison-live-map-unless-compensated-rollback'},
@@ -63,17 +72,16 @@ EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
              'negative_sha256': '4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159',
              'positive_path': 'scripts/tests/fixtures/ihk_smp_resource_compile.rs',
              'positive_sha256': 'cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1'},
- 'integration_blockers': ['OS resource assignment needs declared staging, exact-stage replay and '
-                          'production acceptance',
+ 'integration_blockers': ['OS resource assignment and image loading require declared-stage '
+                          'integration and production acceptance',
                           'CPU physical eject, suspend, topology replacement and uncertain-state '
                           'reconciliation need production acceptance',
                           'IKC optional-versus-complete mapping compatibility is not selected at '
                           'the ABI boundary',
-                          'image loading, APIC reset, IRQ and native McKernel boot remain '
-                          'unreachable'],
+                          'APIC reset, IRQ, IKC and native McKernel boot remain unreachable'],
  'linux_reachable': True,
  'os_token_minting': 'explicit-unsafe-contract-requires-exact-ihk-v2-os-lease-or-destroy-guard-and-smp-module-owner',
- 'status': 'native-cpu-memory-adapters-with-versioned-ihk-os-resource-assignment'}
+ 'status': 'native-cpu-memory-and-os-resource-adapters-with-bounded-image-loading'}
 EXPECTED_PROVIDER_LEASE = {
     "attach_symbol": "ihk_smp_provider_attach_v2",
     "callback_abi": 1,
@@ -250,7 +258,8 @@ EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
               'IHK_OS_GET_NUM_CPUS',
               'IHK_OS_ASSIGN_MEM',
               'IHK_OS_RELEASE_MEM',
-              'IHK_OS_QUERY_MEM'],
+              'IHK_OS_QUERY_MEM',
+              'IHK_OS_LOAD'],
  'compat_address': 'zero-extended once in IHK; reject out-of-range address or compat flag in SMP',
  'compatibility_create_export': 'ihk_os_create_unbooted_v1',
  'cpu_assignment': 'preserve requested logical rank; whole-batch ownership validation',
@@ -265,7 +274,27 @@ EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
  'release_callback': 'ihk_smp_os_release_v2',
  'serialization': 'per-OS sleepable mutex before CPU then memory controller locks',
  'source_reachable': True,
- 'tracker_credit': False}
+ 'tracker_credit': False,
+ 'image_loading': {'command': '0x00112a00',
+                   'filename_limit_bytes': 256,
+                   'file_limit_bytes': 67108864,
+                   'file_owner': 'Linux kernel_read_file_from_path vmalloc buffer released exactly '
+                                 'once with kvfree',
+                   'linux_read_purpose': 'READING_KEXEC_IMAGE',
+                   'prerequisites': 'assigned CPU and exact-generation owned bootstrap extent',
+                   'geometry': 'reuse ihk_mapping checked physical ranges and page alignment',
+                   'image_window_bytes': 8388608,
+                   'program_header_limit': 64,
+                   'preflight': 'all ELF segments, executable file-backed entry and reserved '
+                                'startup space checked before writes',
+                   'writes': 'zero bounded window and copy segments without spanning original '
+                             'PageOwner allocations',
+                   'invalidates_prior_image': 'before replacement file read and memory resource '
+                                              'changes',
+                   'loading_state': 'IHK publishes Loading while holding the OS operation mutex; '
+                                    'restores NotBooted after every result',
+                   'starts_cpus': False,
+                   'tracker_credit': False}}
 EXPECTED_OS_CALLBACK_TYPES = ('type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;', 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;')
 EXPECTED_OS_CALLBACK_HEADERS = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {', 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {')
 EXPECTED_OS_CALLBACK_BODIES = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
@@ -284,7 +313,9 @@ EXPECTED_OS_CALLBACK_BODIES = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
  '        Ok(owner) => owner,\n'
  '        Err(_) => return EINVAL.to_errno() as i64,\n'
  '    };\n'
- '    let result = if smp_cpu::handles_os(command) {\n'
+ '    let result = if command == 0x0011_2a00 {\n'
+ '        smp_loader::load(owner, argument as usize)\n'
+ '    } else if smp_cpu::handles_os(command) {\n'
  '        smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)\n'
  '    } else if smp_memory::handles_os(command) {\n'
  '        smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)\n'
@@ -1013,6 +1044,11 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     )
     _require_active_count(text, code, "mod smp_cpu;", 1, "Rust SMP Linux CPU adapter edge")
     _require_active_count(text, code, "mod smp_memory;", 1, "Rust SMP Linux memory adapter edge")
+    _require_active_count(text, code, "#[allow(dead_code)]\nmod ihk_mapping;", 1,
+                          "Rust SMP reused mapping geometry edge")
+    _require_active_count(text, code, "#[allow(dead_code)]\nmod smp_image;", 1,
+                          "Rust SMP checked image policy edge")
+    _require_active_count(text, code, "mod smp_loader;", 1, "Rust SMP bounded image file edge")
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",

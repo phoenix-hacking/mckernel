@@ -146,7 +146,7 @@ CURRENT_IMPLEMENTATION_OVERRIDES = {
     },
     EXPECTED_INPUT_DESCRIPTORS["response_checker"]["path"]: {
         "path": EXPECTED_INPUT_DESCRIPTORS["response_checker"]["path"],
-        "sha256": '83fd2e75b0195367552ac21821b3087cd16e7292a2cd114a7df1d6c1ec311fab',
+        "sha256": '3303ff5c1e96b6a87f1625c0dd05ccab6e9688c960e3ebb2a9256221613e3202',
         "size": 95089,
     },
 }

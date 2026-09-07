@@ -25,9 +25,9 @@ import tempfile
 import types
 from typing import Any
 
-EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'git_blob_sha1': '6ace8733e173d07bb97af00ca3985872ac3a05cb',
-                         'sha256': '99e07333d2dab7ef9e5595d7f59fce13dfa886b819bc1b3c747a5e7dcef01673',
-                         'size': 60482},
+EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'git_blob_sha1': '2033a4eaed221a8372f7e0cd8361667e6b527be2',
+                         'sha256': '3ed30140b20b02716457c4c600fedab6cd595d66bce8bd35428a9386d254bbae',
+                         'size': 60619},
  'kconfig_policy': {'git_blob_sha1': 'b6205a0ffa55fefc580f4742ef8b24b928b3fef4',
                     'sha256': '9ad866896a98cfa223978748dec998d8ede51b0a042dfee8776fe77080fd4ba8',
                     'size': 7506},
@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:ba48c7ad3ecd8ec6d3a8266e4def9d1677a17be2a5f6d87cae4ad10188342dd0"
+    "ISOLATED_SELF_DIGEST:02f07d028b61fb74ab2a3bcda5b8ea7d44afc88afa99021cbb76883b551d3fa2"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -722,15 +722,15 @@ EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
     "07bd7811fcecb936d1bba93e0f35e9eaa35c5b993d1f7c953fc65be9a6c86327"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
-    'f7ff19ddd72da2437a051275d615cb2f20df49cee75c936c2b1fb2b23989bfe4'
+    'a3c861d14c6c56b6eafb599cebc1cd4de594e084fdcba9416f3782924753a454'
 )
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {'Refuse the wrong runtime and install exact build tools': 'acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420',
  'Check out the exact candidate without credentials': '4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc',
- 'Verify source-only contracts without claiming readiness': '15d39a8bccc409869d2a54b244bc8e81fefbd257b16732d282c50180f16fb512',
+ 'Verify source-only contracts without claiming readiness': '2fd9a5b4a2458a41b50065b7edd944a9d886ddcf1d4c361fd575f6cd5f4caf2e',
  'Acquire, patch, and credit-forbidden-stage the exact source': '28b586e744c7c8af2bcf2ecb005428d71a89e5dac8a67234d703c11db9655fd6',
  'Resolve the evidence-only module configuration twice': 'e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943',
  'Compile the exact kernel and native Rust modules': '17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a',
- 'Validate built metadata and capture immutable diagnostics': '156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c',
+ 'Validate built metadata and capture immutable diagnostics': 'f97b2c0c1a62930bd3d5bed7120cbba0964d7c27c0adf4a39c77fa0e9d5f91bc',
  'Upload compiler evidence or first-failure diagnostics': 'f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9'}
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Initialize non-durable capture and install exact tools": "a89bfbe988001115dbbe5c71135fa75f9ac0a1fe453c98c423e28795f16071ca",
@@ -742,9 +742,9 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = 'ee98e6536a7d75907eb08c3eb2eaacddc4ee651d46a8263bf36b3e3999f7a5a5'
-EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '5ba3de6958586098532a51d0edb1c4804e43d07829683b18a3f7ff7ed9dd0dae',
-                    'size': 92382,
-                    'git_blob_sha1': 'da317a70de20ed96a51041c279502b62e34dae19'},
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': 'b918b14b38035e9d90f7acbb511db6a59a4b581d2ea2cb716413f3d9e549a9e1',
+                    'size': 93655,
+                    'git_blob_sha1': 'b4c18fa98a73c5c4a40f015a7505a71a466e2a2f'},
  'runtime_pr_workflow': {'git_blob_sha1': '64bb717852d36fc1021e2b61e83aca6415b184d5',
                          'sha256': '628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265',
                          'size': 754},

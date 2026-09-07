@@ -70,6 +70,7 @@ EXPECTED_STAGED_FILES = (
     "ihk-compat-build-id.bin",
     "ihk.rs",
     "ihk_ioctl.rs",
+    "ihk_mapping.rs",
     "ihk_smp_x86_64.rs",
     "ikc_master.rs",
     "ikc_queue.rs",
@@ -79,6 +80,8 @@ EXPECTED_STAGED_FILES = (
     "page_allocator.rs",
     "page_owner_registry.rs",
     "smp_cpu.rs",
+    "smp_image.rs",
+    "smp_loader.rs",
     "smp_memory.rs",
     "smp_resource.rs",
 )
@@ -118,7 +121,10 @@ _PROJECT_DEPENDENCIES = {
         "page_owner_registry.rs",
         "os_runtime.rs",
     ),
-    "ihk-smp-x86_64": ("smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs"),
+    "ihk-smp-x86_64": (
+        "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
+        "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs",
+    ),
     "mcctrl": (),
 }
 _GENERATED_METADATA_DEPENDENCIES = {

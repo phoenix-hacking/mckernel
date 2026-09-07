@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the bounded, unattached native Rust IHK mapping foundation.
+"""Validate the bounded native Rust IHK mapping foundation and geometry reuse.
 
 This checker cannot grant IHK-007 or tracker credit.  It binds the frozen IHK
 mapping sources, enforces allocation-free checked Rust semantics and the lack
-of production attachment, and optionally runs the exact Rocky Rust 1.92
+of an IHK user-mmap adapter, and optionally runs the exact Rocky Rust 1.92
 fixture plus its compile-fail ownership probe.
 """
 
@@ -149,13 +149,29 @@ EXPECTED_TESTS = [
 ]
 EXPECTED_UNPROVEN = [
     "Linux 6.12.0-211.44.1.el10_2 VMA, remap_pfn_range, vm_flags, pgprot, pinning, refcount, fork, split, mremap, and close adapters",
-    "attachment to ihk.rs, the authoritative Kbuild/staging surface, RS-011 unsafe ledger, lifecycle contracts, and validation workflows",
+    "IHK user-mmap adapter attachment to ihk.rs and its lifecycle/runtime validation; SMP image geometry reuse is declared separately",
     "device-specific map_memory, unmap_memory, map_virtual, and unmap_virtual calls and exact cache-policy translation",
     "rollback execution after partial remap or metadata-allocation failure and exact VMA teardown ordering",
-    "reserved-memory ownership lookup across multiple physical chunks and concurrent release exclusion",
-    "successful exact Rocky kernel compile, modpost, module load/unload, user mmap runtime, negative-path fault injection, and differential legacy parity",
+    "reserved-memory ownership lookup and concurrent release exclusion for Linux user VMAs; image-copy ownership does not establish VMA lifetime",
+    "successful exact Rocky kernel compile, modpost, module load/unload, user mmap runtime, negative-path fault injection, and differential legacy parity for the IHK-007 Linux mapping adapter",
     "IHK-007 completion, PASS status, or tracker credit",
 ]
+EXPECTED_ATTACHMENT = {
+    "ihk_crate_mod_edge": False,
+    "smp_crate_mod_edge": True,
+    "kernel_build_surface": True,
+    "native_stage_manifest": True,
+    "rs011_ledger": True,
+    "validation_workflows": True,
+}
+EXPECTED_REUSE_PATHS = [
+    "host-kernel/native-rust/ihk_smp_x86_64.rs",
+    "host-kernel/native-rust/smp_image.rs",
+]
+EXPECTED_REUSE_TYPES = [
+    "AlignedPhysicalRange", "MappingError", "PageGeometry", "PhysicalRange"
+]
+EVIDENCE_SCOPE = "IHK-007 Linux user-mmap adapter only; SMP image geometry reuse grants no mapping gate credit"
 
 
 class ValidationError(RuntimeError):
@@ -295,31 +311,59 @@ def validate_legacy(repo, legacy):
                 )
 
 
-def validate_unattached(repo, contract):
-    require_exact(
-        contract["attachment_status"],
-        {
-            "ihk_crate_mod_edge": False,
-            "kernel_build_surface": False,
-            "native_stage_manifest": False,
-            "rs011_ledger": False,
-            "validation_workflows": False,
-        },
-        "attachment status",
-    )
+def validate_attachment(repo, contract):
+    require_exact(contract["attachment_status"], EXPECTED_ATTACHMENT, "attachment status")
+    reuse = contract["geometry_reuse"]
+    require_keys(reuse, {"purpose", "types", "sources"}, "geometry reuse")
+    require_exact(reuse["purpose"], "checked physical image placement in the SMP crate; no Linux VMA mapping", "geometry purpose")
+    require_exact(reuse["types"], EXPECTED_REUSE_TYPES, "geometry types")
+    require_exact([row.get("path") for row in reuse["sources"]], EXPECTED_REUSE_PATHS, "geometry source paths")
+    texts = []
+    for row in reuse["sources"]:
+        require_keys(row, {"path", "sha256", "size"}, "geometry source")
+        path = repo_file(repo, row["path"], "geometry source")
+        size, digest = sha256_file(path)
+        require_exact(size, row["size"], "geometry source size")
+        require_exact(digest, row["sha256"], "geometry source digest")
+        texts.append(read_text(path, "geometry source"))
+    require_exact(len(re.findall(r"^mod ihk_mapping;$", texts[0], re.M)), 1, "SMP mapping module edge")
+    require_exact(len(re.findall(r"^mod smp_image;$", texts[0], re.M)), 1, "SMP image module edge")
+    expected_import = "use super::ihk_mapping::{" + ", ".join(EXPECTED_REUSE_TYPES) + "};"
+    require_exact(texts[1].count(expected_import), 1, "image geometry import")
+    require_exact(texts[1].count("ihk_mapping"), 1, "image mapping reference count")
+
+    manifest_path = "host-kernel/kbuild/stage-manifest.json"
+    manifest = read_json(repo_file(repo, manifest_path, "stage manifest"), "stage manifest")
+    rows = [row for row in manifest["inputs"]
+            if row.get("repository_path") == EXPECTED_SOURCE or row.get("destination") == "ihk_mapping.rs"]
+    require_exact(rows, [{"destination": "ihk_mapping.rs", "kind": "rust_support_module",
+                          "repository_path": EXPECTED_SOURCE,
+                          "sha256": contract["production_source"]["sha256"]}], "mapping stage binding")
+    ledger_path = "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json"
+    ledger = read_json(repo_file(repo, ledger_path, "RS-011 ledger"), "RS-011 ledger")
+    rows = [row for row in ledger["source_inputs"] if row.get("path") == EXPECTED_SOURCE]
+    require_exact(rows, [{"bytes": contract["production_source"]["size"],
+                          "crate_roots": ["ihk_smp_x86_64"], "path": EXPECTED_SOURCE,
+                          "sha256": contract["production_source"]["sha256"]}], "mapping ledger binding")
+    kbuild = read_text(repo_file(repo, "host-kernel/kbuild/Kbuild.in", "Kbuild"), "Kbuild")
+    require_exact(kbuild.count("ihk-smp-x86_64-y := ihk_smp_x86_64.o"), 1, "SMP Kbuild edge")
+    workflow_path = ".github/workflows/native-rust-host-modules-exact-build.yml"
+    workflow = read_text(repo_file(repo, workflow_path, "native workflow"), "native workflow")
+    for marker in ("host-kernel/native-rust/**", "scripts/rocky_rust_staging.py --repo", "scripts/native_rust_unsafe_ffi_ledger.py --repo"):
+        if marker not in workflow:
+            raise ValidationError("geometry build workflow lacks {0}".format(marker))
+
     forbidden_surfaces = [
         "host-kernel/native-rust/ihk.rs",
         "host-kernel/kbuild/Kbuild.in",
-        "host-kernel/kbuild/stage-manifest.json",
-        "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
         ".github/workflows/native-rust-host-modules-exact-build.yml",
         ".github/workflows/rocky-kernel-source-evidence.yml",
     ]
     for relative in forbidden_surfaces:
         text = read_text(repo_file(repo, relative, "attachment surface"), "attachment surface")
-        if "ihk_mapping" in text or EXPECTED_SOURCE in text:
+        if re.search(r"\bihk_mapping(?:\.rs)?\b", text) or EXPECTED_SOURCE in text:
             raise ValidationError(
-                "unattached mapping foundation appears on production surface {0}".format(
+                "mapping foundation has an undeclared direct production surface {0}".format(
                     relative
                 )
             )
@@ -432,7 +476,9 @@ def validate_contract(repo):
             "checker",
             "compile_fixture",
             "evidence_policy",
+            "evidence_policy_scope",
             "foundation_status",
+            "geometry_reuse",
             "gate_id",
             "legacy_oracle",
             "must_use_probe",
@@ -447,9 +493,10 @@ def validate_contract(repo):
     require_exact(contract["gate_id"], "IHK-007", "contract gate")
     require_exact(
         contract["foundation_status"],
-        "unattached-allocation-free-mapping-validation-core",
+        "allocation-free-mapping-core-with-smp-image-geometry-reuse",
         "foundation status",
     )
+    require_exact(contract["evidence_policy_scope"], EVIDENCE_SCOPE, "evidence policy scope")
     require_exact(
         contract["evidence_policy"],
         {
@@ -483,7 +530,7 @@ def validate_contract(repo):
     validate_legacy(repo, contract["legacy_oracle"])
     validate_checker(repo, contract["checker"])
     validate_source(repo, contract["production_source"])
-    validate_unattached(repo, contract)
+    validate_attachment(repo, contract)
     fixture = contract["compile_fixture"]
     require_keys(
         fixture,
@@ -654,7 +701,7 @@ def main(argv=None):
         print("IHK-007 mapping foundation error: {0}".format(error), file=sys.stderr)
         return 1
     print(
-        "SOURCE-CONTRACT-VERIFIED fixture={0} attachment=ABSENT "
+        "SOURCE-CONTRACT-VERIFIED fixture={0} geometry_reuse=SMP_IMAGE user_mmap_adapter=ABSENT "
         "kernel_build=NOT_PROVEN runtime=NOT_PROVEN cleanup=NOT_PROVEN "
         "gate_credit=FORBIDDEN".format(result["fixture_status"])
     )
