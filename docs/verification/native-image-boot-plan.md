@@ -11,8 +11,10 @@ now passes a four-vCPU/two-NUMA guest with both ABIs and two module cycles.
 All 24 physical image readbacks match the independent ELF model, alongside
 the existing CPU, memory and OS resource regressions. The retained native
 build matches the current source bytes. Declared staging, lifecycle/FFI and
-downstream verification integration remain next, followed by an exact-stage
-rebuild and replay before AP startup. No native McKernel boot is claimed.
+downstream verification integration now pass, followed by a fresh declared-stage
+build and guest replay; see `native-image-exact-stage-checkpoint-20260907.json`.
+The full repository suite comes next, then AP startup. No native McKernel boot
+is claimed.
 
 First application checks require a repeatable native boot, working IKC channels,
 and the native mcctrl process-launch/syscall path. The first program should
@@ -39,10 +41,10 @@ owner must remain tied to the exact generation and be retired before minor
 reuse. Do not create a second CPU or memory ownership map.
 
 The existing allocation-free `host-kernel/native-rust/ihk_mapping.rs` provides
-checked geometry, address/range descriptors and cleanup obligations. It remains
-outside the native staged graph until its actual adapter is connected and
-validated. Use it where its mapping semantics fit; its presence is not evidence
-that Linux mappings are implemented.
+checked geometry, address/range descriptors and cleanup obligations. Its physical
+range and page geometry are now reused by the staged SMP image loader. The
+IHK-007 Linux user-VMA mapping adapter remains absent; image geometry reuse
+does not establish its mapping, pinning or cleanup behavior.
 
 The pinned IHK reference at `3114d9e7101ad52030eb3effa849a5c108972a1f` has no Rust
 source. `ihk/linux/driver/smp/smp-driver.c::smp_ihk_os_load_file` describes the

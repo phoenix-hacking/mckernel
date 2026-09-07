@@ -176,6 +176,17 @@ record for the precise scope and retained failures. Next run the fresh
 declared-stage build, guest and full suite. This WIP does
 not supersede the separate successful prototype guest or grant production credit.
 
+The subsequent declared image stage now builds the debug kernel and all three
+modules, passes link closure and ELF/no-SIMD checks, and passes both guest ABIs
+over two four-vCPU/two-NUMA module cycles with all 24 physical image readbacks.
+See `docs/verification/native-image-exact-stage-checkpoint-20260907.json`.
+A capture-only mutable-log input issue was preserved and corrected in a second
+passing guest with an explicit immutable input list and completion-time hashes.
+The Rust inventory has 135 files: 116 unchanged, 13 modified, six added and none
+removed from the baseline; all 64 core files and 18 native files retain their
+declared consumers. Next run the full repository suite, then native AP startup,
+IKC and workloads. Native McKernel boot and production acceptance remain open.
+
 This repository is migrating McKernel from the traditional CentOS-based
 deployment to an exact Rocky Linux 10.2-derived production control-plane kernel
 while porting McKernel-owned implementation logic from C to Rust. The frozen

@@ -575,3 +575,28 @@ and downstream verification integration remain next, followed by fresh
 declared-stage build/guest/full-suite checks. Native McKernel AP startup, IKC,
 native mcctrl workloads and final Rust/assembly completion remain pending.
 No production score changes.
+
+### 2026-09-07 — declared image loader stage and guest
+
+The image loader is now declared in staging, lifecycle, source/link closure,
+unsafe/FFI and current workflow/license records. The focused downstream groups
+pass after the retained source-list and identity-binding fixes. The unsafe/FFI
+queue preserves all previous IDs across 154 sites and 18 source files;
+independent review remains pending.
+
+A fresh declared stage at source parent `aced6376` builds the debug Linux kernel
+and all three modules. The actual Rust compiler invocations, module linking,
+source/stage hashes, Kbuild closure and ELF/no-SIMD checks pass. Both guest ABIs
+pass two four-vCPU/two-NUMA module cycles, with all 24 physical image readbacks
+matching `49c17dc1da40fddd`, alongside CPU, memory and OS resource regressions.
+The first guest also passed, but its generic recipe listed an incidental changing
+orchestration log as an input. The second capture selects immutable build inputs
+and verifies their hashes again at completion; both captures are retained.
+
+See `native-image-exact-stage-checkpoint-20260907.json` for compiler and guest
+artifacts, and `rust-consumers-image-20260907.json` for all 135 Rust source files.
+All 64 core crate files and 18 native staged files retain their consumers; no
+baseline Rust source was removed. The full repository suite remains next, then
+AP startup, IKC and native mcctrl/application work. Loading the image still does
+not boot McKernel or establish final Rust/assembly-only completion. No production
+gate or score is promoted.
