@@ -21,7 +21,8 @@ use kernel::{
 };
 
 use super::smp_resource::{
-    CpuChange, CpuEffectCause, CpuState, CpuTable, HostCpuHotplug, HostCpuSnapshot, SMP_MAX_CPUS,
+    CpuChange, CpuEffectCause, CpuState, CpuTable, HostCpuHotplug, HostCpuSnapshot, OsToken,
+    SMP_MAX_CPUS,
 };
 
 #[allow(dead_code, unreachable_pub)]
@@ -236,7 +237,7 @@ impl CpuContext {
             let slot = self.table.slot(cpu).map_err(|_| EIO)?;
             match slot.state() {
                 CpuState::Online | CpuState::Absent => continue,
-                CpuState::Available => {
+                CpuState::Available | CpuState::Assigned => {
                     let expected = HostCpuSnapshot {
                         hardware_id: slot.hardware_id(),
                         numa_node: slot.numa_node(),
@@ -341,6 +342,64 @@ impl CpuContext {
             if self.table.slot(cpu).map_err(|_| EIO)?.state() == CpuState::Available {
                 writer.write(&(cpu as i32))?;
             }
+        }
+        UserSlice::new(request.count_address, 4)
+            .writer()
+            .write(&(count as i32))?;
+        Ok(0)
+    }
+
+    fn change_os(&mut self, owner: OsToken, request: &CpuRequest, assign: bool) -> Result<isize> {
+        if request.count == 0 {
+            return Ok(0);
+        }
+        // Preserve input order: it defines the McKernel logical CPU rank.
+        // The shared policy rejects duplicates and checks the whole request.
+        let mut reader = UserSlice::new(request.array, request.count * 4).reader();
+        for index in 0..request.count {
+            let cpu = reader.read::<i32>()?;
+            if cpu <= 0 || cpu as usize >= SMP_MAX_CPUS {
+                return Err(EINVAL);
+            }
+            self.requests[index] = cpu as usize;
+        }
+        let hotplug = DeviceHotplugGuard::lock();
+        self.verify_owned(&hotplug)?;
+        drop(hotplug);
+        let mut transaction = if assign {
+            self.table
+                .prepare_assign(owner, &self.requests[..request.count], &mut self.journal)
+        } else {
+            self.table
+                .prepare_release(owner, &self.requests[..request.count], &mut self.journal)
+        }
+        .map_err(|_| EINVAL)?;
+        // These are initial-state ownership transfers; Linux CPUs remain
+        // offline, retained by their existing device owners and CPUHP veto.
+        transaction.begin_external_effects().map_err(|_| EIO)?;
+        transaction
+            .commit()
+            .unwrap_or_else(|_| panic!("OS CPU publication invariant violated"));
+        Ok(0)
+    }
+
+    fn query_os(&mut self, owner: OsToken, request: Option<&CpuRequest>) -> Result<isize> {
+        let hotplug = DeviceHotplugGuard::lock();
+        self.verify_owned(&hotplug)?;
+        drop(hotplug);
+        let count = self
+            .table
+            .assigned_cpus(owner, &mut self.requests)
+            .map_err(|_| EIO)?;
+        let Some(request) = request else {
+            return Ok(count as isize);
+        };
+        if request.count != count {
+            return Err(EINVAL);
+        }
+        let mut writer = UserSlice::new(request.array, count * 4).writer();
+        for &cpu in &self.requests[..count] {
+            writer.write(&(cpu as i32))?;
         }
         UserSlice::new(request.count_address, 4)
             .writer()
@@ -569,4 +628,85 @@ pub(super) fn ioctl(command: u32, argument: usize, compat: bool) -> Result<isize
         abi::IHK_DEVICE_QUERY_CPU => context.query(&request),
         _ => Err(EINVAL),
     }
+}
+
+pub(super) fn handles_os(command: u32) -> bool {
+    matches!(
+        command,
+        abi::IHK_OS_ASSIGN_CPU
+            | abi::IHK_OS_RELEASE_CPU
+            | abi::IHK_OS_QUERY_CPU
+            | abi::IHK_OS_GET_NUM_CPUS
+    )
+}
+
+/// Called only while IHK's OS object pins SMP and holds the operation lock.
+pub(super) fn os_ioctl(
+    owner: OsToken,
+    command: u32,
+    argument: usize,
+    compat: bool,
+) -> Result<isize> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: The OS object's ProviderModule keeps the controller resident
+    // throughout this checked callback; no context borrow escapes its lock.
+    let mut context = unsafe { &*published }.lock();
+    if command == abi::IHK_OS_GET_NUM_CPUS {
+        return context.query_os(owner, None);
+    }
+    let request = CpuRequest::read(argument, compat)?;
+    match command {
+        abi::IHK_OS_ASSIGN_CPU => context.change_os(owner, &request, true),
+        abi::IHK_OS_RELEASE_CPU => context.change_os(owner, &request, false),
+        abi::IHK_OS_QUERY_CPU => context.query_os(owner, Some(&request)),
+        _ => Err(EINVAL),
+    }
+}
+
+/// Release both resource classes before the exclusive OS destruction returns.
+/// CPU lock precedes memory lock; both preflights finish before either commit.
+pub(super) fn release_os_resources(owner: OsToken) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: IHK's DestroyGuard and ProviderModule pin this callback and its
+    // controller until both classes have been returned to the reserved pool.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    context.verify_owned(&hotplug)?;
+    drop(hotplug);
+    let count = context
+        .table
+        .assigned_cpus(owner, &mut context.requests)
+        .map_err(|_| EIO)?;
+    if count == 0 {
+        return super::smp_memory::release_os_resources(owner, || {});
+    }
+    let mut transaction = context
+        .table
+        .prepare_release(owner, &context.requests[..count], &mut context.journal)
+        .map_err(|_| EIO)?;
+    transaction.begin_external_effects().map_err(|_| EIO)?;
+    // Memory calls commit_cpu only after its complete preflight, while both
+    // context locks remain held. No fallible operation follows that callback.
+    let mut cpu_transaction = Some(transaction);
+    let result = super::smp_memory::release_os_resources(owner, || {
+        cpu_transaction
+            .take()
+            .unwrap()
+            .commit()
+            .unwrap_or_else(|_| panic!("OS CPU cleanup invariant violated"));
+    });
+    if let Some(transaction) = cpu_transaction {
+        // Memory preparation failed before any ownership changed. CPU's
+        // external phase consisted only of logical preflight, so compensation
+        // requires no Linux hotplug operation and restores the original table.
+        transaction.compensated_rollback().map_err(|_| EIO)?;
+    }
+    result
 }

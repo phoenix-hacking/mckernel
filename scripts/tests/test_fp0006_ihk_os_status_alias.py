@@ -34,6 +34,21 @@ EXPECTED_NORMALIZED_SELF_SHA256 = '08582dab26fb759ede67a0bdd4cc44487ff47cfd036a6
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
+from scripts.tests.frozen_fp0006_authority import materialize
+
+
+def setUpModule():
+    global ROOT, C_PRODUCER, RUST_PRODUCER, _AUTHORITY_DIRECTORY
+    source_root = ROOT
+    _AUTHORITY_DIRECTORY = tempfile.TemporaryDirectory(prefix="fp0006-status-frozen-")
+    ROOT = materialize(source_root, Path(_AUTHORITY_DIRECTORY.name) / "repo",
+                       "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json")
+    C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
+    RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
+
+
+def tearDownModule():
+    _AUTHORITY_DIRECTORY.cleanup()
 
 
 def canonical(value):

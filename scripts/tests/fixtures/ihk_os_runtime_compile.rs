@@ -41,7 +41,27 @@ impl<T> TestBox<T> {
     }
     pub fn into_raw(value: Self) -> *mut T { std::boxed::Box::into_raw(value.0) }
     pub unsafe fn from_raw(value: *mut T) -> Self { Self(unsafe { std::boxed::Box::from_raw(value) }) }
+    pub fn pin_init(value: T, flags: u32) -> Result<core::pin::Pin<Self>> where T: Unpin {
+        if FAIL_PIN.swap(false, Ordering::SeqCst) { return Err(ENOMEM); }
+        Ok(core::pin::Pin::new(Self::new(value, flags)?))
+    }
 }
+impl<T> core::ops::Deref for TestBox<T> {
+    type Target = T;
+    fn deref(&self) -> &T { &self.0 }
+}
+impl<T> core::ops::DerefMut for TestBox<T> {
+    fn deref_mut(&mut self) -> &mut T { &mut self.0 }
+}
+pub mod sync {
+    pub struct Mutex<T>(std::sync::Mutex<T>);
+    impl<T> Mutex<T> {
+        pub const fn new(value: T) -> Self { Self(std::sync::Mutex::new(value)) }
+        pub fn lock(&self) -> std::sync::MutexGuard<'_, T> { self.0.lock().unwrap() }
+    }
+    pub use crate::new_mutex;
+}
+#[macro_export] macro_rules! new_mutex { ($value:expr) => { $crate::sync::Mutex::new($value) }; }
 
 pub mod bindings {
     // CONFIG_LOCKDEP=n produces this empty C type in the exact Rocky bindings.
@@ -86,6 +106,7 @@ static FAIL_MODULE: AtomicBool = AtomicBool::new(false);
 static FAIL_PAGES: AtomicBool = AtomicBool::new(false);
 static FAIL_NODE: AtomicBool = AtomicBool::new(false);
 static FAIL_BOX: AtomicBool = AtomicBool::new(false);
+static FAIL_PIN: AtomicBool = AtomicBool::new(false);
 static MODULE_REFS: AtomicI32 = AtomicI32::new(0);
 static NODES: Mutex<BTreeMap<u32, u32>> = Mutex::new(BTreeMap::new());
 static PAGES: Mutex<BTreeMap<usize, usize>> = Mutex::new(BTreeMap::new());
@@ -346,4 +367,187 @@ fn chrdev_failure_never_creates_class_or_publishes_family() {
     assert!(FOPS.load(Ordering::SeqCst).is_null());
     assert_eq!(CLASSES.load(Ordering::SeqCst), 0);
     assert_eq!(create(0), -19);
+}
+
+static BACKEND_CALLS: Mutex<Vec<(u32, u64, u32, u64, u32)>> = Mutex::new(Vec::new());
+static BACKEND_RELEASES: Mutex<Vec<(u32, u64)>> = Mutex::new(Vec::new());
+static BACKEND_RELEASE_STATUS: AtomicI32 = AtomicI32::new(0);
+static BACKEND_ACTIVE: [AtomicI32; 64] = [const { AtomicI32::new(0) }; 64];
+
+unsafe extern "C" fn backend_ioctl(slot: u32, generation: u64, command: u32,
+    address: u64, compat: u32) -> i64
+{
+    assert!(slot < 64 && generation > 0 && compat <= 1);
+    assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
+    assert!(NODES.lock().unwrap().contains_key(&((240 << 20) | slot)));
+    assert_eq!(BACKEND_ACTIVE[slot as usize].fetch_add(1, Ordering::SeqCst), 0);
+    std::thread::sleep(std::time::Duration::from_millis(2));
+    BACKEND_CALLS.lock().unwrap().push((slot, generation, command, address, compat));
+    assert_eq!(BACKEND_ACTIVE[slot as usize].fetch_sub(1, Ordering::SeqCst), 1);
+    if command == 0x112a25 { -14 } else if command == u32::MAX { -4096 } else { 73 }
+}
+
+unsafe extern "C" fn backend_release(slot: u32, generation: u64) -> i32 {
+    assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
+    assert!(NODES.lock().unwrap().contains_key(&((240 << 20) | slot)));
+    assert!(!PAGES.lock().unwrap().is_empty());
+    assert_eq!(BACKEND_ACTIVE[slot as usize].load(Ordering::SeqCst), 0);
+    BACKEND_RELEASES.lock().unwrap().push((slot, generation));
+    BACKEND_RELEASE_STATUS.load(Ordering::SeqCst)
+}
+
+fn create_backend() -> i64 {
+    unsafe {
+        os_runtime::ihk_os_create_unbooted_v2(0, THIS_MODULE.as_ptr().cast(),
+            u64::MAX, 1, Some(backend_ioctl), Some(backend_release))
+    }
+}
+
+fn reset_backend() {
+    BACKEND_CALLS.lock().unwrap().clear();
+    BACKEND_RELEASES.lock().unwrap().clear();
+    BACKEND_RELEASE_STATUS.store(0, Ordering::SeqCst);
+}
+
+#[test]
+fn versioned_backend_validates_callbacks_before_any_publication() {
+    with_family(|| {
+        reset_backend();
+        for (version, ioctl, release) in [
+            (0, true, true), (2, true, true), (1, false, true),
+            (1, true, false), (1, false, false),
+        ] {
+            assert_eq!(unsafe {
+                os_runtime::ihk_os_create_unbooted_v2(0, THIS_MODULE.as_ptr().cast(),
+                    0, version, if ioctl { Some(backend_ioctl) } else { None },
+                    if release { Some(backend_release) } else { None })
+            }, -22);
+            assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
+            assert!(NODES.lock().unwrap().is_empty());
+            assert!(PAGES.lock().unwrap().is_empty());
+        }
+        for failure in [&FAIL_PIN, &FAIL_PAGES, &FAIL_BOX, &FAIL_NODE] {
+            failure.store(true, Ordering::SeqCst);
+            assert_eq!(create_backend(), -12);
+            assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
+            assert!(NODES.lock().unwrap().is_empty());
+            assert!(PAGES.lock().unwrap().is_empty());
+            assert!(BACKEND_RELEASES.lock().unwrap().is_empty());
+        }
+        assert_eq!(create_backend(), 0);
+        assert_eq!(destroy(0), 0);
+        assert_eq!(BACKEND_RELEASES.lock().unwrap().len(), 1);
+    });
+}
+
+#[test]
+fn backend_uses_checked_generation_and_exact_native_compat_arguments() {
+    with_family(|| {
+        reset_backend();
+        assert_eq!(create_backend(), 0);
+        let mut file = open(0).unwrap();
+        for compat in [false, true] {
+            assert_eq!(status(&mut file, compat, 0x112a03), 0);
+            assert_eq!(status(&mut file, compat, 0x112a14), 0);
+        }
+        assert!(BACKEND_CALLS.lock().unwrap().is_empty());
+        assert_eq!(status(&mut file, false, 0x112a22), 73);
+        assert_eq!(status(&mut file, true, 0x112a24), 73);
+        assert_eq!(status(&mut file, false, 0x112a25), -14);
+        assert_eq!(status(&mut file, false, u32::MAX), -5);
+        let calls = BACKEND_CALLS.lock().unwrap().clone();
+        assert_eq!(calls.len(), 4);
+        let generation = calls[0].1;
+        assert_eq!(calls[0], (0, generation, 0x112a22, u64::MAX, 0));
+        assert_eq!(calls[1], (0, generation, 0x112a24, u32::MAX as u64, 1));
+        assert_eq!(destroy(0), -16);
+        assert!(BACKEND_RELEASES.lock().unwrap().is_empty());
+        close(file);
+        assert_eq!(destroy(0), 0);
+        assert_eq!(*BACKEND_RELEASES.lock().unwrap(), [(0, generation)]);
+    });
+}
+
+#[test]
+fn backend_cleanup_failure_keeps_instance_and_all_owners_live() {
+    with_family(|| {
+        reset_backend();
+        assert_eq!(create_backend(), 0);
+        for result in [-16, 1, -5] {
+            BACKEND_RELEASE_STATUS.store(result, Ordering::SeqCst);
+            assert_eq!(destroy(0), if result < 0 { result as i64 } else { -5 });
+            assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 1);
+            assert_eq!(NODES.lock().unwrap().len(), 1);
+            assert_eq!(PAGES.lock().unwrap().len(), 1);
+            let mut file = open(0).unwrap();
+            assert_eq!(status(&mut file, false, 0x112a22), 73);
+            close(file);
+        }
+        let calls = BACKEND_CALLS.lock().unwrap().clone();
+        assert!(calls.iter().all(|call| call.1 == calls[0].1));
+        BACKEND_RELEASE_STATUS.store(0, Ordering::SeqCst);
+        assert_eq!(destroy(0), 0);
+        let releases = BACKEND_RELEASES.lock().unwrap().clone();
+        assert_eq!(releases.len(), 4);
+        assert!(releases.iter().all(|release| *release == (0, calls[0].1)));
+    });
+}
+
+#[test]
+fn backend_minor_reuse_always_receives_new_generation() {
+    with_family(|| {
+        reset_backend();
+        for _ in 0..3 {
+            assert_eq!(create_backend(), 0);
+            let mut file = open(0).unwrap();
+            assert_eq!(status(&mut file, false, 0x112a22), 73);
+            close(file);
+            assert_eq!(destroy(0), 0);
+        }
+        let calls = BACKEND_CALLS.lock().unwrap().clone();
+        let releases = BACKEND_RELEASES.lock().unwrap().clone();
+        for index in 0..3 {
+            assert_eq!(releases[index], (0, calls[index].1));
+            if index > 0 { assert!(calls[index].1 > calls[index - 1].1); }
+        }
+    });
+}
+
+#[test]
+fn backend_serializes_operations_across_concurrent_open_files() {
+    with_family(|| {
+        reset_backend();
+        assert_eq!(create_backend(), 0);
+        let threads: Vec<_> = (0..8).map(|_| std::thread::spawn(|| {
+            let mut file = open(0).unwrap();
+            for _ in 0..4 { assert_eq!(status(&mut file, false, 0x112a22), 73); }
+            close(file);
+        })).collect();
+        for thread in threads { thread.join().unwrap(); }
+        assert_eq!(BACKEND_CALLS.lock().unwrap().len(), 32);
+        assert_eq!(destroy(0), 0);
+        assert_eq!(BACKEND_RELEASES.lock().unwrap().len(), 1);
+    });
+}
+
+#[test]
+fn exclusive_unbooted_cleanup_guard_rejects_loading_and_preserves_instance() {
+    let registry = os_registry::OsRegistry::new();
+    let dispatcher = ihk_ioctl::IhkIoctlDispatcher::new(&registry);
+    let create = dispatcher.prepare_device(0x112900, 0).unwrap();
+    assert_eq!(create.require_unbooted_destroy(), Err(ihk_ioctl::IoctlError::InvalidArgument));
+    let handle = create.handle();
+    create.commit_after_external_success().unwrap();
+    registry.transition(handle, os_registry::OsStatus::Loading).unwrap();
+    {
+        let destroy = dispatcher.prepare_device(0x112901, handle.minor() as u64).unwrap();
+        assert_eq!(destroy.require_unbooted_destroy(), Err(ihk_ioctl::IoctlError::Busy));
+        assert_eq!(registry.acquire(handle).err(), Some(os_registry::RegistryError::Busy));
+    }
+    assert_eq!(registry.snapshot(handle).unwrap().status, os_registry::OsStatus::Loading);
+    registry.transition(handle, os_registry::OsStatus::NotBooted).unwrap();
+    let destroy = dispatcher.prepare_device(0x112901, handle.minor() as u64).unwrap();
+    destroy.require_unbooted_destroy().unwrap();
+    destroy.commit_after_external_success().unwrap();
+    assert_eq!(registry.live_count(), 0);
 }

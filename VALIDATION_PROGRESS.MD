@@ -50,9 +50,30 @@ The [final memory validation](docs/verification/native-memory-final-validation-2
 now covers the current runtime/license bindings and the full repository suite:
 2,301 tests in 333.823 seconds, 2,230 passed and 71 skipped. Native McKernel boot
 and production gate acceptance are not claimed. OS resource assignment through
-the existing checked leases is the next functional deliverable.
+the existing checked leases was the next functional deliverable at that checkpoint.
 
-**Current completion: 100% (10/10)**
+The subsequent [OS resource prototype](docs/verification/native-os-resource-checkpoint-20260907.json)
+now passes assignment/query/release and coupled destruction in the isolated
+four-vCPU/two-NUMA guest. The expanded run covers both ABIs across two module
+cycles, ordered CPU assignment, cross-instance rejection, page-sized memory
+ownership, atomic late errors, ALL/empty requests, concurrency and minor reuse.
+All previous CPU/memory regressions pass and CPUs/modules are restored. The
+prototype modules compile against Linux 6.12; ELF64 and no-SIMD/x87 checks pass.
+Its source-bound tests include 51 policy cases (65,536 independent page-model
+comparisons) and 47 complete IHK adapter mock cases. Current staging/lifecycle/FFI
+and verification identities still require integration and a fresh exact-stage
+build, guest and repository suite. Native McKernel image loading, boot, IKC,
+workloads, remaining Rust/assembly completion and production acceptance remain open.
+
+The [final OS resource integration](docs/verification/native-os-resource-final-validation-20260907.json)
+now passes the declared-stage kernel/module build, link closure and both
+isolated guest cycles. Its full repository suite ran 2,305 tests in 354.989 seconds: 2,234 passed and 71 skipped.
+The [current source inventory](docs/verification/rust-consumers-os-resource-20260907.json)
+preserves every baseline Rust file and all 64 McKernel crate consumers.
+The [next boot/application milestones](docs/verification/native-image-boot-plan.md)
+remain unproven; no boot, production or all-Rust completion credit follows.
+
+**Historical Rocky 8.10 smoke completion: 100% (10/10)**
 
 This percentage is evidence-gated. Runtime code checkpoint
 `3a5767b395f932cbe41f717f3c720512009490ff` passed the complete plan in

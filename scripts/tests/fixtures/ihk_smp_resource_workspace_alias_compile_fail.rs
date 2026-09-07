@@ -5,7 +5,7 @@ mod smp_resource;
 
 #[cfg(os_token_forge)]
 fn forge_os_token() -> smp_resource::OsToken {
-    // Production code cannot mint an OS lease without the future provider ABI.
+    // Direct field construction cannot bypass the versioned IHK lease proof.
     smp_resource::OsToken {
         slot: 0,
         generation: 1,
@@ -25,5 +25,12 @@ fn main() {
     let _ = memory.prepare_insert_free(0x1000, 0x1000, 0, &mut memory);
 }
 
-#[cfg(not(any(os_token_forge, workspace_alias)))]
+#[cfg(lease_without_proof)]
+fn main() {
+    // Bounds alone cannot justify a live OS generation. This call requires
+    // the explicit contract of IHK's checked, module-pinned callback.
+    let _ = smp_resource::OsToken::from_ihk_lease_v2(0, 1);
+}
+
+#[cfg(not(any(os_token_forge, workspace_alias, lease_without_proof)))]
 fn main() {}

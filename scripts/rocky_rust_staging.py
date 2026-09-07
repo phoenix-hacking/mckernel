@@ -89,7 +89,7 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'os_registry.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_registry.rs',
-  'sha256': '29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d'},
+  'sha256': '9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9'},
  {'destination': 'device_registry.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/device_registry.rs',
@@ -101,7 +101,7 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'ihk_ioctl.rs',
   'kind': 'rust_ioctl_dispatch',
   'repository_path': 'host-kernel/native-rust/ihk_ioctl.rs',
-  'sha256': 'bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958'},
+  'sha256': '60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e'},
  {'destination': 'page_allocator.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/page_allocator.rs',
@@ -113,19 +113,19 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'smp_resource.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_resource.rs',
-  'sha256': '7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd'},
+  'sha256': 'd8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3'},
  {'destination': 'smp_cpu.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97'},
+  'sha256': 'b7b75d7beae39c8cfb98117b9f03d80d51d796024c1a10909920b022d7cce1c1'},
  {'destination': 'smp_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95'},
+  'sha256': '979e587bb7fe783caf2e455b6b50683fd74908861c1e70657b1b77b7a01bda0a'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
-  'sha256': '624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a'})
+  'sha256': '135d68740e79e2f3e5d7b218f201926678731e1b8c7406b5284ebde530f1bf75'})
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -202,7 +202,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': 'a97292392134d6a1634f3bdf5ccca3c16380c11a6412982fd84da2741658d8e6'},
+  'source_sha256': '7071edb8abaf441bd8d6a4337bee81a69f3eb0547a8155995948f0b6130a3622'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -312,7 +312,40 @@ AUDITED_SMP_EXIT_CALLBACK_TYPE = (
     '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
     'type IhkSmpProviderExitV2 = extern "C" fn();'
 )
-AUDITED_SMP_PROVIDER_EXTERN = 'extern "C" {\n    #[link_name = "ihk_provider_lifecycle_v1"]\n    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n    #[link_name = "ihk_smp_provider_attach_v2"]\n    fn ihk_smp_provider_attach_v2(\n        callback_abi: u32,\n        flags: u32,\n        init: Option<IhkSmpProviderInitV2>,\n        exit: Option<IhkSmpProviderExitV2>,\n    ) -> i64;\n    #[link_name = "ihk_smp_provider_detach_v2"]\n    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n    #[link_name = "ihk_smp_provider_open_v1"]\n    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n    #[link_name = "ihk_smp_provider_close_v1"]\n    fn ihk_smp_provider_close_v1(receipt: i64);\n    #[link_name = "ihk_os_create_unbooted_v1"]\n    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n        owner: *mut core::ffi::c_void, argument: u64) -> i64;\n    #[link_name = "ihk_os_destroy_unbooted_v1"]\n    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n}'
+AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
+ '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+ '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
+ '    #[link_name = "ihk_smp_provider_attach_v2"]\n'
+ '    fn ihk_smp_provider_attach_v2(\n'
+ '        callback_abi: u32,\n'
+ '        flags: u32,\n'
+ '        init: Option<IhkSmpProviderInitV2>,\n'
+ '        exit: Option<IhkSmpProviderExitV2>,\n'
+ '    ) -> i64;\n'
+ '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
+ '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
+ '    #[link_name = "ihk_smp_provider_open_v1"]\n'
+ '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
+ '    #[link_name = "ihk_smp_provider_close_v1"]\n'
+ '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
+ '    #[link_name = "ihk_os_create_unbooted_v2"]\n'
+ '    fn ihk_os_create_unbooted_v2(\n'
+ '        provider_minor: u32,\n'
+ '        owner: *mut core::ffi::c_void,\n'
+ '        argument: u64,\n'
+ '        callback_abi: u32,\n'
+ '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
+ '        release: Option<IhkSmpOsReleaseV2>,\n'
+ '    ) -> i64;\n'
+ '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+ '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
+ '}')
+AUDITED_SMP_OS_IOCTL_TYPE = 'type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;'
+AUDITED_SMP_OS_RELEASE_TYPE = 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'
+AUDITED_SMP_OS_IOCTL_EXTERN = 'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {'
+AUDITED_SMP_OS_RELEASE_EXTERN = 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'
+AUDITED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
+
 AUDITED_SMP_INIT_CALLBACK_EXTERN = (
     '// SAFETY: The callback owns no foreign state and returns only a literal errno\n'
     '// status through the exact v2 function-pointer ABI.\n'
@@ -1038,7 +1071,9 @@ def _validate_input(repo_root, item, index):
         for token in required:
             if text.count(token) < 1:
                 raise ValidationError("{0} lacks SMP-resource marker: {1}".format(label, token))
-        lowered = text.lower()
+        if text.count(AUDITED_OS_LEASE_CONSTRUCTOR) != 1:
+            raise ValidationError("{0} lacks the exact checked IHK lease constructor".format(label))
+        lowered = text.replace(AUDITED_OS_LEASE_CONSTRUCTOR, "", 1).lower()
         for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
@@ -1147,6 +1182,10 @@ def _validate_module(repo_root, module, expected, index):
             AUDITED_SMP_INIT_CALLBACK_TYPE,
             AUDITED_SMP_EXIT_CALLBACK_TYPE,
             AUDITED_SMP_PROVIDER_EXTERN,
+            AUDITED_SMP_OS_IOCTL_TYPE,
+            AUDITED_SMP_OS_RELEASE_TYPE,
+            AUDITED_SMP_OS_IOCTL_EXTERN,
+            AUDITED_SMP_OS_RELEASE_EXTERN,
             AUDITED_SMP_INIT_CALLBACK_EXTERN,
             AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         )

@@ -42,39 +42,38 @@ BOUND_MODINFO_ENVIRONMENT = {
 }
 EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'path': 'host-kernel/native-rust/smp_resource.rs',
-  'sha256': '7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd'},
+  'sha256': 'd8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97'},
+  'sha256': 'b7b75d7beae39c8cfb98117b9f03d80d51d796024c1a10909920b022d7cce1c1'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95'}]
+  'sha256': '979e587bb7fe783caf2e455b6b50683fd74908861c1e70657b1b77b7a01bda0a'}]
 EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
  'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
                                     'memory': 'poison-live-map-unless-compensated-rollback'},
  'fixture': {'expected_fixture_tests': 14,
-             'expected_in_file_tests': 31,
-             'expected_total_tests': 45,
+             'expected_in_file_tests': 37,
+             'expected_total_tests': 51,
              'minimum_rustc': '1.92.0',
              'negative_path': 'scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs',
-             'negative_sha256': 'fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5',
+             'negative_sha256': '4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159',
              'positive_path': 'scripts/tests/fixtures/ihk_smp_resource_compile.rs',
              'positive_sha256': 'cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1'},
- 'integration_blockers': ['no versioned IHK OS lease can mint an OsToken in production',
-                          'memory reservation needs authoritative staging, exact-stage replay and '
+ 'integration_blockers': ['OS resource assignment needs declared staging, exact-stage replay and '
                           'production acceptance',
                           'CPU physical eject, suspend, topology replacement and uncertain-state '
                           'reconciliation need production acceptance',
                           'IKC optional-versus-complete mapping compatibility is not selected at '
                           'the ABI boundary',
-                          'OS resource assignment, image loading, APIC reset, IRQ and McKernel '
-                          'boot remain unreachable'],
+                          'image loading, APIC reset, IRQ and native McKernel boot remain '
+                          'unreachable'],
  'linux_reachable': True,
- 'os_token_minting': 'cfg-test-only-until-versioned-ihk-os-lease-abi',
- 'status': 'native-cpu-and-memory-adapters-with-private-os-assignment-policy'}
+ 'os_token_minting': 'explicit-unsafe-contract-requires-exact-ihk-v2-os-lease-or-destroy-guard-and-smp-module-owner',
+ 'status': 'native-cpu-memory-adapters-with-versioned-ihk-os-resource-assignment'}
 EXPECTED_PROVIDER_LEASE = {
     "attach_symbol": "ihk_smp_provider_attach_v2",
     "callback_abi": 1,
@@ -130,8 +129,8 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
                  'safe_usercopy': 'kernel::uaccess::UserSlice::writer::write_slice',
                  'source_fixture': {'expected_tests': 8,
                                     'path': 'scripts/tests/fixtures/ihk_smp_buildid_compile.rs',
-                                    'sha256': 'e2c91236aaf83141d24c07132584c5e09e3380736af2258d6b16b2db5d4d0326',
-                                    'size': 8923},
+                                    'sha256': '462c0401c78debaa65db84548c884e6f39600f07da11055bb9bff87db1aa496c',
+                                    'size': 9378},
                  'source_fixture_scope': 'extracted production dispatch with mock UserSlice; no '
                                          'kernel usercopy or runtime proof',
                  'success_result': 0},
@@ -163,9 +162,10 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
  'registration_failure_releases_provider_lease': True,
  'rocky_runtime_validated': False,
  'runtime_behavior_proven': False,
- 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy, CPU '
-          'reserve/release/count/query and memory reserve/query/full/partial release; OS '
-          'assignment and boot remain separate',
+ 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy with a versioned '
+          'resource callback pair, CPU reserve/release/count/query and memory '
+          'reserve/query/full/partial release; OS resource commands use mcosN; boot remains '
+          'pending',
  'teardown_order': ['deregister-control-device',
                     'retire-memory-controller-and-owned-pages',
                     'retire-cpu-controller-and-hotplug-callback',
@@ -202,7 +202,113 @@ EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> 
 }'''
 
 
-EXPECTED_OS_REQUEST = 'fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n    match cmd {\n        IHK_DEVICE_CREATE_OS => {\n            // SAFETY: This callback runs with the SMP control file pinning\n            // THIS_MODULE. IHK acquires its own module reference before the\n            // instance becomes live; the raw scalar argument is never a pointer.\n            let result = unsafe {\n                ihk_os_create_unbooted_v1(\n                    IHK_SMP_CONTROL_DEVICE_MINOR,\n                    THIS_MODULE.as_ptr().cast(),\n                    arg as u64,\n                )\n            };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        IHK_DEVICE_DESTROY_OS => {\n            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n            // It validates the provider and minor and refuses open instances.\n            let result =\n                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        _ => control_device_ioctl(cmd, arg),\n    }\n}'
+EXPECTED_OS_REQUEST = ('fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n'
+ '    match cmd {\n'
+ '        IHK_DEVICE_CREATE_OS => {\n'
+ '            // SAFETY: This callback runs with the SMP control file pinning\n'
+ '            // THIS_MODULE. IHK acquires its own module reference before the\n'
+ '            // instance becomes live; the raw scalar argument is never a pointer.\n'
+ '            let result = unsafe {\n'
+ '                ihk_os_create_unbooted_v2(\n'
+ '                    IHK_SMP_CONTROL_DEVICE_MINOR,\n'
+ '                    THIS_MODULE.as_ptr().cast(),\n'
+ '                    arg as u64,\n'
+ '                    1,\n'
+ '                    Some(ihk_smp_os_ioctl_v2),\n'
+ '                    Some(ihk_smp_os_release_v2),\n'
+ '                )\n'
+ '            };\n'
+ '            if result < 0 {\n'
+ '                Err(provider_status_error(result))\n'
+ '            } else {\n'
+ '                Ok(result as isize)\n'
+ '            }\n'
+ '        }\n'
+ '        IHK_DEVICE_DESTROY_OS => {\n'
+ '            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n'
+ '            // It validates the provider and minor and refuses open instances.\n'
+ '            let result =\n'
+ '                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) '
+ '};\n'
+ '            if result < 0 {\n'
+ '                Err(provider_status_error(result))\n'
+ '            } else {\n'
+ '                Ok(result as isize)\n'
+ '            }\n'
+ '        }\n'
+ '        _ => control_device_ioctl(cmd, arg),\n'
+ '    }\n'
+ '}')
+
+EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
+ 'authority': 'exact live IHK OsLease or exclusive DestroyGuard, never userspace identities',
+ 'callback_abi': 1,
+ 'callback_lifetime': 'OS-owned Linux SMP module reference',
+ 'commands': ['IHK_OS_ASSIGN_CPU',
+              'IHK_OS_RELEASE_CPU',
+              'IHK_OS_QUERY_CPU',
+              'IHK_OS_GET_NUM_CPUS',
+              'IHK_OS_ASSIGN_MEM',
+              'IHK_OS_RELEASE_MEM',
+              'IHK_OS_QUERY_MEM'],
+ 'compat_address': 'zero-extended once in IHK; reject out-of-range address or compat flag in SMP',
+ 'compatibility_create_export': 'ihk_os_create_unbooted_v1',
+ 'cpu_assignment': 'preserve requested logical rank; whole-batch ownership validation',
+ 'create_symbol': 'ihk_os_create_unbooted_v2',
+ 'credit_eligible': False,
+ 'destroy': 'preflight CPU and memory before either commit; return to reserved pool before minor '
+            'reuse',
+ 'ioctl_callback': 'ihk_smp_os_ioctl_v2',
+ 'memory_assignment': 'reuse canonical MemoryMap and retained Linux allocation owners',
+ 'native_boot_proven': False,
+ 'node_family': '/dev/mcosN',
+ 'release_callback': 'ihk_smp_os_release_v2',
+ 'serialization': 'per-OS sleepable mutex before CPU then memory controller locks',
+ 'source_reachable': True,
+ 'tracker_credit': False}
+EXPECTED_OS_CALLBACK_TYPES = ('type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;', 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;')
+EXPECTED_OS_CALLBACK_HEADERS = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {', 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {')
+EXPECTED_OS_CALLBACK_BODIES = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
+ '    slot: u32,\n'
+ '    generation: u64,\n'
+ '    command: u32,\n'
+ '    argument: u64,\n'
+ '    compat: u32,\n'
+ ') -> i64 {\n'
+ '    if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {\n'
+ '        return EINVAL.to_errno() as i64;\n'
+ '    }\n'
+ '    // SAFETY: IHK supplies the live lease proof described by this callback ABI;\n'
+ "    // these identifiers are not derived from the user's ioctl arguments.\n"
+ '    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {\n'
+ '        Ok(owner) => owner,\n'
+ '        Err(_) => return EINVAL.to_errno() as i64,\n'
+ '    };\n'
+ '    let result = if smp_cpu::handles_os(command) {\n'
+ '        smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)\n'
+ '    } else if smp_memory::handles_os(command) {\n'
+ '        smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)\n'
+ '    } else {\n'
+ '        Err(EINVAL)\n'
+ '    };\n'
+ '    match result {\n'
+ '        Ok(value) => value as i64,\n'
+ '        Err(error) => error.to_errno() as i64,\n'
+ '    }\n'
+ '}',
+ 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {\n'
+ '    // SAFETY: The versioned IHK exclusive destruction callback proves the\n'
+ '    // exact generation remains owned until both resource maps are cleaned up.\n'
+ '    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {\n'
+ '        Ok(owner) => owner,\n'
+ '        Err(_) => return EINVAL.to_errno(),\n'
+ '    };\n'
+ '    match smp_cpu::release_os_resources(owner) {\n'
+ '        Ok(()) => 0,\n'
+ '        Err(error) => error.to_errno(),\n'
+ '    }\n'
+ '}')
+EXPECTED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
 
 class ValidationError(Exception):
     """Raised when the SMP lifecycle contract is incomplete or inconsistent."""
@@ -692,6 +798,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "provider_source",
             "reference_inventory",
             "resource_foundation",
+            "os_resource_bridge",
             "schema_version",
             "stage_manifest",
         },
@@ -709,6 +816,8 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("SMP lifecycle transitive Rust module graph differs")
     if contract["resource_foundation"] != EXPECTED_RESOURCE_FOUNDATION:
         raise ValidationError("SMP resource foundation differs or overclaims readiness")
+    if contract["os_resource_bridge"] != EXPECTED_OS_RESOURCE_BRIDGE:
+        raise ValidationError("SMP OS resource bridge differs or overclaims readiness")
     if contract["provider_lease"] != EXPECTED_PROVIDER_LEASE:
         raise ValidationError("SMP provider lease differs or overclaims readiness")
     if contract["control_device_shell"] != EXPECTED_CONTROL_DEVICE_SHELL:
@@ -859,7 +968,7 @@ def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str
 
 
 def _module_provider_symbols(contract: dict[str, Any]) -> tuple[str, ...]:
-    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v1", "ihk_os_destroy_unbooted_v1")
+    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v2", "ihk_os_destroy_unbooted_v1")
 
 
 def _provider_import(contract: dict[str, Any]) -> str:
@@ -881,9 +990,15 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f"    fn {open_symbol}(minor: u32) -> i64;\n"
         f'    #[link_name = "{close_symbol}"]\n'
         f"    fn {close_symbol}(receipt: i64);\n"
-        '    #[link_name = "ihk_os_create_unbooted_v1"]\n'
-        "    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n"
-        "        owner: *mut core::ffi::c_void, argument: u64) -> i64;\n"
+        '    #[link_name = "ihk_os_create_unbooted_v2"]\n'
+        '    fn ihk_os_create_unbooted_v2(\n'
+        '        provider_minor: u32,\n'
+        '        owner: *mut core::ffi::c_void,\n'
+        '        argument: u64,\n'
+        '        callback_abi: u32,\n'
+        '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
+        '        release: Option<IhkSmpOsReleaseV2>,\n'
+        '    ) -> i64;\n'
         '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
         "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
         "}"
@@ -932,6 +1047,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             callback_init_type,
             callback_exit_type,
             provider_import,
+            *EXPECTED_OS_CALLBACK_TYPES,
+            *EXPECTED_OS_CALLBACK_HEADERS,
             callback_init,
             callback_exit,
         ),
@@ -954,6 +1071,11 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             1,
             "Rust scalar-only provider lifecycle callback",
         )
+
+    for body in EXPECTED_OS_CALLBACK_BODIES:
+        _require_active_count(text, code, body, 1, "Rust exact checked OS resource callback")
+        _validate_top_level_item(code, _active_fragment_positions(text, code, body)[0],
+                                 "OS resource callback")
 
     expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
     let errno = match status {
@@ -1417,6 +1539,13 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
     masked_production = _validate_rust_escape_hatches(
         production, "SMP resource policy"
     )
+    _require_active_count(production, masked_production, EXPECTED_OS_LEASE_CONSTRUCTOR, 1,
+                          "SMP exact checked IHK lease constructor")
+    constructor_start = _active_fragment_positions(
+        production, masked_production, EXPECTED_OS_LEASE_CONSTRUCTOR)[0]
+    masked_production = (masked_production[:constructor_start]
+                         + " " * len(EXPECTED_OS_LEASE_CONSTRUCTOR)
+                         + masked_production[constructor_start + len(EXPECTED_OS_LEASE_CONSTRUCTOR):])
     for forbidden in (
         r"\bunsafe\b",
         r"\b(?:alloc|std|kernel)::",
@@ -1444,6 +1573,8 @@ def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
         raise ValidationError("SMP resource fixture total is not additive")
     for fragment in (
         "fn forge_os_token() -> smp_resource::OsToken",
+        "#[cfg(lease_without_proof)]\nfn main() {",
+        "let _ = smp_resource::OsToken::from_ihk_lease_v2(0, 1);",
         "smp_resource::OsToken {",
         "&mut memory",
     ):

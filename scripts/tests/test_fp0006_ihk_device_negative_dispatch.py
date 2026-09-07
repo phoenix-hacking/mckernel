@@ -22,6 +22,19 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts import fp0006_ihk_device_negative_dispatch as witness
+from scripts.tests.frozen_fp0006_authority import materialize
+
+
+def setUpModule():
+    global REPO_ROOT, _AUTHORITY_DIRECTORY
+    source_root = REPO_ROOT
+    _AUTHORITY_DIRECTORY = tempfile.TemporaryDirectory(prefix="fp0006-negative-frozen-")
+    REPO_ROOT = materialize(source_root, Path(_AUTHORITY_DIRECTORY.name) / "repo",
+                            witness.DEFAULT_CONTRACT.as_posix())
+
+
+def tearDownModule():
+    _AUTHORITY_DIRECTORY.cleanup()
 
 
 class Fp0006IhkDeviceNegativeDispatchTests(unittest.TestCase):

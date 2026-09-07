@@ -85,7 +85,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v2",
                 "ihk_smp_provider_open_v1",
                 "ihk_smp_provider_close_v1",
-                "ihk_os_create_unbooted_v1",
+                "ihk_os_create_unbooted_v2",
                 "ihk_os_destroy_unbooted_v1",
             ],
             summary["provider_symbols"],
@@ -95,7 +95,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertTrue(summary["resource_foundation_linux_reachable"])
-        self.assertEqual(45, summary["resource_foundation_tests"])
+        self.assertEqual(51, summary["resource_foundation_tests"])
         self.assertEqual("mcd0", summary["control_device_name"])
         self.assertTrue(summary["control_device_source_reachable"])
         self.assertEqual("TODO", summary["control_device_gate_status"])
@@ -111,6 +111,30 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             summary["control_device_valid_ioctl_commands"]
         )
         self.assertEqual(8, summary["get_buildid_source_fixture_tests"])
+
+    def test_os_resource_callback_authority_and_compat_guards_are_fail_closed(self) -> None:
+        source = (REPO_ROOT / self.contract["production_source"]).read_text()
+        for old, new in (
+            ("compat > 1 || (compat == 1 && argument > u32::MAX as u64)", "compat > 1"),
+            ("smp_resource::OsToken::from_ihk_lease_v2(slot, generation)",
+             "smp_resource::OsToken::from_ihk_lease_v2(slot, argument)"),
+            ("match smp_cpu::release_os_resources(owner)", "match Ok::<(), Error>(())"),
+            ("Some(ihk_smp_os_release_v2)", "None"),
+        ):
+            with self.subTest(mutation=old):
+                self.assertIn(old, source)
+                with self.assertRaises(lifecycle.ValidationError):
+                    lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+
+    def test_os_resource_bridge_cannot_claim_boot_or_drop_lease_requirement(self) -> None:
+        for key, value in (("native_boot_proven", True), ("authority", "userspace slot")):
+            with self.subTest(field=key):
+                original = self.contract["os_resource_bridge"][key]
+                self.contract["os_resource_bridge"][key] = value
+                self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), self.contract)
+                with self.assertRaisesRegex(lifecycle.ValidationError, "OS resource bridge"):
+                    lifecycle.validate_repository(self.repo)
+                self.contract["os_resource_bridge"][key] = original
 
     def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
         resource = self.contract["crate_modules"][0]

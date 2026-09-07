@@ -481,6 +481,12 @@ impl DestroyGuard<'_> {
         self.handle
     }
 
+    /// Status captured by the successful exclusive transition. Opens and
+    /// status transitions cannot race this snapshot while the guard is armed.
+    pub(crate) fn status(&self) -> Result<OsStatus, RegistryError> {
+        status(self.live)
+    }
+
     pub(crate) fn commit(mut self) -> Result<(), RegistryError> {
         let vacant = pack(
             PHASE_VACANT,

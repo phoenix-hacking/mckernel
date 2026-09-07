@@ -14,7 +14,7 @@ use super::abi::{
     IHK_OS_STATUS,
 };
 use super::os_registry::{
-    DestroyGuard, OsHandle, OsRegistry, RegistryError, ReservationGuard, OS_CAPACITY,
+    DestroyGuard, OsHandle, OsRegistry, OsStatus, RegistryError, ReservationGuard, OS_CAPACITY,
 };
 
 const ENOENT: i32 = 2;
@@ -133,6 +133,21 @@ impl DeviceTransaction<'_> {
         match &self.inner {
             DeviceTransactionInner::Create { reservation, .. } => reservation.handle(),
             DeviceTransactionInner::Destroy { handle, .. } => *handle,
+        }
+    }
+
+    /// The initial native adapter cannot stop CPUs or retire boot mappings.
+    /// Require the status captured by the exclusive destruction guard, rather
+    /// than a separate observation that could race a future boot transition.
+    pub(crate) fn require_unbooted_destroy(&self) -> Result<(), IoctlError> {
+        match &self.inner {
+            DeviceTransactionInner::Destroy { destruction, .. } => {
+                match destruction.status().map_err(map_registry_error)? {
+                    OsStatus::NotBooted => Ok(()),
+                    _ => Err(IoctlError::Busy),
+                }
+            }
+            DeviceTransactionInner::Create { .. } => Err(IoctlError::InvalidArgument),
         }
     }
 

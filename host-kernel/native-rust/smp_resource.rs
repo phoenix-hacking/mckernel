@@ -55,9 +55,8 @@ pub(crate) enum ResourceError {
 
 /// An OS registry slot plus its bounded, non-zero incarnation.
 ///
-/// Production code cannot mint this token.  Construction awaits a versioned
-/// IHK-to-SMP lease ABI that proves the provider registry slot and generation;
-/// until then this policy core intentionally cannot become Linux-reachable.
+/// The versioned IHK callback proves the registry slot and generation before
+/// the native adapter constructs this token. Bounds alone are not authority.
 /// Reusing a registry slot must advance `generation`, so a token copied by an
 /// old OS cannot release resources owned by its replacement.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -84,6 +83,22 @@ impl OsToken {
         } else {
             Ok(())
         }
+    }
+
+    /// # Safety
+    /// IHK's v2 OS callback must hold an OsLease or exclusive DestroyGuard for
+    /// this exact slot/generation and pin the receiving SMP module throughout
+    /// the call. Only that callback may mint authority; userspace integers and
+    /// independently checked bounds do not satisfy this lifetime contract.
+    // SAFETY: The caller supplies the live IHK lease proof. The constructor
+    // checks its scalar representation but cannot establish registry lifetime.
+    pub(crate) unsafe fn from_ihk_lease_v2(
+        slot: u32,
+        generation: u64,
+    ) -> Result<Self, ResourceError> {
+        let token = Self { slot, generation };
+        token.validate()?;
+        Ok(token)
     }
 
     #[cfg(test)]
@@ -1554,6 +1569,104 @@ impl<const N: usize> MemoryMap<N> {
             map: self,
             workspace,
             operation: MemoryOperation::Release,
+            active: true,
+            external_effects_started: false,
+        })
+    }
+
+    /// Prepare one OS assignment from sorted physical ranges selected by the
+    /// adapter. Each descriptor names a free subrange and its actual NUMA node;
+    /// adjacent descriptors may share a containing extent. The complete batch
+    /// is checked before the live ownership map can change.
+    pub(crate) fn prepare_assign_batch<'map, 'workspace, 'storage>(
+        &'map mut self,
+        owner: OsToken,
+        ranges: &[MemoryExtent],
+        workspace: &'workspace mut MemoryWorkspace<'storage>,
+    ) -> Result<MemoryTransaction<'map, 'workspace, 'storage, N>, ResourceError> {
+        owner.validate()?;
+        self.prepare_transfer_batch(None, Some(owner), ranges, workspace)
+    }
+
+    /// Prepare returning sorted subranges owned by the exact OS generation to
+    /// the reserved pool. Descriptors carry physical coordinates and a node,
+    /// with no embedded owner; authority comes solely from the checked token.
+    /// Linux allocation owners are retained across this logical transfer.
+    pub(crate) fn prepare_release_batch<'map, 'workspace, 'storage>(
+        &'map mut self,
+        owner: OsToken,
+        ranges: &[MemoryExtent],
+        workspace: &'workspace mut MemoryWorkspace<'storage>,
+    ) -> Result<MemoryTransaction<'map, 'workspace, 'storage, N>, ResourceError> {
+        owner.validate()?;
+        self.prepare_transfer_batch(Some(owner), None, ranges, workspace)
+    }
+
+    fn prepare_transfer_batch<'map, 'workspace, 'storage>(
+        &'map mut self,
+        before_owner: Option<OsToken>,
+        after_owner: Option<OsToken>,
+        ranges: &[MemoryExtent],
+        workspace: &'workspace mut MemoryWorkspace<'storage>,
+    ) -> Result<MemoryTransaction<'map, 'workspace, 'storage, N>, ResourceError> {
+        self.validate()?;
+        self.prepare_workspace(workspace)?;
+        Self::validate_free_ranges(ranges)?;
+        let mut transferred = 0;
+        for index in 0..self.length {
+            let current = self.extents[index].ok_or(ResourceError::Corrupt)?;
+            let end = current.end()?;
+            let mut cursor = current.start;
+            while transferred < ranges.len() && ranges[transferred].start < end {
+                let range = ranges[transferred];
+                let range_end = range.end()?;
+                if range.start < cursor || range_end > end {
+                    return Err(ResourceError::RangeUnavailable);
+                }
+                if current.owner != before_owner {
+                    return Err(ResourceError::Ownership);
+                }
+                if current.numa_node != range.numa_node {
+                    return Err(ResourceError::RangeUnavailable);
+                }
+                if range.start > cursor {
+                    workspace.push_normalized(MemoryExtent::new(
+                        cursor,
+                        range.start - cursor,
+                        current.numa_node,
+                        current.owner,
+                    )?)?;
+                }
+                workspace.push_normalized(MemoryExtent::new(
+                    range.start,
+                    range.length,
+                    current.numa_node,
+                    after_owner,
+                )?)?;
+                cursor = range_end;
+                transferred += 1;
+            }
+            if cursor < end {
+                workspace.push_normalized(MemoryExtent::new(
+                    cursor,
+                    end - cursor,
+                    current.numa_node,
+                    current.owner,
+                )?)?;
+            }
+        }
+        if transferred != ranges.len() {
+            return Err(ResourceError::RangeUnavailable);
+        }
+        Self::validate_candidate(workspace)?;
+        Ok(MemoryTransaction {
+            map: self,
+            workspace,
+            operation: if after_owner.is_some() {
+                MemoryOperation::Assign
+            } else {
+                MemoryOperation::Release
+            },
             active: true,
             external_effects_started: false,
         })
@@ -3144,6 +3257,326 @@ mod tests {
         transaction.begin_external_effects().unwrap();
         transaction.commit().unwrap();
         assert!(memory.is_empty());
+    }
+
+    #[test]
+    fn memory_os_batch_transfers_keep_nodes_and_coalesce_adjacent_requests() {
+        let mut memory = MemoryMap::<8>::new();
+        let mut staging = [None; 8];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x1000, 0x4000, 0, &mut workspace)
+            .unwrap();
+        memory
+            .insert_free(0x5000, 0x4000, 1, &mut workspace)
+            .unwrap();
+        let owner = token(2, 7);
+        let ranges = [
+            batch_range(0x2000, 0x1000, 0),
+            batch_range(0x3000, 0x1000, 0),
+            batch_range(0x5000, 0x2000, 1),
+        ];
+        let before = memory.extents;
+        {
+            let transaction = memory
+                .prepare_assign_batch(owner, &ranges, &mut workspace)
+                .unwrap();
+            assert_eq!(transaction.operation(), MemoryOperation::Assign);
+            assert_eq!(transaction.candidate_len(), 5);
+        }
+        assert_eq!(memory.extents, before);
+        let mut transaction = memory
+            .prepare_assign_batch(owner, &ranges, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.bytes_owned_by(owner).unwrap(), 0x4000);
+        assert_eq!(memory.extent(1).unwrap().numa_node(), 0);
+        assert_eq!(memory.extent(3).unwrap().numa_node(), 1);
+        let mut transaction = memory
+            .prepare_release_batch(owner, &ranges, &mut workspace)
+            .unwrap();
+        assert_eq!(transaction.operation(), MemoryOperation::Release);
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.extents, before);
+    }
+
+    #[test]
+    fn memory_os_batch_late_errors_never_publish_earlier_transfers() {
+        for release in [false, true] {
+            let mut memory = MemoryMap::<12>::new();
+            let mut staging = [None; 12];
+            let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+            let owner = token(2, 7);
+            memory
+                .insert_free(0x1000, 0x4000, 0, &mut workspace)
+                .unwrap();
+            memory
+                .insert_free(0x6000, 0x4000, 1, &mut workspace)
+                .unwrap();
+            if release {
+                memory
+                    .assign(owner, 0x1000, 0x4000, &mut workspace)
+                    .unwrap();
+                memory
+                    .assign(owner, 0x6000, 0x3000, &mut workspace)
+                    .unwrap();
+            } else {
+                memory
+                    .assign(token(3, 1), 0x9000, 0x1000, &mut workspace)
+                    .unwrap();
+            }
+            let before = memory.extents;
+            let first = batch_range(0x1000, 0x1000, 0);
+            for last in [
+                batch_range(0x4000, 0x3000, 0),
+                batch_range(0x5000, 0x1000, 0),
+                batch_range(0x6000, 0x1000, 0),
+                batch_range(0x9000, 0x1000, 1),
+                batch_range(0xb000, 0x1000, 1),
+                first,
+            ] {
+                let result = if release {
+                    memory.prepare_release_batch(owner, &[first, last], &mut workspace)
+                } else {
+                    memory.prepare_assign_batch(owner, &[first, last], &mut workspace)
+                };
+                assert!(result.is_err());
+                drop(result);
+                assert_eq!(memory.extents, before);
+                memory.validate().unwrap();
+            }
+        }
+    }
+
+    #[test]
+    fn memory_os_batch_rejects_stale_generation_and_embedded_authority() {
+        let mut memory = MemoryMap::<4>::new();
+        let mut staging = [None; 4];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        let owner = token(0, 2);
+        memory
+            .insert_free(0x1000, 0x4000, 0, &mut workspace)
+            .unwrap();
+        memory
+            .assign(owner, 0x1000, 0x4000, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let range = batch_range(0x1000, 0x1000, 0);
+        for stale in [token(0, 1), token(0, 3), token(1, 2)] {
+            assert_eq!(
+                memory
+                    .prepare_release_batch(stale, &[range], &mut workspace)
+                    .err(),
+                Some(ResourceError::Ownership)
+            );
+            assert_eq!(memory.extents, before);
+        }
+        let claimed = MemoryExtent::new(0x1000, 0x1000, 0, Some(owner)).unwrap();
+        assert_eq!(
+            memory
+                .prepare_release_batch(owner, &[claimed], &mut workspace)
+                .err(),
+            Some(ResourceError::Ownership)
+        );
+        assert_eq!(memory.extents, before);
+    }
+
+    #[test]
+    fn memory_os_batch_capacity_failure_and_workspace_reuse_are_atomic() {
+        let mut memory = MemoryMap::<2>::new();
+        let mut staging = [None; 2];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        let owner = token(4, 3);
+        memory
+            .insert_free(0x1000, 0x7000, 0, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let ranges = [
+            batch_range(0x2000, 0x1000, 0),
+            batch_range(0x5000, 0x1000, 0),
+        ];
+        assert_eq!(
+            memory
+                .prepare_assign_batch(owner, &ranges, &mut workspace)
+                .err(),
+            Some(ResourceError::Capacity)
+        );
+        assert_eq!(memory.extents, before);
+        let ranges = [
+            batch_range(0x1000, 0x1000, 0),
+            batch_range(0x2000, 0x6000, 0),
+        ];
+        let mut transaction = memory
+            .prepare_assign_batch(owner, &ranges, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.len(), 1);
+        assert_eq!(memory.bytes_owned_by(owner).unwrap(), 0x7000);
+        let middle = [batch_range(0x4000, 0x1000, 0)];
+        assert_eq!(
+            memory
+                .prepare_release_batch(owner, &middle, &mut workspace)
+                .err(),
+            Some(ResourceError::Capacity)
+        );
+        assert_eq!(memory.bytes_owned_by(owner).unwrap(), 0x7000);
+        let mut transaction = memory
+            .prepare_release_batch(owner, &ranges, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.extents, before);
+    }
+
+    #[test]
+    fn memory_os_batch_empty_and_compensation_obey_existing_effect_protocol() {
+        for release in [false, true] {
+            for compensate in [false, true] {
+                let mut memory = MemoryMap::<4>::new();
+                let mut staging = [None; 4];
+                let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+                let owner = token(1, 6);
+                memory
+                    .insert_free(0x1000, 0x4000, 0, &mut workspace)
+                    .unwrap();
+                if release {
+                    memory
+                        .assign(owner, 0x1000, 0x4000, &mut workspace)
+                        .unwrap();
+                }
+                let before = memory.extents;
+                let mut transaction = if release {
+                    memory
+                        .prepare_release_batch(owner, &[], &mut workspace)
+                        .unwrap()
+                } else {
+                    memory
+                        .prepare_assign_batch(owner, &[], &mut workspace)
+                        .unwrap()
+                };
+                transaction.begin_external_effects().unwrap();
+                transaction.commit().unwrap();
+                assert_eq!(memory.extents, before);
+                let ranges = [batch_range(0x2000, 0x1000, 0)];
+                let mut transaction = if release {
+                    memory
+                        .prepare_release_batch(owner, &ranges, &mut workspace)
+                        .unwrap()
+                } else {
+                    memory
+                        .prepare_assign_batch(owner, &ranges, &mut workspace)
+                        .unwrap()
+                };
+                transaction.begin_external_effects().unwrap();
+                if compensate {
+                    transaction.compensated_rollback().unwrap();
+                } else {
+                    drop(transaction);
+                }
+                assert_eq!(memory.extents, before);
+                assert_eq!(memory.is_poisoned(), !compensate);
+            }
+        }
+    }
+
+    #[test]
+    fn memory_os_batch_matches_independent_page_ownership_model() {
+        // Exhaust all five-page maps with holes, free pages and two owners,
+        // then every requested subset for assignment and release. The oracle
+        // is a per-page array, independent of extent splitting/coalescing.
+        let owner = token(1, 8);
+        let other = token(2, 3);
+        for encoding in 0..1024 {
+            let mut cells = [0; 5];
+            let mut value = encoding;
+            for cell in &mut cells {
+                *cell = value % 4;
+                value /= 4;
+            }
+            for mask in 0..32 {
+                for release in [false, true] {
+                    let mut memory = MemoryMap::<12>::new();
+                    let mut staging = [None; 12];
+                    let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+                    let mut ranges = [batch_range(0x1000, 0x1000, 0); 5];
+                    let mut count = 0;
+                    let mut expected = cells;
+                    let mut valid = true;
+                    for page in 0..5 {
+                        let address = (page as u64 + 1) * 4096;
+                        let node = (page / 3) as u32;
+                        if cells[page] != 0 {
+                            memory
+                                .insert_free(address, 4096, node, &mut workspace)
+                                .unwrap();
+                            if cells[page] >= 2 {
+                                memory
+                                    .assign(
+                                        if cells[page] == 2 { owner } else { other },
+                                        address,
+                                        4096,
+                                        &mut workspace,
+                                    )
+                                    .unwrap();
+                            }
+                        }
+                        if mask & (1 << page) != 0 {
+                            ranges[count] = batch_range(address, 4096, node);
+                            count += 1;
+                            valid &= cells[page] == if release { 2 } else { 1 };
+                            expected[page] = if release { 1 } else { 2 };
+                        }
+                    }
+                    let before = memory.extents;
+                    {
+                        let result = if release {
+                            memory.prepare_release_batch(owner, &ranges[..count], &mut workspace)
+                        } else {
+                            memory.prepare_assign_batch(owner, &ranges[..count], &mut workspace)
+                        };
+                        assert_eq!(
+                            result.is_ok(),
+                            valid,
+                            "map={encoding} mask={mask} release={release}"
+                        );
+                        if let Ok(mut transaction) = result {
+                            transaction.begin_external_effects().unwrap();
+                            transaction.commit().unwrap();
+                        }
+                    }
+                    if !valid {
+                        assert_eq!(memory.extents, before);
+                        expected = cells;
+                    }
+                    for (page, cell) in expected.iter().copied().enumerate() {
+                        let address = (page as u64 + 1) * 4096;
+                        let found =
+                            (0..memory.len())
+                                .filter_map(|i| memory.extent(i))
+                                .find(|extent| {
+                                    extent.start() <= address && address < extent.end().unwrap()
+                                });
+                        let observed = match found {
+                            None => 0,
+                            Some(extent) => {
+                                assert_eq!(extent.numa_node(), (page / 3) as u32);
+                                match extent.owner() {
+                                    None => 1,
+                                    Some(who) if who == owner => 2,
+                                    Some(who) if who == other => 3,
+                                    _ => panic!("unexpected owner"),
+                                }
+                            }
+                        };
+                        assert_eq!(observed, cell);
+                    }
+                    memory.validate().unwrap();
+                }
+            }
+        }
     }
 
     #[test]

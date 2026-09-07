@@ -1,12 +1,28 @@
 {
   "behavior": {
     "allocation_policy": "sleepable GFP_KERNEL plus ZERO COMP NORETRY NOWARN; no spinlock held",
+    "backend_abi": {
+      "allowed_status": "NotBooted",
+      "callback_pair_required": true,
+      "cleanup_failure": "keep node, generation and owners live",
+      "compat_address_bits": 32,
+      "compat_normalization": "zero extend once",
+      "generation_source": "live OsLease or exclusive DestroyGuard",
+      "native_address_bits": 64,
+      "operation_lock": "per-OS sleepable mutex",
+      "provider_module_retained": true,
+      "trusted_module_code_only": true,
+      "version": 1
+    },
     "capacity": 64,
     "create_argument": "scalar ignored by the frozen SMP create path",
     "create_command": "0x00112900",
     "destroy_command": "0x00112901",
     "destroy_order": [
       "exclude new opens",
+      "require exclusive NotBooted status",
+      "lock OS operations",
+      "finish backend resource cleanup",
       "remove node",
       "free kmsg",
       "release provider owners",
@@ -26,7 +42,7 @@
     "node_family": "/dev/mcosN",
     "node_publication": "only after kmsg and provider owners exist; open excluded until registry commit",
     "project_c_dispatch": false,
-    "resource_assignment": false,
+    "resource_assignment": "through the checked SMP v2 backend; effects bound by SMP lifecycle contract",
     "shared_kmsg_readers": false,
     "status_commands": [
       "0x00112a03",
@@ -44,8 +60,8 @@
   "inputs": [
     {
       "path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
-      "size": 17841
+      "sha256": "135d68740e79e2f3e5d7b218f201926678731e1b8c7406b5284ebde530f1bf75",
+      "size": 24424
     },
     {
       "path": "host-kernel/native-rust/abi/x86_64.rs",
@@ -54,8 +70,8 @@
     },
     {
       "path": "host-kernel/native-rust/os_registry.rs",
-      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
-      "size": 17706
+      "sha256": "9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9",
+      "size": 17961
     },
     {
       "path": "host-kernel/native-rust/device_registry.rs",
@@ -64,24 +80,24 @@
     },
     {
       "path": "host-kernel/native-rust/ihk_ioctl.rs",
-      "sha256": "bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958",
-      "size": 9739
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "size": 10467
     },
     {
       "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
-      "sha256": "9c5a8912f5164c7fae22d2d905beefe2f6493111dcc83b788781c67bafe1a846",
-      "size": 15071
+      "sha256": "82a5ace93fa6c5fad3a58fa6dad1fa34bfe9f71382035cfea7bdda735f3bf994",
+      "size": 23878
     },
     {
       "path": "scripts/tests/test_ihk_os_runtime.py",
-      "sha256": "98413911087ddf8d834721f9cdff30c6589afacb4e9529d4472d29bb16321d21",
+      "sha256": "9b16e2f94946235db24f47075406879436189b676c7b30ddb2771ed16909f47d",
       "size": 2294
     }
   ],
   "schema_version": 1,
-  "scope": "native unbooted create/status/destroy and Linux character-device ownership",
+  "scope": "native unbooted lifecycle, Linux character-device ownership and checked SMP resource callbacks",
   "verification_requirements": {
-    "adapter_cases": 10,
+    "adapter_cases": 16,
     "broader_provider_and_booted_teardown_required": true,
     "embedded_provider_registry_cases": 31,
     "exact_rocky_build_and_guest_required": true,

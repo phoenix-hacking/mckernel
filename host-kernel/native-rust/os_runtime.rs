@@ -4,21 +4,31 @@
 //! The registry excludes opens during construction and destruction. Each open
 //! file owns a generation-checked lease; each instance owns its provider lease,
 //! a Linux module reference and a physically contiguous, zeroed kmsg buffer.
-//! No image, CPU, memory assignment or IKC operation is advertised here.
+//! The versioned backend receives only generation-checked, serialized calls.
+//! Image loading and boot are not implemented by this ownership adapter.
 
 use core::{
     ffi::c_void,
     mem::MaybeUninit,
+    pin::Pin,
     ptr,
     sync::atomic::{AtomicPtr, AtomicU32, Ordering},
 };
-use kernel::{bindings, error::to_result, prelude::*};
+use kernel::{
+    bindings,
+    error::to_result,
+    prelude::*,
+    sync::{new_mutex, Mutex},
+};
 
 use super::{
-    abi::{IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS},
+    abi::{
+        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_QUERY_STATUS,
+        IHK_OS_STATUS,
+    },
     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
     ihk_ioctl::IhkIoctlDispatcher,
-    os_registry::{OsLease, OsRegistry, OS_CAPACITY},
+    os_registry::{OsLease, OsRegistry, OsStatus, OS_CAPACITY},
     IhkExportSymbolRecord,
 };
 
@@ -148,8 +158,27 @@ impl Drop for KmsgPages {
     }
 }
 
+// SAFETY: Only IHK invokes these callbacks with a live OsLease or an exclusive
+// DestroyGuard, respectively. The owning SMP module must keep the callbacks
+// resident, accept the exact scalar ABI and borrow user addresses only during
+// ioctl. The release callback must finish all resource cleanup before success,
+// and leave the OS usable on failure. Neither callback may reenter OS ioctls
+// or destruction while the per-OS operation lock is held.
+type OsBackendIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;
+// SAFETY: The exclusive destruction guard proves this exact slot/generation
+// has no open references. Success returns its resources before minor reuse.
+type OsBackendReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
+
+#[derive(Clone, Copy)]
+struct OsBackend {
+    ioctl: OsBackendIoctlV2,
+    release: OsBackendReleaseV2,
+}
+
 struct OsObject {
     provider: DeviceHandle,
+    operations: Pin<Box<Mutex<()>>>,
+    backend: Option<OsBackend>,
     _kmsg: KmsgPages,
     _provider_lease: DeviceOsLease<'static>,
     // Drop the kernel module pin after the logical provider reference.
@@ -233,7 +262,40 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v1(
     argument: u64,
 ) -> i64 {
     // SAFETY: The exported boundary's caller guarantees the owner lifetime.
-    match unsafe { create_os(provider_minor, owner.cast(), argument) } {
+    match unsafe { create_os(provider_minor, owner.cast(), argument, None) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// Create an unbooted OS with callbacks pinned by its provider module owner.
+/// ABI version 1 uses (slot, generation, command, user address, compat=0/1)
+/// for ioctl and (slot, generation) for exclusive resource cleanup.
+///
+/// # Safety
+/// The caller pins `owner`, and both callbacks reside in that module and obey
+/// the contracts above. These are trusted code pointers, never userspace data.
+// SAFETY: The boundary validates the callback version and complete callback
+// pair before acquiring owners or publishing anything. The existing create
+// transaction retains the module before storing either function pointer.
+#[export_name = "ihk_os_create_unbooted_v2"]
+// SAFETY: This C ABI accepts a pinned Linux module pointer and trusted callback
+// identities with the exact scalar signature; no unwind may cross the boundary.
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v2(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+) -> i64 {
+    let backend = match (callback_abi, ioctl, release) {
+        (1, Some(ioctl), Some(release)) => OsBackend { ioctl, release },
+        _ => return EINVAL.to_errno() as i64,
+    };
+    // SAFETY: The caller supplies pinned module-resident callbacks. The
+    // object stores only their copied identities and its own module reference.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
     }
@@ -247,6 +309,7 @@ unsafe fn create_os(
     provider_minor: u32,
     owner: *mut bindings::module,
     argument: u64,
+    backend: Option<OsBackend>,
 ) -> Result<usize> {
     let class = OS_CLASS.load(Ordering::Acquire);
     let major = OS_MAJOR.load(Ordering::Acquire);
@@ -270,6 +333,8 @@ unsafe fn create_os(
     let object = Box::new(
         OsObject {
             provider,
+            operations: Box::pin_init(new_mutex!(()), GFP_KERNEL)?,
+            backend,
             _kmsg: KmsgPages::allocate()?,
             _provider_lease: provider_lease,
             _provider_module: provider_module,
@@ -333,6 +398,9 @@ fn destroy_os(provider_minor: u32, minor: u64) -> Result {
     let transaction = dispatcher
         .prepare_device(IHK_DEVICE_DESTROY_OS, minor)
         .map_err(|error| errno(error.errno()))?;
+    transaction
+        .require_unbooted_destroy()
+        .map_err(|error| errno(error.errno()))?;
     let handle = transaction.handle();
     let index = handle.minor();
     let object = OS_OBJECTS[index].load(Ordering::Acquire);
@@ -341,6 +409,20 @@ fn destroy_os(provider_minor: u32, minor: u64) -> Result {
     // destructors. Publication stored the complete object before the live word.
     if unsafe { (*object).provider } != provider {
         return Err(EINVAL);
+    }
+    // SAFETY: The same exclusive DestroyGuard owns this published object.
+    // Backend cleanup runs before its node, allocations or module owner drop.
+    let object_ref = unsafe { &*object };
+    {
+        let _operation = object_ref.operations.lock();
+        if let Some(backend) = object_ref.backend {
+            // SAFETY: No OsLease exists while the destruction guard is live.
+            // The retained ProviderModule pins this exact callback identity.
+            let status = unsafe { (backend.release)(index as u32, handle.generation()) };
+            if status != 0 {
+                return Err(if status < 0 { errno(status) } else { EIO });
+            }
+        }
     }
     let class = OS_CLASS.load(Ordering::Acquire);
     let dev = (OS_MAJOR.load(Ordering::Acquire) << MINOR_BITS) | index as u32;
@@ -398,19 +480,79 @@ unsafe extern "C" fn os_release(_inode: *mut bindings::inode, file: *mut binding
 unsafe extern "C" fn os_ioctl(
     file: *mut bindings::file,
     command: u32,
-    _argument: core::ffi::c_ulong,
+    argument: core::ffi::c_ulong,
+) -> core::ffi::c_long {
+    // SAFETY: Linux supplies the live file and its owned immutable lease.
+    unsafe { os_request(file, command, argument, false) }
+}
+
+// SAFETY: Linux's compat callback has the same file lifetime as native ioctl.
+// Zero-extend the top-level user address once before any backend can parse it.
+#[cfg(CONFIG_COMPAT)]
+unsafe extern "C" fn os_compat_ioctl(
+    file: *mut bindings::file,
+    command: u32,
+    argument: core::ffi::c_ulong,
+) -> core::ffi::c_long {
+    // SAFETY: Linux supplies this live file with its generation-checked lease.
+    unsafe { os_request(file, command, argument as u32 as u64, true) }
+}
+
+// SAFETY: Only the two Linux file callbacks enter this function. File release
+// cannot overlap; its lease excludes OS destruction and minor reuse.
+unsafe fn os_request(
+    file: *mut bindings::file,
+    command: u32,
+    argument: u64,
+    compat: bool,
 ) -> core::ffi::c_long {
     // SAFETY: Successful open installed this live Box; release cannot overlap.
     let lease = unsafe { &*((*file).private_data.cast::<OsLease<'static>>()) };
-    let dispatcher = IhkIoctlDispatcher::new(&OS_REGISTRY);
-    match dispatcher.dispatch_os(lease.handle(), command, 0) {
-        Ok(status) => status as core::ffi::c_long,
-        Err(error) => error.errno() as core::ffi::c_long,
+    if matches!(command, IHK_OS_STATUS | IHK_OS_QUERY_STATUS) {
+        let dispatcher = IhkIoctlDispatcher::new(&OS_REGISTRY);
+        return match dispatcher.dispatch_os(lease.handle(), command, 0) {
+            Ok(status) => status as core::ffi::c_long,
+            Err(error) => error.errno() as core::ffi::c_long,
+        };
     }
+    let handle = lease.handle();
+    let object = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+    assert!(!object.is_null());
+    // SAFETY: The immutable file lease keeps this generation's published
+    // object and its provider module owner live throughout the callback.
+    let object = unsafe { &*object };
+    let _operation = object.operations.lock();
+    // Resource assignment is restricted to the initial, unbooted state. Future
+    // load/boot transitions must take this same operation lock before changing
+    // registry status or accessing the backend's assigned resources.
+    match OS_REGISTRY.snapshot(handle) {
+        Ok(snapshot) if snapshot.status == OsStatus::NotBooted => {}
+        Ok(_) => return EBUSY.to_errno() as core::ffi::c_long,
+        Err(error) => return error.errno() as core::ffi::c_long,
+    }
+    let Some(backend) = object.backend else {
+        return EINVAL.to_errno() as core::ffi::c_long;
+    };
+    // SAFETY: This exact slot/generation is pinned by the file lease. The OS
+    // operation mutex serializes its backend calls, the module owner pins the
+    // code, and user addresses are only borrowed for this synchronous call.
+    let status = unsafe {
+        (backend.ioctl)(
+            handle.minor() as u32,
+            handle.generation(),
+            command,
+            argument,
+            u32::from(compat),
+        )
+    };
+    if status < -4095 {
+        return EIO.to_errno() as core::ffi::c_long;
+    }
+    status as core::ffi::c_long
 }
 
 // SAFETY: All-zero optional callbacks are valid, and every non-null pointer
-// names module-resident code. Both ABIs use scalar status with no user pointer.
+// names module-resident code. Compat has its own user-address normalization.
 const OS_FOPS: bindings::file_operations = {
     let mut operations: bindings::file_operations = unsafe { MaybeUninit::zeroed().assume_init() };
     operations.owner = super::THIS_MODULE.as_ptr();
@@ -419,7 +561,7 @@ const OS_FOPS: bindings::file_operations = {
     operations.unlocked_ioctl = Some(os_ioctl);
     #[cfg(CONFIG_COMPAT)]
     {
-        operations.compat_ioctl = Some(os_ioctl);
+        operations.compat_ioctl = Some(os_compat_ioctl);
     }
     operations
 };
@@ -433,6 +575,17 @@ pub(crate) static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolR
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_create_unbooted_v1 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_create_unbooted_v2"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_CREATE_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v2 as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

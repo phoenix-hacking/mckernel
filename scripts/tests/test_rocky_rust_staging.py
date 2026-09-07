@@ -241,6 +241,10 @@ macro_rules! áinclude { () => {} }
             staging.AUDITED_SMP_INIT_CALLBACK_TYPE,
             staging.AUDITED_SMP_EXIT_CALLBACK_TYPE,
             staging.AUDITED_SMP_PROVIDER_EXTERN,
+            staging.AUDITED_SMP_OS_IOCTL_TYPE,
+            staging.AUDITED_SMP_OS_RELEASE_TYPE,
+            staging.AUDITED_SMP_OS_IOCTL_EXTERN,
+            staging.AUDITED_SMP_OS_RELEASE_EXTERN,
             staging.AUDITED_SMP_INIT_CALLBACK_EXTERN,
             staging.AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         ):

@@ -67,6 +67,15 @@ FORBIDDEN_PRODUCTION_TOKENS = (
     "let mut candidate = Self::new();",
 )
 
+LEASE_CONSTRUCTOR = """    pub(crate) unsafe fn from_ihk_lease_v2(
+        slot: u32,
+        generation: u64,
+    ) -> Result<Self, ResourceError> {
+        let token = Self { slot, generation };
+        token.validate()?;
+        Ok(token)
+    }"""
+
 
 def read_text(path):
     with open(path, "r", encoding="utf-8") as stream:
@@ -85,8 +94,11 @@ def assert_source_invariants(source):
         if invariant not in source:
             raise AssertionError("missing resource invariant: {0}".format(invariant))
     production = production_source(source)
+    if production.count(LEASE_CONSTRUCTOR) != 1:
+        raise AssertionError("the sole IHK lease constructor must retain its unsafe contract")
+    policy = production.replace(LEASE_CONSTRUCTOR, "")
     for token in FORBIDDEN_PRODUCTION_TOKENS:
-        if token in production:
+        if token in policy:
             raise AssertionError("forbidden production token: {0}".format(token))
     token_impl = production.split("impl OsToken {", 1)[1].split(
         "/// Internal CPU lifecycle states", 1)[0]
@@ -133,9 +145,13 @@ class IhkSmpResourceTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             assert_source_invariants(mutated)
 
-    def test_source_is_no_std_allocation_ffi_and_unsafe_free(self):
+    def test_source_is_no_std_allocation_and_ffi_free_with_one_lease_boundary(self):
         assert_source_invariants(self.source)
         self.assertTrue(self.source.startswith("// SPDX-License-Identifier: GPL-2.0"))
+
+    def test_checked_lease_constructor_cannot_become_safe_or_skip_bounds(self):
+        self.rejected_mutation("unsafe fn from_ihk_lease_v2", "fn from_ihk_lease_v2")
+        self.rejected_mutation("token.validate()?;", "let _ = token.validate();")
 
     def test_cpu_bound_and_duplicate_mutations_are_rejected(self):
         self.rejected_mutation(
@@ -184,9 +200,9 @@ class IhkSmpResourceTests(unittest.TestCase):
         self.rejected_mutation("if output.len() < needed", "if output.len() > needed")
 
     def test_test_and_fixture_surface_is_broad(self):
-        self.assertEqual(31, self.source.count("#[test]"))
+        self.assertEqual(37, self.source.count("#[test]"))
         self.assertEqual(14, self.fixture.count("#[test]"))
-        self.assertEqual(45, self.source.count("#[test]") + self.fixture.count("#[test]"))
+        self.assertEqual(51, self.source.count("#[test]") + self.fixture.count("#[test]"))
         self.assertIn(
             '#[path = "../../../host-kernel/native-rust/smp_resource.rs"]',
             self.fixture)
@@ -233,7 +249,7 @@ class IhkSmpResourceTests(unittest.TestCase):
                     listing = subprocess.check_output(
                         [tests, "--list"], cwd=REPO_ROOT).decode("utf-8")
                     self.assertEqual(
-                        45,
+                        51,
                         len([line for line in listing.splitlines()
                              if line.endswith(": test")]))
                 subprocess.check_call(command, cwd=REPO_ROOT)
@@ -247,6 +263,16 @@ class IhkSmpResourceTests(unittest.TestCase):
                 universal_newlines=True)
             self.assertNotEqual(0, private_token.returncode)
             self.assertIn("private", private_token.stderr, private_token.stderr)
+
+            unchecked_lease = subprocess.run(
+                [rustc, "--edition=2021", "-Dwarnings", "--cfg",
+                 "lease_without_proof", ALIAS_FIXTURE_PATH, "-o",
+                 os.path.join(temporary, "must-not-mint-unchecked-lease")],
+                cwd=REPO_ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                universal_newlines=True)
+            self.assertNotEqual(0, unchecked_lease.returncode)
+            self.assertIn("E0133", unchecked_lease.stderr, unchecked_lease.stderr)
+            self.assertIn("from_ihk_lease_v2", unchecked_lease.stderr, unchecked_lease.stderr)
 
             workspace_alias = subprocess.run(
                 [rustc, "--edition=2021", "-Dwarnings", "--cfg",

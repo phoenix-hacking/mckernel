@@ -45,21 +45,15 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 15)
-        self.assertEqual(len(discovery["sites"]), 120)
-        self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 67,
-            "ihk_smp_x86_64": 51,
-            "mcctrl": 2,
-        })
-        self.assertEqual(value["coverage"]["by_kind"], {
-            "extern_function": 18,
-            "ffi_export": 18,
-            "foreign_block": 4,
-            "mutable_static": 1,
-            "unsafe_block": 68,
-            "unsafe_function": 3,
-            "unsafe_impl": 8,
-        })
+        self.assertEqual(len(discovery["sites"]), 145)
+        self.assertEqual(value["coverage"]["by_crate"], {'ihk': 81, 'ihk_smp_x86_64': 62, 'mcctrl': 2})
+        self.assertEqual(value["coverage"]["by_kind"], {'extern_function': 26,
+ 'ffi_export': 20,
+ 'foreign_block': 4,
+ 'mutable_static': 1,
+ 'unsafe_block': 81,
+ 'unsafe_function': 5,
+ 'unsafe_impl': 8})
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
         self.assertFalse(value["readiness"]["technical_complete"])
         self.assertFalse(value["readiness"]["credit_eligible"])
@@ -100,22 +94,26 @@ class CurrentLedgerTests(unittest.TestCase):
         ]
         self.assertEqual(
             smp_sites,
-            [
-                "RS011-SMP-0014",
-                "RS011-SMP-0015",
-                "RS011-SMP-0008",
-                "RS011-SMP-0009",
-                "RS011-SMP-0001",
-                "RS011-SMP-0010",
-                "RS011-SMP-0011",
-                "RS011-SMP-0006",
-                "RS011-SMP-0007",
-                "RS011-SMP-0012",
-                "RS011-SMP-0013",
-                "RS011-SMP-0002",
-                "RS011-SMP-0003",
-                "RS011-SMP-0005",
-            ],
+            ['RS011-SMP-0014',
+ 'RS011-SMP-0015',
+ 'RS011-SMP-0008',
+ 'RS011-SMP-0009',
+ 'RS011-SMP-0053',
+ 'RS011-SMP-0054',
+ 'RS011-SMP-0001',
+ 'RS011-SMP-0055',
+ 'RS011-SMP-0056',
+ 'RS011-SMP-0057',
+ 'RS011-SMP-0058',
+ 'RS011-SMP-0010',
+ 'RS011-SMP-0011',
+ 'RS011-SMP-0006',
+ 'RS011-SMP-0007',
+ 'RS011-SMP-0012',
+ 'RS011-SMP-0013',
+ 'RS011-SMP-0002',
+ 'RS011-SMP-0003',
+ 'RS011-SMP-0005'],
         )
         self.assertNotIn("RS011-SMP-0004", [site["id"] for site in value["sites"]])
         self.assertTrue(
@@ -143,18 +141,93 @@ class CurrentLedgerTests(unittest.TestCase):
         )
         self.assertEqual(
             [item["id"] for item in value["sites"] if "ihk" in item["crate_roots"]],
-            ["RS011-IHK-0021", "RS011-IHK-0022"]
-            + ["RS011-IHK-%04d" % index for index in range(1, 4)]
-            + ["RS011-IHK-%04d" % index for index in range(15, 21)]
-            + ["RS011-IHK-%04d" % index for index in range(23, 35)]
-            + ["RS011-IHK-%04d" % index for index in range(4, 15)]
-            + ["RS011-IHK-%04d" % index for index in range(35, 68)],
+            ['RS011-IHK-0021',
+ 'RS011-IHK-0022',
+ 'RS011-IHK-0001',
+ 'RS011-IHK-0002',
+ 'RS011-IHK-0003',
+ 'RS011-IHK-0015',
+ 'RS011-IHK-0016',
+ 'RS011-IHK-0017',
+ 'RS011-IHK-0018',
+ 'RS011-IHK-0019',
+ 'RS011-IHK-0020',
+ 'RS011-IHK-0023',
+ 'RS011-IHK-0024',
+ 'RS011-IHK-0025',
+ 'RS011-IHK-0026',
+ 'RS011-IHK-0027',
+ 'RS011-IHK-0028',
+ 'RS011-IHK-0029',
+ 'RS011-IHK-0030',
+ 'RS011-IHK-0031',
+ 'RS011-IHK-0032',
+ 'RS011-IHK-0033',
+ 'RS011-IHK-0034',
+ 'RS011-IHK-0004',
+ 'RS011-IHK-0005',
+ 'RS011-IHK-0006',
+ 'RS011-IHK-0007',
+ 'RS011-IHK-0008',
+ 'RS011-IHK-0009',
+ 'RS011-IHK-0010',
+ 'RS011-IHK-0011',
+ 'RS011-IHK-0012',
+ 'RS011-IHK-0013',
+ 'RS011-IHK-0014',
+ 'RS011-IHK-0035',
+ 'RS011-IHK-0036',
+ 'RS011-IHK-0037',
+ 'RS011-IHK-0038',
+ 'RS011-IHK-0039',
+ 'RS011-IHK-0040',
+ 'RS011-IHK-0041',
+ 'RS011-IHK-0068',
+ 'RS011-IHK-0069',
+ 'RS011-IHK-0042',
+ 'RS011-IHK-0043',
+ 'RS011-IHK-0044',
+ 'RS011-IHK-0045',
+ 'RS011-IHK-0046',
+ 'RS011-IHK-0047',
+ 'RS011-IHK-0048',
+ 'RS011-IHK-0070',
+ 'RS011-IHK-0071',
+ 'RS011-IHK-0072',
+ 'RS011-IHK-0049',
+ 'RS011-IHK-0050',
+ 'RS011-IHK-0051',
+ 'RS011-IHK-0052',
+ 'RS011-IHK-0053',
+ 'RS011-IHK-0054',
+ 'RS011-IHK-0055',
+ 'RS011-IHK-0073',
+ 'RS011-IHK-0074',
+ 'RS011-IHK-0056',
+ 'RS011-IHK-0057',
+ 'RS011-IHK-0058',
+ 'RS011-IHK-0059',
+ 'RS011-IHK-0060',
+ 'RS011-IHK-0061',
+ 'RS011-IHK-0062',
+ 'RS011-IHK-0063',
+ 'RS011-IHK-0075',
+ 'RS011-IHK-0076',
+ 'RS011-IHK-0077',
+ 'RS011-IHK-0078',
+ 'RS011-IHK-0064',
+ 'RS011-IHK-0079',
+ 'RS011-IHK-0080',
+ 'RS011-IHK-0065',
+ 'RS011-IHK-0066',
+ 'RS011-IHK-0081',
+ 'RS011-IHK-0067'],
         )
 
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "51900be61fd607416a015327f84f61979549b19eeea4e1afa5fd92ab0bf06b0f",
+            "a31e0303a217372b885d4fe0e285b947fa6ea4ead5d0e3f407df81fc2e2cda3e",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
@@ -191,7 +264,7 @@ class CurrentLedgerTests(unittest.TestCase):
         )
         self.assertIn("must be zero", zero_ref_text)
         self.assertIn(
-            "all five relocations",
+            "All seven IHK import relocations",
             " ".join(sites["RS011-SMP-0001"]["context_constraints"]),
         )
         for site_id in (

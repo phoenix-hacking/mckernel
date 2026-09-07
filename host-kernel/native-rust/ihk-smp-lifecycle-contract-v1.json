@@ -36,8 +36,8 @@
       "source_fixture": {
         "expected_tests": 8,
         "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-        "sha256": "e2c91236aaf83141d24c07132584c5e09e3380736af2258d6b16b2db5d4d0326",
-        "size": 8923
+        "sha256": "462c0401c78debaa65db84548c884e6f39600f07da11055bb9bff87db1aa496c",
+        "size": 9378
       },
       "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
       "success_result": 0
@@ -76,7 +76,7 @@
     "registration_failure_releases_provider_lease": true,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy, CPU reserve/release/count/query and memory reserve/query/full/partial release; OS assignment and boot remain separate",
+    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy with a versioned resource callback pair, CPU reserve/release/count/query and memory reserve/query/full/partial release; OS resource commands use mcosN; boot remains pending",
     "teardown_order": [
       "deregister-control-device",
       "retire-memory-controller-and-owned-pages",
@@ -112,12 +112,12 @@
     {
       "destination": "smp_resource.rs",
       "path": "host-kernel/native-rust/smp_resource.rs",
-      "sha256": "7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd"
+      "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3"
     },
     {
       "destination": "smp_cpu.rs",
       "path": "host-kernel/native-rust/smp_cpu.rs",
-      "sha256": "c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97"
+      "sha256": "b7b75d7beae39c8cfb98117b9f03d80d51d796024c1a10909920b022d7cce1c1"
     },
     {
       "destination": "abi/x86_64.rs",
@@ -127,7 +127,7 @@
     {
       "destination": "smp_memory.rs",
       "path": "host-kernel/native-rust/smp_memory.rs",
-      "sha256": "3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95"
+      "sha256": "979e587bb7fe783caf2e455b6b50683fd74908861c1e70657b1b77b7a01bda0a"
     }
   ],
   "dependency_contract": {
@@ -169,6 +169,35 @@
     "license": "Dual BSD/GPL",
     "name": "ihk_smp_x86_64",
     "output": "ihk-smp-x86_64.ko"
+  },
+  "os_resource_bridge": {
+    "allowed_status": "NotBooted",
+    "authority": "exact live IHK OsLease or exclusive DestroyGuard, never userspace identities",
+    "callback_abi": 1,
+    "callback_lifetime": "OS-owned Linux SMP module reference",
+    "commands": [
+      "IHK_OS_ASSIGN_CPU",
+      "IHK_OS_RELEASE_CPU",
+      "IHK_OS_QUERY_CPU",
+      "IHK_OS_GET_NUM_CPUS",
+      "IHK_OS_ASSIGN_MEM",
+      "IHK_OS_RELEASE_MEM",
+      "IHK_OS_QUERY_MEM"
+    ],
+    "compat_address": "zero-extended once in IHK; reject out-of-range address or compat flag in SMP",
+    "compatibility_create_export": "ihk_os_create_unbooted_v1",
+    "cpu_assignment": "preserve requested logical rank; whole-batch ownership validation",
+    "create_symbol": "ihk_os_create_unbooted_v2",
+    "credit_eligible": false,
+    "destroy": "preflight CPU and memory before either commit; return to reserved pool before minor reuse",
+    "ioctl_callback": "ihk_smp_os_ioctl_v2",
+    "memory_assignment": "reuse canonical MemoryMap and retained Linux allocation owners",
+    "native_boot_proven": false,
+    "node_family": "/dev/mcosN",
+    "release_callback": "ihk_smp_os_release_v2",
+    "serialization": "per-OS sleepable mutex before CPU then memory controller locks",
+    "source_reachable": true,
+    "tracker_credit": false
   },
   "parameters": [
     {
@@ -285,24 +314,23 @@
     },
     "fixture": {
       "expected_fixture_tests": 14,
-      "expected_in_file_tests": 31,
-      "expected_total_tests": 45,
+      "expected_in_file_tests": 37,
+      "expected_total_tests": 51,
       "minimum_rustc": "1.92.0",
       "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
-      "negative_sha256": "fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5",
+      "negative_sha256": "4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159",
       "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
       "positive_sha256": "cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1"
     },
     "integration_blockers": [
-      "no versioned IHK OS lease can mint an OsToken in production",
-      "memory reservation needs authoritative staging, exact-stage replay and production acceptance",
+      "OS resource assignment needs declared staging, exact-stage replay and production acceptance",
       "CPU physical eject, suspend, topology replacement and uncertain-state reconciliation need production acceptance",
       "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
-      "OS resource assignment, image loading, APIC reset, IRQ and McKernel boot remain unreachable"
+      "image loading, APIC reset, IRQ and native McKernel boot remain unreachable"
     ],
     "linux_reachable": true,
-    "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
-    "status": "native-cpu-and-memory-adapters-with-private-os-assignment-policy"
+    "os_token_minting": "explicit-unsafe-contract-requires-exact-ihk-v2-os-lease-or-destroy-guard-and-smp-module-owner",
+    "status": "native-cpu-memory-adapters-with-versioned-ihk-os-resource-assignment"
   },
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json"

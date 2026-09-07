@@ -102,7 +102,18 @@ impl ThisModule { fn as_ptr(&self) -> *mut kernel::bindings::module { core::ptr:
 fn provider_status_error(value: i64) -> i32 { value as i32 }
 // The device-request branch is present in the extracted production callback.
 // OS ownership is exercised by the separate complete-adapter fixture.
-unsafe fn ihk_os_create_unbooted_v1(_minor: u32, _owner: *mut kernel::bindings::module, _argument: u64) -> i64 { -12 }
+unsafe extern "C" fn ihk_smp_os_ioctl_v2(_slot: u32, _generation: u64, _command: u32,
+    _argument: u64, _compat: u32) -> i64 { -22 }
+unsafe extern "C" fn ihk_smp_os_release_v2(_slot: u32, _generation: u64) -> i32 { 0 }
+unsafe fn ihk_os_create_unbooted_v2(_minor: u32, _owner: *mut kernel::bindings::module,
+    _argument: u64, version: u32,
+    ioctl: Option<unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64>,
+    release: Option<unsafe extern "C" fn(u32, u64) -> i32>) -> i64
+{
+    assert_eq!(version, 1);
+    assert!(ioctl.is_some() && release.is_some());
+    -12
+}
 unsafe fn ihk_os_destroy_unbooted_v1(_provider: u32, _minor: u64) -> i64 { -22 }
 
 struct ProviderOpenLease;

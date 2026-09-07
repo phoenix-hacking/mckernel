@@ -7,6 +7,8 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest import mock
@@ -14,12 +16,52 @@ import zipfile
 
 from scripts import fp0006_runtime_capture_integration as capture
 from scripts import native_rust_runtime_evidence
+from scripts.tests.frozen_fp0006_authority import materialize
 
 
 ROOT = Path(__file__).resolve().parents[2]
 LEGACY_WORKFLOW = ROOT / ".github/workflows/rust-x86_64-validation.yml"
 NATIVE_WORKFLOW = ROOT / ".github/workflows/native-rust-host-modules-exact-build.yml"
 CONTRACT = ROOT / "host-kernel/contracts/fp0006-runtime-capture-integration-v1.json"
+SOURCE_ROOT = ROOT
+
+
+def setUpModule():
+    global ROOT, LEGACY_WORKFLOW, NATIVE_WORKFLOW, CONTRACT, _AUTHORITY_DIRECTORY
+    _AUTHORITY_DIRECTORY = tempfile.TemporaryDirectory(prefix="fp0006-integration-frozen-")
+    temporary = Path(_AUTHORITY_DIRECTORY.name)
+    ROOT = temporary / "repo"
+    # Git provenance tests still get a real local checkout. Only the frozen
+    # witness source inputs below are replayed from the declared old archive.
+    head = capture._git_head(SOURCE_ROOT)
+    subprocess.run(["git", "clone", "--shared", "--no-hardlinks", "--no-checkout",
+                    str(SOURCE_ROOT), str(ROOT)], check=True, stdout=subprocess.DEVNULL,
+                   stderr=subprocess.PIPE)
+    subprocess.run(["git", "-C", str(ROOT), "checkout", "--detach", head],
+                   check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    relative = "host-kernel/contracts/fp0006-runtime-capture-integration-v1.json"
+    contract = json.loads((SOURCE_ROOT / relative).read_text())
+    inputs = {relative, "scripts/fp0006_runtime_capture_integration.py"}
+    inputs.update(row["path"] for row in contract["base_witness"]["files"].values())
+    inputs.update(row["path"] for row in contract["bound_files"].values())
+    for name in sorted(inputs):
+        target = ROOT / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(SOURCE_ROOT / name, target)
+    frozen = materialize(SOURCE_ROOT, temporary / "frozen",
+                         "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json")
+    for source in frozen.rglob("*"):
+        if source.is_file():
+            target = ROOT / source.relative_to(frozen)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+    LEGACY_WORKFLOW = ROOT / ".github/workflows/rust-x86_64-validation.yml"
+    NATIVE_WORKFLOW = ROOT / ".github/workflows/native-rust-host-modules-exact-build.yml"
+    CONTRACT = ROOT / relative
+
+
+def tearDownModule():
+    _AUTHORITY_DIRECTORY.cleanup()
 
 
 def canonical(value):
@@ -152,6 +194,10 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         self.assertFalse(result["claims"]["exact_native_linker_provenance"])
         self.assertFalse(result["claims"]["exact_toolchain_proven"])
         self.assertFalse(result["claims"]["exact_workflow_run_provenance"])
+
+    def test_live_assignment_source_cannot_replace_the_frozen_witness_inputs(self):
+        with self.assertRaisesRegex(capture.CaptureError, "frozen base witness validation failed"):
+            capture.validate_contract(SOURCE_ROOT)
 
     def test_tool_owner_grammar_is_surface_specific(self):
         legacy = self._legacy_tools()
@@ -352,9 +398,9 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         self.assertIn("90 days", limitations)
         self.assertIn("same envelope", limitations)
 
-    def test_five_frozen_witness_files_match(self):
+    def test_frozen_witness_and_explicit_fixture_inputs_match(self):
         files = self.contract["base_witness"]["files"]
-        self.assertEqual(5, len(files))
+        self.assertEqual(7, len(files))
         for name, binding in files.items():
             with self.subTest(name=name):
                 data = (ROOT / binding["path"]).read_bytes()

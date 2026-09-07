@@ -16,9 +16,13 @@ insufficient. See the [required language acceptance checks](mckernel-rust-assemb
 
 The current [file-level consumer review](rust-consumer-integration.md) separates
 active build paths from optional, comparison/test, and pending native sources.
-It accounts for all 130 current Rust files without removing or replacing the
-immutable baseline. It also records the verified `hash.rs` incremental-build
-dependency repair; complete native unification remains open.
+The subsequent [OS resource inventory](rust-consumers-os-resource-20260907.json)
+accounts for all 131 current Rust files: 116 unchanged, 13 modified and two
+added relative to the immutable baseline, with none removed. All 64 core
+crate files and 15 staged native files have matched consumers. The verified
+`hash.rs` incremental-build dependency repair remains preserved; complete
+native unification is still open. The next steps are recorded in
+[the image/boot/application plan](native-image-boot-plan.md).
 
 ## Architecture and implementation priority
 

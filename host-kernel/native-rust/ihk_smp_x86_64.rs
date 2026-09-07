@@ -15,8 +15,8 @@ use kernel::{
     prelude::*,
 };
 
-// Reuse the resource policy in the Linux CPU and memory adapters. OS assignment
-// and IKC still await the versioned IHK lease bridge and their Linux adapters;
+// Reuse the resource policy in the Linux CPU and memory adapters, including
+// generation-checked OS assignment. IKC and boot integration remain pending;
 // unused policy surfaces stay private.
 #[allow(dead_code)]
 mod smp_resource;
@@ -58,10 +58,13 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
             // THIS_MODULE. IHK acquires its own module reference before the
             // instance becomes live; the raw scalar argument is never a pointer.
             let result = unsafe {
-                ihk_os_create_unbooted_v1(
+                ihk_os_create_unbooted_v2(
                     IHK_SMP_CONTROL_DEVICE_MINOR,
                     THIS_MODULE.as_ptr().cast(),
                     arg as u64,
+                    1,
+                    Some(ihk_smp_os_ioctl_v2),
+                    Some(ihk_smp_os_release_v2),
                 )
             };
             if result < 0 {
@@ -90,6 +93,13 @@ type IhkSmpProviderInitV2 = extern "C" fn() -> i32;
 // SAFETY: This scalar C-ABI callback borrows no provider or caller memory.
 type IhkSmpProviderExitV2 = extern "C" fn();
 
+// SAFETY: IHK holds the exact OS lease, operation lock and SMP module owner.
+// The address and compat flag are borrowed only during the synchronous call.
+type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;
+// SAFETY: IHK holds the exclusive initial-state destruction guard and module
+// owner until this callback returns all resources or leaves them unchanged.
+type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
+
 // SAFETY: The provider owns these namespaced symbols for its full module
 // lifetime.  The byte is read-only; the C-ABI functions exchange only scalars
 // and scalar-only callback function identities. The OS-create call also borrows
@@ -110,11 +120,65 @@ extern "C" {
     fn ihk_smp_provider_open_v1(minor: u32) -> i64;
     #[link_name = "ihk_smp_provider_close_v1"]
     fn ihk_smp_provider_close_v1(receipt: i64);
-    #[link_name = "ihk_os_create_unbooted_v1"]
-    fn ihk_os_create_unbooted_v1(provider_minor: u32,
-        owner: *mut core::ffi::c_void, argument: u64) -> i64;
+    #[link_name = "ihk_os_create_unbooted_v2"]
+    fn ihk_os_create_unbooted_v2(
+        provider_minor: u32,
+        owner: *mut core::ffi::c_void,
+        argument: u64,
+        callback_abi: u32,
+        ioctl: Option<IhkSmpOsIoctlV2>,
+        release: Option<IhkSmpOsReleaseV2>,
+    ) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
+}
+
+// SAFETY: Only IHK's versioned OS object invokes this registered callback. It
+// holds an OsLease for the exact slot/generation, its sleepable operation lock,
+// and the owning SMP module reference. User pointers live only for this call.
+unsafe extern "C" fn ihk_smp_os_ioctl_v2(
+    slot: u32,
+    generation: u64,
+    command: u32,
+    argument: u64,
+    compat: u32,
+) -> i64 {
+    if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {
+        return EINVAL.to_errno() as i64;
+    }
+    // SAFETY: IHK supplies the live lease proof described by this callback ABI;
+    // these identifiers are not derived from the user's ioctl arguments.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno() as i64,
+    };
+    let result = if smp_cpu::handles_os(command) {
+        smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)
+    } else if smp_memory::handles_os(command) {
+        smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)
+    } else {
+        Err(EINVAL)
+    };
+    match result {
+        Ok(value) => value as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+// SAFETY: IHK invokes this only with the exclusive initial-state DestroyGuard
+// and the retained SMP module owner. No OS file, boot, or other resource call
+// can overlap cleanup for this generation. Errors leave its resources intact.
+unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {
+    // SAFETY: The versioned IHK exclusive destruction callback proves the
+    // exact generation remains owned until both resource maps are cleaned up.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno(),
+    };
+    match smp_cpu::release_os_resources(owner) {
+        Ok(()) => 0,
+        Err(error) => error.to_errno(),
+    }
 }
 
 // These callbacks deliberately own lifecycle only.  Returning success from

@@ -101,6 +101,34 @@ The subsequent Rust inventory accounts for 131 sources: 121 unchanged, eight
 modified, two added, none removed; all 64 core crate files and 15 staged native
 files have matched consumers. See `docs/verification/rust-consumers-memory-20260907.json`.
 
+Next source-bound OS resource prototype (2026-09-07): native and compat CPU/memory
+assignment, queries and coupled unbooted destruction now pass the expanded
+four-vCPU/two-NUMA guest across two module cycles, alongside the prior CPU/memory
+regressions. See `docs/verification/native-os-resource-checkpoint-20260907.json`
+and `docs/verification/native-os-resource-bridge-plan.md`. The policy has 51 Rust
+tests, including 65,536 page-model cases; the complete IHK adapter mock has 47.
+The v2 callback pair retains IHK leases, SMP module ownership and per-OS operation
+locks. Current manifest/lifecycle/unsafe-FFI/downstream verification bindings are
+still pending; the prior 2,301-test suite covers the memory checkpoint, not this
+new prototype. Preserve all retained captures and finish those bindings before
+an exact-stage rebuild/guest/full suite. Then proceed to image loading, AP startup,
+IKC and workloads. No native McKernel boot or production gate is promoted.
+
+The subsequent declared OS resource stage now builds and passes link closure,
+followed by both native/compat guest cycles on four vCPUs and two NUMA nodes.
+The current suite passes 2,305 tests in 354.989 seconds: 2,234 passed and 71 skipped.
+See `docs/verification/native-os-resource-final-validation-20260907.json`.
+The unsafe/FFI queue covers 145 sites across 15 native sources, preserving
+all previous site IDs with independent review still pending. Historical
+FP-0006 witnesses replay their unchanged source inputs in explicit private
+fixtures; they do not accept the newer live source as old evidence. The
+Rust inventory accounts for 131 files: 116 unchanged, 13 modified, two
+added and none removed; all 64 core files retain their crate/CMake consumers.
+Next: image loading, AP startup, IKC and native mcctrl execution, then
+application checks; see `docs/verification/native-image-boot-plan.md`.
+Native McKernel boot, full Rust/assembly completion and production
+acceptance remain open. No formal score changes.
+
 ## Mission
 
 This repository is migrating McKernel from the traditional CentOS-based

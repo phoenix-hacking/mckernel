@@ -207,71 +207,67 @@ static IHK_VERSION_MODINFO: [u8; 17] = *b"version=1.7.0rc4\\0";''',
 static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
         ),
     ),
-    "host-kernel/native-rust/ihk_smp_x86_64.rs": (
-        (
-            "IHK exact generated compatibility build identity",
-            'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");',
-        ),
-        (
-            "IHK SMP init callback type",
-            '''type IhkSmpProviderInitV2 = extern "C" fn() -> i32;''',
-        ),
-        (
-            "IHK SMP exit callback type",
-            '''type IhkSmpProviderExitV2 = extern "C" fn();''',
-        ),
-        (
-            "IHK SMP provider and OS import",
-            '''extern "C" {
-    #[link_name = "ihk_provider_lifecycle_v1"]
-    static IHK_PROVIDER_LIFECYCLE_V1: u8;
-    #[link_name = "ihk_smp_provider_attach_v2"]
-    fn ihk_smp_provider_attach_v2(
-        callback_abi: u32,
-        flags: u32,
-        init: Option<IhkSmpProviderInitV2>,
-        exit: Option<IhkSmpProviderExitV2>,
-    ) -> i64;
-    #[link_name = "ihk_smp_provider_detach_v2"]
-    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);
-    #[link_name = "ihk_smp_provider_open_v1"]
-    fn ihk_smp_provider_open_v1(minor: u32) -> i64;
-    #[link_name = "ihk_smp_provider_close_v1"]
-    fn ihk_smp_provider_close_v1(receipt: i64);
-    #[link_name = "ihk_os_create_unbooted_v1"]
-    fn ihk_os_create_unbooted_v1(provider_minor: u32,
-        owner: *mut core::ffi::c_void, argument: u64) -> i64;
-    #[link_name = "ihk_os_destroy_unbooted_v1"]
-    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
-}''',
-        ),
-        (
-            "IHK SMP init callback ABI",
-            '''extern "C" fn ihk_smp_provider_init_v2() -> i32 {''',
-        ),
-        (
-            "IHK SMP exit callback ABI",
-            '''extern "C" fn ihk_smp_provider_exit_v2() {''',
-        ),
-        (
-            "IHK SMP parameter descriptor section",
-            '''#[link_section = "__param"]
-        #[used(compiler)]
-        static $descriptor: KernelParameter = KernelParameter {''',
-        ),
-        (
-            "IHK SMP loadable parameter metadata",
-            '''#[link_section = ".modinfo"]
-        #[used(compiler)]
-        static $loadable_name: [u8; $loadable.len()] = *$loadable;''',
-        ),
-        (
-            "IHK SMP built-in parameter metadata",
-            '''#[link_section = ".modinfo"]
-        #[used(compiler)]
-        static $builtin_name: [u8; $builtin.len()] = *$builtin;''',
-        ),
-    ),
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": (('IHK exact generated compatibility build identity',
+  'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'),
+ ('IHK SMP init callback type', 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'),
+ ('IHK SMP exit callback type', 'type IhkSmpProviderExitV2 = extern "C" fn();'),
+ ('IHK SMP OS ioctl callback type',
+  'type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;'),
+ ('IHK SMP OS release callback type',
+  'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'),
+ ('IHK SMP provider and OS import',
+  'extern "C" {\n'
+  '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+  '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
+  '    #[link_name = "ihk_smp_provider_attach_v2"]\n'
+  '    fn ihk_smp_provider_attach_v2(\n'
+  '        callback_abi: u32,\n'
+  '        flags: u32,\n'
+  '        init: Option<IhkSmpProviderInitV2>,\n'
+  '        exit: Option<IhkSmpProviderExitV2>,\n'
+  '    ) -> i64;\n'
+  '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
+  '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
+  '    #[link_name = "ihk_smp_provider_open_v1"]\n'
+  '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
+  '    #[link_name = "ihk_smp_provider_close_v1"]\n'
+  '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
+  '    #[link_name = "ihk_os_create_unbooted_v2"]\n'
+  '    fn ihk_os_create_unbooted_v2(\n'
+  '        provider_minor: u32,\n'
+  '        owner: *mut core::ffi::c_void,\n'
+  '        argument: u64,\n'
+  '        callback_abi: u32,\n'
+  '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
+  '        release: Option<IhkSmpOsReleaseV2>,\n'
+  '    ) -> i64;\n'
+  '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+  '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
+  '}'),
+ ('IHK SMP OS ioctl callback ABI',
+  'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
+  '    slot: u32,\n'
+  '    generation: u64,\n'
+  '    command: u32,\n'
+  '    argument: u64,\n'
+  '    compat: u32,\n'
+  ') -> i64 {'),
+ ('IHK SMP OS release callback ABI',
+  'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'),
+ ('IHK SMP init callback ABI', 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'),
+ ('IHK SMP exit callback ABI', 'extern "C" fn ihk_smp_provider_exit_v2() {'),
+ ('IHK SMP parameter descriptor section',
+  '#[link_section = "__param"]\n'
+  '        #[used(compiler)]\n'
+  '        static $descriptor: KernelParameter = KernelParameter {'),
+ ('IHK SMP loadable parameter metadata',
+  '#[link_section = ".modinfo"]\n'
+  '        #[used(compiler)]\n'
+  '        static $loadable_name: [u8; $loadable.len()] = *$loadable;'),
+ ('IHK SMP built-in parameter metadata',
+  '#[link_section = ".modinfo"]\n'
+  '        #[used(compiler)]\n'
+  '        static $builtin_name: [u8; $builtin.len()] = *$builtin;')),
     "host-kernel/native-rust/mcctrl.rs": (
         (
             "mcctrl lifecycle provider import",
@@ -308,70 +304,100 @@ REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/smp_memory.rs'] = (
     ('Memory adapter shared ABI', '#[path = "abi/x86_64.rs"]\nmod abi;'),
 )
 
-REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/os_runtime.rs'] = (
-    ('OS Linux kernel exports', '''extern "C" {
-    fn __register_chrdev(
-        major: u32,
-        base: u32,
-        count: u32,
-        name: *const i8,
-        operations: *const c_void,
-    ) -> i32;
-    fn __unregister_chrdev(major: u32, base: u32, count: u32, name: *const i8);
-    fn class_create(name: *const i8) -> *mut bindings::class;
-    fn class_destroy(class: *const bindings::class);
-    fn device_create(
-        class: *const bindings::class,
-        parent: *mut c_void,
-        dev: u32,
-        data: *mut c_void,
-        format: *const i8,
-        ...
-    ) -> *mut c_void;
-    fn device_destroy(class: *const bindings::class, dev: u32);
-    fn get_free_pages_noprof(flags: u32, order: u32) -> usize;
-    fn free_pages(address: usize, order: u32);
-    fn try_module_get(module: *mut c_void) -> bool;
-    fn module_put(module: *mut c_void);
-}'''),
-    ('OS create ABI', '''#[export_name = "ihk_os_create_unbooted_v1"]
-// SAFETY: The C caller supplies its already pinned Linux module pointer; this
-// adapter acquires a separate module reference before publishing any OS node.
-pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v1(
-    provider_minor: u32,
-    owner: *mut c_void,
-    argument: u64,
-) -> i64 {'''),
-    ('OS destroy ABI', '''#[export_name = "ihk_os_destroy_unbooted_v1"]
-// SAFETY: Only scalar identities cross this C ABI. Registry guards validate
-// ownership and exclude live open files before any allocation is reclaimed.
-pub(crate) extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {'''),
-    ('OS open ABI', '''unsafe extern "C" fn os_open(inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {'''),
-    ('OS release ABI', '''unsafe extern "C" fn os_release(_inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {'''),
-    ('OS ioctl ABI', '''unsafe extern "C" fn os_ioctl(
-    file: *mut bindings::file,
-    command: u32,
-    _argument: core::ffi::c_ulong,
-) -> core::ffi::c_long {'''),
-    ('OS create export record', '''#[export_name = "__export_symbol_ihk_os_create_unbooted_v1"]
-#[link_section = ".export_symbol"]
-#[used(compiler)]
-pub(crate) static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
-    license: *b"GPL\\0",
-    namespace: *b"MCKERNEL_IHK_V1\\0",
-    padding: [0; 4],
-    symbol: ihk_os_create_unbooted_v1 as *const () as *const u8,
-};'''),
-    ('OS destroy export record', '''#[export_name = "__export_symbol_ihk_os_destroy_unbooted_v1"]
-#[link_section = ".export_symbol"]
-#[used(compiler)]
-pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
-    license: *b"GPL\\0",
-    namespace: *b"MCKERNEL_IHK_V1\\0",
-    padding: [0; 4],
-    symbol: ihk_os_destroy_unbooted_v1 as *const () as *const u8,
-};'''),
-)
+REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/os_runtime.rs'] = (('OS Linux kernel exports',
+  'extern "C" {\n'
+  '    fn __register_chrdev(\n'
+  '        major: u32,\n'
+  '        base: u32,\n'
+  '        count: u32,\n'
+  '        name: *const i8,\n'
+  '        operations: *const c_void,\n'
+  '    ) -> i32;\n'
+  '    fn __unregister_chrdev(major: u32, base: u32, count: u32, name: *const i8);\n'
+  '    fn class_create(name: *const i8) -> *mut bindings::class;\n'
+  '    fn class_destroy(class: *const bindings::class);\n'
+  '    fn device_create(\n'
+  '        class: *const bindings::class,\n'
+  '        parent: *mut c_void,\n'
+  '        dev: u32,\n'
+  '        data: *mut c_void,\n'
+  '        format: *const i8,\n'
+  '        ...\n'
+  '    ) -> *mut c_void;\n'
+  '    fn device_destroy(class: *const bindings::class, dev: u32);\n'
+  '    fn get_free_pages_noprof(flags: u32, order: u32) -> usize;\n'
+  '    fn free_pages(address: usize, order: u32);\n'
+  '    fn try_module_get(module: *mut c_void) -> bool;\n'
+  '    fn module_put(module: *mut c_void);\n'
+  '}'),
+ ('OS backend ioctl callback type',
+  'type OsBackendIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;'),
+ ('OS backend release callback type',
+  'type OsBackendReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'),
+ ('OS create ABI',
+  '#[export_name = "ihk_os_create_unbooted_v1"]\n'
+  '// SAFETY: The C caller supplies its already pinned Linux module pointer; this\n'
+  '// adapter acquires a separate module reference before publishing any OS node.\n'
+  'pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v1(\n'
+  '    provider_minor: u32,\n'
+  '    owner: *mut c_void,\n'
+  '    argument: u64,\n'
+  ') -> i64 {'),
+ ('OS create v2 ABI',
+  '#[export_name = "ihk_os_create_unbooted_v2"]\n// SAFETY: This C ABI accepts a pinned Linux module pointer and trusted callback\n// identities with the exact scalar signature; no unwind may cross the boundary.\npub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v2(\n    provider_minor: u32,\n    owner: *mut c_void,\n    argument: u64,\n    callback_abi: u32,\n    ioctl: Option<OsBackendIoctlV2>,\n    release: Option<OsBackendReleaseV2>,\n) -> i64 {'),
+ ('OS destroy ABI',
+  '#[export_name = "ihk_os_destroy_unbooted_v1"]\n'
+  '// SAFETY: Only scalar identities cross this C ABI. Registry guards validate\n'
+  '// ownership and exclude live open files before any allocation is reclaimed.\n'
+  'pub(crate) extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {'),
+ ('OS open ABI',
+  'unsafe extern "C" fn os_open(inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {'),
+ ('OS release ABI',
+  'unsafe extern "C" fn os_release(_inode: *mut bindings::inode, file: *mut bindings::file) -> i32 '
+  '{'),
+ ('OS ioctl ABI',
+  'unsafe extern "C" fn os_ioctl(\n'
+  '    file: *mut bindings::file,\n'
+  '    command: u32,\n'
+  '    argument: core::ffi::c_ulong,\n'
+  ') -> core::ffi::c_long {'),
+ ('OS compat ioctl ABI',
+  '#[cfg(CONFIG_COMPAT)]\n'
+  'unsafe extern "C" fn os_compat_ioctl(\n'
+  '    file: *mut bindings::file,\n'
+  '    command: u32,\n'
+  '    argument: core::ffi::c_ulong,\n'
+  ') -> core::ffi::c_long {'),
+ ('OS create export record',
+  '#[export_name = "__export_symbol_ihk_os_create_unbooted_v1"]\n'
+  '#[link_section = ".export_symbol"]\n'
+  '#[used(compiler)]\n'
+  'pub(crate) static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {\n'
+  '    license: *b"GPL\\0",\n'
+  '    namespace: *b"MCKERNEL_IHK_V1\\0",\n'
+  '    padding: [0; 4],\n'
+  '    symbol: ihk_os_create_unbooted_v1 as *const () as *const u8,\n'
+  '};'),
+ ('OS create v2 export record',
+  '#[export_name = "__export_symbol_ihk_os_create_unbooted_v2"]\n'
+  '#[link_section = ".export_symbol"]\n'
+  '#[used(compiler)]\n'
+  'pub(crate) static IHK_OS_CREATE_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {\n'
+  '    license: *b"GPL\\0",\n'
+  '    namespace: *b"MCKERNEL_IHK_V1\\0",\n'
+  '    padding: [0; 4],\n'
+  '    symbol: ihk_os_create_unbooted_v2 as *const () as *const u8,\n'
+  '};'),
+ ('OS destroy export record',
+  '#[export_name = "__export_symbol_ihk_os_destroy_unbooted_v1"]\n'
+  '#[link_section = ".export_symbol"]\n'
+  '#[used(compiler)]\n'
+  'pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {\n'
+  '    license: *b"GPL\\0",\n'
+  '    namespace: *b"MCKERNEL_IHK_V1\\0",\n'
+  '    padding: [0; 4],\n'
+  '    symbol: ihk_os_destroy_unbooted_v1 as *const () as *const u8,\n'
+  '};'))
 
 REVIEWED_RUST_BLOCK_PREFIXES = {
     "CPU adapter shared ABI": "#[allow(dead_code, unreachable_pub)]\n",
@@ -529,6 +555,64 @@ REVIEWED_RUST_OUTER_BLOCKS = frozenset(
 
 REVIEWED_RUST_BLOCK_PREFIXES.update({'OS Linux kernel exports': '// SAFETY: These are Linux 6.12 kernel exports with their C header ABI.\n// Calls below supply only module-resident operations, registered device IDs,\n// valid kernel module pointers or allocation addresses owned by this adapter.\n', 'OS create ABI': "// SAFETY: Called only by the pinned native SMP control-file ioctl. The owner\n// is the caller's Linux module pointer, never a user argument or Rust object.\n// No callback or caller data is retained; a Linux module reference is acquired.\n", 'OS destroy ABI': '// SAFETY: This C ABI accepts scalar minor numbers only. It tears down solely an\n// unbooted OS belonging to the given live provider and propagates busy errors.\n', 'OS open ABI': '// SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by\n// .owner. Successful open installs exactly one owned lease in private_data.\n', 'OS release ABI': '// SAFETY: Linux calls release once after the final file reference. No ioctl\n// can still borrow the private lease, and .owner keeps this module resident.\n', 'OS ioctl ABI': '// SAFETY: Linux pins the file for the callback; its immutable private lease\n// keeps the exact OS generation live until this callback and all peers finish.\n', 'OS create export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n', 'OS destroy export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n'})
 REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset(('OS Linux kernel exports', 'OS create ABI', 'OS destroy ABI', 'OS open ABI', 'OS release ABI', 'OS ioctl ABI', 'OS create export record', 'OS destroy export record'))
+
+REVIEWED_RUST_BLOCK_PREFIXES.update({'IHK SMP OS ioctl callback ABI': "// SAFETY: Only IHK's versioned OS object invokes this "
+                                  'registered callback. It\n'
+                                  '// holds an OsLease for the exact slot/generation, its '
+                                  'sleepable operation lock,\n'
+                                  '// and the owning SMP module reference. User pointers live only '
+                                  'for this call.\n',
+ 'IHK SMP OS ioctl callback type': '// SAFETY: IHK holds the exact OS lease, operation lock and '
+                                   'SMP module owner.\n'
+                                   '// The address and compat flag are borrowed only during the '
+                                   'synchronous call.\n',
+ 'IHK SMP OS release callback ABI': '// SAFETY: IHK invokes this only with the exclusive '
+                                    'initial-state DestroyGuard\n'
+                                    '// and the retained SMP module owner. No OS file, boot, or '
+                                    'other resource call\n'
+                                    '// can overlap cleanup for this generation. Errors leave its '
+                                    'resources intact.\n',
+ 'IHK SMP OS release callback type': '// SAFETY: IHK holds the exclusive initial-state destruction '
+                                     'guard and module\n'
+                                     '// owner until this callback returns all resources or leaves '
+                                     'them unchanged.\n',
+ 'OS backend ioctl callback type': '// SAFETY: Only IHK invokes these callbacks with a live '
+                                   'OsLease or an exclusive\n'
+                                   '// DestroyGuard, respectively. The owning SMP module must keep '
+                                   'the callbacks\n'
+                                   '// resident, accept the exact scalar ABI and borrow user '
+                                   'addresses only during\n'
+                                   '// ioctl. The release callback must finish all resource '
+                                   'cleanup before success,\n'
+                                   '// and leave the OS usable on failure. Neither callback may '
+                                   'reenter OS ioctls\n'
+                                   '// or destruction while the per-OS operation lock is held.\n',
+ 'OS backend release callback type': '// SAFETY: The exclusive destruction guard proves this exact '
+                                     'slot/generation\n'
+                                     '// has no open references. Success returns its resources '
+                                     'before minor reuse.\n',
+ 'OS compat ioctl ABI': "// SAFETY: Linux's compat callback has the same file lifetime as native "
+                        'ioctl.\n'
+                        '// Zero-extend the top-level user address once before any backend can '
+                        'parse it.\n',
+ 'OS create v2 ABI': '/// Create an unbooted OS with callbacks pinned by its provider module '
+                     'owner.\n'
+                     '/// ABI version 1 uses (slot, generation, command, user address, '
+                     'compat=0/1)\n'
+                     '/// for ioctl and (slot, generation) for exclusive resource cleanup.\n'
+                     '///\n'
+                     '/// # Safety\n'
+                     '/// The caller pins `owner`, and both callbacks reside in that module and '
+                     'obey\n'
+                     '/// the contracts above. These are trusted code pointers, never userspace '
+                     'data.\n'
+                     '// SAFETY: The boundary validates the callback version and complete '
+                     'callback\n'
+                     '// pair before acquiring owners or publishing anything. The existing create\n'
+                     '// transaction retains the module before storing either function pointer.\n',
+ 'OS create v2 export record': '// SAFETY: Linux modpost reads this immutable relocation for the '
+                               'module lifetime.\n'})
+REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset(('IHK SMP OS ioctl callback type', 'IHK SMP OS release callback type', 'IHK SMP OS ioctl callback ABI', 'IHK SMP OS release callback ABI', 'OS backend ioctl callback type', 'OS backend release callback type', 'OS create v2 ABI', 'OS compat ioctl ABI', 'OS create v2 export record'))
 
 REVIEWED_RUST_BRACED_BLOCKS = frozenset(
     ("IHK SMP loadable parameter metadata",)

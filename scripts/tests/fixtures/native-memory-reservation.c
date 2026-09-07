@@ -353,7 +353,10 @@ static void concurrent_memory(int fd)
     close_fd(fd);
     message("NATIVE_MEMORY_RESERVATION " ARCH_LABEL " concurrent=3x8 PASS\n");
 }
-int main(void)
+#ifndef NATIVE_MEMORY_MAIN
+#define NATIVE_MEMORY_MAIN main
+#endif
+int NATIVE_MEMORY_MAIN(void)
 {
     require(native_cpu_reference_main() == 0);
     int fd = open_control();

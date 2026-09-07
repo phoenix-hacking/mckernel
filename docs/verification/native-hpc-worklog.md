@@ -448,3 +448,104 @@ lease generations and assignment order, retain Linux page/device owners, and
 complete coupled cleanup before reusing an OS slot. Then continue image loading,
 AP startup, IKC, workloads and remaining McKernel C retirement. No native McKernel
 boot or production acceptance gate is promoted by this checkpoint.
+
+## Native OS resource assignment prototype — 2026-09-07 12:00:22 UTC
+
+The [source-bound checkpoint](native-os-resource-checkpoint-20260907.json) retains
+48 artifacts across policy tests, complete IHK adapter mocks, two module builds,
+two guest captures, compiler/source records, the compiled modules and architecture
+checks. The source parent is local memory commit `3d68165c`; current changes are
+recorded as overlays. The prior exact memory stage and its compiled evidence are
+preserved. No new Rust source replaces an existing consumer: this extends the
+existing policy and Linux adapters in place.
+
+The existing Rust `MemoryMap` gains atomic batch assignment/release. Six new
+cases include 65,536 independent per-page model comparisons, plus late errors,
+capacity, stale generations, coalescing and compensation. The policy/fixture
+group passes 51 Rust cases and ten Python checks. Direct private-field token
+construction, safe calls to the sole checked-lease constructor and aliased
+workspaces remain rejected by the compiler. The first test compile failure was
+a test-local retained transaction borrow; it was recorded before repair and the
+failed source/log remain retained.
+
+IHK's additive v2 creation ABI stores a validated scalar callback pair while its
+existing provider module owner remains pinned. Per-OS sleepable locks serialize
+resource calls; file leases supply exact generations and compat addresses are
+zero-extended once. The exclusive destruction guard supplies its captured status,
+so initial-state cleanup cannot race loading/boot. The complete Linux-adapter
+mock fixture passes 47 cases. Together with the policy group, the later focused
+run passes 11 Python checks; this is separate from the earlier full suite.
+
+The CPU adapter preserves assignment rank, rejects whole invalid batches, and
+keeps assigned CPUs offline under the existing Linux device owner and online
+veto. Memory assignment selects existing free NUMA ranges, retains exact Linux
+compound-page owners, and publishes only a complete candidate. Out-of-line Rust
+metadata permits logical page-sized splits without splitting or freeing Linux
+compound allocations. Release uses canonical queried sizes/nodes. CPU then memory
+locks remain held through both cleanup commits; preparation errors retain the OS
+and its ownership. The [implementation notes](native-os-resource-bridge-plan.md)
+record these reuse decisions and their remaining boundaries.
+
+The combined prototype modules build against the unchanged Linux 6.12 fault-
+injection debug configuration. The IHK and SMP module SHA-256 values are
+`399dcb3777d334ef61fbb3d79d71c5e37f4a9c3b1d06338ee9ddb1b323d1af45`
+and `5b3b56c082048a40a956b69aff098ac4c488675abfc0c47171ad175a2ed85e47`.
+mcctrl and the Linux kernel image are unchanged from the exact memory checkpoint.
+All three remain ELF64/x86-64 and have no SIMD/x87 instructions in the disassembly
+check (4,727 IHK, 16,739 SMP and 221 mcctrl instructions).
+
+The first guest run finishes at 11:57:37 UTC; the expanded second at 12:00:22 UTC.
+Both exit 0 with no missing or error markers. Each uses four vCPUs, two NUMA nodes
+and 8 GiB under the fixed offline four-CPU/12-GiB runner. Native and compat each
+pass twice: ordered CPU transfers, successful release/reassignment, cross-instance
+ownership rejection, page-sized NUMA assignment, all-or-nothing late errors,
+ALL/empty memory requests, query faults, concurrent create/assign/release/destroy,
+closed-file module pinning and minor reuse without inherited resources. Both
+captures retain all old CPU/memory regressions, including 96 injected allocation
+failures, and restore every CPU and unload every module.
+
+This is a working source-bound assignment prototype, not an exact-stage or
+production acceptance claim. Current manifest, lifecycle, unsafe/FFI and downstream
+verification bindings remain pending. Next finish those bindings, rebuild/replay
+the declared stage and run the full suite, then connect image loading, AP startup,
+IKC and basic workloads. Native McKernel has not booted; remaining McKernel C
+retirement and production acceptance remain required. No formal score changes.
+
+## Declared OS resource checkpoint — 2026-09-07T12:50:02.823874+00:00
+
+The [final local validation](native-os-resource-final-validation-20260907.json)
+retains the integration failures, focused passes and final source snapshot.
+The full suite ran 2,305 tests in 354.989 seconds: 2,234 passed and 71 skipped. The
+[declared build and guest](native-os-resource-exact-stage-checkpoint-20260907.json)
+pass with the existing debug configuration: four CPUs, two NUMA nodes,
+both ABIs and two module cycles. CPU/memory assignment, ownership rejection,
+atomic rollback, reuse and cleanup pass alongside prior reservation and
+allocation-failure regressions. ELF64 and no-SIMD/x87 checks also pass.
+
+The manifest, IHK/SMP lifecycle contracts, exact callback boundaries and
+145-site unsafe/FFI inventory now include the versioned OS resource bridge.
+All prior durable site IDs remain. The new scalar callback aliases and
+separate export/function safety arguments are in the rebuilt source.
+Independent review and production acceptance remain pending.
+
+Historical FP-0006 status/negative witnesses retain their original checker,
+contract and producer bytes. An 8,527-byte pinned archive retains the four
+old registry/dispatcher source and contract files, verified against commit
+`3d68165c0d5c6ce173577a2d6ab5efe18c498052`. Their tests use explicit
+private source namespaces. The current capture-integration record binds
+that test harness and archive, while its historical witness still rejects
+the newer live implementation. These schema/fixture tests are not a
+successful current-code production capture workflow.
+
+The [updated inventory](rust-consumers-os-resource-20260907.json) accounts
+for 131 Rust files: 116 unchanged, 13 modified and two added relative to
+the immutable baseline; none removed. All 64 McKernel files and 15 staged
+native files have identified consumers. Optional tools and the native
+mapping foundation keep their explicit pending dispositions.
+
+Application checks begin after image loading, native AP startup, IKC and
+the native mcctrl launch/syscall path work together. The
+[implementation plan](native-image-boot-plan.md) identifies the existing
+Rust to retain and the missing adapters. Native McKernel has not booted;
+no delivery date or new completion percentage is established. The final
+McKernel must still be entirely Rust or reviewed assembly.

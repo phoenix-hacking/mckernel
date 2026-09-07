@@ -202,6 +202,10 @@ struct Request {
 
 impl Request {
     fn read(argument: usize, compat: bool) -> Result<Self> {
+        Self::read_scope(argument, compat, true)
+    }
+
+    fn read_scope(argument: usize, compat: bool, reserve_hints: bool) -> Result<Self> {
         let length = if compat {
             24
         } else {
@@ -240,13 +244,17 @@ impl Request {
             || count as usize > MAX_REQUESTS
             || minimum < 0
             || !(0..=98).contains(&ratio)
-            || timeout < 0
+            || (reserve_hints && timeout < 0)
             || (count > 0 && (sizes == 0 || nodes == 0))
         {
             return Err(EINVAL);
         }
         let minimum_pages = ((minimum as u64).max(PAGE_BYTES) + PAGE_BYTES - 1) / PAGE_BYTES;
-        let min_order = minimum_pages.next_power_of_two().trailing_zeros();
+        let min_order = if reserve_hints {
+            minimum_pages.next_power_of_two().trailing_zeros()
+        } else {
+            0
+        };
         if min_order > MAX_ORDER {
             return Err(EINVAL);
         }
@@ -596,11 +604,15 @@ impl MemoryContext {
         Ok(0)
     }
 
-    fn query(&self, request: &Request) -> Result<isize> {
+    fn query(
+        &self,
+        request: &Request,
+        owner: Option<super::smp_resource::OsToken>,
+    ) -> Result<isize> {
         let mut count = 0;
         for index in 0..self.map.len() {
             let range = self.map.extent(index).ok_or(EIO)?;
-            if range.owner().is_none() {
+            if range.owner() == owner {
                 if request.compat && request.count != 0 && range.length() > u32::MAX as u64 {
                     return Err(overflow());
                 }
@@ -616,7 +628,7 @@ impl MemoryContext {
             let mut nodes = UserSlice::new(request.nodes, count * 4).writer();
             for index in 0..self.map.len() {
                 let range = self.map.extent(index).ok_or(EIO)?;
-                if range.owner().is_none() {
+                if range.owner() == owner {
                     if request.compat {
                         sizes.write(&(range.length() as u32))?;
                     } else {
@@ -629,6 +641,130 @@ impl MemoryContext {
         UserSlice::new(request.count_address, 4)
             .writer()
             .write(&(count as i32))?;
+        Ok(0)
+    }
+
+    fn assign_os(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+        request: &Request,
+    ) -> Result<isize> {
+        // Copy all caller arrays before selecting or transferring any resource.
+        let demands = request.demands()?;
+        let mut available = Vec::with_capacity(self.map.len(), GFP_NOWAIT)?;
+        for index in 0..self.map.len() {
+            let range = self.map.extent(index).ok_or(EIO)?;
+            if range.owner().is_none() {
+                available.push(range, GFP_NOWAIT)?;
+            }
+        }
+        let mut selected = Vec::new();
+        for demand in demands {
+            let all = demand.bytes == u64::MAX;
+            if !all && (demand.bytes == 0 || demand.bytes % PAGE_BYTES != 0) {
+                return Err(EINVAL);
+            }
+            let mut remaining = demand.bytes;
+            let before = selected.len();
+            while remaining != 0 {
+                // Preserve the legacy exact-match-then-largest selection on
+                // the requested node. Physical order breaks equal-size ties.
+                let mut choice: Option<usize> = None;
+                for (index, range) in available.iter().enumerate() {
+                    if range.numa_node() != demand.node {
+                        continue;
+                    }
+                    if range.length() == remaining {
+                        choice = Some(index);
+                        break;
+                    }
+                    if choice.is_none_or(|prior| available[prior].length() < range.length()) {
+                        choice = Some(index);
+                    }
+                }
+                let Some(index) = choice else {
+                    if all && selected.len() != before {
+                        break;
+                    }
+                    return Err(ENOMEM);
+                };
+                let range = available[index];
+                let bytes = range.length().min(remaining);
+                if selected.len() >= MAX_EXTENTS {
+                    return Err(ENOMEM);
+                }
+                selected.push(
+                    MemoryExtent::new(range.start(), bytes, demand.node, None)
+                        .map_err(|_| EINVAL)?,
+                    GFP_NOWAIT,
+                )?;
+                if bytes == range.length() {
+                    available.remove(index);
+                } else {
+                    available[index] = MemoryExtent::new(
+                        range.start() + bytes,
+                        range.length() - bytes,
+                        demand.node,
+                        None,
+                    )
+                    .map_err(|_| EIO)?;
+                }
+                // Rust keeps metadata outside managed pages. A page-aligned
+                // logical split may share a Linux compound allocation; its
+                // original PageOwner stays pinned until all subranges are free.
+                if !all {
+                    remaining -= bytes;
+                }
+            }
+        }
+        selected.sort_unstable_by_key(|range| range.start());
+        let mut workspace = MemoryWorkspace::new(&mut self.staging).map_err(|_| EIO)?;
+        let mut transaction = self
+            .map
+            .prepare_assign_batch(owner, &selected, &mut workspace)
+            .map_err(|_| EINVAL)?;
+        transaction.begin_external_effects().map_err(|_| EIO)?;
+        transaction
+            .commit()
+            .unwrap_or_else(|_| panic!("OS memory assignment invariant violated"));
+        Ok(0)
+    }
+
+    fn release_os(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+        request: &Request,
+    ) -> Result<isize> {
+        let demands = request.demands()?;
+        let mut selected: Vec<MemoryExtent> = Vec::with_capacity(demands.len(), GFP_NOWAIT)?;
+        for demand in demands {
+            let mut choice = None;
+            for index in 0..self.map.len() {
+                let range = self.map.extent(index).ok_or(EIO)?;
+                if range.owner() == Some(owner)
+                    && range.length() == demand.bytes
+                    && range.numa_node() == demand.node
+                    && !selected.iter().any(|prior| prior.start() == range.start())
+                {
+                    choice = Some(
+                        MemoryExtent::new(range.start(), range.length(), range.numa_node(), None)
+                            .map_err(|_| EIO)?,
+                    );
+                    break;
+                }
+            }
+            selected.push(choice.ok_or(EINVAL)?, GFP_NOWAIT)?;
+        }
+        selected.sort_unstable_by_key(|range| range.start());
+        let mut workspace = MemoryWorkspace::new(&mut self.staging).map_err(|_| EIO)?;
+        let mut transaction = self
+            .map
+            .prepare_release_batch(owner, &selected, &mut workspace)
+            .map_err(|_| EINVAL)?;
+        transaction.begin_external_effects().map_err(|_| EIO)?;
+        transaction
+            .commit()
+            .unwrap_or_else(|_| panic!("OS memory release invariant violated"));
         Ok(0)
     }
 }
@@ -694,11 +830,73 @@ pub(super) fn ioctl(command: u32, argument: usize, compat: bool) -> Result<isize
         abi::IHK_DEVICE_RESERVE_MEM => context.reserve(&request),
         abi::IHK_DEVICE_RELEASE_MEM => context.release(&request, false),
         abi::IHK_DEVICE_RELEASE_MEM_PARTIALLY => context.release(&request, true),
-        abi::IHK_DEVICE_QUERY_MEM => context.query(&request),
+        abi::IHK_DEVICE_QUERY_MEM => context.query(&request, None),
         _ => Err(EINVAL),
     };
     if context.map.is_empty() && context.pages.is_empty() && !context.map.is_poisoned() {
         context.pin.take();
     }
     result
+}
+
+pub(super) fn handles_os(command: u32) -> bool {
+    matches!(
+        command,
+        abi::IHK_OS_ASSIGN_MEM | abi::IHK_OS_RELEASE_MEM | abi::IHK_OS_QUERY_MEM
+    )
+}
+
+/// IHK's live OS object pins the module and serializes this initial-state call.
+pub(super) fn os_ioctl(
+    owner: super::smp_resource::OsToken,
+    command: u32,
+    argument: usize,
+    compat: bool,
+) -> Result<isize> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: The OS object's provider module reference keeps this published
+    // mutex and context live for the callback. No guard or owner escapes.
+    let mut context = unsafe { &*published }.lock();
+    context.verify()?;
+    // Legacy OS requests validate count/pointers, nonnegative minimum and the
+    // ratio. Allocation-order and timeout limits apply only to reservation.
+    let request = Request::read_scope(argument, compat, false)?;
+    match command {
+        abi::IHK_OS_ASSIGN_MEM => context.assign_os(owner, &request),
+        abi::IHK_OS_RELEASE_MEM => context.release_os(owner, &request),
+        abi::IHK_OS_QUERY_MEM => context.query(&request, Some(owner)),
+        _ => Err(EINVAL),
+    }
+}
+
+/// Called with the CPU policy lock and exclusive OS destruction held. Invoke
+/// the preflighted CPU commit only after memory preflight, retaining both locks
+/// until both maps have changed. No Linux allocation or module owner is freed.
+pub(super) fn release_os_resources(
+    owner: super::smp_resource::OsToken,
+    commit_cpu: impl FnOnce(),
+) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: The IHK destruction callback retains the provider module until
+    // this borrowed controller, its lock and the CPU commit callback finish.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    context.verify()?;
+    let mut workspace = MemoryWorkspace::new(&mut context.staging).map_err(|_| EIO)?;
+    let mut transaction = context
+        .map
+        .prepare_release_all(owner, &mut workspace)
+        .map_err(|_| EIO)?;
+    transaction.begin_external_effects().map_err(|_| EIO)?;
+    commit_cpu();
+    transaction
+        .commit()
+        .unwrap_or_else(|_| panic!("OS memory cleanup invariant violated"));
+    Ok(())
 }
