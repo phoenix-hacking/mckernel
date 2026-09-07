@@ -94,7 +94,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["provider_lease_credit_eligible"])
         self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
-        self.assertFalse(summary["resource_foundation_linux_reachable"])
+        self.assertTrue(summary["resource_foundation_linux_reachable"])
         self.assertEqual(38, summary["resource_foundation_tests"])
         self.assertEqual("mcd0", summary["control_device_name"])
         self.assertTrue(summary["control_device_source_reachable"])
@@ -103,14 +103,17 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["control_device_runtime_proven"])
         self.assertTrue(summary["control_device_usercopy_source_reachable"])
         self.assertEqual(
-            ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"], summary["control_device_valid_ioctl_commands"]
+            ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS",
+             "IHK_DEVICE_RESERVE_CPU", "IHK_DEVICE_RELEASE_CPU",
+             "IHK_DEVICE_GET_NUM_CPUS", "IHK_DEVICE_QUERY_CPU"],
+            summary["control_device_valid_ioctl_commands"]
         )
-        self.assertEqual(6, summary["get_buildid_source_fixture_tests"])
+        self.assertEqual(7, summary["get_buildid_source_fixture_tests"])
 
     def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
         resource = self.contract["crate_modules"][0]
         self.mutate_text(resource["path"], "SMP_MAX_CPUS: usize = 512", "SMP_MAX_CPUS: usize = 511")
-        with self.assertRaisesRegex(lifecycle.ValidationError, "resource policy digest"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "compiled dependency digest differs"):
             lifecycle.validate_repository(self.repo)
 
         shutil.copyfile(REPO_ROOT / resource["path"], self.repo / resource["path"])
@@ -390,7 +393,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             + detach
             + without_detach[unload_end:]
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "before provider detach"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "retire CPU ownership, then detach provider"):
             lifecycle._validate_rust_source(reordered, self.contract)
 
     def test_commented_provider_detach_cannot_authorize_a_noop_drop(self) -> None:
@@ -766,12 +769,15 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
 
         ordered_drop = (
             "drop(self.control_device.take());\n"
+            "        drop(self.cpu_controller.take());\n"
             "        drop(self.provider_lease.take());"
         )
         reversed_drop = (
             "drop(self.provider_lease.take());\n"
+            "        drop(self.cpu_controller.take());\n"
             "        drop(self.control_device.take());"
         )
+        self.assertEqual(1, source.count(ordered_drop))
         with self.assertRaisesRegex(lifecycle.ValidationError, "deregister mcd0"):
             lifecycle._validate_rust_source(
                 source.replace(ordered_drop, reversed_drop, 1), self.contract

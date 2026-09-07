@@ -553,6 +553,8 @@ jobs:
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch"
           patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
+          patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
+            -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch"
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
             --stage-for-evidence "$source_root"

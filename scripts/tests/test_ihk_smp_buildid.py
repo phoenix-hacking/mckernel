@@ -19,7 +19,7 @@ from scripts import ihk_smp_native_lifecycle_check as lifecycle
 
 def extract_function(source: str, name: str) -> str:
     code = lifecycle._mask_rust_comments_and_literals(source)
-    matches = list(re.finditer(r"(?m)^\s*fn " + re.escape(name) + r"\(", code))
+    matches = list(re.finditer(r"(?m)^\s*(?:pub(?:\(super\))?\s+)?fn " + re.escape(name) + r"\(", code))
     if len(matches) != 1:
         raise AssertionError(f"expected one production {name} function")
     start = matches[0].start()
@@ -44,7 +44,18 @@ def render_fixture(source: str) -> str:
             raise AssertionError(f"expected one production {name} constant")
         constants.append(matches[0])
     template = (REPO_ROOT / "scripts/tests/fixtures/ihk_smp_buildid_compile.rs").read_text()
+    cpu_source = (REPO_ROOT / "host-kernel/native-rust/smp_cpu.rs").read_text()
+    cpu_abi = (REPO_ROOT / "host-kernel/native-rust/abi/x86_64.rs").read_text()
+    cpu_constants = []
+    for name in ("IHK_DEVICE_RESERVE_CPU", "IHK_DEVICE_RELEASE_CPU",
+                 "IHK_DEVICE_GET_NUM_CPUS", "IHK_DEVICE_QUERY_CPU"):
+        matches = re.findall(r"(?m)^pub const " + name + r":[^\n]+;$", cpu_abi)
+        if len(matches) != 1:
+            raise AssertionError(f"expected one canonical CPU ABI constant: {name}")
+        cpu_constants.append(matches[0])
     replacements = {
+        "// PRODUCTION_CPU_ABI_CONSTANTS": "\n".join(cpu_constants),
+        "// PRODUCTION_CPU_HANDLES": extract_function(cpu_source, "handles"),
         "// PRODUCTION_BUILDID_CONSTANTS": "\n".join(constants),
         "// PRODUCTION_BUILDID_DISPATCH": extract_function(source, "control_device_ioctl"),
         "// PRODUCTION_DEVICE_REQUEST": extract_function(source, "control_device_request"),
@@ -79,7 +90,7 @@ class IhkSmpBuildidSourceFixtureTests(unittest.TestCase):
             self.assertEqual(0, compile_result.returncode, compile_result.stderr)
             result = subprocess.run([str(binary)], capture_output=True, text=True, check=False)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("6 passed; 0 failed", result.stdout)
+            self.assertIn("7 passed; 0 failed", result.stdout)
 
 
 if __name__ == "__main__":

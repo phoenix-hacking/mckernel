@@ -254,3 +254,71 @@ The corrected full compatibility build, existing linkage/no-SIMD/composition
 checks, and 25 report tests also pass. The retained record binds the dirty
 source changes separately from their parent commit. Other declaration warnings,
 native CPU/memory assignment, McKernel boot, and workloads remain open.
+
+## 2026-09-07 08:09:13 UTC four-hour checkpoint
+
+The exact Linux 6.12 control kernel and three native Rust modules build. The
+new CPU adapter passes real reserve/return operations in a four-vCPU TCG guest:
+both native and compat control ABIs, failure injection at each CPU position,
+reverse rollback, external-online veto, reservation lifetime after files close,
+three concurrent control processes, and two clean unload/reload cycles. All four
+guest CPUs are restored. This is the first native physical CPU reservation
+result; it is separate from the earlier unbooted OS lifecycle captures.
+
+The adapter reuses the unchanged 38-test `smp_resource.rs` policy and shared
+ABI. The Linux patch only exports four existing device hotplug services. Large
+workspaces reside in module storage; the prototype object's largest direct stack
+allocation is 344 bytes, excluding saved registers and callees. See
+[native CPU adapter review](native-cpu-adapter-review.md). Current integration
+checks are updating the exact staging/FFI/lifetime fixture closure. The first
+runtime capture used prototype staging, so final exact-stage replay remains.
+
+The compatibility McKernel rebuild and existing memory/XPMEM equivalence tests
+pass after the 64-bit page-attribute ABI repair committed as `b8d5170d`. The
+latest linked image has 614,235 Rust executable bytes out of 783,895 total
+(78.356795%). This is language ownership, not whole-system readiness. The earlier
+broad suite ran 2,298 tests: 2,227 passed and 71 skipped. It predates the ABI and
+CPU adapter changes and is not claimed as current-tree full-suite validation.
+
+Remaining native integration: memory reservation and assignment, generation-
+checked OS resource leases, image load/APIC start, bidirectional IKC, unchanged
+user tools/workloads, and restoration/stress/production acceptance. Remaining
+McKernel C bodies must also become Rust or assembly. Native McKernel has not
+booted yet; no overall completion percentage or delivery date is established.
+The formal native score remains 3.50% under its separate evidence authority.
+
+Validation remains offline and unprivileged in the fixed four-CPU, 12 GiB
+container, with experimental kernels only in disposable guests. No host kernel
+module, host CPU hotplug or host reboot experiment is performed. The next formal
+checkpoint is due at 2026-09-07 12:09:13 UTC (05:09:13 America/Los_Angeles).
+
+## Verified native CPU checkpoint — 2026-09-07 09:03:54 UTC
+
+The authoritative stage and all three native Rust modules pass the exact
+Linux build/link checks. Their second guest capture passes the CPU reservation,
+rollback, concurrent control, external-online veto, closed-file module pinning,
+and unload/reload sequence with four vCPUs across two NUMA nodes. The earlier
+prototype capture is retained separately with its original source identities.
+The [checkpoint record](native-cpu-checkpoint-20260907.json) binds both runs,
+serial logs, source archives, compiler records and the current test snapshot.
+
+The final full repository run passed **2,299 tests in 334.363 seconds: 2,228
+passed, 71 skipped, no failures**, in the fixed offline four-CPU native
+container. This includes the unchanged 38-case resource policy fixture and the
+expanded seven-case BUILDID/CPU dispatch fixture. Earlier first failures and
+repairs are recorded in kernel.log; frozen historical authorities remain
+unchanged. The separate license inventory group passed 260 tests with 28 skips.
+
+The full-suite source record identifies its dirty inputs above parent
+`b8d5170d00c30075ea726a17ea819aae80a4fe18`. Later documentation and the separate
+hash.rs CMake dependency repair are outside that snapshot; the build repair
+will be verified separately. No formal production gate is promoted. Memory
+reservation/assignment, OS resource leases, McKernel boot, IKC and workloads
+remain open, alongside the required remaining McKernel C retirement.
+
+At the user's request, the current rough overall planning estimate is **35%**
+for the complete Rust/assembly McKernel plus native Rocky/Linux 6.12 OS goal.
+This is a subjective engineering estimate with substantial uncertainty, not
+an earned evidence score or a remaining-time ratio. The measured Rust share
+of the compatibility image remains 78.356795%; the formal native acceptance
+score remains separately 3.50%.

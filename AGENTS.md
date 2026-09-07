@@ -56,10 +56,18 @@ native modules passed an isolated four-CPU unbooted OS lifecycle run; see
 `docs/verification/native-hpc-worklog.md`. Next major work: finish the existing
 Rust resource model's Linux CPU/memory adapter, then integrate and test resource
 assignment and McKernel boot. Its additive CPU effect executor passes 38 Rust
-tests and the native Kbuild/link checks. The snapshot namespace regressions are
-repaired, including the RS-006 post-close boundary. The broad local suite passes
-2,298 tests with 71 skips, using fixed historical RK-007 fixtures and their
+tests and the native Kbuild/link checks. The new Linux CPU adapter also passes
+a four-vCPU guest capture with native/compat rollback, online veto, resource
+pinning, concurrency and two unload/reload cycles. Exact staging, the rebuilt modules
+and link closure pass, followed by the same CPU tests in a two-NUMA-node guest.
+Memory assignment and McKernel boot remain pending. The snapshot namespace regressions are
+repaired, including the RS-006 post-close boundary. The earlier broad local suite ran
+2,298 tests (2,227 passed, 71 skipped), using fixed historical RK-007 fixtures and their
 original artifacts. No production gate is promoted.
+The CPU checkpoint now also passes the final full repository run: 2,299 tests
+in 334.363 seconds, 2,228 passed and 71 skipped; see
+`docs/verification/native-cpu-checkpoint-20260907.json`. The native CPU source
+and compiled artifacts remain bound separately from later build-only repairs.
 Follow the user's isolated four-CPU validation boundary.
 
 ## Mission

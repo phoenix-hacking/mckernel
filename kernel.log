@@ -33241,3 +33241,172 @@ The offline compatibility container's gzip.compress lacks the mtime keyword.
 Builds and tests had already passed; packaging stopped before producing its
 record. Use GzipFile with a byte buffer for deterministic gzip metadata and a
 new output directory. Command: python3 /work/retain-pageattrs-evidence.py.
+2026-09-07 CPU adapter source check stopped at formatting-copy dependency
+The isolated native rustfmt invocation resolved smp_cpu.rs's existing shared
+ABI module relative to the scratch copy, where abi/x86_64.rs was absent. No
+patch check or build ran. Copy that unchanged dependency alongside the new
+adapter and format only the adapter with skip_children enabled.
+2026-09-07 native CPU adapter Kbuild stopped at an unavailable errno constant
+The patched Linux kernel built successfully. Compilation of the real SMP Rust
+crate then rejected EALREADY: this Linux Rust error-code subset does not expose
+that constant. Convert the existing generated Linux errno with to_result;
+preserve the positive-hotplug-result rejection. Log:
+native-cpu-adapter-prototype.log, four-CPU offline native container.
+2026-09-07 native CPU adapter Kbuild stopped at shared ABI visibility lint
+The adapter typechecked past the errno fix. Kbuild's deny(unreachable_pub)
+then rejected public shared ABI declarations through the new private module
+path. Keep the canonical ABI unchanged and give its import the same explicit
+visibility-lint allowance used by the existing private ABI consumers. Log:
+native-cpu-adapter-prototype-2.log, four-CPU offline native container.
+2026-09-07 native CPU adapter modpost stopped at symbol closure
+The new Rust adapter now compiles. Mixing bzImage and individual module targets
+made Kbuild run the module targets one by one, losing the provider symbols for
+SMP modpost. Build the three modules together after the completed kernel build.
+Modpost also rejected the assumed __cpu_to_node export; inspect the exact
+selected x86_64 NUMA implementation and replace that assumed interface with an
+actually exported Linux service. Log: native-cpu-adapter-prototype-3.log.
+2026-09-07 CPU adapter FFI queue stopped at a missing SAFETY marker
+The source-bound FFI checker rejected the new APIC import because its nearby
+ABI explanation lacked the required SAFETY marker. Add precise comments at
+every new explicit boundary; do not relax the checker. The completed guest
+capture already passed both ABIs, rollback, online veto, closed-file module
+pinning, concurrent cycles and two clean unload/reload cycles. Log:
+native-cpu-ledger-refresh.log, isolated native container.
+2026-09-07 CPU adapter FFI discovery stopped at a lifetime false positive
+The checker classified &'static mut CpuContext in a type alias as a mutable
+static declaration. Inspect its token handling and distinguish a lifetime from
+an actual static mut item; retain real mutable-static coverage and add a
+regression for both forms. Log: native-cpu-ledger-refresh-2.log.
+2026-09-07 CPU integration tests stopped at a stale FFI coverage digest
+The exact current ledger validates, but its unit test still pins the preceding
+83-site digest after adding the CPU adapter's reviewed-boundary queue entries.
+Update the expected 106-site digest and compiler fixture input closure while
+preserving fail-closed checks. Five tests ran before the first failure. Log:
+native-cpu-integration-tests.log, isolated four-CPU native container.
+2026-09-07 CPU integration tests stopped at a stale staging input set
+The FFI tests passed after binding the new adapter. The staging test's explicit
+expected file set still omits smp_cpu.rs. Extend exact expected closure rather
+than relaxing equality. 58 tests ran before this first failure. Log:
+native-cpu-integration-tests-2.log, isolated four-CPU native container.
+2026-09-07 CPU integration tests stopped at a stale teardown mutation fixture
+The old two-owner teardown replacement no longer changes the three-owner
+source, so the negative test passed unchanged input to the checker. Include
+the CPU controller in both ordered and reversed fixtures; require the mutation
+to change source before expecting rejection. 82 tests ran before this failure.
+Log: native-cpu-integration-tests-3.log, isolated four-CPU native container.
+2026-09-07 CPU integration tests stopped at an updated teardown diagnostic
+The unsafe provider-detach mutation is rejected correctly, but its unit test
+still expects the old two-owner diagnostic. Match the new diagnostic describing
+CPU ownership retirement between deregistration and provider detach. 113 tests
+ran before this failure. Log: native-cpu-integration-tests-4.log.
+2026-09-07 CPU integration tests stopped at stale source reachability reporting
+The lifecycle contract now binds the live CPU ioctl adapter, but the checker's
+summary still hardcodes resource_foundation_linux_reachable=False. Report the
+validated source reachability while preserving separate false runtime, review
+and production-credit flags. 120 tests ran before this failure. Log:
+native-cpu-integration-tests-5.log, isolated four-CPU native container.
+2026-09-07 CPU integration tests stopped at expanded dependency diagnostics
+The lifecycle checker correctly rejects a modified resource source through its
+new three-input digest check, but the negative test expects the previous
+single-policy diagnostic. Align the diagnostic assertions with the exact
+compiled dependency check. 122 tests ran before this failure. Log:
+native-cpu-integration-tests-6.log, isolated four-CPU native container.
+2026-09-07 CPU integration tests stopped at an over-broad diagnostic edit
+The missing-policy staging test must retain its existing SMP resource policy
+diagnostic; only source-byte drift uses the expanded compiled-dependency
+diagnostic. Restore the precise assertion. 53 lifecycle tests ran before this
+failure. Log: native-cpu-integration-tests-7.log, isolated native container.
+2026-09-07 CPU integration tests stopped at nested ABI dependency discovery
+All lifecycle checks pass. The Kbuild dependency test reads only the root's
+module declarations and misses smp_cpu.rs's import of the unchanged shared ABI.
+Traverse the actual nested module edges in this source-graph regression. Keep
+the exact compiled dependency list and missing/extra/order checks. 63 tests ran
+before this failure. Log: native-cpu-integration-tests-8.log. Exact rebuild did
+not start because the fail-fast source lane stopped as intended.
+2026-09-07 CPU integration tests stopped at old fixdep adjacency in a mutation
+The source-graph check passes. A negative fixdep ordering fixture still places
+compatibility metadata directly after smp_resource.rs; the adapter and ABI now
+intervene. Move the entire source-dependency block in the negative mutation so
+the order violation remains exercised. Log: native-cpu-integration-tests-9.log;
+10 link-closure tests ran before this failure, and no exact rebuild started.
+2026-09-07 CPU full suite stopped at a stale active acceptance binding
+The exact stage, three-module rebuild/link closure and two-NUMA-node guest all
+pass. Broad discovery stopped after eight tests because the executable
+acceptance contract still binds the preceding runtime-capture contract digest.
+Refresh only the active consumer identities for the reviewed workflow/export
+addition. Preserve frozen review artifacts and every production-credit gate.
+Log: native-cpu-full-suite-20260907.log, isolated four-CPU native container.
+2026-09-07 CPU full suite stopped at the acceptance contract's self binding
+The updated runtime-capture reference now validates. The acceptance CLI also
+pins the full current closure contract digest in its checker and must be
+rebound to that reviewed reference-only change. Eight tests ran before this
+failure. Log: native-cpu-full-suite-20260907-2.log. Historical result authorities
+and production gate states remain unchanged.
+2026-09-07 CPU full suite stopped at the checker's normalized self identity
+The closure contract binding passes. The isolated CLI additionally binds its
+own normalized source bytes; changing its expected contract digest requires
+refreshing that self identity using the existing normalization algorithm.
+Eight tests ran before this failure. Log: native-cpu-full-suite-20260907-3.log.
+2026-09-07 CPU full suite stopped at the runtime bootstrap authority inventory
+The acceptance checks pass. Runtime validator import rejected the changed
+link-closure checker's byte size through its frozen-in-code bootstrap inventory.
+Refresh the current bootstrap authority entries for the reviewed CPU source
+closure update, then rebind its active consumers. 117 tests ran, one skipped,
+before this import error. Log: native-cpu-full-suite-20260907-4.log.
+2026-09-07 CPU full suite stopped at capture integration's contract pin
+The runtime bootstrap inventory now validates. Its active FP-0006 capture
+checker separately pins the runtime-capture contract and rejected the reviewed
+consumer identity update. Rebind that current contract pin, retaining all false
+credit claims and absent result authorities. 118 tests ran with one skip before
+this error. Log: native-cpu-full-suite-20260907-5.log.
+2026-09-07 CPU full suite stopped at an extracted ioctl fixture dependency
+The current native module compiles and passes both guests. A source-extracted
+dispatcher fixture now references smp_cpu without its isolated stub or module
+dependency. Preserve BUILDID and OS-dispatch checks while supplying an explicit
+CPU routing boundary in the fixture. 647 tests ran with 19 skips before this
+failure. Log: native-cpu-full-suite-20260907-6.log, four-CPU native container.
+2026-09-07 CPU full suite stopped after the expanded BUILDID fixture passed
+The extracted production fixture passes all seven cases. Broad discovery stops
+at the next lifecycle fixture identity check; inspect and align the exact
+fixture metadata with the retained new CPU routing regression. 648 tests ran
+with 19 skips before this error. Log: native-cpu-full-suite-20260907-7.log.
+2026-09-07 CPU full suite stopped at the independent build-surface input set
+The lifecycle and dispatcher checks pass. The build-surface audit's separate
+allowlist still omits smp_cpu.rs, so it rejects the expanded staged closure.
+Extend this exact reviewed Rust support input and its fixture; keep all C,
+unstaged input and dependency rejection rules. 847 tests ran with 19 skips
+before this failure. Log: native-cpu-full-suite-20260907-8.log.
+2026-09-07 CPU full suite stopped at a stale historical-drift test expectation
+Attempt 9 ran 1,418 tests with 32 skips before one failure. The historical
+runtime reviewer correctly also reports VALIDATION_PROGRESS.MD as changed from
+its frozen runtime revision; the regression hard-codes only the two formerly
+drifted workflow/script paths. Preserve the frozen review and stale classification;
+make the test check the complete current committed-input drift independently.
+Log: native-cpu-full-suite-20260907-9.log, isolated four-CPU native container.
+2026-09-07 CPU full suite stopped at the license child inventory consumer
+Attempt 10 ran 1,465 tests with 32 skips before one error. The hosted historical
+review regression now passes. The license child v2 checker still pins the former
+license inventory checker bytes, changed by the explicit CPU source/export-patch
+inventory. Review this active binding chain and refresh affected consumer
+identities while retaining the frozen license authority and no-credit claims.
+Log: native-cpu-full-suite-20260907-10.log, isolated four-CPU native container.
+2026-09-07 CPU license chain checks stopped at an overbroad SPDX assertion
+The current child/response consumer pins are repaired without changing frozen
+authorities. The new explicit source inventory regression incorrectly requires
+the export patch to have a Rust source SPDX header; the scanner correctly marks
+that patch NOASSERTION. Assert the observed declaration separately for the patch
+while retaining GPL-2.0 for the Rust sources and all no-credit claims. 89 tests
+ran with nine skips before failure. Log: native-cpu-license-chain-tests.log.
+2026-09-07 Native CPU exact-stage checkpoint validation PASS
+All 2,299 repository tests ran in the isolated native four-CPU/12-GiB container
+in 334.363 seconds: 2,228 passed and 71 skipped. Log and source snapshot:
+native-cpu-full-suite-20260907-11.log/json. License chain: 260 tests, 28 skipped,
+no failures (native-cpu-license-chain-tests-2.log). Exact three-module build and
+four-vCPU/two-NUMA-node CPU guest captures already pass. Retained 31 artifacts
+plus native-cpu-checkpoint-20260907.json. No native McKernel boot or gate claim.
+2026-09-07 Staged CPU checkpoint whitespace check stopped at patch context
+The staged diff check reports the export patch's literal unified-diff context
+prefixes as trailing whitespace and space-before-tab. Preserve the exact patch
+bytes already replayed, built and guest-tested. Extend the existing patch-file
+whitespace treatment to this Kbuild patch directory, then recheck staged source.
+Command: bounded native runner git diff --cached --check. No runtime failure.

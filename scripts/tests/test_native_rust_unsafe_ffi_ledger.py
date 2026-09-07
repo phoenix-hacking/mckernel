@@ -44,21 +44,21 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 13)
-        self.assertEqual(len(discovery["sites"]), 83)
+        self.assertEqual(len(discovery["inputs"]), 14)
+        self.assertEqual(len(discovery["sites"]), 106)
         self.assertEqual(value["coverage"]["by_crate"], {
             "ihk": 67,
-            "ihk_smp_x86_64": 14,
+            "ihk_smp_x86_64": 37,
             "mcctrl": 2,
         })
         self.assertEqual(value["coverage"]["by_kind"], {
-            "extern_function": 17,
+            "extern_function": 18,
             "ffi_export": 18,
-            "foreign_block": 3,
+            "foreign_block": 4,
             "mutable_static": 1,
-            "unsafe_block": 37,
+            "unsafe_block": 56,
             "unsafe_function": 3,
-            "unsafe_impl": 4,
+            "unsafe_impl": 6,
         })
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")
         self.assertFalse(value["readiness"]["technical_complete"])
@@ -154,7 +154,7 @@ class CurrentLedgerTests(unittest.TestCase):
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "68e5d0ad82019857199c82286b42bf3e90dfef7210af468eead790b56882b9d2",
+            "928dde802ecad802417d75debd0323cea5509517544402cacbde181d1c96a7eb",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
@@ -245,6 +245,19 @@ class CurrentLedgerTests(unittest.TestCase):
 
 
 class LexerAndSiteTests(unittest.TestCase):
+    def test_static_mut_borrow_is_not_a_mutable_static_item(self):
+        borrows = (
+            "type ContextMutex = Mutex<&'static mut CpuContext>;\n"
+            "fn borrow(value: &'static mut CpuContext) {}\n"
+        )
+        self.assertEqual(make_source(borrows), [])
+        sites = make_source(borrows +
+            "// SAFETY: actual static is externally serialized.\n"
+            "static mut ROOT: Option<&'static mut CpuContext> = None;\n")
+        self.assertEqual([site["kind"] for site in sites], ["mutable_static"])
+        with self.assertRaisesRegex(ledger.LedgerError, "SAFETY"):
+            make_source(borrows + "static mut ROOT: u8 = 0;\n")
+
     def test_masks_comments_strings_chars_and_raw_strings(self):
         text = (
             'const A: &str = r#"unsafe { extern \\"C\\" }"#;\n'
@@ -410,6 +423,7 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.NATIVE_SOURCE_ROOT + "/page_allocator.rs",
         ledger.NATIVE_SOURCE_ROOT + "/page_owner_registry.rs",
         ledger.NATIVE_SOURCE_ROOT + "/smp_resource.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/smp_cpu.rs",
     )
 
     def setUp(self):

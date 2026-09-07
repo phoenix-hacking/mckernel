@@ -15,11 +15,14 @@ the native production gates, and it does not establish booted McKernel.
 
 The local kernel/module rebuild also passed a second isolated guest run. The
 additive CPU effect executor passes all 38 Rust resource tests and native Kbuild
-link validation; its Linux ioctl/hotplug adapter is still pending. All existing
-Rust bodies are retained. The snapshot regression family now passes 54 tests,
+link validation at its recorded checkpoint. The subsequent Linux ioctl/hotplug
+adapter now passes the isolated native/compat CPU reservation capture described
+in the work log. Exact staging, the module rebuild/link closure and the
+subsequent two-NUMA-node CPU guest also pass. Existing Rust
+policy and ABI bodies are retained. The snapshot regression family now passes 54 tests,
 and the historical RK-007 artifact family passes all 110 tests without skips.
-The final local repository suite passes 2,298 tests with 71 skips in 360.409
-seconds. RS-006 close-race checks now also reject changes when timestamps are
+That checkpoint suite ran 2,298 tests in 360.409 seconds: 2,227 passed and 71
+skipped. It predates the following ABI and CPU adapter changes. RS-006 close-race checks now also reject changes when timestamps are
 equal. This remains scoped local validation; skipped checks and the native
 boot/workload acceptance gates are not treated as passed.
 

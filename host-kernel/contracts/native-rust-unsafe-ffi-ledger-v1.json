@@ -2,21 +2,21 @@
   "coverage": {
     "by_crate": {
       "ihk": 67,
-      "ihk_smp_x86_64": 14,
+      "ihk_smp_x86_64": 37,
       "mcctrl": 2
     },
     "by_kind": {
-      "extern_function": 17,
+      "extern_function": 18,
       "ffi_export": 18,
-      "foreign_block": 3,
+      "foreign_block": 4,
       "mutable_static": 1,
-      "unsafe_block": 37,
+      "unsafe_block": 56,
       "unsafe_function": 3,
-      "unsafe_impl": 4
+      "unsafe_impl": 6
     },
-    "site_count": 83,
-    "site_ids_sha256": "68e5d0ad82019857199c82286b42bf3e90dfef7210af468eead790b56882b9d2",
-    "source_input_count": 13,
+    "site_count": 106,
+    "site_ids_sha256": "928dde802ecad802417d75debd0323cea5509517544402cacbde181d1c96a7eb",
+    "source_input_count": 14,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
   "crate_roots": [
@@ -43,12 +43,14 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "transitive_inputs": [
+        "host-kernel/native-rust/abi/x86_64.rs",
         "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "host-kernel/native-rust/smp_cpu.rs",
         "host-kernel/native-rust/smp_resource.rs"
       ],
-      "transitive_inputs_sha256": "c6efe7de2c8a002c4514370de153459a1b8c13a2b44f36570e554dc694bf50ca"
+      "transitive_inputs_sha256": "086baf291fb2f1c327617e06b2a772fddc13791cd70a30645062ba3f5040499a"
     },
     {
       "crate": "mcctrl",
@@ -68,7 +70,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "2d4b91bf98dc2d2fba0b4a4402bd16b1db99b793c94274f0a448c51e0b860ed4",
+  "ledger_sha256": "d07ccdf33cd178417e1b3dc6c6f662968394f78c64dbe9407de3303b21a70f62",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -93,7 +95,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "e2cd751e2ad142c67a74030e90a4921b4591aa82985cfd90c17feeeb3b4ee25c"
+      "sha256": "07a29277cc2bb0b459cbaeef2ee89f8973810742f0470f70e72157f42ece40d2"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -1202,8 +1204,8 @@
       "source_sha256": "ba3bb82223df3f2119373a16d932920edf856a00950fb13bae8f37b8e91c56bc"
     },
     {
-      "byte_end": 2702,
-      "byte_start": 2488,
+      "byte_end": 2704,
+      "byte_start": 2490,
       "caller_obligations": [
         "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
       ],
@@ -1222,7 +1224,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "80db2649e62fa1c38db601cc7427fc077f7a50fc028402dfc5e3f29225e69b1a",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0014",
       "independent_review": {
         "evidence_sha256": null,
@@ -1231,8 +1233,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 64,
-      "line_start": 58,
+      "line_end": 65,
+      "line_start": 59,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1240,16 +1242,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 57,
-        "line_start": 55,
+        "line_end": 58,
+        "line_start": 56,
         "source_sha256": "99e38c176fbb18fbd36854685738e6ae25dab143544fa29f977058f3250b4cb1",
         "text": "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
       },
       "source_sha256": "60490225ed2069f7d115f39767951bac77bcf2c7b0d4e1da6dfbca3fe6ccfb8d"
     },
     {
-      "byte_end": 3175,
-      "byte_start": 3096,
+      "byte_end": 3177,
+      "byte_start": 3098,
       "caller_obligations": [
         "SAFETY: IHK owns this scalar ABI for the dependency lifetime. It validates the provider and minor and refuses open instances."
       ],
@@ -1268,7 +1270,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "5f90532bf00537d4221c302977a84d50c78247e816c5654e36b2e4a05a5dcc1c",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0015",
       "independent_review": {
         "evidence_sha256": null,
@@ -1277,8 +1279,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 75,
-      "line_start": 75,
+      "line_end": 76,
+      "line_start": 76,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1286,16 +1288,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 73,
-        "line_start": 72,
+        "line_end": 74,
+        "line_start": 73,
         "source_sha256": "ef1151ae34d331622f76c9c2f7bddb25a1714181d9eff313902f5d43dec7611f",
         "text": "SAFETY: IHK owns this scalar ABI for the dependency lifetime. It validates the provider and minor and refuses open instances."
       },
       "source_sha256": "104e50fb1f8c409bf4da75b36a8dd5855be631fa9f17c02a5a5061319ad6b5b2"
     },
     {
-      "byte_end": 3518,
-      "byte_start": 3495,
+      "byte_end": 3520,
+      "byte_start": 3497,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() -> i32 type and remain module-resident for the lease.",
         "The selected callback must not unwind across the C ABI."
@@ -1315,7 +1317,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7225d7e2bc614732c9ff4078d01e360b4321df0698cb126d9c6b115096b74201",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0008",
       "independent_review": {
         "evidence_sha256": null,
@@ -1324,8 +1326,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 87,
-      "line_start": 87,
+      "line_end": 88,
+      "line_start": 88,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1333,16 +1335,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 86,
-        "line_start": 86,
+        "line_end": 87,
+        "line_start": 87,
         "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
         "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
       },
       "source_sha256": "4149a416240d2ad461a73341610a942f087f8e1a238807177a462b8b24016416"
     },
     {
-      "byte_end": 3639,
-      "byte_start": 3623,
+      "byte_end": 3641,
+      "byte_start": 3625,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() type and remain module-resident through detach.",
         "The selected callback must not unwind across the C ABI."
@@ -1362,7 +1364,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4ddd55b22c2c4cf5ee0531eae7c79cd406e85963614a5f9e057946dd3c5c60ce",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0009",
       "independent_review": {
         "evidence_sha256": null,
@@ -1371,8 +1373,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 89,
-      "line_start": 89,
+      "line_end": 90,
+      "line_start": 90,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1380,16 +1382,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 88,
-        "line_start": 88,
+        "line_end": 89,
+        "line_start": 89,
         "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
         "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
       },
       "source_sha256": "8da3628398700d5d4341eec0f1d32dc2b44286312f9763150522af9dcbfe4e7b"
     },
     {
-      "byte_end": 4900,
-      "byte_start": 3955,
+      "byte_end": 4902,
+      "byte_start": 3957,
       "caller_obligations": [
         "Use the exact scalar provider ABI and unbooted OS ABI; the create owner is THIS_MODULE.as_ptr(), already pinned by the control file, never a userspace pointer.",
         "Balance every successful non-Copy provider-file and OS-module owner before unload; IHK remains the linked dependency throughout calls."
@@ -1409,7 +1411,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "463c99b11db27f6f5ca66a82bead476a9e7edb8d747bc44ad3b5bd97c8ee785a",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -1418,8 +1420,8 @@
         "status": "pending"
       },
       "kind": "foreign_block",
-      "line_end": 116,
-      "line_start": 95,
+      "line_end": 117,
+      "line_start": 96,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1427,16 +1429,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 94,
-        "line_start": 91,
+        "line_end": 95,
+        "line_start": 92,
         "source_sha256": "2d436a5000afccae86cd0c43472bb78f4df5d0e2dd762d3a9f7b80ffab4f4ab9",
         "text": "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalars and scalar-only callback function identities. The OS-create call also borrows the pinned caller's Linux module pointer; no private Rust object crosses it."
       },
       "source_sha256": "bf31c1faf86e6a5e4fee3243411269349d19c4d935684f68e73c6a53ef82269e"
     },
     {
-      "byte_end": 5449,
-      "byte_start": 5319,
+      "byte_end": 5451,
+      "byte_start": 5321,
       "caller_obligations": [
         "The callback body must preserve the exact no-argument i32 ABI, return only the reviewed scalar status, and never unwind.",
         "It must not access foreign state or claim device, OS, CPU, memory, IKC, or McKernel behavior."
@@ -1456,7 +1458,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "02409a56a90f02b954fd61d49bb478333e1ee9ca878192b254a3158516db9c9d",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0010",
       "independent_review": {
         "evidence_sha256": null,
@@ -1465,8 +1467,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 127,
-      "line_start": 124,
+      "line_end": 128,
+      "line_start": 125,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1474,16 +1476,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 123,
-        "line_start": 118,
+        "line_end": 124,
+        "line_start": 119,
         "source_sha256": "ca6165f069de5bf11989c41c3c37562582d3e945436ffb329ebd938fb99b9c46",
         "text": "SAFETY: The callback owns no foreign state and returns only a literal errno status through the exact v2 function-pointer ABI."
       },
       "source_sha256": "6fd33526df7a45bda9938be1408dae0252bf9687eef33f5f204673179f2e3765"
     },
     {
-      "byte_end": 5724,
-      "byte_start": 5607,
+      "byte_end": 5726,
+      "byte_start": 5609,
       "caller_obligations": [
         "The callback body must preserve the exact no-argument void ABI, avoid foreign state, and never unwind.",
         "It may emit only the reviewed lifecycle diagnostic and must return synchronously."
@@ -1503,7 +1505,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7490269917ae5c724b09396ce55b5fc49086a74428c4b748e3a69255884ee328",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0011",
       "independent_review": {
         "evidence_sha256": null,
@@ -1512,8 +1514,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 133,
-      "line_start": 131,
+      "line_end": 134,
+      "line_start": 132,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1521,16 +1523,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 130,
-        "line_start": 129,
+        "line_end": 131,
+        "line_start": 130,
         "source_sha256": "8a024aa30418e2a9105daf8fdd74116a0759f3ff9f01db2f9c02cd8210443571",
         "text": "SAFETY: The callback owns no foreign state and returns only after its local lifecycle diagnostic completes through the exact v2 function-pointer ABI."
       },
       "source_sha256": "b7913fb2320e736fe3dfd8195e57832ceb7a35035a8b933cfe4204f15bce6603"
     },
     {
-      "byte_end": 6699,
-      "byte_start": 6435,
+      "byte_end": 6701,
+      "byte_start": 6437,
       "caller_obligations": [
         "The exact v2 relocation must be valid before the call, which passes ABI 1, the shared flag, and the exact resident init and exit callbacks.",
         "Initialization must map every permitted negative errno and immediately store a positive token in the non-Copy ProviderLease owner."
@@ -1550,7 +1552,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d0650a2d2d34d3508f9e291830cebd349ca7d48875f585cc17476c5ea3790a1c",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0006",
       "independent_review": {
         "evidence_sha256": null,
@@ -1559,8 +1561,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 163,
-      "line_start": 156,
+      "line_end": 164,
+      "line_start": 157,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1568,16 +1570,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 155,
-        "line_start": 153,
+        "line_end": 156,
+        "line_start": 154,
         "source_sha256": "fca98ec5e91d39b427216db98ddcbce2e8e9b4f99dbbe11cf42d63e9b9d78a3f",
         "text": "SAFETY: ihk.ko owns the exact namespaced C-ABI function for the dependency lifetime.  The exact callbacks accept no arguments, own no caller memory, and remain resident until the matching detach."
       },
       "source_sha256": "7bffe2c5c55f3d29a1b016081a5d4655b275594f777f5e9d7275389861eaa5d5"
     },
     {
-      "byte_end": 7244,
-      "byte_start": 7163,
+      "byte_end": 7246,
+      "byte_start": 7165,
       "caller_obligations": [
         "The non-Copy owner must pass its unchanged positive token and the same resident exit callback exactly once after all references quiesce.",
         "The exact v2 detach target has void return and fails stop instead of returning with a live provider entry or callback."
@@ -1597,7 +1599,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4266823b75c5d7752aa78415ee7ca34ca2c0a50b1bc4658789e9ee74105e1849",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0007",
       "independent_review": {
         "evidence_sha256": null,
@@ -1606,8 +1608,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 177,
-      "line_start": 177,
+      "line_end": 178,
+      "line_start": 178,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1615,16 +1617,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 176,
-        "line_start": 173,
+        "line_end": 177,
+        "line_start": 174,
         "source_sha256": "2e8a178d6e70c2291416a441ce0b7eb89e481eff9ea40eb56935341d377dc7ae",
         "text": "SAFETY: This non-Copy owner calls the matching provider function exactly once with the positive token returned by attach and the retained exit identity.  The provider fails stop rather than returning with a live entry or callback."
       },
       "source_sha256": "91f0764aa3ec04625a2a46802a8721dd9b17d6d18b6e8228c173b4b03ddf8780"
     },
     {
-      "byte_end": 7783,
-      "byte_start": 7718,
+      "byte_end": 7785,
+      "byte_start": 7720,
       "caller_obligations": [
         "The exact namespaced open relocation must remain valid while minor zero is passed, and each positive receipt must immediately enter one non-Copy ProviderOpenLease.",
         "A negative status must become the bounded kernel error; later allocation failure must drop the temporary owner and close the acquired receipt exactly once."
@@ -1644,7 +1646,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "859497a888a93c0c64fbce90516d7b90588c0a3b943f88b39074d5dc4ec12c9b",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0012",
       "independent_review": {
         "evidence_sha256": null,
@@ -1653,8 +1655,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 192,
-      "line_start": 192,
+      "line_end": 193,
+      "line_start": 193,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP control-device owner",
@@ -1662,16 +1664,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 191,
-        "line_start": 188,
+        "line_end": 192,
+        "line_start": 189,
         "source_sha256": "0d6a95cb22ed09a7a705a0d0799426e53bee7eed00fe7c1ad0f42261f47b271d",
         "text": "SAFETY: ihk.ko owns this exact namespaced scalar function for the dependency lifetime.  Minor zero is the only published provider slot in this bounded shell, and no pointer or Rust layout crosses the boundary."
       },
       "source_sha256": "18fae2d9769ed1cda51365e4a918743e89beb556b7e8cf1f0f62361a449b3305"
     },
     {
-      "byte_end": 8410,
-      "byte_start": 8360,
+      "byte_end": 8412,
+      "byte_start": 8362,
       "caller_obligations": [
         "The non-Copy per-file owner must call the exact namespaced close target once with its unchanged positive receipt.",
         "The target must remain resident and cannot unwind; malformed, stale, duplicate, or mismatched ownership fails stop instead of releasing another reference."
@@ -1691,7 +1693,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "a39b26c594c16207b0201c1191b98ce84434c31ceed2785f3ed6953453d1dffa",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0013",
       "independent_review": {
         "evidence_sha256": null,
@@ -1700,8 +1702,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 207,
-      "line_start": 207,
+      "line_end": 208,
+      "line_start": 208,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP control-device owner",
@@ -1709,16 +1711,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 206,
-        "line_start": 202,
+        "line_end": 207,
+        "line_start": 203,
         "source_sha256": "76d51055ca7611bedb450f0035cce6a4f844b9b096373e10b0796892b0c68c82",
         "text": "SAFETY: This non-Copy per-file owner calls the matching scalar close exactly once with the positive opaque receipt returned by open.  The shared scalar is not a unique per-file identity, so this trusted non-Copy wrapper is the count-balance authority.  ihk.ko fails stop on a nonpositive, stale, or zero-reference release."
       },
       "source_sha256": "d76b9414d2dad20c39d1ebc2a60ca309e6d368e4a1dfa3dace2674bd5019bebb"
     },
     {
-      "byte_end": 10258,
-      "byte_start": 10219,
+      "byte_end": 10469,
+      "byte_start": 10430,
       "caller_obligations": [
         "Every KernelParameter instance must remain immutable after relocation.",
         "Pointers must name module-static parameter storage and selected-kernel parameter operations with matching types."
@@ -1738,7 +1740,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -1747,8 +1749,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 261,
-      "line_start": 261,
+      "line_end": 268,
+      "line_start": 268,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -1756,16 +1758,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 260,
-        "line_start": 258,
+        "line_end": 267,
+        "line_start": 265,
         "source_sha256": "68f329188c795513648285f37e10728cb4b6d17f27e75e51c69d9e98fdf5be8f",
         "text": "SAFETY: Each instance is immutable after relocation.  Linux owns access to the pointed-to parameter storage and serializes writes with its parameter subsystem; Rust code never dereferences these pointers."
       },
       "source_sha256": "8b15f4f88f64705a55f48fd4acaaab6113cbf1073f86c8946aac19b4b987fc80"
     },
     {
-      "byte_end": 11139,
-      "byte_start": 11096,
+      "byte_end": 11350,
+      "byte_start": 11307,
       "caller_obligations": [
         "Rust code must not directly read or write the mutable storage after publication.",
         "Each macro expansion must give its descriptor a unique, type-matched pointer to module-static storage."
@@ -1785,7 +1787,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -1794,8 +1796,8 @@
         "status": "pending"
       },
       "kind": "mutable_static",
-      "line_end": 283,
-      "line_start": 283,
+      "line_end": 290,
+      "line_start": 290,
       "macro_context": "numeric_parameter",
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -1803,16 +1805,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 282,
-        "line_start": 281,
+        "line_end": 289,
+        "line_start": 288,
         "source_sha256": "2c725c36e7e796d5ad9874c306ead7272df73149400633a5614d736ea067fe7d",
         "text": "SAFETY: Linux's parameter subsystem is the only writer after module publication and serializes access; Rust never reads this storage."
       },
       "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
     },
     {
-      "byte_end": 18268,
-      "byte_start": 18185,
+      "byte_end": 18531,
+      "byte_start": 18448,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -1832,7 +1834,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
+      "file_sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -1841,8 +1843,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 503,
-      "line_start": 503,
+      "line_end": 511,
+      "line_start": 511,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP lifecycle owner",
@@ -1850,8 +1852,8 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 502,
-        "line_start": 500,
+        "line_end": 510,
+        "line_start": 508,
         "source_sha256": "f87c1314a28fa1c8c36d4411879cf6e4d13b8b423e959c9e8fa239f15ca7adc0",
         "text": "SAFETY: The provider exports this immutable byte in the declared namespace.  The volatile read keeps the relocation as an actual module dependency; the value itself has no behavioral meaning."
       },
@@ -3986,14 +3988,1119 @@
         "text": "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
       },
       "source_sha256": "0ee23f41312177dd159b35ec6fa0116da2516d968baa9daf64f013122ec12f42"
+    },
+    {
+      "byte_end": 1181,
+      "byte_start": 1112,
+      "caller_obligations": [
+        "SAFETY: The exact selected x86_64 kernel exports this Linux C ABI function. Its declaration is absent from rust/bindings/bindings_helper.h's include closure. No project-owned C implementation is linked into this module."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "35f3fb2c6b18672a652dad8eafb411d14cba7f4253d2898eb8721a4d00471666",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0016",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "foreign_block",
+      "line_end": 36,
+      "line_start": 34,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 33,
+        "line_start": 31,
+        "source_sha256": "2cfc1e10cf0e6d8ee365e47bc419ecc536a792bd481eebb0aba065f86721eebd",
+        "text": "SAFETY: The exact selected x86_64 kernel exports this Linux C ABI function. Its declaration is absent from rust/bindings/bindings_helper.h's include closure. No project-owned C implementation is linked into this module."
+      },
+      "source_sha256": "d4558248e7063965fd041dd46a1c2be3fc5e26d423b1a236fd1562e3ed7cbe02"
+    },
+    {
+      "byte_end": 2248,
+      "byte_start": 1737,
+      "caller_obligations": [
+        "SAFETY: Linux invokes this scalar callback while its registered state and module are live. Only bounded atomics and the current-task identity are read."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "c5402eb22505c370a35d645d6dc559268359764ab3bbb0e3b6c6012201daa335",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0017",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "extern_function",
+      "line_end": 59,
+      "line_start": 46,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 45,
+        "line_start": 42,
+        "source_sha256": "c941b5aee426810ec442a309a2efed5e12956175849932b32d209a7a8410acbc",
+        "text": "SAFETY: Linux invokes this scalar callback while its registered state and module are live. Only bounded atomics and the current-task identity are read."
+      },
+      "source_sha256": "393312102e65e6284fc6e8a3e6cacd2f619801a9ad96c401bcb4e1a1430a4018"
+    },
+    {
+      "byte_end": 2129,
+      "byte_start": 2095,
+      "caller_obligations": [
+        "SAFETY: get_current returns the live task executing this callback. The pointer is compared only; neither pointer is dereferenced or retained."
+      ],
+      "column_end": 52,
+      "column_start": 19,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "54a3e9e2ec3f833d40660d70e0e699ba8ee8d786583ef6ad4dbd0396ce840759",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0018",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 53,
+      "line_start": 53,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 52,
+        "line_start": 51,
+        "source_sha256": "a8204b1efa499a784ccb89cfff27c735efd265396df49d74dfa226c31002a868",
+        "text": "SAFETY: get_current returns the live task executing this callback. The pointer is compared only; neither pointer is dereferenced or retained."
+      },
+      "source_sha256": "a5e577b4e19fda90dd6df9b20320b95a116525d4d62ef422956ad1a8d3cd073d"
+    },
+    {
+      "byte_end": 2630,
+      "byte_start": 2596,
+      "caller_obligations": [
+        "SAFETY: This task remains live until the synchronous hotplug call and this guard end. The pointer is never dereferenced by a callback."
+      ],
+      "column_end": 56,
+      "column_start": 23,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "54a3e9e2ec3f833d40660d70e0e699ba8ee8d786583ef6ad4dbd0396ce840759",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0019",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 68,
+      "line_start": 68,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 67,
+        "line_start": 66,
+        "source_sha256": "054fa7f4e69cb61d4fb4444d3de9f8373099397a53eec2016c34b4cf7751c179",
+        "text": "SAFETY: This task remains live until the synchronous hotplug call and this guard end. The pointer is never dereferenced by a callback."
+      },
+      "source_sha256": "a5e577b4e19fda90dd6df9b20320b95a116525d4d62ef422956ad1a8d3cd073d"
+    },
+    {
+      "byte_end": 3240,
+      "byte_start": 3198,
+      "caller_obligations": [
+        "SAFETY: Called in sleepable module-init/ioctl context after the policy mutex. Neither CPU read-side nor device lock is already held here."
+      ],
+      "column_end": 50,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "d324b4b2f3d24e33972d94e99c57e034cae742d1380a295c19aa8f7930abd1de",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0020",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 87,
+      "line_start": 87,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 86,
+        "line_start": 85,
+        "source_sha256": "7300d35f9627eb23e17efe000cbdd7addb36d992c11616442eee648a031e129a",
+        "text": "SAFETY: Called in sleepable module-init/ioctl context after the policy mutex. Neither CPU read-side nor device lock is already held here."
+      },
+      "source_sha256": "4497bb5b52e52b2a8a4e70610c870b5400b51e876a3c62952be6bece00eb25ab"
+    },
+    {
+      "byte_end": 3465,
+      "byte_start": 3421,
+      "caller_obligations": [
+        "SAFETY: Non-Send, non-Copy guard balances the lock on this task."
+      ],
+      "column_end": 52,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "96684bbbf3d46a45ee7935e6e920c131490a0dcee72bcd8a1c7c8d4e89d14ba2",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0021",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 95,
+      "line_start": 95,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 94,
+        "line_start": 94,
+        "source_sha256": "d1d4bea66bf6f48df5e998d6baa3c9b18099bb1ec0e0e305aac3297407fcb19f",
+        "text": "SAFETY: Non-Send, non-Copy guard balances the lock on this task."
+      },
+      "source_sha256": "89bae23750fa9c32e0bdfe6dbd6743d82e1b01bd3242331b24140aea2d1d3495"
+    },
+    {
+      "byte_end": 3769,
+      "byte_start": 3732,
+      "caller_obligations": [
+        "SAFETY: Sleepable read-side topology observation only. This guard is dropped before device_online/offline can acquire the CPU write side."
+      ],
+      "column_end": 45,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "fe076b61a5b0991998ca6b5cbb1fff9d55446ed4f5b73847db663d0c8e358b43",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0022",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 105,
+      "line_start": 105,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 104,
+        "line_start": 103,
+        "source_sha256": "f8d7de50cb54dbee6c94342e1fc916d776cbabb158cfba5366d91137858438a4",
+        "text": "SAFETY: Sleepable read-side topology observation only. This guard is dropped before device_online/offline can acquire the CPU write side."
+      },
+      "source_sha256": "442f416d9fe684492c221696ca8878f3b693affeb56585b3a158b13abe096f5b"
+    },
+    {
+      "byte_end": 3982,
+      "byte_start": 3943,
+      "caller_obligations": [
+        "SAFETY: Exactly the acquiring task releases the read-side lock."
+      ],
+      "column_end": 47,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "3edeeb5984497f898b0ee9b214d509337dd132f82a7060831731e29185744e7c",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0023",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 113,
+      "line_start": 113,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 112,
+        "line_start": 112,
+        "source_sha256": "4c7e8007bc12c3ef983db4ab39c131fdc2233124a4a3f6b01a1754c4d61c44c4",
+        "text": "SAFETY: Exactly the acquiring task releases the read-side lock."
+      },
+      "source_sha256": "bb14abe9676217013c53549808c9045dbe4251119ea0bf5326389f7076b940a4"
+    },
+    {
+      "byte_end": 4218,
+      "byte_start": 4185,
+      "caller_obligations": [
+        "SAFETY: The retained Linux reference can be released on any task. Access is exclusively under the policy mutex and Linux's device hotplug lock."
+      ],
+      "column_end": 33,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "45ec707a360d1279ef975ef81b7057d6aa83aa377b7137d99a13095a6bcdf3cc",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0024",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 121,
+      "line_start": 121,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 120,
+        "line_start": 119,
+        "source_sha256": "79c914d3c14142ba5e2fb4cbdfbf6b6f6c99c23b11327316b43091009b945a19",
+        "text": "SAFETY: The retained Linux reference can be released on any task. Access is exclusively under the policy mutex and Linux's device hotplug lock."
+      },
+      "source_sha256": "bf1e16f5517f56168e5fb6ccff40a9c92bae777242c1b8a1e6610e1e5aacffd9"
+    },
+    {
+      "byte_end": 4397,
+      "byte_start": 4358,
+      "caller_obligations": [
+        "SAFETY: This non-Copy value owns exactly one successful get_device."
+      ],
+      "column_end": 47,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "cc65f9e25f00edf23da6da50348448f99f40d870c6c517c4f49e7868279be805",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0025",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 126,
+      "line_start": 126,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 125,
+        "line_start": 125,
+        "source_sha256": "3ce9f1b30f9256f16af615a5857e7c4fca3209d998cffc3e29284787a64d5139",
+        "text": "SAFETY: This non-Copy value owns exactly one successful get_device."
+      },
+      "source_sha256": "a42ade0f4abbf67b13d0d77b65e209ab46c214a60daf9f549ce191319d488c1b"
+    },
+    {
+      "byte_end": 4727,
+      "byte_start": 4663,
+      "caller_obligations": [
+        "SAFETY: This is our resident module descriptor. An open control file already pins it while acquiring the longer reservation reference."
+      ],
+      "column_end": 75,
+      "column_start": 12,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "373a4103f3a1f3e858fc14afcff9871bae2f281575dba2d0d77a5aaf917a3aca",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0026",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 136,
+      "line_start": 136,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 135,
+        "line_start": 134,
+        "source_sha256": "deb78a403f17be00de028371147bf0de0f8aba0323da5f77f363f38c844f2384",
+        "text": "SAFETY: This is our resident module descriptor. An open control file already pins it while acquiring the longer reservation reference."
+      },
+      "source_sha256": "5c501916a0b6b8308cacf78d9172f6908b1e0b1a83dfacba40b8e498a927aece"
+    },
+    {
+      "byte_end": 5160,
+      "byte_start": 5100,
+      "caller_obligations": [
+        "SAFETY: Each successful acquisition is balanced once, while an open file still pins this executing code. Uncertain resources keep this owner in CpuContext and cannot reach module teardown."
+      ],
+      "column_end": 68,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "5ae62a564d0753a3ee84ce7aeb60ea6fdb877e7b82487c889be92869b2a9ddf1",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0027",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 149,
+      "line_start": 149,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 148,
+        "line_start": 146,
+        "source_sha256": "92bf5dce557496eae32aaf5ad46924ae791d7338a3e7929acc2356a65a1d0c0e",
+        "text": "SAFETY: Each successful acquisition is balanced once, while an open file still pins this executing code. Uncertain resources keep this owner in CpuContext and cannot reach module teardown."
+      },
+      "source_sha256": "ad4d474be03062528721cf2c95fba618b308ec40078eb07537874a781fa88424"
+    },
+    {
+      "byte_end": 6158,
+      "byte_start": 6127,
+      "caller_obligations": [
+        "SAFETY: nr_cpu_ids is initialized before module loading and stable under CPU hotplug read exclusion. We implement the frozen 512 limit."
+      ],
+      "column_end": 51,
+      "column_start": 21,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "ec9e5d844f1ad43f5bb05cc646bc6b5f1e758e921b9728cf39b632b124432209",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0028",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 181,
+      "line_start": 181,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 180,
+        "line_start": 179,
+        "source_sha256": "9a112ce5bf8e200e73e2ae67ebf01fc7d5b14b7d1411a177cfb65600eed4f75b",
+        "text": "SAFETY: nr_cpu_ids is initialized before module loading and stable under CPU hotplug read exclusion. We implement the frozen 512 limit."
+      },
+      "source_sha256": "90314d7613bc310b3691705a79f00c665e02563a1ef6653f7b8e04b8b1200375"
+    },
+    {
+      "byte_end": 6702,
+      "byte_start": 6655,
+      "caller_obligations": [
+        "SAFETY: Both topology/device hotplug locks protect discovery. get_device retains the live device before either lock is dropped."
+      ],
+      "column_end": 72,
+      "column_start": 26,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "56838f57438e62bdb31a80e34543875c68531438069ba14b29a93de918cd7b55",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0029",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 192,
+      "line_start": 192,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 191,
+        "line_start": 190,
+        "source_sha256": "a4c847c42a1c1b96d14dac763950e2dfbf18998aa72d1798c55b4b3fd077a01a",
+        "text": "SAFETY: Both topology/device hotplug locks protect discovery. get_device retains the live device before either lock is dropped."
+      },
+      "source_sha256": "16bd7b61798ac1110008d45f76964b1f74cbfa5b9d9dc7fc9059780e52824ad2"
+    },
+    {
+      "byte_end": 6992,
+      "byte_start": 6953,
+      "caller_obligations": [
+        "SAFETY: The non-null CPU device remains live under the two guards. Retain it before discovery exclusion ends."
+      ],
+      "column_end": 64,
+      "column_start": 26,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "09f7c810cb7eb5b5a16b2b49658fed1d1bf86a2f3e27c467fc2fa373b705cc19",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0030",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 198,
+      "line_start": 198,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 197,
+        "line_start": 196,
+        "source_sha256": "8efbe03c495dc0c99e0904598c17d0de6bd4cb4da910997412ecedc3a1758ed3",
+        "text": "SAFETY: The non-null CPU device remains live under the two guards. Retain it before discovery exclusion ends."
+      },
+      "source_sha256": "9f43ce0fe5df90b307033d17013142375afaff5383c7b07c2c156f0091e5bfec"
+    },
+    {
+      "byte_end": 14087,
+      "byte_start": 12806,
+      "caller_obligations": [
+        "SAFETY: The caller holds CPU read-side exclusion. Bounds are checked before reading mask words; x86_64 mask words and unsigned long are u64."
+      ],
+      "column_end": 5,
+      "column_start": 5,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "6130fad1500aa109d5d784c5e8cad92b110dc6789b4df21dc4f1a0a517dffe2b",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0031",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 389,
+      "line_start": 360,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 359,
+        "line_start": 358,
+        "source_sha256": "b012880d95da2314922ba30cf895ea8963504bccd83d21f932f4127f2a6de3a7",
+        "text": "SAFETY: The caller holds CPU read-side exclusion. Bounds are checked before reading mask words; x86_64 mask words and unsigned long are u64."
+      },
+      "source_sha256": "af569779fac3888fe8ba58c4925dc59437a72bba0e8e999751e05e8f293c2c78"
+    },
+    {
+      "byte_end": 14759,
+      "byte_start": 14712,
+      "caller_obligations": [
+        "SAFETY: Device-hotplug and CPU read guards protect discovery. The retained reference keeps the original allocation alive for comparison."
+      ],
+      "column_end": 69,
+      "column_start": 23,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "56838f57438e62bdb31a80e34543875c68531438069ba14b29a93de918cd7b55",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0032",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 409,
+      "line_start": 409,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 408,
+        "line_start": 407,
+        "source_sha256": "f79cb187187da228429bf15077e108bb8f9a369a5b2a084895afb13d489a74db",
+        "text": "SAFETY: Device-hotplug and CPU read guards protect discovery. The retained reference keeps the original allocation alive for comparison."
+      },
+      "source_sha256": "16bd7b61798ac1110008d45f76964b1f74cbfa5b9d9dc7fc9059780e52824ad2"
+    },
+    {
+      "byte_end": 15515,
+      "byte_start": 15333,
+      "caller_obligations": [
+        "SAFETY: The batch owns device_hotplug_lock and a retained reference; CPU read-side exclusion has ended before either writer operation."
+      ],
+      "column_end": 9,
+      "column_start": 22,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "4a6eaa80cf823b283394f72d803efcb00d24aec959738b24a9777b1a8ebb6905",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0033",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 431,
+      "line_start": 425,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 424,
+        "line_start": 423,
+        "source_sha256": "511ed9fabe0d66b02b9b74843c41d7ed1c4bf2e2ba45a8d9b1e675a36168aba1",
+        "text": "SAFETY: The batch owns device_hotplug_lock and a retained reference; CPU read-side exclusion has ended before either writer operation."
+      },
+      "source_sha256": "3d26fbaecccdea012d5d8b2ac2f9efac6bf93732af3b5d3fca65585b2f422496"
+    },
+    {
+      "byte_end": 17078,
+      "byte_start": 17040,
+      "caller_obligations": [
+        "SAFETY: Module init exclusively transfers the static context to its single pinned mutex. No subsequent code accesses this UnsafeCell directly."
+      ],
+      "column_end": 38,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "c65c00af1ab3b347489fac3109318865b38614b349aae1178fe2e785aef0b412",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0034",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 482,
+      "line_start": 482,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 481,
+        "line_start": 480,
+        "source_sha256": "e63b837713d04c264c62a048d398e5834431e8d10f19c8f2567055aebc4c5f00",
+        "text": "SAFETY: Module init exclusively transfers the static context to its single pinned mutex. No subsequent code accesses this UnsafeCell directly."
+      },
+      "source_sha256": "4352f5940bfa3219532454d6dfca4b6edfc9e6f1e557d6a95cf3c1b3253bd0e6"
+    },
+    {
+      "byte_end": 17740,
+      "byte_start": 17708,
+      "caller_obligations": [
+        "SAFETY: Module initialization is exclusive and this is the sole access path to CONTEXT. Only its small reference moves onto the stack."
+      ],
+      "column_end": 54,
+      "column_start": 23,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "14a10e288c24debb70e001cb9e0d130b6a6702265e791a3eca9e2b4a6af0a736",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0035",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 497,
+      "line_start": 497,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 496,
+        "line_start": 495,
+        "source_sha256": "bfe01a49cf36a6de4b81124c701e3f30c1cb34fd3bfbf6439eb302a2ece59fce",
+        "text": "SAFETY: Module initialization is exclusive and this is the sole access path to CONTEXT. Only its small reference moves onto the stack."
+      },
+      "source_sha256": "62e77ffe47fcbe109a96697b0b92e8079a5a6a6897cfe4a45faa1a8722f63cfb"
+    },
+    {
+      "byte_end": 18436,
+      "byte_start": 18131,
+      "caller_obligations": [
+        "SAFETY: Callback/name remain resident until unregister under CPUHP exclusion. No existing CPUs are invoked; policy starts unreserved."
+      ],
+      "column_end": 9,
+      "column_start": 21,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "1b6b4c133a18a3fcfb21f51c97d8e5c44714d964de1dc4239020c5f7d783a790",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0036",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 515,
+      "line_start": 506,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 505,
+        "line_start": 504,
+        "source_sha256": "9f6b9c4183198582d5881afb3b9b983baf60c5cc462094bdd9315731b0f6d4be",
+        "text": "SAFETY: Callback/name remain resident until unregister under CPUHP exclusion. No existing CPUs are invoked; policy starts unreserved."
+      },
+      "source_sha256": "c50f69dc4b4cdab8aae354c0da5ebb64237e77e33f6dffbc5676e6666fb73b1f"
+    },
+    {
+      "byte_end": 19079,
+      "byte_start": 19011,
+      "caller_obligations": [
+        "SAFETY: Module teardown has no open control files or resource pins. Linux removes and drains the callback under its CPU locks."
+      ],
+      "column_end": 80,
+      "column_start": 13,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "0b3fc5b1d9db59a7262d81462cf4eb27fbacbd9e2b230a6de2bef9165968fbac",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0037",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 532,
+      "line_start": 532,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 531,
+        "line_start": 530,
+        "source_sha256": "0d3a9beda30dfb8043af47c4785873ac8222a96352624f27ba8a6455f6fd26cb",
+        "text": "SAFETY: Module teardown has no open control files or resource pins. Linux removes and drains the callback under its CPU locks."
+      },
+      "source_sha256": "58b464dec3ea3dda186b80d427608465f8ab54ad261794fe60588f395cd410a9"
+    },
+    {
+      "byte_end": 19951,
+      "byte_start": 19929,
+      "caller_obligations": [
+        "SAFETY: Publication precedes misc_register. The file's module reference prevents CpuController destruction until this call and file release end."
+      ],
+      "column_end": 44,
+      "column_start": 23,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Rocky Linux 6.12 x86_64 CPU/device ABI; no project C implementation is linked.",
+        "Module init owns static storage exclusively; ioctls hold the sleepable policy mutex before device hotplug exclusion.",
+        "CPU read-side guards end before hotplug writers; CPUHP callbacks use atomics and never acquire the policy mutex.",
+        "Outstanding or uncertain reservations retain device and module references; file-owner references protect active calls."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
+      "file_sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825",
+      "id": "RS011-SMP-0038",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 559,
+      "line_start": 559,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP Linux CPU reservation adapter"
+      },
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "safety_comment": {
+        "line_end": 558,
+        "line_start": 557,
+        "source_sha256": "51a165c396c68132feac30f18838d0889f11b14c5b7573565f21d1e09497104f",
+        "text": "SAFETY: Publication precedes misc_register. The file's module reference prevents CpuController destruction until this call and file release end."
+      },
+      "source_sha256": "1f35e04f7b2ead6628d75c5dea26f824f8776be6c07dd70e81c5a72796842ff7"
     }
   ],
-  "source_closure_sha256": "8ebb0904eeac4516e79dc134242a7f52a7b105d81709d7a72e823c3f1eaf77a3",
+  "source_closure_sha256": "10dac50f06d2d2a9dd6a4cc598b70af6c3e30d23d4f2d10a2fd777235d678661",
   "source_inputs": [
     {
       "bytes": 19740,
       "crate_roots": [
-        "ihk"
+        "ihk",
+        "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/abi/x86_64.rs",
       "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
@@ -4023,12 +5130,12 @@
       "sha256": "bfd645218062f6495ff352bb3e336f1448ea1109a5e440aee62ebe6394fe2958"
     },
     {
-      "bytes": 19498,
+      "bytes": 19914,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32"
+      "sha256": "5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7"
     },
     {
       "bytes": 26419,
@@ -4085,6 +5192,14 @@
       ],
       "path": "host-kernel/native-rust/page_owner_registry.rs",
       "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
+    },
+    {
+      "bytes": 20469,
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825"
     },
     {
       "bytes": 97391,

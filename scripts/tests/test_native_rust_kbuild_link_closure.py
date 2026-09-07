@@ -40,6 +40,8 @@ ROCKY_FIXDEP_SMP_RECORD = (
     'deps_drivers/misc/mckernel/ihk_smp_x86_64.o := \\\n'
     '    $(wildcard include/config/COMPAT) \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_resource.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_cpu.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/abi/x86_64.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk-compat-build-id.bin \\\n'
     '  ./rust/libcore.rmeta \\\n'
     '  ./rust/libkernel.rmeta \\\n'
@@ -413,17 +415,30 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
     def test_dependency_lists_match_the_actual_rust_crate_edges(self):
         for module in closure.MODULES:
             with self.subTest(module=module["name"]):
-                path = os.path.join(
-                    REPO_ROOT, "host-kernel", "native-rust", module["crate_root"]
-                )
-                with open(path, "r", encoding="utf-8") as stream:
-                    source = stream.read()
-                edges = re.findall(
-                    r'(?m)^(?:#\[path = "([^"]+)"\]\n)?mod ([a-z0-9_]+);$', source
-                )
+                native_root = os.path.join(REPO_ROOT, "host-kernel", "native-rust")
+                seen = {module["crate_root"]}
+                dependencies = []
+
+                def visit(relative):
+                    with open(os.path.join(native_root, relative), "r", encoding="utf-8") as stream:
+                        source = stream.read()
+                    edges = re.findall(
+                        r'(?m)^(?:#\[path = "([^"]+)"\]\n)?mod ([a-z0-9_]+);$', source
+                    )
+                    for explicit, name in edges:
+                        # Current external children are top-level Rust files;
+                        # explicit paths are relative to the containing file.
+                        child = os.path.normpath(os.path.join(
+                            os.path.dirname(relative), explicit or name + ".rs"
+                        ))
+                        if child not in seen:
+                            seen.add(child)
+                            dependencies.append(child)
+                            visit(child)
+
+                visit(module["crate_root"])
                 self.assertEqual(
-                    tuple(path or name + ".rs" for path, name in edges),
-                    closure._PROJECT_DEPENDENCIES[module["name"]],
+                    tuple(dependencies), closure._PROJECT_DEPENDENCIES[module["name"]]
                 )
 
     def test_valid_closure_is_exact_canonical_and_credit_forbidden(self):
@@ -926,7 +941,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.read_text(name).splitlines()[1:],
         )
         self.assertEqual(
-            ["ihk_smp_x86_64.rs", "smp_resource.rs"],
+            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs"],
             closure._parse_rust_dependency_body(
                 name,
                 target,
@@ -990,7 +1005,11 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         metadata = "  " + SOURCE_PREFIX + "ihk-compat-build-id.bin \\\n"
         kernel = "  ./rust/libcore.rmeta \\\n"
         self.mutate_once(name, config + resource, resource + config)
-        self.mutate_once(name, resource + metadata, metadata + resource)
+        source_dependencies = resource + "".join(
+            "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
+            for item in ("smp_cpu.rs", "abi/x86_64.rs")
+        )
+        self.mutate_once(name, source_dependencies + metadata, metadata + source_dependencies)
         for anchor in (resource, metadata, kernel):
             with self.subTest(anchor=anchor):
                 moved = original.replace(config, "", 1).replace(anchor, anchor + config, 1)

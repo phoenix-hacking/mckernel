@@ -40,41 +40,38 @@ BOUND_MODINFO_ENVIRONMENT = {
     "PATH": "/usr/bin:/bin",
     "TZ": "UTC",
 }
-EXPECTED_CRATE_MODULES = [
-    {
-        "destination": "smp_resource.rs",
-        "path": "host-kernel/native-rust/smp_resource.rs",
-        "sha256": "879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098",
-    }
-]
-EXPECTED_RESOURCE_FOUNDATION = {
-    "credit_eligible": False,
-    "external_effect_failure_policy": {
-        "cpu": "quarantine-affected-slots-unless-compensated-rollback",
-        "memory": "poison-live-map-unless-compensated-rollback",
-    },
-    "fixture": {
-        "expected_fixture_tests": 14,
-        "expected_in_file_tests": 24,
-        "expected_total_tests": 38,
-        "minimum_rustc": "1.92.0",
-        "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
-        "negative_sha256": "fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5",
-        "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
-        "positive_sha256": "cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1",
-    },
-    "integration_blockers": [
-        "no versioned IHK OS lease can mint an OsToken in production",
-        "no pinned off-stack CpuTable, MemoryMap, or transaction workspace is owned by the module",
-        "no audited sleepable outer lock or Linux CPU/page external-effect compensation adapter exists",
-        "the legacy 4 MiB user memory request granule is not enforced by an ioctl adapter",
-        "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
-        "no physical hotplug, page ownership, APIC, IRQ, McKernel boot, or runtime behavior is reachable",
-    ],
-    "linux_reachable": False,
-    "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
-    "status": "private-source-bound-policy-foundation",
-}
+EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
+  'path': 'host-kernel/native-rust/smp_resource.rs',
+  'sha256': '879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098'},
+ {'destination': 'smp_cpu.rs',
+  'path': 'host-kernel/native-rust/smp_cpu.rs',
+  'sha256': '8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825'},
+ {'destination': 'abi/x86_64.rs',
+  'path': 'host-kernel/native-rust/abi/x86_64.rs',
+  'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'}]
+EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
+ 'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
+                                    'memory': 'poison-live-map-unless-compensated-rollback'},
+ 'fixture': {'expected_fixture_tests': 14,
+             'expected_in_file_tests': 24,
+             'expected_total_tests': 38,
+             'minimum_rustc': '1.92.0',
+             'negative_path': 'scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs',
+             'negative_sha256': 'fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5',
+             'positive_path': 'scripts/tests/fixtures/ihk_smp_resource_compile.rs',
+             'positive_sha256': 'cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1'},
+ 'integration_blockers': ['no versioned IHK OS lease can mint an OsToken in production',
+                          'memory tables and page ownership still require a pinned Linux adapter',
+                          'CPU physical eject, suspend, topology replacement and uncertain-state '
+                          'reconciliation need production acceptance',
+                          'the legacy 4 MiB user memory request granule is not enforced by an '
+                          'ioctl adapter',
+                          'IKC optional-versus-complete mapping compatibility is not selected at '
+                          'the ABI boundary',
+                          'page ownership, APIC reset, IRQ and McKernel boot remain unreachable'],
+ 'linux_reachable': True,
+ 'os_token_minting': 'cfg-test-only-until-versioned-ihk-os-lease-abi',
+ 'status': 'native-cpu-adapter-with-private-memory-policy'}
 EXPECTED_PROVIDER_LEASE = {
     "attach_symbol": "ihk_smp_provider_attach_v2",
     "callback_abi": 1,
@@ -109,93 +106,76 @@ EXPECTED_PROVIDER_LEASE = {
     "tracker_credit": False,
     "unknown_status_errno": -117,
 }
-EXPECTED_CONTROL_DEVICE_SHELL = {
-    "close_symbol": "ihk_smp_provider_close_v1",
-    "compat_ioctl": {
-        "explicit_when_config_compat": True,
-        "implicit_pointer_conversion_fallback": False,
-        "pointer_conversion": "arg as u32 as usize",
-        "unsupported_commands_errno": -22,
-    },
-    "credit_eligible": False,
-    "default_release_drops_receipt": True,
-    "device_name": "mcd0",
-    "device_node_source_reachable": True,
-    "file_operations_owner": "THIS_MODULE",
-    "gate_claims": {
-        "IHK-003": False,
-        "IHK-004": False,
-        "RS-006": False,
-    },
-    "gate_status": "TODO",
-    "get_buildid": {
-        "build_identity_semantics": "unchanged IHK consumer compatibility identity; native source candidate provenance is separate",
-        "command": "0x0011290b",
-        "copies_nul_terminator": True,
-        "copy_failure_errno": -14,
-        "generated_metadata_file": "ihk-compat-build-id.bin",
-        "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
-        "source_fixture": {
-            "expected_tests": 6,
-            "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-            "sha256": "c8755402148266afcf363c87b6089ab40e8da2b1080b0ca0d14735a68118e22c",
-            "size": 5990,
-        },
-        "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
-        "success_result": 0,
-    },
-    "minor": 0,
-    "native_ioctl": {
-        "explicit": True,
-        "unsupported_commands_errno": -22,
-    },
-    "noncopy_fixture": {
-        "claim_scope": "Rust language compile-fail shape only; not a kernel build or runtime result",
-        "minimum_rustc": "1.92.0",
-        "path": "scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs",
-        "sha256": "eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a",
-        "size": 541,
-    },
-    "open_allocation_failure_releases_receipt": True,
-    "open_close_abi": "scalar-only",
-    "open_receipt": {
-        "close_exactly_once": True,
-        "concurrent_shared_opens": True,
-        "duplicate_close_detectable_while_other_references_exist": False,
-        "non_copy": True,
-        "non_clone": True,
-        "positive": True,
-        "provider_policy": "shared-reference-counted-generation-receipts",
-        "raw_value_logged": False,
-        "same_generation_token_may_repeat": True,
-        "trusted_noncopy_owner_balance_required": True,
-    },
-    "open_symbol": "ihk_smp_provider_open_v1",
-    "pinned_registration": True,
-    "provider_operation_callbacks_reachable": False,
-    "provider_attach_before_registration": True,
-    "raw_data_pointer": False,
-    "registration_failure_releases_provider_lease": True,
-    "rocky_runtime_validated": False,
-    "runtime_behavior_proven": False,
-    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt, native/compat GET_BUILDID, and unbooted OS create/destroy; no resource or boot operation",
-    "teardown_order": [
-        "deregister-control-device",
-        "detach-provider-lease",
-        "emit-unload-diagnostic",
-    ],
-    "tracker_credit": False,
-    "unsupported_file_operations": [
-        "read",
-        "read_iter",
-        "write",
-        "write_iter",
-        "mmap",
-        "poll",
-    ],
-    "usercopy_reachable": True,
-    "valid_ioctl_commands": ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS"],
-}
+EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
+ 'compat_ioctl': {'explicit_when_config_compat': True,
+                  'implicit_pointer_conversion_fallback': False,
+                  'pointer_conversion': 'arg as u32 as usize',
+                  'unsupported_commands_errno': -22},
+ 'credit_eligible': False,
+ 'default_release_drops_receipt': True,
+ 'device_name': 'mcd0',
+ 'device_node_source_reachable': True,
+ 'file_operations_owner': 'THIS_MODULE',
+ 'gate_claims': {'IHK-003': False, 'IHK-004': False, 'RS-006': False},
+ 'gate_status': 'TODO',
+ 'get_buildid': {'build_identity_semantics': 'unchanged IHK consumer compatibility identity; '
+                                             'native source candidate provenance is separate',
+                 'command': '0x0011290b',
+                 'copies_nul_terminator': True,
+                 'copy_failure_errno': -14,
+                 'generated_metadata_file': 'ihk-compat-build-id.bin',
+                 'safe_usercopy': 'kernel::uaccess::UserSlice::writer::write_slice',
+                 'source_fixture': {'expected_tests': 7,
+                                    'path': 'scripts/tests/fixtures/ihk_smp_buildid_compile.rs',
+                                    'sha256': '4cfb62b601356c40927af321e28e74a0e0a86e85e54ba11b3a14ed65548bd266',
+                                    'size': 7371},
+                 'source_fixture_scope': 'extracted production dispatch with mock UserSlice; no '
+                                         'kernel usercopy or runtime proof',
+                 'success_result': 0},
+ 'minor': 0,
+ 'native_ioctl': {'explicit': True, 'unsupported_commands_errno': -22},
+ 'noncopy_fixture': {'claim_scope': 'Rust language compile-fail shape only; not a kernel build or '
+                                    'runtime result',
+                     'minimum_rustc': '1.92.0',
+                     'path': 'scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs',
+                     'sha256': 'eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a',
+                     'size': 541},
+ 'open_allocation_failure_releases_receipt': True,
+ 'open_close_abi': 'scalar-only',
+ 'open_receipt': {'close_exactly_once': True,
+                  'concurrent_shared_opens': True,
+                  'duplicate_close_detectable_while_other_references_exist': False,
+                  'non_clone': True,
+                  'non_copy': True,
+                  'positive': True,
+                  'provider_policy': 'shared-reference-counted-generation-receipts',
+                  'raw_value_logged': False,
+                  'same_generation_token_may_repeat': True,
+                  'trusted_noncopy_owner_balance_required': True},
+ 'open_symbol': 'ihk_smp_provider_open_v1',
+ 'pinned_registration': True,
+ 'provider_attach_before_registration': True,
+ 'provider_operation_callbacks_reachable': False,
+ 'raw_data_pointer': False,
+ 'registration_failure_releases_provider_lease': True,
+ 'rocky_runtime_validated': False,
+ 'runtime_behavior_proven': False,
+ 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy and CPU '
+          'reserve/release/count/query; memory, OS assignment and boot remain separate',
+ 'teardown_order': ['deregister-control-device',
+                    'retire-cpu-controller-and-hotplug-callback',
+                    'detach-provider-lease',
+                    'emit-unload-diagnostic'],
+ 'tracker_credit': False,
+ 'unsupported_file_operations': ['read', 'read_iter', 'write', 'write_iter', 'mmap', 'poll'],
+ 'usercopy_reachable': True,
+ 'valid_ioctl_commands': ['IHK_DEVICE_GET_BUILDID',
+                          'IHK_DEVICE_CREATE_OS',
+                          'IHK_DEVICE_DESTROY_OS',
+                          'IHK_DEVICE_RESERVE_CPU',
+                          'IHK_DEVICE_RELEASE_CPU',
+                          'IHK_DEVICE_GET_NUM_CPUS',
+                          'IHK_DEVICE_QUERY_CPU']}
 
 EXPECTED_BUILDID_INCLUDE = (
     'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
@@ -907,6 +887,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     _require_active_count(
         text, code, resource_edge, 1, "Rust SMP private resource-policy edge"
     )
+    _require_active_count(text, code, "mod smp_cpu;", 1, "Rust SMP Linux CPU adapter edge")
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",
@@ -1115,10 +1096,16 @@ struct ProviderOpenLease {
     dispatch_start = _active_fragment_positions(text, code, EXPECTED_BUILDID_DISPATCH)[0]
     _validate_top_level_item(code, dispatch_start, "GET_BUILDID dispatcher")
     native_ioctl = '''fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg, false);
+        }
         control_device_request(cmd, arg)
     }'''
     compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
     fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg as u32 as usize, true);
+        }
         // This command takes a userspace pointer.  On x86_64 compat callers
         // supply a 32-bit address; zero extension matches compat_ptr().
         control_device_request(cmd, arg as u32 as usize)
@@ -1186,13 +1173,16 @@ struct ProviderOpenLease {
     )
     control_owner = '''struct IhkSmpModule {
     control_device: Option<core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>>,
+    cpu_controller: Option<smp_cpu::CpuController>,
     provider_lease: Option<ProviderLease>,
 }'''
     if code.count(control_owner) != 1:
         raise ValidationError("Rust SMP module lacks the exact pinned mcd0/provider owners")
     required_control_lifecycle = (
         "control_device: Some(control_device),",
+        "cpu_controller: Some(cpu_controller),",
         "drop(self.control_device.take());",
+        "drop(self.cpu_controller.take());",
         "drop(self.provider_lease.take());",
     )
     for fragment in required_control_lifecycle:
@@ -1336,18 +1326,19 @@ struct ProviderOpenLease {
         )
     construction_at = code.index("Ok(Self {", attach_at)
     attach_end = attach_at + len("let provider_lease = ProviderLease::attach()?;")
-    if code[attach_end:register_at].strip():
+    if code[attach_end:register_at].strip() != "let cpu_controller = smp_cpu::CpuController::new()?;":
         raise ValidationError(
-            "Rust SMP provider attach must immediately precede mcd0 registration"
+            "Rust SMP provider attach must precede CPU owner initialization and mcd0 registration"
         )
     register_end = register_at + len(registration)
     if "?" in code[register_end:construction_at]:
         raise ValidationError(
             "Rust SMP mcd0 registration must remain the final fallible initialization step"
         )
-    if not deregister_at < detach_at < unload_at:
+    cpu_drop_at = code.index("drop(self.cpu_controller.take());")
+    if not deregister_at < cpu_drop_at < detach_at < unload_at:
         raise ValidationError(
-            "Rust SMP teardown must deregister mcd0 before provider detach and unload log"
+            "Rust SMP teardown must deregister mcd0, retire CPU ownership, then detach provider"
         )
     for constant in (
         "IHK_SMP_PARAMETER_COUNT",
@@ -1364,6 +1355,10 @@ struct ProviderOpenLease {
 
 
 def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
+    for dependency in contract["crate_modules"]:
+        path = _repo_file(repo, dependency["path"], "SMP dependency")
+        if _sha256(path) != dependency["sha256"]:
+            raise ValidationError("SMP compiled dependency digest differs: " + dependency["path"])
     module = contract["crate_modules"][0]
     source_path = _repo_file(repo, module["path"], "SMP resource policy source")
     if module["destination"] != "smp_resource.rs" or _sha256(source_path) != module["sha256"]:
@@ -1856,7 +1851,7 @@ def validate_repository(
         "get_buildid_source_fixture_tests": contract["control_device_shell"]["get_buildid"]["source_fixture"]["expected_tests"],
         "rocky_build_load_validated": False,
         "resource_foundation_credit_eligible": False,
-        "resource_foundation_linux_reachable": False,
+        "resource_foundation_linux_reachable": contract["resource_foundation"]["linux_reachable"],
         "resource_foundation_source_sha256": _sha256(resource_path),
         "resource_foundation_tests": contract["resource_foundation"]["fixture"]["expected_total_tests"],
         "source_symbol_reference_present": True,

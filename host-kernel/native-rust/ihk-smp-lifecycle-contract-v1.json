@@ -34,10 +34,10 @@
       "generated_metadata_file": "ihk-compat-build-id.bin",
       "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
       "source_fixture": {
-        "expected_tests": 6,
+        "expected_tests": 7,
         "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-        "sha256": "c8755402148266afcf363c87b6089ab40e8da2b1080b0ca0d14735a68118e22c",
-        "size": 5990
+        "sha256": "4cfb62b601356c40927af321e28e74a0e0a86e85e54ba11b3a14ed65548bd266",
+        "size": 7371
       },
       "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
       "success_result": 0
@@ -76,9 +76,10 @@
     "registration_failure_releases_provider_lease": true,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "pinned SMP-owned mcd0 with scalar per-file open receipt, native/compat GET_BUILDID, and unbooted OS create/destroy; no resource or boot operation",
+    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy and CPU reserve/release/count/query; memory, OS assignment and boot remain separate",
     "teardown_order": [
       "deregister-control-device",
+      "retire-cpu-controller-and-hotplug-callback",
       "detach-provider-lease",
       "emit-unload-diagnostic"
     ],
@@ -95,7 +96,11 @@
     "valid_ioctl_commands": [
       "IHK_DEVICE_GET_BUILDID",
       "IHK_DEVICE_CREATE_OS",
-      "IHK_DEVICE_DESTROY_OS"
+      "IHK_DEVICE_DESTROY_OS",
+      "IHK_DEVICE_RESERVE_CPU",
+      "IHK_DEVICE_RELEASE_CPU",
+      "IHK_DEVICE_GET_NUM_CPUS",
+      "IHK_DEVICE_QUERY_CPU"
     ]
   },
   "crate_modules": [
@@ -103,6 +108,16 @@
       "destination": "smp_resource.rs",
       "path": "host-kernel/native-rust/smp_resource.rs",
       "sha256": "879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098"
+    },
+    {
+      "destination": "smp_cpu.rs",
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825"
+    },
+    {
+      "destination": "abi/x86_64.rs",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
     }
   ],
   "dependency_contract": {
@@ -270,15 +285,15 @@
     },
     "integration_blockers": [
       "no versioned IHK OS lease can mint an OsToken in production",
-      "no pinned off-stack CpuTable, MemoryMap, or transaction workspace is owned by the module",
-      "no audited sleepable outer lock or Linux CPU/page external-effect compensation adapter exists",
+      "memory tables and page ownership still require a pinned Linux adapter",
+      "CPU physical eject, suspend, topology replacement and uncertain-state reconciliation need production acceptance",
       "the legacy 4 MiB user memory request granule is not enforced by an ioctl adapter",
       "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
-      "no physical hotplug, page ownership, APIC, IRQ, McKernel boot, or runtime behavior is reachable"
+      "page ownership, APIC reset, IRQ and McKernel boot remain unreachable"
     ],
-    "linux_reachable": false,
+    "linux_reachable": true,
     "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
-    "status": "private-source-bound-policy-foundation"
+    "status": "native-cpu-adapter-with-private-memory-policy"
   },
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json"

@@ -27,9 +27,9 @@ from typing import Any
 
 EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     "kbuild_link_closure": {
-        "git_blob_sha1": "bb19da767c8a422df36ef53c98d12f89b5547c11",
-        "sha256": "c9640b6b8c3fc6ee168cd875df2c79e00fb8fd1dfda9cf3e4aa48e052a430c7c",
-        "size": 59952,
+        "git_blob_sha1": "328249bb26e92ea387778fec87c15406c2b743b5",
+        "sha256": "a8f4c4a92fc2c5fbb461b3f8ab4d8b54e6da0e2ddc8098a086f0079057eca6e5",
+        "size": 60000,
     },
     "kconfig_policy": {
         "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
@@ -43,7 +43,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
     },
 }
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:ce3e80898425f5985ca38ca02c11d9ee19234a0f41e4440b1147cc8d56b19d1c"
+    "ISOLATED_SELF_DIGEST:eb649d66ced2e84407ec8842c9692ef59f3ec9200ab6bc1632a298c6d4a17ea1"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -735,7 +735,7 @@ EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {'Refuse the wrong runtime and install exact build tools': 'acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420',
  'Check out the exact candidate without credentials': '4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc',
  'Verify source-only contracts without claiming readiness': '15d39a8bccc409869d2a54b244bc8e81fefbd257b16732d282c50180f16fb512',
- 'Acquire, patch, and credit-forbidden-stage the exact source': '421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000',
+ 'Acquire, patch, and credit-forbidden-stage the exact source': 'b68ad8dbbf49255c9ea26ebc48f335d654a858e1f2e67e1ff4c4fa459944e322',
  'Resolve the evidence-only module configuration twice': 'e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943',
  'Compile the exact kernel and native Rust modules': '17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a',
  'Validate built metadata and capture immutable diagnostics': '156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c',
@@ -750,9 +750,9 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = 'ee98e6536a7d75907eb08c3eb2eaacddc4ee651d46a8263bf36b3e3999f7a5a5'
-EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '00c92532178894eb11bc0c39dd87cc9737ac34a606fc885bc19bb95b9baaf3e7',
-                    'size': 91530,
-                    'git_blob_sha1': '124a8e90781a4cbf06664ff5175410f0a91e61dd'},
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '416e892823b225a30625d172bd1f6ee09aee55e338c29c080af5d70ccc6576b9',
+                    'size': 91741,
+                    'git_blob_sha1': 'd88467eb74d657dfb55da142592c1f3f8631c2ec'},
  'runtime_pr_workflow': {'git_blob_sha1': '64bb717852d36fc1021e2b61e83aca6415b184d5',
                          'sha256': '628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265',
                          'size': 754},

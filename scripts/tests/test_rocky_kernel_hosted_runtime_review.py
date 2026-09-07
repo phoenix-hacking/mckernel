@@ -324,13 +324,18 @@ class HostedRuntimeReviewTests(unittest.TestCase):
         self.assertFalse(state["current_head_bound_inputs_match"])
         self.assertFalse(state["current_head_applicable"])
         self.assertEqual(state["current_head_status"], "stale-input-drift")
-        self.assertEqual(
-            state["drifted_committed_inputs"],
-            [
-                ".github/workflows/rust-x86_64-validation.yml",
-                "scripts/rocky-rust-validation.sh",
-            ],
-        )
+        # This historical review remains frozen while current documentation and
+        # build inputs evolve. Check the complete drift set against Git rather
+        # than pinning the paths that happened to differ when this test landed.
+        changed = set(subprocess.check_output(
+            ["git", "diff", "--name-only", "--no-renames", "-z",
+             reviewer.RUNTIME_HEAD_SHA, state["current_head"], "--"],
+            cwd=str(REPO_ROOT),
+        ).decode("utf-8").rstrip("\0").split("\0"))
+        bound_paths = [row["path"] for row in review["runtime_candidate"]["committed_inputs"]]
+        expected = [path for path in bound_paths if path in changed]
+        self.assertTrue(expected)
+        self.assertEqual(state["drifted_committed_inputs"], expected)
 
     def test_repository_state_rejects_recursive_type_and_invariant_drift(self):
         state = reviewer.validate_repository(

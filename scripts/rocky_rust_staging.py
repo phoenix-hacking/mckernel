@@ -114,6 +114,10 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_resource.rs',
   'sha256': '879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098'},
+ {'destination': 'smp_cpu.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
+  'sha256': '8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
@@ -194,7 +198,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': '6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32'},
+  'source_sha256': '5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -883,6 +887,7 @@ def _validate_input(repo_root, item, index):
         "page_allocator.rs",
         "page_owner_registry.rs",
         "smp_resource.rs",
+        "smp_cpu.rs",
         "os_runtime.rs",
     ):
         expected_destination = item["destination"]
@@ -893,7 +898,7 @@ def _validate_input(repo_root, item, index):
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
     text = _read_text(path, label)
-    if item["destination"] == "os_runtime.rs":
+    if item["destination"] in ("os_runtime.rs", "smp_cpu.rs"):
         if __package__:
             from .native_rust_host_audit import reject_unreviewed_rust_escapes
         else:
@@ -901,7 +906,7 @@ def _validate_input(repo_root, item, index):
         try:
             reject_unreviewed_rust_escapes(item["repository_path"], text)
         except SystemExit as error:
-            raise ValidationError("unbooted OS runtime boundary differs: {0}".format(error))
+            raise ValidationError("native Linux adapter boundary differs: {0}".format(error))
     elif item["kind"] not in ("kbuild_template", "kconfig"):
         _validate_rust_escape_hatches(text, label)
     if item["kind"] == "kbuild_template":
@@ -1032,6 +1037,13 @@ def _validate_input(repo_root, item, index):
         for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "smp_cpu.rs":
+        for token in ("struct DeviceHotplugGuard", "struct ResourceModulePin;",
+                      "struct CpuContext", "pub(super) struct CpuController",
+                      "transaction.execute_hotplug(&mut host)",
+                      "impl HostCpuHotplug for LinuxCpuBatch<'_>"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks CPU adapter boundary: {1}".format(label, token))
     elif item["destination"] == "os_runtime.rs":
         for token in ("pub(crate) struct OsDeviceFamily;", "struct KmsgPages(usize);",
                       "struct ProviderModule(*mut bindings::module);",
@@ -1230,12 +1242,13 @@ def validate_manifest(repo_root, manifest_path):
         "page_allocator.rs",
         "page_owner_registry.rs",
         "smp_resource.rs",
+        "smp_cpu.rs",
         "os_runtime.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, os_runtime.rs"
+            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, os_runtime.rs"
         )
 
     modules = manifest["modules"]

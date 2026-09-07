@@ -617,7 +617,11 @@ def discover_sites(relative, raw, text):
         add("ffi_export", attr_begin, _export_item_end(tokens, pairs, item_begin))
 
     for index, token in enumerate(tokens):
-        if token["text"] == "static" and index + 1 < len(tokens) and tokens[index + 1]["text"] == "mut":
+        lifetime = (
+            index > 0 and tokens[index - 1]["text"] == "'"
+            and tokens[index - 1]["end"] == token["start"]
+        )
+        if token["text"] == "static" and not lifetime and index + 1 < len(tokens) and tokens[index + 1]["text"] == "mut":
             add("mutable_static", index, _statement_end(tokens, pairs, index))
         if token["kind"] == "ident" and token["text"] in ("asm", "global_asm"):
             if index + 2 < len(tokens) and tokens[index + 1]["text"] == "!" and tokens[index + 2]["text"] in ("(", "[", "{"):

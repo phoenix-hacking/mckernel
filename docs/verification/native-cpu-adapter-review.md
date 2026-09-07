@@ -1,12 +1,19 @@
 # Native CPU reservation adapter: reuse and API review
 
-This is the next bounded implementation after the recorded native unbooted
-lifecycle run. It does not establish CPU reservation or McKernel boot yet.
+The Rust Linux CPU adapter now builds against the pinned Linux 6.12 kernel
+and passes a disposable four-vCPU guest capture. Native x86_64 and compat i386
+control programs reserve and return CPUs, exercise Linux failure injection,
+and prove rollback, outside-online veto, closed-file module pinning, concurrent
+operations, and two clean unload/reload cycles. McKernel boot remains pending.
+The first capture used a prototype stage. The subsequent authoritative stage,
+three-module Kbuild and compiler link closure pass; those rebuilt modules also
+pass a four-vCPU guest with two NUMA nodes. No production gate is promoted.
 
 The OS target is 64-bit x86_64 throughout. The i386 control probe tests only
 userspace ioctl compatibility; it is not a 32-bit kernel build.
 
-The source baseline is `24a151fef5b9fcf303fdbb8cf9762340cd4100fd`. Linux source
+The preserved inventory baseline is `24a151fef5b9fcf303fdbb8cf9762340cd4100fd`;
+the CPU adapter is added on local checkpoint `b8d5170d`. Linux source
 comes from the pinned Rocky archive in `host-kernel/rocky/source-lock.json`;
 the existing compatibility patches and native staging workflow are reused.
 
@@ -33,25 +40,33 @@ the existing compatibility patches and native staging workflow are reused.
 
 ## Inspected Linux 6.12 APIs
 
-`kernel/cpu.c` exports `remove_cpu(unsigned int)` and `add_cpu(unsigned int)`
-under GPL. Their implementations acquire `device_hotplug_lock`, invoke device
-offline/online, and release that lock. The comments explicitly direct other
-subsystems to these functions. Reuse them instead of reproducing the legacy
-kernel writes to `/sys/devices/system/cpu/cpuN/online`.
+`kernel/cpu.c` exports `remove_cpu` and `add_cpu`, but each acquires the
+Linux device hotplug lock independently. The existing transaction journal needs
+that exclusion across the entire batch, including observations and rollback.
+Calling those wrappers while holding the lock would deadlock. The new support
+patch `0003-driver-core-export-device-hotplug-transactions.patch` therefore
+exports four existing Linux functions: `lock_device_hotplug`,
+`unlock_device_hotplug`, `device_offline`, and `device_online`. It adds four GPL
+exports and no new C function body. The adapter uses those existing Linux
+services through a task-bound Rust guard.
 
-The functions may sleep. Their return value is zero for a performed transition,
-positive for an already-satisfied device state, or negative errno. Do not
-convert any nonnegative value blindly into a newly owned transition.
+These functions may sleep. A positive already-satisfied transition is rejected,
+not treated as a newly owned CPU. `cpus_read_lock`/`cpus_read_unlock` bracket
+mask and topology observations and end before each CPU writer operation.
+Retained `get_device` references preserve allocations, while canonical CPU
+device identity is checked before a transition and on subsequent owned queries.
 
-`cpus_read_lock`/`cpus_read_unlock` are exported and can bracket topology reads;
-release that read lock before a hotplug call requiring the write side.
-`nr_cpu_ids`, `__cpu_online_mask`, and `__cpu_present_mask` are exported, and the
-generated bindings expose the masks and scalar limit. In
-`arch/x86/kernel/apic/apic_common.c`, the exported
-`default_cpu_present_to_apicid(int)` supplies the physical APIC ID or BAD_APICID.
-The NUMA configuration exports `__cpu_to_node(int)` from `arch/x86/mm/numa.c`.
-Use these ordinary Linux services through small reviewed Rust FFI boundaries.
-No McKernel-owned C object or helper bridge is needed for this slice.
+The selected NUMA configuration does **not** export `__cpu_to_node`; that export
+requires `CONFIG_DEBUG_PER_CPU_MAPS`. The adapter instead reads Linux's embedded
+`struct cpu.node_id` under the device/topology guards. Linux `register_cpu` and
+`change_cpu_under_node` maintain that field. The generated bindings expose its
+layout. The exported x86 `default_cpu_present_to_apicid` supplies the APIC ID.
+
+A CPUHP prepare callback rejects external attempts to online a reserved CPU.
+It reads only bounded atomics, never the policy mutex. A scoped current-task
+permission allows the adapter's own transitions and Linux's internal rollback.
+The module keeps a separate reference for outstanding resources, including
+quarantine, so closing all control files cannot permit unsafe module unload.
 
 ## Ownership and behavior requirements
 
@@ -112,7 +127,33 @@ The existing 29 Rust tests are retained. This is an intentional, additive change
 to one existing implementation file and its existing fixture, not a refresh of
 the immutable 24a151fe reuse inventory.
 
-The trait does not provide Linux hotplug exclusion, CPU device lifetime, or a
-module reference. Those are explicit requirements of the Linux adapter. The
-method is not reachable from an ioctl yet, and these model tests cannot prove
-physical CPU reservation. No production tracker credit follows from this step.
+The trait remains independent of Linux ownership. The new `smp_cpu.rs` supplies
+its Linux hotplug exclusion, retained device lifetime, module reference and
+native/compat ioctl adapter. `smp_resource.rs` is unchanged from the verified
+38-test checkpoint; its existing transaction implementation executes the real
+Linux effects. The canonical `abi/x86_64.rs` is also unchanged.
+
+The first guest evidence is retained locally under
+`/work/native-runtime-cpu-adapter-20260907`; `local-run.json` binds the actual
+prototype sources, kernel, modules, fixture binaries and serial output. Both
+ABIs pass reserve and return failure injection at each of three CPU positions,
+three concurrent processes with eight cycles each, malformed/usercopy cases,
+outside-online veto and closed-file resource pinning, repeated across two
+module lifecycle cycles. All four CPUs are restored and all modules unloaded.
+No BUG, WARNING, Oops or panic marker was detected.
+
+This proves the fixed-topology CPU reservation slice. It does not prove physical
+CPU eject, suspend, identity replacement recovery, memory allocation/assignment,
+OS token handoff, APIC boot, IKC, or workloads. The second capture additionally
+proves the same CPU operations with node 0 containing CPUs 0–1 and node 1
+containing CPUs 2–3; it does not prove memory placement or boot on either node.
+No production tracker credit follows automatically from this local capture.
+
+## Retained exact-stage checkpoint
+
+The [2026-09-07 checkpoint](native-cpu-checkpoint-20260907.json) retains both
+runtime captures and distinguishes prototype staging from the verified exact
+stage. Its source/compiler records bind the rebuilt modules and the two-node
+guest. The final repository suite ran 2,299 tests in 334.363 seconds with 71
+skips and no failures. Memory reservation/assignment, native McKernel boot,
+workloads and production gate credit remain unproven by this CPU slice.

@@ -18,6 +18,21 @@ struct CopyState {
 
 std::thread_local! {
     static COPY: std::cell::RefCell<CopyState> = Default::default();
+    static CPU_CALL: std::cell::RefCell<Option<(u32, usize, bool)>> = const { std::cell::RefCell::new(None) };
+}
+
+// The CPU adapter is a separate real Kbuild/guest boundary. This fixture
+// records routing only and deliberately performs no Linux hotplug effects.
+mod cpu_abi {
+    // PRODUCTION_CPU_ABI_CONSTANTS
+}
+mod smp_cpu {
+    use crate::cpu_abi as abi;
+    // PRODUCTION_CPU_HANDLES
+    pub fn ioctl(command: u32, argument: usize, compat: bool) -> crate::Result<isize> {
+        crate::CPU_CALL.with(|call| *call.borrow_mut() = Some((command, argument, compat)));
+        Err(-16)
+    }
 }
 
 mod kernel {
@@ -142,7 +157,7 @@ fn unsupported_commands_do_not_construct_or_call_usercopy() {
         0,
         1,
         0x0011_290a,
-        0x0011_290c,
+        0x0011_ffff,
         0x8011_290b,
         u32::MAX,
     ] {
@@ -194,4 +209,18 @@ fn partial_mock_copy_fault_remains_efault_without_retry() {
         assert_eq!(state.copied, b"fix");
         assert_eq!(state.writes, 1);
     });
+}
+
+#[test]
+fn cpu_dispatch_preserves_native_address_and_compat_pointer_width() {
+    let address = 0x1234_5678_8000_1234usize;
+    for command in [cpu_abi::IHK_DEVICE_RESERVE_CPU, cpu_abi::IHK_DEVICE_RELEASE_CPU,
+                    cpu_abi::IHK_DEVICE_GET_NUM_CPUS, cpu_abi::IHK_DEVICE_QUERY_CPU] {
+        reset(Some(0));
+        assert_eq!(IhkSmpControlDevice::ioctl(&ProviderOpenLease, command, address), Err(-16));
+        CPU_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, address, false))));
+        assert_eq!(IhkSmpControlDevice::compat_ioctl(&ProviderOpenLease, command, address), Err(-16));
+        CPU_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, 0x8000_1234, true))));
+        COPY.with(|state| assert_eq!(state.borrow().constructions, 0));
+    }
 }

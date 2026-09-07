@@ -25,6 +25,15 @@ points still measure the native host path; the active whole-system goal also
 requires those McKernel language checks. Earlier exclusions of further McKernel
 C conversion are superseded. No score or production gate is promoted here.
 
+LOCAL TECHNICAL CHECKPOINT (2026-09-07): the new Rust CPU adapter reuses the
+existing SMP policy and shared ABI, passes exact Linux 6.12 Kbuild/link closure,
+and passes native/compat CPU reserve/return tests in a four-vCPU, two-NUMA-node
+guest. Failure rollback, external-online veto, closed-file module pinning,
+concurrency and two unload/reload cycles pass, with all guest CPUs restored.
+See docs/verification/native-cpu-adapter-review.md and native-hpc-worklog.md.
+Memory assignment, native McKernel boot, IKC and workloads remain pending.
+This scoped local result does not promote the production acceptance gates.
+
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)
 TRACKED GATES: 130 total; 6 PASS; 1 IN_PROGRESS; 0 BLOCKED; 123 TODO

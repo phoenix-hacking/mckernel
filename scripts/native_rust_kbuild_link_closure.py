@@ -78,6 +78,7 @@ EXPECTED_STAGED_FILES = (
     "os_runtime.rs",
     "page_allocator.rs",
     "page_owner_registry.rs",
+    "smp_cpu.rs",
     "smp_resource.rs",
 )
 EXPECTED_STAGED_RUST_SOURCES = tuple(
@@ -116,7 +117,7 @@ _PROJECT_DEPENDENCIES = {
         "page_owner_registry.rs",
         "os_runtime.rs",
     ),
-    "ihk-smp-x86_64": ("smp_resource.rs",),
+    "ihk-smp-x86_64": ("smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs"),
     "mcctrl": (),
 }
 _GENERATED_METADATA_DEPENDENCIES = {

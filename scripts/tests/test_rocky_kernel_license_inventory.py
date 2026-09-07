@@ -367,6 +367,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/native-rust/page_allocator.rs",
             "host-kernel/native-rust/page_owner_registry.rs",
             "host-kernel/native-rust/smp_resource.rs",
+            "host-kernel/native-rust/smp_cpu.rs",
             "scripts/tests/fixtures/ihk_native_master_compile.rs",
             "scripts/tests/fixtures/ihk_native_queue_compile.rs",
             "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
@@ -387,9 +388,11 @@ class LicenseInventoryTests(unittest.TestCase):
 
     def test_repository_inventory_binds_new_foundations_without_review_credit(self):
         relatives = (
+            "host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch",
             "host-kernel/native-rust/device_registry.rs",
             "host-kernel/native-rust/os_runtime.rs",
             "host-kernel/native-rust/smp_resource.rs",
+            "host-kernel/native-rust/smp_cpu.rs",
         )
         self.assertEqual(
             list(relatives),
@@ -420,7 +423,8 @@ class LicenseInventoryTests(unittest.TestCase):
                     },
                     item["source_identity"],
                 )
-                self.assertEqual("GPL-2.0", item["spdx_expression"])
+                expected_spdx = "GPL-2.0" if relative.endswith(".rs") else "NOASSERTION"
+                self.assertEqual(expected_spdx, item["spdx_expression"])
                 self.assertEqual("captured-unreviewed", item["review_status"])
                 self.assertIn(
                     "independent-review-required", item["unresolved_reasons"]

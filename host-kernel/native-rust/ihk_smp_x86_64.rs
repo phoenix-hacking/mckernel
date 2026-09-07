@@ -15,11 +15,12 @@ use kernel::{
     prelude::*,
 };
 
-// Allocation-free policy core for the future Linux CPU/memory/IKC adapter.
-// It is deliberately private and dead-code-only until the versioned IHK OS
-// lease bridge and external-effect compensation layer are implemented.
+// Reuse the allocation-free resource policy in the Linux CPU adapter. OS
+// assignment, memory and IKC still await the versioned IHK lease bridge and
+// their Linux adapters; unused policy surfaces stay private.
 #[allow(dead_code)]
 mod smp_resource;
+mod smp_cpu;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -224,11 +225,17 @@ impl MiscDevice for IhkSmpControlDevice {
     }
 
     fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg, false);
+        }
         control_device_request(cmd, arg)
     }
 
     #[cfg(CONFIG_COMPAT)]
     fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg as u32 as usize, true);
+        }
         // This command takes a userspace pointer.  On x86_64 compat callers
         // supply a 32-bit address; zero extension matches compat_ptr().
         control_device_request(cmd, arg as u32 as usize)
@@ -492,6 +499,7 @@ module! {
 
 struct IhkSmpModule {
     control_device: Option<core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>>,
+    cpu_controller: Option<smp_cpu::CpuController>,
     provider_lease: Option<ProviderLease>,
 }
 
@@ -505,6 +513,7 @@ impl kernel::Module for IhkSmpModule {
         // If registration fails, this local non-Copy lease drops and rolls the
         // provider publication back before module initialization returns.
         let provider_lease = ProviderLease::attach()?;
+        let cpu_controller = smp_cpu::CpuController::new()?;
         let control_device = Box::pin_init(
             MiscDeviceRegistration::<IhkSmpControlDevice>::register(MiscDeviceOptions {
                 name: c_str!("mcd0"),
@@ -519,6 +528,7 @@ impl kernel::Module for IhkSmpModule {
         );
         Ok(Self {
             control_device: Some(control_device),
+            cpu_controller: Some(cpu_controller),
             provider_lease: Some(provider_lease),
         })
     }
@@ -527,6 +537,7 @@ impl kernel::Module for IhkSmpModule {
 impl Drop for IhkSmpModule {
     fn drop(&mut self) {
         drop(self.control_device.take());
+        drop(self.cpu_controller.take());
         drop(self.provider_lease.take());
         pr_info!(
             "lifecycle=unload parameters={} dependency={} import_namespace={}\n",

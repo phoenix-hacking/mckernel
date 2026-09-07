@@ -16,17 +16,22 @@ Linux remains the Rocky-derived control-plane kernel; only these project-owned h
 
 Behavioral implementation is evidence-gated against `host-kernel/contracts/legacy-behavior-contract-f2eb7352.json`. Before any implementation gate is credited, the exact Rocky-derived `CONFIG_RUST` kernel must compile the module and the relevant acceptance tests must pass on immutable CI evidence.
 
-`final-push.txt` is the production completion tracker. Native CPU/memory
-reservation, McKernel image loading and boot, and mcctrl process/offload integration
-remain unfinished. The Rocky 8.10 boot/mcexec smoke validates the legacy
+`final-push.txt` is the production completion tracker. Native CPU reservation
+now has local guest evidence. Memory reservation/assignment, McKernel image
+loading and boot, and mcctrl process/offload integration remain unfinished. The Rocky 8.10 boot/mcexec smoke validates the legacy
 compatibility path. A green snapshot workflow whose archive download and
 offline replay steps were skipped validates only the checks that executed.
 
 The [2026-09-07 local checkpoint](../../docs/verification/native-hpc-worklog.md)
 records a successful four-vCPU native unbooted lifecycle run and serial review
 using the original compiled modules. It adds no production gate credit.
-The next [CPU adapter review](../../docs/verification/native-cpu-adapter-review.md)
-starts from the existing Rust transaction model and ordinary Linux exports.
+The [CPU adapter review](../../docs/verification/native-cpu-adapter-review.md)
+records reuse of the existing Rust transaction model and Linux hotplug services.
+The exact staged rebuild and its two-NUMA-node guest pass native/compat
+reserve/return, failure rollback, external-online veto, closed-file resource
+pinning, concurrency and two clean unload/reload cycles. This adds local
+technical evidence; physical eject/suspend recovery and production acceptance
+remain open.
 
 ## Native control-device identity query
 
@@ -36,7 +41,8 @@ native and x86 compat callers receive the complete IHK compatibility BUILDID,
 including its trailing NUL. The callback uses the kernel's safe `UserSlice`
 writer and returns zero on success or `EFAULT` on failed user copy. Unsupported
 commands retain `EINVAL`. The same control device also exposes the unbooted
-OS lifecycle described below; resource reservation remains unfinished.
+OS lifecycle described below and the CPU reservation adapter. Memory
+reservation and OS resource assignment remain unfinished.
 
 `ihkconfig` allocates `sizeof(BUILDID)`, and `mcexec` compares the corresponding
 OS identity to its own BUILDID. Consequently the UAPI payload must retain the
