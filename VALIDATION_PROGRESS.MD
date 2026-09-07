@@ -35,6 +35,23 @@ and 25 report tests pass. See the
 [repair record](docs/verification/page-attribute-abi-repair.md). This is local
 ABI integration evidence, not a new native boot or production gate result.
 
+The subsequent native memory prototype passes its dedicated kernel/module
+build and four-CPU/two-NUMA-node guest checks. It reuses the existing map and
+page-ownership approach; 45 Rust policy cases pass, and the final guest covers
+both ABIs, two module cycles, 96 injected allocation failures, partial release,
+concurrency, CPU regressions and unbooted OS coexistence with reserved memory.
+See the [memory checkpoint](docs/verification/native-memory-checkpoint-20260907.json).
+The subsequent [staging integration checks](docs/verification/native-memory-staging-integration-20260907.json)
+pass 182 focused cases and a separate 17-test unsafe/FFI group. The declared
+source graph, lifecycle and workflow patch inputs include the memory adapter.
+The [declared-stage rebuild and guest replay](docs/verification/native-memory-exact-stage-checkpoint-20260907.json)
+now pass with the exact debug configuration, both ABIs and two module cycles.
+The [final memory validation](docs/verification/native-memory-final-validation-20260907.json)
+now covers the current runtime/license bindings and the full repository suite:
+2,301 tests in 333.823 seconds, 2,230 passed and 71 skipped. Native McKernel boot
+and production gate acceptance are not claimed. OS resource assignment through
+the existing checked leases is the next functional deliverable.
+
 **Current completion: 100% (10/10)**
 
 This percentage is evidence-gated. Runtime code checkpoint

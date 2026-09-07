@@ -42,6 +42,11 @@ ROCKY_FIXDEP_SMP_RECORD = (
     '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_resource.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_cpu.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/abi/x86_64.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_memory.rs \\\n'
+    '    $(wildcard include/config/NUMA) \\\n'
+    '    $(wildcard include/config/SPARSEMEM_VMEMMAP) \\\n'
+    '    $(wildcard include/config/MEMORY_HOTPLUG) \\\n'
+    '    $(wildcard include/config/DYNAMIC_MEMORY_LAYOUT) \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk-compat-build-id.bin \\\n'
     '  ./rust/libcore.rmeta \\\n'
     '  ./rust/libkernel.rmeta \\\n'
@@ -201,7 +206,11 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         ]
         if module["name"] == "ihk-smp-x86_64":
             body.append("    $(wildcard include/config/COMPAT) \\")
-        body.extend("  {0}{1} \\".format(SOURCE_PREFIX, item) for item in dependencies)
+        for item in dependencies:
+            body.append("  {0}{1} " .format(SOURCE_PREFIX, item) + chr(92))
+            if module["name"] == "ihk-smp-x86_64" and item == "smp_memory.rs":
+                for name in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT"):
+                    body.append("    $(wildcard include/config/{0}) ".format(name) + chr(92))
         if module["name"] == "ihk":
             body.append("    $(wildcard include/config/COMPAT) \\")
         body.extend(
@@ -941,7 +950,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.read_text(name).splitlines()[1:],
         )
         self.assertEqual(
-            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs"],
+            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs"],
             closure._parse_rust_dependency_body(
                 name,
                 target,
@@ -1007,7 +1016,10 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         self.mutate_once(name, config + resource, resource + config)
         source_dependencies = resource + "".join(
             "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
-            for item in ("smp_cpu.rs", "abi/x86_64.rs")
+            for item in ("smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs")
+        ) + "".join(
+            "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
+            for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
         )
         self.mutate_once(name, source_dependencies + metadata, metadata + source_dependencies)
         for anchor in (resource, metadata, kernel):
@@ -1025,6 +1037,35 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         ):
             with self.subTest(extra=extra):
                 self.mutate_once(name, config, config + extra)
+
+    def test_memory_config_dependencies_follow_the_owning_source_exactly(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        source = "  " + SOURCE_PREFIX + "smp_memory.rs " + chr(92) + "\n"
+        lines = [
+            "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
+            for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
+        ]
+        config = "".join(lines)
+        self.mutate_once(name, source + config, config + source)
+        self.mutate_once(name, config, "".join(reversed(lines)))
+        self.mutate_once(name, source, "")
+        self.mutate_once(name, source, source + source)
+        for line in lines:
+            with self.subTest(line=line):
+                self.mutate_once(name, line, "")
+                self.mutate_once(name, line, line + line)
+                self.mutate_once(name, line, line.replace("    ", "  ", 1))
+        # A known config attached to the wrong source is still an invalid closure.
+        original = self.read_text(name)
+        for anchor in ("smp_resource.rs", "abi/x86_64.rs", "ihk-compat-build-id.bin"):
+            line = "  " + SOURCE_PREFIX + anchor + " " + chr(92) + "\n"
+            moved = original.replace(config, "", 1).replace(line, line + config, 1)
+            with self.subTest(anchor=anchor):
+                self.write_text(name, moved)
+                try:
+                    self.assert_rejected()
+                finally:
+                    self.write_text(name, original)
 
     def test_dependency_errors_identify_a_bounded_offending_entry(self):
         name = ".ihk_smp_x86_64.o.cmd"

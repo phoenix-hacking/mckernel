@@ -127,10 +127,10 @@ impl Drop for CpuDevice {
     }
 }
 
-struct ResourceModulePin;
+pub(super) struct ResourceModulePin;
 
 impl ResourceModulePin {
-    fn acquire() -> Result<Self> {
+    pub(super) fn acquire() -> Result<Self> {
         // SAFETY: This is our resident module descriptor. An open control file
         // already pins it while acquiring the longer reservation reference.
         if unsafe { bindings::try_module_get(super::THIS_MODULE.as_ptr()) } {
@@ -144,8 +144,8 @@ impl ResourceModulePin {
 impl Drop for ResourceModulePin {
     fn drop(&mut self) {
         // SAFETY: Each successful acquisition is balanced once, while an open
-        // file still pins this executing code. Uncertain resources keep this
-        // owner in CpuContext and cannot reach module teardown.
+        // file still pins this executing code. Uncertain CPU or memory resources
+        // retain this owner in their context and cannot reach module teardown.
         unsafe { bindings::module_put(super::THIS_MODULE.as_ptr()) };
     }
 }

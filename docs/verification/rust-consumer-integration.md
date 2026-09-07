@@ -9,11 +9,18 @@ The existing [preservation baseline](rust-reuse-baseline-24a151fe.json) remains
 immutable. The current file-level inventory is recorded separately; modified
 and added sources must remain visible rather than rewriting that baseline.
 
-The [2026-09-07 inventory](rust-consumers-20260907.json) accounts for 130 files:
+The [CPU-checkpoint inventory](rust-consumers-20260907.json) accounts for 130 files:
 121 unchanged from the baseline, eight modified, one added, and none removed.
 It checks all 64 core files against the crate and CMake dependencies, and the
 14 native files against the staging/module graph. Its configuration identity
 records the selected Rust, QLMPI and UTI flags. These are source/build checks.
+
+The [memory-checkpoint inventory](rust-consumers-memory-20260907.json) now accounts
+for 131 Rust files: 121 unchanged, eight modified, two added and none removed
+from the same preservation baseline. The 64-file core crate and its CMake
+inputs still match. All 15 native files match the manifest and transitive crate
+graph, including the tested memory adapter. The pending adapters and optional
+consumers below remain explicit; this does not claim complete unification.
 
 ## Current build boundaries
 

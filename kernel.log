@@ -33422,3 +33422,133 @@ actually rebuilds mckernel_rust.o and mckernel.img. Both retain identical SHA-25
 bytes. Existing 17 compiler warnings remain. Source/recipe/build evidence is in
 rust-consumer-verification-20260907.json and its retained archive. No new boot,
 C retirement, complete unification, or production gate credit is claimed.
+2026-09-07 Native memory batch policy validation PASS; Linux prototype pending
+The isolated four-CPU native runner executed run-native-memory-policy-tests.py
+with Rust 1.92: all 45 Rust cases and nine Python checks passed (2.646 seconds).
+The seven additive policy cases retain the previous map, workspace, merge and
+transaction implementation and preflight whole insertion/removal batches.
+Log: /work/native-memory-policy-tests-20260907.log. The separate debug kernel
+build is live under the fixed four-CPU/12-GiB runner; prior CPU kernel/module
+artifacts are preserved. Native memory ioctls, allocation fault injection,
+memory assignment and McKernel boot are not yet claimed as verified.
+2026-09-07 Memory prototype source review corrected partial-release semantics
+Reinspection of pinned smp-driver.c:__ihk_smp_release_mem_partially shows that
+the legacy trim stops before a compound allocation would exceed the remaining
+request, retaining the extra memory and preferring 4-MiB alignment. Corrected
+the unverified prototype's former rounding-up selection and its guest fixture:
+trimming 5 MiB from 16 MiB of order-10 allocations must retain 12 MiB; a later
+1-MiB trim must leave that unchanged. Candidate chunks account for prior
+selections in the same batch. Linux runtime verification is still pending.
+2026-09-07 Native memory prototype module build stopped at Linux errno API
+Command: fixed native container-run.py runner executing
+python3 /work/build-native-memory-prototype.py; exact Kbuild command retained
+in /work/native-memory-prototype-20260907/module-build.command. Environment:
+offline UID 1000 Rocky 10.2, Rust 1.92, LLVM 21, four CPUs and 12 GiB; the new
+fault-injection Linux bzImage build completed before the module target failed.
+The staged SMP adapter reports ten E0425 errors because Linux 6.12 does not
+provide EOVERFLOW in kernel::error::code. Full output remains in
+/work/native-memory-prototype-build-20260907.log. The build returned to its
+shell; no guest was launched. Preserve that failed stage, then use the public
+kernel::error::to_result conversion already prepared in the worktree and
+recompile only the modules against the completed kernel.
+2026-09-07 Native memory module retry stopped at objtool control-flow validation
+Command: fixed native runner python3 /work/repair-native-memory-prototype.py
+/work/native-memory-prototype-repair-20260907, same four-CPU/12-GiB Rocky debug
+kernel environment. Rust compilation succeeds after the errno conversion.
+Objtool rejects fallthrough at four monomorphized Rust slice-sort functions
+and alloc::vec::Vec<PageOwner>::remove. Log:
+/work/native-memory-prototype-repair-20260907.log. The helper records
+module-build-failed and the runner returned to its shell. Preserve this source
+and inspect generated control flow plus the existing Rust objtool adaptation;
+do not suppress objtool or run the guest with rejected objects.
+2026-09-07 Objtool Rust-library panic compatibility checks PASS
+Exact Rust 1.92 sources declare the observed sort-order violation and nested
+Vec::remove assertion functions as -> !. Their emitted calls terminate at
+padding before the next symbol. Export-independent patch 0024 adds only those
+two exact mangled path suffixes to the existing Rust noreturn heuristic.
+The actual emitted object fails with five fallthrough errors under the prior
+objtool and passes with unchanged input bytes under the patched tool and all
+original Kbuild flags. Renaming the sort panic to an unknown callee restores
+four errors; renaming the Vec panic restores one; renaming both restores five.
+All expected results pass in /work/native-memory-objtool-checks-20260907,
+including exact before/after tools, source, object, commands and result hashes.
+The original debug kernel is preserved; the module rebuild remains required.
+2026-09-07 Native memory guest capture stopped at a missing repeated CPU marker
+The repaired prototype kernel and all three modules build/link successfully.
+Command: fixed native runner python3 /work/run-native-memory-guest.py
+/work/native-memory-prototype-repair2-20260907
+/work/native-runtime-memory-prototype-20260907. Both module cycles complete,
+QEMU exits zero, and the validator reports no kernel/error markers, but it
+finds fewer than exactly two intact x86_64 CPU concurrency success markers.
+Capture is failed, not accepted; inspect the retained serial stream and probe
+output before changing the fixture or validator. Log:
+/work/native-runtime-memory-prototype-20260907.log; full inputs/results in
+the capture directory's local-run.json. All validation remains isolated.
+2026-09-07 Missing CPU marker traced to serial interleaving
+The failed stream at lines 510-513 contains the full CPU concurrency marker
+split by three informational kernel printk records. Both module cycles and
+all memory/CPU probe bodies completed, but the original capture stays failed.
+The guest init now lowers only console verbosity to error messages during
+the probes and still emits the complete dmesg ring buffer at exit. All exact
+marker counts and kernel-warning/error rejection checks remain unchanged.
+Rerun a fresh capture using the same preserved kernel and module bytes.
+2026-09-07 Native memory prototype and OS coexistence captures PASS
+The fresh memory capture and the subsequent additive OS-coexistence capture
+both report technical-capture-passed, QEMU exit zero, no missing markers and
+no error markers. Final command: fixed native runner python3
+/work/run-native-memory-guest.py /work/native-memory-prototype-repair2-20260907
+/work/native-runtime-memory-prototype3-20260907. Both ABIs across two module
+cycles cover 96 allocation failures, copy faults before allocation, existing
+reservation preservation, bounded free-memory recovery, fallback, partial
+release, closed-file module pinning and concurrency. Unchanged CPU and existing
+OS lifecycle assembly probes pass; OS create/destroy preserves the reserved
+pool. All CPUs are restored and all modules unload. Retained 37 artifacts and
+docs/verification/native-memory-checkpoint-20260907.json. The first interleaved
+capture remains failed. Exact staging/current verification bindings, full-suite
+revalidation, OS assignment and McKernel boot remain pending; no gate credit.
+2026-09-07 Native memory retained artifact and module checks PASS
+The fixed native runner executed /work/check-native-memory-checkpoint.py.
+All 37 retained artifact hashes, sizes and uncompressed identities match;
+new adapter rustfmt and tracked/new source whitespace checks pass. All three
+preserved .ko files are ELF64 x86-64, with no SIMD/x87 instructions found in
+4,448 IHK, 13,342 SMP and 221 mcctrl decoded instructions. The report and recipe
+are retained as native-memory-module-checks-20260907.json/py. This check does
+not substitute for pending exact staging, source/FFI contract integration,
+the full repository suite or native McKernel boot.
+
+2026-09-07T10:36:56.897790+00:00 native memory staging integration first failure
+Command: fixed native container runner python3 /work/run-native-memory-integration-tests.py 1; unittest -f resource, BUILDID, lifecycle, staging, host audit, build surface, link closure. Environment: offline unprivileged Rocky native image, 4 CPUs, 12 GiB, private current-bf5db3c3 checkout /work/native-memory-integration-20260907.
+Source whitespace and smp_memory rustfmt passed. Resource fixture passed 45 Rust cases. First failure after 19 Python tests: test_control_device_registration_rollback_and_teardown_order_are_exact at line 782 expected the old CPU-only ordered drop block once, found zero because the production lifecycle now drops memory before CPU. Validation stopped; no subsequent groups ran. Log: /work/native-memory-integration-tests-20260907-1.log and matching JSON. Repair the teardown negative fixture while retaining reverse-order rejection.
+
+2026-09-07T10:38:00.574812+00:00 native memory integration run 2 first failure
+Command: fixed native runner python3 /work/run-native-memory-integration-tests.py 2; same four-CPU offline native environment and private bf5db3c3 base. Source checks and 45 Rust policy cases passed. unittest -f stopped after 50 tests at test_provider_lease_raii_owner_and_teardown_order_are_fail_closed: expected old diagnostic "retire CPU ownership, then detach provider", actual stricter diagnostic includes memory and CPU ownership. Log: /work/native-memory-integration-tests-20260907-2.log/json. Update only the diagnostic expectation; teardown rejection remains required.
+
+2026-09-07T10:39:03.775483+00:00 native memory integration run 3 first failure
+Command: fixed native runner python3 /work/run-native-memory-integration-tests.py 3; same four-CPU offline native environment. Source checks, 45 Rust policy cases, BUILDID and SMP lifecycle tests passed. unittest -f stopped after 109 tests at test_repository_checkpoint_has_bound_crate_roots_but_is_not_gate_ready: old exact staged file set omitted smp_memory.rs. Log: /work/native-memory-integration-tests-20260907-3.log/json. Refresh explicit current staged-source expectations without relaxing exact-set checking or readiness restrictions.
+
+2026-09-07T10:43:19.439050+00:00 native memory integration run 5 first failure
+Command: fixed native runner python3 /work/run-native-memory-integration-tests.py 5, now including unsafe/FFI ledger tests; same four-CPU offline environment. Previous 182-test group passes with the shared CPU/memory pin comment bound. unittest -f stopped after 187 tests: test_committed_ledger_is_exact_complete_and_fail_closed still pins the old 106-site ID-list digest 928dde80..., while source discovery and ledger validation agree on 120 sites with digest 51900be6.... Log: /work/native-memory-integration-tests-20260907-5.log/json. Refresh the exact current inventory digest; preserve all old IDs and pending independent review.
+
+2026-09-07T10:44:47.033106+00:00 native memory integration run 6 first failure
+Command: fixed native runner python3 /work/run-native-memory-integration-tests.py 6; same four-CPU offline native environment. unittest -f stopped after 188 tests: test_added_unsafe_site_fails_after_all_outer_digests_are_resigned expected its site-count rejection, but the test repository omitted new smp_memory.rs and failed earlier resolving the crate dependency. Log: /work/native-memory-integration-tests-20260907-6.log/json. Add the memory source to the isolated mutation fixture so it reaches the intended unsafe-site rejection without weakening checks.
+
+2026-09-07T10:55:59.388987+00:00 current memory binding bookkeeping preimage mismatch
+Command: python3 /home/holden/mckernel-work/scratch/refresh-memory-active-bindings.py (host standard-library-only AST/hash editing; no repository code executed). The helper stopped before writing any repository files because EXPECTED_EXACT_BUILD_PREPARATION_SHA256 did not match the HEAD workflow checkout-to-resolution slice. Current v2 prefix and named-step preimages matched. Inspect the legacy preparation constant usage before changing it; do not refresh a frozen v1 binding accidentally.
+
+2026-09-07T10:56:30.377788+00:00 binding helper edit syntax failure
+Command: python3 /home/holden/mckernel-work/scratch/refresh-memory-active-bindings.py. Removing the unused legacy-preparation edit left an extra indentation space on the helper return at line 43. Python stopped during parsing; no repository edits ran. Repair the helper indentation, retain the historical preparation constant unchanged.
+
+2026-09-07T10:59:16.438887+00:00 memory runtime/workflow binding tests first failure
+Command: fixed native runner python3 /work/run-native-memory-binding-tests.py 1 with ten runtime/FP-0006/RS-006/license groups, unittest -f; four-CPU offline Rocky native environment, current bf5db3c3 private base, original RK-007 artifacts and exact source subset supplied. Whitespace and Rust formatting passed. Stopped after 69 tests at test_actual_build_provenance_producer_receipt_is_accepted: executed build workflow bytes differ. Inspect fixture provenance identity for the changed native patch workflow; do not weaken executed-byte validation. Log: /work/native-memory-binding-tests-20260907-1.log/json.
+
+2026-09-07T11:01:12.169672+00:00 memory binding tests run 2 first failure
+Command: fixed native runner python3 /work/run-native-memory-binding-tests.py 2; same isolated four-CPU environment. unittest -f stopped after 3 runtime tests: test_all_mcd0_helper_artifacts_are_regular_exact_members expected its artifact-set rejection but contract validation rejected stale runtime repository workflow identities first. Refresh the current native runtime contract workflow identity to match its updated checker; retain artifact rejection and historical capture facts. Log: /work/native-memory-binding-tests-20260907-2.log/json.
+
+2026-09-07T11:10:00.233968+00:00 native memory full suite run 1 first failure
+Command: fixed native runner python3 /work/run-native-memory-full-tests.py 1; unittest discover -s scripts/tests -p test_*.py -f, four CPUs/12 GiB offline, private bf5db3c3 base, original RK-007 fixtures and exact source subset. Stopped after 1300 tests in 250.777 seconds, 19 skipped. First error: ConfigClassificationTests.setUp -> rocky_kernel_config_resolution_v2.validate_contract rejects the compatibility patch directory because current objtool patch 0024 is absent from the historical config replay contract. Log: /work/native-memory-full-suite-20260907-1.log/json. Inspect the contract/replay scope and register the exact non-config addition separately; do not rewrite historical config or build acceptance evidence.
+
+[2026-09-07T11:28:13.249437+00:00] Native memory checkpoint retention audit helper failure
+Command: host standard-library-only Python audit of four retained memory JSON artifact lists; verify stored sizes/SHA-256 and uncompressed_sha256.
+Environment: /home/holden/mckernel, host Python 3.9, read-only artifact bookkeeping; no project code, build, module or guest executed.
+First error: gzip.BadGzipFile: Not a gzipped file (b'""'). The helper attempted gzip decoding whenever uncompressed_sha256 existed, including retained plain-text files. Stop and inspect artifact metadata before fixing the audit helper; no build/runtime failure inferred.
+Resolution: decode only retained .gz paths; keep plain artifacts as their original bytes. Corrected standard-library audit verified all 86 retained artifact size/SHA-256 entries plus reference identities. Isolated four-CPU native runner git diff --check also passed. No source or retained evidence changed for this helper repair. 2026-09-07T11:28:53.726113+00:00

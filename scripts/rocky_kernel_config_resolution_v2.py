@@ -843,6 +843,29 @@ def validate_compatibility_patch_provenance(row, text, index):
     exact_keys(row, expected_fields, label)
 
 
+# Native-module tool changes outside the frozen configuration replay. Older
+# snapshots may omit these files; current copies must match their exact reviewed
+# bytes. They are never appended to the replay contract or credited by it.
+CURRENT_NON_CONFIG_PATCH_ADDITIONS = {
+    'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch': (1776, 'af8669be53068320a148f25a98b9295e013a3cbcc84227e8d8b4209d3631a7d0'),
+}
+
+
+def validate_repository_patch_scope(repo, discovered):
+    expected = list(EXPECTED_COMPATIBILITY_PATCHES)
+    for relative, identity in CURRENT_NON_CONFIG_PATCH_ADDITIONS.items():
+        if relative not in discovered:
+            continue
+        path = safe_repo_file(repo, relative, "current non-config patch")
+        require_exact(
+            sha256_file(path), identity, "current non-config patch bytes"
+        )
+        expected.append(relative)
+    require_exact(
+        discovered, sorted(expected), "repository compatibility patch authority"
+    )
+
+
 def validate_contract(repo):
     path = safe_repo_file(repo, CONTRACT_PATH.as_posix(), "config contract")
     contract, data = read_json(path, "config contract")
@@ -1154,11 +1177,7 @@ def validate_contract(repo):
         path.relative_to(repo).as_posix()
         for path in patch_directory.glob("[0-9]*.patch")
     )
-    require_exact(
-        discovered_patches,
-        EXPECTED_COMPATIBILITY_PATCHES,
-        "repository compatibility patch authority",
-    )
+    validate_repository_patch_scope(repo, discovered_patches)
     require_exact(
         [row.get("path") for row in patches],
         EXPECTED_COMPATIBILITY_PATCHES,

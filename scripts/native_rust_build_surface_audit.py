@@ -43,6 +43,7 @@ SUPPLEMENTAL_INPUTS = {
     "page_owner_registry.rs": "host-kernel/native-rust/page_owner_registry.rs",
     "smp_resource.rs": "host-kernel/native-rust/smp_resource.rs",
     "smp_cpu.rs": "host-kernel/native-rust/smp_cpu.rs",
+    "smp_memory.rs": "host-kernel/native-rust/smp_memory.rs",
     "os_runtime.rs": "host-kernel/native-rust/os_runtime.rs",
 }
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))

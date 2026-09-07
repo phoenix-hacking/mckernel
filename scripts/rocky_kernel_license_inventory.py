@@ -111,12 +111,14 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/native-rust/page_owner_registry.rs",
     "host-kernel/native-rust/smp_resource.rs",
     "host-kernel/native-rust/smp_cpu.rs",
+    "host-kernel/native-rust/smp_memory.rs",
 ])
 EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/parent-integration-v1.json",
     "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
     "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
     "host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch",
+    "host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch",
     "host-kernel/kbuild/stage-manifest.json",
     "host-kernel/kbuild/Kbuild.in",
     "host-kernel/kbuild/Kconfig",
@@ -134,6 +136,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/native-rust/page_owner_registry.rs",
     "host-kernel/native-rust/smp_resource.rs",
     "host-kernel/native-rust/smp_cpu.rs",
+    "host-kernel/native-rust/smp_memory.rs",
     "host-kernel/rocky/configs/native-rust-evidence.config",
     "host-kernel/rocky/configs/rust-minimal.config",
     "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
@@ -160,6 +163,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
     "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
+    "host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -221,13 +225,14 @@ SOURCE_CLOSURE_KEYS = {
 }
 LOCKED_CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
 CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v2"
-ADDITIVE_REPOSITORY_INPUT_PATHS = (
-    "host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch",
-    "host-kernel/native-rust/device_registry.rs",
-    "host-kernel/native-rust/os_runtime.rs",
-    "host-kernel/native-rust/smp_resource.rs",
-    "host-kernel/native-rust/smp_cpu.rs",
-)
+ADDITIVE_REPOSITORY_INPUT_PATHS = ('host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch',
+ 'host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch',
+ 'host-kernel/native-rust/device_registry.rs',
+ 'host-kernel/native-rust/os_runtime.rs',
+ 'host-kernel/native-rust/smp_resource.rs',
+ 'host-kernel/native-rust/smp_cpu.rs',
+ 'host-kernel/native-rust/smp_memory.rs',
+ 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
 CAPTURE_AUTHORITY_REGISTRATION = {
     "authority_id": CAPTURE_AUTHORITY_ID,
     "credit_eligible": False,

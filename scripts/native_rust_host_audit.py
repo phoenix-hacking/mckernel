@@ -304,6 +304,10 @@ REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/smp_cpu.rs'] = (
     ('CPU adapter online callback', 'unsafe extern "C" fn allow_cpu_online(cpu: u32) -> i32 {'),
 )
 
+REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/smp_memory.rs'] = (
+    ('Memory adapter shared ABI', '#[path = "abi/x86_64.rs"]\nmod abi;'),
+)
+
 REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/os_runtime.rs'] = (
     ('OS Linux kernel exports', '''extern "C" {
     fn __register_chrdev(
@@ -371,6 +375,7 @@ pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbol
 
 REVIEWED_RUST_BLOCK_PREFIXES = {
     "CPU adapter shared ABI": "#[allow(dead_code, unreachable_pub)]\n",
+    "Memory adapter shared ABI": "#[allow(dead_code, unreachable_pub)]\n",
     "IHK locked x86_64 ABI module path": '''#[allow(dead_code, unreachable_pub)]
 ''',
     "IHK SMP provider init callback type": '''// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and
@@ -881,6 +886,7 @@ def main():
         "page_owner_registry.rs",
         "smp_resource.rs",
         "smp_cpu.rs",
+        "smp_memory.rs",
         "os_runtime.rs",
     ]:
         die(

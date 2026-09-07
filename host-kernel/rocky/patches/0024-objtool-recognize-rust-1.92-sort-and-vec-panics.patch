@@ -1,0 +1,36 @@
+From: McKernel Rust Migration <mckernel@localhost>
+Subject: [PATCH] objtool: recognize Rust 1.92 sort and Vec removal panics
+Date: Mon, 7 Sep 2026 10:00:00 +0000
+
+Rocky-Base: linux-6.12.0-211.44.1.el10_2
+Observed-Rustc: 1.92.0
+License: GPL-2.0-only
+
+Native memory ownership uses Rust slice sorting and Vec::remove. Their emitted
+panic calls end at padding before the next function, which objtool currently
+rejects as fallthrough. The exact Rust 1.92 library defines both
+core::slice::sort::shared::smallsort::panic_on_ord_violation and the nested
+alloc::vec::Vec::remove::assert_failed with return type ! and panic bodies.
+
+Recognize only the two observed mangled path suffixes, independent of their
+crate disambiguators. Keep all existing control-flow checks and reject unknown
+callees. This is a project-observed compatibility adjustment; no upstream or
+stable commit is claimed.
+
+Signed-off-by: McKernel Rust Migration <mckernel@localhost>
+---
+ tools/objtool/check.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -207,6 +207,8 @@ static bool is_rust_noreturn(const struct symbol *func)
+ 	 */
+ 	return str_ends_with(func->name, "_4core5sliceSp15copy_from_slice17len_mismatch_fail")		||
++	       str_ends_with(func->name, "_4core5slice4sort6shared9smallsort22panic_on_ord_violation")	||
++	       str_ends_with(func->name, "_5alloc3vecINtB6_3VecppE6remove13assert_failed")		||
+ 	       str_ends_with(func->name, "_4core6option13unwrap_failed")				||
+ 	       str_ends_with(func->name, "_4core6result13unwrap_failed")				||
+ 	       str_ends_with(func->name, "_4core9panicking5panic")					||
+ 	       str_ends_with(func->name, "_4core9panicking9panic_fmt")					||

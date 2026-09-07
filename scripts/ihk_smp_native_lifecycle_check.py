@@ -42,36 +42,39 @@ BOUND_MODINFO_ENVIRONMENT = {
 }
 EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'path': 'host-kernel/native-rust/smp_resource.rs',
-  'sha256': '879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098'},
+  'sha256': '7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': '8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825'},
+  'sha256': 'c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
-  'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'}]
+  'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
+ {'destination': 'smp_memory.rs',
+  'path': 'host-kernel/native-rust/smp_memory.rs',
+  'sha256': '3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95'}]
 EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
  'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
                                     'memory': 'poison-live-map-unless-compensated-rollback'},
  'fixture': {'expected_fixture_tests': 14,
-             'expected_in_file_tests': 24,
-             'expected_total_tests': 38,
+             'expected_in_file_tests': 31,
+             'expected_total_tests': 45,
              'minimum_rustc': '1.92.0',
              'negative_path': 'scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs',
              'negative_sha256': 'fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5',
              'positive_path': 'scripts/tests/fixtures/ihk_smp_resource_compile.rs',
              'positive_sha256': 'cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1'},
  'integration_blockers': ['no versioned IHK OS lease can mint an OsToken in production',
-                          'memory tables and page ownership still require a pinned Linux adapter',
+                          'memory reservation needs authoritative staging, exact-stage replay and '
+                          'production acceptance',
                           'CPU physical eject, suspend, topology replacement and uncertain-state '
                           'reconciliation need production acceptance',
-                          'the legacy 4 MiB user memory request granule is not enforced by an '
-                          'ioctl adapter',
                           'IKC optional-versus-complete mapping compatibility is not selected at '
                           'the ABI boundary',
-                          'page ownership, APIC reset, IRQ and McKernel boot remain unreachable'],
+                          'OS resource assignment, image loading, APIC reset, IRQ and McKernel '
+                          'boot remain unreachable'],
  'linux_reachable': True,
  'os_token_minting': 'cfg-test-only-until-versioned-ihk-os-lease-abi',
- 'status': 'native-cpu-adapter-with-private-memory-policy'}
+ 'status': 'native-cpu-and-memory-adapters-with-private-os-assignment-policy'}
 EXPECTED_PROVIDER_LEASE = {
     "attach_symbol": "ihk_smp_provider_attach_v2",
     "callback_abi": 1,
@@ -125,10 +128,10 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
                  'copy_failure_errno': -14,
                  'generated_metadata_file': 'ihk-compat-build-id.bin',
                  'safe_usercopy': 'kernel::uaccess::UserSlice::writer::write_slice',
-                 'source_fixture': {'expected_tests': 7,
+                 'source_fixture': {'expected_tests': 8,
                                     'path': 'scripts/tests/fixtures/ihk_smp_buildid_compile.rs',
-                                    'sha256': '4cfb62b601356c40927af321e28e74a0e0a86e85e54ba11b3a14ed65548bd266',
-                                    'size': 7371},
+                                    'sha256': 'e2c91236aaf83141d24c07132584c5e09e3380736af2258d6b16b2db5d4d0326',
+                                    'size': 8923},
                  'source_fixture_scope': 'extracted production dispatch with mock UserSlice; no '
                                          'kernel usercopy or runtime proof',
                  'success_result': 0},
@@ -160,9 +163,11 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
  'registration_failure_releases_provider_lease': True,
  'rocky_runtime_validated': False,
  'runtime_behavior_proven': False,
- 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy and CPU '
-          'reserve/release/count/query; memory, OS assignment and boot remain separate',
+ 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy, CPU '
+          'reserve/release/count/query and memory reserve/query/full/partial release; OS '
+          'assignment and boot remain separate',
  'teardown_order': ['deregister-control-device',
+                    'retire-memory-controller-and-owned-pages',
                     'retire-cpu-controller-and-hotplug-callback',
                     'detach-provider-lease',
                     'emit-unload-diagnostic'],
@@ -175,7 +180,11 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
                           'IHK_DEVICE_RESERVE_CPU',
                           'IHK_DEVICE_RELEASE_CPU',
                           'IHK_DEVICE_GET_NUM_CPUS',
-                          'IHK_DEVICE_QUERY_CPU']}
+                          'IHK_DEVICE_QUERY_CPU',
+                          'IHK_DEVICE_RESERVE_MEM',
+                          'IHK_DEVICE_RELEASE_MEM',
+                          'IHK_DEVICE_QUERY_MEM',
+                          'IHK_DEVICE_RELEASE_MEM_PARTIALLY']}
 
 EXPECTED_BUILDID_INCLUDE = (
     'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
@@ -888,6 +897,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         text, code, resource_edge, 1, "Rust SMP private resource-policy edge"
     )
     _require_active_count(text, code, "mod smp_cpu;", 1, "Rust SMP Linux CPU adapter edge")
+    _require_active_count(text, code, "mod smp_memory;", 1, "Rust SMP Linux memory adapter edge")
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",
@@ -1099,12 +1109,18 @@ struct ProviderOpenLease {
         if smp_cpu::handles(cmd) {
             return smp_cpu::ioctl(cmd, arg, false);
         }
+        if smp_memory::handles(cmd) {
+            return smp_memory::ioctl(cmd, arg, false);
+        }
         control_device_request(cmd, arg)
     }'''
     compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
     fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
         if smp_cpu::handles(cmd) {
             return smp_cpu::ioctl(cmd, arg as u32 as usize, true);
+        }
+        if smp_memory::handles(cmd) {
+            return smp_memory::ioctl(cmd, arg as u32 as usize, true);
         }
         // This command takes a userspace pointer.  On x86_64 compat callers
         // supply a 32-bit address; zero extension matches compat_ptr().
@@ -1174,6 +1190,7 @@ struct ProviderOpenLease {
     control_owner = '''struct IhkSmpModule {
     control_device: Option<core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>>,
     cpu_controller: Option<smp_cpu::CpuController>,
+    memory_controller: Option<smp_memory::MemoryController>,
     provider_lease: Option<ProviderLease>,
 }'''
     if code.count(control_owner) != 1:
@@ -1181,7 +1198,9 @@ struct ProviderOpenLease {
     required_control_lifecycle = (
         "control_device: Some(control_device),",
         "cpu_controller: Some(cpu_controller),",
+        "memory_controller: Some(memory_controller),",
         "drop(self.control_device.take());",
+        "drop(self.memory_controller.take());",
         "drop(self.cpu_controller.take());",
         "drop(self.provider_lease.take());",
     )
@@ -1326,9 +1345,12 @@ struct ProviderOpenLease {
         )
     construction_at = code.index("Ok(Self {", attach_at)
     attach_end = attach_at + len("let provider_lease = ProviderLease::attach()?;")
-    if code[attach_end:register_at].strip() != "let cpu_controller = smp_cpu::CpuController::new()?;":
+    if code[attach_end:register_at].strip() != (
+        "let cpu_controller = smp_cpu::CpuController::new()?;\n"
+        "        let memory_controller = smp_memory::MemoryController::new()?;"
+    ):
         raise ValidationError(
-            "Rust SMP provider attach must precede CPU owner initialization and mcd0 registration"
+            "Rust SMP provider attach must precede CPU/memory owner initialization and mcd0 registration"
         )
     register_end = register_at + len(registration)
     if "?" in code[register_end:construction_at]:
@@ -1336,9 +1358,10 @@ struct ProviderOpenLease {
             "Rust SMP mcd0 registration must remain the final fallible initialization step"
         )
     cpu_drop_at = code.index("drop(self.cpu_controller.take());")
-    if not deregister_at < cpu_drop_at < detach_at < unload_at:
+    memory_drop_at = code.index("drop(self.memory_controller.take());")
+    if not deregister_at < memory_drop_at < cpu_drop_at < detach_at < unload_at:
         raise ValidationError(
-            "Rust SMP teardown must deregister mcd0, retire CPU ownership, then detach provider"
+            "Rust SMP teardown must deregister mcd0, retire memory and CPU ownership, then detach provider"
         )
     for constant in (
         "IHK_SMP_PARAMETER_COUNT",

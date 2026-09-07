@@ -45,6 +45,7 @@ def render_fixture(source: str) -> str:
         constants.append(matches[0])
     template = (REPO_ROOT / "scripts/tests/fixtures/ihk_smp_buildid_compile.rs").read_text()
     cpu_source = (REPO_ROOT / "host-kernel/native-rust/smp_cpu.rs").read_text()
+    memory_source = (REPO_ROOT / "host-kernel/native-rust/smp_memory.rs").read_text()
     cpu_abi = (REPO_ROOT / "host-kernel/native-rust/abi/x86_64.rs").read_text()
     cpu_constants = []
     for name in ("IHK_DEVICE_RESERVE_CPU", "IHK_DEVICE_RELEASE_CPU",
@@ -53,9 +54,18 @@ def render_fixture(source: str) -> str:
         if len(matches) != 1:
             raise AssertionError(f"expected one canonical CPU ABI constant: {name}")
         cpu_constants.append(matches[0])
+    memory_constants = []
+    for name in ("IHK_DEVICE_RESERVE_MEM", "IHK_DEVICE_RELEASE_MEM",
+                 "IHK_DEVICE_QUERY_MEM", "IHK_DEVICE_RELEASE_MEM_PARTIALLY"):
+        matches = re.findall(r"(?m)^pub const " + name + r":[^\n]+;$", cpu_abi)
+        if len(matches) != 1:
+            raise AssertionError(f"expected one canonical memory ABI constant: {name}")
+        memory_constants.append(matches[0])
     replacements = {
         "// PRODUCTION_CPU_ABI_CONSTANTS": "\n".join(cpu_constants),
         "// PRODUCTION_CPU_HANDLES": extract_function(cpu_source, "handles"),
+        "// PRODUCTION_MEMORY_ABI_CONSTANTS": "\n".join(memory_constants),
+        "// PRODUCTION_MEMORY_HANDLES": extract_function(memory_source, "handles"),
         "// PRODUCTION_BUILDID_CONSTANTS": "\n".join(constants),
         "// PRODUCTION_BUILDID_DISPATCH": extract_function(source, "control_device_ioctl"),
         "// PRODUCTION_DEVICE_REQUEST": extract_function(source, "control_device_request"),
@@ -90,7 +100,7 @@ class IhkSmpBuildidSourceFixtureTests(unittest.TestCase):
             self.assertEqual(0, compile_result.returncode, compile_result.stderr)
             result = subprocess.run([str(binary)], capture_output=True, text=True, check=False)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("7 passed; 0 failed", result.stdout)
+            self.assertIn("8 passed; 0 failed", result.stdout)
 
 
 if __name__ == "__main__":

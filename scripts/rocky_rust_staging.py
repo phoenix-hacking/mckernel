@@ -113,11 +113,15 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'smp_resource.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_resource.rs',
-  'sha256': '879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098'},
+  'sha256': '7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd'},
  {'destination': 'smp_cpu.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': '8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825'},
+  'sha256': 'c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97'},
+ {'destination': 'smp_memory.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_memory.rs',
+  'sha256': '3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
@@ -198,7 +202,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': '5b2fd0b4b37fb3eddc90b543195658e7c0b456831b42143396706adb6143c3b7'},
+  'source_sha256': 'a97292392134d6a1634f3bdf5ccca3c16380c11a6412982fd84da2741658d8e6'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -888,6 +892,7 @@ def _validate_input(repo_root, item, index):
         "page_owner_registry.rs",
         "smp_resource.rs",
         "smp_cpu.rs",
+        "smp_memory.rs",
         "os_runtime.rs",
     ):
         expected_destination = item["destination"]
@@ -898,7 +903,7 @@ def _validate_input(repo_root, item, index):
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
     text = _read_text(path, label)
-    if item["destination"] in ("os_runtime.rs", "smp_cpu.rs"):
+    if item["destination"] in ("os_runtime.rs", "smp_cpu.rs", "smp_memory.rs"):
         if __package__:
             from .native_rust_host_audit import reject_unreviewed_rust_escapes
         else:
@@ -1044,6 +1049,16 @@ def _validate_input(repo_root, item, index):
                       "impl HostCpuHotplug for LinuxCpuBatch<'_>"):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks CPU adapter boundary: {1}".format(label, token))
+    elif item["destination"] == "smp_memory.rs":
+        for token in ("struct MemoryHotplugGuard", "struct PageOwner {",
+                      "impl Drop for PageOwner", "struct MemoryContext {",
+                      "pub(super) struct MemoryController",
+                      ".prepare_insert_free_batch(&ranges, &mut workspace)",
+                      ".prepare_remove_free_batch(&ranges, &mut workspace)",
+                      "bindings::__alloc_pages_noprof", "bindings::__free_pages",
+                      "drop(core::mem::take(&mut context.pages));"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks memory owner boundary: {1}".format(label, token))
     elif item["destination"] == "os_runtime.rs":
         for token in ("pub(crate) struct OsDeviceFamily;", "struct KmsgPages(usize);",
                       "struct ProviderModule(*mut bindings::module);",
@@ -1168,6 +1183,8 @@ def _validate_module(repo_root, module, expected, index):
     elif module["crate"] == "ihk_smp_x86_64":
         for fragment in (
             "#[allow(dead_code)]\nmod smp_resource;",
+            "mod smp_cpu;",
+            "mod smp_memory;",
             "use kernel::{\n    c_str,\n    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},\n    prelude::*,\n};",
             "struct ProviderOpenLease {",
             "impl MiscDevice for IhkSmpControlDevice {",
@@ -1243,12 +1260,13 @@ def validate_manifest(repo_root, manifest_path):
         "page_owner_registry.rs",
         "smp_resource.rs",
         "smp_cpu.rs",
+        "smp_memory.rs",
         "os_runtime.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, os_runtime.rs"
+            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, smp_memory.rs, os_runtime.rs"
         )
 
     modules = manifest["modules"]

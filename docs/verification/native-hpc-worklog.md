@@ -323,6 +323,33 @@ an earned evidence score or a remaining-time ratio. The measured Rust share
 of the compatibility image remains 78.356795%; the formal native acceptance
 score remains separately 3.50%.
 
+## Native memory reservation prototype — 2026-09-07
+
+The [memory checkpoint](native-memory-checkpoint-20260907.json) and
+[adapter review](native-memory-adapter-review.md) record the next verified
+runtime step after CPU reservation. The existing Rust map, ownership and
+transaction code now preflight whole allocation/release batches; all 45 Rust
+policy cases and nine Python checks pass. The Linux adapter reuses the canonical
+ABI, CPU module pin and existing page-owner approach, adding exact-node Linux
+allocation and native/compat memory ioctls.
+
+The separate fault-injection kernel and all three native modules build. The
+new objtool compatibility adjustment passes an unchanged-object positive check
+and three unknown-callee rejection checks. Two disposable four-CPU/two-node
+captures pass; the final one includes both ABIs, two module cycles, 96 injected
+allocation failures, partial-release and concurrency checks, complete CPU/module
+restoration, and existing unbooted OS lifecycle probes while memory is reserved.
+The first serial-interleaved capture remains failed and retained. The checkpoint
+preserves 37 artifacts; earlier compiler/checker failures are in `kernel.log`.
+
+Next: integrate this source and the two Linux patches into the authoritative
+staging/workflow and verification contracts, then rebuild and rerun that exact
+stage. Subsequently connect resource assignment through the existing checked
+OS leases, then image loading, AP startup, IKC and workloads. The prototype does
+not yet establish those results, a fresh full repository suite, the required
+Rust/assembly-only McKernel, or production gate acceptance. The formal tracker
+and rough overall planning estimate remain unchanged.
+
 ## Rust consumer integration and incremental build repair — 2026-09-07
 
 Local commit `9e7b1f63` saves the verified native CPU adapter and its evidence.
@@ -345,3 +372,79 @@ Next major work remains native memory reservation/query/release using the
 existing Rust map, allocation owners and OS lease model, followed by resource
 assignment and McKernel boot. Preserve the common ABI and existing consumers
 while retiring the remaining McKernel C implementation paths.
+
+## Memory staging integration and standalone prototype estimate — 2026-09-07
+
+The [integration checkpoint](native-memory-staging-integration-20260907.json)
+retains seven test attempts, their source-input records and the final helper.
+The focused policy/dispatch/lifecycle/staging/build/link group passes 182 Python
+checks, including 45 Rust resource-policy cases and eight extracted ioctl cases.
+The later unsafe/FFI group passes all 17 cases with the clarified shared CPU/memory
+module-pin lifetime. Fourteen new memory boundaries join the review queue; all
+106 existing site IDs are retained. Its 120 sites across 15 source inputs still
+require compiler cross-validation and independent review for formal acceptance.
+Intermediate failures were stale fixture expectations or an omitted test source;
+their actual first errors remain in kernel.log and retained logs.
+
+The manifest and build audits include smp_memory.rs. Link validation binds the
+observed source order and places NUMA, SPARSEMEM_VMEMMAP, MEMORY_HOTPLUG and
+DYNAMIC_MEMORY_LAYOUT fixdep records after their owning memory source; malformed,
+missing, duplicate, reordered or misplaced entries remain rejected. Lifecycle
+checks bind both ABIs and memory teardown before CPU/provider teardown. The native
+workflow consumes the export-only memory patch 0004 and objtool patch 0024.
+
+The [fresh declared-stage checkpoint](native-memory-exact-stage-checkpoint-20260907.json)
+passes the kernel/module build and exact link closure under the existing offline
+four-CPU/12-GiB runner. The build ran from 10:45:43 to 10:48:27 UTC and preserves
+the earlier prototype and the same debug configuration. Its guest replay ran from
+10:49:09 to 10:50:35 UTC: QEMU exit 0, no missing or error markers, both ABIs and
+two module cycles pass. It includes the CPU regressions, 96 injected allocation
+failures and existing unbooted OS probes with a reserved memory pool. All four
+guest CPUs and all modules are restored. Fifteen retained artifacts bind the
+exact build, staged source, compiler records, guest inputs and serial output.
+Remaining runtime/workflow and current license authority bindings and a fresh
+full repository suite remain pending. Historical source locks and acceptance
+scores are unchanged.
+
+For the user's standalone-but-not-fully-verified milestone, the rough planning
+estimate is **40–50%**, with substantial uncertainty. The milestone means the
+Rocky/Linux 6.12 control system starting the Rust/assembly McKernel on assigned
+CPUs and memory and running a basic workload. It still requires resource assignment,
+image loading/start, IKC/application integration and the remaining McKernel C
+retirement. Native McKernel has not booted. This subjective estimate is separate
+from the earlier **35%** complete-goal estimate and **3.50%** formal native evidence
+score; none measures elapsed or remaining development time.
+
+## Final native memory integration checkpoint — 2026-09-07 11:20:23 UTC
+
+The [final validation record](native-memory-final-validation-20260907.json)
+retains the current binding checks and both full-suite attempts. The final run
+passed **2,301 tests in 333.823 seconds: 2,230 passed and 71 skipped**, in the
+fixed offline four-CPU/12-GiB native runner. Its private checkout is based on
+bf5db3c36e1842235a1b95778895d565866ba644 with the recorded working-tree overlay.
+The exact source subset and original RK-007 artifacts were supplied; skipped
+checks remain skipped. The earlier first failures remain in kernel.log.
+
+Current workflow, runtime provenance, FP-0006 dependencies, the unsafe/FFI queue
+and license inventory now bind the memory implementation. The historical v2
+configuration replay keeps its original patch list and evidence identities. Its
+current consumer recognizes only the separately pinned later objtool patch,
+without applying it to that frozen replay or accepting unknown/modified files.
+Targeted runtime/binding checks passed 398 tests; the configuration/review group
+passed 163 tests with 10 skips before the successful full run.
+
+The [updated Rust inventory](rust-consumers-memory-20260907.json) accounts for
+131 sources: 121 unchanged from the preservation baseline, eight modified, two
+added and none removed. All 64 core Rust files remain in their existing crate
+with complete CMake dependencies; all 15 native inputs match the stage/module
+graph. Legacy, optional and pending Rust consumers remain explicit. This adds
+no McKernel language-percentage credit or complete-unification claim.
+
+The already retained exact-stage debug kernel, three modules and two-node guest
+pass with CPU/memory rollback, 96 injected allocation failures, concurrency,
+both ABIs, two module cycles and clean restoration. The next implementation is
+the [checked OS resource bridge](native-os-resource-bridge-plan.md): preserve
+lease generations and assignment order, retain Linux page/device owners, and
+complete coupled cleanup before reusing an OS slot. Then continue image loading,
+AP startup, IKC, workloads and remaining McKernel C retirement. No native McKernel
+boot or production acceptance gate is promoted by this checkpoint.

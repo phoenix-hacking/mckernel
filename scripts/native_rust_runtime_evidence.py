@@ -25,25 +25,17 @@ import tempfile
 import types
 from typing import Any
 
-EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {
-    "kbuild_link_closure": {
-        "git_blob_sha1": "328249bb26e92ea387778fec87c15406c2b743b5",
-        "sha256": "a8f4c4a92fc2c5fbb461b3f8ab4d8b54e6da0e2ddc8098a086f0079057eca6e5",
-        "size": 60000,
-    },
-    "kconfig_policy": {
-        "git_blob_sha1": "b6205a0ffa55fefc580f4742ef8b24b928b3fef4",
-        "sha256": "9ad866896a98cfa223978748dec998d8ede51b0a042dfee8776fe77080fd4ba8",
-        "size": 7506,
-    },
-    "kconfig_solver": {
-        "git_blob_sha1": "095bd7b985f05c540696bb614df06a66843e64ad",
-        "sha256": "fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4",
-        "size": 46669,
-    },
-}
+EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'git_blob_sha1': '6ace8733e173d07bb97af00ca3985872ac3a05cb',
+                         'sha256': '99e07333d2dab7ef9e5595d7f59fce13dfa886b819bc1b3c747a5e7dcef01673',
+                         'size': 60482},
+ 'kconfig_policy': {'git_blob_sha1': 'b6205a0ffa55fefc580f4742ef8b24b928b3fef4',
+                    'sha256': '9ad866896a98cfa223978748dec998d8ede51b0a042dfee8776fe77080fd4ba8',
+                    'size': 7506},
+ 'kconfig_solver': {'git_blob_sha1': '095bd7b985f05c540696bb614df06a66843e64ad',
+                    'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
+                    'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:eb649d66ced2e84407ec8842c9692ef59f3ec9200ab6bc1632a298c6d4a17ea1"
+    "ISOLATED_SELF_DIGEST:ba48c7ad3ecd8ec6d3a8266e4def9d1677a17be2a5f6d87cae4ad10188342dd0"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -730,12 +722,12 @@ EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
     "07bd7811fcecb936d1bba93e0f35e9eaa35c5b993d1f7c953fc65be9a6c86327"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
-    "1aeba5e6aa024e0fe3e3bd5a5a25fac5f7086299b721e4116443d98a19fc8e2d"
+    'f7ff19ddd72da2437a051275d615cb2f20df49cee75c936c2b1fb2b23989bfe4'
 )
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {'Refuse the wrong runtime and install exact build tools': 'acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420',
  'Check out the exact candidate without credentials': '4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc',
  'Verify source-only contracts without claiming readiness': '15d39a8bccc409869d2a54b244bc8e81fefbd257b16732d282c50180f16fb512',
- 'Acquire, patch, and credit-forbidden-stage the exact source': 'b68ad8dbbf49255c9ea26ebc48f335d654a858e1f2e67e1ff4c4fa459944e322',
+ 'Acquire, patch, and credit-forbidden-stage the exact source': '28b586e744c7c8af2bcf2ecb005428d71a89e5dac8a67234d703c11db9655fd6',
  'Resolve the evidence-only module configuration twice': 'e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943',
  'Compile the exact kernel and native Rust modules': '17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a',
  'Validate built metadata and capture immutable diagnostics': '156520ce7ae963e88630bff35f20b64b971df249d7cbc4d6da973cb3a209d24c',
@@ -750,9 +742,9 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = 'ee98e6536a7d75907eb08c3eb2eaacddc4ee651d46a8263bf36b3e3999f7a5a5'
-EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '416e892823b225a30625d172bd1f6ee09aee55e338c29c080af5d70ccc6576b9',
-                    'size': 91741,
-                    'git_blob_sha1': 'd88467eb74d657dfb55da142592c1f3f8631c2ec'},
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '5ba3de6958586098532a51d0edb1c4804e43d07829683b18a3f7ff7ed9dd0dae',
+                    'size': 92382,
+                    'git_blob_sha1': 'da317a70de20ed96a51041c279502b62e34dae19'},
  'runtime_pr_workflow': {'git_blob_sha1': '64bb717852d36fc1021e2b61e83aca6415b184d5',
                          'sha256': '628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265',
                          'size': 754},

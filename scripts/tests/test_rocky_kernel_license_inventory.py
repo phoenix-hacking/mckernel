@@ -368,6 +368,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/native-rust/page_owner_registry.rs",
             "host-kernel/native-rust/smp_resource.rs",
             "host-kernel/native-rust/smp_cpu.rs",
+            "host-kernel/native-rust/smp_memory.rs",
             "scripts/tests/fixtures/ihk_native_master_compile.rs",
             "scripts/tests/fixtures/ihk_native_queue_compile.rs",
             "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
@@ -387,13 +388,14 @@ class LicenseInventoryTests(unittest.TestCase):
             )
 
     def test_repository_inventory_binds_new_foundations_without_review_credit(self):
-        relatives = (
-            "host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch",
-            "host-kernel/native-rust/device_registry.rs",
-            "host-kernel/native-rust/os_runtime.rs",
-            "host-kernel/native-rust/smp_resource.rs",
-            "host-kernel/native-rust/smp_cpu.rs",
-        )
+        relatives = ('host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch',
+ 'host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch',
+ 'host-kernel/native-rust/device_registry.rs',
+ 'host-kernel/native-rust/os_runtime.rs',
+ 'host-kernel/native-rust/smp_resource.rs',
+ 'host-kernel/native-rust/smp_cpu.rs',
+ 'host-kernel/native-rust/smp_memory.rs',
+ 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
         self.assertEqual(
             list(relatives),
             [

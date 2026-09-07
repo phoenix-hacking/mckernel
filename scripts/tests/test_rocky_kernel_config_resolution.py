@@ -310,6 +310,37 @@ class AllocatorPatchProvenanceTests(unittest.TestCase):
 
 
 class RepositoryContractTests(unittest.TestCase):
+    def test_current_non_config_patch_is_exact_and_outside_frozen_replay(self):
+        relative = "host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch"
+        frozen = list(resolution.EXPECTED_COMPATIBILITY_PATCHES)
+        self.assertNotIn(relative, frozen)
+        contract = resolution.validate_contract(REPO_ROOT)
+        self.assertEqual(frozen, [row["path"] for row in contract["patch_authority"]["rust_compatibility"]])
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            # Historical replay works without this later native-module patch.
+            resolution.validate_repository_patch_scope(repo, frozen)
+            path = repo / relative
+            path.parent.mkdir(parents=True)
+            original = (REPO_ROOT / relative).read_bytes()
+            path.write_bytes(original)
+            current = sorted(frozen + [relative])
+            resolution.validate_repository_patch_scope(repo, current)
+            for changed in (original + b"\n", original.replace(b"Vec::remove", b"Vec::retain", 1)):
+                path.write_bytes(changed)
+                with self.assertRaisesRegex(resolution.ConfigResolutionError, "non-config patch bytes"):
+                    resolution.validate_repository_patch_scope(repo, current)
+            path.write_bytes(original)
+            for altered in (current + [relative], current[1:], sorted(current + ["host-kernel/rocky/patches/9999-unbound.patch"])):
+                with self.assertRaisesRegex(resolution.ConfigResolutionError, "patch authority"):
+                    resolution.validate_repository_patch_scope(repo, altered)
+            path.unlink()
+            outside = repo / "outside.patch"
+            outside.write_bytes(original)
+            path.symlink_to(outside)
+            with self.assertRaises(resolution.ConfigResolutionError):
+                resolution.validate_repository_patch_scope(repo, current)
+
     def assert_contract_mutation_rejected(self, mutate, pattern):
         contract = resolution.validate_contract(REPO_ROOT)
         mutate(contract)

@@ -95,7 +95,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertTrue(summary["resource_foundation_linux_reachable"])
-        self.assertEqual(38, summary["resource_foundation_tests"])
+        self.assertEqual(45, summary["resource_foundation_tests"])
         self.assertEqual("mcd0", summary["control_device_name"])
         self.assertTrue(summary["control_device_source_reachable"])
         self.assertEqual("TODO", summary["control_device_gate_status"])
@@ -105,10 +105,12 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(
             ["IHK_DEVICE_GET_BUILDID", "IHK_DEVICE_CREATE_OS", "IHK_DEVICE_DESTROY_OS",
              "IHK_DEVICE_RESERVE_CPU", "IHK_DEVICE_RELEASE_CPU",
-             "IHK_DEVICE_GET_NUM_CPUS", "IHK_DEVICE_QUERY_CPU"],
+             "IHK_DEVICE_GET_NUM_CPUS", "IHK_DEVICE_QUERY_CPU",
+             "IHK_DEVICE_RESERVE_MEM", "IHK_DEVICE_RELEASE_MEM",
+             "IHK_DEVICE_QUERY_MEM", "IHK_DEVICE_RELEASE_MEM_PARTIALLY"],
             summary["control_device_valid_ioctl_commands"]
         )
-        self.assertEqual(7, summary["get_buildid_source_fixture_tests"])
+        self.assertEqual(8, summary["get_buildid_source_fixture_tests"])
 
     def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
         resource = self.contract["crate_modules"][0]
@@ -393,7 +395,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             + detach
             + without_detach[unload_end:]
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "retire CPU ownership, then detach provider"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "retire memory and CPU ownership, then detach provider"):
             lifecycle._validate_rust_source(reordered, self.contract)
 
     def test_commented_provider_detach_cannot_authorize_a_noop_drop(self) -> None:
@@ -769,12 +771,14 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
 
         ordered_drop = (
             "drop(self.control_device.take());\n"
+            "        drop(self.memory_controller.take());\n"
             "        drop(self.cpu_controller.take());\n"
             "        drop(self.provider_lease.take());"
         )
         reversed_drop = (
             "drop(self.provider_lease.take());\n"
             "        drop(self.cpu_controller.take());\n"
+            "        drop(self.memory_controller.take());\n"
             "        drop(self.control_device.take());"
         )
         self.assertEqual(1, source.count(ordered_drop))
@@ -782,6 +786,20 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle._validate_rust_source(
                 source.replace(ordered_drop, reversed_drop, 1), self.contract
             )
+        memory_before_device = ordered_drop.replace(
+            "drop(self.control_device.take());\n        drop(self.memory_controller.take());",
+            "drop(self.memory_controller.take());\n        drop(self.control_device.take());",
+        )
+        cpu_before_memory = ordered_drop.replace(
+            "drop(self.memory_controller.take());\n        drop(self.cpu_controller.take());",
+            "drop(self.cpu_controller.take());\n        drop(self.memory_controller.take());",
+        )
+        for wrong_order in (memory_before_device, cpu_before_memory):
+            with self.subTest(order=wrong_order):
+                with self.assertRaisesRegex(lifecycle.ValidationError, "deregister mcd0"):
+                    lifecycle._validate_rust_source(
+                        source.replace(ordered_drop, wrong_order, 1), self.contract
+                    )
 
     def test_control_device_noncopy_fixture_is_bound_and_compile_fails(self) -> None:
         fixture = self.contract["control_device_shell"]["noncopy_fixture"]

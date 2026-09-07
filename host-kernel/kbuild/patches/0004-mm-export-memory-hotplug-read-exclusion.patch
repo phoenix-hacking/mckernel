@@ -1,0 +1,35 @@
+From: McKernel native Rust integration
+Subject: [PATCH] mm: export existing memory exclusion and node accounting
+
+The native Rust IHK memory adapter validates node state and acquires pages
+under the existing memory hotplug read semaphore. Export its balanced read
+entry points and existing per-node memory accounting so native modules can
+use ordinary Linux services without a project C bridge. The implementations
+and lock ordering remain unchanged.
+
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -211,11 +211,13 @@
+ {
+ 	percpu_down_read(&mem_hotplug_lock);
+ }
++EXPORT_SYMBOL_GPL(get_online_mems);
+ 
+ void put_online_mems(void)
+ {
+ 	percpu_up_read(&mem_hotplug_lock);
+ }
++EXPORT_SYMBOL_GPL(put_online_mems);
+ 
+ bool movable_node_enabled = false;
+ 
+--- a/mm/show_mem.c
++++ b/mm/show_mem.c
+@@ -116,6 +116,7 @@
+ #endif
+ 	val->mem_unit = PAGE_SIZE;
+ }
++EXPORT_SYMBOL_GPL(si_meminfo_node);
+ #endif
+ 
+ /*

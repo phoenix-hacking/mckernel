@@ -34,10 +34,10 @@
       "generated_metadata_file": "ihk-compat-build-id.bin",
       "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
       "source_fixture": {
-        "expected_tests": 7,
+        "expected_tests": 8,
         "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
-        "sha256": "4cfb62b601356c40927af321e28e74a0e0a86e85e54ba11b3a14ed65548bd266",
-        "size": 7371
+        "sha256": "e2c91236aaf83141d24c07132584c5e09e3380736af2258d6b16b2db5d4d0326",
+        "size": 8923
       },
       "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
       "success_result": 0
@@ -76,9 +76,10 @@
     "registration_failure_releases_provider_lease": true,
     "rocky_runtime_validated": false,
     "runtime_behavior_proven": false,
-    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy and CPU reserve/release/count/query; memory, OS assignment and boot remain separate",
+    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy, CPU reserve/release/count/query and memory reserve/query/full/partial release; OS assignment and boot remain separate",
     "teardown_order": [
       "deregister-control-device",
+      "retire-memory-controller-and-owned-pages",
       "retire-cpu-controller-and-hotplug-callback",
       "detach-provider-lease",
       "emit-unload-diagnostic"
@@ -100,24 +101,33 @@
       "IHK_DEVICE_RESERVE_CPU",
       "IHK_DEVICE_RELEASE_CPU",
       "IHK_DEVICE_GET_NUM_CPUS",
-      "IHK_DEVICE_QUERY_CPU"
+      "IHK_DEVICE_QUERY_CPU",
+      "IHK_DEVICE_RESERVE_MEM",
+      "IHK_DEVICE_RELEASE_MEM",
+      "IHK_DEVICE_QUERY_MEM",
+      "IHK_DEVICE_RELEASE_MEM_PARTIALLY"
     ]
   },
   "crate_modules": [
     {
       "destination": "smp_resource.rs",
       "path": "host-kernel/native-rust/smp_resource.rs",
-      "sha256": "879317596a89f065e9c61755b7663f9915aaa4cc8cca99ce2b57ba6b6a2be098"
+      "sha256": "7b7e2bf4a80a9a3cf54f792f9a6f5ce87f39098101bb2dba5f0f0571e23f3dfd"
     },
     {
       "destination": "smp_cpu.rs",
       "path": "host-kernel/native-rust/smp_cpu.rs",
-      "sha256": "8cbbb77db3899e0a7630449556305b59673269acbef96b1ffb8f00f0c24f7825"
+      "sha256": "c4c9dde04bfe60a6d0f5ea43ff080eabe70d519cff1ed3d3dbfaf2547df84a97"
     },
     {
       "destination": "abi/x86_64.rs",
       "path": "host-kernel/native-rust/abi/x86_64.rs",
       "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "destination": "smp_memory.rs",
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "3ada657f4dddb5a45e6f95292a9e42dfeb7aa67ecc8f672972d1cb7da8ba7c95"
     }
   ],
   "dependency_contract": {
@@ -275,8 +285,8 @@
     },
     "fixture": {
       "expected_fixture_tests": 14,
-      "expected_in_file_tests": 24,
-      "expected_total_tests": 38,
+      "expected_in_file_tests": 31,
+      "expected_total_tests": 45,
       "minimum_rustc": "1.92.0",
       "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
       "negative_sha256": "fffdd832fe2c60aae7ae3b265ae1af2ceed8a7ad428e87fc2fd704d4332d53b5",
@@ -285,15 +295,14 @@
     },
     "integration_blockers": [
       "no versioned IHK OS lease can mint an OsToken in production",
-      "memory tables and page ownership still require a pinned Linux adapter",
+      "memory reservation needs authoritative staging, exact-stage replay and production acceptance",
       "CPU physical eject, suspend, topology replacement and uncertain-state reconciliation need production acceptance",
-      "the legacy 4 MiB user memory request granule is not enforced by an ioctl adapter",
       "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
-      "page ownership, APIC reset, IRQ and McKernel boot remain unreachable"
+      "OS resource assignment, image loading, APIC reset, IRQ and McKernel boot remain unreachable"
     ],
     "linux_reachable": true,
     "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
-    "status": "native-cpu-adapter-with-private-memory-policy"
+    "status": "native-cpu-and-memory-adapters-with-private-os-assignment-policy"
   },
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json"

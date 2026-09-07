@@ -70,6 +70,37 @@ in 334.363 seconds, 2,228 passed and 71 skipped; see
 and compiled artifacts remain bound separately from later build-only repairs.
 Follow the user's isolated four-CPU validation boundary.
 
+Subsequent native memory prototype (2026-09-07): the additive batch memory policy
+passes 45 Rust cases and nine Python checks. The debug kernel and all three
+modules build; bounded memory reservation/release and CPU regressions pass both
+ABIs across two four-vCPU/two-NUMA-node module cycles, including 96 allocation
+failures and existing unbooted OS lifecycle probes with a reserved memory pool.
+See `docs/verification/native-memory-checkpoint-20260907.json` and the adapter
+review. Exact staging/workflow/FFI and verification-binding integration remains
+pending, followed by a fresh exact-stage build and guest. The prior full suite
+does not cover this prototype. OS resource assignment, native McKernel boot,
+workloads, Rust/assembly-only completion and production acceptance remain open.
+
+Memory staging integration now passes 182 focused checks and a subsequent
+17-test unsafe/FFI group; see
+`docs/verification/native-memory-staging-integration-20260907.json` for separate
+source snapshots and retained intermediate failures. The manifest, source/link
+graph, lifecycle/compat dispatch and review inventory include the memory adapter.
+The workflow includes patches 0004 and 0024. The declared-stage debug kernel and
+all three modules now build, pass link closure, and pass the four-vCPU/two-NUMA
+native/compat guest replay with both module cycles. See
+`docs/verification/native-memory-exact-stage-checkpoint-20260907.json`.
+Runtime/workflow and current license bindings now pass, followed by the full
+repository suite: 2,301 tests in 333.823 seconds, 2,230 passed and 71 skipped.
+See `docs/verification/native-memory-final-validation-20260907.json`. The later
+objtool patch is byte-pinned outside the unchanged historical config replay;
+unknown, altered or substituted patches remain rejected. No native McKernel boot
+or production gate credit is claimed. The next implementation is described in
+`docs/verification/native-os-resource-bridge-plan.md`.
+The subsequent Rust inventory accounts for 131 sources: 121 unchanged, eight
+modified, two added, none removed; all 64 core crate files and 15 staged native
+files have matched consumers. See `docs/verification/rust-consumers-memory-20260907.json`.
+
 ## Mission
 
 This repository is migrating McKernel from the traditional CentOS-based

@@ -1319,7 +1319,9 @@ impl<const N: usize> MemoryTransaction<'_, '_, '_, N> {
     }
 
     /// Complete every fallible candidate/live-map check before the adapter
-    /// acquires, transfers, or returns physical pages.
+    /// publishes, transfers, or returns managed physical pages. Newly allocated
+    /// pages may be held by private temporary owners before this point; they
+    /// must still be released on failure before joining the published map.
     pub(crate) fn begin_external_effects(&mut self) -> Result<(), ResourceError> {
         if self.external_effects_started {
             return Err(ResourceError::ExternalEffectsPending);
@@ -1453,17 +1455,33 @@ impl<const N: usize> MemoryMap<N> {
         self.validate()?;
         self.prepare_workspace(workspace)?;
         let inserted = MemoryExtent::new(start, length, numa_node, None)?;
-        let mut emitted = false;
+        self.prepare_insert_free_batch(&[inserted], workspace)
+    }
+
+    /// Prepare one publication for a sorted batch of privately owned ranges.
+    /// The adapter retains every allocation until the complete candidate is
+    /// valid and it can transfer all owners without another fallible allocation.
+    /// Adjacent ranges are merged using the same canonical workspace as the
+    /// original single-range insertion path.
+    pub(crate) fn prepare_insert_free_batch<'map, 'workspace, 'storage>(
+        &'map mut self,
+        ranges: &[MemoryExtent],
+        workspace: &'workspace mut MemoryWorkspace<'storage>,
+    ) -> Result<MemoryTransaction<'map, 'workspace, 'storage, N>, ResourceError> {
+        self.validate()?;
+        self.prepare_workspace(workspace)?;
+        Self::validate_free_ranges(ranges)?;
+        let mut inserted = 0;
         for index in 0..self.length {
             let current = self.extents[index].ok_or(ResourceError::Corrupt)?;
-            if !emitted && inserted.start <= current.start {
-                workspace.push_normalized(inserted)?;
-                emitted = true;
+            while inserted < ranges.len() && ranges[inserted].start <= current.start {
+                workspace.push_normalized(ranges[inserted])?;
+                inserted += 1;
             }
             workspace.push_normalized(current)?;
         }
-        if !emitted {
-            workspace.push_normalized(inserted)?;
+        for range in &ranges[inserted..] {
+            workspace.push_normalized(*range)?;
         }
         Self::validate_candidate(workspace)?;
         Ok(MemoryTransaction {
@@ -1587,6 +1605,77 @@ impl<const N: usize> MemoryMap<N> {
             active: true,
             external_effects_started: false,
         })
+    }
+
+    /// Prepare returning a complete sorted range batch to Linux. Every range
+    /// must lie inside free memory on its declared node. All checks and splits
+    /// finish while the live map and page owners are untouched. The adapter
+    /// must preflight its corresponding owners before beginning the effects.
+    pub(crate) fn prepare_remove_free_batch<'map, 'workspace, 'storage>(
+        &'map mut self,
+        ranges: &[MemoryExtent],
+        workspace: &'workspace mut MemoryWorkspace<'storage>,
+    ) -> Result<MemoryTransaction<'map, 'workspace, 'storage, N>, ResourceError> {
+        self.validate()?;
+        self.prepare_workspace(workspace)?;
+        Self::validate_free_ranges(ranges)?;
+        let mut removed = 0;
+        for index in 0..self.length {
+            let current = self.extents[index].ok_or(ResourceError::Corrupt)?;
+            let end = current.end()?;
+            let mut cursor = current.start;
+            while removed < ranges.len() && ranges[removed].start < end {
+                let range = ranges[removed];
+                let range_end = range.end()?;
+                if range.start < cursor || range_end > end {
+                    return Err(ResourceError::RangeUnavailable);
+                }
+                if current.owner.is_some() {
+                    return Err(ResourceError::Ownership);
+                }
+                if current.numa_node != range.numa_node {
+                    return Err(ResourceError::RangeUnavailable);
+                }
+                if range.start > cursor {
+                    workspace.push_normalized(MemoryExtent::new(
+                        cursor, range.start - cursor, current.numa_node, None,
+                    )?)?;
+                }
+                cursor = range_end;
+                removed += 1;
+            }
+            if cursor < end {
+                workspace.push_normalized(MemoryExtent::new(
+                    cursor, end - cursor, current.numa_node, current.owner,
+                )?)?;
+            }
+        }
+        if removed != ranges.len() {
+            return Err(ResourceError::RangeUnavailable);
+        }
+        Self::validate_candidate(workspace)?;
+        Ok(MemoryTransaction {
+            map: self,
+            workspace,
+            operation: MemoryOperation::RemoveFree,
+            active: true,
+            external_effects_started: false,
+        })
+    }
+
+    fn validate_free_ranges(ranges: &[MemoryExtent]) -> Result<(), ResourceError> {
+        let mut previous_end = None;
+        for range in ranges {
+            MemoryExtent::new(range.start, range.length, range.numa_node, range.owner)?;
+            if range.owner.is_some() {
+                return Err(ResourceError::Ownership);
+            }
+            if previous_end.is_some_and(|end| end > range.start) {
+                return Err(ResourceError::Overlap);
+            }
+            previous_end = Some(range.end()?);
+        }
+        Ok(())
     }
 
     /// Test-only policy convenience with no physical page effects.
@@ -2771,6 +2860,290 @@ mod tests {
             Err(ResourceError::RangeUnavailable)
         );
         assert_eq!(memory.free_bytes().unwrap(), 0x2000);
+    }
+
+    fn batch_range(start: u64, length: u64, node: u32) -> MemoryExtent {
+        MemoryExtent::new(start, length, node, None).unwrap()
+    }
+
+    #[test]
+    fn memory_batch_insert_merges_old_and_new_ranges_at_one_commit() {
+        let mut memory = MemoryMap::<4>::new();
+        let mut staging = [None; 4];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x3000, 0x1000, 0, &mut workspace)
+            .unwrap();
+        let ranges = [
+            batch_range(0x1000, 0x2000, 0),
+            batch_range(0x4000, 0x1000, 0),
+            batch_range(0x5000, 0x1000, 1),
+        ];
+        let before = memory.extents;
+        {
+            let transaction = memory
+                .prepare_insert_free_batch(&ranges, &mut workspace)
+                .unwrap();
+            assert_eq!(transaction.live_len(), 1);
+            assert_eq!(transaction.candidate_len(), 2);
+            assert_eq!(
+                transaction.candidate_extent(0),
+                Some(batch_range(0x1000, 0x4000, 0))
+            );
+        }
+        assert_eq!(memory.extents, before);
+        let mut transaction = memory
+            .prepare_insert_free_batch(&ranges, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.len(), 2);
+        assert_eq!(memory.free_bytes().unwrap(), 0x5000);
+        assert_eq!(memory.extent(1), Some(batch_range(0x5000, 0x1000, 1)));
+        assert_eq!(workspace.len(), 0);
+    }
+
+    #[test]
+    fn memory_batch_insert_rejects_overlap_order_and_owned_input_without_change() {
+        let mut memory = MemoryMap::<4>::new();
+        let mut staging = [None; 4];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x5000, 0x2000, 0, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let cases = [
+            [
+                batch_range(0x1000, 0x2000, 0),
+                batch_range(0x2000, 0x1000, 1),
+            ],
+            [
+                batch_range(0x3000, 0x1000, 0),
+                batch_range(0x1000, 0x1000, 0),
+            ],
+            [
+                batch_range(0x1000, 0x1000, 0),
+                batch_range(0x6000, 0x2000, 0),
+            ],
+        ];
+        for ranges in cases {
+            assert_eq!(
+                memory
+                    .prepare_insert_free_batch(&ranges, &mut workspace)
+                    .err(),
+                Some(ResourceError::Overlap)
+            );
+            assert_eq!(memory.extents, before);
+            memory.validate().unwrap();
+        }
+        let owned = MemoryExtent::new(0x1000, 0x1000, 0, Some(token(1, 1))).unwrap();
+        assert_eq!(
+            memory
+                .prepare_insert_free_batch(&[owned], &mut workspace)
+                .err(),
+            Some(ResourceError::Ownership)
+        );
+        assert_eq!(memory.extents, before);
+    }
+
+    #[test]
+    fn memory_batch_capacity_failure_leaves_live_state_and_reusable_workspace() {
+        let mut memory = MemoryMap::<2>::new();
+        let mut staging = [None; 2];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x3000, 0x1000, 0, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let fragmented = [
+            batch_range(0x1000, 0x1000, 0),
+            batch_range(0x5000, 0x1000, 0),
+        ];
+        assert_eq!(
+            memory
+                .prepare_insert_free_batch(&fragmented, &mut workspace)
+                .err(),
+            Some(ResourceError::Capacity)
+        );
+        assert_eq!(memory.extents, before);
+        let joined = [
+            batch_range(0x1000, 0x1000, 0),
+            batch_range(0x2000, 0x1000, 0),
+            batch_range(0x4000, 0x1000, 0),
+        ];
+        let mut transaction = memory
+            .prepare_insert_free_batch(&joined, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.len(), 1);
+        assert_eq!(memory.free_bytes().unwrap(), 0x4000);
+    }
+
+    #[test]
+    fn memory_batch_remove_splits_free_ranges_and_preserves_os_owned_memory() {
+        let mut memory = MemoryMap::<8>::new();
+        let mut staging = [None; 8];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x1000, 0x9000, 0, &mut workspace)
+            .unwrap();
+        memory
+            .insert_free(0xa000, 0x4000, 1, &mut workspace)
+            .unwrap();
+        let owner = token(3, 9);
+        memory
+            .assign(owner, 0x5000, 0x1000, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let ranges = [
+            batch_range(0x2000, 0x2000, 0),
+            batch_range(0x6000, 0x4000, 0),
+            batch_range(0xb000, 0x1000, 1),
+        ];
+        {
+            let transaction = memory
+                .prepare_remove_free_batch(&ranges, &mut workspace)
+                .unwrap();
+            assert_eq!(transaction.live_len(), 4);
+            assert_eq!(transaction.candidate_len(), 5);
+        }
+        assert_eq!(memory.extents, before);
+        let mut transaction = memory
+            .prepare_remove_free_batch(&ranges, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.bytes_owned_by(owner).unwrap(), 0x1000);
+        assert_eq!(memory.free_bytes().unwrap(), 0x5000);
+        assert_eq!(memory.len(), 5);
+        memory.validate().unwrap();
+    }
+
+    #[test]
+    fn memory_batch_remove_rejects_late_invalid_ranges_without_partial_release() {
+        let mut memory = MemoryMap::<8>::new();
+        let mut staging = [None; 8];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x1000, 0x4000, 0, &mut workspace)
+            .unwrap();
+        memory
+            .insert_free(0x6000, 0x4000, 1, &mut workspace)
+            .unwrap();
+        memory
+            .assign(token(1, 2), 0x8000, 0x1000, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let first = batch_range(0x1000, 0x1000, 0);
+        for (last, expected) in [
+            (
+                batch_range(0x4000, 0x3000, 0),
+                ResourceError::RangeUnavailable,
+            ),
+            (
+                batch_range(0x5000, 0x1000, 0),
+                ResourceError::RangeUnavailable,
+            ),
+            (
+                batch_range(0x6000, 0x1000, 0),
+                ResourceError::RangeUnavailable,
+            ),
+            (batch_range(0x8000, 0x1000, 1), ResourceError::Ownership),
+            (first, ResourceError::Overlap),
+        ] {
+            assert_eq!(
+                memory
+                    .prepare_remove_free_batch(&[first, last], &mut workspace)
+                    .err(),
+                Some(expected)
+            );
+            assert_eq!(memory.extents, before);
+            memory.validate().unwrap();
+        }
+    }
+
+    #[test]
+    fn memory_batch_remove_capacity_and_adjacent_ranges_are_atomic() {
+        let mut memory = MemoryMap::<2>::new();
+        let mut staging = [None; 2];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        memory
+            .insert_free(0x1000, 0x7000, 0, &mut workspace)
+            .unwrap();
+        let before = memory.extents;
+        let splits = [
+            batch_range(0x2000, 0x1000, 0),
+            batch_range(0x5000, 0x1000, 0),
+        ];
+        assert_eq!(
+            memory
+                .prepare_remove_free_batch(&splits, &mut workspace)
+                .err(),
+            Some(ResourceError::Capacity)
+        );
+        assert_eq!(memory.extents, before);
+        let adjacent = [
+            batch_range(0x2000, 0x1000, 0),
+            batch_range(0x3000, 0x1000, 0),
+        ];
+        let mut transaction = memory
+            .prepare_remove_free_batch(&adjacent, &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert_eq!(memory.len(), 2);
+        assert_eq!(memory.free_bytes().unwrap(), 0x5000);
+    }
+
+    #[test]
+    fn memory_batches_retain_compensation_poison_and_empty_request_rules() {
+        for remove in [false, true] {
+            for compensate in [false, true] {
+                let mut memory = MemoryMap::<4>::new();
+                let mut staging = [None; 4];
+                let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+                memory
+                    .insert_free(0x1000, 0x4000, 0, &mut workspace)
+                    .unwrap();
+                let before = memory.extents;
+                let ranges = [batch_range(if remove { 0x2000 } else { 0x6000 }, 0x1000, 0)];
+                let mut transaction = if remove {
+                    memory
+                        .prepare_remove_free_batch(&ranges, &mut workspace)
+                        .unwrap()
+                } else {
+                    memory
+                        .prepare_insert_free_batch(&ranges, &mut workspace)
+                        .unwrap()
+                };
+                transaction.begin_external_effects().unwrap();
+                if compensate {
+                    transaction.compensated_rollback().unwrap();
+                } else {
+                    drop(transaction);
+                }
+                assert_eq!(memory.extents, before);
+                assert_eq!(memory.is_poisoned(), !compensate);
+            }
+        }
+        let mut memory = MemoryMap::<1>::new();
+        let mut staging = [None; 1];
+        let mut workspace = MemoryWorkspace::new(&mut staging).unwrap();
+        let transaction = memory
+            .prepare_insert_free_batch(&[], &mut workspace)
+            .unwrap();
+        assert_eq!(
+            transaction.commit(),
+            Err(ResourceError::ExternalEffectsNotStarted)
+        );
+        assert!(!memory.is_poisoned());
+        let mut transaction = memory
+            .prepare_remove_free_batch(&[], &mut workspace)
+            .unwrap();
+        transaction.begin_external_effects().unwrap();
+        transaction.commit().unwrap();
+        assert!(memory.is_empty());
     }
 
     #[test]

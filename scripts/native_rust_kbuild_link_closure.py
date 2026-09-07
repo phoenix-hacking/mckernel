@@ -79,6 +79,7 @@ EXPECTED_STAGED_FILES = (
     "page_allocator.rs",
     "page_owner_registry.rs",
     "smp_cpu.rs",
+    "smp_memory.rs",
     "smp_resource.rs",
 )
 EXPECTED_STAGED_RUST_SOURCES = tuple(
@@ -117,7 +118,7 @@ _PROJECT_DEPENDENCIES = {
         "page_owner_registry.rs",
         "os_runtime.rs",
     ),
-    "ihk-smp-x86_64": ("smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs"),
+    "ihk-smp-x86_64": ("smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs"),
     "mcctrl": (),
 }
 _GENERATED_METADATA_DEPENDENCIES = {
@@ -127,17 +128,27 @@ _GENERATED_METADATA_DEPENDENCIES = {
 }
 # Rocky fixdep scans the crate root before its other dependencies and emits
 # configuration dependencies immediately after the source that mentions them.
-# The SMP root and IHK's os_runtime.rs each use CONFIG_COMPAT. Preserve both
-# the exact four-space Make grammar and the different positions in the records.
+# The SMP root and IHK's os_runtime.rs each use CONFIG_COMPAT; smp_memory.rs
+# additionally binds its four required memory-layout options. Preserve the
+# exact four-space grammar and each source's configuration dependency position.
 _FIXDEP_CONFIG_DEPENDENCIES = {
     "ihk": ("$(wildcard include/config/COMPAT)",),
-    "ihk-smp-x86_64": ("$(wildcard include/config/COMPAT)",),
+    "ihk-smp-x86_64": (
+        "$(wildcard include/config/COMPAT)",
+        "$(wildcard include/config/NUMA)",
+        "$(wildcard include/config/SPARSEMEM_VMEMMAP)",
+        "$(wildcard include/config/MEMORY_HOTPLUG)",
+        "$(wildcard include/config/DYNAMIC_MEMORY_LAYOUT)",
+    ),
     "mcctrl": (),
 }
 _FIXDEP_CONFIG_AFTER_SOURCE = {
-    "ihk": "os_runtime.rs",
-    "ihk-smp-x86_64": "ihk_smp_x86_64.rs",
-    "mcctrl": None,
+    "ihk": {"os_runtime.rs": ("$(wildcard include/config/COMPAT)",)},
+    "ihk-smp-x86_64": {
+        "ihk_smp_x86_64.rs": ("$(wildcard include/config/COMPAT)",),
+        "smp_memory.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][1:],
+    },
+    "mcctrl": {},
 }
 _KERNEL_RUST_DEPENDENCIES = (
     "./rust/libcore.rmeta",
@@ -870,8 +881,7 @@ def _parse_rust_dependency_body(name, target, text, root_token, source_prefix, m
         if source != module["crate_root"]:
             project_indices.append(len(expected))
             expected.append(staged_root + source)
-        if source == _FIXDEP_CONFIG_AFTER_SOURCE[module["name"]]:
-            expected.extend(config_dependencies)
+        expected.extend(_FIXDEP_CONFIG_AFTER_SOURCE[module["name"]].get(source, ()))
     expected.extend(_KERNEL_RUST_DEPENDENCIES)
     if dependencies != expected:
         mismatch = next(

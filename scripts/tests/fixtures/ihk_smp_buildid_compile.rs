@@ -19,6 +19,7 @@ struct CopyState {
 std::thread_local! {
     static COPY: std::cell::RefCell<CopyState> = Default::default();
     static CPU_CALL: std::cell::RefCell<Option<(u32, usize, bool)>> = const { std::cell::RefCell::new(None) };
+    static MEMORY_CALL: std::cell::RefCell<Option<(u32, usize, bool)>> = const { std::cell::RefCell::new(None) };
 }
 
 // The CPU adapter is a separate real Kbuild/guest boundary. This fixture
@@ -32,6 +33,20 @@ mod smp_cpu {
     pub fn ioctl(command: u32, argument: usize, compat: bool) -> crate::Result<isize> {
         crate::CPU_CALL.with(|call| *call.borrow_mut() = Some((command, argument, compat)));
         Err(-16)
+    }
+}
+
+// Real allocation and ownership are covered by the separate native guest.
+// This boundary checks the production memory routing and pointer conversion.
+mod memory_abi {
+    // PRODUCTION_MEMORY_ABI_CONSTANTS
+}
+mod smp_memory {
+    use crate::memory_abi as abi;
+    // PRODUCTION_MEMORY_HANDLES
+    pub fn ioctl(command: u32, argument: usize, compat: bool) -> crate::Result<isize> {
+        crate::MEMORY_CALL.with(|call| *call.borrow_mut() = Some((command, argument, compat)));
+        Err(-12)
     }
 }
 
@@ -221,6 +236,22 @@ fn cpu_dispatch_preserves_native_address_and_compat_pointer_width() {
         CPU_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, address, false))));
         assert_eq!(IhkSmpControlDevice::compat_ioctl(&ProviderOpenLease, command, address), Err(-16));
         CPU_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, 0x8000_1234, true))));
+        COPY.with(|state| assert_eq!(state.borrow().constructions, 0));
+    }
+}
+
+#[test]
+fn memory_dispatch_preserves_native_address_and_compat_pointer_width() {
+    let address = 0x1234_5678_8000_1234usize;
+    CPU_CALL.with(|call| *call.borrow_mut() = None);
+    for command in [memory_abi::IHK_DEVICE_RESERVE_MEM, memory_abi::IHK_DEVICE_RELEASE_MEM,
+                    memory_abi::IHK_DEVICE_QUERY_MEM, memory_abi::IHK_DEVICE_RELEASE_MEM_PARTIALLY] {
+        reset(Some(0));
+        assert_eq!(IhkSmpControlDevice::ioctl(&ProviderOpenLease, command, address), Err(-12));
+        MEMORY_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, address, false))));
+        assert_eq!(IhkSmpControlDevice::compat_ioctl(&ProviderOpenLease, command, address), Err(-12));
+        MEMORY_CALL.with(|call| assert_eq!(*call.borrow(), Some((command, 0x8000_1234, true))));
+        CPU_CALL.with(|call| assert_eq!(*call.borrow(), None));
         COPY.with(|state| assert_eq!(state.borrow().constructions, 0));
     }
 }
