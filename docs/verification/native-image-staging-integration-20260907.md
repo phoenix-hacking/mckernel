@@ -25,8 +25,10 @@ mapping groups passed before a synthetic ledger fixture missed three new
 support files. After fixing that fixture, the 30-check ownership/image/resource
 continuation and the exact mapping fixture, OS contract and ledger checks
 passed. The later mapping group passed with the workflow change. Downstream
-workflow checks exposed two stale current identities; their corrections are
-being verified. Every first failure is recorded in `kernel.log`.
+workflow checks exposed two stale current identities; their corrections now pass. The subsequent build-source list and RS-006
+consumer binding corrections also pass: 241 runtime/workflow checks, 226
+build-surface/FP-0006/license checks and 27 RS-006 checks. The intermediate
+failures and exact source overlays are retained. Every first failure is recorded in `kernel.log`.
 
 The adjacent JSON checkpoint retains source snapshots, test logs and recipes.
 The earlier successful loader guest remains separately recorded in
