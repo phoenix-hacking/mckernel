@@ -610,3 +610,20 @@ already compressed source snapshots; their retained bytes did not change.
 The native image-loading verification checkpoint is complete. Next: boot ABI,
 owned startup page tables/trampoline and native CPU wakeup, followed by IKC and
 native mcctrl execution. Native McKernel boot and production acceptance are open.
+
+## 2026-09-07: owned native startup page tables
+
+The source-bound native prototype now passes both guest ABIs and two module
+cycles on four vCPUs/two NUMA nodes: 56 image and 56 table readbacks, 64 forced
+startup allocation failures, and 32 repeated owner cleanups. The initial
+NUMA sentinel allocator bug and its failing guest are retained alongside the
+corrected build and passing capture. See `native-startup-tables-checkpoint-20260907.json`
+and `native-startup-tables-review.md`.
+
+The declared staging, module graph, lifecycle, mapping reuse, 156-site/19-source
+FFI inventory and downstream current bindings now pass their focused groups.
+Intermediate failures and source overlays are retained in
+`native-startup-staging-integration-20260907.json`. Next run the fresh declared
+build/guest/full suite, then continue native trampoline, boot parameters, CPU
+wakeup and IRQ/IKC. Native McKernel boot, applications and complete Rust/assembly
+ownership remain open; no production gate or score is promoted.

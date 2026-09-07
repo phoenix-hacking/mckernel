@@ -51,7 +51,7 @@ EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': 'f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04'},
+  'sha256': '7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183'},
  {'destination': 'ihk_mapping.rs',
   'path': 'host-kernel/native-rust/ihk_mapping.rs',
   'sha256': 'd5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687'},
@@ -60,7 +60,10 @@ EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'sha256': '5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a'},
  {'destination': 'smp_loader.rs',
   'path': 'host-kernel/native-rust/smp_loader.rs',
-  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'}]
+  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'},
+ {'destination': 'smp_startup.rs',
+  'path': 'host-kernel/native-rust/smp_startup.rs',
+  'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}]
 EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
  'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
                                     'memory': 'poison-live-map-unless-compensated-rollback'},
@@ -267,6 +270,45 @@ EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
  'credit_eligible': False,
  'destroy': 'preflight CPU and memory before either commit; return to reserved pool before minor '
             'reuse',
+ 'image_loading': {'command': '0x00112a00',
+                   'file_limit_bytes': 67108864,
+                   'file_owner': 'Linux kernel_read_file_from_path vmalloc buffer released exactly '
+                                 'once with kvfree',
+                   'filename_limit_bytes': 256,
+                   'geometry': 'reuse ihk_mapping checked physical ranges and page alignment',
+                   'image_window_bytes': 8388608,
+                   'invalidates_prior_image': 'before replacement file read and memory resource '
+                                              'changes',
+                   'linux_read_purpose': 'READING_KEXEC_IMAGE',
+                   'loading_state': 'IHK publishes Loading while holding the OS operation mutex; '
+                                    'restores NotBooted after every result',
+                   'preflight': 'all ELF segments, executable file-backed entry and reserved '
+                                'startup space checked before writes',
+                   'prerequisites': 'assigned CPU and exact-generation owned bootstrap extent',
+                   'program_header_limit': 64,
+                   'starts_cpus': False,
+                   'tracker_credit': False,
+                   'writes': 'zero bounded window and copy segments without spanning original '
+                             'PageOwner allocations',
+                   'startup_tables': {'root_limit_exclusive': 4294967296,
+                                      'useful_pages': 260,
+                                      'original_compound_order': 9,
+                                      'allocation': 'GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and '
+                                                    'DMA32; Linux alloc_pages_noprof resolves node '
+                                                    'selection',
+                                      'mapping': '256 GiB identity and straight-map windows share '
+                                                 'a subtree; checked 8 MiB kernel window',
+                                      'ownership': 'noncopy Linux allocation owner retained inside '
+                                                   'exact-generation LoadedImage',
+                                      'cleanup': 'failed/replaced load, memory resource changes '
+                                                 'and unbooted destruction release the original '
+                                                 'compound allocation',
+                                      'preflight': 'allocate and fill tables before first image '
+                                                   'write; no capability or CPU starts',
+                                      'readback': 'volatile physical table bytes checked by an '
+                                                  'independent x86 guest capture model',
+                                      'native_boot_proven': False,
+                                      'tracker_credit': False}},
  'ioctl_callback': 'ihk_smp_os_ioctl_v2',
  'memory_assignment': 'reuse canonical MemoryMap and retained Linux allocation owners',
  'native_boot_proven': False,
@@ -274,27 +316,7 @@ EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
  'release_callback': 'ihk_smp_os_release_v2',
  'serialization': 'per-OS sleepable mutex before CPU then memory controller locks',
  'source_reachable': True,
- 'tracker_credit': False,
- 'image_loading': {'command': '0x00112a00',
-                   'filename_limit_bytes': 256,
-                   'file_limit_bytes': 67108864,
-                   'file_owner': 'Linux kernel_read_file_from_path vmalloc buffer released exactly '
-                                 'once with kvfree',
-                   'linux_read_purpose': 'READING_KEXEC_IMAGE',
-                   'prerequisites': 'assigned CPU and exact-generation owned bootstrap extent',
-                   'geometry': 'reuse ihk_mapping checked physical ranges and page alignment',
-                   'image_window_bytes': 8388608,
-                   'program_header_limit': 64,
-                   'preflight': 'all ELF segments, executable file-backed entry and reserved '
-                                'startup space checked before writes',
-                   'writes': 'zero bounded window and copy segments without spanning original '
-                             'PageOwner allocations',
-                   'invalidates_prior_image': 'before replacement file read and memory resource '
-                                              'changes',
-                   'loading_state': 'IHK publishes Loading while holding the OS operation mutex; '
-                                    'restores NotBooted after every result',
-                   'starts_cpus': False,
-                   'tracker_credit': False}}
+ 'tracker_credit': False}
 EXPECTED_OS_CALLBACK_TYPES = ('type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;', 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;')
 EXPECTED_OS_CALLBACK_HEADERS = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {', 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {')
 EXPECTED_OS_CALLBACK_BODIES = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
@@ -1049,6 +1071,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     _require_active_count(text, code, "#[allow(dead_code)]\nmod smp_image;", 1,
                           "Rust SMP checked image policy edge")
     _require_active_count(text, code, "mod smp_loader;", 1, "Rust SMP bounded image file edge")
+    _require_active_count(text, code, "mod smp_startup;", 1, "Rust SMP startup page-table edge")
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",

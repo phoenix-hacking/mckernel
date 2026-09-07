@@ -48,6 +48,7 @@ SUPPLEMENTAL_INPUTS = {
     "ihk_mapping.rs": "host-kernel/native-rust/ihk_mapping.rs",
     "smp_image.rs": "host-kernel/native-rust/smp_image.rs",
     "smp_loader.rs": "host-kernel/native-rust/smp_loader.rs",
+    "smp_startup.rs": "host-kernel/native-rust/smp_startup.rs",
 }
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))
 EXPECTED_SYMBOLS = (

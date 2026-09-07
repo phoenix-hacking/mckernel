@@ -127,7 +127,7 @@
     {
       "destination": "smp_memory.rs",
       "path": "host-kernel/native-rust/smp_memory.rs",
-      "sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04"
+      "sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183"
     },
     {
       "destination": "ihk_mapping.rs",
@@ -143,6 +143,11 @@
       "destination": "smp_loader.rs",
       "path": "host-kernel/native-rust/smp_loader.rs",
       "sha256": "2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba"
+    },
+    {
+      "destination": "smp_startup.rs",
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2"
     }
   ],
   "dependency_contract": {
@@ -220,6 +225,19 @@
       "prerequisites": "assigned CPU and exact-generation owned bootstrap extent",
       "program_header_limit": 64,
       "starts_cpus": false,
+      "startup_tables": {
+        "allocation": "GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32; Linux alloc_pages_noprof resolves node selection",
+        "cleanup": "failed/replaced load, memory resource changes and unbooted destruction release the original compound allocation",
+        "mapping": "256 GiB identity and straight-map windows share a subtree; checked 8 MiB kernel window",
+        "native_boot_proven": false,
+        "original_compound_order": 9,
+        "ownership": "noncopy Linux allocation owner retained inside exact-generation LoadedImage",
+        "preflight": "allocate and fill tables before first image write; no capability or CPU starts",
+        "readback": "volatile physical table bytes checked by an independent x86 guest capture model",
+        "root_limit_exclusive": 4294967296,
+        "tracker_credit": false,
+        "useful_pages": 260
+      },
       "tracker_credit": false,
       "writes": "zero bounded window and copy segments without spanning original PageOwner allocations"
     },

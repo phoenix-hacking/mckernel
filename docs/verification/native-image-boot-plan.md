@@ -112,3 +112,13 @@ in 29.205 seconds under the pinned four-CPU native runner. Raw output and
 source identities are retained in `artifacts/native-startup-policy-20260907-1.*.gz`.
 Native compilation and guest verification are next; declared staging and FFI
 bindings still describe the preceding accepted image-loader checkpoint.
+
+The subsequent corrected startup-table prototype now builds and passes both
+guest ABIs and two module cycles, with 56 image and 56 table readbacks, 64
+forced startup allocation failures and 32 owner cleanup repetitions. See
+[`native-startup-tables-review.md`](native-startup-tables-review.md) and its
+source-bound checkpoint, including the preserved first allocator failure.
+The declared graph and 156-site/19-source FFI inventory are now integrated;
+fresh declared-stage build/guest and full-suite verification remain next.
+Then implement the owned low-memory trampoline, exact boot parameters,
+CPU wakeup and IRQ/IKC lifetime required for real McKernel readiness.

@@ -2,7 +2,7 @@
   "coverage": {
     "by_crate": {
       "ihk": 81,
-      "ihk_smp_x86_64": 71,
+      "ihk_smp_x86_64": 73,
       "mcctrl": 2
     },
     "by_kind": {
@@ -10,13 +10,13 @@
       "ffi_export": 20,
       "foreign_block": 4,
       "mutable_static": 1,
-      "unsafe_block": 90,
+      "unsafe_block": 92,
       "unsafe_function": 5,
       "unsafe_impl": 8
     },
-    "site_count": 154,
-    "site_ids_sha256": "481a0bf5d5953fa17d0c483374e0c6395aeab79bde24209356743b999c39d95d",
-    "source_input_count": 18,
+    "site_count": 156,
+    "site_ids_sha256": "3bd03060d67fb380b53099520319c0ecd5673b664818d0856eadd98cee7cf0e5",
+    "source_input_count": 19,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
   "crate_roots": [
@@ -43,7 +43,7 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "transitive_inputs": [
         "host-kernel/native-rust/abi/x86_64.rs",
         "host-kernel/native-rust/ihk_mapping.rs",
@@ -52,9 +52,10 @@
         "host-kernel/native-rust/smp_image.rs",
         "host-kernel/native-rust/smp_loader.rs",
         "host-kernel/native-rust/smp_memory.rs",
-        "host-kernel/native-rust/smp_resource.rs"
+        "host-kernel/native-rust/smp_resource.rs",
+        "host-kernel/native-rust/smp_startup.rs"
       ],
-      "transitive_inputs_sha256": "905404c485ecbb8f959e75f4a07100783683abf4b4e2d4b01c8706f27cddeedf"
+      "transitive_inputs_sha256": "d4858efc01629aa9cc7c7abff9a5447d7585caa533cebf3eb419a2ff241c093d"
     },
     {
       "crate": "mcctrl",
@@ -74,7 +75,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "95889ed16276f4eca16b79016d272b2c30a6dd64aebbe568888bd84ffbb229bf",
+  "ledger_sha256": "e6b91b939deeddcbaa17d05aa1aedbae46330e2389879356d0d06bf2b4cb9a57",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -99,7 +100,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "1281493ac7a38a04f412ec15c0c20f1a8268c3d35bacde585ddd5a83aed66068"
+      "sha256": "e6925ba14d3e56ec68053eb7e67c8fa3438babd54423f9d6bb2fade8bc5afb76"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -1208,8 +1209,8 @@
       "source_sha256": "ba3bb82223df3f2119373a16d932920edf856a00950fb13bae8f37b8e91c56bc"
     },
     {
-      "byte_end": 2986,
-      "byte_start": 2653,
+      "byte_end": 3003,
+      "byte_start": 2670,
       "caller_obligations": [
         "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
       ],
@@ -1233,7 +1234,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1b8f7035e18eac7f5b990f6d339b8409d8c35f839b921870d9b75807c93993fd",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0014",
       "independent_review": {
         "evidence_sha256": null,
@@ -1242,8 +1243,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 75,
-      "line_start": 66,
+      "line_end": 76,
+      "line_start": 67,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1251,16 +1252,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 65,
-        "line_start": 63,
+        "line_end": 66,
+        "line_start": 64,
         "source_sha256": "99e38c176fbb18fbd36854685738e6ae25dab143544fa29f977058f3250b4cb1",
         "text": "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
       },
       "source_sha256": "54f555d322c77ec23ceb1722d4cffbf2229627aed2cadf37d0fe7a5880673296"
     },
     {
-      "byte_end": 3459,
-      "byte_start": 3380,
+      "byte_end": 3476,
+      "byte_start": 3397,
       "caller_obligations": [
         "SAFETY: IHK owns this scalar ABI for the dependency lifetime. It validates the provider and minor and refuses open instances."
       ],
@@ -1279,7 +1280,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "5f90532bf00537d4221c302977a84d50c78247e816c5654e36b2e4a05a5dcc1c",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0015",
       "independent_review": {
         "evidence_sha256": null,
@@ -1288,8 +1289,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 86,
-      "line_start": 86,
+      "line_end": 87,
+      "line_start": 87,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1297,16 +1298,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 84,
-        "line_start": 83,
+        "line_end": 85,
+        "line_start": 84,
         "source_sha256": "ef1151ae34d331622f76c9c2f7bddb25a1714181d9eff313902f5d43dec7611f",
         "text": "SAFETY: IHK owns this scalar ABI for the dependency lifetime. It validates the provider and minor and refuses open instances."
       },
       "source_sha256": "104e50fb1f8c409bf4da75b36a8dd5855be631fa9f17c02a5a5061319ad6b5b2"
     },
     {
-      "byte_end": 3802,
-      "byte_start": 3779,
+      "byte_end": 3819,
+      "byte_start": 3796,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() -> i32 type and remain module-resident for the lease.",
         "The selected callback must not unwind across the C ABI."
@@ -1326,7 +1327,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7225d7e2bc614732c9ff4078d01e360b4321df0698cb126d9c6b115096b74201",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0008",
       "independent_review": {
         "evidence_sha256": null,
@@ -1335,8 +1336,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 98,
-      "line_start": 98,
+      "line_end": 99,
+      "line_start": 99,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1344,16 +1345,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 97,
-        "line_start": 97,
+        "line_end": 98,
+        "line_start": 98,
         "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
         "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
       },
       "source_sha256": "4149a416240d2ad461a73341610a942f087f8e1a238807177a462b8b24016416"
     },
     {
-      "byte_end": 3923,
-      "byte_start": 3907,
+      "byte_end": 3940,
+      "byte_start": 3924,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() type and remain module-resident through detach.",
         "The selected callback must not unwind across the C ABI."
@@ -1373,7 +1374,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4ddd55b22c2c4cf5ee0531eae7c79cd406e85963614a5f9e057946dd3c5c60ce",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0009",
       "independent_review": {
         "evidence_sha256": null,
@@ -1382,8 +1383,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 100,
-      "line_start": 100,
+      "line_end": 101,
+      "line_start": 101,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1391,16 +1392,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 99,
-        "line_start": 99,
+        "line_end": 100,
+        "line_start": 100,
         "source_sha256": "58fa1dc00ab9f44302f58eddf7b96c6d57b2d980bdf9bb6a571a173d81e3bf90",
         "text": "SAFETY: This scalar C-ABI callback borrows no provider or caller memory."
       },
       "source_sha256": "8da3628398700d5d4341eec0f1d32dc2b44286312f9763150522af9dcbfe4e7b"
     },
     {
-      "byte_end": 4157,
-      "byte_start": 4104,
+      "byte_end": 4174,
+      "byte_start": 4121,
       "caller_obligations": [
         "SAFETY: IHK holds the exact OS lease, operation lock and SMP module owner. The address and compat flag are borrowed only during the synchronous call."
       ],
@@ -1424,7 +1425,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "c5b167c2239c6784270c30ed5b866430288b525a9601d5d7ba0b26eb2b94170f",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0053",
       "independent_review": {
         "evidence_sha256": null,
@@ -1433,8 +1434,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 104,
-      "line_start": 104,
+      "line_end": 105,
+      "line_start": 105,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1442,16 +1443,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 103,
-        "line_start": 102,
+        "line_end": 104,
+        "line_start": 103,
         "source_sha256": "9034119b5679c2cfe34925167edf6f3babc169f8c3be17b9912948a8c268ca88",
         "text": "SAFETY: IHK holds the exact OS lease, operation lock and SMP module owner. The address and compat flag are borrowed only during the synchronous call."
       },
       "source_sha256": "8df1950b76314ceedab8c2d961ce6f892b5659094769b3395ebd1b63849b03dd"
     },
     {
-      "byte_end": 4376,
-      "byte_start": 4338,
+      "byte_end": 4393,
+      "byte_start": 4355,
       "caller_obligations": [
         "SAFETY: IHK holds the exclusive initial-state destruction guard and module owner until this callback returns all resources or leaves them unchanged."
       ],
@@ -1475,7 +1476,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "ee8e3394e28b58327b066e8daff456e369c98b037c5e607910ed450ade053ffc",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0054",
       "independent_review": {
         "evidence_sha256": null,
@@ -1484,8 +1485,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 107,
-      "line_start": 107,
+      "line_end": 108,
+      "line_start": 108,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1493,16 +1494,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 106,
-        "line_start": 105,
+        "line_end": 107,
+        "line_start": 106,
         "source_sha256": "313b5badbd46983ee3bd99bb08a6d03b4395e9985a6749e1dbe6366cf658b42d",
         "text": "SAFETY: IHK holds the exclusive initial-state destruction guard and module owner until this callback returns all resources or leaves them unchanged."
       },
       "source_sha256": "c8e230d4ec0cc998bf70407ebb4cc20ba58accd02e07146e5f579389f47f86fc"
     },
     {
-      "byte_end": 5771,
-      "byte_start": 4692,
+      "byte_end": 5788,
+      "byte_start": 4709,
       "caller_obligations": [
         "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalars and scalar-only callback function identities. The OS-create call also borrows the pinned caller's Linux module pointer; no private Rust object crosses it."
       ],
@@ -1527,7 +1528,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a41e07e05c053fa898078d219d82d238b9496a9e1b714520b554e9da7505ab0",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -1536,8 +1537,8 @@
         "status": "pending"
       },
       "kind": "foreign_block",
-      "line_end": 140,
-      "line_start": 113,
+      "line_end": 141,
+      "line_start": 114,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1545,16 +1546,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 112,
-        "line_start": 109,
+        "line_end": 113,
+        "line_start": 110,
         "source_sha256": "2d436a5000afccae86cd0c43472bb78f4df5d0e2dd762d3a9f7b80ffab4f4ab9",
         "text": "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalars and scalar-only callback function identities. The OS-create call also borrows the pinned caller's Linux module pointer; no private Rust object crosses it."
       },
       "source_sha256": "807617c2e9cfc9ab61b6dbe692ad09df9328b2f1b239b77222e907a93d47b8c8"
     },
     {
-      "byte_end": 7092,
-      "byte_start": 6012,
+      "byte_end": 7109,
+      "byte_start": 6029,
       "caller_obligations": [
         "SAFETY: Only IHK's versioned OS object invokes this registered callback. It holds an OsLease for the exact slot/generation, its sleepable operation lock, and the owning SMP module reference. User pointers live only for this call."
       ],
@@ -1579,7 +1580,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "a47a042852cdda76961d1457399ef05801690b4a7804bc51594048f208e2c276",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0055",
       "independent_review": {
         "evidence_sha256": null,
@@ -1588,8 +1589,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 174,
-      "line_start": 145,
+      "line_end": 175,
+      "line_start": 146,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1597,16 +1598,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 144,
-        "line_start": 142,
+        "line_end": 145,
+        "line_start": 143,
         "source_sha256": "6a112bc8cecfaa0f8b9a1574332e117589e43d6c93fda4d8c8ee6803c5151c9a",
         "text": "SAFETY: Only IHK's versioned OS object invokes this registered callback. It holds an OsLease for the exact slot/generation, its sleepable operation lock, and the owning SMP module reference. User pointers live only for this call."
       },
       "source_sha256": "ecb767bc14e3451f82d1008d572102157ee79b51b84959e524333ce02a5818c8"
     },
     {
-      "byte_end": 6515,
-      "byte_start": 6446,
+      "byte_end": 6532,
+      "byte_start": 6463,
       "caller_obligations": [
         "SAFETY: IHK supplies the live lease proof described by this callback ABI; these identifiers are not derived from the user's ioctl arguments."
       ],
@@ -1630,7 +1631,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "41b646356e5d4a50a5d159f0cc4fba2471fd912ac84fcc10e26f82f0735bb8bd",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0056",
       "independent_review": {
         "evidence_sha256": null,
@@ -1639,8 +1640,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 157,
-      "line_start": 157,
+      "line_end": 158,
+      "line_start": 158,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1648,16 +1649,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 156,
-        "line_start": 155,
+        "line_end": 157,
+        "line_start": 156,
         "source_sha256": "43c0155066a0a704ac7d612ea30abd24402a0f51af36e1497d1a6c81c8061cc9",
         "text": "SAFETY: IHK supplies the live lease proof described by this callback ABI; these identifiers are not derived from the user's ioctl arguments."
       },
       "source_sha256": "d3b5a81d30726995faffd71cdec9c25d7e59a68cf3a7563dda15ca1e5d1c3e3d"
     },
     {
-      "byte_end": 7855,
-      "byte_start": 7331,
+      "byte_end": 7872,
+      "byte_start": 7348,
       "caller_obligations": [
         "SAFETY: IHK invokes this only with the exclusive initial-state DestroyGuard and the retained SMP module owner. No OS file, boot, or other resource call can overlap cleanup for this generation. Errors leave its resources intact."
       ],
@@ -1681,7 +1682,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a480a3fc0928284e75159b1b6839de7cfd7c65bf3e7bc2f5464280d6a57171d",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0057",
       "independent_review": {
         "evidence_sha256": null,
@@ -1690,8 +1691,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 190,
-      "line_start": 179,
+      "line_end": 191,
+      "line_start": 180,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1699,16 +1700,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 178,
-        "line_start": 176,
+        "line_end": 179,
+        "line_start": 177,
         "source_sha256": "87a84d76d19189b13a5c1832b191ec0814bc22af3770046de4ebf8fcfd19fc62",
         "text": "SAFETY: IHK invokes this only with the exclusive initial-state DestroyGuard and the retained SMP module owner. No OS file, boot, or other resource call can overlap cleanup for this generation. Errors leave its resources intact."
       },
       "source_sha256": "6490b3b6c1f7dcee79b9215c6c26198e3a371ad910a81798554590ba140b6e45"
     },
     {
-      "byte_end": 7656,
-      "byte_start": 7587,
+      "byte_end": 7673,
+      "byte_start": 7604,
       "caller_obligations": [
         "SAFETY: The versioned IHK exclusive destruction callback proves the exact generation remains owned until both resource maps are cleaned up."
       ],
@@ -1732,7 +1733,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "41b646356e5d4a50a5d159f0cc4fba2471fd912ac84fcc10e26f82f0735bb8bd",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0058",
       "independent_review": {
         "evidence_sha256": null,
@@ -1741,8 +1742,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 182,
-      "line_start": 182,
+      "line_end": 183,
+      "line_start": 183,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -1750,16 +1751,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 181,
-        "line_start": 180,
+        "line_end": 182,
+        "line_start": 181,
         "source_sha256": "df5185a95ea23484e6da329822887c25813ae5a97a0310fd251b976a3ff46162",
         "text": "SAFETY: The versioned IHK exclusive destruction callback proves the exact generation remains owned until both resource maps are cleaned up."
       },
       "source_sha256": "d3b5a81d30726995faffd71cdec9c25d7e59a68cf3a7563dda15ca1e5d1c3e3d"
     },
     {
-      "byte_end": 8404,
-      "byte_start": 8274,
+      "byte_end": 8421,
+      "byte_start": 8291,
       "caller_obligations": [
         "The callback body must preserve the exact no-argument i32 ABI, return only the reviewed scalar status, and never unwind.",
         "It must not access foreign state or claim device, OS, CPU, memory, IKC, or McKernel behavior."
@@ -1779,7 +1780,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "02409a56a90f02b954fd61d49bb478333e1ee9ca878192b254a3158516db9c9d",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0010",
       "independent_review": {
         "evidence_sha256": null,
@@ -1788,8 +1789,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 201,
-      "line_start": 198,
+      "line_end": 202,
+      "line_start": 199,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1797,16 +1798,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 197,
-        "line_start": 192,
+        "line_end": 198,
+        "line_start": 193,
         "source_sha256": "ca6165f069de5bf11989c41c3c37562582d3e945436ffb329ebd938fb99b9c46",
         "text": "SAFETY: The callback owns no foreign state and returns only a literal errno status through the exact v2 function-pointer ABI."
       },
       "source_sha256": "6fd33526df7a45bda9938be1408dae0252bf9687eef33f5f204673179f2e3765"
     },
     {
-      "byte_end": 8679,
-      "byte_start": 8562,
+      "byte_end": 8696,
+      "byte_start": 8579,
       "caller_obligations": [
         "The callback body must preserve the exact no-argument void ABI, avoid foreign state, and never unwind.",
         "It may emit only the reviewed lifecycle diagnostic and must return synchronously."
@@ -1826,7 +1827,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7490269917ae5c724b09396ce55b5fc49086a74428c4b748e3a69255884ee328",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0011",
       "independent_review": {
         "evidence_sha256": null,
@@ -1835,8 +1836,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 207,
-      "line_start": 205,
+      "line_end": 208,
+      "line_start": 206,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-callback owner",
@@ -1844,16 +1845,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 204,
-        "line_start": 203,
+        "line_end": 205,
+        "line_start": 204,
         "source_sha256": "8a024aa30418e2a9105daf8fdd74116a0759f3ff9f01db2f9c02cd8210443571",
         "text": "SAFETY: The callback owns no foreign state and returns only after its local lifecycle diagnostic completes through the exact v2 function-pointer ABI."
       },
       "source_sha256": "b7913fb2320e736fe3dfd8195e57832ceb7a35035a8b933cfe4204f15bce6603"
     },
     {
-      "byte_end": 9654,
-      "byte_start": 9390,
+      "byte_end": 9671,
+      "byte_start": 9407,
       "caller_obligations": [
         "The exact v2 relocation must be valid before the call, which passes ABI 1, the shared flag, and the exact resident init and exit callbacks.",
         "Initialization must map every permitted negative errno and immediately store a positive token in the non-Copy ProviderLease owner."
@@ -1873,7 +1874,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d0650a2d2d34d3508f9e291830cebd349ca7d48875f585cc17476c5ea3790a1c",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0006",
       "independent_review": {
         "evidence_sha256": null,
@@ -1882,8 +1883,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 237,
-      "line_start": 230,
+      "line_end": 238,
+      "line_start": 231,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1891,16 +1892,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 229,
-        "line_start": 227,
+        "line_end": 230,
+        "line_start": 228,
         "source_sha256": "fca98ec5e91d39b427216db98ddcbce2e8e9b4f99dbbe11cf42d63e9b9d78a3f",
         "text": "SAFETY: ihk.ko owns the exact namespaced C-ABI function for the dependency lifetime.  The exact callbacks accept no arguments, own no caller memory, and remain resident until the matching detach."
       },
       "source_sha256": "7bffe2c5c55f3d29a1b016081a5d4655b275594f777f5e9d7275389861eaa5d5"
     },
     {
-      "byte_end": 10199,
-      "byte_start": 10118,
+      "byte_end": 10216,
+      "byte_start": 10135,
       "caller_obligations": [
         "The non-Copy owner must pass its unchanged positive token and the same resident exit callback exactly once after all references quiesce.",
         "The exact v2 detach target has void return and fails stop instead of returning with a live provider entry or callback."
@@ -1920,7 +1921,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4266823b75c5d7752aa78415ee7ca34ca2c0a50b1bc4658789e9ee74105e1849",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0007",
       "independent_review": {
         "evidence_sha256": null,
@@ -1929,8 +1930,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 251,
-      "line_start": 251,
+      "line_end": 252,
+      "line_start": 252,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP provider-lease owner",
@@ -1938,16 +1939,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 250,
-        "line_start": 247,
+        "line_end": 251,
+        "line_start": 248,
         "source_sha256": "2e8a178d6e70c2291416a441ce0b7eb89e481eff9ea40eb56935341d377dc7ae",
         "text": "SAFETY: This non-Copy owner calls the matching provider function exactly once with the positive token returned by attach and the retained exit identity.  The provider fails stop rather than returning with a live entry or callback."
       },
       "source_sha256": "91f0764aa3ec04625a2a46802a8721dd9b17d6d18b6e8228c173b4b03ddf8780"
     },
     {
-      "byte_end": 10738,
-      "byte_start": 10673,
+      "byte_end": 10755,
+      "byte_start": 10690,
       "caller_obligations": [
         "The exact namespaced open relocation must remain valid while minor zero is passed, and each positive receipt must immediately enter one non-Copy ProviderOpenLease.",
         "A negative status must become the bounded kernel error; later allocation failure must drop the temporary owner and close the acquired receipt exactly once."
@@ -1967,7 +1968,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "859497a888a93c0c64fbce90516d7b90588c0a3b943f88b39074d5dc4ec12c9b",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0012",
       "independent_review": {
         "evidence_sha256": null,
@@ -1976,8 +1977,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 266,
-      "line_start": 266,
+      "line_end": 267,
+      "line_start": 267,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP control-device owner",
@@ -1985,16 +1986,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 265,
-        "line_start": 262,
+        "line_end": 266,
+        "line_start": 263,
         "source_sha256": "0d6a95cb22ed09a7a705a0d0799426e53bee7eed00fe7c1ad0f42261f47b271d",
         "text": "SAFETY: ihk.ko owns this exact namespaced scalar function for the dependency lifetime.  Minor zero is the only published provider slot in this bounded shell, and no pointer or Rust layout crosses the boundary."
       },
       "source_sha256": "18fae2d9769ed1cda51365e4a918743e89beb556b7e8cf1f0f62361a449b3305"
     },
     {
-      "byte_end": 11365,
-      "byte_start": 11315,
+      "byte_end": 11382,
+      "byte_start": 11332,
       "caller_obligations": [
         "The non-Copy per-file owner must call the exact namespaced close target once with its unchanged positive receipt.",
         "The target must remain resident and cannot unwind; malformed, stale, duplicate, or mismatched ownership fails stop instead of releasing another reference."
@@ -2014,7 +2015,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "a39b26c594c16207b0201c1191b98ce84434c31ceed2785f3ed6953453d1dffa",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0013",
       "independent_review": {
         "evidence_sha256": null,
@@ -2023,8 +2024,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 281,
-      "line_start": 281,
+      "line_end": 282,
+      "line_start": 282,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP control-device owner",
@@ -2032,16 +2033,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 280,
-        "line_start": 276,
+        "line_end": 281,
+        "line_start": 277,
         "source_sha256": "76d51055ca7611bedb450f0035cce6a4f844b9b096373e10b0796892b0c68c82",
         "text": "SAFETY: This non-Copy per-file owner calls the matching scalar close exactly once with the positive opaque receipt returned by open.  The shared scalar is not a unique per-file identity, so this trusted non-Copy wrapper is the count-balance authority.  ihk.ko fails stop on a nonpositive, stale, or zero-reference release."
       },
       "source_sha256": "d76b9414d2dad20c39d1ebc2a60ca309e6d368e4a1dfa3dace2674bd5019bebb"
     },
     {
-      "byte_end": 13643,
-      "byte_start": 13604,
+      "byte_end": 13660,
+      "byte_start": 13621,
       "caller_obligations": [
         "Every KernelParameter instance must remain immutable after relocation.",
         "Pointers must name module-static parameter storage and selected-kernel parameter operations with matching types."
@@ -2061,7 +2062,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -2070,8 +2071,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 347,
-      "line_start": 347,
+      "line_end": 348,
+      "line_start": 348,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -2079,16 +2080,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 346,
-        "line_start": 344,
+        "line_end": 347,
+        "line_start": 345,
         "source_sha256": "68f329188c795513648285f37e10728cb4b6d17f27e75e51c69d9e98fdf5be8f",
         "text": "SAFETY: Each instance is immutable after relocation.  Linux owns access to the pointed-to parameter storage and serializes writes with its parameter subsystem; Rust code never dereferences these pointers."
       },
       "source_sha256": "8b15f4f88f64705a55f48fd4acaaab6113cbf1073f86c8946aac19b4b987fc80"
     },
     {
-      "byte_end": 14524,
-      "byte_start": 14481,
+      "byte_end": 14541,
+      "byte_start": 14498,
       "caller_obligations": [
         "Rust code must not directly read or write the mutable storage after publication.",
         "Each macro expansion must give its descriptor a unique, type-matched pointer to module-static storage."
@@ -2108,7 +2109,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -2117,8 +2118,8 @@
         "status": "pending"
       },
       "kind": "mutable_static",
-      "line_end": 369,
-      "line_start": 369,
+      "line_end": 370,
+      "line_start": 370,
       "macro_context": "numeric_parameter",
       "owner": {
         "accountable_role": "native IHK SMP parameter owner",
@@ -2126,16 +2127,16 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 368,
-        "line_start": 367,
+        "line_end": 369,
+        "line_start": 368,
         "source_sha256": "2c725c36e7e796d5ad9874c306ead7272df73149400633a5614d736ea067fe7d",
         "text": "SAFETY: Linux's parameter subsystem is the only writer after module publication and serializes access; Rust never reads this storage."
       },
       "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
     },
     {
-      "byte_end": 21766,
-      "byte_start": 21683,
+      "byte_end": 21783,
+      "byte_start": 21700,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -2155,7 +2156,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98",
+      "file_sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -2164,8 +2165,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 591,
-      "line_start": 591,
+      "line_end": 592,
+      "line_start": 592,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK SMP lifecycle owner",
@@ -2173,8 +2174,8 @@
       },
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "safety_comment": {
-        "line_end": 590,
-        "line_start": 588,
+        "line_end": 591,
+        "line_start": 589,
         "source_sha256": "f87c1314a28fa1c8c36d4411879cf6e4d13b8b423e959c9e8fa239f15ca7adc0",
         "text": "SAFETY: The provider exports this immutable byte in the declared namespace.  The volatile read keeps the relocation as an actual module dependency; the value itself has no behavioral meaning."
       },
@@ -6486,8 +6487,8 @@
       "source_sha256": "b8208d7e1a8aabc1921329c261b151985785fd7e5ad08e6c35b15771f8f28cde"
     },
     {
-      "byte_end": 2338,
-      "byte_start": 2300,
+      "byte_end": 2405,
+      "byte_start": 2367,
       "caller_obligations": [
         "SAFETY: Sleepable module ioctl context; no memory hotplug lock is already held. The exported Linux read semaphore is balanced by Drop."
       ],
@@ -6504,13 +6505,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "b4aeea4498967e4eb1b17f1b0b9296069ec4332053380d6491f2b2749331503e",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0039",
       "independent_review": {
         "evidence_sha256": null,
@@ -6519,8 +6529,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 65,
-      "line_start": 65,
+      "line_end": 66,
+      "line_start": 66,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6528,16 +6538,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 64,
-        "line_start": 63,
+        "line_end": 65,
+        "line_start": 64,
         "source_sha256": "25d7f98a5800b341cfe60b512d35e0ab6f6220eacb210c247ff2dfbb82edd26b",
         "text": "SAFETY: Sleepable module ioctl context; no memory hotplug lock is already held. The exported Linux read semaphore is balanced by Drop."
       },
       "source_sha256": "49efa2d0d3f4df7e82e62a372cb6acf36ad375c9ffa7c5d5fbcb587db4edfab1"
     },
     {
-      "byte_end": 3146,
-      "byte_start": 2759,
+      "byte_end": 3213,
+      "byte_start": 2826,
       "caller_obligations": [
         "SAFETY: Node-mask storage is resident and bounded. The memory hotplug read semaphore excludes the writer changing memory nodes."
       ],
@@ -6554,13 +6564,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "f20711d0e5c0d33841b1bc9b3a0834f19b1189bfe16210bcb27dd328ceaee42c",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0040",
       "independent_review": {
         "evidence_sha256": null,
@@ -6569,8 +6588,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 85,
-      "line_start": 77,
+      "line_end": 86,
+      "line_start": 78,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6578,16 +6597,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 76,
-        "line_start": 75,
+        "line_end": 77,
+        "line_start": 76,
         "source_sha256": "78ee3cc11816e67c0c91b94244f54c67ffe7ef96f1a98ef3c99b737077601395",
         "text": "SAFETY: Node-mask storage is resident and bounded. The memory hotplug read semaphore excludes the writer changing memory nodes."
       },
       "source_sha256": "2b005573dfaab3d654cda10d3af96480c860fb692ee5d9caa19f33b31e3d973c"
     },
     {
-      "byte_end": 3494,
-      "byte_start": 3434,
+      "byte_end": 3561,
+      "byte_start": 3501,
       "caller_obligations": [
         "SAFETY: The node is a present memory node under exclusion. Linux writes into this complete local sysinfo; only documented fields are read."
       ],
@@ -6604,13 +6623,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "03225e7d06fe07820b3ba87137a38b38b389ccef8a8de1a4af6ce5065aecb2c0",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0041",
       "independent_review": {
         "evidence_sha256": null,
@@ -6619,8 +6647,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 92,
-      "line_start": 92,
+      "line_end": 93,
+      "line_start": 93,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6628,16 +6656,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 91,
-        "line_start": 90,
+        "line_end": 92,
+        "line_start": 91,
         "source_sha256": "b945bbef24b6471f4f2aed7eb97740ba8917651760dbd4049748c9cede5511e5",
         "text": "SAFETY: The node is a present memory node under exclusion. Linux writes into this complete local sysinfo; only documented fields are read."
       },
       "source_sha256": "f355c40bea03c23d0eb123862e2f5735e094d592157f830f2b29e413b7e21b7a"
     },
     {
-      "byte_end": 3798,
-      "byte_start": 3760,
+      "byte_end": 3865,
+      "byte_start": 3827,
       "caller_obligations": [
         "SAFETY: This non-Send, non-Copy guard releases its acquiring task's lock."
       ],
@@ -6654,13 +6682,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "416c75d0a437d61ead758352e58f5608c4b7a69c52e060c99b8caec252149c4a",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0042",
       "independent_review": {
         "evidence_sha256": null,
@@ -6669,8 +6706,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 102,
-      "line_start": 102,
+      "line_end": 103,
+      "line_start": 103,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6678,16 +6715,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 101,
-        "line_start": 101,
+        "line_end": 102,
+        "line_start": 102,
         "source_sha256": "a99dd3c23c8efa4b06ba75e0518622771ad6e968668ae308e90804ca50d8af11",
         "text": "SAFETY: This non-Send, non-Copy guard releases its acquiring task's lock."
       },
       "source_sha256": "8e6a41470a3c02d59d8d8456ce233a3ded8a5ae6f8acc1938f77ffdaf16fe0fe"
     },
     {
-      "byte_end": 4100,
-      "byte_start": 4067,
+      "byte_end": 4167,
+      "byte_start": 4134,
       "caller_obligations": [
         "SAFETY: This value owns a non-movable Linux allocation. Exclusive Rust ownership transfers between tasks; access/publication is under the mutex."
       ],
@@ -6704,13 +6741,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "54d1fe09e1dbe451c9bdc1cf2a845ebe3d0011d1cdc4a674d00bea02d4101f32",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0043",
       "independent_review": {
         "evidence_sha256": null,
@@ -6719,8 +6765,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 115,
-      "line_start": 115,
+      "line_end": 116,
+      "line_start": 116,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6728,39 +6774,42 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 114,
-        "line_start": 113,
+        "line_end": 115,
+        "line_start": 114,
         "source_sha256": "6517960f3eeeefd9371f6b9a219e5859e767d345ef7f873380849da72c4a1807",
         "text": "SAFETY: This value owns a non-movable Linux allocation. Exclusive Rust ownership transfers between tasks; access/publication is under the mutex."
       },
       "source_sha256": "fb30389c0644723259a57294b7526dbc816a3b52947f46fd8e6bf6aa7d3b4615"
     },
     {
-      "byte_end": 5013,
-      "byte_start": 4928,
+      "byte_end": 6202,
+      "byte_start": 5932,
       "caller_obligations": [
-        "SAFETY: The node was checked under memory hotplug exclusion. The bounded order and Linux flags are valid; THISNODE prevents fallback."
+        "SAFETY: Memory hotplug is excluded. A requested concrete node was checked; the low-level allocator never receives NUMA_NO_NODE. The ordinary exported allocator resolves the current Linux policy when no fixed node is requested. Bounded orders and flags are valid; THISNODE is set only for strict-node resource reservations."
       ],
-      "column_end": 97,
-      "column_start": 13,
+      "column_end": 9,
+      "column_start": 19,
       "compiler_capture": {
         "evidence_sha256": null,
         "required": true,
         "status": "not_captured"
       },
       "context_constraints": [
-        "Pinned Linux 6.12 x86_64 NUMA/SPARSEMEM_VMEMMAP layout; compile-time page size, node mask/width, section width and allocator order assertions must hold.",
-        "Module initialization lends static memory state exactly once to its pinned mutex; a live miscdevice file or OS-owned SMP module reference pins every published mutex access.",
-        "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
-        "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
-        "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "ce0a1bbc3e31dedd71a3ad3b7d17bf171963d85965ce7a1341c544a61223f25d",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "expression_sha256": "d225ae0716bdc4570997e9355537bae07145c77045e86a3b6b8898aec263d8db",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0044",
       "independent_review": {
         "evidence_sha256": null,
@@ -6769,8 +6818,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 133,
-      "line_start": 133,
+      "line_end": 164,
+      "line_start": 157,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6778,16 +6827,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 131,
-        "line_start": 130,
-        "source_sha256": "1f509065c1e660efb312de4c78c611319cefe2faec85dc0649fa35a545ec05b3",
-        "text": "SAFETY: The node was checked under memory hotplug exclusion. The bounded order and Linux flags are valid; THISNODE prevents fallback."
+        "line_end": 156,
+        "line_start": 152,
+        "source_sha256": "17077195fc38c7ca19afd8c723904228d5f8cb546c4a1685aef12ef7c7316180",
+        "text": "SAFETY: Memory hotplug is excluded. A requested concrete node was checked; the low-level allocator never receives NUMA_NO_NODE. The ordinary exported allocator resolves the current Linux policy when no fixed node is requested. Bounded orders and flags are valid; THISNODE is set only for strict-node resource reservations."
       },
-      "source_sha256": "cedabdb63fa167caa6214be9dd8473acbb12d49b9371a35128052aa263e37643"
+      "source_sha256": "0a359de872f8d80e2deb6cb7cc3ebf3a418a336653d3cb35e121b027b8a8516e"
     },
     {
-      "byte_end": 5483,
-      "byte_start": 5450,
+      "byte_end": 6675,
+      "byte_start": 6642,
       "caller_obligations": [
         "SAFETY: The selected kernel uses SPARSEMEM_VMEMMAP. vmemmap_base is read-only after init; the returned page is a live member of that map. Use integer address arithmetic, not subtraction between Rust objects."
       ],
@@ -6804,13 +6853,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "70ea0ca386c5f272f8b1862ab62227a60aa7d94687d24ac32254d493948abbb2",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0045",
       "independent_review": {
         "evidence_sha256": null,
@@ -6819,8 +6877,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 144,
-      "line_start": 144,
+      "line_end": 175,
+      "line_start": 175,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6828,16 +6886,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 143,
-        "line_start": 141,
+        "line_end": 174,
+        "line_start": 172,
         "source_sha256": "deaa4d5c9cc87e1ce1f1248c89d5447cb7ef68f776cd7c1151affa5d3e77c7f3",
         "text": "SAFETY: The selected kernel uses SPARSEMEM_VMEMMAP. vmemmap_base is read-only after init; the returned page is a live member of that map. Use integer address arithmetic, not subtraction between Rust objects."
       },
       "source_sha256": "4c7aa2187010a49deefee412e2e86b7933778f9b305de5097d7c8d4fb289d6a8"
     },
     {
-      "byte_end": 6058,
-      "byte_start": 6000,
+      "byte_end": 7250,
+      "byte_start": 7192,
       "caller_obligations": [
         "SAFETY: The newly allocated head page is exclusively owned. Linux fixes its node field before return; the reviewed shift is 64-0-10."
       ],
@@ -6854,13 +6912,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "166cf536c22cdf4508d86d80ae716af83116bd86056db78cf58931921d99bb72",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0046",
       "independent_review": {
         "evidence_sha256": null,
@@ -6869,8 +6936,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 155,
-      "line_start": 155,
+      "line_end": 186,
+      "line_start": 186,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6878,16 +6945,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 154,
-        "line_start": 153,
+        "line_end": 185,
+        "line_start": 184,
         "source_sha256": "a0667f5bcfedf381b6cbe07cbb664c287863da5867f5dbdd18e3e5498103f519",
         "text": "SAFETY: The newly allocated head page is exclusively owned. Linux fixes its node field before return; the reviewed shift is 64-0-10."
       },
       "source_sha256": "61fbde6d9a99a39ebe34b0a50c31e47b48ceb6f2788d94b34d0ad51a0819a25e"
     },
     {
-      "byte_end": 6929,
-      "byte_start": 6864,
+      "byte_end": 8227,
+      "byte_start": 8162,
       "caller_obligations": [
         "SAFETY: Exactly one owning value retains this original allocation and order. No guest may access a free-pool range selected for return."
       ],
@@ -6904,13 +6971,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "a967456f822d062532cfa13c0831154cd5df09013993ec69512da0624e28404e",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0047",
       "independent_review": {
         "evidence_sha256": null,
@@ -6919,8 +6995,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 183,
-      "line_start": 183,
+      "line_end": 216,
+      "line_start": 216,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6928,16 +7004,122 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 182,
-        "line_start": 181,
+        "line_end": 215,
+        "line_start": 214,
         "source_sha256": "a542ce470aaf095ec79e269311a79c45a9f749346c5ba0fc7a860e419beb9876",
         "text": "SAFETY: Exactly one owning value retains this original allocation and order. No guest may access a free-pool range selected for return."
       },
       "source_sha256": "cade9bce029bcdb63580d25692018571f8c5de10652d067e403c58dd7f47fed9"
     },
     {
-      "byte_end": 15349,
-      "byte_start": 15309,
+      "byte_end": 9617,
+      "byte_start": 9537,
+      "caller_obligations": [
+        "SAFETY: This newly owned, zeroed, non-movable compound allocation is private. The useful table extent fits inside that single Linux allocation and is aligned for u64. No alias or CPU sees the pages. fill writes only checked entries and retains no borrowed reference."
+      ],
+      "column_end": 92,
+      "column_start": 13,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "5b779645c44acf528ad2717db0a0da94125ff8a3427039f22c5c15f838d0b34d",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
+      "id": "RS011-SMP-0073",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 250,
+      "line_start": 250,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP owned startup page tables"
+      },
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "safety_comment": {
+        "line_end": 248,
+        "line_start": 245,
+        "source_sha256": "16d4ea9f6a521fbd59deae840642334880a74125641ade43ec4650c9892ad80a",
+        "text": "SAFETY: This newly owned, zeroed, non-movable compound allocation is private. The useful table extent fits inside that single Linux allocation and is aligned for u64. No alias or CPU sees the pages. fill writes only checked entries and retains no borrowed reference."
+      },
+      "source_sha256": "18b0f7b6862b9398b117f5e21a752f1d27e63bd11210ef23325b3780d74f093e"
+    },
+    {
+      "byte_end": 10079,
+      "byte_start": 10014,
+      "caller_obligations": [
+        "SAFETY: The original allocation remains exclusively owned. Read actual initialized memory, wholly within its useful extent; the temporary mutable fill borrow has ended before this access."
+      ],
+      "column_end": 88,
+      "column_start": 24,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "01e29f7bf1c32da571dbcd0fd73bbc5fc3053e89aba7748a4070cc26980181f6",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
+      "id": "RS011-SMP-0074",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 257,
+      "line_start": 257,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "host-module maintainer",
+        "component": "native Rust SMP owned startup page tables"
+      },
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "safety_comment": {
+        "line_end": 256,
+        "line_start": 254,
+        "source_sha256": "f7d9620521a143dea17d1f1cffe73dbfd0e9a126974fd5c9ceee1b228185d703",
+        "text": "SAFETY: The original allocation remains exclusively owned. Read actual initialized memory, wholly within its useful extent; the temporary mutable fill borrow has ended before this access."
+      },
+      "source_sha256": "49b8043c7ecdfa4d6a5d00b22ac7dc37c193d51f12ae877cd20c47a6ada96246"
+    },
+    {
+      "byte_end": 18698,
+      "byte_start": 18658,
       "caller_obligations": [
         "SAFETY: This ordinary Linux clock export returns a scalar time."
       ],
@@ -6954,13 +7136,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "e1a1ab8bc29aa734f1cfbd83e461cb59bdb4c6382b472ee67b81333bf745880e",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0048",
       "independent_review": {
         "evidence_sha256": null,
@@ -6969,8 +7160,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 438,
-      "line_start": 438,
+      "line_end": 519,
+      "line_start": 519,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -6978,16 +7169,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 437,
-        "line_start": 437,
+        "line_end": 518,
+        "line_start": 518,
         "source_sha256": "511b0d39d65bacef6b5e1df2351c5802bd39c40643b3e872f66f55bebe217d98",
         "text": "SAFETY: This ordinary Linux clock export returns a scalar time."
       },
       "source_sha256": "1951b7b6e7c682faaa0da835d2d2678755b4f0a2d5d23a9dd3767384c85fd233"
     },
     {
-      "byte_end": 16076,
-      "byte_start": 16036,
+      "byte_end": 19425,
+      "byte_start": 19385,
       "caller_obligations": [
         "SAFETY: Scalar read from Linux's monotonic seconds clock."
       ],
@@ -7004,13 +7195,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "e1a1ab8bc29aa734f1cfbd83e461cb59bdb4c6382b472ee67b81333bf745880e",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0049",
       "independent_review": {
         "evidence_sha256": null,
@@ -7019,8 +7219,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 453,
-      "line_start": 453,
+      "line_end": 534,
+      "line_start": 534,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7028,16 +7228,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 452,
-        "line_start": 452,
+        "line_end": 533,
+        "line_start": 533,
         "source_sha256": "ffbc20ef7a8555bbf8871c303ef7a86792219e43eb99a48f49e5b0882487ec31",
         "text": "SAFETY: Scalar read from Linux's monotonic seconds clock."
       },
       "source_sha256": "1951b7b6e7c682faaa0da835d2d2678755b4f0a2d5d23a9dd3767384c85fd233"
     },
     {
-      "byte_end": 32403,
-      "byte_start": 31999,
+      "byte_end": 35761,
+      "byte_start": 35357,
       "caller_obligations": [
         "SAFETY: verify() proves the retained PageOwners exactly cover the canonical map. The caller holds CPU and memory locks for an unbooted OS and preflighted this range as exclusively assigned. This chunk lies in one original non-movable allocation's direct map. The immutable vmalloc input is a separate Linux allocation."
       ],
@@ -7056,13 +7256,21 @@
         "Acquire CPU then memory controller locks before placement and copying. A CPU must be assigned to this OS; all physical image bytes and startup space must fit its generation-owned RAM.",
         "Validate every bounded ELF64 program header, source range, destination range, segment overlap, entry and startup geometry before the first physical write. The immutable file borrow survives the entire preflight, copy and readback.",
         "verify() ties the canonical logical map to retained PageOwners. Split zero/copy/readback access at original compound-allocation boundaries; logical adjacency never creates one Rust allocation. Linux direct-map addresses use checked arithmetic.",
-        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented."
+        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "ae1187cbfeeafc4a5d72208a6260f72abe6ecc8b566ac1b4b803100dfb91907c",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0068",
       "independent_review": {
         "evidence_sha256": null,
@@ -7071,8 +7279,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 847,
-      "line_start": 837,
+      "line_end": 928,
+      "line_start": 918,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7080,16 +7288,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 836,
-        "line_start": 832,
+        "line_end": 917,
+        "line_start": 913,
         "source_sha256": "b6ccf37a7beaa7f59ce3433a71941d79b5d76aaaa6b2d5dd255301831ebf056a",
         "text": "SAFETY: verify() proves the retained PageOwners exactly cover the canonical map. The caller holds CPU and memory locks for an unbooted OS and preflighted this range as exclusively assigned. This chunk lies in one original non-movable allocation's direct map. The immutable vmalloc input is a separate Linux allocation."
       },
       "source_sha256": "986d6dec06b5f333b19775ffd0f5f9018c6eebcb27cd2d4d8510b4c97a047e2c"
     },
     {
-      "byte_end": 33070,
-      "byte_start": 33033,
+      "byte_end": 36428,
+      "byte_start": 36391,
       "caller_obligations": [
         "SAFETY: The selected DYNAMIC_MEMORY_LAYOUT x86_64 kernel initializes this direct-map base before module loading; it is stable thereafter."
       ],
@@ -7108,13 +7316,21 @@
         "Acquire CPU then memory controller locks before placement and copying. A CPU must be assigned to this OS; all physical image bytes and startup space must fit its generation-owned RAM.",
         "Validate every bounded ELF64 program header, source range, destination range, segment overlap, entry and startup geometry before the first physical write. The immutable file borrow survives the entire preflight, copy and readback.",
         "verify() ties the canonical logical map to retained PageOwners. Split zero/copy/readback access at original compound-allocation boundaries; logical adjacency never creates one Rust allocation. Linux direct-map addresses use checked arithmetic.",
-        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented."
+        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "f2a6a11add747454cd3242aa960dd13672e2f33da6f947eecb3d840f8ab06bfa",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0069",
       "independent_review": {
         "evidence_sha256": null,
@@ -7123,8 +7339,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 863,
-      "line_start": 863,
+      "line_end": 944,
+      "line_start": 944,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7132,16 +7348,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 862,
-        "line_start": 861,
+        "line_end": 943,
+        "line_start": 942,
         "source_sha256": "c399eb812852f9f8f9fd33d265d16d01908c60103bf5657b95859017df03c182",
         "text": "SAFETY: The selected DYNAMIC_MEMORY_LAYOUT x86_64 kernel initializes this direct-map base before module loading; it is stable thereafter."
       },
       "source_sha256": "d00db60d6115c91c4bfd5f5be60bc6bdfef5c830e6374f177373eade3599a1f7"
     },
     {
-      "byte_end": 34397,
-      "byte_start": 34330,
+      "byte_end": 37971,
+      "byte_start": 37904,
       "caller_obligations": [
         "SAFETY: Same exclusive retained allocation and direct-map proof as the write path. Each actual byte is read back after loading; no reference spans separate compound allocations."
       ],
@@ -7160,13 +7376,21 @@
         "Acquire CPU then memory controller locks before placement and copying. A CPU must be assigned to this OS; all physical image bytes and startup space must fit its generation-owned RAM.",
         "Validate every bounded ELF64 program header, source range, destination range, segment overlap, entry and startup geometry before the first physical write. The immutable file borrow survives the entire preflight, copy and readback.",
         "verify() ties the canonical logical map to retained PageOwners. Split zero/copy/readback access at original compound-allocation boundaries; logical adjacency never creates one Rust allocation. Linux direct-map addresses use checked arithmetic.",
-        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented."
+        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "66c9a138fc707fc86c2e5d2e85024efe6e7e95c4ed60db121f0bd10eb0680fdb",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0070",
       "independent_review": {
         "evidence_sha256": null,
@@ -7175,8 +7399,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 893,
-      "line_start": 893,
+      "line_end": 977,
+      "line_start": 977,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7184,16 +7408,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 892,
-        "line_start": 890,
+        "line_end": 976,
+        "line_start": 974,
         "source_sha256": "16d77e7c72b7b893e03176ef56663e3be9a834fce31551e243e27690e1c34d08",
         "text": "SAFETY: Same exclusive retained allocation and direct-map proof as the write path. Each actual byte is read back after loading; no reference spans separate compound allocations."
       },
       "source_sha256": "f4d1c95d496a254bfb2cf978424d1ededb946f38aabacfb0c153df0d19d9f751"
     },
     {
-      "byte_end": 35183,
-      "byte_start": 35145,
+      "byte_end": 39052,
+      "byte_start": 39014,
       "caller_obligations": [
         "SAFETY: Module init lends this static once to the pinned mutex. No other path accesses the UnsafeCell directly after that exclusive handoff."
       ],
@@ -7210,13 +7434,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "c65c00af1ab3b347489fac3109318865b38614b349aae1178fe2e785aef0b412",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0050",
       "independent_review": {
         "evidence_sha256": null,
@@ -7225,8 +7458,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 913,
-      "line_start": 913,
+      "line_end": 1001,
+      "line_start": 1001,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7234,16 +7467,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 912,
-        "line_start": 911,
+        "line_end": 1000,
+        "line_start": 999,
         "source_sha256": "4ace01b457e4633d7fd9cc680f230ea095f5ff83deb1254b12352cd1a6f5230a",
         "text": "SAFETY: Module init lends this static once to the pinned mutex. No other path accesses the UnsafeCell directly after that exclusive handoff."
       },
       "source_sha256": "4352f5940bfa3219532454d6dfca4b6edfc9e6f1e557d6a95cf3c1b3253bd0e6"
     },
     {
-      "byte_end": 35755,
-      "byte_start": 35723,
+      "byte_end": 39624,
+      "byte_start": 39592,
       "caller_obligations": [
         "SAFETY: Exclusive module init before control-device publication. Only this small reference reaches the stack, not the map/workspace."
       ],
@@ -7260,13 +7493,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "14a10e288c24debb70e001cb9e0d130b6a6702265e791a3eca9e2b4a6af0a736",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0051",
       "independent_review": {
         "evidence_sha256": null,
@@ -7275,8 +7517,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 926,
-      "line_start": 926,
+      "line_end": 1014,
+      "line_start": 1014,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7284,16 +7526,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 925,
-        "line_start": 924,
+        "line_end": 1013,
+        "line_start": 1012,
         "source_sha256": "e64ec46869007b7aca4140294a0b5da62544c0fa331fefeddfac5a787847aa1d",
         "text": "SAFETY: Exclusive module init before control-device publication. Only this small reference reaches the stack, not the map/workspace."
       },
       "source_sha256": "62e77ffe47fcbe109a96697b0b92e8079a5a6a6897cfe4a45faa1a8722f63cfb"
     },
     {
-      "byte_end": 37108,
-      "byte_start": 37086,
+      "byte_end": 40977,
+      "byte_start": 40955,
       "caller_obligations": [
         "SAFETY: The open miscdevice file pins the module and published mutex."
       ],
@@ -7310,13 +7552,22 @@
         "The memory mutex precedes sleepable memory-hotplug read exclusion; the non-Send guard ends on its acquiring task and no callback reacquires this mutex.",
         "Each non-movable compound allocation retains its original head page and order until exactly one free; ownership transfers exclusively, never through shared mutable aliases.",
         "Batch preflight precedes publication or return; outstanding or poisoned memory retains the shared reservation module pin. OS assignment reuses this canonical map; each whole compound allocation remains owned until all subranges are free. The image loader writes and reads back exclusively assigned unbooted RAM while retaining the original PageOwners; native CPU startup and user VMA access remain unimplemented.",
-        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock."
+        "Coupled OS cleanup holds the CPU mutex before this memory mutex, preflights both transactions, then commits both without releasing either lock.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0052",
       "independent_review": {
         "evidence_sha256": null,
@@ -7325,8 +7576,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 964,
-      "line_start": 964,
+      "line_end": 1052,
+      "line_start": 1052,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7334,16 +7585,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 963,
-        "line_start": 963,
+        "line_end": 1051,
+        "line_start": 1051,
         "source_sha256": "bc31630b3363488fcde389f3e74f6473e9e249c559b83682d015ff31afaca0c8",
         "text": "SAFETY: The open miscdevice file pins the module and published mutex."
       },
       "source_sha256": "1f35e04f7b2ead6628d75c5dea26f824f8776be6c07dd70e81c5a72796842ff7"
     },
     {
-      "byte_end": 38394,
-      "byte_start": 38372,
+      "byte_end": 42263,
+      "byte_start": 42241,
       "caller_obligations": [
         "SAFETY: The OS object's provider module reference keeps this published mutex and context live for the callback. No guard or owner escapes."
       ],
@@ -7361,13 +7612,22 @@
         "Process context with a sleepable per-OS mutex; controller ordering is CPU then memory, with no callback reentry into OS operations.",
         "Copy/validate the complete userspace request before logical publication. Native pointers stay 64 bits; compat pointers are zero-extended once and borrowed only for the synchronous callback.",
         "Unbooted destruction preflights both resource classes before either commit and retains both locks through publication. A fallible preflight leaves the instance and resources live.",
-        "Assigned CPUs/pages remain Linux-owned reservations. Boot, guest mappings, IKC and booted teardown require additional implementation and review."
+        "Assigned CPUs/pages remain Linux-owned reservations. Boot, guest mappings, IKC and booted teardown require additional implementation and review.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0061",
       "independent_review": {
         "evidence_sha256": null,
@@ -7376,8 +7636,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 1000,
-      "line_start": 1000,
+      "line_end": 1088,
+      "line_start": 1088,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7385,16 +7645,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 999,
-        "line_start": 998,
+        "line_end": 1087,
+        "line_start": 1086,
         "source_sha256": "96c4c5496aa34a1c48fd867ada29405bee736e54b36fb4bcde1c5bf896d309a1",
         "text": "SAFETY: The OS object's provider module reference keeps this published mutex and context live for the callback. No guard or owner escapes."
       },
       "source_sha256": "1f35e04f7b2ead6628d75c5dea26f824f8776be6c07dd70e81c5a72796842ff7"
     },
     {
-      "byte_end": 39592,
-      "byte_start": 39570,
+      "byte_end": 43461,
+      "byte_start": 43439,
       "caller_obligations": [
         "SAFETY: The IHK destruction callback retains the provider module until this borrowed controller, its lock and the CPU commit callback finish."
       ],
@@ -7412,13 +7672,22 @@
         "Process context with a sleepable per-OS mutex; controller ordering is CPU then memory, with no callback reentry into OS operations.",
         "Copy/validate the complete userspace request before logical publication. Native pointers stay 64 bits; compat pointers are zero-extended once and borrowed only for the synchronous callback.",
         "Unbooted destruction preflights both resource classes before either commit and retains both locks through publication. A fallible preflight leaves the instance and resources live.",
-        "Assigned CPUs/pages remain Linux-owned reservations. Boot, guest mappings, IKC and booted teardown require additional implementation and review."
+        "Assigned CPUs/pages remain Linux-owned reservations. Boot, guest mappings, IKC and booted teardown require additional implementation and review.",
+        "Pinned Linux 6.12 x86_64 ABI; IHK supplies an exact live slot/generation lease and retains the SMP provider module through each synchronous callback.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0062",
       "independent_review": {
         "evidence_sha256": null,
@@ -7427,8 +7696,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 1026,
-      "line_start": 1026,
+      "line_end": 1114,
+      "line_start": 1114,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7436,16 +7705,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 1025,
-        "line_start": 1024,
+        "line_end": 1113,
+        "line_start": 1112,
         "source_sha256": "84a0b3481885e4d4615abab221a36eafb7f67c01151ba1d30f3a3a94a63a282d",
         "text": "SAFETY: The IHK destruction callback retains the provider module until this borrowed controller, its lock and the CPU commit callback finish."
       },
       "source_sha256": "1f35e04f7b2ead6628d75c5dea26f824f8776be6c07dd70e81c5a72796842ff7"
     },
     {
-      "byte_end": 40597,
-      "byte_start": 40575,
+      "byte_end": 44466,
+      "byte_start": 44444,
       "caller_obligations": [
         "SAFETY: IHK pins this module and holds its OS operation mutex. This standalone memory lock is released before the later CPU -> memory pair."
       ],
@@ -7464,13 +7733,21 @@
         "Acquire CPU then memory controller locks before placement and copying. A CPU must be assigned to this OS; all physical image bytes and startup space must fit its generation-owned RAM.",
         "Validate every bounded ELF64 program header, source range, destination range, segment overlap, entry and startup geometry before the first physical write. The immutable file borrow survives the entire preflight, copy and readback.",
         "verify() ties the canonical logical map to retained PageOwners. Split zero/copy/readback access at original compound-allocation boundaries; logical adjacency never creates one Rust allocation. Linux direct-map addresses use checked arithmetic.",
-        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented."
+        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0071",
       "independent_review": {
         "evidence_sha256": null,
@@ -7479,8 +7756,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 1051,
-      "line_start": 1051,
+      "line_end": 1139,
+      "line_start": 1139,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7488,16 +7765,16 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 1050,
-        "line_start": 1049,
+        "line_end": 1138,
+        "line_start": 1137,
         "source_sha256": "d86f3c6032069f8b48d0f8b8296c6916240778222c64869b2575bc796598d367",
         "text": "SAFETY: IHK pins this module and holds its OS operation mutex. This standalone memory lock is released before the later CPU -> memory pair."
       },
       "source_sha256": "1f35e04f7b2ead6628d75c5dea26f824f8776be6c07dd70e81c5a72796842ff7"
     },
     {
-      "byte_end": 41133,
-      "byte_start": 41111,
+      "byte_end": 45002,
+      "byte_start": 44980,
       "caller_obligations": [
         "SAFETY: IHK's operation/module owners and the caller's CPU lock retain this published controller. Loading never starts a CPU or exposes a map."
       ],
@@ -7516,13 +7793,21 @@
         "Acquire CPU then memory controller locks before placement and copying. A CPU must be assigned to this OS; all physical image bytes and startup space must fit its generation-owned RAM.",
         "Validate every bounded ELF64 program header, source range, destination range, segment overlap, entry and startup geometry before the first physical write. The immutable file borrow survives the entire preflight, copy and readback.",
         "verify() ties the canonical logical map to retained PageOwners. Split zero/copy/readback access at original compound-allocation boundaries; logical adjacency never creates one Rust allocation. Linux direct-map addresses use checked arithmetic.",
-        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented."
+        "Zero the complete 8 MiB image window, copy validated file bytes, read back physical bytes, then publish LoadedImage. Invalidation, error or resource changes cannot authorize boot; native McKernel startup, user VMAs and IKC remain unimplemented.",
+        "Process context under the per-OS operation mutex, CPU then memory controller locks; image loading starts no CPUs and publishes no executable capability.",
+        "Keep existing strict-node resource allocations on __alloc_pages_noprof with an explicitly validated concrete node and THISNODE. Never pass NUMA_NO_NODE to that low-level API.",
+        "For startup tables use exported alloc_pages_noprof: Linux resolves the current NUMA policy. GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32 request a bounded order-9 non-movable allocation without THISNODE; ENOMEM has no image effect.",
+        "Retain the original PageOwner and compound order on every success and error path. Validate exact vmemmap/page-node layout and the entire useful 260-page extent below 4 GiB and disjoint from owned bootstrap RAM.",
+        "Fill and physically read back only the useful u64-aligned extent of one exclusive original Linux allocation. No reference crosses allocations, no temporary page reaches the Linux stack, and no pointer escapes.",
+        "LoadedImage is noncopy and retains StartupTables and PageOwner for the exact OS generation. Replacement and invalid input retire the prior image before reading the new file; memory changes and unbooted destruction also retire tables.",
+        "All ELF and startup-space checks and the complete startup allocation/fill precede the first image write. Failed allocation cannot publish LoadedImage or authorize boot. The OS operation lock serializes invalidation and destruction.",
+        "The guest checks independent identity/straight/kernel mappings, high-NUMA image placement, original-owner cleanup, and forced order-9 failure/recovery. CPU wakeup, trampoline, IKC and native McKernel boot remain pending; no production credit."
       ],
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d2729b66dd444dcebae43d7b471fe64efc3ec6593a0366c7871028e027e01b20",
-      "file_sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04",
+      "file_sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
       "id": "RS011-SMP-0072",
       "independent_review": {
         "evidence_sha256": null,
@@ -7531,8 +7816,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 1063,
-      "line_start": 1063,
+      "line_end": 1151,
+      "line_start": 1151,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -7540,8 +7825,8 @@
       },
       "path": "host-kernel/native-rust/smp_memory.rs",
       "safety_comment": {
-        "line_end": 1062,
-        "line_start": 1061,
+        "line_end": 1150,
+        "line_start": 1149,
         "source_sha256": "6bc01eef045f84fc60f599299b9bd278de6aadb1430506bed70a1b72d24e8d47",
         "text": "SAFETY: IHK's operation/module owners and the caller's CPU lock retain this published controller. Loading never starts a CPU or exposes a map."
       },
@@ -7599,7 +7884,7 @@
       "source_sha256": "60a84e877d3c2b7459607e916a157d6476f3131c38812a10c9b282a8ae8d51f2"
     }
   ],
-  "source_closure_sha256": "1ad1ae607b67576fa297d4aa51b0f0372a66534fa82efa34b22cad08009d1711",
+  "source_closure_sha256": "dd4cdd82a53b7dff19de50715fad4d5a8f16760571c6c7ec3b8614b7621c6092",
   "source_inputs": [
     {
       "bytes": 19740,
@@ -7643,12 +7928,12 @@
       "sha256": "d5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687"
     },
     {
-      "bytes": 23320,
+      "bytes": 23337,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98"
+      "sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750"
     },
     {
       "bytes": 26419,
@@ -7731,12 +8016,12 @@
       "sha256": "2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba"
     },
     {
-      "bytes": 41181,
+      "bytes": 45050,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/smp_memory.rs",
-      "sha256": "f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04"
+      "sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183"
     },
     {
       "bytes": 129861,
@@ -7745,6 +8030,14 @@
       ],
       "path": "host-kernel/native-rust/smp_resource.rs",
       "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3"
+    },
+    {
+      "bytes": 4963,
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2"
     }
   ],
   "target": {

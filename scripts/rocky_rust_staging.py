@@ -70,7 +70,7 @@ EXPECTED_TARGET = {
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
     "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
 }
-EXPECTED_INPUTS = ({'destination': 'Kbuild',
+EXPECTED_INPUTS = [{'destination': 'Kbuild',
   'kind': 'kbuild_template',
   'repository_path': 'host-kernel/kbuild/Kbuild.in',
   'sha256': 'f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3'},
@@ -121,7 +121,7 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'smp_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': 'f767e3d440b52c44b50abbf0a65c88e06f51d5544af5c6de2940d2022e0c7c04'},
+  'sha256': '7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
@@ -137,7 +137,11 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'smp_loader.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_loader.rs',
-  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'})
+  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'},
+ {'destination': 'smp_startup.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_startup.rs',
+  'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}]
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -214,7 +218,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': '0ae7e2fe672f850dcd537db1f70ce88e791d640bef0921b157539a9a093b4c98'},
+  'source_sha256': 'fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -942,6 +946,7 @@ def _validate_input(repo_root, item, index):
         "ihk_mapping.rs",
         "smp_image.rs",
         "smp_loader.rs",
+        "smp_startup.rs",
     ):
         expected_destination = item["destination"]
     if expected_destination is None:
@@ -1105,7 +1110,10 @@ def _validate_input(repo_root, item, index):
                       "pub(super) struct MemoryController",
                       ".prepare_insert_free_batch(&ranges, &mut workspace)",
                       ".prepare_remove_free_batch(&ranges, &mut workspace)",
-                      "bindings::__alloc_pages_noprof", "bindings::__free_pages",
+                      "bindings::__alloc_pages_noprof", "bindings::alloc_pages_noprof",
+                      "struct StartupTables {", "tables: StartupTables,",
+                      "let tables = StartupTables::new(layout, direct_map)?;",
+                      "bindings::__free_pages",
                       "drop(core::mem::take(&mut context.pages));"):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks memory owner boundary: {1}".format(label, token))
@@ -1126,6 +1134,15 @@ def _validate_input(repo_root, item, index):
                       "ImageError::SegmentOverlap", "ImageError::BadEntry"):
             if token not in text:
                 raise ValidationError("{0} lacks image preflight boundary: {1}".format(label, token))
+    elif item["destination"] == "smp_startup.rs":
+        for token in ("pub(crate) struct PageTablePlan", "pub(crate) fn fill",
+                      "pub(crate) const TABLE_PAGES: usize = 260;",
+                      "end > 1_u64 << 32", "StartupError::StorageSize"):
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks startup table boundary: {1}".format(label, token))
+        for forbidden in ("unsafe", "kernel::", "bindings::", "module!"):
+            if forbidden in text.lower():
+                raise ValidationError("{0} contains forbidden boundary: {1}".format(label, forbidden))
     elif item["destination"] == "smp_loader.rs":
         for token in ("struct ImageFile {", "impl Drop for ImageFile",
                       "const MAX_IMAGE_FILE_BYTES: usize = 64 << 20;",
@@ -1263,6 +1280,7 @@ def _validate_module(repo_root, module, expected, index):
             "#[allow(dead_code)]\nmod ihk_mapping;",
             "#[allow(dead_code)]\nmod smp_image;",
             "mod smp_loader;",
+            "mod smp_startup;",
             "use kernel::{\n    c_str,\n    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},\n    prelude::*,\n};",
             "struct ProviderOpenLease {",
             "impl MiscDevice for IhkSmpControlDevice {",
@@ -1343,12 +1361,13 @@ def validate_manifest(repo_root, manifest_path):
         "ihk_mapping.rs",
         "smp_image.rs",
         "smp_loader.rs",
+        "smp_startup.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
             "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, "
-            "smp_memory.rs, os_runtime.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs"
+            "smp_memory.rs, os_runtime.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs, smp_startup.rs"
         )
 
     modules = manifest["modules"]

@@ -84,6 +84,7 @@ EXPECTED_STAGED_FILES = (
     "smp_loader.rs",
     "smp_memory.rs",
     "smp_resource.rs",
+    "smp_startup.rs",
 )
 EXPECTED_STAGED_RUST_SOURCES = tuple(
     item for item in EXPECTED_STAGED_FILES if item.endswith(".rs")
@@ -123,7 +124,7 @@ _PROJECT_DEPENDENCIES = {
     ),
     "ihk-smp-x86_64": (
         "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
-        "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs",
+        "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs",
     ),
     "mcctrl": (),
 }

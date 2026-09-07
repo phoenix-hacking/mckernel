@@ -166,6 +166,19 @@ Rust/assembly completion remain pending; no production gate is promoted.
 
 ## Mission
 
+Owned startup-table prototype (2026-09-07): the corrected native module passes
+the four-vCPU/two-NUMA guest over both ABIs and two reload cycles. All 56 image
+and 56 table readbacks match independent models; 64 forced allocations fail
+cleanly and 32 load/invalidate repetitions cover original-owner cleanup.
+See `docs/verification/native-startup-tables-checkpoint-20260907.json` and the
+startup-table review. The initial low-level allocator NUMA sentinel bug and
+its failing guest are retained. The declared graph now has 19 native sources
+and the FFI ledger preserves prior IDs across 156 sites, with independent
+review pending. Complete current downstream checks and a fresh declared-stage
+build/guest/full suite, then continue owned trampoline, boot parameters,
+CPU wakeup and IKC. Native McKernel boot and Rust/assembly completion remain
+open; no production gate or score changes.
+
 Image staging integration (2026-09-07): the recovered loader now appears in declared
 staging/link closure, lifecycle and mapping-reuse contracts, and the 154-site /
 18-source unsafe/FFI queue. Existing site IDs are preserved. Source, lifecycle,

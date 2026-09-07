@@ -975,6 +975,7 @@ def main():
         "ihk_mapping.rs",
         "smp_image.rs",
         "smp_loader.rs",
+        "smp_startup.rs",
     ]:
         die(
             "Rust support input closure differs from the locked ABI, queue, "

@@ -372,6 +372,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/native-rust/ihk_mapping.rs",
             "host-kernel/native-rust/smp_image.rs",
             "host-kernel/native-rust/smp_loader.rs",
+            "host-kernel/native-rust/smp_startup.rs",
             "scripts/tests/fixtures/ihk_native_master_compile.rs",
             "scripts/tests/fixtures/ihk_native_queue_compile.rs",
             "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
@@ -401,6 +402,7 @@ class LicenseInventoryTests(unittest.TestCase):
  "host-kernel/native-rust/ihk_mapping.rs",
  "host-kernel/native-rust/smp_image.rs",
  "host-kernel/native-rust/smp_loader.rs",
+ "host-kernel/native-rust/smp_startup.rs",
  'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
         self.assertEqual(
             list(relatives),

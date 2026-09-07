@@ -29,8 +29,8 @@ SOURCE_PREFIX = SOURCE_ROOT + "/drivers/misc/mckernel/"
 
 # Recorded from the pinned Rocky SRPM's unmodified scripts/basic/fixdep.c
 # (SHA256 512a85c24ca2cdd44d1d652e071abc6650cf4776e21979e0a08b421178f59590).
-# Its dependency body also matches the recovered native image-loader Kbuild
-# capture in native-image-recovery-20260907-build-source-compiler.tar.gz after
+# Its dependency body matches the owned startup-table prototype's captured
+# module-build/.ihk_smp_x86_64.o.cmd after
 # normalizing the source-root prefix. The saved command here is synthetic;
 # this fixture tests generator grammar and grants no compiler/runtime credit.
 ROCKY_FIXDEP_SMP_RECORD = (
@@ -51,6 +51,7 @@ ROCKY_FIXDEP_SMP_RECORD = (
     '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk_mapping.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_image.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_loader.rs \\\n'
+    '  /build/native-rust-source/linux/drivers/misc/mckernel/smp_startup.rs \\\n'
     '  /build/native-rust-source/linux/drivers/misc/mckernel/ihk-compat-build-id.bin \\\n'
     '  ./rust/libcore.rmeta \\\n'
     '  ./rust/libkernel.rmeta \\\n'
@@ -955,7 +956,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         )
         self.assertEqual(
             ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
-             "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs"],
+             "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs"],
             closure._parse_rust_dependency_body(
                 name,
                 target,
@@ -1027,7 +1028,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
         ) + "".join(
             "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
-            for item in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs")
+            for item in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs")
         )
         self.mutate_once(name, source_dependencies + metadata, metadata + source_dependencies)
         for anchor in (resource, metadata, kernel):
@@ -1077,7 +1078,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
 
     def test_image_loader_dependencies_cannot_be_omitted_duplicated_or_substituted(self):
         name = ".ihk_smp_x86_64.o.cmd"
-        for source in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs"):
+        for source in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs"):
             line = "  " + SOURCE_PREFIX + source + " " + chr(92) + "\n"
             with self.subTest(source=source):
                 self.mutate_once(name, line, "")

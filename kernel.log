@@ -33641,3 +33641,34 @@ Evidence: /home/holden/mckernel-work/scratch/native-image-exact-stage-guest-2026
 Command: SHA256/size and gzip round-trip inspection of artifacts in the image staging and declared-stage checkpoint JSON files.
 Result: all retained artifact file bytes are present; two staging source snapshots were already gzip archives when retained, so their uncompressed-size/digest fields described the compressed payload instead of the decompressed tar. Correct those two descriptive fields and the current direct checkpoint reference; preserve the artifact bytes and Git history unchanged. The kernel build, guest replay and full 2,312-test repository suite have passed independently.
 Affected artifacts: native-image-staging-20260907-contract-integration-{1,2}-source.tar.gz. The preceding metadata remains available in commit da198482.
+
+[2026-09-07T16:32:59.113497+00:00] Native startup-table prototype first guest failure
+Command: fixed native runner python3 -B /work/run-native-startup-tables-validation.py -> source-bound module checks and four-vCPU/two-NUMA native/compat guest.
+Environment: pinned Linux 6.12/Rust 1.92, CPUs 2-5, 12 GiB aggregate limit, UID 1000, isolated TCG guest, source 09e823e0. Focused 14-test policy group, native module build and ELF/no-SIMD checks passed.
+Result: guest panicked on the first startup table allocation in __alloc_pages_noprof (address 0x2808). The new no-fixed-node path passed NUMA_NO_NODE (-1) to the low-level allocator; inspect the exact exported higher-level node-selection API before repair. Stop this failing guest and preserve all build, source and serial evidence. No CPU was started by McKernel.
+Evidence: /work/native-startup-tables-prototype-20260907-1 and /work/native-startup-tables-guest-20260907-1.
+
+[2026-09-07T16:40:33.297920+00:00] Startup declared-stage integration first failure
+Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 2, staging/link/audit/lifecycle/FFI/image/resource groups with unittest -f. Same four-CPU, 12-GiB pinned container; private source snapshot /work/native-startup-policy-source-20260907-2.
+Result: stopped after 76 tests in 17.223 seconds. Staging tests passed; the link-closure fixture rejected staged file order. The new startup source was inserted next to the loader in an alphabetically ordered staged-file authority. Restore the canonical sorted file order without relaxing set/order equality.
+Evidence: /work/native-startup-policy-tests-20260907-2.log/json. Passing prototype guest 2 and failed prototype guest 1 remain preserved separately.
+
+[2026-09-07T16:45:41.238766+00:00] Startup downstream binding first failure
+Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 4, mapping/runtime/workflow/FP/license/RS006 groups with unittest -f; same isolated limits, private source snapshot retained.
+Result: stopped after two tests in 0.050 seconds. The mapping-reuse contract still binds the prior SMP crate root (23320 bytes); adding the reviewed startup module edge makes it 23337 bytes. The mapping geometry itself is unchanged. Refresh only its current consumer binding and matching checker expectation; keep IHK-007 Linux VMA gates false and historical sources frozen.
+Evidence: /work/native-startup-policy-tests-20260907-4.log/json.
+
+[2026-09-07T16:48:15.563631+00:00] Startup downstream binding attempt 5 first failure
+Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 5, same downstream groups and isolated limits.
+Result: mapping, current runtime, exact workflow and FP capture integration checks passed; stopped after 282 tests in 71.374 seconds at FP executable acceptance closure. Its current integration-contract dependency was refreshed, but the closure checker still carries the prior normalized self-digest. Recompute that explicit self-identity after reviewing the dependency-only change; do not change historical runtime witnesses or missing result authority.
+Evidence: /work/native-startup-policy-tests-20260907-5.log/json.
+
+[2026-09-07T16:49:27.928303+00:00] Startup downstream binding attempt 6 first failure
+Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 6, remaining FP closure/license/RS006 groups; same private source and isolation controls.
+Result: stopped after 34 tests in 3.881 seconds. Closure CLI and preceding checks pass; the anti-global-rebinding regression still asserts the preceding literal current-contract digest. Update that explicit literal to the reviewed dependency-only current contract, retaining the immutable default-argument anchor and negative mutation test.
+Evidence: /work/native-startup-policy-tests-20260907-6.log/json.
+
+[2026-09-07T16:50:45.582508+00:00] Startup downstream binding attempt 7 first failure
+Command: fixed native runner python3 -B /work/run-native-startup-policy-tests.py 7, remaining closure/license/RS006 groups; prior isolated controls unchanged.
+Result: FP closure and license groups passed; stopped after 189 tests in 24.583 seconds at the RS006 current integrated-consumer inventory. It still pins the preceding native runtime evidence contract. Review the inventory against the known changed current files, then refresh only those exact identities; preserve the module-owner patch and frozen predecessors.
+Evidence: /work/native-startup-policy-tests-20260907-7.log/json.

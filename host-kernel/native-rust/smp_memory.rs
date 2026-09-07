@@ -149,17 +149,18 @@ impl PageOwner {
         if dma32 {
             flags |= 1 << bindings::___GFP_DMA32_BIT;
         }
-        // SAFETY: Memory hotplug is excluded. A requested node was checked;
-        // NUMA_NO_NODE (-1) lets Linux choose for separate startup ownership.
-        // The bounded order and Linux flags are valid; THISNODE is set only
-        // for ordinary strict-node resource reservations.
+        // SAFETY: Memory hotplug is excluded. A requested concrete node was
+        // checked; the low-level allocator never receives NUMA_NO_NODE. The
+        // ordinary exported allocator resolves the current Linux policy when
+        // no fixed node is requested. Bounded orders and flags are valid;
+        // THISNODE is set only for strict-node resource reservations.
         let raw = unsafe {
-            bindings::__alloc_pages_noprof(
-                flags,
-                order,
-                node.map_or(-1, |node| node as i32),
-                ptr::null_mut(),
-            )
+            match node {
+                Some(node) => {
+                    bindings::__alloc_pages_noprof(flags, order, node as i32, ptr::null_mut())
+                }
+                None => bindings::alloc_pages_noprof(flags, order),
+            }
         };
         let page = NonNull::new(raw).ok_or(ENOMEM)?;
         let mut owner = Self {
