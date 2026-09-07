@@ -11,7 +11,7 @@ use core::{
     marker::PhantomData,
     pin::Pin,
     ptr,
-    sync::atomic::{AtomicBool, AtomicPtr, Ordering},
+    sync::atomic::{AtomicBool, AtomicPtr, AtomicU32, AtomicU64, Ordering},
 };
 use kernel::{
     bindings, c_str,
@@ -39,6 +39,80 @@ extern "C" {
 static BLOCK_ONLINE: [AtomicBool; SMP_MAX_CPUS] = [const { AtomicBool::new(false) }; SMP_MAX_CPUS];
 static ALLOWED_TASK: [AtomicPtr<bindings::task_struct>; SMP_MAX_CPUS] =
     [const { AtomicPtr::new(ptr::null_mut()) }; SMP_MAX_CPUS];
+static BOOT_IRQ_TARGET_USERS: AtomicU32 = AtomicU32::new(0);
+static BOOT_IRQ_GENERATIONS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
+static BOOT_IRQ_EVENTS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
+
+// SAFETY: Registered at AP_ONLINE_DYN, before irreversible target teardown.
+// The CPUHP callback uses only one bounded atomic and never a resource mutex.
+unsafe extern "C" fn allow_cpu_offline(cpu: u32) -> i32 {
+    if cpu == 0 && BOOT_IRQ_TARGET_USERS.load(Ordering::Acquire) != 0 {
+        EBUSY.to_errno()
+    } else {
+        0
+    }
+}
+
+// SAFETY: Each monomorphized identity belongs to one pinned OS slot. A started
+// route cannot retire until guest senders stop and Linux drains every work
+// node. Hard IRQ only records pending work; no sleepable lock is acquired.
+unsafe extern "C" fn boot_irq_callback<const SLOT: usize>(_work: *mut core::ffi::c_void) {
+    if BOOT_IRQ_GENERATIONS[SLOT].load(Ordering::Acquire) != 0 {
+        BOOT_IRQ_EVENTS[SLOT].fetch_add(1, Ordering::Release);
+    }
+}
+
+macro_rules! boot_irq_callbacks {
+    ($($slot:literal),* $(,)?) => {
+        [$(boot_irq_callback::<$slot> as unsafe extern "C" fn(*mut core::ffi::c_void)),*]
+    };
+}
+
+const BOOT_IRQ_CALLBACKS: [unsafe extern "C" fn(*mut core::ffi::c_void); 64] = boot_irq_callbacks!(
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+    48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
+);
+
+/// Unstarted route owner. Active/uncertain boot retains this value without
+/// dropping it; generation reuse requires a separate sender-stop/drain proof.
+pub(super) struct BootIrqRoute {
+    owner: OsToken,
+}
+
+impl BootIrqRoute {
+    pub(super) fn new(owner: OsToken, topology: &BootTopology<'_>) -> Result<Self> {
+        if !topology.host_cpu(0)?.online {
+            return Err(ENODEV);
+        }
+        BOOT_IRQ_GENERATIONS[owner.slot() as usize]
+            .compare_exchange(0, owner.generation(), Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| EBUSY)?;
+        // At most 64 routes exist; the CPU read guard excludes teardown until
+        // this counter has made the persistent CPUHP veto visible.
+        BOOT_IRQ_TARGET_USERS.fetch_add(1, Ordering::Release);
+        BOOT_IRQ_EVENTS[owner.slot() as usize].store(0, Ordering::Relaxed);
+        Ok(Self { owner })
+    }
+
+    pub(super) fn callback(&self) -> *mut core::ffi::c_void {
+        BOOT_IRQ_CALLBACKS[self.owner.slot() as usize] as *const () as *mut core::ffi::c_void
+    }
+
+    pub(super) fn events(&self) -> u64 {
+        BOOT_IRQ_EVENTS[self.owner.slot() as usize].load(Ordering::Acquire)
+    }
+}
+
+impl Drop for BootIrqRoute {
+    fn drop(&mut self) {
+        // This destructor is reachable only before any CPU-start effect.
+        // No guest work can still refer to the slot or this module callback.
+        assert_eq!(BOOT_IRQ_GENERATIONS[self.owner.slot() as usize].swap(0, Ordering::AcqRel), self.owner.generation());
+        assert!(BOOT_IRQ_TARGET_USERS.fetch_sub(1, Ordering::AcqRel) > 0);
+    }
+}
 
 /// CPUHP_BP_PREPARE_DYN runs on the initiating task before target CPU bringup.
 /// It must never acquire the policy mutex: our own device transition holds it.
@@ -350,6 +424,7 @@ impl CpuContext {
     }
 
     fn change_os(&mut self, owner: OsToken, request: &CpuRequest, assign: bool) -> Result<isize> {
+        super::smp_memory::retire_os_boot(owner)?;
         if request.count == 0 {
             return Ok(0);
         }
@@ -546,6 +621,7 @@ static PUBLISHED: AtomicPtr<ContextMutex> = AtomicPtr::new(ptr::null_mut());
 pub(super) struct CpuController {
     mutex: Pin<Box<ContextMutex>>,
     hotplug_state: i32,
+    irq_target_state: i32,
 }
 
 impl CpuController {
@@ -558,6 +634,7 @@ impl CpuController {
         let mut controller = Self {
             mutex,
             hotplug_state: -1,
+            irq_target_state: -1,
         };
         controller.mutex.lock().initialize()?;
         // SAFETY: Callback/name remain resident until unregister under CPUHP
@@ -574,6 +651,20 @@ impl CpuController {
         };
         kernel::error::to_result(state)?;
         controller.hotplug_state = state;
+        // SAFETY: This early teardown veto is resident until unregister. The
+        // atomic route users are published under CPU read-side exclusion.
+        let state = unsafe {
+            bindings::__cpuhp_setup_state(
+                bindings::cpuhp_state_CPUHP_AP_ONLINE_DYN,
+                c_str!("mckernel/irq:online").as_char_ptr(),
+                false,
+                None,
+                Some(allow_cpu_offline),
+                false,
+            )
+        };
+        kernel::error::to_result(state)?;
+        controller.irq_target_state = state;
         PUBLISHED.store(
             (&*controller.mutex as *const ContextMutex).cast_mut(),
             Ordering::Release,
@@ -585,6 +676,11 @@ impl CpuController {
 impl Drop for CpuController {
     fn drop(&mut self) {
         PUBLISHED.store(ptr::null_mut(), Ordering::Release);
+        if self.irq_target_state >= 0 {
+            // SAFETY: OS and reservation module pins exclude this destructor
+            // while any route remains; removal drains Linux CPUHP callbacks.
+            unsafe { bindings::__cpuhp_remove_state(self.irq_target_state, false) };
+        }
         if self.hotplug_state >= 0 {
             // SAFETY: Module teardown has no open control files or resource
             // pins. Linux removes and drains the callback under its CPU locks.
@@ -725,4 +821,63 @@ pub(super) fn load_os_image(owner: OsToken, image: &[u8]) -> Result {
         return Err(EINVAL);
     }
     super::smp_memory::load_os_image(owner, image)
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) struct BootCpu {
+    pub(super) linux_id: u32,
+    pub(super) hardware_id: u32,
+    pub(super) numa_node: u32,
+}
+
+/// The guards cannot escape their acquiring task. Only this module constructs
+/// a topology, after checking the canonical exact-generation CPU assignments.
+pub(super) struct BootTopology<'a> {
+    cpus: Vec<BootCpu>,
+    linux_cpus: usize,
+    hotplug: &'a DeviceHotplugGuard,
+    read: &'a CpuReadGuard,
+}
+
+impl BootTopology<'_> {
+    pub(super) fn cpus(&self) -> &[BootCpu] { &self.cpus }
+    pub(super) fn linux_cpus(&self) -> usize { self.linux_cpus }
+    pub(super) fn host_cpu(&self, cpu: usize) -> Result<HostCpuSnapshot> {
+        observed_cpu(cpu, self.read, self.hotplug)
+    }
+}
+
+fn with_boot_topology<T>(owner: OsToken, operation: impl FnOnce(&BootTopology<'_>) -> Result<T>) -> Result<T> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: The IHK lease and provider module owner pin this synchronous
+    // backend call and its published CPU context through operation completion.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    context.verify_owned(&hotplug)?;
+    let read = CpuReadGuard::lock();
+    let count = context.table.assigned_cpus(owner, &mut context.requests).map_err(|_| EIO)?;
+    if count == 0 { return Err(EINVAL); }
+    let mut cpus = Vec::with_capacity(count, GFP_KERNEL)?;
+    for &cpu in &context.requests[..count] {
+        let slot = context.table.slot(cpu).map_err(|_| EIO)?;
+        let actual = observed_cpu(cpu, &read, &hotplug)?;
+        if actual.online || slot.owner() != Some(owner) || actual.hardware_id != slot.hardware_id()
+            || actual.numa_node != slot.numa_node() || actual.hardware_id > i32::MAX as u32 {
+            return Err(EIO);
+        }
+        cpus.push(BootCpu { linux_id: cpu as u32, hardware_id: actual.hardware_id, numa_node: actual.numa_node }, GFP_KERNEL)?;
+    }
+    // SAFETY: Linux fixes this bound under the retained CPU read guard.
+    let linux_cpus = unsafe { bindings::nr_cpu_ids } as usize;
+    operation(&BootTopology { cpus, linux_cpus, hotplug: &hotplug, read: &read })
+}
+
+pub(super) fn prepare_os_boot(owner: OsToken, kmsg: u64, kmsg_bytes: u64, trampoline: u64) -> Result {
+    with_boot_topology(owner, |topology| super::smp_memory::prepare_os_boot(owner, topology, kmsg, kmsg_bytes, trampoline))
+}
+
+pub(super) fn start_os_boot(owner: OsToken) -> Result {
+    with_boot_topology(owner, |topology| super::smp_memory::start_os_boot(owner, topology))
 }

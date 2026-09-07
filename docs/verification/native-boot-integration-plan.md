@@ -98,3 +98,29 @@ owners for native/compat calls. See the separate backend/image checkpoint.
 The SMP provider still uses v2 until its real preparation/start adapter is
 ready. Patch 0006 proposes existing Linux INIT/SIPI and init_top_pgt exports;
 its first apply/build and native SMP integration remain pending.
+
+## SMP integration work in progress
+
+The native provider now uses the tested v3 preparation/start ABI in source.
+Preparation reuses the existing `ihk_trampoline` parameter under Linux's
+parameter mutex, the canonical loaded generation, existing boot ABI structs,
+original compound page owners and startup code. IRQ route slots retain their
+generation and veto the Linux target's offline transition. An irreversible
+started marker precedes INIT/SIPI; uncertain boot leaks retained storage rather
+than freeing it. Deep resource paths also reject started-image mutation.
+
+The read-only `native_boot_prepare_only=1` diagnostic holds a complete unstarted
+preparation and returns EAGAIN; it never reports boot success. The new guest
+probe will exercise allocation failures, cross-OS trampoline exclusion, repeated
+preparation, CPU-change invalidation and destruction over both ABIs. A later
+start run must capture actual guest progress and retain failed-boot owners.
+Current start code deliberately reports incomplete boot while the real host IKC
+service is still being connected. Guest status 2 is not full readiness.
+Performance event maps remain unsupported/zero and the current boot profile
+uses 2 MiB default huge pages; those capabilities require separate integration.
+
+Patch 0006 is applied in the isolated prepared Linux tree, with the existing
+INIT/SIPI body verified byte-identical. Its first complete Linux rebuild is
+still running. The new SMP source and guest probes have not yet compiled or
+executed. This WIP checkpoint precedes those checks and is not declared-stage
+or production acceptance.

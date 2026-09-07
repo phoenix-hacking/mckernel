@@ -29,6 +29,8 @@ mod ihk_mapping;
 mod smp_image;
 mod smp_loader;
 mod smp_startup;
+mod smp_trampoline;
+mod smp_boot_code;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -65,13 +67,15 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
             // THIS_MODULE. IHK acquires its own module reference before the
             // instance becomes live; the raw scalar argument is never a pointer.
             let result = unsafe {
-                ihk_os_create_unbooted_v2(
+                ihk_os_create_unbooted_v3(
                     IHK_SMP_CONTROL_DEVICE_MINOR,
                     THIS_MODULE.as_ptr().cast(),
                     arg as u64,
                     1,
                     Some(ihk_smp_os_ioctl_v2),
                     Some(ihk_smp_os_release_v2),
+                    Some(ihk_smp_prepare_boot_v3),
+                    Some(ihk_smp_start_boot_v3),
                 )
             };
             if result < 0 {
@@ -106,6 +110,11 @@ type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;
 // SAFETY: IHK holds the exclusive initial-state destruction guard and module
 // owner until this callback returns all resources or leaves them unchanged.
 type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
+// SAFETY: IHK supplies its own live kmsg physical address and allocation size.
+// Preparation cannot start CPUs or publish guest work into Linux queues.
+type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;
+// SAFETY: IHK publishes Booting first and retains owners after any start result.
+type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
 
 // SAFETY: The provider owns these namespaced symbols for its full module
 // lifetime.  The byte is read-only; the C-ABI functions exchange only scalars
@@ -127,14 +136,16 @@ extern "C" {
     fn ihk_smp_provider_open_v1(minor: u32) -> i64;
     #[link_name = "ihk_smp_provider_close_v1"]
     fn ihk_smp_provider_close_v1(receipt: i64);
-    #[link_name = "ihk_os_create_unbooted_v2"]
-    fn ihk_os_create_unbooted_v2(
+    #[link_name = "ihk_os_create_unbooted_v3"]
+    fn ihk_os_create_unbooted_v3(
         provider_minor: u32,
         owner: *mut core::ffi::c_void,
         argument: u64,
         callback_abi: u32,
         ioctl: Option<IhkSmpOsIoctlV2>,
         release: Option<IhkSmpOsReleaseV2>,
+        prepare: Option<IhkSmpPrepareBootV3>,
+        start: Option<IhkSmpStartBootV3>,
     ) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
@@ -188,6 +199,44 @@ unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {
         Ok(()) => 0,
         Err(error) => error.to_errno(),
     }
+}
+
+// SAFETY: IHK holds its exact OS lease, per-OS operation mutex and SMP module
+// owner. kmsg scalars identify IHK's allocation, never an ioctl user pointer.
+unsafe extern "C" fn ihk_smp_prepare_boot_v3(slot: u32, generation: u64, kmsg: u64, kmsg_bytes: u64) -> i32 {
+    // SAFETY: The v3 callback retains the same trusted IHK generation proof.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner, Err(_) => return EINVAL.to_errno(),
+    };
+    // SAFETY: The diagnostic parameter is read-only after module init.
+    let prepare_only = unsafe { NATIVE_BOOT_PREPARE_ONLY };
+    if prepare_only > 1 { return EINVAL.to_errno(); }
+    // SAFETY: Reuse the existing writable ihk_trampoline parameter. Linux's
+    // parameter mutex excludes concurrent sysfs writes during this scalar
+    // snapshot; no parameter lock crosses resource locking or CPU startup.
+    let trampoline = unsafe {
+        kernel::bindings::kernel_param_lock(THIS_MODULE.as_ptr());
+        let value = core::ptr::read_volatile(&raw const IHK_TRAMPOLINE);
+        kernel::bindings::kernel_param_unlock(THIS_MODULE.as_ptr());
+        value
+    };
+    match smp_cpu::prepare_os_boot(owner, kmsg, kmsg_bytes, trampoline) {
+        Ok(()) if prepare_only == 1 => {
+            pr_info!("IHK-SMP: boot preparation held os={} generation={}; diagnostic mode, CPUs not started\n", slot, generation);
+            -11
+        }
+        Ok(()) => 0, Err(error) => error.to_errno(),
+    }
+}
+
+// SAFETY: IHK has already published Booting and excludes resource mutation.
+// The native adapter retains every owner before the first CPU-start effect.
+unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {
+    // SAFETY: The v3 start callback carries the same exact-generation lease.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner, Err(_) => return EINVAL.to_errno(),
+    };
+    match smp_cpu::start_os_boot(owner) { Ok(()) => 0, Err(error) => error.to_errno() }
 }
 
 // These callbacks deliberately own lifecycle only.  Returning success from
@@ -344,7 +393,7 @@ struct KernelParameter {
 
 // SAFETY: Each instance is immutable after relocation.  Linux owns access to
 // the pointed-to parameter storage and serializes writes with its parameter
-// subsystem; Rust code never dereferences these pointers.
+// subsystem; the used trampoline value is read under that same mutex.
 unsafe impl Sync for KernelParameter {}
 
 const _: [(); core::mem::size_of::<kernel::bindings::kernel_param>()] =
@@ -408,6 +457,20 @@ numeric_parameter!(
     permission: 0o644,
     loadable_name_bytes: b"ihk_phys_start\0",
     builtin_name_bytes: b"ihk_smp_x86_64.ihk_phys_start\0",
+);
+
+// Additive read-only diagnostic parameter; the six legacy parameters retain
+// their ABI. A held preparation returns EAGAIN and never claims a boot success.
+numeric_parameter!(
+    name: native_boot_prepare_only,
+    storage: NATIVE_BOOT_PREPARE_ONLY,
+    descriptor: PARAM_NATIVE_BOOT_PREPARE_ONLY,
+    rust_type: core::ffi::c_uint,
+    ops: param_ops_uint,
+    default: 0,
+    permission: 0o400,
+    loadable_name_bytes: b"native_boot_prepare_only\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.native_boot_prepare_only\0",
 );
 
 numeric_parameter!(
@@ -569,6 +632,19 @@ modinfo_pair!(
     IHK_TRAMPOLINE_BUILTIN_TYPE_MODINFO,
     b"parmtype=ihk_trampoline:ulong\0",
     b"ihk_smp_x86_64.parmtype=ihk_trampoline:ulong\0"
+);
+
+modinfo_pair!(
+    NATIVE_PREPARE_PARM_MODINFO,
+    NATIVE_PREPARE_BUILTIN_PARM_MODINFO,
+    b"parm=native_boot_prepare_only:Hold owned boot preparation without starting CPUs (0 or 1)\0",
+    b"ihk_smp_x86_64.parm=native_boot_prepare_only:Hold owned boot preparation without starting CPUs (0 or 1)\0"
+);
+modinfo_pair!(
+    NATIVE_PREPARE_TYPE_MODINFO,
+    NATIVE_PREPARE_BUILTIN_TYPE_MODINFO,
+    b"parmtype=native_boot_prepare_only:uint\0",
+    b"ihk_smp_x86_64.parmtype=native_boot_prepare_only:uint\0"
 );
 
 module! {
