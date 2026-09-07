@@ -33756,3 +33756,9 @@ Command: fixed native runner run-native-irq-completion-checks.py, step 3: run-na
 Environment: clean source 3f740ba6, pinned native Rust 1.92, offline four-CPU/12-GiB container. The fresh image guest 4 and complete source-consumer inventory passed first.
 Result: git diff --check passed, then rustfmt stopped on the ordering of the two imported modules in the Linux IRQ verification fixture. The unittest suite did not begin. Apply the formatter-requested declaration order only; preserve the old module artifact and runtime captures as their exact original sources.
 Evidence: /work/native-irq-full-suite-20260907-1.log/json and /work/native-irq-completion-checks-20260907-1.
+
+[2026-09-07T19:18:32.633202+00:00] Direct IRQ transport module attempt 1: FAIL
+Command: fixed native runner run-native-irq-transport-validation.py, first step: build-native-irq-transport-module.py remote 1.
+Environment: source 5552d846; fresh Linux 6.12 export prototype kernel passed, unchanged debug config, native Rust 1.92, four CPUs/12 GiB/offline container.
+Result: the exact-header C transport/layout witness compiled. Rust rejected assert_eq!(bindings::nr_cpu_ids, 4), whose macro creates a shared reference to a mutable Linux static. Read the protected scalar into a local before asserting; retain the compiler rejection and keep static-mut-refs enabled. No guest or later validation step ran.
+Evidence: /work/native-irq-transport-module-20260907-remote-1/module-build.log and record.json; /work/native-irq-transport-validation-20260907-1.

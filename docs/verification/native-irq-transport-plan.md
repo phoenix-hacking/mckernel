@@ -42,3 +42,17 @@ prevent target CPU removal during active communication, and stop/drain every
 sender before retirement. The existing CPU/resource owners and IHK operation
 mutex remain authoritative. Then connect owned boot parameters/trampoline,
 native CPU wakeup, readiness, IKC and application execution.
+
+The source-bound prototype now passes both modes on the newly rebuilt kernel.
+The direct mode has no `irq_work_queue` import, executes 1,024 callbacks across
+three different target CPUs and two module lifetimes, and drains each target.
+The original local-queue mode also passes 1,024 callbacks and both unloads.
+The only compiler failure was the fixture assertion's temporary shared borrow
+of `nr_cpu_ids`; a protected scalar read fixes it with the lint still enabled.
+Retain that failure with the successful captures.
+
+Integrate patch 0005 into the current exact-build workflow and live additive
+license-input inventory. Refresh only their current verifier/dependency byte
+bindings. Preserve the historical source/config patch replay, predecessor
+contracts, and false production-credit flags. A fresh current-stage check and
+the focused downstream groups must precede the next boot implementation.

@@ -255,7 +255,8 @@ impl kernel::Module for IrqWorkVerification {
             ALLOCATE_FAILS.store(false, Ordering::Relaxed);
             #[cfg(native_linux_irq_work_remote_queue)]
             let initiating_cpu = {
-                assert_eq!(kernel::bindings::nr_cpu_ids, 4);
+                let cpu_count = (&raw const kernel::bindings::nr_cpu_ids).read();
+                assert_eq!(cpu_count, 4);
                 let origin = current_linux_cpu();
                 assert!(origin < 4);
                 for cpu in 0..4 {

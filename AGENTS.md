@@ -55,13 +55,19 @@ boot parameters/trampoline, real CPU startup and cross-kernel IRQ/IKC.
 The IRQ module test uses mocked boot/guest context and a local Linux transport;
 it does not prove McKernel boot. Full Rust/assembly completion remains open.
 
-Next transport WIP: `native-irq-transport-plan.md` records reuse of the same
-producer/list bodies with Linux's real raised queues and cross-CPU APIC
-delivery. Patch 0005 exports the existing queue and per-CPU physical translator;
-it applies exactly without changing any C function body. The separate remote
-selection in the existing module fixture is prepared and formatted. A fresh
-kernel/module build and guest are pending; this patch is not yet integrated
-into the authoritative stage/workflow or production acceptance.
+Direct transport checkpoint: the same producer/list bodies now publish into
+Linux's real raised queues and deliver the APIC IRQ-work vector across CPUs.
+Patch 0005 exports the existing queue and per-CPU physical translator without
+changing any C function body. The rebuilt pinned kernel and verification module
+pass 1,024 callbacks across three remote target CPUs and two module lifetimes,
+including final drains; the original local-queue fixture also passes 1,024.
+The remote module has no `irq_work_queue` import. See
+`docs/verification/native-irq-transport-checkpoint-20260907.json` for 25 retained
+artifacts, including the corrected compiler failure. The current workflow and
+additive license inventory now include patch 0005, with their current byte
+bindings refreshed. Focused validation and a fresh declared-stage build/guest
+remain pending. Mock guest context remains: no executing McKernel CPU or IKC
+handshake is claimed, and the earlier intermittent Linux idle/RCU stall is open.
 
 Latest user clarification (2026-09-07): completing the active goal requires the
 entire McKernel kernel implementation to be Rust or assembly, including its

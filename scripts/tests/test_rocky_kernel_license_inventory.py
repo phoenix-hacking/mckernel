@@ -394,6 +394,7 @@ class LicenseInventoryTests(unittest.TestCase):
     def test_repository_inventory_binds_new_foundations_without_review_credit(self):
         relatives = ('host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch',
  'host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch',
+ 'host-kernel/kbuild/patches/0005-irq-work-export-remote-queue-primitives.patch',
  'host-kernel/native-rust/device_registry.rs',
  'host-kernel/native-rust/os_runtime.rs',
  'host-kernel/native-rust/smp_resource.rs',

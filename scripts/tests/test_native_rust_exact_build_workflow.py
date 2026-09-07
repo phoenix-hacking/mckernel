@@ -1741,10 +1741,13 @@ exec {modinfo_fd}<&-
         self.assertIn("scripts/ihk_native_queue_check.py", self.workflow)
         self.assertIn('--rustc /usr/bin/rustc --require-rustc', self.workflow)
 
-    def test_both_local_kernel_patches_are_applied(self):
+    def test_declared_local_kernel_patches_are_applied(self):
         for name in (
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
             "0002-rust-bindings-expose-module-parameters.patch",
+            "0003-driver-core-export-device-hotplug-transactions.patch",
+            "0004-mm-export-memory-hotplug-read-exclusion.patch",
+            "0005-irq-work-export-remote-queue-primitives.patch",
         ):
             self.assertIn(name, self.workflow)
         patch = PATCH.read_text(encoding="utf-8")

@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:2246937855ec66ac5c3991170ac11ed64143772b0856c01c99122a9ba6eb2b0e"
+    "ISOLATED_SELF_DIGEST:84c012975ed62183de70b3c9ea711e2ee6453561ad3bd7b754019f6ef7922492"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -727,7 +727,7 @@ EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {'Refuse the wrong runtime and install exact build tools': 'acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420',
  'Check out the exact candidate without credentials': '4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc',
  'Verify source-only contracts without claiming readiness': '2fd9a5b4a2458a41b50065b7edd944a9d886ddcf1d4c361fd575f6cd5f4caf2e',
- 'Acquire, patch, and credit-forbidden-stage the exact source': '28b586e744c7c8af2bcf2ecb005428d71a89e5dac8a67234d703c11db9655fd6',
+ 'Acquire, patch, and credit-forbidden-stage the exact source': '2ae02bf97b4906e1a30950e46a60d428fbf0b48e5bf4cac959ba7d334c9f4093',
  'Resolve the evidence-only module configuration twice': 'e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943',
  'Compile the exact kernel and native Rust modules': '17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a',
  'Validate built metadata and capture immutable diagnostics': 'f97b2c0c1a62930bd3d5bed7120cbba0964d7c27c0adf4a39c77fa0e9d5f91bc',
@@ -742,9 +742,9 @@ EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = 'ee98e6536a7d75907eb08c3eb2eaacddc4ee651d46a8263bf36b3e3999f7a5a5'
-EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': 'b918b14b38035e9d90f7acbb511db6a59a4b581d2ea2cb716413f3d9e549a9e1',
-                    'size': 93655,
-                    'git_blob_sha1': 'b4c18fa98a73c5c4a40f015a7505a71a466e2a2f'},
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {'build_workflow': {'sha256': '16fb30108ea877dcdb7bfb8e36e100d756160c8c8284ee4ca41c483efeaa81e9',
+                    'size': 93859,
+                    'git_blob_sha1': '1f80cfed984fed789ed3bd133971456c8fe2b2eb'},
  'runtime_pr_workflow': {'git_blob_sha1': '64bb717852d36fc1021e2b61e83aca6415b184d5',
                          'sha256': '628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265',
                          'size': 754},

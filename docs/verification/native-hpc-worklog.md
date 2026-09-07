@@ -711,3 +711,21 @@ fixture formatting pass. The prepared remote selection holds CPU topology
 exclusion, sends the real APIC IRQ-work vector to all three other CPUs, and
 checks actual callback CPU and final drain. Native kernel/module compilation
 and guest execution are next; no transport pass or boot is claimed yet.
+
+The subsequent pinned kernel and both fixture selections now build and pass
+their original-default-idle guests. The direct queue/APIC mode executes 1,024
+callbacks on three remote destination CPUs across two module lifetimes, with
+real Linux busy-bit clearing, `irq_work_sync` and synchronous final drains.
+Its imports exclude `irq_work_queue`; Linux consumes the exact object published
+by the retained Rust producer. The original queue-helper mode also passes
+1,024 callbacks and both unloads. These captures do not resolve the earlier
+intermittent timer/RCU stall or demonstrate an executing McKernel CPU.
+
+The [transport checkpoint](native-irq-transport-checkpoint-20260907.json)
+retains 25 verified artifacts (49,820,624 bytes), including the initial module
+compiler failure and its scalar-read correction with the lint preserved.
+Patch 0005 is now declared in the exact-build workflow and live additive
+license inventory. Their current runtime, FP-0006, license and RS-006 byte
+bindings have been updated without changing frozen source witnesses or credit
+flags. Next validate those focused groups and a fresh declared build/guest,
+then continue owned boot parameters/trampoline, CPU startup and IRQ/IKC.

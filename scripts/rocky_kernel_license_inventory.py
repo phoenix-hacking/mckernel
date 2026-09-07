@@ -123,6 +123,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
     "host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch",
     "host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch",
+    "host-kernel/kbuild/patches/0005-irq-work-export-remote-queue-primitives.patch",
     "host-kernel/kbuild/stage-manifest.json",
     "host-kernel/kbuild/Kbuild.in",
     "host-kernel/kbuild/Kconfig",
@@ -235,6 +236,7 @@ LOCKED_CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
 CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v2"
 ADDITIVE_REPOSITORY_INPUT_PATHS = ('host-kernel/kbuild/patches/0003-driver-core-export-device-hotplug-transactions.patch',
  'host-kernel/kbuild/patches/0004-mm-export-memory-hotplug-read-exclusion.patch',
+ 'host-kernel/kbuild/patches/0005-irq-work-export-remote-queue-primitives.patch',
  'host-kernel/native-rust/device_registry.rs',
  'host-kernel/native-rust/os_runtime.rs',
  'host-kernel/native-rust/smp_resource.rs',
