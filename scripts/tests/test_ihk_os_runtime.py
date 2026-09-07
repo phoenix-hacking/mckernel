@@ -21,7 +21,9 @@ class NativeOsRuntimeTests(unittest.TestCase):
         for name in ("abi", "device_registry", "os_registry", "ihk_ioctl", "os_runtime"):
             relative = "abi/x86_64.rs" if name == "abi" else name + ".rs"
             path = ROOT / "host-kernel/native-rust" / relative
-            modules.append('#[path = "' + str(path) + '"]\nmod ' + name + ';')
+            # Match the production crate's data-only ABI-module visibility lint.
+            attributes = '#[allow(unreachable_pub)]\n' if name == 'abi' else ''
+            modules.append(attributes + '#[path = "' + str(path) + '"]\nmod ' + name + ';')
         self.assertEqual(1, template.count("// SOURCE_MODULES"))
         with tempfile.TemporaryDirectory(prefix="ihk-os-runtime-") as temporary:
             directory = Path(temporary)
@@ -30,7 +32,7 @@ class NativeOsRuntimeTests(unittest.TestCase):
             binary = directory / "tests"
             environment = dict(os.environ, RUSTC_BOOTSTRAP="1")
             result = subprocess.run(
-                [rustc, "--edition=2021", "--test", "--cfg", "CONFIG_COMPAT", "-Dwarnings",
+                [rustc, "--edition=2021", "--test", "--cfg", "CONFIG_COMPAT", "-Dwarnings", "-Dunreachable-pub",
                  str(fixture), "-o", str(binary)],
                 env=environment, capture_output=True, text=True, timeout=90,
             )

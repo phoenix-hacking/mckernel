@@ -240,7 +240,7 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
     fn ihk_smp_provider_close_v1(receipt: i64);
     #[link_name = "ihk_os_create_unbooted_v1"]
     fn ihk_os_create_unbooted_v1(provider_minor: u32,
-        owner: *mut kernel::bindings::module, argument: u64) -> i64;
+        owner: *mut core::ffi::c_void, argument: u64) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
 }''',
@@ -303,37 +303,37 @@ REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/os_runtime.rs'] = (
         base: u32,
         count: u32,
         name: *const i8,
-        operations: *const bindings::file_operations,
+        operations: *const c_void,
     ) -> i32;
     fn __unregister_chrdev(major: u32, base: u32, count: u32, name: *const i8);
     fn class_create(name: *const i8) -> *mut bindings::class;
     fn class_destroy(class: *const bindings::class);
     fn device_create(
         class: *const bindings::class,
-        parent: *mut bindings::device,
+        parent: *mut c_void,
         dev: u32,
         data: *mut c_void,
         format: *const i8,
         ...
-    ) -> *mut bindings::device;
+    ) -> *mut c_void;
     fn device_destroy(class: *const bindings::class, dev: u32);
     fn get_free_pages_noprof(flags: u32, order: u32) -> usize;
     fn free_pages(address: usize, order: u32);
-    fn try_module_get(module: *mut bindings::module) -> bool;
-    fn module_put(module: *mut bindings::module);
+    fn try_module_get(module: *mut c_void) -> bool;
+    fn module_put(module: *mut c_void);
 }'''),
     ('OS create ABI', '''#[export_name = "ihk_os_create_unbooted_v1"]
 // SAFETY: The C caller supplies its already pinned Linux module pointer; this
 // adapter acquires a separate module reference before publishing any OS node.
-pub unsafe extern "C" fn ihk_os_create_unbooted_v1(
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v1(
     provider_minor: u32,
-    owner: *mut bindings::module,
+    owner: *mut c_void,
     argument: u64,
 ) -> i64 {'''),
     ('OS destroy ABI', '''#[export_name = "ihk_os_destroy_unbooted_v1"]
 // SAFETY: Only scalar identities cross this C ABI. Registry guards validate
 // ownership and exclude live open files before any allocation is reclaimed.
-pub extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {'''),
+pub(crate) extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {'''),
     ('OS open ABI', '''unsafe extern "C" fn os_open(inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {'''),
     ('OS release ABI', '''unsafe extern "C" fn os_release(_inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {'''),
     ('OS ioctl ABI', '''unsafe extern "C" fn os_ioctl(
@@ -344,7 +344,7 @@ pub extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) ->
     ('OS create export record', '''#[export_name = "__export_symbol_ihk_os_create_unbooted_v1"]
 #[link_section = ".export_symbol"]
 #[used(compiler)]
-pub static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+pub(crate) static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     license: *b"GPL\\0",
     namespace: *b"MCKERNEL_IHK_V1\\0",
     padding: [0; 4],
@@ -353,7 +353,7 @@ pub static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     ('OS destroy export record', '''#[export_name = "__export_symbol_ihk_os_destroy_unbooted_v1"]
 #[link_section = ".export_symbol"]
 #[used(compiler)]
-pub static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     license: *b"GPL\\0",
     namespace: *b"MCKERNEL_IHK_V1\\0",
     padding: [0; 4],
@@ -510,7 +510,7 @@ REVIEWED_RUST_OUTER_BLOCKS = frozenset(
     )
 )
 
-REVIEWED_RUST_BLOCK_PREFIXES.update({'OS Linux kernel exports': '// SAFETY: These are Linux 6.12 kernel exports with their C header prototypes.\n// Calls below supply only module-resident operations, registered device IDs,\n// valid kernel module pointers or allocation addresses owned by this adapter.\n', 'OS create ABI': "// SAFETY: Called only by the pinned native SMP control-file ioctl. The owner\n// is the caller's Linux module pointer, never a user argument or Rust object.\n// No callback or caller data is retained; a Linux module reference is acquired.\n", 'OS destroy ABI': '// SAFETY: This C ABI accepts scalar minor numbers only. It tears down solely an\n// unbooted OS belonging to the given live provider and propagates busy errors.\n', 'OS open ABI': '// SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by\n// .owner. Successful open installs exactly one owned lease in private_data.\n', 'OS release ABI': '// SAFETY: Linux calls release once after the final file reference. No ioctl\n// can still borrow the private lease, and .owner keeps this module resident.\n', 'OS ioctl ABI': '// SAFETY: Linux pins the file for the callback; its immutable private lease\n// keeps the exact OS generation live until this callback and all peers finish.\n', 'OS create export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n', 'OS destroy export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n'})
+REVIEWED_RUST_BLOCK_PREFIXES.update({'OS Linux kernel exports': '// SAFETY: These are Linux 6.12 kernel exports with their C header ABI.\n// Calls below supply only module-resident operations, registered device IDs,\n// valid kernel module pointers or allocation addresses owned by this adapter.\n', 'OS create ABI': "// SAFETY: Called only by the pinned native SMP control-file ioctl. The owner\n// is the caller's Linux module pointer, never a user argument or Rust object.\n// No callback or caller data is retained; a Linux module reference is acquired.\n", 'OS destroy ABI': '// SAFETY: This C ABI accepts scalar minor numbers only. It tears down solely an\n// unbooted OS belonging to the given live provider and propagates busy errors.\n', 'OS open ABI': '// SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by\n// .owner. Successful open installs exactly one owned lease in private_data.\n', 'OS release ABI': '// SAFETY: Linux calls release once after the final file reference. No ioctl\n// can still borrow the private lease, and .owner keeps this module resident.\n', 'OS ioctl ABI': '// SAFETY: Linux pins the file for the callback; its immutable private lease\n// keeps the exact OS generation live until this callback and all peers finish.\n', 'OS create export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n', 'OS destroy export record': '// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.\n'})
 REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset(('OS Linux kernel exports', 'OS create ABI', 'OS destroy ABI', 'OS open ABI', 'OS release ABI', 'OS ioctl ABI', 'OS create export record', 'OS destroy export record'))
 
 REVIEWED_RUST_BRACED_BLOCKS = frozenset(

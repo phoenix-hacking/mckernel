@@ -58,7 +58,7 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
             let result = unsafe {
                 ihk_os_create_unbooted_v1(
                     IHK_SMP_CONTROL_DEVICE_MINOR,
-                    THIS_MODULE.as_ptr(),
+                    THIS_MODULE.as_ptr().cast(),
                     arg as u64,
                 )
             };
@@ -110,7 +110,7 @@ extern "C" {
     fn ihk_smp_provider_close_v1(receipt: i64);
     #[link_name = "ihk_os_create_unbooted_v1"]
     fn ihk_os_create_unbooted_v1(provider_minor: u32,
-        owner: *mut kernel::bindings::module, argument: u64) -> i64;
+        owner: *mut core::ffi::c_void, argument: u64) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
 }

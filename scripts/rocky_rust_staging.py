@@ -117,7 +117,7 @@ EXPECTED_INPUTS = ({'destination': 'Kbuild',
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
-  'sha256': '542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f'})
+  'sha256': '624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a'})
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -194,7 +194,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': '051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01'},
+  'source_sha256': '6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -304,7 +304,7 @@ AUDITED_SMP_EXIT_CALLBACK_TYPE = (
     '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
     'type IhkSmpProviderExitV2 = extern "C" fn();'
 )
-AUDITED_SMP_PROVIDER_EXTERN = 'extern "C" {\n    #[link_name = "ihk_provider_lifecycle_v1"]\n    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n    #[link_name = "ihk_smp_provider_attach_v2"]\n    fn ihk_smp_provider_attach_v2(\n        callback_abi: u32,\n        flags: u32,\n        init: Option<IhkSmpProviderInitV2>,\n        exit: Option<IhkSmpProviderExitV2>,\n    ) -> i64;\n    #[link_name = "ihk_smp_provider_detach_v2"]\n    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n    #[link_name = "ihk_smp_provider_open_v1"]\n    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n    #[link_name = "ihk_smp_provider_close_v1"]\n    fn ihk_smp_provider_close_v1(receipt: i64);\n    #[link_name = "ihk_os_create_unbooted_v1"]\n    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n        owner: *mut kernel::bindings::module, argument: u64) -> i64;\n    #[link_name = "ihk_os_destroy_unbooted_v1"]\n    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n}'
+AUDITED_SMP_PROVIDER_EXTERN = 'extern "C" {\n    #[link_name = "ihk_provider_lifecycle_v1"]\n    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n    #[link_name = "ihk_smp_provider_attach_v2"]\n    fn ihk_smp_provider_attach_v2(\n        callback_abi: u32,\n        flags: u32,\n        init: Option<IhkSmpProviderInitV2>,\n        exit: Option<IhkSmpProviderExitV2>,\n    ) -> i64;\n    #[link_name = "ihk_smp_provider_detach_v2"]\n    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n    #[link_name = "ihk_smp_provider_open_v1"]\n    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n    #[link_name = "ihk_smp_provider_close_v1"]\n    fn ihk_smp_provider_close_v1(receipt: i64);\n    #[link_name = "ihk_os_create_unbooted_v1"]\n    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n        owner: *mut core::ffi::c_void, argument: u64) -> i64;\n    #[link_name = "ihk_os_destroy_unbooted_v1"]\n    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n}'
 AUDITED_SMP_INIT_CALLBACK_EXTERN = (
     '// SAFETY: The callback owns no foreign state and returns only a literal errno\n'
     '// status through the exact v2 function-pointer ABI.\n'

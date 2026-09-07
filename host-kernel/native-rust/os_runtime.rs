@@ -35,7 +35,10 @@ static OS_OBJECTS: [AtomicPtr<OsObject>; OS_CAPACITY] =
 static OS_CLASS: AtomicPtr<bindings::class> = AtomicPtr::new(ptr::null_mut());
 static OS_MAJOR: AtomicU32 = AtomicU32::new(0);
 
-// SAFETY: These are Linux 6.12 kernel exports with their C header prototypes.
+// Empty lockdep structs in generated bindings cannot cross a Rust extern
+// declaration. Erase only opaque pointees; keep the exact C pointer/scalar ABI.
+//
+// SAFETY: These are Linux 6.12 kernel exports with their C header ABI.
 // Calls below supply only module-resident operations, registered device IDs,
 // valid kernel module pointers or allocation addresses owned by this adapter.
 extern "C" {
@@ -44,24 +47,24 @@ extern "C" {
         base: u32,
         count: u32,
         name: *const i8,
-        operations: *const bindings::file_operations,
+        operations: *const c_void,
     ) -> i32;
     fn __unregister_chrdev(major: u32, base: u32, count: u32, name: *const i8);
     fn class_create(name: *const i8) -> *mut bindings::class;
     fn class_destroy(class: *const bindings::class);
     fn device_create(
         class: *const bindings::class,
-        parent: *mut bindings::device,
+        parent: *mut c_void,
         dev: u32,
         data: *mut c_void,
         format: *const i8,
         ...
-    ) -> *mut bindings::device;
+    ) -> *mut c_void;
     fn device_destroy(class: *const bindings::class, dev: u32);
     fn get_free_pages_noprof(flags: u32, order: u32) -> usize;
     fn free_pages(address: usize, order: u32);
-    fn try_module_get(module: *mut bindings::module) -> bool;
-    fn module_put(module: *mut bindings::module);
+    fn try_module_get(module: *mut c_void) -> bool;
+    fn module_put(module: *mut c_void);
 }
 
 fn errno(value: i32) -> Error {
@@ -93,7 +96,7 @@ impl ProviderModule {
             return Err(EINVAL);
         }
         // SAFETY: The caller supplies its currently pinned Linux module.
-        if !unsafe { try_module_get(module) } {
+        if !unsafe { try_module_get(module.cast()) } {
             return Err(EBUSY);
         }
         Ok(Self(module))
@@ -104,7 +107,7 @@ impl Drop for ProviderModule {
     fn drop(&mut self) {
         // SAFETY: This unique owner balances one successful try_module_get.
         // The caller's control-file reference remains live during destruction.
-        unsafe { module_put(self.0) };
+        unsafe { module_put(self.0.cast()) };
     }
 }
 
@@ -167,7 +170,7 @@ impl OsDeviceFamily {
                 0,
                 OS_CAPACITY as u32,
                 kernel::c_str!("mcos").as_char_ptr(),
-                &OS_FOPS,
+                ptr::from_ref(&OS_FOPS).cast(),
             )
         };
         to_result(major)?;
@@ -224,13 +227,13 @@ impl Drop for OsDeviceFamily {
 #[export_name = "ihk_os_create_unbooted_v1"]
 // SAFETY: The C caller supplies its already pinned Linux module pointer; this
 // adapter acquires a separate module reference before publishing any OS node.
-pub unsafe extern "C" fn ihk_os_create_unbooted_v1(
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v1(
     provider_minor: u32,
-    owner: *mut bindings::module,
+    owner: *mut c_void,
     argument: u64,
 ) -> i64 {
     // SAFETY: The exported boundary's caller guarantees the owner lifetime.
-    match unsafe { create_os(provider_minor, owner, argument) } {
+    match unsafe { create_os(provider_minor, owner.cast(), argument) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
     }
@@ -315,7 +318,7 @@ unsafe fn create_os(
 #[export_name = "ihk_os_destroy_unbooted_v1"]
 // SAFETY: Only scalar identities cross this C ABI. Registry guards validate
 // ownership and exclude live open files before any allocation is reclaimed.
-pub extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {
+pub(crate) extern "C" fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64 {
     match destroy_os(provider_minor, minor) {
         Ok(()) => 0,
         Err(error) => error.to_errno() as i64,
@@ -425,7 +428,7 @@ const OS_FOPS: bindings::file_operations = {
 #[export_name = "__export_symbol_ihk_os_create_unbooted_v1"]
 #[link_section = ".export_symbol"]
 #[used(compiler)]
-pub static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+pub(crate) static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     license: *b"GPL\0",
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
@@ -436,7 +439,7 @@ pub static IHK_OS_CREATE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
 #[export_name = "__export_symbol_ihk_os_destroy_unbooted_v1"]
 #[link_section = ".export_symbol"]
 #[used(compiler)]
-pub static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     license: *b"GPL\0",
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],

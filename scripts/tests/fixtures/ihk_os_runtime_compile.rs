@@ -44,9 +44,12 @@ impl<T> TestBox<T> {
 }
 
 pub mod bindings {
-    #[repr(C)] pub struct module { pub identity: u32 }
+    // CONFIG_LOCKDEP=n produces this empty C type in the exact Rocky bindings.
+    // Typed foreign declarations that transitively expose it must fail linting.
+    #[repr(C)] pub struct lockdep_map {}
+    #[repr(C)] pub struct module { pub identity: u32, pub lockdep: lockdep_map }
     #[repr(C)] pub struct class { pub identity: u32 }
-    #[repr(C)] pub struct device { pub identity: u32 }
+    #[repr(C)] pub struct device { pub identity: u32, pub lockdep: lockdep_map }
     #[repr(C)] pub struct inode { pub i_rdev: u32 }
     #[repr(C)] pub struct file { pub private_data: *mut core::ffi::c_void }
     #[repr(C)] pub struct file_operations {
@@ -66,9 +69,9 @@ pub mod bindings {
 pub struct ThisModule;
 impl ThisModule { pub const fn as_ptr(&self) -> *mut bindings::module { core::ptr::addr_of!(MODULE).cast_mut() } }
 pub static THIS_MODULE: ThisModule = ThisModule;
-static MODULE: bindings::module = bindings::module { identity: 1 };
+static MODULE: bindings::module = bindings::module { identity: 1, lockdep: bindings::lockdep_map {} };
 static CLASS: bindings::class = bindings::class { identity: 1 };
-static DEVICE: bindings::device = bindings::device { identity: 1 };
+static DEVICE: bindings::device = bindings::device { identity: 1, lockdep: bindings::lockdep_map {} };
 #[repr(C, align(8))]
 pub struct IhkExportSymbolRecord {
     license: [u8; 4], namespace: [u8; 16], padding: [u8; 4], symbol: *const u8,
@@ -172,7 +175,7 @@ extern "C" fn module_put(module: *mut bindings::module) {
 }
 
 fn create(argument: u64) -> i64 {
-    unsafe { os_runtime::ihk_os_create_unbooted_v1(0, THIS_MODULE.as_ptr(), argument) }
+    unsafe { os_runtime::ihk_os_create_unbooted_v1(0, THIS_MODULE.as_ptr().cast(), argument) }
 }
 fn destroy(minor: u64) -> i64 { os_runtime::ihk_os_destroy_unbooted_v1(0, minor) }
 fn open(minor: u32) -> std::result::Result<bindings::file, i32> {

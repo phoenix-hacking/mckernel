@@ -243,7 +243,7 @@ REVIEW_GLOB = "rk007-native-build-review-*-v2.json"
 SCHEMA_VERSION = 2
 REVIEW_ID = "rk-007-native-rust-exact-build-review-ef58860e-v2"
 # Filled after the exact ef58860e artifact was downloaded and reviewed.
-REVIEW_SHA256 = 'b02f9d52973585731aee786de78d1c8f0873eaaf107d7a4138b2d42f9d7ff425'
+REVIEW_SHA256 = '6534e52cdcd0346e2639b851f7df982159668853e492198d4c44281a6d2d0be5'
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
 )
@@ -380,9 +380,9 @@ EXPECTED_CURRENT_OVERRIDES = [{'path': '.github/workflows/native-rust-host-modul
   'runtime_git_blob_sha1': '3780ba2239d4b365f5d8bb92e6fbaa505b287c30'},
  {'path': 'host-kernel/kbuild/stage-manifest.json',
   'mode': '100644',
-  'current_sha256': '5d19712bd4562cc8f2d3b30fcf16461caefd8e73f179af9152b1dca4b1c97ac0',
+  'current_sha256': '5be2f97bd7e507e3e231d31fcb4d03304017f6833dec54e1f87137cf879f74ae',
   'current_size': 6468,
-  'current_git_blob_sha1': 'd4e9c9dd444d5b908ac759a6e84dfebc8cfab410',
+  'current_git_blob_sha1': 'b1ecb30effe1bc5b04f2eb877151ba54e8a0871d',
   'runtime_sha256': 'e41b6df1dcd0d8007b23a0795de596e5c775e84f10fe02cf08edd5d199cd4b7a',
   'runtime_size': 5743,
   'runtime_git_blob_sha1': 'a17f033fed694044a34e37f9f361ba75e37f6e7c'},
@@ -412,17 +412,17 @@ EXPECTED_CURRENT_OVERRIDES = [{'path': '.github/workflows/native-rust-host-modul
   'runtime_git_blob_sha1': '200f4840bfa71521bbbac628d080c0d5f66df0a2'},
  {'path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
   'mode': '100644',
-  'current_sha256': '051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01',
+  'current_sha256': '6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32',
   'current_size': 19498,
-  'current_git_blob_sha1': 'd0806e3d3bd3176c1b23043ce11a9fa86b02a834',
+  'current_git_blob_sha1': '2a2a93bbed58f4ab7be339b680f11c2cbb1257f0',
   'runtime_sha256': 'f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f',
   'runtime_size': 10271,
   'runtime_git_blob_sha1': 'fc3d63b0396fb09470b14b48c016bb246f93b493'},
  {'path': 'scripts/rocky_rust_staging.py',
   'mode': '100644',
-  'current_sha256': 'c2afaea667c97d14c6ecc10831457695ba32168b30f42cd67739ff06b76b657d',
-  'current_size': 73903,
-  'current_git_blob_sha1': '5012c87c9690da2c251871649eb2dd9f438704c2',
+  'current_sha256': '16675ca75850107b72d6fe2839a1eedc10197e4d823e87651c673712cefcebbf',
+  'current_size': 73896,
+  'current_git_blob_sha1': 'b25f56e3d0239dd47198ef7223f31df8aa8f6d70',
   'runtime_sha256': '47d5c0005ae7e8217b723b2c5f1a1f321f90e7aa4d26000aa44ffbf25e426656',
   'runtime_size': 49797,
   'runtime_git_blob_sha1': '529e790c2037caf334517983afd489e16f9882cf'},
@@ -444,9 +444,9 @@ EXPECTED_CURRENT_OVERRIDES = [{'path': '.github/workflows/native-rust-host-modul
   'runtime_git_blob_sha1': '8211d19c56c56368718fe1420937fd5187530773'},
  {'path': 'scripts/rocky_kernel_rk007_build_review.py',
   'mode': '100644',
-  'current_sha256': '88349f0c2612de0d0d5e595379a7acfc19af8a2c7733508fdce1959c11d3d4ea',
+  'current_sha256': '423baf61f898ddbcae898d918190818282bca36ff6c856f50924d6e72fd71c47',
   'current_size': 138130,
-  'current_git_blob_sha1': '85297ca8023012ef11968f76c3d61178238ba521',
+  'current_git_blob_sha1': '3b875713090f1db1b87bb0d104d8aa3170ee9884',
   'runtime_sha256': '6741d0963c670c2febc97cc527e833f5fcf16e6e878c5831a76e9b67bd62a581',
   'runtime_size': 136681,
   'runtime_git_blob_sha1': '4842e2e3f58a842de707565bd50a6f710eba4c55'}]

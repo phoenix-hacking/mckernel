@@ -213,7 +213,7 @@ EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> 
 }'''
 
 
-EXPECTED_OS_REQUEST = 'fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n    match cmd {\n        IHK_DEVICE_CREATE_OS => {\n            // SAFETY: This callback runs with the SMP control file pinning\n            // THIS_MODULE. IHK acquires its own module reference before the\n            // instance becomes live; the raw scalar argument is never a pointer.\n            let result = unsafe {\n                ihk_os_create_unbooted_v1(\n                    IHK_SMP_CONTROL_DEVICE_MINOR,\n                    THIS_MODULE.as_ptr(),\n                    arg as u64,\n                )\n            };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        IHK_DEVICE_DESTROY_OS => {\n            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n            // It validates the provider and minor and refuses open instances.\n            let result =\n                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        _ => control_device_ioctl(cmd, arg),\n    }\n}'
+EXPECTED_OS_REQUEST = 'fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n    match cmd {\n        IHK_DEVICE_CREATE_OS => {\n            // SAFETY: This callback runs with the SMP control file pinning\n            // THIS_MODULE. IHK acquires its own module reference before the\n            // instance becomes live; the raw scalar argument is never a pointer.\n            let result = unsafe {\n                ihk_os_create_unbooted_v1(\n                    IHK_SMP_CONTROL_DEVICE_MINOR,\n                    THIS_MODULE.as_ptr().cast(),\n                    arg as u64,\n                )\n            };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        IHK_DEVICE_DESTROY_OS => {\n            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n            // It validates the provider and minor and refuses open instances.\n            let result =\n                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) };\n            if result < 0 {\n                Err(provider_status_error(result))\n            } else {\n                Ok(result as isize)\n            }\n        }\n        _ => control_device_ioctl(cmd, arg),\n    }\n}'
 
 class ValidationError(Exception):
     """Raised when the SMP lifecycle contract is incomplete or inconsistent."""
@@ -894,7 +894,7 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f"    fn {close_symbol}(receipt: i64);\n"
         '    #[link_name = "ihk_os_create_unbooted_v1"]\n'
         "    fn ihk_os_create_unbooted_v1(provider_minor: u32,\n"
-        "        owner: *mut kernel::bindings::module, argument: u64) -> i64;\n"
+        "        owner: *mut core::ffi::c_void, argument: u64) -> i64;\n"
         '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
         "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
         "}"

@@ -43,7 +43,7 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "transitive_inputs": [
         "host-kernel/native-rust/ihk_smp_x86_64.rs",
         "host-kernel/native-rust/smp_resource.rs"
@@ -68,7 +68,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "b9213c2234126b180a63c09f0260df2de19381c70f82be847b092b7f0a41a629",
+  "ledger_sha256": "30127558082c305af397c442c863990089cfbbfd5b9f862a75e214f9c925360c",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -93,7 +93,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "5d19712bd4562cc8f2d3b30fcf16461caefd8e73f179af9152b1dca4b1c97ac0"
+      "sha256": "5be2f97bd7e507e3e231d31fcb4d03304017f6833dec54e1f87137cf879f74ae"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -1202,7 +1202,7 @@
       "source_sha256": "ba3bb82223df3f2119373a16d932920edf856a00950fb13bae8f37b8e91c56bc"
     },
     {
-      "byte_end": 2695,
+      "byte_end": 2702,
       "byte_start": 2488,
       "caller_obligations": [
         "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
@@ -1221,8 +1221,8 @@
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "024189cc4a3b040d21e183150e79a01a2930faca9f32fcda23f25bf5eff46a65",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "expression_sha256": "80db2649e62fa1c38db601cc7427fc077f7a50fc028402dfc5e3f29225e69b1a",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0014",
       "independent_review": {
         "evidence_sha256": null,
@@ -1245,11 +1245,11 @@
         "source_sha256": "99e38c176fbb18fbd36854685738e6ae25dab143544fa29f977058f3250b4cb1",
         "text": "SAFETY: This callback runs with the SMP control file pinning THIS_MODULE. IHK acquires its own module reference before the instance becomes live; the raw scalar argument is never a pointer."
       },
-      "source_sha256": "6a5b0210d589694f0b9d80a07435b2194ceada7cca9721da315ce7daa88ee21b"
+      "source_sha256": "60490225ed2069f7d115f39767951bac77bcf2c7b0d4e1da6dfbca3fe6ccfb8d"
     },
     {
-      "byte_end": 3168,
-      "byte_start": 3089,
+      "byte_end": 3175,
+      "byte_start": 3096,
       "caller_obligations": [
         "SAFETY: IHK owns this scalar ABI for the dependency lifetime. It validates the provider and minor and refuses open instances."
       ],
@@ -1268,7 +1268,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "5f90532bf00537d4221c302977a84d50c78247e816c5654e36b2e4a05a5dcc1c",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0015",
       "independent_review": {
         "evidence_sha256": null,
@@ -1294,8 +1294,8 @@
       "source_sha256": "104e50fb1f8c409bf4da75b36a8dd5855be631fa9f17c02a5a5061319ad6b5b2"
     },
     {
-      "byte_end": 3511,
-      "byte_start": 3488,
+      "byte_end": 3518,
+      "byte_start": 3495,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() -> i32 type and remain module-resident for the lease.",
         "The selected callback must not unwind across the C ABI."
@@ -1315,7 +1315,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7225d7e2bc614732c9ff4078d01e360b4321df0698cb126d9c6b115096b74201",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0008",
       "independent_review": {
         "evidence_sha256": null,
@@ -1341,8 +1341,8 @@
       "source_sha256": "4149a416240d2ad461a73341610a942f087f8e1a238807177a462b8b24016416"
     },
     {
-      "byte_end": 3632,
-      "byte_start": 3616,
+      "byte_end": 3639,
+      "byte_start": 3623,
       "caller_obligations": [
         "The alias must exactly match the provider extern \"C\" fn() type and remain module-resident through detach.",
         "The selected callback must not unwind across the C ABI."
@@ -1362,7 +1362,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4ddd55b22c2c4cf5ee0531eae7c79cd406e85963614a5f9e057946dd3c5c60ce",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0009",
       "independent_review": {
         "evidence_sha256": null,
@@ -1389,7 +1389,7 @@
     },
     {
       "byte_end": 4900,
-      "byte_start": 3948,
+      "byte_start": 3955,
       "caller_obligations": [
         "Use the exact scalar provider ABI and unbooted OS ABI; the create owner is THIS_MODULE.as_ptr(), already pinned by the control file, never a userspace pointer.",
         "Balance every successful non-Copy provider-file and OS-module owner before unload; IHK remains the linked dependency throughout calls."
@@ -1408,8 +1408,8 @@
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
-      "expression_sha256": "770c8dba28b5396eb617dc1e300a93215363fc6edbfc58cf3a414c5fb5d45b21",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "expression_sha256": "463c99b11db27f6f5ca66a82bead476a9e7edb8d747bc44ad3b5bd97c8ee785a",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -1432,7 +1432,7 @@
         "source_sha256": "2d436a5000afccae86cd0c43472bb78f4df5d0e2dd762d3a9f7b80ffab4f4ab9",
         "text": "SAFETY: The provider owns these namespaced symbols for its full module lifetime.  The byte is read-only; the C-ABI functions exchange only scalars and scalar-only callback function identities. The OS-create call also borrows the pinned caller's Linux module pointer; no private Rust object crosses it."
       },
-      "source_sha256": "7f583fd7990b370d7f37b36189e45a5e8d4f7e884128d0b5c0930379d30f0d3d"
+      "source_sha256": "bf31c1faf86e6a5e4fee3243411269349d19c4d935684f68e73c6a53ef82269e"
     },
     {
       "byte_end": 5449,
@@ -1456,7 +1456,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "02409a56a90f02b954fd61d49bb478333e1ee9ca878192b254a3158516db9c9d",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0010",
       "independent_review": {
         "evidence_sha256": null,
@@ -1503,7 +1503,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "7490269917ae5c724b09396ce55b5fc49086a74428c4b748e3a69255884ee328",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0011",
       "independent_review": {
         "evidence_sha256": null,
@@ -1550,7 +1550,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "d0650a2d2d34d3508f9e291830cebd349ca7d48875f585cc17476c5ea3790a1c",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0006",
       "independent_review": {
         "evidence_sha256": null,
@@ -1597,7 +1597,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "4266823b75c5d7752aa78415ee7ca34ca2c0a50b1bc4658789e9ee74105e1849",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0007",
       "independent_review": {
         "evidence_sha256": null,
@@ -1644,7 +1644,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "859497a888a93c0c64fbce90516d7b90588c0a3b943f88b39074d5dc4ec12c9b",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0012",
       "independent_review": {
         "evidence_sha256": null,
@@ -1691,7 +1691,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "a39b26c594c16207b0201c1191b98ce84434c31ceed2785f3ed6953453d1dffa",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0013",
       "independent_review": {
         "evidence_sha256": null,
@@ -1738,7 +1738,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -1785,7 +1785,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -1832,7 +1832,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01",
+      "file_sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -2469,10 +2469,11 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     },
     {
-      "byte_end": 2554,
-      "byte_start": 1665,
+      "byte_end": 2646,
+      "byte_start": 1816,
       "caller_obligations": [
-        "SAFETY: These are Linux 6.12 kernel exports with their C header prototypes. Calls below supply only module-resident operations, registered device IDs, valid kernel module pointers or allocation addresses owned by this adapter."
+        "Preserve the exact Linux C pointer/scalar ABI while erasing opaque module, device and file_operations pointees that transitively contain empty lockdep_map bindings.",
+        "Supply only module-resident operations, registered device IDs, valid pinned kernel module pointers and owned allocation addresses; cast back to typed pointers only inside Rust."
       ],
       "column_end": 1,
       "column_start": 1,
@@ -2488,8 +2489,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "b95f2035e225f1477859713eb317f7f349fe0c1c75f1824b456733060467c206",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "78671f2c36032e207714dc82915b34fc044a2d8b4bbe9ca9ad97996363f528ff",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0035",
       "independent_review": {
         "evidence_sha256": null,
@@ -2498,8 +2499,8 @@
         "status": "pending"
       },
       "kind": "foreign_block",
-      "line_end": 65,
-      "line_start": 41,
+      "line_end": 68,
+      "line_start": 44,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2507,16 +2508,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 40,
+        "line_end": 43,
         "line_start": 38,
-        "source_sha256": "831320d55dc00564b59da32340aa565d44baee8d7f980e295f4b61f14b3dc607",
-        "text": "SAFETY: These are Linux 6.12 kernel exports with their C header prototypes. Calls below supply only module-resident operations, registered device IDs, valid kernel module pointers or allocation addresses owned by this adapter."
+        "source_sha256": "3f5add491f021be30cac97e5d1f9cd2780b6af40efd888922b19f806fc8a1c6a",
+        "text": "SAFETY: These are Linux 6.12 kernel exports with their C header ABI. Calls below supply only module-resident operations, registered device IDs, valid kernel module pointers or allocation addresses owned by this adapter."
       },
-      "source_sha256": "636c92201eb2a445916819626419f702c3122b2c726725435cf8233aac92aeef"
+      "source_sha256": "7dd60688de90352fb9ba91ba2e832b5104098bfbb83711aba98f8958fb90abc5"
     },
     {
-      "byte_end": 3695,
-      "byte_start": 3363,
+      "byte_end": 3794,
+      "byte_start": 3455,
       "caller_obligations": [
         "SAFETY: Callers must hold a Linux reference to this valid module pointer while acquire attempts to obtain a separately owned reference."
       ],
@@ -2534,8 +2535,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "8a1c99f0cd0c478b961951969770892fae3f96357bf524f1ea42318abff010c7",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "0c9d80aa50b992cc95623c1872cc9bf3a3ac1c559890494ad9dc837af70c4596",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0036",
       "independent_review": {
         "evidence_sha256": null,
@@ -2544,8 +2545,8 @@
         "status": "pending"
       },
       "kind": "unsafe_function",
-      "line_end": 100,
-      "line_start": 91,
+      "line_end": 103,
+      "line_start": 94,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2553,20 +2554,20 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 90,
-        "line_start": 86,
+        "line_end": 93,
+        "line_start": 89,
         "source_sha256": "8dc72ee9f5f18e20286c4c693ed9056fd15ab755828cc5f7f167bbe435341e57",
         "text": "SAFETY: Callers must hold a Linux reference to this valid module pointer while acquire attempts to obtain a separately owned reference."
       },
-      "source_sha256": "0d2f5f2960a26f74d83b83200dfec87dd7c49e4114189796bcf4fa7e32f75e40"
+      "source_sha256": "33284e46ee59bf2cfb9cab9e375e74902bac60f58ab5bb5107745a85620185aa"
     },
     {
-      "byte_end": 3621,
-      "byte_start": 3588,
+      "byte_end": 3720,
+      "byte_start": 3680,
       "caller_obligations": [
         "SAFETY: The caller supplies its currently pinned Linux module."
       ],
-      "column_end": 45,
+      "column_end": 52,
       "column_start": 13,
       "compiler_capture": {
         "evidence_sha256": null,
@@ -2580,8 +2581,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "316a574498b04d158725bd1e83dcc1cb4aa53a22f287335d7037f64cfbbf5d20",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "26c4027a92f6c90979258680827690cfea3030e984df153830b9aee0718c3ea2",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0037",
       "independent_review": {
         "evidence_sha256": null,
@@ -2590,8 +2591,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 96,
-      "line_start": 96,
+      "line_end": 99,
+      "line_start": 99,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2599,20 +2600,20 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 95,
-        "line_start": 95,
+        "line_end": 98,
+        "line_start": 98,
         "source_sha256": "9dac11bee3600f0e945c107ba31d909be95e06bd7fe92b1a703965088efb8759",
         "text": "SAFETY: The caller supplies its currently pinned Linux module."
       },
-      "source_sha256": "6391c62fc2f88cb2c0c38016bc3dcd94ab13c4d5662b6556c468b293e61c8d77"
+      "source_sha256": "661e66c422bb3fd5486939bb0be86974f2c7694de99b74676a9897019c281def"
     },
     {
-      "byte_end": 3949,
-      "byte_start": 3920,
+      "byte_end": 4055,
+      "byte_start": 4019,
       "caller_obligations": [
         "SAFETY: This unique owner balances one successful try_module_get. The caller's control-file reference remains live during destruction."
       ],
-      "column_end": 37,
+      "column_end": 44,
       "column_start": 9,
       "compiler_capture": {
         "evidence_sha256": null,
@@ -2626,8 +2627,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "de7b06646a6a8e67be1376f13c906accce8ecfbe54899d90a514f86615e035ed",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "207d5997480eaf968d8e33486da27f8a5bfa6d390c2b06b23e55f24277223c11",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0038",
       "independent_review": {
         "evidence_sha256": null,
@@ -2636,8 +2637,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 107,
-      "line_start": 107,
+      "line_end": 110,
+      "line_start": 110,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2645,16 +2646,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 106,
-        "line_start": 105,
+        "line_end": 109,
+        "line_start": 108,
         "source_sha256": "3b48578cec6ac7bfd60e9dd6c3332c67c7a6f0cff2b2eb48bf8491d8712d6720",
         "text": "SAFETY: This unique owner balances one successful try_module_get. The caller's control-file reference remains live during destruction."
       },
-      "source_sha256": "85cf6c7746265a30c5d0a95377366c7705e0af0a5249e044bd39dc8f03797912"
+      "source_sha256": "09cf0001ba582b109f15fdaef26d06f06acd0d749e736779756de568b75e5182"
     },
     {
-      "byte_end": 4800,
-      "byte_start": 4749,
+      "byte_end": 4906,
+      "byte_start": 4855,
       "caller_obligations": [
         "SAFETY: The fixed order is ten (4 MiB), the flags are Linux GFP constants, and this process-context allocation holds no spinlock."
       ],
@@ -2673,7 +2674,7 @@
         "ihk"
       ],
       "expression_sha256": "76a3f258da9657a62c004e0c253e17071639bc020eae2989fc8acd8fcae50b4a",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0039",
       "independent_review": {
         "evidence_sha256": null,
@@ -2682,8 +2683,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 126,
-      "line_start": 126,
+      "line_end": 129,
+      "line_start": 129,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2691,16 +2692,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 125,
-        "line_start": 124,
+        "line_end": 128,
+        "line_start": 127,
         "source_sha256": "34401fa41339360d43f30018dbbe39ac14a2f2b47edce9a68d053a16acc8d514",
         "text": "SAFETY: The fixed order is ten (4 MiB), the flags are Linux GFP constants, and this process-context allocation holds no spinlock."
       },
       "source_sha256": "52c4bff709eccef4b1a110eb5dba43af5d4c407bf26c4f43bc511d52dffe1c03"
     },
     {
-      "byte_end": 5274,
-      "byte_start": 5194,
+      "byte_end": 5380,
+      "byte_start": 5300,
       "caller_obligations": [
         "SAFETY: The allocation is zeroed, directly mapped, exclusively owned, page-aligned and exactly the ABI size. Initialize only the length field in place; never put the 4 MiB structure on the stack."
       ],
@@ -2719,7 +2720,7 @@
         "ihk"
       ],
       "expression_sha256": "ee20e7845bcf3a19ce934615b4da341cc8584903289d508e1e9569bdf822272c",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0040",
       "independent_review": {
         "evidence_sha256": null,
@@ -2728,8 +2729,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 135,
-      "line_start": 135,
+      "line_end": 138,
+      "line_start": 138,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2737,16 +2738,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 134,
-        "line_start": 132,
+        "line_end": 137,
+        "line_start": 135,
         "source_sha256": "6e0e3169c4d7d8e57b56073db0bf6e99468fb295ed64760e5d8dcd89b9915da7",
         "text": "SAFETY: The allocation is zeroed, directly mapped, exclusively owned, page-aligned and exactly the ABI size. Initialize only the length field in place; never put the 4 MiB structure on the stack."
       },
       "source_sha256": "380bf4286228abdf3007a3f7b0d12c2baab9fe2f443c1f90f97bbecb52e0c533"
     },
     {
-      "byte_end": 5562,
-      "byte_start": 5521,
+      "byte_end": 5668,
+      "byte_start": 5627,
       "caller_obligations": [
         "SAFETY: Exactly this base address and order came from the successful allocation; no mapping, user reference or co-kernel access escaped."
       ],
@@ -2765,7 +2766,7 @@
         "ihk"
       ],
       "expression_sha256": "4f2888cc641de0655740a339aabd7d6cff3e2175ea22f031d812a40aae2a0dad",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0041",
       "independent_review": {
         "evidence_sha256": null,
@@ -2774,8 +2775,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 144,
-      "line_start": 144,
+      "line_end": 147,
+      "line_start": 147,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2783,16 +2784,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 143,
-        "line_start": 142,
+        "line_end": 146,
+        "line_start": 145,
         "source_sha256": "6078fcb1cfebb681fb8bfd2088cc43eeb40b9525559df1285e1c98ec54c3ed9f",
         "text": "SAFETY: Exactly this base address and order came from the successful allocation; no mapping, user reference or co-kernel access escaped."
       },
       "source_sha256": "03c03d11a0673b17b0d3691add79a8e11a51753dddfdfa28db265d17f27db1b3"
     },
     {
-      "byte_end": 6460,
-      "byte_start": 6243,
+      "byte_end": 6588,
+      "byte_start": 6349,
       "caller_obligations": [
         "SAFETY: The operations and name reside in ihk.ko; .owner pins it for every callback. Linux allocates a major for exactly 64 minor numbers."
       ],
@@ -2810,8 +2811,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "04281e94d1730eb0c0a98b89849df9e052e284bdd5420884c17d9723c714d98f",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "9932aff68fc2f2ec009ba9acb3a86779bb63f1866c810fdc0915ef5a4c743e02",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0042",
       "independent_review": {
         "evidence_sha256": null,
@@ -2820,8 +2821,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 172,
-      "line_start": 164,
+      "line_end": 175,
+      "line_start": 167,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2829,16 +2830,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 163,
-        "line_start": 162,
+        "line_end": 166,
+        "line_start": 165,
         "source_sha256": "bd09a5286e829f196d0615bb4d508283d79f379b14a6a7fa039861026016fa15",
         "text": "SAFETY: The operations and name reside in ihk.ko; .owner pins it for every callback. Linux allocates a major for exactly 64 minor numbers."
       },
-      "source_sha256": "e764a7a9b3ca296b85f79f8ee3f7db66b6c5038519f6c5d9e6c932266f6ab457"
+      "source_sha256": "c640bf0246cc34f5dec374cf4986a4b35fa19ac0c688148975aec1e8eb252b75"
     },
     {
-      "byte_end": 6681,
-      "byte_start": 6620,
+      "byte_end": 6809,
+      "byte_start": 6748,
       "caller_obligations": [
         "SAFETY: The constant name is NUL terminated and outlives the class."
       ],
@@ -2857,7 +2858,7 @@
         "ihk"
       ],
       "expression_sha256": "8b6088174ccb185afc85a2be76b7e9f041477cdf0e5c53702db7bbdecfbba3e6",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0043",
       "independent_review": {
         "evidence_sha256": null,
@@ -2866,8 +2867,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 176,
-      "line_start": 176,
+      "line_end": 179,
+      "line_start": 179,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2875,16 +2876,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 174,
-        "line_start": 174,
+        "line_end": 177,
+        "line_start": 177,
         "source_sha256": "e5fc601e80defc38047805a010a8fac891586a81e80c717d2340ec7930e6c493",
         "text": "SAFETY: The constant name is NUL terminated and outlives the class."
       },
       "source_sha256": "26d7d8d8f166c1ad22f9ca09dbc6bda6687acc2818f3092202535df116bdc4ba"
     },
     {
-      "byte_end": 7146,
-      "byte_start": 6858,
+      "byte_end": 7274,
+      "byte_start": 6986,
       "caller_obligations": [
         "SAFETY: Registration succeeded and no class/OS was published."
       ],
@@ -2903,7 +2904,7 @@
         "ihk"
       ],
       "expression_sha256": "e4910fc650c2ade51a64391f0093bd90208ceb90900a65a8c335024a11977a56",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0044",
       "independent_review": {
         "evidence_sha256": null,
@@ -2912,8 +2913,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 187,
-      "line_start": 180,
+      "line_end": 190,
+      "line_start": 183,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2921,16 +2922,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 179,
-        "line_start": 179,
+        "line_end": 182,
+        "line_start": 182,
         "source_sha256": "d72e7b8cc53038a4027847fdbd3dc8abe2b9e2abefc6e4bb600f9e4210a0b4fe",
         "text": "SAFETY: Registration succeeded and no class/OS was published."
       },
       "source_sha256": "5551c3d415b2ea201e828d484d7e4e324a00ae006242e81f94a7fefe5424b52a"
     },
     {
-      "byte_end": 8150,
-      "byte_start": 7918,
+      "byte_end": 8278,
+      "byte_start": 8046,
       "caller_obligations": [
         "SAFETY: All instance nodes are gone and .owner excludes outstanding file callbacks during module exit. These are the owned registrations."
       ],
@@ -2949,7 +2950,7 @@
         "ihk"
       ],
       "expression_sha256": "a4a99575c42366cc8146c4f4e7d1daec1cc93a12110315c1ff4281d746683b3d",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0045",
       "independent_review": {
         "evidence_sha256": null,
@@ -2958,8 +2959,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 216,
-      "line_start": 208,
+      "line_end": 219,
+      "line_start": 211,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -2967,16 +2968,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 207,
-        "line_start": 206,
+        "line_end": 210,
+        "line_start": 209,
         "source_sha256": "8662c44c1ce13aaeb825c265eb1105ae5c81a167c88eef9ffd776a48acaddf11",
         "text": "SAFETY: All instance nodes are gone and .owner excludes outstanding file callbacks during module exit. These are the owned registrations."
       },
       "source_sha256": "7362e051b746a5e88a578af72afa289e1cd3b3866058936673f038beb8fc737c"
     },
     {
-      "byte_end": 9024,
-      "byte_start": 8448,
+      "byte_end": 9156,
+      "byte_start": 8576,
       "caller_obligations": [
         "SAFETY: Called only by the pinned native SMP control-file ioctl. The owner is the caller's Linux module pointer, never a user argument or Rust object. No callback or caller data is retained; a Linux module reference is acquired."
       ],
@@ -2994,8 +2995,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "2927c96b53ff6a35a6e12d1cf0d6d89e072d02095dcdea1289793bd37f97da2b",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "bdbb25e379e834af6cc72438676d4e0d4ceff29f8a59a3e3a9d3857da001a482",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0046",
       "independent_review": {
         "evidence_sha256": null,
@@ -3004,8 +3005,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 237,
-      "line_start": 224,
+      "line_end": 240,
+      "line_start": 227,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3013,21 +3014,21 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 223,
-        "line_start": 221,
+        "line_end": 226,
+        "line_start": 224,
         "source_sha256": "5db1e00ee8aea615b26fb5e826b518dd3743643edb5535f797e923d8d7b0fa93",
         "text": "SAFETY: Called only by the pinned native SMP control-file ioctl. The owner is the caller's Linux module pointer, never a user argument or Rust object. No callback or caller data is retained; a Linux module reference is acquired."
       },
-      "source_sha256": "2126d2a6554b18a1137664ec002d8b2c160c9a57b9ce97441eb70054903b44d8"
+      "source_sha256": "94921d65f8e9e9f5287feb720168e538c3366100b4b906f3ecf633b8b89da1c3"
     },
     {
-      "byte_end": 9024,
-      "byte_start": 8655,
+      "byte_end": 9156,
+      "byte_start": 8790,
       "caller_obligations": [
         "SAFETY: The C caller supplies its already pinned Linux module pointer; this adapter acquires a separate module reference before publishing any OS node."
       ],
       "column_end": 1,
-      "column_start": 5,
+      "column_start": 12,
       "compiler_capture": {
         "evidence_sha256": null,
         "required": true,
@@ -3040,8 +3041,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "33c11c9aa17371a32db8c812bbca6be4e51c82aa7926513f112d45b85d04cd6d",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "3ac9e4dff7f419222eed7469d1e0f89cd1d512beba5575b4246dc91d94e1acbf",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0047",
       "independent_review": {
         "evidence_sha256": null,
@@ -3050,8 +3051,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 237,
-      "line_start": 227,
+      "line_end": 240,
+      "line_start": 230,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3059,20 +3060,20 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 226,
-        "line_start": 225,
+        "line_end": 229,
+        "line_start": 228,
         "source_sha256": "b004b037665f812ae483dffed0d7ac64373ad0a6c88af10763a7fe22cd7ed824",
         "text": "SAFETY: The C caller supplies its already pinned Linux module pointer; this adapter acquires a separate module reference before publishing any OS node."
       },
-      "source_sha256": "10d491554112282aa0404520646e0ece44aafc051a7ea1caa9635c6a32229f34"
+      "source_sha256": "18e72603bf3c5d9ac9ec4ae62216638ba540934ba691c1c5c498f9bdb6b6420d"
     },
     {
-      "byte_end": 8932,
-      "byte_start": 8879,
+      "byte_end": 9064,
+      "byte_start": 9004,
       "caller_obligations": [
         "SAFETY: The exported boundary's caller guarantees the owner lifetime."
       ],
-      "column_end": 63,
+      "column_end": 70,
       "column_start": 11,
       "compiler_capture": {
         "evidence_sha256": null,
@@ -3086,8 +3087,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "b780d2e1ade2f7ded46f829e57e265de4158a6795db4d9fde6a66adc94d80138",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "725bc01f6b5fb58e4d4cef5f864e1fb135d4ed112079cb2cbcd9f7bcb52c880e",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0048",
       "independent_review": {
         "evidence_sha256": null,
@@ -3096,8 +3097,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 233,
-      "line_start": 233,
+      "line_end": 236,
+      "line_start": 236,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3105,16 +3106,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 232,
-        "line_start": 232,
+        "line_end": 235,
+        "line_start": 235,
         "source_sha256": "4fedb803b281f56d2432c375c0c89f196afe0178f9acabc2c4626670d8b35b68",
         "text": "SAFETY: The exported boundary's caller guarantees the owner lifetime."
       },
-      "source_sha256": "745b4dda5c653dd0007cd994c22c03d0a64bdfce1871d3f6f30aff095bd7f7dd"
+      "source_sha256": "609ee8a5db4346c189c606a3d605ed43b888190d32a40dd263dad9af1671c59a"
     },
     {
-      "byte_end": 11882,
-      "byte_start": 9265,
+      "byte_end": 12014,
+      "byte_start": 9397,
       "caller_obligations": [
         "SAFETY: The caller pins its Linux SMP module throughout this call. Registry reservations and owned allocations below exclude partially initialized opens."
       ],
@@ -3133,7 +3134,7 @@
         "ihk"
       ],
       "expression_sha256": "19f7cb64b66846b5029f0eb20dfea8f5b1e41af0cbe8ef6f4a4df7175f3f0a4b",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0049",
       "independent_review": {
         "evidence_sha256": null,
@@ -3142,8 +3143,8 @@
         "status": "pending"
       },
       "kind": "unsafe_function",
-      "line_end": 311,
-      "line_start": 243,
+      "line_end": 314,
+      "line_start": 246,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3151,16 +3152,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 242,
-        "line_start": 239,
+        "line_end": 245,
+        "line_start": 242,
         "source_sha256": "15ba4022d4dff7280a21088ef03562424a3933d6d8b0c46f7ed7863bf4f02b18",
         "text": "SAFETY: The caller pins its Linux SMP module throughout this call. Registry reservations and owned allocations below exclude partially initialized opens."
       },
       "source_sha256": "283e10df81874275a484c14804f83cfa88b465c5ca59dc91b1efc585439d3337"
     },
     {
-      "byte_end": 9969,
-      "byte_start": 9928,
+      "byte_end": 10101,
+      "byte_start": 10060,
       "caller_obligations": [
         "SAFETY: The live control-file owner is guaranteed by this function's caller."
       ],
@@ -3179,7 +3180,7 @@
         "ihk"
       ],
       "expression_sha256": "fff73f36d44fe64965e0af45b60ade1b68a15b1b1ac74cd4386192d6d8a91652",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0050",
       "independent_review": {
         "evidence_sha256": null,
@@ -3188,8 +3189,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 260,
-      "line_start": 260,
+      "line_end": 263,
+      "line_start": 263,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3197,16 +3198,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 259,
-        "line_start": 259,
+        "line_end": 262,
+        "line_start": 262,
         "source_sha256": "6a4f59fd16623669d03a89605c52fe2a11e86c3871a83ab4874250a9959c438d",
         "text": "SAFETY: The live control-file owner is guaranteed by this function's caller."
       },
       "source_sha256": "6c6bb953f579aebd0c1ff3fd475908e05081a3a61fa9b5937813b8253910e4f5"
     },
     {
-      "byte_end": 11067,
-      "byte_start": 10848,
+      "byte_end": 11199,
+      "byte_start": 10980,
       "caller_obligations": [
         "SAFETY: The registered class owns this unique reserved minor. The format is constant and the variadic integer matches %u. No driver-data escapes."
       ],
@@ -3225,7 +3226,7 @@
         "ihk"
       ],
       "expression_sha256": "90300f0248bb9d4a18a563431f53b3a66c3e8fcf532cc3e06499687f5c061273",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0051",
       "independent_review": {
         "evidence_sha256": null,
@@ -3234,8 +3235,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 291,
-      "line_start": 282,
+      "line_end": 294,
+      "line_start": 285,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3243,16 +3244,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 281,
-        "line_start": 280,
+        "line_end": 284,
+        "line_start": 283,
         "source_sha256": "2208ea0e0d5f028e1d8c4bbf3e8bf05d097dfd59f1548ef2da9ae576f7dfc335",
         "text": "SAFETY: The registered class owns this unique reserved minor. The format is constant and the variadic integer matches %u. No driver-data escapes."
       },
       "source_sha256": "a48d268c05b806ea14bcd30ee0d804548d90db77f2655eeec30b0c05535ee076"
     },
     {
-      "byte_end": 11430,
-      "byte_start": 11391,
+      "byte_end": 11562,
+      "byte_start": 11523,
       "caller_obligations": [
         "SAFETY: No file lease or other destruction can hold this object. Drop storage and both provider references before making the minor reusable."
       ],
@@ -3271,7 +3272,7 @@
         "ihk"
       ],
       "expression_sha256": "da22e3f32e60d8c3cd0d95a2c5223039716a9d79e8fd7b7bb4c8fe075519e8ab",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0052",
       "independent_review": {
         "evidence_sha256": null,
@@ -3280,8 +3281,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 297,
-      "line_start": 297,
+      "line_end": 300,
+      "line_start": 300,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3289,16 +3290,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 296,
-        "line_start": 295,
+        "line_end": 299,
+        "line_start": 298,
         "source_sha256": "55e4466b249fb5ef0d048c942accb50625822033780f9ccde232dca73fc37169",
         "text": "SAFETY: The unpublished registry reservation excludes every open. This uniquely reclaims the Box and all of its allocation/lease owners."
       },
       "source_sha256": "4bc8b094ac83f88070fb6a3e32a592ba558fb0dcb846660a537e48ce0ddd3f20"
     },
     {
-      "byte_end": 12453,
-      "byte_start": 12045,
+      "byte_end": 12592,
+      "byte_start": 12177,
       "caller_obligations": [
         "SAFETY: This C ABI accepts scalar minor numbers only. It tears down solely an unbooted OS belonging to the given live provider and propagates busy errors."
       ],
@@ -3316,8 +3317,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "86187195888c3ca2dde9917add6c01f08071cc0d14119f36d89ac6492427625d",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "dbfe9a14ae5a9426593064130cdef165d49a6b2001261bbb5c7c52f4968107d0",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0053",
       "independent_review": {
         "evidence_sha256": null,
@@ -3326,8 +3327,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 323,
-      "line_start": 315,
+      "line_end": 326,
+      "line_start": 318,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3335,21 +3336,21 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 314,
-        "line_start": 313,
+        "line_end": 317,
+        "line_start": 316,
         "source_sha256": "98109422fa35e06ae1452aa5b8a004e684e96ada220d404636916b63b3e00e39",
         "text": "SAFETY: This C ABI accepts scalar minor numbers only. It tears down solely an unbooted OS belonging to the given live provider and propagates busy errors."
       },
-      "source_sha256": "8464fb34283b3ba4d4d861b97b85c627a9ae4479cf60c1cb97ed04e3cfd1a389"
+      "source_sha256": "a62a2e67a678da56697202e3ba3af5adb1af187351835dcf24e128537d153dd6"
     },
     {
-      "byte_end": 12453,
-      "byte_start": 12249,
+      "byte_end": 12592,
+      "byte_start": 12388,
       "caller_obligations": [
         "SAFETY: Only scalar identities cross this C ABI. Registry guards validate ownership and exclude live open files before any allocation is reclaimed."
       ],
       "column_end": 1,
-      "column_start": 5,
+      "column_start": 12,
       "compiler_capture": {
         "evidence_sha256": null,
         "required": true,
@@ -3363,7 +3364,7 @@
         "ihk"
       ],
       "expression_sha256": "b4a63b11b9235ea568eccdf2902e068f11521d10872cfd271e66a5d2eff49862",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0054",
       "independent_review": {
         "evidence_sha256": null,
@@ -3372,8 +3373,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 323,
-      "line_start": 318,
+      "line_end": 326,
+      "line_start": 321,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3381,16 +3382,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 317,
-        "line_start": 316,
+        "line_end": 320,
+        "line_start": 319,
         "source_sha256": "75e5d1cc38b661408098c74ed53c782c0bf15b3a36f0387c51551f345ea8117b",
         "text": "SAFETY: Only scalar identities cross this C ABI. Registry guards validate ownership and exclude live open files before any allocation is reclaimed."
       },
       "source_sha256": "267b64f37932a4bf883ee733bca1bc629a450d3422672c334a2f0e767ad95bd7"
     },
     {
-      "byte_end": 13197,
-      "byte_start": 13168,
+      "byte_end": 13336,
+      "byte_start": 13307,
       "caller_obligations": [
         "SAFETY: The exclusive destroying guard excludes opens and other destructors. Publication stored the complete object before the live word."
       ],
@@ -3409,7 +3410,7 @@
         "ihk"
       ],
       "expression_sha256": "95e244752dd14306efa1b5993d4607e97f23a344f225d4fbe024ed8807c9d433",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0055",
       "independent_review": {
         "evidence_sha256": null,
@@ -3418,8 +3419,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 339,
-      "line_start": 339,
+      "line_end": 342,
+      "line_start": 342,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3427,16 +3428,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 338,
-        "line_start": 337,
+        "line_end": 341,
+        "line_start": 340,
         "source_sha256": "3cb67e4294b3cf30bfabb0b2896815a9f505a7f1226cece2b74f6bf33cf5e5c0",
         "text": "SAFETY: The exclusive destroying guard excludes opens and other destructors. Publication stored the complete object before the live word."
       },
       "source_sha256": "e410112e893d4a99b3a94f6fe2d5c44ef116662da91bb96d86c75c4f5dea62f7"
     },
     {
-      "byte_end": 13491,
-      "byte_start": 13454,
+      "byte_end": 13630,
+      "byte_start": 13593,
       "caller_obligations": [
         "SAFETY: The node belongs to this exclusive destruction transaction."
       ],
@@ -3455,7 +3456,7 @@
         "ihk"
       ],
       "expression_sha256": "6afb8498c99e4c4ca99481853643cc547054d6b3d2d510de125e85239077be45",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0056",
       "independent_review": {
         "evidence_sha256": null,
@@ -3464,8 +3465,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 345,
-      "line_start": 345,
+      "line_end": 348,
+      "line_start": 348,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3473,16 +3474,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 344,
-        "line_start": 344,
+        "line_end": 347,
+        "line_start": 347,
         "source_sha256": "31c7bb3edbd969766c0132c5392ab5934f262c7d8cc742a3c6c6e751b17f40c7",
         "text": "SAFETY: The node belongs to this exclusive destruction transaction."
       },
       "source_sha256": "58ce03e7682f40a24b0d6f0f6ea161019c4168d57026664496083aaa8d2745e3"
     },
     {
-      "byte_end": 13800,
-      "byte_start": 13761,
+      "byte_end": 13939,
+      "byte_start": 13900,
       "caller_obligations": [
         "SAFETY: No file lease or other destruction can hold this object. Drop storage and both provider references before making the minor reusable."
       ],
@@ -3501,7 +3502,7 @@
         "ihk"
       ],
       "expression_sha256": "da22e3f32e60d8c3cd0d95a2c5223039716a9d79e8fd7b7bb4c8fe075519e8ab",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0057",
       "independent_review": {
         "evidence_sha256": null,
@@ -3510,8 +3511,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 350,
-      "line_start": 350,
+      "line_end": 353,
+      "line_start": 353,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3519,16 +3520,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 349,
-        "line_start": 348,
+        "line_end": 352,
+        "line_start": 351,
         "source_sha256": "8fa138504869335f557f4ef2ec8a9e55b8ee408365f8b1d2068b407299b49c82",
         "text": "SAFETY: No file lease or other destruction can hold this object. Drop storage and both provider references before making the minor reusable."
       },
       "source_sha256": "4bc8b094ac83f88070fb6a3e32a592ba558fb0dcb846660a537e48ce0ddd3f20"
     },
     {
-      "byte_end": 14956,
-      "byte_start": 14160,
+      "byte_end": 15095,
+      "byte_start": 14299,
       "caller_obligations": [
         "SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by .owner. Successful open installs exactly one owned lease in private_data."
       ],
@@ -3547,7 +3548,7 @@
         "ihk"
       ],
       "expression_sha256": "349434e65a9d1ed50d9fd2f441cee795d908d8879e078ce7092a4bddced0c1b9",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0058",
       "independent_review": {
         "evidence_sha256": null,
@@ -3556,8 +3557,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 378,
-      "line_start": 360,
+      "line_end": 381,
+      "line_start": 363,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3565,16 +3566,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 359,
-        "line_start": 358,
+        "line_end": 362,
+        "line_start": 361,
         "source_sha256": "9c91e2eb90a5ac171c641946a77c7c84f1ca60889feb99e46067ba8f628f50e9",
         "text": "SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by .owner. Successful open installs exactly one owned lease in private_data."
       },
       "source_sha256": "5e9ea444b2eb0d6a1fa46f2e5761768500d04e4d58ca5b99f6875ba1d463be02"
     },
     {
-      "byte_end": 14376,
-      "byte_start": 14350,
+      "byte_end": 14515,
+      "byte_start": 14489,
       "caller_obligations": [
         "SAFETY: Linux supplies the live inode for this registered device family."
       ],
@@ -3593,7 +3594,7 @@
         "ihk"
       ],
       "expression_sha256": "8719b24bee031cfdd4b8851e9ed63cf768941b8b4b0eca17218fde6e73ed8583",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0059",
       "independent_review": {
         "evidence_sha256": null,
@@ -3602,8 +3603,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 362,
-      "line_start": 362,
+      "line_end": 365,
+      "line_start": 365,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3611,16 +3612,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 361,
-        "line_start": 361,
+        "line_end": 364,
+        "line_start": 364,
         "source_sha256": "632695b7f9a7c2987cc82b170a9bc5d77a1aeabe28dfcc6855b1f2ec638f647f",
         "text": "SAFETY: Linux supplies the live inode for this registered device family."
       },
       "source_sha256": "a0d9ac72c3e486fbc18cb0fd72a68f84eab6c5c3623c4523e7257809d2aecc74"
     },
     {
-      "byte_end": 14947,
-      "byte_start": 14886,
+      "byte_end": 15086,
+      "byte_start": 15025,
       "caller_obligations": [
         "SAFETY: Linux gives this open callback exclusive initialization of the new file. Failure above drops the lease before leaving private_data alone."
       ],
@@ -3639,7 +3640,7 @@
         "ihk"
       ],
       "expression_sha256": "b12a455fd6713b58a930f6a3f49a3e72ee60a08f4e6aa57d94a49c789925f0db",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0060",
       "independent_review": {
         "evidence_sha256": null,
@@ -3648,8 +3649,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 376,
-      "line_start": 376,
+      "line_end": 379,
+      "line_start": 379,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3657,16 +3658,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 375,
-        "line_start": 374,
+        "line_end": 378,
+        "line_start": 377,
         "source_sha256": "f893227979ab262be6b4089cfd2382761164d0640f4ae1fffb54b84793bfe74b",
         "text": "SAFETY: Linux gives this open callback exclusive initialization of the new file. Failure above drops the lease before leaving private_data alone."
       },
       "source_sha256": "4663a5984df5f606c6e86fc03594198e8933e2ad60538371532173c846c894b2"
     },
     {
-      "byte_end": 15538,
-      "byte_start": 15113,
+      "byte_end": 15677,
+      "byte_start": 15252,
       "caller_obligations": [
         "SAFETY: Linux calls release once after the final file reference. No ioctl can still borrow the private lease, and .owner keeps this module resident."
       ],
@@ -3685,7 +3686,7 @@
         "ihk"
       ],
       "expression_sha256": "0a3e33b9dfcde69adc283c81cbf6c11839a485d639a56d81674ed731e6920e4f",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0061",
       "independent_review": {
         "evidence_sha256": null,
@@ -3694,8 +3695,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 391,
-      "line_start": 382,
+      "line_end": 394,
+      "line_start": 385,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3703,16 +3704,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 381,
-        "line_start": 380,
+        "line_end": 384,
+        "line_start": 383,
         "source_sha256": "6a047b951774ecc3e50ac37ce7f08e2827c62a9a34c74abd0d2dba23fe973ea7",
         "text": "SAFETY: Linux calls release once after the final file reference. No ioctl can still borrow the private lease, and .owner keeps this module resident."
       },
       "source_sha256": "9127c7442e3cdc20d5ac401487231496385dfb536c36a7dec14662d677863b6e"
     },
     {
-      "byte_end": 15530,
-      "byte_start": 15363,
+      "byte_end": 15669,
+      "byte_start": 15502,
       "caller_obligations": [
         "SAFETY: This is the exact Box installed by a successful os_open, reclaimed once. Linux excludes concurrent use at final file release."
       ],
@@ -3731,7 +3732,7 @@
         "ihk"
       ],
       "expression_sha256": "d390cb868c6d2291324b288749aeaad440c4e919e6aaabe4112e34462809da68",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0062",
       "independent_review": {
         "evidence_sha256": null,
@@ -3740,8 +3741,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 389,
-      "line_start": 385,
+      "line_end": 392,
+      "line_start": 388,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3749,16 +3750,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 384,
-        "line_start": 383,
+        "line_end": 387,
+        "line_start": 386,
         "source_sha256": "a05933941ec55e9e1d8556c569158792ad56745a7a1533c8718c24d998cc28c4",
         "text": "SAFETY: This is the exact Box installed by a successful os_open, reclaimed once. Linux excludes concurrent use at final file release."
       },
       "source_sha256": "3f62c85f10939ab56b1b42221022c60a135d9008310795c71101390cafb58708"
     },
     {
-      "byte_end": 16236,
-      "byte_start": 15697,
+      "byte_end": 16375,
+      "byte_start": 15836,
       "caller_obligations": [
         "SAFETY: Linux pins the file for the callback; its immutable private lease keeps the exact OS generation live until this callback and all peers finish."
       ],
@@ -3777,7 +3778,7 @@
         "ihk"
       ],
       "expression_sha256": "9ac655d62e2557a1b1c9d4f4aba78c9652dd8789a5c9cfc6cfa1dfffa9506189",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0063",
       "independent_review": {
         "evidence_sha256": null,
@@ -3786,8 +3787,8 @@
         "status": "pending"
       },
       "kind": "extern_function",
-      "line_end": 407,
-      "line_start": 395,
+      "line_end": 410,
+      "line_start": 398,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3795,16 +3796,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 394,
-        "line_start": 393,
+        "line_end": 397,
+        "line_start": 396,
         "source_sha256": "914b63fa14308ce65f83cdb1871879f8f048f9e0cea7dd95482cc2442bcc4db6",
         "text": "SAFETY: Linux pins the file for the callback; its immutable private lease keeps the exact OS generation live until this callback and all peers finish."
       },
       "source_sha256": "2ccb87a199cfacbaa43ed8236c62008abcaf5420ff837dc81c78b8e6c6842377"
     },
     {
-      "byte_end": 15995,
-      "byte_start": 15933,
+      "byte_end": 16134,
+      "byte_start": 16072,
       "caller_obligations": [
         "SAFETY: Successful open installed this live Box; release cannot overlap."
       ],
@@ -3823,7 +3824,7 @@
         "ihk"
       ],
       "expression_sha256": "071970c6e7611ca223cb96d7039687f3d3a67e472812f51965c1a12f4c17a2f2",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0064",
       "independent_review": {
         "evidence_sha256": null,
@@ -3832,8 +3833,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 401,
-      "line_start": 401,
+      "line_end": 404,
+      "line_start": 404,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3841,16 +3842,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 400,
-        "line_start": 400,
+        "line_end": 403,
+        "line_start": 403,
         "source_sha256": "b51799119be5342cc85dd5e5f3564979cfd0681a9897416f90a469d6dc59b6d2",
         "text": "SAFETY: Successful open installed this live Box; release cannot overlap."
       },
       "source_sha256": "893dffc277c4452ccd74d8748eb731059795fc76409585859f018859b3dcf1f9"
     },
     {
-      "byte_end": 16539,
-      "byte_start": 16493,
+      "byte_end": 16678,
+      "byte_start": 16632,
       "caller_obligations": [
         "SAFETY: All-zero optional callbacks are valid, and every non-null pointer names module-resident code. Both ABIs use scalar status with no user pointer."
       ],
@@ -3869,7 +3870,7 @@
         "ihk"
       ],
       "expression_sha256": "26625c8b6c846b7e33ae810089bd00cbf88bb6de16e15ab9d9dc1b1e45bf9f40",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0065",
       "independent_review": {
         "evidence_sha256": null,
@@ -3878,8 +3879,8 @@
         "status": "pending"
       },
       "kind": "unsafe_block",
-      "line_end": 412,
-      "line_start": 412,
+      "line_end": 415,
+      "line_start": 415,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3887,16 +3888,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 410,
-        "line_start": 409,
+        "line_end": 413,
+        "line_start": 412,
         "source_sha256": "6a9f846dda8bd33b27d15ab7a3f35187a43b47f5e1f49445c409619bd4296105",
         "text": "SAFETY: All-zero optional callbacks are valid, and every non-null pointer names module-resident code. Both ABIs use scalar status with no user pointer."
       },
       "source_sha256": "0abdb4caecc61b8f1174ed513f10d1d1daddb904da1debdff760142eab1f5fcc"
     },
     {
-      "byte_end": 17255,
-      "byte_start": 16910,
+      "byte_end": 17401,
+      "byte_start": 17049,
       "caller_obligations": [
         "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
       ],
@@ -3914,8 +3915,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "e05a748d288bfd9ef4a5383c3d5d2e6f4ea86376ad9d5ce7a41dd0732649d3d0",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "da608f210d27c8db75cb53fb94a088c16c83af2f2e5a03b2909280fba3efee86",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0066",
       "independent_review": {
         "evidence_sha256": null,
@@ -3924,8 +3925,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 433,
-      "line_start": 425,
+      "line_end": 436,
+      "line_start": 428,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3933,16 +3934,16 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 424,
-        "line_start": 424,
+        "line_end": 427,
+        "line_start": 427,
         "source_sha256": "bf79e9ab1c6a177f0bebcf2be39ee8aad1314201c1965507a68864b376268e65",
         "text": "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
       },
-      "source_sha256": "6711fce61f29cd1bfffe0e23c45db5d08a5f4bc85c420a6c6ed457db44e93207"
+      "source_sha256": "229dd359b75de189f8a4fca11adb7838a881d59f48dc4ef524909ba2e438846e"
     },
     {
-      "byte_end": 17687,
-      "byte_start": 17339,
+      "byte_end": 17840,
+      "byte_start": 17485,
       "caller_obligations": [
         "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
       ],
@@ -3960,8 +3961,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "48b7c87b914c0fee0e73278fb84b16a5df1c1eff61d3609aa603e917eaa45eeb",
-      "file_sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f",
+      "expression_sha256": "c83674b9e167ee275cda62a13e46861344a981512187aefa71f380ac402aa3d3",
+      "file_sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a",
       "id": "RS011-IHK-0067",
       "independent_review": {
         "evidence_sha256": null,
@@ -3970,8 +3971,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 444,
-      "line_start": 436,
+      "line_end": 447,
+      "line_start": 439,
       "macro_context": null,
       "owner": {
         "accountable_role": "host-module maintainer",
@@ -3979,15 +3980,15 @@
       },
       "path": "host-kernel/native-rust/os_runtime.rs",
       "safety_comment": {
-        "line_end": 435,
-        "line_start": 435,
+        "line_end": 438,
+        "line_start": 438,
         "source_sha256": "bf79e9ab1c6a177f0bebcf2be39ee8aad1314201c1965507a68864b376268e65",
         "text": "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
       },
-      "source_sha256": "b96a6b98bafb0131a47c07e4b086a35e2717ea3b990dc942fbfd7abd532ac6b2"
+      "source_sha256": "0ee23f41312177dd159b35ec6fa0116da2516d968baa9daf64f013122ec12f42"
     }
   ],
-  "source_closure_sha256": "2dbb1ac1b2bbe2e4b4fe4b63383ea3e774385e27bb91bbba7fbcad8d325d140e",
+  "source_closure_sha256": "550fe79c40555637f37fe3b40a801f0d75c799098321939eaa8e6c1d530403d7",
   "source_inputs": [
     {
       "bytes": 19740,
@@ -4027,7 +4028,7 @@
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "051750702c8505164fad5e91e3e38626f494f73ab02caf37cd5364f37fefdf01"
+      "sha256": "6d95b42ec1007a8601cb0688ec29129bfcdd851be35c4d3c07b6a9ef5719dd32"
     },
     {
       "bytes": 26419,
@@ -4062,12 +4063,12 @@
       "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
     },
     {
-      "bytes": 17688,
+      "bytes": 17841,
       "crate_roots": [
         "ihk"
       ],
       "path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "542fee691d8f01d52c0c104dbae752ad0107b92366acc34fbec850a7c096712f"
+      "sha256": "624dd432480329e54688f5d11fc4a67a54a82745edabdf852e878d8d6e61ab6a"
     },
     {
       "bytes": 21301,
