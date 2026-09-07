@@ -3,8 +3,9 @@
 The recovered image loader is now declared in the native stage manifest,
 Kbuild source closure, lifecycle contracts, and unsafe/FFI inventory. This is
 a source integration checkpoint. The subsequent declared-stage build and guest
-replay pass in `native-image-exact-stage-checkpoint-20260907.json`; the full
-repository suite remains pending.
+replay pass in `native-image-exact-stage-checkpoint-20260907.json`. The full
+repository suite also passes: 2,241 passed and 71 skipped out of 2,312 tests
+in 402.583 seconds. See `native-image-final-validation-20260907.json`.
 
 The stage includes the existing `ihk_mapping.rs` geometry and the new
 `smp_image.rs` and `smp_loader.rs` consumers. Geometry reuse does not implement

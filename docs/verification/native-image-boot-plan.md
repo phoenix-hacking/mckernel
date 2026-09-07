@@ -13,8 +13,9 @@ the existing CPU, memory and OS resource regressions. The retained native
 build matches the current source bytes. Declared staging, lifecycle/FFI and
 downstream verification integration now pass, followed by a fresh declared-stage
 build and guest replay; see `native-image-exact-stage-checkpoint-20260907.json`.
-The full repository suite comes next, then AP startup. No native McKernel boot
-is claimed.
+The full repository suite now passes 2,312 tests (2,241 passed, 71 skipped);
+see `native-image-final-validation-20260907.json`. AP startup comes next.
+No native McKernel boot is claimed.
 
 First application checks require a repeatable native boot, working IKC channels,
 and the native mcctrl process-launch/syscall path. The first program should

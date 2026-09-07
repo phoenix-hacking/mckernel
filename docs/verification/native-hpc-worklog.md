@@ -600,3 +600,13 @@ baseline Rust source was removed. The full repository suite remains next, then
 AP startup, IKC and native mcctrl/application work. Loading the image still does
 not boot McKernel or establish final Rust/assembly-only completion. No production
 gate or score is promoted.
+
+The subsequent complete repository run passed at source parent `da198482`:
+2,312 tests in 402.583 seconds, with 2,241 passed and 71 skipped. See
+`native-image-final-validation-20260907.json` for the exact environment,
+command, result and retained log. The historical artifact fixtures were unchanged.
+Final evidence review also corrected two decompressed-size/digest labels for
+already compressed source snapshots; their retained bytes did not change.
+The native image-loading verification checkpoint is complete. Next: boot ABI,
+owned startup page tables/trampoline and native CPU wakeup, followed by IKC and
+native mcctrl execution. Native McKernel boot and production acceptance are open.

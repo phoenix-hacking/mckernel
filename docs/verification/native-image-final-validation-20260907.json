@@ -1,0 +1,79 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-image-final-20260907-native-image-full-suite-20260907-1.json.gz",
+      "sha256": "91827d43b6d47b1b7abbe444287a7eaf14cfd195cd6ac9ddd4425c31aac9952e",
+      "size": 719,
+      "uncompressed_sha256": "7b1c0fbc17fe4a4e116028a58804f8c7271ceec2e47cbb18e0ea5d5480e96239",
+      "uncompressed_size": 1813
+    },
+    {
+      "path": "docs/verification/evidence/native-image-final-20260907-native-image-full-suite-20260907-1.log.gz",
+      "sha256": "bdc8b52780fd5e7e31d1fb808443b91e4f47d69f9acf70bcfbda9b67ffb651a0",
+      "size": 5202,
+      "uncompressed_sha256": "20fa59cc4c4d626dee567dcffacf6a7406208f1daa9b1e54590d63e81a1d7019",
+      "uncompressed_size": 25675
+    },
+    {
+      "path": "docs/verification/evidence/native-image-final-20260907-run-native-image-full-tests.py.gz",
+      "sha256": "9ba4af3c455afed3882b3a0ba8f940cf5180010b2ca527b4b71932d3c3c239ea",
+      "size": 1668,
+      "uncompressed_sha256": "4c2dec3eb66929955e4bbf63d7002cd972e57e3aadc6e19a88fa94453495270f",
+      "uncompressed_size": 3952
+    },
+    {
+      "path": "docs/verification/evidence/native-image-final-20260907-retainer.py.gz",
+      "sha256": "26f0c3ef24d06e2624086b6da1420b6567c2c61d0d9fca5d772df639492f4470",
+      "size": 1783,
+      "uncompressed_sha256": "d4e591235634e6b58cb0a42721fdd78c2018170356d273295819c7987b8e80f2",
+      "uncompressed_size": 4460
+    }
+  ],
+  "complete_rust_unification_claimed": false,
+  "kind": "native-image-final-local-validation",
+  "native_mckernel_boot_proven": false,
+  "production_gate_credit": false,
+  "recorded_utc": "2026-09-07T16:01:33.128324+00:00",
+  "references": [
+    {
+      "path": "docs/verification/native-image-exact-stage-checkpoint-20260907.json",
+      "sha256": "2c87be57d956e8a222f5b3325c82528aed68d2ee45c60cfd3bc5cdc89f7c9bec",
+      "size": 12891
+    },
+    {
+      "path": "docs/verification/native-image-staging-integration-20260907.json",
+      "sha256": "783f0454d9d156841d86504e01bed06de8ffda716f73470cf1e224d2ddb3cd37",
+      "size": 19928
+    },
+    {
+      "path": "docs/verification/rust-consumers-image-20260907.json",
+      "sha256": "543a9de158fce5b25c2d677706e55756224982b34c1b78340f6fb1772861c123",
+      "size": 65738
+    }
+  ],
+  "remaining": [
+    "Native AP startup and McKernel boot",
+    "IKC and native mcctrl workloads",
+    "McKernel Rust/assembly-only completion",
+    "Production capture and independent acceptance review"
+  ],
+  "retention_integrity": {
+    "checkpoint_references_checked": 6,
+    "compressed_and_decompressed_hashes_checked": true,
+    "retained_artifacts_checked": 61,
+    "status": "PASS"
+  },
+  "schema_version": 1,
+  "scope": "Complete current repository suite after declared-stage image build and native/compat guest; historical witnesses retain their frozen inputs.",
+  "source_parent": "da198482fbd16776c05d2cefe0616f7531017716",
+  "suite": {
+    "finished_utc": "2026-09-07T16:00:19.438421+00:00",
+    "log": "docs/verification/evidence/native-image-final-20260907-native-image-full-suite-20260907-1.log.gz",
+    "seconds": 402.583,
+    "started_utc": "2026-09-07T15:53:33.577064+00:00",
+    "status": "PASS",
+    "tests_passed": 2241,
+    "tests_run": 2312,
+    "tests_skipped": 71
+  }
+}

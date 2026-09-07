@@ -166,15 +166,15 @@ Rust/assembly completion remain pending; no production gate is promoted.
 
 ## Mission
 
-Image staging WIP (2026-09-07): the recovered loader now appears in declared
+Image staging integration (2026-09-07): the recovered loader now appears in declared
 staging/link closure, lifecycle and mapping-reuse contracts, and the 154-site /
 18-source unsafe/FFI queue. Existing site IDs are preserved. Source, lifecycle,
 mapping and loader checks have passing captures. Current workflow, license
 and downstream bindings now pass the focused checks. See
 `docs/verification/native-image-staging-integration-20260907.md` and its JSON
-record for the precise scope and retained failures. Next run the fresh
-declared-stage build, guest and full suite. This WIP does
-not supersede the separate successful prototype guest or grant production credit.
+record for the precise scope and retained failures. The subsequent declared-stage
+build, guest and full suite are recorded below. These local checkpoints do not
+grant production credit.
 
 The subsequent declared image stage now builds the debug kernel and all three
 modules, passes link closure and ELF/no-SIMD checks, and passes both guest ABIs
@@ -184,8 +184,16 @@ A capture-only mutable-log input issue was preserved and corrected in a second
 passing guest with an explicit immutable input list and completion-time hashes.
 The Rust inventory has 135 files: 116 unchanged, 13 modified, six added and none
 removed from the baseline; all 64 core files and 18 native files retain their
-declared consumers. Next run the full repository suite, then native AP startup,
-IKC and workloads. Native McKernel boot and production acceptance remain open.
+declared consumers. Native McKernel boot and production acceptance remain open.
+
+The complete image checkpoint now passes the full repository suite: 2,312 tests
+in 402.583 seconds, with 2,241 passed and 71 skipped. See
+`docs/verification/native-image-final-validation-20260907.json`. The suite used
+source parent da198482 and the original historical artifact fixtures. The build
+and guest remain independently bound to their compiler inputs. Next implement
+native AP startup and boot using the existing guest Rust/assembly entry paths,
+then IKC and native mcctrl/application work. Full Rust/assembly completion and
+production acceptance remain separate open requirements; no scores are promoted.
 
 This repository is migrating McKernel from the traditional CentOS-based
 deployment to an exact Rocky Linux 10.2-derived production control-plane kernel
