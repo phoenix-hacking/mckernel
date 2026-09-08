@@ -50,10 +50,22 @@ impl Preparation {
         for section in (wire::HEADER..input.descriptor).step_by(wire::SECTION) {
             descriptor.put(section + 16, &[0; 8])?;
         }
-        let exchange = Exchange::prepare(os, input.cpu, input.pid, descriptor.physical()).map_err(errno)?;
-        Ok(Self { exchange, input, original, output,
-            buffers: Some(Buffers { descriptor, _args: args, _envs: envs }),
-            result: None, thread: 0, page_table: 0 })
+        let exchange =
+            Exchange::prepare(os, input.cpu, input.pid, descriptor.physical()).map_err(errno)?;
+        Ok(Self {
+            exchange,
+            input,
+            original,
+            output,
+            buffers: Some(Buffers {
+                descriptor,
+                _args: args,
+                _envs: envs,
+            }),
+            result: None,
+            thread: 0,
+            page_table: 0,
+        })
     }
 
     /// Called only after the exact response has retired the peer's mappings.
@@ -62,20 +74,35 @@ impl Preparation {
         let peer = self.exchange.result().ok_or(EBUSY)?;
         let outcome = (|| -> Result {
             kernel::error::to_result(peer)?;
-            self.buffers.as_ref().ok_or(EIO)?.descriptor.read_into(&mut self.output)?;
-            for offset in [0, wire::USER_START, wire::USER_END, wire::ARGS_LEN, wire::ENVS_LEN] {
-                if wire::word(&self.output, offset).map_err(errno)? != wire::word(&self.original, offset).map_err(errno)? {
+            self.buffers
+                .as_ref()
+                .ok_or(EIO)?
+                .descriptor
+                .read_into(&mut self.output)?;
+            for offset in [
+                0,
+                wire::USER_START,
+                wire::USER_END,
+                wire::ARGS_LEN,
+                wire::ENVS_LEN,
+            ] {
+                if wire::word(&self.output, offset).map_err(errno)?
+                    != wire::word(&self.original, offset).map_err(errno)?
+                {
                     return Err(errno(-71));
                 }
             }
             for offset in [wire::NUM_SECTIONS, wire::CPU, wire::PID] {
-                if wire::integer(&self.output, offset).map_err(errno)? != wire::integer(&self.original, offset).map_err(errno)? {
+                if wire::integer(&self.output, offset).map_err(errno)?
+                    != wire::integer(&self.original, offset).map_err(errno)?
+                {
                     return Err(errno(-71));
                 }
             }
             let thread = wire::word(&self.output, wire::THREAD).map_err(errno)?;
             let table = wire::word(&self.output, wire::PAGE_TABLE).map_err(errno)?;
-            if thread < 0xffff_8000_0000_0000 || thread % 8 != 0 || table == 0 || table % 4096 != 0 {
+            if thread < 0xffff_8000_0000_0000 || thread % 8 != 0 || table == 0 || table % 4096 != 0
+            {
                 return Err(errno(-71));
             }
             memory(table, 4096)?;
@@ -99,15 +126,26 @@ impl Preparation {
                     return Err(errno(-71));
                 }
                 if filesz != 0 {
-                    let bytes = filesz.checked_add(address & 4095).and_then(|n| n.checked_add(4095)).ok_or(errno(-75))? & !4095;
-                    if physical % 4096 != 0 { return Err(errno(-71)); }
+                    let bytes = filesz
+                        .checked_add(address & 4095)
+                        .and_then(|n| n.checked_add(4095))
+                        .ok_or(errno(-75))?
+                        & !4095;
+                    if physical % 4096 != 0 {
+                        return Err(errno(-71));
+                    }
                     memory(physical, bytes as usize)?;
                 }
             }
             // Keep the user's original opaque addresses in its returned ABI;
             // the physical Linux request buffers are never exposed to it.
             for offset in [wire::ARGS, wire::ENVS] {
-                wire::put_word(&mut self.output, offset, wire::word(&self.original, offset).map_err(errno)?).map_err(errno)?;
+                wire::put_word(
+                    &mut self.output,
+                    offset,
+                    wire::word(&self.original, offset).map_err(errno)?,
+                )
+                .map_err(errno)?;
             }
             Ok(())
         })();
@@ -119,26 +157,41 @@ impl Preparation {
         outcome
     }
 
-    pub(crate) fn result(&self) -> Option<i32> { self.result }
+    pub(crate) fn result(&self) -> Option<i32> {
+        self.result
+    }
 
     pub(crate) fn copy_result(&self, output: &mut [u8]) -> Result {
         kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
-        output.get_mut(..self.output.len()).ok_or(EINVAL)?.copy_from_slice(&self.output);
+        output
+            .get_mut(..self.output.len())
+            .ok_or(EINVAL)?
+            .copy_from_slice(&self.output);
         Ok(())
     }
 
     pub(crate) fn authorize_transfer(&self, physical: u64, length: usize) -> Result {
         kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
-        if length == 0 { return Err(EINVAL); }
+        if length == 0 {
+            return Err(EINVAL);
+        }
         let last = physical.checked_add(length as u64).ok_or(EINVAL)?;
         for section in self.output[wire::HEADER..].chunks_exact(wire::SECTION) {
             let address = wire::word(section, 0).map_err(errno)?;
             let start = wire::word(section, 16).map_err(errno)?;
             let filesz = wire::word(section, 24).map_err(errno)?;
-            if filesz == 0 { continue; }
-            let bytes = filesz.checked_add(address & 4095).and_then(|n| n.checked_add(4095)).ok_or(EINVAL)? & !4095;
+            if filesz == 0 {
+                continue;
+            }
+            let bytes = filesz
+                .checked_add(address & 4095)
+                .and_then(|n| n.checked_add(4095))
+                .ok_or(EINVAL)?
+                & !4095;
             let end = start.checked_add(bytes).ok_or(EINVAL)?;
-            if physical >= start && last <= end { return Ok(()); }
+            if physical >= start && last <= end {
+                return Ok(());
+            }
         }
         Err(EACCES)
     }

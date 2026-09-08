@@ -127,8 +127,13 @@ impl Runtime {
         if port != 503 {
             return Err(EINVAL);
         }
-        if matches!(message, application_rpc::CLEANUP_REPLY | application_rpc::PREPARE_REPLY) {
-            if let Err(error) = self.application.reply(packet, |physical, bytes| self.memory.application_range(physical, bytes)) {
+        if matches!(
+            message,
+            application_rpc::CLEANUP_REPLY | application_rpc::PREPARE_REPLY
+        ) {
+            if let Err(error) = self.application.reply(packet, |physical, bytes| {
+                self.memory.application_range(physical, bytes)
+            }) {
                 if error != ENOENT {
                     return Err(error);
                 }
@@ -371,17 +376,17 @@ impl Runtime {
     }
 
     fn publish_applications(&self) -> Result {
-        let Some(guest_cpu) = self.application.queued_cpu() else { return Ok(()); };
+        let Some(guest_cpu) = self.application.queued_cpu() else {
+            return Ok(());
+        };
         let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
         smp_cpu::with_runtime_target(self.owner, target, |cpu| {
             smp_ikc::validate_apic()?;
             let result = {
                 let transport = self.transport.lock();
-                let Some(entry) = transport
-                    .channels
-                    .iter()
-                    .find(|entry| entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32)
-                else {
+                let Some(entry) = transport.channels.iter().find(|entry| {
+                    entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32
+                }) else {
                     return Ok(());
                 };
                 self.application
@@ -601,34 +606,63 @@ impl Application {
 
     pub(in super::super) fn prepare(&self, bytes: &mut [u8]) -> Result {
         let runtime = &self.started.runtime;
-        runtime.application.prepare(self.token, bytes, runtime.cpus.len(), runtime.memory.direct_map)
+        runtime.application.prepare(
+            self.token,
+            bytes,
+            runtime.cpus.len(),
+            runtime.memory.direct_map,
+        )
     }
 
     pub(in super::super) fn lookup(&self, bytes: &mut [u8]) -> Result {
-        if bytes.len() != 32 { return Err(EINVAL); }
+        if bytes.len() != 32 {
+            return Err(EINVAL);
+        }
         let address = application_image::word(bytes, 0).map_err(errno)?;
         let access = application_image::word(bytes, 8).map_err(errno)?;
-        if access & !3 != 0 { return Err(EINVAL); }
+        if access & !3 != 0 {
+            return Err(EINVAL);
+        }
         let runtime = &self.started.runtime;
         runtime.application.with_prepared(self.token, |image| {
-            let page = application_image::translate(image.page_table, address,
-                |physical| runtime.memory.application_word(physical).map_err(|error| error.to_errno())).map_err(errno)?;
-            if access & 1 != 0 && !page.writable || access & 2 != 0 && !page.executable { return Err(EACCES); }
-            runtime.memory.application_range(page.physical & !4095, 4096)?;
+            let page = application_image::translate(image.page_table, address, |physical| {
+                runtime
+                    .memory
+                    .application_word(physical)
+                    .map_err(|error| error.to_errno())
+            })
+            .map_err(errno)?;
+            if access & 1 != 0 && !page.writable || access & 2 != 0 && !page.executable {
+                return Err(EACCES);
+            }
+            runtime
+                .memory
+                .application_range(page.physical & !4095, 4096)?;
             application_image::put_word(bytes, 16, page.physical).map_err(errno)?;
-            application_image::put_word(bytes, 24, u64::from(page.writable) | u64::from(page.executable) << 1).map_err(errno)
+            application_image::put_word(
+                bytes,
+                24,
+                u64::from(page.writable) | u64::from(page.executable) << 1,
+            )
+            .map_err(errno)
         })
     }
 
     pub(in super::super) fn transfer(&self, bytes: &mut [u8]) -> Result {
-        if bytes.len() <= 16 { return Err(EINVAL); }
+        if bytes.len() <= 16 {
+            return Err(EINVAL);
+        }
         let physical = application_image::word(bytes, 0).map_err(errno)?;
         let direction = application_image::word(bytes, 8).map_err(errno)?;
-        if direction > 1 { return Err(EINVAL); }
+        if direction > 1 {
+            return Err(EINVAL);
+        }
         let runtime = &self.started.runtime;
         runtime.application.with_prepared(self.token, |image| {
             image.authorize_transfer(physical, bytes.len() - 16)?;
-            runtime.memory.application_copy(physical, &mut bytes[16..], direction == 0)
+            runtime
+                .memory
+                .application_copy(physical, &mut bytes[16..], direction == 0)
         })
     }
 }

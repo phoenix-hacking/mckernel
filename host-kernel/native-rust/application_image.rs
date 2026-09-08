@@ -31,17 +31,24 @@ pub(crate) const PROFILE: usize = 768;
 
 pub(crate) fn word(bytes: &[u8], offset: usize) -> Result<u64, i32> {
     let end = offset.checked_add(8).ok_or(-75)?;
-    Ok(u64::from_le_bytes(bytes.get(offset..end).ok_or(-22)?.try_into().unwrap()))
+    Ok(u64::from_le_bytes(
+        bytes.get(offset..end).ok_or(-22)?.try_into().unwrap(),
+    ))
 }
 
 pub(crate) fn integer(bytes: &[u8], offset: usize) -> Result<i32, i32> {
     let end = offset.checked_add(4).ok_or(-75)?;
-    Ok(i32::from_le_bytes(bytes.get(offset..end).ok_or(-22)?.try_into().unwrap()))
+    Ok(i32::from_le_bytes(
+        bytes.get(offset..end).ok_or(-22)?.try_into().unwrap(),
+    ))
 }
 
 pub(crate) fn put_word(bytes: &mut [u8], offset: usize, value: u64) -> Result<(), i32> {
     let end = offset.checked_add(8).ok_or(-75)?;
-    bytes.get_mut(offset..end).ok_or(-22)?.copy_from_slice(&value.to_le_bytes());
+    bytes
+        .get_mut(offset..end)
+        .ok_or(-22)?
+        .copy_from_slice(&value.to_le_bytes());
     Ok(())
 }
 
@@ -79,7 +86,10 @@ pub(crate) fn flattened(bytes: &[u8]) -> Result<(), i32> {
     if count > i32::MAX as u64 {
         return Err(-22);
     }
-    let strings = (count as usize).checked_add(2).and_then(|n| n.checked_mul(8)).ok_or(-75)?;
+    let strings = (count as usize)
+        .checked_add(2)
+        .and_then(|n| n.checked_mul(8))
+        .ok_or(-75)?;
     if strings > bytes.len() || word(bytes, strings - 8)? != 0 {
         return Err(-22);
     }
@@ -110,7 +120,10 @@ impl Input {
         let descriptor = descriptor_bytes(bytes)?;
         let args = word(bytes, ARGS_LEN)? as usize;
         let envs = word(bytes, ENVS_LEN)? as usize;
-        let total = descriptor.checked_add(args).and_then(|n| n.checked_add(envs)).ok_or(-75)?;
+        let total = descriptor
+            .checked_add(args)
+            .and_then(|n| n.checked_add(envs))
+            .ok_or(-75)?;
         if total != bytes.len() || cpus == 0 || cpus > 1024 {
             return Err(-22);
         }
@@ -135,9 +148,18 @@ impl Input {
             let filesz = word(section, 24)?;
             let offset = word(section, 32)?;
             let prot = integer(section, 40)?;
-            let last = address.checked_add(length).and_then(|n| n.checked_add(4095)).ok_or(-75)? & !4095;
-            if length == 0 || filesz > length || last > end || prot & !7 != 0
-                || section[44] > 1 || offset.checked_add(filesz).is_none() {
+            let last = address
+                .checked_add(length)
+                .and_then(|n| n.checked_add(4095))
+                .ok_or(-75)?
+                & !4095;
+            if length == 0
+                || filesz > length
+                || last > end
+                || prot & !7 != 0
+                || section[44] > 1
+                || offset.checked_add(filesz).is_none()
+            {
                 return Err(-22);
             }
             if section[44] != 0 && !word(bytes, INTERP_ALIGN)?.is_power_of_two() {
@@ -146,7 +168,13 @@ impl Input {
         }
         flattened(&bytes[descriptor..descriptor + args])?;
         flattened(&bytes[descriptor + args..])?;
-        Ok(Self { descriptor, args, envs, cpu, pid })
+        Ok(Self {
+            descriptor,
+            args,
+            envs,
+            cpu,
+            pid,
+        })
     }
 }
 
@@ -160,28 +188,50 @@ pub(crate) struct Page {
 /// Adapt the existing x86_64 translate_rva_to_rpa walk. The callback must
 /// validate each retained guest page-table word before reading it. Handle 1-GiB,
 /// 2-MiB and 4-KiB leaves, including the distinct leaf PAT/large-page bit.
-pub(crate) fn translate(table: u64, address: u64, mut read: impl FnMut(u64) -> Result<u64, i32>) -> Result<Page, i32> {
+pub(crate) fn translate(
+    table: u64,
+    address: u64,
+    mut read: impl FnMut(u64) -> Result<u64, i32>,
+) -> Result<Page, i32> {
     const PHYSICAL: u64 = 0x000f_ffff_ffff_f000;
-    if table == 0 || table % 4096 != 0 || address >= USER_LIMIT { return Err(-22); }
+    if table == 0 || table % 4096 != 0 || address >= USER_LIMIT {
+        return Err(-22);
+    }
     let mut table = table;
     let mut writable = true;
     let mut executable = true;
     for shift in [39, 30, 21, 12] {
-        let pte = read(table.checked_add(((address >> shift) & 511) * 8).ok_or(-75)?)?;
-        if pte & 1 == 0 || pte & 4 == 0 { return Err(-14); }
+        let pte = read(
+            table
+                .checked_add(((address >> shift) & 511) * 8)
+                .ok_or(-75)?,
+        )?;
+        if pte & 1 == 0 || pte & 4 == 0 {
+            return Err(-14);
+        }
         writable &= pte & 2 != 0;
         executable &= pte & (1 << 63) == 0;
         let large = pte & 128 != 0;
-        if shift == 39 && large { return Err(-71); }
+        if shift == 39 && large {
+            return Err(-71);
+        }
         if shift == 12 || large {
             let mask = (1u64 << shift) - 1;
             // Large-leaf bit 12 is PAT; other address bits below the leaf's
             // physical alignment must be zero rather than silently rounded.
-            if large && shift != 12 && pte & PHYSICAL & mask & !4096 != 0 { return Err(-71); }
-            return Ok(Page { physical: (pte & PHYSICAL & !mask) | (address & mask), writable, executable });
+            if large && shift != 12 && pte & PHYSICAL & mask & !4096 != 0 {
+                return Err(-71);
+            }
+            return Ok(Page {
+                physical: (pte & PHYSICAL & !mask) | (address & mask),
+                writable,
+                executable,
+            });
         }
         table = pte & PHYSICAL;
-        if table == 0 { return Err(-14); }
+        if table == 0 {
+            return Err(-14);
+        }
     }
     Err(-14)
 }

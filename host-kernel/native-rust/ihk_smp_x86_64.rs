@@ -68,6 +68,8 @@ mod sysfs_remote;
 #[path = "abi/application.rs"]
 mod application_abi;
 mod application_rpc;
+// The shared image view also defines fields/reservation geometry for mcctrl.
+#[allow(dead_code)]
 mod application_image;
 mod smp_application;
 mod smp_application_image;
@@ -234,8 +236,10 @@ unsafe extern "C" fn application_invoke(
     let application = unsafe { &*context.cast::<smp_memory::Application>() };
     let result = if command == application_abi::CLEANUP && buffer.is_null() && bytes == 0 {
         application.cleanup()
-    } else if !buffer.is_null() && bytes > 0
-        && bytes <= application_image::DESCRIPTOR_CAPACITY + 2 * application_image::MAX_FLAT_BYTES {
+    } else if !buffer.is_null()
+        && bytes > 0
+        && bytes <= application_image::DESCRIPTOR_CAPACITY + 2 * application_image::MAX_FLAT_BYTES
+    {
         // SAFETY: The kernel-only ABI supplies this exclusive borrow, retained
         // for the call. Preparation copies into owned pages before publication.
         let bytes = unsafe { core::slice::from_raw_parts_mut(buffer, bytes) };
@@ -245,7 +249,9 @@ unsafe extern "C" fn application_invoke(
             application_abi::TRANSFER => application.transfer(bytes),
             _ => Err(EINVAL),
         }
-    } else { Err(EINVAL) };
+    } else {
+        Err(EINVAL)
+    };
     result.map_or_else(|error| error.to_errno() as i64, |()| 0)
 }
 

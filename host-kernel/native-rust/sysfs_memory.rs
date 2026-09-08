@@ -133,32 +133,52 @@ impl Memory {
 
     pub(super) fn application_range(&self, physical: u64, bytes: usize) -> Result {
         self.address(physical, bytes)?;
-        if self.ledger.lock().conflicts(Span::new(physical, bytes)?, true) { return Err(EBUSY); }
+        if self
+            .ledger
+            .lock()
+            .conflicts(Span::new(physical, bytes)?, true)
+        {
+            return Err(EBUSY);
+        }
         Ok(())
     }
 
     pub(super) fn application_word(&self, physical: u64) -> Result<u64> {
-        if physical % 8 != 0 { return Err(EINVAL); }
+        if physical % 8 != 0 {
+            return Err(EINVAL);
+        }
         let address = self.address(physical, 8)?;
         let ledger = self.ledger.lock();
-        if ledger.conflicts(Span::new(physical, 8)?, true) { return Err(EBUSY); }
+        if ledger.conflicts(Span::new(physical, 8)?, true) {
+            return Err(EBUSY);
+        }
         // SAFETY: Original OS pages remain owned. The ledger excludes service
         // aliases, and this aligned scalar creates no shared-memory reference.
         Ok(unsafe { ptr::read_volatile(address as *const u64) })
     }
 
-    pub(super) fn application_copy(&self, physical: u64, bytes: &mut [u8], to_guest: bool) -> Result {
+    pub(super) fn application_copy(
+        &self,
+        physical: u64,
+        bytes: &mut [u8],
+        to_guest: bool,
+    ) -> Result {
         let address = self.address(physical, bytes.len())?;
         let ledger = self.ledger.lock();
-        if ledger.conflicts(Span::new(physical, bytes.len())?, true) { return Err(EBUSY); }
+        if ledger.conflicts(Span::new(physical, bytes.len())?, true) {
+            return Err(EBUSY);
+        }
         for (offset, byte) in bytes.iter_mut().enumerate() {
             // SAFETY: The caller independently authorizes this prepared image
             // section, whose complete retained range was checked above. Its
             // private byte buffer never aliases the guest allocation.
             unsafe {
                 let target = (address as *mut u8).add(offset);
-                if to_guest { ptr::write_volatile(target, *byte); }
-                else { *byte = ptr::read_volatile(target); }
+                if to_guest {
+                    ptr::write_volatile(target, *byte);
+                } else {
+                    *byte = ptr::read_volatile(target);
+                }
             }
         }
         Ok(())
