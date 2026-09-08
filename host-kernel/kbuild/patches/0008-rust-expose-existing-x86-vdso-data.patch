@@ -1,0 +1,62 @@
+From: McKernel Rust migration <mckernel@example.invalid>
+Subject: [PATCH] rust: expose existing x86 vDSO image and generic data
+
+The native Rust SMP service needs Linux's actual vDSO text and continuously
+updated generic data pages. Export the existing permanent objects and expose
+their existing declarations to bindgen. Linux keeps all allocation and update
+ownership; no C function body is added or changed.
+
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -6,6 +6,7 @@
+  */
+ #include <linux/mm.h>
+ #include <linux/err.h>
++#include <linux/export.h>
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/slab.h>
+@@ -33,6 +34,7 @@
+ 
+ #if defined(CONFIG_X86_64)
+ unsigned int __read_mostly vdso64_enabled = 1;
++EXPORT_SYMBOL_GPL(vdso_image_64);
+ #endif
+ 
+ int __init init_vdso_image(const struct vdso_image *image)
+--- a/lib/vdso/datastore.c
++++ b/lib/vdso/datastore.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ 
++#include <linux/export.h>
+ #include <linux/linkage.h>
+ #include <linux/mmap_lock.h>
+ #include <linux/mm.h>
+@@ -17,6 +18,7 @@
+ 	u8			page[PAGE_SIZE];
+ } vdso_time_data_store __page_aligned_data;
+ struct vdso_time_data *vdso_k_time_data = &vdso_time_data_store.data;
++EXPORT_SYMBOL_GPL(vdso_k_time_data);
+ static_assert(sizeof(vdso_time_data_store) == PAGE_SIZE);
+ #endif /* CONFIG_GENERIC_GETTIMEOFDAY */
+ 
+@@ -26,6 +28,7 @@
+ 	u8			page[PAGE_SIZE];
+ } vdso_rng_data_store __page_aligned_data;
+ struct vdso_rng_data *vdso_k_rng_data = &vdso_rng_data_store.data;
++EXPORT_SYMBOL_GPL(vdso_k_rng_data);
+ static_assert(sizeof(vdso_rng_data_store) == PAGE_SIZE);
+ #endif /* CONFIG_VDSO_GETRANDOM */
+ 
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -8,6 +8,8 @@
+ 
+ #ifdef CONFIG_X86_64
+ #include <asm/apic.h>
++#include <asm/vdso.h>
++#include <asm/vdso/vsyscall.h>
+ #endif
+ 
+ #include <kunit/test.h>
