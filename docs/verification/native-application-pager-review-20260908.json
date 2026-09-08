@@ -1,0 +1,329 @@
+{
+  "application_readiness_complete": false,
+  "command": "/home/holden/mckernel-work/bin/mckernel-container native python3 -B /work/run-native-application-core.py memory 1",
+  "created_utc": "2026-09-08T23:38:09.141832+00:00",
+  "decisions": [
+    "Retain selected guest Rust fileobj, ABI, launcher and C fallback consumers",
+    "Adapt existing Rust in-kernel/pager dispatch; legacy C callback pointer graph is not usable in native modules",
+    "Pinned Linux Rust exposes no File abstraction; existing generated ordinary Linux file exports need a balanced native Rust owner",
+    "Preserve shared-file references across fd close and accumulated guest sref release",
+    "Use reserved request/worker/serial and existing exact-OS memory ownership; do not broaden public RET copying",
+    "Handle RELEASE in continuing service independently of surviving launcher workers"
+  ],
+  "environment": {
+    "container": "native",
+    "cpus": "2-5",
+    "linux": "6.12.0-211.44.1.el10_2",
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory_limit_gib": 12,
+    "qemu": "TCG, four vCPUs, two NUMA nodes",
+    "rust": "1.92"
+  },
+  "full_capture_retention_pending": true,
+  "linux_reference": "Four PASS modes on Linux only: memory, files, threads, signals",
+  "native_pager_implemented": false,
+  "observed": {
+    "abnormal_owner_proven": false,
+    "actual_exit": 127,
+    "actual_return": -38,
+    "expected_exit": 37,
+    "failed_pager_request": "PAGER_REQ_CREATE",
+    "failed_syscall": 9,
+    "fstat_return": 0,
+    "libc_fd": 6,
+    "mckernel_core_cases_passed": 0,
+    "normal_marked_retirement": true,
+    "pid": 307,
+    "pread_bytes": [
+      784,
+      784
+    ],
+    "read_bytes": 832
+  },
+  "original_capture": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1",
+  "original_capture_status": "FAIL",
+  "preserved_baseline": "Sixteen repeated HELLO/exit-37 applications in two accepted fresh guests at the start checkpoint; eight further HELLOs in the pathname checkpoint",
+  "production_gate_credit": false,
+  "remaining": [
+    "Implement and verify native file pager, including sharing, page I/O, cancellation and teardown",
+    "Rerun unchanged dynamic libc memory case in fresh guest",
+    "Pass unchanged files, threads/futex and signals modes in McKernel",
+    "Pass actual abnormal-owner cases and original regressions",
+    "Fully retain captures and verify final GitHub handoff evidence"
+  ],
+  "retained_diagnostics_and_linux_references": [
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/record.json",
+        "sha256": "d6e2acb9ce1d63c2cffc8bde913eb121fb4c9e6d91f43254cec267eb2b103446",
+        "size": 31773
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-record.json.gz",
+        "sha256": "274c0446e4d986e36197b30991ce4583f585db490c2454795028926becb3a230",
+        "size": 5449
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/helper.py",
+        "sha256": "3f1c5fa92c67c16736ec6e477b5ada8bd5ecf7567f30754da8f9afdc93b7a3f0",
+        "size": 24443
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-helper.py.gz",
+        "sha256": "35c2fcf070dee9ff514c91d88225dafca2488e2c34af80e27e4811d36103ff8d",
+        "size": 7535
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/serial.log",
+        "sha256": "c3241baf27397d614032d6a9a6958c978863e59f30c5da8226aae6b90ec81a10",
+        "size": 71992
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-serial.log.gz",
+        "sha256": "1d09338c24f89cb6c9a5dd5f9a077b3894508fa851799b327a6db0c452a93356",
+        "size": 18816
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/debugcon.log",
+        "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+        "size": 152
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-debugcon.log.gz",
+        "sha256": "d1780bb68a42aa888540e63c85d8ae02c323f87fb3187530f54a6f82eab5bd75",
+        "size": 132
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/capture-emergency/kmsg.txt",
+        "sha256": "7c1e1cf8816778be701f896fbf97b6d8b174608fa3d56456e5a7ff6ca8ebea7e",
+        "size": 55512
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-capture-emergency-kmsg.txt.gz",
+        "sha256": "f735ed8cccc928be5c39d84f205a13e847c4bca76ebb7bb3a781cbd3dde6a731",
+        "size": 3853
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/capture-emergency/kmsg.bin",
+        "sha256": "743719e3792f63d52810cfa633f90bce366ccf686ccf47a8d1d6c6f17333318a",
+        "size": 4194304
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-capture-emergency-kmsg.bin.gz",
+        "sha256": "982b9276b4fd5701b4dfd48042c1c4847b3f42f16602c7aa732614f8ee638801",
+        "size": 8334
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/capture-emergency/registers.txt",
+        "sha256": "01e9f3d5bce2dbfd9ed4a07ffd5319105fcf251f60989bef7c637abf83a67975",
+        "size": 10467
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-capture-emergency-registers.txt.gz",
+        "sha256": "e710b74e21a2ff9b1a68a2cfd9a7c6753fc51e9103b0a4dbfb3c11adf354a88e",
+        "size": 1349
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-memory-guest-20260908-1/capture-emergency/cpus.json",
+        "sha256": "c5f7f55a1cd4d3d7f7a16788304cee923aec8c286954de40352008a8782886d1",
+        "size": 1047
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-guest-capture-emergency-cpus.json.gz",
+        "sha256": "c39d872159d71f083864684793b41511d73d2f6974aa4915df921d8fc5fe660c",
+        "size": 222
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/rust/kernel/lib.rs",
+        "sha256": "cde3e1e9608006f36c3a44ee11be848d8481c665f75b6d29937c9e9d9f76b0b6",
+        "size": 4196
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-linux-rust-kernel-lib.rs.gz",
+        "sha256": "8bec131ad714fb06499ca95d08387612bdaeeb54181cfbc8f636767a550ef55c",
+        "size": 1896
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/fs/file.c",
+        "sha256": "926eea5a4fa7496cdbaecbcf7b72d2944f98ff51e8fa52ea5a937bbd718096d4",
+        "size": 38550
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-linux-fs-file.c.gz",
+        "sha256": "362e2f9e7d2800649471aad75dd54e3ac925c163cbe33774a52b853cd0444a63",
+        "size": 11289
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/fs/read_write.c",
+        "sha256": "d005c39290413df888a727ed2762237426b8de0d1d4f15dd96ab277b66fa2d28",
+        "size": 44827
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-linux-fs-read_write.c.gz",
+        "sha256": "42584a51bf56cfe2f89edb25e14e475219566352d8f27d342faf3553052cae04",
+        "size": 9700
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/fs/stat.c",
+        "sha256": "53a35c31b57cdd5370e8892c649b22f9c352c853137a96a15894c670fc9b7730",
+        "size": 27057
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-linux-fs-stat.c.gz",
+        "sha256": "4b1fda797832b6121ab7d4d9ec2caf194a03f38c58ed3f478bc4c9c96a6b8521",
+        "size": 6390
+      }
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/scratch/native-build-base-24a151fe/rust/bindings/bindings_generated.rs",
+        "sha256": "89e60708ae31dbf48b4ebb60a118527c7f567e4954a4dbbaa41a58b2eccb22ec",
+        "size": 3166259
+      },
+      "retained": {
+        "path": "docs/verification/evidence/native-application-pager-review-20260908-linux-bindings_generated.rs.gz",
+        "sha256": "fcc337f60f621bf84d469c82b6064fcd1a4d9a8068564ff50bf88739fed8b01d",
+        "size": 402006
+      }
+    }
+  ],
+  "reviewed_sources": [
+    {
+      "path": "executer/kernel/mcctrl/CMakeLists.txt",
+      "sha256": "f86000b2034abd00c01431fb81bf6e8aa31ee1808c360da05d54023ad5380ba3",
+      "size": 3845
+    },
+    {
+      "path": "executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14",
+      "size": 403227
+    },
+    {
+      "path": "executer/kernel/mcctrl/syscall.c",
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450",
+      "size": 88788
+    },
+    {
+      "path": "executer/kernel/mcctrl/control.c",
+      "sha256": "00d83f9ad7cf6c7bd263a33933aa3f5b89e4e399c2245b86ff90be87d1be3221",
+      "size": 147514
+    },
+    {
+      "path": "executer/user/rust/mcexec_helpers.rs",
+      "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+      "size": 251439
+    },
+    {
+      "path": "executer/include/uprotocol.h",
+      "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69",
+      "size": 9756
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "1ca18dfd79add9954bcd175a081afe2ed4a2e15a94390f2ee34832d480cb09e5",
+      "size": 22022
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "2e186a9c61bd76e8c4fb7fdade78952b5c895add5f47c53ed9103aa6d9f04a08",
+      "size": 1567
+    },
+    {
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "path": "kernel/rust/fileobj.rs",
+      "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb",
+      "size": 32461
+    },
+    {
+      "path": "kernel/rust/pager.rs",
+      "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f",
+      "size": 35974
+    },
+    {
+      "path": "kernel/include/pager.h",
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f",
+      "size": 1223
+    },
+    {
+      "path": "kernel/fileobj.c",
+      "sha256": "dfc509031aeeaeac00bd8eda4113e470aeb8ce1b20f20b9996002bc7d7f929f6",
+      "size": 43241
+    },
+    {
+      "path": "host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "ecf99562176fa9ad53bead2fda63a16ad0296f402a2d7794fa1b134d0e907293",
+      "size": 36662
+    },
+    {
+      "path": "host-kernel/native-rust/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "host-kernel/native-rust/application_syscall.rs",
+      "sha256": "36c0969b61225cd3b3979eafa0a3ca6e1c5dc6f9bc6f273f90dad3a047ed8671",
+      "size": 13101
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "259d53472fd2a9ae139ea70b6712aa91dff03981e77b8daaaeb427eaa63cc4fe",
+      "size": 12197
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "b4486e51a823ee19ac0b55c8f64fbcec29169f1a4ff7b93fa280d46a405f6469",
+      "size": 28842
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "e981807e437b3d723d4aca33fb38d44caaa0cb188dfb9befed5f6cc007ff78ee",
+      "size": 36315
+    },
+    {
+      "path": "host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "b638be34e740614a7f5273945d64b220fddf52441b0877608b4305443539cf92",
+      "size": 20988
+    },
+    {
+      "path": "host-kernel/native-rust/abi/application.rs",
+      "sha256": "c075bad000187084eab80efe50286f37742392bf8a88a60fff6baeb93e060175",
+      "size": 1900
+    },
+    {
+      "path": "scripts/tests/fixtures/native-application-core.c",
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+      "size": 5758
+    }
+  ],
+  "scope": "First ordinary libc application failure diagnosis and pre-implementation native file-pager source review; no new runtime acceptance",
+  "source_parent": "4b067ed93077e433fe6f4c9bdde31a786bf2b696",
+  "status": "REVIEW",
+  "unchanged_application": "scripts/tests/fixtures/native-application-core.c"
+}

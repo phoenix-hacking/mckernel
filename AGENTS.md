@@ -207,9 +207,14 @@ the shared SMP module; original warning failure 1 remains retained. Actual
 guest 1 passes both LP64/i386 descriptors, 28 guarded data cases, eight
 descriptor faults and eight unchanged HELLO/exit-37/retirement launches.
 Ordinary dynamically linked libc/pthread core application build 1 passes all
-four Linux reference modes. Its memory/file/thread/signal modes still require
-actual McKernel execution. Preserve every new capture pending full archival;
-continue the readiness and abnormal-owner gates before announcing Ultra.
+four Linux reference modes. Actual memory guest 1 fails in the dynamic loader:
+libc opens and reads, but missing native file-pager dispatch returns ENOSYS on
+PAGER_REQ_CREATE. It exits 127 with normal scheduled retirement; no libc core
+mode has passed in McKernel. See native-application-pager-review-20260908.json
+and the file-pager source review in the application service plan. Keep the
+ordinary dynamic application and launcher unchanged while fixing this blocker.
+Preserve every new capture pending full archival; continue the four actual
+core modes and abnormal-owner gates before announcing Ultra.
 
 Latest actual application checkpoint, 2026-09-08:
 `docs/verification/native-application-start-checkpoint-20260908.json` retains
@@ -229,9 +234,10 @@ final application replay checks stdout files exactly before logging them.
 No assertion was removed. Preserve module 5, image 1, return-adapter test 1,
 repeat guests 2/4, current ABI guests and all active launcher/compiler inputs.
 Next: actual abnormal-owner and memory/file/thread-futex/signal smokes, adding
-missing native integration required by those paths. Native STRNCPY_FROM_USER
-is still needed for the launcher's file-path handling. No application-readiness,
-whole-OS production or Rust/assembly acceptance gate is promoted.
+missing native integration required by those paths. The later string checkpoint
+connects STRNCPY_FROM_USER; native file paging now blocks the dynamic libc smoke.
+No application-readiness, whole-OS production or Rust/assembly acceptance gate
+is promoted.
 
 Earlier native START WIP, 2026-09-08:
 `docs/verification/native-application-start-wip-20260908.json` records compiled

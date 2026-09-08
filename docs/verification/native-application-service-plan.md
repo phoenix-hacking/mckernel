@@ -33,14 +33,21 @@ captures and fixes. Final stdout/verification markers now use an ordered log
 stream because serial tty output can be split by printk even inside one write.
 Original failing captures retain their original status and bytes.
 
-The Astra Ultra handoff is **not ready**. The next gates are actual abnormal
-launcher/worker handling and small memory, file-I/O, thread/futex and signal
-applications. These require remaining native ioctl integration where exercised;
-for example, the existing launcher uses STRNCPY_FROM_USER for file paths, which
-is not yet connected in the native dispatcher. Preserve the accepted baseline
-while adding that coverage. The later review must list unsupported features
-and distinguish this one-McKernel-CPU, 128-MiB guest baseline from multicore,
-MPI, dynamic/libc application suites and whole-OS production acceptance.
+The Astra Ultra handoff is **not ready**. Native STRNCPY_FROM_USER now passes
+both real control ABIs, 28 guarded data cases and eight descriptor faults,
+followed by eight unchanged HELLO launches. The normal dynamically linked
+libc/pthread core application passes its four Linux reference modes. Its first
+actual McKernel memory run stops in the runtime linker: libc opens and reads,
+but PAGER_REQ_CREATE reaches the launcher and returns ENOSYS instead of being
+handled by the native kernel service. The loader exits 127 with normal cleanup;
+none of the four libc core modes has passed in McKernel. This is a current
+integration blocker, not a completed smoke or a future-suite exclusion.
+
+After fixing file paging, require the unchanged memory, file-I/O, thread/futex
+and signal modes, actual abnormal launcher/worker handling, current regressions
+and complete evidence retention. The later review must list unsupported
+features and distinguish this one-McKernel-CPU, 128-MiB guest baseline from
+multicore, MPI, broader application suites and whole-OS production acceptance.
 
 ## Application readiness and model handoff, 2026-09-08
 
@@ -1473,3 +1480,77 @@ which correctly rejects the unused mcctrl-only ioctl adapter under -D warnings.
 Keep user_string::read_into unchanged and place the new current-caller copy
 adapter in mcctrl_exec, reusing its initialized path_buffer allocation. This
 retains both existing consumers and introduces no dead-code allowance.
+
+## Native file-pager source review, 2026-09-08
+
+Reviewed parent: 4b067ed93077e433fe6f4c9bdde31a786bf2b696. Original
+`native-application-core-memory-guest-20260908-1` remains FAIL. PID 307 opens
+libc as fd 6, reads 832 bytes, preads 784 bytes, completes fstat and a second
+pread, then receives -38 on syscall 9. The independently captured McKernel
+log identifies `fileobj_create(6)` / PAGER_REQ_CREATE. Its loader prints the
+shared-object mapping failure, exits 127 and completes marked retirement.
+The application does not reach its memory checks. Diagnostic evidence and
+source identities are recorded in `native-application-pager-review-20260908.json`;
+the complete original guest capture remains protected pending full archival.
+
+Retain `kernel/rust/fileobj.rs::{fileobj_create,fileobj_do_pageio,fileobj_free}`
+and its CREATE/READ/WRITE/RELEASE request producers. Kernel CMake selects
+this Rust module through rust/lib.rs and removes fileobj.c in the Rust build;
+the C fallback remains a reference and a supported build selection. Retain
+`kernel/rust/abi.rs::PagerCreateResult`: size 4128, handle at 0, maxprot at 8,
+flags at 12, size at 16, pgshift at 24 and the 4096-byte path at 28, with final
+alignment padding. Keep the existing result and request ABI unchanged.
+
+Retain the selected launcher `act_reserved_memory_syscall` unchanged. Its
+ENOSYS is deliberate: the existing host handles reserved mmap/munmap/mprotect
+requests before userspace dispatch. Adapt the existing Rust
+`mcctrl_in_kernel_irq_syscall_body_result`,
+`mcctrl_in_kernel_syscall_body_result` and
+`mcctrl_pager_call{,_irq}_body_result` dispatch semantics. Compatibility CMake
+links mcctrl_helpers.o under MCCTRL_RUST_HELPERS; these bodies call C callback
+tables and legacy OS/packet pointers, so they cannot be directly linked into
+the native ownership graph. `syscall.c::pager_req_*` supplies the actual Linux
+file-I/O and registry bodies behind those callbacks; it is not already a
+native Rust pager. Preserve all compatibility consumers.
+
+The source contract requires more than acknowledging CREATE. The file pager
+shares handles by retained inode, increments a server reference for each
+CREATE, retains read/write Linux file references independently of fd close,
+and releases the accumulated guest sref on final file-object destruction.
+READ repeats short reads and zero-fills the final partial page; WRITE is
+bounded by the existing file size. Permissions, noexec mounts, file type,
+tmpfs/procfs/device handling and huge-page selection must remain explicit.
+Guest `kernel/rust/pager.rs` implements swap/page-in/page-out and mlock-list
+requests; it does not replace the Linux file-pager backend.
+
+The pinned Linux 6.12 rust/kernel/lib.rs exposes no fs/file module or File
+owner abstraction. Its generated bindings already expose ordinary Linux
+fget/fput, kernel_read/kernel_write and vfs_getattr. Use those reviewed exports
+behind a Rust file owner, retaining Linux's permission checks and positional
+I/O. The existing native mcctrl_exec::Executable demonstrates balanced fput
+and bounded d_path, but its execute-only opening and write denial cannot own
+arbitrary mapped files. Do not use whole-image smp_loader loading for paging.
+
+Native integration must retain the exact reserved Request, worker and serial
+while handling CREATE/READ/WRITE in the calling Linux worker's sleepable
+context; fd lookup needs that caller's file table. Keep file-I/O outside the
+application state and memory-ledger locks. Reuse the existing OS generation,
+started storage, mailbox completion/wake ordering and memory span validation.
+Add a distinct internal pager operation and request-authorized data path;
+keep the userspace RET copy contract restricted to its existing 16-byte futex
+case. Never authorize arbitrary physical writes through the public RET ioctl.
+
+RELEASE cannot depend on a surviving Linux launcher worker: the existing
+in-kernel IRQ path handles it before userspace dispatch, including during
+guest teardown. Its native equivalent must run through continuing service,
+retain the response until completion, and validate handles and sref without
+underflow or reuse. Per-OS sharing, cancellation during I/O, unpublished CREATE
+rollback, late RELEASE and independently referenced files must have explicit
+ownership before source changes are accepted. Close or PID deletion alone
+cannot free shared pagers or permit stale writes.
+
+Next implement that bounded integration and test exact ABI/dispatch, sharing,
+close-after-mmap, partial/EOF I/O, invalid handles/spans, cancellation and
+teardown. Then rebuild the native modules and rerun the unchanged dynamic
+application in a fresh guest. Original failure evidence stays FAIL. Passing
+Linux reference modes, a source review or a compile cannot promote the handoff.
