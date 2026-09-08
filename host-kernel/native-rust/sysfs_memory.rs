@@ -1,10 +1,16 @@
 // SPDX-License-Identifier: GPL-2.0-only
 //! Retained guest mappings and exclusive claims for continuing sysfs requests.
 
-use super::{errno, wire, OsToken, METADATA_CAPACITY};
 use super::super::{checked_guest_bytes, MemoryExtent, MemoryMap, MAX_EXTENTS};
-use core::{ptr, sync::atomic::{AtomicI32, Ordering}};
-use kernel::{prelude::*, sync::{new_mutex, Arc, Mutex}};
+use super::{errno, wire, OsToken, METADATA_CAPACITY};
+use core::{
+    ptr,
+    sync::atomic::{AtomicI32, Ordering},
+};
+use kernel::{
+    prelude::*,
+    sync::{new_mutex, Arc, Mutex},
+};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) struct Span {
@@ -17,7 +23,10 @@ impl Span {
         if physical == 0 || bytes == 0 {
             return Err(EINVAL);
         }
-        Ok(Self { physical, end: physical.checked_add(bytes as u64).ok_or(EINVAL)? })
+        Ok(Self {
+            physical,
+            end: physical.checked_add(bytes as u64).ok_or(EINVAL)?,
+        })
     }
 
     fn overlaps(self, other: Self) -> bool {
@@ -41,13 +50,20 @@ struct Ledger {
 impl Ledger {
     fn conflicts(&self, span: Span, snoops: bool) -> bool {
         self.fixed.iter().any(|old| old.overlaps(span))
-            || self.requests.iter().flatten().any(|old| old.span.overlaps(span))
+            || self
+                .requests
+                .iter()
+                .flatten()
+                .any(|old| old.span.overlaps(span))
             || snoops && self.snoops.iter().any(|old| old.span.overlaps(span))
     }
 
     fn tag(&mut self, span: Span) -> Result<Tagged> {
         self.serial = self.serial.checked_add(1).ok_or_else(|| errno(-75))?;
-        Ok(Tagged { span, serial: self.serial })
+        Ok(Tagged {
+            span,
+            serial: self.serial,
+        })
     }
 }
 
@@ -91,10 +107,13 @@ impl Memory {
         for _ in 0..METADATA_CAPACITY + 2 {
             requests.push(None, GFP_KERNEL)?;
         }
-        Arc::pin_init(pin_init!(Self {
-            owner, direct_map, extents,
-            ledger <- new_mutex!(Ledger { fixed, requests, snoops: Vec::new(), serial: 0 }),
-        }), GFP_KERNEL)
+        Arc::pin_init(
+            pin_init!(Self {
+                owner, direct_map, extents,
+                ledger <- new_mutex!(Ledger { fixed, requests, snoops: Vec::new(), serial: 0 }),
+            }),
+            GFP_KERNEL,
+        )
     }
 
     pub(super) fn extents(&self) -> &[MemoryExtent] {
@@ -102,8 +121,14 @@ impl Memory {
     }
 
     fn address(&self, physical: u64, bytes: usize) -> Result<u64> {
-        checked_guest_bytes(self.extents.as_slice(), self.owner, self.direct_map, physical, bytes)
-            .map(|value| value as u64)
+        checked_guest_bytes(
+            self.extents.as_slice(),
+            self.owner,
+            self.direct_map,
+            physical,
+            bytes,
+        )
+        .map(|value| value as u64)
     }
 
     pub(super) fn claim(self: &Arc<Self>, kind: wire::Kind, physical: u64) -> Result<Claim> {
@@ -117,7 +142,11 @@ impl Memory {
         if ledger.conflicts(span, true) {
             return Err(EBUSY);
         }
-        let slot = ledger.requests.iter().position(Option::is_none).ok_or(ENOMEM)?;
+        let slot = ledger
+            .requests
+            .iter()
+            .position(Option::is_none)
+            .ok_or(ENOMEM)?;
         // SAFETY: The complete aligned exact-generation mapping is retained,
         // and this mutex excludes every overlapping host access claim.
         let busy = unsafe { AtomicI32::from_ptr((address as *mut u8).add(layout.busy).cast()) };
@@ -126,7 +155,14 @@ impl Memory {
         }
         let tag = ledger.tag(span)?;
         ledger.requests[slot] = Some(tag);
-        Ok(Claim { memory: self.clone(), kind, address, tag, slot, active: true })
+        Ok(Claim {
+            memory: self.clone(),
+            kind,
+            address,
+            tag,
+            slot,
+            active: true,
+        })
     }
 
     /// Reserve queue aliases while the caller allocates and stores both owned
@@ -148,7 +184,7 @@ impl Memory {
         ledger.fixed.push(span, GFP_KERNEL)?;
         if let Err(error) = ledger.fixed.push(span, GFP_KERNEL) {
             ledger.fixed.pop();
-            return Err(error);
+            return Err(error.into());
         }
         match make() {
             Ok(result) => {
@@ -179,8 +215,10 @@ impl Memory {
             // from writers. Copy all input before releasing the ledger lock.
             *byte = unsafe { ptr::read_volatile((address as *const u8).add(index)) };
         }
-        Ok((i32::from_le_bytes(bytes[..4].try_into().unwrap()),
-            u64::from_le_bytes(bytes[8..].try_into().unwrap())))
+        Ok((
+            i32::from_le_bytes(bytes[..4].try_into().unwrap()),
+            u64::from_le_bytes(bytes[8..].try_into().unwrap()),
+        ))
     }
 
     fn snoop(self: &Arc<Self>, physical: u64, bytes: usize) -> Result<Region> {
@@ -194,7 +232,12 @@ impl Memory {
         }
         let tag = ledger.tag(span)?;
         ledger.snoops.push(tag, GFP_KERNEL)?;
-        Ok(Region { memory: self.clone(), address, bytes, tag })
+        Ok(Region {
+            memory: self.clone(),
+            address,
+            bytes,
+            tag,
+        })
     }
 }
 
@@ -228,7 +271,11 @@ impl Claim {
     fn finish(&mut self, error: i32, handle: Option<u64>) -> Result {
         let mut ledger = self.memory.ledger.lock();
         let entry = ledger.requests.get_mut(self.slot).ok_or(EIO)?;
-        if !self.active || entry.as_ref().is_none_or(|tag| tag.serial != self.tag.serial) {
+        if !self.active
+            || entry
+                .as_ref()
+                .is_none_or(|tag| tag.serial != self.tag.serial)
+        {
             return Err(EIO);
         }
         *entry = None;
@@ -236,8 +283,7 @@ impl Claim {
         // SAFETY: The unique original claim is still excluded by the ledger
         // lock. Completion writes error/handle before its final release store;
         // no guest memory is accessed by us after that store.
-        unsafe { wire::complete(self.kind, self.address as *mut u8, error, handle) }
-            .map_err(errno)
+        unsafe { wire::complete(self.kind, self.address as *mut u8, error, handle) }.map_err(errno)
     }
 
     pub(super) fn complete(mut self, result: Result<Option<u64>>) -> Result {
@@ -252,7 +298,10 @@ impl Drop for Claim {
     fn drop(&mut self) {
         if self.active {
             if let Err(error) = self.finish(EIO.to_errno(), None) {
-                pr_err!("IHK-SMP: sysfs abandoned request completion failed errno={}\n", error.to_errno());
+                pr_err!(
+                    "IHK-SMP: sysfs abandoned request completion failed errno={}\n",
+                    error.to_errno()
+                );
             }
         }
     }
@@ -283,7 +332,11 @@ impl Region {
 impl Drop for Region {
     fn drop(&mut self) {
         let mut ledger = self.memory.ledger.lock();
-        if let Some(index) = ledger.snoops.iter().position(|tag| tag.serial == self.tag.serial) {
+        if let Some(index) = ledger
+            .snoops
+            .iter()
+            .position(|tag| tag.serial == self.tag.serial)
+        {
             ledger.snoops.remove(index);
         }
     }

@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-only
 //! Bounded native adapters for the eight existing guest snooping operations.
 
-use super::{errno, memory::{Claim, Region}};
 use super::super::super::sysfs_objects::AttributeOps;
+use super::{
+    errno,
+    memory::{Claim, Region},
+};
 use kernel::{bindings, fmt, prelude::*, str::CString};
 
 pub(super) struct Snoop {
@@ -28,13 +31,25 @@ impl Snoop {
             }
             _ => return Err(EINVAL),
         };
-        let region = if bytes == 0 { None } else { Some(claim.snoop(physical, bytes)?) };
-        Ok(Self { operation, region, bytes, bits })
+        let region = if bytes == 0 {
+            None
+        } else {
+            Some(claim.snoop(physical, bytes)?)
+        };
+        Ok(Self {
+            operation,
+            region,
+            bytes,
+            bits,
+        })
     }
 
     fn number(&self) -> Result<u64> {
         let mut value = [0u8; 8];
-        self.region.as_ref().ok_or(EIO)?.copy(&mut value[..self.bytes])?;
+        self.region
+            .as_ref()
+            .ok_or(EIO)?
+            .copy(&mut value[..self.bytes])?;
         Ok(u64::from_le_bytes(value))
     }
 
@@ -63,7 +78,13 @@ impl Snoop {
             } else {
                 bindings::bitmap_print_bitmask_to_buf
             };
-            print(output.as_mut_ptr().cast(), snapshot.as_ptr(), self.bits as i32, 0, output.len())
+            print(
+                output.as_mut_ptr().cast(),
+                snapshot.as_ptr(),
+                self.bits as i32,
+                0,
+                output.len(),
+            )
         };
         kernel::error::to_result(count)?;
         let count = count as usize;
@@ -101,7 +122,10 @@ impl AttributeOps for Snoop {
             _ => return Err(EINVAL),
         };
         let bytes = text.as_bytes();
-        output.get_mut(..bytes.len()).ok_or_else(|| errno(-75))?.copy_from_slice(bytes);
+        output
+            .get_mut(..bytes.len())
+            .ok_or_else(|| errno(-75))?
+            .copy_from_slice(bytes);
         Ok(bytes.len())
     }
 }

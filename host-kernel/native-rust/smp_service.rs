@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 //! Continuing native control service, retained beyond the synchronous BOOT call.
 
-use super::{abi, BootCpu, MemoryMap, OwnedControlChannel, PreparedBoot, MAX_EXTENTS};
 use super::super::{
     ikc_master::{AcceptSuccess, ExecutionContext, MasterRouter, RouteAction},
     smp_cpu,
@@ -12,8 +11,17 @@ use super::super::{
     sysfs_setup::{Service, SharedData},
     sysfs_tree::Handle,
 };
-use core::{mem::offset_of, ptr, sync::atomic::{AtomicBool, AtomicI32, AtomicU64, Ordering}};
-use kernel::{bindings, prelude::*, sync::{new_mutex, Arc, Mutex}};
+use super::{abi, BootCpu, MemoryMap, OwnedControlChannel, PreparedBoot, MAX_EXTENTS};
+use core::{
+    mem::offset_of,
+    ptr,
+    sync::atomic::{AtomicBool, AtomicI32, AtomicU64, Ordering},
+};
+use kernel::{
+    bindings,
+    prelude::*,
+    sync::{new_mutex, Arc, Mutex},
+};
 
 #[path = "sysfs_memory.rs"]
 mod memory;
@@ -43,7 +51,11 @@ impl Pending {
         for _ in 0..METADATA_CAPACITY {
             slots.push(None, GFP_KERNEL)?;
         }
-        Ok(Self { slots, head: 0, length: 0 })
+        Ok(Self {
+            slots,
+            head: 0,
+            length: 0,
+        })
     }
 
     fn push(&mut self, item: Metadata) -> Option<Metadata> {
@@ -98,7 +110,11 @@ struct Runtime {
 
 impl Runtime {
     fn fail(&self, error: Error) {
-        if self.error.compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire).is_ok() {
+        if self
+            .error
+            .compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire)
+            .is_ok()
+        {
             pr_err!("IHK-SMP: continuing service error os={} generation={} errno={}; workers and all started owners retained\n",
                 self.owner.slot(), self.owner.generation(), error.to_errno());
         }
@@ -121,8 +137,13 @@ impl Runtime {
             return Ok(());
         }
         let Some(kind) = wire::Kind::from_message(message) else {
-            pr_info!("IHK-SMP: unserviced continuing request os={} generation={} port={} message={:x}\n",
-                self.owner.slot(), self.owner.generation(), port, message);
+            pr_info!(
+                "IHK-SMP: unserviced continuing request os={} generation={} port={} message={:x}\n",
+                self.owner.slot(),
+                self.owner.generation(),
+                port,
+                message
+            );
             return Err(errno(-38));
         };
         let physical = u64::from_le_bytes(packet[24..32].try_into().unwrap());
@@ -166,7 +187,8 @@ impl Runtime {
             match item.request.operation {
                 wire::Operation::Create { mode, client } => {
                     if (1..=1000).contains(&client.operations) {
-                        let operations = snoop::Snoop::new(&item.claim, client.operations, client.instance)?;
+                        let operations =
+                            snoop::Snoop::new(&item.claim, client.operations, client.instance)?;
                         tree.create(path, mode, operations)?;
                     } else {
                         let operations = Attribute::new(self.remote.clone(), client)?;
@@ -179,7 +201,9 @@ impl Runtime {
                     Ok(None)
                 }
                 wire::Operation::Mkdir => tree.mkdir(path).map(|handle| Some(handle.wire())),
-                wire::Operation::Symlink { target } => tree.symlink(Handle::from_wire(target)?, path).map(|_| None),
+                wire::Operation::Symlink { target } => {
+                    tree.symlink(Handle::from_wire(target)?, path).map(|_| None)
+                }
                 wire::Operation::Lookup => tree.lookup(path).map(|handle| Some(handle.wire())),
                 wire::Operation::Unlink { flags } => tree.unlink(path, flags).map(|_| None),
             }
@@ -233,13 +257,23 @@ impl Runtime {
                 RouteAction::Accept(plan) => {
                     let offer = plan.offer();
                     let mut transport = self.transport.lock();
-                    let result = self.memory.connect(offer.send_queue, CONTROL_QUEUE_BYTES, || {
-                        super::accept_control_channel(
-                            self.memory.extents(), self.owner, &self.cpus, &mut transport.channels,
-                            Some(self.data), self.memory.direct_map, self.master_receive,
-                            self.master_send, self.master_bytes, offer,
-                        )
-                    }).map_err(|error| error.to_errno());
+                    let result = self
+                        .memory
+                        .connect(offer.send_queue, CONTROL_QUEUE_BYTES, || {
+                            super::accept_control_channel(
+                                self.memory.extents(),
+                                self.owner,
+                                &self.cpus,
+                                &mut transport.channels,
+                                Some(self.data),
+                                self.memory.direct_map,
+                                self.master_receive,
+                                self.master_send,
+                                self.master_bytes,
+                                offer,
+                            )
+                        })
+                        .map_err(|error| error.to_errno());
                     let reply = plan.connect_reply(result).map_err(smp_ikc::master_error)?;
                     transport.master_reply = Some(BootMaster::encode(&reply.packet()));
                 }
@@ -247,15 +281,19 @@ impl Runtime {
                     self.transport.lock().master_reply = Some(BootMaster::encode(&reply.packet()));
                 }
                 RouteAction::DeliverPacket { channel_cookie } => {
-                    if !self.transport.lock().channels.iter().any(|entry|
-                        entry.channel.owner == self.owner && entry.channel.cookie == channel_cookie)
-                    {
+                    if !self.transport.lock().channels.iter().any(|entry| {
+                        entry.channel.owner == self.owner && entry.channel.cookie == channel_cookie
+                    }) {
                         return Err(EINVAL);
                     }
                 }
                 _ => {
-                    pr_info!("IHK-SMP: unserviced continuing master os={} generation={} message={:x}\n",
-                        self.owner.slot(), self.owner.generation(), packet.message);
+                    pr_info!(
+                        "IHK-SMP: unserviced continuing master os={} generation={} message={:x}\n",
+                        self.owner.slot(),
+                        self.owner.generation(),
+                        packet.message
+                    );
                     return Err(errno(-38));
                 }
             }
@@ -303,8 +341,10 @@ impl Runtime {
         smp_cpu::with_runtime_target(self.owner, target, |cpu| {
             smp_ikc::validate_apic()?;
             let transport = self.transport.lock();
-            let Some(entry) = transport.channels.iter().find(|entry|
-                entry.channel.port == 501 && entry.channel.guest_cpu == 0)
+            let Some(entry) = transport
+                .channels
+                .iter()
+                .find(|entry| entry.channel.port == 501 && entry.channel.guest_cpu == 0)
             else {
                 // Keep the queued exchange owned until this channel's master
                 // handshake completes. Nothing has been published yet.
@@ -322,7 +362,11 @@ impl Runtime {
     fn pump(&self) {
         // A failure in one service must not prevent callback replies or
         // already-published exchanges from draining in the other service.
-        for result in [self.pump_master(), self.pump_regular(), self.publish_remote()] {
+        for result in [
+            self.pump_master(),
+            self.pump_regular(),
+            self.publish_remote(),
+        ] {
             if let Err(error) = result {
                 self.fail(error);
             }
@@ -339,7 +383,10 @@ impl Runtime {
 }
 
 #[derive(Clone, Copy)]
-enum Role { Packets, Metadata }
+enum Role {
+    Packets,
+    Metadata,
+}
 
 struct Entry {
     runtime: Arc<Runtime>,
@@ -356,9 +403,11 @@ unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
     while !unsafe { bindings::kthread_should_stop() } {
         match entry.role {
             Role::Packets => entry.runtime.pump(),
-            Role::Metadata => if let Err(error) = entry.runtime.metadata() {
-                entry.runtime.fail(error);
-            },
+            Role::Metadata => {
+                if let Err(error) = entry.runtime.metadata() {
+                    entry.runtime.fail(error);
+                }
+            }
         }
         // Polling also notices host-initiated show/store calls; waiting solely
         // for a guest IRQ would strand those outgoing exchanges. Yield even
@@ -384,20 +433,41 @@ unsafe impl Sync for Thread {}
 impl Thread {
     fn new(runtime: Arc<Runtime>, role: Role) -> Result<Arc<Self>> {
         let entered = Arc::new(AtomicBool::new(false), GFP_KERNEL)?;
-        let entry = Box::into_raw(Box::new(Entry { runtime, role, entered: entered.clone() }, GFP_KERNEL)?);
+        let entry = Box::into_raw(Box::new(
+            Entry {
+                runtime,
+                role,
+                entered: entered.clone(),
+            },
+            GFP_KERNEL,
+        )?);
         let name = match role {
             Role::Packets => kernel::c_str!("mck-sysfs-pump"),
             Role::Metadata => kernel::c_str!("mck-sysfs-meta"),
         };
         // SAFETY: A unique live callback context is transferred only on entry.
         // The stopped task cannot access it until the owned activation below.
-        let task = unsafe { bindings::kthread_create_on_node(Some(run), entry.cast(), -1, name.as_char_ptr()) };
+        let task = unsafe {
+            bindings::kthread_create_on_node(Some(run), entry.cast(), -1, name.as_char_ptr())
+        };
         if task.is_null() || (-4095..0).contains(&(task as isize)) {
             // SAFETY: Creation failed; no callback can own this context.
             unsafe { drop(Box::from_raw(entry)) };
-            return Err(if task.is_null() { ENOMEM } else { errno(task as isize as i32) });
+            return Err(if task.is_null() {
+                ENOMEM
+            } else {
+                errno(task as isize as i32)
+            });
         }
-        Ok(Arc::new(Self { task, entry, entered, activated: AtomicBool::new(false) }, GFP_KERNEL)?)
+        Ok(Arc::new(
+            Self {
+                task,
+                entry,
+                entered,
+                activated: AtomicBool::new(false),
+            },
+            GFP_KERNEL,
+        )?)
     }
 
     fn activate(&self) {
@@ -481,14 +551,20 @@ pub(super) fn prepare(
         cpus.push(cpu, GFP_KERNEL)?;
     }
     let mut fixed = Vec::with_capacity(4 + 2 * (cpus.len() + 1), GFP_KERNEL)?;
-    for (physical, bytes) in [(receive, queue_bytes), (send, queue_bytes),
-        (prepared.vdso_request, super::super::vdso_protocol::BYTES), (data.physical, data.bytes)]
-    {
+    for (physical, bytes) in [
+        (receive, queue_bytes),
+        (send, queue_bytes),
+        (prepared.vdso_request, super::super::vdso_protocol::BYTES),
+        (data.physical, data.bytes),
+    ] {
         fixed.push(memory::Span::new(physical, bytes)?, GFP_KERNEL)?;
     }
     for entry in &prepared.channels {
         for physical in [entry.channel.receive_physical, entry.channel.send_physical] {
-            fixed.push(memory::Span::new(physical, CONTROL_QUEUE_BYTES)?, GFP_KERNEL)?;
+            fixed.push(
+                memory::Span::new(physical, CONTROL_QUEUE_BYTES)?,
+                GFP_KERNEL,
+            )?;
         }
     }
     // SAFETY: BOOT already made original page/module ownership irreversible;
@@ -498,18 +574,26 @@ pub(super) fn prepare(
     // acknowledgement. No prior continuing Remote exists for this OS.
     let remote = unsafe { Remote::new(data)? };
     let pending = Pending::new()?;
-    let runtime = Arc::pin_init(pin_init!(Runtime {
-        owner, memory, cpus, data, remote, master,
-        master_receive: receive, master_send: send, master_bytes: queue_bytes,
-        status_address: prepared.params.address + offset_of!(abi::IhkSmpBootParam, status) as u64,
-        error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
-        transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
-        service <- new_mutex!(None),
-        pending <- new_mutex!(pending),
-    }), GFP_KERNEL)?;
+    let status_address = prepared.params.address + offset_of!(abi::IhkSmpBootParam, status) as u64;
+    let runtime = Arc::pin_init(
+        pin_init!(Runtime {
+            owner, memory, cpus, data, remote, master,
+            master_receive: receive, master_send: send, master_bytes: queue_bytes,
+            status_address,
+            error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
+            transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
+            service <- new_mutex!(None),
+            pending <- new_mutex!(pending),
+        }),
+        GFP_KERNEL,
+    )?;
     let packets = Thread::new(runtime.clone(), Role::Packets)?;
     let metadata = Thread::new(runtime.clone(), Role::Metadata)?;
-    let started = Started { runtime, metadata, packets };
+    let started = Started {
+        runtime,
+        metadata,
+        packets,
+    };
     // All fallible allocations and task creation finished. Moving a published
     // tree into a fallible constructor could otherwise destroy it on error.
     *started.runtime.service.lock() = prepared.sysfs.take();

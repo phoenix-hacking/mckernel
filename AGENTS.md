@@ -74,10 +74,16 @@ metadata exclusively, excludes active snooping/data/queue aliases and retires
 claims before the final busy store. sysfs_snoop.rs implements the eight
 existing guest snooping formats with bounded copies. Five metadata handlers
 use the existing Tree and Remote owners; remote calls use port 501/CPU rank 0.
-The current source is uncompiled and has not been run in a guest. Validate
-with the new build-native-sysfs-service.py helper and fresh 20260908 attempts,
-preserving every failure. No boot/application/production credit yet. Actual
-previous verified boot remains at CREATE/status 2.
+Module attempt 2 now compiles all three native modules and the remote Linux
+fixture, with no SIMD/FPU use. Exact setup/extent checks pass under service
+ownership attempt 1. Preparation attempt 1 passes both ABIs and two module
+lifetimes, including 404 namespace checks, 32 allocation failures and four
+physical captures with full unstarted restoration. Initial module attempt 1
+failed allocator conversion and initializer capture; its complete artifacts
+remain retained. The continuing workers have not yet run during a real start.
+Next use run-native-sysfs-service-guest.py for full-ready status and actual
+guest show/store round trips in both ABIs. No boot/application/production
+credit yet; the previous verified actual boot remains at CREATE/status 2.
 
 Native remote callback checkpoint: all three native modules and the real
 Linux fixture build on the pinned topology kernel. Two fixture lifetimes pass

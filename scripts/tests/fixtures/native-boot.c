@@ -42,6 +42,35 @@ static void capture_pause(void)
     require(call(SYS_NANOSLEEP, (long)&delay, 0, 0) == 0);
 }
 
+#if defined(NATIVE_SYSFS_SERVICE) && !BOOT_PREPARE_ONLY
+static void service_value(const char *path, char expected)
+{
+    char value[32];
+    long fd = call(SYS_OPEN, (long)path, 0, 0);
+    require(fd >= 0);
+    require(call(SYS_READ, fd, (long)value, sizeof(value)) == 2);
+    require(value[0] == expected && value[1] == '\n');
+    require(call(SYS_READ, fd, (long)value, sizeof(value)) == 0);
+    close_fd(fd);
+}
+
+static void service_roundtrips(void)
+{
+    const char *online = "/sys/class/mcos/mcos0/sys/devices/system/cpu/cpu0/online";
+    service_value("/sys/class/mcos/mcos0/sys/devices/system/cpu/num_processors", '1');
+    service_value(online, '1');
+    for (int cycle = 0; cycle < 32; cycle++) {
+        // This is McKernel's documented simulated per-CPU online attribute;
+        // the test changes its guest value, not Linux CPU hotplug state.
+        put_value(online, "0\n");
+        service_value(online, '0');
+        put_value(online, "1\n");
+        service_value(online, '1');
+    }
+    message("NATIVE_SYSFS_SERVICE " ARCH_LABEL " PASS read_checks=66 store_checks=64 rounds=32\n");
+}
+#endif
+
 int main(void)
 {
     int control = open_control();
@@ -164,11 +193,23 @@ int main(void)
     require(request(os, OS_ASSIGN_CPU, assigned, 1) == 0);
     require(mem_one(os, OS_ASSIGN_MEM, 128 * MIB, 0) == 0);
     require(call(SYS_IOCTL, os, OS_LOAD, (long)"/images/mckernel.img") == 0);
+#if defined(NATIVE_SYSFS_SERVICE)
+    long boot_result = call(SYS_IOCTL, os, OS_BOOT, 0);
+    message("NATIVE_BOOT_SERVICE " ARCH_LABEL " boot_errno=");
+    print_number(boot_result < 0 ? (unsigned long)-boot_result : 0);
+    message("\n");
+    require(boot_result == 0);
+#else
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);
+#endif
 #if defined(NATIVE_SYSFS_SETUP)
     sysfs_completed = 1;
 #endif
+#if defined(NATIVE_SYSFS_SERVICE)
+    require(call(SYS_IOCTL, os, OS_STATUS, 0) == 4);
+#else
     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);
+#endif
     sysfs_state(0, 1);
     require(call(SYS_IOCTL, os, OS_KARGS, (long)"changed") == -EBUSY);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -EBUSY);
@@ -176,12 +217,20 @@ int main(void)
     require(mem_one(os, OS_RELEASE_MEM, 128 * MIB, 0) == -EBUSY);
     online_mask(13);
     capture_pause();
+#if defined(NATIVE_SYSFS_SERVICE)
+    service_roundtrips();
+    capture_pause();
+#endif
     close_fd(os);
     require(destroy_os(control, 0) == -EBUSY);
     sysfs_state(0, 1);
     close_fd(control);
     require(call(SYS_DELETE_MODULE, (long)"ihk_smp_x86_64", 2048, 0) == -EAGAIN);
+#if defined(NATIVE_SYSFS_SERVICE)
+    message("NATIVE_BOOT_START " ARCH_LABEL " CAPTURED ready=1 resources_retained=1\n");
+#else
     message("NATIVE_BOOT_START " ARCH_LABEL " CAPTURED incomplete=1 resources_retained=1\n");
+#endif
 #endif
 #if defined(NATIVE_SYSFS_OS)
     message("NATIVE_OS_SYSFS " ARCH_LABEL " PASS checks="); print_number(sysfs_checks);

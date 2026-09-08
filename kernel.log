@@ -34243,3 +34243,30 @@ owners move only after all task/service allocations succeed. New source
 has not been compiled or run. Next command is the pinned native container's
 build-native-sysfs-service.py with a fresh 20260908 attempt. This WIP GitHub
 checkpoint protects implementation progress and carries no acceptance credit.
+
+Continuing sysfs module attempt 1 FAILED compilation; no guest was started.
+Command: mckernel-container native python3 -B /work/build-native-sysfs-service.py 1
+Environment: pinned Linux 6.12/Rust 1.92 native container, CPUs 2-5,
+four-CPU/12-GiB limits. Diff and staged formatting pass. The SMP crate reports
+E0308 for returning Vec::push's AllocError without converting to kernel Error,
+and E0382 because pin_init captures the mutable PreparedBoot reference while
+computing the status address, preventing its later channel/tree transfer.
+Preserve native-sysfs-service-module-20260908-1 with exact original/staged
+sources and the full compiler log. Convert the allocator error and compute
+the scalar status address before constructing the initializer; retry under
+a fresh attempt. This is not a runtime or sysfs acceptance result.
+
+Continuing sysfs module attempt 2 PASSED all three native modules and the
+existing Linux remote callback fixture, including no-SIMD checks. The exact
+production setup/extent bodies pass their two existing tests under
+check-native-sysfs-service-ownership.py attempt 1 after adapting extraction
+to the shared GuestExtents trait. Preparation through both ABIs and two
+module lifetimes passes run-native-sysfs-service-prepare.py prepare 2 1:
+404 namespace checks, 32 original forced allocation failures, four QMP
+captures at status 0, and full unstarted CPU/memory/namespace restoration.
+All checks use the pinned native container and original four-CPU/12-GiB
+limits. Current production Rust bytes equal their formatted module-2 inputs.
+The new NATIVE_SYSFS_SERVICE fixture requires BOOT=0/registry Ready=4 and
+then performs 66 real reads plus 64 writes through McKernel's remote sysfs
+callbacks, with independent physical captures before and after those calls.
+Its actual startup run is next; no result is claimed before that run.

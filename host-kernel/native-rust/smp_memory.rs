@@ -750,9 +750,12 @@ fn accept_control_channel(
         || offer.reference == 0
         || !matches!((offer.port, offer.interrupt_cpu), (501, -1) | (503, 0))
         || data.is_some_and(|data| {
-            offer.send_queue.checked_add(CONTROL_QUEUE_BYTES as u64).is_none_or(|end| {
-                offer.send_queue < data.physical + data.bytes as u64 && data.physical < end
-            })
+            offer
+                .send_queue
+                .checked_add(CONTROL_QUEUE_BYTES as u64)
+                .is_none_or(|end| {
+                    offer.send_queue < data.physical + data.bytes as u64 && data.physical < end
+                })
         })
     {
         return Err(EINVAL);
@@ -1960,7 +1963,10 @@ impl MemoryContext {
                                 owner,
                                 &prepared.cpus,
                                 &mut prepared.channels,
-                                prepared.sysfs.as_ref().and_then(super::sysfs_setup::Service::data),
+                                prepared
+                                    .sysfs
+                                    .as_ref()
+                                    .and_then(super::sysfs_setup::Service::data),
                                 direct_map,
                                 receive,
                                 send,
@@ -2044,7 +2050,13 @@ impl MemoryContext {
                             && super::sysfs_request::Kind::from_message(message).is_some()
                         {
                             let started = service::prepare(
-                                memory_map, owner, direct_map, prepared, receive, send, queue_bytes,
+                                memory_map,
+                                owner,
+                                direct_map,
+                                prepared,
+                                receive,
+                                send,
+                                queue_bytes,
                             )?;
                             // Retain every owner before queued work or task
                             // activation can expose the continuing callbacks.
