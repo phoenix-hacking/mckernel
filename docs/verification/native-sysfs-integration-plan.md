@@ -350,3 +350,25 @@ On publication failure, retire every newly created tree entry before replying;
 never leave setup_complete after a failed setup. Continue draining the real
 channel after success so the next guest dependency is observed. Full ready,
 continuing host services, applications and shutdown remain required.
+
+## Setup build and Linux fixture checkpoint
+
+`native-sysfs-setup-build-checkpoint-20260907.json` retains the integrated
+three-module build, protocol tests, exact extent/reply-body fixture and real
+Linux setup fixture. The wire layout matches all six values from the unchanged
+legacy C header; 4,096 concurrent exchanges preserve release-last completion.
+The actual ownership/reply bodies reject stale generations, incomplete extents,
+all queue/vDSO/request/data aliases and malformed buffers before publication.
+Their setup callback is an effect recorder, separate from real Linux coverage.
+
+The Linux fixture uses assigned CPU ranks [3, 1] across two NUMA nodes. Its
+97 files, 27 directories and seven links match independently read Linux values
+and the legacy setup names. Across two module lifetimes, 582 complete text
+reads stay identical before CPU offline, during offline and after restoration.
+Four CPU offline/online cycles complete. A forced invalid-cache error occurs
+after partial publication and removes every created entry while preserving
+protected roots. Duplicate setup preserves the completed tree; all namespaces
+retire on unload. Forty-four topology comparisons cover changed scalar fields,
+cache identity/shape and online/offline membership. Not every allocation failure
+has been injected. Actual McKernel setup completion still requires both startup
+interfaces with this integrated CPU owner and new kernel.

@@ -13,6 +13,9 @@
 #endif
 
 static unsigned sysfs_checks;
+#if defined(NATIVE_SYSFS_OS)
+static unsigned sysfs_completed;
+#endif
 static void sysfs_state(int minor, int present)
 {
 #if defined(NATIVE_SYSFS_OS)
@@ -23,7 +26,9 @@ static void sysfs_state(int minor, int present)
     if (present) { require(fd >= 0); close_fd(fd); }
     else { require(fd == -2); }
     // The root's existence must never stand in for the actual setup service.
-    require(call(SYS_OPEN, (long)markers[minor], 0, 0) == -2);
+    fd = call(SYS_OPEN, (long)markers[minor], 0, 0);
+    if (minor == 0 && sysfs_completed) { require(fd >= 0); close_fd(fd); }
+    else { require(fd == -2); }
     sysfs_checks++;
 #else
     (void)minor; (void)present;
@@ -160,6 +165,9 @@ int main(void)
     require(mem_one(os, OS_ASSIGN_MEM, 128 * MIB, 0) == 0);
     require(call(SYS_IOCTL, os, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);
+#if defined(NATIVE_SYSFS_SETUP)
+    sysfs_completed = 1;
+#endif
     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);
     sysfs_state(0, 1);
     require(call(SYS_IOCTL, os, OS_KARGS, (long)"changed") == -EBUSY);
@@ -177,7 +185,7 @@ int main(void)
 #endif
 #if defined(NATIVE_SYSFS_OS)
     message("NATIVE_OS_SYSFS " ARCH_LABEL " PASS checks="); print_number(sysfs_checks);
-    message(" setup_completed=0\n");
+    message(" setup_completed="); print_number(sysfs_completed); message("\n");
 #else
     (void)sysfs_checks;
 #endif

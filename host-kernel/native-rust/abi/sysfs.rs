@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-only
 //! Existing sysfs setup wire layout and release-last completion.
-use core::{mem::{align_of, offset_of, size_of}, ptr,
-    sync::atomic::{AtomicI32, Ordering}};
+use core::{
+    mem::{align_of, offset_of, size_of},
+    ptr,
+    sync::atomic::{AtomicI32, Ordering},
+};
 
 pub(crate) const SETUP_MESSAGE: i32 = 0x40;
 pub(crate) const SETUP_BYTES: usize = 1056;
@@ -23,10 +26,14 @@ pub(crate) struct SetupRequest {
 /// disjoint from queues. Queue publication precedes this read. The peer only
 /// polls busy until this sole service completes; no Rust reference escapes.
 pub(crate) unsafe fn read_setup(request: *mut u8) -> Result<(u64, usize), i32> {
-    if request.is_null() || request as usize % 8 != 0 { return Err(-22); }
+    if request.is_null() || request as usize % 8 != 0 {
+        return Err(-22);
+    }
     let request = request.cast::<SetupRequest>();
     let busy = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!((*request).busy)) };
-    if busy.load(Ordering::Acquire) != 1 { return Err(-16); }
+    if busy.load(Ordering::Acquire) != 1 {
+        return Err(-16);
+    }
     let physical = unsafe { ptr::read_volatile(ptr::addr_of!((*request).physical)) };
     let bytes = unsafe { ptr::read_volatile(ptr::addr_of!((*request).bytes)) };
     if bytes != DATA_BYTES as i64 || physical == 0 || physical % DATA_BYTES as u64 != 0 {
@@ -45,7 +52,9 @@ pub(crate) unsafe fn complete_setup(request: *mut u8, error: i32) -> Result<(), 
     }
     let request = request.cast::<SetupRequest>();
     let busy = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!((*request).busy)) };
-    if busy.load(Ordering::Relaxed) != 1 { return Err(-16); }
+    if busy.load(Ordering::Relaxed) != 1 {
+        return Err(-16);
+    }
     unsafe { ptr::write_volatile(ptr::addr_of_mut!((*request).error), error) };
     busy.store(0, Ordering::Release);
     Ok(())

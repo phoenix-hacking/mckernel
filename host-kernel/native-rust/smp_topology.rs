@@ -22,7 +22,12 @@ impl CpuMask {
     /// The caller holds CPU hotplug read exclusion throughout the copy.
     pub(crate) unsafe fn online() -> Result<Self> {
         // SAFETY: The caller stabilizes both the bound and this resident mask.
-        unsafe { Self::copy(&raw const bindings::__cpu_online_mask, bindings::nr_cpu_ids as usize) }
+        unsafe {
+            Self::copy(
+                &raw const bindings::__cpu_online_mask,
+                bindings::nr_cpu_ids as usize,
+            )
+        }
     }
 
     pub(crate) fn contains(&self, cpu: usize) -> bool {
@@ -86,23 +91,58 @@ impl Cpu {
     /// Offline peers may disappear from Linux's masks. Validate only current
     /// online membership, retaining the complete original masks for McKernel.
     pub(crate) fn matches_current(&self, current: &Self, online: &CpuMask) -> bool {
-        [self.linux_id, self.apic_id, self.package_id, self.core_id, self.die_id]
-            == [current.linux_id, current.apic_id, current.package_id, current.core_id, current.die_id]
-            && self.core_siblings.matches_online(&current.core_siblings, online)
-            && self.thread_siblings.matches_online(&current.thread_siblings, online)
+        [
+            self.linux_id,
+            self.apic_id,
+            self.package_id,
+            self.core_id,
+            self.die_id,
+        ] == [
+            current.linux_id,
+            current.apic_id,
+            current.package_id,
+            current.core_id,
+            current.die_id,
+        ] && self
+            .core_siblings
+            .matches_online(&current.core_siblings, online)
+            && self
+                .thread_siblings
+                .matches_online(&current.thread_siblings, online)
             && self.caches.len() == current.caches.len()
-            && self.caches.iter().zip(&current.caches).all(|(saved, current)| {
-                // Linux specifies cache IDs only when CACHE_ID is set. Do not
-                // infer shared membership from IDs: use the observed masks.
-                (saved.attributes & (1 << 4) == 0 || saved.id == current.id)
-                    && [saved.index, saved.kind, saved.level, saved.coherency_line_size,
-                        saved.number_of_sets, saved.ways_of_associativity,
-                        saved.physical_line_partition, saved.size, saved.attributes]
-                        == [current.index, current.kind, current.level, current.coherency_line_size,
-                            current.number_of_sets, current.ways_of_associativity,
-                            current.physical_line_partition, current.size, current.attributes]
-                    && saved.shared_cpus.matches_online(&current.shared_cpus, online)
-            })
+            && self
+                .caches
+                .iter()
+                .zip(&current.caches)
+                .all(|(saved, current)| {
+                    // Linux specifies cache IDs only when CACHE_ID is set. Do not
+                    // infer shared membership from IDs: use the observed masks.
+                    (saved.attributes & (1 << 4) == 0 || saved.id == current.id)
+                        && [
+                            saved.index,
+                            saved.kind,
+                            saved.level,
+                            saved.coherency_line_size,
+                            saved.number_of_sets,
+                            saved.ways_of_associativity,
+                            saved.physical_line_partition,
+                            saved.size,
+                            saved.attributes,
+                        ] == [
+                            current.index,
+                            current.kind,
+                            current.level,
+                            current.coherency_line_size,
+                            current.number_of_sets,
+                            current.ways_of_associativity,
+                            current.physical_line_partition,
+                            current.size,
+                            current.attributes,
+                        ]
+                        && saved
+                            .shared_cpus
+                            .matches_online(&current.shared_cpus, online)
+                })
     }
 }
 

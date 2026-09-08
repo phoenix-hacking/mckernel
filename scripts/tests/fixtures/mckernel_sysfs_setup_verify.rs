@@ -56,11 +56,15 @@ impl kernel::Module for SetupVerify {
     fn init(_module: &'static ThisModule) -> Result<Self> {
         let guard = ReadGuard::new();
         // This fixture is intentionally pinned to its four-vCPU/two-node guest.
-        if unsafe { bindings::nr_cpu_ids } != 4 { return Err(EINVAL); }
+        if unsafe { bindings::nr_cpu_ids } != 4 {
+            return Err(EINVAL);
+        }
         let saved = guard.capture(0)?;
         // SAFETY: The fixture still holds CPU read exclusion.
         let online = unsafe { smp_topology::CpuMask::online()? };
-        if !saved.matches_current(&guard.capture(0)?, &online) { return Err(EIO); }
+        if !saved.matches_current(&guard.capture(0)?, &online) {
+            return Err(EIO);
+        }
         for field in 0..18 {
             let mut current = guard.capture(0)?;
             match field {
@@ -81,32 +85,50 @@ impl kernel::Module for SetupVerify {
                 14 => current.caches[0].size ^= 1,
                 15 => current.caches[0].attributes ^= 1,
                 16 => current.caches[0].shared_cpus.words[0] ^= 4,
-                17 => { current.caches.pop(); },
+                17 => {
+                    current.caches.pop();
+                }
                 _ => return Err(EIO),
             }
-            if saved.matches_current(&current, &online) { return Err(EIO); }
+            if saved.matches_current(&current, &online) {
+                return Err(EIO);
+            }
         }
         let mut current = guard.capture(0)?;
-        if current.caches[0].attributes & (1 << 4) == 0 { return Err(EIO); }
+        if current.caches[0].attributes & (1 << 4) == 0 {
+            return Err(EIO);
+        }
         current.caches[0].id ^= 1;
-        if saved.matches_current(&current, &online) { return Err(EIO); }
+        if saved.matches_current(&current, &online) {
+            return Err(EIO);
+        }
         let mut current = guard.capture(0)?;
         let mut reduced = online.clone();
         reduced.words[0] &= !2;
         current.core_siblings.words[0] &= !2;
         current.thread_siblings.words[0] &= !2;
-        for cache in &mut current.caches { cache.shared_cpus.words[0] &= !2; }
-        if !saved.matches_current(&current, &reduced) { return Err(EIO); }
-        if saved.matches_current(&current, &online) { return Err(EIO); }
+        for cache in &mut current.caches {
+            cache.shared_cpus.words[0] &= !2;
+        }
+        if !saved.matches_current(&current, &reduced) {
+            return Err(EIO);
+        }
+        if saved.matches_current(&current, &online) {
+            return Err(EIO);
+        }
 
         let mut snapshots = Vec::new();
-        for cpu in [3, 1] { snapshots.push(Arc::new(guard.capture(cpu)?, GFP_KERNEL)?, GFP_KERNEL)?; }
+        for cpu in [3, 1] {
+            snapshots.push(Arc::new(guard.capture(cpu)?, GFP_KERNEL)?, GFP_KERNEL)?;
+        }
         let mut distances = Vec::new();
         for from in 0..2 {
             for to in 0..2 {
                 // SAFETY: Both nodes belong to the fixed retained guest CPUs.
                 let distance = unsafe { bindings::__node_distance(from, to) };
-                if distance <= 0 { return Err(EIO); }
+                if distance <= 0 {
+                    return Err(EIO);
+                }
                 distances.push(distance as u32, GFP_KERNEL)?;
             }
         }
@@ -115,22 +137,41 @@ impl kernel::Module for SetupVerify {
         // Force a failure after test/global/topology/cache nodes were created.
         invalid.caches[0].kind = 0;
         let invalid = [Arc::new(invalid, GFP_KERNEL)?];
-        let mut local_distance = Vec::new(); local_distance.push(10, GFP_KERNEL)?;
+        let mut local_distance = Vec::new();
+        local_distance.push(10, GFP_KERNEL)?;
         let invalid = sysfs_setup::Topology::new(4, &invalid, &[0], &[0], local_distance)?;
         drop(guard);
-        let root = sysfs_objects::Directory::new(None, kernel::c_str!("mckernel_sysfs_setup_verify"))?;
+        let root =
+            sysfs_objects::Directory::new(None, kernel::c_str!("mckernel_sysfs_setup_verify"))?;
         let good_parent = sysfs_objects::Directory::new(Some(&root), kernel::c_str!("good"))?;
         let failed_parent = sysfs_objects::Directory::new(Some(&root), kernel::c_str!("failed"))?;
-        let mut good = sysfs_tree::Tree::new(sysfs_objects::Directory::new(Some(&good_parent), kernel::c_str!("sys"))?)?;
-        let mut failed = sysfs_tree::Tree::new(sysfs_objects::Directory::new(Some(&failed_parent), kernel::c_str!("sys"))?)?;
+        let mut good = sysfs_tree::Tree::new(sysfs_objects::Directory::new(
+            Some(&good_parent),
+            kernel::c_str!("sys"),
+        )?)?;
+        let mut failed = sysfs_tree::Tree::new(sysfs_objects::Directory::new(
+            Some(&failed_parent),
+            kernel::c_str!("sys"),
+        )?)?;
         let count = sysfs_setup::setup_tree(&mut good, &topology)?;
-        if count <= 2 || sysfs_setup::setup_tree(&mut good, &topology) != Err(EBUSY)
-            || good.len() != count || good.lookup(b"/sys/setup_complete").is_err()
+        if count <= 2
+            || sysfs_setup::setup_tree(&mut good, &topology) != Err(EBUSY)
+            || good.len() != count
+            || good.lookup(b"/sys/setup_complete").is_err()
             || sysfs_setup::setup_tree(&mut failed, &invalid) != Err(EIO)
-            || failed.len() != 2 || failed.lookup(b"/sys/test").is_ok()
-            || failed.lookup(b"/sys/setup_complete").is_ok() { return Err(EIO); }
+            || failed.len() != 2
+            || failed.lookup(b"/sys/test").is_ok()
+            || failed.lookup(b"/sys/setup_complete").is_ok()
+        {
+            return Err(EIO);
+        }
         pr_info!("MCKERNEL_SYSFS_SETUP_VERIFY READY nodes={} comparison_checks=22 rollback=1 duplicate_preserved=1 ranks=3,1\n", count);
-        Ok(Self { _good: good, _failed: failed, _good_parent: good_parent,
-            _failed_parent: failed_parent, _root: root })
+        Ok(Self {
+            _good: good,
+            _failed: failed,
+            _good_parent: good_parent,
+            _failed_parent: failed_parent,
+            _root: root,
+        })
     }
 }

@@ -626,33 +626,48 @@ fn reply_vdso(
 }
 
 fn reply_sysfs_setup(
-    map: &MemoryMap<MAX_EXTENTS>, owner: super::smp_resource::OsToken,
-    direct_map: u64, physical: u64, master_receive: u64, master_send: u64,
-    master_bytes: usize, channels: &[OwnedControlChannel], vdso_request: u64,
+    map: &MemoryMap<MAX_EXTENTS>,
+    owner: super::smp_resource::OsToken,
+    direct_map: u64,
+    physical: u64,
+    master_receive: u64,
+    master_send: u64,
+    master_bytes: usize,
+    channels: &[OwnedControlChannel],
+    vdso_request: u64,
     service: &mut super::sysfs_setup::Service,
 ) -> Result {
     use super::sysfs_protocol as wire;
     let checked = |physical: u64, bytes: usize| -> Result<*mut u8> {
         let pointer = checked_guest_bytes(map, owner, direct_map, physical, bytes)?;
         let end = physical + bytes as u64;
-        for (start, size) in [(master_receive, master_bytes), (master_send, master_bytes),
-            (vdso_request, super::vdso_protocol::BYTES)] {
+        for (start, size) in [
+            (master_receive, master_bytes),
+            (master_send, master_bytes),
+            (vdso_request, super::vdso_protocol::BYTES),
+        ] {
             if start == 0 || physical < start + size as u64 && start < end {
                 return Err(EINVAL);
             }
         }
         for entry in channels {
-            if entry.channel.owner != owner { return Err(EIO); }
+            if entry.channel.owner != owner {
+                return Err(EIO);
+            }
             for start in [entry.channel.receive_physical, entry.channel.send_physical] {
                 if physical < start + super::smp_ikc::CONTROL_QUEUE_BYTES as u64 && start < end {
                     return Err(EINVAL);
                 }
             }
         }
-        if service.overlaps(physical, bytes) { return Err(EINVAL); }
+        if service.overlaps(physical, bytes) {
+            return Err(EINVAL);
+        }
         Ok(pointer)
     };
-    if physical % 8 != 0 { return Err(EINVAL); }
+    if physical % 8 != 0 {
+        return Err(EINVAL);
+    }
     let request = checked(physical, wire::SETUP_BYTES)?;
     let outcome = (|| {
         // SAFETY: The checked complete request is disjoint from live queues
@@ -661,11 +676,15 @@ fn reply_sysfs_setup(
             .map_err(|code| kernel::error::to_result(code).err().unwrap_or(EIO))?;
         let buffer = checked(buffer_physical, bytes)?;
         if physical < buffer_physical + bytes as u64
-            && buffer_physical < physical + wire::SETUP_BYTES as u64 {
+            && buffer_physical < physical + wire::SETUP_BYTES as u64
+        {
             return Err(EINVAL);
         }
         Ok(super::sysfs_setup::SharedData {
-            owner, physical: buffer_physical, address: buffer as u64, bytes,
+            owner,
+            physical: buffer_physical,
+            address: buffer as u64,
+            bytes,
         })
     })();
     let mut buffer_physical = 0;
@@ -1770,7 +1789,12 @@ impl MemoryContext {
         // completes, or retains it after the first possible CPU-start effect.
         let sysfs = unsafe { super::sysfs_os::root(owner) }?;
         let sysfs_topology = super::sysfs_setup::Topology::new(
-            topology.linux_cpus(), topology.saved(), &cpu_nodes, &nodes, distances)?;
+            topology.linux_cpus(),
+            topology.saved(),
+            &cpu_nodes,
+            &nodes,
+            distances,
+        )?;
         let sysfs = super::sysfs_setup::Service::new(sysfs, sysfs_topology);
         pr_info!(
             "IHK-SMP: sysfs root attached os={} generation={} setup_completed=0\n",
@@ -1963,11 +1987,23 @@ impl MemoryContext {
                             prepared.vdso_request = argument;
                             continue;
                         }
-                        if entry.channel.port == 503 && message == super::sysfs_protocol::SETUP_MESSAGE {
-                            let sysfs_argument = u64::from_le_bytes(packet[24..32].try_into().unwrap());
-                            reply_sysfs_setup(memory_map, owner, direct_map, sysfs_argument,
-                                receive, send, queue_bytes, &prepared.channels,
-                                prepared.vdso_request, &mut prepared.sysfs)?;
+                        if entry.channel.port == 503
+                            && message == super::sysfs_protocol::SETUP_MESSAGE
+                        {
+                            let sysfs_argument =
+                                u64::from_le_bytes(packet[24..32].try_into().unwrap());
+                            reply_sysfs_setup(
+                                memory_map,
+                                owner,
+                                direct_map,
+                                sysfs_argument,
+                                receive,
+                                send,
+                                queue_bytes,
+                                &prepared.channels,
+                                prepared.vdso_request,
+                                &mut prepared.sysfs,
+                            )?;
                             continue;
                         }
                         pr_info!("IHK-SMP: regular host service pending os={} generation={} message={:x}; resources retained\n", owner.slot(), owner.generation(), message);

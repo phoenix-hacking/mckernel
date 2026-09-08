@@ -41,12 +41,18 @@ restored using the retained cleanup report; never reuse their attempt names.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Current implementation WIP: CpuContext retains owned topology snapshots and
-revalidates online reservations. Native sysfs setup now has CPU/cache/NUMA
-publication, rollback and shared-request completion source paths. These new
-paths and their fixtures still require compilation, ownership/protocol checks
-and both actual startup interfaces. Do not claim setup or application success
-from the source changes alone; the last verified boot still stops at setup.
+Native sysfs setup build checkpoint: CpuContext now retains owned topology
+snapshots and validates online reservations. The three native modules and
+setup fixture build on the topology-export kernel. Three protocol tests pass,
+including six independent C layout values and 4,096 concurrent replies. Two
+actual extent/reply-body tests check exact generations, all queue/data/vDSO
+aliases and error completion. The Linux fixture passes two module lifetimes,
+44 topology comparisons, partial-publication rollback, 97 files/27 directories/
+seven links, 582 exact file reads and four CPU offline/online cycles. All fixture
+namespaces retire. See native-sysfs-setup-build-checkpoint-20260907.json in
+docs/verification for 14 retained artifacts and compiler bindings. Actual OS
+preparation and both boot interfaces remain next; the last verified McKernel
+boot still stops at setup. Do not infer application or production acceptance.
 
 Native topology producer checkpoint (2026-09-07 local date): patch 0009 adds
 only the existing Linux get_cpu_cacheinfo GPL export. The kernel and three
