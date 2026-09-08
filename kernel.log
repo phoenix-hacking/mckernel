@@ -33866,3 +33866,16 @@ the second generated output. Do not recursively hide unrelated Hyper-V types.
 The vDSO data header can retain its actual structs and exclude its private
 user-space implementation-header inclusion only for Linux's existing
 __BINDGEN__ mode. Prove unchanged normal C preprocessing before rebuilding.
+
+2026-09-07 local date — native vDSO service prototype 6 FAILED compilation.
+Command: mckernel-container native python3 -B /work/build-native-vdso-prototype.py 6
+Environment: pinned Linux 6.12/native Rust 1.92, uid 1000, CPUs 2-5,
+four-CPU/12-GiB offline container. Exact timestamps and complete compiler
+inputs/logs are retained in /work/native-ikc-prototype-20260907-6.
+Formatting and both exact boot layout witnesses pass. Module compilation
+fails E0425 because the pinned Rust prelude does not export EOPNOTSUPP,
+and E0034 because its Init trait and Iterator both define chain. Validation
+stops before image builds or guest runs. Use the existing bindings errno
+conversion and explicitly select Iterator::chain, preserving the intended
+unsupported-encryption result and Linux-page ownership checks. No module
+or actual service runtime pass is claimed by this attempt.

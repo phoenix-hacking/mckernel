@@ -58,7 +58,9 @@ pub(super) fn collect() -> Result<Descriptor> {
     if unsafe { bindings::sme_me_mask } != 0 {
         // The current native startup and mapping contract uses plain RAM. A
         // decrypted PV page needs a separately verified encrypted-memory path.
-        return Err(EOPNOTSUPP);
+        return Err(kernel::error::to_result(-(bindings::EOPNOTSUPP as i32))
+            .err()
+            .unwrap_or(EINVAL));
     }
     let (text, bytes, time, rng) = unsafe {
         let image = addr_of!(bindings::vdso_image_64);

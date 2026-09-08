@@ -600,11 +600,7 @@ fn reply_vdso(
     let response = super::smp_vdso::collect()?;
     // Linux owns these permanent pages. They must never overlap the reserved
     // McKernel pool, including another generation or currently unassigned RAM.
-    for page in response
-        .text_physical
-        .iter()
-        .chain(response.data_physical.iter())
-        .copied()
+    for page in Iterator::chain(response.text_physical.iter(), response.data_physical.iter()).copied()
     {
         if page == 0 {
             continue;
