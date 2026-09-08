@@ -6,6 +6,59 @@ full readiness through both startup ABIs. Native applications have not run.
 The remaining application work is production integration, not another boot
 status milestone.
 
+## Application readiness and model handoff, 2026-09-08
+
+The user has divided the remaining work into phases. The current active goal
+uses Max to establish that the kernel is ready for aggressive application tests.
+At that milestone, stop execution after preserving the evidence and verifying
+the GitHub checkpoint. The user will switch to Astra Ultra for review and test
+planning, then to Codex Spark to implement and run that plan. The older whole-OS
+and Rust/assembly requirements below remain future acceptance work; they are
+not all prerequisites for ending this narrower execution phase.
+
+Readiness must be demonstrated by real application runs in the established
+isolated Linux/McKernel guest environment. Require:
+
+- The unchanged `mcexec` launches an ordinary ELF inside McKernel. Its expected
+  output and exit status are observed through the actual launcher. The existing
+  hello fixture's expected marker is `NATIVE_APPLICATION_HELLO`, with exit 37.
+- Delegated syscalls reach the native WAIT/RET path, execute in the Linux worker
+  and return the actual result to the correct guest request. A prepared image,
+  successful module build or protocol fixture alone does not satisfy this.
+- Normal exit and launcher/worker failure handling retire or safely retain
+  their actual owners, without stale response writes or unsafe PID reuse.
+  Procfs publication and scheduled-process cleanup must support these runs.
+  Any unresolved blocker in these paths keeps the phase active.
+- Back-to-back launches in one running OS instance and a fresh guest replay
+  reproduce the result without a host/guest panic, unexplained timeout or
+  accumulating application registrations. Record the exact repetition counts.
+- Small memory, file-I/O, thread/futex and signal smoke checks establish the
+  basic execution paths needed by broader application tests. Preserve the
+  normal boot and continuing-service regressions for the changed native code.
+  These are baseline checks; the later application suite still needs review.
+- The handoff binds the tested sources, module/image hashes, exact commands,
+  expected and observed outcomes, and all failures. List unsupported features
+  and remaining risks explicitly. A known defect that prevents safe application
+  testing must be fixed before completing this phase.
+
+At this document checkpoint the latest real launcher still fails at START;
+no application has executed in McKernel. The syscall protocol has eleven passing
+tests, with nineteen earlier image/protocol tests also passing, and all three
+native modules compile. The native mailbox, response-memory ownership, actual
+user WAIT/RET adapters, procfs and scheduled cleanup still need connection.
+The immediate implementation sequence remains the scheduled-service review
+below. No readiness criterion becomes PASS because of this workflow change.
+
+Astra's subsequent review should examine the implementation and retained
+evidence, fix issues it finds, and produce a test plan with bounded cases. Each
+case needs its purpose, prerequisites, commands, independent expected behavior,
+timeout and cleanup rules, negative cases and required captures. Record the
+supported configuration matrix and which results require deeper investigation.
+Spark then implements and executes those cases in small verifiable changes.
+Preserve failing evidence and investigate kernel defects without weakening an
+expected result. Review the resulting tests and failures before any broader
+acceptance claim. The user's later model switches remain separate actions.
+
 ## Existing consumers and reuse decisions
 
 | Source and symbols | Decision and native dependency |

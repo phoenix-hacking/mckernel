@@ -2,6 +2,32 @@
 
 Updated: 2026-06-02
 
+## Current execution phase and model handoff (2026-09-08)
+
+The active goal now stops at a verified baseline for aggressive application
+testing. Stay on Max while completing the native services and the application
+smoke checks needed to establish that baseline. Once the readiness criteria in
+[`docs/verification/native-application-service-plan.md`](docs/verification/native-application-service-plan.md#application-readiness-and-model-handoff-2026-09-08)
+are met with retained runtime evidence, checkpoint and verify the GitHub push,
+mark this phase complete, and stop execution for the user's model switch.
+Do not report whole-OS or full Rust/assembly acceptance at this phase boundary.
+
+The user plans to switch to Astra Ultra for review, any fixes found during that
+review, and a concrete plan for application tests and further verification.
+After that review is satisfactory, the user plans to switch to Codex Spark to
+implement and run the delineated tests. The plan must supply commands, expected
+results, timeouts, failure cases and evidence requirements. Kernel failures
+return for investigation; tests must not be weakened to make them pass.
+Do not change the configured model or start the future phases automatically.
+
+This phase boundary supersedes older descriptions below that require every
+remaining production or Rust/assembly obligation before ending the active goal.
+Those obligations remain tracked for subsequent work. Existing isolation,
+failure-recording, Rust preservation, disk cleanup and periodic GitHub
+checkpoint requirements continue to apply throughout the current phase.
+No native application has executed at this checkpoint; START, connected
+syscall service, procfs and scheduled-process cleanup are still pending.
+
 ## Active goal and GitHub checkpoints (2026-09-07)
 
 Resume the interrupted McKernel work: restore the existing validation

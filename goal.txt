@@ -1,3 +1,28 @@
+Current execution goal (2026-09-08)
+----------------------------------
+Stay on Max until the native kernel has a reproducible application-testing
+baseline: real application execution, working delegated syscalls, clean process
+retirement, repeated launches and representative application smoke checks.
+Retain the commands, source and image identities, results and failure evidence.
+Use docs/verification/native-application-service-plan.md, section
+"Application readiness and model handoff, 2026-09-08", for the readiness criteria.
+
+Continue saving coherent checkpoints to GitHub, aiming for about every 30
+minutes during sustained work and before long validation or ending a session.
+Verify the pushed commit. Once the readiness criteria pass, save the handoff,
+mark this phase complete and stop for the user's switch to Astra Ultra.
+Astra will review the implementation and evidence, fix issues it finds and
+produce the detailed application/further-testing plan. After that review, the
+user intends to switch to Codex Spark to implement and run those tests.
+Do not switch models or begin the later phases automatically.
+
+This goal's completion means readiness for broader testing. Full production
+acceptance and the Rust/assembly end state remain subsequent obligations.
+The historical request below is preserved as background, not this phase's
+stopping condition.
+
+Historical full-port request
+----------------------------
 › Awesome put this in full-port.txt with a plan to see it completed please and update AGENTS.md for
   this as well. Also please make somethign that I can push to goal mode and complete it. All code
   should be verified and QEMU and virtualization tools like KVM should be used to make sure that
