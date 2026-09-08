@@ -25,12 +25,13 @@ remaining production or Rust/assembly obligation before ending the active goal.
 Those obligations remain tracked for subsequent work. Existing isolation,
 failure-recording, Rust preservation, disk cleanup and periodic GitHub
 checkpoint requirements continue to apply throughout the current phase.
-One real unchanged-launcher ELF has now passed native write (25 bytes), exit
-37 and scheduled retirement with module 3. Module 4 fixes a reaper/final-close
-race and passes both original control-ABI regressions. Repeated application
-attempt 1 fails RET with EINVAL; the current baseline is not ready for handoff.
-See `docs/verification/native-application-runtime-wip-20260908.json`. Preserve
-all captures pending full archival and continue the documented smoke gates.
+Sixteen unchanged-launcher applications now pass across two independent
+guests with current module 5: write result 25, exit 37 and complete scheduled
+retirement after each launch. Both original control-ABI regressions pass. The
+full `docs/verification/native-application-start-checkpoint-20260908.json`
+retains 21 captures, including all six original failures. The phase remains
+active: actual abnormal-owner handling and memory/file/thread-futex/signal
+smokes are pending. Do not announce Ultra readiness yet.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 
@@ -198,7 +199,29 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Latest native START WIP, 2026-09-08:
+Latest actual application checkpoint, 2026-09-08:
+`docs/verification/native-application-start-checkpoint-20260908.json` retains
+21 complete captures and all six original failures, current module 5, four
+rebuilt guest image profiles, 26 protocol/image tests and five exact adapter
+tests. Accepted repeat guests 2 and 4 prove sixteen native ELF hello/exit-37
+launches, actual WAIT/RET result 25, normal scheduled cleanup, empty process
+namespaces and fresh-guest reproduction. Current i386 guest 3 and x86_64 guest
+4 preserve the full original control/boot/procfs/reaper regressions. The
+corrected RET adapter uses the retained guest CPU, matching the existing Rust
+and C host contract, while preserving internal worker/serial/CPU validation.
+
+Six original failures remain fully retained: one native module compile, one
+protocol C cast, one final-close/reaper race, one real RET routing error and
+two console marker/output interleavings. Verification markers use /dev/kmsg;
+final application replay checks stdout files exactly before logging them.
+No assertion was removed. Preserve module 5, image 1, return-adapter test 1,
+repeat guests 2/4, current ABI guests and all active launcher/compiler inputs.
+Next: actual abnormal-owner and memory/file/thread-futex/signal smokes, adding
+missing native integration required by those paths. Native STRNCPY_FROM_USER
+is still needed for the launcher's file-path handling. No application-readiness,
+whole-OS production or Rust/assembly acceptance gate is promoted.
+
+Earlier native START WIP, 2026-09-08:
 `docs/verification/native-application-start-wip-20260908.json` records compiled
 START, trusted prepare-target validation, independent procfs TID tracking and
 explicit native scheduled-retirement queries. Module 3 passes all three module

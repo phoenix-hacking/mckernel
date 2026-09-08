@@ -152,6 +152,7 @@ impl Registration {
                 mirror,
                 handle,
                 delivery: AtomicU64::new(0),
+                delivery_cpu: AtomicI32::new(-1),
             },
             GFP_KERNEL,
         ) {
@@ -226,6 +227,12 @@ impl Registration {
         // The original private request stays queued if any user byte faults.
         copied?;
         commit?;
+        // The launcher uses its Linux worker slot in RET.cpu. Retain the
+        // packet's guest CPU before publishing this private delivered serial.
+        worker.delivery_cpu.store(
+            image::word(&bytes, 16).map_err(errno)? as i32,
+            Ordering::Relaxed,
+        );
         worker.delivery.store(serial, Ordering::Release);
         if self.trace() {
             pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
@@ -255,7 +262,9 @@ impl Registration {
         let mut bytes = [0; 72];
         bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
         bytes[8..16].copy_from_slice(&serial.to_le_bytes());
-        bytes[16..32].copy_from_slice(&descriptor[..16]);
+        let cpu = worker.delivery_cpu.load(Ordering::Relaxed) as i64;
+        bytes[16..24].copy_from_slice(&cpu.to_le_bytes());
+        bytes[24..32].copy_from_slice(&descriptor[8..16]);
         bytes[32..48].copy_from_slice(&descriptor[24..40]);
         if length != 0 {
             let source = image::word(&descriptor, 16).map_err(errno)? as usize;
@@ -263,6 +272,11 @@ impl Registration {
             UserSlice::new(source, length as usize)
                 .reader()
                 .read_slice(&mut bytes[56..56 + length as usize])?;
+        }
+        let launcher_cpu = image::word(&descriptor, 0).map_err(errno)? as i64;
+        if launcher_cpu != cpu && self.trace() {
+            pr_info!("application_syscall=return_route os={} generation={} pid={} worker={} delivery={} launcher_cpu={} guest_cpu={}\n",
+                self.slot, self.generation, self.pid, worker.handle, serial, launcher_cpu, cpu);
         }
         let result = self.invoke(super::application_abi::RETURN_SYSCALL, &mut bytes);
         if image::word(&bytes, 48).map_err(errno)? == 1 {
@@ -565,6 +579,7 @@ struct HostWorker {
     mirror: Arc<Mirror>,
     handle: u64,
     delivery: AtomicU64,
+    delivery_cpu: AtomicI32,
 }
 
 #[pin_data]

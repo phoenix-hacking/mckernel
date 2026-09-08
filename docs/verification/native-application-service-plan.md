@@ -1,10 +1,46 @@
 # Native application service integration
 
 Source reviewed at `4aea3ac846d499b3ebeb98393bfdc457020025ee` on 2026-09-08.
-The actual guest sysfs checkpoint proves one executing McKernel CPU reaches
-full readiness through both startup ABIs. Native applications have not run.
-The remaining application work is production integration, not another boot
-status milestone.
+At that initial review, the actual guest sysfs checkpoint proved one executing
+McKernel CPU reached full readiness through both startup ABIs; applications
+had not yet run. The current runtime checkpoint below supersedes that status.
+
+## Current application baseline, 2026-09-08
+
+`native-application-start-checkpoint-20260908.json` retains 21 complete captures,
+including all six original failed attempts. Module 5 and the rebuilt native
+Rust guest image pass sixteen unchanged-launcher ELF hello/exit-37 runs across
+two independent guests (eight per OS instance). Each proves actual delegated
+write result 25, exit_group delivery, PID/TID publication/deletion, explicit
+scheduled retirement, registration release and no remaining procfs process
+nodes. Five observed Linux worker-slot-1/guest-CPU-0 returns pass after the
+adapter correction. Attempt 4 additionally checks each stdout file's exact
+25 bytes before publishing the verified output into the ordered log stream.
+
+The first independent application PASS used module 3. Module 4 fixed a
+final-binding/reaper ownership race. Module 5 fixed RET routing by retaining
+the guest CPU from the delivered packet instead of treating the launcher's
+worker slot as a guest CPU. Current x86_64 and i386 control regressions pass,
+including root procfs, idle WAIT, worker/TGID retirement, image, process,
+credential, executable, topology and continuing sysfs checks. Seven new
+scheduled-retirement protocol tests, nineteen prior protocol/image tests and
+five exact native adapter tests pass. All four guest image selections build;
+no C fallback or existing launcher was removed or changed.
+
+The retention index binds 53 native compiler sources, 24 guest production
+inputs, exact tested probes/modules/images and the original commands, failed
+captures and fixes. Final stdout/verification markers now use an ordered log
+stream because serial tty output can be split by printk even inside one write.
+Original failing captures retain their original status and bytes.
+
+The Astra Ultra handoff is **not ready**. The next gates are actual abnormal
+launcher/worker handling and small memory, file-I/O, thread/futex and signal
+applications. These require remaining native ioctl integration where exercised;
+for example, the existing launcher uses STRNCPY_FROM_USER for file paths, which
+is not yet connected in the native dispatcher. Preserve the accepted baseline
+while adding that coverage. The later review must list unsupported features
+and distinguish this one-McKernel-CPU, 128-MiB guest baseline from multicore,
+MPI, dynamic/libc application suites and whole-OS production acceptance.
 
 ## Application readiness and model handoff, 2026-09-08
 
@@ -41,8 +77,8 @@ isolated Linux/McKernel guest environment. Require:
   and remaining risks explicitly. A known defect that prevents safe application
   testing must be fixed before completing this phase.
 
-At this document checkpoint the latest real launcher still fails at START;
-no application has executed in McKernel. The syscall protocol has eleven passing
+At the original phase-definition checkpoint, the real launcher still failed
+at START and no application had executed in McKernel. The syscall protocol has eleven passing
 tests, with nineteen earlier image/protocol tests also passing, and all three
 native modules compile. The native mailbox, response-memory ownership, actual
 user WAIT/RET adapters, procfs and scheduled cleanup still need connection.
@@ -1352,3 +1388,44 @@ Reuse the same detach operation for a truly dead TGID. Never free guest pages
 or bypass a real remaining owner just to satisfy immediate reopen. Compile and
 rerun the failing original i386 regression, then current x86_64 and real
 application runs with the corrected module.
+
+## Native RET routing adaptation review, 2026-09-08
+
+Repeated application attempt 1 delivers write on McKernel CPU 0, prints its
+25 bytes, then the launcher reports RET EINVAL; dead-worker cancellation
+subsequently returns -512 in the independent guest kmsg. This is a blocking
+failure. The original capture remains FAIL, including its emergency physical
+snapshot. The first module-3 application PASS is retained separately.
+
+Selected existing Rust producers `executer/user/rust/mcexec_helpers.rs`:
+`act_main_loop_iteration` passes `my_thread.cpu` into `act_main_loop_syscall`
+and `do_syscall_return`. It stores the guest `w.cpu` separately in remote_cpu.
+C fallback `executer/user/mcexec.c::main_loop` has the same semantics; thread
+creation assigns increasing worker slots and creates n_threads + 1 workers.
+Consequently even -t 1 can return from Linux worker slot 1 for guest CPU 0.
+Both RET descriptor producers initialize all five fields.
+
+Retain both launcher selections unchanged. Reuse the ownership contract of
+`executer/kernel/mcctrl/rust/mcctrl_helpers.rs::mcctrl_control_ret_syscall_body_result`
+(selected by MCCTRL_RUST_HELPERS outside CONFIG_MIC), and its control.c
+fallback: look up the current task's retained packet and complete that packet;
+neither uses ret_desc.cpu to choose or validate the guest request. The existing
+C `syscall.c::__return_syscall` also derives response ownership from the packet.
+Its Linux 4.x/C-bridge registry cannot be directly called by the Linux 6.12
+native module; the existing referenced HostWorker/MM and private serial remain
+the native equivalents.
+
+Adapt native `mcctrl_process::Registration::{wait_syscall,return_syscall}` to
+retain the trusted guest CPU alongside the delivered serial in HostWorker.
+Store CPU before publishing the nonzero serial with Release, and load CPU only
+after acquiring that serial. Only the referenced current Linux TID can issue
+those synchronous ioctls; a reaper cannot reuse a live identity. Build the
+internal RETURN message using this retained CPU, with the actual user result,
+validated bounded copy and existing worker/serial. Keep the backend's wrong-CPU,
+wrong-worker, stale serial and duplicate completion checks unchanged. Bound a
+route diagnostic to the existing trace budget when launcher and guest CPU
+differ, allowing the fresh unchanged-launcher run to prove this case directly.
+Test the actual extracted adapter methods for distinct worker/guest values,
+copy failures and acceptance/interrupt ownership before fresh module/runtime
+checks. No guest code, wire ABI, old test assertion or launcher workaround is
+needed for this adaptation.

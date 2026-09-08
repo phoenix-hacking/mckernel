@@ -33,6 +33,7 @@ static void process_reap_finish(int fd, const int children[4])
     require(call(35, (long)quiet, 0, 0) == 0); /* x86_64 nanosleep */
     for (unsigned index = 0; index != 4; ++index)
         process_reap_marker(fd, "QUIET_DONE", children[index]);
+    static const char passed[] = "<6>NATIVE_PROCESS_REAP PASS inherited_tgids=4 binding_held=1 applications=0\n";
+    require(call(SYS_WRITE, fd, (long)passed, sizeof(passed) - 1) == (long)sizeof(passed) - 1);
     close_fd(fd);
-    message("NATIVE_PROCESS_REAP PASS inherited_tgids=4 binding_held=1 applications=0\n");
 }

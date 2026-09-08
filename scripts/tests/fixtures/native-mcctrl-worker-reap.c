@@ -101,7 +101,8 @@ static void worker_reaper_probe(int fd)
         reaper_marker("NATIVE_WORKER_REAP_QUIET_DONE", pid, tid);
     }
     REAP_CHECK(syscall_four(13, 10, (long)&old, 0, 8) == 0);
+    static const char passed[] = "<6>NATIVE_WORKER_REAP PASS workers=72 quiet_windows=72 waits_interrupted=72 untouched_bytes=6336 applications=0\n";
+    REAP_CHECK(call(SYS_WRITE, reaper_log_fd, (long)passed, sizeof(passed) - 1) == (long)sizeof(passed) - 1);
     REAP_CHECK(call(SYS_CLOSE, reaper_log_fd, 0, 0) == 0);
-    message("NATIVE_WORKER_REAP PASS workers=72 quiet_windows=72 waits_interrupted=72 untouched_bytes=6336 applications=0\n");
 }
 #undef REAP_CHECK
