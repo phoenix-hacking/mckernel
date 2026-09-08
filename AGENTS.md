@@ -24,6 +24,39 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native OS-device sysfs checkpoint (2026-09-07 local date): the native SMP
+prototype now consumes the production directory owner and attaches `/sys`
+to the actual generation-owned mcos Linux device. The additive IHK borrowing
+export retains an exact-generation registry lease during its synchronous
+callback, without reacquiring the backend's operation mutex. PreparedBoot
+owns the child; unstarted cleanup retires it before device destruction, while
+started storage retains it. No parallel device or new C implementation body.
+
+All three native modules and the borrowing fixture build, pass no-SIMD checks
+and match the independent device-layout witness (760/8/0). Both preparation
+ABIs across two module lifetimes pass 404 namespace checks, minor reuse,
+32 original boot allocation failures, four physical captures and full
+unstarted restoration. Both actual starts add four namespace checks and
+retain their roots after incomplete BOOT and refused destruction. Four
+fixture lifetimes pass 60 borrowing checks, including invalid/stale identities,
+exact parent names and callback errno boundaries; 20 callbacks execute.
+
+See `docs/verification/native-sysfs-os-checkpoint-20260907.json` for 19 retained
+artifacts and exact source/compiler bindings, including the initial fixture
+modpost and retention failures. Older formatting differences are bound by an
+exact pinned-rustfmt replay, with original and compiler bytes retained. All
+capture hashes and gzip streams pass. Callback/destruction races and every
+new sysfs allocation-failure point remain outside this checkpoint's coverage.
+
+Both real McKernel starts still complete vDSO and reach architectural status 2,
+then stop at SYSFS_REQ_SETUP with busy=1. The root is empty and never exposes
+setup_complete. Next implement the native tree/path/handles, real topology and
+setup files, shared-buffer ownership and request dispatch; then continuing
+host services, full ready status and the application launcher/tests. Native
+shutdown, declared staging/contracts/full-suite integration, full McKernel/
+linked-support Rust or assembly completion and independent production acceptance
+remain open. No full boot, application test or production gate credit.
+
 Native sysfs object checkpoint (2026-09-07 local date): the actual Rust
 directory/file/link owners now pass two disposable Linux module lifetimes.
 All 21 generated layout values match an independent C witness; final module 5
@@ -43,8 +76,8 @@ See `docs/verification/native-sysfs-objects-checkpoint-20260907.json` for
 failure, two initramfs preparation/execution failures and the initial removed-
 file seek expectation failure. Earlier failed attempts remain FAIL.
 
-The current consumer is the disposable verification module. Next attach these
-owners to the actual generation-owned mcos device and adapt the existing Rust
+At that object checkpoint the consumer was the disposable verification module.
+The subsequent OS-device checkpoint above attaches these owners; next adapt the existing Rust
 tree, setup files/topology and request dispatch described in
 `docs/verification/native-sysfs-integration-plan.md`. No actual McKernel
 SYSFS_REQ_SETUP response has completed; its boot still stops at that request.

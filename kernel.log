@@ -33975,3 +33975,15 @@ modpost rejects a helper-supplied KBUILD_EXTRA_SYMBOLS path because this native
 in-tree module build has no drivers/misc/mckernel/Module.symvers. Stop before
 runtime checks; resolve the actual symbol manifest and fix only the helper's
 modpost input. No complete build-attempt PASS or live attachment is claimed.
+
+2026-09-07 local date — native OS sysfs retention attempt 1 FAILED source binding.
+Command: mckernel-container native python3 -B /work/retain-native-sysfs-os.py 1
+Environment: pinned native four-CPU/12-GiB container. Both actual startup ABIs
+and the preparation guest already PASS. Their 408 namespace checks and 60
+borrowing checks are unchanged. Retention verifies/archive-preserves all five
+build/guest captures, then its byte-equality check fails for ihk_ioctl.rs:
+the build formatter's compiler input differs from the original repository
+bytes. Evidence: /work/native-sysfs-os-retained-20260907-1, with the failed
+manifest and 13 completed artifacts. Stop before publication. Inspect the
+original and formatted captures and bind that transformation explicitly;
+do not claim an unchanged-byte compiler binding or discard the failure.

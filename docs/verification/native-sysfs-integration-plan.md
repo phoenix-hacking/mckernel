@@ -149,3 +149,40 @@ passes the no-SIMD check. Attempt 1's fixture modpost failure remains retained:
 the helper incorrectly supplied a per-directory Module.symvers path; the actual
 in-tree build publishes these exports in the build-root manifest. Live
 OS-device retirement and borrowing checks are pending at this build checkpoint.
+
+## Verified OS-device checkpoint, 2026-09-07 local date
+
+Both preparation interfaces across two module lifetimes pass 404 namespace
+checks, including repeated root creation/removal, failed-operation preservation,
+argument/image/CPU changes, OS destruction and minor reuse. The original 32
+boot allocation failures, four independent physical captures and full unstarted
+resource restoration also pass. Both actual-start interfaces retain the root
+after incomplete BOOT and rejected destruction, passing four further namespace
+checks. No run exposes a `setup_complete` marker.
+
+The actual IHK export passes 60 borrowing checks across four fixture lifetimes
+on started mcos0 generation 1, including absent callbacks/OS instances, invalid
+slots/versions, mismatched generations, the exact Linux device name and errno
+boundaries. Only 20 valid invocations reach the callback. These are Linux-side
+boundary tests, not McKernel application tests. The device's size/alignment and
+kobject offset match the independent C witness: 760, 8 and 0 bytes.
+
+The native SMP prototype now consumes the production directory owner directly.
+Both actual starts preserve the preceding vDSO exchange and independently
+captured architectural status 2. SYSFS_REQ_SETUP remains pending with busy=1;
+the next implementation is the native tree, topology/setup files, shared-buffer
+ownership and real request completion, followed by continuing host service.
+
+`native-sysfs-os-checkpoint-20260907.json` binds 19 retained artifacts. The
+initial fixture modpost failure and retention source-binding failure remain
+preserved. The latter found formatter changes in older inputs; the corrected
+retention binds original repository bytes to the exact compiler bytes by
+replaying the same pinned rustfmt command and retaining both versions. All
+capture hashes and complete gzip streams pass. The failed retention's already
+completed archives are preserved byte-for-byte in this final artifact set.
+
+Borrowing has not yet been raced against OS destruction in the new fixture;
+minor reuse is covered separately by preparation. The original allocation
+failures do not inject every new sysfs allocation point. Full ready status,
+application launch/tests, native shutdown, declared production integration,
+full Rust/assembly ownership and independent acceptance remain open.
