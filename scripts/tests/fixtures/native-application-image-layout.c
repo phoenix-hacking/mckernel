@@ -5,6 +5,9 @@
 #include <sys/types.h>
 #include <sys/resource.h>
 #include "../../../executer/include/uprotocol.h"
+#include "native-application-c-reference.h"
+
+_Static_assert(SCD_MSG_PROCFS_TID_DELETE == 0x45, "existing guest deletion message");
 
 int main(void)
 {

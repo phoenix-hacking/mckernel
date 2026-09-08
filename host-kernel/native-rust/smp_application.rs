@@ -144,10 +144,26 @@ impl Remote {
         mut memory: impl FnMut(u64, usize) -> Result,
     ) -> Result {
         let mut slots = self.slots.lock();
+        let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
         for slot in &mut *slots {
             let Some(entry) = slot.as_mut() else {
                 continue;
             };
+            if message == super::application_rpc::TID_DELETE {
+                match entry.cleanup.accept_unscheduled_delete(packet) {
+                    Ok(()) => {
+                        pr_info!("IHK-SMP: application unscheduled delete os={} generation={} pid={} cpu={} tid=0 cleanup_token={}\n",
+                            self.owner.slot(), self.owner.generation(), entry.cleanup.pid(),
+                            entry.cleanup.cpu(), entry.key().wire());
+                        if entry.closed && entry.cleanup.retired() {
+                            *slot = None;
+                        }
+                        return Ok(());
+                    }
+                    Err(-2 | -16) => continue,
+                    Err(error) => return Err(errno(error)),
+                }
+            }
             if let Some(prepare) = entry
                 .prepare
                 .as_mut()
@@ -202,7 +218,7 @@ impl Remote {
                 return;
             }
             if entry.prepare.is_none() && entry.cleanup.reserved()
-                || entry.cleanup.result().is_some()
+                || entry.cleanup.release_ready()
             {
                 *slot = None;
             } else {
@@ -318,7 +334,8 @@ impl Remote {
                 if entry.quarantined {
                     return Err(errno(-71));
                 }
-                if let Some(error) = entry.cleanup.result() {
+                if entry.cleanup.release_ready() {
+                    let error = entry.cleanup.result().unwrap();
                     *slot = None;
                     return kernel::error::to_result(error).map(|_| ());
                 }

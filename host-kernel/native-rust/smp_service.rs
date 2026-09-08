@@ -129,7 +129,9 @@ impl Runtime {
         }
         if matches!(
             message,
-            application_rpc::CLEANUP_REPLY | application_rpc::PREPARE_REPLY
+            application_rpc::CLEANUP_REPLY
+                | application_rpc::PREPARE_REPLY
+                | application_rpc::TID_DELETE
         ) {
             if let Err(error) = self.application.reply(packet, |physical, bytes| {
                 self.memory.application_range(physical, bytes)

@@ -12,6 +12,10 @@ mod abi;
 mod guest {
     include!("native-application-guest-reference.rs");
 }
+#[allow(dead_code)]
+mod procfs {
+    include!("native-application-procfs-reference.rs");
+}
 
 use core::{
     ffi::c_void,
@@ -408,4 +412,72 @@ fn actual_guest_prepare_and_prepared_cleanup_use_distinct_exact_tokens() {
     let mut cleanup = rpc::Exchange::new(0, 0, 1).unwrap();
     assert_eq!(cleanup.cleanup_target(-1, 0), Err(-22));
     assert_eq!(cleanup.cleanup_target(0, 0x400000), Err(-22));
+}
+
+unsafe extern "C" fn deletion_physical(done: *mut c_void) -> u64 {
+    assert!(!done.is_null());
+    0xdead_beef
+}
+unsafe extern "C" fn deletion_send(_: *mut c_void, packet: *mut abi::IkcScdPacket) -> i32 {
+    PEER.with(|peer| {
+        let mut peer = peer.borrow_mut();
+        peer.events.push("delete");
+        peer.reply = core::slice::from_raw_parts(packet.cast::<u8>(), 128).to_vec();
+    });
+    0
+}
+fn deletion(os: i32, cpu: i32, pid: i32, tid: i32) -> Vec<u8> {
+    let mut packet: abi::IkcScdPacket = unsafe { core::mem::zeroed() };
+    let mut done = 0;
+    unsafe {
+        assert_eq!(
+            procfs::procfs_thread_ctl_result(
+                core::ptr::null_mut(), &mut packet, &mut done, rpc::TID_DELETE,
+                os, cpu, pid, tid, Some(deletion_physical), Some(deletion_send), None,
+            ),
+            0
+        );
+    }
+    // The unchanged guest DELETE neither waits nor requires a completion write.
+    assert_eq!(done, 0);
+    let bytes = PEER.with(|peer| peer.borrow().reply.clone());
+    assert_eq!(image::word(&bytes, 120).unwrap(), 0xdead_beef);
+    bytes
+}
+
+#[test]
+fn prepared_cleanup_retains_owner_until_matching_unscheduled_deletion() {
+    let mut cleanup = rpc::Exchange::new(0, 0, 991).unwrap();
+    cleanup.cleanup_target(3, 0xffff_8000_1234_5000).unwrap();
+    let response = reply(&mut cleanup, false, 0);
+    let event = deletion(0, 3, 991, 0);
+    assert_eq!(cleanup.accept_unscheduled_delete(&event), Err(-16));
+    cleanup.abandon();
+    cleanup.accept(&response).unwrap();
+    assert_eq!(cleanup.result(), Some(0));
+    assert!(!cleanup.release_ready() && !cleanup.retired());
+    assert_eq!(cleanup.accept_unscheduled_delete(&event[..127]), Err(-22));
+    for offset in [8, 24, 28, 32, 40] {
+        let mut wrong = event.clone();
+        wrong[offset] ^= 1;
+        assert_eq!(cleanup.accept_unscheduled_delete(&wrong), Err(-2));
+        assert!(!cleanup.release_ready() && !cleanup.retired());
+    }
+    let original = event.clone();
+    cleanup.accept_unscheduled_delete(&event).unwrap();
+    assert_eq!(event, original);
+    assert!(cleanup.release_ready() && cleanup.retired());
+    assert_eq!(cleanup.accept_unscheduled_delete(&event), Err(-16));
+}
+
+#[test]
+fn unprepared_cleanup_releases_after_ack_without_a_deletion_event() {
+    let mut cleanup = rpc::Exchange::new(0, 3, 991).unwrap();
+    let response = reply(&mut cleanup, false, 0);
+    cleanup.accept(&response).unwrap();
+    assert!(cleanup.release_ready());
+    let event = deletion(0, 3, 991, 0);
+    assert_eq!(cleanup.accept_unscheduled_delete(&event), Err(-2));
+    cleanup.abandon();
+    assert!(cleanup.retired());
 }

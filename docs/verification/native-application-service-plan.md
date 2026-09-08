@@ -403,3 +403,42 @@ fixture and keep all child work inside the syscall assembly until exit/fault,
 so vfork does not corrupt the suspended parent's stack. Preserve the original
 failed helper/source/captures; use fresh module 7 and guest 3. Keep all baseline,
 physical-memory, queue, capability and lifecycle assertions unchanged in strength.
+
+Image guest attempt 3 teardown diagnosis: the PFN correction passes the actual
+same-MM data write, readonly-text SIGBUS and unchanged-text checks, plus all
+12,288 independently captured image bytes and three guest page walks. Teardown
+then emits message 0x45 (printed in hex), SCD_MSG_PROCFS_TID_DELETE. The emergency
+port-503 receive ring at byte 11200 contains OS 0 / CPU 0 / PID 351 / TID 0. The
+native dispatcher currently treats it as unserviced and sets ENOSYS, so the
+subsequent cleanup barrier's registration fails. Keep the original overall FAIL.
+
+Reuse kernel/rust/object_helpers.rs::procfs_thread_ctl_result and the existing
+mcctrl_procfs_work_main_body_result / mcctrl_procfs_delete_tid_entry_body_result
+contract: DELETE does not wait for or require a response-memory write, and an
+absent thread entry is a successful absence. The event's resp_pa points into a
+guest stack and must never be dereferenced on DELETE. Prepared threads have no
+scheduled TID (zero); host scheduling assigns the PID as TID in
+host_schedule_process_request_result. This image phase has never published a
+thread directory and needs no synthetic procfs node or fabricated writeback.
+
+Extend the existing Exchange/Remote cleanup owner to retain a prepared,
+unscheduled registration past its cleanup ACK until its exact OS/CPU/PID and
+TID-zero deletion event is consumed. Reject foreign, duplicate, premature and
+nonzero-TID events; unprepared cleanup still needs only its existing ACK. A late
+event can retire an abandoned waiter without permitting premature PID reuse.
+Route only this implemented deletion case through the existing packet worker;
+actual procfs CREATE, reads, scheduled-thread tracking and full process/exit
+parity remain required before application acceptance. Do not claim that DELETE
+is final destruction: the same-CPU subsequent request still provides the
+existing barrier past the cleanup handler. The traditional DELETE contains no
+per-operation token, so ordered exactly-once queue delivery and the retained
+unscheduled owner are the applicable identity boundary; full running process
+and duplicate/reuse fault injection remain required.
+
+Verify state and packet construction with the exact guest procfs helper and C
+message constant, including the unchanged zero done flag on DELETE. Extend the
+actual capture to prove one additional incoming deletion packet (no outgoing
+reply) and its exact OS/CPU/PID/TID fields. Keep every prior queue invariant and
+baseline assertion, accounting explicitly for the protocol's asymmetric event.
+Use fresh module 8, image protocol attempt 2 and image guest attempt 4; module 7
+and the original failed guest 3 remain unchanged. No application has executed.

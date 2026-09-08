@@ -2,7 +2,8 @@
 //! Traditional SCD application exchange, adapted from the existing Rust RPC owner.
 //!
 //! A registration reserves its descriptor before publication. Caller departure
-//! cannot retire queued/published work; only its matching acknowledgement can.
+//! cannot retire queued/published work. Unscheduled prepared cleanup retains
+//! its owner through both acknowledgement and the matching deletion event.
 
 use core::sync::atomic::{AtomicU64, Ordering};
 
@@ -11,6 +12,7 @@ pub(crate) const PREPARE: i32 = 1;
 pub(crate) const PREPARE_REPLY: i32 = 2;
 pub(crate) const CLEANUP: i32 = 9;
 pub(crate) const CLEANUP_REPLY: i32 = 10;
+pub(crate) const TID_DELETE: i32 = 0x45;
 static NEXT_TOKEN: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -40,6 +42,7 @@ pub(crate) struct Exchange {
     argument: u64,
     phase: Phase,
     waiter: bool,
+    unscheduled_deleted: bool,
 }
 
 impl Exchange {
@@ -63,6 +66,7 @@ impl Exchange {
             argument: 0,
             phase: Phase::Reserved,
             waiter: true,
+            unscheduled_deleted: false,
         })
     }
 
@@ -179,10 +183,47 @@ impl Exchange {
         }
     }
 
+    /// A prepared, unscheduled thread emits an advisory procfs deletion with
+    /// TID zero after its cleanup reply. Its resp_pa is an expired peer-stack
+    /// address, not a reply target. Never map or write it for this operation.
+    pub(crate) fn accept_unscheduled_delete(&mut self, packet: &[u8]) -> Result<(), i32> {
+        if packet.len() != PACKET_BYTES {
+            return Err(-22);
+        }
+        let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
+        let cpu = i32::from_le_bytes(packet[24..28].try_into().unwrap());
+        let os = i32::from_le_bytes(packet[28..32].try_into().unwrap());
+        let pid = i32::from_le_bytes(packet[32..36].try_into().unwrap());
+        let tid = u64::from_le_bytes(packet[40..48].try_into().unwrap());
+        if self.message != CLEANUP
+            || self.argument == 0
+            || message != TID_DELETE
+            || cpu != self.cpu
+            || os != self.os
+            || pid != self.pid
+            || tid != 0
+        {
+            return Err(-2);
+        }
+        if self.result().is_none() || self.unscheduled_deleted {
+            return Err(-16);
+        }
+        self.unscheduled_deleted = true;
+        Ok(())
+    }
+
+    /// These wire events allow local exchange release; final guest destruction
+    /// still requires the same-CPU handler barrier. Scheduled TIDs need their
+    /// full procfs/process lifecycle owner before START is supported.
+    pub(crate) fn release_ready(&self) -> bool {
+        self.result().is_some()
+            && (self.message != CLEANUP || self.argument == 0 || self.unscheduled_deleted)
+    }
+
     pub(crate) fn abandon(&mut self) {
         self.waiter = false;
     }
     pub(crate) fn retired(&self) -> bool {
-        self.abandoned() && self.result().is_some()
+        self.abandoned() && self.release_ready()
     }
 }
