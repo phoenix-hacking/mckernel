@@ -188,7 +188,9 @@ static void boundary_buffers(int fd)
 static void replacement_and_files(int fd)
 {
     close_exec(fd, EINVAL);
-    open_exec(fd, "", -2);
+    /* Pinned Linux open_exec uses getname_kernel, which accepts the empty
+     * name. path_init selects cwd and may_open rejects directory execution. */
+    open_exec(fd, "", -13);
     open_exec(fd, "/targets/missing", -2);
     open_exec(fd, "/targets", -13);
     open_exec(fd, "/targets/notexec", -13);

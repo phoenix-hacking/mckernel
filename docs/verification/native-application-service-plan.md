@@ -161,3 +161,16 @@ and concurrent replacements without leaked exclusions. Repeat the established
 module lifetime/topology and normal-image boot/sysfs checks. First application
 execution, declared-stage/FFI/full-suite integration and the full original goal
 remain open throughout this adapter checkpoint.
+
+The first executable runtime diagnostic identifies an incorrect empty-path
+expectation in the fixture. In the pinned Linux source, `fs/namei.c::getname_kernel`
+copies an empty NUL-terminated name without the empty-name rejection performed
+for userspace path acquisition. `path_init` starts at the current directory;
+`link_path_walk` keeps `LAST_ROOT`, and `may_open` returns EACCES for a directory
+with MAY_EXEC. `fs/exec.c::open_exec` uses that exact route, also called by the
+existing `mcexec_open_exec` implementation. Correct only this expected result
+from ENOENT to EACCES; retain ENOENT for the missing file and every other error
+and ownership assertion. Module attempt 2 and its production sources remain
+unchanged. Preserve failed guests 1/2/3 and rerun with fresh names. Retain both
+pinned Linux source files with the executable checkpoint so this correction is
+reviewable independently of the observed native ioctl result.
