@@ -33,6 +33,28 @@ free blocks are returned to the host drive. Do not resize or delete that image.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native sysfs tree checkpoint (2026-09-07 local date): the native PreparedBoot
+owner now contains the Rust tree, with checked nonpointer handles, bounded path
+validation and iterative teardown. All three native modules and the actual
+tree fixture build. Two disposable Linux module lifetimes match 60 operations
+from 15 unchanged legacy C bodies, validate stale/foreign handles and protected
+roots, remove a 509-level tree, and drain active callbacks before namespace
+retirement. OS preparation preserves 404 namespace checks, the original 32
+allocation failures, four physical captures and full resource restoration.
+Both real startup interfaces preserve vDSO completion, four more namespace
+checks and 60 borrowing checks. See the 21 retained artifacts in
+`docs/verification/native-sysfs-tree-checkpoint-20260907.json`, including the
+first fixture compiler failure. Original/compiler bytes and explicit old-source
+rustfmt replays are bound; artifact hashes and complete gzip streams pass.
+
+This closes the bounded tree adapter checks, not the sysfs setup service.
+Production OS trees still contain only protected roots; actual starts remain
+at architectural status 2 with SYSFS_REQ_SETUP busy=1. Next capture real CPU/cache
+topology before CPU offline, adapt the existing Rust setup file sequence, own
+the shared data/request buffers and complete the actual request. Keep working
+toward full ready status, continuing host service, applications, shutdown and
+the full Rust/assembly, declared integration and independent acceptance gates.
+
 Native OS-device sysfs checkpoint (2026-09-07 local date): the native SMP
 prototype now consumes the production directory owner and attaches `/sys`
 to the actual generation-owned mcos Linux device. The additive IHK borrowing

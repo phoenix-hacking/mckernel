@@ -233,3 +233,55 @@ The separate native guest probe and exact dynamic libc/loader also build.
 Attempt 1's missing fixture fmt! import is recorded and retained. Runtime
 trace comparison, Linux namespace properties and both actual startup paths
 remain pending at this build checkpoint.
+
+## Verified tree checkpoint, 2026-09-07 local date
+
+The disposable Linux guest passes two complete tree-module lifetimes. Each
+matches all 60 legacy-body trace operations and verifies protected roots,
+malformed paths without prefix mutation, stale and foreign identities, name
+reuse, a 509-directory path and iterative teardown. Real sysfs modes, scalar
+reads/writes and symlink resolution pass. Both module removals observe an active
+callback, wait for it to finish (1,083 and 1,078 ms), then leave no namespace.
+
+The native PreparedBoot owner also passes both user ABIs through two preparation
+module lifetimes: 404 namespace checks, the original 32 allocation failures,
+four independent physical captures and full unstarted resource restoration.
+Both actual McKernel starts retain the tree root after incomplete boot, preserve
+the completed vDSO exchange and pass another four namespace checks plus 60
+OS-device borrowing checks. Architectural status remains 2 and SYSFS_REQ_SETUP
+remains busy=1. These native trees still contain only the protected roots.
+
+`native-sysfs-tree-checkpoint-20260907.json` retains 21 artifacts, including
+the original fixture import failure, exact original/compiler sources, all
+guest captures and the 15-body C extraction. All artifact hashes and full gzip
+streams pass. Three older source files retain their explicit pinned rustfmt
+replay bindings. New tree allocation-failure coverage, actual setup attributes,
+shared-buffer ownership, continuing service, applications, shutdown and the
+broader native integration/acceptance gates remain open.
+
+## Topology capture boundary
+
+The next setup adaptation retains the file names and ordering from the existing
+Rust `setup_sysfs_files`, `setup_local_snooping_files`, CPU/cache setup and
+`setup_node_files` bodies. Translate actual Linux CPU IDs and NUMA nodes into
+the assigned McKernel ordering. Publish setup_complete only after every required
+attribute and link succeeds; a missing topology or allocation error must not
+be treated as successful setup.
+
+The old collector in `ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c`
+reads Linux sysfs at module initialization and saves topology before reservation.
+Adapt that ownership boundary to Rust values. In the pinned Linux source,
+`cacheinfo_cpu_pre_down` removes sysfs objects and clears shared CPU membership;
+collecting after offline would lose siblings. Capture the initially supported
+online CPU inventory under the existing device-hotplug and CPU read guards,
+keep owned copies through reservation, and validate identity and current online
+membership before admitting a reservation. Reject changed hardware/topology
+instead of reusing stale data; existing owned CPUs retain their snapshot.
+
+Reuse the already exported `cpu_info`, `cpu_core_map` and `cpu_sibling_map` and
+their generated bindings. `get_cpu_cacheinfo` and its structures are already
+bound but its existing Linux function lacks a module export. Add only the
+missing GPL export, without a new C adapter body, then verify exact layouts
+and captured values against independent Linux sysfs readings. Preserve cache
+indices, scalar fields and real shared masks. The native snapshot must own all
+data before releasing the hotplug guards; no Linux topology pointer may escape.
