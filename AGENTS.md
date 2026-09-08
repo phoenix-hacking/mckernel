@@ -87,6 +87,18 @@ restoration mapping for removed captures, including failed attempts. Preserve
 active compiler/browser caches, installed environments and other workspaces.
 Continue checking capacity between substantial verification batches.
 
+The seventh cleanup checkpoint is
+`docs/verification/storage-maintenance-20260908-4.json`. After the actual guest
+checkpoint was pushed, 2,112 mapped evidence copies in the two new image-source
+checkouts and 22 extra retention archives were removed against 1,079 verified
+committed files. Targeted scratch trim returns another 5.34 GiB of host allocation,
+for 63.27 GiB across all seven cleanups. All 2,016 checked current files remain
+byte-identical after trim, and all 25 protected directories remain present.
+About 142 GiB is free on the host and 30 GiB in scratch. The source checkouts
+now omit only redundant historical evidence; restore those exact Git blobs
+using the actual guest manifest before historical replay. Compiler sources,
+objects, images, guest captures and failed-attempt records remain intact.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Actual guest sysfs checkpoint, 2026-09-08: the default-OFF
