@@ -80,3 +80,24 @@ normal C selects exactly the original implementation. Compare normal C
 preprocessing before/after this patch, excluding source-position markers,
 then repeat the layout witness and build. No layout or production C body is
 rewritten to accommodate binding generation.
+
+Kernel attempt 3 now passes normal C preprocessing equivalence, all 44 layout
+values, the pinned kernel rebuild and the three existing prototype modules.
+The original resolved configuration is unchanged and all three new data
+exports are present. Add a read-only disposable Rust module fixture that uses
+those actual exports, independently emits all 44 generated layout values,
+checks the two-page ELF text and reads live sequence-protected coarse time
+against Linux's own time API. It must verify updates and unchanged text across
+module lifetimes, without responding to McKernel. Repeat the existing actual
+control-connection captures with the rebuilt kernel; then implement the
+versioned descriptor and real service described above.
+
+The Rust fixture now compiles, imports the actual three Linux data symbols and
+its time/sleep APIs, and passes ELF/no-SIMD checks. Its emitted layout agrees
+byte-for-byte with the independent C witness for all 44 values. Prototype 5
+also builds all three existing native modules against this rebuilt kernel.
+The next guest uses the unchanged revision-2 McKernel image and boot/control
+probe, plus two read-only fixture lifetimes before native resource assignment.
+QMP will independently capture the Linux text/time/RNG pages, compare the text
+hash with the actual module reads and check those pages remain outside assigned
+McKernel memory. The service descriptor must still remain busy in this replay.
