@@ -148,6 +148,24 @@ compressed restoration mapping. Active caches, personal files, other projects,
 VM disks and Docker state remain intact. Continue checking capacity and saving
 coherent GitHub checkpoints between substantial verification batches.
 
+
+The eleventh cleanup checkpoint is
+`docs/verification/storage-maintenance-20260908-8.json`. Fourteen superseded
+IKC prototype/completion/publication and vDSO test captures were removed only
+after complete comparisons against their verified GitHub archives. All four
+historical failed attempts remain fully restorable. All 4,158 checked current
+files are byte-identical after deletion and targeted scratch trim; all 78
+protected directories remain present. The backing file returns another
+596,934,656 bytes (569 MiB), totaling 75.69 GiB across eleven cleanups.
+About 152 GiB remains free on the host and 40 GiB in scratch. Preserve all
+current image module attempts 1-6, image protocol attempt 1 and image guest
+attempts 1-2, including the new timeout and emergency diagnostics, alongside
+all previous compiler/kernel/image/setup dependencies. Restore removed older
+captures from their exact committed archives before historical replay; never
+reuse attempt names. Active caches, personal files, installed environments,
+other projects, VM disks, recent host logs and Docker state remain intact.
+Continue capacity checks and periodic GitHub checkpoints during verification.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native process registration/cleanup checkpoint, 2026-09-08: module attempt 1,
