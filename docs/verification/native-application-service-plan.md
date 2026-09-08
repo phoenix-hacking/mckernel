@@ -101,3 +101,63 @@ launch. These need native Linux adapters before process-data, VM and image
 packet integration. The retained file context is the ownership connection,
 not proof of those unimplemented operations. Declared-stage/source-graph/FFI and
 current full-suite integration remain separate unfinished work.
+
+## Executable and credential adapter review, 2026-09-08
+
+Reviewed source parent: `6f9e29abdcbbdb9fada38724b2ae8ecb242896cf`.
+Retain the existing launcher and all compatibility helpers. Adapt
+`mcctrl_control_getcredv_body_result` and its eight-value ordering to the pinned
+kernel's current subjective credentials and `UserSliceWriter`. Read the calling
+task on each request, before any user copy or sleep, rather than caching the
+credentials of the task that opened the OS file. Preserve the existing raw
+`kuid_t`/`kgid_t` values and the 32-byte payload on both ABIs. Physical-address
+GET_CRED still requires the later checked shared-memory adapter.
+
+`mcexec_open_exec` in `executer/kernel/mcctrl/control.c` remains C-owned; the
+existing Rust `mcctrl_control_close_exec_body_result` delegates its file/list
+effects to C bridges. Adapt their successful open/replace/close ownership and
+preserve the legacy positive EINVAL result when CLOSE_EXEC finds no executable.
+Extract the current `smp_loader.rs::read_user_string` byte loop into a shared
+native `user_string.rs` adapter, keeping the image-loader wrapper, filename limit,
+error behavior and all current consumers. The executable path uses a heap buffer
+bounded by PATH_MAX, checks termination, and preserves EINVAL for a faulted path
+copy. Reject an unterminated PATH_MAX path with ENAMETOOLONG instead of the old
+unbounded kernel string access.
+
+The exact Linux `fs/exec.c::open_exec` and `do_open_execat` check execution
+permission, regular-file type and noexec mounts, but this pinned source no longer
+acquires write exclusion. Its matching `do_close_execat` now only calls `fput`.
+Use the exported `open_exec`/`fput` and `d_path`, with a narrowly reviewed Rust
+adapter for the `include/linux/fs.h::{deny_write_access,allow_write_access}`
+signed atomic inode counter. Each successful denial must have exactly one
+increment before its owned file reference is released. Failures, replacement,
+CLOSE_EXEC and final file cleanup must all balance that owner. Do not assume the
+legacy Linux inline behavior still runs in the new kernel.
+
+Executable ownership is per OS generation and Linux process, not per descriptor.
+Use the exported `get_task_pid(current, PIDTYPE_TGID)`/`put_pid` ownership to
+identify a thread group without namespace-number collisions or PID reuse. The
+existing Rust Task API does not expose this stable thread-group PID owner.
+New native process glue shares one mutex-protected executable owner across
+separately opened OS files belonging to the same process. Each file retains an
+explicit process binding; the final binding retires the process entry. Forked
+callers sharing an OS descriptor attach separate process identities. Global
+publication locks must not cross pathname/user-copy/VFS operations; per-process
+replacement publishes only a completely opened, denied and resolved file.
+
+The existing `procfs.c` and `mcctrl_procfs_exe_link_body_result` also publish the
+guest process/exe/task hierarchy and other guest-backed proc files. Retain those
+consumers. The owned canonical executable path is an input to their later native
+procfs/process integration; do not credit `/proc/mcosN/...` publication or full
+OPEN_EXEC parity before that integration. Per-process data, native guest VM,
+launch packets and syscall forwarding still need their existing Rust adapters.
+
+Verify caller-vs-opener credentials, distinct real/effective/saved/fs IDs, bad
+and boundary-crossing user buffers, current IDs after changes, and both ABIs.
+Verify real VFS permission/noexec/type/busy failures, bounded paths, replacement
+rollback, shared descriptors vs separately opened files vs forked processes,
+write exclusion through successful ownership and its release on close/final exit,
+and concurrent replacements without leaked exclusions. Repeat the established
+module lifetime/topology and normal-image boot/sysfs checks. First application
+execution, declared-stage/FFI/full-suite integration and the full original goal
+remain open throughout this adapter checkpoint.

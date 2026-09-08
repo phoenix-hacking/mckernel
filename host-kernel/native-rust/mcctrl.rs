@@ -12,6 +12,11 @@
 
 use core::ffi::c_void;
 use kernel::prelude::*;
+use mcctrl_process::Context as FileContext;
+
+mod mcctrl_exec;
+mod mcctrl_process;
+mod user_string;
 
 #[allow(dead_code, unreachable_pub)]
 #[path = "abi/x86_64.rs"]
@@ -49,16 +54,15 @@ extern "C" {
     fn ihk_os_topology_query_v1(slot: u32, generation: u64, command: u32) -> i64;
 }
 
-struct FileContext {
-    slot: u32,
-    generation: u64,
-}
-
 // SAFETY: IHK supplies an exact live OS identity, retains this module and gives
-// exclusive writable output storage. The immutable context permits concurrent
-// ioctl borrows and retains no user memory or independently running work.
+// exclusive writable output storage. Pinned mutexes protect process bindings
+// during concurrent ioctls; no user memory or independently running work escapes.
 unsafe extern "C" fn open(slot: u32, generation: u64, output: *mut *mut c_void) -> i32 {
-    let context = match Box::new(FileContext { slot, generation }, GFP_KERNEL) {
+    let context = match FileContext::new(slot, generation) {
+        Ok(context) => context,
+        Err(error) => return error.to_errno(),
+    };
+    let context = match Box::new(context, GFP_KERNEL) {
         Ok(context) => context,
         Err(_) => return ENOMEM.to_errno(),
     };
@@ -79,11 +83,21 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
     if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {
         return EINVAL.to_errno() as i64;
     }
+    // SAFETY: Successful open supplied this object and its interior locks,
+    // live until final close and shared safely by concurrent ioctl borrows.
+    let context = unsafe { &*context.cast::<FileContext>() };
+    let operation = match command {
+        abi::MCEXEC_UP_GET_CREDV => Some(mcctrl_exec::credentials(argument as usize)),
+        abi::MCEXEC_UP_OPEN_EXEC => Some(context.open_executable(argument as usize)),
+        abi::MCEXEC_UP_CLOSE_EXEC => Some(context.close_executable()),
+        _ => None,
+    };
+    if let Some(result) = operation {
+        return result.map_or_else(|error| error.to_errno() as i64, |value| value as i64);
+    }
     if !service_abi::topology_query(command) {
         return EINVAL.to_errno() as i64;
     }
-    // SAFETY: Successful open supplied this immutable object, live until close.
-    let context = unsafe { &*context.cast::<FileContext>() };
     // SAFETY: The dependency owns the checked scalar query for our lifetime.
     let value = unsafe { ihk_os_topology_query_v1(context.slot, context.generation, command) };
     // Adapt the existing mcctrl_control_get_cpu_body_result check. GET_NODES
@@ -128,10 +142,13 @@ module! {
     license: "GPL v2",
 }
 
-struct McctrlModule;
+struct McctrlModule {
+    _processes: mcctrl_process::Registry,
+}
 
 impl kernel::Module for McctrlModule {
     fn init(_module: &'static ThisModule) -> Result<Self> {
+        let processes = mcctrl_process::Registry::new()?;
         // SAFETY: The provider exports this immutable byte in the declared
         // namespace. The volatile read preserves the relocation that makes
         // modpost derive the module dependency and loader unload ordering.
@@ -157,7 +174,7 @@ impl kernel::Module for McctrlModule {
             MCCTRL_IHK_IMPORT_STATUS,
             MCCTRL_BINFMT_STATUS,
         );
-        Ok(Self)
+        Ok(Self { _processes: processes })
     }
 }
 

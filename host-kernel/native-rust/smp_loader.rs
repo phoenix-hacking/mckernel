@@ -3,7 +3,7 @@
 
 use super::smp_resource::OsToken;
 use core::{ffi::c_void, ptr, ptr::NonNull};
-use kernel::{bindings, prelude::*, uaccess::UserSlice};
+use kernel::{bindings, prelude::*};
 
 const MAX_IMAGE_FILE_BYTES: usize = 64 << 20;
 const MAX_FILENAME_BYTES: usize = 256;
@@ -14,14 +14,7 @@ pub(super) fn read_user_string<const N: usize>(
     require_nul: bool,
 ) -> Result<[u8; N]> {
     let mut bytes = [0_u8; N];
-    let mut reader = UserSlice::new(argument, N).reader();
-    for byte in &mut bytes {
-        *byte = reader.read::<u8>()?;
-        if *byte == 0 {
-            return Ok(bytes);
-        }
-    }
-    if require_nul {
+    if !super::user_string::read_into(argument, &mut bytes)? && require_nul {
         Err(EINVAL)
     } else {
         Ok(bytes)

@@ -29,6 +29,7 @@ mod ihk_mapping;
 #[allow(dead_code)]
 mod smp_image;
 mod smp_loader;
+mod user_string;
 mod smp_startup;
 mod smp_trampoline;
 mod smp_boot_code;
