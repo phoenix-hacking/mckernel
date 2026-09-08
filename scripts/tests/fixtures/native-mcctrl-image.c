@@ -22,6 +22,7 @@ static struct { unsigned long count, offset, null; char text[16]; } image_args =
 static unsigned long image_envs[2];
 static unsigned char payload[8192], readback[8192];
 static unsigned image_checks;
+static volatile unsigned image_child_progress;
 
 static void image_require(int condition, int line)
 {
@@ -64,6 +65,30 @@ static void capability_snapshot(unsigned data[6])
 {
     unsigned header[2] = {0x20080522, 0};
     require(call(125, (long)header, (long)data, 0) == 0);
+}
+
+static void reject_text_write(void)
+{
+    const struct rlimit no_core = {0, 0};
+    require(call(160, RLIMIT_CORE, (long)&no_core, 0) == 0);
+    long child;
+    /* Raw vfork shares this exact MM. The child first proves writable access
+     * to data, preserving the original byte, then attempts a text write.
+     * Keep all child work in assembly so the parent's stack is untouched. */
+    __asm__ volatile("mov $58, %%eax\n\tsyscall\n\t"
+                     "test %%rax, %%rax\n\tjnz 1f\n\t"
+                     "movb $0x83, 0x601080\n\t"
+                     "movl $1, (%1)\n\t"
+                     "movb $0x5a, 0x400080\n\t"
+                     "mov $60, %%eax\n\tmov $99, %%edi\n\tsyscall\n\tud2\n"
+                     "1:"
+                     : "=&a"(child) : "r"(&image_child_progress)
+                     : "rcx", "r11", "rdi", "cc", "memory");
+    require(child > 0);
+    int status = -1;
+    require(call(SYS_WAIT, child, (long)&status, 0) == child);
+    require(image_child_progress == 1);
+    require((status & 0x7f) == 7); /* SIGBUS from rejected guest write permission. */
 }
 
 int main(void)
@@ -123,7 +148,12 @@ int main(void)
     compare(payload, readback, 8192);
     compare(payload, (volatile unsigned char *)0x400000, 4096);
     compare(payload, (volatile unsigned char *)0x600000, 8192);
+    message("NATIVE_IMAGE_MIRROR reads-complete\n");
+    reject_text_write();
+    compare(payload, (volatile unsigned char *)0x400000, 4096);
+    message("NATIVE_IMAGE_MIRROR readonly-write-rejected\n");
     ((volatile unsigned char *)0x600000)[128] = 0x5a;
+    message("NATIVE_IMAGE_MIRROR data-write-complete\n");
     transfer(fd, desc->sections[1].remote_pa, readback, 8192, 1, 0);
     payload[128] = 0x5a; compare(payload, readback, 8192);
     transfer(fd, desc->rpgtable, payload, 4096, 0, -13);
@@ -160,6 +190,6 @@ int main(void)
      * the earlier prepared cleanup handler returned past terminate_host. */
     fd = open_os(0); ppd(fd, 0, 0); close_fd(fd); references(0);
     message("NATIVE_MCCTRL_IMAGE x86_64 PASS checks="); print_number(image_checks);
-    message(" prepared=1 transfer_bytes=12288 readback_bytes=16384 mirror_bytes=20480 pte_clear=1 capability_restored=1 foreign_process_rejected=1 mapping_unload_veto=1 cleanup_barrier=1 final_release=1 applications=0\n");
+    message(" prepared=1 transfer_bytes=12288 readback_bytes=16384 mirror_bytes=24576 readonly_write_sigbus=1 shared_mm_write=1 pte_clear=1 capability_restored=1 foreign_process_rejected=1 mapping_unload_veto=1 cleanup_barrier=1 final_release=1 applications=0\n");
     return 0;
 }

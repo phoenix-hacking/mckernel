@@ -280,55 +280,85 @@ unsafe extern "C" fn mmap(file: *mut bindings::file, vma: *mut bindings::vm_area
     0
 }
 
+struct FaultPage {
+    vma: *mut bindings::vm_area_struct,
+    address: u64,
+    physical: u64,
+    permissions: u64,
+}
+
+// SAFETY: The caller keeps Linux's locked live VMA and its retained file,
+// module, mirror and application valid through use of the returned page.
+unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<FaultPage> {
+    // SAFETY: Linux supplies the live fault structure and retained VMA.
+    let (vma, address, flags) = unsafe {
+        (
+            (*vmf).__bindgen_anon_1.vma,
+            (*vmf).__bindgen_anon_1.address,
+            (*vmf).flags,
+        )
+    };
+    let private = unsafe { &*(*(*vma).vm_file).private_data.cast::<MappingFile>() };
+    let mirror = &private.mirror;
+    if unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
+        || address < mirror.start
+        || address >= mirror.end
+    {
+        return Err(EACCES);
+    }
+    let mut request = [0; 32];
+    wire::put_word(&mut request, 0, address).map_err(errno)?;
+    // FAULT_FLAG_WRITE=bit 0 and FAULT_FLAG_INSTRUCTION=bit 8 in Linux.
+    let access = u64::from(write || flags & 1 != 0) | u64::from(flags & 256 != 0) << 1;
+    wire::put_word(&mut request, 8, access).map_err(errno)?;
+    private
+        .registration
+        .invoke(super::application_abi::LOOKUP, &mut request)?;
+    Ok(FaultPage {
+        vma,
+        address,
+        physical: wire::word(&request, 16).map_err(errno)?,
+        permissions: wire::word(&request, 24).map_err(errno)?,
+    })
+}
+
 // SAFETY: The locked live VMA retains its file, module, mirror and application.
 unsafe extern "C" fn fault(vmf: *mut bindings::vm_fault) -> bindings::vm_fault_t {
     let result = (|| -> Result<bindings::vm_fault_t> {
-        // SAFETY: Linux supplies the live fault structure and retained VMA.
-        let (vma, address, flags) = unsafe {
-            (
-                (*vmf).__bindgen_anon_1.vma,
-                (*vmf).__bindgen_anon_1.address,
-                (*vmf).flags,
-            )
-        };
-        let private = unsafe { &*(*(*vma).vm_file).private_data.cast::<MappingFile>() };
-        let mirror = &private.mirror;
-        if unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
-            || address < mirror.start
-            || address >= mirror.end
-        {
-            return Err(EACCES);
-        }
-        let mut request = [0; 32];
-        wire::put_word(&mut request, 0, address).map_err(errno)?;
-        // FAULT_FLAG_WRITE=bit 0 and FAULT_FLAG_INSTRUCTION=bit 8 in Linux.
-        let access = u64::from(flags & 1 != 0) | u64::from(flags & 256 != 0) << 1;
-        wire::put_word(&mut request, 8, access).map_err(errno)?;
-        private
-            .registration
-            .invoke(super::application_abi::LOOKUP, &mut request)?;
-        let physical = wire::word(&request, 16).map_err(errno)?;
-        let permissions = wire::word(&request, 24).map_err(errno)?;
+        // SAFETY: Linux retains the VMA throughout this callback.
+        let page = unsafe { lookup_fault(vmf, false) }?;
         // SAFETY: The kernel connection validated this process's live guest
         // page. Linux installs only a 4-KiB PFN and preserves VMA protections,
         // further restricted by the guest's effective page-table permissions.
         unsafe {
-            let mut protection = (*vma).vm_page_prot;
-            if permissions & 1 == 0 {
+            let mut protection = (*page.vma).vm_page_prot;
+            if page.permissions & 1 == 0 {
                 protection.pgprot &= !2;
             }
-            if permissions & 2 == 0 {
+            if page.permissions & 2 == 0 {
                 protection.pgprot |= 1 << 63;
             }
             Ok(bindings::vmf_insert_pfn_prot(
-                vma,
-                address & !4095,
-                physical >> 12,
+                page.vma,
+                page.address & !4095,
+                page.physical >> 12,
                 protection,
             ))
         }
     })();
     result.unwrap_or(bindings::vm_fault_reason_VM_FAULT_SIGBUS)
+}
+
+// SAFETY: Linux retains the VMA while its original PTE awaits a write upgrade.
+unsafe extern "C" fn pfn_mkwrite(vmf: *mut bindings::vm_fault) -> bindings::vm_fault_t {
+    // The prepared image remains owned by this VMA's application connection.
+    // Recheck guest write permission; zero lets Linux lock and revalidate the
+    // original PTE in finish_mkwrite_fault. Inserting a PFN here would return
+    // VM_FAULT_NOPAGE and leave the PTE read-only, causing an endless refault.
+    match unsafe { lookup_fault(vmf, true) } {
+        Ok(_) => 0,
+        Err(_) => bindings::vm_fault_reason_VM_FAULT_SIGBUS,
+    }
 }
 
 // SAFETY: Preserve guest PTE permissions until the full synchronized mprotect
@@ -368,7 +398,7 @@ static VM_OPERATIONS: VmOperations = VmOperations({
     let mut operations: bindings::vm_operations_struct =
         unsafe { MaybeUninit::zeroed().assume_init() };
     operations.fault = Some(fault);
-    operations.pfn_mkwrite = Some(fault);
+    operations.pfn_mkwrite = Some(pfn_mkwrite);
     operations.mprotect = Some(mprotect);
     operations.mremap = Some(mremap);
     operations

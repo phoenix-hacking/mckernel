@@ -373,3 +373,33 @@ actual guest text/stack execute attributes and Linux's anon-inode mount policy.
 The original failed guest capture remains evidence; retry with a fresh module
 and guest. Full application execution still requires the same guest scheduling,
 syscall and lifecycle work, with no reduction in the requested end state.
+
+Image guest attempt 2 write-notify diagnosis: the preserved emergency capture
+has Linux CPU 2 in asm_exc_page_fault (RIP 0xffffffff82001280, matching the
+pinned System.map) with CR2 0x600080, exactly the probe's data store. The run
+remains FAIL at its original 600-second timeout. Linux mm/mmap.c:81 and
+mm/vma.c:1948 intentionally give a shared writable PFN mapping an initially
+read-only vm_page_prot when pfn_mkwrite is installed. mm/memory.c:2494 calls
+insert_pfn with mkwrite=false and returns VM_FAULT_NOPAGE; using that same fault
+callback for pfn_mkwrite causes wp_pfn_shared (line 3614) to return without
+finish_mkwrite_fault (line 3590), repeatedly retrying the unchanged read-only PTE.
+
+Reuse the current exact-registration/MM guest LOOKUP permission check for both
+callbacks, but give pfn_mkwrite its required success return of zero so Linux
+locks, revalidates the original PTE and performs the write upgrade. Keep initial
+PFN insertion in fault only. Guest text still requires an explicit successful
+write-authorized LOOKUP; a rejected write returns SIGBUS. This introduces no
+new C bridge, allocator, registry or private userspace ABI. The prepared image
+and its page table are stable under the VMA-retained connection; full running
+image invalidation and remote page faults remain required before START parity.
+
+Extend the actual x86_64 guest probe with a joined raw-vfork child sharing the
+originating MM: it must first write the original value to the second data page,
+then publish a shared progress marker, and finally receive SIGBUS on a text
+write. The parent checks both the progress marker and exact termination signal
+and verifies all text bytes unchanged. This distinguishes write-permission
+rejection from a blanket foreign-MM rejection. Disable core dumps for this
+fixture and keep all child work inside the syscall assembly until exit/fault,
+so vfork does not corrupt the suspended parent's stack. Preserve the original
+failed helper/source/captures; use fresh module 7 and guest 3. Keep all baseline,
+physical-memory, queue, capability and lifecycle assertions unchanged in strength.
