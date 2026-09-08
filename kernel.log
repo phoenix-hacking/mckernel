@@ -33917,3 +33917,15 @@ argument from byte 40. Sysfs uses sysfs_arg1 at byte 24. Its resulting zero
 address fails whole-owned-page validation. Stop and retain this failure;
 correct only the capture's next-message decoder against the existing packet
 ABI and rerun. No complete startup-capture PASS is claimed for attempt 1.
+
+2026-09-07 local date — native sysfs objects build 2 FAILED user-probe link.
+Command: mckernel-container native python3 -B /work/build-native-sysfs-objects.py 2
+Environment: pinned native Linux 6.12/Rust 1.92 container, CPUs 2-5,
+four-CPU/12-GiB limits. Full inputs and logs are preserved under
+/work/native-sysfs-objects-module-20260907-2. Source formatting, the Rust
+module build, all 21 independent C/Rust layout values and ELF/no-SIMD checks
+pass. The new libc-based userspace fixture then fails its static link:
+/usr/bin/ld: cannot find -lc. This container lacks static libc. Stop before
+guest validation. Use its existing dynamic libc and loader, retain their
+exact bytes and dependency report in the isolated initramfs, and rebuild the
+fixture. No sysfs runtime or complete attempt-2 PASS is claimed.

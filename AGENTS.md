@@ -24,6 +24,16 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native sysfs object WIP: the missing Rust directory/file/link owners now build
+against the pinned Linux, with all 21 generated layout values matching an
+independent C witness and passing ELF/no-SIMD checks. Module attempt 3 includes
+the userspace callback/teardown probe; attempt 2's missing static-libc link is
+recorded in `kernel.log`. Runtime validation is next. See
+`docs/verification/native-sysfs-integration-plan.md` for the existing Rust reuse
+map and remaining OS-device, tree, topology and request-dispatch integration.
+The new objects currently have a disposable module consumer only. Neither
+SYSFS_REQ_SETUP completion nor a new McKernel boot milestone is claimed.
+
 Native vDSO service checkpoint (2026-09-07 local date): both actual-start ABIs
 now complete the versioned 128-byte exchange. Independent QMP captures match
 the Linux text/time/RNG pages, all descriptor bytes, guest validation state 2,
