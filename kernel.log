@@ -33854,3 +33854,15 @@ repr(align) members. No rebuilt kernel, module or service pass is claimed.
 Preserve the generated bindings and failed source before narrowing the binding
 surface or fixing its exact unsupported type boundary. Keep Linux's actual
 vDSO declarations/layout and the original configured production C behavior.
+
+2026-09-08 — native vDSO kernel attempt 2 FAILED Rust binding compilation.
+Command: mckernel-container native python3 -B /work/build-native-vdso-kernel.py 2
+Environment: same pinned native four-CPU/12-GiB container. Evidence:
+/work/native-vdso-kernel-20260907-2, whose record retains exact timestamps.
+The exact C layout witness passes again. Making only the two MSI leaf unions
+opaque leaves explicit bindgen alignment in their packed parent structures,
+so E0588 persists at six containing types. Stop this validation and preserve
+the second generated output. Do not recursively hide unrelated Hyper-V types.
+The vDSO data header can retain its actual structs and exclude its private
+user-space implementation-header inclusion only for Linux's existing
+__BINDGEN__ mode. Prove unchanged normal C preprocessing before rebuilding.

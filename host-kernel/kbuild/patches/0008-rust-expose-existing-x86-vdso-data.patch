@@ -4,9 +4,10 @@ Subject: [PATCH] rust: expose existing x86 vDSO image and generic data
 The native Rust SMP service needs Linux's actual vDSO text and continuously
 updated generic data pages. Export the existing permanent objects and expose
 their existing declarations to bindgen. Linux keeps all allocation and update
-ownership; no C function body is added or changed. Keep the unrelated packed
-Hyper-V MSI register unions opaque, following the existing x86 MSI binding
-rule; their generated nested bitfield alignment is not representable in Rust.
+ownership; no C function body is added or changed. Bindgen
+consumes the existing data declarations, while the private user-space helper
+headers remain selected only for normal C compilation. This avoids exposing
+unrelated Hyper-V implementation types to Rust.
 
 --- a/arch/x86/entry/vdso/vma.c
 +++ b/arch/x86/entry/vdso/vma.c
@@ -62,14 +63,20 @@ rule; their generated nested bitfield alignment is not representable in Rust.
  #endif
  
  #include <kunit/test.h>
---- a/rust/bindgen_parameters
-+++ b/rust/bindgen_parameters
-@@ -9,6 +9,8 @@
- --opaque-type alt_instr
- --opaque-type x86_msi_data
- --opaque-type x86_msi_addr_lo
-+--opaque-type hv_msi_address_register
-+--opaque-type hv_msi_data_register
+--- a/include/vdso/datapage.h
++++ b/include/vdso/datapage.h
+@@ -191,11 +191,14 @@
+  * - clock_gettime_fallback(): fallback for clock_gettime.
+  * - clock_getres_fallback(): fallback for clock_getres.
+  */
++/* Rust consumes data declarations, not the private user-space helpers. */
++#ifndef __BINDGEN__
+ #ifdef ENABLE_COMPAT_VDSO
+ #include <asm/vdso/compat_gettimeofday.h>
+ #else
+ #include <asm/vdso/gettimeofday.h>
+ #endif /* ENABLE_COMPAT_VDSO */
++#endif /* !__BINDGEN__ */
  
- # `try` is a reserved keyword since Rust 2018; solved in `bindgen` v0.59.2,
- # commit 2aed6b021680 ("context: Escape the try keyword properly").
+ #else /* !__ASSEMBLY__ */
+ 

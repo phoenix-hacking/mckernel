@@ -69,3 +69,14 @@ and implementation stay unchanged, and the native vDSO adapter does not access
 them. The actual vDSO structures remain fully generated and independently
 witnessed. A new capture will reverse only the exact failed patch before
 applying the corrected complete patch and rebuilding.
+
+That leaf-only opacity retry also fails: bindgen keeps explicit alignment on
+the opaque unions, which still cannot be embedded in their packed parents.
+Preserve the second failure and remove the additional opaque-type rules.
+The next patch instead uses Linux's existing `__BINDGEN__` preprocessor mode
+to omit only the private user-space helper-header inclusion at the end of
+`include/vdso/datapage.h`. All actual vDSO data declarations remain visible;
+normal C selects exactly the original implementation. Compare normal C
+preprocessing before/after this patch, excluding source-position markers,
+then repeat the layout witness and build. No layout or production C body is
+rewritten to accommodate binding generation.
