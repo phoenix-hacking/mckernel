@@ -41,6 +41,7 @@ pub(super) struct Registration {
     pid: i32,
     armed: AtomicBool,
     reap_error: AtomicI32,
+    trace_budget: AtomicI32,
     operation: Pin<Box<Mutex<()>>>,
     mapping: Pin<Box<Mutex<Option<Arc<Mirror>>>>>,
     workers: Pin<Box<Mutex<Vec<Arc<HostWorker>>>>>,
@@ -82,6 +83,7 @@ impl Registration {
                 pid,
                 armed: AtomicBool::new(false),
                 reap_error: AtomicI32::new(0),
+                trace_budget: AtomicI32::new(64),
                 operation,
                 mapping,
                 workers,
@@ -106,6 +108,14 @@ impl Registration {
             return Err(EIO);
         }
         kernel::error::to_result(status as i32).map(|_| ())
+    }
+
+    fn trace(&self) -> bool {
+        self.trace_budget
+            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |count| {
+                (count > 0).then(|| count - 1)
+            })
+            .is_ok()
     }
 
     fn worker(&self, create: bool) -> Result<Arc<HostWorker>> {
@@ -217,6 +227,11 @@ impl Registration {
         copied?;
         commit?;
         worker.delivery.store(serial, Ordering::Release);
+        if self.trace() {
+            pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
+                self.slot, self.generation, self.pid, worker.handle, serial,
+                image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 40).map_err(errno)?);
+        }
         Ok(0)
     }
 
@@ -257,6 +272,11 @@ impl Registration {
             worker.delivery.store(0, Ordering::Release);
         }
         result?;
+        if self.trace() {
+            pr_info!("application_syscall=returned os={} generation={} pid={} worker={} delivery={} cpu={} value={}\n",
+                self.slot, self.generation, self.pid, worker.handle, serial,
+                image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 24).map_err(errno)? as i64);
+        }
         Ok(0)
     }
 
@@ -344,6 +364,21 @@ impl Registration {
             (descriptor - image::HEADER) / image::SECTION,
             image::integer(&bytes, image::CPU).map_err(errno)?
         );
+        Ok(0)
+    }
+
+    fn start_image(&self, argument: usize, compat: bool) -> Result<isize> {
+        if compat {
+            return Err(errno(-95));
+        }
+        let _operation = self.operation.lock();
+        let mirror = self.mapping.lock().clone().ok_or(EINVAL)?;
+        mirror.current()?;
+        let mut header = zero_bytes(image::HEADER)?;
+        UserSlice::new(argument, header.len())
+            .reader()
+            .read_slice(&mut header)?;
+        self.invoke(super::application_abi::START, &mut header)?;
         Ok(0)
     }
 
@@ -889,6 +924,10 @@ impl Context {
 
     pub(super) fn prepare_image(&self, argument: usize, compat: bool) -> Result<isize> {
         self.registered()?.prepare_image(argument, compat)
+    }
+
+    pub(super) fn start_image(&self, argument: usize, compat: bool) -> Result<isize> {
+        self.registered()?.start_image(argument, compat)
     }
 
     pub(super) fn transfer_image(&self, argument: usize, compat: bool) -> Result<isize> {

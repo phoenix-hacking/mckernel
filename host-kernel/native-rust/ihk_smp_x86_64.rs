@@ -262,6 +262,7 @@ unsafe extern "C" fn application_invoke(
             application_abi::WAIT_SYSCALL => application.wait_syscall(bytes),
             application_abi::COPIED_SYSCALL => application.copied_syscall(bytes),
             application_abi::RETURN_SYSCALL => application.return_syscall(bytes),
+            application_abi::START => application.start(bytes),
             _ => Err(EINVAL),
         }
     } else {

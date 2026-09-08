@@ -10,6 +10,7 @@ use core::sync::atomic::{AtomicU64, Ordering};
 pub(crate) const PACKET_BYTES: usize = 128;
 pub(crate) const PREPARE: i32 = 1;
 pub(crate) const PREPARE_REPLY: i32 = 2;
+pub(crate) const SCHEDULE: i32 = 3;
 pub(crate) const CLEANUP: i32 = 9;
 pub(crate) const CLEANUP_REPLY: i32 = 10;
 pub(crate) const TID_DELETE: i32 = 0x45;
@@ -53,6 +54,7 @@ pub(crate) struct Exchange {
     phase: Phase,
     waiter: bool,
     unscheduled_deleted: bool,
+    retirement_query: bool,
 }
 
 impl Exchange {
@@ -79,6 +81,7 @@ impl Exchange {
             phase: Phase::Reserved,
             waiter: true,
             unscheduled_deleted: false,
+            retirement_query: false,
         })
     }
 
@@ -92,6 +95,24 @@ impl Exchange {
         exchange.message = PREPARE;
         exchange.reply = PREPARE_REPLY;
         exchange.argument = descriptor;
+        Ok(exchange)
+    }
+
+    /// Read-only native PID-hash query. Ordinary cleanup ACKs cannot satisfy it.
+    pub(crate) fn retirement(os: i32, cpu: i32, pid: i32) -> Result<Self, i32> {
+        let mut exchange = Self::new(os, cpu, pid)?;
+        exchange.retirement_query = true;
+        Ok(exchange)
+    }
+
+    /// SCHEDULE has no reply; publication transfers the prepared thread owner.
+    pub(crate) fn schedule(os: i32, cpu: i32, pid: i32, thread: u64) -> Result<Self, i32> {
+        let mut exchange = Self::new(os, cpu, pid)?;
+        exchange.cleanup_target(cpu, thread)?;
+        if thread == 0 {
+            return Err(-22);
+        }
+        exchange.message = SCHEDULE;
         Ok(exchange)
     }
 
@@ -124,7 +145,7 @@ impl Exchange {
     /// Refine the reserved cleanup target only after a checked prepare reply.
     /// It must use the same guest CPU queue as preparation and scheduling.
     pub(crate) fn cleanup_target(&mut self, cpu: i32, thread: u64) -> Result<(), i32> {
-        if !self.reserved() || self.message != CLEANUP {
+        if !self.reserved() || self.message != CLEANUP || self.retirement_query {
             return Err(-16);
         }
         if cpu < 0 || thread != 0 && thread < 0xffff_8000_0000_0000 {
@@ -175,6 +196,9 @@ impl Exchange {
         packet[28..32].copy_from_slice(&self.os.to_le_bytes());
         packet[32..36].copy_from_slice(&self.pid.to_le_bytes());
         packet[40..48].copy_from_slice(&self.argument.to_le_bytes());
+        if self.retirement_query {
+            packet[120..128].copy_from_slice(b"MCRQ0001");
+        }
         Some(packet)
     }
 
@@ -182,7 +206,11 @@ impl Exchange {
         if !self.queued() {
             return Err(-16);
         }
-        self.phase = Phase::Published;
+        self.phase = if self.message == SCHEDULE {
+            Phase::Complete(0)
+        } else {
+            Phase::Published
+        };
         Ok(())
     }
 
@@ -204,6 +232,13 @@ impl Exchange {
         if self.reply == PROCFS_ANSWER
             && (i32::from_le_bytes(packet[32..36].try_into().unwrap()) != self.pid
                 || &packet[120..128] != b"MCPR0001")
+        {
+            return Err(-2);
+        }
+        if self.retirement_query
+            && (i32::from_le_bytes(packet[28..32].try_into().unwrap()) != self.os
+                || i32::from_le_bytes(packet[32..36].try_into().unwrap()) != self.pid
+                || &packet[120..128] != b"MCRE0001")
         {
             return Err(-2);
         }

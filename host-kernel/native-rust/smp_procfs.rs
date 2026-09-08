@@ -543,12 +543,16 @@ impl<const WRITE: bool> vfs::FileOps for Node<WRITE> {
 /// Stored on the existing application Entry. The namespace retains another
 /// reference only while nodes are published, so its final VFS drop happens on
 /// the independent metadata worker, never under the application state lock.
+#[pin_data]
 pub(crate) struct Process {
     remote: Arc<Remote>,
     context: Arc<Context>,
     uid: u32,
     gid: u32,
     published: AtomicBool,
+    #[pin]
+    tids: Mutex<Vec<i32>>,
+    main_seen: AtomicBool,
 }
 impl Process {
     pub(crate) fn new(
@@ -559,30 +563,36 @@ impl Process {
         uid: u32,
         gid: u32,
     ) -> Result<Arc<Self>> {
-        Ok(Arc::new(
-            Self {
+        let context = Arc::new(
+            Context {
+                key,
+                pid,
+                cpu,
+                live: AtomicBool::new(true),
+            },
+            GFP_KERNEL,
+        )?;
+        Arc::pin_init(
+            pin_init!(Self {
                 remote,
-                context: Arc::new(
-                    Context {
-                        key,
-                        pid,
-                        cpu,
-                        live: AtomicBool::new(true),
-                    },
-                    GFP_KERNEL,
-                )?,
+                context,
                 uid,
                 gid,
                 published: AtomicBool::new(false),
-            },
+                tids <- new_mutex!(Vec::new()),
+                main_seen: AtomicBool::new(false),
+            }),
             GFP_KERNEL,
-        )?)
+        )
     }
     pub(crate) fn close(&self) {
         self.context.live.store(false, Ordering::Release);
     }
     pub(crate) fn drained(&self) -> bool {
         !self.published.load(Ordering::Acquire) && self.remote.drained(self.context.key)
+    }
+    pub(crate) fn threads_retired(&self) -> bool {
+        self.main_seen.load(Ordering::Acquire) && self.tids.lock().is_empty()
     }
 }
 
@@ -666,9 +676,23 @@ impl Service {
     }
 
     pub(super) fn create(&mut self, process: Arc<Process>, tid: i32) -> Result {
-        if tid <= 0 || !process.context.live.load(Ordering::Acquire) {
+        if tid <= 0 {
             return Err(EINVAL);
         }
+        {
+            let mut tids = process.tids.lock();
+            // Metadata mutation is serialized by Service. Repeated CREATE
+            // acknowledges the already published identity without double count.
+            if tids.contains(&tid) {
+                return Ok(());
+            }
+            if tids.len() == 4096 {
+                return Err(ENOMEM);
+            }
+            tids.reserve(1, GFP_KERNEL)?;
+        }
+        // Even a CREATE racing close must complete before the guest can exit.
+        // Its closed Context rejects opens; the next metadata pass removes it.
         if !self
             .processes
             .iter()
@@ -714,6 +738,17 @@ impl Service {
             },
             GFP_KERNEL,
         )?;
+        process.tids.lock().push(tid, GFP_KERNEL)?;
+        if tid == process.context.pid {
+            process.main_seen.store(true, Ordering::Release);
+        }
+        pr_info!(
+            "IHK-SMP: application procfs published os={} generation={} pid={} tid={}\n",
+            process.remote.memory.owner.slot(),
+            process.remote.memory.owner.generation(),
+            process.context.pid,
+            tid
+        );
         Ok(())
     }
 
@@ -758,17 +793,28 @@ impl Service {
     }
 
     pub(super) fn delete(&mut self, process: &Process, tid: i32) -> Result {
-        let entry = self
+        if let Some(entry) = self
             .processes
             .iter_mut()
             .find(|entry| entry.process.context.key == process.context.key)
-            .ok_or(ENOENT)?;
-        let index = entry
-            .tids
-            .iter()
-            .position(|entry| entry.tid == tid)
-            .ok_or(ENOENT)?;
-        drop(entry.tids.remove(index));
+        {
+            if let Some(index) = entry.tids.iter().position(|entry| entry.tid == tid) {
+                drop(entry.tids.remove(index));
+            }
+        }
+        // Namespace rundown may already have removed all nodes. Preserve the
+        // ledger until this advisory event; never access DELETE's resp_pa.
+        let mut tids = process.tids.lock();
+        if let Some(index) = tids.iter().position(|value| *value == tid) {
+            tids.remove(index);
+            pr_info!(
+                "IHK-SMP: application procfs deleted os={} generation={} pid={} tid={}\n",
+                process.remote.memory.owner.slot(),
+                process.remote.memory.owner.generation(),
+                process.context.pid,
+                tid
+            );
+        }
         Ok(())
     }
 

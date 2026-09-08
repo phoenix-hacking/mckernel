@@ -821,6 +821,10 @@ impl Application {
         )
     }
 
+    pub(in super::super) fn start(&self, bytes: &[u8]) -> Result {
+        self.started.runtime.application.start(self.token, bytes)
+    }
+
     pub(in super::super) fn lookup(&self, bytes: &mut [u8]) -> Result {
         if bytes.len() != 32 {
             return Err(EINVAL);

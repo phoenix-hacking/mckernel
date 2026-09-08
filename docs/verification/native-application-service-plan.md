@@ -1279,3 +1279,52 @@ three pinned formatter replays verify. There is no scheduled cleanup or live
 syscall-delivery claim; no McKernel application has executed. Continue the
 explicit scheduled-retirement contract and START, then all documented baseline
 runs before announcing the Astra Ultra handoff.
+
+## Scheduled retirement and START implementation review, 2026-09-08
+
+Reviewed parent: 06976ff31b23cc2a3f885539cbf55feede724cd5, fetched from
+GitHub and compared against 94 exact source/evidence blobs. Previous goal turn
+made progress: independent Linux worker/TGID retirement is now guest-proven.
+
+Retain the selected guest Rust host_helpers::host_cleanup_process_request_result
+and its ordinary ACK-before-terminate ordering, process_helpers final-reference
+PID-hash detachment, procfs advisory DELETE producers and all C fallback bodies.
+Add a native-Linux-6.12-only read-only retirement query to the existing cleanup
+handler: request CLEANUP/arg=0/resp_pa=MCRQ0001, response CLEANUP_REPLY with
+MCRE0001 plus exact PID, OS, CPU and token. The bridge validates its current
+resource set and process hash before using existing find_process/process_unlock;
+missing configuration is an error, not proof of absence. A present PID gives
+EAGAIN. No process reference or peer pointer escapes the lookup lock. Ordinary
+legacy cleanup packet bytes and behavior remain unchanged.
+
+Adapt the existing native Exchange and Entry owners, rather than introducing
+another guest PID registry or Process ABI field. Only after the original
+cleanup ACK may an independently pumped, uniquely tokened query be sent. A
+matching zero answer is required alongside all recorded TID deletions and
+retired syscall/procfs/mirror owners. PID hash absence occurs on the final
+process reference; its remaining guest-only destruction does not borrow host
+application pages after the other gates drain. DELETE alone and unrelated
+same-CPU packets are not retirement proof. EAGAIN retries are rate bounded;
+malformed, stale and unmarked answers cannot retire the Entry. Unknown or
+incomplete state retains the bounded registration and excludes PID reuse.
+
+Keep a bounded TID ledger on the existing ProcfsProcess, independently of
+namespace nodes. Closing the namespace must preserve those identities until
+DELETE. CREATE racing with close must still finish real publication and ACK,
+then remove the closed namespace; callbacks refuse new opens. Duplicate
+CREATE/DELETE must not alter the count twice. Close both syscall admission and
+procfs before waiting for either to drain, so namespace rundown cannot prevent
+worker cancellation. Validate event CPU against the actual OS topology; threads
+may use a different CPU from the original prepare target.
+
+Adapt the unchanged MCEXEC_UP_START_IMAGE path through mcctrl's existing
+Registration operation serializer and referenced mirror MM. Copy the actual
+user header and compare its identity/target to the retained prepare output;
+only the retained guest thread pointer may enter SCHEDULE. Queue publication
+and the transition to scheduled share the existing Entry mutex. Unpublished
+schedule work may cancel into ordinary unscheduled cleanup; once published,
+cleanup always uses arg=0 and the explicit scheduled retirement gates. Keep
+mcexec unchanged. Verify exact wire/negative cases and source selection, compile
+native modules and fallback/Rust/native images, preserve original regressions,
+then attempt the actual hello/exit-37 launcher baseline. No application or
+handoff claim is made by this design or compilation alone.

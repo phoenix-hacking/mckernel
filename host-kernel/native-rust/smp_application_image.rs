@@ -161,6 +161,34 @@ impl Preparation {
         self.result
     }
 
+    pub(crate) fn authorize_start(&self, header: &[u8]) -> Result {
+        kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
+        if header.len() != wire::HEADER {
+            return Err(EINVAL);
+        }
+        for offset in [
+            0,
+            wire::THREAD,
+            wire::PAGE_TABLE,
+            wire::USER_START,
+            wire::USER_END,
+        ] {
+            if wire::word(header, offset).map_err(errno)?
+                != wire::word(&self.output, offset).map_err(errno)?
+            {
+                return Err(EINVAL);
+            }
+        }
+        for offset in [wire::NUM_SECTIONS, wire::CPU, wire::PID] {
+            if wire::integer(header, offset).map_err(errno)?
+                != wire::integer(&self.output, offset).map_err(errno)?
+            {
+                return Err(EINVAL);
+            }
+        }
+        Ok(())
+    }
+
     /// PREPARE's kernel-only caller overwrites these raw kuid/kgid scalars
     /// from its retained credentials. Never borrow a task after dropping RCU.
     pub(crate) fn procfs_credentials(&self) -> Result<(u32, u32)> {

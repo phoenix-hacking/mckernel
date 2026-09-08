@@ -5945,6 +5945,18 @@ unsafe extern "C" fn host_cleanup_process_request_bridge(
     response_channel: *mut c_void,
     packet: *mut IkcScdPacket,
 ) -> CInt {
+    #[cfg(native_linux_irq_work_v6_12)]
+    if !packet.is_null() {
+        let body = (&raw mut (*packet).body).cast::<IkcScdPacketTraditional>();
+        if (*body).resp_pa == CULong::from_le_bytes(*b"MCRQ0001") {
+            return host_process_retirement_query_result(
+                response_channel,
+                packet,
+                Some(host_process_retirement_lookup_bridge),
+                Some(host_ikc_packet_send_raw_bridge),
+            );
+        }
+    }
     let _ = host_cleanup_process_request_result(
         response_channel,
         packet,
@@ -5954,6 +5966,67 @@ unsafe extern "C" fn host_cleanup_process_request_bridge(
         Some(host_ikc_packet_send_raw_bridge),
     );
     0
+}
+
+/// Native query completion follows the locked lookup, never ordinary cleanup.
+/// It maps no peer address and neither terminates nor borrows the old thread.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn host_process_retirement_query_result(
+    channel: *mut c_void,
+    request: *mut IkcScdPacket,
+    lookup_fn: HostCleanupProcessFn,
+    send_fn: HostIkcPacketSendFn,
+) -> CInt {
+    if request.is_null() || lookup_fn.is_none() || send_fn.is_none() {
+        return -EINVAL;
+    }
+    let body = (&raw mut (*request).body).cast::<IkcScdPacketTraditional>();
+    if (*request).msg != SCD_MSG_CLEANUP_PROCESS
+        || (*body).pid <= 0
+        || (*body).arg != 0
+        || (*body).resp_pa != CULong::from_le_bytes(*b"MCRQ0001")
+    {
+        return -EINVAL;
+    }
+    let result = lookup_fn.unwrap()((*body).pid);
+    let mut response = core::mem::MaybeUninit::<IkcScdPacket>::uninit();
+    zero_ikc_scd_packet(response.as_mut_ptr());
+    let response = response.as_mut_ptr();
+    let output = (&raw mut (*response).body).cast::<IkcScdPacketTraditional>();
+    (*response).msg = SCD_MSG_CLEANUP_PROCESS_RESP;
+    (*response).err = result;
+    (*response).reply = (*request).reply;
+    (*output).ref_ = (*body).ref_;
+    (*output).osnum = (*body).osnum;
+    (*output).pid = (*body).pid;
+    (*output).resp_pa = CULong::from_le_bytes(*b"MCRE0001");
+    send_fn.unwrap()(channel, response);
+    0
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe extern "C" fn host_process_retirement_lookup_bridge(pid: CInt) -> CInt {
+    use crate::lock_helpers::McsRwlockNodeIrqsave;
+    unsafe extern "C" {
+        fn find_process(pid: CInt, lock: *mut McsRwlockNodeIrqsave) -> *mut Process;
+        fn process_unlock(process: *mut Process, lock: *mut McsRwlockNodeIrqsave);
+    }
+    let cpu = get_this_cpu_local_var();
+    if pid <= 0 || cpu.is_null() || (*cpu).resource_set.is_null()
+        || (*(*cpu).resource_set).process_hash.is_null()
+    {
+        return -EINVAL;
+    }
+    let mut lock = core::mem::MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let process = find_process(pid, lock.as_mut_ptr());
+    if process.is_null() {
+        // find_process already unlocks on absence. No reference was acquired.
+        0
+    } else {
+        process_unlock(process, lock.as_mut_ptr());
+        -EAGAIN
+    }
 }
 
 unsafe extern "C" fn host_cleanup_fd_request_bridge(

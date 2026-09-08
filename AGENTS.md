@@ -196,6 +196,19 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native START WIP, 2026-09-08:
+`docs/verification/native-application-start-wip-20260908.json` records compiled
+START, trusted prepare-target validation, independent procfs TID tracking and
+explicit native scheduled-retirement queries. Module 3 passes all three module
+builds, with bounded live WAIT/RET tracing. Protocol 2 passes seven new exact
+native dispatch/lookup/wire tests and nineteen original protocol/image tests.
+Original module 1 and protocol 1 failures are retained. Actual guest images
+must now be rebuilt with the native query branch, followed by original guest
+regressions, unchanged mcexec hello/exit-37 and the complete readiness baseline.
+No application or scheduled-runtime acceptance is claimed. Preserve every
+current and failed capture; full archives remain pending at this WIP.
+
+
 Latest independent reaper checkpoint, 2026-09-08:
 `docs/verification/native-application-reaper-checkpoint-20260908.json` retains
 passing native module 1, actual guest 3 and guest 5, and all three original

@@ -24,7 +24,11 @@ fn errno(code: i32) -> Error {
 
 struct Entry {
     cleanup: Exchange,
+    owner_slot: i32,
     prepare: Option<Preparation>,
+    schedule: Option<Exchange>,
+    retirement: Option<Exchange>,
+    retirement_after: u64,
     procfs: Option<Arc<ProcfsProcess>>,
     syscalls: Mailbox<SyscallResponse>,
     scheduled: bool,
@@ -40,39 +44,58 @@ impl Entry {
     fn next(&self) -> &Exchange {
         match self.prepare.as_ref() {
             Some(prepare) if prepare.result().is_none() => &prepare.exchange,
-            _ => &self.cleanup,
+            _ => match self.schedule.as_ref() {
+                Some(schedule) if schedule.result().is_none() => schedule,
+                _ => self.retirement.as_ref().unwrap_or(&self.cleanup),
+            },
         }
     }
     fn next_mut(&mut self) -> &mut Exchange {
         match self.prepare.as_mut() {
             Some(prepare) if prepare.result().is_none() => &mut prepare.exchange,
-            _ => &mut self.cleanup,
+            _ => match self.schedule.as_mut() {
+                Some(schedule) if schedule.result().is_none() => schedule,
+                _ => self.retirement.as_mut().unwrap_or(&mut self.cleanup),
+            },
         }
     }
+    fn release_ready(&self) -> bool {
+        !self.quarantined
+            && self.cleanup.release_ready()
+            && self.syscalls.drained()
+            && self.procfs.as_ref().is_none_or(|procfs| procfs.drained())
+            && (!self.scheduled
+                || self.cleanup.result() == Some(0)
+                    && self
+                        .retirement
+                        .as_ref()
+                        .is_some_and(|query| query.result() == Some(0))
+                    && self
+                        .procfs
+                        .as_ref()
+                        .is_some_and(|procfs| procfs.threads_retired()))
+    }
+
     fn request_cleanup(&mut self) -> Result {
         self.needs_cleanup = true;
         if let Some(procfs) = &self.procfs {
             procfs.close();
-            // Namespace removal runs on the metadata worker. The packet
-            // worker continues remote releases while Linux drains open files.
-            if !procfs.drained() {
-                return Ok(());
-            }
         }
         if self.quarantined {
             return Err(errno(-71));
         }
+        // Close both admissions before waiting: procfs rundown can need a
+        // blocked syscall to be cancelled by the independent packet pump.
         if let Err(error) = self.syscalls.close() {
             self.quarantined = true;
             return Err(errno(error));
         }
-        if !self.syscalls.drained() {
-            return Ok(());
+        if !self.scheduled {
+            self.schedule = None; // Nothing published can be cancelled here.
         }
-        // START's future scheduled owner must supply its own retirement path.
-        // Never terminate a scheduled task through the prepared-thread pointer.
-        if self.scheduled {
-            return Err(errno(-95));
+        if !self.syscalls.drained() || self.procfs.as_ref().is_some_and(|procfs| !procfs.drained())
+        {
+            return Ok(());
         }
         if let Some(prepare) = &self.prepare {
             if prepare.result().is_none() {
@@ -80,12 +103,31 @@ impl Entry {
             }
             if self.cleanup.reserved() {
                 self.cleanup
-                    .cleanup_target(prepare.input.cpu, prepare.thread)
+                    .cleanup_target(
+                        prepare.input.cpu,
+                        if self.scheduled { 0 } else { prepare.thread },
+                    )
                     .map_err(errno)?;
             }
         }
         if self.cleanup.reserved() {
             self.cleanup.begin().map_err(errno)?;
+        }
+        if self.scheduled && self.cleanup.result().is_some() {
+            kernel::error::to_result(self.cleanup.result().unwrap())?;
+            let retry = self
+                .retirement
+                .as_ref()
+                .is_none_or(|query| query.result() == Some(-11));
+            // Existing exported monotonic seconds clock bounds repeated queries.
+            let now = unsafe { bindings::ktime_get_seconds() } as u64;
+            if retry && now >= self.retirement_after {
+                let mut query =
+                    Exchange::retirement(self.owner_slot, self.cleanup.cpu(), self.cleanup.pid())
+                        .map_err(errno)?;
+                query.begin().map_err(errno)?;
+                self.retirement = Some(query);
+            }
         }
         Ok(())
     }
@@ -131,7 +173,11 @@ impl Remote {
         let token = cleanup.token();
         *slot = Some(Entry {
             cleanup,
+            owner_slot: self.owner.slot() as i32,
             prepare: None,
+            schedule: None,
+            retirement: None,
+            retirement_after: 0,
             procfs: None,
             syscalls,
             scheduled: false,
@@ -154,9 +200,21 @@ impl Remote {
 
     pub(crate) fn advance(&self) -> Result {
         let mut slots = self.slots.lock();
-        for entry in slots.iter_mut().flatten() {
-            if entry.needs_cleanup && !entry.quarantined {
-                entry.request_cleanup()?;
+        for slot in &mut *slots {
+            if let Some(entry) = slot {
+                if entry.needs_cleanup && !entry.quarantined {
+                    if let Err(error) = entry.request_cleanup() {
+                        entry.quarantined = true;
+                        pr_err!(
+                            "IHK-SMP: application cleanup retained pid={} errno={}\n",
+                            entry.cleanup.pid(),
+                            error.to_errno()
+                        );
+                    }
+                }
+                if entry.closed && entry.cleanup.retired() && entry.release_ready() {
+                    *slot = None;
+                }
             }
         }
         Ok(())
@@ -170,7 +228,7 @@ impl Remote {
             .find(|entry| entry.cleanup.pid() == pid)
             .ok_or(ENOENT)?;
         let image = entry.prepare.as_ref().ok_or(EINVAL)?;
-        if entry.quarantined || image.input.cpu != cpu {
+        if entry.quarantined || cpu < 0 {
             return Err(EINVAL);
         }
         kernel::error::to_result(image.result().ok_or(EBUSY)?)?;
@@ -183,19 +241,33 @@ impl Remote {
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
         let mut slots = self.slots.lock();
-        let Some(exchange) = slots
+        let Some(entry) = slots
             .iter_mut()
             .flatten()
-            .map(Entry::next_mut)
-            .find(|exchange| exchange.queued() && exchange.cpu() == cpu)
+            .find(|entry| entry.next().queued() && entry.next().cpu() == cpu)
         else {
             return Ok(false);
         };
+        let is_schedule = entry
+            .schedule
+            .as_ref()
+            .is_some_and(|schedule| schedule.queued());
+        let exchange = entry.next_mut();
         let packet = exchange.outgoing().ok_or(EIO)?;
-        // Queue publication and the state transition share this short lock.
-        // A full queue retries the same bytes and retains every physical owner.
+        // Publication and the irreversible scheduled transition share this lock.
         send(&packet)?;
         exchange.published().map_err(errno)?;
+        if is_schedule {
+            entry.scheduled = true;
+            pr_info!(
+                "IHK-SMP: application SCHEDULE os={} generation={} pid={} cpu={}\n",
+                self.owner.slot(),
+                self.owner.generation(),
+                entry.cleanup.pid(),
+                cpu
+            );
+            self.changed.notify_all();
+        }
         Ok(true)
     }
 
@@ -216,7 +288,7 @@ impl Remote {
                         pr_info!("IHK-SMP: application unscheduled delete os={} generation={} pid={} cpu={} tid=0 cleanup_token={}\n",
                             self.owner.slot(), self.owner.generation(), entry.cleanup.pid(),
                             entry.cleanup.cpu(), entry.key().wire());
-                        if entry.closed && entry.cleanup.retired() {
+                        if entry.closed && entry.cleanup.retired() && entry.release_ready() {
                             *slot = None;
                         }
                         return Ok(());
@@ -248,12 +320,33 @@ impl Remote {
                     Err(error) => return Err(errno(error)),
                 }
             }
+            if let Some(query) = &mut entry.retirement {
+                match query.accept(packet) {
+                    Ok(()) => {
+                        let result = query.result().unwrap();
+                        pr_info!("IHK-SMP: application retirement os={} generation={} pid={} token={} errno={}\n",
+                            self.owner.slot(), self.owner.generation(), query.pid(), query.token().wire(), result);
+                        if result == -11 {
+                            entry.retirement_after =
+                                unsafe { bindings::ktime_get_seconds() } as u64 + 1;
+                        } else if result != 0 {
+                            entry.quarantined = true;
+                        }
+                        if entry.closed && entry.cleanup.retired() && entry.release_ready() {
+                            *slot = None;
+                        }
+                        return Ok(());
+                    }
+                    Err(-2 | -16) => continue,
+                    Err(error) => return Err(errno(error)),
+                }
+            }
             match entry.cleanup.accept(packet) {
                 Ok(()) => {
                     pr_info!("IHK-SMP: application cleanup ACK os={} generation={} pid={} token={} errno={} abandoned={}\n",
                         self.owner.slot(), self.owner.generation(), entry.cleanup.pid(), entry.key().wire(),
                         entry.cleanup.result().unwrap(), entry.cleanup.abandoned() as u8);
-                    if entry.closed && entry.cleanup.retired() {
+                    if entry.closed && entry.cleanup.retired() && entry.release_ready() {
                         *slot = None;
                     }
                     return Ok(());
@@ -283,8 +376,7 @@ impl Remote {
             }
             if entry.syscalls.drained()
                 && entry.procfs.as_ref().is_none_or(|procfs| procfs.drained())
-                && (entry.prepare.is_none() && entry.cleanup.reserved()
-                    || entry.cleanup.release_ready())
+                && (entry.prepare.is_none() && entry.cleanup.reserved() || entry.release_ready())
             {
                 *slot = None;
             } else {
@@ -592,6 +684,59 @@ impl Remote {
         Err(errno(-110))
     }
 
+    pub(crate) fn start(&self, token: Token, bytes: &[u8]) -> Result {
+        let mut slots = self.slots.lock();
+        {
+            let entry = slots
+                .iter_mut()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            if entry.closed || entry.needs_cleanup || entry.quarantined || entry.schedule.is_some()
+            {
+                return Err(EBUSY);
+            }
+            let image = entry.prepare.as_ref().ok_or(EINVAL)?;
+            image.authorize_start(bytes)?;
+            let mut schedule = Exchange::schedule(
+                self.owner.slot() as i32,
+                image.input.cpu,
+                image.input.pid,
+                image.thread,
+            )
+            .map_err(errno)?;
+            schedule.begin().map_err(errno)?;
+            entry.schedule = Some(schedule);
+        }
+        loop {
+            let entry = slots
+                .iter_mut()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            if entry.scheduled {
+                return Ok(());
+            }
+            if entry.needs_cleanup || entry.closed || entry.quarantined {
+                return Err(EBUSY);
+            }
+            if self.changed.wait_interruptible(&mut slots) {
+                let entry = slots
+                    .iter_mut()
+                    .flatten()
+                    .find(|entry| entry.key() == token)
+                    .ok_or(ENOENT)?;
+                if entry.scheduled {
+                    return Ok(());
+                }
+                // The same mutex excludes publication while cancelling queued work.
+                entry.schedule = None;
+                entry.request_cleanup()?;
+                return Err(EINTR);
+            }
+        }
+    }
+
     pub(crate) fn with_prepared<T>(
         &self,
         token: Token,
@@ -636,7 +781,7 @@ impl Remote {
                 if entry.quarantined {
                     return Err(errno(-71));
                 }
-                if entry.cleanup.release_ready() {
+                if entry.release_ready() {
                     let error = entry.cleanup.result().unwrap();
                     *slot = None;
                     return kernel::error::to_result(error).map(|_| ());
