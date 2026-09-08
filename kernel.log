@@ -34534,3 +34534,17 @@ bytes, exact commands, compiler version and hashes are retained. The formatted
 file is copied back only after verifying both capture identities. This WIP
 checkpoint saves the implementation and planned controller before the long
 four-profile image build; compile and runtime acceptance are still pending.
+
+Image build attempt 1 FAILS in the reject-sysfs-legacy configuration check.
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-sysfs-images.py 1
+Environment: pinned Rocky 8 compat container, nightly Rust compiler, CPUs 2-5,
+four-CPU/12-GiB limits. Clone, formatting, focused producer verification and both
+original invalid-IRQ configuration checks pass. The new negative configuration
+assertion does not match its required diagnostic; no image build has begun.
+Preserve mckernel-native-sysfs-images-20260908-1, exact source/helper, all command
+logs and FAIL record unchanged. Inspect the configuration output before edits.
+
+The negative configuration exits nonzero at the intended new CMake guard;
+CMake wraps the final "IRQ ABI" onto another line. Normalize whitespace in
+the diagnostic comparison while requiring the same complete expected message
+and nonzero exit. Preserve the original failed capture and retry image attempt 2.
