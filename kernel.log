@@ -33889,3 +33889,17 @@ The prior API/type errors are fixed and both layout witnesses pass. Linux's
 vDSO module. Limit them to pub(crate), which matches the host and guest's
 actual module consumers. Do not suppress this lint. Validation stops before
 image builds or guest runs; no compiled service pass is claimed.
+
+2026-09-07 local date — vDSO image build 12 FAILED native image link closure.
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-boot-note-images.py 12
+Environment: pinned compatibility container, Rust nightly 1.95, original
+compatibility binutils, CPUs 2-5, four-CPU/12-GiB limits. Complete inputs/logs:
+/work/mckernel-native-irq-images-20260907-12. C fallback and legacy Rust images
+build successfully, including producer/queue checks. The native Rust object
+compiles but its final link requires slice_index_fail, panic_bounds_check and
+bcmp from the new shared descriptor codec/validation. These are absent from
+the standalone guest's retained runtime closure. Stop before runtime tests.
+Adapt the codec to fixed complete word iteration and checked storage access,
+and use scalar request/reserved validation. Preserve explicit wire encoding,
+all negative-input tests and the original failure; do not add a C runtime or
+claim native image completion from this attempt.

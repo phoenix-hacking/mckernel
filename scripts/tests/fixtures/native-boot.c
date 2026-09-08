@@ -45,6 +45,13 @@ int main(void)
     require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/native-v1.img") == 0);
     require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);
     require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+#if defined(NATIVE_VDSO_REV3)
+    // Revision 2 completes queue reads but still uses the old 88-byte vDSO
+    // descriptor. Reject it before taking any native startup resources.
+    require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/native-v2.img") == 0);
+    require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EINVAL);
+    require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+#endif
     online_mask(1);
     require(call(SYS_IOCTL, first, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, second, OS_LOAD, (long)"/images/mckernel.img") == 0);

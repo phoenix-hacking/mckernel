@@ -117,7 +117,21 @@ impl Descriptor {
     }
 
     pub(crate) fn validate_request(&self) -> Result<(), Error> {
-        if *self == Self::request() {
+        if self.busy == 1
+            && self.version == VERSION
+            && self.bytes == BYTES as u32
+            && self.status == -115
+            && self.text_pages == 0
+            && self.data_pages == 0
+            && self.clock_layout == 0
+            && self
+                .text_physical
+                .iter()
+                .chain(self.data_physical.iter())
+                .chain(self.reserved.iter())
+                .fold(0, |bits, word| bits | word)
+                == 0
+        {
             Ok(())
         } else {
             Err(Error::Request)
@@ -161,7 +175,7 @@ impl Descriptor {
         if self.clock_layout != CLOCK_LAYOUT_GENERIC_OVERFLOW_V1 {
             return Err(Error::ClockLayout);
         }
-        if self.reserved != [0; 4] {
+        if self.reserved.iter().fold(0, |bits, word| bits | word) != 0 {
             return Err(Error::Reserved);
         }
         if self.text_pages == 0
@@ -191,11 +205,11 @@ impl Descriptor {
             }
             if physical % PAGE_BYTES != 0
                 || physical > PHYSICAL_LIMIT - PAGE_BYTES
-                || seen[..count].contains(&physical)
+                || seen.contains(&physical)
             {
                 return Err(Error::Pages);
             }
-            seen[count] = physical;
+            *seen.get_mut(count).ok_or(Error::Pages)? = physical;
             count += 1;
         }
         Ok(())
@@ -205,57 +219,53 @@ impl Descriptor {
     /// of a descriptor that another kernel may be publishing.
     pub(crate) fn encode(&self) -> [u8; BYTES] {
         let mut bytes = [0_u8; BYTES];
-        bytes[..8].copy_from_slice(&self.busy.to_le_bytes());
-        for (index, value) in [
-            self.version,
-            self.bytes,
-            self.status as u32,
-            self.text_pages,
-            self.data_pages,
-            self.clock_layout,
-        ]
-        .into_iter()
-        .enumerate()
-        {
-            bytes[8 + index * 4..12 + index * 4].copy_from_slice(&value.to_le_bytes());
-        }
-        for (index, value) in self
-            .text_physical
-            .iter()
-            .chain(self.data_physical.iter())
-            .chain(self.reserved.iter())
-            .enumerate()
-        {
-            bytes[32 + index * 8..40 + index * 8].copy_from_slice(&value.to_le_bytes());
+        let words = [
+            self.busy,
+            self.version as u64 | ((self.bytes as u64) << 32),
+            self.status as u32 as u64 | ((self.text_pages as u64) << 32),
+            self.data_pages as u64 | ((self.clock_layout as u64) << 32),
+            self.text_physical[0],
+            self.text_physical[1],
+            self.data_physical[0],
+            self.data_physical[1],
+            self.data_physical[2],
+            self.data_physical[3],
+            self.data_physical[4],
+            self.data_physical[5],
+            self.reserved[0],
+            self.reserved[1],
+            self.reserved[2],
+            self.reserved[3],
+        ];
+        for (chunk, word) in bytes.chunks_exact_mut(8).zip(words) {
+            for (slot, byte) in chunk.iter_mut().zip(word.to_le_bytes()) {
+                *slot = byte;
+            }
         }
         bytes
     }
 
     pub(crate) fn decode(bytes: &[u8; BYTES]) -> Self {
-        let word = |offset| u32::from_le_bytes(bytes[offset..offset + 4].try_into().unwrap());
-        let long = |offset| u64::from_le_bytes(bytes[offset..offset + 8].try_into().unwrap());
-        let mut result = Self {
-            busy: long(0),
-            version: word(8),
-            bytes: word(12),
-            status: word(16) as i32,
-            text_pages: word(20),
-            data_pages: word(24),
-            clock_layout: word(28),
-            text_physical: [0; TEXT_PAGES],
-            data_physical: [0; DATA_PAGES],
-            reserved: [0; 4],
-        };
-        for (index, value) in result
-            .text_physical
-            .iter_mut()
-            .chain(result.data_physical.iter_mut())
-            .chain(result.reserved.iter_mut())
-            .enumerate()
-        {
-            *value = long(32 + index * 8);
+        let mut words = [0_u64; BYTES / 8];
+        for (word, chunk) in words.iter_mut().zip(bytes.chunks_exact(8)) {
+            // Exactly eight steps assemble little-endian bytes, with no
+            // dynamic slice/index panic dependency in the standalone guest.
+            *word = chunk
+                .iter()
+                .fold(0, |value, byte| (value >> 8) | ((*byte as u64) << 56));
         }
-        result
+        Self {
+            busy: words[0],
+            version: words[1] as u32,
+            bytes: (words[1] >> 32) as u32,
+            status: words[2] as i32,
+            text_pages: (words[2] >> 32) as u32,
+            data_pages: words[3] as u32,
+            clock_layout: (words[3] >> 32) as u32,
+            text_physical: [words[4], words[5]],
+            data_physical: [words[6], words[7], words[8], words[9], words[10], words[11]],
+            reserved: [words[12], words[13], words[14], words[15]],
+        }
     }
 }
 
