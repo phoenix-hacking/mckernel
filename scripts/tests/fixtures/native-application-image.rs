@@ -16,12 +16,104 @@ mod guest {
 mod procfs {
     include!("native-application-procfs-reference.rs");
 }
+#[allow(dead_code)]
+mod launcher {
+    include!("native-application-flat-rust-reference.rs");
+}
 
 use core::{
     ffi::c_void,
     mem::{align_of, offset_of, size_of},
 };
 use std::cell::RefCell;
+
+fn original_c_flat_vectors() -> Vec<Vec<u8>> {
+    include_str!("native-application-flat-c.txt")
+        .lines()
+        .map(|line| {
+            let (size, hex) = line.split_once(' ').unwrap();
+            assert_eq!(hex.len(), 2 * size.parse::<usize>().unwrap());
+            hex.as_bytes()
+                .chunks_exact(2)
+                .map(|pair| u8::from_str_radix(std::str::from_utf8(pair).unwrap(), 16).unwrap())
+                .collect()
+        })
+        .collect()
+}
+
+fn original_rust_flat(prefix: Option<&[&[u8]]>, strings: &[&[u8]]) -> Vec<u8> {
+    unsafe fn produce(prefix: *mut u8, strings: &[&[u8]]) -> (*mut u8, usize) {
+        let values: Vec<_> = strings
+            .iter()
+            .map(|value| std::ffi::CString::new(*value).unwrap())
+            .collect();
+        let mut pointers: Vec<_> = values
+            .iter()
+            .map(|value| value.as_ptr() as *mut u8)
+            .collect();
+        pointers.push(core::ptr::null_mut());
+        let mut output = core::ptr::null_mut();
+        let size = unsafe {
+            launcher::mcexec_flatten_strings_result(prefix, pointers.as_mut_ptr(), &mut output)
+        };
+        assert!(size > 0 && !output.is_null());
+        (output, size as usize)
+    }
+    unsafe {
+        let pre = prefix
+            .map(|values| produce(core::ptr::null_mut(), values).0)
+            .unwrap_or(core::ptr::null_mut());
+        let (output, size) = produce(pre, strings);
+        let bytes = core::slice::from_raw_parts(output, size).to_vec();
+        launcher::free(output);
+        launcher::free(pre);
+        bytes
+    }
+}
+
+#[test]
+fn actual_c_and_rust_launcher_flat_producers_match_byte_for_byte() {
+    let prefix: &[&[u8]] = &[b"/bin/interpreter", b"-e"];
+    let multiple: &[&[u8]] = &[b"one", b"", b"three", b"\xc3\xa9"];
+    let actual = [
+        original_rust_flat(None, &[]),
+        original_rust_flat(None, &[b""]),
+        original_rust_flat(None, &[b"/bin/native-application-hello"]),
+        original_rust_flat(None, multiple),
+        original_rust_flat(Some(prefix), &[]),
+        original_rust_flat(Some(prefix), multiple),
+    ];
+    assert_eq!(actual.as_slice(), original_c_flat_vectors());
+}
+
+#[test]
+fn actual_launcher_terminal_lengths_are_validated_without_losing_bounds() {
+    let actual = original_c_flat_vectors();
+    assert_eq!(actual.len(), 6);
+    for (case, bytes) in actual.iter().enumerate() {
+        assert_eq!(
+            image::flattened(bytes),
+            Ok(()),
+            "actual launcher case {case}"
+        );
+        let count = image::word(bytes, 0).unwrap() as usize;
+        let terminal = 8 * (count + 1);
+        assert_eq!(image::word(bytes, terminal).unwrap(), bytes.len() as u64);
+        for value in [1, bytes.len() as u64 - 1, bytes.len() as u64 + 1, u64::MAX] {
+            let mut bad = bytes.clone();
+            image::put_word(&mut bad, terminal, value).unwrap();
+            assert!(image::flattened(&bad).is_err());
+        }
+        if count != 0 {
+            let mut bad = bytes.clone();
+            image::put_word(&mut bad, 8, bytes.len() as u64).unwrap();
+            assert!(image::flattened(&bad).is_err());
+            let mut bad = bytes.clone();
+            *bad.last_mut().unwrap() = 1;
+            assert!(image::flattened(&bad).is_err());
+        }
+    }
+}
 
 fn flatten(strings: &[&[u8]]) -> Vec<u8> {
     let mut bytes = vec![0; 8 * (strings.len() + 2)];

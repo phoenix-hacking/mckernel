@@ -76,8 +76,10 @@ pub(crate) fn reservation_end(first_vma: Option<u64>) -> Result<u64, i32> {
     Ok(end)
 }
 
-/// The guest reads a signed count, count offsets, a NULL slot, then strings.
-/// Check this before the guest performs unchecked count/offset arithmetic.
+/// The guest reads a signed count and count offsets before the strings. The
+/// launcher stores the used byte length in the terminal slot; already
+/// terminated vectors may store zero. Check both encodings before the guest
+/// performs unchecked count/offset arithmetic.
 pub(crate) fn flattened(bytes: &[u8]) -> Result<(), i32> {
     if bytes.len() < 16 || bytes.len() > MAX_FLAT_BYTES {
         return Err(-7);
@@ -90,7 +92,11 @@ pub(crate) fn flattened(bytes: &[u8]) -> Result<(), i32> {
         .checked_add(2)
         .and_then(|n| n.checked_mul(8))
         .ok_or(-75)?;
-    if strings > bytes.len() || word(bytes, strings - 8)? != 0 {
+    if strings > bytes.len() {
+        return Err(-22);
+    }
+    let terminal = word(bytes, strings - 8)?;
+    if terminal != 0 && terminal != bytes.len() as u64 {
         return Err(-22);
     }
     // One scan bounds total work even when every offset names the same string.

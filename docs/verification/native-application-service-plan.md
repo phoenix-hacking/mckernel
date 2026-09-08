@@ -538,3 +538,17 @@ native and compat pointers, exact trailing NUL and buffer guards, inaccessible,
 readonly and partial-page copyout, both unbooted and running instances, and
 operation with mcctrl absent. Then retry the same unmodified actual launcher.
 Preserve the first run's build-ID failure and both harness failures unchanged.
+
+The next actual launcher run passes build-ID and process registration but
+PREPARE_IMAGE fails before publication. Both existing launcher producers,
+`mcexec.c::flatten_strings` and
+`mcexec_helpers.rs::mcexec_flatten_strings_result`, write the total used byte
+length into the terminal offset slot. The native `application_image.rs`
+validator incorrectly requires zero there. The unchanged guest consumes the
+explicit count and string offsets; init-stack construction supplies the actual
+argv/envp terminators. Preserve acceptance of the already verified zero-slot
+vectors and also accept the exact-length producer encoding, while retaining
+all count, offset, maximum-size and NUL-bounds checks. Other terminal values
+remain invalid. Reproduce the failure using exact extracted C and Rust producer
+bodies, including empty and prefix-combined vectors, before changing validation.
+Then repeat the image/protocol suite, module build and real launcher attempt.
