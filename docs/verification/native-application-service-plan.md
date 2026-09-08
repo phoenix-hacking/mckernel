@@ -1328,3 +1328,27 @@ mcexec unchanged. Verify exact wire/negative cases and source selection, compile
 native modules and fallback/Rust/native images, preserve original regressions,
 then attempt the actual hello/exit-37 launcher baseline. No application or
 handoff claim is made by this design or compilation alone.
+
+## Final-binding/reaper race review, 2026-09-08
+
+Actual current i386 regression 1 fails immediate CREATE_PPD after final close
+(PID 286, check 11, expected 0, actual EINVAL); the old registration's cleanup
+ACK/release appears afterwards. The earlier x86_64 application is independently
+PASS, but this regression blocks accepting the current baseline. Preserve the
+original assertion and failure. Do not insert a retry or delay into the probe.
+
+Review mcctrl_process::Binding::drop and the new joined reaper against the
+existing Process/Registration owners. A reaper snapshot Arc<Process>, and its
+temporary Arc<Registration> clone, can defer final registration destruction
+past close even with no VMA or active ioctl. Adapt final Binding removal to
+detach the process's executable and registration explicitly outside the global
+table lock. Borrow the registration under its short process mutex while the
+reaper invokes nonblocking WORKER_CLOSE, rather than cloning an observational
+Arc. Thus final close waits for that observation before taking/dropping its
+owner. The reaper still uses the same registry and referenced PID and still
+retries EBUSY independently; its snapshot alone cannot delay registration
+retirement. Real VMA/in-flight Arc owners must continue retaining Registration.
+Reuse the same detach operation for a truly dead TGID. Never free guest pages
+or bypass a real remaining owner just to satisfy immediate reopen. Compile and
+rerun the failing original i386 regression, then current x86_64 and real
+application runs with the corrected module.

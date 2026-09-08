@@ -25,10 +25,12 @@ remaining production or Rust/assembly obligation before ending the active goal.
 Those obligations remain tracked for subsequent work. Existing isolation,
 failure-recording, Rust preservation, disk cleanup and periodic GitHub
 checkpoint requirements continue to apply throughout the current phase.
-No native application has executed at this checkpoint. Live root procfs now
-passes actual guest reads/releases and idle WAIT/RET remains guest-tested.
-PID/TID procfs and direct I/O coverage, live syscall delivery, START and
-scheduled-process cleanup are still pending.
+One real unchanged-launcher ELF has now passed native write (25 bytes), exit
+37 and scheduled retirement with module 3. Module 4 fixes a reaper/final-close
+race and passes both original control-ABI regressions. Repeated application
+attempt 1 fails RET with EINVAL; the current baseline is not ready for handoff.
+See `docs/verification/native-application-runtime-wip-20260908.json`. Preserve
+all captures pending full archival and continue the documented smoke gates.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 

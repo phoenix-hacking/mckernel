@@ -584,6 +584,15 @@ impl Process {
         self.slot == slot && self.generation == generation && self.pid.same(pid)
     }
 
+    fn detach_owners(&self) {
+        let registration = self.registration.lock().take();
+        let executable = self.executable.lock().take();
+        // Reaper snapshots retain only Process identity. Real VMAs and active
+        // invocations still own independent Registration references.
+        drop(executable);
+        drop(registration);
+    }
+
     fn replace(&self, executable: Option<Executable>) -> bool {
         let old = core::mem::replace(&mut *self.executable.lock(), executable);
         let found = old.is_some();
@@ -730,27 +739,34 @@ unsafe extern "C" fn reap(context: *mut c_void) -> i32 {
             }
         }
         for process in batch.into_iter().flatten() {
-            let registration = process.registration.lock().clone();
-            if let Some(registration) = registration {
-                if let Err(error) = registration.reap_workers() {
-                    if registration
-                        .reap_error
-                        .compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire)
-                        .is_ok()
-                    {
-                        pr_err!("application_worker=reap_retained os={} generation={} pid={} errno={}\n",
+            {
+                // WORKER_CLOSE never waits for guest publication. Borrow under
+                // this short mutex, so observational clones cannot defer cleanup
+                // past the final binding's detach_owners call.
+                let registration = process.registration.lock();
+                if let Some(registration) = &*registration {
+                    if let Err(error) = registration.reap_workers() {
+                        if registration
+                            .reap_error
+                            .compare_exchange(
+                                0,
+                                error.to_errno(),
+                                Ordering::AcqRel,
+                                Ordering::Acquire,
+                            )
+                            .is_ok()
+                        {
+                            pr_err!("application_worker=reap_retained os={} generation={} pid={} errno={}\n",
                             registration.slot, registration.generation, registration.pid, error.to_errno());
+                        }
                     }
                 }
             }
             if !process.pid.group_alive() {
-                let registration = process.registration.lock().take();
-                let executable = process.executable.lock().take();
                 // File bindings may outlive a dead TGID through inheritance.
                 // VMAs and in-flight calls still retain their independent Arc;
                 // final cleanup cannot free pages under a surviving mirror.
-                drop(executable);
-                drop(registration);
+                process.detach_owners();
             }
         }
         // Bounded snapshots prevent one large inherited-file registry from
@@ -816,8 +832,11 @@ impl Drop for Binding {
                 None
             }
         };
-        // Both this binding and the removed entry retain the process until the
-        // publication lock ends. Final executable/PID cleanup is outside it.
+        if removed.is_some() {
+            // A reaper snapshot can retain Process beyond close. Explicitly
+            // detach its owners here, after releasing the global table lock.
+            self.0.detach_owners();
+        }
         drop(removed);
     }
 }
