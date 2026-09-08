@@ -34270,3 +34270,68 @@ The new NATIVE_SYSFS_SERVICE fixture requires BOOT=0/registry Ready=4 and
 then performs 66 real reads plus 64 writes through McKernel's remote sysfs
 callbacks, with independent physical captures before and after those calls.
 Its actual startup run is next; no result is claimed before that run.
+
+Continuing sysfs x86_64 guest attempt 1 FAILED at the guest init failure marker.
+Command: mckernel-container native python3 -B /work/run-native-sysfs-service-guest.py x86_64 2 1
+Environment: pinned native container, CPUs 2-5/four CPUs/12 GiB, disposable
+four-vCPU/two-NUMA/8-GiB TCG guest and unchanged revision-3 McKernel image.
+Shell syntax, freestanding probe compilation and initramfs construction pass.
+The controller stops at NATIVE_SERVICE_GUEST FAIL, before a completed boot
+capture. Preserve native-sysfs-service-guest-20260908-x86_64-1 and inspect its
+serial/init record before any next validation. No guest success is claimed.
+
+Attempt 1 reached image loading but BOOT returned EINVAL before preparation
+or CPU start. The new helper accidentally used QEMU's default i440fx/max CPU
+instead of the established q35/max,la57=off profile. linux_boot_root explicitly
+rejects five-level paging; the helper also changed the chipset implicitly.
+Keep the rejected run and original helper unchanged. Helper v2 restores the
+exact existing qemu-kvm/q35/four-level CPU profile before retrying startup.
+
+Continuing sysfs x86_64 guest attempt 2 reaches actual full readiness:
+all seven boot metadata operations complete with errno 0, BOOT returns 0,
+registry Ready=4 is checked, and QMP independently captures physical status 3
+with completed queue counters and the guest's booted message. The subsequent
+first remote file-read assertion FAILS at native-boot.c line 52. Command:
+mckernel-container native python3 -B /work/run-native-sysfs-service-guest-v2.py x86_64 2 2
+Same pinned limits, now with the correct q35/max,la57=off profile. Preserve
+the initial full-ready capture, emergency status-3 capture and every log.
+Inspect the returned packet/value and unchanged guest callback body before
+retrying. The whole run remains FAIL; remote read/write acceptance is open.
+
+Packet inspection refines the attempt-2 failure: both initial reads pass,
+the first two-byte store is acknowledged, and its following read returns the
+original value. Four requests and four matching responses have fully drained.
+The unchanged kernel/rust/ap.rs store_fake_cpu_info body logs NYI and returns
+the input count; it deliberately does not assign info.online. The fixture
+incorrectly expected a toggle. Keep production guest behavior unchanged and
+assert its documented original value after writes, with independent guest
+kmsg checks for all 64 delivered alternating payloads. No CPU hotplug or
+guest-value mutation credit may be inferred from these store acknowledgements.
+
+Continuing sysfs full-ready checkpoint PASSED on both actual startup ABIs.
+Commands: mckernel-container native python3 -B /work/run-native-sysfs-service-guest-v3.py x86_64 2 3
+and mckernel-container native python3 -B /work/run-native-sysfs-service-guest-v3.py i386 2 1
+Environment: pinned Linux 6.12/Rust 1.92 native container, CPUs 2-5,
+four-CPU/12-GiB limits; q35/max,la57=off TCG, four-vCPU/two-NUMA/8-GiB guest,
+one assigned McKernel CPU and unchanged revision-3 McKernel image. Each start
+returns BOOT=0, checks registry Ready=4 and completes seven metadata requests.
+Four independent full-ready QMP captures show physical status 3 and all queue
+counters drained. The two starts complete 132 reads plus 128 writes, totaling
+260 actual remote callbacks. Both CPU symlinks resolve correctly. Every one of
+the 128 alternating write payloads is independently found in guest kmsg. The
+existing NYI guest store acknowledges bytes without changing online; no value
+mutation or CPU hotplug is claimed. Started owners and their destruction,
+release, reboot, KARGS and module-unload vetoes remain intact.
+
+Retention command: mckernel-container native python3 -B /work/retain-native-sysfs-service.py 1
+PASS: all eight captures, including the failed module and both failed x86_64
+starts, are retained in 24 compressed artifacts. Forty-two current compiler
+bindings, three exact pinned-rustfmt replays, four prior manifests, artifact
+hashes and complete gzip streams pass. See native-sysfs-service-checkpoint-20260908.json.
+Preserve native-sysfs-service-module-20260908-2 as a current dependency.
+Mkdir/unlink/remote release, special snooping, metadata claim/queue/failure
+coverage, multi-CPU/multi-OS operation, applications and shutdown remain open.
+Review scalar snooping's bytewise snapshot for tearing against original aligned
+word loads before claiming concurrent scalar parity. No formal gate promotion;
+the broader Rust/assembly, declared integration and independent acceptance
+requirements remain active. The old full-suite result predates these changes.

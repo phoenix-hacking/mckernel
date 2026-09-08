@@ -1,5 +1,34 @@
 # Native sysfs integration
 
+## Verified continuing service, 2026-09-08
+
+Both actual startup ABIs now complete full one-CPU McKernel boot: BOOT=0,
+registry Ready=4 and physical status 3. Each completes four creates, one lookup
+and two symlinks, followed by 66 reads and 64 writes through the real guest
+callbacks. Independent QMP captures before and after the calls show drained
+queues; both CPU symlinks resolve to their intended targets. McKernel kmsg
+contains its booted message and every alternating store payload. The existing
+store_fake_cpu_info is NYI and does not change online; acknowledged bytes are
+verified without claiming value mutation or CPU hotplug.
+
+`native-sysfs-service-checkpoint-20260908.json` preserves eight captures and
+all three failures in 24 artifacts, with 42 current source/compiler bindings.
+The pinned three-module build and no-SIMD checks pass. Preparation retains
+404 namespace checks, 32 original allocation failures, four physical captures
+and full unstarted restoration through both ABIs and two module lifetimes.
+The accepted real starts use helper v3, x86_64 attempt 3 and i386 attempt 1.
+Keep `native-sysfs-service-module-20260908-2` as a current input.
+
+Next directly exercise mkdir/unlink/remote release, eight special snooping
+formats, exclusive-claim races, malformed mappings, queue pressure and worker
+allocation failures. Review scalar snooping's bytewise copies against the
+original aligned 32/64-bit loads before claiming parity under concurrent
+updates. Multiple active McKernel CPUs/OSes, application execution, native
+shutdown and complete resource restoration, current full-suite integration,
+full Rust/assembly and independent production acceptance remain open.
+The historical design/checkpoint sections below retain their original scope;
+their earlier status-2 boot boundary is superseded by this checkpoint.
+
 ## Continuing request and callback adaptation, 2026-09-07
 
 Runtime implementation decision, 2026-09-08: use two owned per-OS kthreads,

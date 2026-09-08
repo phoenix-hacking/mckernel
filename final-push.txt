@@ -25,25 +25,31 @@ points still measure the native host path; the active whole-system goal also
 requires those McKernel language checks. Earlier exclusions of further McKernel
 C conversion are superseded. No score or production gate is promoted here.
 
-LOCAL TECHNICAL CHECKPOINT (2026-09-07): both actual startup interfaces complete
-vDSO and native sysfs setup on the pinned Linux 6.12 topology-export kernel.
-The integrated CPU owner preserves pre-offline topology; each OS publishes
-52 checked files, 19 directories and four links. Preparation preserves both
-ABIs, original allocation failures and full unstarted resource restoration.
-See docs/verification/native-sysfs-setup-checkpoint-20260907.json and its build
-checkpoint. Architectural status remains 2; the next actual request is remote
-creation of cpu/num_processors, busy=1. Full ready status, continuing services,
-workloads, native shutdown and the declared production integration/acceptance
-requirements remain open. No production gate is promoted by this local result.
+LOCAL TECHNICAL CHECKPOINT (2026-09-08): both actual startup interfaces now
+reach full one-CPU McKernel readiness on the pinned Linux 6.12 topology-export
+kernel: BOOT=0, registry Ready=4 and independently captured physical status 3.
+Each completes seven real sysfs metadata requests and 130 actual callbacks
+(66 reads and 64 writes), with drained queues and independently checked guest
+write payloads. The original online store acknowledges bytes without changing
+its value; no mutation or CPU-hotplug credit is claimed. Preparation retains
+404 namespace checks, 32 original allocation failures, four physical captures
+and full unstarted restoration through both ABIs and two module lifetimes.
+See docs/verification/native-sysfs-service-checkpoint-20260908.json for 24
+artifacts, 42 source/compiler bindings and all three retained failures.
+Remaining metadata/snooping/race/failure coverage, multi-CPU/multi-OS workloads,
+application execution, native shutdown and the declared production integration,
+Rust/assembly and independent acceptance requirements remain open. No production
+gate is promoted by this local boot/service result.
 
-The subsequent remote sysfs callback adapter passes its independent Linux
+The earlier remote sysfs callback adapter passes its independent Linux
 fixture over two module lifetimes, including 512 concurrent round trips,
 1,068 exchanges with queue retries, interrupted readers and callback/release
 draining. Metadata and RPC bodies pass unchanged-C layouts and existing guest
 Rust response comparisons. See docs/verification/native-sysfs-remote-checkpoint-20260907.json
 and native-sysfs-request-protocol-20260907.json in the same directory.
-Actual McKernel dispatch, request ownership/aliases and special snooping remain
-unintegrated. This bounded adapter result does not promote the gates below.
+Actual McKernel dispatch is integrated and exercised by the newer checkpoint
+above; all special formats and request-ownership races still need direct runtime
+coverage. These bounded results do not promote the gates below.
 
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)

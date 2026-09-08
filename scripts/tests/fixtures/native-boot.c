@@ -60,10 +60,11 @@ static void service_roundtrips(void)
     service_value("/sys/class/mcos/mcos0/sys/devices/system/cpu/num_processors", '1');
     service_value(online, '1');
     for (int cycle = 0; cycle < 32; cycle++) {
-        // This is McKernel's documented simulated per-CPU online attribute;
-        // the test changes its guest value, not Linux CPU hotplug state.
+        // The existing guest store_fake_cpu_info logs the input and returns
+        // its count but does not change online. The controller independently
+        // checks those delivered payloads in the captured guest kmsg log.
         put_value(online, "0\n");
-        service_value(online, '0');
+        service_value(online, '1');
         put_value(online, "1\n");
         service_value(online, '1');
     }

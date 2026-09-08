@@ -65,7 +65,25 @@ installed environments, personal files and recent host logs were preserved.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Continuing service integration WIP, 2026-09-08: smp_service.rs transfers the
+Continuing service checkpoint, 2026-09-08: both actual startup interfaces now
+reach full McKernel readiness. BOOT returns 0, the native registry is Ready=4,
+and four independent QMP captures show physical status 3. Each one-CPU start
+completes seven real metadata requests and 130 actual guest callbacks: 66 reads
+and 64 writes. Both CPU symlinks resolve correctly; all queue counters drain.
+The unchanged guest store_fake_cpu_info logs and acknowledges the write bytes
+without changing online. All 128 payloads are independently checked in guest
+kmsg; no value-mutation or CPU-hotplug credit is claimed. Applications have
+not run. The earlier status-2 limits below describe historical checkpoints.
+
+See docs/verification/native-sysfs-service-checkpoint-20260908.json: 24 retained
+artifacts, 42 source/compiler bindings, three exact pinned-format replays and
+all three failures. Module attempt 1 failed compilation; actual x86_64 attempt 1
+used the wrong QEMU CPU/machine profile, and attempt 2 failed an incorrect
+store-mutation expectation after reaching status 3. The accepted starts are
+x86_64 attempt 3 and i386 attempt 1 using guest helper v3. Preserve current
+native-sysfs-service-module-20260908-2 and all existing active dependencies.
+
+smp_service.rs transfers the
 published tree and channels into two retained, initially stopped kthreads,
 then activates them after BOOT releases CPU/device/topology/memory guards.
 The packet worker remains independent of the bounded metadata/tree worker.
@@ -80,10 +98,14 @@ ownership attempt 1. Preparation attempt 1 passes both ABIs and two module
 lifetimes, including 404 namespace checks, 32 allocation failures and four
 physical captures with full unstarted restoration. Initial module attempt 1
 failed allocator conversion and initializer capture; its complete artifacts
-remain retained. The continuing workers have not yet run during a real start.
-Next use run-native-sysfs-service-guest.py for full-ready status and actual
-guest show/store round trips in both ABIs. No boot/application/production
-credit yet; the previous verified actual boot remains at CREATE/status 2.
+remain retained. The continuing workers now pass the actual starts above.
+Next verify mkdir/unlink/remote release, all eight snooping formats, metadata
+claim races, malformed mappings, queue pressure and worker allocation failures.
+Review scalar snooping for aligned single-width loads: bytewise snapshots can
+tear against a concurrently updated guest scalar. Multi-CPU/multi-OS operation,
+application execution, full shutdown, current full-suite integration and the
+remaining Rust/assembly and independent acceptance checks remain required.
+No production gate is promoted by this local one-CPU boot/service checkpoint.
 
 Native remote callback checkpoint: all three native modules and the real
 Linux fixture build on the pinned topology kernel. Two fixture lifetimes pass
