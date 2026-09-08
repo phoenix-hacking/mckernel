@@ -99,7 +99,40 @@ now omit only redundant historical evidence; restore those exact Git blobs
 using the actual guest manifest before historical replay. Compiler sources,
 objects, images, guest captures and failed-attempt records remain intact.
 
+The eighth cleanup checkpoint is
+`docs/verification/storage-maintenance-20260908-5.json`. It removes 15,218 exact
+committed evidence copies from 41 older scratch checkouts and 22 extra mcctrl
+retention archives. All 780 checked retained originals match pushed Git objects;
+all 2,831 checked current files remain byte-identical after deletion and targeted
+trim, and all 71 protected directories remain present. The backing-file reduction
+returns another 10.77 GiB of host allocation, totaling 74.04 GiB across eight
+cleanups. About 152 GiB is free on the host and 40 GiB in scratch. The compressed
+plan/report maps every removed copy to its exact Git blob, path, mode and timestamp.
+Restore those copies before replaying historical validation that consumes the
+evidence directories. All compiler sources, objects, images, current executable
+attempts and original failure records remain intact. For new compile-only source
+copies, avoid duplicating historical evidence when the build does not consume it;
+record exact restoration references before omitting files. Full validation must
+still have all of its required evidence. Continue capacity checks and GitHub
+checkpoints between substantial validation batches.
+
 ## Current accounting and Rust preservation (2026-09-07)
+
+Native executable/credential WIP, 2026-09-08: module attempt 2 compiles all three
+native modules with the pinned Linux/Rust toolchain, after retaining the first
+missing-error-constant compilation failure. The x86_64 diagnostic guest attempt
+3 passes both normal boot/status-3 captures and the prior topology/lifetime probe,
+then reports 259 credential checks before stopping at OPEN_EXEC file-check index
+9: actual EACCES (-13), expected ENOENT (-2). Preserve both executable module
+attempts and all three executable guest attempts unchanged. The fixture now
+includes the noexec file copy and prints the actual result on mismatch; expected
+behavior has not been weakened. The source and exact failures were pushed in
+34fb21cf before the requested storage cleanup. Resume diagnosis from
+`native-mcctrl-exec-guest-20260908-x86_64-3/serial.log`, using
+`native-mcctrl-exec-module-20260908-2` as the built input and fresh attempt names.
+Executable runtime acceptance and the i386 repeat remain pending. Applications
+have not run; all native launch/VM/syscall, procfs, integration, full-language,
+shutdown, remaining sysfs fault/race and independent acceptance work stays open.
 
 Native application service checkpoint, 2026-09-08: IHK now owns a versioned
 mcctrl callback registration and lazily attached per-file context/module lease.
