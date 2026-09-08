@@ -34054,3 +34054,20 @@ leaves that mask unchanged. The retry checks the exact level/type/ID predicate,
 records unchanged cache masks, and separately verifies the CPU core-sibling
 mask change from remove_siblinginfo. That function also clears an offline
 CPU's core_id, reinforcing the requirement to own the pre-offline snapshot.
+
+2026-09-07 local date — second requested storage maintenance completed.
+Host-only filesystem maintenance; no kernel build or guest ran. The second
+cleanup helper verifies all selected retained evidence against pushed commit
+bacdad3837426d13bde180a476af3d7185b68b5c before removing eight fully archived
+expanded captures and 38 duplicate archives (659,791,872 allocated bytes).
+Failed sysfs-tree build and topology guest evidence remain in committed
+archives. Targeted sudo fstrim --verbose on the mounted scratch filesystem
+reclaims 2.94 GiB of backing allocation, including previously freed blocks;
+its 31.2-GiB free-range report is not treated as newly reclaimed storage.
+Both cleanup checkpoints together recover 39.25 GiB; the host now has about
+131.49 GiB available, and scratch has 31.20 GiB available. All 17 protected
+dependency directories and the exact bytes of 263 current input/output files
+are preserved. See docs/verification/storage-maintenance-20260907-2.json and
+its six verified gzip artifacts for actions, hashes and restoration mappings.
+Next resume CpuContext ownership of the verified topology snapshots and the
+actual sysfs setup service; no new boot/application acceptance is claimed.

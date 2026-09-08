@@ -31,6 +31,14 @@ inputs. The mounted scratch filesystem uses a sparse backing file: run targeted
 `fstrim` on `/home/holden/mckernel-work/scratch` after substantial cleanup so its
 free blocks are returned to the host drive. Do not resize or delete that image.
 
+The second cleanup checkpoint is recorded in
+`docs/verification/storage-maintenance-20260907-2.json`. It removes eight more
+fully archived captures and 38 duplicate archives, then trims scratch. Both
+cleanups together reclaim 39.25 GiB of host allocation. All 263 checked current
+input/output files remain byte-identical, including the new topology kernel
+and module and the passing sysfs tree module. Historical captures can be
+restored using the retained cleanup report; never reuse their attempt names.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native topology producer checkpoint (2026-09-07 local date): patch 0009 adds
