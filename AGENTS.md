@@ -168,6 +168,39 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Actual native launcher checkpoint, 2026-09-08: the unchanged Rust-selected
+`mcexec` now prepares an ordinary ELF and reaches START_IMAGE in the real guest.
+START still returns EINVAL; no application instruction has executed in McKernel.
+The Linux reference prints its marker and exits 37. Actual guest kmsg confirms
+the prepared ELF entry 0x40010c and one unscheduled thread; final close consumes
+cleanup ACK plus exact TID-zero deletion and releases the registration.
+Two concrete integration fixes are verified: OS GET_BUILDID now reuses the
+existing exact IHK compatibility payload, and image validation accepts the
+terminal-length encoding produced by both original C and Rust launchers.
+Both metadata interfaces pass eight bounded writes and twenty copyout faults
+over running and unbooted instances, including operation with mcctrl absent.
+All nineteen protocol/image tests pass, retaining the original seventeen and
+adding six exact C/Rust producer vectors plus terminal-length bounds coverage.
+Native application-service module 2 passes both existing ABI regressions, all
+47 x86_64 image assertions and seven physical status-3 captures. Both actual
+launcher selections build; C fallback application execution remains untested.
+See `docs/verification/native-application-launcher-checkpoint-20260908.json`:
+fifteen complete captures, all seven original failures, 41 artifacts, 49 native
+compiler bindings, twenty Linux probe bindings, fifteen protocol bindings,
+seven launcher source bindings, all 226 actual launcher compiler dependencies,
+eleven unchanged guest peer bindings and three exact formatter replays.
+Source checkouts omit only mapped committed evidence archives to conserve space;
+the retained captures themselves have no exclusions. Preserve
+native-application-service-module-20260908-2,
+native-application-image-20260908-6 and native-application-launcher-20260908-2,
+alongside the established kernel/image/compiler/setup and prior active inputs.
+Next implement actual START, syscall wait/return, procfs and scheduled-process
+ownership, then verify application execution. All earlier signal/VM/fork/exec/
+exit, fault/race, multi-CPU/OS, shutdown, source-graph/staging/lifecycle/FFI/
+current-full-suite, full Rust/assembly and independent acceptance work remains
+required. This is verified launcher progress, not application or production
+acceptance. Continue capacity checks, audited cleanup and periodic GitHub pushes.
+
 Native prepared-image/VM checkpoint, 2026-09-08: native module 8, image
 protocol attempt 3, x86_64 image guest 4 and i386 baseline regression 1 pass.
 The actual guest prepares one unscheduled thread and two image sections. All

@@ -552,3 +552,48 @@ all count, offset, maximum-size and NUL-bounds checks. Other terminal values
 remain invalid. Reproduce the failure using exact extracted C and Rust producer
 bodies, including empty and prefix-combined vectors, before changing validation.
 Then repeat the image/protocol suite, module build and real launcher attempt.
+
+## Actual launcher reaches START, 2026-09-08
+
+The unchanged Rust-selected launcher and ordinary static ELF have now been
+attempted in the native guest. After the two verified adapter fixes, it passes
+the build-ID check, registers its process and receives a real PREPARE ACK.
+The guest records one prepared thread with ELF entry 0x40010c. The launcher
+advances through image transfer, CLOSE_EXEC and worker initialization to
+START_IMAGE, which remains unimplemented and returns EINVAL. The actual
+application attempt therefore remains FAIL. Final close receives its distinct
+cleanup ACK and exact TID-zero deletion and releases the unscheduled owner.
+Only the explicitly separate Linux reference executes the ELF and exits 37.
+
+Both actual launcher builds pass with their existing CMake selections, including
+the Rust object/link path and unchanged C fallback. Both metadata interfaces
+verify the same authoritative NUL-terminated build ID, eight bounded successful
+writes, twenty invalid/readonly/partial-page copyout faults, running/unbooted
+states and queries with mcctrl absent. Nineteen protocol/image tests pass:
+the original seventeen remain, and two added tests check six exact original
+C/Rust producer vectors and terminal-length bounds. The unchanged legacy C
+producer uses the actual launcher Debug optimization selection; its earlier
+optimized compiler diagnostic and the reproduced decoder failure are retained.
+
+Application-service module 2 also passes the unchanged x86_64 image and i386
+baseline regressions. All 47 image assertions and seven physical ready captures
+pass, alongside the existing process, credentials, executable and topology
+checks. This does not add compatibility image preparation or application
+execution coverage.
+
+The retained checkpoint is `native-application-launcher-checkpoint-20260908.json`:
+fifteen complete captures, all seven original failures and 41 artifacts. It
+binds 49 current native sources, twenty Linux probe inputs, fifteen protocol
+inputs, seven launcher source inputs, 226 actual compiler dependencies,
+eleven unchanged guest peer files and three exact formatter replays. Each
+complete archive preserves all original paths, modes, symlinks and bytes.
+The source checkouts separately record their mapped omission of committed
+evidence archives; no source code was omitted. Preserve current module 2,
+protocol 6 and launcher build 2 with existing image/kernel/setup dependencies.
+
+Next connect the actual START request to its retained prepared owner and supply
+syscall wait/return, native procfs and scheduled-process lifecycle services.
+Continue all remaining signal, running-VM, fork/exec/exit, compatibility,
+fault/race, multi-CPU/OS, shutdown, declared integration/current full suite,
+full Rust/assembly and independent acceptance requirements. No formal gate or
+whole-OS completion percentage changes at this checkpoint.
