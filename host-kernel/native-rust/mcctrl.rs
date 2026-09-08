@@ -39,8 +39,11 @@ extern "Rust" {
 // the narrow topology query validates all scalar identities before dispatch.
 extern "C" {
     fn ihk_os_service_register_v1(
-        owner: *mut c_void, version: u32, open: Option<service_abi::Open>,
-        ioctl: Option<service_abi::Ioctl>, close: Option<service_abi::Close>,
+        owner: *mut c_void,
+        version: u32,
+        open: Option<service_abi::Open>,
+        ioctl: Option<service_abi::Ioctl>,
+        close: Option<service_abi::Close>,
     ) -> i32;
     fn ihk_os_service_unregister_v1(owner: *mut c_void);
     fn ihk_os_topology_query_v1(slot: u32, generation: u64, command: u32) -> i64;
@@ -61,7 +64,11 @@ unsafe extern "C" fn open(slot: u32, generation: u64, output: *mut *mut c_void) 
     };
     // SAFETY: IHK initializes the output null and owns it through this call.
     unsafe { output.write(Box::into_raw(context).cast()) };
-    pr_info!("application_file=open os={} generation={}\n", slot, generation);
+    pr_info!(
+        "application_file=open os={} generation={}\n",
+        slot,
+        generation
+    );
     0
 }
 
@@ -83,7 +90,9 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
     // returns the retained boot node count, matching its existing Rust helper.
     if command == abi::MCEXEC_UP_GET_CPU && value == 0 {
         EINVAL.to_errno() as i64
-    } else { value }
+    } else {
+        value
+    }
 }
 
 // SAFETY: IHK transfers back the unique Box after every ioctl has finished,
@@ -91,7 +100,11 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
 unsafe extern "C" fn close(context: *mut c_void) {
     // SAFETY: This is exactly the allocation returned by successful open.
     let context = unsafe { Box::from_raw(context.cast::<FileContext>()) };
-    pr_info!("application_file=close os={} generation={}\n", context.slot, context.generation);
+    pr_info!(
+        "application_file=close os={} generation={}\n",
+        context.slot,
+        context.generation
+    );
     drop(context);
 }
 
@@ -107,8 +120,7 @@ static MCCTRL_IHK_IMPORT_NAMESPACE: [u8; 26] = *b"import_ns=MCKERNEL_IHK_V1\0";
 #[doc(hidden)]
 #[link_section = ".modinfo"]
 #[used(compiler)]
-static MCCTRL_BUILTIN_IHK_IMPORT_NAMESPACE: [u8; 33] =
-    *b"mcctrl.import_ns=MCKERNEL_IHK_V1\0";
+static MCCTRL_BUILTIN_IHK_IMPORT_NAMESPACE: [u8; 33] = *b"mcctrl.import_ns=MCKERNEL_IHK_V1\0";
 
 module! {
     type: McctrlModule,
@@ -123,15 +135,19 @@ impl kernel::Module for McctrlModule {
         // SAFETY: The provider exports this immutable byte in the declared
         // namespace. The volatile read preserves the relocation that makes
         // modpost derive the module dependency and loader unload ordering.
-        let _ = unsafe {
-            core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))
-        };
+        let _ = unsafe { core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)) };
         // SAFETY: THIS_MODULE and all callbacks remain resident until Drop
         // unregisters. A failed registration publishes no callbacks. No fallible
         // initialization follows successful publication.
-        kernel::error::to_result(unsafe { ihk_os_service_register_v1(
-            THIS_MODULE.as_ptr().cast(), service_abi::VERSION, Some(open), Some(ioctl), Some(close),
-        ) })?;
+        kernel::error::to_result(unsafe {
+            ihk_os_service_register_v1(
+                THIS_MODULE.as_ptr().cast(),
+                service_abi::VERSION,
+                Some(open),
+                Some(ioctl),
+                Some(close),
+            )
+        })?;
         pr_info!("application_service=registered abi=1 topology_queries=2\n");
         pr_info!(
             "lifecycle=load foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}\n",

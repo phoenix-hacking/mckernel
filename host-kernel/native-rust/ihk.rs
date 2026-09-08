@@ -31,8 +31,8 @@ mod service_abi;
 
 use core::sync::atomic::{AtomicPtr, Ordering};
 
+use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};
 use kernel::prelude::*;
-use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};
 
 const IHK_VERSION: &str = "1.7.0rc4";
 const IHK_ABI_VERSION: u16 = 1;
@@ -183,9 +183,7 @@ pub extern "C" fn ihk_smp_provider_attach_v2(
     init: Option<IhkSmpProviderInitV2>,
     exit: Option<IhkSmpProviderExitV2>,
 ) -> i64 {
-    if callback_abi != IHK_SMP_PROVIDER_CALLBACK_ABI_V1
-        || flags != IHK_SMP_PROVIDER_FLAG_SHARED
-    {
+    if callback_abi != IHK_SMP_PROVIDER_CALLBACK_ABI_V1 || flags != IHK_SMP_PROVIDER_FLAG_SHARED {
         return -22;
     }
     let (init, exit) = match (init, exit) {
@@ -252,14 +250,15 @@ pub extern "C" fn ihk_smp_provider_attach_v2(
     let token = match IHK_DEVICE_REGISTRY.encode_provider_token(handle) {
         Ok(token) => token,
         Err(error) => {
-            let unregister = IHK_DEVICE_REGISTRY
-                .begin_unregister(handle)
-                .unwrap_or_else(|cleanup| {
-                    panic!(
-                        "v2 provider publication cleanup failed: errno={}",
-                        cleanup.errno(),
-                    )
-                });
+            let unregister =
+                IHK_DEVICE_REGISTRY
+                    .begin_unregister(handle)
+                    .unwrap_or_else(|cleanup| {
+                        panic!(
+                            "v2 provider publication cleanup failed: errno={}",
+                            cleanup.errno(),
+                        )
+                    });
             exit();
             unregister.commit().unwrap_or_else(|cleanup| {
                 panic!(
@@ -305,10 +304,7 @@ pub static IHK_SMP_PROVIDER_ATTACH_V2_EXPORT: IhkExportSymbolRecord = IhkExportS
 #[export_name = "ihk_smp_provider_detach_v2"]
 // SAFETY: The token and exact retained exit identity name the sole live v2
 // lease; invariant violations fail stop before provider retirement can return.
-pub extern "C" fn ihk_smp_provider_detach_v2(
-    token: i64,
-    exit: Option<IhkSmpProviderExitV2>,
-) {
+pub extern "C" fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>) {
     let exit = exit.unwrap_or_else(|| panic!("v2 provider detach omitted exit callback"));
     let exit_pointer = exit as *const () as *mut ();
     if IHK_SMP_PROVIDER_EXIT_V2.load(Ordering::Acquire) != exit_pointer {
@@ -317,29 +313,29 @@ pub extern "C" fn ihk_smp_provider_detach_v2(
 
     let handle = IHK_DEVICE_REGISTRY
         .decode_provider_token(token)
-        .unwrap_or_else(|error| {
-            panic!("v2 provider token rejected: errno={}", error.errno())
-        });
+        .unwrap_or_else(|error| panic!("v2 provider token rejected: errno={}", error.errno()));
     let unregister = IHK_DEVICE_REGISTRY
         .begin_unregister(handle)
+        .unwrap_or_else(|error| panic!("v2 provider unpublish failed: errno={}", error.errno()));
+    let snapshot = IHK_DEVICE_REGISTRY
+        .snapshot(handle)
         .unwrap_or_else(|error| {
-            panic!("v2 provider unpublish failed: errno={}", error.errno())
+            panic!(
+                "v2 provider unpublish snapshot failed: errno={}",
+                error.errno()
+            )
         });
-    let snapshot = IHK_DEVICE_REGISTRY.snapshot(handle).unwrap_or_else(|error| {
-        panic!("v2 provider unpublish snapshot failed: errno={}", error.errno())
-    });
     if snapshot.provider_references != 0 || snapshot.os_references != 0 {
         panic!(
             "v2 provider detach before reference drain: open={} os={}",
-            snapshot.provider_references,
-            snapshot.os_references,
+            snapshot.provider_references, snapshot.os_references,
         );
     }
 
     exit();
-    unregister.commit().unwrap_or_else(|error| {
-        panic!("v2 provider retirement failed: errno={}", error.errno())
-    });
+    unregister
+        .commit()
+        .unwrap_or_else(|error| panic!("v2 provider retirement failed: errno={}", error.errno()));
     IHK_SMP_PROVIDER_EXIT_V2
         .compare_exchange(
             exit_pointer,
@@ -476,10 +472,7 @@ impl Drop for IhkModule {
         match IHK_DEVICE_REGISTRY.active_count() {
             Ok(0) => pr_info!("provider_registry=empty active=0\n"),
             Ok(active) => pr_err!("provider_registry=not-empty active={}\n", active),
-            Err(error) => pr_err!(
-                "provider_registry=corrupt errno={}\n",
-                error.errno(),
-            ),
+            Err(error) => pr_err!("provider_registry=corrupt errno={}\n", error.errno(),),
         }
         pr_info!(
             "lifecycle=unload version={} abi={} parameters={} dependencies={}\n",

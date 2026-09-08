@@ -257,7 +257,9 @@ impl OsDeviceFamily {
         OS_MAJOR.store(major as u32, Ordering::Release);
         OS_CLASS.store(class, Ordering::Release);
         pr_info!("os_family=registered minors=64\n");
-        Ok(Self { _services: services })
+        Ok(Self {
+            _services: services,
+        })
     }
 }
 
@@ -682,7 +684,10 @@ unsafe fn os_request(
         let (callback, service_context) = {
             let mut service = context.service.lock();
             if service.is_none() {
-                match super::os_service::FileService::open(handle.minor() as u32, handle.generation()) {
+                match super::os_service::FileService::open(
+                    handle.minor() as u32,
+                    handle.generation(),
+                ) {
                     Ok(attached) => *service = Some(attached),
                     Err(error) => return error.to_errno() as core::ffi::c_long,
                 }
@@ -694,8 +699,11 @@ unsafe fn os_request(
         // SAFETY: The file owns the context and module pin; publication guards
         // have ended. The argument is only a borrowed user value for this call.
         let status = unsafe { callback(service_context, command, argument, u32::from(compat)) };
-        return if status < -4095 { EIO.to_errno() as core::ffi::c_long }
-            else { status as core::ffi::c_long };
+        return if status < -4095 {
+            EIO.to_errno() as core::ffi::c_long
+        } else {
+            status as core::ffi::c_long
+        };
     }
     let _operation = object.operations.lock();
     // Resource assignment is restricted to the initial, unbooted state. Future
@@ -802,22 +810,36 @@ const OS_FOPS: bindings::file_operations = {
 #[export_name = "ihk_os_topology_query_v1"]
 pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32) -> i64 {
     let result = (|| -> Result<i64> {
-        if !super::service_abi::topology_query(command) { return Err(EINVAL); }
-        let handle = OS_REGISTRY.resolve_minor(slot as usize).map_err(|error| errno(error.errno()))?;
-        if handle.generation() != generation { return Err(errno(-116)); }
-        let _lease = OS_REGISTRY.acquire(handle).map_err(|error| errno(error.errno()))?;
+        if !super::service_abi::topology_query(command) {
+            return Err(EINVAL);
+        }
+        let handle = OS_REGISTRY
+            .resolve_minor(slot as usize)
+            .map_err(|error| errno(error.errno()))?;
+        if handle.generation() != generation {
+            return Err(errno(-116));
+        }
+        let _lease = OS_REGISTRY
+            .acquire(handle)
+            .map_err(|error| errno(error.errno()))?;
         let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
         assert!(!raw.is_null());
         // SAFETY: The exact-generation lease excludes object and backend release.
         let object = unsafe { &*raw };
         let _operation = object.operations.lock();
-        let snapshot = OS_REGISTRY.snapshot(handle).map_err(|error| errno(error.errno()))?;
-        if !matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) { return Err(EBUSY); }
+        let snapshot = OS_REGISTRY
+            .snapshot(handle)
+            .map_err(|error| errno(error.errno()))?;
+        if !matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) {
+            return Err(EBUSY);
+        }
         let backend = object.backend.ok_or(ENODEV)?;
         // SAFETY: Reuse the versioned backend under its original operation lock
         // and module/OS owners. These two scalar commands ignore argument zero.
         let value = unsafe { (backend.ioctl)(slot, generation, command, 0, 0) };
-        if value < -4095 || value > i32::MAX as i64 { return Err(EIO); }
+        if value < -4095 || value > i32::MAX as i64 {
+            return Err(EIO);
+        }
         Ok(value)
     })();
     result.unwrap_or_else(|error| error.to_errno() as i64)
@@ -828,7 +850,9 @@ pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32
 #[link_section = ".export_symbol"]
 #[used(compiler)]
 pub(crate) static TOPOLOGY_QUERY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
-    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
     symbol: topology_query as *const () as *const u8,
 };
 

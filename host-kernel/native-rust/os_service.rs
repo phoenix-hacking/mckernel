@@ -1,9 +1,17 @@
 // SPDX-License-Identifier: GPL-2.0
 //! File-owned callback and module lifetimes for the native mcctrl service.
 
-use core::{ffi::c_void, pin::Pin, ptr, sync::atomic::{AtomicPtr, Ordering}};
-use kernel::{prelude::*, sync::{new_mutex, Mutex}};
 use super::{os_runtime::ProviderModule, service_abi, IhkExportSymbolRecord};
+use core::{
+    ffi::c_void,
+    pin::Pin,
+    ptr,
+    sync::atomic::{AtomicPtr, Ordering},
+};
+use kernel::{
+    prelude::*,
+    sync::{new_mutex, Mutex},
+};
 
 #[derive(Clone, Copy)]
 struct Registration {
@@ -27,7 +35,8 @@ impl Registry {
     pub(super) fn new() -> Result<Self> {
         let state = Box::pin_init(new_mutex!(None), GFP_KERNEL)?;
         let raw = ptr::from_ref(&*state).cast_mut();
-        PUBLISHED.compare_exchange(ptr::null_mut(), raw, Ordering::AcqRel, Ordering::Acquire)
+        PUBLISHED
+            .compare_exchange(ptr::null_mut(), raw, Ordering::AcqRel, Ordering::Acquire)
             .map_err(|_| EBUSY)?;
         Ok(Self(state))
     }
@@ -37,13 +46,17 @@ impl Drop for Registry {
     fn drop(&mut self) {
         // All service consumers depend on IHK; OS files also pin its fops.
         assert!(self.0.lock().is_none());
-        assert!(PUBLISHED.swap(ptr::null_mut(), Ordering::AcqRel) == ptr::from_ref(&*self.0).cast_mut());
+        assert!(
+            PUBLISHED.swap(ptr::null_mut(), Ordering::AcqRel) == ptr::from_ref(&*self.0).cast_mut()
+        );
     }
 }
 
 fn state() -> Result<&'static State> {
     let state = PUBLISHED.load(Ordering::Acquire);
-    if state.is_null() { return Err(ENODEV); }
+    if state.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: Only module-dependent registration calls or IHK-owned file
     // operations enter this private helper. Both prevent Registry destruction.
     Ok(unsafe { &*state })
@@ -55,15 +68,29 @@ fn state() -> Result<&'static State> {
 /// module storage can disappear. Callback semantics are specified by service_abi.
 #[export_name = "ihk_os_service_register_v1"]
 pub(crate) unsafe extern "C" fn register(
-    owner: *mut c_void, version: u32, open: Option<service_abi::Open>,
-    ioctl: Option<service_abi::Ioctl>, close: Option<service_abi::Close>,
+    owner: *mut c_void,
+    version: u32,
+    open: Option<service_abi::Open>,
+    ioctl: Option<service_abi::Ioctl>,
+    close: Option<service_abi::Close>,
 ) -> i32 {
     let result = (|| -> Result {
-        if owner.is_null() || version != service_abi::VERSION { return Err(EINVAL); }
-        let (Some(open), Some(ioctl), Some(close)) = (open, ioctl, close) else { return Err(EINVAL); };
+        if owner.is_null() || version != service_abi::VERSION {
+            return Err(EINVAL);
+        }
+        let (Some(open), Some(ioctl), Some(close)) = (open, ioctl, close) else {
+            return Err(EINVAL);
+        };
         let mut guard = state()?.lock();
-        if guard.is_some() { return Err(EBUSY); }
-        *guard = Some(Registration { owner, open, ioctl, close });
+        if guard.is_some() {
+            return Err(EBUSY);
+        }
+        *guard = Some(Registration {
+            owner,
+            open,
+            ioctl,
+            close,
+        });
         Ok(())
     })();
     result.map_or_else(|error| error.to_errno(), |()| 0)
@@ -113,8 +140,16 @@ impl FileService {
             assert!(context.is_null(), "failed mcctrl open retained a context");
             return Err(kernel::error::to_result(status).err().unwrap_or(EIO));
         }
-        assert!(!context.is_null(), "successful mcctrl open omitted its context");
-        Ok(Self { context, ioctl: entry.ioctl, close: entry.close, _module: module })
+        assert!(
+            !context.is_null(),
+            "successful mcctrl open omitted its context"
+        );
+        Ok(Self {
+            context,
+            ioctl: entry.ioctl,
+            close: entry.close,
+            _module: module,
+        })
     }
 
     /// # Safety
@@ -139,7 +174,9 @@ impl Drop for FileService {
 #[link_section = ".export_symbol"]
 #[used(compiler)]
 pub(crate) static REGISTER_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
-    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
     symbol: register as *const () as *const u8,
 };
 
@@ -148,6 +185,8 @@ pub(crate) static REGISTER_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord
 #[link_section = ".export_symbol"]
 #[used(compiler)]
 pub(crate) static UNREGISTER_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
-    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
     symbol: unregister as *const () as *const u8,
 };

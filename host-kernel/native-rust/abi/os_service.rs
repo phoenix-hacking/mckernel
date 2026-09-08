@@ -23,20 +23,42 @@ pub(crate) fn handles(command: u32) -> bool {
     use crate::abi::*;
     matches!(
         command,
-        MCEXEC_UP_PREPARE_IMAGE | MCEXEC_UP_TRANSFER | MCEXEC_UP_START_IMAGE
-            | MCEXEC_UP_WAIT_SYSCALL | MCEXEC_UP_RET_SYSCALL | MCEXEC_UP_LOAD_SYSCALL
-            | MCEXEC_UP_SEND_SIGNAL | MCEXEC_UP_GET_CPU | MCEXEC_UP_STRNCPY_FROM_USER
-            | MCEXEC_UP_GET_CRED | MCEXEC_UP_GET_CREDV | MCEXEC_UP_GET_NODES
-            | MCEXEC_UP_GET_CPUSET | MCEXEC_UP_CREATE_PPD | MCEXEC_UP_PREPARE_DMA
-            | MCEXEC_UP_FREE_DMA | MCEXEC_UP_OPEN_EXEC | MCEXEC_UP_CLOSE_EXEC
-            | MCEXEC_UP_SYS_MOUNT | MCEXEC_UP_SYS_UMOUNT | MCEXEC_UP_SYS_UNSHARE
-            | MCEXEC_UP_UTI_GET_CTX | MCEXEC_UP_UTI_SWITCH_CTX | MCEXEC_UP_SIG_THREAD
-            | MCEXEC_UP_SYSCALL_THREAD | MCEXEC_UP_TERMINATE_THREAD
-            | MCEXEC_UP_GET_NUM_POOL_THREADS | MCEXEC_UP_UTI_ATTR
-            | MCEXEC_UP_RELEASE_USER_SPACE | MCEXEC_UP_DEBUG_LOG
+        MCEXEC_UP_PREPARE_IMAGE
+            | MCEXEC_UP_TRANSFER
+            | MCEXEC_UP_START_IMAGE
+            | MCEXEC_UP_WAIT_SYSCALL
+            | MCEXEC_UP_RET_SYSCALL
+            | MCEXEC_UP_LOAD_SYSCALL
+            | MCEXEC_UP_SEND_SIGNAL
+            | MCEXEC_UP_GET_CPU
+            | MCEXEC_UP_STRNCPY_FROM_USER
+            | MCEXEC_UP_GET_CRED
+            | MCEXEC_UP_GET_CREDV
+            | MCEXEC_UP_GET_NODES
+            | MCEXEC_UP_GET_CPUSET
+            | MCEXEC_UP_CREATE_PPD
+            | MCEXEC_UP_PREPARE_DMA
+            | MCEXEC_UP_FREE_DMA
+            | MCEXEC_UP_OPEN_EXEC
+            | MCEXEC_UP_CLOSE_EXEC
+            | MCEXEC_UP_SYS_MOUNT
+            | MCEXEC_UP_SYS_UMOUNT
+            | MCEXEC_UP_SYS_UNSHARE
+            | MCEXEC_UP_UTI_GET_CTX
+            | MCEXEC_UP_UTI_SWITCH_CTX
+            | MCEXEC_UP_SIG_THREAD
+            | MCEXEC_UP_SYSCALL_THREAD
+            | MCEXEC_UP_TERMINATE_THREAD
+            | MCEXEC_UP_GET_NUM_POOL_THREADS
+            | MCEXEC_UP_UTI_ATTR
+            | MCEXEC_UP_RELEASE_USER_SPACE
+            | MCEXEC_UP_DEBUG_LOG
     )
 }
 
 pub(crate) fn topology_query(command: u32) -> bool {
-    matches!(command, crate::abi::MCEXEC_UP_GET_CPU | crate::abi::MCEXEC_UP_GET_NODES)
+    matches!(
+        command,
+        crate::abi::MCEXEC_UP_GET_CPU | crate::abi::MCEXEC_UP_GET_NODES
+    )
 }

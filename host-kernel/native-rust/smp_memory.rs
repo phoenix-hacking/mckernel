@@ -2312,22 +2312,39 @@ pub(super) fn start_os_boot(
 
 /// The existing boot owner is the sole source of application topology. IHK
 /// retains the exact OS lease and backend module and serializes this short query.
-pub(super) fn application_topology(owner: super::smp_resource::OsToken, command: u32) -> Result<isize> {
+pub(super) fn application_topology(
+    owner: super::smp_resource::OsToken,
+    command: u32,
+) -> Result<isize> {
     let published = PUBLISHED.load(Ordering::Acquire);
-    if published.is_null() { return Err(ENODEV); }
+    if published.is_null() {
+        return Err(ENODEV);
+    }
     // SAFETY: The synchronous IHK backend lease pins this memory context.
     let context = unsafe { &*published }.lock();
-    let image = context.images[owner.slot() as usize].as_ref().ok_or(EINVAL)?;
-    if image.owner != owner { return Err(kernel::error::to_result(-116).unwrap_err()); }
+    let image = context.images[owner.slot() as usize]
+        .as_ref()
+        .ok_or(EINVAL)?;
+    if image.owner != owner {
+        return Err(kernel::error::to_result(-116).unwrap_err());
+    }
     let boot = image.boot.as_ref().ok_or(EINVAL)?;
-    if !boot.started { return Err(EBUSY); }
-    boot.prepared.continuing.as_ref().ok_or(EBUSY)?.require_ready()?;
+    if !boot.started {
+        return Err(EBUSY);
+    }
+    boot.prepared
+        .continuing
+        .as_ref()
+        .ok_or(EBUSY)?
+        .require_ready()?;
     let value = match command {
         abi::MCEXEC_UP_GET_CPU => boot.prepared.cpus.len(),
         abi::MCEXEC_UP_GET_NODES => boot.prepared.numa_nodes,
         _ => return Err(EINVAL),
     };
-    if value == 0 || value > i32::MAX as usize { return Err(EIO); }
+    if value == 0 || value > i32::MAX as usize {
+        return Err(EIO);
+    }
     Ok(value as isize)
 }
 

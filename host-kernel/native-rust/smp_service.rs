@@ -501,11 +501,15 @@ pub(in super::super) struct Started {
 impl Started {
     pub(super) fn require_ready(&self) -> Result {
         let error = self.runtime.error.load(Ordering::Acquire);
-        if error != 0 { return Err(errno(error)); }
+        if error != 0 {
+            return Err(errno(error));
+        }
         if self.runtime.status() != 3
             || !self.packets.entered.load(Ordering::Acquire)
             || !self.metadata.entered.load(Ordering::Acquire)
-        { return Err(EBUSY); }
+        {
+            return Err(EBUSY);
+        }
         Ok(())
     }
 
