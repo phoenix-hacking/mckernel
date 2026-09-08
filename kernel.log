@@ -34471,3 +34471,36 @@ mkdir/unlink/release and continuing metadata/queue/task failure coverage, native
 application services, multi-CPU/multi-OS operation, shutdown and the full
 Rust/assembly, declared integration and independent acceptance scope remain
 open. Production gate accounting is unchanged; this turn made verified progress.
+
+2026-09-08: Sixth user-requested storage maintenance PASS.
+Commands (host maintenance only, no kernel compilation or execution):
+python3 -B check-storage-preserved-inputs-20260908-3.py before
+python3 -B cleanup-archived-captures-20260908-3.py audit
+python3 -B cleanup-stale-caches-20260908-3.py audit
+python3 -B cleanup-archived-captures-20260908-3.py apply
+python3 -B cleanup-stale-caches-20260908-3.py apply
+python3 -B trim-scratch-storage-20260908-3.py
+python3 -B check-storage-preserved-inputs-20260908-3.py after
+Working directory: /home/holden/mckernel-work/scratch.
+Before deletion, retained evidence matched all 37 checked Git objects at pushed
+HEAD d5e5d20778e509dc600e43825c6b239a50003741, manifest SHA-256 values and full
+gzip reads. Eight expanded snooping captures matched their committed archives
+entry by entry, including contents, modes and symlinks. Those captures and 35
+extra compressed copies were removed; every failed attempt remains restorable.
+Three old Coursier/Poetry download/repository cache roots contributed another
+427,491,328 bytes; all files were last modified and accessed before 2026-06-01.
+Visible descriptor, working-directory and mapping checks found no target in use.
+Targeted scratch fstrim reclaimed 653,189,120 bytes of actual backing allocation;
+its printed discard range is not counted as recovered space. The logical 60-GiB
+image and mount remain intact. Total recovery this pass: 1,080,680,448 bytes
+(1.01 GiB); all six cleanups total 62,200,410,112 bytes (57.93 GiB).
+All 1,777 checked current files remain byte-identical and all 23 protected
+dependency directories remain present, including snooping module attempts 2/3,
+the pinned Linux kernel/source/build environment and revision-3 McKernel image.
+About 143 GiB remains free on the host and 31 GiB in scratch. Active compiler
+and browser caches, installed environments, personal files and other project
+workspaces were preserved. Ten maintenance artifacts pass SHA-256 and gzip
+round-trip checks; see docs/verification/storage-maintenance-20260908-3.json
+for the restoration mapping and exact accounting. No kernel/application test
+was rerun for this maintenance, and no production gate credit is claimed.
+The full verification and native application integration goal remains active.

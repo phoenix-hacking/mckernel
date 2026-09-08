@@ -74,6 +74,19 @@ available on the host and 31 GiB in scratch. Preserve the current module,
 kernel, image, build inputs and compressed restoration mapping. New runs must
 use fresh attempt names; restore historical captures from Git when needed.
 
+The sixth cleanup checkpoint is recorded in
+`docs/verification/storage-maintenance-20260908-3.json`. Eight completed
+snooping captures and 35 duplicate archives were removed after exact comparisons
+with their pushed evidence. Old Coursier and Poetry download/repository caches,
+unused since before 2026-06-01, were also removed. Targeted scratch trim returns
+the unused blocks to the host; this pass reclaims another 1.01 GiB, totaling
+57.93 GiB across all six cleanups. All 1,777 checked current files and 23 protected
+dependency directories remain intact, including snooping module attempts 2 and
+3. The host has about 143 GiB free, and scratch about 31 GiB. Use the retained
+restoration mapping for removed captures, including failed attempts. Preserve
+active compiler/browser caches, installed environments and other workspaces.
+Continue checking capacity between substantial verification batches.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Bitmap boundary checkpoint, 2026-09-08: module attempt 3 and Linux guest
