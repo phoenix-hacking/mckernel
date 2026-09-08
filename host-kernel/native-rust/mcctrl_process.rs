@@ -18,8 +18,19 @@ use kernel::{
 // SAFETY: IHK is the real namespaced module dependency. These operations use
 // only kernel-owned output/connection storage and retain exact OS/backend owners.
 extern "C" {
-    fn ihk_os_application_open_v1(slot: u32, generation: u64, version: u32, pid: i32, output: *mut *mut c_void) -> i32;
-    fn ihk_os_application_invoke_v1(context: *mut c_void, command: u32, buffer: *mut u8, bytes: usize) -> i64;
+    fn ihk_os_application_open_v1(
+        slot: u32,
+        generation: u64,
+        version: u32,
+        pid: i32,
+        output: *mut *mut c_void,
+    ) -> i32;
+    fn ihk_os_application_invoke_v1(
+        context: *mut c_void,
+        command: u32,
+        buffer: *mut u8,
+        bytes: usize,
+    ) -> i64;
     fn ihk_os_application_close_v1(context: *mut c_void);
 }
 
@@ -41,9 +52,21 @@ impl Registration {
         // SAFETY: mcctrl pins IHK, and this output remains exclusively borrowed
         // until the checked open transfers its independently leased connection.
         kernel::error::to_result(unsafe {
-            ihk_os_application_open_v1(slot, generation, super::application_abi::VERSION, pid, &mut context)
+            ihk_os_application_open_v1(
+                slot,
+                generation,
+                super::application_abi::VERSION,
+                pid,
+                &mut context,
+            )
         })?;
-        Ok(Self { context: NonNull::new(context).ok_or(EIO)?, slot, generation, pid, armed: false })
+        Ok(Self {
+            context: NonNull::new(context).ok_or(EIO)?,
+            slot,
+            generation,
+            pid,
+            armed: false,
+        })
     }
 }
 
@@ -54,10 +77,20 @@ impl Drop for Registration {
             // cleanup finishes. The continuing service owns any request whose
             // acknowledgement arrives after the bounded waiter has departed.
             let status = unsafe {
-                ihk_os_application_invoke_v1(self.context.as_ptr(), super::application_abi::CLEANUP, ptr::null_mut(), 0)
+                ihk_os_application_invoke_v1(
+                    self.context.as_ptr(),
+                    super::application_abi::CLEANUP,
+                    ptr::null_mut(),
+                    0,
+                )
             };
-            pr_info!("application_process=release os={} generation={} pid={} cleanup_errno={}\n",
-                self.slot, self.generation, self.pid, status);
+            pr_info!(
+                "application_process=release os={} generation={} pid={} cleanup_errno={}\n",
+                self.slot,
+                self.generation,
+                self.pid,
+                status
+            );
         }
         // SAFETY: Return exactly the successful connection after invocation.
         // A failed/racing publication remains unarmed and cancels only its own
@@ -87,8 +120,12 @@ impl ProcessId {
         // SAFETY: The referenced PID and permanent initial namespace outlive
         // this call. The guest identity uses the host-global number, while the
         // process registry continues to distinguish referenced PID objects.
-        let pid = unsafe { bindings::pid_nr_ns(self.0.as_ptr(), ptr::addr_of_mut!(bindings::init_pid_ns)) };
-        if pid <= 0 { return Err(ESRCH); }
+        let pid = unsafe {
+            bindings::pid_nr_ns(self.0.as_ptr(), ptr::addr_of_mut!(bindings::init_pid_ns))
+        };
+        if pid <= 0 {
+            return Err(ESRCH);
+        }
         Ok(pid)
     }
 }
@@ -294,20 +331,31 @@ impl Context {
             // operation until its adapter exists. No registration is published.
             let mut descriptor = [0u8; 24];
             let bytes = if compat { 12 } else { 24 };
-            UserSlice::new(argument, bytes).reader().read_slice(&mut descriptor[..bytes])?;
+            UserSlice::new(argument, bytes)
+                .reader()
+                .read_slice(&mut descriptor[..bytes])?;
             return Err(kernel::error::to_result(-95).unwrap_err());
         }
         let process = self.process()?;
-        if process.registration.lock().is_some() { return Err(EINVAL); }
+        if process.registration.lock().is_some() {
+            return Err(EINVAL);
+        }
         let pid = process.pid.number()?;
         let mut registration = Registration::acquire(self.slot, self.generation, pid)?;
         {
             let mut published = process.registration.lock();
-            if published.is_some() { return Err(EINVAL); }
+            if published.is_some() {
+                return Err(EINVAL);
+            }
             registration.armed = true;
             *published = Some(registration);
         }
-        pr_info!("application_process=registered os={} generation={} pid={}\n", self.slot, self.generation, pid);
+        pr_info!(
+            "application_process=registered os={} generation={} pid={}\n",
+            self.slot,
+            self.generation,
+            pid
+        );
         Ok(0)
     }
 }

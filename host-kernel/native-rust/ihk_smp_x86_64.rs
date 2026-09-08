@@ -198,7 +198,10 @@ extern "C" {
 // SAFETY: IHK owns writable kernel output, the operation guard and an exact
 // OS/module lease. Acquiring a connection cannot publish guest work.
 unsafe extern "C" fn application_open(
-    slot: u32, generation: u64, pid: i32, output: *mut *mut core::ffi::c_void,
+    slot: u32,
+    generation: u64,
+    pid: i32,
+    output: *mut *mut core::ffi::c_void,
 ) -> i32 {
     let result = (|| -> Result<_> {
         // SAFETY: These identities come only from the retained IHK lease.
@@ -220,14 +223,19 @@ unsafe extern "C" fn application_open(
 // SAFETY: IHK retains the connection and lease for every concurrent invocation,
 // with no OS operation lock held. Initial cleanup borrows no external buffer.
 unsafe extern "C" fn application_invoke(
-    context: *mut core::ffi::c_void, command: u32, buffer: *mut u8, bytes: usize,
+    context: *mut core::ffi::c_void,
+    command: u32,
+    buffer: *mut u8,
+    bytes: usize,
 ) -> i64 {
     if command != application_abi::CLEANUP || !buffer.is_null() || bytes != 0 {
         return EINVAL.to_errno() as i64;
     }
     // SAFETY: The exact successful open remains live until final close.
     let application = unsafe { &*context.cast::<smp_memory::Application>() };
-    application.cleanup().map_or_else(|error| error.to_errno() as i64, |()| 0)
+    application
+        .cleanup()
+        .map_or_else(|error| error.to_errno() as i64, |()| 0)
 }
 
 // SAFETY: IHK returns the unique connection after every invocation has ended,

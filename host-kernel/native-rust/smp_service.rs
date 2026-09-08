@@ -4,8 +4,7 @@
 use super::super::{
     application_rpc,
     ikc_master::{AcceptSuccess, ExecutionContext, MasterRouter, RouteAction},
-    smp_cpu,
-    smp_application,
+    smp_application, smp_cpu,
     smp_ikc::{self, BootMaster, CONTROL_PACKET_BYTES, CONTROL_QUEUE_BYTES},
     smp_resource::OsToken,
     sysfs_remote::{Attribute, Remote},
@@ -130,7 +129,9 @@ impl Runtime {
         }
         if message == application_rpc::CLEANUP_REPLY {
             if let Err(error) = self.application.reply(packet) {
-                if error != ENOENT { return Err(error); }
+                if error != ENOENT {
+                    return Err(error);
+                }
                 self.rejected.fetch_add(1, Ordering::Relaxed);
             }
             return Ok(());
@@ -370,17 +371,23 @@ impl Runtime {
     }
 
     fn publish_applications(&self) -> Result {
-        if !self.application.queued() { return Ok(()); }
+        if !self.application.queued() {
+            return Ok(());
+        }
         let target = *self.cpus.first().ok_or(EIO)?;
         smp_cpu::with_runtime_target(self.owner, target, |cpu| {
             smp_ikc::validate_apic()?;
             let result = {
                 let transport = self.transport.lock();
-                let Some(entry) = transport.channels.iter().find(|entry|
-                    entry.channel.port == 501 && entry.channel.guest_cpu == 0) else {
+                let Some(entry) = transport
+                    .channels
+                    .iter()
+                    .find(|entry| entry.channel.port == 501 && entry.channel.guest_cpu == 0)
+                else {
                     return Ok(());
                 };
-                self.application.publish(|packet| entry.channel.publish(packet))
+                self.application
+                    .publish(|packet| entry.channel.publish(packet))
             };
             match result {
                 Ok(true) => smp_ikc::notify(cpu),
