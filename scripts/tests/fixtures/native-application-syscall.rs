@@ -5,6 +5,47 @@ mod application_rpc;
 #[allow(dead_code)]
 #[path = "../../../host-kernel/native-rust/application_syscall.rs"]
 mod syscall;
+use syscall as application_syscall;
+#[allow(dead_code)]
+#[path = "../../../host-kernel/native-rust/smp_application_syscall.rs"]
+mod mailbox;
+
+// Only allocation is substituted. Tests compile the complete native mailbox
+// source, with its real protocol, owner transitions and bounded slot handling.
+extern crate self as kernel;
+pub mod prelude {
+    pub const GFP_KERNEL: u32 = 0;
+    pub struct AllocError;
+    impl AllocError {
+        pub fn to_errno(self) -> i32 {
+            -12
+        }
+    }
+    pub struct Vec<T>(std::vec::Vec<T>);
+    impl<T> Vec<T> {
+        pub fn with_capacity(n: usize, _flags: u32) -> Result<Self, AllocError> {
+            let mut value = std::vec::Vec::new();
+            value.try_reserve(n).map_err(|_| AllocError)?;
+            Ok(Self(value))
+        }
+        pub fn push(&mut self, value: T, _flags: u32) -> Result<(), AllocError> {
+            self.0.try_reserve(1).map_err(|_| AllocError)?;
+            self.0.push(value);
+            Ok(())
+        }
+    }
+    impl<T> core::ops::Deref for Vec<T> {
+        type Target = [T];
+        fn deref(&self) -> &[T] {
+            &self.0
+        }
+    }
+    impl<T> core::ops::DerefMut for Vec<T> {
+        fn deref_mut(&mut self) -> &mut [T] {
+            &mut self.0
+        }
+    }
+}
 #[allow(dead_code)]
 #[path = "../../../kernel/rust/abi.rs"]
 mod abi;
@@ -428,12 +469,329 @@ fn invalid_response_states_are_rejected_without_overwriting_peer_bytes() {
     assert!(matches!(
         unsafe { Response::new(&request, buffer.0.as_mut_ptr()) }
             .unwrap()
-            .prepare(0, 23),
+            .prepare(-1, 23),
         Err(-22)
     ));
     assert_eq!(buffer.0, before);
     assert!(unsafe { Response::new(&request, core::ptr::null_mut()) }.is_err());
     assert!(unsafe { Response::new(&request, buffer.0.as_mut_ptr().add(1)) }.is_err());
+}
+
+struct TestRam {
+    bytes: core::cell::UnsafeCell<Buffer>,
+    physical: u64,
+    claimed: core::sync::atomic::AtomicBool,
+    releases: core::sync::atomic::AtomicUsize,
+}
+// SAFETY: The exclusive TestMemory claim serializes host writes. Concurrent
+// peer operations use only aligned atomics; full snapshots follow joined work.
+unsafe impl Sync for TestRam {}
+impl TestRam {
+    fn new(physical: u64, state: u64) -> Arc<Self> {
+        Arc::new(Self {
+            bytes: core::cell::UnsafeCell::new(Buffer::new(state)),
+            physical,
+            claimed: core::sync::atomic::AtomicBool::new(false),
+            releases: core::sync::atomic::AtomicUsize::new(0),
+        })
+    }
+    fn claim(self: &Arc<Self>) -> Result<TestMemory, i32> {
+        self.claimed
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| -16)?;
+        Ok(TestMemory {
+            ram: self.clone(),
+            released: false,
+        })
+    }
+    fn snapshot(&self) -> [u8; 64] {
+        unsafe { (*self.bytes.get()).0 }
+    }
+    fn status(&self) -> u64 {
+        unsafe { AtomicU64::from_ptr(self.bytes.get().cast::<u8>().add(8).cast()) }
+            .load(Ordering::Acquire)
+    }
+}
+struct TestMemory {
+    ram: Arc<TestRam>,
+    released: bool,
+}
+// SAFETY: Construction checks the exclusive claim. Arc owns the aligned RAM;
+// unfinished destruction deliberately retains it as a quarantined test owner.
+unsafe impl syscall::ResponseMemory for TestMemory {
+    fn physical(&self) -> u64 {
+        self.ram.physical
+    }
+    fn address(&mut self) -> *mut u8 {
+        self.ram.bytes.get().cast()
+    }
+    unsafe fn release(mut self) {
+        assert!(self.ram.claimed.swap(false, Ordering::AcqRel));
+        self.ram.releases.fetch_add(1, Ordering::AcqRel);
+        self.released = true;
+    }
+}
+impl Drop for TestMemory {
+    fn drop(&mut self) {
+        if !self.released {
+            // The synthetic peer supplied no retirement proof. Keep its RAM,
+            // matching the native started owner's quarantine contract.
+            std::mem::forget(self.ram.clone());
+        }
+    }
+}
+fn queued_request(index: usize, target: i32) -> Request {
+    let mut packet = c_requests()[0].clone();
+    packet[48..52].copy_from_slice(&(700 + index as i32).to_le_bytes());
+    packet[52..56].copy_from_slice(&target.to_le_bytes());
+    packet[120..128].copy_from_slice(&(0x800000 + 128 * index as u64).to_le_bytes());
+    Request::decode(&packet, 4).unwrap()
+}
+fn admit(queue: &mut mailbox::Mailbox<TestMemory>, request: Request, state: u64) -> Arc<TestRam> {
+    let memory = TestRam::new(request.response(), state);
+    assert_eq!(queue.admit(request, |_| memory.claim()), Ok(true));
+    memory
+}
+
+#[test]
+fn kernel_cancellation_matches_original_c_with_servicing_tid_zero() {
+    let request = request();
+    let rows: Vec<_> = include_str!("native-application-syscall-c.txt")
+        .lines()
+        .filter(|line| line.starts_with("cancellation "))
+        .collect();
+    assert_eq!(rows.len(), 2);
+    for line in rows {
+        let words: Vec<_> = line.split_whitespace().collect();
+        let mut buffer = Buffer::new(words[1].parse().unwrap());
+        let mut completion = unsafe { Response::new(&request, buffer.0.as_mut_ptr()) }
+            .unwrap()
+            .prepare(0, -512)
+            .unwrap();
+        let mut sends = 0;
+        completion
+            .publish(|packet| {
+                sends += 1;
+                assert_eq!(
+                    i32::from_le_bytes(packet[8..12].try_into().unwrap()),
+                    words[3].parse().unwrap()
+                );
+                assert_eq!(
+                    i32::from_le_bytes(packet[24..28].try_into().unwrap()),
+                    words[4].parse().unwrap()
+                );
+                assert_eq!(
+                    u64::from_le_bytes(buffer.0[8..16].try_into().unwrap()),
+                    words[5].parse().unwrap()
+                );
+                Ok(())
+            })
+            .unwrap();
+        assert_eq!(sends, words[2].parse::<usize>().unwrap());
+        assert_eq!(buffer.0.as_slice(), hex(words[6]));
+    }
+}
+
+#[test]
+fn owned_completion_survives_request_scope_and_moves_between_threads() {
+    let ram = TestRam::new(queued_request(0, 0).response(), 2);
+    let completion = {
+        let request = queued_request(0, 0);
+        Response::from_memory(&request, ram.claim().unwrap())
+            .unwrap()
+            .prepare(900, 37)
+            .unwrap()
+    };
+    let mut completion = std::thread::spawn(move || {
+        let mut completion = completion;
+        completion.publish(|_| Ok(())).unwrap();
+        completion
+    })
+    .join()
+    .unwrap();
+    assert_eq!(ram.status(), 1);
+    assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+    assert!(!ram.claimed.load(Ordering::Acquire));
+    unsafe {
+        (*ram.bytes.get()).0.fill(0x5a);
+    }
+    assert_eq!(completion.publish(|_| panic!("late wake")), Err(-16));
+    assert_eq!(ram.snapshot(), [0x5a; 64]);
+}
+
+#[test]
+fn actual_mailbox_capacity_retries_without_claiming_or_losing_a_request() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let mut memory = Vec::new();
+    for index in 0..mailbox::CAPACITY {
+        memory.push(admit(&mut queue, queued_request(index, 0), 2));
+    }
+    let extra = queued_request(64, 0);
+    assert_eq!(
+        queue.admit(extra, |_| panic!("full admission took a claim")),
+        Err(-11)
+    );
+    assert_eq!(
+        queue.admit(queued_request(0, 0), |_| panic!("duplicate responder")),
+        Ok(false)
+    );
+    queue.close().unwrap();
+    assert!(!queue.drained());
+    for _ in 0..mailbox::CAPACITY {
+        assert_eq!(queue.publish(0, |_| Ok(())), Ok(true));
+    }
+    assert!(queue.drained());
+    assert_eq!(queue.publish(0, |_| panic!("extra completion")), Ok(false));
+    for ram in memory {
+        assert_eq!(ram.status(), 1);
+        assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+        let bytes = ram.snapshot();
+        assert_eq!(i32::from_le_bytes(bytes[4..8].try_into().unwrap()), 0);
+        assert_eq!(i64::from_le_bytes(bytes[24..32].try_into().unwrap()), -512);
+    }
+}
+
+#[test]
+fn actual_mailbox_preserves_target_priority_copy_rollback_and_worker_identity() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let other = queue.open_worker(901).unwrap();
+    let general = admit(&mut queue, queued_request(0, 0), 0);
+    let targeted = admit(&mut queue, queued_request(1, 900), 0);
+    let (serial, output) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(output, queued_request(1, 900).wait_output());
+    assert_eq!(queue.copied(other, serial, true), Err(-16));
+    queue.copied(worker, serial, false).unwrap();
+    let (again, output) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(again, serial);
+    assert_eq!(output, queued_request(1, 900).wait_output());
+    queue.copied(worker, serial, true).unwrap();
+    assert_eq!(
+        queue.return_value(worker, serial, 1, 23, |_| panic!("wrong CPU copy")),
+        Err(-22)
+    );
+    assert_eq!(
+        queue.return_value(other, serial, 0, 23, |_| panic!("wrong owner copy")),
+        Err(-16)
+    );
+    assert_eq!(
+        queue.return_value(worker, serial, 0, 23, |_| Err(-14)),
+        Err(-14)
+    );
+    assert_eq!(targeted.status(), 0);
+    queue
+        .return_value(worker, serial, 0, 23, |_| Ok(()))
+        .unwrap();
+    assert_eq!(
+        queue.return_value(worker, serial, 0, 23, |_| panic!("duplicate return copy")),
+        Err(-16)
+    );
+    queue
+        .publish(0, |_| panic!("spinning requester was sent a wake"))
+        .unwrap();
+    assert_eq!(queue.returned(worker, serial), Ok(true));
+    queue.close_worker(worker).unwrap();
+    let reused = queue.open_worker(900).unwrap();
+    assert_ne!(reused, worker);
+    assert_eq!(queue.reserve(worker), Err(-2));
+    let (serial, output) = queue.reserve(reused).unwrap().unwrap();
+    assert_eq!(output, queued_request(0, 0).wait_output());
+    queue.copied(reused, serial, true).unwrap();
+    queue
+        .return_value(reused, serial, 0, -1, |_| Ok(()))
+        .unwrap();
+    queue.publish(0, |_| panic!("spinning wake")).unwrap();
+    assert!(queue.drained());
+    assert_eq!(general.status(), 1);
+}
+
+#[test]
+fn actual_mailbox_full_wake_queue_retains_worker_until_publication() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let first = admit(&mut queue, queued_request(0, 0), 2);
+    let second = admit(&mut queue, queued_request(1, 0), 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    queue.copied(worker, serial, true).unwrap();
+    queue
+        .return_value(worker, serial, 0, 37, |_| Ok(()))
+        .unwrap();
+    for _ in 0..1024 {
+        assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+        assert_eq!(queue.reserve(worker), Ok(None));
+        assert_eq!(queue.returned(worker, serial), Ok(false));
+        assert_eq!(first.status(), 0);
+        assert!(first.claimed.load(Ordering::Acquire));
+    }
+    assert_eq!(queue.publish(0, |_| Ok(())), Ok(true));
+    assert_eq!(queue.returned(worker, serial), Ok(true));
+    assert!(queue.reserve(worker).unwrap().is_some());
+    queue.close().unwrap();
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert!(queue.drained());
+    assert_eq!(second.status(), 1);
+}
+
+#[test]
+fn actual_mailbox_worker_death_and_close_cancel_copying_without_tid_reuse() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let ram = admit(&mut queue, queued_request(0, 0), 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(queue.close_worker(worker), Err(-16));
+    assert_eq!(queue.open_worker(900), Err(-16));
+    assert_eq!(queue.copied(worker, serial, true), Err(-16));
+    assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+    assert_eq!(ram.status(), 0);
+    queue.publish(0, |_| Ok(())).unwrap();
+    queue.close_worker(worker).unwrap();
+    assert_ne!(queue.open_worker(900).unwrap(), worker);
+    assert_eq!(
+        i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+        -512
+    );
+    assert!(queue.drained());
+}
+
+#[test]
+fn actual_mailbox_quarantines_invalid_response_instead_of_releasing_it() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let ram = admit(&mut queue, queued_request(0, 0), 0);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    queue.copied(worker, serial, true).unwrap();
+    unsafe { AtomicU64::from_ptr(ram.bytes.get().cast::<u8>().add(16).cast()) }
+        .store(1, Ordering::Release);
+    let before = ram.snapshot();
+    assert_eq!(
+        queue.return_value(worker, serial, 0, 37, |_| Ok(())),
+        Err(-71)
+    );
+    assert!(queue.quarantined());
+    assert!(!queue.drained());
+    drop(queue);
+    assert!(ram.claimed.load(Ordering::Acquire));
+    assert_eq!(ram.releases.load(Ordering::Acquire), 0);
+    assert_eq!(ram.snapshot(), before);
+}
+
+#[test]
+fn return_copy_is_bound_to_the_existing_futex_clock_destination_and_extent() {
+    let mut packet = c_requests()[0].clone();
+    packet[64..72].copy_from_slice(&202u64.to_le_bytes());
+    packet[72..80].copy_from_slice(&0x900008u64.to_le_bytes());
+    let request = Request::decode(&packet, 4).unwrap();
+    assert_eq!(request.authorize_return_copy(0x900008, 16), Ok(()));
+    for (address, length) in [(0, 16), (0x900000, 16), (0x900008, 8), (0x900008, 17)] {
+        assert_eq!(request.authorize_return_copy(address, length), Err(-22));
+    }
+    packet[64..72].copy_from_slice(&228u64.to_le_bytes());
+    assert_eq!(
+        Request::decode(&packet, 4)
+            .unwrap()
+            .authorize_return_copy(0x900008, 16),
+        Err(-22)
+    );
 }
 
 #[test]

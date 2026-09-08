@@ -2,7 +2,7 @@
 //! Continuing native control service, retained beyond the synchronous BOOT call.
 
 use super::super::{
-    application_image, application_rpc,
+    application_image, application_rpc, application_syscall,
     ikc_master::{AcceptSuccess, ExecutionContext, MasterRouter, RouteAction},
     smp_application, smp_cpu,
     smp_ikc::{self, BootMaster, CONTROL_PACKET_BYTES, CONTROL_QUEUE_BYTES},
@@ -26,6 +26,7 @@ use kernel::{
 
 #[path = "sysfs_memory.rs"]
 mod memory;
+pub(in super::super) use memory::SyscallResponse;
 #[path = "sysfs_snoop.rs"]
 mod snoop;
 
@@ -126,6 +127,10 @@ impl Runtime {
         let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
         if port != 503 {
             return Err(EINVAL);
+        }
+        if message == application_syscall::REQUEST_MESSAGE {
+            let request = application_syscall::Request::decode(packet, self.cpus.len()).map_err(errno)?;
+            return self.application.syscall_request(request, |request| self.memory.syscall(request));
         }
         if matches!(
             message,
@@ -330,18 +335,31 @@ impl Runtime {
                     if entry.channel.owner != self.owner {
                         return Err(EIO);
                     }
-                    let Some(packet) = entry.channel.next_packet()? else {
-                        break;
-                    };
                     if entry.pages.read64(56)? as u32 != entry.channel.guest_cpu {
                         return Err(EIO);
                     }
+                    let packet = match entry.pending {
+                        Some(packet) => packet,
+                        None => {
+                            let Some(packet) = entry.channel.next_packet()? else { break; };
+                            entry.pending = Some(packet);
+                            packet
+                        }
+                    };
                     (entry.channel.port, packet)
                 };
                 // No channel/tree/resource mutex spans reply completion or
                 // metadata admission. The two workers cannot wait on each
                 // other's tree lock during active callback removal.
-                if let Err(error) = self.dispatch(port, &packet) {
+                let result = self.dispatch(port, &packet);
+                if result == Err(EAGAIN) {
+                    // Admission did not acquire ownership. Keep this complete
+                    // packet ahead of subsequent packets on the same channel;
+                    // other channels and outgoing completions still progress.
+                    break;
+                }
+                self.transport.lock().channels.get_mut(index).ok_or(EIO)?.pending = None;
+                if let Err(error) = result {
                     self.fail(error);
                 }
             }
@@ -411,11 +429,36 @@ impl Runtime {
             self.pump_regular(),
             self.publish_remote(),
             self.publish_applications(),
+            self.publish_syscalls(),
         ] {
             if let Err(error) = result {
                 self.fail(error);
             }
         }
+    }
+
+    fn publish_syscalls(&self) -> Result {
+        let Some(guest_cpu) = self.application.syscall_cpu() else { return Ok(()); };
+        let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
+        let result = smp_cpu::with_runtime_target(self.owner, target, |cpu| {
+            smp_ikc::validate_apic()?;
+            let result = {
+                let transport = self.transport.lock();
+                let Some(entry) = transport.channels.iter().find(|entry| {
+                    entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32
+                }) else { return Ok(()); };
+                self.application.publish_syscall(guest_cpu, |packet| entry.channel.publish(packet))
+            };
+            match result {
+                Ok(true) => smp_ikc::notify(cpu),
+                Ok(false) => Ok(()),
+                Err(error) if error == EBUSY || error == EAGAIN => Ok(()),
+                Err(error) => Err(error),
+            }
+        });
+        // No transport/resource mutex spans Linux waiter wakeup.
+        self.application.notify_syscalls();
+        result
     }
 
     fn status(&self) -> u64 {
@@ -604,6 +647,26 @@ impl Application {
 
     pub(in super::super) fn cleanup(&self) -> Result {
         self.started.runtime.application.cleanup(self.token)
+    }
+
+    pub(in super::super) fn worker(&self, bytes: &mut [u8], open: bool) -> Result {
+        self.started.runtime.application.worker(self.token, bytes, open)
+    }
+
+    pub(in super::super) fn wait_syscall(&self, bytes: &mut [u8]) -> Result {
+        self.started.runtime.application.wait_syscall(self.token, bytes)
+    }
+
+    pub(in super::super) fn copied_syscall(&self, bytes: &[u8]) -> Result {
+        self.started.runtime.application.copied_syscall(self.token, bytes)
+    }
+
+    pub(in super::super) fn return_syscall(&self, bytes: &mut [u8]) -> Result {
+        let runtime = &self.started.runtime;
+        runtime.application.return_syscall(self.token, bytes, |request, destination, bytes| {
+            request.authorize_return_copy(destination, bytes.len()).map_err(errno)?;
+            runtime.memory.application_copy(destination, bytes, true)
+        })
     }
 
     pub(in super::super) fn prepare(&self, bytes: &mut [u8]) -> Result {

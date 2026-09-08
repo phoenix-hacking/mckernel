@@ -3,16 +3,19 @@
 
 use super::{
     application_rpc::{Exchange, Token},
+    application_syscall::Request,
     smp_application_image::Preparation,
+    smp_application_syscall::Mailbox,
+    smp_memory::SyscallResponse,
     smp_resource::OsToken,
 };
 use kernel::{
     bindings,
     prelude::*,
-    sync::{new_mutex, Arc, Mutex},
+    sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
 };
 
-const CAPACITY: usize = 64;
+pub(crate) const CAPACITY: usize = 64;
 
 fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
@@ -21,6 +24,8 @@ fn errno(code: i32) -> Error {
 struct Entry {
     cleanup: Exchange,
     prepare: Option<Preparation>,
+    syscalls: Mailbox<SyscallResponse>,
+    scheduled: bool,
     needs_cleanup: bool,
     closed: bool,
     quarantined: bool,
@@ -47,6 +52,18 @@ impl Entry {
         if self.quarantined {
             return Err(errno(-71));
         }
+        if let Err(error) = self.syscalls.close() {
+            self.quarantined = true;
+            return Err(errno(error));
+        }
+        if !self.syscalls.drained() {
+            return Ok(());
+        }
+        // START's future scheduled owner must supply its own retirement path.
+        // Never terminate a scheduled task through the prepared-thread pointer.
+        if self.scheduled {
+            return Err(errno(-95));
+        }
         if let Some(prepare) = &self.prepare {
             if prepare.result().is_none() {
                 return Ok(());
@@ -69,6 +86,8 @@ pub(crate) struct Remote {
     owner: OsToken,
     #[pin]
     slots: Mutex<Vec<Option<Entry>>>,
+    #[pin]
+    changed: CondVar,
 }
 
 impl Remote {
@@ -78,12 +97,13 @@ impl Remote {
             slots.push(None, GFP_KERNEL)?;
         }
         Arc::pin_init(
-            pin_init!(Self { owner, slots <- new_mutex!(slots) }),
+            pin_init!(Self { owner, slots <- new_mutex!(slots), changed <- new_condvar!() }),
             GFP_KERNEL,
         )
     }
 
     pub(crate) fn reserve(&self, pid: i32) -> Result<Token> {
+        let syscalls = Mailbox::new().map_err(errno)?;
         let mut slots = self.slots.lock();
         // Late and quarantined requests continue excluding numeric PID reuse.
         if slots
@@ -99,6 +119,8 @@ impl Remote {
         *slot = Some(Entry {
             cleanup,
             prepare: None,
+            syscalls,
+            scheduled: false,
             needs_cleanup: false,
             closed: false,
             quarantined: false,
@@ -204,7 +226,7 @@ impl Remote {
         Err(ENOENT)
     }
 
-    pub(crate) fn close(&self, token: Token) {
+    fn close_inner(&self, token: Token) {
         let mut slots = self.slots.lock();
         if let Some(slot) = slots
             .iter_mut()
@@ -217,7 +239,8 @@ impl Remote {
                 // Retain its bounded slot until actual OS shutdown is implemented.
                 return;
             }
-            if entry.prepare.is_none() && entry.cleanup.reserved() || entry.cleanup.release_ready()
+            if entry.syscalls.drained()
+                && (entry.prepare.is_none() && entry.cleanup.reserved() || entry.cleanup.release_ready())
             {
                 *slot = None;
             } else {
@@ -228,6 +251,139 @@ impl Remote {
                 }
                 let _ = entry.request_cleanup();
             }
+        }
+    }
+
+    pub(crate) fn close(&self, token: Token) {
+        self.close_inner(token);
+        self.changed.notify_all();
+    }
+
+    pub(crate) fn syscall_request(
+        &self, request: Request,
+        claim: impl FnOnce(&Request) -> Result<SyscallResponse>,
+    ) -> Result {
+        let result = (|| {
+            let mut slots = self.slots.lock();
+            let entry = slots.iter_mut().flatten()
+                .find(|entry| entry.cleanup.pid() == request.pid()).ok_or(ENOENT)?;
+            if !entry.scheduled || entry.quarantined { return Err(EINVAL); }
+            let result = entry.syscalls.admit(request, |request| claim(request).map_err(|e| e.to_errno()));
+            if let Err(error) = result {
+                if error != -11 { entry.quarantined = true; }
+                return Err(errno(error));
+            }
+            Ok(())
+        })();
+        self.changed.notify_all();
+        result
+    }
+
+    pub(crate) fn syscall_cpu(&self) -> Option<i32> {
+        self.slots.lock().iter().flatten().find_map(|entry| entry.syscalls.queued_cpu())
+    }
+
+    pub(crate) fn publish_syscall(
+        &self, cpu: i32, send: impl FnOnce(&[u8; 128]) -> Result,
+    ) -> Result<bool> {
+        let mut slots = self.slots.lock();
+        let Some(entry) = slots.iter_mut().flatten()
+            .find(|entry| entry.syscalls.queued_cpu() == Some(cpu)) else { return Ok(false); };
+        let published = entry.syscalls.publish(cpu, |packet| send(packet).map_err(|e| e.to_errno()))
+            .map_err(errno)?;
+        if entry.needs_cleanup && entry.syscalls.drained() && !entry.quarantined {
+            if let Err(error) = entry.request_cleanup() {
+                entry.quarantined = true;
+                pr_err!("IHK-SMP: syscall drain retained application pid={} cleanup_errno={}\n",
+                    entry.cleanup.pid(), error.to_errno());
+                // Publication already happened. The caller must still notify
+                // the guest even when the following cleanup cannot advance.
+            }
+        }
+        Ok(published)
+    }
+
+    pub(crate) fn notify_syscalls(&self) { self.changed.notify_all(); }
+
+    pub(crate) fn worker(&self, token: Token, bytes: &mut [u8], open: bool) -> Result {
+        if bytes.len() != 16 { return Err(EINVAL); }
+        let mut slots = self.slots.lock();
+        let entry = slots.iter_mut().flatten().find(|entry| entry.key() == token).ok_or(ENOENT)?;
+        if open {
+            if entry.closed || entry.needs_cleanup || entry.quarantined { return Err(EBUSY); }
+            let prepare = entry.prepare.as_ref().ok_or(EINVAL)?;
+            kernel::error::to_result(prepare.result().ok_or(EBUSY)?)?;
+            let tid = i64::from_le_bytes(bytes[..8].try_into().unwrap());
+            let tid = i32::try_from(tid).map_err(|_| EINVAL)?;
+            let worker = entry.syscalls.open_worker(tid).map_err(errno)?;
+            bytes[8..16].copy_from_slice(&worker.to_le_bytes());
+            Ok(())
+        } else {
+            let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
+            let result = entry.syscalls.close_worker(worker);
+            entry.quarantined |= entry.syscalls.quarantined();
+            result.map_err(errno)
+        }
+    }
+
+    pub(crate) fn wait_syscall(&self, token: Token, bytes: &mut [u8]) -> Result {
+        if bytes.len() != 96 { return Err(EINVAL); }
+        let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
+        let mut slots = self.slots.lock();
+        loop {
+            let entry = slots.iter_mut().flatten().find(|entry| entry.key() == token).ok_or(ENOENT)?;
+            if entry.closed || entry.needs_cleanup || entry.quarantined { return Err(errno(-32)); }
+            if kernel::current!().signal_pending() { return Err(EINTR); }
+            if let Some((serial, output)) = entry.syscalls.reserve(worker).map_err(errno)? {
+                bytes[8..16].copy_from_slice(&serial.to_le_bytes());
+                bytes[16..96].copy_from_slice(&output);
+                return Ok(());
+            }
+            // Linux queues the waiter before releasing this exact mutex. No
+            // transport, OS operation or user-copy lock is held by the caller.
+            if self.changed.wait_interruptible(&mut slots) { return Err(EINTR); }
+        }
+    }
+
+    pub(crate) fn copied_syscall(&self, token: Token, bytes: &[u8]) -> Result {
+        if bytes.len() != 24 { return Err(EINVAL); }
+        let word = |offset| u64::from_le_bytes(bytes[offset..offset + 8].try_into().unwrap());
+        let success = word(16);
+        if success > 1 { return Err(EINVAL); }
+        let result = {
+            let mut slots = self.slots.lock();
+            let entry = slots.iter_mut().flatten().find(|entry| entry.key() == token).ok_or(ENOENT)?;
+            entry.syscalls.copied(word(0), word(8), success != 0).map_err(errno)
+        };
+        self.changed.notify_all();
+        result
+    }
+
+    pub(crate) fn return_syscall(
+        &self, token: Token, bytes: &mut [u8],
+        copy: impl FnOnce(&Request, u64, &mut [u8]) -> Result,
+    ) -> Result {
+        if bytes.len() != 72 { return Err(EINVAL); }
+        let word = |offset| u64::from_le_bytes(bytes[offset..offset + 8].try_into().unwrap());
+        let (worker, serial, cpu, value, destination, length) =
+            (word(0), word(8), word(16) as i64, word(24) as i64, word(32), word(40));
+        if length > 16 { return Err(EINVAL); }
+        bytes[48..56].fill(0); // Output: whether the continuing owner accepted the return.
+        let mut slots = self.slots.lock();
+        let entry = slots.iter_mut().flatten().find(|entry| entry.key() == token).ok_or(ENOENT)?;
+        let result = entry.syscalls.return_value(worker, serial, cpu, value, |request| {
+            if length == 0 { return Ok(()); }
+            copy(request, destination, &mut bytes[56..56 + length as usize]).map_err(|e| e.to_errno())
+        });
+        entry.quarantined |= entry.syscalls.quarantined();
+        result.map_err(errno)?;
+        bytes[48..56].copy_from_slice(&1u64.to_le_bytes());
+        loop {
+            let entry = slots.iter().flatten().find(|entry| entry.key() == token).ok_or(ENOENT)?;
+            if entry.syscalls.returned(worker, serial).map_err(errno)? { return Ok(()); }
+            // An interrupted return retains its original result, response and
+            // worker binding for publication. WAIT cannot take new work early.
+            if self.changed.wait_interruptible(&mut slots) { return Err(EINTR); }
         }
     }
 
@@ -319,7 +475,10 @@ impl Remote {
                 .flatten()
                 .find(|entry| entry.key() == token)
                 .ok_or(ENOENT)?;
-            entry.request_cleanup()?;
+            let result = entry.request_cleanup();
+            drop(slots);
+            self.changed.notify_all();
+            result?;
         }
         // The independent packet worker continues past a departing waiter.
         for _ in 0..500 {

@@ -8,6 +8,18 @@ pub(crate) const CLEANUP: u32 = 1;
 pub(crate) const PREPARE: u32 = 2;
 pub(crate) const LOOKUP: u32 = 3;
 pub(crate) const TRANSFER: u32 = 4;
+pub(crate) const WORKER_OPEN: u32 = 5;
+pub(crate) const WORKER_CLOSE: u32 = 6;
+pub(crate) const WAIT_SYSCALL: u32 = 7;
+pub(crate) const COPIED_SYSCALL: u32 = 8;
+pub(crate) const RETURN_SYSCALL: u32 = 9;
+
+// Kernel-only buffers: WORKER_OPEN/CLOSE 16 bytes (tid/handle, output handle);
+// WAIT 96 bytes (worker, delivery, original 80-byte copyout); COPIED 24 bytes
+// (worker, delivery, successful-copy flag); RETURN 72 bytes (worker, delivery,
+// cpu, value, copy destination/length, accepted output flag, up to 16 data bytes).
+// Handles originate in the backend and remain attached to referenced Linux
+// worker/MM owners. None of these handles are accepted from the user UAPI.
 
 // SAFETY: IHK holds the OS operation guard and exact-generation/module lease.
 // Success transfers a non-null, concurrency-safe connection; failure leaves

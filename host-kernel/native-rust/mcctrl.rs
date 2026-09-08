@@ -100,6 +100,8 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
         abi::MCEXEC_UP_CREATE_PPD => Some(context.create_process(argument as usize, compat == 1)),
         abi::MCEXEC_UP_PREPARE_IMAGE => Some(context.prepare_image(argument as usize, compat == 1)),
         abi::MCEXEC_UP_TRANSFER => Some(context.transfer_image(argument as usize, compat == 1)),
+        abi::MCEXEC_UP_WAIT_SYSCALL => Some(context.wait_syscall(argument as usize, compat == 1)),
+        abi::MCEXEC_UP_RET_SYSCALL => Some(context.return_syscall(argument as usize, compat == 1)),
         abi::MCEXEC_UP_RELEASE_USER_SPACE => {
             Some(context.clear_user_space(argument as usize, compat == 1))
         }

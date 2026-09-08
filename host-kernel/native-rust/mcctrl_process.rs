@@ -6,7 +6,7 @@ use core::{
     ffi::c_void,
     pin::Pin,
     ptr::{self, NonNull},
-    sync::atomic::{AtomicBool, AtomicPtr, Ordering},
+    sync::atomic::{AtomicBool, AtomicPtr, AtomicU64, Ordering},
 };
 use kernel::{
     bindings,
@@ -42,6 +42,7 @@ pub(super) struct Registration {
     armed: AtomicBool,
     operation: Pin<Box<Mutex<()>>>,
     mapping: Pin<Box<Mutex<Option<Arc<Mirror>>>>>,
+    workers: Pin<Box<Mutex<Vec<Arc<HostWorker>>>>>,
     // Mirror files can outlive all mcos file bindings and their Process owner.
     // Retain the referenced PID independently for that complete lifetime.
     _pid: ProcessId,
@@ -59,6 +60,7 @@ impl Registration {
         let pid = identity.number()?;
         let operation = Box::pin_init(new_mutex!(()), GFP_KERNEL)?;
         let mapping = Box::pin_init(new_mutex!(None), GFP_KERNEL)?;
+        let workers = Box::pin_init(new_mutex!(Vec::with_capacity(64, GFP_KERNEL)?), GFP_KERNEL)?;
         let mut context = ptr::null_mut();
         // SAFETY: mcctrl pins IHK, and this output remains exclusively borrowed
         // until the checked open transfers its independently leased connection.
@@ -80,6 +82,7 @@ impl Registration {
                 armed: AtomicBool::new(false),
                 operation,
                 mapping,
+                workers,
                 _pid: identity,
             },
             GFP_KERNEL,
@@ -101,6 +104,113 @@ impl Registration {
             return Err(EIO);
         }
         kernel::error::to_result(status as i32).map(|_| ())
+    }
+
+    fn worker(&self, create: bool) -> Result<Arc<HostWorker>> {
+        let identity = ProcessId::thread()?;
+        let mirror = self.mapping.lock().clone().ok_or(EINVAL)?;
+        mirror.current()?;
+        let mut workers = self.workers.lock();
+        if let Some(worker) = workers.iter().find(|worker| worker.identity.same(&identity)) {
+            worker.mirror.current()?;
+            return Ok(worker.clone());
+        }
+        if !create { return Err(EINVAL); }
+        let mut index = 0;
+        while index < workers.len() {
+            if !workers[index].identity.thread_alive() {
+                let mut bytes = [0; 16];
+                bytes[..8].copy_from_slice(&workers[index].handle.to_le_bytes());
+                match self.invoke(super::application_abi::WORKER_CLOSE, &mut bytes) {
+                    Ok(()) => {
+                        let removed = workers.swap_remove(index);
+                        drop(workers);
+                        // Referenced PID/MM destruction is outside publication.
+                        drop(removed);
+                        workers = self.workers.lock();
+                        index = 0;
+                        continue;
+                    }
+                    Err(error) if error == EBUSY => {},
+                    Err(error) => return Err(error),
+                }
+            }
+            index += 1;
+        }
+        if workers.len() == 64 { return Err(EAGAIN); }
+        let mut bytes = [0; 16];
+        bytes[..8].copy_from_slice(&(identity.number()? as i64).to_le_bytes());
+        self.invoke(super::application_abi::WORKER_OPEN, &mut bytes)?;
+        let handle = u64::from_le_bytes(bytes[8..].try_into().unwrap());
+        if handle == 0 { return Err(EIO); }
+        let worker = match Arc::new(HostWorker {
+            identity, mirror, handle, delivery: AtomicU64::new(0),
+        }, GFP_KERNEL) {
+            Ok(worker) => worker,
+            Err(error) => {
+                bytes[..8].copy_from_slice(&handle.to_le_bytes());
+                let _ = self.invoke(super::application_abi::WORKER_CLOSE, &mut bytes);
+                return Err(error.into());
+            }
+        };
+        if let Err(error) = workers.push(worker.clone(), GFP_KERNEL) {
+            bytes[..8].copy_from_slice(&handle.to_le_bytes());
+            let _ = self.invoke(super::application_abi::WORKER_CLOSE, &mut bytes);
+            return Err(error.into());
+        }
+        Ok(worker)
+    }
+
+    fn wait_syscall(&self, argument: usize, compat: bool) -> Result<isize> {
+        if compat { return Err(errno(-95)); }
+        let worker = self.worker(true)?;
+        if worker.delivery.load(Ordering::Acquire) != 0 { return Err(EBUSY); }
+        let mut bytes = [0; 96];
+        bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
+        self.invoke(super::application_abi::WAIT_SYSCALL, &mut bytes)?;
+        let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+        if serial == 0 { return Err(EIO); }
+        let copied = UserSlice::new(argument, 80).writer().write_slice(&bytes[16..96]);
+        let mut result = [0; 24];
+        result[..16].copy_from_slice(&bytes[..16]);
+        result[16..24].copy_from_slice(&(copied.is_ok() as u64).to_le_bytes());
+        let commit = self.invoke(super::application_abi::COPIED_SYSCALL, &mut result);
+        // The original private request stays queued if any user byte faults.
+        copied?;
+        commit?;
+        worker.delivery.store(serial, Ordering::Release);
+        Ok(0)
+    }
+
+    fn return_syscall(&self, argument: usize, compat: bool) -> Result<isize> {
+        if compat { return Err(errno(-95)); }
+        let mut descriptor = [0; 40];
+        UserSlice::new(argument, descriptor.len()).reader().read_slice(&mut descriptor)?;
+        let worker = self.worker(false)?;
+        let serial = worker.delivery.load(Ordering::Acquire);
+        if serial == 0 { return Err(EINVAL); }
+        let length = image::word(&descriptor, 32).map_err(errno)?;
+        if length > 16 { return Err(EINVAL); }
+        let mut bytes = [0; 72];
+        bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
+        bytes[8..16].copy_from_slice(&serial.to_le_bytes());
+        bytes[16..32].copy_from_slice(&descriptor[..16]);
+        bytes[32..48].copy_from_slice(&descriptor[24..40]);
+        if length != 0 {
+            let source = image::word(&descriptor, 16).map_err(errno)? as usize;
+            source.checked_add(length as usize).ok_or(errno(-75))?;
+            UserSlice::new(source, length as usize).reader()
+                .read_slice(&mut bytes[56..56 + length as usize])?;
+        }
+        let result = self.invoke(super::application_abi::RETURN_SYSCALL, &mut bytes);
+        if image::word(&bytes, 48).map_err(errno)? == 1 {
+            // This includes interrupted waits after acceptance. The independent
+            // pump retains the original result; WAIT cannot rebind this worker
+            // until its status and any required wake have actually published.
+            worker.delivery.store(0, Ordering::Release);
+        }
+        result?;
+        Ok(0)
     }
 
     fn prepare_image(self: &Arc<Self>, argument: usize, compat: bool) -> Result<isize> {
@@ -305,12 +415,30 @@ struct ProcessId(NonNull<bindings::pid>);
 
 impl ProcessId {
     fn current() -> Result<Self> {
+        Self::from_current(bindings::pid_type_PIDTYPE_TGID)
+    }
+
+    fn thread() -> Result<Self> {
+        Self::from_current(bindings::pid_type_PIDTYPE_PID)
+    }
+
+    fn from_current(kind: bindings::pid_type) -> Result<Self> {
         // SAFETY: get_current is valid for this calling task; get_task_pid takes
         // its own reference under Linux's RCU protection before returning.
         let pid = unsafe {
-            bindings::get_task_pid(bindings::get_current(), bindings::pid_type_PIDTYPE_TGID)
+            bindings::get_task_pid(bindings::get_current(), kind)
         };
         Ok(Self(NonNull::new(pid).ok_or(ESRCH)?))
+    }
+
+    fn thread_alive(&self) -> bool {
+        // SAFETY: The referenced PID excludes object reuse. Linux checks its
+        // task link under RCU and returns an owned task reference on success.
+        let task = unsafe { bindings::get_pid_task(self.0.as_ptr(), bindings::pid_type_PIDTYPE_PID) };
+        if task.is_null() { return false; }
+        // SAFETY: Balance exactly get_pid_task's task reference.
+        unsafe { bindings::put_task_struct(task) };
+        true
     }
     fn same(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -340,6 +468,13 @@ impl Drop for ProcessId {
         // SAFETY: Exactly one successful get_task_pid reference is released.
         unsafe { bindings::put_pid(self.0.as_ptr()) };
     }
+}
+
+struct HostWorker {
+    identity: ProcessId,
+    mirror: Arc<Mirror>,
+    handle: u64,
+    delivery: AtomicU64,
 }
 
 #[pin_data]
@@ -576,5 +711,13 @@ impl Context {
 
     pub(super) fn clear_user_space(&self, argument: usize, compat: bool) -> Result<isize> {
         self.registered()?.clear_user_space(argument, compat)
+    }
+
+    pub(super) fn wait_syscall(&self, argument: usize, compat: bool) -> Result<isize> {
+        self.registered()?.wait_syscall(argument, compat)
+    }
+
+    pub(super) fn return_syscall(&self, argument: usize, compat: bool) -> Result<isize> {
+        self.registered()?.return_syscall(argument, compat)
     }
 }

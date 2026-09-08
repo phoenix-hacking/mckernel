@@ -779,3 +779,53 @@ through final publication or quarantine. Never treat dropping a view as guest
 retirement. Keep native START unavailable until its dependent owners exist.
 The latest actual launcher remains FAIL at START_IMAGE, and no application
 instruction has executed in McKernel. The full acceptance goal stays active.
+
+## Native syscall ownership refinement, 2026-09-08
+
+Reviewed parent: `b8f990ef395a86e0b5206c41c91c1219da5fab0f`. Retain the exact
+guest/launcher consumers and extracted reference bodies identified above.
+Adapt the verified `application_syscall.rs::{Response,Completion}` to own a
+memory capability and a copied Request so a native mailbox can retain completion
+across queue retries without self-referential Rust storage. Preserve the existing
+borrowed test adapter and the result/state/wake/status ordering. The owned
+capability must keep its exclusive ledger tag on unfinished destruction; only
+terminal status publication permits removal, with no later guest-memory access.
+Errors quarantine the existing application entry instead of freeing its thread.
+
+Extend `sysfs_memory.rs::Ledger` to exclude live application response spans from
+all existing queue, metadata, snooping and prepared-image accesses. Reuse its
+checked exact-generation extents, original started resource lifetime and tagged
+claim allocation. Use bounded storage and reject aliases before reading shared
+response fields. Do not reuse the sysfs Claim destructor, which acknowledges its
+own protocol and would fabricate a syscall completion.
+
+Add the mailbox to each existing `smp_application.rs::Entry`; no additional PID
+registry is needed. Reuse Delivery and never-reused Worker/Token identities.
+Reserve copyout before exposing a request, requeue on copy failure, and keep
+Returning until the independent continuing worker publishes the actual wake
+and final response. Receive capacity exhaustion retains one packet per channel
+in the existing `OwnedControlChannel`, and retries it before popping another.
+Only scheduled entries may accept application requests; worker waits can begin
+after preparation, before START, as the unchanged launcher requires.
+
+The pinned Linux `sync/condvar.rs` supplies interruptible waits releasing their
+Mutex guard. Current `mcctrl_process.rs::ProcessId` and `mcctrl_vm.rs::Mirror`
+supply referenced PID and originating-MM ownership to adapt for Linux workers.
+The kernel-only application connection carries opaque worker/delivery handles;
+existing user WAIT/RET descriptors retain their original layout. No transport,
+OS operation or publication lock spans a user copy or interruptible sleep.
+The continuing pump's existing nesting is transport, application, then memory;
+master channel admission takes transport then memory. Preserve this direction
+and release transport before waiting or notifying Linux waiters. Original C
+kernel cancellation calls use servicing TID zero, which must be covered by an
+additional original-C completion vector if enabled in the common protocol.
+
+The existing launcher's only nonzero RET copy is `act_futex_clock` (and its C
+fallback case): offloaded syscall 202, destination in request argument zero,
+and a 16-byte timespec. Preserve that actual producer by binding the return
+copy to those request fields before the checked guest-memory write. Zero-length
+returns retain the general syscall path. User-supplied return addresses alone
+must not authorize writes to unrelated guest allocations. An interrupted RET
+keeps its accepted result owned by the pump; a kernel-only accepted flag lets
+mcctrl clear its private delivery handle while the next WAIT waits for actual
+publication. The user descriptor receives no new field.

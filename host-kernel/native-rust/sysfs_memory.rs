@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-only
-//! Retained guest mappings and exclusive claims for continuing sysfs requests.
+//! Retained guest mappings and exclusive continuing-service claims.
 
 use super::super::{checked_guest_bytes, MemoryExtent, MemoryMap, MAX_EXTENTS};
 use super::{errno, wire, OsToken, METADATA_CAPACITY};
+use crate::application_syscall::{Request as SyscallRequest, ResponseMemory, RESPONSE_BYTES};
 use core::{
     ptr,
     sync::atomic::{AtomicI32, AtomicU32, AtomicU64, Ordering},
@@ -43,6 +44,7 @@ struct Tagged {
 struct Ledger {
     fixed: Vec<Span>,
     requests: Vec<Option<Tagged>>,
+    responses: Vec<Option<Tagged>>,
     snoops: Vec<Tagged>,
     serial: u64,
 }
@@ -55,6 +57,7 @@ impl Ledger {
                 .iter()
                 .flatten()
                 .any(|old| old.span.overlaps(span))
+            || self.responses.iter().flatten().any(|old| old.span.overlaps(span))
             || snoops && self.snoops.iter().any(|old| old.span.overlaps(span))
     }
 
@@ -107,10 +110,15 @@ impl Memory {
         for _ in 0..METADATA_CAPACITY + 2 {
             requests.push(None, GFP_KERNEL)?;
         }
+        let capacity = crate::smp_application::CAPACITY * crate::smp_application_syscall::CAPACITY;
+        let mut responses = Vec::with_capacity(capacity, GFP_KERNEL)?;
+        for _ in 0..capacity {
+            responses.push(None, GFP_KERNEL)?;
+        }
         Arc::pin_init(
             pin_init!(Self {
                 owner, direct_map, extents,
-                ledger <- new_mutex!(Ledger { fixed, requests, snoops: Vec::new(), serial: 0 }),
+                ledger <- new_mutex!(Ledger { fixed, requests, responses, snoops: Vec::new(), serial: 0 }),
             }),
             GFP_KERNEL,
         )
@@ -216,6 +224,30 @@ impl Memory {
             slot,
             active: true,
         })
+    }
+
+    pub(super) fn syscall(self: &Arc<Self>, request: &SyscallRequest) -> Result<SyscallResponse> {
+        let physical = request.response();
+        if physical % 8 != 0 {
+            return Err(EINVAL);
+        }
+        let address = self.address(physical, RESPONSE_BYTES)?;
+        let span = Span::new(physical, RESPONSE_BYTES)?;
+        let mut ledger = self.ledger.lock();
+        if ledger.conflicts(span, true) {
+            return Err(EBUSY);
+        }
+        let slot = ledger.responses.iter().position(Option::is_none).ok_or(EAGAIN)?;
+        // SAFETY: The checked exact-generation RAM is aligned and disjoint
+        // from every active service access. The guest owns only atomic state.
+        let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
+        let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
+        if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
+            return Err(errno(-71));
+        }
+        let tag = ledger.tag(span)?;
+        ledger.responses[slot] = Some(tag);
+        Ok(SyscallResponse { memory: self.clone(), address, tag, slot })
     }
 
     /// Reserve queue aliases while the caller allocates and stores both owned
@@ -357,6 +389,32 @@ impl Drop for Claim {
                 );
             }
         }
+    }
+}
+
+/// Only completed response publication removes this exact ledger tag. Dropping
+/// an unfinished capability leaves its span excluded; the continuing Runtime
+/// and original started BootStorage retain all RAM/module owners in quarantine.
+pub(crate) struct SyscallResponse {
+    memory: Arc<Memory>,
+    address: u64,
+    tag: Tagged,
+    slot: usize,
+}
+
+// SAFETY: Memory::syscall is the only constructor. It validates the complete
+// retained mapping and excludes aliases under the shared ledger. Unfinished
+// destruction does not remove the tag or acknowledge the guest.
+unsafe impl ResponseMemory for SyscallResponse {
+    fn physical(&self) -> u64 { self.tag.span.physical }
+    fn address(&mut self) -> *mut u8 { self.address as *mut u8 }
+    unsafe fn release(self) {
+        let mut ledger = self.memory.ledger.lock();
+        let slot = &mut ledger.responses[self.slot];
+        assert!(slot.as_ref().is_some_and(|tag| tag.serial == self.tag.serial));
+        *slot = None;
+        // The guest can already reuse the response; only host bookkeeping is
+        // accessed above. No destructor dereferences its address.
     }
 }
 

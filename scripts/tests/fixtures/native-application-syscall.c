@@ -114,5 +114,20 @@ int main(void)
             hex(&response, sizeof(response));
         }
     }
+    for (int state = 0; state <= 2; state += 2) {
+        union { uint64_t alignment[8]; unsigned char bytes[64]; } response;
+        struct ikc_scd_packet packet = {0};
+        memset(&response, 0xa5, sizeof(response));
+        current_response = (struct syscall_response *)&response;
+        current_response->status = 0;
+        current_response->req_thread_status = state;
+        packet.req.rtid = 700; packet.ref = 2; packet.pid = 600;
+        packet.resp_pa = (unsigned long)&response;
+        sends = wake_message = wake_tid = 0; send_status = ULONG_MAX;
+        /* Original worker/process cleanup uses stid zero and -ERESTARTSYS. */
+        __return_syscall(&userdata, NULL, &packet, -512, 0);
+        printf("cancellation %d %d %d %d %lu ", state, sends, wake_message, wake_tid, send_status);
+        hex(&response, sizeof(response));
+    }
     return 0;
 }

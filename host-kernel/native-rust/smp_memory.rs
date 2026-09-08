@@ -31,6 +31,7 @@ mod abi;
 #[path = "smp_service.rs"]
 mod service;
 pub(super) use service::Application;
+pub(super) use service::SyscallResponse;
 
 const MAX_EXTENTS: usize = 4096;
 const MAX_REQUESTS: usize = MAX_EXTENTS;
@@ -545,6 +546,7 @@ impl BootPages {
 struct OwnedControlChannel {
     channel: super::smp_ikc::ControlChannel,
     pages: BootPages,
+    pending: Option<[u8; super::smp_ikc::CONTROL_PACKET_BYTES]>,
 }
 
 /// The same checked mapping policy serves the locked ledger and the retained
@@ -845,7 +847,7 @@ fn accept_control_channel(
         )?
     };
     // Store every owner before a reply can expose physical memory to McKernel.
-    channels.push(OwnedControlChannel { channel, pages }, GFP_KERNEL)?;
+    channels.push(OwnedControlChannel { channel, pages, pending: None }, GFP_KERNEL)?;
     pr_info!("IHK-SMP: control accepted os={} generation={} port={} guest_cpu={} linux_cpu={} cookie={} receive={:x} send={:x} bytes={} reference={} remote_cookie={:x}\n",
         owner.slot(), owner.generation(), offer.port, guest_cpu, cpus[guest_cpu as usize].linux_id,
         cookie, physical, offer.send_queue, CONTROL_QUEUE_BYTES, offer.reference, offer.remote_channel_cookie);

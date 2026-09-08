@@ -68,14 +68,14 @@ mod sysfs_remote;
 #[path = "abi/application.rs"]
 mod application_abi;
 mod application_rpc;
-// Protocol prerequisite only: the mailbox, response claims and user ioctl
-// integration must be connected before the native application can be started.
+// Shared protocol fields also support the original reference fixtures.
 #[allow(dead_code)]
 mod application_syscall;
 // The shared image view also defines fields/reservation geometry for mcctrl.
 #[allow(dead_code)]
 mod application_image;
 mod smp_application;
+mod smp_application_syscall;
 mod smp_application_image;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
@@ -253,6 +253,11 @@ unsafe extern "C" fn application_invoke(
             application_abi::PREPARE => application.prepare(bytes),
             application_abi::LOOKUP => application.lookup(bytes),
             application_abi::TRANSFER => application.transfer(bytes),
+            application_abi::WORKER_OPEN => application.worker(bytes, true),
+            application_abi::WORKER_CLOSE => application.worker(bytes, false),
+            application_abi::WAIT_SYSCALL => application.wait_syscall(bytes),
+            application_abi::COPIED_SYSCALL => application.copied_syscall(bytes),
+            application_abi::RETURN_SYSCALL => application.return_syscall(bytes),
             _ => Err(EINVAL),
         }
     } else {
