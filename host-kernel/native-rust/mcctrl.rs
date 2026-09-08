@@ -95,6 +95,9 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
     let context = unsafe { &*context.cast::<FileContext>() };
     let operation = match command {
         abi::MCEXEC_UP_GET_CREDV => Some(mcctrl_exec::credentials(argument as usize)),
+        abi::MCEXEC_UP_STRNCPY_FROM_USER => {
+            Some(mcctrl_exec::copy_string(argument as usize, compat == 1))
+        }
         abi::MCEXEC_UP_OPEN_EXEC => Some(context.open_executable(argument as usize)),
         abi::MCEXEC_UP_CLOSE_EXEC => Some(context.close_executable()),
         abi::MCEXEC_UP_CREATE_PPD => Some(context.create_process(argument as usize, compat == 1)),

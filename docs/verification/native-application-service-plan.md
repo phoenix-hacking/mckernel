@@ -1429,3 +1429,47 @@ Test the actual extracted adapter methods for distinct worker/guest values,
 copy failures and acceptance/interrupt ownership before fresh module/runtime
 checks. No guest code, wire ABI, old test assertion or launcher workaround is
 needed for this adaptation.
+
+## Native pathname-copy adaptation review, 2026-09-08
+
+Retain the selected existing Rust `executer/user/rust/mcexec_helpers.rs::
+do_strncpy_from_user` and its C fallback unchanged. File path dispatch uses
+MCEXEC_UP_STRNCPY_FROM_USER (0x30a02908), with pointer/pointer/unsigned-long/long
+fields in `executer/include/uprotocol.h::strncpy_from_user_desc`.
+
+Adapt the selected Rust `executer/kernel/mcctrl/rust/mcctrl_helpers.rs::
+mcctrl_control_strncpy_from_user_body_result`, called by control.c whenever
+MCCTRL_RUST_HELPERS is selected. Its chunked copying body preserves source and
+destination, stops at the first NUL, copies the terminator, returns count
+excluding NUL (or n if none is found), and reports data-copy faults through
+`desc.result` with ioctl return 0. Descriptor faults return EFAULT and buffer
+allocation failure returns ENOMEM. The C fallback preserves those public
+semantics; its unchecked pointer arithmetic is not copied into native Rust.
+
+Reuse native `user_string::read_into`, already consumed by executable/image
+path reads, and pinned Linux 6.12 `rust/kernel/uaccess.rs::UserSlice` readers and
+writers. Reuse one initialized 4-KiB heap buffer and the existing Vec allocation
+API. Retain bounded chunking with no arbitrary pathname-length cap; checked
+address advancement prevents wrapping. No kernel/user copy or allocator bridge
+is required. The old Rust function's C callback types and page allocator cannot
+serve the native Linux crate directly, so adapt its sequencing in user_string.
+
+As in the original body (which ignores os), this operation accesses only the
+current Linux task's userspace, with no registration or guest-pointer shortcut.
+Any mirror fault still uses the existing VMA's referenced MM/Registration
+checks. Do not hold an application/registry lock across user copying. Decode
+and preserve the original four fields for LP64 and i386; write only the result
+field within the copied descriptor and return descriptor-copy faults normally.
+
+Verify page boundaries, zero length, embedded NUL, multi-page strings, no
+terminator within n, invalid source/destination/descriptor pointers, partial
+copy faults and descriptor guards through both actual Linux ioctl ABIs. Then
+run real application file operations through unchanged mcexec. Keep the prior
+launch/cleanup baseline and all failure captures. This is missing integration
+for the readiness smoke checks, not a new launcher or reduced test contract.
+
+Build-selection refinement: user_string is shared with the SMP image loader,
+which correctly rejects the unused mcctrl-only ioctl adapter under -D warnings.
+Keep user_string::read_into unchanged and place the new current-caller copy
+adapter in mcctrl_exec, reusing its initialized path_buffer allocation. This
+retains both existing consumers and introduces no dead-code allowance.

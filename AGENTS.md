@@ -199,6 +199,18 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest pathname-copy/application-smoke WIP, 2026-09-08:
+`docs/verification/native-application-string-wip-20260908.json` records native
+STRNCPY_FROM_USER in mcctrl_exec using the existing buffer and shared bounded
+reader. Module 2 passes all builds after moving the mcctrl-only adapter out of
+the shared SMP module; original warning failure 1 remains retained. Actual
+guest 1 passes both LP64/i386 descriptors, 28 guarded data cases, eight
+descriptor faults and eight unchanged HELLO/exit-37/retirement launches.
+Ordinary dynamically linked libc/pthread core application build 1 passes all
+four Linux reference modes. Its memory/file/thread/signal modes still require
+actual McKernel execution. Preserve every new capture pending full archival;
+continue the readiness and abnormal-owner gates before announcing Ultra.
+
 Latest actual application checkpoint, 2026-09-08:
 `docs/verification/native-application-start-checkpoint-20260908.json` retains
 21 complete captures and all six original failures, current module 5, four

@@ -1,0 +1,54 @@
+{
+  "application_readiness_complete": false,
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-string-module-20260908-1",
+      "record": {
+        "path": "docs/verification/evidence/native-application-string-module-20260908-1-string-wip-record.json.gz",
+        "sha256": "9c37b871eb5708ce8b02149bf7e456ab042c536ff916e3e7ca226f8991a8dbf2",
+        "size": 4643
+      },
+      "status": "FAIL"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-string-module-20260908-2",
+      "record": {
+        "path": "docs/verification/evidence/native-application-string-module-20260908-2-string-wip-record.json.gz",
+        "sha256": "2caa74b68b5d2e0d5ec7d96b29eab9f593af5cc3877fd0c5f4d31805b2f8ffd7",
+        "size": 5807
+      },
+      "status": "PASS"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-string-application-guest-20260908-1",
+      "record": {
+        "path": "docs/verification/evidence/native-application-string-application-guest-20260908-1-string-wip-record.json.gz",
+        "sha256": "5e6ca8907b9b72d691ea6e43d7a80935d91a36917552b8c7967201fc377f6a84",
+        "size": 6248
+      },
+      "status": "PASS"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1",
+      "record": {
+        "path": "docs/verification/evidence/native-application-core-build-20260908-1-string-wip-record.json.gz",
+        "sha256": "e321310ab20727f1da616af1adfa4aa16f908363db16eeda7db92efbc7622818",
+        "size": 9651
+      },
+      "status": "PASS"
+    }
+  ],
+  "created_utc": "2026-09-08T23:24:45.436083+00:00",
+  "full_capture_retention_pending": true,
+  "libc_core_mckernel": "pending",
+  "libc_core_reference": "PASS four modes on Linux only",
+  "native_path_copy": {
+    "actual_guest": true,
+    "data_cases": 28,
+    "descriptor_faults": 8,
+    "interfaces": 2
+  },
+  "scope": "Native pathname-copy adapter, real native/compat fault boundaries and prior HELLO baseline; ordinary libc core application built/reference-tested for actual McKernel execution next. Original shared-module warning failure retained.",
+  "status": "WIP",
+  "unchanged_launcher_repetitions": 8
+}

@@ -32,6 +32,54 @@ fn path_buffer() -> Result<Vec<u8>> {
     Ok(bytes)
 }
 
+/// Adapt mcctrl_control_strncpy_from_user_body_result for current-task
+/// userspace, retaining its chunking and separate descriptor/data error ABI.
+pub(super) fn copy_string(argument: usize, compat: bool) -> Result<isize> {
+    let width = if compat { 4 } else { 8 };
+    let mut descriptor = [0; 32];
+    UserSlice::new(argument, 4 * width)
+        .reader()
+        .read_slice(&mut descriptor[..4 * width])?;
+    let word = |index| {
+        let mut bytes = [0; 8];
+        bytes[..width].copy_from_slice(&descriptor[index * width..(index + 1) * width]);
+        u64::from_le_bytes(bytes) as usize
+    };
+    let (destination, source, count) = (word(0), word(1), word(2));
+    // One initialized x86 page, outside the kernel stack. Existing source
+    // consumers continue using read_into without reading past their first NUL.
+    let mut buffer = path_buffer()?;
+    let result = (|| -> Result<usize> {
+        let mut copied = 0usize;
+        while copied < count {
+            let length = (count - copied).min(buffer.len());
+            let input = source.checked_add(copied).ok_or(EFAULT)?;
+            let terminated = super::user_string::read_into(input, &mut buffer[..length])?;
+            let bytes = if terminated {
+                buffer[..length].iter().position(|&byte| byte == 0).unwrap()
+            } else {
+                length
+            };
+            let output = destination.checked_add(copied).ok_or(EFAULT)?;
+            let written = bytes + usize::from(terminated);
+            UserSlice::new(output, written)
+                .writer()
+                .write_slice(&buffer[..written])?;
+            copied = copied.checked_add(bytes).ok_or(EFAULT)?;
+            if terminated {
+                break;
+            }
+        }
+        Ok(copied)
+    })();
+    let result = result.map_or_else(|error| error.to_errno() as i64, |bytes| bytes as i64);
+    descriptor[3 * width..4 * width].copy_from_slice(&result.to_le_bytes()[..width]);
+    UserSlice::new(argument, 4 * width)
+        .writer()
+        .write_slice(&descriptor[..4 * width])?;
+    Ok(0)
+}
+
 pub(super) struct Executable {
     file: NonNull<bindings::file>,
     denied: bool,
