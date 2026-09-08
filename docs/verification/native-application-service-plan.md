@@ -675,3 +675,54 @@ Rust producers and existing C declarations, then compile native adapters and run
 isolated waiter/copy/lifetime checks before the next real application attempt.
 No source retirement, application execution or production acceptance follows
 from these prerequisites alone.
+
+## Syscall protocol prerequisite verified, 2026-09-08
+
+The first scheduled-service prerequisite now passes eleven tests using 25
+unchanged extracted C/Rust declarations and bodies. The actual original C and
+Rust request producers agree byte-for-byte on six vectors, including a targeted
+worker. Twelve successful response vectors agree with the original host C
+completion; the exact guest Rust wake handler consumes the new wake packet.
+The common 40-byte response prefix is checked independently from the guest's
+48-byte object, and completion preserves the extra pointer and surrounding
+bytes. The decoder preserves the actual wait-copy extent and leaves its unused
+trailing PID field alone. Worker and delivery tokens reuse the original
+never-reused allocation source; 4,096 concurrent delivery/RPC tokens stay unique.
+
+State tests cover copyout rollback, wrong workers, numeric TID reuse, duplicate
+returns, CPU mismatches and targeted requests. The actual completion body passes
+256 races with a concurrently descheduling simulated peer. In 1,024 simulated
+queue-full failures it retains the original wake and result with status zero,
+then publishes status only after send succeeds. This intentionally improves
+the original C failure path, which publishes status even if its wake send fails;
+successful-path byte equivalence is recorded separately. Repeated completion
+does not access a response after simulated peer reuse. These are protocol and
+atomic-memory tests, not live IKC capacity, actual user-copy or native worker
+lifecycle tests.
+
+The unchanged nineteen image/protocol tests pass again. All three native
+modules compile with the new protocol selected, but the native continuing
+service does not consume it yet. The new module has not been run in QEMU.
+Compared with the last actual guest module, 47 source inputs are unchanged,
+two change for shared token allocation and protocol compile selection, and
+one is added. Both original launcher and guest implementation remain intact.
+
+`native-application-syscall-checkpoint-20260908.json` retains all four complete
+captures in fourteen artifacts, with fifty native source bindings, twelve
+syscall test inputs, fifteen existing image/protocol inputs, four unchanged
+actual guest source bindings, seven pinned Linux review files and three exact
+formatter replays. The first successful capture preserves its generated
+unused-import warning; the second removes that import and enforces Rust
+warnings. No failed assertion or original evidence was removed.
+
+Next implement the native mailbox in the existing application registration.
+Capacity rejection must retain an incoming packet for retry rather than pop
+and lose it; outgoing wake retry must keep its exclusive response claim.
+Connect referenced Linux worker/MM identity and transactional user copyout,
+then real procfs publication/read/release and scheduled process ownership.
+The raw response capability is only a protocol view: its constructor requires
+the native adapter to retain the exact mapping/module/pages and exclude aliases
+through final publication or quarantine. Never treat dropping a view as guest
+retirement. Keep native START unavailable until its dependent owners exist.
+The latest actual launcher remains FAIL at START_IMAGE, and no application
+instruction has executed in McKernel. The full acceptance goal stays active.

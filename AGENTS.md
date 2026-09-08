@@ -168,6 +168,36 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Syscall protocol prerequisite, 2026-09-08: eleven new tests pass against 25
+exact original C/Rust declarations and bodies. Six request vectors and twelve
+completion vectors agree with the existing implementations; the actual guest
+Rust wake consumer accepts the new packet. Copyout/requeue and worker-token
+reuse are state tests; 1,024 simulated send failures retain completion, and
+256 real atomic deschedule races verify result visibility. The 4,096 concurrent
+delivery/RPC tokens remain distinct. The nineteen previous protocol/image tests
+pass again. All three native modules build with the new protocol selected for
+compilation only; its mailbox, response-memory claims and user WAIT/RET adapters
+are not connected. No new guest run or application execution is claimed.
+See `docs/verification/native-application-syscall-checkpoint-20260908.json`:
+four complete captures, fourteen artifacts, fifty native source bindings,
+twelve syscall fixture bindings, fifteen existing image/protocol bindings,
+four unchanged actual guest source bindings and seven pinned Linux reviews.
+The original successful capture's generated unused-import warning is retained;
+the final syscall build enforces Rust warnings and passes. Three exact formatter
+replays bind the existing differently formatted native sources. Preserve
+native-application-syscall-20260908-2, native-application-image-20260908-7 and
+native-application-syscall-module-20260908-1 alongside the previous actual guest
+module native-application-service-module-20260908-2, launcher build 2 and all
+established kernel/image/compiler/setup inputs. The last real launcher still
+fails at START_IMAGE after preparing its ELF. Next connect the bounded native
+mailbox and incoming backpressure, exclusive response spans, referenced worker
+and MM ownership, user copies/waits/returns, actual procfs and scheduled cleanup
+before enabling START. All earlier application, VM, signal, fork/exec/exit,
+race/fault, multi-CPU/OS, shutdown, declared integration/current full suite,
+full Rust/assembly and independent acceptance requirements remain. Root and
+scratch have about 149/39 GiB free. Continue audited cleanup as needed and
+periodic GitHub checkpoints; no formal score or production gate changes.
+
 Actual native launcher checkpoint, 2026-09-08: the unchanged Rust-selected
 `mcexec` now prepares an ordinary ELF and reaches START_IMAGE in the real guest.
 START still returns EINVAL; no application instruction has executed in McKernel.
