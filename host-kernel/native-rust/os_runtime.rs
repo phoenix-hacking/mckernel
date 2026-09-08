@@ -197,10 +197,18 @@ struct OsBackendBootV3 {
 }
 
 #[derive(Clone, Copy)]
+struct ApplicationCallbacks {
+    open: super::application_abi::Open,
+    invoke: super::application_abi::Invoke,
+    close: super::application_abi::Close,
+}
+
+#[derive(Clone, Copy)]
 struct OsBackend {
     ioctl: OsBackendIoctlV2,
     release: OsBackendReleaseV2,
     boot: Option<OsBackendBootV3>,
+    application: Option<ApplicationCallbacks>,
 }
 
 struct OsObject {
@@ -330,6 +338,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v2(
             ioctl,
             release,
             boot: None,
+            application: None,
         },
         _ => return EINVAL.to_errno() as i64,
     };
@@ -364,11 +373,46 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v3(
             ioctl,
             release,
             boot: Some(OsBackendBootV3 { prepare, start }),
+            application: None,
         },
         _ => return EINVAL.to_errno() as i64,
     };
     // SAFETY: The complete callback identities stay resident through the
     // provider module owner acquired before any OS object is published.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// Add kernel application connections while retaining the v1/v2/v3 contracts.
+///
+/// # Safety
+/// The caller pins owner and all seven callbacks have the declared signatures,
+/// module lifetime and exact-generation ownership contracts.
+#[export_name = "ihk_os_create_unbooted_v4"]
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v4(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+    open: Option<super::application_abi::Open>,
+    invoke: Option<super::application_abi::Invoke>,
+    close: Option<super::application_abi::Close>,
+) -> i64 {
+    let backend = match (callback_abi, ioctl, release, prepare, start, open, invoke, close) {
+        (1, Some(ioctl), Some(release), Some(prepare), Some(start), Some(open), Some(invoke), Some(close)) => OsBackend {
+            ioctl, release, boot: Some(OsBackendBootV3 { prepare, start }),
+            application: Some(ApplicationCallbacks { open, invoke, close }),
+        },
+        _ => return EINVAL.to_errno() as i64,
+    };
+    // SAFETY: Publication follows validation and acquisition of the callback
+    // module owner, using the same create transaction as the retained versions.
     match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
@@ -806,6 +850,128 @@ const OS_FOPS: bindings::file_operations = {
     operations
 };
 
+struct BackendApplication {
+    context: ptr::NonNull<c_void>,
+    callbacks: ApplicationCallbacks,
+}
+
+// SAFETY: The registered callback contract supplies a concurrency-safe opaque
+// owner. Only invoke borrows it; final Drop follows the last such borrow.
+unsafe impl Send for BackendApplication {}
+unsafe impl Sync for BackendApplication {}
+
+impl Drop for BackendApplication {
+    fn drop(&mut self) {
+        // SAFETY: This successful open is uniquely owned and its OS/module
+        // lease is the later-dropping field of ApplicationConnection.
+        unsafe { (self.callbacks.close)(self.context.as_ptr()) };
+    }
+}
+
+struct ApplicationConnection {
+    backend: BackendApplication,
+    _lease: OsLease<'static>,
+}
+
+/// # Safety
+/// Output is exclusive kernel storage. The dependency caller pins IHK until
+/// close; the returned opaque connection may never be exposed to userspace.
+#[export_name = "ihk_os_application_open_v1"]
+pub(crate) unsafe extern "C" fn open_application(
+    slot: u32, generation: u64, version: u32, pid: i32, output: *mut *mut c_void,
+) -> i32 {
+    if output.is_null() { return EINVAL.to_errno(); }
+    // SAFETY: The caller grants this writable kernel output for the call.
+    unsafe { output.write(ptr::null_mut()) };
+    let result = (|| -> Result<Box<ApplicationConnection>> {
+        if version != super::application_abi::VERSION || pid <= 0 { return Err(EINVAL); }
+        let handle = OS_REGISTRY.resolve_minor(slot as usize).map_err(|error| errno(error.errno()))?;
+        if handle.generation() != generation { return Err(errno(-116)); }
+        let lease = OS_REGISTRY.acquire(handle).map_err(|error| errno(error.errno()))?;
+        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        assert!(!raw.is_null());
+        // SAFETY: The exact lease excludes OS/backend object destruction.
+        let object = unsafe { &*raw };
+        let backend = {
+            let _operation = object.operations.lock();
+            let snapshot = OS_REGISTRY.snapshot(handle).map_err(|error| errno(error.errno()))?;
+            if !matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) { return Err(EBUSY); }
+            let callbacks = object.backend.and_then(|backend| backend.application).ok_or(ENODEV)?;
+            let mut context = ptr::null_mut();
+            // SAFETY: The lease pins all callbacks. This short acquisition
+            // reserves owned state without publishing guest work or waiting.
+            let status = unsafe { (callbacks.open)(slot, generation, pid, &mut context) };
+            if status != 0 {
+                if !context.is_null() {
+                    // SAFETY: A misbehaving trusted callback still transferred
+                    // its owned output; close it while the lease remains live.
+                    unsafe { (callbacks.close)(context) };
+                }
+                return Err(errno(status));
+            }
+            BackendApplication { context: ptr::NonNull::new(context).ok_or(EIO)?, callbacks }
+        };
+        // Box allocation failure drops the backend before the retained lease.
+        Ok(Box::new(ApplicationConnection { backend, _lease: lease }, GFP_KERNEL)?)
+    })();
+    match result {
+        Ok(connection) => {
+            // SAFETY: Transfer the sole allocation to the dependency caller.
+            unsafe { output.write(Box::into_raw(connection).cast()) };
+            0
+        }
+        Err(error) => error.to_errno(),
+    }
+}
+
+/// # Safety
+/// Context is a live successful open; the caller excludes close during this
+/// call and supplies only command-defined kernel storage, never user addresses.
+#[export_name = "ihk_os_application_invoke_v1"]
+pub(crate) unsafe extern "C" fn invoke_application(
+    context: *mut c_void, command: u32, buffer: *mut u8, bytes: usize,
+) -> i64 {
+    if context.is_null() { return EINVAL.to_errno() as i64; }
+    // SAFETY: The caller retains this exact connection and its OS/module lease.
+    let connection = unsafe { &*context.cast::<ApplicationConnection>() };
+    // SAFETY: No OS operation/publication lock spans this potentially blocking
+    // operation. The backend owns any work remaining after the call returns.
+    unsafe { (connection.backend.callbacks.invoke)(connection.backend.context.as_ptr(), command, buffer, bytes) }
+}
+
+/// # Safety
+/// Return the unique successful open after all concurrent invocations end.
+#[export_name = "ihk_os_application_close_v1"]
+pub(crate) unsafe extern "C" fn close_application(context: *mut c_void) {
+    // SAFETY: The trusted caller transfers the original unique Box exactly once.
+    unsafe { drop(Box::from_raw(context.cast::<ApplicationConnection>())) };
+}
+
+// SAFETY: These immutable relocations name module-resident ABI exports.
+#[export_name = "__export_symbol_ihk_os_application_open_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_OPEN_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: open_application as *const () as *const u8,
+};
+// SAFETY: Immutable relocation with the same module lifetime and namespace.
+#[export_name = "__export_symbol_ihk_os_application_invoke_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_INVOKE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: invoke_application as *const () as *const u8,
+};
+// SAFETY: Immutable relocation with the same module lifetime and namespace.
+#[export_name = "__export_symbol_ihk_os_application_close_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_CLOSE_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: close_application as *const () as *const u8,
+};
+
 /// Query only the running OS's retained topology, never a user pointer.
 #[export_name = "ihk_os_topology_query_v1"]
 pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32) -> i64 {
@@ -887,6 +1053,15 @@ pub(crate) static IHK_OS_CREATE_V3_EXPORT: IhkExportSymbolRecord = IhkExportSymb
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_create_unbooted_v3 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_create_unbooted_v4"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_CREATE_V4_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v4 as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

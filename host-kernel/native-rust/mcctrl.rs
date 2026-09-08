@@ -24,6 +24,9 @@ mod abi;
 #[allow(dead_code)]
 #[path = "abi/os_service.rs"]
 mod service_abi;
+#[allow(dead_code)]
+#[path = "abi/application.rs"]
+mod application_abi;
 
 const MCCTRL_FOUNDATION_VERSION: u16 = 1;
 const MCCTRL_PARAMETER_COUNT: usize = 0;
@@ -90,6 +93,7 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
         abi::MCEXEC_UP_GET_CREDV => Some(mcctrl_exec::credentials(argument as usize)),
         abi::MCEXEC_UP_OPEN_EXEC => Some(context.open_executable(argument as usize)),
         abi::MCEXEC_UP_CLOSE_EXEC => Some(context.close_executable()),
+        abi::MCEXEC_UP_CREATE_PPD => Some(context.create_process(argument as usize, compat == 1)),
         _ => None,
     };
     if let Some(result) = operation {

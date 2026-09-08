@@ -2,8 +2,10 @@
 //! Continuing native control service, retained beyond the synchronous BOOT call.
 
 use super::super::{
+    application_rpc,
     ikc_master::{AcceptSuccess, ExecutionContext, MasterRouter, RouteAction},
     smp_cpu,
+    smp_application,
     smp_ikc::{self, BootMaster, CONTROL_PACKET_BYTES, CONTROL_QUEUE_BYTES},
     smp_resource::OsToken,
     sysfs_remote::{Attribute, Remote},
@@ -92,6 +94,7 @@ struct Runtime {
     cpus: Vec<BootCpu>,
     data: SharedData,
     remote: Arc<Remote>,
+    application: Arc<smp_application::Remote>,
     master: Arc<BootMaster>,
     master_receive: u64,
     master_send: u64,
@@ -124,6 +127,13 @@ impl Runtime {
         let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
         if port != 503 {
             return Err(EINVAL);
+        }
+        if message == application_rpc::CLEANUP_REPLY {
+            if let Err(error) = self.application.reply(packet) {
+                if error != ENOENT { return Err(error); }
+                self.rejected.fetch_add(1, Ordering::Relaxed);
+            }
+            return Ok(());
         }
         if matches!(message, 0x3b | 0x3d | 0x3f) {
             // Stale/foreign/wrong-kind replies cannot retire the live exchange.
@@ -359,6 +369,28 @@ impl Runtime {
         })
     }
 
+    fn publish_applications(&self) -> Result {
+        if !self.application.queued() { return Ok(()); }
+        let target = *self.cpus.first().ok_or(EIO)?;
+        smp_cpu::with_runtime_target(self.owner, target, |cpu| {
+            smp_ikc::validate_apic()?;
+            let result = {
+                let transport = self.transport.lock();
+                let Some(entry) = transport.channels.iter().find(|entry|
+                    entry.channel.port == 501 && entry.channel.guest_cpu == 0) else {
+                    return Ok(());
+                };
+                self.application.publish(|packet| entry.channel.publish(packet))
+            };
+            match result {
+                Ok(true) => smp_ikc::notify(cpu),
+                Ok(false) => Ok(()),
+                Err(error) if error == EBUSY || error == EAGAIN => Ok(()),
+                Err(error) => Err(error),
+            }
+        })
+    }
+
     fn pump(&self) {
         // A failure in one service must not prevent callback replies or
         // already-published exchanges from draining in the other service.
@@ -366,6 +398,7 @@ impl Runtime {
             self.pump_master(),
             self.pump_regular(),
             self.publish_remote(),
+            self.publish_applications(),
         ] {
             if let Err(error) = result {
                 self.fail(error);
@@ -546,6 +579,30 @@ impl Started {
     }
 }
 
+pub(in super::super) struct Application {
+    started: Started,
+    token: application_rpc::Token,
+}
+
+impl Application {
+    pub(super) fn new(started: Started, pid: i32) -> Result<Self> {
+        let token = started.runtime.application.reserve(pid)?;
+        Ok(Self { started, token })
+    }
+
+    pub(in super::super) fn cleanup(&self) -> Result {
+        self.started.runtime.application.cleanup(self.token)
+    }
+}
+
+impl Drop for Application {
+    fn drop(&mut self) {
+        // An unpublished registration cancels only its reserved slot. A caller
+        // departing after publication cannot remove the continuing RPC owner.
+        self.started.runtime.application.close(self.token);
+    }
+}
+
 pub(super) fn prepare(
     map: &MemoryMap<MAX_EXTENTS>,
     owner: OsToken,
@@ -587,11 +644,12 @@ pub(super) fn prepare(
     // SAFETY: Setup validated the unique response page and stored it before
     // acknowledgement. No prior continuing Remote exists for this OS.
     let remote = unsafe { Remote::new(data)? };
+    let application = smp_application::Remote::new(owner)?;
     let pending = Pending::new()?;
     let status_address = prepared.params.address + offset_of!(abi::IhkSmpBootParam, status) as u64;
     let runtime = Arc::pin_init(
         pin_init!(Runtime {
-            owner, memory, cpus, data, remote, master,
+            owner, memory, cpus, data, remote, application, master,
             master_receive: receive, master_send: send, master_bytes: queue_bytes,
             status_address,
             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),

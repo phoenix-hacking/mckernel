@@ -251,3 +251,15 @@ continued boot/sysfs service on both ABIs. The initial process registration owns
 no prepared guest application. Actual image/VM preparation, image transfer/start,
 syscall forwarding, procfs publication and application execution remain the next
 required consumers of this connection, alongside all original acceptance work.
+
+Implementation refinement: reserve one of 64 continuing cleanup descriptors when
+opening a process connection, before publishing registration. Release therefore
+requires no allocation; exhausted capacity returns EAGAIN before registration.
+An unpublished connection cancels only its reservation. Queued/published requests
+outlive a timed-out caller, and their numeric PID remains excluded until the
+matching acknowledgement. Use the referenced Linux TGID's initial-namespace
+number on the guest wire; retain the referenced PID object for local identity.
+The initial request has no prepared thread or guest memory. An acknowledgement
+precedes guest terminate_host, so it must not be promoted to proof of full task
+termination or prepared-image retirement. Those owners and final termination
+semantics remain part of the subsequent image/process lifecycle work.

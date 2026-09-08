@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0
-//! Native per-process executable ownership shared by the process's OS files.
+//! Native per-process executable and application ownership across OS files.
 
 use super::mcctrl_exec::Executable;
 use core::{
+    ffi::c_void,
     pin::Pin,
     ptr::{self, NonNull},
     sync::atomic::{AtomicPtr, Ordering},
@@ -11,7 +12,59 @@ use kernel::{
     bindings,
     prelude::*,
     sync::{new_mutex, Arc, Mutex},
+    uaccess::UserSlice,
 };
+
+// SAFETY: IHK is the real namespaced module dependency. These operations use
+// only kernel-owned output/connection storage and retain exact OS/backend owners.
+extern "C" {
+    fn ihk_os_application_open_v1(slot: u32, generation: u64, version: u32, pid: i32, output: *mut *mut c_void) -> i32;
+    fn ihk_os_application_invoke_v1(context: *mut c_void, command: u32, buffer: *mut u8, bytes: usize) -> i64;
+    fn ihk_os_application_close_v1(context: *mut c_void);
+}
+
+struct Registration {
+    context: NonNull<c_void>,
+    slot: u32,
+    generation: u64,
+    pid: i32,
+    armed: bool,
+}
+
+// SAFETY: The IHK connection contract permits concurrent borrows and ownership
+// transfer. Our process mutex publishes it; only its final destructor invokes it.
+unsafe impl Send for Registration {}
+
+impl Registration {
+    fn acquire(slot: u32, generation: u64, pid: i32) -> Result<Self> {
+        let mut context = ptr::null_mut();
+        // SAFETY: mcctrl pins IHK, and this output remains exclusively borrowed
+        // until the checked open transfers its independently leased connection.
+        kernel::error::to_result(unsafe {
+            ihk_os_application_open_v1(slot, generation, super::application_abi::VERSION, pid, &mut context)
+        })?;
+        Ok(Self { context: NonNull::new(context).ok_or(EIO)?, slot, generation, pid, armed: false })
+    }
+}
+
+impl Drop for Registration {
+    fn drop(&mut self) {
+        if self.armed {
+            // SAFETY: The process's PID and this connection remain owned until
+            // cleanup finishes. The continuing service owns any request whose
+            // acknowledgement arrives after the bounded waiter has departed.
+            let status = unsafe {
+                ihk_os_application_invoke_v1(self.context.as_ptr(), super::application_abi::CLEANUP, ptr::null_mut(), 0)
+            };
+            pr_info!("application_process=release os={} generation={} pid={} cleanup_errno={}\n",
+                self.slot, self.generation, self.pid, status);
+        }
+        // SAFETY: Return exactly the successful connection after invocation.
+        // A failed/racing publication remains unarmed and cancels only its own
+        // reserved descriptor; it cannot clean up the winning registration.
+        unsafe { ihk_os_application_close_v1(self.context.as_ptr()) };
+    }
+}
 
 /// Linux's referenced thread-group PID, stable across namespace-number reuse
 /// and leader replacement. The kernel owns the object's atomic reference count.
@@ -28,6 +81,15 @@ impl ProcessId {
     }
     fn same(&self, other: &Self) -> bool {
         self.0 == other.0
+    }
+
+    fn number(&self) -> Result<i32> {
+        // SAFETY: The referenced PID and permanent initial namespace outlive
+        // this call. The guest identity uses the host-global number, while the
+        // process registry continues to distinguish referenced PID objects.
+        let pid = unsafe { bindings::pid_nr_ns(self.0.as_ptr(), ptr::addr_of_mut!(bindings::init_pid_ns)) };
+        if pid <= 0 { return Err(ESRCH); }
+        Ok(pid)
     }
 }
 
@@ -47,9 +109,12 @@ impl Drop for ProcessId {
 struct Process {
     slot: u32,
     generation: u64,
-    pid: ProcessId,
     #[pin]
     executable: Mutex<Option<Executable>>,
+    #[pin]
+    registration: Mutex<Option<Registration>>,
+    // Field destruction closes the executable and application before this PID.
+    pid: ProcessId,
 }
 
 impl Process {
@@ -126,7 +191,8 @@ impl Binding {
         }
         let process = Arc::pin_init(
             try_pin_init!(Process {
-                slot, generation, pid, executable <- new_mutex!(None),
+                slot, generation, executable <- new_mutex!(None),
+                registration <- new_mutex!(None), pid,
             }),
             GFP_KERNEL,
         )?;
@@ -219,5 +285,29 @@ impl Context {
         } else {
             22
         })
+    }
+
+    pub(super) fn create_process(&self, argument: usize, compat: bool) -> Result<isize> {
+        if argument != 0 {
+            // Legacy non-null CREATE_PPD also clears Linux mirror VMAs after
+            // fork. Preserve real user-copy failures, but do not claim that VM
+            // operation until its adapter exists. No registration is published.
+            let mut descriptor = [0u8; 24];
+            let bytes = if compat { 12 } else { 24 };
+            UserSlice::new(argument, bytes).reader().read_slice(&mut descriptor[..bytes])?;
+            return Err(kernel::error::to_result(-95).unwrap_err());
+        }
+        let process = self.process()?;
+        if process.registration.lock().is_some() { return Err(EINVAL); }
+        let pid = process.pid.number()?;
+        let mut registration = Registration::acquire(self.slot, self.generation, pid)?;
+        {
+            let mut published = process.registration.lock();
+            if published.is_some() { return Err(EINVAL); }
+            registration.armed = true;
+            *published = Some(registration);
+        }
+        pr_info!("application_process=registered os={} generation={} pid={}\n", self.slot, self.generation, pid);
+        Ok(0)
     }
 }

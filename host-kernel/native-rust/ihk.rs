@@ -28,6 +28,9 @@ mod os_runtime;
 mod os_service;
 #[path = "abi/os_service.rs"]
 mod service_abi;
+#[allow(dead_code)]
+#[path = "abi/application.rs"]
+mod application_abi;
 
 use core::sync::atomic::{AtomicPtr, Ordering};
 

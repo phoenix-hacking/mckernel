@@ -64,6 +64,11 @@ mod sysfs_request;
 mod sysfs_rpc;
 #[allow(dead_code)]
 mod sysfs_remote;
+#[allow(dead_code)]
+#[path = "abi/application.rs"]
+mod application_abi;
+mod application_rpc;
+mod smp_application;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -100,7 +105,7 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
             // THIS_MODULE. IHK acquires its own module reference before the
             // instance becomes live; the raw scalar argument is never a pointer.
             let result = unsafe {
-                ihk_os_create_unbooted_v3(
+                ihk_os_create_unbooted_v4(
                     IHK_SMP_CONTROL_DEVICE_MINOR,
                     THIS_MODULE.as_ptr().cast(),
                     arg as u64,
@@ -109,6 +114,9 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
                     Some(ihk_smp_os_release_v2),
                     Some(ihk_smp_prepare_boot_v3),
                     Some(ihk_smp_start_boot_v3),
+                    Some(application_open),
+                    Some(application_invoke),
+                    Some(application_close),
                 )
             };
             if result < 0 {
@@ -169,8 +177,8 @@ extern "C" {
     fn ihk_smp_provider_open_v1(minor: u32) -> i64;
     #[link_name = "ihk_smp_provider_close_v1"]
     fn ihk_smp_provider_close_v1(receipt: i64);
-    #[link_name = "ihk_os_create_unbooted_v3"]
-    fn ihk_os_create_unbooted_v3(
+    #[link_name = "ihk_os_create_unbooted_v4"]
+    fn ihk_os_create_unbooted_v4(
         provider_minor: u32,
         owner: *mut core::ffi::c_void,
         argument: u64,
@@ -179,9 +187,54 @@ extern "C" {
         release: Option<IhkSmpOsReleaseV2>,
         prepare: Option<IhkSmpPrepareBootV3>,
         start: Option<IhkSmpStartBootV3>,
+        application_open: Option<application_abi::Open>,
+        application_invoke: Option<application_abi::Invoke>,
+        application_close: Option<application_abi::Close>,
     ) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
+}
+
+// SAFETY: IHK owns writable kernel output, the operation guard and an exact
+// OS/module lease. Acquiring a connection cannot publish guest work.
+unsafe extern "C" fn application_open(
+    slot: u32, generation: u64, pid: i32, output: *mut *mut core::ffi::c_void,
+) -> i32 {
+    let result = (|| -> Result<_> {
+        // SAFETY: These identities come only from the retained IHK lease.
+        let owner = unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) }
+            .map_err(|_| EINVAL)?;
+        let application = smp_memory::application_connection(owner, pid)?;
+        Ok(Box::new(application, GFP_KERNEL)?)
+    })();
+    match result {
+        Ok(application) => {
+            // SAFETY: IHK supplies a non-null exclusive output initialized null.
+            unsafe { output.write(Box::into_raw(application).cast()) };
+            0
+        }
+        Err(error) => error.to_errno(),
+    }
+}
+
+// SAFETY: IHK retains the connection and lease for every concurrent invocation,
+// with no OS operation lock held. Initial cleanup borrows no external buffer.
+unsafe extern "C" fn application_invoke(
+    context: *mut core::ffi::c_void, command: u32, buffer: *mut u8, bytes: usize,
+) -> i64 {
+    if command != application_abi::CLEANUP || !buffer.is_null() || bytes != 0 {
+        return EINVAL.to_errno() as i64;
+    }
+    // SAFETY: The exact successful open remains live until final close.
+    let application = unsafe { &*context.cast::<smp_memory::Application>() };
+    application.cleanup().map_or_else(|error| error.to_errno() as i64, |()| 0)
+}
+
+// SAFETY: IHK returns the unique connection after every invocation has ended,
+// retaining the OS/module lease until after this destructor returns.
+unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {
+    // SAFETY: Exactly the Box transferred by application_open.
+    unsafe { drop(Box::from_raw(context.cast::<smp_memory::Application>())) };
 }
 
 // SAFETY: Only IHK's versioned OS object invokes this registered callback. It

@@ -30,6 +30,7 @@ mod abi;
 
 #[path = "smp_service.rs"]
 mod service;
+pub(super) use service::Application;
 
 const MAX_EXTENTS: usize = 4096;
 const MAX_REQUESTS: usize = MAX_EXTENTS;
@@ -2346,6 +2347,25 @@ pub(super) fn application_topology(
         return Err(EIO);
     }
     Ok(value as isize)
+}
+
+/// Acquire from the existing exact-generation boot owner, releasing the memory
+/// publication guard before any application operation can wait for the guest.
+pub(super) fn application_connection(owner: super::smp_resource::OsToken, pid: i32) -> Result<Application> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    let started = {
+        // SAFETY: The synchronous IHK backend lease pins this memory context.
+        let context = unsafe { &*published }.lock();
+        let image = context.images[owner.slot() as usize].as_ref().ok_or(EINVAL)?;
+        if image.owner != owner { return Err(kernel::error::to_result(-116).unwrap_err()); }
+        let boot = image.boot.as_ref().ok_or(EINVAL)?;
+        if !boot.started { return Err(EBUSY); }
+        let started = boot.prepared.continuing.as_ref().ok_or(EBUSY)?;
+        started.require_ready()?;
+        started.clone()
+    };
+    Application::new(started, pid)
 }
 
 const _: () = {
