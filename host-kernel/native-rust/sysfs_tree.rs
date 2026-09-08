@@ -6,7 +6,10 @@
 //! and must not reacquire this tree's outer lock while removal drains them.
 
 use core::sync::atomic::{AtomicU64, Ordering};
-use kernel::{prelude::*, str::{CStr, CString}};
+use kernel::{
+    prelude::*,
+    str::{CStr, CString},
+};
 
 use super::sysfs_objects::{AttributeOps, Directory, File, Link};
 
@@ -25,32 +28,48 @@ pub(crate) struct Handle(u64);
 
 impl Handle {
     pub(crate) fn from_wire(value: u64) -> Result<Self> {
-        if value == 0 || value > i64::MAX as u64 { return Err(EINVAL); }
+        if value == 0 || value > i64::MAX as u64 {
+            return Err(EINVAL);
+        }
         Ok(Self(value))
     }
 
-    pub(crate) fn wire(self) -> u64 { self.0 }
+    pub(crate) fn wire(self) -> u64 {
+        self.0
+    }
 
     fn allocate() -> Result<Self> {
-        let value = NEXT_HANDLE.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
-            |value| (value < i64::MAX as u64).then(|| value + 1))
+        let value = NEXT_HANDLE
+            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |value| {
+                (value < i64::MAX as u64).then(|| value + 1)
+            })
             .map_err(|_| errno(-75))?;
         Ok(Self(value))
     }
 }
 
 fn validate_path(path: &[u8]) -> Result {
-    if path.len() >= PATH_BYTES { return Err(errno(-36)); }
-    if path.contains(&0) { return Err(EINVAL); }
+    if path.len() >= PATH_BYTES {
+        return Err(errno(-36));
+    }
+    if path.contains(&0) {
+        return Err(EINVAL);
+    }
     for name in path.split(|&byte| byte == b'/') {
-        if name == b"." || name == b".." { return Err(EINVAL); }
-        if name.len() > 255 { return Err(errno(-36)); }
+        if name == b"." || name == b".." {
+            return Err(EINVAL);
+        }
+        if name.len() > 255 {
+            return Err(errno(-36));
+        }
     }
     Ok(())
 }
 
 fn component(name: &[u8]) -> Result<CString> {
-    if name.is_empty() || name.len() > 255 { return Err(EINVAL); }
+    if name.is_empty() || name.len() > 255 {
+        return Err(EINVAL);
+    }
     let mut bytes = [0_u8; 256];
     bytes[..name.len()].copy_from_slice(name);
     let name = CStr::from_bytes_with_nul(&bytes[..name.len() + 1]).map_err(|_| EINVAL)?;
@@ -60,8 +79,12 @@ fn component(name: &[u8]) -> Result<CString> {
 struct Operations(Box<dyn AttributeOps>);
 
 impl AttributeOps for Operations {
-    fn show(&self, output: &mut [u8]) -> Result<usize> { self.0.show(output) }
-    fn store(&self, input: &[u8]) -> Result<usize> { self.0.store(input) }
+    fn show(&self, output: &mut [u8]) -> Result<usize> {
+        self.0.show(output)
+    }
+    fn store(&self, input: &[u8]) -> Result<usize> {
+        self.0.store(input)
+    }
 }
 
 enum Object {
@@ -91,17 +114,36 @@ impl Tree {
         let root = Handle::allocate()?;
         let child = Handle::allocate()?;
         let mut nodes = Vec::with_capacity(2, GFP_KERNEL)?;
-        nodes.push(Node { handle: root, parent: root,
-            name: CString::try_from(kernel::c_str!("(the_root)"))?, object: Object::Root }, GFP_KERNEL)?;
-        nodes.push(Node { handle: child, parent: root,
-            name: CString::try_from(kernel::c_str!("sys"))?, object: Object::Directory(sys) }, GFP_KERNEL)?;
+        nodes.push(
+            Node {
+                handle: root,
+                parent: root,
+                name: CString::try_from(kernel::c_str!("(the_root)"))?,
+                object: Object::Root,
+            },
+            GFP_KERNEL,
+        )?;
+        nodes.push(
+            Node {
+                handle: child,
+                parent: root,
+                name: CString::try_from(kernel::c_str!("sys"))?,
+                object: Object::Directory(sys),
+            },
+            GFP_KERNEL,
+        )?;
         Ok(Self { nodes })
     }
 
-    pub(crate) fn len(&self) -> usize { self.nodes.len() }
+    pub(crate) fn len(&self) -> usize {
+        self.nodes.len()
+    }
 
     fn index(&self, handle: Handle) -> Result<usize> {
-        self.nodes.iter().position(|node| node.handle == handle).ok_or(ENOENT)
+        self.nodes
+            .iter()
+            .position(|node| node.handle == handle)
+            .ok_or(ENOENT)
     }
 
     fn directory(&self, index: usize) -> Result<&Directory> {
@@ -115,17 +157,24 @@ impl Tree {
     /// Same type/name traversal as mcctrl_sysfs_lookup_i_body_result. Links
     /// are leaf objects here; kernel/user sysfs resolution remains Linux-owned.
     fn child(&self, parent: usize, name: &[u8]) -> Result<Option<usize>> {
-        if !matches!(self.nodes[parent].object, Object::Root | Object::Directory(_)) {
+        if !matches!(
+            self.nodes[parent].object,
+            Object::Root | Object::Directory(_)
+        ) {
             return Err(errno(-20));
         }
         let handle = self.nodes[parent].handle;
-        Ok(self.nodes.iter().position(|node| node.handle != handle &&
-            node.parent == handle && node.name.as_bytes() == name))
+        Ok(self.nodes.iter().position(|node| {
+            node.handle != handle && node.parent == handle && node.name.as_bytes() == name
+        }))
     }
 
     fn walk(&self, path: &[u8]) -> Result<usize> {
         let mut parent = 0;
-        for name in path.split(|&byte| byte == b'/').filter(|name| !name.is_empty()) {
+        for name in path
+            .split(|&byte| byte == b'/')
+            .filter(|name| !name.is_empty())
+        {
             parent = self.child(parent, name)?.ok_or(ENOENT)?;
         }
         Ok(parent)
@@ -144,26 +193,43 @@ impl Tree {
     }
 
     fn add_directory(&mut self, parent: usize, name: &[u8]) -> Result<usize> {
-        if parent == 0 && name != b"sys" { return Err(EPERM); }
-        if self.child(parent, name)?.is_some() { return Err(EEXIST); }
+        if parent == 0 && name != b"sys" {
+            return Err(EPERM);
+        }
+        if self.child(parent, name)?.is_some() {
+            return Err(EEXIST);
+        }
         let name = component(name)?;
         let handle = self.reserve_node()?;
         let directory = Directory::new(Some(self.directory(parent)?), &name)?;
         let parent = self.nodes[parent].handle;
         let index = self.nodes.len();
-        self.nodes.push(Node { handle, parent, name, object: Object::Directory(directory) }, GFP_KERNEL)?;
+        self.nodes.push(
+            Node {
+                handle,
+                parent,
+                name,
+                object: Object::Directory(directory),
+            },
+            GFP_KERNEL,
+        )?;
         Ok(index)
     }
 
     fn dig(&mut self, path: &[u8]) -> Result<usize> {
         let mut parent = 0;
-        for name in path.split(|&byte| byte == b'/').filter(|name| !name.is_empty()) {
+        for name in path
+            .split(|&byte| byte == b'/')
+            .filter(|name| !name.is_empty())
+        {
             parent = match self.child(parent, name)? {
                 Some(index) => index,
                 None => self.add_directory(parent, name)?,
             };
         }
-        if parent != 0 { self.directory(parent)?; }
+        if parent != 0 {
+            self.directory(parent)?;
+        }
         Ok(parent)
     }
 
@@ -175,7 +241,9 @@ impl Tree {
             Some(index) => (&path[..index], &path[index + 1..]),
             None => (&b""[..], path),
         };
-        if name.is_empty() { return Err(EINVAL); }
+        if name.is_empty() {
+            return Err(EINVAL);
+        }
         Ok((self.dig(prefix)?, name))
     }
 
@@ -186,18 +254,33 @@ impl Tree {
     }
 
     pub(crate) fn create<T: AttributeOps + 'static>(
-        &mut self, path: &[u8], mode: u16, operations: T,
+        &mut self,
+        path: &[u8],
+        mode: u16,
+        operations: T,
     ) -> Result<Handle> {
-        if mode & !0o777 != 0 { return Err(EINVAL); }
+        if mode & !0o777 != 0 {
+            return Err(EINVAL);
+        }
         let (parent, name) = self.parent(path)?;
         self.directory(parent)?;
-        if self.child(parent, name)?.is_some() { return Err(EEXIST); }
+        if self.child(parent, name)?.is_some() {
+            return Err(EEXIST);
+        }
         let name = component(name)?;
         let handle = self.reserve_node()?;
         let operations: Box<dyn AttributeOps> = Box::new(operations, GFP_KERNEL)?;
         let file = File::new(self.directory(parent)?, &name, mode, Operations(operations))?;
         let parent = self.nodes[parent].handle;
-        self.nodes.push(Node { handle, parent, name, object: Object::File(file) }, GFP_KERNEL)?;
+        self.nodes.push(
+            Node {
+                handle,
+                parent,
+                name,
+                object: Object::File(file),
+            },
+            GFP_KERNEL,
+        )?;
         Ok(handle)
     }
 
@@ -205,21 +288,35 @@ impl Tree {
         // Resolve before creating any prefix; an arbitrary or another tree's
         // identity cannot cause side effects or become a pointer dereference.
         let target = self.index(target)?;
-        if !matches!(self.nodes[target].object, Object::Directory(_)) { return Err(EINVAL); }
+        if !matches!(self.nodes[target].object, Object::Directory(_)) {
+            return Err(EINVAL);
+        }
         let (parent, name) = self.parent(path)?;
         self.directory(parent)?;
-        if self.child(parent, name)?.is_some() { return Err(EEXIST); }
+        if self.child(parent, name)?.is_some() {
+            return Err(EEXIST);
+        }
         let name = component(name)?;
         let handle = self.reserve_node()?;
         // dig only appends, so the checked target's vector index is unchanged.
         let link = Link::new(self.directory(parent)?, self.directory(target)?, &name)?;
         let parent = self.nodes[parent].handle;
-        self.nodes.push(Node { handle, parent, name, object: Object::Link(link) }, GFP_KERNEL)?;
+        self.nodes.push(
+            Node {
+                handle,
+                parent,
+                name,
+                object: Object::Link(link),
+            },
+            GFP_KERNEL,
+        )?;
         Ok(handle)
     }
 
     fn has_child(&self, handle: Handle) -> bool {
-        self.nodes.iter().any(|node| node.handle != handle && node.parent == handle)
+        self.nodes
+            .iter()
+            .any(|node| node.handle != handle && node.parent == handle)
     }
 
     /// Adapt remove's iterative leaf-first walk. Removal and Drop never allocate
@@ -227,14 +324,21 @@ impl Tree {
     fn remove_branch(&mut self, target: Handle) -> Result {
         let mut current = target;
         loop {
-            if let Some(child) = self.nodes.iter().rev().find(|node| node.parent == current && node.handle != current) {
+            if let Some(child) = self
+                .nodes
+                .iter()
+                .rev()
+                .find(|node| node.parent == current && node.handle != current)
+            {
                 current = child.handle;
                 continue;
             }
             let index = self.index(current)?;
             let parent = self.nodes[index].parent;
             drop(self.nodes.remove(index));
-            if current == target { return Ok(()); }
+            if current == target {
+                return Ok(());
+            }
             current = parent;
         }
     }
@@ -247,13 +351,17 @@ impl Tree {
         let root = self.nodes[0].handle;
         // Protect both roots BEFORE visiting any child. A failed protected
         // unlink must not partially empty the live OS namespace.
-        if target == root || parent == root { return Err(EPERM); }
+        if target == root || parent == root {
+            return Err(EPERM);
+        }
         self.remove_branch(target)?;
         if flags & KEEP_ANCESTOR == 0 {
             loop {
                 let index = self.index(parent)?;
                 let next = self.nodes[index].parent;
-                if parent == root || next == root || self.has_child(parent) { break; }
+                if parent == root || next == root || self.has_child(parent) {
+                    break;
+                }
                 drop(self.nodes.remove(index));
                 parent = next;
             }
@@ -266,6 +374,8 @@ impl Drop for Tree {
     fn drop(&mut self) {
         // All children were published after their parents. Preserve that order
         // on removal, then drain every file/link before its parent's last put.
-        while let Some(node) = self.nodes.pop() { drop(node); }
+        while let Some(node) = self.nodes.pop() {
+            drop(node);
+        }
     }
 }

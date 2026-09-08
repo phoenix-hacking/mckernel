@@ -4,8 +4,8 @@
 use core::ffi::c_void;
 use kernel::{bindings, prelude::*};
 
-use super::{smp_resource::OsToken, sysfs_objects::Directory};
 use super::sysfs_tree::Tree;
+use super::{smp_resource::OsToken, sysfs_objects::Directory};
 
 // SAFETY: IHK's namespaced export synchronously lends its actual Linux kobject
 // while a generation-checked registry lease excludes device unregister.

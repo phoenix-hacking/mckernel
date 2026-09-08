@@ -221,3 +221,15 @@ bodies into the fixture header, build the three native modules and tree fixture
 in the pinned container, then run the disposable Linux guest and both existing
 OS preparation/startup interfaces. This source checkpoint adds no runtime or
 production acceptance claim; SYSFS_REQ_SETUP is still pending.
+
+Tree build attempt 2 now passes in the pinned native container: all three
+native modules, both boot layout witnesses, the OS-device borrowing fixture
+and independent device layout, and the actual tree fixture compile. Module
+disassembly checks find no SIMD/FPU register use. The helper extracts 15
+unchanged legacy C bodies with byte offsets and individual hashes; their
+userspace reference produces a 60-operation trace ending with only the two
+protected nodes. Its Linux effects are stubbed only for this reference.
+The separate native guest probe and exact dynamic libc/loader also build.
+Attempt 1's missing fixture fmt! import is recorded and retained. Runtime
+trace comparison, Linux namespace properties and both actual startup paths
+remain pending at this build checkpoint.

@@ -34008,3 +34008,13 @@ The sysfs tree implementation and fixtures were saved as WIP in 36df4320.
 Only its staged whitespace check passed in the pinned native container;
 compilation, legacy-body extraction, guest execution and real sysfs setup
 completion remain the next verification work.
+
+2026-09-07 local date — native sysfs tree build 1 FAILED fixture compilation.
+Command: mckernel-container native python3 -B /work/build-native-sysfs-tree.py 1
+Environment: pinned Linux 6.12/Rust 1.92 container, CPUs 2-5, four-CPU and
+12-GiB limits. Evidence: /work/native-sysfs-tree-module-20260907-1.
+The three native modules, boot layout witnesses, OS-device borrowing fixture
+and its layout comparison pass. The new tree fixture fails Rust compilation
+because its two CString formatting calls use fmt! without importing that
+kernel macro. Stop before legacy-reference or guest execution; add the explicit
+macro import and retry with a new attempt. No tree runtime PASS is claimed.
