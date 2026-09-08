@@ -34504,3 +34504,33 @@ round-trip checks; see docs/verification/storage-maintenance-20260908-3.json
 for the restoration mapping and exact accounting. No kernel/application test
 was rerun for this maintenance, and no production gate credit is claimed.
 The full verification and native application integration goal remains active.
+
+2026-09-08: Actual guest sysfs verification WIP, before validation.
+The reuse plan now specifies a default-OFF native sysfs image profile, using
+the existing guest Rust public requests and real IRQ callback dispatcher.
+The normal boot thread coordinates Linux workers and metadata removal through
+atomic phases; callbacks issue no blocking metadata requests. New fixture
+sources cover all eight existing snooping samples, a full bitmap, four separate
+writable values, metadata/handle errors, bounded transfer counts and exactly-once
+remote release. Source review also corrects the existing string sample instance
+from a pointer address to the string bytes, matching kernel/init.c and the
+existing special-create conversion. No new compile or runtime result is claimed.
+Next use the pinned compat formatter and build all four image profiles, then
+the pinned native Linux controller and both startup interfaces. The original
+passing revision-3 image and all active native module dependencies stay retained.
+
+First validation attempt FAILS in the formatter helper before rustfmt runs.
+Command: mckernel-container compat python3 -B /work/format-native-guest-sysfs.py 1
+Environment: fixed Rocky 8 compat container, Python 3.6, nightly Rust toolchain,
+CPUs 2-5, four-CPU/12-GiB limits. Python 3.6 subprocess.check_output rejects the
+helper's text=True argument: TypeError, unexpected keyword argument 'text'.
+Preserve native-guest-sysfs-format-20260908-1, its original helper/input and FAIL
+record unchanged. Use the established universal_newlines/PIPE subprocess form
+and a new formatter attempt; no Rust formatting, build or guest PASS is claimed.
+
+Formatter attempt 2 PASS: the same pinned compat invocation with attempt 2
+formats the new guest fixture and checks its result. Original and formatted
+bytes, exact commands, compiler version and hashes are retained. The formatted
+file is copied back only after verifying both capture identities. This WIP
+checkpoint saves the implementation and planned controller before the long
+four-profile image build; compile and runtime acceptance are still pending.

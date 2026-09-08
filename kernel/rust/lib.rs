@@ -54,6 +54,9 @@ mod spinlock_helpers;
 mod string;
 mod syscall_policy;
 mod sysfs;
+#[cfg(native_sysfs_verify)]
+#[path = "../../scripts/tests/fixtures/mckernel_guest_sysfs.rs"]
+mod sysfs_verify;
 mod timer;
 mod tofu_uapi;
 mod ubsan;

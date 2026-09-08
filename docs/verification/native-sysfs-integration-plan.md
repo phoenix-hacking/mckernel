@@ -1,5 +1,51 @@
 # Native sysfs integration
 
+## Actual guest metadata and special-format verification decision, 2026-09-08
+
+Add an opt-in `ENABLE_NATIVE_SYSFS_VERIFY` image profile, default OFF, requiring
+the x86_64 Rust kernel and linux-6.12 IRQ ABI. Its fixture compiles into the
+actual McKernel image and calls the existing Rust public sysfs request functions
+and callback dispatcher. Reuse `setup_remote_snooping_samples` for all eight
+legacy formats. Source review finds one transcription error there: the Rust
+string sample passes the address of its pointer, whereas kernel/init.c passes
+the string bytes themselves. Restore that original instance contract and test
+the actual resulting string through Linux sysfs.
+
+Use a compile-time fixture module under scripts/tests/fixtures, with no new
+production host protocol, diagnostic IHK identities or C implementation body.
+Publish temporary directories, directory links, four independent writable
+remote values, ordinary absent/error callbacks, full-capacity show/store and
+oversized return-count cases, plus a 14,560-bit snooping mask. Exercise all five
+metadata operations, duplicate publication, missing paths, stale handles,
+protected roots and ancestor removal through actual IKC requests. Check that
+a rejected duplicate never receives a guest release callback.
+
+A Linux userspace helper starts before BOOT and polls for the fixture control
+file while BOOT is waiting for physical readiness. Guest callbacks only update
+atomic phase/value counters; they must never issue blocking metadata requests
+from the IRQ handler. The normal guest boot thread waits with interrupts enabled,
+removes the value subtree after the Linux read/write workers finish, checks each
+actual remote release exactly once, and publishes a second phase. After Linux
+checks those results, the guest retires its control namespace and eight samples
+before returning to normal done_init/status-3 startup. Keep the pre-existing
+test roots and CPU topology intact. A timeout or missing handshake is failure.
+
+Expected values come independently from Linux integer/bitmap formatting and
+known payload construction. Require complete 4,095-byte reads, 4,096-byte stores,
+original errno behavior, isolated concurrent values and exact guest callback
+counters. Retain real metadata results, guest kmsg and both QMP snapshots; account
+for every metadata/reply packet without assuming a fixed number of status polls.
+Repeat both startup ioctl ABIs and the ordinary post-ready callback regression.
+Build the normal C, legacy Rust and native Rust profiles as regressions, verifying
+that the fixture is absent there, and retain the original passing image unchanged.
+
+Use the pinned compat container for guest image builds and the pinned native
+container for Linux probe compilation and QEMU, one invocation at a time under
+the established limits. Preserve the first failing command, error and complete
+attempt before changing expectations or implementation. All current worker/queue
+allocation faults, multi-CPU/multi-OS operation, native application services,
+shutdown and the full Rust/assembly/integration/acceptance scope remain required.
+
 ## Verified exact-capacity output, 2026-09-08
 
 Module attempt 3 and Linux guest attempt 3 pass the bitmap boundary correction.

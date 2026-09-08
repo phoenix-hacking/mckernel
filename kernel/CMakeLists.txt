@@ -30,6 +30,7 @@ if (${ARCH} STREQUAL "arm64")
 endif()
 
 option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
+option(ENABLE_NATIVE_SYSFS_VERIFY "Enable guest sysfs verification with a Linux test controller" OFF)
 set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
 set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
 if (NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "legacy" AND
@@ -39,6 +40,11 @@ endif()
 if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
     (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64"))
 	message(FATAL_ERROR "linux-6.12 IRQ ABI requires the x86_64 Rust kernel")
+endif()
+if (ENABLE_NATIVE_SYSFS_VERIFY AND
+    (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12"))
+	message(FATAL_ERROR "Native sysfs verification requires the x86_64 Rust kernel and linux-6.12 IRQ ABI")
 endif()
 set(RUST_KERNEL_ENABLED OFF)
 if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
@@ -124,6 +130,10 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_vdso.rs"
 	)
 		set(RUST_KERNEL_CFG)
+		if (ENABLE_NATIVE_SYSFS_VERIFY)
+			list(APPEND RUST_KERNEL_CFG "--cfg" "native_sysfs_verify")
+			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/tests/fixtures/mckernel_guest_sysfs.rs")
+		endif()
 		if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
 			list(APPEND RUST_KERNEL_CFG "--cfg" "native_linux_irq_work_v6_12")
 		endif()

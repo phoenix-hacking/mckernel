@@ -400,7 +400,7 @@ unsafe fn rest_init() {
 #[allow(dead_code)]
 unsafe fn setup_remote_snooping_samples() {
     static mut LVALUE: CLong = 0xf123_4567_89ab_cde0u64 as CLong;
-    static mut SVALUE: *const c_char = c"string(remote)".as_ptr();
+    static SVALUE: &core::ffi::CStr = c"string(remote)";
 
     let mut error = unsafe {
         sysfs_createf(
@@ -461,7 +461,7 @@ unsafe fn setup_remote_snooping_samples() {
     error = unsafe {
         sysfs_createf(
             5usize as *mut SysfsOps,
-            (&raw mut SVALUE).cast::<c_void>(),
+            SVALUE.as_ptr().cast_mut().cast::<c_void>(),
             0o444,
             cstr(b"/sys/test/remote/s\0"),
         )
@@ -527,6 +527,11 @@ unsafe fn populate_sysfs() {
         crate::ap::cpu_sysfs_setup();
         numa_sysfs_setup();
         dynamic_debug_sysfs_setup();
+        #[cfg(native_sysfs_verify)]
+        {
+            setup_remote_snooping_samples();
+            crate::sysfs_verify::run();
+        }
     }
 }
 
