@@ -33,8 +33,12 @@ Native clock syscalls honor Linux's current TSC mode; unsupported modes use
 Linux forwarding. Legacy local-time paths use their fallback, while internal
 boot/timer reads can use Linux coarse time. Source formatting, eight protocol/
 mapping/clock tests, 77,824 exact Linux arithmetic comparisons and existing
-image/resource policy fixtures pass in service-tests attempt 1. Image/module
-builds, actual service runtime and supplemental page-map tests are pending.
+image/resource policy fixtures pass in service-tests attempt 1. Attempt 2 adds
+144 exact original-C/Rust mapping comparisons, all optional native page sets,
+cache/hole checks, every mapping callback failure and invalid-input rejection.
+Native prototype 8 builds all three modules and passes layout/ELF/no-SIMD
+checks after two recorded API/visibility failures. Images and actual service
+runtime are still pending.
 The latest verified runtime remains the export checkpoint below; this WIP
 does not claim a completed service, full boot or application verification.
 

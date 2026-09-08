@@ -178,3 +178,13 @@ image/loader/startup policy fixtures. The original Linux arithmetic bodies
 are extracted unchanged from the pinned source for the independent C oracle.
 The native and legacy images, Linux adapter build, supplemental mapping
 callbacks and actual cross-kernel service still require verification.
+
+Service-tests attempt 2 adds the complete original C arch_map_vdso body and
+complete production Rust mapping bodies with only their primitive callbacks
+replaced by a recorded trace. All 144 legacy cases agree, including each
+callback failure. Native tests verify all optional page combinations, exact
+physical/virtual addresses, ordinary cache attributes, unmapped holes and
+pre-mutation rejection. Native prototype 8 now compiles all three modules and
+passes exact layout/ELF/no-SIMD checks. Attempts 6/7 preserve the Rust kernel
+API and unreachable-pub failures; their fixes do not change the wire contract.
+Next rebuild the three images and run actual preparation/start captures.
