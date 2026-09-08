@@ -27,6 +27,9 @@ static volatile unsigned image_child_progress;
 #ifdef NATIVE_SYSCALL_WAITER_CHECKS
 #include "native-mcctrl-syscall-wait.c"
 #endif
+#ifdef NATIVE_WORKER_REAPER_CHECKS
+#include "native-mcctrl-worker-reap.c"
+#endif
 
 static void image_require(int condition, int line)
 {
@@ -149,6 +152,9 @@ int main(void)
     references(2); /* One mcos file and one anonymous mirror file. */
 #ifdef NATIVE_SYSCALL_WAITER_CHECKS
     syscall_waiter_probe(fd);
+#ifdef NATIVE_WORKER_REAPER_CHECKS
+    worker_reaper_probe(fd);
+#endif
 #endif
 
     for (unsigned i = 0; i < sizeof(payload); i++) payload[i] = (i * 17 + 3) & 255;

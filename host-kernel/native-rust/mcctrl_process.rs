@@ -6,7 +6,7 @@ use core::{
     ffi::c_void,
     pin::Pin,
     ptr::{self, NonNull},
-    sync::atomic::{AtomicBool, AtomicPtr, AtomicU64, Ordering},
+    sync::atomic::{AtomicBool, AtomicI32, AtomicPtr, AtomicU64, Ordering},
 };
 use kernel::{
     bindings,
@@ -40,6 +40,7 @@ pub(super) struct Registration {
     generation: u64,
     pid: i32,
     armed: AtomicBool,
+    reap_error: AtomicI32,
     operation: Pin<Box<Mutex<()>>>,
     mapping: Pin<Box<Mutex<Option<Arc<Mirror>>>>>,
     workers: Pin<Box<Mutex<Vec<Arc<HostWorker>>>>>,
@@ -80,6 +81,7 @@ impl Registration {
                 generation,
                 pid,
                 armed: AtomicBool::new(false),
+                reap_error: AtomicI32::new(0),
                 operation,
                 mapping,
                 workers,
@@ -110,7 +112,7 @@ impl Registration {
         let identity = ProcessId::thread()?;
         let mirror = self.mapping.lock().clone().ok_or(EINVAL)?;
         mirror.current()?;
-        let mut workers = self.workers.lock();
+        let workers = self.workers.lock();
         if let Some(worker) = workers
             .iter()
             .find(|worker| worker.identity.same(&identity))
@@ -121,27 +123,9 @@ impl Registration {
         if !create {
             return Err(EINVAL);
         }
-        let mut index = 0;
-        while index < workers.len() {
-            if !workers[index].identity.thread_alive() {
-                let mut bytes = [0; 16];
-                bytes[..8].copy_from_slice(&workers[index].handle.to_le_bytes());
-                match self.invoke(super::application_abi::WORKER_CLOSE, &mut bytes) {
-                    Ok(()) => {
-                        let removed = workers.swap_remove(index);
-                        drop(workers);
-                        // Referenced PID/MM destruction is outside publication.
-                        drop(removed);
-                        workers = self.workers.lock();
-                        index = 0;
-                        continue;
-                    }
-                    Err(error) if error == EBUSY => {}
-                    Err(error) => return Err(error),
-                }
-            }
-            index += 1;
-        }
+        drop(workers);
+        self.reap_workers()?;
+        let mut workers = self.workers.lock();
         if workers.len() == 64 {
             return Err(EAGAIN);
         }
@@ -174,6 +158,37 @@ impl Registration {
             return Err(error.into());
         }
         Ok(worker)
+    }
+
+    /// Both acquisition and the independent reaper use this original PID/MM
+    /// retirement path. The backend owns cancellation past a departing task.
+    fn reap_workers(&self) -> Result {
+        let mut workers = self.workers.lock();
+        let mut index = 0;
+        while index < workers.len() {
+            if !workers[index].identity.thread_alive() {
+                let mut bytes = [0; 16];
+                bytes[..8].copy_from_slice(&workers[index].handle.to_le_bytes());
+                match self.invoke(super::application_abi::WORKER_CLOSE, &mut bytes) {
+                    Ok(()) => {
+                        let removed = workers.swap_remove(index);
+                        drop(workers);
+                        pr_info!("application_worker=retired os={} generation={} pid={} tid={} handle={} delivered={}\n",
+                            self.slot, self.generation, self.pid, removed.identity.number()?, removed.handle,
+                            removed.delivery.load(Ordering::Acquire));
+                        // Referenced PID/MM destruction is outside publication.
+                        drop(removed);
+                        workers = self.workers.lock();
+                        index = 0;
+                        continue;
+                    }
+                    Err(error) if error == EBUSY => {}
+                    Err(error) => return Err(error),
+                }
+            }
+            index += 1;
+        }
+        Ok(())
     }
 
     fn wait_syscall(&self, argument: usize, compat: bool) -> Result<isize> {
@@ -462,10 +477,17 @@ impl ProcessId {
     }
 
     fn thread_alive(&self) -> bool {
+        self.alive(bindings::pid_type_PIDTYPE_PID)
+    }
+
+    fn group_alive(&self) -> bool {
+        self.alive(bindings::pid_type_PIDTYPE_TGID)
+    }
+
+    fn alive(&self, kind: bindings::pid_type) -> bool {
         // SAFETY: The referenced PID excludes object reuse. Linux checks its
         // task link under RCU and returns an owned task reference on success.
-        let task =
-            unsafe { bindings::get_pid_task(self.0.as_ptr(), bindings::pid_type_PIDTYPE_PID) };
+        let task = unsafe { bindings::get_pid_task(self.0.as_ptr(), kind) };
         if task.is_null() {
             return false;
         }
@@ -544,11 +566,15 @@ struct Entry {
 type Table = Mutex<Vec<Entry>>;
 static PUBLISHED: AtomicPtr<Table> = AtomicPtr::new(ptr::null_mut());
 
-pub(super) struct Registry(Pin<Box<Table>>);
+pub(super) struct Registry {
+    reaper: Reaper,
+    table: Arc<Table>,
+}
 
 impl Registry {
     pub(super) fn new() -> Result<Self> {
-        let table = Box::pin_init(new_mutex!(Vec::new()), GFP_KERNEL)?;
+        let table = Arc::pin_init(new_mutex!(Vec::new()), GFP_KERNEL)?;
+        let reaper = Reaper::new(table.clone())?;
         PUBLISHED
             .compare_exchange(
                 ptr::null_mut(),
@@ -557,7 +583,8 @@ impl Registry {
                 Ordering::Acquire,
             )
             .map_err(|_| EBUSY)?;
-        Ok(Self(table))
+        reaper.activate();
+        Ok(Self { reaper, table })
     }
 }
 
@@ -565,11 +592,137 @@ impl Drop for Registry {
     fn drop(&mut self) {
         // Every published process is held by at least one IHK-owned file
         // binding, whose mcctrl module reference excludes registry destruction.
-        assert!(self.0.lock().is_empty());
+        self.reaper.stop();
+        assert!(self.table.lock().is_empty());
         assert!(
-            PUBLISHED.swap(ptr::null_mut(), Ordering::AcqRel) == ptr::from_ref(&*self.0).cast_mut()
+            PUBLISHED.swap(ptr::null_mut(), Ordering::AcqRel)
+                == ptr::from_ref(&*self.table).cast_mut()
         );
     }
+}
+
+struct ReaperContext {
+    table: Arc<Table>,
+    entered: Arc<AtomicBool>,
+}
+
+struct Reaper {
+    task: *mut bindings::task_struct,
+    context: *mut ReaperContext,
+    entered: Arc<AtomicBool>,
+}
+
+// SAFETY: Only Registry activates this owned task and its unique destructor
+// stops/joins it. Callback ownership is tracked independently of task entry.
+unsafe impl Send for Reaper {}
+unsafe impl Sync for Reaper {}
+
+impl Reaper {
+    fn new(table: Arc<Table>) -> Result<Self> {
+        let entered = Arc::new(AtomicBool::new(false), GFP_KERNEL)?;
+        let context = Box::into_raw(Box::new(
+            ReaperContext {
+                table,
+                entered: entered.clone(),
+            },
+            GFP_KERNEL,
+        )?);
+        // SAFETY: The context transfers only if the stopped task actually enters.
+        let task = unsafe {
+            bindings::kthread_create_on_node(
+                Some(reap),
+                context.cast(),
+                -1,
+                kernel::c_str!("mck-worker-reap").as_char_ptr(),
+            )
+        };
+        if task.is_null() || (-4095..0).contains(&(task as isize)) {
+            unsafe { drop(Box::from_raw(context)) };
+            return Err(if task.is_null() {
+                ENOMEM
+            } else {
+                errno(task as isize as i32)
+            });
+        }
+        // No fallible allocation after task creation can lose this task owner.
+        Ok(Self {
+            task,
+            context,
+            entered,
+        })
+    }
+
+    fn activate(&self) {
+        // SAFETY: Registry calls once after successful table publication.
+        unsafe { bindings::wake_up_process(self.task) };
+    }
+
+    fn stop(&mut self) {
+        if self.task.is_null() {
+            return;
+        }
+        // SAFETY: The task and its callback code stay resident through this join.
+        unsafe { bindings::kthread_stop(self.task) };
+        self.task = ptr::null_mut();
+        if !self.entered.load(Ordering::Acquire) {
+            // A never-entered stopped task did not consume the unique Box.
+            unsafe { drop(Box::from_raw(self.context)) };
+        }
+    }
+}
+
+impl Drop for Reaper {
+    fn drop(&mut self) {
+        self.stop();
+    }
+}
+
+// SAFETY: Only the successfully created task can take this context. Registry
+// joins the task before freeing its table or allowing module-code retirement.
+unsafe extern "C" fn reap(context: *mut c_void) -> i32 {
+    let context = unsafe { Box::from_raw(context.cast::<ReaperContext>()) };
+    context.entered.store(true, Ordering::Release);
+    let mut cursor = 0usize;
+    while !unsafe { bindings::kthread_should_stop() } {
+        let mut batch: [Option<Arc<Process>>; 16] = core::array::from_fn(|_| None);
+        {
+            let entries = context.table.lock();
+            let count = entries.len().min(batch.len());
+            for destination in &mut batch[..count] {
+                let index = cursor % entries.len();
+                *destination = Some(entries[index].process.clone());
+                cursor = cursor.wrapping_add(1);
+            }
+        }
+        for process in batch.into_iter().flatten() {
+            let registration = process.registration.lock().clone();
+            if let Some(registration) = registration {
+                if let Err(error) = registration.reap_workers() {
+                    if registration
+                        .reap_error
+                        .compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire)
+                        .is_ok()
+                    {
+                        pr_err!("application_worker=reap_retained os={} generation={} pid={} errno={}\n",
+                            registration.slot, registration.generation, registration.pid, error.to_errno());
+                    }
+                }
+            }
+            if !process.pid.group_alive() {
+                let registration = process.registration.lock().take();
+                let executable = process.executable.lock().take();
+                // File bindings may outlive a dead TGID through inheritance.
+                // VMAs and in-flight calls still retain their independent Arc;
+                // final cleanup cannot free pages under a surviving mirror.
+                drop(executable);
+                drop(registration);
+            }
+        }
+        // Bounded snapshots prevent one large inherited-file registry from
+        // monopolizing a CPU. This scan does not depend on another ioctl.
+        unsafe { bindings::msleep(10) };
+    }
+    0
 }
 
 fn table() -> &'static Table {

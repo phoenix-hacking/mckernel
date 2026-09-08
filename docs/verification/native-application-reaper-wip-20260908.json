@@ -1,0 +1,58 @@
+{
+  "status": "WIP",
+  "created_utc": "2026-09-08T21:31:25.891070+00:00",
+  "module_build": "PASS",
+  "independent_worker_retirement": "PASS",
+  "scheduled_cleanup": false,
+  "application_executed": false,
+  "full_capture_retention_pending": true,
+  "scope": "Independent worker retirement verified for 72 threads; explicit inherited-TGID quiet-window verification follows. All original captures protected locally.",
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-reaper-module-20260908-1",
+      "status": "PASS",
+      "record": {
+        "path": "docs/verification/evidence/native-application-reaper-module-20260908-1-wip-record.json.gz",
+        "size": 5819,
+        "sha256": "d85ac29ded4db37a4e78007a67864a53d1efae66e2e7e118b6e1b06ae1379f3a"
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-reaper-guest-20260908-x86_64-1",
+      "status": "FAIL",
+      "record": {
+        "path": "docs/verification/evidence/native-application-reaper-guest-20260908-x86_64-1-wip-record.json.gz",
+        "size": 7038,
+        "sha256": "08894825235cbd15aa570a76bc5d230664ed9fec3c16155c141d888f4b2d3eee"
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-reaper-guest-20260908-x86_64-2",
+      "status": "FAIL",
+      "record": {
+        "path": "docs/verification/evidence/native-application-reaper-guest-20260908-x86_64-2-wip-record.json.gz",
+        "size": 6987,
+        "sha256": "cafbac0785d2bbced2a3d1f97d19766776d6eeea56438f5fd0c2f99f5d862872"
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-reaper-guest-20260908-x86_64-3",
+      "status": "PASS",
+      "record": {
+        "path": "docs/verification/evidence/native-application-reaper-guest-20260908-x86_64-3-wip-record.json.gz",
+        "size": 7547,
+        "sha256": "04354cbe1d80b92463a90809d2d7cc60e2705e91920831986c461d58f4322db3"
+      }
+    }
+  ],
+  "worker_reaper": {
+    "delivered_request_death_tested": false,
+    "distinct_worker_handles": 72,
+    "independent_idle_retirement": true,
+    "interruptions": 72,
+    "quiet_windows": 72,
+    "scheduled_cleanup_tested": false,
+    "untouched_bytes": 6336,
+    "worker_threads": 72
+  }
+}

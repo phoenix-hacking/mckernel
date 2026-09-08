@@ -1211,3 +1211,43 @@ cleanup and independent dead-worker reaping, connect START and test the unchange
 launcher, then prove those paths alongside the documented application smoke
 baseline. No McKernel application instruction has executed. Preserve every
 current/failed capture and continue periodic verified GitHub checkpoints.
+
+## Independent worker and process reaping review, 2026-09-08
+
+Reviewed parent: 0f6b8791ebf054e3f0485fb5a0b6ab3186178094. The previous
+turn made verified progress: live root procfs is connected, guest-tested and
+pushed. Continue toward real startup with actual Linux lifecycle ownership.
+
+Retain/adapt mcctrl_process.rs::Registration::worker's existing referenced PID
+pruning body and the single Process/Binding registry. Its current pruning runs
+only during a new worker acquisition, so the final dead worker's response can
+remain stranded. Use a joined mcctrl-owned kthread to scan bounded snapshots of
+that same registry independently. Clone process/registration references under
+short publication locks, then invoke existing WORKER_CLOSE outside the registry
+lock. EBUSY retains the PID/MM and retries after the independent SMP packet pump
+publishes cancellation. Preserve smp_application_syscall::Mailbox::close_worker,
+cancel_call and publish sequencing and their actual response owners; no new
+worker or application registry is needed.
+
+Use the existing ProcessId get_pid_task/put_task_struct pair with PIDTYPE_PID
+for workers and PIDTYPE_TGID for the process. A missing referenced TGID permits
+removing its registration/executable from a process kept alive only by inherited
+file bindings. Drop those owners outside all publication locks. MappingFile and
+in-flight operations still retain Registration independently; never force its
+cleanup while a Linux mirror VMA still owns guest PFNs. Registry destruction
+must stop/join the reaper before releasing its table/module code. Task creation
+and failed-publication rollback must release the never-entered callback exactly
+once. Verify real worker departure without any new acquisition, slot reuse and
+inherited-binding retirement in the isolated guest.
+
+Selected guest host_helpers.rs::host_cleanup_process_request_result deliberately
+sends the ordinary ACK before terminate_host. Scheduled cleanup must pass a null
+thread argument, since the prepared pointer can be freed after SCHEDULE. The
+original process_release_thread_body_result sends advisory DELETE before VM and
+process destruction; process_release_process_body_result detaches its PID hash
+only on the final reference. Neither ACK nor DELETE alone proves scheduled
+retirement. Preserve these existing Rust bodies and C fallback while reviewing
+an explicit final-retirement contract; do not enable START based on the old
+unscheduled cleanup flag. Also retain the unchanged mcexec exit path, which does
+not return its exit syscall and relies on final Linux-owner release. Worker
+cancellation must drain its actual response before guest cleanup is requested.
