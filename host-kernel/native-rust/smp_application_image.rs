@@ -161,6 +161,15 @@ impl Preparation {
         self.result
     }
 
+    /// PREPARE's kernel-only caller overwrites these raw kuid/kgid scalars
+    /// from its retained credentials. Never borrow a task after dropping RCU.
+    pub(crate) fn procfs_credentials(&self) -> Result<(u32, u32)> {
+        Ok((
+            wire::integer(&self.original, wire::CREDENTIALS).map_err(errno)? as u32,
+            wire::integer(&self.original, wire::CREDENTIALS + 16).map_err(errno)? as u32,
+        ))
+    }
+
     pub(crate) fn copy_result(&self, output: &mut [u8]) -> Result {
         kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
         output

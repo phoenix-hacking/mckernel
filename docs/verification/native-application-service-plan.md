@@ -1109,3 +1109,55 @@ sources; do not claim that suite passed. Preserve current module attempt 5,
 both procfs-image guests, procfs-image build 1 and fixture 6, plus all previous
 active dependencies and original failure archives. Continue GitHub checkpoints
 and audited storage maintenance; no formal gate or score is promoted.
+
+
+## Live native procfs connection review, 2026-09-08
+
+Reviewed parent: `04d80a3a0086cfe2b417a4e6f6840673a6727a35`. Previous turn
+made verified progress: the lifetime fix, all four images and both actual guest
+regressions are pushed. Continue with real procfs integration, not another
+replacement guest implementation. Retain the full selected guest procfs.rs,
+object_helpers.rs and original host node/open/read/release/seek bodies. Reuse
+procfs_objects.rs and application_rpc::Exchange directly. The native service
+will live alongside the existing continuing service and use its independent
+packet/metadata workers; no second application PID registry is introduced.
+
+Each existing prepared application entry will retain its procfs process owner.
+Its CPU and raw kernel UID/GID come from the trusted prepared-image input:
+mcctrl overwrites PID and all eight credential scalars before its kernel-only
+PREPARE call. The old host credential lookup uses a borrowed task after RCU;
+that legacy pointer cannot become a native owner. Snapshot uid/gid scalars from
+the retained preparation and keep the existing referenced registration identity.
+Root stat/mckernel and the original PID/TID node tables remain the interface.
+Guest CREATE 0x44 waits for real publication; DELETE 0x45 is advisory and never
+writes its expired resp_pa. Attach per-process VFS ownership to the existing
+entry before scheduling. Drain/removal must run outside the application and
+transport mutexes, and callbacks must never reacquire their namespace lock.
+
+Use a bounded per-open remote table with original Linux BootPages for each
+808-byte request and direct-I/O page. Reserving an open reserves its later
+release capacity too. Queued/published requests outlive interrupted calls and
+fd removal; the packet worker must retain and complete them independently.
+Only the exact native MCPR0001 answer can permit request-page reuse. Snapshot
+reads retain the guest's real linked buffer pages, validating complete page
+ranges, header sizes, monotonic positions and repeated-page/alias rejection.
+Extend the same Memory ledger that excludes queues, sysfs and syscall responses
+for CREATE's four-byte completion and retained buffer pages. Release publication
+must retire host read claims atomically under that ledger: queue-full leaves
+claims intact, and successful publication permits no later host buffer access.
+The request page itself remains held until the terminal release answer.
+
+Keep Runtime/tree/file/registration ownership acyclic. File callback payloads
+retain the independent remote service and a process-liveness identity, never
+Runtime or the application registry. Started BootStorage already irreversibly
+retains the exact guest RAM/module owners. Preserve that prerequisite through
+all pending operations and quarantine uncertain retirement rather than freeing
+published storage. Linux rundown may call release with fds still open; remote
+release must not require the namespace or metadata worker to make progress.
+
+Connect the actual SMP build and pump, then verify real procfs reads/releases,
+partial I/O, copy faults, repeated opens, aliases and completion ownership in
+the fixed guest environment. Follow with scheduled-process cleanup, independent
+dead-worker reaping, START and the unchanged launcher baseline. These additions
+are implementation work toward the existing readiness criteria; no procfs or
+application acceptance follows from compiling an unused protocol constructor.

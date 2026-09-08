@@ -9,6 +9,9 @@
 //! names are emitted explicitly.  No project-owned C object participates in
 //! this crate.
 
+// Runtime's pinned service fields exceed the default macro expansion depth.
+#![recursion_limit = "256"]
+
 use kernel::{
     c_str,
     miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},
@@ -23,6 +26,7 @@ mod smp_resource;
 mod smp_cpu;
 mod smp_topology;
 mod smp_memory;
+mod procfs_objects;
 // Reuse the existing checked mapping geometry for owned image destinations.
 #[allow(dead_code)]
 mod ihk_mapping;

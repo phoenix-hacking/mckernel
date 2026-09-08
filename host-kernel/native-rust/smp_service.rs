@@ -26,6 +26,8 @@ use kernel::{
 
 #[path = "sysfs_memory.rs"]
 mod memory;
+#[path = "smp_procfs.rs"]
+pub(in super::super) mod procfs;
 pub(in super::super) use memory::SyscallResponse;
 #[path = "sysfs_snoop.rs"]
 mod snoop;
@@ -95,6 +97,7 @@ struct Runtime {
     data: SharedData,
     remote: Arc<Remote>,
     application: Arc<smp_application::Remote>,
+    procfs: Arc<procfs::Remote>,
     master: Arc<BootMaster>,
     master_receive: u64,
     master_send: u64,
@@ -109,6 +112,10 @@ struct Runtime {
     service: Mutex<Option<Service>>,
     #[pin]
     pending: Mutex<Pending>,
+    #[pin]
+    procfs_service: Mutex<procfs::Service>,
+    #[pin]
+    procfs_pending: Mutex<Vec<procfs::Event>>,
 }
 
 impl Runtime {
@@ -127,6 +134,61 @@ impl Runtime {
         let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
         if port != 503 {
             return Err(EINVAL);
+        }
+        if message == 0x13 {
+            if let Err(error) = self.procfs.reply(packet) {
+                if error != ENOENT {
+                    return Err(error);
+                }
+                self.rejected.fetch_add(1, Ordering::Relaxed);
+            }
+            return Ok(());
+        }
+        if message == 0x44
+            || message == application_rpc::TID_DELETE
+                && u64::from_le_bytes(packet[40..48].try_into().unwrap()) != 0
+        {
+            let cpu = i32::from_le_bytes(packet[24..28].try_into().unwrap());
+            let os = i32::from_le_bytes(packet[28..32].try_into().unwrap());
+            let pid = i32::from_le_bytes(packet[32..36].try_into().unwrap());
+            let tid = u64::from_le_bytes(packet[40..48].try_into().unwrap());
+            if os != self.owner.slot() as i32
+                || cpu < 0
+                || cpu as usize >= self.cpus.len()
+                || tid == 0
+                || tid > i32::MAX as u64
+            {
+                return Err(EINVAL);
+            }
+            let process = self.application.procfs_process(pid, cpu)?;
+            let mut pending = self.procfs_pending.lock();
+            // Refuse overflow without acknowledging CREATE. Retain started
+            // ownership and report a service failure, but keep draining this
+            // channel: a later answer may unblock namespace rundown.
+            if pending.len() == METADATA_CAPACITY {
+                return Err(ENOMEM);
+            }
+            let completion = if message == 0x44 {
+                Some(
+                    self.memory
+                        .procfs(
+                            u64::from_le_bytes(packet[120..128].try_into().unwrap()),
+                            true,
+                        )
+                        .map_err(|error| if error == EAGAIN { ENOMEM } else { error })?,
+                )
+            } else {
+                None
+            }; // DELETE resp_pa is expired guest stack; never use it.
+            pending.push(
+                procfs::Event {
+                    process,
+                    tid: tid as i32,
+                    completion,
+                },
+                GFP_KERNEL,
+            )?;
+            return Ok(());
         }
         if message == application_syscall::REQUEST_MESSAGE {
             let request =
@@ -203,6 +265,26 @@ impl Runtime {
     }
 
     fn metadata(&self) -> Result<bool> {
+        {
+            let item = {
+                let mut pending = self.procfs_pending.lock();
+                if pending.is_empty() {
+                    None
+                } else {
+                    Some(pending.remove(0))
+                }
+            };
+            let mut service = self.procfs_service.lock();
+            service.retire();
+            if let Some(item) = item {
+                if let Some(completion) = item.completion {
+                    service.create(item.process, item.tid)?;
+                    completion.created()?;
+                } else {
+                    service.delete(&item.process, item.tid)?;
+                }
+            }
+        }
         let Some(item) = self.pending.lock().pop() else {
             return Ok(false);
         };
@@ -432,6 +514,7 @@ impl Runtime {
     }
 
     fn pump(&self) {
+        self.procfs.advance();
         // A failure in one service must not prevent callback replies or
         // already-published exchanges from draining in the other service.
         for result in [
@@ -440,11 +523,39 @@ impl Runtime {
             self.publish_remote(),
             self.publish_applications(),
             self.publish_syscalls(),
+            self.application.advance(),
+            self.publish_procfs(),
         ] {
             if let Err(error) = result {
                 self.fail(error);
             }
         }
+    }
+
+    fn publish_procfs(&self) -> Result {
+        let Some(guest_cpu) = self.procfs.queued_cpu() else {
+            return Ok(());
+        };
+        let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
+        smp_cpu::with_runtime_target(self.owner, target, |cpu| {
+            smp_ikc::validate_apic()?;
+            let result = {
+                let transport = self.transport.lock();
+                let Some(entry) = transport.channels.iter().find(|entry| {
+                    entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32
+                }) else {
+                    return Ok(());
+                };
+                self.procfs
+                    .publish(guest_cpu, |packet| entry.channel.publish(packet))
+            };
+            match result {
+                Ok(true) => smp_ikc::notify(cpu),
+                Ok(false) => Ok(()),
+                Err(error) if error == EBUSY || error == EAGAIN => Ok(()),
+                Err(error) => Err(error),
+            }
+        })
     }
 
     fn publish_syscalls(&self) -> Result {
@@ -627,6 +738,7 @@ impl Started {
     pub(in super::super) fn activate_and_wait(&self) -> Result {
         self.packets.activate();
         self.metadata.activate();
+        self.runtime.procfs.activate();
         for _ in 0..3000 {
             let error = self.runtime.error.load(Ordering::Acquire);
             if error != 0 {
@@ -811,18 +923,23 @@ pub(super) fn prepare(
     // SAFETY: Setup validated the unique response page and stored it before
     // acknowledgement. No prior continuing Remote exists for this OS.
     let remote = unsafe { Remote::new(data)? };
-    let application = smp_application::Remote::new(owner)?;
+    let procfs = procfs::Remote::new(memory.clone())?;
+    let procfs_service = procfs::Service::new(procfs.clone())?;
+    let procfs_pending = Vec::with_capacity(METADATA_CAPACITY, GFP_KERNEL)?;
+    let application = smp_application::Remote::new(owner, procfs.clone())?;
     let pending = Pending::new()?;
     let status_address = prepared.params.address + offset_of!(abi::IhkSmpBootParam, status) as u64;
     let runtime = Arc::pin_init(
         pin_init!(Runtime {
-            owner, memory, cpus, data, remote, application, master,
+            owner, memory, cpus, data, remote, application, procfs, master,
             master_receive: receive, master_send: send, master_bytes: queue_bytes,
             status_address,
             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
             service <- new_mutex!(None),
             pending <- new_mutex!(pending),
+            procfs_service <- new_mutex!(procfs_service),
+            procfs_pending <- new_mutex!(procfs_pending),
         }),
         GFP_KERNEL,
     )?;

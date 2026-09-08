@@ -223,10 +223,29 @@ pub(crate) struct Directory(Owner);
 
 impl Directory {
     pub(crate) fn new(parent: Option<&Self>, name: &CStr) -> Result<Self> {
+        Self::owned(
+            parent,
+            name,
+            bindings::kuid_t { val: 0 },
+            bindings::kgid_t { val: 0 },
+        )
+    }
+
+    pub(crate) fn owned(
+        parent: Option<&Self>,
+        name: &CStr,
+        uid: bindings::kuid_t,
+        gid: bindings::kgid_t,
+    ) -> Result<Self> {
         Owner::publish(parent, name, |name, parent| {
             // SAFETY: Names are terminated, the parent is live and all native
             // namespace mutations are excluded until publication finishes.
-            unsafe { abi::proc_mkdir_mode(name, 0o555, parent) }
+            let entry = unsafe { abi::proc_mkdir_mode(name, 0o555, parent) };
+            if !entry.is_null() {
+                // SAFETY: This live publication is excluded from removal.
+                unsafe { abi::proc_set_user(entry, uid, gid) };
+            }
+            entry
         })
         .map(Self)
     }

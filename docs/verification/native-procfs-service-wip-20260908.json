@@ -1,0 +1,100 @@
+{
+  "status": "WIP",
+  "created_utc": "2026-09-08T20:48:35.542670+00:00",
+  "module_build": "PASS",
+  "runtime_proven": false,
+  "application_executed": false,
+  "archive_retention_pending": true,
+  "scope": "Live native procfs service source selected and three modules compiled; guest validation pending. Complete original captures stay protected locally until full archival.",
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-procfs-service-module-20260908-1",
+      "status": "FAIL",
+      "command": "/home/holden/mckernel-work/bin/mckernel-container native python3 -B /work/build-native-procfs-service.py 1",
+      "evidence": [
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-1-record.json.gz",
+          "size": 4781,
+          "sha256": "6de89f75194b8006efddede241a75d332054989180a16ed18e70ee3682d50762"
+        },
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-1-module-build.log.gz",
+          "size": 786,
+          "sha256": "69cd54e0fa0ea37c1b992ada92a23dee1f53ae392817e47bed00e2beffc029de"
+        }
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-procfs-service-module-20260908-2",
+      "status": "FAIL",
+      "command": "/home/holden/mckernel-work/bin/mckernel-container native python3 -B /work/build-native-procfs-service.py 2",
+      "evidence": [
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-2-record.json.gz",
+          "size": 5068,
+          "sha256": "03323091d8b442d8f51cc21ce1ee51435a66f12a22dc680a481d296e9cbc46fd"
+        },
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-2-module-build.log.gz",
+          "size": 1053,
+          "sha256": "1a0df2738e02318abdb32b75f00958d6d462e6a9f3ec6f6488cb1835081be447"
+        }
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-procfs-service-module-20260908-3",
+      "status": "PASS",
+      "command": "/home/holden/mckernel-work/bin/mckernel-container native python3 -B /work/build-native-procfs-service.py 3",
+      "evidence": [
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-3-record.json.gz",
+          "size": 6075,
+          "sha256": "263cde8fb4f309c110d377f7ae0b4509dfb0705d91712a3494d56f5414181a06"
+        },
+        {
+          "path": "docs/verification/evidence/native-procfs-service-module-20260908-3-module-build.log.gz",
+          "size": 428,
+          "sha256": "0a47089950ea0b79677e17416f734ceb1c8e97fe99a89a8409691bb982a28437"
+        }
+      ]
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "host-kernel/native-rust/smp_procfs.rs",
+      "sha256": "3ae89194175d5771164e0a0805becd72d0498bcec9ea0736d3be72feed3cb012"
+    },
+    {
+      "path": "host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "b638be34e740614a7f5273945d64b220fddf52441b0877608b4305443539cf92"
+    },
+    {
+      "path": "host-kernel/native-rust/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "b6f1c1c6903d6e2a08a35bc55c9900ff537b45a58c8d0476597ebf34638f296f"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_image.rs",
+      "sha256": "02652bcb497ef52680cd4ea517e6a52b8a278a0d15ec5da798802e35e9a76d31"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "3b3ef5ae8b512895b0038d1e0bd0da2ee9a84e1b4adec3f86780079af94e7a89"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "777975dc75390b82305422868cbb6ca3160f32e4ddbe998863cf96ac2ccc196b"
+    },
+    {
+      "path": "host-kernel/native-rust/application_rpc.rs",
+      "sha256": "84490e22a3dfb655049af887d1df56f66e90f92cfd76c0609b380e0e70af57d4"
+    },
+    {
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "57ff47ef95386667691d56793f1ef11dbaf01ae10577e0dbcd8138b97d52f245"
+    }
+  ]
+}

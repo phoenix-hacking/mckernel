@@ -6,7 +6,7 @@ use super::{
     application_syscall::Request,
     smp_application_image::Preparation,
     smp_application_syscall::Mailbox,
-    smp_memory::SyscallResponse,
+    smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
 use core::sync::atomic::{AtomicUsize, Ordering};
@@ -25,6 +25,7 @@ fn errno(code: i32) -> Error {
 struct Entry {
     cleanup: Exchange,
     prepare: Option<Preparation>,
+    procfs: Option<Arc<ProcfsProcess>>,
     syscalls: Mailbox<SyscallResponse>,
     scheduled: bool,
     needs_cleanup: bool,
@@ -50,6 +51,14 @@ impl Entry {
     }
     fn request_cleanup(&mut self) -> Result {
         self.needs_cleanup = true;
+        if let Some(procfs) = &self.procfs {
+            procfs.close();
+            // Namespace removal runs on the metadata worker. The packet
+            // worker continues remote releases while Linux drains open files.
+            if !procfs.drained() {
+                return Ok(());
+            }
+        }
         if self.quarantined {
             return Err(errno(-71));
         }
@@ -85,6 +94,7 @@ impl Entry {
 #[pin_data]
 pub(crate) struct Remote {
     owner: OsToken,
+    procfs: Arc<ProcfsRemote>,
     #[pin]
     slots: Mutex<Vec<Option<Entry>>>,
     #[pin]
@@ -93,13 +103,13 @@ pub(crate) struct Remote {
 }
 
 impl Remote {
-    pub(crate) fn new(owner: OsToken) -> Result<Arc<Self>> {
+    pub(crate) fn new(owner: OsToken, procfs: Arc<ProcfsRemote>) -> Result<Arc<Self>> {
         let mut slots = Vec::with_capacity(CAPACITY, GFP_KERNEL)?;
         for _ in 0..CAPACITY {
             slots.push(None, GFP_KERNEL)?;
         }
         Arc::pin_init(
-            pin_init!(Self { owner, slots <- new_mutex!(slots), changed <- new_condvar!(),
+            pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
                 syscall_cursor: AtomicUsize::new(0) }),
             GFP_KERNEL,
         )
@@ -122,6 +132,7 @@ impl Remote {
         *slot = Some(Entry {
             cleanup,
             prepare: None,
+            procfs: None,
             syscalls,
             scheduled: false,
             needs_cleanup: false,
@@ -139,6 +150,31 @@ impl Remote {
             .map(Entry::next)
             .find(|exchange| exchange.queued())
             .map(Exchange::cpu)
+    }
+
+    pub(crate) fn advance(&self) -> Result {
+        let mut slots = self.slots.lock();
+        for entry in slots.iter_mut().flatten() {
+            if entry.needs_cleanup && !entry.quarantined {
+                entry.request_cleanup()?;
+            }
+        }
+        Ok(())
+    }
+
+    pub(crate) fn procfs_process(&self, pid: i32, cpu: i32) -> Result<Arc<ProcfsProcess>> {
+        let slots = self.slots.lock();
+        let entry = slots
+            .iter()
+            .flatten()
+            .find(|entry| entry.cleanup.pid() == pid)
+            .ok_or(ENOENT)?;
+        let image = entry.prepare.as_ref().ok_or(EINVAL)?;
+        if entry.quarantined || image.input.cpu != cpu {
+            return Err(EINVAL);
+        }
+        kernel::error::to_result(image.result().ok_or(EBUSY)?)?;
+        entry.procfs.as_ref().cloned().ok_or(EIO)
     }
 
     pub(crate) fn publish(
@@ -238,11 +274,15 @@ impl Remote {
             let entry = slot.as_mut().unwrap();
             if entry.quarantined {
                 entry.closed = true;
+                if let Some(procfs) = &entry.procfs {
+                    procfs.close();
+                }
                 // An untrustworthy success cannot prove prepared-task retirement.
                 // Retain its bounded slot until actual OS shutdown is implemented.
                 return;
             }
             if entry.syscalls.drained()
+                && entry.procfs.as_ref().is_none_or(|procfs| procfs.drained())
                 && (entry.prepare.is_none() && entry.cleanup.reserved()
                     || entry.cleanup.release_ready())
             {
@@ -490,6 +530,15 @@ impl Remote {
     ) -> Result {
         // All allocations and input validation finish outside the state lock.
         let mut prepare = Preparation::new(self.owner.slot() as i32, bytes, cpus, direct_map)?;
+        let (uid, gid) = prepare.procfs_credentials()?;
+        let procfs = ProcfsProcess::new(
+            self.procfs.clone(),
+            token,
+            prepare.input.pid,
+            prepare.input.cpu,
+            uid,
+            gid,
+        )?;
         {
             let mut slots = self.slots.lock();
             let entry = slots
@@ -508,6 +557,7 @@ impl Remote {
                 return Err(EINVAL);
             }
             prepare.exchange.begin().map_err(errno)?;
+            entry.procfs = Some(procfs);
             entry.prepare = Some(prepare);
         }
         for _ in 0..3000 {

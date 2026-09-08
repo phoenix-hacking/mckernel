@@ -30,6 +30,7 @@ mod abi;
 
 #[path = "smp_service.rs"]
 mod service;
+pub(super) use service::procfs::{Process as ProcfsProcess, Remote as ProcfsRemote};
 pub(super) use service::Application;
 pub(super) use service::SyscallResponse;
 
@@ -463,8 +464,9 @@ impl BootPages {
         if end > self.bytes {
             return Err(EINVAL);
         }
-        // SAFETY: This unstarted exclusive owner retains one complete Linux
-        // allocation. The checked source/destination belong to distinct storage.
+        // SAFETY: This exclusive owner retains one complete Linux allocation.
+        // Callers write only before publication or after the exact terminal
+        // reply has retired every peer mapping. Source/destination are distinct.
         unsafe {
             ptr::copy_nonoverlapping(
                 bytes.as_ptr(),

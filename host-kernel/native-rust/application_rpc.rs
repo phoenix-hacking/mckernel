@@ -98,7 +98,6 @@ impl Exchange {
     /// The owner retains the 808-byte request, host data pages, and exact OS
     /// generation until a matching native reply proves guest mapping retirement.
     /// Caller departure or an unmarked legacy answer cannot release these pages.
-    #[allow(dead_code)] // Tested prerequisite; the native procfs service is not connected yet.
     pub(crate) fn procfs(
         os: i32,
         cpu: i32,

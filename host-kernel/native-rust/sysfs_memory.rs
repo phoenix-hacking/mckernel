@@ -46,6 +46,7 @@ struct Ledger {
     requests: Vec<Option<Tagged>>,
     responses: Vec<Option<Tagged>>,
     snoops: Vec<Tagged>,
+    procfs: Vec<Tagged>,
     serial: u64,
 }
 
@@ -63,6 +64,7 @@ impl Ledger {
                 .flatten()
                 .any(|old| old.span.overlaps(span))
             || snoops && self.snoops.iter().any(|old| old.span.overlaps(span))
+            || self.procfs.iter().any(|old| old.span.overlaps(span))
     }
 
     fn tag(&mut self, span: Span) -> Result<Tagged> {
@@ -119,10 +121,11 @@ impl Memory {
         for _ in 0..capacity {
             responses.push(None, GFP_KERNEL)?;
         }
+        let procfs = Vec::with_capacity(4096 + METADATA_CAPACITY + 2, GFP_KERNEL)?;
         Arc::pin_init(
             pin_init!(Self {
                 owner, direct_map, extents,
-                ledger <- new_mutex!(Ledger { fixed, requests, responses, snoops: Vec::new(), serial: 0 }),
+                ledger <- new_mutex!(Ledger { fixed, requests, responses, snoops: Vec::new(), procfs, serial: 0 }),
             }),
             GFP_KERNEL,
         )
@@ -151,6 +154,72 @@ impl Memory {
             .conflicts(Span::new(physical, bytes)?, true)
         {
             return Err(EBUSY);
+        }
+        Ok(())
+    }
+
+    /// CREATE owns four bytes until its final done store. A returned snapshot
+    /// owns complete immutable pages until RELEASE is actually published.
+    pub(super) fn procfs(self: &Arc<Self>, physical: u64, create: bool) -> Result<ProcfsRegion> {
+        let bytes = if create { 4 } else { 4096 };
+        if physical % bytes as u64 != 0 {
+            return Err(EINVAL);
+        }
+        let address = self.address(physical, bytes)?;
+        let span = Span::new(physical, bytes)?;
+        let mut ledger = self.ledger.lock();
+        if ledger.conflicts(span, true) {
+            return Err(EBUSY);
+        }
+        if ledger.procfs.len() == 4096 + METADATA_CAPACITY + 2 {
+            return Err(EAGAIN);
+        }
+        if create
+            && unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire) != 0
+        {
+            return Err(EBUSY);
+        }
+        let tag = ledger.tag(span)?;
+        ledger.procfs.push(tag, GFP_KERNEL)?;
+        Ok(ProcfsRegion {
+            memory: self.clone(),
+            address,
+            tag,
+            create,
+            active: true,
+        })
+    }
+
+    /// Queue-full retains every page claim. Successful publication can make
+    /// the guest free/reuse the chain immediately, even before its answer.
+    /// Exclude other claims until those old host read permissions are retired.
+    pub(super) fn publish_procfs_release(
+        &self,
+        pages: &mut [ProcfsRegion],
+        send: impl FnOnce() -> Result,
+    ) -> Result {
+        let mut ledger = self.ledger.lock();
+        for page in pages.iter() {
+            if !ptr::eq(self, &*page.memory)
+                || !page.active
+                || page.create
+                || !ledger
+                    .procfs
+                    .iter()
+                    .any(|old| old.serial == page.tag.serial)
+            {
+                return Err(EIO);
+            }
+        }
+        send()?;
+        for page in pages {
+            let index = ledger
+                .procfs
+                .iter()
+                .position(|old| old.serial == page.tag.serial)
+                .unwrap();
+            ledger.procfs.swap_remove(index);
+            page.active = false;
         }
         Ok(())
     }
@@ -336,6 +405,53 @@ impl Memory {
             bytes,
             tag,
         })
+    }
+}
+
+/// Unfinished destruction leaves its exact ledger tag quarantined. Started OS
+/// storage retains the physical RAM; Drop never dereferences the peer address.
+pub(super) struct ProcfsRegion {
+    memory: Arc<Memory>,
+    address: u64,
+    tag: Tagged,
+    create: bool,
+    active: bool,
+}
+
+impl ProcfsRegion {
+    pub(super) fn read(&self, offset: usize, output: &mut [u8]) -> Result {
+        if !self.active
+            || self.create
+            || offset
+                .checked_add(output.len())
+                .is_none_or(|end| end > 4096)
+        {
+            return Err(EINVAL);
+        }
+        // The private owner excludes RELEASE publication throughout this read.
+        // The terminal native answer made all of this guest page immutable.
+        for (index, byte) in output.iter_mut().enumerate() {
+            *byte = unsafe { ptr::read_volatile((self.address as *const u8).add(offset + index)) };
+        }
+        Ok(())
+    }
+
+    pub(super) fn created(mut self) -> Result {
+        let mut ledger = self.memory.ledger.lock();
+        if !self.active || !self.create {
+            return Err(EINVAL);
+        }
+        let index = ledger
+            .procfs
+            .iter()
+            .position(|old| old.serial == self.tag.serial)
+            .ok_or(EIO)?;
+        ledger.procfs.swap_remove(index);
+        self.active = false;
+        // SAFETY: The exact aligned CREATE claim is still excluded. Namespace
+        // publication succeeded before this final store; no peer access follows.
+        unsafe { AtomicI32::from_ptr(self.address as *mut i32) }.store(1, Ordering::Release);
+        Ok(())
     }
 }
 
