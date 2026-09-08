@@ -137,6 +137,48 @@ void reference_map(const struct descriptor *input, size_t size, intptr_t offset,
             self.assertIn("actual C/Rust mapping scenarios=144", self.run_checked(
                 [str(output), "--test-threads=1", "--nocapture"]))
 
+    def test_actual_host_argument_ownership_before_writes(self):
+        rustc = shutil.which("rustc")
+        if rustc is None:
+            self.skipTest("Rust compiler unavailable")
+        generated = '#![allow(dead_code)]\n'
+        for name, relative in [('abi', 'abi/x86_64.rs'), ('vdso_protocol', 'abi/vdso.rs'),
+                               ('ihk_mapping', 'ihk_mapping.rs'), ('smp_resource', 'smp_resource.rs')]:
+            generated += '#[path = "' + str(ROOT / 'host-kernel/native-rust' / relative) + '"] mod ' + name + ';\n'
+        generated += '''
+mod smp_ikc { pub const CONTROL_QUEUE_BYTES: usize = 16384; }
+mod smp_vdso {
+    use super::vdso_protocol::{self as wire, Descriptor};
+    pub fn collect() -> Result<Descriptor, i32> {
+        Descriptor::response(2, [0x2000, 0x3000], [0x4000, 0, 0x5000, 0, 0, 0]).map_err(|_| -22)
+    }
+    pub unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Result<(), i32> {
+        unsafe { wire::complete(destination, response) }.map_err(|_| -22)
+    }
+}
+mod memory {
+    use super::smp_resource::MemoryMap;
+    type Result<T = ()> = core::result::Result<T, i32>;
+    const EINVAL: i32 = -22;
+    const EIO: i32 = -5;
+    const MAX_EXTENTS: usize = 16;
+    const IDENTITY_WINDOW_END: u64 = 256 << 30;
+    struct FakeChannel { owner: super::smp_resource::OsToken, receive_physical: u64, send_physical: u64 }
+    struct OwnedControlChannel { channel: FakeChannel }
+    macro_rules! pr_info { ($($argument:tt)*) => { let _ = format_args!($($argument)*); }; }
+'''
+        memory = (ROOT / 'host-kernel/native-rust/smp_memory.rs').read_text()
+        for signature in ['fn checked_guest_bytes(', 'fn checked_guest_queue(', 'fn reply_vdso(']:
+            generated += function(memory, signature) + '\n'
+        generated += (ROOT / 'scripts/tests/fixtures/mckernel_native_vdso_ownership.rs').read_text() + '\n}\n'
+        with tempfile.TemporaryDirectory(prefix="native-vdso-owner-") as temporary:
+            directory = Path(temporary)
+            (directory / 'ownership.rs').write_text(generated)
+            output = directory / 'ownership'
+            self.run_checked([rustc, '--edition=2021', '--test', '-Dwarnings', '-O',
+                              str(directory / 'ownership.rs'), '-o', str(output)])
+            self.run_checked([str(output), 'exact_owner_', '--test-threads=1'])
+
     def test_protocol_publication_and_clock_reader(self):
         rustc = shutil.which("rustc")
         if rustc is None:

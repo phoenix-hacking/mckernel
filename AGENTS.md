@@ -37,8 +37,16 @@ image/resource policy fixtures pass in service-tests attempt 1. Attempt 2 adds
 144 exact original-C/Rust mapping comparisons, all optional native page sets,
 cache/hole checks, every mapping callback failure and invalid-input rejection.
 Native prototype 8 builds all three modules and passes layout/ELF/no-SIMD
-checks after two recorded API/visibility failures. Images and actual service
-runtime are still pending.
+checks after two recorded API/visibility failures. Image attempt 12 exposed
+missing standalone slice-panic/bcmp dependencies; the fixed-word codec keeps
+the wire contract and all tests. All three images now build in attempt 13,
+whose native entry is 0xfffffffffe846c00 and loaded-window FNV aa6419ab7afa5442.
+Prototype 9 rebuilds the final host codec and passes. The actual image parser
+also verifies revisions 1/2/3. Service-tests attempt 4 adds whole-extent,
+generation, queue-alias and Linux-page exclusion checks on the production host
+adapter. Preparation passes both ABIs over two module lifetimes, including
+rejection of revision 2 before startup and full unstarted restoration. Actual
+service startup remains to be checked.
 The latest verified runtime remains the export checkpoint below; this WIP
 does not claim a completed service, full boot or application verification.
 
