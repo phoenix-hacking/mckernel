@@ -297,7 +297,10 @@ static void final_release(int fd)
     write_access("/targets/two", 0);
 }
 
-int main(void)
+#ifndef NATIVE_MCCTRL_EXEC_MAIN
+#define NATIVE_MCCTRL_EXEC_MAIN main
+#endif
+int NATIVE_MCCTRL_EXEC_MAIN(void)
 {
     /* Populate the mounted noexec filesystem with the same executable bytes.
      * The minimal initramfs intentionally has no external cp utility. */

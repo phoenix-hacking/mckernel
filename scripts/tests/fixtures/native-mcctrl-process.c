@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /* Real CREATE_PPD and final-file cleanup in the isolated Linux/McKernel guest. */
-#define main native_exec_reference_main
+#define NATIVE_MCCTRL_EXEC_MAIN native_exec_reference_main
 #include "native-mcctrl-exec.c"
-#undef main
+#undef NATIVE_MCCTRL_EXEC_MAIN
 
 #define CREATE_PPD 0x30a0290e
 static unsigned process_checks;
