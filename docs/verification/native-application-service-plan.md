@@ -362,3 +362,14 @@ fork/exec lifetime, compatibility, real fault injection and application runs
 remain required before acceptance, together with all earlier integration and
 Rust/assembly requirements. Verify in the pinned containers and real guests,
 retain first failures, and save coherent GitHub checkpoints periodically.
+
+Image guest attempt 1 refinement: the exact Linux 6.12 anon_inodefs initializer
+sets SB_I_NOEXEC (`fs/anon_inodes.c:89`), and `mm/mmap.c` returns EPERM for an
+executable mapping on such a path. The legacy RWX mirror reservation therefore
+cannot be copied unchanged onto this Linux ABI. Reserve the Linux mirror with
+PROT_READ|PROT_WRITE: it serves host data access/transfer, while McKernel executes
+the application under its own prepared page-table permissions. Preserve those
+actual guest text/stack execute attributes and Linux's anon-inode mount policy.
+The original failed guest capture remains evidence; retry with a fresh module
+and guest. Full application execution still requires the same guest scheduling,
+syscall and lifecycle work, with no reduction in the requested end state.

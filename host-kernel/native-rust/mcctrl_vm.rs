@@ -168,9 +168,11 @@ impl Mirror {
             let address = unsafe {
                 (*promoted).cap_effective.val |= 1 << 17; // CAP_SYS_RAWIO
                 let original = bindings::override_creds(promoted);
-                // MAP_FIXED_NOREPLACE | MAP_SHARED, PROT_READ|WRITE|EXEC.
+                // MAP_FIXED_NOREPLACE | MAP_SHARED, PROT_READ|WRITE. Linux
+                // anon_inodefs is noexec; this mirror serves host data access.
+                // The guest's own page tables retain application execution.
                 // A mapping raced into the snapshot gap fails with EEXIST.
-                let address = bindings::vm_mmap(file, 0, end, 7, 0x100001, 0);
+                let address = bindings::vm_mmap(file, 0, end, 3, 0x100001, 0);
                 bindings::revert_creds(original);
                 bindings::abort_creds(promoted);
                 address
