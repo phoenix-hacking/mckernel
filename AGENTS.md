@@ -116,6 +116,23 @@ record exact restoration references before omitting files. Full validation must
 still have all of its required evidence. Continue capacity checks and GitHub
 checkpoints between substantial validation batches.
 
+The ninth cleanup checkpoint is
+`docs/verification/storage-maintenance-20260908-6.json`. Fourteen completed
+sysfs/mcctrl captures and 19 duplicate executable retention archives were removed
+only after full comparisons against 30 verified committed originals. Every failed
+run remains recoverable from its complete original archive. All 2,427 checked
+current files remain byte-identical after deletion and targeted scratch trim;
+all 67 protected dependency directories remain present. Actual backing-file
+allocation drops another 846,270,464 bytes (807 MiB), totaling 74.83 GiB across
+nine cleanups. About 152 GiB is free on the host and 40 GiB in scratch. The first
+read-only audit failed on a repository path outside scratch before any deletion;
+the original helper/failure and corrected attempt are retained. Recent host logs,
+active caches, personal files, VM disks, other projects and Docker state remain.
+Use the compressed restoration mapping before historical replay; retain the
+current executable/service modules, kernel, images, compiler and setup inputs.
+Continue capacity checks, avoiding redundant evidence copies, and GitHub
+checkpoints between substantial verification batches.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native executable/credential checkpoint, 2026-09-08: production module attempt 2
