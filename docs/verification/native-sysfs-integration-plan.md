@@ -186,3 +186,38 @@ minor reuse is covered separately by preparation. The original allocation
 failures do not inject every new sysfs allocation point. Full ready status,
 application launch/tests, native shutdown, declared production integration,
 full Rust/assembly ownership and independent acceptance remain open.
+
+## Native tree reuse and boundary
+
+Adapt the existing Rust `mcctrl_sysfs_lookup_i_body_result` directory/type/name
+walk and the remaining C `lookup`, `dig`, `sysfsm_{create,mkdir,symlink,unlink}`,
+`remove` and `cleanup_ancestor` ownership bodies. Preserve repeated-separator
+lookup, automatic intermediate directories, duplicate errors, directory-only
+symlink targets, no symlink traversal by the request lookup, recursive unlink
+and the KEEP_ANCESTOR flag. As in the existing body, a later create failure may
+leave successfully created intermediate directories; they remain owned.
+
+Validate the whole bounded path before namespace mutation, rejecting NUL,
+dot/dotdot and oversized components. Reject removal of the logical root or its
+protected sys child before touching descendants. Replace guest-visible node
+addresses with nonzero, positive-long identities from a nonwrapping module-wide
+sequence; every operation validates membership in its own tree. No handle is
+ever converted into a Linux or Rust pointer. Different trees and removed nodes
+cannot alias live handles through slot or filename reuse.
+
+The tree owns heterogeneous file operations through stable boxed callback
+objects and the verified Directory/File/Link owners. Mutable tree access
+serializes metadata changes; callbacks must not reacquire the tree/removal lock.
+Use iterative leaf-first deletion and reverse-publication cleanup so teardown
+does not allocate or recurse on a kernel stack. Store the tree in PreparedBoot's
+existing OS-device lifetime. Verify actual Linux paths, data, links, errors and
+retirement, including stale/cross-tree handles, before request completion.
+
+Implementation WIP checkpoint during requested disk maintenance: the new
+`sysfs_tree.rs` and its native-module, userspace and legacy-body comparison
+fixtures are saved, including 60 shared path-operation cases. They have not
+yet been compiled or executed. The next step is to extract the exact legacy
+bodies into the fixture header, build the three native modules and tree fixture
+in the pinned container, then run the disposable Linux guest and both existing
+OS preparation/startup interfaces. This source checkpoint adds no runtime or
+production acceptance claim; SYSFS_REQ_SETUP is still pending.

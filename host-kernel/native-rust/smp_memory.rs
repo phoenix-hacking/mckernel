@@ -727,7 +727,7 @@ fn accept_control_channel(
 struct PreparedBoot {
     // Retired before device_destroy by the unstarted backend cleanup; every
     // started owner remains retained with the rest of PreparedBoot.
-    _sysfs: super::sysfs_objects::Directory,
+    _sysfs: super::sysfs_tree::Tree,
     params: BootPages,
     _dump: BootPages,
     trampoline: super::smp_trampoline::LowRegion,

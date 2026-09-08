@@ -5,6 +5,7 @@ use core::ffi::c_void;
 use kernel::{bindings, prelude::*};
 
 use super::{smp_resource::OsToken, sysfs_objects::Directory};
+use super::sysfs_tree::Tree;
 
 // SAFETY: IHK's namespaced export synchronously lends its actual Linux kobject
 // while a generation-checked registry lease excludes device unregister.
@@ -43,7 +44,7 @@ unsafe extern "C" fn attach(context: *mut c_void, parent: *mut c_void) -> i32 {
 /// The caller holds IHK's exact OS lease, operation lock and SMP module pin.
 /// Store the result in this OS's backend ownership graph, retiring it before
 /// backend release succeeds. Once a CPU starts, retain it until proven shutdown.
-pub(super) unsafe fn root(owner: OsToken) -> Result<Directory> {
+pub(super) unsafe fn root(owner: OsToken) -> Result<Tree> {
     let mut directory = None;
     // SAFETY: The stack output and module-resident callback remain live. IHK
     // checks the exact generation before lending a registered device parent.
@@ -56,5 +57,5 @@ pub(super) unsafe fn root(owner: OsToken) -> Result<Directory> {
             Some(attach),
         )
     })?;
-    directory.ok_or(EIO)
+    Tree::new(directory.ok_or(EIO)?)
 }

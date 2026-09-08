@@ -47,6 +47,8 @@ mod smp_vdso;
 #[allow(dead_code)]
 mod sysfs_objects;
 mod sysfs_os;
+#[allow(dead_code)]
+mod sysfs_tree;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
