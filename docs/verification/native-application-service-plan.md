@@ -263,3 +263,41 @@ The initial request has no prepared thread or guest memory. An acknowledgement
 precedes guest terminate_host, so it must not be promoted to proof of full task
 termination or prepared-image retirement. Those owners and final termination
 semantics remain part of the subsequent image/process lifecycle work.
+
+## Process registration and cleanup checkpoint, 2026-09-08
+
+Native module attempt 1, protocol attempt 1, x86_64 guest attempt 3 and i386
+guest attempt 1 pass. Both real guest interfaces complete 306 PPD assertions:
+146 registrations, 148 duplicate rejections, six user-copy faults, four explicit
+unsupported mirror-VM requests, two 64-slot exhaustion/reuse phases, 138 joined
+fork workers and 142 exact process-file context retirements. All 146 cleanup
+acknowledgements have matching unique tokens and errno zero. Independent queue
+captures show exactly 146 corresponding request/reply exchanges; all six physical
+captures remain status 3. Existing executable/credential, topology/file lifetime
+and 260 continuing sysfs callback regressions pass again.
+
+Eight protocol tests bind the actual native state to four exact C declarations
+and seven extracted unchanged guest Rust bodies. They cover cleanup/ACK/terminate
+ordering, errno handling, reservation, queue-full retries, wrong/stale replies,
+caller departure, malformed matching results and 4,096 concurrent unique tokens.
+These fault paths are state/body checks; actual guest timeout, queue-full fault
+injection and removal races remain open. The real guest capacity test exercises
+the Linux adapter's 64-descriptor admission and complete reuse.
+
+See `native-mcctrl-process-checkpoint-20260908.json`: six complete captures,
+both original harness failures, 18 artifacts, 46 native compiler bindings,
+14 Linux probe bindings, seven protocol compiler bindings, four unchanged image
+peer source bindings, three exact formatter replays and four pinned Linux review
+sources. The failures are the fixture's nested main macro before boot and final
+capture parsing of the repeated shutdown dmesg output. Both remain FAIL in their
+original complete captures. The corrected capture uses the original console
+segment and retains strict metadata sequencing and queue assertions.
+
+Preserve `native-mcctrl-process-module-20260908-1` and
+`native-application-protocol-20260908-1` alongside the established image/kernel,
+executable/service, snooping, compiler and setup dependencies. Next extend the
+owned connection through actual image/VM preparation, transfer/start and syscall
+service for the unchanged launcher. Procfs, full exit and prepared-task retirement,
+non-null CREATE_PPD parity, same-TGID thread races and the full original language,
+staging/FFI/full-suite, shutdown, multi-CPU/OS and acceptance work remain required.
+No native application has run, and no production acceptance gate is promoted.

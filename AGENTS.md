@@ -135,6 +135,35 @@ checkpoints between substantial verification batches.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native process registration/cleanup checkpoint, 2026-09-08: module attempt 1,
+protocol attempt 1, x86_64 guest attempt 3 and i386 guest attempt 1 pass. Both
+interfaces verify 306 PPD assertions, 146 real registrations and matching cleanup
+acknowledgements, 148 duplicate rejections, six copy faults, four explicit
+unsupported mirror-VM requests, two 64-slot exhaustion/reuse phases, 138 joined
+fork workers and 142 exact process-file context retirements. Independent final
+queue captures show all 146 request/reply exchanges, with six physical status-3
+captures. Existing executable/credential, file/topology and 260 continuing sysfs
+callback regressions pass. Eight state/body tests cover the traditional protocol,
+late/wrong replies and 4,096 concurrent tokens using exact guest Rust/C sources.
+See `docs/verification/native-mcctrl-process-checkpoint-20260908.json`: six
+complete captures, both harness failures, 18 artifacts, 46 native compiler
+bindings, 14 Linux probe bindings, seven protocol bindings, four unchanged image
+peer bindings, three formatter replays and four pinned Linux review sources.
+Preserve `native-mcctrl-process-module-20260908-1` and
+`native-application-protocol-20260908-1` as current inputs alongside the existing
+kernel/image/executable/service/snooping/compiler/setup dependencies. The bounded
+registration owns a cleanup reservation and exact OS/backend connection; an
+unpublished loser cancels only its own reservation. Published requests outlive
+a departing waiter. Real guest timeout/queue-full injection and removal races
+still need coverage. Only unprepared registration is exercised: acknowledgements
+precede guest terminate_host and do not prove prepared-task termination. Shared
+inherited files still retain process bindings until final file close. Native
+applications have not run; continue image/VM preparation, transfer/start, syscalls,
+procfs and full process exit, non-null CREATE_PPD parity, same-TGID races and the
+accumulated declared-stage/FFI/current full-suite integration. Full Rust/assembly,
+shutdown, multi-CPU/OS, remaining sysfs faults/races and independent acceptance
+remain required. Keep capacity checks and periodic GitHub checkpoints.
+
 Native executable/credential checkpoint, 2026-09-08: production module attempt 2
 and actual x86_64 guest attempt 4 / i386 attempt 1 pass. Both ABIs verify 518
 current-caller credential comparisons, six user-buffer faults, 1,116 executable
