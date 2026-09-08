@@ -34434,3 +34434,19 @@ do not claim full bitmap boundary parity. The plan now calls for oracle-derived
 exact-capacity and genuine truncation checks and acceptance of newline-only
 completion. Actual continuing guest special/metadata/failure paths, applications,
 shutdown and the full language/integration/acceptance scope remain open.
+
+Bitmap boundary follow-up PASSES module attempt 3 and Linux guest attempt 3.
+Commands: mckernel-container native python3 -B /work/build-native-sysfs-snoop.py 3
+and mckernel-container native python3 -B /work/run-native-sysfs-snoop-guest-v2.py 3 3
+The same pinned container, q35/four-level guest and resource limits apply.
+Snoop accepts complete bitmap text ending in newline even when Linux omits
+NUL at the supplied count, and rejects missing-newline truncation. Across two
+module lifetimes, all 274 legacy-format comparisons pass again with 274 exact-
+capacity comparisons and 274 one-byte-short rejection checks. The new 14,560-bit
+mask yields exactly 4,095 characters through a real Linux sysfs read; both
+reads match independent userspace hex-group construction byte for byte. A
+write through that writable-mode snooping file returns the original ENOSPC
+in both lifetimes. All 2,560 concurrent scalar reads, 128 claim races, capacity/
+alias/reuse checks, two callback/mapping drains and six joined workers pass.
+No first failure occurs in this boundary follow-up. Next repeat actual starts
+with module 3, retain the boundary evidence and keep the full goal active.

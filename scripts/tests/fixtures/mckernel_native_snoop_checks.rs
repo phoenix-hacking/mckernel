@@ -210,6 +210,12 @@ fn equivalent(backing: &Backing, operation: u64, offset: usize, bits: i32) -> Re
     assert_eq!(&actual[..count], &expected[..count]);
     assert_eq!(&actual[PAGE..], &[0xa5; 8]);
     assert_eq!(&expected[PAGE..], &[0xa5; 8]);
+    assert!(count > 0);
+    actual.fill(0xa5);
+    assert_eq!(value.show(&mut actual[..count])?, count);
+    assert_eq!(&actual[..count], &expected[..count]);
+    assert!(actual[count..].iter().all(|&byte| byte == 0xa5));
+    assert!(value.show(&mut actual[..count - 1]).is_err());
     assert_eq!(value.store(b"x"), Err(ENOSPC));
     Ok(())
 }
@@ -270,7 +276,11 @@ fn formats(backing: &Backing) -> Result<usize> {
             }
         }
     }
-    assert_eq!(cases, 136);
+    // 455 complete 32-bit groups produce exactly 4,095 characters including
+    // separators and newline, leaving only sysfs's own trailing NUL byte.
+    equivalent(backing, 7, BITMAP, 14560)?;
+    cases += 1;
+    assert_eq!(cases, 137);
     let number = backing.snoop(4, NUMBER, 0)?;
     assert_eq!(number.show(&mut [0u8; 2]), Err(errno(-75)));
     drop(number);
@@ -746,6 +756,8 @@ impl kernel::Module for Verifier {
             tree.lock()
                 .create(path, 0o444, backing.snoop(operation, offset, bits)?)?;
         }
+        tree.lock()
+            .create(b"/sys/fullmask", 0o644, backing.snoop(7, BITMAP, 14560)?)?;
         backing.initialize(wire::Kind::Mkdir, SLOW);
         backing.word32(SLOW).store(4242, Ordering::Relaxed);
         tree.lock().create(
@@ -792,7 +804,7 @@ impl kernel::Module for Verifier {
         )?;
         let writer = Thread::start(Job::Writer(backing.clone(), stats.clone()))?;
         pr_info!(
-            "MCKERNEL_SYSFS_SNOOP_VERIFY READY formats={} claim_races=64 capacity=66 files=9\n",
+            "MCKERNEL_SYSFS_SNOOP_VERIFY READY formats={} claim_races=64 capacity=66 files=10\n",
             cases
         );
         Ok(Self {

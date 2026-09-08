@@ -85,6 +85,16 @@ int main(void)
     value(ROOT "sys/s","snoop(remote)\n");
     value(ROOT "sys/pbl","0,2-3,63-64,69\n");
     value(ROOT "sys/pb","21,80000000,0000000d\n");
+    char full[4096],expected_full[4096];size_t offset=0;
+    for(int chunk=454;chunk>=0;chunk--){
+        unsigned word=chunk==2?0x21u:chunk==1?0x80000000u:chunk==0?13u:0u;
+        int n=snprintf(expected_full+offset,sizeof(expected_full)-offset,"%08x%s",word,chunk?",":"\n");
+        CHECK(n>0 && n<(int)(sizeof(expected_full)-offset));offset+=(size_t)n;
+    }
+    CHECK(offset==4095 && io(ROOT "sys/fullmask",false,full,sizeof(full))==4095);
+    CHECK(memcmp(full,expected_full,4095)==0);
+    char denied[]="x\n";errno=0;
+    CHECK(io(ROOT "sys/fullmask",true,denied,2)==-1 && errno==ENOSPC);
     control(ROOT "writer",true);
     for(int n=0;n<10000 && status().writes==0;n++)usleep(1000);
     CHECK(status().writes>0);
@@ -109,6 +119,6 @@ int main(void)
     char scratch[32];errno=0;
     CHECK(io(ROOT "sys/slow",false,scratch,sizeof(scratch))==-1 && errno==ENOENT);
     control(ROOT "writer",false);
-    printf("MCKERNEL_SYSFS_SNOOP_USER_PASS initial_reads=8 scalar_reads=1280 callback_drain=1 mapping_reclaimed=1 writes=%llu\n",status().writes);
+    printf("MCKERNEL_SYSFS_SNOOP_USER_PASS initial_reads=9 full_page=4095 readonly_store=1 scalar_reads=1280 callback_drain=1 mapping_reclaimed=1 writes=%llu\n",status().writes);
     return 0;
 }

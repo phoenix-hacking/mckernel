@@ -86,10 +86,17 @@ impl Snoop {
         };
         kernel::error::to_result(count)?;
         let count = count as usize;
-        if count < 2 || count > output.len() || output[count - 2..count] != *b"\n\0" {
+        if count == 0 || count > output.len() {
             return Err(errno(-75));
         }
-        Ok(count - 1)
+        // Linux copies the formatted text plus NUL up to the supplied count.
+        // An exact-capacity copy may include the complete newline without NUL.
+        // Bitmap text has no interior newline, so this also detects truncation.
+        let bytes = count - usize::from(output[count - 1] == 0);
+        if bytes == 0 || output[bytes - 1] != b'\n' {
+            return Err(errno(-75));
+        }
+        Ok(bytes)
     }
 }
 
