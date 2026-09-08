@@ -201,3 +201,53 @@ shared descriptor held elsewhere and same-TGID thread races need the full
 process-lifecycle adapter. Do not equate these tests with that pending coverage.
 The accumulated declared staging/source-graph/FFI integration, current full suite
 and all original runtime/language/independent acceptance requirements remain open.
+
+## Native process registration and cleanup transport review, 2026-09-08
+
+Reviewed parent: `e1a1d633869c7200dd85e371a397d916ee0e2fc1`. The next native
+consumer is the unchanged launcher's `MCEXEC_UP_CREATE_PPD(NULL)` before
+PREPARE_IMAGE. The existing `mcexec_create_per_process_data` body remains C-owned;
+it creates per-process state, rejects duplicate registration, and uses the Rust
+`mcctrl_control_newprocess_body_result` sequencing to attach final-file cleanup.
+Its non-null `rpgtable_desc` branch also clears a Linux mirror mapping after
+fork; that branch requires the later VM adapter and must remain explicitly
+unsupported until implemented, with bad user copies still rejected.
+
+Reuse the native `mcctrl_process.rs` OS-generation/referenced-TGID table and
+existing file bindings. Add actual owned process registration with a retained
+backend connection, duplicate exclusion and exactly-once final cleanup; do not
+return success from an empty CREATE_PPD placeholder. No parallel PID registry or
+legacy project C bridge is introduced. Extend this same registration with image,
+VM, syscall and procfs state in subsequent work. Preserve the current explicit
+limits on abrupt exit with an externally held inherited file.
+
+`release_handler` currently sends SCD_MSG_CLEANUP_PROCESS and awaits
+SCD_MSG_CLEANUP_PROCESS_RESP. Adapt `mcctrl_ikc_send_wait_array` ownership: queue
+publication transfers the request to the continuing service, and a departing
+waiter cannot free a published request or its later reply target. Reuse the
+native sysfs RPC pattern for bounded pending requests and publication/reply
+ordering. Traditional packets use the reply field at offset 16 as an opaque
+non-reused scalar token, not the sysfs token field or a dereferenceable Linux
+pointer. Match the exact reply message and CPU reference. The existing guest
+Rust `host_cleanup_process_request_result` and `host_traditional_reply_result`
+remain the peer; retain their cleanup/acknowledgement ordering and C fallback.
+
+The SMP continuing owner already retains the exact guest memory and channels.
+Extend its packet pump with the traditional cleanup exchange and independent
+progress during caller waits. Add an explicit v4 OS backend callback family for
+acquiring, invoking and releasing an application connection. Retain v1/v2/v3
+exports. IHK opens the connection under its short OS operation guard, owns an
+additional exact-generation lease, then invokes application work outside that
+guard. Closing destroys the opaque backend context before releasing the lease.
+Callbacks and opaque contexts are trusted kernel identities; no private Rust
+layout or userspace value becomes a callback or connection. Do not hide a kernel
+pointer operation behind a userspace-reachable private ioctl command.
+
+Verify packet layout and reply semantics against the existing guest Rust/C
+sources, including queue-full retry, wrong/stale replies and waiter departure.
+In real guests, verify duplicate process registration, independent forked
+registrations, file/module lifetime, exactly-once cleanup acknowledgements and
+continued boot/sysfs service on both ABIs. The initial process registration owns
+no prepared guest application. Actual image/VM preparation, image transfer/start,
+syscall forwarding, procfs publication and application execution remain the next
+required consumers of this connection, alongside all original acceptance work.
