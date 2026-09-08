@@ -188,3 +188,55 @@ pre-mutation rejection. Native prototype 8 now compiles all three modules and
 passes exact layout/ELF/no-SIMD checks. Attempts 6/7 preserve the Rust kernel
 API and unreachable-pub failures; their fixes do not change the wire contract.
 Next rebuild the three images and run actual preparation/start captures.
+
+## Verified service checkpoint, 2026-09-07 local date
+
+Image attempt 12 exposed missing standalone slice-panic and `bcmp` dependencies
+in the descriptor codec. The fixed-word iteration and checked storage access
+preserve the wire bytes without introducing a C runtime. Source-check attempts
+3/4 pass the protocol, arithmetic and mapping coverage after that change.
+Attempt 4 also executes the production host ownership adapter: stale owners,
+whole-extent failures, every queue alias and reserved Linux-page overlap are
+rejected before writes, while a valid cross-page response preserves canaries.
+
+All three images build in attempt 13. Prototype 9 builds the final host codec
+and all three modules, with exact layout witnesses and ELF/no-SIMD checks.
+The native image has boot note revision 3, SHA-256
+`c37e6e7d30e09079003bcb9ed80baf27acc18f9d60d472e79826629b01a62e80`,
+entry `0xfffffffffe846c00` and loaded-window FNV `aa6419ab7afa5442`.
+The actual loader validates all three new images and the preserved revision-1
+and revision-2 native images. Both preparation ABIs pass over two module
+lifetimes, including 32 forced allocation failures, old-capability rejection
+before startup and complete unstarted resource restoration.
+
+Both actual-start ABIs now complete the real vDSO service. Independent QMP
+captures verify all 128 descriptor bytes against the actual Linux pages, guest
+validation state 2, the original 88-byte object, the 32,768-byte container,
+24,576-byte text offset and disabled legacy local-time flags. The time pointer
+uses the captured direct-map base and Linux time-page physical address.
+McKernel reports `vdso is enabled` and sends its next real setup request.
+
+That request is `SCD_MSG_SYSFS_REQ_SETUP` (0x40). Its payload uses
+`body.sysfs.sysfs_arg1` at packet byte 24, rather than the traditional vDSO
+argument at byte 40. The first startup capture failed because it used the wrong
+union member; its normal/emergency evidence is preserved. Corrected native and
+compat captures both pass, including ownership/disjointness of the 1,056-byte
+setup request and its separate 4 KiB data page. Busy at request byte 1,052
+remains one, accurately identifying the next unimplemented host service.
+
+See `native-vdso-service-checkpoint-20260907.json` for all 47 retained artifacts,
+four preserved failures, source/compiled-input bindings and passing archive
+round trips. All four source checks retain the exact formatted compiler inputs;
+attempts 1-3 did not retain every original pre-format byte and make no such
+verification claim. Attempt 4 additionally retains every original Rust input.
+
+This completes the vDSO setup exchange at the native boot boundary. Actual
+application PTE use is still untested; supplemental mapping evidence comes
+from the production-body callback fixtures. TCG still uses clock mode NONE;
+accelerated TSC/PV/Hyper-V clocks and encrypted memory are unverified, and
+high-resolution forwarding needs the continuing runtime service loop. BOOT
+still returns -110/Failed with started owners retained at the pending sysfs
+request. Next reuse and adapt the existing Rust sysfs setup/dispatch bodies,
+then complete continuing host services, full status 3, applications and native
+shutdown. Declared integration, complete Rust/assembly ownership and independent
+production acceptance remain separate unfinished requirements.

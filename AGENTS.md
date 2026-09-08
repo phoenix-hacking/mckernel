@@ -22,35 +22,54 @@ commit. If work is unfinished, make an explicit WIP checkpoint with the exact
 checks passed, failures, and remaining work; saving it is not a production
 acceptance claim. Preserve existing history and evidence.
 
-## Current accounting and Rust preservation (2026-09-06)
+## Current accounting and Rust preservation (2026-09-07)
 
-Native vDSO service WIP (2026-09-07 local date): the versioned 128-byte
-exchange, host response and guest consumer are now implemented, with native
-boot-note revision 3. The host checks the entire argument's generation and
-queue disjointness and replies once. The guest retains the legacy 88-byte
-object, adds explicit generic data mappings and reads the pinned clock layout.
-Native clock syscalls honor Linux's current TSC mode; unsupported modes use
-Linux forwarding. Legacy local-time paths use their fallback, while internal
-boot/timer reads can use Linux coarse time. Source formatting, eight protocol/
-mapping/clock tests, 77,824 exact Linux arithmetic comparisons and existing
-image/resource policy fixtures pass in service-tests attempt 1. Attempt 2 adds
-144 exact original-C/Rust mapping comparisons, all optional native page sets,
-cache/hole checks, every mapping callback failure and invalid-input rejection.
-Native prototype 8 builds all three modules and passes layout/ELF/no-SIMD
-checks after two recorded API/visibility failures. Image attempt 12 exposed
-missing standalone slice-panic/bcmp dependencies; the fixed-word codec keeps
-the wire contract and all tests. All three images now build in attempt 13,
-whose native entry is 0xfffffffffe846c00 and loaded-window FNV aa6419ab7afa5442.
-Prototype 9 rebuilds the final host codec and passes. The actual image parser
-also verifies revisions 1/2/3. Service-tests attempt 4 adds whole-extent,
-generation, queue-alias and Linux-page exclusion checks on the production host
-adapter. Preparation passes both ABIs over two module lifetimes, including
-rejection of revision 2 before startup and full unstarted restoration. Actual
-service startup remains to be checked.
-The latest verified runtime remains the export checkpoint below; this WIP
-does not claim a completed service, full boot or application verification.
+Native vDSO service checkpoint (2026-09-07 local date): both actual-start ABIs
+now complete the versioned 128-byte exchange. Independent QMP captures match
+the Linux text/time/RNG pages, all descriptor bytes, guest validation state 2,
+the unchanged 88-byte legacy object and its container geometry. McKernel logs
+that vDSO is enabled and advances to a real SYSFS_REQ_SETUP (0x40), whose
+request and data pages are captured with busy still set. The corrected capture
+uses sysfs_arg1 at packet byte 24; vDSO uses the traditional argument at byte 40.
+The first capture's wrong payload decoder and its emergency evidence remain
+retained. BOOT still returns -110/Failed with all started owners retained;
+architectural status 2 is proven, full ready status 3 is not.
 
-Native vDSO export checkpoint (2026-09-07 local date): patch 0008 builds the
+The host validates the whole descriptor extent, OS generation, every active
+queue and exclusion of Linux pages from all reserved McKernel memory before a
+one-shot release/acquire reply. Native boot note 3 requires the new descriptor;
+the queue ABI remains revision 2. The guest adds explicit generic data mappings
+and reads the pinned Linux clock layout. Native clock syscalls honor Linux's
+current mode and otherwise forward; legacy local-time flags remain disabled.
+TCG selects VDSO_CLOCKMODE_NONE, so runtime evidence covers live/coarse time,
+not accelerated TSC/PV/Hyper-V clocks or complete syscall offload.
+
+Four source-check captures pass, including 128 concurrent cross-page exchanges,
+77,824 exact Linux arithmetic comparisons, 144 original-C/Rust mapping cases,
+all optional data-page sets, callback failures and actual host ownership checks.
+All three images build in attempt 13, and prototype 9 builds all three native
+modules with layout/ELF/no-SIMD checks. The actual image parser verifies native
+revisions 1/2/3. Preparation passes both ABIs over two module lifetimes with
+32 forced allocation failures, old-capability rejection and full unstarted
+restoration. Native image SHA-256 is
+`c37e6e7d30e09079003bcb9ed80baf27acc18f9d60d472e79826629b01a62e80`,
+entry `0xfffffffffe846c00`, loaded-window FNV `aa6419ab7afa5442`.
+See `docs/verification/native-vdso-service-checkpoint-20260907.json` for
+47 retained artifacts, including two prototype build failures, the native
+image link failure and the first startup capture failure. All artifact hashes
+and gzip round trips pass; 26 final native compiler inputs and current guest
+inputs are bound. The manifest distinguishes retained formatted inputs from
+the incomplete original pre-format bytes in source-check attempts 1-3.
+
+Next adapt the existing Rust sysfs service, then continuing host dispatch,
+remaining mcctrl services, full status 3 and applications. Supplemental
+application mappings currently have actual-body callback evidence only.
+Declared staging/lifecycle/unsafe-FFI/license bindings, current full-suite
+integration, native shutdown, full McKernel/linked-support Rust or assembly
+completion and independent production acceptance remain open. The earlier
+intermittent Linux idle/RCU stall remains unresolved. No production gate credit.
+
+Prior native vDSO export checkpoint (2026-09-07 local date): patch 0008 builds the
 pinned Linux kernel and prototype 5's three native modules. Normal C
 preprocessing is unchanged. The read-only Rust fixture and independent C
 witness agree on all 44 layout values and pass module ELF/no-SIMD checks.
@@ -63,10 +82,10 @@ vDSO request still pass both ABIs with the rebuilt Linux kernel. See
 artifacts, including two binding failures and their generated outputs. The
 final patch excludes private user-space helper headers only in Linux's existing
 __BINDGEN__ mode. TCG uses VDSO_CLOCKMODE_NONE: these checks prove live data and
-coarse time, not accelerated TSC operation. Next implement the versioned native
-descriptor, actual vDSO response and guest mapping/clock adaptation described
-in `native-vdso-integration-plan.md`. The original 88-byte descriptor remains
-busy. No full boot, application, shutdown or production acceptance is claimed.
+coarse time, not accelerated TSC operation. At that checkpoint the original
+88-byte descriptor remained busy; the subsequent native service result is
+recorded above and in `native-vdso-integration-plan.md`. Neither checkpoint
+claims full boot, application, shutdown or production acceptance.
 
 Native control-channel checkpoint (2026-09-07): both actual-start ABIs now
 accept ports 501 and 503 and deliver McKernel's first real vDSO request over

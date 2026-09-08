@@ -33903,3 +33903,17 @@ Adapt the codec to fixed complete word iteration and checked storage access,
 and use scalar request/reserved validation. Preserve explicit wire encoding,
 all negative-input tests and the original failure; do not add a C runtime or
 claim native image completion from this attempt.
+
+2026-09-07 local date — native vDSO start-x86_64 capture 1 FAILED next-packet decoding.
+Command: mckernel-container native python3 -B /work/run-native-vdso-service-guest.py start-x86_64 9 1
+Environment: pinned native container/Linux, four TCG vCPUs/two NUMA nodes,
+8 GiB guest/12 GiB aggregate, CPUs 2-5. Full normal/emergency captures:
+/work/native-vdso-service-guest-20260907-start-x86_64-1.
+The actual vDSO response matches Linux's physical pages, the guest exchange
+is validated (state 2), the original 88-byte prefix/container are correct,
+and the guest advances to SYSFS_REQ_SETUP (0x40). The capture validator then
+incorrectly reads that packet as the traditional vDSO payload, taking its
+argument from byte 40. Sysfs uses sysfs_arg1 at byte 24. Its resulting zero
+address fails whole-owned-page validation. Stop and retain this failure;
+correct only the capture's next-message decoder against the existing packet
+ABI and rerun. No complete startup-capture PASS is claimed for attempt 1.
