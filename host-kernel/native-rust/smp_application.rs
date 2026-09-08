@@ -217,8 +217,7 @@ impl Remote {
                 // Retain its bounded slot until actual OS shutdown is implemented.
                 return;
             }
-            if entry.prepare.is_none() && entry.cleanup.reserved()
-                || entry.cleanup.release_ready()
+            if entry.prepare.is_none() && entry.cleanup.reserved() || entry.cleanup.release_ready()
             {
                 *slot = None;
             } else {

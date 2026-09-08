@@ -432,8 +432,17 @@ fn deletion(os: i32, cpu: i32, pid: i32, tid: i32) -> Vec<u8> {
     unsafe {
         assert_eq!(
             procfs::procfs_thread_ctl_result(
-                core::ptr::null_mut(), &mut packet, &mut done, rpc::TID_DELETE,
-                os, cpu, pid, tid, Some(deletion_physical), Some(deletion_send), None,
+                core::ptr::null_mut(),
+                &mut packet,
+                &mut done,
+                rpc::TID_DELETE,
+                os,
+                cpu,
+                pid,
+                tid,
+                Some(deletion_physical),
+                Some(deletion_send),
+                None,
             ),
             0
         );
