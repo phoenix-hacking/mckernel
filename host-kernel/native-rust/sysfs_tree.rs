@@ -139,6 +139,14 @@ impl Tree {
         self.nodes.len()
     }
 
+    /// Roll back a failed initial setup while preserving both protected roots.
+    /// Reverse publication order drains attributes/links before their parents.
+    pub(crate) fn clear_contents(&mut self) {
+        while self.nodes.len() > 2 {
+            drop(self.nodes.pop());
+        }
+    }
+
     fn index(&self, handle: Handle) -> Result<usize> {
         self.nodes
             .iter()

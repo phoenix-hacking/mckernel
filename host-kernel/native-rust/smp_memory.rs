@@ -625,11 +625,72 @@ fn reply_vdso(
     Ok(())
 }
 
+fn reply_sysfs_setup(
+    map: &MemoryMap<MAX_EXTENTS>, owner: super::smp_resource::OsToken,
+    direct_map: u64, physical: u64, master_receive: u64, master_send: u64,
+    master_bytes: usize, channels: &[OwnedControlChannel], vdso_request: u64,
+    service: &mut super::sysfs_setup::Service,
+) -> Result {
+    use super::sysfs_protocol as wire;
+    let checked = |physical: u64, bytes: usize| -> Result<*mut u8> {
+        let pointer = checked_guest_bytes(map, owner, direct_map, physical, bytes)?;
+        let end = physical + bytes as u64;
+        for (start, size) in [(master_receive, master_bytes), (master_send, master_bytes),
+            (vdso_request, super::vdso_protocol::BYTES)] {
+            if start == 0 || physical < start + size as u64 && start < end {
+                return Err(EINVAL);
+            }
+        }
+        for entry in channels {
+            if entry.channel.owner != owner { return Err(EIO); }
+            for start in [entry.channel.receive_physical, entry.channel.send_physical] {
+                if physical < start + super::smp_ikc::CONTROL_QUEUE_BYTES as u64 && start < end {
+                    return Err(EINVAL);
+                }
+            }
+        }
+        if service.overlaps(physical, bytes) { return Err(EINVAL); }
+        Ok(pointer)
+    };
+    if physical % 8 != 0 { return Err(EINVAL); }
+    let request = checked(physical, wire::SETUP_BYTES)?;
+    let outcome = (|| {
+        // SAFETY: The checked complete request is disjoint from live queues
+        // and retained data. Queue publication synchronizes the guest writer.
+        let (buffer_physical, bytes) = unsafe { wire::read_setup(request) }
+            .map_err(|code| kernel::error::to_result(code).err().unwrap_or(EIO))?;
+        let buffer = checked(buffer_physical, bytes)?;
+        if physical < buffer_physical + bytes as u64
+            && buffer_physical < physical + wire::SETUP_BYTES as u64 {
+            return Err(EINVAL);
+        }
+        Ok(super::sysfs_setup::SharedData {
+            owner, physical: buffer_physical, address: buffer as u64, bytes,
+        })
+    })();
+    let mut buffer_physical = 0;
+    let result = outcome.and_then(|data| {
+        buffer_physical = data.physical;
+        service.setup(data)
+    });
+    let error = result.as_ref().err().map_or(0, |error| error.to_errno());
+    // SAFETY: Setup has stored all successful owners or drained every partial
+    // publication. This is the sole responder's last request access; its peer
+    // may free/reuse the request immediately after the release-store to busy.
+    unsafe { wire::complete_setup(request, error) }
+        .map_err(|code| kernel::error::to_result(code).err().unwrap_or(EIO))?;
+    let nodes = result?;
+    pr_info!("IHK-SMP: sysfs setup replied os={} generation={} request={:x} buffer={:x} bytes={} nodes={} error=0 setup_completed=1\n",
+        owner.slot(), owner.generation(), physical, buffer_physical, wire::DATA_BYTES, nodes);
+    Ok(())
+}
+
 fn accept_control_channel(
     map: &MemoryMap<MAX_EXTENTS>,
     owner: super::smp_resource::OsToken,
     cpus: &[BootCpu],
     channels: &mut Vec<OwnedControlChannel>,
+    sysfs: &super::sysfs_setup::Service,
     direct_map: u64,
     master_receive: u64,
     master_send: u64,
@@ -641,6 +702,7 @@ fn accept_control_channel(
         || offer.remote_channel_cookie == 0
         || offer.reference == 0
         || !matches!((offer.port, offer.interrupt_cpu), (501, -1) | (503, 0))
+        || sysfs.overlaps(offer.send_queue, CONTROL_QUEUE_BYTES)
     {
         return Err(EINVAL);
     }
@@ -727,7 +789,7 @@ fn accept_control_channel(
 struct PreparedBoot {
     // Retired before device_destroy by the unstarted backend cleanup; every
     // started owner remains retained with the rest of PreparedBoot.
-    _sysfs: super::sysfs_tree::Tree,
+    sysfs: super::sysfs_setup::Service,
     params: BootPages,
     _dump: BootPages,
     trampoline: super::smp_trampoline::LowRegion,
@@ -736,6 +798,7 @@ struct PreparedBoot {
     master: Option<Box<super::smp_ikc::BootMaster>>,
     channels: Vec<OwnedControlChannel>,
     vdso_replied: bool,
+    vdso_request: u64,
 }
 
 /// Turning started on is irreversible without an implemented stop/drain proof.
@@ -1434,12 +1497,14 @@ impl MemoryContext {
         let mut trampoline = super::smp_trampoline::LowRegion::acquire(trampoline_physical)?;
         let linux_root = linux_boot_root()?;
         let mut cpus = Vec::with_capacity(topology.cpus().len(), GFP_KERNEL)?;
+        let mut cpu_nodes = Vec::with_capacity(topology.cpus().len(), GFP_KERNEL)?;
         let mut nodes = Vec::with_capacity(MAX_NODES, GFP_KERNEL)?;
         for &cpu in topology.cpus() {
             if cpu.numa_node as usize >= MAX_NODES {
                 return Err(EINVAL);
             }
             cpus.push(cpu, GFP_KERNEL)?;
+            cpu_nodes.push(cpu.numa_node, GFP_KERNEL)?;
             if !nodes.contains(&cpu.numa_node) {
                 nodes.push(cpu.numa_node, GFP_KERNEL)?;
             }
@@ -1617,6 +1682,7 @@ impl MemoryContext {
                 params.put32(offset + field, value)?;
             }
         }
+        let mut distances = Vec::with_capacity(nodes.len() * nodes.len(), GFP_KERNEL)?;
         for (rank, &node) in nodes.iter().enumerate() {
             params.put32(node_offset + rank * 8, 1)?;
             params.put32(node_offset + rank * 8 + 4, node)?;
@@ -1627,6 +1693,7 @@ impl MemoryContext {
                 if distance <= 0 {
                     return Err(EIO);
                 }
+                distances.push(distance as u32, GFP_KERNEL)?;
                 params.put32(
                     distance_offset + (rank * nodes.len() + other_rank) * 4,
                     distance as u32,
@@ -1702,6 +1769,9 @@ impl MemoryContext {
         // and module pin. PreparedBoot owns the child until unstarted cleanup
         // completes, or retains it after the first possible CPU-start effect.
         let sysfs = unsafe { super::sysfs_os::root(owner) }?;
+        let sysfs_topology = super::sysfs_setup::Topology::new(
+            topology.linux_cpus(), topology.saved(), &cpu_nodes, &nodes, distances)?;
+        let sysfs = super::sysfs_setup::Service::new(sysfs, sysfs_topology);
         pr_info!(
             "IHK-SMP: sysfs root attached os={} generation={} setup_completed=0\n",
             owner.slot(),
@@ -1711,7 +1781,7 @@ impl MemoryContext {
             owner.slot(), owner.generation(), params.physical(), param_bytes, trampoline.physical(), layout.startup(), cpus.len(), nodes.len(), chunks.len(), kmsg);
         self.images[owner.slot() as usize].as_mut().ok_or(EIO)?.boot = Some(BootStorage {
             prepared: ManuallyDrop::new(PreparedBoot {
-                _sysfs: sysfs,
+                sysfs,
                 params,
                 _dump: dump,
                 trampoline,
@@ -1720,6 +1790,7 @@ impl MemoryContext {
                 master: None,
                 channels: Vec::new(),
                 vdso_replied: false,
+                vdso_request: 0,
             }),
             started: false,
         });
@@ -1831,6 +1902,7 @@ impl MemoryContext {
                                 owner,
                                 &prepared.cpus,
                                 &mut prepared.channels,
+                                &prepared.sysfs,
                                 direct_map,
                                 receive,
                                 send,
@@ -1888,6 +1960,14 @@ impl MemoryContext {
                                 &prepared.channels,
                             )?;
                             prepared.vdso_replied = true;
+                            prepared.vdso_request = argument;
+                            continue;
+                        }
+                        if entry.channel.port == 503 && message == super::sysfs_protocol::SETUP_MESSAGE {
+                            let sysfs_argument = u64::from_le_bytes(packet[24..32].try_into().unwrap());
+                            reply_sysfs_setup(memory_map, owner, direct_map, sysfs_argument,
+                                receive, send, queue_bytes, &prepared.channels,
+                                prepared.vdso_request, &mut prepared.sysfs)?;
                             continue;
                         }
                         pr_info!("IHK-SMP: regular host service pending os={} generation={} message={:x}; resources retained\n", owner.slot(), owner.generation(), message);

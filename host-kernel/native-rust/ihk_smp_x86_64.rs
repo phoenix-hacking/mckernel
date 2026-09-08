@@ -21,6 +21,7 @@ use kernel::{
 #[allow(dead_code)]
 mod smp_resource;
 mod smp_cpu;
+mod smp_topology;
 mod smp_memory;
 // Reuse the existing checked mapping geometry for owned image destinations.
 #[allow(dead_code)]
@@ -49,6 +50,10 @@ mod sysfs_objects;
 mod sysfs_os;
 #[allow(dead_code)]
 mod sysfs_tree;
+#[allow(dead_code)]
+mod sysfs_setup;
+#[path = "abi/sysfs.rs"]
+mod sysfs_protocol;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";

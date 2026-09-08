@@ -16,7 +16,7 @@ use core::{
 use kernel::{
     bindings, c_str,
     prelude::*,
-    sync::{new_mutex, Mutex},
+    sync::{new_mutex, Arc, Mutex},
     uaccess::UserSlice,
 };
 
@@ -221,7 +221,7 @@ impl Drop for CpuReadGuard {
     }
 }
 
-struct CpuDevice(*mut bindings::device);
+struct CpuDevice(*mut bindings::device, Arc<super::smp_topology::Cpu>);
 
 // SAFETY: The retained Linux reference can be released on any task. Access is
 // exclusively under the policy mutex and Linux's device hotplug lock.
@@ -294,6 +294,13 @@ impl CpuContext {
                 Ok(snapshot) if snapshot.online => snapshot,
                 _ => continue,
             };
+            // SAFETY: Both guards remain held through the complete capture.
+            // Own this before offline clears Linux's core ID and sibling maps.
+            let topology = unsafe { super::smp_topology::capture(cpu)? };
+            if topology.apic_id != snapshot.hardware_id {
+                return Err(EIO);
+            }
+            let topology = Arc::new(topology, GFP_KERNEL)?;
             // SAFETY: Both topology/device hotplug locks protect discovery.
             // get_device retains the live device before either lock is dropped.
             let device = unsafe { bindings::get_cpu_device(cpu as u32) };
@@ -306,7 +313,7 @@ impl CpuContext {
             if device.is_null() {
                 return Err(ENODEV);
             }
-            self.devices[cpu] = Some(CpuDevice(device));
+            self.devices[cpu] = Some(CpuDevice(device, topology));
             self.table
                 .add_online_cpu(cpu, snapshot.hardware_id, snapshot.numa_node)
                 .map_err(|_| EINVAL)?;
@@ -405,6 +412,20 @@ impl CpuContext {
             // task gets scope-bound permission for each forward/inverse call.
             for &cpu in &self.requests[..count] {
                 BLOCK_ONLINE[cpu].store(true, Ordering::Release);
+            }
+            if reserve {
+                let _read = CpuReadGuard::lock();
+                // SAFETY: The read guard excludes every topology transition.
+                let online = unsafe { super::smp_topology::CpuMask::online()? };
+                for &cpu in &self.requests[..count] {
+                    let saved = &self.devices[cpu].as_ref().ok_or(ENODEV)?.1;
+                    // SAFETY: The same guard retains the complete online data.
+                    let current = unsafe { super::smp_topology::capture(cpu)? };
+                    if !saved.matches_current(&current, &online) {
+                        return Err(EIO);
+                    }
+                }
+                // End CPU read exclusion before device_offline takes its writer.
             }
             let mut host = LinuxCpuBatch {
                 devices: &self.devices,
@@ -866,6 +887,7 @@ pub(super) struct BootCpu {
 /// a topology, after checking the canonical exact-generation CPU assignments.
 pub(super) struct BootTopology<'a> {
     cpus: Vec<BootCpu>,
+    saved: Vec<Arc<super::smp_topology::Cpu>>,
     linux_cpus: usize,
     hotplug: &'a DeviceHotplugGuard,
     read: &'a CpuReadGuard,
@@ -874,6 +896,9 @@ pub(super) struct BootTopology<'a> {
 impl BootTopology<'_> {
     pub(super) fn cpus(&self) -> &[BootCpu] {
         &self.cpus
+    }
+    pub(super) fn saved(&self) -> &[Arc<super::smp_topology::Cpu>] {
+        &self.saved
     }
     pub(super) fn linux_cpus(&self) -> usize {
         self.linux_cpus
@@ -906,6 +931,7 @@ fn with_boot_topology<T>(
         return Err(EINVAL);
     }
     let mut cpus = Vec::with_capacity(count, GFP_KERNEL)?;
+    let mut saved = Vec::with_capacity(count, GFP_KERNEL)?;
     for &cpu in &context.requests[..count] {
         let slot = context.table.slot(cpu).map_err(|_| EIO)?;
         let actual = observed_cpu(cpu, &read, &hotplug)?;
@@ -925,11 +951,17 @@ fn with_boot_topology<T>(
             },
             GFP_KERNEL,
         )?;
+        let snapshot = &context.devices[cpu].as_ref().ok_or(EIO)?.1;
+        if snapshot.linux_id as usize != cpu || snapshot.apic_id != actual.hardware_id {
+            return Err(EIO);
+        }
+        saved.push(snapshot.clone(), GFP_KERNEL)?;
     }
     // SAFETY: Linux fixes this bound under the retained CPU read guard.
     let linux_cpus = unsafe { bindings::nr_cpu_ids } as usize;
     operation(&BootTopology {
         cpus,
+        saved,
         linux_cpus,
         hotplug: &hotplug,
         read: &read,

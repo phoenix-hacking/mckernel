@@ -41,6 +41,13 @@ restored using the retained cleanup report; never reuse their attempt names.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Current implementation WIP: CpuContext retains owned topology snapshots and
+revalidates online reservations. Native sysfs setup now has CPU/cache/NUMA
+publication, rollback and shared-request completion source paths. These new
+paths and their fixtures still require compilation, ownership/protocol checks
+and both actual startup interfaces. Do not claim setup or application success
+from the source changes alone; the last verified boot still stops at setup.
+
 Native topology producer checkpoint (2026-09-07 local date): patch 0009 adds
 only the existing Linux get_cpu_cacheinfo GPL export. The kernel and three
 existing native modules rebuild; generated Rust bindings and C declarations

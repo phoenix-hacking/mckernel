@@ -325,3 +325,28 @@ the corrected checks. Native CPU-context ownership, every new allocation failure
 the actual setup attributes and shared-buffer request completion remain open.
 This new kernel has topology-fixture coverage; both actual McKernel startup
 interfaces must be repeated after integrating the producer into the SMP owner.
+
+## CPU reservation and setup service adaptation
+
+Keep each initialization-time snapshot in the existing CpuDevice owner through
+an Arc. After the existing policy preflight, compare a fresh online capture to
+that snapshot under the CPU read guard before reservation has any hotplug effect.
+Compare hardware/cache scalars and membership restricted to currently online
+CPUs; retain Linux's observed cache masks. Drop the read guard before offline.
+BootTopology lends these owned snapshots in the exact assigned CPU rank order.
+
+Adapt the existing Rust setup sequence into the owned tree: test nodes, global
+CPU lists, CPU/cache topology, node lists/distances and reciprocal links, then
+setup_complete last. Use the same sorted node ranks and positive Linux distance
+values already written to boot parameters. Translate saved Linux masks through
+the assigned CPU list. Reuse Linux bitmap formatting with an explicitly bounded
+buffer. Immutable callback payloads never borrow mutable guest memory.
+
+Validate the whole 1,056-byte setup request and separate 4-KiB data page against
+the retained exact OS generation, all active queues and one another. Keep only
+an owned validated data descriptor after setup; use volatile wire accesses.
+Adapt the existing setup body's error-before-release-before-busy-clear order.
+On publication failure, retire every newly created tree entry before replying;
+never leave setup_complete after a failed setup. Continue draining the real
+channel after success so the next guest dependency is observed. Full ready,
+continuing host services, applications and shutdown remain required.
