@@ -34560,3 +34560,40 @@ fixture is present only in the opt-in profile. Exact sources, commands, objects,
 maps and images are retained in mckernel-native-sysfs-images-20260908-2.
 No new guest runtime result is claimed yet. Next execute the real Linux
 controller with snooping module 3 and both startup ABIs under the native limits.
+
+First actual guest verification FAILS in the Linux controller.
+Command: mckernel-container native python3 -B /work/run-native-guest-sysfs.py x86_64 2 verify 1
+Environment: pinned Linux 6.12/Rust 1.92 native container, CPUs 2-5,
+four-CPU/12-GiB limits; four-vCPU/two-NUMA/8-GiB q35 TCG Linux guest and one
+actual McKernel CPU. Shell syntax, startup probe and Linux controller builds
+pass. The controller emits NATIVE_GUEST_SYSFS_USER FAIL; the outer helper stops
+and retains an emergency physical status-2 capture. Preserve the full original
+native-guest-sysfs-20260908-verify-x86_64-1 capture and FAIL record unchanged.
+Inspect its serial and guest kmsg before changing code or test expectations.
+
+Guest attempt 1 stops at native-guest-sysfs.c line 174: absent ordinary remote
+store returns EIO (-5), while the controller expected ENOSPC. The existing
+guest sysfs_default_response_ssize_result explicitly returns -EIO; its store
+body uses that result when no callback exists. Host-local snooping uses a
+different absent-store dispatcher returning ENOSPC. Preserve both production
+semantics and fix only the controller's ordinary-store expectation. Its earlier
+nine special reads and four joined value workers completed before this failure.
+The original guest image remains reusable because only Linux controller code
+changes. Also count leading metadata variants before their logged Debug fields;
+retain the complete raw operation text. Repeat with a fresh guest capture.
+
+Actual x86_64 guest attempt 2 PASS.
+Command: mckernel-container native python3 -B /work/run-native-guest-sysfs.py x86_64 2 verify 2
+Same pinned native limits and actual image attempt 2. All 52 metadata requests
+complete with the exact nine expected errors and operation counts. Nine special
+reads pass, including the corrected string and 4,095-byte bitmap. Four Linux
+workers complete 260 isolated value reads and 256 verified stores. Both ordinary
+and bitmap full-capacity reads and the 4,096-byte ordinary store pass. Six remote
+error results and the distinct local snooping ENOSPC pass. Eight data callbacks
+release exactly once; the failed duplicate never releases; both temporary
+subtrees and all eight samples retire while the existing roots stay present.
+There are 542 completed pre-ready callback exchanges, followed by full BOOT=0,
+registry Ready=4 and two physical status-3 captures. The original post-ready
+regression adds exactly 130 callbacks and checks all 64 guest write payloads.
+Preserve native-guest-sysfs-20260908-verify-x86_64-2. The original first attempt
+remains FAIL. Next repeat i386 and both normal-profile startup regressions.

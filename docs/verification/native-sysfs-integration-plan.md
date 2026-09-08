@@ -46,6 +46,15 @@ attempt before changing expectations or implementation. All current worker/queue
 allocation faults, multi-CPU/multi-OS operation, native application services,
 shutdown and the full Rust/assembly/integration/acceptance scope remain required.
 
+The first actual guest reaches all nine special reads and four completed value
+workers before the controller fails its absent remote-store errno expectation.
+The existing guest `sysfs_default_response_ssize_result` returns EIO, used by
+`sysfss_req_store_body_result` when its callback is absent. This differs from
+host-local snooping's absent-store ENOSPC. Keep both production dispatchers
+unchanged and require those distinct original errors in the Linux controller.
+The retained metadata log includes fields after Create/Symlink/Unlink variants;
+count the leading variant while retaining and checking the complete raw trace.
+
 ## Verified exact-capacity output, 2026-09-08
 
 Module attempt 3 and Linux guest attempt 3 pass the bitmap boundary correction.

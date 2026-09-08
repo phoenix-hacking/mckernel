@@ -171,7 +171,8 @@ int main(void)
     for (unsigned index = 0; index < 4; ++index)
         CHECK(pthread_join(tasks[index], NULL) == 0);
     expect_text(ITEMS "readonly", "readonly\n");
-    CHECK(io(ITEMS "readonly", true, "x", 1) == -ENOSPC);
+    /* The guest's absent remote callback uses EIO; snooping above uses ENOSPC. */
+    CHECK(io(ITEMS "readonly", true, "x", 1) == -EIO);
     char bytes[8192];
     CHECK(io(ITEMS "error", false, bytes, sizeof(bytes)) == -EINVAL);
     CHECK(io(ITEMS "error", true, "x", 1) == -EINVAL);
