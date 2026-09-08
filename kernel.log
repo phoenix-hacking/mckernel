@@ -34597,3 +34597,41 @@ registry Ready=4 and two physical status-3 captures. The original post-ready
 regression adds exactly 130 callbacks and checks all 64 guest write payloads.
 Preserve native-guest-sysfs-20260908-verify-x86_64-2. The original first attempt
 remains FAIL. Next repeat i386 and both normal-profile startup regressions.
+
+Actual i386 verification and both normal-image regressions PASS.
+Commands: mckernel-container native python3 -B /work/run-native-guest-sysfs.py i386 2 verify 1
+mckernel-container native python3 -B /work/run-native-guest-sysfs.py x86_64 2 normal 1
+mckernel-container native python3 -B /work/run-native-guest-sysfs.py i386 2 normal 1
+The same fixed native container and four-vCPU/two-NUMA/8-GiB Linux guest limits
+apply. The i386 startup probe repeats all 52 metadata requests, nine expected
+metadata errors, nine special reads, 260 value reads, 256 stores, eight checked
+releases and all transfer/errno/namespace checks. Its 544 pre-ready callbacks
+differ from x86_64's 542 only through status polling. Both normal images retain
+their original seven metadata operations and exclude the opt-in fixture.
+All four runs return BOOT=0/Ready=4, preserve eight physical status-3 captures,
+and add 520 post-ready callbacks with all 256 online-store payloads checked.
+Including the two opt-in phases, 1,606 callback exchanges are captured. These
+are kernel sysfs operations, not McKernel application execution or shutdown.
+Next retain all nine captures, including all three first failures. For the two
+image-source checkouts, avoid duplicating their 2.6-GiB historical evidence
+folders: omit only files whose exact SHA-256 and Git blob match already committed
+evidence, and record each restoration identity. All other capture files, source,
+compiler objects, maps, images and Git metadata must be preserved and checked.
+
+Actual guest retention PASS.
+Command: mckernel-container native python3 -B /work/retain-native-guest-sysfs.py 1
+Nine captures, including all three original FAIL attempts, are retained in
+22 artifacts. Every included archive entry matches its capture, including
+contents, modes and symlinks. For the two image checkouts, 2,112 redundant
+evidence copies (5,478,825,786 bytes) match exact Git blobs and retained SHA-256
+identities and are represented by restoration mappings instead of duplicated
+compressed bytes. All other capture entries, including source and Git metadata,
+remain archived. Thirty-two native module, 68 guest and 18 Linux compiler-source
+bindings match current source. Three reference manifests and their artifacts
+verify, and the original passing image's SHA-256 remains unchanged. Copies in
+docs/verification/evidence pass size, SHA-256 and full gzip checks; see
+docs/verification/native-guest-sysfs-checkpoint-20260908.json. All four actual
+guest processes and the retention container are terminal. Next remove only the
+mapped duplicate evidence files after this checkpoint is pushed and trim scratch.
+The continuing native service/application/metadata-fault/language/integration
+and acceptance goal remains active; this turn adds verified progress.

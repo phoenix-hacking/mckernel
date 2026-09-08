@@ -1,5 +1,39 @@
 # Native sysfs integration
 
+## Verified actual guest sysfs checkpoint, 2026-09-08
+
+All four image profiles build, with the fixture absent from the three normal
+profiles and present only when explicitly enabled. Four invalid-configuration
+checks pass. Both startup ABIs execute the opt-in fixture in an actual McKernel
+image: each completes 52 metadata requests with nine exact expected errors,
+nine special reads, 260 independent value reads, 256 stores and eight checked
+data release callbacks. The rejected duplicate never receives a release. Both
+4,095-byte ordinary/bitmap reads and a 4,096-byte ordinary store pass; malformed
+return counts become EOVERFLOW, absent remote stores retain EIO, explicit callback
+errors propagate and mapped snooping stores retain ENOSPC. Both temporary
+subtrees and all eight samples retire while the established roots remain.
+
+The opt-in phases complete 542 and 544 callback exchanges; the difference is
+status polling. Both normal-image regressions also reach full readiness. All
+four runs return BOOT=0/Ready=4, retain eight physical status-3 captures and add
+520 post-ready callbacks with all 256 online-store payloads independently checked.
+This is actual guest sysfs traffic; McKernel applications have not run.
+
+`native-guest-sysfs-checkpoint-20260908.json` retains nine captures and 22
+artifacts, including the first formatter, image-harness and guest-controller
+failures. Thirty-two current native source bindings, 68 guest compiler-source
+bindings and 18 Linux probe bindings verify. Image archives retain every entry
+except exact copies of evidence already committed to Git; the manifest records
+each omitted blob, SHA-256, mode and restoration path. The original passing
+revision-3 image remains byte-identical. Preserve the new image family 2 and
+snooping module 3 as active inputs alongside established dependencies.
+
+The value workers finish before their subtree is removed. Forced removal while
+a guest value read is active, remaining metadata/worker/queue fault injection,
+multiple McKernel CPUs/OSes, native application services, applications, shutdown,
+current full-suite integration and the complete language/production acceptance
+scope remain open. No production gate is promoted.
+
 ## Actual guest metadata and special-format verification decision, 2026-09-08
 
 Add an opt-in `ENABLE_NATIVE_SYSFS_VERIFY` image profile, default OFF, requiring

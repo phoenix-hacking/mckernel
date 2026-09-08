@@ -89,6 +89,29 @@ Continue checking capacity between substantial verification batches.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Actual guest sysfs checkpoint, 2026-09-08: the default-OFF
+ENABLE_NATIVE_SYSFS_VERIFY profile builds alongside the three normal image
+profiles. Both startup ABIs pass the actual guest fixture: 104 metadata requests,
+18 expected metadata errors, 18 special reads, 520 independent value reads,
+512 stores, 16 exactly-once data release callbacks, full-capacity transfers and
+complete fixture retirement. Both normal-image startup regressions also pass.
+The four runs retain eight physical status-3 captures and 1,606 real callback
+exchanges, including 520 post-ready calls and 256 independently checked online
+store payloads. Applications and shutdown are still untested. The guest sample
+string now passes its bytes, matching the original C instance contract. The
+absent ordinary guest store retains EIO; host-local snooping retains ENOSPC.
+See docs/verification/native-guest-sysfs-checkpoint-20260908.json for nine
+captures, all three first failures, 22 artifacts, 32 native module source
+bindings, 68 guest source bindings and 18 Linux probe source bindings. The image
+archives omit only verified copies of earlier committed evidence and include
+their complete restoration mapping. Preserve native-sysfs-snoop-module-20260908-3,
+mckernel-native-sysfs-images-20260908-2 and the original passing image family 13,
+plus the established kernel/setup/build dependencies. New runs need fresh attempt
+names. Worker/queue and remaining metadata fault injection, actual removal races,
+multi-CPU/multi-OS operation, native application services, application execution,
+shutdown, current full-suite, full Rust/assembly and independent acceptance remain
+open. No production gate is promoted by this checkpoint.
+
 Bitmap boundary checkpoint, 2026-09-08: module attempt 3 and Linux guest
 attempt 3 pass. Complete output ending exactly at its newline is accepted
 without requiring a copied NUL. Both lifetimes pass 274 C format comparisons,
