@@ -90,14 +90,16 @@ const IHK_DEVICE_DESTROY_OS: u32 = 0x0011_2901;
 // is recorded separately in stage-lock.json, not substituted into this UAPI.
 const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");
 
+fn compatibility_build_id(argument: usize) -> Result<isize> {
+    kernel::uaccess::UserSlice::new(argument, IHK_COMPAT_BUILD_ID.len())
+        .writer()
+        .write_slice(IHK_COMPAT_BUILD_ID)?;
+    Ok(0)
+}
+
 fn control_device_ioctl(cmd: u32, arg: usize) -> Result<isize> {
     match cmd {
-        IHK_DEVICE_GET_BUILDID => {
-            kernel::uaccess::UserSlice::new(arg, IHK_COMPAT_BUILD_ID.len())
-                .writer()
-                .write_slice(IHK_COMPAT_BUILD_ID)?;
-            Ok(0)
-        }
+        IHK_DEVICE_GET_BUILDID => compatibility_build_id(arg),
         _ => Err(EINVAL),
     }
 }
@@ -281,7 +283,9 @@ unsafe extern "C" fn ihk_smp_os_ioctl_v2(
         Ok(owner) => owner,
         Err(_) => return EINVAL.to_errno() as i64,
     };
-    let result = if matches!(command, abi::MCEXEC_UP_GET_CPU | abi::MCEXEC_UP_GET_NODES) {
+    let result = if command == abi::IHK_OS_GET_BUILDID {
+        compatibility_build_id(argument as usize)
+    } else if matches!(command, abi::MCEXEC_UP_GET_CPU | abi::MCEXEC_UP_GET_NODES) {
         smp_memory::application_topology(owner, command)
     } else if command == 0x0011_2a00 {
         smp_loader::load(owner, argument as usize)

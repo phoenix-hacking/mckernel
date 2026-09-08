@@ -486,3 +486,55 @@ fork/exec/exit and real race/fault injection, alongside the accumulated declared
 staging/source-graph/lifecycle/FFI/current-full-suite integration, full Rust/assembly,
 shutdown, multi-CPU/OS, remaining sysfs faults and independent acceptance. This
 checkpoint makes no application-execution or production-gate completion claim.
+
+## Actual launcher integration review, 2026-09-08
+
+Reviewed parent: `37fbf7962eaf1ffe6181e7564d5870c34a65ab2c`, verified on origin.
+Retain `executer/user/CMakeLists.txt`, `mcexec.c` and
+`rust/mcexec_helpers.rs` without production changes. The configured Rust consumer
+`mcexec_finish_main_image_body` prepares and transfers the ELF, closes the
+executable, initializes signal handlers and worker threads, and only then calls
+START_IMAGE. `act_main_loop_body` concurrently enters WAIT_SYSCALL before START.
+The C fallback preserves the same path. A START-only adapter is insufficient.
+
+Rebuild both actual launcher selections with the pinned compatibility compiler
+in fresh directories; bind their source, generated build commands, Rust object,
+ELF/link outputs and runtime libraries. Use a sparse source checkout omitting
+only committed `docs/verification/evidence` archives, with their Git object
+inventory retained, to avoid duplicating large existing captures. Keep all
+source code and submodule pins. Existing kernel/module/image captures remain
+unchanged. The small freestanding ELF fixture exercises getpid, write and
+exit_group through ordinary application syscalls. Its Linux reference result
+must remain explicitly separate from later McKernel application acceptance.
+
+For the native path, adapt the existing
+`mcctrl_control_start_image_body_result` and scheduling serializer to the
+retained Registration/Preparation rather than trusting user-provided remote
+thread pointers. Preserve exact-generation CPU, MM and image ownership.
+`kernel/rust/host_helpers.rs::host_schedule_process_request_result` assigns the
+PID as TID and queues the prepared thread. The exact guest
+`object_helpers.rs::procfs_thread_ctl_result` spins until CREATE completes;
+the Linux-side `mcctrl_procfs_work_main_body_result` first publishes actual
+thread entries and then writes its completion flag. DELETE never writes that
+stack address. Native procfs publication/read ownership, syscall wait/return,
+signals and scheduled-process cleanup must accompany real application startup.
+Do not acknowledge unimplemented services or claim an application ran merely
+because its image or launcher compiled.
+
+The first actual launcher run (guest attempt 2) reaches both validated boot
+captures and passes the Linux ELF reference, then fails in the unchanged
+`mcexec_opendev_body` at IHK_OS_GET_BUILDID. The existing native
+`ihk_smp_x86_64.rs::control_device_ioctl` already returns the authoritative
+stager's exact NUL-terminated `ihk-compat-build-id.bin` through Linux Rust
+UserSlice. Reuse that body for the OS-device request. Adapt the original pinned
+IHK `smp_ihk_os_get_buildid` semantics: the same consumer-sized bytes and EFAULT
+on failed copyout. No C bridge, new export or mcctrl service is needed.
+
+Keep the existing OS file's exact-generation lease, backend module pin and
+operation serializer. Permit only this immutable metadata query through the
+current unbooted-state restriction; resource mutation remains restricted as
+before. The backend validates the same lease token before copyout. Verify
+native and compat pointers, exact trailing NUL and buffer guards, inaccessible,
+readonly and partial-page copyout, both unbooted and running instances, and
+operation with mcctrl absent. Then retry the same unmodified actual launcher.
+Preserve the first run's build-ID failure and both harness failures unchanged.

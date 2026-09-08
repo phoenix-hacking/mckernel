@@ -23,8 +23,8 @@ use kernel::{
 
 use super::{
     abi::{
-        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_BOOT, IHK_OS_LOAD,
-        IHK_OS_QUERY_STATUS, IHK_OS_STATUS,
+        IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_BOOT,
+        IHK_OS_GET_BUILDID, IHK_OS_LOAD, IHK_OS_QUERY_STATUS, IHK_OS_STATUS,
     },
     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
     ihk_ioctl::IhkIoctlDispatcher,
@@ -774,11 +774,12 @@ unsafe fn os_request(
         };
     }
     let _operation = object.operations.lock();
-    // Resource assignment is restricted to the initial, unbooted state. Future
-    // load/boot transitions must take this same operation lock before changing
-    // registry status or accessing the backend's assigned resources.
+    // The immutable compatibility ID is also available on a booted OS, without
+    // creating an application service. Resource assignment remains restricted
+    // to the initial state, under the same lock as load/boot transitions.
     match OS_REGISTRY.snapshot(handle) {
-        Ok(snapshot) if snapshot.status == OsStatus::NotBooted => {}
+        Ok(snapshot) if command == IHK_OS_GET_BUILDID || snapshot.status == OsStatus::NotBooted => {
+        }
         Ok(_) => return EBUSY.to_errno() as core::ffi::c_long,
         Err(error) => return error.errno() as core::ffi::c_long,
     }
