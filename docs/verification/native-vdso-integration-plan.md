@@ -58,3 +58,14 @@ the request, response, backing pages and next guest request. Preserve all first
 failures. Successful vDSO service alone does not prove full status 3, sysfs,
 mcctrl, asynchronous runtime dispatch, applications, native shutdown, full
 Rust/assembly ownership or independent production acceptance.
+
+The first exact-header witness passes all 44 values, including the 232-byte
+clock and 512-byte, 64-aligned time structure. The first kernel rebuild fails
+E0588 in unrelated Hyper-V MSI register unions reached through vDSO headers.
+Retain that attempt and its generated bindings. The corrected patch follows
+Linux's existing `rust/bindgen_parameters` rule for packed x86 MSI registers:
+keep `hv_msi_address_register` and `hv_msi_data_register` opaque. Their C layout
+and implementation stay unchanged, and the native vDSO adapter does not access
+them. The actual vDSO structures remain fully generated and independently
+witnessed. A new capture will reverse only the exact failed patch before
+applying the corrected complete patch and rebuilding.

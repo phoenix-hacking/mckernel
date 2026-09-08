@@ -4,7 +4,9 @@ Subject: [PATCH] rust: expose existing x86 vDSO image and generic data
 The native Rust SMP service needs Linux's actual vDSO text and continuously
 updated generic data pages. Export the existing permanent objects and expose
 their existing declarations to bindgen. Linux keeps all allocation and update
-ownership; no C function body is added or changed.
+ownership; no C function body is added or changed. Keep the unrelated packed
+Hyper-V MSI register unions opaque, following the existing x86 MSI binding
+rule; their generated nested bitfield alignment is not representable in Rust.
 
 --- a/arch/x86/entry/vdso/vma.c
 +++ b/arch/x86/entry/vdso/vma.c
@@ -60,3 +62,14 @@ ownership; no C function body is added or changed.
  #endif
  
  #include <kunit/test.h>
+--- a/rust/bindgen_parameters
++++ b/rust/bindgen_parameters
+@@ -9,6 +9,8 @@
+ --opaque-type alt_instr
+ --opaque-type x86_msi_data
+ --opaque-type x86_msi_addr_lo
++--opaque-type hv_msi_address_register
++--opaque-type hv_msi_data_register
+ 
+ # `try` is a reserved keyword since Rust 2018; solved in `bindgen` v0.59.2,
+ # commit 2aed6b021680 ("context: Escape the try keyword properly").

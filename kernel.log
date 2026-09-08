@@ -33842,3 +33842,15 @@ literal contiguous string '(ikc2mckernel) Trying to connect host ...connected.'
 failed. Preserve the normal and emergency raw captures and inspect the actual
 message framing before correcting that assertion. No complete guest PASS is
 claimed for this failed capture.
+
+2026-09-08 00:02:54 UTC — native vDSO kernel attempt 1 FAILED Rust binding compilation.
+Command: mckernel-container native python3 -B /work/build-native-vdso-kernel.py 1
+Environment: pinned Linux 6.12/native Rust 1.92, fixed offline four-CPU/12-GiB
+container, CPUs 2-5. Evidence: /work/native-vdso-kernel-20260907-1.
+Patch dry-run/application and the exact 44-value C layout witness passed.
+The kernel build then failed with E0588: including the vDSO implementation
+headers also exposed Hyper-V MSI packed types containing bindgen-generated
+repr(align) members. No rebuilt kernel, module or service pass is claimed.
+Preserve the generated bindings and failed source before narrowing the binding
+surface or fixing its exact unsupported type boundary. Keep Linux's actual
+vDSO declarations/layout and the original configured production C behavior.
