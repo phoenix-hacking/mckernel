@@ -195,6 +195,37 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest selected guest procfs lifetime checkpoint, 2026-09-08:
+`docs/verification/native-procfs-lifetime-checkpoint-20260908.json` retains
+seven complete captures, including the three original failures. The actual
+image selects `kernel/rust/procfs.rs` and removes C procfs from its Rust build;
+retain/adapt that complete Rust body. Terminal replies now follow all mapping
+and process/thread/VM reference retirement. Maps/pagemap/status deferral sends
+no reply, the backlog callback returns the original C retry result, and missing
+tasks do not release an unacquired process reference. Preserve both C fallback
+and Rust selections, including the deliberate C cleanup/ref corrections.
+
+Both guest cfg selections pass nine tests using the complete selected Rust
+body and actual answer producer. Six exact C answer vectors preserve every
+legacy response byte; native Linux 6.12 replies add MCPR0001 in the otherwise
+unused final eight bytes. Native Exchange requires that marker and matching
+token/CPU/PID/request address before completion. Root procfs permits PID zero;
+application registrations still require positive PIDs. Nine C backlog vectors,
+12,288 queue-full observations per profile, and the existing 19 image/protocol
+and 21 mailbox regressions pass. Eighteen compiler bindings and original actual
+image sources are retained. The native exchange tests do not supply real
+request-page owners or integrate the procfs service.
+
+Next rebuild all four guest image selections and three native modules, then
+connect and guest-test the actual procfs service and scheduled cleanup before
+START. The new image helper records exact Git blob restoration references
+before omitting historical evidence from compile-only source copies. No new
+image/module build or application execution is claimed by this checkpoint.
+Host/scratch have about 136/38 GiB free. Preserve all failed/current captures
+and current build/image inputs; continue periodic GitHub checkpoints. Explicitly
+tell the user "We're ready to switch to Astra Ultra" only after the documented
+application baseline passes, then stop for the user's model switch.
+
 Latest procfs VFS prerequisite, 2026-09-08:
 `docs/verification/native-procfs-objects-checkpoint-20260908.json` retains the
 new `procfs_objects.rs` owner and its actual Linux guest verification. All 27

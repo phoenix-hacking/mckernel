@@ -972,3 +972,105 @@ an identifiable native completion contract, while retaining all existing Rust
 consumers and legacy fallback behavior. Preserve the original sources and test
 the cleanup/reply order before new images are accepted. No application has
 executed and the Ultra readiness milestone remains open.
+
+## Selected Rust procfs completion review, 2026-09-08
+
+Reviewed parent: `aad65b77e97b48bb04ff499ef8bda0d87cc35d0e`. Correction to the
+preceding source-selection description: `kernel/rust/procfs.rs` is the actual
+native guest implementation. `kernel/rust/lib.rs` selects it, and the x86 Rust
+CMake branch removes `kernel/procfs.c` from MCKERNEL_SRCS. The current image's
+build.make includes procfs.rs and its compile_commands has no procfs.c input.
+All four reviewed selection/procfs/cls files match the retained image-2 sources.
+The C file remains the legacy fallback/reference; preserve both selections.
+
+Adapt the existing `procfs.rs::{goto_cleanup,process_procfs_request_inner,
+lock_failed,do_procfs_backlog}` directly; no new replacement implementation or
+cleanup abstraction is needed. The Rust goto_cleanup sends before unmapping,
+like the C fallback. Its maps/pagemap/status deferred branches additionally
+call the reply-producing cleanup even when backlog has retained the request.
+Its backlog callback returns the processing errno instead of the C callback's
+retry flag, potentially asking cls::do_backlog to retry an argument it just
+freed. `kernel/rust/cls.rs::do_backlog` releases its queue spinlock before calling
+that callback, so receipt of an unrelated same-CPU packet is not a sufficient
+standalone proof of deferred-operation retirement.
+
+First reproduce these paths using the complete existing Rust procfs and object
+helper sources, the actual ABI, and controlled allocation/mapping/queue/lock
+callbacks. Bind the retry expectations to the exact original C callback.
+Then retain the existing request cleanup body but separate unmapping/reference
+release from terminal reply, use no-reply cleanup while a request is deferred,
+and return the actual retry flag. Terminal replies must follow all host-buffer
+accesses. Preserve C fallback behavior except for the deliberate stronger
+terminal cleanup ordering. The native receiver also needs an identifiable
+completion contract before it can free its host request pages; legacy replies
+must not silently authorize that retirement. Keep START unavailable until the
+complete service and scheduled ownership are connected and tested.
+
+## Native procfs terminal completion contract review, 2026-09-08
+
+The full selected Rust lifetime fixture now passes five regressions, including
+no reply during maps/pagemap/status deferral, terminal backlog error without
+retry after packet free, and no release of an unacquired process reference on
+a missing task. The original C and Rust retry helper returns -EAGAIN, which
+cls interprets as nonzero; preserve that exact result. The C fallback also
+needs the deliberate missing-task reference correction and terminal ordering.
+
+The existing `kernel/rust/object_helpers.rs::procfs_answer_result` zeroes its
+128-byte reply and publishes message 0x13, CPU, argument, errno, reply token
+and PID. Its traditional resp_pa at offset 120 is unused for this message.
+Both existing host consumers (`executer/kernel/mcctrl/ikc.c::mcctrl_wakeup_cb`
+and `rust/mcctrl_helpers.rs::mcctrl_wakeup_cb_result`) read token/error for the
+wake operation and do not use resp_pa. Reuse this producer and the existing
+native `application_rpc::Exchange` lifecycle; do not introduce a replacement
+RPC registry or an unrelated-packet retirement barrier.
+
+For the existing native Linux 6.12 guest selection only, publish the eight
+bytes `MCPR0001` in the unused response field after terminal cleanup. Keep
+message numbers, packet layouts and the default legacy C/Rust response bytes
+unchanged. Extend Exchange with procfs request/release constructors, including
+root PID zero, while preserving the stricter positive PID requirement for
+application registration. Procfs completion must match the never-reused token,
+CPU, PID, request physical address and the explicit native retirement marker.
+The queue owner supplies the exact OS generation; the existing answer producer
+leaves osnum zero. Legacy/unmarked, stale, duplicate, premature and mismatched
+replies must not authorize host-page release. Queue-full retries and abandoned
+callers retain their request. This protocol is a prerequisite: production
+request-page and peer-buffer owners still need integration and actual guests.
+
+Verify the actual reply producer in both cfg selections against exact original
+C packet/layout/body vectors, run the full lifetime cases in both selections,
+and test native Exchange rejection and completion directly. Then rebuild all
+four actual C fallback/legacy Rust/native Rust/sysfs verification image profiles
+with their original selection checks and retain the exact source bindings.
+
+## Selected procfs lifetime prerequisite verified, 2026-09-08
+
+`docs/verification/native-procfs-lifetime-checkpoint-20260908.json` retains
+seven complete captures, including the three original failures. The actual
+image selects `kernel/rust/procfs.rs` and removes C procfs from its Rust build;
+retain/adapt that complete Rust body. Terminal replies now follow all mapping
+and process/thread/VM reference retirement. Maps/pagemap/status deferral sends
+no reply, the backlog callback returns the original C retry result, and missing
+tasks do not release an unacquired process reference. Preserve both C fallback
+and Rust selections, including the deliberate C cleanup/ref corrections.
+
+Both guest cfg selections pass nine tests using the complete selected Rust
+body and actual answer producer. Six exact C answer vectors preserve every
+legacy response byte; native Linux 6.12 replies add MCPR0001 in the otherwise
+unused final eight bytes. Native Exchange requires that marker and matching
+token/CPU/PID/request address before completion. Root procfs permits PID zero;
+application registrations still require positive PIDs. Nine C backlog vectors,
+12,288 queue-full observations per profile, and the existing 19 image/protocol
+and 21 mailbox regressions pass. Eighteen compiler bindings and original actual
+image sources are retained. The native exchange tests do not supply real
+request-page owners or integrate the procfs service.
+
+Next rebuild all four guest image selections and three native modules, then
+connect and guest-test the actual procfs service and scheduled cleanup before
+START. The new image helper records exact Git blob restoration references
+before omitting historical evidence from compile-only source copies. No new
+image/module build or application execution is claimed by this checkpoint.
+Host/scratch have about 136/38 GiB free. Preserve all failed/current captures
+and current build/image inputs; continue periodic GitHub checkpoints. Explicitly
+tell the user "We're ready to switch to Astra Ultra" only after the documented
+application baseline passes, then stop for the user's model switch.

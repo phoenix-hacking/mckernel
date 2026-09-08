@@ -264,6 +264,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	int count;
 	int npages;
 	int readwrite = 0;
+	int reply = 0;
 	int err = -EIO;
 	struct mckernel_procfs_buffer *buf_top = NULL;
 	struct mckernel_procfs_buffer *buf_cur = NULL;
@@ -380,6 +381,8 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			if(procfs_task_missing_terminal_result(tids)){
 				mcs_rwlock_reader_unlock(&proc->threads_lock, &tlock);
 				process_unlock(proc, &lock);
+				/* The lookup supplied a lock, not a held reference. */
+				proc = NULL;
 				goto end;
 			}
 			thread = thread1;
@@ -748,7 +751,7 @@ end:
 	err = procfs_finish_request_result(r, ans, eof, buf_top,
 			procfs_buf_phys_bridge);
 err:
-	send_procfs_answer(rpacket, err);
+	reply = 1;
 
 out:
 	if (vbuf) {
@@ -770,6 +773,9 @@ out:
 	if(vm)
 		release_process_vm(vm);
 
+	/* No request/data access may follow terminal host-buffer completion. */
+	if (reply)
+		send_procfs_answer(rpacket, err);
 	return err;
 }
 

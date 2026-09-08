@@ -2554,6 +2554,13 @@ pub unsafe extern "C" fn procfs_answer_result(
     (*answer).err = err;
     (*answer).reply = (*request).reply;
     (*answer_body).pid = (*request_body).pid;
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        // procfs::goto_cleanup has retired every request/data mapping and
+        // reference before calling this producer. Legacy hosts ignore this
+        // otherwise unused field; native hosts require the versioned marker.
+        (*answer_body).resp_pa = CULong::from_le_bytes(*b"MCPR0001");
+    }
     send(channel, answer);
     0
 }
