@@ -33879,3 +33879,13 @@ stops before image builds or guest runs. Use the existing bindings errno
 conversion and explicitly select Iterator::chain, preserving the intended
 unsupported-encryption result and Linux-page ownership checks. No module
 or actual service runtime pass is claimed by this attempt.
+
+2026-09-07 local date — native vDSO service prototype 7 FAILED visibility lint.
+Command: mckernel-container native python3 -B /work/build-native-vdso-prototype.py 7
+Environment: same pinned native four-CPU/12-GiB container. Exact timestamps,
+inputs and compiler logs: /work/native-ikc-prototype-20260907-7.
+The prior API/type errors are fixed and both layout witnesses pass. Linux's
+-Dwarnings now rejects 31 unreachable-pub declarations in the shared private
+vDSO module. Limit them to pub(crate), which matches the host and guest's
+actual module consumers. Do not suppress this lint. Validation stops before
+image builds or guest runs; no compiled service pass is claimed.

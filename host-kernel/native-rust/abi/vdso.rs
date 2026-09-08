@@ -8,25 +8,25 @@ use core::mem::{align_of, offset_of, size_of};
 use core::ptr::{addr_of, read_volatile, write_volatile};
 use core::sync::atomic::{AtomicU64, Ordering};
 
-pub const NATIVE_BOOT_ABI_VERSION: u32 = 3;
-pub const VERSION: u32 = 1;
-pub const BYTES: usize = 128;
-pub const TEXT_PAGES: usize = 2;
-pub const DATA_PAGES: usize = 6;
-pub const PAGE_BYTES: u64 = 4096;
-pub const PHYSICAL_LIMIT: u64 = 256 << 30;
-pub const CLOCK_LAYOUT_GENERIC_OVERFLOW_V1: u32 = 1;
-pub const TIME_PAGE: usize = 0;
-pub const RNG_PAGE: usize = 2;
-pub const PVCLOCK_PAGE: usize = 4;
-pub const HVCLOCK_PAGE: usize = 5;
-pub const CLOCK_NONE: i32 = 0;
-pub const CLOCK_TSC: i32 = 1;
-pub const CLOCK_PVCLOCK: i32 = 2;
-pub const CLOCK_HVCLOCK: i32 = 3;
+pub(crate) const NATIVE_BOOT_ABI_VERSION: u32 = 3;
+pub(crate) const VERSION: u32 = 1;
+pub(crate) const BYTES: usize = 128;
+pub(crate) const TEXT_PAGES: usize = 2;
+pub(crate) const DATA_PAGES: usize = 6;
+pub(crate) const PAGE_BYTES: u64 = 4096;
+pub(crate) const PHYSICAL_LIMIT: u64 = 256 << 30;
+pub(crate) const CLOCK_LAYOUT_GENERIC_OVERFLOW_V1: u32 = 1;
+pub(crate) const TIME_PAGE: usize = 0;
+pub(crate) const RNG_PAGE: usize = 2;
+pub(crate) const PVCLOCK_PAGE: usize = 4;
+pub(crate) const HVCLOCK_PAGE: usize = 5;
+pub(crate) const CLOCK_NONE: i32 = 0;
+pub(crate) const CLOCK_TSC: i32 = 1;
+pub(crate) const CLOCK_PVCLOCK: i32 = 2;
+pub(crate) const CLOCK_HVCLOCK: i32 = 3;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum Error {
+pub(crate) enum Error {
     InProgress,
     Version,
     Size,
@@ -45,7 +45,7 @@ pub enum Error {
 /// generation. It is disjoint from queues and other writers. The peer has
 /// published exactly `Descriptor::request()` and only polls the atomic busy
 /// word until completion. There is one responder and no subsequent host write.
-pub unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Result<(), Error> {
+pub(crate) unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Result<(), Error> {
     if destination.is_null() || destination as usize % 8 != 0 {
         return Err(Error::Alignment);
     }
@@ -68,7 +68,7 @@ pub unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Result<()
 /// # Safety
 /// The caller retains the complete aligned exchange and only the sole host
 /// responder may write it. Completion is its final release operation.
-pub unsafe fn read_response(source: *const u8) -> Result<Descriptor, Error> {
+pub(crate) unsafe fn read_response(source: *const u8) -> Result<Descriptor, Error> {
     if source.is_null() || source as usize % 8 != 0 {
         return Err(Error::Alignment);
     }
@@ -87,21 +87,21 @@ pub unsafe fn read_response(source: *const u8) -> Result<Descriptor, Error> {
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct Descriptor {
-    pub busy: u64,
-    pub version: u32,
-    pub bytes: u32,
-    pub status: i32,
-    pub text_pages: u32,
-    pub data_pages: u32,
-    pub clock_layout: u32,
-    pub text_physical: [u64; TEXT_PAGES],
-    pub data_physical: [u64; DATA_PAGES],
-    pub reserved: [u64; 4],
+pub(crate) struct Descriptor {
+    pub(crate) busy: u64,
+    pub(crate) version: u32,
+    pub(crate) bytes: u32,
+    pub(crate) status: i32,
+    pub(crate) text_pages: u32,
+    pub(crate) data_pages: u32,
+    pub(crate) clock_layout: u32,
+    pub(crate) text_physical: [u64; TEXT_PAGES],
+    pub(crate) data_physical: [u64; DATA_PAGES],
+    pub(crate) reserved: [u64; 4],
 }
 
 impl Descriptor {
-    pub const fn request() -> Self {
+    pub(crate) const fn request() -> Self {
         Self {
             busy: 1,
             version: VERSION,
@@ -116,7 +116,7 @@ impl Descriptor {
         }
     }
 
-    pub fn validate_request(&self) -> Result<(), Error> {
+    pub(crate) fn validate_request(&self) -> Result<(), Error> {
         if *self == Self::request() {
             Ok(())
         } else {
@@ -124,7 +124,7 @@ impl Descriptor {
         }
     }
 
-    pub fn response(
+    pub(crate) fn response(
         text_pages: u32,
         text: [u64; TEXT_PAGES],
         data: [u64; DATA_PAGES],
@@ -145,7 +145,7 @@ impl Descriptor {
         Ok(response)
     }
 
-    pub fn validate_response(&self) -> Result<(), Error> {
+    pub(crate) fn validate_response(&self) -> Result<(), Error> {
         if self.busy != 0 {
             return Err(Error::InProgress);
         }
@@ -203,7 +203,7 @@ impl Descriptor {
 
     /// Explicit wire encoding avoids uninitialized padding and borrowed views
     /// of a descriptor that another kernel may be publishing.
-    pub fn encode(&self) -> [u8; BYTES] {
+    pub(crate) fn encode(&self) -> [u8; BYTES] {
         let mut bytes = [0_u8; BYTES];
         bytes[..8].copy_from_slice(&self.busy.to_le_bytes());
         for (index, value) in [
@@ -231,7 +231,7 @@ impl Descriptor {
         bytes
     }
 
-    pub fn decode(bytes: &[u8; BYTES]) -> Self {
+    pub(crate) fn decode(bytes: &[u8; BYTES]) -> Self {
         let word = |offset| u32::from_le_bytes(bytes[offset..offset + 4].try_into().unwrap());
         let long = |offset| u64::from_le_bytes(bytes[offset..offset + 8].try_into().unwrap());
         let mut result = Self {
@@ -260,39 +260,39 @@ impl Descriptor {
 }
 
 #[repr(C)]
-pub struct Timestamp {
-    pub sec: u64,
-    pub nsec: u64,
+pub(crate) struct Timestamp {
+    pub(crate) sec: u64,
+    pub(crate) nsec: u64,
 }
 
 /// Exact generic-overflow layout witnessed against the pinned Linux headers.
 /// Consumers use raw scalar reads under the Linux sequence protocol.
 #[repr(C)]
-pub struct Clock {
-    pub seq: u32,
-    pub clock_mode: i32,
-    pub cycle_last: u64,
-    pub max_cycles: u64,
-    pub mask: u64,
-    pub mult: u32,
-    pub shift: u32,
-    pub basetime: [Timestamp; 12],
+pub(crate) struct Clock {
+    pub(crate) seq: u32,
+    pub(crate) clock_mode: i32,
+    pub(crate) cycle_last: u64,
+    pub(crate) max_cycles: u64,
+    pub(crate) mask: u64,
+    pub(crate) mult: u32,
+    pub(crate) shift: u32,
+    pub(crate) basetime: [Timestamp; 12],
 }
 
 #[repr(C, align(64))]
-pub struct TimeData {
-    pub clock_data: [Clock; 2],
-    pub tz_minuteswest: i32,
-    pub tz_dsttime: i32,
-    pub hrtimer_res: u32,
-    pub unused: u32,
+pub(crate) struct TimeData {
+    pub(crate) clock_data: [Clock; 2],
+    pub(crate) tz_minuteswest: i32,
+    pub(crate) tz_dsttime: i32,
+    pub(crate) hrtimer_res: u32,
+    pub(crate) unused: u32,
 }
 
 /// Exact x86 vdso_calc_ns arithmetic from the pinned Linux implementation.
 /// `cycles` has already passed x86's S64_MAX counter mask. Invalid shifts fail
 /// instead of invoking an undefined shift. The wide path returns the low u64
 /// just like Linux's mul_u64_u32_add_u64_shr helper.
-pub fn tsc_nanoseconds(
+pub(crate) fn tsc_nanoseconds(
     cycles: u64,
     last: u64,
     max: u64,
@@ -330,7 +330,7 @@ fn read_barrier() {
 /// retained and mapped read-only by the caller. Only Linux updates its scalar
 /// fields under the witnessed sequence protocol. `cycles` is an ordered TSC
 /// read, never a user-controlled callback in production.
-pub unsafe fn read_clock(
+pub(crate) unsafe fn read_clock(
     data: *const TimeData,
     clock_id: i32,
     mut cycles: impl FnMut() -> u64,
