@@ -34071,3 +34071,37 @@ are preserved. See docs/verification/storage-maintenance-20260907-2.json and
 its six verified gzip artifacts for actions, hashes and restoration mappings.
 Next resume CpuContext ownership of the verified topology snapshots and the
 actual sysfs setup service; no new boot/application acceptance is claimed.
+
+2026-09-07 local date — native sysfs setup retention attempt 1 FAILED metadata validation.
+Command: mckernel-container native python3 -B /work/retain-native-sysfs-setup.py 1
+Environment: pinned Linux 6.12/Rust 1.92 container, CPUs 2-5, four-CPU/12-GiB
+limits; no guest or build ran during retention. All integrated setup build,
+protocol/ownership tests, Linux fixture, preparation and both actual starts
+already passed. The retention helper assumes each OS guest record has an
+outputs field; these records use their established per-capture artifacts and
+other metadata instead. KeyError: 'outputs' stops retention before any archive
+is created. Preserve /work/native-sysfs-setup-retained-20260907-1 and its failed
+manifest/helper. Inspect the actual guest record schema and retry packaging
+under a new attempt; do not change or rerun the already passing guest results.
+
+2026-09-07 local date — actual native sysfs setup PASSED both startup interfaces.
+Build: mckernel-container native python3 -B /work/build-native-sysfs-setup.py 1
+Ownership: /work/check-native-sysfs-ownership.py 1; Linux fixture:
+/work/run-native-sysfs-setup-guest.py 1 1. OS runs:
+/work/run-native-sysfs-setup-os-guest.py prepare 1 1, start-x86_64 1 1,
+and start-i386 1 1, each inside the pinned four-CPU/12-GiB native container.
+All build/protocol/ownership/guest attempts pass on their first run. Both OS
+starts complete the real vDSO and setup requests and expose 52 verified files,
+19 directories and four links. Their next actual packet is SYSFS_REQ_CREATE
+(0x30) for /sys/devices/system/cpu/num_processors with busy=1. QMP captures
+the request, shared buffer, all queue geometry and exact OS memory ownership.
+Preparation preserves 404 namespace checks, 32 original forced allocations,
+four physical captures and complete unstarted restoration; both starts retain
+their roots and pass another four namespace and 60 borrowing checks.
+Architectural status remains 2; BOOT is still -110/Failed, with all started
+owners retained. Full readiness, continuing remote file/path/callback service,
+applications, native shutdown and full language/integration/acceptance remain
+open. Retention attempt 2 passes after the recorded metadata-schema failure;
+15 verified final artifacts and 14 build/fixture artifacts are linked from
+docs/verification/native-sysfs-setup-checkpoint-20260907.json. No formal gate
+or application-test credit. Continue with native remote sysfs/runtime dispatch.

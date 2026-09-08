@@ -25,14 +25,16 @@ points still measure the native host path; the active whole-system goal also
 requires those McKernel language checks. Earlier exclusions of further McKernel
 C conversion are superseded. No score or production gate is promoted here.
 
-LOCAL TECHNICAL CHECKPOINT (2026-09-07): the new Rust CPU adapter reuses the
-existing SMP policy and shared ABI, passes exact Linux 6.12 Kbuild/link closure,
-and passes native/compat CPU reserve/return tests in a four-vCPU, two-NUMA-node
-guest. Failure rollback, external-online veto, closed-file module pinning,
-concurrency and two unload/reload cycles pass, with all guest CPUs restored.
-See docs/verification/native-cpu-adapter-review.md and native-hpc-worklog.md.
-Memory assignment, native McKernel boot, IKC and workloads remain pending.
-This scoped local result does not promote the production acceptance gates.
+LOCAL TECHNICAL CHECKPOINT (2026-09-07): both actual startup interfaces complete
+vDSO and native sysfs setup on the pinned Linux 6.12 topology-export kernel.
+The integrated CPU owner preserves pre-offline topology; each OS publishes
+52 checked files, 19 directories and four links. Preparation preserves both
+ABIs, original allocation failures and full unstarted resource restoration.
+See docs/verification/native-sysfs-setup-checkpoint-20260907.json and its build
+checkpoint. Architectural status remains 2; the next actual request is remote
+creation of cpu/num_processors, busy=1. Full ready status, continuing services,
+workloads, native shutdown and the declared production integration/acceptance
+requirements remain open. No production gate is promoted by this local result.
 
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)

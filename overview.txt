@@ -1,6 +1,18 @@
 McKernel Rust Migration Overview
 Updated: 2026-05-28
 
+Native runtime checkpoint (2026-09-07)
+------------------------------------------------------------
+Both actual startup interfaces now complete the native sysfs setup exchange.
+Each OS exposes 52 verified files, 19 directories and four links using CPU/cache
+topology retained before CPU offline. Preparation preserves both ABIs, failure
+handling and unstarted restoration. See
+docs/verification/native-sysfs-setup-checkpoint-20260907.json.
+The next request is remote creation of cpu/num_processors. Architectural status
+is still 2; full ready status, continuing native services and applications remain
+open. These runtime checks do not change the historical dashboard percentages
+or the production acceptance gates in final-push.txt.
+
 Current source investment and reuse plan (2026-09-06)
 ------------------------------------------------------------
 The existing Rust is accounted for in docs/verification/rust-reuse-plan.md and

@@ -41,7 +41,23 @@ restored using the retained cleanup report; never reuse their attempt names.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Native sysfs setup build checkpoint: CpuContext now retains owned topology
+Native sysfs setup runtime checkpoint: both actual startup interfaces now
+complete SYSFS_REQ_SETUP through the integrated topology owner and the new
+kernel. Each OS exposes 52 checked files, 19 directories and four links. QMP
+captures both port-503 rings progressing from vDSO through setup to the next
+real SYSFS_REQ_CREATE (0x30), for /sys/devices/system/cpu/num_processors, busy=1.
+Architectural status remains 2; BOOT returns -110/Failed and retains all started
+owners. Full ready status 3 and applications are still unproven. Preparation
+passes both ABIs over two module lifetimes with 404 namespace checks, 32 original
+forced boot-allocation failures, four physical captures and full unstarted
+restoration. Both starts preserve another four namespace and 60 borrowing
+checks. See docs/verification/native-sysfs-setup-checkpoint-20260907.json for
+15 artifacts, exact compiler bindings and the retained initial packaging error.
+Next adapt continuing sysfs create/path/remote callbacks and runtime dispatch,
+then application execution, shutdown and the full language/integration/
+acceptance requirements. No production gate or application-test credit.
+
+Prior sysfs setup build checkpoint: CpuContext now retains owned topology
 snapshots and validates online reservations. The three native modules and
 setup fixture build on the topology-export kernel. Three protocol tests pass,
 including six independent C layout values and 4,096 concurrent replies. Two
@@ -50,9 +66,9 @@ aliases and error completion. The Linux fixture passes two module lifetimes,
 44 topology comparisons, partial-publication rollback, 97 files/27 directories/
 seven links, 582 exact file reads and four CPU offline/online cycles. All fixture
 namespaces retire. See native-sysfs-setup-build-checkpoint-20260907.json in
-docs/verification for 14 retained artifacts and compiler bindings. Actual OS
-preparation and both boot interfaces remain next; the last verified McKernel
-boot still stops at setup. Do not infer application or production acceptance.
+docs/verification for 14 retained artifacts and compiler bindings. At that
+checkpoint the actual OS exchange was still unverified; the subsequent runtime
+checkpoint above supplies it. Neither result proves application acceptance.
 
 Native topology producer checkpoint (2026-09-07 local date): patch 0009 adds
 only the existing Linux get_cpu_cacheinfo GPL export. The kernel and three

@@ -372,3 +372,32 @@ retire on unload. Forty-four topology comparisons cover changed scalar fields,
 cache identity/shape and online/offline membership. Not every allocation failure
 has been injected. Actual McKernel setup completion still requires both startup
 interfaces with this integrated CPU owner and new kernel.
+
+## Actual setup exchange verified
+
+`native-sysfs-setup-checkpoint-20260907.json` records the subsequent preparation
+and both real startup interfaces. Preparation passes 404 namespace checks,
+the original 32 forced boot-allocation failures, four independent physical
+captures and full unstarted restoration across two module lifetimes. Both
+actual starts complete vDSO and SYSFS_REQ_SETUP with the new topology-export
+kernel and CpuContext owner. Each OS publishes 52 exact files, 19 directories
+and four links, including the final setup_complete marker. Expected values
+come from Linux topology read before reservation, with McKernel CPU/node ranks
+translated independently. Both starts preserve generation borrowing and retain
+their namespaces after incomplete BOOT and refused destruction.
+
+QMP captures each real port-503 queue advancing to SYSFS_REQ_CREATE (0x30) for
+`/sys/devices/system/cpu/num_processors`, mode 0444 and busy=1. Request/data
+extents, every queue, vDSO exclusion and guest callback tokens are captured.
+The previous setup request may already be freed after acknowledgement; the
+verifier does not interpret reused bytes as its old setup layout. The next
+request proves that the guest observed the setup response and continued.
+
+Architectural status remains 2, and BOOT returns -110/Failed with started owners
+retained. Full ready status 3, continuing remote sysfs file/path/callback service,
+other native mcctrl services, application execution, shutdown and production
+integration/acceptance remain open. The initial packaging helper failed because
+it assumed a top-level outputs field absent from the established OS guest
+record schema. That failure is retained separately; retry 2 checks the actual
+input/per-capture hashes and archives all capture files. Both guest starts
+passed on their first attempts. All 15 final archives/gzip artifacts verify.
