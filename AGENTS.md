@@ -24,16 +24,23 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
-Native vDSO binding checkpoint in progress (2026-09-07 local date): patch 0008
-now builds the pinned Linux kernel and prototype 5's three native modules.
-Normal C preprocessing is unchanged. The read-only Rust fixture and independent
-C witness agree on all 44 layout values; the fixture imports the actual Linux
-text/time/RNG symbols and passes module ELF/no-SIMD checks. Two initial binding
-failures are preserved; the final patch excludes private user-space helper
-headers only in Linux's existing __BINDGEN__ mode. See
-`docs/verification/native-vdso-integration-plan.md`. Live data checks and repeat
-preparation/control-connection guests are next. No vDSO reply, full boot or
-application acceptance is claimed by this build prerequisite.
+Native vDSO export checkpoint (2026-09-07 local date): patch 0008 builds the
+pinned Linux kernel and prototype 5's three native modules. Normal C
+preprocessing is unchanged. The read-only Rust fixture and independent C
+witness agree on all 44 layout values and pass module ELF/no-SIMD checks.
+Preparation and both actual-start guests pass, each with two fixture lifetimes
+and 32 coherent time samples checked against Linux time. QMP independently
+captures the Linux text/time/RNG pages, matches the live text hash and verifies
+disjointness from assigned McKernel memory. The control connections and first
+vDSO request still pass both ABIs with the rebuilt Linux kernel. See
+`docs/verification/native-vdso-exports-checkpoint-20260907.json` for 34 retained
+artifacts, including two binding failures and their generated outputs. The
+final patch excludes private user-space helper headers only in Linux's existing
+__BINDGEN__ mode. TCG uses VDSO_CLOCKMODE_NONE: these checks prove live data and
+coarse time, not accelerated TSC operation. Next implement the versioned native
+descriptor, actual vDSO response and guest mapping/clock adaptation described
+in `native-vdso-integration-plan.md`. The original 88-byte descriptor remains
+busy. No full boot, application, shutdown or production acceptance is claimed.
 
 Native control-channel checkpoint (2026-09-07): both actual-start ABIs now
 accept ports 501 and 503 and deliver McKernel's first real vDSO request over

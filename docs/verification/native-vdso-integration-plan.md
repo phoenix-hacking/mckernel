@@ -101,3 +101,52 @@ probe, plus two read-only fixture lifetimes before native resource assignment.
 QMP will independently capture the Linux text/time/RNG pages, compare the text
 hash with the actual module reads and check those pages remain outside assigned
 McKernel memory. The service descriptor must still remain busy in this replay.
+
+Preparation and both actual-start replays now pass. Every guest verifies two
+read-only fixture lifetimes and 32 coherent samples against Linux time, then
+captures the Linux text/time/RNG pages independently with QMP. Both McKernel
+starts still complete the two control connections and deliver their first
+vDSO request; the original 88-byte descriptor remains busy. The new Linux text
+FNV64 is `c9b0bc0d04c8c91b`. That is the Linux vDSO text identity, separate from
+the unchanged McKernel image identity in the previous control checkpoint.
+
+All these TCG guests select `VDSO_CLOCKMODE_NONE` after Linux rejects the
+unsynchronized TSC. The live fixture proves coherent coarse time, data updates
+and exported object access, not an accelerated TSC clock. The native guest
+must honor the current clock mode and preserve a valid fallback. Do not force
+a TSC clocksource merely to advance boot. In particular, inspect
+`kernel/rust/x86_vsyscall.rs`, the clock/gettimeofday/nanosleep wrappers in
+`syscall_policy.rs` and `init.rs`'s local-time flags as well as the direct
+`calculate_time_from_tsc` reader when adapting the clock path.
+
+## Next native descriptor boundary
+
+Use a separate Rust-owned, aligned native exchange with an explicit version,
+size and completion status. A candidate 128-byte layout is: 64-bit busy;
+32-bit version, byte size, signed status, text-page count, data-page count and
+clock-layout ID; two 64-bit text physical addresses; six 64-bit data physical
+addresses; four reserved 64-bit words. Keep the existing IKC packet/message
+unchanged. The six data entries represent the exact negative page offsets
+already witnessed; absent namespace/architecture pages stay unmapped. Map
+ordinary time/RNG/clock RAM with ordinary cache attributes, not HPET attributes.
+
+Advertise this additional capability with a new native boot-note revision;
+the completed-read queue contract itself stays revision 2. Preserve parsing
+of older notes and reject an incompatible native peer before startup-resource
+allocation. On the guest, keep the C-owned 88-byte ArchVdso object within its
+original bounds: copy only a validated compatible prefix into it if reusing
+the existing setup/map bodies, and pass supplemental native data mappings
+through an explicit internal mapping interface. Never append host writes to
+that legacy object's allocation. Publish the complete response before a
+release store of busy, and consume it with an acquire operation. Validate the
+descriptor extent, generation, alignment, version, size and queue disjointness
+before any host write. Native service implementation and its actual-body
+failure/publication/mapping/time tests remain the next work.
+
+The completed export/layout/live-data checkpoint is
+`native-vdso-exports-checkpoint-20260907.json`: 34 retained artifacts include
+both failed binding attempts, the passing kernel and module builds, all three
+guest replays, compiler sources, helper scripts and independent captures.
+All retained input/output identities and gzip round trips pass. This checkpoint
+preserves the earlier control-channel results and does not complete the native
+vDSO service or promote a production gate.
