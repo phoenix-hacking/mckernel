@@ -133,6 +133,21 @@ current executable/service modules, kernel, images, compiler and setup inputs.
 Continue capacity checks, avoiding redundant evidence copies, and GitHub
 checkpoints between substantial verification batches.
 
+The tenth cleanup checkpoint is
+`docs/verification/storage-maintenance-20260908-7.json`. Four completed process
+guest captures and 18 duplicate retention archives were removed after exact
+comparisons with 19 committed originals at the verified GitHub HEAD. Both
+failed guest attempts remain fully recoverable with their original evidence.
+All 2,678 checked current files remain byte-identical after deletion and
+targeted scratch trim, and all 69 protected directories remain present.
+The backing file returns another 335,380,480 bytes (320 MiB), totaling
+75.14 GiB across ten cleanups. About 152 GiB is available on the host and
+40 GiB in scratch. Preserve the current native process module and application
+protocol inputs, all existing compiler/image/setup dependencies, and the
+compressed restoration mapping. Active caches, personal files, other projects,
+VM disks and Docker state remain intact. Continue checking capacity and saving
+coherent GitHub checkpoints between substantial verification batches.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native process registration/cleanup checkpoint, 2026-09-08: module attempt 1,
