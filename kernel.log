@@ -34132,3 +34132,31 @@ artifacts for measurements, exact dependencies and McKernel restoration maps.
 Next resume continuing native remote sysfs requests, callbacks and dispatch
 from the real SYSFS_REQ_CREATE at architectural status 2. Application tests
 and production acceptance remain open; maintenance earns no kernel gate credit.
+
+2026-09-07 local date — native sysfs request protocol attempt 1 FAILED fixture compilation.
+Command: mckernel-container native python3 -B /work/check-native-sysfs-requests.py 1
+Environment: pinned native Rust 1.92/Linux 6.12 container, CPUs 2-5,
+four CPUs, 12 GiB. Formatting and the independent unchanged-C layout witness
+pass (32 values). rustc --test then rejects the test's untyped errno array:
+E0689, cannot call to_le_bytes on ambiguous integer at formatted fixture line
+198. No protocol tests, kernel module build or guest ran. Preserve the entire
+/work/native-sysfs-request-tests-20260907-1 directory and failed record. Add
+the explicit i32 type to that test input and retry with a fresh attempt name.
+
+Protocol attempt 2 passes all seven tests, 32 C layout values, 2,560
+release/acquire metadata exchanges and 4,096 existing-guest-body exchanges.
+Evidence review identifies a recorder limitation: pre-format input hashes
+refer to files subsequently formatted in place. The compiler bytes are retained
+and match the final source exactly, but those original byte streams were not
+separately retained. Do not count their original hashes as verified. Preserve
+attempts 1/2; update the helper to keep immutable original inputs and repeat
+under attempt 3 to provide complete source/compiler provenance.
+
+Native sysfs request protocol attempt 3 PASSED with immutable original and
+compiler source captures. All seven tests, 32 C layout values, 2,560 concurrent
+metadata completions and 4,096 exchanges through nine unchanged guest Rust
+bodies pass. The final seven repository source files equal both retained
+originals and compiler inputs. Eight complete gzip artifacts preserve all
+three attempts and both helper versions. The Linux callback adapter is a WIP
+source checkpoint; no native module build, Linux callback fixture, actual
+guest CREATE completion or production gate credit is claimed yet.

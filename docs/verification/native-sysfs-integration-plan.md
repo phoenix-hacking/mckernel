@@ -1,5 +1,54 @@
 # Native sysfs integration
 
+## Continuing request and callback adaptation, 2026-09-07
+
+The actual setup checkpoint now reaches CREATE for
+`/sys/devices/system/cpu/num_processors`. Continue with the complete metadata
+protocol (create, mkdir, symlink, lookup and unlink), ordinary remote callbacks,
+special snooping files and a retained packet service. Do not replace remote
+callbacks with fixed values or acknowledge files before their operations exist.
+
+Adapt `mcctrl_sysfs_req_common_body_result` and the unchanged `sysfs_msg.h`
+layouts into bounded native snapshots and error/handle-before-busy completion.
+The caller must validate the whole exact-generation mapping, reject queue/data
+aliases and retain an exclusive request claim before decoding. Client ops and
+instance are opaque guest tokens; only McKernel may invoke them. Guest-visible
+directory handles remain checked native tree identities.
+
+Adapt `mcctrl_sysfs_remote_common_body_result`,
+`mcctrl_sysfs_remote_release_body_result`, `mcctrl_sysfs_resp_body_result`
+and `sysfss_packet_handler_body_result` into one shared-data exchange per OS.
+Use a fresh positive request token for every exchange; the guest already echoes
+arg1 without dereferencing it. Match token and response kind before completing,
+bound every returned byte count, and preserve an outstanding exchange when a
+Linux waiter is interrupted. Queue-full before publication can retry; an error
+after publication cannot authorize buffer reuse. Release must also finish
+before the guest can retire its instance after unlink.
+
+Linux file removal drains active callbacks while the metadata/tree lock is
+held. Its response processing must therefore run independently of that lock.
+The intended continuing owner has a dedicated packet pump and separate bounded
+metadata work, using the pinned Linux Rust workqueue and condition-variable
+APIs. Ingress must reject duplicate/overlapping outstanding metadata mappings;
+queue pressure must receive a checked error completion without blocking the
+response pump. Packet processing owns channel publication and outgoing sends.
+Callback operations own only the shared exchange and never reacquire the tree
+or resource locks. Special snooping operations retain checked OS-owned regions
+and use bounded volatile reads, not guest-derived Linux references.
+
+The current BOOT loop holds CPU/device/topology/memory locks. Transfer the
+validated memory extents, owned service/channel state and retained CPU target
+before releasing those guards; wait for readiness outside them. Started
+BootStorage and existing module/resource pins must retain every allocation and
+callback throughout errors. Return successful BOOT only after full status 3
+and continuing service readiness. Native shutdown and the entire declared
+Rust/assembly and production acceptance scope remain required afterward.
+
+Validate the unchanged C layouts and actual protocol/state bodies first, then
+the real Linux callback adapter with an independent peer and concurrent file
+removal. Integrate the owned pump and run both actual McKernel startup ABIs;
+fixture success alone does not prove guest sysfs or application completion.
+
 Source parent: `96dde3b4461f604ca474809ba3649cbf444da005`.
 Target: the pinned Linux `6.12.0-211.44.1.el10_2`, native Rust 1.92 and
 revision-3 McKernel image from the completed vDSO service checkpoint.

@@ -54,6 +54,15 @@ mod sysfs_tree;
 mod sysfs_setup;
 #[path = "abi/sysfs.rs"]
 mod sysfs_protocol;
+// Continuing remote service is being integrated; its actual callback adapter
+// is exercised separately before guest CREATE requests may publish it.
+#[allow(dead_code)]
+#[path = "abi/sysfs_request.rs"]
+mod sysfs_request;
+#[allow(dead_code)]
+mod sysfs_rpc;
+#[allow(dead_code)]
+mod sysfs_remote;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";

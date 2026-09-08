@@ -52,6 +52,21 @@ recorded. Continue checking capacity between substantial validation batches.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Continuing sysfs protocol checkpoint: `abi/sysfs_request.rs` decodes all five
+metadata requests into owned snapshots and publishes error/optional handle
+before busy. `sysfs_rpc.rs` serializes one shared buffer with unique response
+tokens and retains outstanding ownership across waiter interruption. Seven
+actual-body tests pass, including 32 unchanged-C layout values, 2,560 concurrent
+metadata exchanges and 4,096 responses through nine existing guest Rust bodies.
+See `docs/verification/native-sysfs-request-protocol-20260907.json` for eight
+artifacts and exact original/compiler bindings. Initial fixture compilation
+failure and the first helper's original-source retention limitation remain
+recorded. Final attempt 3 preserves and verifies both complete source sets.
+The new Linux `sysfs_remote.rs` callback adapter is written but still uncompiled
+and unexercised. Next verify it, then integrate the retained packet pump,
+metadata claims, special snooping and actual CREATE. Both real startups still
+stop at CREATE/status 2; no new guest service, application or production credit.
+
 Native sysfs setup runtime checkpoint: both actual startup interfaces now
 complete SYSFS_REQ_SETUP through the integrated topology owner and the new
 kernel. Each OS exposes 52 checked files, 19 directories and four links. QMP
