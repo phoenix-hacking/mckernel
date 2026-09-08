@@ -31,6 +31,9 @@ impl Snoop {
             }
             _ => return Err(EINVAL),
         };
+        if matches!(operation, 1..=4 | 8) && physical % bytes as u64 != 0 {
+            return Err(EINVAL);
+        }
         let region = if bytes == 0 {
             None
         } else {
@@ -45,12 +48,7 @@ impl Snoop {
     }
 
     fn number(&self) -> Result<u64> {
-        let mut value = [0u8; 8];
-        self.region
-            .as_ref()
-            .ok_or(EIO)?
-            .copy(&mut value[..self.bytes])?;
-        Ok(u64::from_le_bytes(value))
+        self.region.as_ref().ok_or(EIO)?.number()
     }
 
     fn bitmap(&self, output: &mut [u8]) -> Result<usize> {
@@ -106,7 +104,9 @@ impl AttributeOps for Snoop {
                 snapshot.push(0u8, GFP_KERNEL)?;
             }
             self.region.as_ref().ok_or(EIO)?.copy(&mut snapshot)?;
-            let length = snapshot.iter().position(|&byte| byte == 0).ok_or(EINVAL)?;
+            // Match the existing remote "%.*s" precision: a full bounded
+            // string need not contain NUL, but its newline must still fit.
+            let length = snapshot.iter().position(|&byte| byte == 0).unwrap_or(self.bytes);
             let target = output.get_mut(..length + 1).ok_or_else(|| errno(-75))?;
             target[..length].copy_from_slice(&snapshot[..length]);
             target[length] = b'\n';

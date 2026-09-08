@@ -34355,3 +34355,19 @@ space is 141.88 GiB on the host and 30.92 GiB in scratch; other active work can
 change those values. No kernel test/build or production gate credit is added.
 See docs/verification/storage-maintenance-20260908-2.json and seven compressed
 maintenance artifacts for the audit, preserved inputs and restoration mapping.
+
+Snooping/mapping verification WIP, 2026-09-08. Source review confirms that
+the new numeric adapter assembled bytes where the original remote bodies use
+one scalar load, and rejected a bounded non-NUL string that the original
+precision-limited string body accepts. The reuse/verification plan was updated
+before changing the production sources. Region now loads aligned 32/64-bit RAM
+values atomically; scalar CREATE rejects unaligned mappings. Bounded strings
+use the full descriptor size when no earlier NUL is present, while explicitly
+rejecting output overflow. A separate disposable Linux fixture includes the
+actual mapping/snooping bodies and exact extracted extent checker, with only
+diagnostic identity/extent carriers. A separate C oracle module extracts the
+unchanged legacy remote formats; it is never a production dependency. Planned
+checks cover formats, alias/claim/capacity/reuse and real callback lifetime,
+with concurrent scalar producers. These new bytes are not yet compiled or
+runtime verified. Current accepted actual boots remain the preceding full-ready
+checkpoint; no new acceptance credit is claimed at this WIP checkpoint.

@@ -1,5 +1,29 @@
 # Native sysfs integration
 
+## Snooping and mapping verification decision, 2026-09-08
+
+Retain the existing eight operation IDs and Linux formatting. Numeric values
+must come from one aligned native-width RAM load, matching the scalar access
+in the existing remote snooping bodies; reject unaligned scalar mappings before
+publication. Use relaxed 32/64-bit atomic loads on retained coherent RAM so a
+concurrent native-width producer cannot create a mixed-byte value. This adds
+no ordering claim between distinct guest fields. Strings retain the existing
+bounded precision behavior: a descriptor-sized string without NUL is valid
+when its bytes plus newline fit the output. Reject output overflow explicitly.
+
+Exercise the unchanged Memory/Claim/Region and Snoop sources in a disposable
+Linux fixture with module-owned RAM and diagnostic extent/identity carriers.
+Extract the actual complete-extent checker without changing its body; these
+carriers test the mapping algorithm and do not grant IHK authority or claim
+another actual McKernel startup. Compare all eight formats with the existing
+C bodies, including numeric boundaries, partial-word bitmaps and bounded
+strings. Verify alias exclusion, duplicate claims, fixed queue reservations,
+request-slot exhaustion, completion/reuse and retained file mappings. Concurrent
+scalar producers and real Linux file reads must only observe complete values.
+Keep direct continuing metadata/queue/task failure and actual guest coverage
+open until separately exercised. All compilation and runtime use the pinned
+native container and original resource limits; preserve the first failure.
+
 ## Verified continuing service, 2026-09-08
 
 Both actual startup ABIs now complete full one-CPU McKernel boot: BOOT=0,
