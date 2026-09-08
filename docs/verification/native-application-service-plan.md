@@ -1251,3 +1251,31 @@ an explicit final-retirement contract; do not enable START based on the old
 unscheduled cleanup flag. Also retain the unchanged mcexec exit path, which does
 not return its exit syscall and relies on final Linux-owner release. Worker
 cancellation must drain its actual response before guest cleanup is requested.
+
+## Independent worker and process reaping verified, 2026-09-08
+
+The exact checkpoint is `native-application-reaper-checkpoint-20260908.json`.
+All three native modules compile with warnings enforced. Actual x86_64 guest
+attempt 5 proves 72 Linux workers retire independently after interrupted WAIT
+and thread exit: 72 distinct handles, 72 quiet windows without any new
+application acquisition, and all 6,336 result bytes unchanged. Four reaped
+TGIDs release their registrations with cleanup_errno=0 while the inherited
+mcos file remains open, again before any new application acquisition.
+
+The existing 194 root procfs snapshots and 194 terminal releases, 396 idle
+WAIT assertions, physical boot/image/unscheduled-cleanup and process, executable,
+credential, file, topology and continuing sysfs regressions pass. The guest
+powers off normally and QEMU exits 0. Worker attempt 3 also passes. Original
+attempts 1/2 failed strict evidence ordering because printk split serial
+markers; attempt 4 failed compiler command construction before guest startup.
+All three full original failures remain archived. The correction puts verifier
+markers in /dev/kmsg and selects compiler output by the explicit -o argument;
+no interval, identity or original regression assertion is removed.
+
+Six full captures and sixteen artifacts retain exact helpers, modules, guest
+roots, commands, probes, serial logs and physical evidence. All 53 native
+compiler bindings, 13 current probe inputs, three module-to-guest copies and
+three pinned formatter replays verify. There is no scheduled cleanup or live
+syscall-delivery claim; no McKernel application has executed. Continue the
+explicit scheduled-retirement contract and START, then all documented baseline
+runs before announcing the Astra Ultra handoff.

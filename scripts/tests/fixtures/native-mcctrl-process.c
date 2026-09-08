@@ -38,6 +38,10 @@ static void references(unsigned expected)
     require(actual == expected);
 }
 
+#ifdef NATIVE_PROCESS_REAPER_CHECKS
+#include "native-mcctrl-process-reap.c"
+#endif
+
 static void basic_ownership(void)
 {
     int fd = open_os(0);
@@ -84,9 +88,15 @@ static void inherited_owners(void)
             __builtin_unreachable();
         }
     }
+#ifdef NATIVE_PROCESS_REAPER_CHECKS
+    int reap_log = process_reap_begin(children);
+#endif
     for (int i = 0; i < 4; i++) join(children[i]);
     process_checks += 8;
     references(1);
+#ifdef NATIVE_PROCESS_REAPER_CHECKS
+    process_reap_finish(reap_log, children);
+#endif
     ppd(fd, 0, -22);
     close_fd(fd);
     references(0);

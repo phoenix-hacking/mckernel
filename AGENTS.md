@@ -196,6 +196,23 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest independent reaper checkpoint, 2026-09-08:
+`docs/verification/native-application-reaper-checkpoint-20260908.json` retains
+passing native module 1, actual guest 3 and guest 5, and all three original
+guest failures (serial marker interleaving twice, then a compiler-command bug).
+Guest 5 proves 72 worker deaths/quiet-window retirements and four dead TGIDs
+retiring while an inherited device binding remains open. Prior 194 root
+procfs snapshots/releases and 396 idle WAIT assertions, physical image/boot
+and process/sysfs regressions pass; normal poweroff and QEMU exit 0.
+
+Independent Linux worker/TGID reaping is now implemented and guest-tested.
+Scheduled McKernel retirement, START and actual application execution remain
+pending. Preserve module 1, guest 5, all failed captures and current guest
+image/compiler inputs. The retained manifest binds 53 native sources and 13
+probe inputs; no application readiness or production acceptance is claimed.
+The next work is the explicit scheduled cleanup contract and launch path.
+
+
 Latest live root procfs checkpoint, 2026-09-08:
 `docs/verification/native-procfs-service-checkpoint-20260908.json` retains the
 connected production service, original module failures 1-2, passing module 3,
