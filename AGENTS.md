@@ -76,6 +76,21 @@ use fresh attempt names; restore historical captures from Git when needed.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Snooping/mapping checkpoint in progress, 2026-09-08: module attempt 2 builds
+all three production modules and separate Rust/C verification modules. Guest
+attempt 2 passes two module lifetimes: 272 exact legacy-format comparisons,
+2,560 concurrent scalar reads, 128 two-task claim collisions, 66-slot request
+exhaustion/reuse, alias exclusions and two real callback/mapping drains. All
+six workers join and both namespaces retire. The first guest failed because
+Snoop inherited EIO for absent store; the existing dispatcher requires ENOSPC.
+That production override is fixed without weakening the expectation. Scalar
+loads now use one aligned word and bounded strings preserve precision behavior.
+Preserve native-sysfs-snoop-module-20260908-2 alongside current dependencies.
+The fixture uses diagnostic extent/identity carriers and module-owned RAM;
+it does not claim IHK authority or actual continuing metadata dispatch. Next
+repeat both actual starts using run-native-sysfs-snoop-start.py, then retain
+all evidence. Direct real-guest snooping/metadata failure coverage remains open.
+
 Continuing service checkpoint, 2026-09-08: both actual startup interfaces now
 reach full McKernel readiness. BOOT returns 0, the native registry is Ready=4,
 and four independent QMP captures show physical status 3. Each one-CPU start

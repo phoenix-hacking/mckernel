@@ -94,6 +94,12 @@ impl Snoop {
 }
 
 impl AttributeOps for Snoop {
+    fn store(&self, _input: &[u8]) -> Result<usize> {
+        // Existing snooping ops have no store callback; the legacy mcctrl
+        // dispatcher reports ENOSPC for that case.
+        Err(ENOSPC)
+    }
+
     fn show(&self, output: &mut [u8]) -> Result<usize> {
         if matches!(self.operation, 6 | 7) {
             return self.bitmap(output);
@@ -106,7 +112,10 @@ impl AttributeOps for Snoop {
             self.region.as_ref().ok_or(EIO)?.copy(&mut snapshot)?;
             // Match the existing remote "%.*s" precision: a full bounded
             // string need not contain NUL, but its newline must still fit.
-            let length = snapshot.iter().position(|&byte| byte == 0).unwrap_or(self.bytes);
+            let length = snapshot
+                .iter()
+                .position(|&byte| byte == 0)
+                .unwrap_or(self.bytes);
             let target = output.get_mut(..length + 1).ok_or_else(|| errno(-75))?;
             target[..length].copy_from_slice(&snapshot[..length]);
             target[length] = b'\n';

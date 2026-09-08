@@ -34371,3 +34371,42 @@ checks cover formats, alias/claim/capacity/reuse and real callback lifetime,
 with concurrent scalar producers. These new bytes are not yet compiled or
 runtime verified. Current accepted actual boots remain the preceding full-ready
 checkpoint; no new acceptance credit is claimed at this WIP checkpoint.
+
+Snooping module attempt 1 PASSES production three-module compilation, both
+separate verification modules, user probe compilation and no-SIMD checks.
+The following first guest validation FAILS at a Rust assertion during fixture
+module initialization; the controller stops on Call Trace before user tests.
+Command: mckernel-container native python3 -B /work/run-native-sysfs-snoop-guest.py 1 1
+Environment: pinned Linux 6.12/Rust 1.92 native container, CPUs 2-5,
+four-CPU/12-GiB limits, q35/max,la57=off four-vCPU/two-NUMA/8-GiB TCG guest.
+Preserve native-sysfs-snoop-module-20260908-1 and
+native-sysfs-snoop-guest-20260908-1, all exact sources and the complete serial
+failure. Inspect the assertion before changing any implementation or test.
+No format, mapping, race or new actual-boot runtime success is claimed.
+
+The guest-1 assertion is the direct readonly-store expectation: actual EIO,
+expected ENOSPC. Snoop inherited the generic AttributeOps::store default EIO,
+whereas the existing mcctrl_sysfs_store_body_result returns ENOSPC when the
+operation has no store callback. All eight original remote snooping operation
+tables omit store. Preserve the expectation and adapt Snoop's store method to
+the original errno, after recording the decision in the reuse plan. Retry the
+build and guest with fresh attempt 2; attempt 1 remains failed evidence.
+
+Snooping module attempt 2 and guest attempt 2 PASS.
+Commands: mckernel-container native python3 -B /work/build-native-sysfs-snoop.py 2
+and mckernel-container native python3 -B /work/run-native-sysfs-snoop-guest.py 2 2
+The same pinned kernel/container/guest limits apply. Both module lifetimes
+pass 136 format comparisons each against eight unchanged legacy C show bodies
+and their two bitmap wrappers. This includes all scalar boundaries, bounded
+non-NUL strings and partial-word bitmaps. Explicit output overflow and original
+ENOSPC stores pass. Both lifetimes pass 66-slot exhaustion/reuse, every metadata
+kind's snapshot/completion/drop, fixed/request/snoop alias exclusions, foreign
+diagnostic extents, queue reservation rollback and 64 simultaneous claim races.
+Across the two lifetimes, 2,560 concurrent scalar reads observe only complete
+producer values. Two active Linux callbacks prevent mapping reclamation until
+removal drains them. All six workers join and both namespaces retire. All new
+Rust compiler bytes match current repository bytes. The C oracle is separate
+from the three production modules. This fixture substitutes only diagnostic
+identity/extent carriers and owns its Linux pages; it proves no IHK authority,
+actual continuing metadata pump, new real guest traffic or application run.
+Next repeat both actual starts with module attempt 2 and retain all artifacts.

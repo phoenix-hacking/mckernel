@@ -2,6 +2,20 @@
 
 ## Snooping and mapping verification decision, 2026-09-08
 
+Module attempt 2 and Linux guest attempt 2 now pass. Two module lifetimes
+complete 272 unchanged-C format comparisons, 2,560 concurrent scalar reads,
+128 claim-collision races and both callback/mapping drains; six workers join
+and both namespaces retire. The 66-slot exhaustion/reuse and fixed/request/
+snooping alias checks also pass. The original guest failure remains retained.
+Actual startup regressions with these corrected modules and complete evidence
+retention are next. The diagnostic carriers do not grant IHK authority.
+
+The first Linux fixture exposes a missing operation-specific store override:
+the generic native AttributeOps default returns EIO, while the existing
+mcctrl_sysfs_store_body_result returns ENOSPC for all eight snooping operations
+with no store callback. Preserve that existing errno explicitly in Snoop;
+retain the failed run and repeat the unchanged expectation.
+
 Retain the existing eight operation IDs and Linux formatting. Numeric values
 must come from one aligned native-width RAM load, matching the scalar access
 in the existing remote snooping bodies; reject unaligned scalar mappings before

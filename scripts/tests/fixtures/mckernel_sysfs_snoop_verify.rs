@@ -22,15 +22,21 @@ mod smp_resource {
         pub(crate) identity: OsToken,
     }
     impl MemoryExtent {
-        pub(crate) fn owner(self) -> Option<OsToken> { Some(self.identity) }
-        pub(crate) fn start(self) -> u64 { self.physical }
+        pub(crate) fn owner(self) -> Option<OsToken> {
+            Some(self.identity)
+        }
+        pub(crate) fn start(self) -> u64 {
+            self.physical
+        }
         pub(crate) fn end(self) -> Result<u64, ()> {
             self.physical.checked_add(self.bytes).ok_or(())
         }
     }
     pub(crate) struct MemoryMap<const N: usize>(pub(crate) [Option<MemoryExtent>; N]);
     impl<const N: usize> MemoryMap<N> {
-        pub(crate) fn len(&self) -> usize { self.0.iter().flatten().count() }
+        pub(crate) fn len(&self) -> usize {
+            self.0.iter().flatten().count()
+        }
         pub(crate) fn extent(&self, index: usize) -> Option<MemoryExtent> {
             self.0.get(index).copied().flatten()
         }

@@ -323,13 +323,17 @@ impl Region {
                 // SAFETY: The checked, retained RAM covers this aligned word.
                 // The guest publishes native-width scalar values; an atomic
                 // load cannot combine bytes from different such stores.
-                Ok(unsafe { AtomicU32::from_ptr(self.address as *mut u32) }
-                    .load(Ordering::Relaxed) as u64)
+                Ok(
+                    unsafe { AtomicU32::from_ptr(self.address as *mut u32) }.load(Ordering::Relaxed)
+                        as u64,
+                )
             }
             8 if self.address % 8 == 0 => {
                 // SAFETY: As above, for a complete aligned 64-bit RAM value.
-                Ok(unsafe { AtomicU64::from_ptr(self.address as *mut u64) }
-                    .load(Ordering::Relaxed))
+                Ok(
+                    unsafe { AtomicU64::from_ptr(self.address as *mut u64) }
+                        .load(Ordering::Relaxed),
+                )
             }
             _ => Err(EINVAL),
         }
