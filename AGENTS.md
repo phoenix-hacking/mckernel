@@ -101,6 +101,26 @@ objects, images, guest captures and failed-attempt records remain intact.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native application service checkpoint, 2026-09-08: IHK now owns a versioned
+mcctrl callback registration and lazily attached per-file context/module lease.
+Ready/Running application requests run outside the file-publication and OS
+operation locks. Native mcctrl GET_CPU/GET_NODES query the exact retained boot
+topology and continuing-service health. Both real guest ABIs pass 2,112 topology
+queries, 16 joined workers, eight context open/close pairs, ten module load/unload
+cycles and 16 file-held unload vetoes. Four pre-ready, 12 absent-service and four
+unsupported-image requests are rejected. Both normal-image boots and 260 continuing
+sysfs callbacks pass again, with four physical status-3 captures. See
+`docs/verification/native-mcctrl-service-checkpoint-20260908.json`: 14 artifacts,
+both harness failures, all native/compiler bindings and three exact formatter
+replays are retained. Preserve `native-mcctrl-service-module-20260908-2` as the
+current three-module input, alongside the existing kernel/image/setup dependencies
+and original snooping modules. The first builder's misnamed capture has an exact
+relocation map; never reuse historical attempt names. Applications have not run.
+Next adapt executable/credential ownership and per-process/VM/image/syscall services
+from existing Rust helpers, and integrate the accumulated native stage/FFI/source
+graph changes. Full-suite, shutdown, multi-CPU/OS, remaining sysfs fault/race work,
+full Rust/assembly and independent production acceptance remain required.
+
 Actual guest sysfs checkpoint, 2026-09-08: the default-OFF
 ENABLE_NATIVE_SYSFS_VERIFY profile builds alongside the three normal image
 profiles. Both startup ABIs pass the actual guest fixture: 104 metadata requests,

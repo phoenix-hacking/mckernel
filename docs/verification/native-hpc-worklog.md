@@ -781,3 +781,30 @@ exact OS/CPU/IRQ lifetime, prepare the existing startup assembly and exact boot
 parameters, then implement bounded CPU wakeup/readiness and real IKC. The
 intermittent Linux idle/RCU issue, actual McKernel boot, complete Rust/assembly
 ownership and independent production acceptance remain open.
+
+## 2026-09-08: native mcctrl application file service
+
+The [application-service checkpoint](native-mcctrl-service-checkpoint-20260908.json)
+verifies the first production connection from running `/dev/mcos0` application
+ioctls to native mcctrl. IHK retains a lazy per-file mcctrl context/module owner
+and the exact OS generation, permits concurrent callbacks outside publication
+and OS operation locks, and closes the context before releasing either owner.
+GET_CPU/GET_NODES reuse the retained assigned boot topology and continuing-service
+health. Other application services remain rejected.
+
+All three modules build. Both real guest ABIs pass 2,112 topology queries,
+16 joined workers, eight context retirements, ten module load/unload pairs and
+16 unload vetoes. Both normal-image boot regressions and 260 continuing sysfs
+callbacks pass, with four physical status-3 captures. Four premature, 12 absent
+and four unsupported-image requests are rejected. The 14 retained artifacts
+bind 40 native sources, 10 Linux probe inputs and three exact formatter replays.
+The first builder's capture-name error and first retention's formatting-binding
+failure are preserved; only verified duplicate retention archives are omitted
+with restoration mappings. The current modules are in
+`/work/native-mcctrl-service-module-20260908-2`.
+
+No native application has run. Continue adapting existing executable/credential,
+process-data, VM/pinning, image-launch and syscall helpers, and integrate the
+accumulated declared-stage/source-graph/FFI changes. Full-suite, shutdown,
+multi-CPU/OS, remaining sysfs faults/races, full Rust/assembly and independent
+production acceptance remain required.

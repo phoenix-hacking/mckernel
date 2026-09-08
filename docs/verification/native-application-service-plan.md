@@ -67,3 +67,37 @@ stop and drain application work before freeing any started resource. An OS
 lease alone is not that drain proof. Multi-CPU/multi-OS, remaining sysfs faults
 and races, full Rust/assembly completion, full-suite and independent production
 acceptance remain required by the original goal.
+
+## First connection verified, 2026-09-08
+
+The [source-bound checkpoint](native-mcctrl-service-checkpoint-20260908.json)
+retains the three-module build and both real guest ABI runs. Each ABI passes
+1,056 GET_CPU/GET_NODES queries, eight joined workers, four context open/close
+pairs, five module loads and unloads, and eight file-held unload vetoes. Existing
+open files recover after an absent service is loaded; duplicated descriptors
+keep one context alive until the last close, while separately opened files own
+separate contexts. The probe rejects premature, absent-service and unsupported
+image requests and confirms the registry stays Ready. Physical boot parameters
+and actual guest sysfs independently establish one McKernel CPU/node in the
+four-CPU/two-NUMA Linux guest.
+
+Both normal-image startup regressions also pass, retaining four physical status-3
+captures, 132 ordinary reads, 128 stores and 260 post-ready callback exchanges.
+The original online-store NYI semantics remain unchanged. No program has been
+launched by native mcctrl, and full shutdown remains absent.
+
+The first build used an inherited capture name; its complete new output is
+preserved unchanged under a unique path with a relocation map. Fresh module
+attempt 2 is the sole input to these two guest runs. The first retention attempt
+stopped on an existing source/formatter mismatch. Three exact pinned formatter
+replays now bind those unchanged sources to the compiler input, and the original
+failed manifest/helper remain retained. Only verified duplicate archive copies
+are omitted from that failed retention archive, with canonical restoration paths.
+
+Next native requests in the unchanged loader include OPEN_EXEC/CLOSE_EXEC and
+GET_CREDV. The latter's existing Rust body emits eight 32-bit credential values
+through a checked user copy; OPEN_EXEC holds executable-file ownership through
+launch. These need native Linux adapters before process-data, VM and image
+packet integration. The retained file context is the ownership connection,
+not proof of those unimplemented operations. Declared-stage/source-graph/FFI and
+current full-suite integration remain separate unfinished work.
