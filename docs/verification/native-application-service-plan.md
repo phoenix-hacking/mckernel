@@ -597,3 +597,81 @@ Continue all remaining signal, running-VM, fork/exec/exit, compatibility,
 fault/race, multi-CPU/OS, shutdown, declared integration/current full suite,
 full Rust/assembly and independent acceptance requirements. No formal gate or
 whole-OS completion percentage changes at this checkpoint.
+
+## Scheduled application service review, 2026-09-08
+
+Reviewed parent: `50bd446cd27c3dfeb1de4e0a22c7847091423769`. The real launcher
+has reached START, but no application has executed. Implement the dependent
+syscall service first, then procfs publication and scheduled cleanup before
+enabling START. Keep all existing consumers, fallback selections and application
+acceptance requirements. This ordering is an implementation sequence, not a
+reduction of the application milestone.
+
+Retain the original guest `kernel/rust/syscall_policy.rs` bodies
+`syscall_send_prepare_result`, `syscall_request_copy_result`,
+`syscall_request_publish_result`, `syscall_packet_traditional_prepare_result`,
+`syscall_offload_prepare_result` and `send_syscall`. The configured guest Rust
+crate still consumes them through its existing CMake selection. Retain both
+unchanged `executer/user` launcher selections. Adapt the host-side
+`mcexec_wait_syscall` in `executer/kernel/mcctrl/control.c` and
+`mcctrl_control_ret_syscall_body_result` in
+`executer/kernel/mcctrl/rust/mcctrl_helpers.rs`: their legacy per-thread hashes,
+wait queues, project mapping callbacks and packet allocations cannot be imported
+as native Linux owners. Use the existing native Registration and its exact
+OS-generation application connection, with a bounded syscall mailbox belonging
+to each existing SMP application entry. Do not introduce another PID registry.
+
+The exact pinned Linux 6.12 Rust `sync/condvar.rs` supplies interruptible waits
+that release and reacquire a Mutex guard, including a pending-signal result.
+Reuse it with Rust Arc/Mutex ownership and UserSlice for copies. Reuse the
+current referenced PID wrapper for host worker identity as well as TGID identity;
+numeric TID reuse must not take another worker's delivered request. Reserve a
+delivery before copyout, commit it only on success, and requeue it on failed
+copyout. An interrupted idle waiter must not consume a request. No OS operation,
+publication or transport mutex may span an interruptible wait or user copy.
+
+The existing guest request has 72 bytes and is embedded at packet offset 48.
+Its response address is at 120; `send_syscall` fills CPU and PID but does not
+fill osnum. Bind the OS generation to the receiving continuing owner instead
+of requiring a nonexistent wire-generation field. Preserve the original x86_64
+wait/return descriptor geometry and independently check it against actual C and
+Rust declarations. Compatibility image execution remains separately pending.
+Do not infer a syscall result from its number: the unchanged launcher must
+execute each delegated userspace operation and return its actual result.
+
+Adapt `executer/kernel/mcctrl/syscall.c::__return_syscall` and
+`__notify_syscall_requester`. The common response prefix is 40 bytes; the guest
+has an additional Tofu pointer that ordinary host completion must leave intact.
+Write result and servicing TID, atomically change requester state from spinning
+(0) or descheduled (2) to waking (1), send the actual 0x14 wake packet when
+descheduled, and publish response status last. A full outgoing queue must retain
+the wake and original response ownership for retry. Never acknowledge completion
+before a required wake is published. Reject a second responder rather than
+repeating writes to a potentially retired guest stack. Retain exclusive response
+spans in the existing guest-memory ledger; reject aliases with queues, metadata,
+sysfs snooping and other pending responses. Remove the span only at terminal
+publication, after which no host code may touch that response address.
+
+Procfs requires its own real VFS adapter. The pinned kernel has no Rust procfs
+wrapper; `include/linux/proc_fs.h` defines proc_ops without a module-owner field,
+and `fs/proc/inode.c::proc_entry_rundown` drains callbacks and forcibly invokes
+each successful open's release exactly once. Any adapter must retain its module,
+callback data, exact-generation guest memory and request buffers through this
+rundown, without Runtime/tree/registration reference cycles. Preserve the
+existing node tables in `executer/kernel/mcctrl/procfs.c` and guest request/read/
+release formats in `kernel/include/syscall.h`. Guest procfs ANSWER precedes final
+unmapping, so the existing same-CPU handler barrier requirement also applies to
+host request-buffer retirement. `procfs_thread_ctl_result` waits on CREATE;
+`mcctrl_procfs_work_main_body_result` publishes entries before that completion.
+DELETE is advisory and must never write its expired stack response address.
+
+START must consume only the retained checked prepared thread and its selected
+CPU/MM, preserving `mcctrl_control_start_image_body_result` and
+`host_schedule_process_request_result` sequencing. Once scheduling is published,
+cleanup must use scheduled-process ownership, not the unscheduled thread-pointer
+termination path. Keep START unavailable until syscall, procfs and that ownership
+transition are connected. Verify the protocol against extracted unchanged guest
+Rust producers and existing C declarations, then compile native adapters and run
+isolated waiter/copy/lifetime checks before the next real application attempt.
+No source retirement, application execution or production acceptance follows
+from these prerequisites alone.

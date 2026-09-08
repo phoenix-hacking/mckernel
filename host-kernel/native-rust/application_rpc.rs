@@ -19,6 +19,15 @@ static NEXT_TOKEN: AtomicU64 = AtomicU64::new(1);
 pub(crate) struct Token(u64);
 
 impl Token {
+    pub(crate) fn allocate() -> Result<Self, i32> {
+        NEXT_TOKEN
+            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |value| {
+                (value < i64::MAX as u64).then(|| value + 1)
+            })
+            .map(Self)
+            .map_err(|_| -75)
+    }
+
     pub(crate) fn wire(self) -> u64 {
         self.0
     }
@@ -50,12 +59,7 @@ impl Exchange {
         if os < 0 || cpu < 0 || pid <= 0 {
             return Err(-22);
         }
-        let token = NEXT_TOKEN
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |value| {
-                (value < i64::MAX as u64).then(|| value + 1)
-            })
-            .map(Token)
-            .map_err(|_| -75)?;
+        let token = Token::allocate()?;
         Ok(Self {
             token,
             os,

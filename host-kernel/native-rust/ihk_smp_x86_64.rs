@@ -68,6 +68,10 @@ mod sysfs_remote;
 #[path = "abi/application.rs"]
 mod application_abi;
 mod application_rpc;
+// Protocol prerequisite only: the mailbox, response claims and user ioctl
+// integration must be connected before the native application can be started.
+#[allow(dead_code)]
+mod application_syscall;
 // The shared image view also defines fields/reservation geometry for mcctrl.
 #[allow(dead_code)]
 mod application_image;
