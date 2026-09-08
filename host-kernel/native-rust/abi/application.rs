@@ -5,6 +5,9 @@ use core::ffi::c_void;
 
 pub(crate) const VERSION: u32 = 1;
 pub(crate) const CLEANUP: u32 = 1;
+pub(crate) const PREPARE: u32 = 2;
+pub(crate) const LOOKUP: u32 = 3;
+pub(crate) const TRANSFER: u32 = 4;
 
 // SAFETY: IHK holds the OS operation guard and exact-generation/module lease.
 // Success transfers a non-null, concurrency-safe connection; failure leaves

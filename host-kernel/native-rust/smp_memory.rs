@@ -429,14 +429,14 @@ impl Drop for LoadedImage {
 
 /// One original Linux allocation, used only through bounded preparation writes
 /// and raw status reads after publication. No Rust slice escapes a method.
-struct BootPages {
+pub(super) struct BootPages {
     pages: PageOwner,
     address: u64,
     bytes: usize,
 }
 
 impl BootPages {
-    fn allocate(bytes: usize, direct_map: u64) -> Result<Self> {
+    pub(super) fn allocate(bytes: usize, direct_map: u64) -> Result<Self> {
         if bytes == 0 || bytes > (4096 << MAX_ORDER) {
             return Err(ENOMEM);
         }
@@ -457,7 +457,7 @@ impl BootPages {
         })
     }
 
-    fn put(&mut self, offset: usize, bytes: &[u8]) -> Result {
+    pub(super) fn put(&mut self, offset: usize, bytes: &[u8]) -> Result {
         let end = offset.checked_add(bytes.len()).ok_or_else(overflow)?;
         if end > self.bytes {
             return Err(EINVAL);
@@ -479,8 +479,22 @@ impl BootPages {
     fn put32(&mut self, offset: usize, value: u32) -> Result {
         self.put(offset, &value.to_le_bytes())
     }
-    fn physical(&self) -> u64 {
+    pub(super) fn physical(&self) -> u64 {
         self.pages.physical
+    }
+
+    /// Snapshot a peer-written allocation after its matching acknowledgement.
+    /// No slice or Rust reference to concurrently shared storage escapes.
+    pub(super) fn read_into(&self, output: &mut [u8]) -> Result {
+        if output.len() > self.bytes {
+            return Err(EINVAL);
+        }
+        for (offset, byte) in output.iter_mut().enumerate() {
+            // SAFETY: The original allocation is retained, and the checked
+            // byte lies within it. The receive queue provided acquire ordering.
+            *byte = unsafe { ptr::read_volatile((self.address as *const u8).add(offset)) };
+        }
+        Ok(())
     }
 
     fn read64(&self, offset: usize) -> Result<u64> {

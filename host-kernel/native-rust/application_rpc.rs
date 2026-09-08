@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0
-//! Traditional SCD cleanup exchange, adapted from the existing Rust RPC owner.
+//! Traditional SCD application exchange, adapted from the existing Rust RPC owner.
 //!
 //! A registration reserves its descriptor before publication. Caller departure
 //! cannot retire queued/published work; only its matching acknowledgement can.
@@ -7,6 +7,8 @@
 use core::sync::atomic::{AtomicU64, Ordering};
 
 pub(crate) const PACKET_BYTES: usize = 128;
+pub(crate) const PREPARE: i32 = 1;
+pub(crate) const PREPARE_REPLY: i32 = 2;
 pub(crate) const CLEANUP: i32 = 9;
 pub(crate) const CLEANUP_REPLY: i32 = 10;
 static NEXT_TOKEN: AtomicU64 = AtomicU64::new(1);
@@ -33,6 +35,9 @@ pub(crate) struct Exchange {
     os: i32,
     cpu: i32,
     pid: i32,
+    message: i32,
+    reply: i32,
+    argument: u64,
     phase: Phase,
     waiter: bool,
 }
@@ -53,9 +58,43 @@ impl Exchange {
             os,
             cpu,
             pid,
+            message: CLEANUP,
+            reply: CLEANUP_REPLY,
+            argument: 0,
             phase: Phase::Reserved,
             waiter: true,
         })
+    }
+
+    /// The caller must retain the descriptor and its pointed-to physical
+    /// allocations from publication until the matching prepare acknowledgement.
+    pub(crate) fn prepare(os: i32, cpu: i32, pid: i32, descriptor: u64) -> Result<Self, i32> {
+        if descriptor == 0 || descriptor % 4096 != 0 {
+            return Err(-22);
+        }
+        let mut exchange = Self::new(os, cpu, pid)?;
+        exchange.message = PREPARE;
+        exchange.reply = PREPARE_REPLY;
+        exchange.argument = descriptor;
+        Ok(exchange)
+    }
+
+    /// Refine the reserved cleanup target only after a checked prepare reply.
+    /// It must use the same guest CPU queue as preparation and scheduling.
+    pub(crate) fn cleanup_target(&mut self, cpu: i32, thread: u64) -> Result<(), i32> {
+        if !self.reserved() || self.message != CLEANUP {
+            return Err(-16);
+        }
+        if cpu < 0 || thread != 0 && thread < 0xffff_8000_0000_0000 {
+            return Err(-22);
+        }
+        self.cpu = cpu;
+        self.argument = thread;
+        Ok(())
+    }
+
+    pub(crate) fn cpu(&self) -> i32 {
+        self.cpu
     }
 
     pub(crate) fn token(&self) -> Token {
@@ -87,13 +126,13 @@ impl Exchange {
             return None;
         }
         let mut packet = [0; PACKET_BYTES];
-        packet[8..12].copy_from_slice(&CLEANUP.to_le_bytes());
+        packet[8..12].copy_from_slice(&self.message.to_le_bytes());
         // Traditional reply is at 16; offset 24 belongs to its CPU reference.
         packet[16..24].copy_from_slice(&self.token.wire().to_le_bytes());
         packet[24..28].copy_from_slice(&self.cpu.to_le_bytes());
         packet[28..32].copy_from_slice(&self.os.to_le_bytes());
         packet[32..36].copy_from_slice(&self.pid.to_le_bytes());
-        // This initial registration has no prepared thread or borrowed memory.
+        packet[40..48].copy_from_slice(&self.argument.to_le_bytes());
         Some(packet)
     }
 
@@ -114,9 +153,9 @@ impl Exchange {
         let cpu = i32::from_le_bytes(packet[24..28].try_into().unwrap());
         let argument = u64::from_le_bytes(packet[40..48].try_into().unwrap());
         if token != self.token.wire()
-            || message != CLEANUP_REPLY
+            || message != self.reply
             || cpu != self.cpu
-            || argument != 0
+            || argument != self.argument
         {
             return Err(-2);
         }

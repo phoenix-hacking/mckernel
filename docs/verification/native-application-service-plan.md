@@ -301,3 +301,64 @@ service for the unchanged launcher. Procfs, full exit and prepared-task retireme
 non-null CREATE_PPD parity, same-TGID thread races and the full original language,
 staging/FFI/full-suite, shutdown, multi-CPU/OS and acceptance work remain required.
 No native application has run, and no production acceptance gate is promoted.
+
+## Native image preparation and mirror VM reuse review, 2026-09-08
+
+Reviewed parent: `4093b9a027c84034291abf556dead948d92b1d39`. The next actual
+consumer is the unchanged x86_64 launcher's PREPARE_IMAGE, followed by TRANSFER
+and START_IMAGE. Preserve that path and the full application verification goal.
+The first implementation must prepare a real guest thread and return its actual
+section/page-table results; an empty successful ioctl is not implementation.
+The narrower cleanup-only registration checkpoint remains historical evidence.
+
+Reuse `executer/include/uprotocol.h` and `kernel/rust/abi.rs` as the image ABI
+sources. A checked native byte view avoids copying private Rust layouts across
+modules. Verify every used field against independently compiled existing C and
+guest Rust declarations. Keep pointer-width conversion explicit; the earlier
+i386 registration probes do not prove image/VM compatibility. Validate section
+counts, checked address geometry, CPU selection, and flattened argument/env
+counts, offsets and terminating strings before exposing input to the guest.
+The unchanged guest maps the fixed descriptor plus all 16 section slots even
+when fewer are used, so allocate and zero that complete physical capacity.
+
+Adapt `mcexec_prepare_image` and the existing guest
+`host_prepare_process_body_result`, `host_prepare_ranges_args_envs_result` and
+traditional reply path. Extend the existing `application_rpc.rs` and
+`smp_application.rs` connection, not a parallel PID registry. Each published
+operation gets a fresh opaque token and exact message/CPU/argument matching.
+Reuse the current bounded reservation and independent packet pump. Descriptor,
+arguments and environment must be owned physically contiguous allocations;
+reuse the existing `smp_memory.rs` PageOwner/BootPages allocator rather than
+introduce another Linux allocator. The continuing owner keeps published buffers
+past a departing waiter and consumes the actual prepare reply before releasing
+them. A prepared thread pointer comes only from the checked peer result and is
+carried by its final cleanup request. Preparation and cleanup use the same guest
+CPU queue. The cleanup ACK precedes terminate_host; do not claim it proves final
+prepared-task retirement. Late replies, failed prepares and termination ordering
+need direct verification as well as state tests.
+
+Reuse `reserve_user_space` and `reserve_user_space_common`'s anon-inode-backed
+mirror VMA. The existing Linux `anon_inode_getfile` implementation retains its
+file-operations module; use a real native mmap/release/fault owner. VMAs retain
+the application connection until their final file reference retires. Do not
+create a reference cycle through mm_users. Preserve referenced MM identity for
+cross-thread/fork/exec checks and keep publication locks out of waits and VFS
+release. Check subtraction of the 512-GiB launcher gap and use
+MAP_FIXED_NOREPLACE to avoid overwriting a raced mapping. The temporary
+CAP_SYS_RAWIO override required for the existing zero-based reservation must be
+reverted on every path; Linux's exported abort_creds balances prepare_creds
+without introducing an ad-hoc credential refcount adapter. No extra McKernel C
+bridge or private user-reachable ioctl is needed.
+
+The actual RELEASE_USER_SPACE ioctl clears PTEs, while the legacy internal
+release_user_space helper unmaps VMAs; preserve that distinction. The shared
+anon inode must never be invalidated with an unscoped unmap_mapping_range.
+Reuse the existing remote page-table translation and page-fault protocol for
+mirror faults, with exact retained guest-memory bounds and per-process state.
+User-supplied physical addresses must not authorize arbitrary guest RAM access.
+Transfer must consume the prepared section ownership, and START must consume
+the same prepared thread. Full syscall/signal/procfs/exit, mirror invalidation,
+fork/exec lifetime, compatibility, real fault injection and application runs
+remain required before acceptance, together with all earlier integration and
+Rust/assembly requirements. Verify in the pinned containers and real guests,
+retain first failures, and save coherent GitHub checkpoints periodically.
