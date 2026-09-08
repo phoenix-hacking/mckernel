@@ -442,3 +442,47 @@ reply) and its exact OS/CPU/PID/TID fields. Keep every prior queue invariant and
 baseline assertion, accounting explicitly for the protocol's asymmetric event.
 Use fresh module 8, image protocol attempt 2 and image guest attempt 4; module 7
 and the original failed guest 3 remain unchanged. No application has executed.
+
+## Actual prepared-image and mirror-VM checkpoint, 2026-09-08
+
+Native module 8, protocol attempt 3, actual x86_64 image guest 4 and the unchanged
+i386 baseline regression pass. The prepared image receives a real guest thread,
+page table and two sections. All 47 image assertions pass, including 12,288
+transferred bytes, 16,384 readback bytes and 24,576 mirror comparison bytes.
+The joined vfork child shares the originating MM, successfully writes data and
+receives SIGBUS on a text write; all text bytes remain unchanged. Capability
+restoration, transfer bounds and copy faults, exact-owner PTE clear/refault,
+foreign-process rejection, module unload vetoes and final VMA/file release pass.
+Independent physical capture matches all 12,288 image bytes and three page walks.
+
+Prepared cleanup now retains its unscheduled owner through both the traditional
+ACK and the matching advisory TID-zero deletion. The final queue contains the
+exact deletion packet and one additional incoming event with no outgoing reply.
+A later acknowledged request on the same guest CPU supplies the original
+handler-completion barrier. This verifies neither a scheduled process nor all
+allocator/fork/exit semantics. Full native procfs publication and read paths,
+scheduled TID tracking and running-VM synchronization remain required.
+
+Both ABI regressions repeat 306 PPD checks, 518 credential checks, 1,116 executable
+checks, 2,112 topology queries and 260 continuing sysfs callbacks. Seven physical
+ready captures pass. Seventeen protocol/image tests bind the traditional packet
+and image geometry to original C/guest Rust declarations and eleven exact guest
+Rust functions, including advisory deletion construction and completion ownership.
+The i386 regression does not claim image preparation compatibility.
+
+See native-mcctrl-image-checkpoint-20260908.json: sixteen complete captures,
+all seven original failures, 41 artifacts, 49 native compiler bindings, sixteen
+Linux probe bindings, twelve protocol bindings, eleven unchanged guest peer
+bindings, three exact formatter replays and sixteen pinned Linux reference files.
+The noexec, repeated-write-fault and unserviced-deletion failures remain FAIL in
+their original archives; the three build failures and duplicate C-declaration
+fixture failure are also preserved. No existing assertion was removed to pass.
+
+Preserve the accepted module/protocol and original build/image/setup dependencies.
+Next implement START and the complete native procfs/syscall/signal/process services
+needed by the actual ELF launcher, then run real applications. Continue running-VM
+invalidation/pinning and remote faults, mprotect/mremap, compatibility, full
+fork/exec/exit and real race/fault injection, alongside the accumulated declared
+staging/source-graph/lifecycle/FFI/current-full-suite integration, full Rust/assembly,
+shutdown, multi-CPU/OS, remaining sysfs faults and independent acceptance. This
+checkpoint makes no application-execution or production-gate completion claim.

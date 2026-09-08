@@ -168,6 +168,40 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native prepared-image/VM checkpoint, 2026-09-08: native module 8, image
+protocol attempt 3, x86_64 image guest 4 and i386 baseline regression 1 pass.
+The actual guest prepares one unscheduled thread and two image sections. All
+47 image assertions pass: 12,288 transferred bytes, 16,384 explicit readback
+bytes, 24,576 mirror comparison bytes, same-MM data writes and readonly-text
+SIGBUS, capability restoration, bounded transfers, PTE clear/refault and
+mapping-held unload vetoes. Independent capture verifies all 12,288 physical
+image bytes and three page walks. Prepared cleanup retains its registration
+through the matching ACK and exact advisory TID-zero deletion; a subsequent
+same-CPU request supplies a handler-completion barrier. The original ABI
+regressions pass again with 306 PPD checks, 518 credential checks, 1,116
+executable checks, 2,112 topology queries and 260 continuing sysfs callbacks.
+Seven physical ready captures pass. Seventeen state/image tests retain the
+original C/guest Rust layouts and exact request/reply/deletion construction.
+See `docs/verification/native-mcctrl-image-checkpoint-20260908.json`: all 16
+complete captures and seven original failures, 41 artifacts, 49 native compiler
+bindings, 16 Linux probe bindings, 12 protocol bindings, 11 unchanged guest peer
+bindings, three exact formatter replays and 16 pinned Linux reference sources.
+The fixed failures include Linux anon-inode noexec policy, PFN write-notify
+return semantics and unscheduled thread deletion; none were suppressed.
+Preserve native-mcctrl-image-module-20260908-8 and
+native-application-image-20260908-3 alongside all existing compiler/kernel/image,
+process/executable/service/snooping/setup dependencies. The i386 run verifies
+existing interfaces only: compatibility image preparation remains unsupported.
+No native application has executed. START, full syscall/signal/procfs service,
+scheduled-thread/fork/exec/exit ownership, running-VM invalidation/pinning and
+remote faults, mprotect/mremap, actual timeout/queue-full/duplicate/reuse/removal
+fault injection and multi-CPU/OS operation remain required. DELETE has no wire
+operation token; the retained unscheduled identity and ordered delivery do not
+prove full running-task lifecycle or final allocator retirement. Continue all
+declared staging/source-graph/lifecycle/FFI/current-full-suite work, full
+Rust/assembly retirement, shutdown, remaining sysfs faults/races and independent
+acceptance. Keep capacity checks, audited cleanup and periodic GitHub checkpoints.
+
 Native process registration/cleanup checkpoint, 2026-09-08: module attempt 1,
 protocol attempt 1, x86_64 guest attempt 3 and i386 guest attempt 1 pass. Both
 interfaces verify 306 PPD assertions, 146 real registrations and matching cleanup
