@@ -33929,3 +33929,38 @@ pass. The new libc-based userspace fixture then fails its static link:
 guest validation. Use its existing dynamic libc and loader, retain their
 exact bytes and dependency report in the isolated initramfs, and rebuild the
 fixture. No sysfs runtime or complete attempt-2 PASS is claimed.
+
+2026-09-07 local date — native sysfs guest 1 FAILED initramfs preparation.
+Command: mckernel-container native python3 -B /work/run-native-sysfs-objects-guest.py 3 1
+Environment: same isolated native container. Evidence is preserved in
+/work/native-sysfs-objects-guest-20260907-1. Input verification passes, but
+the new helper assumes the existing BusyBox is root/bin/busybox. That path
+does not exist in the retained root layout. QEMU was never started. Stop,
+resolve the actual retained BusyBox location and update only that source
+path before retrying; no Linux guest execution is claimed for attempt 1.
+The retained root uses Bash and individual system utilities, not BusyBox.
+Reuse that exact root as the established guest helpers do; it also avoids
+introducing symlinks unsupported by the retained initramfs-spec generator.
+
+2026-09-07 local date — native sysfs guest 2 FAILED Linux init execution.
+Command: mckernel-container native python3 -B /work/run-native-sysfs-objects-guest.py 3 2
+Environment: isolated four-vCPU/two-NUMA/8-GiB TCG guest in the native
+four-CPU/12-GiB container. Linux boots, then /init fails -13/EACCES and the
+guest panics because no fallback init exists. Full serial/initramfs/inputs:
+/work/native-sysfs-objects-guest-20260907-2. The helper copied the newly
+retained dynamic loader with mode 0644; /init and Bash are 0755. Preserve
+library executable modes in new build captures, and restore 0755 on the
+byte-identical loader copy in the new initramfs. Stop before further checks;
+no sysfs module or userspace test executed in this attempt.
+
+2026-09-07 local date — native sysfs guest 3 FAILED removed-file seek expectation.
+Command: mckernel-container native python3 -B /work/run-native-sysfs-objects-guest.py 3 3
+Environment: the same isolated native Linux/TCG guest. Evidence is preserved
+in /work/native-sysfs-objects-guest-20260907-3. Real sysfs reads/writes,
+duplicate errors, name reuse, 512 concurrent writes/reads and callback drain
+execute. Module removal observes active=1, then retires with live=0/active=0.
+The user fixture incorrectly requires lseek on the already removed sysfs
+file to succeed before checking read for ENODEV. Linux can reject the seek
+itself after node deactivation. Stop and retain this run; verify the actual
+kernfs llseek path and accept only ENODEV at either invalidated operation,
+with the actual result recorded. No complete guest PASS is claimed.

@@ -9,12 +9,14 @@
 use core::{
     cell::UnsafeCell,
     mem::{offset_of, MaybeUninit},
+    pin::Pin,
     ptr,
 };
 use kernel::{
     bindings,
     prelude::*,
     str::{CStr, CString},
+    sync::{new_mutex, Arc, Mutex},
 };
 
 const PAGE_BYTES: usize = bindings::PAGE_SIZE as usize;
@@ -63,44 +65,51 @@ static DIRECTORY_TYPE: DirectoryType = DirectoryType(bindings::kobj_type {
     get_ownership: None,
 });
 
-/// One Linux reference, without ownership of a registered name. Dependents
-/// keep this separate reference even if their directory is removed first.
+/// One Linux reference, shared through DirectoryState's Rust Arc. It remains
+/// live until every directory/file/link owner releases the shared state.
 struct ObjectRef(*mut bindings::kobject);
-
-impl ObjectRef {
-    // SAFETY: The caller lends a live kobject through the get operation.
-    unsafe fn acquire(object: *mut bindings::kobject) -> Self {
-        // SAFETY: The live directory owner excludes its final put here.
-        Self(unsafe { bindings::kobject_get(object) })
-    }
-}
 
 impl Drop for ObjectRef {
     fn drop(&mut self) {
-        // SAFETY: Exactly one owned get/initial reference is released here.
+        // SAFETY: Exactly one owned initial reference is released here.
         unsafe { bindings::kobject_put(self.0) };
     }
 }
 
-// SAFETY: References are atomic in Linux; access is through Linux's own APIs.
+// SAFETY: DirectoryState serializes name operations; the pointer is stable
+// through its owned Linux reference. Symlink targets use Linux's target lock.
 unsafe impl Send for ObjectRef {}
 // SAFETY: Sharing the pointer does not expose mutable Rust references.
 unsafe impl Sync for ObjectRef {}
 
+struct DirectoryState {
+    object: ObjectRef,
+    registered: Pin<Box<Mutex<bool>>>,
+}
+
 /// Uniquely owns a registered directory. Linux owns the final allocation
 /// release; dependent files/links retain references and stable callback data.
 pub(crate) struct Directory {
-    object: ObjectRef,
+    state: Arc<DirectoryState>,
 }
 
 impl Directory {
     /// Create under another native directory, or at the sysfs root for an
     /// owning module's namespace. Production OS trees use `under_kobject`.
     pub(crate) fn new(parent: Option<&Self>, name: &CStr) -> Result<Self> {
-        let parent = parent.map_or(ptr::null_mut(), |parent| parent.object.0);
-        // SAFETY: An optional directory borrow keeps its kobject live; null
-        // explicitly denotes Linux's sysfs root.
-        unsafe { Self::under_kobject(parent, name) }
+        match parent {
+            Some(parent) => {
+                let registered = parent.state.registered.lock();
+                if !*registered {
+                    return Err(ENODEV);
+                }
+                // SAFETY: The shared state owns the kobject; its mutex excludes
+                // all direct registration/removal operations for this parent.
+                unsafe { Self::under_kobject(parent.state.object.0, name) }
+            }
+            // SAFETY: Null explicitly selects Linux's sysfs root.
+            None => unsafe { Self::under_kobject(ptr::null_mut(), name) },
+        }
     }
 
     /// # Safety
@@ -112,6 +121,7 @@ impl Directory {
         name: &CStr,
     ) -> Result<Self> {
         check_name(name)?;
+        let registered = Box::pin_init(new_mutex!(true), GFP_KERNEL)?;
         // SAFETY: All-zero kobject storage is the input required by Linux's
         // initializer. UnsafeCell covers its subsequent Linux-owned mutation.
         let allocation = Box::new(
@@ -136,21 +146,34 @@ impl Directory {
         };
         let reference = ObjectRef(object);
         kernel::error::to_result(result)?;
-        Ok(Self { object: reference })
+        let state = Arc::new(
+            DirectoryState {
+                object: reference,
+                registered,
+            },
+            GFP_KERNEL,
+        )?;
+        Ok(Self { state })
     }
 }
 
 impl Drop for Directory {
     fn drop(&mut self) {
-        // SAFETY: Only this owner can delete the registered directory. Linux
-        // removes and drains descendant sysfs operations before returning.
-        // ObjectRef then drops the initial reference, after namespace removal.
-        unsafe { bindings::kobject_del(self.object.0) };
+        let mut registered = self.state.registered.lock();
+        // Linux sysfs_remove_dir explicitly requires callers to exclude other
+        // operations on kobj->sd. Kobject references alone do not do that.
+        *registered = false;
+        // SAFETY: This mutex excludes direct file/link registration/removal
+        // while Linux clears sd and drains the namespace. Descendants retain
+        // the shared state, and skip subsequent name removals once inactive.
+        unsafe { bindings::kobject_del(self.state.object.0) };
     }
 }
 
 /// Implementations own their state and synchronize concurrent callbacks.
 /// Safe slices bound every operation; errors retain the usual Linux errno.
+/// Callbacks must not remove their own file or an ancestor, nor acquire the
+/// namespace lock that their own removal holds while draining callbacks.
 pub(crate) trait AttributeOps: Send + Sync {
     fn show(&self, _buffer: &mut [u8]) -> Result<usize> {
         Err(EIO)
@@ -226,7 +249,7 @@ unsafe extern "C" fn store<T: AttributeOps>(
 /// Registered file plus the stable data Linux can use from its callbacks.
 /// Failed publication never owns a name and therefore never removes it.
 pub(crate) struct File<T: AttributeOps> {
-    parent: ObjectRef,
+    parent: Arc<DirectoryState>,
     storage: Box<AttributeStorage<T>>,
 }
 
@@ -251,14 +274,17 @@ impl<T: AttributeOps> File<T> {
             },
             GFP_KERNEL,
         )?;
-        // SAFETY: The parent borrow excludes its removal during this get and
-        // publication. The separate reference also covers later file removal.
-        let reference = unsafe { ObjectRef::acquire(parent.object.0) };
+        let reference = parent.state.clone();
+        let registered = reference.registered.lock();
+        if !*registered {
+            return Err(ENODEV);
+        }
         // SAFETY: Stable initialized Box and name remain owned on success.
         // On failure Linux has published no callback; local storage may drop.
         kernel::error::to_result(unsafe {
-            bindings::sysfs_create_file_ns(reference.0, &storage.attribute.attr, ptr::null())
+            bindings::sysfs_create_file_ns(reference.object.0, &storage.attribute.attr, ptr::null())
         })?;
+        drop(registered);
         Ok(Self {
             parent: reference,
             storage,
@@ -268,12 +294,21 @@ impl<T: AttributeOps> File<T> {
 
 impl<T: AttributeOps> Drop for File<T> {
     fn drop(&mut self) {
-        // SAFETY: The unique registration owns this exact parent/name. Linux
+        let registered = self.parent.registered.lock();
+        if !*registered {
+            return;
+        }
+        // SAFETY: The mutex excludes direct parent removal; the unique file
+        // registration owns this exact parent/name. Linux
         // deactivates and drains callbacks before returning; only then may
         // fields drop. A previously removed parent has no replacement under
         // this old kobject, and the separate reference keeps it valid.
         unsafe {
-            bindings::sysfs_remove_file_ns(self.parent.0, &self.storage.attribute.attr, ptr::null())
+            bindings::sysfs_remove_file_ns(
+                self.parent.object.0,
+                &self.storage.attribute.attr,
+                ptr::null(),
+            )
         };
     }
 }
@@ -286,8 +321,8 @@ unsafe impl<T: AttributeOps> Sync for File<T> {}
 
 /// A registered symlink owns its name and keeps both endpoint objects alive.
 pub(crate) struct Link {
-    parent: ObjectRef,
-    _target: ObjectRef,
+    parent: Arc<DirectoryState>,
+    _target: Arc<DirectoryState>,
     name: CString,
 }
 
@@ -295,14 +330,20 @@ impl Link {
     pub(crate) fn new(parent: &Directory, target: &Directory, name: &CStr) -> Result<Self> {
         check_name(name)?;
         let name = CString::try_from(name)?;
-        // SAFETY: Both directory borrows exclude removal through registration.
-        let parent = unsafe { ObjectRef::acquire(parent.object.0) };
-        let target = unsafe { ObjectRef::acquire(target.object.0) };
-        // SAFETY: Linux owns namespace locking and acquires its kernfs target
-        // reference. Only success transfers registered-name ownership to Link.
+        let parent = parent.state.clone();
+        let target = target.state.clone();
+        let registered = parent.registered.lock();
+        if !*registered {
+            return Err(ENODEV);
+        }
+        // SAFETY: The parent mutex excludes removal of its sd. Linux's
+        // sysfs_symlink_target_lock protects the target's sd independently;
+        // the target Arc retains the kobject. No second Rust lock is needed,
+        // including same-directory or reciprocal links.
         kernel::error::to_result(unsafe {
-            bindings::sysfs_create_link(parent.0, target.0, name.as_char_ptr())
+            bindings::sysfs_create_link(parent.object.0, target.object.0, name.as_char_ptr())
         })?;
+        drop(registered);
         Ok(Self {
             parent,
             _target: target,
@@ -313,8 +354,13 @@ impl Link {
 
 impl Drop for Link {
     fn drop(&mut self) {
-        // SAFETY: This owner alone removes its registered name. Both endpoint
+        let registered = self.parent.registered.lock();
+        if !*registered {
+            return;
+        }
+        // SAFETY: The parent mutex excludes directory removal. This owner
+        // alone removes its registered name. Both endpoint
         // references and the name remain live until after Linux returns.
-        unsafe { bindings::sysfs_remove_link(self.parent.0, self.name.as_char_ptr()) };
+        unsafe { bindings::sysfs_remove_link(self.parent.object.0, self.name.as_char_ptr()) };
     }
 }

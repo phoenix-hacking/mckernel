@@ -73,3 +73,14 @@ static libc link; its full inputs/logs are retained. Attempt 3 uses the existing
 dynamic libc/loader, with their bytes and dependency report retained for the
 disposable guest. Runtime checks and actual OS-device/service integration remain
 pending at this implementation checkpoint.
+
+Review of the pinned `fs/sysfs/dir.c::sysfs_remove_dir` identifies a further
+caller obligation: object references alone do not serialize `kobj->sd`
+removal against file/name operations. The adapter therefore shares one owned
+Linux reference through Rust `Arc<DirectoryState>` and a pinned Rust mutex.
+Direct registration/removal holds that mutex; directory removal marks the
+state inactive before draining, and remaining file/link owners skip name
+removal after that point. Symlink targets use Linux's existing separate target
+lock, avoiding a second Rust namespace lock for reciprocal/same-directory
+links. Callback code must not remove itself/ancestors or require its removal
+lock. The real callback-drain fixture is repeated against this revision.

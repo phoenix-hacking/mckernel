@@ -26,9 +26,12 @@ acceptance claim. Preserve existing history and evidence.
 
 Native sysfs object WIP: the missing Rust directory/file/link owners now build
 against the pinned Linux, with all 21 generated layout values matching an
-independent C witness and passing ELF/no-SIMD checks. Module attempt 3 includes
-the userspace callback/teardown probe; attempt 2's missing static-libc link is
-recorded in `kernel.log`. Runtime validation is next. See
+independent C witness and passing ELF/no-SIMD checks. Module attempt 4 adds
+shared Rust Arc/mutex ownership to serialize parent removal against file/link
+operations. Guest 3 exercises reads/writes and drains an active callback, then
+fails the fixture's removed-file seek expectation; the corrected probe checks
+the pinned kernfs ENODEV behavior. Earlier static-libc and initramfs failures
+are recorded in `kernel.log`. The corrected runtime replay is next. See
 `docs/verification/native-sysfs-integration-plan.md` for the existing Rust reuse
 map and remaining OS-device, tree, topology and request-dispatch integration.
 The new objects currently have a disposable module consumer only. Neither

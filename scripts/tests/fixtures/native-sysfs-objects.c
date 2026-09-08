@@ -132,10 +132,11 @@ int main(void)
 	assert(waitpid(slow, &status, 0) == slow);
 	assert(WIFEXITED(status) && WEXITSTATUS(status) == 0);
 	assert(stat(ROOT, &st) == -1 && errno == ENOENT);
-	assert(lseek(held, 0, SEEK_SET) == 0);
 	errno = 0;
-	assert(read(held, bytes, sizeof(bytes)) == -1 && errno == ENODEV);
+	off_t seek = lseek(held, 0, SEEK_SET);
+	int removed_at_seek = seek == -1;
+	assert(removed_at_seek && errno == ENODEV);
 	assert(close(held) == 0);
-	printf("MCKERNEL_SYSFS_USER PASS concurrent_writes=512 concurrent_reads=512 duplicate_survival=1 name_reuse=1 overcounts=2 active_drain=1 removed_fd=ENODEV drain_ms=%ld\n", elapsed);
+	printf("MCKERNEL_SYSFS_USER PASS concurrent_writes=512 concurrent_reads=512 duplicate_survival=1 name_reuse=1 overcounts=2 active_drain=1 removed_fd=ENODEV removed_at_seek=%d drain_ms=%ld\n", removed_at_seek, elapsed);
 	return 0;
 }
