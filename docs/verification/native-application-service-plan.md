@@ -887,3 +887,88 @@ milestone has not been reached. Next retain the original procfs producers,
 node tables and read/release consumers while adapting them to pinned Linux VFS
 ownership and the continuing transport, then connect scheduled lifetime and
 START before the next unchanged-launcher attempt.
+
+## Procfs VFS ownership adaptation, 2026-09-08
+
+Reviewed parent: `e2ac85e18bcbea898d31f3899755a570a2372bf9`. Retain
+`executer/kernel/mcctrl/rust/mcctrl_helpers.rs`'s procfs node, open/read/release
+and seek bodies and their existing selection through `executer/kernel/mcctrl/procfs.c`.
+Retain guest `kernel/rust/object_helpers.rs::{procfs_thread_ctl_result,
+procfs_answer_result,procfs_finish_request_result}` and the existing configured
+`kernel/procfs.c` consumer. The original host node tables and credential-based
+file ownership remain the publication reference. No existing implementation
+or fallback is retired by this step.
+
+Adapt only the missing native VFS boundary first. Pinned Linux 6.12 exposes
+`proc_mkdir_mode`, `proc_create_data`, `proc_set_user` and `proc_remove`, but its
+Rust bindings lack proc_ops and safe procfs owners. Supply a narrow Rust ABI
+view checked against a C object compiled with the exact kernel configuration,
+including CONFIG_COMPAT. Reuse Linux's actual procfs implementation and Rust
+Arc/Mutex/UserSlice APIs. The new owner must retain callback data until Linux's
+`proc_entry_rundown` has finished both active operations and exactly one release
+for each successful open. Release may happen during removal while userspace
+still holds the fd; no later callback may dereference its retired session.
+
+Use one short namespace lock shared by a root and its descendants. Track owned
+names and ancestor liveness, so removing a parent before its descendants cannot
+make later old-owner drops remove a replacement with the same name or touch a
+freed proc_dir_entry. Reserve fallible name metadata and callback state before
+Linux publication. Serialize each open session separately, preserving partial
+I/O, independent pread positions, original SET/CUR seek behavior and copy-fault
+position rollback. Backend callbacks must never acquire the namespace lock
+that removal holds while draining them. No namespace or session lock should
+become a Runtime/registration reference cycle.
+
+First validate actual VFS callbacks, failed opens, duplicate names, ancestor
+removal/name reuse, concurrent access and removal with active and retained open
+files in a disposable guest. This owner alone does not acknowledge CREATE or
+provide procfs content. Subsequent integration must supply the exact-generation
+remote request/buffer owners, checked guest buffer lists and same-CPU retirement
+barrier before releasing any host request page; DELETE never writes resp_pa.
+START stays unavailable until those dependent services and scheduled cleanup
+are connected.
+
+
+## Procfs VFS owner verified, 2026-09-08
+
+The new native `procfs_objects.rs` adapter passes its actual Linux guest tests.
+Its C and Rust objects agree on all 27 proc_ops/inode/file/credential/configuration
+values. The procfs implementation imports the pinned Linux APIs directly and
+preserves stable callback payloads through actual `proc_entry_rundown`. Names
+are reserved before publication, descendants retain ancestor identities, and
+old-owner destruction cannot remove a replacement or touch a freed ancestor.
+Backend session acquisition follows all fallible open allocation, ensuring each
+successful backend open receives exactly one release. Bounded heap buffers avoid
+large kernel stack allocations; user-copy failure preserves file position and
+write input is copied before invoking the backend.
+
+Two load/unload cycles in the disposable guest pass 1,024 concurrent writes and
+1,024 reads, 32 namespace races with 64 joined workers, four user-copy faults,
+two denied opens, overcount rejection, SET/CUR seeks, independent pread positions,
+credential ownership and 16,384 bytes of partial reads. Both root-first removals
+start with an active read and wait for it to finish (1,150 and 1,118 ms). Each
+cycle records exactly 1,039 backend opens, releases and session drops, with zero
+live payloads/active callbacks afterward. Duplicated held descriptors correctly
+return EIO on read and EINVAL on seek after removal; closing them after module
+unload does not call the released session again. The guest finishes both module
+unloads and PASS before QMP quit, with QEMU exit zero.
+
+`native-procfs-objects-checkpoint-20260908.json` retains both complete captures
+and exact source, binary, layout, Linux and existing project references in eight
+artifacts. No original assertion or failure was removed; this batch had no
+failures. The VFS owner is tested in a separate module and is not yet connected
+to McKernel procfs content or the production SMP module.
+
+Next resolve the peer completion lifetime before connecting those requests.
+The unchanged `kernel/procfs.c::_process_procfs_request` calls
+`send_procfs_answer` before unmapping its host request/data, freeing its temporary
+page and releasing process/thread/VM references. A maps/pagemap lock conflict
+can defer the operation through backlog. Receipt of that ANSWER alone therefore
+does not authorize native host request-buffer reuse. The prior image fixture's
+later same-CPU cleanup ACK is an external barrier observation, not a native
+procfs lifetime implementation. Verify backlog execution context before relying
+on any queued barrier; consider explicit completion after peer cleanup, with
+an identifiable native completion contract, while retaining all existing Rust
+consumers and legacy fallback behavior. Preserve the original sources and test
+the cleanup/reply order before new images are accepted. No application has
+executed and the Ultra readiness milestone remains open.

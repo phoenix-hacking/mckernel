@@ -195,6 +195,30 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest procfs VFS prerequisite, 2026-09-08:
+`docs/verification/native-procfs-objects-checkpoint-20260908.json` retains the
+new `procfs_objects.rs` owner and its actual Linux guest verification. All 27
+proc_ops/inode/file/credential/configuration values match an independent C
+object built against pinned Linux. Two fixture load/unload cycles pass 1,024
+concurrent writes and reads, 32 namespace races/64 joined workers, copy faults,
+partial I/O, failed opens, credentials, duplicate/name reuse and stale-parent
+rejection. Each cycle has exactly 1,039 opens/releases/drops and no live payload
+or active callback after root-first removal. Linux waits for the active read;
+duplicated held fds remain safe to close after module unload. Two complete
+captures, exact sources/binaries and original Linux/project references are
+retained in eight artifacts. No failures occurred in this batch.
+
+This owner is verified in a separate module; guest procfs CREATE/read/release
+and production SMP selection are still pending. Before freeing native procfs
+request buffers, address the original guest's ANSWER-before-unmap ordering,
+including deferred backlog execution. A later same-CPU cleanup ACK in the image
+fixture is an external barrier observation, not a native procfs retirement
+implementation. Retain or explicitly strengthen the peer completion contract;
+never infer mapping retirement merely from the current procfs ANSWER. START,
+scheduled cleanup and the documented application baseline remain pending.
+The user must still receive an explicit notification before the Ultra switch.
+
+
 Latest native mailbox checkpoint, 2026-09-08:
 `docs/verification/native-application-mailbox-checkpoint-20260908.json` retains
 eleven complete captures in 29 artifacts, including the original missing-VecExt
