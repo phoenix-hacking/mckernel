@@ -63,6 +63,17 @@ dependency directories remain intact. In particular, preserve the current
 runs; the report supplies restoration paths. Current compiler/browser caches,
 installed environments, personal files and recent host logs were preserved.
 
+The fifth cleanup checkpoint, after the full-ready service evidence was pushed,
+is docs/verification/storage-maintenance-20260908-2.json. Seven completed
+captures and 24 duplicate archives were removed only after exact committed
+archive comparisons; all failed attempts remain restorable. Targeted scratch
+trim returns another 484 MiB of host allocation, for 56.92 GiB across all five
+cleanups. All 1,281 checked current files and 21 dependency directories remain
+intact, including native-sysfs-service-module-20260908-2. About 142 GiB remains
+available on the host and 31 GiB in scratch. Preserve the current module,
+kernel, image, build inputs and compressed restoration mapping. New runs must
+use fresh attempt names; restore historical captures from Git when needed.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Continuing service checkpoint, 2026-09-08: both actual startup interfaces now

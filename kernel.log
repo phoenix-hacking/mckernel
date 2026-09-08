@@ -34335,3 +34335,23 @@ Review scalar snooping's bytewise snapshot for tearing against original aligned
 word loads before claiming concurrent scalar parity. No formal gate promotion;
 the broader Rust/assembly, declared integration and independent acceptance
 requirements remain active. The old full-suite result predates these changes.
+
+2026-09-08 storage maintenance after full-ready service checkpoint: PASS.
+Source/evidence commit 5c247af3 was pushed and verified against GitHub before
+cleanup. Host-only maintenance commands:
+python3 -B /home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-2.py audit
+python3 -B /home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-2.py apply
+python3 -B /home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-2.py
+Seven completed expanded captures and 24 duplicate compressed copies were
+removed after full entry/content/mode/link comparisons against committed
+archives and checks for open descriptors/working directories. All failed runs
+remain in the GitHub evidence. Twenty-five retained files match committed
+hashes, and all 1,281 inventoried current files remain byte-identical across
+cleanup. All 21 dependency directories, including service module attempt 2,
+remain available. The mounted scratch image keeps its 60-GiB logical size.
+Targeted fstrim returns 507,654,144 bytes of host allocation (484.14 MiB).
+All five cleanups total 61,119,729,664 bytes (56.92 GiB). Final measured free
+space is 141.88 GiB on the host and 30.92 GiB in scratch; other active work can
+change those values. No kernel test/build or production gate credit is added.
+See docs/verification/storage-maintenance-20260908-2.json and seven compressed
+maintenance artifacts for the audit, preserved inputs and restoration mapping.
