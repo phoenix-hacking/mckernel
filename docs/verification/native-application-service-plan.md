@@ -829,3 +829,12 @@ must not authorize writes to unrelated guest allocations. An interrupted RET
 keeps its accepted result owned by the pump; a kernel-only accepted flag lets
 mcctrl clear its private delivery handle while the next WAIT waits for actual
 publication. The user descriptor receives no new field.
+
+The first live waiter/image guest passes, but two added source regressions expose
+queue ordering and fairness defects in the initial mailbox. Preserve that failed
+capture. Adapt the existing mailbox's selection rather than creating another
+queue: keep original `mcexec_wait_syscall` targeted priority and pending-list
+arrival order, using the already allocated monotonic delivery token across slot
+reuse. Rotate completion selection even on full-queue failure. The continuing
+pump must carry both the selected application's existing token and CPU through
+publication, so one active application or CPU cannot monopolize the scan.

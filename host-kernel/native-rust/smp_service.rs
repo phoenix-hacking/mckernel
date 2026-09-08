@@ -448,7 +448,7 @@ impl Runtime {
     }
 
     fn publish_syscalls(&self) -> Result {
-        let Some(guest_cpu) = self.application.syscall_cpu() else {
+        let Some((application, guest_cpu)) = self.application.syscall_cpu() else {
             return Ok(());
         };
         let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
@@ -462,7 +462,9 @@ impl Runtime {
                     return Ok(());
                 };
                 self.application
-                    .publish_syscall(guest_cpu, |packet| entry.channel.publish(packet))
+                    .publish_syscall(application, guest_cpu, |packet| {
+                        entry.channel.publish(packet)
+                    })
             };
             match result {
                 Ok(true) => smp_ikc::notify(cpu),

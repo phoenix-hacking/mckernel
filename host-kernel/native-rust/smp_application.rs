@@ -9,6 +9,7 @@ use super::{
     smp_memory::SyscallResponse,
     smp_resource::OsToken,
 };
+use core::sync::atomic::{AtomicUsize, Ordering};
 use kernel::{
     bindings,
     prelude::*,
@@ -88,6 +89,7 @@ pub(crate) struct Remote {
     slots: Mutex<Vec<Option<Entry>>>,
     #[pin]
     changed: CondVar,
+    syscall_cursor: AtomicUsize,
 }
 
 impl Remote {
@@ -97,7 +99,8 @@ impl Remote {
             slots.push(None, GFP_KERNEL)?;
         }
         Arc::pin_init(
-            pin_init!(Self { owner, slots <- new_mutex!(slots), changed <- new_condvar!() }),
+            pin_init!(Self { owner, slots <- new_mutex!(slots), changed <- new_condvar!(),
+                syscall_cursor: AtomicUsize::new(0) }),
             GFP_KERNEL,
         )
     }
@@ -290,16 +293,18 @@ impl Remote {
         result
     }
 
-    pub(crate) fn syscall_cpu(&self) -> Option<i32> {
-        self.slots
-            .lock()
-            .iter()
-            .flatten()
-            .find_map(|entry| entry.syscalls.queued_cpu())
+    pub(crate) fn syscall_cpu(&self) -> Option<(Token, i32)> {
+        let slots = self.slots.lock();
+        let start = self.syscall_cursor.fetch_add(1, Ordering::Relaxed);
+        super::smp_application_syscall::cyclic(start, slots.len()).find_map(|index| {
+            let entry = slots[index].as_ref()?;
+            entry.syscalls.queued_cpu().map(|cpu| (entry.key(), cpu))
+        })
     }
 
     pub(crate) fn publish_syscall(
         &self,
+        token: Token,
         cpu: i32,
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
@@ -307,7 +312,7 @@ impl Remote {
         let Some(entry) = slots
             .iter_mut()
             .flatten()
-            .find(|entry| entry.syscalls.queued_cpu() == Some(cpu))
+            .find(|entry| entry.key() == token)
         else {
             return Ok(false);
         };

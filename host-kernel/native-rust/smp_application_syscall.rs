@@ -10,6 +10,10 @@ use kernel::prelude::{Vec, VecExt, GFP_KERNEL};
 type Result<T = ()> = core::result::Result<T, i32>;
 pub(crate) const CAPACITY: usize = 64;
 
+pub(crate) fn cyclic(start: usize, capacity: usize) -> impl Iterator<Item = usize> {
+    (0..capacity).map(move |offset| (start % capacity + offset) % capacity)
+}
+
 struct WorkerState {
     worker: Worker,
     delivery: Option<Token>,
@@ -29,6 +33,7 @@ pub(crate) struct Mailbox<M: ResponseMemory> {
     workers: Vec<Option<WorkerState>>,
     closed: bool,
     quarantined: bool,
+    completion_cursor: usize,
 }
 
 impl<M: ResponseMemory> Mailbox<M> {
@@ -45,6 +50,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             workers,
             closed: false,
             quarantined: false,
+            completion_cursor: 0,
         })
     }
 
@@ -180,19 +186,26 @@ impl<M: ResponseMemory> Mailbox<M> {
             }
             return Err(-16);
         }
-        // The original WAIT path serves targeted work before general work.
-        let targeted = self.calls.iter().position(|slot| {
-            slot.as_ref().is_some_and(|call| {
-                call.delivery.eligible(worker.worker)
-                    && call.delivery.request().target() == worker.worker.tid()
+        // Preserve targeted priority and arrival order even after a newer
+        // request reuses an earlier array slot. Tokens never wrap or repeat.
+        let Some(index) = self
+            .calls
+            .iter()
+            .enumerate()
+            .filter_map(|(index, slot)| {
+                let call = slot.as_ref()?;
+                call.delivery
+                    .eligible(worker.worker)
+                    .then_some((index, call))
             })
-        });
-        let Some(index) = targeted.or_else(|| {
-            self.calls.iter().position(|slot| {
-                slot.as_ref()
-                    .is_some_and(|call| call.delivery.eligible(worker.worker))
+            .min_by_key(|(_, call)| {
+                (
+                    call.delivery.request().target() != worker.worker.tid(),
+                    call.delivery.serial().wire(),
+                )
             })
-        }) else {
+            .map(|(index, _)| index)
+        else {
             return Ok(None);
         };
         let call = self.calls[index].as_mut().unwrap();
@@ -288,11 +301,17 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn queued_cpu(&self) -> Option<i32> {
-        self.calls
-            .iter()
-            .flatten()
-            .find(|call| call.completion.is_some())
-            .map(|call| call.delivery.request().cpu())
+        self.next_completion(None)
+            .map(|index| self.calls[index].as_ref().unwrap().delivery.request().cpu())
+    }
+
+    fn next_completion(&self, cpu: Option<i32>) -> Option<usize> {
+        cyclic(self.completion_cursor, self.calls.len()).find(|&index| {
+            self.calls[index].as_ref().is_some_and(|call| {
+                call.completion.is_some()
+                    && cpu.is_none_or(|cpu| call.delivery.request().cpu() == cpu)
+            })
+        })
     }
 
     /// Queue publication and final status happen under the outer application's
@@ -302,13 +321,11 @@ impl<M: ResponseMemory> Mailbox<M> {
         cpu: i32,
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
-        let Some(slot) = self.calls.iter_mut().find(|slot| {
-            slot.as_ref().is_some_and(|call| {
-                call.delivery.request().cpu() == cpu && call.completion.is_some()
-            })
-        }) else {
+        let Some(index) = self.next_completion(Some(cpu)) else {
             return Ok(false);
         };
+        self.completion_cursor = (index + 1) % self.calls.len();
+        let slot = &mut self.calls[index];
         let call = slot.as_mut().unwrap();
         call.completion.as_mut().unwrap().publish(send)?;
         if call.cancelled {

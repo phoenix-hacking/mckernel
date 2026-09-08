@@ -753,6 +753,72 @@ fn actual_mailbox_worker_death_and_close_cancel_copying_without_tid_reuse() {
 }
 
 #[test]
+fn actual_mailbox_slot_reuse_preserves_pending_fifo_order() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let _first = admit(&mut queue, queued_request(0, 0), 0);
+    let _second = admit(&mut queue, queued_request(1, 0), 0);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    queue.copied(worker, serial, true).unwrap();
+    queue
+        .return_value(worker, serial, 0, 1, |_| Ok(()))
+        .unwrap();
+    queue.publish(0, |_| Ok(())).unwrap();
+    let _third = admit(&mut queue, queued_request(2, 0), 0);
+    let (serial, output) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(
+        output,
+        queued_request(1, 0).wait_output(),
+        "a reused slot overtook an older request"
+    );
+    queue.copied(worker, serial, true).unwrap();
+    queue
+        .return_value(worker, serial, 0, 2, |_| Ok(()))
+        .unwrap();
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert_eq!(
+        queue.reserve(worker).unwrap().unwrap().1,
+        queued_request(2, 0).wait_output()
+    );
+    queue.close().unwrap();
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert!(queue.drained());
+}
+
+#[test]
+fn actual_mailbox_full_wake_queue_does_not_starve_another_cpu() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let first_worker = queue.open_worker(900).unwrap();
+    let second_worker = queue.open_worker(901).unwrap();
+    let first = admit(&mut queue, queued_request(0, 0), 2);
+    let mut packet = c_requests()[0].clone();
+    packet[24..28].copy_from_slice(&1i32.to_le_bytes());
+    packet[48..52].copy_from_slice(&701i32.to_le_bytes());
+    packet[120..128].copy_from_slice(&0x800080u64.to_le_bytes());
+    let second = admit(&mut queue, Request::decode(&packet, 4).unwrap(), 2);
+    for (worker, cpu) in [(first_worker, 0), (second_worker, 1)] {
+        let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+        queue.copied(worker, serial, true).unwrap();
+        queue
+            .return_value(worker, serial, cpu, 37, |_| Ok(()))
+            .unwrap();
+    }
+    assert_eq!(queue.queued_cpu(), Some(0));
+    assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+    assert_eq!(
+        queue.queued_cpu(),
+        Some(1),
+        "full CPU zero ring starved CPU one"
+    );
+    queue.publish(1, |_| Ok(())).unwrap();
+    assert_eq!(second.status(), 1);
+    assert_eq!(first.status(), 0);
+    assert_eq!(queue.queued_cpu(), Some(0));
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert!(queue.drained());
+}
+
+#[test]
 fn actual_mailbox_quarantines_invalid_response_instead_of_releasing_it() {
     let mut queue = mailbox::Mailbox::new().unwrap();
     let worker = queue.open_worker(900).unwrap();
