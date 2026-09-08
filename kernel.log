@@ -34018,3 +34018,39 @@ and its layout comparison pass. The new tree fixture fails Rust compilation
 because its two CString formatting calls use fmt! without importing that
 kernel macro. Stop before legacy-reference or guest execution; add the explicit
 macro import and retry with a new attempt. No tree runtime PASS is claimed.
+
+2026-09-07 local date — native topology guest 1 FAILED fixture preparation.
+Command: mckernel-container native python3 -B /work/run-native-topology-guest.py 1 1
+Environment: the new cacheinfo-export kernel in the isolated four-vCPU/two-NUMA
+8-GiB TCG guest, inside the four-CPU/12-GiB native container. Kernel and topology
+module builds, the 45-value C/Rust layout match and no-SIMD checks already pass.
+Linux boots, but /init cannot run cat: the reused minimal initramfs contains
+selected utilities, not cat. No topology fixture loaded or CPU transition ran.
+Evidence: /work/native-topology-guest-20260907-1. Stop and retain this failure;
+capture the needed utility and its exact dynamic dependencies before retrying.
+Dependency inspection found /usr/bin/cat is a coreutils shebang wrapper;
+ldd exits 1 with "not a dynamic executable". The fixture instead uses its
+already retained Bash file-reading builtins for these text files. No new
+utility or interpreter dependency is added to the retry initramfs.
+
+2026-09-07 local date — native topology guest 2 FAILED capture validation.
+Command: mckernel-container native python3 -B /work/run-native-topology-guest.py 1 2
+Environment: same isolated cacheinfo-export kernel, four-vCPU/two-NUMA/8-GiB
+TCG guest. The module loads twice, all recorded Rust snapshots match the
+independent Linux values, both CPU offline/online cycles complete, and namespace
+cleanup reaches the guest PASS marker. The Python validator then incorrectly
+requires Linux CPU0's cache index3 mask to remove offline CPU1: its actual
+before/after values are both 3. Stop; inspect Linux's cache-sharing predicate
+and preserve this observation before adjusting the capture expectation.
+A second helper error occurs while retaining the failure: a parsed integer
+named identity shadows the hash function, so final output recording raises
+TypeError: 'int' object is not callable. Preserve the original pending record
+and recover an explicitly failed final record from the tool output. No overall
+guest-2 PASS is claimed, and the retry must use a new attempt directory.
+Diagnosis: this x86 TCG configuration reports cache-sharing masks of 3 for
+CPU0/CPU1 L3 while their valid cache IDs are 0 and 1. Linux's pinned
+cache_leaves_are_shared predicate compares those IDs, so its removal path
+leaves that mask unchanged. The retry checks the exact level/type/ID predicate,
+records unchanged cache masks, and separately verifies the CPU core-sibling
+mask change from remove_siblinginfo. That function also clears an offline
+CPU's core_id, reinforcing the requirement to own the pre-offline snapshot.

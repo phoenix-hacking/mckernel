@@ -33,6 +33,29 @@ free blocks are returned to the host drive. Do not resize or delete that image.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native topology producer checkpoint (2026-09-07 local date): patch 0009 adds
+only the existing Linux get_cpu_cacheinfo GPL export. The kernel and three
+existing native modules rebuild; generated Rust bindings and C declarations
+stay unchanged. smp_topology.rs owns CPU/cache fields and masks copied under
+CPU hotplug exclusion. Its disposable module passes all 45 independent C/Rust
+layout values and real Linux comparisons: 376 field/mask checks, 32 cache-leaf
+checks and 24 unchanged snapshot reads across two offline/online cycles and
+two module lifetimes. See docs/verification/native-topology-checkpoint-20260907.json
+for retained sources, inputs and both guest failures, including the recovered
+failed recorder state. No production gate or actual sysfs setup is claimed.
+
+The global native build now contains the cacheinfo-export kernel captured as
+/work/native-topology-kernel-20260907-1. The snapshot module is captured as
+/work/native-topology-module-20260907-1; passing guest attempt is 3. Older
+/work/native-vdso-kernel-20260907-3 remains preserved for its original evidence.
+Use the new kernel when importing get_cpu_cacheinfo. Integrate the owned
+snapshot into CpuContext before reservation, validate new reservations against
+saved identity and current online membership, and use the retained values in
+the real sysfs setup tree. Linux clears core_id and core-sibling membership on
+offline. This QEMU model's raw cache masks can retain offline bits because its
+valid cache IDs differ; use the observed masks, not reconstructed sharing.
+The new kernel still needs actual McKernel startup regressions after integration.
+
 Native sysfs tree checkpoint (2026-09-07 local date): the native PreparedBoot
 owner now contains the Rust tree, with checked nonpointer handles, bounded path
 validation and iterative teardown. All three native modules and the actual

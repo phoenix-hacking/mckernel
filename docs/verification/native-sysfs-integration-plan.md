@@ -271,7 +271,7 @@ be treated as successful setup.
 The old collector in `ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c`
 reads Linux sysfs at module initialization and saves topology before reservation.
 Adapt that ownership boundary to Rust values. In the pinned Linux source,
-`cacheinfo_cpu_pre_down` removes sysfs objects and clears shared CPU membership;
+`cacheinfo_cpu_pre_down` removes sysfs objects and can change shared CPU membership;
 collecting after offline would lose siblings. Capture the initially supported
 online CPU inventory under the existing device-hotplug and CPU read guards,
 keep owned copies through reservation, and validate identity and current online
@@ -285,3 +285,43 @@ missing GPL export, without a new C adapter body, then verify exact layouts
 and captured values against independent Linux sysfs readings. Preserve cache
 indices, scalar fields and real shared masks. The native snapshot must own all
 data before releasing the hotplug guards; no Linux topology pointer may escape.
+
+## Verified topology producer, 2026-09-07 local date
+
+Patch 0009 exports the existing `get_cpu_cacheinfo` function. The pinned kernel
+and existing native modules rebuild without changing the generated Rust bindings
+or C topology declarations. `smp_topology.rs` copies the actual per-CPU scalar
+fields, CPU masks and visible cache leaves into Rust-owned values while its
+caller holds CPU hotplug exclusion. It reuses the established per-CPU linker
+token calculation from the native raised-list integration. The copied values
+hold no Linux topology pointers. Its current consumer is the disposable
+`mckernel_topology_verify` fixture; CpuContext integration remains next.
+
+All 45 independently compiled C/Rust layout values match. The fixture builds
+with the expected Linux imports and no SIMD/FPU register use. In a four-vCPU,
+two-NUMA TCG guest, two module lifetimes perform 376 scalar/mask checks and
+32 cache-leaf checks against independent Linux sysfs and procfs readings. All
+24 reads of owned snapshots stay byte-identical before CPU1 offline, while it
+is offline and after it returns online. Linux removes CPU1's cache namespace
+and changes CPU0's core-sibling mask from 3 to 1; the stored snapshots retain
+the original topology. Both fixture namespaces retire completely on unload.
+
+The pinned x86 `remove_siblinginfo` also clears an offline CPU's core_id, so
+boot-time topology must use the retained pre-offline values. Cache masks need
+more care: this QEMU model reports different valid L3 cache IDs for CPUs sharing
+a mask. Linux's level/type/ID predicate leaves those cache masks unchanged on
+offline. The final capture verifies that exact behavior and the changing core
+mask separately. Do not reconstruct cache sharing from IDs or require every
+raw Linux cache mask to lose an offline CPU bit. Reservation validation should
+compare online membership and scalar identity against the saved snapshot.
+
+`native-topology-checkpoint-20260907.json` retains the new kernel, producer,
+fixture and three guest attempts. Guest 1 lacked a utility in its minimal root;
+the corrected init uses existing Bash file reads. Guest 2 reached the guest
+success marker but failed the original cache-mask assumption; a separate hash
+function shadowing error prevented its final record write. The original pending
+record and explicitly recovered FAIL record are both retained. Guest 3 passes
+the corrected checks. Native CPU-context ownership, every new allocation failure,
+the actual setup attributes and shared-buffer request completion remain open.
+This new kernel has topology-fixture coverage; both actual McKernel startup
+interfaces must be repeated after integrating the producer into the SMP owner.
