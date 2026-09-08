@@ -174,3 +174,30 @@ and ownership assertion. Module attempt 2 and its production sources remain
 unchanged. Preserve failed guests 1/2/3 and rerun with fresh names. Retain both
 pinned Linux source files with the executable checkpoint so this correction is
 reviewable independently of the observed native ioctl result.
+
+## Executable and credential checkpoint verified, 2026-09-08
+
+[The retained checkpoint](native-mcctrl-exec-checkpoint-20260908.json) binds the
+unchanged production module attempt 2 to passing x86_64 guest attempt 4 and i386
+attempt 1. Both ABIs pass 518 independent credential comparisons (including IDs
+above 16 bits), six copy faults, 1,116 executable/file assertions and six exact
+context retirements. Write denial remains balanced through failures, replacement,
+separate and duplicate descriptors, forked process isolation and final file close.
+Two phases of four forked workers per ABI cover credential changes and executable
+replacement. The existing topology/module/file and normal-image boot/sysfs checks
+also pass, with four physical status-3 captures and 260 continuing callbacks.
+
+All seven captures, including the four failures, are retained without exclusions.
+The 19 artifacts also retain 43 native compiler bindings, 12 Linux probe bindings,
+three exact pinned formatter replays and the six Linux review source files. No
+new C production shim, guest-image change or launcher change was required.
+
+This remains a host application-service checkpoint. Native procfs/exe publication,
+PPD/VM/pinning, image launch, syscall forwarding and actual mcexec applications
+are still required. Current process retirement follows final file bindings; the
+inherited-descriptor test closes the child's executable explicitly, while the
+automatic process-exit test gives the child its own file. Abrupt exit with a
+shared descriptor held elsewhere and same-TGID thread races need the full
+process-lifecycle adapter. Do not equate these tests with that pending coverage.
+The accumulated declared staging/source-graph/FFI integration, current full suite
+and all original runtime/language/independent acceptance requirements remain open.

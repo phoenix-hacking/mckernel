@@ -118,21 +118,28 @@ checkpoints between substantial validation batches.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Native executable/credential WIP, 2026-09-08: module attempt 2 compiles all three
-native modules with the pinned Linux/Rust toolchain, after retaining the first
-missing-error-constant compilation failure. The x86_64 diagnostic guest attempt
-3 passes both normal boot/status-3 captures and the prior topology/lifetime probe,
-then reports 259 credential checks before stopping at OPEN_EXEC file-check index
-9: actual EACCES (-13), expected ENOENT (-2). Preserve both executable module
-attempts and all three executable guest attempts unchanged. The fixture now
-includes the noexec file copy and prints the actual result on mismatch; expected
-behavior has not been weakened. The source and exact failures were pushed in
-34fb21cf before the requested storage cleanup. Resume diagnosis from
-`native-mcctrl-exec-guest-20260908-x86_64-3/serial.log`, using
-`native-mcctrl-exec-module-20260908-2` as the built input and fresh attempt names.
-Executable runtime acceptance and the i386 repeat remain pending. Applications
-have not run; all native launch/VM/syscall, procfs, integration, full-language,
-shutdown, remaining sysfs fault/race and independent acceptance work stays open.
+Native executable/credential checkpoint, 2026-09-08: production module attempt 2
+and actual x86_64 guest attempt 4 / i386 attempt 1 pass. Both ABIs verify 518
+current-caller credential comparisons, six user-buffer faults, 1,116 executable
+file checks, six exact executable-context retirements and two four-worker phases
+per ABI. Replacement rollback, write exclusion, separate/duplicate descriptors,
+forked PID isolation and final file release pass. The normal-image boot/sysfs
+regressions pass with four physical status-3 captures and 260 continuing callbacks;
+the repeated file-service checks add 2,112 topology queries and 16 unload vetoes.
+See `docs/verification/native-mcctrl-exec-checkpoint-20260908.json`: seven captures,
+all four failures, 19 artifacts, 43 native compiler bindings, 12 Linux probe
+bindings, three exact formatter replays and six pinned Linux review sources.
+The empty-path fixture expected ENOENT incorrectly: the exact Linux open_exec
+uses getname_kernel, selects cwd and rejects directory execution with EACCES.
+Only that test expectation changed; the production module stayed byte-identical.
+Preserve `native-mcctrl-exec-module-20260908-2` as the current input alongside the
+existing kernel/image/setup and prior verified service dependencies. Native process
+retirement still follows final file bindings; abrupt exit while another process
+holds an inherited descriptor needs the complete PPD/process lifecycle adapter.
+Native procfs publication and applications have not run. Continue per-process/VM,
+image prepare/transfer/start and syscall services plus the accumulated declared
+staging/FFI/current full-suite integration. Full Rust/assembly, shutdown, multi-CPU/
+OS, remaining sysfs faults/races and independent acceptance remain required.
 
 Native application service checkpoint, 2026-09-08: IHK now owns a versioned
 mcctrl callback registration and lazily attached per-file context/module lease.
