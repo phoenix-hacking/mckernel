@@ -725,6 +725,9 @@ fn accept_control_channel(
 }
 
 struct PreparedBoot {
+    // Retired before device_destroy by the unstarted backend cleanup; every
+    // started owner remains retained with the rest of PreparedBoot.
+    _sysfs: super::sysfs_objects::Directory,
     params: BootPages,
     _dump: BootPages,
     trampoline: super::smp_trampoline::LowRegion,
@@ -1695,10 +1698,20 @@ impl MemoryContext {
                 return Err(EIO);
             }
         }
+        // SAFETY: The synchronous backend holds IHK's lease, operation mutex
+        // and module pin. PreparedBoot owns the child until unstarted cleanup
+        // completes, or retains it after the first possible CPU-start effect.
+        let sysfs = unsafe { super::sysfs_os::root(owner) }?;
+        pr_info!(
+            "IHK-SMP: sysfs root attached os={} generation={} setup_completed=0\n",
+            owner.slot(),
+            owner.generation()
+        );
         pr_info!("IHK-SMP: boot prepared os={} generation={} params={:x} bytes={} trampoline={:x} startup={:x} cpus={} numa={} chunks={} kmsg={:x}; CPUs not started\n",
             owner.slot(), owner.generation(), params.physical(), param_bytes, trampoline.physical(), layout.startup(), cpus.len(), nodes.len(), chunks.len(), kmsg);
         self.images[owner.slot() as usize].as_mut().ok_or(EIO)?.boot = Some(BootStorage {
             prepared: ManuallyDrop::new(PreparedBoot {
+                _sysfs: sysfs,
                 params,
                 _dump: dump,
                 trampoline,

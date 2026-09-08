@@ -205,6 +205,9 @@ struct OsBackend {
 
 struct OsObject {
     provider: DeviceHandle,
+    // Published before the registry becomes live. Registry leases exclude
+    // device_destroy, including while a backend borrows the parent kobject.
+    node: AtomicPtr<bindings::device>,
     operations: Pin<Box<Mutex<()>>>,
     backend: Option<OsBackend>,
     _kmsg: KmsgPages,
@@ -399,6 +402,7 @@ unsafe fn create_os(
     let object = Box::new(
         OsObject {
             provider,
+            node: AtomicPtr::new(ptr::null_mut()),
             operations: Box::pin_init(new_mutex!(()), GFP_KERNEL)?,
             backend,
             _kmsg: KmsgPages::allocate()?,
@@ -431,6 +435,9 @@ unsafe fn create_os(
         unsafe { drop(Box::from_raw(removed)) };
         return Err(ENOMEM);
     }
+    // SAFETY: The reserved registry slot excludes readers until commit. The
+    // successful device_create owns the registration until destroy_os.
+    unsafe { (*object).node.store(node.cast(), Ordering::Release) };
     // Any unexpected registry corruption fails stop; a successful return must
     // never leave a node with an unpublished or mismatched OS identity.
     transaction
@@ -492,6 +499,10 @@ fn destroy_os(provider_minor: u32, minor: u64) -> Result {
     }
     let class = OS_CLASS.load(Ordering::Acquire);
     let dev = (OS_MAJOR.load(Ordering::Acquire) << MINOR_BITS) | index as u32;
+    assert!(!object_ref
+        .node
+        .swap(ptr::null_mut(), Ordering::AcqRel)
+        .is_null());
     // SAFETY: The node belongs to this exclusive destruction transaction.
     unsafe { device_destroy(class, dev) };
     let removed = OS_OBJECTS[index].swap(ptr::null_mut(), Ordering::AcqRel);
@@ -504,6 +515,64 @@ fn destroy_os(provider_minor: u32, minor: u64) -> Result {
         .unwrap_or_else(|_| panic!("OS destruction invariant violated"));
     pr_info!("os=destroy minor={} state=vacant\n", index);
     Ok(())
+}
+
+// SAFETY: Only a synchronous kernel caller supplies this function and context.
+// The second argument borrows the real mcos device's Linux kobject while an
+// exact-generation OsLease excludes unregister. Neither Rust layout nor a user
+// or guest address crosses this callback boundary.
+type OsKobjectCallbackV1 = unsafe extern "C" fn(*mut c_void, *mut c_void) -> i32;
+
+/// Borrow the real OS device without taking its operation mutex again.
+///
+/// # Safety
+/// The caller pins its callback code and context through the synchronous call.
+/// It must not retain the borrowed pointer or reenter OS operations. A created
+/// Linux child must own its parent reference and retire before the backend's
+/// release callback succeeds and before the child's module can unload. Holding
+/// an OsLease for the entire child lifetime would prevent that release callback
+/// from ever running; only this short borrow owns an additional registry lease.
+#[export_name = "ihk_os_with_kobject_v1"]
+pub(crate) unsafe extern "C" fn ihk_os_with_kobject_v1(
+    slot: u32,
+    generation: u64,
+    callback_abi: u32,
+    context: *mut c_void,
+    callback: Option<OsKobjectCallbackV1>,
+) -> i32 {
+    if callback_abi != 1 || callback.is_none() {
+        return EINVAL.to_errno();
+    }
+    let result = (|| -> Result<i32> {
+        let handle = OS_REGISTRY
+            .resolve_minor(slot as usize)
+            .map_err(|error| errno(error.errno()))?;
+        if handle.generation() != generation {
+            return Err(errno(-116));
+        }
+        // Acquisition rechecks generation atomically against destruction and
+        // minor reuse between resolve_minor and this compare/exchange.
+        let _lease = OS_REGISTRY
+            .acquire(handle)
+            .map_err(|error| errno(error.errno()))?;
+        let object = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        assert!(!object.is_null());
+        // SAFETY: The lease keeps this exact object and registered device live.
+        // Only form a raw field pointer: Linux owns the device's mutable data.
+        let node = unsafe { (*object).node.load(Ordering::Acquire) };
+        assert!(!node.is_null());
+        let parent = unsafe { ptr::addr_of_mut!((*node).kobj) };
+        // SAFETY: The caller owns callback/context and obeys the borrowed-parent
+        // contract above. No operation mutex is acquired across reentry from a
+        // backend that already holds it during preparation or request handling.
+        let status = unsafe { callback.unwrap()(context, parent.cast()) };
+        if (-4095..=0).contains(&status) {
+            Ok(status)
+        } else {
+            Err(EIO)
+        }
+    })();
+    result.unwrap_or_else(|error| error.to_errno())
 }
 
 // SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by
@@ -730,4 +799,15 @@ pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbol
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_destroy_unbooted_v1 as *const () as *const u8,
+};
+
+// SAFETY: Immutable data-only modpost relocation for this module's lifetime.
+#[export_name = "__export_symbol_ihk_os_with_kobject_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_KOBJECT_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_with_kobject_v1 as *const () as *const u8,
 };

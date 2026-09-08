@@ -43,6 +43,10 @@ mod smp_ikc;
 #[path = "abi/vdso.rs"]
 mod vdso_protocol;
 mod smp_vdso;
+// The OS-bound root is live; file/tree and request service integration follows.
+#[allow(dead_code)]
+mod sysfs_objects;
+mod sysfs_os;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";

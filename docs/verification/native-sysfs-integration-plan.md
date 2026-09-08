@@ -121,3 +121,31 @@ object boundary through its disposable module consumer. Allocation-pressure
 fault injection and a complete OS lifecycle are not covered. Actual OS-device
 binding, native tree/path/handle behavior, topology/setup files, owned shared
 buffers and SYSFS_REQ_SETUP completion remain the next integration work.
+
+## OS-device attachment implementation
+
+The additive `ihk_os_with_kobject_v1` export borrows the actual `device_create`
+result under a short, exact-generation registry lease. Acquisition rechecks the
+generation against concurrent destruction/reuse. It deliberately does not take
+the OS operation mutex: the boot backend already holds that mutex. Callback
+code/context are synchronous kernel borrows; no private Rust layout crosses the
+ABI, and callback status must be zero or a valid negative Linux errno.
+
+`sysfs_os.rs` creates the legacy `/sys` child through that borrow and stores its
+owner in `PreparedBoot`. Linux's successful child add takes the parent kobject
+reference. Unstarted image/boot retirement removes the child before the backend
+release returns and IHK unregisters its device; started storage retains it.
+A permanent additional OsLease would prevent the destruction guard from ever
+calling backend cleanup, so the child owns the Linux reference and backend
+lifetime instead. This extends the existing ownership graph without creating a
+second device or changing the old create/backend ABIs.
+
+The root is prepared before CPU startup so allocation errors remain recoverable.
+It contains no setup marker and acknowledges no guest request. Native tree,
+topology/setup files, owned shared buffers and request dispatch remain required.
+Module attempt 2 builds all three native modules and the borrowing fixture;
+all three independent Linux device-layout values match, and module disassembly
+passes the no-SIMD check. Attempt 1's fixture modpost failure remains retained:
+the helper incorrectly supplied a per-directory Module.symvers path; the actual
+in-tree build publishes these exports in the build-root manifest. Live
+OS-device retirement and borrowing checks are pending at this build checkpoint.

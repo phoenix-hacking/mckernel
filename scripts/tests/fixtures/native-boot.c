@@ -12,6 +12,24 @@
 #define SYS_NANOSLEEP 162
 #endif
 
+static unsigned sysfs_checks;
+static void sysfs_state(int minor, int present)
+{
+#if defined(NATIVE_SYSFS_OS)
+    const char *paths[] = {"/sys/class/mcos/mcos0/sys", "/sys/class/mcos/mcos1/sys"};
+    const char *markers[] = {"/sys/class/mcos/mcos0/sys/setup_complete", "/sys/class/mcos/mcos1/sys/setup_complete"};
+    require(minor == 0 || minor == 1);
+    long fd = call(SYS_OPEN, (long)paths[minor], 0, 0);
+    if (present) { require(fd >= 0); close_fd(fd); }
+    else { require(fd == -2); }
+    // The root's existence must never stand in for the actual setup service.
+    require(call(SYS_OPEN, (long)markers[minor], 0, 0) == -2);
+    sysfs_checks++;
+#else
+    (void)minor; (void)present;
+#endif
+}
+
 static void capture_pause(void)
 {
     struct { long seconds, nanoseconds; } delay = {10, 0};
@@ -30,6 +48,7 @@ int main(void)
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 0);
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 1);
     int first = open_os(0), second = open_os(1);
+    sysfs_state(0, 0); sysfs_state(1, 0);
     char arguments[1024];
     for (int i = 0; i < 1024; i++) arguments[i] = 'y';
     require(call(SYS_IOCTL, first, OS_KARGS, (long)arguments) == 0);
@@ -65,35 +84,53 @@ int main(void)
         put_value(FI "times", "0");
         put_value(FI "min-order", "10");
         require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+        sysfs_state(0, 0);
         require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EAGAIN);
+        sysfs_state(1, 1);
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EBUSY);
+        sysfs_state(0, 0); sysfs_state(1, 1);
         require(call(SYS_IOCTL, second, OS_LOAD, (long)"/images/missing") == -2);
+        sysfs_state(1, 0);
         require(call(SYS_IOCTL, second, OS_LOAD, (long)"/images/mckernel.img") == 0);
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
         require(call(SYS_IOCTL, first, OS_STATUS, 0) == 0);
+        sysfs_state(0, 1);
         // Failed argument reads preserve the held preparation. Successful
         // changes retire it, making the exclusive trampoline available again.
         require(call(SYS_IOCTL, first, OS_KARGS, 1) == -EFAULT);
+        sysfs_state(0, 1);
         require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EBUSY);
         require(call(SYS_IOCTL, first, OS_KARGS, (long)arguments) == 0);
+        sysfs_state(0, 0);
         require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EAGAIN);
+        sysfs_state(1, 1);
         require(call(SYS_IOCTL, second, OS_KARGS, (long)"second-os") == 0);
+        sysfs_state(1, 0);
         require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
+        sysfs_state(0, 1);
         online_mask(1);
         if (cycle == 0) capture_pause();
         // Changing CPU assignment retires the held preparation, retaining the
         // image and original startup tables for a later preparation.
         int changed[] = {1};
         require(request(first, OS_RELEASE_CPU, changed, 1) == 0);
+        sysfs_state(0, 0);
         require(request(first, OS_ASSIGN_CPU, changed, 1) == 0);
     }
     require(call(SYS_IOCTL, first, OS_BOOT, 0) == -EAGAIN);
     close_fd(first);
     require(destroy_os(control, 0) == 0);
+    sysfs_state(0, 0);
     require(call(SYS_IOCTL, second, OS_BOOT, 0) == -EAGAIN);
     close_fd(second);
     require(destroy_os(control, 1) == 0);
+    sysfs_state(1, 0);
+#if defined(NATIVE_SYSFS_OS)
+    require(call(SYS_IOCTL, control, OS_CREATE, 0) == 0);
+    sysfs_state(0, 0);
+    require(destroy_os(control, 0) == 0);
+#endif
     int chunks = query_memory(control), node1_chunks = 0;
     require(totals[0] == 128 * MIB && totals[1] == 128 * MIB);
     for (int i = 0; i < chunks; i++) {
@@ -124,6 +161,7 @@ int main(void)
     require(call(SYS_IOCTL, os, OS_LOAD, (long)"/images/mckernel.img") == 0);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);
     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);
+    sysfs_state(0, 1);
     require(call(SYS_IOCTL, os, OS_KARGS, (long)"changed") == -EBUSY);
     require(call(SYS_IOCTL, os, OS_BOOT, 0) == -EBUSY);
     require(request(os, OS_RELEASE_CPU, assigned, 1) == -EBUSY);
@@ -132,9 +170,16 @@ int main(void)
     capture_pause();
     close_fd(os);
     require(destroy_os(control, 0) == -EBUSY);
+    sysfs_state(0, 1);
     close_fd(control);
     require(call(SYS_DELETE_MODULE, (long)"ihk_smp_x86_64", 2048, 0) == -EAGAIN);
     message("NATIVE_BOOT_START " ARCH_LABEL " CAPTURED incomplete=1 resources_retained=1\n");
+#endif
+#if defined(NATIVE_SYSFS_OS)
+    message("NATIVE_OS_SYSFS " ARCH_LABEL " PASS checks="); print_number(sysfs_checks);
+    message(" setup_completed=0\n");
+#else
+    (void)sysfs_checks;
 #endif
     return 0;
 }

@@ -33964,3 +33964,14 @@ file to succeed before checking read for ENODEV. Linux can reject the seek
 itself after node deactivation. Stop and retain this run; verify the actual
 kernfs llseek path and accept only ENODEV at either invalidated operation,
 with the actual result recorded. No complete guest PASS is claimed.
+
+2026-09-07 local date — native OS sysfs module attempt 1 FAILED fixture modpost.
+Command: mckernel-container native python3 -B /work/build-native-sysfs-os.py 1
+Environment: pinned native Linux 6.12/Rust 1.92 container, CPUs 2-5,
+four-CPU/12-GiB limits. Evidence: /work/native-sysfs-os-module-20260907-1.
+The exact boot-layout witnesses and all three native modules build, including
+the new actual OS-device/root ownership. The borrowing fixture compiles, but
+modpost rejects a helper-supplied KBUILD_EXTRA_SYMBOLS path because this native
+in-tree module build has no drivers/misc/mckernel/Module.symvers. Stop before
+runtime checks; resolve the actual symbol manifest and fix only the helper's
+modpost input. No complete build-attempt PASS or live attachment is claimed.
