@@ -16,19 +16,18 @@ extern crate self as kernel;
 pub mod prelude {
     pub const GFP_KERNEL: u32 = 0;
     pub struct AllocError;
-    impl AllocError {
-        pub fn to_errno(self) -> i32 {
-            -12
-        }
-    }
     pub struct Vec<T>(std::vec::Vec<T>);
-    impl<T> Vec<T> {
-        pub fn with_capacity(n: usize, _flags: u32) -> Result<Self, AllocError> {
+    pub trait VecExt<T>: Sized {
+        fn with_capacity(n: usize, flags: u32) -> Result<Self, AllocError>;
+        fn push(&mut self, value: T, flags: u32) -> Result<(), AllocError>;
+    }
+    impl<T> VecExt<T> for Vec<T> {
+        fn with_capacity(n: usize, _flags: u32) -> Result<Self, AllocError> {
             let mut value = std::vec::Vec::new();
             value.try_reserve(n).map_err(|_| AllocError)?;
             Ok(Self(value))
         }
-        pub fn push(&mut self, value: T, _flags: u32) -> Result<(), AllocError> {
+        fn push(&mut self, value: T, _flags: u32) -> Result<(), AllocError> {
             self.0.try_reserve(1).map_err(|_| AllocError)?;
             self.0.push(value);
             Ok(())

@@ -847,7 +847,14 @@ fn accept_control_channel(
         )?
     };
     // Store every owner before a reply can expose physical memory to McKernel.
-    channels.push(OwnedControlChannel { channel, pages, pending: None }, GFP_KERNEL)?;
+    channels.push(
+        OwnedControlChannel {
+            channel,
+            pages,
+            pending: None,
+        },
+        GFP_KERNEL,
+    )?;
     pr_info!("IHK-SMP: control accepted os={} generation={} port={} guest_cpu={} linux_cpu={} cookie={} receive={:x} send={:x} bytes={} reference={} remote_cookie={:x}\n",
         owner.slot(), owner.generation(), offer.port, guest_cpu, cpus[guest_cpu as usize].linux_id,
         cookie, physical, offer.send_queue, CONTROL_QUEUE_BYTES, offer.reference, offer.remote_channel_cookie);

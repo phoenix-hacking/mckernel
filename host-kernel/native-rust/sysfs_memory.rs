@@ -57,7 +57,11 @@ impl Ledger {
                 .iter()
                 .flatten()
                 .any(|old| old.span.overlaps(span))
-            || self.responses.iter().flatten().any(|old| old.span.overlaps(span))
+            || self
+                .responses
+                .iter()
+                .flatten()
+                .any(|old| old.span.overlaps(span))
             || snoops && self.snoops.iter().any(|old| old.span.overlaps(span))
     }
 
@@ -237,7 +241,11 @@ impl Memory {
         if ledger.conflicts(span, true) {
             return Err(EBUSY);
         }
-        let slot = ledger.responses.iter().position(Option::is_none).ok_or(EAGAIN)?;
+        let slot = ledger
+            .responses
+            .iter()
+            .position(Option::is_none)
+            .ok_or(EAGAIN)?;
         // SAFETY: The checked exact-generation RAM is aligned and disjoint
         // from every active service access. The guest owns only atomic state.
         let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
@@ -247,7 +255,12 @@ impl Memory {
         }
         let tag = ledger.tag(span)?;
         ledger.responses[slot] = Some(tag);
-        Ok(SyscallResponse { memory: self.clone(), address, tag, slot })
+        Ok(SyscallResponse {
+            memory: self.clone(),
+            address,
+            tag,
+            slot,
+        })
     }
 
     /// Reserve queue aliases while the caller allocates and stores both owned
@@ -406,12 +419,18 @@ pub(crate) struct SyscallResponse {
 // retained mapping and excludes aliases under the shared ledger. Unfinished
 // destruction does not remove the tag or acknowledge the guest.
 unsafe impl ResponseMemory for SyscallResponse {
-    fn physical(&self) -> u64 { self.tag.span.physical }
-    fn address(&mut self) -> *mut u8 { self.address as *mut u8 }
+    fn physical(&self) -> u64 {
+        self.tag.span.physical
+    }
+    fn address(&mut self) -> *mut u8 {
+        self.address as *mut u8
+    }
     unsafe fn release(self) {
         let mut ledger = self.memory.ledger.lock();
         let slot = &mut ledger.responses[self.slot];
-        assert!(slot.as_ref().is_some_and(|tag| tag.serial == self.tag.serial));
+        assert!(slot
+            .as_ref()
+            .is_some_and(|tag| tag.serial == self.tag.serial));
         *slot = None;
         // The guest can already reuse the response; only host bookkeeping is
         // accessed above. No destructor dereferences its address.

@@ -5,7 +5,7 @@ use super::{
     application_rpc::Token,
     application_syscall::{Completion, Delivery, Request, Response, ResponseMemory, Worker},
 };
-use kernel::prelude::{Vec, GFP_KERNEL};
+use kernel::prelude::{Vec, VecExt, GFP_KERNEL};
 
 type Result<T = ()> = core::result::Result<T, i32>;
 pub(crate) const CAPACITY: usize = 64;
@@ -33,11 +33,12 @@ pub(crate) struct Mailbox<M: ResponseMemory> {
 
 impl<M: ResponseMemory> Mailbox<M> {
     pub(crate) fn new() -> Result<Self> {
-        let mut calls = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|e| e.to_errno())?;
-        let mut workers = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|e| e.to_errno())?;
+        // The pinned kernel maps its payload-free AllocError to ENOMEM.
+        let mut calls = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
+        let mut workers = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
         for _ in 0..CAPACITY {
-            calls.push(None, GFP_KERNEL).map_err(|e| e.to_errno())?;
-            workers.push(None, GFP_KERNEL).map_err(|e| e.to_errno())?;
+            calls.push(None, GFP_KERNEL).map_err(|_| -12)?;
+            workers.push(None, GFP_KERNEL).map_err(|_| -12)?;
         }
         Ok(Self {
             calls,

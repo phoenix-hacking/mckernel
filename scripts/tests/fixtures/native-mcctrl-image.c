@@ -24,6 +24,10 @@ static unsigned char payload[8192], readback[8192];
 static unsigned image_checks;
 static volatile unsigned image_child_progress;
 
+#ifdef NATIVE_SYSCALL_WAITER_CHECKS
+#include "native-mcctrl-syscall-wait.c"
+#endif
+
 static void image_require(int condition, int line)
 {
     image_checks++;
@@ -96,6 +100,9 @@ int main(void)
     require((unsigned long)&image_request > 0x008000000000UL);
     int fd = open_os(0);
     ppd(fd, 0, 0);
+#ifdef NATIVE_SYSCALL_WAITER_CHECKS
+    syscall_before_prepare(fd);
+#endif
     struct program_load_desc *desc = &image_request.desc;
     desc->magic = PLD_MAGIC; desc->num_sections = 2; desc->cpu = 0;
     desc->pid = -999; /* The kernel must use the referenced current TGID. */
@@ -140,6 +147,9 @@ int main(void)
     require(desc->sections[0].remote_pa && desc->sections[1].remote_pa);
     require(call(SYS_IOCTL, fd, MCEXEC_UP_PREPARE_IMAGE, (long)desc) == -16);
     references(2); /* One mcos file and one anonymous mirror file. */
+#ifdef NATIVE_SYSCALL_WAITER_CHECKS
+    syscall_waiter_probe(fd);
+#endif
 
     for (unsigned i = 0; i < sizeof(payload); i++) payload[i] = (i * 17 + 3) & 255;
     transfer(fd, desc->sections[0].remote_pa, payload, 4096, 0, 0);
