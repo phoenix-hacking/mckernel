@@ -1,0 +1,29 @@
+From: McKernel native Rust integration
+Subject: [PATCH] cacheinfo: export the existing CPU cache information accessor
+
+Native Rust modules need an owned copy of cache topology before CPUs are
+reserved and offlined. The existing cacheinfo structures and accessor are
+already present in generated bindings. Export that accessor for GPL modules
+without introducing a C adapter or changing the cache discovery code.
+Callers must validate the CPU, hold CPU hotplug exclusion while reading, and
+copy the information before releasing it. Offline removes shared membership;
+no returned pointer or cache mask may outlive the protected observation.
+
+--- a/drivers/base/cacheinfo.c
++++ b/drivers/base/cacheinfo.c
+@@ -14,6 +14,7 @@
+ #include <linux/compiler.h>
+ #include <linux/cpu.h>
+ #include <linux/device.h>
++#include <linux/export.h>
+ #include <linux/init.h>
+ #include <linux/of.h>
+ #include <linux/sched.h>
+@@ -36,6 +37,7 @@
+ {
+ 	return ci_cacheinfo(cpu);
+ }
++EXPORT_SYMBOL_GPL(get_cpu_cacheinfo);
+ 
+ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+ 					   struct cacheinfo *sib_leaf)
