@@ -174,7 +174,9 @@ impl kernel::Module for McctrlModule {
             MCCTRL_IHK_IMPORT_STATUS,
             MCCTRL_BINFMT_STATUS,
         );
-        Ok(Self { _processes: processes })
+        Ok(Self {
+            _processes: processes,
+        })
     }
 }
 

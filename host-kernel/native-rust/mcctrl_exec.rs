@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0
 //! Linux executable-file ownership and current-caller credential adaptation.
 
-use core::{mem::{align_of, offset_of, size_of}, ptr::{self, NonNull}, sync::atomic::{AtomicI32, Ordering}};
+use core::{
+    mem::{align_of, offset_of, size_of},
+    ptr::{self, NonNull},
+    sync::atomic::{AtomicI32, Ordering},
+};
 use kernel::{bindings, prelude::*, uaccess::UserSlice};
 
 const PATH_MAX: usize = 4096;
@@ -12,7 +16,9 @@ fn errno(value: i32) -> Error {
 
 fn check_pointer<T>(pointer: *mut T) -> Result<NonNull<T>> {
     let value = pointer as isize;
-    if (-4095..0).contains(&value) { return Err(errno(value as i32)); }
+    if (-4095..0).contains(&value) {
+        return Err(errno(value as i32));
+    }
     NonNull::new(pointer).ok_or(EIO)
 }
 
@@ -20,7 +26,9 @@ fn path_buffer() -> Result<Vec<u8>> {
     // Keep PATH_MAX off the kernel stack. Capacity is allocated once; subsequent
     // pushes cannot grow the allocation and initialize every byte before use.
     let mut bytes = Vec::with_capacity(PATH_MAX, GFP_KERNEL)?;
-    for _ in 0..PATH_MAX { bytes.push(0, GFP_KERNEL)?; }
+    for _ in 0..PATH_MAX {
+        bytes.push(0, GFP_KERNEL)?;
+    }
     Ok(bytes)
 }
 
@@ -46,14 +54,20 @@ impl Executable {
         // SAFETY: The private heap pathname is bounded and NUL-terminated.
         // Linux checks execute permission, regular type, symlinks and noexec.
         let file = check_pointer(unsafe { bindings::open_exec(name.as_ptr().cast()) })?;
-        let mut owned = Self { file, denied: false, _canonical_path: Vec::new() };
+        let mut owned = Self {
+            file,
+            denied: false,
+            _canonical_path: Vec::new(),
+        };
         // The exact pinned open_exec no longer denies writes. Adapt the Linux
         // inline atomic_dec_unless_positive; never wrap a saturated negative
         // count through zero or acquire a denial over an existing writer.
         let counter = owned.write_count();
         let mut value = counter.load(Ordering::Relaxed);
         loop {
-            if value > 0 { return Err(errno(-26)); }
+            if value > 0 {
+                return Err(errno(-26));
+            }
             let next = value.checked_sub(1).ok_or_else(|| errno(-75))?;
             match counter.compare_exchange_weak(value, next, Ordering::SeqCst, Ordering::Relaxed) {
                 Ok(_) => break,
@@ -69,9 +83,16 @@ impl Executable {
         let resolved = check_pointer(unsafe {
             bindings::d_path(path, name.as_mut_ptr().cast(), name.len() as i32)
         })?;
-        let begin = (resolved.as_ptr() as usize).checked_sub(name.as_ptr() as usize).ok_or(EIO)?;
-        if begin >= name.len() { return Err(EIO); }
-        let length = name[begin..].iter().position(|&byte| byte == 0).ok_or(EIO)?;
+        let begin = (resolved.as_ptr() as usize)
+            .checked_sub(name.as_ptr() as usize)
+            .ok_or(EIO)?;
+        if begin >= name.len() {
+            return Err(EIO);
+        }
+        let length = name[begin..]
+            .iter()
+            .position(|&byte| byte == 0)
+            .ok_or(EIO)?;
         name.copy_within(begin..begin + length + 1, 0);
         name.truncate(length + 1);
         owned._canonical_path = name;
@@ -111,12 +132,22 @@ pub(super) fn credentials(argument: usize) -> Result<isize> {
     let values: [u32; 8] = unsafe {
         let task = bindings::get_current();
         let cred = ptr::addr_of!((*task).cred).read();
-        [(*cred).uid.val, (*cred).euid.val, (*cred).suid.val, (*cred).fsuid.val,
-         (*cred).gid.val, (*cred).egid.val, (*cred).sgid.val, (*cred).fsgid.val]
+        [
+            (*cred).uid.val,
+            (*cred).euid.val,
+            (*cred).suid.val,
+            (*cred).fsuid.val,
+            (*cred).gid.val,
+            (*cred).egid.val,
+            (*cred).sgid.val,
+            (*cred).fsgid.val,
+        ]
     };
     // The existing Rust helper writes precisely eight 32-bit raw kernel IDs.
     // Keep its EFAULT result and do not reinterpret compat as native-long data.
-    UserSlice::new(argument, size_of::<[u32; 8]>()).writer().write(&values)?;
+    UserSlice::new(argument, size_of::<[u32; 8]>())
+        .writer()
+        .write(&values)?;
     Ok(0)
 }
 
