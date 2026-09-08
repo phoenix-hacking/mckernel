@@ -26,6 +26,12 @@ native unification is still open. The next steps are recorded in
 
 ## Architecture and implementation priority
 
+The next native application boundary is mapped in
+[the application service plan](native-application-service-plan.md). It retains
+the existing launcher and compatibility helpers while adapting the native OS
+file/module lifetime and assigned-topology query path. Actual guest readiness
+and sysfs now have separate runtime evidence; application execution remains open.
+
 The user confirmed the intended architecture: Rocky Linux supplies a Linux 6.x
 control kernel with Rust support, and the existing Rust-heavy McKernel supplies
 the HPC co-kernel. The current native target uses the pinned Rocky-derived

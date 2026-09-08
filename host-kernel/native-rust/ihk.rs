@@ -25,6 +25,9 @@ mod page_allocator;
 #[allow(dead_code)]
 mod page_owner_registry;
 mod os_runtime;
+mod os_service;
+#[path = "abi/os_service.rs"]
+mod service_abi;
 
 use core::sync::atomic::{AtomicPtr, Ordering};
 

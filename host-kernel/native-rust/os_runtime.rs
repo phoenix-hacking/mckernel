@@ -93,19 +93,19 @@ fn check_pointer<T>(value: *mut T) -> Result<*mut T> {
 }
 
 #[must_use = "the module reference must remain owned until OS destruction"]
-struct ProviderModule(*mut bindings::module);
+pub(super) struct ProviderModule(*mut bindings::module);
 
 impl ProviderModule {
     /// # Safety
-    /// `module` must point to the calling SMP module, already pinned by its
-    /// open control file throughout this call. It must not be a userspace value.
-    // SAFETY: Callers must hold a Linux reference to this valid module pointer
-    // while acquire attempts to obtain a separately owned reference.
-    unsafe fn acquire(module: *mut bindings::module) -> Result<Self> {
+    /// `module` must be a valid Linux module pointer whose allocation remains
+    /// live throughout this call. A pinned control file or a registration lock
+    /// excluding the owner's unregister/exit supplies that lifetime. It must
+    /// never be a userspace value. A going-away module may refuse acquisition.
+    pub(super) unsafe fn acquire(module: *mut bindings::module) -> Result<Self> {
         if module.is_null() {
             return Err(EINVAL);
         }
-        // SAFETY: The caller supplies its currently pinned Linux module.
+        // SAFETY: The caller keeps this Linux module allocation live for the call.
         if !unsafe { try_module_get(module.cast()) } {
             return Err(EBUSY);
         }
@@ -116,7 +116,7 @@ impl ProviderModule {
 impl Drop for ProviderModule {
     fn drop(&mut self) {
         // SAFETY: This unique owner balances one successful try_module_get.
-        // The caller's control-file reference remains live during destruction.
+        // No callback into that module may continue after this final put.
         unsafe { module_put(self.0.cast()) };
     }
 }
@@ -218,10 +218,13 @@ struct OsObject {
 
 /// Owns the Linux character-device family. OS minors remain 0..64 even though
 /// the allocated Linux major is dynamic. Only live instances get device nodes.
-pub(crate) struct OsDeviceFamily;
+pub(crate) struct OsDeviceFamily {
+    _services: super::os_service::Registry,
+}
 
 impl OsDeviceFamily {
     pub(crate) fn register() -> Result<Self> {
+        let services = super::os_service::Registry::new()?;
         // SAFETY: The operations and name reside in ihk.ko; .owner pins it for
         // every callback. Linux allocates a major for exactly 64 minor numbers.
         let major = unsafe {
@@ -254,7 +257,7 @@ impl OsDeviceFamily {
         OS_MAJOR.store(major as u32, Ordering::Release);
         OS_CLASS.store(class, Ordering::Release);
         pr_info!("os_family=registered minors=64\n");
-        Ok(Self)
+        Ok(Self { _services: services })
     }
 }
 
@@ -575,6 +578,13 @@ pub(crate) unsafe extern "C" fn ihk_os_with_kobject_v1(
     result.unwrap_or_else(|error| error.to_errno())
 }
 
+// Fields drop in declaration order: the service closes while its exact OS
+// lease still prevents destruction, minor reuse and provider module release.
+struct OsFile {
+    service: Pin<Box<Mutex<Option<super::os_service::FileService>>>>,
+    lease: OsLease<'static>,
+}
+
 // SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by
 // .owner. Successful open installs exactly one owned lease in private_data.
 unsafe extern "C" fn os_open(inode: *mut bindings::inode, file: *mut bindings::file) -> i32 {
@@ -587,13 +597,17 @@ unsafe extern "C" fn os_open(inode: *mut bindings::inode, file: *mut bindings::f
         Ok(lease) => lease,
         Err(error) => return error.errno(),
     };
-    let lease = match Box::new(lease, GFP_KERNEL) {
-        Ok(lease) => lease,
+    let service = match Box::pin_init(new_mutex!(None), GFP_KERNEL) {
+        Ok(service) => service,
+        Err(_) => return -12,
+    };
+    let context = match Box::new(OsFile { service, lease }, GFP_KERNEL) {
+        Ok(context) => context,
         Err(_) => return -12,
     };
     // SAFETY: Linux gives this open callback exclusive initialization of the
     // new file. Failure above drops the lease before leaving private_data alone.
-    unsafe { (*file).private_data = Box::into_raw(lease).cast() };
+    unsafe { (*file).private_data = Box::into_raw(context).cast() };
     0
 }
 
@@ -603,9 +617,9 @@ unsafe extern "C" fn os_release(_inode: *mut bindings::inode, file: *mut binding
     // SAFETY: This is the exact Box installed by a successful os_open, reclaimed
     // once. Linux excludes concurrent use at final file release.
     unsafe {
-        let lease = (*file).private_data.cast::<OsLease<'static>>();
+        let context = (*file).private_data.cast::<OsFile>();
         (*file).private_data = ptr::null_mut();
-        drop(Box::from_raw(lease));
+        drop(Box::from_raw(context));
     }
     0
 }
@@ -642,7 +656,8 @@ unsafe fn os_request(
     compat: bool,
 ) -> core::ffi::c_long {
     // SAFETY: Successful open installed this live Box; release cannot overlap.
-    let lease = unsafe { &*((*file).private_data.cast::<OsLease<'static>>()) };
+    let context = unsafe { &*((*file).private_data.cast::<OsFile>()) };
+    let lease = &context.lease;
     if matches!(command, IHK_OS_STATUS | IHK_OS_QUERY_STATUS) {
         let dispatcher = IhkIoctlDispatcher::new(&OS_REGISTRY);
         return match dispatcher.dispatch_os(lease.handle(), command, 0) {
@@ -656,6 +671,32 @@ unsafe fn os_request(
     // SAFETY: The immutable file lease keeps this generation's published
     // object and its provider module owner live throughout the callback.
     let object = unsafe { &*object };
+    if super::service_abi::handles(command) {
+        // No OS operation lock may cross a blocking application callback. The
+        // lease prevents destruction; shutdown still needs a separate drain.
+        match OS_REGISTRY.snapshot(handle) {
+            Ok(snapshot) if matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) => {}
+            Ok(_) => return EBUSY.to_errno() as core::ffi::c_long,
+            Err(error) => return error.errno() as core::ffi::c_long,
+        }
+        let (callback, service_context) = {
+            let mut service = context.service.lock();
+            if service.is_none() {
+                match super::os_service::FileService::open(handle.minor() as u32, handle.generation()) {
+                    Ok(attached) => *service = Some(attached),
+                    Err(error) => return error.to_errno() as core::ffi::c_long,
+                }
+            }
+            // SAFETY: Published service ownership cannot change until final
+            // file release. Linux pins this file for the entire ioctl below.
+            unsafe { service.as_ref().unwrap().borrowed_call() }
+        };
+        // SAFETY: The file owns the context and module pin; publication guards
+        // have ended. The argument is only a borrowed user value for this call.
+        let status = unsafe { callback(service_context, command, argument, u32::from(compat)) };
+        return if status < -4095 { EIO.to_errno() as core::ffi::c_long }
+            else { status as core::ffi::c_long };
+    }
     let _operation = object.operations.lock();
     // Resource assignment is restricted to the initial, unbooted state. Future
     // load/boot transitions must take this same operation lock before changing
@@ -755,6 +796,40 @@ const OS_FOPS: bindings::file_operations = {
         operations.compat_ioctl = Some(os_compat_ioctl);
     }
     operations
+};
+
+/// Query only the running OS's retained topology, never a user pointer.
+#[export_name = "ihk_os_topology_query_v1"]
+pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32) -> i64 {
+    let result = (|| -> Result<i64> {
+        if !super::service_abi::topology_query(command) { return Err(EINVAL); }
+        let handle = OS_REGISTRY.resolve_minor(slot as usize).map_err(|error| errno(error.errno()))?;
+        if handle.generation() != generation { return Err(errno(-116)); }
+        let _lease = OS_REGISTRY.acquire(handle).map_err(|error| errno(error.errno()))?;
+        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        assert!(!raw.is_null());
+        // SAFETY: The exact-generation lease excludes object and backend release.
+        let object = unsafe { &*raw };
+        let _operation = object.operations.lock();
+        let snapshot = OS_REGISTRY.snapshot(handle).map_err(|error| errno(error.errno()))?;
+        if !matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) { return Err(EBUSY); }
+        let backend = object.backend.ok_or(ENODEV)?;
+        // SAFETY: Reuse the versioned backend under its original operation lock
+        // and module/OS owners. These two scalar commands ignore argument zero.
+        let value = unsafe { (backend.ioctl)(slot, generation, command, 0, 0) };
+        if value < -4095 || value > i32::MAX as i64 { return Err(EIO); }
+        Ok(value)
+    })();
+    result.unwrap_or_else(|error| error.to_errno() as i64)
+}
+
+// SAFETY: Immutable module-resident relocation for Linux modpost.
+#[export_name = "__export_symbol_ihk_os_topology_query_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static TOPOLOGY_QUERY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: topology_query as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

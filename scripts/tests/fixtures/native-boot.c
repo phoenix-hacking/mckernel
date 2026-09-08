@@ -190,6 +190,11 @@ int main(void)
     require(mem_one(control, MEM_RESERVE, 128 * MIB, 0) == 0);
     require(call(SYS_IOCTL, control, OS_CREATE, 0) == 0);
     int os = open_os(0);
+#if defined(NATIVE_MCCTRL_SERVICE)
+    require(call(SYS_IOCTL, os, 0x30a02907, 0) == -EBUSY);
+    require(call(SYS_IOCTL, os, 0x30a0290c, 0) == -EBUSY);
+    message("NATIVE_MCCTRL_PREREADY " ARCH_LABEL " PASS rejected=2\n");
+#endif
     require(call(SYS_IOCTL, os, OS_KARGS, (long)"hidos") == 0);
     require(request(os, OS_ASSIGN_CPU, assigned, 1) == 0);
     require(mem_one(os, OS_ASSIGN_MEM, 128 * MIB, 0) == 0);
