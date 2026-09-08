@@ -34450,3 +34450,24 @@ in both lifetimes. All 2,560 concurrent scalar reads, 128 claim races, capacity/
 alias/reuse checks, two callback/mapping drains and six joined workers pass.
 No first failure occurs in this boundary follow-up. Next repeat actual starts
 with module 3, retain the boundary evidence and keep the full goal active.
+
+Both final actual-start regressions PASS with snooping module attempt 3.
+Commands: mckernel-container native python3 -B /work/run-native-sysfs-snoop-start.py x86_64 3 2
+and mckernel-container native python3 -B /work/run-native-sysfs-snoop-start.py i386 3 2
+Both retain BOOT=0/registry Ready=4 and physical status 3 in four independently
+validated captures, with 260 completed real callbacks and all 128 guest store
+payloads checked. The McKernel image remains unchanged at revision 3; the
+online store still acknowledges/logs bytes without changing its value.
+Retention command: mckernel-container native python3 -B /work/retain-native-sysfs-snoop-boundary.py 1
+PASS: four complete new captures in 16 artifacts, 44 current source/compiler
+bindings, three exact pinned-format replays, four prior manifests and the
+original Linux bitmap implementation. The earlier failed guest stays retained
+through those references. Copied artifacts pass SHA-256 and full gzip checks.
+See docs/verification/native-sysfs-snoop-boundary-checkpoint-20260908.json.
+Current input is native-sysfs-snoop-module-20260908-3; retain the established
+kernel/image/setup dependencies. Host/scratch checks show about 143/31 GiB free.
+No McKernel verification guest or build remains after retention. Direct actual guest snooping,
+mkdir/unlink/release and continuing metadata/queue/task failure coverage, native
+application services, multi-CPU/multi-OS operation, shutdown and the full
+Rust/assembly, declared integration and independent acceptance scope remain
+open. Production gate accounting is unchanged; this turn made verified progress.

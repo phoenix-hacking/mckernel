@@ -1,5 +1,27 @@
 # Native sysfs integration
 
+## Verified exact-capacity output, 2026-09-08
+
+Module attempt 3 and Linux guest attempt 3 pass the bitmap boundary correction.
+Each legacy comparison now also tests an output slice ending exactly at the
+last text byte and another one byte too short. Across both module lifetimes,
+274 C format comparisons and 274 exact-capacity comparisons pass; all 274 short
+outputs are rejected. A real 14,560-bit sysfs mask returns exactly 4,095 bytes,
+matching independently constructed userspace hex groups. Both writes through
+this writable-mode snooping file return the original ENOSPC. The 2,560 concurrent
+scalar reads, 128 claim collisions, capacity/alias/reuse checks, two callback/
+mapping drains and six joined workers also pass again.
+
+Both actual startups pass with module 3, attempt 2 for each ABI: BOOT=0,
+registry Ready=4, four physical status-3 captures and 260 real callbacks.
+`native-sysfs-snoop-boundary-checkpoint-20260908.json` retains 16 artifacts,
+44 current compiler bindings, three exact format replays and pinned Linux's
+bitmap implementation. Its references preserve the earlier failed guest.
+Use `native-sysfs-snoop-module-20260908-3` for new native checks. The diagnostic
+mapping fixture does not grant IHK authority; direct guest special operations,
+remaining metadata/failure paths, applications, shutdown and the full declared
+language/integration/acceptance scope remain required. No gate is promoted.
+
 ## Snooping and mapping verification decision, 2026-09-08
 
 Module attempt 2 and Linux guest attempt 2 now pass. Two module lifetimes
@@ -13,12 +35,12 @@ native-sysfs-snoop-checkpoint-20260908.json for 19 artifacts, 44 source/compiler
 bindings, three exact pinned-format replays and the failed first guest.
 The diagnostic carriers do not grant IHK authority.
 
-Follow-up from pinned Linux source review: bitmap_print_to_buf copies at most
+The follow-up above comes from pinned Linux source review: bitmap_print_to_buf copies at most
 the requested count from a formatted string plus NUL. Complete text can end
 exactly at the supplied output length, with its newline present and NUL omitted.
-The current Snoop wrongly requires both bytes. Add exact-capacity versus truly
-truncated comparisons against the retained C oracle, accept a final newline
-without NUL, and retain explicit rejection when the newline is missing.
+The initial Snoop wrongly required both bytes. The corrected adapter accepts
+a final newline without NUL and still rejects missing-newline truncation;
+the oracle-derived capacity checks and real full-size reads above verify it.
 
 The first Linux fixture exposes a missing operation-specific store override:
 the generic native AttributeOps default returns EIO, while the existing

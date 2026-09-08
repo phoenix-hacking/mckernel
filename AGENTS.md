@@ -76,7 +76,25 @@ use fresh attempt names; restore historical captures from Git when needed.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Snooping/mapping checkpoint, 2026-09-08: module attempt 2 builds
+Bitmap boundary checkpoint, 2026-09-08: module attempt 3 and Linux guest
+attempt 3 pass. Complete output ending exactly at its newline is accepted
+without requiring a copied NUL. Both lifetimes pass 274 C format comparisons,
+274 exact-capacity comparisons, 274 truncated-output rejections, two real
+4,095-byte bitmap reads and two Linux ENOSPC store checks. All earlier scalar,
+claim/capacity/alias and callback/mapping retirement checks pass again. Both
+actual starts also pass with module 3 (attempt 2 for each ABI), including four
+physical status-3 captures and 260 real callbacks. See
+docs/verification/native-sysfs-snoop-boundary-checkpoint-20260908.json for 16
+artifacts, 44 current source/compiler bindings, three exact format replays and
+references to all earlier failures. Preserve native-sysfs-snoop-module-20260908-3
+as the current module input. Its kernel/image/setup dependencies remain the
+established pinned ones. The container resource limits remain unchanged.
+Next exercise real guest special operations, mkdir/unlink/release and continuing
+packet/metadata failure paths, then native application service integration.
+Multi-CPU/multi-OS operation, applications, shutdown, current full-suite and
+the full Rust/assembly and production acceptance scope remain open.
+
+Prior snooping/mapping checkpoint, 2026-09-08: module attempt 2 builds
 all three production modules and separate Rust/C verification modules. Guest
 attempt 2 passes two module lifetimes: 272 exact legacy-format comparisons,
 2,560 concurrent scalar reads, 128 two-task claim collisions, 66-slot request
@@ -93,10 +111,8 @@ four physical status-3 captures and 260 real callbacks with checked write
 payloads. See docs/verification/native-sysfs-snoop-checkpoint-20260908.json:
 19 artifacts, 44 current source/compiler bindings, three pinned-format replays
 and the full first guest failure. Direct real-guest snooping/metadata failure
-coverage remains open. Final review also identifies a remaining bitmap output
-boundary: Linux can fill the output exactly through its newline without copying
-NUL; the current Snoop rejects that complete text. Verify and correct that edge
-before claiming complete bitmap-output parity.
+coverage remains open. The subsequent bitmap boundary checkpoint above corrects
+and verifies the exact-capacity issue found in this initial source review.
 
 Continuing service checkpoint, 2026-09-08: both actual startup interfaces now
 reach full McKernel readiness. BOOT returns 0, the native registry is Ready=4,
