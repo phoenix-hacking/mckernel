@@ -24,18 +24,33 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Native sysfs object WIP: the missing Rust directory/file/link owners now build
-against the pinned Linux, with all 21 generated layout values matching an
-independent C witness and passing ELF/no-SIMD checks. Module attempt 4 adds
-shared Rust Arc/mutex ownership to serialize parent removal against file/link
-operations. Guest 3 exercises reads/writes and drains an active callback, then
-fails the fixture's removed-file seek expectation; the corrected probe checks
-the pinned kernfs ENODEV behavior. Earlier static-libc and initramfs failures
-are recorded in `kernel.log`. The corrected runtime replay is next. See
-`docs/verification/native-sysfs-integration-plan.md` for the existing Rust reuse
-map and remaining OS-device, tree, topology and request-dispatch integration.
-The new objects currently have a disposable module consumer only. Neither
-SYSFS_REQ_SETUP completion nor a new McKernel boot milestone is claimed.
+Native sysfs object checkpoint (2026-09-07 local date): the actual Rust
+directory/file/link owners now pass two disposable Linux module lifetimes.
+All 21 generated layout values match an independent C witness; final module 5
+passes compilation and ELF/no-SIMD checks. Rust Arc/mutex state serializes
+direct parent removal against file/link operations, as required by the pinned
+Linux sysfs implementation. Linux's existing target lock protects symlink
+targets without taking a second Rust namespace lock.
+
+Final guest 5 passes 1,024 concurrent writes and reads, 32 races between parent
+and file retirement with 64 joined kernel threads, failed duplicate directory/
+file/link publication, invalid names, replacement-tree survival, numeric/error
+and callback byte-count checks. Both module removals observe an active callback
+and wait for it; all Value payloads retire and the namespace disappears. The
+pinned kernfs rejects seek on an already-open removed file with ENODEV.
+See `docs/verification/native-sysfs-objects-checkpoint-20260907.json` for
+27 hash-verified artifacts and complete gzip checks, including the static-libc
+failure, two initramfs preparation/execution failures and the initial removed-
+file seek expectation failure. Earlier failed attempts remain FAIL.
+
+The current consumer is the disposable verification module. Next attach these
+owners to the actual generation-owned mcos device and adapt the existing Rust
+tree, setup files/topology and request dispatch described in
+`docs/verification/native-sysfs-integration-plan.md`. No actual McKernel
+SYSFS_REQ_SETUP response has completed; its boot still stops at that request.
+Continuing host services, full ready status, application launch/tests, native
+shutdown, full Rust/assembly completion and production integration/acceptance
+remain open. No production gate credit or new McKernel boot milestone.
 
 Native vDSO service checkpoint (2026-09-07 local date): both actual-start ABIs
 now complete the versioned 128-byte exchange. Independent QMP captures match

@@ -3,9 +3,9 @@
 
 use core::{
     mem::{align_of, offset_of, size_of},
-    sync::atomic::{AtomicU64, AtomicUsize, Ordering},
+    sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering},
 };
-use kernel::{bindings, prelude::*};
+use kernel::{bindings, prelude::*, sync::Arc};
 
 #[path = "../../../host-kernel/native-rust/sysfs_objects.rs"]
 mod sysfs_objects;
@@ -136,6 +136,113 @@ impl AttributeOps for Value {
 
 struct Active;
 
+enum RetireObject {
+    Directory(Directory),
+    File(File<Value>),
+}
+
+impl RetireObject {
+    fn retire(self) {
+        match self {
+            Self::Directory(object) => drop(object),
+            Self::File(object) => drop(object),
+        }
+    }
+}
+
+struct RetireJob {
+    object: Option<RetireObject>,
+    start: Arc<AtomicBool>,
+    entered: Arc<AtomicBool>,
+}
+
+// SAFETY: start_retire_thread transfers exactly one Box to this callback.
+// Module initialization joins every started thread before returning. Workers
+// stay alive until kthread_stop, so their task pointers cannot retire early.
+unsafe extern "C" fn retire_thread(data: *mut core::ffi::c_void) -> i32 {
+    let mut job = unsafe { Box::from_raw(data.cast::<RetireJob>()) };
+    job.entered.store(true, Ordering::Release);
+    while !job.start.load(Ordering::Acquire) && !unsafe { bindings::kthread_should_stop() } {
+        unsafe { bindings::msleep(1) };
+    }
+    job.object.take().unwrap().retire();
+    while !unsafe { bindings::kthread_should_stop() } {
+        unsafe { bindings::msleep(1) };
+    }
+    0
+}
+
+struct RetireThread(*mut bindings::task_struct);
+
+impl Drop for RetireThread {
+    fn drop(&mut self) {
+        // SAFETY: The worker entered its callback before this owner was
+        // returned and remains alive until this unique stop/join call.
+        assert_eq!(unsafe { bindings::kthread_stop(self.0) }, 0);
+    }
+}
+
+fn start_retire_thread(object: RetireObject, start: Arc<AtomicBool>) -> Result<RetireThread> {
+    let entered = Arc::new(AtomicBool::new(false), GFP_KERNEL)?;
+    let job = Box::new(
+        RetireJob {
+            object: Some(object),
+            start,
+            entered: entered.clone(),
+        },
+        GFP_KERNEL,
+    )?;
+    let data = Box::into_raw(job);
+    // SAFETY: Linux starts only the resident callback with its owned Box.
+    // NUMA_NO_NODE is -1 and the name is a constant variadic format.
+    let task = unsafe {
+        bindings::kthread_create_on_node(
+            Some(retire_thread),
+            data.cast(),
+            -1,
+            kernel::c_str!("mck-sysfs-test").as_char_ptr(),
+        )
+    };
+    if (-4095..0).contains(&(task as isize)) {
+        // SAFETY: An error pointer means Linux never started the callback.
+        unsafe { drop(Box::from_raw(data)) };
+        return Err(kernel::error::to_result(task as isize as i32)
+            .err()
+            .unwrap_or(EIO));
+    }
+    assert!(!task.is_null());
+    unsafe { bindings::wake_up_process(task) };
+    // Establish callback entry before kthread_stop can skip execution. The
+    // outer disposable-guest deadline bounds an unexpected scheduler failure.
+    while !entered.load(Ordering::Acquire) {
+        unsafe { bindings::msleep(1) };
+    }
+    Ok(RetireThread(task))
+}
+
+fn namespace_races(root: &Directory) -> Result {
+    for _ in 0..16 {
+        let directory = Directory::new(Some(root), kernel::c_str!("race"))?;
+        let file = File::new(
+            &directory,
+            kernel::c_str!("value"),
+            0o444,
+            Value::new(false, false),
+        )?;
+        let start = Arc::new(AtomicBool::new(false), GFP_KERNEL)?;
+        let parent_thread = start_retire_thread(RetireObject::Directory(directory), start.clone())?;
+        let file_thread = start_retire_thread(RetireObject::File(file), start.clone())?;
+        start.store(true, Ordering::Release);
+        drop(parent_thread);
+        drop(file_thread);
+        assert_eq!(LIVE.load(Ordering::Relaxed), 0);
+        // Both retirements finished. The name must be immediately reusable.
+        drop(Directory::new(Some(root), kernel::c_str!("race"))?);
+    }
+    pr_info!("MCKERNEL_SYSFS_VERIFY namespace_races=16 joined=32\n");
+    Ok(())
+}
+
 impl AttributeOps for Active {
     fn show(&self, output: &mut [u8]) -> Result<usize> {
         output[0] = b'0' + ACTIVE.load(Ordering::Acquire).min(9) as u8;
@@ -174,6 +281,7 @@ impl kernel::Module for SysfsVerify {
             );
         }
         assert_eq!(LIVE.load(Ordering::Relaxed), 0);
+        namespace_races(&root)?;
         let child = Directory::new(Some(&root), kernel::c_str!("child"))?;
         pr_info!("MCKERNEL_SYSFS_VERIFY expected_duplicate_begin\n");
         assert_eq!(

@@ -84,3 +84,40 @@ removal after that point. Symlink targets use Linux's existing separate target
 lock, avoiding a second Rust namespace lock for reciprocal/same-directory
 links. Callback code must not remove itself/ancestors or require its removal
 lock. The real callback-drain fixture is repeated against this revision.
+
+## Verified object checkpoint, 2026-09-07 local date
+
+Final module 5 passes compilation, formatting, the 21-value independent C/Rust
+layout witness and ELF/no-SIMD checks. Final guest 5 uses the unchanged pinned
+Linux kernel, four TCG vCPUs and two NUMA nodes inside the established container.
+Across two module lifetimes it passes 1,024 concurrent reads and writes and
+32 races between actual directory/file destructors using 64 joined Linux
+kernel threads. Failed duplicate directory/file/link creation preserves the
+original nodes. Invalid names are rejected, and deleting an old parent before
+its descendants does not remove a replacement subtree with the same names.
+
+The user probe verifies exact file modes, symlink resolution, initial and
+maximum-u64 values, malformed/overflowing writes and callback count overflow.
+Each module removal observes an active slow callback and blocks until it exits;
+then all Value callback payloads retire and the namespace disappears. An
+already-open removed file rejects seek with ENODEV, exactly as the pinned
+`fs/kernfs/file.c::kernfs_fop_llseek` requires. The final observed drain times
+are 1,138 and 1,078 ms; these are fixture observations, not performance claims.
+
+Four first failures remain preserved: the user fixture's missing static libc,
+an incorrect BusyBox assumption in the new initramfs helper, loss of executable
+permission on its copied dynamic loader, and an incorrect expectation that seek
+would succeed after file removal. The first two guest attempts never execute
+the object module. Guest 3 reaches real callback retirement before its fixture
+assertion fails. Guests 4/5 pass; guest 5 adds the concurrent destructor races.
+Linux intentionally emits duplicate-name diagnostic stacks during the negative
+tests. The evidence validator requires every such stack to occur inside the
+explicit duplicate-test spans and rejects unexpected diagnostics outside them.
+
+`native-sysfs-objects-checkpoint-20260907.json` binds 27 retained artifacts,
+the exact final production/test compiler inputs and the previous kernel/vDSO
+evidence. All input/output hashes and gzip streams verify. This proves the
+object boundary through its disposable module consumer. Allocation-pressure
+fault injection and a complete OS lifecycle are not covered. Actual OS-device
+binding, native tree/path/handle behavior, topology/setup files, owned shared
+buffers and SYSFS_REQ_SETUP completion remain the next integration work.
