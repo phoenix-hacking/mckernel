@@ -1161,3 +1161,53 @@ the fixed guest environment. Follow with scheduled-process cleanup, independent
 dead-worker reaping, START and the unchanged launcher baseline. These additions
 are implementation work toward the existing readiness criteria; no procfs or
 application acceptance follows from compiling an unused protocol constructor.
+
+## Live root procfs service verified, 2026-09-08
+
+The native SMP production crate now selects procfs_objects.rs and the live
+smp_procfs.rs service. It reuses the original selected guest procfs body and
+traditional Exchange, with MCPR0001 required for terminal retirement. Each open
+reserves one of 64 slots and its Linux request/data owners; snapshot reads keep
+checked guest buffer chains (at most 1,024 pages per open) until release. Shared
+Memory claims exclude queue/sysfs/syscall/CREATE aliases. Successful release
+publication retires read claims under that same ledger before guest reuse;
+queue-full preserves them. Interrupted or closed callers cannot free pending
+request pages. Unknown retirement quarantines storage. Metadata overflow fails
+and retains started ownership without acknowledging CREATE or blocking later
+answers needed by namespace rundown.
+
+Each existing application Entry now retains its procfs identity, trusted UID/GID
+and prepared CPU. PID/TID node publication, real CREATE completion and advisory
+DELETE are compiled into the continuing service. Callback payloads retain the
+independent remote owner, never the application registry or namespace. Process
+close schedules namespace rundown on the metadata worker, while the packet
+worker drains replies and release requests. START and scheduled cleanup remain
+unavailable; these process paths are not yet runtime-proven.
+
+Native module attempt 3 and x86_64 guest attempt 2 pass. The actual root files
+return cpu0 and the guest version through 194 real snapshot requests and 194
+terminal releases. The guest verifies 64-open capacity/exhaustion/recovery,
+128 repeated opens, copy-fault position preservation, partial I/O, pread/seek,
+and duplicate-fd shared position. All 388 answers have distinct exchange tokens,
+zero errno and no quarantine; checked page counts fall from one to zero on each
+release. Both physical boot captures, prepared-image/memory proof, unscheduled
+cleanup evidence and the original idle-wait/process/credential/file/sysfs checks
+pass. QEMU exits 0 after normal guest poweroff.
+
+Original module failures 1-2 and guest failure 1 remain retained. The first guest
+passed its Linux probes but its host verifier expected the old absolute packet
+totals. The corrected verifier first proves all 388 added procfs exchanges, then
+requires exact total counts (464,465) and the unchanged application remainder
+(76,77); prepared-image remainder stays 74, later cleanup stays (2,3), and the
+original physical TID-zero deletion proof remains present. No assertion is
+removed or relaxed. Full evidence is indexed by
+native-procfs-service-checkpoint-20260908.json; the earlier source/module WIP
+checkpoint was pushed and independently verified as 379f6423.
+
+This is live root procfs evidence, not full procfs or application acceptance.
+Remaining coverage includes PID/TID CREATE/DELETE, direct mem/pagemap I/O,
+interrupted live procfs operations and malformed/alias requests. Finish scheduled
+cleanup and independent dead-worker reaping, connect START and test the unchanged
+launcher, then prove those paths alongside the documented application smoke
+baseline. No McKernel application instruction has executed. Preserve every
+current/failed capture and continue periodic verified GitHub checkpoints.

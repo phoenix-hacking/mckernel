@@ -25,9 +25,10 @@ remaining production or Rust/assembly obligation before ending the active goal.
 Those obligations remain tracked for subsequent work. Existing isolation,
 failure-recording, Rust preservation, disk cleanup and periodic GitHub
 checkpoint requirements continue to apply throughout the current phase.
-No native application has executed at this checkpoint. Syscall ownership and
-WAIT/RET are connected and idle waits are guest-tested; live request delivery,
-START, procfs and scheduled-process cleanup are still pending.
+No native application has executed at this checkpoint. Live root procfs now
+passes actual guest reads/releases and idle WAIT/RET remains guest-tested.
+PID/TID procfs and direct I/O coverage, live syscall delivery, START and
+scheduled-process cleanup are still pending.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 
@@ -194,6 +195,29 @@ other projects, VM disks, recent host logs and Docker state remain intact.
 Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
+
+Latest live root procfs checkpoint, 2026-09-08:
+`docs/verification/native-procfs-service-checkpoint-20260908.json` retains the
+connected production service, original module failures 1-2, passing module 3,
+original guest accounting failure 1 and passing actual x86_64 guest 2. Root
+procfs passes 194 real snapshots and 194 terminal releases, 64-slot exhaustion
+and recovery, 128 repeated opens, partial/duplicate/seek and copy-fault checks.
+All 388 replies validate unique tokens, zero errors and exact buffer retirement.
+Existing physical boot/image/unscheduled-cleanup and idle WAIT/RET regressions
+pass; QEMU exits 0 after normal poweroff. The added traffic is explicitly
+verified before preserving the original application packet-count remainders.
+
+Existing application Entries retain procfs contexts; PID/TID publication,
+CREATE completion, advisory DELETE and independent namespace removal compile.
+Those process paths, direct I/O, interruptions and malformed requests still need
+live coverage. Scheduled cleanup and independent dead-worker reaping must be
+finished before START and the unchanged launcher baseline. No application has
+executed. Do not announce Ultra readiness yet. Preserve current module 3, both
+new guest captures, all original failures and previous active image/compiler
+inputs. The standalone service is now connected; the old temporary procfs
+constructor dead-code allowance has been removed. Continue verified GitHub
+checkpoints and audited disk maintenance; no formal acceptance score changes.
+
 
 Latest actual procfs-image regression checkpoint, 2026-09-08:
 `docs/verification/native-procfs-images-checkpoint-20260908.json` retains the
