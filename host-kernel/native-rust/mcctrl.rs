@@ -16,7 +16,11 @@ use mcctrl_process::Context as FileContext;
 
 mod mcctrl_exec;
 mod mcctrl_process;
+mod mcctrl_vm;
 mod user_string;
+// Shared byte ABI: SMP and mcctrl intentionally consume different operations.
+#[allow(dead_code)]
+mod application_image;
 
 #[allow(dead_code, unreachable_pub)]
 #[path = "abi/x86_64.rs"]
@@ -94,6 +98,9 @@ unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, co
         abi::MCEXEC_UP_OPEN_EXEC => Some(context.open_executable(argument as usize)),
         abi::MCEXEC_UP_CLOSE_EXEC => Some(context.close_executable()),
         abi::MCEXEC_UP_CREATE_PPD => Some(context.create_process(argument as usize, compat == 1)),
+        abi::MCEXEC_UP_PREPARE_IMAGE => Some(context.prepare_image(argument as usize, compat == 1)),
+        abi::MCEXEC_UP_TRANSFER => Some(context.transfer_image(argument as usize, compat == 1)),
+        abi::MCEXEC_UP_RELEASE_USER_SPACE => Some(context.clear_user_space(argument as usize, compat == 1)),
         _ => None,
     };
     if let Some(result) = operation {

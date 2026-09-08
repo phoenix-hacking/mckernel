@@ -124,12 +124,12 @@ impl Drop for Executable {
     }
 }
 
-pub(super) fn credentials(argument: usize) -> Result<isize> {
+pub(super) fn credential_values() -> [u32; 8] {
     // SAFETY: We are the current syscall task. As documented by current_cred(),
     // no other task can modify its subjective credential pointer, and published
     // UID/GID fields are immutable. Read the pointer once and copy only scalars,
     // before calling any user-copy or other potentially sleeping function.
-    let values: [u32; 8] = unsafe {
+    unsafe {
         let task = bindings::get_current();
         let cred = ptr::addr_of!((*task).cred).read();
         [
@@ -142,7 +142,11 @@ pub(super) fn credentials(argument: usize) -> Result<isize> {
             (*cred).sgid.val,
             (*cred).fsgid.val,
         ]
-    };
+    }
+}
+
+pub(super) fn credentials(argument: usize) -> Result<isize> {
+    let values = credential_values();
     // The existing Rust helper writes precisely eight 32-bit raw kernel IDs.
     // Keep its EFAULT result and do not reinterpret compat as native-long data.
     UserSlice::new(argument, size_of::<[u32; 8]>())
