@@ -71,47 +71,80 @@ impl Registration {
                 &mut context,
             )
         })?;
-        Arc::new(Self {
-            context: NonNull::new(context).ok_or(EIO)?,
-            slot,
-            generation,
-            pid,
-            armed: AtomicBool::new(false),
-            operation,
-            mapping,
-            _pid: identity,
-        }, GFP_KERNEL)
+        Ok(Arc::new(
+            Self {
+                context: NonNull::new(context).ok_or(EIO)?,
+                slot,
+                generation,
+                pid,
+                armed: AtomicBool::new(false),
+                operation,
+                mapping,
+                _pid: identity,
+            },
+            GFP_KERNEL,
+        )?)
     }
 
     pub(super) fn invoke(&self, command: u32, bytes: &mut [u8]) -> Result {
         // SAFETY: This Arc retains the kernel connection through the exclusive
         // byte borrow. The backend copies any published work into its own pages.
-        let status = unsafe { ihk_os_application_invoke_v1(self.context.as_ptr(), command, bytes.as_mut_ptr(), bytes.len()) };
-        if status > 0 || status < -4095 { return Err(EIO); }
+        let status = unsafe {
+            ihk_os_application_invoke_v1(
+                self.context.as_ptr(),
+                command,
+                bytes.as_mut_ptr(),
+                bytes.len(),
+            )
+        };
+        if status > 0 || status < -4095 {
+            return Err(EIO);
+        }
         kernel::error::to_result(status as i32).map(|_| ())
     }
 
     fn prepare_image(self: &Arc<Self>, argument: usize, compat: bool) -> Result<isize> {
-        if compat { return Err(kernel::error::to_result(-95).unwrap_err()); }
+        if compat {
+            return Err(kernel::error::to_result(-95).unwrap_err());
+        }
         // This is an operation serializer, not a publication/OS lock. The
         // continuing service and VM faults do not need it to make progress.
         let _operation = self.operation.lock();
-        if self.mapping.lock().is_some() { return Err(EBUSY); }
+        if self.mapping.lock().is_some() {
+            return Err(EBUSY);
+        }
         let mut header = zero_bytes(image::HEADER)?;
-        UserSlice::new(argument, header.len()).reader().read_slice(&mut header)?;
+        UserSlice::new(argument, header.len())
+            .reader()
+            .read_slice(&mut header)?;
         let descriptor = image::descriptor_bytes(&header).map_err(errno)?;
         let args = image::word(&header, image::ARGS_LEN).map_err(errno)? as usize;
         let envs = image::word(&header, image::ENVS_LEN).map_err(errno)? as usize;
-        if !(16..=image::MAX_FLAT_BYTES).contains(&args) || !(16..=image::MAX_FLAT_BYTES).contains(&envs) { return Err(errno(-7)); }
-        let total = descriptor.checked_add(args).and_then(|n| n.checked_add(envs)).ok_or(errno(-75))?;
+        if !(16..=image::MAX_FLAT_BYTES).contains(&args)
+            || !(16..=image::MAX_FLAT_BYTES).contains(&envs)
+        {
+            return Err(errno(-7));
+        }
+        let total = descriptor
+            .checked_add(args)
+            .and_then(|n| n.checked_add(envs))
+            .ok_or(errno(-75))?;
         let mut bytes = zero_bytes(total)?;
         bytes[..image::HEADER].copy_from_slice(&header);
-        UserSlice::new(argument.checked_add(image::HEADER).ok_or(errno(-75))?, descriptor - image::HEADER)
-            .reader().read_slice(&mut bytes[image::HEADER..descriptor])?;
+        UserSlice::new(
+            argument.checked_add(image::HEADER).ok_or(errno(-75))?,
+            descriptor - image::HEADER,
+        )
+        .reader()
+        .read_slice(&mut bytes[image::HEADER..descriptor])?;
         let argv = image::word(&header, image::ARGS).map_err(errno)? as usize;
         let envp = image::word(&header, image::ENVS).map_err(errno)? as usize;
-        UserSlice::new(argv, args).reader().read_slice(&mut bytes[descriptor..descriptor + args])?;
-        UserSlice::new(envp, envs).reader().read_slice(&mut bytes[descriptor + args..])?;
+        UserSlice::new(argv, args)
+            .reader()
+            .read_slice(&mut bytes[descriptor..descriptor + args])?;
+        UserSlice::new(envp, envs)
+            .reader()
+            .read_slice(&mut bytes[descriptor + args..])?;
         bytes[image::PID..image::PID + 4].copy_from_slice(&self.pid.to_le_bytes());
         for (index, value) in super::mcctrl_exec::credential_values().iter().enumerate() {
             let offset = image::CREDENTIALS + index * 4;
@@ -120,22 +153,40 @@ impl Registration {
         image::put_word(&mut bytes, image::USER_START, 0).map_err(errno)?;
         image::put_word(&mut bytes, image::USER_END, image::USER_LIMIT).map_err(errno)?;
         // SAFETY: Exact scalar identities belong to our retained connection.
-        let cpus = unsafe { super::ihk_os_topology_query_v1(self.slot, self.generation, super::abi::MCEXEC_UP_GET_CPU) };
-        if cpus <= 0 { return Err(if cpus < 0 { errno(cpus as i32) } else { EINVAL }); }
+        let cpus = unsafe {
+            super::ihk_os_topology_query_v1(
+                self.slot,
+                self.generation,
+                super::abi::MCEXEC_UP_GET_CPU,
+            )
+        };
+        if cpus <= 0 {
+            return Err(if cpus < 0 { errno(cpus as i32) } else { EINVAL });
+        }
         image::Input::parse(&bytes, cpus as usize).map_err(errno)?;
         let mirror = Mirror::reserve(self.clone())?;
         *self.mapping.lock() = Some(mirror.clone());
         image::put_word(&mut bytes, image::USER_END, mirror.end).map_err(errno)?;
-        let result = image::Input::parse(&bytes, cpus as usize).map_err(errno)
+        let result = image::Input::parse(&bytes, cpus as usize)
+            .map_err(errno)
             .and_then(|_| self.invoke(super::application_abi::PREPARE, &mut bytes));
         if let Err(error) = result {
-            if mirror.unmap().is_ok() { *self.mapping.lock() = None; }
+            if mirror.unmap().is_ok() {
+                *self.mapping.lock() = None;
+            }
             return Err(error);
         }
-        UserSlice::new(argument, descriptor).writer().write_slice(&bytes[..descriptor])?;
-        pr_info!("application_image=prepared os={} generation={} pid={} sections={} cpu={}\n",
-            self.slot, self.generation, self.pid, (descriptor - image::HEADER) / image::SECTION,
-            image::integer(&bytes, image::CPU).map_err(errno)?);
+        UserSlice::new(argument, descriptor)
+            .writer()
+            .write_slice(&bytes[..descriptor])?;
+        pr_info!(
+            "application_image=prepared os={} generation={} pid={} sections={} cpu={}\n",
+            self.slot,
+            self.generation,
+            self.pid,
+            (descriptor - image::HEADER) / image::SECTION,
+            image::integer(&bytes, image::CPU).map_err(errno)?
+        );
         Ok(0)
     }
 
@@ -144,45 +195,78 @@ impl Registration {
         mirror.current()?;
         let mut descriptor = [0; 32];
         let length = if compat { 16 } else { 32 };
-        UserSlice::new(argument, length).reader().read_slice(&mut descriptor[..length])?;
+        UserSlice::new(argument, length)
+            .reader()
+            .read_slice(&mut descriptor[..length])?;
         let (physical, user, size, direction) = if compat {
-            (u32::from_le_bytes(descriptor[0..4].try_into().unwrap()) as u64,
-             u32::from_le_bytes(descriptor[4..8].try_into().unwrap()) as usize,
-             u32::from_le_bytes(descriptor[8..12].try_into().unwrap()) as usize, descriptor[12])
+            (
+                u32::from_le_bytes(descriptor[0..4].try_into().unwrap()) as u64,
+                u32::from_le_bytes(descriptor[4..8].try_into().unwrap()) as usize,
+                u32::from_le_bytes(descriptor[8..12].try_into().unwrap()) as usize,
+                descriptor[12],
+            )
         } else {
-            (image::word(&descriptor, 0).map_err(errno)?, image::word(&descriptor, 8).map_err(errno)? as usize,
-             image::word(&descriptor, 16).map_err(errno)? as usize, descriptor[24])
+            (
+                image::word(&descriptor, 0).map_err(errno)?,
+                image::word(&descriptor, 8).map_err(errno)? as usize,
+                image::word(&descriptor, 16).map_err(errno)? as usize,
+                descriptor[24],
+            )
         };
-        if size == 0 || size > image::MAX_FLAT_BYTES || direction > 1 { return Err(EINVAL); }
+        if size == 0 || size > image::MAX_FLAT_BYTES || direction > 1 {
+            return Err(EINVAL);
+        }
         user.checked_add(size).ok_or(errno(-75))?;
         physical.checked_add(size as u64).ok_or(errno(-75))?;
         let mut bytes = zero_bytes(16 + size)?;
         image::put_word(&mut bytes, 0, physical).map_err(errno)?;
         image::put_word(&mut bytes, 8, direction as u64).map_err(errno)?;
-        if direction == 0 { UserSlice::new(user, size).reader().read_slice(&mut bytes[16..])?; }
+        if direction == 0 {
+            UserSlice::new(user, size)
+                .reader()
+                .read_slice(&mut bytes[16..])?;
+        }
         self.invoke(super::application_abi::TRANSFER, &mut bytes)?;
-        if direction == 1 { UserSlice::new(user, size).writer().write_slice(&bytes[16..])?; }
+        if direction == 1 {
+            UserSlice::new(user, size)
+                .writer()
+                .write_slice(&bytes[16..])?;
+        }
         Ok(0)
     }
 
     fn clear_user_space(&self, argument: usize, compat: bool) -> Result<isize> {
         let mut bytes = [0; 16];
         let length = if compat { 8 } else { 16 };
-        UserSlice::new(argument, length).reader().read_slice(&mut bytes[..length])?;
+        UserSlice::new(argument, length)
+            .reader()
+            .read_slice(&mut bytes[..length])?;
         let (start, end) = if compat {
-            (u32::from_le_bytes(bytes[..4].try_into().unwrap()) as u64, u32::from_le_bytes(bytes[4..8].try_into().unwrap()) as u64)
-        } else { (image::word(&bytes, 0).map_err(errno)?, image::word(&bytes, 8).map_err(errno)?) };
+            (
+                u32::from_le_bytes(bytes[..4].try_into().unwrap()) as u64,
+                u32::from_le_bytes(bytes[4..8].try_into().unwrap()) as u64,
+            )
+        } else {
+            (
+                image::word(&bytes, 0).map_err(errno)?,
+                image::word(&bytes, 8).map_err(errno)?,
+            )
+        };
         let mirror = self.mapping.lock().clone().ok_or(EINVAL)?;
         mirror.clear(start, end)?;
         Ok(0)
     }
 }
 
-fn errno(code: i32) -> Error { kernel::error::to_result(code).err().unwrap_or(EIO) }
+fn errno(code: i32) -> Error {
+    kernel::error::to_result(code).err().unwrap_or(EIO)
+}
 
 fn zero_bytes(length: usize) -> Result<Vec<u8>> {
     let mut bytes = Vec::with_capacity(length, GFP_KERNEL)?;
-    for _ in 0..length { bytes.push(0, GFP_KERNEL)?; }
+    for _ in 0..length {
+        bytes.push(0, GFP_KERNEL)?;
+    }
     Ok(bytes)
 }
 
@@ -457,7 +541,8 @@ impl Context {
             return Err(EINVAL);
         }
         let pid = process.pid.number()?;
-        let registration = Registration::acquire(self.slot, self.generation, ProcessId::current()?)?;
+        let registration =
+            Registration::acquire(self.slot, self.generation, ProcessId::current()?)?;
         {
             let mut published = process.registration.lock();
             if published.is_some() {

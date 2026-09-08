@@ -139,7 +139,10 @@ static void capacity_and_reuse(void)
     references(0);
 }
 
-int main(void)
+#ifndef NATIVE_MCCTRL_PROCESS_MAIN
+#define NATIVE_MCCTRL_PROCESS_MAIN main
+#endif
+int NATIVE_MCCTRL_PROCESS_MAIN(void)
 {
     references(0);
     basic_ownership();
