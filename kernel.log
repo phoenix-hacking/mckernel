@@ -34105,3 +34105,30 @@ open. Retention attempt 2 passes after the recorded metadata-schema failure;
 15 verified final artifacts and 14 build/fixture artifacts are linked from
 docs/verification/native-sysfs-setup-checkpoint-20260907.json. No formal gate
 or application-test credit. Continue with native remote sysfs/runtime dispatch.
+
+2026-09-07 local date — third requested storage maintenance completed.
+Host filesystem maintenance only; no kernel code changes, builds or guests.
+cleanup-archived-captures-20260907-3.py audit/apply verifies retained evidence
+against pushed commit ccc48c93c1a6e8c576739fd831bc96d4a0c8b9dc and removes
+five fully archived sysfs capture directories and 29 duplicate archives
+(447,516,672 allocated scratch bytes). Complete archive entry comparisons,
+Git blob/SHA-256/size checks and full gzip reads pass before deletion; all
+31 used committed evidence files remain exact afterward. The setup module,
+kernel, image and runtime dependencies are preserved. All 794 checked current
+files remain byte-identical and all 18 protected directories remain present.
+cleanup-old-trash-20260907.py removes 36 user Trash entries discarded in
+2021-2024 after checking age, unchanged entries, ownership, mount boundaries,
+hardlinks and visible open use. This frees 12,223,381,504 allocated bytes;
+only aggregate metadata is retained, with no personal filenames or content.
+Targeted sudo /usr/sbin/fstrim --verbose on the mounted scratch filesystem
+reclaims another 462,794,752 bytes of backing allocation. The 12.5-GiB trim
+free-range output is not counted as newly freed storage. This cleanup recovers
+11.81 GiB; the three recorded cleanups together recover 51.07 GiB. The host
+has about 140 GiB available, with about 31 GiB available in the unchanged
+60-GiB logical scratch image. Current compiler/browser caches and recent
+host system/crash logs are preserved. See
+docs/verification/storage-maintenance-20260907-3.json and its nine compressed
+artifacts for measurements, exact dependencies and McKernel restoration maps.
+Next resume continuing native remote sysfs requests, callbacks and dispatch
+from the real SYSFS_REQ_CREATE at architectural status 2. Application tests
+and production acceptance remain open; maintenance earns no kernel gate credit.

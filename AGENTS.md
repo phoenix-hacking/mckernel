@@ -39,6 +39,17 @@ input/output files remain byte-identical, including the new topology kernel
 and module and the passing sysfs tree module. Historical captures can be
 restored using the retained cleanup report; never reuse their attempt names.
 
+The third cleanup checkpoint is recorded in
+`docs/verification/storage-maintenance-20260907-3.json`. It removes five fully
+archived sysfs captures, 29 duplicate archives and 36 user Trash entries
+discarded in 2021-2024. Targeted scratch trim completes the 11.81-GiB recovery;
+all three cleanups together reclaim 51.07 GiB of host allocation. All 794
+checked current files and 18 dependency directories are preserved, including
+`native-sysfs-setup-module-20260907-1`. Host free space is about 140 GiB and
+scratch free space is about 31 GiB. Retain the compressed archive restoration
+mapping; personal Trash content was discarded, with only aggregate metadata
+recorded. Continue checking capacity between substantial validation batches.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native sysfs setup runtime checkpoint: both actual startup interfaces now
