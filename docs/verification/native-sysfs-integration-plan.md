@@ -7,8 +7,18 @@ complete 272 unchanged-C format comparisons, 2,560 concurrent scalar reads,
 128 claim-collision races and both callback/mapping drains; six workers join
 and both namespaces retire. The 66-slot exhaustion/reuse and fixed/request/
 snooping alias checks also pass. The original guest failure remains retained.
-Actual startup regressions with these corrected modules and complete evidence
-retention are next. The diagnostic carriers do not grant IHK authority.
+Both actual startup ABIs pass with the corrected modules: four physical ready
+captures and another 260 real remote callbacks. See
+native-sysfs-snoop-checkpoint-20260908.json for 19 artifacts, 44 source/compiler
+bindings, three exact pinned-format replays and the failed first guest.
+The diagnostic carriers do not grant IHK authority.
+
+Follow-up from pinned Linux source review: bitmap_print_to_buf copies at most
+the requested count from a formatted string plus NUL. Complete text can end
+exactly at the supplied output length, with its newline present and NUL omitted.
+The current Snoop wrongly requires both bytes. Add exact-capacity versus truly
+truncated comparisons against the retained C oracle, accept a final newline
+without NUL, and retain explicit rejection when the newline is missing.
 
 The first Linux fixture exposes a missing operation-specific store override:
 the generic native AttributeOps default returns EIO, while the existing
@@ -58,10 +68,10 @@ The accepted real starts use helper v3, x86_64 attempt 3 and i386 attempt 1.
 Keep `native-sysfs-service-module-20260908-2` as a current input.
 
 Next directly exercise mkdir/unlink/remote release, eight special snooping
-formats, exclusive-claim races, malformed mappings, queue pressure and worker
-allocation failures. Review scalar snooping's bytewise copies against the
-original aligned 32/64-bit loads before claiming parity under concurrent
-updates. Multiple active McKernel CPUs/OSes, application execution, native
+formats and claim handling in the actual continuing guest service. The Linux
+fixture above covers bounded formats and claim collisions; actual queue pressure
+and worker allocation failures still need direct coverage. Multiple active
+McKernel CPUs/OSes, application execution, native
 shutdown and complete resource restoration, current full-suite integration,
 full Rust/assembly and independent production acceptance remain open.
 The historical design/checkpoint sections below retain their original scope;

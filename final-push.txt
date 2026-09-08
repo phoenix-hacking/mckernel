@@ -41,6 +41,16 @@ application execution, native shutdown and the declared production integration,
 Rust/assembly and independent acceptance requirements remain open. No production
 gate is promoted by this local boot/service result.
 
+The corrected snooping adapter also passes two independent Linux fixture
+lifetimes: 272 legacy C format comparisons, 2,560 concurrent scalar reads,
+128 claim collisions, capacity/alias/reuse checks and two callback/mapping
+drains. Both actual startups and their 260 callbacks pass again with these
+modules. See docs/verification/native-sysfs-snoop-checkpoint-20260908.json for
+19 retained artifacts and 44 source/compiler bindings. The fixture uses
+diagnostic extent/identity carriers, not IHK authority or a real guest producer.
+Exact-capacity bitmap text, actual guest special operations and remaining
+metadata/failure paths still need coverage; no additional gate credit.
+
 The earlier remote sysfs callback adapter passes its independent Linux
 fixture over two module lifetimes, including 512 concurrent round trips,
 1,068 exchanges with queue retries, interrupted readers and callback/release

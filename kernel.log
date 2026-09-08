@@ -34410,3 +34410,27 @@ from the three production modules. This fixture substitutes only diagnostic
 identity/extent carriers and owns its Linux pages; it proves no IHK authority,
 actual continuing metadata pump, new real guest traffic or application run.
 Next repeat both actual starts with module attempt 2 and retain all artifacts.
+
+Both actual-start regressions PASS with snooping module attempt 2.
+Commands: mckernel-container native python3 -B /work/run-native-sysfs-snoop-start.py x86_64 2 1
+and mckernel-container native python3 -B /work/run-native-sysfs-snoop-start.py i386 2 1
+Both use the same pinned limits and unchanged revision-3 McKernel image. They
+return BOOT=0/Ready=4, retain physical status 3 in four QMP captures and complete
+another 260 real callbacks (132 reads, 128 writes with all payloads independently
+checked in guest kmsg). The old guest online-store NYI behavior is unchanged.
+Retention passes: mckernel-container native python3 -B /work/retain-native-sysfs-snoop.py 1
+All six captures, including the failed first Linux guest, are preserved in
+19 archives. Forty-four current source/compiler bindings, three exact
+pinned-format replays, three prior manifests and two legacy source references
+verify; copied artifacts pass SHA-256 and full gzip checks. See
+docs/verification/native-sysfs-snoop-checkpoint-20260908.json. Keep current
+native-sysfs-snoop-module-20260908-2 and all earlier active dependencies.
+
+Post-checkpoint source review identifies a further bitmap output edge. The
+pinned lib/bitmap-str.c bitmap_print_to_buf copies min(count, strlen+1) bytes,
+so valid complete text may end at its newline with no copied NUL. Snoop currently
+rejects that exact-capacity output. This was outside the completed comparisons;
+do not claim full bitmap boundary parity. The plan now calls for oracle-derived
+exact-capacity and genuine truncation checks and acceptance of newline-only
+completion. Actual continuing guest special/metadata/failure paths, applications,
+shutdown and the full language/integration/acceptance scope remain open.

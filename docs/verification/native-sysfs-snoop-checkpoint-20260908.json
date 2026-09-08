@@ -1,0 +1,724 @@
+{
+  "actual_callback_exchanges": 260,
+  "actual_guest_store_payload_checks": 128,
+  "actual_linux_callback_drains": 2,
+  "actual_read_checks": 132,
+  "actual_start_abis": [
+    "x86_64",
+    "i386"
+  ],
+  "actual_starts": [
+    {
+      "architecture": "x86_64",
+      "boot_ioctl": 0,
+      "guest_store_payload_checks": 64,
+      "observed_callback_exchanges": 130,
+      "physical_status": 3,
+      "read_checks": 66,
+      "registry_status": 4,
+      "rounds": 32,
+      "store_checks": 64
+    },
+    {
+      "architecture": "i386",
+      "boot_ioctl": 0,
+      "guest_store_payload_checks": 64,
+      "observed_callback_exchanges": 130,
+      "physical_status": 3,
+      "read_checks": 66,
+      "registry_status": 4,
+      "rounds": 32,
+      "store_checks": 64
+    }
+  ],
+  "actual_store_checks": 128,
+  "applications_tested": false,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-module-20260908-1.tar.gz",
+      "sha256": "1ffd2e510ed1483ff218dd5d36d3e26dc4d115a3aa988596d3b6ea3a4f796aa4",
+      "size": 30633950,
+      "source": "/work/native-sysfs-snoop-module-20260908-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-module-20260908-1-record.json.gz",
+      "sha256": "0cc1277df59ac8f96cd382ad8b5e0891b57de5af2464480998c8b77188e29c3f",
+      "size": 7096,
+      "source": "/work/native-sysfs-snoop-module-20260908-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-module-20260908-2.tar.gz",
+      "sha256": "720e2301f4ebb6e2a738e3f67775288be764cb55dde370c78370433bb3a525c5",
+      "size": 30635114,
+      "source": "/work/native-sysfs-snoop-module-20260908-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-module-20260908-2-record.json.gz",
+      "sha256": "396c623fb0ffc5bb40a3db2fd5992a1c2bf5200868f00df5ce67c885ebeaa70a",
+      "size": 6894,
+      "source": "/work/native-sysfs-snoop-module-20260908-2/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-guest-20260908-1.tar.gz",
+      "sha256": "99ad0c028535119aa7737b81ae9891b4c20b784ab88fcc94a07790d349ee704f",
+      "size": 15309993,
+      "source": "/work/native-sysfs-snoop-guest-20260908-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-guest-20260908-1-record.json.gz",
+      "sha256": "11428367522f5479ac10a47a160cf02f3c650ce2d561c525912dbda585878ead",
+      "size": 3398,
+      "source": "/work/native-sysfs-snoop-guest-20260908-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-guest-20260908-2.tar.gz",
+      "sha256": "a1e1024ed7ab54a1b4d867cf26b0b4b98b12d2f20403e63d4841301fbaa65ff1",
+      "size": 15310817,
+      "source": "/work/native-sysfs-snoop-guest-20260908-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-guest-20260908-2-record.json.gz",
+      "sha256": "9e660eed21e147f06b4de10fee2df54b327db00e3bc52fb93d2930e057eb933f",
+      "size": 3706,
+      "source": "/work/native-sysfs-snoop-guest-20260908-2/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-start-20260908-x86_64-1.tar.gz",
+      "sha256": "3718f7fe869d591d2af9c2fb258dbf145e6276322a07b36f4d817be4f9f19543",
+      "size": 21076197,
+      "source": "/work/native-sysfs-snoop-start-20260908-x86_64-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-start-20260908-x86_64-1-record.json.gz",
+      "sha256": "5b4710883c40c5726a10a68f618f05f730c6fe18d831fec8717857703361dcb5",
+      "size": 3932,
+      "source": "/work/native-sysfs-snoop-start-20260908-x86_64-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-start-20260908-i386-1.tar.gz",
+      "sha256": "c2956907637ca27a5035efecb79576cb7d3bf432df9e3cd972fef1d383407c2c",
+      "size": 21074710,
+      "source": "/work/native-sysfs-snoop-start-20260908-i386-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-start-20260908-i386-1-record.json.gz",
+      "sha256": "649f618fe7ba06c9587c51c924cfdd05645a9edbe5bd7f00adeed760eaabae4e",
+      "size": 3925,
+      "source": "/work/native-sysfs-snoop-start-20260908-i386-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-format-replay-20260908.tar.gz",
+      "sha256": "55f740ee61fbc9e35eb8dcc2b93739ab6920cecc8a420df2c367aef393296293",
+      "size": 24415,
+      "source": "/work/native-sysfs-snoop-retained-20260908-1/format-replay"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-legacy-rust-dispatch-20260908.rs.gz",
+      "sha256": "2d0c222e6978c194642a08e58d01e865a126c9b84a59d4e70b5fc7dfb9736ce6",
+      "size": 59431,
+      "source": "/workspace/executer/kernel/mcctrl/rust/mcctrl_helpers.rs"
+    },
+    {
+      "path": "docs/verification/evidence/build-native-sysfs-snoop.py.gz",
+      "sha256": "aace44233648bf3b48bebe7d9b573466d9aa19108109f38bfa454d7a4bc7601c",
+      "size": 3640,
+      "source": "/work/build-native-sysfs-snoop.py"
+    },
+    {
+      "path": "docs/verification/evidence/run-native-sysfs-snoop-guest.py.gz",
+      "sha256": "68100b168532ba7c813455d10fbef98dd51ae7a7d74efd86cf95f2c710253ef8",
+      "size": 3242,
+      "source": "/work/run-native-sysfs-snoop-guest.py"
+    },
+    {
+      "path": "docs/verification/evidence/native-sysfs-snoop-guest-init.sh.gz",
+      "sha256": "cdab806337afea1e9415cfe94da9a71558ee7921138424666063504efaccc2ad",
+      "size": 327,
+      "source": "/work/native-sysfs-snoop-guest-init.sh"
+    },
+    {
+      "path": "docs/verification/evidence/run-native-sysfs-snoop-start.py.gz",
+      "sha256": "03813a5a6aec39cbdeb7d424692b6577670a3f3d6e4308b3fa6f24184a5d049e",
+      "size": 6307,
+      "source": "/work/run-native-sysfs-snoop-start.py"
+    },
+    {
+      "path": "docs/verification/evidence/retain-native-sysfs-snoop.py.gz",
+      "sha256": "f05d696cb56f753d50ad8cc1caec977c87f8518217a465c636c04475bccb16ab",
+      "size": 3893,
+      "source": "/work/native-sysfs-snoop-retained-20260908-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "path": "/work/native-sysfs-snoop-module-20260908-1",
+      "status": "PASS"
+    },
+    {
+      "path": "/work/native-sysfs-snoop-module-20260908-2",
+      "status": "PASS"
+    },
+    {
+      "path": "/work/native-sysfs-snoop-guest-20260908-1",
+      "status": "FAIL"
+    },
+    {
+      "path": "/work/native-sysfs-snoop-guest-20260908-2",
+      "status": "PASS"
+    },
+    {
+      "path": "/work/native-sysfs-snoop-start-20260908-x86_64-1",
+      "status": "PASS"
+    },
+    {
+      "path": "/work/native-sysfs-snoop-start-20260908-i386-1",
+      "status": "PASS"
+    }
+  ],
+  "claim_collision_races": 128,
+  "commands": [
+    {
+      "command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-sysfs-snoop-retained-20260908-1/format-replay/ihk_ioctl.rs"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-sysfs-snoop-retained-20260908-1/format-replay/os_registry.rs"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-sysfs-snoop-retained-20260908-1/format-replay/smp_resource.rs"
+      ],
+      "exit_code": 0,
+      "output": ""
+    }
+  ],
+  "compiler_inputs": [
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/abi/sysfs.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/abi/sysfs.rs",
+      "path": "host-kernel/native-rust/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629,
+      "source_sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "source_size": 2629
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/abi/sysfs_request.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/abi/sysfs_request.rs",
+      "path": "host-kernel/native-rust/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715,
+      "source_sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "source_size": 6715
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/abi/vdso.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/abi/vdso.rs",
+      "path": "host-kernel/native-rust/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530,
+      "source_sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "source_size": 14530
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/ihk_ioctl.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/ihk_ioctl.rs",
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "replay": "/work/native-sysfs-snoop-retained-20260908-1/format-replay/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432,
+      "source_sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "source_size": 10467
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/ihk_mapping.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/ihk_mapping.rs",
+      "path": "host-kernel/native-rust/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943,
+      "source_sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "source_size": 21943
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/ihk_smp_x86_64.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/ihk_smp_x86_64.rs",
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "581d8ce67dbd9943bdca6bfc92d6d936d01af3b6194d846f4f1a187626cc74c5",
+      "size": 28109,
+      "source_sha256": "581d8ce67dbd9943bdca6bfc92d6d936d01af3b6194d846f4f1a187626cc74c5",
+      "source_size": 28109
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/ikc_master.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/ikc_master.rs",
+      "path": "host-kernel/native-rust/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480,
+      "source_sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "source_size": 26480
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/ikc_queue.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/ikc_queue.rs",
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030,
+      "source_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "source_size": 23030
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/fixture/source/scripts/tests/fixtures/mckernel_native_snoop_checks.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/mckernel_native_snoop_checks.rs",
+      "path": "scripts/tests/fixtures/mckernel_native_snoop_checks.rs",
+      "sha256": "a64d70079d924170bf7b6154283e35a7b2c74e159f5a1848057cd56d258fb234",
+      "size": 26831,
+      "source_sha256": "a64d70079d924170bf7b6154283e35a7b2c74e159f5a1848057cd56d258fb234",
+      "source_size": 26831
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/fixture/source/scripts/tests/fixtures/mckernel_sysfs_snoop_oracle.c",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/mckernel_sysfs_snoop_oracle.c",
+      "path": "scripts/tests/fixtures/mckernel_sysfs_snoop_oracle.c",
+      "sha256": "cf05387492a999e03307e84da4b3396cf4f05fdb61abe784e8faf030fd5377d0",
+      "size": 1660,
+      "source_sha256": "cf05387492a999e03307e84da4b3396cf4f05fdb61abe784e8faf030fd5377d0",
+      "source_size": 1660
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/fixture/source/scripts/tests/fixtures/mckernel_sysfs_snoop_verify.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/mckernel_sysfs_snoop_verify.rs",
+      "path": "scripts/tests/fixtures/mckernel_sysfs_snoop_verify.rs",
+      "sha256": "a5a41770095660c68f102d9ecd90ede5080680f543c493d3c4798ef1e31dc0eb",
+      "size": 2011,
+      "source_sha256": "a5a41770095660c68f102d9ecd90ede5080680f543c493d3c4798ef1e31dc0eb",
+      "source_size": 2011
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/fixture/source/scripts/tests/fixtures/native-sysfs-snoop.c",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/native-sysfs-snoop.c",
+      "path": "scripts/tests/fixtures/native-sysfs-snoop.c",
+      "sha256": "2db2b09a34f0e75ba15fcbd5002244618ec69b2df961cc2f6c12f38ccf414e64",
+      "size": 4999,
+      "source_sha256": "2db2b09a34f0e75ba15fcbd5002244618ec69b2df961cc2f6c12f38ccf414e64",
+      "source_size": 4999
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/os_registry.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/os_registry.rs",
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "replay": "/work/native-sysfs-snoop-retained-20260908-1/format-replay/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410,
+      "source_sha256": "9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9",
+      "source_size": 17961
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/os_runtime.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/os_runtime.rs",
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "e0d528506e5d4f14a4aced011ad7e1a2b178e8d3573c533cf055959c25d96ea3",
+      "size": 33601,
+      "source_sha256": "e0d528506e5d4f14a4aced011ad7e1a2b178e8d3573c533cf055959c25d96ea3",
+      "source_size": 33601
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_boot_code.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_boot_code.rs",
+      "path": "host-kernel/native-rust/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317,
+      "source_sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "source_size": 1317
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_cpu.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_cpu.rs",
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178,
+      "source_sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "source_size": 38178
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_ikc.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_ikc.rs",
+      "path": "host-kernel/native-rust/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665,
+      "source_sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "source_size": 12665
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_image.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_image.rs",
+      "path": "host-kernel/native-rust/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208,
+      "source_sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "source_size": 14208
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_loader.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_loader.rs",
+      "path": "host-kernel/native-rust/smp_loader.rs",
+      "sha256": "006c28a2556c3ce734f77e600a73ca27733e1cf9c89e85c90798a26ffb04ac3a",
+      "size": 3353,
+      "source_sha256": "006c28a2556c3ce734f77e600a73ca27733e1cf9c89e85c90798a26ffb04ac3a",
+      "source_size": 3353
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_memory.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_memory.rs",
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "d63d758a67c6f2cf74322f5dd164509f0227e809f1ec3a419db4ebae9dfbb90a",
+      "size": 95358,
+      "source_sha256": "d63d758a67c6f2cf74322f5dd164509f0227e809f1ec3a419db4ebae9dfbb90a",
+      "source_size": 95358
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_resource.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_resource.rs",
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "replay": "/work/native-sysfs-snoop-retained-20260908-1/format-replay/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249,
+      "source_sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3",
+      "source_size": 129861
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_service.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_service.rs",
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "8a6e8fbab6f3dce96aa1078998c21f61fd7894a077c0256d72dc187e4ebdf206",
+      "size": 22663,
+      "source_sha256": "8a6e8fbab6f3dce96aa1078998c21f61fd7894a077c0256d72dc187e4ebdf206",
+      "source_size": 22663
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_startup.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_startup.rs",
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963,
+      "source_sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "source_size": 4963
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_startup_entry.S",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_startup_entry.S",
+      "path": "host-kernel/native-rust/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350,
+      "source_sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "source_size": 1350
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_topology.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_topology.rs",
+      "path": "host-kernel/native-rust/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615,
+      "source_sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "source_size": 10615
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_trampoline.S",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_trampoline.S",
+      "path": "host-kernel/native-rust/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650,
+      "source_sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "source_size": 3650
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_trampoline.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_trampoline.rs",
+      "path": "host-kernel/native-rust/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477,
+      "source_sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "source_size": 5477
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/smp_vdso.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/smp_vdso.rs",
+      "path": "host-kernel/native-rust/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863,
+      "source_sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "source_size": 5863
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_memory.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_memory.rs",
+      "path": "host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "b52fb002dc8ba6f91f5d380a7ebf51eee45918133e68432bdc5aef16f1545bd6",
+      "size": 12056,
+      "source_sha256": "b52fb002dc8ba6f91f5d380a7ebf51eee45918133e68432bdc5aef16f1545bd6",
+      "source_size": 12056
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_objects.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_objects.rs",
+      "path": "host-kernel/native-rust/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753,
+      "source_sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "source_size": 13753
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_os.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_os.rs",
+      "path": "host-kernel/native-rust/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451,
+      "source_sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "source_size": 2451
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_remote.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_remote.rs",
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287,
+      "source_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "source_size": 8287
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_rpc.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_rpc.rs",
+      "path": "host-kernel/native-rust/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833,
+      "source_sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "source_size": 6833
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_setup.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_setup.rs",
+      "path": "host-kernel/native-rust/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683,
+      "source_sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "source_size": 12683
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_snoop.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_snoop.rs",
+      "path": "host-kernel/native-rust/sysfs_snoop.rs",
+      "sha256": "4bdd853088a40cc9f20d89d1a15cbf31beffe309cfa8b005fff5ba6e0e173166",
+      "size": 5154,
+      "source_sha256": "4bdd853088a40cc9f20d89d1a15cbf31beffe309cfa8b005fff5ba6e0e173166",
+      "source_size": 5154
+    },
+    {
+      "binding": "identical",
+      "compiler_capture": "/work/native-sysfs-snoop-module-20260908-2/staged-source/sysfs_tree.rs",
+      "original_capture": "/work/native-sysfs-snoop-module-20260908-2/original-inputs/sysfs_tree.rs",
+      "path": "host-kernel/native-rust/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276,
+      "source_sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "source_size": 12276
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-boot.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-boot.c",
+      "path": "scripts/tests/fixtures/native-boot.c",
+      "sha256": "7647859b74a901d50c9b02ba121fd152c2f681350e7288b1a4a9cdafc3ff6db1",
+      "size": 10508,
+      "source_sha256": "7647859b74a901d50c9b02ba121fd152c2f681350e7288b1a4a9cdafc3ff6db1",
+      "source_size": 10508
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-cpu-reservation.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-cpu-reservation.c",
+      "path": "scripts/tests/fixtures/native-cpu-reservation.c",
+      "sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807",
+      "size": 8289,
+      "source_sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807",
+      "source_size": 8289
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-memory-reservation.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-memory-reservation.c",
+      "path": "scripts/tests/fixtures/native-memory-reservation.c",
+      "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+      "size": 14223,
+      "source_sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+      "source_size": 14223
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-os-resource-assignment.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-x86_64-1/probe-source/native-os-resource-assignment.c",
+      "path": "scripts/tests/fixtures/native-os-resource-assignment.c",
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "size": 9829,
+      "source_sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "source_size": 9829
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-boot.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-boot.c",
+      "path": "scripts/tests/fixtures/native-boot.c",
+      "sha256": "7647859b74a901d50c9b02ba121fd152c2f681350e7288b1a4a9cdafc3ff6db1",
+      "size": 10508,
+      "source_sha256": "7647859b74a901d50c9b02ba121fd152c2f681350e7288b1a4a9cdafc3ff6db1",
+      "source_size": 10508
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-cpu-reservation.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-cpu-reservation.c",
+      "path": "scripts/tests/fixtures/native-cpu-reservation.c",
+      "sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807",
+      "size": 8289,
+      "source_sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807",
+      "source_size": 8289
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-memory-reservation.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-memory-reservation.c",
+      "path": "scripts/tests/fixtures/native-memory-reservation.c",
+      "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+      "size": 14223,
+      "source_sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+      "source_size": 14223
+    },
+    {
+      "binding": "identical actual-start compiler source",
+      "compiler_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-os-resource-assignment.c",
+      "original_capture": "/work/native-sysfs-snoop-start-20260908-i386-1/probe-source/native-os-resource-assignment.c",
+      "path": "scripts/tests/fixtures/native-os-resource-assignment.c",
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "size": 9829,
+      "source_sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "source_size": 9829
+    }
+  ],
+  "concurrent_scalar_reads": 2560,
+  "finished_utc": "2026-09-08T08:55:23.090241+00:00",
+  "fixture_module_lifetimes": 2,
+  "fixture_namespaces_removed": true,
+  "fixture_scalar_producer_updates": [
+    47616,
+    43520
+  ],
+  "full_ready_observed": true,
+  "initial_fixture_file_reads": 16,
+  "joined_fixture_workers": 6,
+  "limitations": [
+    "The mapping/snooping fixture includes unchanged production sources but substitutes diagnostic identity/extent carriers and an eight-entry carrier capacity. It owns Linux RAM and grants no IHK authority; production request capacity remains 66.",
+    "The separate C oracle contains eight unchanged legacy show bodies and two bitmap wrappers; it is not a production module dependency. Oversized output is rejected explicitly instead of reproducing legacy truncation or unsafe writes.",
+    "Fixture coverage includes all five request layouts, fixed/request/snoop aliases, repeated claims, 66-slot exhaustion/reuse, queue reservation rollback and successful exclusion, concurrent claim collisions and callback-bound mapping retirement. Serial exhaustion, every allocator failure and arbitrary malicious peer writes remain outside these checks.",
+    "Actual starts exercise one McKernel CPU in a four-vCPU/two-NUMA Linux guest, ordinary boot metadata and 260 remote callbacks. These runs do not exercise real guest snooping, mkdir/unlink/release, packet-queue pressure, worker allocation failure, multiple McKernel CPUs/OSes or applications.",
+    "The guest CPU online store remains NYI: it logs and acknowledges bytes without changing its value or Linux CPU state. No store mutation or hotplug credit is claimed.",
+    "The first Linux fixture run remains FAIL for the missing ENOSPC store override. Both module builds and the corrected second guest pass; all original bytes and failure logs remain retained.",
+    "Preparation coverage remains the prior checkpoint, not a new full preparation run. Native shutdown, current full-suite integration, complete Rust/assembly, declared production integration and independent acceptance remain open. No production gate accounting change."
+  ],
+  "mapping_reclaims": 2,
+  "native_modules_built": 3,
+  "no_simd": true,
+  "physical_ready_captures": 4,
+  "production_gate_credit": false,
+  "references": [
+    {
+      "path": "docs/verification/native-sysfs-service-checkpoint-20260908.json",
+      "sha256": "488af77b58b775583d629837a76bab7018393020c8bf3b7718ce73bb71f760e6",
+      "size": 35378
+    },
+    {
+      "path": "docs/verification/native-sysfs-setup-checkpoint-20260907.json",
+      "sha256": "bbdde73e8d03ae234f5995a89fb63656b70a5bd29df19e568518090cd1dd9f7a",
+      "size": 48734
+    },
+    {
+      "path": "docs/verification/native-topology-checkpoint-20260907.json",
+      "sha256": "c16f8d6cede310f239fa14ea7b787ca5dda1473638a4e175f7665ccdcd6f3e23",
+      "size": 13418
+    }
+  ],
+  "request_slots": 66,
+  "scope": "Corrected native snooping formats/coherent scalar loads and actual mapping ledger verified in Linux, with both actual one-CPU McKernel starts and ordinary callback regressions",
+  "source_parent": "4f499d3501c72f5c08c6b1cd92b1cc115747361a",
+  "source_references": [
+    {
+      "path": "executer/kernel/mcctrl/sysfs.c",
+      "sha256": "11602cfd97f99767e7494a51b236ed5d107da9637c1e476ea485cff5ca0a904c",
+      "size": 85344
+    },
+    {
+      "path": "executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14",
+      "size": 403227
+    }
+  ],
+  "started_utc": "2026-09-08T08:54:56.623892+00:00",
+  "status": "PASS",
+  "sysfs_service_completed": false,
+  "unchanged_c_format_comparisons": 272,
+  "verification_modules_built": 2
+}

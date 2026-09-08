@@ -76,7 +76,7 @@ use fresh attempt names; restore historical captures from Git when needed.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
-Snooping/mapping checkpoint in progress, 2026-09-08: module attempt 2 builds
+Snooping/mapping checkpoint, 2026-09-08: module attempt 2 builds
 all three production modules and separate Rust/C verification modules. Guest
 attempt 2 passes two module lifetimes: 272 exact legacy-format comparisons,
 2,560 concurrent scalar reads, 128 two-task claim collisions, 66-slot request
@@ -87,9 +87,16 @@ That production override is fixed without weakening the expectation. Scalar
 loads now use one aligned word and bounded strings preserve precision behavior.
 Preserve native-sysfs-snoop-module-20260908-2 alongside current dependencies.
 The fixture uses diagnostic extent/identity carriers and module-owned RAM;
-it does not claim IHK authority or actual continuing metadata dispatch. Next
-repeat both actual starts using run-native-sysfs-snoop-start.py, then retain
-all evidence. Direct real-guest snooping/metadata failure coverage remains open.
+it does not claim IHK authority or actual continuing metadata dispatch. Both
+actual startups also pass with the corrected modules: BOOT=0, registry Ready=4,
+four physical status-3 captures and 260 real callbacks with checked write
+payloads. See docs/verification/native-sysfs-snoop-checkpoint-20260908.json:
+19 artifacts, 44 current source/compiler bindings, three pinned-format replays
+and the full first guest failure. Direct real-guest snooping/metadata failure
+coverage remains open. Final review also identifies a remaining bitmap output
+boundary: Linux can fill the output exactly through its newline without copying
+NUL; the current Snoop rejects that complete text. Verify and correct that edge
+before claiming complete bitmap-output parity.
 
 Continuing service checkpoint, 2026-09-08: both actual startup interfaces now
 reach full McKernel readiness. BOOT returns 0, the native registry is Ready=4,
@@ -127,8 +134,7 @@ failed allocator conversion and initializer capture; its complete artifacts
 remain retained. The continuing workers now pass the actual starts above.
 Next verify mkdir/unlink/remote release, all eight snooping formats, metadata
 claim races, malformed mappings, queue pressure and worker allocation failures.
-Review scalar snooping for aligned single-width loads: bytewise snapshots can
-tear against a concurrently updated guest scalar. Multi-CPU/multi-OS operation,
+Scalar snooping now has the aligned-load checks above. Multi-CPU/multi-OS operation,
 application execution, full shutdown, current full-suite integration and the
 remaining Rust/assembly and independent acceptance checks remain required.
 No production gate is promoted by this local one-CPU boot/service checkpoint.
