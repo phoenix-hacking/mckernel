@@ -65,6 +65,20 @@ installed environments, personal files and recent host logs were preserved.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Continuing service integration WIP, 2026-09-08: smp_service.rs transfers the
+published tree and channels into two retained, initially stopped kthreads,
+then activates them after BOOT releases CPU/device/topology/memory guards.
+The packet worker remains independent of the bounded metadata/tree worker.
+sysfs_memory.rs shares the existing complete-extent address checker, claims
+metadata exclusively, excludes active snooping/data/queue aliases and retires
+claims before the final busy store. sysfs_snoop.rs implements the eight
+existing guest snooping formats with bounded copies. Five metadata handlers
+use the existing Tree and Remote owners; remote calls use port 501/CPU rank 0.
+The current source is uncompiled and has not been run in a guest. Validate
+with the new build-native-sysfs-service.py helper and fresh 20260908 attempts,
+preserving every failure. No boot/application/production credit yet. Actual
+previous verified boot remains at CREATE/status 2.
+
 Native remote callback checkpoint: all three native modules and the real
 Linux fixture build on the pinned topology kernel. Two fixture lifetimes pass
 512 concurrent write/read round trips, 1,068 exchanges with forced queue-full

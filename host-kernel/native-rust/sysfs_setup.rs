@@ -86,6 +86,7 @@ impl Topology {
 
 /// Validated guest allocation. PreparedBoot retains the exact memory owner
 /// through every started outcome; callbacks never borrow its mutable bytes.
+#[derive(Clone, Copy)]
 pub(crate) struct SharedData {
     pub(crate) owner: OsToken,
     pub(crate) physical: u64,
@@ -114,6 +115,14 @@ impl Service {
                 physical < data.physical + data.bytes as u64 && data.physical < end
             })
         })
+    }
+
+    pub(crate) fn data(&self) -> Option<SharedData> {
+        self.data
+    }
+
+    pub(crate) fn tree(&mut self) -> &mut Tree {
+        &mut self.tree
     }
 
     pub(crate) fn setup(&mut self, data: SharedData) -> Result<usize> {

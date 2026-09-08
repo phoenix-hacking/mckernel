@@ -2,6 +2,24 @@
 
 ## Continuing request and callback adaptation, 2026-09-07
 
+Runtime implementation decision, 2026-09-08: use two owned per-OS kthreads,
+adapting the joined Linux peer-thread owner already verified by the remote
+callback fixture. One pumps packets; one consumes a preallocated 64-entry
+metadata queue. A dedicated metadata worker avoids coupling one OS's remote
+release wait to another OS or the global workqueue. Both tasks are allocated
+stopped before transferring the published tree and are activated only after
+the BOOT caller releases CPU/device/topology/memory guards. Retain both task
+owners in started storage before activation. Unstarted task cleanup must also
+reclaim a callback context when kthread_stop prevents its first entry.
+
+Share the existing whole-extent address checker between the live MemoryMap
+and an immutable vector of exact-generation extents. A separate mapping ledger
+excludes queues, shared data, vDSO, active metadata and retained snooping
+regions. It has 66 request slots: 64 queued, one executing and one admission
+slot so queue pressure can still receive a checked ENOMEM completion. Remove
+the request claim under the ledger lock before the final busy release-store;
+the peer may reuse the allocation immediately after observing that store.
+
 The actual setup checkpoint now reaches CREATE for
 `/sys/devices/system/cpu/num_processors`. Continue with the complete metadata
 protocol (create, mkdir, symlink, lookup and unlink), ordinary remote callbacks,

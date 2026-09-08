@@ -980,7 +980,42 @@ pub(super) fn prepare_os_boot(
 }
 
 pub(super) fn start_os_boot(owner: OsToken) -> Result {
-    with_boot_topology(owner, |topology| {
+    let service = with_boot_topology(owner, |topology| {
         super::smp_memory::start_os_boot(owner, topology)
-    })
+    })?;
+    // The continuing send path revalidates its CPU under these same guards.
+    // It must never wait for us while BOOT waits for its sysfs completions.
+    service.activate_and_wait()
+}
+
+/// A short send-only borrow of the original assigned CPU/device identity.
+/// The caller's retained started storage and resource module pins outlive it.
+pub(super) fn with_runtime_target<T>(
+    owner: OsToken,
+    expected: BootCpu,
+    operation: impl FnOnce(u32) -> Result<T>,
+) -> Result<T> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: The continuing owner retains the module and original reservation.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    context.verify_owned(&hotplug)?;
+    let read = CpuReadGuard::lock();
+    let cpu = expected.linux_id as usize;
+    let slot = context.table.slot(cpu).map_err(|_| EIO)?;
+    let actual = observed_cpu(cpu, &read, &hotplug)?;
+    if slot.state() != CpuState::Assigned
+        || slot.owner() != Some(owner)
+        || actual.online
+        || actual.hardware_id != expected.hardware_id
+        || actual.numa_node != expected.numa_node
+        || context.devices.get(cpu).and_then(Option::as_ref).is_none()
+    {
+        return Err(EIO);
+    }
+    operation(expected.linux_id)
 }

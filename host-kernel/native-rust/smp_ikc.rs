@@ -73,7 +73,7 @@ pub(super) fn validate_apic() -> Result {
     Ok(())
 }
 
-fn notify(cpu: u32) -> Result {
+pub(super) fn notify(cpu: u32) -> Result {
     validate_apic()?;
     let mut mask = bindings::cpumask::default();
     let word = cpu as usize / 64;
@@ -202,14 +202,24 @@ impl BootMaster {
     }
 
     pub(super) fn send_packet(&self, cpu: u32, packet: &IhkIkcMasterPacket) -> Result {
+        self.publish(&Self::encode(packet))?;
+        notify(cpu)
+    }
+
+    pub(super) fn encode(packet: &IhkIkcMasterPacket) -> [u8; 56] {
         let mut bytes = [0u8; 56];
         bytes[8..12].copy_from_slice(&packet.message.to_le_bytes());
         bytes[12..16].copy_from_slice(&packet.reference.to_le_bytes());
         for (index, value) in packet.parameters.iter().enumerate() {
             bytes[16 + index * 8..24 + index * 8].copy_from_slice(&value.to_le_bytes());
         }
-        self.send.send(&bytes)?;
-        notify(cpu)
+        bytes
+    }
+
+    /// An error means nothing was published. Notify only after success, and
+    /// never retry a publication merely because its later notification failed.
+    pub(super) fn publish(&self, packet: &[u8; 56]) -> Result {
+        self.send.send(packet)
     }
 
     /// Hard IRQ: only an atomic notification; packets stay in their owned ring.
@@ -264,7 +274,7 @@ pub(super) struct ControlChannel {
     pub(super) receive_physical: u64,
     pub(super) send_physical: u64,
     receive: SharedQueue<'static>,
-    _send: OutboundQueue,
+    send: OutboundQueue,
     pub(super) received: u64,
     pub(super) first: Option<[u8; CONTROL_PACKET_BYTES]>,
 }
@@ -305,7 +315,7 @@ impl ControlChannel {
             receive_physical,
             send_physical,
             receive,
-            _send: send,
+            send,
             received: 0,
             first: None,
         })
@@ -323,5 +333,11 @@ impl ControlChannel {
         }
         self.received += 1;
         Ok(Some(packet))
+    }
+
+    /// Sole host producer. The exchange lock must span publication and its
+    /// Published transition; the CPU notification follows outside that lock.
+    pub(super) fn publish(&self, packet: &[u8; CONTROL_PACKET_BYTES]) -> Result {
+        self.send.send(packet)
     }
 }

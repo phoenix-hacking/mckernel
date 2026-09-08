@@ -76,6 +76,10 @@ impl Remote {
         Ok(true)
     }
 
+    pub(crate) fn queued(&self) -> bool {
+        self.state.lock().exchange.outgoing().is_some()
+    }
+
     /// The queue consumer must acquire the response publication before this
     /// call. It runs independently of the tree/removal lock and caller waits.
     pub(crate) fn reply(&self, packet: &[u8]) -> Result {

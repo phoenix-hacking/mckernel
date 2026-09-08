@@ -20,13 +20,16 @@ use core::{
 use kernel::{
     bindings,
     prelude::*,
-    sync::{new_mutex, Mutex},
+    sync::{new_mutex, Arc, Mutex},
     uaccess::UserSlice,
 };
 
 #[allow(dead_code, unreachable_pub)]
 #[path = "abi/x86_64.rs"]
 mod abi;
+
+#[path = "smp_service.rs"]
+mod service;
 
 const MAX_EXTENTS: usize = 4096;
 const MAX_REQUESTS: usize = MAX_EXTENTS;
@@ -529,8 +532,33 @@ struct OwnedControlChannel {
     pages: BootPages,
 }
 
+/// The same checked mapping policy serves the locked ledger and the retained
+/// immutable extent snapshot. Neither view authorizes a new OS generation.
+trait GuestExtents {
+    fn len(&self) -> usize;
+    fn extent(&self, index: usize) -> Option<MemoryExtent>;
+}
+
+impl<const N: usize> GuestExtents for MemoryMap<N> {
+    fn len(&self) -> usize {
+        MemoryMap::len(self)
+    }
+    fn extent(&self, index: usize) -> Option<MemoryExtent> {
+        MemoryMap::extent(self, index)
+    }
+}
+
+impl GuestExtents for [MemoryExtent] {
+    fn len(&self) -> usize {
+        <[MemoryExtent]>::len(self)
+    }
+    fn extent(&self, index: usize) -> Option<MemoryExtent> {
+        self.get(index).copied()
+    }
+}
+
 fn checked_guest_bytes(
-    map: &MemoryMap<MAX_EXTENTS>,
+    map: &(impl GuestExtents + ?Sized),
     owner: super::smp_resource::OsToken,
     direct_map: u64,
     physical: u64,
@@ -554,7 +582,7 @@ fn checked_guest_bytes(
 }
 
 fn checked_guest_queue(
-    map: &MemoryMap<MAX_EXTENTS>,
+    map: &(impl GuestExtents + ?Sized),
     owner: super::smp_resource::OsToken,
     direct_map: u64,
     physical: u64,
@@ -705,11 +733,11 @@ fn reply_sysfs_setup(
 }
 
 fn accept_control_channel(
-    map: &MemoryMap<MAX_EXTENTS>,
+    map: &(impl GuestExtents + ?Sized),
     owner: super::smp_resource::OsToken,
     cpus: &[BootCpu],
     channels: &mut Vec<OwnedControlChannel>,
-    sysfs: &super::sysfs_setup::Service,
+    data: Option<super::sysfs_setup::SharedData>,
     direct_map: u64,
     master_receive: u64,
     master_send: u64,
@@ -721,7 +749,11 @@ fn accept_control_channel(
         || offer.remote_channel_cookie == 0
         || offer.reference == 0
         || !matches!((offer.port, offer.interrupt_cpu), (501, -1) | (503, 0))
-        || sysfs.overlaps(offer.send_queue, CONTROL_QUEUE_BYTES)
+        || data.is_some_and(|data| {
+            offer.send_queue.checked_add(CONTROL_QUEUE_BYTES as u64).is_none_or(|end| {
+                offer.send_queue < data.physical + data.bytes as u64 && data.physical < end
+            })
+        })
     {
         return Err(EINVAL);
     }
@@ -808,14 +840,15 @@ fn accept_control_channel(
 struct PreparedBoot {
     // Retired before device_destroy by the unstarted backend cleanup; every
     // started owner remains retained with the rest of PreparedBoot.
-    sysfs: super::sysfs_setup::Service,
+    sysfs: Option<super::sysfs_setup::Service>,
     params: BootPages,
     _dump: BootPages,
     trampoline: super::smp_trampoline::LowRegion,
     irq: BootIrqRoute,
     cpus: Vec<BootCpu>,
-    master: Option<Box<super::smp_ikc::BootMaster>>,
+    master: Option<Arc<super::smp_ikc::BootMaster>>,
     channels: Vec<OwnedControlChannel>,
+    continuing: Option<service::Started>,
     vdso_replied: bool,
     vdso_request: u64,
 }
@@ -1805,7 +1838,7 @@ impl MemoryContext {
             owner.slot(), owner.generation(), params.physical(), param_bytes, trampoline.physical(), layout.startup(), cpus.len(), nodes.len(), chunks.len(), kmsg);
         self.images[owner.slot() as usize].as_mut().ok_or(EIO)?.boot = Some(BootStorage {
             prepared: ManuallyDrop::new(PreparedBoot {
-                sysfs,
+                sysfs: Some(sysfs),
                 params,
                 _dump: dump,
                 trampoline,
@@ -1813,6 +1846,7 @@ impl MemoryContext {
                 cpus,
                 master: None,
                 channels: Vec::new(),
+                continuing: None,
                 vdso_replied: false,
                 vdso_request: 0,
             }),
@@ -1825,7 +1859,7 @@ impl MemoryContext {
         &mut self,
         owner: super::smp_resource::OsToken,
         topology: &BootTopology<'_>,
-    ) -> Result {
+    ) -> Result<service::Started> {
         self.verify()?;
         self.require_unstarted(owner)?;
         let memory_map = &self.map;
@@ -1897,9 +1931,9 @@ impl MemoryContext {
             let master = unsafe {
                 super::smp_ikc::BootMaster::new(owner, receive_pointer, send_pointer, queue_bytes)?
             };
-            prepared.master = Some(Box::new(master, GFP_KERNEL)?);
+            prepared.master = Some(Arc::new(master, GFP_KERNEL)?);
             let master = prepared.master.as_ref().ok_or(EIO)?;
-            // SAFETY: The stable Box is already inside the retained started
+            // SAFETY: The stable Arc is already inside the retained started
             // owner before the IRQ route can observe it.
             unsafe { prepared.irq.publish_master(master)? };
             master.send_initial_ack(cpu.linux_id)?;
@@ -1926,7 +1960,7 @@ impl MemoryContext {
                                 owner,
                                 &prepared.cpus,
                                 &mut prepared.channels,
-                                &prepared.sysfs,
+                                prepared.sysfs.as_ref().and_then(super::sysfs_setup::Service::data),
                                 direct_map,
                                 receive,
                                 send,
@@ -2002,9 +2036,21 @@ impl MemoryContext {
                                 queue_bytes,
                                 &prepared.channels,
                                 prepared.vdso_request,
-                                &mut prepared.sysfs,
+                                prepared.sysfs.as_mut().ok_or(EIO)?,
                             )?;
                             continue;
+                        }
+                        if entry.channel.port == 503
+                            && super::sysfs_request::Kind::from_message(message).is_some()
+                        {
+                            let started = service::prepare(
+                                memory_map, owner, direct_map, prepared, receive, send, queue_bytes,
+                            )?;
+                            // Retain every owner before queued work or task
+                            // activation can expose the continuing callbacks.
+                            prepared.continuing = Some(started.clone());
+                            started.first(&packet);
+                            return Ok(started);
                         }
                         pr_info!("IHK-SMP: regular host service pending os={} generation={} message={:x}; resources retained\n", owner.slot(), owner.generation(), message);
                         break 'service;
@@ -2238,7 +2284,7 @@ pub(super) fn prepare_os_boot(
 pub(super) fn start_os_boot(
     owner: super::smp_resource::OsToken,
     topology: &BootTopology<'_>,
-) -> Result {
+) -> Result<service::Started> {
     let published = PUBLISHED.load(Ordering::Acquire);
     if published.is_null() {
         return Err(ENODEV);
