@@ -112,6 +112,7 @@ mod image_tests {
                     header_bytes: header_bytes as usize,
                     performance: flag == 1,
                     completed_queue_reads: false,
+                    generic_vdso: false,
                 })
             );
             assert_eq!(plan.load_segments(), 2);
@@ -119,20 +120,23 @@ mod image_tests {
     }
 
     #[test]
-    fn revision_two_advertises_completed_reads_for_both_boot_layouts() {
-        for (header_bytes, flag) in [(6656, 0), (7616, 1)] {
-            let mut image = with_native_note(header_bytes, flag);
-            put32(&mut image, 0x318, 2);
-            let plan = ImagePlan::parse(&image, layout()).unwrap();
-            assert_eq!(
-                plan.native_boot_abi(),
-                Some(NativeBootAbi {
-                    header_bytes: header_bytes as usize,
-                    performance: flag == 1,
-                    completed_queue_reads: true,
-                })
-            );
-            assert_eq!(plan.load_segments(), 2);
+    fn native_revisions_advertise_independent_queue_and_vdso_contracts() {
+        for revision in [2, 3] {
+            for (header_bytes, flag) in [(6656, 0), (7616, 1)] {
+                let mut image = with_native_note(header_bytes, flag);
+                put32(&mut image, 0x318, revision);
+                let plan = ImagePlan::parse(&image, layout()).unwrap();
+                assert_eq!(
+                    plan.native_boot_abi(),
+                    Some(NativeBootAbi {
+                        header_bytes: header_bytes as usize,
+                        performance: flag == 1,
+                        completed_queue_reads: true,
+                        generic_vdso: revision == 3,
+                    })
+                );
+                assert_eq!(plan.load_segments(), 2);
+            }
         }
     }
 
@@ -140,7 +144,7 @@ mod image_tests {
     fn wrong_native_abi_version_layout_flags_and_duplicates_are_rejected() {
         for (at, value) in [
             (0x318, 0),
-            (0x318, 3),
+            (0x318, 4),
             (0x31c, 0x0005_0000),
             (0x320, 6656),
             (0x320, 7615),

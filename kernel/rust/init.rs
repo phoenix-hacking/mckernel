@@ -52,6 +52,7 @@ unsafe extern "C" {
     fn ap_start();
     fn arch_init();
     fn arch_ready();
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_setup_vdso();
     fn arch_start_pvclock();
     fn cpu_enable_interrupt();
@@ -279,9 +280,8 @@ pub unsafe extern "C" fn monitor_init() {
 
     let ncpus = unsafe { core::ptr::read_volatile(core::ptr::addr_of!((*cpu_info).ncpus)) };
 
-    let bytes = size_of::<IhkOsMonitor>().wrapping_add(
-        size_of::<crate::abi::IhkOsCpuMonitor>() * ncpus as usize,
-    );
+    let bytes = size_of::<IhkOsMonitor>()
+        .wrapping_add(size_of::<crate::abi::IhkOsCpuMonitor>() * ncpus as usize);
     let pages = ((bytes + PAGE_SIZE - 1) >> PAGE_SHIFT) as CInt;
     unsafe {
         crate::x86_setup::early_phase(b'7');
@@ -316,9 +316,7 @@ pub unsafe extern "C" fn monitor_init() {
         let probe_phys = virt_to_phys(monitor_ptr.cast::<c_void>());
         let canonical_ptr = phys_to_virt(probe_phys).cast::<u8>();
         kprintf(
-            cstr(
-                b"monitor_init: ptr=%lx phys=%lx canonical=%lx pages=%d bytes=%lu ncpus=%d\n\0",
-            ),
+            cstr(b"monitor_init: ptr=%lx phys=%lx canonical=%lx pages=%d bytes=%lu ncpus=%d\n\0"),
             monitor_ptr as CULong,
             probe_phys,
             canonical_ptr as CULong,
@@ -566,6 +564,11 @@ unsafe fn post_init() {
     }
     unsafe {
         crate::x86_setup::early_phase(b'}');
+        #[cfg(native_linux_irq_work_v6_12)]
+        if crate::syscall_policy::arch_setup_vdso() != 0 {
+            kernel_panic(cstr(b"native vDSO setup failed\0"));
+        }
+        #[cfg(not(native_linux_irq_work_v6_12))]
         arch_setup_vdso();
         crate::x86_setup::early_phase(b'^');
         arch_start_pvclock();

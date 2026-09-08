@@ -65,6 +65,12 @@ mod x86_memory_helpers;
 mod x86_perfctr;
 mod x86_setup;
 mod x86_vsyscall;
+#[cfg(native_linux_irq_work_v6_12)]
+#[allow(dead_code)]
+#[path = "../../host-kernel/native-rust/abi/vdso.rs"]
+mod vdso_protocol;
+#[cfg(native_linux_irq_work_v6_12)]
+mod native_vdso;
 mod xpmem_helpers;
 mod zeroobj;
 

@@ -144,6 +144,7 @@ pub(crate) struct NativeBootAbi {
     pub(crate) header_bytes: usize,
     pub(crate) performance: bool,
     pub(crate) completed_queue_reads: bool,
+    pub(crate) generic_vdso: bool,
 }
 
 /// All program headers and destination ranges are checked before this exists.
@@ -280,7 +281,7 @@ impl<'image> ImagePlan<'image> {
             if name == b"MCKERNEL\0" && kind == 0x4d43_4b01 {
                 if self.native_boot_abi.is_some()
                     || descriptor_bytes != 16
-                    || !matches!(u32_at(descriptor, 0)?, 1 | 2)
+                    || !matches!(u32_at(descriptor, 0)?, 1 | 2 | 3)
                     || u32_at(descriptor, 4)? != 0x0006_0c00
                 {
                     return Err(ImageError::BadElf);
@@ -293,7 +294,8 @@ impl<'image> ImagePlan<'image> {
                 self.native_boot_abi = Some(NativeBootAbi {
                     header_bytes,
                     performance: flags == 1,
-                    completed_queue_reads: u32_at(descriptor, 0)? == 2,
+                    completed_queue_reads: u32_at(descriptor, 0)? >= 2,
+                    generic_vdso: u32_at(descriptor, 0)? >= 3,
                 });
             }
             cursor = next;

@@ -10,6 +10,31 @@
 /// Smallest Linux errno accepted from a mapping adapter.
 const LINUX_ERRNO_MIN: i32 = -4095;
 
+/// Checked x86 __pa_symbol geometry, extracted from the native boot-root
+/// adapter. The caller supplies Linux's boot-initialized phys_base. This only
+/// accepts the bounded kernel image mapping, never vmalloc or a remote pointer.
+pub(crate) fn kernel_image_physical(address: u64, physical_base: u64, limit: u64) -> Option<u64> {
+    let offset = address.checked_sub(0xffff_ffff_8000_0000)?;
+    if offset >= 1 << 30 {
+        return None;
+    }
+    let physical = offset.checked_add(physical_base)?;
+    if physical >= limit {
+        return None;
+    }
+    Some(physical)
+}
+
+/// Checked direct-map translation for a Linux-owned object supplied by an
+/// existing kernel API. Range validation does not establish object ownership.
+pub(crate) fn kernel_linear_physical(address: u64, linear_base: u64, limit: u64) -> Option<u64> {
+    let physical = address.checked_sub(linear_base)?;
+    if physical >= limit {
+        return None;
+    }
+    Some(physical)
+}
+
 /// A validated negative Linux errno.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct LinuxErrno(i32);
@@ -381,11 +406,7 @@ impl UserMmapRequest {
         }
         policy.validate(protection)?;
         let physical_start = pages.pfn_to_address(page_offset)?;
-        let physical = AlignedPhysicalRange::from_start_length(
-            physical_start,
-            length,
-            pages,
-        )?;
+        let physical = AlignedPhysicalRange::from_start_length(physical_start, length, pages)?;
         if !allowed_window.contains(physical.range()) {
             return Err(MappingError::OutsidePhysicalWindow);
         }
@@ -435,11 +456,7 @@ impl DeviceMapping {
         if local_start == 0 {
             return Err(MappingError::ZeroMappedAddress);
         }
-        let local = AlignedPhysicalRange::from_start_length(
-            local_start,
-            request.length(),
-            pages,
-        )?;
+        let local = AlignedPhysicalRange::from_start_length(local_start, request.length(), pages)?;
         let local_pfn = pages.address_to_pfn(local.start())?;
         Ok(Self {
             remote: request.physical(),
@@ -464,13 +481,8 @@ impl DeviceMapping {
 /// A cleanup operation that a later Linux adapter must execute in order.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum CleanupStep {
-    UnmapUser {
-        user_start: u64,
-        length: u64,
-    },
-    UnmapDevice {
-        local: AlignedPhysicalRange,
-    },
+    UnmapUser { user_start: u64, length: u64 },
+    UnmapDevice { local: AlignedPhysicalRange },
 }
 
 /// Ordered, fixed-capacity rollback description preserving the original errno.
@@ -596,10 +608,7 @@ impl MmapTransaction {
     }
 
     /// Freeze the transaction and return cleanup in adapter execution order.
-    pub(crate) fn rollback(
-        &mut self,
-        errno: LinuxErrno,
-    ) -> Result<RollbackPlan, MappingError> {
+    pub(crate) fn rollback(&mut self, errno: LinuxErrno) -> Result<RollbackPlan, MappingError> {
         let plan = match (self.stage, self.mapping) {
             (MmapStage::Validated, None) => RollbackPlan::none(errno),
             (MmapStage::DeviceMapped, Some(mapping)) => {

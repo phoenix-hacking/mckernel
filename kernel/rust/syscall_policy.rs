@@ -11320,16 +11320,28 @@ pub unsafe extern "C" fn sys_arch_prctl(_n: CInt, ctx: *mut X86UserContext) -> C
 
 #[no_mangle]
 pub unsafe extern "C" fn time() -> CLong {
-    if gettime_local_support != 0 || tod_data.clocks_per_sec != 0 {
-        let mut ts = TimeSpec {
-            tv_sec: 0,
-            tv_nsec: 0,
-        };
-        syscall_gettime_bridge(addr_of_mut!(ts));
-        return ts.tv_sec;
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        if let Some(ts) =
+            crate::native_vdso::clock(CLOCK_REALTIME).or_else(|| crate::native_vdso::clock(5))
+        {
+            return ts.tv_sec;
+        }
+        return syscall_policy_do_syscall2_bridge(SYS_TIME, 0, 0);
     }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
+        if gettime_local_support != 0 || tod_data.clocks_per_sec != 0 {
+            let mut ts = TimeSpec {
+                tv_sec: 0,
+                tv_nsec: 0,
+            };
+            syscall_gettime_bridge(addr_of_mut!(ts));
+            return ts.tv_sec;
+        }
 
-    syscall_policy_do_syscall2_bridge(SYS_TIME, 0, 0)
+        syscall_policy_do_syscall2_bridge(SYS_TIME, 0, 0)
+    }
 }
 
 #[no_mangle]
@@ -11471,6 +11483,25 @@ pub unsafe extern "C" fn sys_clock_gettime(_n: CInt, ctx: *mut X86UserContext) -
     if ctx.is_null() {
         return -(EFAULT as CLong);
     }
+    #[cfg(native_linux_irq_work_v6_12)]
+    if let Some(ts) = crate::native_vdso::clock((*ctx).gpr.rdi as CInt) {
+        return syscall_copy_to_user_bridge(
+            (*ctx).gpr.rsi,
+            (&ts as *const TimeSpec).cast(),
+            size_of::<TimeSpec>(),
+        );
+    }
+    #[cfg(native_linux_irq_work_v6_12)]
+    if !matches!(
+        (*ctx).gpr.rdi as CInt,
+        CLOCK_PROCESS_CPUTIME_ID | CLOCK_THREAD_CPUTIME_ID
+    ) {
+        return syscall_policy_do_syscall2_bridge(
+            SYS_CLOCK_GETTIME,
+            (*ctx).gpr.rdi,
+            (*ctx).gpr.rsi,
+        );
+    }
     let thread = current_thread_ptr();
     if thread.is_null() {
         return -(EFAULT as CLong);
@@ -11517,6 +11548,20 @@ pub unsafe extern "C" fn sys_clock_gettime(_n: CInt, ctx: *mut X86UserContext) -
 pub unsafe extern "C" fn sys_gettimeofday(_n: CInt, ctx: *mut X86UserContext) -> CLong {
     if ctx.is_null() {
         return -(EFAULT as CLong);
+    }
+    #[cfg(native_linux_irq_work_v6_12)]
+    if (*ctx).gpr.rdi != 0 && (*ctx).gpr.rsi == 0 {
+        if let Some(ts) = crate::native_vdso::clock(CLOCK_REALTIME) {
+            let tv = TimeVal {
+                tv_sec: ts.tv_sec,
+                tv_usec: ts.tv_nsec / 1000,
+            };
+            return syscall_copy_to_user_bridge(
+                (*ctx).gpr.rdi,
+                (&tv as *const TimeVal).cast(),
+                size_of::<TimeVal>(),
+            );
+        }
     }
     gettimeofday_body_result(
         (*ctx).gpr.rdi,
@@ -13402,6 +13447,7 @@ pub struct ArchVdso {
 }
 
 #[repr(C)]
+#[cfg(not(native_linux_irq_work_v6_12))]
 struct VsyscallClock {
     vclock_mode: CInt,
     cycle_last: CULong,
@@ -13411,6 +13457,7 @@ struct VsyscallClock {
 }
 
 #[repr(C)]
+#[cfg(not(native_linux_irq_work_v6_12))]
 struct VsyscallGtodData {
     seq: CInt,
     clock: VsyscallClock,
@@ -13441,6 +13488,7 @@ unsafe extern "C" {
         container_size: *mut *mut SizeT,
         vdso_offset: *mut *mut isize,
     );
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn vdso_get_vdso_info() -> CInt;
     fn vdso_map_global_pages() -> CInt;
     fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
@@ -13558,6 +13606,25 @@ unsafe fn calculate_time_from_tod_data(ts: *mut TimeSpec) {
     }
 }
 
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
+    if ts.is_null() {
+        return;
+    }
+    // Internal boot/timer consumers cannot forward a user syscall. Use the
+    // actual Linux clock, with explicitly coarse time when no TSC is usable.
+    // Before the exchange exists, retain the original boot-time calibration.
+    if let Some(sample) =
+        crate::native_vdso::clock(CLOCK_REALTIME).or_else(|| crate::native_vdso::clock(5))
+    {
+        write(ts, sample);
+    } else {
+        calculate_time_from_tod_data(ts);
+    }
+}
+
+#[cfg(not(native_linux_irq_work_v6_12))]
 #[no_mangle]
 pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
     if ts.is_null() {
@@ -13608,6 +13675,52 @@ pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
 }
 
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe extern "C" fn vdso_get_vdso_info() -> CInt {
+    let (vdso, _, _) = match arch_vdso_state() {
+        Ok(state) => state,
+        Err(error) => return error,
+    };
+    let response = match crate::native_vdso::initialize() {
+        Ok(response) => response,
+        Err(error) => return error,
+    };
+    let time = crate::native_vdso::time_mapping(&response);
+    if time.is_null() {
+        return -EFAULT;
+    }
+    // The C allocation is exactly the old 88-byte ABI. Supplemental generic
+    // pages stay in the separate validated native exchange, never after it.
+    const _: () = assert!(size_of::<ArchVdso>() == 88);
+    write(
+        vdso,
+        ArchVdso {
+            busy: 0,
+            vdso_npages: response.text_pages as CInt,
+            vvar_is_global: 0,
+            hpet_is_global: 0,
+            pvti_is_global: 0,
+            padding: 0,
+            vdso_physlist: response.text_physical.map(|physical| physical as CLong),
+            vvar_virt: (-((crate::vdso_protocol::DATA_PAGES as isize) * PAGE_SIZE as isize))
+                as *mut c_void,
+            vvar_phys: response.data_physical[crate::vdso_protocol::TIME_PAGE] as CLong,
+            hpet_virt: null_mut(),
+            hpet_phys: 0,
+            pvti_virt: null_mut(),
+            pvti_phys: 0,
+            vgtod_virt: time.cast(),
+        },
+    );
+    // Native syscall wrappers check Linux's live mode on every call. Other
+    // legacy local-time users retain their Linux fallback; do not let the
+    // fixed user vsyscall page call ordinary kernel text. Keep the independent
+    // clocks_per_sec calibration needed by existing CPU accounting.
+    gettime_local_support = 0;
+    tod_data.do_local = 0;
+    0
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn arch_setup_vdso() -> CInt {
     arch_vdso_public_log_bridge(ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER, 0, 0, null_mut());
@@ -13645,16 +13758,34 @@ pub unsafe extern "C" fn arch_map_vdso(vm: *mut ProcessVm) -> CInt {
         -EFAULT
     } else {
         match arch_vdso_state() {
-            Ok((vdso, container_size, vdso_offset)) => arch_map_vdso_body_result(
-                vm,
-                (*(*vm).address_space).page_table,
-                vdso,
-                *container_size,
-                *vdso_offset,
-                Some(arch_vdso_add_range_bridge),
-                Some(arch_vdso_set_range_bridge),
-                Some(arch_vdso_map_log_bridge),
-            ),
+            Ok((vdso, container_size, vdso_offset)) => {
+                #[cfg(not(native_linux_irq_work_v6_12))]
+                let extra_pages: &[(isize, CULong)] = &[];
+                #[cfg(native_linux_irq_work_v6_12)]
+                let pages = match crate::native_vdso::snapshot() {
+                    Some(response) => [2_usize, 4, 5].map(|index| {
+                        (
+                            (index as isize - crate::vdso_protocol::DATA_PAGES as isize)
+                                * PAGE_SIZE as isize,
+                            response.data_physical[index],
+                        )
+                    }),
+                    None => return -EFAULT,
+                };
+                #[cfg(native_linux_irq_work_v6_12)]
+                let extra_pages = &pages[..];
+                arch_map_vdso_with_pages(
+                    vm,
+                    (*(*vm).address_space).page_table,
+                    vdso,
+                    *container_size,
+                    *vdso_offset,
+                    Some(arch_vdso_add_range_bridge),
+                    Some(arch_vdso_set_range_bridge),
+                    Some(arch_vdso_map_log_bridge),
+                    extra_pages,
+                )
+            }
             Err(error) => error,
         }
     };
@@ -13807,6 +13938,30 @@ pub unsafe extern "C" fn arch_map_vdso_body_result(
     set_range_fn: Option<ArchVdsoSetRangeFn>,
     log_fn: Option<ArchVdsoMapLogFn>,
 ) -> CInt {
+    arch_map_vdso_with_pages(
+        vm,
+        page_table,
+        vdso,
+        container_size,
+        vdso_offset,
+        add_range_fn,
+        set_range_fn,
+        log_fn,
+        &[],
+    )
+}
+
+unsafe fn arch_map_vdso_with_pages(
+    vm: *mut ProcessVm,
+    page_table: *mut c_void,
+    vdso: *const ArchVdso,
+    container_size: SizeT,
+    vdso_offset: isize,
+    add_range_fn: Option<ArchVdsoAddRangeFn>,
+    set_range_fn: Option<ArchVdsoSetRangeFn>,
+    log_fn: Option<ArchVdsoMapLogFn>,
+    extra_pages: &[(isize, CULong)],
+) -> CInt {
     if container_size == 0 {
         if let Some(log) = log_fn {
             log(ARCH_VDSO_MAP_LOG_NOT_AVAILABLE, 0, vm, 0, 0, 0, 0, 0);
@@ -13825,6 +13980,38 @@ pub unsafe extern "C" fn arch_map_vdso_body_result(
     };
     let vdso_ref = &*vdso;
     let container = (*vm).region.map_end;
+    // Additional pages are explicitly inside the native pre-text container.
+    // Validate every address before changing the VM or calling its callbacks.
+    if !extra_pages.is_empty() {
+        if !(1..=2).contains(&vdso_ref.vdso_npages)
+            || vdso_offset <= 0
+            || (vdso_offset as usize)
+                .checked_add(vdso_ref.vdso_npages as usize * PAGE_SIZE as usize)
+                != Some(container_size)
+            || container.checked_add(container_size as u64).is_none()
+        {
+            return -EINVAL;
+        }
+        for (index, &(offset, physical)) in extra_pages.iter().enumerate() {
+            if physical == 0 {
+                continue;
+            }
+            if offset >= 0
+                || offset < -vdso_offset
+                || offset % PAGE_SIZE as isize != 0
+                || physical % PAGE_SIZE != 0
+                || physical > (256_u64 << 30) - PAGE_SIZE
+                || offset == vdso_ref.vvar_virt as isize
+                || offset == vdso_ref.hpet_virt as isize
+                || offset == vdso_ref.pvti_virt as isize
+                || extra_pages[..index]
+                    .iter()
+                    .any(|&(old, pa)| pa != 0 && old == offset)
+            {
+                return -EINVAL;
+            }
+        }
+    }
     (*vm).region.map_end = (*vm).region.map_end.wrapping_add(container_size as CULong);
 
     let vdso_addr = arch_vdso_addr_add(container, vdso_offset);
@@ -13895,6 +14082,28 @@ pub unsafe extern "C" fn arch_map_vdso_body_result(
             return error;
         }
         (*vm).vvar_addr = vvar_start as *mut c_void;
+
+        for &(offset, physical) in extra_pages {
+            if physical == 0 {
+                continue;
+            }
+            let start = arch_vdso_addr_add(vdso_addr, offset);
+            error = set_range(
+                page_table,
+                vm,
+                start,
+                start + PAGE_SIZE,
+                physical,
+                PTATTR_ACTIVE | PTATTR_USER | PTATTR_NO_EXECUTE,
+                range,
+            );
+            if error != 0 {
+                if let Some(log) = log_fn {
+                    log(ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED, error, vm, 0, 0, 0, 0, 0);
+                }
+                return error;
+            }
+        }
 
         if !vdso_ref.vvar_virt.is_null() && vdso_ref.vvar_is_global == 0 {
             let s = arch_vdso_addr_add((*vm).vdso_addr as CULong, vdso_ref.vvar_virt as isize);

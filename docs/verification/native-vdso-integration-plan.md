@@ -150,3 +150,31 @@ guest replays, compiler sources, helper scripts and independent captures.
 All retained input/output identities and gzip round trips pass. This checkpoint
 preserves the earlier control-channel results and does not complete the native
 vDSO service or promote a production gate.
+
+The first service implementation now shares the explicit descriptor and its
+one-shot publication functions between the host and guest. Native boot note 3
+requires both completed queue reads and generic vDSO consumption; notes 1/2
+remain loadable but cannot prepare native startup. The host checks the whole
+128-byte extent, exact OS generation and every active queue before responding.
+Linux backing pages must remain outside all reserved McKernel extents.
+
+The guest owns its native exchange separately and copies only the original
+88-byte prefix into ArchVdso after full validation. Existing setup/map bodies
+are reused through an explicit supplemental-page slice. Normal RAM mappings
+cover RNG and any exported PV/HV pages while leaving the namespace and
+architecture holes unmapped. Native setup failures stop boot instead of being
+ignored. The new native reader uses the witnessed generic-overflow layout and
+the actual x86 Linux arithmetic, including backward-TSC clamping and overflow.
+Public clock syscalls read a supported Linux mode or forward through the
+existing syscall transport. Legacy local-time flags stay disabled in this
+native path; CPU-accounting calibration is retained. Internal boot/timer
+readers may use coherent Linux coarse time when TSC is unavailable. These are
+explicit fallbacks, not proof of accelerated clocks or completed offload.
+
+Service-tests attempt 1 passes eight protocol/mapping/clock tests, 128
+cross-page concurrent exchanges with canaries, all malformed request bytes,
+77,824 exact pinned Linux arithmetic comparisons, and the existing three
+image/loader/startup policy fixtures. The original Linux arithmetic bodies
+are extracted unchanged from the pinned source for the independent C oracle.
+The native and legacy images, Linux adapter build, supplemental mapping
+callbacks and actual cross-kernel service still require verification.

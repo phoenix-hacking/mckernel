@@ -120,6 +120,8 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_vsyscall.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/xpmem_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/zeroobj.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/abi/vdso.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_vdso.rs"
 	)
 		set(RUST_KERNEL_CFG)
 		if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")

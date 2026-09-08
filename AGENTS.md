@@ -24,6 +24,20 @@ acceptance claim. Preserve existing history and evidence.
 
 ## Current accounting and Rust preservation (2026-09-06)
 
+Native vDSO service WIP (2026-09-07 local date): the versioned 128-byte
+exchange, host response and guest consumer are now implemented, with native
+boot-note revision 3. The host checks the entire argument's generation and
+queue disjointness and replies once. The guest retains the legacy 88-byte
+object, adds explicit generic data mappings and reads the pinned clock layout.
+Native clock syscalls honor Linux's current TSC mode; unsupported modes use
+Linux forwarding. Legacy local-time paths use their fallback, while internal
+boot/timer reads can use Linux coarse time. Source formatting, eight protocol/
+mapping/clock tests, 77,824 exact Linux arithmetic comparisons and existing
+image/resource policy fixtures pass in service-tests attempt 1. Image/module
+builds, actual service runtime and supplemental page-map tests are pending.
+The latest verified runtime remains the export checkpoint below; this WIP
+does not claim a completed service, full boot or application verification.
+
 Native vDSO export checkpoint (2026-09-07 local date): patch 0008 builds the
 pinned Linux kernel and prototype 5's three native modules. Normal C
 preprocessing is unchanged. The read-only Rust fixture and independent C

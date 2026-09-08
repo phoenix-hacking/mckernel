@@ -529,6 +529,30 @@ struct OwnedControlChannel {
     pages: BootPages,
 }
 
+fn checked_guest_bytes(
+    map: &MemoryMap<MAX_EXTENTS>,
+    owner: super::smp_resource::OsToken,
+    direct_map: u64,
+    physical: u64,
+    bytes: usize,
+) -> Result<*mut u8> {
+    let end = physical.checked_add(bytes as u64).ok_or(EINVAL)?;
+    if physical == 0 || bytes == 0 || end > IDENTITY_WINDOW_END {
+        return Err(EINVAL);
+    }
+    direct_map.checked_add(end - 1).ok_or(EINVAL)?;
+    for index in 0..map.len() {
+        let extent = map.extent(index).ok_or(EIO)?;
+        if extent.owner() == Some(owner)
+            && extent.start() <= physical
+            && end <= extent.end().map_err(|_| EIO)?
+        {
+            return Ok(direct_map.checked_add(physical).ok_or(EINVAL)? as *mut u8);
+        }
+    }
+    Err(EINVAL)
+}
+
 fn checked_guest_queue(
     map: &MemoryMap<MAX_EXTENTS>,
     owner: super::smp_resource::OsToken,
@@ -536,22 +560,72 @@ fn checked_guest_queue(
     physical: u64,
     bytes: usize,
 ) -> Result<*mut super::abi::IhkIkcQueueHead> {
-    let end = physical.checked_add(bytes as u64).ok_or(EINVAL)?;
-    if physical == 0 || physical % 4096 != 0 || bytes == 0 || end > IDENTITY_WINDOW_END {
+    if physical % 4096 != 0 {
         return Err(EINVAL);
     }
-    for index in 0..map.len() {
-        let extent = map.extent(index).ok_or(EIO)?;
-        if extent.owner() == Some(owner)
-            && extent.start() <= physical
-            && end <= extent.end().map_err(|_| EIO)?
-        {
-            return Ok(
-                direct_map.checked_add(physical).ok_or(EINVAL)? as *mut super::abi::IhkIkcQueueHead
-            );
+    checked_guest_bytes(map, owner, direct_map, physical, bytes).map(|pointer| pointer.cast())
+}
+
+fn reply_vdso(
+    map: &MemoryMap<MAX_EXTENTS>,
+    owner: super::smp_resource::OsToken,
+    direct_map: u64,
+    physical: u64,
+    master_receive: u64,
+    master_send: u64,
+    master_bytes: usize,
+    channels: &[OwnedControlChannel],
+) -> Result {
+    use super::vdso_protocol as wire;
+    if physical % 8 != 0 {
+        return Err(EINVAL);
+    }
+    let destination = checked_guest_bytes(map, owner, direct_map, physical, wire::BYTES)?;
+    let end = physical + wire::BYTES as u64;
+    for (start, bytes) in [(master_receive, master_bytes), (master_send, master_bytes)] {
+        if physical < start + bytes as u64 && start < end {
+            return Err(EINVAL);
         }
     }
-    Err(EINVAL)
+    for entry in channels {
+        if entry.channel.owner != owner {
+            return Err(EIO);
+        }
+        for start in [entry.channel.receive_physical, entry.channel.send_physical] {
+            if physical < start + super::smp_ikc::CONTROL_QUEUE_BYTES as u64 && start < end {
+                return Err(EINVAL);
+            }
+        }
+    }
+    let response = super::smp_vdso::collect()?;
+    // Linux owns these permanent pages. They must never overlap the reserved
+    // McKernel pool, including another generation or currently unassigned RAM.
+    for page in response
+        .text_physical
+        .iter()
+        .chain(response.data_physical.iter())
+        .copied()
+    {
+        if page == 0 {
+            continue;
+        }
+        for index in 0..map.len() {
+            let extent = map.extent(index).ok_or(EIO)?;
+            if page < extent.end().map_err(|_| EIO)? && extent.start() < page + wire::PAGE_BYTES {
+                return Err(EIO);
+            }
+        }
+    }
+    // SAFETY: The whole descriptor belongs to this retained generation and is
+    // disjoint from every queue. Its native-revision-3 peer only polls busy;
+    // the serialized BOOT service calls this once and retains all owners.
+    unsafe { super::smp_vdso::complete(destination, &response)? };
+    pr_info!("IHK-SMP: vDSO replied os={} generation={} argument={:x} bytes={} text_pages={} text0={:x} text1={:x} time={:x} rng={:x} pvclock={:x} hvclock={:x}\n",
+        owner.slot(), owner.generation(), physical, wire::BYTES, response.text_pages,
+        response.text_physical[0], response.text_physical[1], response.data_physical[wire::TIME_PAGE],
+        response.data_physical[wire::RNG_PAGE], response.data_physical[wire::PVCLOCK_PAGE],
+        response.data_physical[wire::HVCLOCK_PAGE]);
+    Ok(())
 }
 
 fn accept_control_channel(
@@ -661,6 +735,7 @@ struct PreparedBoot {
     cpus: Vec<BootCpu>,
     master: Option<Box<super::smp_ikc::BootMaster>>,
     channels: Vec<OwnedControlChannel>,
+    vdso_replied: bool,
 }
 
 /// Turning started on is irreversible without an implemented stop/drain proof.
@@ -697,17 +772,14 @@ fn linux_boot_root() -> Result<u64> {
     if unsafe { bindings::pgdir_shift } != 39 {
         return Err(EINVAL);
     }
-    let offset = (&raw const init_top_pgt as u64)
-        .checked_sub(0xffff_ffff_8000_0000)
-        .ok_or(EIO)?;
-    if offset >= 1 << 30 {
-        return Err(EIO);
-    }
     // SAFETY: phys_base is Linux's boot-initialized __pa_symbol base. The
     // permanent assembly symbol uses the kernel-image mapping, not PAGE_OFFSET.
-    let physical = offset
-        .checked_add(unsafe { bindings::phys_base })
-        .ok_or(EIO)?;
+    let physical = super::ihk_mapping::kernel_image_physical(
+        &raw const init_top_pgt as u64,
+        unsafe { bindings::phys_base },
+        IDENTITY_WINDOW_END,
+    )
+    .ok_or(EIO)?;
     if physical % 4096 != 0 || physical >= IDENTITY_WINDOW_END {
         return Err(EIO);
     }
@@ -1341,9 +1413,9 @@ impl MemoryContext {
         self.require_unstarted(owner)?;
         let loaded = self.images[owner.slot() as usize].as_mut().ok_or(EINVAL)?;
         let boot_abi = loaded.native_boot_abi.ok_or(EINVAL)?;
-        // Older native images remain loadable, but cannot safely reuse reply
-        // slots. Reject them before taking the trampoline or preparing startup.
-        if !boot_abi.completed_queue_reads {
+        // Older native images remain loadable but lack the queue completion or
+        // generic vDSO contract. Reject before taking any startup resources.
+        if !boot_abi.completed_queue_reads || !boot_abi.generic_vdso {
             return Err(EINVAL);
         }
         let (layout, entry, root) = (loaded.layout, loaded.entry, loaded.tables.plan.root());
@@ -1637,6 +1709,7 @@ impl MemoryContext {
                 cpus,
                 master: None,
                 channels: Vec::new(),
+                vdso_replied: false,
             }),
             started: false,
         });
@@ -1778,7 +1851,11 @@ impl MemoryContext {
                         }
                     }
                 }
-                for entry in prepared.channels.iter_mut() {
+                for index in 0..prepared.channels.len() {
+                    let entry = &mut prepared.channels[index];
+                    if entry.channel.owner != owner {
+                        return Err(EIO);
+                    }
                     if let Some(packet) = entry.channel.next_packet()? {
                         // Queue publication synchronizes the guest's preceding
                         // write_cpu update. Validate the source before dispatch.
@@ -1788,7 +1865,22 @@ impl MemoryContext {
                         let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
                         let reference = i32::from_le_bytes(packet[24..28].try_into().unwrap());
                         let argument = u64::from_le_bytes(packet[40..48].try_into().unwrap());
-                        pr_info!("IHK-SMP: regular request os={} generation={} port={} cookie={} packets={} message={:x} reference={} argument={:x} irq_events={}; host service pending, resources retained\n", owner.slot(), owner.generation(), entry.channel.port, entry.channel.cookie, entry.channel.received, message, reference, argument, prepared.irq.events());
+                        pr_info!("IHK-SMP: regular request os={} generation={} port={} cookie={} packets={} message={:x} reference={} argument={:x} irq_events={}\n", owner.slot(), owner.generation(), entry.channel.port, entry.channel.cookie, entry.channel.received, message, reference, argument, prepared.irq.events());
+                        if entry.channel.port == 503 && message == 0xb && !prepared.vdso_replied {
+                            reply_vdso(
+                                memory_map,
+                                owner,
+                                direct_map,
+                                argument,
+                                receive,
+                                send,
+                                queue_bytes,
+                                &prepared.channels,
+                            )?;
+                            prepared.vdso_replied = true;
+                            continue;
+                        }
+                        pr_info!("IHK-SMP: regular host service pending os={} generation={} message={:x}; resources retained\n", owner.slot(), owner.generation(), message);
                         break 'service;
                     }
                 }

@@ -39,6 +39,10 @@ mod ikc_queue;
 #[allow(dead_code)]
 mod ikc_master;
 mod smp_ikc;
+#[allow(dead_code)]
+#[path = "abi/vdso.rs"]
+mod vdso_protocol;
+mod smp_vdso;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
