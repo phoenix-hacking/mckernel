@@ -137,7 +137,16 @@ static void write_access(const char *path, int denied)
 
 static void open_exec(int fd, const char *path, long expected)
 {
-    require(call(SYS_IOCTL, fd, OPEN_EXEC, (long)path) == expected);
+    long actual = call(SYS_IOCTL, fd, OPEN_EXEC, (long)path);
+    if (actual != expected) {
+        message("NATIVE_MCCTRL_OPEN_RESULT index="); print_number(file_checks);
+        message(" actual_negative="); print_number(actual < 0);
+        message(" actual_magnitude="); print_number(actual < 0 ? -actual : actual);
+        message(" expected_negative="); print_number(expected < 0);
+        message(" expected_magnitude="); print_number(expected < 0 ? -expected : expected);
+        message(" credential_checks="); print_number(credential_checks); message("\n");
+    }
+    require(actual == expected);
     file_checks++;
 }
 
@@ -288,6 +297,17 @@ static void final_release(int fd)
 
 int main(void)
 {
+    /* Populate the mounted noexec filesystem with the same executable bytes.
+     * The minimal initramfs intentionally has no external cp utility. */
+    int source = call(SYS_OPEN, (long)"/targets/one", 0, 0);
+    int target = call(SYS_OPEN, (long)"/noexec/one", 1 | 64 | 128, 0755);
+    require(source >= 0 && target >= 0);
+    char block[512];
+    long bytes;
+    while ((bytes = call(SYS_READ, source, (long)block, sizeof(block))) > 0)
+        require(call(SYS_WRITE, target, (long)block, bytes) == bytes);
+    require(bytes == 0);
+    close_fd(source); close_fd(target);
     int fd = open_os(0);
     credentials(fd);
     caller_credentials(fd);
