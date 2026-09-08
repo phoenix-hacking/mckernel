@@ -1,0 +1,176 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260907.py.gz",
+      "sha256": "9e08dbe4cadf3d9f0efd614aa64eb319ebfa6903cc1790089c718fc0851c625d",
+      "size": 3658,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260907.py",
+      "unpacked_sha256": "fd7449eb0dc02de41ca81e966f2464e160327a31058169c62b4554bf02acdbae",
+      "unpacked_size": 11198
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-plan.json.gz",
+      "sha256": "45cfa8b0bc545a6007f158c8ae5b0f6feb6e951cbdc844c5218be4249f5d9809",
+      "size": 137532,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-plan.json",
+      "unpacked_sha256": "d034e97094e59f3d8aa091d99d0a30eb9d8f3275db432998d504df79847dff88",
+      "unpacked_size": 1417886
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-report.json.gz",
+      "sha256": "ea16acf9a43264c75a1425521b27b41974022988ce3ae47e36176796f10fca06",
+      "size": 39766,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-report.json",
+      "unpacked_sha256": "05d138b6a32425f62892cebb00340bbe42a8a8dcd2c7472e8d62f3528a716b62",
+      "unpacked_size": 257667
+    },
+    {
+      "path": "docs/verification/evidence/storage-pip-cache-cleanup-20260907.json.gz",
+      "sha256": "a1f93b4f94b7d5a342208173f1c9d05348e88440647cd3285ca636b3dcee50c8",
+      "size": 398,
+      "source": "/home/holden/mckernel-work/scratch/storage-pip-cache-cleanup-20260907.json",
+      "unpacked_sha256": "e47e765bada8fb8483adde8db474accb3d2099784a11f0af01f58c06dee0ff9f",
+      "unpacked_size": 918
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-before-20260907.json.gz",
+      "sha256": "7e0e6ddfbd2da5a57356fc5ab9d718a11f656e1484e0885a4a2a9f3cbcc8a887",
+      "size": 274,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-before-20260907.json",
+      "unpacked_sha256": "45bfe85810a02846fb43a0a8f12b2016477bfa86dec5c8143ac33de02a446e96",
+      "unpacked_size": 454
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-after-20260907.json.gz",
+      "sha256": "e3ad546f7040bdb5110663f47dc758868222217e75631357e9b8017b88e56971",
+      "size": 355,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-after-20260907.json",
+      "unpacked_sha256": "dfb131eccee6eb5e1e06f3d9241e2cdf707ad5eeb68f3d664d5af40fd0041660",
+      "unpacked_size": 653
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-20260907.json.gz",
+      "sha256": "dfdddafb8ba975603674cd2c279c3e64488146ae78a2b211235354424722d6ea",
+      "size": 335,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-20260907.json",
+      "unpacked_sha256": "1daecbcf2b721749b6f7a1c92d880cfe17f33be4828c30cc272068ed44501281",
+      "unpacked_size": 898
+    }
+  ],
+  "checks": [
+    "Every retained manifest and archive used for removal matches its Git blob at the verified pushed commit and its declared SHA-256/size; complete gzip streams were read",
+    "Every entry in each removed capture matches its retained archive for contents, type, mode and symlink target; no incomplete archive candidates were removed",
+    "Source snapshots and archive hashes were rechecked before deletion; all selected paths were absent afterward",
+    "All 14 protected current dependency directories and 91 recorded build/fixture input/output paths remain present"
+  ],
+  "current_root_available_bytes": 67361124352,
+  "evidence_checked_at_pushed_head": "fe5976b9e7c7761ff70196ee0c8a3954e7b46c69",
+  "finished_utc": "2026-09-08T03:50:16.552545+00:00",
+  "first_scratch_trim": {
+    "backing_allocated_after": 31094517760,
+    "backing_allocated_before": 63539965952,
+    "command": [
+      "sudo",
+      "/usr/sbin/fstrim",
+      "--verbose",
+      "/home/holden/mckernel-work/scratch"
+    ],
+    "newly_reclaimed_backing_bytes": 32445448192,
+    "observation": "Earlier maintenance tool output in this session; initial df was 98% full with about 27 GiB available. fstrim reports free ranges, not necessarily newly released backing blocks.",
+    "trim_reported_bytes": 32445501440
+  },
+  "kind": "storage maintenance; no kernel runtime acceptance",
+  "limitations": [
+    "Host free space also changes with unrelated activity; reclaimed bytes use backing-file allocation deltas and pip cache allocation, not the difference between two rounded df outputs",
+    "Sparse image capacity is unchanged at 60 GiB; source, current build inputs, images, toolchains, Git history and committed failed-run evidence were preserved",
+    "Unfinished native sysfs tree sources are saved as WIP in the parent commit; compilation and runtime validation remain pending"
+  ],
+  "preserved": {
+    "current_record_paths_present": 91,
+    "current_records": [
+      "native-sysfs-os-module-20260907-2",
+      "native-sysfs-objects-module-20260907-5",
+      "native-vdso-module-20260907-1"
+    ],
+    "protected_directories": [
+      "mckernel-native-irq-images-20260907-10",
+      "mckernel-native-irq-images-20260907-11",
+      "mckernel-native-irq-images-20260907-13",
+      "native-build-base-24a151fe",
+      "native-ikc-prototype-20260907-9",
+      "native-irq-transport-exact-stage-20260907-1",
+      "native-runtime-24a151fe",
+      "native-runtime-local-base-24a151fe",
+      "native-source",
+      "native-sysfs-objects-module-20260907-5",
+      "native-sysfs-os-module-20260907-2",
+      "native-trampoline-region-module-20260907-3",
+      "native-vdso-kernel-20260907-3",
+      "native-vdso-module-20260907-1"
+    ],
+    "scope": "Presence check after cleanup; no new kernel build or runtime acceptance",
+    "status": "PASS"
+  },
+  "reclaimed_host_allocated_bytes": 38991736832,
+  "removed_capture_directories": 52,
+  "removed_duplicate_archives": 463,
+  "removed_regenerable_pip_cache_bytes": 2077061120,
+  "removed_scratch_allocated_bytes": 4412248064,
+  "restoration": [
+    "The compressed cleanup report maps every removed capture or duplicate file to a retained archive and SHA-256 in docs/verification/evidence",
+    "To restore an old capture, verify that archive hash, then extract its top-level directory into the scratch filesystem; copy an archive back to its recorded source path only if an old retention helper needs that extra copy",
+    "Retained metadata can still refer to original /work paths. Restore a historical capture before replaying a helper that consumes those paths. Do not reuse an old attempt name for new evidence"
+  ],
+  "second_scratch_trim": {
+    "after": {
+      "backing_file": {
+        "allocated_bytes": 26681729024,
+        "logical_bytes": 64424509440,
+        "path": "/home/holden/mckernel-work/scratch.ext4"
+      },
+      "command": [
+        "sudo",
+        "/usr/sbin/fstrim",
+        "--verbose",
+        "/home/holden/mckernel-work/scratch"
+      ],
+      "filesystems": {
+        "/": {
+          "free": 67361124352,
+          "total": 1006450962432,
+          "used": 887889498112
+        },
+        "/home/holden/mckernel-work/scratch": {
+          "free": 33626669056,
+          "total": 63090503680,
+          "used": 26225831936
+        }
+      },
+      "newly_reclaimed_backing_bytes": 4469227520,
+      "trim_reported_bytes": 28284211200,
+      "utc": "2026-09-08T03:48:01.294507+00:00"
+    },
+    "before": {
+      "backing_file": {
+        "allocated_bytes": 31150956544,
+        "logical_bytes": 64424509440,
+        "path": "/home/holden/mckernel-work/scratch.ext4"
+      },
+      "filesystems": {
+        "/": {
+          "free": 63131824128,
+          "total": 1006450962432,
+          "used": 892118798336
+        },
+        "/home/holden/mckernel-work/scratch": {
+          "free": 33626673152,
+          "total": 63090503680,
+          "used": 26225827840
+        }
+      },
+      "utc": "2026-09-08T03:47:29.817637+00:00"
+    }
+  },
+  "source_parent": "36df4320b1bcffab5732974b265f7139a9fdc14c",
+  "status": "PASS"
+}

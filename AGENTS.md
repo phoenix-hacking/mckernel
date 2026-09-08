@@ -22,6 +22,15 @@ commit. If work is unfinished, make an explicit WIP checkpoint with the exact
 checks passed, failures, and remaining work; saving it is not a production
 acceptance claim. Preserve existing history and evidence.
 
+The user also requests ongoing disk cleanup. Check host and scratch free space
+between substantial validation batches. After a checkpoint is pushed, remove
+obsolete expanded captures and extra archive copies only after verifying their
+retained evidence against the committed hashes and checking current dependency
+paths. Preserve every failed run's evidence and all active source/build/image
+inputs. The mounted scratch filesystem uses a sparse backing file: run targeted
+`fstrim` on `/home/holden/mckernel-work/scratch` after substantial cleanup so its
+free blocks are returned to the host drive. Do not resize or delete that image.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native OS-device sysfs checkpoint (2026-09-07 local date): the native SMP

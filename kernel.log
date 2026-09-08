@@ -33987,3 +33987,24 @@ bytes. Evidence: /work/native-sysfs-os-retained-20260907-1, with the failed
 manifest and 13 completed artifacts. Stop before publication. Inspect the
 original and formatted captures and bind that transformation explicitly;
 do not claim an unchanged-byte compiler binding or discard the failure.
+
+2026-09-07 local date — requested storage maintenance completed.
+No kernel build or guest ran during this cleanup. Targeted fstrim on the
+mounted 60-GiB scratch image reclaimed unused backing blocks without resizing
+the filesystem. A full byte/mode/type/link comparison against hash-verified
+archives at pushed commit fe5976b9e7c7761ff70196ee0c8a3954e7b46c69 allowed
+removal of 52 obsolete expanded captures and 463 extra compressed copies.
+Their original evidence, including failed runs, remains committed in
+docs/verification/evidence. The regenerable pip download/wheel cache was
+cleared; installed packages were preserved. A second targeted trim returned
+the newly freed scratch blocks to the host drive. Total reclaimed allocation
+was about 36.31 GiB; the final measurement had about 62.73 GiB available on /.
+All 14 protected dependency directories and 91 current recorded build/fixture
+paths remain present. Complete actions, byte counts and restoration mappings:
+docs/verification/storage-maintenance-20260907.json and its retained artifacts.
+Historical /work capture paths in older log entries may now require restoring
+their retained archive before replay; no failure evidence was discarded.
+The sysfs tree implementation and fixtures were saved as WIP in 36df4320.
+Only its staged whitespace check passed in the pinned native container;
+compilation, legacy-body extraction, guest execution and real sysfs setup
+completion remain the next verification work.
