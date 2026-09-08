@@ -36,6 +36,15 @@ creation of cpu/num_processors, busy=1. Full ready status, continuing services,
 workloads, native shutdown and the declared production integration/acceptance
 requirements remain open. No production gate is promoted by this local result.
 
+The subsequent remote sysfs callback adapter passes its independent Linux
+fixture over two module lifetimes, including 512 concurrent round trips,
+1,068 exchanges with queue retries, interrupted readers and callback/release
+draining. Metadata and RPC bodies pass unchanged-C layouts and existing guest
+Rust response comparisons. See docs/verification/native-sysfs-remote-checkpoint-20260907.json
+and native-sysfs-request-protocol-20260907.json in the same directory.
+Actual McKernel dispatch, request ownership/aliases and special snooping remain
+unintegrated. This bounded adapter result does not promote the gates below.
+
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)
 TRACKED GATES: 130 total; 6 PASS; 1 IN_PROGRESS; 0 BLOCKED; 123 TODO

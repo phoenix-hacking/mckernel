@@ -1,16 +1,19 @@
 // SPDX-License-Identifier: GPL-2.0-only
 //! Sleepable remote attributes with reply progress independent of tree removal.
 
-use core::{ptr, sync::atomic::{AtomicBool, Ordering}};
-use kernel::{
-    prelude::*,
-    sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
-};
 use super::{
     sysfs_objects::AttributeOps,
     sysfs_request::Client,
     sysfs_rpc::{Call, Exchange, DATA_BYTES, PACKET_BYTES},
     sysfs_setup::SharedData,
+};
+use core::{
+    ptr,
+    sync::atomic::{AtomicBool, Ordering},
+};
+use kernel::{
+    prelude::*,
+    sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
 };
 
 fn errno(value: i32) -> Error {
@@ -39,7 +42,9 @@ impl Remote {
     /// The peer accesses it only for the one published request; no Rust slice
     /// aliases its bytes. No other remote service may claim the same page.
     pub(crate) unsafe fn new(data: SharedData) -> Result<Arc<Self>> {
-        if data.bytes != DATA_BYTES || data.address == 0 || data.physical == 0
+        if data.bytes != DATA_BYTES
+            || data.address == 0
+            || data.physical == 0
             || data.address % DATA_BYTES as u64 != 0
             || data.physical % DATA_BYTES as u64 != 0
             || data.address.checked_add(DATA_BYTES as u64).is_none()
@@ -47,21 +52,21 @@ impl Remote {
         {
             return Err(EINVAL);
         }
-        Arc::pin_init(pin_init!(Self {
-            data,
-            state <- new_mutex!(State { exchange: Exchange::new(), caller: false }),
-            changed <- new_condvar!(),
-        }), GFP_KERNEL)
+        Arc::pin_init(
+            pin_init!(Self {
+                data,
+                state <- new_mutex!(State { exchange: Exchange::new(), caller: false }),
+                changed <- new_condvar!(),
+            }),
+            GFP_KERNEL,
+        )
     }
 
     /// Execute only the queue reservation/publication while holding this lock.
     /// The transport callback must not sleep waiting for a peer response or
     /// reacquire this service. An error MUST mean no packet was published;
     /// queue-full may retry later. Notify the guest after this method succeeds.
-    pub(crate) fn publish(
-        &self,
-        send: impl FnOnce(&[u8; PACKET_BYTES]) -> Result,
-    ) -> Result<bool> {
+    pub(crate) fn publish(&self, send: impl FnOnce(&[u8; PACKET_BYTES]) -> Result) -> Result<bool> {
         let mut state = self.state.lock();
         let Some((token, packet)) = state.exchange.outgoing() else {
             return Ok(false);
@@ -133,13 +138,18 @@ impl Remote {
                     self.changed.wait(&mut state);
                 }
             }
-            let bytes = state.exchange.finish(token).map_err(errno)?.map_err(errno)?;
+            let bytes = state
+                .exchange
+                .finish(token)
+                .map_err(errno)?
+                .map_err(errno)?;
             if matches!(call, Call::Show { .. }) {
                 for (index, byte) in output.get_mut(..bytes).ok_or(EIO)?.iter_mut().enumerate() {
                     // SAFETY: The matching acquired response retires the peer's
                     // write. The state lock and caller flag exclude a new call
                     // until these bounded volatile reads have completed.
-                    *byte = unsafe { ptr::read_volatile((self.data.address as *const u8).add(index)) };
+                    *byte =
+                        unsafe { ptr::read_volatile((self.data.address as *const u8).add(index)) };
                 }
             }
             Ok(bytes)
@@ -165,7 +175,14 @@ impl Attribute {
         if (1..=1000).contains(&client.operations) {
             return Err(EINVAL);
         }
-        Arc::new(Self { remote, client, published: AtomicBool::new(false) }, GFP_KERNEL)
+        Ok(Arc::new(
+            Self {
+                remote,
+                client,
+                published: AtomicBool::new(false),
+            },
+            GFP_KERNEL,
+        )?)
     }
 
     pub(crate) fn arm(&self) {
@@ -175,11 +192,25 @@ impl Attribute {
 
 impl AttributeOps for Arc<Attribute> {
     fn show(&self, output: &mut [u8]) -> Result<usize> {
-        self.remote.call(self.client, Call::Show { capacity: output.len() }, &[], output, true)
+        self.remote.call(
+            self.client,
+            Call::Show {
+                capacity: output.len(),
+            },
+            &[],
+            output,
+            true,
+        )
     }
 
     fn store(&self, input: &[u8]) -> Result<usize> {
-        self.remote.call(self.client, Call::Store { bytes: input.len() }, input, &mut [], true)
+        self.remote.call(
+            self.client,
+            Call::Store { bytes: input.len() },
+            input,
+            &mut [],
+            true,
+        )
     }
 }
 
@@ -189,9 +220,16 @@ impl Drop for Attribute {
             // File owns this Arc until sysfs_remove_file has drained callbacks.
             // Wait uninterruptibly for release: a signal must not let unlink
             // acknowledge while McKernel can still access the instance.
-            if let Err(error) = self.remote.call(self.client, Call::Release, &[], &mut [], false) {
-                pr_err!("IHK-SMP: remote sysfs release failed os={} generation={} error={}\n",
-                    self.remote.data.owner.slot(), self.remote.data.owner.generation(), error.to_errno());
+            if let Err(error) = self
+                .remote
+                .call(self.client, Call::Release, &[], &mut [], false)
+            {
+                pr_err!(
+                    "IHK-SMP: remote sysfs release failed os={} generation={} error={}\n",
+                    self.remote.data.owner.slot(),
+                    self.remote.data.owner.generation(),
+                    error.to_errno()
+                );
             }
         }
     }

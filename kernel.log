@@ -34160,3 +34160,52 @@ originals and compiler inputs. Eight complete gzip artifacts preserve all
 three attempts and both helper versions. The Linux callback adapter is a WIP
 source checkpoint; no native module build, Linux callback fixture, actual
 guest CREATE completion or production gate credit is claimed yet.
+
+2026-09-07 local date — native sysfs remote module attempt 1 FAILED compilation.
+Command: mckernel-container native python3 -B /work/build-native-sysfs-remote.py 1
+Environment: pinned Linux 6.12/Rust 1.92 native container, CPUs 2-5,
+four-CPU/12-GiB limits. Source diff/format checks pass. The actual SMP crate
+then fails E0308 in Attribute::new: Linux Arc::new returns AllocError, while
+the callback adapter returns kernel::error::Error. No fixture build or guest
+ran. Preserve native-sysfs-remote-module-20260907-1 with all original/compiler
+sources and the failed log. Convert the allocator error through ? and retry
+the module build under a fresh attempt directory.
+
+Native sysfs remote module attempt 2 passes all three native module builds
+and their no-SIMD checks, then FAILS fixture compilation. Same pinned command
+with attempt 2: -D unreachable-pub rejects the fixture-only setup carrier and
+diagnostic owner methods exported pub inside a private module. Preserve the
+full attempt and compiler log. Restrict that fixture API to pub(crate) and
+retry; no Linux callback or guest result has been obtained yet.
+
+Native sysfs remote module attempt 3 compiles all native modules and the
+Linux callback fixture, with no SIMD/FPU instructions. The helper then FAILS
+its undefined-symbol assertion for __wake_up before building the userspace
+probe. Preserve the attempt and exact nm/disassembly. Inspect the pinned
+Rust CondVar call boundary: its non-generic methods may link through the
+Linux Rust library rather than directly importing the underlying C symbol.
+Do not rerun a guest; none has started for this callback fixture yet.
+
+2026-09-07 local date — native remote sysfs callback boundary PASSED.
+Build: mckernel-container native python3 -B /work/build-native-sysfs-remote-v2.py 4
+Guest: mckernel-container native python3 -B /work/run-native-sysfs-remote-guest.py 4 1
+Retention: mckernel-container native python3 -B /work/retain-native-sysfs-remote.py 1
+All use the pinned Linux 6.12/Rust 1.92 container, CPUs 2-5 and four-CPU/
+12-GiB limits. Three native modules and the actual Linux callback fixture
+compile with no SIMD/FPU register use. The corrected import check verifies
+Linux's Rust CondVar::notify_all export and the actual C wait imports.
+Two fixture lifetimes pass 512 concurrent write/read round trips, 1,068
+completed exchanges and 1,068 queue-full retries; two interrupted readers
+retain outstanding buffer ownership until late replies arrive. Two active
+callback removals wait for callback and remote-release completion. All 18
+attributes release; failed duplicate creates never release their guest tokens.
+Four page-boundary and eight error checks pass; both namespaces disappear.
+All initial module/harness failures remain archived. Retention passes with
+16 artifacts, 31 source/compiler bindings and three references, including
+exact pinned-rustfmt replay of the same three older source formatting changes.
+The fixture owns its own page and substitutes only a diagnostic mapping carrier;
+it claims no IHK generation, guest extent ownership or actual McKernel CREATE.
+Next integrate the retained packet pump, metadata ownership/alias claims,
+complete request handlers and special snooping, then repeat both actual-start
+ABIs. Actual architectural status remains 2. No new boot/application/formal
+acceptance credit. Host and scratch retain about 140 GiB and 31 GiB free.

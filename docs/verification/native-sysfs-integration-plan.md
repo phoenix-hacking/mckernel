@@ -49,6 +49,46 @@ the real Linux callback adapter with an independent peer and concurrent file
 removal. Integrate the owned pump and run both actual McKernel startup ABIs;
 fixture success alone does not prove guest sysfs or application completion.
 
+## Verified remote callback boundary, 2026-09-07
+
+The native metadata decoder and exchange state pass seven actual-body tests:
+32 unchanged-C layout values, 2,560 concurrent metadata completions and 4,096
+responses through nine extracted existing guest Rust bodies. The final protocol
+capture preserves immutable originals and compiler bytes. Earlier fixture type
+failure and original-source recorder limitation remain documented in
+`native-sysfs-request-protocol-20260907.json`.
+
+`sysfs_remote.rs` now compiles in all three native modules and in the disposable
+Linux fixture. It uses the pinned Rust Mutex/CondVar, a caller flag that can be
+released on interruption without releasing the pending exchange, bounded
+volatile copies and a release gate armed only after successful file creation.
+The fixture's separate peer keeps replies moving while Tree::unlink drains an
+active file callback, and acknowledges release before that unlink finishes.
+
+Two module lifetimes pass 512 concurrent write/read round trips, 1,068 completed
+exchanges and 1,068 forced pre-publication queue-full retries. Each lifetime
+interrupts a reader, proves the next reader still waits for the outstanding
+peer write, and then receives its own fresh result. Each removes a file during
+an active callback and verifies both callback and remote release completion.
+All 18 published remote attributes release, failed duplicate creation never
+releases its guest token, and both namespaces disappear. Four page-boundary
+checks and eight malformed-count/errno checks also pass.
+
+`native-sysfs-remote-checkpoint-20260907.json` retains 16 artifacts, 31 exact
+source/compiler bindings and three references. Three older formatting changes
+are bound by the exact pinned rustfmt replay. The allocator-error conversion,
+fixture visibility and CondVar symbol assertion failures remain FAIL; module
+attempt 4 and guest attempt 1 pass. Linux's notify_all is imported through its
+Rust library rather than a direct __wake_up import.
+
+This fixture uses a separately owned Linux page and diagnostic identity in
+place of the setup mapping carrier. It proves no IHK generation or actual
+McKernel extent ownership. Continuing dispatch, request claims/aliases, special
+snooping, real CREATE and both actual-start regressions remain the next work.
+Architectural boot status is still 2; full readiness, applications, shutdown,
+declared production integration, complete Rust/assembly and independent
+acceptance remain open.
+
 Source parent: `96dde3b4461f604ca474809ba3649cbf444da005`.
 Target: the pinned Linux `6.12.0-211.44.1.el10_2`, native Rust 1.92 and
 revision-3 McKernel image from the completed vDSO service checkpoint.

@@ -52,6 +52,22 @@ recorded. Continue checking capacity between substantial validation batches.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Native remote callback checkpoint: all three native modules and the real
+Linux fixture build on the pinned topology kernel. Two fixture lifetimes pass
+512 concurrent write/read round trips, 1,068 exchanges with forced queue-full
+retries, two interrupted-reader/late-response checks, two concurrent callback
+drains, 18 remote releases, four page-boundary checks and eight error checks.
+Failed duplicate creation preserves the original and does not release the
+guest token. Both namespaces retire. See
+`docs/verification/native-sysfs-remote-checkpoint-20260907.json`: 16 retained
+artifacts, 31 source/compiler bindings and all three initial build/harness
+failures. Final module attempt 4 and guest attempt 1 pass; preserve module 4
+as a current verification dependency. The fixture owns its own page and uses
+a diagnostic identity, not IHK authority or actual McKernel memory.
+Next integrate the continuing packet pump, exclusive metadata claims, all
+request handlers and special snooping. Actual boot remains at CREATE/status 2;
+there is no new application or production acceptance credit.
+
 Continuing sysfs protocol checkpoint: `abi/sysfs_request.rs` decodes all five
 metadata requests into owned snapshots and publishes error/optional handle
 before busy. `sysfs_rpc.rs` serializes one shared buffer with unique response
@@ -62,10 +78,10 @@ See `docs/verification/native-sysfs-request-protocol-20260907.json` for eight
 artifacts and exact original/compiler bindings. Initial fixture compilation
 failure and the first helper's original-source retention limitation remain
 recorded. Final attempt 3 preserves and verifies both complete source sets.
-The new Linux `sysfs_remote.rs` callback adapter is written but still uncompiled
-and unexercised. Next verify it, then integrate the retained packet pump,
-metadata claims, special snooping and actual CREATE. Both real startups still
-stop at CREATE/status 2; no new guest service, application or production credit.
+The Linux `sysfs_remote.rs` adapter now passes the separate callback checkpoint
+above. Next integrate the retained packet pump, metadata claims, special
+snooping and actual CREATE. Both real startups still stop at CREATE/status 2;
+no new guest service, application or production credit.
 
 Native sysfs setup runtime checkpoint: both actual startup interfaces now
 complete SYSFS_REQ_SETUP through the integrated topology owner and the new
