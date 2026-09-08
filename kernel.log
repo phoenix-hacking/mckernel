@@ -34548,3 +34548,15 @@ The negative configuration exits nonzero at the intended new CMake guard;
 CMake wraps the final "IRQ ABI" onto another line. Normalize whitespace in
 the diagnostic comparison while requiring the same complete expected message
 and nonzero exit. Preserve the original failed capture and retry image attempt 2.
+
+Image attempt 2 PASS.
+Command: mckernel-container compat python3 -B /work/build-mckernel-native-sysfs-images.py 2
+All four actual images build: C fallback, legacy Rust, native Rust and opt-in
+native sysfs verification. Four negative configuration checks pass, including
+both new profile guards. Pinned formatting and the unchanged focused IRQ
+producer tests pass. All Rust images retain linked text ownership reports.
+CMake cache, compiler flags, symbols and image marker bytes agree that the
+fixture is present only in the opt-in profile. Exact sources, commands, objects,
+maps and images are retained in mckernel-native-sysfs-images-20260908-2.
+No new guest runtime result is claimed yet. Next execute the real Linux
+controller with snooping module 3 and both startup ABIs under the native limits.
