@@ -34209,3 +34209,25 @@ Next integrate the retained packet pump, metadata ownership/alias claims,
 complete request handlers and special snooping, then repeat both actual-start
 ABIs. Actual architectural status remains 2. No new boot/application/formal
 acceptance credit. Host and scratch retain about 140 GiB and 31 GiB free.
+
+2026-09-08 local date — requested storage maintenance PASSED.
+Host maintenance only: cleanup-archived-captures-20260908.py audit/apply,
+cleanup-stale-caches-20260908.py audit/apply, and targeted fstrim of the
+existing mckernel-work/scratch mount. Six expanded captures and 16 duplicate
+archives match retained evidence at pushed HEAD 1386ca24 before deletion.
+All 20 retained evidence files are rechecked, including complete gzip streams;
+all 1,046 current input/helper/build files and 20 dependency directories stay
+intact. Failed remote-module and protocol attempts remain fully archived.
+Old Conda download archives, the old npm cache and eight inactive Chrome disk
+caches recover 5,460,955,136 allocated bytes. All selected cache entries predate
+2026-06-01, have no shared regular-file hardlinks or symlinks, and show no use
+in visible process descriptors/mappings. Current browser/compiler caches,
+installed environments, personal files and recent host logs are preserved.
+Scratch trim returns another 316,518,400 backing bytes; its reported 10.5 GiB
+of free ranges is not used as the recovery figure. Total recovery this pass
+is 5,777,473,536 bytes (5.38 GiB), or 56.45 GiB across all four cleanups.
+Host and scratch retain about 142 GiB and 31 GiB available. Nine compressed
+maintenance artifacts and restoration mappings are recorded in
+docs/verification/storage-maintenance-20260908.json. No kernel code changed
+and no build, guest or application acceptance is claimed. Next resume the
+continuing sysfs dispatcher, metadata ownership and actual CREATE work.

@@ -50,6 +50,19 @@ scratch free space is about 31 GiB. Retain the compressed archive restoration
 mapping; personal Trash content was discarded, with only aggregate metadata
 recorded. Continue checking capacity between substantial validation batches.
 
+The fourth cleanup checkpoint is recorded in
+`docs/verification/storage-maintenance-20260908.json`. It removes six fully
+archived remote-sysfs/protocol captures, 16 extra archives, and old Conda/npm
+downloads and inactive browser disk caches last modified before 2026-06-01.
+The measured recovery is another 5.38 GiB, including targeted scratch trim;
+all four cleanups total 56.45 GiB. All 1,046 checked current files and 20
+dependency directories remain intact. In particular, preserve the current
+`native-sysfs-remote-module-20260907-4` and
+`native-sysfs-request-tests-20260907-3` captures. Host and scratch have about
+142 GiB and 31 GiB available. Committed archives preserve all removed failed
+runs; the report supplies restoration paths. Current compiler/browser caches,
+installed environments, personal files and recent host logs were preserved.
+
 ## Current accounting and Rust preservation (2026-09-07)
 
 Native remote callback checkpoint: all three native modules and the real
