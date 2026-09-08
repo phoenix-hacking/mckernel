@@ -838,3 +838,52 @@ arrival order, using the already allocated monotonic delivery token across slot
 reuse. Rotate completion selection even on full-queue failure. The continuing
 pump must carry both the selected application's existing token and CPU through
 publication, so one active application or CPU cannot monopolize the scan.
+
+
+## Native mailbox integration verified, 2026-09-08
+
+The native mailbox and owned response adapter now compile into the actual SMP
+module and connect to the original WAIT/RET ioctls. Each existing application
+entry owns its bounded requests and Linux workers retain exact referenced PID
+and originating-MM identities. Incoming capacity rejection keeps the packet
+for retry; outgoing queue pressure retains the result, exclusive memory claim
+and wake. Final response publication precedes host-only claim release, with no
+later guest-memory access. Failed copies requeue; interrupted accepted returns
+remain owned until the continuing pump completes them. Existing targeted
+priority is preserved alongside arrival order across slot reuse. Completion
+selection rotates across CPU queues and existing applications even after a
+full-queue failure.
+
+The final exact-source fixture passes 21 tests, preserving all earlier C/Rust
+producer and completion assertions. Both original C stid-zero cancellation
+vectors pass. Added FIFO and cross-CPU progress tests first reproduced the two
+defects; their failed capture is retained alongside the passing correction.
+The initial native compile failure is also retained: pinned VecExt must be
+imported explicitly and its allocation failure has no error payload. The
+allocation substitute now uses that same trait boundary.
+
+The current module passes the real x86_64 idle-waiter/image guest and existing
+i386 interface regression. All 396 waiter assertions pass, including 128
+signal interruptions leaving all 11,264 user bytes untouched, 130 idle return
+rejections and repeated use of one referenced worker. The original 47 image
+assertions still pass, including independent physical content/page-table
+checks and unscheduled cleanup. Across both guests there are seven physical
+status-3 captures, 306 process assertions, 518 credential comparisons, 1,116
+executable/file checks, 2,112 topology queries and 260 continuing sysfs callbacks.
+Both guests shut down normally.
+
+`native-application-mailbox-checkpoint-20260908.json` retains eleven complete
+captures in 29 artifacts, with 51 native compiler bindings, 13 protocol source
+bindings, 25 extracted C/Rust bodies, 17 guest fixtures, six exact module copies,
+four unchanged actual guest source bindings, thirteen pinned Linux review
+sources and three exact formatter replays. It includes every original failure.
+
+These results do not cover live response claims, successful WAIT copyout or
+RET completion from a scheduled application. START remains unavailable while
+procfs and scheduled-process retirement are being connected. Worker pruning
+currently runs on new worker acquisition; independent dead-worker retirement
+is still required. No application has executed, and the Ultra readiness
+milestone has not been reached. Next retain the original procfs producers,
+node tables and read/release consumers while adapting them to pinned Linux VFS
+ownership and the continuing transport, then connect scheduled lifetime and
+START before the next unchanged-launcher attempt.

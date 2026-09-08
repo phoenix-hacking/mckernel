@@ -25,8 +25,9 @@ remaining production or Rust/assembly obligation before ending the active goal.
 Those obligations remain tracked for subsequent work. Existing isolation,
 failure-recording, Rust preservation, disk cleanup and periodic GitHub
 checkpoint requirements continue to apply throughout the current phase.
-No native application has executed at this checkpoint; START, connected
-syscall service, procfs and scheduled-process cleanup are still pending.
+No native application has executed at this checkpoint. Syscall ownership and
+WAIT/RET are connected and idle waits are guest-tested; live request delivery,
+START, procfs and scheduled-process cleanup are still pending.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 
@@ -193,6 +194,38 @@ other projects, VM disks, recent host logs and Docker state remain intact.
 Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
+
+Latest native mailbox checkpoint, 2026-09-08:
+`docs/verification/native-application-mailbox-checkpoint-20260908.json` retains
+eleven complete captures in 29 artifacts, including the original missing-VecExt
+module failure and both reproduced queue regressions. The final actual mailbox
+source passes 21 tests with exact unchanged C/Rust request/completion/wake
+references, owned cancellation, copy rollback, worker identity, response
+quarantine, arrival order after slot reuse and cross-CPU completion progress.
+All three native modules compile. The response ledger, bounded mailbox,
+incoming-packet backpressure and real WAIT/RET adapters are connected to the
+existing application entries and exact Linux PID/MM owners.
+
+The current module's x86_64 guest passes 396 idle-waiter and 47 image assertions.
+Its 128 interrupted WAIT calls preserve all 11,264 descriptor bytes and reuse
+the same worker identity. The existing i386 interface regression also passes;
+both guests retain seven physical status-3 captures, 306 process assertions,
+518 credential checks, 1,116 executable checks, 2,112 topology queries and 260
+continuing sysfs callbacks. Both QEMU guests finish powered off. Fifty-one
+native compiler inputs, thirteen protocol inputs, seventeen guest fixtures,
+six module copies and unchanged guest peers are bound to exact retained bytes.
+All prior assertions and both original failures remain preserved.
+
+No scheduled application request has been delivered. Live response claims,
+successful user copyout/RET publication, procfs publication/read/release, START
+and scheduled cleanup remain unverified or unconnected. Dead Linux workers
+are pruned on new worker acquisition; independent reaping is still needed.
+Do not reuse unscheduled-thread cleanup after START or infer application
+acceptance from idle waiter tests. Continue toward the current Max readiness
+criteria, then explicitly tell the user to switch to Astra Ultra and stop.
+Retain current module attempt 3, both final guests and all active image/build
+inputs. Host and scratch have about 145 GiB and 38 GiB free.
+
 
 Syscall protocol prerequisite, 2026-09-08: eleven new tests pass against 25
 exact original C/Rust declarations and bodies. Six request vectors and twelve
