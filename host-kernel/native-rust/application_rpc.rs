@@ -13,9 +13,7 @@ pub(crate) const PREPARE_REPLY: i32 = 2;
 pub(crate) const CLEANUP: i32 = 9;
 pub(crate) const CLEANUP_REPLY: i32 = 10;
 pub(crate) const TID_DELETE: i32 = 0x45;
-const PROCFS_REQUEST: i32 = 0x12;
 const PROCFS_ANSWER: i32 = 0x13;
-const PROCFS_RELEASE: i32 = 0x15;
 static NEXT_TOKEN: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -100,6 +98,7 @@ impl Exchange {
     /// The owner retains the 808-byte request, host data pages, and exact OS
     /// generation until a matching native reply proves guest mapping retirement.
     /// Caller departure or an unmarked legacy answer cannot release these pages.
+    #[allow(dead_code)] // Tested prerequisite; the native procfs service is not connected yet.
     pub(crate) fn procfs(
         os: i32,
         cpu: i32,
@@ -107,6 +106,8 @@ impl Exchange {
         descriptor: u64,
         release: bool,
     ) -> Result<Self, i32> {
+        const PROCFS_REQUEST: i32 = 0x12;
+        const PROCFS_RELEASE: i32 = 0x15;
         if descriptor == 0 || descriptor % 4096 != 0 {
             return Err(-22);
         }

@@ -1074,3 +1074,38 @@ Host/scratch have about 136/38 GiB free. Preserve all failed/current captures
 and current build/image inputs; continue periodic GitHub checkpoints. Explicitly
 tell the user "We're ready to switch to Astra Ultra" only after the documented
 application baseline passes, then stop for the user's model switch.
+
+## Rebuilt procfs images and actual guests verified, 2026-09-08
+
+`docs/verification/native-procfs-images-checkpoint-20260908.json` retains the
+four rebuilt guest images, native module attempts 4 (original dead-code warning
+failure) and 5 (PASS), final procfs lifetime fixture 6, and both real guests.
+C fallback, legacy Rust, native Rust and sysfs verification image selection,
+producer/configuration/ELF/linked-ownership checks pass. Source review and exact
+compiler inputs prove procfs.rs is the selected Rust implementation. The native
+Exchange::procfs constructor has one documented dead-code allowance while its
+real service remains unconnected; request/release constants are local. All
+other module warnings remain denied. Remove that allowance when connecting it.
+
+Both guest ABIs reach physical McKernel status 3 and power off normally.
+x86_64 retains 396 idle syscall-wait assertions and 47 image/memory assertions;
+together the guests retain 306 process, 518 credential, 1,116 executable and
+2,112 topology checks, plus 260 continuing sysfs callbacks. All original
+assertions remain unchanged. Final procfs fixture source again passes nine
+tests per cfg profile. Fifty-one native sources, eighteen fixture inputs,
+seventeen guest probes, six module copies and both actual image copies are
+bound to retained bytes. Three existing formatter differences are reproduced
+with the pinned compiler's formatter. The complete image capture includes an
+exact Git blob restoration map for 1,315 omitted historical evidence files
+(4,156,777,159 bytes), avoiding their duplication in a compile-only checkout.
+
+No live procfs request/release service or application instruction was exercised.
+Next connect the verified VFS owner and terminal exchange to actual procfs nodes,
+request-page/peer-buffer ownership, CREATE completion and advisory DELETE.
+Then finish independent dead-worker reaping, scheduled cleanup and START, and
+run the documented real application baseline before the Astra Ultra handoff.
+The old broad-equivalence harness still lacks its recorded historical IHK
+sources; do not claim that suite passed. Preserve current module attempt 5,
+both procfs-image guests, procfs-image build 1 and fixture 6, plus all previous
+active dependencies and original failure archives. Continue GitHub checkpoints
+and audited storage maintenance; no formal gate or score is promoted.
