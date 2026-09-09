@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.socketpair-stream",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.socketpair-stream"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["sent=65553 received=65553 exact=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both directions transfer exactly 65553 fixed bytes over a stream socket", "Received byte sequences equal the independently generated opposite-direction inputs"],
+  "unresolved_expectations": ["Large stream ordering, partial-write behavior, and pthread/socket lifetime require Max review."],
+  "max_question_for_reviewer": "Confirm bidirectional stream transfer preserves all 65553 bytes without message boundaries or truncation."
+}

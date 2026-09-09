@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-058",
+  "packet_version": 1,
+  "context_sha256": "d79b8ed8cb2a398aa11389c836069cfdc14986af7ba056c2c6fba94ebd869ab1",
+  "started_utc": "2026-09-09T12:50:00Z",
+  "finished_utc": "2026-09-09T12:52:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.socketpair-stream",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.socketpair-stream.c",
+      "oracle": "scripts/application-tests/oracles/ipc.socketpair-stream.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.socketpair-stream.c", "scripts/application-tests/oracles/ipc.socketpair-stream.json"],
+      "parameter_vectors": {"socket_family": ["AF_UNIX"], "socket_type": ["SOCK_STREAM"], "payload_bytes": [65553], "directions": ["bidirectional"]},
+      "implemented_operations": ["threaded full-duplex stream socketpair", "partial-write/read loops", "independent deterministic byte patterns"],
+      "unresolved_oracle_notes": ["Large stream ordering, partial-write behavior, and pthread/socket lifetime require Max review."],
+      "max_reviewer_question": "Confirm bidirectional stream transfer preserves all 65553 bytes without message boundaries or truncation."
+    },
+    {
+      "case_id": "ipc.socketpair-datagram",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.socketpair-datagram.c",
+      "oracle": "scripts/application-tests/oracles/ipc.socketpair-datagram.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.socketpair-datagram.c", "scripts/application-tests/oracles/ipc.socketpair-datagram.json"],
+      "parameter_vectors": {"socket_family": ["AF_UNIX"], "socket_type": ["SOCK_DGRAM"], "messages": ["A", "BC", "DEF"], "receive_buffer_bytes": [8]},
+      "implemented_operations": ["three distinct datagram sends", "three receives preserving boundaries", "exact byte and length checks"],
+      "unresolved_oracle_notes": ["Datagram boundary preservation and socket cleanup require Max review."],
+      "max_reviewer_question": "Confirm AF_UNIX datagram boundaries and exact payload bytes are preserved independently of stream semantics."
+    },
+    {
+      "case_id": "ipc.socketpair-halfclose",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.socketpair-halfclose.c",
+      "oracle": "scripts/application-tests/oracles/ipc.socketpair-halfclose.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.socketpair-halfclose.c", "scripts/application-tests/oracles/ipc.socketpair-halfclose.json"],
+      "parameter_vectors": {"socket_family": ["AF_UNIX"], "socket_type": ["SOCK_STREAM"], "shutdown_mode": ["SHUT_WR"], "buffered_payload": ["LEFT"], "reverse_payload": ["R"]},
+      "implemented_operations": ["buffered write followed by SHUT_WR", "peer data-then-EOF observation", "reverse-direction response"],
+      "unresolved_oracle_notes": ["Half-close ordering, EOF lifetime, and descriptor cleanup require Max review."],
+      "max_reviewer_question": "Confirm shutdown(SHUT_WR) preserves buffered data, then EOF, while retaining reverse-direction reads and writes."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.socketpair-stream.c", "sha256": "20203ff6088801ee385a4c0d9b489b92402f02690f0f87cb31cd280daedd6fa2"},
+    {"path": "scripts/application-tests/oracles/ipc.socketpair-stream.json", "sha256": "3c418cfe81dd9fef31da685a25f9a3d0a566221798391636e0c6f17ffe2bfcea"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.socketpair-datagram.c", "sha256": "4c3ec0f4b9a9918fadf5ed2ec9c3b47e06ad85b90a47e09c1a2f2b587d691ed7"},
+    {"path": "scripts/application-tests/oracles/ipc.socketpair-datagram.json", "sha256": "b043316f77fd7e57656cb59b6a1000b3be8c5e13d07212497dbcffb3b9352e7e"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.socketpair-halfclose.c", "sha256": "edbdb266f06c3a7e25ecf3342d23ed7f3a022167f7600c621570c8635c53b4ea"},
+    {"path": "scripts/application-tests/oracles/ipc.socketpair-halfclose.json", "sha256": "651d5f4e9c9cd19f21fb822c84a0a74ac2a6ccb86659bdc9f2016b90d3c9548d"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-058/context.json", "sha256": "d79b8ed8cb2a398aa11389c836069cfdc14986af7ba056c2c6fba94ebd869ab1"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-058.json --emit-context /tmp/application-packet-058-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-058/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Socketpair stream, datagram, and half-close ordering, ABI, and descriptor lifetime semantics need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review full-duplex stream transfer", "Review datagram boundaries", "Review half-close data-then-EOF ordering"],
+  "next_packet_id": "packet-059"
+}

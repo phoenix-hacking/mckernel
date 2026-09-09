@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.socketpair-datagram",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.socketpair-datagram"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lengths=1,2,3 boundaries=1,1,1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Three sends create three separately received datagrams", "Lengths and bytes remain A, BC, and DEF in order"],
+  "unresolved_expectations": ["Datagram boundary preservation and socket cleanup require Max review."],
+  "max_question_for_reviewer": "Confirm AF_UNIX datagram boundaries and exact payload bytes are preserved independently of stream semantics."
+}
