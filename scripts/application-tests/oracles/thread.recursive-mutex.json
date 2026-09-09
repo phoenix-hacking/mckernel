@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.recursive-mutex",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.recursive-mutex"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lock1=0 lock2=0 unlock1=0 unlock2=0 entered_before_final=0 entered_after=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both recursive locks and both corresponding unlocks succeed", "A competing thread cannot enter after the first unlock and enters after the final unlock"],
+  "unresolved_expectations": ["Freeze recursive mutex ABI and scheduling bracket before execution."],
+  "max_question_for_reviewer": "Confirm recursive ownership depth is two and competing acquisition is blocked until the second unlock."
+}
