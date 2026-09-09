@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "case_id": "file.closed-write",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "write-return=-1 errno=9"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "operation": "write to closed fd",
+    "payload": "hello",
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "write must fail with EBADF"
+  ],
+  "unresolved_expectations": [
+    "Exact line output serialization is draft-level and may be adjusted for structured output capture."
+  ],
+  "max_question_for_reviewer": "Should closed-write include post-write file-state assertions for descriptors other than target fd?"
+}

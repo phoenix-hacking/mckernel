@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "case_id": "file.closed-close",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "close-return=-1 errno=9"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "operation": "close already closed fd",
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "close must return -1 with EBADF when descriptor is closed"
+  ],
+  "unresolved_expectations": [
+    "Buffered output schema should remain consistent with other file-family cases in final execution run."
+  ],
+  "max_question_for_reviewer": "Should second close be treated as deterministic EBADF for the same fd across kernels?"
+}
