@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.relative-timeout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.relative-timeout"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["rc", "errno", "unchanged", "elapsed_ns"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["FUTEX_WAIT on unchanged word returns -1/ETIMEDOUT", "The futex word remains zero", "Elapsed time is positive but no exact microsecond value is asserted"],
+  "unresolved_expectations": ["Bind pinned ETIMEDOUT numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm 20 ms relative timeout and no exact timing comparison beyond timeout completion."
+}

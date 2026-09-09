@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.negative-seconds",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.negative-seconds"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["tv_sec=-1 returns -1/EINVAL before waiting", "The futex word remains unchanged and no waiter is retained"],
+  "unresolved_expectations": ["Bind pinned EINVAL numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm negative timeout seconds are rejected synchronously without a retained request."
+}
