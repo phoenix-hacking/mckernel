@@ -7326,7 +7326,11 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 			 newsp, cursp);
 
 	/* CLONE_VM and newsp == parent_tidptr impiles pthread start routine addr */
-	if (clone_pthread_marker_result(clone_flags, newsp, parent_tidptr)) {
+	if (
+#ifdef MCKERNEL_NATIVE_CLONE3
+		ihk_mc_syscall_number(old->uctx) != __NR_clone3 &&
+#endif
+		clone_pthread_marker_result(clone_flags, newsp, parent_tidptr)) {
 		old->clone_pthread_start_routine = parent_tidptr;
 		dkprintf("%s: clone_pthread_start_routine: 0x%lx\n", __func__,
 			old->clone_pthread_start_routine);

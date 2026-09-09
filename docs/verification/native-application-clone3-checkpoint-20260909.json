@@ -1,0 +1,252 @@
+{
+  "actual_clone3_guest_pass": false,
+  "application_readiness_complete": false,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-application-clone3-protocol-20260909-1.tar.gz",
+      "sha256": "9a5904b6256cbc2931e7a7cdc150985e1e2cabba0a01b014175597d9d1670bf9",
+      "size": 360447,
+      "source": "/work/native-application-clone3-protocol-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-clone3-protocol-20260909-2.tar.gz",
+      "sha256": "98c65ab35bf6ccd562f6744e5c6a95c3c8d0b3efde0472b31c5a4f3c763f6c51",
+      "size": 3743526,
+      "source": "/work/native-application-clone3-protocol-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-clone3-protocol-20260909-3.tar.gz",
+      "sha256": "9b7bc8ac17d1b352111517630c585d2418a4949c7507d377197f05d5273b528a",
+      "size": 3747978,
+      "source": "/work/native-application-clone3-protocol-20260909-3"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-clone3-20260909-retention-helper.gz",
+      "sha256": "b5f4de6310321de1fab2b05b181c21d9f9acd1668c55f98c3353673aee4972c9",
+      "size": 2858,
+      "source": "/work/native-application-clone3-retained-20260909-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "name": "native-application-clone3-protocol-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-clone3-protocol-20260909-1/record.json",
+        "sha256": "29b059075168ceb7df00a187b4ac5ee916d6573323afccd43866f85b4f0f73fc",
+        "size": 11953
+      }
+    },
+    {
+      "name": "native-application-clone3-protocol-20260909-2",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-clone3-protocol-20260909-2/record.json",
+        "sha256": "f976836114e7314ed86cf30ff061b4531cd3dfcb6078a01056a06b57d07c4745",
+        "size": 14579
+      }
+    },
+    {
+      "name": "native-application-clone3-protocol-20260909-3",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-clone3-protocol-20260909-3/record.json",
+        "sha256": "ed3c93fea0568e111856298e1eee743f0258ff96d2f299f3a1674d78504a1de1",
+        "size": 17371
+      }
+    }
+  ],
+  "extracted_bodies": [
+    {
+      "end_byte": 343704,
+      "name": "sys_clone",
+      "sha256": "1f8c978a59060cf6d3690de7e53c43202d598519b6c4cdbc620d266604ba04ed",
+      "source": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/syscall_policy.rs",
+      "start_byte": 342884
+    },
+    {
+      "end_byte": 345203,
+      "name": "sys_clone3",
+      "sha256": "61139910c5dac379ed0c69d7ff152c3e5055dfde7eef27219bebf33331bc0187",
+      "source": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/syscall_policy.rs",
+      "start_byte": 344069
+    },
+    {
+      "end_byte": 325863,
+      "name": "arch_clone_body_result",
+      "sha256": "b0a045576b45638d4d0b980956c31b1a06345f3539c44c03e505e200c813fcd7",
+      "source": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/syscall_policy.rs",
+      "start_byte": 324856
+    },
+    {
+      "end_byte": 724,
+      "name": "McsRwlockNodeIrqsave",
+      "sha256": "a49140b4a326d46ca5486e6354374af6606b8d0007748959c66259e541ea7271",
+      "source": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/lock_helpers.rs",
+      "start_byte": 668
+    },
+    {
+      "end_byte": 5028,
+      "name": "clone_args",
+      "sha256": "39f259615fd0560cf070cb0b1b06c540e6eb6f258d70f751e9bc2d879a1cbafa",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/include/uapi/linux/sched.h",
+      "start_byte": 4737
+    },
+    {
+      "end_byte": 964,
+      "name": "kernel_clone_args",
+      "sha256": "28c07ff7c95c44154a2189b9edbdee0998a549dce2809dc96a53b3de76e9ded5",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/include/linux/sched/task.h",
+      "start_byte": 473
+    },
+    {
+      "end_byte": 12938,
+      "name": "copy_struct_from_user",
+      "sha256": "5fa49d788a537bdc26345ef6e433e98ceaefdc063f0a38d289b0174dc214bcbc",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/include/linux/uaccess.h",
+      "start_byte": 12260
+    },
+    {
+      "end_byte": 76472,
+      "name": "copy_clone_args_from_user",
+      "sha256": "cce056b524ebf714715f81e8091199fac31612df5423d505106db819e68af34f",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/kernel/fork.c",
+      "start_byte": 74601
+    },
+    {
+      "end_byte": 77104,
+      "name": "clone3_stack_valid",
+      "sha256": "1ef1c1ad85b4edc9ac0862f4738f960a06afc66f0aeae12d2d44881dc65de19d",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/kernel/fork.c",
+      "start_byte": 76719
+    },
+    {
+      "end_byte": 77815,
+      "name": "clone3_args_valid",
+      "sha256": "746e009c862f6114de141a3c28562be64b3c133f46940f9c1685c74a13acbf17",
+      "source": "/work/native-application-clone3-protocol-20260909-3/linux-reference/kernel/fork.c",
+      "start_byte": 77106
+    },
+    {
+      "end_byte": 571296,
+      "name": "clone_pthread_marker_result",
+      "sha256": "9fbb43e2b48b21d8bb3036b00150bb866f703bfa646191dab262da2ebbf3ec3f",
+      "source": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/syscall.c",
+      "start_byte": 571104
+    }
+  ],
+  "finished_utc": "2026-09-09T02:58:11.944268+00:00",
+  "full_capture_retention_pending": false,
+  "guest_images_built": false,
+  "marker_vectors_per_selection": 144,
+  "original_failures": 2,
+  "references": [
+    {
+      "path": "docs/verification/native-application-core-checkpoint-20260909.json",
+      "sha256": "fc4c56e3762e11d1c2e45108bdfc0f908bd0cb225af0f788c9271db43cd0a6eb",
+      "size": 44794
+    },
+    {
+      "path": "docs/verification/native-application-zeroing-host-checkpoint-20260909.json",
+      "sha256": "ba61100012410a7b6d5d2b7c4f159457232cef72ed26989517b9367adfa61739",
+      "size": 53415
+    }
+  ],
+  "scope": "Native guest clone3 adapter to existing clone lifecycle, exact pinned Linux validators and selected marker boundary. Full original fixture failures; image/runtime pending.",
+  "source_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/arch/x86_64/kernel/include/syscall_list.h",
+      "path": "arch/x86_64/kernel/include/syscall_list.h",
+      "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead",
+      "size": 5815
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/CMakeLists.txt",
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "cbe8f8cc266132cab1463f8e11ebe6a4012d9fcd404e3fea1ea34ddbe815ed69",
+      "size": 22187
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "8c00adefe43d316dcb7d8f5db735f6281e572f536568d1584b6809e5445bdce5",
+      "size": 20836
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/clone3.rs",
+      "formatter_original": {
+        "path": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/clone3.rs",
+        "sha256": "45a58409d08142569b8d4b529d8fa00ce73876d0375dfaa0ac20c3a26b27b85e",
+        "size": 4025
+      },
+      "path": "kernel/rust/clone3.rs",
+      "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094",
+      "size": 4013
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/lib.rs",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "6bbf1328724d482a05c86bae998564a1a922e9df32d0dec3c379895661f25a5b",
+      "size": 1743
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/lock_helpers.rs",
+      "path": "kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "size": 12202
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/rust/syscall_policy.rs",
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "8c6141c0522b54f264f421f53c2470fb9feef69126ad4d75cd45a1f609d759d0",
+      "size": 691905
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/kernel/syscall.c",
+      "path": "kernel/syscall.c",
+      "sha256": "ae68cbd2f8ea92c083639aeb301bb4c097252f66073d1811bfd1494f4f402bb5",
+      "size": 833250
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/original-inputs/scripts/tests/fixtures/native-application-clone3.c",
+      "path": "scripts/tests/fixtures/native-application-clone3.c",
+      "sha256": "d21ec97cbccf0a8fde8ca47d2d4051e4e1279453506a819b2e0790f72c701f7a",
+      "size": 3051
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-clone3-protocol-20260909-3/native-application-clone3.rs",
+      "formatter_original": {
+        "path": "/work/native-application-clone3-protocol-20260909-3/original-inputs/scripts/tests/fixtures/native-application-clone3.rs",
+        "sha256": "d558320d44b5e17fdff464521ecc2c0673e1402c2d33553da91877023fd53f69",
+        "size": 7614
+      },
+      "path": "scripts/tests/fixtures/native-application-clone3.rs",
+      "sha256": "a6919cf20db9ceb9f6e2185ead355ff9e606e38f54c552281179d0d67e6e943f",
+      "size": 9361
+    }
+  ],
+  "source_parent": "b238376a2472f97ba70b14139ee6b7a56cc6f3d2",
+  "started_utc": "2026-09-09T02:58:09.080703+00:00",
+  "status": "PASS",
+  "test_summary": [
+    "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  ],
+  "vectors": 524
+}

@@ -11282,6 +11282,47 @@ pub unsafe extern "C" fn sys_clone(_n: CInt, ctx: *mut X86UserContext) -> CLong 
     ) as CLong
 }
 
+/// Native clone3 uses the existing guest clone lifecycle and its actual result.
+/// The userspace context remains unchanged; only a private argument view uses
+/// the legacy register convention. `do_fork` observes the original syscall
+/// number, so valid clone3 arguments cannot invoke the private clone marker.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn sys_clone3(n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() || n as u64 != crate::clone3::NUMBER {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).proc.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let region = addr_of!((*(*thread).vm).region);
+    let args = match crate::clone3::read(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as usize,
+        (*region).user_start,
+        (*region).user_end,
+        |address, bytes| {
+            let result = syscall_copy_from_user_bridge(bytes.as_mut_ptr(), address, bytes.len());
+            if result == 0 {
+                Ok(())
+            } else {
+                Err(result)
+            }
+        },
+    ) {
+        Ok(args) => args,
+        Err(error) => return error,
+    };
+    let mut legacy = core::ptr::read(ctx);
+    legacy.gpr.rdi = args.flags;
+    legacy.gpr.rsi = args.stack;
+    legacy.gpr.rdx = args.parent_tid;
+    legacy.gpr.r10 = args.child_tid;
+    legacy.gpr.r8 = args.tls;
+    sys_clone(56, addr_of_mut!(legacy))
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn sys_wait4(_n: CInt, ctx: *mut X86UserContext) -> CLong {
     if ctx.is_null() {

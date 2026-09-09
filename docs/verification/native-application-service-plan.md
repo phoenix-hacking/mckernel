@@ -1818,3 +1818,51 @@ including hostile argument values and original invalid-input guards. Build all
 four images and bind the selected native code before rerunning the thread mode.
 If the existing clone path exposes another issue, retain it and investigate;
 signal and handoff acceptance remain pending until their actual checks pass.
+
+## Guest-local clone3 integration review, 2026-09-09
+
+This implementation supersedes the preceding unexecuted blanket-ENOSYS plan.
+Reuse the existing Rust `sys_clone`, `arch_clone_body_result` and their C
+`do_fork` lifecycle provider to create the actual McKernel thread. Add a native
+Rust `sys_clone3` handler in the selected x86_64 syscall table, controlled by
+the same native build profile. Preserve C fallback/legacy tables and all
+existing clone exports. The generic forwarding body remains unchanged.
+
+Bind the new 88-byte argument decoder to pinned Linux 6.12 `include/uapi/linux/
+sched.h`, `kernel/fork.c::{copy_clone_args_from_user,clone3_stack_valid,
+clone3_args_valid}` and `include/linux/uaccess.h::copy_struct_from_user`.
+Accept the 64-, 80- and 88-byte versions and zero-filled extensions up to one
+page; preserve size, copy-fault, zero-tail, signal, flag and stack validation.
+Use the existing checked `syscall_copy_from_user_bridge` into bounded private
+storage, then compute the downward-growing child stack top and map flags,
+parent/child TID pointers and TLS into a private copy of the original context.
+Preserve the caller's complete context, PC/SP and actual clone result. Never
+invoke a Linux clone3 syscall. Reject features without a McKernel owner
+(pidfds, explicit set-TID, cgroups/namespaces, CLONE_IO and CLEAR_SIGHAND)
+explicitly; do not silently accept or truncate their flags. Existing guest
+clone restrictions remain enforced by the retained lifecycle provider.
+
+The old clone ABI has a private pthread-marker convention when child stack
+and parent-TID addresses are equal. A real clone3 must never be interpreted as
+that marker: gate the existing C call-site's marker branch by the original
+syscall number under the same native-only selection. Keep all other legacy
+and lifecycle control flow intact. Verify the original/adapted selection and
+valid alias case; do not introduce an artificial address restriction.
+
+Test the full decoder against exact extracted pinned Linux C validators with
+controlled copy/access providers, then the complete native adapter with the
+existing Rust clone entry and lock/fork callbacks. Include all version/tail
+boundaries, checked address arithmetic, rejected flags, copy faults, invalid
+owners, context preservation, correct stack/TID/TLS/PC/SP mapping and actual
+success/error propagation. Build all four image selections; require the native
+syscall table's slot 435 to point at the Rust handler and legacy slots to stay
+zero. Run the unchanged pthread/TLS/barrier/mutex/join application afterward,
+with no observed generic host syscall 435, before signals or handoff acceptance.
+
+The adapter/protocol checkpoint now passes 524 vectors against the exact pinned
+Linux C validators, with explicit unsupported-feature errors, plus three full
+Rust decoder/adapter tests and 144 exact C marker-selection cases per profile.
+The actual Rust clone/lock/fork adapters preserve private context and actual
+provider results. Original attempts 1 and 2 remain failed fixture captures
+(missing exact lock-node type and generated C indentation respectively).
+Image compilation and actual clone3 thread execution remain pending.

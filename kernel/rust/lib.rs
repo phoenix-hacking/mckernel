@@ -78,6 +78,8 @@ mod native_vdso;
 #[allow(dead_code)]
 #[path = "../../host-kernel/native-rust/zero_pages.rs"]
 mod zero_pages;
+#[cfg(native_linux_irq_work_v6_12)]
+mod clone3;
 mod xpmem_helpers;
 mod zeroobj;
 

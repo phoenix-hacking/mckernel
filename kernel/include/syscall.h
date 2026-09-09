@@ -511,6 +511,7 @@ enum {
 	__NR_process_vm_readv = 310,
 	__NR_process_vm_writev = 311,
 	__NR_execveat = 322,
+	__NR_clone3 = 435,
 	__NR_get_cpu_id = 700,
 #ifdef PROFILE_ENABLE
 	__NR_profile = PROFILE_EVENT_MAX,

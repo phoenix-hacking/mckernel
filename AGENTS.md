@@ -201,6 +201,19 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native clone3 source/protocol checkpoint, 2026-09-09:
+`docs/verification/native-application-clone3-checkpoint-20260909.json` retains
+all three protocol attempts and both original fixture failures. The native
+Rust clone3 adapter decodes checked versioned arguments and calls the existing
+guest clone/lock/fork lifecycle; the earlier ENOSYS-only plan was never applied
+and is superseded. All 524 Linux-reference argument vectors and three full
+Rust tests pass, along with 144 exact C marker cases per legacy/native profile.
+The original context and actual clone result are preserved. Unsupported pidfd,
+set-TID, cgroup/namespace, IO and CLEAR_SIGHAND features are explicit errors.
+Next build all four images and verify native table slot 435, legacy absence,
+then rerun the unchanged pthread application. Keep current host zeroing module
+2 and all existing images/captures. No clone3 runtime or Ultra acceptance yet.
+
 Latest actual application checkpoint, 2026-09-09:
 `docs/verification/native-application-core-checkpoint-20260909.json` retains
 fourteen complete captures, all six failures and exact current module/image
@@ -210,10 +223,9 @@ HELLO repetitions each. Both metadata/string ABIs and continuing sysfs pass.
 Host invalidation and nonempty zeroing now have actual runtime evidence.
 Thread guest 1 remains FAIL: unsupported clone3 forwards into the Linux launcher,
 returns Linux child PID 311 and crashes with exit 139. The batch stopped before
-signals. The service plan records the pre-edit native capability-boundary fix:
-truthful ENOSYS before generic clone3 offload, preserving the existing guest
-clone implementation and unchanged libc/application. Next verify this boundary,
-build the four images and rerun the original thread test. Do not announce Ultra
+signals. The later clone3 source checkpoint supersedes the initial capability-only
+proposal with an actual guest adapter to the existing clone implementation.
+Next build the four images and rerun the original thread test. Do not announce Ultra
 readiness until threads, signals, abnormal owners and final regressions pass.
 This full checkpoint supersedes the earlier string/pager WIP retention-pending
 status; their original records and all expanded attempts remain protected.
