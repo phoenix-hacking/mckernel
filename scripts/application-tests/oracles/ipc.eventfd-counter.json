@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.eventfd-counter",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.eventfd-counter"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["value=5 second_read=-1 second_errno=11 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Eventfd counter accumulates writes2 and3 into one read value5", "A subsequent nonblocking read observes EAGAIN with no value"],
+  "unresolved_expectations": ["Eventfd ABI and errno preservation require Max review."],
+  "max_question_for_reviewer": "Confirm counter-mode eventfd accumulates both writes and exposes EAGAIN after the single consuming read."
+}

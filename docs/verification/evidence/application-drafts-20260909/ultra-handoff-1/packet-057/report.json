@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-057",
+  "packet_version": 1,
+  "context_sha256": "f62d8922cb7fcff103740a8ff6e0062f8815e1d39ebbfef08597e785c603f3b0",
+  "started_utc": "2026-09-09T12:40:00Z",
+  "finished_utc": "2026-09-09T12:42:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.eventfd-counter",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.eventfd-counter.c",
+      "oracle": "scripts/application-tests/oracles/ipc.eventfd-counter.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.eventfd-counter.c", "scripts/application-tests/oracles/ipc.eventfd-counter.json"],
+      "parameter_vectors": {"initial_counter": [0], "writes": [2, 3], "read_size": [8], "flags": ["EFD_NONBLOCK"]},
+      "implemented_operations": ["counter-mode eventfd", "two writes and one consuming read", "post-consumption EAGAIN check"],
+      "unresolved_oracle_notes": ["Eventfd ABI and errno preservation require Max review."],
+      "max_reviewer_question": "Confirm counter-mode eventfd accumulates both writes and exposes EAGAIN after the single consuming read."
+    },
+    {
+      "case_id": "ipc.eventfd-semaphore",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.eventfd-semaphore.c",
+      "oracle": "scripts/application-tests/oracles/ipc.eventfd-semaphore.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.eventfd-semaphore.c", "scripts/application-tests/oracles/ipc.eventfd-semaphore.json"],
+      "parameter_vectors": {"initial_counter": [3], "reads": [4], "read_size": [8], "flags": ["EFD_SEMAPHORE", "EFD_NONBLOCK"]},
+      "implemented_operations": ["semaphore-mode eventfd", "three token reads", "fourth EAGAIN check"],
+      "unresolved_oracle_notes": ["Semaphore eventfd ABI and errno preservation require Max review."],
+      "max_reviewer_question": "Confirm semaphore mode decrements one count per read and reports EAGAIN only after the three initial tokens."
+    },
+    {
+      "case_id": "ipc.timerfd",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.timerfd.c",
+      "oracle": "scripts/application-tests/oracles/ipc.timerfd.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.timerfd.c", "scripts/application-tests/oracles/ipc.timerfd.json"],
+      "parameter_vectors": {"clock": ["CLOCK_MONOTONIC"], "initial_expiration_ns": [20000000], "poll_timeout_ms": [1000], "disarmed_observation_ms": [0]},
+      "implemented_operations": ["one-shot monotonic timerfd", "poll and expiration-count read", "disarm and zero-time readiness check"],
+      "unresolved_oracle_notes": ["Timer scheduling bound and post-disarm readiness require Max review."],
+      "max_reviewer_question": "Confirm one-shot timerfd expiration/read semantics and that disarm prevents subsequent readiness."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.eventfd-counter.c", "sha256": "962e1ba160da658ef9c1db904d9f1b6a1b2ce0908c476c20d97dd5ccb34b8076"},
+    {"path": "scripts/application-tests/oracles/ipc.eventfd-counter.json", "sha256": "870eeaa8116ad5f3d9a7b124df0d84c3d48517b1f12ec6249d134833ea5f1ea0"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.eventfd-semaphore.c", "sha256": "ec99b4af707d9a8a59bc52565e5f5ace38ed1c4bbd8b2a77433a7c1e45da22a4"},
+    {"path": "scripts/application-tests/oracles/ipc.eventfd-semaphore.json", "sha256": "5cb98e450e8ea89eaab6a3a1045ecad710a0adea7cd28b3e63189f4cf634d015"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.timerfd.c", "sha256": "183bee1cd38042be12a6e330f35b55dcd248592537379af3debb6c96f57f0895"},
+    {"path": "scripts/application-tests/oracles/ipc.timerfd.json", "sha256": "76047d3d6766f436397e38edff222d3447cfdaf02a81046ce954992d67941a04"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-057/context.json", "sha256": "f62d8922cb7fcff103740a8ff6e0062f8815e1d39ebbfef08597e785c603f3b0"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-057.json --emit-context /tmp/application-packet-057-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-057/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Eventfd counter, eventfd semaphore, and timerfd ABI, scheduler, errno, and descriptor-lifetime semantics need final Max review."],
+  "blocked_execution_capabilities": ["current-inputs", "runner-contract", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review eventfd counter accumulation and EAGAIN", "Review semaphore token consumption", "Review timerfd expiration and disarm readiness"],
+  "next_packet_id": "packet-058"
+}

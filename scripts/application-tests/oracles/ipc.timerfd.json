@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.timerfd",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.timerfd"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["poll_rc", "expirations", "disarm_rc", "quiet", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A one-shot monotonic timer becomes readable and read returns an expiration count at least one", "Disarming the timer removes readiness in a zero-time observation"],
+  "unresolved_expectations": ["Timer scheduling bound and post-disarm readiness require Max review."],
+  "max_question_for_reviewer": "Confirm one-shot timerfd expiration/read semantics and that disarm prevents subsequent readiness."
+}
