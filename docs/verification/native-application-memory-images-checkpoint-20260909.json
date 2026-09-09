@@ -1,0 +1,508 @@
+{
+  "actual_guest_pass": false,
+  "application_readiness_complete": false,
+  "artifact_bytes": 169949754,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-1.tar.gz",
+      "sha256": "3641705733cf3176c3279d008e220c3553cf70252b482b5e4d7c85d1a8f0dad8",
+      "size": 50617247,
+      "source": "/work/mckernel-native-memory-images-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-1-record.json.gz",
+      "sha256": "6ebd49de415753424f26a98c3ea60f3a97e0bce66e0b74cbdb122822843a1511",
+      "size": 3707,
+      "source": "/work/mckernel-native-memory-images-20260909-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-2.tar.gz",
+      "sha256": "c7ca8940ad8e940fd2ee53203c687ec3db3aff32104cc137c33e076d23c17999",
+      "size": 50657878,
+      "source": "/work/mckernel-native-memory-images-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-2-record.json.gz",
+      "sha256": "8c1a8aaf8ed0df65cc41631c1d292c62552410d1a49eae0196e9087d299ba279",
+      "size": 3711,
+      "source": "/work/mckernel-native-memory-images-20260909-2/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-3.tar.gz",
+      "sha256": "ff337af6424366f37c25f1921c45884cdc369b6ae3ba1a6627c5189660c9261e",
+      "size": 68658073,
+      "source": "/work/mckernel-native-memory-images-20260909-3"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-memory-images-20260909-3-record.json.gz",
+      "sha256": "e87bc0a7c2686c3e31654dc321b02b6913f74aae37342c205e5097c0ae4e4455",
+      "size": 5709,
+      "source": "/work/mckernel-native-memory-images-20260909-3/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-memory-images-20260909-retention-helper.gz",
+      "sha256": "6fc76908702fc392db2826932acf9d61a5092da0bf58cbc11974777b6b8d8386",
+      "size": 3429,
+      "source": "/work/native-application-memory-images-retained-20260909-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 5087698562,
+        "count": 1493,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "FAIL",
+      "path": "/work/mckernel-native-memory-images-20260909-1",
+      "record": {
+        "path": "/work/mckernel-native-memory-images-20260909-1/record.json",
+        "sha256": "2e6c064c77d758680ec47fe4f22b84d66aaf39dac251e6cfe0aa711f53c34388",
+        "size": 16909
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    },
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 5087698562,
+        "count": 1493,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "FAIL",
+      "path": "/work/mckernel-native-memory-images-20260909-2",
+      "record": {
+        "path": "/work/mckernel-native-memory-images-20260909-2/record.json",
+        "sha256": "c2f43771303e44ae0ef0a3901baedaf7df862b5237d4dad926993948fc4d569e",
+        "size": 16963
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    },
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 5087698562,
+        "count": 1493,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "PASS",
+      "path": "/work/mckernel-native-memory-images-20260909-3",
+      "record": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/record.json",
+        "sha256": "3fb6b6c34db1cb85c03a6b3886292b3689baa108370fbf11d368c9f759b3a245",
+        "size": 32343
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    }
+  ],
+  "complete_captures": 3,
+  "finished_utc": "2026-09-09T00:53:48.976434+00:00",
+  "full_capture_retention_pending": false,
+  "guest_compiler": "rustc 1.95.0-nightly (c04308580 2026-02-18)\nbinary: rustc\ncommit-hash: c043085801b7a884054add21a94882216df5971c\ncommit-date: 2026-02-18\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0-nightly\nLLVM version: 22.1.0\n",
+  "guest_compiler_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/syscall_policy.rs",
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "3b4104d5480b3b8902056f97c7a0cc2d3799211e76e756e8eb307bfb0a5fd6ab",
+      "size": 690406
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/page_alloc.rs",
+      "path": "kernel/rust/page_alloc.rs",
+      "sha256": "53d2ab2e0e2c6c901d7116a41a929b01e19bfc21955ad014281154b78c839917",
+      "size": 81383
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/x86_memory_helpers.rs",
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+      "size": 187212
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/CMakeLists.txt",
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "1ca18dfd79add9954bcd175a081afe2ed4a2e15a94390f2ee34832d480cb09e5",
+      "size": 22022
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/smp_ikc.rs",
+      "path": "kernel/rust/smp_ikc.rs",
+      "sha256": "64056fc3418792b6693875bd0dc4b3c59a76585bce2ce61e2e7203c38e35cfbe",
+      "size": 11359
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/llist.rs",
+      "path": "kernel/rust/llist.rs",
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8",
+      "size": 2753
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/lib.rs",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "2e186a9c61bd76e8c4fb7fdade78952b5c895add5f47c53ed9103aa6d9f04a08",
+      "size": 1567
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/init.rs",
+      "path": "kernel/rust/init.rs",
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886",
+      "size": 17659
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/sysfs.rs",
+      "path": "kernel/rust/sysfs.rs",
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7",
+      "size": 25143
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/object_helpers.rs",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "size": 235965
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/host_helpers.rs",
+      "path": "kernel/rust/host_helpers.rs",
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+      "size": 180826
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/process_helpers.rs",
+      "path": "kernel/rust/process_helpers.rs",
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+      "size": 324283
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/lock_helpers.rs",
+      "path": "kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "size": 12202
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/procfs.rs",
+      "path": "kernel/rust/procfs.rs",
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "size": 36968
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/rust/cls.rs",
+      "path": "kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "size": 7877
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/procfs.c",
+      "path": "kernel/procfs.c",
+      "sha256": "bed2ba5f5f786d1198c93bcc8d0bb7f608ad0a70e57ab6c3fa0caa99228306da",
+      "size": 21605
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/cls.c",
+      "path": "kernel/cls.c",
+      "sha256": "071008b51aaa9f173b855a65791c2e24286d4b7f843d786227d68377e3c9a31f",
+      "size": 5550
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/object_helpers.c",
+      "path": "kernel/object_helpers.c",
+      "sha256": "b74b8a4aeaf98fbb03a3f346a3c74a1f6032e5e088217867e3cae18859801f5f",
+      "size": 127728
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8",
+      "size": 20816
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/include/object_helpers.h",
+      "path": "kernel/include/object_helpers.h",
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a",
+      "size": 61009
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/kernel/init.c",
+      "path": "kernel/init.c",
+      "sha256": "05fbb5e79d0dc2265687dbf1b7bb83ec3871fedac66f3793e098ea15e80a0196",
+      "size": 9207
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "path": "scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "sha256": "2262fddd9cb33052d7259fe3f0ee47cd4a56502fba97cc93797c9f7f394cac4c",
+      "size": 14227
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/scripts/tests/fixtures/native-guest-sysfs.c",
+      "path": "scripts/tests/fixtures/native-guest-sysfs.c",
+      "sha256": "ccfb00ee63e57a7ae90e793d937f277c3e67af61ff1179f554e3ad68f37f3eb0",
+      "size": 7906
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/lib/include/list.h",
+      "path": "lib/include/list.h",
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440",
+      "size": 2870
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/arch/x86_64/kernel/include/registers.h",
+      "path": "arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "size": 5778
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-memory-images-20260909-3/source/arch/x86_64/kernel/include/ihk/atomic.h",
+      "path": "arch/x86_64/kernel/include/ihk/atomic.h",
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d",
+      "size": 2680
+    }
+  ],
+  "historical_equivalence": {
+    "current_surface_equivalence": "producer-check includes exact pinned C body and current Rust body",
+    "missing": [
+      "ihk/linux/core/rust/core_helpers.rs",
+      "ihk/linux/driver/smp/rust/smp_driver_helpers.rs",
+      "ihk/linux/user/rust/ihklib_helpers.rs"
+    ],
+    "pass_claimed": false,
+    "retained_failure": "/work/mckernel-native-irq-images-20260907-2",
+    "status": "prerequisites-unavailable"
+  },
+  "images": [
+    {
+      "host_irq_abi": "legacy",
+      "kind": "fallback",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/fallback/kernel/mckernel.img",
+          "sha256": "3e524f13307302fe42190810a1fe0373b175260ab3777ede5860037a0f03c634",
+          "size": 5264048
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/fallback/kernel/mckernel.img.map",
+          "sha256": "e53e4771d4ae6f2ab74b2ae7632a1e3b08b03321692ea2a571297c42bd67a1b8",
+          "size": 306327
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/fallback/CMakeCache.txt",
+          "sha256": "7635fe2b53a83dd2ba6eac7603d9eed9d145bed55e37a6fda1852eb26c44f8bc",
+          "size": 26731
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/fallback/compile_commands.json",
+          "sha256": "7314f1da3a0ca16dd0cffdc90c859d71d6eb9b75e34e07c7bc0b2d9b19c4d79b",
+          "size": 193344
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "legacy",
+      "kind": "legacy-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/kernel/mckernel.img",
+          "sha256": "969199d9e521c83ce191f521b01583f87100a6a7b1da7454db6184a105fb9f6c",
+          "size": 7939608
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/kernel/mckernel.img.map",
+          "sha256": "40d818718dccc6da6e55251b43f7dab0e79c6545ffc266d57c1de4cda1832fb6",
+          "size": 733674
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/CMakeCache.txt",
+          "sha256": "4008be154db1f17ce08172701e5b8e125e1e023f0280a2c8055cc8820d6b3953",
+          "size": 26717
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/compile_commands.json",
+          "sha256": "cdfeddd93c8bcdea934d336354938a6e3cb913bbbaf5ab0a5503464f76ae3cd4",
+          "size": 115053
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "68672bd1ade29e84336d4b7a4d09f4e9594f763eb5842b2dd5d15c107ff17693",
+          "size": 12375000
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "63cc90d60703b09b500cb75b7dfe188fd077aea0eeda65efa7e4968ec1674026",
+          "size": 11325
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/kernel/mckernel.img",
+          "sha256": "0ebeeb417b129301fec3073495f4c2d5653248e45da1bfa44f72767bcd412190",
+          "size": 8009728
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/kernel/mckernel.img.map",
+          "sha256": "4828af50841e2d21ccfec952103b8ea12d709b30915f80fb6f1d7ddfcabe8b0b",
+          "size": 736370
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/CMakeCache.txt",
+          "sha256": "1c8d6e41b3c81817ff734f7768f50253f7dedebfef3964c8332d1a456bbad23c",
+          "size": 26721
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/compile_commands.json",
+          "sha256": "02174ab226973a83673978a3392d465d34e00016047453dd08a8644c7d62979e",
+          "size": 115053
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "8b8d714c761c077306f158b219eec42fb99d57079b6b3b3c484f47bb2e11b8f7",
+          "size": 12498992
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "a6c18ee1466e579a53c8ac6f7a7a9c60a396a83d145082cac71bc4a3a960d9e9",
+          "size": 11359
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-sysfs-verify",
+      "native_sysfs_verify": true,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/kernel/mckernel.img",
+          "sha256": "7b659d0b962b7abf01a2b100e140549d4ad715ec57b60e71f47df7701325afb7",
+          "size": 8072984
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/kernel/mckernel.img.map",
+          "sha256": "7f34a4bbbaab58f912fbe89a42d5e3533e75df5730c32af2add2a0ded4754447",
+          "size": 739599
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/CMakeCache.txt",
+          "sha256": "dbd933bd5705d86fc59d7f22af39cc7e1b5f2141e97e43b392c25abeb0b19fa2",
+          "size": 26784
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/compile_commands.json",
+          "sha256": "db7a59d29f8c1d74815f6b481d0ec5a7af244d9f82eefa4cbe65e5d48c9f2788",
+          "size": 118045
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/kernel/rust/mckernel_rust.o",
+          "sha256": "a0aff44ac46ad9dd8c324c8812c6a6dac7fe8b9ddc1a05fa58e853e5903481b4",
+          "size": 12606872
+        },
+        {
+          "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "4b886b87d27ed41bef236da720049991dbeddc16985cb6e7fb6704fb2f4576ce",
+          "size": 11603
+        }
+      ]
+    }
+  ],
+  "original_failures": 2,
+  "protection_binary_bindings": [
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "cd1fc1748413ce2ddc073b815165e7005eb01f905625802aa1cdba9b162ceacf",
+        "size": 454
+      },
+      "kind": "legacy-rust",
+      "native_invalidation_selected": false,
+      "symbol_table": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/legacy-rust-sized-symbols.txt",
+        "sha256": "f8b7aa09e0d8c29e01e19db86551a386283083d475354ac8ad7ea5b6b949a454",
+        "size": 306539
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/native-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "3d7e575d830c1cdbceb4a1ac9981f0a895e72ced7b186932f71294710b43f4d5",
+        "size": 4832
+      },
+      "kind": "native-rust",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/native-rust-sized-symbols.txt",
+        "sha256": "ee6f17c4c423f76470a8e17921062479a39e3343b9fdeca8a9b13ba09d8283b7",
+        "size": 307745
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify-set_host_vma_body_result-disassembly.log",
+        "sha256": "9b9406804693f26dd2de46e5aa33c155296432ea83587f9ee7cb240ca20e95f1",
+        "size": 4840
+      },
+      "kind": "native-sysfs-verify",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-memory-images-20260909-3/native-sysfs-verify-sized-symbols.txt",
+        "sha256": "5906c7adbbc2241294ad6ae35df923b302e282baf42e60da10ce521c8536cac7",
+        "size": 309090
+      }
+    }
+  ],
+  "references": [
+    {
+      "path": "docs/verification/native-application-memory-checkpoint-20260909.json",
+      "sha256": "1fe0316d65db1d005049707d85dde73cefcec9d9101bafd5ca9f05f7e163e521",
+      "size": 31166
+    }
+  ],
+  "scope": "All four image selections with native guest host-PTE invalidation; original failed diagnostic attempts retained in full. No new guest application execution.",
+  "source_parent": "79f91b83dff9969260c1b71f214fd34f7821fb3d",
+  "started_utc": "2026-09-09T00:53:05.950915+00:00",
+  "status": "PASS",
+  "zeroing_service_integrated": false
+}

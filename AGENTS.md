@@ -206,13 +206,17 @@ Thirty mailbox/protocol tests, eight exact WAIT/RET adapter tests and all three
 native module builds pass. The native guest now clears cached host PTEs after
 read/write/execute permission changes, including partial-range errors; four
 tests pass in each legacy/native selection with an exact legacy C reference.
-Original protection protocol 1 is a retained fixture-import failure. The
-changed guest image is not built or executed at this checkpoint. The allocator
-zeroing service remains missing; source review also requires fixing concurrent
-pending-list consumer ownership rather than changing only the host pop.
-Preserve the ordinary core application and launcher. Next rebuild image
-selections, integrate zeroing safely, rerun the unchanged core modes, and finish
-abnormal-owner/regression/evidence gates. No Ultra readiness is claimed.
+Original protection protocol 1 is a retained fixture-import failure. Subsequent
+`native-application-memory-images-checkpoint-20260909.json` retains all three
+image attempts: two diagnostic-tool failures followed by all four image
+selections passing. Native disassembly proves the nr-11 offload and VM lock-flag
+restoration; legacy keeps its zero return. These images have not executed in a
+guest. The allocator zeroing service remains missing; source review requires
+fixing concurrent pending-list consumer ownership rather than changing only
+the host pop. Preserve the ordinary core application and launcher. Next
+integrate zeroing safely, rebuild affected image selections, rerun the unchanged
+core modes, and finish abnormal-owner/regression/evidence gates. No Ultra
+readiness is claimed.
 
 Latest native file-pager WIP, 2026-09-08:
 `docs/verification/native-application-pager-wip-20260908.json` records native

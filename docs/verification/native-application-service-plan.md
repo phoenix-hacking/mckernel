@@ -60,6 +60,13 @@ four focused tests passing in each legacy/native selection and the original
 fixture-import failure retained. Guest image builds and actual execution of
 these changes are still pending, as is the separate allocator zeroing service.
 
+The image checkpoint `native-application-memory-images-checkpoint-20260909.json`
+supersedes the build-pending status: all four selections now compile, and the
+native binary's protection adapter forwards nr 11 and restores the VM lock
+flag. The legacy adapter remains a zero return. Three complete image captures
+retain both original diagnostic-tool failures and the passing retry. No new
+guest application ran; allocator zeroing remains the next implementation task.
+
 After fixing those services and verifying pager teardown, require the unchanged memory, file-I/O, thread/futex
 and signal modes, actual abnormal launcher/worker handling, current regressions
 and complete evidence retention. The later review must list unsupported
@@ -1689,3 +1696,17 @@ the host pop with del_all does not remove that ABA risk. Resolve ownership
 across both selected consumers before wiring the zeroing side effect. Do not
 cast guest pointers to Linux objects, suppress the packet or relax the ordinary
 response-bearing decoder. Original captures stay protected and failed.
+
+The zeroing review must also cover `syscall_policy`'s offload-poll loop and
+the timer bridge, which call `ihk_numa_zero_free_pages` outside the allocator's
+MCS lock. Native host/guest pop ownership therefore cannot assume that lock
+serializes all consumers. Any shared critical section must account for guest
+interrupt reentry and avoid Linux blocking operations while the guest waits.
+The original image's `memory_nodes` symbol is exactly
+`0xfffffffffe910040`, matching the captured node argument. `kernel/mem.c`
+owns its static BSS array of 512 nodes; `mem_helpers::MemNumaNode` explicitly
+represents the four bytes of padding at offset 12 as `_pad0`. Review its
+selected initializer and all field accesses before using any layout space for
+coordination. Keep node/chunk bounds, atomic publication and worker/page counts
+in the protocol checks, and require the selected guest and host to agree on any
+new synchronization contract before handling the one-way request.
