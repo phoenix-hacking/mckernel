@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.altstack-change-active",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.altstack-change-active"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["change_rc=-1 errno=1 eperm=1 handled=1 original_valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Changing the alternate stack while executing on it returns EPERM", "The outer handler completes and the original stack remains installed and valid"],
+  "unresolved_expectations": ["Freeze active-handler stack-state evidence and canonical EPERM binding before execution."],
+  "max_question_for_reviewer": "Confirm active alternate-stack changes are rejected with EPERM while preserving the original configuration."
+}

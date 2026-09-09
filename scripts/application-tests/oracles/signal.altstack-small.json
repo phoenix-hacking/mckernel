@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.altstack-small",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.altstack-small"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=12 enomem=1 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A stack below MINSIGSTKSZ is rejected with ENOMEM", "The previous alternate-stack configuration remains byte-for-byte unchanged"],
+  "unresolved_expectations": ["Freeze platform MINSIGSTKSZ value and canonical rejection errno before execution."],
+  "max_question_for_reviewer": "Confirm the selected minimum and ENOMEM binding for undersized alternate stacks."
+}

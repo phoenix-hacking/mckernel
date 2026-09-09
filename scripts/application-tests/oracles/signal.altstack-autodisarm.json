@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.altstack-autodisarm",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.altstack-autodisarm"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 einval=1 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SS_AUTODISARM with an otherwise valid stack is rejected with the documented native EINVAL", "The prior stack configuration remains unchanged; Linux support divergence is recorded rather than accepted"],
+  "unresolved_expectations": ["Confirm target SS_AUTODISARM support policy and exact EINVAL binding before execution."],
+  "max_question_for_reviewer": "Confirm native EINVAL rejection is intentional and must remain distinct from Linux support."
+}
