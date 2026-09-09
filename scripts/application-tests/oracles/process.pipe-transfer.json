@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.pipe-transfer",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.pipe-transfer"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bytes=65553 content_ok=1 eof=1 child_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The child transfers exactly 65553 deterministic bytes through the pipe", "The parent validates every byte and observes EOF only after the final writer closes", "Both process ends retire cleanly"],
+  "unresolved_expectations": ["Pipe backpressure scheduling and endpoint-retirement trace evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm exact stream integrity, EOF ordering, and both endpoint closures across guest processes."
+}

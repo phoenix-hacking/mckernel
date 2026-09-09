@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.pipe-sigpipe",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.pipe-sigpipe"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["reaped=1 signaled=1 signal=13 sigpipe=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A child writing with default SIGPIPE and no readers is terminated by SIGPIPE", "Parent preserves WIFSIGNALED/SIGPIPE rather than fabricating exit status 141"],
+  "unresolved_expectations": ["Raw signal status and endpoint-retirement evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm SIGPIPE remains a raw signal termination and no reader descriptor remains open in the parent."
+}
