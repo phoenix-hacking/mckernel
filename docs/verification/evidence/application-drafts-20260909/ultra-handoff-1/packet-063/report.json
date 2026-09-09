@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-063",
+  "packet_version": 1,
+  "context_sha256": "9c87faf460166f6df3abe4683461502c180e5f88f56951fd86978c889711bee1",
+  "started_utc": "2026-09-09T13:40:00Z",
+  "finished_utc": "2026-09-09T13:42:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "loader.cxx-exception",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.cxx-exception.c",
+      "oracle": "scripts/application-tests/oracles/loader.cxx-exception.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.cxx-exception.c", "scripts/application-tests/oracles/loader.cxx-exception.json"],
+      "parameter_vectors": {"exception_type": ["std::runtime_error"], "message": ["fixture"], "throw_boundary": ["two functions"], "guard_destruction": [1]},
+      "implemented_operations": ["typed C++ throw/catch", "function-boundary unwind", "RAII guard destruction count"],
+      "unresolved_oracle_notes": ["C++ exception ABI and destructor ordering require Max review."],
+      "max_reviewer_question": "Confirm exception unwind preserves the typed catch and exact RAII destruction ordering under the pinned C++ ABI."
+    },
+    {
+      "case_id": "loader.tls-dso",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.tls-dso.c",
+      "oracle": "scripts/application-tests/oracles/loader.tls-dso.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.tls-dso.c", "scripts/application-tests/oracles/loader.tls-dso.json"],
+      "parameter_vectors": {"dso": ["/apps/libloader-tls.so"], "initial_tls": [7], "thread_assignments": [[11, 13]], "parent_final": [19]},
+      "implemented_operations": ["bound TLS DSO load", "two pthread TLS get/set sequences", "parent isolation check"],
+      "unresolved_oracle_notes": ["TLS DSO symbol ABI, loader relocation, and thread teardown require Max review."],
+      "max_reviewer_question": "Confirm the bound TLS DSO initializes each thread independently and does not alter the parent TLS slot."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/loader/loader.cxx-exception.c", "sha256": "4f6b24188d0d37a32e262f62bd3e7c1624641b793dd4af3a79427947c10ca2d9"},
+    {"path": "scripts/application-tests/oracles/loader.cxx-exception.json", "sha256": "616b69061b57607d9da15a41d8cebfbde2dd5f861b34ce49d59195798ac2ae07"},
+    {"path": "scripts/application-tests/cases/loader/loader.tls-dso.c", "sha256": "38bcf7707da6aadce8ef2fb69bc1ccc6b11437388a00aac42ca852f82e147469"},
+    {"path": "scripts/application-tests/oracles/loader.tls-dso.json", "sha256": "359935b812e362ae9fbbe64dfd1ac48bc4355292da1956e315d5ad8f7e6d4530"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-063/context.json", "sha256": "9c87faf460166f6df3abe4683461502c180e5f88f56951fd86978c889711bee1"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-063.json --emit-context /tmp/application-packet-063-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-063/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["C++ exception unwind, TLS DSO ABI, loader relocation, and thread teardown need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review typed exception and RAII unwind", "Review TLS initialization and per-thread isolation"],
+  "next_packet_id": "packet-064"
+}

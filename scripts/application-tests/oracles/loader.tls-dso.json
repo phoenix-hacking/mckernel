@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.tls-dso",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.tls-dso"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["parent_initial=7 thread_a=1 thread_b=1 parent_final=19 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each thread sees independent TLS initial value7 and retains its assigned value11 or13", "The parent TLS value remains19 after both workers finish"],
+  "unresolved_expectations": ["TLS DSO symbol ABI, loader relocation, and thread teardown require Max review."],
+  "max_question_for_reviewer": "Confirm the bound TLS DSO initializes each thread independently and does not alter the parent TLS slot."
+}
