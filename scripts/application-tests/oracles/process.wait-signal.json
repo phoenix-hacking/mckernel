@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.wait-signal",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.wait-signal"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["reaped_match=1 signaled=1 signal=15 sigterm=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The parent terminates the real child with SIGTERM", "waitpid reports WIFSIGNALED and WTERMSIG(SIGTERM), never a normal exit code"],
+  "unresolved_expectations": ["Raw signal wait-status and child retirement evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm SIGTERM status is preserved as WIFSIGNALED with exact child PID ownership."
+}
