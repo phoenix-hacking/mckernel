@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.file-tail-zero",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.file-tail-zero"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["data_bad=5000 tail_bad=8192"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Every byte before EOF equals the independently generated input", "Every byte from EOF to the end of the mapped final page is zero", "No wholly beyond-EOF page is accessed"],
+  "unresolved_expectations": ["Bind exact 5000-byte input vector and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm zero-fill from byte 5000 through byte 8191 for a 5000-byte file mapped over two pages."
+}

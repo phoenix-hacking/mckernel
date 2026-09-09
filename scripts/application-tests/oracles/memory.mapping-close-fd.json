@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.mapping-close-fd",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.mapping-close-fd"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bad_index=4096"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["All 4096 mapped bytes remain readable after close(fd)", "The mapping owns its pager reference independently of the descriptor", "munmap retires the mapping and the temporary path is removed"],
+  "unresolved_expectations": ["Bind exact 4096-byte input vector and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm closing the descriptor does not invalidate the live private mapping."
+}

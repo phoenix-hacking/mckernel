@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.file-eof-sigbus",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.file-eof-sigbus"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["trapped", "si_code", "fault_offset"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["trapped=1", "si_code=BUS_ADRERR", "fault_offset=4096", "The wholly beyond-EOF page access is a real volatile read"],
+  "unresolved_expectations": ["Bind pinned guest BUS_ADRERR numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm one-byte file plus second-page access must deliver SIGBUS/BUS_ADRERR at page offset 4096."
+}
