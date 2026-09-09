@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-040",
+  "packet_version": 1,
+  "context_sha256": "95feecf8e3dc57ca5b24d0e9143f9b9d0c5a34b48c8c17b779144e539710648b",
+  "started_utc": "2026-09-09T11:00:00Z",
+  "finished_utc": "2026-09-09T11:01:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.key-destructor",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.key-destructor.c",
+      "oracle": "scripts/application-tests/oracles/thread.key-destructor.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.key-destructor.c", "scripts/application-tests/oracles/thread.key-destructor.json"],
+      "parameter_vectors": {"key_values": ["non-NULL token"], "destructor_invocations": [1]},
+      "implemented_operations": ["pthread key creation", "worker-specific value", "destructor and join ordering"],
+      "unresolved_oracle_notes": ["Destructor iteration and key-lifetime evidence require Max review."],
+      "max_reviewer_question": "Confirm destructor completion is ordered before join and one value causes exactly one invocation."
+    },
+    {
+      "case_id": "thread.rwlock-readers",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.rwlock-readers.c",
+      "oracle": "scripts/application-tests/oracles/thread.rwlock-readers.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.rwlock-readers.c", "scripts/application-tests/oracles/thread.rwlock-readers.json"],
+      "parameter_vectors": {"readers": [2], "old_value": [7], "new_value": [42]},
+      "implemented_operations": ["two concurrent read locks", "writer exclusion", "post-release write"],
+      "unresolved_oracle_notes": ["Reader/writer scheduling and fairness evidence require Max review."],
+      "max_reviewer_question": "Confirm writer exclusion lasts until both reader ownerships are released."
+    },
+    {
+      "case_id": "thread.rwlock-trywrite",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.rwlock-trywrite.c",
+      "oracle": "scripts/application-tests/oracles/thread.rwlock-trywrite.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.rwlock-trywrite.c", "scripts/application-tests/oracles/thread.rwlock-trywrite.json"],
+      "parameter_vectors": {"initial_reader": [1], "try_operation": ["pthread_rwlock_trywrlock"], "old_value": [11], "new_value": [99]},
+      "implemented_operations": ["reader ownership", "direct try-write EBUSY capture", "blocking write after release"],
+      "unresolved_oracle_notes": ["Rwlock error-number ABI and scheduler bracket require Max review."],
+      "max_reviewer_question": "Confirm EBUSY is the direct try-write result and no errno interpretation is used."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.key-destructor.c", "sha256": "c129191633fc78a10ffdf88e0bb4fa6777c28ee9225b4ff19f3c1103e3462e00"},
+    {"path": "scripts/application-tests/oracles/thread.key-destructor.json", "sha256": "e485bd35e8c6f4064e637532d3a242149adb1032f19a925ba33b2d8f18b43112"},
+    {"path": "scripts/application-tests/cases/thread/thread.rwlock-readers.c", "sha256": "78d0b7917787e2710039648c339aac6d52af75d19cfcae7a42f0a738e72a99d1"},
+    {"path": "scripts/application-tests/oracles/thread.rwlock-readers.json", "sha256": "6156a90c7aed4aec8507efdc79e5fbf4723fd2dbdd4dd7d8e94f828a1fe806ac"},
+    {"path": "scripts/application-tests/cases/thread/thread.rwlock-trywrite.c", "sha256": "83c054fda513981147339a4daf76e979b8e8bf2cbec7794bf8e6bb9cfdd80b16"},
+    {"path": "scripts/application-tests/oracles/thread.rwlock-trywrite.json", "sha256": "c7997c7af3658dc4c2f35691fd4465db6e347c9324d383b8a6753385adc0d676"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-040/context.json", "sha256": "95feecf8e3dc57ca5b24d0e9143f9b9d0c5a34b48c8c17b779144e539710648b"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-040.json --emit-context /tmp/application-packet-040-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-040/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Key destructors and rwlock reader/writer cases need final native ABI, scheduler, lifetime, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review key-destructor ordering", "Review rwlock reader/writer exclusion", "Confirm direct try-write EBUSY semantics"],
+  "next_packet_id": "packet-041"
+}

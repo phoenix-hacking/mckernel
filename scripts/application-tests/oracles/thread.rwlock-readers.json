@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.rwlock-readers",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.rwlock-readers"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["old_reads=2 writer_before_release=0 writer_done=1 value=42"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Two readers both observe value 7 while holding read locks", "The writer cannot complete until both readers release", "The writer then stores exactly 42"],
+  "unresolved_expectations": ["Freeze reader/writer scheduling and fairness evidence before execution."],
+  "max_question_for_reviewer": "Confirm writer exclusion lasts until both reader ownerships are released."
+}

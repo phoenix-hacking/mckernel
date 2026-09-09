@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.rwlock-trywrite",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.rwlock-trywrite"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["try_rc=16 busy=1 before=11 after_ok=1 value=99"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Try-write while a reader owns the lock returns EBUSY directly", "The writer succeeds after reader release and stores 99", "The protected value stays 11 until the writer acquires"],
+  "unresolved_expectations": ["Freeze rwlock error-number ABI and scheduling bracket before execution."],
+  "max_question_for_reviewer": "Confirm EBUSY is the direct try-write result and no errno interpretation is used."
+}

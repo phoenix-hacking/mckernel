@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.key-destructor",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.key-destructor"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["join_ok=1 result_ok=1 destructor_calls=1 value_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The worker's key destructor receives the exact assigned value", "The destructor runs exactly once before pthread_join returns"],
+  "unresolved_expectations": ["Freeze destructor iteration and key-lifetime evidence before execution."],
+  "max_question_for_reviewer": "Confirm destructor completion is ordered before join return and one non-NULL value causes exactly one invocation."
+}
