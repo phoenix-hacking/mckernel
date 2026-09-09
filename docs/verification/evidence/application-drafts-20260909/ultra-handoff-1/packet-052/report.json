@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-052",
+  "packet_version": 1,
+  "context_sha256": "a116c9ee8137d19ea55eb9a80c4176dd8fd772da8bf049e38e457a342aadd689",
+  "started_utc": "2026-09-09T12:02:00Z",
+  "finished_utc": "2026-09-09T12:03:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.vfork-exec",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.vfork-exec.c",
+      "oracle": "scripts/application-tests/oracles/process.vfork-exec.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.vfork-exec.c", "scripts/application-tests/oracles/process.vfork-exec.json"],
+      "parameter_vectors": {"operation": ["vfork then immediate exec"], "child_exit_code": [23], "parent_state": ["0x3141 unchanged"]},
+      "implemented_operations": ["vfork child", "immediate bound-image exec", "parent wait and state check"],
+      "unresolved_oracle_notes": ["Address-space exclusion and parent-resume ordering require Max review."],
+      "max_reviewer_question": "Confirm no parent-state corruption occurs between vfork and child exec."
+    },
+    {
+      "case_id": "process.spawn",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.spawn.c",
+      "oracle": "scripts/application-tests/oracles/process.spawn.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.spawn.c", "scripts/application-tests/oracles/process.spawn.json"],
+      "parameter_vectors": {"api": ["posix_spawn"], "argv": ["/apps/process.spawn"], "child_exit_code": [23]},
+      "implemented_operations": ["posix_spawn bound image", "child stage record", "exact wait/reap status"],
+      "unresolved_oracle_notes": ["Native spawn path and process identity evidence require Max review."],
+      "max_reviewer_question": "Confirm posix_spawn uses native child creation and preserves exact wait status."
+    },
+    {
+      "case_id": "process.session-group",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.session-group.c",
+      "oracle": "scripts/application-tests/oracles/process.session-group.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.session-group.c", "scripts/application-tests/oracles/process.session-group.json"],
+      "parameter_vectors": {"groups": [2], "target_signal": ["SIGTERM"], "targeting": ["negative-PID group"], "isolation": ["other group remains alive"]},
+      "implemented_operations": ["two child process groups", "targeted group kill", "other-group liveness and separate kill"],
+      "unresolved_oracle_notes": ["Group identity, fanout, and retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm negative-PID group signaling is isolated to the intended guest group."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.vfork-exec.c", "sha256": "a1340c9f5ef21bb56a7e6be93702352635a095c89c6e31149b567a6e2e3b53ca"},
+    {"path": "scripts/application-tests/oracles/process.vfork-exec.json", "sha256": "115b009eb471b2534139e9e96bd7f0ee5a51fa700761707246eeac35fe27b34a"},
+    {"path": "scripts/application-tests/cases/process/process.spawn.c", "sha256": "dc36a8ca5cbe222f072f8409d97e39883d1c299a2b4d61fa3d287aad13031ca1"},
+    {"path": "scripts/application-tests/oracles/process.spawn.json", "sha256": "92bcef65f77ca91c6327b60fd9c8d614d2906f036e09217affb3fa9f5ee58054"},
+    {"path": "scripts/application-tests/cases/process/process.session-group.c", "sha256": "7f1e9543cb29c1f3e05d6ae9f972fde692d177f1c84e0dfc0f74006934234346"},
+    {"path": "scripts/application-tests/oracles/process.session-group.json", "sha256": "196d4f793c109c572cc4c8c6f1a98e2d61a8bc423c4176a7baf61d5c8ba98f1c"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-052/context.json", "sha256": "a116c9ee8137d19ea55eb9a80c4176dd8fd772da8bf049e38e457a342aadd689"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-052.json --emit-context /tmp/application-packet-052-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-052/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["vfork/exec, posix_spawn, and process-group signaling cases need final process identity, address-space, group, signal, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review vfork address-space safety", "Review posix_spawn identity/status", "Review group-signal isolation"],
+  "next_packet_id": "packet-053"
+}

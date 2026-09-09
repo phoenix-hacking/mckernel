@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.session-group",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.session-group"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["groups_distinct=1 target_kill=0 target_sigterm=1 other_alive_before=1 other_kill=0 other_sigterm=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Two children have distinct process groups", "A negative-PID SIGTERM affects only the targeted group; the other child remains alive until separately targeted", "Both raw wait statuses are SIGTERM"],
+  "unresolved_expectations": ["Process-group identity, signal fanout, and retirement evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm negative-PID group signaling is isolated to the intended guest process group."
+}

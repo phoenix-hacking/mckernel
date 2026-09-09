@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.spawn",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.spawn"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["spawn_stage=1", "spawn_rc=0 reaped=1 exited=1 code=23"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["posix_spawn returns zero and launches the bound child image", "The child emits its stage record, exits 23, and is reaped exactly once"],
+  "unresolved_expectations": ["McKernel spawn path and process identity evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm posix_spawn uses the native child path and preserves exact argv/env and wait status."
+}
