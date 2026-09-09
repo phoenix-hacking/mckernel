@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.argv-whitespace",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": [
+      "/apps/startup.argv-whitespace",
+      "arg with space",
+      "tab\targ",
+      "\"quoted\" segment",
+      "single 'quote'"
+    ],
+    "cwd": "/case/work",
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "argc=5",
+      "argv[0]=/apps/startup.argv-whitespace",
+      "argv[1]=arg with space",
+      "argv[2]=tab\targ",
+      "argv[3]=\"quoted\" segment",
+      "argv[4]=single 'quote'",
+      "argv[5]=NULL"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "relational_assertions": [
+    "All argv entries are passed verbatim as fixed bytes",
+    "The tab character is preserved in argv[2]",
+    "Literal quote characters are preserved in argv[3] and argv[4]",
+    "argv[argc] is NULL"
+  ],
+  "unresolved_expectations": [],
+  "max_question_for_reviewer": "No additional reviewer question; fixed argv bytes are fully specified for this packet."
+}

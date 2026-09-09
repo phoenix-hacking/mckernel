@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-008",
+  "packet_version": 1,
+  "context_sha256": "c89eb833122d9c5c94f71a82d1bc7e27d8e70c29731ee0e2c6a03a8793364b29",
+  "started_utc": "2026-09-09T09:54:55Z",
+  "finished_utc": "2026-09-09T09:54:55Z",
+  "draft_status": "DRAFTED",
+  "cases": [
+    {
+      "case_id": "startup.argv-whitespace",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/cases/startup/startup.argv-whitespace.c",
+      "oracle": "scripts/application-tests/oracles/startup.argv-whitespace.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.argv-whitespace.c",
+        "scripts/application-tests/oracles/startup.argv-whitespace.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; fixed argv parsing fixture is fully specified."
+    },
+    {
+      "case_id": "startup.cwd",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/cases/startup/startup.cwd.c",
+      "oracle": "scripts/application-tests/oracles/startup.cwd.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.cwd.c",
+        "scripts/application-tests/oracles/startup.cwd.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; fixed cwd assertion is fully specified."
+    },
+    {
+      "case_id": "startup.umask",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/cases/startup/startup.umask.c",
+      "oracle": "scripts/application-tests/oracles/startup.umask.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.umask.c",
+        "scripts/application-tests/oracles/startup.umask.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; umask and mode restoration assertions are fully specified."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/startup/startup.argv-whitespace.c",
+      "sha256": "974798081049f6c23310bee4c226a19ddb32e8a907525dcfb5352535460c1c08"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.argv-whitespace.json",
+      "sha256": "4b828aec935fd17e85a305174a125ee0728d3ff7690f70309d86667bdce4c049"
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.cwd.c",
+      "sha256": "c542a6d379c554973fd65d062b245ac899417f3df884be7945930cfea84abdb7"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.cwd.json",
+      "sha256": "4e4ce710c6b487dfa363a5032f8e66edd0881ac83ec3b7f4b9934ef969a52dc1"
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.umask.c",
+      "sha256": "46b19a853da800f3e255c1b6ab5d3c8b0a8ce2c9c7f6bc3501600529c050bb78"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.umask.json",
+      "sha256": "cf94f6e95623fdc61120ad71e47f0832f77e4c8de5c99a4ae80e85e1a88fc32e"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-008.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-008.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-008-context-attempt-4.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [],
+  "blocked_execution_capabilities": [
+    "current-inputs",
+    "runtime-transport-fault-injection",
+    "runner-contract"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [],
+  "next_packet_id": "packet-009"
+}

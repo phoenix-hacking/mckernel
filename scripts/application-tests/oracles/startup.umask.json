@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.umask",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": [
+      "/apps/startup.umask"
+    ],
+    "cwd": "/case/work",
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "old_umask=0002",
+      "requested_mode=0666",
+      "created_file_mode=0644"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "relational_assertions": [
+    "The file mode must be 0644 after umask 022 on 0666 request",
+    "Fixture restores previous umask after creation"
+  ],
+  "unresolved_expectations": [],
+  "max_question_for_reviewer": "No additional reviewer question; umask-file mode assertion is fully specified."
+}
