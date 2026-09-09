@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-018",
+  "packet_version": 1,
+  "context_sha256": "b348b4dedbe13f554f1d35299f3027708821d7b2a05af3fbd844e59519ad247b",
+  "started_utc": "2026-09-09T11:30:00Z",
+  "finished_utc": "2026-09-09T11:30:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "file.write-read", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.write-read.c", "oracle": "scripts/application-tests/oracles/file.write-read.json", "changed_files": ["scripts/application-tests/cases/file/file.write-read.c", "scripts/application-tests/oracles/file.write-read.json"], "parameter_vectors": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576]}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm all six deterministic write/read vectors and EOF behavior."},
+    {"case_id": "file.zero-length-io", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.zero-length-io.c", "oracle": "scripts/application-tests/oracles/file.zero-length-io.json", "changed_files": ["scripts/application-tests/cases/file/file.zero-length-io.c", "scripts/application-tests/oracles/file.zero-length-io.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm zero-byte read/write preserve offset 3 and all file bytes."},
+    {"case_id": "file.pread-offset", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.pread-offset.c", "oracle": "scripts/application-tests/oracles/file.pread-offset.json", "changed_files": ["scripts/application-tests/cases/file/file.pread-offset.c", "scripts/application-tests/oracles/file.pread-offset.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm pread offset 11 returns five exact bytes without changing fd offset 7."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/file/file.write-read.c", "sha256": "942927376c8d3707a7d14b0f5bdc353790297ce4bf85fe6db2c34090198f58fd"},
+    {"path": "scripts/application-tests/oracles/file.write-read.json", "sha256": "a3262a52829161a9f0ede49d451a72cb7fcddaa857742d6fdc5cec6bf85141bd"},
+    {"path": "scripts/application-tests/cases/file/file.zero-length-io.c", "sha256": "142f1dbfa9b9b906c7faee2cdecb228e4d7d3939a93f6f47ecdf9cf99cc66286"},
+    {"path": "scripts/application-tests/oracles/file.zero-length-io.json", "sha256": "589ac2be0fabbc423b5b2daf764d1ec035c8ad69f2610a23a202d933b539d43c"},
+    {"path": "scripts/application-tests/cases/file/file.pread-offset.c", "sha256": "defd5d30ad861c3219f06a40b58a53e396575a6781c45d09ede2216f2f419e9c"},
+    {"path": "scripts/application-tests/oracles/file.pread-offset.json", "sha256": "d601ec43f4824e8c69eb07c7d607263a179a8bbd28b3e95b10e910889d928197"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-018.json --emit-context /tmp/application-packet-018-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three file I/O cases need final canonical record and reviewed input binding."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review deterministic byte vectors, EOF semantics, zero-length side effects, and pread offset preservation."],
+  "next_packet_id": "packet-019"
+}

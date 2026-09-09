@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.zero-length-io",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.zero-length-io"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read_zero=0 write_zero=0 offset=3 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Zero-byte read and write return 0", "The descriptor offset remains 3", "All file bytes remain unchanged"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm zero-length I/O has no offset or content side effect."
+}
