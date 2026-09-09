@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.argv-empty",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/startup.argv-empty", "app", "A", "", "B"],
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "[startup.argv-empty]",
+      "argc=4",
+      "argv[0]=app",
+      "argv[1]=A",
+      "argv[2]=",
+      "argv[3]=B",
+      "argv[4]=NULL"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "relational_assertions": [
+    "argv[argc] must be NULL",
+    "argc must equal 4",
+    "all argv bytes must be zero-terminated"
+  ],
+  "unresolved_expectations": [
+    "Execution mode currently provides only one argv element in metadata; this fixture requires explicit argv expansion for app/A/empty/B and should be resolved by root/Max."
+  ],
+  "max_question_for_reviewer": "Can execution metadata pass argv=[\"/apps/startup.argv-empty\", \"app\", \"A\", \"\", \"B\"] with argv[2] empty and terminating argv pointer NULL for this case?"
+}

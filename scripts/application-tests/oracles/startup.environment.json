@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.environment",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC",
+      "APP_STARTUP_ENV_ALPHA": "ALPHA-STARTUP-VALUE",
+      "APP_STARTUP_ENV_BETA": "BETA-STARTUP-VALUE"
+    },
+    "environment_absent": ["APP_STARTUP_ENV_MISSING"]
+  },
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "ENV_ALPHA=ALPHA-STARTUP-VALUE",
+      "ENV_BETA=BETA-STARTUP-VALUE",
+      "ENV_MISSING=NULL"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "relational_assertions": [
+    "getenv(APP_STARTUP_ENV_ALPHA) must equal fixed bytes ALPHA-STARTUP-VALUE",
+    "getenv(APP_STARTUP_ENV_BETA) must equal fixed bytes BETA-STARTUP-VALUE",
+    "getenv(APP_STARTUP_ENV_MISSING) must return NULL"
+  ],
+  "unresolved_expectations": [
+    "No pinned environment variable source is attached to this packet yet; confirm that APP_STARTUP_ENV_ALPHA/BETA are set and APP_STARTUP_ENV_MISSING is cleared by the runner payload contract."
+  ],
+  "max_question_for_reviewer": "Are APP_STARTUP_ENV_ALPHA and APP_STARTUP_ENV_BETA the intended fixed keys, or should another key pair be used by this spec?"
+}

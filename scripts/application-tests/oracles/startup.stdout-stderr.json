@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.stdout-stderr",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-bytes-hex",
+    "hex": "7374646f75742d322d7374646572720a"
+  },
+  "stderr": {
+    "kind": "exact-bytes-hex",
+    "hex": "7374646572722d312d7374646f75740a"
+  },
+  "relational_assertions": [
+    "stdout bytes must remain bounded to declared fixture bytes",
+    "stderr bytes must remain bounded to declared fixture bytes",
+    "no interleaving deadlock behavior expected"
+  ],
+  "unresolved_expectations": [
+    "Current generic metadata path records an empty oracle stderr payload; this packet proposes explicit fixed stderr bytes and waits for root to align output capture expectations."
+  ],
+  "max_question_for_reviewer": "Should stderr expectation for startup.stdout-stderr stay binary payload, and should runner capture ordering guarantees be enforced at fixture scope or handled as an execution check only?"
+}
