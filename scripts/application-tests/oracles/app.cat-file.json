@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "case_id": "app.cat-file",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-bytes",
+    "hex": "4b65726e656c4d61726b2054657374204578616d706c65207061796c6f6164286e292e0a"
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "case": "app.cat-file",
+    "input_path": "/case/input"
+  },
+  "relational_assertions": [
+    "STDOUT must equal input bytes exactly",
+    "No stderr output",
+    "Process exits 0"
+  ]
+}

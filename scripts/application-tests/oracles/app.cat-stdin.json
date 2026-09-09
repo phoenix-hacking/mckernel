@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "case_id": "app.cat-stdin",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-bytes",
+    "hex": "4f726465723d6e696c2d7a65726f2d6c696e652d3132333435566f6963650a"
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "case": "app.cat-stdin",
+    "source": "stdin"
+  },
+  "relational_assertions": [
+    "STDOUT must match stdin bytes exactly",
+    "No stderr output",
+    "Process exits 0"
+  ]
+}
