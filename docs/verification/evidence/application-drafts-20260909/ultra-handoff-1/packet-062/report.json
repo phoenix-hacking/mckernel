@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-062",
+  "packet_version": 1,
+  "context_sha256": "f803c09e43d3a5b3237c1f62c7f8bf4b44dbc9b35a54f420cdce254060134f4a",
+  "started_utc": "2026-09-09T13:30:00Z",
+  "finished_utc": "2026-09-09T13:32:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "loader.dlopen-constructor",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.dlopen-constructor.c",
+      "oracle": "scripts/application-tests/oracles/loader.dlopen-constructor.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.dlopen-constructor.c", "scripts/application-tests/oracles/loader.dlopen-constructor.json"],
+      "parameter_vectors": {"dso": ["/apps/libloader-lifecycle.so"], "flags": ["RTLD_NOW|RTLD_LOCAL"], "constructor_count": [1], "destructor_before_unload": [0]},
+      "implemented_operations": ["load lifecycle DSO", "resolve constructor/destructor counters", "single dlclose"],
+      "unresolved_oracle_notes": ["Destructor-after-unload observation and lifecycle DSO symbol ABI require Max review."],
+      "max_reviewer_question": "Confirm the lifecycle DSO exports the counter symbols and provide an independent post-unload destructor observation mechanism."
+    },
+    {
+      "case_id": "loader.dlsym-missing",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.dlsym-missing.c",
+      "oracle": "scripts/application-tests/oracles/loader.dlsym-missing.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.dlsym-missing.c", "scripts/application-tests/oracles/loader.dlsym-missing.json"],
+      "parameter_vectors": {"missing_symbol": ["fixture_symbol_that_does_not_exist"], "valid_symbol": ["fixture_add"], "error_sequence": ["missing then cleared"]},
+      "implemented_operations": ["bound DSO load", "missing dlsym and nonempty dlerror", "subsequent valid lookup"],
+      "unresolved_oracle_notes": ["DSO symbol table and dlerror ABI require Max review."],
+      "max_reviewer_question": "Confirm missing-symbol diagnostics are nonempty and do not poison a subsequent valid symbol lookup."
+    },
+    {
+      "case_id": "loader.cxx-containers",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.cxx-containers.c",
+      "oracle": "scripts/application-tests/oracles/loader.cxx-containers.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.cxx-containers.c", "scripts/application-tests/oracles/loader.cxx-containers.json"],
+      "parameter_vectors": {"elements": [[2, 4, 6]], "sum": [12], "string": ["mckernel"], "destructor_lower_bound": [3]},
+      "implemented_operations": ["std::vector counted elements", "std::string fixed content", "clear and destructor accounting"],
+      "unresolved_oracle_notes": ["C++ ABI, vector relocation destructor accounting, and compiler binding require Max review."],
+      "max_reviewer_question": "Confirm the pinned C++ toolchain ABI and whether destructor accounting must distinguish relocation temporaries from final elements."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/loader/loader.dlopen-constructor.c", "sha256": "ddd0dddc49b0aafbeb46221a3fd0c0ffcae74a10a491884257db99e289c30cd0"},
+    {"path": "scripts/application-tests/oracles/loader.dlopen-constructor.json", "sha256": "0a1466b1cc110e64ae145ee1e5a4901759e2809818adabd9fba955a3692b6c15"},
+    {"path": "scripts/application-tests/cases/loader/loader.dlsym-missing.c", "sha256": "a69888f81196f16c3c7b53addada1052ec30732b6c194f82e2e98c5a7603c46b"},
+    {"path": "scripts/application-tests/oracles/loader.dlsym-missing.json", "sha256": "8395e89b3cd66aafb1d0bfa21cd38c9b7fda8308dfcef45fd308fc741ba567ba"},
+    {"path": "scripts/application-tests/cases/loader/loader.cxx-containers.c", "sha256": "5609029c0abffb6dcef06717c42ec589484e1ef5bd7d6e945dddc928ff84584f"},
+    {"path": "scripts/application-tests/oracles/loader.cxx-containers.json", "sha256": "559bfd537293b72a6581d99817729c44115ae4fb6c8ec8cc6daae5769ef39a25"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-062/context.json", "sha256": "f803c09e43d3a5b3237c1f62c7f8bf4b44dbc9b35a54f420cdce254060134f4a"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-062.json --emit-context /tmp/application-packet-062-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-062/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["DSO lifecycle observation, dlsym diagnostics, C++ ABI, and destructor accounting need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review constructor/destructor observation", "Review missing-symbol error clearing", "Review C++ container ABI and lifetime accounting"],
+  "next_packet_id": "packet-063"
+}
