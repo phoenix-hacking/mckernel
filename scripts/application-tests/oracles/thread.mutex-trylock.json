@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.mutex-trylock",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.mutex-trylock"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["try_rc=16 busy=1 after_release=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A second thread's trylock while the mutex is held returns EBUSY directly", "After release, the same thread acquires and releases the mutex successfully", "The assertion uses pthread return values rather than errno"],
+  "unresolved_expectations": ["Freeze mutex error-number ABI and scheduler bracket before execution."],
+  "max_question_for_reviewer": "Confirm EBUSY is returned directly by pthread_mutex_trylock and no errno interpretation is accepted."
+}

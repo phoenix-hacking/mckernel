@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.join-values",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.join-values"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["n=2 join_ok=1 n=4 join_ok=1 n=8 join_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each thread vector joins every created thread exactly once", "Each joined pointer-sized return value equals its assigned tag"],
+  "unresolved_expectations": ["Freeze pointer-width ABI and canonical vector output before execution."],
+  "max_question_for_reviewer": "Confirm exact pointer-sized return tags and join ordering are part of the native ABI contract."
+}
