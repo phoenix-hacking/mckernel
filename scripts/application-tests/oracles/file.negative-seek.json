@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.negative-seek",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.negative-seek"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["result=-1 errno=22 current=5"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Negative SEEK_SET returns -1/EINVAL", "The current offset remains 5 after rejection", "File content is unaffected"],
+  "unresolved_expectations": ["Bind pinned guest EINVAL value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm failed negative seek is atomic and leaves the prior offset unchanged."
+}

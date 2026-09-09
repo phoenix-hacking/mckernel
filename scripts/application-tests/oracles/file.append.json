@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.append",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.append"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read=10 exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["O_APPEND places the six-byte suffix at EOF despite seek to zero", "The prefix remains BASE and suffix appears exactly once"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm O_APPEND overrides the current offset for each write and produces BASESUFFIX."
+}
