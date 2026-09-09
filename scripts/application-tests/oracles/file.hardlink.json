@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.hardlink",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.hardlink"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["initial_shared=1 first_gone=1 remaining_links_one=1 read=8 exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both names initially identify one inode/device with link count 2", "After first unlink, second name has link count 1", "Remaining name still reads all HARDLINK bytes"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm hardlink inode identity and final-name lifetime semantics."
+}
