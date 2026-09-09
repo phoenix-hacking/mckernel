@@ -1,0 +1,442 @@
+{
+  "capability_contracts": {
+    "current-inputs": {
+      "acceptance": "Full compiler source bindings, exact executable/DSO closure and current native module/image regression replay.",
+      "state": "blocked"
+    },
+    "dynamic-etexec": {
+      "acceptance": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "state": "historical-baseline-only"
+    },
+    "runner-contract": {
+      "acceptance": "Repository runner/supervisor implements argv-only execution, same-guest Linux reference, raw wait status, bounded dual-stream pumps, watchdog and evidence requirements.",
+      "state": "blocked"
+    },
+    "runtime-transport-fault-injection": {
+      "acceptance": "Real guest prepublication hard fault, postpublication notify fault, recovery before deadline and permanent pressure pass with exact phase/ownership assertions.44 protocol tests alone do not satisfy this gate.",
+      "state": "blocked"
+    },
+    "threads-basic": {
+      "acceptance": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "state": "historical-baseline-only"
+    }
+  },
+  "cases": [
+    {
+      "acceptance_status": "not-verified",
+      "cleanup": "normal-retirement-v1",
+      "command_argv": [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/run.py",
+        "--inputs",
+        "{input_manifest}",
+        "--case",
+        "thread.semaphore",
+        "--attempt",
+        "{fresh_attempt}",
+        "--profile",
+        "baseline-root-1cpu",
+        "--mode",
+        "differential-guest"
+      ],
+      "depends_on": [],
+      "evidence": [
+        "exact-input-manifest",
+        "original-and-executed-source",
+        "compiler-command-and-dependencies",
+        "payload-interpreter-dso-hashes",
+        "both-engine-argv-env-identity-cwd-fd-inputs",
+        "raw-stdout-stderr-and-wait-status",
+        "per-assertion-observed-and-expected",
+        "schedule-os-generation-pid-tids-and-matched-delivery",
+        "trace-coverage-and-loss",
+        "cleanup-owner-pager-claim-snapshot",
+        "full-serial-debugcon-qemu-command",
+        "physical-memory-queue-register-captures",
+        "failure-and-timeout-captures",
+        "sha256-retention-index"
+      ],
+      "execution_status": "blocked",
+      "family": "thread",
+      "id": "thread.semaphore",
+      "implementation_status": "not-created",
+      "limits": {
+        "application_children": 0,
+        "application_threads": 2,
+        "case_file_bytes": 4194304,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 8388608,
+        "payload_timeout_seconds": 30,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "logical_case_count": 1,
+      "mode": "differential-guest",
+      "oracle": {
+        "artifact": "scripts/application-tests/oracles/thread.semaphore.json",
+        "assertions": [
+          "Exactly16 completions; no extra token; final sem_trywait returns-1/EAGAIN."
+        ],
+        "independent_source": "Frozen input bytes and mathematical/POSIX contract; pinned-Linux guest reference supplies only explicitly version-bound details. Expected output is never computed by the production function under test.",
+        "kind": "fixed-and-relational-v1",
+        "normalization_allowlist": [],
+        "readiness": "draft-unresolved",
+        "reference": "same-binary-pinned-linux-guest",
+        "stderr": {
+          "hex": "",
+          "kind": "exact-bytes"
+        },
+        "unresolved": [
+          "Freeze canonical stdout record schema and exact serialized output or declared relation fields before first execution.",
+          "Bind fixed input fixture bytes and independent oracle artifact SHA256."
+        ],
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "parameters": {},
+      "payload_contract": {
+        "argv": [
+          "/apps/thread.semaphore"
+        ],
+        "argv_options_status": "fixed-fixture-interface",
+        "build_profile": "ordinary-dynamic-etexec-c11",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "feature_test_macros": [
+          "_GNU_SOURCE"
+        ],
+        "identity_profile": "baseline-root",
+        "operation": "Producer posts16 counted tokens and consumer waits16 times.",
+        "path": "cases/thread/thread.semaphore.c",
+        "shell_interpretation": false
+      },
+      "repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "requires": [
+        "current-inputs",
+        "runner-contract",
+        "dynamic-etexec",
+        "threads-basic"
+      ],
+      "status": "planned",
+      "title": "thread / semaphore",
+      "version": 1
+    },
+    {
+      "acceptance_status": "not-verified",
+      "cleanup": "normal-retirement-v1",
+      "command_argv": [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/run.py",
+        "--inputs",
+        "{input_manifest}",
+        "--case",
+        "thread.detach",
+        "--attempt",
+        "{fresh_attempt}",
+        "--profile",
+        "baseline-root-1cpu",
+        "--mode",
+        "differential-guest"
+      ],
+      "depends_on": [],
+      "evidence": [
+        "exact-input-manifest",
+        "original-and-executed-source",
+        "compiler-command-and-dependencies",
+        "payload-interpreter-dso-hashes",
+        "both-engine-argv-env-identity-cwd-fd-inputs",
+        "raw-stdout-stderr-and-wait-status",
+        "per-assertion-observed-and-expected",
+        "schedule-os-generation-pid-tids-and-matched-delivery",
+        "trace-coverage-and-loss",
+        "cleanup-owner-pager-claim-snapshot",
+        "full-serial-debugcon-qemu-command",
+        "physical-memory-queue-register-captures",
+        "failure-and-timeout-captures",
+        "sha256-retention-index"
+      ],
+      "execution_status": "blocked",
+      "family": "thread",
+      "id": "thread.detach",
+      "implementation_status": "not-created",
+      "limits": {
+        "application_children": 0,
+        "application_threads": 2,
+        "case_file_bytes": 4194304,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 8388608,
+        "payload_timeout_seconds": 30,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "logical_case_count": 1,
+      "mode": "differential-guest",
+      "oracle": {
+        "artifact": "scripts/application-tests/oracles/thread.detach.json",
+        "assertions": [
+          "Worker runs once and its TID/procfs node retires within15 seconds; no pthread_join on detached thread."
+        ],
+        "independent_source": "Frozen input bytes and mathematical/POSIX contract; pinned-Linux guest reference supplies only explicitly version-bound details. Expected output is never computed by the production function under test.",
+        "kind": "fixed-and-relational-v1",
+        "normalization_allowlist": [],
+        "readiness": "draft-unresolved",
+        "reference": "same-binary-pinned-linux-guest",
+        "stderr": {
+          "hex": "",
+          "kind": "exact-bytes"
+        },
+        "unresolved": [
+          "Freeze canonical stdout record schema and exact serialized output or declared relation fields before first execution.",
+          "Bind fixed input fixture bytes and independent oracle artifact SHA256."
+        ],
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "parameters": {},
+      "payload_contract": {
+        "argv": [
+          "/apps/thread.detach"
+        ],
+        "argv_options_status": "fixed-fixture-interface",
+        "build_profile": "ordinary-dynamic-etexec-c11",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "feature_test_macros": [
+          "_GNU_SOURCE"
+        ],
+        "identity_profile": "baseline-root",
+        "operation": "Create a detached worker that reports completion through a guarded handshake.",
+        "path": "cases/thread/thread.detach.c",
+        "shell_interpretation": false
+      },
+      "repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "requires": [
+        "current-inputs",
+        "runner-contract",
+        "dynamic-etexec",
+        "threads-basic"
+      ],
+      "status": "planned",
+      "title": "thread / detach",
+      "version": 1
+    }
+  ],
+  "catalog_sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+  "execution_enabled": false,
+  "execution_inputs": "UNRESOLVED; no runtime authorization",
+  "mode": "draft-only",
+  "notice": "Metadata/context restriction is not an operating-system sandbox. No case has passed.",
+  "packet": {
+    "blocked_by": [
+      "runner-contract",
+      "current-inputs",
+      "runtime-transport-fault-injection"
+    ],
+    "candidate_fix_policy": {
+      "allowed": "One bounded candidate for a simple diagnosed defect after preserving the first failure. Scope must be authorized by the active packet; writes outside allowlist are forbidden.",
+      "invalidate_previous_binary_coverage": true,
+      "max_candidates": 1,
+      "not_automatic_acceptance": true,
+      "prohibited": [
+        "oracle weakening",
+        "allowed-errno widening",
+        "hidden retry",
+        "kernel or launcher change in a draft-only packet",
+        "changing baseline fixtures",
+        "rewriting failed evidence"
+      ],
+      "reviewer": "Max for native correctness, lifetime, ABI, scheduler, unsafe or unclear semantics; independently reviewed candidate before any acceptance"
+    },
+    "case_ids": [
+      "thread.semaphore",
+      "thread.detach"
+    ],
+    "command_templates_are_implemented": false,
+    "completion": [
+      "Draft each selected source/input specification and independent oracle within its exact allowlist; report unresolved semantics explicitly.",
+      "Represent every listed parameter without inflating logical case counts; feature-blocked execution still permits drafting.",
+      "No runtime execution, kernel/launcher edits, oracle weakening or invented capability acceptance in this draft-only packet.",
+      "Write the immutable packet-specific draft report, including exact changed-file hashes, unresolved oracles and any preserved failure/Max escalation.",
+      "After reporting, advance automatically only to the next packet already listed in the reviewed draft queue; request no repeated user permission and never enable execution."
+    ],
+    "execution_enabled": false,
+    "executor_model": "Luna or Spark; user chooses",
+    "inputs": {
+      "capability_manifest": "{reviewed_capability_manifest}",
+      "case_subset_only": true,
+      "catalog": "scripts/application-tests/cases.json",
+      "input_manifest": "{reviewed_input_manifest}"
+    },
+    "limits": {
+      "active_cases_max": 3,
+      "candidate_fix_changed_lines_max": 80,
+      "candidate_fix_files_max": 2,
+      "candidate_fix_minutes_max": 15,
+      "container_cpus": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "container_memory_bytes": 12884901888,
+      "container_network": "none",
+      "container_tasks": 512,
+      "host_tests_forbidden": true
+    },
+    "mode": "draft-only",
+    "packet_id": "packet-041",
+    "permitted_commands": [
+      [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/validate.py",
+        "--packet",
+        "/workspace/scripts/application-tests/packets/packet-041.json"
+      ],
+      [
+        "git",
+        "diff",
+        "--check"
+      ]
+    ],
+    "queue": {
+      "active_case_limit": 3,
+      "advance_only_when_queue_reviewed": true,
+      "new_user_permission_per_packet_required": false,
+      "next_packet_id": "packet-042",
+      "path": "scripts/application-tests/draft-queue.json",
+      "position": 41
+    },
+    "read_allowlist": [
+      "scripts/application-tests/README.md",
+      "scripts/application-tests/packets/packet-041.json",
+      "{reviewed_capability_manifest}",
+      "{reviewed_input_manifest}",
+      "cases.json#thread.semaphore",
+      "cases.json#thread.detach"
+    ],
+    "reporting": {
+      "draft_statuses": [
+        "DRAFTED",
+        "DRAFTED_WITH_UNRESOLVED",
+        "BLOCKED",
+        "FAILED"
+      ],
+      "failure_artifact_directory": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-041/failures/",
+      "failure_log_creation": "Open a nonsymlink regular file with O_APPEND|O_CREAT|O_NOFOLLOW, serialize one complete JSON object per line and fsync; never truncate, edit or remove old events.",
+      "failure_log_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/failures.jsonl",
+      "failure_preservation": "Immediately append the first unexpected failure event and preserve original output/source/diff/context before diagnosis; no hidden retry. Runtime/validation failures also retain the established root kernel.log record.",
+      "max_escalation": "Record exact smallest reproducer, evidence paths and unresolved semantic question for Max. No model switch or production patch in a draft packet. Continue later independent drafting; mark dependency-blocked drafts precisely.",
+      "report_creation": "Create once exclusively after draft work; do not replace a prior report. A resumed/revised run uses a new fresh_queue_run_id and links prior failed evidence.",
+      "report_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-041/report.json",
+      "required_failure_event_fields": [
+        "schema_version",
+        "sequence",
+        "utc",
+        "queue_run_id",
+        "packet_id",
+        "case_ids",
+        "stage",
+        "exact_command_argv_or_tool_action",
+        "environment_summary",
+        "error",
+        "original_artifact_paths_and_sha256",
+        "source_and_context_sha256",
+        "max_escalation_required"
+      ],
+      "required_report_fields": [
+        "schema_version",
+        "queue_run_id",
+        "queue_sha256",
+        "packet_id",
+        "packet_version",
+        "context_sha256",
+        "started_utc",
+        "finished_utc",
+        "draft_status",
+        "cases",
+        "changed_files_with_sha256",
+        "commands_and_outcomes",
+        "unresolved_oracles",
+        "blocked_execution_capabilities",
+        "first_failure_event",
+        "max_escalation",
+        "next_packet_id"
+      ],
+      "scratch_write_exception": "Only this packet report, original failure artifacts within its named failure directory, and append-only shared failure log. No production-source scope expansion.",
+      "test_pass_status_forbidden": true
+    },
+    "schema_version": 1,
+    "status": "planned",
+    "version": 1,
+    "write_allowlist": [
+      "scripts/application-tests/cases/thread/thread.semaphore.c",
+      "scripts/application-tests/oracles/thread.semaphore.json",
+      "scripts/application-tests/cases/thread/thread.detach.c",
+      "scripts/application-tests/oracles/thread.detach.json"
+    ]
+  },
+  "packet_sha256": "35a843f54748a5e80fd252cd20102fd7e74bfc8d51358198ca34bb8b247dc6d7",
+  "queue_cursor": {
+    "index": 41,
+    "next_packet_id": "packet-042",
+    "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+    "review_state": "released-for-drafting",
+    "total": 97
+  },
+  "schema_version": 1
+}
