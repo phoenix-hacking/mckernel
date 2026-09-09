@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wait-unaligned",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "futex-wait-unaligned rc=-1 errno=22",
+      "raw0=0 raw4=0"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "alignment": "unaligned",
+    "expected_value": 0,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "syscall on unaligned futex address must fail with EINVAL",
+    "adjacent bytes must stay unmodified"
+  ],
+  "unresolved_expectations": [
+    "Execution capture remains line-based for now; structured output may replace line checks in final harness."
+  ],
+  "max_question_for_reviewer": "Should this case assert errno=EINVAL unconditionally, or allow implementation-specific rejection path for alignment checks?"
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wait-mismatch",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "futex-wait-mismatch rc=-1 errno=11",
+      "word=0",
+      "buffer-end=42"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "expected_value": 1,
+    "futex_initial": 0,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "syscall must return -1 and errno must be EAGAIN",
+    "futex word must remain unchanged",
+    "no waiter should remain queued on mismatch"
+  ],
+  "unresolved_expectations": [
+    "Output format remains draft-specific line list; execution stage may replace with structured reporting format."
+  ],
+  "max_question_for_reviewer": "Does this draft need explicit timeout/queue assertions beyond EAGAIN return for wait mismatch?"
+}

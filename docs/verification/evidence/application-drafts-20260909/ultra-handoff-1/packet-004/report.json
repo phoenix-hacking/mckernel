@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-004",
+  "packet_version": 2,
+  "context_sha256": "c86e45d986a9beeeef831657399adeebd411840606a02fd127ef2def5b365355",
+  "started_utc": "2026-09-09T09:45:57Z",
+  "finished_utc": "2026-09-09T09:46:25Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "futex.wait-mismatch",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.wait-mismatch.c",
+      "oracle": "scripts/application-tests/oracles/futex.wait-mismatch.json",
+      "changed_files": [
+        "scripts/application-tests/cases/futex/futex.wait-mismatch.c",
+        "scripts/application-tests/oracles/futex.wait-mismatch.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Draft output is fixed-line and may be normalized in execution stage."
+      ],
+      "max_reviewer_question": "Should this case include explicit timeout-boundary assertions for mismatch return latency?"
+    },
+    {
+      "case_id": "futex.wake-empty",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.wake-empty.c",
+      "oracle": "scripts/application-tests/oracles/futex.wake-empty.json",
+      "changed_files": [
+        "scripts/application-tests/cases/futex/futex.wake-empty.c",
+        "scripts/application-tests/oracles/futex.wake-empty.json"
+      ],
+      "unresolved_oracle_notes": [
+        "No-waiter wake semantics are draft assumed 0 and may need broader wake-return policy alignment."
+      ],
+      "max_reviewer_question": "Should wake-empty require exactly rc=0 or tolerate implementation-defined wake return with no waiters?"
+    },
+    {
+      "case_id": "futex.wait-unaligned",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.wait-unaligned.c",
+      "oracle": "scripts/application-tests/oracles/futex.wait-unaligned.json",
+      "changed_files": [
+        "scripts/application-tests/cases/futex/futex.wait-unaligned.c",
+        "scripts/application-tests/oracles/futex.wait-unaligned.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Alignment fault path remains line-based in this draft and does not yet capture a full structured relation trace."
+      ],
+      "max_reviewer_question": "Can this case assume EINVAL for all aligned-pointer violations, or is stronger architecture-conditional handling needed?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/futex/futex.wait-mismatch.c",
+      "sha256": "fd7850ca265e5eb82370f0ee309cc546cc2e645d9118a38eca83dc3eaefdfb9d"
+    },
+    {
+      "path": "scripts/application-tests/oracles/futex.wait-mismatch.json",
+      "sha256": "b751126490cf9ff206408137173e1ca64634f2f484bb35058ba206f174bb8791"
+    },
+    {
+      "path": "scripts/application-tests/cases/futex/futex.wake-empty.c",
+      "sha256": "4be8a4451ab1b4cdee8f452fe6f0ef093ef0bdac55679417fd4ad6e183b5e564"
+    },
+    {
+      "path": "scripts/application-tests/oracles/futex.wake-empty.json",
+      "sha256": "f78648482256f4fe003495e66d4f458ae459fdc39b16cedfdaea09acde8618a7"
+    },
+    {
+      "path": "scripts/application-tests/cases/futex/futex.wait-unaligned.c",
+      "sha256": "dc3f3f7792b095210a49acf9b23e6b1591135245d293543d255941e0a9702e53"
+    },
+    {
+      "path": "scripts/application-tests/oracles/futex.wait-unaligned.json",
+      "sha256": "a46ce255af44e748a8716700d959a8d5a6ca283f6a113c3c938f9877d36f862a"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-004.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-004.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-004-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "Futex errno and return values remain draft-fixed line expectations",
+    "Need alignment on wake/unaligned edge behavior across guest/runtime variants"
+  ],
+  "blocked_execution_capabilities": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection",
+    "dynamic-etexec",
+    "threads-basic",
+    "futex-timeout-hardening"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Need confirmation that FUTEX_WAIT mismatch must return EAGAIN in planned runner contract.",
+    "Need confirmation on unaligned futex pointer rejection policy and wake return expectations."
+  ],
+  "next_packet_id": "packet-005"
+}
