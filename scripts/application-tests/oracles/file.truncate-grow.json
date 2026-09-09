@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.truncate-grow",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.truncate-grow"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["size=8192 prefix_bad=7 zero_bad=8192"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["File size grows exactly to 8192", "Original seven-byte prefix remains unchanged", "Every added byte is zero"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm ftruncate growth exposes a zero-filled range after the retained seven-byte prefix."
+}

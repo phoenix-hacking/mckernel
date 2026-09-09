@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.unlink-open",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.unlink-open"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["path_missing=1 read=16 exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Path lookup fails after unlink", "The open descriptor still returns every original byte", "Final close releases the unlinked file"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm unlink removes the name while preserving open-file data until the descriptor closes."
+}
