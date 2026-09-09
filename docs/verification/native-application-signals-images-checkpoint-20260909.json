@@ -1,0 +1,906 @@
+{
+  "actual_guest_pass": false,
+  "application_readiness_complete": false,
+  "artifact_bytes": 131770273,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/mckernel-native-signals-images-20260909-1.tar.gz",
+      "sha256": "992472b32aa61e140e6b5553cc90e86265f1f3b6681c00263ad4e4b43d125ecf",
+      "size": 62832550,
+      "source": "/work/mckernel-native-signals-images-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-signals-images-20260909-1-record.json.gz",
+      "sha256": "e9e3676adc90f60e712f4207c2b870b815237cc2f83ff785bea3f3014aeaea74",
+      "size": 7199,
+      "source": "/work/mckernel-native-signals-images-20260909-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-signals-images-20260909-2.tar.gz",
+      "sha256": "f6da02d0194090fdc7144c7d97d4e6828e934c7f13d7993edbba47855e78bff2",
+      "size": 68917101,
+      "source": "/work/mckernel-native-signals-images-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-signals-images-20260909-2-record.json.gz",
+      "sha256": "b45de9a809499d30e1e7bb1c3b9b219630c278b4a0ae839d2780b1e4330eb5fa",
+      "size": 8669,
+      "source": "/work/mckernel-native-signals-images-20260909-2/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-signals-images-20260909-retention-helper.gz",
+      "sha256": "e0c18f043f09acd178e72e5161925827cf6821f45feb8d996bd9bb3d2687ddef",
+      "size": 4754,
+      "source": "/work/native-application-signals-images-retained-20260909-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 6019940092,
+        "count": 1570,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "FAIL",
+      "path": "/work/mckernel-native-signals-images-20260909-1",
+      "record": {
+        "path": "/work/mckernel-native-signals-images-20260909-1/record.json",
+        "sha256": "625d74ab93f0d47b725627bb1a09098566e8efa80387795f4f6afd862c8b6060",
+        "size": 46935
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    },
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 6019940092,
+        "count": 1570,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "PASS",
+      "path": "/work/mckernel-native-signals-images-20260909-2",
+      "record": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/record.json",
+        "sha256": "62ae0e99d03d52b28012901e6e0be1703e7eb4795f16d123eb673ca316a1572f",
+        "size": 71087
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    }
+  ],
+  "clone3_binary_bindings": [
+    {
+      "marker_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/fallback-do_fork-disassembly.log",
+        "sha256": "a939ea6be653b26f6167d4c70f5716e6efaa5ac1cd301d87130f442fcf9ce6ec",
+        "size": 76977
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DPROFILE_ENABLE -D__KERNEL__ -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel -I/work/mckernel-native-signals-images-20260909-2/fallback -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/fallback/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "compiler_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DPROFILE_ENABLE -D__KERNEL__ -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel -I/work/mckernel-native-signals-images-20260909-2/fallback -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/fallback/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+        },
+        "existing_clone": 18446744073684920656,
+        "native": false,
+        "native_marker_bypass": false,
+        "profile": "fallback",
+        "rust_handler": 0,
+        "slot435": 0,
+        "table": 18446744073685021056,
+        "table_bytes": 32200
+      },
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/fallback-sized-symbols.txt",
+        "sha256": "d52c0a77d70844dac3239a4e9ab776eacbfd3ee1599093dc0b695a120adbd16b",
+        "size": 269687
+      }
+    },
+    {
+      "marker_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-do_fork-disassembly.log",
+        "sha256": "9a71aea2a4e8cb4bbc9b011fba7d5cc64acd6abac4f2d0bc303623e33ea58733",
+        "size": 70161
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/legacy-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "compiler_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_RLIMIT_HELPERS -DMCKERNEL_RUST_SCHED_POLICY_HELPERS -DMCKERNEL_RUST_SCHED_PRIO_HELPERS -DMCKERNEL_RUST_SHMID_HELPERS -DMCKERNEL_RUST_SHM_PERM_HELPERS -DMCKERNEL_RUST_SIGNAL_HELPERS -DMCKERNEL_RUST_SYSCALL_OFFLOAD -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/legacy-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+        },
+        "existing_clone": 18446744073685013680,
+        "native": false,
+        "native_marker_bypass": false,
+        "profile": "legacy-rust",
+        "rust_handler": 0,
+        "slot435": 0,
+        "table": 18446744073685243392,
+        "table_bytes": 32200
+      },
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-sized-symbols.txt",
+        "sha256": "2c4d95fb23f1bb1034efa7834979e2b68c2937e820b55bb7274ba9619b323002",
+        "size": 306539
+      }
+    },
+    {
+      "clone3_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-sys_clone3-disassembly.log",
+        "sha256": "ee28ee7193b253f9d992728dcf21fd3ff7e88104b290b83c784bef42611a2483",
+        "size": 15451
+      },
+      "marker_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-do_fork-disassembly.log",
+        "sha256": "a203b7c4b95ac5ca6fbd16b0ea9da7d60e2046e009053bf5fc232c0947286e94",
+        "size": 70497
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/native-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "compiler_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_RLIMIT_HELPERS -DMCKERNEL_RUST_SCHED_POLICY_HELPERS -DMCKERNEL_RUST_SCHED_PRIO_HELPERS -DMCKERNEL_RUST_SHMID_HELPERS -DMCKERNEL_RUST_SHM_PERM_HELPERS -DMCKERNEL_RUST_SIGNAL_HELPERS -DMCKERNEL_RUST_SYSCALL_OFFLOAD -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/native-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+        },
+        "existing_clone": 18446744073685019472,
+        "native": true,
+        "native_marker_bypass": true,
+        "profile": "native-rust",
+        "rust_handler": 18446744073685019824,
+        "slot435": 18446744073685019824,
+        "table": 18446744073685251712,
+        "table_bytes": 32200
+      },
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-sized-symbols.txt",
+        "sha256": "c3f804a6b9a3fd9700301ddeb4234350affd8dd3fd4a7df527d8b6e769682d06",
+        "size": 307935
+      }
+    },
+    {
+      "clone3_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-sys_clone3-disassembly.log",
+        "sha256": "787012dac408803caf8376f5bc9768d4592b83690b272e9b7d6dd362f0d14998",
+        "size": 15459
+      },
+      "marker_disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-do_fork-disassembly.log",
+        "sha256": "9ee5eabdbf25b5c5476960cdc55351d288dc3c7d9e4562358a08fc908a3ce486",
+        "size": 70505
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "compiler_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_RLIMIT_HELPERS -DMCKERNEL_RUST_SCHED_POLICY_HELPERS -DMCKERNEL_RUST_SCHED_PRIO_HELPERS -DMCKERNEL_RUST_SHMID_HELPERS -DMCKERNEL_RUST_SHM_PERM_HELPERS -DMCKERNEL_RUST_SIGNAL_HELPERS -DMCKERNEL_RUST_SYSCALL_OFFLOAD -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+        },
+        "existing_clone": 18446744073685024848,
+        "native": true,
+        "native_marker_bypass": true,
+        "profile": "native-sysfs-verify",
+        "rust_handler": 18446744073685025200,
+        "slot435": 18446744073685025200,
+        "table": 18446744073685256096,
+        "table_bytes": 32200
+      },
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-sized-symbols.txt",
+        "sha256": "1dbb363008631887612ad3e90b00a77fd2917f81b01d266141b3cdc7104f49e7",
+        "size": 309280
+      }
+    }
+  ],
+  "complete_captures": 2,
+  "finished_utc": "2026-09-09T04:36:27.173723+00:00",
+  "full_capture_retention_pending": false,
+  "guest_compiler": "rustc 1.95.0-nightly (c04308580 2026-02-18)\nbinary: rustc\ncommit-hash: c043085801b7a884054add21a94882216df5971c\ncommit-date: 2026-02-18\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0-nightly\nLLVM version: 22.1.0\n",
+  "guest_compiler_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/native_signal.rs",
+      "path": "kernel/rust/native_signal.rs",
+      "sha256": "c59b13750ea4127f27280c793929d6c9984d339c2f9994ec271a4e96b152528f",
+      "size": 5559
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+      "path": "arch/x86_64/kernel/syscall.c",
+      "sha256": "609306dbfe832c70db85349646d6fab4883c6d2bb188be1f2dcebd26c6f7244b",
+      "size": 109645
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include/signal.h",
+      "path": "arch/x86_64/kernel/include/signal.h",
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752",
+      "size": 7474
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/clone3.rs",
+      "path": "kernel/rust/clone3.rs",
+      "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094",
+      "size": 4013
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/syscall.c",
+      "path": "kernel/syscall.c",
+      "sha256": "ae68cbd2f8ea92c083639aeb301bb4c097252f66073d1811bfd1494f4f402bb5",
+      "size": 833250
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include/syscall_list.h",
+      "path": "arch/x86_64/kernel/include/syscall_list.h",
+      "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead",
+      "size": 5815
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/x86_cpu_helpers.rs",
+      "path": "kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "06198638ade1e3ff18ebffc1c386bbea721d393f6b9189f3e2ce875e92d41803",
+      "size": 69605
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/host-kernel/native-rust/zero_pages.rs",
+      "path": "host-kernel/native-rust/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/lib/page_alloc.c",
+      "path": "lib/page_alloc.c",
+      "sha256": "6d47575cd27e369bc3a4e7309077e7411a4f89dce8b545567689eb23fa343866",
+      "size": 63982
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/lib/include/ihk/page_alloc.h",
+      "path": "lib/include/ihk/page_alloc.h",
+      "sha256": "4332184f12d9609e978153b5ac4e20dbf0e61ba5de253cb0073fa75376b5ccd1",
+      "size": 2623
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/syscall_policy.rs",
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "7e3a362cdc1704e6c5359655db0226c90e17ce9ee8ce57ae8e65e251dd219b56",
+      "size": 692750
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/page_alloc.rs",
+      "path": "kernel/rust/page_alloc.rs",
+      "sha256": "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd",
+      "size": 85061
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/x86_memory_helpers.rs",
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+      "size": 187212
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/CMakeLists.txt",
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "94435d0ee77fea3bfdf4960fa2e8ba3b1883c61953fb7f443d8ae6d0fa579642",
+      "size": 22292
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/smp_ikc.rs",
+      "path": "kernel/rust/smp_ikc.rs",
+      "sha256": "64056fc3418792b6693875bd0dc4b3c59a76585bce2ce61e2e7203c38e35cfbe",
+      "size": 11359
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/llist.rs",
+      "path": "kernel/rust/llist.rs",
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8",
+      "size": 2753
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/lib.rs",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "7cd2922f2f7aa28b0f70e0c15fe4987201cbf22eee5d4b771d2de84025db1396",
+      "size": 1798
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/init.rs",
+      "path": "kernel/rust/init.rs",
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886",
+      "size": 17659
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/sysfs.rs",
+      "path": "kernel/rust/sysfs.rs",
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7",
+      "size": 25143
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/object_helpers.rs",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "size": 235965
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/host_helpers.rs",
+      "path": "kernel/rust/host_helpers.rs",
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+      "size": 180826
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/process_helpers.rs",
+      "path": "kernel/rust/process_helpers.rs",
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+      "size": 324283
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/lock_helpers.rs",
+      "path": "kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "size": 12202
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/procfs.rs",
+      "path": "kernel/rust/procfs.rs",
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "size": 36968
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/rust/cls.rs",
+      "path": "kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "size": 7877
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/procfs.c",
+      "path": "kernel/procfs.c",
+      "sha256": "bed2ba5f5f786d1198c93bcc8d0bb7f608ad0a70e57ab6c3fa0caa99228306da",
+      "size": 21605
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/cls.c",
+      "path": "kernel/cls.c",
+      "sha256": "071008b51aaa9f173b855a65791c2e24286d4b7f843d786227d68377e3c9a31f",
+      "size": 5550
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/object_helpers.c",
+      "path": "kernel/object_helpers.c",
+      "sha256": "b74b8a4aeaf98fbb03a3f346a3c74a1f6032e5e088217867e3cae18859801f5f",
+      "size": 127728
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "8c00adefe43d316dcb7d8f5db735f6281e572f536568d1584b6809e5445bdce5",
+      "size": 20836
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/include/object_helpers.h",
+      "path": "kernel/include/object_helpers.h",
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a",
+      "size": 61009
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/kernel/init.c",
+      "path": "kernel/init.c",
+      "sha256": "05fbb5e79d0dc2265687dbf1b7bb83ec3871fedac66f3793e098ea15e80a0196",
+      "size": 9207
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "path": "scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "sha256": "2262fddd9cb33052d7259fe3f0ee47cd4a56502fba97cc93797c9f7f394cac4c",
+      "size": 14227
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/scripts/tests/fixtures/native-guest-sysfs.c",
+      "path": "scripts/tests/fixtures/native-guest-sysfs.c",
+      "sha256": "ccfb00ee63e57a7ae90e793d937f277c3e67af61ff1179f554e3ad68f37f3eb0",
+      "size": 7906
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/lib/include/list.h",
+      "path": "lib/include/list.h",
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440",
+      "size": 2870
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include/registers.h",
+      "path": "arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "size": 5778
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include/ihk/atomic.h",
+      "path": "arch/x86_64/kernel/include/ihk/atomic.h",
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d",
+      "size": 2680
+    }
+  ],
+  "historical_equivalence": {
+    "current_surface_equivalence": "producer-check includes exact pinned C body and current Rust body",
+    "missing": [
+      "ihk/linux/core/rust/core_helpers.rs",
+      "ihk/linux/driver/smp/rust/smp_driver_helpers.rs",
+      "ihk/linux/user/rust/ihklib_helpers.rs"
+    ],
+    "pass_claimed": false,
+    "retained_failure": "/work/mckernel-native-irq-images-20260907-2",
+    "status": "prerequisites-unavailable"
+  },
+  "images": [
+    {
+      "host_irq_abi": "legacy",
+      "kind": "fallback",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/fallback/kernel/mckernel.img",
+          "sha256": "1da209e622a0c71481c59f7d65e3ffc2e570dd6efa3c8fb2ec44a65b32c0efc7",
+          "size": 5264352
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/fallback/kernel/mckernel.img.map",
+          "sha256": "6e9858f6e8bd6aced482ad03c8b50ba9995d0f8c6fcb453b2925b5acd60d0e78",
+          "size": 306327
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/fallback/CMakeCache.txt",
+          "sha256": "487c249dacbbed90cbc1ba53f95c495afb6938f880181f7672e643aab96e0c5a",
+          "size": 26742
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/fallback/compile_commands.json",
+          "sha256": "d63442ae605b0f460c299bed263a62a9dcc7fc8e0e372b9ad3069e63faa35fb6",
+          "size": 194968
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "legacy",
+      "kind": "legacy-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/mckernel.img",
+          "sha256": "e6306ab8c67839678becd1780d7f1be1816931d25d3f297529333b55d99eb7ae",
+          "size": 7939384
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/mckernel.img.map",
+          "sha256": "47759b99d6ed19820f7e69608b90b249fc48a7e626b4dc5819b9d8a48fe538f2",
+          "size": 733674
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/CMakeCache.txt",
+          "sha256": "73add257fb32fc3fa06d963dbc850dbe2c259c970f59c6b581c0da75dfd5fa09",
+          "size": 26728
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/compile_commands.json",
+          "sha256": "ad311dfa103c6a0e7cf85a05289b11045614d97f957321530b812068ee53b642",
+          "size": 115981
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "f1ba820bb12819f8b7f443030a3f32069eafde965e8576a9fffcece41d129b77",
+          "size": 12374824
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "416241b7afeac0527072b0ff4f532b490d40c966d3d12228252955c65deceda5",
+          "size": 11747
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/mckernel.img",
+          "sha256": "5f370ee96463a0a606e2b06d0e76e26bd77055f44396e5cb0a4326bf996763a4",
+          "size": 8016600
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/mckernel.img.map",
+          "sha256": "8782194b20e8118ea4d4917315f94a88ac8f5f02d82ea04b089877c0845b43a2",
+          "size": 736988
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/CMakeCache.txt",
+          "sha256": "a1470707f4ebf016a359bdaf73322a86b0733effa13817dec2bbba2e2ffb1104",
+          "size": 26732
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/compile_commands.json",
+          "sha256": "9bbfdfb9576e28dce8b98144a3597bd62b093658cc53a5071c38a728b8eb4ac4",
+          "size": 116541
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "72e1ef399060fcbba3018a1b2104e03ecfa1e4353baec8341d95eec5dfced04f",
+          "size": 12514656
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "c522bcdca665a14e01982f683a1e2326233fda2952816f974cc7416d56d039df",
+          "size": 11781
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-sysfs-verify",
+      "native_sysfs_verify": true,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/mckernel.img",
+          "sha256": "0a446f6e65f4fcaf9f527ba2dccbe5889fe7268cfa29a5ce722033b674e5704e",
+          "size": 8079552
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/mckernel.img.map",
+          "sha256": "4c0f7ec22f5d73243245a839e089e769692a675b043bdce34c5ae5778d48e1b0",
+          "size": 740217
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/CMakeCache.txt",
+          "sha256": "51db30584ca3f22003ffbde1e1ea500198b59ec999dd82101e023ea08c9f8b23",
+          "size": 26795
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/compile_commands.json",
+          "sha256": "dd4c919924a2f876d6043616d51e2b39a4a6afe862b41e00131c798cfbdb72ff",
+          "size": 119533
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/rust/mckernel_rust.o",
+          "sha256": "02cc9e59ed88c6a098932640e9c3a67e92051c640e6aee979a1e2ada090ad9b2",
+          "size": 12626016
+        },
+        {
+          "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "c97a010232b3fa7d26972d46adbef7fe91efeeda62d4550e55642dfc687a102e",
+          "size": 12026
+        }
+      ]
+    }
+  ],
+  "original_failures": 1,
+  "protection_binary_bindings": [
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "dae56ceaecfac439e6773637c64066f9af72787f2d29263c17e9851acc854190",
+        "size": 455
+      },
+      "kind": "legacy-rust",
+      "native_invalidation_selected": false,
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-sized-symbols.txt",
+        "sha256": "2c4d95fb23f1bb1034efa7834979e2b68c2937e820b55bb7274ba9619b323002",
+        "size": 306539
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810e10",
+      "disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "7d6c7755772a2f058ead22a4ea682af691be6ae3124b979c8d035e89324d88f6",
+        "size": 4833
+      },
+      "kind": "native-rust",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-sized-symbols.txt",
+        "sha256": "c3f804a6b9a3fd9700301ddeb4234350affd8dd3fd4a7df527d8b6e769682d06",
+        "size": 307935
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810e10",
+      "disassembly": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-set_host_vma_body_result-disassembly.log",
+        "sha256": "6668ba3f824b6069a1d0473a66af3c676549578c035da420a5144993315f26ce",
+        "size": 4841
+      },
+      "kind": "native-sysfs-verify",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-sized-symbols.txt",
+        "sha256": "1dbb363008631887612ad3e90b00a77fd2917f81b01d266141b3cdc7104f49e7",
+        "size": 309280
+      }
+    }
+  ],
+  "references": [
+    {
+      "path": "docs/verification/native-application-signals-protocol-checkpoint-20260909.json",
+      "sha256": "870cc77f015d983c7a1881930e03bc251c5ce26d462e3639365914cf6fb8b8be",
+      "size": 9829
+    },
+    {
+      "path": "docs/verification/native-application-clone3-images-checkpoint-20260909.json",
+      "sha256": "c82e49490ecd416dd7426617bb6c9ea485332d0c614726c1d5e653f1ccda57cb",
+      "size": 45508
+    },
+    {
+      "path": "docs/verification/native-application-zeroing-host-checkpoint-20260909.json",
+      "sha256": "ba61100012410a7b6d5d2b7c4f159457232cef72ed26989517b9367adfa61739",
+      "size": 53415
+    },
+    {
+      "path": "docs/verification/native-application-zeroing-images-checkpoint-20260909.json",
+      "sha256": "d710e8b972829ee8505ad16da8fb2865d810afbf0570b8b1089c9be69f6b39e4",
+      "size": 23528
+    }
+  ],
+  "scope": "All four image selections with native signal stack preparation/publication and return handlers, exact existing clone3 selection, protection and zeroing binaries. Original signal failure is retained by the referenced thread checkpoint; new actual signal execution pending.",
+  "signal_stack_binary_bindings": [
+    {
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/fallback-do_signal-disassembly.log",
+        "sha256": "1df58e8959eac0fa57f3763e66990879b7096665a54878ab057343ad0fbef416",
+        "size": 51032
+      },
+      "return_entry": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/fallback-sys_rt_sigreturn-disassembly.log",
+        "sha256": "be9f7247f0a21a262cb751fbba0e914592531a9e1cee9123d1233eba6b273549",
+        "size": 10763
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DPROFILE_ENABLE -D__KERNEL__ -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/fallback/kernel -I/work/mckernel-native-signals-images-20260909-2/fallback -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/fallback/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "native": false,
+        "prepare": null,
+        "profile": "fallback",
+        "publish": null,
+        "slot131": 18446744073684474480,
+        "slot15": 18446744073684914592
+      },
+      "sigaltstack": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/fallback-sys_sigaltstack-disassembly.log",
+        "sha256": "f8bac221f3e1235e925c9afba5dfa233ed9ae9602b02d68e1f7aebe0d0f37ed7",
+        "size": 5410
+      }
+    },
+    {
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-do_signal-disassembly.log",
+        "sha256": "e54af497bf4dff425086955b5d19432863cfa2cf956966724094e2d7af65336e",
+        "size": 51035
+      },
+      "return_entry": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-sys_rt_sigreturn-disassembly.log",
+        "sha256": "23740be4c02050013f5dd8d7d0550a4918d2c15a242dd588548e5bd6e14b30c2",
+        "size": 14105
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/legacy-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/legacy-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "native": false,
+        "prepare": null,
+        "profile": "legacy-rust",
+        "publish": null,
+        "slot131": 18446744073685046416,
+        "slot15": 18446744073685036624
+      },
+      "sigaltstack": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-sys_sigaltstack-disassembly.log",
+        "sha256": "1ac8b7ad0a16f4a451c3ba29e76e5256c33299f4543cd996a750e3308eeb831c",
+        "size": 5631
+      }
+    },
+    {
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-do_signal-disassembly.log",
+        "sha256": "40ec78d3e80a475e99dc43571d25ed4a2af0ad1869da5c5a127562130ae4a710",
+        "size": 51402
+      },
+      "return_entry": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-sys_rt_sigreturn-disassembly.log",
+        "sha256": "acfd761df1db3fef231098aa11056adbbd6330102488cb867a97681e015b31c2",
+        "size": 12649
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-rust/kernel -I/work/mckernel-native-signals-images-20260909-2/native-rust -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-rust/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "native": true,
+        "prepare": [
+          18446744073684862272,
+          411
+        ],
+        "profile": "native-rust",
+        "publish": [
+          18446744073684862688,
+          156
+        ],
+        "slot131": 18446744073685053216,
+        "slot15": 18446744073685043648
+      },
+      "sigaltstack": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-sys_sigaltstack-disassembly.log",
+        "sha256": "ef31f65c73ea812a952962d31ce2792df185801769023319e0f7e1cb93819038",
+        "size": 8246
+      }
+    },
+    {
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-do_signal-disassembly.log",
+        "sha256": "30de1f614b112a8b933fe5a92b6e401c270fbd0e3fc0672a330909c669de2d63",
+        "size": 51410
+      },
+      "return_entry": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-sys_rt_sigreturn-disassembly.log",
+        "sha256": "e72a6d4ac1561ec93fc5b9f92d7977db8bcf53fba0deac4757510158f12bb116",
+        "size": 12657
+      },
+      "selection": {
+        "architecture_dispatch": {
+          "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel/include -I/work/mckernel-native-signals-images-20260909-2/source/kernel/include -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel -I/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/cokernel/smp/x86_64 -I/work/mckernel-native-signals-images-20260909-2/source/ihk/ikc/include -I/work/mckernel-native-signals-images-20260909-2/source/ihk/linux/include -I/work/mckernel-native-signals-images-20260909-2/source/lib/include -I/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/8/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "directory": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify/kernel",
+          "file": "/work/mckernel-native-signals-images-20260909-2/source/arch/x86_64/kernel/syscall.c",
+          "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+        },
+        "native": true,
+        "prepare": [
+          18446744073684867648,
+          411
+        ],
+        "profile": "native-sysfs-verify",
+        "publish": [
+          18446744073684868064,
+          156
+        ],
+        "slot131": 18446744073685058592,
+        "slot15": 18446744073685049024
+      },
+      "sigaltstack": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-sys_sigaltstack-disassembly.log",
+        "sha256": "cb21ca3aa5a1acf46869c25bd5720661fb44a0dc2a2e699ab1e65cb8bf4a59da",
+        "size": 8254
+      }
+    }
+  ],
+  "source_parent": "3453edd571152132b19d23b26dad32f4204612e6",
+  "started_utc": "2026-09-09T04:35:54.043004+00:00",
+  "status": "PASS",
+  "zeroing_binary_bindings": [
+    {
+      "kind": "legacy-rust",
+      "marker": null,
+      "native_batch_selected": false,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "d5bf4df6b7045cd6f4aed99eb3232a0f4de3f651ad2280bed7c8611f72f846c7",
+        "size": 2389
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/legacy-rust-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "7c46e22171b00dd63d67f54951d6e89ae621f5e2714d2cb1ad5a338275e8b3a2",
+        "size": 17757
+      }
+    },
+    {
+      "kind": "native-rust",
+      "marker": "MCZB0001",
+      "native_batch_selected": true,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "85c6bb8054016d8c8be62b493f8589d855fb1bddfb1939bdb2ed00d1f3baf399",
+        "size": 2717
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-rust-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "3a44dc9681b91266895d1ca6c8137dfa8cbc1c1c7e396a583d43723df700ddd8",
+        "size": 11665
+      }
+    },
+    {
+      "kind": "native-sysfs-verify",
+      "marker": "MCZB0001",
+      "native_batch_selected": true,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "946681796354c6e9c4e60fd57aa251aed207d5855b127347440088867e967a21",
+        "size": 2725
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-signals-images-20260909-2/native-sysfs-verify-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "b3e3fd0b7d1978089347629668cda3a78d2ef6ca7dc762b82df75e6f77f575e0",
+        "size": 11673
+      }
+    }
+  ],
+  "zeroing_service_integrated": true
+}

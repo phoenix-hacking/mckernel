@@ -2069,3 +2069,10 @@ Build all four guest selections and all three host modules with original
 checks; then run the unchanged signal application in a fresh guest. Preserve
 the original failed attempt and all original output/route/cleanup assertions.
 Final memory/files/control replays and abnormal-owner coverage still follow.
+
+The native signal image checkpoint now passes all four image profiles and 37
+exact guest compiler bindings. It retains the complete first indirect-call
+audit failure and the corrected exact target/register/call audit. Prior
+clone3, protection and zeroing binary checks still pass. All three signal
+host modules also compile. Candidate: signal module 1 and signal image 2;
+the unchanged signal application result remains pending.
