@@ -2,48 +2,40 @@
 
 Updated: 2026-06-02
 
-## Current execution phase and model handoff (2026-09-08)
+## Application baseline verified and model handoff (2026-09-09)
 
-The active goal now stops at a verified baseline for aggressive application
-testing. Stay on Max while completing the native services and the application
-smoke checks needed to establish that baseline. Once the readiness criteria in
-[`docs/verification/native-application-service-plan.md`](docs/verification/native-application-service-plan.md#application-readiness-and-model-handoff-2026-09-08)
-are met with retained runtime evidence, checkpoint and verify the GitHub push,
-mark this phase complete, and stop execution for the user's model switch.
-Do not report whole-OS or full Rust/assembly acceptance at this phase boundary.
+The Max application-baseline runtime gates and readiness audit now PASS.
+Use [`docs/verification/native-application-ultra-handoff-20260909.md`](docs/verification/native-application-ultra-handoff-20260909.md)
+and its readiness/final manifests as the current authority. The exact final
+GitHub fetched-blob verification is required before marking the active goal
+complete and notifying the user. After that verification, stop execution for
+the user's switch to Astra Ultra; do not start another Max continuation.
 
-The user plans to switch to Astra Ultra for review, any fixes found during that
-review, and a concrete plan for application tests and further verification.
-After that review is satisfactory, the user plans to switch to Codex Spark to
-implement and run the delineated tests. The plan must supply commands, expected
-results, timeouts, failure cases and evidence requirements. Kernel failures
-return for investigation; tests must not be weakened to make them pass.
-Do not change the configured model or start the future phases automatically.
+The same signal module 1 / signal image 2 passes all four unchanged dynamic-libc
+smokes: memory, files, threads/futexes and signals. Five accepted application
+guests total 48 HELLO launches and five core runs. Actual launcher/worker
+SIGKILL during a delegated read passes bounded retirement, procfs/process
+release, 700 quiet forks reusing both old IDs three times, and eight subsequent
+applications in the same OS. Both complete original control-ABI regressions
+pass, including their exact physical counters, 72 independent worker reaps and
+four inherited-TGID retirements. All 57 native and 37 guest compiler bindings
+match the current tested sources. Complete captures, original failures, exact
+helpers/commands and module/image identities remain retained.
 
-This phase boundary supersedes older descriptions below that require every
-remaining production or Rust/assembly obligation before ending the active goal.
-Those obligations remain tracked for subsequent work. Existing isolation,
-failure-recording, Rust preservation, disk cleanup and periodic GitHub
-checkpoint requirements continue to apply throughout the current phase.
-All four unchanged libc core smoke categories now pass inside McKernel:
-memory, file I/O, threads/futexes and signals. The current signal-tested pair is
-signal module 1 / signal image 2. The signals checkpoint retains both complete
-module/runtime captures, all 57 native compiler bindings and the original
-launcher/core. Both actual alternate-stack handlers and sigreturns, every
-syscall route/result, normal retirement and process/pager release pass. Eight
-HELLO repeats and both metadata/string ABIs also pass. The signal image
-checkpoint verifies all four image profiles, 37 guest bindings and prior
-clone3/protection/zeroing binary checks. Both original protocol fixture failures
-and the original image audit failure remain retained in their checkpoints.
-Actual scheduled launcher/worker failure now passes on this current pair:
-SIGKILL during a delegated blocked read, bounded retirement/process cleanup,
-700 quiet Linux forks reusing both the old PID and worker TID three times,
-then eight more unchanged HELLO applications in the same OS. The owner-failure
-checkpoint retains both complete attempts, including the original runner
-pause/resume failure; all original assertions remain. Memory/files and threads
-have separate earlier tested inputs. Final replays on the current pair and
-both full control-ABI regressions remain required. Do not announce Ultra
-readiness yet.
+The user controls the next model switch. Astra Ultra will review the retained
+implementation/evidence, fix issues it finds and produce a concrete application
+and further-verification plan. That plan needs commands, expected results,
+timeouts, failure cases and required evidence. After review, the user intends
+to switch to Codex Spark to implement/run that plan. Do not switch models or
+start these later phases automatically. Never weaken tests to obtain a pass.
+
+This phase proves a reproducible baseline for broader application testing.
+Whole-OS production acceptance, full Rust/assembly completion, multicore/MPI,
+long stress and the other documented limitations remain later obligations.
+The established isolation, immediate failure logging, Rust preservation,
+audited cleanup and periodic verified GitHub checkpoints still apply.
+Dated implementation checkpoints below are historical; this status and the
+new handoff supersede their descriptions of pending baseline work.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 

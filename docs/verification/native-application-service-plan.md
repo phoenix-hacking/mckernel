@@ -7,47 +7,39 @@ had not yet run. The current runtime checkpoint below supersedes that status.
 
 ## Current application baseline, 2026-09-09
 
-**All four core application smoke categories now pass inside McKernel.**
-The Astra Ultra handoff still requires final current-pair regressions/replays.
-Actual scheduled launcher/worker failure handling now passes on the current
-pair. The current candidate is signal
-module 1 / signal image 2. Earlier memory/file and thread inputs remain
-separately recorded until the final replays complete.
+**All application-baseline runtime gates and the readiness audit PASS.**
+The current authority is
+[`native-application-ultra-handoff-20260909.md`](native-application-ultra-handoff-20260909.md),
+with the requirement-by-requirement
+[`native-application-readiness-20260909.json`](native-application-readiness-20260909.json).
+After the final GitHub commit is fetched and every selected blob verified,
+mark the Max phase complete and stop for the user's Astra Ultra switch.
 
-`native-application-owner-failure-checkpoint-20260909.json` retains both complete
-actual failure-test attempts. Guest 2 runs the unchanged normal signal/core and
-eight-HELLO baseline, then SIGKILLs the unchanged launcher while its worker is
-blocked in a delivered read(fd=0, length=16). Retirement, procfs deletion and
-process release complete with zero errors. In a quiet interval with no
-application ioctl, 700 Linux forks reuse the old launcher PID and worker TID
-three times each, without a stale returned response. Eight more unchanged
-HELLO applications then pass exact output, exit 37 and complete cleanup in
-the same McKernel OS. The first attempt remains a runner failure: its live
-capture left QEMU paused. The second adds an explicit resume and preserves
-all original assertions and complete helpers. No native behavior changed.
+The same signal module 1 / signal image 2 now passes memory, file I/O,
+threads/futexes and signals through the unchanged mcexec and dynamic-libc core.
+Five accepted application guests provide 48 HELLO launches and five core runs,
+including an independent signal replay. Every original route/result,
+retirement, procfs/process and pager assertion remains intact.
 
-`native-application-signals-checkpoint-20260909.json` retains the complete
-module and signal guest captures, all 57 native compiler bindings and the
-unchanged launcher/core application. Both SIGUSR1 handlers use stack address
-0x60f648; both actual sigreturns return zero. Blocked/pending/unblock/repeated
-alternate-stack assertions, exact output/exit 37, all host return routes,
-normal scheduled retirement and process/pager release pass. No interrupted
-host RET error remains. Eight HELLO repetitions, both metadata/string ABIs,
-continuing sysfs, zeroing and host invalidation checks also pass.
+Actual scheduled launcher/worker failure also passes: SIGKILL while a real
+Linux worker is blocked in a delegated sixteen-byte read, bounded retirement
+and release, 700 quiet Linux forks reusing both the old PID and worker TID
+three times, then eight unchanged applications in the same OS. The complete
+first runner pause/resume failure is retained alongside the passing attempt.
 
-The signal image checkpoint retains all four image profiles, 37 exact guest
-source bindings, native helper call targets, syscall slots and prior
-clone3/protection/zeroing binary checks. The protocol checkpoint verifies
-3,780 pinned Linux vectors, five legacy and six native frame/return tests,
-and 37 mailbox/committed-return tests. The two original fixture compile
-failures and the original indirect-call image audit failure are retained.
-The original signal guest remains FAIL in the earlier threads checkpoint;
-its unchanged application now passes on the recorded corrected pair.
+The final checkpoint retains all three new core replays, both full original
+control-ABI regressions and the sequential batch. All original physical
+counter assertions pass, along with 72 worker reaps, four inherited-TGID
+retirements, boot and continuing services. The only regression adaptations
+select the current inputs, use fresh output names and change the known
+continuing-worker count from two to three; complete original/executed helpers
+prove this. All 57 native and 37 guest compiler bindings match current sources.
 
-The previously accepted ordinary memory/file modes use the pair recorded at
-`a841707d`; the fully audited pthread/futex/TLS/join mode uses TID module 2 /
-clone3 image 2. This establishes four core categories, not final regression
-or abnormal-owner acceptance. Do not announce Ultra readiness yet.
+The handoff records exact inputs, commands, results, failures and limitations.
+This is readiness for broader testing, with one McKernel CPU and 128 MiB in
+the isolated TCG guest. Production acceptance, multicore/MPI, long stress and
+full Rust/assembly completion remain later work. The dated checkpoints below
+are preserved history; they do not supersede this current acceptance status.
 
 ## Earlier application checkpoints
 
