@@ -83,6 +83,7 @@ mod smp_application_syscall;
 mod smp_application_image;
 mod application_pager;
 mod smp_file_pager;
+mod zero_pages;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";

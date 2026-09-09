@@ -173,6 +173,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
     "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
     "host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch",
+    "host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -246,7 +247,8 @@ ADDITIVE_REPOSITORY_INPUT_PATHS = ('host-kernel/kbuild/patches/0003-driver-core-
  "host-kernel/native-rust/smp_image.rs",
  "host-kernel/native-rust/smp_loader.rs",
  "host-kernel/native-rust/smp_startup.rs",
- 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
+ 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch',
+ 'host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch')
 CAPTURE_AUTHORITY_REGISTRATION = {
     "authority_id": CAPTURE_AUTHORITY_ID,
     "credit_eligible": False,

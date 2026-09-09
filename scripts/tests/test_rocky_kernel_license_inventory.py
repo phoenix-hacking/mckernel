@@ -404,7 +404,8 @@ class LicenseInventoryTests(unittest.TestCase):
  "host-kernel/native-rust/smp_image.rs",
  "host-kernel/native-rust/smp_loader.rs",
  "host-kernel/native-rust/smp_startup.rs",
- 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch')
+ 'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch',
+ 'host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch')
         self.assertEqual(
             list(relatives),
             [

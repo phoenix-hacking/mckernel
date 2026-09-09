@@ -847,6 +847,7 @@ def validate_compatibility_patch_provenance(row, text, index):
 # snapshots may omit these files; current copies must match their exact reviewed
 # bytes. They are never appended to the replay contract or credited by it.
 CURRENT_NON_CONFIG_PATCH_ADDITIONS = {
+    'host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch': (1822, 'eae8f7ad572cc6639e23ea132b40070bd7619f48c7ef6221e6bfbe2eb290df63'),
     'host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch': (1776, 'af8669be53068320a148f25a98b9295e013a3cbcc84227e8d8b4209d3631a7d0'),
 }
 

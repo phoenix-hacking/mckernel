@@ -1,0 +1,35 @@
+From: McKernel Rust Migration <mckernel@localhost>
+Subject: [PATCH] objtool: recognize Rust 1.92 Vec swap_remove panic
+Date: Wed, 9 Sep 2026 02:00:00 +0000
+
+Rocky-Base: linux-6.12.0-211.44.1.el10_2
+Observed-Rustc: 1.92.0
+License: GPL-2.0-only
+
+Native zeroing releases retained ledger entries with Vec::swap_remove. Rust
+1.92 emits its out-of-bounds call to a nested assert_failed function with
+return type !. The exact compiler library source and alloc.o confirm that
+this function panics rather than returning. Its two call sites in the native
+module are incorrectly reported as falling through to the next function.
+
+Extend the existing Rust noreturn classifier with only the observed mangled
+path suffix, alongside Vec::remove. Keep all control-flow and stack checks,
+including rejection of unknown callees. This is a project-observed compiler
+compatibility adjustment; no upstream or stable commit is claimed.
+
+Signed-off-by: McKernel Rust Migration <mckernel@localhost>
+---
+ tools/objtool/check.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -207,6 +207,7 @@ static bool is_rust_noreturn(const struct symbol *func)
+ 	return str_ends_with(func->name, "_4core5sliceSp15copy_from_slice17len_mismatch_fail")		||
+ 	       str_ends_with(func->name, "_4core5slice4sort6shared9smallsort22panic_on_ord_violation")	||
+ 	       str_ends_with(func->name, "_5alloc3vecINtB6_3VecppE6remove13assert_failed")		||
++	       str_ends_with(func->name, "_5alloc3vecINtB6_3VecppE11swap_remove13assert_failed")	||
+ 	       str_ends_with(func->name, "_4core6option13unwrap_failed")				||
+ 	       str_ends_with(func->name, "_4core6result13unwrap_failed")				||
+ 	       str_ends_with(func->name, "_4core9panicking5panic")					||

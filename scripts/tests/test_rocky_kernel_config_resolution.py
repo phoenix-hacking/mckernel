@@ -310,6 +310,27 @@ class AllocatorPatchProvenanceTests(unittest.TestCase):
 
 
 class RepositoryContractTests(unittest.TestCase):
+    def test_swap_remove_tool_patch_is_exact_and_outside_frozen_replay(self):
+        relative = "host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch"
+        frozen = list(resolution.EXPECTED_COMPATIBILITY_PATCHES)
+        self.assertNotIn(relative, frozen)
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            resolution.validate_repository_patch_scope(repo, frozen)
+            path = repo / relative
+            path.parent.mkdir(parents=True)
+            original = (REPO_ROOT / relative).read_bytes()
+            path.write_bytes(original)
+            current = sorted(frozen + [relative])
+            resolution.validate_repository_patch_scope(repo, current)
+            for changed in (original + b"\n", original.replace(b"11swap_remove", b"11swap_return", 1)):
+                path.write_bytes(changed)
+                with self.assertRaisesRegex(resolution.ConfigResolutionError, "non-config patch bytes"):
+                    resolution.validate_repository_patch_scope(repo, current)
+            path.write_bytes(original)
+            with self.assertRaisesRegex(resolution.ConfigResolutionError, "patch authority"):
+                resolution.validate_repository_patch_scope(repo, current + [relative])
+
     def test_current_non_config_patch_is_exact_and_outside_frozen_replay(self):
         relative = "host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch"
         frozen = list(resolution.EXPECTED_COMPATIBILITY_PATCHES)

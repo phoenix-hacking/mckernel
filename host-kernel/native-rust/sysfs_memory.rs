@@ -13,6 +13,9 @@ use kernel::{
     sync::{new_mutex, Arc, Mutex},
 };
 
+#[path = "sysfs_zeroing.rs"]
+mod zeroing;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) struct Span {
     physical: u64,
@@ -48,6 +51,7 @@ struct Ledger {
     payloads: Vec<Option<Tagged>>,
     snoops: Vec<Tagged>,
     procfs: Vec<Tagged>,
+    zeroing: Vec<Tagged>,
     serial: u64,
 }
 
@@ -71,6 +75,7 @@ impl Ledger {
                 .any(|old| old.span.overlaps(span))
             || snoops && self.snoops.iter().any(|old| old.span.overlaps(span))
             || self.procfs.iter().any(|old| old.span.overlaps(span))
+            || self.zeroing.iter().any(|old| old.span.overlaps(span))
     }
 
     fn tag(&mut self, span: Span) -> Result<Tagged> {
@@ -87,6 +92,8 @@ pub(super) struct Memory {
     pub(super) owner: OsToken,
     pub(super) direct_map: u64,
     extents: Vec<MemoryExtent>,
+    layout: crate::smp_image::BootLayout,
+    numa_nodes: usize,
     #[pin]
     ledger: Mutex<Ledger>,
 }
@@ -100,8 +107,13 @@ impl Memory {
         map: &MemoryMap<MAX_EXTENTS>,
         owner: OsToken,
         direct_map: u64,
+        layout: crate::smp_image::BootLayout,
+        numa_nodes: usize,
         fixed: Vec<Span>,
     ) -> Result<Arc<Self>> {
+        if layout.extent().owner() != Some(owner) || numa_nodes == 0 || numa_nodes > 512 {
+            return Err(EINVAL);
+        }
         let mut extents = Vec::with_capacity(map.len(), GFP_KERNEL)?;
         for index in 0..map.len() {
             let extent = map.extent(index).ok_or(EIO)?;
@@ -132,8 +144,8 @@ impl Memory {
         let procfs = Vec::with_capacity(4096 + METADATA_CAPACITY + 2, GFP_KERNEL)?;
         Arc::pin_init(
             pin_init!(Self {
-                owner, direct_map, extents,
-                ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, snoops: Vec::new(), procfs, serial: 0 }),
+                owner, direct_map, extents, layout, numa_nodes,
+                ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, snoops: Vec::new(), procfs, zeroing: Vec::new(), serial: 0 }),
             }),
             GFP_KERNEL,
         )

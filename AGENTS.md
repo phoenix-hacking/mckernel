@@ -199,6 +199,21 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native host zeroing checkpoint, 2026-09-09:
+`docs/verification/native-application-zeroing-host-checkpoint-20260909.json`
+retains nine complete captures and both original audit failures in 13 artifacts,
+with all 57 native compiler source bindings. The separate retained
+zeroing worker, same-owner extent validation and complete detached-batch ledger
+are integrated. Host protocol 2 passes nine focused tests. Native module 2
+builds all three modules after exact Rust 1.92 objtool noreturn patch 0025;
+the unchanged failing object passes after the patch and all three unknown-callee
+controls remain rejected. All 77 targeted configuration/license tests pass.
+Original protocol 1, module 1 and patch-contract 1 failures remain protected.
+Use `/work/native-application-zeroing-module-20260909-2` with zeroing image 1
+for the next unchanged libc memory guest. Neither zeroing nor the nr-11 host
+invalidation fix has passed actual guest execution yet. Keep the goal active;
+all four core modes and abnormal-owner handling are still handoff requirements.
+
 Latest native zeroing guest/protocol checkpoint, 2026-09-09:
 `docs/verification/native-application-zeroing-checkpoint-20260909.json` retains
 all four focused attempts, including three original harness failures. Protocol

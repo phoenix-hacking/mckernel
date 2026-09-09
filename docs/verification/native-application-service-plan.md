@@ -1778,3 +1778,34 @@ node, including a node that straddles a page boundary. Do not exclude the whole
 can legitimately enter the free pool there. Retain exact boot geometry and
 check assigned ownership, headers, cycles and active ledger spans before
 clearing any detached chunk.
+
+The host adapter is now integrated. `sysfs_zeroing.rs` retains the exact boot
+layout, validates the complete same-owner extent union, claims node control
+and every detached chunk before effects, preserves the 48-byte header, and
+uses captured page counts after publication permits immediate allocator reuse.
+A third retained worker handles bounded zeroing admission independently of
+metadata and packet progress. Existing EAGAIN handling retains the complete
+unaccepted packet; malformed accepted work retains its claims and owners.
+Nine focused host tests pass, including 512 concurrent immediate chunk reuses,
+1,024 queue-full retries, five allocation failure points and all seven ledger
+claim classes. The original fixture accessor failure is preserved.
+
+Native module attempt 1 compiled Rust but objtool did not recognize the exact
+Rust 1.92 `Vec::swap_remove::assert_failed` noreturn symbol. The retained compiler
+library source, alloc object and relocations prove this function returns `!`.
+Patch 0025 adds only its exact mangled suffix to the existing Rust classifier.
+The identical failing module object then passes the original objtool flags;
+three unknown-callee mutations still reproduce both original errors. Module
+attempt 2 builds all three modules with all original checks. All 77 targeted
+configuration/license tests pass from a captured writable source tree; the
+earlier read-only mutation-test failure remains preserved. Historical config
+replay and patch 0024 are unchanged. These results establish compilation and
+focused checks; actual zeroing, host invalidation and libc completion remain
+unverified until the next guest run.
+
+The full `native-application-zeroing-host-checkpoint-20260909.json` retains
+nine complete validation captures and both original audit failures in 13
+artifacts, with all 57 native compiler bindings. The corrected audit accounts
+for expected CLI-error stdout inside one passing test and buffered stdout after
+final unittest OK. Neither failure changes the original test or build results.
+Guest runtime verification remains the next gate.

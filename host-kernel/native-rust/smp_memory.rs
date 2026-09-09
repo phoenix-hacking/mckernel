@@ -875,6 +875,7 @@ struct PreparedBoot {
     trampoline: super::smp_trampoline::LowRegion,
     irq: BootIrqRoute,
     cpus: Vec<BootCpu>,
+    layout: super::smp_image::BootLayout,
     // Immutable host copy of the exact node set encoded in the boot parameters.
     numa_nodes: usize,
     master: Option<Arc<super::smp_ikc::BootMaster>>,
@@ -1875,6 +1876,7 @@ impl MemoryContext {
                 trampoline,
                 irq,
                 cpus,
+                layout,
                 numa_nodes: nodes.len(),
                 master: None,
                 channels: Vec::new(),

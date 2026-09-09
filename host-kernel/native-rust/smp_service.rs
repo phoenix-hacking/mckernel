@@ -11,6 +11,7 @@ use super::super::{
     sysfs_request as wire,
     sysfs_setup::{Service, SharedData},
     sysfs_tree::Handle,
+    zero_pages,
 };
 use super::{abi, BootCpu, MemoryMap, OwnedControlChannel, PreparedBoot, MAX_EXTENTS};
 use core::{
@@ -33,6 +34,20 @@ pub(in super::super) use memory::SyscallResponse;
 mod snoop;
 
 const METADATA_CAPACITY: usize = 64;
+
+fn admit_zeroing(
+    pending: &Mutex<Vec<zero_pages::Request>>,
+    packet: &[u8; CONTROL_PACKET_BYTES],
+    cpus: usize,
+) -> Result {
+    let request = zero_pages::Request::decode(packet, cpus).map_err(errno)?;
+    let mut pending = pending.lock();
+    if pending.len() == METADATA_CAPACITY {
+        return Err(EAGAIN);
+    }
+    pending.push(request, GFP_KERNEL)?;
+    Ok(())
+}
 
 fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
@@ -106,6 +121,7 @@ struct Runtime {
     error: AtomicI32,
     completed: AtomicU64,
     rejected: AtomicU64,
+    zeroed: AtomicU64,
     #[pin]
     transport: Mutex<Transport>,
     #[pin]
@@ -116,6 +132,8 @@ struct Runtime {
     procfs_service: Mutex<procfs::Service>,
     #[pin]
     procfs_pending: Mutex<Vec<procfs::Event>>,
+    #[pin]
+    zero_pending: Mutex<Vec<zero_pages::Request>>,
 }
 
 impl Runtime {
@@ -189,6 +207,9 @@ impl Runtime {
                 GFP_KERNEL,
             )?;
             return Ok(());
+        }
+        if zero_pages::Request::candidate(packet) {
+            return admit_zeroing(&self.zero_pending, packet, self.cpus.len());
         }
         if message == application_syscall::REQUEST_MESSAGE {
             let request =
@@ -589,6 +610,27 @@ impl Runtime {
         result
     }
 
+    fn zeroing(&self) -> Result<bool> {
+        if self.error.load(Ordering::Acquire) != 0 {
+            return Ok(false);
+        }
+        let request = {
+            let mut pending = self.zero_pending.lock();
+            if pending.is_empty() {
+                return Ok(false);
+            }
+            pending.remove(0)
+        };
+        let done = self.memory.zero(request)?;
+        let sequence = self.zeroed.fetch_add(1, Ordering::Relaxed) + 1;
+        if sequence <= 256 {
+            pr_info!("IHK-SMP: allocator zeroed os={} generation={} sequence={} pid={} cpu={} chunks={} pages={} pending={} workers={}\n",
+                self.owner.slot(), self.owner.generation(), sequence, request.pid, request.cpu,
+                done.chunks, done.pages, done.pending, done.workers);
+        }
+        Ok(true)
+    }
+
     fn status(&self) -> u64 {
         // SAFETY: The aligned boot-parameter allocation is retained by the
         // original started owner. Guest status is shared, never Rust-borrowed.
@@ -602,6 +644,7 @@ impl Runtime {
 enum Role {
     Packets,
     Metadata,
+    Zeroing,
 }
 
 struct Entry {
@@ -621,6 +664,11 @@ unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
             Role::Packets => entry.runtime.pump(),
             Role::Metadata => {
                 if let Err(error) = entry.runtime.metadata() {
+                    entry.runtime.fail(error);
+                }
+            }
+            Role::Zeroing => {
+                if let Err(error) = entry.runtime.zeroing() {
                     entry.runtime.fail(error);
                 }
             }
@@ -660,6 +708,7 @@ impl Thread {
         let name = match role {
             Role::Packets => kernel::c_str!("mck-sysfs-pump"),
             Role::Metadata => kernel::c_str!("mck-sysfs-meta"),
+            Role::Zeroing => kernel::c_str!("mck-zero-pages"),
         };
         // SAFETY: A unique live callback context is transferred only on entry.
         // The stopped task cannot access it until the owned activation below.
@@ -712,6 +761,7 @@ pub(in super::super) struct Started {
     runtime: Arc<Runtime>,
     metadata: Arc<Thread>,
     packets: Arc<Thread>,
+    zeroing: Arc<Thread>,
 }
 
 impl Started {
@@ -723,6 +773,7 @@ impl Started {
         if self.runtime.status() != 3
             || !self.packets.entered.load(Ordering::Acquire)
             || !self.metadata.entered.load(Ordering::Acquire)
+            || !self.zeroing.entered.load(Ordering::Acquire)
         {
             return Err(EBUSY);
         }
@@ -738,6 +789,7 @@ impl Started {
     pub(in super::super) fn activate_and_wait(&self) -> Result {
         self.packets.activate();
         self.metadata.activate();
+        self.zeroing.activate();
         self.runtime.procfs.activate();
         for _ in 0..3000 {
             let error = self.runtime.error.load(Ordering::Acquire);
@@ -747,8 +799,9 @@ impl Started {
             if self.runtime.status() == 3
                 && self.packets.entered.load(Ordering::Acquire)
                 && self.metadata.entered.load(Ordering::Acquire)
+                && self.zeroing.entered.load(Ordering::Acquire)
             {
-                pr_info!("IHK-SMP: full guest ready os={} generation={} status=3 sysfs_requests={} continuing_workers=2\n",
+                pr_info!("IHK-SMP: full guest ready os={} generation={} status=3 sysfs_requests={} continuing_workers=3\n",
                     self.runtime.owner.slot(), self.runtime.owner.generation(),
                     self.runtime.completed.load(Ordering::Acquire));
                 return Ok(());
@@ -937,13 +990,23 @@ pub(super) fn prepare(
     }
     // SAFETY: BOOT already made original page/module ownership irreversible;
     // these exact-generation mappings are retained throughout every outcome.
-    let memory = unsafe { memory::Memory::new(map, owner, direct_map, fixed)? };
+    let memory = unsafe {
+        memory::Memory::new(
+            map,
+            owner,
+            direct_map,
+            prepared.layout,
+            prepared.numa_nodes,
+            fixed,
+        )?
+    };
     // SAFETY: Setup validated the unique response page and stored it before
     // acknowledgement. No prior continuing Remote exists for this OS.
     let remote = unsafe { Remote::new(data)? };
     let procfs = procfs::Remote::new(memory.clone())?;
     let procfs_service = procfs::Service::new(procfs.clone())?;
     let procfs_pending = Vec::with_capacity(METADATA_CAPACITY, GFP_KERNEL)?;
+    let zero_pending = Vec::with_capacity(METADATA_CAPACITY, GFP_KERNEL)?;
     let application = smp_application::Remote::new(owner, procfs.clone())?;
     let pending = Pending::new()?;
     let status_address = prepared.params.address + offset_of!(abi::IhkSmpBootParam, status) as u64;
@@ -953,20 +1016,24 @@ pub(super) fn prepare(
             master_receive: receive, master_send: send, master_bytes: queue_bytes,
             status_address,
             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
+            zeroed: AtomicU64::new(0),
             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
             service <- new_mutex!(None),
             pending <- new_mutex!(pending),
             procfs_service <- new_mutex!(procfs_service),
             procfs_pending <- new_mutex!(procfs_pending),
+            zero_pending <- new_mutex!(zero_pending),
         }),
         GFP_KERNEL,
     )?;
     let packets = Thread::new(runtime.clone(), Role::Packets)?;
     let metadata = Thread::new(runtime.clone(), Role::Metadata)?;
+    let zeroing = Thread::new(runtime.clone(), Role::Zeroing)?;
     let started = Started {
         runtime,
         metadata,
         packets,
+        zeroing,
     };
     // All fallible allocations and task creation finished. Moving a published
     // tree into a fallible constructor could otherwise destroy it on error.
