@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.gzip-corrupt",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"path": "/case/input.gz", "size": 46},
+  "wait_status": {"kind": "nonzero-exit", "code": "pinned-reference"},
+  "stdout": {"kind": "not-complete-plaintext", "forbidden_hex": "4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a"},
+  "stderr": {"kind": "pinned-reference-nonempty"},
+  "relational_assertions": ["Truncated input yields the pinned gzip diagnostic and nonzero wait status", "No successful full-plaintext acceptance is permitted"],
+  "unresolved_expectations": ["Exact exit code, stderr bytes, and partial-output policy must be frozen from the pinned reference before execution."],
+  "max_question_for_reviewer": "Run the pinned gzip reference once to bind exact nonzero status/stderr and decide whether partial stdout is retained."
+}

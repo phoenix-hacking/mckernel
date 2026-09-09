@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-067",
+  "packet_version": 1,
+  "context_sha256": "ee78d655877417edaeb8ef36016d0c5fe5d56e6561c94ff2dfd1a6bc8be11aac",
+  "started_utc": "2026-09-09T14:20:00Z",
+  "finished_utc": "2026-09-09T14:22:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.gzip-decompress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.gzip-decompress.json",
+      "oracle": "scripts/application-tests/oracles/app.gzip-decompress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.gzip-decompress.json", "scripts/application-tests/oracles/app.gzip-decompress.json"],
+      "parameter_vectors": {"utility": ["gzip"], "flags": ["-d", "-c"], "compressed_bytes": [51], "decoded_bytes": [112]},
+      "implemented_operations": ["frozen valid gzip stream", "independent plaintext oracle", "empty-stderr and exit-zero contract"],
+      "unresolved_oracle_notes": ["Pinned gzip binary identity and decompressor diagnostic closure require Max review."],
+      "max_reviewer_question": "Confirm the frozen gzip stream and exact 112-byte decompressed output."
+    },
+    {
+      "case_id": "app.gzip-corrupt",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.gzip-corrupt.json",
+      "oracle": "scripts/application-tests/oracles/app.gzip-corrupt.json",
+      "changed_files": ["scripts/application-tests/inputs/app.gzip-corrupt.json", "scripts/application-tests/oracles/app.gzip-corrupt.json"],
+      "parameter_vectors": {"utility": ["gzip"], "flags": ["-d", "-c"], "corruption": ["truncated stream"], "compressed_bytes": [46]},
+      "implemented_operations": ["specifically truncated fixture", "forbidden full-plaintext predicate", "pinned-reference status/stderr placeholder"],
+      "unresolved_oracle_notes": ["Exact exit code, stderr bytes, and partial-output policy must be frozen from the pinned reference before execution."],
+      "max_reviewer_question": "Run the pinned gzip reference once to bind exact nonzero status/stderr and decide whether partial stdout is retained."
+    },
+    {
+      "case_id": "app.xz-compress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.xz-compress.json",
+      "oracle": "scripts/application-tests/oracles/app.xz-compress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.xz-compress.json", "scripts/application-tests/oracles/app.xz-compress.json"],
+      "parameter_vectors": {"utility": ["xz"], "flags": ["--threads=1", "-0"], "input_bytes": [112], "decoded_bytes": [112]},
+      "implemented_operations": ["fixed plaintext input", "single-thread/level-zero option record", "independent decoded-byte relation"],
+      "unresolved_oracle_notes": ["Pinned xz identity, encoder bytes, memory bound, and metadata require Max review."],
+      "max_reviewer_question": "Confirm xz --threads=1 -0 option binding and independent decoded-byte oracle; freeze compressed bytes from the pinned reference."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.gzip-decompress.json", "sha256": "c34b25938fc1feb943a332c0fef6e93130cca0b1052186caa7a5e136381405e1"},
+    {"path": "scripts/application-tests/oracles/app.gzip-decompress.json", "sha256": "cfd34821622c7b0626db54d333c1a39993181f82454f687d8df51ce2ff3c6a49"},
+    {"path": "scripts/application-tests/inputs/app.gzip-corrupt.json", "sha256": "ea87ad4576447dba0dffb3800edb7eafbe14c97cacb33246f924587418b1e2de"},
+    {"path": "scripts/application-tests/oracles/app.gzip-corrupt.json", "sha256": "5401cdbe994c26ece0850ba5143eb908b39b0458be9d56c6ccb9c886d487beac"},
+    {"path": "scripts/application-tests/inputs/app.xz-compress.json", "sha256": "ad072a47211458fa7254faea7a0fe75d0ae48c9995c818e57bfcafbed324450c"},
+    {"path": "scripts/application-tests/oracles/app.xz-compress.json", "sha256": "190c9f3ab7d37d57aeab5dacb860e2fb6ccd298a2108e52f0750742bfccaafc8"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-067/context.json", "sha256": "ee78d655877417edaeb8ef36016d0c5fe5d56e6561c94ff2dfd1a6bc8be11aac"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-067.json --emit-context /tmp/application-packet-067-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-067/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned gzip/xz identities, exact corrupt diagnostics, encoder bytes, and decompression relations need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review valid gzip stream and exact plaintext", "Review truncated gzip status/stderr", "Review xz options and independent decode"],
+  "next_packet_id": "packet-068"
+}
