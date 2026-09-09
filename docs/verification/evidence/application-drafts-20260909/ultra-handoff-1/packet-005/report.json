@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-005",
+  "packet_version": 2,
+  "context_sha256": "0ddbc176f8d327b998d1349d59242d58b65ee475f9405cc0c79243957349d945",
+  "started_utc": "2026-09-09T09:47:06Z",
+  "finished_utc": "2026-09-09T09:47:06Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.alternate-repeat",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+      "oracle": "scripts/application-tests/oracles/signal.alternate-repeat.json",
+      "changed_files": [
+        "scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+        "scripts/application-tests/oracles/signal.alternate-repeat.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Output assertions currently rely on fixed-line-prefix expectations and exact alternate-stack range checks; runtime ordering and normalization policy remains to be confirmed by reviewer."
+      ],
+      "max_reviewer_question": "Should alternate-stack verification rely on exact address-range checks from fixture-local bounds or only high-level SA_ONSTACK semantics?"
+    },
+    {
+      "case_id": "signal.alternate-nested",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.alternate-nested.c",
+      "oracle": "scripts/application-tests/oracles/signal.alternate-nested.json",
+      "changed_files": [
+        "scripts/application-tests/cases/signal/signal.alternate-nested.c",
+        "scripts/application-tests/oracles/signal.alternate-nested.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Nested signal ordering and whether strict enter-inner-exit sequencing is required remains unresolved in the absence of runtime traces."
+      ],
+      "max_reviewer_question": "Should this case enforce strict outer-enter\u2192inner\u2192outer-exit sequencing, or only assert successful nested handling semantics?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+      "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb"
+    },
+    {
+      "path": "scripts/application-tests/oracles/signal.alternate-repeat.json",
+      "sha256": "462077668cf49ff07565ff3fe42e4c2b1dbc6cb3bfaeda9608820cd229065f53"
+    },
+    {
+      "path": "scripts/application-tests/cases/signal/signal.alternate-nested.c",
+      "sha256": "252f35428043c7867478275e3f7b64dd1b06d4473b0fadaae21cf093a25b231d"
+    },
+    {
+      "path": "scripts/application-tests/oracles/signal.alternate-nested.json",
+      "sha256": "f953764844486efd611063e3dd1b2fa98c3de9c3ac3740d2a8568e28f5ea364b"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-005.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-005.json --emit-context /tmp/packet-005-context-check.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "Alternate stack fixture verifies handler execution but leaves exact output schema ordering guarantees to reviewer.",
+    "Nested signal test needs confirmation on strict runtime line-order expectations under nested delivery behavior."
+  ],
+  "blocked_execution_capabilities": [
+    "current-inputs",
+    "dynamic-etexec",
+    "runner-contract",
+    "runtime-transport-fault-injection",
+    "signals-basic"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Confirm whether the alternate-repeat case should assert all deliveries observed on alternate stack via address-range bounds or a stronger platform-independent predicate.",
+    "Confirm whether nested-delivery strict ordering outer-enter \u2192 inner \u2192 outer-exit should be enforced as absolute output requirement for signal.alternate-nested."
+  ],
+  "next_packet_id": "packet-006"
+}
