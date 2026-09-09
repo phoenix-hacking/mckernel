@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-075",
+  "packet_version": 1,
+  "context_sha256": "7ee7b4b13ea254ae4003858447cb2556a8e3c5728fbc9688d6ca5ea421255fe2",
+  "started_utc": "2026-09-09T15:40:00Z",
+  "finished_utc": "2026-09-09T15:45:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id":"vector.avx2-signed-saturate","status":"DRAFTED_WITH_UNRESOLVED","fixture":"scripts/application-tests/cases/vector/vector.avx2-signed-saturate.c","oracle":"scripts/application-tests/oracles/vector.avx2-signed-saturate.json","changed_files":["scripts/application-tests/cases/vector/vector.avx2-signed-saturate.c","scripts/application-tests/oracles/vector.avx2-signed-saturate.json"],"parameter_vectors":{"feature":["avx2"],"instructions":["vpaddsb","vpsubsw"],"lanes":[32,16],"endpoints":["int8 min/max","int16 min/max"]},"implemented_operations":["target-isolated signed saturating add/subtract","independent widened scalar clamp","low/high YMM endpoint patterns"],"unresolved_oracle_notes":["AVX2 CPUID/XCR0 evidence, exact disassembly and spill audit require Max review."],"max_reviewer_question":"Confirm vpaddsb/vpsubsw selection and transitive AVX/SSE2 state evidence in both engines."},
+    {"case_id":"vector.avx2-cross-lane-permute","status":"DRAFTED_WITH_UNRESOLVED","fixture":"scripts/application-tests/cases/vector/vector.avx2-cross-lane-permute.c","oracle":"scripts/application-tests/oracles/vector.avx2-cross-lane-permute.json","changed_files":["scripts/application-tests/cases/vector/vector.avx2-cross-lane-permute.c","scripts/application-tests/oracles/vector.avx2-cross-lane-permute.json"],"parameter_vectors":{"feature":["avx2"],"instructions":["vpermd","vpshufb"],"dword_lanes":[8],"byte_lanes":[32],"halves":[2]},"implemented_operations":["cross-half indexed dword permutation","independent 128-bit byte shuffle","distinct low/high seeds"],"unresolved_oracle_notes":["Exact target disassembly and feature evidence require Max review."],"max_reviewer_question":"Confirm index and mask arrays distinguish cross-lane VPERMD from lane-local behavior."},
+    {"case_id":"vector.avx2-gather","status":"DRAFTED_WITH_UNRESOLVED","fixture":"scripts/application-tests/cases/vector/vector.avx2-gather.c","oracle":"scripts/application-tests/oracles/vector.avx2-gather.json","changed_files":["scripts/application-tests/cases/vector/vector.avx2-gather.c","scripts/application-tests/oracles/vector.avx2-gather.json"],"parameter_vectors":{"feature":["avx2"],"instruction":["vpgatherdd"],"lanes":[8],"scale":[4],"indices":["repeated","negative","bounded"],"masked_lanes":[2]},"implemented_operations":["valid signed-index gather","repeated and negative in-range offsets","masked seed preservation","independent scalar table oracle"],"unresolved_oracle_notes":["Exact gather disassembly, page ownership and masked-fault behavior require Max review."],"max_reviewer_question":"Confirm base/index/scale contract and owned mapping before fault-sensitive variants."}
+  ],
+  "changed_files_with_sha256": [
+    {"path":"scripts/application-tests/cases/vector/vector.avx2-signed-saturate.c","sha256":"c45148a419a18d67da068411374e623a489b6aa198f512ff9ecc3a474376b8a2"},
+    {"path":"scripts/application-tests/oracles/vector.avx2-signed-saturate.json","sha256":"7961c22188cf3c2944bef84063b55726b3373b8e413ac8206c90880bfe8d6f40"},
+    {"path":"scripts/application-tests/cases/vector/vector.avx2-cross-lane-permute.c","sha256":"44177ab4b0ba03665e2b57aa48b9c90583ebd374cc502159cb50ae2a408824a2"},
+    {"path":"scripts/application-tests/oracles/vector.avx2-cross-lane-permute.json","sha256":"7b82239e36ef3e911daad47d6604e64eb8f7af25e43af784eec045c5e6741793"},
+    {"path":"scripts/application-tests/cases/vector/vector.avx2-gather.c","sha256":"e27afa561cd15fc8660be2defb8496f7f77727182a706721ec79600acc3b666f"},
+    {"path":"scripts/application-tests/oracles/vector.avx2-gather.json","sha256":"22078ea4263f90a6495bcf1e26bab14bfd40f13b6b9706730be2acd1aeb4908f"},
+    {"path":"docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-075/context.json","sha256":"7ee7b4b13ea254ae4003858447cb2556a8e3c5728fbc9688d6ca5ea421255fe2"}
+  ],
+  "commands_and_outcomes":[
+    {"command":"python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-075.json --emit-context /tmp/application-packet-075-context-20260909-1.json","outcome":"PASS; planning metadata only; runtime_authorized=false"},
+    {"command":"python3 -m json.tool packet-075/report.json","outcome":"PASS"},
+    {"command":"git diff --check","outcome":"PASS"}
+  ],
+  "unresolved_oracles":["Exact AVX2 feature masks, target disassembly, register windows, gather page ownership and both-engine runtime evidence require final Max review."],
+  "blocked_execution_capabilities":["runner-contract","current-inputs","runtime-transport-fault-injection","vector-runtime-discovery","vector-instruction-audit","memory-basic"],
+  "first_failure_event":null,
+  "max_escalation":["Review signed saturation endpoint vectors","Review cross-lane permutation and byte-shuffle lane rules","Review gather scale, masking and bounded addresses"],
+  "next_packet_id":"packet-076"
+}

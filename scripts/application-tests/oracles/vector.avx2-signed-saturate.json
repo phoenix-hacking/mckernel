@@ -1,0 +1,7 @@
+{
+  "schema_version": 1, "case_id": "vector.avx2-signed-saturate", "case_version": 1, "artifact_version": "20260909.1",
+  "wait_status": {"kind":"exited","code":0}, "stdout": {"kind":"exact-line-lines","lines":["bytes=32 words=16 add_sat8=1 sub_sat16=1 endpoints=1 valid=1"]}, "stderr":{"kind":"exact-bytes","hex":""},
+  "relational_assertions":["Independent widened signed sums/differences clamp to the exact int8/int16 endpoints without signed overflow","Both YMM halves contain endpoint and interior lane patterns"],
+  "unresolved_expectations":["AVX2 CPUID/XCR0 evidence, exact target disassembly, compiler spill audit, and same-guest runtime evidence require Max review."],
+  "max_question_for_reviewer":"Confirm vpaddsb and vpsubsw are the selected target instructions and require AVX2 plus transitive AVX/SSE2 state in both engines."
+}

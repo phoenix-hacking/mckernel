@@ -1,0 +1,7 @@
+{
+  "schema_version":1,"case_id":"vector.avx2-cross-lane-permute","case_version":1,"artifact_version":"20260909.1",
+  "wait_status":{"kind":"exited","code":0},"stdout":{"kind":"exact-line-lines","lines":["lanes32=8 byte_lanes=32 halves=2 vpermd=1 vpshufb=1 valid=1"]},"stderr":{"kind":"exact-bytes","hex":""},
+  "relational_assertions":["Each output dword equals the independently indexed input lane, including cross-half indices","PSHUFB reverses bytes independently within each 128-bit half; distinct half seeds detect cross-lane substitution"],
+  "unresolved_expectations":["AVX2 feature evidence, exact vpermd/vpshufb disassembly and no-spill instruction windows require Max review."],
+  "max_question_for_reviewer":"Confirm the frozen index and byte-mask arrays adequately distinguish lane-local and cross-lane behavior before runtime execution."
+}
