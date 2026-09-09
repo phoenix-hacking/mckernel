@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.writev-boundaries",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.writev-boundaries"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["written=12 bad_index=12"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["writev count equals the sum of all iovec lengths", "File bytes equal exact concatenation including embedded NULs", "No string-based truncation occurs"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm concatenation of 3, 5, and 4 byte iovecs including all embedded NULs."
+}
