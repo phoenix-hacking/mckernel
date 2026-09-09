@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-042",
+  "packet_version": 1,
+  "context_sha256": "1324df900aa3b083ed934cfa180650ed7ce6196738aa3b3f523a0741d94862b2",
+  "started_utc": "2026-09-09T11:09:00Z",
+  "finished_utc": "2026-09-09T11:10:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.block-pending",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.block-pending.c",
+      "oracle": "scripts/application-tests/oracles/signal.block-pending.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.block-pending.c", "scripts/application-tests/oracles/signal.block-pending.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "mask_state": ["blocked", "unblocked"]},
+      "implemented_operations": ["block SIGUSR1", "raise while blocked", "pending-mask inspection and unblock delivery"],
+      "unresolved_oracle_notes": ["Pending-set timing and delivery ordering require Max review."],
+      "max_reviewer_question": "Confirm pending state is sampled before unblock and delivery completes before the assertion."
+    },
+    {
+      "case_id": "signal.mask-restore",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.mask-restore.c",
+      "oracle": "scripts/application-tests/oracles/signal.mask-restore.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.mask-restore.c", "scripts/application-tests/oracles/signal.mask-restore.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "handler_mask": ["SIGUSR2"], "restoration": ["exact baseline"]},
+      "implemented_operations": ["sa_mask installation", "handler-time mask inspection", "post-return mask comparison"],
+      "unresolved_oracle_notes": ["Automatic signal-mask augmentation and exact restoration require Max review."],
+      "max_reviewer_question": "Confirm handler mask augmentation and exact caller-mask restoration semantics."
+    },
+    {
+      "case_id": "signal.altstack-disable",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.altstack-disable.c",
+      "oracle": "scripts/application-tests/oracles/signal.altstack-disable.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.altstack-disable.c", "scripts/application-tests/oracles/signal.altstack-disable.json"],
+      "parameter_vectors": {"stack_bytes": [16384], "disable": ["SS_DISABLE"], "handler_flags": ["no SA_ONSTACK"]},
+      "implemented_operations": ["alternate-stack installation snapshot", "outside-handler disable", "ordinary-stack handler observation"],
+      "unresolved_oracle_notes": ["Altstack lifetime and normal-handler stack evidence require Max review."],
+      "max_reviewer_question": "Confirm disabling outside a handler and ordinary-stack delivery without SA_ONSTACK."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.block-pending.c", "sha256": "c2ed420a2b583ce0f057f1bf75757be03456ff3088338ed36db0ab0e498c36c4"},
+    {"path": "scripts/application-tests/oracles/signal.block-pending.json", "sha256": "6ab85dec7e4f65fa94beeb9379afd6f68b6e6ed7f9c6973bbb2f49d132445ee6"},
+    {"path": "scripts/application-tests/cases/signal/signal.mask-restore.c", "sha256": "c5c7803f9d9592151d1c3508d832cd1c26aafca3ac55c420c209b1bc1c740a57"},
+    {"path": "scripts/application-tests/oracles/signal.mask-restore.json", "sha256": "9f7f1d39a26e9016331e1ad2032062d84feb72c23540064fe1994dd00dc56759"},
+    {"path": "scripts/application-tests/cases/signal/signal.altstack-disable.c", "sha256": "b26b8cbe0b8f6b274347bfcb8fe2f6827bf2f3311cbbcbf341cc3459afa88246"},
+    {"path": "scripts/application-tests/oracles/signal.altstack-disable.json", "sha256": "44bed977dc0628bcdf907ed8beb40277dd209bf708adac005c55b75bcacadcaa"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-042/context.json", "sha256": "1324df900aa3b083ed934cfa180650ed7ce6196738aa3b3f523a0741d94862b2"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-042.json --emit-context /tmp/application-packet-042-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-042/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pending signals, mask restoration, and altstack disable cases need final native ABI, ordering, lifetime, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review pending signal delivery ordering", "Confirm exact mask restoration", "Review alternate-stack disable and handler stack evidence"],
+  "next_packet_id": "packet-043"
+}

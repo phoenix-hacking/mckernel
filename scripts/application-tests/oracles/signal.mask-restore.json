@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.mask-restore",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.mask-restore"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["handled=1 observed_blocked=1 restored=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SIGUSR2 is blocked during the SIGUSR1 handler by sa_mask", "The pre-signal mask is restored exactly after handler return"],
+  "unresolved_expectations": ["Freeze automatic-signal-mask and exact restoration evidence before execution."],
+  "max_question_for_reviewer": "Confirm handler mask augmentation and exact caller-mask restoration semantics."
+}
