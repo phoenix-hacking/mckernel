@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-065",
+  "packet_version": 1,
+  "context_sha256": "9d3164be1d719f1b036c0c22c540d7ea8d79b35a709d03333a24308724d095cf",
+  "started_utc": "2026-09-09T14:00:00Z",
+  "finished_utc": "2026-09-09T14:02:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.cp",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.cp.json",
+      "oracle": "scripts/application-tests/oracles/app.cp.json",
+      "changed_files": ["scripts/application-tests/inputs/app.cp.json", "scripts/application-tests/oracles/app.cp.json"],
+      "parameter_vectors": {"source": ["/case/input"], "destination": ["/case/output"], "source_size": [160], "source_generator": ["copy-data\\n x16"]},
+      "implemented_operations": ["absent destination declaration", "independent source generator", "destination byte/size and source-retention predicates"],
+      "unresolved_oracle_notes": ["Pinned coreutils cp identity and filesystem fixture binding require Max review."],
+      "max_reviewer_question": "Confirm cp source/destination setup and byte-for-byte destination and source retention checks."
+    },
+    {
+      "case_id": "app.sort-numeric",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.sort-numeric.json",
+      "oracle": "scripts/application-tests/oracles/app.sort-numeric.json",
+      "changed_files": ["scripts/application-tests/inputs/app.sort-numeric.json", "scripts/application-tests/oracles/app.sort-numeric.json"],
+      "parameter_vectors": {"utility": ["sort"], "mode": ["-n"], "records": [4096], "width": [8], "input_order": ["descending"]},
+      "implemented_operations": ["independent descending padded-integer generator", "ascending/no-loss relational oracle", "newline preservation invariant"],
+      "unresolved_oracle_notes": ["Pinned coreutils sort identity, option inventory, and full generated-output capture require Max review."],
+      "max_reviewer_question": "Confirm numeric ordering semantics for padded decimal records and the bounded 4096-line output oracle."
+    },
+    {
+      "case_id": "app.uniq",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.uniq.json",
+      "oracle": "scripts/application-tests/oracles/app.uniq.json",
+      "changed_files": ["scripts/application-tests/inputs/app.uniq.json", "scripts/application-tests/oracles/app.uniq.json"],
+      "parameter_vectors": {"utility": ["uniq"], "mode": ["-c"], "runs": [["alpha", 3], ["beta", 2], ["gamma", 1]], "order": ["original"]},
+      "implemented_operations": ["fixed adjacent-run input", "independent run-length computation", "exact count-field formatting oracle"],
+      "unresolved_oracle_notes": ["Pinned coreutils uniq identity, field-width formatting, and DSO closure require Max review."],
+      "max_reviewer_question": "Confirm uniq -c count field spacing and exact adjacent-run output for the pinned input."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.cp.json", "sha256": "cdd6a17100f9efff8c0cf984feb2e621a538a1045666ceae0ad2cf92cde9ef28"},
+    {"path": "scripts/application-tests/oracles/app.cp.json", "sha256": "57b3b8941017f9935bee80b3d65017102297387621109d2f389f6bd7bde3412c"},
+    {"path": "scripts/application-tests/inputs/app.sort-numeric.json", "sha256": "5eb04bef3e7d90e9e3a787075bed04792cb38a58035cc49c2d88aab4d356f55d"},
+    {"path": "scripts/application-tests/oracles/app.sort-numeric.json", "sha256": "bd4be7c94d06cef71d216c655b7c909962bfb051f39c8516e457053427c7282d"},
+    {"path": "scripts/application-tests/inputs/app.uniq.json", "sha256": "0afe60a149badbaf56d817237a4db79688bbb5c40022d7ebf257cd87df971b7c"},
+    {"path": "scripts/application-tests/oracles/app.uniq.json", "sha256": "7488747d2d03cd0891ce2c7603877d588aa9bd399315cd9fe25d995f2f136831"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-065/context.json", "sha256": "9d3164be1d719f1b036c0c22c540d7ea8d79b35a709d03333a24308724d095cf"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-065.json --emit-context /tmp/application-packet-065-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-065/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned coreutils identity, generated input expansion, numeric ordering, and output formatting need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review cp destination and source invariants", "Review sort numeric generator and full ordering", "Review uniq run counts and spacing"],
+  "next_packet_id": "packet-066"
+}

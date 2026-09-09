@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.uniq",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"path": "/case/input", "hex": "616c7068610a616c7068610a616c7068610a626574610a626574610a67616d6d610a"},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["      3 alpha", "      2 beta", "      1 gamma"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["uniq -c emits one record per adjacent run with independently computed counts3,2,1 and original order"],
+  "unresolved_expectations": ["Pinned coreutils uniq identity, field-width formatting, and DSO closure require Max review."],
+  "max_question_for_reviewer": "Confirm uniq -c count field spacing and exact adjacent-run output for the pinned input."
+}

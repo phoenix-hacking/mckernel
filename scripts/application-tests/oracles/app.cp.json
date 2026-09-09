@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.cp",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"source": "/case/input", "generator": {"kind": "repeat-utf8", "text": "copy-data\\n", "count": 16}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-bytes", "hex": ""},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["After cp exits zero, /case/output exists with size160 and bytes equal the source", "The source remains unchanged and no diagnostic output is emitted"],
+  "unresolved_expectations": ["Pinned coreutils cp identity and filesystem fixture binding require Max review."],
+  "max_question_for_reviewer": "Confirm cp source/destination setup and byte-for-byte destination and source retention checks."
+}
