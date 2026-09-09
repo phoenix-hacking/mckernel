@@ -35,9 +35,15 @@ HELLO repeats and both metadata/string ABIs also pass. The signal image
 checkpoint verifies all four image profiles, 37 guest bindings and prior
 clone3/protection/zeroing binary checks. Both original protocol fixture failures
 and the original image audit failure remain retained in their checkpoints.
-Memory/files and threads have separate earlier tested inputs; final replays on
-the current pair, both full control-ABI regressions and actual abnormal
-launcher/worker handling remain required. Do not announce Ultra readiness yet.
+Actual scheduled launcher/worker failure now passes on this current pair:
+SIGKILL during a delegated blocked read, bounded retirement/process cleanup,
+700 quiet Linux forks reusing both the old PID and worker TID three times,
+then eight more unchanged HELLO applications in the same OS. The owner-failure
+checkpoint retains both complete attempts, including the original runner
+pause/resume failure; all original assertions remain. Memory/files and threads
+have separate earlier tested inputs. Final replays on the current pair and
+both full control-ABI regressions remain required. Do not announce Ultra
+readiness yet.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 

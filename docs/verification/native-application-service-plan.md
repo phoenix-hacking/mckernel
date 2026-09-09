@@ -8,10 +8,23 @@ had not yet run. The current runtime checkpoint below supersedes that status.
 ## Current application baseline, 2026-09-09
 
 **All four core application smoke categories now pass inside McKernel.**
-The Astra Ultra handoff still requires actual abnormal launcher/worker handling
-and final current-pair regressions/replays. The current candidate is signal
+The Astra Ultra handoff still requires final current-pair regressions/replays.
+Actual scheduled launcher/worker failure handling now passes on the current
+pair. The current candidate is signal
 module 1 / signal image 2. Earlier memory/file and thread inputs remain
 separately recorded until the final replays complete.
+
+`native-application-owner-failure-checkpoint-20260909.json` retains both complete
+actual failure-test attempts. Guest 2 runs the unchanged normal signal/core and
+eight-HELLO baseline, then SIGKILLs the unchanged launcher while its worker is
+blocked in a delivered read(fd=0, length=16). Retirement, procfs deletion and
+process release complete with zero errors. In a quiet interval with no
+application ioctl, 700 Linux forks reuse the old launcher PID and worker TID
+three times each, without a stale returned response. Eight more unchanged
+HELLO applications then pass exact output, exit 37 and complete cleanup in
+the same McKernel OS. The first attempt remains a runner failure: its live
+capture left QEMU paused. The second adds an explicit resume and preserves
+all original assertions and complete helpers. No native behavior changed.
 
 `native-application-signals-checkpoint-20260909.json` retains the complete
 module and signal guest captures, all 57 native compiler bindings and the
