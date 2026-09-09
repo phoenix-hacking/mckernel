@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-046",
+  "packet_version": 1,
+  "context_sha256": "5805ced65071262398caee673118927b0285d84b39708a1b4e73819ca616ed78",
+  "started_utc": "2026-09-09T11:29:00Z",
+  "finished_utc": "2026-09-09T11:30:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.sigsuspend",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.sigsuspend.c",
+      "oracle": "scripts/application-tests/oracles/signal.sigsuspend.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.sigsuspend.c", "scripts/application-tests/oracles/signal.sigsuspend.json"],
+      "parameter_vectors": {"temporary_mask": ["empty"], "blocked_signal": ["SIGUSR1"], "expected_return": ["EINTR"]},
+      "implemented_operations": ["blocked pending signal", "atomic sigsuspend mask swap", "post-return mask restoration"],
+      "unresolved_oracle_notes": ["Pending delivery ordering and exact mask restoration require Max review."],
+      "max_reviewer_question": "Confirm sigsuspend atomically swaps the mask and restores blocked SIGUSR1 state on EINTR."
+    },
+    {
+      "case_id": "signal.sigwait",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.sigwait.c",
+      "oracle": "scripts/application-tests/oracles/signal.sigwait.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.sigwait.c", "scripts/application-tests/oracles/signal.sigwait.json"],
+      "parameter_vectors": {"blocked_signal": ["SIGUSR1"], "consumption": ["sigwait"], "ordinary_handler": ["must not run"]},
+      "implemented_operations": ["blocked signal setup", "pending signal generation", "synchronous sigwait consumption"],
+      "unresolved_oracle_notes": ["Signal-number ABI and synchronous-consumption ordering require Max review."],
+      "max_reviewer_question": "Confirm sigwait consumes the pending signal without invoking the installed ordinary handler."
+    },
+    {
+      "case_id": "signal.thread-target",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.thread-target.c",
+      "oracle": "scripts/application-tests/oracles/signal.thread-target.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.thread-target.c", "scripts/application-tests/oracles/signal.thread-target.json"],
+      "parameter_vectors": {"threads": [3], "target_slot": [1], "signal": ["SIGUSR1"], "expected_entries": ["0,1,0"]},
+      "implemented_operations": ["three ready pthreads", "targeted pthread_kill", "per-thread handler counters and cancellation cleanup"],
+      "unresolved_oracle_notes": ["Real guest TID matching and cancellation cleanup evidence require runner review."],
+      "max_reviewer_question": "Confirm pthread_kill delivery is matched to the selected guest TID and excludes siblings."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.sigsuspend.c", "sha256": "e0135787b4ccd233dc1be1e552cc3bee440fa0a2aa91194087c68a876f898df5"},
+    {"path": "scripts/application-tests/oracles/signal.sigsuspend.json", "sha256": "b14390fd0dc612c20124e526b2eef3cc5537e684d03ceb6d59bd43d6ec1eebb8"},
+    {"path": "scripts/application-tests/cases/signal/signal.sigwait.c", "sha256": "8377e07a94b5cb3d1e1af404e6b210db637256f74d9303841af5dd0bf2958982"},
+    {"path": "scripts/application-tests/oracles/signal.sigwait.json", "sha256": "f64caeecee2a903a1caefe234403780b77fe7b74987f3d7f82bccb1f833a9fa5"},
+    {"path": "scripts/application-tests/cases/signal/signal.thread-target.c", "sha256": "c9f890554edb50872756a5d622ba249aa415bb903ad21f93b3e3527183b1d11c"},
+    {"path": "scripts/application-tests/oracles/signal.thread-target.json", "sha256": "ddd48ee04464327ef504ee56e7f64225a49bc331874e7f91d06bf89788a8c5fc"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-046/context.json", "sha256": "5805ced65071262398caee673118927b0285d84b39708a1b4e73819ca616ed78"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-046.json --emit-context /tmp/application-packet-046-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-046/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Sigsuspend, sigwait, and targeted-thread signal cases need final native ABI, ordering, TID, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review sigsuspend mask restoration", "Review synchronous sigwait consumption", "Require targeted guest TID evidence"],
+  "next_packet_id": "packet-047"
+}

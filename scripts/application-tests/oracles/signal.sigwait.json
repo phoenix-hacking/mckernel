@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.sigwait",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.sigwait"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["wait_rc=0 signal=10 expected=10 handler=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["sigwait synchronously consumes blocked SIGUSR1 and returns zero with signal number SIGUSR1", "The ordinary handler does not run and sigwait's return is checked directly"],
+  "unresolved_expectations": ["Synchronous-consumption ordering and signal-number ABI require Max review."],
+  "max_question_for_reviewer": "Confirm sigwait consumes the pending signal without invoking the installed ordinary handler."
+}
