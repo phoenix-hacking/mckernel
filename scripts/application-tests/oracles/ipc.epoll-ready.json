@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.epoll-ready",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.epoll-ready"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=1 pollin=1 token=4660 read=1 data=X valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A registered readable pipe returns one EPOLLIN event with the exact user token", "The event corresponds to one exact byte read"],
+  "unresolved_expectations": ["Epoll readiness delivery and event-data ABI require Max review."],
+  "max_question_for_reviewer": "Confirm epoll returns exactly one EPOLLIN event with token 0x1234 for the queued byte."
+}
