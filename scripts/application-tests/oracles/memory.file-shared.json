@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.file-shared",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.file-shared"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["msync=0 mapped_bad=64 file_bad=64"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["msync returns 0", "The shared mapping reads back all modified bytes", "An independent file read observes every modified byte", "No durability-after-powerloss claim is made"],
+  "unresolved_expectations": ["Bind exact input-file bytes and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm MAP_SHARED plus MS_SYNC must make the modified 64-byte vector visible to the independent file read."
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-016",
+  "packet_version": 1,
+  "context_sha256": "09d761ac9bc5ae95a26f664fdebd9e62d5beac249b701c43d402480fd8fdad81",
+  "started_utc": "2026-09-09T11:10:00Z",
+  "finished_utc": "2026-09-09T11:10:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "memory.mmap-zero-length", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.mmap-zero-length.c", "oracle": "scripts/application-tests/oracles/memory.mmap-zero-length.json", "changed_files": ["scripts/application-tests/cases/memory/memory.mmap-zero-length.c", "scripts/application-tests/oracles/memory.mmap-zero-length.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and canonical output require review."], "max_reviewer_question": "Confirm zero-length mmap returns MAP_FAILED/EINVAL without publication."},
+    {"case_id": "memory.file-private", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.file-private.c", "oracle": "scripts/application-tests/oracles/memory.file-private.json", "changed_files": ["scripts/application-tests/cases/memory/memory.file-private.c", "scripts/application-tests/oracles/memory.file-private.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Exact file bytes and canonical output require reviewed input binding."], "max_reviewer_question": "Confirm MAP_PRIVATE copy-on-write and original-file preservation for the 64-byte vector."},
+    {"case_id": "memory.file-shared", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.file-shared.c", "oracle": "scripts/application-tests/oracles/memory.file-shared.json", "changed_files": ["scripts/application-tests/cases/memory/memory.file-shared.c", "scripts/application-tests/oracles/memory.file-shared.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Exact file bytes and canonical output require reviewed input binding."], "max_reviewer_question": "Confirm MAP_SHARED/MS_SYNC visibility without making a durability-after-powerloss claim."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.mmap-zero-length.c", "sha256": "675962340bfeb93cff1274f34e9db52e987ea1bb51dc406e6d5cc699471cbad1"},
+    {"path": "scripts/application-tests/oracles/memory.mmap-zero-length.json", "sha256": "78734474679f6f71fd667a401a43472826b648cf11c79f6e5ac1b50b3cabd0f9"},
+    {"path": "scripts/application-tests/cases/memory/memory.file-private.c", "sha256": "0e2d33094c4e9cc1daba9e1199cbded53f81881c8eba675bd7c71349bcc71231"},
+    {"path": "scripts/application-tests/oracles/memory.file-private.json", "sha256": "6ade1cb296f17eb72f19a80f53c1d446ce26ae362a5bb3adc31590e270b7c9d9"},
+    {"path": "scripts/application-tests/cases/memory/memory.file-shared.c", "sha256": "989badc18e59d105e88795d8e51c4de88ceb4a1752c349ce15843853ef34d917"},
+    {"path": "scripts/application-tests/oracles/memory.file-shared.json", "sha256": "e2cb6c69062ba5f4800dd2c435954a445fc321bb128da5e0319f3239cefb35e2"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-016.json --emit-context /tmp/application-packet-016-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three memory mapping/file cases require final ABI, input-byte, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review exact file vectors, errno behavior, and mapping publication/cleanup before execution."],
+  "next_packet_id": "packet-017"
+}

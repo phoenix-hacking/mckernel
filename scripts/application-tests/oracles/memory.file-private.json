@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.file-private",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.file-private"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["mapped_bad=64 file_bad=64"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The private mapping reads back all modified bytes", "Reopening the file observes every original byte unchanged", "Temporary file and mapping are cleaned up"],
+  "unresolved_expectations": ["Bind exact input-file bytes and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm MAP_PRIVATE copy-on-write behavior and exact 64-byte initial/modified vectors."
+}
