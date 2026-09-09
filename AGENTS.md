@@ -31,7 +31,9 @@ retirement after each launch. Both original control-ABI regressions pass. The
 full `docs/verification/native-application-start-checkpoint-20260908.json`
 retains 21 captures, including all six original failures. The phase remains
 active. The later core checkpoint accepts unchanged libc memory and file-I/O
-modes, but the first thread test crashes the launcher at unsupported clone3.
+modes. The native clone3 adapter now enters the guest clone path, but the
+latest thread guest fails the existing TID transfer. Its host connection now
+passes focused tests and native module builds; a fresh guest is required.
 Signals and abnormal-owner handling remain pending. Do not announce Ultra
 readiness yet.
 
@@ -200,6 +202,22 @@ other projects, VM disks, recent host logs and Docker state remain intact.
 Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
+
+Latest native running TID transfer checkpoint, 2026-09-09:
+`docs/verification/native-application-tids-checkpoint-20260909.json` retains
+five complete captures and the original clone3 thread guest failure. Native
+clone3 reaches the existing settid path; the old prepared-image-only transfer
+rejects its guest kernel TID array, giving -14 at the pthread_create check.
+The new host connection preserves the unchanged launcher/TID bytes and public
+descriptor, checks exact current worker/delivery/physical span, and retains
+the shared payload claim through actual RET publication. All 34 mailbox,
+three native user-adapter and 52 payload/zeroing/included-module tests pass.
+All three native modules and 57 compiler-source bindings verify, preserving
+the same three formatter replays and objtool controls. Next run TID module 1
+with clone3 image 2. Enable the existing allow_oversubscribe boot option for
+the original two-pthread smoke on one McKernel CPU; retain the exact original
+and adapted boot probe. Memory/files are the only accepted core modes.
+No actual TID-transfer, thread/futex or Ultra acceptance yet.
 
 Latest native clone3 source/protocol checkpoint, 2026-09-09:
 `docs/verification/native-application-clone3-checkpoint-20260909.json` retains

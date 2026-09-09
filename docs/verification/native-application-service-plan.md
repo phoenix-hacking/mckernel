@@ -47,6 +47,19 @@ the existing clone handler preserved. Protection and zeroing binary checks
 still pass. Clone3 image 2 is ready for the unchanged pthread application with
 current host zeroing module 2; its runtime result remains pending.
 
+The subsequent native clone3 guest now reaches the existing `settid` path.
+Its unchanged launcher fails to transfer the TID array because the native
+ioctl only authorizes prepared ELF sections; guest clone3 returns -14 and
+the original pthread_create check fails. The TID checkpoint retains this
+complete failure and the new host adapter: exact current worker/delivery,
+request-sized physical buffer and shared payload claim through ordinary RET.
+The 34 mailbox, three user-adapter and 52 payload/zeroing/module tests pass;
+all three native modules and 57 compiler bindings verify. The next candidate
+is TID module 1 with clone3 image 2. Its actual thread result is pending.
+For two pthreads on one McKernel CPU, enable the existing allow_oversubscribe
+boot option; the old hidos-only probe otherwise limits NR_TIDS to one. Keep
+the original/adapted probe and all original application assertions.
+
 The host zeroing checkpoint retains all 57 native compiler bindings, nine host
 unit tests, three successful native modules, the exact Rust 1.92 objtool patch
 and 77 configuration/license tests. All four guest image selections build.
@@ -1875,3 +1888,57 @@ The actual Rust clone/lock/fork adapters preserve private context and actual
 provider results. Original attempts 1 and 2 remain failed fixture captures
 (missing exact lock-node type and generated C indentation respectively).
 Image compilation and actual clone3 thread execution remain pending.
+
+
+## Native running TID transfer integration review, 2026-09-09
+
+Before host behavior edits, the clone3 image 2 / host zeroing module 2 guest
+reaches the existing guest `do_fork` and `settid` path. The unchanged Rust
+launcher `act_gettid` receives delegated nr 186, collects its actual active
+thread IDs, and invokes the existing `MCEXEC_UP_TRANSFER` descriptor. That
+ioctl currently authorizes only prepared ELF sections; the allocated guest
+kernel TID array is outside them. The launcher reports the failed transfer,
+returns -EFAULT, and the original pthread_create assertion fails at line 102.
+The actual guest clone3 result is -14; no nr-435 Linux delegation occurs.
+The complete original runtime capture remains FAIL and must be retained.
+
+Reuse decisions and required integration:
+
+- Preserve `kernel/syscall.c::{do_fork,settid,NR_TIDS}` and the selected native
+  clone3 adapter. Preserve `executer/user/rust/mcexec_helpers.rs::{act_gettid,
+  mcexec_collect_active_tids_result}`, its C counterpart and the public
+  `remote_transfer` descriptor. The actual launcher supplies the TID bytes;
+  do not fabricate IDs, remove a thread or replace pthread synchronization.
+- Extend `mcctrl_process::Registration::transfer_image` using its existing
+  referenced current Linux worker/MM, private delivery token and UserSlice
+  copy. Add a kernel-only running-transfer command to the existing application
+  connection. Prepared image transfers retain their original section checks.
+  A delivered worker cannot fall back to unrestricted prepared-image copying.
+- Reuse `application_syscall::Request` to authorize exactly nr 186's arg4
+  element count, arg5 physical address, checked four-byte element size and
+  to-guest direction. Preserve the existing public transfer size bound; do not
+  silently truncate a requested TID array or broaden arbitrary RAM access.
+- Extend `smp_application_syscall::Mailbox` under its existing application
+  mutex: exact worker/delivery, Delivered state, no kernel-service takeover,
+  cancellation, stale/reused token, duplicate successful transfer or completion
+  may write. The full bounded kernel-buffer copy stays inside this ownership
+  critical section; user access occurs before it. The original RET publishes
+  the actual launcher result; a successful TID result requires its copy.
+- Reuse `sysfs_memory::SyscallResponse` and its shared payload ledger. Factor
+  the existing pager claim into one checked helper used by both pager and TID
+  payloads. Retain the whole exact-OS payload claim through real response/wake
+  publication, including close and full-queue retries. All seven existing
+  claim classes and zeroing exclusions remain active. No guest access after
+  final status or ownership release. Failed copies retain or release owners
+  through the existing response lifecycle.
+- Route the new kernel-only command through existing IHK/SMP application
+  dispatch and registration, with no new C body, Linux FFI or registry.
+  Validate argument/owner/state/duplicate/retry/cancellation cases against the
+  full current mailbox, exact native user adapter and actual memory ledger,
+  then build all three native modules with original warnings/objtool/no-SIMD
+  checks. Guest sources are unchanged; reuse clone3 image 2 and rerun the
+  unchanged pthread test in a fresh isolated guest. Stop at its first failure.
+
+This work is an unfinished host connection, not a thread/futex PASS. Signals,
+actual abnormal-owner coverage, final control regressions and replays remain
+required before the Ultra handoff.

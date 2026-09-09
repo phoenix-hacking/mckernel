@@ -561,6 +561,10 @@ impl SyscallResponse {
         let Some((physical, bytes, to_guest)) = operation.payload() else {
             return Ok(());
         };
+        self.prepare_payload(physical, bytes, to_guest)
+    }
+
+    fn prepare_payload(&mut self, physical: u64, bytes: usize, to_guest: bool) -> Result {
         if self.payload.is_some() {
             return Err(EBUSY);
         }
@@ -576,6 +580,15 @@ impl SyscallResponse {
         Ok(())
     }
 
+    pub(crate) fn copy_tids(&mut self, request: &SyscallRequest, bytes: &mut [u8]) -> Result {
+        let (physical, length) = request.tid_buffer().map_err(errno)?;
+        if length != bytes.len() as u64 {
+            return Err(EINVAL);
+        }
+        self.prepare_payload(physical, bytes.len(), true)?;
+        self.pager_copy(0, bytes, true)
+    }
+
     pub(crate) fn pager_copy(&mut self, offset: usize, bytes: &mut [u8], to_guest: bool) -> Result {
         let (tag, address, direction) = self.payload.ok_or(EINVAL)?;
         if to_guest != direction
@@ -585,7 +598,8 @@ impl SyscallResponse {
         {
             return Err(EINVAL);
         }
-        // The mailbox's in-kernel reservation excludes completion/cancellation.
+        // The mailbox's in-kernel reservation or complete transfer critical
+        // section excludes completion/cancellation throughout this copy.
         // This unique payload tag excludes every other host service mapping;
         // no file operation or userspace access occurs while the caller locks it.
         for (index, byte) in bytes.iter_mut().enumerate() {

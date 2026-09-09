@@ -1290,3 +1290,222 @@ fn invalidation_never_consumes_a_pager_reservation() {
     assert_eq!(queue.finish_invalidation(worker, serial, 0), Err(-22));
     queue.finish_kernel(worker, serial, |_, _| Ok(0)).unwrap();
 }
+
+fn tid_request(count: u64, physical: u64) -> Request {
+    let mut packet = c_requests()[0].clone();
+    packet[64..72].copy_from_slice(&186u64.to_le_bytes());
+    packet[104..112].copy_from_slice(&count.to_le_bytes());
+    packet[112..120].copy_from_slice(&physical.to_le_bytes());
+    Request::decode(&packet, 4).unwrap()
+}
+
+#[test]
+fn tid_transfer_preserves_count_and_rejects_invalid_geometry() {
+    for count in [1, 2, 128, 4096, 1 << 24] {
+        assert_eq!(
+            tid_request(count, 0x1234000).tid_buffer(),
+            Ok((0x1234000, count * 4))
+        );
+    }
+    for (count, physical) in [
+        (0, 4096),
+        (1, 0),
+        (1, 4097),
+        (1, 4098),
+        (2, u64::MAX - 3),
+        (u64::MAX / 4 + 1, 4096),
+    ] {
+        assert_eq!(tid_request(count, physical).tid_buffer(), Err(-22));
+    }
+    assert_eq!(invalidation_request(4096, 4096).tid_buffer(), Err(-22));
+}
+
+#[test]
+fn tid_transfer_requires_exact_delivery_and_full_successful_copy_before_return() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let wrong = queue.open_worker(901).unwrap();
+    let request = tid_request(128, 0x1234000);
+    let cpu = request.cpu();
+    let ram = admit(&mut queue, request, 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    let mut data: Vec<u8> = (0..512).map(|i| (i * 17) as u8).collect();
+    assert!(queue
+        .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| panic!(
+            "copy before WAIT"
+        ))
+        .is_err());
+    queue.copied(worker, serial, true).unwrap();
+    for (handle, number, physical, direction) in [
+        (wrong, serial, 0x1234000, 0),
+        (worker, serial + 1, 0x1234000, 0),
+        (worker, serial, 0x1234004, 0),
+        (worker, serial, 0x1234000, 1),
+    ] {
+        assert!(queue
+            .transfer_tids(
+                handle,
+                number,
+                physical,
+                &mut data,
+                direction,
+                |_, _, _| panic!("invalid transfer")
+            )
+            .is_err());
+    }
+    assert!(queue
+        .transfer_tids(
+            worker,
+            serial,
+            0x1234000,
+            &mut data[..511],
+            0,
+            |_, _, _| panic!("short transfer")
+        )
+        .is_err());
+    assert_eq!(
+        queue.return_value(worker, serial, cpu as i64, 0, |_| panic!("missing copy")),
+        Err(-22)
+    );
+    assert_eq!(
+        queue.transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| Err(-14)),
+        Err(-14)
+    );
+    assert_eq!(ram.status(), 0);
+    let expected = data.clone();
+    let mut copied = Vec::new();
+    queue
+        .transfer_tids(
+            worker,
+            serial,
+            0x1234000,
+            &mut data,
+            0,
+            |request, memory, bytes| {
+                assert_eq!(request.tid_buffer(), Ok((0x1234000, 512)));
+                assert_eq!(memory.ram.status(), 0);
+                assert!(memory.ram.claimed.load(Ordering::Acquire));
+                copied.extend_from_slice(bytes);
+                Ok(())
+            },
+        )
+        .unwrap();
+    assert_eq!(copied, expected);
+    assert!(queue
+        .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| panic!(
+            "duplicate transfer"
+        ))
+        .is_err());
+    queue
+        .return_value(worker, serial, cpu as i64, 0, |_| Ok(()))
+        .unwrap();
+    for _ in 0..1024 {
+        assert_eq!(queue.publish(cpu, |_| Err(-11)), Err(-11));
+        assert_eq!(ram.status(), 0);
+        assert!(ram.claimed.load(Ordering::Acquire));
+        assert!(queue
+            .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| panic!(
+                "copy during completion"
+            ))
+            .is_err());
+    }
+    queue.publish(cpu, |_| Ok(())).unwrap();
+    assert_eq!(queue.returned(worker, serial), Ok(true));
+    assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+    assert!(queue
+        .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| panic!(
+            "stale transfer"
+        ))
+        .is_err());
+}
+
+#[test]
+fn tid_transfer_cancellation_retains_response_and_excludes_tid_reuse() {
+    for process in [false, true] {
+        for copied in [false, true] {
+            let mut queue = mailbox::Mailbox::new().unwrap();
+            let worker = queue.open_worker(900).unwrap();
+            let request = tid_request(2, 0x1234000);
+            let cpu = request.cpu();
+            let ram = admit(&mut queue, request, 2);
+            let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+            queue.copied(worker, serial, true).unwrap();
+            let mut data = [0xa5; 8];
+            if copied {
+                queue
+                    .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| Ok(()))
+                    .unwrap();
+            }
+            if process {
+                queue.close().unwrap();
+            } else {
+                assert_eq!(queue.close_worker(worker), Err(-16));
+            }
+            assert!(queue
+                .transfer_tids(worker, serial, 0x1234000, &mut data, 0, |_, _, _| panic!(
+                    "copy after close"
+                ))
+                .is_err());
+            assert!(queue.open_worker(900).is_err());
+            for _ in 0..1024 {
+                assert_eq!(queue.publish(cpu, |_| Err(-11)), Err(-11));
+                assert_eq!(ram.status(), 0);
+                assert!(ram.claimed.load(Ordering::Acquire));
+            }
+            queue.publish(cpu, |_| Ok(())).unwrap();
+            assert_eq!(
+                i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+                -512
+            );
+            assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+            queue.close_worker(worker).unwrap();
+            if !process {
+                let replacement = queue.open_worker(900).unwrap();
+                assert_ne!(replacement, worker);
+                assert!(queue
+                    .transfer_tids(
+                        replacement,
+                        serial,
+                        0x1234000,
+                        &mut data,
+                        0,
+                        |_, _, _| panic!("reused TID")
+                    )
+                    .is_err());
+            }
+            assert!(queue.drained());
+        }
+    }
+}
+
+#[test]
+fn tid_transfer_rejects_kernel_service_and_preserves_actual_error_return() {
+    for value in [-14, -22, -12] {
+        let mut queue = mailbox::Mailbox::new().unwrap();
+        let worker = queue.open_worker(900).unwrap();
+        let request = tid_request(128, 0x1234000);
+        let cpu = request.cpu();
+        let ram = admit(&mut queue, request, 2);
+        let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+        queue.copied(worker, serial, true).unwrap();
+        queue
+            .return_value(worker, serial, cpu as i64, value, |_| Ok(()))
+            .unwrap();
+        queue.publish(cpu, |_| Ok(())).unwrap();
+        assert_eq!(
+            i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+            value
+        );
+    }
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    admit(&mut queue, tid_request(2, 0x1234000), 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    queue.begin_kernel(worker, serial).unwrap();
+    assert!(queue
+        .transfer_tids(worker, serial, 0x1234000, &mut [0; 8], 0, |_, _, _| panic!(
+            "kernel takeover"
+        ))
+        .is_err());
+    queue.finish_kernel(worker, serial, |_, _| Ok(-95)).unwrap();
+}

@@ -852,6 +852,13 @@ impl Application {
             .copied_syscall(self.token, bytes)
     }
 
+    pub(in super::super) fn transfer_tids(&self, bytes: &mut [u8]) -> Result {
+        self.started
+            .runtime
+            .application
+            .transfer_tids(self.token, bytes)
+    }
+
     pub(in super::super) fn clear_syscall(&self, bytes: &mut [u8], finish: bool) -> Result {
         self.started
             .runtime

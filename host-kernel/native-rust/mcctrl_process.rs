@@ -467,19 +467,42 @@ impl Registration {
         }
         user.checked_add(size).ok_or(errno(-75))?;
         physical.checked_add(size as u64).ok_or(errno(-75))?;
-        let mut bytes = zero_bytes(16 + size)?;
-        image::put_word(&mut bytes, 0, physical).map_err(errno)?;
-        image::put_word(&mut bytes, 8, direction as u64).map_err(errno)?;
+        let identity = ProcessId::thread()?;
+        let worker = self
+            .workers
+            .lock()
+            .iter()
+            .find(|worker| worker.identity.same(&identity))
+            .cloned();
+        let delivery = worker
+            .as_ref()
+            .map_or(0, |worker| worker.delivery.load(Ordering::Acquire));
+        let running = delivery != 0;
+        let prefix = if running { 32 } else { 16 };
+        let mut bytes = zero_bytes(prefix + size)?;
+        if running {
+            let worker = worker.as_ref().ok_or(EINVAL)?;
+            worker.mirror.current()?;
+            image::put_word(&mut bytes, 0, worker.handle).map_err(errno)?;
+            image::put_word(&mut bytes, 8, delivery).map_err(errno)?;
+        }
+        image::put_word(&mut bytes, prefix - 16, physical).map_err(errno)?;
+        image::put_word(&mut bytes, prefix - 8, direction as u64).map_err(errno)?;
         if direction == 0 {
             UserSlice::new(user, size)
                 .reader()
-                .read_slice(&mut bytes[16..])?;
+                .read_slice(&mut bytes[prefix..])?;
         }
-        self.invoke(super::application_abi::TRANSFER, &mut bytes)?;
+        let command = if running {
+            super::application_abi::TID_TRANSFER
+        } else {
+            super::application_abi::TRANSFER
+        };
+        self.invoke(command, &mut bytes)?;
         if direction == 1 {
             UserSlice::new(user, size)
                 .writer()
-                .write_slice(&bytes[16..])?;
+                .write_slice(&bytes[prefix..])?;
         }
         Ok(0)
     }

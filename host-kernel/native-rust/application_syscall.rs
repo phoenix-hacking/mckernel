@@ -108,6 +108,23 @@ impl Request {
         Ok((start, end))
     }
 
+    /// Existing settid/act_gettid exchange: the launcher copies count i32 TIDs
+    /// to the exact physical buffer named by the retained guest request.
+    pub(crate) fn tid_buffer(&self) -> Result<(u64, u64), i32> {
+        let arguments = self.arguments();
+        let bytes = arguments[4].checked_mul(4).ok_or(-22)?;
+        let physical = arguments[5];
+        if self.number() != 186
+            || bytes == 0
+            || physical == 0
+            || physical % 4 != 0
+            || physical.checked_add(bytes).is_none()
+        {
+            return Err(-22);
+        }
+        Ok((physical, bytes))
+    }
+
     pub(crate) fn authorize_return_copy(&self, destination: u64, bytes: usize) -> Result<(), i32> {
         // Both existing launcher selections copy only act_futex_clock's native
         // timespec through RET. Its guest physical destination is request arg0.

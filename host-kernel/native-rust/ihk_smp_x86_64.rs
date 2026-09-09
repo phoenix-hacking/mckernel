@@ -269,6 +269,7 @@ unsafe extern "C" fn application_invoke(
             application_abi::PAGER_SYSCALL => application.pager_syscall(bytes),
             application_abi::CLEAR_SYSCALL => application.clear_syscall(bytes, false),
             application_abi::CLEAR_DONE => application.clear_syscall(bytes, true),
+            application_abi::TID_TRANSFER => application.transfer_tids(bytes),
             _ => Err(EINVAL),
         }
     } else {

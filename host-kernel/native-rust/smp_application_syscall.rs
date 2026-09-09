@@ -28,6 +28,7 @@ struct Call<M: ResponseMemory> {
     cancelled: bool,
     kernel: bool,
     service: bool,
+    transferred: bool,
 }
 
 pub(crate) struct Mailbox<M: ResponseMemory> {
@@ -182,6 +183,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             cancelled: false,
             kernel: false,
             service: false,
+            transferred: false,
         };
         if let Some(service) = service {
             call.delivery.begin_service()?;
@@ -273,6 +275,59 @@ impl<M: ResponseMemory> Mailbox<M> {
             worker.delivery = None;
             call.worker = None;
         }
+        Ok(())
+    }
+
+    /// Copy a running settid payload while the caller holds the application
+    /// mutex. The callback uses only kernel bytes and retains its payload claim
+    /// in the response until the ordinary launcher RET is actually published.
+    pub(crate) fn transfer_tids(
+        &mut self,
+        handle: u64,
+        serial: u64,
+        physical: u64,
+        bytes: &mut [u8],
+        direction: u64,
+        copy: impl FnOnce(&Request, &mut M, &mut [u8]) -> Result,
+    ) -> Result {
+        if self.closed || self.quarantined {
+            return Err(-32);
+        }
+        let worker = self
+            .workers
+            .iter()
+            .flatten()
+            .find(|state| state.worker.wire() == handle)
+            .ok_or(-2)?;
+        if worker.delivery.map(Token::wire) != Some(serial) {
+            return Err(-16);
+        }
+        let call = self
+            .calls
+            .iter_mut()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?;
+        if call.kernel
+            || call.service
+            || call.cancelled
+            || call.transferred
+            || call.completion.is_some()
+        {
+            return Err(-16);
+        }
+        let request = call.delivery.request();
+        call.delivery
+            .check_return(worker.worker, request.cpu() as i64)?;
+        if direction != 0 || request.tid_buffer()? != (physical, bytes.len() as u64) {
+            return Err(-22);
+        }
+        copy(
+            request,
+            call.response.as_mut().ok_or(-71)?.memory_mut(),
+            bytes,
+        )?;
+        call.transferred = true;
         Ok(())
     }
 
@@ -426,6 +481,13 @@ impl<M: ResponseMemory> Mailbox<M> {
             return Err(-16);
         }
         call.delivery.check_return(worker.worker, cpu)?;
+        let request = call.delivery.request();
+        if value == 0 && request.number() == 186 && request.arguments()[4] != 0 {
+            request.tid_buffer()?;
+            if !call.transferred {
+                return Err(-22);
+            }
+        }
         // Only an already copied kernel buffer is used here, never user access.
         // Failed validation/copy leaves Delivered available for a proper retry.
         copy(call.delivery.request())?;

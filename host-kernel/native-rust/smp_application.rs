@@ -611,6 +611,38 @@ impl Remote {
         result
     }
 
+    pub(crate) fn transfer_tids(&self, token: Token, bytes: &mut [u8]) -> Result {
+        if bytes.len() <= 32 || bytes.len() - 32 > super::application_image::MAX_FLAT_BYTES {
+            return Err(EINVAL);
+        }
+        let word = |offset| u64::from_le_bytes(bytes[offset..offset + 8].try_into().unwrap());
+        let (worker, serial, physical, direction) = (word(0), word(8), word(16), word(24));
+        let mut slots = self.slots.lock();
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
+        entry
+            .syscalls
+            .transfer_tids(
+                worker,
+                serial,
+                physical,
+                &mut bytes[32..],
+                direction,
+                |request, memory, data| {
+                    memory
+                        .copy_tids(request, data)
+                        .map_err(|error| error.to_errno())
+                },
+            )
+            .map_err(errno)?;
+        pr_info!("application_tids=transferred os={} generation={} pid={} worker={} delivery={} physical={:x} bytes={}\n",
+            self.owner.slot(), self.owner.generation(), entry.cleanup.pid(), worker, serial, physical, bytes.len() - 32);
+        Ok(())
+    }
+
     pub(crate) fn clear_syscall(&self, token: Token, bytes: &mut [u8], finish: bool) -> Result {
         if bytes.len() != 40 {
             return Err(EINVAL);

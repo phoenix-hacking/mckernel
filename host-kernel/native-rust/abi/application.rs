@@ -17,6 +17,13 @@ pub(crate) const START: u32 = 10;
 pub(crate) const PAGER_SYSCALL: u32 = 11;
 pub(crate) const CLEAR_SYSCALL: u32 = 12;
 pub(crate) const CLEAR_DONE: u32 = 13;
+pub(crate) const TID_TRANSFER: u32 = 14;
+
+// TID_TRANSFER: worker/delivery/physical/direction in 32 kernel-only bytes,
+// followed by the complete copied launcher TID array. The backend checks the
+// exact Delivered nr-186 request, count and destination before any guest write.
+// This does not complete the syscall; the original launcher RET still owns its
+// result. Handles are taken only from the referenced current Linux worker.
 
 // CLEAR: 40 kernel-only bytes: worker, delivery, accepted output, start, end.
 // BEGIN returns the checked range from the retained nr-11 request and reserves
