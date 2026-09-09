@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.sse2-integer-lanes",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lanes=4 add_xor_shift=1 highbit=1 alternating=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Every unsigned32 lane matches independent modulo arithmetic for packed add, xor, and left shift", "High-bit, zero, all-one, and alternating patterns are all checked"],
+  "unresolved_expectations": ["SSE2 target disassembly, raw lane arrays, and both-engine feature evidence require Max review."],
+  "max_question_for_reviewer": "Confirm exact SSE2 instruction window and independent per-lane expected arrays before optional execution."
+}

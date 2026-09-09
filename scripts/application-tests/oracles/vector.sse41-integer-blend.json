@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.sse41-integer-blend",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lanes=8 masks=0,85,170,255 selected=1 unselected=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Every 16-bit lane equals b for selected immediate-mask bits and a otherwise", "Masks0,0x55,0xaa,0xff independently exercise all, alternating, and no-selection paths"],
+  "unresolved_expectations": ["SSE4.1 target disassembly, immediate-mask encoding, and both-engine feature evidence require Max review."],
+  "max_question_for_reviewer": "Confirm PBLENDW immediate-mask lane semantics and exact SSE4.1 transitive feature gate."
+}
