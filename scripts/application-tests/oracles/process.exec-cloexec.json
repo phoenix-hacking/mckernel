@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.exec-cloexec",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.exec-cloexec"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["keep_ok=1 cloexec_ebadf=1 data=KEEP"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The inheritable descriptor 90 survives exec and reads the exact file identity", "The FD_CLOEXEC descriptor 91 is closed in the new image and reports EBADF"],
+  "unresolved_expectations": ["Descriptor identity, /proc/self/exe binding, and same-process evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm close-on-exec is enforced for fd 91 while fd 90 and its open-file description survive unchanged."
+}
