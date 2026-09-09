@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.mutex-counter",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.mutex-counter"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["n=2 counter_ok=1 n=4 counter_ok=1 n=8 counter_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each vector reaches exactly N*1000 under mutex protection", "Every lock, unlock, create, and join operation succeeds"],
+  "unresolved_expectations": ["Freeze mutex ABI and canonical vector output before execution."],
+  "max_question_for_reviewer": "Confirm all three thread counts must execute in one fresh fixture and no lost increments are tolerated."
+}

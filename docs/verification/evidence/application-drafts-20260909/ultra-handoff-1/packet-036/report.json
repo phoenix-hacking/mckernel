@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-036",
+  "packet_version": 1,
+  "context_sha256": "c8fc2283bfc135915af4868d6ea0c58f51860837a6f44241136922a0348cca08",
+  "started_utc": "2026-09-09T10:44:00Z",
+  "finished_utc": "2026-09-09T10:45:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.tls-isolation",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.tls-isolation.c",
+      "oracle": "scripts/application-tests/oracles/thread.tls-isolation.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.tls-isolation.c", "scripts/application-tests/oracles/thread.tls-isolation.json"],
+      "parameter_vectors": {"threads": [2, 4, 8], "explicit_stack_bytes": [262144]},
+      "implemented_operations": ["distinct _Thread_local values", "explicit pthread stacks", "parent TLS preservation and joins"],
+      "unresolved_oracle_notes": ["TLS ABI and explicit-stack evidence require Max review."],
+      "max_reviewer_question": "Confirm _Thread_local isolation and explicit pthread stack ownership for all vectors."
+    },
+    {
+      "case_id": "thread.mutex-counter",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.mutex-counter.c",
+      "oracle": "scripts/application-tests/oracles/thread.mutex-counter.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.mutex-counter.c", "scripts/application-tests/oracles/thread.mutex-counter.json"],
+      "parameter_vectors": {"threads": [2, 4, 8], "increments_per_thread": [1000]},
+      "implemented_operations": ["mutex-protected shared counter", "lock/unlock error accounting", "join validation"],
+      "unresolved_oracle_notes": ["Mutex ABI and canonical vector output require Max review."],
+      "max_reviewer_question": "Confirm all three thread vectors require exact N*1000 with no lost increments."
+    },
+    {
+      "case_id": "thread.barrier-generations",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.barrier-generations.c",
+      "oracle": "scripts/application-tests/oracles/thread.barrier-generations.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.barrier-generations.c", "scripts/application-tests/oracles/thread.barrier-generations.json"],
+      "parameter_vectors": {"threads": [2, 4, 8], "generations": [16]},
+      "implemented_operations": ["reusable pthread barrier", "arrival count per generation", "serial-return count and error accounting"],
+      "unresolved_oracle_notes": ["Generation-boundary evidence and canonical vector output require Max review."],
+      "max_reviewer_question": "Confirm reusable barrier boundaries and exactly one serial return per generation."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.tls-isolation.c", "sha256": "e7b1133fffd39ed5d4d902489411662d7b3465007e0be3556ec2ed3529d74f79"},
+    {"path": "scripts/application-tests/oracles/thread.tls-isolation.json", "sha256": "2bbde84497f6b165133afdb6fa2e4bacfc503ecc1fc1fd51fab7a66f134fa53d"},
+    {"path": "scripts/application-tests/cases/thread/thread.mutex-counter.c", "sha256": "25f9e7a407a02d8d3732ac0391bbfb6dc93d2b92ac6bf80d1e49a9321fbf4a42"},
+    {"path": "scripts/application-tests/oracles/thread.mutex-counter.json", "sha256": "2c680e8137f3ed36426e611c8cb5f5fc60047630177e29469266a680c2d33e5d"},
+    {"path": "scripts/application-tests/cases/thread/thread.barrier-generations.c", "sha256": "710ac0d2d295835d3f930d9a0a9556205fe35d3e61f8b0d7a1917e22be23867c"},
+    {"path": "scripts/application-tests/oracles/thread.barrier-generations.json", "sha256": "8717a1a709bf46ff67c2b9bd3e7dffdae0cde904039da9efb5b2d13267bd2244"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-036/context.json", "sha256": "c8fc2283bfc135915af4868d6ea0c58f51860837a6f44241136922a0348cca08"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-036.json --emit-context /tmp/application-packet-036-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-036/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["TLS, mutex, and reusable-barrier cases need final native ABI, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review TLS isolation and stack ownership", "Review mutex serialization and exact counters", "Review barrier generation and serial-return semantics"],
+  "next_packet_id": "packet-037"
+}

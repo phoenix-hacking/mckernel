@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.tls-isolation",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.tls-isolation"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["n=2 tls_ok=1 n=4 tls_ok=1 n=8 tls_ok=1 parent_tls_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The 2, 4, and 8 thread vectors each preserve distinct TLS values", "The parent TLS value remains unchanged after each join"],
+  "unresolved_expectations": ["Freeze TLS ABI, explicit-stack evidence, and canonical vector output before execution."],
+  "max_question_for_reviewer": "Confirm _Thread_local isolation and explicit pthread stack ownership are required for all three vectors."
+}
