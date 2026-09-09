@@ -1759,3 +1759,22 @@ with immediate allocator metadata reuse of 2,048 chunks. Original attempts 1–3
 remain failed and fully retained: a legacy C signedness warning and two fixture
 module/import issues. Native host integration and actual guest acceptance remain
 pending. Keep the original core application and launcher unchanged.
+
+All four guest image selections now build with this batch contract; exact
+source/binary evidence is in the zeroing image checkpoint. The Rust selections
+exclude the whole C allocator and supply all zeroing exports from the actual
+Rust object. Native disassembly binds atomic exchange at node offset 56,
+zeroed publication at 48, page subtraction at 44 and the nr-279 marker at
+packet offset 80. The legacy image retains its old producer and consumer.
+No new image has executed in a guest yet.
+
+For the remaining host adapter, validate a chunk across the contiguous union
+of the same OS's extents: existing `checked_guest_bytes` admits only one extent,
+while guest free chunks can span adjacent owned extents. Keep the existing
+other service mappings unchanged. The node control claim covers 24 bytes, but
+chunk preflight must additionally reject overlap with the complete 256-byte
+node, including a node that straddles a page boundary. Do not exclude the whole
+8-MiB kernel mapping window from zeroing: unused pages beyond early allocation
+can legitimately enter the free pool there. Retain exact boot geometry and
+check assigned ownership, headers, cycles and active ledger spans before
+clearing any detached chunk.

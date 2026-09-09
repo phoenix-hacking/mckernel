@@ -211,6 +211,17 @@ existing selection. This is guest/protocol WIP: the native host queue, bounded
 mapping/ledger and third worker are not integrated yet; new image compilation
 and actual unchanged libc memory execution are still required. Preserve all
 current images/modules and original failure captures. No Ultra readiness.
+Subsequent `native-application-zeroing-images-checkpoint-20260909.json` retains
+all four successful image builds from d0451679, 30 guest source bindings and
+native/legacy binary checks. Native code exchanges the pending head at offset
+56, preserves the 48-byte header, publishes at offset 48 and subtracts the
+captured page count at offset 44. Rust images exclude the entire C allocator;
+the actual Rust object supplies every zeroing export. The unused first audit
+draft was cancelled before execution and is retained with the corrected audit.
+Use `/work/mckernel-native-zeroing-images-20260909-1/native-rust/kernel/mckernel.img`
+after completing and building the matching native host service. These images
+have not run in a guest. Host zeroing, unchanged core smokes and abnormal-owner
+checks remain required before the Ultra handoff.
 
 Latest native host invalidation/protection checkpoint, 2026-09-09:
 `docs/verification/native-application-memory-checkpoint-20260909.json` retains

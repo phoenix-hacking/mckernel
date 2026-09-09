@@ -1,0 +1,538 @@
+{
+  "actual_guest_pass": false,
+  "application_readiness_complete": false,
+  "artifact_bytes": 68709980,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/mckernel-native-zeroing-images-20260909-1.tar.gz",
+      "sha256": "1efb32cbeb8fe015941a89121128ab8ac442a0573e79b3879abeb8a5cd7974ef",
+      "size": 68696025,
+      "source": "/work/mckernel-native-zeroing-images-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/mckernel-native-zeroing-images-20260909-1-record.json.gz",
+      "sha256": "1aba7fe8f51f842f961fd4801f62bbbef6f9a6cb2d1df83d4fd0a549c352d0dd",
+      "size": 5976,
+      "source": "/work/mckernel-native-zeroing-images-20260909-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-zeroing-images-20260909-cancelled-helper-1.py.gz",
+      "sha256": "7c52691b34ce72e1b0783df646b3c7e281decf23d4fabe9320ed299bc912b42e",
+      "size": 3868,
+      "source": "/work/retain-native-application-zeroing-images.py"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-zeroing-images-20260909-retention-helper.gz",
+      "sha256": "56e170f782dd9a7179ef8b90ece6a8b1b035569fee4618cc278afdddcc65d297",
+      "size": 4111,
+      "source": "/work/native-application-zeroing-images-retained-20260909-2/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "compile_only_evidence_omission": {
+        "bytes": 5264917455,
+        "count": 1509,
+        "restoration_map": "historical-evidence-restoration.json",
+        "scope": "Compile-only source copy; exact committed blobs remain in the source Git object database"
+      },
+      "complete_capture_retained": true,
+      "original_status": "PASS",
+      "path": "/work/mckernel-native-zeroing-images-20260909-1",
+      "record": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/record.json",
+        "sha256": "afa892741615034f7643e2e56d48a63bf6ea37727c50885faa1315f99817be80",
+        "size": 35128
+      },
+      "restoration_map_verified_against_exact_git_tree": true
+    }
+  ],
+  "complete_captures": 1,
+  "finished_utc": "2026-09-09T01:37:20.123657+00:00",
+  "full_capture_retention_pending": false,
+  "guest_compiler": "rustc 1.95.0-nightly (c04308580 2026-02-18)\nbinary: rustc\ncommit-hash: c043085801b7a884054add21a94882216df5971c\ncommit-date: 2026-02-18\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0-nightly\nLLVM version: 22.1.0\n",
+  "guest_compiler_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/host-kernel/native-rust/zero_pages.rs",
+      "path": "host-kernel/native-rust/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/lib/page_alloc.c",
+      "path": "lib/page_alloc.c",
+      "sha256": "6d47575cd27e369bc3a4e7309077e7411a4f89dce8b545567689eb23fa343866",
+      "size": 63982
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/lib/include/ihk/page_alloc.h",
+      "path": "lib/include/ihk/page_alloc.h",
+      "sha256": "4332184f12d9609e978153b5ac4e20dbf0e61ba5de253cb0073fa75376b5ccd1",
+      "size": 2623
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/syscall_policy.rs",
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "3b4104d5480b3b8902056f97c7a0cc2d3799211e76e756e8eb307bfb0a5fd6ab",
+      "size": 690406
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/page_alloc.rs",
+      "path": "kernel/rust/page_alloc.rs",
+      "sha256": "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd",
+      "size": 85061
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/x86_memory_helpers.rs",
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+      "size": 187212
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/CMakeLists.txt",
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "f18495bc30aecda25a7bef86736f43acff904af6ce7f9b1ac52071c4a9770648",
+      "size": 22095
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/smp_ikc.rs",
+      "path": "kernel/rust/smp_ikc.rs",
+      "sha256": "64056fc3418792b6693875bd0dc4b3c59a76585bce2ce61e2e7203c38e35cfbe",
+      "size": 11359
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/llist.rs",
+      "path": "kernel/rust/llist.rs",
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8",
+      "size": 2753
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/lib.rs",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "a8e9c7485e4374b3e9a895fb863fd8daee9c1feb371322e71a1e7f2cadc5e064",
+      "size": 1695
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/init.rs",
+      "path": "kernel/rust/init.rs",
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886",
+      "size": 17659
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/sysfs.rs",
+      "path": "kernel/rust/sysfs.rs",
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7",
+      "size": 25143
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/object_helpers.rs",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "size": 235965
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/host_helpers.rs",
+      "path": "kernel/rust/host_helpers.rs",
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+      "size": 180826
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/process_helpers.rs",
+      "path": "kernel/rust/process_helpers.rs",
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+      "size": 324283
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/lock_helpers.rs",
+      "path": "kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "size": 12202
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/procfs.rs",
+      "path": "kernel/rust/procfs.rs",
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "size": 36968
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/rust/cls.rs",
+      "path": "kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "size": 7877
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/procfs.c",
+      "path": "kernel/procfs.c",
+      "sha256": "bed2ba5f5f786d1198c93bcc8d0bb7f608ad0a70e57ab6c3fa0caa99228306da",
+      "size": 21605
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/cls.c",
+      "path": "kernel/cls.c",
+      "sha256": "071008b51aaa9f173b855a65791c2e24286d4b7f843d786227d68377e3c9a31f",
+      "size": 5550
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/object_helpers.c",
+      "path": "kernel/object_helpers.c",
+      "sha256": "b74b8a4aeaf98fbb03a3f346a3c74a1f6032e5e088217867e3cae18859801f5f",
+      "size": 127728
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8",
+      "size": 20816
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/include/object_helpers.h",
+      "path": "kernel/include/object_helpers.h",
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a",
+      "size": 61009
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/kernel/init.c",
+      "path": "kernel/init.c",
+      "sha256": "05fbb5e79d0dc2265687dbf1b7bb83ec3871fedac66f3793e098ea15e80a0196",
+      "size": 9207
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "path": "scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "sha256": "2262fddd9cb33052d7259fe3f0ee47cd4a56502fba97cc93797c9f7f394cac4c",
+      "size": 14227
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/scripts/tests/fixtures/native-guest-sysfs.c",
+      "path": "scripts/tests/fixtures/native-guest-sysfs.c",
+      "sha256": "ccfb00ee63e57a7ae90e793d937f277c3e67af61ff1179f554e3ad68f37f3eb0",
+      "size": 7906
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/lib/include/list.h",
+      "path": "lib/include/list.h",
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440",
+      "size": 2870
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/arch/x86_64/kernel/include/registers.h",
+      "path": "arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "size": 5778
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-zeroing-images-20260909-1/source/arch/x86_64/kernel/include/ihk/atomic.h",
+      "path": "arch/x86_64/kernel/include/ihk/atomic.h",
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d",
+      "size": 2680
+    }
+  ],
+  "historical_equivalence": {
+    "current_surface_equivalence": "producer-check includes exact pinned C body and current Rust body",
+    "missing": [
+      "ihk/linux/core/rust/core_helpers.rs",
+      "ihk/linux/driver/smp/rust/smp_driver_helpers.rs",
+      "ihk/linux/user/rust/ihklib_helpers.rs"
+    ],
+    "pass_claimed": false,
+    "retained_failure": "/work/mckernel-native-irq-images-20260907-2",
+    "status": "prerequisites-unavailable"
+  },
+  "images": [
+    {
+      "host_irq_abi": "legacy",
+      "kind": "fallback",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/fallback/kernel/mckernel.img",
+          "sha256": "474c5ed84a3601b553bcda3757e55a348df1d2f9e08dffea377b3bbff9fa36d1",
+          "size": 5264536
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/fallback/kernel/mckernel.img.map",
+          "sha256": "aa97476a3cf8cd016441b585184910a25a59d709da5b2c60e26568827757c8ef",
+          "size": 306327
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/fallback/CMakeCache.txt",
+          "sha256": "9459a6e301df03dcb112c5414b5b17741c777d2bcbc5ba0783fc125c55b1b195",
+          "size": 26742
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/fallback/compile_commands.json",
+          "sha256": "2433a02e5171d80f82158676982aa9c730904bce0c45ab9a6e124a68214ee0b7",
+          "size": 194968
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "legacy",
+      "kind": "legacy-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/kernel/mckernel.img",
+          "sha256": "09e95edcb8904420c461bb677b0960c5315b323ba6ada592afe32f8ffe451126",
+          "size": 7939704
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/kernel/mckernel.img.map",
+          "sha256": "03cadf4af2b66ef58513d96cc7f228f1b8356248aba8ec5c917b62e2cc1069b3",
+          "size": 733674
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/CMakeCache.txt",
+          "sha256": "1493008c11afe89b08dda4dad73b41e09950fb27978b0c86fbb7fb09368b66a3",
+          "size": 26728
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/compile_commands.json",
+          "sha256": "a8952749fdeebbd3e3c1d891104c47612ca3f19448dc6df2ff227af22b55cdf3",
+          "size": 115981
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "9255208be6fdf72cefb2ab8a2558dcf8d3f04121db0e0d324fdd616b5cd7c285",
+          "size": 12375016
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "093b3278ed037b01ae37cfe3367b3a56f4d5db49021e46d9ccb2183557c29c2e",
+          "size": 11528
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-rust",
+      "native_sysfs_verify": false,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/kernel/mckernel.img",
+          "sha256": "38b8491c13ed6914c4d298f6858197966905c2c57ef69b17cd991806e4ad1749",
+          "size": 8005568
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/kernel/mckernel.img.map",
+          "sha256": "d521f318057e713b7c7017e3ec372dfabf2b721e7cd73560ba2face73d1fa07f",
+          "size": 736263
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/CMakeCache.txt",
+          "sha256": "ad3b7c86eb6abcf5e2d6cbf48ef7be8b1d32c20979eff65c2c2071c04833c078",
+          "size": 26732
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/compile_commands.json",
+          "sha256": "cb5e1ce61a42337e45bee84b275f9d7f1464ef0ef8b130b8259d13f3cd917531",
+          "size": 115981
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/kernel/rust/mckernel_rust.o",
+          "sha256": "28a348b54fb48d44c2ea3971e2f1b1dd13351039729deb962e02a02b5b1634a1",
+          "size": 12491984
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "01181f7bf59714e521a739789175cbe8a70d4bb3137baeeba60264ffab7381a2",
+          "size": 11562
+        }
+      ]
+    },
+    {
+      "host_irq_abi": "linux-6.12",
+      "kind": "native-sysfs-verify",
+      "native_sysfs_verify": true,
+      "outputs": [
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/kernel/mckernel.img",
+          "sha256": "4313155904b18e6436dba2e1cf6f87329a4b32445fc359449c1e3b0012ba20c0",
+          "size": 8068848
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/kernel/mckernel.img.map",
+          "sha256": "f28f18a8fdce0f5f34903159bcd7319f60fdcc108527e4fafaecf85dde744c63",
+          "size": 739492
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/CMakeCache.txt",
+          "sha256": "05d985aa33c7ad92703c5782e9744129c472d91c1fd77de94985c6a122c62e5f",
+          "size": 26795
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/compile_commands.json",
+          "sha256": "d739f58ed852f61e30881b8972e7d301a9f86b8b3651bd61d13ded05e525931d",
+          "size": 118973
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/kernel/rust/mckernel_rust.o",
+          "sha256": "50aecbde8e4819aa8daa4c71c624da242aeffb2ab30f63bda4c139c1cae61b32",
+          "size": 12599864
+        },
+        {
+          "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "5cefc4fb727b5c43c168dc23aed2a5b2e22eb0c6e23fa92a6e1984ba12ef18f6",
+          "size": 11807
+        }
+      ]
+    }
+  ],
+  "original_failures": 0,
+  "preexecution_cancelled_attempt": {
+    "capture_created": false,
+    "command": "fixed native wrapper python3 -B /work/retain-native-application-zeroing-images.py 1",
+    "reason": "Source review before helper execution showed Rust images exclude the entire C allocator; retained original audit draft and replaced its C macro assumption with exact Rust-object export and absent-C checks."
+  },
+  "protection_binary_bindings": [
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "55542e8a9b753153ab638bd5d2c9aa3acb275663c03eab49d93855d739dd9809",
+        "size": 455
+      },
+      "kind": "legacy-rust",
+      "native_invalidation_selected": false,
+      "symbol_table": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust-sized-symbols.txt",
+        "sha256": "f8b7aa09e0d8c29e01e19db86551a386283083d475354ac8ad7ea5b6b949a454",
+        "size": 306539
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust-set_host_vma_body_result-disassembly.log",
+        "sha256": "d0f6fcd61e3405d1ccbec7c0825db0e747ee212e6ca36c5d5d23265d98c7fff2",
+        "size": 4833
+      },
+      "kind": "native-rust",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust-sized-symbols.txt",
+        "sha256": "9b04ea564ed151d84305518a182d43cf5452795bd5aadd35e482f7387cba7c0c",
+        "size": 307745
+      }
+    },
+    {
+      "bridge_address": "fffffffffe810df0",
+      "disassembly": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify-set_host_vma_body_result-disassembly.log",
+        "sha256": "43b38df007efd5d9648090d1e28a786ed47b6a58298001f24d1eb03c1f852b0c",
+        "size": 4841
+      },
+      "kind": "native-sysfs-verify",
+      "native_invalidation_selected": true,
+      "symbol_table": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify-sized-symbols.txt",
+        "sha256": "1bcecf8068d36d59d40a48ba749e77086d62cf6adaae4b9e10ae0eccd35ff101",
+        "size": 309090
+      }
+    }
+  ],
+  "references": [
+    {
+      "path": "docs/verification/native-application-zeroing-checkpoint-20260909.json",
+      "sha256": "2c3696387304bc9039c3820b3ef4ee1e7fbbfaaae6d93e9b44025f4fd1e3d373",
+      "size": 24397
+    }
+  ],
+  "scope": "All four image selections with native guest atomic zeroing batches and one-way marker, preserving host-PTE invalidation. Native host zeroing integration and new guest execution remain pending.",
+  "source_parent": "d04516793ad02bebc12bbb4243ae60b680c2d2cd",
+  "started_utc": "2026-09-09T01:37:02.104729+00:00",
+  "status": "PASS",
+  "zeroing_binary_bindings": [
+    {
+      "kind": "legacy-rust",
+      "marker": null,
+      "native_batch_selected": false,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "fd7933d14cb5a4c2616c442c966989da180a8813b46e7de6a44919633b41a896",
+        "size": 2389
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/legacy-rust-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "3cf221174b5eb90b82a740202e1f558087954d197199f50eaef92c3eb4070e5e",
+        "size": 17757
+      }
+    },
+    {
+      "kind": "native-rust",
+      "marker": "MCZB0001",
+      "native_batch_selected": true,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "62937cfe75602acb4ed62e9a7acb15c7f6e3f9f097a516d04517624f25a6fb3f",
+        "size": 2717
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-rust-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "38f2935b7ce61e7339ae10354eb41faa3d2fe63340252c4ef19a5621c32a5884",
+        "size": 11665
+      }
+    },
+    {
+      "kind": "native-sysfs-verify",
+      "marker": "MCZB0001",
+      "native_batch_selected": true,
+      "pending_counter_offset": 44,
+      "pending_head_offset": 56,
+      "producer": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify-__ihk_numa_zero_request_packet_fill-disassembly.log",
+        "sha256": "29e79c0821b0745c3ef9762e26225e57c67f7c37dbbad6083e15a63de43c08fd",
+        "size": 2725
+      },
+      "zeroed_head_offset": 48,
+      "zeroing": {
+        "path": "/work/mckernel-native-zeroing-images-20260909-1/native-sysfs-verify-__ihk_numa_zero_free_pages_node-disassembly.log",
+        "sha256": "72a9df80132e724d928f4f214e00479b774612cf74e1d0dc4faa4c3a3a2ad5ca",
+        "size": 11673
+      }
+    }
+  ],
+  "zeroing_service_integrated": false
+}
