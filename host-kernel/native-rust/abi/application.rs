@@ -14,6 +14,11 @@ pub(crate) const WAIT_SYSCALL: u32 = 7;
 pub(crate) const COPIED_SYSCALL: u32 = 8;
 pub(crate) const RETURN_SYSCALL: u32 = 9;
 pub(crate) const START: u32 = 10;
+pub(crate) const PAGER_SYSCALL: u32 = 11;
+
+// PAGER: 32 kernel-only bytes, worker/delivery, accepted output, actual result.
+// It consumes the exact reserved WAIT packet before any userspace copy. Its
+// payload addresses come only from that retained packet, never from this ABI.
 
 // Kernel-only buffers: WORKER_OPEN/CLOSE 16 bytes (tid/handle, output handle);
 // WAIT 96 bytes (worker, delivery, original 80-byte copyout); COPIED 24 bytes

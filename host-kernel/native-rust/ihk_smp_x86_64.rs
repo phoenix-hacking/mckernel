@@ -81,6 +81,8 @@ mod application_image;
 mod smp_application;
 mod smp_application_syscall;
 mod smp_application_image;
+mod application_pager;
+mod smp_file_pager;
 
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
@@ -263,6 +265,7 @@ unsafe extern "C" fn application_invoke(
             application_abi::COPIED_SYSCALL => application.copied_syscall(bytes),
             application_abi::RETURN_SYSCALL => application.return_syscall(bytes),
             application_abi::START => application.start(bytes),
+            application_abi::PAGER_SYSCALL => application.pager_syscall(bytes),
             _ => Err(EINVAL),
         }
     } else {

@@ -85,6 +85,13 @@ impl Request {
         u64::from_le_bytes(self.bytes[16..24].try_into().unwrap())
     }
 
+    pub(crate) fn arguments(&self) -> [u64; 6] {
+        core::array::from_fn(|index| {
+            let offset = 24 + index * 8;
+            u64::from_le_bytes(self.bytes[offset..offset + 8].try_into().unwrap())
+        })
+    }
+
     pub(crate) fn authorize_return_copy(&self, destination: u64, bytes: usize) -> Result<(), i32> {
         // Both existing launcher selections copy only act_futex_clock's native
         // timespec through RET. Its guest physical destination is request arg0.
@@ -148,6 +155,7 @@ enum Phase {
     Copying(Worker),
     Delivered(Worker),
     Returning(Worker),
+    Servicing,
     Cancelling,
     Complete,
 }
@@ -246,6 +254,22 @@ impl Delivery {
         self.phase = Phase::Complete;
         Ok(())
     }
+
+    pub(crate) fn begin_service(&mut self) -> Result<(), i32> {
+        if self.phase != Phase::Queued {
+            return Err(-16);
+        }
+        self.phase = Phase::Servicing;
+        Ok(())
+    }
+
+    pub(crate) fn serviced(&mut self) -> Result<(), i32> {
+        if self.phase != Phase::Servicing {
+            return Err(-16);
+        }
+        self.phase = Phase::Complete;
+        Ok(())
+    }
 }
 
 /// An exclusive retained mapping, owned independently of a mailbox's location.
@@ -290,6 +314,15 @@ unsafe impl ResponseMemory for Borrowed<'_> {
 pub(crate) struct Response<M: ResponseMemory> {
     memory: M,
     request: Request,
+}
+
+impl<M: ResponseMemory> Response<M> {
+    /// The mailbox exclusively retains this response before completion starts.
+    /// Native memory adapters may attach independently authorized payload claims;
+    /// the original response address and its ownership must remain unchanged.
+    pub(crate) fn memory_mut(&mut self) -> &mut M {
+        &mut self.memory
+    }
 }
 
 impl<'a> Response<Borrowed<'a>> {

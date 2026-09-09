@@ -43,7 +43,16 @@ handled by the native kernel service. The loader exits 127 with normal cleanup;
 none of the four libc core modes has passed in McKernel. This is a current
 integration blocker, not a completed smoke or a future-suite exclusion.
 
-After fixing file paging, require the unchanged memory, file-I/O, thread/futex
+The subsequent native pager WIP connects regular-file paging and compiles all
+three modules. The unchanged libc application now loads through four CREATEs
+sharing one inode handle and 473 successful page reads, then reaches memory
+operations. Its first fresh guest remains FAIL: a legitimate one-way allocator
+zeroing packet (syscall 279, requester/response zero) is rejected by the generic
+response-bearing decoder. Delegated munmap also logs failed host invalidation.
+Both errors require native integration; no complete libc mode is accepted yet.
+See `native-application-pager-wip-20260908.json` for the exact capture and scope.
+
+After fixing those services and verifying pager teardown, require the unchanged memory, file-I/O, thread/futex
 and signal modes, actual abnormal launcher/worker handling, current regressions
 and complete evidence retention. The later review must list unsupported
 features and distinguish this one-McKernel-CPU, 128-MiB guest baseline from
@@ -1554,3 +1563,63 @@ close-after-mmap, partial/EOF I/O, invalid handles/spans, cancellation and
 teardown. Then rebuild the native modules and rerun the unchanged dynamic
 application in a fresh guest. Original failure evidence stays FAIL. Passing
 Linux reference modes, a source review or a compile cannot promote the handoff.
+
+Implementation ownership refinement: the native OS Remote will own the shared
+file registry and a separately pumped RELEASE mailbox with a never-reused
+internal token. Route RELEASE before numeric process lookup, because final VM
+file-object destruction can occur after the original PID/TID retirement gates;
+a shared file object may also release CREATE references from multiple processes.
+This queue borrows no dead launcher or MM and uses the original response/wake
+protocol. Active file I/O reserves the existing mailbox delivery, defers close
+cancellation until I/O ends, and retains an exclusive payload tag on the same
+SyscallResponse through publication. Chunk copies validate the retained tag
+under the application's short lock; filesystem calls hold neither that lock
+nor the shared memory ledger. CREATE commits its inode handle/reference only
+when the authorized result copy succeeds and cancellation has not won. Public
+RET and ordinary mailbox behavior remain unchanged. Add exact protocol tests
+for deferred cancellation and service completion before native compilation.
+
+## File-pager runtime findings and next service review, 2026-09-08
+
+Native pager protocol 2 passes all 26 cases, module 1 passes all three native
+builds/imports/no-SIMD checks, and the four file-mode masks match separately
+compiled definitions from the pinned Linux fs.h. Guest 1 passes the prior
+pathname and eight-HELLO setup, loads libc and reaches memory operations, but
+remains FAIL on continuing-service EINVAL. Its emergency port-503 receive ring
+retains the original 128-byte packet at byte 6080: message 4, CPU 0, PID 307,
+requester/target 0, valid 1, syscall 279, node argument 0xfffffffffe910040 and
+response physical address 0. This is a legitimate one-way allocator request.
+Preserve Request::decode's strict requester/response checks for ordinary calls.
+
+Retain the selected `kernel/rust/page_alloc.rs` producer
+`__ihk_numa_zero_request_packet_fill`, worker increment and deferred-free list
+publication. Its node pointer and intrusive list links are guest virtual
+addresses; they are not Linux pointers. The selected old host Rust
+`mcctrl_zero_mckernel_pages_{step,finish}_result` pops a free chunk, zeroes all
+bytes after its 48-byte metadata, publishes the chunk to zeroed_list, subtracts
+its pages from nr_to_zero_pages and finally decrements zeroing_workers. Legacy
+Linux/C mappings supplied its pointer interpretation. Adapt the sequencing
+with exact current-OS mapping and atomic list ownership, without calling the
+old pointer body on unvalidated guest values. Bind the guest's exact node and
+FreeChunk layouts, kernel-address translation and original publication order
+before implementation. This work must be handled by continuing service with
+no synthetic syscall response or requirement for a surviving application PID.
+
+The same guest reaches ordinary munmap, whose selected Rust
+`clear_host_pte_body_result` forwards syscall 11 before freeing/reusing pages.
+The legacy host's in-kernel Rust dispatcher calls its PTE-clearing adapter;
+the native path still sends it to the launcher's reserved-memory ENOSYS body.
+The guest logs that error while its public munmap returns 0, so application
+exit/output alone cannot establish safe invalidation. Reuse the existing
+native `mcctrl_vm::Mirror::clear` with its referenced current MM, complete
+range preflight and exact mirror-file check. Route the retained syscall's
+range through a native kernel service and actual completion, keeping syscall
+ownership alive through invalidation. Review mprotect synchronization as well;
+do not weaken the VM callbacks or accept arbitrary userspace ranges.
+
+Actual file RELEASE, zeroing completion, host invalidation and full libc/core
+exit remain unverified. The original guest failure and its emergency physical
+state stay protected, along with the original failed protocol attempt. Full
+capture archives are still pending at this WIP. Next fix the newly reached
+services, rerun the unchanged app in a fresh guest, then preserve original
+regressions and finish all remaining handoff requirements.

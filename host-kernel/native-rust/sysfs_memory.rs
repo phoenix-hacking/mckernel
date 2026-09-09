@@ -45,6 +45,7 @@ struct Ledger {
     fixed: Vec<Span>,
     requests: Vec<Option<Tagged>>,
     responses: Vec<Option<Tagged>>,
+    payloads: Vec<Option<Tagged>>,
     snoops: Vec<Tagged>,
     procfs: Vec<Tagged>,
     serial: u64,
@@ -55,6 +56,11 @@ impl Ledger {
         self.fixed.iter().any(|old| old.overlaps(span))
             || self
                 .requests
+                .iter()
+                .flatten()
+                .any(|old| old.span.overlaps(span))
+            || self
+                .payloads
                 .iter()
                 .flatten()
                 .any(|old| old.span.overlaps(span))
@@ -118,14 +124,16 @@ impl Memory {
         }
         let capacity = crate::smp_application::CAPACITY * crate::smp_application_syscall::CAPACITY;
         let mut responses = Vec::with_capacity(capacity, GFP_KERNEL)?;
+        let mut payloads = Vec::with_capacity(capacity, GFP_KERNEL)?;
         for _ in 0..capacity {
             responses.push(None, GFP_KERNEL)?;
+            payloads.push(None, GFP_KERNEL)?;
         }
         let procfs = Vec::with_capacity(4096 + METADATA_CAPACITY + 2, GFP_KERNEL)?;
         Arc::pin_init(
             pin_init!(Self {
                 owner, direct_map, extents,
-                ledger <- new_mutex!(Ledger { fixed, requests, responses, snoops: Vec::new(), procfs, serial: 0 }),
+                ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, snoops: Vec::new(), procfs, serial: 0 }),
             }),
             GFP_KERNEL,
         )
@@ -329,6 +337,7 @@ impl Memory {
             address,
             tag,
             slot,
+            payload: None,
         })
     }
 
@@ -529,6 +538,56 @@ pub(crate) struct SyscallResponse {
     address: u64,
     tag: Tagged,
     slot: usize,
+    // Same slot in a distinct ledger: this capability outlives all page I/O
+    // and stays excluded until the response's actual final publication.
+    payload: Option<(Tagged, u64, bool)>,
+}
+
+impl SyscallResponse {
+    pub(crate) fn prepare_pager(&mut self, request: &SyscallRequest) -> Result {
+        let operation = crate::application_pager::Operation::decode(request).map_err(errno)?;
+        let Some((physical, bytes, to_guest)) = operation.payload() else {
+            return Ok(());
+        };
+        if self.payload.is_some() {
+            return Err(EBUSY);
+        }
+        let address = self.memory.address(physical, bytes)?;
+        let span = Span::new(physical, bytes)?;
+        let mut ledger = self.memory.ledger.lock();
+        if ledger.payloads[self.slot].is_some() || ledger.conflicts(span, true) {
+            return Err(EBUSY);
+        }
+        let tag = ledger.tag(span)?;
+        ledger.payloads[self.slot] = Some(tag);
+        self.payload = Some((tag, address, to_guest));
+        Ok(())
+    }
+
+    pub(crate) fn pager_copy(&mut self, offset: usize, bytes: &mut [u8], to_guest: bool) -> Result {
+        let (tag, address, direction) = self.payload.ok_or(EINVAL)?;
+        if to_guest != direction
+            || offset
+                .checked_add(bytes.len())
+                .is_none_or(|end| end as u64 > tag.span.end - tag.span.physical)
+        {
+            return Err(EINVAL);
+        }
+        // The mailbox's in-kernel reservation excludes completion/cancellation.
+        // This unique payload tag excludes every other host service mapping;
+        // no file operation or userspace access occurs while the caller locks it.
+        for (index, byte) in bytes.iter_mut().enumerate() {
+            unsafe {
+                let pointer = (address as *mut u8).add(offset + index);
+                if to_guest {
+                    ptr::write_volatile(pointer, *byte);
+                } else {
+                    *byte = ptr::read_volatile(pointer);
+                }
+            }
+        }
+        Ok(())
+    }
 }
 
 // SAFETY: Memory::syscall is the only constructor. It validates the complete
@@ -548,6 +607,12 @@ unsafe impl ResponseMemory for SyscallResponse {
             .as_ref()
             .is_some_and(|tag| tag.serial == self.tag.serial));
         *slot = None;
+        if let Some((tag, _, _)) = self.payload {
+            assert!(ledger.payloads[self.slot]
+                .as_ref()
+                .is_some_and(|old| old.serial == tag.serial));
+            ledger.payloads[self.slot] = None;
+        }
         // The guest can already reuse the response; only host bookkeeping is
         // accessed above. No destructor dereferences its address.
     }

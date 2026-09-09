@@ -199,6 +199,24 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native file-pager WIP, 2026-09-08:
+`docs/verification/native-application-pager-wip-20260908.json` records native
+regular-file CREATE/READ/WRITE, shared inode/file references, response-owned
+payload claims and an OS-owned RELEASE mailbox independent of launcher/PID
+lifetime. Pager protocol 2 passes all 26 tests; original protocol 1 failure is
+a retained pathname-length assertion mistake. Module 1 builds all three native
+modules, and a separate compiled C/Rust check binds all four Linux file-mode
+masks. Original guest 1 remains FAIL: libc loads through four CREATEs sharing
+one handle and 473 page reads, then executes memory operations. The first
+service EINVAL is the allocator's one-way syscall 279 (requester/response zero),
+which needs a separate native zeroing service before generic syscall decoding.
+The capture also shows delegated munmap/host invalidation returning ENOSYS.
+Neither error may be ignored even if an application returns success. No libc
+core smoke or actual pager RELEASE/teardown is accepted yet. Preserve all five
+new captures and prior string/core captures pending full archival. Next adapt
+existing Rust zeroing and host PTE invalidation, rerun the unchanged application,
+then continue the remaining readiness gates. No Ultra handoff yet.
+
 Latest pathname-copy/application-smoke WIP, 2026-09-08:
 `docs/verification/native-application-string-wip-20260908.json` records native
 STRNCPY_FROM_USER in mcctrl_exec using the existing buffer and shared bounded

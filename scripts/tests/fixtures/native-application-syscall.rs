@@ -9,6 +9,9 @@ use syscall as application_syscall;
 #[allow(dead_code)]
 #[path = "../../../host-kernel/native-rust/smp_application_syscall.rs"]
 mod mailbox;
+#[allow(dead_code)]
+#[path = "../../../host-kernel/native-rust/application_pager.rs"]
+mod pager;
 
 // Only allocation is substituted. Tests compile the complete native mailbox
 // source, with its real protocol, owner transitions and bounded slot handling.
@@ -928,4 +931,238 @@ fn concurrent_delivery_and_existing_rpc_tokens_never_overlap() {
     let distinct: BTreeSet<_> = tokens.iter().copied().collect();
     assert_eq!(distinct.len(), tokens.len());
     assert!(!distinct.contains(&0));
+}
+
+fn pager_request(arguments: [u64; 6]) -> Request {
+    let mut packet = c_requests()[0].clone();
+    packet[64..72].copy_from_slice(&9u64.to_le_bytes());
+    for (index, value) in arguments.iter().enumerate() {
+        let offset = 72 + index * 8;
+        packet[offset..offset + 8].copy_from_slice(&value.to_le_bytes());
+    }
+    Request::decode(&packet, 4).unwrap()
+}
+
+#[test]
+fn pager_result_matches_selected_guest_abi_and_keeps_public_ret_narrow() {
+    use abi::PagerCreateResult;
+    assert_eq!(size_of::<PagerCreateResult>(), pager::CREATE_BYTES);
+    assert_eq!(offset_of!(PagerCreateResult, maxprot), 8);
+    assert_eq!(offset_of!(PagerCreateResult, flags), 12);
+    assert_eq!(offset_of!(PagerCreateResult, size), 16);
+    assert_eq!(offset_of!(PagerCreateResult, pgshift), 24);
+    assert_eq!(offset_of!(PagerCreateResult, path), 28);
+    let mut output = vec![0x5a; pager::CREATE_BYTES + 16];
+    pager::create_result(
+        &mut output[..pager::CREATE_BYTES],
+        7123,
+        5,
+        8,
+        0x3456789,
+        b"/lib64/libc.so.6\0",
+    )
+    .unwrap();
+    let value = unsafe { core::ptr::read_unaligned(output.as_ptr().cast::<PagerCreateResult>()) };
+    assert_eq!(value.handle, 7123);
+    assert_eq!(value.maxprot, 5);
+    assert_eq!(value.flags, 8);
+    assert_eq!(value.size, 0x3456789);
+    assert_eq!(value.pgshift, 0);
+    let path = b"/lib64/libc.so.6\0";
+    assert_eq!(&output[28..28 + path.len()], path);
+    assert!(output[28 + path.len()..pager::CREATE_BYTES]
+        .iter()
+        .all(|&b| b == 0));
+    assert!(output[pager::CREATE_BYTES..].iter().all(|&b| b == 0x5a));
+    assert!(pager::create_result(
+        &mut output[..pager::CREATE_BYTES],
+        1,
+        5,
+        0,
+        0,
+        b"missing-nul"
+    )
+    .is_err());
+    let request = pager_request([1, 6, 0x900000, 0, 0, 0]);
+    assert_eq!(
+        pager::Operation::decode(&request).unwrap().payload(),
+        Some((0x900000, 4128, true))
+    );
+    assert!(request.authorize_return_copy(0x900000, 16).is_err());
+    assert!(request.authorize_return_copy(0x900000, 4128).is_err());
+}
+
+#[test]
+fn pager_request_geometry_rejects_wrapping_ranges_and_preserves_direction() {
+    for (code, write) in [(3, false), (4, true)] {
+        let request = pager_request([code, 2, 4096, 8192, 0x900000, 0]);
+        assert_eq!(
+            pager::Operation::decode(&request).unwrap(),
+            pager::Operation::Io {
+                write,
+                handle: 2,
+                offset: 4096,
+                bytes: 8192,
+                physical: 0x900000,
+            }
+        );
+        assert_eq!(
+            pager::Operation::decode(&request).unwrap().payload(),
+            Some((0x900000, 8192, !write))
+        );
+    }
+    for args in [
+        [1, 6, 0, 0, 0, 0],
+        [1, 6, u64::MAX - 4095, 0, 0, 0],
+        [3, 2, u64::MAX, 1, 0x900000, 0],
+        [3, 2, i64::MAX as u64, 1, 0x900000, 0],
+        [4, 2, 0, 8, u64::MAX - 3, 0],
+        [4, 2, 0, u64::MAX, 0x900000, 0],
+    ] {
+        assert_eq!(pager::Operation::decode(&pager_request(args)), Err(-22));
+    }
+    assert_eq!(
+        pager::Operation::decode(&pager_request([5, 0, 0, 0, 0, 0])),
+        Err(-38)
+    );
+    assert_eq!(
+        pager::Operation::decode(&pager_request([3, 2, 0, 0, 0, 0]))
+            .unwrap()
+            .payload(),
+        None
+    );
+    assert!(pager::Operation::is_release(&pager_request([
+        2, 2, 7, 0, 0, 0
+    ])));
+}
+
+#[test]
+fn kernel_io_defers_owner_cancellation_until_memory_access_finishes() {
+    for close_process in [false, true] {
+        let mut queue = mailbox::Mailbox::new().unwrap();
+        let worker = queue.open_worker(900).unwrap();
+        let request = queued_request(0, 0);
+        let ram = admit(&mut queue, request.clone(), 2);
+        let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+        assert_eq!(queue.begin_kernel(worker, serial).unwrap(), request);
+        assert!(queue.begin_kernel(worker, serial).is_err());
+        assert!(queue
+            .return_value(worker, serial, 0, 91, |_| panic!("public RET during I/O"))
+            .is_err());
+        queue
+            .with_kernel_memory(worker, serial, |_, _| Ok(()))
+            .unwrap();
+        if close_process {
+            queue.close().unwrap();
+        } else {
+            assert_eq!(queue.close_worker(worker), Err(-16));
+        }
+        assert_eq!(
+            queue.publish(0, |_| panic!("early I/O completion")),
+            Ok(false)
+        );
+        assert_eq!(ram.status(), 0);
+        assert!(ram.claimed.load(Ordering::Acquire));
+        assert!(queue
+            .with_kernel_memory::<()>(worker, serial, |_, _| panic!("copy after cancel"))
+            .is_err());
+        queue
+            .finish_kernel(worker, serial, |_, _| {
+                panic!("CREATE committed after cancel")
+            })
+            .unwrap();
+        assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+        assert_eq!(ram.status(), 0);
+        assert!(queue.open_worker(900).is_err());
+        assert_eq!(queue.publish(0, |_| Ok(())), Ok(true));
+        assert!(queue.drained());
+        assert_eq!(ram.status(), 1);
+        assert_eq!(
+            i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+            -512
+        );
+        queue.close_worker(worker).unwrap();
+    }
+}
+
+#[test]
+fn kernel_io_keeps_exact_worker_serial_and_error_through_completion() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    let wrong = queue.open_worker(901).unwrap();
+    let ram = admit(&mut queue, queued_request(0, 0), 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    assert!(queue.begin_kernel(wrong, serial).is_err());
+    assert!(queue.begin_kernel(worker, serial + 1).is_err());
+    queue.begin_kernel(worker, serial).unwrap();
+    assert!(queue
+        .finish_kernel(wrong, serial, |_, _| panic!("wrong worker"))
+        .is_err());
+    assert!(queue
+        .with_kernel_memory::<()>(worker, serial + 1, |_, _| panic!("stale memory"))
+        .is_err());
+    queue
+        .finish_kernel(worker, serial, |_, _| Err(-14))
+        .unwrap();
+    for _ in 0..1024 {
+        assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+        assert_eq!(queue.reserve(worker), Ok(None));
+        assert_eq!(ram.status(), 0);
+    }
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert_eq!(queue.returned(worker, serial), Ok(true));
+    assert_eq!(
+        i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+        -14
+    );
+    assert_eq!(
+        i32::from_le_bytes(ram.snapshot()[4..8].try_into().unwrap()),
+        0
+    );
+    assert!(queue
+        .finish_kernel(worker, serial, |_, _| panic!("duplicate effect"))
+        .is_err());
+}
+
+#[test]
+fn continuing_service_requires_no_worker_and_survives_close_and_duplicate_ingress() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    queue.close().unwrap();
+    let request = queued_request(0, 9123);
+    let ram = TestRam::new(request.response(), 2);
+    let mut effects = 0;
+    assert_eq!(
+        queue.admit_serviced(
+            request.clone(),
+            |_| ram.claim(),
+            |_| {
+                effects += 1;
+                23
+            }
+        ),
+        Ok(true)
+    );
+    assert_eq!(
+        queue.admit_serviced(
+            request,
+            |_| panic!("duplicate claim"),
+            |_| panic!("duplicate RELEASE")
+        ),
+        Ok(false)
+    );
+    assert_eq!(effects, 1);
+    queue.close().unwrap();
+    for _ in 0..1024 {
+        assert_eq!(queue.publish(0, |_| Err(-11)), Err(-11));
+        assert_eq!(ram.status(), 0);
+        assert!(ram.claimed.load(Ordering::Acquire));
+    }
+    queue.publish(0, |_| Ok(())).unwrap();
+    assert_eq!(ram.status(), 1);
+    assert_eq!(
+        i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+        23
+    );
+    assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+    assert!(queue.drained());
 }

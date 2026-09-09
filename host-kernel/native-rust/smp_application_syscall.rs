@@ -26,6 +26,8 @@ struct Call<M: ResponseMemory> {
     completion: Option<Completion<M>>,
     worker: Option<Worker>,
     cancelled: bool,
+    kernel: bool,
+    service: bool,
 }
 
 pub(crate) struct Mailbox<M: ResponseMemory> {
@@ -119,6 +121,26 @@ impl<M: ResponseMemory> Mailbox<M> {
         request: Request,
         claim: impl FnOnce(&Request) -> Result<M>,
     ) -> Result<bool> {
+        self.admit_inner(request, claim, None::<fn(&Request) -> i64>)
+    }
+
+    /// Only continuing-service operations that require no caller file table.
+    /// The effect runs once, after a response claim, and survives process close.
+    pub(crate) fn admit_serviced(
+        &mut self,
+        request: Request,
+        claim: impl FnOnce(&Request) -> Result<M>,
+        service: impl FnOnce(&Request) -> i64,
+    ) -> Result<bool> {
+        self.admit_inner(request, claim, Some(service))
+    }
+
+    fn admit_inner(
+        &mut self,
+        request: Request,
+        claim: impl FnOnce(&Request) -> Result<M>,
+        service: Option<impl FnOnce(&Request) -> i64>,
+    ) -> Result<bool> {
         if self.quarantined {
             return Err(-71);
         }
@@ -152,13 +174,28 @@ impl<M: ResponseMemory> Mailbox<M> {
                 return Err(error);
             }
         };
-        *slot = Some(Call {
+        let mut call = Call {
             delivery,
             response: Some(response),
             completion: None,
             worker: None,
             cancelled: false,
-        });
+            kernel: false,
+            service: false,
+        };
+        if let Some(service) = service {
+            call.delivery.begin_service()?;
+            let value = service(call.delivery.request());
+            match call.response.take().ok_or(-71)?.prepare(0, value) {
+                Ok(completion) => call.completion = Some(completion),
+                Err(error) => {
+                    self.quarantined = true;
+                    return Err(error);
+                }
+            }
+            call.service = true;
+        }
+        *slot = Some(call);
         if self.closed {
             self.cancel_pending()?;
         }
@@ -239,6 +276,85 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(())
     }
 
+    /// Convert the exact reserved WAIT delivery into in-kernel work. Close
+    /// cannot complete or reuse its response while that work accesses memory.
+    pub(crate) fn begin_kernel(&mut self, handle: u64, serial: u64) -> Result<Request> {
+        if self.closed || self.quarantined {
+            return Err(-32);
+        }
+        self.copied(handle, serial, true)?;
+        let call = self
+            .calls
+            .iter_mut()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?;
+        call.kernel = true;
+        Ok(call.delivery.request().clone())
+    }
+
+    pub(crate) fn with_kernel_memory<T>(
+        &mut self,
+        handle: u64,
+        serial: u64,
+        use_memory: impl FnOnce(&Request, &mut M) -> Result<T>,
+    ) -> Result<T> {
+        if self.closed || self.quarantined {
+            return Err(-32);
+        }
+        let call = self
+            .calls
+            .iter_mut()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?;
+        let worker = call.worker.ok_or(-71)?;
+        if !call.kernel || call.cancelled || worker.wire() != handle || call.completion.is_some() {
+            return Err(-16);
+        }
+        use_memory(
+            call.delivery.request(),
+            call.response.as_mut().ok_or(-71)?.memory_mut(),
+        )
+    }
+
+    pub(crate) fn finish_kernel(
+        &mut self,
+        handle: u64,
+        serial: u64,
+        result: impl FnOnce(&Request, &mut M) -> Result<i64>,
+    ) -> Result {
+        let call = self
+            .calls
+            .iter_mut()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?;
+        let worker = call.worker.ok_or(-71)?;
+        if !call.kernel || worker.wire() != handle || call.completion.is_some() {
+            return Err(-16);
+        }
+        call.kernel = false;
+        if self.closed || call.cancelled {
+            return Self::cancel_call(call);
+        }
+        let value = result(
+            call.delivery.request(),
+            call.response.as_mut().ok_or(-71)?.memory_mut(),
+        )
+        .unwrap_or_else(|error| error as i64);
+        call.delivery
+            .begin_return(worker, call.delivery.request().cpu() as i64)?;
+        match call.response.take().ok_or(-71)?.prepare(0, value) {
+            Ok(completion) => call.completion = Some(completion),
+            Err(error) => {
+                self.quarantined = true;
+                return Err(error);
+            }
+        }
+        Ok(())
+    }
+
     pub(crate) fn return_value(
         &mut self,
         handle: u64,
@@ -265,6 +381,9 @@ impl<M: ResponseMemory> Mailbox<M> {
             .flatten()
             .find(|call| call.delivery.serial().wire() == serial)
             .ok_or(-2)?;
+        if call.kernel {
+            return Err(-16);
+        }
         call.delivery.check_return(worker.worker, cpu)?;
         // Only an already copied kernel buffer is used here, never user access.
         // Failed validation/copy leaves Delivered available for a proper retry.
@@ -328,7 +447,9 @@ impl<M: ResponseMemory> Mailbox<M> {
         let slot = &mut self.calls[index];
         let call = slot.as_mut().unwrap();
         call.completion.as_mut().unwrap().publish(send)?;
-        if call.cancelled {
+        if call.service {
+            call.delivery.serviced()?;
+        } else if call.cancelled {
             call.delivery.cancelled()?;
         } else {
             call.delivery.completed(call.worker.ok_or(-71)?)?;
@@ -367,6 +488,10 @@ impl<M: ResponseMemory> Mailbox<M> {
 
     fn cancel_call(call: &mut Call<M>) -> Result {
         if call.completion.is_some() {
+            return Ok(());
+        }
+        if call.kernel {
+            call.cancelled = true;
             return Ok(());
         }
         call.delivery.cancel()?;

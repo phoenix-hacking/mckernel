@@ -210,36 +210,53 @@ impl Registration {
         if worker.delivery.load(Ordering::Acquire) != 0 {
             return Err(EBUSY);
         }
-        let mut bytes = [0; 96];
-        bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
-        self.invoke(super::application_abi::WAIT_SYSCALL, &mut bytes)?;
-        let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
-        if serial == 0 {
-            return Err(EIO);
-        }
-        let copied = UserSlice::new(argument, 80)
-            .writer()
-            .write_slice(&bytes[16..96]);
-        let mut result = [0; 24];
-        result[..16].copy_from_slice(&bytes[..16]);
-        result[16..24].copy_from_slice(&(copied.is_ok() as u64).to_le_bytes());
-        let commit = self.invoke(super::application_abi::COPIED_SYSCALL, &mut result);
-        // The original private request stays queued if any user byte faults.
-        copied?;
-        commit?;
-        // The launcher uses its Linux worker slot in RET.cpu. Retain the
-        // packet's guest CPU before publishing this private delivered serial.
-        worker.delivery_cpu.store(
-            image::word(&bytes, 16).map_err(errno)? as i32,
-            Ordering::Relaxed,
-        );
-        worker.delivery.store(serial, Ordering::Release);
-        if self.trace() {
-            pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
+        loop {
+            let mut bytes = [0; 96];
+            bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
+            self.invoke(super::application_abi::WAIT_SYSCALL, &mut bytes)?;
+            let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+            if serial == 0 {
+                return Err(EIO);
+            }
+            if image::word(&bytes, 40).map_err(errno)? == 9 {
+                // mmap numbers in this protocol are kernel file/device-pager
+                // requests. Consume the retained packet in this worker's context
+                // before the ordinary userspace WAIT descriptor is touched.
+                let mut pager = [0; 32];
+                pager[..16].copy_from_slice(&bytes[..16]);
+                let result = self.invoke(super::application_abi::PAGER_SYSCALL, &mut pager);
+                if result.is_err() && image::word(&pager, 16).map_err(errno)? == 0 {
+                    let mut rollback = [0; 24];
+                    rollback[..16].copy_from_slice(&bytes[..16]);
+                    let _ = self.invoke(super::application_abi::COPIED_SYSCALL, &mut rollback);
+                }
+                result?;
+                continue;
+            }
+            let copied = UserSlice::new(argument, 80)
+                .writer()
+                .write_slice(&bytes[16..96]);
+            let mut result = [0; 24];
+            result[..16].copy_from_slice(&bytes[..16]);
+            result[16..24].copy_from_slice(&(copied.is_ok() as u64).to_le_bytes());
+            let commit = self.invoke(super::application_abi::COPIED_SYSCALL, &mut result);
+            // The original private request stays queued if any user byte faults.
+            copied?;
+            commit?;
+            // The launcher uses its Linux worker slot in RET.cpu. Retain the
+            // packet's guest CPU before publishing this private delivered serial.
+            worker.delivery_cpu.store(
+                image::word(&bytes, 16).map_err(errno)? as i32,
+                Ordering::Relaxed,
+            );
+            worker.delivery.store(serial, Ordering::Release);
+            if self.trace() {
+                pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
                 self.slot, self.generation, self.pid, worker.handle, serial,
                 image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 40).map_err(errno)?);
+            }
+            return Ok(0);
         }
-        Ok(0)
     }
 
     fn return_syscall(&self, argument: usize, compat: bool) -> Result<isize> {

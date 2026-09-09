@@ -2,10 +2,12 @@
 //! Bounded application connections and independently pumped prepare/cleanup.
 
 use super::{
+    application_pager::Operation as PagerOperation,
     application_rpc::{Exchange, Token},
     application_syscall::Request,
     smp_application_image::Preparation,
     smp_application_syscall::Mailbox,
+    smp_file_pager::{Prepared as PagerFile, Registry as Pagers},
     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
@@ -142,17 +144,25 @@ pub(crate) struct Remote {
     #[pin]
     changed: CondVar,
     syscall_cursor: AtomicUsize,
+    pagers: Arc<Pagers>,
+    release_token: Token,
+    #[pin]
+    releases: Mutex<Mailbox<SyscallResponse>>,
 }
 
 impl Remote {
     pub(crate) fn new(owner: OsToken, procfs: Arc<ProcfsRemote>) -> Result<Arc<Self>> {
+        let pagers = Pagers::new()?;
+        let releases = Mailbox::new().map_err(errno)?;
+        let release_token = Token::allocate().map_err(errno)?;
         let mut slots = Vec::with_capacity(CAPACITY, GFP_KERNEL)?;
         for _ in 0..CAPACITY {
             slots.push(None, GFP_KERNEL)?;
         }
         Arc::pin_init(
             pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
-                syscall_cursor: AtomicUsize::new(0) }),
+                syscall_cursor: AtomicUsize::new(0), pagers, release_token,
+                releases <- new_mutex!(releases) }),
             GFP_KERNEL,
         )
     }
@@ -400,6 +410,31 @@ impl Remote {
         request: Request,
         claim: impl FnOnce(&Request) -> Result<SyscallResponse>,
     ) -> Result {
+        if PagerOperation::is_release(&request) {
+            // A shared file object can outlive the original PID. This exact-OS
+            // response queue owns no launcher/MM and is pumped independently.
+            let result = self
+                .releases
+                .lock()
+                .admit_serviced(
+                    request,
+                    |request| claim(request).map_err(|error| error.to_errno()),
+                    |request| {
+                        let PagerOperation::Release { handle, references } =
+                            PagerOperation::decode(request).unwrap()
+                        else {
+                            unreachable!()
+                        };
+                        self.pagers
+                            .release(handle, references)
+                            .unwrap_or_else(|error| error.to_errno() as i64)
+                    },
+                )
+                .map(|_| ())
+                .map_err(errno);
+            self.changed.notify_all();
+            return result;
+        }
         let result = (|| {
             let mut slots = self.slots.lock();
             let entry = slots
@@ -426,11 +461,24 @@ impl Remote {
     }
 
     pub(crate) fn syscall_cpu(&self) -> Option<(Token, i32)> {
-        let slots = self.slots.lock();
         let start = self.syscall_cursor.fetch_add(1, Ordering::Relaxed);
-        super::smp_application_syscall::cyclic(start, slots.len()).find_map(|index| {
-            let entry = slots[index].as_ref()?;
-            entry.syscalls.queued_cpu().map(|cpu| (entry.key(), cpu))
+        if start % 2 == 0 {
+            if let Some(cpu) = self.releases.lock().queued_cpu() {
+                return Some((self.release_token, cpu));
+            }
+        }
+        let slots = self.slots.lock();
+        let application =
+            super::smp_application_syscall::cyclic(start, slots.len()).find_map(|index| {
+                let entry = slots[index].as_ref()?;
+                entry.syscalls.queued_cpu().map(|cpu| (entry.key(), cpu))
+            });
+        drop(slots);
+        application.or_else(|| {
+            self.releases
+                .lock()
+                .queued_cpu()
+                .map(|cpu| (self.release_token, cpu))
         })
     }
 
@@ -440,6 +488,13 @@ impl Remote {
         cpu: i32,
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
+        if token == self.release_token {
+            return self
+                .releases
+                .lock()
+                .publish(cpu, |packet| send(packet).map_err(|error| error.to_errno()))
+                .map_err(errno);
+        }
         let mut slots = self.slots.lock();
         let Some(entry) = slots
             .iter_mut()
@@ -554,6 +609,110 @@ impl Remote {
         };
         self.changed.notify_all();
         result
+    }
+
+    pub(crate) fn pager_syscall(&self, token: Token, bytes: &mut [u8]) -> Result {
+        if bytes.len() != 32 {
+            return Err(EINVAL);
+        }
+        let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
+        let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+        bytes[16..].fill(0);
+        let request = {
+            let mut slots = self.slots.lock();
+            let entry = slots
+                .iter_mut()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            entry.syscalls.begin_kernel(worker, serial).map_err(errno)?
+        };
+        bytes[16..24].copy_from_slice(&1u64.to_le_bytes());
+        enum Work {
+            Create(PagerFile),
+            Value(i64),
+        }
+        let outcome = (|| -> Result<Work> {
+            let operation = PagerOperation::decode(&request).map_err(errno)?;
+            self.with_pager_memory(token, worker, serial, |request, memory| {
+                memory.prepare_pager(request)
+            })?;
+            match operation {
+                PagerOperation::Create { fd, .. } => PagerFile::open(fd).map(Work::Create),
+                PagerOperation::Io {
+                    write,
+                    handle,
+                    offset,
+                    bytes,
+                    ..
+                } => self
+                    .pagers
+                    .io(write, handle, offset, bytes, |offset, data, to_guest| {
+                        self.with_pager_memory(token, worker, serial, |_, memory| {
+                            memory.pager_copy(offset, data, to_guest)
+                        })
+                    })
+                    .map(Work::Value),
+                PagerOperation::Release { .. } => Err(EINVAL), // Owned by continuing ingress.
+            }
+        })();
+        let mut value = -512i64;
+        let mut slots = self.slots.lock();
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
+        let finished = entry.syscalls.finish_kernel(worker, serial, |_, memory| {
+            let result = match outcome {
+                Ok(Work::Create(prepared)) => self
+                    .pagers
+                    .create(prepared, |data| memory.pager_copy(0, data, true)),
+                Ok(Work::Value(value)) => Ok(value),
+                Err(error) => Err(error),
+            };
+            value = result.unwrap_or_else(|error| error.to_errno() as i64);
+            Ok(value)
+        });
+        entry.quarantined |= entry.syscalls.quarantined();
+        finished.map_err(errno)?;
+        bytes[24..32].copy_from_slice(&value.to_le_bytes());
+        pr_info!("file_pager=completed os={} generation={} pid={} worker={} delivery={} operation={} value={}\n",
+            self.owner.slot(), self.owner.generation(), request.pid(), worker, serial, request.arguments()[0], value);
+        loop {
+            let entry = slots
+                .iter()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                return Ok(());
+            }
+            if self.changed.wait_interruptible(&mut slots) {
+                return Err(EINTR);
+            }
+        }
+    }
+
+    fn with_pager_memory<T>(
+        &self,
+        token: Token,
+        worker: u64,
+        serial: u64,
+        operation: impl FnOnce(&Request, &mut SyscallResponse) -> Result<T>,
+    ) -> Result<T> {
+        let mut slots = self.slots.lock();
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
+        entry
+            .syscalls
+            .with_kernel_memory(worker, serial, |request, memory| {
+                operation(request, memory).map_err(|error| error.to_errno())
+            })
+            .map_err(errno)
     }
 
     pub(crate) fn return_syscall(

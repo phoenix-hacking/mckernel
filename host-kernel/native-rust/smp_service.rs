@@ -799,6 +799,13 @@ impl Application {
             .copied_syscall(self.token, bytes)
     }
 
+    pub(in super::super) fn pager_syscall(&self, bytes: &mut [u8]) -> Result {
+        self.started
+            .runtime
+            .application
+            .pager_syscall(self.token, bytes)
+    }
+
     pub(in super::super) fn return_syscall(&self, bytes: &mut [u8]) -> Result {
         let runtime = &self.started.runtime;
         runtime
