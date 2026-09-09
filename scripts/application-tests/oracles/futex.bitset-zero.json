@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.bitset-zero",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.bitset-zero"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 unchanged=1 wake_after=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A zero bitset is rejected synchronously with EINVAL", "The invalid call does not publish a waiter, so a subsequent wake returns zero"],
+  "unresolved_expectations": ["Confirm the private/shared operation variant and canonical errno/output binding before execution."],
+  "max_question_for_reviewer": "Confirm FUTEX_WAIT_BITSET bitset=0 must reject without queueing on the target native ABI."
+}

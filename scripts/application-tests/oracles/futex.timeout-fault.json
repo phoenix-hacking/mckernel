@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.timeout-fault",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.timeout-fault"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=14 unchanged=1 unmapped=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A valid matching futex word with an inaccessible timeout pointer fails synchronously with EFAULT", "The futex word remains unchanged and the mapping is retired"],
+  "unresolved_expectations": ["Confirm native timeout-pointer validation ordering and canonical errno/output binding before execution."],
+  "max_question_for_reviewer": "Confirm EFAULT is required before any waiter publication when the timeout pointer is inaccessible."
+}

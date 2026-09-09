@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.bitset-monotonic-timeout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.bitset-monotonic-timeout"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "record": "rc=-1 errno=110 unchanged=1 elapsed_ns=<nonnegative>"},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["FUTEX_WAIT_BITSET with FUTEX_BITSET_MATCH_ANY and an absolute CLOCK_MONOTONIC deadline returns ETIMEDOUT", "The futex word remains unchanged", "Elapsed time is recorded for deadline and scheduler evidence without an exact microsecond threshold"],
+  "unresolved_expectations": ["Confirm whether the target uses the private nr202 path, and freeze the canonical timing relation and errno binding before execution."],
+  "max_question_for_reviewer": "Confirm monotonic absolute-deadline semantics and required capture of the actual private futex syscall path."
+}
