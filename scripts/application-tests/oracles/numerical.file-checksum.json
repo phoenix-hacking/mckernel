@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "numerical.file-checksum",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bytes=65537 hash=749938500287627275 chunks=1,7,64,1023,4096 stable=1 unchanged=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Independent uint64 modulo-2^64 rolling hash is 749938500287627275 and invariant across uneven chunks1,7,64,1023,4096", "The fixed 65537-byte source remains unchanged"],
+  "unresolved_expectations": ["Chunk-loop boundaries, uint64 overflow semantics, and input lifetime require Max review."],
+  "max_question_for_reviewer": "Confirm the rolling-hash recurrence and all chunk sizes are applied to identical 65537-byte input without mutation."
+}

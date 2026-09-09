@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-071",
+  "packet_version": 1,
+  "context_sha256": "1ac93ce2fcb2616c439baec2c5b53c086e4a8a3cf21fa5648342289c9590515c",
+  "started_utc": "2026-09-09T15:00:00Z",
+  "finished_utc": "2026-09-09T15:03:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "numerical.sort-permutation",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/numerical/numerical.sort-permutation.c",
+      "oracle": "scripts/application-tests/oracles/numerical.sort-permutation.json",
+      "changed_files": ["scripts/application-tests/cases/numerical/numerical.sort-permutation.c", "scripts/application-tests/oracles/numerical.sort-permutation.json"],
+      "parameter_vectors": {"count": [4096], "value_domain": [0, 256], "generator": ["(i*73+19) mod257"], "expected_distinct": [257]},
+      "implemented_operations": ["deterministic duplicate-bearing generation", "qsort ordering", "distinctness and endpoint permutation checks"],
+      "unresolved_oracle_notes": ["C library qsort behavior, permutation accounting, and allocator/runtime provenance require Max review."],
+      "max_reviewer_question": "Confirm the modular input generator yields 4096 values with all 257 distinct values and exact multiplicities."
+    },
+    {
+      "case_id": "numerical.file-checksum",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/numerical/numerical.file-checksum.c",
+      "oracle": "scripts/application-tests/oracles/numerical.file-checksum.json",
+      "changed_files": ["scripts/application-tests/cases/numerical/numerical.file-checksum.c", "scripts/application-tests/oracles/numerical.file-checksum.json"],
+      "parameter_vectors": {"bytes": [65537], "formula": ["(i*37+11)&255"], "chunks": [[1, 7, 64, 1023, 4096]], "hash": [749938500287627275]},
+      "implemented_operations": ["fixed deterministic byte fixture", "uint64 rolling recurrence", "five uneven chunk traversals and stability comparison"],
+      "unresolved_oracle_notes": ["Chunk-loop boundaries, uint64 overflow semantics, and input lifetime require Max review."],
+      "max_reviewer_question": "Confirm the rolling-hash recurrence and all chunk sizes are applied to identical 65537-byte input without mutation."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/numerical/numerical.sort-permutation.c", "sha256": "8a01ceff05097c58d04731d5b2b843471ec58c33f8d0a0684d41a70156f2bda2"},
+    {"path": "scripts/application-tests/oracles/numerical.sort-permutation.json", "sha256": "caa4e3540557895b665ca922b989e35a1ca92adf4e04c2a4171950c785a31b4c"},
+    {"path": "scripts/application-tests/cases/numerical/numerical.file-checksum.c", "sha256": "7c64f70c7d3ac4b177dcb096c00a9801d91490a0450ec722f79bf170f749a6f7"},
+    {"path": "scripts/application-tests/oracles/numerical.file-checksum.json", "sha256": "fd24831f05ab9b4334c82e6962635a9cc94a5ca02eaceb82a369fbbf76fd553a"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-071/context.json", "sha256": "1ac93ce2fcb2616c439baec2c5b53c086e4a8a3cf21fa5648342289c9590515c"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-071.json --emit-context /tmp/application-packet-071-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-071/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Permutation multiplicity, rolling-hash arithmetic, chunk boundaries, and runtime provenance need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review duplicate-bearing sort permutation", "Review rolling hash and uneven chunk coverage"],
+  "next_packet_id": "packet-072"
+}

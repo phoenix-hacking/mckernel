@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "numerical.sort-permutation",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["count=4096 distinct=257 first=0 last=256 ordered=1 permutation=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["qsort output is nondecreasing with exactly the independently generated multiplicity of each value 0..256", "No generated element is lost or introduced"],
+  "unresolved_expectations": ["C library qsort behavior, permutation accounting, and allocator/runtime provenance require Max review."],
+  "max_question_for_reviewer": "Confirm the modular input generator yields 4096 values with all 257 distinct values and exact multiplicities."
+}
