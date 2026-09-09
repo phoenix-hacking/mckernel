@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.read-restart",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.read-restart"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["handled=1 rc=4 bytes=ABCD exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SA_RESTART causes the interrupted blocked read to resume", "One handler entry occurs and read returns exactly ABCD after the writer supplies four bytes"],
+  "unresolved_expectations": ["Restart boundary, duplicate-read side effects, and delegated I/O evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm restart does not duplicate or partially apply the read and exactly four supplied bytes are returned."
+}
