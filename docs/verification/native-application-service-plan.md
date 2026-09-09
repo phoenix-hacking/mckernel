@@ -5,73 +5,53 @@ At that initial review, the actual guest sysfs checkpoint proved one executing
 McKernel CPU reached full readiness through both startup ABIs; applications
 had not yet run. The current runtime checkpoint below supersedes that status.
 
-## Current application baseline, 2026-09-08
+## Current application baseline, 2026-09-09
 
-`native-application-start-checkpoint-20260908.json` retains 21 complete captures,
-including all six original failed attempts. Module 5 and the rebuilt native
-Rust guest image pass sixteen unchanged-launcher ELF hello/exit-37 runs across
-two independent guests (eight per OS instance). Each proves actual delegated
-write result 25, exit_group delivery, PID/TID publication/deletion, explicit
-scheduled retirement, registration release and no remaining procfs process
-nodes. Five observed Linux worker-slot-1/guest-CPU-0 returns pass after the
-adapter correction. Attempt 4 additionally checks each stdout file's exact
-25 bytes before publishing the verified output into the ordered log stream.
+**Actual memory and file-I/O core applications now pass inside McKernel.**
+The Astra Ultra handoff remains pending thread/futex, signal, abnormal-owner
+and final regression/replay checks. Native module 2 and zeroing guest image 1
+are the current tested pair, with source checkpoint `a841707d`.
 
-The first independent application PASS used module 3. Module 4 fixed a
-final-binding/reaper ownership race. Module 5 fixed RET routing by retaining
-the guest CPU from the delivered packet instead of treating the launcher's
-worker slot as a guest CPU. Current x86_64 and i386 control regressions pass,
-including root procfs, idle WAIT, worker/TGID retirement, image, process,
-credential, executable, topology and continuing sysfs checks. Seven new
-scheduled-retirement protocol tests, nineteen prior protocol/image tests and
-five exact native adapter tests pass. All four guest image selections build;
-no C fallback or existing launcher was removed or changed.
+`native-application-core-checkpoint-20260909.json` retains fourteen complete
+captures and all six original failures, including the earlier pathname-copy,
+file-pager and dynamic-loader attempts. Memory guest 2 and files guest 1 each
+run the unchanged dynamically linked libc application through the unchanged
+`mcexec`. Both verify exact output, exit 37, scheduled retirement, registration
+release and no remaining process nodes. Each also repeats eight HELLO launches
+with exact write 25, exit 37 and complete cleanup; both metadata/string pointer
+widths and the boot/continuing sysfs checks pass.
 
-The retention index binds 53 native compiler sources, 24 guest production
-inputs, exact tested probes/modules/images and the original commands, failed
-captures and fixes. Final stdout/verification markers now use an ordered log
-stream because serial tty output can be split by printk even inside one write.
-Original failing captures retain their original status and bytes.
+The memory mode verifies malloc/mmap data, read-only/read-write mprotect and
+munmap/free. All fourteen host invalidations return and complete zero. Three
+actual zeroing batches clear 503 chunks / 521 pages; later pending pages are
+still OS-owned and are not represented as fully drained. The four shared libc
+pager references release to zero. The file mode verifies 8,209 bytes through
+create/write/stat/seek/read/EOF/pwrite/pread/fsync/close/reopen/unlink and expected
+ENOENT after deletion. Its ten host invalidations and pager release also pass.
+These are the first two complete ordinary libc core modes accepted in McKernel.
 
-The Astra Ultra handoff is **not ready**. Native STRNCPY_FROM_USER now passes
-both real control ABIs, 28 guarded data cases and eight descriptor faults,
-followed by eight unchanged HELLO launches. The normal dynamically linked
-libc/pthread core application passes its four Linux reference modes. Its first
-actual McKernel memory run stops in the runtime linker: libc opens and reads,
-but PAGER_REQ_CREATE reaches the launcher and returns ENOSYS instead of being
-handled by the native kernel service. The loader exits 127 with normal cleanup;
-none of the four libc core modes has passed in McKernel. This is a current
-integration blocker, not a completed smoke or a future-suite exclusion.
+The first thread guest remains FAIL. The guest forwards unimplemented syscall
+435 (`clone3`) to the generic Linux launcher path. Linux returns child PID 311
+and the launcher terminates with SIGSEGV/exit 139; the guest never completes its
+thread smoke. Cleanup ultimately retires the original PID and releases pager
+references, but this does not establish the required abnormal-owner coverage.
+Signals have not run because the batch stopped at that first failure. Preserve
+the complete serial/debugcon and emergency physical memory/queue/register data.
 
-The subsequent native pager WIP connects regular-file paging and compiles all
-three modules. The unchanged libc application now loads through four CREATEs
-sharing one inode handle and 473 successful page reads, then reaches memory
-operations. Its first fresh guest remains FAIL: a legitimate one-way allocator
-zeroing packet (syscall 279, requester/response zero) is rejected by the generic
-response-bearing decoder. Delegated munmap also logs failed host invalidation.
-Both errors require native integration; no complete libc mode is accepted yet.
-See `native-application-pager-wip-20260908.json` for the exact capture and scope.
+The host zeroing checkpoint retains all 57 native compiler bindings, nine host
+unit tests, three successful native modules, the exact Rust 1.92 objtool patch
+and 77 configuration/license tests. All four guest image selections build.
+The first new memory attempt was a retained harness failure: the old capture
+validator expected two continuing workers after integration added the third.
+Only that exact count changed in the executed reference; both original and
+adapted references remain archived, along with all original assertions.
 
-The subsequent `native-application-memory-checkpoint-20260909.json` connects
-retained syscall-11 host invalidation, passing 30 protocol tests, eight actual
-adapter tests with controlled providers and all three native module builds.
-Native guest protection changes now request this invalidation as well, with
-four focused tests passing in each legacy/native selection and the original
-fixture-import failure retained. Guest image builds and actual execution of
-these changes are still pending, as is the separate allocator zeroing service.
-
-The image checkpoint `native-application-memory-images-checkpoint-20260909.json`
-supersedes the build-pending status: all four selections now compile, and the
-native binary's protection adapter forwards nr 11 and restores the VM lock
-flag. The legacy adapter remains a zero return. Three complete image captures
-retain both original diagnostic-tool failures and the passing retry. No new
-guest application ran; allocator zeroing remains the next implementation task.
-
-After fixing those services and verifying pager teardown, require the unchanged memory, file-I/O, thread/futex
-and signal modes, actual abnormal launcher/worker handling, current regressions
-and complete evidence retention. The later review must list unsupported
-features and distinguish this one-McKernel-CPU, 128-MiB guest baseline from
-multicore, MPI, broader application suites and whole-OS production acceptance.
+The earlier `native-application-start-checkpoint-20260908.json` remains the
+sixteen-HELLO baseline over two independent guests and original control-ABI
+regressions. Whole-OS production acceptance, full Rust/assembly completion,
+multicore McKernel execution, MPI and broader application testing are later
+obligations. The current baseline uses one McKernel CPU and 128 MiB inside the
+isolated four-vCPU/two-NUMA Linux guest. Do not announce Ultra readiness yet.
 
 ## Application readiness and model handoff, 2026-09-08
 
@@ -1809,3 +1789,32 @@ artifacts, with all 57 native compiler bindings. The corrected audit accounts
 for expected CLI-error stdout inside one passing test and buffered stdout after
 final unittest OK. Neither failure changes the original test or build results.
 Guest runtime verification remains the next gate.
+
+## Native clone3 capability boundary review, 2026-09-09
+
+Before changing behavior, preserve thread guest 1 from `a841707d`. The actual
+trace records guest syscall 435 returning Linux child PID 311, followed by
+launcher SIGSEGV. `arch/x86_64/kernel/include/syscall_list.h` has no clone3
+handler; `kernel/syscall.c::syscall` routes that missing entry through existing
+Rust `syscall_generic_forwarding` / `syscall_generic_forwarding_body_result`.
+The unchanged launcher special-cases syscall 56 for its existing cooperative
+clone protocol, but sends 435 to `syscall(number, args...)` generically. It
+cannot create a McKernel thread from that Linux execution context.
+
+Retain the existing Rust `sys_clone` / `arch_clone_body_result` and `do_fork`
+implementation and unchanged libc/application/launcher. For the native guest
+selection only, return truthful ENOSYS for unsupported clone3 from the generic
+forwarding body before writing the request or invoking its offload provider.
+Keep its original null-request/provider checks, all other syscall forwarding,
+legacy Rust selection and exact C fallback unchanged. Clone3 remains explicitly
+unsupported; this is a capability boundary, not a clone3 implementation. Do not
+change libc or force a successful thread result. Its normal compatibility path
+must exercise the existing guest clone and pass the complete original pthread,
+TLS, barrier, mutex and join checks in a fresh guest.
+
+Verify exact C/legacy Rust equivalence for the original forwarding body,
+native non-435 equivalence, and zero request mutation/provider calls for 435,
+including hostile argument values and original invalid-input guards. Build all
+four images and bind the selected native code before rerunning the thread mode.
+If the existing clone path exposes another issue, retain it and investigate;
+signal and handoff acceptance remain pending until their actual checks pass.

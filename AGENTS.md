@@ -30,8 +30,10 @@ guests with current module 5: write result 25, exit 37 and complete scheduled
 retirement after each launch. Both original control-ABI regressions pass. The
 full `docs/verification/native-application-start-checkpoint-20260908.json`
 retains 21 captures, including all six original failures. The phase remains
-active: actual abnormal-owner handling and memory/file/thread-futex/signal
-smokes are pending. Do not announce Ultra readiness yet.
+active. The later core checkpoint accepts unchanged libc memory and file-I/O
+modes, but the first thread test crashes the launcher at unsupported clone3.
+Signals and abnormal-owner handling remain pending. Do not announce Ultra
+readiness yet.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 
@@ -198,6 +200,23 @@ other projects, VM disks, recent host logs and Docker state remain intact.
 Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
+
+Latest actual application checkpoint, 2026-09-09:
+`docs/verification/native-application-core-checkpoint-20260909.json` retains
+fourteen complete captures, all six failures and exact current module/image
+copies. Memory guest 2 and files guest 1 pass the unchanged dynamically linked
+libc application, output/exit 37, scheduled cleanup, pager release and eight
+HELLO repetitions each. Both metadata/string ABIs and continuing sysfs pass.
+Host invalidation and nonempty zeroing now have actual runtime evidence.
+Thread guest 1 remains FAIL: unsupported clone3 forwards into the Linux launcher,
+returns Linux child PID 311 and crashes with exit 139. The batch stopped before
+signals. The service plan records the pre-edit native capability-boundary fix:
+truthful ENOSYS before generic clone3 offload, preserving the existing guest
+clone implementation and unchanged libc/application. Next verify this boundary,
+build the four images and rerun the original thread test. Do not announce Ultra
+readiness until threads, signals, abnormal owners and final regressions pass.
+This full checkpoint supersedes the earlier string/pager WIP retention-pending
+status; their original records and all expanded attempts remain protected.
 
 Latest native host zeroing checkpoint, 2026-09-09:
 `docs/verification/native-application-zeroing-host-checkpoint-20260909.json`
