@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wake-one",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.wake-one"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["wake_one=1 completed=1 thread_ok=1 wake_after=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Exactly one waiter is woken with wake return 1", "The waiter completes exactly once", "A wake after join returns 0 and no waiter remains"],
+  "unresolved_expectations": ["Freeze scheduler-bracket evidence and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm retry-until-actual-wake is required and wake-after-join must return zero."
+}

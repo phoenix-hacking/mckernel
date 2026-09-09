@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wake-two",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.wake-two"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["started=2 first=1 second=1 completed=2 threads_ok=1 wake_after=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Two distinct waiters are started", "Each wake call returns exactly 1 and releases one waiter", "Both waiters complete exactly once", "Wake after both joins returns 0"],
+  "unresolved_expectations": ["Freeze scheduler-bracket evidence and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm two actual one-waiter wake returns are required and no waiter may be lost."
+}

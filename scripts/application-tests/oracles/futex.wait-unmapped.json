@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wait-unmapped",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.wait-unmapped"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=14 e_fault=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["FUTEX_WAIT on the unmapped nonnull address returns -1/EFAULT", "The process remains alive and no waiter is retained"],
+  "unresolved_expectations": ["Bind pinned futex ABI errno value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm unmapped futex input is rejected with EFAULT without creating waiter state."
+}
