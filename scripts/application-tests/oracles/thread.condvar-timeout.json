@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.condvar-timeout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.condvar-timeout"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=110 timedout=1 predicate=0 unchanged=1 unlock=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["An unsatisfied predicate times out with ETIMEDOUT using CLOCK_MONOTONIC", "The mutex is reacquired on return, unlock succeeds, and predicate data remains unchanged"],
+  "unresolved_expectations": ["Freeze condition-clock ABI, timeout relation, and canonical output before execution."],
+  "max_question_for_reviewer": "Confirm monotonic condvar deadlines and mutex reacquisition on ETIMEDOUT."
+}

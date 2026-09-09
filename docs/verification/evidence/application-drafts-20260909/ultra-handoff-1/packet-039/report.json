@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-039",
+  "packet_version": 1,
+  "context_sha256": "5f3233dac770f7885ee61e112549657408cd70196a1daf0a33a6796f4e34cd05",
+  "started_utc": "2026-09-09T10:55:00Z",
+  "finished_utc": "2026-09-09T10:56:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.condvar-broadcast",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.condvar-broadcast.c",
+      "oracle": "scripts/application-tests/oracles/thread.condvar-broadcast.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.condvar-broadcast.c", "scripts/application-tests/oracles/thread.condvar-broadcast.json"],
+      "parameter_vectors": {"waiters": [4], "broadcasts": [1], "predicate": ["false then true"]},
+      "implemented_operations": ["four predicate-loop waiters", "single guarded broadcast", "post-broadcast joins"],
+      "unresolved_oracle_notes": ["Wake scheduling and spurious-wakeup evidence require Max review."],
+      "max_reviewer_question": "Confirm broadcast must release all predicate waiters without asserting a spurious-wakeup count."
+    },
+    {
+      "case_id": "thread.condvar-timeout",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.condvar-timeout.c",
+      "oracle": "scripts/application-tests/oracles/thread.condvar-timeout.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.condvar-timeout.c", "scripts/application-tests/oracles/thread.condvar-timeout.json"],
+      "parameter_vectors": {"clock": ["CLOCK_MONOTONIC"], "deadline_offset_ns": [20000000], "predicate": [0]},
+      "implemented_operations": ["monotonic condition clock", "unsatisfied timed wait", "mutex unlock after timeout"],
+      "unresolved_oracle_notes": ["Condition-clock ABI and timeout relation require Max review."],
+      "max_reviewer_question": "Confirm monotonic condvar deadlines and mutex reacquisition on ETIMEDOUT."
+    },
+    {
+      "case_id": "thread.once",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.once.c",
+      "oracle": "scripts/application-tests/oracles/thread.once.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.once.c", "scripts/application-tests/oracles/thread.once.json"],
+      "parameter_vectors": {"threads": [8], "calls_per_thread": [16], "published_value": [20903]},
+      "implemented_operations": ["concurrent pthread_once calls", "single initializer counter", "published-data observation"],
+      "unresolved_oracle_notes": ["Once-control memory ordering and publication evidence require Max review."],
+      "max_reviewer_question": "Confirm publication visibility and exactly one initializer invocation for all callers."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.condvar-broadcast.c", "sha256": "e8e52a97f509fc0faf76848bb2c83ec8d6dd8d63d50c25f0532d42b18096a7d3"},
+    {"path": "scripts/application-tests/oracles/thread.condvar-broadcast.json", "sha256": "1d85b2f433890791f93b6087578da252eb299bea9cf6b5229430dedc24c96fb0"},
+    {"path": "scripts/application-tests/cases/thread/thread.condvar-timeout.c", "sha256": "f24d817d875af0efb8375e01310f37fe262b727603c6f0fcb7c6bcc8284ed906"},
+    {"path": "scripts/application-tests/oracles/thread.condvar-timeout.json", "sha256": "49357cc260e82849c2a3174037acf66ba66141576f49cb026535697cf5cf8683"},
+    {"path": "scripts/application-tests/cases/thread/thread.once.c", "sha256": "812f16d5e7221eb27b854bb0e526f0dbd107774d22b835cb2eceb591ce396933"},
+    {"path": "scripts/application-tests/oracles/thread.once.json", "sha256": "35997bb3530b16842099f9c2a520eff6effa0e91096e52173114a475141119f9"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-039/context.json", "sha256": "5f3233dac770f7885ee61e112549657408cd70196a1daf0a33a6796f4e34cd05"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-039.json --emit-context /tmp/application-packet-039-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-039/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Broadcast, timed condvar, and once publication cases need final native ABI, scheduler, memory-order, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review broadcast predicate and wake evidence", "Confirm monotonic timeout and mutex reacquisition", "Review pthread_once publication ordering"],
+  "next_packet_id": "packet-040"
+}

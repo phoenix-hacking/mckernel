@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.once",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.once"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["threads=8 initializer_calls=1 all_seen=8 published=20903"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Eight threads call pthread_once sixteen times each", "The initializer executes exactly once", "Every caller observes the fixed published value"],
+  "unresolved_expectations": ["Freeze once-control memory-order evidence and canonical output before execution."],
+  "max_question_for_reviewer": "Confirm publication visibility to every pthread_once caller and exactly one initializer invocation."
+}

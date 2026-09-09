@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.condvar-broadcast",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.condvar-broadcast"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["waiting=4 awakened=4 ready=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Four waiters block on a false predicate", "One broadcast releases all four after the guarded predicate becomes true", "Each waiter observes the predicate once and joins"],
+  "unresolved_expectations": ["Freeze wake scheduling evidence and canonical output before execution; spurious wake counts remain intentionally unconstrained."],
+  "max_question_for_reviewer": "Confirm broadcast must release all predicate waiters without requiring a spurious-wakeup count."
+}
