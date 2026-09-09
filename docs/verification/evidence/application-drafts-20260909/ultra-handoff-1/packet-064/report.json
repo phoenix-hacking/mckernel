@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-064",
+  "packet_version": 1,
+  "context_sha256": "d3f22512f9039bddd03e842720913f7592df69762d763bae6beb640010d46817",
+  "started_utc": "2026-09-09T13:50:00Z",
+  "finished_utc": "2026-09-09T13:52:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.wc-bytes",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.wc-bytes.json",
+      "oracle": "scripts/application-tests/oracles/app.wc-bytes.json",
+      "changed_files": ["scripts/application-tests/inputs/app.wc-bytes.json", "scripts/application-tests/oracles/app.wc-bytes.json"],
+      "parameter_vectors": {"utility": ["wc"], "mode": ["-c"], "stdin_bytes": [1048576], "byte": ["0x41"]},
+      "implemented_operations": ["independent 1MiB generated stdin specification", "exact byte-count oracle", "empty-stderr and exit-zero contract"],
+      "unresolved_oracle_notes": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+      "max_reviewer_question": "Confirm the bound coreutils wc -c argv and exact 1MiB generated stdin contract."
+    },
+    {
+      "case_id": "app.wc-lines",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.wc-lines.json",
+      "oracle": "scripts/application-tests/oracles/app.wc-lines.json",
+      "changed_files": ["scripts/application-tests/inputs/app.wc-lines.json", "scripts/application-tests/oracles/app.wc-lines.json"],
+      "parameter_vectors": {"utility": ["wc"], "mode": ["-l"], "lines": [4096], "line_bytes": ["line\\n"]},
+      "implemented_operations": ["independent 4096-line generated stdin specification", "exact line-count oracle", "newline termination invariant"],
+      "unresolved_oracle_notes": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+      "max_reviewer_question": "Confirm the bound coreutils wc -l argv and exact 4096-line generated stdin contract."
+    },
+    {
+      "case_id": "app.sha256sum",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.sha256sum.json",
+      "oracle": "scripts/application-tests/oracles/app.sha256sum.json",
+      "changed_files": ["scripts/application-tests/inputs/app.sha256sum.json", "scripts/application-tests/oracles/app.sha256sum.json"],
+      "parameter_vectors": {"utility": ["sha256sum"], "input_bytes": [24], "digest": ["21f87b81702c28e740565cbe54127948ec0cb50cf3e0d171c3c30d97df786aeb"], "filename": ["/case/input"]},
+      "implemented_operations": ["pinned input bytes", "independent hashlib digest", "exact filename/separator/newline oracle"],
+      "unresolved_oracle_notes": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+      "max_reviewer_question": "Confirm sha256sum output formatting and the independent digest for the pinned input bytes."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.wc-bytes.json", "sha256": "0aa940b00c0c237cae3f35b1e6543bd5259aa6b41736da4249d17429d2d1ec8b"},
+    {"path": "scripts/application-tests/oracles/app.wc-bytes.json", "sha256": "44f76144cfec473dd8bd689c4b5726b67141aaae0198420263ea1ed434e2af1b"},
+    {"path": "scripts/application-tests/inputs/app.wc-lines.json", "sha256": "ab0c5e589f5c69f514ba22816a34fa6edfb4402aac3928f7c9e01b143af95013"},
+    {"path": "scripts/application-tests/oracles/app.wc-lines.json", "sha256": "20086b5978545ae2c85635a290be9648233041eb18894913274bccb688a92c80"},
+    {"path": "scripts/application-tests/inputs/app.sha256sum.json", "sha256": "0e6ed96c9d86528a8d3ca12a702ab75e62a3333578b2fb8a4bfe8a7b3938a3b7"},
+    {"path": "scripts/application-tests/oracles/app.sha256sum.json", "sha256": "48f31b5392fa97e0f6d4b2bb3ad06ea7500782ce51ec051a46c400e97ea1dbbc"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-064/context.json", "sha256": "d3f22512f9039bddd03e842720913f7592df69762d763bae6beb640010d46817"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-064.json --emit-context /tmp/application-packet-064-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-064/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned coreutils identity, generator expansion, output formatting, and DSO closure need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review wc byte generator and coreutils argv", "Review wc line generator and newline semantics", "Review independent SHA-256 and output formatting"],
+  "next_packet_id": "packet-065"
+}

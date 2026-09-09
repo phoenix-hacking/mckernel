@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "case_id": "app.wc-lines",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_files": {"/case/stdin": {"size": 20480, "generator": {"kind": "repeat-hex-sequence", "hex": "6c696e650a", "count": 4096}}},
+  "stdin": {"generator": {"kind": "repeat-hex-sequence", "hex": "6c696e650a", "count": 4096}},
+  "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"},
+  "relational_assertions": ["Independent fixture generation produces 4096 complete newline-terminated lines."]
+}

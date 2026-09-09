@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.wc-lines",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"stdin_generator": {"kind": "repeat-hex-sequence", "hex": "6c696e650a", "count": 4096}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["4096"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["wc -l reports the independently fixed count of 4096 newline terminators followed by one newline"],
+  "unresolved_expectations": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+  "max_question_for_reviewer": "Confirm the bound coreutils wc -l argv and exact 4096-line generated stdin contract."
+}

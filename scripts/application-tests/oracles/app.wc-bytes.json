@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.wc-bytes",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"stdin_generator": {"kind": "repeat-byte", "hex_byte": "41", "count": 1048576}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["1048576"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["wc -c reports the independently fixed byte count followed by one newline"],
+  "unresolved_expectations": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+  "max_question_for_reviewer": "Confirm the bound coreutils wc -c argv and exact 1MiB generated stdin contract."
+}
