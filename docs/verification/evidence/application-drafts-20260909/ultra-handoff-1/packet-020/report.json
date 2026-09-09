@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-020",
+  "packet_version": 1,
+  "context_sha256": "08acc5025566b6304284ff17c2982e7880ccb173059b3bd0ab702482c9607c2a",
+  "started_utc": "2026-09-09T11:50:00Z",
+  "finished_utc": "2026-09-09T11:50:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "file.dup-shared-offset", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.dup-shared-offset.c", "oracle": "scripts/application-tests/oracles/file.dup-shared-offset.json", "changed_files": ["scripts/application-tests/cases/file/file.dup-shared-offset.c", "scripts/application-tests/oracles/file.dup-shared-offset.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm alternating fd/dup reads share one offset and consume all eight bytes in order."},
+    {"case_id": "file.dup-close-original", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.dup-close-original.c", "oracle": "scripts/application-tests/oracles/file.dup-close-original.json", "changed_files": ["scripts/application-tests/cases/file/file.dup-close-original.c", "scripts/application-tests/oracles/file.dup-close-original.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm duplicate remains usable and extends abc to abcXYZ after original close."},
+    {"case_id": "file.dup2-replacement", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.dup2-replacement.c", "oracle": "scripts/application-tests/oracles/file.dup2-replacement.json", "changed_files": ["scripts/application-tests/cases/file/file.dup2-replacement.c", "scripts/application-tests/oracles/file.dup2-replacement.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm dup2 target replacement inherits source offset and leaves target pathname bytes unchanged."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/file/file.dup-shared-offset.c", "sha256": "92febc619b795dc13f6e0a2c0f50cb40ed15daef66e5c62c4864124457f2a792"},
+    {"path": "scripts/application-tests/oracles/file.dup-shared-offset.json", "sha256": "76c51fb66f0adeed8e67173f3c32ca573e22512f97aa1ac9cafb68a0c2b4bc59"},
+    {"path": "scripts/application-tests/cases/file/file.dup-close-original.c", "sha256": "8f649854b10e23602064dba9e25d12bcf34e088223e8e8e0d7294b52857c4d94"},
+    {"path": "scripts/application-tests/oracles/file.dup-close-original.json", "sha256": "0ee0e48f8a461ab1c751392f4943fde5af6e6dbdaab989b453b5092ce5438856"},
+    {"path": "scripts/application-tests/cases/file/file.dup2-replacement.c", "sha256": "de8bad64b6fb00adc53fc8ca9fab0ee5771d768e11e682d60bc283ad71014c30"},
+    {"path": "scripts/application-tests/oracles/file.dup2-replacement.json", "sha256": "68aa63e80666db5f88d1bfbdb734ad5324dd698c4976763e39ededbd33d984ed"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-020.json --emit-context /tmp/application-packet-020-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three descriptor duplication cases need final canonical record and reviewed input binding."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review shared open-file offsets, duplicate lifetime, replacement semantics, and exact file identities."],
+  "next_packet_id": "packet-021"
+}
