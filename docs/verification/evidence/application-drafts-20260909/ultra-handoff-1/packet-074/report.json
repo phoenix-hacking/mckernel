@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-074",
+  "packet_version": 1,
+  "context_sha256": "af5d0d2d35ed40972ed0762537f4c634346546974914857580a6d2bea983a67f",
+  "started_utc": "2026-09-09T15:30:00Z",
+  "finished_utc": "2026-09-09T15:34:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "vector.sse42-crc32c",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.sse42-crc32c.c",
+      "oracle": "scripts/application-tests/oracles/vector.sse42-crc32c.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.sse42-crc32c.c", "scripts/application-tests/oracles/vector.sse42-crc32c.json"],
+      "parameter_vectors": {"feature": ["sse4.2"], "instruction": ["crc32"], "input": ["123456789"], "seed_final_xor": ["0xffffffff"], "expected": ["0xe3069283"]},
+      "implemented_operations": ["target-isolated hardware CRC32C", "independent reflected-polynomial scalar oracle", "fixed known-answer vector"],
+      "unresolved_oracle_notes": ["SSE4.2 CRC32 instruction forms, chunk boundaries, and feature evidence require Max review."],
+      "max_reviewer_question": "Confirm byte/word/dword/qword CRC32 forms and exact standard CRC32C seed/final-XOR contract before extending the fixture."
+    },
+    {
+      "case_id": "vector.avx-f32-arithmetic",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.avx-f32-arithmetic.c",
+      "oracle": "scripts/application-tests/oracles/vector.avx-f32-arithmetic.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.avx-f32-arithmetic.c", "scripts/application-tests/oracles/vector.avx-f32-arithmetic.json"],
+      "parameter_vectors": {"feature": ["avx"], "instructions": ["vaddps", "vsubps", "vmulps"], "lanes": [8], "halves": [2], "inputs": ["finite dyadic binary32"]},
+      "implemented_operations": ["AVX target-isolated 256-bit arithmetic", "independent scalar lane comparisons", "distinct low/high-half patterns"],
+      "unresolved_oracle_notes": ["AVX CPUID/XCR0 evidence, target disassembly, and no-spill instruction window require Max review."],
+      "max_reviewer_question": "Confirm AVX requires CPUID leaf1 AVX plus XCR0 bits1/2 in both engines before enabling this target."
+    },
+    {
+      "case_id": "vector.avx2-integer-wrap",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.avx2-integer-wrap.c",
+      "oracle": "scripts/application-tests/oracles/vector.avx2-integer-wrap.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.avx2-integer-wrap.c", "scripts/application-tests/oracles/vector.avx2-integer-wrap.json"],
+      "parameter_vectors": {"feature": ["avx2"], "instructions": ["vpaddd", "vpsubd", "vpmulld"], "lanes": [8], "wrap_vectors": ["0xffffffff+1", "cross-32-bit products"]},
+      "implemented_operations": ["AVX2 target-isolated packed uint32 operations", "independent modulo-2^32 scalar checks", "high-half and overflow patterns"],
+      "unresolved_oracle_notes": ["AVX2 CPUID/AVX transitive masks, target disassembly, and lane evidence require Max review."],
+      "max_reviewer_question": "Confirm AVX2 requires AVX plus leaf7 EBX bit5 and XCR0 bits1/2 in both engines before enabling this target."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/vector/vector.sse42-crc32c.c", "sha256": "269ce69435f3682aad69600580335a44e267a99bdf54bae28b5a1b3bbf15fc34"},
+    {"path": "scripts/application-tests/oracles/vector.sse42-crc32c.json", "sha256": "4cd2c9087a37aa26e4ce8fe2099bf667678dd18d07b01746ed502a02c5f1caf9"},
+    {"path": "scripts/application-tests/cases/vector/vector.avx-f32-arithmetic.c", "sha256": "23fcfb12ab3f364a6ddaade6d2d12f3cb9c33ce32abfeaf40cf101839745b9d1"},
+    {"path": "scripts/application-tests/oracles/vector.avx-f32-arithmetic.json", "sha256": "a63575fb28eb7ca5ae4eba5c7b224a4fdf486415d9fdc846d2748d2acd37eb35"},
+    {"path": "scripts/application-tests/cases/vector/vector.avx2-integer-wrap.c", "sha256": "50a6a681e891225bcabf4b1ee24f487256bd7d69bd37918ef049c8fa8a03102a"},
+    {"path": "scripts/application-tests/oracles/vector.avx2-integer-wrap.json", "sha256": "f1d5a2427962fc3f85c0894d5b78d8c735f0290401b7e2641a7ccd7e29127b6c"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-074/context.json", "sha256": "af5d0d2d35ed40972ed0762537f4c634346546974914857580a6d2bea983a67f"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-074.json --emit-context /tmp/application-packet-074-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-074/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Exact CPUID/XCR0 masks, target disassembly, CRC forms, AVX lane arrays, and both-engine runtime evidence require final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "vector-runtime-discovery", "vector-instruction-audit"],
+  "first_failure_event": null,
+  "max_escalation": ["Review CRC32C known answer and instruction forms", "Review AVX f32 exact dyadic lanes", "Review AVX2 modulo wrap and low products"],
+  "next_packet_id": "packet-075"
+}

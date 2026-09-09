@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.avx2-integer-wrap",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lanes=8 add_wrap=1 multiply_low=1 high_halves=1 modulo32=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each lane matches independent unsigned modulo-2^32 add and low-product arithmetic", "Explicit 0xffffffff+1 and products crossing32 bits exercise both 128-bit halves"],
+  "unresolved_expectations": ["AVX2 CPUID/AVX transitive masks, target disassembly, and lane register evidence require Max review."],
+  "max_question_for_reviewer": "Confirm AVX2 requires AVX plus leaf7 EBX bit5 and XCR0 bits1/2 in both engines before enabling this target."
+}
