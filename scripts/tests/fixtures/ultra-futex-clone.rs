@@ -108,6 +108,44 @@ fn scaling_never_wraps_or_selects_infinite() {
 }
 
 #[test]
+fn scaling_full_width_divisors_and_quotient_boundaries() {
+    let mut values = vec![0, 1, 999, 1000, 1001, i64::MAX as u64 - 1,
+                          i64::MAX as u64, i64::MAX as u64 + 1, u64::MAX - 1, u64::MAX];
+    for bit in 0..64 {
+        let power = 1u64 << bit;
+        values.extend([power - 1, power, power.saturating_add(1)]);
+    }
+    values.sort_unstable();
+    values.dedup();
+    for nanos in &values {
+        for scale in values.iter().copied().filter(|scale| *scale != 0) {
+            let numerator = *nanos as u128 * 1000;
+            let divisor = scale as u128;
+            let expected = (numerator / divisor + u128::from(numerator % divisor != 0))
+                .clamp(1, i64::MAX as u128);
+            assert_eq!(actual_native_futex::timer_ticks(*nanos, scale).unwrap() as u128,
+                       expected, "nanos={nanos} scale={scale}");
+        }
+    }
+    // Exercise both sides of an exact multiple without an overflowing
+    // product in the fixture's u64 input domain.
+    for scale in [1, 2, 3, 999, 1000, 1001, 1u64 << 32, 1u64 << 63, u64::MAX] {
+        for multiple in [1u128, 2, 999, 1000, 1001, i64::MAX as u128] {
+            let boundary = scale as u128 * multiple / 1000;
+            for candidate in [boundary.saturating_sub(1), boundary, boundary.saturating_add(1)] {
+                if candidate > u64::MAX as u128 { continue; }
+                let numerator = candidate * 1000;
+                let divisor = scale as u128;
+                let expected = (numerator / divisor + u128::from(numerator % divisor != 0))
+                    .clamp(1, i64::MAX as u128);
+                assert_eq!(actual_native_futex::timer_ticks(candidate as u64, scale).unwrap() as u128,
+                           expected, "boundary nanos={candidate} scale={scale}");
+            }
+        }
+    }
+}
+
+#[test]
 fn complete_word_range_rejects_kernel_wrap_and_misalignment() {
     assert_eq!(actual_native_futex::word_range(0x1000,0x1000,0x2000),Ok(()));
     assert_eq!(actual_native_futex::word_range(0x1ffc,0x1000,0x2000),Ok(()));

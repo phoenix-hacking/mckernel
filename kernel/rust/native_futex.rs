@@ -74,8 +74,21 @@ pub(crate) fn timer_ticks(nanoseconds: u64, picoseconds_per_tick: u64) -> Result
         return Err(-22);
     }
     let numerator = nanoseconds as u128 * 1000;
-    let ticks = numerator.div_ceil(picoseconds_per_tick as u128);
-    Ok(ticks.max(1).min(i64::MAX as u128) as u64)
+    // Freestanding x86 has no __udivti3. Compute only the 63 quotient bits
+    // representable by the timer ABI, using bounded shift/subtraction.
+    // A larger exact quotient greedily fills every bit and is saturated.
+    let mut remainder = numerator;
+    let mut quotient = 0u64;
+    for bit in (0..63).rev() {
+        let shifted = (picoseconds_per_tick as u128) << bit;
+        if remainder >= shifted {
+            remainder -= shifted;
+            quotient |= 1u64 << bit;
+        }
+    }
+    // quotient <= i64::MAX, so rounding up cannot overflow u64.
+    let ticks = quotient + u64::from(remainder != 0);
+    Ok(ticks.max(1).min(i64::MAX as u64))
 }
 
 /// Copy the exact user timespec once, then validate/convert only that private

@@ -172,3 +172,29 @@ the new image and isolated guest. The preserved
 `kernel/rust/tests/run_equivalence.sh` is the full legacy-equivalence command,
 to be run from an isolated writable source copy with its existing prerequisite
 inputs; this helper does not replace it or alter its assertions.
+
+## Native image 2 link failure: bounded division design before correction
+
+Root retained `/work/mckernel-native-ultra-images-20260909-2` and logged the
+native linker failure: `timer_ticks`' u128 `div_ceil` requires `__udivti3`, which
+the freestanding kernel does not provide. The passing user-space protocol
+fixture linked compiler runtime support and therefore did not expose this
+image dependency. Fallback and legacy Rust were already built and audited.
+
+Review found no existing selected kernel Rust u128 division or long-division
+helper to reuse (`kernel/rust` search for `__udivti3`, division helpers and
+u128 division). Retain the original multiply-by-1000, which already compiled,
+and the original exact ceil/minimum-one/i64::MAX saturation contract. Replace
+only the division with 63 bounded descending quotient-bit decisions. For
+each bit 62 through 0, compare/subtract the u64 divisor shifted into u128.
+Each shift fits in 126 bits; the numerator is below 2^74. The resulting
+quotient is the exact floor when representable, or i64::MAX when larger;
+one remaining nonzero remainder rounds up, then the original upper cap and
+minimum-one apply. This needs no new compiler runtime, C provider or ABI.
+
+Keep every existing protocol assertion. Extend the independent standard-Rust
+u128 division oracle with all u64 powers of two and adjacent values, extreme
+divisors and exact quotient/remainder boundaries; those test-only divisions
+remain in the ordinary user-space fixture. Root must rerun the complete
+protocol in fresh native/compat attempts and rebuild a fresh four-profile
+image attempt. No new runtime or image acceptance follows from this design.

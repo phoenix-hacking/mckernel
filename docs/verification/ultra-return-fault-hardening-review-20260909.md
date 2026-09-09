@@ -38,3 +38,6 @@ actual benign signal/FP/restart and futex/clone guest fixtures, original four
 application modes and both complete control regressions. Controlled dispatch
 tests alone do not prove actual trap delivery or application isolation. The
 full Linux extended signal xstate metadata ABI remains an explicit later gate.
+
+Image2 identified six newly unused legacy signal extern declarations after native consumer selection. Root now applies the same inverse native cfg already protecting their sole call site. No provider, legacy path or native behavior changes; warning settings remain unchanged.
+The same selection cleanup applies to two timeout log event constants whose only users are in the preserved legacy futex branch; no logger or warning suppression added.

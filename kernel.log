@@ -35168,3 +35168,277 @@ collect2: error: ld returned 1 exit status. Adding the optional process macro af
 2026-09-09 Ultra signal protocol3 PASS: stty -echo && exec /home/holden/mckernel-work/bin/mckernel-container native python3 -B /workspace/scripts/tests/verify-native-signal-abi.py 3. Both actual legacy/native restart policies pass27assertions each; four native ABI tests including12entryaddressboundaries, three pureXSAVEpolicytests, dynamic-libc Linuxcontainer references mask-context/fp-return/fp-restart pass exactoutputs/exit37. Restartblockedread andhandlerack precede0xa5input. CurrenttargetLinuxguest/McKernelexecution remainspending. Exact /work/native-signal-abi-protocol-20260909-3 retained, originalfailures1/2 retained, noassertionsweakened. Copiedexecutedformatted Rustsources/fixtures onlyafteroriginalbytecomparison.
 
 2026-09-09 Ultra WIP retention2 PASS; exact command native container python3 -B /work/retain-ultra-wip-2.py 2. Ninecompletecaptures archived/contentverified includingallthreeoriginalfailures inthisbatch. See docs/verification/ultra-wip-checkpoint-20260909-2.json. Newnative3modulebuildPASS, fault/signal/futex/protocol/casevalidatorPASS. All4guestimagebuilds/newpairruntimepending. Hostfree90GiB/scratchfree28GiB; preserveactiveinputs andfailures.
+
+2026-09-09 Ultra image1 FAIL; batch stopped immediately. Command: stty -echo && exec /home/holden/mckernel-work/bin/mckernel-container compat python3 -B /work/build-mckernel-native-ultra-images.py 1. Pinned compat CPU2-5 12GiB. Fallback andlegacyRust image builds pass; additional legacy sigreturn exact-call auditor cannot find arch_rt_sigreturn_body_result call withinitsboundeddecodewindow. Nativeprofilesnotbuilt. Full original /work/mckernel-native-ultra-images-20260909-1 preserved. Exact error: ('legacy-rust', 'sys_rt_sigreturn', 'arch_rt_sigreturn_body_result', [])
+
+2026-09-09 Ultra image2 FAIL; batch stopped immediately. Command: stty -echo && exec /home/holden/mckernel-work/bin/mckernel-container compat python3 -B /work/build-mckernel-native-ultra-images.py 2. Pinned compat CPU2-5 12GiB. Fallback+legacyRust compile/audits PASS. Native cmake --build /work/mckernel-native-ultra-images-20260909-2/native-rust --target mckernel.img -j4 exited2. Fulloriginalcapturepreserved. Nativebuild error tail:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arch_rt_sigreturn_alloc_bridge` is never used
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/syscall_policy.rs:255:8
+    |
+255 |     fn arch_rt_sigreturn_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arch_rt_sigreturn_free_bridge` is never used
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/syscall_policy.rs:256:8
+    |
+256 |     fn arch_rt_sigreturn_free_bridge(ptr: *mut c_void);
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arch_rt_sigreturn_xrstor_bridge` is never used
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/syscall_policy.rs:257:8
+    |
+257 |     fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void);
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: direct cast of function item into an integer
+    --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:1795:21
+     |
+1795 |         xpmem_ioctl as usize as CULong,
+     |                     ^^^^^^^^
+     |
+     = note: `#[warn(function_casts_as_integer)]` on by default
+help: first cast to a pointer `as *const ()`
+     |
+1795 |         xpmem_ioctl as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:1796:21
+     |
+1796 |         xpmem_close as usize as CULong,
+     |                     ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1796 |         xpmem_close as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:1797:19
+     |
+1797 |         xpmem_dup as usize as CULong,
+     |                   ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1797 |         xpmem_dup as *const () as usize as CULong,
+     |                   ++++++++++++
+
+warning: `ihk_ikc_send` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:197:5
+    |
+197 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut c_void, opt: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/futex.rs:198:5
+    |
+198 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut IkcScdPacket, flags: CInt) -> CInt;
+    |     -------------------------------------------------------------------------------------- `ihk_ikc_send` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, *mut IkcScdPacket, i32) -> i32`
+               found `unsafe extern "C" fn(*mut c_void, *mut c_void, i32) -> i32`
+    = note: `#[warn(clashing_extern_declarations)]` on by default
+
+warning: `page_fault_process_vm` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:215:5
+    |
+215 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/futex.rs:204:5
+    |
+204 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong) -> CInt;
+    |     ---------------------------------------------------------------------------------------- `page_fault_process_vm` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut ProcessVm, *mut c_void, u64) -> i32`
+               found `unsafe extern "C" fn(*mut ProcessVm, *mut c_void, u64)`
+
+warning: `sched_wakeup_thread` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:221:5
+    |
+221 |     fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/futex.rs:205:5
+    |
+205 |     fn sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt;
+    |     ------------------------------------------------------------------------ `sched_wakeup_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut Thread, i32) -> i32`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/ikc_queue.rs:95:5
+    |
+ 95 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/ikc_queue.rs:96:5
+    |
+ 96 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/listeners.rs:55:5
+    |
+ 55 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/listeners.rs:56:5
+    |
+ 56 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/procfs.rs:103:5
+    |
+103 |     fn ihk_mc_map_virtual(phys: CULong, npages: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/procfs.rs:104:5
+    |
+104 |     fn ihk_mc_unmap_virtual(ptr: *mut CULong, npages: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `syscall_generic_forwarding` redeclared with a different signature
+  --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:98:5
+   |
+98 |     fn syscall_generic_forwarding(syscall_num: CInt, ctx: *mut c_void) -> CLong;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+   |
+  ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/devobj.rs:57:5
+   |
+57 |     fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong;
+   |     -------------------------------------------------------------------------- `syscall_generic_forwarding` previously declared here
+   |
+   = note: expected `unsafe extern "C" fn(i32, *mut X86UserContext) -> i64`
+              found `unsafe extern "C" fn(i32, *mut c_void) -> i64`
+
+warning: `memobj_unref` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:127:5
+    |
+127 |     fn memobj_unref(ptr: *mut c_void) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/fileobj.rs:190:5
+    |
+190 |     fn memobj_unref(obj: *mut Memobj) -> CInt;
+    |     ------------------------------------------ `memobj_unref` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut Memobj) -> i32`
+               found `unsafe extern "C" fn(*mut c_void) -> i32`
+
+warning: `ihk_mc_pt_set_range` redeclared with a different signature
+   --> /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/xpmem_helpers.rs:154:5
+    |
+154 | /     fn ihk_mc_pt_set_range(
+155 | |         page_table: *mut c_void,
+156 | |         vm: *mut ProcessVm,
+157 | |         start: *mut c_void,
+...   |
+163 | |         replace: CInt,
+164 | |     ) -> CInt;
+    | |______________^ this signature doesn't match the previous declaration
+    |
+   ::: /work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/host_helpers.rs:161:5
+    |
+161 | /     fn ihk_mc_pt_set_range(
+162 | |         page_table: *mut c_void,
+163 | |         vm: *mut c_void,
+164 | |         start: *mut c_void,
+...   |
+170 | |         flags: CInt,
+171 | |     ) -> CInt;
+    | |______________- `ihk_mc_pt_set_range` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut c_void, *mut c_void, *mut c_void, *mut c_void, u64, u64, i32, *mut c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut c_void, *mut ProcessVm, *mut c_void, *mut c_void, u64, u64, i32, *mut VmRange, i32) -> i32`
+
+warning: 26 warnings emitted
+
+[ 10%] Built target mckernel_rust_obj
+[ 40%] Building C object kernel/CMakeFiles/mckernel.img.dir/syscall.c.o
+[ 40%] Building C object kernel/CMakeFiles/mckernel.img.dir/process.c.o
+[ 40%] Building C object kernel/CMakeFiles/mckernel.img.dir/mem.c.o
+[ 50%] Building C object kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o
+[ 50%] Building ASM object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o
+[ 60%] Building C object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o
+/work/mckernel-native-ultra-images-20260909-2/source/kernel/syscall.c:24927:44: warning: ‘syscall_itimer_offsets’ defined but not used [-Wunused-const-variable=]
+ static const struct syscall_itimer_offsets syscall_itimer_offsets = {
+                                            ^~~~~~~~~~~~~~~~~~~~~~
+/work/mckernel-native-ultra-images-20260909-2/source/kernel/syscall.c:24627:43: warning: ‘sched_syscall_offsets’ defined but not used [-Wunused-const-variable=]
+ static const struct sched_syscall_offsets sched_syscall_offsets = {
+                                           ^~~~~~~~~~~~~~~~~~~~~
+/work/mckernel-native-ultra-images-20260909-2/source/kernel/syscall.c:22964:45: warning: ‘syscall_cputime_offsets’ defined but not used [-Wunused-const-variable=]
+ static const struct syscall_cputime_offsets syscall_cputime_offsets = {
+                                             ^~~~~~~~~~~~~~~~~~~~~~~
+[ 70%] Building ASM object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o
+[ 80%] Building C object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o
+[ 90%] Building C object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o
+[100%] Building ASM object kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o
+[100%] Linking C executable mckernel.img
+rust/mckernel_rust.o: In function `_RNvNtCsbVRkTr4hvpt_13mckernel_rust12native_futex11timer_ticks':
+/work/mckernel-native-ultra-images-20260909-2/source/kernel/rust/native_futex.rs:(.ltext.do_futex_body_result+0x449): undefined reference to `__udivti3'
+gmake[3]: *** [kernel/CMakeFiles/mckernel.img.dir/build.make:316: kernel/mckernel.img] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:929: kernel/CMakeFiles/mckernel.img.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:936: kernel/CMakeFiles/mckernel.img.dir/rule] Error 2
+gmake: *** [Makefile:501: mckernel.img] Error 2
+
+2026-09-09 Ultra futex protocol native3 FAIL at initial git diff --check: kernel.log:35439 new blank line at EOF from root prior build-error logging. No compiler/test ran. Command: native container python3 -B /workspace/scripts/tests/run_ultra_futex_clone.py native 3; original /work/ultra-futex-clone-protocol-20260909-native-3 preserved. This appended failure record naturally removes the EOF blank condition without deleting any logged evidence; assertions unchanged. Fresh native4 follows.
+
+2026-09-09 Ultra futex protocol native4 PASS: native container python3 -B /workspace/scripts/tests/run_ultra_futex_clone.py native 4. Corrected freestanding shift/subtract timerconversion matches retained240Linuxvectors and addedfullwidth/threshold/denominator Rust referencevectors; alloriginalcopy/store/countdowntestsPASS. Original native3 whitespacefailure retained; native2belongsolddivisionimplementation. Full /work/ultra-futex-clone-protocol-20260909-native-4 retained.
+
+2026-09-09 Ultra futex protocol compat2 PASS: compat container python3 -B /workspace/scripts/tests/run_ultra_futex_clone.py compat 2. Finalboundeddivisionreplacement passes240pinnedLinuxvectors plusfullwidth/rounding/saturation referenceandalloriginaltests onactualguestcompiler. Complete /work/ultra-futex-clone-protocol-20260909-compat-2 retained. Native4/compat2arecurrentarithmetic acceptance; images1/2failures andprotocolnative3failure retained; newimage3pending. CommittedWIP2 b512afbe15aca52c6ac8b964360748814e342ff0 had36exactfetchedGitHubblobs verified, report /work/ultra-wip-github-20260909-2.json.

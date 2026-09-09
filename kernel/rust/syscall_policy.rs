@@ -249,11 +249,17 @@ unsafe extern "C" {
         regs: *mut *mut X86UserContext,
         xsave_size: *mut CInt,
     );
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_syscall_bridge(num: CInt, regs: *mut c_void) -> CLong;
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_set_signal_bridge(sig: CInt, regs: *mut c_void, info: *const SigInfo);
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_check_signal_bridge(signum: CInt, regs: *mut c_void, num: CInt);
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_free_bridge(ptr: *mut c_void);
+    #[cfg(not(native_linux_irq_work_v6_12))]
     fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void);
     #[cfg(native_linux_irq_work_v6_12)]
     fn arch_native_signal_restore_fp_bridge(fpregs: CULong, xsave_size: CInt) -> CLong;
@@ -1545,7 +1551,9 @@ const FUTEX_PRIVATE_FLAG: CInt = 128;
 const FUTEX_CLOCK_REALTIME: CInt = 256;
 const FUTEX_CMD_MASK: CInt = !(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME);
 const DO_FUTEX_LOG_ENTER: CInt = 1;
+#[cfg(not(native_linux_irq_work_v6_12))]
 const DO_FUTEX_LOG_TIMEOUT: CInt = 2;
+#[cfg(not(native_linux_irq_work_v6_12))]
 const DO_FUTEX_LOG_ABSOLUTE_TIME: CInt = 3;
 const DO_FUTEX_LOG_EXIT: CInt = 4;
 const BRK_LOG_ENTER: CInt = 1;
