@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.clone3-io-unsupported",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.clone3-io-unsupported"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["rc=-1 errno=95 eopnotsupp=1 child_created=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A valid CLONE_IO clone3 request returns the reviewed native EOPNOTSUPP", "No guest or delegated Linux worker child is created"],
+  "unresolved_expectations": ["Native CLONE_IO routing and no-child rollback evidence require Max review; malformed flags are out of scope."],
+  "max_question_for_reviewer": "Confirm CLONE_IO alone is rejected with EOPNOTSUPP and must not be generalized to malformed flag combinations."
+}

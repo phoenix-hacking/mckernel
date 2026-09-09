@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-054",
+  "packet_version": 1,
+  "context_sha256": "899f17583f1101699ad2c755cea4073e87ffd99b97ad52100bfb0826e2a3b8ef",
+  "started_utc": "2026-09-09T12:14:00Z",
+  "finished_utc": "2026-09-09T12:15:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.clone3-tail",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.clone3-tail.c",
+      "oracle": "scripts/application-tests/oracles/process.clone3-tail.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.clone3-tail.c", "scripts/application-tests/oracles/process.clone3-tail.json"],
+      "parameter_vectors": {"struct_size": ["sizeof(struct clone_args)+1"], "tail_byte": [1], "expected_errno": ["E2BIG"]},
+      "implemented_operations": ["zeroed clone_args layout", "nonzero trailing byte", "clone3 call and child observation"],
+      "unresolved_oracle_notes": ["Supported-layout size and tail-validation ordering require Max review."],
+      "max_reviewer_question": "Confirm nonzero clone3 trailing bytes reject with E2BIG before process creation."
+    },
+    {
+      "case_id": "process.clone3-io-unsupported",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.clone3-io-unsupported.c",
+      "oracle": "scripts/application-tests/oracles/process.clone3-io-unsupported.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.clone3-io-unsupported.c", "scripts/application-tests/oracles/process.clone3-io-unsupported.json"],
+      "parameter_vectors": {"flags": ["CLONE_IO"], "struct_size": ["sizeof(struct clone_args)"], "expected_errno": ["EOPNOTSUPP"], "child_created": [0]},
+      "implemented_operations": ["otherwise valid clone_args", "isolated CLONE_IO request", "no-child observation"],
+      "unresolved_oracle_notes": ["Native CLONE_IO routing and no-child rollback require Max review; malformed combinations remain out of scope."],
+      "max_reviewer_question": "Confirm CLONE_IO alone is EOPNOTSUPP and must not generalize to malformed flags."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.clone3-tail.c", "sha256": "546530e3b58455a59076e8de300fdb00ff532c662a198714fd5818a95f5abf98"},
+    {"path": "scripts/application-tests/oracles/process.clone3-tail.json", "sha256": "19d07e4b1e26291c611755d65e28b9491c411ed64521289cde3c7b38d735d56d"},
+    {"path": "scripts/application-tests/cases/process/process.clone3-io-unsupported.c", "sha256": "7399dc07a754f5fd7b57619e3134cd7bd1e2345c4ab50573ba41e89da5479d25"},
+    {"path": "scripts/application-tests/oracles/process.clone3-io-unsupported.json", "sha256": "ae24ab4793f14222feb5ddbb02592f846deeea32af8e8ac867421e92a9585492"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-054/context.json", "sha256": "899f17583f1101699ad2c755cea4073e87ffd99b97ad52100bfb0826e2a3b8ef"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-054.json --emit-context /tmp/application-packet-054-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-054/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Clone3 trailing-byte and CLONE_IO capability cases need final process ABI, validation-ordering, no-child, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review clone3 trailing-byte E2BIG", "Review CLONE_IO EOPNOTSUPP and scope"],
+  "next_packet_id": "packet-055"
+}
