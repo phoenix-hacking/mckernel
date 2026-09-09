@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-021",
+  "packet_version": 1,
+  "context_sha256": "06f5cc50422b1349ee100053f605de34d2263f014e6aa4b02347159f39217e22",
+  "started_utc": "2026-09-09T12:00:00Z",
+  "finished_utc": "2026-09-09T12:00:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "file.fd-reuse", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.fd-reuse.c", "oracle": "scripts/application-tests/oracles/file.fd-reuse.json", "changed_files": ["scripts/application-tests/cases/file/file.fd-reuse.c", "scripts/application-tests/oracles/file.fd-reuse.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed identity binding require confirmation."], "max_reviewer_question": "Confirm descriptor-number reuse is incidental while content proves the new file identity."},
+    {"case_id": "file.missing-open", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.missing-open.c", "oracle": "scripts/application-tests/oracles/file.missing-open.json", "changed_files": ["scripts/application-tests/cases/file/file.missing-open.c", "scripts/application-tests/oracles/file.missing-open.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned ENOENT numeric binding and canonical output require review."], "max_reviewer_question": "Confirm fixed absent path remains absent after failed open without O_CREAT."},
+    {"case_id": "file.exclusive-create", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.exclusive-create.c", "oracle": "scripts/application-tests/oracles/file.exclusive-create.json", "changed_files": ["scripts/application-tests/cases/file/file.exclusive-create.c", "scripts/application-tests/oracles/file.exclusive-create.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EEXIST numeric binding and canonical output require review."], "max_reviewer_question": "Confirm O_CREAT|O_EXCL rejects existing path atomically and preserves bytes/size."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/file/file.fd-reuse.c", "sha256": "fa74d0ee7ee8bba6bdcf8a4dfd52158ae3afb6ea6760bc224366f280b7924781"},
+    {"path": "scripts/application-tests/oracles/file.fd-reuse.json", "sha256": "97560875114449ff0de3dc31ba9460b8c6304ca2c55d5b672afdad4c7fe33843"},
+    {"path": "scripts/application-tests/cases/file/file.missing-open.c", "sha256": "f997fd938a5eda5224ee9ed3f4d06a6c4a30bc0638acfa1e35f501de29f196cf"},
+    {"path": "scripts/application-tests/oracles/file.missing-open.json", "sha256": "bbe0b5fe5ac9fcca9625bac74290d939f5cecb40c462ee4d3a028adca8a8c62e"},
+    {"path": "scripts/application-tests/cases/file/file.exclusive-create.c", "sha256": "7d634bab25caaf5995e725fef97858ac816f2900b7baab75acbd5769159e9ac7"},
+    {"path": "scripts/application-tests/oracles/file.exclusive-create.json", "sha256": "d712812a64a087e0611bd31a8382edd65ddff27a07196bf15d6d536e294d081f"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-021.json --emit-context /tmp/application-packet-021-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three descriptor/path identity cases need final errno, canonical record, and input review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review fd reuse identity, missing-path noncreation, and exclusive-create atomicity."],
+  "next_packet_id": "packet-022"
+}

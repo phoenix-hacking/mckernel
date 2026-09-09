@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.missing-open",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.missing-open"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["fd_negative=1 errno=2 still_missing=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["open returns -1", "errno is ENOENT immediately", "O_CREAT is absent and the path remains absent"],
+  "unresolved_expectations": ["Bind pinned guest ENOENT numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm the fixed path is guaranteed absent and no file is created by the failed open."
+}

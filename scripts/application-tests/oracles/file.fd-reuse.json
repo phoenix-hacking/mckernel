@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.fd-reuse",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.fd-reuse"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["old_fd", "new_fd", "fd_reused", "new_bytes"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The newly opened descriptor may reuse the closed number", "Reads follow the new file identity and equal NEW", "No stale old-file data is observed"],
+  "unresolved_expectations": ["The draft currently needs an independent fixed NEW byte vector and canonical output binding before execution."],
+  "max_question_for_reviewer": "Confirm the fd-reuse fixture's old/new byte vectors and require identity by content, not number alone."
+}
