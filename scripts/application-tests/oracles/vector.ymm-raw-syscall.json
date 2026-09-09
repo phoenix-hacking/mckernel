@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.ymm-raw-syscall",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-prefixes",
+    "lines": [
+      "case=vector.ymm-raw-syscall",
+      "write-byte=0x",
+      "syscall-getpid-ret=",
+      "syscall-gettid-ret=",
+      "syscall-write-ret=",
+      "syscall-yield-ret=",
+      "before reg00=",
+      "after_getpid reg00=",
+      "after_gettid reg00=",
+      "after_write reg00=",
+      "after_yield reg00="
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "seed_seed_formula": "seed_byte = (reg_index * 0x11 + byte_index * 0x0b + 0xa5) & 0xff",
+    "write_syscall_byte": "Y",
+    "syscalls": ["getpid", "gettid", "write", "sched_yield"],
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "all 512 bytes per snapshot must be captured for all 16 YMM registers",
+    "write syscall must return 1 with one emitted byte 0x59",
+    "upper 128-bit lanes must be checked independently from low lanes",
+    "no call or compiler restore must occur in the critical load-syscall-store window"
+  ],
+  "unresolved_expectations": [
+    "Exact per-register 32-byte seed/output arrays remain symbolic formulas until an oracle reviewer confirms fixed bytes.",
+    "Exact AVX contract outcome for optional VZEROUPPER and register spill behavior is pending instruction-disassembly review."
+  ],
+  "max_question_for_reviewer": "Should this case demand exact equality for upper and lower 128-bit halves separately, or is full 256-bit byte equality required as the only acceptance contract?"
+}

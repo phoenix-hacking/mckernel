@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.xmm-raw-syscall",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-prefixes",
+    "lines": [
+      "case=vector.xmm-raw-syscall",
+      "write-byte=0x",
+      "syscall-getpid-ret=",
+      "syscall-gettid-ret=",
+      "syscall-write-ret=",
+      "syscall-yield-ret=",
+      "before reg00=",
+      "after_getpid reg00=",
+      "after_gettid reg00=",
+      "after_write reg00=",
+      "after_yield reg00="
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "seed_seed_formula": "seed_byte = (reg_index * 0x13 + byte_index * 0x1f + 0x5a) & 0xff",
+    "write_syscall_byte": "Z",
+    "syscalls": ["getpid", "gettid", "write", "sched_yield"],
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "seed and after_getpid snapshots must include 16 registers x 16 bytes each",
+    "write syscall must return 1 and write exactly one byte 0x5a",
+    "getpid/gettid results should be positive and distinct by process/thread identity checks",
+    "each register window must be stored immediately after each syscall transition"
+  ],
+  "unresolved_expectations": [
+    "Exact precomputed seed byte array and per-byte output arrays are not yet encoded as fixed bytes in fixture metadata.",
+    "The raw line set from independent Linux reference must define the exact tolerated identity fields before final PASS transitions are allowed."
+  ],
+  "max_question_for_reviewer": "Should this case require full-byte equality for every XMM register after each transition, including write-byte identity and both PIDs/TIDs, or allow bounded identity-only checks on getpid/gettid?"
+}
