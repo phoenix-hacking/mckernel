@@ -53,6 +53,8 @@ mod smp_ikc;
 mod spinlock_helpers;
 mod string;
 mod syscall_policy;
+#[cfg(native_linux_irq_work_v6_12)]
+mod native_signal;
 mod sysfs;
 #[cfg(native_sysfs_verify)]
 #[path = "../../scripts/tests/fixtures/mckernel_guest_sysfs.rs"]

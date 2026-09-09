@@ -981,6 +981,17 @@ struct sigsp {
 	siginfo_t info;
 };
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+extern long native_signal_stack_prepare_result(const stack_t *stack,
+		stack_t *saved, unsigned long sp, unsigned long flags,
+		int xsave_size, size_t frame_size, unsigned long user_start,
+		unsigned long user_end, unsigned long *frame,
+		unsigned long *fpregs);
+extern long native_signal_stack_publish_result(stack_t *stack,
+		unsigned long frame, unsigned long restorer,
+		long (*copy_to)(unsigned long, const void *, size_t));
+#endif
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx);
 #else
@@ -1752,6 +1763,20 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		int xsavesize = get_xsave_size();
 		unsigned long fpregs;
 
+		memset(&ksigsp, '\0', sizeof ksigsp);
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+		unsigned long native_frame;
+
+		ret = native_signal_stack_prepare_result(&thread->sigstack,
+				&ksigsp.sigstack, regs->gpr.rsp, k->sa.sa_flags,
+				xsavesize, sizeof ksigsp,
+				thread->vm->region.user_start,
+				thread->vm->region.user_end,
+				&native_frame, &fpregs);
+		if (ret)
+			goto native_bad_signal_frame;
+		sigsp = (struct sigsp *)native_frame;
+#else
 		if((k->sa.sa_flags & SA_ONSTACK) &&
 		   !(thread->sigstack.ss_flags & SS_DISABLE) &&
 		   !(thread->sigstack.ss_flags & SS_ONSTACK)){
@@ -1766,7 +1791,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		fpregs = (unsigned long)usp - xsavesize;
 		sigsp = ((struct sigsp *)fpregs) - 1;
 		sigsp = (struct sigsp *)((unsigned long)sigsp & 0xfffffffffffffff0UL);
-		memset(&ksigsp, '\0', sizeof ksigsp);
+#endif
 
 		ksigsp._r15 = regs->gpr.r15;
 		ksigsp._r14 = regs->gpr.r14;
@@ -1790,7 +1815,9 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		ksigsp._cr2 = (unsigned long)pending->info._sifields._sigfault.si_addr;
 		ksigsp._oldmask = thread->sigmask.__val[0];
 
+#ifndef MCKERNEL_NATIVE_SIGNAL_STACK
 		memcpy(&ksigsp.sigstack, &thread->sigstack, sizeof(stack_t));
+#endif
 		ksigsp.sigrc = rc;
 		ksigsp.num = num;
 		restart = isrestart(num, rc, sig, k->sa.sa_flags & SA_RESTART);
@@ -1803,21 +1830,32 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 			struct xsave_struct *kfpregs;
 
 			if(!_kfpregs){
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+				ret = -ENOMEM;
+				goto native_bad_signal_frame;
+#else
 				kfree_tracked(pending, __FILE__, __LINE__);
 				kfree_tracked(_kfpregs, __FILE__, __LINE__);
 				kprintf("do_signal,no space available\n");
 				terminate(0, sig);
 				goto out;
+#endif
 			}
 			kfpregs = (void *)((((unsigned long)_kfpregs) + 63) & ~63);
 			memset(kfpregs, '\0', xsavesize);
 			asm volatile("xsave %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
 			if(copy_to_user((void *)fpregs, kfpregs, xsavesize)){
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+				kfree_tracked(_kfpregs, __FILE__, __LINE__);
+				ret = -EFAULT;
+				goto native_bad_signal_frame;
+#else
 				kfree_tracked(pending, __FILE__, __LINE__);
 				kfree_tracked(_kfpregs, __FILE__, __LINE__);
 				kprintf("do_signal,write_process_vm failed\n");
 				terminate(0, sig);
 				goto out;
+#endif
 			}
 			ksigsp.fpregs = (void *)fpregs;
 			kfree_tracked(_kfpregs, __FILE__, __LINE__);
@@ -1825,16 +1863,40 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		memcpy(&ksigsp.info, &pending->info, sizeof(siginfo_t));
 
 		if(copy_to_user(sigsp, &ksigsp, sizeof ksigsp)){
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+			ret = -EFAULT;
+			goto native_bad_signal_frame;
+#else
 			kfree_tracked(pending, __FILE__, __LINE__);
 			mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 			kprintf("do_signal,write_process_vm failed\n");
 			terminate(0, sig);
 			goto out;
+#endif
 		}
 
 		usp = (unsigned long *)sigsp;
 		usp--;
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+		ret = native_signal_stack_publish_result(&thread->sigstack,
+				(unsigned long)sigsp,
+				(unsigned long)k->sa.sa_restorer,
+				arch_copy_to_user_bridge);
+		if (ret)
+			goto native_bad_signal_frame;
+		goto native_signal_frame_copied;
+
+native_bad_signal_frame:
+		kfree_tracked(pending, __FILE__, __LINE__);
+		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
+		kprintf("do_signal: invalid native signal frame: %d\n", ret);
+		terminate(0, SIGSEGV);
+		goto out;
+
+native_signal_frame_copied:
+#else
 		*usp = (unsigned long)k->sa.sa_restorer;
+#endif
 		if (mcexec_v10_signal_logs < 64) {
 			kprintf("mcexec_v10: signal_handler pid=%d tid=%d sig=%d handler=0x%lx restorer=0x%lx old_rip=0x%lx old_sp=0x%lx new_sp=0x%lx si_addr=0x%lx\n",
 				pid, thread ? thread->tid : -1, sig,

@@ -37,6 +37,13 @@ the second handler skips the alternate stack. Signals, abnormal-owner handling
 and final current-module regressions/replays remain pending. Do not announce
 Ultra readiness yet.
 
+The native signal candidate now passes 3,780 exact pinned Linux stack vectors,
+five legacy and six native return/frame tests, including repeated/nested
+delivery, red-zone/bounds and user-copy failures. The host committed-return
+method and all original mailbox tests pass 37 cases. Full original fixture
+failures are retained in the signals protocol checkpoint. New native images,
+modules and actual signal runtime remain pending; the failed guest stays FAIL.
+
 ## Active goal and GitHub checkpoints (2026-09-07)
 
 Resume the interrupted McKernel work: restore the existing validation

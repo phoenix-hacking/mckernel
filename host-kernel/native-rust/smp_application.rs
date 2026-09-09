@@ -842,11 +842,14 @@ impl Remote {
             if entry.syscalls.returned(worker, serial).map_err(errno)? {
                 return Ok(());
             }
-            // An interrupted return retains its original result, response and
-            // worker binding for publication. WAIT cannot take new work early.
-            if self.changed.wait_interruptible(&mut slots) {
-                return Err(EINTR);
+            if entry.quarantined {
+                return Err(errno(-71));
             }
+            // The return is committed: complete its real publication before
+            // exposing success to the launcher. A signal cannot cancel or
+            // replay that result. The continuing owner still handles errors,
+            // quarantine and wake publication; ordinary WAIT is interruptible.
+            self.changed.wait(&mut slots);
         }
     }
 

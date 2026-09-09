@@ -27,8 +27,11 @@ Signal guest 1 fails its second alternate-stack assertion: the first handler
 uses the alternate stack and returns; the second uses the ordinary stack.
 The producer saves SS_ONSTACK after setting it, and Rust sigreturn restores
 that saved state. The captured interrupted host RET also needs review.
-No signal behavior has been changed yet. Preserve the original signal test
-and error scan; final current-module memory/file/control replays and actual
+The native signal candidate now passes 3,780 pinned Linux comparison vectors,
+five legacy and six native frame/return tests, and 37 mailbox/committed-return
+tests. The signals protocol checkpoint retains both original fixture failures.
+New images/modules and actual signal runtime remain pending. Preserve the
+original signal test and error scan; final memory/file/control replays and actual
 abnormal-owner coverage remain open. Do not announce Ultra readiness yet.
 
 `native-application-core-checkpoint-20260909.json` retains fourteen complete
@@ -2007,3 +2010,62 @@ has no abnormal-owner or cleanup acceptance credit. Final current-module
 memory/file replays, both full control regressions and real abnormal-owner
 coverage remain pending. The phase is still active, with three core modes
 accepted and no Ultra readiness claim.
+
+
+## Native signal frame and committed-return integration review, 2026-09-09
+
+Before behavior edits, the selected producer remains architecture C
+`arch/x86_64/kernel/syscall.c::do_signal`; native Rust owns
+`syscall_policy::{sys_rt_sigreturn,arch_rt_sigreturn_body_result,
+sys_sigaltstack,sigaltstack_body_result}`. Reuse `abi::SigStack`, the existing
+`sigsp`/`RtSigreturnFrame` layout, checked user-copy bridges, XSAVE providers,
+and the current signal-common lock and pending-signal lifecycle. Preserve
+legacy Rust and C fallback selections and their original equivalence bodies.
+No existing Rust producer implements this architecture stack-selection gap.
+Add only the native Rust stack preparation/publication and alternate-stack
+state handling behind the existing Linux-6.12 Rust cfg and an explicit matching
+C selection; do not overload the clone3 selection macro.
+
+Pinned Linux 6.12 references are `include/linux/sched/signal.h::{__on_sig_stack,
+on_sig_stack,sas_ss_flags}`, `arch/x86/kernel/signal.c::get_sigframe`,
+`include/linux/signal.h::unsafe_save_altstack`, and
+`kernel/signal.c::{do_sigaltstack,restore_altstack}`. Linux determines active
+stack state from the interrupted/restored SP; entering a handler must not save
+an already-mutated active flag. Its downward stack interval excludes the base
+and includes the top. Preserve the 128-byte x86 red zone for ordinary and nested
+frames, check all frame/XSAVE/restorer arithmetic and user/alternate extents,
+and reject overflow before user writes. Keep McKernel's existing frame ABI
+and floating-point layout. Unsupported SS_AUTODISARM remains rejected.
+
+Native preparation snapshots the interrupted stack without changing the live
+thread. Publish live active state only after the existing XSAVE/frame copies
+and a checked restorer copy succeed. Failed copies must leave that state
+unchanged and release the signal lock before the retained termination path.
+Native sigaltstack queries derive flags from the actual caller SP and reject
+replacement while running on the alternate stack. Native sigreturn restores
+stack configuration with the Linux nesting rule, uses its private copied frame
+for restart/result fields, and releases its temporary XSAVE allocation after a
+copy failure. Keep the old byte-restoration tests in the legacy selection;
+exercise actual native bodies separately with copy faults and nested returns.
+
+The actual host nr-14 RET was accepted while Linux delivered the signal, but
+`Remote::return_syscall` allowed its completion wait to return EINTR. The
+unchanged launcher treats a RET error as an error, whereas its WAIT loop
+explicitly retries EINTR. Reuse the exact pinned Linux
+`rust/kernel/sync/condvar.rs::CondVar::wait` for the already-committed return
+publication interval. Validation/copy errors before acceptance remain errors;
+ordinary WAIT remains interruptible. The existing continuing pump, retained
+response/worker ownership, quarantine errors and notifications remain the
+completion authority. A committed result cannot be retried or rebound; hold
+the ioctl's referenced owner until its real publication or recorded failure.
+No new FFI, fabricated result or early 'returned' log is needed. Preserve the
+actual native user RET adapter and its acceptance/error tests.
+
+Validate the native stack predicates against exact extracted pinned Linux C,
+actual native preparation/publication/sigaltstack/return bodies including
+nested delivery, red-zone/extent boundaries and copy failures, and the exact
+host committed-return method with delayed/full-queue and error completion.
+Build all four guest selections and all three host modules with original
+checks; then run the unchanged signal application in a fresh guest. Preserve
+the original failed attempt and all original output/route/cleanup assertions.
+Final memory/files/control replays and abnormal-owner coverage still follow.

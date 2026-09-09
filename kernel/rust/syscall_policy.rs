@@ -10792,6 +10792,9 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
         return -(EFAULT as CLong);
     }
     let frame = &*frame_storage.as_ptr();
+    // Native consumers never re-read a userspace frame after the checked copy.
+    #[cfg(native_linux_irq_work_v6_12)]
+    let sigsp = frame as *const RtSigreturnFrame;
 
     let gpr = &mut (*regs).gpr;
     gpr.r15 = frame.regs[RTSIG_REG_R15];
@@ -10815,6 +10818,14 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
     gpr.rsp = frame.regs[RTSIG_REG_RSP];
 
     *thread.add(sigmask_offset).cast::<CULong>() = frame.regs[RTSIG_REG_OLDMASK];
+    #[cfg(native_linux_irq_work_v6_12)]
+    crate::native_signal::restore(
+        &mut *thread.add(sigstack_offset).cast::<SigStack>(),
+        &frame.sigstack,
+        frame.regs[RTSIG_REG_RSP],
+    );
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
     let sigstack_src = (&frame.sigstack as *const SigStack).cast::<u8>();
     let sigstack_dst = thread.add(sigstack_offset);
     let mut sigstack_byte = 0usize;
@@ -10824,6 +10835,7 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
             read_volatile(sigstack_src.add(sigstack_byte)),
         );
         sigstack_byte += 1;
+    }
     }
 
     if (*sigsp).restart != 0 {
@@ -10876,6 +10888,8 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
                 xsave_size as SizeT,
             ) != 0
             {
+                #[cfg(native_linux_irq_work_v6_12)]
+                free(fpregs);
                 return -(EFAULT as CLong);
             }
             xrstor(aligned);
@@ -12242,6 +12256,17 @@ pub unsafe extern "C" fn sys_sigaltstack(_n: CInt, ctx: *mut X86UserContext) -> 
         return -(EFAULT as CLong);
     }
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    return crate::native_signal::sigaltstack(
+        &mut (*thread).sigstack,
+        (*ctx).gpr.rsp,
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+    );
+
+    #[cfg(not(native_linux_irq_work_v6_12))]
     sigaltstack_body_result(
         thread.cast::<u8>(),
         offset_of!(Thread, sigstack),
