@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.xsave-layout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["aligned", "requested_mask", "xstate_bv", "xcomp_bv", "mask_ok", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["XSAVE64 target is 64-byte aligned and XSTATE_BV contains no bits outside requested enabled mask0x3", "Standard XCOMP_BV is zero and only active CPUID-defined component bytes are checked"],
+  "unresolved_expectations": ["Current enabled user-state mask, CPUID component offsets/sizes, and seeded defined bytes require Max review."],
+  "max_question_for_reviewer": "Bind the current paired-engine xstate mask and CPUID offsets before replacing the draft requested mask or accepting component bytes."
+}

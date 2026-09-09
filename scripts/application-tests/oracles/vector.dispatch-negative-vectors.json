@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.dispatch-negative-vectors",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["accepted=1 rejected=1 optional_instructions=0 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Synthetic missing AVX, OSXSAVE, and XCR0 SSE vectors reject dispatch while the fully satisfied baseline accepts", "No optional vector instruction executes during predicate evaluation"],
+  "unresolved_expectations": ["Complete feature matrix, guarded CPUID leaf records, and both-engine capability evidence require Max review."],
+  "max_question_for_reviewer": "Confirm all required negative vectors, leaf bounds, and independent raw CPUID/XCR0 records before enabling any optional instruction case."
+}
