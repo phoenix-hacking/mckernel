@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-030",
+  "packet_version": 1,
+  "context_sha256": "198effff32eb5e34ad0c4c2572aeb9c7040294418449193d9be5f8aaeecfd11a",
+  "started_utc": "2026-09-09T13:30:00Z",
+  "finished_utc": "2026-09-09T13:30:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "time.absolute-sleep", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.absolute-sleep.c", "oracle": "scripts/application-tests/oracles/time.absolute-sleep.json", "changed_files": ["scripts/application-tests/cases/time/time.absolute-sleep.c", "scripts/application-tests/oracles/time.absolute-sleep.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical timestamp record and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm absolute monotonic deadline is exactly 10 ms ahead and return value is direct 0."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/time/time.absolute-sleep.c", "sha256": "e5c63eec5b551bf4faf723405b094060cfc162d80967581073924e271b3c92a1"},
+    {"path": "scripts/application-tests/oracles/time.absolute-sleep.json", "sha256": "b0d8e7a606a759356a582df03a0dc8ace67fe9279ee8e6eb0fec4622d0609870"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-030.json --emit-context /tmp/application-packet-030-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Absolute-sleep case needs final timestamp record and reviewed input binding."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review absolute deadline timing and direct clock_nanosleep return semantics."],
+  "next_packet_id": "packet-031"
+}
