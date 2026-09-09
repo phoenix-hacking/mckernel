@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-066",
+  "packet_version": 1,
+  "context_sha256": "4c1ddf6c3ba44b4a0ff3519a1292551d7b5a2c2831d6183e57eec6bcd6250541",
+  "started_utc": "2026-09-09T14:10:00Z",
+  "finished_utc": "2026-09-09T14:12:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.head",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.head.json",
+      "oracle": "scripts/application-tests/oracles/app.head.json",
+      "changed_files": ["scripts/application-tests/inputs/app.head.json", "scripts/application-tests/oracles/app.head.json"],
+      "parameter_vectors": {"utility": ["head"], "mode": ["-n17"], "input_lines": [100], "output_lines": [17]},
+      "implemented_operations": ["independent numbered-line generator", "exact first-17 line oracle", "newline/order invariant"],
+      "unresolved_oracle_notes": ["Pinned coreutils head identity and option inventory require Max review."],
+      "max_reviewer_question": "Confirm head -n17 output and numbered-line fixture expansion under the pinned coreutils binary."
+    },
+    {
+      "case_id": "app.tail",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.tail.json",
+      "oracle": "scripts/application-tests/oracles/app.tail.json",
+      "changed_files": ["scripts/application-tests/inputs/app.tail.json", "scripts/application-tests/oracles/app.tail.json"],
+      "parameter_vectors": {"utility": ["tail"], "mode": ["-n17"], "input_lines": [100], "output_lines": [17]},
+      "implemented_operations": ["independent numbered-line generator", "exact last-17 line oracle", "newline/order invariant"],
+      "unresolved_oracle_notes": ["Pinned coreutils tail identity and option inventory require Max review."],
+      "max_reviewer_question": "Confirm tail -n17 output and numbered-line fixture expansion under the pinned coreutils binary."
+    },
+    {
+      "case_id": "app.gzip-compress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.gzip-compress.json",
+      "oracle": "scripts/application-tests/oracles/app.gzip-compress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.gzip-compress.json", "scripts/application-tests/oracles/app.gzip-compress.json"],
+      "parameter_vectors": {"utility": ["gzip"], "flags": ["-n", "-c"], "input_bytes": [1048576], "byte": ["0x41"]},
+      "implemented_operations": ["independent 1MiB input generator", "metadata suppression predicate", "independent decompression and digest relation"],
+      "unresolved_oracle_notes": ["Pinned gzip identity, DEFLATE details, and compressed-byte reference require Max review."],
+      "max_reviewer_question": "Confirm gzip -n metadata suppression and the independent decompressed-byte oracle; bind exact compressed bytes only after pinned reference execution."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.head.json", "sha256": "a2d39deda675dbd432ef9ce39773b54986d256fdb9d80bd401965f966eddfafe"},
+    {"path": "scripts/application-tests/oracles/app.head.json", "sha256": "c0d2519b5282e9d94ffbe0dd67660f337ea78d686bac29bba2ab82653608c796"},
+    {"path": "scripts/application-tests/inputs/app.tail.json", "sha256": "46e2388a4b9e2157f987c4a04782775d67936d7e6d92959f354bbc02f7c018a2"},
+    {"path": "scripts/application-tests/oracles/app.tail.json", "sha256": "c51ef6cfb214c25682cf879f6996d41679ce6735a6dbaf0bb2e177b9942e52e0"},
+    {"path": "scripts/application-tests/inputs/app.gzip-compress.json", "sha256": "03d27866dcb2db0128ba51d57660a30da8a8a20f0e61b01c340811c3f26017ec"},
+    {"path": "scripts/application-tests/oracles/app.gzip-compress.json", "sha256": "01e6c573ac2bee21803b0d2582c888aa99c5b3f78e42bd891a2e981e77770a10"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-066/context.json", "sha256": "4c1ddf6c3ba44b4a0ff3519a1292551d7b5a2c2831d6183e57eec6bcd6250541"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-066.json --emit-context /tmp/application-packet-066-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-066/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned utility identities, generator expansion, gzip metadata, and output contracts need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review head first-lines boundary", "Review tail last-lines boundary", "Review gzip -n metadata and decompression oracle"],
+  "next_packet_id": "packet-067"
+}
