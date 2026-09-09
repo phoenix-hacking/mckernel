@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-044",
+  "packet_version": 1,
+  "context_sha256": "ba273db2cee7811939b8106e1bff89145337bcef30a7a8c78b1d9be58a267fe4",
+  "started_utc": "2026-09-09T11:19:00Z",
+  "finished_utc": "2026-09-09T11:20:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.default-segv",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.default-segv.c",
+      "oracle": "scripts/application-tests/oracles/signal.default-segv.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.default-segv.c", "scripts/application-tests/oracles/signal.default-segv.json"],
+      "parameter_vectors": {"fault": ["volatile unmapped write"], "expected_status": ["WIFSIGNALED SIGSEGV"]},
+      "implemented_operations": ["default signal disposition", "volatile unmapped access"],
+      "unresolved_oracle_notes": ["Raw wait-status and core-dump bit evidence require Max review."],
+      "max_reviewer_question": "Confirm WIFSIGNALED/SIGSEGV must be preserved independently from exit code 139."
+    },
+    {
+      "case_id": "signal.default-term",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.default-term.c",
+      "oracle": "scripts/application-tests/oracles/signal.default-term.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.default-term.c", "scripts/application-tests/oracles/signal.default-term.json"],
+      "parameter_vectors": {"ready_record": ["ready"], "signal": ["SIGTERM"], "cleanup_deadline_seconds": [15]},
+      "implemented_operations": ["flushed ready handshake", "indefinite pause for supervisor delivery"],
+      "unresolved_oracle_notes": ["Supervisor timing, raw signal status, and owner-retirement evidence require runtime review."],
+      "max_reviewer_question": "Confirm SIGTERM is delivered after readiness and launcher handling is recorded separately."
+    },
+    {
+      "case_id": "signal.ignore",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.ignore.c",
+      "oracle": "scripts/application-tests/oracles/signal.ignore.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.ignore.c", "scripts/application-tests/oracles/signal.ignore.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "disposition": ["SIG_IGN"], "completion": ["normal exit 0"]},
+      "implemented_operations": ["ignore disposition", "ready output", "delayed normal completion"],
+      "unresolved_oracle_notes": ["Supervisor delivery bracket and pending-signal evidence require runtime review."],
+      "max_reviewer_question": "Confirm ignored SIGUSR1 neither terminates nor creates a handler event before normal exit."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.default-segv.c", "sha256": "59855cf110bbb217c82956730c8e9a4022d4f6f88f3d5f74beced1c45bed713b"},
+    {"path": "scripts/application-tests/oracles/signal.default-segv.json", "sha256": "2e25245f1ae24b4ce91eeeea035656428d00f9791f4932d241e518d81bdeb25d"},
+    {"path": "scripts/application-tests/cases/signal/signal.default-term.c", "sha256": "f91164a89ae9be0ea05c45ac52f21ed49e1865f338ac683e3682c3aa05cdfe57"},
+    {"path": "scripts/application-tests/oracles/signal.default-term.json", "sha256": "1254f13d051764b07737e71fa402d4e715ca736d9f7b822d5ec72227adcc22b9"},
+    {"path": "scripts/application-tests/cases/signal/signal.ignore.c", "sha256": "2305f0a2cf74f28e8d0b72a566768726bfbcf27205deb2a29c4d33cdabb5f4de"},
+    {"path": "scripts/application-tests/oracles/signal.ignore.json", "sha256": "ad2c9c52dbcdcc2e2971a1d95879c57e9ad2a78d757a038ce5e0b7e8718fe4ca"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-044/context.json", "sha256": "ba273db2cee7811939b8106e1bff89145337bcef30a7a8c78b1d9be58a267fe4"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-044.json --emit-context /tmp/application-packet-044-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-044/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Default SIGSEGV/SIGTERM and ignored-signal cases need final supervisor status, signal delivery, ownership, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review raw SIGSEGV status", "Review supervisor SIGTERM and cleanup", "Review ignored-signal continuation"],
+  "next_packet_id": "packet-045"
+}

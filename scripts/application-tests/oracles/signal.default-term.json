@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.default-term",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.default-term"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "signaled", "signal": "SIGTERM", "signal_number": 15, "core_dump": "record-supervisor-bit"},
+  "stdout": {"kind": "exact-line-lines", "lines": ["ready"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The application reaches the ready record and remains alive for supervisor delivery", "Supervisor SIGTERM yields raw WIFSIGNALED/SIGTERM and all application owners retire within the cleanup bound"],
+  "unresolved_expectations": ["Supervisor delivery timing, raw status bits, and owner-retirement evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm SIGTERM is delivered by the supervisor after the ready record and launcher handling is reported separately."
+}

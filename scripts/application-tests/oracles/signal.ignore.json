@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.ignore",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.ignore"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["ready", "completed=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SIGUSR1 is ignored after the ready record", "Supervisor delivery causes no handler event or termination and the application completes normally"],
+  "unresolved_expectations": ["Supervisor delivery bracket and signal-pending evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm ignored SIGUSR1 neither terminates nor creates a visible handler event before normal exit."
+}
