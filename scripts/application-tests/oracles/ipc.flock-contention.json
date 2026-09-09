@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.flock-contention",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.flock-contention"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["first=0 second=-1 errno=11 blocked=1 unlock=0 retry=0 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Two independent open file descriptions contend for LOCK_EX|LOCK_NB with exact EWOULDBLOCK", "The second description acquires the lock after the first unlocks"],
+  "unresolved_expectations": ["flock ownership, EWOULDBLOCK errno, and independent-description lifetime require Max review."],
+  "max_question_for_reviewer": "Confirm nonblocking flock contention returns EWOULDBLOCK for the second description and succeeds after unlock."
+}

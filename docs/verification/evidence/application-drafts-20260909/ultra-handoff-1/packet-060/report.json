@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-060",
+  "packet_version": 1,
+  "context_sha256": "02a1851e3eff1afe8a31c80d557ec0dbc8be89ce23e9debf77679598c9f5f8ee",
+  "started_utc": "2026-09-09T13:10:00Z",
+  "finished_utc": "2026-09-09T13:11:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.flock-contention",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.flock-contention.c",
+      "oracle": "scripts/application-tests/oracles/ipc.flock-contention.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.flock-contention.c", "scripts/application-tests/oracles/ipc.flock-contention.json"],
+      "parameter_vectors": {"open_descriptions": [2], "lock_mode": ["LOCK_EX|LOCK_NB"], "contention_errno": ["EWOULDBLOCK"], "post_unlock_retry": ["success"]},
+      "implemented_operations": ["two independent opens", "nonblocking exclusive contention", "unlock and retry acquisition"],
+      "unresolved_oracle_notes": ["flock ownership, EWOULDBLOCK errno, and independent-description lifetime require Max review."],
+      "max_reviewer_question": "Confirm nonblocking flock contention returns EWOULDBLOCK for the second description and succeeds after unlock."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.flock-contention.c", "sha256": "05bde2dffd8c99de7642b9dc6bbb2e6b5f3abf80be00f2b5dae794a1ca75ca5f"},
+    {"path": "scripts/application-tests/oracles/ipc.flock-contention.json", "sha256": "0444ff128f48b425d93c4daca5f99e5f6c40b1fb8ace67b8ce82a18b7c0d19e5"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-060/context.json", "sha256": "02a1851e3eff1afe8a31c80d557ec0dbc8be89ce23e9debf77679598c9f5f8ee"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-060.json --emit-context /tmp/application-packet-060-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-060/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["flock ownership, exact errno, lock handoff, and descriptor lifetime semantics need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review independent-description contention", "Review exact EWOULDBLOCK and post-unlock handoff"],
+  "next_packet_id": "packet-061"
+}
