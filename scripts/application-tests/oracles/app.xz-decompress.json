@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.xz-decompress",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"path": "/case/input.xz", "size": 96},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-bytes", "hex": "4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a"},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["xz -d -c output equals independent decompression of the frozen stream byte-for-byte"],
+  "unresolved_expectations": ["Pinned xz binary identity and decoder closure require Max review."],
+  "max_question_for_reviewer": "Confirm the frozen XZ stream and exact 112-byte decompressed output."
+}

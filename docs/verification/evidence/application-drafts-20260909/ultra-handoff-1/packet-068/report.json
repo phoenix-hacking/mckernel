@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-068",
+  "packet_version": 1,
+  "context_sha256": "4967d597a51990236613f0f3eba2006762f77d25b63e9ff3a9ad748399b1a5af",
+  "started_utc": "2026-09-09T14:30:00Z",
+  "finished_utc": "2026-09-09T14:32:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.xz-decompress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.xz-decompress.json",
+      "oracle": "scripts/application-tests/oracles/app.xz-decompress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.xz-decompress.json", "scripts/application-tests/oracles/app.xz-decompress.json"],
+      "parameter_vectors": {"utility": ["xz"], "flags": ["-d", "-c"], "compressed_bytes": [96], "decoded_bytes": [112]},
+      "implemented_operations": ["frozen valid XZ stream", "independent plaintext oracle", "empty-stderr and exit-zero contract"],
+      "unresolved_oracle_notes": ["Pinned xz binary identity and decoder closure require Max review."],
+      "max_reviewer_question": "Confirm the frozen XZ stream and exact 112-byte decompressed output."
+    },
+    {
+      "case_id": "app.zstd-compress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.zstd-compress.json",
+      "oracle": "scripts/application-tests/oracles/app.zstd-compress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.zstd-compress.json", "scripts/application-tests/oracles/app.zstd-compress.json"],
+      "parameter_vectors": {"utility": ["zstd"], "options": ["single-thread", "low-memory inventoried"], "input_bytes": [88], "decoded_bytes": [88]},
+      "implemented_operations": ["fixed plaintext input", "option-preserving compression record", "independent decoded-byte relation"],
+      "unresolved_oracle_notes": ["Pinned zstd identity, level/options, encoder bytes, and memory bound require Max review."],
+      "max_reviewer_question": "Confirm zstd option binding and independent decoded-byte oracle; freeze compressed bytes from the pinned reference."
+    },
+    {
+      "case_id": "app.zstd-decompress",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.zstd-decompress.json",
+      "oracle": "scripts/application-tests/oracles/app.zstd-decompress.json",
+      "changed_files": ["scripts/application-tests/inputs/app.zstd-decompress.json", "scripts/application-tests/oracles/app.zstd-decompress.json"],
+      "parameter_vectors": {"utility": ["zstd"], "compressed_bytes": [41], "decoded_bytes": [88], "stream": ["single frame"]},
+      "implemented_operations": ["frozen valid Zstandard stream", "independent exact plaintext oracle", "empty-stderr and exit-zero contract"],
+      "unresolved_oracle_notes": ["Pinned zstd identity, decoder options, and stream closure require Max review."],
+      "max_reviewer_question": "Confirm the frozen Zstandard stream and exact 88-byte decompressed output."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.xz-decompress.json", "sha256": "449a630054ab30dbb50f388fbe5dad4cf1e95aefb5dc7f6f6e7c1094b4915539"},
+    {"path": "scripts/application-tests/oracles/app.xz-decompress.json", "sha256": "434ac8ddeae50004f23fb84a32f8ac743d375fe298a754ca8f1bfde568ec8fac"},
+    {"path": "scripts/application-tests/inputs/app.zstd-compress.json", "sha256": "27b07840364d221db0e22d3751f70a4633da13ac7e10898996550d5705060de6"},
+    {"path": "scripts/application-tests/oracles/app.zstd-compress.json", "sha256": "d2fe71ab8b41282435040b8a3eedb818ff7ce5efa76527968d9f951ce7a5d92f"},
+    {"path": "scripts/application-tests/inputs/app.zstd-decompress.json", "sha256": "fd393cfef2a899a1edbc1adcacbd1f1b79e36b10deff9601d9f2ff1a5a1e924f"},
+    {"path": "scripts/application-tests/oracles/app.zstd-decompress.json", "sha256": "07002002a595ef66d34a98f0791b7e00ed92682d1747413fcb0031c8a1f27215"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-068/context.json", "sha256": "4967d597a51990236613f0f3eba2006762f77d25b63e9ff3a9ad748399b1a5af"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-068.json --emit-context /tmp/application-packet-068-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-068/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned xz/zstd identities, decoder options, encoder bytes, memory bounds, and stream closure need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review XZ stream and exact decode", "Review zstd compression options and independent decode", "Review zstd stream and exact decode"],
+  "next_packet_id": "packet-069"
+}
