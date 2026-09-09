@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.monotonic-syscall",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.monotonic-syscall"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["syscall", "count", "bad_index", "order_bad", "last_sec", "last_nsec"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The selected path is explicit SYS_clock_gettime", "Exactly 1024 raw calls complete", "Every timespec is valid and the sequence is nondecreasing"],
+  "unresolved_expectations": ["Freeze canonical record and bind input/oracle hashes before execution."],
+  "max_question_for_reviewer": "Confirm raw syscall path must be retained independently from libc wrapper behavior."
+}
