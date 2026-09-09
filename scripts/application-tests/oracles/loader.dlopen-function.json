@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.dlopen-function",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.dlopen-function"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["symbol=1 result=42 close=0 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The reviewed DSO exports fixture_add and returns the independent arithmetic result 19+23=42", "The loaded handle closes successfully"],
+  "unresolved_expectations": ["DSO path, exported symbol ABI, and loader closure hashes require Max review."],
+  "max_question_for_reviewer": "Confirm the bound DSO path and fixture_add ABI, result 42, and successful dlclose contract."
+}
