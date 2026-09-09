@@ -199,6 +199,19 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native zeroing guest/protocol checkpoint, 2026-09-09:
+`docs/verification/native-application-zeroing-checkpoint-20260909.json` retains
+all four focused attempts, including three original harness failures. Protocol
+4 passes three legacy and five native tests: 30 exact C first-fit/guard vectors,
+six producer vectors, strict ordinary decoder isolation, checked geometry,
+reentrant/late arrivals and three consumers with immediate reuse of 2,048
+chunks. Native guest pending consumers now detach whole batches; the one-way
+producer marks the contract MCZB0001. The C fallback and legacy Rust keep their
+existing selection. This is guest/protocol WIP: the native host queue, bounded
+mapping/ledger and third worker are not integrated yet; new image compilation
+and actual unchanged libc memory execution are still required. Preserve all
+current images/modules and original failure captures. No Ultra readiness.
+
 Latest native host invalidation/protection checkpoint, 2026-09-09:
 `docs/verification/native-application-memory-checkpoint-20260909.json` retains
 the exact syscall-11 begin/finish integration around existing Mirror::clear.

@@ -1710,3 +1710,52 @@ selected initializer and all field accesses before using any layout space for
 coordination. Keep node/chunk bounds, atomic publication and worker/page counts
 in the protocol checks, and require the selected guest and host to agree on any
 new synchronization contract before handling the one-way request.
+
+## Native zeroing batch integration review, 2026-09-09
+
+Start from verified `f0181f89d9e63e4a16a5dfb90545dfd5cb8f1a52`; the previous
+goal turn made implementation/verification progress on host invalidation and
+guest protection, with all failures retained. For zeroing, use atomic batch
+detachment on every native pending-list consumer. Reuse the sequencing of
+`kernel/rust/llist.rs::llist_del_all` (atomic exchange with zero) and its batch
+publication operation. This is the multiple-consumer combination explicitly
+supported by the pinned Linux list contract. Native allocator, timer and
+offload-poll calls all enter `__ihk_numa_zero_free_pages_node`; adapt its native
+selection to detached batches, preserving first-sufficient-chunk selection and
+returning unused chunks. Keep legacy Rust/C behavior and current exports.
+Capture page counts before publishing zeroed chunks, because another consumer
+may immediately reuse their metadata. No shared spinlock or node layout change
+is needed. Add a native-only marker in the unused second one-way argument so
+the host cannot consume an old guest's del_first list under the new contract.
+
+Adapt `mcctrl_zero_mckernel_pages_{step,finish}_result` using bounded OS-owned
+views: retain the actual boot layout for kernel-window node translation;
+translate post-initialization free-chunk links through the supplied direct-map
+base, then validate complete ranges against the same assigned OS extents.
+Claim the node's four control fields and all detached chunk spans in the
+existing continuing-service ledger before clearing or publishing any chunk.
+Reject overlap, cycles, wrong physical headers and invalid sizes. Preserve each
+48-byte header, publish zeroed chunks atomically, subtract their retained page
+counts and finish exactly one worker request. On malformed work retain claims
+and started owners, record the service failure and never synthesize a response.
+
+Run zeroing on a third retained continuing-service worker so metadata and
+packet/reply progress continue during a large batch. Use the established
+bounded admission/backpressure and stopped-task activation/rollback paths.
+This one-way service must precede ordinary syscall decoding and must not depend
+on a still-registered PID or launcher. Test exact old/new producers, unchanged
+ordinary decoding, guest first-fit behavior, concurrent batch ownership, node
+and chunk geometry, guarded data zeroing and ledger/publication ownership before
+module/image compilation and the unchanged libc application rerun.
+
+Guest batch/protocol checkpoint: native pending consumers now use the existing
+atomic `llist_del_all` and `llist_add_batch` operations. The node ABI is unchanged,
+with compile-time bindings to the shared checked zeroing geometry. The original
+one-way producer sets `MCZB0001` only for native nr 279; the ordinary syscall
+decoder remains strict. Protocol attempt 4 passes three legacy and five native
+tests, including all 30 exact C allocation/guard vectors, six producer vectors,
+deterministic timer-style reentry/late arrivals and three concurrent consumers
+with immediate allocator metadata reuse of 2,048 chunks. Original attempts 1–3
+remain failed and fully retained: a legacy C signedness warning and two fixture
+module/import issues. Native host integration and actual guest acceptance remain
+pending. Keep the original core application and launcher unchanged.

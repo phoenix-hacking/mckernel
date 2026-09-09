@@ -219,6 +219,22 @@ const _: () = {
     assert!(offset_of!(IhkMcNumaNode, max_addr) == 216);
 };
 
+#[cfg(native_linux_irq_work_v6_12)]
+const _: () = {
+    use crate::zero_pages as wire;
+    assert!(size_of::<FreeChunk>() == wire::HEADER_BYTES);
+    assert!(offset_of!(FreeChunk, list) as u64 == wire::LINK_OFFSET);
+    assert!(size_of::<IhkMcNumaNode>() == wire::NODE_BYTES);
+    assert!(align_of::<IhkMcNumaNode>() as u64 == wire::NODE_ALIGN);
+    assert!(offset_of!(IhkMcNumaNode, zeroing_workers) as u64 == wire::CONTROL_OFFSET);
+    assert!(offset_of!(IhkMcNumaNode, free_chunks)
+        - offset_of!(IhkMcNumaNode, zeroing_workers) == wire::CONTROL_BYTES);
+    assert!(size_of::<LListNode>() == size_of::<crate::llist::LListNode>());
+    assert!(align_of::<LListNode>() == align_of::<crate::llist::LListNode>());
+    assert!(size_of::<LListHead>() == size_of::<crate::llist::LListHead>());
+    assert!(align_of::<LListHead>() == align_of::<crate::llist::LListHead>());
+};
+
 unsafe extern "C" {
     static mut cpu_local_var_initialized: CInt;
 
@@ -1059,6 +1075,74 @@ pub unsafe extern "C" fn ihk_numa_add_free_pages_result(
     rc
 }
 
+/// Every native pending consumer detaches a complete batch. In particular,
+/// allocator, timer, offload poll and the host must not mix del_first with
+/// another consumer: that would read a link after its chunk could be reused.
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe fn native_zero_free_pages_node(node: *mut IhkMcNumaNode, nr_pages: CInt) -> CInt {
+    let pending = &raw mut (*node).to_zero_list;
+    let mut cursor = crate::llist::llist_del_all(pending.cast()).cast::<LListNode>();
+    let mut skipped_first: *mut LListNode = null_mut();
+    let mut skipped_last: *mut LListNode = null_mut();
+    let mut zeroed: CInt = 0;
+    let requested_size = if nr_pages > 0 {
+        (nr_pages as CULong) << PAGE_SHIFT
+    } else {
+        0
+    };
+
+    while !cursor.is_null() {
+        let link = cursor;
+        cursor = read_volatile(&(*link).next);
+        let chunk = list_to_chunk(link);
+        let addr = (*chunk).addr;
+        let size = (*chunk).size;
+        if nr_pages != 0 && size < requested_size {
+            if skipped_last.is_null() {
+                skipped_first = link;
+            } else {
+                (*skipped_last).next = link;
+            }
+            skipped_last = link;
+            continue;
+        }
+
+        let pages = (size >> PAGE_SHIFT) as CInt;
+        if size > size_of::<FreeChunk>() as CULong {
+            zero_phys_range(
+                addr + size_of::<FreeChunk>() as CULong,
+                size - size_of::<FreeChunk>() as CULong,
+            );
+        }
+        llist_add(link, &raw mut (*node).zeroed_list);
+        // Publication transfers the chunk immediately. Never read its size or
+        // next link again: the allocator can already be reusing that memory.
+        compiler_fence(Ordering::SeqCst);
+        ihk_atomic_sub(pages, &raw mut (*node).nr_to_zero_pages);
+        zeroed = zeroed.wrapping_add(pages);
+        if nr_pages != 0 {
+            break;
+        }
+    }
+
+    // Return the unselected private chain in its original order. Concurrent
+    // arrivals stay on the shared head; this insertion is one atomic batch.
+    let first = if skipped_first.is_null() {
+        cursor
+    } else {
+        (*skipped_last).next = cursor;
+        skipped_first
+    };
+    if !first.is_null() {
+        let mut last = first;
+        while !(*last).next.is_null() {
+            last = (*last).next;
+        }
+        crate::llist::llist_add_batch(first.cast(), last.cast(), pending.cast());
+    }
+    zeroed
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
     node: *mut IhkMcNumaNode,
@@ -1068,6 +1152,12 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
         return 0;
     }
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        return native_zero_free_pages_node(node, nr_pages);
+    }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
     let mut nr_zeroed_pages: CInt = 0;
     let requested_size = if nr_pages > 0 {
         (nr_pages as CULong) << PAGE_SHIFT
@@ -1144,6 +1234,7 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
     }
 
     nr_zeroed_pages
+    }
 }
 
 #[no_mangle]
@@ -1876,6 +1967,10 @@ pub unsafe extern "C" fn __ihk_numa_zero_request_packet_fill(
     let traditional = (&raw mut (*packet).body).cast::<IkcScdPacketTraditional>();
     (*traditional).req.number = syscall_number;
     (*traditional).req.args[0] = node_addr;
+    #[cfg(native_linux_irq_work_v6_12)]
+    if syscall_number == NR_MOVE_PAGES {
+        (*traditional).req.args[1] = crate::zero_pages::BATCH_MARKER;
+    }
 
     compiler_fence(Ordering::Release);
     write_volatile(&raw mut (*traditional).req.valid, 1);

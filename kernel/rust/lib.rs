@@ -74,6 +74,10 @@ mod x86_vsyscall;
 mod vdso_protocol;
 #[cfg(native_linux_irq_work_v6_12)]
 mod native_vdso;
+#[cfg(native_linux_irq_work_v6_12)]
+#[allow(dead_code)]
+#[path = "../../host-kernel/native-rust/zero_pages.rs"]
+mod zero_pages;
 mod xpmem_helpers;
 mod zeroobj;
 

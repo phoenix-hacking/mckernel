@@ -128,6 +128,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/zeroobj.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/abi/vdso.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_vdso.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/zero_pages.rs"
 	)
 		set(RUST_KERNEL_CFG)
 		if (ENABLE_NATIVE_SYSFS_VERIFY)
