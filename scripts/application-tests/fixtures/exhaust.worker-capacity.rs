@@ -1,0 +1,1 @@
+fn main() { let capacity: u32 = 64; let mut workers = 0; while workers < capacity { workers += 1; } println!("resource=worker registrations={} capacity={} next=EAGAIN cleanup=required", workers, capacity); }
