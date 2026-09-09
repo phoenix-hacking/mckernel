@@ -2,6 +2,27 @@
 
 Updated: 2026-06-02
 
+## Bounded drafting release authority (2026-09-09)
+
+The Ultra drafting release is `docs/verification/ultra-drafting-handoff-20260909.json`.
+It becomes effective only with status PASS, its exact input/queue/context hashes,
+and successful fetched-blob GitHub verification. Before that, continue the
+remaining Ultra handoff gates; a queue review_state alone is insufficient.
+After release, tell the user "We're ready to run Codex Spark" and stop for their
+model switch. The user may choose Luna instead; never switch automatically.
+
+The released next phase creates fixtures and independent oracles for273 logical
+cases (56 vector cases) in97 pre-reviewed packets. Start with
+`scripts/application-tests/handoff-start.md`. Supply only the active packet's
+selected cases and small reviewed manifests, at most three cases at once.
+Continue the reviewed queue without repeated permission, preserving immutable
+reports and original failures. Runtime stays disabled until its separate
+execution gates and reviewed packet version explicitly enable it. Drafting
+completion is not application acceptance. Difficult/unsafe kernel defects and
+preserved small candidate patches return to Max for narrow investigation.
+Continue verified GitHub checkpoints about every30minutes and at coherent
+milestones. The release supersedes older phase stopping instructions below.
+
 ## Active Ultra review and executor handoff (2026-09-09)
 
 The user has switched to Ultra. Continue review, bounded correctness fixes and

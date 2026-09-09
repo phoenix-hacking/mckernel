@@ -29,7 +29,8 @@
     "All selected sources and frozen independent oracles created within allowlist.",
     "Each parameter vector represented without inflating logical-case count.",
     "Report implemented,blocked and unresolved assertions explicitly; no runtime PASS in draft-only mode.",
-    "Submit exact diff and hashes for review; do not self-activate next packet."
+    "Write the immutable packet-specific draft report, including exact changed-file hashes, unresolved oracles and any preserved failure/Max escalation.",
+    "After reporting, advance automatically only to the next packet already listed in the reviewed draft queue; request no repeated user permission and never enable execution."
   ],
   "execution_enabled": false,
   "executor_model": "Luna or Spark; user chooses",
@@ -71,6 +72,14 @@
       "--check"
     ]
   ],
+  "queue": {
+    "active_case_limit": 3,
+    "advance_only_when_queue_reviewed": true,
+    "new_user_permission_per_packet_required": false,
+    "next_packet_id": "packet-003",
+    "path": "scripts/application-tests/draft-queue.json",
+    "position": 2
+  },
   "read_allowlist": [
     "scripts/application-tests/README.md",
     "scripts/application-tests/packets/packet-002.json",
@@ -80,9 +89,60 @@
     "cases.json#memory.realloc-grow",
     "cases.json#memory.realloc-shrink"
   ],
+  "reporting": {
+    "draft_statuses": [
+      "DRAFTED",
+      "DRAFTED_WITH_UNRESOLVED",
+      "BLOCKED",
+      "FAILED"
+    ],
+    "failure_artifact_directory": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-002/failures/",
+    "failure_log_creation": "Open a nonsymlink regular file with O_APPEND|O_CREAT|O_NOFOLLOW, serialize one complete JSON object per line and fsync; never truncate, edit or remove old events.",
+    "failure_log_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/failures.jsonl",
+    "failure_preservation": "Immediately append the first unexpected failure event and preserve original output/source/diff/context before diagnosis; no hidden retry. Runtime/validation failures also retain the established root kernel.log record.",
+    "max_escalation": "Record exact smallest reproducer, evidence paths and unresolved semantic question for Max. No model switch or production patch in a draft packet. Continue later independent drafting; mark dependency-blocked drafts precisely.",
+    "report_creation": "Create once exclusively after draft work; do not replace a prior report. A resumed/revised run uses a new fresh_queue_run_id and links prior failed evidence.",
+    "report_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-002/report.json",
+    "required_failure_event_fields": [
+      "schema_version",
+      "sequence",
+      "utc",
+      "queue_run_id",
+      "packet_id",
+      "case_ids",
+      "stage",
+      "exact_command_argv_or_tool_action",
+      "environment_summary",
+      "error",
+      "original_artifact_paths_and_sha256",
+      "source_and_context_sha256",
+      "max_escalation_required"
+    ],
+    "required_report_fields": [
+      "schema_version",
+      "queue_run_id",
+      "queue_sha256",
+      "packet_id",
+      "packet_version",
+      "context_sha256",
+      "started_utc",
+      "finished_utc",
+      "draft_status",
+      "cases",
+      "changed_files_with_sha256",
+      "commands_and_outcomes",
+      "unresolved_oracles",
+      "blocked_execution_capabilities",
+      "first_failure_event",
+      "max_escalation",
+      "next_packet_id"
+    ],
+    "scratch_write_exception": "Only this packet report, original failure artifacts within its named failure directory, and append-only shared failure log. No production-source scope expansion.",
+    "test_pass_status_forbidden": true
+  },
   "schema_version": 1,
   "status": "planned",
-  "version": 1,
+  "version": 2,
   "write_allowlist": [
     "scripts/application-tests/cases/memory/memory.calloc-zero.c",
     "scripts/application-tests/oracles/memory.calloc-zero.json",

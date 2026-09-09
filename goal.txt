@@ -1,4 +1,4 @@
-Current execution phase (2026-09-09): Ultra review and application test handoff
+Current execution phase (2026-09-09): Ultra gates and bounded drafting release
 ----------------------------------------------------------------------------
 Review the accepted Max baseline, fix and verify prerequisite defects, and
 produce a very broad, precise application test plan with bounded executor
@@ -9,6 +9,13 @@ Periodically commit, push and verify GitHub progress about every30minutes during
 sustained work, after coherent checkpoints, and before long runs/session end.
 New source changes require new validation; historical baseline PASS is retained
 only for its exact original binaries. Follow current AGENTS.md and Ultra reviews.
+Release authority is docs/verification/ultra-drafting-handoff-20260909.json plus
+its successful exact fetched-blob verification. Once released, explicitly tell
+the user "We're ready to run Codex Spark" and stop for their chosen model switch.
+Next phase drafts273 cases (56 vector cases) through97 bounded packets; it does
+not automatically enable guest execution. Follow scripts/application-tests/
+handoff-start.md, preserve immutable failure/review reports, and return difficult
+kernel diagnosis to Max. Do not load the whole catalog/history into the executor.
 
 Historical completed Max phase follows
 -------------------------------------

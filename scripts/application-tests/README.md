@@ -1,6 +1,6 @@
 # Application verification executor contract
 
-This directory contains a **plan**, a catalog and six draft packets. It does
+This directory contains a **plan**, a 273-case catalog and 97 draft packets. It does
 not yet contain an implemented runner, supervisor or new application payloads.
 All new results remain unverified. Commands containing placeholders, or naming
 an unimplemented program, must not be executed. The four historically accepted
@@ -25,14 +25,31 @@ loader must resolve it to exactly one case object and supply that subset with
 the complete catalog's SHA-256. Missing/duplicate IDs, unrecognized schema,
 unresolved placeholders and stale input hashes are errors before execution.
 
-All six initial packets are `draft-only` and `execution_enabled=false`. They
-authorize creating their listed fixture/oracle files and reporting a diff.
-They do not authorize a kernel change, guest launch or activating the next
-packet. A reviewer must issue a new packet version before enabling execution.
+All 97 packets are `draft-only` and `execution_enabled=false`. After root
+releases the reviewed queue, they authorize creating their listed fixture/oracle
+files and reporting a diff.
+They do not authorize a kernel change or guest launch. Root may supply a
+reviewed sequential draft queue; proceed through that queue without repeated
+user permission, with only one packet's bounded context active at a time.
+Do not select unlisted packets or broaden their scope. A reviewer must issue
+a new packet version before enabling execution.
+
+The canonical [draft queue](draft-queue.json) assigns every one of the 273 cases
+exactly once. Packets 001–007 preserve the initial 20-case sequence; 008–097
+cover the remaining 253 cases, grouped by family and dependency order. No
+packet has more than three cases. The queue remains pending root validation
+and the verified handoff checkpoint until its release record says otherwise.
+
+The [handoff gates](../../docs/verification/ultra-handoff-gates-20260909.md)
+distinguish drafting readiness from runtime acceptance. The catalog's global
+execution gates and each packet's `blocked_by` list constrain execution; they
+do not require implementing the runner before drafting its fixtures. Root
+announces draft readiness after the specified current-source checks, original
+regressions, independent ordinary fixtures and verified GitHub checkpoint.
 
 ## Canonical schemas
 
-Catalog version 1 has `schema_version`, `catalog_version`,
+Catalog version 2 retains schema version 1 and has `schema_version`, `catalog_version`,
 `logical_case_count`, `baseline_regressions`, `global_execution_gates`,
 `capabilities` and `cases`. Each case has a unique `id`, integer `version`,
 `family`, `status` (`planned` or `blocked`), `execution_status`, `requires`,
@@ -41,6 +58,15 @@ Catalog version 1 has `schema_version`, `catalog_version`,
 and `acceptance_status`. Every case contributes exactly one to the logical
 count. Dependencies must resolve without cycles. Baseline records contribute
 zero. A planned case may be drafted while its global execution gate is blocked.
+
+The 56 vector cases carry an embedded `vector_contract` with transitive CPUID
+feature masks, XCR0 requirements, target instructions and compilation rules.
+The raw capability records come from both pinned Linux guest and McKernel.
+Physical host flags never authorize an optional guest instruction. Missing
+support is BLOCKED, and an instruction's absent parameter is not a passing
+parameter. Follow the [vector plan](../../docs/verification/ultra-vector-test-plan-20260909.md)
+for register observation, exact arithmetic, FP tolerances and disassembly.
+The kernel opcode audit is static evidence and contributes no application run.
 
 Capability manifests must contain `schema_version=1`, a source/module/image
 input-manifest SHA-256, and a capability map. Each capability has
@@ -66,6 +92,44 @@ blocking gates, candidate-fix policy and completion checks. The validator must
 reject writes outside the allowlist, shell fragments in metadata, unknown case
 IDs, absent oracles, unreviewed capabilities or increased resource bounds.
 
+The draft queue has `schema_version=1`, `queue_version`, `queue_id`, a review
+state, catalog version/count and ordered `packets` objects containing
+`packet_id`, `path` and `case_ids`. The loader verifies each object against its
+packet, unique complete catalog coverage and dependency order. It supplies the
+active executor only a cursor with the queue hash, index, total and next ID,
+plus that packet's bounded context. Completed case bodies are replaced by
+immutable report references and a minimal unresolved-dependency summary.
+
+Each packet's `reporting` object grants one explicit scratch exception under
+`/work/application-test-drafts-20260909/{fresh_queue_run_id}`: its immutable
+`packet-NNN/report.json`, original failure artifacts inside its named failure
+directory, and append-only shared `failures.jsonl`. This does not expand the
+repository write allowlist. Root binds a fresh queue run ID before drafting;
+never overwrite a prior report. A revised run links the previous evidence.
+
+On an unexpected drafting error, preserve the original output, source/diff,
+command or tool action, environment and context hashes before diagnosis.
+Append one complete JSON event using `O_APPEND|O_CREAT|O_NOFOLLOW` on a regular
+file and fsync it; never truncate or rewrite prior events. Record the precise
+question and smallest reproducer for Max where semantics are unclear. The
+established immediate kernel.log rule also applies to actual validation/runtime
+failures. A draft packet does not authorize a production candidate patch.
+
+Every packet report names case draft statuses, changed-file hashes, unresolved
+oracles, blocked execution capabilities, original failure reference and Max
+escalation. Status is `DRAFTED`, `DRAFTED_WITH_UNRESOLVED`, `BLOCKED` or `FAILED`;
+`PASS` is forbidden. Report progress after every packet: index/97, cases and
+their draft statuses, produced files, unresolved expectations and the next
+already-reviewed packet. Continue independent queued drafts after preserving
+and classifying a failure; mark affected dependencies rather than fabricating
+their expectations. Do not switch models or ask for permission at each packet.
+
+After all 97 packet reports exist, exclusively create `queue-summary.json`
+under the same scratch root, with all report hashes and exact drafted,
+unresolved, blocked and failed counts. Its status is `DRAFT_QUEUE_COMPLETE` or
+`DRAFT_QUEUE_COMPLETE_WITH_BLOCKERS`. That records drafting coverage only;
+runtime readiness and application acceptance remain separate.
+
 Each draft must create a versioned `oracles/ID.json` that freezes constants,
 input-file hashes, raw byte expectations and named relational predicates before
 its first run. Permitted predicate forms are exact integer/byte/string equality,
@@ -78,7 +142,8 @@ result cannot be adopted as the expectation retrospectively.
 
 ## Planned build and execution interface
 
-These interfaces are requirements for the future repository runner:
+The metadata validator exists. The execution command describes the required
+interface for the future repository runner and is not implemented yet:
 
 ```text
 python3 -B /workspace/scripts/application-tests/validate.py --packet /workspace/scripts/application-tests/packets/packet-001.json

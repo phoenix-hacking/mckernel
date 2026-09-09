@@ -516,3 +516,62 @@ The production comparison now spells `(unsigned long)-EINTR`, exactly the
 usual arithmetic conversion already performed by C. This is a bounded type
 clarification with unchanged values and legacy/native behavior; warning
 requirements and policy assertions remain intact.
+
+### Benign guest signal runner and external-forwarding capability boundary
+
+The assigned guest runner reuses the complete current
+`/work/run-native-ultra-baseline.py`, with its original source retained as
+`/work/run-native-ultra-signal-abi-baseline-original.py` and hashed inside each
+new attempt. The separate `/work/run-native-ultra-signal-abi.py` preserves all
+original boot/control assertions, eight HELLO applications and the original
+signals core on their preceding console window. It then executes the exact
+protocol-built signal payload through the unchanged mcexec launcher for
+`mask-context` and `fp-return`, with independent schedule, delivery/return,
+stdout/stderr, raw exit status, procfs, retirement, invalidation, pager and
+actual guest frame/sigreturn assertions. The original four-mode baseline
+helper remains unchanged.
+
+The new `native-signal-controller.c` reuses the existing failure supervisor's
+Linux-only fork/exec, pipe and `/proc/PID/task/TID/syscall` observation pattern.
+It drains both streams concurrently, writes complete streams into guest files
+and prints their exact bytes as hexadecimal evidence, enforces a 45-second
+child deadline and raw wait status 9472 (exit 37), and kills/reaps only its own
+unreaped child on failure. Its supervisor fork is Linux execution and supplies
+no McKernel fork capability credit. Direct Linux references for all three
+payload modes run inside the same guest, using the same pinned Linux bzImage
+and byte-identical payload and libraries as the McKernel launches.
+
+For `fp-restart`, the prepared controller waits for stdout READY, observes one
+actual Linux fd-0 read of one byte, sends SIGUSR1 to its owned child, drains
+stderr until the exact HANDLED marker, then writes a5 and verifies both full
+streams and exit 37. This is implemented for the direct Linux reference. Its
+McKernel invocation is deliberately not executed in the initial runner:
+native `mcctrl.rs::ioctl` does not implement `MCEXEC_UP_SIG_THREAD` or
+`MCEXEC_UP_SEND_SIGNAL`, despite `abi/os_service.rs::handles` routing both
+commands to that callback. Both return EINVAL. The unchanged Rust launcher's
+`mcexec_helpers.rs::sendsig` treats the failed SIG_THREAD query as non-UTI,
+attempts SEND_SIGNAL, then closes the device and exits 1 when it fails.
+The independent host review also found no selected native SEND_SIGNAL packet
+producer/ACK ownership implementation. Guest-local tgkill acceptance does not
+prove this separate external-forwarding path.
+
+The runner records the native restart case as **BLOCKED**, with zero guest
+execution/acceptance credit, its exact future oracle and the missing native
+forwarding prerequisite. Max must design the versioned descriptor copy/compat
+checks, process/TID binding, and owned send/ACK/cancellation lifetime before
+enabling it; adding the ioctl number to a match is insufficient. Existing pure
+producer/consumer restart fixtures provide bounded context/FP ordering coverage
+but do not replace an actual delegated-read restart.
+
+Prepared invocation, to be run only by root inside the serialized pinned
+container after the chosen inputs pass:
+
+```text
+python3 -B /work/run-native-ultra-signal-abi.py MODULE_ATTEMPT IMAGE_ATTEMPT PROTOCOL_ATTEMPT FRESH_GUEST_ATTEMPT
+```
+
+The helper compiles the new controller with `-Wall -Wextra -Werror`, captures
+its complete source/dependencies/ELF/disassembly, requires protocol input PASS
+and exact payload hashes, retains the unchanged 300-second whole-guest bound,
+and captures the original and adapted complete runner sources. No build,
+controller execution or guest run was performed by this subagent.

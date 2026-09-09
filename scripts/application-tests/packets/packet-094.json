@@ -1,0 +1,154 @@
+{
+  "blocked_by": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection"
+  ],
+  "candidate_fix_policy": {
+    "allowed": "One bounded candidate for a simple diagnosed defect after preserving the first failure. Scope must be authorized by the active packet; writes outside allowlist are forbidden.",
+    "invalidate_previous_binary_coverage": true,
+    "max_candidates": 1,
+    "not_automatic_acceptance": true,
+    "prohibited": [
+      "oracle weakening",
+      "allowed-errno widening",
+      "hidden retry",
+      "kernel or launcher change in a draft-only packet",
+      "changing baseline fixtures",
+      "rewriting failed evidence"
+    ],
+    "reviewer": "Max for native correctness, lifetime, ABI, scheduler, unsafe or unclear semantics; independently reviewed candidate before any acceptance"
+  },
+  "case_ids": [
+    "exhaust.application-capacity",
+    "exhaust.worker-capacity",
+    "exhaust.mailbox-capacity"
+  ],
+  "command_templates_are_implemented": false,
+  "completion": [
+    "Draft each selected source/input specification and independent oracle within its exact allowlist; report unresolved semantics explicitly.",
+    "Represent every listed parameter without inflating logical case counts; feature-blocked execution still permits drafting.",
+    "No runtime execution, kernel/launcher edits, oracle weakening or invented capability acceptance in this draft-only packet.",
+    "Write the immutable packet-specific draft report, including exact changed-file hashes, unresolved oracles and any preserved failure/Max escalation.",
+    "After reporting, advance automatically only to the next packet already listed in the reviewed draft queue; request no repeated user permission and never enable execution."
+  ],
+  "execution_enabled": false,
+  "executor_model": "Luna or Spark; user chooses",
+  "inputs": {
+    "capability_manifest": "{reviewed_capability_manifest}",
+    "case_subset_only": true,
+    "catalog": "scripts/application-tests/cases.json",
+    "input_manifest": "{reviewed_input_manifest}"
+  },
+  "limits": {
+    "active_cases_max": 3,
+    "candidate_fix_changed_lines_max": 80,
+    "candidate_fix_files_max": 2,
+    "candidate_fix_minutes_max": 15,
+    "container_cpus": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_tasks": 512,
+    "host_tests_forbidden": true
+  },
+  "mode": "draft-only",
+  "packet_id": "packet-094",
+  "permitted_commands": [
+    [
+      "python3",
+      "-B",
+      "/workspace/scripts/application-tests/validate.py",
+      "--packet",
+      "/workspace/scripts/application-tests/packets/packet-094.json"
+    ],
+    [
+      "git",
+      "diff",
+      "--check"
+    ]
+  ],
+  "queue": {
+    "active_case_limit": 3,
+    "advance_only_when_queue_reviewed": true,
+    "new_user_permission_per_packet_required": false,
+    "next_packet_id": "packet-095",
+    "path": "scripts/application-tests/draft-queue.json",
+    "position": 94
+  },
+  "read_allowlist": [
+    "scripts/application-tests/README.md",
+    "scripts/application-tests/packets/packet-094.json",
+    "{reviewed_capability_manifest}",
+    "{reviewed_input_manifest}",
+    "cases.json#exhaust.application-capacity",
+    "cases.json#exhaust.worker-capacity",
+    "cases.json#exhaust.mailbox-capacity"
+  ],
+  "reporting": {
+    "draft_statuses": [
+      "DRAFTED",
+      "DRAFTED_WITH_UNRESOLVED",
+      "BLOCKED",
+      "FAILED"
+    ],
+    "failure_artifact_directory": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-094/failures/",
+    "failure_log_creation": "Open a nonsymlink regular file with O_APPEND|O_CREAT|O_NOFOLLOW, serialize one complete JSON object per line and fsync; never truncate, edit or remove old events.",
+    "failure_log_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/failures.jsonl",
+    "failure_preservation": "Immediately append the first unexpected failure event and preserve original output/source/diff/context before diagnosis; no hidden retry. Runtime/validation failures also retain the established root kernel.log record.",
+    "max_escalation": "Record exact smallest reproducer, evidence paths and unresolved semantic question for Max. No model switch or production patch in a draft packet. Continue later independent drafting; mark dependency-blocked drafts precisely.",
+    "report_creation": "Create once exclusively after draft work; do not replace a prior report. A resumed/revised run uses a new fresh_queue_run_id and links prior failed evidence.",
+    "report_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-094/report.json",
+    "required_failure_event_fields": [
+      "schema_version",
+      "sequence",
+      "utc",
+      "queue_run_id",
+      "packet_id",
+      "case_ids",
+      "stage",
+      "exact_command_argv_or_tool_action",
+      "environment_summary",
+      "error",
+      "original_artifact_paths_and_sha256",
+      "source_and_context_sha256",
+      "max_escalation_required"
+    ],
+    "required_report_fields": [
+      "schema_version",
+      "queue_run_id",
+      "queue_sha256",
+      "packet_id",
+      "packet_version",
+      "context_sha256",
+      "started_utc",
+      "finished_utc",
+      "draft_status",
+      "cases",
+      "changed_files_with_sha256",
+      "commands_and_outcomes",
+      "unresolved_oracles",
+      "blocked_execution_capabilities",
+      "first_failure_event",
+      "max_escalation",
+      "next_packet_id"
+    ],
+    "scratch_write_exception": "Only this packet report, original failure artifacts within its named failure directory, and append-only shared failure log. No production-source scope expansion.",
+    "test_pass_status_forbidden": true
+  },
+  "schema_version": 1,
+  "status": "planned",
+  "version": 1,
+  "write_allowlist": [
+    "scripts/application-tests/fixtures/exhaust.application-capacity.rs",
+    "scripts/application-tests/oracles/exhaust.application-capacity.json",
+    "scripts/application-tests/fixtures/exhaust.worker-capacity.rs",
+    "scripts/application-tests/oracles/exhaust.worker-capacity.json",
+    "scripts/application-tests/fixtures/exhaust.mailbox-capacity.rs",
+    "scripts/application-tests/oracles/exhaust.mailbox-capacity.json"
+  ]
+}

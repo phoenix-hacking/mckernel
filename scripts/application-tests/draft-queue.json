@@ -1,0 +1,919 @@
+{
+  "activation": "Root releases this queue after its drafting handoff gates, structural/dependency validation and verified GitHub checkpoint. No fixture implementation begins while review_state remains pending.",
+  "advancement": "Within the reviewed queue, write the packet report then automatically load the next listed bounded context. No repeated user permission request. Do not invent packets, enable runtime, edit production or broaden file allowlists.",
+  "catalog": "scripts/application-tests/cases.json",
+  "catalog_version": 2,
+  "completion_contract": "Every catalog ID appears in exactly one immutable packet report, including blocked/unresolved/failed drafts. Draft completion is not test acceptance, execution readiness, production acceptance or a model switch.",
+  "context_policy": {
+    "active_cases_max": 3,
+    "active_packets": 1,
+    "completed_context": "Replace completed case bodies with immutable report reference and minimal unresolved dependency summary before next packet.",
+    "supply": [
+      "README contract",
+      "active packet",
+      "only selected case objects with embedded vector feature masks where relevant",
+      "reviewed capability/input manifests",
+      "directly required source excerpts",
+      "queue cursor containing queue hash,index,total and nextpacketID"
+    ],
+    "withhold": [
+      "whole catalog",
+      "whole historical kernel.log",
+      "all other packet case bodies"
+    ]
+  },
+  "date": "2026-09-09",
+  "execution_enabled": false,
+  "executor_model": "Luna or Spark; user chooses",
+  "failure_policy": {
+    "append_only_original_failure_log": true,
+    "continue": "Preserve and classify a failed draft, report the exact unresolved dependency and continue independent later draft packets. Do not fabricate an oracle to satisfy coverage.",
+    "hidden_retry": false,
+    "max_review_required_for": [
+      "unsafe memory",
+      "FP/xstate lifetime",
+      "PID/MM ownership",
+      "wire/return ABI",
+      "scheduler or transport",
+      "unclear errno or concurrency semantics",
+      "larger or unsuccessful candidate repair"
+    ],
+    "oracle_weakening_allowed": false,
+    "production_changes_allowed": false
+  },
+  "logical_case_count": 273,
+  "mode": "draft-only",
+  "ordering": "Existing001-007 first, each case once; remaining cases grouped by family with all declared depends_on cases earlier in packet/queue order. Dependency ordering supports drafting and does not imply runtime capability acceptance.",
+  "packet_count": 97,
+  "packets": [
+    {
+      "case_ids": [
+        "startup.argv-empty",
+        "startup.environment",
+        "startup.stdout-stderr"
+      ],
+      "packet_id": "packet-001",
+      "path": "scripts/application-tests/packets/packet-001.json"
+    },
+    {
+      "case_ids": [
+        "memory.calloc-zero",
+        "memory.realloc-grow",
+        "memory.realloc-shrink"
+      ],
+      "packet_id": "packet-002",
+      "path": "scripts/application-tests/packets/packet-002.json"
+    },
+    {
+      "case_ids": [
+        "file.closed-read",
+        "file.closed-write",
+        "file.closed-close"
+      ],
+      "packet_id": "packet-003",
+      "path": "scripts/application-tests/packets/packet-003.json"
+    },
+    {
+      "case_ids": [
+        "futex.wait-mismatch",
+        "futex.wake-empty",
+        "futex.wait-unaligned"
+      ],
+      "packet_id": "packet-004",
+      "path": "scripts/application-tests/packets/packet-004.json"
+    },
+    {
+      "case_ids": [
+        "signal.alternate-repeat",
+        "signal.alternate-nested"
+      ],
+      "packet_id": "packet-005",
+      "path": "scripts/application-tests/packets/packet-005.json"
+    },
+    {
+      "case_ids": [
+        "app.cat-file",
+        "app.cat-stdin",
+        "app.cat-empty"
+      ],
+      "packet_id": "packet-006",
+      "path": "scripts/application-tests/packets/packet-006.json"
+    },
+    {
+      "case_ids": [
+        "vector.capability-snapshot",
+        "vector.xmm-raw-syscall",
+        "vector.ymm-raw-syscall"
+      ],
+      "packet_id": "packet-007",
+      "path": "scripts/application-tests/packets/packet-007.json"
+    },
+    {
+      "case_ids": [
+        "startup.argv-whitespace",
+        "startup.cwd",
+        "startup.umask"
+      ],
+      "packet_id": "packet-008",
+      "path": "scripts/application-tests/packets/packet-008.json"
+    },
+    {
+      "case_ids": [
+        "startup.pagesize",
+        "startup.auxv-entry",
+        "startup.stdin-binary"
+      ],
+      "packet_id": "packet-009",
+      "path": "scripts/application-tests/packets/packet-009.json"
+    },
+    {
+      "case_ids": [
+        "startup.exit-status"
+      ],
+      "packet_id": "packet-010",
+      "path": "scripts/application-tests/packets/packet-010.json"
+    },
+    {
+      "case_ids": [
+        "memory.realloc-null",
+        "memory.aligned-allocation",
+        "memory.alignment-invalid"
+      ],
+      "packet_id": "packet-011",
+      "path": "scripts/application-tests/packets/packet-011.json"
+    },
+    {
+      "case_ids": [
+        "memory.anonymous-zero",
+        "memory.anonymous-reuse",
+        "memory.map-unmap-hole"
+      ],
+      "packet_id": "packet-012",
+      "path": "scripts/application-tests/packets/packet-012.json"
+    },
+    {
+      "case_ids": [
+        "memory.protect-readonly",
+        "memory.protect-none-read",
+        "memory.protect-none-write"
+      ],
+      "packet_id": "packet-013",
+      "path": "scripts/application-tests/packets/packet-013.json"
+    },
+    {
+      "case_ids": [
+        "memory.unmapped-read",
+        "memory.unmapped-write",
+        "memory.protection-restore"
+      ],
+      "packet_id": "packet-014",
+      "path": "scripts/application-tests/packets/packet-014.json"
+    },
+    {
+      "case_ids": [
+        "memory.protection-subrange",
+        "memory.mprotect-unaligned",
+        "memory.munmap-unaligned"
+      ],
+      "packet_id": "packet-015",
+      "path": "scripts/application-tests/packets/packet-015.json"
+    },
+    {
+      "case_ids": [
+        "memory.mmap-zero-length",
+        "memory.file-private",
+        "memory.file-shared"
+      ],
+      "packet_id": "packet-016",
+      "path": "scripts/application-tests/packets/packet-016.json"
+    },
+    {
+      "case_ids": [
+        "memory.file-eof-sigbus",
+        "memory.file-tail-zero",
+        "memory.mapping-close-fd"
+      ],
+      "packet_id": "packet-017",
+      "path": "scripts/application-tests/packets/packet-017.json"
+    },
+    {
+      "case_ids": [
+        "file.write-read",
+        "file.zero-length-io",
+        "file.pread-offset"
+      ],
+      "packet_id": "packet-018",
+      "path": "scripts/application-tests/packets/packet-018.json"
+    },
+    {
+      "case_ids": [
+        "file.pwrite-offset",
+        "file.readv-boundaries",
+        "file.writev-boundaries"
+      ],
+      "packet_id": "packet-019",
+      "path": "scripts/application-tests/packets/packet-019.json"
+    },
+    {
+      "case_ids": [
+        "file.dup-shared-offset",
+        "file.dup-close-original",
+        "file.dup2-replacement"
+      ],
+      "packet_id": "packet-020",
+      "path": "scripts/application-tests/packets/packet-020.json"
+    },
+    {
+      "case_ids": [
+        "file.fd-reuse",
+        "file.missing-open",
+        "file.exclusive-create"
+      ],
+      "packet_id": "packet-021",
+      "path": "scripts/application-tests/packets/packet-021.json"
+    },
+    {
+      "case_ids": [
+        "file.negative-seek",
+        "file.append",
+        "file.truncate-shrink"
+      ],
+      "packet_id": "packet-022",
+      "path": "scripts/application-tests/packets/packet-022.json"
+    },
+    {
+      "case_ids": [
+        "file.truncate-grow",
+        "file.fsync",
+        "file.unlink-open"
+      ],
+      "packet_id": "packet-023",
+      "path": "scripts/application-tests/packets/packet-023.json"
+    },
+    {
+      "case_ids": [
+        "file.rename",
+        "file.rename-overwrite",
+        "file.mkdir-rmdir"
+      ],
+      "packet_id": "packet-024",
+      "path": "scripts/application-tests/packets/packet-024.json"
+    },
+    {
+      "case_ids": [
+        "file.rmdir-nonempty",
+        "file.symlink-readlink",
+        "file.symlink-follow"
+      ],
+      "packet_id": "packet-025",
+      "path": "scripts/application-tests/packets/packet-025.json"
+    },
+    {
+      "case_ids": [
+        "file.hardlink",
+        "file.directory-entries",
+        "file.fcntl-flags"
+      ],
+      "packet_id": "packet-026",
+      "path": "scripts/application-tests/packets/packet-026.json"
+    },
+    {
+      "case_ids": [
+        "time.monotonic-libc",
+        "time.monotonic-syscall",
+        "time.realtime-range"
+      ],
+      "packet_id": "packet-027",
+      "path": "scripts/application-tests/packets/packet-027.json"
+    },
+    {
+      "case_ids": [
+        "time.clock-resolution",
+        "time.invalid-clock",
+        "time.clock-output-fault"
+      ],
+      "packet_id": "packet-028",
+      "path": "scripts/application-tests/packets/packet-028.json"
+    },
+    {
+      "case_ids": [
+        "time.nanosleep",
+        "time.nanosleep-invalid",
+        "time.sleep-interrupted"
+      ],
+      "packet_id": "packet-029",
+      "path": "scripts/application-tests/packets/packet-029.json"
+    },
+    {
+      "case_ids": [
+        "time.absolute-sleep"
+      ],
+      "packet_id": "packet-030",
+      "path": "scripts/application-tests/packets/packet-030.json"
+    },
+    {
+      "case_ids": [
+        "futex.wait-unmapped",
+        "futex.wake-one",
+        "futex.wake-two"
+      ],
+      "packet_id": "packet-031",
+      "path": "scripts/application-tests/packets/packet-031.json"
+    },
+    {
+      "case_ids": [
+        "futex.relative-timeout",
+        "futex.invalid-nanoseconds",
+        "futex.negative-seconds"
+      ],
+      "packet_id": "packet-032",
+      "path": "scripts/application-tests/packets/packet-032.json"
+    },
+    {
+      "case_ids": [
+        "futex.timeout-fault",
+        "futex.bitset-zero",
+        "futex.bitset-monotonic-timeout"
+      ],
+      "packet_id": "packet-033",
+      "path": "scripts/application-tests/packets/packet-033.json"
+    },
+    {
+      "case_ids": [
+        "futex.bitset-selective-wake",
+        "futex.private-flag",
+        "futex.interrupted-wait"
+      ],
+      "packet_id": "packet-034",
+      "path": "scripts/application-tests/packets/packet-034.json"
+    },
+    {
+      "case_ids": [
+        "futex.requeue",
+        "futex.unsupported-command"
+      ],
+      "packet_id": "packet-035",
+      "path": "scripts/application-tests/packets/packet-035.json"
+    },
+    {
+      "case_ids": [
+        "thread.tls-isolation",
+        "thread.mutex-counter",
+        "thread.barrier-generations"
+      ],
+      "packet_id": "packet-036",
+      "path": "scripts/application-tests/packets/packet-036.json"
+    },
+    {
+      "case_ids": [
+        "thread.join-values",
+        "thread.create-join-reuse",
+        "thread.mutex-trylock"
+      ],
+      "packet_id": "packet-037",
+      "path": "scripts/application-tests/packets/packet-037.json"
+    },
+    {
+      "case_ids": [
+        "thread.recursive-mutex",
+        "thread.errorcheck-mutex",
+        "thread.condvar-order"
+      ],
+      "packet_id": "packet-038",
+      "path": "scripts/application-tests/packets/packet-038.json"
+    },
+    {
+      "case_ids": [
+        "thread.condvar-broadcast",
+        "thread.condvar-timeout",
+        "thread.once"
+      ],
+      "packet_id": "packet-039",
+      "path": "scripts/application-tests/packets/packet-039.json"
+    },
+    {
+      "case_ids": [
+        "thread.key-destructor",
+        "thread.rwlock-readers",
+        "thread.rwlock-trywrite"
+      ],
+      "packet_id": "packet-040",
+      "path": "scripts/application-tests/packets/packet-040.json"
+    },
+    {
+      "case_ids": [
+        "thread.semaphore",
+        "thread.detach"
+      ],
+      "packet_id": "packet-041",
+      "path": "scripts/application-tests/packets/packet-041.json"
+    },
+    {
+      "case_ids": [
+        "signal.block-pending",
+        "signal.mask-restore",
+        "signal.altstack-disable"
+      ],
+      "packet_id": "packet-042",
+      "path": "scripts/application-tests/packets/packet-042.json"
+    },
+    {
+      "case_ids": [
+        "signal.altstack-small",
+        "signal.altstack-autodisarm",
+        "signal.altstack-change-active"
+      ],
+      "packet_id": "packet-043",
+      "path": "scripts/application-tests/packets/packet-043.json"
+    },
+    {
+      "case_ids": [
+        "signal.default-segv",
+        "signal.default-term",
+        "signal.ignore"
+      ],
+      "packet_id": "packet-044",
+      "path": "scripts/application-tests/packets/packet-044.json"
+    },
+    {
+      "case_ids": [
+        "signal.external-user1",
+        "signal.read-eintr",
+        "signal.read-restart"
+      ],
+      "packet_id": "packet-045",
+      "path": "scripts/application-tests/packets/packet-045.json"
+    },
+    {
+      "case_ids": [
+        "signal.sigsuspend",
+        "signal.sigwait",
+        "signal.thread-target"
+      ],
+      "packet_id": "packet-046",
+      "path": "scripts/application-tests/packets/packet-046.json"
+    },
+    {
+      "case_ids": [
+        "signal.handler-flags"
+      ],
+      "packet_id": "packet-047",
+      "path": "scripts/application-tests/packets/packet-047.json"
+    },
+    {
+      "case_ids": [
+        "process.fork-exit",
+        "process.fork-cow",
+        "process.fork-shared-offset"
+      ],
+      "packet_id": "packet-048",
+      "path": "scripts/application-tests/packets/packet-048.json"
+    },
+    {
+      "case_ids": [
+        "process.wait-nochild",
+        "process.wait-nohang",
+        "process.wait-signal"
+      ],
+      "packet_id": "packet-049",
+      "path": "scripts/application-tests/packets/packet-049.json"
+    },
+    {
+      "case_ids": [
+        "process.exec-success",
+        "process.exec-missing",
+        "process.exec-cloexec"
+      ],
+      "packet_id": "packet-050",
+      "path": "scripts/application-tests/packets/packet-050.json"
+    },
+    {
+      "case_ids": [
+        "process.pipe-transfer",
+        "process.pipe-epipe",
+        "process.pipe-sigpipe"
+      ],
+      "packet_id": "packet-051",
+      "path": "scripts/application-tests/packets/packet-051.json"
+    },
+    {
+      "case_ids": [
+        "process.vfork-exec",
+        "process.spawn",
+        "process.session-group"
+      ],
+      "packet_id": "packet-052",
+      "path": "scripts/application-tests/packets/packet-052.json"
+    },
+    {
+      "case_ids": [
+        "process.fork-unsupported",
+        "process.clone3-size-small",
+        "process.clone3-size-large"
+      ],
+      "packet_id": "packet-053",
+      "path": "scripts/application-tests/packets/packet-053.json"
+    },
+    {
+      "case_ids": [
+        "process.clone3-tail",
+        "process.clone3-io-unsupported"
+      ],
+      "packet_id": "packet-054",
+      "path": "scripts/application-tests/packets/packet-054.json"
+    },
+    {
+      "case_ids": [
+        "ipc.pipe-same-process",
+        "ipc.pipe-nonblock",
+        "ipc.poll-readable"
+      ],
+      "packet_id": "packet-055",
+      "path": "scripts/application-tests/packets/packet-055.json"
+    },
+    {
+      "case_ids": [
+        "ipc.poll-timeout",
+        "ipc.poll-invalid-fd",
+        "ipc.select-readable"
+      ],
+      "packet_id": "packet-056",
+      "path": "scripts/application-tests/packets/packet-056.json"
+    },
+    {
+      "case_ids": [
+        "ipc.eventfd-counter",
+        "ipc.eventfd-semaphore",
+        "ipc.timerfd"
+      ],
+      "packet_id": "packet-057",
+      "path": "scripts/application-tests/packets/packet-057.json"
+    },
+    {
+      "case_ids": [
+        "ipc.socketpair-stream",
+        "ipc.socketpair-datagram",
+        "ipc.socketpair-halfclose"
+      ],
+      "packet_id": "packet-058",
+      "path": "scripts/application-tests/packets/packet-058.json"
+    },
+    {
+      "case_ids": [
+        "ipc.epoll-ready",
+        "ipc.epoll-remove",
+        "ipc.dup-cloexec-flags"
+      ],
+      "packet_id": "packet-059",
+      "path": "scripts/application-tests/packets/packet-059.json"
+    },
+    {
+      "case_ids": [
+        "ipc.flock-contention"
+      ],
+      "packet_id": "packet-060",
+      "path": "scripts/application-tests/packets/packet-060.json"
+    },
+    {
+      "case_ids": [
+        "loader.pie-startup",
+        "loader.static-startup",
+        "loader.dlopen-function"
+      ],
+      "packet_id": "packet-061",
+      "path": "scripts/application-tests/packets/packet-061.json"
+    },
+    {
+      "case_ids": [
+        "loader.dlopen-constructor",
+        "loader.dlsym-missing",
+        "loader.cxx-containers"
+      ],
+      "packet_id": "packet-062",
+      "path": "scripts/application-tests/packets/packet-062.json"
+    },
+    {
+      "case_ids": [
+        "loader.cxx-exception",
+        "loader.tls-dso"
+      ],
+      "packet_id": "packet-063",
+      "path": "scripts/application-tests/packets/packet-063.json"
+    },
+    {
+      "case_ids": [
+        "app.wc-bytes",
+        "app.wc-lines",
+        "app.sha256sum"
+      ],
+      "packet_id": "packet-064",
+      "path": "scripts/application-tests/packets/packet-064.json"
+    },
+    {
+      "case_ids": [
+        "app.cp",
+        "app.sort-numeric",
+        "app.uniq"
+      ],
+      "packet_id": "packet-065",
+      "path": "scripts/application-tests/packets/packet-065.json"
+    },
+    {
+      "case_ids": [
+        "app.head",
+        "app.tail",
+        "app.gzip-compress"
+      ],
+      "packet_id": "packet-066",
+      "path": "scripts/application-tests/packets/packet-066.json"
+    },
+    {
+      "case_ids": [
+        "app.gzip-decompress",
+        "app.gzip-corrupt",
+        "app.xz-compress"
+      ],
+      "packet_id": "packet-067",
+      "path": "scripts/application-tests/packets/packet-067.json"
+    },
+    {
+      "case_ids": [
+        "app.xz-decompress",
+        "app.zstd-compress",
+        "app.zstd-decompress"
+      ],
+      "packet_id": "packet-068",
+      "path": "scripts/application-tests/packets/packet-068.json"
+    },
+    {
+      "case_ids": [
+        "app.bash-arithmetic",
+        "app.bash-pipeline"
+      ],
+      "packet_id": "packet-069",
+      "path": "scripts/application-tests/packets/packet-069.json"
+    },
+    {
+      "case_ids": [
+        "numerical.integer-reduction",
+        "numerical.integer-matrix",
+        "numerical.prefix-scan"
+      ],
+      "packet_id": "packet-070",
+      "path": "scripts/application-tests/packets/packet-070.json"
+    },
+    {
+      "case_ids": [
+        "numerical.sort-permutation",
+        "numerical.file-checksum"
+      ],
+      "packet_id": "packet-071",
+      "path": "scripts/application-tests/packets/packet-071.json"
+    },
+    {
+      "case_ids": [
+        "vector.dispatch-negative-vectors",
+        "vector.fxsave-layout",
+        "vector.xsave-layout"
+      ],
+      "packet_id": "packet-072",
+      "path": "scripts/application-tests/packets/packet-072.json"
+    },
+    {
+      "case_ids": [
+        "vector.sse2-integer-lanes",
+        "vector.ssse3-byte-shuffle",
+        "vector.sse41-integer-blend"
+      ],
+      "packet_id": "packet-073",
+      "path": "scripts/application-tests/packets/packet-073.json"
+    },
+    {
+      "case_ids": [
+        "vector.sse42-crc32c",
+        "vector.avx-f32-arithmetic",
+        "vector.avx2-integer-wrap"
+      ],
+      "packet_id": "packet-074",
+      "path": "scripts/application-tests/packets/packet-074.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx2-signed-saturate",
+        "vector.avx2-cross-lane-permute",
+        "vector.avx2-gather"
+      ],
+      "packet_id": "packet-075",
+      "path": "scripts/application-tests/packets/packet-075.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx-unaligned-page-load",
+        "vector.avx2-masked-guard-load",
+        "vector.avx-f64-reduction"
+      ],
+      "packet_id": "packet-076",
+      "path": "scripts/application-tests/packets/packet-076.json"
+    },
+    {
+      "case_ids": [
+        "vector.fma-single-rounding",
+        "vector.f16c-rounding",
+        "vector.aes-block"
+      ],
+      "packet_id": "packet-077",
+      "path": "scripts/application-tests/packets/packet-077.json"
+    },
+    {
+      "case_ids": [
+        "vector.pclmul-polynomial",
+        "vector.vaes-two-blocks",
+        "vector.vpclmul-two-products"
+      ],
+      "packet_id": "packet-078",
+      "path": "scripts/application-tests/packets/packet-078.json"
+    },
+    {
+      "case_ids": [
+        "vector.gfni-affine",
+        "vector.sha256-known-answer",
+        "vector.x87-raw-syscall"
+      ],
+      "packet_id": "packet-079",
+      "path": "scripts/application-tests/packets/packet-079.json"
+    },
+    {
+      "case_ids": [
+        "vector.mxcsr-raw-syscall",
+        "vector.xmm-thread-switch",
+        "vector.ymm-thread-switch"
+      ],
+      "packet_id": "packet-080",
+      "path": "scripts/application-tests/packets/packet-080.json"
+    },
+    {
+      "case_ids": [
+        "vector.x87-thread-switch",
+        "vector.mxcsr-thread-switch",
+        "vector.ymm-join-survivor"
+      ],
+      "packet_id": "packet-081",
+      "path": "scripts/application-tests/packets/packet-081.json"
+    },
+    {
+      "case_ids": [
+        "vector.xmm-local-signal",
+        "vector.ymm-local-signal",
+        "vector.x87-nested-signal"
+      ],
+      "packet_id": "packet-082",
+      "path": "scripts/application-tests/packets/packet-082.json"
+    },
+    {
+      "case_ids": [
+        "vector.mxcsr-nested-signal",
+        "vector.ymm-nested-altstack",
+        "vector.xmm-fresh-exec-state"
+      ],
+      "packet_id": "packet-083",
+      "path": "scripts/application-tests/packets/packet-083.json"
+    },
+    {
+      "case_ids": [
+        "vector.ymm-fresh-exec-state",
+        "vector.x87-fresh-exec-control",
+        "vector.mxcsr-fresh-exec-control"
+      ],
+      "packet_id": "packet-084",
+      "path": "scripts/application-tests/packets/packet-084.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx-vzeroupper-semantics",
+        "vector.fp-denormal-controls",
+        "vector.avx512-integer-lanes"
+      ],
+      "packet_id": "packet-085",
+      "path": "scripts/application-tests/packets/packet-085.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx512-masked-guard-memory",
+        "vector.avx512-opmask-context",
+        "vector.avx512-high-zmm-context"
+      ],
+      "packet_id": "packet-086",
+      "path": "scripts/application-tests/packets/packet-086.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx512-vl-upper-state",
+        "vector.avx512-vnni-dot",
+        "vector.avx512-vbmi-byte-permute"
+      ],
+      "packet_id": "packet-087",
+      "path": "scripts/application-tests/packets/packet-087.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx512-ifma52",
+        "vector.avx512-bit-popcounts",
+        "vector.avx512-conflict"
+      ],
+      "packet_id": "packet-088",
+      "path": "scripts/application-tests/packets/packet-088.json"
+    },
+    {
+      "case_ids": [
+        "vector.avx512-nested-signal-frame",
+        "vector.kernel-no-simd-audit"
+      ],
+      "packet_id": "packet-089",
+      "path": "scripts/application-tests/packets/packet-089.json"
+    },
+    {
+      "case_ids": [
+        "failure.worker-idle",
+        "failure.worker-delivered",
+        "failure.worker-copyout"
+      ],
+      "packet_id": "packet-090",
+      "path": "scripts/application-tests/packets/packet-090.json"
+    },
+    {
+      "case_ids": [
+        "failure.ret-precopy",
+        "failure.ret-prepublish",
+        "failure.ret-notify"
+      ],
+      "packet_id": "packet-091",
+      "path": "scripts/application-tests/packets/packet-091.json"
+    },
+    {
+      "case_ids": [
+        "failure.ret-backpressure",
+        "failure.ret-timeout",
+        "failure.pager-inflight"
+      ],
+      "packet_id": "packet-092",
+      "path": "scripts/application-tests/packets/packet-092.json"
+    },
+    {
+      "case_ids": [
+        "failure.invalidation-inflight",
+        "failure.pid-reuse",
+        "failure.procfs-close-race"
+      ],
+      "packet_id": "packet-093",
+      "path": "scripts/application-tests/packets/packet-093.json"
+    },
+    {
+      "case_ids": [
+        "exhaust.application-capacity",
+        "exhaust.worker-capacity",
+        "exhaust.mailbox-capacity"
+      ],
+      "packet_id": "packet-094",
+      "path": "scripts/application-tests/packets/packet-094.json"
+    },
+    {
+      "case_ids": [
+        "exhaust.pager-handles",
+        "exhaust.response-ledger",
+        "exhaust.fd-limit"
+      ],
+      "packet_id": "packet-095",
+      "path": "scripts/application-tests/packets/packet-095.json"
+    },
+    {
+      "case_ids": [
+        "exhaust.allocation",
+        "exhaust.zeroing-detach",
+        "exhaust.long-sequential"
+      ],
+      "packet_id": "packet-096",
+      "path": "scripts/application-tests/packets/packet-096.json"
+    },
+    {
+      "case_ids": [
+        "exhaust.multicore-routing"
+      ],
+      "packet_id": "packet-097",
+      "path": "scripts/application-tests/packets/packet-097.json"
+    }
+  ],
+  "parameter_executions_in_case_count": false,
+  "queue_id": "application-drafts-20260909-v1",
+  "queue_version": 1,
+  "reporting": {
+    "failure_log_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/failures.jsonl",
+    "progress": "Report after each packet: packet index/total, exact case draft statuses, source/oracle files produced, unresolved expectations, first failure preservation and next already-reviewed packet. No application PASS claim from drafting.",
+    "root": "/work/application-test-drafts-20260909/{fresh_queue_run_id}",
+    "scratch_scope": "The queue summary plus packet-specific reporting exceptions are the only scratch reporting writes; repository write_allowlist remains exact.",
+    "summary_creation": "Exclusive immutable creation after all packet reports exist; status is DRAFT_QUEUE_COMPLETE or DRAFT_QUEUE_COMPLETE_WITH_BLOCKERS, never PASS. Include drafted/unresolved/blocked/failed counts, all report hashes and pending Max questions.",
+    "summary_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/queue-summary.json"
+  },
+  "review_state": "pending-root-validation-and-verified-checkpoint",
+  "schema_version": 1,
+  "status": "prepared-for-root-review"
+}
