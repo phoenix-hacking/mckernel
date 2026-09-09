@@ -29,6 +29,7 @@ struct Call<M: ResponseMemory> {
     kernel: bool,
     service: bool,
     transferred: bool,
+    publication_since: Option<u64>,
 }
 
 pub(crate) struct Mailbox<M: ResponseMemory> {
@@ -87,6 +88,9 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn close_worker(&mut self, handle: u64) -> Result {
+        if self.quarantined {
+            return Err(-71);
+        }
         let slot = self
             .workers
             .iter_mut()
@@ -184,6 +188,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             kernel: false,
             service: false,
             transferred: false,
+            publication_since: None,
         };
         if let Some(service) = service {
             call.delivery.begin_service()?;
@@ -255,6 +260,9 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn copied(&mut self, handle: u64, serial: u64, success: bool) -> Result {
+        if self.quarantined {
+            return Err(-71);
+        }
         let worker = self
             .workers
             .iter_mut()
@@ -420,6 +428,9 @@ impl<M: ResponseMemory> Mailbox<M> {
         serial: u64,
         result: impl FnOnce(&Request, &mut M) -> Result<i64>,
     ) -> Result {
+        if self.quarantined {
+            return Err(-71);
+        }
         let call = self
             .calls
             .iter_mut()
@@ -504,6 +515,9 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn returned(&self, handle: u64, serial: u64) -> Result<bool> {
+        if self.quarantined {
+            return Err(-71);
+        }
         let worker = self
             .workers
             .iter()
@@ -513,9 +527,6 @@ impl<M: ResponseMemory> Mailbox<M> {
         if worker.completed.map(Token::wire) == Some(serial) {
             return Ok(true);
         }
-        if self.quarantined {
-            return Err(-71);
-        }
         if worker.delivery.map(Token::wire) != Some(serial) {
             return Err(-16);
         }
@@ -523,6 +534,9 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn queued_cpu(&self) -> Option<i32> {
+        if self.quarantined {
+            return None;
+        }
         self.next_completion(None)
             .map(|index| self.calls[index].as_ref().unwrap().delivery.request().cpu())
     }
@@ -543,6 +557,9 @@ impl<M: ResponseMemory> Mailbox<M> {
         cpu: i32,
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
+        if self.quarantined {
+            return Err(-71);
+        }
         let Some(index) = self.next_completion(Some(cpu)) else {
             return Ok(false);
         };
@@ -575,8 +592,35 @@ impl<M: ResponseMemory> Mailbox<M> {
     }
 
     pub(crate) fn close(&mut self) -> Result {
+        if self.quarantined {
+            return Err(-71);
+        }
         self.closed = true;
         self.cancel_pending()
+    }
+
+    /// A failed transport cannot acknowledge or cancel an unfinished response.
+    /// Retain every call and its exact memory claim; in-flight kernel work may
+    /// finish its independent I/O, but may no longer copy or publish peer data.
+    pub(crate) fn quarantine(&mut self) {
+        self.closed = true;
+        self.quarantined = true;
+    }
+
+    /// The independent packet owner supplies CLOCK_MONOTONIC seconds. Each
+    /// committed completion has its own deadline, so progress by another call
+    /// cannot indefinitely reset a blocked response's publication lifetime.
+    pub(crate) fn publication_expired(&mut self, now: u64, timeout: u64) -> bool {
+        if self.quarantined {
+            return false;
+        }
+        self.calls.iter_mut().flatten().any(|call| {
+            if call.completion.is_none() {
+                return false;
+            }
+            let since = call.publication_since.get_or_insert(now);
+            now.saturating_sub(*since) >= timeout
+        })
     }
 
     fn cancel_pending(&mut self) -> Result {

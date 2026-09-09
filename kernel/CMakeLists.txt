@@ -131,6 +131,9 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/zero_pages.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/clone3.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_signal.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_fault.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_futex.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_xstate.rs"
 	)
 		set(RUST_KERNEL_CFG)
 		if (ENABLE_NATIVE_SYSFS_VERIFY)
@@ -141,6 +144,9 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			list(APPEND RUST_KERNEL_CFG "--cfg" "native_linux_irq_work_v6_12")
 			add_definitions(-DMCKERNEL_NATIVE_CLONE3)
 			add_definitions(-DMCKERNEL_NATIVE_SIGNAL_STACK)
+			add_definitions(-DMCKERNEL_NATIVE_FAULT_FIXUP)
+			add_definitions(-DMCKERNEL_NATIVE_FUTEX)
+			add_definitions(-DMCKERNEL_NATIVE_CLONE_TID)
 		endif()
 		if (ENABLE_TOFU)
 			list(APPEND RUST_KERNEL_CFG "--cfg" "enable_tofu")

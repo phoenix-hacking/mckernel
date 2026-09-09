@@ -11,7 +11,7 @@ use super::{
     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
-use core::sync::atomic::{AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicI32, AtomicUsize, Ordering};
 use kernel::{
     bindings,
     prelude::*,
@@ -19,6 +19,7 @@ use kernel::{
 };
 
 pub(crate) const CAPACITY: usize = 64;
+const PUBLICATION_TIMEOUT_SECONDS: u64 = 5;
 
 fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
@@ -144,6 +145,7 @@ pub(crate) struct Remote {
     #[pin]
     changed: CondVar,
     syscall_cursor: AtomicUsize,
+    transport_error: AtomicI32,
     pagers: Arc<Pagers>,
     release_token: Token,
     #[pin]
@@ -161,7 +163,7 @@ impl Remote {
         }
         Arc::pin_init(
             pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
-                syscall_cursor: AtomicUsize::new(0), pagers, release_token,
+                syscall_cursor: AtomicUsize::new(0), transport_error: AtomicI32::new(0), pagers, release_token,
                 releases <- new_mutex!(releases) }),
             GFP_KERNEL,
         )
@@ -170,6 +172,7 @@ impl Remote {
     pub(crate) fn reserve(&self, pid: i32) -> Result<Token> {
         let syscalls = Mailbox::new().map_err(errno)?;
         let mut slots = self.slots.lock();
+        self.transport_health()?;
         // Late and quarantined requests continue excluding numeric PID reuse.
         if slots
             .iter()
@@ -199,6 +202,9 @@ impl Remote {
     }
 
     pub(crate) fn queued_cpu(&self) -> Option<i32> {
+        if self.transport_health().is_err() {
+            return None;
+        }
         self.slots
             .lock()
             .iter()
@@ -210,6 +216,16 @@ impl Remote {
 
     pub(crate) fn advance(&self) -> Result {
         let mut slots = self.slots.lock();
+        self.transport_health()?;
+        // This task continues even if the original RET waiter is dying. No
+        // intentionally blocking user syscall is timed: only accepted results
+        // whose response/wake has not reached real publication are bounded.
+        let now = unsafe { bindings::ktime_get_seconds() } as u64;
+        if let Err(error) = self.expire_publications(&mut slots, now) {
+            drop(slots);
+            self.changed.notify_all();
+            return Err(error);
+        }
         for slot in &mut *slots {
             if let Some(entry) = slot {
                 if entry.needs_cleanup && !entry.quarantined {
@@ -251,6 +267,7 @@ impl Remote {
         send: impl FnOnce(&[u8; 128]) -> Result,
     ) -> Result<bool> {
         let mut slots = self.slots.lock();
+        self.transport_health()?;
         let Some(entry) = slots
             .iter_mut()
             .flatten()
@@ -287,6 +304,7 @@ impl Remote {
         mut memory: impl FnMut(u64, usize) -> Result,
     ) -> Result {
         let mut slots = self.slots.lock();
+        self.transport_health()?;
         let message = i32::from_le_bytes(packet[8..12].try_into().unwrap());
         for slot in &mut *slots {
             let Some(entry) = slot.as_mut() else {
@@ -411,6 +429,8 @@ impl Remote {
         claim: impl FnOnce(&Request) -> Result<SyscallResponse>,
     ) -> Result {
         if PagerOperation::is_release(&request) {
+            let slots = self.slots.lock();
+            self.transport_health()?;
             // A shared file object can outlive the original PID. This exact-OS
             // response queue owns no launcher/MM and is pumped independently.
             let result = self
@@ -432,6 +452,7 @@ impl Remote {
                 )
                 .map(|_| ())
                 .map_err(errno);
+            drop(slots);
             self.changed.notify_all();
             return result;
         }
@@ -461,6 +482,9 @@ impl Remote {
     }
 
     pub(crate) fn syscall_cpu(&self) -> Option<(Token, i32)> {
+        if self.transport_health().is_err() {
+            return None;
+        }
         let start = self.syscall_cursor.fetch_add(1, Ordering::Relaxed);
         if start % 2 == 0 {
             if let Some(cpu) = self.releases.lock().queued_cpu() {
@@ -487,15 +511,18 @@ impl Remote {
         token: Token,
         cpu: i32,
         send: impl FnOnce(&[u8; 128]) -> Result,
+        notify: impl FnOnce() -> Result,
     ) -> Result<bool> {
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
         if token == self.release_token {
-            return self
+            let result = self
                 .releases
                 .lock()
                 .publish(cpu, |packet| send(packet).map_err(|error| error.to_errno()))
                 .map_err(errno);
+            return self.finish_publication(&mut slots, result, notify);
         }
-        let mut slots = self.slots.lock();
         let Some(entry) = slots
             .iter_mut()
             .flatten()
@@ -503,10 +530,19 @@ impl Remote {
         else {
             return Ok(false);
         };
-        let published = entry
+        let result = entry
             .syscalls
             .publish(cpu, |packet| send(packet).map_err(|e| e.to_errno()))
-            .map_err(errno)?;
+            .map_err(errno);
+        // `send` above means only queue publication. Notification runs after
+        // the response has released its memory, but under the same application
+        // mutex as RET completion. Its error must never retry that publication.
+        let published = self.finish_publication(&mut slots, result, notify)?;
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
         if entry.needs_cleanup && entry.syscalls.drained() && !entry.quarantined {
             if let Err(error) = entry.request_cleanup() {
                 entry.quarantined = true;
@@ -515,11 +551,95 @@ impl Remote {
                     entry.cleanup.pid(),
                     error.to_errno()
                 );
-                // Publication already happened. The caller must still notify
-                // the guest even when the following cleanup cannot advance.
+                // Publication and notification already happened. A following
+                // cleanup failure cannot cause another syscall publication.
             }
         }
         Ok(published)
+    }
+
+    fn transport_health(&self) -> Result {
+        let error = self.transport_error.load(Ordering::Acquire);
+        if error == 0 {
+            Ok(())
+        } else {
+            Err(errno(error))
+        }
+    }
+
+    fn expire_publications(&self, slots: &mut [Option<Entry>], now: u64) -> Result {
+        let expired = slots.iter_mut().flatten().any(|entry| {
+            entry
+                .syscalls
+                .publication_expired(now, PUBLICATION_TIMEOUT_SECONDS)
+        }) || self
+            .releases
+            .lock()
+            .publication_expired(now, PUBLICATION_TIMEOUT_SECONDS);
+        if expired {
+            pr_err!("IHK-SMP: application transport failure os={} generation={} phase=publication_timeout errno=-110\n",
+                self.owner.slot(), self.owner.generation());
+            self.quarantine_transport(slots, errno(-110));
+            return Err(errno(-110));
+        }
+        Ok(())
+    }
+
+    /// Caller holds slots; all publication, failure and admission decisions
+    /// share that mutex. No guest bytes or cancellation responses are written.
+    fn quarantine_transport(&self, slots: &mut [Option<Entry>], error: Error) {
+        if self
+            .transport_error
+            .compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            return;
+        }
+        for entry in slots.iter_mut().flatten() {
+            entry.quarantined = true;
+            entry.needs_cleanup = true;
+            entry.syscalls.quarantine();
+            if let Some(procfs) = &entry.procfs {
+                procfs.close();
+            }
+        }
+        self.releases.lock().quarantine();
+    }
+
+    /// A hard target/channel error before entering publication follows the
+    /// same terminal transition. Wake after releasing all publication locks.
+    pub(crate) fn fail_transport(&self, error: Error) {
+        let mut slots = self.slots.lock();
+        self.quarantine_transport(&mut slots, error);
+        drop(slots);
+        self.changed.notify_all();
+    }
+
+    fn finish_publication(
+        &self,
+        slots: &mut [Option<Entry>],
+        published: Result<bool>,
+        notify: impl FnOnce() -> Result,
+    ) -> Result<bool> {
+        match published {
+            Ok(true) => match notify() {
+                Ok(()) => Ok(true),
+                Err(error) => {
+                    pr_err!("IHK-SMP: application transport failure os={} generation={} phase=postpublication_notify errno={}\n",
+                        self.owner.slot(), self.owner.generation(), error.to_errno());
+                    self.quarantine_transport(slots, error);
+                    Err(error)
+                }
+            },
+            Ok(false) => Ok(false),
+            Err(error) if error == EBUSY || error == EAGAIN => Ok(false),
+            Err(error) => {
+                pr_err!("IHK-SMP: application transport failure os={} generation={} phase=prepublication errno={}\n",
+                    self.owner.slot(), self.owner.generation(), error.to_errno());
+                self.quarantine_transport(slots, error);
+                Err(error)
+            }
+        }
     }
 
     pub(crate) fn notify_syscalls(&self) {
@@ -839,11 +959,11 @@ impl Remote {
                 .flatten()
                 .find(|entry| entry.key() == token)
                 .ok_or(ENOENT)?;
-            if entry.syscalls.returned(worker, serial).map_err(errno)? {
-                return Ok(());
-            }
             if entry.quarantined {
                 return Err(errno(-71));
+            }
+            if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                return Ok(());
             }
             // The return is committed: complete its real publication before
             // exposing success to the launcher. A signal cannot cancel or
@@ -880,6 +1000,7 @@ impl Remote {
                 .ok_or(ENOENT)?;
             if entry.closed
                 || entry.needs_cleanup
+                || entry.quarantined
                 || entry.prepare.is_some()
                 || !entry.cleanup.reserved()
             {
@@ -901,6 +1022,9 @@ impl Remote {
                     .find(|entry| entry.key() == token)
                     .ok_or(ENOENT)?;
                 let prepare = entry.prepare.as_ref().ok_or(EIO)?;
+                if entry.quarantined {
+                    return Err(errno(-71));
+                }
                 if prepare.result().is_some() {
                     return prepare.copy_result(bytes);
                 }
@@ -914,6 +1038,9 @@ impl Remote {
             .flatten()
             .find(|entry| entry.key() == token)
             .ok_or(ENOENT)?;
+        if entry.quarantined {
+            return Err(errno(-71));
+        }
         let prepare = entry.prepare.as_mut().ok_or(EIO)?;
         // Resolve the completion/timeout race while holding the same reply lock.
         if prepare.result().is_some() {

@@ -7532,6 +7532,10 @@ retry_tid:
 		         parent_tidptr);
 
 		err = setint_user((int *)parent_tidptr, new->tid);
+#ifdef MCKERNEL_NATIVE_CLONE_TID
+		/* Linux kernel_clone() ignores a failed parent-TID put_user. */
+		err = 0;
+#endif
 		if (err) {
 			goto release_ids;
 		}
@@ -7545,6 +7549,15 @@ retry_tid:
 	}
 	
 	if (clone_child_tid_store_needed_result(clone_flags)) {
+#ifdef MCKERNEL_NATIVE_CLONE_TID
+		/* The child is held and not runnable yet. Use its explicit VM so
+		 * private mappings fault/COW there, and copy the complete int by
+		 * virtual page with normal user-write permissions. Like Linux's
+		 * child-start put_user, a failed store does not cancel the clone.
+		 */
+		(void)write_process_vm(new->vm, (void *)child_tidptr,
+				      &new->tid, sizeof(new->tid));
+#else
 		unsigned long phys;
 		dkprintf("clone_flags & CLONE_CHILD_SETTID: 0x%lX\n",
 				child_tidptr);
@@ -7557,6 +7570,7 @@ retry_tid:
 		}
 	
 		*((int*)phys_to_virt(phys)) = new->tid;
+#endif
 	}
 	
 	if (clone_tls_source_result(clone_flags) == CLONE_TLS_SOURCE_ARGUMENT) {
@@ -22355,8 +22369,13 @@ static const char *do_futex_op_name(int op)
 static int do_futex_syscall_time_bridge(int syscall_nr, int clock_id,
 		struct timespec *ats)
 {
+#ifdef MCKERNEL_NATIVE_FUTEX
+	struct syscall_request request IHK_DMA_ALIGN = { 0 };
+	struct timespec tv[2] = { { 0 } };
+#else
 	struct syscall_request request IHK_DMA_ALIGN;
 	struct timespec tv[2];
+#endif
 	struct timespec *tv_now = tv;
 	int r;
 
@@ -22369,7 +22388,11 @@ static int do_futex_syscall_time_bridge(int syscall_nr, int clock_id,
 
 	r = do_syscall(&request, ihk_mc_get_processor_id());
 	if (r < 0)
+#ifdef MCKERNEL_NATIVE_FUTEX
+		return r;
+#else
 		return -EFAULT;
+#endif
 
 	ats->tv_sec = tv_now->tv_sec;
 	ats->tv_nsec = tv_now->tv_nsec;

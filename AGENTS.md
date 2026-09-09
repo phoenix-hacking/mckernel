@@ -2,6 +2,26 @@
 
 Updated: 2026-06-02
 
+## Active Ultra review and executor handoff (2026-09-09)
+
+The user has switched to Ultra. Continue review, bounded correctness fixes and
+isolated validation, then prepare detailed application test packets. The user
+may choose Luna or Spark as the later executor; all packets must support either.
+Tell the user explicitly when the handoff gates pass. Do not switch models.
+The previous Max baseline is historical acceptance of its exact binaries, not
+acceptance of the new working-tree changes or broader signal/futex behavior.
+
+Review findings and prerequisite fixes are recorded under docs/verification/
+ultra-*-20260909.md. The forthcoming canonical plan is
+`docs/verification/ultra-application-test-plan-20260909.md`, with bounded executor
+inputs in `scripts/application-tests/`. Go wide on independent tests, then send
+failures and preserved candidate patches to Max for narrow investigation.
+The executor may attempt a small logged candidate fix within its active packet;
+never silently accept a changed kernel or weaken an oracle. Preserve original
+failures and use fresh guests after a failure. Continue periodic verified GitHub
+checkpoints (about30minutes), including explicit WIP saves before long runs.
+This section supersedes the old instruction below to stop for the Ultra switch.
+
 ## Application baseline verified and model handoff (2026-09-09)
 
 The Max application-baseline runtime gates and readiness audit now PASS.

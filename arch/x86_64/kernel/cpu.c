@@ -3369,6 +3369,34 @@ void clear_fp_regs(void)
 	}
 }
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+extern long native_xrstor_checked(const unsigned char *buffer, uint64_t mask);
+
+unsigned int arch_native_signal_mxcsr_mask_bridge(void)
+{
+#ifdef ENABLE_SSE
+	struct i387_fxsave_struct saved;
+
+	/* FXSAVE reports the hardware mask at byte 28 without changing FP state. */
+	asm volatile("fxsave %0" : "=m"(saved) : : "memory");
+	return saved.mxcsr_mask ? saved.mxcsr_mask : 0xffbfU;
+#else
+	return 0xffbfU;
+#endif
+}
+
+long arch_native_signal_reset_fp_bridge(void)
+{
+	if (xsave_available) {
+		if (!initial_fp_regs_available)
+			return -EOPNOTSUPP;
+		return native_xrstor_checked(initial_fp_regs, xsave_mask);
+	}
+	restore_default_fp_regs(get_this_cpu_local_var()->current);
+	return 0;
+}
+#endif
+
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 {
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS

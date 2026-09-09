@@ -402,6 +402,56 @@ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
 }
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+extern long native_xstate_buffer_size_result(int provided, int configured);
+extern long native_xstate_validate_result(const unsigned char *buffer,
+		size_t bytes, int configured, uint64_t xfeatures, unsigned int mxcsr_mask);
+extern long native_xrstor_checked(const unsigned char *buffer, uint64_t mask);
+extern unsigned int arch_native_signal_mxcsr_mask_bridge(void);
+extern long arch_native_signal_reset_fp_bridge(void);
+
+long arch_native_signal_restore_fp_bridge(unsigned long user_address, int size)
+{
+	int configured = get_xsave_size();
+	long bytes, result;
+	void *allocation;
+	unsigned char *aligned;
+	uint64_t mask;
+
+	if (!user_address)
+		return arch_native_signal_reset_fp_bridge();
+	bytes = native_xstate_buffer_size_result(size, configured);
+	if (bytes < 0)
+		return bytes;
+	/* Rust bounds bytes to 64 KiB; retain the original pointer for cleanup. */
+	allocation = kmalloc_tracked((size_t)bytes + 63, IHK_MC_AP_NOWAIT,
+			__FILE__, __LINE__);
+	if (!allocation)
+		return -ENOMEM;
+	aligned = (unsigned char *)(((unsigned long)allocation + 63) & ~63UL);
+	result = copy_from_user(aligned, (const void *)user_address, (size_t)bytes);
+	if (result) {
+		result = -EFAULT;
+		goto out;
+	}
+	mask = get_xsave_mask();
+	result = native_xstate_validate_result(aligned, (size_t)bytes, configured,
+			mask, arch_native_signal_mxcsr_mask_bridge());
+	if (!result)
+		result = native_xrstor_checked(aligned, mask);
+out:
+	kfree_tracked(allocation, __FILE__, __LINE__);
+	return result;
+}
+
+long arch_native_signal_bad_frame_bridge(long error)
+{
+	kprintf("native signal return rejected: %ld\n", error);
+	terminate(0, SIGSEGV);
+	return -EFAULT;
+}
+#endif
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 arch_rt_sigreturn_context_bridge(struct thread **threadp,
@@ -973,15 +1023,30 @@ struct sigsp {
 	void *fpregs;
 	unsigned long reserve[8];
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+	/* libc ucontext_t reserves 128 bytes even though the kernel has 64 signals. */
+	unsigned long sigmask[16];
+#else
 	unsigned long sigrc;
 	unsigned long sigmask;
 	int num;
 	int restart;
 	unsigned long ss;
+#endif
 	siginfo_t info;
 };
 
 #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+_Static_assert(offsetof(struct sigsp, regs) == 40, "native signal mcontext");
+_Static_assert(offsetof(struct sigsp, fpregs) == 224, "native signal fpregs");
+_Static_assert(offsetof(struct sigsp, sigmask) == 296, "native signal mask");
+_Static_assert(offsetof(struct sigsp, info) == 424, "native signal siginfo");
+_Static_assert(sizeof(struct sigsp) == 552, "native signal frame");
+extern long native_signal_context_prepare_result(const struct x86_user_context *regs,
+		unsigned long mask, unsigned long result, int number, int restart,
+		struct sigsp *frame, arch_rt_sigreturn_copy_from_user_fn_t copy_from);
+extern unsigned long native_signal_action_mask_result(unsigned long previous,
+		unsigned long action_mask, int signal, unsigned long flags);
 extern long native_signal_stack_prepare_result(const stack_t *stack,
 		stack_t *saved, unsigned long sp, unsigned long flags,
 		int xsave_size, size_t frame_size, unsigned long user_start,
@@ -1793,6 +1858,15 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		sigsp = (struct sigsp *)((unsigned long)sigsp & 0xfffffffffffffff0UL);
 #endif
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+		restart = isrestart(num, rc, sig, k->sa.sa_flags & SA_RESTART);
+		ret = native_signal_context_prepare_result(regs,
+				thread->sigmask.__val[0], rc, num, restart,
+				&ksigsp, arch_copy_from_user_bridge);
+		if (ret)
+			goto native_bad_signal_frame;
+		ksigsp._cr2 = (unsigned long)pending->info._sifields._sigfault.si_addr;
+#else
 		ksigsp._r15 = regs->gpr.r15;
 		ksigsp._r14 = regs->gpr.r14;
 		ksigsp._r13 = regs->gpr.r13;
@@ -1822,6 +1896,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		ksigsp.num = num;
 		restart = isrestart(num, rc, sig, k->sa.sa_flags & SA_RESTART);
 		ksigsp.restart = restart;
+#endif
 		if(xsavesize){
 			uint64_t xsave_mask = get_xsave_mask();
 			unsigned int low = (unsigned int)xsave_mask;
@@ -1920,8 +1995,14 @@ native_signal_frame_copied:
 			k->sa.sa_handler = SIG_DFL; 
 		}
 
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+		thread->sigmask.__val[0] = native_signal_action_mask_result(
+				thread->sigmask.__val[0], k->sa.sa_mask.__val[0],
+				sig, k->sa.sa_flags);
+#else
 		if(!(k->sa.sa_flags & SA_NODEFER))
 			thread->sigmask.__val[0] |= pending->sigmask.__val[0];
+#endif
 		kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		if(regs->gpr.rflags & RFLAGS_TF){

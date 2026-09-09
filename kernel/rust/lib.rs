@@ -55,6 +55,12 @@ mod string;
 mod syscall_policy;
 #[cfg(native_linux_irq_work_v6_12)]
 mod native_signal;
+#[cfg(native_linux_irq_work_v6_12)]
+mod native_fault;
+#[cfg(native_linux_irq_work_v6_12)]
+mod native_futex;
+#[cfg(native_linux_irq_work_v6_12)]
+mod native_xstate;
 mod sysfs;
 #[cfg(native_sysfs_verify)]
 #[path = "../../scripts/tests/fixtures/mckernel_guest_sysfs.rs"]

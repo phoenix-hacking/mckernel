@@ -583,28 +583,33 @@ impl Runtime {
         let Some((application, guest_cpu)) = self.application.syscall_cpu() else {
             return Ok(());
         };
-        let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
-        let result = smp_cpu::with_runtime_target(self.owner, target, |cpu| {
-            smp_ikc::validate_apic()?;
-            let result = {
-                let transport = self.transport.lock();
-                let Some(entry) = transport.channels.iter().find(|entry| {
-                    entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32
-                }) else {
-                    return Ok(());
+        let result = (|| {
+            let target = *self.cpus.get(guest_cpu as usize).ok_or(EIO)?;
+            smp_cpu::with_runtime_target(self.owner, target, |cpu| {
+                smp_ikc::validate_apic()?;
+                let result = {
+                    let transport = self.transport.lock();
+                    let Some(entry) = transport.channels.iter().find(|entry| {
+                        entry.channel.port == 501 && entry.channel.guest_cpu == guest_cpu as u32
+                    }) else {
+                        return Ok(());
+                    };
+                    self.application.publish_syscall(
+                        application,
+                        guest_cpu,
+                        |packet| entry.channel.publish(packet),
+                        || smp_ikc::notify(cpu),
+                    )
                 };
-                self.application
-                    .publish_syscall(application, guest_cpu, |packet| {
-                        entry.channel.publish(packet)
-                    })
-            };
-            match result {
-                Ok(true) => smp_ikc::notify(cpu),
-                Ok(false) => Ok(()),
-                Err(error) if error == EBUSY || error == EAGAIN => Ok(()),
-                Err(error) => Err(error),
-            }
-        });
+                match result {
+                    Ok(_) => Ok(()),
+                    Err(error) => Err(error),
+                }
+            })
+        })();
+        if let Err(error) = result {
+            self.application.fail_transport(error);
+        }
         // No transport/resource mutex spans Linux waiter wakeup.
         self.application.notify_syscalls();
         result

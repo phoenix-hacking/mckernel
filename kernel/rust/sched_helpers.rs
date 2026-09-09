@@ -1528,14 +1528,30 @@ pub unsafe extern "C" fn timer_schedule_timeout_body_result(
     let runq_lock_addr = cpu_local_addr.wrapping_add(offsets.cpu_runq_lock_offset);
     let runq_len_addr = cpu_local_addr.wrapping_add(offsets.cpu_runq_len_offset);
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let (native_started, native_duration) = (unsafe { rdtsc() }, timeout);
+
     loop {
         let t_s = unsafe { rdtsc() };
+        #[cfg(native_linux_irq_work_v6_12)]
+        {
+            timeout = native_duration.saturating_sub(t_s.wrapping_sub(native_started));
+        }
         let irqstate = unsafe { spin_lock(thread_spin_lock_addr) };
 
         if unsafe { read_volatile(thread_spin_sleep_addr as *const CInt) } == 0 {
             let t_e = unsafe { rdtsc() };
             timeout = timer_spin_sleep_remaining_result(timeout, t_e.wrapping_sub(t_s));
             unsafe {
+                spin_unlock(thread_spin_lock_addr, irqstate);
+            }
+            break;
+        }
+
+        #[cfg(native_linux_irq_work_v6_12)]
+        if timeout == 0 {
+            unsafe {
+                write_volatile(thread_spin_sleep_addr as *mut CInt, 0);
                 spin_unlock(thread_spin_lock_addr, irqstate);
             }
             break;
@@ -1560,14 +1576,25 @@ pub unsafe extern "C" fn timer_schedule_timeout_body_result(
             spin_unlock(runq_lock_addr, irqstate);
         }
 
-        while unsafe { rdtsc().wrapping_sub(t_s) } < loop_timeout {
+        #[cfg(native_linux_irq_work_v6_12)]
+        let spin_budget = loop_timeout.min(timeout);
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        let spin_budget = loop_timeout;
+        while unsafe { rdtsc().wrapping_sub(t_s) } < spin_budget {
             unsafe {
                 zero_free();
                 pause();
             }
         }
 
-        timeout = timer_after_spin_remaining_result(timeout, loop_timeout);
+        #[cfg(native_linux_irq_work_v6_12)]
+        {
+            timeout = native_duration.saturating_sub(unsafe { rdtsc() }.wrapping_sub(native_started));
+        }
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        {
+            timeout = timer_after_spin_remaining_result(timeout, loop_timeout);
+        }
         if timeout == 0 {
             let irqstate = unsafe { spin_lock(thread_spin_lock_addr) };
             unsafe {
@@ -4891,6 +4918,9 @@ pub unsafe extern "C" fn futex_wait_body_result(
     }
     let tid = unsafe { read_cint_field(thread_addr, thread_tid_offset) };
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let native_started = crate::native_futex::ticks_now();
+
     loop {
         let mut hb_addr = 0usize;
         let ret = unsafe { setup(uaddr, val, fshared, q_addr, (&raw mut hb_addr) as usize) };
@@ -4901,7 +4931,17 @@ pub unsafe extern "C" fn futex_wait_body_result(
             return ret;
         }
 
-        let time_remain = unsafe { wait_queue(hb_addr, q_addr, timeout) };
+        #[cfg(native_linux_irq_work_v6_12)]
+        let remaining = if timeout == 0 {
+            0
+        } else {
+            timeout
+                .saturating_sub(crate::native_futex::ticks_now().wrapping_sub(native_started))
+                .max(1)
+        };
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        let remaining = timeout;
+        let time_remain = unsafe { wait_queue(hb_addr, q_addr, remaining) };
         let unqueued = unsafe { unqueue(q_addr) };
         let mut has_pending_signal = 0;
         if unqueued != 0 && !(timeout != 0 && time_remain == 0) {

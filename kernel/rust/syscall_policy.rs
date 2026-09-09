@@ -255,6 +255,10 @@ unsafe extern "C" {
     fn arch_rt_sigreturn_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
     fn arch_rt_sigreturn_free_bridge(ptr: *mut c_void);
     fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void);
+    #[cfg(native_linux_irq_work_v6_12)]
+    fn arch_native_signal_restore_fp_bridge(fpregs: CULong, xsave_size: CInt) -> CLong;
+    #[cfg(native_linux_irq_work_v6_12)]
+    fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong;
     fn arch_syscall_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
     fn arch_prctl_set_register_bridge(type_: CInt, value: CULong) -> CInt;
     fn arch_prctl_get_register_bridge(type_: CInt, addr: *mut CULong) -> CInt;
@@ -11025,6 +11029,19 @@ pub unsafe extern "C" fn sys_rt_sigreturn(_n: CInt, _ctx: *mut X86UserContext) -
         return -(EFAULT as CLong);
     }
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    return match crate::native_signal::sigreturn(
+        thread,
+        regs,
+        xsave_size,
+        arch_copy_from_user_bridge,
+        arch_native_signal_restore_fp_bridge,
+    ) {
+        Ok(result) => result,
+        Err(error) => arch_native_signal_bad_frame_bridge(error),
+    };
+
+    #[cfg(not(native_linux_irq_work_v6_12))]
     arch_rt_sigreturn_body_result(
         thread.cast::<u8>(),
         regs,
@@ -22506,6 +22523,7 @@ pub unsafe extern "C" fn do_futex_body_result(
     futex_fn: Option<FutexDispatchFn>,
     log_fn: Option<FutexLogFn>,
 ) -> CLong {
+    #[cfg(not(native_linux_irq_work_v6_12))]
     let mut timeout: u64 = 0;
     let mut fshared: CInt = 1;
     let mut op = arg1 as CInt;
@@ -22513,6 +22531,7 @@ pub unsafe extern "C" fn do_futex_body_result(
     let uaddr = arg0;
     let val = arg2 as u32;
     let utime_addr = arg3;
+    #[cfg(not(native_linux_irq_work_v6_12))]
     let utime = utime_addr as *const TimeSpec;
     let uaddr2 = arg4;
     let val3 = arg5 as u32;
@@ -22535,6 +22554,30 @@ pub unsafe extern "C" fn do_futex_body_result(
         0,
     );
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let timeout = match crate::native_futex::timeout(
+        flags,
+        utime_addr,
+        has_uti_clv,
+        Some(syscall_copy_from_user_bridge),
+        |clock_id| {
+            if let Some(now) = crate::native_vdso::clock(clock_id) {
+                return Ok(now);
+            }
+            let clock = syscall_time_fn.ok_or(-(EFAULT as i64))?;
+            let mut now = TimeSpec { tv_sec: 0, tv_nsec: 0 };
+            let error = clock(n, clock_id, &mut now);
+            if error != 0 { Err(error as i64) } else { Ok(now) }
+        },
+        || ns_per_tsc_fn.map(|clock| clock()).ok_or(-(EINVAL as i64)),
+    ) {
+        Ok(timeout) => timeout,
+        Err(error) => return error,
+    };
+    #[cfg(native_linux_irq_work_v6_12)]
+    let _ = (local_gettime_support, local_time_fn, linux_time_fn);
+
+    #[cfg(not(native_linux_irq_work_v6_12))]
     if futex_wait_timeout_needed_result(op, (!utime.is_null()) as CInt) != 0 {
         let time_sec = read_volatile(&(*utime).tv_sec);
         let time_nsec = read_volatile(&(*utime).tv_nsec);
@@ -22619,6 +22662,9 @@ pub unsafe extern "C" fn do_futex_body_result(
         }
     }
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let val2 = if op == FUTEX_REQUEUE { arg3 as u32 } else { futex_requeue_val2_result(op, arg3) };
+    #[cfg(not(native_linux_irq_work_v6_12))]
     let val2 = futex_requeue_val2_result(op, arg3);
     let Some(futex) = futex_fn else {
         return -(EINVAL as CLong);
