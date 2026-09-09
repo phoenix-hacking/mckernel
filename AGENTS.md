@@ -25,24 +25,19 @@ remaining production or Rust/assembly obligation before ending the active goal.
 Those obligations remain tracked for subsequent work. Existing isolation,
 failure-recording, Rust preservation, disk cleanup and periodic GitHub
 checkpoint requirements continue to apply throughout the current phase.
-Sixteen unchanged-launcher applications now pass across two independent
-guests with current module 5: write result 25, exit 37 and complete scheduled
-retirement after each launch. Both original control-ABI regressions pass. The
-full `docs/verification/native-application-start-checkpoint-20260908.json`
-retains 21 captures, including all six original failures. The phase remains
-active. Unchanged libc memory, file-I/O and thread/futex modes now pass.
-The native threads checkpoint verifies both actual McKernel clone3 children,
-TID transfer, synchronization/TLS/join and complete cleanup. Signals fail when
-the second handler skips the alternate stack. Signals, abnormal-owner handling
-and final current-module regressions/replays remain pending. Do not announce
-Ultra readiness yet.
-
-The native signal candidate now passes 3,780 exact pinned Linux stack vectors,
-five legacy and six native return/frame tests, including repeated/nested
-delivery, red-zone/bounds and user-copy failures. The host committed-return
-method and all original mailbox tests pass 37 cases. Full original fixture
-failures are retained in the signals protocol checkpoint. New native images,
-modules and actual signal runtime remain pending; the failed guest stays FAIL.
+All four unchanged libc core smoke categories now pass inside McKernel:
+memory, file I/O, threads/futexes and signals. The current signal-tested pair is
+signal module 1 / signal image 2. The signals checkpoint retains both complete
+module/runtime captures, all 57 native compiler bindings and the original
+launcher/core. Both actual alternate-stack handlers and sigreturns, every
+syscall route/result, normal retirement and process/pager release pass. Eight
+HELLO repeats and both metadata/string ABIs also pass. The signal image
+checkpoint verifies all four image profiles, 37 guest bindings and prior
+clone3/protection/zeroing binary checks. Both original protocol fixture failures
+and the original image audit failure remain retained in their checkpoints.
+Memory/files and threads have separate earlier tested inputs; final replays on
+the current pair, both full control-ABI regressions and actual abnormal
+launcher/worker handling remain required. Do not announce Ultra readiness yet.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 

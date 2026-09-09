@@ -7,32 +7,36 @@ had not yet run. The current runtime checkpoint below supersedes that status.
 
 ## Current application baseline, 2026-09-09
 
-**Actual memory, file-I/O and thread/futex applications now pass inside McKernel.**
-The Astra Ultra handoff remains pending signal, abnormal-owner and final
-regression/replay checks. TID module 2 and clone3 guest image 2 are the current
-thread-tested pair; the earlier memory/file pair is retained at `a841707d`.
+**All four core application smoke categories now pass inside McKernel.**
+The Astra Ultra handoff still requires actual abnormal launcher/worker handling
+and final current-pair regressions/replays. The current candidate is signal
+module 1 / signal image 2. Earlier memory/file and thread inputs remain
+separately recorded until the final replays complete.
 
-`native-application-threads-checkpoint-20260909.json` retains six complete
-captures, including three original failures. Thread guest 2 passes the
-unchanged pthread barrier, mutex, TLS and join checks with actual McKernel
-TIDs 308/310/311, full 512-byte TID transfer, complete syscall route/result
-matching, exact output/exit 37 and all process/pager cleanup. Eight HELLO
-repeats, both metadata/string ABIs and continuing sysfs checks also pass.
-The trace audit now samples whole deliveries; all nine adapter tests, three
-native modules and 57 compiler bindings verify. Original audit/fixture failures
-remain retained. The bootstrap enables existing allow_oversubscribe for the
-two pthreads on one McKernel CPU, with original and adapted sources retained.
+`native-application-signals-checkpoint-20260909.json` retains the complete
+module and signal guest captures, all 57 native compiler bindings and the
+unchanged launcher/core application. Both SIGUSR1 handlers use stack address
+0x60f648; both actual sigreturns return zero. Blocked/pending/unblock/repeated
+alternate-stack assertions, exact output/exit 37, all host return routes,
+normal scheduled retirement and process/pager release pass. No interrupted
+host RET error remains. Eight HELLO repetitions, both metadata/string ABIs,
+continuing sysfs, zeroing and host invalidation checks also pass.
 
-Signal guest 1 fails its second alternate-stack assertion: the first handler
-uses the alternate stack and returns; the second uses the ordinary stack.
-The producer saves SS_ONSTACK after setting it, and Rust sigreturn restores
-that saved state. The captured interrupted host RET also needs review.
-The native signal candidate now passes 3,780 pinned Linux comparison vectors,
-five legacy and six native frame/return tests, and 37 mailbox/committed-return
-tests. The signals protocol checkpoint retains both original fixture failures.
-New images/modules and actual signal runtime remain pending. Preserve the
-original signal test and error scan; final memory/file/control replays and actual
-abnormal-owner coverage remain open. Do not announce Ultra readiness yet.
+The signal image checkpoint retains all four image profiles, 37 exact guest
+source bindings, native helper call targets, syscall slots and prior
+clone3/protection/zeroing binary checks. The protocol checkpoint verifies
+3,780 pinned Linux vectors, five legacy and six native frame/return tests,
+and 37 mailbox/committed-return tests. The two original fixture compile
+failures and the original indirect-call image audit failure are retained.
+The original signal guest remains FAIL in the earlier threads checkpoint;
+its unchanged application now passes on the recorded corrected pair.
+
+The previously accepted ordinary memory/file modes use the pair recorded at
+`a841707d`; the fully audited pthread/futex/TLS/join mode uses TID module 2 /
+clone3 image 2. This establishes four core categories, not final regression
+or abnormal-owner acceptance. Do not announce Ultra readiness yet.
+
+## Earlier application checkpoints
 
 `native-application-core-checkpoint-20260909.json` retains fourteen complete
 captures and all six original failures, including the earlier pathname-copy,
