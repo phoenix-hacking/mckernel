@@ -2080,3 +2080,39 @@ audit failure and the corrected exact target/register/call audit. Prior
 clone3, protection and zeroing binary checks still pass. All three signal
 host modules also compile. Candidate: signal module 1 and signal image 2;
 the unchanged signal application result remains pending.
+
+
+## Actual abnormal-owner verification, 2026-09-09
+
+Use the current signal module 1 / signal image 2, unchanged mcexec and original
+core/HELLO assertions. Existing worker-reap and inherited-process fixtures prove
+real Linux task departure only with applications=0; they do not satisfy the
+scheduled application failure gate. Retain them as later control regressions.
+
+Add a small ordinary dynamic-libc payload that writes a fixed readiness marker,
+then reads sixteen bytes from stdin into a guarded buffer. Its Linux reference
+must verify both the ordinary successful read and a real blocked read killed
+by its parent. A separate Linux guest controller owns private stdin/stdout
+pipes, forks and execs the unchanged mcexec, reads the exact marker, and locates
+the exact live Linux task blocked in read(fd=0, length=16) through /proc. Only
+then send SIGKILL to that unreaped child and verify its actual SIGKILL status.
+The controller never writes input that could complete the read before death.
+
+Require scheduled application and delivered-read evidence, successful normal
+baseline first, bounded process/worker cleanup after actual launcher failure,
+and no remaining application process nodes. In the isolated guest only, lower
+pid_max after cleanup and fork/reap enough children to prove numerical reuse
+of both the old launcher PID and blocked worker TID. No application ioctl may
+hide cleanup during that quiet reuse window. Then run eight more unchanged
+HELLO applications in the same McKernel OS instance, with original output,
+exit, delivery/result, registration and retirement assertions for each.
+Keep the entire pre-failure core suite and every unexpected-error scan. Audit
+the intentional failure window separately and retain all original/executed
+helpers and exact binaries. A cleanup failure stops the batch and is evidence
+for investigation, not permission to weaken the acceptance criteria.
+
+Reuse the existing native ProcessId, Registration/HostWorker reaper,
+Remote/Mailbox cancellation and scheduled retirement implementations unchanged
+for this first test. Any behavior fix needs its own selected Rust/Linux reuse
+review and focused validation after the actual failure is retained. Final
+current-pair core replays and both full control-ABI regressions remain pending.

@@ -1,0 +1,90 @@
+{
+  "abnormal_owner_verified": false,
+  "application_readiness_complete": false,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-application-failure-build-20260909-1.tar.gz",
+      "sha256": "d5dc2f36ff5fe72c4c79883bb4d1f9eb1d5d6e78f86d7f42ae36d67772f15718",
+      "size": 1463594,
+      "source": "/work/native-application-failure-build-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/run-native-application-owner-failure.py.gz",
+      "sha256": "1560386ca1330079b45de176879d76ce4c32b811fd4eb26a4b59fcfd2f0bfc20",
+      "size": 10911,
+      "source": "/work/run-native-application-owner-failure.py"
+    },
+    {
+      "path": "docs/verification/evidence/prepare-native-application-owner-failure.py.gz",
+      "sha256": "3224d0c0805df33aaf5e59e93626ef68f7b52d6c0bcbf7939ed1a1f50c0fc1b6",
+      "size": 2584,
+      "source": "/work/prepare-native-application-owner-failure.py"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-failure-probe-20260909-retention-helper.gz",
+      "sha256": "d373dea374a42e4436dd9ea91d50e1e8d714de6583d81b1d44c426fe66ad3110",
+      "size": 2740,
+      "source": "/work/native-application-failure-probe-retained-20260909-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "linux_reference": {
+        "blocked_read_sigkill": {
+          "buffer": "0x7ffe868f4ae8",
+          "controller_exit_code": 0,
+          "pid": 56,
+          "signal": 9,
+          "tid": 56
+        },
+        "guarded_read": {
+          "bytes": 16,
+          "exit_code": 37
+        },
+        "mckernel": false
+      },
+      "name": "native-application-failure-build-20260909-1",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-failure-build-20260909-1/record.json",
+        "sha256": "02ad163a1a2b5d1a6d4dde5f1b101ece60807d80d3895cc8c359f32487e43fec",
+        "size": 42158
+      }
+    }
+  ],
+  "complete_captures": 1,
+  "finished_utc": "2026-09-09T05:08:27.181920+00:00",
+  "original_failures": 0,
+  "references": [
+    {
+      "path": "docs/verification/native-application-signals-checkpoint-20260909.json",
+      "sha256": "6a67ac9c9af7631cfe69697e09f65d099949ef577d864921367dfcef15ca15e9",
+      "size": 41981
+    },
+    {
+      "path": "docs/verification/native-application-signals-images-checkpoint-20260909.json",
+      "sha256": "fd5e0a1b82a621ab814eba46650e487a9602d56bdf4d71979ffcde6eede8b7c6",
+      "size": 59109
+    }
+  ],
+  "scope": "Ordinary guarded-read payload and Linux supervisor references; exact prepared guest runner preserves original normal assertions and adds scheduled launcher/worker SIGKILL and PID reuse. Actual McKernel failure case has not run.",
+  "source_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-failure-build-20260909-1/native-application-failure.c",
+      "path": "scripts/tests/fixtures/native-application-failure.c",
+      "sha256": "1cb799c6b994250dad9d367bd33b629a095b78d220df5a683f1da607bbfb971b",
+      "size": 870
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-failure-build-20260909-1/native-application-failure-control.c",
+      "path": "scripts/tests/fixtures/native-application-failure-control.c",
+      "sha256": "92d42d77e090039062a7ff028672fc7b6fd521a400d9ace0eceba2f017b04be1",
+      "size": 5726
+    }
+  ],
+  "source_parent": "a5145f9596c393c4d4b7472b91d0d6a98930e1e8",
+  "started_utc": "2026-09-09T05:08:26.893634+00:00",
+  "status": "PASS"
+}
