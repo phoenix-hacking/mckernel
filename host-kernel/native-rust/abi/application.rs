@@ -15,6 +15,15 @@ pub(crate) const COPIED_SYSCALL: u32 = 8;
 pub(crate) const RETURN_SYSCALL: u32 = 9;
 pub(crate) const START: u32 = 10;
 pub(crate) const PAGER_SYSCALL: u32 = 11;
+pub(crate) const CLEAR_SYSCALL: u32 = 12;
+pub(crate) const CLEAR_DONE: u32 = 13;
+
+// CLEAR: 40 kernel-only bytes: worker, delivery, accepted output, start, end.
+// BEGIN returns the checked range from the retained nr-11 request and reserves
+// in-kernel ownership. DONE replaces start with the actual Mirror::clear result
+// and clears end; acceptance transfers completion to the continuing pump.
+// The caller must retain its worker/MM/connection through the actual clear and
+// submit DONE on both success and error. No user pointer or range is an input.
 
 // PAGER: 32 kernel-only bytes, worker/delivery, accepted output, actual result.
 // It consumes the exact reserved WAIT packet before any userspace copy. Its

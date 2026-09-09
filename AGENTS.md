@@ -199,6 +199,21 @@ Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
 
+Latest native host invalidation/protection checkpoint, 2026-09-09:
+`docs/verification/native-application-memory-checkpoint-20260909.json` retains
+the exact syscall-11 begin/finish integration around existing Mirror::clear.
+Thirty mailbox/protocol tests, eight exact WAIT/RET adapter tests and all three
+native module builds pass. The native guest now clears cached host PTEs after
+read/write/execute permission changes, including partial-range errors; four
+tests pass in each legacy/native selection with an exact legacy C reference.
+Original protection protocol 1 is a retained fixture-import failure. The
+changed guest image is not built or executed at this checkpoint. The allocator
+zeroing service remains missing; source review also requires fixing concurrent
+pending-list consumer ownership rather than changing only the host pop.
+Preserve the ordinary core application and launcher. Next rebuild image
+selections, integrate zeroing safely, rerun the unchanged core modes, and finish
+abnormal-owner/regression/evidence gates. No Ultra readiness is claimed.
+
 Latest native file-pager WIP, 2026-09-08:
 `docs/verification/native-application-pager-wip-20260908.json` records native
 regular-file CREATE/READ/WRITE, shared inode/file references, response-owned

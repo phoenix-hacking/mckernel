@@ -52,6 +52,14 @@ response-bearing decoder. Delegated munmap also logs failed host invalidation.
 Both errors require native integration; no complete libc mode is accepted yet.
 See `native-application-pager-wip-20260908.json` for the exact capture and scope.
 
+The subsequent `native-application-memory-checkpoint-20260909.json` connects
+retained syscall-11 host invalidation, passing 30 protocol tests, eight actual
+adapter tests with controlled providers and all three native module builds.
+Native guest protection changes now request this invalidation as well, with
+four focused tests passing in each legacy/native selection and the original
+fixture-import failure retained. Guest image builds and actual execution of
+these changes are still pending, as is the separate allocator zeroing service.
+
 After fixing those services and verifying pager teardown, require the unchanged memory, file-I/O, thread/futex
 and signal modes, actual abnormal launcher/worker handling, current regressions
 and complete evidence retention. The later review must list unsupported
@@ -1623,3 +1631,61 @@ state stay protected, along with the original failed protocol attempt. Full
 capture archives are still pending at this WIP. Next fix the newly reached
 services, rerun the unchanged app in a fresh guest, then preserve original
 regressions and finish all remaining handoff requirements.
+
+## Retained host invalidation and zero-list ownership review, 2026-09-09
+
+Continue from clean `24a7a41cc146bffa9be60944c9178ae148305c99`. The intervening
+status turn also reviewed the selected guest address conversion and list
+consumers. Preserve `clear_host_pte_body_result` and its selected C bridge:
+the retained syscall 11 carries an address and length, with the guest's pending
+free sequence delaying reuse until the offload returns. Adapt the legacy
+`mcctrl_clear_pte_range_body_result` integration by reusing native
+`mcctrl_vm::Mirror::clear` unchanged. Its current-MM check, two-pass exact VMA
+preflight and Linux `zap_vma_ptes` already supply the required side effect.
+No generic Linux VMA mutation or userspace-supplied service handle is needed.
+
+Add kernel-only begin/finish commands around that existing operation. Begin
+uses the exact reserved worker and delivery in `smp_application_syscall`,
+validates syscall 11 and checked page geometry, then reuses `begin_kernel`.
+The calling mcctrl worker retains its original PID, Mirror and Registration
+while clearing the returned range, outside application/transport locks.
+Finish reuses `finish_kernel` and the original response/wake publication;
+cancellation must retain response ownership until the MM operation has ended.
+Both commands reject another syscall kind, stale delivery or wrong worker.
+Only the actual clear result is completed; a failed begin rolls the untouched
+WAIT reservation back, and interruption after completion acceptance does not
+re-execute the clear. Existing public RET and WAIT user layouts stay unchanged.
+
+The protection review also finds that selected
+`syscall_policy::set_host_vma_body_result` currently returns zero without host
+invalidation. The C bridge returns through it before the historical mprotect
+offload. Keeping a host VMA writable was deliberate for the legacy fabric
+path, but stale writable host PTEs must still be invalidated after guest
+protection changes. This remains required native guest integration and cannot
+be accepted merely because the memory smoke returns success. Keep the actual
+Mirror callbacks' protection checks intact.
+
+For the native Linux-6.12 guest selection, adapt that existing Rust no-op to
+call `clear_host_pte_body_result` with the current Thread/ProcessVm, the exact
+`is_memory_range_lock_taken` offset, and the existing
+`syscall_policy_do_syscall3_bridge`. This reuses nr 11 and propagates its actual
+result without adding a C body or Linux mprotect request. Preserve the legacy
+Rust/C no-op selection. Native permission-change detection must cover read,
+write and execute bits, including read-to-none; invalidate after partial guest
+range changes even if a later range fails, preserving the first error. Compare
+the unchanged legacy behavior with its exact C body, and test the native
+forwarded arguments, lock flag restoration, errors and partial-range case.
+
+For zeroing, `page_alloc::IhkMcNumaNode` is 256 bytes/aligned 64; worker count,
+pending-page count, zeroed head and pending head are at 40, 44, 48 and 56.
+FreeChunk is 48 bytes, with its list link at 40. The selected address converter
+maps the kernel window through the retained BootLayout physical base, and
+post-initialization free chunks through the supplied Linux direct-map base.
+Both translations must still validate the complete span against the same OS.
+The guest also consumes pending zero chunks in its low-memory allocation path.
+The pinned Linux `include/linux/llist.h` explicitly requires serialization
+when any consumer uses del_first alongside another consumer; replacing only
+the host pop with del_all does not remove that ABA risk. Resolve ownership
+across both selected consumers before wiring the zeroing side effect. Do not
+cast guest pointers to Linux objects, suppress the packet or relax the ordinary
+response-bearing decoder. Original captures stay protected and failed.

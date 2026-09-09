@@ -5570,7 +5570,32 @@ pub extern "C" fn set_host_vma_body_result(
     _prot: CInt,
     _holding_memory_range_lock: CInt,
 ) -> CInt {
-    0
+    #[cfg(native_linux_irq_work_v6_12)]
+    unsafe {
+        let thread = current_thread_ptr();
+        if thread.is_null() || (*thread).vm.is_null() {
+            return -EINVAL;
+        }
+        // Keep the mirror VMA's original protection and invalidate cached PFNs.
+        // Subsequent host faults must consult the new guest PTE permissions.
+        // The existing bridge publishes the held-range-lock flag while the
+        // offload runs, then restores it before the caller unlocks that range.
+        return clear_host_pte_body_result(
+            (*thread).vm.cast::<c_void>(),
+            _addr,
+            _len,
+            _holding_memory_range_lock,
+            offset_of!(ProcessVm, is_memory_range_lock_taken),
+            ihk_mc_get_processor_id(),
+            11,
+            Some(syscall_policy_do_syscall3_bridge),
+            None,
+        ) as CInt;
+    }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
+        0
+    }
 }
 
 #[no_mangle]
@@ -5622,7 +5647,12 @@ pub unsafe extern "C" fn mprotect_split_needed_result(
 
 #[no_mangle]
 pub extern "C" fn mprotect_write_changed_result(range_flags: CULong, protflags: CULong) -> CInt {
-    (((range_flags ^ protflags) & VR_PROT_WRITE) != 0) as CInt
+    let mask = if cfg!(native_linux_irq_work_v6_12) {
+        VR_PROT_MASK
+    } else {
+        VR_PROT_WRITE
+    };
+    (((range_flags ^ protflags) & mask) != 0) as CInt
 }
 
 #[inline(always)]
@@ -5990,13 +6020,13 @@ pub unsafe extern "C" fn mprotect_body_result(
     if let Some(flush_tlb) = flush_tlb_fn {
         flush_tlb();
     }
-    if ro_changed != 0 && error == 0 {
-        error = if let Some(set_host_vma) = set_host_vma_fn {
+    if ro_changed != 0 && (error == 0 || cfg!(native_linux_irq_work_v6_12)) {
+        let host_error = if let Some(set_host_vma) = set_host_vma_fn {
             set_host_vma(start, len, prot & (PROT_READ | PROT_WRITE | PROT_EXEC), 1)
         } else {
             -EINVAL
         };
-        if error != 0 {
+        if host_error != 0 {
             mprotect_log(
                 log_fn,
                 MPROTECT_LOG_SET_HOST_FAILED,
@@ -6010,8 +6040,11 @@ pub unsafe extern "C" fn mprotect_body_result(
                 0,
                 protflags,
                 0,
-                error,
+                host_error,
             );
+        }
+        if error == 0 {
+            error = host_error;
         }
     }
     if let Some(unlock) = unlock_fn {

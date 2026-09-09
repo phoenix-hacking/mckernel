@@ -1166,3 +1166,127 @@ fn continuing_service_requires_no_worker_and_survives_close_and_duplicate_ingres
     assert_eq!(ram.releases.load(Ordering::Acquire), 1);
     assert!(queue.drained());
 }
+
+fn invalidation_request(start: u64, length: u64) -> Request {
+    let mut packet = c_requests()[0].clone();
+    packet[64..72].copy_from_slice(&11u64.to_le_bytes());
+    packet[72..80].copy_from_slice(&start.to_le_bytes());
+    packet[80..88].copy_from_slice(&length.to_le_bytes());
+    Request::decode(&packet, 4).unwrap()
+}
+
+#[test]
+fn invalidation_range_rejects_wrong_kind_empty_unaligned_and_wrapping() {
+    for start in [0, 0x400000, 0x700000000000] {
+        assert_eq!(
+            invalidation_request(start, 8192).invalidation_range(),
+            Ok((start, start + 8192))
+        );
+    }
+    for (start, length) in [(0, 0), (1, 4096), (0, 1), (u64::MAX - 4095, 8192)] {
+        assert_eq!(
+            invalidation_request(start, length).invalidation_range(),
+            Err(-22)
+        );
+    }
+    assert_eq!(
+        pager_request([1, 6, 4096, 0, 0, 0]).invalidation_range(),
+        Err(-22)
+    );
+}
+
+#[test]
+fn invalidation_reserves_only_exact_delivery_and_preserves_real_mm_result() {
+    for value in [0, -14, -22, -18, -4095] {
+        let mut queue = mailbox::Mailbox::new().unwrap();
+        let worker = queue.open_worker(900).unwrap();
+        let wrong = queue.open_worker(901).unwrap();
+        let request = invalidation_request(0x400000, 8192);
+        let cpu = request.cpu();
+        let ram = admit(&mut queue, request, 2);
+        let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+        assert!(queue.begin_invalidation(wrong, serial).is_err());
+        assert!(queue.begin_invalidation(worker, serial + 1).is_err());
+        assert!(queue.finish_invalidation(worker, serial, 0).is_err());
+        assert_eq!(
+            queue.begin_invalidation(worker, serial),
+            Ok((0x400000, 0x402000))
+        );
+        assert!(queue.begin_invalidation(worker, serial).is_err());
+        assert!(queue
+            .return_value(worker, serial, cpu as i64, 0, |_| panic!(
+                "public clear return"
+            ))
+            .is_err());
+        assert!(queue.finish_invalidation(wrong, serial, value).is_err());
+        for invalid in [1, i64::MAX, -4096, i64::MIN] {
+            assert!(queue.finish_invalidation(worker, serial, invalid).is_err());
+        }
+        assert_eq!(queue.finish_invalidation(worker, serial, value), Ok(value));
+        assert!(queue.finish_invalidation(worker, serial, 0).is_err());
+        for _ in 0..1024 {
+            assert_eq!(queue.publish(cpu, |_| Err(-11)), Err(-11));
+            assert_eq!(ram.status(), 0);
+            assert_eq!(queue.reserve(worker), Ok(None));
+        }
+        queue.publish(cpu, |_| Ok(())).unwrap();
+        assert_eq!(queue.returned(worker, serial), Ok(true));
+        assert_eq!(
+            i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+            value
+        );
+        assert_eq!(
+            i32::from_le_bytes(ram.snapshot()[4..8].try_into().unwrap()),
+            0
+        );
+        assert_eq!(ram.releases.load(Ordering::Acquire), 1);
+    }
+}
+
+#[test]
+fn invalidation_cancellation_waits_for_mm_operation_and_blocks_tid_reuse() {
+    for close_process in [false, true] {
+        let mut queue = mailbox::Mailbox::new().unwrap();
+        let worker = queue.open_worker(900).unwrap();
+        let request = invalidation_request(0x400000, 4096);
+        let cpu = request.cpu();
+        let ram = admit(&mut queue, request, 2);
+        let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+        queue.begin_invalidation(worker, serial).unwrap();
+        if close_process {
+            queue.close().unwrap();
+        } else {
+            assert_eq!(queue.close_worker(worker), Err(-16));
+        }
+        assert_eq!(
+            queue.publish(cpu, |_| panic!("response released during MM clear")),
+            Ok(false)
+        );
+        assert_eq!(ram.status(), 0);
+        assert!(ram.claimed.load(Ordering::Acquire));
+        assert!(queue.open_worker(900).is_err());
+        assert_eq!(queue.finish_invalidation(worker, serial, 0), Ok(-512));
+        queue.publish(cpu, |_| Ok(())).unwrap();
+        assert_eq!(
+            i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
+            -512
+        );
+        queue.close_worker(worker).unwrap();
+        assert!(queue.drained());
+    }
+}
+
+#[test]
+fn invalidation_never_consumes_a_pager_reservation() {
+    let mut queue = mailbox::Mailbox::new().unwrap();
+    let worker = queue.open_worker(900).unwrap();
+    admit(&mut queue, pager_request([1, 6, 4096, 0, 0, 0]), 2);
+    let (serial, _) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(queue.begin_invalidation(worker, serial), Err(-22));
+    queue.copied(worker, serial, false).unwrap();
+    let (same, _) = queue.reserve(worker).unwrap().unwrap();
+    assert_eq!(same, serial);
+    queue.begin_kernel(worker, serial).unwrap();
+    assert_eq!(queue.finish_invalidation(worker, serial, 0), Err(-22));
+    queue.finish_kernel(worker, serial, |_, _| Ok(0)).unwrap();
+}

@@ -20,11 +20,17 @@ fn errno(value: i32) -> i32 {
 macro_rules! pr_info {
     ($($arg:tt)*) => { let _ = format_args!($($arg)*); };
 }
-mod application_abi {
-    pub const WAIT_SYSCALL: u32 = 1;
-    pub const COPIED_SYSCALL: u32 = 2;
-    pub const RETURN_SYSCALL: u32 = 3;
+trait ErrorCode {
+    fn to_errno(self) -> i32;
 }
+impl ErrorCode for i32 {
+    fn to_errno(self) -> i32 {
+        self
+    }
+}
+#[allow(dead_code)]
+#[path = "native-application-memory-abi.rs"]
+mod application_abi;
 mod image {
     pub fn word(bytes: &[u8], offset: usize) -> Result<u64, i32> {
         let value = bytes.get(offset..offset + 8).ok_or(-22)?;
@@ -83,6 +89,17 @@ struct HostWorker {
     handle: u64,
     delivery: AtomicU64,
     delivery_cpu: AtomicI32,
+    mirror: Mirror,
+}
+struct Mirror {
+    clears: RefCell<Vec<(u64, u64)>>,
+    error: Cell<Option<i32>>,
+}
+impl Mirror {
+    fn clear(&self, start: u64, end: u64) -> Result {
+        self.clears.borrow_mut().push((start, end));
+        self.error.get().map_or(Ok(()), Err)
+    }
 }
 struct Backend {
     serial: u64,
@@ -91,6 +108,11 @@ struct Backend {
     returns: Vec<[u8; 72]>,
     accepted: bool,
     error: Option<i32>,
+    number: u64,
+    clear_begin_error: Option<i32>,
+    clear_done_error: Option<i32>,
+    clear_busy: bool,
+    clear_results: Vec<i64>,
 }
 struct Registration {
     worker: Arc<HostWorker>,
@@ -106,6 +128,10 @@ impl Registration {
                 handle: 42,
                 delivery: AtomicU64::new(0),
                 delivery_cpu: AtomicI32::new(-1),
+                mirror: Mirror {
+                    clears: RefCell::new(Vec::new()),
+                    error: Cell::new(None),
+                },
             }),
             backend: RefCell::new(Backend {
                 serial: 73,
@@ -114,6 +140,11 @@ impl Registration {
                 returns: Vec::new(),
                 accepted: true,
                 error: None,
+                number: 1,
+                clear_begin_error: None,
+                clear_done_error: None,
+                clear_busy: false,
+                clear_results: Vec::new(),
             }),
             slot: 0,
             generation: 1,
@@ -134,7 +165,10 @@ impl Registration {
                 assert_eq!(bytes.len(), 96);
                 bytes[8..16].copy_from_slice(&backend.serial.to_le_bytes());
                 bytes[16..24].copy_from_slice(&backend.guest_cpu.to_le_bytes());
-                bytes[40..48].copy_from_slice(&1u64.to_le_bytes());
+                bytes[40..48].copy_from_slice(&backend.number.to_le_bytes());
+                // BEGIN must supply the authorized range. These private WAIT
+                // bytes intentionally differ and must never select MM effects.
+                bytes[48..64].fill(0xff);
             }
             application_abi::COPIED_SYSCALL => {
                 assert_eq!(image::word(bytes, 8)?, backend.serial);
@@ -147,6 +181,35 @@ impl Registration {
                 backend.returns.push(bytes.try_into().unwrap());
                 bytes[48..56].copy_from_slice(&(backend.accepted as u64).to_le_bytes());
                 if let Some(error) = backend.error {
+                    return Err(error);
+                }
+            }
+            application_abi::CLEAR_SYSCALL => {
+                assert_eq!(bytes.len(), 40);
+                assert_eq!(image::word(bytes, 8)?, backend.serial);
+                assert_eq!(backend.number, 11);
+                assert!(!backend.clear_busy);
+                if let Some(error) = backend.clear_begin_error {
+                    return Err(error);
+                }
+                backend.clear_busy = true;
+                bytes[16..24].copy_from_slice(&1u64.to_le_bytes());
+                bytes[24..32].copy_from_slice(&0x400000u64.to_le_bytes());
+                bytes[32..40].copy_from_slice(&0x402000u64.to_le_bytes());
+            }
+            application_abi::CLEAR_DONE => {
+                assert_eq!(bytes.len(), 40);
+                assert_eq!(image::word(bytes, 8)?, backend.serial);
+                assert!(backend.clear_busy);
+                assert_eq!(*self.worker.mirror.clears.borrow(), [(0x400000, 0x402000)]);
+                assert_eq!(image::word(bytes, 16)?, 0);
+                assert_eq!(image::word(bytes, 32)?, 0);
+                backend.clear_results.push(image::word(bytes, 24)? as i64);
+                backend.clear_busy = false;
+                bytes[16..24].copy_from_slice(&1u64.to_le_bytes());
+                backend.number = 1;
+                backend.serial += 1;
+                if let Some(error) = backend.clear_done_error {
                     return Err(error);
                 }
             }
@@ -257,4 +320,64 @@ fn successive_deliveries_replace_cpu_and_serial_together() {
     assert_eq!(backend.returns.len(), 2);
     assert_eq!(image::word(&backend.returns[1], 8), Ok(74));
     assert_eq!(image::word(&backend.returns[1], 24), Ok((-9i64) as u64));
+}
+
+#[test]
+fn in_kernel_clear_uses_authorized_range_and_completes_actual_mm_errors() {
+    for error in [None, Some(-14), Some(-22), Some(-18)] {
+        let registration = Registration::new(3);
+        registration.backend.borrow_mut().number = 11;
+        registration.worker.mirror.error.set(error);
+        assert_eq!(registration.deliver(), Ok(0));
+        assert_eq!(
+            *registration.worker.mirror.clears.borrow(),
+            [(0x400000, 0x402000)]
+        );
+        let backend = registration.backend.borrow();
+        assert_eq!(backend.clear_results, [error.unwrap_or(0) as i64]);
+        assert_eq!(backend.copied, [true]); // Only the following ordinary request.
+        assert!(backend.returns.is_empty());
+        assert!(!backend.clear_busy);
+        assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 74);
+    }
+}
+
+#[test]
+fn failed_clear_admission_rolls_back_without_mm_or_user_writes() {
+    let registration = Registration::new(0);
+    registration.backend.borrow_mut().number = 11;
+    registration.backend.borrow_mut().clear_begin_error = Some(-16);
+    let mut output = [0x5a; 80];
+    assert_eq!(
+        registration.adapter_wait(output.as_mut_ptr() as usize),
+        Err(-16)
+    );
+    assert_eq!(output, [0x5a; 80]);
+    assert!(registration.worker.mirror.clears.borrow().is_empty());
+    assert!(registration.backend.borrow().clear_results.is_empty());
+    assert_eq!(registration.backend.borrow().copied, [false]);
+    assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 0);
+}
+
+#[test]
+fn interrupted_clear_completion_does_not_copy_or_reexecute() {
+    let registration = Registration::new(0);
+    registration.backend.borrow_mut().number = 11;
+    registration.backend.borrow_mut().clear_done_error = Some(-4);
+    let mut output = [0x5a; 80];
+    WRITE_FAULT.with(|fault| fault.set(true));
+    assert_eq!(
+        registration.adapter_wait(output.as_mut_ptr() as usize),
+        Err(-4)
+    );
+    WRITE_FAULT.with(|fault| fault.set(false));
+    assert_eq!(output, [0x5a; 80]);
+    assert!(registration.backend.borrow().copied.is_empty());
+    assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 0);
+    assert_eq!(registration.deliver(), Ok(0));
+    assert_eq!(
+        *registration.worker.mirror.clears.borrow(),
+        [(0x400000, 0x402000)]
+    );
+    assert_eq!(registration.backend.borrow().clear_results, [0]);
 }

@@ -799,6 +799,13 @@ impl Application {
             .copied_syscall(self.token, bytes)
     }
 
+    pub(in super::super) fn clear_syscall(&self, bytes: &mut [u8], finish: bool) -> Result {
+        self.started
+            .runtime
+            .application
+            .clear_syscall(self.token, bytes, finish)
+    }
+
     pub(in super::super) fn pager_syscall(&self, bytes: &mut [u8]) -> Result {
         self.started
             .runtime

@@ -92,6 +92,22 @@ impl Request {
         })
     }
 
+    /// The selected clear_host_pte bridge delegates nr 11 with address/length.
+    /// This checks wire geometry only; the caller must still check its exact
+    /// retained Mirror and current MM before any Linux PTE is changed.
+    pub(crate) fn invalidation_range(&self) -> Result<(u64, u64), i32> {
+        if self.number() != 11 {
+            return Err(-22);
+        }
+        let arguments = self.arguments();
+        let (start, bytes) = (arguments[0], arguments[1]);
+        let end = start.checked_add(bytes).ok_or(-22)?;
+        if bytes == 0 || start % 4096 != 0 || bytes % 4096 != 0 {
+            return Err(-22);
+        }
+        Ok((start, end))
+    }
+
     pub(crate) fn authorize_return_copy(&self, destination: u64, bytes: usize) -> Result<(), i32> {
         // Both existing launcher selections copy only act_futex_clock's native
         // timespec through RET. Its guest physical destination is request arg0.

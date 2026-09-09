@@ -293,6 +293,47 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(call.delivery.request().clone())
     }
 
+    pub(crate) fn begin_invalidation(&mut self, handle: u64, serial: u64) -> Result<(u64, u64)> {
+        let range = self
+            .calls
+            .iter()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?
+            .delivery
+            .request()
+            .invalidation_range()?;
+        self.begin_kernel(handle, serial)?;
+        Ok(range)
+    }
+
+    /// This result comes only from the retained worker's completed Mirror
+    /// operation. A close during that operation defers its cancellation here.
+    pub(crate) fn finish_invalidation(
+        &mut self,
+        handle: u64,
+        serial: u64,
+        value: i64,
+    ) -> Result<i64> {
+        if !(-4095..=0).contains(&value) {
+            return Err(-22);
+        }
+        self.calls
+            .iter()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?
+            .delivery
+            .request()
+            .invalidation_range()?;
+        let mut completed = -512;
+        self.finish_kernel(handle, serial, |_, _| {
+            completed = value;
+            Ok(value)
+        })?;
+        Ok(completed)
+    }
+
     pub(crate) fn with_kernel_memory<T>(
         &mut self,
         handle: u64,

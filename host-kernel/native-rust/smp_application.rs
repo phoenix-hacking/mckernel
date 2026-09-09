@@ -611,6 +611,52 @@ impl Remote {
         result
     }
 
+    pub(crate) fn clear_syscall(&self, token: Token, bytes: &mut [u8], finish: bool) -> Result {
+        if bytes.len() != 40 {
+            return Err(EINVAL);
+        }
+        let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
+        let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+        let value = i64::from_le_bytes(bytes[24..32].try_into().unwrap());
+        bytes[16..].fill(0);
+        let mut slots = self.slots.lock();
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
+        if !finish {
+            let (start, end) = entry
+                .syscalls
+                .begin_invalidation(worker, serial)
+                .map_err(errno)?;
+            bytes[16..24].copy_from_slice(&1u64.to_le_bytes());
+            bytes[24..32].copy_from_slice(&start.to_le_bytes());
+            bytes[32..40].copy_from_slice(&end.to_le_bytes());
+            return Ok(());
+        }
+        let outcome = entry.syscalls.finish_invalidation(worker, serial, value);
+        entry.quarantined |= entry.syscalls.quarantined();
+        let completed = outcome.map_err(errno)?;
+        bytes[16..24].copy_from_slice(&1u64.to_le_bytes());
+        bytes[24..32].copy_from_slice(&completed.to_le_bytes());
+        pr_info!("host_mapping=invalidated os={} generation={} pid={} worker={} delivery={} value={} completed={}\n",
+            self.owner.slot(), self.owner.generation(), entry.cleanup.pid(), worker, serial, value, completed);
+        loop {
+            let entry = slots
+                .iter()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                return Ok(());
+            }
+            if self.changed.wait_interruptible(&mut slots) {
+                return Err(EINTR);
+            }
+        }
+    }
+
     pub(crate) fn pager_syscall(&self, token: Token, bytes: &mut [u8]) -> Result {
         if bytes.len() != 32 {
             return Err(EINVAL);

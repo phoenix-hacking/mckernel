@@ -233,6 +233,32 @@ impl Registration {
                 result?;
                 continue;
             }
+            if image::word(&bytes, 40).map_err(errno)? == 11 {
+                let mut clear = [0; 40];
+                clear[..16].copy_from_slice(&bytes[..16]);
+                if let Err(error) = self.invoke(super::application_abi::CLEAR_SYSCALL, &mut clear) {
+                    if u64::from_le_bytes(clear[16..24].try_into().unwrap()) == 0 {
+                        let mut rollback = [0; 24];
+                        rollback[..16].copy_from_slice(&bytes[..16]);
+                        let _ = self.invoke(super::application_abi::COPIED_SYSCALL, &mut rollback);
+                    }
+                    return Err(error);
+                }
+                let start = u64::from_le_bytes(clear[24..32].try_into().unwrap());
+                let end = u64::from_le_bytes(clear[32..40].try_into().unwrap());
+                // The kernel reservation defers cancellation. This worker
+                // retains the exact Mirror/Registration while Linux clears its
+                // current MM outside every application/transport lock. Always
+                // finish the reservation, including an actual MM error.
+                let value = worker
+                    .mirror
+                    .clear(start, end)
+                    .map_or_else(|error| error.to_errno() as i64, |()| 0);
+                clear[16..].fill(0);
+                clear[24..32].copy_from_slice(&value.to_le_bytes());
+                self.invoke(super::application_abi::CLEAR_DONE, &mut clear)?;
+                continue;
+            }
             let copied = UserSlice::new(argument, 80)
                 .writer()
                 .write_slice(&bytes[16..96]);
