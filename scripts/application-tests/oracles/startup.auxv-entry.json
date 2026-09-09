@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.auxv-entry",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/startup.auxv-entry"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+  },
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {
+    "kind": "canonical-record-with-relations",
+    "fields": ["at_entry", "at_phdr", "at_phnum", "main_address"]
+  },
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "at_entry equals the bound ET_EXEC ELF header e_entry",
+    "at_phdr equals the bound ET_EXEC program-header table address",
+    "at_phnum equals the bound ELF program-header count and is positive",
+    "main_address lies within the bound executable text mapping"
+  ],
+  "unresolved_expectations": [
+    "Bind the exact ET_EXEC input bytes and independent ELF-derived addresses from the reviewed input manifest; freeze the canonical record schema and hashes before execution."
+  ],
+  "max_question_for_reviewer": "Which immutable ET_EXEC artifact and ELF field bindings should supply e_entry, PT_PHDR and e_phnum for the first comparison?"
+}

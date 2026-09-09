@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.stdin-binary",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/startup.stdin-binary"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"},
+    "stdin": {"kind": "bytes", "construction": "NUL byte followed by byte values 0x00 through 0xff", "length": 257}
+  },
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": ["count=257", "fnv1a32=25e4491f", "eof=0"]
+  },
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "count equals the independently generated stream length 257",
+    "fnv1a32 equals the independently computed digest of every byte in order",
+    "The final read observes EOF and no byte is dropped or transformed"
+  ],
+  "unresolved_expectations": [
+    "The packet assertion names SHA256 while this bounded fixture emits FNV-1a32; resolve the digest-field contract and bind the exact input bytes and oracle hash before execution."
+  ],
+  "max_question_for_reviewer": "Should the fixture implement SHA256 as required by the frozen assertion, or should the assertion be versioned to the bounded FNV-1a32 record?"
+}
