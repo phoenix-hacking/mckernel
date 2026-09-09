@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.realloc-grow",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "realloc-grow status=PASS"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "old_size": 32,
+    "new_size": 2048,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "realloc should either keep prior bytes intact for first old_size range or report fail",
+    "payload must return EXIT_SUCCESS only when retained content is verified"
+  ],
+  "unresolved_expectations": [
+    "Output shape is normalized to a line oracle; execution stage may emit richer structured output later"
+  ],
+  "max_question_for_reviewer": "Can memory-basic gated semantics allow this PASS contract for grow operations or should additional relocation checks be captured?"
+}

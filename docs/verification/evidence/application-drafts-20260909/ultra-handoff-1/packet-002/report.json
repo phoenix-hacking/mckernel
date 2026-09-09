@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-002",
+  "packet_version": 2,
+  "context_sha256": "d556291dc5f2521263c1c7b519bb8ab9b203239e38974a4a6399285664c74d3f",
+  "started_utc": "2026-09-09T09:58:20Z",
+  "finished_utc": "2026-09-09T10:03:40Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "memory.calloc-zero",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.calloc-zero.c",
+      "oracle": "scripts/application-tests/oracles/memory.calloc-zero.json",
+      "changed_files": [
+        "scripts/application-tests/cases/memory/memory.calloc-zero.c",
+        "scripts/application-tests/oracles/memory.calloc-zero.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Stdout serialization for large-size sweep (6 entries) is fixed in fixture but runtime capture schema may change on execution enable."
+      ],
+      "max_reviewer_question": "Confirm that output serialization can remain exact-line for calloc-zero while still preserving any future structured output contracts."
+    },
+    {
+      "case_id": "memory.realloc-grow",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.realloc-grow.c",
+      "oracle": "scripts/application-tests/oracles/memory.realloc-grow.json",
+      "changed_files": [
+        "scripts/application-tests/cases/memory/memory.realloc-grow.c",
+        "scripts/application-tests/oracles/memory.realloc-grow.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Oracle assumes retained old bytes are exactly preserved across grow; execution may require stronger address-lifetime checks in the final runner stage."
+      ],
+      "max_reviewer_question": "Do we need explicit relocation checks for this case, or is byte-preservation alone enough for planning review?"
+    },
+    {
+      "case_id": "memory.realloc-shrink",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.realloc-shrink.c",
+      "oracle": "scripts/application-tests/oracles/memory.realloc-shrink.json",
+      "changed_files": [
+        "scripts/application-tests/cases/memory/memory.realloc-shrink.c",
+        "scripts/application-tests/oracles/memory.realloc-shrink.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Oracle does not yet bind all allocator lifetime/ownership diagnostics required for final execution acceptance."
+      ],
+      "max_reviewer_question": "Should this case include explicit ownership-transition assertions for allocator metadata, or keep to byte-level retention only in draft scope?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/memory/memory.calloc-zero.c",
+      "sha256": "fadacad72c40ef81e61154729012d75f2cdc8fee9ff4206f432b9a470aea9bbf"
+    },
+    {
+      "path": "scripts/application-tests/oracles/memory.calloc-zero.json",
+      "sha256": "ee72669633d6050616f2f8fa7d6057c7c23d4dc746b9f15fc3f6468ef9d202fc"
+    },
+    {
+      "path": "scripts/application-tests/cases/memory/memory.realloc-grow.c",
+      "sha256": "e41e4ea6de6d6f3c78872a84b9be720c3556832609327748e6083374339a2f23"
+    },
+    {
+      "path": "scripts/application-tests/oracles/memory.realloc-grow.json",
+      "sha256": "a92a48a5744918df323670d80b9d9e44e7ae637fe09f53a5c83d103b090ece4d"
+    },
+    {
+      "path": "scripts/application-tests/cases/memory/memory.realloc-shrink.c",
+      "sha256": "af74604de5fccfee7ed073a446735f9a4b7f7f97e5b63daa1b9ccef1783cccdb"
+    },
+    {
+      "path": "scripts/application-tests/oracles/memory.realloc-shrink.json",
+      "sha256": "a2f5bbb971e5be3c3996a1c5c078ea266081f80887cd2fcbe98ebca6d6ac9e85"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-002.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-002.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-002-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "allocator growth/shrink expectations are byte-preservation only",
+    "stdout output schema remains draft-plain-lines"
+  ],
+  "blocked_execution_capabilities": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection",
+    "dynamic-etexec",
+    "memory-basic"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Clarify whether output capture remains plain line based for memory packets in draft artifacts.",
+    "Confirm required allocator ownership/lifetime assertions for final execution contracts."
+  ],
+  "next_packet_id": "packet-003"
+}
