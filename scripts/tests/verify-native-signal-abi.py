@@ -102,25 +102,55 @@ def restart_reference(binary):
 try:
     shutil.copyfile(__file__, out / 'helper.py')
     record['source_parent'] = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip()
-    names = ['kernel/rust/native_signal.rs', 'kernel/rust/abi.rs',
+    names = ['kernel/rust/native_signal.rs', 'kernel/rust/native_xstate.rs', 'kernel/rust/abi.rs',
              'kernel/rust/syscall_policy.rs', 'arch/x86_64/kernel/syscall.c',
+             'arch/x86_64/kernel/cpu.c',
              'scripts/tests/fixtures/native-signal-abi.rs',
-             'scripts/tests/fixtures/native-signal-abi.c']
+             'scripts/tests/fixtures/native-signal-abi.c',
+             'scripts/tests/fixtures/native-xstate.rs',
+             'scripts/tests/fixtures/native-signal-restart.c']
     for name in names:
         target = out / 'original-inputs' / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(repo / name, target)
         record['inputs'].append(identity(target))
-    for name in ['native_signal.rs', 'abi.rs']:
+    for name in ['native_signal.rs', 'native_xstate.rs', 'abi.rs']:
         shutil.copyfile(out / 'original-inputs/kernel/rust' / name, out / name)
-    for name in ['native-signal-abi.rs', 'native-signal-abi.c']:
+    for name in ['native-signal-abi.rs', 'native-signal-abi.c', 'native-xstate.rs', 'native-signal-restart.c']:
         shutil.copyfile(out / 'original-inputs/scripts/tests/fixtures' / name, out / name)
+    producer = (out / 'original-inputs/arch/x86_64/kernel/syscall.c').read_text()
+    match = re.search(r'^static int\nisrestart\(', producer, re.M)
+    assert match is not None, 'missing exact isrestart body'
+    start = match.start()
+    end = producer.index('{', start) + 1
+    depth = 1
+    while depth:
+        depth += (producer[end] == '{') - (producer[end] == '}')
+        end += 1
+    restart_body = producer[start:end]
+    (out / 'signal-restart-body.h').write_text(restart_body + '\n')
+    record['restart_policy'] = dict(source='arch/x86_64/kernel/syscall.c',
+                                    start_byte=len(producer[:start].encode()),
+                                    end_byte=len(producer[:end].encode()),
+                                    sha256=hashlib.sha256(restart_body.encode()).hexdigest())
     run('diff-check', ['git', '-C', str(repo), 'diff', '--check'])
     run('rust-compiler', ['rustc', '--version', '--verbose'])
     run('c-compiler', ['cc', '--version'])
     run('kernel', ['uname', '-a'])
+    for profile in ['legacy', 'native']:
+        command = ['cc', '-std=gnu11', '-O2', '-Wall', '-Wextra', '-Werror',
+                   str(out / 'native-signal-restart.c'), '-o', str(out / (profile + '-restart-policy'))]
+        if profile == 'native':
+            command += ['-DMCKERNEL_NATIVE_SIGNAL_STACK']
+        run(profile + '-restart-policy-build', command)
+        result = run(profile + '-restart-policy-tests', [str(out / (profile + '-restart-policy'))])
+        assert result == 'native signal restart policy PASS checks=27\n', repr(result)
     run('format', ['rustfmt', '--edition', '2021', '--config', 'skip_children=true,reorder_modules=false',
-                   str(out / 'native_signal.rs'), str(out / 'native-signal-abi.rs')])
+                   str(out / 'native_signal.rs'), str(out / 'native-signal-abi.rs'),
+                   str(out / 'native_xstate.rs'), str(out / 'native-xstate.rs')])
+    run('xstate-rust-build', ['rustc', '--edition', '2021', '-D', 'warnings', '--test',
+                             str(out / 'native-xstate.rs'), '-o', str(out / 'xstate-tests')])
+    run('xstate-rust-tests', [str(out / 'xstate-tests'), '--nocapture'])
     run('native-rust-build', ['rustc', '--edition', '2021', '-D', 'warnings', '--cfg',
                               'native_linux_irq_work_v6_12', '--test', str(out / 'native-signal-abi.rs'),
                               '-o', str(out / 'native-tests')])
@@ -151,7 +181,9 @@ try:
             record['compiler_dependencies'].append(identity(dependency))
     assert record['compiler_dependencies']
     record['compiler_inputs'] = [identity(out / name) for name in
-                                ['native_signal.rs', 'abi.rs', 'native-signal-abi.rs', 'native-signal-abi.c']]
+                                ['native_signal.rs', 'native_xstate.rs', 'abi.rs',
+                                 'native-signal-abi.rs', 'native-signal-abi.c', 'native-xstate.rs',
+                                 'native-signal-restart.c', 'signal-restart-body.h']]
     record.update(status='PASS', binary=identity(binary))
 except BaseException as error:
     record.update(status='FAIL', error=str(error))

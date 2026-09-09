@@ -1536,6 +1536,8 @@ const AT_SYMLINK_NOFOLLOW: CInt = 0x100;
 const AT_EMPTY_PATH: CInt = 0x1000;
 
 const FUTEX_WAIT: CInt = 0;
+#[cfg(native_linux_irq_work_v6_12)]
+const FUTEX_REQUEUE: CInt = 3;
 const FUTEX_CMP_REQUEUE: CInt = 4;
 const FUTEX_WAKE_OP: CInt = 5;
 const FUTEX_WAIT_BITSET: CInt = 9;

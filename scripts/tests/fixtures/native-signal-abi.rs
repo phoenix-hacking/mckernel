@@ -51,6 +51,40 @@ fn standard_libc_offsets_and_action_mask() {
 }
 
 #[test]
+fn selected_handler_and_restorer_user_interval() {
+    let start = 0x200000;
+    let end = 1 << 47;
+    let handler = 0x401000;
+    let restorer = 0x2aaa_aaa4_b1c0;
+    assert_eq!(
+        native_signal::native_signal_entry_targets_result(handler, restorer, start, end),
+        0
+    );
+    assert_eq!(
+        native_signal::native_signal_entry_targets_result(start, end - 1, start, end),
+        0
+    );
+    for target in [0, start - 1, end, u64::MAX] {
+        assert_eq!(
+            native_signal::native_signal_entry_targets_result(target, restorer, start, end),
+            -14
+        );
+        assert_eq!(
+            native_signal::native_signal_entry_targets_result(handler, target, start, end),
+            -14
+        );
+    }
+    assert_eq!(
+        native_signal::native_signal_entry_targets_result(handler, restorer, end, start),
+        -14
+    );
+    assert_eq!(
+        native_signal::native_signal_entry_targets_result(handler, end, start, u64::MAX),
+        -14
+    );
+}
+
+#[test]
 fn native_context_register_mask_and_fp_order_roundtrip() {
     unsafe {
         let mut vm = MaybeUninit::<ProcessVm>::zeroed().assume_init();
@@ -76,12 +110,18 @@ fn native_context_register_mask_and_fp_order_roundtrip() {
             regs.gpr.rsp = 0x60000;
             assert_eq!(
                 native_signal::native_signal_context_prepare_result(
-                    &regs, 1 << 13, result as u64, 234, 0, &mut frame, Some(copy_from)
+                    &regs,
+                    1 << 13,
+                    result as u64,
+                    234,
+                    0,
+                    &mut frame,
+                    Some(copy_from)
                 ),
                 0
             );
             assert_eq!(frame.regs[13], result as u64);
-            assert_eq!(frame.regs[18], 0x3b00_0000_0000_0033);
+            assert_eq!(frame.regs[18], 0x003b_0000_0000_0033);
             assert_eq!(frame.sigmask[0], 1 << 13);
             assert!(frame.sigmask[1..].iter().all(|word| *word == 0));
             // Standard handler edits must survive, including negative RAX.
@@ -120,13 +160,22 @@ fn restart_is_a_normal_saved_user_syscall_context() {
         let mut frame = MaybeUninit::<native_signal::Frame>::zeroed().assume_init();
         assert_eq!(
             native_signal::native_signal_context_prepare_result(
-                &regs, 0, (-4i64) as u64, 0, 1, &mut frame, Some(copy_from)
+                &regs,
+                0,
+                (-4i64) as u64,
+                0,
+                1,
+                &mut frame,
+                Some(copy_from)
             ),
             0
         );
         assert_eq!(frame.regs[16], instruction.as_ptr() as u64);
         assert_eq!(frame.regs[13], 0);
-        assert_eq!((frame.regs[8], frame.regs[9], frame.regs[12]), (7, 0x70000, 16));
+        assert_eq!(
+            (frame.regs[8], frame.regs[9], frame.regs[12]),
+            (7, 0x70000, 16)
+        );
         assert_eq!(regs.gpr.rip, instruction.as_ptr() as u64 + 2);
     }
 }

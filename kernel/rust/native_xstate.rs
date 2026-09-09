@@ -66,7 +66,12 @@ pub unsafe extern "C" fn native_xstate_validate_result(
     {
         return -22;
     }
-    match validate(core::slice::from_raw_parts(buffer, bytes), configured, xfeatures, mxcsr_mask) {
+    match validate(
+        core::slice::from_raw_parts(buffer, bytes),
+        configured,
+        xfeatures,
+        mxcsr_mask,
+    ) {
         Ok(()) => 0,
         Err(error) => error,
     }

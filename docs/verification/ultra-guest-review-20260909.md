@@ -477,3 +477,42 @@ diagnostic and calls the existing process-local `terminate(0, SIGSEGV)`.
 No malformed-context runtime payload is created or executed. Pure-buffer
 policy tests and benign real FP-preservation tests supply the first validation
 layer; root retains control of module/image builds and guest execution.
+
+### Pre-edit follow-up: pending signals after native sigreturn
+
+Independent source review traced the outer `syscall()` pending-signal check:
+after sigreturn it still passes syscall number 15 alongside the restored
+application RAX. If that saved result is EINTR, the old `isrestart` policy
+could classify a newly pending SA_RESTART handler as a restart of syscall 15.
+For the selected native producer, explicitly exclude rt_sigreturn before
+the SIGCHLD shortcut. The interrupted user continuation already contains its
+complete return or restart context. Keep the legacy policy unchanged and
+extract the complete selected C policy for assertions in both selections.
+
+Signal protocol attempt 1 failed on a fixture SS packing constant: the
+producer's `0x3b << 48` is correct, while the fixture literal used `0x3b << 56`.
+Root logged and retained that original attempt. The corrected test continues
+to assert the exact ABI word, using the proper shift; this is not a production
+behavior change or a passing relabel of attempt 1.
+
+### Pre-edit follow-up: native signal entry targets
+
+The native return checks do not protect the separate IRET into a newly
+delivered handler. The reviewed producer writes `sa_handler` into saved RIP
+and always pushes the supplied `sa_restorer`; there is no x86_64 kernel
+fallback restorer in this selected path. Add one pure Rust target validator
+before stack preparation, any user frame copy or live state change. Both
+actual targets must be nonzero lower-47-bit canonical addresses within the
+configured user interval. Keep the existing supplied-restorer ABI without
+adding a new SA_RESTORER-flag requirement. Failure uses the existing native
+bad-frame cleanup and process-local SIGSEGV path. Legacy delivery remains
+unchanged. Tests are pure policy vectors; no invalid-context runtime payload
+is added. Image selection must prove the new call precedes frame preparation.
+
+Signal protocol attempt 2 failed while compiling the exact legacy C restart
+policy with `-Werror=sign-compare`: its unsigned-long result was compared with
+the signed expression `-EINTR`. Root logged and retained the whole attempt.
+The production comparison now spells `(unsigned long)-EINTR`, exactly the
+usual arithmetic conversion already performed by C. This is a bounded type
+clarification with unchanged values and legacy/native behavior; warning
+requirements and policy assertions remain intact.

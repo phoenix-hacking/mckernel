@@ -1,0 +1,90 @@
+{
+  "blocked_by": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection"
+  ],
+  "candidate_fix_policy": {
+    "allowed": "One bounded candidate for a simple diagnosed defect after preserving the first failure. Scope must be authorized by the active packet; writes outside allowlist are forbidden.",
+    "invalidate_previous_binary_coverage": true,
+    "max_candidates": 1,
+    "not_automatic_acceptance": true,
+    "prohibited": [
+      "oracle weakening",
+      "allowed-errno widening",
+      "hidden retry",
+      "kernel or launcher change in a draft-only packet",
+      "changing baseline fixtures",
+      "rewriting failed evidence"
+    ],
+    "reviewer": "Max for native correctness, lifetime, ABI, scheduler, unsafe or unclear semantics; independently reviewed candidate before any acceptance"
+  },
+  "case_ids": [
+    "signal.alternate-repeat",
+    "signal.alternate-nested"
+  ],
+  "command_templates_are_implemented": false,
+  "completion": [
+    "All selected sources and frozen independent oracles created within allowlist.",
+    "Each parameter vector represented without inflating logical-case count.",
+    "Report implemented,blocked and unresolved assertions explicitly; no runtime PASS in draft-only mode.",
+    "Submit exact diff and hashes for review; do not self-activate next packet."
+  ],
+  "execution_enabled": false,
+  "executor_model": "Luna or Spark; user chooses",
+  "inputs": {
+    "capability_manifest": "{reviewed_capability_manifest}",
+    "case_subset_only": true,
+    "catalog": "scripts/application-tests/cases.json",
+    "input_manifest": "{reviewed_input_manifest}"
+  },
+  "limits": {
+    "active_cases_max": 3,
+    "candidate_fix_changed_lines_max": 80,
+    "candidate_fix_files_max": 2,
+    "candidate_fix_minutes_max": 15,
+    "container_cpus": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_tasks": 512,
+    "host_tests_forbidden": true
+  },
+  "mode": "draft-only",
+  "packet_id": "packet-005",
+  "permitted_commands": [
+    [
+      "python3",
+      "-B",
+      "/workspace/scripts/application-tests/validate.py",
+      "--packet",
+      "/workspace/scripts/application-tests/packets/packet-005.json"
+    ],
+    [
+      "git",
+      "diff",
+      "--check"
+    ]
+  ],
+  "read_allowlist": [
+    "scripts/application-tests/README.md",
+    "scripts/application-tests/packets/packet-005.json",
+    "{reviewed_capability_manifest}",
+    "{reviewed_input_manifest}",
+    "cases.json#signal.alternate-repeat",
+    "cases.json#signal.alternate-nested"
+  ],
+  "schema_version": 1,
+  "status": "planned",
+  "version": 1,
+  "write_allowlist": [
+    "scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+    "scripts/application-tests/oracles/signal.alternate-repeat.json",
+    "scripts/application-tests/cases/signal/signal.alternate-nested.c",
+    "scripts/application-tests/oracles/signal.alternate-nested.json"
+  ]
+}

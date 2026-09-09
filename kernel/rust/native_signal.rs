@@ -40,6 +40,27 @@ const _: () = {
     assert!(size_of::<Frame>() == 552);
 };
 
+/// Validate the actual targets selected by the existing x86_64 producer.
+/// That producer has no implicit restorer trampoline or missing-restorer
+/// fallback. Mapping/execute faults for valid user addresses stay user faults.
+#[no_mangle]
+pub extern "C" fn native_signal_entry_targets_result(
+    handler: CULong,
+    restorer: CULong,
+    user_start: CULong,
+    user_end: CULong,
+) -> CLong {
+    if user_start >= user_end {
+        return -14;
+    }
+    for target in [handler, restorer] {
+        if target == 0 || target < user_start || target >= user_end || target >= (1 << 47) {
+            return -14;
+        }
+    }
+    0
+}
+
 /// The frame is private kernel storage. Restart preparation verifies the
 /// original SYSCALL instruction, then resumes through ordinary userspace
 /// execution rather than dispatching a syscall recursively from sigreturn.
@@ -183,8 +204,7 @@ pub(crate) unsafe fn sigreturn(
     gpr.rcx = frame.regs[14];
     gpr.rsp = frame.regs[15];
     gpr.rip = frame.regs[16];
-    gpr.rflags = (gpr.rflags & !USER_CHANGEABLE_RFLAGS)
-        | (frame.regs[17] & USER_CHANGEABLE_RFLAGS);
+    gpr.rflags = (gpr.rflags & !USER_CHANGEABLE_RFLAGS) | (frame.regs[17] & USER_CHANGEABLE_RFLAGS);
     gpr.orig_rax = CULong::MAX;
     (*thread).sigmask.val[0] = frame.sigmask[0] & !UNBLOCKABLE;
     restore(&mut (*thread).sigstack, &frame.sigstack, gpr.rsp);

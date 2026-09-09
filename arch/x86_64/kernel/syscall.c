@@ -1042,6 +1042,8 @@ _Static_assert(offsetof(struct sigsp, fpregs) == 224, "native signal fpregs");
 _Static_assert(offsetof(struct sigsp, sigmask) == 296, "native signal mask");
 _Static_assert(offsetof(struct sigsp, info) == 424, "native signal siginfo");
 _Static_assert(sizeof(struct sigsp) == 552, "native signal frame");
+extern long native_signal_entry_targets_result(unsigned long handler,
+		unsigned long restorer, unsigned long user_start, unsigned long user_end);
 extern long native_signal_context_prepare_result(const struct x86_user_context *regs,
 		unsigned long mask, unsigned long result, int number, int restart,
 		struct sigsp *frame, arch_rt_sigreturn_copy_from_user_fn_t copy_from);
@@ -1735,9 +1737,14 @@ arch_ptrace(long request, int pid, long addr, long data)
 static int
 isrestart(int num, unsigned long rc, int sig, int restart)
 {
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+	/* A pending handler observes the already-restored user continuation. */
+	if (num == __NR_rt_sigreturn)
+		return 0;
+#endif
 	if (sig == SIGKILL || sig == SIGSTOP)
 		return 0;
-	if (num < 0 || rc != -EINTR)
+	if (num < 0 || rc != (unsigned long)-EINTR)
 		return 0;
 	if (sig == SIGCHLD)
 		return 1;
@@ -1832,6 +1839,13 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
 		unsigned long native_frame;
 
+		ret = native_signal_entry_targets_result(
+				(unsigned long)k->sa.sa_handler,
+				(unsigned long)k->sa.sa_restorer,
+				thread->vm->region.user_start,
+				thread->vm->region.user_end);
+		if (ret)
+			goto native_bad_signal_frame;
 		ret = native_signal_stack_prepare_result(&thread->sigstack,
 				&ksigsp.sigstack, regs->gpr.rsp, k->sa.sa_flags,
 				xsavesize, sizeof ksigsp,
