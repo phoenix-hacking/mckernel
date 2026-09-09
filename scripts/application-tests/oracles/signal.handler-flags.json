@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.handler-flags",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.handler-flags"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["handled=1 reset_default=1 flags=<platform-defined>"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SA_RESETHAND handler runs exactly once", "A post-invocation sigaction query reports SIG_DFL without sending a second fatal signal"],
+  "unresolved_expectations": ["Platform-specific post-reset sa_flags bits and canonical output binding require Max review."],
+  "max_question_for_reviewer": "Confirm the reset-to-default action is observable immediately after one handler invocation and flags normalization is recorded."
+}
