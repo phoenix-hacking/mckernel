@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.protect-readonly",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.protect-readonly"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["trapped", "si_code", "fault_offset", "unchanged"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["trapped=1", "si_code=SEGV_ACCERR", "fault_offset=0", "unchanged=1", "The protected byte is not modified"],
+  "unresolved_expectations": ["Bind pinned guest SEGV_ACCERR numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm write fault classification as SEGV_ACCERR at offset zero and preservation of 0x5a."
+}
