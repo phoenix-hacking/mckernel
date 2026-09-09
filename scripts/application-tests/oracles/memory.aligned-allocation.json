@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.aligned-allocation",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/memory.aligned-allocation"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+  },
+  "parameters": {"alignment": [16, 64, 4096], "bytes": [4096, 65536]},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["alignment", "bytes", "rc", "modulo", "bad_index"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "Every alignment/bytes Cartesian vector returns rc=0",
+    "modulo is zero for each returned address",
+    "bad_index equals the requested byte count after complete pattern readback",
+    "Every successful allocation is freed exactly once"
+  ],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm Cartesian expansion across all three alignments and both allocation sizes."
+}

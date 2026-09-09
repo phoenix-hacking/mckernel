@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.alignment-invalid",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/memory.alignment-invalid"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+  },
+  "parameters": {"alignment": [3], "bytes": [64]},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=22", "pointer_unchanged=1", "errno_before=123 errno_after=123"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "Return value is EINVAL (22) directly",
+    "The output pointer remains the original sentinel",
+    "posix_memalign does not modify errno"
+  ],
+  "unresolved_expectations": ["The numeric EINVAL value and canonical output require binding to the reviewed guest ABI before execution."],
+  "max_question_for_reviewer": "Confirm EINVAL=22 for the pinned guest ABI and preserve the direct-return/no-errno contract."
+}
