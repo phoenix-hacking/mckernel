@@ -210,9 +210,15 @@ and is superseded. All 524 Linux-reference argument vectors and three full
 Rust tests pass, along with 144 exact C marker cases per legacy/native profile.
 The original context and actual clone result are preserved. Unsupported pidfd,
 set-TID, cgroup/namespace, IO and CLEAR_SIGHAND features are explicit errors.
-Next build all four images and verify native table slot 435, legacy absence,
-then rerun the unchanged pthread application. Keep current host zeroing module
-2 and all existing images/captures. No clone3 runtime or Ultra acceptance yet.
+All four image selections now pass in
+`docs/verification/native-application-clone3-images-checkpoint-20260909.json`.
+Native ELF table slot 435 selects the Rust handler; legacy images omit it,
+and slot 56 remains the existing clone. Both exact syscall compiler paths,
+native marker bypass, protection and zeroing binary checks pass. All 34 guest
+sources and both complete image attempts are retained, including the original
+compiler-path audit failure. Next run the unchanged pthread application with
+clone3 image 2 and current host zeroing module 2. Preserve all existing images
+and captures. No clone3 runtime or Ultra acceptance yet.
 
 Latest actual application checkpoint, 2026-09-09:
 `docs/verification/native-application-core-checkpoint-20260909.json` retains

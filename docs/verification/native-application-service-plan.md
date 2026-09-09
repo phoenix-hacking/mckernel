@@ -38,6 +38,15 @@ references, but this does not establish the required abnormal-owner coverage.
 Signals have not run because the batch stopped at that first failure. Preserve
 the complete serial/debugcon and emergency physical memory/queue/register data.
 
+The guest-local native clone3 adapter now passes 524 Linux-reference argument
+vectors, the full clone adapter tests and both original marker selections.
+The clone3 image checkpoint retains all four passing image configurations,
+34 exact source bindings and the complete first compiler-path audit failure.
+Actual native ELF slot 435 selects the Rust adapter, with legacy absence and
+the existing clone handler preserved. Protection and zeroing binary checks
+still pass. Clone3 image 2 is ready for the unchanged pthread application with
+current host zeroing module 2; its runtime result remains pending.
+
 The host zeroing checkpoint retains all 57 native compiler bindings, nine host
 unit tests, three successful native modules, the exact Rust 1.92 objtool patch
 and 77 configuration/license tests. All four guest image selections build.
