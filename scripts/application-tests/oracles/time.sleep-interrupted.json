@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.sleep-interrupted",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.sleep-interrupted"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["rc", "errno", "events", "rem_sec", "rem_nsec", "bounded"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["nanosleep returns -1/EINTR", "Exactly one handled SIGALRM event occurs", "Remaining time is nonnegative and no greater than the one-second request"],
+  "unresolved_expectations": ["Freeze exact timer-delivery bracket and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm one 10 ms SIGALRM interruption and the permitted remaining-time relation."
+}

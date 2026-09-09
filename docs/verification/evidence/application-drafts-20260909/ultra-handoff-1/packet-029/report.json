@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-029",
+  "packet_version": 1,
+  "context_sha256": "9c3b353c1875f1e3b96833e82beaf2b86dc6e24411edfcfc06ed33418907386a",
+  "started_utc": "2026-09-09T13:20:00Z",
+  "finished_utc": "2026-09-09T13:20:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "time.nanosleep", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.nanosleep.c", "oracle": "scripts/application-tests/oracles/time.nanosleep.json", "changed_files": ["scripts/application-tests/cases/time/time.nanosleep.c", "scripts/application-tests/oracles/time.nanosleep.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical elapsed-time record and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm 10 ms minimum monotonic elapsed relation and ten-second deadline."},
+    {"case_id": "time.nanosleep-invalid", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.nanosleep-invalid.c", "oracle": "scripts/application-tests/oracles/time.nanosleep-invalid.json", "changed_files": ["scripts/application-tests/cases/time/time.nanosleep-invalid.c", "scripts/application-tests/oracles/time.nanosleep-invalid.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Remaining-output mutation for invalid input is intentionally unresolved."], "max_reviewer_question": "Confirm whether rem is unchanged for invalid tv_nsec or only EINVAL is frozen."},
+    {"case_id": "time.sleep-interrupted", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.sleep-interrupted.c", "oracle": "scripts/application-tests/oracles/time.sleep-interrupted.json", "changed_files": ["scripts/application-tests/cases/time/time.sleep-interrupted.c", "scripts/application-tests/oracles/time.sleep-interrupted.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Timer delivery bracket and canonical remaining-time record require review."], "max_reviewer_question": "Confirm one handled 10 ms SIGALRM interruption and bounded remaining time."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/time/time.nanosleep.c", "sha256": "c663c7bbbf8ffcedbf8a67195977d0e36fe21f5d41325fad44d610b1ec62a317"},
+    {"path": "scripts/application-tests/oracles/time.nanosleep.json", "sha256": "6621996154445e164ffbad80c00f486cc50649c03601993b74bcee2df134faaa"},
+    {"path": "scripts/application-tests/cases/time/time.nanosleep-invalid.c", "sha256": "d6f5df2fa56bdced069db9d5d020eec310ee49bfdd0d9f5a07bd682f2d7989bf"},
+    {"path": "scripts/application-tests/oracles/time.nanosleep-invalid.json", "sha256": "b939dcfc51d233756f6393976410d66ba0eee2b9b4a5d4f3281981b2dcc7df72"},
+    {"path": "scripts/application-tests/cases/time/time.sleep-interrupted.c", "sha256": "ba3e2de1f931ffd2e7a39576e94a36dedeb8269fe06aebaecde04893052027f9"},
+    {"path": "scripts/application-tests/oracles/time.sleep-interrupted.json", "sha256": "8b4aa8f7dca37c9f81a4f0a25496a45879119def6085c312eedcdb10bc42c360"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-029.json --emit-context /tmp/application-packet-029-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three sleep/timer cases need final elapsed, rem, signal, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review nanosleep invalid rem behavior, timer delivery, and elapsed-time evidence."],
+  "next_packet_id": "packet-030"
+}
