@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-034",
+  "packet_version": 1,
+  "context_sha256": "f0417aae42c2f089e54437767fb102f1f7fb8f2b780c0682c9617bea14e3d2ae",
+  "started_utc": "2026-09-09T10:40:00Z",
+  "finished_utc": "2026-09-09T10:40:58Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "futex.bitset-selective-wake",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.bitset-selective-wake.c",
+      "oracle": "scripts/application-tests/oracles/futex.bitset-selective-wake.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.bitset-selective-wake.c", "scripts/application-tests/oracles/futex.bitset-selective-wake.json"],
+      "parameter_vectors": {"wait_bitsets": [1, 2], "wake_bitsets": [1, 2], "wake_count": [1]},
+      "implemented_operations": ["two disjoint WAIT_BITSET waiters", "selective WAKE_BITSET calls", "completion and result accounting"],
+      "unresolved_oracle_notes": ["Scheduler-bracket evidence and canonical output/input hashes require Max review."],
+      "max_reviewer_question": "Confirm disjoint bitset matching is independent of wake count and queue ordering."
+    },
+    {
+      "case_id": "futex.private-flag",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.private-flag.c",
+      "oracle": "scripts/application-tests/oracles/futex.private-flag.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.private-flag.c", "scripts/application-tests/oracles/futex.private-flag.json"],
+      "parameter_vectors": {"operation_flags": ["FUTEX_PRIVATE_FLAG on WAIT and WAKE"]},
+      "implemented_operations": ["private wait", "private wake", "single waiter completion"],
+      "unresolved_oracle_notes": ["Native private-operation routing and syscall-path evidence require Max review."],
+      "max_reviewer_question": "Confirm FUTEX_PRIVATE_FLAG is honored without delegation to shared Linux futex state."
+    },
+    {
+      "case_id": "futex.interrupted-wait",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.interrupted-wait.c",
+      "oracle": "scripts/application-tests/oracles/futex.interrupted-wait.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.interrupted-wait.c", "scripts/application-tests/oracles/futex.interrupted-wait.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "restart": ["SA_RESTART absent"]},
+      "implemented_operations": ["handled signal delivery", "interrupted FUTEX_WAIT", "post-interruption wake-retirement check"],
+      "unresolved_oracle_notes": ["Signal-delivery bracket, SA_RESTART behavior, and canonical errno/output binding require Max review."],
+      "max_reviewer_question": "Confirm interrupted waits retire queue ownership before returning EINTR."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/futex/futex.bitset-selective-wake.c", "sha256": "5d147aa919dcbcfc8972304c12150b03ea913710d0919850130dd81b6272b6ff"},
+    {"path": "scripts/application-tests/oracles/futex.bitset-selective-wake.json", "sha256": "9c983782efb16149cb9986146673f98e353bee34cb5571a2ad7a962bf7e61e8f"},
+    {"path": "scripts/application-tests/cases/futex/futex.private-flag.c", "sha256": "8b8c052463abafedd8bf926490a0a46cd3850fa8f6ae5cc1372da50b0ae41147"},
+    {"path": "scripts/application-tests/oracles/futex.private-flag.json", "sha256": "9b4ba57335ff50396fcf7a3ad80f413f174b2bce95cfdc2fcba03e199817a0be"},
+    {"path": "scripts/application-tests/cases/futex/futex.interrupted-wait.c", "sha256": "46f029af6b7105946a8918884cfbbbb2987af3ff49f7cf99795dcf684d5d508c"},
+    {"path": "scripts/application-tests/oracles/futex.interrupted-wait.json", "sha256": "c5a82f5e75b949bc01204f9e0c0d27510c554f8bda69521ee40db0eb60ce549d"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-034/context.json", "sha256": "f0417aae42c2f089e54437767fb102f1f7fb8f2b780c0682c9617bea14e3d2ae"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-034.json --emit-context /tmp/application-packet-034-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-034/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["All three futex selective/private/interrupted cases need final native ABI, scheduler, signal, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review selective bitset wake matching", "Confirm private futex routing", "Confirm EINTR queue retirement and signal semantics"],
+  "next_packet_id": "packet-035"
+}

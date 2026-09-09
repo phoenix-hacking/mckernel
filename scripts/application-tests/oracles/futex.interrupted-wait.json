@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.interrupted-wait",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.interrupted-wait"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exact-bytes", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["wait_result=-1 errno=4 signals=1 wake_after=0 word=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A handled signal interrupts the queued wait and returns EINTR without restart", "Exactly one signal handler record is observed", "A subsequent wake finds no stale waiter and the word is unchanged"],
+  "unresolved_expectations": ["Confirm signal delivery bracket, SA_RESTART behavior, and canonical errno/output binding before execution."],
+  "max_question_for_reviewer": "Confirm interrupted futex waits retire their queue ownership before returning EINTR."
+}

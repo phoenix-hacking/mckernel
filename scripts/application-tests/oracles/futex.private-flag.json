@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.private-flag",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.private-flag"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["wake=1 completed=1 wait_result=0 word=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A private wait is matched by a private wake and returns zero", "Exactly one waiter completes and the futex word retains value one", "The operation records the private-flag path for native ABI review"],
+  "unresolved_expectations": ["Confirm native private futex operation routing and canonical syscall-path evidence before execution."],
+  "max_question_for_reviewer": "Confirm FUTEX_PRIVATE_FLAG is honored without unexpected delegation to shared Linux futex state."
+}
