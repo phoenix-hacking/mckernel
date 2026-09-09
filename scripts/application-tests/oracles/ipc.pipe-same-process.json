@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.pipe-same-process",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.pipe-same-process"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["write=4 read=4 data=PING eof_after_close=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Same-process writer and reader exchange exact ordered bytes PING", "Writer close establishes EOF and all pipe descriptors retire"],
+  "unresolved_expectations": ["Thread scheduling and descriptor-retirement trace evidence require Max review."],
+  "max_question_for_reviewer": "Confirm exact byte ordering and EOF after the final writer descriptor closes."
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.poll-readable",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.poll-readable"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["before=0 after=1 pollin=1 read=4 data=DATA"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A zero-timeout poll reports no readability before data", "After a fixed write poll reports POLLIN and read returns exact DATA without sleep-based synchronization"],
+  "unresolved_expectations": ["Poll wake ordering and descriptor-retirement evidence require Max review."],
+  "max_question_for_reviewer": "Confirm readiness transition is observed by poll itself and no uncontrolled sleep is accepted."
+}
