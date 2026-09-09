@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "numerical.integer-matrix",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["dimension", "corner", "checksum", "equal", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Every scalar 64x64 cell equals the independent formula and the four-thread result", "Corner values 2148 and145536 and total checksum294328320 are fixed mathematical oracles"],
+  "unresolved_expectations": ["Thread partitioning, signed int64 arithmetic, and complete cell retention require Max review."],
+  "max_question_for_reviewer": "Confirm the independent matrix formulas, corner/checksum constants, and four-way row partition coverage."
+}

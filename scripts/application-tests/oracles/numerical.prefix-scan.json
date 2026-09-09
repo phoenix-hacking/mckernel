@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "numerical.prefix-scan",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["count=4096 first=0 second=-8 last=-15 total=-8 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each output index is the exclusive sum of independently defined values (i mod17)-8", "The final total equals the independently computed sum and the last exclusive prefix is -8"],
+  "unresolved_expectations": ["Signed overflow bounds, output retention, and scan coverage require Max review."],
+  "max_question_for_reviewer": "Confirm exclusive indexing, signed-value formula, and the independently computed count4096/total-8 constants."
+}
