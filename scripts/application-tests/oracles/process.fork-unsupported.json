@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.fork-unsupported",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.fork-unsupported"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["rc=-1 errno=95 eopnotsupp=1 child_created=0 clean=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The non-null native CREATE_PPD-dependent fork path returns EOPNOTSUPP", "No child is accepted, no partial parent registration remains, and no Linux orphan is created"],
+  "unresolved_expectations": ["Exact adapter binding, rollback trace, and no-orphan evidence require native runtime review."],
+  "max_question_for_reviewer": "Confirm EOPNOTSUPP and clean rollback are the reviewed current native result, distinct from host fork behavior."
+}

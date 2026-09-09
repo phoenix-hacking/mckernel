@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.clone3-size-large",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.clone3-size-large"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["rc=-1 errno=7 e2big=1 child_created=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Readable zeroed clone_args with size 4097 is rejected with E2BIG", "No child or worker is created"],
+  "unresolved_expectations": ["clone3 availability and exact size-validation ordering require native runtime review."],
+  "max_question_for_reviewer": "Confirm size above 4096 rejects before any child creation with E2BIG."
+}
