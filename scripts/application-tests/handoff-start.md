@@ -1,10 +1,11 @@
 # Start the bounded application-test drafting queue
 
-**Prepared for review; handoff release is pending.** This page does not release
-the queue, enable execution or announce a model switch. Root must satisfy the
-[handoff gates](../../docs/verification/ultra-handoff-gates-20260909.md), retain
-the exact starting context and verify its GitHub checkpoint before releasing
-the [draft queue](draft-queue.json).
+**The separate release manifest and verified GitHub checkpoint govern activation.**
+Read `docs/verification/ultra-drafting-handoff-20260909.json`: it must have status
+PASS, bind the exact queue/context/manifests, and have successful fetched-blob
+verification. Otherwise finish the [handoff gates](../../docs/verification/ultra-handoff-gates-20260909.md).
+The queue's review state alone does not activate drafting. This page does not
+enable execution or change the user's model.
 
 The catalog contains **273 logical cases across 97 packets**, including
 **56 vector instruction/state cases**. Parameter combinations are subordinate
@@ -28,6 +29,13 @@ inputs; it does not bind manifests, release the queue, enforce an OS sandbox
 or execute a test. Root supplies the reviewed input/capability artifacts and
 binds the fresh reporting run ID separately. Generated capability contracts
 are specifications, not evidence that those features work.
+
+The release manifest supplies the retained starting context, reviewed input
+and capability manifest paths/hashes, and the resolved fresh report root.
+Use those exact artifacts; do not reconstruct runtime inputs or load the full
+final evidence checkpoint into the executor. The initial retained context is
+`docs/verification/evidence/ultra-packet-001-context-20260909.json`; packet007's
+vector context is retained separately for its turn in the queue.
 
 Once Root releases drafting, start with packet 001: `startup.argv-empty`,
 `startup.environment` and `startup.stdout-stderr`. Supply only the

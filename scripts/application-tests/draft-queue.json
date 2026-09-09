@@ -1,5 +1,5 @@
 {
-  "activation": "Root releases this queue after its drafting handoff gates, structural/dependency validation and verified GitHub checkpoint. No fixture implementation begins while review_state remains pending.",
+  "activation": "This structural queue release becomes effective only with a PASS docs/verification/ultra-drafting-handoff-20260909.json bound to this exact queue SHA-256 and successful exact fetched-blob GitHub verification. No fixture drafting starts before both conditions and the user-selected model handoff. Queue review_state alone is insufficient; runtime remains disabled.",
   "advancement": "Within the reviewed queue, write the packet report then automatically load the next listed bounded context. No repeated user permission request. Do not invent packets, enable runtime, edit production or broaden file allowlists.",
   "catalog": "scripts/application-tests/cases.json",
   "catalog_version": 2,
@@ -913,7 +913,7 @@
     "summary_creation": "Exclusive immutable creation after all packet reports exist; status is DRAFT_QUEUE_COMPLETE or DRAFT_QUEUE_COMPLETE_WITH_BLOCKERS, never PASS. Include drafted/unresolved/blocked/failed counts, all report hashes and pending Max questions.",
     "summary_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/queue-summary.json"
   },
-  "review_state": "pending-root-validation-and-verified-checkpoint",
+  "review_state": "released-for-drafting",
   "schema_version": 1,
-  "status": "prepared-for-root-review"
+  "status": "released-for-drafting"
 }

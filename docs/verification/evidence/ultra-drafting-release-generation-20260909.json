@@ -1,0 +1,182 @@
+{
+  "application_tests_executed": 0,
+  "checked_inputs": [
+    {
+      "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+      "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+      "size": 435332
+    },
+    {
+      "path": "scripts/application-tests/draft-queue.json",
+      "sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+      "size": 26404
+    },
+    {
+      "path": "scripts/application-tests/cases.json",
+      "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+      "size": 1387917
+    },
+    {
+      "path": "docs/verification/evidence/ultra-packet-001-context-20260909.json",
+      "sha256": "44fd13912b28b6f009f8f82360a718361d43f46dfe1b5297eeab83c250846d03",
+      "size": 20711
+    },
+    {
+      "path": "docs/verification/evidence/ultra-packet-007-context-20260909.json",
+      "sha256": "3a24d92c733eea4ccd11ab66cff02e3107384a508b533309f44aaebf22c196e3",
+      "size": 45374
+    },
+    {
+      "path": "docs/verification/evidence/verify-ultra-final-github-20260909.py",
+      "sha256": "191f0b33c1345688c8daaec22db0e273df682cf663b949530711db8b73914913",
+      "size": 16972
+    }
+  ],
+  "draft_reporting_root": "/work/application-test-drafts-20260909/ultra-handoff-1",
+  "drafting_started": false,
+  "effective_at_generation": false,
+  "finished_utc": "2026-09-09T09:19:58.230221+00:00",
+  "fresh_queue_run_id": "ultra-handoff-1",
+  "gates": [
+    {
+      "evidence": {
+        "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+        "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+        "size": 435332
+      },
+      "guest_production_bindings": 44,
+      "host_compiler_bindings": 57,
+      "image_profiles": 4,
+      "name": "retained-source-and-selected-pair",
+      "native_modules": 3,
+      "status": "PASS"
+    },
+    {
+      "checks_per_control": 153,
+      "control_architectures": 2,
+      "core_modes": 4,
+      "evidence": {
+        "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+        "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+        "size": 435332
+      },
+      "hello_applications": 48,
+      "name": "unchanged-regression-replay",
+      "status": "PASS",
+      "total_core_replays": 6
+    },
+    {
+      "evidence": {
+        "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+        "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+        "size": 435332
+      },
+      "external_restart": "BLOCKED",
+      "futex_engines": 2,
+      "futex_logical_cases": 16,
+      "name": "ordinary-signal-and-futex-guest-evidence",
+      "shared_vm_child_tid_cases": 1,
+      "signal_guest_cases": 2,
+      "signal_linux_reference_cases": 3,
+      "status": "PASS"
+    },
+    {
+      "active_cases_per_context": 3,
+      "bounded_contexts": 2,
+      "evidence": {
+        "path": "/work/ultra-test-plan-protocol-20260909-2/record.json",
+        "sha256": "ef6da72225af7c7e4878301989877cda0d946db93ae2a6d0832f27ca7252e9e4",
+        "size": 43732
+      },
+      "logical_cases": 273,
+      "name": "validated-bounded-draft-queue",
+      "negative_rejection_checks": 48,
+      "packets": 97,
+      "queue": {
+        "path": "scripts/application-tests/draft-queue.json",
+        "sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+        "size": 26404
+      },
+      "status": "PASS",
+      "vector_cases": 56
+    },
+    {
+      "evidence": {
+        "path": "docs/verification/evidence/verify-ultra-final-github-20260909.py",
+        "sha256": "191f0b33c1345688c8daaec22db0e273df682cf663b949530711db8b73914913",
+        "size": 16972
+      },
+      "execution_status": "NOT_RUN_BY_THIS_GENERATOR",
+      "name": "retained-final-github-verifier-present",
+      "status": "PASS"
+    }
+  ],
+  "github_verification_required": true,
+  "outputs": [
+    {
+      "path": "/work/ultra-drafting-release-20260909-1/draft-capabilities.json",
+      "sha256": "8b529be5b24d02eb164515454f37bb26164fee3b7356357759b7e45be13a46ad",
+      "size": 15178
+    },
+    {
+      "path": "/work/ultra-drafting-release-20260909-1/draft-inputs.json",
+      "sha256": "76500ac10a0fc0936f793dd7a3a2c7e31be59bff96b8fe49002676f89347f220",
+      "size": 3586
+    },
+    {
+      "path": "/work/ultra-drafting-release-20260909-1/prepare-ultra-drafting-release-20260909.py",
+      "sha256": "efdcf14036c47e8c29e89a97ca01016f46c039cfab7317e51db780857edaeb26",
+      "size": 16503
+    },
+    {
+      "path": "/work/ultra-drafting-release-20260909-1/ultra-drafting-handoff-20260909.json",
+      "sha256": "e5b2e506be2fede066b1dd70e2d9bbaa709e0a74e8d765d8f971b1674d077b10",
+      "size": 5905
+    }
+  ],
+  "publication_map": [
+    {
+      "path": "docs/verification/evidence/prepare-ultra-drafting-release-20260909.py",
+      "sha256": "efdcf14036c47e8c29e89a97ca01016f46c039cfab7317e51db780857edaeb26",
+      "size": 16503,
+      "source": "/work/ultra-drafting-release-20260909-1/prepare-ultra-drafting-release-20260909.py"
+    },
+    {
+      "path": "docs/verification/ultra-draft-inputs-20260909.json",
+      "sha256": "76500ac10a0fc0936f793dd7a3a2c7e31be59bff96b8fe49002676f89347f220",
+      "size": 3586,
+      "source": "/work/ultra-drafting-release-20260909-1/draft-inputs.json"
+    },
+    {
+      "path": "docs/verification/ultra-draft-capabilities-20260909.json",
+      "sha256": "8b529be5b24d02eb164515454f37bb26164fee3b7356357759b7e45be13a46ad",
+      "size": 15178,
+      "source": "/work/ultra-drafting-release-20260909-1/draft-capabilities.json"
+    },
+    {
+      "path": "docs/verification/ultra-drafting-handoff-20260909.json",
+      "sha256": "e5b2e506be2fede066b1dd70e2d9bbaa709e0a74e8d765d8f971b1674d077b10",
+      "size": 5905,
+      "source": "/work/ultra-drafting-release-20260909-1/ultra-drafting-handoff-20260909.json"
+    }
+  ],
+  "release": {
+    "path": "docs/verification/ultra-drafting-handoff-20260909.json",
+    "sha256": "e5b2e506be2fede066b1dd70e2d9bbaa709e0a74e8d765d8f971b1674d077b10",
+    "size": 5905
+  },
+  "reviewed_capability_manifest": {
+    "path": "docs/verification/ultra-draft-capabilities-20260909.json",
+    "sha256": "8b529be5b24d02eb164515454f37bb26164fee3b7356357759b7e45be13a46ad",
+    "size": 15178
+  },
+  "reviewed_input_manifest": {
+    "path": "docs/verification/ultra-draft-inputs-20260909.json",
+    "sha256": "76500ac10a0fc0936f793dd7a3a2c7e31be59bff96b8fe49002676f89347f220",
+    "size": 3586
+  },
+  "runtime_execution_authorized": false,
+  "scope": "Prepare drafting artifacts only; final GitHub verification and user model choice/switch remain required",
+  "started_utc": "2026-09-09T09:19:58.127146+00:00",
+  "status": "PASS"
+}

@@ -37,8 +37,10 @@ a new packet version before enabling execution.
 The canonical [draft queue](draft-queue.json) assigns every one of the 273 cases
 exactly once. Packets 001–007 preserve the initial 20-case sequence; 008–097
 cover the remaining 253 cases, grouped by family and dependency order. No
-packet has more than three cases. The queue remains pending root validation
-and the verified handoff checkpoint until its release record says otherwise.
+packet has more than three cases. The queue becomes active only when the separate
+`docs/verification/ultra-drafting-handoff-20260909.json` has status PASS, binds
+its exact hash, and the fetched GitHub checkpoint has been verified. A queue
+review state alone does not activate drafting.
 
 The [handoff gates](../../docs/verification/ultra-handoff-gates-20260909.md)
 distinguish drafting readiness from runtime acceptance. The catalog's global

@@ -28,8 +28,9 @@ Canonical artifacts:
   files. They authorize drafting only. Runtime remains disabled.
 - [`scripts/application-tests/draft-queue.json`](../../scripts/application-tests/draft-queue.json)
   orders every catalog case exactly once: the original packets 001–007 first,
-  then 008–097 grouped by family and dependency order. Its release remains
-  pending root validation and the verified drafting handoff checkpoint.
+  then 008–097 grouped by family and dependency order. Its activation requires
+  the separate PASS drafting-release manifest bound to its exact hash and
+  verified fetched GitHub checkpoint; the review state alone is insufficient.
 - [Host review](ultra-host-review-20260909.md) and
   [test inventory](ultra-test-inventory-20260909.md) provide review background.
   Supply only relevant excerpts with an active packet, not the complete history.
