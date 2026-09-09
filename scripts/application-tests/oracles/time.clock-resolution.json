@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.clock-resolution",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.clock-resolution"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["mono_rc", "mono_sec", "mono_nsec", "real_rc", "real_sec", "real_nsec", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both clock_getres calls return 0", "Both resolutions are positive valid timespecs", "Values match the reviewed pinned-source capability contract"],
+  "unresolved_expectations": ["Bind exact pinned resolution values and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Provide the immutable monotonic/realtime resolution values expected for the pinned guest."
+}

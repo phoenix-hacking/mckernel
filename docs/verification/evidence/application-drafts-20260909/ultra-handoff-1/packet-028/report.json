@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-028",
+  "packet_version": 1,
+  "context_sha256": "a76c2c182d4b11e840995dfbb36157e314099c2086624beba5885ea79f88b545",
+  "started_utc": "2026-09-09T13:10:00Z",
+  "finished_utc": "2026-09-09T13:10:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "time.clock-resolution", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.clock-resolution.c", "oracle": "scripts/application-tests/oracles/time.clock-resolution.json", "changed_files": ["scripts/application-tests/cases/time/time.clock-resolution.c", "scripts/application-tests/oracles/time.clock-resolution.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Exact pinned resolution values and canonical record require review."], "max_reviewer_question": "Bind immutable MONOTONIC and REALTIME resolution values for the pinned guest."},
+    {"case_id": "time.invalid-clock", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.invalid-clock.c", "oracle": "scripts/application-tests/oracles/time.invalid-clock.json", "changed_files": ["scripts/application-tests/cases/time/time.invalid-clock.c", "scripts/application-tests/oracles/time.invalid-clock.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and canonical record require review."], "max_reviewer_question": "Confirm invalid clock ID leaves output timespec byte-for-byte unchanged."},
+    {"case_id": "time.clock-output-fault", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.clock-output-fault.c", "oracle": "scripts/application-tests/oracles/time.clock-output-fault.json", "changed_files": ["scripts/application-tests/cases/time/time.clock-output-fault.c", "scripts/application-tests/oracles/time.clock-output-fault.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EFAULT numeric binding and canonical record require review."], "max_reviewer_question": "Confirm inaccessible output returns EFAULT without termination or adjacent writes."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/time/time.clock-resolution.c", "sha256": "d07e6f868943fb55c9454c51321910ab4d4a69d4dc611a36752c099feab25d4e"},
+    {"path": "scripts/application-tests/oracles/time.clock-resolution.json", "sha256": "0a42fc6b9d3d20bc4aef6694f22288c47bf3c919eac04be06b492551ec32bb39"},
+    {"path": "scripts/application-tests/cases/time/time.invalid-clock.c", "sha256": "a39b453aed0ac0dc652511e69d5b1bbffa43ddcd3e38acbdad919a554d6664d9"},
+    {"path": "scripts/application-tests/oracles/time.invalid-clock.json", "sha256": "b76b70340b15d97feb589684ba97f579e6147d942645281523003db1b5e7fad5"},
+    {"path": "scripts/application-tests/cases/time/time.clock-output-fault.c", "sha256": "6aab3b31fd8f381f953f20d0ef9815713e5b48eb238c677e46d94c8e60ba8d77"},
+    {"path": "scripts/application-tests/oracles/time.clock-output-fault.json", "sha256": "75b74fe19feba5c1eec72c4222bb683251cb22204a3ddb5970172a3b84322fd5"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-028.json --emit-context /tmp/application-packet-028-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three clock error/resolution cases need final ABI, capability, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review exact clock resolution, invalid-ID EINVAL, and inaccessible-output EFAULT semantics."],
+  "next_packet_id": "packet-029"
+}

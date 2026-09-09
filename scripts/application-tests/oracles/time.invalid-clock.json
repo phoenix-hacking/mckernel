@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.invalid-clock",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.invalid-clock"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Invalid clock id returns -1/EINVAL", "The output timespec remains byte-for-byte unchanged", "No partial output write occurs"],
+  "unresolved_expectations": ["Bind pinned guest EINVAL numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm invalid clock ID is rejected before touching the guarded timespec."
+}

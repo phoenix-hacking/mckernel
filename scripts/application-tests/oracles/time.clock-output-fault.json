@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.clock-output-fault",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.clock-output-fault"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=14 adjacent_unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["clock_gettime returns -1/EFAULT rather than terminating", "The adjacent writable page remains unchanged", "No inaccessible-page bytes are written"],
+  "unresolved_expectations": ["Bind pinned guest EFAULT numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm inaccessible clock output is rejected with EFAULT and no adjacent-page modification."
+}
