@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.unmapped-write",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.unmapped-write"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["trapped", "si_code", "fault_offset"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["trapped=1", "si_code=SEGV_MAPERR", "fault_offset=0", "No unrelated memory is modified"],
+  "unresolved_expectations": ["Bind pinned guest SEGV_MAPERR numeric value, exact address evidence, and canonical output before execution."],
+  "max_question_for_reviewer": "Confirm stale-page write must fault at the first byte with SEGV_MAPERR and be visible in disassembly."
+}

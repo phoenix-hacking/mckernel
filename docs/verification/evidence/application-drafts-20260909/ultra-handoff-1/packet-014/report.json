@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-014",
+  "packet_version": 1,
+  "context_sha256": "030a8a73ca68cab74632339740323a168b5178e4e7f367fc5c987e84ccc868b3",
+  "started_utc": "2026-09-09T10:50:00Z",
+  "finished_utc": "2026-09-09T10:50:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "memory.unmapped-read", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.unmapped-read.c", "oracle": "scripts/application-tests/oracles/memory.unmapped-read.json", "changed_files": ["scripts/application-tests/cases/memory/memory.unmapped-read.c", "scripts/application-tests/oracles/memory.unmapped-read.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Signal numeric binding, exact address evidence, and canonical output require review."], "max_reviewer_question": "Confirm SEGV_MAPERR at stale-page offset zero and emitted volatile access."},
+    {"case_id": "memory.unmapped-write", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.unmapped-write.c", "oracle": "scripts/application-tests/oracles/memory.unmapped-write.json", "changed_files": ["scripts/application-tests/cases/memory/memory.unmapped-write.c", "scripts/application-tests/oracles/memory.unmapped-write.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Signal numeric binding, exact address evidence, and canonical output require review."], "max_reviewer_question": "Confirm SEGV_MAPERR at stale-page offset zero and no unrelated modification."},
+    {"case_id": "memory.protection-restore", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.protection-restore.c", "oracle": "scripts/application-tests/oracles/memory.protection-restore.json", "changed_files": ["scripts/application-tests/cases/memory/memory.protection-restore.c", "scripts/application-tests/oracles/memory.protection-restore.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input/oracle bindings require confirmation."], "max_reviewer_question": "Confirm both mprotect transitions and complete restored-pattern readback."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.unmapped-read.c", "sha256": "d8cf3a4652cb9191af6d8039e9e5e686c199edfe597692076a85f7e26cb24a92"},
+    {"path": "scripts/application-tests/oracles/memory.unmapped-read.json", "sha256": "c27931a9311948ac9407bc5accec939ee0ae37f5edfc69be32579937e5a85705"},
+    {"path": "scripts/application-tests/cases/memory/memory.unmapped-write.c", "sha256": "c48f8db8887c31fde9812702b2cc150ef8abd8f9489a4714450b74fecc01a20b"},
+    {"path": "scripts/application-tests/oracles/memory.unmapped-write.json", "sha256": "60312822a7ac0121f8837da426a10199baf3b89b54973fe44f1ab418222fd017"},
+    {"path": "scripts/application-tests/cases/memory/memory.protection-restore.c", "sha256": "526b8b6b48603d0d238e2f4b571c92b9c7afc8536db248e64af9c54138ea958b"},
+    {"path": "scripts/application-tests/oracles/memory.protection-restore.json", "sha256": "b0301a6248d3c45cbcac7051d5482147d78c87cbe37c6046ed542823c89fed46"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-014.json --emit-context /tmp/application-packet-014-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three memory fault/protection cases need final signal and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review exact fault provenance and restored mapping invariants before execution."],
+  "next_packet_id": "packet-015"
+}
