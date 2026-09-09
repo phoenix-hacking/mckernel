@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-069",
+  "packet_version": 1,
+  "context_sha256": "eabde5c1f3bf922d1dadcb697ed14eb8adcd7303f8a55e6661b53cbefeb0e5c0",
+  "started_utc": "2026-09-09T14:40:00Z",
+  "finished_utc": "2026-09-09T14:42:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "app.bash-arithmetic",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.bash-arithmetic.json",
+      "oracle": "scripts/application-tests/oracles/app.bash-arithmetic.json",
+      "changed_files": ["scripts/application-tests/inputs/app.bash-arithmetic.json", "scripts/application-tests/oracles/app.bash-arithmetic.json"],
+      "parameter_vectors": {"shell": ["bash"], "startup": ["--noprofile", "--norc"], "assignment": ["x=7"], "expression": ["x*6"]},
+      "implemented_operations": ["builtin-only script contract", "independent arithmetic result", "exact stdout/exit oracle"],
+      "unresolved_oracle_notes": ["Pinned bash identity, startup options, and ELF/DSO closure require Max review."],
+      "max_reviewer_question": "Confirm the builtin-only bash argv, arithmetic expansion, and exact output contract."
+    },
+    {
+      "case_id": "app.bash-pipeline",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/inputs/app.bash-pipeline.json",
+      "oracle": "scripts/application-tests/oracles/app.bash-pipeline.json",
+      "changed_files": ["scripts/application-tests/inputs/app.bash-pipeline.json", "scripts/application-tests/oracles/app.bash-pipeline.json"],
+      "parameter_vectors": {"shell": ["bash"], "pipefail": [true], "producer": ["cat"], "consumer": ["wc -c"], "input_bytes": [224]},
+      "implemented_operations": ["independent pipeline input generator", "exact byte-count oracle", "pipefail and child-status review requirement"],
+      "unresolved_oracle_notes": ["Both child McKernel provenance records, coreutils argv identity, and pipefail status evidence require Max review."],
+      "max_reviewer_question": "Confirm both pipeline children are separately proven guest applications and bind their exact statuses alongside the 224-byte output."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/inputs/app.bash-arithmetic.json", "sha256": "57656a5e6c4df0d6f8a5e433ba881ca24c311967eb4a457e56b60f079ce8f72b"},
+    {"path": "scripts/application-tests/oracles/app.bash-arithmetic.json", "sha256": "539b9df5b6e5c373d7e02ed2cbf91138abd0b4f3d2c6107639986bf142aa8b3e"},
+    {"path": "scripts/application-tests/inputs/app.bash-pipeline.json", "sha256": "7d330ba25fb7e1fe96f95bf8490008806f093a8f1f8991b923ea185897b4c336"},
+    {"path": "scripts/application-tests/oracles/app.bash-pipeline.json", "sha256": "034b26f00b7c3fefcf2b3ad88e54b3eb98a1a081aa0560d70b63c901a331a996"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-069/context.json", "sha256": "eabde5c1f3bf922d1dadcb697ed14eb8adcd7303f8a55e6661b53cbefeb0e5c0"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-069.json --emit-context /tmp/application-packet-069-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-069/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pinned bash/coreutils identities, pipeline child provenance, and exact pipefail status need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "pinned-application-inventory"],
+  "first_failure_event": null,
+  "max_escalation": ["Review builtin arithmetic expansion", "Review two-child pipeline provenance and pipefail"],
+  "next_packet_id": "packet-070"
+}

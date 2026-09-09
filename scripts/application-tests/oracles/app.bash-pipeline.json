@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "app.bash-pipeline",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["224"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The two-ELF pipeline passes all 224 input bytes and wc -c emits 224", "pipefail preserves a zero shell status only when both child statuses are zero"],
+  "unresolved_expectations": ["Both child McKernel provenance records, coreutils argv identity, and pipefail status evidence require Max review."],
+  "max_question_for_reviewer": "Confirm both pipeline children are separately proven guest applications and bind their exact statuses alongside the 224-byte output."
+}

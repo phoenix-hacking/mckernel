@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "app.bash-arithmetic",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["42"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Bash arithmetic expansion computes 7*6 independently as 42 and emits one newline"],
+  "unresolved_expectations": ["Pinned bash identity, startup options, and ELF/DSO closure require Max review."],
+  "max_question_for_reviewer": "Confirm the builtin-only bash argv, arithmetic expansion, and exact output contract."
+}
