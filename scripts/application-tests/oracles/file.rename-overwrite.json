@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.rename-overwrite",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.rename-overwrite"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["path_source=1 old_fd_target=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Target pathname resolves to SOURCE after overwrite", "Already-open old-target fd still reads TARGET", "Source pathname is consumed by rename"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm rename-overwrite switches the name while preserving existing open-target inode data."
+}

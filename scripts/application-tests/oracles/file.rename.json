@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.rename",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.rename"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["old_missing=1 read=32 exact=1 size=32"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Old path is absent after rename", "New path contains all 32 original bytes", "New path size is exactly 32"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm rename into an unused target is atomic and preserves bytes and size."
+}

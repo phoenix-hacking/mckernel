@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.mkdir-rmdir",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.mkdir-rmdir"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["mkdir=0 is_dir=1 rmdir=0 missing=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["mkdir returns 0 and path is a directory", "rmdir returns 0 for the empty directory", "Final lookup is absent and parent entries are restored"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm empty-directory create/remove behavior and final path absence."
+}
