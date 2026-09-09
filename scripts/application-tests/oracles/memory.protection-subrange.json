@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.protection-subrange",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.protection-subrange"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["trapped", "si_code", "fault_offset", "outer_ok"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["trapped=1", "si_code=SEGV_ACCERR", "fault_offset=4096", "outer_ok=1", "First and third pages remain writable and unchanged"],
+  "unresolved_expectations": ["Bind pinned guest SEGV_ACCERR numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm only the middle page is protected and its first byte faults while both outer pages retain their patterns."
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.mprotect-unaligned",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.mprotect-unaligned"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 bad_index=4096"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["mprotect returns -1", "errno is EINVAL (22) immediately", "All original bytes remain readable and unchanged"],
+  "unresolved_expectations": ["Bind pinned guest EINVAL numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm page_base+1 is rejected without changing permissions or bytes."
+}
