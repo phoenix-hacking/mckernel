@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-056",
+  "packet_version": 1,
+  "context_sha256": "f12a28609ad159e08b61041ce55aca1fa958a2dbeea0f01411128c5f844a3729",
+  "started_utc": "2026-09-09T12:26:00Z",
+  "finished_utc": "2026-09-09T12:27:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.poll-timeout",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.poll-timeout.c",
+      "oracle": "scripts/application-tests/oracles/ipc.poll-timeout.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.poll-timeout.c", "scripts/application-tests/oracles/ipc.poll-timeout.json"],
+      "parameter_vectors": {"descriptors": [1], "timeout_ms": [20], "initial_events": [0], "post_payload": ["Z"]},
+      "implemented_operations": ["finite idle poll", "zero-revents check", "post-timeout descriptor reuse"],
+      "unresolved_oracle_notes": ["Timeout scheduling bound and descriptor reuse require Max review."],
+      "max_reviewer_question": "Confirm finite poll timeout produces no events and does not invalidate the descriptor."
+    },
+    {
+      "case_id": "ipc.poll-invalid-fd",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.poll-invalid-fd.c",
+      "oracle": "scripts/application-tests/oracles/ipc.poll-invalid-fd.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.poll-invalid-fd.c", "scripts/application-tests/oracles/ipc.poll-invalid-fd.json"],
+      "parameter_vectors": {"fd_state": ["known closed nonnegative"], "events": ["POLLIN"], "expected_revents": ["POLLNVAL only"]},
+      "implemented_operations": ["known descriptor close", "zero-timeout poll", "POLLNVAL isolation check"],
+      "unresolved_oracle_notes": ["Descriptor-number reuse and revents ABI require Max review."],
+      "max_reviewer_question": "Confirm POLLNVAL is isolated to the closed descriptor and poll returns one event."
+    },
+    {
+      "case_id": "ipc.select-readable",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.select-readable.c",
+      "oracle": "scripts/application-tests/oracles/ipc.select-readable.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.select-readable.c", "scripts/application-tests/oracles/ipc.select-readable.json"],
+      "parameter_vectors": {"payload": ["Q"], "read_bytes": [1], "timeout_sec": [1], "selected_fds": [1]},
+      "implemented_operations": ["queued pipe byte", "select fd-set", "exact selected read"],
+      "unresolved_oracle_notes": ["Select readiness and descriptor cleanup require Max review."],
+      "max_reviewer_question": "Confirm only the queued descriptor is selected and exact byte readiness is preserved."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.poll-timeout.c", "sha256": "521c11977df9d381a692f30534b83a46666a734ce703b88759766a0ff21e0671"},
+    {"path": "scripts/application-tests/oracles/ipc/ipc.poll-timeout.json", "sha256": "fb6bef0dff3f1124a4ef797a3ab12d929174271ec9dadcebf5bfe6bfd0f9a4e5"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.poll-invalid-fd.c", "sha256": "4ff912b207aa1ba7021e9f3abd7f90627329809befe7b9fb20852380376ec35f"},
+    {"path": "scripts/application-tests/oracles/ipc/ipc.poll-invalid-fd.json", "sha256": "1a354dd62e0ee011b074d760f8f37e30daa11e9522d3b8880ac42bd23a0fa3ef"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.select-readable.c", "sha256": "bb302be155ec974181ecc734e74d11dd568af5a5408d9380dd0a3f1e34e51e1c"},
+    {"path": "scripts/application-tests/oracles/ipc/ipc.select-readable.json", "sha256": "87fe90685b798e7b1cda37a2882e2dc952f77903e31a21889f1e98517fb7e925"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-056/context.json", "sha256": "f12a28609ad159e08b61041ce55aca1fa958a2dbeea0f01411128c5f844a3729"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-056.json --emit-context /tmp/application-packet-056-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-056/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Poll timeout, invalid fd, and select readiness cases need final IPC, descriptor, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review finite poll timeout and reuse", "Review POLLNVAL isolation", "Review select exact readiness"],
+  "next_packet_id": "packet-057"
+}

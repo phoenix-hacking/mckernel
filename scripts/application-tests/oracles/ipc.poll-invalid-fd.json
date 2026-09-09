@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.poll-invalid-fd",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.poll-invalid-fd"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=1 invalid=1 revents=32 pollnval=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A known closed nonnegative descriptor produces one POLLNVAL result", "No POLLIN or unrelated revents are reported"],
+  "unresolved_expectations": ["Descriptor-number reuse and poll revents ABI require Max review."],
+  "max_question_for_reviewer": "Confirm POLLNVAL is isolated to the closed descriptor and poll returns one event."
+}

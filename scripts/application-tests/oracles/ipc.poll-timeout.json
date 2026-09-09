@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.poll-timeout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.poll-timeout"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["timeout_rc=0 no_events=1 post_read=Z usable=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["An idle valid descriptor poll returns zero after its finite timeout with revents zero", "The descriptor remains usable for a later write/read"],
+  "unresolved_expectations": ["Timeout scheduling bound and descriptor reuse evidence require Max review."],
+  "max_question_for_reviewer": "Confirm finite poll timeout produces no events and does not invalidate the descriptor."
+}
