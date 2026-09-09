@@ -2,6 +2,26 @@
 
 Updated: 2026-06-02
 
+## Codex Spark goal entry point (2026-09-09)
+
+The user requested a ready-to-run goal and reference files for Codex Spark.
+The goal is `docs/verification/codex-spark-goal-20260909.md`; startup, paths,
+coordination, recovery and completion are in
+`docs/verification/codex-spark-runbook-20260909.md`. The active section of
+`goal.txt` carries the same goal; historical sections below are not new tasks.
+The Ultra handoff was announced after commit
+`7b32298119df13a83240e082c275c34d184f7ccc` passed exact fetched-blob verification.
+The retained proof is `docs/verification/evidence/ultra-handoff-github-verification-20260909-1.json`.
+When the user starts the goal after choosing Spark or Luna, execute its bounded
+drafting queue; do not stop again for an already-completed Ultra notification.
+Preparing these goal documents alone does not start drafts or switch models.
+
+Follow the runbook's narrow coordination scope for next-context emission,
+crash recovery, immutable report preservation and verified GitHub checkpoints.
+It clarifies existing continuation/reporting authorization; it does not enable
+compilation, payload/guest execution, production repair or release-metadata edits.
+The 97 released packets and all hash-bound handoff inputs stay unchanged.
+
 ## Bounded drafting release authority (2026-09-09)
 
 The Ultra drafting release is `docs/verification/ultra-drafting-handoff-20260909.json`.
