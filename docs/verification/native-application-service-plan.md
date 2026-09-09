@@ -7,10 +7,29 @@ had not yet run. The current runtime checkpoint below supersedes that status.
 
 ## Current application baseline, 2026-09-09
 
-**Actual memory and file-I/O core applications now pass inside McKernel.**
-The Astra Ultra handoff remains pending thread/futex, signal, abnormal-owner
-and final regression/replay checks. Native module 2 and zeroing guest image 1
-are the current tested pair, with source checkpoint `a841707d`.
+**Actual memory, file-I/O and thread/futex applications now pass inside McKernel.**
+The Astra Ultra handoff remains pending signal, abnormal-owner and final
+regression/replay checks. TID module 2 and clone3 guest image 2 are the current
+thread-tested pair; the earlier memory/file pair is retained at `a841707d`.
+
+`native-application-threads-checkpoint-20260909.json` retains six complete
+captures, including three original failures. Thread guest 2 passes the
+unchanged pthread barrier, mutex, TLS and join checks with actual McKernel
+TIDs 308/310/311, full 512-byte TID transfer, complete syscall route/result
+matching, exact output/exit 37 and all process/pager cleanup. Eight HELLO
+repeats, both metadata/string ABIs and continuing sysfs checks also pass.
+The trace audit now samples whole deliveries; all nine adapter tests, three
+native modules and 57 compiler bindings verify. Original audit/fixture failures
+remain retained. The bootstrap enables existing allow_oversubscribe for the
+two pthreads on one McKernel CPU, with original and adapted sources retained.
+
+Signal guest 1 fails its second alternate-stack assertion: the first handler
+uses the alternate stack and returns; the second uses the ordinary stack.
+The producer saves SS_ONSTACK after setting it, and Rust sigreturn restores
+that saved state. The captured interrupted host RET also needs review.
+No signal behavior has been changed yet. Preserve the original signal test
+and error scan; final current-module memory/file/control replays and actual
+abnormal-owner coverage remain open. Do not announce Ultra readiness yet.
 
 `native-application-core-checkpoint-20260909.json` retains fourteen complete
 captures and all six original failures, including the earlier pathname-copy,
@@ -1942,3 +1961,49 @@ Reuse decisions and required integration:
 This work is an unfinished host connection, not a thread/futex PASS. Signals,
 actual abnormal-owner coverage, final control regressions and replays remain
 required before the Ultra handoff.
+
+
+## Native syscall trace sampling review, 2026-09-09
+
+The TID-module thread guest completes both guest clones (TIDs 310/309), all
+original pthread checks, exact output/exit 37 and full normal cleanup. Its
+final audit fails because Registration's per-PID trace budget counts each
+line separately: 27 deliveries + 26 returns + 11 routes consume all 64 slots,
+cutting off the final write result after its route. Preserve that original
+FAIL; do not weaken route/result assertions. Before logging edits: reuse the
+existing private HostWorker and exact delivery publication, sample once per
+WAIT delivery, and retain that decision for its route and actual return.
+Keep the 64-delivery bound (at most three lines each), existing identity/MM and
+WAIT/RET effects, error propagation, C code and public ABI. Validate the exact
+WAIT/RET adapter including its final budget slot, build native module 2 and
+rerun the unchanged guest with all original assertions. Thread acceptance
+remains pending the complete passing audit.
+
+
+## Signal-stack failure triage, 2026-09-09
+
+TID module 2 / clone3 image 2 passes the full unchanged threads guest audit.
+The first signal guest fails line 142: the first blocked/pending SIGUSR1 is
+unblocked, handled on the 64-KiB alternate stack and returns successfully;
+the second SIGUSR1 handler is placed on the ordinary user stack. The exact
+captured handler stack pointers are 0x60f648 and 0x547fffffec78. Keep the
+original assertion requiring both deliveries on the alternate stack.
+
+The selected architecture C signal-frame builder in
+`arch/x86_64/kernel/syscall.c::do_signal` sets `SS_ONSTACK` on the live thread
+before copying that stack into `ksigsp.sigstack`. The selected Rust
+`syscall_policy::arch_rt_sigreturn_body_result` then restores the saved stack
+bytes verbatim. That preserves the active-stack flag after return and explains
+why the next delivery skips the alternate stack. Review the full producer,
+Rust consumer, nested delivery and original Linux stack-state semantics before
+editing; preserve the legacy/C equivalence selections and implement new native
+behavior in Rust through the established boundary. Do not change the app.
+
+The same capture contains `ret: Interrupted system call` during the host return
+path. Its accepted-result/response ownership and ordinary launcher behavior
+also need review; do not hide that output or weaken the guest error scan.
+The first failure scan stopped before complete cleanup, so this signal attempt
+has no abnormal-owner or cleanup acceptance credit. Final current-module
+memory/file replays, both full control regressions and real abnormal-owner
+coverage remain pending. The phase is still active, with three core modes
+accepted and no Ultra readiness claim.

@@ -5,7 +5,7 @@
 use std::{
     cell::{Cell, RefCell},
     sync::{
-        atomic::{AtomicI32, AtomicU64, Ordering},
+        atomic::{AtomicBool, AtomicI32, AtomicU64, Ordering},
         Arc,
     },
 };
@@ -18,7 +18,10 @@ fn errno(value: i32) -> i32 {
     value
 }
 macro_rules! pr_info {
-    ($($arg:tt)*) => { let _ = format_args!($($arg)*); };
+    ($($arg:tt)*) => {{
+        let message = format!($($arg)*);
+        LOG.with(|log| log.borrow_mut().push(message));
+    }};
 }
 trait ErrorCode {
     fn to_errno(self) -> i32;
@@ -39,6 +42,7 @@ mod image {
 }
 
 thread_local! {
+    static LOG: RefCell<Vec<String>> = const { RefCell::new(Vec::new()) };
     static READ_FAULT: Cell<bool> = const { Cell::new(false) };
     static WRITE_FAULT: Cell<bool> = const { Cell::new(false) };
 }
@@ -89,6 +93,7 @@ struct HostWorker {
     handle: u64,
     delivery: AtomicU64,
     delivery_cpu: AtomicI32,
+    delivery_trace: AtomicBool,
     mirror: Mirror,
 }
 struct Mirror {
@@ -120,6 +125,7 @@ struct Registration {
     slot: u32,
     generation: u64,
     pid: i32,
+    trace_budget: AtomicI32,
 }
 impl Registration {
     fn new(cpu: i64) -> Self {
@@ -128,6 +134,7 @@ impl Registration {
                 handle: 42,
                 delivery: AtomicU64::new(0),
                 delivery_cpu: AtomicI32::new(-1),
+                delivery_trace: AtomicBool::new(false),
                 mirror: Mirror {
                     clears: RefCell::new(Vec::new()),
                     error: Cell::new(None),
@@ -149,10 +156,8 @@ impl Registration {
             slot: 0,
             generation: 1,
             pid: 123,
+            trace_budget: AtomicI32::new(64),
         }
-    }
-    fn trace(&self) -> bool {
-        true
     }
     fn worker(&self, _create: bool) -> Result<Arc<HostWorker>> {
         Ok(self.worker.clone())
@@ -380,4 +385,34 @@ fn interrupted_clear_completion_does_not_copy_or_reexecute() {
         [(0x400000, 0x402000)]
     );
     assert_eq!(registration.backend.borrow().clear_results, [0]);
+}
+
+#[test]
+fn final_trace_budget_slot_retains_complete_delivery_route_and_actual_result() {
+    LOG.with(|log| log.borrow_mut().clear());
+    let registration = Registration::new(0);
+    registration.trace_budget.store(1, Ordering::Relaxed);
+    WRITE_FAULT.with(|fault| fault.set(true));
+    assert_eq!(registration.deliver(), Err(-14));
+    WRITE_FAULT.with(|fault| fault.set(false));
+    assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 1);
+    assert_eq!(registration.deliver(), Ok(0));
+    assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 0);
+    assert_eq!(registration.complete(1, 25, 0), Ok(0));
+    LOG.with(|log| {
+        let log = log.borrow();
+        assert_eq!(log.len(), 3);
+        assert!(log[0].contains("application_syscall=delivered") && log[0].contains("delivery=73"));
+        assert!(
+            log[1].contains("application_syscall=return_route") && log[1].contains("delivery=73")
+        );
+        assert!(log[2].contains("application_syscall=returned") && log[2].contains("value=25"));
+    });
+    registration.backend.borrow_mut().serial = 74;
+    assert_eq!(registration.deliver(), Ok(0));
+    assert!(!registration.worker.delivery_trace.load(Ordering::Relaxed));
+    assert_eq!(registration.complete(1, -9, 0), Ok(0));
+    assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 0);
+    LOG.with(|log| assert_eq!(log.borrow().len(), 3));
+    assert_eq!(registration.backend.borrow().returns.len(), 2);
 }

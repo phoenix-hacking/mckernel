@@ -30,12 +30,12 @@ guests with current module 5: write result 25, exit 37 and complete scheduled
 retirement after each launch. Both original control-ABI regressions pass. The
 full `docs/verification/native-application-start-checkpoint-20260908.json`
 retains 21 captures, including all six original failures. The phase remains
-active. The later core checkpoint accepts unchanged libc memory and file-I/O
-modes. The native clone3 adapter now enters the guest clone path, but the
-latest thread guest fails the existing TID transfer. Its host connection now
-passes focused tests and native module builds; a fresh guest is required.
-Signals and abnormal-owner handling remain pending. Do not announce Ultra
-readiness yet.
+active. Unchanged libc memory, file-I/O and thread/futex modes now pass.
+The native threads checkpoint verifies both actual McKernel clone3 children,
+TID transfer, synchronization/TLS/join and complete cleanup. Signals fail when
+the second handler skips the alternate stack. Signals, abnormal-owner handling
+and final current-module regressions/replays remain pending. Do not announce
+Ultra readiness yet.
 
 ## Active goal and GitHub checkpoints (2026-09-07)
 
@@ -202,6 +202,26 @@ other projects, VM disks, recent host logs and Docker state remain intact.
 Continue capacity checks and periodic GitHub checkpoints during verification.
 
 ## Current accounting and Rust preservation (2026-09-07)
+
+Latest actual thread/futex checkpoint, 2026-09-09:
+`docs/verification/native-application-threads-checkpoint-20260909.json` retains
+six complete captures and three original failures. TID module 2 / clone3 image
+2 passes the unchanged pthread application with full route/result auditing:
+actual guest TIDs 308/310/311, 512-byte TID transfer, barrier/mutex/TLS/join,
+exact stdout and exit 37, all three procfs nodes removed and full normal
+retirement/pager release. Eight HELLO repeats and both metadata/string ABIs
+plus continuing boot/sysfs checks pass. The existing allow_oversubscribe boot
+option supports two pthreads on one McKernel CPU; original/adapted bootstrap
+is retained. Per-delivery trace sampling fixes the original 64-line cutoff;
+nine exact adapter tests and all three modules pass with 57 source bindings.
+Signals guest 1 remains FAIL at line 142: its second handler uses the normal
+stack after the first alternate-stack handler returns. Review the architecture
+frame producer's saved SS_ONSTACK state, Rust sigreturn restoration and the
+captured interrupted host RET. Keep original assertions/error scanning.
+Use TID module 2 and clone3 image 2 as current runtime inputs; signal behavior
+has not yet been edited. Three core modes are accepted. Abnormal-owner and
+final current-module control regressions/replays remain pending; no Ultra
+readiness or whole-OS acceptance.
 
 Latest native running TID transfer checkpoint, 2026-09-09:
 `docs/verification/native-application-tids-checkpoint-20260909.json` retains

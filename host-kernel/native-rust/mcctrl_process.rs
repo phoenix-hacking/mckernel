@@ -153,6 +153,7 @@ impl Registration {
                 handle,
                 delivery: AtomicU64::new(0),
                 delivery_cpu: AtomicI32::new(-1),
+                delivery_trace: AtomicBool::new(false),
             },
             GFP_KERNEL,
         ) {
@@ -275,8 +276,12 @@ impl Registration {
                 image::word(&bytes, 16).map_err(errno)? as i32,
                 Ordering::Relaxed,
             );
+            // Sample the complete delivery, so exhausting the budget cannot
+            // split a logged route from its actual return result.
+            let traced = self.trace();
+            worker.delivery_trace.store(traced, Ordering::Relaxed);
             worker.delivery.store(serial, Ordering::Release);
-            if self.trace() {
+            if traced {
                 pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
                 self.slot, self.generation, self.pid, worker.handle, serial,
                 image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 40).map_err(errno)?);
@@ -298,6 +303,7 @@ impl Registration {
         if serial == 0 {
             return Err(EINVAL);
         }
+        let traced = worker.delivery_trace.load(Ordering::Relaxed);
         let length = image::word(&descriptor, 32).map_err(errno)?;
         if length > 16 {
             return Err(EINVAL);
@@ -317,7 +323,7 @@ impl Registration {
                 .read_slice(&mut bytes[56..56 + length as usize])?;
         }
         let launcher_cpu = image::word(&descriptor, 0).map_err(errno)? as i64;
-        if launcher_cpu != cpu && self.trace() {
+        if launcher_cpu != cpu && traced {
             pr_info!("application_syscall=return_route os={} generation={} pid={} worker={} delivery={} launcher_cpu={} guest_cpu={}\n",
                 self.slot, self.generation, self.pid, worker.handle, serial, launcher_cpu, cpu);
         }
@@ -329,7 +335,7 @@ impl Registration {
             worker.delivery.store(0, Ordering::Release);
         }
         result?;
-        if self.trace() {
+        if traced {
             pr_info!("application_syscall=returned os={} generation={} pid={} worker={} delivery={} cpu={} value={}\n",
                 self.slot, self.generation, self.pid, worker.handle, serial,
                 image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 24).map_err(errno)? as i64);
@@ -646,6 +652,7 @@ struct HostWorker {
     handle: u64,
     delivery: AtomicU64,
     delivery_cpu: AtomicI32,
+    delivery_trace: AtomicBool,
 }
 
 #[pin_data]
