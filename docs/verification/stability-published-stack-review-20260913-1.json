@@ -1,0 +1,2855 @@
+{
+  "analysis_environment": {
+    "python": "/home/holden/anaconda3/bin/python3",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "analysis_record": {
+    "path": "/tmp/stability-published-stack-review-20260913-jx2y2d33/analysis.json",
+    "sha256": "c1731102089a383f1a3269db35bef84225151417c0b412b6c57c0d03c2a119bd",
+    "size": 3569134
+  },
+  "analyzer": {
+    "path": "/tmp/stability-published-stack-review-20260913-jx2y2d33/analyzer-published.py",
+    "sha256": "8161a3589d29615a40c3db39643e3a8b8a8cdfc148de04299e769868855b6e34",
+    "size": 8246
+  },
+  "application_acceptance": false,
+  "build_record": {
+    "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/record.json",
+    "sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48",
+    "size": 176401
+  },
+  "comparison": {
+    "app_helper_bytes": 1536,
+    "app_helper_sibling_to_mailbox": true,
+    "app_outer_bytes": 224,
+    "ioctl_current": 6088,
+    "ioctl_increase": 256,
+    "ioctl_previous": 5832,
+    "mailbox_copier_bytes": 296,
+    "mailbox_emitter_bytes": 3760,
+    "mcctrl_exactly_unchanged": true,
+    "previous_review": {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-3.json",
+      "sha256": "872a1c3a87541d55fb8b084416af2897d741cec9d0ec3e45631b4c2df0cc43db",
+      "size": 90957
+    },
+    "worker_current": 5688,
+    "worker_increase": 176,
+    "worker_previous": 5512
+  },
+  "full_linux_stack_bound_verified": false,
+  "further_source_stack_reduction_recommended": false,
+  "independent_arithmetic_review_directory": "/tmp/stability-published-stack-arithmetic-peer-20260913-05rmm4q0",
+  "known_module_chains": {
+    "packet_worker_ready_log": {
+      "bytes": 768,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x4a0d0",
+          "callsites": [
+            {
+              "address": "0x4a0f0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 79300,
+              "op": "call   37040 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                225344
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 79289,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x37040",
+          "callsites": [
+            {
+              "address": "0x371b9",
+              "depth_before": 56,
+              "kind": "call",
+              "line": 60229,
+              "op": "call   31950 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203088
+              ]
+            }
+          ],
+          "counted_bytes": 64,
+          "counted_local_bytes": 56,
+          "entry_line": 60117,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 56
+        },
+        {
+          "address": "0x31950",
+          "callsites": [
+            {
+              "address": "0x31a73",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 54501,
+              "op": "call   11450 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                70736
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 54440,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x11450",
+          "callsites": [
+            {
+              "address": "0x1183f",
+              "depth_before": 200,
+              "kind": "call",
+              "line": 21060,
+              "op": "call   48560 <ihk_smp_x86_64::stability_phase::observe_ready>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                296288
+              ]
+            }
+          ],
+          "counted_bytes": 208,
+          "counted_local_bytes": 200,
+          "entry_line": 20810,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 200
+        },
+        {
+          "address": "0x48560",
+          "counted_bytes": 240,
+          "counted_local_bytes": 232,
+          "entry_line": 77394,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::stability_phase::observe_ready",
+          "maximum_local_bytes": 232
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "packet_worker_to_apps": {
+      "bytes": 3168,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x4a0d0",
+          "callsites": [
+            {
+              "address": "0x4a0f0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 79300,
+              "op": "call   37040 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                225344
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 79289,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x37040",
+          "callsites": [
+            {
+              "address": "0x371b9",
+              "depth_before": 56,
+              "kind": "call",
+              "line": 60229,
+              "op": "call   31950 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203088
+              ]
+            }
+          ],
+          "counted_bytes": 64,
+          "counted_local_bytes": 56,
+          "entry_line": 60117,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 56
+        },
+        {
+          "address": "0x31950",
+          "callsites": [
+            {
+              "address": "0x31a73",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 54501,
+              "op": "call   11450 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                70736
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 54440,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x11450",
+          "callsites": [
+            {
+              "address": "0x11658",
+              "depth_before": 200,
+              "kind": "call",
+              "line": 20944,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            }
+          ],
+          "counted_bytes": 208,
+          "counted_local_bytes": 200,
+          "entry_line": 20810,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 200
+        },
+        {
+          "address": "0x31b50",
+          "callsites": [
+            {
+              "address": "0x31cf8",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 54661,
+              "op": "call   2f960 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                194912
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 54564,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f960",
+          "callsites": [
+            {
+              "address": "0x2fdb9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52659,
+              "op": "call   235f0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                144880
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 52419,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x235f0",
+          "callsites": [
+            {
+              "address": "0x23616",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39159,
+              "op": "call   23740 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                145216
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 39146,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x23740",
+          "counted_bytes": 1536,
+          "counted_local_bytes": 1528,
+          "entry_line": 39251,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "maximum_local_bytes": 1528
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "packet_worker_to_mailbox_copy": {
+      "bytes": 5688,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x4a0d0",
+          "callsites": [
+            {
+              "address": "0x4a0f0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 79300,
+              "op": "call   37040 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                225344
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 79289,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x37040",
+          "callsites": [
+            {
+              "address": "0x371b9",
+              "depth_before": 56,
+              "kind": "call",
+              "line": 60229,
+              "op": "call   31950 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203088
+              ]
+            }
+          ],
+          "counted_bytes": 64,
+          "counted_local_bytes": 56,
+          "entry_line": 60117,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 56
+        },
+        {
+          "address": "0x31950",
+          "callsites": [
+            {
+              "address": "0x31a73",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 54501,
+              "op": "call   11450 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                70736
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 54440,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x11450",
+          "callsites": [
+            {
+              "address": "0x11658",
+              "depth_before": 200,
+              "kind": "call",
+              "line": 20944,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            }
+          ],
+          "counted_bytes": 208,
+          "counted_local_bytes": 200,
+          "entry_line": 20810,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 200
+        },
+        {
+          "address": "0x31b50",
+          "callsites": [
+            {
+              "address": "0x31cf8",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 54661,
+              "op": "call   2f960 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                194912
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 54564,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f960",
+          "callsites": [
+            {
+              "address": "0x2fdb9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52659,
+              "op": "call   235f0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                144880
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 52419,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x235f0",
+          "callsites": [
+            {
+              "address": "0x236f8",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39215,
+              "op": "call   24b60 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                150368
+              ]
+            },
+            {
+              "address": "0x236c7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39201,
+              "op": "call   24b60 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                150368
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 39146,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x24b60",
+          "callsites": [
+            {
+              "address": "0x24d80",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40505,
+              "op": "call   33700 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                210688
+              ]
+            },
+            {
+              "address": "0x24d46",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40492,
+              "op": "call   33700 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                210688
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_line": 40396,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x33700",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_line": 56346,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "phase_ioctl_release_log": {
+      "bytes": 1344,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x2430",
+          "callsites": [
+            {
+              "address": "0x2442",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2263,
+              "op": "call   2447 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  321088
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                321088
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 2257,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4e640",
+          "callsites": [
+            {
+              "address": "0x4ecd5",
+              "depth_before": 600,
+              "kind": "call",
+              "line": 85375,
+              "op": "call   312d0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                201424
+              ]
+            }
+          ],
+          "counted_bytes": 608,
+          "counted_local_bytes": 600,
+          "entry_line": 84991,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 600
+        },
+        {
+          "address": "0x312d0",
+          "callsites": [
+            {
+              "address": "0x3137f",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54096,
+              "op": "call   486f0 <ihk_smp_x86_64::stability_phase::observe_release>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                296688
+              ]
+            },
+            {
+              "address": "0x31921",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54415,
+              "op": "call   486f0 <ihk_smp_x86_64::stability_phase::observe_release>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                296688
+              ]
+            }
+          ],
+          "counted_bytes": 288,
+          "counted_local_bytes": 280,
+          "entry_line": 54046,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase",
+          "maximum_local_bytes": 280
+        },
+        {
+          "address": "0x486f0",
+          "counted_bytes": 416,
+          "counted_local_bytes": 408,
+          "entry_line": 77488,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::stability_phase::observe_release",
+          "maximum_local_bytes": 408
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "phase_ioctl_to_apps": {
+      "bytes": 3568,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x2430",
+          "callsites": [
+            {
+              "address": "0x2442",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2263,
+              "op": "call   2447 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  321088
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                321088
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 2257,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4e640",
+          "callsites": [
+            {
+              "address": "0x4ecd5",
+              "depth_before": 600,
+              "kind": "call",
+              "line": 85375,
+              "op": "call   312d0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                201424
+              ]
+            }
+          ],
+          "counted_bytes": 608,
+          "counted_local_bytes": 600,
+          "entry_line": 84991,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 600
+        },
+        {
+          "address": "0x312d0",
+          "callsites": [
+            {
+              "address": "0x313ca",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54115,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            },
+            {
+              "address": "0x31821",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54358,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            }
+          ],
+          "counted_bytes": 288,
+          "counted_local_bytes": 280,
+          "entry_line": 54046,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase",
+          "maximum_local_bytes": 280
+        },
+        {
+          "address": "0x31b50",
+          "callsites": [
+            {
+              "address": "0x31cf8",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 54661,
+              "op": "call   2f960 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                194912
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 54564,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f960",
+          "callsites": [
+            {
+              "address": "0x2fdb9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52659,
+              "op": "call   235f0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                144880
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 52419,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x235f0",
+          "callsites": [
+            {
+              "address": "0x23616",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39159,
+              "op": "call   23740 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                145216
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 39146,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x23740",
+          "counted_bytes": 1536,
+          "counted_local_bytes": 1528,
+          "entry_line": 39251,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "maximum_local_bytes": 1528
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "phase_ioctl_to_mailbox_copy": {
+      "bytes": 6088,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x2430",
+          "callsites": [
+            {
+              "address": "0x2442",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2263,
+              "op": "call   2447 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  321088
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                321088
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 2257,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4e640",
+          "callsites": [
+            {
+              "address": "0x4ecd5",
+              "depth_before": 600,
+              "kind": "call",
+              "line": 85375,
+              "op": "call   312d0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                201424
+              ]
+            }
+          ],
+          "counted_bytes": 608,
+          "counted_local_bytes": 600,
+          "entry_line": 84991,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 600
+        },
+        {
+          "address": "0x312d0",
+          "callsites": [
+            {
+              "address": "0x313ca",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54115,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            },
+            {
+              "address": "0x31821",
+              "depth_before": 280,
+              "kind": "call",
+              "line": 54358,
+              "op": "call   31b50 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                203600
+              ]
+            }
+          ],
+          "counted_bytes": 288,
+          "counted_local_bytes": 280,
+          "entry_line": 54046,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_command_phase",
+          "maximum_local_bytes": 280
+        },
+        {
+          "address": "0x31b50",
+          "callsites": [
+            {
+              "address": "0x31cf8",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 54661,
+              "op": "call   2f960 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                194912
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 54564,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f960",
+          "callsites": [
+            {
+              "address": "0x2fdb9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52659,
+              "op": "call   235f0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                144880
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 52419,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x235f0",
+          "callsites": [
+            {
+              "address": "0x236f8",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39215,
+              "op": "call   24b60 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                150368
+              ]
+            },
+            {
+              "address": "0x236c7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 39201,
+              "op": "call   24b60 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                150368
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_line": 39146,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x24b60",
+          "callsites": [
+            {
+              "address": "0x24d80",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40505,
+              "op": "call   33700 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                210688
+              ]
+            },
+            {
+              "address": "0x24d46",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40492,
+              "op": "call   33700 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                210688
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_line": 40396,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x33700",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_line": 56346,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "ret_enter_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x41c6",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4823,
+              "op": "call   5b00 <mcctrl::mcctrl_process::stability_ret_enter>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23296
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5b00",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_line": 6578,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_enter",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "ret_leave_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x4204",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4839,
+              "op": "call   5c90 <mcctrl::mcctrl_process::stability_ret_leave>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23696
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5c90",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_line": 6678,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_leave",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    },
+    "ret_select_hook": {
+      "bytes": 560,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xeb0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1274,
+              "op": "call   2ac0 <<mcctrl::mcctrl_process::Context>::wait_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                10944
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x2ac0",
+          "callsites": [
+            {
+              "address": "0x3115",
+              "depth_before": 392,
+              "kind": "call",
+              "line": 3774,
+              "op": "call   5e20 <mcctrl::mcctrl_process::stability_ret_select>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                24096
+              ]
+            }
+          ],
+          "counted_bytes": 400,
+          "counted_local_bytes": 392,
+          "entry_line": 3390,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::wait_syscall",
+          "maximum_local_bytes": 392
+        },
+        {
+          "address": "0x5e20",
+          "counted_bytes": 128,
+          "counted_local_bytes": 120,
+          "entry_line": 6778,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_select",
+          "maximum_local_bytes": 120
+        }
+      ],
+      "scope": "Known nested module frames only. External kernel/callback residuals remain separate."
+    }
+  },
+  "modules": {
+    "ihk-smp-x86_64": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "e6f8697ac8b85e49d3ed0b7b46c2a64151fa0b50b87ef19d7c8c9c3c137419fa",
+        "size": 5223926
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko",
+        "sha256": "9572ce3cfe55bf83315fe060b7c6a61f06458096a16b50efae8560c46dceb593",
+        "size": 11835856
+      }
+    },
+    "mcctrl": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "5f200d9257e3a3969d9815da85af0fe9172fc81166885c998de0d849cd0114c8",
+        "size": 481098
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko",
+        "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+        "size": 1951376
+      }
+    }
+  },
+  "production_gate_credit": false,
+  "recommendation": "Current measured changes add176/256 known bytes to the already reduced worker/ioctl prefixes. No additional observer buffer change is indicated by this bounded comparison; retain explicit residuals for controlled guest validation.",
+  "record_kind": "published-held-observer-compiled-stack-review",
+  "residuals": [
+    "Dynamic core::fmt/Debug callbacks and nested formatting frames.",
+    "Alternate printk_sprint formatting path, console flush and console-driver descendants.",
+    "Linux syscall/kthread entry, lock slowpaths, scheduler, interrupts/NMI, mitigations and deeper RETURN backend handling outside selected module chains.",
+    "No runtime stack watermark or actual guest publication/timer/QMP/physical proof is supplied by this review."
+  ],
+  "retention": {
+    "all_members_read_back_and_verified": true,
+    "archive": {
+      "path": "docs/verification/evidence/stability-published-stack-review-20260913-1.tar.gz",
+      "sha256": "a60dd39d14173efed3c10d078883ee7f4d6469f2590f1758252eaa5bb2891705",
+      "size": 6356445
+    },
+    "members": [
+      {
+        "path": "analysis-invocation.json",
+        "sha256": "2f7dc16341eb13a88dd747c739e09c1bc803880e1867821820e64379b1b3b298",
+        "size": 576
+      },
+      {
+        "path": "analysis.json",
+        "sha256": "c1731102089a383f1a3269db35bef84225151417c0b412b6c57c0d03c2a119bd",
+        "size": 3569134
+      },
+      {
+        "path": "analysis.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "analysis.stdout",
+        "sha256": "feb24fb484253f5eaf8a8dea18fd2a2c4b770577db4ecdfb7447bf8e6774f411",
+        "size": 280
+      },
+      {
+        "path": "analyzer-published.py",
+        "sha256": "8161a3589d29615a40c3db39643e3a8b8a8cdfc148de04299e769868855b6e34",
+        "size": 8246
+      },
+      {
+        "path": "analyzer-record-schema.diff",
+        "sha256": "0d3091d61c6e8cfc2daa511922ddc79dea6230f71eee077b0fdec63eea41eb80",
+        "size": 568
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/held-stage-record.json",
+        "sha256": "f0ca92f93e0da5d1b619a81074907a18e3d7d02ec4e829710c71cb26152dea8f",
+        "size": 37138
+      },
+      {
+        "path": "compiled-inputs/helper.py",
+        "sha256": "e2cdeed7eadbebc85ba0df0a557a18d355c4ca2346832ac03ded12dd676cc31c",
+        "size": 7804
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-demangled-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-demangled-disassembly-collection/report.json",
+        "sha256": "902d7ba8dd5f696d49c04d7e122ffa2fa2194342f99ffc72019cf8c045924b5c",
+        "size": 3168
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-demangled-disassembly-collection/request.json",
+        "sha256": "be2c0c20545e3553a927687e7a81ee88669e3226df4918c2eaf0a9dfc03cdcb2",
+        "size": 864
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-demangled-disassembly-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "e6f8697ac8b85e49d3ed0b7b46c2a64151fa0b50b87ef19d7c8c9c3c137419fa",
+        "size": 5223926
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-disassembly-collection/report.json",
+        "sha256": "f6f43455b4b3964bcd7722df3259b76ce9c4b7b66d06d55df5fd2d8151bd6163",
+        "size": 3145
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-disassembly-collection/request.json",
+        "sha256": "b2862b3572043d022feff92b318c1a18aae4da982773e8ec360ee27bf6ebfd4d",
+        "size": 863
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-disassembly-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-disassembly-collection/stdout.bin",
+        "sha256": "77b42e15eae135af632f73671e6257208316ac325f7e567a6c03aa655e4e802c",
+        "size": 5568430
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-modinfo-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-modinfo-collection/report.json",
+        "sha256": "55196355de85f6aa9b453eb4e392fe0092b96fbd33865602e50a8b85ab381f3f",
+        "size": 3117
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-modinfo-collection/request.json",
+        "sha256": "1aa1b93c093038b82b2ac1746a3ad7fbf82d11506aeb56f0af50b2eccb544766",
+        "size": 855
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-modinfo-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/ihk-smp-x86_64.ko-modinfo-collection/stdout.bin",
+        "sha256": "388483cc3caf2997ed371952d5918a48ad02bcb1c41e81e58a4ff1462dcf4ef4",
+        "size": 921
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/mcctrl.ko-demangled-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-demangled-disassembly-collection/report.json",
+        "sha256": "f06df5ff433ca1398f628fa654a98fa1e1416743dce85489d405c67aa9dd4d69",
+        "size": 3140
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-demangled-disassembly-collection/request.json",
+        "sha256": "d193fef5be47b0f96cce62b684c018ced727fca6e89b1727b8f9f048e85db8d4",
+        "size": 856
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-demangled-disassembly-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "5f200d9257e3a3969d9815da85af0fe9172fc81166885c998de0d849cd0114c8",
+        "size": 481098
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/mcctrl.ko-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-disassembly-collection/report.json",
+        "sha256": "89f8ee88428da53b69dc6b9a861a9d2223dd4bd3cc3948b81712a4050afe957e",
+        "size": 3121
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-disassembly-collection/request.json",
+        "sha256": "f0d721d7b2147f84ab30364544c17046c14518ae1683f867a1d4624b3e7432ef",
+        "size": 855
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-disassembly-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-disassembly-collection/stdout.bin",
+        "sha256": "ef50ce494e935c9e0aceeafae61341c4ec2566e035ac399998e93a54be14e469",
+        "size": 527819
+      },
+      {
+        "mode": 509,
+        "path": "compiled-inputs/mcctrl.ko-modinfo-collection",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-modinfo-collection/report.json",
+        "sha256": "b551c0df26574fa4901b5568fbd768bf703913daad57b7e2ff79171a4ffe166b",
+        "size": 3093
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-modinfo-collection/request.json",
+        "sha256": "8272218043c925187d736c40faa44ad772d26964c0024d144c2fcb0b98957b44",
+        "size": 847
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-modinfo-collection/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "compiled-inputs/mcctrl.ko-modinfo-collection/stdout.bin",
+        "sha256": "7898015be60d15649852e82877847d4547cf1ce34704c9ab8743e5e82fe899ff",
+        "size": 369
+      },
+      {
+        "path": "compiled-inputs/preparation-record.json",
+        "sha256": "e7e2e6b8caa8e7c4deaffcbfd87f7d53bbb9b04b19dd7c574e9ace670520c0b2",
+        "size": 132842
+      },
+      {
+        "path": "compiled-inputs/record.json",
+        "sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48",
+        "size": 176401
+      },
+      {
+        "mode": 493,
+        "path": "compiled-staged-source",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-staged-source/Kbuild",
+        "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "size": 371
+      },
+      {
+        "path": "compiled-staged-source/Kconfig",
+        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+        "size": 848
+      },
+      {
+        "mode": 493,
+        "path": "compiled-staged-source/abi",
+        "type": "directory"
+      },
+      {
+        "path": "compiled-staged-source/abi/application.rs",
+        "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "size": 3171
+      },
+      {
+        "path": "compiled-staged-source/abi/os_service.rs",
+        "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+        "size": 2527
+      },
+      {
+        "path": "compiled-staged-source/abi/sysfs.rs",
+        "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+        "size": 2629
+      },
+      {
+        "path": "compiled-staged-source/abi/sysfs_request.rs",
+        "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+        "size": 6715
+      },
+      {
+        "path": "compiled-staged-source/abi/vdso.rs",
+        "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+        "size": 14530
+      },
+      {
+        "path": "compiled-staged-source/abi/x86_64.rs",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+        "size": 19740
+      },
+      {
+        "path": "compiled-staged-source/application_image.rs",
+        "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+        "size": 8356
+      },
+      {
+        "path": "compiled-staged-source/application_pager.rs",
+        "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+        "size": 3196
+      },
+      {
+        "path": "compiled-staged-source/application_rpc.rs",
+        "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+        "size": 10925
+      },
+      {
+        "path": "compiled-staged-source/application_syscall.rs",
+        "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+        "size": 17343
+      },
+      {
+        "path": "compiled-staged-source/device_registry.rs",
+        "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+        "size": 60079
+      },
+      {
+        "path": "compiled-staged-source/ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+        "size": 8
+      },
+      {
+        "path": "compiled-staged-source/ihk.rs",
+        "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+        "size": 18754
+      },
+      {
+        "path": "compiled-staged-source/ihk_ioctl.rs",
+        "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+        "size": 10432
+      },
+      {
+        "path": "compiled-staged-source/ihk_mapping.rs",
+        "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+        "size": 21943
+      },
+      {
+        "path": "compiled-staged-source/ihk_smp_x86_64.rs",
+        "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+        "size": 33317
+      },
+      {
+        "path": "compiled-staged-source/ikc_master.rs",
+        "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+        "size": 26480
+      },
+      {
+        "path": "compiled-staged-source/ikc_queue.rs",
+        "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+        "size": 23030
+      },
+      {
+        "path": "compiled-staged-source/mcctrl.rs",
+        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "size": 8992
+      },
+      {
+        "path": "compiled-staged-source/mcctrl_exec.rs",
+        "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+        "size": 8508
+      },
+      {
+        "path": "compiled-staged-source/mcctrl_process.rs",
+        "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+        "size": 45316
+      },
+      {
+        "path": "compiled-staged-source/mcctrl_vm.rs",
+        "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+        "size": 15927
+      },
+      {
+        "path": "compiled-staged-source/os_registry.rs",
+        "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+        "size": 17410
+      },
+      {
+        "path": "compiled-staged-source/os_runtime.rs",
+        "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+        "size": 46941
+      },
+      {
+        "path": "compiled-staged-source/os_service.rs",
+        "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+        "size": 6907
+      },
+      {
+        "path": "compiled-staged-source/page_allocator.rs",
+        "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+        "size": 21246
+      },
+      {
+        "path": "compiled-staged-source/page_owner_registry.rs",
+        "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+        "size": 13034
+      },
+      {
+        "path": "compiled-staged-source/prior-stage-lock.json",
+        "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+        "size": 4297
+      },
+      {
+        "path": "compiled-staged-source/procfs_objects.rs",
+        "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+        "size": 16161
+      },
+      {
+        "path": "compiled-staged-source/smp_application.rs",
+        "sha256": "78e9d817247ab73fa246563b0665afc3eb7ee2d8aa4df361449438fcf57d2a41",
+        "size": 59069
+      },
+      {
+        "path": "compiled-staged-source/smp_application_image.rs",
+        "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+        "size": 9982
+      },
+      {
+        "path": "compiled-staged-source/smp_application_syscall.rs",
+        "sha256": "4f7611fca376aacddf80be2dacef0928f5e6c8506c692f0154680f93dfeaa5d4",
+        "size": 36879
+      },
+      {
+        "path": "compiled-staged-source/smp_boot_code.rs",
+        "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+        "size": 1317
+      },
+      {
+        "path": "compiled-staged-source/smp_cpu.rs",
+        "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+        "size": 38178
+      },
+      {
+        "path": "compiled-staged-source/smp_file_pager.rs",
+        "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+        "size": 14721
+      },
+      {
+        "path": "compiled-staged-source/smp_ikc.rs",
+        "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+        "size": 12665
+      },
+      {
+        "path": "compiled-staged-source/smp_image.rs",
+        "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+        "size": 14208
+      },
+      {
+        "path": "compiled-staged-source/smp_loader.rs",
+        "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+        "size": 3194
+      },
+      {
+        "path": "compiled-staged-source/smp_memory.rs",
+        "sha256": "abdaa082804a79b25a749245febc954cf7dcdcbd599d9e56accd79a299c36fb6",
+        "size": 101787
+      },
+      {
+        "path": "compiled-staged-source/smp_procfs.rs",
+        "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+        "size": 28177
+      },
+      {
+        "path": "compiled-staged-source/smp_resource.rs",
+        "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+        "size": 129249
+      },
+      {
+        "path": "compiled-staged-source/smp_service.rs",
+        "sha256": "96737eb497b3e84a71747b18d1d93133efd75b2a0d7c23e5d1c452869e82d197",
+        "size": 49486
+      },
+      {
+        "path": "compiled-staged-source/smp_startup.rs",
+        "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+        "size": 4963
+      },
+      {
+        "path": "compiled-staged-source/smp_startup_entry.S",
+        "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+        "size": 1350
+      },
+      {
+        "path": "compiled-staged-source/smp_topology.rs",
+        "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+        "size": 10615
+      },
+      {
+        "path": "compiled-staged-source/smp_trampoline.S",
+        "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+        "size": 3650
+      },
+      {
+        "path": "compiled-staged-source/smp_trampoline.rs",
+        "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+        "size": 5477
+      },
+      {
+        "path": "compiled-staged-source/smp_vdso.rs",
+        "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+        "size": 5863
+      },
+      {
+        "path": "compiled-staged-source/stability_observer.rs",
+        "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+        "size": 11309
+      },
+      {
+        "path": "compiled-staged-source/stability_phase.rs",
+        "sha256": "041b7e983132745e64aed003e745600f7e8573ed19a8ead57a4f4fecda888131",
+        "size": 16600
+      },
+      {
+        "path": "compiled-staged-source/sysfs_memory.rs",
+        "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+        "size": 29925
+      },
+      {
+        "path": "compiled-staged-source/sysfs_objects.rs",
+        "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+        "size": 13753
+      },
+      {
+        "path": "compiled-staged-source/sysfs_os.rs",
+        "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+        "size": 2451
+      },
+      {
+        "path": "compiled-staged-source/sysfs_remote.rs",
+        "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "size": 8287
+      },
+      {
+        "path": "compiled-staged-source/sysfs_rpc.rs",
+        "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+        "size": 6833
+      },
+      {
+        "path": "compiled-staged-source/sysfs_setup.rs",
+        "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+        "size": 12683
+      },
+      {
+        "path": "compiled-staged-source/sysfs_snoop.rs",
+        "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+        "size": 5515
+      },
+      {
+        "path": "compiled-staged-source/sysfs_tree.rs",
+        "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+        "size": 12276
+      },
+      {
+        "path": "compiled-staged-source/sysfs_zeroing.rs",
+        "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+        "size": 10243
+      },
+      {
+        "path": "compiled-staged-source/user_string.rs",
+        "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+        "size": 603
+      },
+      {
+        "path": "compiled-staged-source/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+        "size": 4354
+      },
+      {
+        "path": "freeze-published.py",
+        "sha256": "a62860d6cc9292c165e9f88525c7fe132896c039da34a16772254e11b774d6d3",
+        "size": 8306
+      },
+      {
+        "path": "freeze-published.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "freeze-published.stdout",
+        "sha256": "d9edf37ba00ffadc72f402659eec940c16bf7564d969e4d21ea9d9a63b8436d4",
+        "size": 326
+      },
+      {
+        "path": "freeze.py",
+        "sha256": "9812542e4aa4b0ae77e94d7ef9fba0880d40f3e22f566feb431ea1ba6c5d7347",
+        "size": 8185
+      },
+      {
+        "path": "ihk-smp-x86_64-selected-assembly.json",
+        "sha256": "afca72519d8b9142cdad4dc46680cda3bb785ce7a03642dd4283962c8ea8f8a0",
+        "size": 129929
+      },
+      {
+        "mode": 448,
+        "path": "independent-arithmetic-review",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/actual-disassembly-snippets.json",
+        "sha256": "658e98c1133ec76611887596729a39f8b88a53e15b9f058090595b698eefaaf8",
+        "size": 35760
+      },
+      {
+        "path": "independent-arithmetic-review/actual-elf-relocation.json",
+        "sha256": "7358aa6c8d88b92ae2678ad54354650772127a432e9189ac32b4dc49d397c8fc",
+        "size": 271
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel/docs",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel/docs/verification",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+        "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+        "size": 104140
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko",
+        "sha256": "9572ce3cfe55bf83315fe060b7c6a61f06458096a16b50efae8560c46dceb593",
+        "size": 11835856
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko-demangled-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "e6f8697ac8b85e49d3ed0b7b46c2a64151fa0b50b87ef19d7c8c9c3c137419fa",
+        "size": 5223926
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk.ko",
+        "sha256": "062c254901a1d51eba60928432d959c01288355ead854f4ab754a09ebd775a78",
+        "size": 1357704
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko",
+        "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+        "size": 1951376
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko-demangled-disassembly-collection",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "5f200d9257e3a3969d9815da85af0fe9172fc81166885c998de0d849cd0114c8",
+        "size": 481098
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/record.json",
+        "sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48",
+        "size": 176401
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/Kbuild",
+        "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "size": 371
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/Kconfig",
+        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+        "size": 848
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/application.rs",
+        "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "size": 3171
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/os_service.rs",
+        "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+        "size": 2527
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/sysfs.rs",
+        "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+        "size": 2629
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/sysfs_request.rs",
+        "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+        "size": 6715
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/vdso.rs",
+        "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+        "size": 14530
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/x86_64.rs",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+        "size": 19740
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_image.rs",
+        "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+        "size": 8356
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_pager.rs",
+        "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+        "size": 3196
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_rpc.rs",
+        "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+        "size": 10925
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_syscall.rs",
+        "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+        "size": 17343
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/device_registry.rs",
+        "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+        "size": 60079
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+        "size": 8
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk.rs",
+        "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+        "size": 18754
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_ioctl.rs",
+        "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+        "size": 10432
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_mapping.rs",
+        "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+        "size": 21943
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_smp_x86_64.rs",
+        "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+        "size": 33317
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ikc_master.rs",
+        "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+        "size": 26480
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ikc_queue.rs",
+        "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+        "size": 23030
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl.rs",
+        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "size": 8992
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_exec.rs",
+        "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+        "size": 8508
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_process.rs",
+        "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+        "size": 45316
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_vm.rs",
+        "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+        "size": 15927
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_registry.rs",
+        "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+        "size": 17410
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_runtime.rs",
+        "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+        "size": 46941
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_service.rs",
+        "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+        "size": 6907
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/page_allocator.rs",
+        "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+        "size": 21246
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/page_owner_registry.rs",
+        "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+        "size": 13034
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/prior-stage-lock.json",
+        "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+        "size": 4297
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/procfs_objects.rs",
+        "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+        "size": 16161
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application.rs",
+        "sha256": "78e9d817247ab73fa246563b0665afc3eb7ee2d8aa4df361449438fcf57d2a41",
+        "size": 59069
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application_image.rs",
+        "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+        "size": 9982
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application_syscall.rs",
+        "sha256": "4f7611fca376aacddf80be2dacef0928f5e6c8506c692f0154680f93dfeaa5d4",
+        "size": 36879
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_boot_code.rs",
+        "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+        "size": 1317
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_cpu.rs",
+        "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+        "size": 38178
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_file_pager.rs",
+        "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+        "size": 14721
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_ikc.rs",
+        "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+        "size": 12665
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_image.rs",
+        "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+        "size": 14208
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_loader.rs",
+        "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+        "size": 3194
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_memory.rs",
+        "sha256": "abdaa082804a79b25a749245febc954cf7dcdcbd599d9e56accd79a299c36fb6",
+        "size": 101787
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_procfs.rs",
+        "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+        "size": 28177
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_resource.rs",
+        "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+        "size": 129249
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_service.rs",
+        "sha256": "96737eb497b3e84a71747b18d1d93133efd75b2a0d7c23e5d1c452869e82d197",
+        "size": 49486
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_startup.rs",
+        "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+        "size": 4963
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_startup_entry.S",
+        "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+        "size": 1350
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_topology.rs",
+        "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+        "size": 10615
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_trampoline.S",
+        "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+        "size": 3650
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_trampoline.rs",
+        "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+        "size": 5477
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_vdso.rs",
+        "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+        "size": 5863
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/stability_observer.rs",
+        "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+        "size": 11309
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/stability_phase.rs",
+        "sha256": "041b7e983132745e64aed003e745600f7e8573ed19a8ead57a4f4fecda888131",
+        "size": 16600
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_memory.rs",
+        "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+        "size": 29925
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_objects.rs",
+        "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+        "size": 13753
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_os.rs",
+        "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+        "size": 2451
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_remote.rs",
+        "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "size": 8287
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_rpc.rs",
+        "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+        "size": 6833
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_setup.rs",
+        "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+        "size": 12683
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_snoop.rs",
+        "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+        "size": 5515
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_tree.rs",
+        "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+        "size": 12276
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_zeroing.rs",
+        "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+        "size": 10243
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/user_string.rs",
+        "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+        "size": 603
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+        "size": 4354
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/held-overlay",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/held-overlay/record.json",
+        "sha256": "f0ca92f93e0da5d1b619a81074907a18e3d7d02ec4e829710c71cb26152dea8f",
+        "size": 37138
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/record.json",
+        "sha256": "e7e2e6b8caa8e7c4deaffcbfd87f7d53bbb9b04b19dd7c574e9ace670520c0b2",
+        "size": 132842
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures",
+        "type": "directory"
+      },
+      {
+        "mode": 509,
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1",
+        "type": "directory"
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/send-gate.rs",
+        "sha256": "dac2855ca19e587c33f7bd5a36c30c9090a6ea846f6dca90081abf0543228267",
+        "size": 364
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_application.append.rs",
+        "sha256": "3b6b1348687cd6ed8a092e184cfcf687d95b7b36ca14756d7a0ae10f1cb8b7b3",
+        "size": 4534
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_application_syscall.append.rs",
+        "sha256": "f9af4c106b69def12cd353c684c83c0dbfbdef7915cc27ff6fabc30e21d53fc5",
+        "size": 1857
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_memory.append.rs",
+        "sha256": "2d4be27a2e26df46f9e278d4071d901595bf8358ea6444c41a2da6eff27f5000",
+        "size": 2806
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_service.append.rs",
+        "sha256": "0a9f8988e2b97dd224b421cf7baaff8b001ddb01441ab2dedffe0b3a753875cc",
+        "size": 5946
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/stability_phase.rs",
+        "sha256": "7219f34ca70b4a4051947fa5221802ce5395aa1f2e475c0aab263676c4b416e2",
+        "size": 15126
+      },
+      {
+        "path": "independent-arithmetic-review/bound-inputs/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/prepare_stability_published_hold.py",
+        "sha256": "80b6b4fe90a5ac42f187f08e1056867b06776a83102cf59196011790c6b2e563",
+        "size": 11728
+      },
+      {
+        "path": "independent-arithmetic-review/known-module-chains.json",
+        "sha256": "e5dcc0c517344fd76f7628ebe532c8e6ffd459391a47c78241dc60643f5ded54",
+        "size": 38771
+      },
+      {
+        "path": "independent-arithmetic-review/metadata-check-original-failure.json",
+        "sha256": "026874992687c634402f4d0184eb1778292cda2b1f65d9fcba9825fa69ad6779",
+        "size": 537
+      },
+      {
+        "path": "independent-arithmetic-review/review-final.json",
+        "sha256": "7032d5592d42b8e7ca94d2f08dab1a2899f3cc97e5c654a9b188abddbbb04a1a",
+        "size": 26363
+      },
+      {
+        "path": "independent-arithmetic-review/review.json",
+        "sha256": "676382cc1d255d5b6f76fe68ea31d37a157d1c732491885398ad506dccb21d17",
+        "size": 1781
+      },
+      {
+        "path": "known-module-chains.json",
+        "sha256": "e5dcc0c517344fd76f7628ebe532c8e6ffd459391a47c78241dc60643f5ded54",
+        "size": 38771
+      },
+      {
+        "path": "mcctrl-selected-assembly.json",
+        "sha256": "c20788b724dc858dc8bde9b12b0c7d6fed2cf1f11475ea6d321322e055861edd",
+        "size": 48023
+      },
+      {
+        "path": "old-address-display-diagnostic.json",
+        "sha256": "44ae2803177446a639c5ae392012f9486151d5fd7461a09cb31087f2a0d3914c",
+        "size": 700
+      },
+      {
+        "path": "publish.py",
+        "sha256": "ac8e63153084d1a98168ae574ecb9dbb17da8e52e06e9b37a2108ab4b1b9d658",
+        "size": 2160
+      },
+      {
+        "path": "retained-analyzer.py",
+        "sha256": "09f9d72f9475ad7b2563a39733b5dd41ca386561139f960d42cedb17bab7003a",
+        "size": 8196
+      },
+      {
+        "path": "review.json",
+        "sha256": "c238afc9c1e59ab9d586bdaddc5a0fe39fb2948d826bda2329da48fa123ae4dd",
+        "size": 65946
+      }
+    ]
+  },
+  "review_source_retention": "/tmp/stability-published-stack-review-20260913-jx2y2d33",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "selected_linux_context": {
+    "current_vmlinux_rehashed": {
+      "path": "/home/holden/mckernel-work/scratch/native-build-base-24a151fe/vmlinux",
+      "sha256": "1a8412ded548006989f060bc6ddbf6f3c467a1addeac277647f945077dea7a6b",
+      "size": 345517528
+    },
+    "ioctl_mailbox_print_prefix_bytes": 5792,
+    "ioctl_plus_selected_linux_prefix_bytes": 6589,
+    "reference": {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+      "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+      "size": 104140
+    },
+    "scope": "Same exact pinned vmlinux. Only direct initial formatting through core::fmt::write; stops before dynamic callbacks and is not a full stack upper bound.",
+    "selected_direct_formatting_prefix_bytes": 797,
+    "thread_size_bytes": 16384,
+    "worker_mailbox_print_prefix_bytes": 5392,
+    "worker_plus_selected_linux_prefix_bytes": 6189
+  },
+  "status": "MEASURED_PUBLISHED_HOLD_MODULE_FRAMES_WITH_KERNEL_RESIDUALS",
+  "subject_execution_by_reviewer": false,
+  "transport_acceptance": false,
+  "verified_compiler_and_fixture_input_count": 75,
+  "verified_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_rpc.rs",
+      "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+      "size": 10925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/application_syscall.rs",
+      "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "size": 17343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/device_registry.rs",
+      "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+      "size": 60079
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ihk_smp_x86_64.rs",
+      "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+      "size": 33317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_process.rs",
+      "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+      "size": 45316
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/page_allocator.rs",
+      "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+      "size": 21246
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/page_owner_registry.rs",
+      "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+      "size": 13034
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application.rs",
+      "sha256": "78e9d817247ab73fa246563b0665afc3eb7ee2d8aa4df361449438fcf57d2a41",
+      "size": 59069
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application_image.rs",
+      "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+      "size": 9982
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_application_syscall.rs",
+      "sha256": "4f7611fca376aacddf80be2dacef0928f5e6c8506c692f0154680f93dfeaa5d4",
+      "size": 36879
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_file_pager.rs",
+      "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+      "size": 14721
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_memory.rs",
+      "sha256": "abdaa082804a79b25a749245febc954cf7dcdcbd599d9e56accd79a299c36fb6",
+      "size": 101787
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_procfs.rs",
+      "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+      "size": 28177
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_service.rs",
+      "sha256": "96737eb497b3e84a71747b18d1d93133efd75b2a0d7c23e5d1c452869e82d197",
+      "size": 49486
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/stability_phase.rs",
+      "sha256": "041b7e983132745e64aed003e745600f7e8573ed19a8ead57a4f4fecda888131",
+      "size": 16600
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_memory.rs",
+      "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "size": 29925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/staged-source/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk.ko",
+      "sha256": "062c254901a1d51eba60928432d959c01288355ead854f4ab754a09ebd775a78",
+      "size": 1357704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/ihk-smp-x86_64.ko",
+      "sha256": "9572ce3cfe55bf83315fe060b7c6a61f06458096a16b50efae8560c46dceb593",
+      "size": 11835856
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/mcctrl.ko",
+      "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+      "size": 1951376
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/send-gate.rs",
+      "sha256": "dac2855ca19e587c33f7bd5a36c30c9090a6ea846f6dca90081abf0543228267",
+      "size": 364
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_application.append.rs",
+      "sha256": "3b6b1348687cd6ed8a092e184cfcf687d95b7b36ca14756d7a0ae10f1cb8b7b3",
+      "size": 4534
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_application_syscall.append.rs",
+      "sha256": "f9af4c106b69def12cd353c684c83c0dbfbdef7915cc27ff6fabc30e21d53fc5",
+      "size": 1857
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_memory.append.rs",
+      "sha256": "2d4be27a2e26df46f9e278d4071d901595bf8358ea6444c41a2da6eff27f5000",
+      "size": 2806
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/smp_service.append.rs",
+      "sha256": "0a9f8988e2b97dd224b421cf7baaff8b001ddb01441ab2dedffe0b3a753875cc",
+      "size": 5946
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/fixtures/stability-published-hold-v1/stability_phase.rs",
+      "sha256": "7219f34ca70b4a4051947fa5221802ce5395aa1f2e475c0aab263676c4b416e2",
+      "size": 15126
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/source/scripts/tests/prepare_stability_published_hold.py",
+      "sha256": "80b6b4fe90a5ac42f187f08e1056867b06776a83102cf59196011790c6b2e563",
+      "size": 11728
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/record.json",
+      "sha256": "e7e2e6b8caa8e7c4deaffcbfd87f7d53bbb9b04b19dd7c574e9ace670520c0b2",
+      "size": 132842
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-source-20260913-postpublish-notify-2/held-overlay/record.json",
+      "sha256": "f0ca92f93e0da5d1b619a81074907a18e3d7d02ec4e829710c71cb26152dea8f",
+      "size": 37138
+    }
+  ]
+}

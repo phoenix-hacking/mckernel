@@ -1,0 +1,159 @@
+{
+  "acceptance_scope": "source review and retained implementation only; no collector runtime, application or OS acceptance",
+  "actual_test_executions": 0,
+  "all_member_types_modes_bytes_verified": true,
+  "all_original_versions_and_peer_failures_retained": true,
+  "application_acceptance": false,
+  "archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-linux-collector-source-20260913-1.tar.gz",
+    "sha256": "ae920a0364e8cb66cf00e107aa100ca625e04b6d250bd3190810297dae818c3b",
+    "size_bytes": 514789
+  },
+  "author_review": {
+    "path": "/tmp/stability-linux-sealed-collector-source-20260913-uuvfj0uc/author-review.json",
+    "sha256": "88a12b93e4c433d470ba86c876d38cd066427fe57ea685b705713b916f8b790f",
+    "size_bytes": 6192
+  },
+  "backend_enabled": false,
+  "catalog_cases_executed": 0,
+  "collector_profile": "linux-sealed-infrastructure-v1",
+  "compiler_executions": 0,
+  "documentation": {
+    "path": "/home/holden/mckernel/docs/verification/stability-linux-collector-source-review-20260913.md",
+    "sha256": "91ef63a7aeb23a9fcd725857d073f0b1e08952cade2b23c8e7749a1f5f416039",
+    "size_bytes": 4786
+  },
+  "guest_executions": 0,
+  "immutable_preserved_inputs": [
+    "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/request.c",
+    "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/request.h",
+    "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/request-v1.md",
+    "/home/holden/mckernel-work/setup/container-run.py"
+  ],
+  "kind": "linux-sealed-collector-source-review",
+  "loader_closure": "NOT_VERIFIED",
+  "member_count": 235,
+  "members_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-linux-collector-source-20260913-1.members.json",
+    "sha256": "4f04ee0eb049b50c6be7af0d1a54069a7426f2a6174cd0aa479fec86980e1055",
+    "size_bytes": 82782
+  },
+  "native_role": "BLOCKED",
+  "original_capture_root": "/tmp/stability-linux-sealed-collector-source-20260913-uuvfj0uc",
+  "pathname_execution": "UNSUPPORTED",
+  "peer_reviews": [
+    {
+      "directory": "stability-linux-sha-contract-independent-review-20260913-nxtzjx97",
+      "record": "review.json",
+      "scope": "SHA and original profile contract",
+      "sha256": "fc16b25102cbe67e73f9aab35fede87e708b65fd671b91fdbc50e66d8501a7f7",
+      "size_bytes": 4100
+    },
+    {
+      "directory": "stability-linux-collector-process-independent-review-20260913-9372y9z7",
+      "record": "review.json",
+      "scope": "child setup, ownership, waits and bounded cleanup",
+      "sha256": "bdd5b5a5a91e8c47e75887ac651ab9f1b94a77a7dfed3942580befc1139ea100",
+      "size_bytes": 8462
+    },
+    {
+      "directory": "stability-linux-collector-root-delta-review-20260913-d_mqaeo6",
+      "record": "review.json",
+      "scope": "group and original-memfd compatibility delta",
+      "sha256": "15f1fcb9ad0d7f077521f7f5458d34eedcd1061e5819f1e47262791a1daffd0b",
+      "size_bytes": 2451
+    },
+    {
+      "directory": "stability-linux-root-profile-peer-20260913-xdufem6q",
+      "record": "review-final.json",
+      "scope": "root command planner, fixed entry point and isolation contract",
+      "sha256": "6c067b7a7868250b5e3f35ae427b66618b7c805a7b339ee8208de0a53fc1fad6",
+      "size_bytes": 3158
+    },
+    {
+      "directory": "stability-linux-collector-file-driver-review-20260913-eg9oxn1m",
+      "record": "review-final.json",
+      "scope": "file/seal/artifact/report pipeline, fixture/driver/SHA harness and final corrections",
+      "sha256": "49ac0a44e16cfe67e33de1c4b0d6636fefe33d042234689fe50c4f0349a4c1c6",
+      "size_bytes": 7124
+    }
+  ],
+  "planned_actual_checks": {
+    "actual_builder_block_cases": 1,
+    "actual_root_driver_cases": 25,
+    "sha_harness_literal_lines": 9
+  },
+  "python_subject_imports": 0,
+  "remaining_gates": [
+    "pinned compiler/dependency/ELF validation",
+    "actual SHA and builder-negative checks",
+    "parent-owned exact isolated root profile inspect/lock/watchdog/cleanup",
+    "actual25-case collector fixture run with complete raw evidence",
+    "remaining adverse storage/late-signal/ownership/stop/setup checks from tests.md",
+    "immutable pathname execution before pathname predicates/case release",
+    "source/image-bound loader closure and reviewed native payload observation",
+    "existing global and case capabilities plus separate reviewed execution packet"
+  ],
+  "schema_version": 1,
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c",
+      "sha256": "2fb337ddd98bdd5356e78959ebc5d43d4759c968bd726dbab2437b3697b71440",
+      "size_bytes": 52093
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/contract.md",
+      "sha256": "194813f9cd1e49de63afb611c989c8574f3ecdd87c18ea5f634a7d205a88d7f3",
+      "size_bytes": 10151
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/fixture.c",
+      "sha256": "d2c33206cb1dc938b31ef83c5827f3aae2ca4e78740178d0df2f221015bdfc6d",
+      "size_bytes": 4728
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root-profile.md",
+      "sha256": "68350568cca75248a85a3e43cdcf1ca85e1197dff24713aa4fc01128c47ddb52",
+      "size_bytes": 5252
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_inside.py",
+      "sha256": "1eab68ce627271bb97febfd51c3455e5267280009ad0f1b6249ae92f5d568e19",
+      "size_bytes": 7889
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_profile.py",
+      "sha256": "a65d104d76ec7ce3918d667ac02b1cea92c1a80cae321360b01c12190f2f6dd6",
+      "size_bytes": 12957
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/run_collector_tests.py",
+      "sha256": "691aee973f9ea5e79cdf7766b87c69e0d5d5a01ff334b8674cd099c776125bb5",
+      "size_bytes": 20783
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/sha256.c",
+      "sha256": "8a8a93d4e7f7d1562f044671a673b48e96dc152ad65bd294f082b7b20b4a39e1",
+      "size_bytes": 4204
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/sha256.h",
+      "sha256": "52cfafeecb6c411f7df956e6d444068185e17177bd8f21ed1270a2d06ce50e97",
+      "size_bytes": 536
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/sha256_harness.c",
+      "sha256": "cb5b4634f38be0121254f0ac7080ed134e134d7ada7cbddd4b45315362bd4ce9",
+      "size_bytes": 2832
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/tests.md",
+      "sha256": "8d5249cef4565120ffeaad2949a011f32ac2a405b3b95d61a02e7e528236dacc",
+      "size_bytes": 6940
+    }
+  ],
+  "source_root": "/home/holden/mckernel/scripts/tests/fixtures/application-collector-v1/linux-sealed-v1",
+  "status": "PASS_SOURCE_REVIEW_ONLY_NOT_RUN",
+  "supported_role": "declared-Linux-reference-only",
+  "transport_acceptance": false
+}

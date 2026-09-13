@@ -414,3 +414,41 @@ Continue in this order, keeping heavy work serialized:
    capabilities, Rust/assembly executable closure, pinned packaging and the
    complete platform/stress/independent qualification roadmap. Preserve all
    existing historical scores and hardware/exposure requirements.
+
+## Continuation checkpoint: compiled published profile and ownership gap
+
+The first version2 notification-failure native module builds successfully,
+with all compiler bindings retained and both shared production trees restored.
+Two independent reviews establish known module stack sums of 5,688 bytes for
+the worker observation path and 6,088 for the ioctl path. Selected direct Linux
+formatting prefixes bring those sums to 6,189/6,589 before dynamic callbacks;
+these are not complete kernel stack bounds. See
+`stability-published-stack-review-20260913-1.json`.
+
+The first mode2 guest root is prepared, but remains unreleased. Source review
+found that cancellation between SELECT's logged BlockedRead and a later QMP
+pause can prepare a cancelled completion which bypasses the eligible selected-
+send hook. A send-only hold also cannot cover no-wake completion publication.
+The historical snapshot and false host release flag alone therefore do not
+establish current ownership before the planned physical read. Trace all
+cancellation, completion, no-wake and drop paths; retain the actual selected
+response before any final publication, including on verification failure.
+Preserve module1, root1 and every original source/result. New runtime credit
+requires a reviewed fix, fresh build and corresponding guest inputs.
+
+The draft new runner/proof also received concrete evidence checks: journal
+rejected physical reads; bind the selected span and recompute intersections;
+require exact capture-receipt membership and original-read identity; preserve
+opaque C padding while validating defined probe fields and primitive types;
+restrict ioctl retries to their actual phase/state; and verify copied imports.
+Those source changes are pending final review and execution. No mode2 guest
+has run. The original two accepted fault outcomes and production baseline are
+not promoted to broader transport acceptance.
+
+The published physical comparator passes 18 pinned literal tests. The Linux
+collector builds and passes nine actual SHA checks plus one actual non-root
+identity rejection. The dedicated root 25-case profile and its host cleanup
+orchestrator are the next independent infrastructure run. Catalog/native
+backend execution remains disabled. Complete new build, preparation, failed
+review diagnostics and original helpers are retained in
+`stability-published-build-collection-20260913-1.json`.
