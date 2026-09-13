@@ -1,0 +1,353 @@
+Active user instruction, 2026-09-13: implement this complete roadmap; ignore
+the timelines and continue until the OS is as stable as possible. GO ALL OUT.
+The original attached roadmap follows; trailing blank lines are normalized.
+Schedule references are historical.
+
+ # McKernel: three-day verification run and completion roadmap
+
+  ## Summary and current progress
+
+  Prioritize functionality first, using trustworthy runtime evidence to guide
+  repairs and subsequent Rust migration. The three-day target is to establish
+  the execution infrastructure, close its prerequisite gates, and begin
+  accepting broader application coverage. Full production acceptance remains a
+  larger campaign.
+
+  The retained Ultra module attempt 1 / image attempt 3, launcher, core
+  payload and Linux kernel are present and match their recorded hashes.
+
+   Progress tracker                  Recorded progress    Interpretation
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━
+   overview.txt / overview2.txt      96.7% broad; core    Historical
+                                                  100%    functional
+                                                          ownership.
+                                                          Remaining rows
+                                                          include build/link
+                                                          95%, tools 83%,
+                                                          Rocky runtime 82%;
+                                                          arm64 deferred.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   migration.txt                     Strict core 100%;    Completed
+                                            standalone    sequencing
+                                    scoreboard 500/500    campaigns;
+                                                          remaining C
+                                                          execution
+                                                          dependencies
+                                                          require separate
+                                                          verification.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   full-port.txt                     100%; 611.9/611.9    Closed historical
+                                                points    campaign. Preserve
+                                                          its score.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   rust-source-retirement.txt           100% under its    Includes 62
+                                        classification    allowlisted C
+                                                 rules    boundaries.
+                                                          Historical
+                                                          conservative image
+                                                          measurement is
+                                                          78.354960% Rust
+                                                          executable bytes; a
+                                                          later ABI repair
+                                                          measured
+                                                          78.356795%. Neither
+                                                          establishes current
+                                                          Rust/assembly
+                                                          closure.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   VALIDATION_PROGRESS.MD             10/10 historical    Accepted Rocky 8.10
+                                           smoke gates    baseline with
+                                                          limited workloads
+                                                          and topology.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   final-push.txt                   350/10,000 points:    Six production
+                                                 3.50%    gates PASS, one
+                                                          IN_PROGRESS, 123
+                                                          TODO. This measures
+                                                          acceptance
+                                                          evidence, not the
+                                                          amount of
+                                                          implementation
+                                                          present.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   Additional MK-LANG gates         Three IN_PROGRESS;    Actual Rust/
+                                             four TODO    assembly production
+                                                          closure, runtime
+                                                          verification and
+                                                          reproducibility
+                                                          remain required.
+  ──────────────────────────────  ─────────────────────  ─────────────────────
+   Application drafting queue           97/97 packets;    Six DRAFTED, 267
+                                         273/273 cases    DRAFTED_WITH_UNRESO
+                                         accounted for    LVED; zero new
+                                                          catalog cases
+                                                          compiled, executed
+                                                          or accepted.
+
+  The drafting audit found nine invalid report references, inconsistent input
+  lengths, and 22 failure/exhaustion cases whose current fixtures simulate or
+  print outcomes without exercising the required behavior. Preserve useful
+  implementations, correct the evidence through new records, and review each
+  case before execution.
+
+  ## Three-day execution sequence
+
+  These are scheduling targets. Advance when the preceding gate passes;
+  unfinished prerequisite work retains priority throughout the 72 hours.
+
+  ### Day 1 — Reconcile evidence and build a trustworthy execution path
+
+  - Create a dated current-state ledger linking every tracker, all 130
+    production gates, seven language gates, and all 273 application cases.
+    Record implementation, review, build, runtime and acceptance separately.
+    Preserve historical scores and reports.
+
+  - Add an immutable correction manifest for the nine broken references. Check
+    every declared input’s length/hash and every packet’s case coverage.
+    Classify the 220 reviewer questions into already-specified answers,
+    fixture defects, missing observations and missing OS capabilities.
+
+  - Inventory all drafts; deeply review only the next eligible packet, with at
+    most three active cases. Reject unconditional success, fabricated
+    observations, incomplete parameter coverage and expectations derived from
+    the tested implementation.
+
+  - Implement the existing planned scripts/application-tests/run.py interface
+    with --inputs, --case, --attempt, --profile and --mode. Reuse the
+    catalog’s input, capability, packet and result schemas.
+
+  - Implement concurrent stdout/stderr capture, raw wait-status handling,
+    independent deadlines, QMP pause/resume recovery, exclusive attempt
+    directories, and actual McKernel process/request provenance. Run identical
+    payload bytes directly on the pinned Linux guest and through the unchanged
+    launcher, resetting inputs between engines.
+
+  - Verify the retained build/source bindings and replay all four original
+    core modes, both control ABIs, and ordinary signal/futex regressions on
+    the selected pair. Any production changes require new builds and bindings.
+
+  Day 1 gate: trustworthy inventory, reviewed first packet, reproducible
+  baseline, and tested execution infrastructure. Draft review can continue
+  independently while infrastructure is repaired.
+
+  ### Day 2 — Close transport and ownership prerequisites
+
+  Implement the missing fault supervisor and independent owner observer, then
+  run each mode in a fresh guest:
+
+   Mode                                   Required observation
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Hard failure before publication        Accepted return stops waiting;
+                                          unpublished response and required
+                                          owners remain safely retained.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   Notification failure after             Exactly one real publication; no
+   publication                            later host access or duplicate
+                                          publication after ownership
+                                          transfer.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   Recoverable backpressure               Original result survives retries;
+                                          application completes normally;
+                                          eight subsequent HELLO applications
+                                          pass.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   Permanent backpressure                 Production five-second completion
+                                          deadline takes effect; host waiter
+                                          exits within 15 seconds; quarantine
+                                          ownership remains stable.
+
+  - Capture the actual OS generation, delivery, response claim, worker and
+    retained owners. Logs or disappearing procfs entries alone cannot
+    establish ownership.
+
+  - Verify physical ring saturation and recovery separately. Injected EAGAIN
+    cannot close the full-ring requirement.
+
+  - Treat continuing-service failure/admission handling and VM invalidation
+    ownership as priority defects: affected admission must close safely,
+    detached zeroing work must remain owned, and backing memory must remain
+    unavailable for reuse while stale mappings could survive.
+
+  - Rebuild and repeat affected baseline/fault checks after repairs. Keep
+    verification-only injection artifacts separate from production artifacts.
+
+  - Release a new, reviewed execution packet only after current-input, runner
+    and required transport gates pass. Preserve the original draft-only
+    packets.
+
+  Day 2 gate: evidence-backed execution release for a small supported subset.
+  If ownership or infrastructure remains unresolved, continue that work and
+  keep new application execution blocked.
+
+  ### Day 3 — Accept supported applications and establish repeatability
+
+  - Execute reviewed, dependency-ready cases in this order: startup and
+    streams; allocation/VM and regular files; ordinary threads/futexes/local
+    signals/time; unchanged utilities and deterministic numerical workloads.
+
+  - Within each wave, follow existing queue order and skip only explicitly
+    blocked dependencies, recording the reason. Extended loaders, successful
+    fork, external signals and optional instructions require their own
+    capability evidence.
+
+  - After a short case first passes, run three additional repetitions in the
+    same OS and one in a fresh guest with identical inputs.
+
+  - Run the existing ten-cycle campaign only after its seven members pass:
+    cat-file, wc-bytes, sha256sum, cp, numeric sort, gzip compression and
+    decompression. Freeze guest batch membership beforehand and retain the
+    300-second guest limit.
+
+  - Spend remaining time on the earliest blocking functionality defect. Native
+    shutdown/drain is the next major integration milestone; a complete
+    shutdown implementation is a stretch outcome for this run.
+
+  Day 3 deliverable: an exact accepted-case count, preserved failures and
+  blocked dependencies, source-bound results, and a concrete next defect or
+  integration task. If prerequisite gates consume the run, deliver their
+  completed evidence and remaining blocker without claiming application
+  acceptance.
+
+  ## Complete roadmap beyond the first execution subset
+
+  Every existing production gate remains mapped to its original acceptance
+  contract.
+
+   Workstream                             Remaining completion work
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WS00 — Baseline and traceability       Finish behavior → Rust owner →
+                                          independent test mapping. Reconcile
+                                          current evidence with historical
+                                          trackers without promoting
+                                          incomplete contracts.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS10 — Rocky platform                  Reproducible pinned source/
+                                          toolchain/configuration;
+                                          deterministic staging; RPM
+                                          packaging; signatures and Secure
+                                          Boot negatives; installation,
+                                          rescue, update and rollback; exact-
+                                          package virtual and physical boot.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS20 — Shared substrate                Complete ABI, allocation/mapping,
+                                          device/uaccess, locking/refcount/
+                                          RCU, asynchronous cancellation,
+                                          CPU/IRQ and process-service
+                                          contracts. Refresh the unsafe/FFI
+                                          inventory and compiler captures;
+                                          complete independent review.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS30 — IHK                             Verify registries, resources,
+                                          mappings, queues/channels,
+                                          cancellation, concurrent lifecycle,
+                                          unload/failure ownership, zero-C
+                                          module closure and differential
+                                          parity.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS40 — SMP and OS lifecycle            Stop admission; drain applications
+                                          and senders; stop McKernel CPUs;
+                                          drain IRQ/work callbacks; retire
+                                          channels/mappings; restore CPUs,
+                                          memory and affinities; destroy/
+                                          recreate OS and unload/reload
+                                          modules. Then validate multicore,
+                                          NUMA, multi-OS isolation, hotplug
+                                          and crash/restart. VM disposal does
+                                          not establish restoration.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS50 — mcctrl and application          Complete external signal delivery/
+   capabilities                           restart; robust futex owner death;
+                                          fork/COW/adoption → exec/wait; IPC
+                                          and extended loaders; ptrace;
+                                          remote-memory invalidation; procfs/
+                                          sysfs removal races; affinity/
+                                          migration; every failure unwind and
+                                          lifetime boundary.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS60 — Integration                     Exact production builds, ABI
+                                          goldens, same-kernel differential
+                                          checks, unchanged tools/
+                                          applications, supported syscall
+                                          families, lifecycle restoration,
+                                          deterministic faults, complete
+                                          accounting and performance smoke.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS70 — Qualification                   MPI/OpenMP, XPMEM and supported
+                                          optional configurations; numerical/
+                                          HPC workloads; stress, sanitizers,
+                                          malformed interfaces, privilege
+                                          checks, fuzzing, resource-growth
+                                          and performance campaigns; Intel/
+                                          AMD hardware exposure.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   WS80 — Release                         Close blockers; produce signed
+                                          packages, SBOM and provenance;
+                                          publish the verified compatibility
+                                          matrix, operations/recovery
+                                          procedures and diagnostics; obtain
+                                          independent final acceptance.
+  ─────────────────────────────────────  ─────────────────────────────────────
+   MK-LANG — Rust/assembly completion     Refresh exact-image provenance and
+                                          every existing Rust consumer. Reuse
+                                          established Rust to replace
+                                          remaining syscall, process, memory,
+                                          CPU and support/runtime C bodies.
+                                          Require production executable and
+                                          dispatch closure with no C
+                                          implementation or unknown origins,
+                                          followed by workload, shutdown and
+                                          reproducibility evidence.
+
+  Application coverage retains all 15 families: startup, memory, files,
+  threads, futexes, signals, time, processes, IPC, loaders, unchanged
+  applications, numerical work, failure phases, exhaustion and vectors.
+
+  Vector work proceeds through corrected capability discovery and opcode
+  auditing, XMM/YMM raw-syscall preservation, arithmetic, observed thread
+  transitions, signal state, guarded memory and complete crypto known answers.
+  Extended signal frames and first-entry state need dedicated observers. AVX-
+  512 remains conditional on each guest engine’s CPUID/XCR0 evidence.
+
+  Rust completion follows demonstrated runtime coverage. Preserve fallback/
+  reference builds during migration, then prove the final production path no
+  longer depends on them. Assembly remains permitted.
+
+  ## Verification, operating limits and handoff
+
+  - Preserve public headers, symbols, syscall/ioctl numbers, IKC formats and
+    launcher behavior. Add verification interfaces through versioned manifests
+    and reviewed test facilities.
+
+  - Test runner rejection of stale hashes, missing capabilities/oracles,
+    malformed output, missing provenance, incorrect signal classification,
+    stream pressure, existing attempt directories, timeouts and failed QMP
+    resume.
+
+  - Apply targeted source/ABI/equivalence checks, relevant fallback/Rust/
+    module builds, link and opcode checks, then affected guest regressions.
+    Stop the affected batch at the first unexpected failure; preserve it
+    before diagnosis.
+
+  - Use one coordinator and independent fixture-review, infrastructure and
+    defect-review lanes. Serialize builds and guests under the existing four-
+    CPU, 12-GiB, no-swap, 512-task limits. Keep the initial McKernel profile
+    at one CPU/128 MiB.
+
+  - Retain catalog deadlines: ordinarily ten seconds per payload, 15 seconds
+    cleanup and 300 seconds per application guest; original full controls
+    retain their documented 600 seconds.
+
+    growth and emergency capture space while preserving existing runner/build
+    free-space floors. Remove only verified redundant evidence.
+
+  - Save coherent checkpoints approximately every 30 minutes and before long
+    runs or session end; verify fetched GitHub blobs. Report accepted logical
+    cases separately from parameter runs, reference runs, protocol checks and
+    blocked cases.
+
+  The larger completion contract still requires configurations beyond the
+  local four-CPU limit, 168-hour Intel and AMD soaks, 30,000 bare-metal node-
+  hours and 100,000 fuzzing VM-hours. Preserve those requirements as
+  subsequent qualification work. At the three-day checkpoint, publish
+  completed gates, exact accepted artifacts, unresolved failures and the next
+  ordered work queue.

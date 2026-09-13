@@ -2,6 +2,27 @@
 
 Updated: 2026-06-02
 
+## Active stability and complete-verification goal (2026-09-13)
+
+The user has authorized implementation of the full stability/verification
+roadmap and explicitly removed its earlier three-day deadline. The active
+objective is preserved in `docs/verification/stability-goal-20260913.txt`;
+the continuation entry point is `docs/verification/stability-run-20260913.md`.
+This supersedes the completed Spark drafting-only phase and its model-switch
+stops. Continue implementation, fixture/oracle review, infrastructure repair,
+isolated validation and verified GitHub checkpoints without repeated permission.
+The user requested independent review/infrastructure/defect lanes. Heavy
+builds and guests remain serialized under the existing four-CPU/12-GiB limits.
+
+Preserve all original released catalogs, packets, reports, failure evidence and
+historical scores. Correct historical references through additive, source-bound
+records. Prerequisite baseline, runner and transport-fault work is authorized;
+new catalog execution still requires all global and case capability gates plus
+a separately reviewed execution packet. Drafting or protocol-test success never
+counts as application acceptance. Retain current Rust consumers and the full
+Rust/assembly, native production and qualification requirements. Do not reduce
+the goal to the first application subset or mark it complete at a checkpoint.
+
 ## Codex Spark goal entry point (2026-09-09)
 
 The user requested a ready-to-run goal and reference files for Codex Spark.
