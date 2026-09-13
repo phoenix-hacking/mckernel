@@ -1,0 +1,118 @@
+{
+  "actual_gate_union": [
+    "current-inputs",
+    "runner-contract",
+    "runtime-transport-fault-injection",
+    "dynamic-etexec"
+  ],
+  "application_acceptance": false,
+  "compiler_execution": false,
+  "container_execution": false,
+  "execution_backend_implemented": false,
+  "first_draft_correction": {
+    "original_document": {
+      "path": "/tmp/stability-application-backend-map-20260913-_f9x_awt/integration-map.md",
+      "sha256": "93fe57447f13a4dc0fcb309ad6414223df25e73c2963ef37ec43e0bd5370a182"
+    },
+    "reason": "Initial map incorrectly called v3 oracle schema directly reusable. Independent source review established the exact incompatible keys; final map requires new records with unchanged expected bytes."
+  },
+  "guest_execution": false,
+  "independent_review": {
+    "findings_applied": [
+      "V3 oracle schema is incompatible with strict independent-oracle; new derived records must preserve original expected bytes.",
+      "Explicit integer18 to string0022 umask and environment to env mapping.",
+      "Single-collection evaluator cannot pair engines or establish payload provenance.",
+      "Interpreter/DSO identities are not rederived from executable/root by current evaluator."
+    ],
+    "reviewer": "/root/progress_audit",
+    "scope": "Narrow read-only compatibility review of runtime contracts, evaluator and reviewed packet001-v3; not a new runtime release or a test execution.",
+    "test_execution": false
+  },
+  "kind": "application-backend-integration-map",
+  "map": {
+    "path": "docs/verification/stability-application-backend-map-20260913.md",
+    "sha256": "b1e459e61a41a4232e30df59d5ff686ad9ab4dc75d3912e7ed7a4b3c8a7e6142",
+    "size": 12802
+  },
+  "next_slice": "Metadata-only planned CLI with immutable fresh attempt retention and unconditional NOT_RUN/BLOCKED while backend is absent.",
+  "production_gate_credit": false,
+  "run_py_exists_at_review": false,
+  "schema_version": 1,
+  "scope": "Existing metadata/supervisor/compile interfaces and first reviewed startup packet integration; no backend implementation or execution release.",
+  "source_capture": "/tmp/stability-application-backend-map-20260913-_f9x_awt",
+  "sources": [
+    {
+      "path": "scripts/application-tests/README.md",
+      "sha256": "58d1d9d65e3199c7da5e8824a06a02061118ae19f6baf0231aadbb53147f3e5b",
+      "size": 15560
+    },
+    {
+      "path": "scripts/application-tests/runtime-contract.md",
+      "sha256": "88751b5d92ac319b5e7b2b7f4be799f82498cb9bf72a33dde5db3c7ff02c3d89",
+      "size": 9739
+    },
+    {
+      "path": "scripts/application-tests/runtime_contracts.py",
+      "sha256": "6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e",
+      "size": 27703
+    },
+    {
+      "path": "scripts/application-tests/supervisor.py",
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "size": 24564
+    },
+    {
+      "path": "scripts/application-tests/compile_reviewed.py",
+      "sha256": "cca8642312fbee7eb43c5612ff7f924f27463c1af211ea2feaff084e3f8029b8",
+      "size": 12485
+    },
+    {
+      "path": "scripts/application-tests/verification_state.py",
+      "sha256": "46de065ad4c99769a9cb644b472731398adfcce1b8087dc3b728d1045e4c58a8",
+      "size": 39732
+    },
+    {
+      "path": "scripts/application-tests/cases.json",
+      "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+      "size": 1387917
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/review.json",
+      "sha256": "1468456b482ab77315336279ecc1ff279949446181688f54d3981149a8e5e581",
+      "size": 4211
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/REVIEW.md",
+      "sha256": "9664a3e63c78875c62954829d6d9d13f1ca24109da64e26831857216cf832792",
+      "size": 2529
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+      "size": 687
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+      "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+      "size": 730
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+      "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+      "size": 16892
+    },
+    {
+      "path": "docs/verification/stability-packet001-review-20260913.json",
+      "sha256": "61fc92ad9b60ec2ca39121a32dae0ebce67055cf6bc4478dffbf9bc751dca07c",
+      "size": 64134
+    },
+    {
+      "path": "docs/verification/stability-packet001-compile-20260913-1.json",
+      "sha256": "65d12c45da7677f95436a0603e5e471aa22f03de6cee84554c1fdb2d277382f6",
+      "size": 56667
+    }
+  ],
+  "status": "REVIEWED_SOURCE_ONLY_INTEGRATION_MAP",
+  "test_execution": false,
+  "transport_acceptance": false
+}

@@ -235,3 +235,43 @@ response bytes and transport acceptance still require a successful fresh guest
 and independent review. Current production remains the repaired pair with all
 eight original suites passing; catalog totals are three compiled, zero executed
 and zero accepted.
+
+
+## Real guest collection and runnable-thread prerequisite
+
+Guest3 demonstrated complete real virtio artifact export and acknowledged
+shutdown. Its Linux reference child failed setup before exec because /case/work
+was missing. Root3 explicitly includes that directory and preserves the failed
+root/child diagnostics. Guest4 then passed the Linux reference (exact READY,
+PASS and raw exit37), launched the McKernel payload and collected a complete
+selected-read owner snapshot. Its stopped physical response was status0/wake0:
+the guest was spinning. The strict wake2 prerequisite correctly rejected it
+before input ACK. Without descheduling, native completion has no wake packet
+and bypasses the send fault. Controller deadline/owned kill and later EOF RET0
+are preserved cleanup effects, not selected fault execution or acceptance.
+Both guests, parents, root3/preflight and all16 passing physical comparator tests
+are retained in stability-fault-integration-20260913-2.json. The real export
+channel now works; transport-fault acceptance remains open.
+
+The additive payload-runnable-thread-v1.c creates one actual pthread with a
+256-KiB stack and an atomic start handshake. Its runnable helper loop makes no
+calls while the original guarded read16 is outstanding. Normal completion
+signals and joins that thread before exact PASS/exit37. Source reviews and the
+actual compiled loop are linked in stability-runnable-thread-payload-review-20260913.json;
+all original fixtures remain preserved. The owner parser accepts additional
+observed rows under its existing caps; no counter or physical assertion changed.
+Actual wake2 must still be observed before releasing input in the next guest.
+
+The new payload builds under unchanged warnings/pthread flags. Root4 selects
+it explicitly, verifies all compiler/loader/output identities and passes the
+initializer and empty cwd checks. stability-runnable-profile-20260913-1.json
+retains the complete build/preparation/root/preflight trees. Invocation5 uses
+these exact inputs and unchanged verification module3. Current production
+continues to have all eight original suites passing; new catalog counts remain
+three compiled, zero executed, zero accepted.
+
+Independent source work also maps the application backend's missing payload
+provenance interfaces and the first pinned pending-free list transfer/reset
+primitive. These are preparation for later implementation, not a released
+application runner or an invalidation repair. All language, native lifecycle,
+platform and extended qualification requirements remain in the full roadmap.

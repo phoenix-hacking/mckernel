@@ -89,6 +89,7 @@ def prepare(args):
     args.output.mkdir()
     record = dict(status='RUNNING', started_utc=datetime.now(timezone.utc).isoformat(),
                   mode=args.mode, nonce=args.nonce, inputs=[], bindings=[],
+                  payload_profile=args.payload_profile,
                   guest_execution=False, payload_execution=False, application_acceptance=False,
                   transport_acceptance=False, production_gate_credit=False)
 
@@ -124,8 +125,17 @@ def prepare(args):
         assert first['phase'] == 'artifact-exporter-compile'
         second = load(utility2, 'PASS_BUILD_AND_SYNTHETIC_COLLECTION_TESTS_ONLY')
         assert second['prior_attempt_record'] == identity(utility1 / 'record.json')
-        payload = work / 'stability-transport-infrastructure-20260913-1'
-        payload_record = load(payload, 'FAIL')
+        if args.payload_profile == 'single-thread-v1':
+            payload = work / 'stability-transport-infrastructure-20260913-1'
+            payload_record = load(payload, 'FAIL')
+        else:
+            assert args.payload_profile == 'runnable-thread-v1'
+            payload = work / 'stability-runnable-thread-payload-build-20260913-1'
+            payload_record = load(payload, 'PASS_BUILD_ONLY')
+            assert payload_record['payload_profile'] == args.payload_profile
+            assert payload_record['payload_source']['sha256'] == 'dbc68dc4e981c0ed3433491747b4dcd7a031548fbd84bddbd8e98361d4681491'
+            for row in payload_record['compiler_dependencies'] + payload_record['compiled_outputs']:
+                assert identity(Path(row['path'])) == row
         auxiliary = work / 'stability-artifact-channel-module-20260913-1'
         auxiliary_record = load(auxiliary, 'PASS_BUILD_ONLY')
         record['reused_failed_attempt_outputs'] = (
@@ -152,7 +162,7 @@ def prepare(args):
             target.chmod(0o755)
         # Exact libraries already selected by the accepted baseline must match
         # every independently captured collection utility dependency.
-        for row in first['loader_dependencies'] + second['loader_dependencies']:
+        for row in first['loader_dependencies'] + second['loader_dependencies'] + payload_record.get('loader_dependencies', []):
             source = Path(row['path'])
             assert identity(source) == row
             target = root / str(source).lstrip('/')
@@ -185,6 +195,10 @@ def prepare(args):
                 assert identity(Path(row['path'])) == row
             record['bindings'].append(dict(prepared=identity(root / relative), compiler_outputs=matches))
         (root / 'stability').mkdir(mode=0o700)
+        # The unchanged controller sets this exact working directory before
+        # execve for both engines. Keep it explicit in the prepared inventory.
+        (root / 'case').mkdir(mode=0o755)
+        (root / 'case/work').mkdir(mode=0o755)
         original = (root / 'init').read_text()
         marker = "printf 'NATIVE_APPLICATION_LINUX_REFERENCE begin\\n'"
         assert original.count(marker) == 1
@@ -243,6 +257,7 @@ while IFS= read -r line; do
 done </stability/boot-dmesg.txt
 [[ "$boot_count" -eq 1 && "$boot_os" -eq 0 && "$boot_generation" -gt 0 ]]
 printf 'STABILITY_BOOT_ID os=%s generation=%s\\n' "$boot_os" "$boot_generation" >/stability/boot-identity.txt
+[[ -d /case/work && ! -L /case && ! -L /case/work && -d /proc/self/fd ]]
 /bin/fault-controller --linux-reference @NONCE@ /stability/linux /bin/fault-payload >/stability/linux-controller.stdout 2>/stability/linux-controller.stderr
 printf 'STABILITY_LINUX_REFERENCE_EXIT status=0\\n'
 status=0
@@ -273,5 +288,6 @@ if __name__ == '__main__':
     parser.add_argument('--module', type=Path, required=True)
     parser.add_argument('--mode', choices=['prepublish-hard'], required=True)
     parser.add_argument('--nonce', required=True)
+    parser.add_argument('--payload-profile', choices=['single-thread-v1', 'runnable-thread-v1'], default='single-thread-v1')
     parser.add_argument('--output', type=Path, required=True)
     prepare(parser.parse_args())
