@@ -66,7 +66,9 @@ streams; actual guest execution and all transport prerequisites remain pending.
 
 The H04 admission/quarantine and pump-order repair is integrated after all 50
 controlled exact-method tests passed; see `stability-service-failure-tests-20260913-3.json`.
-The native module rebuild and guest replay are pending. The original source review
+The repaired module attempt 2026091301 builds and passes all eight unchanged
+suites on image3. Full current bindings and fifteen complete captures are in
+`stability-service-failure-baseline-20260913-1.json`. The original source review
 and candidate are preserved in `stability-service-failure-review-20260913.md`.
 Controlled tests are distinct from actual guest failure evidence. Preserve every
 failed attempt, including the initial stage binding mismatch, harness output-path
@@ -95,3 +97,20 @@ Commit and push coherent work about every 30 minutes and before long runs or
 session end; verify fetched GitHub blobs. Preserve active dependencies and all
 failure evidence. Audited removal of redundant retained copies and targeted
 scratch trim remain authorized. A WIP checkpoint is not goal completion.
+
+## Second implementation checkpoint
+
+The current production pair is module2026091301/image3, containing the reviewed
+H04 repair. Its eight-suite replay has passed; actual four-mode transport-fault
+and physical full-ring acceptance remain open. The typed owner observer builds
+in an isolated verification overlay, with production stage and object trees
+restored after compilation. Its phase wiring, stack-frame audit and actual guest
+observations are pending. The controller and parser are under separate source
+review; no new catalog payload has executed.
+
+The invalidation ownership audit is
+`stability-invalidation-ownership-review-20260913.md`. It identifies ignored host
+clear errors, per-CPU pending-free ownership and inherited host mapping aliases
+as repair obligations. No unsafe partial fix or stale-mapping runtime proof is
+claimed. The dated ledger v2 preserves three reviewed/compiled startup cases and
+zero accepted cases; later records retain their own exact source identities.

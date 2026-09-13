@@ -1,0 +1,4169 @@
+{
+  "actual_guest_transport_fault_verified": false,
+  "actual_stack_frames_verified": false,
+  "build_command_input": {
+    "path": "/work/native-irq-transport-exact-stage-20260907-1/module-build.command",
+    "sha256": "6512503abf3a7994a7c2acef74562796db7eb26580ebcc116ba089ff3f82c0b0",
+    "size": 605
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/rustc",
+        "--edition",
+        "2021",
+        "-D",
+        "warnings",
+        "--test",
+        "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer-state.rs",
+        "-o",
+        "/work/stability-owner-observer-module-20260913-1/observer-tests"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/rustc",
+          "--edition",
+          "2021",
+          "-D",
+          "warnings",
+          "--test",
+          "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer-state.rs",
+          "-o",
+          "/work/stability-owner-observer-module-20260913-1/observer-tests"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.5274828629917465,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507104.148399551,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/rustc",
+          "sha256": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6",
+          "size": 15560
+        },
+        "executable_path": "/usr/bin/rustc",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507104.163495749,
+        "monotonic_started": 507103.636012886,
+        "payload_completion_observed_monotonic": 507104.148393831,
+        "payload_monotonic_deadline": 507223.636718141,
+        "payload_monotonic_started": 507103.636718141,
+        "process": {
+          "pgid": 8,
+          "pid": 8,
+          "ppid": 7,
+          "session": 8,
+          "starttime_ticks": 50710363,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/observer-state-build-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/observer-state-build-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 7,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "observer-state-build"
+    },
+    {
+      "argv": [
+        "/work/stability-owner-observer-module-20260913-1/observer-tests",
+        "--nocapture"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/work/stability-owner-observer-module-20260913-1/observer-tests",
+          "--nocapture"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.052158306003548205,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507104.277278229,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/work/stability-owner-observer-module-20260913-1/observer-tests",
+          "sha256": "ac23933611890216ceebf66644ca0010a24d4ed98b054812739d52c3fcfffa1b",
+          "size": 14625648
+        },
+        "executable_path": "/work/stability-owner-observer-module-20260913-1/observer-tests",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507104.309582493,
+        "monotonic_started": 507104.257424187,
+        "payload_completion_observed_monotonic": 507104.277273362,
+        "payload_monotonic_deadline": 507224.275538595,
+        "payload_monotonic_started": 507104.275538595,
+        "process": {
+          "pgid": 20,
+          "pid": 20,
+          "ppid": 19,
+          "session": 20,
+          "starttime_ticks": 50710427,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/observer-state-tests-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/observer-state-tests-collection/stdout.bin",
+              "sha256": "4ca2c0902a0e0bfd95f4ff2c9e7784fc34d1f867f2e294467f1d1ed2819a7e4f",
+              "size": 200
+            },
+            "bytes_observed": 200,
+            "bytes_retained": 200,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 19,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "observer-state-tests"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/test_verification_state.py",
+        "-v"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/test_verification_state.py",
+          "-v"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 8.83045615896117,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507113.199868218,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507113.224232637,
+        "monotonic_started": 507104.393776478,
+        "payload_completion_observed_monotonic": 507113.199860603,
+        "payload_monotonic_deadline": 507224.394348944,
+        "payload_monotonic_started": 507104.394348944,
+        "process": {
+          "pgid": 23,
+          "pid": 23,
+          "ppid": 22,
+          "session": 23,
+          "starttime_ticks": 50710439,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ledger-tests-collection/stderr.bin",
+              "sha256": "aef6537f436cdf8c63620be03b9e805c97b0a431e566c1d29f992f7f7e2742e7",
+              "size": 3259
+            },
+            "bytes_observed": 3259,
+            "bytes_retained": 3259,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ledger-tests-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 22,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ledger-tests"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/prepare_stability_owner_observer.py",
+        "--source",
+        "/work/native-ultra-module-20260909-2026091301/staged-source",
+        "--output",
+        "/work/stability-owner-observer-module-20260913-1/overlay"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/prepare_stability_owner_observer.py",
+          "--source",
+          "/work/native-ultra-module-20260909-2026091301/staged-source",
+          "--output",
+          "/work/stability-owner-observer-module-20260913-1/overlay"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.09686801501084119,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507113.419502766,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507113.446632803,
+        "monotonic_started": 507113.349764788,
+        "payload_completion_observed_monotonic": 507113.419497014,
+        "payload_monotonic_deadline": 507233.350288778,
+        "payload_monotonic_started": 507113.350288778,
+        "process": {
+          "pgid": 25,
+          "pid": 25,
+          "ppid": 24,
+          "session": 25,
+          "starttime_ticks": 50711335,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/prepare-observer-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/prepare-observer-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 24,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "prepare-observer"
+    },
+    {
+      "argv": [
+        "/usr/bin/rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_rpc.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_syscall.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_image.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_syscall.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_file_pager.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_procfs.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_service.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_memory.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_smp_x86_64.rs",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/stability_observer.rs"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/rustfmt",
+          "--edition",
+          "2021",
+          "--config",
+          "skip_children=true,reorder_modules=false",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_rpc.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_syscall.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_image.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_syscall.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_file_pager.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_procfs.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_service.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_memory.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_smp_x86_64.rs",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/stability_observer.rs"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.17994304798776284,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507113.740767157,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/rustfmt",
+          "sha256": "317296cd1e88440b66f8439526ef00c0debec93b5ff97951c9e3e52e4df6890e",
+          "size": 5206304
+        },
+        "executable_path": "/usr/bin/rustfmt",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507113.764384092,
+        "monotonic_started": 507113.584441044,
+        "payload_completion_observed_monotonic": 507113.740761429,
+        "payload_monotonic_deadline": 507233.609250842,
+        "payload_monotonic_started": 507113.609250842,
+        "process": {
+          "pgid": 27,
+          "pid": 27,
+          "ppid": 26,
+          "session": 27,
+          "starttime_ticks": 50711360,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/format-overlay-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/format-overlay-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 26,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "format-overlay"
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "GNUMAKEFLAGS=",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "LANG=C",
+        "LC_ALL=C",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "MAKEFILES=",
+        "MAKEFLAGS=",
+        "MAKEOVERRIDES=",
+        "MFLAGS=",
+        "PATH=/usr/bin:/bin",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "TZ=UTC",
+        "/usr/bin/make",
+        "-C",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2",
+        "O=/work/native-build-base-24a151fe",
+        "ARCH=x86_64",
+        "LLVM=1",
+        "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+        "-j4",
+        "drivers/misc/mckernel/ihk.ko",
+        "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+        "drivers/misc/mckernel/mcctrl.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/env",
+          "-i",
+          "BASH_ENV=",
+          "ENV=",
+          "GNUMAKEFLAGS=",
+          "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+          "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+          "KBUILD_BUILD_USER=mckernel",
+          "KBUILD_BUILD_VERSION=1",
+          "LANG=C",
+          "LC_ALL=C",
+          "LD_LIBRARY_PATH=",
+          "LD_PRELOAD=",
+          "MAKEFILES=",
+          "MAKEFLAGS=",
+          "MAKEOVERRIDES=",
+          "MFLAGS=",
+          "PATH=/usr/bin:/bin",
+          "SOURCE_DATE_EPOCH=1786434034",
+          "TZ=UTC",
+          "/usr/bin/make",
+          "-C",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2",
+          "O=/work/native-build-base-24a151fe",
+          "ARCH=x86_64",
+          "LLVM=1",
+          "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+          "-j4",
+          "drivers/misc/mckernel/ihk.ko",
+          "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+          "drivers/misc/mckernel/mcctrl.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 23.62048560398398,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507135.574080569,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/env",
+          "sha256": "3164957405d820d74c59ce94cbe8e20eafa4d25366f53e4de9e3f4a149a9576c",
+          "size": 50
+        },
+        "executable_path": "/usr/bin/env",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507137.507742167,
+        "monotonic_started": 507113.887256563,
+        "payload_completion_observed_monotonic": 507135.574073056,
+        "payload_monotonic_deadline": 508913.898570807,
+        "payload_monotonic_started": 507113.898570807,
+        "process": {
+          "pgid": 29,
+          "pid": 29,
+          "ppid": 28,
+          "session": 29,
+          "starttime_ticks": 50711389,
+          "state": "D"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/native-module-build-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/native-module-build-collection/stdout.bin",
+              "sha256": "ab7e470494660a8761deca2c615f2b3cf80147b891548f4fca4b7391c7aad809",
+              "size": 1137
+            },
+            "bytes_observed": 1137,
+            "bytes_retained": 1137,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 28,
+        "timeout_seconds": 1800.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "native-module-build"
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-d",
+        "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/objdump",
+          "-d",
+          "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.11167164798825979,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507137.708544573,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/objdump",
+          "sha256": "6515c0504cdef7aae684a33101fafbdb656695a2c49cd6611449132ebcfe2a7a",
+          "size": 444544
+        },
+        "executable_path": "/usr/bin/objdump",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507137.771172864,
+        "monotonic_started": 507137.659501216,
+        "payload_completion_observed_monotonic": 507137.708538403,
+        "payload_monotonic_deadline": 507257.682181317,
+        "payload_monotonic_started": 507137.682181317,
+        "process": {
+          "pgid": 518,
+          "pid": 518,
+          "ppid": 517,
+          "session": 518,
+          "starttime_ticks": 50713768,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-disassembly-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-disassembly-collection/stdout.bin",
+              "sha256": "bf136c9d5d4fcb83b98fe3e753bffb6fa83f4df4920e43b1900bbb5c8d809545",
+              "size": 409226
+            },
+            "bytes_observed": 409226,
+            "bytes_retained": 409226,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 517,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk.ko-disassembly"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-S",
+        "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-S",
+          "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.06453111296286806,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507137.903154025,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507137.954415757,
+        "monotonic_started": 507137.889884644,
+        "payload_completion_observed_monotonic": 507137.903147243,
+        "payload_monotonic_deadline": 507257.890516968,
+        "payload_monotonic_started": 507137.890516968,
+        "process": {
+          "pgid": 520,
+          "pid": 520,
+          "ppid": 519,
+          "session": 520,
+          "starttime_ticks": 50713789,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-symbols-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-symbols-collection/stdout.bin",
+              "sha256": "ff93c2ca5f2498d00237ad6caa4bd820c5e7016ddbc5a073b625a586e7e10eb7",
+              "size": 25406
+            },
+            "bytes_observed": 25406,
+            "bytes_retained": 25406,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 519,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk.ko-symbols"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-u",
+          "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.07894155301619321,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507138.134944974,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507138.201961889,
+        "monotonic_started": 507138.123020336,
+        "payload_completion_observed_monotonic": 507138.134939732,
+        "payload_monotonic_deadline": 507258.123618222,
+        "payload_monotonic_started": 507138.123618222,
+        "process": {
+          "pgid": 522,
+          "pid": 522,
+          "ppid": 521,
+          "session": 522,
+          "starttime_ticks": 50713812,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-undefined-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-undefined-collection/stdout.bin",
+              "sha256": "f2a401218fe8b6245b9e27175720cc741a1db98b7cd4d695de9e15481da6a215",
+              "size": 2101
+            },
+            "bytes_observed": 2101,
+            "bytes_retained": 2101,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 521,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk.ko-undefined"
+    },
+    {
+      "argv": [
+        "/usr/sbin/modinfo",
+        "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/sbin/modinfo",
+          "/work/stability-owner-observer-module-20260913-1/ihk.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.07391680794535205,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507138.340874357,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/kmod",
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "size": 182088
+        },
+        "executable_path": "/usr/sbin/modinfo",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507138.412293517,
+        "monotonic_started": 507138.338376709,
+        "payload_completion_observed_monotonic": 507138.340870402,
+        "payload_monotonic_deadline": 507258.339186044,
+        "payload_monotonic_started": 507138.339186044,
+        "process": {
+          "pgid": 524,
+          "pid": 524,
+          "ppid": 523,
+          "session": 524,
+          "starttime_ticks": 50713833,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-modinfo-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko-modinfo-collection/stdout.bin",
+              "sha256": "90c83aa3a7b42e6c2a96bb77c2ebe3c6d2aae17955d5574c37c3eb1db24e54fd",
+              "size": 411
+            },
+            "bytes_observed": 411,
+            "bytes_retained": 411,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 523,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk.ko-modinfo"
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-d",
+        "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/objdump",
+          "-d",
+          "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 1.1794057349907234,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507138.673300014,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/objdump",
+          "sha256": "6515c0504cdef7aae684a33101fafbdb656695a2c49cd6611449132ebcfe2a7a",
+          "size": 444544
+        },
+        "executable_path": "/usr/bin/objdump",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507139.73854521,
+        "monotonic_started": 507138.559139475,
+        "payload_completion_observed_monotonic": 507138.67329454,
+        "payload_monotonic_deadline": 507258.560234968,
+        "payload_monotonic_started": 507138.560234968,
+        "process": {
+          "pgid": 526,
+          "pid": 526,
+          "ppid": 525,
+          "session": 526,
+          "starttime_ticks": 50713856,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-disassembly-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-disassembly-collection/stdout.bin",
+              "sha256": "5aa3b0a8343b7f8fed0f0d2915e1c01975a20af47b88469b1354284b50e9c354",
+              "size": 4927504
+            },
+            "bytes_observed": 4927504,
+            "bytes_retained": 4927504,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 525,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk-smp-x86_64.ko-disassembly"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-S",
+        "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-S",
+          "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.047301204001996666,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507139.942043244,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507139.976360771,
+        "monotonic_started": 507139.929059567,
+        "payload_completion_observed_monotonic": 507139.942037381,
+        "payload_monotonic_deadline": 507259.929657032,
+        "payload_monotonic_started": 507139.929657032,
+        "process": {
+          "pgid": 528,
+          "pid": 528,
+          "ppid": 527,
+          "session": 528,
+          "starttime_ticks": 50713992,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-symbols-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-symbols-collection/stdout.bin",
+              "sha256": "0d90eb9b2a4621298575218da5941e8ec5bab5f963f691925968b145a37cfa58",
+              "size": 162922
+            },
+            "bytes_observed": 162922,
+            "bytes_retained": 162922,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 527,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk-smp-x86_64.ko-symbols"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-u",
+          "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.04932414600625634,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507140.089439143,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507140.126094427,
+        "monotonic_started": 507140.076770281,
+        "payload_completion_observed_monotonic": 507140.089433084,
+        "payload_monotonic_deadline": 507260.077438829,
+        "payload_monotonic_started": 507140.077438829,
+        "process": {
+          "pgid": 530,
+          "pid": 530,
+          "ppid": 529,
+          "session": 530,
+          "starttime_ticks": 50714007,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-undefined-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-undefined-collection/stdout.bin",
+              "sha256": "89c4b8580bfc28a2c6806548cf7a11edfea5ad537d0213a00d6de4b91619c62a",
+              "size": 8488
+            },
+            "bytes_observed": 8488,
+            "bytes_retained": 8488,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 529,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk-smp-x86_64.ko-undefined"
+    },
+    {
+      "argv": [
+        "/usr/sbin/modinfo",
+        "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/sbin/modinfo",
+          "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.05187713197665289,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507140.23074847,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/kmod",
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "size": 182088
+        },
+        "executable_path": "/usr/sbin/modinfo",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507140.280231718,
+        "monotonic_started": 507140.228354586,
+        "payload_completion_observed_monotonic": 507140.230744483,
+        "payload_monotonic_deadline": 507260.229164642,
+        "payload_monotonic_started": 507140.229164642,
+        "process": {
+          "pgid": 532,
+          "pid": 532,
+          "ppid": 531,
+          "session": 532,
+          "starttime_ticks": 50714022,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-modinfo-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko-modinfo-collection/stdout.bin",
+              "sha256": "5c63ff07bf2c45c962953f3cdbfcb5e06c7a444d38486af8b2d281e0e0fbd197",
+              "size": 902
+            },
+            "bytes_observed": 902,
+            "bytes_retained": 902,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 531,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "ihk-smp-x86_64.ko-modinfo"
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-d",
+        "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/objdump",
+          "-d",
+          "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.12143564998405054,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507140.407516385,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/objdump",
+          "sha256": "6515c0504cdef7aae684a33101fafbdb656695a2c49cd6611449132ebcfe2a7a",
+          "size": 444544
+        },
+        "executable_path": "/usr/bin/objdump",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507140.512824316,
+        "monotonic_started": 507140.391388666,
+        "payload_completion_observed_monotonic": 507140.407510355,
+        "payload_monotonic_deadline": 507260.392497596,
+        "payload_monotonic_started": 507140.392497596,
+        "process": {
+          "pgid": 534,
+          "pid": 534,
+          "ppid": 533,
+          "session": 534,
+          "starttime_ticks": 50714039,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-disassembly-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-disassembly-collection/stdout.bin",
+              "sha256": "18b95a5c93e5fa3e0ee302a5de6c57f01903ebb9ff57a9cc1a4f45ced1cfabbc",
+              "size": 497554
+            },
+            "bytes_observed": 497554,
+            "bytes_retained": 497554,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 533,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "mcctrl.ko-disassembly"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-S",
+        "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-S",
+          "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.06868785503320396,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507140.708531336,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507140.765385719,
+        "monotonic_started": 507140.696697864,
+        "payload_completion_observed_monotonic": 507140.708524987,
+        "payload_monotonic_deadline": 507260.697281467,
+        "payload_monotonic_started": 507140.697281467,
+        "process": {
+          "pgid": 536,
+          "pid": 536,
+          "ppid": 535,
+          "session": 536,
+          "starttime_ticks": 50714069,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-symbols-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-symbols-collection/stdout.bin",
+              "sha256": "d8fee3d695272940fd075aa1f28e1791a0dce0d4d142d834a73301fcefe5c1a9",
+              "size": 26036
+            },
+            "bytes_observed": 26036,
+            "bytes_retained": 26036,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 535,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "mcctrl.ko-symbols"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-u",
+          "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.06919505004771054,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507140.949806472,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507141.007419034,
+        "monotonic_started": 507140.938223984,
+        "payload_completion_observed_monotonic": 507140.949799936,
+        "payload_monotonic_deadline": 507260.938825416,
+        "payload_monotonic_started": 507140.938825416,
+        "process": {
+          "pgid": 538,
+          "pid": 538,
+          "ppid": 537,
+          "session": 538,
+          "starttime_ticks": 50714093,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-undefined-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-undefined-collection/stdout.bin",
+              "sha256": "762f2ddf214cad42e3be159552c8a25dee3bb00cdb91b76637bbd68e2aec8e67",
+              "size": 3881
+            },
+            "bytes_observed": 3881,
+            "bytes_retained": 3881,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 537,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "mcctrl.ko-undefined"
+    },
+    {
+      "argv": [
+        "/usr/sbin/modinfo",
+        "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/sbin/modinfo",
+          "/work/stability-owner-observer-module-20260913-1/mcctrl.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-owner-observer-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.10600381303811446,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "c5eee6a6d662",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 507141.177075038,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/kmod",
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "size": 182088
+        },
+        "executable_path": "/usr/sbin/modinfo",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 507141.280587817,
+        "monotonic_started": 507141.174584004,
+        "payload_completion_observed_monotonic": 507141.177070929,
+        "payload_monotonic_deadline": 507261.175365172,
+        "payload_monotonic_started": 507141.175365172,
+        "process": {
+          "pgid": 540,
+          "pid": 540,
+          "ppid": 539,
+          "session": 540,
+          "starttime_ticks": 50714117,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 16777216,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 16777216,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-modinfo-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko-modinfo-collection/stdout.bin",
+              "sha256": "e50e3f25c8c730b25503c4e4169188d8309055e92589cb8f434f7b014b730553",
+              "size": 350
+            },
+            "bytes_observed": 350,
+            "bytes_retained": 350,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 16777216,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 539,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "mcctrl.ko-modinfo"
+    }
+  ],
+  "compiled_modules": [
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/ihk-smp-x86_64.ko",
+      "sha256": "51ed79380d15bd45554c8c286c1c5b435ec7fe77252efbf5931ab45092e3ba52",
+      "size": 11030776
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160
+    }
+  ],
+  "compiler_inputs": [
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_rpc.rs",
+      "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+      "size": 10925
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_syscall.rs",
+      "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "size": 17343
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_smp_x86_64.rs",
+      "sha256": "8a840554fd34352932e20ef542bf6771ce0d7063186d0ab0c3914d38c1eb73ca",
+      "size": 32920
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "size": 21301
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "size": 13085
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application.rs",
+      "sha256": "dd1491a8c4e499005c953d3ff4983f14935235f1cb3cfbcac86d57430ff3e134",
+      "size": 53561
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_image.rs",
+      "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+      "size": 9982
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_syscall.rs",
+      "sha256": "f7e0943b5521035614ca75122b1f4637e51e72e7a6f2d53cdf59dee129adc8da",
+      "size": 25814
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_file_pager.rs",
+      "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+      "size": 14721
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_procfs.rs",
+      "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+      "size": 28177
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_service.rs",
+      "sha256": "ef25bfb5138b8c5b93ec93b41aef8632402f937b67b8aa449301a7e09df0bac4",
+      "size": 42006
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_memory.rs",
+      "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "size": 29925
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    }
+  ],
+  "finished_utc": "2026-09-13T10:24:56.893999+00:00",
+  "fixture_inputs": [
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/application_rpc.append.rs",
+      "sha256": "dcc392d9ffc51490a394db1a36a5f82499b39c1ba697d9dd19d447ad2babf5cd",
+      "size": 845
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/application_syscall.append.rs",
+      "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+      "size": 1768
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_application.append.rs",
+      "sha256": "8be0a92c4db8d9b18a2bf0a258a6ba4053d55d9f80fe97e2de49091dca21d3db",
+      "size": 9304
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_application_image.append.rs",
+      "sha256": "019f7bf5ccd56857e59c375144034005eca9b543cba3c824ee6c96eea323ffd4",
+      "size": 772
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_application_syscall.append.rs",
+      "sha256": "0ca1b708f4efb83494009740700e5ea26987c92aa09849e44eb534bf95e1ed18",
+      "size": 4788
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_file_pager.append.rs",
+      "sha256": "68442c8a1fc5bf05aa9a9f2df88660f2622c269b12dd01251e71995c9ed96118",
+      "size": 1794
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_procfs.append.rs",
+      "sha256": "1eb6179d539cadd695bc23d77fcb173371fda3ad5461aaa17169320b84e218b9",
+      "size": 603
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/smp_service.append.rs",
+      "sha256": "e2ad699e5ec2325bbe76aef39fe43e13497a8e6529943fb24cff988273c41c89",
+      "size": 2340
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer/sysfs_memory.append.rs",
+      "sha256": "5bc492c9298fc669149eb475446462348ed2b233b6c1a84bdd6255fe80a7b55b",
+      "size": 4918
+    },
+    {
+      "path": "/work/stability-owner-observer-module-20260913-1/fixture/stability-owner-observer-state.rs",
+      "sha256": "c881444ad9626b46cbc0fe8af6822becee99697128cd0b1cd78172242dcc1983",
+      "size": 3946
+    }
+  ],
+  "inputs": [],
+  "observer_guest_verified": false,
+  "overlay_record": {
+    "path": "/work/stability-owner-observer-module-20260913-1/overlay/record.json",
+    "sha256": "b68efe08bc85e99159c7af64ca77deb341d030a8585d73dac6af7fcdae1f32af",
+    "size": 9401
+  },
+  "parent_inputs": [
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_file_pager.rs",
+      "sha256": "08c427f5333b859b6628e3946668b679d1777a4abf49ceb2d08666dac28aefec",
+      "size": 12927
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_service.rs",
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478",
+      "size": 39666
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_procfs.rs",
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "size": 27574
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_memory.rs",
+      "sha256": "11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73",
+      "size": 24656
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ihk_smp_x86_64.rs",
+      "sha256": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+      "size": 32772
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "size": 21026
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_application.rs",
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0",
+      "size": 44257
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/smp_application_image.rs",
+      "sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "size": 9210
+    },
+    {
+      "path": "/work/native-ultra-module-20260909-2026091301/staged-source/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    }
+  ],
+  "parent_record": {
+    "path": "/work/native-ultra-module-20260909-2026091301/record.json",
+    "sha256": "805e664751405a88d70697342eecbd5d0de569d5b63d682f2757284a25cbfe2a",
+    "size": 47505
+  },
+  "phase": "mcctrl.ko-modinfo",
+  "phase_wiring": "NONE",
+  "production_gate_credit": false,
+  "shared_modules_after": [
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.ko.cmd",
+      "sha256": "2e608ceeeab99a11ff07135f014be4b0e87209cb864165fc41fdfeb6c0b87cd7",
+      "size": 272
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.mod.cmd",
+      "sha256": "3a122749c2a69a7884c316d37e8e9474e7fc923a5edd3a863d520740bcb37bdf",
+      "size": 186
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.mod.o.cmd",
+      "sha256": "7292afa76b9caa82f61f2147a16c8a28a8446fad73eba426d4d6ee2cabe68415",
+      "size": 72322
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.o.cmd",
+      "sha256": "569329bc0644b43570f3e47eb8373374cbe9fa849f7d57c73fbc5e88ee801a6a",
+      "size": 489
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.ko.cmd",
+      "sha256": "6739f4d1e9141d321835a6a607d735113def24054abf2d3b1ab5fed8843e23db",
+      "size": 228
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.mod.cmd",
+      "sha256": "fa945babda5e444d0b5f783a79c166e2129003f439a761d608122106dcb4e93f",
+      "size": 153
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.mod.o.cmd",
+      "sha256": "dc711550d0a8e0845cb29d581e0b38502d1403b42a06ce33a29e5dc44f4fa7ed",
+      "size": 72179
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.o.cmd",
+      "sha256": "5f1161e3e46eb958bc431b6cf2a7775fbaec646afc839398dd69b4029ab01b11",
+      "size": 3371
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk_smp_x86_64.o.cmd",
+      "sha256": "0dfdf54462036bf6862a4e09abb786bd10288a5e0ffac1ac42dac3f67d08ab9c",
+      "size": 6521
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.ko.cmd",
+      "sha256": "dce809d695b2e46a132460f3719f5f1d1e1952b284a6f275290e1b04dcf9e9a4",
+      "size": 240
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.mod.cmd",
+      "sha256": "19eb040ff31e457fb875124258997b3be67b5e299312158b9f57d13c6221f1e5",
+      "size": 162
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.mod.o.cmd",
+      "sha256": "9630636374c35a93d348961c4dc1d5c4efeb85243b9390480a006a04e2d1c2ec",
+      "size": 72218
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.o.cmd",
+      "sha256": "78db6af9a1c6c93718fc14860e83a7a18b36e1f6d140d2ed006e40898b9b2b38",
+      "size": 3012
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.ko",
+      "sha256": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+      "size": 11030936
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod",
+      "sha256": "a3bceeb424df30f067f00f5916875522d7dd6d4becdaa5afe543b6e1582f60ea",
+      "size": 39
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod.c",
+      "sha256": "fb91c707542947a53d0abe3aa976c5dcc9e7fbce65d1c892d25ef206941f8295",
+      "size": 490
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod.o",
+      "sha256": "97a710ac489dd2a1d68c1eb4f555ea90d638254726e43afcbefad526ec61e987",
+      "size": 148368
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.o",
+      "sha256": "9a8419e6453d61f54e07bbb2421ab85f7df71c1c08729490cf3549f2d95abc12",
+      "size": 10953816
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod",
+      "sha256": "21d023987a6249e8918fe9c01cbffc42346c3bee9c55feeca64f57eed18877ad",
+      "size": 28
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod.c",
+      "sha256": "b3514f860f45e19f3831793abbc62802fa0e46a7940affac9d1df8ceda8ad019",
+      "size": 1789
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod.o",
+      "sha256": "31f3f30a09ac8e5872cb698ff8d1fa935bf7c81a089d70bb229de63aa2989105",
+      "size": 158072
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.o",
+      "sha256": "53bf28a279f052fb60e4abc7677438f5bfb13310f8e7027db3696fc21d73e525",
+      "size": 1240472
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_smp_x86_64.o",
+      "sha256": "df711e6a342109dcdc87cf23396d65be088b5affb2f15ba4ce6d4bf2a1a3ccaa",
+      "size": 10681840
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod",
+      "sha256": "bf43eadfa447d7fe1aafbbde30a47213b22f802a2b2ef67401e8eb7dd451e0f4",
+      "size": 31
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod.c",
+      "sha256": "855bc1435de4a4540698c71aaa1d031b7a2b0499a64eb55fb1ac931230c10fee",
+      "size": 490
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod.o",
+      "sha256": "422bcb3cab569e4a98145a6a664b7c787d4e90153dbb98a96b23375eaf614490",
+      "size": 148336
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.o",
+      "sha256": "34415048317391f4489806e18c89995e1b396f4702663b97c8c61a48f2d1ab94",
+      "size": 1803648
+    }
+  ],
+  "shared_modules_before": [
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.ko.cmd",
+      "sha256": "2e608ceeeab99a11ff07135f014be4b0e87209cb864165fc41fdfeb6c0b87cd7",
+      "size": 272
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.mod.cmd",
+      "sha256": "3a122749c2a69a7884c316d37e8e9474e7fc923a5edd3a863d520740bcb37bdf",
+      "size": 186
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.mod.o.cmd",
+      "sha256": "7292afa76b9caa82f61f2147a16c8a28a8446fad73eba426d4d6ee2cabe68415",
+      "size": 72322
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk-smp-x86_64.o.cmd",
+      "sha256": "569329bc0644b43570f3e47eb8373374cbe9fa849f7d57c73fbc5e88ee801a6a",
+      "size": 489
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.ko.cmd",
+      "sha256": "6739f4d1e9141d321835a6a607d735113def24054abf2d3b1ab5fed8843e23db",
+      "size": 228
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.mod.cmd",
+      "sha256": "fa945babda5e444d0b5f783a79c166e2129003f439a761d608122106dcb4e93f",
+      "size": 153
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.mod.o.cmd",
+      "sha256": "dc711550d0a8e0845cb29d581e0b38502d1403b42a06ce33a29e5dc44f4fa7ed",
+      "size": 72179
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk.o.cmd",
+      "sha256": "5f1161e3e46eb958bc431b6cf2a7775fbaec646afc839398dd69b4029ab01b11",
+      "size": 3371
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".ihk_smp_x86_64.o.cmd",
+      "sha256": "0dfdf54462036bf6862a4e09abb786bd10288a5e0ffac1ac42dac3f67d08ab9c",
+      "size": 6521
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.ko.cmd",
+      "sha256": "dce809d695b2e46a132460f3719f5f1d1e1952b284a6f275290e1b04dcf9e9a4",
+      "size": 240
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.mod.cmd",
+      "sha256": "19eb040ff31e457fb875124258997b3be67b5e299312158b9f57d13c6221f1e5",
+      "size": 162
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.mod.o.cmd",
+      "sha256": "9630636374c35a93d348961c4dc1d5c4efeb85243b9390480a006a04e2d1c2ec",
+      "size": 72218
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": ".mcctrl.o.cmd",
+      "sha256": "78db6af9a1c6c93718fc14860e83a7a18b36e1f6d140d2ed006e40898b9b2b38",
+      "size": 3012
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.ko",
+      "sha256": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+      "size": 11030936
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod",
+      "sha256": "a3bceeb424df30f067f00f5916875522d7dd6d4becdaa5afe543b6e1582f60ea",
+      "size": 39
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod.c",
+      "sha256": "fb91c707542947a53d0abe3aa976c5dcc9e7fbce65d1c892d25ef206941f8295",
+      "size": 490
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.mod.o",
+      "sha256": "97a710ac489dd2a1d68c1eb4f555ea90d638254726e43afcbefad526ec61e987",
+      "size": 148368
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-smp-x86_64.o",
+      "sha256": "9a8419e6453d61f54e07bbb2421ab85f7df71c1c08729490cf3549f2d95abc12",
+      "size": 10953816
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod",
+      "sha256": "21d023987a6249e8918fe9c01cbffc42346c3bee9c55feeca64f57eed18877ad",
+      "size": 28
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod.c",
+      "sha256": "b3514f860f45e19f3831793abbc62802fa0e46a7940affac9d1df8ceda8ad019",
+      "size": 1789
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.mod.o",
+      "sha256": "31f3f30a09ac8e5872cb698ff8d1fa935bf7c81a089d70bb229de63aa2989105",
+      "size": 158072
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.o",
+      "sha256": "53bf28a279f052fb60e4abc7677438f5bfb13310f8e7027db3696fc21d73e525",
+      "size": 1240472
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_smp_x86_64.o",
+      "sha256": "df711e6a342109dcdc87cf23396d65be088b5affb2f15ba4ce6d4bf2a1a3ccaa",
+      "size": 10681840
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod",
+      "sha256": "bf43eadfa447d7fe1aafbbde30a47213b22f802a2b2ef67401e8eb7dd451e0f4",
+      "size": 31
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod.c",
+      "sha256": "855bc1435de4a4540698c71aaa1d031b7a2b0499a64eb55fb1ac931230c10fee",
+      "size": 490
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.mod.o",
+      "sha256": "422bcb3cab569e4a98145a6a664b7c787d4e90153dbb98a96b23375eaf614490",
+      "size": 148336
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.o",
+      "sha256": "34415048317391f4489806e18c89995e1b396f4702663b97c8c61a48f2d1ab94",
+      "size": 1803648
+    }
+  ],
+  "shared_production_trees_restored": true,
+  "shared_stage_after": [
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "kind": "directory",
+      "mode": 493,
+      "path": "abi"
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_smp_x86_64.rs",
+      "sha256": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+      "size": 32772
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "size": 21301
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "size": 13085
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application.rs",
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0",
+      "size": 44257
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application_image.rs",
+      "sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "size": 9210
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "size": 21026
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_file_pager.rs",
+      "sha256": "08c427f5333b859b6628e3946668b679d1777a4abf49ceb2d08666dac28aefec",
+      "size": 12927
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_procfs.rs",
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "size": 27574
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_service.rs",
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478",
+      "size": 39666
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_memory.rs",
+      "sha256": "11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73",
+      "size": 24656
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    }
+  ],
+  "shared_stage_before": [
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "kind": "directory",
+      "mode": 493,
+      "path": "abi"
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ihk_smp_x86_64.rs",
+      "sha256": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+      "size": 32772
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "size": 21301
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "size": 13085
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application.rs",
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0",
+      "size": 44257
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application_image.rs",
+      "sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "size": 9210
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "size": 21026
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_file_pager.rs",
+      "sha256": "08c427f5333b859b6628e3946668b679d1777a4abf49ceb2d08666dac28aefec",
+      "size": 12927
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_procfs.rs",
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "size": 27574
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_service.rs",
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478",
+      "size": 39666
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_memory.rs",
+      "sha256": "11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73",
+      "size": 24656
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "kind": "file",
+      "mode": 420,
+      "path": "zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    }
+  ],
+  "started_utc": "2026-09-13T10:24:18.907789+00:00",
+  "status": "PASS_BUILD_ONLY",
+  "verification_only": true
+}
