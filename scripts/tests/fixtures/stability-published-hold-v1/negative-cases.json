@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "record_kind": "published_hold_source_test_interfaces",
+  "status": "DRAFT_NOT_EXECUTED",
+  "application_acceptance": false,
+  "execution_authorized": false,
+  "harness_rules": [
+    "Compile/import the exact retained implementation only in root's authorized isolated validation lane; do not reimplement the state machine as the oracle.",
+    "Run each native state scenario in a fresh process/module so production statics need no test-only reset API.",
+    "Use controlled monotonic-clock and typed Selection/Completion owners only in a clearly labelled source harness; real guest provenance and physical bytes remain independent gates.",
+    "Retain complete source, argv, literal requests, results, event order and every failed first attempt. No author tests or imports have run."
+  ],
+  "request_literal_fields": {
+    "version": 2, "operation": 1, "os": 0, "pid": 1234,
+    "generation": 7, "request_sequence": 1,
+    "nonce_low": 72623859790382856, "nonce_high": 1230066625199609624,
+    "delivery": 0, "ledger_serial": 0, "tail_zero_bytes": 192
+  },
+  "cases": [
+    {"id": "decode-version", "interface": "Request::read", "change": "version 0, 1, 3 or u32::MAX", "expect": "-22; no state change"},
+    {"id": "decode-op", "interface": "Request::read", "change": "operation 0, 9, u32::MAX; mode2 op4/5; mode3 op2/3", "expect": "-22"},
+    {"id": "decode-identity", "interface": "Request::read", "change": "OS64, pid0/negative, generation0, sequence0, both nonce words0", "expect": "-22 individually"},
+    {"id": "decode-reserved", "interface": "Request::read", "change": "each nonrelease byte64..255 individually nonzero", "expect": "-22"},
+    {"id": "decode-release", "interface": "Request::read", "change": "op8 accepted sequence1/3, UART sequence1/3, zero digest, each reserved byte112..255 individually nonzero", "expect": "-22; arbitrary nonzero digest is parsed only, never physical acceptance"},
+    {"id": "release-digest-byte-order", "interface": "Request::read and observe_release", "change": "literal digest bytes00..1f", "expect": "LE words0706050403020100,0f0e0d0c0b0a0908,1716151413121110,1f1e1d1c1b1a1918; exact external original digest reconstructable"},
+    {"id": "validate-sequence-owner", "interface": "Request::validate", "change": "duplicate/skipped ioctl sequence; one wrong OS/generation/pid/delivery/ledger/nonce after selection", "expect": "-116; sequence unconsumed and selection unchanged"},
+    {"id": "select-reuse", "interface": "Request::validate", "change": "SELECT after binding, or nonzero select delivery/ledger", "expect": "-16"},
+    {"id": "timer-none", "interface": "Remote::verification_begin_accepted_hold", "change": "actual Returning Completion has publication_since None", "expect": "Ok(None), stage2, no timer store, no snapshot, unchanged call and original production timeout path"},
+    {"id": "timer-zero", "interface": "begin_emitting and output", "change": "Some(0) with native time below5s", "expect": "timer_present1, timer_seconds0; never confused with None"},
+    {"id": "timer-overflow", "interface": "deadline", "change": "u64::MAX and value whose timer+5 multiplication overflows", "expect": "-75 with no release"},
+    {"id": "timer-expired-boundary", "interface": "check_deadline", "change": "timer35; native40,000,000,000ns and later", "expect": "-110 exactly at deadline and later"},
+    {"id": "mode3-reserve", "interface": "check_deadline releasing", "change": "timer35; native37,999,999,999 then38,000,000,000ns", "expect": "first passes preliminary reserve; second -110; actual unchanged recovery still needs a timely later callback"},
+    {"id": "claim-recheck", "interface": "verification_phase_completion and Remote live hold helpers", "change": "mutate each actual worker/OS generation/ledger serial/index/span/call kind/completion state; remove selected call; set each Entry.closed/needs_cleanup/quarantined or Mailbox.closed/quarantined while global transport error remains0", "expect": "no valid selected live completion and no release; old owners/call/timer unchanged"},
+    {"id": "begin-count-freeze", "interface": "before_selected_send, begin_emitting, send-gate.rs", "change": "calls in state2, then transition2to4, then calls in4and5", "expect": "phase/fault old barrier increments together only in2; later calls increment HOST_HOLD_CALLS only; no actual fault/send attempts"},
+    {"id": "hold-cap", "interface": "before_selected_send", "change": "1,000,000 then one additional state4or5 calls", "expect": "counter remains1,000,000; -75 verification invalid on extra call; no release or timer mutation"},
+    {"id": "repeat-accepted", "interface": "accepted_pending and snapshot_begin", "change": "pump after emitting/held; attempt second AcceptedReturn", "expect": "no repeated snapshot; strict snapshot sequence rejects duplicate"},
+    {"id": "snapshot-failure", "interface": "Runtime::verification_accepted_phase", "change": "full snapshot reports incomplete/error", "expect": "invalid latched, no HELD_READY or release; original deadline still expires normally"},
+    {"id": "timer-changed-during-snapshot", "interface": "Remote::verification_commit_accepted_hold", "change": "timer differs/None, claim changes, or health fails between begin and recheck", "expect": "no HELD_READY; exact owner/timer check fails"},
+    {"id": "status-not-held", "interface": "ACCEPTED_STATUS", "change": "state1 before Completion, state2/4, released; held with absent call, failed health, changed/expired timer", "expect": "states1/2/4 return-11 and consume dispatched sequence; fresh next-sequence polling allowed; released returns-116; held errors cannot yield successful status; no snapshot side effect"},
+    {"id": "release-one-shot", "interface": "Runtime::verification_command_phase op8", "change": "valid release then duplicate with next sequence, and separately failed first release followed by corrected request", "expect": "at most one commit; every later release fails; failed dispatched first attempt cannot be repaired/retried"},
+    {"id": "release-owner-race", "interface": "Remote::verification_release_accepted_hold", "change": "production fail_service/quarantine or call retirement wins slots before release", "expect": "release fails; no transport-after-slots acquisition or response read"},
+    {"id": "released-observer-failure", "interface": "before_selected_send", "change": "state3 then invalid(-75)", "expect": "Released gate still permits actual unchanged wrapper; no rearmed barrier"},
+    {"id": "output-defined-bytes", "interface": "output", "change": "op8 input digest/nonzero extension then output", "expect": "all192 output bytes defined by schema; digest not leaked into old reserved/identity fields; exact timer0 presence preserved"},
+    {"id": "ioctl-copyout-ambiguity", "interface": "verification_phase_ioctl", "change": "output copy fails after successful release dispatch", "expect": "consumed sequence and one commit persist; Permit/slots released before copy; never retry or reread response"},
+    {"id": "permit-busy", "interface": "verification_phase_ioctl", "change": "Permit already held", "expect": "-11 before dispatch; entire256-byte request remains unchanged including nonzero op8 tail; no sequence consumption"},
+    {"id": "full-phase-order", "interface": "snapshot_begin", "change": "duplicate/skipped/mode-wrong Terminal/Quiet/Recovery/AfterEight snapshots", "expect": "-116; only sequences1,2,3,4 in the chosen frozen mode are valid"},
+    {"id": "stage-positive2and3", "interface": "prepare", "change": "exact composed original mode2 and separately mode3 source", "expect": "fresh output/source; exact inverse bytes; all original/source/template/helper identities retained and unchanged; no execution authority"},
+    {"id": "stage-mode-mismatch", "interface": "prepare", "change": "mode1/4 request, wrong complete send appendix, or new held source as input", "expect": "reject; retain failed output if created"},
+    {"id": "stage-identity", "interface": "prepare", "change": "alter one frozen phase/send byte, duplicate/remove a hook, or change input during staging", "expect": "reject without mutating input"},
+    {"id": "stage-filesystem-bounds", "interface": "prepare and read_regular", "change": "symlink/FIFO/directory member, CRLF, non-Rust member,129 files, over8MiB member, over64MiB total, nested/aliased/existing output", "expect": "bounded rejection; no destructive cleanup; preserved original source"}
+  ]
+}

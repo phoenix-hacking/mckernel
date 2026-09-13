@@ -128,6 +128,29 @@ The other fault modes, physical ring saturation, VM invalidation ownership,
 generic native payload observations, lifecycle restoration and the complete
 Rust/assembly and production qualification requirements remain in scope.
 
+## Published-mode preparation checkpoint
+
+The new verification-only native hold and stager pass bounded independent
+source review in `stability-published-hold-source-20260913.json`. They preserve
+the original production timer, freeze the old barrier count before AcceptedReturn,
+and require one acknowledged release. Native compilation, controlled interface
+execution, stack measurement and actual guest proof remain separate gates.
+
+The STF2 controller builds and all 81 actual C metadata cases pass. Full captures
+are in `stability-published-client-collection-20260913-1.json`, with independent
+source and result records in `stability-published-client-independent-review-20260913.json`
+and `stability-published-client-results-independent-review-20260913.json`.
+Every case retains the complete post-call identity and observation. No actual
+client ioctl, controller main or guest ran in this check. The earlier 21-case
+polling review is `stability-return-poll-independent-review-20260913.json`.
+
+The new host STF2 coordinator, held-record parser and focused socket/native
+interface tests remain under review. Recovery's eight same-OS HELLO executions
+and final version2 snapshot are not yet composed. A separate sealed-descriptor
+Linux infrastructure collector is source work and cannot release catalog cases.
+The full goal and its physical ring, invalidation, lifecycle, Rust/assembly and
+qualification requirements remain active; acceptance counts are unchanged.
+
 ## Runtime and evidence discipline
 
 The original catalog, packets, validator and draft release remain unchanged.

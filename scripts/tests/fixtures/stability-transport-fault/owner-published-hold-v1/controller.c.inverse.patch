@@ -1,0 +1,97 @@
+--- controller.c
++++ controller.c
+@@ -98 +98 @@
+-        dprintf(2, "STF2 COLLECTION_FAILURE reason=%s errno=%d monotonic_ns=%" PRIu64 "\n",
++        dprintf(2, "STF1 COLLECTION_FAILURE reason=%s errno=%d monotonic_ns=%" PRIu64 "\n",
+@@ -437 +437 @@
+-    int n = snprintf(request, sizeof request, "STF2 REQ %s %u %s %s %d %d %" PRIu64 "\n",
++    int n = snprintf(request, sizeof request, "STF1 REQ %s %u %s %s %d %d %" PRIu64 "\n",
+@@ -439 +439 @@
+-    int a = snprintf(ack_prefix, sizeof ack_prefix, "STF2 ACK %s %u %s %s %d %d %" PRIu64 " ",
++    int a = snprintf(ack_prefix, sizeof ack_prefix, "STF1 ACK %s %u %s %s %d %d %" PRIu64 " ",
+@@ -445,8 +444,0 @@
+-    if (!strcmp(phase, "ACCEPTED_RETURN")) {
+-        uint64_t native_deadline, reserve = owner_identity.mode == 3 ? UINT64_C(2000000000) : 0;
+-        if (!owner_identity.held || owner_identity.release_possible || sequence != 2 ||
+-            !op_deadline(owner_identity.timer_seconds, &native_deadline) || native_deadline <= reserve) {
+-            fail("accepted-capture-state", EPROTO); return false;
+-        }
+-        if (deadline > native_deadline - reserve) deadline = native_deadline - reserve;
+-    }
+@@ -485 +477 @@
+-    int n = snprintf(request, sizeof request, "STF2 FAIL %s %u %s %s %d %d %" PRIu64 " %s %d\n",
++    int n = snprintf(request, sizeof request, "STF1 FAIL %s %u %s %s %d %d %" PRIu64 " %s %d\n",
+@@ -489 +481 @@
+-                     "STF2 ACK %s %u EMERGENCY_CAPTURED %s %d %d %" PRIu64 " ",
++                     "STF1 ACK %s %u EMERGENCY_CAPTURED %s %d %d %" PRIu64 " ",
+@@ -597 +589 @@
+-            dprintf(2, "STF2 CHILD_SETUP_ERROR errno=%d\n", errno); _exit(125);
++            dprintf(2, "STF1 CHILD_SETUP_ERROR errno=%d\n", errno); _exit(125);
+@@ -601 +593 @@
+-        dprintf(2, "STF2 CHILD_EXEC_ERROR errno=%d\n", errno);
++        dprintf(2, "STF1 CHILD_EXEC_ERROR errno=%d\n", errno);
+@@ -877,3 +869 @@
+-                phase == OP_RECOVERY ? "owner-recovery-response.bin" :
+-                phase == OP_ACCEPTED_STATUS ? "owner-accepted-response.bin" :
+-                phase == OP_RELEASE_ACCEPTED ? "owner-release-response.bin" : NULL;
++                phase == OP_RECOVERY ? "owner-recovery-response.bin" : NULL;
+@@ -887,35 +877 @@
+-        pump(phase == OP_ACCEPTED_STATUS ? 5 : 250);
+-    }
+-    return false;
+-}
+-
+-/* Require the original worker still in the exact RET before asking for the
+- * native held snapshot. UNKNOWN procfs samples never imply RET exit. The
+- * actual native RET events remain the return-value/timing authority. */
+-static bool accepted_capture_and_release(void)
+-{
+-    active_phase = "OWNER_ACCEPTED_RETURN";
+-    uint64_t deadline = input_ns + UINT64_C(15000000000);
+-    if (deadline > overall_deadline) deadline = overall_deadline;
+-    while (before(deadline)) {
+-        pump(5);
+-        uint64_t ticks;
+-        if (!task_ticks(launcher, worker, &ticks)) { fail("accepted-worker-stat", errno); return false; }
+-        if (ticks != worker_ticks) { fail("accepted-worker-identity", ESTALE); return false; }
+-        struct sample sample = task_sample(worker, true);
+-        if (sample.error && sample.error != ENOENT && sample.error != ESRCH) {
+-            fail("accepted-worker-sample", sample.error); return false;
+-        }
+-        if (launcher_done) { fail("accepted-launcher-already-finished", EPROTO); return false; }
+-        if (classify_return_sample(&sample) != RETURN_SAMPLE_RET) continue;
+-        if (!ret_entry_seen) { ret_entry_seen = true; ret_entry_ns = now_ns(); }
+-        if (!collect_owner_phase(OP_ACCEPTED_STATUS, "OWNER_ACCEPTED_RETURN")) return false;
+-        if (!capture("ACCEPTED_RETURN")) return false;
+-        if (!op_capture_digest(&owner_identity, ack_digest, sequence)) {
+-            fail("accepted-capture-digest", EPROTO); return false;
+-        }
+-        event("\"event\":\"accepted-release-intent\",\"uart_sequence\":%u,\"capture_sha256\":\"%s\",\"original_timer_seconds\":%" PRIu64,
+-              sequence, ack_digest, owner_identity.timer_seconds);
+-        /* op_call latches release_possible before starting its ioctl child and
+-         * never retries a release. Host independently latched before ACK send. */
+-        return collect_owner_phase(OP_RELEASE_ACCEPTED, "OWNER_RELEASE_ACCEPTED");
++        pump(250);
+@@ -985 +941 @@
+-    char record[1024];
++    char record[768];
+@@ -987,2 +943,2 @@
+-        "{\"schema_version\":1,\"scope\":\"verification-phase-client-only\",\"os\":%u,\"generation\":%" PRIu64 ",\"selected_pid\":%d,\"selected\":%s,\"held\":%s,\"release_possible\":%s,\"released\":%s,\"attempts\":%u,\"last_consumed_sequence\":%" PRIu64 ",\"application_acceptance\":false,\"transport_acceptance\":false}\n",
+-        owner_identity.os, owner_identity.generation, owner_identity.pid, owner_identity.selected ? "true" : "false", owner_identity.held ? "true" : "false", owner_identity.release_possible ? "true" : "false", owner_identity.released ? "true" : "false", owner_identity.attempt, owner_identity.sequence);
++        "{\"schema_version\":1,\"scope\":\"verification-phase-client-only\",\"os\":%u,\"generation\":%" PRIu64 ",\"selected_pid\":%d,\"selected\":%s,\"attempts\":%u,\"last_consumed_sequence\":%" PRIu64 ",\"application_acceptance\":false,\"transport_acceptance\":false}\n",
++        owner_identity.os, owner_identity.generation, owner_identity.pid, owner_identity.selected ? "true" : "false", owner_identity.attempt, owner_identity.sequence);
+@@ -998 +954 @@
+-    guest = owner_guest;
++    guest = owner_guest || (argc == 7 && !strcmp(argv[1], "--guest"));
+@@ -1000 +956 @@
+-    if (!guest && !reference) { dprintf(2, "STF2 invalid arguments\n"); return 2; }
++    if (!guest && !reference) { dprintf(2, "STF1 invalid arguments\n"); return 2; }
+@@ -1002 +958,2 @@
+-    if (guest && strcmp(mode, "postpublish-notify") && strcmp(mode, "recoverable-backpressure")) return 2;
++    if (guest && strcmp(mode, "prepublish-hard") && strcmp(mode, "postpublish-notify") &&
++        strcmp(mode, "recoverable-backpressure") && strcmp(mode, "permanent-backpressure")) return 2;
+@@ -1008 +965 @@
+-    if (owner_guest && !op_initialize(&owner_identity, argv[7], argv[8], nonce, 0, mode)) return 2;
++    if (owner_guest && !op_initialize(&owner_identity, argv[7], argv[8], nonce, 0)) return 2;
+@@ -1039 +995,0 @@
+-    if (owner_guest && !accepted_capture_and_release()) goto cleanup;

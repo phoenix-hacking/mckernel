@@ -1,0 +1,222 @@
+--- phase_client.h
++++ phase_client.h
+@@ -2,2 +2,2 @@
+-/* Private verification ABI, version 2 of the new published-hold fixture.
+- * Exact native-source binding remains a separately reviewed build requirement.
++/* Private verification ABI, bound to stability_phase.rs version 1, SHA-256
++ * 5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54.
+@@ -5,2 +5,2 @@
+-#ifndef STABILITY_OWNER_PUBLISHED_HOLD_CLIENT_V1_H
+-#define STABILITY_OWNER_PUBLISHED_HOLD_CLIENT_V1_H
++#ifndef STABILITY_OWNER_PHASE_CLIENT_V1_H
++#define STABILITY_OWNER_PHASE_CLIENT_V1_H
+@@ -25 +25 @@
+-#define OP_COMMAND UINT32_C(0xc100f502)
++#define OP_COMMAND UINT32_C(0xc100f501)
+@@ -33,3 +33 @@
+-#define OP_ACCEPTED_STATUS 7u
+-#define OP_RELEASE_ACCEPTED 8u
+-#define OP_MAX_ATTEMPTS 24u /* Four artifacts each; total tree remains <256 entries. */
++#define OP_MAX_ATTEMPTS 48u /* Four artifacts each; total tree remains <256 entries. */
+@@ -42,4 +40 @@
+-    bool selected, held, released, release_possible;
+-    uint32_t mode;
+-    uint64_t last_snapshot, timer_seconds, held_ns, terminal_ns, barrier_calls, host_hold_calls;
+-    unsigned char capture_digest[32];
++    bool selected;
+@@ -115 +110 @@
+-                                 const char *nonce, int32_t pid, const char *mode)
++                                 const char *nonce, int32_t pid)
+@@ -118,3 +112,0 @@
+-    if (!strcmp(mode, "postpublish-notify")) id->mode = 2;
+-    else if (!strcmp(mode, "recoverable-backpressure")) id->mode = 3;
+-    else return false;
+@@ -148,46 +140,3 @@
+-/* Validate complete child collection and defined native output. Fresh status
+- * queries can consume successive sequences. A release is never redispatched,
+- * including an untouched predispatch busy result: publication is conservatively
+- * possible after its first submission. No response-memory read occurs here. */
+-static inline bool op_phase_allowed(const struct op_identity *id, uint32_t phase)
+-{
+-    return (id->mode == 2 || id->mode == 3) &&
+-        (phase == OP_SELECT || phase == OP_ACCEPTED_STATUS || phase == OP_RELEASE_ACCEPTED ||
+-         (id->mode == 2 && (phase == OP_TERMINAL || phase == OP_QUIET)) ||
+-         (id->mode == 3 && (phase == OP_RECOVERY || phase == OP_AFTER_HELLO)));
+-}
+-static inline bool op_deadline(uint64_t timer, uint64_t *deadline)
+-{
+-    if (timer > UINT64_MAX / UINT64_C(1000000000) - 5) return false;
+-    *deadline = (timer + 5) * UINT64_C(1000000000);
+-    return true;
+-}
+-static inline bool op_capture_digest(struct op_identity *id, const char *hex, unsigned sequence)
+-{
+-    if (!id->held || id->release_possible || sequence != 2 || strlen(hex) != 64) return false;
+-    unsigned char digest[32];
+-    for (unsigned i = 0; i < 64; ++i) {
+-        unsigned value;
+-        if (hex[i] >= '0' && hex[i] <= '9') value = (unsigned)(hex[i] - '0');
+-        else if (hex[i] >= 'a' && hex[i] <= 'f') value = (unsigned)(hex[i] - 'a') + 10;
+-        else return false;
+-        if (!(i & 1)) digest[i / 2] = (unsigned char)(value << 4);
+-        else digest[i / 2] |= (unsigned char)value;
+-    }
+-    if (op_zero(digest, 0, sizeof digest)) return false;
+-    memcpy(id->capture_digest, digest, sizeof digest);
+-    return true;
+-}
+-static inline bool op_request_valid(const struct op_identity *id, uint32_t phase, const unsigned char *request)
+-{
+-    if (op_u32(request, 0) != 2 || op_u32(request, 4) != phase ||
+-        op_u32(request, 8) != id->os || op_u32(request, 12) != (uint32_t)id->pid ||
+-        op_u64(request, 16) != id->generation || op_u64(request, 32) != id->nonce_low ||
+-        op_u64(request, 40) != id->nonce_high ||
+-        op_u64(request, 48) != (id->selected ? op_u64(id->key, 16) : 0) ||
+-        op_u64(request, 56) != (id->selected ? op_u64(id->key, 24) : 0)) return false;
+-    if (phase != OP_RELEASE_ACCEPTED) return op_zero(request, 64, OP_BYTES);
+-    return op_u64(request, 64) == 2 && op_u64(request, 72) == 2 &&
+-        !op_zero(request, 80, 112) && !memcmp(request + 80, id->capture_digest, 32) &&
+-        op_zero(request, 112, OP_BYTES);
+-}
++/* All dispatched requests, including EAGAIN, consume their sequence. Only an
++ * explicit untouched output region with ioctl EAGAIN is a safe nonconsumed
++ * busy-Permit retry. Copyout errors and inconsistent replies are always fatal. */
+@@ -197 +146 @@
+-    if (!op_phase_allowed(id, phase) || !op_request_valid(id, phase, request) || !out->response_received || !out->reaped || out->timed_out ||
++    if (!out->response_received || !out->reaped || out->timed_out ||
+@@ -199,2 +148 @@
+-        out->open_result < 0 || out->open_errno || !out->begin_ns || out->end_ns < out->begin_ns ||
+-        memcmp(out->reply, request, 64)) return OP_FAILED;
++        memcmp(out->reply, request, 64) || !op_zero(out->reply, 208, OP_BYTES)) return OP_FAILED;
+@@ -202,4 +150,2 @@
+-    if (id->sequence == UINT64_MAX || sequence != id->sequence + 1 ||
+-        op_u32(request, 0) != 2 || op_u32(request, 4) != phase) return OP_FAILED;
+-    if (!memcmp(out->reply, request, OP_BYTES))
+-        return phase != OP_RELEASE_ACCEPTED && out->ioctl_result == -1 && out->ioctl_errno == EAGAIN ? OP_RETRY : OP_FAILED;
++    if (op_zero(out->reply, 64, OP_BYTES))
++        return out->ioctl_result == -1 && out->ioctl_errno == EAGAIN ? OP_RETRY : OP_FAILED;
+@@ -209,12 +155,3 @@
+-    const unsigned char *r = out->reply;
+-    uint64_t snapshot = op_u64(r, 64), phase_error = op_u64(r, 72), stage = op_u64(r, 160);
+-    uint64_t accepted = op_u64(r, 168), terminal = op_u64(r, 176), barrier = op_u64(r, 192);
+-    uint64_t timer = op_u64(r, 208), present = op_u64(r, 216), held = op_u64(r, 224);
+-    uint64_t holds = op_u64(r, 232), native_begin = op_u64(r, 240), native_end = op_u64(r, 248);
+-    if (!op_key_valid(id, r) || (id->selected && memcmp(id->key, r + 80, sizeof id->key)) ||
+-        op_u64(r, 184) || stage < 1 || stage > 5 || present > 1 || holds > UINT64_C(1000000) ||
+-        (!present && (timer || held)) || native_begin < out->begin_ns || native_end < native_begin ||
+-        native_end > out->end_ns || (held && held > native_end) || (terminal && terminal > native_end)) return OP_FAILED;
+-    if (id->held && (present != 1 || timer != id->timer_seconds || held != id->held_ns ||
+-        barrier != id->barrier_calls || holds < id->host_hold_calls || accepted != 2)) return OP_FAILED;
+-    if (id->terminal_ns && terminal != id->terminal_ns) return OP_FAILED;
++    uint64_t phase_error = op_u64(out->reply, 72), verification_error = op_u64(out->reply, 184);
++    if (!op_key_valid(id, out->reply) || (id->selected && memcmp(id->key, out->reply + 80, sizeof id->key)) ||
++        verification_error || op_u64(out->reply, 160) > 3) return OP_FAILED;
+@@ -222,9 +159,5 @@
+-        if (out->ioctl_errno != EAGAIN || phase_error != (uint64_t)(int64_t)-EAGAIN || snapshot ||
+-            phase == OP_SELECT || phase == OP_RELEASE_ACCEPTED) return OP_FAILED;
+-        if (phase == OP_ACCEPTED_STATUS) {
+-            if (!id->selected || id->held || id->release_possible ||
+-                (stage != 1 && stage != 2) || accepted || terminal || present || held || holds) return OP_FAILED;
+-        } else if (!id->released || stage != 3 || accepted != 2) return OP_FAILED;
+-        return OP_RETRY;
+-    }
+-    if (out->ioctl_result != 0 || out->ioctl_errno || phase_error) return OP_FAILED;
++        if (out->ioctl_errno != EAGAIN || phase_error != (uint64_t)(int64_t)-EAGAIN || op_u64(out->reply, 64) != 0) return OP_FAILED;
++        return phase == OP_SELECT ? OP_FAILED : OP_RETRY;
++    }
++    if (out->ioctl_result != 0 || out->ioctl_errno != 0 || phase_error) return OP_FAILED;
++    uint64_t snapshot = op_u64(out->reply, 64), stage = op_u64(out->reply, 160);
+@@ -232,3 +165,3 @@
+-        if (id->selected || sequence != 1 || snapshot != 1 || stage != 1 || accepted || terminal ||
+-            barrier || timer || present || held || holds) return OP_FAILED;
+-        memcpy(id->key, r + 80, sizeof id->key);
++        if (id->selected || sequence != 1 || snapshot != 1 || stage != 1 ||
++            op_u64(out->reply, 168) || op_u64(out->reply, 176) || op_u64(out->reply, 192)) return OP_FAILED;
++        memcpy(id->key, out->reply + 80, sizeof id->key);
+@@ -236,12 +168,0 @@
+-    } else if (phase == OP_ACCEPTED_STATUS) {
+-        uint64_t deadline;
+-        if (!id->selected || id->held || id->release_possible || id->last_snapshot != 1 ||
+-            snapshot != 2 || stage != 5 || accepted != 2 || terminal || present != 1 || !held ||
+-            held > native_begin || !op_deadline(timer, &deadline) || native_end >= deadline) return OP_FAILED;
+-        id->held = true; id->timer_seconds = timer; id->held_ns = held; id->barrier_calls = barrier;
+-    } else if (phase == OP_RELEASE_ACCEPTED) {
+-        uint64_t deadline, reserve = id->mode == 3 ? UINT64_C(2000000000) : 0;
+-        if (!id->held || !id->release_possible || id->released || id->last_snapshot != 2 ||
+-            snapshot != 2 || stage != 3 || accepted != 2 || terminal || !op_deadline(timer, &deadline) ||
+-            native_end >= deadline || reserve >= deadline - native_end) return OP_FAILED;
+-        id->released = true;
+@@ -249,10 +170,6 @@
+-        if (!id->released || stage != 3 || accepted != 2) return OP_FAILED;
+-        if (phase == OP_TERMINAL || phase == OP_RECOVERY) {
+-            if (id->last_snapshot != 2 || snapshot != 3) return OP_FAILED;
+-        } else if (id->last_snapshot != 3 || snapshot != 4) return OP_FAILED;
+-        if ((phase == OP_TERMINAL || phase == OP_QUIET) != (terminal != 0)) return OP_FAILED;
+-        if (phase == OP_QUIET && (native_begin < terminal || native_begin - terminal < UINT64_C(5000000000))) return OP_FAILED;
+-        id->terminal_ns = terminal;
+-    }
+-    id->host_hold_calls = holds;
+-    id->last_snapshot = snapshot;
++        if (!id->selected || stage != 3 || op_u64(out->reply, 168) != 2) return OP_FAILED;
++        if (phase == OP_TERMINAL || phase == OP_RECOVERY) { if (snapshot != 3) return OP_FAILED; }
++        else if (phase == OP_QUIET || phase == OP_AFTER_HELLO) { if (snapshot != 4) return OP_FAILED; }
++        else return OP_FAILED;
++        if ((phase == OP_TERMINAL || phase == OP_QUIET) != (op_u64(out->reply, 176) != 0)) return OP_FAILED;
++    }
+@@ -266 +183 @@
+-    if (id->sequence == UINT64_MAX || id->attempt >= OP_MAX_ATTEMPTS || !op_phase_allowed(id, phase)) return OP_FAILED;
++    if (id->sequence == UINT64_MAX || id->attempt >= OP_MAX_ATTEMPTS || phase < OP_SELECT || phase > OP_AFTER_HELLO) return OP_FAILED;
+@@ -268 +185 @@
+-    op_put32(request, 0, 2); op_put32(request, 4, phase); op_put32(request, 8, id->os);
++    op_put32(request, 0, 1); op_put32(request, 4, phase); op_put32(request, 8, id->os);
+@@ -272,7 +188,0 @@
+-    if (phase == OP_RELEASE_ACCEPTED) {
+-        if (!id->held || id->released || id->release_possible || op_zero(id->capture_digest, 0, 32)) return OP_FAILED;
+-        op_put64(request, 64, 2); op_put64(request, 72, 2);
+-        memcpy(request + 80, id->capture_digest, 32);
+-        /* Conservative before any fork/ioctl attempt; never clear on error. */
+-        id->release_possible = true;
+-    }
+@@ -363,0 +274,42 @@
++static inline bool op_load_recovery(struct op_identity *id, const char *path, int directory)
++{
++    unsigned char reply[OP_BYTES];
++    int fd = open(path, O_RDONLY | O_NONBLOCK | O_NOFOLLOW | O_CLOEXEC);
++    if (fd < 0) return false;
++    struct stat st, after;
++    bool ok = fstat(fd, &st) == 0 && S_ISREG(st.st_mode) && st.st_size == OP_BYTES;
++    size_t used = 0;
++    while (ok && used < sizeof reply) {
++        ssize_t n = read(fd, reply + used, sizeof reply - used);
++        if (n < 0 && errno == EINTR) continue;
++        if (n <= 0) { ok = false; break; }
++        used += (size_t)n;
++    }
++    if (ok && (fstat(fd, &after) < 0 || st.st_dev != after.st_dev || st.st_ino != after.st_ino ||
++        st.st_size != after.st_size || st.st_mtim.tv_sec != after.st_mtim.tv_sec ||
++        st.st_mtim.tv_nsec != after.st_mtim.tv_nsec || st.st_ctim.tv_sec != after.st_ctim.tv_sec ||
++        st.st_ctim.tv_nsec != after.st_ctim.tv_nsec)) ok = false;
++    close(fd);
++    if (!op_artifact(directory, "recovery-input.bin", reply, used)) return false;
++    if (ok) {
++        char metadata[1024];
++        int n = snprintf(metadata, sizeof metadata,
++            "{\"schema_version\":1,\"scope\":\"recovery-input-file-observation-only\",\"device\":%" PRIuMAX ",\"inode\":%" PRIuMAX ",\"bytes\":%" PRIuMAX ",\"mtime_seconds\":%" PRIdMAX ",\"mtime_nanoseconds\":%ld,\"ctime_seconds\":%" PRIdMAX ",\"ctime_nanoseconds\":%ld,\"stat_unchanged_during_read\":true,\"application_acceptance\":false,\"transport_acceptance\":false}\n",
++            (uintmax_t)st.st_dev, (uintmax_t)st.st_ino, (uintmax_t)st.st_size,
++            (intmax_t)st.st_mtim.tv_sec, st.st_mtim.tv_nsec, (intmax_t)st.st_ctim.tv_sec, st.st_ctim.tv_nsec);
++        if (n <= 0 || (size_t)n >= sizeof metadata || !op_artifact(directory, "recovery-input-stat.json", metadata, (size_t)n)) return false;
++    }
++    if (!ok || !op_zero(reply, 208, OP_BYTES) || op_u32(reply, 0) != 1 || op_u32(reply, 4) != OP_RECOVERY ||
++        op_u32(reply, 8) != id->os || op_u64(reply, 16) != id->generation ||
++        op_u64(reply, 32) != id->nonce_low || op_u64(reply, 40) != id->nonce_high ||
++        op_u64(reply, 64) != 3 || op_u64(reply, 72) || op_u64(reply, 160) != 3 ||
++        op_u64(reply, 168) != 2 || op_u64(reply, 176) || op_u64(reply, 184) ||
++        !op_u64(reply, 200) || op_u64(reply, 24) != op_u64(reply, 200) ||
++        op_u64(reply, 48) != op_u64(reply, 96) || op_u64(reply, 56) != op_u64(reply, 104) ||
++        op_u32(reply, 12) != op_u32(reply, 136)) return false;
++    id->pid = (int32_t)op_u32(reply, 136);
++    if (!op_key_valid(id, reply)) return false;
++    id->sequence = op_u64(reply, 200); id->selected = true;
++    memcpy(id->key, reply + 80, sizeof id->key);
++    return true;
++}
