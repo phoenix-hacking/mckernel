@@ -114,3 +114,28 @@ clear errors, per-CPU pending-free ownership and inherited host mapping aliases
 as repair obligations. No unsafe partial fix or stale-mapping runtime proof is
 claimed. The dated ledger v2 preserves three reviewed/compiled startup cases and
 zero accepted cases; later records retain their own exact source identities.
+
+## Third infrastructure checkpoint
+
+The first composed prepublication fault module builds with real RET hooks,
+selected-response callbacks and a versioned SMP phase interface. Its compiled
+stack audit found known module paths of 9,416 bytes (worker) and 7,080 bytes
+(ioctl), before unbounded external overhead. Ten verification-only function
+boundaries preserve all service bodies and now compile in module attempt2; its reduced
+live stack is awaiting a fresh disassembly audit. No fault guest has run yet.
+
+All 23 controller protocol cases pass in pinned infrastructure attempt3,
+including actual 10/30-second deadlines, malformed acknowledgements, emergency
+resynchronization and a 31-second delayed observer. Both original harness
+failures remain preserved. The original eight QMP socket tests passed there;
+independent review identified five further source defects, now corrected with
+13 tests now passing in module attempt2. Forty-one ledger/owner-parser tests passed
+separately. These are infrastructure counts, not catalog acceptance.
+
+`stability-fault-infrastructure-20260913-1.json` retains eight complete captures
+and the previous fetched GitHub proof. The auxiliary Linux virtio-console
+module builds against the unchanged pinned kernel for bounded guest artifact
+export. Its exporter, owner-phase controller variant and host fault runner are
+still under integration and review. Current production remains the repaired
+module2026091301/image3 with all eight original suites passing. New catalog
+counts remain three compiled, zero executed, zero accepted.

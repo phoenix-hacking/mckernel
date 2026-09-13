@@ -1,0 +1,260 @@
+{
+  "acceptance_limits": [
+    "This review authorizes parent isolated compilation only. Rust type/visibility/stack properties await the actual native compiler and disassembly; no compiled or runtime PASS is claimed.",
+    "An observation cap or invalid phase is an evidence failure and excludes acceptance even if actual callback later succeeds.",
+    "Physical response/ring snapshots, original serial lifetime checks, host task/UART acknowledgement, actual module/image/build provenance, launcher wait status, same-OS followups and error/quarantine semantics remain independently required.",
+    "Typed owner parser remains comparison-only; future evaluator must explicitly validate additional STABILITY_FAULT and STABILITY_PHASE schemas/counts and bind mode names through this fixed mapping.",
+    "Actual physical-full-ring/recovery qualifications remain open; callback EAGAIN injection must not close them."
+  ],
+  "application_acceptance": false,
+  "callback_and_lifetime_conclusions": [
+    "Nonmatching requests use the original send unchanged. Selected hard mode returns EIO before invoking actual channel publication.",
+    "Modes2 and3 never manufacture send success: actual ControlChannel.publish callback must return Ok. Actual failures propagate unchanged and do not set published. OutboundQueue remains the unchanged sole-producer try_enqueue path.",
+    "Completion::publish accesses final response and releases its claim only after actual wake-send success; mode2 notification injection is later, under the same application publication mutex, after response release/call completion. Its one-shot exact-owner latch cannot convert that publication to a retry.",
+    "Mode3 and mode4 inject EAGAIN without filling or modifying the physical ring. This is a real guest callback-failure injection test, not physical-full-ring evidence.",
+    "Original global delivery Token allocation does not wrap/reuse. Added actual native Claim matching also binds OS generation and original response allocation identity; response-address recycling alone cannot retrigger selection.",
+    "RET current HostWorker comes from referenced ProcessId::thread authority. The same Linux worker cannot enter RET until WAIT finishes SELECTED logging; parser still rejects missing/reordered/mismatched triplets.",
+    "The recorded RET errno is the real public Result of Registration.invoke (including its existing FFI status normalization); it is not inferred from transport error or launcher wait status."
+  ],
+  "compile_authorized": true,
+  "compiled_by_reviewer": false,
+  "corrected_findings": [
+    {
+      "correction": "Notify requires actual OS generation and application token as well as guest CPU. send and accepted additionally require exact native Claim OS/gen/response ledger serial/index/span.",
+      "id": "SEND01",
+      "original": "Notification fault was matched only by guest CPU and module-global publication flag; another OS Runtime could consume it.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Generator explicitly maps original notify Error to errno and wrapper errno back to kernel Error.",
+      "id": "SEND02",
+      "original": "Notify callback crosses Result<(),i32> and kernel Result<(),Error> modules.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Bounded STABILITY_FAULT_REAL_SEND records actual callback begin/end and errno. Published ownership updates only on actual Ok; PUBLISHED/RECOVERED log timestamp is sampled after callback return.",
+      "id": "SEND03",
+      "original": "PUBLISHED/RECOVERED timestamps were sampled before actual send; failed real sends were not individually recorded.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Counter saturates; >32 latches verification invalid and suppresses further per-send logs while still invoking the real callback and preserving its Result/publication update. Once accepted is Released, phase barrier remains open even after later evidence invalidity. Invalid runs cannot receive acceptance.",
+      "id": "SEND04",
+      "original": "The first real-send log cap implementation returned synthetic EOVERFLOW instead of invoking the real send, manufacturing a different transport failure.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Phase snapshot envelope emits fault counters after owner observation and before phase END.",
+      "id": "SEND05",
+      "original": "stability_fault_observe had no caller, so terminal/+5s fault counts were absent.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Stager reads original bytes once, writes exact .original, decodes UTF8 and rejects CR, verifies inverse bytes equal captured bytes, and compares current input against original capture. Helper identity is recorded.",
+      "id": "STAGE01",
+      "original": "Source text was read separately before copying .original; a concurrent source change could misbind the output to newer captured bytes. Inverse comparison used newline-normalized text.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    },
+    {
+      "correction": "Selected OS/gen guard precedes Permit acquisition and any invalidation. Selection is immutable. Permit is also dropped before phase ioctl user copyout.",
+      "id": "PHASE01",
+      "original": "Every Runtime end-pump could consume global accepted_pending and invalidate selected attempt on another OS mismatch.",
+      "status": "CORRECTED_SOURCE_REVIEWED"
+    }
+  ],
+  "date": "2026-09-13",
+  "deadline_obligations": {
+    "clock": "ktime_get_seconds, initialized by first publication_expired pass after completion exists",
+    "limitation": "The automatic accepted snapshot/logging already consumes production lifetime. Two seconds from later first fault attempt is not proof of recovery before deadline. A delayed or late run fails evidence expectations; do not extend/reset the production timer to pass it.",
+    "production_source": "host-kernel/native-rust/smp_application.rs:22 and smp_application_syscall.rs:613",
+    "production_timeout_seconds": 5,
+    "recovery_epoch": "first post-AcceptedReturn-barrier fault attempt ktime_get",
+    "recovery_hold_seconds": 2,
+    "required_evaluator_check": "Bind AcceptedReturn original call publication_since and real-send end_ns to the same guest kernel monotonic clock; require actual successful publication before the observed production since+5s boundary. Also require actual RET leave-entry <=15s.",
+    "timer_reset_by_overlay": false
+  },
+  "executed_by_reviewer": false,
+  "inputs": [
+    {
+      "path": "scripts/tests/prepare_stability_transport_fault.py",
+      "sha256": "860e7a941660b9453e89fefeb83948673377fc75146a08f263251390bf3bfbb6",
+      "size": 8269
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-transport-fault/send.append.rs",
+      "sha256": "01f781f9258e3a6564c8512c40721dc2a11e0621a5262756c6f8e85675f0543d",
+      "size": 7149
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-ret-observer.rs",
+      "sha256": "d0fdda0b7b77800a614ccfde18d42967be03f1c67117dd5c7abee7b64f2b93bc",
+      "size": 3939
+    },
+    {
+      "path": "scripts/tests/prepare_stability_owner_phase.py",
+      "sha256": "08f122921f8c496e7b6a67d3175294f7e4d5edd924bf80422418e9a4aade3041",
+      "size": 7170
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-phase/stability_phase.rs",
+      "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+      "size": 9176
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-phase/smp_service.append.rs",
+      "sha256": "27ccee5815ccdd09c128803483fa488061d50721ff35f51e67363164379e5579",
+      "size": 4827
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-phase/smp_application.append.rs",
+      "sha256": "5120d4ad683702ffc80453643b6106635c5f6148861da7d247686a37039c5834",
+      "size": 1064
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-phase/smp_application_syscall.append.rs",
+      "sha256": "fc4fd377d10e5a9f6e63627fb0a062de9d0650367d7079e289e255c74cfb67ec",
+      "size": 1643
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-phase/smp_memory.append.rs",
+      "sha256": "3097600b3bf042cfd952162b2a0584faa1bc69c21c1f779f5010c5148a67989c",
+      "size": 2640
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-observer/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-observer/application_syscall.append.rs",
+      "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+      "size": 1768
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-owner-observer/sysfs_memory.append.rs",
+      "sha256": "5bc492c9298fc669149eb475446462348ed2b233b6c1a84bdd6255fe80a7b55b",
+      "size": 4918
+    },
+    {
+      "path": "host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "size": 21026
+    },
+    {
+      "path": "host-kernel/native-rust/application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0",
+      "size": 44257
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478",
+      "size": 39666
+    },
+    {
+      "path": "host-kernel/native-rust/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "host-kernel/native-rust/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+      "size": 32772
+    },
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    }
+  ],
+  "mode_mapping": [
+    {
+      "controller": "prepublish-hard",
+      "fault": "Injected prepublication EIO; zero real selected queue successes.",
+      "id": 1,
+      "parser_contract": "hard-prepublication"
+    },
+    {
+      "controller": "postpublish-notify",
+      "fault": "Actual selected queue publication succeeds, then one exact-owner notify callback returns injected EIO.",
+      "id": 2,
+      "parser_contract": "postpublication-notify"
+    },
+    {
+      "controller": "recoverable-backpressure",
+      "fault": "Injected EAGAIN until2seconds after first post-barrier fault attempt, then actual callback determines publication.",
+      "id": 3,
+      "parser_contract": "recovery-before-deadline"
+    },
+    {
+      "controller": "permanent-backpressure",
+      "fault": "Injected EAGAIN until unchanged production publication timeout; no synthetic timeout substitute.",
+      "id": 4,
+      "parser_contract": "permanent-pressure"
+    }
+  ],
+  "physical_full_ring_verified": false,
+  "production_gate_credit": false,
+  "read_diagnostic": {
+    "command": "rg ... host-kernel/native-rust/smp_control_channel.rs host-kernel/native-rust/smp_ikc.rs",
+    "exit_code": 2,
+    "raw_output": "rg: host-kernel/native-rust/smp_control_channel.rs: No such file or directory (os error 2)\n",
+    "resolution": "Read actual ControlChannel and OutboundQueue in smp_ikc.rs. Root notified; no mutation, compilation or runtime failure."
+  },
+  "record_kind": "independent-transport-overlay-source-review",
+  "reviewed_hooks": [
+    {
+      "finding": "Selected actual Request/delivery/eligibility and copied Completion native Claim precede scalar accepted phase transition. No syscall result, prepared prefix, production ownership or timer is replaced.",
+      "location": "scripts/tests/prepare_stability_transport_fault.py:65",
+      "operation": "Successful Mailbox::return_value after response.prepare and before Ok"
+    },
+    {
+      "finding": "Request.clone is fixed scalars and72bytes, not allocation. Serial/eligibility and Option<Claim> Copy values are captured under shared borrows before the mutable Completion borrow; no borrowed response or guest byte alias crosses the callback. Completion::publish original body remains untouched by this helper.",
+      "location": "scripts/tests/prepare_stability_transport_fault.py:76",
+      "operation": "Mailbox::publish actual Completion::publish send callback"
+    },
+    {
+      "finding": "Actual Runtime OS slot/generation, application token and guest CPU bind the selected notification. The namespace super::super reaches the root native mailbox module. Original kernel Error converts to i32 and back explicitly.",
+      "location": "scripts/tests/prepare_stability_transport_fault.py:87",
+      "operation": "Runtime::publish_syscalls separate notify closure"
+    },
+    {
+      "finding": "Runs only after copied and commit succeed and actual worker.delivery Release store. WAIT request offsets40/48/64 are nr/fd/length. Registration and HostWorker supply the actual OS/gen/PID/TID/worker/delivery key.",
+      "location": "scripts/tests/prepare_stability_transport_fault.py:92",
+      "operation": "mcctrl successful copied read16 selection"
+    },
+    {
+      "finding": "ENTER follows private user-descriptor/payload copying and immediately precedes invoke; LEAVE records actual Result errno-or0 and raw accepted word48 immediately after invoke, before accepted processing or result propagation. Key is copied once across the call. No guest response bytes are inspected or substituted.",
+      "location": "scripts/tests/prepare_stability_transport_fault.py:101",
+      "operation": "Actual Registration.invoke RETURN_SYSCALL bracket"
+    },
+    {
+      "finding": "stability_fault_observe is now called after complete owner observation and before STABILITY_PHASE_SNAPSHOT_END, outside production domain locks and within serialized phase envelope.",
+      "location": "scripts/tests/fixtures/stability-owner-phase/smp_service.append.rs:6",
+      "operation": "Per-phase fault counter emission"
+    }
+  ],
+  "reviewer": "/root/progress_audit",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PARENT_ISOLATED_COMPILATION",
+  "validation_scope": {
+    "commands_executed": "Read-only source reads/searches/hash calculation only. No helper staging, Python selftests, Rust/C compilation, container, guest, kernel operation or production edit was performed by this review lane.",
+    "original_prototype": "Parent reported original first-send prototype not executed. Corrected findings are source review changes, not passing runtime repairs.",
+    "parent_next": "Serialized isolated source composition and native compilation, compiled visibility/type checks, measured frame sizes/call chain and real printk line/capture bounds before any guest run."
+  }
+}

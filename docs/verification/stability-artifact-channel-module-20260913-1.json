@@ -1,0 +1,693 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "GNUMAKEFLAGS=",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "LANG=C",
+        "LC_ALL=C",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "MAKEFILES=",
+        "MAKEFLAGS=",
+        "MAKEOVERRIDES=",
+        "MFLAGS=",
+        "PATH=/usr/bin:/bin",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "TZ=UTC",
+        "/usr/bin/make",
+        "-C",
+        "/work/native-source/linux-6.12.0-211.44.1.el10_2",
+        "O=/work/native-build-base-24a151fe",
+        "ARCH=x86_64",
+        "LLVM=1",
+        "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+        "-j4",
+        "drivers/char/virtio_console.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/env",
+          "-i",
+          "BASH_ENV=",
+          "ENV=",
+          "GNUMAKEFLAGS=",
+          "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+          "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+          "KBUILD_BUILD_USER=mckernel",
+          "KBUILD_BUILD_VERSION=1",
+          "LANG=C",
+          "LC_ALL=C",
+          "LD_LIBRARY_PATH=",
+          "LD_PRELOAD=",
+          "MAKEFILES=",
+          "MAKEFLAGS=",
+          "MAKEOVERRIDES=",
+          "MFLAGS=",
+          "PATH=/usr/bin:/bin",
+          "SOURCE_DATE_EPOCH=1786434034",
+          "TZ=UTC",
+          "/usr/bin/make",
+          "-C",
+          "/work/native-source/linux-6.12.0-211.44.1.el10_2",
+          "O=/work/native-build-base-24a151fe",
+          "ARCH=x86_64",
+          "LLVM=1",
+          "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+          "-j4",
+          "drivers/char/virtio_console.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-artifact-channel-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 3.123570031952113,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "81f7b1220742",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 509699.826187193,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/env",
+          "sha256": "3164957405d820d74c59ce94cbe8e20eafa4d25366f53e4de9e3f4a149a9576c",
+          "size": 50
+        },
+        "executable_path": "/usr/bin/env",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 509699.835450004,
+        "monotonic_started": 509696.711879972,
+        "payload_completion_observed_monotonic": 509699.826182974,
+        "payload_monotonic_deadline": 510896.712384442,
+        "payload_monotonic_started": 509696.712384442,
+        "process": {
+          "pgid": 10,
+          "pid": 10,
+          "ppid": 9,
+          "session": 10,
+          "starttime_ticks": 50969671,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/linux-virtio-console-module-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/linux-virtio-console-module-collection/stdout.bin",
+              "sha256": "0bbeec7bb55d9441b35c916e2865de000c8dc325ad7c33f50d8d04f2dfb95a82",
+              "size": 983
+            },
+            "bytes_observed": 983,
+            "bytes_retained": 983,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 9,
+        "timeout_seconds": 1200.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "linux-virtio-console-module"
+    },
+    {
+      "argv": [
+        "/usr/sbin/modinfo",
+        "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/sbin/modinfo",
+          "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-artifact-channel-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.0040239469963125885,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "81f7b1220742",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 509699.894099658,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/kmod",
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "size": 182088
+        },
+        "executable_path": "/usr/sbin/modinfo",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 509699.896192411,
+        "monotonic_started": 509699.892168464,
+        "payload_completion_observed_monotonic": 509699.894097295,
+        "payload_monotonic_deadline": 509819.892734874,
+        "payload_monotonic_started": 509699.892734874,
+        "process": {
+          "pgid": 487,
+          "pid": 487,
+          "ppid": 486,
+          "session": 487,
+          "starttime_ticks": 50969989,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-info-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-info-collection/stdout.bin",
+              "sha256": "b4a76db30ceabcd60e369014a77437f6226f7b26b452d94ac312a8427173280e",
+              "size": 403
+            },
+            "bytes_observed": 403,
+            "bytes_retained": 403,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 486,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "module-info"
+    },
+    {
+      "argv": [
+        "/usr/sbin/modinfo",
+        "-F",
+        "depends",
+        "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/sbin/modinfo",
+          "-F",
+          "depends",
+          "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-artifact-channel-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.00527141202474013,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "81f7b1220742",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 509699.960432368,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/kmod",
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "size": 182088
+        },
+        "executable_path": "/usr/sbin/modinfo",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 509699.9636853,
+        "monotonic_started": 509699.958413888,
+        "payload_completion_observed_monotonic": 509699.960429924,
+        "payload_monotonic_deadline": 509819.958980817,
+        "payload_monotonic_started": 509699.958980817,
+        "process": {
+          "pgid": 489,
+          "pid": 489,
+          "ppid": 488,
+          "session": 489,
+          "starttime_ticks": 50969995,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-dependencies-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-dependencies-collection/stdout.bin",
+              "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+              "size": 1
+            },
+            "bytes_observed": 1,
+            "bytes_retained": 1,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 488,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "module-dependencies"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/nm",
+          "-u",
+          "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 20.0,
+        "cwd": "/work/stability-artifact-channel-module-20260913-1",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.011466194002423435,
+        "env": {
+          "CARGO_BUILD_JOBS": "4",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "4",
+          "HOME": "/home/builder",
+          "HOSTNAME": "81f7b1220742",
+          "LC_CTYPE": "C.UTF-8",
+          "MAKEFLAGS": "-j4",
+          "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/work/tmp",
+          "container": "oci"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 509700.042133021,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/nm",
+          "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+          "size": 50288
+        },
+        "executable_path": "/usr/bin/nm",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 509700.044565189,
+        "monotonic_started": 509700.033098995,
+        "payload_completion_observed_monotonic": 509700.042129198,
+        "payload_monotonic_deadline": 509820.033660637,
+        "payload_monotonic_started": 509700.033660637,
+        "process": {
+          "pgid": 491,
+          "pid": 491,
+          "ppid": 490,
+          "session": 491,
+          "starttime_ticks": 50970003,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-symbols-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-artifact-channel-module-20260913-1/module-symbols-collection/stdout.bin",
+              "sha256": "b5ffccd2a9024cdaae2b36b123cfdcbecbc514266d369d85141e801430fd9773",
+              "size": 3569
+            },
+            "bytes_observed": 3569,
+            "bytes_retained": 3569,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 490,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "module-symbols"
+    }
+  ],
+  "finished_utc": "2026-09-13T11:07:35.610951+00:00",
+  "guest_execution": false,
+  "inputs": [
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/char/virtio_console.c",
+        "sha256": "b849d4070962b504f76035ef51b0a1780937bb35ca72aa34302c8fbaf1071510",
+        "size": 54004
+      },
+      "retained": {
+        "path": "/work/stability-artifact-channel-module-20260913-1/source/drivers/char/virtio_console.c",
+        "sha256": "b849d4070962b504f76035ef51b0a1780937bb35ca72aa34302c8fbaf1071510",
+        "size": 54004
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/char/Kconfig",
+        "sha256": "b47706f0d21b5aadcf60cfc0828ffd63191d5b9c93b4a0f8b4de18a1ea80115f",
+        "size": 14693
+      },
+      "retained": {
+        "path": "/work/stability-artifact-channel-module-20260913-1/source/drivers/char/Kconfig",
+        "sha256": "b47706f0d21b5aadcf60cfc0828ffd63191d5b9c93b4a0f8b4de18a1ea80115f",
+        "size": 14693
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/drivers/char/Makefile",
+        "sha256": "54bef22a9ad2ea1e0bb5ce9783138b5501d003f603c588e331b094d445589c64",
+        "size": 1302
+      },
+      "retained": {
+        "path": "/work/stability-artifact-channel-module-20260913-1/source/drivers/char/Makefile",
+        "sha256": "54bef22a9ad2ea1e0bb5ce9783138b5501d003f603c588e331b094d445589c64",
+        "size": 1302
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-build-base-24a151fe/.config",
+        "sha256": "0d1ab80a308e2ca785dffcbadb238d37536e2ef0548eeed42f135e28cdd4c8f8",
+        "size": 260962
+      },
+      "retained": {
+        "path": "/work/stability-artifact-channel-module-20260913-1/source/.config",
+        "sha256": "0d1ab80a308e2ca785dffcbadb238d37536e2ef0548eeed42f135e28cdd4c8f8",
+        "size": 260962
+      }
+    }
+  ],
+  "mckernel_modules_and_kernel_unchanged": true,
+  "outputs": [
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/.virtio_console.ko.cmd",
+      "sha256": "c4e69fcff0a12d3fb5ff76105f39ad324360c11db8242669356d13cb774c609e",
+      "size": 236
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/.virtio_console.mod.cmd",
+      "sha256": "63646202de9d269bd386cffa7af85ef9fbb2562cbb7165621dbf7688985a2cb6",
+      "size": 159
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/.virtio_console.mod.o.cmd",
+      "sha256": "f991ed32b40bbeaa980f48e492331be4a19c73e211c98d80e279078efbc52546",
+      "size": 72232
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/.virtio_console.o.cmd",
+      "sha256": "3aab96107800679cda4fd11de33ad366e0ac387dd28d4a63c87dd154340e12a8",
+      "size": 85863
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/helper.py",
+      "sha256": "e86659114cc8728c36b1ee3e6c4a43613197a5e40b6443888c9f514173e53ab8",
+      "size": 3740
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/supervisor.py",
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "size": 24564
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/virtio_console.ko",
+      "sha256": "de7f247cc1ee893d683fe05c7a7591ec10dfa4aa1cba0f29236196f44804e1cd",
+      "size": 505168
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/virtio_console.mod",
+      "sha256": "08de718432aa36c470f48c74e3b035015dfb62a25eec535638b993bb9e48d1a4",
+      "size": 30
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/virtio_console.mod.c",
+      "sha256": "db655b18b1e5b29d0f44e64d08e7c2ee59bfdb3e206cdd9537a8cebb7794d79c",
+      "size": 523
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/virtio_console.mod.o",
+      "sha256": "1a1e569973dcce8d5a1b093a9a4b384a54f9365364b69d5517a3f259c7d4c292",
+      "size": 148560
+    },
+    {
+      "path": "/work/stability-artifact-channel-module-20260913-1/virtio_console.o",
+      "sha256": "fc592168e3322c0ae52132e2af14fad5250b0f17133689976a77eb2f5f541c89",
+      "size": 393800
+    }
+  ],
+  "phase": "module-symbols",
+  "production_gate_credit": false,
+  "protected_after": [
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/ihk-smp-x86_64.ko",
+      "sha256": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+      "size": 11030936
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/.config",
+      "sha256": "0d1ab80a308e2ca785dffcbadb238d37536e2ef0548eeed42f135e28cdd4c8f8",
+      "size": 260962
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/arch/x86/boot/bzImage",
+      "sha256": "b6cbd689108f499d37ba8d3768f2cdd6cb0f3422d93a4e091af93680686e94eb",
+      "size": 16130048
+    }
+  ],
+  "protected_before": [
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/ihk-smp-x86_64.ko",
+      "sha256": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+      "size": 11030936
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/drivers/misc/mckernel/mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/.config",
+      "sha256": "0d1ab80a308e2ca785dffcbadb238d37536e2ef0548eeed42f135e28cdd4c8f8",
+      "size": 260962
+    },
+    {
+      "path": "/work/native-build-base-24a151fe/arch/x86/boot/bzImage",
+      "sha256": "b6cbd689108f499d37ba8d3768f2cdd6cb0f3422d93a4e091af93680686e94eb",
+      "size": 16130048
+    }
+  ],
+  "scope": "Pinned Linux virtio-console transport for exact guest test artifacts only",
+  "started_utc": "2026-09-13T11:07:32.111148+00:00",
+  "status": "PASS_BUILD_ONLY"
+}
