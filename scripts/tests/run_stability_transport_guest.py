@@ -419,6 +419,13 @@ def run(args):
             canonical=identity(out / 'native-dmesg.canonical.bin'), lines=mapping))
         observations = owner.parse_observations(canonical)
         write_json(out / 'owner-observations.json', observations)
+        if prepared.get('controller_profile', 'owner-phase-v1') == 'owner-phase-v2':
+            for snapshot in observations['snapshots']:
+                if snapshot['phase'] in ('Terminal', 'TerminalPlusFive'):
+                    selected = snapshot['selection']['application']
+                    apps = [row['row'] for row in snapshot['records']
+                            if row['kind'] == 'APP' and row['row']['token'] == selected]
+                    assert len(apps) == 1 and apps[0]['closed'] and apps[0]['quarantined'], 'terminal launcher closure not reflected in native owner'
         comparison = phases.validate_capture(raw_native, mode='prepublish-hard',
             nonce_low=int(nonce[:16], 16), nonce_high=int(nonce[16:], 16), owner_contract=owner_contract)
         write_json(out / 'native-phase-contract.json', comparison)

@@ -1,0 +1,52 @@
+{
+  "application_acceptance": false,
+  "backend_implemented": false,
+  "execution_status": "NOT_RUN",
+  "guest_execution": false,
+  "independent_review": {
+    "path": "/tmp/stability-application-preflight-independent-review-20260913-ancdwtiq/review.json",
+    "sha256": "33d9c67239f0132bd74e9a86328cabc0c5dbd66d9d41ede4a3ac9c3d48eb68b6",
+    "size": 3487
+  },
+  "kind": "application-preflight-source-review",
+  "pinned_test_command": [
+    "python3",
+    "-B",
+    "scripts/tests/test_application_run.py",
+    "-f"
+  ],
+  "production_gate_credit": false,
+  "remaining": [
+    "Parent pinned execution of12 tests with retained original results.",
+    "Typed backend/root/provenance integration, all capability gates and separate execution packet release."
+  ],
+  "schema_version": 1,
+  "scope": "Metadata-only run.py entrypoint and12 synthetic boundary test sources; no executable backend, test execution or runtime release.",
+  "source_capture": "/tmp/stability-application-preflight-source-20260913-5refja9x",
+  "source_changes_after_initial_review": [
+    "Retained root used for validator to prevent temporary original-bundle substitution.",
+    "Parsed-document cache and256-use cap count repeated references as work."
+  ],
+  "sources": [
+    {
+      "path": "scripts/application-tests/run.py",
+      "sha256": "75bd82edb4ac6bc55519e18c8eb1b89056793af871ef2b85b0bdb5f19d9f0347",
+      "size": 13264
+    },
+    {
+      "path": "scripts/tests/test_application_run.py",
+      "sha256": "5c37bf0fa76b927a5c048593a99178c8701631cdd103fe17390a36543e8c63ce",
+      "size": 11593
+    },
+    {
+      "path": "scripts/application-tests/run-preflight.md",
+      "sha256": "99e5483b90d5ae87f794d7922d3fbb5dead52d9b11c33e288a50932519301447",
+      "size": 5799
+    }
+  ],
+  "static_validation": "AST parsing of new Python sources only; no module import or execution by author/reviewer.",
+  "status": "PASS_SOURCE_REVIEW_ONLY",
+  "test_execution": "NOT_RUN",
+  "test_method_count": 12,
+  "transport_acceptance": false
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope": "actual Linux terminal-boundary harness only",
+  "source_status": "DRAFT_NOT_COMPILED_OR_EXECUTED",
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "production_gate_credit": false,
+  "guest_execution": false,
+  "controller_sha256": "7b1115f4c744d32bb085f23b515e35bcfab4cf0efa6f2e3cb5827742876511e2",
+  "phase_client_sha256": "03f17078369078898dfafc97b064b29a349efd6f758d9e7895f5cdb91579d9c7",
+  "cases": [
+    {"name": "exit-eof", "method_result": true, "method_failure_errno": 0, "launcher_raw_wait": 0, "reaped": 1},
+    {"name": "alive-eof", "method_result": false, "method_failure_errno": 110, "launcher_raw_wait": 9, "reaped": 1},
+    {"name": "descendant-stdout", "method_result": false, "method_failure_errno": 110, "launcher_raw_wait": 0, "descendant_raw_wait": 9, "reaped": 2},
+    {"name": "descendant-stderr", "method_result": false, "method_failure_errno": 110, "launcher_raw_wait": 0, "descendant_raw_wait": 9, "reaped": 2},
+    {"name": "ticks-mismatch", "method_result": false, "method_failure_errno": 116, "launcher_raw_wait": 0, "reaped": 1},
+    {"name": "nonzero-exit", "method_result": true, "method_failure_errno": 0, "launcher_raw_wait": 5888, "reaped": 1},
+    {"name": "expired-ready", "method_result": false, "method_failure_errno": 110, "launcher_raw_wait": 0, "reaped": 1},
+    {"name": "overall-deadline", "method_result": false, "method_failure_errno": 110, "launcher_raw_wait": 9, "reaped": 1}
+  ]
+}
