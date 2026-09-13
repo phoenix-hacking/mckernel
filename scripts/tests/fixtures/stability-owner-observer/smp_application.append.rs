@@ -38,6 +38,24 @@ impl Remote {
 
     #[inline(never)]
     pub(crate) fn verification_emit(&self, sequence: u64) -> bool {
+        // The full App rows die before entering the mailbox observer. Only
+        // their fixed-size token inventory remains live in this caller.
+        let (tokens, used, mut complete) = self.verification_emit_apps(sequence);
+        for token in tokens.iter().take(used) {
+            complete &= self.verification_emit_detail(sequence, *token);
+            complete &= self.verification_emit_mailbox(sequence, Some(*token));
+        }
+        complete &= self.verification_emit_mailbox(sequence, None);
+        // No slots guard remains when acquiring the pager registry.
+        complete &= self.pagers.verification_emit(sequence);
+        complete
+    }
+
+    #[inline(never)]
+    fn verification_emit_apps(
+        &self,
+        sequence: u64,
+    ) -> ([u64; crate::stability_observer::APPS], usize, bool) {
         use crate::stability_observer as observer;
         let mut rows = observer::Rows::<observer::App, { observer::APPS }>::new();
         let health;
@@ -77,8 +95,9 @@ impl Remote {
         kernel::pr_info!("STABILITY_OWNER_DOMAIN version={} sequence={} domain=applications os={} generation={} transport_error={} slots={} total={} emitted={} complete={} release_token={}\n",
             observer::VERSION, sequence, self.owner.slot(), self.owner.generation(), health,
             capacity, rows.total, rows.used, rows.complete(), self.release_token.wire());
-        let mut complete = rows.complete();
+        let mut tokens = [0; observer::APPS];
         for (index, row) in rows.rows.iter().flatten().enumerate() {
+            tokens[index] = row.token;
             kernel::pr_info!(
                 "STABILITY_OWNER_APP version={} sequence={} ordinal={} row={:?}\n",
                 observer::VERSION,
@@ -86,13 +105,8 @@ impl Remote {
                 index,
                 row
             );
-            complete &= self.verification_emit_detail(sequence, row.token);
-            complete &= self.verification_emit_mailbox(sequence, Some(row.token));
         }
-        complete &= self.verification_emit_mailbox(sequence, None);
-        // No slots guard remains when acquiring the pager registry.
-        complete &= self.pagers.verification_emit(sequence);
-        complete
+        (tokens, rows.used, rows.complete())
     }
 
     #[inline(never)]

@@ -1,0 +1,56 @@
+{
+  "application_acceptance": false,
+  "changes_in_scope": [
+    "New private verification_emit_apps returns fixed8tokens/count/completeness.",
+    "App records are grouped before details; all header/row schemas, counts, ordinals and original one-lock snapshot preserved.",
+    "Mailbox calls/workers still copied together under their original lock; no added heap, unsafe code, locks, ownership or timer change."
+  ],
+  "compile_authorized": true,
+  "compiled_stack_reduction_verified": false,
+  "fixture": {
+    "path": "/home/holden/mckernel/scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+    "sha256": "f6f6ec5f859a977c3ebb22998eef891cf480f70dacb97d930bd5844ff9caf2fa",
+    "size": 9835
+  },
+  "independent_review_statement": "Same single-lock Rows<App,8> snapshot/header/APP fields; noninlined helper returns only8tokens+used+complete. used stays bounded by Rows.push and overflow remains incomplete. Outer token traversal/order and release mailbox/pager preserved. Two-App test compares grouped/interleaved inventories across four phases and rejects orphan detail; acceptance remains false.",
+  "independent_reviewer": "/root/application_audit",
+  "original_inputs": [
+    {
+      "path": "scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+      "sha256": "8be0a92c4db8d9b18a2bf0a258a6ba4053d55d9f80fe97e2de49091dca21d3db",
+      "size": 9304
+    },
+    {
+      "path": "scripts/tests/test_owner_observations.py",
+      "sha256": "1f2a4edd0c1c70bd425cda6e0490f172ca597b439747cfddd74ed4e62802a0b2",
+      "size": 20295
+    }
+  ],
+  "parser_test": {
+    "path": "/home/holden/mckernel/scripts/tests/test_owner_observations.py",
+    "sha256": "fa30ea4f670b239c619f08b708ec099943b9832318a4ffc44bcc8150dc61c096",
+    "size": 23318
+  },
+  "production_gate_credit": false,
+  "record_kind": "stability-app-row-stack-helper-source-review",
+  "retention": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-observer-stack-review-20260913-2.tar.gz",
+    "sha256": "9b4cc0ec9a192bcfa2c91407b37a34cef95fd57f69a1fad8ecb24bab61c2ef63",
+    "size": 1443229
+  },
+  "review_date": "2026-09-13",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "stack_review": {
+    "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+    "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+    "size": 104140
+  },
+  "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PARENT_PINNED_TESTS_AND_COMPILATION",
+  "test_scope": "One new synthetic parser ordering/inventory test; reviewer and author have not run it. Parent owns the single affected19-test suite and fresh module3 compilation.",
+  "unchanged_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/owner_observations.py",
+    "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+    "size": 33019
+  }
+}

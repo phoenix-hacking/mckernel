@@ -108,6 +108,45 @@ class OwnerObservationsTests(unittest.TestCase):
                 decorated = b"\r\n".join(prefix + line for line in raw.splitlines()) + b"\r\n"
                 self.assertEqual(len(owner.parse_observations(decorated)["snapshots"]), 4)
 
+    def test_two_apps_grouped_rows_preserve_token_bound_independent_domains(self):
+        raw, contract, timing = fixture()
+        lines = raw.decode().splitlines()
+        second_app = APP.replace("index: 3", "index: 4").replace("token: 7", "token: 9").replace("pid: 101", "pid: 103")
+        second_rpc = RPC.replace("token: 7", "token: 9").replace("pid: 101", "pid: 103")
+        for sequence in range(1, 5):
+            prefix = f"version=1 sequence={sequence} "
+            header = next(i for i, line in enumerate(lines) if prefix + "domain=applications " in line)
+            lines[header] = lines[header].replace("total=1 emitted=1", "total=2 emitted=2")
+            first_app = next(i for i, line in enumerate(lines) if "STABILITY_OWNER_APP " + prefix in line)
+            lines.insert(first_app + 1, "STABILITY_OWNER_APP " + prefix + "ordinal=1 row=" + second_app)
+            release = next(i for i, line in enumerate(lines) if prefix + "domain=mailbox application=None " in line)
+            lines[release:release] = [
+                "STABILITY_OWNER_RPC " + prefix + "application=9 role=cleanup row=" + second_rpc,
+                "STABILITY_OWNER_IMAGE " + prefix + "application=9 row=None",
+                "STABILITY_OWNER_RPC " + prefix + "application=9 role=schedule row=None",
+                "STABILITY_OWNER_RPC " + prefix + "application=9 role=retirement row=None",
+                "STABILITY_OWNER_DOMAIN " + prefix + "domain=mailbox application=Some(9) release_token=6 state=" + MAILBOX + " calls_total=0 calls_emitted=0 workers_total=0 workers_emitted=0 claims_known=true complete=true",
+            ]
+        grouped_raw = ("\n".join(lines) + "\n").encode()
+        grouped = owner.parse_observations(grouped_raw)
+        result = owner.validate_run(grouped, contract, timing)
+        self.assertIs(result["application_acceptance"], False)
+        # The previous emitter interleaved each APP with its own details.
+        # Both orderings must retain the same separately sampled inventory.
+        for sequence in range(1, 5):
+            prefix = f"version=1 sequence={sequence} "
+            second = next(i for i, line in enumerate(lines) if "STABILITY_OWNER_APP " + prefix + "ordinal=1 " in line)
+            app_line = lines.pop(second)
+            detail = next(i for i, line in enumerate(lines) if prefix + "application=9 role=cleanup " in line)
+            lines.insert(detail, app_line)
+        interleaved = owner.parse_observations(("\n".join(lines) + "\n").encode())
+        for before, after in zip(interleaved["snapshots"], grouped["snapshots"]):
+            project = lambda snapshot: sorted(json.dumps(row, sort_keys=True) for row in owner.inventory_projection(snapshot))
+            self.assertEqual(project(before), project(after))
+            apps = [row["row"]["token"] for row in after["records"] if row["kind"] == "APP"]
+            self.assertEqual(apps, [7, 9])
+        self.reject(grouped_raw.replace(b"application=9 role=cleanup", b"application=10 role=cleanup", 1))
+
     def test_versions_unknown_fields_literal_injection_and_type_drift(self):
         raw, _, _ = fixture()
         changes = [(b"version=1", b"version=2"), (b"version=1", b"version=true"), (b"phase=BlockedRead", b"phase=Unknown"), (b"sampling=independent_domains", b"sampling=independent_domains extra=1"), (b"pid: 101", b"pid: 2147483648"), (b"generation: 4", b"generation: 18446744073709551616"), (b"generation: 4", b"generation: -1"), (b"generation: 4", b"generation: 04"), (b"runtime_error=0", b"runtime_error=-0"), (b"runtime_owner=ffff1234", b"runtime_owner=0xffff1234"), (b"owner=Some(Claim", b"owner=Some(Evil"), (b"serial: Some(17)", b"serial: Some(__import__('os'))"), (b'phase: "delivered"', b'phase: "delivered\\n"'), (b"[0, 8192, 16, 0, 0, 0]", b"[0, 8192, 16, 0, 0]"), (b"Some((12, 102))", b"Some((12, 102, 1))"), (b"valid=true", b"valid=1")]

@@ -1,0 +1,2603 @@
+{
+  "application_acceptance": false,
+  "build_record": {
+    "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/record.json",
+    "sha256": "73b4943ba360e0024702a70443986ad58d671015c393df1b97fa233c77673648",
+    "size": 189147
+  },
+  "comparison": {
+    "compiled_role_entry_frames": {
+      "accepted_closure": 144,
+      "metadata": 2832,
+      "pump": 176,
+      "run": 32,
+      "zeroing": 480
+    },
+    "phase_ioctl_after_bytes": 7080,
+    "phase_ioctl_before_bytes": 7080,
+    "role_service_boundaries": [
+      "Remote::advance",
+      "Runtime::metadata",
+      "Runtime::zeroing",
+      "Runtime::pump",
+      "Runtime::pump_master",
+      "Runtime::pump_regular",
+      "Runtime::publish_remote",
+      "Runtime::publish_applications",
+      "Runtime::publish_syscalls",
+      "Runtime::publish_procfs"
+    ],
+    "unchanged_mcctrl": true,
+    "worker_after_bytes": 6760,
+    "worker_before_bytes": 9416,
+    "worker_reduction_bytes": 2656
+  },
+  "full_linux_stack_bound_verified": false,
+  "known_module_chains": {
+    "packet_worker_to_mailbox_copy": {
+      "bytes": 6760,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x48b60",
+          "callsites": [
+            {
+              "address": "0x48b80",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 77925,
+              "op": "call   35db0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                220592
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 77914,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x35db0",
+          "callsites": [
+            {
+              "address": "0x35ffa",
+              "depth_before": 168,
+              "kind": "call",
+              "line": 59071,
+              "op": "call   11150 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                69968
+              ]
+            }
+          ],
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_line": 58921,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 168
+        },
+        {
+          "address": "0x11150",
+          "callsites": [
+            {
+              "address": "0x1126a",
+              "depth_before": 136,
+              "kind": "call",
+              "line": 20717,
+              "op": "call   30930 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                198960
+              ]
+            }
+          ],
+          "counted_bytes": 144,
+          "counted_local_bytes": 136,
+          "entry_line": 20650,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 136
+        },
+        {
+          "address": "0x30930",
+          "callsites": [
+            {
+              "address": "0x30a72",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53463,
+              "op": "call   2ef70 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192368
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 53391,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2ef70",
+          "callsites": [
+            {
+              "address": "0x2f3c9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 51984,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 51744,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x236d2",
+              "depth_before": 1464,
+              "kind": "call",
+              "line": 39188,
+              "op": "call   243b0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148400
+              ]
+            },
+            {
+              "address": "0x23691",
+              "depth_before": 1464,
+              "kind": "call",
+              "line": 39171,
+              "op": "call   243b0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148400
+              ]
+            }
+          ],
+          "counted_bytes": 1472,
+          "counted_local_bytes": 1464,
+          "entry_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 1464
+        },
+        {
+          "address": "0x243b0",
+          "callsites": [
+            {
+              "address": "0x245d0",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40029,
+              "op": "call   32470 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                205936
+              ]
+            },
+            {
+              "address": "0x24596",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40016,
+              "op": "call   32470 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                205936
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_line": 39920,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x32470",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_line": 55150,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only; no full Linux stack bound."
+    },
+    "phase_ioctl_to_mailbox_copy": {
+      "bytes": 7080,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x22d0",
+          "callsites": [
+            {
+              "address": "0x22e2",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2190,
+              "op": "call   22e7 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  315600
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                315600
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 2184,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4d0d0",
+          "callsites": [
+            {
+              "address": "0x4d5d4",
+              "depth_before": 472,
+              "kind": "call",
+              "line": 83915,
+              "op": "call   3e170 <<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                254320
+              ]
+            }
+          ],
+          "counted_bytes": 480,
+          "counted_local_bytes": 472,
+          "entry_line": 83616,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 472
+        },
+        {
+          "address": "0x3e170",
+          "callsites": [
+            {
+              "address": "0x3e1db",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67148,
+              "op": "call   30930 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                198960
+              ]
+            },
+            {
+              "address": "0x3e386",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67254,
+              "op": "call   30930 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                198960
+              ]
+            }
+          ],
+          "counted_bytes": 160,
+          "counted_local_bytes": 152,
+          "entry_line": 67115,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command",
+          "maximum_local_bytes": 152
+        },
+        {
+          "address": "0x30930",
+          "callsites": [
+            {
+              "address": "0x30a72",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53463,
+              "op": "call   2ef70 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192368
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_line": 53391,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2ef70",
+          "callsites": [
+            {
+              "address": "0x2f3c9",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 51984,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_line": 51744,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x236d2",
+              "depth_before": 1464,
+              "kind": "call",
+              "line": 39188,
+              "op": "call   243b0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148400
+              ]
+            },
+            {
+              "address": "0x23691",
+              "depth_before": 1464,
+              "kind": "call",
+              "line": 39171,
+              "op": "call   243b0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148400
+              ]
+            }
+          ],
+          "counted_bytes": 1472,
+          "counted_local_bytes": 1464,
+          "entry_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 1464
+        },
+        {
+          "address": "0x243b0",
+          "callsites": [
+            {
+              "address": "0x245d0",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40029,
+              "op": "call   32470 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                205936
+              ]
+            },
+            {
+              "address": "0x24596",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40016,
+              "op": "call   32470 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                205936
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_line": 39920,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x32470",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_line": 55150,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only; no full Linux stack bound."
+    },
+    "ret_enter_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x41c6",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4823,
+              "op": "call   5b00 <mcctrl::mcctrl_process::stability_ret_enter>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23296
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5b00",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_line": 6578,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_enter",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only; no full Linux stack bound."
+    },
+    "ret_leave_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x4204",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4839,
+              "op": "call   5c90 <mcctrl::mcctrl_process::stability_ret_leave>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23696
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5c90",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_line": 6678,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_leave",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only; no full Linux stack bound."
+    },
+    "ret_select_hook": {
+      "bytes": 560,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xeb0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1274,
+              "op": "call   2ac0 <<mcctrl::mcctrl_process::Context>::wait_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                10944
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x2ac0",
+          "callsites": [
+            {
+              "address": "0x3115",
+              "depth_before": 392,
+              "kind": "call",
+              "line": 3774,
+              "op": "call   5e20 <mcctrl::mcctrl_process::stability_ret_select>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                24096
+              ]
+            }
+          ],
+          "counted_bytes": 400,
+          "counted_local_bytes": 392,
+          "entry_line": 3390,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::wait_syscall",
+          "maximum_local_bytes": 392
+        },
+        {
+          "address": "0x5e20",
+          "counted_bytes": 128,
+          "counted_local_bytes": 120,
+          "entry_line": 6778,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_select",
+          "maximum_local_bytes": 120
+        }
+      ],
+      "scope": "Known nested module frames only; no full Linux stack bound."
+    }
+  },
+  "linux_context": {
+    "configuration_reference": {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-1.json",
+      "sha256": "72c0f63e759331688de49131099300d3396bb2268412537038dc2d2793655ad6",
+      "size": 431099
+    },
+    "direct_initial_formatting_path": [
+      {
+        "address": "0xffffffff81765610",
+        "edge": "tail jump to _printk at0xffffffff81765619; shares entry return address",
+        "function": "kernel::print::call_printk -> _printk",
+        "local_upper_bytes": 0,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff81006ff0",
+        "edge": "call vprintk at0xffffffff81007048; pushrbp8 + stack80 + at most15 alignment",
+        "function": "_printk",
+        "local_upper_bytes": 103,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff811bcaa0",
+        "edge": "ordinary vprintk path pops its temporary16 bytes before tail0xffffffff811bcafb; default tail0xffffffff811b8ce8",
+        "function": "vprintk -> vprintk_default -> vprintk_emit",
+        "local_upper_bytes": 0,
+        "new_return_bytes": 0
+      },
+      {
+        "address": "0xffffffff811b87f0",
+        "edge": "six pushes48 + stack40 at call store0xffffffff811b8920; other branch max96 is not nested here",
+        "function": "vprintk_emit",
+        "local_upper_bytes": 88,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff811b7d40",
+        "edge": "six pushes48 + stack160 + at most15 alignment at direct vsnprintf0xffffffff811b7ef2; later rbp epilogue is outside selected prefix",
+        "function": "vprintk_store",
+        "local_upper_bytes": 223,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff81f02850",
+        "edge": "six pushes48 + stack40; pointer call0xffffffff81f02d06",
+        "function": "vsnprintf",
+        "local_upper_bytes": 88,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff81f035a0",
+        "edge": "two pushes16 + stack48 + at most15 alignment; %pA rust_fmt_argument call0xffffffff81f03cb1",
+        "function": "pointer",
+        "local_upper_bytes": 79,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff81766310",
+        "edge": "stack72; core::fmt::write call0xffffffff8176636a",
+        "function": "rust_fmt_argument",
+        "local_upper_bytes": 72,
+        "new_return_bytes": 8
+      },
+      {
+        "address": "0xffffffff81753f70",
+        "edge": "six pushes48 + stack40; stop before dynamic trait callbacks",
+        "function": "core::fmt::write",
+        "local_upper_bytes": 88,
+        "new_return_bytes": 0
+      }
+    ],
+    "direct_initial_formatting_path_upper_bytes": 797,
+    "known_module_prefix_plus_this_path": {
+      "ioctl": 7581,
+      "worker": 7261
+    },
+    "ordinary_sysv_alignment_arithmetic_bytes": 768,
+    "scope": "Only the selected direct initial vsnprintf formatting path through core::fmt::write. These sums stop before dynamic callback frames and do not bound every printk or kernel path. The ELF/header/config binding and partial graph limitations remain explicit.",
+    "thread_size_bytes": 16384,
+    "vmlinux": {
+      "path": "/home/holden/mckernel-work/scratch/native-build-base-24a151fe/vmlinux",
+      "sha256": "1a8412ded548006989f060bc6ddbf6f3c467a1addeac277647f945077dea7a6b",
+      "size": 345517528
+    }
+  },
+  "modules": {
+    "ihk-smp-x86_64": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/ihk-smp-x86_64.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "cf23bd9fb9b1f5d2781ac30cc385b06654a9f23df03432058be6bafe94afc102",
+        "size": 5124401
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/ihk-smp-x86_64.ko",
+        "sha256": "b26dbd5625bb07f6f98d3f6759dfa0822f8c5511dfadbe5499cc29e946985f2e",
+        "size": 11704216
+      }
+    },
+    "mcctrl": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/mcctrl.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "ffcccb347bd5e8229c2aa16e150941540ee26437a8842efb2fc336c180c68107",
+        "size": 481096
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/mcctrl.ko",
+        "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+        "size": 1951376
+      }
+    }
+  },
+  "original_diagnostics": {
+    "first_linux_cfg_limitation": "Binary objdump branch operand presentation initially prevented CFG resolution. Original output preserved; fresh normalized analysis changes presentation only.",
+    "kernel_log_appended_under_explicit_parent_authority": true,
+    "python_compatibility_failure": "Original linux_frames.py exits1 at hashlib.file_digest on hostPython3.9.12; original source, byte slices, disassembly and traceback preserved in archive module-analysis/. Streaming retry is separate."
+  },
+  "previous_review": {
+    "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-1.json",
+    "sha256": "72c0f63e759331688de49131099300d3396bb2268412537038dc2d2793655ad6",
+    "size": 431099
+  },
+  "production_gate_credit": false,
+  "record_kind": "stability-compiled-observer-stack-review",
+  "residual_edges": [
+    "core::fmt::write and DebugStruct field helpers call dynamic formatting traits; known typed module frames exist but their complete nested closure is not established here.",
+    "vprintk_store also reaches printk_sprint before formatting; that wrapper and console flush/console drivers are not included in the797-byte selected prefix.",
+    "Linux ioctl syscall entry and stack switching, lock slowpaths/scheduler, IRQ/NMI/mitigation paths and RETURN backend stack remain separate residuals.",
+    "The reused module analyzer leaves 16-byte alignment and rbp epilogues explicitly unresolved; selected pre-epilogue callsites use independent bounded alignment arithmetic. do_syscall_64 additionally hits a CFG exploration limit/stack switch and has no certified bound.",
+    "No further whole-Linux certification is being attempted; parent will measure the final minimal observer and use controlled guest verification with this explicit residual claim."
+  ],
+  "retained_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/application_rpc.rs",
+      "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+      "size": 10925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/application_syscall.rs",
+      "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "size": 17343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/device_registry.rs",
+      "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+      "size": 60079
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ihk_smp_x86_64.rs",
+      "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+      "size": 33317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/mcctrl_process.rs",
+      "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+      "size": 45316
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/page_allocator.rs",
+      "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+      "size": 21246
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/page_owner_registry.rs",
+      "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+      "size": 13034
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_application.rs",
+      "sha256": "81d15998a4597222c30cd0170552a5e2e48cdf83df9906537814f67c9e5ae9b4",
+      "size": 54646
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_application_image.rs",
+      "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+      "size": 9982
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_application_syscall.rs",
+      "sha256": "e5e9fcd01b73896a559700adde13fe206ea0facb451f4482b0aaea5ff2ae60ea",
+      "size": 36219
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_file_pager.rs",
+      "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+      "size": 14721
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_memory.rs",
+      "sha256": "75983706f45ab8c33fdb4059f7f0e354b041a82ee7940933b670d84220ecb126",
+      "size": 101582
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_procfs.rs",
+      "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+      "size": 28177
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_service.rs",
+      "sha256": "944afdc8646c6722e666913af514f800d052717f0fb31f7d93ffb8b26230509f",
+      "size": 47572
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/stability_phase.rs",
+      "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+      "size": 9176
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_memory.rs",
+      "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "size": 29925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/staged-source/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/ihk.ko",
+      "sha256": "062c254901a1d51eba60928432d959c01288355ead854f4ab754a09ebd775a78",
+      "size": 1357704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/ihk-smp-x86_64.ko",
+      "sha256": "b26dbd5625bb07f6f98d3f6759dfa0822f8c5511dfadbe5499cc29e946985f2e",
+      "size": 11704216
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/mcctrl.ko",
+      "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+      "size": 1951376
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/application_rpc.append.rs",
+      "sha256": "dcc392d9ffc51490a394db1a36a5f82499b39c1ba697d9dd19d447ad2babf5cd",
+      "size": 845
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/application_syscall.append.rs",
+      "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+      "size": 1768
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+      "sha256": "8be0a92c4db8d9b18a2bf0a258a6ba4053d55d9f80fe97e2de49091dca21d3db",
+      "size": 9304
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_application_image.append.rs",
+      "sha256": "019f7bf5ccd56857e59c375144034005eca9b543cba3c824ee6c96eea323ffd4",
+      "size": 772
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_application_syscall.append.rs",
+      "sha256": "0ca1b708f4efb83494009740700e5ea26987c92aa09849e44eb534bf95e1ed18",
+      "size": 4788
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_file_pager.append.rs",
+      "sha256": "68442c8a1fc5bf05aa9a9f2df88660f2622c269b12dd01251e71995c9ed96118",
+      "size": 1794
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_procfs.append.rs",
+      "sha256": "1eb6179d539cadd695bc23d77fcb173371fda3ad5461aaa17169320b84e218b9",
+      "size": 603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/smp_service.append.rs",
+      "sha256": "e2ad699e5ec2325bbe76aef39fe43e13497a8e6529943fb24cff988273c41c89",
+      "size": 2340
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-observer/sysfs_memory.append.rs",
+      "sha256": "5bc492c9298fc669149eb475446462348ed2b233b6c1a84bdd6255fe80a7b55b",
+      "size": 4918
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-phase/smp_application.append.rs",
+      "sha256": "5120d4ad683702ffc80453643b6106635c5f6148861da7d247686a37039c5834",
+      "size": 1064
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-phase/smp_application_syscall.append.rs",
+      "sha256": "fc4fd377d10e5a9f6e63627fb0a062de9d0650367d7079e289e255c74cfb67ec",
+      "size": 1643
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-phase/smp_memory.append.rs",
+      "sha256": "3097600b3bf042cfd952162b2a0584faa1bc69c21c1f779f5010c5148a67989c",
+      "size": 2640
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-phase/smp_service.append.rs",
+      "sha256": "27ccee5815ccdd09c128803483fa488061d50721ff35f51e67363164379e5579",
+      "size": 4827
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-owner-phase/stability_phase.rs",
+      "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+      "size": 9176
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-ret-observer.rs",
+      "sha256": "d0fdda0b7b77800a614ccfde18d42967be03f1c67117dd5c7abee7b64f2b93bc",
+      "size": 3939
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/controller.c",
+      "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+      "size": 40734
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/README.md",
+      "sha256": "21b130b10b5726bd1a2290c00b18c079e6e91f0d930924e934dd5142b145fcf1",
+      "size": 7892
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/after_hello.c",
+      "sha256": "8d636faa0f72c685c9c74612a6b0a640fa4c39796759352deb54922827e54aeb",
+      "size": 1897
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.c",
+      "sha256": "92307db9af4cdaa76e85f9c985575f4aec413789751a1e1f012f1d9962fbb06f",
+      "size": 45151
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.forward.patch",
+      "sha256": "e04458f04cc49f2daf6d51fdeddb695049d381521b4f40a0555ec4447af548d5",
+      "size": 7380
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.inverse.patch",
+      "sha256": "6a9a3b4f590ba7c31ff54082328d41a5eeded64c5b631e174c6ce235d619bb91",
+      "size": 7380
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.original.c",
+      "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+      "size": 40734
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase_client.h",
+      "sha256": "03f17078369078898dfafc97b064b29a349efd6f758d9e7895f5cdb91579d9c7",
+      "size": 16068
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/payload.c",
+      "sha256": "1cb799c6b994250dad9d367bd33b629a095b78d220df5a683f1da607bbfb971b",
+      "size": 870
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/protocol-expectations.json",
+      "sha256": "6ab4fb9edaf5cf8f70eda23b95035d91ad834b4ab7bf61bd486e3e5293965e20",
+      "size": 3007
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/protocol-harness.md",
+      "sha256": "306ba431b8ad84228c6fc6b3558a0f0621e2dd4f1b8dd3842e338f5c243d785e",
+      "size": 6228
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/protocol_harness.c",
+      "sha256": "7aed190e6aed3bc0940e1e7c513a899abc4c5205076f4dfd8d3d81cf205924f1",
+      "size": 21374
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/run_protocol_tests.py",
+      "sha256": "3898ee3155a09822bf637b021b9ab5534310ec1fa3b95b47c6dada4c99bcc28a",
+      "size": 9256
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/fixtures/stability-transport-fault/send.append.rs",
+      "sha256": "01f781f9258e3a6564c8512c40721dc2a11e0621a5262756c6f8e85675f0543d",
+      "size": 7149
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/prepare_stability_owner_observer.py",
+      "sha256": "e78fdd58d3f959798e94111c960110086376182a1aa659733e1d550d94979466",
+      "size": 7295
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/prepare_stability_owner_phase.py",
+      "sha256": "cd58971d7a810728f9426dfa10d2b661c831ecfe1328e413554632764f2d1d0d",
+      "size": 9056
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/prepare_stability_transport_fault.py",
+      "sha256": "860e7a941660b9453e89fefeb83948673377fc75146a08f263251390bf3bfbb6",
+      "size": 8269
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/source/scripts/tests/test_qmp_capture.py",
+      "sha256": "8f662134f83930e0a7e69c88bb391bd8b00231dbb0407368cb49c9e2c5b8e721",
+      "size": 10911
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/owner-overlay/record.json",
+      "sha256": "c2e2ae14e07f643f6bb6f283bdb3f8dce40e18c9df9b82b313a6a363bd8c74c3",
+      "size": 9423
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/phase-overlay/record.json",
+      "sha256": "adf13c6a915415d7c87c6a9589fb91e1d3e1d73b9331b41e4583ea49a9dc13e6",
+      "size": 8487
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-2/transport-overlay/record.json",
+      "sha256": "01cb44eeeb9c8fd04226e4453bab927f50f0d1fbc1adffe2b111baaa53d182af",
+      "size": 8666
+    }
+  ],
+  "retention": {
+    "archive": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/stability-observer-stack-review-20260913-2.tar.gz",
+      "sha256": "9b4cc0ec9a192bcfa2c91407b37a34cef95fd57f69a1fad8ecb24bab61c2ef63",
+      "size": 1443229
+    },
+    "member_count": 251,
+    "members": [
+      {
+        "name": "app-originals/original-inputs.json",
+        "sha256": "5c9bbfa691884de8101ea2a09c6dab9e3f0a7583985c487fbd9308f57a28d538",
+        "size": 365
+      },
+      {
+        "name": "app-originals/smp_application.append.rs.original",
+        "sha256": "8be0a92c4db8d9b18a2bf0a258a6ba4053d55d9f80fe97e2de49091dca21d3db",
+        "size": 9304
+      },
+      {
+        "name": "app-originals/test_owner_observations.py.original",
+        "sha256": "1f2a4edd0c1c70bd425cda6e0490f172ca597b439747cfddd74ed4e62802a0b2",
+        "size": 20295
+      },
+      {
+        "name": "compiled-capture/phase-overlay/record.json",
+        "sha256": "adf13c6a915415d7c87c6a9589fb91e1d3e1d73b9331b41e4583ea49a9dc13e6",
+        "size": 8487
+      },
+      {
+        "name": "compiled-capture/record.json",
+        "sha256": "73b4943ba360e0024702a70443986ad58d671015c393df1b97fa233c77673648",
+        "size": 189147
+      },
+      {
+        "name": "compiled-staged-source/Kbuild",
+        "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "size": 371
+      },
+      {
+        "name": "compiled-staged-source/Kconfig",
+        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+        "size": 848
+      },
+      {
+        "name": "compiled-staged-source/abi/application.rs",
+        "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "size": 3171
+      },
+      {
+        "name": "compiled-staged-source/abi/os_service.rs",
+        "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+        "size": 2527
+      },
+      {
+        "name": "compiled-staged-source/abi/sysfs.rs",
+        "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+        "size": 2629
+      },
+      {
+        "name": "compiled-staged-source/abi/sysfs_request.rs",
+        "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+        "size": 6715
+      },
+      {
+        "name": "compiled-staged-source/abi/vdso.rs",
+        "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+        "size": 14530
+      },
+      {
+        "name": "compiled-staged-source/abi/x86_64.rs",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+        "size": 19740
+      },
+      {
+        "name": "compiled-staged-source/application_image.rs",
+        "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+        "size": 8356
+      },
+      {
+        "name": "compiled-staged-source/application_pager.rs",
+        "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+        "size": 3196
+      },
+      {
+        "name": "compiled-staged-source/application_rpc.rs",
+        "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+        "size": 10925
+      },
+      {
+        "name": "compiled-staged-source/application_syscall.rs",
+        "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+        "size": 17343
+      },
+      {
+        "name": "compiled-staged-source/device_registry.rs",
+        "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+        "size": 60079
+      },
+      {
+        "name": "compiled-staged-source/ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+        "size": 8
+      },
+      {
+        "name": "compiled-staged-source/ihk.rs",
+        "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+        "size": 18754
+      },
+      {
+        "name": "compiled-staged-source/ihk_ioctl.rs",
+        "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+        "size": 10432
+      },
+      {
+        "name": "compiled-staged-source/ihk_mapping.rs",
+        "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+        "size": 21943
+      },
+      {
+        "name": "compiled-staged-source/ihk_smp_x86_64.rs",
+        "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+        "size": 33317
+      },
+      {
+        "name": "compiled-staged-source/ikc_master.rs",
+        "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+        "size": 26480
+      },
+      {
+        "name": "compiled-staged-source/ikc_queue.rs",
+        "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+        "size": 23030
+      },
+      {
+        "name": "compiled-staged-source/mcctrl.rs",
+        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "size": 8992
+      },
+      {
+        "name": "compiled-staged-source/mcctrl_exec.rs",
+        "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+        "size": 8508
+      },
+      {
+        "name": "compiled-staged-source/mcctrl_process.rs",
+        "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+        "size": 45316
+      },
+      {
+        "name": "compiled-staged-source/mcctrl_vm.rs",
+        "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+        "size": 15927
+      },
+      {
+        "name": "compiled-staged-source/os_registry.rs",
+        "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+        "size": 17410
+      },
+      {
+        "name": "compiled-staged-source/os_runtime.rs",
+        "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+        "size": 46941
+      },
+      {
+        "name": "compiled-staged-source/os_service.rs",
+        "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+        "size": 6907
+      },
+      {
+        "name": "compiled-staged-source/page_allocator.rs",
+        "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+        "size": 21246
+      },
+      {
+        "name": "compiled-staged-source/page_owner_registry.rs",
+        "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+        "size": 13034
+      },
+      {
+        "name": "compiled-staged-source/prior-stage-lock.json",
+        "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+        "size": 4297
+      },
+      {
+        "name": "compiled-staged-source/procfs_objects.rs",
+        "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+        "size": 16161
+      },
+      {
+        "name": "compiled-staged-source/smp_application.rs",
+        "sha256": "81d15998a4597222c30cd0170552a5e2e48cdf83df9906537814f67c9e5ae9b4",
+        "size": 54646
+      },
+      {
+        "name": "compiled-staged-source/smp_application_image.rs",
+        "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+        "size": 9982
+      },
+      {
+        "name": "compiled-staged-source/smp_application_syscall.rs",
+        "sha256": "e5e9fcd01b73896a559700adde13fe206ea0facb451f4482b0aaea5ff2ae60ea",
+        "size": 36219
+      },
+      {
+        "name": "compiled-staged-source/smp_boot_code.rs",
+        "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+        "size": 1317
+      },
+      {
+        "name": "compiled-staged-source/smp_cpu.rs",
+        "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+        "size": 38178
+      },
+      {
+        "name": "compiled-staged-source/smp_file_pager.rs",
+        "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+        "size": 14721
+      },
+      {
+        "name": "compiled-staged-source/smp_ikc.rs",
+        "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+        "size": 12665
+      },
+      {
+        "name": "compiled-staged-source/smp_image.rs",
+        "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+        "size": 14208
+      },
+      {
+        "name": "compiled-staged-source/smp_loader.rs",
+        "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+        "size": 3194
+      },
+      {
+        "name": "compiled-staged-source/smp_memory.rs",
+        "sha256": "75983706f45ab8c33fdb4059f7f0e354b041a82ee7940933b670d84220ecb126",
+        "size": 101582
+      },
+      {
+        "name": "compiled-staged-source/smp_procfs.rs",
+        "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+        "size": 28177
+      },
+      {
+        "name": "compiled-staged-source/smp_resource.rs",
+        "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+        "size": 129249
+      },
+      {
+        "name": "compiled-staged-source/smp_service.rs",
+        "sha256": "944afdc8646c6722e666913af514f800d052717f0fb31f7d93ffb8b26230509f",
+        "size": 47572
+      },
+      {
+        "name": "compiled-staged-source/smp_startup.rs",
+        "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+        "size": 4963
+      },
+      {
+        "name": "compiled-staged-source/smp_startup_entry.S",
+        "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+        "size": 1350
+      },
+      {
+        "name": "compiled-staged-source/smp_topology.rs",
+        "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+        "size": 10615
+      },
+      {
+        "name": "compiled-staged-source/smp_trampoline.S",
+        "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+        "size": 3650
+      },
+      {
+        "name": "compiled-staged-source/smp_trampoline.rs",
+        "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+        "size": 5477
+      },
+      {
+        "name": "compiled-staged-source/smp_vdso.rs",
+        "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+        "size": 5863
+      },
+      {
+        "name": "compiled-staged-source/stability_observer.rs",
+        "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+        "size": 11309
+      },
+      {
+        "name": "compiled-staged-source/stability_phase.rs",
+        "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+        "size": 9176
+      },
+      {
+        "name": "compiled-staged-source/sysfs_memory.rs",
+        "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+        "size": 29925
+      },
+      {
+        "name": "compiled-staged-source/sysfs_objects.rs",
+        "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+        "size": 13753
+      },
+      {
+        "name": "compiled-staged-source/sysfs_os.rs",
+        "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+        "size": 2451
+      },
+      {
+        "name": "compiled-staged-source/sysfs_remote.rs",
+        "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "size": 8287
+      },
+      {
+        "name": "compiled-staged-source/sysfs_rpc.rs",
+        "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+        "size": 6833
+      },
+      {
+        "name": "compiled-staged-source/sysfs_setup.rs",
+        "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+        "size": 12683
+      },
+      {
+        "name": "compiled-staged-source/sysfs_snoop.rs",
+        "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+        "size": 5515
+      },
+      {
+        "name": "compiled-staged-source/sysfs_tree.rs",
+        "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+        "size": 12276
+      },
+      {
+        "name": "compiled-staged-source/sysfs_zeroing.rs",
+        "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+        "size": 10243
+      },
+      {
+        "name": "compiled-staged-source/user_string.rs",
+        "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+        "size": 603
+      },
+      {
+        "name": "compiled-staged-source/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+        "size": 4354
+      },
+      {
+        "name": "linux-analysis/linux-analysis.json",
+        "sha256": "481c2d1ffa914c3e7a31d4e6992f1c2d2678e54deddb22465d1fc27a5dfc9f75",
+        "size": 8384014
+      },
+      {
+        "name": "linux-analysis/linux-functions/0.bin",
+        "sha256": "1d489e824fb7611079ddaf652cc8bad85db143aecbbe7698178a4c99fc939837",
+        "size": 562
+      },
+      {
+        "name": "linux-analysis/linux-functions/0.normalized-disassembly",
+        "sha256": "09ab5c9b5b0cdcbd7e5ae05436139806ea111556412e96c33cccdcbfd3a9369f",
+        "size": 8168
+      },
+      {
+        "name": "linux-analysis/linux-functions/0.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/0.stdout",
+        "sha256": "e43d9da74029bbaaf5a215921ff0434a5d4dc6843dc34504683d8ef29b710300",
+        "size": 8264
+      },
+      {
+        "name": "linux-analysis/linux-functions/1.bin",
+        "sha256": "2de4adfb84fb4c877a6e568992bdd369aee4d3c8db47463b80b25a7fcce3bc52",
+        "size": 2304
+      },
+      {
+        "name": "linux-analysis/linux-functions/1.normalized-disassembly",
+        "sha256": "62e3be50ad8a3340f1b4c2847043a3cad9c5aee606832191a31e15c617e015d1",
+        "size": 33066
+      },
+      {
+        "name": "linux-analysis/linux-functions/1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/1.stdout",
+        "sha256": "e7fc95716017ff8a0e97d2cd784ca335a61f4a768887c80b2a2d0448447ce136",
+        "size": 33162
+      },
+      {
+        "name": "linux-analysis/linux-functions/10.bin",
+        "sha256": "18ad2019c6b42951e2ce177363a5b4923eab743ff535baeeb543b586f93bd954",
+        "size": 1279
+      },
+      {
+        "name": "linux-analysis/linux-functions/10.normalized-disassembly",
+        "sha256": "3ff1812f66ea5a0e00692936edb78a9975c3402287f5404fd36c4773ec57f6bd",
+        "size": 18902
+      },
+      {
+        "name": "linux-analysis/linux-functions/10.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/10.stdout",
+        "sha256": "bdb7e18c9f6e4a5783bfc393d6ab4eb73d19d7525a1d15eb6d0a81a1326673bc",
+        "size": 18993
+      },
+      {
+        "name": "linux-analysis/linux-functions/11.bin",
+        "sha256": "a74338071a2dffb57805a78fb8eb994c9135656a724da1c24604e08f92a2fc94",
+        "size": 609
+      },
+      {
+        "name": "linux-analysis/linux-functions/11.normalized-disassembly",
+        "sha256": "b34e132df4e114571b6094d2d992c7de0bcdf6ffa02dff2c9beb98a5a1386b1d",
+        "size": 10227
+      },
+      {
+        "name": "linux-analysis/linux-functions/11.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/11.stdout",
+        "sha256": "b8ba4277bd1fde0382578b157d89638d050da3e3441a8571be0929cc3839a1cf",
+        "size": 10296
+      },
+      {
+        "name": "linux-analysis/linux-functions/12.bin",
+        "sha256": "3d6f3fbfcadd4b20401ec62f06f88e00c8f37cdefaa1e65e160666056810c66c",
+        "size": 193
+      },
+      {
+        "name": "linux-analysis/linux-functions/12.normalized-disassembly",
+        "sha256": "32653e4dc27286d87889d1ee5098159b037df158fabd5ef306631bfd3cccd559",
+        "size": 3266
+      },
+      {
+        "name": "linux-analysis/linux-functions/12.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/12.stdout",
+        "sha256": "11fa5322870c5b75df0da6ad757972a56686c3657f2e503015689f46e0da357c",
+        "size": 3285
+      },
+      {
+        "name": "linux-analysis/linux-functions/13.bin",
+        "sha256": "72abc31e7c27829d34cfd36efb27751d8c5a502133bc2f067cd674e0942aa5db",
+        "size": 447
+      },
+      {
+        "name": "linux-analysis/linux-functions/13.normalized-disassembly",
+        "sha256": "4063516a01d419b316802d5a290f27bfda1d06a3d09707ff3d752e8d8bf0557f",
+        "size": 7236
+      },
+      {
+        "name": "linux-analysis/linux-functions/13.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/13.stdout",
+        "sha256": "b8fcca9891f37a0ff7d53577e3be0040836b043b4020740618d0aa4618d4db75",
+        "size": 7272
+      },
+      {
+        "name": "linux-analysis/linux-functions/14.bin",
+        "sha256": "f5e80e553298a4f147c20284bed30ef8fe5350812e21cd706624a25344944122",
+        "size": 98
+      },
+      {
+        "name": "linux-analysis/linux-functions/14.normalized-disassembly",
+        "sha256": "72e5cde8cdc6c8a1a59d2c644522262369c42e5fe55241c539963851435cb7b9",
+        "size": 1828
+      },
+      {
+        "name": "linux-analysis/linux-functions/14.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/14.stdout",
+        "sha256": "ce62222694d92833b78176acec533483675840b48cb8dca64ba9e2041137faa7",
+        "size": 1863
+      },
+      {
+        "name": "linux-analysis/linux-functions/15.bin",
+        "sha256": "ba961d537a9e9f6f7afacece94b7deea2121104e3fd2d93b65d153c462804ccf",
+        "size": 14
+      },
+      {
+        "name": "linux-analysis/linux-functions/15.normalized-disassembly",
+        "sha256": "55743e12d43810d2f562fadf98287ec31a63644ae54686f513a3cc8ddbee1b09",
+        "size": 326
+      },
+      {
+        "name": "linux-analysis/linux-functions/15.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/15.stdout",
+        "sha256": "4eadfba310dc938566e9b6211a974f70d5ae6dce9b059adc76e9bbccef19cd26",
+        "size": 384
+      },
+      {
+        "name": "linux-analysis/linux-functions/16.bin",
+        "sha256": "bf3ab415f46c26425fbdb0be96b3311d98aa6fb9967c60e939d3cc13000e2165",
+        "size": 21
+      },
+      {
+        "name": "linux-analysis/linux-functions/16.normalized-disassembly",
+        "sha256": "a8daa1f07a74f97d1ef80607365eccaa8ec120920f9478fc8304007beddf7a1d",
+        "size": 403
+      },
+      {
+        "name": "linux-analysis/linux-functions/16.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/16.stdout",
+        "sha256": "fdcae60524aa74cc3bf2da3bc5a4f163295b7e596f7517c294e476c75a934a87",
+        "size": 456
+      },
+      {
+        "name": "linux-analysis/linux-functions/17.bin",
+        "sha256": "bcc8e91c86e8d16fcf5997a6dcb47293ce6a9e3eeb52f371556f3e757332556c",
+        "size": 109
+      },
+      {
+        "name": "linux-analysis/linux-functions/17.normalized-disassembly",
+        "sha256": "0007c85ef597a0b055b24277f77220a7bddda45c8f00fa160c27990a3bce8097",
+        "size": 1554
+      },
+      {
+        "name": "linux-analysis/linux-functions/17.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/17.stdout",
+        "sha256": "9ea66e7c89c125e177802a585bbe7e64764d8189698db4ccfbddde77107431c9",
+        "size": 1641
+      },
+      {
+        "name": "linux-analysis/linux-functions/2.bin",
+        "sha256": "6bdcd6ba7a5278034ea25f2a3794cc86e96d80163db615df3023224f5e8393a8",
+        "size": 124
+      },
+      {
+        "name": "linux-analysis/linux-functions/2.normalized-disassembly",
+        "sha256": "c828781ec5a0bf11055c99e56eb9570a9b92ecad452b8ece0733e6d2bc4af771",
+        "size": 1855
+      },
+      {
+        "name": "linux-analysis/linux-functions/2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/2.stdout",
+        "sha256": "09acb29dc7d4ee9cd95f2c569495a3e8dde160694e593069a7d8d6cceb06507b",
+        "size": 1951
+      },
+      {
+        "name": "linux-analysis/linux-functions/3.bin",
+        "sha256": "1e08b7af9abd7e04a7f819eecc76193cd0d4617e535b03086de07cd2f06ff2b3",
+        "size": 305
+      },
+      {
+        "name": "linux-analysis/linux-functions/3.normalized-disassembly",
+        "sha256": "1dafd91fe049b82a74b92b7eb81a6a23502f20a75b4ed140b2bfcba2bfad0319",
+        "size": 4942
+      },
+      {
+        "name": "linux-analysis/linux-functions/3.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/3.stdout",
+        "sha256": "840ac50303be2938ceede67144de149341dd1e0e8f24fbce7a7f0ebc9cae9938",
+        "size": 5032
+      },
+      {
+        "name": "linux-analysis/linux-functions/4.bin",
+        "sha256": "3023fcef998107d9cb6630d0e7120a7eb4cbf61196e1acaee7a3cde3bf266ec8",
+        "size": 26
+      },
+      {
+        "name": "linux-analysis/linux-functions/4.normalized-disassembly",
+        "sha256": "99712197af2e2e14c68ac3fa6f9c516818fbccb068d1ca8a8c63cf86c30521d7",
+        "size": 491
+      },
+      {
+        "name": "linux-analysis/linux-functions/4.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/4.stdout",
+        "sha256": "b05fda58e2d343d9ae60282371d4fddc12d3347b6cf1df1ed1e032b6c0bce2e8",
+        "size": 579
+      },
+      {
+        "name": "linux-analysis/linux-functions/5.bin",
+        "sha256": "12c9f297a02edd0996142de1869cb4e2291693ae8ff13e5dedf154953e45457d",
+        "size": 52
+      },
+      {
+        "name": "linux-analysis/linux-functions/5.normalized-disassembly",
+        "sha256": "3df6dad21581c8a72a7d86a14cd54853475dd4e13e458988093679f29a73421c",
+        "size": 1059
+      },
+      {
+        "name": "linux-analysis/linux-functions/5.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/5.stdout",
+        "sha256": "594642d927ea601017891189bbd03c97a51a878ed1aa99394a05c3fa0e88c697",
+        "size": 1152
+      },
+      {
+        "name": "linux-analysis/linux-functions/6.bin",
+        "sha256": "961e2176567e6c581f91bd55b22fcae8881ae3a9a6da237de6d6f4085c6e02c5",
+        "size": 115
+      },
+      {
+        "name": "linux-analysis/linux-functions/6.normalized-disassembly",
+        "sha256": "14624695371c8e887ea3d9b58a0b15c54893cf88960da5975be0743aaff28e1b",
+        "size": 1909
+      },
+      {
+        "name": "linux-analysis/linux-functions/6.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/6.stdout",
+        "sha256": "687f4dc337b2187f236e66705f066e433de661652d219ca8868bba274ad6b673",
+        "size": 2005
+      },
+      {
+        "name": "linux-analysis/linux-functions/7.bin",
+        "sha256": "c8b8ea85f8f4938fd5a4ff606a97b3d047dfb51d49ee7b03c080c6c5fd9430c9",
+        "size": 1714
+      },
+      {
+        "name": "linux-analysis/linux-functions/7.normalized-disassembly",
+        "sha256": "07df49d677f9e5da6b5d172704a9bd6a5320c6248d088b6aff9588006dca66a4",
+        "size": 27716
+      },
+      {
+        "name": "linux-analysis/linux-functions/7.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/7.stdout",
+        "sha256": "a83f2aa807f682019f67bc7e71280ce6249f7039cae00314711f87ece8ca7e11",
+        "size": 27810
+      },
+      {
+        "name": "linux-analysis/linux-functions/8.bin",
+        "sha256": "12c983dd8352a767a4e987ac3aa454634261f75a5319bbd2bb0e2b41d3a8dadc",
+        "size": 957
+      },
+      {
+        "name": "linux-analysis/linux-functions/8.normalized-disassembly",
+        "sha256": "6ef54db3bca8530fd3f015857e383dcde88e8ea972d7d7112957881f17a73205",
+        "size": 15019
+      },
+      {
+        "name": "linux-analysis/linux-functions/8.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/8.stdout",
+        "sha256": "1857ccdc918fefa31d226142e06a25e0d8894a4dce3ef1a9f1e402f732b3e95e",
+        "size": 15110
+      },
+      {
+        "name": "linux-analysis/linux-functions/9.bin",
+        "sha256": "2ac45f282712d2f96e0f27da53dbfcf8370f88664dffcb81d3f6568caccf026c",
+        "size": 29
+      },
+      {
+        "name": "linux-analysis/linux-functions/9.normalized-disassembly",
+        "sha256": "c73ababed4c6846f2a5ea34fe0ceb04793b828f48bdfc346840a4011fcd12019",
+        "size": 536
+      },
+      {
+        "name": "linux-analysis/linux-functions/9.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/linux-functions/9.stdout",
+        "sha256": "4e03ab63963e2113cd9eaad3317a0804bd1a3cc8a1a10de31fecdbd6894142fe",
+        "size": 624
+      },
+      {
+        "name": "linux-analysis/linux_frames.py",
+        "sha256": "738bcfbffa724d6137e32bfe06a8c225721a263990008a8de68358086619a82b",
+        "size": 3629
+      },
+      {
+        "name": "linux-analysis/normalize.py",
+        "sha256": "29583963c5b6daaf96610b0065953fdd7bb24e4d2f90919c3c5ddae328347eea",
+        "size": 2868
+      },
+      {
+        "name": "linux-analysis/normalize.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/normalize.stdout",
+        "sha256": "6375985927b05702da6dd4c702aba2ae18cf7994bc2131118ba95d7a68b21cf6",
+        "size": 2767
+      },
+      {
+        "name": "linux-analysis/normalized/0.disassembly",
+        "sha256": "37a5873d127b5ff59d7d73bd1b715d2836c5dc5491c561138d0e9d2e45f498e4",
+        "size": 9042
+      },
+      {
+        "name": "linux-analysis/normalized/1.disassembly",
+        "sha256": "acffaf35cac5b44e30ca3c7ba506dfdda6b169763e2fd72cca0d4e446235d9cf",
+        "size": 36699
+      },
+      {
+        "name": "linux-analysis/normalized/10.disassembly",
+        "sha256": "758abb33f9a5072ca6954deebb5ad2975bee8c543f8b2a45061828af2c810c54",
+        "size": 19899
+      },
+      {
+        "name": "linux-analysis/normalized/11.disassembly",
+        "sha256": "e89ff815fef935b8458b8370774e76b374ceaa98ed1ce50a95ce42e84547e60f",
+        "size": 10971
+      },
+      {
+        "name": "linux-analysis/normalized/12.disassembly",
+        "sha256": "4f613c8b4b09f05171e10d7d44796bf1c6c8a0c43dd60258464e8a65e7e29ebd",
+        "size": 3565
+      },
+      {
+        "name": "linux-analysis/normalized/13.disassembly",
+        "sha256": "aeebf36b556ca205caa4e0c1e5f45b50890a81ba15bd082041bf5f7c3c3ddd1a",
+        "size": 7882
+      },
+      {
+        "name": "linux-analysis/normalized/14.disassembly",
+        "sha256": "f2d5c9a1da359196818697a5bfc15751c905188145709c24309f2733e855c524",
+        "size": 1972
+      },
+      {
+        "name": "linux-analysis/normalized/15.disassembly",
+        "sha256": "b2a5842313ec744903c3db2b6de721826188e24459310159eabe86ac63c268b0",
+        "size": 334
+      },
+      {
+        "name": "linux-analysis/normalized/16.disassembly",
+        "sha256": "1bc299907965d035e4485fac381e7166687b55b063a6c50fbdc64be5baa2b1a8",
+        "size": 411
+      },
+      {
+        "name": "linux-analysis/normalized/17.disassembly",
+        "sha256": "8248af84fad829df48f33fb0d777cc52ea440d47db5a444cf9c2113f438c4e88",
+        "size": 1614
+      },
+      {
+        "name": "linux-analysis/normalized/2.disassembly",
+        "sha256": "4fb439bdb97f37c96c9a01b67502bac0415daa9f6f6316c52a5a92c8030f51e4",
+        "size": 1928
+      },
+      {
+        "name": "linux-analysis/normalized/3.disassembly",
+        "sha256": "33ed4757b137b0a043ae36cabc8e3b93f690d65a41864a166734b5f866f709a6",
+        "size": 5374
+      },
+      {
+        "name": "linux-analysis/normalized/4.disassembly",
+        "sha256": "4ad63253f1631db2f92962eecfb9ee4dbf6025f3b0f040e8bc42b5981523957a",
+        "size": 506
+      },
+      {
+        "name": "linux-analysis/normalized/5.disassembly",
+        "sha256": "73d573595945996fbe5fec64c8067eaa535b38da72c5ce767f1feba92f4ffc58",
+        "size": 1189
+      },
+      {
+        "name": "linux-analysis/normalized/6.disassembly",
+        "sha256": "126a197fca65c30e310d8aac98efc21403fa352d0338fab3d1e2726fb0dc20df",
+        "size": 2061
+      },
+      {
+        "name": "linux-analysis/normalized/7.disassembly",
+        "sha256": "9e7c6f7bfc7c06beb587116fc48db6bb27a9fd2809273070e24f034767aa39c1",
+        "size": 30302
+      },
+      {
+        "name": "linux-analysis/normalized/8.disassembly",
+        "sha256": "bb1d97b14c9d88728b149f447189527e647e6e907940a783219f2416938288d1",
+        "size": 16713
+      },
+      {
+        "name": "linux-analysis/normalized/9.disassembly",
+        "sha256": "132c7e401b2faef6b5bb6a4157eb028ec557521eab09b69c3add7c670838816c",
+        "size": 549
+      },
+      {
+        "name": "linux-analysis/normalized/analysis.json",
+        "sha256": "5bcdc160d9f84a52377f9a0b0d9ac877d2cbc2c1db60ac110e939925b700782c",
+        "size": 99321
+      },
+      {
+        "name": "linux-analysis/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "linux-analysis/stdout.bin",
+        "sha256": "59474565f8ea0b3633464f3eb97df64b0fd51e81e0ac9bd443657785d026a73f",
+        "size": 9831
+      },
+      {
+        "name": "module-analysis/analysis.json",
+        "sha256": "dc89cdd14b9fb17000417234fda5a8050252619433943ad94f4537c96f5bb634",
+        "size": 3521164
+      },
+      {
+        "name": "module-analysis/freeze.py",
+        "sha256": "3290728eff982150a285666c27b555eb268ae3e72d511ec9124e4476a9b1adae",
+        "size": 11931
+      },
+      {
+        "name": "module-analysis/freeze.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/freeze.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/0.bin",
+        "sha256": "1d489e824fb7611079ddaf652cc8bad85db143aecbbe7698178a4c99fc939837",
+        "size": 562
+      },
+      {
+        "name": "module-analysis/linux-functions/0.normalized-disassembly",
+        "sha256": "09ab5c9b5b0cdcbd7e5ae05436139806ea111556412e96c33cccdcbfd3a9369f",
+        "size": 8168
+      },
+      {
+        "name": "module-analysis/linux-functions/0.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/0.stdout",
+        "sha256": "40a835f3dabdf796da1ec38df78f046da19d55537ec36204531bb6e435c9d8eb",
+        "size": 8264
+      },
+      {
+        "name": "module-analysis/linux-functions/1.bin",
+        "sha256": "2de4adfb84fb4c877a6e568992bdd369aee4d3c8db47463b80b25a7fcce3bc52",
+        "size": 2304
+      },
+      {
+        "name": "module-analysis/linux-functions/1.normalized-disassembly",
+        "sha256": "62e3be50ad8a3340f1b4c2847043a3cad9c5aee606832191a31e15c617e015d1",
+        "size": 33066
+      },
+      {
+        "name": "module-analysis/linux-functions/1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/1.stdout",
+        "sha256": "f7b6f243dc00e9191fceb06d0ea2f40b991016cef22502be5bff7282191a0a70",
+        "size": 33162
+      },
+      {
+        "name": "module-analysis/linux-functions/10.bin",
+        "sha256": "18ad2019c6b42951e2ce177363a5b4923eab743ff535baeeb543b586f93bd954",
+        "size": 1279
+      },
+      {
+        "name": "module-analysis/linux-functions/10.normalized-disassembly",
+        "sha256": "3ff1812f66ea5a0e00692936edb78a9975c3402287f5404fd36c4773ec57f6bd",
+        "size": 18902
+      },
+      {
+        "name": "module-analysis/linux-functions/10.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/10.stdout",
+        "sha256": "ff3f9c4d247771b8f1c59d4db1118d49153a0a0dedd1957d6e620754708b26a7",
+        "size": 18993
+      },
+      {
+        "name": "module-analysis/linux-functions/11.bin",
+        "sha256": "a74338071a2dffb57805a78fb8eb994c9135656a724da1c24604e08f92a2fc94",
+        "size": 609
+      },
+      {
+        "name": "module-analysis/linux-functions/11.normalized-disassembly",
+        "sha256": "b34e132df4e114571b6094d2d992c7de0bcdf6ffa02dff2c9beb98a5a1386b1d",
+        "size": 10227
+      },
+      {
+        "name": "module-analysis/linux-functions/11.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/11.stdout",
+        "sha256": "5c11daa3411b61dc5cd062c40b5f2dc955ebc0b3aaa7d8a7e6f9f85280868990",
+        "size": 10296
+      },
+      {
+        "name": "module-analysis/linux-functions/12.bin",
+        "sha256": "3d6f3fbfcadd4b20401ec62f06f88e00c8f37cdefaa1e65e160666056810c66c",
+        "size": 193
+      },
+      {
+        "name": "module-analysis/linux-functions/12.normalized-disassembly",
+        "sha256": "32653e4dc27286d87889d1ee5098159b037df158fabd5ef306631bfd3cccd559",
+        "size": 3266
+      },
+      {
+        "name": "module-analysis/linux-functions/12.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/12.stdout",
+        "sha256": "2a8a60f95bb44816569ce9da2d9f192fbd7fc3e9ec8f0dd48cb175c33df033f0",
+        "size": 3285
+      },
+      {
+        "name": "module-analysis/linux-functions/13.bin",
+        "sha256": "72abc31e7c27829d34cfd36efb27751d8c5a502133bc2f067cd674e0942aa5db",
+        "size": 447
+      },
+      {
+        "name": "module-analysis/linux-functions/13.normalized-disassembly",
+        "sha256": "4063516a01d419b316802d5a290f27bfda1d06a3d09707ff3d752e8d8bf0557f",
+        "size": 7236
+      },
+      {
+        "name": "module-analysis/linux-functions/13.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/13.stdout",
+        "sha256": "9790cea9c5fac587630405676c84e6e68073eb12ade763b11de99048f2c4d8bc",
+        "size": 7272
+      },
+      {
+        "name": "module-analysis/linux-functions/14.bin",
+        "sha256": "f5e80e553298a4f147c20284bed30ef8fe5350812e21cd706624a25344944122",
+        "size": 98
+      },
+      {
+        "name": "module-analysis/linux-functions/14.normalized-disassembly",
+        "sha256": "72e5cde8cdc6c8a1a59d2c644522262369c42e5fe55241c539963851435cb7b9",
+        "size": 1828
+      },
+      {
+        "name": "module-analysis/linux-functions/14.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/14.stdout",
+        "sha256": "be17e3b42f20db43f09d137d6a130f4ac5a6e492368bd83094c49cf460e87d75",
+        "size": 1863
+      },
+      {
+        "name": "module-analysis/linux-functions/15.bin",
+        "sha256": "ba961d537a9e9f6f7afacece94b7deea2121104e3fd2d93b65d153c462804ccf",
+        "size": 14
+      },
+      {
+        "name": "module-analysis/linux-functions/15.normalized-disassembly",
+        "sha256": "55743e12d43810d2f562fadf98287ec31a63644ae54686f513a3cc8ddbee1b09",
+        "size": 326
+      },
+      {
+        "name": "module-analysis/linux-functions/15.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/15.stdout",
+        "sha256": "964489a97423a31d3a64fcab60127c80f98e2ab19a2d32f9a4f5d1c48a0c6d99",
+        "size": 384
+      },
+      {
+        "name": "module-analysis/linux-functions/16.bin",
+        "sha256": "bf3ab415f46c26425fbdb0be96b3311d98aa6fb9967c60e939d3cc13000e2165",
+        "size": 21
+      },
+      {
+        "name": "module-analysis/linux-functions/16.normalized-disassembly",
+        "sha256": "a8daa1f07a74f97d1ef80607365eccaa8ec120920f9478fc8304007beddf7a1d",
+        "size": 403
+      },
+      {
+        "name": "module-analysis/linux-functions/16.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/16.stdout",
+        "sha256": "0e901e65fce6754f89f0ad4f5fd991f6f4c2b3249b396866cfc823c1e115ff90",
+        "size": 456
+      },
+      {
+        "name": "module-analysis/linux-functions/17.bin",
+        "sha256": "bcc8e91c86e8d16fcf5997a6dcb47293ce6a9e3eeb52f371556f3e757332556c",
+        "size": 109
+      },
+      {
+        "name": "module-analysis/linux-functions/17.normalized-disassembly",
+        "sha256": "0007c85ef597a0b055b24277f77220a7bddda45c8f00fa160c27990a3bce8097",
+        "size": 1554
+      },
+      {
+        "name": "module-analysis/linux-functions/17.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/17.stdout",
+        "sha256": "26fd88d2fc17bab720894f19d092f61f3c1ce6ae356a7977302d87f2563b0e6b",
+        "size": 1641
+      },
+      {
+        "name": "module-analysis/linux-functions/2.bin",
+        "sha256": "6bdcd6ba7a5278034ea25f2a3794cc86e96d80163db615df3023224f5e8393a8",
+        "size": 124
+      },
+      {
+        "name": "module-analysis/linux-functions/2.normalized-disassembly",
+        "sha256": "c828781ec5a0bf11055c99e56eb9570a9b92ecad452b8ece0733e6d2bc4af771",
+        "size": 1855
+      },
+      {
+        "name": "module-analysis/linux-functions/2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/2.stdout",
+        "sha256": "f2ef2d873c7c506134324f5e5931e2fb5fd76c813f9923f9c4fc8240b91f46df",
+        "size": 1951
+      },
+      {
+        "name": "module-analysis/linux-functions/3.bin",
+        "sha256": "1e08b7af9abd7e04a7f819eecc76193cd0d4617e535b03086de07cd2f06ff2b3",
+        "size": 305
+      },
+      {
+        "name": "module-analysis/linux-functions/3.normalized-disassembly",
+        "sha256": "1dafd91fe049b82a74b92b7eb81a6a23502f20a75b4ed140b2bfcba2bfad0319",
+        "size": 4942
+      },
+      {
+        "name": "module-analysis/linux-functions/3.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/3.stdout",
+        "sha256": "c19c9a325122110c469d4fa01e39281d10b31cc2114e8980ac2afd79a42b5b4d",
+        "size": 5032
+      },
+      {
+        "name": "module-analysis/linux-functions/4.bin",
+        "sha256": "3023fcef998107d9cb6630d0e7120a7eb4cbf61196e1acaee7a3cde3bf266ec8",
+        "size": 26
+      },
+      {
+        "name": "module-analysis/linux-functions/4.normalized-disassembly",
+        "sha256": "99712197af2e2e14c68ac3fa6f9c516818fbccb068d1ca8a8c63cf86c30521d7",
+        "size": 491
+      },
+      {
+        "name": "module-analysis/linux-functions/4.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/4.stdout",
+        "sha256": "ef78686982c0dd72a3b5c8b093951064790151b44a3ad450be1c86bf1cc9278a",
+        "size": 579
+      },
+      {
+        "name": "module-analysis/linux-functions/5.bin",
+        "sha256": "12c9f297a02edd0996142de1869cb4e2291693ae8ff13e5dedf154953e45457d",
+        "size": 52
+      },
+      {
+        "name": "module-analysis/linux-functions/5.normalized-disassembly",
+        "sha256": "3df6dad21581c8a72a7d86a14cd54853475dd4e13e458988093679f29a73421c",
+        "size": 1059
+      },
+      {
+        "name": "module-analysis/linux-functions/5.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/5.stdout",
+        "sha256": "5a8444426456d2cbe31dc4010101cd0f0cd937c080b7265cb90689fd07ad2b55",
+        "size": 1152
+      },
+      {
+        "name": "module-analysis/linux-functions/6.bin",
+        "sha256": "961e2176567e6c581f91bd55b22fcae8881ae3a9a6da237de6d6f4085c6e02c5",
+        "size": 115
+      },
+      {
+        "name": "module-analysis/linux-functions/6.normalized-disassembly",
+        "sha256": "14624695371c8e887ea3d9b58a0b15c54893cf88960da5975be0743aaff28e1b",
+        "size": 1909
+      },
+      {
+        "name": "module-analysis/linux-functions/6.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/6.stdout",
+        "sha256": "f356c5b01ac392355c42474efef7e3aed1bc9d38d59d1247cf9609fa8716dca5",
+        "size": 2005
+      },
+      {
+        "name": "module-analysis/linux-functions/7.bin",
+        "sha256": "c8b8ea85f8f4938fd5a4ff606a97b3d047dfb51d49ee7b03c080c6c5fd9430c9",
+        "size": 1714
+      },
+      {
+        "name": "module-analysis/linux-functions/7.normalized-disassembly",
+        "sha256": "07df49d677f9e5da6b5d172704a9bd6a5320c6248d088b6aff9588006dca66a4",
+        "size": 27716
+      },
+      {
+        "name": "module-analysis/linux-functions/7.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/7.stdout",
+        "sha256": "8b4035c9c0a176858b90d314a0f8c54c86bdac3e261dc3c72cb7c6497b74b39e",
+        "size": 27810
+      },
+      {
+        "name": "module-analysis/linux-functions/8.bin",
+        "sha256": "12c983dd8352a767a4e987ac3aa454634261f75a5319bbd2bb0e2b41d3a8dadc",
+        "size": 957
+      },
+      {
+        "name": "module-analysis/linux-functions/8.normalized-disassembly",
+        "sha256": "6ef54db3bca8530fd3f015857e383dcde88e8ea972d7d7112957881f17a73205",
+        "size": 15019
+      },
+      {
+        "name": "module-analysis/linux-functions/8.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/8.stdout",
+        "sha256": "b9a01c5a034a26173fabe88974c5f1ed567d7abcdf3a18d5a2a707ea572f009d",
+        "size": 15110
+      },
+      {
+        "name": "module-analysis/linux-functions/9.bin",
+        "sha256": "2ac45f282712d2f96e0f27da53dbfcf8370f88664dffcb81d3f6568caccf026c",
+        "size": 29
+      },
+      {
+        "name": "module-analysis/linux-functions/9.normalized-disassembly",
+        "sha256": "c73ababed4c6846f2a5ea34fe0ceb04793b828f48bdfc346840a4011fcd12019",
+        "size": 536
+      },
+      {
+        "name": "module-analysis/linux-functions/9.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux-functions/9.stdout",
+        "sha256": "74c92f0734c288acc383301a109642b84d0930549a17044b051f7a20b77352bc",
+        "size": 624
+      },
+      {
+        "name": "module-analysis/linux-symbols.json",
+        "sha256": "44f5be533d380d75a8527d45b13b126e148f406ad3ddbb411c5ed0cf37e87c5f",
+        "size": 2742
+      },
+      {
+        "name": "module-analysis/linux.stderr",
+        "sha256": "811a90ab90a03969472baf3349b307f90e737e5c50bd8e7eede009e27b5b9c50",
+        "size": 682
+      },
+      {
+        "name": "module-analysis/linux.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/linux_frames.py",
+        "sha256": "fe8bdca68808b7f6b124e6fdbbc225c665a13318767675d12f8771d1e7a108f3",
+        "size": 3487
+      },
+      {
+        "name": "module-analysis/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "module-analysis/stdout.bin",
+        "sha256": "91286cbb4afd880b923fb6f5457eff4676a900681b9714cd78ef0b8df7edf2ce",
+        "size": 273
+      },
+      {
+        "name": "reviewed-sources/audit.py",
+        "sha256": "09f9d72f9475ad7b2563a39733b5dd41ca386561139f960d42cedb17bab7003a",
+        "size": 8196
+      },
+      {
+        "name": "reviewed-sources/smp_application.append.rs",
+        "sha256": "f6f6ec5f859a977c3ebb22998eef891cf480f70dacb97d930bd5844ff9caf2fa",
+        "size": 9835
+      },
+      {
+        "name": "reviewed-sources/test_owner_observations.py",
+        "sha256": "fa30ea4f670b239c619f08b708ec099943b9832318a4ffc44bcc8150dc61c096",
+        "size": 23318
+      }
+    ],
+    "roundtrip_bytes_verified": true
+  },
+  "review_date": "2026-09-13",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "source_review_recommendation": {
+    "action": "Separate full App row collection/printing from nested mailbox observation using an existing noninlined helper and a fixed eight-token return.",
+    "application_header_and_app_rows_grouped_before_details": true,
+    "compiled_reduction_for_helper_verified": false,
+    "mailbox_sampling_unchanged": true,
+    "reason": "Measured App emitter1472 remains live across mailbox emitter3760; removing that nested full-row buffer is the smallest remaining change with no heap/unsafe/owner complexity.",
+    "source_changed": true
+  },
+  "status": "MEASURED_REDUCTION_RECOMMENDS_APP_HELPER_BEFORE_GUEST",
+  "verified_retained_input_count": 104
+}

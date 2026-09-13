@@ -139,3 +139,39 @@ export. Its exporter, owner-phase controller variant and host fault runner are
 still under integration and review. Current production remains the repaired
 module2026091301/image3 with all eight original suites passing. New catalog
 counts remain three compiled, zero executed, zero accepted.
+
+## Fourth infrastructure checkpoint
+
+Verification module attempt3 builds with the smaller App-row observer. Its
+known module stack paths measure 5,512 bytes for the worker and 5,832 bytes
+for the ioctl, a 1,248-byte reduction from attempt2. The separately captured
+Linux formatting prefix and unresolved dynamic/console/entry overhead remain
+explicit in `stability-observer-stack-review-20260913-3.json`. All 19 owner
+parser tests pass; this does not establish actual guest ownership.
+
+The owner-phase collection utilities compile. Their actual metadata harness
+passes 67 synthetic ABI checks. The original exporter compilation failure is
+preserved; the standard feature-macro guard fixes it under unchanged warning
+flags. All 32 retained receiver tests pass, followed by 14 actual C-exporter/
+Python-receiver PTY cases, including the real 60-second missing-ACK deadline.
+The reviewed host UART coordinator passes 20 connected-socket tests. These
+counts remain separate from application and native fault acceptance.
+
+`stability-collection-infrastructure-20260913-1.json` retains seven full
+captures, including both reduced-stack module builds, the failed and passing
+collection builds, all actual PTY and UART tests, source reviews and the prior
+GitHub checkpoint proof. The earlier author's synthetic receiver runs retain
+their exact sources and full logs; their original temporary per-case trees
+were deleted by that earlier test implementation. The new pinned runs retain
+every per-case attempt and do not delete them.
+
+The first prepublication-hard guest preparer and QMP/UART runner are source
+work in progress. The preparer binds inherited files to the exact accepted
+initramfs and requires the actual named virtio port and boot OS generation.
+Runner review fixes preserve emergency captures, require paused revalidation,
+join both UART directions and actual controller identity, and enforce owned
+QEMU cleanup independently. Native printk-prefix integration, final phase/
+owner/physical contracts and actual guest execution remain pending. Collection
+alone cannot close a fault gate. Current production remains module2026091301/
+image3 with eight original suites passing; catalog counts remain three
+compiled, zero executed and zero accepted.
