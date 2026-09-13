@@ -351,3 +351,66 @@ provenance interfaces and the first pinned pending-free list transfer/reset
 primitive. These are preparation for later implementation, not a released
 application runner or an invalidation repair. All language, native lifecycle,
 platform and extended qualification requirements remain in the full roadmap.
+
+## Continuation checkpoint: 2026-09-13 15:40 UTC
+
+The full implementation goal remains active without a three-day deadline.
+Current production is still the repaired module2026091301/image3 pair with
+all eight original suites passing. The independently reviewed hard-before-
+publication and permanent-backpressure guests pass their narrow fault
+contracts. Their full captures and independent reviews are linked by
+`stability-hard-collection-20260913-1.json` and
+`stability-permanent-collection-20260913-1.json`. Two published fault modes,
+actual physical full-ring saturation, and the overall transport gate remain
+open. New catalog totals remain three compiled, zero executed, zero accepted.
+
+The permanent guest exposed an infrastructure error: the old controller
+mistook `/proc/TID/syscall` text `running` for an observed return. Preserve
+that original failure and its false timestamp. Actual native RET plus the
+unreaped original launcher's terminal/stream boundary independently establish
+the accepted fault outcome. The corrected shared C sample classifier passes
+21 cases; that result alone does not verify the full live polling state machine.
+
+The version2 published-hold profile now has independently reviewed native
+source, a compiled controller/client with 81 metadata cases passing, 48
+controlled native-interface cases passing, 13 synthetic native-phase parser
+cases passing, and 30 connected-socket host-control cases passing. These are
+infrastructure results, with explicit stubs or synthetic observations where
+applicable. They do not verify a native module, physical publication, or guest.
+The durable host release flag is set before any accepted-return ACK send;
+all normal and emergency physical reads must honor possible ownership transfer.
+
+The actual native source composition is prepared. Its wrapper first failed
+by supplying non-Rust build members to the reviewed Rust-only stager; the
+fresh corrected wrapper projects every actual Rust source and merges the
+result into a complete copy, preserving all other native build inputs.
+Exactly five Rust files change and both shared production trees remain exact.
+All 18 actual-source staging checks pass, including full negative evidence
+with retained FIFO/symlink and oversized inputs. The original argument-only
+test wrapper failure remains preserved. Complete infrastructure, composition,
+failed attempts, helpers and logs are in
+`stability-published-infrastructure-collection-20260913-1.json`.
+
+Continue in this order, keeping heavy work serialized:
+
+1. Build the prepared version2 mode2 native module in the pinned container,
+   restore both shared trees, and independently examine actual stack frames
+   and calls before releasing a guest.
+2. Complete a new guest preparer/runner that joins the held original owner,
+   stopped physical request/response, immutable native timer, ioctl proof and
+   exact UART capture digest. Require a real ring wake publication. Run a fresh
+   notification-failure guest and independently review all original evidence.
+3. Compose mode3 with eight actual subsequent HELLO applications and AFTER8,
+   then build/run/review its fresh recoverable-backpressure guest. Injected
+   EAGAIN provides no physical full-ring credit.
+4. Finish the separately scoped Linux sealed-execution collector's source
+   review, actual build and controlled tests. Its backing identity differs
+   from pathname execution; keep catalog/native execution disabled until
+   each execution/provenance/capability contract is met.
+5. Repair and verify VM invalidation and detached pending-free ownership,
+   actual full-ring pressure, admission/drain and CPU/resource restoration.
+   Release the reviewed first application packet only after its required gates.
+6. Continue all 273 cases and their parameters, native lifecycle and supported
+   capabilities, Rust/assembly executable closure, pinned packaging and the
+   complete platform/stress/independent qualification roadmap. Preserve all
+   existing historical scores and hardware/exposure requirements.
