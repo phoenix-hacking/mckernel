@@ -235,11 +235,12 @@ printf 'name=%s device=%s major_hex=%s minor_hex=%s\\n' "$port_name" "$port_numb
 # Derive identity from this boot's actual native printk record. The host
 # independently joins it to stopped physical boot parameters before PRE_INPUT.
 boot_os= boot_generation= boot_count=0
+/bin/dmesg >/stability/boot-dmesg.txt
 while IFS= read -r line; do
  if [[ "$line" =~ IHK-SMP:\\ boot\\ prepared\\ os=([0-9]+)\\ generation=([0-9]+)\\ params= ]]; then
   boot_os=${BASH_REMATCH[1]}; boot_generation=${BASH_REMATCH[2]}; boot_count=$((boot_count+1))
  fi
-done < <(/bin/dmesg)
+done </stability/boot-dmesg.txt
 [[ "$boot_count" -eq 1 && "$boot_os" -eq 0 && "$boot_generation" -gt 0 ]]
 printf 'STABILITY_BOOT_ID os=%s generation=%s\\n' "$boot_os" "$boot_generation" >/stability/boot-identity.txt
 /bin/fault-controller --linux-reference @NONCE@ /stability/linux /bin/fault-payload >/stability/linux-controller.stdout 2>/stability/linux-controller.stderr

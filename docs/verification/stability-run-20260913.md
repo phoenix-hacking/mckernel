@@ -205,3 +205,33 @@ reviews the integrated runner. Its first invocation helper is retained in
 The next action is that bounded first guest, followed by independent review
 of actual physical request/response bytes and ownership stability. Transport
 and catalog acceptance remain open until their complete contracts pass.
+
+
+## First guest integration failures and retry
+
+The first invocation stopped before QEMU because its wrapper expected PASS
+where the immutable production binding record uses INPUTS_MATCH. The second
+invocation booted verification module3 and passed both original boot snapshots
+and the 32/64-bit buildid/string probes. Its initializer then failed because
+process substitution requires /dev/fd, absent from the minimal guest. Neither
+the Linux reference nor the fault payload started. Artifact collection exposed
+a missing setblocking method in the host ACK gate; its later control deadline
+is a secondary failure. Both attempts and the emergency physical capture are
+preserved in stability-fault-integration-20260913-1.json with complete trees.
+
+The initializer now reads a retained regular boot-dmesg file. The gate forwards
+the required socket interface, and the runner detects both thrown and returned
+receiver failures immediately while preserving the first guest failure marker.
+All four actual Python receiver/gate socket tests pass, including real fsync,
+withheld acknowledgment, returned failure and deadline behavior. Root2 has a
+fresh nonce, exact inherited input bindings and passing initializer syntax;
+unchanged QEMU/coreutils preflight is reused through exact binary identities.
+Fresh invocation3 consumes these inputs and the preserved module3 build.
+
+The physical hard-fault comparator is separately source reviewed. It binds a
+consumed original request in retained ring slots, preserves opaque response
+bytes and rejects overwritten publication intervals. Actual fault ownership,
+response bytes and transport acceptance still require a successful fresh guest
+and independent review. Current production remains the repaired pair with all
+eight original suites passing; catalog totals are three compiled, zero executed
+and zero accepted.

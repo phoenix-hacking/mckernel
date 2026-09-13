@@ -53,6 +53,9 @@ class ExportAckGate:
     def fileno(self):
         return self.connection.fileno()
 
+    def setblocking(self, enabled):
+        self.connection.setblocking(enabled)
+
     def recv(self, *args):
         return self.connection.recv(*args)
 
@@ -323,6 +326,15 @@ def run(args):
             assert time.monotonic() < deadline, 'guest deadline'
             raw = console()
             text = raw.decode('ascii', errors='replace')
+            if 'first_guest_failure' not in record:
+                failure = re.search(r'STABILITY_(?:CONTROLLER_EXIT|GUEST_FINISH) status=([1-9][0-9]*)\b', text)
+                if failure is not None:
+                    record['first_guest_failure'] = dict(marker=failure[0],
+                        observed_monotonic_ns=time.monotonic_ns(), serial=identity(out / 'serial.log'))
+                    save()
+            assert 'error' not in export_result, ('artifact receiver failed', export_result)
+            if 'result' in export_result:
+                assert export_result['result'].get('ok') is True, ('artifact receiver rejected capture', export_result)
             for bad in ('Kernel panic', 'BUG:', 'Oops:', 'WARNING:', 'rcu_preempt detected stalls', 'soft lockup', 'hard LOCKUP'):
                 assert bad not in text, bad
             ready = text.count('NATIVE_BOOT_CAPTURE x86_64 ready')

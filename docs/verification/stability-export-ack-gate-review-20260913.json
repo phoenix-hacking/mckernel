@@ -1,0 +1,259 @@
+{
+  "application_acceptance": false,
+  "archive_member_count": 13,
+  "archive_members": [
+    {
+      "name": "final-source-review.json",
+      "sha256": "2028794fe50cf1d9025cd11a35d88e0f4f158a0cc3c6b32a8996902988618183",
+      "size": 1709
+    },
+    {
+      "name": "independent-peer-review.json",
+      "sha256": "24a0ce45cda1faf63490175b8e90c25c8273f860e564f08511cdf0bcc3ff0d09",
+      "size": 4718
+    },
+    {
+      "name": "inspect_pinned_and_archive.py",
+      "sha256": "70acafec224bb8dc6f79d0d898291bceffe55453825a158fbe49b62dde5038b5",
+      "size": 12894
+    },
+    {
+      "name": "pinned-results-inspection.json",
+      "sha256": "8450da4ecf78f0e37a8fee5b289e8e32a0a81cebfa2c72f6c7c463038bdf5b7b",
+      "size": 7314
+    },
+    {
+      "name": "prepare_stability_fault_guest.py",
+      "sha256": "e9f65c3946ebf49ffdba13fd4e6dea6c36aa03905d410c57fb119bd1901cbd5a",
+      "size": 14964
+    },
+    {
+      "name": "receiver.py",
+      "sha256": "aa9e165044e9567c992a0354dacdc49b884794b31841a3871d977eeae9c8c5d9",
+      "size": 18043
+    },
+    {
+      "name": "run_stability_transport_guest.py",
+      "sha256": "2d29c05934b9cd53af76fe483fe82473c235f9cbed4da9c7e4c0d741011e716c",
+      "size": 28223
+    },
+    {
+      "name": "runner-current-da859579.py",
+      "sha256": "da859579bad27f05ed6304f8189846a4b60f37d072938cb0f448fb62bf00facf",
+      "size": 28634
+    },
+    {
+      "name": "runner-final-c047955e.py",
+      "sha256": "c047955e27903fa8ee2c5cb571a83d4438c11f8c9d349912acc110f78d3fa5f6",
+      "size": 28796
+    },
+    {
+      "name": "source-review.json",
+      "sha256": "30079d114e341993ca30fb132cf37df87444c73f7ebcbc6482bf99c7cf143806",
+      "size": 1195
+    },
+    {
+      "name": "source.json",
+      "sha256": "7c045620de3f0675ffe9bc7e50412b3ad5828b8914f68f0785078e4273d4c90c",
+      "size": 596
+    },
+    {
+      "name": "test_export_ack_gate.final.py",
+      "sha256": "3f9943f3ca00c7800f8563d8dfd552e370c43a04cda039f74246e737bfdde63e",
+      "size": 13677
+    },
+    {
+      "name": "test_export_ack_gate.first-freeze.py",
+      "sha256": "5e0bed7aa754af6361fa829c5f24460d6b8ceb9e45ec4a01613e1c78a13f0c43",
+      "size": 13552
+    }
+  ],
+  "archive_roundtrip_all_bytes_verified": true,
+  "component_tests_executed_by_parent": true,
+  "created_utc": "2026-09-13T12:39:46.748425+00:00",
+  "guest_execution": false,
+  "independent_peer_review": {
+    "path": "/tmp/stability-export-ack-gate-source-u8f3m6nz/independent-peer-review.json",
+    "sha256": "24a0ce45cda1faf63490175b8e90c25c8273f860e564f08511cdf0bcc3ff0d09",
+    "size": 4718
+  },
+  "independent_peer_scope": "Only ack_gate_test_review section applies here; its unrelated physical oracle review grants no extra credit.",
+  "limitations": [
+    "Four connected-socket Python infrastructure cases only; no C exporter, virtio, QMP or guest execution.",
+    "Filesystem fsync observations do not replace an independent watchdog for pathological storage blocking.",
+    "Pinned container/process provenance and full attempt archival remain parent records.",
+    "Actual guest fault control, physical ownership and final export require their separate reviewed runtime evidence."
+  ],
+  "original_guest_failure_evidence": "Preserved separately by root; these synthetic results do not change that failed guest outcome.",
+  "original_source_tree": "/tmp/stability-export-ack-gate-source-u8f3m6nz",
+  "original_source_tree_preserved": true,
+  "pinned_full_attempt_archive_owner": "/root",
+  "pinned_test_inspection": {
+    "application_acceptance": false,
+    "collection_stderr": {
+      "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/collection/stderr.bin",
+      "sha256": "f778f6270e76ce141ae12c63759cdcc24c915cef90e16e45164b5524f674e939",
+      "size": 102
+    },
+    "collection_stdout": {
+      "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/collection/stdout.bin",
+      "sha256": "1dde18434199d9c73cfaecd3ed496beea4735211bf8ab918f0885205d041c9dd",
+      "size": 838
+    },
+    "collector_elapsed_seconds": 0.7081977429916151,
+    "guest_execution": false,
+    "inspected_cases": [
+      {
+        "ack_status": 0,
+        "actual_ack_bytes": 112,
+        "actual_peer_ack": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-4iu5gzfe/peer-ack-0.bin",
+          "sha256": "668055ea74c2fcd23230808cea5b0924c4e1eb23852909d0b6a599d4e789e6e9",
+          "size": 112
+        },
+        "case": "test_complete_tree_ack_held_after_fsync_then_released_exactly",
+        "manifest": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-4iu5gzfe/capture/manifest.json",
+          "sha256": "31004621145cb282e9b5eaf29ec617de556b786399fd427e1a68b6ffb208b0c9",
+          "size": 1678
+        },
+        "receiver_ok": true,
+        "result": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-4iu5gzfe/result-0.json",
+          "sha256": "183cfd02e6569145a904c1dd64483254aaef98d1052bc1c10bb8f9dae903359b",
+          "size": 2239
+        },
+        "verified_behavior": "Real fsync completions precede observed pending; exact binary/empty tree and status0 112-byte ACK after gate release.",
+        "wire": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-4iu5gzfe/capture/wire.bin",
+          "sha256": "8f0f73c22ce64c0d2b50036a5b695e9cc80566f4128311ed77c5415e43666252",
+          "size": 467
+        }
+      },
+      {
+        "ack_status": 1,
+        "actual_ack_bytes": 112,
+        "actual_peer_ack": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-f0iqq3i7/peer-ack-0.bin",
+          "sha256": "c398b79b689ed232400bf153a504a54f05f9c337cc0c7578c5ed36eedf17e344",
+          "size": 112
+        },
+        "case": "test_malformed_tree_failure_ack_remains_failure_when_gate_opens",
+        "manifest": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-f0iqq3i7/capture/manifest.json",
+          "sha256": "4db6159cd4db7b44344ca76ae309d5d2426bdf7a4fc10fe3bb79cddb4453aec3",
+          "size": 1209
+        },
+        "receiver_ok": false,
+        "result": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-f0iqq3i7/result-0.json",
+          "sha256": "b753e6bf4be1d8f6d89e1a45acb28ed171fe874e0fd55baa9f3cba6290dffcd5",
+          "size": 1719
+        },
+        "verified_behavior": "Malformed END remains failed after complete exact status1 ACK; original file/wire retained.",
+        "wire": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-f0iqq3i7/capture/wire.bin",
+          "sha256": "9e6abb8753e45175ef191e83c683971a9fe977b21790a1961a0cb0c9d535ee98",
+          "size": 291
+        }
+      },
+      {
+        "actual_peer_ack": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-l44krzti/peer-ack-0.bin",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "case": "test_actual_receiver_constructor_forwards_socket_interface",
+        "result": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-l44krzti/result-0.json",
+          "sha256": "9be4072db4c81a65896a88586a1d06dd0adf67917c2ac4c98c34f7b75b70cbba",
+          "size": 171
+        },
+        "verified_behavior": "Actual constructor/interface test passed; no receive run or ACK claimed."
+      },
+      {
+        "ack_status": 0,
+        "actual_ack_bytes": 0,
+        "actual_peer_ack": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-ymkminpi/peer-ack-0.bin",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "case": "test_closed_gate_real_deadline_fails_without_ack_even_if_opened_late",
+        "manifest": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-ymkminpi/capture/manifest.json",
+          "sha256": "f61b88a5f8e0ba1e1bbe363a154e51ff3b9435409e109a0c750bb246f6bd09ff",
+          "size": 891
+        },
+        "receiver_ok": false,
+        "result": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-ymkminpi/result-0.json",
+          "sha256": "8fd422b7c05f91c3aa15bf286fd63f84cd0296240750830257edd076948fd309",
+          "size": 1398
+        },
+        "verified_behavior": "Real 0.5-second deadline; zero actual ACK bytes, including after late gate opening.",
+        "wire": {
+          "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/tmp/stability-export-ack-gate-ymkminpi/capture/wire.bin",
+          "sha256": "73fc78685c458d23f1067c45ad93d6add101d4384f1eb6c53151af2de9e3b682",
+          "size": 186
+        }
+      }
+    ],
+    "pinned_record": {
+      "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/record.json",
+      "sha256": "a6f87911690825cacc49622b5fe31a49034018124adb753b7a7566c890acf01b",
+      "size": 5563
+    },
+    "production_gate_credit": false,
+    "raw_wait_status": 0,
+    "retained_input_bindings": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/scripts/tests/run_stability_transport_guest.py",
+        "sha256": "c047955e27903fa8ee2c5cb571a83d4438c11f8c9d349912acc110f78d3fa5f6",
+        "size": 28796
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/scripts/tests/test_export_ack_gate.py",
+        "sha256": "3f9943f3ca00c7800f8563d8dfd552e370c43a04cda039f74246e737bfdde63e",
+        "size": 13677
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/scripts/tests/fixtures/stability-artifact-export/receiver.py",
+        "sha256": "aa9e165044e9567c992a0354dacdc49b884794b31841a3871d977eeae9c8c5d9",
+        "size": 18043
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/scripts/application-tests/supervisor.py",
+        "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+        "size": 24564
+      }
+    ],
+    "reviewer_executed_tests": false,
+    "schema_version": 1,
+    "status": "PASS_RETAINED_INFRASTRUCTURE_INSPECTION_ONLY",
+    "transport_acceptance": false,
+    "unittest_reported_seconds": 0.592
+  },
+  "production_gate_credit": false,
+  "record_kind": "export_ack_gate_review",
+  "reviewer_executed_tests": false,
+  "runtime_release_authorized_by_this_record": false,
+  "schema_version": 1,
+  "source_archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-export-ack-gate-source-review-20260913-1.tar.gz",
+    "sha256": "365c1106a087ecdb392a3dbe4de70c186d43ebe959250ac5c8882de651da7197",
+    "size": 30246
+  },
+  "source_fixes": [
+    "Regular retained boot-dmesg input replaces unavailable /dev/fd process substitution.",
+    "ExportAckGate forwards Receiver constructor setblocking.",
+    "Runner preserves first nonzero guest marker and detects both receiver exceptions and returned ok=false."
+  ],
+  "source_review": {
+    "path": "/tmp/stability-export-ack-gate-source-u8f3m6nz/final-source-review.json",
+    "sha256": "2028794fe50cf1d9025cd11a35d88e0f4f158a0cc3c6b32a8996902988618183",
+    "size": 1709
+  },
+  "status": "PASS_INFRASTRUCTURE_REVIEW_ONLY",
+  "transport_acceptance": false
+}

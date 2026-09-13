@@ -1,0 +1,121 @@
+{
+  "application_acceptance": false,
+  "checked_deltas": [
+    "Fresh run and guest output directories numbered3; both absent during review.",
+    "Prepared root argument and prerequisite both select root2; preflight2 binds the exact root2 record.",
+    "Actual receiver/gate prerequisite added; retained test inputs bind exact runnerc047 and reviewed4-test source3f9943f3.",
+    "Exact runnerc047 and preparere9 source hashes match current files; seven remaining retained source hashes unchanged.",
+    "Original306-input binding and compiled module3 module/fixture/parent/retained-compiler validation code is byte-identical to helper2. Record statuses/counts match; reviewer did not rerun all306 hashes or build.",
+    "Supervision340s plus15s cleanup, stream caps, post-run raw0/cleanup/collection assertions and acceptance-false status unchanged."
+  ],
+  "definite_findings": [],
+  "guest_execution": false,
+  "helper2": {
+    "matches_preserved_attempt2_helper": true,
+    "path": "/home/holden/mckernel-work/scratch/stability-20260913-1/run-fault-guest-2.py",
+    "sha256": "f9517eb79f87a00e31486940119fb71628660b237f03bc9c1a4260d23c8e620a"
+  },
+  "helper3": {
+    "path": "/home/holden/mckernel-work/scratch/stability-20260913-1/run-fault-guest-3.py",
+    "sha256": "fe2fc9dbbc283b6a6f152dda83085efa041fbfcacbc77d44438810e6e35d261c",
+    "size": 6279
+  },
+  "helper_executed": false,
+  "prerequisite_records": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-export-ack-gate-tests-20260913-1/record.json",
+      "sha256": "a6f87911690825cacc49622b5fe31a49034018124adb753b7a7566c890acf01b",
+      "size": 5563,
+      "status": "PASS_ACTUAL_RECEIVER_GATE_INFRASTRUCTURE_ONLY"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-fault-guest-root-20260913-prepublish-hard-2/record.json",
+      "sha256": "73b72812b2c2250bd616ae653b4f9074b81cc62486bc93f8a91ecb643589d756",
+      "size": 31427,
+      "status": "PREPARED_NOT_EXECUTED"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-fault-guest-preflight-20260913-2/record.json",
+      "sha256": "140f4a26ade36d790a5652f810b14b64c0ac25d30a72f86930a744700803710e",
+      "size": 5449,
+      "status": "PASS_PREFLIGHT_NO_GUEST_EXECUTION"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-phase-parser-tests-20260913-1/record.json",
+      "sha256": "6b70193e14da93e9d4da38cd88fa4268076d03734bca688d902ef7a0014ae522",
+      "size": 5969,
+      "status": "PASS_SYNTHETIC_PHASE_PARSER_ONLY"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-fault-control-tests-20260913-1/record.json",
+      "sha256": "713390a1181f4f15e8dea923b19f6746ed7b385291a7c63f70d9524989c9fc68",
+      "size": 5064,
+      "status": "PASS_SYNTHETIC_FAULT_CONTROL_ONLY"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-artifact-pty-tests-20260913-1/record.json",
+      "sha256": "00972c0528b5c77a1ef864cf2a9f2fb1431b6cfcbee33208450dfc30f8fbd794",
+      "size": 6534,
+      "status": "PASS_ACTUAL_C_PTY_INFRASTRUCTURE_ONLY"
+    }
+  ],
+  "production_gate_credit": false,
+  "production_inputs_revalidated_by_reviewer": false,
+  "retention_archive": {
+    "exact_tree_members": 18,
+    "path": "docs/verification/evidence/stability-guest3-invocation-review-20260913.tar.gz",
+    "sha256": "748e9b907c17371389df897a24c527f1bfa97c50cefa0ca7f9e6a8587990bffc",
+    "size": 15453
+  },
+  "schema_version": 1,
+  "source_hashes_matched": [
+    {
+      "path": "scripts/tests/run_stability_transport_guest.py",
+      "sha256": "c047955e27903fa8ee2c5cb571a83d4438c11f8c9d349912acc110f78d3fa5f6",
+      "size": 28796
+    },
+    {
+      "path": "scripts/tests/prepare_stability_fault_guest.py",
+      "sha256": "e9f65c3946ebf49ffdba13fd4e6dea6c36aa03905d410c57fb119bd1901cbd5a",
+      "size": 14964
+    },
+    {
+      "path": "scripts/application-tests/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019
+    },
+    {
+      "path": "scripts/application-tests/phase_observations.py",
+      "sha256": "589694ee603b096743682225ff964b39612439a3082ae7f6a80707c4755f7102",
+      "size": 25144
+    },
+    {
+      "path": "scripts/application-tests/fault_control.py",
+      "sha256": "b7ed7c6b131ff2106a1317a0d535d3a032c6c1117210a9bac4d10eebea9f68fc",
+      "size": 21520
+    },
+    {
+      "path": "scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    },
+    {
+      "path": "scripts/application-tests/supervisor.py",
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "size": 24564
+    },
+    {
+      "path": "scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json",
+      "sha256": "025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665",
+      "size": 1098
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-artifact-export/receiver.py",
+      "sha256": "aa9e165044e9567c992a0354dacdc49b884794b31841a3871d977eeae9c8c5d9",
+      "size": 18043
+    }
+  ],
+  "status": "PASS_SOURCE_WIRING_REVIEW_ONLY",
+  "tests_executed": false,
+  "transport_acceptance": false
+}
