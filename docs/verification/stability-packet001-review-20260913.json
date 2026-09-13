@@ -1,0 +1,1331 @@
+{
+  "cases": [
+    {
+      "acceptance": "NOT_VERIFIED",
+      "acceptance_credit": 0,
+      "build": "NOT_RUN",
+      "case_id": "startup.argv-empty",
+      "frozen_execution_inputs": {
+        "argv": [
+          "app",
+          "A",
+          "",
+          "B"
+        ],
+        "case_id": "startup.argv-empty",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/apps:/bin:/usr/bin",
+          "TZ": "UTC"
+        },
+        "environment_absent": [
+          "APP_STARTUP_ENV_MISSING"
+        ],
+        "executable_path": "/apps/app",
+        "gid": 0,
+        "groups": [
+          0
+        ],
+        "uid": 0,
+        "umask": 18
+      },
+      "implementation": "SOURCE_INSPECTED_OPERATION_IMPLEMENTED",
+      "independent_expected_streams": {
+        "stderr": {
+          "construction": "empty bytes",
+          "literal_utf8": "",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "stdout": {
+          "construction": "literal canonical JSON plus one LF",
+          "literal_utf8": "{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n",
+          "sha256": "e3ef69c5f8e85e2cdca6bac568664d3b146038ac5523185517595a70364a2884",
+          "size": 91
+        }
+      },
+      "independent_review": "SOURCE_CONTRACT_AND_ORACLE_REVIEWED",
+      "negative_source_checks": [
+        "argc not 4 -> exit 41",
+        "non-NULL argv[4] -> exit 41",
+        "NULL, wrong, reordered or nonempty argv[2] -> exit 42",
+        "wrong argv[0] including /apps/app -> exit 42",
+        "output/flush failure -> exit 43"
+      ],
+      "operation_review": "Checks argc=4 before accessing argv[argc], checks terminating NULL and each expected C string including empty argv[2]. Fixed ASCII values are compared before JSON interpolation, so no general escaping is needed. Failure exits 41/42; printf or fflush failure exits 43. This proves fixture logic only.",
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+        "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+        "size": 687
+      },
+      "original_catalog_assertions": [
+        "argc=4 and argv bytes equal app,A,empty,B; terminating argv pointer is NULL."
+      ],
+      "original_catalog_operation": "Launch with an empty argument between two fixed strings.",
+      "original_defects": [
+        "Original oracle proposed five arguments but asserted argc=4.",
+        "Original source additionally emitted an environment line not in the original fixed stdout oracle."
+      ],
+      "original_limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 4194304,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 8388608,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "original_oracle": {
+        "path": "scripts/application-tests/oracles/startup.argv-empty.json",
+        "sha256": "e809ed818e388710605b2112bd33c743e2978a247b8acfa11f02992425c70e97",
+        "size": 1169
+      },
+      "original_repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "original_source": {
+        "path": "scripts/application-tests/cases/startup/startup.argv-empty.c",
+        "sha256": "c15fb5a0e7df71710f1f59c3ac58bccaf7b57c5e4eaebd7d1165c44985a4005e",
+        "size": 576
+      },
+      "runtime": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+        "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+        "size": 777
+      },
+      "source_evidence": [
+        {
+          "first_line": 1,
+          "last_line": 24,
+          "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+          "text": "#include <stdio.h>\n#include <string.h>\n\nint main(int argc, char **argv)\n{\n    static const char *const expected[] = {\"app\", \"A\", \"\", \"B\"};\n    if (argc != 4 || argv[argc] != NULL) {\n        fputs(\"unexpected argc or argv terminator\\n\", stderr);\n        return 41;\n    }\n    for (int i = 0; i < argc; ++i) {\n        if (argv[i] == NULL || strcmp(argv[i], expected[i]) != 0) {\n            fputs(\"unexpected argument bytes\\n\", stderr);\n            return 42;\n        }\n    }\n    if (printf(\"{\\\"case\\\":\\\"startup.argv-empty\\\",\\\"argc\\\":%d,\"\n               \"\\\"argv\\\":[\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\"],\"\n               \"\\\"terminator_is_null\\\":true}\\n\",\n               argc, argv[0], argv[1], argv[2], argv[3]) < 0 ||\n        fflush(stdout) != 0) {\n        return 43;\n    }\n    return 0;\n"
+        }
+      ],
+      "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PINNED_COMPILATION"
+    },
+    {
+      "acceptance": "NOT_VERIFIED",
+      "acceptance_credit": 0,
+      "build": "NOT_RUN",
+      "case_id": "startup.environment",
+      "frozen_execution_inputs": {
+        "argv": [
+          "/apps/startup.environment"
+        ],
+        "case_id": "startup.environment",
+        "cwd": "/case/work",
+        "environment": {
+          "APP_STARTUP_ENV_ALPHA": "ALPHA-STARTUP-VALUE",
+          "APP_STARTUP_ENV_BETA": "BETA-STARTUP-VALUE",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/apps:/bin:/usr/bin",
+          "TZ": "UTC"
+        },
+        "environment_absent": [
+          "APP_STARTUP_ENV_MISSING"
+        ],
+        "executable_path": "/apps/startup.environment",
+        "gid": 0,
+        "groups": [
+          0
+        ],
+        "uid": 0,
+        "umask": 18
+      },
+      "implementation": "SOURCE_INSPECTED_OPERATION_IMPLEMENTED",
+      "independent_expected_streams": {
+        "stderr": {
+          "construction": "empty bytes",
+          "literal_utf8": "",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "stdout": {
+          "construction": "literal canonical JSON plus one LF",
+          "literal_utf8": "{\"case\":\"startup.environment\",\"alpha\":\"ALPHA-STARTUP-VALUE\",\"beta\":\"BETA-STARTUP-VALUE\",\"missing_is_null\":true}\n",
+          "sha256": "e350d1886f903adc3975b083bb0cb9f884718abca6a7cc71ab02e2e03bf26d47",
+          "size": 112
+        }
+      },
+      "independent_review": "SOURCE_CONTRACT_AND_ORACLE_REVIEWED",
+      "negative_source_checks": [
+        "missing, empty or wrong ALPHA/BETA -> exit 41",
+        "present third key with empty value, NULL text or any other value -> exit 41",
+        "output/flush failure -> exit 42"
+      ],
+      "operation_review": "Calls getenv for both frozen keys and the absent key. Requires exact nonempty ALPHA/BETA values; requires missing==NULL, rejecting an existing empty string or the literal NULL. JSON interpolates only strings already checked against fixed ASCII literals. Input environment, rather than self-setenv, supplies the values. Failure exits 41; printf or fflush failure exits 42.",
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+        "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+        "size": 730
+      },
+      "original_catalog_assertions": [
+        "getenv returns exact fixed bytes for the two keys and NULL for the absent key."
+      ],
+      "original_catalog_operation": "Set two fixed variables and remove a third before launch.",
+      "original_defects": [
+        "Original absent-key text NULL was indistinguishable from an actual value of NULL; revised pointer test resolves that ambiguity.",
+        "Original unresolved input keys and values are frozen additively."
+      ],
+      "original_limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 4194304,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 8388608,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "original_oracle": {
+        "path": "scripts/application-tests/oracles/startup.environment.json",
+        "sha256": "7eb9e5593814b9e1e7a45a0dd91bf3fe714959b25f3e5840b66e2d8caaa8f958",
+        "size": 1321
+      },
+      "original_repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "original_source": {
+        "path": "scripts/application-tests/cases/startup/startup.environment.c",
+        "sha256": "b47b74129866949413ffdb6ac9455a80fc61eb7c4323ed2a92f0c5a151cb1cbd",
+        "size": 413
+      },
+      "runtime": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+        "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+        "size": 732
+      },
+      "source_evidence": [
+        {
+          "first_line": 1,
+          "last_line": 23,
+          "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+          "text": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nint main(void)\n{\n    const char *alpha = getenv(\"APP_STARTUP_ENV_ALPHA\");\n    const char *beta = getenv(\"APP_STARTUP_ENV_BETA\");\n    const char *missing = getenv(\"APP_STARTUP_ENV_MISSING\");\n    if (alpha == NULL || strcmp(alpha, \"ALPHA-STARTUP-VALUE\") != 0 ||\n        beta == NULL || strcmp(beta, \"BETA-STARTUP-VALUE\") != 0 ||\n        missing != NULL) {\n        fputs(\"unexpected environment values or presence\\n\", stderr);\n        return 41;\n    }\n    if (printf(\"{\\\"case\\\":\\\"startup.environment\\\",\\\"alpha\\\":\\\"%s\\\",\"\n               \"\\\"beta\\\":\\\"%s\\\",\\\"missing_is_null\\\":true}\\n\", alpha, beta) < 0 ||\n        fflush(stdout) != 0) {\n        return 42;\n    }\n    return 0;\n}\n"
+        }
+      ],
+      "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PINNED_COMPILATION"
+    },
+    {
+      "acceptance": "NOT_VERIFIED",
+      "acceptance_credit": 0,
+      "build": "NOT_RUN",
+      "case_id": "startup.stdout-stderr",
+      "frozen_execution_inputs": {
+        "argv": [
+          "/apps/startup.stdout-stderr"
+        ],
+        "case_id": "startup.stdout-stderr",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/apps:/bin:/usr/bin",
+          "TZ": "UTC"
+        },
+        "environment_absent": [
+          "APP_STARTUP_ENV_MISSING"
+        ],
+        "executable_path": "/apps/startup.stdout-stderr",
+        "gid": 0,
+        "groups": [
+          0
+        ],
+        "uid": 0,
+        "umask": 18
+      },
+      "implementation": "SOURCE_INSPECTED_OPERATION_IMPLEMENTED",
+      "independent_expected_streams": {
+        "stderr": {
+          "construction": "descending unsigned octets 255 through 0 repeated 16 times",
+          "literal_utf8": null,
+          "sha256": "191016cc9f08e7f1187290730ae5ea234aa5e4073168f28b478100dee65988da",
+          "size": 4096
+        },
+        "stdout": {
+          "construction": "ascending unsigned octets 0 through 255 repeated 16 times",
+          "literal_utf8": null,
+          "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+          "size": 4096
+        }
+      },
+      "independent_review": "SOURCE_CONTRACT_AND_ORACLE_REVIEWED",
+      "negative_source_checks": [
+        "zero write or non-EINTR write failure -> exit 41",
+        "partial write continues at bytes+done for count-done",
+        "truncated, extended, swapped or changed stream -> exact byte oracle mismatch",
+        "signal termination/nonzero exit cannot satisfy exited code 0"
+      ],
+      "operation_review": "Constructs every byte 0..255 for stdout and 255..0 for stderr and alternates sixteen 256-byte chunks through write on the real descriptors. Successful partial writes advance the pointer; zero/non-EINTR negative writes return failure and main exits 41. EINTR retries the same remaining bytes. Each complete stream has 4096 bytes; no ordering relation across the separate streams is asserted.",
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+        "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+        "size": 16892
+      },
+      "original_catalog_assertions": [
+        "Each stream independently equals its fixed byte sequence; neither loses bytes or deadlocks."
+      ],
+      "original_catalog_operation": "Write alternating bounded binary chunks to stdout and stderr.",
+      "original_defects": [
+        "Original stderr_payload indexed writes used putchar_unlocked, which writes stdout; only four indexed stderr bytes were emitted, all on stdout.",
+        "Original source/oracle fixed bytes and generic catalog empty stderr metadata were inconsistent with the requested two-stream operation. Revised oracle explicitly supplies both binary streams."
+      ],
+      "original_limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 4194304,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 8388608,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "original_oracle": {
+        "path": "scripts/application-tests/oracles/startup.stdout-stderr.json",
+        "sha256": "eb90880d6e03673ed2a5d159818c3c827108fc21ee2c53d67e3827304570ebe9",
+        "size": 1027
+      },
+      "original_repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "original_source": {
+        "path": "scripts/application-tests/cases/startup/startup.stdout-stderr.c",
+        "sha256": "4bfa7ccced1fed26837b80507d5725b582803e0ce93529f36c6a80524310ac87",
+        "size": 627
+      },
+      "retry_bound": "There is no finite internal bound on repeated EINTR and a blocking write can wait indefinitely. This is not an authorized whole-case retry. Runtime acceptance requires the catalog independent 10-second payload deadline, 15-second cleanup deadline and 300-second outer QEMU deadline; source review does not prove them.",
+      "runtime": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+        "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+        "size": 877
+      },
+      "source_evidence": [
+        {
+          "first_line": 1,
+          "last_line": 36,
+          "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+          "text": "#include <errno.h>\n#include <stddef.h>\n#include <unistd.h>\n\nstatic int write_all(int fd, const unsigned char *bytes, size_t count)\n{\n    size_t done = 0;\n    while (done < count) {\n        ssize_t result = write(fd, bytes + done, count - done);\n        if (result < 0 && errno == EINTR) {\n            continue;\n        }\n        if (result <= 0) {\n            return -1;\n        }\n        done += (size_t)result;\n    }\n    return 0;\n}\n\nint main(void)\n{\n    unsigned char out[256];\n    unsigned char err[256];\n    for (size_t i = 0; i < sizeof(out); ++i) {\n        out[i] = (unsigned char)i;\n        err[i] = (unsigned char)(255 - i);\n    }\n    for (unsigned int chunk = 0; chunk < 16; ++chunk) {\n        if (write_all(STDOUT_FILENO, out, sizeof(out)) != 0 ||\n            write_all(STDERR_FILENO, err, sizeof(err)) != 0) {\n            return 41;\n        }\n    }\n    return 0;\n}\n"
+        }
+      ],
+      "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PINNED_COMPILATION"
+    }
+  ],
+  "catalog": {
+    "path": "scripts/application-tests/cases.json",
+    "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+    "size": 1387917
+  },
+  "check_summary": {
+    "matched": 66,
+    "mismatched": 0,
+    "total": 66
+  },
+  "checks": [
+    {
+      "expected": {
+        "path": "scripts/application-tests/cases.json",
+        "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+        "size": 1387917
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/cases.json",
+      "observed": {
+        "path": "scripts/application-tests/cases.json",
+        "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+        "size": 1387917
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/packets/packet-001.json",
+        "sha256": "b0780b744e0096868fcc9916debba90864f8f8a297031c72654f12289cd3f477",
+        "size": 6075
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/packets/packet-001.json",
+      "observed": {
+        "path": "scripts/application-tests/packets/packet-001.json",
+        "sha256": "b0780b744e0096868fcc9916debba90864f8f8a297031c72654f12289cd3f477",
+        "size": 6075
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+        "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+        "size": 777
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+        "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+        "size": 777
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+        "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+        "size": 687
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+        "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+        "size": 687
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+        "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+        "size": 732
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+        "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+        "size": 732
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+        "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+        "size": 730
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+        "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+        "size": 730
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+        "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+        "size": 877
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+        "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+        "size": 877
+      }
+    },
+    {
+      "expected": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+        "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+        "size": 16892
+      },
+      "matched": true,
+      "name": "declared identity: scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+      "observed": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+        "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+        "size": 16892
+      }
+    },
+    {
+      "expected": false,
+      "matched": true,
+      "name": "review keeps execution disabled",
+      "observed": false
+    },
+    {
+      "expected": [
+        "startup.argv-empty",
+        "startup.environment",
+        "startup.stdout-stderr"
+      ],
+      "matched": true,
+      "name": "review and original packet select exact same three cases",
+      "observed": [
+        "startup.argv-empty",
+        "startup.environment",
+        "startup.stdout-stderr"
+      ]
+    },
+    {
+      "expected": 3,
+      "matched": true,
+      "name": "active case maximum unchanged",
+      "observed": 3
+    },
+    {
+      "expected": "fixture-review-and-compile",
+      "matched": true,
+      "name": "review mode is compile-only",
+      "observed": "fixture-review-and-compile"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "review version follows original packet",
+      "observed": true
+    },
+    {
+      "expected": "ordinary-dynamic-etexec-c11",
+      "matched": true,
+      "name": "startup.argv-empty original build profile",
+      "observed": "ordinary-dynamic-etexec-c11"
+    },
+    {
+      "expected": "startup.argv-empty",
+      "matched": true,
+      "name": "startup.argv-empty oracle case id",
+      "observed": "startup.argv-empty"
+    },
+    {
+      "expected": 1,
+      "matched": true,
+      "name": "startup.argv-empty oracle case version",
+      "observed": 1
+    },
+    {
+      "expected": {
+        "code": 0,
+        "kind": "exited"
+      },
+      "matched": true,
+      "name": "startup.argv-empty wait status",
+      "observed": {
+        "code": 0,
+        "kind": "exited"
+      }
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.argv-empty stdout exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.argv-empty stdout independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 91,
+      "matched": true,
+      "name": "startup.argv-empty stdout length",
+      "observed": 91
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.argv-empty stdout stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.argv-empty stderr exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.argv-empty stderr independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 0,
+      "matched": true,
+      "name": "startup.argv-empty stderr length",
+      "observed": 0
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.argv-empty stderr stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "matched": true,
+      "name": "startup.argv-empty frozen required locale",
+      "observed": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      }
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.argv-empty missing key absent from complete declared environment",
+      "observed": true
+    },
+    {
+      "expected": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ],
+      "matched": true,
+      "name": "startup.argv-empty all acceptance dimensions not run",
+      "observed": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ]
+    },
+    {
+      "expected": "ordinary-dynamic-etexec-c11",
+      "matched": true,
+      "name": "startup.environment original build profile",
+      "observed": "ordinary-dynamic-etexec-c11"
+    },
+    {
+      "expected": "startup.environment",
+      "matched": true,
+      "name": "startup.environment oracle case id",
+      "observed": "startup.environment"
+    },
+    {
+      "expected": 1,
+      "matched": true,
+      "name": "startup.environment oracle case version",
+      "observed": 1
+    },
+    {
+      "expected": {
+        "code": 0,
+        "kind": "exited"
+      },
+      "matched": true,
+      "name": "startup.environment wait status",
+      "observed": {
+        "code": 0,
+        "kind": "exited"
+      }
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.environment stdout exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.environment stdout independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 112,
+      "matched": true,
+      "name": "startup.environment stdout length",
+      "observed": 112
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.environment stdout stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.environment stderr exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.environment stderr independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 0,
+      "matched": true,
+      "name": "startup.environment stderr length",
+      "observed": 0
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.environment stderr stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "matched": true,
+      "name": "startup.environment frozen required locale",
+      "observed": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      }
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.environment missing key absent from complete declared environment",
+      "observed": true
+    },
+    {
+      "expected": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ],
+      "matched": true,
+      "name": "startup.environment all acceptance dimensions not run",
+      "observed": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ]
+    },
+    {
+      "expected": "ordinary-dynamic-etexec-c11",
+      "matched": true,
+      "name": "startup.stdout-stderr original build profile",
+      "observed": "ordinary-dynamic-etexec-c11"
+    },
+    {
+      "expected": "startup.stdout-stderr",
+      "matched": true,
+      "name": "startup.stdout-stderr oracle case id",
+      "observed": "startup.stdout-stderr"
+    },
+    {
+      "expected": 1,
+      "matched": true,
+      "name": "startup.stdout-stderr oracle case version",
+      "observed": 1
+    },
+    {
+      "expected": {
+        "code": 0,
+        "kind": "exited"
+      },
+      "matched": true,
+      "name": "startup.stdout-stderr wait status",
+      "observed": {
+        "code": 0,
+        "kind": "exited"
+      }
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.stdout-stderr stdout exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.stdout-stderr stdout independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 4096,
+      "matched": true,
+      "name": "startup.stdout-stderr stdout length",
+      "observed": 4096
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.stdout-stderr stdout stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": "exact-bytes",
+      "matched": true,
+      "name": "startup.stdout-stderr stderr exact kind",
+      "observed": "exact-bytes"
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.stdout-stderr stderr independent literal comparison",
+      "observed": true
+    },
+    {
+      "expected": 4096,
+      "matched": true,
+      "name": "startup.stdout-stderr stderr length",
+      "observed": 4096
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.stdout-stderr stderr stays within original limit",
+      "observed": true
+    },
+    {
+      "expected": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "matched": true,
+      "name": "startup.stdout-stderr frozen required locale",
+      "observed": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      }
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "startup.stdout-stderr missing key absent from complete declared environment",
+      "observed": true
+    },
+    {
+      "expected": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ],
+      "matched": true,
+      "name": "startup.stdout-stderr all acceptance dimensions not run",
+      "observed": [
+        "NOT_RUN",
+        "NOT_RUN",
+        "NOT_RUN"
+      ]
+    },
+    {
+      "expected": [
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "matched": true,
+      "name": "argv exact four-element vector",
+      "observed": [
+        "app",
+        "A",
+        "",
+        "B"
+      ]
+    },
+    {
+      "expected": "/apps/app",
+      "matched": true,
+      "name": "argv executable path",
+      "observed": "/apps/app"
+    },
+    {
+      "expected": {
+        "APP_STARTUP_ENV_ALPHA": "ALPHA-STARTUP-VALUE",
+        "APP_STARTUP_ENV_BETA": "BETA-STARTUP-VALUE",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "matched": true,
+      "name": "environment keys preserve original fixed values",
+      "observed": {
+        "APP_STARTUP_ENV_ALPHA": "ALPHA-STARTUP-VALUE",
+        "APP_STARTUP_ENV_BETA": "BETA-STARTUP-VALUE",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      }
+    },
+    {
+      "expected": {
+        "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+        "size": 220972
+      },
+      "matched": true,
+      "name": "pinned source equals current executer/user/mcexec.c",
+      "observed": {
+        "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+        "size": 220972
+      }
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "pinned source bound by launcher build record executer/user/mcexec.c",
+      "observed": true
+    },
+    {
+      "expected": {
+        "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+        "size": 251439
+      },
+      "matched": true,
+      "name": "pinned source equals current executer/user/rust/mcexec_helpers.rs",
+      "observed": {
+        "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+        "size": 251439
+      }
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "pinned source bound by launcher build record executer/user/rust/mcexec_helpers.rs",
+      "observed": true
+    },
+    {
+      "expected": true,
+      "matched": true,
+      "name": "pinned launcher binary matches old build record",
+      "observed": true
+    }
+  ],
+  "compile_authorized": true,
+  "created_utc": "2026-09-13T09:46:00.282880+00:00",
+  "current_launcher_sources": [
+    {
+      "build_record_path": "/work/native-application-launcher-20260908-2/source/executer/user/mcexec.c",
+      "current": {
+        "path": "executer/user/mcexec.c",
+        "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+        "size": 220972
+      },
+      "retained_build_source": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/source/executer/user/mcexec.c",
+        "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+        "size": 220972
+      }
+    },
+    {
+      "build_record_path": "/work/native-application-launcher-20260908-2/source/executer/user/rust/mcexec_helpers.rs",
+      "current": {
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+        "size": 251439
+      },
+      "retained_build_source": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/source/executer/user/rust/mcexec_helpers.rs",
+        "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+        "size": 251439
+      }
+    }
+  ],
+  "date": "2026-09-13",
+  "execution_enabled": false,
+  "fixture_defects_found": [],
+  "input_bindings": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/record.json",
+      "sha256": "fcf0861b146a8e64a2fc524c6be8cc47cec940f595772d32bdaec4169ea6a4b2",
+      "size": 60705
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/rust/executer/user/mcexec",
+      "sha256": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+      "size": 453288
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/source/executer/user/mcexec.c",
+      "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+      "size": 220972
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/source/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+      "size": 251439
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "0353e5a1e42653fd4f955522ff797e49ba2c3977b9c77aead749646fb70fcf6b",
+      "size": 316908
+    },
+    {
+      "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+      "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+      "size": 435332
+    },
+    {
+      "path": "executer/user/mcexec.c",
+      "sha256": "0264d8ad51e00fdaa6348c72db16063f61b4284fe3643b4dae00248727fc0c61",
+      "size": 220972
+    },
+    {
+      "path": "executer/user/rust/mcexec_helpers.rs",
+      "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+      "size": 251439
+    },
+    {
+      "path": "scripts/application-tests/README.md",
+      "sha256": "58d1d9d65e3199c7da5e8824a06a02061118ae19f6baf0231aadbb53147f3e5b",
+      "size": 15560
+    },
+    {
+      "path": "scripts/application-tests/cases.json",
+      "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+      "size": 1387917
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.argv-empty.c",
+      "sha256": "c15fb5a0e7df71710f1f59c3ac58bccaf7b57c5e4eaebd7d1165c44985a4005e",
+      "size": 576
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.environment.c",
+      "sha256": "b47b74129866949413ffdb6ac9455a80fc61eb7c4323ed2a92f0c5a151cb1cbd",
+      "size": 413
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.stdout-stderr.c",
+      "sha256": "4bfa7ccced1fed26837b80507d5725b582803e0ce93529f36c6a80524310ac87",
+      "size": 627
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.argv-empty.json",
+      "sha256": "e809ed818e388710605b2112bd33c743e2978a247b8acfa11f02992425c70e97",
+      "size": 1169
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.environment.json",
+      "sha256": "7eb9e5593814b9e1e7a45a0dd91bf3fe714959b25f3e5840b66e2d8caaa8f958",
+      "size": 1321
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.stdout-stderr.json",
+      "sha256": "eb90880d6e03673ed2a5d159818c3c827108fc21ee2c53d67e3827304570ebe9",
+      "size": 1027
+    },
+    {
+      "path": "scripts/application-tests/packets/packet-001.json",
+      "sha256": "b0780b744e0096868fcc9916debba90864f8f8a297031c72654f12289cd3f477",
+      "size": 6075
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/REVIEW.md",
+      "sha256": "9664a3e63c78875c62954829d6d9d13f1ca24109da64e26831857216cf832792",
+      "size": 2529
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/review.json",
+      "sha256": "1468456b482ab77315336279ecc1ff279949446181688f54d3981149a8e5e581",
+      "size": 4211
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+      "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+      "size": 777
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+      "size": 687
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+      "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+      "size": 732
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+      "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+      "size": 730
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+      "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+      "size": 877
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+      "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+      "size": 16892
+    }
+  ],
+  "inspection_failures_preserved": [
+    {
+      "action": "python3 - <<'PY'\nimport json,pathlib\nroot=pathlib.Path('.')\nc=json.loads((root/'scripts/application-tests/catalog.json').read_text())\nprint('CATALOG KEYS',list(c))\nprint('CASES TYPE',type(c.get('cases')).__name__)\nfor x in c['cases']:\n if x.get('id',x.get('case_id')) in ('startup.argv-empty','startup.environment','startup.stdout-stderr'): print(json.dumps(x,indent=2))\nprint('PACKET', (root/'scripts/application-tests/packets/packet-001.json').read_text())\nfor f in sorted((root/'scripts/application-tests/reviewed/packet-001-v3').iterdir()):\n if f.name.endswith('oracle.json'):\n  d=json.loads(f.read_text())\n  for k in list(d):\n   if isinstance(d[k],str) and len(d[k])>1000:d[k]=f'<string length {len(d[k])}>'\n  print(f,json.dumps(d,indent=2))\n elif f.suffix=='.c' or f.name in ('REVIEW.md','review.json'):print(f,f.read_text())\nPY",
+      "cwd": "/home/holden/mckernel",
+      "diagnosis": "Reviewer guessed catalog.json instead of following declared catalog.path. No fixture/test/build execution occurred. Retried inspection using review.json catalog.path=cases.json; original evidence preserved here. Root notified immediately.",
+      "exit_code": 1,
+      "stage": "read-only source discovery",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 3, in <module>\n  File \"/home/holden/anaconda3/lib/python3.9/pathlib.py\", line 1266, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n  File \"/home/holden/anaconda3/lib/python3.9/pathlib.py\", line 1252, in open\n    return io.open(self, mode, buffering, encoding, errors, newline,\n  File \"/home/holden/anaconda3/lib/python3.9/pathlib.py\", line 1120, in _opener\n    return self._accessor.open(self, flags, mode)\nFileNotFoundError: [Errno 2] No such file or directory: 'scripts/application-tests/catalog.json'\n",
+      "stdout": ""
+    },
+    {
+      "action_summary": "rg searched optional missing rust top-level directory, later rg inspected not-yet-created run.py, and sed attempted nonexistent normalization.json. These are discovery mistakes, not application/test results.",
+      "diagnostics": [
+        "rg: scripts/application-tests/run.py: IO error for operation on scripts/application-tests/run.py: No such file or directory (os error 2)",
+        "sed: can't read scripts/application-tests/normalization.json: No such file or directory"
+      ],
+      "effect": "No changes or runtime evidence; no normalization file assumed. Review records the runtime contract as pending.",
+      "stage": "read-only optional discovery"
+    }
+  ],
+  "launcher_argument_review": {
+    "conclusion": "Selected Rust launcher independently resolves app via COKERNEL_PATH or PATH into a local path buffer, loads that ELF, then flattens the original argv tail. Empty argument strings have length+1=1 and are counted by non-NULL pointers, not by nonempty contents. Numeric OS argument 0 is consumed before app; getopt option prefix + stops at the first nonoption.",
+    "evidence": [
+      {
+        "first_line": 3997,
+        "last_line": 4006,
+        "path": "executer/user/mcexec.c",
+        "text": "int mcexec_main_next_option_bridge(int argc, char **argv)\n{\n#ifdef ADD_ENVS_OPTION\n\treturn getopt_long(argc, argv, \"+c:n:t:M:h:e:s:m:u:S:f:\",\n\t\t\t   mcexec_options, NULL);\n#else\n\treturn getopt_long(argc, argv, \"+c:n:t:M:h:s:m:u:S:f:\",\n\t\t\t   mcexec_options, NULL);\n#endif\n}\n"
+      },
+      {
+        "first_line": 4630,
+        "last_line": 4638,
+        "path": "executer/user/mcexec.c",
+        "text": "pthread_spinlock_t overlay_fd_lock;\n\n#ifdef MCEXEC_RUST_HELPERS\nint main(int argc, char **argv)\n{\n\treturn mcexec_main_body(argc, argv);\n}\n#else\nint main(int argc, char **argv)\n"
+      },
+      {
+        "first_line": 3864,
+        "last_line": 3935,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "    let mut optind = unsafe { mcexec_main_optind_bridge() };\n    let candidate = if !argv.is_null() && optind < argc {\n        unsafe { *argv.add(optind as usize) as *const u8 }\n    } else {\n        core::ptr::null()\n    };\n    let mut planned_heap_extension = unsafe { main_read_ulong(state.heap_extension) };\n    let mut planned_mcosid = mcosid;\n    let mut planned_optind = optind;\n    if unsafe {\n        mcexec_post_options_plan_result(\n            optind,\n            argc,\n            candidate,\n            main_read_ulong(state.heap_extension),\n            MCEXEC_PAGE_SIZE,\n            mcosid,\n            &mut planned_heap_extension,\n            &mut planned_mcosid,\n            &mut planned_optind,\n        )\n    } < 0\n    {\n        unsafe {\n            print_usage(argv);\n            exit(1);\n        }\n    }\n\n    unsafe {\n        main_write_ulong(state.heap_extension, planned_heap_extension);\n    }\n    mcosid = planned_mcosid;\n    optind = planned_optind;\n\n    if unsafe { mcexec_post_option_setup_body(mcosid, main_read_i32(state.enable_uti)) } != 0 {\n        unsafe { exit(1) };\n    }\n\n    let add_envs_option = unsafe { mcexec_print_usage_add_envs_bridge() };\n    if add_envs_option == 0 {\n        unsafe {\n            mcexec_collect_default_envs_body(&mut envs_len, &mut envs);\n        }\n    }\n\n    if unsafe { mcexec_main_bind_mount_bridge() } != 0 {\n        return 1;\n    }\n\n    let argv_tail = unsafe { argv.add(optind as usize) };\n    if unsafe { mcexec_load_main_desc_body(*argv_tail, &mut desc, &mut shebang_argv) } != 0 {\n        return 1;\n    }\n\n    if add_envs_option != 0 {\n        unsafe {\n            mcexec_collect_main_envs_body(&mut extra_env, &mut envs_len, &mut envs);\n        }\n    }\n\n    unsafe {\n        mcexec_prepare_main_desc_body(\n            desc,\n            argv_tail,\n            shebang_argv,\n            envs_len,\n            envs,\n            target_core,\n            main_read_i32(state.enable_vdso),\n        );\n    }\n"
+      },
+      {
+        "first_line": 4433,
+        "last_line": 4448,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "#[no_mangle]\npub unsafe extern \"C\" fn mcexec_load_main_desc_body(\n    path: *mut u8,\n    desc_p: *mut *mut c_void,\n    shebang_argv_p: *mut *mut *mut u8,\n) -> c_int {\n    let ret = unsafe { load_elf_desc_shebang(path, desc_p, shebang_argv_p, 1) };\n    if ret != 0 {\n        unsafe { mcexec_main_load_desc_error_bridge(path as *const u8, ret) };\n        return 1;\n    }\n\n    let desc = unsafe { *desc_p };\n    unsafe { mcexec_desc_clear_flags_bridge(desc) };\n    0\n}\n"
+      },
+      {
+        "first_line": 3634,
+        "last_line": 3671,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "pub unsafe extern \"C\" fn load_elf_desc_shebang(\n    shebang_argv0: *mut u8,\n    desc_p: *mut *mut c_void,\n    shebang_argv_p: *mut *mut *mut u8,\n    execvp: c_int,\n) -> c_int {\n    let mut path = [0u8; PATH_MAX];\n    let mut shebang: *mut u8 = core::ptr::null_mut();\n\n    let ret =\n        unsafe { lookup_exec_path(shebang_argv0, path.as_mut_ptr(), PATH_MAX as c_int, execvp) };\n    if ret != 0 {\n        unsafe { mcexec_load_shebang_find_error_bridge(shebang_argv0 as *const u8) };\n        return ret;\n    }\n\n    let ret = unsafe { load_elf_desc(path.as_mut_ptr(), desc_p, &mut shebang) };\n    if ret != 0 {\n        unsafe { mcexec_load_shebang_load_error_bridge(shebang_argv0 as *const u8) };\n        return ret;\n    }\n\n    if !shebang.is_null() {\n        if shebang_argv_p.is_null() {\n            return unsafe {\n                load_elf_desc_shebang(shebang, desc_p, core::ptr::null_mut(), execvp)\n            };\n        }\n\n        if unsafe { mcexec_shebang_argv_extend_result(shebang_argv_p, shebang) } < 0 {\n            return ENOMEM;\n        }\n\n        return unsafe { load_elf_desc_shebang(shebang, desc_p, shebang_argv_p, execvp) };\n    }\n\n    0\n}\n"
+      },
+      {
+        "first_line": 4872,
+        "last_line": 4883,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "unsafe fn count_cstr_array(strings: *mut *mut u8) -> usize {\n    if strings.is_null() {\n        return 0;\n    }\n\n    let mut count = 0usize;\n    while unsafe { !(*strings.add(count)).is_null() } {\n        count += 1;\n    }\n    count\n}\n\n"
+      },
+      {
+        "first_line": 5879,
+        "last_line": 5995,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "pub unsafe extern \"C\" fn mcexec_flatten_strings_result(\n    pre_strings: *mut u8,\n    strings: *mut *mut u8,\n    flat: *mut *mut u8,\n) -> i32 {\n    if strings.is_null() || flat.is_null() {\n        return 0;\n    }\n\n    let nr_strings = unsafe { count_cstr_array(strings) };\n    let mut pre_strings_count = 0usize;\n    let mut pre_strings_len = 0usize;\n    let pre_strings_flat = pre_strings as *const isize;\n\n    let mut full_len = core::mem::size_of::<isize>() + core::mem::size_of::<*mut u8>();\n    if !pre_strings.is_null() {\n        pre_strings_count = unsafe { *pre_strings_flat } as usize;\n        let pre_end = unsafe { *pre_strings_flat.add(pre_strings_count + 1) } as usize;\n        let pre_header_len = core::mem::size_of::<isize>() * (pre_strings_count + 2);\n        if pre_end < pre_header_len {\n            return 0;\n        }\n        pre_strings_len = pre_end - pre_header_len;\n        let Some(next_len) = full_len\n            .checked_add(pre_strings_count * core::mem::size_of::<isize>())\n            .and_then(|v| v.checked_add(pre_strings_len))\n        else {\n            return 0;\n        };\n        full_len = next_len;\n    }\n\n    let mut idx = 0usize;\n    while idx < nr_strings {\n        let string = unsafe { *strings.add(idx) };\n        let len = unsafe { cstr_len(string as *const u8) } + 1;\n        let Some(next_len) = full_len\n            .checked_add(core::mem::size_of::<*mut u8>())\n            .and_then(|v| v.checked_add(len))\n        else {\n            return 0;\n        };\n        full_len = next_len;\n        idx += 1;\n    }\n\n    let align = core::mem::size_of::<isize>() - 1;\n    full_len = (full_len + align) & !align;\n    let base = unsafe { malloc(full_len) };\n    if base.is_null() {\n        return 0;\n    }\n    unsafe {\n        zero_bytes(base, full_len);\n    }\n\n    let flat_words = base as *mut isize;\n    unsafe {\n        *flat_words = (nr_strings + pre_strings_count) as isize;\n    }\n\n    let mut out =\n        unsafe { base.add((nr_strings + pre_strings_count + 2) * core::mem::size_of::<isize>()) };\n    if !pre_strings.is_null() {\n        idx = 0;\n        while idx < pre_strings_count {\n            let old_offset = unsafe { *pre_strings_flat.add(idx + 1) };\n            unsafe {\n                *flat_words.add(idx + 1) =\n                    old_offset + (nr_strings * core::mem::size_of::<isize>()) as isize;\n            }\n            idx += 1;\n        }\n\n        let start = unsafe { *pre_strings_flat.add(1) } as usize;\n        unsafe {\n            copy_ptr_bytes(out, pre_strings.add(start), pre_strings_len);\n            out = out.add(pre_strings_len);\n        }\n    }\n\n    idx = 0;\n    while idx < nr_strings {\n        let string = unsafe { *strings.add(idx) };\n        let len = unsafe { cstr_len(string as *const u8) } + 1;\n        unsafe {\n            *flat_words.add(idx + pre_strings_count + 1) = out.offset_from(base) as isize;\n            copy_ptr_bytes(out, string as *const u8, len);\n            out = out.add(len);\n        }\n        idx += 1;\n    }\n\n    let len = unsafe { out.offset_from(base) } as usize;\n    unsafe {\n        *flat_words.add(nr_strings + pre_strings_count + 1) = len as isize;\n        *flat = base;\n    }\n\n    if len > i32::MAX as usize {\n        unsafe {\n            free(base);\n            *flat = core::ptr::null_mut();\n        }\n        return 0;\n    }\n    len as i32\n}\n\n#[no_mangle]\npub unsafe extern \"C\" fn flatten_strings(\n    pre_strings: *mut u8,\n    strings: *mut *mut u8,\n    flat: *mut *mut u8,\n) -> i32 {\n    unsafe { mcexec_flatten_strings_result(pre_strings, strings, flat) }\n}\n"
+      },
+      {
+        "first_line": 5998,
+        "last_line": 6043,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "pub unsafe extern \"C\" fn mcexec_prepare_main_desc_body(\n    desc: *mut c_void,\n    argv_tail: *mut *mut u8,\n    shebang_argv: *mut *mut u8,\n    envs_len: c_int,\n    envs: *mut u8,\n    target_core: c_int,\n    enable_vdso: c_int,\n) {\n    if desc.is_null() {\n        return;\n    }\n\n    unsafe {\n        mcexec_desc_snapshot_rlimits_bridge(desc);\n        mcexec_desc_publish_env_bridge(desc, envs_len, envs);\n    }\n\n    let mut shebang_argv_flat: *mut u8 = core::ptr::null_mut();\n    if !shebang_argv.is_null() {\n        unsafe {\n            flatten_strings(core::ptr::null_mut(), shebang_argv, &mut shebang_argv_flat);\n        }\n    }\n\n    let mut args: *mut u8 = core::ptr::null_mut();\n    let args_len = unsafe { flatten_strings(shebang_argv_flat, argv_tail, &mut args) };\n    unsafe {\n        mcexec_desc_publish_args_cpu_bridge(\n            desc,\n            args_len as c_ulong,\n            args,\n            target_core,\n            enable_vdso,\n        );\n        free(shebang_argv as *mut u8);\n        free(shebang_argv_flat);\n    }\n}\n\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_shebang_argv_extend_result(\n    shebang_argv_p: *mut *mut *mut u8,\n    shebang: *mut u8,\n) -> i32 {\n    if shebang_argv_p.is_null() || shebang.is_null() {\n"
+      },
+      {
+        "first_line": 6599,
+        "last_line": 6637,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "                let mut path_env = unsafe { getenv(COKERNEL_PATH_ENV.as_ptr()) };\n                if path_env.is_null() {\n                    path_env = unsafe { getenv(PATH_ENV.as_ptr()) };\n                }\n                if path_env.is_null() {\n                    return ENOENT;\n                }\n                if !filename_len_lt_255 {\n                    return ENAMETOOLONG;\n                }\n\n                let path_bytes = unsafe { cstr_bytes(path_env as *const u8) };\n                let mut start = 0usize;\n                while start <= path_bytes.len() {\n                    let mut end = start;\n                    while end < path_bytes.len() && byte_at(path_bytes, end) != b':' {\n                        end += 1;\n                    }\n\n                    let token = unsafe { bytes_range(path_bytes, start, end) };\n                    let join_rc =\n                        unsafe { write_joined_path_bytes(token, filename_bytes, path, max_len) };\n                    if join_rc < 0 {\n                        unsafe { mcexec_lookup_array_too_small_bridge() };\n                    } else if unsafe { access(path as *const u8, X_OK) } == 0 {\n                        found = true;\n                        break;\n                    }\n\n                    if end == path_bytes.len() {\n                        break;\n                    }\n                    start = end + 1;\n                }\n\n                if !found {\n                    return ENOENT;\n                }\n            }\n"
+      },
+      {
+        "first_line": 4772,
+        "last_line": 4791,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "pub unsafe extern \"C\" fn mcexec_init_stack_limit_body(argv: *mut *mut u8) -> c_int {\n    const MCEXEC_MAX_STACK_SIZE: u64 = 16 * 1024 * 1024;\n\n    let mut cur = 0u64;\n    let mut max = 0u64;\n    if unsafe { mcexec_main_load_stack_rlimit_bridge(&mut cur, &mut max) } != 0 {\n        return 1;\n    }\n\n    if cur > MCEXEC_MAX_STACK_SIZE {\n        unsafe {\n            mcexec_reduce_stack_body(cur, max, argv);\n            mcexec_main_reduce_stack_failed_bridge();\n        }\n        return 1;\n    }\n\n    0\n}\n\n"
+      },
+      {
+        "first_line": 6793,
+        "last_line": 6831,
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "text": "pub unsafe extern \"C\" fn mcexec_ld_preload_init_body() {\n    let mut libdir = [0u8; PATH_MAX];\n    let mut envbuf = [0u8; PATH_MAX];\n\n    if unsafe { mcexec_find_libdir_body(libdir.as_mut_ptr(), libdir.len()) } < 0 {\n        unsafe { mcexec_ld_preload_find_failed_bridge() };\n        return;\n    }\n\n    let existing = unsafe { mcexec_ld_preload_getenv_bridge(MCKERNEL_LD_PRELOAD_ENV.as_ptr()) };\n    let rc = unsafe {\n        mcexec_build_ld_preload_result(\n            libdir.as_ptr(),\n            existing as *const u8,\n            mcexec_ld_preload_enable_uti_bridge(),\n            mcexec_ld_preload_disable_sched_yield_bridge(),\n            mcexec_ld_preload_enable_qlmpi_bridge(),\n            envbuf.as_mut_ptr(),\n            envbuf.len(),\n        )\n    };\n    if rc < 0 {\n        unsafe { mcexec_ld_preload_line_too_long_bridge() };\n        return;\n    }\n\n    if unsafe { cstr_len(envbuf.as_ptr()) } != 0 {\n        if unsafe { mcexec_ld_preload_setenv_bridge(envbuf.as_ptr()) } < 0 {\n            unsafe { mcexec_ld_preload_setenv_failed_bridge() };\n        }\n        unsafe { mcexec_ld_preload_debug_bridge(envbuf.as_ptr()) };\n    }\n\n    if !unsafe { mcexec_ld_preload_getenv_bridge(LD_PRELOAD_ENVNAME_LITERAL.as_ptr()) }.is_null() {\n        unsafe {\n            mcexec_ld_preload_unsetenv_bridge();\n        }\n    }\n}\n"
+      }
+    ],
+    "expected_flattened_x86_64_layout": {
+      "allocation_aligned_length": 64,
+      "argument_count": 4,
+      "argument_offsets": [
+        48,
+        52,
+        54,
+        55
+      ],
+      "caution": "Flattened transport stores an end offset; actual argv[argc] NULL construction is a runtime assertion, not claimed from this encoded sentinel.",
+      "end_offset": 57,
+      "returned_length": 57,
+      "string_bytes_hex": "617070004100004200"
+    },
+    "linux_argv": [
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "linux_execve_path": "/apps/app",
+    "mckernel_launcher_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ]
+  },
+  "launcher_build_record": {
+    "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/record.json",
+    "sha256": "fcf0861b146a8e64a2fc524c6be8cc47cec940f595772d32bdaec4169ea6a4b2",
+    "size": 60705
+  },
+  "original_packet": {
+    "path": "scripts/application-tests/packets/packet-001.json",
+    "sha256": "b0780b744e0096868fcc9916debba90864f8f8a297031c72654f12289cd3f477",
+    "size": 6075
+  },
+  "record_kind": "independent-source-and-oracle-review",
+  "retained_launcher_binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-application-launcher-20260908-2/rust/executer/user/mcexec",
+    "sha256": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+    "size": 453288
+  },
+  "reviewed_oracles": [
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+      "size": 687
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+      "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+      "size": 730
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+      "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+      "size": 16892
+    }
+  ],
+  "reviewed_packet": {
+    "path": "scripts/application-tests/reviewed/packet-001-v3/review.json",
+    "sha256": "1468456b482ab77315336279ecc1ff279949446181688f54d3981149a8e5e581",
+    "size": 4211
+  },
+  "reviewed_readme": {
+    "path": "scripts/application-tests/reviewed/packet-001-v3/REVIEW.md",
+    "sha256": "9664a3e63c78875c62954829d6d9d13f1ca24109da64e26831857216cf832792",
+    "size": 2529
+  },
+  "reviewed_sources": [
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+      "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+      "size": 777
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+      "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+      "size": 732
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+      "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+      "size": 877
+    }
+  ],
+  "reviewer": "/root/progress_audit independent lane; did not author or modify reviewed fixtures/oracles",
+  "runtime_authorized": false,
+  "runtime_release_requirements": [
+    {
+      "id": "exact-executable-and-argv",
+      "required": "Install /apps/app as the exact pinned ELF, verify inode/file bytes and interpreter/DSO closure; invoke execve with argv arrays, no shell or argv[0] substitution. Same binary in both guest engines. Confirm all four actual arguments and NULL terminator at runtime."
+    },
+    {
+      "id": "exact-environment",
+      "required": "Treat each environment object as a complete replacement, not additions to inherited host/supervisor variables. In particular COKERNEL_PATH must be absent so PATH=/apps:/bin:/usr/bin controls lookup. Capture actual payload environment for both engines, including launcher-added state; three getenv checks do not prove full-environment equality. Pinned launcher may set LD_PRELOAD if library discovery succeeds or MCKERNEL_RLIMIT_STACK when reducing a stack limit above 16 MiB. Freeze and prove handling before execution acceptance; no unreviewed assumptions about those branches."
+    },
+    {
+      "id": "raw-stream-accounting",
+      "required": "Payload oracle bytes are not a claim that combined launcher stderr is empty. Retain complete raw stdout/stderr and separate source-bound launcher diagnostics without generic filtering. Existing ultra-final-checkpoint-20260909.json records an exact launcher stderr prefix; new execution must freeze its own applicable framing/accounting before its first comparison and preserve every byte. Binary stderr oracle additively supersedes the original catalog placeholder empty stderr for this reviewed revision only."
+    },
+    {
+      "id": "bounded-supervision",
+      "required": "Enforce existing 10-second independent payload timeout, 15-second cleanup timeout, 300-second outer host QEMU timeout and 65536-byte limit on each stream. Drain streams concurrently. EINTR continuations are not whole-case reruns; preserve first failure with no hidden retry."
+    },
+    {
+      "id": "complete-negative-oracle-checks",
+      "required": "Before execution release demonstrate rejection of wrong argc/argv0/empty argument position; missing/wrong/empty ALPHA/BETA; any present missing key including empty and NULL text; truncated/extra/swapped/changed stdout/stderr; wrong raw exited status or signal death. Infrastructure tests must not be counted as application acceptance."
+    },
+    {
+      "id": "global-gates-and-repeatability",
+      "required": "Require current-inputs, runner-contract, runtime-transport-fault-injection, dynamic-etexec and a separate reviewed execution release. Bind real McKernel schedule/OS generation/PID/TIDs/matched delegation and normal retirement/owner/pager cleanup, loss accounting, all original resource bounds and repeatability (same_os_repeats=3, fresh_guest_repeats=1). Linux stdout agreement alone does not establish McKernel routing."
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Independent static review plus bounded Python metadata, identity and independent byte-sequence comparisons only. No compiler, application fixture, container, guest or kernel test was run. Compilation authorization applies only to exact identities above under the existing pinned container and limits. It is not a separately reviewed execution release.",
+  "score_credit": {
+    "catalog_cases_accepted": 0,
+    "final_push_points": 0,
+    "migration_points": 0
+  },
+  "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PINNED_COMPILATION"
+}

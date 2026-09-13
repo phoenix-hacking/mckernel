@@ -1,0 +1,146 @@
+{
+  "active_cases_max": 3,
+  "blocked_by": [
+    "current-inputs",
+    "runner-contract",
+    "runtime-transport-fault-injection",
+    "dynamic-etexec"
+  ],
+  "bounds": "All original case resource bounds remain unchanged. New guest execution is disabled.",
+  "case_ids": [
+    "startup.argv-empty",
+    "startup.environment",
+    "startup.stdout-stderr"
+  ],
+  "cases": [
+    {
+      "acceptance_status": "NOT_RUN",
+      "argv": [
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "case_id": "startup.argv-empty",
+      "compile_status": "NOT_RUN",
+      "cwd": "/case/work",
+      "environment": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/apps:/bin:/usr/bin",
+        "TZ": "UTC"
+      },
+      "environment_absent": [
+        "APP_STARTUP_ENV_MISSING"
+      ],
+      "executable_path": "/apps/app",
+      "gid": 0,
+      "groups": [
+        0
+      ],
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+        "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+        "size": 687
+      },
+      "runtime_status": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+        "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+        "size": 777
+      },
+      "uid": 0,
+      "umask": 18
+    },
+    {
+      "acceptance_status": "NOT_RUN",
+      "argv": [
+        "/apps/startup.environment"
+      ],
+      "case_id": "startup.environment",
+      "compile_status": "NOT_RUN",
+      "cwd": "/case/work",
+      "environment": {
+        "APP_STARTUP_ENV_ALPHA": "ALPHA-STARTUP-VALUE",
+        "APP_STARTUP_ENV_BETA": "BETA-STARTUP-VALUE",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/apps:/bin:/usr/bin",
+        "TZ": "UTC"
+      },
+      "environment_absent": [
+        "APP_STARTUP_ENV_MISSING"
+      ],
+      "executable_path": "/apps/startup.environment",
+      "gid": 0,
+      "groups": [
+        0
+      ],
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.oracle.json",
+        "sha256": "bb91393cde48e076d4ed24eed4e7d19fd6cdcc31b4a54c194339507819d812fc",
+        "size": 730
+      },
+      "runtime_status": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.environment.c",
+        "sha256": "dbc38fdfb6f09e22663ccd75bcb381da5cd224d1a8c684549c744c32939aaaba",
+        "size": 732
+      },
+      "uid": 0,
+      "umask": 18
+    },
+    {
+      "acceptance_status": "NOT_RUN",
+      "argv": [
+        "/apps/startup.stdout-stderr"
+      ],
+      "case_id": "startup.stdout-stderr",
+      "compile_status": "NOT_RUN",
+      "cwd": "/case/work",
+      "environment": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/apps:/bin:/usr/bin",
+        "TZ": "UTC"
+      },
+      "environment_absent": [
+        "APP_STARTUP_ENV_MISSING"
+      ],
+      "executable_path": "/apps/startup.stdout-stderr",
+      "gid": 0,
+      "groups": [
+        0
+      ],
+      "oracle": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.oracle.json",
+        "sha256": "35506931774eab549df110f2249093b81e6f5ee36c719d6e59d42d8ca675bed4",
+        "size": 16892
+      },
+      "runtime_status": "NOT_RUN",
+      "source": {
+        "path": "scripts/application-tests/reviewed/packet-001-v3/startup.stdout-stderr.c",
+        "sha256": "d1464ba0b7694b2e74a54935b26b72b2c7da8e078f1fa45711c41e9a55e79ec5",
+        "size": 877
+      },
+      "uid": 0,
+      "umask": 18
+    }
+  ],
+  "catalog": {
+    "path": "scripts/application-tests/cases.json",
+    "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+    "size": 1387917
+  },
+  "execution_enabled": false,
+  "mode": "fixture-review-and-compile",
+  "original_packet": {
+    "path": "scripts/application-tests/packets/packet-001.json",
+    "sha256": "b0780b744e0096868fcc9916debba90864f8f8a297031c72654f12289cd3f477",
+    "size": 6075
+  },
+  "packet_id": "packet-001",
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "schema_version": 1,
+  "version": 3
+}

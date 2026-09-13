@@ -1,0 +1,43 @@
+{
+  "application_acceptance": false,
+  "author_test_evidence": {
+    "duration_seconds": 4.954,
+    "errors": 0,
+    "failures": 0,
+    "log": {
+      "path": "/tmp/application-supervisor-origin-validation-vgsy7807/test.log",
+      "sha256": "36164e2005b2321891e089265dfb2271e408d8e1857075a08f0a71b8452e197f",
+      "size": 1889
+    },
+    "raw_log": "test_actual_signal_differs_from_exit_128_plus_signal (__main__.ApplicationSupervisorTests) ... ok\ntest_concurrent_pipe_pressure_is_collected_exactly (__main__.ApplicationSupervisorTests) ... ok\ntest_delayed_spawn_return_cannot_shift_payload_deadline (__main__.ApplicationSupervisorTests) ... ok\ntest_empty_streams_allow_zero_limit (__main__.ApplicationSupervisorTests) ... ok\ntest_explicit_environment_cwd_stdin_and_literal_argv (__main__.ApplicationSupervisorTests) ... ok\ntest_explicit_executable_preserves_custom_argv0_and_empty_argument (__main__.ApplicationSupervisorTests) ... ok\ntest_inherited_pipe_holder_is_killed_and_reaped (__main__.ApplicationSupervisorTests) ... ok\ntest_late_completion_observation_cannot_accept_overdue_exit (__main__.ApplicationSupervisorTests) ... ok\ntest_malformed_arguments_fail_before_attempt_creation (__main__.ApplicationSupervisorTests) ... ok\ntest_missing_executable_preserves_launch_error (__main__.ApplicationSupervisorTests) ... ok\ntest_nonregular_or_symlink_stdin_is_rejected_without_blocking (__main__.ApplicationSupervisorTests) ... ok\ntest_output_limit_is_explicit_failure_with_bounded_artifact (__main__.ApplicationSupervisorTests) ... ok\ntest_parent_keyboard_interrupt_preserves_failure_and_cleans_child (__main__.ApplicationSupervisorTests) ... ok\ntest_preexisting_attempt_is_never_overwritten (__main__.ApplicationSupervisorTests) ... ok\ntest_session_escaping_pipe_holder_is_adopted_and_reaped (__main__.ApplicationSupervisorTests) ... ok\ntest_stderr_limit_is_independent (__main__.ApplicationSupervisorTests) ... ok\ntest_stopped_private_worker_has_independent_deadline_and_tree_rescue (__main__.ApplicationSupervisorTests) ... ok\ntest_timeout_kills_sigterm_ignoring_process_and_retains_prefix (__main__.ApplicationSupervisorTests) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 4.954s\n\nOK\n",
+    "scope": "bounded infrastructure child-process tests; not catalog application acceptance",
+    "tests": 18
+  },
+  "created_utc": "2026-09-13T10:02:25.338694+00:00",
+  "date": "2026-09-13",
+  "execution_enabled": false,
+  "independent_review": "Read changed source and focused delayed-Popen-return test; confirmed start assignment precedes Popen. Read retained author18-test log. No supervisor/application/guest execution by this reviewer.",
+  "prior_review": {
+    "path": "docs/verification/stability-runtime-contract-review-20260913.json",
+    "sha256": "003c9951fe3e3c6b7766d1c0c98c10ede91cb80620c4cd2b228936b8d1c49794",
+    "size": 20739
+  },
+  "production_gate_credit": false,
+  "record_kind": "independent-review-addendum",
+  "remaining": "Root pinned-environment verification and full runtime/backend/provenance/capability/execution-release work remain required. No earlier review or original evidence is overwritten.",
+  "resolved_finding": "The remaining supervisor deadline-origin issue in the prior immutable review is now corrected. Executable identity preparation precedes the timestamp; start/deadline are recorded immediately before Popen, before child execution or a delayed return can occur. Process identity read and stream pumping use this original deadline.",
+  "reviewed_supervisor": {
+    "path": "scripts/application-tests/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "size": 24564
+  },
+  "reviewed_supervisor_tests": {
+    "path": "scripts/tests/test_application_supervisor.py",
+    "sha256": "e8e91cb7a2d65fda236711e3af202a7f874c365b34e493b6baa387e777f15262",
+    "size": 21438
+  },
+  "reviewer": "/root/progress_audit",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "status": "DEADLINE_ORIGIN_FINDING_RESOLVED_IN_SOURCE_AND_FOCUSED_TESTS"
+}

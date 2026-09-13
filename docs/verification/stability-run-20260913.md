@@ -41,6 +41,38 @@ Independent lanes own draft reconciliation, supervision and narrow fault review.
 Only the coordinator launches serialized container builds/guests. Do not run
 host kernel/module operations or use host application execution as guest evidence.
 
+## First implementation checkpoint
+
+All eight original suites passed fresh guest runs on the retained module1/image3:
+memory, files, threads, signals, both original control ABIs, ordinary signal ABI,
+and futex/child-TID. `stability-baseline-20260913.json` records ten complete capture
+archives and exact current 57 native / 44 guest compiler source bindings. This
+acceptance belongs to that input pair; production edits require a new build and
+affected replays.
+
+`application-draft-audit-20260913.json` reconciles all 97 reports and 273 cases.
+The additive corrections preserve nine broken original references; the audit
+also records a queue-identity defect and seven input-length discrepancies.
+Reviewer questions are classified, not automatically answered. The initial
+`stability-state-20260913.json` is a dated inventory snapshot, not a current
+source-verification claim after later edits.
+
+The three corrected startup fixtures in `reviewed/packet-001-v3` passed independent
+source review and pinned compilation. See `stability-packet001-review-20260913.json`,
+`stability-compile-helper-review-20260913.json`, and
+`stability-packet001-compile-20260913-1.json`. New catalog totals are three compiled,
+zero executed, zero accepted. Source review freezes argv, environment and binary
+streams; actual guest execution and all transport prerequisites remain pending.
+
+The H04 admission/quarantine and pump-order repair is integrated after all 50
+controlled exact-method tests passed; see `stability-service-failure-tests-20260913-3.json`.
+The native module rebuild and guest replay are pending. The original source review
+and candidate are preserved in `stability-service-failure-review-20260913.md`.
+Controlled tests are distinct from actual guest failure evidence. Preserve every
+failed attempt, including the initial stage binding mismatch, harness output-path
+collision and the test's incorrect pre-RET response snapshot. Supervisor/runtime
+contract development and the typed owner observer remain active infrastructure.
+
 ## Runtime and evidence discipline
 
 The original catalog, packets, validator and draft release remain unchanged.

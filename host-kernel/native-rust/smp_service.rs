@@ -138,11 +138,7 @@ struct Runtime {
 
 impl Runtime {
     fn fail(&self, error: Error) {
-        if self
-            .error
-            .compare_exchange(0, error.to_errno(), Ordering::AcqRel, Ordering::Acquire)
-            .is_ok()
-        {
+        if self.application.fail_service(&self.error, error) {
             pr_err!("IHK-SMP: continuing service error os={} generation={} errno={}; workers and all started owners retained\n",
                 self.owner.slot(), self.owner.generation(), error.to_errno());
         }
@@ -538,18 +534,28 @@ impl Runtime {
         self.procfs.advance();
         // A failure in one service must not prevent callback replies or
         // already-published exchanges from draining in the other service.
-        for result in [
-            self.pump_master(),
-            self.pump_regular(),
-            self.publish_remote(),
-            self.publish_applications(),
-            self.publish_syscalls(),
-            self.application.advance(),
-            self.publish_procfs(),
-        ] {
-            if let Err(error) = result {
-                self.fail(error);
-            }
+        // Handle each result before invoking the next service. An array of
+        // Results would eagerly publish later work before recording failure.
+        if let Err(error) = self.pump_master() {
+            self.fail(error);
+        }
+        if let Err(error) = self.pump_regular() {
+            self.fail(error);
+        }
+        if let Err(error) = self.publish_remote() {
+            self.fail(error);
+        }
+        if let Err(error) = self.publish_applications() {
+            self.fail(error);
+        }
+        if let Err(error) = self.publish_syscalls() {
+            self.fail(error);
+        }
+        if let Err(error) = self.application.advance() {
+            self.fail(error);
+        }
+        if let Err(error) = self.publish_procfs() {
+            self.fail(error);
         }
     }
 

@@ -615,6 +615,24 @@ impl Remote {
         self.changed.notify_all();
     }
 
+    /// Record a continuing-service failure at the same admission boundary as
+    /// transport quarantine. The referenced error belongs to our retained
+    /// Runtime. Callers hold none of the application/publication locks.
+    pub(crate) fn fail_service(&self, service_error: &AtomicI32, error: Error) -> bool {
+        let mut slots = self.slots.lock();
+        let first = service_error.compare_exchange(
+            0,
+            error.to_errno(),
+            Ordering::AcqRel,
+            Ordering::Acquire,
+        );
+        let recorded = first.err().unwrap_or(error.to_errno());
+        self.quarantine_transport(&mut slots, errno(recorded));
+        drop(slots);
+        self.changed.notify_all();
+        first.is_ok()
+    }
+
     fn finish_publication(
         &self,
         slots: &mut [Option<Entry>],

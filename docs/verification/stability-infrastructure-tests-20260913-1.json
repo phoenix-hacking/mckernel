@@ -1,0 +1,693 @@
+{
+  "application_acceptance": false,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/git",
+        "-C",
+        "/workspace",
+        "diff",
+        "--check"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/git",
+          "-C",
+          "/workspace",
+          "diff",
+          "--check"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 10.0,
+        "cwd": "/workspace",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.050932738988194615,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TMPDIR": "/work/stability-infrastructure-tests-20260913-1/tmp",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505747.357652877,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/git",
+          "sha256": "731889ec77f39fd6a4a55affdf8a5b35a8e73560b7840a80358bc4b444dc950f",
+          "size": 4541184
+        },
+        "executable_path": "/usr/bin/git",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505747.359712429,
+        "monotonic_started": 505747.30877969,
+        "payload_completion_observed_monotonic": 505747.357646703,
+        "payload_monotonic_deadline": 505867.319594481,
+        "payload_monotonic_started": 505747.319594481,
+        "process": {
+          "pgid": 8,
+          "pid": 8,
+          "ppid": 7,
+          "session": 8,
+          "starttime_ticks": 50574731,
+          "state": "D"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/diff-check/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/diff-check/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 7,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "diff-check"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/test_application_draft_audit.py",
+        "-v"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/test_application_draft_audit.py",
+          "-v"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 10.0,
+        "cwd": "/workspace",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 1.681683917006012,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TMPDIR": "/work/stability-infrastructure-tests-20260913-1/tmp",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505749.095361072,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505749.10600275,
+        "monotonic_started": 505747.424318833,
+        "payload_completion_observed_monotonic": 505749.095348431,
+        "payload_monotonic_deadline": 505867.42492672,
+        "payload_monotonic_started": 505747.42492672,
+        "process": {
+          "pgid": 31,
+          "pid": 31,
+          "ppid": 30,
+          "session": 31,
+          "starttime_ticks": 50574742,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_draft_audit.py/stderr.bin",
+              "sha256": "13c8ef98fe9398f4d3382a62f632a279f1a945028f7dac94e18c62ec45b8b6cb",
+              "size": 1833
+            },
+            "bytes_observed": 1833,
+            "bytes_retained": 1833,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_draft_audit.py/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 30,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "test_application_draft_audit.py"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/test_verification_state.py",
+        "-v"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/test_verification_state.py",
+          "-v"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 10.0,
+        "cwd": "/workspace",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 3.3679503219900653,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TMPDIR": "/work/stability-infrastructure-tests-20260913-1/tmp",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505752.566083194,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505752.576052835,
+        "monotonic_started": 505749.208102513,
+        "payload_completion_observed_monotonic": 505752.566074974,
+        "payload_monotonic_deadline": 505869.208756232,
+        "payload_monotonic_started": 505749.208756232,
+        "process": {
+          "pgid": 33,
+          "pid": 33,
+          "ppid": 32,
+          "session": 33,
+          "starttime_ticks": 50574920,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_verification_state.py/stderr.bin",
+              "sha256": "22a613e9009ca060b06b59b8876c54fa7eb3ed29ba73371df53b35f6b5a3386e",
+              "size": 1413
+            },
+            "bytes_observed": 1413,
+            "bytes_retained": 1413,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_verification_state.py/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 32,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "test_verification_state.py"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/test_application_supervisor.py",
+        "-v"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/test_application_supervisor.py",
+          "-v"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 10.0,
+        "cwd": "/workspace",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 4.937478265026584,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TMPDIR": "/work/stability-infrastructure-tests-20260913-1/tmp",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505757.634184632,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505757.637325124,
+        "monotonic_started": 505752.699846859,
+        "payload_completion_observed_monotonic": 505757.634175816,
+        "payload_monotonic_deadline": 505872.70063083,
+        "payload_monotonic_started": 505752.70063083,
+        "process": {
+          "pgid": 35,
+          "pid": 35,
+          "ppid": 34,
+          "session": 35,
+          "starttime_ticks": 50575270,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_supervisor.py/stderr.bin",
+              "sha256": "c72cceb53c0ef00b4c9007e7cda3a423043060cce87c4064de342822766f23da",
+              "size": 2869
+            },
+            "bytes_observed": 2869,
+            "bytes_retained": 2869,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_supervisor.py/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 34,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "test_application_supervisor.py"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/workspace/scripts/tests/test_application_runtime_contracts.py",
+        "-v"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/workspace/scripts/tests/test_application_runtime_contracts.py",
+          "-v"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 10.0,
+        "cwd": "/workspace",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 1.653714197978843,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TMPDIR": "/work/stability-infrastructure-tests-20260913-1/tmp",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505759.362154807,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+          "size": 15800
+        },
+        "executable_path": "/usr/bin/python3",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505759.371635273,
+        "monotonic_started": 505757.717921075,
+        "payload_completion_observed_monotonic": 505759.362148005,
+        "payload_monotonic_deadline": 505877.718527358,
+        "payload_monotonic_started": 505757.718527358,
+        "process": {
+          "pgid": 74,
+          "pid": 74,
+          "ppid": 73,
+          "session": 74,
+          "starttime_ticks": 50575771,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_runtime_contracts.py/stderr.bin",
+              "sha256": "e1ea77661970202fd0d9c046276c83381788c198aa411bdd24c5e29df8b91489",
+              "size": 3570
+            },
+            "bytes_observed": 3570,
+            "bytes_retained": 3570,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-infrastructure-tests-20260913-1/test_application_runtime_contracts.py/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 73,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "test_application_runtime_contracts.py"
+    }
+  ],
+  "finished_utc": "2026-09-13T10:01:54.901508+00:00",
+  "inputs": [
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/application-tests/supervisor.py",
+        "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+        "size": 24564
+      },
+      "original": {
+        "path": "/workspace/scripts/application-tests/supervisor.py",
+        "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+        "size": 24564
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/application-tests/runtime_contracts.py",
+        "sha256": "6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e",
+        "size": 27703
+      },
+      "original": {
+        "path": "/workspace/scripts/application-tests/runtime_contracts.py",
+        "sha256": "6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e",
+        "size": 27703
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/application-tests/runtime-contract.md",
+        "sha256": "88751b5d92ac319b5e7b2b7f4be799f82498cb9bf72a33dde5db3c7ff02c3d89",
+        "size": 9739
+      },
+      "original": {
+        "path": "/workspace/scripts/application-tests/runtime-contract.md",
+        "sha256": "88751b5d92ac319b5e7b2b7f4be799f82498cb9bf72a33dde5db3c7ff02c3d89",
+        "size": 9739
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/application-tests/audit_drafts.py",
+        "sha256": "72a4ab693fcbc0af4c781b7d18be91e7a5b024a267a516d8ffa7bc43af2510f1",
+        "size": 19902
+      },
+      "original": {
+        "path": "/workspace/scripts/application-tests/audit_drafts.py",
+        "sha256": "72a4ab693fcbc0af4c781b7d18be91e7a5b024a267a516d8ffa7bc43af2510f1",
+        "size": 19902
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/application-tests/verification_state.py",
+        "sha256": "f9dcb5f9af2741752025fba270f15cec4af1b8179885cd1bd4c02ef90a6ef961",
+        "size": 16371
+      },
+      "original": {
+        "path": "/workspace/scripts/application-tests/verification_state.py",
+        "sha256": "f9dcb5f9af2741752025fba270f15cec4af1b8179885cd1bd4c02ef90a6ef961",
+        "size": 16371
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/tests/test_application_supervisor.py",
+        "sha256": "e8e91cb7a2d65fda236711e3af202a7f874c365b34e493b6baa387e777f15262",
+        "size": 21438
+      },
+      "original": {
+        "path": "/workspace/scripts/tests/test_application_supervisor.py",
+        "sha256": "e8e91cb7a2d65fda236711e3af202a7f874c365b34e493b6baa387e777f15262",
+        "size": 21438
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/tests/test_application_runtime_contracts.py",
+        "sha256": "47c79c6eea7335a7ffccbd51f0f924d72abe04bb6a66787ad308c2a768d1e4e1",
+        "size": 25122
+      },
+      "original": {
+        "path": "/workspace/scripts/tests/test_application_runtime_contracts.py",
+        "sha256": "47c79c6eea7335a7ffccbd51f0f924d72abe04bb6a66787ad308c2a768d1e4e1",
+        "size": 25122
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/tests/test_application_draft_audit.py",
+        "sha256": "9c5aaebaece6057d08363d5170ab0a8e159385345dded9938e635932877a9119",
+        "size": 8010
+      },
+      "original": {
+        "path": "/workspace/scripts/tests/test_application_draft_audit.py",
+        "sha256": "9c5aaebaece6057d08363d5170ab0a8e159385345dded9938e635932877a9119",
+        "size": 8010
+      }
+    },
+    {
+      "captured": {
+        "path": "/work/stability-infrastructure-tests-20260913-1/source/scripts/tests/test_verification_state.py",
+        "sha256": "a1f2f6c52da91ab6c7dc1e9dc69f147c95c6b6e5ebb47202594e927883544966",
+        "size": 6918
+      },
+      "original": {
+        "path": "/workspace/scripts/tests/test_verification_state.py",
+        "sha256": "a1f2f6c52da91ab6c7dc1e9dc69f147c95c6b6e5ebb47202594e927883544966",
+        "size": 6918
+      }
+    }
+  ],
+  "phase": "test_application_runtime_contracts.py",
+  "production_gate_credit": false,
+  "scope": "Pinned infrastructure self-tests only; no application payload or guest execution",
+  "started_utc": "2026-09-13T10:01:42.748315+00:00",
+  "status": "PASS"
+}

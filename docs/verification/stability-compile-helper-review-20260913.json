@@ -1,0 +1,220 @@
+{
+  "application_acceptance": false,
+  "compile_authorized": true,
+  "created_utc": "2026-09-13T09:50:07.795924+00:00",
+  "date": "2026-09-13",
+  "evidence_expectations_for_actual_compile": [
+    "Root must invoke the exact reviewed helper/packet/review through the external pinned native wrapper and retain that invocation, selected image digest, wrapper identity, resource/isolation evidence and result. UID and CPU affinity checks alone are insufficient proof.",
+    "Expected successful record contains original and copied source/oracle identities, exact compile and separate link argv, retained object/dependency/link map, compiler versions/tool hashes, full ELF headers/program headers/dynamic table and disassembly, interpreter/transitive loader-traced DSO identities and copies.",
+    "Each subprocess has a 60-second timeout, below catalog preparation bound 120 seconds. The external wrapper serial lock, 4 CPU/12 GiB/no swap/512-task bounds, network none, read-only repository/image and whole-container cleanup remain required.",
+    "All success/status fields apply to compilation/inspection only. ldd performs loader dependency tracing; there is no payload main or Linux/McKernel application reference acceptance. Existing runtime release gates and original case bounds remain unchanged.",
+    "Stop and preserve the original evidence on the first failure; no hidden retry or omission of missing dependency files. An actual compile failure requires a new preserved attempt after diagnosis."
+  ],
+  "execution_enabled": false,
+  "external_native_image_manifest": {
+    "path": "/home/holden/mckernel-work/logs/image-native.json",
+    "sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+    "size": 4785
+  },
+  "external_wrapper": {
+    "path": "/home/holden/mckernel-work/setup/container-run.py",
+    "sha256": "008c0c7b320d0c880d701979b88455d25bd1222115fbbb12893cf46bd8ab5aab",
+    "size": 4169
+  },
+  "findings_and_resolutions": [
+    {
+      "evidence": [
+        {
+          "line": 163,
+          "text": "            require(macros == ['_GNU_SOURCE'], 'unreviewed compiler feature macros')"
+        },
+        {
+          "line": 165,
+          "text": "            run(case_id + '-compile', ['cc', '-std=c11', '-O2', '-g', '-Wall', '-Wextra', '-Werror',"
+        },
+        {
+          "line": 166,
+          "text": "                '-fno-pie', '-pthread', '-D_GNU_SOURCE', '-MD', '-MF', str(dependency_file),"
+        },
+        {
+          "line": 168,
+          "text": "            run(case_id + '-link', ['cc', '-no-pie', '-pthread', '-Wl,-z,noexecstack',"
+        }
+      ],
+      "id": "compile-profile",
+      "original_finding": "Initial helper selected gnu11 and omitted the catalog pthread and _GNU_SOURCE compilation contract.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 164,
+          "text": "            object_file = case_out / 'payload.o'"
+        },
+        {
+          "line": 167,
+          "text": "                '-c', str(source), '-o', str(object_file)])"
+        },
+        {
+          "line": 169,
+          "text": "                '-Wl,-Map,' + str(case_out / 'link.map'), str(object_file), '-o', str(executable)])"
+        },
+        {
+          "line": 192,
+          "text": "            compiler_paths.update(re.findall(r'^LOAD (/.+)$', (case_out / 'link.map').read_text(), re.M))"
+        }
+      ],
+      "id": "retained-link-object",
+      "original_finding": "Initial one-step cc compile/link would delete its temporary object before hashing all linker LOAD entries.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 155,
+          "text": "            for copied, expected in ((source, case['source']), (case_out / 'oracle.json', case['oracle'])):"
+        },
+        {
+          "line": 158,
+          "text": "                        'copied reviewed input differs: ' + str(copied))"
+        }
+      ],
+      "id": "copied-input-binding",
+      "original_finding": "Initial check-original then copy did not verify the copied bytes against the reviewed source/oracle.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 117,
+          "text": "        require(review['runtime_authorized'] is False and review['execution_enabled'] is False,"
+        },
+        {
+          "line": 129,
+          "text": "        require(review['reviewed_sources'] == [case['source'] for case in packet['cases']]"
+        },
+        {
+          "line": 130,
+          "text": "                and review['reviewed_oracles'] == [case['oracle'] for case in packet['cases']],"
+        },
+        {
+          "line": 132,
+          "text": "        for row in review['current_launcher_sources']:"
+        }
+      ],
+      "id": "independent-review-membership",
+      "original_finding": "Requested explicit review source/oracle membership, disabled runtime flags, and launcher source identity binding.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 61,
+          "text": "    build_environment = dict(PATH='/usr/local/bin:/usr/bin:/bin', LANG='C', LC_ALL='C',"
+        },
+        {
+          "line": 62,
+          "text": "                             TZ='UTC', TMPDIR=str(out / 'tmp'))"
+        },
+        {
+          "line": 101,
+          "text": "                                    stderr=subprocess.STDOUT, timeout=timeout, env=build_environment)"
+        },
+        {
+          "line": 141,
+          "text": "            path = Path(shutil.which(tool, path=build_environment['PATH'])).resolve()"
+        }
+      ],
+      "id": "deterministic-command-environment",
+      "original_finding": "Inherited locale/compiler environment could influence tool resolution or parsed diagnostics.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 187,
+          "text": "                original_library, captured_library = identity(path), identity(target)"
+        },
+        {
+          "line": 189,
+          "text": "                        (captured_library['size'], captured_library['sha256']), 'copied DSO differs')"
+        },
+        {
+          "line": 206,
+          "text": "                for row in (library['original'], library['captured']):"
+        },
+        {
+          "line": 207,
+          "text": "                    require(identity(Path(row['path'])) == row, 'runtime library changed during compilation')"
+        }
+      ],
+      "id": "runtime-library-copy-and-recheck",
+      "original_finding": "Initial helper recorded but did not compare copied DSOs or recheck runtime library identities at completion.",
+      "resolution": "RESOLVED_IN_SOURCE"
+    },
+    {
+      "evidence": [
+        {
+          "line": 70,
+          "text": "    record['isolation_authority'] = 'external pinned container-run.py wrapper and its retained invocation'"
+        },
+        {
+          "line": 71,
+          "text": "    record['ldd_scope'] = 'ELF loader dependency tracing only; no payload main/reference execution credit'"
+        }
+      ],
+      "id": "external-isolation-and-loader-scope",
+      "original_finding": "UID/affinity are not complete container provenance; ldd traces through the ELF loader.",
+      "resolution": "SCOPE_CLARIFIED_WITH_EXTERNAL_EXECUTION_PREREQUISITE"
+    }
+  ],
+  "independent_packet_review": {
+    "path": "docs/verification/stability-packet001-review-20260913.json",
+    "sha256": "61fc92ad9b60ec2ca39121a32dae0ebce67055cf6bc4478dffbf9bc751dca07c",
+    "size": 64134
+  },
+  "limitations": [
+    "This is source review of exactly three fixed-source C fixtures and this helper version. It does not establish successful pinned compilation, complete compiler hermeticity, same effective guest environment, runtime routing/cleanup, application semantics or production acceptance.",
+    "No dynamic negative helper tests or compilation were run by this review lane. Subsequent actual compilation must verify its generated ELF and captured dependency records.",
+    "The initial helper bytes were reviewed in the conversation before root changed them; this artifact binds the final revised helper and preserves the pre-execution finding descriptions, not a separate archived initial source snapshot."
+  ],
+  "production_gate_credit": false,
+  "record_kind": "independent-compile-helper-source-review",
+  "reviewed_helper": {
+    "path": "scripts/application-tests/compile_reviewed.py",
+    "sha256": "cca8642312fbee7eb43c5612ff7f924f27463c1af211ea2feaff084e3f8029b8",
+    "size": 12485
+  },
+  "reviewed_packet": {
+    "path": "scripts/application-tests/reviewed/packet-001-v3/review.json",
+    "sha256": "1468456b482ab77315336279ecc1ff279949446181688f54d3981149a8e5e581",
+    "size": 4211
+  },
+  "reviewer": "/root/progress_audit independent lane; root authored and changed helper",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "status": "STATIC_REVIEW_ACCEPTABLE_FOR_PINNED_COMPILATION",
+  "unresolved_compile_blockers": [],
+  "verification_performed": [
+    {
+      "kind": "manual source review",
+      "scope": "Entire updated helper read against original packet/catalog profile, independent source/oracle review, and actual external wrapper enforcement."
+    },
+    {
+      "kind": "Python AST syntax parse",
+      "scope": "ast.parse only; helper main, compiler, loader, payload, container and guest were not invoked.",
+      "status": "MATCHED_EXPECTATION"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "scripts/application-tests/compile_reviewed.py"
+      ],
+      "exit_code": 0,
+      "kind": "whitespace check"
+    }
+  ]
+}

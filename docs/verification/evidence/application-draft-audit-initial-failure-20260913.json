@@ -1,0 +1,19 @@
+{
+  "cause": "packet-007 immutable report stores catalog SHA-256 in queue_sha256; its summary report digest remains valid.",
+  "command_argv": [
+    "python3",
+    "-B",
+    "scripts/application-tests/audit_drafts.py"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "date": "2026-09-13",
+  "environment": "Host read-only Python audit; no container, guest, build or fixture execution.",
+  "exit_code": 1,
+  "followup": "Record the exact original field, expected queue digest and original report digest in additive metadata_discrepancies; do not rewrite the report.",
+  "limitation": "The first uncommitted auditor source revision was not separately archived before this failure; action and exact tool output are retained here and in kernel.log.",
+  "original_reports_modified": false,
+  "schema_version": 1,
+  "status": "PRESERVED_ORIGINAL_AUDIT_FAILURE",
+  "stderr": "draft audit rejected: report queue or packet identity differs\n",
+  "stdout": ""
+}
