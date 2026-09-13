@@ -75,6 +75,42 @@ failed attempt, including the initial stage binding mismatch, harness output-pat
 collision and the test's incorrect pre-RET response snapshot. Supervisor/runtime
 contract development and the typed owner observer remain active infrastructure.
 
+## Current fault milestone
+
+The first of four actual fault modes is independently verified. Fresh guest6
+passes the hard failure before publication contract; the acceptance and exact
+source/runtime evidence are in
+`stability-prepublish-hard-independent-review-20260913.json`. Its actual RET
+completes in 38,475,001 ns, and all terminal ownership rows remain identical
+through 5,063,902,535 ns. Real physical request/ring/response captures, native
+selection and counters, input/UART/QMP ordering, raw waits, export and owned
+cleanup were joined independently. This is a single fault-mode acceptance,
+with no whole-transport, physical-full-ring or production gate credit.
+
+The original guest5 failure remains unchanged: its first terminal snapshot
+preceded final launcher descriptor closure. The reviewed owner-phase-v2
+controller observes the original launcher waitable and both pipe EOFs before
+Terminal, retaining WNOWAIT identity through the quiet interval. Eight actual
+Linux boundary scenarios passed. Full failure/build/preparation/test captures
+are mapped by `stability-terminal-integration-20260913-1.json`; guest6 and the
+next mode's isolated build are in `stability-hard-collection-20260913-1.json`.
+
+Permanent backpressure is the next actual mode. Its isolated module builds,
+the seven measured observer stack paths are unchanged, and fresh preparation2
+and preflight2 pass. Preparation1's missing reused-parser-proof field is
+preserved; the corrected preparer checks the exact original 19-case result
+and matching parser/test bytes. `stability-permanent-readiness-20260913-1.json`
+retains both attempts. The permanent guest has not run at this checkpoint.
+Its original five-second production timer, 15-second return bound, stable
+quarantine and admission timeout must be observed in the new guest.
+
+Application metadata preflight passes twelve checks; the runner still records
+NOT_RUN with acceptance false. A generic C request decoder is in source review.
+Catalog totals remain three fixtures compiled, zero executed and zero accepted.
+The other fault modes, physical ring saturation, VM invalidation ownership,
+generic native payload observations, lifecycle restoration and the complete
+Rust/assembly and production qualification requirements remain in scope.
+
 ## Runtime and evidence discipline
 
 The original catalog, packets, validator and draft release remain unchanged.

@@ -83,7 +83,9 @@ def prepare(args):
     assert os.getuid() == 1000 and os.sched_getaffinity(0) == {2, 3, 4, 5}
     assert args.output.is_absolute() and args.module.is_absolute()
     assert re.fullmatch('[0-9a-f]{32}', args.nonce) and int(args.nonce, 16)
-    assert args.mode == 'prepublish-hard'  # Release other modes in separate reviewed versions.
+    assert args.mode in ('prepublish-hard', 'permanent-backpressure')
+    if args.mode == 'permanent-backpressure':
+        assert args.controller_profile == 'owner-phase-v2' and args.payload_profile == 'runnable-thread-v1'
     work = Path('/work')
     assert shutil.disk_usage(work).free > 3 * 1024**3
     args.output.mkdir()
@@ -119,7 +121,32 @@ def prepare(args):
         baseline_record = load(baseline, 'PASS')
         module_record = load(args.module, 'PASS_BUILD_ONLY')
         assert module_record['mode'] == args.mode and module_record['shared_production_trees_restored']
-        assert module_record['verification_only'] and module_record['owner_parser_tests'] == 19
+        assert module_record['verification_only']
+        if 'reused_owner_parser_tests' in module_record:
+            reuse = module_record['reused_owner_parser_tests']
+            assert reuse['passed_cases'] == 19 and reuse['rerun'] is False
+            prior_path = Path(reuse['record']['path'])
+            assert prior_path.is_relative_to(work) and prior_path.name == 'record.json'
+            assert identity(prior_path) == reuse['record']
+            prior = load(prior_path.parent, 'PASS_BUILD_ONLY')
+            assert prior['owner_parser_tests'] == 19
+            checks = [row for row in prior['commands'] if row['label'] == 'owner-parser-tests']
+            assert len(checks) == 1
+            collected = checks[0]['collection']
+            assert collected['status'] == 'COMPLETED' and collected['raw_wait_status'] == 0 and collected['cleanup_complete']
+            for stream in collected['streams'].values():
+                assert stream['eof'] and not stream['truncated'] and stream['discarded_observed_bytes'] == 0
+                assert identity(Path(stream['artifact']['path'])) == stream['artifact']
+            for relative in ('scripts/tests/test_owner_observations.py', 'scripts/application-tests/owner_observations.py'):
+                rows = []
+                for proof in (prior, module_record):
+                    matches = [row for row in proof['fixture_inputs'] if row['path'].endswith('/source/' + relative)]
+                    assert len(matches) == 1 and identity(Path(matches[0]['path'])) == matches[0]
+                    rows.append(matches[0])
+                assert (rows[0]['size'], rows[0]['sha256']) == (rows[1]['size'], rows[1]['sha256'])
+            record['reused_owner_parser_validation'] = dict(reference=identity(prior_path), passed_cases=19, rerun=False)
+        else:
+            assert module_record['owner_parser_tests'] == 19
         utility1 = work / 'stability-guest-collection-build-20260913-1'
         utility2 = work / 'stability-guest-collection-build-20260913-2'
         first = load(utility1, 'FAIL')
@@ -297,7 +324,7 @@ printf 'STABILITY_GUEST_COLLECTION_COMPLETE mode=@MODE@\\n'
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--module', type=Path, required=True)
-    parser.add_argument('--mode', choices=['prepublish-hard'], required=True)
+    parser.add_argument('--mode', choices=['prepublish-hard', 'permanent-backpressure'], required=True)
     parser.add_argument('--nonce', required=True)
     parser.add_argument('--payload-profile', choices=['single-thread-v1', 'runnable-thread-v1'], default='single-thread-v1')
     parser.add_argument('--controller-profile', choices=['owner-phase-v1', 'owner-phase-v2'], default='owner-phase-v1')

@@ -104,7 +104,7 @@ def run(args):
         # Prefix observation: RET is correctly absent before input release.
         # The native adapter accepts only the exact source-bound crate labels;
         # the phase parser enforces nonce, sequence, complete domains and caps.
-        parsed = phases.parse_envelopes(raw, mode='prepublish-hard',
+        parsed = phases.parse_envelopes(raw, mode=fault_mode,
                     nonce_low=int(nonce[:16], 16), nonce_high=int(nonce[16:], 16))
         return [snapshot['owner'] for snapshot in parsed['snapshots']]
 
@@ -199,7 +199,11 @@ def run(args):
 
     try:
         shutil.copyfile(__file__, out / 'helper.py')
-        assert prepared['status'] == 'PREPARED_NOT_EXECUTED' and prepared['mode'] == 'prepublish-hard'
+        assert prepared['status'] == 'PREPARED_NOT_EXECUTED'
+        fault_mode = prepared['mode']
+        assert fault_mode in ('prepublish-hard', 'permanent-backpressure')
+        if fault_mode == 'permanent-backpressure':
+            assert prepared['controller_profile'] == 'owner-phase-v2' and prepared['payload_profile'] == 'runnable-thread-v1'
         nonce = prepared['nonce']
         record['mode'] = prepared['mode']; record['nonce'] = nonce
         record['inputs'].append(identity(args.prepared / 'record.json'))
@@ -222,9 +226,13 @@ def run(args):
         qmp = imported('bounded_qmp', inputs / 'qmp_capture.py')
         uart = imported('fault_uart', inputs / 'fault_control.py')
         receiver = imported('artifact_receiver', inputs / 'receiver.py')
-        contract_path = repo / 'scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json'
+        contract_name, contract_hash = {
+            'prepublish-hard': ('stability-prepublish-hard-20260913-v1.json', '025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665'),
+            'permanent-backpressure': ('stability-permanent-backpressure-20260913-v1.json', 'fa5bbb142f3842908eb0a71f9834f1f1477e57049feddeb6dbc6c717b4649f8c'),
+        }[fault_mode]
+        contract_path = repo / 'scripts/application-tests/contracts' / contract_name
         contract_raw = contract_path.read_bytes()
-        assert hashlib.sha256(contract_raw).hexdigest() == '025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665'
+        assert hashlib.sha256(contract_raw).hexdigest() == contract_hash
         (inputs / 'owner-contract.json').write_bytes(contract_raw)
         owner_contract = owner.load_json(contract_raw)
         record['inputs'].append(identity(contract_path))
@@ -317,7 +325,7 @@ def run(args):
                 write_json(out / 'export-result.json', export_result)
 
         receiver_thread = threading.Thread(target=export_worker, daemon=True); receiver_thread.start()
-        control = uart.FaultControl(control_socket, nonce=nonce, mode='prepublish-hard', capture_root=out / 'uart',
+        control = uart.FaultControl(control_socket, nonce=nonce, mode=fault_mode, capture_root=out / 'uart',
                                    capture_phase=fault_capture, timeout_seconds=280,
                                    frame_timeout_seconds=5, capture_timeout_seconds=10)
         seen = 0
@@ -371,7 +379,7 @@ def run(args):
         report = owner.load_json((files / 'mckernel/report.json').read_bytes())
         reference_report = owner.load_json((files / 'linux/report.json').read_bytes())
         assert report['collection_status'] == reference_report['collection_status'] == 'COMPLETE'
-        for observed, mode, directory in ((report, 'prepublish-hard', 'mckernel'),
+        for observed, mode, directory in ((report, fault_mode, 'mckernel'),
                                           (reference_report, 'linux-reference', 'linux')):
             assert observed['schema_version'] == 1 and observed['mode'] == mode and observed['nonce'] == nonce
             assert observed['application_acceptance'] is observed['transport_acceptance'] is False
@@ -399,7 +407,7 @@ def run(args):
         # Neither launcher outcome establishes completion of the guest payload.
         assert type(raw_wait) is int and raw_wait in (0, 9)
         assert raw_wait != 9 or report['launcher_kill_sent']
-        assert report['new_admission_observed'] and report['new_admission_result'] == -1 and report['new_admission_errno'] == 5
+        assert report['new_admission_observed'] and report['new_admission_result'] == -1 and report['new_admission_errno'] == (110 if fault_mode == 'permanent-backpressure' else 5)
         assert reference_report['raw_wait_status'] == 37 << 8 and not reference_report['launcher_kill_sent']
         assert (files / 'linux/stdout.bin').read_bytes() == b'NATIVE_FAILURE_READY\nNATIVE_FAILURE_PASS\n'
         assert (files / 'linux/stderr.bin').read_bytes() == b''
@@ -426,8 +434,13 @@ def run(args):
                     apps = [row['row'] for row in snapshot['records']
                             if row['kind'] == 'APP' and row['row']['token'] == selected]
                     assert len(apps) == 1 and apps[0]['closed'] and apps[0]['quarantined'], 'terminal launcher closure not reflected in native owner'
-        comparison = phases.validate_capture(raw_native, mode='prepublish-hard',
+        comparison = phases.validate_capture(raw_native, mode=fault_mode,
             nonce_low=int(nonce[:16], 16), nonce_high=int(nonce[16:], 16), owner_contract=owner_contract)
+        if fault_mode == 'permanent-backpressure':
+            timer = comparison['publication_timer_seconds']
+            assert type(timer) is int and timer >= 0
+            deadline_ns = (timer + 5) * 1_000_000_000
+            assert observations['ret']['leave_ns'] >= deadline_ns, 'permanent RET left before original production deadline'
         write_json(out / 'native-phase-contract.json', comparison)
         record.update(status='COLLECTED_REQUIRES_CONTRACT_REVIEW', completed_controller=report,
                       linux_reference=reference_report,
@@ -435,7 +448,7 @@ def run(args):
                       required_remaining_evidence=['exact_real_ring_packet_binding',
                         'preserved_response_prefix_and_terminal_plus_five_byte_equality',
                         'terminal_plus_five_inventory_and_counter_equality',
-                        'independent_final_fault_review', 'other_three_modes', 'physical_full_ring'])
+                        'independent_final_fault_review', 'other_required_modes', 'physical_full_ring'])
     except BaseException as error:
         record.update(status='FAIL', error_type=type(error).__name__, error=str(error))
         save()
