@@ -1,0 +1,150 @@
+{
+  "all_members_verified": true,
+  "application_acceptance": false,
+  "application_execution": "NOT_RUN",
+  "archive": {
+    "path": "docs/verification/evidence/stability-application-request-decoder-source-20260913-1.tar.gz",
+    "sha256": "ec79fe838ece137204193250a4889789ea099edae828971c0365e2318476fdf3",
+    "size": 107478
+  },
+  "catalog_credit": 0,
+  "compiler_execution": false,
+  "content_bytes": 423187,
+  "execution_backend_enabled": false,
+  "findings": [
+    {
+      "corrected_harness_sha256": "bb1831f3a2a9fd99bb336cb9807c651310a8f27011a8c042c51f56d7e404cf62",
+      "correction": "Only final argument and explanatory doc changed to3722; exact boundary65536/65537 and decoder/oracles unchanged.",
+      "finding": "Final3723-byte argument produced65537-byte fixture because case ID is18 bytes.",
+      "finding_record": {
+        "path": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r/maximum-wire-source-finding.json",
+        "sha256": "44387c6f15ba64ad1d01e4ff1e34bfd167b3690f62a4677d8ad94ab0a15af250",
+        "size": 801
+      },
+      "kind": "harness-boundary-source-defect",
+      "original_harness_sha256": "f9106a8a4ab9df05c8c5daf528a426f513f4036f102c8fc83ceeb481a2dc2913",
+      "resolved_by_source_review": true,
+      "runtime_reproduction": "NOT_RUN"
+    }
+  ],
+  "frozen_inputs": [
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/decoder-expectations.json",
+      "sha256": "31f565b03064cb26a27be6effb83640ebde68660ef916ffb312e4fdda77d4cee",
+      "size": 20777
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/decoder-tests.md",
+      "sha256": "6422ab9f482347c7d28fb6b48ef9f039aef25444d1ceb2fb02e058179f559e30",
+      "size": 4453
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/decoder_harness.c",
+      "sha256": "bb1831f3a2a9fd99bb336cb9807c651310a8f27011a8c042c51f56d7e404cf62",
+      "size": 19381
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/literal-vector.json",
+      "sha256": "5dc71f8f31e465c56d07a006b6227069189376e6531e3e5f76af369550d424cb",
+      "size": 2352
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/literal_vector.h",
+      "sha256": "91b81cd6e2e976d8aa8995ee9f0673847719ffd2a2e31065aaf7a382935c6fdc",
+      "size": 2677
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/request-v1.md",
+      "sha256": "837518bf205c39c007540dcc87123661458f021c780045d756e082abf20d92c0",
+      "size": 6028
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/request.c",
+      "sha256": "c072005948e479e6f50d3f647bf649301741365d7c034c72d3047df3f85cc3ab",
+      "size": 8011
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/request.h",
+      "sha256": "e767e217104d3b89b0b6d0f74e37f8150600c0b078d40799e75d14f3ede8d00e",
+      "size": 1860
+    },
+    {
+      "path": "docs/verification/stability-application-request-decoder-review-20260913.md",
+      "sha256": "59fd9458f01fc9e513dcf75d0fe30ae2a1c27c2c66f930003249285c06e08a3b",
+      "size": 3629
+    }
+  ],
+  "guest_execution": false,
+  "helper": {
+    "path": "/tmp/stability-request-decoder-retention-20260913-y9gut0qj/archive.py",
+    "sha256": "017a02dc540149566c98e3d6c43f6cb2b34deb2fa6fa93bbfeb9e11d3ff164c2",
+    "size": 6015
+  },
+  "independent_reviews": [
+    {
+      "path": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r/decoder-independent-peer/review.json",
+      "sha256": "12cfbbafb139aee68aeeef3f7f8e861ae07e8d27ab09071381fa4bd661705290",
+      "size": 2115
+    },
+    {
+      "path": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r/harness-independent-peer/review-first.json",
+      "sha256": "07bbcc002fcff07724bd6a797318d0b3de96a744cd84bb8379e6f864574fda9e",
+      "size": 2254
+    },
+    {
+      "path": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r/harness-independent-peer/review-final.json",
+      "sha256": "0ff8d02bf1a46b397bc95618877b65b27c45a4895a4f18717ba162cd52b6c201",
+      "size": 3332
+    }
+  ],
+  "kind": "application-request-decoder-source-review",
+  "member_count": 76,
+  "member_manifest": {
+    "path": "docs/verification/evidence/stability-application-request-decoder-source-20260913-1.members.json",
+    "sha256": "16d5b737d22d593e5fb5051e026a54d5cf3160a732e6dff4977d24a4b3e7a9e8",
+    "size": 20598
+  },
+  "original_sources_and_reviews_preserved": true,
+  "originals_unchanged": true,
+  "production_gate_credit": false,
+  "proposed_tests": {
+    "case_count": 84,
+    "cleanup_timeout_seconds": 15,
+    "expectations": {
+      "path": "scripts/tests/fixtures/application-collector-v1/decoder-expectations.json",
+      "sha256": "31f565b03064cb26a27be6effb83640ebde68660ef916ffb312e4fdda77d4cee",
+      "size": 20777
+    },
+    "process_timeout_seconds": 10,
+    "root_owns_pinned_compile_and_actual_run": true,
+    "status": "NOT_RUN"
+  },
+  "regular_file_count": 67,
+  "required_followups": [
+    "Pinned actual C compile and84-case retained infrastructure run.",
+    "Separate reviewed ordinary Linux collector and actual input/file/setup/process/stream/wait evidence.",
+    "Separate native payload route/exit/lifetime and exact stream attribution producers/evaluator.",
+    "All global/case capability gates and independently reviewed execution packet before new catalog execution."
+  ],
+  "retained_helper": {
+    "path": "docs/verification/evidence/stability-application-request-decoder-retention-20260913-1.py",
+    "sha256": "017a02dc540149566c98e3d6c43f6cb2b34deb2fa6fa93bbfeb9e11d3ff164c2",
+    "size": 6015
+  },
+  "schema_version": 1,
+  "scope": "Pure C memory request decoder, independently specified fixtures and source retention only. No execution backend or application observation is implemented.",
+  "source_capture": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r",
+  "source_capture_review": {
+    "path": "/tmp/stability-application-request-decoder-source-20260913-yn1omu0r/review.json",
+    "sha256": "e20e4f8663c8d257067ec250eb5556d409f2476dd79c9b57e254b5026938f0c7",
+    "size": 5074
+  },
+  "source_doc": {
+    "path": "docs/verification/stability-application-request-decoder-review-20260913.md",
+    "sha256": "59fd9458f01fc9e513dcf75d0fe30ae2a1c27c2c66f930003249285c06e08a3b",
+    "size": 3629
+  },
+  "status": "PASS_BOUNDED_SOURCE_REVIEW_ONLY",
+  "test_execution": false,
+  "transport_acceptance": false
+}

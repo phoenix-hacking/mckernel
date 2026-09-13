@@ -77,7 +77,7 @@ contract development and the typed owner observer remain active infrastructure.
 
 ## Current fault milestone
 
-The first of four actual fault modes is independently verified. Fresh guest6
+Two of four actual fault modes are independently verified. Fresh guest6
 passes the hard failure before publication contract; the acceptance and exact
 source/runtime evidence are in
 `stability-prepublish-hard-independent-review-20260913.json`. Its actual RET
@@ -95,17 +95,34 @@ Linux boundary scenarios passed. Full failure/build/preparation/test captures
 are mapped by `stability-terminal-integration-20260913-1.json`; guest6 and the
 next mode's isolated build are in `stability-hard-collection-20260913-1.json`.
 
-Permanent backpressure is the next actual mode. Its isolated module builds,
-the seven measured observer stack paths are unchanged, and fresh preparation2
-and preflight2 pass. Preparation1's missing reused-parser-proof field is
-preserved; the corrected preparer checks the exact original 19-case result
-and matching parser/test bytes. `stability-permanent-readiness-20260913-1.json`
-retains both attempts. The permanent guest has not run at this checkpoint.
-Its original five-second production timer, 15-second return bound, stable
-quarantine and admission timeout must be observed in the new guest.
+Permanent backpressure guest2 now passes its independent narrow contract in
+`stability-permanent-backpressure-independent-review-20260913.json`. The actual
+RET leaves 4,174,297 ns after the original coarse production deadline, with
+2,085 injected retries and no real send, publication or release. All 31 terminal
+owner rows remain stable through 5,072,408,643 ns; admission rejects with errno110.
+The measured RET interval is 4,334,221,248 ns: the unchanged timer uses whole
+seconds, so this is not a claim of exactly five elapsed seconds from RET entry.
+Full guest, physical comparison and decoder captures are retained in
+`stability-permanent-collection-20260913-1.json`. The original preparation1
+failure remains in `stability-permanent-readiness-20260913-1.json`.
+
+That guest exposed a separate controller defect: its procfs polling field
+incorrectly reported RET exit for an actual `running` sample, 4,257,682,191 ns
+before native RET leave. The original report is unchanged and the false field
+is rejected. Independent native RET and later real launcher WNOWAIT/EOF prove
+the accepted terminal boundary; controller infrastructure remains unverified.
+The new `owner-return-poll-v1` candidate treats errors, incomplete samples and
+negative syscall numbers as unknown. Its 21 actual C classification cases pass,
+including all 14 original samples. This checks classification only; full polling
+state-machine execution and a fresh composed-controller guest remain pending.
 
 Application metadata preflight passes twelve checks; the runner still records
-NOT_RUN with acceptance false. A generic C request decoder is in source review.
+NOT_RUN with acceptance false. The generic C request decoder passes all 84
+pinned cases, including exact maximum-size input and rejection boundaries;
+`stability-application-request-decoder-tests-review-20260913-1.json` independently
+binds the retained results. Payload execution is still disabled. A separate Linux
+collector and the accepted-response hold needed for the two published modes
+remain source work; draft contracts and source review do not release either.
 Catalog totals remain three fixtures compiled, zero executed and zero accepted.
 The other fault modes, physical ring saturation, VM invalidation ownership,
 generic native payload observations, lifecycle restoration and the complete
