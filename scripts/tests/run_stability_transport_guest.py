@@ -99,35 +99,11 @@ def run(args):
 
     def complete_snapshots(raw):
         # Prefix observation: RET is correctly absent before input release.
-        # Use the strict schema/inventory parser without inventing a RET result.
-        assert 0 < len(raw) <= owner.MAX_BYTES
-        lines = raw.splitlines(keepends=True)
-        assert len(lines) <= owner.MAX_LINES
-        rows, snapshots, records = None, [], 0
-        for number, line in enumerate(lines, 1):
-            if b'STABILITY_OWNER' not in line:
-                continue
-            assert line.endswith(b'\n') and len(line) <= owner.MAX_LINE
-            row = owner.parse_line(line.rstrip(b'\r\n').decode('ascii'))
-            records += 1
-            assert records <= owner.MAX_RECORDS
-            row['line'] = number
-            row['raw_sha256'] = hashlib.sha256(line).hexdigest()
-            if row['kind'] == 'BEGIN':
-                assert rows is None and len(snapshots) < len(owner.PHASES)
-                rows = []
-            assert rows is not None
-            assert not rows or row['sequence'] == rows[0]['sequence']
-            rows.append(row)
-            if row['kind'] == 'END':
-                snapshots.append(owner.validate_snapshot(rows))
-                rows = None
-        assert rows is None, 'partial owner snapshot'
-        assert all(s['sequence'] == i + 1 for i, s in enumerate(snapshots))
-        assert len({s['phase'] for s in snapshots}) == len(snapshots)
-        if snapshots:
-            assert all(s['selection'] == snapshots[0]['selection'] for s in snapshots)
-        return snapshots
+        # The native adapter accepts only the exact source-bound crate labels;
+        # the phase parser enforces nonce, sequence, complete domains and caps.
+        parsed = phases.parse_envelopes(raw, mode='prepublish-hard',
+                    nonce_low=int(nonce[:16], 16), nonce_high=int(nonce[16:], 16))
+        return [snapshot['owner'] for snapshot in parsed['snapshots']]
 
     def physical(serial, label, validate=False):
         # Both old capture body and assertions are byte-retained. This wrapper
@@ -230,6 +206,7 @@ def run(args):
             'owner_observations.py': repo / 'scripts/application-tests/owner_observations.py',
             'qmp_capture.py': repo / 'scripts/application-tests/qmp_capture.py',
             'fault_control.py': repo / 'scripts/application-tests/fault_control.py',
+            'phase_observations.py': repo / 'scripts/application-tests/phase_observations.py',
             'receiver.py': repo / 'scripts/tests/fixtures/stability-artifact-export/receiver.py',
             'prepare_stability_fault_guest.py': repo / 'scripts/tests/prepare_stability_fault_guest.py'}
         for name, src in sources.items():
@@ -238,9 +215,16 @@ def run(args):
         preparer = imported('prepared_inventory', inputs / 'prepare_stability_fault_guest.py')
         assert preparer.inventory(args.prepared / 'root') == prepared['root_inventory']
         owner = imported('strict_owner', inputs / 'owner_observations.py')
+        phases = imported('native_phases', inputs / 'phase_observations.py')
         qmp = imported('bounded_qmp', inputs / 'qmp_capture.py')
         uart = imported('fault_uart', inputs / 'fault_control.py')
         receiver = imported('artifact_receiver', inputs / 'receiver.py')
+        contract_path = repo / 'scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json'
+        contract_raw = contract_path.read_bytes()
+        assert hashlib.sha256(contract_raw).hexdigest() == '025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665'
+        (inputs / 'owner-contract.json').write_bytes(contract_raw)
+        owner_contract = owner.load_json(contract_raw)
+        record['inputs'].append(identity(contract_path))
         reference = Path('/work/native-mcctrl-image-guest-20260908-x86_64-4/helper.py')
         original = reference.read_text()
         assert original.count('continuing_workers=2') == 1
@@ -356,6 +340,7 @@ def run(args):
             state = qmp_session.execute('query-status')
             if state['status'] in ('shutdown', 'guest-panicked'):
                 record['terminal_vm_state'] = state
+                text = console().decode('ascii', errors='replace')
                 assert state['status'] == 'shutdown'
                 assert final_capture and seen == 2
                 assert 'STABILITY_CONTROLLER_EXIT status=0' in text
@@ -396,8 +381,12 @@ def run(args):
             assert not stream['truncated']
         assert report['launcher_reaped'] and report['owned_linux_cleanup_complete']
         raw_wait = report['raw_wait_status']
-        assert type(raw_wait) is int and 0 <= raw_wait <= 0xffff
-        assert os.WIFEXITED(raw_wait) or (os.WIFSIGNALED(raw_wait) and os.WTERMSIG(raw_wait) == 9)
+        # Frozen unchanged launcher: terminal RET perror, then WAIT EPIPE stops
+        # the worker; main joins without propagating its return and exits zero.
+        # If still alive, the owned controller cleanup can instead reap SIGKILL.
+        # Neither launcher outcome establishes completion of the guest payload.
+        assert type(raw_wait) is int and raw_wait in (0, 9)
+        assert raw_wait != 9 or report['launcher_kill_sent']
         assert report['new_admission_observed'] and report['new_admission_result'] == -1 and report['new_admission_errno'] == 5
         assert reference_report['raw_wait_status'] == 37 << 8 and not reference_report['launcher_kill_sent']
         assert (files / 'linux/stdout.bin').read_bytes() == b'NATIVE_FAILURE_READY\nNATIVE_FAILURE_PASS\n'
@@ -411,12 +400,20 @@ def run(args):
         for interface in ('x86_64', 'i386'):
             assert ('NATIVE_OS_BUILDID ' + interface + ' PASS states=2 guarded=4 faults=10 mcctrl_absent=1').encode() in console()
             assert ('NATIVE_STRING_COPY ' + interface + ' PASS cases=14 descriptor_faults=4 guarded=1 applications=0').encode() in console()
-        observations = owner.parse_observations((files / 'native-dmesg.txt').read_bytes())
+        raw_native = (files / 'native-dmesg.txt').read_bytes()
+        canonical, mapping = phases.canonicalize_capture(raw_native)
+        (out / 'native-dmesg.canonical.bin').write_bytes(canonical)
+        write_json(out / 'native-prefix-mapping.json', dict(original=identity(files / 'native-dmesg.txt'),
+            canonical=identity(out / 'native-dmesg.canonical.bin'), lines=mapping))
+        observations = owner.parse_observations(canonical)
         write_json(out / 'owner-observations.json', observations)
+        comparison = phases.validate_capture(raw_native, mode='prepublish-hard',
+            nonce_low=int(nonce[:16], 16), nonce_high=int(nonce[16:], 16), owner_contract=owner_contract)
+        write_json(out / 'native-phase-contract.json', comparison)
         record.update(status='COLLECTED_REQUIRES_CONTRACT_REVIEW', completed_controller=report,
                       linux_reference=reference_report,
-                      required_remaining_evidence=['frozen_phase_and_owner_contract', 'exact_real_ring_packet_binding',
-                        'terminal_launcher_wait_semantics_against_unchanged_launcher',
+                      native_phase_contract=identity(out / 'native-phase-contract.json'),
+                      required_remaining_evidence=['exact_real_ring_packet_binding',
                         'preserved_response_prefix_and_terminal_plus_five_byte_equality',
                         'terminal_plus_five_inventory_and_counter_equality',
                         'independent_final_fault_review', 'other_three_modes', 'physical_full_ring'])

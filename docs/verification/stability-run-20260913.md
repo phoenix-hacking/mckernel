@@ -175,3 +175,33 @@ owner/physical contracts and actual guest execution remain pending. Collection
 alone cannot close a fault gate. Current production remains module2026091301/
 image3 with eight original suites passing; catalog counts remain three
 compiled, zero executed and zero accepted.
+
+## First fault guest readiness
+
+The exact accepted baseline initramfs matches all 55 inherited root members.
+The prepared first hard-failure root has 61 members with exact module3,
+collection utility, payload and runtime-library bindings. Pinned preflight
+checks pass for its shell initializer, inherited sleep utility and QEMU port
+properties. `stability-fault-readiness-20260913-1.json` retains all four full
+preparation/preflight/parser captures. No guest ran in those captures.
+
+The independently reviewed phase parser passes all 15 pinned tests. It
+accepts only the actual source-bound module prefixes, retains raw/canonical
+line mappings, and checks native phase/RET ordering, immutable requests and
+frozen counters. Its source review and original author attempts are retained
+separately in `stability-phase-parser-validation-20260913.json`.
+
+The first contract is frozen before execution in
+`scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json`.
+This actual read uses a mapped buffer and RET copy size zero; selected pager
+payload counts therefore stay zero. RET value16/errno-71/accepted1 is required.
+The unchanged launcher can naturally exit0 after its worker gets an error;
+actual exit0 or owned SIGKILL9 is classified without claiming payload success.
+The contract derivation and independent reviews preserve exact source and
+compiler bindings. `stability-fault-guest-source-review-20260913-2.json`
+reviews the integrated runner. Its first invocation helper is retained in
+`evidence/stability-first-fault-invocation-20260913.py`.
+
+The next action is that bounded first guest, followed by independent review
+of actual physical request/response bytes and ownership stability. Transport
+and catalog acceptance remain open until their complete contracts pass.
