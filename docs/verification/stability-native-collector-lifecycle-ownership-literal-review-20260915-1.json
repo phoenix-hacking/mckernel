@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_ownership_literal_review",
+  "task_id": "M02-C-lifecycle-ownership-literal-review",
+  "attempt": 1,
+  "status": "PASS_OWNERSHIP_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T10:34:00Z",
+  "reviewed_base_commit": "0debcddcccff9b6d99d422b19bf89818297b5baf",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-ownership-literal-slice-20260915-1.tar.gz",
+    "sha256": "99682f6c1353c77462e5613ad3182c1d2189bedb6f2155fbf4c16e18a99bea59",
+    "size": 9251,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "0fc850a6777fd72a89f060714df781d29522cfcfa8ba742148268858b899b5b9",
+    "expected.json": "2b3b3fc2bf41142696019ef494b179c5f29e737e9aa1fd6ca35208ead8ccd869",
+    "test_native_lifecycle_model.py": "b95730f70d588ce566bfe4b76b2c61fe16d5003f428373c26a819415c26fbb86"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "retained-thread-ref",
+      "retained-process-ref",
+      "authority-revoked",
+      "zombie-before-after-reap",
+      "main-storage-held",
+      "vm-held"
+    ],
+    "reference_and_authority_states": "MATCH_INDEPENDENT_DRAFT",
+    "ref_busy_results": "MATCH_INDEPENDENT_DRAFT",
+    "zombie_recovery_event_sequence": [[15, 16], [16, 17], [17, 18]],
+    "failure_state_preserved": true,
+    "sticky_incomplete": true,
+    "mutant_binding": "early-retirement:retained-thread-ref"
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

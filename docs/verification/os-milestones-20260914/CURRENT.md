@@ -564,3 +564,14 @@ retained attempt sequence. Active alias rejection creates no secondary thread ro
 The cumulative five-file bytes are archived as
 `stability-native-collector-lifecycle-semantic-negative-literal-slice-20260915-1`.
 The entire corpus and models remain incomplete and unexecuted.
+
+Six ownership-blocker vectors now receive independent
+`PASS_OWNERSHIP_LITERAL_SLICE_ONLY`: retained thread/process references,
+irreversibly revoked unpublished authority, zombie before and after parent reap,
+main-thread storage retention and VM retention. Exact REF/BUSY failures preserve
+state and sticky incompleteness; post-failure zombie recovery retains distinct
+event sequence and operation IDs. A first review caught and the bounded correction
+fixed those three event IDs plus the early-retirement mutant target. Cumulative
+bytes are archived as
+`stability-native-collector-lifecycle-ownership-literal-slice-20260915-1`. Whole
+corpus/model source, compilation and acceptance remain closed.
