@@ -1048,3 +1048,13 @@ Boolean-`true` and integral-float-`1.0` mutations; review returns
 integer helper before any registry, key or oracle validation. No source edit or
 new check has started. Ordinary inventory remains 44, raw inventory remains 137,
 and every compiler, model, native, application and production gate stays closed.
+
+The output row-ID type slice now also receives independent
+`PASS_OUTPUT_ROW_ID_TYPE_SOURCE_ONLY` and
+`PASS_OUTPUT_ROW_ID_TYPE_EVIDENCE_ONLY`. Python 3.9.12 and 3.8.10 each pass all
+three focused methods: exact integer `1` accepts, while Boolean `true` and
+integral float `1.0` reject at the exact integer helper before registry or oracle
+work. The ten-member archive binds all source, literal, interpreter and command
+log hashes. This remains mocked post-capture schema evidence only. Ordinary 44,
+raw 137 and its lexical hash are unchanged; the full matrices and all execution
+and acceptance gates remain incomplete and closed.
