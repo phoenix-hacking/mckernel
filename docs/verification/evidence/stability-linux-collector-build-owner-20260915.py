@@ -10,9 +10,11 @@ import fcntl
 import hashlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
+import shlex
 import signal
 import stat
 import subprocess
@@ -62,6 +64,11 @@ MAX_FILE = 16 * 1024 * 1024
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def same(actual, expected):
+    """Compare daemon JSON values without allowing bool/int aliasing."""
+    return type(actual) is type(expected) and actual == expected
 
 
 def digest(path):
@@ -202,32 +209,53 @@ def lookup(commands, config, label):
 
 
 def full_build_inspect(row, config, image=None, retained_image=None):
-    owned(row, config); c, h = row.get('Config'), row.get('HostConfig'); require(type(c) is dict and type(h) is dict, 'complete inspect objects')
-    require(c.get('User') == '1000:1000' and c.get('Image') == IMAGE_ID and c.get('WorkingDir') == '/work' and c.get('Entrypoint') == [PYTHON] and c.get('Cmd') == ['-B', '/workspace/docs/verification/evidence/stability-linux-collector-rebuild-20260915.py'] and c.get('Tty') is False and c.get('OpenStdin') is False, 'UID1000 entrypoint config')
-    require(c.get('Hostname') == row['Id'][:12] and c.get('Volumes') in (None, {}) and c.get('ExposedPorts') in (None, {}) and c.get('Healthcheck') in (None, {}) and c.get('OnBuild') in (None, []) and c.get('StopSignal') in (None, '', 'SIGTERM'), 'no hidden Config execution')
+    cid = owned(row, config)
+    helper = '/workspace/docs/verification/evidence/stability-linux-collector-rebuild-20260915.py'
+    require(row.get('Path') == PYTHON and row.get('Args') == ['-B', helper], 'actual fixed entry point')
+    c, h = row.get('Config'), row.get('HostConfig'); require(type(c) is dict and type(h) is dict, 'complete inspect objects')
     if image is not None:
         inherited = image.get('Config', {})
-        inherited_env = inherited.get('Env') or []
-        require(c.get('Env', [])[:len(inherited_env)] == inherited_env, 'inherited image environment')
         require(image.get('Id') == IMAGE_ID and image.get('Architecture') == 'amd64' and image.get('Os') == 'linux', 'immutable image identity')
         if retained_image is not None:
             require(image.get('Config') == retained_image.get('Config') and image.get('RootFS') == retained_image.get('RootFS'), 'immutable image config/rootfs')
         expected_labels = dict(inherited.get('Labels') or {}); expected_labels['mckernel.collector.owner'] = config['nonce']
-        require(c.get('Labels') == expected_labels, 'inherited image labels plus owner')
+    else:
+        inherited = {}; expected_labels = {'mckernel.collector.owner': config['nonce']}
+    for key, value in {'User': '1000:1000', 'Image': IMAGE_ID, 'WorkingDir': '/work',
+            'Entrypoint': [PYTHON], 'Cmd': ['-B', helper], 'Labels': expected_labels,
+            'Tty': False, 'OpenStdin': False, 'StdinOnce': False, 'AttachStdin': False,
+            'Domainname': ''}.items():
+        require(same(c.get(key), value), 'container Config.' + key)
+    require(c.get('Hostname') == cid[:12] and c.get('Volumes') in (None, {}) and c.get('ExposedPorts') in (None, {}) and c.get('Healthcheck') in (None, {}) and c.get('OnBuild') in (None, []) and c.get('StopSignal') in (None, '', 'SIGTERM'), 'no hidden Config execution')
     allowed_config = {'Hostname', 'Domainname', 'User', 'AttachStdin', 'AttachStdout', 'AttachStderr', 'ExposedPorts', 'Tty', 'OpenStdin', 'StdinOnce', 'Env', 'Cmd', 'Healthcheck', 'ArgsEscaped', 'Image', 'Volumes', 'WorkingDir', 'Entrypoint', 'NetworkDisabled', 'MacAddress', 'OnBuild', 'Labels', 'StopSignal', 'StopTimeout', 'Shell'}
     require(set(c) <= allowed_config, 'unreviewed Config field')
-    env = c.get('Env', []); require(type(env) is list and len(env) == len(set(env)) and all(isinstance(item, str) and '=' in item and not item.startswith('LD_') for item in env), 'unique environment')
-    values = dict(item.split('=', 1) for item in env)
+    require(c.get('Shell') in (None, inherited.get('Shell')) and c.get('MacAddress', '') == '' and c.get('StopTimeout') in (None, 10) and c.get('NetworkDisabled', False) is False, 'reviewed inherited config defaults')
+    for key in ('AttachStdout', 'AttachStderr', 'ArgsEscaped'):
+        require(key not in c or type(c[key]) is bool, 'actual boolean output config')
+    env = c.get('Env', []); require(type(env) is list and all(isinstance(item, str) and '=' in item and '\x00' not in item and not item.startswith('LD_') for item in env), 'literal environment')
+    values = {}
+    for item in env:
+        key, value = item.split('=', 1); require(key and key not in values, 'unique environment key'); values[key] = value
     expected_env = {'TMPDIR': '/work/tmp', 'HOME': '/tmp', 'PYTHONDONTWRITEBYTECODE': '1'}
     if image is not None:
         expected_env = dict(item.split('=', 1) for item in (image.get('Config', {}).get('Env') or [])); expected_env.update(TMPDIR='/work/tmp', HOME='/tmp', PYTHONDONTWRITEBYTECODE='1')
     require(values == expected_env, 'exact helper environment')
-    for key, value in {'NetworkMode': 'none', 'Privileged': False, 'ReadonlyRootfs': True, 'CapDrop': ['ALL'], 'SecurityOpt': ['no-new-privileges'], 'Memory': 12884901888, 'MemorySwap': 12884901888, 'NanoCpus': 4000000000, 'CpusetCpus': '2-5', 'PidsLimit': 512, 'CgroupParent': '/mckernel-dev', 'Init': True}.items(): require(h.get(key) == value, 'HostConfig.' + key)
-    require(h.get('GroupAdd') in (None, []) and h.get('Devices', []) in (None, []) and h.get('DeviceRequests', []) in (None, []), 'no supplemental groups/devices')
-    require(h.get('Binds') in (None, []) and h.get('CapAdd') in (None, []) and h.get('PortBindings') in (None, {}), 'no extra host privilege/bind')
-    require(sorted(h.get('Ulimits', []), key=lambda item: item.get('Name', '')) == [{'Hard': 0, 'Name': 'core', 'Soft': 0}, {'Hard': 4096, 'Name': 'nofile', 'Soft': 4096}], 'exact ulimits')
-    require(h.get('PidMode') in (None, '') and h.get('IpcMode') in (None, '', 'private') and h.get('UTSMode') in (None, '') and h.get('UsernsMode') in (None, '') and h.get('Runtime') in (None, 'runc') and h.get('AutoRemove') is False and h.get('PublishAllPorts') is False, 'exact namespaces/runtime')
-    require(h.get('RestartPolicy') in (None, {'Name': 'no', 'MaximumRetryCount': 0}) and h.get('Tmpfs') == {'/tmp': 'rw,nodev,nosuid,size=256m'}, 'exact restart/tmpfs')
+    expected = {'NetworkMode': 'none', 'Privileged': False, 'ReadonlyRootfs': True, 'CapDrop': ['ALL'], 'SecurityOpt': ['no-new-privileges'], 'Memory': 12884901888, 'MemorySwap': 12884901888, 'NanoCpus': 4000000000, 'CpusetCpus': '2-5', 'PidsLimit': 512, 'CgroupParent': '/mckernel-dev', 'Init': True, 'PidMode': '', 'UTSMode': '', 'UsernsMode': '', 'IpcMode': 'private', 'Runtime': 'runc', 'AutoRemove': False, 'PublishAllPorts': False, 'RestartPolicy': {'Name': 'no', 'MaximumRetryCount': 0}, 'Tmpfs': {'/tmp': 'rw,nodev,nosuid,size=256m'}}
+    for key, value in expected.items(): require(same(h.get(key), value), 'actual HostConfig.' + key)
+    require(any(same(h.get('GroupAdd'), value) for value in (None, [])), 'no supplemental groups')
+    empty = {'Binds', 'ContainerIDFile', 'Links', 'PortBindings', 'VolumesFrom', 'CapAdd', 'GroupAdd', 'Dns', 'DnsOptions', 'DnsSearch', 'ExtraHosts', 'Devices', 'DeviceCgroupRules', 'DeviceRequests', 'Sysctls', 'StorageOpt', 'Annotations', 'VolumeDriver', 'ConsoleSize', 'LxcConf', 'Cgroup', 'CpusetMems', 'Isolation', 'BlkioDeviceReadBps', 'BlkioDeviceWriteBps', 'BlkioDeviceReadIOps', 'BlkioDeviceWriteIOps', 'BlkioWeightDevice'}
+    zero = {'CpuShares', 'CpuPeriod', 'CpuQuota', 'CpuRealtimePeriod', 'CpuRealtimeRuntime', 'MemoryReservation', 'KernelMemory', 'KernelMemoryTCP', 'BlkioWeight', 'CpuCount', 'CpuPercent', 'IOMaximumIOps', 'IOMaximumBandwidth'}
+    extra = {'Mounts', 'Ulimits', 'MaskedPaths', 'ReadonlyPaths', 'CgroupnsMode', 'ShmSize', 'OomKillDisable', 'MemorySwappiness', 'OomScoreAdj', 'LogConfig'}
+    require(set(h) <= set(expected) | empty | zero | extra, 'unreviewed HostConfig field')
+    for key in empty:
+        if key in h:
+            allowed = (None, [0, 0]) if key == 'ConsoleSize' else (None, '', [], {})
+            require(any(same(h[key], value) for value in allowed), 'nonempty additional HostConfig.' + key)
+    for key in zero:
+        if key in h: require(type(h[key]) is int and h[key] == 0, 'additional resource override: ' + key)
+    require(h.get('CgroupnsMode') in ('host', 'private', '') and same(h.get('ShmSize'), 67108864) and any(same(h.get('OomKillDisable'), value) for value in (None, False)) and any(same(h.get('MemorySwappiness'), value) for value in (None, -1)) and same(h.get('OomScoreAdj'), 0), 'reviewed daemon namespace/OOM defaults')
+    require(h.get('LogConfig') in ({'Type': 'json-file', 'Config': {}}, {'Type': 'local', 'Config': {}}), 'local default Docker log sink')
+    require(same(sorted(h.get('Ulimits', []), key=lambda item: item.get('Name', '')), [{'Hard': 0, 'Name': 'core', 'Soft': 0}, {'Hard': 4096, 'Name': 'nofile', 'Soft': 4096}]), 'exact ulimits')
     for key, minimum in (('MaskedPaths', {'/proc/kcore', '/proc/keys', '/proc/latency_stats', '/proc/timer_list', '/proc/scsi', '/sys/firmware'}), ('ReadonlyPaths', {'/proc/bus', '/proc/fs', '/proc/irq', '/proc/sys', '/proc/sysrq-trigger'})):
         paths = h.get(key); require(type(paths) is list and len(paths) == len(set(paths)) and minimum <= set(paths) and all(isinstance(item, str) and item.startswith(('/proc/', '/sys/')) and '..' not in item.split('/') for item in paths), 'daemon protection paths')
     require(type(h.get('Mounts')) is list and len(h['Mounts']) == 2, 'exact requested build mounts')
@@ -235,16 +263,21 @@ def full_build_inspect(row, config, image=None, retained_image=None):
     for item in h['Mounts']:
         require(set(item) <= {'Type', 'Source', 'Target', 'ReadOnly', 'Consistency', 'BindOptions'} and item.get('Type') == 'bind' and item.get('Consistency', '') == '' and item.get('BindOptions') in (None, {}, {'Propagation': 'rprivate'}), 'requested bind options')
         value = item.get('ReadOnly', False); require(type(value) is bool, 'requested bind readonly type')
-        pairs.add((item.get('Source'), item.get('Target'), value))
+        pair = (item.get('Source'), item.get('Target'), value); require(pair not in pairs, 'unique requested bind'); pairs.add(pair)
     require(pairs == {(str(REPO), '/workspace', True), (config['mount'], '/work', False)}, 'requested bind identities')
-    require(type(row.get('Mounts')) is list and len(row['Mounts']) == 2, 'exact actual build mounts')
+    require(type(row.get('Mounts')) is list and len(row['Mounts']) in (2, 3), 'complete actual build mounts')
     actual_pairs = set()
+    tmpfs = 0
     for item in row['Mounts']:
+        if item.get('Type') == 'tmpfs':
+            require(item.get('Destination') == '/tmp' and item.get('RW') is True and item.get('Source', '') == '', 'only private /tmp tmpfs')
+            tmpfs += 1; continue
         require(set(item) <= {'Type', 'Source', 'Destination', 'Driver', 'Mode', 'RW', 'Propagation', 'Name'} and item.get('Type') == 'bind' and type(item.get('RW')) is bool and item.get('Propagation') == 'rprivate', 'actual bind options')
-        actual_pairs.add((item.get('Source'), item.get('Destination'), item.get('RW'), item.get('Propagation')))
-    require(actual_pairs == {(str(REPO), '/workspace', False, 'rprivate'), (config['mount'], '/work', True, 'rprivate')}, 'actual private mount identities')
+        pair = (item.get('Source'), item.get('Destination'), item.get('RW'), item.get('Propagation')); require(pair not in actual_pairs, 'unique actual bind'); actual_pairs.add(pair)
+    require(actual_pairs == {(str(REPO), '/workspace', False, 'rprivate'), (config['mount'], '/work', True, 'rprivate')} and tmpfs <= 1, 'actual private mount identities')
     networks = row.get('NetworkSettings', {}).get('Networks'); require(type(networks) is dict and set(networks) == {'none'}, 'none network')
     require(all(networks['none'].get(key, '') == '' for key in ('IPAddress', 'GlobalIPv6Address', 'Gateway', 'IPv6Gateway', 'MacAddress')), 'no network endpoint')
+    require(row.get('NetworkSettings', {}).get('Ports') in (None, {}), 'no published ports')
 
 
 def mapped(path, output, mount):
@@ -260,17 +293,26 @@ def mapped(path, output, mount):
 
 def verify_build_record(mount, host):
     mount, host = Path(mount), Path(host); output = mount / 'stability-linux-collector-build-20260915-2'
+    container_output = Path('/work/stability-linux-collector-build-20260915-2')
     raw, record_identity = regular(output / 'record.json'); record = strict_json(raw)
-    require(record.get('status') == 'PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY' and record.get('application_acceptance') is False and record.get('backend_enabled') is False and record.get('guest_execution') is False and record.get('root_positive_execution') is False and isinstance(record.get('scope'), str) and 'SHA9' in record['scope'], 'build-only flags/scope')
+    record_keys = {'schema_version', 'status', 'started_utc', 'finished_utc', 'phase', 'commands', 'inputs',
+        'compiler_dependencies', 'compiled_outputs', 'loader_dependencies', 'helper', 'application_acceptance',
+        'backend_enabled', 'guest_execution', 'root_positive_execution', 'scope', 'sha_cases', 'builder_cases',
+        'clean_launch_requirement'}
+    require(set(record) == record_keys and same(record.get('schema_version'), 1), 'exact build record schema')
+    expected_scope = 'Pinned Linux collector rebuild after retained close_range/EPERM root failure; SHA9 and builder rejection only'
+    require(record.get('status') == 'PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY' and record.get('application_acceptance') is False and record.get('backend_enabled') is False and record.get('guest_execution') is False and record.get('root_positive_execution') is False and record.get('scope') == expected_scope and record.get('phase') == 'builder-negative' and record.get('clean_launch_requirement') == 'root execution must bind close_fds, empty pass_fds and nofile=4096:4096', 'build-only flags/scope')
     require(len(record.get('inputs', [])) == 14 and len(record.get('compiled_outputs', [])) == 16 and len(record.get('compiler_dependencies', [])) == 176 and len(record.get('commands', [])) == 20, 'exact build counts')
     require(record.get('helper', {}).get('sha256') == HELPER_SHA, 'helper binding')
     verified = []
     def artifact(row):
-        require(type(row) is dict and type(row.get('path')) is str and type(row.get('size')) is int, 'artifact row')
+        require(type(row) is dict and set(row) == {'path', 'size', 'sha256'} and type(row.get('path')) is str and type(row.get('size')) is int and row['size'] >= 0 and type(row.get('sha256')) is str and re.fullmatch(r'[0-9a-f]{64}', row['sha256']), 'artifact row')
         data, identity = regular(mapped(row['path'], output, mount)); require(len(data) == row['size'] and identity['sha256'] == row['sha256'], 'artifact binding'); verified.append(identity)
-    artifact(record['helper']); require(record['helper']['sha256'] == HELPER_SHA, 'exact helper bytes')
+    artifact(record['helper']); require(record['helper']['path'] == '/workspace/docs/verification/evidence/stability-linux-collector-rebuild-20260915.py' and record['helper']['sha256'] == HELPER_SHA, 'exact helper bytes')
+    retained_helper_raw, retained_helper_identity = regular(output / 'helper.py'); require(retained_helper_identity['sha256'] == HELPER_SHA, 'retained helper bytes'); verified.append(retained_helper_identity)
     seen_inputs = set()
     for row in record['inputs']:
+        require(type(row) is dict and set(row) == {'original', 'retained'}, 'exact pinned input row')
         original_path = Path(row['original']['path'])
         try:
             relative = str(original_path.relative_to('/workspace'))
@@ -278,21 +320,41 @@ def verify_build_record(mount, host):
             raise ValueError('pinned input workspace path')
         require(PINNED_INPUTS.get(relative) == row['original']['sha256'], 'pinned input hash: ' + relative)
         require(relative not in seen_inputs, 'duplicate pinned input: ' + relative); seen_inputs.add(relative)
+        if relative == 'scripts/application-tests/supervisor.py': expected_retained = container_output / 'supervisor.py'
+        elif relative.startswith('scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/'): expected_retained = container_output / 'source/linux-sealed-v1' / Path(relative).name
+        else: expected_retained = container_output / 'source' / Path(relative).name
+        require(Path(row['retained']['path']) == expected_retained, 'exact retained input path: ' + relative)
         artifact(row['original']); artifact(row['retained']); require(row['original']['sha256'] == row['retained']['sha256'] and row['original']['size'] == row['retained']['size'], 'retained equality')
     require(seen_inputs == set(PINNED_INPUTS), 'complete pinned input set')
+    dependency_originals = set()
     for row in record['compiler_dependencies']:
+        require(type(row) is dict and set(row) == {'original', 'retained'} and type(row['original']) is dict and set(row['original']) == {'path', 'size', 'sha256'}, 'compiler dependency row')
         original = Path(row['original']['path']); retained = Path(row['retained']['path'])
         require(str(original).startswith(('/usr/', '/work/stability-linux-collector-build-20260915-2/')), 'compiler dependency must be container path')
-        require(str(retained) == str(output / 'compiler-inputs' / str(original).lstrip('/')), 'compiler dependency retained path')
+        require(type(row['original']['size']) is int and row['original']['size'] >= 0 and re.fullmatch(r'[0-9a-f]{64}', row['original'].get('sha256', '')), 'compiler dependency original identity')
+        require(str(original) not in dependency_originals, 'duplicate compiler dependency')
+        dependency_originals.add(str(original))
+        require(retained == container_output / 'compiler-inputs' / str(original).lstrip('/'), 'compiler dependency retained path')
         artifact(row['retained']); require(row['original']['sha256'] == row['retained']['sha256'] and row['original']['size'] == row['retained']['size'], 'retained equality')
-    expected_outputs = {str(output / (name + suffix)) for name in ('request', 'sha256', 'collector', 'fixture', 'sha256_harness') for suffix in ('.o', '.d')}
-    expected_outputs.update(str(output / (name + suffix)) for name in ('linux-collector', 'fixture', 'sha256-harness') for suffix in ('', '.map'))
+    expected_outputs = {str(container_output / (name + suffix)) for name in ('request', 'sha256', 'collector', 'fixture', 'sha256_harness') for suffix in ('.o', '.d')}
+    expected_outputs.update(str(container_output / (name + suffix)) for name in ('linux-collector', 'fixture', 'sha256-harness') for suffix in ('', '.map'))
     require({row.get('path') for row in record['compiled_outputs']} == expected_outputs, 'exact compiled output set')
     for row in record['compiled_outputs']: artifact(row)
+    dependency_files = set()
+    for name in ('request', 'sha256', 'collector', 'fixture', 'sha256_harness'):
+        dep_raw, _ = regular(output / (name + '.d'))
+        text_value = dep_raw.decode('utf-8').split(':', 1); require(len(text_value) == 2, 'compiler dependency file syntax')
+        for item in shlex.split(text_value[1].replace('\\\n', ' ')):
+            dep = Path(item)
+            if not dep.is_absolute(): dep = container_output / dep
+            dep = Path(os.path.normpath(str(dep)))
+            require(dep.is_absolute() and '..' not in dep.parts, 'canonical compiler dependency')
+            dependency_files.add(str(dep))
+    require(dependency_files == dependency_originals, 'exact compiler dependency-file membership')
     expected_labels = ['compiler-version'] + ['compile-' + name for name in ('request', 'sha256', 'collector', 'fixture', 'sha256_harness')]
     expected_labels += [phase + '-' + name for name in ('linux-collector', 'fixture', 'sha256-harness') for phase in ('link', 'elf', 'disassembly', 'loader')]
     expected_labels += ['sha9', 'builder-negative']
-    root = '/work/stability-linux-collector-build-20260915-2'
+    root = str(container_output)
     def p(name): return root + '/' + name
     expected_argv = [[ '/usr/bin/gcc', '--version' ]]
     for name, src in (('request', 'source/request.c'), ('sha256', 'source/linux-sealed-v1/sha256.c'), ('collector', 'source/linux-sealed-v1/collector.c'), ('fixture', 'source/linux-sealed-v1/fixture.c'), ('sha256_harness', 'source/linux-sealed-v1/sha256_harness.c')):
@@ -304,15 +366,47 @@ def verify_build_record(mount, host):
         expected_argv.append(['/usr/bin/ldd', p(name)])
     expected_argv += [[p('sha256-harness')], ['/usr/bin/python3', '-B', p('source/linux-sealed-v1/run_collector_tests.py'), '--collector', p('linux-collector'), '--fixture', p('fixture'), '--supervisor', p('supervisor.py'), '--attempt-root', p('builder-negative'), '--builder-only']]
     require([row.get('label') for row in record['commands']] == expected_labels and [row.get('argv') for row in record['commands']] == expected_argv, 'exact build command sequence/argv')
-    for row in record['commands']:
-        collection = row['collection']; require(collection.get('status') == 'COMPLETED' and collection.get('raw_wait_status') == 0 and collection.get('cleanup_complete') is True and collection.get('application_acceptance') is False, 'build command result')
-        artifact(collection['streams']['stdout']['artifact']); artifact(collection['streams']['stderr']['artifact'])
+    exact_env = {'PATH': '/usr/local/bin:/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'UTC', 'TMPDIR': p('tmp')}
+    for index, row in enumerate(record['commands']):
+        label, argv = expected_labels[index], expected_argv[index]
+        require(type(row) is dict and set(row) == {'label', 'argv', 'environment', 'collection'}, 'exact command row schema: ' + label)
+        require(row.get('environment') == exact_env, 'exact outer command environment: ' + label)
+        collection = row['collection']; require(collection.get('status') == 'COMPLETED' and type(collection.get('raw_wait_status')) is int and collection.get('raw_wait_status') == 0 and collection.get('cleanup_complete') is True and collection.get('application_acceptance') is False, 'build command result')
+        for clock in ('payload_monotonic_started', 'payload_monotonic_deadline', 'payload_completion_observed_monotonic'):
+            require(type(collection.get(clock)) in (int, float) and math.isfinite(collection[clock]), 'finite command clock: ' + label)
+        require(collection['payload_monotonic_started'] <= collection['payload_completion_observed_monotonic'] < collection['payload_monotonic_deadline'], 'command observed before exclusive deadline: ' + label)
+        require(collection.get('argv') == argv and collection.get('cwd') == root and collection.get('env') == exact_env, 'exact collected command context: ' + label)
+        require(collection.get('uid') == 1000 and collection.get('gid') == 1000 and collection.get('groups') == [1000] and collection.get('stdin') == {'kind': 'devnull'} and collection.get('stdin_path') is None, 'exact collected command identity: ' + label)
+        require(collection.get('wait_status') == {'kind': 'exited', 'code': 0} and collection.get('descendants') == [] and collection.get('descendant_records_omitted') == 0, 'exact command exit/descendants: ' + label)
+        limit = 65536 if label == 'sha9' else 8 * 1024 * 1024
+        timeout = 10.0 if label == 'sha9' else (60.0 if label == 'builder-negative' else 120.0)
+        require(collection.get('stdout_limit_bytes') == limit and collection.get('stderr_limit_bytes') == limit and collection.get('timeout_seconds') == timeout and collection.get('cleanup_timeout_seconds') == 15.0, 'exact collection bounds: ' + label)
+        for stream_name in ('stdout', 'stderr'):
+            stream = collection.get('streams', {}).get(stream_name); require(type(stream) is dict, 'stream row: ' + label)
+            stream_artifact = stream.get('artifact'); artifact(stream_artifact)
+            require(stream_artifact['path'] == p(label + '-collection/' + stream_name + '.bin'), 'exact stream destination: ' + label)
+            for counter in ('bytes_observed', 'bytes_retained', 'discarded_observed_bytes', 'limit_bytes'):
+                require(type(stream.get(counter)) is int, 'plain stream counter: ' + label)
+            require(stream.get('eof') is True and stream.get('truncated') is False and stream.get('discarded_observed_bytes') == 0 and stream.get('limit_bytes') == limit and stream.get('bytes_observed') == stream_artifact['size'] and stream.get('bytes_retained') == stream_artifact['size'], 'complete stream retention: ' + label)
     require(record.get('sha_cases') == 9 and record.get('builder_cases') == 1, 'SHA9/builder counts')
     sha9_stdout = b'PASS empty\nPASS abc\nPASS multi-56\nPASS boundary-55\nPASS boundary-56\nPASS boundary-63\nPASS boundary-64\nPASS boundary-65\nPASS rejected-update-preserves-state\n'
     sha9_out, _ = regular(mapped(record['commands'][-2]['collection']['streams']['stdout']['artifact']['path'], output, mount)); sha9_err, _ = regular(mapped(record['commands'][-2]['collection']['streams']['stderr']['artifact']['path'], output, mount))
     require(sha9_out == sha9_stdout and sha9_err == b'', 'literal SHA9 stdout/stderr')
-    builder_out, _ = regular(mapped(record['commands'][-1]['collection']['streams']['stdout']['artifact']['path'], output, mount)); require(builder_out == b'PASS builder-identity\nRETAINED /work/stability-linux-collector-build-20260915-2/builder-negative\n', 'literal builder stdout')
-    loaders = record.get('loader_dependencies'); require(type(loaders) is list and all(type(item) is dict and isinstance(item.get('path'), str) and item['path'].startswith('/') and not item['path'].startswith(('/work', '/workspace')) for item in loaders), 'container-only loader references')
+    builder_out, _ = regular(mapped(record['commands'][-1]['collection']['streams']['stdout']['artifact']['path'], output, mount)); builder_err, _ = regular(mapped(record['commands'][-1]['collection']['streams']['stderr']['artifact']['path'], output, mount)); require(builder_out == b'PASS builder-identity\nRETAINED /work/stability-linux-collector-build-20260915-2/builder-negative\n' and builder_err == b'', 'literal builder stdout/stderr')
+    builder_raw, builder_identity = regular(output / 'builder-negative/result.json'); verified.append(builder_identity); builder = strict_json(builder_raw)
+    require(set(builder) == {'application_acceptance', 'backend_enabled', 'cases', 'euid', 'inputs', 'kind', 'schema_version', 'status', 'uid'} and same(builder.get('schema_version'), 1) and builder.get('kind') == 'actual-linux-sealed-collector-infrastructure-tests', 'exact builder result schema')
+    require(builder.get('status') == 'PASS_INFRASTRUCTURE_ONLY' and builder.get('application_acceptance') is False and builder.get('backend_enabled') is False and builder.get('uid') == 1000 and builder.get('euid') == 1000, 'builder infrastructure-only result')
+    require(builder.get('cases') == [{'case': 'builder-identity', 'observed_status': 'BLOCKED', 'status': 'PASS_INFRASTRUCTURE_ONLY'}], 'exact builder case')
+    require(type(builder.get('inputs')) is list and len(builder['inputs']) == 4, 'exact builder inputs')
+    builder_expected = {p('linux-collector'), p('fixture'), p('supervisor.py'), p('source/linux-sealed-v1/run_collector_tests.py')}
+    require({row.get('path') for row in builder['inputs']} == builder_expected and all(type(row) is dict and set(row) == {'path', 'size_bytes', 'sha256'} and type(row.get('size_bytes')) is int and re.fullmatch(r'[0-9a-f]{64}', row.get('sha256', '')) for row in builder['inputs']), 'exact builder input identities')
+    for row in builder['inputs']:
+        data, identity = regular(mapped(row['path'], output, mount)); require(len(data) == row['size_bytes'] and identity['sha256'] == row['sha256'], 'builder input artifact binding')
+    expected_loaders = [
+        {'path': '/lib64/libc.so.6', 'size': 2339896, 'sha256': 'b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4'},
+        {'path': '/lib64/ld-linux-x86-64.so.2', 'size': 930600, 'sha256': '0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b'},
+    ]
+    loaders = record.get('loader_dependencies'); require(loaders == expected_loaders, 'exact immutable-image loader identities')
     write(host / 'build-record.json', raw); save(host / 'build-bindings.json', {'record': record_identity, 'verified': verified, 'loader_scope': 'container-only immutable image paths', 'application_acceptance': False, 'transport_acceptance': False})
     return record, record_identity
 
