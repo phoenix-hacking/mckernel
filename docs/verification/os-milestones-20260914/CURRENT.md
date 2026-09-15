@@ -859,3 +859,14 @@ on a corruption and requires both one-sided comparison directions. After preserv
 the missing-direction packet review failure, independent review returns
 `PASS_OUTPUT_ORACLE_PACKET_ONLY`. Six model operation families still lack complete
 decision tables. No new source edit or check has started.
+
+The output-oracle source slice now receives independent
+`PASS_OUTPUT_ORACLE_SOURCE_ONLY` and `PASS_OUTPUT_ORACLE_EVIDENCE_ONLY`. Its two
+helper-site assertion failures and an evidence-manifest row-count failure are
+preserved before bounded corrections. Python 3.9.12 and 3.8.10 each pass all
+three focused tests: both one-sided comparisons, agreed corruption, 13 exact
+corruptions, and the baseline with and without terminal LF. The canonical
+one-row literal is independently bound as 192 compact bytes. The corrected
+10-member archive and the byte-exact failed archive are retained. Raw inventory
+remains 133; the raw/oracle matrix, compilation, models, native execution and
+all acceptance gates remain incomplete and closed.
