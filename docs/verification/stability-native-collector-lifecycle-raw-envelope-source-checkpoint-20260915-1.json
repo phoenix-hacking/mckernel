@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_envelope_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-envelope-source",
+  "attempt": 1,
+  "status": "PASS_RAW_ENVELOPE_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T16:36:00Z",
+  "base_commit": "7dfd26c83d91a86f9df3ee72fff77eddc590c100",
+  "reviews": {
+    "packet": "PASS_RAW_ENVELOPE_PACKET_ONLY",
+    "source": "PASS_RAW_ENVELOPE_SOURCE_ONLY",
+    "evidence": "PASS_RAW_ENVELOPE_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "2a58d661746133080b55f5fbe7824eb57219474b0235b04f27003984b2cf897e",
+    "vectors_sha256": "38e54872dbef9a44eea90dab5ea4ca06a0c6a4872f3db4af10e188afdee353fa",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "06409a813c65bfae224f920c55e5e53c8214bb52cd912e32ffc780d6f5b349c0",
+    "accepted_prefix_text_sha256": "e66175e09519434778e8a91df2913cce7afc0c3eab7a0cdd49f8479069f2ccda"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-envelope-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "d48ab3852a73b9673419bd78d4b7afcf2cbbd646acd255cb8f3bde3ad1f897aa",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 11, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 11, "tests_failed": 0},
+    "new_raw_cases": 3,
+    "cumulative_raw_cases": 113,
+    "whitespace_positive_bytes": 253,
+    "max_input_positive_bytes": 1048576
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

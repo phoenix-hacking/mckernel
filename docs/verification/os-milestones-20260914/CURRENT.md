@@ -781,3 +781,12 @@ boundary in
 `stability-native-collector-lifecycle-raw-envelope-source-packet-20260915-1.md`.
 It receives independent `PASS_RAW_ENVELOPE_PACKET_ONLY`; no source edit or new
 check has started.
+
+The envelope slice now receives independent `PASS_RAW_ENVELOPE_SOURCE_ONLY` and
+`PASS_RAW_ENVELOPE_EVIDENCE_ONLY`. Three exact container-site negatives bring the
+raw inventory to 113; whitespace, unresolved-mutant decoder isolation and exactly
+1,048,576 input bytes are accepted. Python 3.9.12 and 3.8.10 each pass all eleven
+focused decoder tests. Ten hash-bound members are retained in
+`stability-native-collector-lifecycle-raw-envelope-source-checkpoint-20260915-1.tar.gz`.
+The operation/argument slice and full raw/oracle matrix remain open; compilation,
+models, native execution and acceptance remain closed.
