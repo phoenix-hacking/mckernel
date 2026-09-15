@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_capacity_literal_review",
+  "task_id": "M02-C-lifecycle-capacity-literal-review",
+  "attempt": 1,
+  "status": "PASS_CAPACITY_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T11:49:00Z",
+  "reviewed_base_commit": "22d8d4ede9685395cb39422a692b96012a8a207a",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-capacity-literal-slice-20260915-1.tar.gz",
+    "sha256": "0bee3286953fe7a4212c2a9b226dcf3971fc2bb5c7eade0a200a9ae0d7137190",
+    "size": 12636,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "67e22e473050e75aae23d9ad6841bf576d129487e150da2b807f5efb7c8e7d45",
+    "expected.json": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_native_lifecycle_model.py": "d8ceae5f17e2a49afd84eea3c0bc84be5aa7a37ea1a3fb449c1c94ceaf42d70b"
+  },
+  "accepted_scope": {
+    "vectors": ["application-limit", "process-limit", "thread-limit"],
+    "materialized_vectors_total": 38,
+    "application_rows_before_limit": 2,
+    "process_rows_before_limit": 4,
+    "thread_rows_before_limit": 8,
+    "limit_events": 0,
+    "state_unchanged_on_limit": true,
+    "end_event_sequence_operation_pairs": [[3, 4], [5, 6], [10, 11]]
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

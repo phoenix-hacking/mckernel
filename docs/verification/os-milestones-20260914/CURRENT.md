@@ -648,3 +648,23 @@ separate coverage and pool arity in
 `stability-native-collector-lifecycle-corpus-contract-addendum-20260915-1.md`.
 Capacity/raw literals are not yet materialized; whole-corpus/model/source and all
 runtime or acceptance gates remain closed.
+
+Three retained-capacity vectors now receive independent
+`PASS_CAPACITY_LITERAL_SLICE_ONLY`. Separate traces admit exactly two applications,
+four process rows and eight thread rows, then reject the next fresh identity with
+`LIMIT` before any event or state mutation. Exact parent projection, sorted rows,
+sticky incompleteness and post-failure capture-end sequence identities pass literal
+inspection. Cumulative five-file bytes are archived as
+`stability-native-collector-lifecycle-capacity-literal-slice-20260915-1`, bringing
+the materialized ordinary-vector count to 38. The operation-count/raw matrix and
+replacement models remain outstanding.
+
+The bounded raw-invalid mechanism packet receives independent
+`PASS_RAW_INVALID_SOURCE_PACKET_ONLY`. It freezes a four-path allowlist, isolated
+stdin decoder, pre-build validation order, exact child status/stream contract,
+nine first mechanism cases, single-open external artifact handling and separate
+raw coverage in
+`stability-native-collector-lifecycle-raw-invalid-source-packet-20260915-1.md`.
+The current harness still lacks this behavior and the oversized artifact has no
+final bound hash, so this is a source-ready packet only; no check, build or runtime
+credit follows.
