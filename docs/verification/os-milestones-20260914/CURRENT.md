@@ -800,3 +800,15 @@ controls are bound, and independent review returns
 `PASS_RAW_OPERATION_ARGUMENT_PACKET_ONLY`. No source edit or new check has started;
 the full raw/oracle matrix, compilation, models, native execution and acceptance
 remain closed.
+
+The operation/argument source slice now receives independent
+`PASS_RAW_OPERATION_ARGUMENT_SOURCE_ONLY` and
+`PASS_RAW_OPERATION_ARGUMENT_EVIDENCE_ONLY`. Its first review failure for missing
+integer-versus-boolean/float anti-conflation assertions is preserved; the bounded
+test correction then passes. Nineteen exact negatives bring the raw inventory to
+132, with the first 113 lexical records unchanged. Python 3.9.12 and 3.8.10 each
+pass all twelve focused decoder tests. The exact source, oversized artifact,
+packet, reviews, commands and streams are retained in the 10-member
+`stability-native-collector-lifecycle-raw-operation-argument-source-checkpoint-20260915-1.tar.gz`.
+The full raw/oracle matrix remains open; compilation, models, native execution and
+all acceptance gates remain closed.

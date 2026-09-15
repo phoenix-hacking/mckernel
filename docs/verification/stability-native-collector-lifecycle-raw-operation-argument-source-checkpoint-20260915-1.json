@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_operation_argument_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-operation-argument-source",
+  "attempt": 1,
+  "status": "PASS_RAW_OPERATION_ARGUMENT_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T17:27:00Z",
+  "base_commit": "528b7934a75c9b8a408e6331337789621c070a36",
+  "reviews": {
+    "packet": "PASS_RAW_OPERATION_ARGUMENT_PACKET_ONLY",
+    "source_attempt_1": "FAIL_MISSING_ANTI_CONFLATION_ASSERTIONS",
+    "source_attempt_2": "PASS_RAW_OPERATION_ARGUMENT_SOURCE_ONLY",
+    "evidence": "PASS_RAW_OPERATION_ARGUMENT_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "e76d8a831655b82126f762b5ad9bf41fcf2f5837dc5c66b90b08de9ac4e5f479",
+    "vectors_sha256": "4d31f16ec54564588a820001d4a89b048864aabedd5fe8a5283bd83ee61d58da",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "29f09bcb424fc363c2f01ce877264c76b6466390a6d9c89f201cf2717f13d118",
+    "accepted_prefix_records": 113,
+    "accepted_prefix_text_sha256": "0e0112f4463bba6f04d5b1b9ff5b8fa37f8a767bdde3f5b5dfddb92a256fb428"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-operation-argument-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "77a9e7b1c8751d6bedf20cddb7442d4ee70e2d6a9b48dd03296090c4f126c05d",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 12, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 12, "tests_failed": 0},
+    "new_raw_cases": 19,
+    "numeric_bound_cases": 8,
+    "unused_argument_cases": 11,
+    "cumulative_raw_cases": 132
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
