@@ -942,3 +942,11 @@ records. After preserving the missing exact-size assertion, Python 3.9.12 and
 fixture remains below its unchanged 1-MiB cap and is retained with all hashes in
 the 10-member archive. The raw/oracle matrix and every execution and acceptance
 gate remain incomplete and closed.
+
+A parallel source-bound TID-assignment audit now receives independent
+`PASS_TID_ASSIGNMENT_EVIDENCE_DRAFT_ONLY`. Nine exact native source files, three
+literal-review records and the retained START protocol archive distinguish slot
+reservation/release and unchecked assignment from model identity semantics.
+Same/different reassignment, phase/domain permission, alias classification,
+reference/authority interaction and CLOSED precedence remain unspecified, so the
+`TID_ASSIGN` decision family is not frozen and no transition source is released.
