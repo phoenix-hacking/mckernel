@@ -906,3 +906,12 @@ lexical records. Python 3.9.12 and 3.8.10 each pass all fifteen focused decoder
 tests. The 488,540-byte fixture, exact budget instances and all source/log hashes
 are retained in the 10-member archive. The full raw/oracle matrix remains open;
 compilation, models, native execution and all acceptance gates remain closed.
+
+The next independent source packet covers `run()`'s post-capture output envelope:
+nonzero status, nonempty stderr and the exact 1-MiB stdout boundary, plus two
+positive controls. It is frozen in
+`stability-native-collector-lifecycle-output-envelope-source-packet-20260915-1.md`;
+independent review returns `PASS_OUTPUT_ENVELOPE_PACKET_ONLY`. This remains
+mock-only validation and does not prove live collection bounds. Raw inventory
+stays 135; no source edit or new check has started and every execution and
+acceptance gate remains closed.
