@@ -978,3 +978,13 @@ review returns `PASS_OUTPUT_CONTROL_BOOLEAN_PACKET_ONLY` for three exact
 integer-for-Boolean rejections and two schema-only positive scenarios. Raw
 inventory remains 136. No source edit or execution has started, and every
 compiler, model, native, application and production gate remains closed.
+
+The output control-Boolean source slice now receives independent
+`PASS_OUTPUT_CONTROL_BOOLEAN_SOURCE_ONLY` and
+`PASS_OUTPUT_CONTROL_BOOLEAN_EVIDENCE_ONLY`. Three exact integer-for-Boolean
+rejections and two schema-only positive scenarios pass all four focused tests
+under Python 3.9.12 and 3.8.10. The ten-member archive binds independently
+handwritten compact literals, exact mutation bytes, validator ordering, pinned
+interpreters and command-prefixed logs. This remains post-capture mocked-output
+validation. Raw inventory stays 136, and all compilation, model, native,
+application and production gates remain closed.
