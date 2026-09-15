@@ -1040,3 +1040,11 @@ first 137 raw records reproduce their lexical hash. The incompatible MODEL1
 sources remain excluded and unexecuted, so this is literal/schema source evidence
 only. The lifecycle decision families, full matrices and every execution and
 acceptance gate remain incomplete and closed.
+
+The next independently reviewed output-schema packet isolates exact typing of
+the top-level output row identifier. It binds one positive R1 literal and exact
+Boolean-`true` and integral-float-`1.0` mutations; review returns
+`PASS_OUTPUT_ROW_ID_TYPE_PACKET_ONLY`. Both negatives must reject at the exact
+integer helper before any registry, key or oracle validation. No source edit or
+new check has started. Ordinary inventory remains 44, raw inventory remains 137,
+and every compiler, model, native, application and production gate stays closed.
