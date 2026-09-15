@@ -425,3 +425,12 @@ proof, range identity/geometry is missing, and Copy inventories retain no arena
 lifetime or non-releasing validated authority. The exact four files are archived
 as `stability-pending-free-inventory-source-checkpoint-20260915-1`; there are no
 retained command streams. No compilation or acceptance follows.
+
+M03 private inventory attempt 2 partially adds exclusive arena lifetimes, separate
+descriptor/extent identity and a non-releasing result, but independent review
+still rejects it. Sentinel rules reject valid rings while allowing detached cycles;
+constructors remain metadata/zero-count placeholders; the C preprocessor and
+source parser are invalid; trusted extent ownership is absent; and overflow codes
+contradict vectors. No test was run before the dispatcher timebox. The exact source
+is archived as `stability-pending-free-inventory-source-checkpoint-20260915-2`.
+Under the two-attempt stop rule no immediate implementation retry is released.

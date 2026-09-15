@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_inventory_fixture_source_failure",
+  "task_id": "M03-A/M03-B-private-bounded-inventory-fixture",
+  "attempt": 2,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T08:55:00Z",
+  "source_sha256": {
+    "model": "1b2b2ab6c5732b0d92040d93bc1219646b4633ebbf3bfae46d058b9c06cfe44b",
+    "vectors": "798a2f9c0c9bc7aee2384049bfdfedf4e67376e1426f6e35386a3e8268715928",
+    "c_reference": "db6df3c3b214ec75d6fbe8d1aee84e7ca5b83508592d60829623436a458cf66e",
+    "harness": "bedb35acfe55000e865309db395142bc73b15aa10af89eac065ff41bce13f142"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-inventory-source-checkpoint-20260915-2.tar.gz",
+    "sha256": "f84530ee85fe6d751b182015665c7c553aa07b1d62259a67c2fa1a807329dabc",
+    "size": 3322,
+    "members": 4
+  },
+  "independent_results": ["FAIL_SOURCE", "FAIL_SOURCE_EVIDENCE"],
+  "blocking_findings": [
+    "sentinel membership logic rejects legitimate rings yet permits detached self/foreign cycles",
+    "Rust/C constructors remain metadata or zero-count placeholders rather than model executions",
+    "C preprocessor syntax is invalid and parser requires absent strings",
+    "trusted physical ownership range is absent",
+    "overflow error classifications contradict the vectors"
+  ],
+  "tests_executed": false,
+  "immediate_retry_released": false,
+  "compiler_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}
