@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_failure",
+  "task_id": "M03-A/M03-B",
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "59f5d34a7a021500392650039cf5b6b297091e08",
+  "candidate_files": [
+    {
+      "path": "kernel/rust/mem_helpers.rs",
+      "sha256": "c445fbfe8f33ad5d0ef2fd82bec94125f7bb4c32b69a6f67f30bc9deac32c23e"
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "6530a62bbc697aa92306435c3ea1210cf3ed46142125a0a4ef3cc5c63e40cbc0"
+    }
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-failure-20260915.tar.gz",
+    "size": 718776,
+    "sha256": "8e3891cecea0d36106d35e810df9bfc618bbaa19a1a2e7fbc735801e74b0384f",
+    "members": 2
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL",
+    "findings": [
+      "Pin::new_unchecked receives an owned non-Deref PendingFreeBatch and cannot compile.",
+      "Circular-empty detach points the destination at source and then nulls source, leaving invalid or dangling links.",
+      "The additive-only packet prematurely replaces production finish behavior, adds an arbitrary 4096-node rejection and changes reset/callback ordering.",
+      "Four grep checks are not executable M03-B vectors.",
+      "The intended private unsafe ownership boundary is public and incompletely documented."
+    ]
+  },
+  "positive_observations": [
+    "Nonempty transfer repairs both boundary links and preserves page metadata.",
+    "Validation precedes nonempty mutation and release.",
+    "PhantomPinned plus raw-pointer PhantomData supplies the intended negative auto-traits and no freeing destructor was added."
+  ],
+  "required_correction": [
+    "Restore production mem_finish_free_pages_pending_result byte-for-byte and keep the first primitive additive/private.",
+    "Pin a final-address local by reference and explicitly handle circular-empty detach.",
+    "Add actual focused Rust/C-reference vectors including later-invalid atomic rejection and compile-fail trait checks before any integration."
+  ],
+  "compiled": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

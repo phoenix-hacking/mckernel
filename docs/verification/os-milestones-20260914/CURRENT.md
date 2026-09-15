@@ -40,18 +40,28 @@ Active work:
    available, explicitly scopes no-swap to isolated runs, and passed a bounded
    independent audit. Remeasure immediately before each heavy acquisition.
 
-M03-A source audit is complete and defines the next implementation boundary: a
-pinned private Rust pending-free batch must detach the exact per-CPU chain while
-preserving order, page metadata and boundary links; invalid input must leave the
-list untouched. Next three dependency-ready tasks: checkpoint the M01-B
-provenance subgate; correct/review M02-A durable cleanup ownership; implement
-and test the bounded M03-A batch abstraction. M02-B root attempt 1 is retained
-as FAIL: SHA passed, but the first `literal` collector case produced setup stage
-1/EPERM and the remaining 24 cases did not run. Cleanup, exact absence and the
-watchdog passed. Same-profile probes isolate the blocker to Docker seccomp
-rejecting `close_range`; a bounded finite-descriptor fallback is under source
-review before a pinned rebuild and fresh attempt 2. No heavy process or
-McKernel guest is live.
+M03-A source audit defines the next implementation boundary: a pinned private
+Rust pending-free batch must detach the exact per-CPU chain while preserving
+order, page metadata and boundary links; invalid input must leave the list
+untouched. Its first candidate was independently rejected for invalid Pin
+construction, broken empty-list transfer, premature production integration and
+grep-only tests; its exact failure archive and additive review record are
+retained. The dirty candidate remains rejected and must not be staged as an
+implementation.
+
+M02-B root attempt 1 is retained as FAIL: SHA passed, but the first `literal`
+collector case produced setup stage 1/EPERM and the remaining 24 cases did not
+run. Cleanup, exact absence and the watchdog passed. The immutable raw packet
+has magic decimal 827081537 (`0x314c4341`); an additive correction preserves the
+earlier summary's mistyped decimal. Same-profile probes isolate the blocker to
+Docker seccomp rejecting `close_range`. The production collector now has a
+bounded ENOSYS/EPERM finite-descriptor fallback, and its exact included-C matrix
+passes. The pinned rebuild helper binds all 14 original and retained inputs.
+Independent review nevertheless withholds the build because the established
+outer container wrapper can release its flock without verified Docker absence.
+A dedicated durable build owner with an inherited-lock watchdog and exact
+name/label/ID cleanup is the next prerequisite; only then may the dispatcher
+take the sole heavy lease. No heavy process or McKernel guest is live.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language

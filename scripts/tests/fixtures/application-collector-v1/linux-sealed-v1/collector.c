@@ -20,6 +20,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/prctl.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/syscall.h>
 #include <sys/sysmacros.h>
@@ -406,13 +407,35 @@ static _Noreturn void child_error(int fd, unsigned stage, int error)
     setup_packet(fd, words); _exit(stage == 2 ? 126 : 125);
 }
 
+#ifndef COLLECTOR_CLOSE_RANGE_CALL
+#define COLLECTOR_CLOSE_RANGE_CALL(first, last, flags) syscall(SYS_close_range, first, last, flags)
+#endif
+#ifndef COLLECTOR_GETRLIMIT_CALL
+#define COLLECTOR_GETRLIMIT_CALL(resource, limit) getrlimit(resource, limit)
+#endif
+#ifndef COLLECTOR_CLOSE_CALL
+#define COLLECTOR_CLOSE_CALL(fd) close(fd)
+#endif
+
 static bool close_except(int a, int b)
 {
+    if (a < 3 || b < 3 || a == b) { errno = EINVAL; return false; }
     unsigned low = (unsigned)(a < b ? a : b), high = (unsigned)(a < b ? b : a);
-    if (low < 3 || low == high) { errno = EINVAL; return false; }
-    if (low > 3 && syscall(SYS_close_range, 3U, low - 1U, 0U) != 0) return false;
-    if (high > low + 1U && syscall(SYS_close_range, low + 1U, high - 1U, 0U) != 0) return false;
-    return syscall(SYS_close_range, high + 1U, UINT_MAX, 0U) == 0;
+    int saved_error = 0;
+    if (low > 3 && COLLECTOR_CLOSE_RANGE_CALL(3U, low - 1U, 0U) != 0) saved_error = errno;
+    if (!saved_error && high > low + 1U && COLLECTOR_CLOSE_RANGE_CALL(low + 1U, high - 1U, 0U) != 0) saved_error = errno;
+    if (!saved_error && COLLECTOR_CLOSE_RANGE_CALL(high + 1U, UINT_MAX, 0U) == 0) return true;
+    if (!saved_error) saved_error = errno;
+    if (saved_error != ENOSYS && saved_error != EPERM) { errno = saved_error; return false; }
+    struct rlimit limit;
+    if (COLLECTOR_GETRLIMIT_CALL(RLIMIT_NOFILE, &limit) != 0) return false;
+    if (limit.rlim_max == RLIM_INFINITY || limit.rlim_max > 4096) { errno = EOVERFLOW; return false; }
+    /* Clean launch requires inherited descriptors to fit this finite hard bound. */
+    for (unsigned fd = 3; fd < (unsigned)limit.rlim_max; fd++) {
+        if ((int)fd == a || (int)fd == b) continue;
+        if (COLLECTOR_CLOSE_CALL((int)fd) != 0 && errno != EBADF) return false;
+    }
+    return true;
 }
 
 static _Noreturn void child_run(int stdin_fd, int out_fd, int err_fd, int setup_fd)
