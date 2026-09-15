@@ -958,3 +958,15 @@ independent review returns `PASS_OUTPUT_REGISTRY_BOOLEAN_PACKET_ONLY` for four
 integer-for-Boolean rejections and two schema-only positive scenarios. Raw count
 stays 136; no source edit or check has started and all execution and acceptance
 gates remain closed.
+
+The output-registry Boolean source slice now receives independent
+`PASS_OUTPUT_REGISTRY_BOOLEAN_SOURCE_ONLY` and
+`PASS_OUTPUT_REGISTRY_BOOLEAN_EVIDENCE_ONLY`. Four integer-for-Boolean
+rejections and two positive schema scenarios pass all five focused tests under
+Python 3.9.12 and 3.8.10. The initial missing exact compact-byte expectations are
+preserved as a review failure; the corrected source independently binds each
+unique literal-token mutation before collector invocation. The exact ten-member
+archive retains both command-prefixed logs and all source, interpreter and
+literal hashes. This is post-capture mocked-output evidence only. Raw inventory
+stays 136, and compilation, models, native execution and every acceptance gate
+remain closed.
