@@ -46,8 +46,11 @@ order, page metadata and boundary links; invalid input must leave the list
 untouched. Its first candidate was independently rejected for invalid Pin
 construction, broken empty-list transfer, premature production integration and
 grep-only tests; its exact failure archive and additive review record are
-retained. The dirty candidate remains rejected and must not be staged as an
-implementation.
+retained. Attempt 2 restored the production finish path but was also rejected:
+empty detach did not release the source, mixed destination states passed, its
+unsafe contract was incomplete, and its tests exercised look-alikes rather than
+the production helpers. Both exact candidates are retained; the current dirty
+candidate remains rejected and must not be staged as an implementation.
 
 M02-B root attempt 1 is retained as FAIL: SHA passed, but the first `literal`
 collector case produced setup stage 1/EPERM and the remaining 24 cases did not
@@ -59,7 +62,11 @@ bounded ENOSYS/EPERM finite-descriptor fallback, and its exact included-C matrix
 passes. The pinned rebuild helper binds all 14 original and retained inputs.
 Independent review nevertheless withholds the build because the established
 outer container wrapper can release its flock without verified Docker absence.
-A dedicated durable build owner with an inherited-lock watchdog and exact
+A first dedicated build-owner candidate was independently rejected because its
+bounded cleanup could release the inherited flock with a live container, its
+watchdog/config/isolation evidence was incomplete, and its root-owned `/work`
+mount was unusable by UID 1000. Its exact source and review are retained. A
+corrected durable owner with persistent recovery, watchdog identity and exact
 name/label/ID cleanup is the next prerequisite; only then may the dispatcher
 take the sole heavy lease. No heavy process or McKernel guest is live.
 
