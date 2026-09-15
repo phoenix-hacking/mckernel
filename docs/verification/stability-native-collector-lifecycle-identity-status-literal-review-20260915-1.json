@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_identity_status_literal_review",
+  "task_id": "M02-C-lifecycle-identity-status-literal-review",
+  "attempt": 1,
+  "status": "PASS_IDENTITY_STATUS_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T10:54:00Z",
+  "reviewed_base_commit": "9598590e6ba41e3e85c2fb55cbfcb0a3a586db89",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-identity-status-literal-slice-20260915-1.tar.gz",
+    "sha256": "d99dff99f3e396c77bce864194f7ab57df48135ed55f3f9d89d89a5d1c5a4b0a",
+    "size": 10341,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "dfe650c7ac19fd03a7f9ee4eccf1a86d3daaaa707c4570f7e0b92d319e8d7bf4",
+    "expected.json": "52cb41cddc48e9e0e4e82a7c298c1210b6fe9a9e2c0f6aa4b8798d2297882de7",
+    "test_native_lifecycle_model.py": "868c27c40461619b3e09a23a8cac22dd2b347bdc5bcbbc50e1c8af2c60b4c3b1"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "wrong-raw-terminal",
+      "wrong-capture",
+      "wrong-os-generation",
+      "wrong-application",
+      "wrong-process",
+      "wrong-exec",
+      "wrong-domain"
+    ],
+    "materialized_vectors_total": 28,
+    "wrong_raw_status_result": "STATUS",
+    "forged_key_dimensions": 5,
+    "forged_key_result": "KEY",
+    "wrong_domain_result": "STATE",
+    "failed_operation_events": 0,
+    "unchanged_state_on_failure": true,
+    "bounded_correction": "added the previously materialized birth-after-runnable name to REQUIRED"
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

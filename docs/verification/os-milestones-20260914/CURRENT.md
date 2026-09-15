@@ -585,3 +585,17 @@ incomplete. One review correction binds the silent-loss mutant to the materializ
 `buffer-full` case. The cumulative bytes are archived as
 `stability-native-collector-lifecycle-capture-control-literal-slice-20260915-1`.
 Whole corpus/model source, compilation and native/acceptance gates remain closed.
+
+Seven terminal-integrity and source-identity negatives now receive independent
+`PASS_IDENTITY_STATUS_LITERAL_SLICE_ONLY`: a wrong raw terminal status, five
+separately forged capture/OS-generation/application/process/exec identity fields,
+and process/thread domain confusion. Every rejected operation emits no event,
+preserves the exact preceding process/thread rows and latches incompleteness; the
+following capture end retains distinct operation and event sequence identities.
+The first review found one required-name bookkeeping omission, corrected only by
+adding the already materialized birth-after-runnable label. Cumulative five-file
+bytes are archived as
+`stability-native-collector-lifecycle-identity-status-literal-slice-20260915-1`.
+The corpus remains incomplete; replacement models, source checks, compilation,
+native execution, ABI freeze, application acceptance and production credit remain
+closed.
