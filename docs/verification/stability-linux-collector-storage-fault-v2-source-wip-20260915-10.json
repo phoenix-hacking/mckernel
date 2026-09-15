@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 10,
+  "status": "SOURCE_REVIEW_PENDING",
+  "recorded_utc": "2026-09-15T23:28:25Z",
+  "archive": {"path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-wip-20260915-10.tar.gz", "sha256": "e9a177df2391724cf3f3c13fcb6d0eb096020873bf593f151def2c77e0e033cd", "size": 190057, "members": 33},
+  "source_sha256": {
+    "supervise.py": "ba08b96e791d18c95c1b372f198b3a27a7d79a36ab5eff7cd6ea12039515d1a8",
+    "witness_owner.py": "2d6211d6c481ddb5ff1c12ad5c82b0b7eafcc5029f3f00662cf47eb5760d8210",
+    "oracle.py": "43fa6aebc223d407584fe5679ca856790662888757b3f9ff312041e752d21b76",
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "test_collector_storage_fault_packet.py": "b7f29b7093e3fc1e173dfaed7ef6d4fb87c5f5b56efdc4dfff27ca9aa72f0225"
+  },
+  "checks": {
+    "python3.9.12": {"result": "49/49 PASS", "stderr_sha256": "bf2126962e47f48c2da24230ea3b0779f8cb7f08d69cdb6ddc23ca9d51cb12f1"},
+    "python3.8.10": {"result": "49/49 PASS", "stderr_sha256": "b41cc1269ddb438801988313177739e1b590445657bcdfd4f6c98230e539b474"},
+    "pycompile": "PASS for both interpreters"
+  },
+  "covered_corrections": [
+    "irreversible ECHILD signal authority and immediate-pair identity",
+    "bounded pipe-prefix retention and cleanup progress draining",
+    "direct and adopted wait/signal/terminal oracle joins",
+    "packet-15 positive stage and deadline matrix",
+    "actual final-file rollback and partial spawn fd ownership",
+    "prepare descriptor acquisition and independent close unwind"
+  ],
+  "remaining_review_boundary": [
+    "stateful preservation across an unexpected supervisor cleanup helper exception",
+    "packet-15 invalid flag/time combinations and end-to-end unreaped sentinel controls",
+    "fresh full independent exact-byte source review"
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

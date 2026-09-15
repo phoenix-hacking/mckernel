@@ -1292,3 +1292,43 @@ At 2026-09-15T19:42:41Z the only retained campaign identities remain launcher
 Rust, GCC or Clang process is live. All three child agents are joined/completed,
 new dispatch is stopped and future launcher continuations remain user-paused.
 The whole-OS goal remains incomplete and is not resumed or marked complete.
+
+The new continuous launcher resumed the campaign and preserves attempts 12
+through 16 plus independent source review attempt 9. Review 9 is `FAIL_SOURCE`
+for exact supervisor/owner/oracle/test hashes `ec666454/a73edf9f/9f66a85f/
+7986129e`: ECHILD authority crossed layers incorrectly, cleanup exceptions could
+discard retirement evidence, owner cleanup and oracle joins were incomplete,
+pipe overflow lost its prefix, and prepare could leak descriptors. Its exact
+input archive SHA256 is
+`74cd28d9f662af70622c9280878612258bf8efe1dcd2bf2cfa20926e9e7b7e10`.
+
+The current unreviewed correction is preserved in
+`stability-linux-collector-storage-fault-v2-source-wip-20260915-10` at archive
+SHA256 `e9a177df2391724cf3f3c13fcb6d0eb096020873bf593f151def2c77e0e033cd`.
+Python 3.9.12 and 3.8.10 each pass 49/49 source-only tests and both compile the
+four Python sources. New controls cover retained overflow prefixes, partial and
+parent-close spawn ownership, packet-15 positive preflight stages/deadlines,
+actual final rollback, direct/adopted wait-signal joins, terminal ECHILD, exact
+adopted-reap equality and prepare descriptor unwind. These bytes are not source
+accepted. The supervisor's last-resort unexpected cleanup exception path still
+needs stateful retirement preservation without future timestamps or closed-union
+schema drift; packet-15 invalid flag/time and unreaped-sentinel controls remain
+incomplete. Do not compile the collector or use root before fresh full source
+review passes.
+
+Next tasks, in order: (1) replace the supervisor's outer placeholder fallback
+with caller-owned mutable cleanup state and actual bounded continuation; (2) add
+invalid packet-15 combinations plus cleanup-exception/descendant-writer controls
+and rerun both interpreters; (3) obtain fresh exact-byte independent source review,
+then checkpoint a released build packet only if it passes. The planning index is
+locally repaired for the concurrent one-line README shift and passes all 14
+milestones, 68 tasks, 130 gates, seven language gates and 273 cases; its edited
+index remains unstaged with the concurrent launcher documentation.
+
+At 2026-09-15T23:28:25Z the live campaign identities are launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC or
+Clang process is live. All bounded child agents are joined/completed. Host free
+space is 68 GiB and scratch free space is 23 GiB. Counters remain 0/273 accepted
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates; this checkpoint is not OS completion.

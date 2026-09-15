@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "attempt": 9,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T23:14:47Z",
+  "reviewed_sha256": {
+    "supervise.py": "ec6664545883f714557abb048c238e9192f1b62cd08ce879863b70d74edfd579",
+    "witness_owner.py": "a73edf9fe2f77cf35a2cd1cd638ad6f5f66a5cb4e7a684660606696402f164b1",
+    "oracle.py": "9f66a85f557cd9f88101da103276307be02984d3b14f8c5a2e5fb0fa9cf672ae",
+    "prepare.py": "775f3a59f3ba10f2321edfa95630eb81ebae541026249f2258f413a006112fd2",
+    "packet.json": "212dfe163bcb6828839b95cf1aaf05cb70597604dc737f56b1dd45d651063804",
+    "tests.md": "1968d49f4f39915b1baa46dbec667c30b0430bdcdecea792e397f9d058f318a6",
+    "test_collector_storage_fault_packet.py": "7986129eba48e464cd1a8c0874746e7633058d5865475d5650ca5d3968364ffe"
+  },
+  "source_checks": {
+    "python3.9.12": "44/44 PASS",
+    "python3.8.10": "44/44 PASS"
+  },
+  "p0_blockers": [
+    "ECHILD wait-authority loss is not propagated from preflight or pump_owner into cleanup_tree and can authorize a later numeric-PID signal",
+    "cleanup_tree exceptions discard accumulated retirement observations and substitute an unreviewed placeholder instead of exhausting bounded responsibility"
+  ],
+  "p1_blockers": [
+    "owner cleanup can lose an observed direct wait, erase a scan exception, or fabricate a premature timeout",
+    "pump_owner loses PipeOverflow.retained and cleanup waits do not interleave pipe draining",
+    "oracle does not completely join adopted signals/waits, owner adopted_reaps, reaped births, or terminal ECHILD ordering",
+    "packet-15 invalid combinations, real spawn/post-fork paths, descendant writers and cleanup exceptions remain incompletely controlled",
+    "prepare descriptor acquisition and close unwind can leak an fd or skip a later close"
+  ],
+  "review_input_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-9.tar.gz",
+    "sha256": "74cd28d9f662af70622c9280878612258bf8efe1dcd2bf2cfa20926e9e7b7e10",
+    "size": 183116,
+    "members": 33
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

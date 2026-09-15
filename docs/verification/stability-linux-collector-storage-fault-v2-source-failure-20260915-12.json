@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 12,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T23:01:38Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-12.tar.gz",
+    "sha256": "11d2ad422e41c986db313510fe15b673d45cf755a65ebcb0857824852e37a901",
+    "size": 62335,
+    "members": 16
+  },
+  "source_sha256": {
+    "supervise.py": "c8ffdfe0aa43d63a2664e9a258d6fa45fc836836fe19ce6e2600b251f03a2b11",
+    "witness_owner.py": "ccf077ee4e39279b91569f78d24640051cf951eb28aabfd5b8a39d454286a976",
+    "oracle.py": "9f66a85f557cd9f88101da103276307be02984d3b14f8c5a2e5fb0fa9cf672ae",
+    "test_collector_storage_fault_packet.py": "cc9973878ff526fd545523732cf8f325c22153a83dd14088792d2560287584f6"
+  },
+  "checks": {
+    "python3.9.12": {
+      "status": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7a9215cbd81947769d4f4419e78c9577017023fe4071c1261404648d78ba7f42"
+    },
+    "python3.8.10": {
+      "status": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1a0f09523991eb838d08407097d51083181646674cdce47e12fd12d85e1919e6"
+    }
+  },
+  "failure": [
+    "the owner cleanup refactor treated the first adoption-phase ECHILD as terminal before the required two empty scans",
+    "the new supervisor fresh-pair negative used an inconsistent mocked wait deadline and raised premature cleanup wait timeout"
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

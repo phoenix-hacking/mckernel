@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 16,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T23:23:31Z",
+  "archive": {"path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-16.tar.gz", "sha256": "19041e5015e60c69636d9eb14d09e5fa0d5bf35e1031853ac7caaa25d0532401", "size": 64599, "members": 18},
+  "source_sha256": {
+    "supervise.py": "ba08b96e791d18c95c1b372f198b3a27a7d79a36ab5eff7cd6ea12039515d1a8",
+    "witness_owner.py": "b5cda38733d2a937de6f6e4677c32863a7a57112a537649ba433c93fcbbcd04b",
+    "oracle.py": "43fa6aebc223d407584fe5679ca856790662888757b3f9ff312041e752d21b76",
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "test_collector_storage_fault_packet.py": "46e98e66de6385def27c5f0e8aa946497fd007c9395a225d181cddc694525269"
+  },
+  "checks": {
+    "python3.9.12": {"status": 1, "stderr_sha256": "5d79e92c38ebea6b19b4b91264069b2444fb0e611cbeb2580998e4354902bdb7"},
+    "python3.8.10": {"status": 1, "stderr_sha256": "86506ebc3996452a5aa3f8cfaa6d4c76dc2d83f8fa902df2c29cbda6fd08127a"}
+  },
+  "failure": "the corrected fresh-pair test still expected final wait-timeout after an earlier retained identity mismatch",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
