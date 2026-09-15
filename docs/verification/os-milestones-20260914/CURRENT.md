@@ -924,3 +924,11 @@ is preserved at its exact hash; corrected logs bind commands, versions, exits an
 streams in the replacement 10-member archive. This proves mock-only post-capture
 validation, not live collection bounds. Raw inventory stays 135, and compilation,
 models, native execution and all acceptance gates remain closed.
+
+Post-135 audits select aggregate unused-pool preflight node exhaustion as the
+next raw slice. Its exact adjacent-zero boundary is frozen in
+`stability-native-collector-lifecycle-raw-preflight-aggregate-node-source-packet-20260915-1.md`;
+independent review returns `PASS_RAW_PREFLIGHT_AGGREGATE_NODE_PACKET_ONLY`. If
+materialized, it raises raw inventory to 136 while leaving about 35 KiB fixture
+headroom. No source edit or new check has started, and all execution and
+acceptance gates remain closed.
