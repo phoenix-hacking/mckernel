@@ -522,3 +522,14 @@ full failure/mutant vector set. See
 `stability-native-collector-lifecycle-model-correction-map-20260915-1.md`. Attempt 1
 remains rejected; no source check or build is released until exact attempt-2 bytes
 receive independent review.
+
+The independent attempt-2 corpus draft now freezes result codes, full row/event and
+control layouts, main-storage acquisition, branch-4 and inherited-status semantics,
+successful-operation event emission, EOF behavior, fault seeds, capacity/schema
+negatives and four exact mutant bindings. Its acyclic literal-pool rules and full
+coverage inventory are retained in
+`stability-native-collector-lifecycle-corpus-draft-20260915-1.md`. The working
+allowlist currently contains only a new README/harness/test shell over the rejected
+attempt-1 model and data bytes; it is deliberately `SOURCE_WIP_NOT_REVIEWABLE`.
+Materialized independent literals and replacement Rust/C models remain required
+before attempt-2 source review or any check/compilation.
