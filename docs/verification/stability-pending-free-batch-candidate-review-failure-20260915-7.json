@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_review_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 7,
+  "status": "FAIL_INDEPENDENT_REVIEW",
+  "base_commit": "f579708d006cf594099bee3b232739d140a4f8c4",
+  "claimed_marker": "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY",
+  "candidate_files": [
+    {"path": "kernel/rust/mem_helpers.rs", "sha256": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca"},
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "344e636a44df9594ea26c8bafa5ed08441518233dfee17920cda83e5653788e8"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "1c1a6faeabb1b8f2749629efb915d76b9b5be4e31ec1037e71034aabe3653fd4"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "6f0555989406254ed695597872593eed9d89c6cd80cc7f26dca04c1f5261061f"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "dcd02600c8b4a02e95d001a69c8ac47fb7a860b27720611635270e0e713c6aa0"}
+  ],
+  "claimed_run": {
+    "path": "/home/holden/mckernel-work/scratch/pending-free-candidate7-1789452960143036561",
+    "manifest_sha256": "7306e723b4b60270f9ce9d58d7a8eb8eb1a6c176cb850c7072167119ea9fc783",
+    "generated_rust_sha256": "dc18aac5b1cb8a53184b7bb3bbeb414ed030ad16e0a4f3a45d962310b8b3dcce",
+    "rust_rows_sha256": "b46c609e68df0b44680f1ffb2f4113916b80f95ceb5bac80b13ae32685d9db93",
+    "c_rows_sha256": "089e6687eabc6ecd364fae8977d9ca05a1838f755492199f5be1e1987f3d7ff6",
+    "mutant_rows_sha256": "4bcffe31dce16f62af3f975e26fc255e240cd424c71b7cbc16753cbe9137e363"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-run-20260915-7.tar.gz",
+    "size": 2559894,
+    "sha256": "f6d8fbd432122f83ce83253624b40b415ff949d12750c8be42f68aaf72771af6",
+    "members": 25
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL",
+    "findings": [
+      "The C program emits twelve fixed rows and executes no reference transition or release algorithm.",
+      "The harness still handwrites ABI types, constants, list helpers and offset_of; the standalone Rust fixture defines a different type and is neither appended nor executed.",
+      "Source reuse through actual begin/enqueue/finish, both mixed-destination cases, two-head isolation, complete metadata preservation and required trait negatives are missing or mislabeled.",
+      "The mutant bypasses detach validation and does not release a valid prefix before discovering the later-invalid node.",
+      "Wrong-source recovery is unfinished and the callback ledger lacks checked RefCell borrowing and a callback-safe capacity bound.",
+      "The no-argument entrypoint attempts to create an already-created temporary directory.",
+      "Commands, return codes, compiler identities and complete input/artifact hashes are not retained."
+    ]
+  },
+  "source_review_observation": "The production drain implementation performs complete validation before its first callback under its unsafe exclusivity contract.",
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

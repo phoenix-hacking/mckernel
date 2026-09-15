@@ -136,3 +136,28 @@ not freeze the native collector ABI: terminal encoding, thread birth identity,
 complete loader observation, unchanged-mcexec stream attribution and qualified
 no-loss/clock/owner producers remain unresolved. No native collector implementation
 or credit follows from the retained design draft.
+
+The follow-up M02-C source audit found that retained host `ProcessId` object
+identity already protects Linux PID reuse, but McKernel threads have no birth
+generation and no native producer exports authoritative guest terminal status.
+The existing 64-record trace budget is diagnostic rather than lossless. A future
+freeze therefore needs separately reviewed guest birth and terminal/retirement
+publication; numeric TID, launcher wait and fixture status encoding are invalid
+substitutes.
+
+M02-B adverse-v1 source attempt 1 stopped before executing any unit test because
+its isolated `python -m unittest` invocation could not import the repository
+`scripts` package. The exact new source packet is archived as
+`stability-linux-collector-adverse-source-failure-20260915-1`; it has not been
+compiled or executed and is under independent semantic review before any corrected
+test run. The accepted adverse design record remains an input, not evidence.
+
+M03-A/B candidate 7 printed its focused PASS marker, but independent review
+rejects it. Its C side emits fixed rows without executing a model; production ABI
+dependencies remain handwritten; the separate Rust fixture is not executed;
+mandatory isolation/reuse/trait cases and safe callback/recovery are incomplete;
+and the mutant does not exercise partial release. The exact claimed run and PASS
+manifest remain archived as rejected evidence in
+`stability-pending-free-batch-candidate-run-20260915-7`. Production source review
+still finds complete validation before the first callback, but no focused
+equivalence, invalidation, reuse, runtime or production credit follows.
