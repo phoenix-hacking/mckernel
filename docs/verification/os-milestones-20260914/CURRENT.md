@@ -1009,3 +1009,12 @@ full original-failure-preservation claim. The corrected ten-member archive binds
 all source, input, interpreter and command-log hashes. The raw matrix remains
 open, and every compiler, model, native, application and production gate remains
 closed.
+
+The additive capture-closure policy now receives independent
+`PASS_CAPTURE_CLOSED_POLICY_DECISION_ONLY`. It makes the first end irrevocable,
+places every later schema-valid operation behind `CLOSED` before semantic checks,
+and freezes zero-event/preserved-state/sticky-incomplete effects. Six independent
+exact input/full-output witnesses remain mandatory before a source packet can be
+released. No literal, fixture or model has been materialized; TID semantics and
+the other lifecycle decision families remain unresolved, and all execution and
+acceptance gates remain closed.
