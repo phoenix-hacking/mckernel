@@ -1058,3 +1058,14 @@ work. The ten-member archive binds all source, literal, interpreter and command
 log hashes. This remains mocked post-capture schema evidence only. Ordinary 44,
 raw 137 and its lexical hash are unchanged; the full matrices and all execution
 and acceptance gates remain incomplete and closed.
+
+Priority returns to the earlier M02-B collector fault gap. The corrected
+storage-fault-v2 producer/oracle packet now receives independent
+`PASS_STORAGE_FAULT_V2_SOURCE_PACKET_ONLY`. It freezes seven exact selectors,
+target-only collector seams, parent-durable witness ownership, collector-origin
+reap/EOF/cleanup observations, per-acquisition descriptor identity and bounded
+identity-safe cleanup. Two packet-review failures are preserved before the
+observation, record-budget, BEFORE/AFTER, READY/RELEASE and descriptor-reuse
+corrections. Both rejected v1 source failures and their archives remain intact.
+No v2 source, build or root execution has started, and this grants no collector,
+application or production acceptance.
