@@ -56,6 +56,7 @@ def prelude():
         (MEM, '#[inline(always)]\nunsafe fn list_add(', '#[inline(always)]\nunsafe fn kmalloc_track_hash('),
         (MEM, '#[derive(Clone, Copy, PartialEq, Eq)]\nenum PendingFreeBatchState', '#[no_mangle]\npub extern "C" fn round_up'),
         (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_body_result('),
+        (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_body_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_public_body_result('),
         (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_free_pages_pending_enqueue_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_body_result('),
     ]
     for path, begin, end in regions:
@@ -63,7 +64,8 @@ def prelude():
         parts.append(text)
         bindings.append(binding)
     for prefix in ('const EINVAL:', 'const IHK_MC_PG_USER:', 'const PM_NONE:', 'const PM_PENDING_FREE:',
-                   'const LIST_POISON1:', 'const LIST_POISON2:', 'type MemPendingFreeFn =', 'type MemPendingWarnFn ='):
+                   'const LIST_POISON1:', 'const LIST_POISON2:', 'type MemPendingFreeFn =', 'type MemPendingWarnFn =',
+                   'type MemBeginFreePagesPendingFn =', 'type MemVoidFn ='):
         lines = [line for line in MEM.read_text().splitlines(True) if line.startswith(prefix)]
         assert len(lines) == 1, (prefix, len(lines))
         parts.append(lines[0])
@@ -126,6 +128,10 @@ EXPECTED = [
     ('repeated-detach','detach',-22), ('repeated-recovery','drain',1), ('repeated-drain','drain',-22),
     ('null-source','detach',-22), ('inactive-empty','detach',-22), ('alias-destination','detach',-22),
     ('mixed-destination-links','detach',-22), ('mixed-destination-state','detach',-22),
+    ('conflicting-begin','begin',-22), ('nested-begin-first','begin',0),
+    ('nested-begin-second','begin',-22), ('begin-panic-bridge','begin-body',-22),
+    ('malformed-active-empty','detach',-22), ('malformed-boundary-prev','detach',-22),
+    ('malformed-boundary-next','detach',-22),
     ('two-head-isolation','detach',0),
     ('source-reuse','begin',0), ('source-reuse','enqueue',1), ('source-reuse','finish',1),
     ('two-head-isolation','drain',2), ('other-head-finish','finish',1),
@@ -135,6 +141,7 @@ EXPECTED = [
 def check_rows(result):
     assert [(r['case'],r['op'],r['rc']) for r in result] == EXPECTED
     for r in result:
+        assert r.get('panic', 0) == (1 if r['case'] == 'begin-panic-bridge' else 0), r['case']
         if r['rc'] < 0:
             assert r['before'] == r['after'] and r['callbacks'] == [], r['case']
         if r['case'] == 'two-head-isolation':

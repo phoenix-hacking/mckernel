@@ -9,6 +9,8 @@ thread_local! {
     static CALLBACK_ERROR: Cell<usize> = const { Cell::new(0) };
 }
 static TLS_ERROR: AtomicUsize = AtomicUsize::new(0);
+static PANIC_BRIDGE: AtomicUsize = AtomicUsize::new(0);
+unsafe extern "C" fn panic_bridge() { PANIC_BRIDGE.fetch_add(1, Ordering::SeqCst); }
 unsafe extern "C" fn free_page(p: CULong, n: CInt, u: CInt) {
     let access = LEDGER.try_with(|c| {
         let error = match c.try_borrow_mut() {
@@ -19,7 +21,7 @@ unsafe extern "C" fn free_page(p: CULong, n: CInt, u: CInt) {
     });
     if access.is_err() { TLS_ERROR.fetch_add(1,Ordering::SeqCst); }
 }
-fn reset() { LEDGER.with(|c| { let mut l=c.borrow_mut(); l.used=0; l.limit=32; }); CALLBACK_ERROR.with(|c|c.set(0)); assert_eq!(TLS_ERROR.load(Ordering::SeqCst),0); }
+fn reset() { LEDGER.with(|c| { let mut l=c.borrow_mut(); l.used=0; l.limit=32; }); CALLBACK_ERROR.with(|c|c.set(0)); PANIC_BRIDGE.store(0, Ordering::SeqCst); assert_eq!(TLS_ERROR.load(Ordering::SeqCst),0); }
 fn callbacks() -> String { LEDGER.with(|c| { let l=c.borrow(); let v:Vec<String>=l.entries[..l.used].iter().map(|x|format!("[{},{},{}]",x.0,x.1,x.2)).collect(); format!("[{}]",v.join(",")) }) }
 fn callback_controls() { reset(); LEDGER.with(|c| { let _held=c.borrow_mut(); unsafe { free_page(1,1,1); } }); assert_eq!(CALLBACK_ERROR.with(Cell::get),1); reset(); LEDGER.with(|c|c.borrow_mut().limit=0); unsafe { free_page(1,1,1); } assert_eq!(CALLBACK_ERROR.with(Cell::get),2); reset(); println!("CONTROL|callback-borrow-and-capacity-observed"); }
 fn head() -> AbiListHead { AbiListHead {next:null_mut(),prev:null_mut()} }
@@ -45,9 +47,12 @@ impl World {
         format!("{}:{}:{}",self.links(&b.head),self.id(b.source),pages.join(","))
     }
     unsafe fn setup(&mut self,n:usize,other:bool){assert_eq!(mem_begin_free_pages_pending_result(&raw mut self.s),0);for i in 0..n {assert_eq!(mem_free_pages_pending_enqueue_result(&raw mut self.p[i],&raw mut self.s,i as i32+1,None),1)} if other {assert_eq!(mem_begin_free_pages_pending_result(&raw mut self.t),0);assert_eq!(mem_free_pages_pending_enqueue_result(&raw mut self.p[3],&raw mut self.t,4,None),1)} for p in &mut self.p {init_list_head(&raw mut p.hash)} }
-    unsafe fn emit(&self,name:&str,op:&str,rc:i32,before:String){let after=self.snapshot();let cb=callbacks();println!("JSON|{{\"case\":\"{}\",\"op\":\"{}\",\"rc\":{},\"before\":{},\"after\":{},\"callbacks\":{}}}",name,op,rc,before,after,cb);assert_eq!(CALLBACK_ERROR.with(Cell::get),0);assert_eq!(TLS_ERROR.load(Ordering::SeqCst),0);if rc<0 {assert!(before==after && cb=="[]","PARTIAL_RELEASE_DETECTED case={}",name)} }
+    unsafe fn emit(&self,name:&str,op:&str,rc:i32,before:String){let after=self.snapshot();let cb=callbacks();let panic=PANIC_BRIDGE.load(Ordering::SeqCst);println!("JSON|{{\"case\":\"{}\",\"op\":\"{}\",\"rc\":{},\"panic\":{},\"before\":{},\"after\":{},\"callbacks\":{}}}",name,op,rc,panic,before,after,cb);assert_eq!(CALLBACK_ERROR.with(Cell::get),0);assert_eq!(TLS_ERROR.load(Ordering::SeqCst),0);if rc<0 {assert!(before==after && cb=="[]","PARTIAL_RELEASE_DETECTED case={}",name)} }
     unsafe fn detach(&mut self,name:&str,src:usize){reset();let before=self.snapshot();let s=match src{0=>null_mut(),3=>&raw mut self.b.as_mut().get_unchecked_mut().head,_=>&raw mut self.s};let rc=detach_pending_free_batch(s,self.b.as_mut());self.emit(name,"detach",rc,before)}
     unsafe fn drain(&mut self,name:&str,wrong:bool,callback:bool){reset();let before=self.snapshot();let s=if wrong{&raw mut self.t}else{&raw mut self.s};let rc=drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None});self.emit(name,"drain",rc,before)}
+    unsafe fn begin(&mut self,name:&str){reset();let before=self.snapshot();let rc=mem_begin_free_pages_pending_result(&raw mut self.s);self.emit(name,"begin",rc,before)}
+    unsafe fn begin_body(&mut self,name:&str){reset();let before=self.snapshot();let rc=mem_begin_free_pages_pending_body_result(&raw mut self.s,Some(mem_begin_free_pages_pending_result),Some(panic_bridge));self.emit(name,"begin-body",rc,before)}
+    unsafe fn malformed(&mut self,name:&str,boundary:usize){reset();if boundary==0 {self.setup(0,false);self.s.prev=null_mut()} else {self.setup(2,false);if boundary==1 {self.p[0].list.prev=&raw mut self.t} else {self.p[1].list.next=&raw mut self.t}}let before=self.snapshot();let rc=detach_pending_free_batch(&raw mut self.s,self.b.as_mut());self.emit(name,"detach",rc,before)}
 }
 fn main(){unsafe{
     assert_eq!(core::mem::offset_of!(MemPage,list),0);assert_eq!(core::mem::size_of::<MemPage>(),80);
@@ -62,6 +67,12 @@ fn main(){unsafe{
     let mut w=World::new();w.setup(1,false);w.detach("alias-destination",3);
     let mut w=World::new();w.setup(1,false);w.b.as_mut().get_unchecked_mut().head.next=&raw mut w.s;w.detach("mixed-destination-links",1);
     let mut w=World::new();w.setup(1,false);w.b.as_mut().get_unchecked_mut().state=PendingFreeBatchState::Retained;w.detach("mixed-destination-state",1);
+    let mut w=World::new();w.setup(1,false);w.begin("conflicting-begin");
+    let mut w=World::new();w.begin("nested-begin-first");w.begin("nested-begin-second");
+    let mut w=World::new();w.setup(1,false);w.begin_body("begin-panic-bridge");
+    let mut w=World::new();w.malformed("malformed-active-empty",0);
+    let mut w=World::new();w.malformed("malformed-boundary-prev",1);
+    let mut w=World::new();w.malformed("malformed-boundary-next",2);
     let mut w=World::new();w.setup(2,true);w.detach("two-head-isolation",1);let retained=w.retained_destination();
     reset();let before=w.snapshot();let rc=mem_begin_free_pages_pending_result(&raw mut w.s);w.emit("source-reuse","begin",rc,before);
     assert_eq!(w.retained_destination(),retained);assert_eq!(callbacks(),"[]");

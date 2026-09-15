@@ -275,3 +275,25 @@ guard. The exact three-file source is preserved in
 output was not retained, which is recorded as an evidence limitation. A conflicting
 cheap inspection reported PASS, but the precise semantic blockers control the
 failure disposition. No build, runtime or credit follows.
+
+The bounded M02-C birth/terminal source audit confirms there is no stable guest
+thread generation or native terminal publication hook today. Numeric proxy TIDs
+are reused; authoritative group/thread status writes precede a distinct later
+finalize/release path. The current application ABI's delivery serial can be a
+future carrier only after a retained loss-detecting event ledger exists; its
+64-record trace is diagnostic. A proposed birth/terminal/retire record and exact
+ordering are retained in
+`stability-native-collector-birth-terminal-source-audit-20260915-1.md`, but loader
+completeness, unchanged-`mcexec` stream attribution/no-loss and clock guarantees
+still prevent ABI freeze. No producer edit or acceptance is authorized.
+
+M03 candidate-14 corrects all three candidate-13 source blockers and receives
+independent `PASS_SOURCE` and `PASS_SOURCE_EVIDENCE`. Its 37-row contract now
+extracts the actual production body helper and callback aliases, uses normalized
+C identities, and corrupts only `first.prev` or `last.next` on valid two-page
+rings. Cheap source generation binds 20 regions/prefixes and 10,117 generated
+bytes. The exact sources and streams are retained in
+`stability-pending-free-batch-source-checkpoint-20260915-14`. Compilation,
+execution, the real fatal panic/public-entry path, bounded incomplete inventory,
+runtime and all production credit remain closed; a new reviewed build-owner pin
+packet is required next.
