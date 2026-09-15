@@ -82,6 +82,10 @@ class PendingFreeOwnerTests(unittest.TestCase):
     def test_source_and_six_input_pins_are_exact(self):
         self.assertEqual(len(owner.pinned_inputs()), 6)
         self.assertEqual(len(owner.harness_contract()['EXPECTED']), 37)
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/mem_helpers.rs'], '647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b')
+        old_pins = owner.pinned_inputs()
+        old_pins['kernel/rust/mem_helpers.rs'] = '3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca'
+        with self.assertRaises(ValueError): owner.verify_result(Path('/nonexistent'), Path('/nonexistent'), old_pins)
         self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.rs'], 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4')
         self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.c'], '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441')
         self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_actual_harness.py'], 'b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a')

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_owner_pin_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-17-owner-pin",
+  "attempt": 17,
+  "status": "PASS_BUILD_PACKET",
+  "recorded_utc": "2026-09-15T08:10:00Z",
+  "base_commit": "29b00a06bc4408a99c9b5fe273ee9088521c7f00",
+  "source_sha256": {
+    "owner": "1ef88f2f0b51f34aaeb59bc0984414780a288fb4c51462359d383b2d5ce06ca9",
+    "tests": "27fa1a2dfb9859c0efdb1c3f9e8a0b15cad5a10ed9660199cec06bfe5d67aca4",
+    "corrected_mem_helpers": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-owner-pin-checkpoint-20260915-17.tar.gz",
+    "sha256": "e295f0162646cef70d8d8fff9cd08187418ec6710f7ccdeae0464650a528d64e",
+    "size": 14609,
+    "members": 15
+  },
+  "tests": {
+    "python3": {"count": 8, "status": "PASS"},
+    "python3.8": {"count": 8, "status": "PASS"},
+    "diff_check": "PASS",
+    "old_pin_rejected_before_directory_access": true
+  },
+  "independent_reviews": ["PASS_BUILD_PACKET", "PASS_SOURCE_EVIDENCE"],
+  "limitations": "cheap commands lack interpreter byte identities, environment and timestamps",
+  "container_execution": false,
+  "source_integration_released": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

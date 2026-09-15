@@ -41,7 +41,7 @@ BASE_SHA = 'ba1ed0320e36e24cf59c394b7466a25e6906be179f19924f221d54c759bf7979'
 
 PINNED_INPUTS = {
     'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e',
-    'kernel/rust/mem_helpers.rs': '3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca',
+    'kernel/rust/mem_helpers.rs': '647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b',
     'kernel/rust/tests/pending_free_batch_vectors.rs': 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4',
     'kernel/rust/tests/pending_free_batch_vectors.c': '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441',
     'kernel/rust/tests/run_equivalence.sh': '14cbdf9421c5d284ded0a607324c60a72f5d628fe55e99139d135986e9cbb145',

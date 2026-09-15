@@ -338,3 +338,30 @@ descriptor/range ownership proof. Aggregate allocator bounds cannot substitute.
 `stability-pending-free-batch-inventory-source-audit-20260915-1.md` records the
 needed captured capacity/count and negative matrix. No such ABI is wired today;
 integration, invalidation, guest/application and production credit remain closed.
+
+M03 candidate-16 corrects only the contradictory detach safety comment. Exact
+archive comparison and independent reviews return `PASS_CONTRACT` and
+`PASS_SOURCE_DELTA`: executable/test bytes and the normalized executable hash are
+unchanged. The text now preserves exclusive transfer and retained-descriptor
+ownership, pinning and callback non-reentrancy while permitting a later
+independently owned capture after the source head is reset. The exact corrected
+source is archived in `stability-pending-free-batch-contract-checkpoint-20260915-16`;
+it is not committed as production source and integration remains closed on the
+inventory, durable ownership, invalidation and qualification blockers.
+
+M02-B now has a reviewed `PASS_DESIGN_ONLY` stopped-collector/external-rescuer
+packet specification in `stability-linux-collector-stopped-rescue-design-20260915-1.md`.
+It requires a real parent-observed SIGSTOP, fork-owned identity-safe leader and
+adopted-child termination, raw stop/exit waits, ECHILD, bounded continuation and
+complete cleanup evidence. No packet or execution is released yet. The separate
+watchdog/fsync audit identifies an existing private-disarm timeout recovery path
+but no deterministic post-reap/report-fsync seam; both need separately reviewed
+instrumented cases. The accepted adverse run covers neither.
+
+M03 candidate-17 changes only the focused build owner's exact production-source
+pin to the reviewed comment-corrected SHA and adds an old-pin rejection. Eight
+tests pass in both Python lanes; independent reviews return `PASS_BUILD_PACKET`
+and `PASS_SOURCE_EVIDENCE`. The cheap command records lack complete interpreter,
+environment and timestamp identity, so they support the source packet only. A
+fresh dispatcher-owned container build is released after this fetched checkpoint;
+source integration and all runtime/production credit remain closed.
