@@ -772,3 +772,12 @@ in the 11-member
 `stability-native-collector-lifecycle-raw-pool-source-checkpoint-20260915-1.tar.gz`.
 The full raw matrix, replacement models, compilation, native execution and all
 acceptance gates remain closed.
+
+Post-110 audits split the next work into a three-case envelope completion slice,
+a separate 19-case operation/argument slice and an independently draftable model
+foundation. Full model transitions remain blocked on explicit decision tables.
+The selected envelope slice also pins legal whitespace and the exact 1-MiB input
+boundary in
+`stability-native-collector-lifecycle-raw-envelope-source-packet-20260915-1.md`.
+It receives independent `PASS_RAW_ENVELOPE_PACKET_ONLY`; no source edit or new
+check has started.
