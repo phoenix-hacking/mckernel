@@ -22,15 +22,17 @@ Active work:
    only three Rust inputs while five ownership-critical files are presence-only.
    A Luna/medium worker owns the narrow stager/test correction; mode2 release is
    still blocked and no runtime credit is granted.
-2. M02-A source audit found no collector orchestrator defect and confirmed the
-   fixed 25-case order. Astra/high is checking execution release; the root run
-   remains dispatcher-owned and has not started.
-3. M00-B Luna/low is deriving the exact live-ledger schema and imported counts.
+2. M02-A independent review found a P1 cleanup defect: parent and watchdog can
+   both release the development lock while container absence is unproved. The
+   root run is blocked pending a recovery-lock fix and fresh review.
+3. M00-B is complete locally: `docs/verification/os-live-ledger-20260915.json`
+   contains every exact gate/case/packet ID and required reconciliation record;
+   its SHA256 is `2b34c315a710620aa4f3c9eaaa76012f2c42dd2b374e8099b073a0229976a2e5`.
 
 Next three dependency-ready tasks: integrate/review the M01-B provenance fix;
-materialize and validate M00-B; run M02-B only if the exact M02-A review releases
-its isolated packet. M03-A source work remains independent if either lane blocks.
-No heavy process or McKernel guest is live.
+implement and test M02-A durable cleanup ownership; begin M03-A source audit.
+M02-B remains blocked until the exact corrected packet passes review. No heavy
+process or McKernel guest is live.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language
