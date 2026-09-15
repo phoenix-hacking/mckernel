@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 5,
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "0b1c6109dc24d7dd953f0e003423aee21f7a9109",
+  "candidate_files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "4ae7163ef8d3ee91823ae78906ff89f28374895946891fab37a7871b400716d5"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "35daa95b4c6eefdb8b4d0079d86a45a8b5d488a8f67bd29b1cd600c8a597d082"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-failure-20260915-5.tar.gz",
+    "size": 12884,
+    "sha256": "1002c97ab560b4e1347d52aa2aaa2eb8f3cdec0cb904b77920c241cc4b50448d",
+    "members": 2
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and runtime-acceptance reviewer",
+    "status": "FAIL",
+    "findings": [
+      {"severity": "P1", "finding": "Build verification mixes host and container path namespaces and rejects actual project compiler dependencies."},
+      {"severity": "P1", "finding": "Writable requested mounts may omit ReadOnly=false, but the checker requires an explicit false field."},
+      {"severity": "P1", "finding": "Additional HostConfig/default/mount constraints remain incomplete."},
+      {"severity": "P2", "finding": "Command argv and complete stream-loss evidence plus a positive complete-record test remain incomplete."}
+    ],
+    "nonblocking_limitation": "A parent death between stopped-container create and CID-bound watchdog readiness can leave a stopped container, but cannot start the build; preserve and audit before broader reuse."
+  },
+  "heavy_build_executed": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

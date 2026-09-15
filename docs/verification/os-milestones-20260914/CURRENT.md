@@ -70,10 +70,12 @@ watchdog/config/isolation evidence was incomplete, and its root-owned `/work`
 mount was unusable by UID 1000. Three follow-up candidates remained unsafe,
 structurally incompatible with the reviewed watchdog ABI, or deterministically
 unable to validate their own Docker configuration/build record. All four exact
-states and findings are retained. A
-corrected durable owner with persistent recovery, watchdog identity and exact
-name/label/ID cleanup is the next prerequisite; only then may the dispatcher
-take the sole heavy lease. No heavy process or McKernel guest is live.
+states and findings are retained. Candidate 6 is checkpointed as unreviewed WIP:
+its seven focused tests pass after correcting the last reviewed path, mount and
+record-membership failures, but it has not received independent release review.
+Review that exact source before the dispatcher takes the sole heavy lease. The
+stopped-container interval before CID-bound watchdog readiness remains an
+explicit non-execution limitation. No heavy process or McKernel guest is live.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language
