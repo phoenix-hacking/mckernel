@@ -434,3 +434,13 @@ source parser are invalid; trusted extent ownership is absent; and overflow code
 contradict vectors. No test was run before the dispatcher timebox. The exact source
 is archived as `stability-pending-free-inventory-source-checkpoint-20260915-2`.
 Under the two-attempt stop rule no immediate implementation retry is released.
+
+Three remaining M02-B gaps now have bounded read-only records. Storage fault design
+permits only separately guarded simulated I/O seams with an external fsynced
+witness, preserving raw 256 versus report-path raw 32000 and immutable original
+failures. Overflow audit distinguishes the already covered 65,537-byte stream case
+from an unreleased >512-owner containment case. Loader-closure design requires
+parent-owned exec/syscall tracing and descriptor/mapping identities across dynamic
+load/unload plus a true static fixture. See the three new
+`stability-linux-collector-{storage-fault,overflow,loader-closure}-design-20260915-1.md`
+records. None releases source, build, root execution or acceptance.
