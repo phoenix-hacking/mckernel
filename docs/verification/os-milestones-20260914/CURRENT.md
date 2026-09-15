@@ -417,3 +417,11 @@ address resolution before dereference, finite work and full range/membership
 rejection without granting detach/free authority. Registry and typed release
 authorization remain later prerequisites. The exact allowlist and negatives are
 in `stability-pending-free-integration-plan-review-20260915-1.md`.
+
+M03 private inventory fixture attempt 1 is rejected. Its 14 Rust/C rows are only
+names and expected constants, its parser compares names/substrings rather than
+computed behavior, the model accepts malformed rings without sentinel/cardinality
+proof, range identity/geometry is missing, and Copy inventories retain no arena
+lifetime or non-releasing validated authority. The exact four files are archived
+as `stability-pending-free-inventory-source-checkpoint-20260915-1`; there are no
+retained command streams. No compilation or acceptance follows.
