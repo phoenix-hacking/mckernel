@@ -87,8 +87,17 @@ trees are retained in archive SHA256
 Container absence, watchdog disarm/reap and lock release passed. The narrow
 179-count correction passes both 8/8 test runs, the corrected verifier passes
 against the preserved raw record, and Astra/high returned `PASS_RERUN_PACKET`.
-Commit and fetched-blob verify it before fresh attempt 2. The stopped-container
-interval before CID-bound watchdog
+Fresh attempt 2 then passes the complete build-owner gate. Its 612-member archive
+SHA256 is `1aa076149e2ffc83019f43d11b79c9f679ec5ca24345c13525e45528292319a6`;
+independent review returns `PASS_REBUILT_COLLECTOR_INPUT`, with rebuilt collector
+SHA256 `e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d`.
+This is build-input acceptance only; the separately gated root-positive run has
+not started. The root orchestrator is rebound to the exact new record/path and
+passes 14/14 focused tests under Python 3 and 3.8 plus independent Astra/high
+`PASS_ROOT_PACKET_SOURCE` review at source SHA256
+`b794fc74a668f9f41caceb99e299381652fe02caa002c06d8b43c287b75599a3`.
+Checkpoint and fetched-blob verification are required before executing it. The
+stopped-container interval before CID-bound watchdog
 readiness remains an explicit non-execution limitation. No heavy process or
 McKernel guest is live.
 

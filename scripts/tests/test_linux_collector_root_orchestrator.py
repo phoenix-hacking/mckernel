@@ -1,5 +1,6 @@
 """Controlled recovery-owner tests; Docker/root/runtime are never used."""
 import importlib.util
+import copy
 import fcntl
 import json
 import os
@@ -16,6 +17,47 @@ spec.loader.exec_module(module)
 
 
 class RecoveryOwnerTests(unittest.TestCase):
+    def _rebuild_record(self):
+        path = module.BUILD / 'record.json'
+        return json.loads(path.read_text())
+
+    def test_rebuild_owner_binding_is_exact(self):
+        record = self._rebuild_record()
+        module.validate_build_record_schema(record)
+        self.assertEqual(module.BUILD_SHA,
+                         'fa12fe8df3092f64fbe757bbd3ccad62bd8a672cbda39fb4153ffd54c6d917ed')
+        self.assertEqual(module.BUILD_CONTAINER_PREFIX, '/work/stability-linux-collector-build-20260915-2')
+        self.assertEqual(len(record['compiler_dependencies']), 179)
+        self.assertEqual(record['status'], 'PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY')
+        self.assertNotIn('source_review', record)
+        self.assertEqual(record['helper']['sha256'], '6ae0e29dbebf2593f91b4cfa19a5252a157241b83715b2243826cf528efca0e2')
+        self.assertEqual(record['loader_dependencies'], module.BUILD_LOADER_DEPENDENCIES)
+        self.assertEqual(module.mapped('/work/stability-linux-collector-build-20260915-2/linux-collector'),
+                         module.BUILD / 'linux-collector')
+
+    def test_rebuild_owner_rejects_stale_or_hostile_records(self):
+        record = self._rebuild_record()
+        mutations = []
+        stale = copy.deepcopy(record)
+        stale['status'] = 'PASS_LINUX_COLLECTOR_BUILD_SHA9_BUILDER_NEGATIVE_ONLY'
+        mutations.append(stale)
+        stale = copy.deepcopy(record)
+        stale['compiler_dependencies'].pop()
+        mutations.append(stale)
+        hostile = copy.deepcopy(record)
+        hostile['loader_dependencies'][0]['sha256'] = 'f' * 64
+        mutations.append(hostile)
+        hostile = copy.deepcopy(record)
+        hostile['source_review'] = {'path': '/workspace/old-review.json'}
+        mutations.append(hostile)
+        hostile = copy.deepcopy(record)
+        hostile['helper']['path'] = '/work/hostile.py'
+        mutations.append(hostile)
+        for candidate in mutations:
+            with self.subTest(candidate=candidate):
+                with self.assertRaises(ValueError):
+                    module.validate_build_record_schema(candidate)
+
     def test_failed_then_successful_retry_records_first_failure(self):
         outcomes = iter(({'absence_verified': False, 'errors': ['remove failed']},
                          {'absence_verified': True, 'errors': []}))

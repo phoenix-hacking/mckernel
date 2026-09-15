@@ -20,12 +20,20 @@ import traceback
 
 REPO = Path('/home/holden/mckernel')
 WORK = Path('/home/holden/mckernel-work')
-BUILD = WORK / 'scratch/stability-linux-collector-build-20260913-1'
+BUILD = WORK / 'scratch/stability-linux-collector-build-mount-20260915-2/stability-linux-collector-build-20260915-2'
 FIXTURES = REPO / 'scripts/tests/fixtures/application-collector-v1/linux-sealed-v1'
 LOCK = Path('/run/lock/mckernel-development.lock')
 DOCKER = '/usr/bin/docker'
 PYTHON = '/usr/bin/python3'
-BUILD_SHA = '72ad1e2e01b00c9ccb664096d8c81852f8892b7eb87dab894dc0f59e5d23f783'
+BUILD_SHA = 'fa12fe8df3092f64fbe757bbd3ccad62bd8a672cbda39fb4153ffd54c6d917ed'
+BUILD_STATUS = 'PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY'
+BUILD_CONTAINER_PREFIX = '/work/stability-linux-collector-build-20260915-2'
+BUILD_COMPILER_DEPENDENCY_COUNT = 179
+BUILD_CLEAN_LAUNCH_REQUIREMENT = 'root execution must bind close_fds, empty pass_fds and nofile=4096:4096'
+BUILD_LOADER_DEPENDENCIES = [
+    {'path': '/lib64/libc.so.6', 'sha256': 'b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4', 'size': 2339896},
+    {'path': '/lib64/ld-linux-x86-64.so.2', 'sha256': '0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b', 'size': 930600},
+]
 IMAGE_SHA = 'c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a'
 IMAGE_ID = 'sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94'
 PLANNER_SHA = 'a65d104d76ec7ce3918d667ac02b1cea92c1a80cae321360b01c12190f2f6dd6'
@@ -223,7 +231,7 @@ class Commands:
 def mapped(path):
     value = Path(path)
     for prefix, target in ((Path('/workspace'), REPO),
-                           (Path('/work/stability-linux-collector-build-20260913-1'), BUILD)):
+                           (Path(BUILD_CONTAINER_PREFIX), BUILD)):
         try:
             relative = value.relative_to(prefix)
         except ValueError:
@@ -233,13 +241,38 @@ def mapped(path):
     raise ValueError('unmapped retained build reference: ' + path)
 
 
+def validate_build_record_schema(record):
+    """Validate the immutable rebuild owner record before binding any artifact."""
+    require(type(record) is dict, 'build record object')
+    require(set(record) == {'application_acceptance', 'backend_enabled', 'builder_cases',
+            'clean_launch_requirement', 'commands', 'compiled_outputs', 'compiler_dependencies',
+            'finished_utc', 'guest_execution', 'helper', 'inputs', 'loader_dependencies',
+            'phase', 'root_positive_execution', 'schema_version', 'scope', 'sha_cases',
+            'started_utc', 'status'}, 'exact rebuild record schema')
+    require(record['status'] == BUILD_STATUS and record['application_acceptance'] is False and
+            record['backend_enabled'] is False and record['root_positive_execution'] is False and
+            record['guest_execution'] is False, 'build-only prerequisites')
+    require(record['schema_version'] == 1 and record['phase'] == 'builder-negative' and
+            record['sha_cases'] == 9 and record['builder_cases'] == 1, 'exact rebuild identity')
+    require(record['clean_launch_requirement'] == BUILD_CLEAN_LAUNCH_REQUIREMENT,
+            'exact clean launch requirement')
+    helper = record['helper']
+    require(type(helper) is dict and set(helper) == {'path', 'sha256', 'size'} and
+            helper['path'] == '/workspace/docs/verification/evidence/stability-linux-collector-rebuild-20260915.py' and
+            CID.fullmatch(helper['sha256']) is not None and type(helper['size']) is int and helper['size'] == 10018,
+            'exact source-reviewed rebuild helper')
+    require(record['loader_dependencies'] == BUILD_LOADER_DEPENDENCIES,
+            'exact immutable loader dependencies')
+    require(len(record['inputs']) == 14 and len(record['compiled_outputs']) == 16 and
+            len(record['compiler_dependencies']) == BUILD_COMPILER_DEPENDENCY_COUNT and
+            len(record['commands']) == 20, 'exact retained build inventory')
+
+
 def bind_build(host):
     raw, identity = regular(BUILD / 'record.json')
     require(identity['sha256'] == BUILD_SHA, 'exact actual build record')
     record = strict_json(raw)
-    require(record['status'] == 'PASS_LINUX_COLLECTOR_BUILD_SHA9_BUILDER_NEGATIVE_ONLY' and
-            record['application_acceptance'] is False and record['backend_enabled'] is False and
-            record['root_positive_execution'] is False, 'build-only prerequisites')
+    validate_build_record_schema(record)
     write(host / 'build-record.json', raw)
     checks = []
     def verify(row, copy_name=None):
@@ -249,8 +282,6 @@ def bind_build(host):
         checks.append(actual)
         if copy_name is not None:
             write(host / copy_name, data)
-    require(len(record['inputs']) == 14 and len(record['compiled_outputs']) == 16 and
-            len(record['compiler_dependencies']) == 176 and len(record['commands']) == 20, 'exact retained build inventory')
     for row in record['inputs']:
         verify(row['original']); verify(row['retained'])
     for row in record['compiler_dependencies']:
@@ -266,10 +297,11 @@ def bind_build(host):
                 'actual build command result')
         for name in ('stdout', 'stderr'):
             verify(collection['streams'][name]['artifact'])
-    verify(record['source_review'], 'build-source-review.json')
+    verify(record['helper'], 'build-helper.py')
     save(host / 'build-bindings.json', {'build_record': identity, 'verified': checks,
          'container_only_loader_references': record['loader_dependencies'],
          'loader_scope': 'exact same immutable image required; no host substitution for container library paths',
+         'clean_launch_requirement': record['clean_launch_requirement'],
          'application_acceptance': False})
     return checks
 

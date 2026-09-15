@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_root_packet_source_checkpoint",
+  "task_id": "M02-B-root-positive",
+  "status": "PASS_ROOT_PACKET_SOURCE",
+  "recorded_utc": "2026-09-15T05:49:10Z",
+  "base_commit": "e634d38c731003ab682a0948659b660cf0b654d4",
+  "files": [
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_orchestrator.py",
+      "sha256": "b794fc74a668f9f41caceb99e299381652fe02caa002c06d8b43c287b75599a3"
+    },
+    {
+      "path": "scripts/tests/test_linux_collector_root_orchestrator.py",
+      "sha256": "75e827d304c7730f37bd2b23751ef2a250d0528f2a1829e87654fea30372082f"
+    },
+    {
+      "path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py",
+      "sha256": "ba1ed0320e36e24cf59c394b7466a25e6906be179f19924f221d54c759bf7979",
+      "change": "advance the reusable recovery/watchdog source pin after the reviewed lifetime-equivalent root orchestrator rebind"
+    }
+  ],
+  "build_input": {
+    "path": "/home/holden/mckernel-work/scratch/stability-linux-collector-build-mount-20260915-2/stability-linux-collector-build-20260915-2",
+    "record_sha256": "fa12fe8df3092f64fbe757bbd3ccad62bd8a672cbda39fb4153ffd54c6d917ed",
+    "collector_sha256": "e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d",
+    "status": "PASS_REBUILT_COLLECTOR_INPUT",
+    "compiler_dependencies": 179,
+    "verified_artifact_occurrences": 264
+  },
+  "rebind": {
+    "container_prefix": "/work/stability-linux-collector-build-20260915-2",
+    "build_status": "PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY",
+    "exact_schema_helper_clean_launch_and_loader_binding": true,
+    "obsolete_source_review_reference_removed": true,
+    "lifetime_and_cleanup_protocol_changed": false
+  },
+  "focused_tests": {
+    "python3": "14/14 PASS",
+    "python3_8": "14/14 PASS",
+    "combined_owner_and_root_python3": "22/22 PASS",
+    "combined_owner_and_root_python3_8": "22/22 PASS"
+  },
+  "independent_review": {
+    "role": "Astra/high OS ownership and runtime-acceptance reviewer",
+    "status": "PASS_ROOT_PACKET_SOURCE"
+  },
+  "nonblocking_limitation": "A parent death after stopped-container creation but before watchdog readiness can leave a stopped container requiring audited cleanup; it cannot execute without the later start gate.",
+  "root_positive_execution": false,
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Commit, push and fetched-blob verify the source packet and successful build archive before a fresh root-positive attempt."
+}
