@@ -831,3 +831,10 @@ decoder tests. Ten hash-bound members are retained in
 `stability-native-collector-lifecycle-raw-expanded-node-source-checkpoint-20260915-1.tar.gz`.
 The full raw/oracle matrix remains open; compilation, models, native execution
 and all acceptance gates remain closed.
+
+The next independent source packet targets five exceptional artifact I/O cleanup
+paths plus one positive descriptor-lifetime control without adding raw cases. It
+is frozen provisionally in
+`stability-native-collector-lifecycle-artifact-io-cleanup-source-packet-20260915-1.md`;
+it receives independent `PASS_ARTIFACT_IO_CLEANUP_PACKET_ONLY`. No source edit or
+check has started.
