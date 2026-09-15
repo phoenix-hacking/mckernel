@@ -118,3 +118,21 @@ fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language
 gates complete (three IN_PROGRESS). Current production remains exact baseline
 module2026091301/image3 with its eight original suites; no broader acceptance is
 claimed. External hardware/exposure work remains later and unavailable locally.
+
+M03-A/B pending-free candidate 6 stopped at its first focused execution failure:
+the expanded Rust callback vectors exceeded the fixture's four-entry event ledger.
+The exact five candidate sources plus generated Rust source/binary are preserved in
+`stability-pending-free-batch-candidate-runtime-failure-20260915-6`; no negative
+trait, C-oracle, runtime, invalidation, backing-reuse or production credit follows.
+Candidate 5 and its independent review failure remain unchanged. A fresh reviewed
+correction is required before another focused execution.
+
+Independent M02-B review now permits a new additive adverse-v1 implementation
+packet for missing setup, 383-byte partial setup and deterministic interruption
+at the completed-wait boundary. It requires separately named, hash-bound generated
+test collectors and a new root profile; the released collector and 25-case profile
+remain unchanged. No adverse execution has started. Independent M02-C review did
+not freeze the native collector ABI: terminal encoding, thread birth identity,
+complete loader observation, unchanged-mcexec stream attribution and qualified
+no-loss/clock/owner producers remain unresolved. No native collector implementation
+or credit follows from the retained design draft.
