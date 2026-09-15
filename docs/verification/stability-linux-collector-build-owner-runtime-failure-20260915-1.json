@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_runtime_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 1,
+  "status": "FAIL_RECORD_COUNT_EXPECTATION",
+  "source_commit": "2b2d8831da417a3654489eb7bf338d7c59f1fe26",
+  "recorded_utc": "2026-09-15T05:39:10Z",
+  "owner_sha256": "06268712e4c070112e0d8aabdf68d7fba1413a2a1ccfebdd5ccbaf6737b583ee",
+  "failure": {
+    "phase": "owner record verification",
+    "type": "ValueError",
+    "message": "exact build counts",
+    "expected_compiler_dependencies": 176,
+    "observed_compiler_dependencies": 179,
+    "observed_inputs": 14,
+    "observed_compiled_outputs": 16,
+    "observed_commands": 20,
+    "observed_loader_dependencies": 2,
+    "new_dependencies_from_bounded_close_fallback": [
+      "/usr/include/bits/resource.h",
+      "/usr/include/bits/types/struct_rusage.h",
+      "/usr/include/sys/resource.h"
+    ]
+  },
+  "build_record": {
+    "path": "stability-linux-collector-build-mount-20260915-1/stability-linux-collector-build-20260915-2/record.json",
+    "sha256": "abbba2467da7b67283eb48a55bef046263104b1782bc39ca72b79a68727c3ab9",
+    "inner_status": "PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY",
+    "sha_cases": 9,
+    "builder_negative_cases": 1
+  },
+  "owner_result_sha256": "ffa16b9693c2736a97beb2ab978d26225ddb9f03ed0f1f66ee9093946f7c9e62",
+  "first_failure_sha256": "8c7b7d94bfe30d15e72de0cb0d7cc75c26de9a1c0e38897e7f457e8c5796a493",
+  "watchdog_result_sha256": "869bf9a7b39639ae5917145e67f60cce1c1af4bfd504d3727d797d083b8ca9d6",
+  "cleanup": {
+    "container_absence_verified": true,
+    "cleanup_evidence_complete": true,
+    "cleanup_first_failure": null,
+    "watchdog_status": "DISARMED_AFTER_VERIFIED_ABSENCE",
+    "watchdog_raw_wait_status": 0,
+    "development_lock_free_after_run": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-runtime-failure-20260915-1.tar.gz",
+    "size": 710785,
+    "sha256": "b81e64cd1ae35152f9649f645151f158d4b6b34a3c37b9ce9b9b6d6b357e4a0d",
+    "members": 612,
+    "contains_complete_owner_and_build_mount_trees": true
+  },
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Change the exact dependency membership expectation and synthetic fixture from 176 to 179, review the narrow correction independently, and use fresh attempt 2 paths."
+}

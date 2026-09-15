@@ -228,7 +228,7 @@ class OwnerContractTests(unittest.TestCase):
         # Keep both container namespaces represented.  The retained path is
         # deliberately compiler-inputs/<absolute-container-path>.
         deps_by_depfile = {}
-        for index in range(176):
+        for index in range(179):
             if index < 16:
                 original_path = '/work/stability-linux-collector-build-20260915-2/project-%03d.h' % index
             else:

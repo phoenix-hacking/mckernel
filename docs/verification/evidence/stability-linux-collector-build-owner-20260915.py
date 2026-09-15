@@ -302,7 +302,7 @@ def verify_build_record(mount, host):
     require(set(record) == record_keys and same(record.get('schema_version'), 1), 'exact build record schema')
     expected_scope = 'Pinned Linux collector rebuild after retained close_range/EPERM root failure; SHA9 and builder rejection only'
     require(record.get('status') == 'PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY' and record.get('application_acceptance') is False and record.get('backend_enabled') is False and record.get('guest_execution') is False and record.get('root_positive_execution') is False and record.get('scope') == expected_scope and record.get('phase') == 'builder-negative' and record.get('clean_launch_requirement') == 'root execution must bind close_fds, empty pass_fds and nofile=4096:4096', 'build-only flags/scope')
-    require(len(record.get('inputs', [])) == 14 and len(record.get('compiled_outputs', [])) == 16 and len(record.get('compiler_dependencies', [])) == 176 and len(record.get('commands', [])) == 20, 'exact build counts')
+    require(len(record.get('inputs', [])) == 14 and len(record.get('compiled_outputs', [])) == 16 and len(record.get('compiler_dependencies', [])) == 179 and len(record.get('commands', [])) == 20, 'exact build counts')
     require(record.get('helper', {}).get('sha256') == HELPER_SHA, 'helper binding')
     verified = []
     def artifact(row):

@@ -77,10 +77,20 @@ Astra/high `PASS_BUILD_PACKET` review at exact owner SHA256
 `06268712e4c070112e0d8aabdf68d7fba1413a2a1ccfebdd5ccbaf6737b583ee` and test
 SHA256 `273c1ce062d83376ef43fce45a7e30dd55651aa299e91f8428ebac172c891af6`.
 Both Python versions pass 8/8 focused tests; 23 additional clock/type mutations
-are rejected. This releases only one bounded UID1000 rebuild after a fetched-blob
-checkpoint. The stopped-container interval before CID-bound watchdog readiness
-remains an explicit non-execution limitation. No heavy process or McKernel guest
-is live.
+are rejected. The exact packet was pushed and fetched-blob verified at
+`2b2d8831da417a3654489eb7bf338d7c59f1fe26`. Bounded build attempt 1 completed
+the 14 inputs, 16 outputs, 20 commands, SHA9 and builder-negative run, but the
+owner rejected it because the new `<sys/resource.h>` fallback adds three exact
+headers to the old 176-dependency expectation. The full original owner/build
+trees are retained in archive SHA256
+`b81e64cd1ae35152f9649f645151f158d4b6b34a3c37b9ce9b9b6d6b357e4a0d`.
+Container absence, watchdog disarm/reap and lock release passed. The narrow
+179-count correction passes both 8/8 test runs, the corrected verifier passes
+against the preserved raw record, and Astra/high returned `PASS_RERUN_PACKET`.
+Commit and fetched-blob verify it before fresh attempt 2. The stopped-container
+interval before CID-bound watchdog
+readiness remains an explicit non-execution limitation. No heavy process or
+McKernel guest is live.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language
