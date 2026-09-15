@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_build_owner_source_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-15-build-packet",
+  "attempt": 15,
+  "status": "PASS_BUILD_PACKET",
+  "recorded_utc": "2026-09-15T07:53:00Z",
+  "base_commit": "aefe86f4651e2f3e1044ac1093aa259d70af9df8",
+  "source_sha256": {
+    "owner": "a563166f605c106ea93f9bcb236dcf22867fb854ef2f507f86132af687c5b1ba",
+    "tests": "43c8ad8bf73bf89d94e9d9afee4cbac376d749dde60ec7bf85b6074d3756e498"
+  },
+  "bound_candidate14_sha256": {
+    "rust_fixture": "fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4",
+    "c_oracle": "23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441",
+    "harness": "b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a",
+    "production_mem_helpers": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca"
+  },
+  "tests": {
+    "python3": {"count": 8, "status": "PASS", "stderr_sha256": "1879061f078ec57d8e78de33e9110c1d128d272e7b5974645b85ce4b0d92ae39"},
+    "python3.8": {"count": 8, "status": "PASS", "stderr_sha256": "0447cdc4901754861e206e813eb1727b921d4cd8acb1cea2e69d06923fb56faa"},
+    "diff_check": "PASS"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-source-checkpoint-20260915-15.tar.gz",
+    "sha256": "31746ab117d47e2c8a3eed5e1dbe0ceeac45d1a96f5dde19f72a1e7d0122c08e",
+    "size": 14181,
+    "members": 9
+  },
+  "independent_review": "PASS_BUILD_PACKET",
+  "limitations": [
+    "cheap streams do not independently retain invocation or interpreter identity metadata",
+    "synthetic result fixtures validate schema/rejection rather than descriptor transitions",
+    "real fatal panic/public entrypoint and bounded incomplete inventory remain outside scope"
+  ],
+  "container_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

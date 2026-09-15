@@ -1,4 +1,4 @@
-"""Cheap contract tests for the pending-free candidate12 build owner.
+"""Cheap contract tests for the pending-free candidate14 build owner.
 
 These tests deliberately do not invoke Docker, compilers, a guest, or the
 production lock.  They exercise only static profile/result rejection paths.
@@ -81,12 +81,17 @@ class PendingFreeOwnerTests(unittest.TestCase):
 
     def test_source_and_six_input_pins_are_exact(self):
         self.assertEqual(len(owner.pinned_inputs()), 6)
+        self.assertEqual(len(owner.harness_contract()['EXPECTED']), 37)
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.rs'], 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.c'], '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_actual_harness.py'], 'b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a')
         for path, expected in owner.pinned_inputs().items():
             self.assertEqual(hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), expected)
         source = OWNER.read_text()
         for required in ('compiler_copies', 'RUSTC_SHA', 'GCC_SHA', 'recover_cleanup',
                          'watchdog-config.json', 'original-tree-inventory.json',
-                         "'--rustc', RUSTC", "'--cc', GCC"):
+                         "'--rustc', RUSTC", "'--cc', GCC", 'len(rows) == 37',
+                         "'panic'", 'candidate14 expected row count'):
             self.assertIn(required, source)
 
     def result_fixture(self, td):
@@ -116,7 +121,8 @@ class PendingFreeOwnerTests(unittest.TestCase):
             callbacks = [[100+i, i+1, 1] for i in range(rc)] if op in ('drain', 'finish') and rc > 0 else []
             if case == 'source-reuse' and op == 'finish': callbacks = [[102, 7, 1]]
             if case == 'other-head-finish': callbacks = [[103, 4, 1]]
-            rows.append({'case': case, 'op': op, 'rc': rc, 'before': before, 'after': copy.deepcopy(before), 'callbacks': callbacks})
+            rows.append({'case': case, 'op': op, 'rc': rc, 'panic': 1 if case == 'begin-panic-bridge' else 0,
+                         'before': before, 'after': copy.deepcopy(before), 'callbacks': callbacks})
         bad = copy.deepcopy(rows[7]); bad['callbacks'] = [[100, 1, 1]]
         bad['after']['pages'][0]['mode'] = 0; bad['after']['pages'][0]['list'] = {'next': 90, 'prev': 91}
         def stream(rows): return ''.join('JSON|' + json.dumps(row) + '\n' for row in rows)

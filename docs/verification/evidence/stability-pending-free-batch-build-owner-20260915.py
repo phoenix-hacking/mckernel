@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded UID1000 owner for pending-free candidate12 only.
+"""Bounded UID1000 owner for pending-free candidate14 only.
 
 This is infrastructure evidence.  It uses the accepted collector owner's
 lock/watchdog/recovery implementation without borrowing its build inventory.
@@ -42,10 +42,10 @@ BASE_SHA = 'ba1ed0320e36e24cf59c394b7466a25e6906be179f19924f221d54c759bf7979'
 PINNED_INPUTS = {
     'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e',
     'kernel/rust/mem_helpers.rs': '3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca',
-    'kernel/rust/tests/pending_free_batch_vectors.rs': 'ee38d7d27a2c68e04fc3ac8433faf8d923e33580a6c55968bac927f6e01a33bb',
-    'kernel/rust/tests/pending_free_batch_vectors.c': '0eb14ca2ee9b7e085d21be76cab087b673532d3abd2f86bbeb5b199f09f29890',
+    'kernel/rust/tests/pending_free_batch_vectors.rs': 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4',
+    'kernel/rust/tests/pending_free_batch_vectors.c': '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441',
     'kernel/rust/tests/run_equivalence.sh': '14cbdf9421c5d284ded0a607324c60a72f5d628fe55e99139d135986e9cbb145',
-    'kernel/rust/tests/pending_free_batch_actual_harness.py': '298af617437bd5beef1643286532c3cff7e14c30f0be263d414f93de47dc3cfc',
+    'kernel/rust/tests/pending_free_batch_actual_harness.py': 'b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a',
 }
 
 
@@ -158,6 +158,7 @@ def harness_contract():
     require(identity['sha256'] == PINNED_INPUTS[str(path.relative_to(REPO))], 'reviewed harness drift')
     namespace = {'__file__': str(path), '__name__': 'reviewed_pending_free_contract'}
     exec(compile(raw, str(path), 'exec'), namespace)
+    require(len(namespace['EXPECTED']) == 37, 'candidate14 expected row count')
     return namespace
 
 
@@ -190,10 +191,11 @@ def artifact_names():
 
 
 def validate_rows(rows, contract):
-    require(type(rows) is list and len(rows) == 30, 'all thirty computed rows')
+    require(type(rows) is list and len(rows) == 37, 'all thirty-seven computed rows')
     for row in rows:
-        require(type(row) is dict and set(row) == {'case', 'op', 'rc', 'before', 'after', 'callbacks'}, 'computed row fields')
-        require(type(row['rc']) is int and type(row['callbacks']) is list, 'computed result types')
+        require(type(row) is dict and set(row) == {'case', 'op', 'rc', 'panic', 'before', 'after', 'callbacks'}, 'computed row fields')
+        require(type(row['rc']) is int and type(row['panic']) is int and row['panic'] in (0, 1) and type(row['callbacks']) is list, 'computed result types')
+        require(row['panic'] == (1 if row['case'] == 'begin-panic-bridge' else 0), 'panic bridge result')
         for snapshot in (row['before'], row['after']):
             require(type(snapshot) is dict and set(snapshot) == {'source', 'other', 'batch', 'pages'}, 'snapshot fields')
             batch = snapshot['batch']

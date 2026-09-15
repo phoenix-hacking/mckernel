@@ -297,3 +297,27 @@ bytes. The exact sources and streams are retained in
 execution, the real fatal panic/public-entry path, bounded incomplete inventory,
 runtime and all production credit remain closed; a new reviewed build-owner pin
 packet is required next.
+
+The M02-C loader-map audit finds no authoritative executed loader/DSO or
+transient-map producer. Current image code validates caller-supplied section
+descriptors, and synthetic procfs maps do not bind mapping lifetime or ownership.
+The proposed begin/row/end record in
+`stability-native-collector-loader-source-audit-20260915-1.md` remains structural
+only: stable thread generation, executed hooks, complete transient events,
+stream/no-loss attribution and ownership/clock qualification still block freeze.
+
+The separate M02-C stream review confirms unchanged `mcexec` shares stdout/stderr
+endpoints between launcher and delegated payload writes, while the supervisor
+retains bytes but not writer identity or write boundaries. Marker filtering and
+PTY substitution are unsound. The out-of-band exact partition proposal and
+negative matrix in `stability-native-collector-stream-source-review-20260915-1.md`
+remain structural only; no inspected producer supplies origin, endpoint-lifetime,
+committed-fragment ordering and loss guarantees.
+
+M03 candidate-15 updates only the isolated build owner and its cheap tests to bind
+the committed candidate-14 hashes, 37 ordered rows and panic field. Eight tests
+pass under each Python interpreter and independent review returns
+`PASS_BUILD_PACKET`. The retained cheap streams lack full invocation/interpreter
+metadata, which limits them to source-packet support. A fresh dispatcher-owned
+Rocky Rust 1.92 focused build is released only after this exact checkpoint is
+pushed and fetched; no runtime or production credit exists yet.
