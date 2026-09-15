@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_root_attempt_failure",
+  "task_id": "M02-B",
+  "status": "FAIL_LITERAL_CHILD_SETUP_EPERM",
+  "source_commit": "a7f05d444c42ff5f79bfd6c6d7e8941b2b107646",
+  "orchestrator_sha256": "6e6311ac7059eb97f1cba2eb9606bdc7e82016e381cb47a732ca5b274c216ab3",
+  "attempt": {
+    "number": 1,
+    "host_root": "/home/holden/mckernel-work/scratch/stability-linux-sealed-root-host-20260913-1",
+    "profile_root": "/home/holden/mckernel-work/scratch/stability-linux-sealed-root-tests-20260913-1",
+    "archive": {
+      "path": "docs/verification/evidence/stability-linux-sealed-root-attempt-20260913-1.tar.gz",
+      "size": 262764,
+      "members": 282,
+      "sha256": "99c9da8d429fd7740a1efc6541d07d028fa678b27d255e08534af67a76c3ff81"
+    }
+  },
+  "first_failure": {
+    "outer_phase": "host:start-attach",
+    "outer_type": "ValueError",
+    "outer_message": "actual zero command exit",
+    "collector_status": "SETUP_ERROR",
+    "collector_reason": "child-setup-error",
+    "setup_packet_bytes": 384,
+    "setup_packet_sha256": "8b02815ce17c37593e8210442eadff04cc1171a3ca70189095b4b69f46536861",
+    "setup_words_prefix": [826032961, 1, 2, 1, 1],
+    "decoded": "ACL1 version 1 ERROR, setup stage 1, errno EPERM; all remaining words zero"
+  },
+  "executed_scope": {
+    "sha256_harness": "PASS raw wait 0 with complete streams",
+    "collector_cases_started": ["literal"],
+    "collector_cases_accepted": [],
+    "remaining_cases_not_run": 24
+  },
+  "diagnosis": {
+    "independent_archive_audit": "PASS exact failure and cleanup decoding; source protocol exposes only aggregate setup stage",
+    "same_security_profile_probe_1": [
+      "PASS raw rt_sigaction signals 1..64 excluding SIGKILL/SIGSTOP",
+      "groups [0]",
+      "PASS setsid",
+      "PASS setresgid(0,0,0)",
+      "PASS setresuid(0,0,0)"
+    ],
+    "same_security_profile_probe_2": "SYS_close_range(1000,2000,0) returned -1 errno EPERM",
+    "root_cause": "the required retained Docker seccomp profile denies close_range; collector close_except treats EPERM as fatal",
+    "required_fix": "retain the security profile and implement an independently reviewed finite descriptor-close fallback; do not weaken seccomp or add capabilities"
+  },
+  "cleanup": {
+    "host_result_sha256": "f392949d98018da1945dc82f12711dbd3ce9baebc720cd11e7766191321e81de",
+    "absence_verified": true,
+    "evidence_complete": true,
+    "recovery_first_failure": null,
+    "journal_error_count": 0,
+    "watchdog_result_sha256": "bf617e46672f997bba3745dd8d3efe2ded39c806653bb9d030dedff168ed3a44",
+    "watchdog_status": "DISARMED_AFTER_VERIFIED_ABSENCE",
+    "watchdog_raw_wait_status": 0,
+    "matching_container_after_cleanup": false,
+    "development_lock_holder_after_cleanup": false
+  },
+  "selected_artifacts": [
+    {"path": "host/first-failure.json", "size": 201, "sha256": "9fc3825a1ec415222e7055a2ca6e4d833439730b7bc007de4dc94f56de8dc26d"},
+    {"path": "host/host-012-start-attach-returned.json", "size": 3111, "sha256": "ecf930b2a6c295e4dd6ded27409694abf512ab8f594890dffd5e7d3e89ccd679"},
+    {"path": "profile/work/root-result.json", "size": 1051, "sha256": "cade15f32e2772ec2fec5b84bca012282a825c8971a709bbf41934d65685b46a"},
+    {"path": "profile/work/driver-returned.json", "size": 2682, "sha256": "f258afb3c0733e1020b1ba9554bb3fe22caf72c71a415a3cd26bd0bb5dcae4cb"},
+    {"path": "profile/work/cases/result.json", "size": 1696, "sha256": "aa1e5bdb701b7d3a8fb9d904e5e6f0826b9d26410bf3294b5c79298f85f2263d"},
+    {"path": "profile/work/cases/literal/collection/report.json", "size": 7275, "sha256": "0ae4d75ba308ddba017e0520c46e1f1984a0188df067a7a7c635bf86715c228b"}
+  ],
+  "next_required": [
+    "Review and test the bounded close_range ENOSYS/EPERM fallback.",
+    "Rebuild the exact collector binaries and all compiler/source bindings in the pinned container.",
+    "Review the rebuilt input packet before fresh root attempt 2."
+  ],
+  "application_acceptance": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
