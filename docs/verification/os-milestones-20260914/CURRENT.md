@@ -1126,3 +1126,20 @@ and strict per-kind/schedule validation before ACK. Seven focused methods pass
 under both pinned interpreters, but the oracle and synthetic positive fixtures
 still require replacement and the current partial source needs fresh review.
 No compiler, build, root, native, application or production gate is released.
+
+The stable owner-identity addition now receives independent
+`PASS_OWNER_PACKET_ONLY` at packet SHA256
+`4624b42a5f6fd63dacc8bcb881c7f8a31f38c5addffc4e74ff9ad3714f43caa5`.
+It requires two matching `/proc/self/stat` observations before socket creation
+or fork and joins that owner birth to the collector PPID. Strict-oracle work
+then preserved source failures 5 through 7: replacement of the old placeholder
+positives, a selector-4 phase-scope error, and a selector-4 absent-report setup
+capture error. Both pinned interpreters subsequently pass all eight focused
+methods with exact report keys, nested process/setup/source/sink structures,
+production-shaped events, report/witness joins and exact-class/message semantic
+negatives. Fresh full independent review nevertheless returns `FAIL_SOURCE`:
+pre-ACK field/phase validation, request-sync identity, buffered pre-flush size,
+phase deadlines, sticky cleanup mismatch, first-error-preserving unwind and the
+shared owner/oracle layout remain incomplete. Corrections have started, but no
+source acceptance, compiler, build, root, native, application or production gate
+is released.

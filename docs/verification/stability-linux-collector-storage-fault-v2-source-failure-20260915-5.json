@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 5,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T15:38:42Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-5.tar.gz",
+    "sha256": "a894fb08ea9e732e6eff69f23453a46797e920d0839ef2dd94a979ee80200bf5",
+    "size": 26060,
+    "members": 11
+  },
+  "failure": "the new exact oracle correctly rejected all seven former placeholder positive fixtures at witness-kind validation; the old negative matrix then reported its expected-message mismatch",
+  "correction": "replace placeholder packets with independently constructed exact selector schedules, schemas, acquisition identities, sizes, results and production-shaped retained evidence",
+  "original_test_stream_retained": true,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
