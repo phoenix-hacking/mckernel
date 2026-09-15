@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_runtime_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 10,
+  "status": "FAIL_RUST_COMPILATION",
+  "base_commit": "2f60fdd286fa30cc04d3be36fde8126b3db6e9c5",
+  "candidate_files": [
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "14cbdf9421c5d284ded0a607324c60a72f5d628fe55e99139d135986e9cbb145"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "5e31b4287d52b4811a622b71947716f497d2206d91c4986742d24ce564872ca5"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "ee38d7d27a2c68e04fc3ac8433faf8d923e33580a6c55968bac927f6e01a33bb"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "0eb14ca2ee9b7e085d21be76cab087b673532d3abd2f86bbeb5b199f09f29890"}
+  ],
+  "checks": [
+    {"command": "bash -n kernel/rust/tests/run_equivalence.sh", "status": "PASS"},
+    {"command": "/home/holden/.cargo/bin/rustc +nightly --edition=2021 -D warnings actual_extracted_and_vectors.rs", "status": "FAIL", "returncode": 1, "stderr_sha256": "5c2b296ba962372193e0d2dd021bffe646921041a40af8fc5ddbdd6f90df0373"}
+  ],
+  "compiler": {
+    "requested": "/home/holden/.cargo/bin/rustc +nightly",
+    "resolved_version": "rustc 1.60.0-nightly (777bb86bc 2022-01-20)",
+    "finding": "The selected host compiler lacks the fixture's compiler-supported offset_of, raw-reference and pointer cast_mut APIs; compilation reported 46 diagnostics."
+  },
+  "retained_failure": {
+    "path": "pending-free-candidate10-20260915-lZvr0T/failure.json",
+    "sha256": "e6db1d74e20c87b27770ffce5c5338973e1f47f2ef41915ae7034544b599827d",
+    "artifact_manifest_sha256": "f91ac091ce4f5b92b0712e08369b049f375714bcf2f04d437fd7af85c4310957",
+    "pre_run_sources_frozen": true,
+    "commands_and_outputs_retained": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-runtime-failure-20260915-10.tar.gz",
+    "size": 1480442,
+    "sha256": "56f8f0ae971bae7856307827666d453802835fa39e28d32985e0f16602bcf039",
+    "members": 29
+  },
+  "independent_review": {
+    "role": "Astra/high compiler and ownership reviewer",
+    "status": "FAIL_RERUN_PACKET_COMPILER_CORRECTION_BOUNDED",
+    "diagnostic_accounting": {
+      "raw_address_expressions": 28,
+      "offset_of_import_or_macro": 10,
+      "cast_mut": 5,
+      "let_else": 2,
+      "array_from_fn": 1
+    },
+    "required_compiler_lane": {
+      "image_digest": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "image_manifest_sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+      "rustc_path": "/usr/bin/rustc",
+      "rustc_version": "1.92.0 ded5c06cf21d2b93bffd5d884aa6e96934ee4234",
+      "rustc_sha256": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6",
+      "gcc_path": "/usr/bin/gcc",
+      "gcc_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2"
+    },
+    "owner_requirement": "A new reviewed adapter must preserve the accepted lock/watchdog/container-isolation/cleanup contract; the collector-specific owner cannot change entrypoints or inventories implicitly."
+  },
+  "rerun_performed": false,
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

@@ -176,3 +176,32 @@ and is explicitly untested; independent review is required before any new run.
 M03-A/B candidate 8 stopped before compilation when its `IhkAtomic` extraction
 anchor also matched `IhkAtomic64`. Its exact sources and `failure.json` are
 preserved; no retry, focused equivalence or acceptance follows.
+
+Read-only M02-B review confirms stopped-collector/external-rescue is not ready to
+run: neither the accepted 25-case profile nor adverse setup packet contains an
+identity-bound collector-stop stimulus. Existing supervisor and root watchdog
+cleanup can be reused only after a separate reviewed stopper/rescuer packet; no
+ordinary root rerun can substitute for this case.
+
+M03-A/B candidate 9 expanded the unexecuted fixture/evidence design, but stopped
+before compilation because its `kmalloc_track_hash` extraction end marker also
+matched `kmalloc_track_hash_ptr`. Exact pre-run sources, environment, command
+status and failure are retained in
+`stability-pending-free-batch-candidate-runtime-failure-20260915-9`; the claimed
+computed cases remain under independent static review and receive no credit.
+
+M03-A/B candidate 10 applied the two candidate-9 corrections and passed source
+extraction plus shell syntax, then stopped at Rust compilation. The host `+nightly`
+is Rust 1.60.0-nightly from 2022 and lacks the modern APIs used by the exact-source
+fixture, producing 46 diagnostics. The complete pre-run inputs, compiler identity,
+commands, streams and failure are archived as
+`stability-pending-free-batch-candidate-runtime-failure-20260915-10`; compiler-lane
+review is pending and no retry or credit follows.
+
+M02-B adverse-v1 attempt 4 passed 10 retained source/mock tests and diff check,
+but independent review rejects its source/build packet. Under umask 077 its file
+writer records modes it never applies, complete link/tool/input provenance is not
+verified, and actual builds omit the generated diff. The exact passing unit-test
+archive remains rejected evidence in
+`stability-linux-collector-adverse-source-success-20260915-4`; no collector build,
+root execution or acceptance follows.
