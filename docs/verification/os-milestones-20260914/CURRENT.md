@@ -950,3 +950,11 @@ reservation/release and unchecked assignment from model identity semantics.
 Same/different reassignment, phase/domain permission, alias classification,
 reference/authority interaction and CLOSED precedence remain unspecified, so the
 `TID_ASSIGN` decision family is not frozen and no transition source is released.
+
+The next independent output-schema packet isolates exact Boolean typing in the
+process and thread registries. It is frozen in
+`stability-native-collector-lifecycle-output-registry-boolean-source-packet-20260915-1.md`;
+independent review returns `PASS_OUTPUT_REGISTRY_BOOLEAN_PACKET_ONLY` for four
+integer-for-Boolean rejections and two schema-only positive scenarios. Raw count
+stays 136; no source edit or check has started and all execution and acceptance
+gates remain closed.
