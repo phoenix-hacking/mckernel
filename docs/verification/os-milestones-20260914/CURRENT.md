@@ -878,3 +878,14 @@ depth-33 rejection, while preserving the first 133 lexical records. Independent
 review returns `PASS_RAW_EXPANDED_DEPTH_PACKET_ONLY`; if materialized, the raw
 inventory becomes 134. No source edit or new check has started, and every model,
 native, application and production gate remains closed.
+
+The expanded-depth source slice now receives independent
+`PASS_RAW_EXPANDED_DEPTH_SOURCE_ONLY` and
+`PASS_RAW_EXPANDED_DEPTH_EVIDENCE_ONLY`. The exact depth-32 positive and
+depth-33 rejection bring the raw inventory to 134 while preserving the first
+133 lexical records. Python 3.9.12 and 3.8.10 each pass all fourteen focused raw
+decoder tests. The misplaced-vector source, wrong-selector errors, seven stale
+inventory assertions and missing exact exception-class assertions are retained
+as original failures in the 13-member archive. The full raw/oracle matrix remains
+open; compilation, models, native execution and all acceptance gates remain
+closed.
