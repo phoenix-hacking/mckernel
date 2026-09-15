@@ -1,0 +1,111 @@
+{
+  "status": "PASS_SUPERVISED_UNATTENDED_PREPARATION",
+  "at": "2026-09-15T03:07:33.301027+00:00",
+  "supersedes_for_current_sources": "launcher-validation.json",
+  "configuration": {
+    "coordinator": "gpt-5.6-sol/medium",
+    "workers": "gpt-5.6-luna/low-or-medium",
+    "reviewer": "gpt-6-astra/high",
+    "sandbox": "danger-full-access",
+    "approval_policy": "never",
+    "normal_command_starts_watcher": true,
+    "max_runner_restarts": 3,
+    "runner_heartbeat_timeout_seconds": 180,
+    "helper_read_attempts": 3,
+    "helper_read_timeout_seconds": 5
+  },
+  "checks": [
+    {
+      "command": "OS_GOAL_PROTOCOL_SCHEMA=/tmp/os-goal-protocol-ci05fpv2 python3 -B scripts/tests/test_os_goal_launcher.py",
+      "result": "PASS",
+      "tests": 27,
+      "scope": "Offline lifecycle/transport/schema checks, temporary worker crash/stall recovery, retained thread and work window, process birth/owner guards, autonomous input fallback, private sudo helper subprocess and transient/permanent errors."
+    },
+    {
+      "command": "python3 /home/holden/mckernel/scripts/run_os_goal.py --check-sudo",
+      "result": "PASS_UNATTENDED_SUDO",
+      "effective_uid": 0,
+      "scope": "Approved outside the current chat sandbox; fixed sudo -A -k -- /usr/bin/id -u only. No model or OS payload."
+    },
+    {
+      "command": "python3 -B scripts/run_os_goal.py --status",
+      "result": "not_started"
+    },
+    {
+      "command": "python3 -B scripts/run_os_goal.py --dry-run",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -B docs/verification/os-milestones-20260914/dispatch.py check",
+      "result": "PASS_PLANNING_INDEX"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "credential_storage": {
+    "path": "~/.local/state/mckernel-os-goal/sudo-password",
+    "directory_mode": "0700",
+    "file_mode": "0600",
+    "password_in_publication_files": false,
+    "password_value_or_digest_retained_in_record": false
+  },
+  "preparation_errors_preserved": [
+    {
+      "operation": "Read generated ToolRequestUserInputParams schema",
+      "original_error": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/os-goal-protocol-ci05fpv2/v2/ToolRequestUserInputParams.json'",
+      "correction": "Located root-level ToolRequestUserInputParams.json and ToolRequestUserInputResponse.json; response schema check passes."
+    },
+    {
+      "operation": "sudo --help inside managed sandbox",
+      "original_error": "sudo: /usr/bin/sudo must be owned by uid 0 and have the setuid bit set",
+      "correction": "Approved sudo --help outside the sandbox passed; the completed --check-sudo authentication check also passed outside the sandbox."
+    },
+    {
+      "operation": "Initial test-file import patch",
+      "original_error": "apply_patch verification failed: Failed to find expected lines in scripts/tests/test_os_goal_launcher.py",
+      "correction": "Applied corrected separate hunks; no partial failed test change was retained."
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "scripts/run_os_goal.py",
+      "size": 33315,
+      "sha256": "7d4da526bbc0124b270291ce2ee5e794748cdb9b6dc55f44ae1372b28516ec6d"
+    },
+    {
+      "path": "scripts/watch_os_goal.py",
+      "size": 6759,
+      "sha256": "816b906eeeea3b0d9b7049beba6995a5ebfcc3dbe0d2a9f26599c2601c078ce1"
+    },
+    {
+      "path": "scripts/os_goal_sudo_askpass.py",
+      "size": 2676,
+      "sha256": "cfbb844c340f05acd3dbf899f11df8ec57aec97971c2acff883121fe81740fca"
+    },
+    {
+      "path": "scripts/tests/test_os_goal_launcher.py",
+      "size": 25653,
+      "sha256": "875df13d4ee99ae3469d5aa5c99fddc131b426399758340bad27b480a1f20b0c"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/LAUNCH.md",
+      "size": 10222,
+      "sha256": "738c57ac1701928a85ebbcffdfd601a0b8ee4e955516986157c79bc9bb7ff5a5"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/START.md",
+      "size": 4361,
+      "sha256": "ba827e693d2fce26b4c642e7b394e29e25db34ba770baf60d2a75456055ed9c7"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "size": 3471,
+      "sha256": "ff951f41e886deeefbf0b6f4b91ac44d87c1166f3f17b0523ae00401f5e5af17"
+    }
+  ],
+  "paid_model_turns_started": 0,
+  "live_os_campaign": "NOT_STARTED",
+  "runtime_acceptance_credit": "None"
+}

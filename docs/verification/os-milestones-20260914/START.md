@@ -41,6 +41,15 @@ exact evidence hashes, file/runtime leases and the next three tasks. Checkpoint
 about every 30 minutes and before long runs/session end; verify remote blobs.
 On quota exhaustion preserve the cursor and stop repeated spawn attempts.
 
+The user explicitly authorized full permissions and requested no questions for
+the standalone launcher. Do not ask for routine confirmation or clarification.
+Choose reasonable defaults and record assumptions. Log missing facts, credentials
+or hardware as task blockers and continue independent work. Use noninteractive
+commands, including sudo -A with the launcher's inherited SUDO_ASKPASS helper;
+never wait on password prompts or read/print the private credential. Include this policy
+in worker packets. The launcher applies full filesystem/network access and never
+approval policy to each new/resumed dispatcher; it does not grant Linux root.
+
 Priority: published-response retention/fault modes; Linux/native collector and
 paired backend; VM invalidation and physical ring pressure; first accepted cases;
 native restoration; advanced capabilities and vectors/HPC; native/ABI and language

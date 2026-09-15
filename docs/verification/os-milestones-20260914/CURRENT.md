@@ -10,6 +10,13 @@ User-selected coordinator: Sol/medium. Workers: Luna/low for audits and
 Luna/medium for specified fixtures. Use a bounded Astra/high independent review
 for difficult ownership, concurrency, unsafe code and execution release.
 At most three children; one dispatcher owns serialized builds/guests.
+Standalone launcher permissions: full filesystem/network access, approval policy
+never. No clarification prompts: record assumptions and continue other ready work
+when a task lacks facts or external resources. See LAUNCH.md for tested behavior.
+The normal command now supervises the runner and sudo credential-read helper.
+Recoverable runner failures reuse its saved thread, with three restarts maximum;
+quota, budget, blocked/completed goals and user stops do not auto-restart.
+Private unattended sudo passed the fixed `id -u` authentication check.
 
 Read START.md, then README.md once. Run:
 

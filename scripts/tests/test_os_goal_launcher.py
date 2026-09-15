@@ -18,6 +18,12 @@ SOURCE = Path(__file__).resolve().parents[1] / "run_os_goal.py"
 SPEC = importlib.util.spec_from_file_location("os_goal_launcher", SOURCE)
 launcher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(launcher)
+ASKPASS_SPEC = importlib.util.spec_from_file_location("os_goal_askpass", SOURCE.with_name("os_goal_sudo_askpass.py"))
+askpass = importlib.util.module_from_spec(ASKPASS_SPEC)
+ASKPASS_SPEC.loader.exec_module(askpass)
+WATCH_SPEC = importlib.util.spec_from_file_location("os_goal_watch", SOURCE.with_name("watch_os_goal.py"))
+watcher = importlib.util.module_from_spec(WATCH_SPEC)
+WATCH_SPEC.loader.exec_module(watcher)
 
 
 def goal(status="active", objective=launcher.OBJECTIVE):
@@ -138,6 +144,8 @@ class CampaignTests(unittest.TestCase):
         self.assertIsNone(self.args.token_budget)
         command = launcher.server_argv(self.args, self.directory)
         self.assertIn("agents.max_depth=1", command)
+        self.assertIn('sandbox_mode="danger-full-access"', command)
+        self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
 
     def test_new_goal_continues_multiple_turns_without_client_prompt_loop(self):
@@ -152,6 +160,9 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["goal"]["status"], "blocked")
         self.assertEqual(state["last_turn"]["id"], "turn-2")
         self.assertEqual(sum(m == "thread/start" for m, p in rpc.calls), 1)
+        start = next(p for m, p in rpc.calls if m == "thread/start")
+        self.assertEqual(start["sandbox"], "danger-full-access")
+        self.assertEqual(start["approvalPolicy"], "never")
         self.assertEqual(sum(m == "thread/goal/set" for m, p in rpc.calls), 1)
         self.assertFalse(any(m == "turn/start" for m, p in rpc.calls))
 
@@ -162,6 +173,8 @@ class CampaignTests(unittest.TestCase):
         resumes = [p for m, p in rpc.calls if m == "thread/resume"]
         self.assertEqual(resumes[0]["threadId"], "test-thread")
         self.assertTrue(resumes[0]["excludeTurns"])
+        self.assertEqual(resumes[0]["sandbox"], "danger-full-access")
+        self.assertEqual(resumes[0]["approvalPolicy"], "never")
         self.assertEqual(state["goal"]["tokensUsed"], 1234)
         self.assertFalse(any(m == "thread/start" or "objective" in p or "tokenBudget" in p
                              for m, p in rpc.calls))
@@ -244,6 +257,16 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["goal"]["status"], "paused")
         self.assertEqual(sum(m == "turn/steer" for m, p in rpc.calls), 1)
 
+    def test_clarification_request_does_not_stop_campaign(self):
+        def ask(rpc):
+            rpc.on_event({"id": 50, "method": launcher.USER_INPUT_METHOD, "params": {
+                "threadId": "test-thread", "questions": [{"id": "approach"}]}})
+        rpc = FakeRPC(self.args, steps=[ask, lambda r: (r.completed(), r.status("blocked"))])
+        state = self.run_campaign(rpc, 20)
+        self.assertIsNone(state["stop_reason"])
+        self.assertNotIn("pending_request", state)
+        self.assertEqual(state["last_automatic_input"]["question_ids"], ["approach"])
+
     def test_missing_automatic_continuation_stops_instead_of_prompt_loop(self):
         clock = [100.0]
         def idle(rpc):
@@ -292,7 +315,169 @@ class CampaignTests(unittest.TestCase):
                 jsonschema.Draft7Validator(schemas[method]).validate(params)
 
 
+class SudoHelperTests(unittest.TestCase):
+    def test_helper_watch_retries_transient_failure_but_not_bad_credentials(self):
+        failed = launcher.subprocess.CompletedProcess([], 75, b"", b"temporary read error\n")
+        permanent = launcher.subprocess.CompletedProcess([], 1, b"", b"missing credential\n")
+        output = type("Output", (), {"buffer": io.BytesIO(), "write": lambda self, value: None,
+                                     "flush": lambda self: None})()
+        with patch.object(sys, "argv", ["askpass"]), patch.object(sys, "stderr", output), \
+                patch.object(askpass.time, "sleep"), patch.object(askpass.subprocess, "run", side_effect=[failed, permanent]) as run:
+            self.assertEqual(askpass.main(), 1)
+            self.assertEqual(run.call_count, 2)
+        with patch.object(sys, "argv", ["askpass"]), patch.object(sys, "stderr", output), \
+                patch.object(askpass.subprocess, "run", return_value=permanent) as run:
+            self.assertEqual(askpass.main(), 1)
+            self.assertEqual(run.call_count, 1)
+
+    def test_private_credential_is_read_and_insecure_files_are_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="os-goal-credential-test-") as temp:
+            path = Path(temp) / "credential"
+            path.write_bytes(b"offline-test-password\n")
+            path.chmod(0o600)
+            self.assertEqual(askpass.read_credential(path), b"offline-test-password")
+            path.chmod(0o644)
+            with self.assertRaises(ValueError):
+                askpass.read_credential(path)
+            path.chmod(0o600)
+            link = Path(temp) / "link"
+            link.symlink_to(path)
+            with self.assertRaises(OSError):
+                askpass.read_credential(link)
+            with patch.object(askpass.os, "getuid", return_value=os.getuid() + 1):
+                with self.assertRaises(ValueError):
+                    askpass.read_credential(path)
+
+    def test_invalid_credential_contents_are_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="os-goal-credential-test-") as temp:
+            path = Path(temp) / "credential"
+            path.touch(mode=0o600)
+            for value in (b"", b"\n", b"two\nlines", b"nul\0byte", b"x" * 4097):
+                path.write_bytes(value)
+                with self.subTest(size=len(value)), self.assertRaises(ValueError):
+                    askpass.read_credential(path)
+
+    def test_askpass_process_uses_only_private_file_and_stdout(self):
+        with tempfile.TemporaryDirectory(prefix="os-goal-credential-test-") as temp:
+            path = Path(temp) / "credential"
+            path.write_bytes(b"offline-test-password\n")
+            path.chmod(0o600)
+            environment = launcher.runtime_environment()
+            environment["MCKERNEL_OS_SUDO_CREDENTIAL"] = str(path)
+            self.assertNotIn("offline-test-password", environment.values())
+            result = launcher.subprocess.run([environment["SUDO_ASKPASS"], "sudo prompt"],
+                env=environment, stdin=launcher.subprocess.DEVNULL, capture_output=True, timeout=5)
+            self.assertEqual(result.returncode, 0)
+            self.assertEqual(result.stdout, b"offline-test-password\n")
+            self.assertEqual(result.stderr, b"")
+
+
+class WatcherTests(unittest.TestCase):
+    def test_only_recoverable_failures_restart(self):
+        self.assertTrue(watcher.should_restart(1, {"retryable": True}))
+        self.assertTrue(watcher.should_restart(-9, {}))
+        self.assertTrue(watcher.should_restart(24, {}))
+        self.assertFalse(watcher.should_restart(1, {"retryable": False}))
+        for status in ("complete", "blocked", "usageLimited", "budgetLimited"):
+            self.assertFalse(watcher.should_restart(-9, {"goal": {"status": status}}, watchdog=True))
+        for code in (0, 10, 20, 21, 22, 23):
+            self.assertFalse(watcher.should_restart(code, {"retryable": True}))
+        self.assertFalse(watcher.should_restart(-9, {}, stopped=True))
+
+    def test_recovery_keeps_thread_and_original_work_window(self):
+        source = r'''
+import json,os,sys
+from pathlib import Path
+path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','windows':[]}
+state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
+state['worker_pid']=os.getpid()
+state['retryable']=True
+state['goal']={'status':'complete' if '--recovered' in sys.argv else 'active'}
+path.write_text(json.dumps(state))
+sys.exit(0 if '--recovered' in sys.argv else 1)
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-watcher-test-") as temp:
+            repo = Path(temp)
+            (repo / "scripts").mkdir()
+            (repo / "scripts/run_os_goal.py").write_text(source)
+            directory = repo / ".git/os-autopilot"
+            args = launcher.arguments(["--hours", "0.01", "--restart-delay", "0", "--max-restarts", "1"])
+            with redirect_stdout(io.StringIO()):
+                code = watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json)
+            self.assertEqual(code, 0)
+            state = json.loads((directory / "state.json").read_text())
+            self.assertEqual(state["thread_id"], "retained-thread")
+            self.assertEqual(len(state["windows"]), 2)
+            self.assertLess(state["windows"][1], state["windows"][0])
+            self.assertEqual(json.loads((directory / "watcher.json").read_text())["restarts"], 1)
+
+    def test_server_retirement_does_not_signal_reused_or_unverified_pid(self):
+        state = {"server_pid": 123, "server_start": "original", "worker_pid": 456}
+        with patch.object(watcher, "process_start", return_value="replacement"), patch.object(watcher.os, "kill") as kill:
+            self.assertTrue(watcher.retire_server(state, 456))
+            kill.assert_not_called()
+        with patch.object(watcher, "process_start", return_value="original"), patch.object(watcher.os, "kill") as kill:
+            self.assertFalse(watcher.retire_server(state, 999))
+            kill.assert_not_called()
+
+    def test_stalled_worker_recovers_without_losing_session(self):
+        source = r'''
+import json,os,sys,time
+from pathlib import Path
+path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+state={'thread_id':'stalled-thread','worker_pid':os.getpid(),
+       'goal':{'status':'complete' if '--recovered' in sys.argv else 'active'}}
+path.write_text(json.dumps(state))
+if '--recovered' not in sys.argv: time.sleep(10)
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-watchdog-test-") as temp:
+            repo = Path(temp)
+            (repo / "scripts").mkdir()
+            (repo / "scripts/run_os_goal.py").write_text(source)
+            directory = repo / ".git/os-autopilot"
+            args = launcher.arguments(["--hours", "0", "--restart-delay", "0",
+                                       "--max-restarts", "1", "--watchdog-seconds", "0.05"])
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json), 0)
+            state = json.loads((directory / "state.json").read_text())
+            self.assertEqual(state["thread_id"], "stalled-thread")
+            self.assertEqual(state["goal"]["status"], "complete")
+            events = [json.loads(line)["event"] for line in (directory / "watcher.jsonl").read_text().splitlines()]
+            self.assertIn("heartbeat_stalled", events)
+            self.assertIn("restarting_saved_session", events)
+
+
 class TransportTests(unittest.TestCase):
+    def test_questions_return_standing_instruction_without_selecting_approval_or_secret(self):
+        source = r'''
+import json,os,sys
+request=json.loads(sys.stdin.readline())
+event={'method':'item/tool/requestUserInput','id':99,'params':{'questions':[
+    {'id':'approach','options':[{'label':'Accept'},{'label':'Decline'}]},
+    {'id':'password','isSecret':True}]}}
+sys.stdout.write(json.dumps(event)+'\n'); sys.stdout.flush()
+reply=json.loads(sys.stdin.readline())
+sys.stdout.write(json.dumps({'id':request['id'],'result':{'reply':reply,
+    'git_prompt':os.environ['GIT_TERMINAL_PROMPT']}})+'\n'); sys.stdout.flush()
+sys.stdin.read()
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-unattended-") as temp:
+            rpc = launcher.RPC([sys.executable, "-u", "-c", source], Path(temp), lambda e: None)
+            try:
+                result = rpc.call("initialize", {}, timeout=5)
+                answers = result["reply"]["result"]["answers"]
+                self.assertEqual(answers["approach"]["answers"], [launcher.AUTONOMY_REPLY])
+                self.assertEqual(answers["password"]["answers"], [])
+                self.assertEqual(result["git_prompt"], "0")
+                directory = os.environ.get("OS_GOAL_PROTOCOL_SCHEMA")
+                if directory:
+                    import jsonschema
+                    schema = json.loads((Path(directory) / "ToolRequestUserInputResponse.json").read_text())
+                    jsonschema.Draft7Validator(schema).validate(result["reply"]["result"])
+            finally:
+                rpc.close()
+
     def test_fragmented_events_and_unsupported_approval_are_handled_without_approval(self):
         source = r'''
 import json,sys,time

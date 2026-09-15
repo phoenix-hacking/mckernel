@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Start/resume the McKernel milestone goal through the local Codex app server.
 
-No model calls for --dry-run, --status or --check. A normal invocation starts
+No model calls for --dry-run, --status, --check or --check-sudo. A normal invocation starts
 paid/account-metered work. Runtime state stays in the repository's Git directory.
 """
 
@@ -24,6 +24,8 @@ from uuid import uuid4
 
 
 REPO = Path(__file__).resolve().parents[1]
+SUDO_HELPER = REPO / "scripts/os_goal_sudo_askpass.py"
+SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
 OBJECTIVE = (
     "Complete the McKernel OS functionality, stability, native production and "
@@ -39,6 +41,38 @@ OBJECTIVE = (
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "rateLimitExceeded", "sessionBudgetExceeded"}
+USER_INPUT_METHOD = "item/tool/requestUserInput"
+AUTONOMY_REPLY = (
+    "Automatic launcher response applying the user's standing instruction; "
+    "no new human answer was provided. Continue the authorized OS milestone "
+    "work autonomously without asking questions. Choose reasonable implementation "
+    "defaults and record assumptions. If a missing fact, credential or external "
+    "resource cannot be inferred, record that task's blocker and continue other "
+    "ready work. Do not fabricate facts, select an external-action approval, "
+    "weaken acceptance criteria, or repeat this question."
+)
+
+
+def unattended_input(params):
+    """Return the existing delegation instruction, never an invented user choice."""
+    answers = {}
+    for question in params["questions"]:
+        ident = question["id"]
+        if not isinstance(ident, str) or not ident or ident in answers:
+            raise ValueError("Invalid/duplicate unattended question ID")
+        # An instruction must not be supplied as if it were a password/token.
+        answers[ident] = {"answers": [] if question.get("isSecret") else [AUTONOMY_REPLY]}
+    return {"answers": answers}
+
+
+def runtime_environment():
+    """Pass credential paths to sudo, never the password in argv or environment."""
+    return dict(os.environ, GIT_TERMINAL_PROMPT="0", GCM_INTERACTIVE="Never",
+                SUDO_ASKPASS=str(SUDO_HELPER), MCKERNEL_OS_SUDO_CREDENTIAL=str(SUDO_CREDENTIAL))
+
+
+class RecoverableFailure(RuntimeError):
+    """A transport/process failure that the watcher may retry within its limit."""
 
 
 def utc():
@@ -89,7 +123,8 @@ class RPC:
         self.events = (log_dir / "protocol.jsonl").open("a", buffering=1)
         self.stderr = (log_dir / "server.stderr.log").open("ab")
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                     stderr=self.stderr, bufsize=0, start_new_session=True)
+                                     stderr=self.stderr, bufsize=0, start_new_session=True,
+                                     env=runtime_environment())
         self.selector = selectors.DefaultSelector()
         self.selector.register(self.proc.stdout, selectors.EVENT_READ)
 
@@ -103,7 +138,7 @@ class RPC:
                 return
             chunk = os.read(self.proc.stdout.fileno(), 65536)
             if not chunk:
-                raise RuntimeError("Codex app server disconnected; see retained stderr.")
+                raise RecoverableFailure("Codex app server disconnected; see retained stderr.")
             self.buffer += chunk
         if len(self.buffer) > 32 * 1024 * 1024:
             raise RuntimeError("Oversized app-server record; stopped without discarding logs.")
@@ -115,10 +150,13 @@ class RPC:
                 continue
             self.events.write(json.dumps({"at": utc(), "event": message}) + "\n")
             if "id" in message:
-                # Unattended mode cannot provide missing information or approvals.
-                # Returning an error does not manufacture approval or a user answer.
-                self.send({"id": message["id"], "error": {
-                    "code": -32000, "message": "Unattended launcher cannot answer; checkpoint and stop."}})
+                if message["method"] == USER_INPUT_METHOD:
+                    self.send({"id": message["id"], "result": unattended_input(message["params"])})
+                else:
+                    # Full permissions are selected before execution. Unknown
+                    # interactive protocols still require facts/authority we lack.
+                    self.send({"id": message["id"], "error": {
+                        "code": -32000, "message": "Unattended launcher cannot answer this protocol; checkpoint and stop."}})
             self.on_event(message)
 
     def call(self, method, params, timeout=45.0):
@@ -129,7 +167,7 @@ class RPC:
         deadline = time.monotonic() + timeout
         while ident not in self.responses:
             if time.monotonic() >= deadline:
-                raise RuntimeError("App-server request timed out: " + method)
+                raise RecoverableFailure("App-server request timed out: " + method)
             self.pump(min(1.0, max(0.0, deadline - time.monotonic())))
         response = self.responses.pop(ident)
         if "error" in response:
@@ -166,8 +204,8 @@ def server_argv(args, repo):
         "agents.default_subagent_model": "gpt-5.6-luna",
         "agents.default_subagent_reasoning_effort": "low",
         "approval_policy": "never",
-        # Match the user's current unrestricted OS-development session. This is
-        # local to this process; global config and project trust are unchanged.
+        # The user explicitly authorized full access for the standalone launcher.
+        # This is local to this process; global config/project trust are unchanged.
         "sandbox_mode": "danger-full-access",
     }
     argv = [args.codex, "--strict-config", "-C", str(repo)]
@@ -247,6 +285,11 @@ class Campaign:
         thread = data.get("threadId")
         primary = thread == self.state.get("thread_id")
         if "id" in message:
+            if method == USER_INPUT_METHOD:
+                self.save(last_automatic_input={"thread_id": thread, "request_id": message["id"],
+                          "question_ids": [q["id"] for q in data["questions"]],
+                          "policy": "standing_autonomy_instruction; no new human answer"})
+                return
             self.save(pending_request={"method": method, "params": data})
             self.stop_reason, self.stop_now = "needs_user_input", True
         elif method == "thread/goal/updated" and primary:
@@ -285,6 +328,17 @@ class Campaign:
     def instructions(self):
         return (
             "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
+            "The user explicitly authorized full filesystem/network access and no "
+            "approval or clarification prompts for this OS campaign. Do not ask "
+            "questions: choose reasonable defaults, record assumptions, and dispatch "
+            "independent ready work when a task lacks necessary information. Pass "
+            "these instructions to every worker. Use noninteractive commands. "
+            "The user supplied a local sudo credential: use sudo -A with the "
+            "inherited SUDO_ASKPASS helper when elevated host access is necessary. "
+            "Do not add -n to password-authenticated sudo -A. Never read the private "
+            "credential file, invoke the askpass helper directly, or put its output "
+            "in a tool response, shell command, environment value, Git file or log. "
+            "If authentication fails, retain the error and continue unrelated work. "
             "Follow " + PLAN_REL + "/START.md and GOAL.md. The user explicitly authorizes "
             "automatic cheap subagents; use fresh bounded packets and explicit models. "
             "Maximum three children, no recursive dispatch, one heavy build/guest owner. "
@@ -300,10 +354,22 @@ class Campaign:
             "join/close workers, record any live process identities, checkpoint and return. "
             "If credentials or external resources are unavailable, preserve the blocker "
             "and continue independent ready work. Never store credentials in the plan or logs."
+            + (" This is automatic crash recovery. Read CURRENT.md and the previous "
+               "run/watcher records first. Reconcile source changes and exact live "
+               "process/runtime leases before any new build or guest. Resume the "
+               "existing thread and acceptance ledger; do not replay completed work."
+               if self.args.recovered else "")
         )
 
     def begin(self):
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
+        proc = getattr(self.rpc, "proc", None)
+        birth = None
+        if proc:
+            from watch_os_goal import process_start
+            birth = process_start(proc.pid)
+        self.save(worker_pid=os.getpid(), server_pid=proc.pid if proc else None,
+                  server_start=birth, retryable=False)
         settings = preflight(self.rpc, self.args, self.repo)
         self.save(phase="starting", settings=settings, stop_reason=None)
         if self.stop_reason:
@@ -452,6 +518,7 @@ class Campaign:
                     break
                 if not self.active and now - self.last_activity > 120:
                     self.stop_reason = "active_goal_did_not_continue"
+                    self.save(retryable=True)
                     code = 24
                     break
                 self.rpc.pump(timeout=1)
@@ -461,7 +528,8 @@ class Campaign:
                     say("Goal " + str((self.goal or {}).get("status")) + "; local status: --status.")
         except Exception as error:
             self.stop_reason = self.stop_reason or "launcher_error"
-            self.save(last_error=str(error))
+            self.save(last_error=str(error), retryable=isinstance(error, (
+                RecoverableFailure, BrokenPipeError, ConnectionResetError)))
             say(str(error))
         finally:
             try:
@@ -481,6 +549,7 @@ def arguments(argv=None):
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true", help="Print launch settings; no server, thread or model call")
     mode.add_argument("--check", action="store_true", help="Inspect local Codex settings/models; no thread or inference")
+    mode.add_argument("--check-sudo", action="store_true", help="Verify private askpass authentication with sudo id -u; no inference")
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
     parser.add_argument("--hours", type=float, default=12, help="Work window in hours; 0 removes timer (default: 12)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
@@ -488,11 +557,20 @@ def arguments(argv=None):
     parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh", "max", "ultra"])
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
+    parser.add_argument("--max-restarts", type=int, default=3, help="Maximum automatic crash recoveries (default: 3)")
+    parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
+    parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
+    parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if not math.isfinite(args.hours) or args.hours < 0 or not math.isfinite(args.grace_seconds) or args.grace_seconds < 0:
         parser.error("hours and grace-seconds must be finite and non-negative")
     if args.token_budget is not None and args.token_budget <= 0:
         parser.error("token-budget must be positive")
+    if (args.max_restarts < 0 or args.max_restarts > 50
+            or not math.isfinite(args.restart_delay) or args.restart_delay < 0
+            or not math.isfinite(args.watchdog_seconds) or args.watchdog_seconds < 0):
+        parser.error("restart count must be 0-50; recovery timing must be finite and non-negative")
     return args
 
 
@@ -503,13 +581,29 @@ def main(argv=None):
     directory = (REPO / git_dir).resolve() / "os-autopilot"
     if args.status:
         state = directory / "state.json"
-        print(state.read_text() if state.exists() else json.dumps({"phase": "not_started", "state_path": str(state)}))
+        current = json.loads(state.read_text()) if state.exists() else {"phase": "not_started", "state_path": str(state)}
+        watch = directory / "watcher.json"
+        if watch.exists():
+            current["watcher"] = json.loads(watch.read_text())
+        print(json.dumps(current, indent=2))
         return 0
     if args.dry_run:
         print(json.dumps({"command": shlex.join(server_argv(args, REPO)), "hours": args.hours,
                           "checkpoint_reserve_seconds": args.grace_seconds, "state_directory": str(directory),
                           "objective": OBJECTIVE, "model_calls": 0,
-                          "permissions": "Matches this OS session: danger-full-access, approval_policy=never. Global config unchanged."}, indent=2))
+                          "sudo_helper": str(SUDO_HELPER), "sudo_credential_configured": SUDO_CREDENTIAL.is_file(),
+                          "supervised": not args.worker, "max_restarts": args.max_restarts,
+                          "watchdog_seconds": args.watchdog_seconds,
+                          "permissions": "User-authorized danger-full-access, approval_policy=never; no clarification prompts. Global config unchanged."}, indent=2))
+        return 0
+    if args.check_sudo:
+        result = subprocess.run(["sudo", "-A", "-k", "--", "/usr/bin/id", "-u"],
+                                env=runtime_environment(), stdin=subprocess.DEVNULL,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=30)
+        if result.returncode != 0 or result.stdout.strip() != "0":
+            raise RuntimeError("Unattended sudo check failed: " + result.stderr.strip())
+        print(json.dumps({"status": "PASS_UNATTENDED_SUDO", "effective_uid": 0,
+                          "scope": "Authentication and id -u only; no agent or OS payload started."}))
         return 0
     if not shutil.which(args.codex):
         raise RuntimeError("Codex executable not found. Install/sign in to the local CLI first.")
@@ -521,6 +615,9 @@ def main(argv=None):
             finally:
                 rpc.close()
         return 0
+    if not args.worker:
+        from watch_os_goal import supervise
+        return supervise(args, REPO, directory, list(sys.argv[1:] if argv is None else argv), Lease, atomic_json)
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     lease = Lease(directory / "run.lock")
     try:
