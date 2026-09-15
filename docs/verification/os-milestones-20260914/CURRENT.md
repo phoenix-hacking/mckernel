@@ -689,3 +689,15 @@ The nine-member checkpoint archive is
 `stability-native-collector-lifecycle-raw-invalid-source-checkpoint-20260915-2`.
 The full malformed/width/authority matrix, replacement models, whole-corpus review,
 compilation and every runtime/acceptance gate remain closed.
+
+The next raw work is split by an independent normalized inventory. Decoder input,
+ordinary semantic precedence, positive legal boundaries, expected-output oracle
+corruption and artifact/cleanup tests remain separate obligations; exact freeze
+conditions are recorded in
+`stability-native-collector-lifecycle-raw-matrix-inventory-draft-20260915-1.md`.
+The first dependency-ready source packet receives independent
+`PASS_RAW_AUTHORITY_WIDTH_PACKET_ONLY`. It pins exact base operations and mutations
+for 19 authority-forging and shared PID/TID width/type cases, for 28 cumulative raw
+cases, along with positive legal boundaries and the common u64 slot rule. The
+matrix remains explicitly incomplete and `RAW_FULL_MATRIX_FROZEN` remains false.
+No source edit, check, compilation, model run, runtime or acceptance credit follows.
