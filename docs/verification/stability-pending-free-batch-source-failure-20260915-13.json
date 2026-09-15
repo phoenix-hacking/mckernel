@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_source_failure",
+  "task_id": "M03-A/M03-B-candidate-13-source",
+  "attempt": 13,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T07:37:00Z",
+  "base_commit": "e8a65afca708420891950768169448b6a8e203c3",
+  "source_sha256": {
+    "rust": "7e9d3f86691f8cf2e571f2b1373b36acf39c040f9bc8bad1e0bc6be36db45fdf",
+    "c": "9af3931a1dfcac1d0d47331ddeaf70bf0b9631b159c0ef20c92288c31808a7e9",
+    "harness": "a61915aacc694cf9f69dc1789ecb3f95ce266af284222063f41745fd7bd1b466"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-source-failure-20260915-13.tar.gz",
+    "sha256": "791c0ef0838174bc532a752bcf6f10dd3eac9389f323f0a97bfaf705111e430c",
+    "size": 9752,
+    "members": 3
+  },
+  "reported_cheap_checks": {
+    "python_compile": "PASS",
+    "diff_check": "PASS",
+    "owner_unittest": "expected reviewed harness drift",
+    "raw_owner_unittest_output_retained": false
+  },
+  "independent_review": {
+    "status": "FAIL_SOURCE",
+    "blocking_findings": [
+      "C malformed cases assign pointers to integer link identities",
+      "panic row uses a handwritten wrapper instead of the production body helper",
+      "boundary rows stop at inconsistent-empty validation instead of first.prev or last.next guards"
+    ],
+    "conflicting_audit": "a separate low-cost source audit reported PASS by inspection; the semantic blockers govern disposition"
+  },
+  "container_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

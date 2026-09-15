@@ -265,3 +265,13 @@ four-selector Linux infrastructure run only: stopped-collector rescue,
 watchdog-triggered recovery, post-reap/report-fsync interruption, general storage
 faults, production-binary equivalence and every McKernel application/production
 gate remain unaccepted.
+
+M03 candidate-13 source attempt is rejected before build. It proposed seven new
+conflict/panic/malformed-link rows, but semantic review finds pointer-to-integer C
+link assignments, a handwritten panic dispatcher that bypasses the production
+body helper, and two boundary cases that stop at the earlier inconsistent-empty
+guard. The exact three-file source is preserved in
+`stability-pending-free-batch-source-failure-20260915-13`; its owner-test pin-drift
+output was not retained, which is recorded as an evidence limitation. A conflicting
+cheap inspection reported PASS, but the precise semantic blockers control the
+failure disposition. No build, runtime or credit follows.
