@@ -1028,3 +1028,15 @@ artifact, vector-envelope and malformed-control corrections. Both rejected
 MODEL1 sources remain excluded and unexecuted. No fixture or test source has yet
 been materialized, raw inventory stays 137, and every compiler, model, native,
 application and production gate remains closed.
+
+The capture-closure source slice now also receives independent
+`PASS_CAPTURE_CLOSED_LITERALS_SOURCE_ONLY` and
+`PASS_CAPTURE_CLOSED_LITERALS_EVIDENCE_ONLY`. After preserving one source-review
+failure, the four focused methods require exact duplicate-free inventories, real
+wire validation, independent compact byte literals and zero execution calls.
+Python 3.9.12 and 3.8.10 each pass 4/4. The exact ten-member archive retains six
+witnesses and 88 expanded steps; ordinary inventory is 44 and the unchanged
+first 137 raw records reproduce their lexical hash. The incompatible MODEL1
+sources remain excluded and unexecuted, so this is literal/schema source evidence
+only. The lifecycle decision families, full matrices and every execution and
+acceptance gate remain incomplete and closed.

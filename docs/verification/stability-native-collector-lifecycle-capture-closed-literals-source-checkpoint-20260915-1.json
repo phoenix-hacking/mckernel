@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_capture_closed_literals_source_checkpoint",
+  "task_id": "M02-C-lifecycle-capture-closed-literals-source",
+  "attempt": 2,
+  "status": "PASS_CAPTURE_CLOSED_LITERALS_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T16:29:00Z",
+  "base_commit": "8343621fc58502adb1e14053d2749ddd0daea459",
+  "reviews": {
+    "packet": "PASS_CAPTURE_CLOSED_LITERALS_PACKET_ONLY",
+    "source": "PASS_CAPTURE_CLOSED_LITERALS_SOURCE_ONLY",
+    "preliminary_evidence": "PASS_CAPTURE_CLOSED_LITERALS_SOURCE_PRELIM_ONLY",
+    "evidence": "PASS_CAPTURE_CLOSED_LITERALS_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "d4e097b8920a299ce730d0546b476a3cf2c0c96282b925133d133edbac91cb52",
+    "vectors_sha256": "18dfdae2efc515c79da0cb49c20080d613fd3bd45f1c79b1839904352bb35846",
+    "expected_sha256": "8f8ffb64b4a254f74174e291a84305738e3b54ee2ec9962eecd7cc510a79c80e",
+    "test_sha256": "419294ea48edd3bcfbb64b5e5ce568000e6c9d261558e1410f5ad0d156ca73c1"
+  },
+  "rejected_models": {
+    "rust_sha256": "0bd333c42890bb6692041ad8d69765da8bf90d6c073004b6a382e56d57741ead",
+    "c_sha256": "3bbb640edf2712fe00c757216311accadd3acd185d47f6c5ba5427acd6277714",
+    "executed": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-capture-closed-literals-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "b03594749e77866ad8e0c1bc4abf7e09050e2147f6ff00e24353084f1740c989",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 4, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 4, "tests_failed": 0},
+    "literal_witnesses": 6,
+    "expanded_steps": 88,
+    "ordinary_inventory": 44,
+    "cumulative_raw_cases": 137,
+    "first_137_lexical_sha256": "3f833ae7e954445215f2632b8575b8bcbfe507867fc53e9fe2b41b62c50cffd9",
+    "fixture_bytes": 1017373,
+    "scope": "CAPTURE_CLOSED_LITERAL_AND_SCHEMA_SOURCE_ONLY"
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
