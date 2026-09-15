@@ -46,11 +46,12 @@ order, page metadata and boundary links; invalid input must leave the list
 untouched. Its first candidate was independently rejected for invalid Pin
 construction, broken empty-list transfer, premature production integration and
 grep-only tests; its exact failure archive and additive review record are
-retained. Attempts 2 and 3 restored the production finish path but were also rejected:
+retained. Attempts 2 through 5 restored the production finish path but were also rejected:
 empty detach did not release the source, mixed destination states passed, its
 unsafe contract was incomplete, then the purported production tests were not
-executed and contained independent borrow/count defects. All exact candidates
-are retained; the current dirty
+executed and contained independent borrow/count defects. Later extracted-helper
+tests still used unbound ABI dependencies and overstated later-invalid/C-reference
+coverage. All exact candidates are retained; the current dirty
 candidate remains rejected and must not be staged as an implementation.
 
 M02-B root attempt 1 is retained as FAIL: SHA passed, but the first `literal`
