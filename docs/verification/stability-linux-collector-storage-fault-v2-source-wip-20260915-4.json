@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 4,
+  "status": "CORRECTION_WIP_SOURCE_ONLY",
+  "recorded_utc": "2026-09-15T16:23:59Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-wip-20260915-4.tar.gz",
+    "sha256": "056734884bc514d306071158501b9f69b660c88da4febf18a3e9191093d9f053",
+    "size": 41601,
+    "members": 13
+  },
+  "checks": {
+    "python3.9.12": "10/10 PASS",
+    "python3.8.10": "10/10 PASS"
+  },
+  "implemented": [
+    "strict pre-ACK exact types and phases",
+    "request-sync and buffered report identity joins",
+    "source-faithful nested report/events/artifact oracle",
+    "observable owner phase deadlines",
+    "fresh-root retained runtime-input layout",
+    "partial ordered owner-error and sticky cleanup source"
+  ],
+  "remaining": [
+    "independent packet-12 review",
+    "finish owner error-journal exception precedence",
+    "implement and test source-bound supervisor",
+    "extend oracle to supervisor/status/error unions",
+    "fresh full independent source review"
+  ],
+  "active_processes": [
+    {"pid": 776516, "role": "launcher", "started": "2026-09-14T21:32:56-07:00"},
+    {"pid": 776518, "role": "launcher-worker", "started": "2026-09-14T21:32:56-07:00"},
+    {"pid": 776520, "role": "codex-app-server", "started": "2026-09-14T21:32:56-07:00"}
+  ],
+  "build_or_guest_processes": [],
+  "child_agents_joined": true,
+  "clock_note": "packet-review records 20260915-11 through -14 contain mistaken future 16:27-16:51 UTC sequence labels; host UTC was re-observed as 16:23:59 at this checkpoint, so their message/hash order is authoritative but those recorded_utc values are not",
+  "packet_12_reviewed": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

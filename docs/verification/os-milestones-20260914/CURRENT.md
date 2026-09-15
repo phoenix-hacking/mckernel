@@ -1156,3 +1156,25 @@ supervisor, subreaper adoption cleanup, a 248-second total bound, and exact
 non-overlapping owner identity/wait states. This releases source correction only.
 The source is not accepted; fresh full review remains mandatory before any
 compiler, root, native, application or production execution.
+
+Window-end WIP checkpoint 4 preserves the authorized source correction at
+archive SHA256
+`056734884bc514d306071158501b9f69b660c88da4febf18a3e9191093d9f053`.
+Python 3.9.12 and 3.8.10 each pass 10/10 focused methods. Implemented bytes add
+exact pre-ACK types/phases, request/report identity joins, buffered pre-flush
+handling, production-shaped report/event validation, observable owner deadlines,
+fresh-root retained runtime inputs, and partial ordered owner-error/sticky-cleanup
+handling. The next task is independent review of unreviewed packet 12 SHA256
+`d7adc51450fd91420e9944cbbb8bc488758e275174452609accccf8deb735f70`,
+which resolves nullable birth evidence for a safely signaled unreaped direct
+owner. Then finish exception precedence, implement/test the source-bound
+supervisor and supervisor/error oracle unions, and request fresh full source
+review. No build or guest process is live. The only retained live identities are
+launcher 776516, launcher worker 776518 and Codex app-server 776520, all started
+2026-09-14 21:32:56 PDT. All three child agents are joined/completed. Source,
+compiler, root, native, application and production gates remain closed.
+
+Timestamp correction: packet-review records `20260915-11` through `-14` contain
+mistaken future 16:27-16:51 UTC sequence labels. Host UTC was re-observed as
+16:23:59 at this checkpoint. Their immutable message/hash order remains the
+authority; those four `recorded_utc` values do not represent host wall time.
