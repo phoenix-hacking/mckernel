@@ -1143,3 +1143,16 @@ phase deadlines, sticky cleanup mismatch, first-error-preserving unwind and the
 shared owner/oracle layout remain incomplete. Corrections have started, but no
 source acceptance, compiler, build, root, native, application or production gate
 is released.
+
+The broader storage-fault-v2 correction authority is now closed by additive
+packet 11 at SHA256
+`274a51378b0172b4728eae3557b1f1b7a1c65708887b7980bfec1b205bc06f1f`
+with independent `PASS_CORRECTION_PACKET_ONLY`. Rejected packets 6 through 10
+remain preserved with their exact reviews. The accepted union freezes strict
+pre-ACK state and acquisition joins, observable 180/60-second collection bounds,
+trigger-relative cleanup, buffered report-prefix handling, immutable ordered
+error/result publication, three retained runtime inputs, an independently waited
+supervisor, subreaper adoption cleanup, a 248-second total bound, and exact
+non-overlapping owner identity/wait states. This releases source correction only.
+The source is not accepted; fresh full review remains mandatory before any
+compiler, root, native, application or production execution.
