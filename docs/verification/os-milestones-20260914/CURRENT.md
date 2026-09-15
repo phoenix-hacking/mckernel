@@ -91,15 +91,27 @@ Fresh attempt 2 then passes the complete build-owner gate. Its 612-member archiv
 SHA256 is `1aa076149e2ffc83019f43d11b79c9f679ec5ca24345c13525e45528292319a6`;
 independent review returns `PASS_REBUILT_COLLECTOR_INPUT`, with rebuilt collector
 SHA256 `e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d`.
-This is build-input acceptance only; the separately gated root-positive run has
-not started. The root orchestrator is rebound to the exact new record/path and
+This is build-input acceptance only. The root orchestrator was rebound to the
+exact new record/path and
 passes 14/14 focused tests under Python 3 and 3.8 plus independent Astra/high
 `PASS_ROOT_PACKET_SOURCE` review at source SHA256
 `b794fc74a668f9f41caceb99e299381652fe02caa002c06d8b43c287b75599a3`.
-Checkpoint and fetched-blob verification are required before executing it. The
-stopped-container interval before CID-bound watchdog
+Its checkpoint was fetched-blob verified before execution. The stopped-container
+interval before CID-bound watchdog
 readiness remains an explicit non-execution limitation. No heavy process or
 McKernel guest is live.
+
+Root-positive attempt 2 now passes all 25 exact Linux infrastructure cases. Its
+991-member archive SHA256 is
+`ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721`;
+independent Luna and Astra reviews return `PASS_ROOT_EVIDENCE` and
+`PASS_ROOT_COLLECTOR_INPUT`. All 58 supervisor collections, 989 inventory
+entries, build/input bindings, exact process outcomes and cleanup/absence gates
+verify. The retained `observed-profile.json` FAIL is the conservative pre-test
+snapshot; the post-SHA9/post-25-case `root-result.json` is PASS. This remains
+Linux infrastructure input only. M02-B still requires its adverse storage,
+late-signal/setup, rescue, overflow and loader-closure cases; M02-C through M02-F
+and all McKernel/application/transport acceptance remain open.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language
