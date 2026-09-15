@@ -996,3 +996,16 @@ review returns `PASS_RAW_KEY_CAPTURE_U64_PACKET_ONLY`. If materialized, its one
 position-specific record raises raw inventory from 136 to 137 while preserving
 the first 136 lexical records. No source edit or execution has started, and all
 compiler, model, native, application and production gates remain closed.
+
+The raw capture-key `u64` adjacency now receives independent
+`PASS_RAW_KEY_CAPTURE_U64_SOURCE_ONLY` and
+`PASS_RAW_KEY_CAPTURE_U64_EVIDENCE_ONLY`. Its one exact upper-bound rejection
+raises raw inventory to 137 while preserving the first 136 lexical records.
+After correcting harness inventory and exact-size assertions, Python 3.9.12 and
+3.8.10 each pass all 17 focused raw-decoder tests. The initial failing terminal
+stream and exact failing source hash were not retained; the hash-bound
+summary-only record discloses that evidence limitation and cannot support a
+full original-failure-preservation claim. The corrected ten-member archive binds
+all source, input, interpreter and command-log hashes. The raw matrix remains
+open, and every compiler, model, native, application and production gate remains
+closed.
