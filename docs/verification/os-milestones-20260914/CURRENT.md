@@ -889,3 +889,11 @@ inventory assertions and missing exact exception-class assertions are retained
 as original failures in the 13-member archive. The full raw/oracle matrix remains
 open; compilation, models, native execution and all acceptance gates remain
 closed.
+
+Post-134 audits leave all six lifecycle decision families blocked on incomplete
+source-bound policy tables and select aggregate unused-pool preflight accounting
+as the next raw slice. The exact adjacent-character boundary is frozen in
+`stability-native-collector-lifecycle-raw-preflight-aggregate-byte-source-packet-20260915-1.md`;
+independent review returns `PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_PACKET_ONLY`. If
+materialized it adds one raw case for 135 total. No source edit or check has
+started, and all model, native, application and production gates remain closed.
