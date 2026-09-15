@@ -365,3 +365,14 @@ and `PASS_SOURCE_EVIDENCE`. The cheap command records lack complete interpreter,
 environment and timestamp identity, so they support the source packet only. A
 fresh dispatcher-owned container build is released after this fetched checkpoint;
 source integration and all runtime/production credit remain closed.
+
+The dispatcher-owned candidate-16 exact-source build attempt 3 passes the same 37
+Rust/C rows byte-for-byte against corrected source SHA
+`647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b`.
+All 20 bindings, 51 artifacts, five trait controls, mutant and isolated cleanup
+checks pass independent audit/review. Its 288-member archive is
+`stability-pending-free-batch-build-owner-success-20260915-3`. The accepted
+disposition remains a private unused prerequisite only: trusted pre-dereference
+inventory/range proof, durable owner-loss recovery/transaction identity,
+invalidation/backing policy and full module/guest qualification still block source
+integration and all runtime/production credit.

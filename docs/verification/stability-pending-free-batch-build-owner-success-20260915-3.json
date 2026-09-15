@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_exact_source_focused_build_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-16-focused-build",
+  "attempt": 3,
+  "status": "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY",
+  "recorded_utc": "2026-09-15T08:15:00Z",
+  "source_checkpoint_commit": "14eba5eb4fdbcaa498fe31742e3a7aaa940bbdb9",
+  "corrected_source_sha256": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+  "owner_result_sha256": "dfe155c352f17d2094d9d920bb6dc2c8bfa636a073c2f03d6a396d9f2c148be1",
+  "manifest_sha256": "d4c08da345f92af4326df818117cbde2bf4c39d09c63242311d6033141c44bc3",
+  "artifact_manifest_sha256": "8a8fc07b3ba92cf16bffa814f4968747f71be8de4e27519ad1718c4864344138",
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-success-20260915-3.tar.gz",
+    "sha256": "ea461d7a3a6bfa380fca0a7c85ff21d8e77fd7c9b8e964859adbe8fde819875f",
+    "size": 5679295,
+    "members": 288
+  },
+  "accepted_scope": {
+    "rust_rows": 37,
+    "c_rows": 37,
+    "rows_equal": true,
+    "rows_match_attempt2_byte_for_byte": true,
+    "extraction_bindings": 20,
+    "artifacts": 51,
+    "trait_negative_controls": 5,
+    "partial_release_mutant_raw_status": 101,
+    "cleanup_absence_verified": true,
+    "watchdog_disarmed_after_verified_absence": true
+  },
+  "independent_reviews": [
+    "PASS focused build archive audit",
+    "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY"
+  ],
+  "candidate_disposition": "private unused prerequisite only",
+  "source_integration_released": false,
+  "integration_blockers": [
+    "trusted descriptor inventory and pre-dereference membership/range validation",
+    "durable registration, owner-loss recovery and nonreused transaction identity",
+    "caller exclusion, backing/VM references and invalidation failed-clear retention policy",
+    "full-module, public fatal-panic and guest qualification"
+  ],
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
