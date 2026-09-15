@@ -501,3 +501,14 @@ The native lifecycle model separates allocation, birth, abort, thread/process
 terminal and actual retirement with sticky observation loss in
 `stability-native-collector-lifecycle-model-design-20260915-1.md`. These records
 release no source, build, root/native execution, ABI freeze or acceptance credit.
+
+Native lifecycle model source attempt 1 is rejected before checks or compilation.
+Its operation rows do not consistently join allocation to later typed identities
+and one row violates the declared arity. Process/thread state is conflated, full
+identity fields are ignored, numeric IDs narrow unchecked, and an unowned integer
+can stand in for destruction authority while reference resurrection and retirement
+without process terminal remain possible. Literal expectations omit the complete
+event/ownership state and the harness ignores `S`/`E` fields. Exact bytes are
+retained in `stability-native-collector-lifecycle-model-source-failure-20260915-1`.
+One bounded correction may address these source-review findings; no build, native
+execution, ABI freeze or acceptance is released.
