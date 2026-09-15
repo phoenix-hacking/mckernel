@@ -161,3 +161,10 @@ manifest remain archived as rejected evidence in
 `stability-pending-free-batch-candidate-run-20260915-7`. Production source review
 still finds complete validation before the first callback, but no focused
 equivalence, invalidation, reuse, runtime or production credit follows.
+
+M02-B adverse-v1 source attempt 2 corrected several semantic defects, then its
+first focused unit-test run failed on a string/bytes hashing error, an inconsistent
+hook-count assertion and a positive missing/partial oracle fixture that rejected
+itself. The exact source is preserved as
+`stability-linux-collector-adverse-source-failure-20260915-2` and is under fresh
+independent review. It remains uncompiled and unexecuted outside Python tests.
