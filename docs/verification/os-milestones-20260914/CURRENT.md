@@ -489,3 +489,15 @@ main-thread storage outlive terminal status. Nonreused guest incarnation and exe
 identity are still missing. The bounded producer-only next scope is recorded in
 `stability-native-collector-lifecycle-publication-review-20260915-1.md`; ABI freeze,
 native collection, application acceptance and production credit remain closed.
+
+Three design-only packets now bound the next independent source work. Storage-fault
+v2 specifies seven connected selectors, an external durable witness owner, raw wait
+and report presence semantics, additive secondary failures and cross-bound oracle
+negatives in `stability-linux-collector-storage-fault-v2-packet-design-20260915-1.md`.
+The pending-free private registry model defines safe non-releasing owned mock state,
+epochs, exclusive recovery leases, quarantine/archive and independent Rust/C full
+snapshot checks in `stability-pending-free-private-registry-model-design-20260915-1.md`.
+The native lifecycle model separates allocation, birth, abort, thread/process
+terminal and actual retirement with sticky observation loss in
+`stability-native-collector-lifecycle-model-design-20260915-1.md`. These records
+release no source, build, root/native execution, ABI freeze or acceptance credit.
