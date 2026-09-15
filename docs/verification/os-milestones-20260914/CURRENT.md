@@ -838,3 +838,15 @@ is frozen provisionally in
 `stability-native-collector-lifecycle-artifact-io-cleanup-source-packet-20260915-1.md`;
 it receives independent `PASS_ARTIFACT_IO_CLEANUP_PACKET_ONLY`. No source edit or
 check has started.
+
+The artifact cleanup slice now receives independent
+`PASS_ARTIFACT_IO_CLEANUP_SOURCE_ONLY` and
+`PASS_ARTIFACT_IO_CLEANUP_EVIDENCE_ONLY`. Its first source review failure for an
+exact `OSError` class assertion is preserved and corrected. Five injected EIO
+paths and the positive control pass all six focused tests under Python 3.9.12 and
+3.8.10. Per-acquisition descriptor tracking, exact EBADF closure, immutable
+artifact bytes and non-artifact execution guards are retained in the 10-member
+`stability-native-collector-lifecycle-artifact-io-cleanup-source-checkpoint-20260915-1.tar.gz`.
+Raw inventory remains 133; the raw/oracle matrix, compilation, models, native
+execution and all acceptance gates remain incomplete, with every execution and
+acceptance gate closed.

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_artifact_io_cleanup_source_checkpoint",
+  "task_id": "M02-C-lifecycle-artifact-io-cleanup-source",
+  "attempt": 2,
+  "status": "PASS_ARTIFACT_IO_CLEANUP_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T18:54:00Z",
+  "base_commit": "a5fcec49af168c8c1d539279717dabc496c03250",
+  "reviews": {
+    "packet": "PASS_ARTIFACT_IO_CLEANUP_PACKET_ONLY",
+    "source_attempt_1": "FAIL_EXACT_OSERROR_CLASS_ASSERTION_MISSING",
+    "source_attempt_2": "PASS_ARTIFACT_IO_CLEANUP_SOURCE_ONLY",
+    "evidence": "PASS_ARTIFACT_IO_CLEANUP_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "d2e1507baf611c97bfc6fb18287a3a67a99c0774b8e29148abd893068c9c4c11",
+    "vectors_sha256": "3e845d032938fef1854638529a3d21bb0c992780d65fb76b555dd62721e9da2f",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "3aa399895b8df0a7e76807b7722937194977392d20d8360e0e8ed811070da3b9"
+  },
+  "artifact": {
+    "path": "scripts/tests/fixtures/native-lifecycle-model-v1/raw-invalid/oversized-document.json",
+    "sha256": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "size": 1048577
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-artifact-io-cleanup-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "2785ac4835b826e1ac93547dc25840f2f7ae51053f55ba6218cd3c96a6a8a0c9",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 6, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 6, "tests_failed": 0},
+    "negative_cleanup_cases": 5,
+    "positive_controls": 1,
+    "scope": "ARTIFACT_IO_CLEANUP_CHECKS_ONLY",
+    "cumulative_raw_cases": 133
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
