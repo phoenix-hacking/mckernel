@@ -1087,3 +1087,17 @@ SHA256 is `4f1aaad972b137071a5722b4528415f68f34d12052eefdc8cf9890c15d98f689`.
 Strict per-kind schemas, durable owner artifacts, adopted-child cleanup,
 phase-relative owner deadlines and exact independent oracle fixtures remain open.
 Source review, build, root, native, application and production gates remain closed.
+
+An exact storage-fault-v2 packet correction now receives independent
+`PASS_PACKET_ONLY` at SHA256
+`0feaad14f408acf806fb391195e519a16de60cc41ffdb24cd9721ea432b90089`.
+Two preserved packet-review failures first exposed missing create/cleanup values,
+request size transitions, an inexact owner schema, and inability to represent
+unavailable identities or verify cleanup timing. The accepted correction freezes
+all seven real schedules/phases, strict kind schemas, imported request acquisition
+zero, sanitized complete eight-entry collector environment, byte-identical durable
+owner publication, tagged unavailable/unreaped states and trigger-relative 22-
+second cleanup with 16/1/5 stage bounds. This releases a new source correction
+only. The current untracked implementation still has the earlier source-review
+blockers and is not accepted; compiler, build, root, native, application and
+production gates remain closed.
