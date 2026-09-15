@@ -1018,3 +1018,13 @@ exact input/full-output witnesses remain mandatory before a source packet can be
 released. No literal, fixture or model has been materialized; TID semantics and
 the other lifecycle decision families remain unresolved, and all execution and
 acceptance gates remain closed.
+
+The six capture-closure literals now have an independently reviewed source
+packet with `PASS_CAPTURE_CLOSED_LITERALS_PACKET_ONLY`. It freezes five exact
+complete-state suffixes, one incomplete-state repeat end, all full registry and
+control rows, 88 expanded steps, ordinary inventory 38 to 44, and two in-process
+schema-first controls. The first packet review failure is preserved before the
+artifact, vector-envelope and malformed-control corrections. Both rejected
+MODEL1 sources remain excluded and unexecuted. No fixture or test source has yet
+been materialized, raw inventory stays 137, and every compiler, model, native,
+application and production gate remains closed.
