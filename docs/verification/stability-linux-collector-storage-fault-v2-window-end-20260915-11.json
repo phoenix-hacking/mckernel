@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_window_end",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 11,
+  "status": "SOURCE_WIP_TEST_FAILURE",
+  "recorded_utc": "2026-09-15T23:33:17Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-window-end-20260915-11.tar.gz",
+    "sha256": "c2c42633654f73036f2adc9d9031181eb8abfd560563b81a2ec79dc4261bc6a4",
+    "size": 192616,
+    "members": 19
+  },
+  "source_sha256": {
+    "supervise.py": "5ee773d971666c03219bb04ec5f46e5cfe9cd0af7a17a1bde3855cf2246cd9c5",
+    "witness_owner.py": "2d6211d6c481ddb5ff1c12ad5c82b0b7eafcc5029f3f00662cf47eb5760d8210",
+    "oracle.py": "d281e292298e377789e1f543d7c26e228c79504fbc2d10e8822d04107d1ef639",
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "test_collector_storage_fault_packet.py": "b7f29b7093e3fc1e173dfaed7ef6d4fb87c5f5b56efdc4dfff27ca9aa72f0225"
+  },
+  "checks": {
+    "python3.9.12": "47/49 PASS; 2 assertion-message ordering failures",
+    "python3.8.10": "47/49 PASS; same 2 assertion-message ordering failures",
+    "pycompile": "PASS for supervise.py and oracle.py on both interpreters"
+  },
+  "failures": [
+    {
+      "test": "test_supervisor_oracle_exact_identity_deadline_and_hash_controls",
+      "mutation": "supervisor owner identity",
+      "expected_error": "supervisor owner identity",
+      "actual_error": "supervisor complete state"
+    },
+    {
+      "test": "test_supervisor_oracle_exact_identity_deadline_and_hash_controls",
+      "mutation": "supervisor deadlines",
+      "expected_error": "supervisor deadlines",
+      "actual_error": "supervisor complete state"
+    }
+  ],
+  "bounded_changes": [
+    "caller-owned mutable supervisor cleanup session and recovery continuation",
+    "packet-15 NOT_SPAWNED preflight record validator"
+  ],
+  "remaining_review_boundary": [
+    "correct oracle validation ordering without weakening exact joins",
+    "add packet-15 invalid-matrix and supervisor exception-injection tests",
+    "run both pinned interpreters and obtain fresh independent exact-byte source review"
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

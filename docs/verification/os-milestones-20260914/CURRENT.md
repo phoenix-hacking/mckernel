@@ -1332,3 +1332,34 @@ Clang process is live. All bounded child agents are joined/completed. Host free
 space is 68 GiB and scratch free space is 23 GiB. Counters remain 0/273 accepted
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates; this checkpoint is not OS completion.
+
+Window-end checkpoint 11 preserves the post-checkpoint bounded worker results
+at archive SHA256
+`c2c42633654f73036f2adc9d9031181eb8abfd560563b81a2ec79dc4261bc6a4`.
+The supervisor now has a caller-owned mutable cleanup session and bounded
+recovery continuation; the oracle adds packet-15 NOT_SPAWNED preflight record
+validation. These exact bytes are WIP, not source accepted. Python 3.9.12 and
+3.8.10 each report 47/49: the owner-identity and deadline negative mutations
+are rejected first as `supervisor complete state`, rather than their required
+specific errors. Both interpreters compile the two changed files. The original
+failure is retained in
+`stability-linux-collector-storage-fault-v2-window-end-20260915-11.json`.
+
+Next tasks, in order: (1) correct oracle validation ordering while retaining
+all exact completion, identity and deadline joins; (2) add packet-15 invalid
+stage/flag/arithmetic/sentinel-retirement controls and supervisor exception-
+injection coverage for retained event/wait prefixes, generic direct reaps,
+ECHILD authority and actual-deadline timestamps; (3) rerun both pinned
+interpreters and request a fresh independent exact-byte full source review.
+Do not compile the collector, use root, launch a guest or claim a gate before
+that review passes.
+
+At 2026-09-15T23:33:17Z the active campaign identities are launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC or
+Clang process is live. All three bounded child agents are joined/completed and
+new dispatch is stopped. Host free space is 68 GiB and scratch free space is
+23 GiB. The launcher has paused future goal continuations. The counters remain
+0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. The whole-OS goal remains
+incomplete and is neither resumed nor marked complete by this checkpoint.
