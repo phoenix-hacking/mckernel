@@ -444,3 +444,11 @@ parent-owned exec/syscall tracing and descriptor/mapping identities across dynam
 load/unload plus a true static fixture. See the three new
 `stability-linux-collector-{storage-fault,overflow,loader-closure}-design-20260915-1.md`
 records. None releases source, build, root execution or acceptance.
+
+Storage-fault-v1 source attempt 1 stops at its first focused test: the test computes
+`scripts/scripts/tests/...` and raises `FileNotFoundError` before exercising the
+packet or oracle. Python syntax was reported passing, but the original test streams
+were not retained. The exact source tree is archived as
+`stability-linux-collector-storage-fault-source-failure-20260915-1`; no semantic
+review, build or execution follows until a fresh path-only correction and retained
+test run.
