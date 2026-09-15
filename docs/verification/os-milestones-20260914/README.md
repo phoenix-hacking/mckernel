@@ -16,7 +16,8 @@ let scripts perform inventories, hashing, compilation, comparisons and counting.
 
 ## What to read and run
 
-1. Use `GOAL.md` for a durable autonomous goal; `START.md` is the dispatcher prompt.
+1. Run `python3 /home/holden/mckernel/scripts/run_os_goal.py`. See `LAUNCH.md`;
+   `GOAL.md` defines the objective and `START.md` contains dispatcher instructions.
 2. Read this document once as the dispatcher. Workers receive a selected task.
 3. Run `python3 -B docs/verification/os-milestones-20260914/dispatch.py check`.
 4. Select a task with `dispatch.py task M01-A`, a gate with
@@ -76,7 +77,7 @@ call and available account quota still need to be checked when execution starts.
 
 | Role | Recommended starting configuration | Scope and escalation |
 | --- | --- | --- |
-| Dispatcher | Astra, medium for the first autonomous run; Terra/medium is an economical alternative | Prioritize ready tasks, hold file/build leases, maintain state and checkpoint; send hard design/review to a bounded expert task. |
+| Dispatcher | Sol, medium, selected by the user | Prioritize ready tasks, hold file/build leases, maintain state and checkpoint; send hard design/review to a bounded expert task. |
 | `os_auditor` | Luna, low | One inventory, source-reference audit or retained-result comparison; read-only. |
 | `os_worker` | Luna, medium | One specified fixture, parser change or focused test. Escalate ambiguity to the dispatcher. |
 | Bounded repair escalation | Terra, medium or high, explicitly requested | One reproduced defect with known files and a frozen oracle. |
@@ -88,11 +89,11 @@ token. Cheap workers should receive simple tasks; reducing model cost does not
 make an ambiguous kernel task simpler. Reserve the capable reviewer for changes
 whose failure could invalidate memory ownership, runtime evidence or acceptance.
 
-You can lower this existing chat from Astra/max to Astra/medium, then resume
-`CURRENT.md`. This is the recommended first autonomous setup while ownership and
-backend design are still open. Terra/medium is an alternative coordinator; Luna
-is best reserved for fully specified tasks initially. Max is a reasoning level,
-while Astra/Terra/Luna select models. Lower effort can reduce reasoning tokens;
+The user selected Sol/medium for coordination. The launcher applies that choice
+automatically, or you can select Sol/medium in this chat and resume CURRENT.md.
+Luna remains the worker for fully specified tasks; focused Astra/high reviews
+remain unchanged. Max is a reasoning level,
+while Sol/Astra/Terra/Luna select models. Lower effort can reduce reasoning tokens;
 it does not guarantee lower total cost after retries and review. Switching the
 parent does not require restarting the repository work.
 
@@ -118,23 +119,23 @@ the model and use the same role instructions in the task message. The CLI role
 files are a reusable setup for future local sessions, not a claim that this
 already-running conversation was reconfigured.
 
-Start the dispatcher interactively:
+Start or resume the dispatcher with one command:
 
 ```bash
-codex -C /home/holden/mckernel -m gpt-6-astra --enable goals \
-  -c 'model_reasoning_effort="medium"' \
-  -c 'agents.max_concurrent_threads_per_session=3' \
-  -c 'agents.default_subagent_model="gpt-5.6-luna"' \
-  -c 'agents.default_subagent_reasoning_effort="low"' \
-  'Read docs/verification/os-milestones-20260914/START.md and execute its dispatcher instructions.'
+python3 /home/holden/mckernel/scripts/run_os_goal.py
 ```
 
-Use `/goal` for the durable run; the complete objective and resume steps are in
-`GOAL.md`. Official [goal instructions](https://learn.chatgpt.com/use-cases/follow-goals)
-document multi-turn work and `/goal pause` / `/goal resume`. The existing goal
-was observed as `usageLimited` during planning; resume it after quota is
-available, with GOAL.md as its current execution instructions. A 12-hour session
-is an unattended work window, not the completion deadline for all qualification.
+The launcher defaults to Sol/medium, Luna workers, three children maximum and no
+recursive dispatch. It owns a separate persistent goal, records its exact thread
+ID and retains logs under `.git/os-autopilot/`. The default window is 12 hours,
+with up to ten minutes within that window reserved for checkpointing. See
+`LAUNCH.md` for status, controls, exit codes and the tested scope. Keep the older
+chat goal paused while the launcher owns this checkout.
+
+For an interactive alternative use GOAL.md and the official
+[goal controls](https://learn.chatgpt.com/use-cases/follow-goals). The older goal
+was observed as usageLimited; changing models does not replenish quota. A
+12-hour window cannot finish the required 168-hour soaks or external exposures.
 
 No agent needs the whole history to begin. A concrete dispatch request is:
 
@@ -627,15 +628,15 @@ first. No approval is required at each milestone or cheap-agent packet.
 
 ## What the user needs to provide
 
-1. Available account quota, and the selected dispatcher/worker models. Set this
-   chat to Astra/medium (or Terra/medium), follow GOAL.md, then resume CURRENT.
+1. Available account quota and the local signed-in Codex CLI. Run the launcher;
+   it selects Sol/medium and Luna workers. No chat model change is required.
 2. Keep the workspace, retained scratch inputs and permitted container/runtime
    access available. Begin with M00 storage and state checks.
 3. For later qualification, designate the required Intel/AMD systems and larger
    virtual profiles, campaign capacity, permitted boot/rollback environments and
    signing/release operator. Keep unavailable jobs explicitly blocked while
    local work continues.
-4. Start or resume using START/CURRENT. Review concise milestone outcomes and
+4. Start or resume with the same launcher command; use `--status` and CURRENT. Review concise milestone outcomes and
    escalations; there is no need to dispatch every individual worker yourself.
 
 The dispatcher should report accepted cases/273, four-mode fault completion,

@@ -1,0 +1,540 @@
+#!/usr/bin/env python3
+"""Start/resume the McKernel milestone goal through the local Codex app server.
+
+No model calls for --dry-run, --status or --check. A normal invocation starts
+paid/account-metered work. Runtime state stays in the repository's Git directory.
+"""
+
+import argparse
+import fcntl
+import json
+import math
+import os
+from pathlib import Path
+import selectors
+import shlex
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+from datetime import datetime, timezone
+from uuid import uuid4
+
+
+REPO = Path(__file__).resolve().parents[1]
+PLAN_REL = "docs/verification/os-milestones-20260914"
+OBJECTIVE = (
+    "Complete the McKernel OS functionality, stability, native production and "
+    "Rust/assembly acceptance objective in " + PLAN_REL + "/README.md. "
+    "First read " + PLAN_REL + "/GOAL.md, START.md and CURRENT.md. "
+    "Automatically dispatch bounded cheap subagents using that plan; continue "
+    "through all dependency-ready milestones, preserving exact evidence and "
+    "verified Git checkpoints. Complete only when all 130 production gates, "
+    "seven language gates and required application/configuration coverage meet "
+    "their original acceptance contracts, including external qualification. "
+    "A work-window checkpoint is not whole-OS completion."
+)
+TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
+                  "usageLimited": 21, "budgetLimited": 22}
+LIMIT_ERRORS = {"usageLimitExceeded", "rateLimitExceeded", "sessionBudgetExceeded"}
+
+
+def utc():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def say(message):
+    print("[os-goal] " + message, flush=True)
+
+
+def atomic_json(path, value):
+    """Same-directory replace and fsync keep the last complete cursor on a crash."""
+    with tempfile.NamedTemporaryFile(mode="w", dir=str(path.parent),
+                                     prefix=path.name + ".", delete=False) as stream:
+        temporary = Path(stream.name)
+        json.dump(value, stream, indent=2)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(str(temporary), str(path))
+    directory = os.open(str(path.parent), os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(directory)
+    finally:
+        os.close(directory)
+
+
+class Lease:
+    def __init__(self, path):
+        self.file = path.open("a+")
+        try:
+            fcntl.flock(self.file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            self.file.close()
+            raise RuntimeError("Another OS launcher holds the repository lease.")
+
+    def close(self):
+        self.file.close()
+
+
+class RPC:
+    """JSON-lines transport; waiting and goal observation consume no model tokens."""
+    def __init__(self, argv, log_dir, on_event):
+        self.on_event = on_event
+        self.next_id = 0
+        self.responses = {}
+        self.buffer = b""
+        self.events = (log_dir / "protocol.jsonl").open("a", buffering=1)
+        self.stderr = (log_dir / "server.stderr.log").open("ab")
+        self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                     stderr=self.stderr, bufsize=0, start_new_session=True)
+        self.selector = selectors.DefaultSelector()
+        self.selector.register(self.proc.stdout, selectors.EVENT_READ)
+
+    def send(self, value):
+        self.proc.stdin.write((json.dumps(value) + "\n").encode())
+        self.proc.stdin.flush()
+
+    def pump(self, timeout=1.0):
+        if b"\n" not in self.buffer:
+            if not self.selector.select(timeout):
+                return
+            chunk = os.read(self.proc.stdout.fileno(), 65536)
+            if not chunk:
+                raise RuntimeError("Codex app server disconnected; see retained stderr.")
+            self.buffer += chunk
+        if len(self.buffer) > 32 * 1024 * 1024:
+            raise RuntimeError("Oversized app-server record; stopped without discarding logs.")
+        while b"\n" in self.buffer:
+            line, self.buffer = self.buffer.split(b"\n", 1)
+            message = json.loads(line)
+            if "method" not in message:
+                self.responses[message["id"]] = message
+                continue
+            self.events.write(json.dumps({"at": utc(), "event": message}) + "\n")
+            if "id" in message:
+                # Unattended mode cannot provide missing information or approvals.
+                # Returning an error does not manufacture approval or a user answer.
+                self.send({"id": message["id"], "error": {
+                    "code": -32000, "message": "Unattended launcher cannot answer; checkpoint and stop."}})
+            self.on_event(message)
+
+    def call(self, method, params, timeout=45.0):
+        self.next_id += 1
+        ident = self.next_id
+        self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
+        self.send({"id": ident, "method": method, "params": params})
+        deadline = time.monotonic() + timeout
+        while ident not in self.responses:
+            if time.monotonic() >= deadline:
+                raise RuntimeError("App-server request timed out: " + method)
+            self.pump(min(1.0, max(0.0, deadline - time.monotonic())))
+        response = self.responses.pop(ident)
+        if "error" in response:
+            raise RuntimeError(method + ": " + json.dumps(response["error"]))
+        return response["result"]
+
+    def close(self):
+        # Only this launcher's server process; never kill a host-wide process name.
+        if self.proc.stdin:
+            self.proc.stdin.close()
+        try:
+            self.proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            self.proc.terminate()
+            try:
+                self.proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.proc.kill()
+                self.proc.wait(timeout=5)
+        self.selector.close()
+        self.proc.stdout.close()
+        self.events.close()
+        self.stderr.close()
+
+
+def server_argv(args, repo):
+    settings = {
+        "model": args.model,
+        "model_reasoning_effort": args.effort,
+        "features.goals": True,
+        "agents.enabled": True,
+        "agents.max_concurrent_threads_per_session": 3,
+        "agents.max_depth": 1,
+        "agents.default_subagent_model": "gpt-5.6-luna",
+        "agents.default_subagent_reasoning_effort": "low",
+        "approval_policy": "never",
+        # Match the user's current unrestricted OS-development session. This is
+        # local to this process; global config and project trust are unchanged.
+        "sandbox_mode": "danger-full-access",
+    }
+    argv = [args.codex, "--strict-config", "-C", str(repo)]
+    for key, value in settings.items():
+        argv.extend(["-c", key + "=" + json.dumps(value)])
+    return argv + ["app-server", "--stdio"]
+
+
+def preflight(rpc, args, repo):
+    rpc.call("initialize", {"clientInfo": {"name": "mckernel-os-goal", "version": "1.0"},
+                            "capabilities": {"experimentalApi": True}})
+    rpc.send({"method": "initialized", "params": {}})
+    config = rpc.call("config/read", {"cwd": str(repo), "includeLayers": False})["config"]
+    agents = config.get("agents") or {}
+    expected = {"enabled": True, "max_concurrent_threads_per_session": 3,
+                "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
+                "default_subagent_reasoning_effort": "low"}
+    if (config.get("model") != args.model or config.get("model_reasoning_effort") != args.effort
+            or not (config.get("features") or {}).get("goals")
+            or config.get("approval_policy") != "never"
+            or any(agents.get(key) != value for key, value in expected.items())):
+        raise RuntimeError("Effective Codex settings differ from the requested dispatch limits.")
+    models, cursor = {}, None
+    while True:
+        page = rpc.call("model/list", {"includeHidden": True, "limit": 100, "cursor": cursor})
+        models.update((row["model"], row) for row in page["data"])
+        cursor = page.get("nextCursor")
+        if not cursor:
+            break
+    for model, effort in [(args.model, args.effort), ("gpt-5.6-luna", "low"),
+                          ("gpt-5.6-luna", "medium"), ("gpt-6-astra", "high")]:
+        if effort not in {r["reasoningEffort"] for r in models.get(model, {}).get("supportedReasoningEfforts", [])}:
+            raise RuntimeError("Required model/effort not advertised: " + model + "/" + effort)
+    # Deliberately do not serialize the full personal config or authentication data.
+    return {"model": args.model, "effort": args.effort, "agents": expected,
+            "goals": True, "approval_policy": "never", "sandbox_mode": "danger-full-access",
+            "scope": "Configuration and advertised models only; quota and inference untested."}
+
+
+class Campaign:
+    def __init__(self, args, repo, directory, rpc_factory=RPC):
+        self.args, self.repo, self.directory = args, repo, directory
+        self.state_path = directory / "state.json"
+        self.state = json.loads(self.state_path.read_text()) if self.state_path.exists() else {
+            "schema_version": 1, "repo": str(repo), "thread_id": None, "created_at": utc()}
+        if self.state.get("schema_version") != 1 or self.state.get("repo") != str(repo):
+            raise RuntimeError("State belongs to a different repository or unsupported schema.")
+        self.log_dir = directory / "runs" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8])
+        self.log_dir.mkdir(parents=True, mode=0o700)
+        self.rpc_factory, self.rpc = rpc_factory, None
+        self.active = {}
+        self.goal = None
+        self.stop_reason = None
+        self.stop_now = False
+        self.checkpoint_requested = False
+        self.last_activity = time.monotonic()
+        self.stopping = False
+        self.controlled = False
+
+    def save(self, **fields):
+        self.state.update(fields)
+        self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active)
+        atomic_json(self.state_path, self.state)
+
+    def on_signal(self, signum, frame):
+        if self.stop_reason:
+            self.stop_now = True
+        else:
+            self.stop_reason = "signal_" + str(signum)
+
+    def remember_goal(self, goal):
+        self.goal = goal
+        self.save(goal=goal)
+
+    def event(self, message):
+        method, data = message.get("method"), message.get("params", {})
+        thread = data.get("threadId")
+        primary = thread == self.state.get("thread_id")
+        if "id" in message:
+            self.save(pending_request={"method": method, "params": data})
+            self.stop_reason, self.stop_now = "needs_user_input", True
+        elif method == "thread/goal/updated" and primary:
+            self.remember_goal(data["goal"])
+        elif method == "thread/goal/cleared" and primary:
+            self.goal = None
+            self.stop_reason, self.stop_now = "goal_cleared", True
+        elif method == "turn/started":
+            self.active[thread] = data["turn"]["id"]
+            self.last_activity = time.monotonic()
+            self.save()
+            if primary:
+                say("Dispatcher turn started; evidence and checkpoint paths are in CURRENT.md.")
+        elif method == "turn/completed":
+            if self.active.get(thread) == data["turn"]["id"]:
+                self.active.pop(thread, None)
+            self.last_activity = time.monotonic()
+            self.save(last_turn={"thread_id": thread, "id": data["turn"]["id"],
+                                 "status": data["turn"]["status"]})
+            if data["turn"]["status"] == "failed":
+                self.save(last_error=data["turn"].get("error"))
+                self.stop_reason, self.stop_now = "turn_failed", True
+        elif method == "error":
+            error = data["error"]
+            self.save(last_error=error)
+            info = error.get("codexErrorInfo")
+            if (isinstance(info, str) and info in LIMIT_ERRORS) or not data.get("willRetry", False):
+                self.stop_reason = "quota_or_rate_limit" if isinstance(info, str) and info in LIMIT_ERRORS else "server_error"
+                self.stop_now = True
+        elif method == "item/agentMessage/delta" and primary:
+            # Full agent output is retained in protocol.jsonl, with a bounded console excerpt.
+            excerpt = data.get("delta", "")
+            with (self.log_dir / "dispatcher.txt").open("a") as stream:
+                stream.write(excerpt)
+
+    def instructions(self):
+        return (
+            "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
+            "Follow " + PLAN_REL + "/START.md and GOAL.md. The user explicitly authorizes "
+            "automatic cheap subagents; use fresh bounded packets and explicit models. "
+            "Maximum three children, no recursive dispatch, one heavy build/guest owner. "
+            "Preserve preexisting untracked work. Read all applicable active instructions. "
+            "Write implementation evidence and the live task cursor per the plan. This "
+            "launcher's logs are at " + str(self.log_dir) + "; state.json is launcher-owned. "
+            "Do not edit or start another launcher, clear/replace this goal, change its "
+            "budget, or alter model/permission settings to bypass a blocker. "
+            "The launcher controls the work window and goal pausing; agents use goal "
+            "status tools only under their actual tool rules. Keep CURRENT.md updated "
+            "and commit/push verified checkpoints about every 30 minutes and before "
+            "long runs. On a checkpoint request stop new dispatch, finish bounded work, "
+            "join/close workers, record any live process identities, checkpoint and return. "
+            "If credentials or external resources are unavailable, preserve the blocker "
+            "and continue independent ready work. Never store credentials in the plan or logs."
+        )
+
+    def begin(self):
+        self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
+        settings = preflight(self.rpc, self.args, self.repo)
+        self.save(phase="starting", settings=settings, stop_reason=None)
+        if self.stop_reason:
+            return
+        params = {"cwd": str(self.repo), "model": self.args.model, "approvalPolicy": "never",
+                  "sandbox": "danger-full-access",
+                  "config": {"model_reasoning_effort": self.args.effort},
+                  "developerInstructions": self.instructions()}
+        previous_id = self.state.get("thread_id")
+        goal = None
+        if previous_id:
+            # Reading a stored goal does not resume a thread or start inference.
+            # Validate ownership before a resume can trigger automatic goal work.
+            goal = self.rpc.call("thread/goal/get", {"threadId": previous_id})["goal"]
+            if goal and goal["objective"] != OBJECTIVE:
+                raise RuntimeError("Stored thread has a different objective; it was not resumed or replaced.")
+            if not goal and self.state.get("goal"):
+                raise RuntimeError("The saved goal was cleared outside this launcher; inspect state before starting a new campaign.")
+            self.controlled = True
+            if goal and (goal["status"] == "complete" or
+                         goal["status"] == "budgetLimited" and self.args.token_budget is None):
+                self.remember_goal(goal)
+                return
+            params.update(threadId=previous_id, excludeTurns=True)
+            result = self.rpc.call("thread/resume", params)
+        else:
+            params.update(ephemeral=False, allowProviderModelFallback=False)
+            result = self.rpc.call("thread/start", params)
+        ident = result["thread"]["id"]
+        if previous_id and ident != previous_id:
+            raise RuntimeError("Resume returned a different thread; refusing to replace the cursor.")
+        self.save(thread_id=ident, phase="ready")
+        self.controlled = True
+        if result["model"] != self.args.model or result.get("reasoningEffort") != self.args.effort:
+            raise RuntimeError("Thread model/effort differs from the selected dispatcher.")
+        if result.get("sandbox", {}).get("type") != "dangerFullAccess" or result.get("approvalPolicy") != "never":
+            raise RuntimeError("Thread permissions differ from this authorized OS-development session.")
+        self.save(effective_permissions={"sandbox": result.get("sandbox"),
+                  "profile": result.get("activePermissionProfile"),
+                  "approval_policy": result.get("approvalPolicy")})
+        goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
+        if goal and goal["objective"] != OBJECTIVE:
+            raise RuntimeError("Stored thread has a different objective; it was not replaced.")
+        if goal and goal["status"] == "complete":
+            self.remember_goal(goal)
+            return
+        if goal and goal["status"] == "budgetLimited" and self.args.token_budget is None:
+            self.remember_goal(goal)
+            return
+        if self.stop_reason:
+            self.remember_goal(goal)
+            return
+        update = {"threadId": ident, "status": "active"}
+        if not goal:
+            update["objective"] = OBJECTIVE
+        if self.args.token_budget is not None:
+            update["tokenBudget"] = self.args.token_budget
+        if not goal or goal["status"] != "active" or self.args.token_budget is not None:
+            # The server's durable-goal engine starts/continues idle turns. Do not
+            # also send a turn/start loop, which could duplicate or steer that work.
+            goal = self.rpc.call("thread/goal/set", update)["goal"]
+        self.remember_goal(goal)
+        self.save(phase="running")
+        say("Thread " + ident + "; " + self.args.model + "/" + self.args.effort + "; Luna workers.")
+
+    def pause(self):
+        ident = self.state.get("thread_id")
+        if not ident or not self.controlled:
+            return
+        current = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
+        if current and current["objective"] != OBJECTIVE:
+            self.controlled = False
+            raise RuntimeError("Goal objective changed externally; launcher will not alter it.")
+        if current and current["status"] == "active":
+            current = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
+        self.remember_goal(current)
+
+    def request_checkpoint(self):
+        self.pause()
+        self.checkpoint_requested = True
+        ident = self.state["thread_id"]
+        turn = self.active.get(ident)
+        if turn:
+            self.rpc.call("turn/steer", {"threadId": ident, "expectedTurnId": turn,
+                "input": [{"type": "text", "text":
+                    "This user-requested work window is ending. Stop new task dispatch. "
+                    "Finish bounded active operations, join/close child agents, preserve "
+                    "original evidence and active process identities, update CURRENT.md "
+                    "with next tasks, commit/push and verify the checkpoint, then return. "
+                    "The launcher has paused future goal continuations. Do not mark the OS "
+                    "complete or resume the goal merely to finish this window."}]})
+        say("Checkpoint requested; waiting for bounded active work to finish.")
+
+    def stop(self):
+        if not self.rpc or self.stopping or not self.controlled:
+            return
+        self.stopping = True
+        errors = []
+        try:
+            self.pause()
+        except Exception as error:
+            errors.append(str(error))
+        # Include loaded descendants even if this client did not receive their events.
+        try:
+            for ident in self.rpc.call("thread/loaded/list", {})["data"]:
+                page = self.rpc.call("thread/turns/list", {
+                    "threadId": ident, "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
+                for turn in page["data"]:
+                    if turn["status"] == "inProgress":
+                        self.active[ident] = turn["id"]
+        except Exception as error:
+            errors.append(str(error))
+        for ident, turn in list(self.active.items()):
+            try:
+                self.rpc.call("turn/interrupt", {"threadId": ident, "turnId": turn}, timeout=10)
+            except Exception as error:
+                errors.append(str(error))
+        self.save(stop_errors=errors, cleanup_verified=False)
+        # Runtime cleanup is an OS evidence contract. Interruption/EOF is never
+        # recorded as proof that a guest, container or retained owner was cleaned.
+
+    def run(self):
+        started = time.monotonic()
+        deadline = started + self.args.hours * 3600 if self.args.hours else float("inf")
+        checkpoint_at = max(started, deadline - min(self.args.grace_seconds, self.args.hours * 1800))
+        stop_deadline = None
+        next_refresh = started + 30
+        code = 1
+        try:
+            self.begin()
+            while True:
+                now = time.monotonic()
+                status = self.goal["status"] if self.goal else None
+                if status in TERMINAL_CODES and not self.checkpoint_requested:
+                    code = TERMINAL_CODES[status]
+                    break
+                if self.stop_now:
+                    code = 21 if self.stop_reason == "quota_or_rate_limit" else 23
+                    break
+                if not self.checkpoint_requested and (self.stop_reason or now >= checkpoint_at):
+                    self.stop_reason = self.stop_reason or "work_window"
+                    self.request_checkpoint()
+                    stop_deadline = min(deadline, now + self.args.grace_seconds)
+                if self.checkpoint_requested and (not self.active or now >= stop_deadline):
+                    code = 10
+                    break
+                if not self.active and now - self.last_activity > 120:
+                    self.stop_reason = "active_goal_did_not_continue"
+                    code = 24
+                    break
+                self.rpc.pump(timeout=1)
+                if now >= next_refresh:
+                    self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"])
+                    next_refresh = now + 30
+                    say("Goal " + str((self.goal or {}).get("status")) + "; local status: --status.")
+        except Exception as error:
+            self.stop_reason = self.stop_reason or "launcher_error"
+            self.save(last_error=str(error))
+            say(str(error))
+        finally:
+            try:
+                self.stop()
+            finally:
+                if self.rpc:
+                    self.rpc.close()
+                self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code)
+        status = (self.goal or {}).get("status", "unknown")
+        say("Stopped: goal reports " + status + "; " + (self.stop_reason or "goal status") + ".")
+        say("State: " + str(self.state_path) + "; run the same command to resume unfinished work.")
+        return code
+
+
+def arguments(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true", help="Print launch settings; no server, thread or model call")
+    mode.add_argument("--check", action="store_true", help="Inspect local Codex settings/models; no thread or inference")
+    mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
+    parser.add_argument("--hours", type=float, default=12, help="Work window in hours; 0 removes timer (default: 12)")
+    parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
+    parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
+    parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh", "max", "ultra"])
+    parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
+    parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
+    args = parser.parse_args(argv)
+    if not math.isfinite(args.hours) or args.hours < 0 or not math.isfinite(args.grace_seconds) or args.grace_seconds < 0:
+        parser.error("hours and grace-seconds must be finite and non-negative")
+    if args.token_budget is not None and args.token_budget <= 0:
+        parser.error("token-budget must be positive")
+    return args
+
+
+def main(argv=None):
+    args = arguments(argv)
+    os.umask(0o077)
+    git_dir = subprocess.check_output(["git", "-C", str(REPO), "rev-parse", "--git-common-dir"], text=True).strip()
+    directory = (REPO / git_dir).resolve() / "os-autopilot"
+    if args.status:
+        state = directory / "state.json"
+        print(state.read_text() if state.exists() else json.dumps({"phase": "not_started", "state_path": str(state)}))
+        return 0
+    if args.dry_run:
+        print(json.dumps({"command": shlex.join(server_argv(args, REPO)), "hours": args.hours,
+                          "checkpoint_reserve_seconds": args.grace_seconds, "state_directory": str(directory),
+                          "objective": OBJECTIVE, "model_calls": 0,
+                          "permissions": "Matches this OS session: danger-full-access, approval_policy=never. Global config unchanged."}, indent=2))
+        return 0
+    if not shutil.which(args.codex):
+        raise RuntimeError("Codex executable not found. Install/sign in to the local CLI first.")
+    if args.check:
+        with tempfile.TemporaryDirectory(prefix="mckernel-goal-check-") as temporary:
+            rpc = RPC(server_argv(args, REPO), Path(temporary), lambda event: None)
+            try:
+                print(json.dumps(preflight(rpc, args, REPO), indent=2))
+            finally:
+                rpc.close()
+        return 0
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    lease = Lease(directory / "run.lock")
+    try:
+        campaign = Campaign(args, REPO, directory)
+        for signum in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
+            signal.signal(signum, campaign.on_signal)
+        return campaign.run()
+    finally:
+        lease.close()
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as failure:
+        say(str(failure))
+        sys.exit(1)

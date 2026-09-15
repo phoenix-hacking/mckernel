@@ -1,7 +1,9 @@
 # Dispatcher entry point
 
-Set this chat to Astra with medium reasoning (Terra/medium is an alternative),
-then use `GOAL.md` for the autonomous run. For a new dispatcher session use:
+Run `python3 /home/holden/mckernel/scripts/run_os_goal.py` for the autonomous
+campaign. The coordinator is Sol with medium reasoning, as requested by the
+user. See `LAUNCH.md` for status, restart and work-window controls. For this
+existing chat, select Sol/medium and use `GOAL.md`. Dispatcher instructions:
 
 ```text
 Continue the full McKernel functionality, stability, Rust/assembly and native
@@ -48,16 +50,14 @@ execution blocker. Never convert drafting/build/protocol results into runtime
 acceptance. Report exact gate/case/exposure counters and the next blocker.
 ```
 
-Local launch:
+Single-command local launch (starts or resumes the launcher's own goal):
 
 ```bash
-codex -C /home/holden/mckernel -m gpt-6-astra --enable goals \
-  -c 'model_reasoning_effort="medium"' \
-  -c 'agents.max_concurrent_threads_per_session=3' \
-  -c 'agents.default_subagent_model="gpt-5.6-luna"' \
-  -c 'agents.default_subagent_reasoning_effort="low"' \
-  'Read docs/verification/os-milestones-20260914/START.md and execute its dispatcher instructions.'
+python3 /home/holden/mckernel/scripts/run_os_goal.py
 ```
 
-This starts work when issued by the user; preparing the plan did not launch the
-OS campaign. After interruption, add the actual CURRENT.md path to the prompt.
+This starts account-metered work when issued by the user; preparing/testing the
+launcher did not start the OS campaign. It defaults to a 12-hour work window,
+with up to ten minutes inside that window reserved for a checkpoint. Rerun the
+same command to resume its saved thread. Keep this chat's older goal paused
+while using the launcher; do not dispatch two campaigns on this checkout.

@@ -1,8 +1,13 @@
 # Autonomous McKernel goal
 
-Recommended first run: Astra with medium reasoning as dispatcher, Luna workers,
-and focused Astra/high reviews only when required. Terra/medium is an alternative
-dispatcher. The user chooses the parent model/effort in the chat controls.
+User-selected setup: Sol with medium reasoning as dispatcher, Luna workers,
+and focused Astra/high reviews only when required. The launcher selects these
+settings itself; changing this chat's model is unnecessary for a script run.
+
+Run `python3 /home/holden/mckernel/scripts/run_os_goal.py`. See `LAUNCH.md`.
+The launcher owns one separate persistent thread and resumes its exact ID; it
+does not replace the older goal in this chat. Keep that older goal paused while
+the launcher works. The following chat controls are an alternative to the script.
 
 This thread already has an unfinished goal, observed as `usageLimited` during
 planning. Preserve it. Once quota is available, send:
@@ -57,12 +62,14 @@ Execution instructions for the dispatcher:
    useful progress while the client, machine and quota permit it. It is not a
    promise of uninterrupted execution or a deadline for the full OS contract;
    the required 168-hour soaks and larger exposures remain mandatory. The user
-   can pause the goal when returning; this file installs no wall-clock cutoff.
+   can pause an interactive goal when returning. The launcher defaults to a
+   12-hour window and reserves up to ten minutes within it for checkpointing.
+   Obey its stop/checkpoint message, join workers and preserve process identities.
 8. Before low quota or a controlled stop, save a short restart record and inspect
    active process identities. Do not loop on quota errors, infer permission from
    elapsed time, relax gates to continue, or mark the OS complete at a checkpoint.
 
 For local CLI sessions keep the computer awake and the session/runtime available.
-START's launch command enables goals and supplies cheap-worker defaults directly;
-it does not depend on project-local configuration being trusted. No 12-hour
-campaign was started merely by preparing this file.
+The launcher enables goals and supplies Sol/medium, cheap-worker defaults and
+the three-child/no-recursion limits directly. It does not depend on project-local
+configuration being trusted. No 12-hour campaign was started during preparation.

@@ -1,0 +1,92 @@
+{
+  "status": "PASS_LAUNCHER_PREPARATION",
+  "checked_at": "2026-09-15T02:38:45.972480+00:00",
+  "cli_version": "codex-cli 0.153.4",
+  "dispatcher": {
+    "model": "gpt-5.6-sol",
+    "effort": "medium"
+  },
+  "workers": {
+    "default_model": "gpt-5.6-luna",
+    "default_effort": "low",
+    "implementation_effort": "medium",
+    "max_children": 3,
+    "max_depth": 1
+  },
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "effort": "high"
+  },
+  "checks": [
+    {
+      "command": "OS_GOAL_PROTOCOL_SCHEMA=/tmp/os-goal-protocol-ci05fpv2 python3 -B scripts/tests/test_os_goal_launcher.py -v",
+      "result": "PASS",
+      "tests": 17,
+      "scope": "Offline lifecycle, resume/ownership, quota, interruption, checkpoint, idle-continuation failure, child stopping, locking, state corruption and fragmented JSON-RPC transport; all used RPC parameters validated against locally generated schemas."
+    },
+    {
+      "command": "python3 -B scripts/run_os_goal.py --check",
+      "result": "PASS",
+      "scope": "Actual local app-server initialize/config/read/model/list, without inference."
+    },
+    {
+      "command": "python3 -B scripts/run_os_goal.py --dry-run",
+      "result": "PASS",
+      "scope": "Command generation, not execution."
+    },
+    {
+      "command": "python3 -B scripts/run_os_goal.py --status",
+      "result": "not_started"
+    },
+    {
+      "command": "python3 -B docs/verification/os-milestones-20260914/dispatch.py check",
+      "result": "PASS_PLANNING_INDEX",
+      "milestones": 14,
+      "tasks": 68,
+      "production_gates": 130,
+      "language_gates": 7,
+      "logical_cases": 273,
+      "packets": 97
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "metadata_only_thread_probe": {
+    "ephemeral": true,
+    "goals_enabled": false,
+    "turns_started": 0,
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "medium",
+    "sandbox": {
+      "type": "dangerFullAccess"
+    },
+    "approvalPolicy": "never"
+  },
+  "generated_client_request_schema_sha256": "05c82ead1a820c765c23d3a1d262e4ae54889785276ee1acf7c494141fd94d70",
+  "source_bindings": [
+    {
+      "path": "scripts/run_os_goal.py",
+      "size": 26893,
+      "sha256": "053402251d070b262d559febbcfd6ab2233c21254f511baddb6308f1677ec72a"
+    },
+    {
+      "path": "scripts/tests/test_os_goal_launcher.py",
+      "size": 14989,
+      "sha256": "1c444d6ad92a8d3179f93ce0f1f5612378cf4d9e36e00b972ba762cac2c61180"
+    },
+    {
+      "path": ".codex/config.toml",
+      "size": 244,
+      "sha256": "66f09297e1ab83d264a2c00052c56fd736b631f83a9295a644c4a3b958a4a410"
+    }
+  ],
+  "original_failed_harness_record": "launcher-schema-path-failure.json",
+  "model_inference_turns_started": 0,
+  "paid_workers_started": 0,
+  "os_payloads_executed": 0,
+  "live_goal_continuation": "NOT_TESTED",
+  "twelve_hour_campaign": "NOT_STARTED",
+  "acceptance_credit": "None; this validates launcher preparation, not OS acceptance or live model behavior."
+}
