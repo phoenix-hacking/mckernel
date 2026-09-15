@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_provenance_checkpoint",
+  "status": "PASS_SOURCE_PROVENANCE_SUBGATE_ONLY",
+  "task_scope": "M01-B prerequisite correction and mode-3 source authority; actual native method matrix, candidate build, stack review and guests remain open",
+  "base_commit": "316e5465ea331105fc093eca896170d0d79fe4ce",
+  "source_files": [
+    {
+      "path": "scripts/tests/prepare_stability_selected_retention.py",
+      "size": 18726,
+      "sha256": "c2b8b256bc4ee0997fed3c210f9d6aef1878a6dc507d3fd96fe66ea011b843b0"
+    },
+    {
+      "path": "scripts/tests/test_stability_selected_retention.py",
+      "size": 5123,
+      "sha256": "ef9d217a99ba15f1e896fd8ddca72e69c947778d435d369e37dc44260cf0deeb"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/source-manifests.json",
+      "size": 19839,
+      "sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-source-authority-20260915.json",
+      "size": 36675,
+      "sha256": "868d6a90b8acd56b7cf1c3b61884c76abad605a1a6c31215607b098a99da73e1"
+    }
+  ],
+  "retained_archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-provenance-20260915.tar.gz",
+    "size": 16024181,
+    "sha256": "35c31f276acca117cefc894dccfda772fdd6b5f4a1d3537149e5a41b425925a9",
+    "member_count": 1140,
+    "includes": [
+      "fresh recoverable-backpressure verification-only module build",
+      "original failed held-source attempt 1",
+      "superseded held-source attempt 2",
+      "retained pre/post-format held-source attempt 3",
+      "mode-2 Rust-only authority projection"
+    ]
+  },
+  "mode_2_authority": {
+    "record_path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/record.json",
+    "record_sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48",
+    "members": 51,
+    "status": "existing_build_binding_only"
+  },
+  "mode_3_authority": {
+    "base_build_record_path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-recoverable-backpressure-1/record.json",
+    "base_build_record_sha256": "11de2af873b88fe6afb19749195294b10b41879b6f0e99e97b95065cf25de968",
+    "base_build_status": "PASS_BUILD_ONLY",
+    "held_stage_record_path": "/home/holden/mckernel-work/scratch/stability-published-held-source-20260915-recoverable-backpressure-3/held/record.json",
+    "held_stage_record_sha256": "8191c433b65769d4f8d89106f0978b4e6aa8de379b777eb0d06a8100bbae114e",
+    "members": 51,
+    "rustfmt_changed_members": 10,
+    "final_mode2_equal_members": 49,
+    "mode_specific_members": [
+      "smp_application_syscall.rs",
+      "stability_phase.rs"
+    ]
+  },
+  "checks": [
+    {
+      "command": "python3 -B -m unittest -v scripts/tests/test_stability_selected_retention.py",
+      "status": "PASS",
+      "cases": 7,
+      "scope": "exact 51-member source identity, drift/bounds, both complete staging paths and inverse restoration"
+    },
+    {
+      "command": "pinned isolated stability-build-transport-fault-4.py recoverable-backpressure 1",
+      "status": "PASS_BUILD_ONLY",
+      "scope": "verification-only recoverable base and restored shared production trees; no selected-retention candidate compilation"
+    },
+    {
+      "command": "independent Astra/high exact-current-file review",
+      "status": "PASS_SOURCE_PROVENANCE_SUBGATE_ONLY",
+      "scope": "no build, guest, native method or runtime release"
+    }
+  ],
+  "original_failures": [
+    "First worker correction bound wrong mode-2/mode-3 source revisions and removed the old three-anchor equivalence check.",
+    "First authority-tree implementation used an uncapped directory scan.",
+    "First mode-3 held-source attempt used post-format transport input and failed the exact send-appendix check."
+  ],
+  "next_required": [
+    "Complete the actual native Mailbox/Response/Completion state and cancellation matrix.",
+    "Build a fresh selected-retention candidate from the exact source output and independently review stack/call bindings.",
+    "Keep mode-2 and mode-3 guests blocked until their separate execution packets pass."
+  ],
+  "compiled_selected_retention_candidate": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

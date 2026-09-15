@@ -17,6 +17,11 @@ MAX_FILES = 128
 MAX_FILE_BYTES = 8 * 1024 * 1024
 MAX_TOTAL_BYTES = 64 * 1024 * 1024
 MODES = {"postpublish-notify": 2, "recoverable-backpressure": 3}
+SOURCE_MANIFEST_NAME = "source-manifests.json"
+SOURCE_MANIFEST_IDENTITY = {
+    "size": 19839,
+    "sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0",
+}
 FROZEN_SOURCE = {
     2: {
         "application_syscall.rs": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
@@ -79,6 +84,83 @@ def source_names(source):
     return sorted(names)
 
 
+def authoritative_source_manifest(mode, package=None):
+    """Return a pinned 51-file manifest and verify every retained authority."""
+    package = package or Path(__file__).resolve().parent / "fixtures" / "stability-selected-retention-v1"
+    manifest_path = package / SOURCE_MANIFEST_NAME
+    raw = read_regular(manifest_path)
+    if identity(raw) != SOURCE_MANIFEST_IDENTITY:
+        raise ValueError("authoritative source manifest identity drifted")
+    try:
+        document = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise ValueError("authoritative source manifest is not JSON: " + str(error)) from error
+    if (document.get("schema_version") != 1 or document.get("member_count_per_mode") != 51 or
+            document.get("execution_authorized") is not False or document.get("runtime_acceptance") is not False):
+        raise ValueError("authoritative source manifest header mismatch")
+    row = document.get("modes", {}).get(str(mode))
+    expected_mode = "postpublish-notify" if mode == 2 else "recoverable-backpressure"
+    if not isinstance(row, dict) or row.get("mode") != expected_mode:
+        raise ValueError("authoritative source manifest mode mismatch")
+    authorities = row.get("authority_records")
+    if not isinstance(authorities, list) or not authorities:
+        raise ValueError("authoritative source records missing")
+    verified = []
+    for authority in authorities:
+        path = Path(authority.get("path", ""))
+        data = read_regular(path)
+        actual = identity(data)
+        if actual != {"size": authority.get("size"), "sha256": authority.get("sha256")}:
+            raise ValueError("authoritative source record identity drifted: " + str(path))
+        record = json.loads(data)
+        if record.get("mode") != authority.get("expected_mode") or record.get("status") != authority.get("expected_status"):
+            raise ValueError("authoritative source record state mismatch: " + str(path))
+        verified.append({"path": str(path), **actual})
+    members = row.get("members")
+    if not isinstance(members, list) or len(members) != 51:
+        raise ValueError("authoritative source composition must contain exactly 51 flat Rust members")
+    expected = {}
+    for entry in members:
+        if (not isinstance(entry, dict) or not isinstance(entry.get("name"), str) or
+                "/" in entry["name"] or not entry["name"].endswith(".rs") or entry["name"] in expected or
+                type(entry.get("size")) is not int or type(entry.get("sha256")) is not str or
+                len(entry["sha256"]) != 64):
+            raise ValueError("invalid or duplicate authoritative source member")
+        expected[entry["name"]] = {"size": entry["size"], "sha256": entry["sha256"]}
+    tree = Path(row.get("tree", ""))
+    names = source_names(tree)
+    if names != sorted(expected):
+        raise ValueError("authoritative source tree membership drifted")
+    for name in names:
+        if identity(read_regular(tree / name)) != expected[name]:
+            raise ValueError("authoritative source tree hash drifted: " + name)
+    frozen = FROZEN_SOURCE[mode]
+    if any(expected.get(name, {}).get("sha256") != digest for name, digest in frozen.items()):
+        raise ValueError("frozen held-v1 source is not the authoritative composition")
+    return ({name: entry["sha256"] for name, entry in expected.items()}, {
+        "manifest": {"path": str(manifest_path), **identity(raw)},
+        "authority_records": verified,
+        "tree": str(tree),
+    })
+
+
+def validate_source_contract(source, mode, manifest=None):
+    """Reject membership or byte drift before any staging output is created."""
+    expected = authoritative_source_manifest(mode)[0] if manifest is None else dict(manifest)
+    names = source_names(source)
+    if names != sorted(expected):
+        missing = sorted(set(expected) - set(names))
+        extra = sorted(set(names) - set(expected))
+        raise ValueError("source ownership membership mismatch (missing=%s extra=%s)" % (missing, extra))
+    originals = {}
+    for name in names:
+        data = read_regular(Path(source) / name)
+        originals[name] = data
+        if identity(data)["sha256"] != expected[name]:
+            raise ValueError("authoritative source hash mismatch: " + name)
+    return originals
+
+
 def replace_once(data, old, new, label, edits):
     if not old or data.count(old) != 1:
         raise ValueError("expected one exact original hook: " + label)
@@ -127,12 +209,19 @@ def prepare(source, output, mode):
         record["inputs"].append({"path": str(gate_path), **identity(gate)})
         if identity(gate)["sha256"] != OLD_GATE_SHA:
             raise ValueError("original held-v1 gate changed")
+        formatted_gate = gate.replace(b"SendGate::Released => {},", b"SendGate::Released => {}")
+        if formatted_gate == gate:
+            raise ValueError("original held-v1 gate formatting anchor changed")
         templates = {path.name: data for path, data in inputs.items() if path != gate_path}
         if templates["mailbox-retention.append.rs"].count(gate) != 1:
             raise ValueError("moved gate must retain exactly the original counter block")
-        names, originals, total = source_names(source), {}, 0
+        mode_number = MODES[mode]
+        manifest, authority = authoritative_source_manifest(mode_number)
+        record["authoritative_source"] = dict(authority,
+            members=[{"name": name, "sha256": digest} for name, digest in sorted(manifest.items())])
+        names, originals, total = source_names(source), validate_source_contract(source, mode_number, manifest), 0
         for name in names:
-            data = read_regular(source / name)
+            data = originals[name]
             (output / "originals" / name).write_bytes(data)
             record["source_inputs"].append({"name": name, **identity(data)})
             total += len(data)
@@ -146,9 +235,8 @@ def prepare(source, output, mode):
                     "sysfs_memory.rs", "ihk_smp_x86_64.rs", "mcctrl_process.rs"} | set(FROZEN_SOURCE[MODES[mode]])
         if not required.issubset(originals):
             raise ValueError("missing complete original held-v1 composed source")
-        for name, expected in FROZEN_SOURCE[MODES[mode]].items():
-            if identity(originals[name])["sha256"] != expected:
-                raise ValueError("frozen held-v1 source mismatch: " + name)
+        # Every member, including the former three "frozen" inputs, was
+        # authenticated above against the retained mode-specific manifest.
         # One actual native Completion::publish caller. Do not infer this from
         # any similarly named service/RPC publication method.
         original_mailbox = originals["smp_application_syscall.rs"]
@@ -183,7 +271,7 @@ def prepare(source, output, mode):
                 prepublish = b"        let stability_request = call.delivery.request().clone();\n"
                 hook = b"        stability_retention_pre_publish(call.completion.as_ref().and_then(Completion::verification_owner))?;\n"
                 changed = replace_once(changed, prepublish, hook + prepublish, "universal prepublish gate before eligibility and wake", edits)
-                changed = replace_once(changed, gate, b"    // The selected phase gate already ran at the unique Mailbox prepublish entry.\n", "remove optional send gate without duplicate counts", edits)
+                changed = replace_once(changed, formatted_gate, b"    // The selected phase gate already ran at the unique Mailbox prepublish entry.\n", "remove optional send gate without duplicate counts", edits)
                 old_comment = b"""    // The initial selected key was bound to real OS-generation/ledger/worker
     // owners while this request was Delivered. The selection never resets.
     // A scalar-only barrier can defer publication until the unlocked pump has
