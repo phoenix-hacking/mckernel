@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_root_execution_checkpoint",
+  "task_id": "M02-B-adverse-v1-root",
+  "attempt": 1,
+  "status": "PASS_INSTRUMENTED_LINUX_ADVERSE_COLLECTOR_ONLY",
+  "recorded_utc": "2026-09-15T07:34:51Z",
+  "release_activation_commit": "38c4444c44c7ea4d318341203fce0eae108dee10",
+  "runtime_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-root-success-20260915-1.tar.gz",
+    "sha256": "84d49c9395090531e0ac4e9823cfb8e910dcffb38c5e11152108b893401138f0",
+    "size": 492350,
+    "members": 364,
+    "inventoried_attempt_files": 296,
+    "supervisor_reports": 35
+  },
+  "additive_lock_observation": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-root-lock-observation-20260915-1.tar.gz",
+    "sha256": "97f3828dc8da934e2b893abf62b0988d18010d109dd953890081757346fcc3ea",
+    "size": 2549,
+    "members": 9,
+    "result_sha256": "21e59b74f81843be3eed08fda10883e7f992287a8cdb2018b6c367cbf99e405f",
+    "outer_report_sha256": "e31a7482004dd6215598b27fa3432d666c9786e8f723255e125812157e9186f5",
+    "status": "PASS_POST_RUN_DEVELOPMENT_LOCK_ACQUIRABLE"
+  },
+  "results": {
+    "outer_raw_wait_status": 0,
+    "owner_status": "PASS_ADVERSE_RUN_OWNER_INFRASTRUCTURE_ONLY",
+    "inner_status": "PASS_ADVERSE_RUN_INFRASTRUCTURE_ONLY",
+    "cases": ["control", "missing-setup", "partial-setup", "interrupt-completed-wait"],
+    "case_status": "4/4 PASS_INSTRUMENTED_LINUX_ONLY",
+    "collector_raw_wait_statuses": [0, 256, 256, 256],
+    "fixture_child_raw_wait_statuses": [0, 0, 0, 0],
+    "setup_lengths": [384, 0, 383, 384],
+    "cleanup_absence_verified": true,
+    "watchdog_status": "DISARMED_AFTER_VERIFIED_ABSENCE",
+    "watchdog_raw_wait_status": 0
+  },
+  "independent_reviews": [
+    "PASS archive audit",
+    "PASS exact instrumented Linux adverse collector scope only"
+  ],
+  "limitations": [
+    "no stopped-collector rescue",
+    "no watchdog-triggered recovery",
+    "no post-reap or report-fsync interruption",
+    "no general storage faults",
+    "no production-binary equivalence"
+  ],
+  "mckernel_runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

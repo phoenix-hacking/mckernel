@@ -251,3 +251,17 @@ boundary links, and bounded incomplete-inventory behavior. The dirty candidate
 may therefore be retained only as a private unused prerequisite; production
 integration, guest execution, invalidation/concurrency/application acceptance and
 all M03 production credit remain closed.
+
+M02-B adverse-v1 root attempt 1 passes its exact instrumented Linux scope after
+independent audit and semantic/ownership review. Control, missing setup, partial
+setup and completed-wait interruption produce collector raw waits
+`[0, 256, 256, 256]`, four child raw waits of zero, exact setup lengths
+`[384, 0, 383, 384]`, verified container absence and watchdog disarm. A separate
+accepted-supervisor observation reacquires the same development lock exclusively
+and without waiting after completion. The immutable runtime and additive lock
+archives are `stability-linux-collector-adverse-root-success-20260915-1` and
+`stability-linux-collector-adverse-root-lock-observation-20260915-1`. This is one
+four-selector Linux infrastructure run only: stopped-collector rescue,
+watchdog-triggered recovery, post-reap/report-fsync interruption, general storage
+faults, production-binary equivalence and every McKernel application/production
+gate remain unaccepted.
