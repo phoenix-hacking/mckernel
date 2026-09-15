@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_build_owner_source_review_failure",
+  "task_id": "M03-A/M03-B-candidate-11-owner",
+  "attempt": 11,
+  "status": "FAIL_SOURCE_PACKET",
+  "base_commit": "78faa2d3d8cf5e431e11efcd47c2d5fabfc63e27",
+  "sources": [
+    {"path": "docs/verification/evidence/stability-pending-free-batch-build-owner-20260915.py", "sha256": "8921699bd4e1689aeb7c0d14fa2b07c30b5ea5219a1464270016f0b79b1af37f"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "966762fb2a509013cddc1ecfc666c7111d7fd00a0d9c34e45341343e34b1347d"},
+    {"path": "scripts/tests/test_stability_pending_free_batch_build_owner.py", "sha256": "cbb72d9cd142ac552a265be197f96dbb61a0d6b5d91a3085499c481fa2e527df"}
+  ],
+  "source_archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-source-20260915-11.tar.gz",
+    "size": 751315,
+    "sha256": "54fd1ae46143f90bb13e246157a9927c219b3af9d19f9877a242b1707afcca80",
+    "members": 8
+  },
+  "reported_tests": {"python3": "4/4 PASS", "python3.8": "4/4 PASS", "accepted_as_retained_evidence": false},
+  "retention_finding": "An initial unit fixture failure was corrected and rerun without retained exact source/output; the later passing reports are not a valid replacement.",
+  "independent_review": {
+    "role": "Astra/high compiler and ownership reviewer",
+    "status": "FAIL_SOURCE_PACKET",
+    "findings": [
+      "verify_result rejects the intentionally nonzero mutant-run required by the harness.",
+      "The positive unit fixture permits empty rows, arbitrary expectations, empty mutant/trait evidence, placeholder commands and an incomplete artifact set.",
+      "Artifact names allow traversal and digest verification follows symlinks."
+    ],
+    "accepted_source_scope_only": "Six input pins and the restricted UID1000 Docker/watchdog/lock/cleanup lifecycle match the reviewed constraints by static inspection."
+  },
+  "container_execution": false,
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

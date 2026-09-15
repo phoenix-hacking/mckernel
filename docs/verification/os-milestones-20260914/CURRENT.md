@@ -224,3 +224,20 @@ checks retain status and empty streams for all three files. Independent Astra/hi
 review returns `PASS_BUILD_PACKET` for selectors 0-3 compilation only. The source
 must be checkpointed before the dispatcher runs the isolated build; root execution
 and all collector/application acceptance remain closed.
+
+The dispatcher has now run fresh adverse-v1 build attempt 1 from fetched commit
+`2e3fe26cf138c4d2170912b82fb8b6419e573c6b`. Host owner, inner build and watchdog
+all report their infrastructure-only PASS statuses; the raw build record contains
+23 commands, 179 unique compiler dependencies, 24 outputs and all four selectors.
+The complete 650-member archive SHA256 is
+`eaf0665189b49d80359b44109d7f015e19700112cc1d07d68b2d1ccd405e8675`.
+Independent evidence and ownership reviews are active; no root selector run or
+acceptance is released yet.
+
+M03 candidate-12's corrected Rocky Rust 1.92 build owner passes 8/8 retained
+source tests under both Python interpreters and independent Astra/high source and
+build-packet review. It binds 30 exact computed rows, 51 artifacts, five trait
+negatives, the partial-release mutant, compiler bytes and the inherited isolated
+watchdog/cleanup owner. This releases only a fresh dispatcher-owned focused
+container build after a fetched-source checkpoint; no fixture execution or M03
+credit exists yet.
