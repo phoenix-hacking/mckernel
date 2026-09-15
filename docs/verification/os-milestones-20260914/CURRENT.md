@@ -321,3 +321,20 @@ pass under each Python interpreter and independent review returns
 metadata, which limits them to source-packet support. A fresh dispatcher-owned
 Rocky Rust 1.92 focused build is released only after this exact checkpoint is
 pushed and fetched; no runtime or production credit exists yet.
+
+Dispatcher-owned candidate-14 focused build attempt 2 passes 37/37 computed Rust
+and C rows, 20 production extraction bindings, 51 artifacts, the intended
+partial-release mutant and five negative trait probes under the pinned Rocky
+compiler. Both independent reviews accept only
+`PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY`. Source integration remains
+closed because the safety text forbids enqueue for the entire detached lifetime
+while the implementation and source-reuse row permit a subsequent independently
+owned capture on the reset head. The exact 288-member archive is
+`stability-pending-free-batch-build-owner-success-20260915-2`.
+
+The separate bounded-inventory audit finds that current cycle validation still
+has no trusted node-count bound and dereferences ring links before independent
+descriptor/range ownership proof. Aggregate allocator bounds cannot substitute.
+`stability-pending-free-batch-inventory-source-audit-20260915-1.md` records the
+needed captured capacity/count and negative matrix. No such ABI is wired today;
+integration, invalidation, guest/application and production credit remain closed.
