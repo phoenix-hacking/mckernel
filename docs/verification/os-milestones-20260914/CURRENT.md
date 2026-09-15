@@ -533,3 +533,14 @@ allowlist currently contains only a new README/harness/test shell over the rejec
 attempt-1 model and data bytes; it is deliberately `SOURCE_WIP_NOT_REVIEWABLE`.
 Materialized independent literals and replacement Rust/C models remain required
 before attempt-2 source review or any check/compilation.
+
+The first attempt-2 corpus slice now has independent
+`PASS_BASELINE_LITERAL_SLICE_ONLY` review. Its exact 16 operations and full literal
+process/thread/event/control expectations match the draft for immediate exit,
+last-thread process terminal and ordinary complete retirement. The pool expander's
+nested type checks, acyclic recursion and conservative pre-allocation node/byte
+budgets pass source inspection, and `corpus_complete=false` prevents directory
+creation or compilation. Exact five-file bytes are retained in
+`stability-native-collector-lifecycle-baseline-literal-slice-20260915-1`. The other
+required vectors and both replacement models are still missing; whole-corpus and
+source acceptance remain closed.
