@@ -205,3 +205,22 @@ verified, and actual builds omit the generated diff. The exact passing unit-test
 archive remains rejected evidence in
 `stability-linux-collector-adverse-source-success-20260915-4`; no collector build,
 root execution or acceptance follows.
+
+M02-B adverse-v1 attempt 5 passes 12 retained Python 3.8 source/mock tests and
+preserves the three attempt-4 corrections, but review finds a deterministic
+producer/verifier mismatch: the pinned image resolves logical `/lib64` loaders to
+canonical `/usr/lib64`, while verification demands the logical path as the file
+identity. No build packet is released. M03 candidate-11's new Rocky Rust 1.92
+owner likewise fails source review: it rejects the required negative mutant run,
+accepts incomplete placeholder result inventories, and permits traversing or
+symlink-followed artifact names. Its reported passing tests are not accepted
+because an earlier fixture failure was corrected without retaining exact output.
+
+M02-B adverse-v1 attempt 6 corrects the sole attempt-5 loader mismatch by binding
+both logical `/lib64` and canonical `/usr/lib64` paths to the pinned image. Thirteen
+retained Python 3.8 tests pass. The original no-index diff chain stopped normally
+at its first content-difference status with empty diagnostics; additive per-file
+checks retain status and empty streams for all three files. Independent Astra/high
+review returns `PASS_BUILD_PACKET` for selectors 0-3 compilation only. The source
+must be checkpointed before the dispatcher runs the isolated build; root execution
+and all collector/application acceptance remain closed.
