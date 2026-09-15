@@ -1,0 +1,38 @@
+--- original/supervisor.py
++++ host38/supervisor_host38.py
+@@ -42,6 +42,17 @@
+             digest.update(block)
+             size += len(block)
+     return {"path": str(path), "size": size, "sha256": digest.hexdigest()}
++
++
++def _host38_waitstatus_to_exitcode(status):
++    """Host Python3.8 compatibility only; derive the real observed wait status."""
++    if type(status) is not int:
++        raise TypeError("plain raw wait status required")
++    if os.WIFEXITED(status):
++        return os.WEXITSTATUS(status)
++    if os.WIFSIGNALED(status):
++        return -os.WTERMSIG(status)
++    raise ValueError("unexpected raw wait status")
+ 
+ 
+ def _decode_wait(status):
+@@ -485,7 +496,7 @@
+                 raise RuntimeError("exited owned leader could not be reaped")
+             report["raw_wait_status"] = raw
+             report["wait_status"] = _decode_wait(raw)
+-            process.returncode = os.waitstatus_to_exitcode(raw)
++            process.returncode = _host38_waitstatus_to_exitcode(raw)
+         return report
+     except BaseException as error:
+         report.update(status="SUPERVISOR_ERROR", error="{}: {}".format(type(error).__name__, error))
+@@ -502,7 +513,7 @@
+                         _, raw = os.waitpid(process.pid, os.WNOHANG)
+                         report["raw_wait_status"] = raw
+                         report["wait_status"] = _decode_wait(raw)
+-                        process.returncode = os.waitstatus_to_exitcode(raw)
++                        process.returncode = _host38_waitstatus_to_exitcode(raw)
+                         report["cleanup_complete"] = True
+                         break
+                     time.sleep(0.01)
