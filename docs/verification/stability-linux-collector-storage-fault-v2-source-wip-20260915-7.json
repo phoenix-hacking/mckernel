@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 7,
+  "status": "WINDOW_PAUSED_FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T19:42:41Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-wip-20260915-7.tar.gz",
+    "sha256": "e899c6b1ac0c954deb62484dd309f8f4cd728be9e730f92c0e7f037ac6036214",
+    "size": 66831,
+    "members": 15
+  },
+  "source_sha256": {
+    "witness_owner.py": "46b74ce3c04ec4cb469f481dad03cefc068b6f5cb0d39a3a5b9c18fb14f93654",
+    "oracle.py": "49aef239d7be3900630a78ba2c1713af82ada1d89a81a3b402253c4c7bed4949",
+    "supervise.py": "34a61c142b2d74b20f0b1460181f1892836fcf1e283ff681c5398011c0a115f2",
+    "prepare.py": "775f3a59f3ba10f2321edfa95630eb81ebae541026249f2258f413a006112fd2",
+    "packet.json": "212dfe163bcb6828839b95cf1aaf05cb70597604dc737f56b1dd45d651063804",
+    "tests.md": "1968d49f4f39915b1baa46dbec667c30b0430bdcdecea792e397f9d058f318a6",
+    "test_collector_storage_fault_packet.py": "2be239729fdaadd1e7806cabc991d324fb659e0eaef179eaa55050803f52797d"
+  },
+  "checks": {
+    "python3.9.12": "38/38 PASS",
+    "python3.8.10": "38/38 PASS",
+    "python-py_compile": "PASS",
+    "python3.9_log_sha256": "729771715b6da8bb12a961fd10cb3189c6588d6a6bbb1cd8f42221b33110e429",
+    "python3.8_log_sha256": "64327eca9cfa87bfa2fa10aed145cfa890868ea19a2d4a60c63a0b203082d8dc"
+  },
+  "additional_original_failures": [
+    "the first checkpoint rerun retained a 37/38 TypeError after scan_owned gained its deadline argument",
+    "the second checkpoint rerun retained a 37/38 tuple-arity error and an invalid Python 3.9 path"
+  ],
+  "review_status": "FAIL_SOURCE applies to the exact earlier supervisor hash 136756c5; current supervisor hash 34a61c14 is later unreviewed WIP",
+  "remaining": [
+    "repair fresh sentinel identity and ECHILD authority semantics",
+    "make all post-fork failures retain bounded retirement responsibility and evidence",
+    "enforce the complete supervisor cleanup state machine and owner wait joins in oracle",
+    "preserve pipe prefixes and drain throughout cleanup",
+    "add actual run_supervisor, spawn_owner, packet-15 matrix, partial-spawn, descendant-writer and rollback controls",
+    "rerun both Python versions and obtain fresh full independent review of stable exact bytes"
+  ],
+  "active_processes": [
+    {"pid": 1492539, "role": "launcher", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492541, "role": "launcher-worker", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492543, "role": "codex-app-server", "started": "2026-09-15T11:38:18-07:00"}
+  ],
+  "build_or_guest_processes": [],
+  "child_agents_joined": true,
+  "future_goal_continuations_paused_by_user": true,
+  "goal_complete": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -1256,3 +1256,39 @@ At 2026-09-15T19:16:11Z the only retained campaign identities are launcher
 Rust, GCC or Clang process is live. All three child agents are joined/completed,
 new dispatch is stopped and future launcher continuations remain user-paused.
 The whole-OS goal remains incomplete and is not resumed or marked complete.
+
+Window-end checkpoint 7 preserves source failure attempts 10 and 11 at archive
+SHA256s `1ff7b0341d4f3ee7ab9aa1ed18ff6661d7d5035666559029ca8602b8ef456acf`
+and `10fd9881d5f6f5bb24d8361e8aaaa9e80f46a0d5b26f4963f16ca225ec273ab8`.
+It preserves the exact current WIP, including both checkpoint-rerun failures,
+at archive SHA256
+`e899c6b1ac0c954deb62484dd309f8f4cd728be9e730f92c0e7f037ac6036214`.
+After correcting only the cleanup mock interface, Python 3.9.12 and 3.8.10
+each pass 38/38 source-only tests and all edited Python files compile.
+
+Fresh independent review attempt 8 is `FAIL_SOURCE` for its exact reviewed
+snapshot. P0 blockers are stale sentinel identity/ECHILD signal authority and
+post-fork failure paths that can abandon retirement. P1 blockers are incomplete
+oracle cleanup/owner-wait joins and loss/non-draining of bounded pipe prefixes.
+The current supervisor SHA256
+`34a61c142b2d74b20f0b1460181f1892836fcf1e283ff681c5398011c0a115f2`
+contains a later deadline patch and is unreviewed; it does not supersede the
+failure. Source, compiler, root, native, application and production gates stay
+closed.
+
+Next window, in order: repair immediate-pair sentinel identity and terminate
+authority on ECHILD; make every post-fork exception retain bounded cleanup and
+evidence; make oracle require the complete cleanup state machine and direct
+owner wait/signal joins; retain pipe prefixes and drain during cleanup; add real
+`run_supervisor`/`spawn_owner`, packet-15 matrix, partial-spawn,
+descendant-writer, cleanup-exception and durable rollback controls. Rerun both
+Python versions and request a fresh full review only after the exact bytes are
+stable. Do not compile native code, use root, launch a guest or claim acceptance
+before that review passes.
+
+At 2026-09-15T19:42:41Z the only retained campaign identities remain launcher
+1492539, launcher worker 1492541 and Codex app-server 1492543, started
+2026-09-15 11:38:17-18 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo,
+Rust, GCC or Clang process is live. All three child agents are joined/completed,
+new dispatch is stopped and future launcher continuations remain user-paused.
+The whole-OS goal remains incomplete and is not resumed or marked complete.
