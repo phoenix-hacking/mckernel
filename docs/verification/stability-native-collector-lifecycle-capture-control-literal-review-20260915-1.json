@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_capture_control_literal_review",
+  "task_id": "M02-C-lifecycle-capture-control-literal-review",
+  "attempt": 1,
+  "status": "PASS_CAPTURE_CONTROL_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T10:44:00Z",
+  "reviewed_base_commit": "050d0a9e23f612713d4c0ceb9864a86ee6747d5e",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-capture-control-literal-slice-20260915-1.tar.gz",
+    "sha256": "aa676d5f8645021574bfd76588ec26100a02264d55aff7f1847e9fefccd77973",
+    "size": 9929,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "44b9686b216657da7cb70207c28f539768bbfc3648e4c1894e2647af1302269a",
+    "expected.json": "e33bf3b3bc3f8c4678ceb7f9125fd81711217651beefdb582fca04cadb9e0106",
+    "test_native_lifecycle_model.py": "e47f9004ae30b359b923527159b6f43e58834d1cd1bf161a9bd68cbf4bdc931c"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "teardown-failure",
+      "launcher-loss",
+      "missing-end",
+      "buffer-full",
+      "counter-overflow",
+      "unfinished-reservation"
+    ],
+    "capacity_zero_losses": 16,
+    "capacity_zero_retained_events": 0,
+    "cleanup_state_continues_after_loss": true,
+    "missing_end_incomplete": true,
+    "lost_counter_saturates": true,
+    "reservation_prevents_complete": true,
+    "mutant_binding": "silent-loss:buffer-full"
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

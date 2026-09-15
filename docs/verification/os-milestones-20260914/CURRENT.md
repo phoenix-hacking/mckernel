@@ -575,3 +575,13 @@ fixed those three event IDs plus the early-retirement mutant target. Cumulative
 bytes are archived as
 `stability-native-collector-lifecycle-ownership-literal-slice-20260915-1`. Whole
 corpus/model source, compilation and acceptance remain closed.
+
+Six capture-control vectors now receive independent
+`PASS_CAPTURE_CONTROL_LITERAL_SLICE_ONLY`: teardown failure, launcher loss, missing
+capture end, zero-capacity event retention, saturated lost-counter overflow and an
+unfinished reservation. Zero capacity preserves all 16 lifecycle transitions while
+retaining no events and counting every loss; all fault paths remain irreversibly
+incomplete. One review correction binds the silent-loss mutant to the materialized
+`buffer-full` case. The cumulative bytes are archived as
+`stability-native-collector-lifecycle-capture-control-literal-slice-20260915-1`.
+Whole corpus/model source, compilation and native/acceptance gates remain closed.
