@@ -6,6 +6,7 @@ paid/account-metered work. Runtime state stays in the repository's Git directory
 """
 
 import argparse
+import codecs
 import fcntl
 import json
 import math
@@ -21,6 +22,8 @@ import tempfile
 import time
 from datetime import datetime, timezone
 from uuid import uuid4
+
+from os_goal_output import LiveOutput
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -122,6 +125,8 @@ class RPC:
         self.buffer = b""
         self.events = (log_dir / "protocol.jsonl").open("a", buffering=1)
         self.stderr = (log_dir / "server.stderr.log").open("ab")
+        self.stderr_reader = (log_dir / "server.stderr.log").open("rb")
+        self.stderr_decoder = codecs.getincrementaldecoder("utf-8")("replace")
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=self.stderr, bufsize=0, start_new_session=True,
                                      env=runtime_environment())
@@ -133,6 +138,7 @@ class RPC:
         self.proc.stdin.flush()
 
     def pump(self, timeout=1.0):
+        self.pump_stderr()
         if b"\n" not in self.buffer:
             if not self.selector.select(timeout):
                 return
@@ -158,6 +164,22 @@ class RPC:
                     self.send({"id": message["id"], "error": {
                         "code": -32000, "message": "Unattended launcher cannot answer this protocol; checkpoint and stop."}})
             self.on_event(message)
+
+    def pump_stderr(self, final=False):
+        # Read the retained file, so stderr cannot fill a pipe and deadlock Codex.
+        remaining = max(0, os.fstat(self.stderr_reader.fileno()).st_size - self.stderr_reader.tell()) if final else 65536
+        while remaining:
+            chunk = self.stderr_reader.read(min(remaining, 65536))
+            if not chunk:
+                break
+            remaining -= len(chunk)
+            value = self.stderr_decoder.decode(chunk)
+            if value:
+                self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
+        if final:
+            value = self.stderr_decoder.decode(b"", final=True)
+            if value:
+                self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
 
     def call(self, method, params, timeout=45.0):
         self.next_id += 1
@@ -189,6 +211,8 @@ class RPC:
                 self.proc.wait(timeout=5)
         self.selector.close()
         self.proc.stdout.close()
+        self.pump_stderr(final=True)
+        self.stderr_reader.close()
         self.events.close()
         self.stderr.close()
 
@@ -264,10 +288,14 @@ class Campaign:
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
+        self.output = LiveOutput(self.log_dir, quiet=args.quiet)
+        self.output.primary = self.state.get("thread_id")
 
     def save(self, **fields):
         self.state.update(fields)
-        self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active)
+        self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active,
+                          agents=self.output.snapshot(), console_log=str(self.log_dir / "console.log"),
+                          agent_event_count=self.output.agent_event_count)
         atomic_json(self.state_path, self.state)
 
     def on_signal(self, signum, frame):
@@ -282,6 +310,7 @@ class Campaign:
 
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
+        self.output.event(message)
         thread = data.get("threadId")
         primary = thread == self.state.get("thread_id")
         if "id" in message:
@@ -301,8 +330,6 @@ class Campaign:
             self.active[thread] = data["turn"]["id"]
             self.last_activity = time.monotonic()
             self.save()
-            if primary:
-                say("Dispatcher turn started; evidence and checkpoint paths are in CURRENT.md.")
         elif method == "turn/completed":
             if self.active.get(thread) == data["turn"]["id"]:
                 self.active.pop(thread, None)
@@ -320,7 +347,7 @@ class Campaign:
                 self.stop_reason = "quota_or_rate_limit" if isinstance(info, str) and info in LIMIT_ERRORS else "server_error"
                 self.stop_now = True
         elif method == "item/agentMessage/delta" and primary:
-            # Full agent output is retained in protocol.jsonl, with a bounded console excerpt.
+            # Preserve the existing dispatcher-only transcript for older consumers.
             excerpt = data.get("delta", "")
             with (self.log_dir / "dispatcher.txt").open("a") as stream:
                 stream.write(excerpt)
@@ -402,6 +429,7 @@ class Campaign:
         if previous_id and ident != previous_id:
             raise RuntimeError("Resume returned a different thread; refusing to replace the cursor.")
         self.save(thread_id=ident, phase="ready")
+        self.output.primary = ident
         self.controlled = True
         if result["model"] != self.args.model or result.get("reasoningEffort") != self.args.effort:
             raise RuntimeError("Thread model/effort differs from the selected dispatcher.")
@@ -433,7 +461,7 @@ class Campaign:
             goal = self.rpc.call("thread/goal/set", update)["goal"]
         self.remember_goal(goal)
         self.save(phase="running")
-        say("Thread " + ident + "; " + self.args.model + "/" + self.args.effort + "; Luna workers.")
+        self.output.notice("Thread " + ident + "; " + self.args.model + "/" + self.args.effort + "; Luna workers.")
 
     def pause(self):
         ident = self.state.get("thread_id")
@@ -461,7 +489,7 @@ class Campaign:
                     "with next tasks, commit/push and verify the checkpoint, then return. "
                     "The launcher has paused future goal continuations. Do not mark the OS "
                     "complete or resume the goal merely to finish this window."}]})
-        say("Checkpoint requested; waiting for bounded active work to finish.")
+        self.output.notice("Checkpoint requested; waiting for bounded active work to finish.")
 
     def stop(self):
         if not self.rpc or self.stopping or not self.controlled:
@@ -497,8 +525,11 @@ class Campaign:
         checkpoint_at = max(started, deadline - min(self.args.grace_seconds, self.args.hours * 1800))
         stop_deadline = None
         next_refresh = started + 30
+        next_heartbeat = started
         code = 1
         try:
+            self.output.notice("Starting launcher; worker_pid=" + str(os.getpid())
+                               + "; live log: " + str(self.log_dir / "console.log"))
             self.begin()
             while True:
                 now = time.monotonic()
@@ -522,25 +553,34 @@ class Campaign:
                     code = 24
                     break
                 self.rpc.pump(timeout=1)
+                self.output.flush()
+                now = time.monotonic()
+                if now >= next_heartbeat:
+                    self.output.heartbeat(self.goal, self.active, now - started,
+                                          os.getpid(), self.state.get("server_pid"))
+                    self.save(heartbeat_at=utc(), uptime_seconds=round(now - started, 1))
+                    next_heartbeat = now + self.args.heartbeat_seconds
                 if now >= next_refresh:
                     self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"])
                     next_refresh = now + 30
-                    say("Goal " + str((self.goal or {}).get("status")) + "; local status: --status.")
         except Exception as error:
             self.stop_reason = self.stop_reason or "launcher_error"
             self.save(last_error=str(error), retryable=isinstance(error, (
                 RecoverableFailure, BrokenPipeError, ConnectionResetError)))
-            say(str(error))
+            self.output.notice(str(error))
         finally:
             try:
                 self.stop()
             finally:
-                if self.rpc:
-                    self.rpc.close()
-                self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code)
-        status = (self.goal or {}).get("status", "unknown")
-        say("Stopped: goal reports " + status + "; " + (self.stop_reason or "goal status") + ".")
-        say("State: " + str(self.state_path) + "; run the same command to resume unfinished work.")
+                try:
+                    if self.rpc:
+                        self.rpc.close()
+                    self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code)
+                    self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
+                                       + "; " + (self.stop_reason or "goal status") + ".")
+                    self.output.notice("State: " + str(self.state_path) + "; run the same command to resume unfinished work.")
+                finally:
+                    self.output.close()
         return code
 
 
@@ -560,6 +600,9 @@ def arguments(argv=None):
     parser.add_argument("--max-restarts", type=int, default=3, help="Maximum automatic crash recoveries (default: 3)")
     parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
     parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
+    parser.add_argument("--heartbeat-seconds", type=float, default=15, help="Print liveness and agent activity every N seconds (default: 15)")
+    parser.add_argument("--stall-seconds", type=float, default=900, help="Recover a running campaign with no agent events for N seconds; 0 disables (default: 900)")
+    parser.add_argument("--quiet", action="store_true", help="Hide live agent output; keep heartbeats and console.log")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
@@ -567,6 +610,12 @@ def arguments(argv=None):
         parser.error("hours and grace-seconds must be finite and non-negative")
     if args.token_budget is not None and args.token_budget <= 0:
         parser.error("token-budget must be positive")
+    if not math.isfinite(args.heartbeat_seconds) or args.heartbeat_seconds <= 0:
+        parser.error("heartbeat-seconds must be finite and positive")
+    if not math.isfinite(args.stall_seconds) or args.stall_seconds < 0:
+        parser.error("stall-seconds must be finite and non-negative")
+    if args.stall_seconds and args.stall_seconds <= args.heartbeat_seconds:
+        parser.error("stall-seconds must exceed heartbeat-seconds, or be 0 to disable recovery")
     if (args.max_restarts < 0 or args.max_restarts > 50
             or not math.isfinite(args.restart_delay) or args.restart_delay < 0
             or not math.isfinite(args.watchdog_seconds) or args.watchdog_seconds < 0):
@@ -585,6 +634,14 @@ def main(argv=None):
         watch = directory / "watcher.json"
         if watch.exists():
             current["watcher"] = json.loads(watch.read_text())
+            saved_watch = current["watcher"]
+            if (saved_watch.get("worker_pid") == current.get("worker_pid")
+                    and saved_watch.get("event") in {"worker_exited", "watcher_stopped"}):
+                # SIGKILL prevents the worker from replacing its last running snapshot.
+                current["last_worker_phase"] = current.get("phase")
+                current["phase"] = "stopped"
+                current["last_recorded_active_turns"] = current.get("active_turns", {})
+                current["active_turns"] = {}
         print(json.dumps(current, indent=2))
         return 0
     if args.dry_run:
@@ -594,6 +651,8 @@ def main(argv=None):
                           "sudo_helper": str(SUDO_HELPER), "sudo_credential_configured": SUDO_CREDENTIAL.is_file(),
                           "supervised": not args.worker, "max_restarts": args.max_restarts,
                           "watchdog_seconds": args.watchdog_seconds,
+                          "heartbeat_seconds": args.heartbeat_seconds, "live_output": not args.quiet,
+                          "stall_seconds": args.stall_seconds,
                           "permissions": "User-authorized danger-full-access, approval_policy=never; no clarification prompts. Global config unchanged."}, indent=2))
         return 0
     if args.check_sudo:

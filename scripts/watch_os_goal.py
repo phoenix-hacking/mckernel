@@ -31,11 +31,42 @@ def should_restart(code, state, watchdog=False, stopped=False):
     if stopped or (state.get("goal") or {}).get("status") in {
             "complete", "blocked", "usageLimited", "budgetLimited"}:
         return False
+    if state.get("stop_reason") in {"quota_or_rate_limit", "server_error", "turn_failed",
+                                    "needs_user_input", "goal_cleared"}:
+        return False
     if watchdog:
         return True
     if code in {0, 10, 20, 21, 22, 23}:
         return False
     return code < 0 or code == 24 or code == 1 and state.get("retryable") is True
+
+
+def progress_marker(state, worker_pid):
+    if (state.get("worker_pid") == worker_pid and state.get("phase") == "running"
+            and (state.get("goal") or {}).get("status") == "active"):
+        return state.get("agent_event_count")
+    return None
+
+
+def diagnostics(state, worker_pid):
+    """Capture process/resource state without command lines or environment secrets."""
+    result = {"state": state, "processes": {}, "resources": {}}
+    for name, pid in (("worker", worker_pid), ("server", state.get("server_pid"))):
+        if not pid:
+            continue
+        row = {"pid": pid, "observed_start": process_start(pid)}
+        for source in ("status", "wchan"):
+            try:
+                row[source] = (Path("/proc") / str(pid) / source).read_text()
+            except OSError as error:
+                row[source + "_error"] = str(error)
+        result["processes"][name] = row
+    for source in ("meminfo", "loadavg"):
+        try:
+            result["resources"][source] = (Path("/proc") / source).read_text()
+        except OSError as error:
+            result["resources"][source + "_error"] = str(error)
+    return result
 
 
 def retire_server(state, worker_pid):
@@ -88,7 +119,9 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                     worker_pid=child.pid if child else None, restarts=restarts, **values)
         write_json(watch_path, data)
         log.write(json.dumps(data) + "\n")
-        print("[os-watch] " + event, flush=True)
+        details = " ".join(str(key) + "=" + str(value) for key, value in data.items()
+                           if key not in {"event", "at", "watcher_pid"})
+        print("[os-watch] " + event + " " + details, flush=True)
 
     def on_signal(signum, frame):
         stop_signals.append(signum)
@@ -110,8 +143,12 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             child = subprocess.Popen(command, stdin=subprocess.DEVNULL, start_new_session=True)
             record("worker_started", attempt=restarts + 1)
             heartbeat = time.monotonic()
+            next_notice = heartbeat + args.heartbeat_seconds
             last_mtime = None
+            progress_at, last_progress = heartbeat, None
+            current = {}
             shutdown_at = None
+            killed_at = None
             watchdog = False
             while child.poll() is None:
                 now = time.monotonic()
@@ -121,19 +158,44 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                     mtime = None
                 if mtime != last_mtime:
                     heartbeat, last_mtime = now, mtime
+                    current = snapshot(state_path)
+                marker = progress_marker(current, child.pid)
+                if marker is None or marker != last_progress:
+                    progress_at, last_progress = now, marker
+                if now >= next_notice:
+                    # Keep the supervisor visible during startup, RPC waits and shutdown.
+                    print("[os-watch] HEARTBEAT alive; worker_pid=" + str(child.pid)
+                          + "; uptime=" + str(int(now - started))
+                          + "s; state_updated=" + str(round(now - heartbeat, 1)) + "s ago", flush=True)
+                    next_notice = now + args.heartbeat_seconds
                 if not shutdown_at:
                     if stop_signals or now >= deadline:
                         if not stop_signals:
                             stop_signals.append(signal.SIGTERM)
                             child.terminate()
                         shutdown_at = now + min(args.grace_seconds + 15, 615)
-                    elif args.watchdog_seconds and now - heartbeat > args.watchdog_seconds:
+                    elif (args.watchdog_seconds and now - heartbeat > args.watchdog_seconds
+                          or args.stall_seconds and marker is not None and now - progress_at > args.stall_seconds):
                         watchdog = True
-                        record("heartbeat_stalled", seconds_without_update=now - heartbeat)
-                        child.terminate()
-                        shutdown_at = now + 30
-                elif now >= shutdown_at:
+                        kind = "heartbeat_stalled" if args.watchdog_seconds and now - heartbeat > args.watchdog_seconds else "agent_progress_stalled"
+                        capture = directory / ("watchdog-" + str(child.pid) + "-" + str(time.time_ns()) + ".json")
+                        try:
+                            write_json(capture, dict(diagnostics(current, child.pid), reason=kind))
+                            record(kind, seconds_without_update=now - heartbeat,
+                                   seconds_without_agent_event=now - progress_at, diagnostics=str(capture))
+                        finally:
+                            # Even a full log disk must not prevent the stop signal.
+                            child.terminate()
+                        shutdown_at = now + min(args.grace_seconds, 30)
+                elif now >= shutdown_at and killed_at is None:
                     child.kill()
+                    killed_at = now
+                    record("worker_forced_stop", grace_expired=True)
+                if len(stop_signals) > 1 and killed_at is None:
+                    killed_at = now
+                if killed_at is not None and now - killed_at >= 5:
+                    record("worker_kill_timed_out", recovery_stopped=True)
+                    raise RuntimeError("Worker did not exit after SIGKILL; no replacement was started. Inspect watchdog diagnostics.")
                 time.sleep(0.25)
             final_code = child.returncode
             state = snapshot(state_path)
@@ -165,7 +227,10 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 child.wait(timeout=10)
             except subprocess.TimeoutExpired:
                 child.kill()
-                child.wait(timeout=5)
+                try:
+                    child.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    print("[os-watch] Worker is still present after SIGKILL; recovery stopped.", flush=True)
         for signum, handler in previous_handlers.items():
             signal.signal(signum, handler)
         log.close()

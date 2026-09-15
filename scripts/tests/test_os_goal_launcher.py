@@ -15,6 +15,7 @@ from unittest.mock import patch
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "run_os_goal.py"
+sys.path.insert(0, str(SOURCE.parent))
 SPEC = importlib.util.spec_from_file_location("os_goal_launcher", SOURCE)
 launcher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(launcher)
@@ -285,6 +286,26 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["phase"], "stopped")
         self.assertEqual(state["goal"]["status"], "paused")
 
+    def test_heartbeat_stays_live_without_resetting_agent_quiet_time(self):
+        clock = [100.0]
+        self.args.quiet = True
+        rpc = FakeRPC(self.args, steps=[
+            lambda r: clock.__setitem__(0, 116.0),
+            lambda r: clock.__setitem__(0, 301.0),
+            lambda r: (r.completed(), r.status("blocked"))])
+        output = io.StringIO()
+        with patch.object(launcher.time, "monotonic", side_effect=lambda: clock[0]), redirect_stdout(output):
+            campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+            self.assertEqual(campaign.run(), 20)
+        self.assertGreaterEqual(output.getvalue().count("HEARTBEAT alive"), 2)
+        self.assertIn("201.0s ago", output.getvalue())
+        self.assertIn("POSSIBLY STALLED", output.getvalue())
+        self.assertNotIn("Goal active; local status", output.getvalue())
+        state = json.loads((self.directory / "state.json").read_text())
+        self.assertIn("heartbeat_at", state)
+        self.assertEqual(state["agents"]["test-thread"]["label"], "dispatcher")
+        self.assertIn("HEARTBEAT alive", Path(state["console_log"]).read_text())
+
     def test_lease_and_corrupted_state_fail_closed(self):
         lease = launcher.Lease(self.directory / "run.lock")
         try:
@@ -313,6 +334,121 @@ class CampaignTests(unittest.TestCase):
             schemas = {method: json.loads((Path(directory) / name).read_text()) for method, name in files.items()}
             for method, params in cls.all_calls:
                 jsonschema.Draft7Validator(schemas[method]).validate(params)
+
+
+class LiveOutputTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="os-goal-output-")
+        self.directory = Path(self.temp.name)
+        self.output = launcher.LiveOutput(self.directory, quiet=True)
+        self.output.primary = "parent"
+
+    def tearDown(self):
+        self.output.close()
+        self.temp.cleanup()
+
+    def event(self, method, thread="parent", **params):
+        self.output.event({"method": method, "params": dict(threadId=thread, **params)})
+
+    def log(self):
+        return (self.directory / "console.log").read_text()
+
+    def test_interleaved_agents_partial_lines_completion_and_output_fallback(self):
+        self.event("item/started", item={"type": "subAgentActivity", "id": "spawn",
+                   "kind": "started", "agentThreadId": "child", "agentPath": "/root/audit"})
+        self.event("item/agentMessage/delta", itemId="one", delta="Parent ")
+        self.event("item/agentMessage/delta", thread="child", itemId="two", delta="Child ready\n")
+        self.event("item/agentMessage/delta", itemId="one", delta="ready\n")
+        self.event("item/completed", item={"type": "agentMessage", "id": "one", "text": "Parent ready\n"})
+        self.assertEqual(self.log().count("Parent ready"), 1)
+        self.assertIn("[/root/audit/message] Child ready", self.log())
+        self.event("item/completed", item={"type": "commandExecution", "id": "cmd",
+                   "command": "test", "status": "failed", "exitCode": 7, "aggregatedOutput": "failure details\n"})
+        self.assertIn("failure details", self.log())
+        self.assertIn("exit=7", self.log())
+
+    def test_partial_fragments_flush_on_timer_and_buffers_are_bounded(self):
+        clock = [10.0]
+        with patch.object(launcher.time, "monotonic", side_effect=lambda: clock[0]):
+            self.event("item/agentMessage/delta", itemId="partial", delta="still working")
+            self.output.flush()
+            self.assertNotIn("still working", self.log())
+            clock[0] += 0.3
+            self.output.flush()
+            self.assertIn("still working", self.log())
+        self.event("item/commandExecution/outputDelta", itemId="long", delta="x" * 50000)
+        self.assertLess(len(self.output.pending[("parent", "long", "output")][0]), 4096)
+
+    def test_quiet_keeps_log_and_heartbeat_and_omits_raw_reasoning(self):
+        console = io.StringIO()
+        with redirect_stdout(console):
+            self.event("item/completed", item={"type": "agentMessage", "id": "msg", "text": "visible in log"})
+            self.event("item/completed", item={"type": "reasoning", "id": "thought", "content": ["raw-private-text"]})
+            self.output.heartbeat(goal(), {"parent": "turn"}, 20, 100, 200)
+        self.assertIn("visible in log", self.log())
+        self.assertNotIn("visible in log", console.getvalue())
+        self.assertNotIn("raw-private-text", self.log())
+        self.assertIn("HEARTBEAT alive", console.getvalue())
+        self.assertIn("worker_pid=100; server_pid=200", console.getvalue())
+
+    def test_real_transport_streams_before_command_completes_and_retains_stderr(self):
+        source = r'''
+import json,sys
+first=json.loads(sys.stdin.readline())
+def emit(value):
+    print(json.dumps(value), flush=True)
+emit({'method':'item/commandExecution/outputDelta','params':{
+    'threadId':'parent','itemId':'cmd','delta':'live command output\n'}})
+sys.stderr.write('server diagnostic\n'); sys.stderr.flush()
+emit({'id':first['id'],'result':{}})
+second=json.loads(sys.stdin.readline())
+emit({'method':'item/completed','params':{'threadId':'parent','item':{
+    'type':'commandExecution','id':'cmd','command':'fake build','status':'completed',
+    'exitCode':0,'aggregatedOutput':'live command output\n'}}})
+emit({'id':second['id'],'result':{}})
+sys.stdin.read()
+'''
+        self.output.quiet = False
+        console = io.StringIO()
+        rpc = launcher.RPC([sys.executable, "-u", "-c", source], self.directory, self.output.event)
+        try:
+            with redirect_stdout(console):
+                rpc.call("start", {}, timeout=5)
+                self.assertIn("live command output", console.getvalue())
+                self.assertNotIn("Command completed", console.getvalue())
+                rpc.call("finish", {}, timeout=5)
+                rpc.close()
+                self.output.flush(force=True)
+            self.assertEqual(console.getvalue().count("live command output"), 1)
+            self.assertIn("server diagnostic", console.getvalue())
+            self.assertIn("exit=0", console.getvalue())
+            self.assertIn("server diagnostic", (self.directory / "server.stderr.log").read_text())
+        finally:
+            if rpc.proc.poll() is None:
+                rpc.close()
+
+
+class StatusTests(unittest.TestCase):
+    def test_forced_stop_labels_stale_snapshot_without_mutation_or_server(self):
+        with tempfile.TemporaryDirectory(prefix="os-goal-status-") as temp:
+            repo = Path(temp)
+            directory = repo / ".git/os-autopilot"
+            directory.mkdir(parents=True)
+            original = {"phase": "running", "worker_pid": 456, "active_turns": {"parent": "turn"}}
+            launcher.atomic_json(directory / "state.json", original)
+            launcher.atomic_json(directory / "watcher.json", {"event": "watcher_stopped", "worker_pid": 456})
+            console = io.StringIO()
+            with patch.object(launcher, "REPO", repo), \
+                    patch.object(launcher.subprocess, "check_output", return_value=".git"), \
+                    patch.object(launcher, "RPC") as rpc, redirect_stdout(console):
+                self.assertEqual(launcher.main(["--status"]), 0)
+            state = json.loads(console.getvalue())
+            self.assertEqual(state["phase"], "stopped")
+            self.assertEqual(state["last_worker_phase"], "running")
+            self.assertEqual(state["active_turns"], {})
+            self.assertEqual(state["last_recorded_active_turns"], original["active_turns"])
+            self.assertEqual(json.loads((directory / "state.json").read_text()), original)
+            rpc.assert_not_called()
 
 
 class SudoHelperTests(unittest.TestCase):
@@ -373,6 +509,80 @@ class SudoHelperTests(unittest.TestCase):
 
 
 class WatcherTests(unittest.TestCase):
+    def test_progress_marker_requires_current_running_worker(self):
+        state = {"worker_pid": 10, "phase": "running", "goal": {"status": "active"},
+                 "agent_event_count": 5, "heartbeat_at": "later"}
+        self.assertEqual(watcher.progress_marker(state, 10), 5)
+        self.assertIsNone(watcher.progress_marker(state, 20))
+        state["goal"]["status"] = "paused"
+        self.assertIsNone(watcher.progress_marker(state, 10))
+        for reason in ("quota_or_rate_limit", "server_error", "needs_user_input", "turn_failed"):
+            self.assertFalse(watcher.should_restart(23, {"stop_reason": reason}, watchdog=True))
+
+    def test_agent_stall_recovers_even_when_worker_keeps_writing_heartbeats(self):
+        source = r'''
+import json,os,signal,sys,time
+from pathlib import Path
+path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+state={'thread_id':'quiet-thread','worker_pid':os.getpid(),'phase':'running',
+       'agent_event_count':1,'goal':{'status':'active'}}
+signal.signal(signal.SIGTERM, signal.SIG_IGN)
+if '--recovered' in sys.argv:
+    state['goal']['status']='complete'
+while True:
+    state['heartbeat_at']=time.time()
+    temporary=path.with_suffix('.tmp')
+    temporary.write_text(json.dumps(state)); temporary.replace(path)
+    if '--recovered' in sys.argv: break
+    time.sleep(0.03)
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-progress-stall-") as temp:
+            repo = Path(temp)
+            (repo / "scripts").mkdir()
+            (repo / "scripts/run_os_goal.py").write_text(source)
+            directory = repo / ".git/os-autopilot"
+            args = launcher.arguments(["--hours", "0", "--restart-delay", "0", "--max-restarts", "1",
+                                       "--stall-seconds", "0.15", "--grace-seconds", "0.05",
+                                       "--heartbeat-seconds", "0.025", "--watchdog-seconds", "5"])
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json), 0)
+            events = [json.loads(line) for line in (directory / "watcher.jsonl").read_text().splitlines()]
+            stalled = next(row for row in events if row["event"] == "agent_progress_stalled")
+            self.assertLess(stalled["seconds_without_update"], 0.15)
+            self.assertIn("worker_forced_stop", [row["event"] for row in events])
+            capture = json.loads(Path(stalled["diagnostics"]).read_text())
+            self.assertEqual(capture["state"]["agent_event_count"], 1)
+            self.assertIn("meminfo", capture["resources"])
+            self.assertEqual(json.loads((directory / "state.json").read_text())["thread_id"], "quiet-thread")
+
+    def test_agent_events_keep_a_quiet_campaign_running(self):
+        source = r'''
+import json,os,time
+from pathlib import Path
+path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+state={'thread_id':'busy-thread','worker_pid':os.getpid(),'phase':'running',
+       'agent_event_count':0,'goal':{'status':'active'}}
+deadline=time.monotonic()+1
+while True:
+    state['agent_event_count']+=1
+    done=time.monotonic()>=deadline
+    if done: state['goal']['status']='complete'
+    temporary=path.with_suffix('.tmp')
+    temporary.write_text(json.dumps(state)); temporary.replace(path)
+    if done: break
+    time.sleep(0.03)
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-progress-live-") as temp:
+            repo = Path(temp)
+            (repo / "scripts").mkdir()
+            (repo / "scripts/run_os_goal.py").write_text(source)
+            directory = repo / ".git/os-autopilot"
+            args = launcher.arguments(["--hours", "0", "--stall-seconds", "0.15", "--max-restarts", "0",
+                                       "--heartbeat-seconds", "0.025"])
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json), 0)
+            self.assertNotIn("agent_progress_stalled", (directory / "watcher.jsonl").read_text())
+
     def test_only_recoverable_failures_restart(self):
         self.assertTrue(watcher.should_restart(1, {"retryable": True}))
         self.assertTrue(watcher.should_restart(-9, {}))
@@ -437,9 +647,13 @@ if '--recovered' not in sys.argv: time.sleep(10)
             (repo / "scripts/run_os_goal.py").write_text(source)
             directory = repo / ".git/os-autopilot"
             args = launcher.arguments(["--hours", "0", "--restart-delay", "0",
-                                       "--max-restarts", "1", "--watchdog-seconds", "0.05"])
-            with redirect_stdout(io.StringIO()):
+                                       "--max-restarts", "1", "--watchdog-seconds", "0.05",
+                                       "--heartbeat-seconds", "0.025"])
+            console = io.StringIO()
+            with redirect_stdout(console):
                 self.assertEqual(watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json), 0)
+            self.assertIn("[os-watch] HEARTBEAT alive", console.getvalue())
+            self.assertIn("state_updated=", console.getvalue())
             state = json.loads((directory / "state.json").read_text())
             self.assertEqual(state["thread_id"], "stalled-thread")
             self.assertEqual(state["goal"]["status"], "complete")

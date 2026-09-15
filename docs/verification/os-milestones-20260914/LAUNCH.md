@@ -47,6 +47,9 @@ this script's lock. The older goal was usageLimited during preparation.
 | `--max-restarts 3` | Permit up to three automatic runner recoveries; default is three. |
 | `--restart-delay 5` | Initial restart backoff; doubles per retry, capped at 60 seconds. |
 | `--watchdog-seconds 180` | Recover a worker whose saved state stops updating; default is 180 seconds. |
+| `--heartbeat-seconds 15` | Print launcher liveness and agent activity every 15 seconds (default). |
+| `--stall-seconds 900` | Recover after 15 minutes without any agent events; 0 disables this progress watchdog. |
+| `--quiet` | Hide live agent output in the terminal, retaining heartbeats and the complete readable log. |
 
 For example:
 
@@ -65,6 +68,32 @@ command after quota or the external blocker changes. A budget-limited goal
 requires an explicit adequate `--token-budget` before it resumes. A budget is
 not a dollar cap or a demonstrated account-wide limit across all child usage.
 
+## Live output and heartbeat
+
+Normal runs stream timestamped dispatcher and child-agent messages, command
+starts/output/exit codes, file changes, tool status, compaction and server errors
+to the terminal. Child activity is labeled with its task path when available;
+command output includes its item ID suffix to distinguish concurrent commands.
+Partial message lines flush during streaming, before the agent finishes its turn.
+Raw internal reasoning is represented by a `Working` activity indicator.
+
+The worker prints `HEARTBEAT alive` with uptime, worker/server PIDs, goal status,
+reported goal token count, and active-agent count. Each active agent also shows
+its last activity and seconds since its last event. After 180 seconds of silence,
+the line says `POSSIBLY STALLED`. The supervisor prints its own heartbeat while the worker starts,
+waits for an RPC response, or shuts down. Its `state_updated` age measures worker
+responsiveness, not agent progress. The existing watchdog still recovers workers
+whose state stops updating. Heartbeats do not make model calls.
+
+Readable output is also retained in `console.log` in the run directory printed
+at startup. `--status` includes its path, agent activity snapshots, and the last
+worker heartbeat time. After forced termination it reports the stopped watcher
+state and labels the worker's old phase/turns as historical. For a second terminal,
+use `tail -f` on the printed `console.log` path. `--quiet` still writes that file.
+Full protocol events and the original server stderr remain available separately.
+Console timestamps are UTC. Increase heartbeat frequency with, for example,
+`--heartbeat-seconds 5`; this interval must be finite and positive.
+
 ## Watchers
 
 The normal command automatically wraps the runner in `watch_os_goal.py`. It
@@ -76,11 +105,28 @@ It keeps a separate supervisor lock and records events in
 `--status` includes that snapshot. The dispatcher reconciles live process leases
 and retained evidence before resuming a build or guest after recovery.
 
+A second watchdog detects a responsive launcher whose agents produce no new
+item/turn events for 15 minutes. Heartbeats, status polls and account updates do
+not reset this timer. It captures worker/server process state, memory/load and
+the last campaign snapshot to a private `watchdog-*.json` before requesting a
+checkpoint and bounded shutdown. This shares the existing three-restart limit
+and saved thread, and remains disabled while the campaign is paused or starting.
+Set `--stall-seconds 3600` for work expected to produce no agent events for up to
+an hour, or `--stall-seconds 0` to disable progress-based recovery. A positive
+stall interval must exceed the heartbeat interval. Long silent commands or
+compactions can reach this timeout even when healthy.
+
 A stalled worker first receives a termination/checkpoint request, with up to
-30 seconds before forced termination. The watcher retires only an app-server PID
+30 seconds (or the shorter configured checkpoint grace) before forced termination.
+Forced termination has a bounded wait; if a worker remains present after SIGKILL,
+recovery stops without starting a replacement. The watcher retires only an app-server PID
 whose recorded worker owner and Linux process birth identity match. It stops
 recovery if process ownership cannot be established. These actions are not proof
 that runtime guests or kernel resources were cleaned up.
+
+These process-level guards cannot guarantee recovery from a host kernel hang,
+power loss or an uninterruptible device operation. They do not change existing
+build/guest isolation or the four-CPU/12-GiB execution limits.
 
 The sudo helper supervises its credential-read child with a five-second timeout
 and at most two retries for a transient read failure, timeout or killed process.
