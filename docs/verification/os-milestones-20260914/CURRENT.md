@@ -742,3 +742,14 @@ independent `PASS_RAW_KEY_DOMAIN_PACKET_ONLY` and are retained in
 The separate gap inventory keeps full per-component key, pool/budget, remaining
 envelope, positive, semantic and oracle obligations open. No source edit or check
 has begun.
+
+The key/domain source slice now receives independent
+`PASS_RAW_KEY_DOMAIN_SOURCE_ONLY` and `PASS_RAW_KEY_DOMAIN_EVIDENCE_ONLY`.
+Thirty exact cases bring the raw inventory to 88, with the accepted first 58
+record texts SHA-bound and relationship-consistent legal key controls. Python
+3.9.12 and 3.8.10 each pass all nine focused decoder tests. A review caught an
+anti-conflation test mutating `model_only` instead of the boolean key slot; the
+structured correction and original finding are retained in the 11-member
+`stability-native-collector-lifecycle-raw-key-domain-source-checkpoint-20260915-1.tar.gz`.
+Full per-component key coverage, pools/budgets and remaining raw/oracle work stay
+open; the matrix flag is false and no compiler, model, native or acceptance gate ran.
