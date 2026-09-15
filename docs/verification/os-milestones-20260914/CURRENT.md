@@ -821,3 +821,13 @@ tables. The selected node packet is documented in
 after correcting and preserving two packet-wording findings, independent review
 returns `PASS_RAW_EXPANDED_NODE_PACKET_ONLY`. No new source edit or check has
 started.
+
+The expansion-node slice now receives independent
+`PASS_RAW_EXPANDED_NODE_SOURCE_ONLY` and
+`PASS_RAW_EXPANDED_NODE_EVIDENCE_ONLY`. Its exact 262,144-node positive and
+262,145th-node rejection bring the inventory to 133 while preserving the first
+132 lexical records. Python 3.9.12 and 3.8.10 each pass all thirteen focused
+decoder tests. Ten hash-bound members are retained in
+`stability-native-collector-lifecycle-raw-expanded-node-source-checkpoint-20260915-1.tar.gz`.
+The full raw/oracle matrix remains open; compilation, models, native execution
+and all acceptance gates remain closed.
