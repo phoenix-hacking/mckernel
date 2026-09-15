@@ -1101,3 +1101,14 @@ second cleanup with 16/1/5 stage bounds. This releases a new source correction
 only. The current untracked implementation still has the earlier source-review
 blockers and is not accepted; compiler, build, root, native, application and
 production gates remain closed.
+
+A final retained-input correction now receives independent
+`PASS_INPUT_PACKET_ONLY` at SHA256
+`e6eacb0c70e1175a78076c695c38c5d8a7293d58f10176c112e0072df7dcee93`.
+Its preserved first review failure found that reviewed ELF bytes were not bound
+to the actually executed path. The correction requires four canonical pinned-fd
+stable input reads, exact byte/hash records and canonical `argv[0] == --elf`
+before fork; the oracle repeats every join. This closes only source authority.
+The in-progress untracked producer/owner/oracle correction is not independently
+accepted, and every compiler, build, root, native, application and production
+gate stays closed.
