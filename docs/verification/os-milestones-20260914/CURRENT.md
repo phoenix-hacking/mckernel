@@ -722,3 +722,14 @@ independent `PASS_RAW_DOCUMENT_VECTOR_PACKET_ONLY` and is retained in
 It would bring the raw inventory to 58 while preserving the accepted 28 and the
 false full-matrix gate. Pool accounting and key/domain packets remain separate;
 no new source edit or check has begun.
+
+The document/vector slice now receives independent
+`PASS_RAW_DOCUMENT_VECTOR_SOURCE_ONLY` and
+`PASS_RAW_DOCUMENT_VECTOR_EVIDENCE_ONLY`. Thirty exact negative documents bring
+the raw inventory to 58; exact `raw-base` positives and a lexical SHA-256 guard
+preserve the accepted first 28 record texts, including newline bytes. Python
+3.9.12 and 3.8.10 each pass all eight focused decoder tests. The original stale
+28-count test failure and three review corrections are retained in the 12-member
+`stability-native-collector-lifecycle-raw-document-vector-source-checkpoint-20260915-1.tar.gz`.
+The full matrix flag remains false; compilation, models, native execution and all
+acceptance counters remain untouched.
