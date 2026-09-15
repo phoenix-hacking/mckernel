@@ -1069,3 +1069,21 @@ observation, record-budget, BEFORE/AFTER, READY/RELEASE and descriptor-reuse
 corrections. Both rejected v1 source failures and their archives remain intact.
 No v2 source, build or root execution has started, and this grants no collector,
 application or production acceptance.
+
+Storage-fault-v2 source attempts 1 and 2 exposed and preserve two focused-test
+failures: the extra-packet negative was diagnosed first as receipt ordering, and
+the report-sync negative edited a non-sync observation. After narrow corrections,
+both pinned interpreters passed 6/6, but independent Astra/high review returns
+`FAIL_SOURCE`. It found an off-by-one live ACK, incompatible generic packet
+schemas, missing durable owner/output/filesystem evidence, incomplete adopted-
+child cleanup, incorrect deadline/packet-limit behavior, insufficient independent
+oracle joins and synthetic fixtures that concealed those faults. The complete
+review failure is archive SHA256
+`f09c32e1cd7a3ca693371fa3a1c898983ac0abafe393f0c387a6bf5e1fd9db01`.
+Correction WIP now binds ACKs to their emitted sequence, uses an absolute C ACK
+deadline across EINTR, accepts packet 32 while rejecting packet 33, and fixes the
+two semantic negatives; both interpreters again pass 6/6. Its source-only archive
+SHA256 is `4f1aaad972b137071a5722b4528415f68f34d12052eefdc8cf9890c15d98f689`.
+Strict per-kind schemas, durable owner artifacts, adopted-child cleanup,
+phase-relative owner deadlines and exact independent oracle fixtures remain open.
+Source review, build, root, native, application and production gates remain closed.

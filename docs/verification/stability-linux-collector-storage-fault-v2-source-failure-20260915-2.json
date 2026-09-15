@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 2,
+  "status": "FAIL_SOURCE_NEGATIVE_MATRIX",
+  "recorded_utc": "2026-09-15T18:02:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-2.tar.gz",
+    "sha256": "bd4106e2125d8956c5abeadbff879a947c1bba13f1fd527c8321b7453ab4a0c1",
+    "size": 26183,
+    "members": 13
+  },
+  "command": "/home/holden/anaconda3/bin/python3 -B -m unittest -v scripts.tests.test_collector_storage_fault_packet.StorageFaultV2SourceTests",
+  "command_status": 1,
+  "tests_run": 6,
+  "tests_passed": 5,
+  "failure": "selector-5 report-sync negative edits a non-sync observation and the oracle correctly accepts it",
+  "original_test_stream_retained": true,
+  "immediate_retry_released": true,
+  "correction_scope": "select the failed report-sync AFTER packet by semantic fields",
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
