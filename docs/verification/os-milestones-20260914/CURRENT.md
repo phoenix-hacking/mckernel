@@ -870,3 +870,11 @@ one-row literal is independently bound as 192 compact bytes. The corrected
 10-member archive and the byte-exact failed archive are retained. Raw inventory
 remains 133; the raw/oracle matrix, compilation, models, native execution and
 all acceptance gates remain incomplete and closed.
+
+The next one-case raw slice is frozen in
+`stability-native-collector-lifecycle-raw-expanded-depth-source-packet-20260915-1.md`.
+It isolates supplied-argument expansion depth: an exact depth-32 positive and
+depth-33 rejection, while preserving the first 133 lexical records. Independent
+review returns `PASS_RAW_EXPANDED_DEPTH_PACKET_ONLY`; if materialized, the raw
+inventory becomes 134. No source edit or new check has started, and every model,
+native, application and production gate remains closed.
