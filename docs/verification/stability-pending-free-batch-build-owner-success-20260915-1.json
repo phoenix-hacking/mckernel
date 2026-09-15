@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_focused_build_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-12-focused-build",
+  "attempt": 1,
+  "status": "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY",
+  "recorded_utc": "2026-09-15T07:29:00Z",
+  "source_checkpoint_commit": "20611dc38ee7adaf42d853cb86491c99e5fb6988",
+  "owner_result": {
+    "status": "PASS_PENDING_FREE_BATCH_BUILD_OWNER_INFRASTRUCTURE_ONLY",
+    "sha256": "b49d3ca6545df51030c35af18ac1fbb5afa14734060a5f3d1ba7437a63ce1e30"
+  },
+  "harness_manifest_sha256": "deefb5cc34bcad6f7b841bbd4203a4f52d4cf3543820fc7b1e36dd81e9ce1df5",
+  "watchdog_sha256": "8977895605f638468459c0b588b770a0f99783769c5d73c20d7048a4207759c5",
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-success-20260915-1.tar.gz",
+    "sha256": "7a07956710a2e059011261ed2054954be60176227c72de470ec5366f1a8adfd9",
+    "size": 5668142,
+    "members": 288
+  },
+  "accepted_scope": {
+    "computed_rust_rows": 30,
+    "computed_c_rows": 30,
+    "cases": 24,
+    "artifacts": 51,
+    "trait_negative_controls": 5,
+    "partial_release_mutant_raw_status": 101,
+    "compiler_identities_match": true,
+    "container_absence_verified": true,
+    "watchdog_disarmed_after_verified_absence": true
+  },
+  "independent_reviews": [
+    "PASS_FOCUSED_BUILD_EVIDENCE",
+    "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY"
+  ],
+  "known_matrix_gaps": [
+    "conflicting or nested begin and its panic bridge are not executed",
+    "malformed active-source empty and boundary links are not exercised",
+    "bounded incomplete-inventory behavior has no implementation or evidence"
+  ],
+  "candidate_disposition": "may be checkpointed as a private unused prerequisite only",
+  "source_integration_released": false,
+  "guest_execution": false,
+  "invalidation_acceptance": false,
+  "concurrency_acceptance": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -241,3 +241,13 @@ negatives, the partial-release mutant, compiler bytes and the inherited isolated
 watchdog/cleanup owner. This releases only a fresh dispatcher-owned focused
 container build after a fetched-source checkpoint; no fixture execution or M03
 credit exists yet.
+
+The dispatcher-owned M03 candidate-12 focused build attempt 1 now passes its
+exact 30-row Rust/C equivalence packet, five negative trait probes, partial-release
+mutant and isolated Rocky Rust 1.92 ownership checks. Both independent reviews
+accept only `PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY`. The fixture omits
+conflicting/nested begin and its panic bridge, malformed active-source empty and
+boundary links, and bounded incomplete-inventory behavior. The dirty candidate
+may therefore be retained only as a private unused prerequisite; production
+integration, guest execution, invalidation/concurrency/application acceptance and
+all M03 production credit remain closed.

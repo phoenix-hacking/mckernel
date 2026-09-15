@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_root_execution_release_activation",
+  "task_id": "M02-B-adverse-v1-root",
+  "status": "PASS_ROOT_EXECUTION_PACKET",
+  "activated_utc": "2026-09-15T07:28:00Z",
+  "reviewed_release": {"path": "docs/verification/stability-linux-collector-adverse-root-release-20260915-1.json", "sha256": "5caa20c21d7e441ed94c756cb2e3566ef7b7f5924f8c3e71b0a9e3b8dbbe8b12"},
+  "reviewer": "Astra/high root execution reviewer",
+  "source_commit": "2e3fe26cf138c4d2170912b82fb8b6419e573c6b",
+  "build_record_sha256": "e3e399e902efed7c868cb8f63a6570d4b7a689fde852161be9fb7b248cb0bd12",
+  "expected": {
+    "outer_raw_wait_status": 0,
+    "top_level": "PASS_ADVERSE_RUN_OWNER_INFRASTRUCTURE_ONLY",
+    "inner": "PASS_ADVERSE_RUN_INFRASTRUCTURE_ONLY",
+    "cases": "4/4 PASS_INSTRUMENTED_LINUX_ONLY",
+    "collector_raw_wait_statuses": [0, 256, 256, 256],
+    "each_fixture_child_raw_wait_status": 0,
+    "watchdog": "DISARMED_AFTER_VERIFIED_ABSENCE"
+  },
+  "stop_on_first_unexpected_result": true,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
