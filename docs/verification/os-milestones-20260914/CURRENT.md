@@ -628,3 +628,23 @@ empty `raw_invalid` object. Required mutation families and the exit-2/empty-stre
 zero-model-invocation contract are retained in
 `stability-native-collector-lifecycle-raw-invalid-contract-gap-review-20260915-1.md`.
 No raw-invalid source or execution is accepted.
+
+The distinct attempt-counter saturation vector now receives independent
+`PASS_ATTEMPT_OVERFLOW_LITERAL_SLICE_ONLY`. `ATTEMPTS_MAX` with capacity 256 and
+one capture-end operation retains no event and saturates both attempts/lost with
+overflow, end and incompleteness; the separate zero-capacity `LOST_MAX` vector is
+unchanged. Cumulative five-file bytes are archived as
+`stability-native-collector-lifecycle-attempt-overflow-literal-slice-20260915-1`.
+This brings the materialized ordinary-vector count to 35 without completing the
+corpus or releasing source execution.
+
+The additive lifecycle corpus contract now receives scoped independent capacity
+and raw-invalid review PASS. Three bounded review corrections require exact
+thread-to-parent key projection, a single bounded read whose verified bytes are
+the decoded bytes, and fixture-directory containment without symlink traversal.
+The accepted text freezes application admission, globally retained occupancy,
+capacity precedence, 129-operation document rejection, raw-case representation,
+separate coverage and pool arity in
+`stability-native-collector-lifecycle-corpus-contract-addendum-20260915-1.md`.
+Capacity/raw literals are not yet materialized; whole-corpus/model/source and all
+runtime or acceptance gates remain closed.

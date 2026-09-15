@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_attempt_overflow_literal_review",
+  "task_id": "M02-C-lifecycle-attempt-overflow-literal-review",
+  "attempt": 1,
+  "status": "PASS_ATTEMPT_OVERFLOW_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T11:28:00Z",
+  "reviewed_base_commit": "ca3c040da67468425c72f3748f78c3d062ce83a9",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-attempt-overflow-literal-slice-20260915-1.tar.gz",
+    "sha256": "7eecf5220ba4a9babc1404c048a114b0f00ecfe306996a80c48ef4411022c0d6",
+    "size": 11896,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "67e7d5163bb640bfb5b590af281b068130a33cee4c6906bc9fca272bcff973c6",
+    "expected.json": "2f6d63be75d5243eb95aefad8d8464477d86cec8ba8c2420fe0a633548fb4368",
+    "test_native_lifecycle_model.py": "1cb8158dae4f6a39a9c52188f1c1ff9bf23e44c2f00b79648f1da8d6392be271"
+  },
+  "accepted_scope": {
+    "vector": "attempt-counter-overflow",
+    "materialized_vectors_total": 35,
+    "seed": "ATTEMPTS_MAX",
+    "event_capacity": 256,
+    "retained_events": 0,
+    "control": [18446744073709551615, 0, 18446744073709551615, true, true, true, 0],
+    "lost_max_case_retained_separately": true
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

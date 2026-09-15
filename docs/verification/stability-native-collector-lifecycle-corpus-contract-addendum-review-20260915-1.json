@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_corpus_contract_addendum_review",
+  "task_id": "M02-C-lifecycle-corpus-contract-addendum-review",
+  "attempt": 1,
+  "status": "PASS_SCOPED_CONTRACT_ADDENDUM_ONLY",
+  "recorded_utc": "2026-09-15T11:28:00Z",
+  "reviewed_base_commit": "ca3c040da67468425c72f3748f78c3d062ce83a9",
+  "document": {
+    "path": "docs/verification/stability-native-collector-lifecycle-corpus-contract-addendum-20260915-1.md",
+    "sha256": "ff85c36a76b5cdfdcf5bb2764adee5cc8acbcc855de1bef8a6e43038a4ede8bc"
+  },
+  "reviews": {
+    "capacity_and_counter": "PASS_CAPACITY_CONTRACT_ADDENDUM_ONLY",
+    "raw_invalid_and_pool": "PASS_RAW_INVALID_CONTRACT_ADDENDUM_ONLY"
+  },
+  "bounded_corrections": [
+    "thread keys must project exactly to their complete parent process key",
+    "external artifacts use one bounded open/read and decode the same retained bytes",
+    "external artifacts are confined to the lifecycle fixture directory without symlink traversal"
+  ],
+  "source_materialized": false,
+  "corpus_complete": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
