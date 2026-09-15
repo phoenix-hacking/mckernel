@@ -790,3 +790,13 @@ focused decoder tests. Ten hash-bound members are retained in
 `stability-native-collector-lifecycle-raw-envelope-source-checkpoint-20260915-1.tar.gz`.
 The operation/argument slice and full raw/oracle matrix remain open; compilation,
 models, native execution and acceptance remain closed.
+
+The separate operation/argument slice is now frozen as a source-only packet in
+`stability-native-collector-lifecycle-raw-operation-argument-source-packet-20260915-1.md`.
+Its 19 independent mutations cover eight operation/terminal numeric boundaries
+and eleven opcode-specific unused argument positions, for 132 cumulative raw cases
+if materialized. The exact first-113 lexical prefix and decoder-positive boundary
+controls are bound, and independent review returns
+`PASS_RAW_OPERATION_ARGUMENT_PACKET_ONLY`. No source edit or new check has started;
+the full raw/oracle matrix, compilation, models, native execution and acceptance
+remain closed.
