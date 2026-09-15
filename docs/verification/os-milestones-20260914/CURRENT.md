@@ -168,3 +168,11 @@ hook-count assertion and a positive missing/partial oracle fixture that rejected
 itself. The exact source is preserved as
 `stability-linux-collector-adverse-source-failure-20260915-2` and is under fresh
 independent review. It remains uncompiled and unexecuted outside Python tests.
+
+M02-B adverse-v1 attempt 3 failed its focused test, then changed the candidate
+without retaining the exact failing source or raw output. The post-failure tree is
+preserved separately as `stability-linux-collector-adverse-source-postfailure-20260915-3`
+and is explicitly untested; independent review is required before any new run.
+M03-A/B candidate 8 stopped before compilation when its `IhkAtomic` extraction
+anchor also matched `IhkAtomic64`. Its exact sources and `failure.json` are
+preserved; no retry, focused equivalence or acceptance follows.

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_runtime_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 8,
+  "status": "FAIL_FIRST_FOCUSED_EXECUTION",
+  "base_commit": "f66d153922fde51ddc5576fefc5c8dec1a9231c6",
+  "checks": [
+    {"command": "bash -n kernel/rust/tests/run_equivalence.sh", "status": "PASS"},
+    {"command": "python3 -B kernel/rust/tests/pending_free_batch_actual_harness.py --output-dir /home/holden/mckernel-work/scratch/pending-free-candidate8-20260915T000000Z", "status": "FAIL", "compiled": false, "first_failure": "IhkAtomic extraction start boundary is non-unique because the selected prefix also matches IhkAtomic64"}
+  ],
+  "candidate_files": [
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "f37cbd591e5b0a50c0739c1a17835839b19f798d28e48de24e0db432adf738f5"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "2a515d4c7ac159e4ff223316d4a6a8e5a6d09f8b8586681aa09f21b6b6f7b52d"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "22488d7c2db34a13b6926854e13533a19dc561cb3df0eb7834c575d5920dc99d"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "3c9647c39ebce5956779561b97157975307b6db8ab29836d86d5bd7fe2dff075"}
+  ],
+  "retained_failure": {
+    "path": "pending-free-candidate8-20260915T000000Z/failure.json",
+    "sha256": "ddc41aa0f14c6f23bb51c3a3af6b5820648d61477aeeb53fd93e72c2b7461908"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-runtime-failure-20260915-8.tar.gz",
+    "size": 725610,
+    "sha256": "8e221097098a6b063d12dbc92bac75c09642797c5b417f4bb9d7737987f9ecf8",
+    "members": 7
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL_UNREADY_FOR_FOCUSED_EQUIVALENCE",
+    "findings": [
+      "The IhkAtomic begin marker also matches IhkAtomic64; adding the opening brace makes the boundary unique while retaining both definitions.",
+      "The Rust fixture moves a mutable slice before later indexing it and stabilized feature declarations may fail under -D warnings.",
+      "Rust and C emit incompatible measured schemas and Rust classifies retained rings inconsistently with its expected rows.",
+      "Recovery, true two-head isolation, actual begin/enqueue/finish source reuse and complete metadata preservation remain missing.",
+      "Several malformed-state rows are printed rather than derived from constructed state; the C model still hardcodes rejection rows.",
+      "Trait probes accept any compiler failure and are confounded by an unused-import warning.",
+      "Callback borrow or capacity failures are silently discarded rather than observed and rejected."
+    ],
+    "structural_improvements_only": [
+      "Production definitions and list helpers are now extracted and the Rust fixture is appended verbatim.",
+      "The mutant now releases a valid prefix before encountering the invalid node.",
+      "No-argument output creation and success-path command/hash recording were expanded."
+    ]
+  },
+  "rerun_performed": false,
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

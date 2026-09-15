@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_source_postfailure",
+  "task_id": "M02-B-adverse-v1-source",
+  "attempt": 3,
+  "status": "FAIL_EVIDENCE_RETENTION",
+  "base_commit": "f66d153922fde51ddc5576fefc5c8dec1a9231c6",
+  "executed_command": "python3 -I -B scripts/tests/test_collector_adverse_packet.py",
+  "reported_first_failure": "The test fixture still listed stdin.verified.bin for DEVNULL.",
+  "retention_failure": "The worker corrected source after the unexpected failure without preserving the exact failing tree or raw unittest output. The retained archive is the post-failure, unexecuted candidate only.",
+  "postfailure_candidate_sha256": {
+    "build_owner.py": "8647d65e9c411b6b8de5ad8a876ea1da2021fb9347ec9fcbf95381e31009c20f",
+    "collector.patch": "262e75200c9d34600a977425f3a4549e187411d091d1f0d6300866bc6a5fcdb0",
+    "inject.h": "c00f73b43c41a2d0f1abc224e881d3e85c980e3188352ae5169505950d2fd130",
+    "oracle.py": "08d73601d049d78a820f4c4868e8427b35cdc525b2caab960c6e81a84909f0ca",
+    "packet.json": "34cd2af6f4e20d85dbd3b873a64b0297e2fb4a000938d5d5177e5a732f71b5b5",
+    "prepare.py": "c5171176b664eefcd6adbc12030abae18ff9d7012adc694684a5272aadd0073c",
+    "root_inside.py": "a43992725670c151b010b2b07052fa704a4b642fed268566dece1e149cab5644",
+    "root_orchestrator.py": "f5b51b8079848461b26c594a4917e09851acc85e869c35067c0a16b9e8e6fec4",
+    "root_profile.py": "3c8e6575dfd9f3e1951907e1edbada793203d1d8135b1e8665036e004252cc73",
+    "run.py": "0f8e9a12416e5e25f5ca43bc957a5b930454b5ea612215d5000a98df78897cef",
+    "tests.md": "654fd004b7930ead5b412c0faaafe8249a74609cfcb26a62b70dd186e97457fa",
+    "scripts/tests/test_collector_adverse_packet.py": "934d7a103ce30624431178ce5e7bcff3c7676841a9f8ccd3ad401de67b83b65f"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-source-postfailure-20260915-3.tar.gz",
+    "size": 11712,
+    "sha256": "cfb4d0e43578286dfa520d69917331e1ca09f99e6b5ae89a73216872bc588b35",
+    "members": 16,
+    "note": "Includes generated Python bytecode present in the post-failure candidate directory."
+  },
+  "independent_review": {
+    "role": "Astra/high collector ownership reviewer",
+    "status": "FAIL_SOURCE_PACKET",
+    "findings": [
+      "A real DEVNULL report's null stdin artifact still raises in the oracle; tests omit that layout.",
+      "The oracle does not open and hash retained files or prove setup prefix, witnesses, stdout, request/process identity, outer wait or event/deadline ordering; several fields are invented rather than produced.",
+      "Completed-wait incorrectly requires no post-exec observation even though observe_exec runs before check_leader.",
+      "Only collector source is pre-pinned; packet, patch and header identities and exact bytes remain untrusted before use.",
+      "Build, run and root programs remain metadata emitters without compiler, dependency, ELF, watchdog, container, cleanup or lock execution.",
+      "The unit suite still omits the required negative matrix and selector-0 proof."
+    ],
+    "next_execution_condition": "A new unit attempt is permissible only under a fresh identity after exact sources are snapshotted and its complete command/stdout/stderr/exit evidence is retained before any edit."
+  },
+  "postfailure_candidate_tested": false,
+  "collector_compiled": false,
+  "docker_or_root_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}
