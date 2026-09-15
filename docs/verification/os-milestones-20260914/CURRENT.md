@@ -733,3 +733,12 @@ preserve the accepted first 28 record texts, including newline bytes. Python
 `stability-native-collector-lifecycle-raw-document-vector-source-checkpoint-20260915-1.tar.gz`.
 The full matrix flag remains false; compilation, models, native execution and all
 acceptance counters remain untouched.
+
+After subtracting the accepted 58 cases, independent review rebases the next
+key/domain slice to remove duplicate operation-ID mechanisms. After correcting an
+operation-reference wording ambiguity, the resulting 30 exact negatives receive
+independent `PASS_RAW_KEY_DOMAIN_PACKET_ONLY` and are retained in
+`stability-native-collector-lifecycle-raw-key-domain-source-packet-20260915-1.md`.
+The separate gap inventory keeps full per-component key, pool/budget, remaining
+envelope, positive, semantic and oracle obligations open. No source edit or check
+has begun.
