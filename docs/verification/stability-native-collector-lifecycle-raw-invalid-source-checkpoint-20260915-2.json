@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_invalid_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-invalid-source",
+  "attempt": 2,
+  "status": "PASS_RAW_INVALID_SOURCE_MECHANISM_CHECKS_ONLY",
+  "recorded_utc": "2026-09-15T12:58:00Z",
+  "base_commit": "3d90f517daa1ed92d366732a89a4b4cd5d3c8555",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-invalid-source-checkpoint-20260915-2.tar.gz",
+    "sha256": "16acca78f650dd51d8cc38318b76cfd2251b2a07de3730b4632fb56a869acd97",
+    "size": 19646,
+    "members": 9
+  },
+  "source_sha256": {
+    "harness.py": "c8f7ea875195ba0e825e6d143732b93810d340ffef2c1946dc0d6f7a772b8aa2",
+    "vectors.json": "ef3beb02fc6a113e6b116fb1d95ffa689c904ea18540ad62dc5f320ac4f672d3",
+    "expected.json": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "raw-invalid/oversized-document.json": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "test_native_lifecycle_model.py": "004f7903932bc54c1c3dd348202ad242d44f2ed9a49f75c27fe77a0c10733c6e"
+  },
+  "artifact_size": 1048577,
+  "checks": {
+    "python_3_9_12": {
+      "tests_passed": 8,
+      "tests_failed": 0,
+      "log_sha256": "7af18b365b956b29f7901855a874c2955d3f545b2dd03febb7f7876acf2dd965"
+    },
+    "python_3_8_10": {
+      "tests_passed": 8,
+      "tests_failed": 0,
+      "log_sha256": "12a5e6dcc8822d8551bbbbb6109bb04cf0bb8eb7267e172e6716c11850bfcdc0"
+    },
+    "original_broad_failure_log_sha256": "1c5b46b9a6a3edd94add5a2eb3453bd2b2db0abfb5a4b93839fba51ea0a07e82",
+    "original_broad_failure": "known rejected attempt-1 model lacks ProcessRow; all raw tests passed"
+  },
+  "raw_mechanism_cases": 9,
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "models_replaced": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

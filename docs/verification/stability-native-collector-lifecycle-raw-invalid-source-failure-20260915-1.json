@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_invalid_source_failure",
+  "task_id": "M02-C-lifecycle-raw-invalid-source",
+  "attempt": 1,
+  "status": "FAIL_RAW_INVALID_SOURCE_MECHANISM_REVIEW_ONLY",
+  "recorded_utc": "2026-09-15T12:18:00Z",
+  "base_commit": "3d90f517daa1ed92d366732a89a4b4cd5d3c8555",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-invalid-source-failure-20260915-1.tar.gz",
+    "sha256": "1f47d76ddc5701e12e1f90c9b19602ce5e4b442ada0bf018e43169a87548e583",
+    "size": 13691,
+    "members": 4
+  },
+  "source_sha256": {
+    "harness.py": "6d9396b98819952e38c4641517c0a791ff2547d40f00252730a6f3a67e55a666",
+    "vectors.json": "ef3beb02fc6a113e6b116fb1d95ffa689c904ea18540ad62dc5f320ac4f672d3",
+    "raw-invalid/oversized-document.json": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "test_native_lifecycle_model.py": "0599566056e4bcfa43c5248934d6279bd1ce57a954cc9608944f97b29b982e4b"
+  },
+  "findings": [
+    "build mode bypasses raw payload verification and complete preflight",
+    "thread-parent full identity was incorrectly treated as harness schema",
+    "artifact and oversized inline permissions are broader than the reviewed case",
+    "assertion and value errors cannot distinguish validation rejection from internal failure",
+    "pool arity is unbounded and unused invalid pools escape validation",
+    "cleanup ownership and required negative/tripwire tests are incomplete"
+  ],
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -668,3 +668,24 @@ raw coverage in
 The current harness still lacks this behavior and the oversized artifact has no
 final bound hash, so this is a source-ready packet only; no check, build or runtime
 credit follows.
+
+Raw-invalid mechanism source attempt 1 is preserved as rejected before execution.
+Its build path could bypass payload checks, parent identity crossed the schema/model
+boundary, artifact permissions and error typing were unsafe, pool validation was
+unbounded/incomplete and cleanup/tripwire tests were insufficient. Exact four-file
+bytes are archived as
+`stability-native-collector-lifecycle-raw-invalid-source-failure-20260915-1`.
+
+Bounded attempt 2 receives independent
+`PASS_RAW_INVALID_SOURCE_MECHANISM_REVIEW_ONLY`, `PASS_POOL_ARITY_SOURCE_ONLY` and
+`PASS_BOUND_RAW_INVALID_EVIDENCE_ONLY`. It adds a dedicated typed decoder, validates
+all pools with bounded insertion-independent dependency depth, confines and reads
+the oversized artifact once, checks all nine raw cases before any build action and
+owns child timeout/output retirement. Self-bound Python 3.9.12 and 3.8.10 logs each
+pass the six raw tests and two applicable source-envelope tests (8/8). The original
+broad nine-test run is retained: its sole failure is the deliberately unreplaced,
+previously rejected attempt-1 Rust model lacking `ProcessRow`; every raw test passed.
+The nine-member checkpoint archive is
+`stability-native-collector-lifecycle-raw-invalid-source-checkpoint-20260915-2`.
+The full malformed/width/authority matrix, replacement models, whole-corpus review,
+compilation and every runtime/acceptance gate remain closed.
