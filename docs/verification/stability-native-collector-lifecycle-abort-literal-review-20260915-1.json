@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_abort_literal_review",
+  "task_id": "M02-C-lifecycle-abort-literal-review",
+  "attempt": 1,
+  "status": "PASS_ABORT_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T10:16:00Z",
+  "reviewed_base_commit": "49e23fca6a0d7a47ec150c3f932d9b2629af3ad9",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-abort-literal-slice-20260915-1.tar.gz",
+    "sha256": "6ac009947b2ec2182cc0dd1cdae455fc35dfbf13b856b33db797ed06474db3a5",
+    "size": 7847,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "9206a6b09f60abd24b4fad00ccfe4902e561b9649626169d0b79a9b4930827cb",
+    "expected.json": "f5e6ae1e52663256869bc812675df1d23e0099a5bb5a771de7e733f5408f81bc",
+    "test_native_lifecycle_model.py": "448ba5ee06bfa2744d38f775edd6d7d70318d67a2e9d48649836bce53483cb2d"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "preparation-abort",
+      "assigned-tid-abort",
+      "late-clone-abort"
+    ],
+    "coverage_alias": "unscheduled-destroy",
+    "literal_steps": 34,
+    "authority_consumption": "MATCH_INDEPENDENT_DRAFT",
+    "abort_provenance_and_snapshots": "MATCH_INDEPENDENT_DRAFT",
+    "events_and_controls": "MATCH_INDEPENDENT_DRAFT",
+    "fabricated_birth_or_terminal_events": 0
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

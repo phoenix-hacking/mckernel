@@ -544,3 +544,13 @@ creation or compilation. Exact five-file bytes are retained in
 `stability-native-collector-lifecycle-baseline-literal-slice-20260915-1`. The other
 required vectors and both replacement models are still missing; whole-corpus and
 source acceptance remain closed.
+
+The next attempt-2 slice receives independent `PASS_ABORT_LITERAL_SLICE_ONLY`.
+Preparation abort (unassigned TID/stage 1), assigned-TID abort (TID 200/stage 2)
+and late-clone abort (TID 200/stage 3) contribute 34 exact steps. Each preserves
+unpublished authority until it is consumed with the sole reference at retirement
+begin, retains identity/stage snapshots, retires the thread before releasing VM and
+main storage, and emits no fabricated birth or terminal event. The exact cumulative
+five-file slice is archived as
+`stability-native-collector-lifecycle-abort-literal-slice-20260915-1`. Corpus
+completion, replacement models, source checks and build remain closed.
