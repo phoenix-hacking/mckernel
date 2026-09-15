@@ -988,3 +988,11 @@ handwritten compact literals, exact mutation bytes, validator ordering, pinned
 interpreters and command-prefixed logs. This remains post-capture mocked-output
 validation. Raw inventory stays 136, and all compilation, model, native,
 application and production gates remain closed.
+
+The next reviewed raw-decoder packet isolates the capture component of a full
+key at the `u64` upper-bound adjacency. It is frozen in
+`stability-native-collector-lifecycle-raw-key-capture-u64-source-packet-20260915-1.md`;
+review returns `PASS_RAW_KEY_CAPTURE_U64_PACKET_ONLY`. If materialized, its one
+position-specific record raises raw inventory from 136 to 137 while preserving
+the first 136 lexical records. No source edit or execution has started, and all
+compiler, model, native, application and production gates remain closed.
