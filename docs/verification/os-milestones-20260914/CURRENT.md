@@ -714,3 +714,11 @@ members are bound by
 `stability-native-collector-lifecycle-raw-authority-width-source-checkpoint-20260915-1.tar.gz`.
 `RAW_FULL_MATRIX_FROZEN` remains false; no compiler, model, native, application or
 production gate has run or receives credit.
+
+Three independent raw-matrix design lanes returned bounded document/vector, pool
+and key/domain slices. The dependency-closed 30-case document/vector slice receives
+independent `PASS_RAW_DOCUMENT_VECTOR_PACKET_ONLY` and is retained in
+`stability-native-collector-lifecycle-raw-document-vector-source-packet-20260915-1.md`.
+It would bring the raw inventory to 58 while preserving the accepted 28 and the
+false full-matrix gate. Pool accounting and key/domain packets remain separate;
+no new source edit or check has begun.
