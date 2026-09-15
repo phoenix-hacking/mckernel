@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "record_kind": "os_milestone_m00_preservation_checkpoint",
+  "status": "PASS_PRESERVATION_ONLY",
+  "task_id": "M00-A",
+  "observed_utc": "2026-09-15T03:20:54Z",
+  "base_commit": "701bea7ff965ccf6f899904c906336593793ba00",
+  "preservation_commit": "6c0f9f81339ed3ad90a8d207cdd995184fcc625f",
+  "branch": "codex/local-native-staging-repair",
+  "remote_ref_commit": "6c0f9f81339ed3ad90a8d207cdd995184fcc625f",
+  "source_index": {
+    "path": "docs/verification/os-milestones-20260914/source-index.json",
+    "sha256": "fd0cc0c0fad05ca84d021faffed42ff6492de7f313dfe81e8229fd99bf7f7df5"
+  },
+  "preserved_file_count": 15,
+  "fetched_remote_identity_check": {
+    "status": "PASS",
+    "files_checked": 15,
+    "method": "git fetch plus git show of every indexed path with independent size/SHA256 comparison"
+  },
+  "checks": [
+    {
+      "command": "python3 -B docs/verification/os-milestones-20260914/dispatch.py check",
+      "status": "PASS_PLANNING_INDEX",
+      "scope": "14 milestones, 68 tasks, 130 production gates, seven language gates, 273 logical cases and 97 packets; no execution authority"
+    },
+    {
+      "command": "python3 -B scripts/final_push_tracker.py --check",
+      "status": "PASS",
+      "scope": "350/10000 points and 6/130 production gates PASS"
+    },
+    {
+      "command": "python3 -B -m unittest -v scripts/tests/test_stability_published_response_guard.py",
+      "status": "PASS",
+      "cases": 16,
+      "scope": "source-only overlap guard with stub backend; no guest, native ownership or runtime acceptance"
+    },
+    {
+      "command": "independent source-index size/SHA256 and review-archive member audit",
+      "status": "PASS",
+      "scope": "15 indexed files; 389 and 768 unique safe archive members; JSON archive identities matched"
+    },
+    {
+      "command": "git diff --cached --check",
+      "status": "EXPECTED_PRESERVED_FORMAT_FINDING",
+      "scope": "supervisor-host38.patch lines 18 and 19 contain trailing whitespace already bound by source-index; bytes intentionally preserved"
+    }
+  ],
+  "review_scopes": {
+    "linux_collector": "Build, SHA9 and one builder non-root rejection only; no root-positive profile, application, native backend or guest acceptance.",
+    "published_preparation": "Preparation bindings and physical18 only; guest release remains blocked by SELECT cancellation and no-wake ownership paths."
+  },
+  "capacity": {
+    "host_available": "39 GiB",
+    "scratch_available": "23 GiB",
+    "heavy_build_or_guest_lease": "FREE"
+  },
+  "counters_unchanged": {
+    "application_cases_accepted": 0,
+    "application_cases_total": 273,
+    "fault_modes_accepted": 2,
+    "fault_modes_total": 4,
+    "production_gates_pass": 6,
+    "production_gates_total": 130,
+    "production_points": 350,
+    "production_points_total": 10000,
+    "language_gates_complete": 0,
+    "language_gates_total": 7
+  },
+  "runtime_acceptance": false,
+  "whole_os_acceptance": false
+}
