@@ -761,3 +761,14 @@ confirmed and receives independent `PASS_RAW_POOL_PACKET_ONLY` in
 `stability-native-collector-lifecycle-raw-pool-source-packet-20260915-1.md`.
 Two controls are already covered and six are new; node/output budgets and broader
 pool/key/raw closure remain deferred. No pool source edit or check has started.
+
+The pool source slice now receives independent `PASS_RAW_POOL_SOURCE_ONLY` and
+`PASS_RAW_POOL_EVIDENCE_ONLY`. Twenty-two exact negatives bring the raw inventory
+to 110; dependency chains in both orders, unused syntax depth and the paired
+175,020/175,021-byte expansion traversal boundary are checked without claiming
+node or serialized-output coverage. Python 3.9.12 and 3.8.10 each pass all ten
+focused decoder tests. The exact source, streams and arithmetic audit are retained
+in the 11-member
+`stability-native-collector-lifecycle-raw-pool-source-checkpoint-20260915-1.tar.gz`.
+The full raw matrix, replacement models, compilation, native execution and all
+acceptance gates remain closed.
