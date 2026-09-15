@@ -812,3 +812,12 @@ packet, reviews, commands and streams are retained in the 10-member
 `stability-native-collector-lifecycle-raw-operation-argument-source-checkpoint-20260915-1.tar.gz`.
 The full raw/oracle matrix remains open; compilation, models, native execution and
 all acceptance gates remain closed.
+
+Post-132 review selects an independent one-case expansion-node boundary as the
+next raw source packet. A separate five-case artifact I/O cleanup packet is ready
+after it, while paired model transitions remain blocked on six explicit decision
+tables. The selected node packet is documented in
+`stability-native-collector-lifecycle-raw-expanded-node-source-packet-20260915-1.md`;
+after correcting and preserving two packet-wording findings, independent review
+returns `PASS_RAW_EXPANDED_NODE_PACKET_ONLY`. No new source edit or check has
+started.
