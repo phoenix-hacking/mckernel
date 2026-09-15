@@ -970,3 +970,11 @@ archive retains both command-prefixed logs and all source, interpreter and
 literal hashes. This is post-capture mocked-output evidence only. Raw inventory
 stays 136, and compilation, models, native execution and every acceptance gate
 remain closed.
+
+The next independently reviewed output-schema packet covers the three Boolean
+fields in the control array. It is frozen in
+`stability-native-collector-lifecycle-output-control-boolean-source-packet-20260915-1.md`;
+review returns `PASS_OUTPUT_CONTROL_BOOLEAN_PACKET_ONLY` for three exact
+integer-for-Boolean rejections and two schema-only positive scenarios. Raw
+inventory remains 136. No source edit or execution has started, and every
+compiler, model, native, application and production gate remains closed.
