@@ -67,8 +67,9 @@ outer container wrapper can release its flock without verified Docker absence.
 A first dedicated build-owner candidate was independently rejected because its
 bounded cleanup could release the inherited flock with a live container, its
 watchdog/config/isolation evidence was incomplete, and its root-owned `/work`
-mount was unusable by UID 1000. Two follow-up candidates remained unsafe or
-structurally incompatible with the reviewed watchdog ABI. All three exact
+mount was unusable by UID 1000. Three follow-up candidates remained unsafe,
+structurally incompatible with the reviewed watchdog ABI, or deterministically
+unable to validate their own Docker configuration/build record. All four exact
 states and findings are retained. A
 corrected durable owner with persistent recovery, watchdog identity and exact
 name/label/ID cleanup is the next prerequisite; only then may the dispatcher
