@@ -932,3 +932,13 @@ independent review returns `PASS_RAW_PREFLIGHT_AGGREGATE_NODE_PACKET_ONLY`. If
 materialized, it raises raw inventory to 136 while leaving about 35 KiB fixture
 headroom. No source edit or new check has started, and all execution and
 acceptance gates remain closed.
+
+The aggregate unused-pool preflight-node slice now receives independent
+`PASS_RAW_PREFLIGHT_AGGREGATE_NODE_SOURCE_ONLY` and
+`PASS_RAW_PREFLIGHT_AGGREGATE_NODE_EVIDENCE_ONLY`. Its adjacent-zero boundary
+adds one rejection for 136 raw cases while preserving the first 135 lexical
+records. After preserving the missing exact-size assertion, Python 3.9.12 and
+3.8.10 each pass all sixteen focused decoder tests. The exact 1,013,510-byte
+fixture remains below its unchanged 1-MiB cap and is retained with all hashes in
+the 10-member archive. The raw/oracle matrix and every execution and acceptance
+gate remain incomplete and closed.
