@@ -1178,3 +1178,48 @@ Timestamp correction: packet-review records `20260915-11` through `-14` contain
 mistaken future 16:27-16:51 UTC sequence labels. Host UTC was re-observed as
 16:23:59 at this checkpoint. Their immutable message/hash order remains the
 authority; those four `recorded_utc` values do not represent host wall time.
+
+The final work-window checkpoint preserves source failure attempt 8 at archive
+SHA256 `b623017859e7242f2d8640e0158e10800b00e7a7a394a6d3ded91c27c47a4c0b`.
+After repairing the synthetic positive chronology, its older negative mutation
+fell outside the cleanup interval and produced `owner cleanup event time` rather
+than the intended order rejection. The exact Python 3.9.12 failure stream and
+all source bytes remain immutable in the archive; the untracked failing test is
+intentionally retained without a window-end correction or rerun.
+
+Packet 12 receives independent `FAIL_DIRECT_OWNER_EVENT_PACKET_ONLY` at SHA256
+`d7adc51450fd91420e9944cbbb8bc488758e275174452609accccf8deb735f70`.
+Its replacement packet 13 receives independent
+`PASS_DIRECT_OWNER_EVENT_PACKET_ONLY` at SHA256
+`db607e3b89d7cdf0fbca6e69fe8ea29daa07b9c9cd7b55daae2ba4b0b91eee0a`.
+That pass freezes only the exclusive-wait/no-auto-reap rule, monotonic direct
+owner authority, later-observed matching births and nullable adopted historical
+waits. It is not source or runtime acceptance.
+
+Fresh full review of owner SHA256
+`56c934dfdc7909c3568682bab58c8b42664e07110a3e353c81967145bdc87c30`,
+oracle SHA256 `7e4f7308265c5bd535dfc703f6069023ef818b21c40b818a59a029717c960d41`
+and test SHA256 `39802553c9433c3dff2b183c02507a25f1ba3aa8ccbbb83e01a78bd759b28643`
+remains `FAIL_SOURCE`. P0 blockers are false zero exit, loss of first-exception
+precedence and cleanup bypass immediately after fork. P1 blockers cover cleanup
+stickiness/schema, receipt-bound deadlines, fresh-root/setup unwind, terminal
+serialization/publication and incomplete pre-ACK semantic gates. The coverage
+audit additionally requires exact error partition/publication tests, deadline
+joins, durable runtime layout, cleanup tagged unions and supervisor status,
+identity and wait controls.
+
+Next window, in order: correct only the retained chronology negative timestamp
+inside the cleanup interval and rerun Python 3.9.12 plus 3.8.10; implement the
+first-exception ledger, unconditional post-fork cleanup and exit-125 contract;
+complete deadline, cleanup and durable-publication validators/tests; then
+implement and test the packet-bound supervisor with status-before-evidence-read.
+Request a fresh full independent source review only after those controls pass.
+Do not compile, use root, launch a guest or claim an application/production gate.
+
+At the final observation, the active campaign identities are launcher 1492539,
+launcher worker 1492541 and Codex app-server 1492543, started 2026-09-15
+11:38:17-18 PDT. The previously recorded 776516/776518/776520 identities are no
+longer present. No build, compiler, guest, QEMU, mcexec or IHK process is live.
+All three child reviewers are joined/completed, and future launcher continuations
+are user-paused. The OS goal remains incomplete and is not resumed or marked
+complete by this checkpoint.

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "attempt": 6,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T18:43:00Z",
+  "reviewed_sha256": {
+    "oracle.py": "7e4f7308265c5bd535dfc703f6069023ef818b21c40b818a59a029717c960d41",
+    "witness_owner.py": "56c934dfdc7909c3568682bab58c8b42664e07110a3e353c81967145bdc87c30",
+    "test_collector_storage_fault_packet.py": "39802553c9433c3dff2b183c02507a25f1ba3aa8ccbbb83e01a78bd759b28643"
+  },
+  "implementation_blockers": [
+    "false-successful-owner-exit-and-non-125-infrastructure-failures",
+    "first-exception-precedence-and-secondary-chain-absent",
+    "cleanup-bypass-after-fork",
+    "cleanup-stickiness-and-tagged-union-schema-violations",
+    "receipt-deadline-and-loop-bound-defects",
+    "fresh-root-setup-lifetime-and-close-unwind-defects",
+    "terminal-serialization-and-publication-classification-defects",
+    "incomplete-pre-ACK-semantic-state-gates"
+  ],
+  "coverage_blockers": [
+    "owner-error-partition-boundaries",
+    "owner-publication-failure-order",
+    "deadline-arithmetic-and-receipt-joins",
+    "positive-fixture-chronology",
+    "runtime-layout-exact-and-durable-matrix",
+    "cleanup-unresolved-tagged-union",
+    "supervisor-status-before-evidence-read",
+    "supervisor-identity-wait-and-direct-event-controls"
+  ],
+  "supervisor_reviewed": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

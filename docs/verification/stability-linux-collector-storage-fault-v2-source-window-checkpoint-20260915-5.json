@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_window_checkpoint",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 5,
+  "status": "WINDOW_PAUSED_FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T18:43:00Z",
+  "preserved_failure": {
+    "attempt": 8,
+    "archive": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-8.tar.gz",
+    "sha256": "b623017859e7242f2d8640e0158e10800b00e7a7a394a6d3ded91c27c47a4c0b"
+  },
+  "reviewed_sha256": {
+    "packet_12": "d7adc51450fd91420e9944cbbb8bc488758e275174452609accccf8deb735f70",
+    "packet_13": "db607e3b89d7cdf0fbca6e69fe8ea29daa07b9c9cd7b55daae2ba4b0b91eee0a",
+    "oracle.py": "7e4f7308265c5bd535dfc703f6069023ef818b21c40b818a59a029717c960d41",
+    "witness_owner.py": "56c934dfdc7909c3568682bab58c8b42664e07110a3e353c81967145bdc87c30",
+    "test_collector_storage_fault_packet.py": "39802553c9433c3dff2b183c02507a25f1ba3aa8ccbbb83e01a78bd759b28643"
+  },
+  "reviews": {
+    "packet_12": "FAIL_DIRECT_OWNER_EVENT_PACKET_ONLY",
+    "packet_13": "PASS_DIRECT_OWNER_EVENT_PACKET_ONLY",
+    "full_source": "FAIL_SOURCE"
+  },
+  "active_processes": [
+    {"pid": 1492539, "role": "launcher", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492541, "role": "launcher-worker", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492543, "role": "codex-app-server", "started": "2026-09-15T11:38:18-07:00"}
+  ],
+  "previous_processes_no_longer_present": [776516, 776518, 776520],
+  "build_or_guest_processes": [],
+  "child_agents_joined": true,
+  "future_goal_continuations_paused_by_user": true,
+  "next_tasks": [
+    "correct the retained chronology negative timestamp and rerun both pinned interpreters",
+    "implement first-exception precedence, unconditional post-fork cleanup and exit 125",
+    "complete deadline, cleanup, durable-publication and error-partition controls",
+    "implement and test the source-bound supervisor status/identity/wait contract",
+    "obtain fresh full independent source review"
+  ],
+  "goal_complete": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
