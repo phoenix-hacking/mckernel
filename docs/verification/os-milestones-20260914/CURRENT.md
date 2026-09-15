@@ -554,3 +554,13 @@ main storage, and emits no fabricated birth or terminal event. The exact cumulat
 five-file slice is archived as
 `stability-native-collector-lifecycle-abort-literal-slice-20260915-1`. Corpus
 completion, replacement models, source checks and build remain closed.
+
+Five attempt-2 semantic negatives now receive independent
+`PASS_SEMANTIC_NEGATIVE_LITERAL_SLICE_ONLY`: birth after runnable, duplicate
+terminal, runnable without birth, reference resurrection after retirement begins,
+and active TID aliasing. Each failure emits no event, leaves the preceding full
+state unchanged and latches incomplete; the later capture-end event uses the exact
+retained attempt sequence. Active alias rejection creates no secondary thread row.
+The cumulative five-file bytes are archived as
+`stability-native-collector-lifecycle-semantic-negative-literal-slice-20260915-1`.
+The entire corpus and models remain incomplete and unexecuted.
