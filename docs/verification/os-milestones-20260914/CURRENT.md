@@ -46,10 +46,11 @@ order, page metadata and boundary links; invalid input must leave the list
 untouched. Its first candidate was independently rejected for invalid Pin
 construction, broken empty-list transfer, premature production integration and
 grep-only tests; its exact failure archive and additive review record are
-retained. Attempt 2 restored the production finish path but was also rejected:
+retained. Attempts 2 and 3 restored the production finish path but were also rejected:
 empty detach did not release the source, mixed destination states passed, its
-unsafe contract was incomplete, and its tests exercised look-alikes rather than
-the production helpers. Both exact candidates are retained; the current dirty
+unsafe contract was incomplete, then the purported production tests were not
+executed and contained independent borrow/count defects. All exact candidates
+are retained; the current dirty
 candidate remains rejected and must not be staged as an implementation.
 
 M02-B root attempt 1 is retained as FAIL: SHA passed, but the first `literal`
@@ -65,7 +66,9 @@ outer container wrapper can release its flock without verified Docker absence.
 A first dedicated build-owner candidate was independently rejected because its
 bounded cleanup could release the inherited flock with a live container, its
 watchdog/config/isolation evidence was incomplete, and its root-owned `/work`
-mount was unusable by UID 1000. Its exact source and review are retained. A
+mount was unusable by UID 1000. Two follow-up candidates remained unsafe or
+structurally incompatible with the reviewed watchdog ABI. All three exact
+states and findings are retained. A
 corrected durable owner with persistent recovery, watchdog identity and exact
 name/label/ID cleanup is the next prerequisite; only then may the dispatcher
 take the sole heavy lease. No heavy process or McKernel guest is live.
