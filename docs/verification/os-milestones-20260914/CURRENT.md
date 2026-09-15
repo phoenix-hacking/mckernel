@@ -850,3 +850,12 @@ artifact bytes and non-artifact execution guards are retained in the 10-member
 Raw inventory remains 133; the raw/oracle matrix, compilation, models, native
 execution and all acceptance gates remain incomplete, with every execution and
 acceptance gate closed.
+
+Post-checkpoint audits select strict output-oracle comparison as the next source
+slice, ahead of the separate one-case expansion-depth boundary. The 13-case packet
+in `stability-native-collector-lifecycle-output-oracle-source-packet-20260915-1.md`
+requires each implementation to match an independent literal even when both agree
+on a corruption and requires both one-sided comparison directions. After preserving
+the missing-direction packet review failure, independent review returns
+`PASS_OUTPUT_ORACLE_PACKET_ONLY`. Six model operation families still lack complete
+decision tables. No new source edit or check has started.
