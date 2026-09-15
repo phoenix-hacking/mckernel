@@ -395,3 +395,25 @@ sources and calls a nonexistent API; and its oracle accepts handwritten summarie
 without raw evidence. The exact source/check archive is retained as
 `stability-linux-collector-stopped-rescue-source-checkpoint-20260915-1` with the
 failure record. No build or root execution is released.
+
+Stopped-rescue source attempt 2 made no file change: both proposed patches failed
+their context verification atomically, then the dispatcher timeboxed the task.
+Only an unretained Python syntax check was reported; no new evidence directory
+exists. The exact working packet therefore remains identical to rejected attempt
+1. Under the two-attempt stop rule this correction is escalated for a newly
+scoped source/context review rather than another immediate implementation retry.
+
+The escalated stopped-rescue context review retains `FAIL_SOURCE` and supplies an
+exact dependency-ordered correction map in
+`stability-linux-collector-stopped-rescue-context-review-20260915-2.md`. It
+clarifies that the rescuer owns/waits only for the collector, while the stopped
+collector owns and later reaps both fixture processes; it also identifies the
+stateful non-idempotent setup validator and exact hook/run/oracle wiring. No third
+immediate source retry, build or execution is released.
+
+The M03 integration sequencing review returns `PASS_DESIGN_ONLY` for a four-file
+private bounded-inventory fixture. Its independently supplied arena/count can test
+address resolution before dereference, finite work and full range/membership
+rejection without granting detach/free authority. Registry and typed release
+authorization remain later prerequisites. The exact allowlist and negatives are
+in `stability-pending-free-integration-plan-review-20260915-1.md`.
