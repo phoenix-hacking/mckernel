@@ -376,3 +376,22 @@ disposition remains a private unused prerequisite only: trusted pre-dereference
 inventory/range proof, durable owner-loss recovery/transaction identity,
 invalidation/backing policy and full module/guest qualification still block source
 integration and all runtime/production credit.
+
+Two follow-up M03 reviews now make the remaining ownership boundary concrete.
+`stability-pending-free-durable-owner-review-20260915-1.md` requires a surviving
+OS registry, OS/VM incarnation plus nonreused serial, durable inventory/progress,
+owned backing references and interruption-safe bounded recovery before capture.
+`stability-pending-free-invalidation-policy-audit-20260915-1.md` requires retaining
+`PM_PENDING_FREE` and backing until successful clear/TLB acknowledgement, with
+bounded retry or terminal quarantine on failure. Current void callbacks and
+stack-local inventories cannot supply either contract. An audit-response hash
+transcription is corrected additively in the retained policy record.
+
+M02-B stopped-rescue-v1 source attempt 1 passes four cheap mock tests but is
+rejected by independent semantic/ownership review. It stops the fixture before
+setup/exec rather than the collector at the designed boundary; its rescuer logic
+is uncalled and lacks parent/adoption ownership; build/run wiring omits the new C
+sources and calls a nonexistent API; and its oracle accepts handwritten summaries
+without raw evidence. The exact source/check archive is retained as
+`stability-linux-collector-stopped-rescue-source-checkpoint-20260915-1` with the
+failure record. No build or root execution is released.

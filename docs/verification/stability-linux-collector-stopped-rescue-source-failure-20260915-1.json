@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_stopped_rescue_source_failure",
+  "task_id": "M02-B-stopped-rescue-v1-source",
+  "attempt": 1,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T08:26:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-stopped-rescue-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "37ef7fdca5d17e3dac065600dbcd1a84553128fa002543554d0f44287461f111",
+    "size": 18308,
+    "members": 20
+  },
+  "cheap_checks": {
+    "python3.8_tests": "4/4 PASS",
+    "python_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "independent_results": ["PASS_SOURCE_EVIDENCE", "FAIL_SOURCE"],
+  "blocking_findings": [
+    "fixture-side hook stops before setup/exec and is not an identity-bound collector-side stop",
+    "rescuer protocol is uncalled and lacks actual collector-parent ownership/adoption/journal behavior",
+    "build/run profiles omit new fixture/rescuer or call a nonexistent runner API",
+    "oracle accepts handwritten summaries without raw identity/order/durability evidence"
+  ],
+  "compiler_execution": false,
+  "root_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
