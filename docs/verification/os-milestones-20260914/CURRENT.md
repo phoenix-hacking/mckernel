@@ -599,3 +599,32 @@ bytes are archived as
 The corpus remains incomplete; replacement models, source checks, compilation,
 native execution, ABI freeze, application acceptance and production credit remain
 closed.
+
+Six multithread vectors now receive independent
+`PASS_MULTITHREAD_LITERAL_SLICE_ONLY`: thread-only exit, rejected last-thread
+process terminal with a live sibling, live-sibling retirement/VM blockers, two
+independent competing group-terminal winner orders with explicit inherited branch
+3 thread status, and non-main TID reuse only after the old full identity retires.
+No group operation synthesizes a sibling terminal event; the old retired row and
+snapshot remain alongside the distinct replacement identity. Cumulative five-file
+bytes are archived as
+`stability-native-collector-lifecycle-multithread-literal-slice-20260915-1`.
+This still releases no whole-corpus/source/model/build/native/ABI/application or
+production acceptance.
+
+Independent capacity review returns `CAPACITY_SPEC_GAPS_ONLY`. The contract does
+not yet freeze application admission/identity, global retained occupancy, second
+application domain constraints or capacity-result precedence. The 129-operation
+case is a raw document rejection rather than a semantic result, and the separate
+attempt-counter saturation case is still missing. Exact required corrections are
+retained in
+`stability-native-collector-lifecycle-capacity-contract-gap-review-20260915-1.md`;
+no capacity literals are released.
+
+Independent malformed-input review returns `RAW_INVALID_SPEC_GAPS_ONLY`. The raw
+entry schema, hash-bound oversized-byte artifact, pool argument policy and separate
+coverage accounting are unfrozen, while the current harness never consumes its
+empty `raw_invalid` object. Required mutation families and the exit-2/empty-stream/
+zero-model-invocation contract are retained in
+`stability-native-collector-lifecycle-raw-invalid-contract-gap-review-20260915-1.md`.
+No raw-invalid source or execution is accepted.
