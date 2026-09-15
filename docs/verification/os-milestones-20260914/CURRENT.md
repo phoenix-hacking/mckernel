@@ -701,3 +701,16 @@ for 19 authority-forging and shared PID/TID width/type cases, for 28 cumulative 
 cases, along with positive legal boundaries and the common u64 slot rule. The
 matrix remains explicitly incomplete and `RAW_FULL_MATRIX_FROZEN` remains false.
 No source edit, check, compilation, model run, runtime or acceptance credit follows.
+
+The authority/width source slice now receives independent
+`PASS_RAW_AUTHORITY_WIDTH_SOURCE_ONLY` and
+`PASS_RAW_AUTHORITY_WIDTH_EVIDENCE_ONLY`. Exactly 19 new inline documents bring the
+raw inventory to 28; exact compact-byte tests distinguish integer, integral-float
+and boolean mutations and retain the original nine records unchanged. Python
+3.9.12 and 3.8.10 each pass all seven bounded decoder tests. The first secondary
+path lookup exited 127 before starting a test and is retained as a stale-path
+preflight failure, followed by the passing `/usr/bin/python3.8` run. Eleven exact
+members are bound by
+`stability-native-collector-lifecycle-raw-authority-width-source-checkpoint-20260915-1.tar.gz`.
+`RAW_FULL_MATRIX_FROZEN` remains false; no compiler, model, native, application or
+production gate has run or receives credit.
