@@ -897,3 +897,12 @@ as the next raw slice. The exact adjacent-character boundary is frozen in
 independent review returns `PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_PACKET_ONLY`. If
 materialized it adds one raw case for 135 total. No source edit or check has
 started, and all model, native, application and production gates remain closed.
+
+The aggregate unused-pool preflight-byte slice now receives independent
+`PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_SOURCE_ONLY` and
+`PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_EVIDENCE_ONLY`. Its exact adjacent-character
+boundary adds one rejection for 135 raw cases while preserving the first 134
+lexical records. Python 3.9.12 and 3.8.10 each pass all fifteen focused decoder
+tests. The 488,540-byte fixture, exact budget instances and all source/log hashes
+are retained in the 10-member archive. The full raw/oracle matrix remains open;
+compilation, models, native execution and all acceptance gates remain closed.
