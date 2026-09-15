@@ -753,3 +753,11 @@ structured correction and original finding are retained in the 11-member
 `stability-native-collector-lifecycle-raw-key-domain-source-checkpoint-20260915-1.tar.gz`.
 Full per-component key coverage, pools/budgets and remaining raw/oracle work stay
 open; the matrix flag is false and no compiler, model, native or acceptance gate ran.
+
+The independently rebased pool slice retains 22 negative records and eight legal
+controls atop the accepted 88 cases, for 110 cumulative raw cases if materialized.
+Its dependency-depth, syntax-depth and expansion-budget arithmetic is independently
+confirmed and receives independent `PASS_RAW_POOL_PACKET_ONLY` in
+`stability-native-collector-lifecycle-raw-pool-source-packet-20260915-1.md`.
+Two controls are already covered and six are new; node/output budgets and broader
+pool/key/raw closure remain deferred. No pool source edit or check has started.
