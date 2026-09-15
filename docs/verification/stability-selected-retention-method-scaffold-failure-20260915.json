@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "selected_retention_method_scaffold_failure",
+  "task_id": "M01-B",
+  "status": "FAIL_NON_PROBATIVE_STRUCTURAL_SCAFFOLD",
+  "base_commit": "bfde796317690d751d0156a77f62a715344ae8d1",
+  "candidate_files": [
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/native_methods_harness.rs",
+      "size": 3059,
+      "sha256": "d9f863ff1ab86cc1ed5d37f1fae2a8f889ccdf87c8ed9663e8745c03c7763c42"
+    },
+    {
+      "path": "scripts/tests/test_stability_selected_retention_methods.py",
+      "size": 1846,
+      "sha256": "102f29b035cdeca44b355b21591ae421f76aa07f8a4468c2d1ff336255f9f15b"
+    }
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-method-scaffold-failure-20260915.tar.gz",
+    "sha256": "d70428a4f498bdb7cd78b9739955b2d103a9c134714aae686872be2f1351d97b",
+    "members": 2
+  },
+  "check": {
+    "command": "python3 -B -m unittest -v scripts/tests/test_stability_selected_retention_methods.py",
+    "result": "3/3 PASS but non-probative"
+  },
+  "independent_review": {
+    "model_role": "Astra/high ownership reviewer",
+    "status": "FAIL",
+    "severity": "P1",
+    "finding": "The Rust file includes candidate snippets only as strings, never constructs or invokes actual Mailbox, Response or Completion, never iterates its declared cases, and its Python checks assert only names and substrings."
+  },
+  "required_correction": [
+    "Compile exact hash-bound staged native modules as Rust code.",
+    "Drive actual admission, selection, return, cancellation and publication transitions using concrete aligned response backing and observable address/send/release/drop counters.",
+    "Run every reviewed vector in a fresh bounded supervised process and retain raw status and complete streams."
+  ],
+  "native_method_coverage": false,
+  "build_release": false,
+  "guest_release": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "record_kind": "os_resource_and_lease_checkpoint",
+  "task_id": "M00-D",
+  "status": "PASS_COORDINATION_PREREQUISITE_ONLY",
+  "measured_utc": "2026-09-15T03:51:31Z",
+  "measured_local": "2026-09-14T20:51:31-0700",
+  "commit_at_measurement": "bfde796317690d751d0156a77f62a715344ae8d1",
+  "capacity": {
+    "host": {
+      "filesystem": "/dev/nvme0n1p2",
+      "mount": "/",
+      "size_bytes": 1006450962432,
+      "used_bytes": 893993541632,
+      "available_bytes": 61257080832,
+      "df_h_available": "58G",
+      "filesystem_metadata_residual_bytes": 51200339968
+    },
+    "scratch": {
+      "filesystem": "/dev/loop39",
+      "mount": "/home/holden/mckernel-work/scratch",
+      "size_bytes": 63090503680,
+      "used_bytes": 36049068032,
+      "available_bytes": 23803432960,
+      "df_h_available": "23G",
+      "filesystem_metadata_residual_bytes": 3238002688
+    },
+    "assessment": "sufficient for one bounded build or collector attempt; remeasure immediately before every heavy run and preserve capture/emergency headroom"
+  },
+  "exclusive_heavy_lease": {
+    "owner": "dispatcher /root",
+    "maximum_concurrent_build_or_guest_runs": 1,
+    "state_at_measurement": "free",
+    "exact_process_names_checked": [
+      "mcexec",
+      "qemu-system-x86_64",
+      "insmod",
+      "rmmod"
+    ],
+    "matching_pids": [],
+    "development_lock": {
+      "path": "/run/lock/mckernel-development.lock",
+      "device": 27,
+      "inode": 4,
+      "uid": 0,
+      "gid": 0,
+      "mode_octal": "0644",
+      "size": 0,
+      "lslocks_holders": [],
+      "mode_note": "root-owned 0644 permits non-root reads but only owner writes; serialization derives from advisory flock on the opened inode"
+    }
+  },
+  "compute_at_measurement": {
+    "online_cpus": 8,
+    "memory_total_bytes": 33199702016,
+    "memory_available_bytes": 30056321024,
+    "host_swap_total_bytes": 2147479552,
+    "host_swap_used_bytes": 1006190592,
+    "scope_note": "the no-swap requirement applies to each isolated Docker/guest run configuration; it is not a claim that the host has no configured swap"
+  },
+  "disjoint_ownership": [
+    {
+      "owner": "dispatcher",
+      "scope": "CURRENT.md, evidence integration, commits, pushes, all sudo/build/container/guest work"
+    },
+    {
+      "owner": "M01 worker/reviewer lane",
+      "scope": "selected-retention tests and bounded provenance/state review"
+    },
+    {
+      "owner": "M02 worker/reviewer lane",
+      "scope": "root collector orchestrator and its focused non-root tests"
+    },
+    {
+      "owner": "M03 audit/worker lane",
+      "scope": "pending-free batch design, Rust implementation and focused equivalence tests"
+    }
+  ],
+  "container_inventory": {
+    "command": "sudo -A /usr/bin/docker ps -a --no-trunc --format '{{.ID}} {{.Names}} {{.Status}} {{.Labels}}'",
+    "verified_by": "dispatcher with authorized sudo; the unprivileged independent auditor could not query the daemon",
+    "mckernel_collector_containers": [],
+    "unrelated_running_containers_preserved": [
+      "kasper-results_web-interface_1",
+      "kasper-results_db_1"
+    ],
+    "cleanup_performed": false
+  },
+  "independent_audit": {
+    "auditor_scope": "unprivileged read-only",
+    "verified": [
+      "capacity arithmetic",
+      "development-lock identity and mode",
+      "no exact heavy process-name matches"
+    ],
+    "limitations": [
+      "unprivileged Docker daemon query was denied; dispatcher repeated the exact read-only inventory with authorized sudo",
+      "the audit compared a UTC timestamp with the local calendar date; both UTC and America/Los_Angeles timestamps are now explicit"
+    ],
+    "corrections_applied": [
+      "host swap is recorded and no-swap is scoped to isolated run configuration",
+      "filesystem residual byte accounting is explicit"
+    ]
+  },
+  "policy": [
+    "Only the dispatcher may acquire the heavy build/guest lease.",
+    "One pinned four-CPU/12-GiB/no-swap container build or one four-vCPU/8-GiB guest may run at a time.",
+    "Recheck host and scratch capacity and the development lock before acquisition.",
+    "Preserve every failed run and active dependency; delete only exact verified redundant copies under an additive cleanup record, then target fstrim only after a pushed checkpoint.",
+    "A coordination prerequisite grants no application, runtime, production or language acceptance."
+  ],
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "language_gate_credit": false,
+  "whole_os_acceptance": false
+}

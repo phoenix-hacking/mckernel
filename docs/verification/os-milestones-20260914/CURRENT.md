@@ -22,24 +22,33 @@ Active work:
    bind all 51 Rust inputs, the mode-3 pre/post-rustfmt authority is retained,
    seven focused tests pass, and all rejected attempts are preserved. This is
    only a provenance subgate: the actual native state/cancellation matrix,
-   selected candidate build, stack review and guests remain blocked/open.
-2. M02-A remains blocked after fresh independent review. The first recovery fix
-   still permits a second exclusive journal write to raise and release flock at
-   process exit, and its lifetime command cap prevents indefinite recovery.
-   The four focused tests pass but miss both production paths; no root run is
-   authorized until unique durable pass records, renewable bounded command
-   budgets and inherited-lock recovery tests pass another review.
+   selected candidate build, stack review and guests remain blocked/open. The
+   first proposed native-method harness was rejected because it included method
+   snippets only as strings and ran substring checks; its exact files and
+   independent P1 review are retained as explicit failure evidence.
+2. M02-A now passes exact-current independent Astra/high source review after six
+   preserved correction findings. Twelve focused tests cover durable unique
+   journals, bounded retry state, fallible diagnostics, actual inherited-flock
+   recovery and the production PASS predicate. This releases only the source
+   packet; the root/Docker 25-case run has not yet executed.
 3. M00-B is complete locally: `docs/verification/os-live-ledger-20260915.json`
    contains every exact gate/case/packet ID and required reconciliation record;
    its SHA256 is `2b34c315a710620aa4f3c9eaaa76012f2c42dd2b374e8099b073a0229976a2e5`.
+4. M00-D coordination is complete locally. The dispatcher alone owns one heavy
+   build/guest lease; no exact heavy process or development-lock holder was
+   present. The corrected resource record measured 58G host and 23G scratch
+   available, explicitly scopes no-swap to isolated runs, and passed a bounded
+   independent audit. Remeasure immediately before each heavy acquisition.
 
 M03-A source audit is complete and defines the next implementation boundary: a
 pinned private Rust pending-free batch must detach the exact per-CPU chain while
 preserving order, page metadata and boundary links; invalid input must leave the
 list untouched. Next three dependency-ready tasks: checkpoint the M01-B
 provenance subgate; correct/review M02-A durable cleanup ownership; implement
-and test the bounded M03-A batch abstraction. M02-B remains blocked until the
-exact corrected packet passes review. No heavy process or McKernel guest is live.
+and test the bounded M03-A batch abstraction. M02-B is dependency-ready after
+this exact source checkpoint is pushed and resources are remeasured; the
+dispatcher will run fresh attempt 1 under the exclusive heavy lease. No heavy
+process or McKernel guest is live.
 
 Counters remain: 0/273 application cases accepted (three compiled), 2/4 narrow
 fault modes accepted, 6/130 production gates and 350/10,000 points, 0/7 language

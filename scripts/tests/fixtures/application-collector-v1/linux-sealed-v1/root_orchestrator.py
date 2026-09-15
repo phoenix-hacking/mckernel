@@ -143,6 +143,16 @@ def first_failure(host, phase, error):
         pass
 
 
+def safe_first_failure(host, phase, error, sink):
+    """Diagnostics never escape an ownership/recovery boundary."""
+    try:
+        first_failure(host, phase, error)
+    except BaseException as diagnostic:
+        if len(sink) < 32:
+            sink.append({'phase': phase, 'type': type(diagnostic).__name__,
+                         'message': str(diagnostic)[:1024]})
+
+
 def load_source(path, expected, name):
     raw, identity = regular(path)
     require(identity['sha256'] == expected, 'frozen source identity: ' + str(path))
@@ -481,6 +491,103 @@ def cleanup(commands, config, label):
     return result
 
 
+class RecoveryOwner:
+    """Retains serialization while each bounded cleanup pass is retried."""
+    def __init__(self, commands, config, label, *, max_passes=None, clock=time.monotonic,
+                 sleeper=time.sleep, journal=None):
+        self.commands, self.config, self.label = commands, config, label
+        self.max_passes, self.clock, self.sleeper, self.journal = max_passes, clock, sleeper, journal
+        self.state = 'RECOVERING'
+        self.attempts = []
+        self.first_failure = None
+        self.journal_errors = []
+        self.journal_error_count = 0
+
+    def remember_journal_error(self, number, error):
+        self.journal_error_count += 1
+        if len(self.journal_errors) < 64:
+            self.journal_errors.append({'attempt': number, 'type': type(error).__name__,
+                                        'message': str(error)[:1024]})
+
+    def outcome(self, absence_verified):
+        return {'state': self.state, 'absence_verified': absence_verified,
+                'evidence_complete': self.journal_error_count == 0,
+                'journal_error_count': self.journal_error_count,
+                'journal_errors': self.journal_errors,
+                'attempts': self.attempts, 'first_failure': self.first_failure,
+                'recovery_owner': {'pid': os.getpid(), 'reason': self.label}}
+
+    def recover(self):
+        number = 0
+        while self.max_passes is None or number < self.max_passes:
+            number += 1
+            self.commands.number = 0
+            try:
+                result = cleanup(self.commands, self.config, self.label + '-%03d' % number)
+            except BaseException as error:
+                result = {'absence_verified': False, 'errors': [str(error)]}
+            attempt = {'number': number, 'monotonic': self.clock(), 'result': result}
+            if len(self.attempts) >= 64:
+                self.attempts.pop(0)
+            self.attempts.append(attempt)
+            if result.get('absence_verified') is True:
+                self.state = 'ABSENCE_VERIFIED'
+                if self.journal is not None:
+                    try:
+                        self.journal({'state': self.state, 'attempts': self.attempts,
+                                      'first_failure': self.first_failure,
+                                      'recovery_owner': {'pid': os.getpid(), 'reason': self.label}})
+                    except BaseException as error:
+                        self.remember_journal_error(number, error)
+                return self.outcome(True)
+            if self.first_failure is None:
+                errors = result.get('errors') or ['cleanup pass failed']
+                self.first_failure = {'attempt': number, 'reason': errors[0]}
+            if self.journal is not None:
+                try:
+                    self.journal({'state': 'RECOVERING', 'attempts': self.attempts,
+                                  'first_failure': self.first_failure,
+                                  'recovery_owner': {'pid': os.getpid(), 'reason': self.label}})
+                except BaseException as error:
+                    self.remember_journal_error(number, error)
+            if self.max_passes is not None and number >= self.max_passes:
+                break
+            try:
+                self.sleeper(1)
+            except BaseException as error:
+                if self.first_failure is None:
+                    self.first_failure = {'attempt': number, 'reason': 'backoff: ' + str(error)}
+        self.state = 'RECOVERING'
+        return self.outcome(False)
+
+
+def recover_cleanup(commands, config, label, *, max_passes=None, clock=time.monotonic,
+                    sleeper=time.sleep, journal=None):
+    """Controlled-cycle API; production's default retries until absence."""
+    return RecoveryOwner(commands, config, label, max_passes=max_passes,
+                         clock=clock, sleeper=sleeper, journal=journal).recover()
+
+
+def release_lock_allowed(cleanup_result, watchdog_status):
+    return (cleanup_result.get('absence_verified') is True and watchdog_status == 0)
+
+
+def infrastructure_pass_allowed(result, host):
+    cleanup_result = result.get('cleanup', {})
+    return (result.get('collected_infrastructure_candidate') is True and
+            not result.get('diagnostic_errors') and not (host / 'first-failure.json').exists() and
+            result.get('watchdog_raw_wait_status') == 0 and
+            cleanup_result.get('absence_verified') is True and
+            cleanup_result.get('evidence_complete') is True and
+            cleanup_result.get('first_failure') is None)
+
+
+def recovery_journal(host, prefix, state):
+    number = state['attempts'][-1]['number']
+    write(host / ('%s-recovery-%03d.json' % (prefix, number)),
+          (json.dumps(state, indent=2, sort_keys=True) + '\n').encode())
+
+
 def recheck(checks):
     for expected in checks:
         require(regular(Path(expected['path']))[1] == expected, 'bound source/artifact drift: ' + expected['path'])
@@ -539,7 +646,7 @@ def watchdog(config_path, pipe_fd, lock_fd):
             time.monotonic() - 300 <= deadline <= time.monotonic() + 300, 'bounded original watchdog deadline')
     save(host / 'watchdog-ready.json', {'pid': os.getpid(), 'identity': supervisor._process_identity(os.getpid()),
          'deadline_monotonic': deadline, 'lock_identity': stat_identity(os.fstat(lock_fd)), 'subreaper': True})
-    reason = None; data = b''
+    reason = None; data = b''; release_lock = False; diagnostic_errors = []
     try:
         while reason is None:
             if interrupted:
@@ -562,20 +669,29 @@ def watchdog(config_path, pipe_fd, lock_fd):
                 save(host / 'watchdog-result.json', {'status': 'DISARMED_AFTER_VERIFIED_ABSENCE',
                      'finished_monotonic': time.monotonic(), 'container_id': config['container_id'],
                      'application_acceptance': False})
+                release_lock = True
                 return 0
-        first_failure(host, 'watchdog', RuntimeError(reason))
-        result = cleanup(commands, config, 'watchdog')
+        safe_first_failure(host, 'watchdog', RuntimeError(reason), diagnostic_errors)
+        result = recover_cleanup(commands, config, 'watchdog',
+                                 journal=lambda state: recovery_journal(host, 'watchdog', state))
+        result['evidence_complete'] = result.get('evidence_complete', True) and not diagnostic_errors
         save(host / 'watchdog-result.json', {'status': 'WATCHDOG_TRIGGERED', 'reason': reason, 'cleanup': result,
+             'diagnostic_errors': diagnostic_errors,
              'finished_monotonic': time.monotonic(), 'application_acceptance': False})
+        release_lock = result.get('absence_verified') is True
         return 1
     except BaseException as error:
-        first_failure(host, 'watchdog', error)
-        result = cleanup(commands, config, 'watchdog-exception')
-        save(host / 'watchdog-exception.json', {'error': str(error), 'cleanup': result})
+        safe_first_failure(host, 'watchdog', error, diagnostic_errors)
+        result = recover_cleanup(commands, config, 'watchdog-exception',
+                                 journal=lambda state: recovery_journal(host, 'watchdog-exception', state))
+        release_lock = result.get('absence_verified') is True
+        save(host / 'watchdog-exception.json', {'error': str(error), 'cleanup': result,
+             'diagnostic_errors': diagnostic_errors})
         return 1
     finally:
         os.close(pipe_fd)
-        os.close(lock_fd)
+        if release_lock:
+            os.close(lock_fd)
 
 
 def main():
@@ -601,10 +717,11 @@ def main():
     config = None; watch = None; control = None; supervisor = None; commands = None
     result = {'status': 'FAIL', 'application_acceptance': False, 'transport_acceptance': False,
               'backend_enabled': False, 'host_root': str(host), 'profile_root': str(profile),
-              'started_monotonic': time.monotonic(), 'watchdog_raw_wait_status': None}
+              'started_monotonic': time.monotonic(), 'watchdog_raw_wait_status': None,
+              'diagnostic_errors': []}
     checks = []
     def interrupted(number, frame):
-        first_failure(host, 'host-signal', RuntimeError('signal ' + str(number)))
+        safe_first_failure(host, 'host-signal', RuntimeError('signal ' + str(number)), result['diagnostic_errors'])
         raise KeyboardInterrupt
     for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
         signal.signal(sig, interrupted)
@@ -712,18 +829,22 @@ def main():
         recheck(checks)
         result['collected_infrastructure_candidate'] = True
     except BaseException as error:
-        first_failure(host, 'host-orchestration', error)
+        safe_first_failure(host, 'host-orchestration', error, result['diagnostic_errors'])
         save(host / 'host-error.json', {'type': type(error).__name__, 'message': str(error), 'traceback': traceback.format_exc()})
     finally:
         for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
-            signal.signal(sig, lambda number, frame: first_failure(host, 'cleanup-signal', RuntimeError('signal ' + str(number))))
+            signal.signal(sig, lambda number, frame: safe_first_failure(host, 'cleanup-signal', RuntimeError('signal ' + str(number)), result['diagnostic_errors']))
         def final_error(label, error):
-            first_failure(host, label, error)
-            save(host / (label + '-error.json'), {'type': type(error).__name__, 'error': str(error),
-                                                'traceback': traceback.format_exc()})
+            safe_first_failure(host, label, error, result['diagnostic_errors'])
+            try:
+                save(host / (label + '-error.json'), {'type': type(error).__name__, 'error': str(error),
+                                                    'traceback': traceback.format_exc()})
+            except BaseException as diagnostic:
+                safe_first_failure(host, label + '-save', diagnostic, result['diagnostic_errors'])
         if config is not None and commands is not None:
             try:
-                result['cleanup'] = cleanup(commands, config, 'host-final')
+                result['cleanup'] = recover_cleanup(commands, config, 'host-final',
+                                                    journal=lambda state: recovery_journal(host, 'host-final', state))
             except BaseException as error:
                 final_error('host-cleanup', error)
         if control is not None:
@@ -749,7 +870,7 @@ def main():
                         break
                     time.sleep(0.05)
                 if watch.returncode is None:
-                    first_failure(host, 'watchdog-wait', RuntimeError('watchdog failed bounded completion'))
+                    safe_first_failure(host, 'watchdog-wait', RuntimeError('watchdog failed bounded completion'), result['diagnostic_errors'])
                     result['watchdog_rescue'] = supervisor._rescue_worker(watch, 15)
                 require(result['watchdog_raw_wait_status'] == 0, 'actual clean watchdog exit after absence')
                 watcher = strict_json(regular(host / 'watchdog-result.json')[0])
@@ -771,17 +892,17 @@ def main():
                     trees.append(inventory(profile))
                 save(host / 'original-tree-inventory.json', {'trees': trees, 'ownership_changed': False,
                      'scope': 'all existing attempt members before this inventory and final result; parent archives final metadata too'})
-                if (result.get('collected_infrastructure_candidate') is True and
-                        not (host / 'first-failure.json').exists() and result['watchdog_raw_wait_status'] == 0):
+                if infrastructure_pass_allowed(result, host):
                     result['status'] = 'PASS_ROOT_COLLECTOR_INFRASTRUCTURE_ONLY'
             except BaseException as error:
-                first_failure(host, 'original-tree-inventory', error)
+                safe_first_failure(host, 'original-tree-inventory', error, result['diagnostic_errors'])
                 result['inventory_error'] = str(error)
             save(host / 'result.json', result)
             # Do not explicitly unlock the shared open-file description. If
             # the parent fails while its watchdog still lives, that inherited
             # descriptor must continue holding serialization through cleanup.
-            os.close(lock_fd)
+            if release_lock_allowed(result.get('cleanup', {}), result.get('watchdog_raw_wait_status')):
+                os.close(lock_fd)
     print(result['status'] + ' ' + str(host), flush=True)
     return 0 if result['status'] == 'PASS_ROOT_COLLECTOR_INFRASTRUCTURE_ONLY' else 1
 

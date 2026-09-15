@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_recovery_source_checkpoint",
+  "task_id": "M02-A",
+  "status": "PASS_SOURCE_EXECUTION_PACKET_ONLY",
+  "base_commit": "bfde796317690d751d0156a77f62a715344ae8d1",
+  "sources": [
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_orchestrator.py",
+      "size": 53040,
+      "sha256": "6e6311ac7059eb97f1cba2eb9606bdc7e82016e381cb47a732ca5b274c216ab3"
+    },
+    {
+      "path": "scripts/tests/test_linux_collector_root_orchestrator.py",
+      "size": 11669,
+      "sha256": "6f6da85a19827f3f24af0ed2774124c29e50a73a96f7209e63b27561cc634a22"
+    }
+  ],
+  "focused_check": {
+    "command": "python3 -B -m unittest -v scripts/tests/test_linux_collector_root_orchestrator.py",
+    "status": "PASS",
+    "cases": 12
+  },
+  "verified_properties": [
+    "parent and watchdog retain the inherited development-lock ownership until exact container absence is verified",
+    "fallible diagnostics cannot escape the recovery boundary",
+    "cleanup retries use unique exclusive durable journals, renewed bounded command budgets and nonzero backoff",
+    "attempt and journal-error samples cap at 64 and diagnostic messages cap at 1024 bytes while a total error count stays sticky",
+    "infrastructure PASS requires verified absence, complete recovery evidence, no recovery first failure, no parent diagnostic failure and a clean watchdog",
+    "the fork test invokes actual recover_cleanup with an inherited locked descriptor and denies an independent contender until the second pass verifies absence"
+  ],
+  "preserved_review_failures": [
+    "initial parent/watchdog cleanup could release serialization after cleanup failure",
+    "first correction reused one exclusive journal pathname and exhausted a lifetime command budget",
+    "second correction tests manually unlocked flock and did not invoke recovery ownership",
+    "third correction allowed diagnostic ENOSPC/EIO to bypass watchdog cleanup",
+    "fourth correction could silently lose a successful cleanup journal",
+    "fifth correction allowed recovered failure to become PASS and retained unbounded journal errors"
+  ],
+  "independent_review": {
+    "role": "Astra/high ownership and execution-release reviewer",
+    "status": "PASS",
+    "scope": "exact-current M02-A source execution packet only",
+    "root_orchestrator_sha256": "6e6311ac7059eb97f1cba2eb9606bdc7e82016e381cb47a732ca5b274c216ab3",
+    "test_sha256": "6f6da85a19827f3f24af0ed2774124c29e50a73a96f7209e63b27561cc634a22"
+  },
+  "next_required": [
+    "Push and verify these exact source blobs before execution.",
+    "Remeasure M00-D resources and acquire the dispatcher-exclusive heavy lease.",
+    "Run the fresh root 25-case infrastructure profile with the exact reviewed orchestrator hash, stopping at its first unexpected failure.",
+    "Preserve the complete root/container attempt before evaluating any further adverse collector cases."
+  ],
+  "root_execution": false,
+  "docker_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "language_gate_credit": false,
+  "whole_os_acceptance": false
+}
