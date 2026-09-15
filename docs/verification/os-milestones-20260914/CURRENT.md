@@ -915,3 +915,12 @@ independent review returns `PASS_OUTPUT_ENVELOPE_PACKET_ONLY`. This remains
 mock-only validation and does not prove live collection bounds. Raw inventory
 stays 135; no source edit or new check has started and every execution and
 acceptance gate remains closed.
+
+The output-envelope source slice now receives independent
+`PASS_OUTPUT_ENVELOPE_SOURCE_ONLY` and `PASS_OUTPUT_ENVELOPE_EVIDENCE_ONLY`.
+Three pre-parse rejections and two positive controls pass all five tests under
+Python 3.9.12 and 3.8.10. The first evidence archive's missing command provenance
+is preserved at its exact hash; corrected logs bind commands, versions, exits and
+streams in the replacement 10-member archive. This proves mock-only post-capture
+validation, not live collection bounds. Raw inventory stays 135, and compilation,
+models, native execution and all acceptance gates remain closed.
