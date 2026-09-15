@@ -462,3 +462,30 @@ be accepted. The exact source and streams are archived as
 `stability-linux-collector-storage-fault-source-failure-20260915-2`. Under the
 two-attempt stop rule no immediate third source attempt, build or root execution is
 released; the lane returns to independently scoped source/context review.
+
+Independent storage-fault context review retains `FAIL_SOURCE`. Two assertions are
+test defects and one is an undefined exception contract, but the deeper packet is
+also disconnected: its injected helper is uncalled, preparation is not durably
+published, and the oracle trusts handwritten witness fields without raw wait,
+process, cleanup, prefix or report-byte cross-binding. Report-open absence and
+secondary report failures also need distinct evidence. The exact correction scope
+is retained in `stability-linux-collector-storage-fault-context-review-20260915-1.md`;
+no new source packet is released.
+
+M03 durable-registry review finds `SOURCE_FEASIBILITY_ONLY`. The published OS
+runtime can own a private transaction table, and existing application RPC slots
+offer useful bounded/quarantine patterns. Production wiring remains blocked because
+`Mirror::clear` cannot target a departed launcher's MM, clear errors are discarded,
+the current zeroing head exchange cannot reconstruct interrupted work, and existing
+raw page ownership cannot reject address reuse. A private non-releasing registry
+model is now specifiable; exact identity and negative requirements are in
+`stability-pending-free-durable-registry-feasibility-review-20260915-1.md`.
+
+M02-C lifecycle review returns `FAIL_DESIGN_FREEZE`. Authoritative publication must
+separate allocation/birth/abort, thread terminal, process terminal and actual
+refcount-zero retirement. `do_exit` bypasses group `terminate`, early fork and main
+preparation can fail after identity allocation, and finalized zombies or retained
+main-thread storage outlive terminal status. Nonreused guest incarnation and exec
+identity are still missing. The bounded producer-only next scope is recorded in
+`stability-native-collector-lifecycle-publication-review-20260915-1.md`; ABI freeze,
+native collection, application acceptance and production credit remain closed.
