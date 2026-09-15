@@ -1112,3 +1112,17 @@ before fork; the oracle repeats every join. This closes only source authority.
 The in-progress untracked producer/owner/oracle correction is not independently
 accepted, and every compiler, build, root, native, application and production
 gate stays closed.
+
+The outer cleanup evidence union now receives independent
+`PASS_CLEANUP_PACKET_ONLY` at SHA256
+`521e5075a576ade72603e4867cc0b831ada163449ab5b60ca3adb1e755a90a44`.
+It adds repeated double-identity owned scans and terminal empty/ECHILD evidence,
+so killing or reaping an adopted parent cannot conceal a newly reparented child.
+Source attempts 3 and 4 preserve two newly exposed test failures plus the first
+partial implementation review. The current correction fixes the ACK binding,
+C serializer arity, nonblocking absolute transport, original-path symlink/FIFO
+checks, repeated descendant scans, bounded signal checks, early descriptor unwind
+and strict per-kind/schedule validation before ACK. Seven focused methods pass
+under both pinned interpreters, but the oracle and synthetic positive fixtures
+still require replacement and the current partial source needs fresh review.
+No compiler, build, root, native, application or production gate is released.
