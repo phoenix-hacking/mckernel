@@ -512,3 +512,13 @@ event/ownership state and the harness ignores `S`/`E` fields. Exact bytes are
 retained in `stability-native-collector-lifecycle-model-source-failure-20260915-1`.
 One bounded correction may address these source-review findings; no build, native
 execution, ABI freeze or acceptance is released.
+
+The bounded lifecycle attempt-2 correction map is now source-ready but not
+implemented. It replaces the ambiguous line protocol with exact eight-field JSON
+operations and full typed keys, separates process/thread registries and obligations,
+and defines retained one-shot unpublished destruction authority. It also requires
+complete literal step/event/control expectations, strict output parsing and the
+full failure/mutant vector set. See
+`stability-native-collector-lifecycle-model-correction-map-20260915-1.md`. Attempt 1
+remains rejected; no source check or build is released until exact attempt-2 bytes
+receive independent review.
