@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "attempt": 7,
+  "status": "FAIL_OWNER_ORACLE_SOURCE",
+  "recorded_utc": "2026-09-15T19:16:11Z",
+  "reviewed_sha256": {
+    "witness_owner.py": "ee010d392bc6638f50ba49cbbf247d45ce0eb9c4924889b7b2b23b4b1f246193",
+    "oracle.py": "b6895c281efeba30f60afa0e3b8e82225d2be2d806e57568d55225136f5b238e",
+    "test_collector_storage_fault_packet.py": "62c36b5ae27e51bc89fb33c27832db1503e9809103620ae2d26b80dde04247e4"
+  },
+  "blockers": [
+    "serialization cutoff did not reserve a strictly later error timestamp",
+    "clean EOF did not require the complete selector schedule",
+    "pre-ACK acquisition state machine was absent",
+    "exact scalar-type and exact error-partition enforcement was incomplete",
+    "cleanup signal identity and wait lifecycle joins were absent",
+    "real mocked bounded_cleanup transition tests were absent"
+  ],
+  "later_source_note": "the first five reviewed findings were corrected after this exact review snapshot; current later bytes are unreviewed and the bounded_cleanup transition-test finding remains open",
+  "supervisor_reviewed": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

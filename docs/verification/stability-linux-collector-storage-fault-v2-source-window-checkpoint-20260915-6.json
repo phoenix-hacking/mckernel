@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_window_checkpoint",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 6,
+  "status": "WINDOW_PAUSED_SOURCE_WIP",
+  "recorded_utc": "2026-09-15T19:16:11Z",
+  "preserved_failure": {
+    "attempt": 9,
+    "archive": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-9.tar.gz",
+    "sha256": "f466ea005966f1265c31efe322ecc2afa7779c193bb51624ae6dc3e33c3859c2"
+  },
+  "preserved_wip": {
+    "attempt": 6,
+    "archive": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-wip-20260915-6.tar.gz",
+    "sha256": "9afef9611bed413a4dd23bf4621239e6f776b4cee8154dcb7407cbc988318f9b"
+  },
+  "reviews": {
+    "packet_14": "FAIL_SUPERVISOR_GAP_PACKET_ONLY",
+    "packet_15": "PASS_SUPERVISOR_GAP_PACKET_ONLY",
+    "latest_exact_full_source_snapshot": "FAIL_OWNER_ORACLE_SOURCE",
+    "current_later_source_bytes": "UNREVIEWED_WIP"
+  },
+  "active_processes": [
+    {"pid": 1492539, "role": "launcher", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492541, "role": "launcher-worker", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492543, "role": "codex-app-server", "started": "2026-09-15T11:38:18-07:00"}
+  ],
+  "build_or_guest_processes": [],
+  "child_agents_joined": true,
+  "future_goal_continuations_paused_by_user": true,
+  "next_tasks": [
+    "add real mocked bounded_cleanup transition coverage",
+    "complete packet-15 supervisor orchestration with exclusive wait and sentinel cleanup",
+    "integrate supervisor source bindings and exact result schema",
+    "extend oracle positive and negative supervisor fixtures",
+    "obtain fresh full independent source review before any compilation or runtime"
+  ],
+  "goal_complete": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

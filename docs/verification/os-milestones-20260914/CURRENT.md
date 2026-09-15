@@ -1223,3 +1223,36 @@ longer present. No build, compiler, guest, QEMU, mcexec or IHK process is live.
 All three child reviewers are joined/completed, and future launcher continuations
 are user-paused. The OS goal remains incomplete and is not resumed or marked
 complete by this checkpoint.
+
+Window-end checkpoint 6 preserves the next exact source state at WIP archive
+SHA256 `9afef9611bed413a4dd23bf4621239e6f776b4cee8154dcb7407cbc988318f9b`.
+Python 3.9.12 and 3.8.10 each pass 29/29 source-only tests, and all four edited
+Python files compile. These checks do not accept the source. The new supervisor
+file is intentionally partial: it contains bounded helper code but its main
+path returns 125 after input validation, so it is neither runnable nor accepted.
+
+Original source-test failure attempt 9 is preserved at archive SHA256
+`f466ea005966f1265c31efe322ecc2afa7779c193bb51624ae6dc3e33c3859c2`.
+Packet 14 receives independent `FAIL_SUPERVISOR_GAP_PACKET_ONLY` at SHA256
+`d8c39438d70e46f065668be9ed58fc13274a502837ca29b4ffeda9ca390413f7`.
+Its replacement packet 15 receives independent
+`PASS_SUPERVISOR_GAP_PACKET_ONLY` at SHA256
+`bb3a662fe4d729da08ea9ff4eaddcba632585565bc92e4547ee4ef83b52ded1a`.
+That packet pass releases only the exact supervisor-gap source contract; it is
+not source, compiler, runtime, application or production acceptance.
+
+The latest full owner/oracle review is `FAIL_OWNER_ORACLE_SOURCE` for its exact
+older hashes. Five of its six findings were corrected in later bytes, but those
+later bytes are unreviewed; real mocked `bounded_cleanup` transition coverage
+remains open. Next tasks are to add that coverage, complete the packet-15
+supervisor orchestration and failure cleanup, bind it in prepare/packet inputs,
+require its exact result in oracle fixtures, and obtain fresh full independent
+source review. No compilation, root use or guest execution is authorized before
+that review passes.
+
+At 2026-09-15T19:16:11Z the only retained campaign identities are launcher
+1492539, launcher worker 1492541 and Codex app-server 1492543, started
+2026-09-15 11:38:17-18 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo,
+Rust, GCC or Clang process is live. All three child agents are joined/completed,
+new dispatch is stopped and future launcher continuations remain user-paused.
+The whole-OS goal remains incomplete and is not resumed or marked complete.

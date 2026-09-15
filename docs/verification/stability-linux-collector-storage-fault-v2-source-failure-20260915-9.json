@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 9,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T19:08:20Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-9.tar.gz",
+    "sha256": "f466ea005966f1265c31efe322ecc2afa7779c193bb51624ae6dc3e33c3859c2",
+    "size": 40959,
+    "members": 11
+  },
+  "failure": "the coherent fixture-clock rewrite left selector 3 first_failure_monotonic_ns before collector finish and cleanup completion",
+  "correction": "move the selector-3 owner-observed failure after the retained collector finish and cleanup completion while preserving the exact oracle relation",
+  "original_test_stream_retained": true,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
