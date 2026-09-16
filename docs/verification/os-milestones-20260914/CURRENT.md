@@ -2015,3 +2015,46 @@ space is 54 GiB and scratch free space is 22 GiB. Next tasks remain: finish
 correction/review of the exact source, checkpoint it only after `PASS_SOURCE`,
 then independently review the conditional UID1000 compiler-only packet. M03 and
 M01 retain their source-map blockers. Acceptance counters remain unchanged.
+
+Window-close checkpoint 25 stops new dispatch at 2026-09-16T06:39:48Z.
+Correction 32 is bounded and locally complete on the same two still-untracked
+storage-fault files. It restricts the selector-2/6 I/O-failure exception to the
+request sink, requires healthy reached event sinks, bounds retained counters to
+the producer's uint64 domain and enforces their ordering relationships. The
+review-28-through-32 controls pass, the complete suite passes 121/121 under both
+Python 3.9.12 and Python 3.8.10, both pycompile runs pass, and `git diff --check`
+passes. The exact oracle SHA256 is
+`0c4d98319b562b72801b6f8ac5979ccfe301f5d25bf808680c216ea363c26afd`;
+the exact test SHA256 is
+`dbff9e543a31e2a0ebcd5a60b8be4b79d75fc2d6b1185088f67761499611cce1`.
+
+The corrected bytes, dual-interpreter identities and raw logs, both empty
+pycompile streams, archive 35 and review-32's failure record are frozen without
+source promotion in the 29-member, 19-file review-input archive
+`stability-linux-collector-storage-fault-v2-source-review-input-20260915-36.tar.gz`,
+37,511,064 bytes, SHA256
+`d1adca4b4904667efe66e8253a42c2d16a46336b34b676b0efa03ba65de011b8`.
+Its manifest bindings and safe unique member paths were rechecked. No review-33
+agent was dispatched before the window ended, so this is explicitly unreviewed
+source-review input, not `PASS_SOURCE`; the raw fixture/test remain untracked and
+unaccepted. No compiler packet, compilation, root/native/guest execution,
+application acceptance or production credit is released.
+
+All three bounded child agents are completed and joined. The live campaign
+identities are launcher 1676703 (started Tue Sep 15 15:51:14 2026), recovered
+worker 1899017 (started Tue Sep 15 21:05:29 2026) and Codex app-server 1899019
+(started Tue Sep 15 21:05:29 2026). No project build, container build, guest,
+QEMU, mcexec or IHK process is live. Unrelated Verilator compiler activity remains
+outside this project and was left untouched. Host free space is 54 GiB and scratch
+free space is 22 GiB. The launcher has paused future goal continuations.
+
+Next tasks, in order: (1) obtain fresh complete independent review 33 of exact
+archive 36, replaying reviews 24 through 32 and auditing adjacent producer/schema
+joins; (2) only after terminal `PASS_SOURCE`, checkpoint the exact raw fixture and
+test bytes; (3) draft and independently review a separate conditional UID1000
+compiler-only packet before any compile; (4) retain M03 and M01 at their current
+source-map blockers until concrete generation/pin/TLB/quarantine authority and
+actual-method runner ABI packets are independently reviewed. Counters remain
+0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. The whole-OS objective remains
+incomplete and is neither resumed nor marked complete by this checkpoint.
