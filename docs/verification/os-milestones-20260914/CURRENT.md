@@ -2249,3 +2249,34 @@ is specified and independently reviewed. Counters remain 0/273 accepted
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. The whole-OS objective remains incomplete and is
 not marked complete.
+
+Continuous checkpoint 29 resumes the paused launcher-owned goal and completes
+dispatcher validation of storage correction 36. The exact complete unittest
+selector contains 123 methods. `/home/holden/anaconda3/bin/python3.9` 3.9.12 and
+`/usr/bin/python3.8` 3.8.10 each pass 123/123; both pycompile the four fixture
+Python sources, and `git diff --check` passes. Raw logs and interpreter-byte
+identities remain at
+`/home/holden/mckernel-work/scratch/storage-fault-v2-attempt36-validation-Cd6WD0`.
+An independent read-only audit confirmed the selector/count and the exact current
+packet, tests-document and test hashes; it also confirmed that no post-correction
+full-suite evidence existed before this run.
+
+Fresh source-review archive 40 is 38,007,901 bytes with 32 unique safe members
+and 22 files at SHA256
+`5f43d6af69298a84c980b04aa65f66a18c7e621043767a12f69039ed444e0a30`.
+It binds archive 39, review-36 failure record 32, the exact correction-36 source,
+both complete raw test logs, interpreter identities, status files, both empty
+pycompile streams and the empty diff-check stream. This is source-review input
+only: the raw fixture and test remain untracked and unaccepted, and no compiler,
+root, native, application or production gate is released before fresh independent
+review 37 returns terminal `PASS_SOURCE`.
+
+Next tasks: (1) checkpoint and fetched-blob verify archive 40; (2) obtain a fresh
+complete Astra/high review 37 that replays reviews 24 through 36 and audits the
+full producer/owner/oracle schema; (3) on `PASS_SOURCE`, checkpoint the exact raw
+source and prepare the separately reviewed conditional UID1000 compiler-only
+packet, otherwise retain the exact finding and bounded correction; (4) continue
+independent M01 design consolidation while leaving M03 behind its missing
+generation/pin/ack/quarantine authority. Counters remain 0/273 application cases,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. The whole-OS objective remains active and incomplete.
