@@ -2503,3 +2503,71 @@ its generation, descriptor-pin, authenticated-TLB-ack and quarantine-ownership
 blockers. Counters remain 0/273 application cases, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
 acceptance remains incomplete.
+
+Continuous checkpoint 34 resumes the launcher-owned objective after fetched
+checkpoint `13445bf54d0f35b256c88b50cdde5415e69269bb`. Independent storage source
+review 40 authenticates archive 43 but returns `FAIL_SOURCE`: for selectors 0,
+3 and 5 the complete oracle accepted report executable `source_before` and
+`source_after` sizes zero while the authenticated payload and retained executable
+remain 27,448 bytes. The additive failure record is
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260916-36.json`,
+SHA256 `7fb9aaab0597330a4952188247ea6582b7fa1fbd9757ab5933cbed1eaf5ed2ae`.
+Correction 40 joins both source sizes to both the authenticated runtime fixture
+size and independently retained byte count. Dispatcher Python 3.9 and 3.8 each
+pass 127/127, dual pycompile and diff check pass. Archive 44 is 38,514,524 bytes,
+35 safe unique members, 25 files and 24 verified bindings at SHA256
+`5ddf13abf15505cc8ebbf71abfac7175603293b2dac46ee01aa3ddf952486153`.
+
+Independent review 41 authenticates archive 44 and correction 40, then returns
+`FAIL_SOURCE`: the oracle still accepted non-executable report source modes even
+though `seal_source` rejects them. Failure record 37 is SHA256
+`4495ae0738b08cd45b54639528dcc64bb78c2ff1dd3d2cdfaeef6166fee031ca`.
+Correction 41 now applies the producer's exact regular-file, any-execute-bit and
+no-setuid/setgid predicate only to executable report sources; generic stdin
+validation remains non-executable. The initial worker log-path failure and first
+mis-scoped focused-test failure remain preserved. The corrected focused test and
+clean dispatcher Python 3.9/3.8 lanes each pass 128/128; both pycompile lanes and
+the full diff check pass. Exact final oracle SHA256 is
+`f14211e3f7bf1fc42367c58f0617de66d93ff130dd238eb953ce6fc705cd5a11`
+and test SHA256 is
+`a70a1ff3d639dffed070ee578e8ab35e0aa02c055cb3ad9beda8db5897786d74`.
+Archive 45 is 38,640,721 bytes with 35 safe unique members, 25 files and 24
+verified bindings at SHA256
+`ced17e4703ca50a1797ac5531d95653f0f4ad408215d0d0da4d63e2cb0ee57fb`.
+Raw storage source remains untracked and unaccepted pending complete review 42;
+no compiler or runtime gate is released.
+
+M01 design-input review 13 freezes the remaining ambiguity: production source
+proves row03 and row12 publication outcomes but not a Drop/quarantine/deallocation
+ledger. Packet 9 then fails independent review 14 on one mistyped input hash and
+an allowlist total of 344 rather than 346; both are preserved. Additive packet 10,
+SHA256 `7e934ff07a79eb89c533114552c43b50379f3a6028f25b501cc13a38ac344c57`,
+corrects only those findings and receives independent `PASS_PACKET` review 15.
+Its fixture-owned Box/Arc transfer, deferred/quarantine snapshots, explicit
+post-snapshot drains and row03/row12 source traces are accepted for bounded
+source staging only. The review record SHA256 is
+`e7d38285b99ad21329ad497516547d9ace150172f38905d2c4d77c29503461d9`;
+an additive timestamp correction preserves that consumed byte identity because
+its embedded time was entered ahead of the host clock.
+
+M01 implementation 16 authenticates and stages all 102 source members and the
+expected 346 files, but hard-stops when a Python syntax check creates unlisted
+`__pycache__/result-parser.cpython-39.pyc`, making 347 files. Nothing is deleted
+or retried. The complete 359-member/347-file failure archive is 1,001,844 bytes
+at SHA256 `43004cea9973639ae59bb4df8af431ebb9d25bf58afac0ff2b0faeb32a475f0c`;
+the additive failure record binds the manifest, parser, bytecode, per-mode result
+and identical failure hashes. No compilation, execution or M01 credit follows.
+
+Crash recovery retained launcher PID 1676703 and replaced the worker/app-server
+pair with recovered worker PID 2172732 and app-server PID 2172734. The heavy
+lease is free; no project container build, guest, QEMU, mcexec or IHK process is
+live. Host free space is 48 GiB and scratch free space is 22 GiB. Next tasks are:
+(1) checkpoint and fetched-blob verify archives 44/45 and all M01/M02 additive
+records; (2) obtain complete source review 42 of exact archive 45; (3) only on
+terminal `PASS_SOURCE`, checkpoint the exact raw storage source and prepare the
+separately reviewed conditional UID1000 compiler-only packet; (4) independently
+review one additive M01 rerun packet that disables Python bytecode writes and
+uses a fresh root; (5) keep M03 behind its generation/pin/authenticated-ack/
+quarantine ownership blockers. Counters remain 0/273 application cases, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. Whole-OS acceptance remains incomplete.

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_implementation_failure",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "implementation_attempt": 16,
+  "recorded_utc": "2026-09-16T09:43:10Z",
+  "status": "HARD_STOP_ALLOWLIST",
+  "authority": {
+    "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-implementation-packet-20260916-10.md",
+    "packet_sha256": "7e934ff07a79eb89c533114552c43b50379f3a6028f25b501cc13a38ac344c57",
+    "review_path": "docs/verification/stability-selected-retention-generic-row03-row12-packet-review-20260916-15.json",
+    "review_sha256": "e7d38285b99ad21329ad497516547d9ace150172f38905d2c4d77c29503461d9"
+  },
+  "failed_root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-packet-20260916-10",
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-implementation-failure-20260916-16.tar.gz",
+    "sha256": "43004cea9973639ae59bb4df8af431ebb9d25bf58afac0ff2b0faeb32a475f0c",
+    "size": 1001844,
+    "members": 359,
+    "files": 347
+  },
+  "authenticated_progress": {
+    "source_members": "102/102 PASS",
+    "stager_initial_files": 322,
+    "expected_final_files": 346,
+    "manifest_sha256": "40ac38350db2b4203e4f09a3060ca4eb32108bb71ec2e34867cba80053b366d0",
+    "mode2_result_sha256": "84a13772c6c294a9474a2574c7af470f76f6aafdd5190c8871e96457ca9df811",
+    "mode3_result_sha256": "84a13772c6c294a9474a2574c7af470f76f6aafdd5190c8871e96457ca9df811"
+  },
+  "failure": {
+    "unexpected_path": "__pycache__/result-parser.cpython-39.pyc",
+    "unexpected_sha256": "b915843391ad187c05c3903462ae36d3329dc1e07ed790c30b0db8d4a70b7d50",
+    "parser_sha256": "5e2c4af398078165d9e2a6537189a283c59c7bae068837eb19977cddf23244d3",
+    "observed_files": 347,
+    "expected_files": 346,
+    "mode2_failure_sha256": "abebfb2a60e9816bcb1522da681e50a643f475a2eb1de14c64b0e7bf089ab517",
+    "mode3_failure_sha256": "abebfb2a60e9816bcb1522da681e50a643f475a2eb1de14c64b0e7bf089ab517",
+    "reason": "A Python syntax check wrote bytecode outside packet10's exhaustive allowlist. The run stopped without deletion or retry."
+  },
+  "repository_files_changed_by_implementation": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Independently review an additive rerun packet that invokes Python with bytecode writing disabled and retains the exact 346-file allowlist, then use a fresh attempt root."
+}

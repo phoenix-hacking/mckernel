@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_packet_review",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "review_attempt": 14,
+  "recorded_utc": "2026-09-16T09:42:00Z",
+  "status": "FAIL_PACKET",
+  "reviewed_packet": {
+    "path": "docs/verification/stability-selected-retention-generic-row03-row12-implementation-packet-20260916-9.md",
+    "sha256": "6bcf0d5eee3e0d9c0687679a573b2b84c5264b1bd2b5ff1c228e9ae7cc009f56"
+  },
+  "findings": [
+    {
+      "anchor": "packet9 line 16",
+      "kind": "input_pin_mismatch",
+      "packet_value": "8f3f44a61f0392b10f79258842a120bfefb4aa8b5828868eb53a19de665e8d8",
+      "actual_value": "8f3f44a61f0392b10f79258842a120bfefeb4aa8b5828868eb53a19de665e8d8",
+      "required": "Use the exact actual SHA256 of design-input failure 13."
+    },
+    {
+      "anchor": "packet9 line 115",
+      "kind": "exhaustive_allowlist_count_mismatch",
+      "packet_value": 344,
+      "actual_value": 346,
+      "calculation": "2 * 161 stager files + 4 adapter/runner files + 2 global files + 2 * 9 per-mode evidence files",
+      "required": "Correct the total to 346 without changing the named allowlist."
+    }
+  ],
+  "review_scope": "Authentication stopped at the mandatory pin-drift gate; source and ownership review did not run.",
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Publish one additive packet with only the exact failure13 hash and allowlist total corrected, then obtain a complete independent packet review."
+}

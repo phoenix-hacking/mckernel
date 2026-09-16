@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 41,
+  "recorded_utc": "2026-09-16T09:36:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-44.tar.gz",
+    "sha256": "5ddf13abf15505cc8ebbf71abfac7175603293b2dac46ee01aa3ddf952486153",
+    "size": 38514524,
+    "safe_unique_members": 35,
+    "files": 25,
+    "manifest_bindings": 24
+  },
+  "reviewed_source": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "sha256": "2f1cc151e0dba39d96af8ac992968951272a2c5d537e9c6af78be5b89b05141a"
+  },
+  "authenticated_replay": {
+    "archive43_and_failure36_lineage": "PASS",
+    "source_bindings": "24/24 PASS",
+    "positive_fixtures": "7/7 PASS",
+    "correction40_size_regression": "PASS: archive43 accepts and current source rejects all selectors 0/3/5",
+    "python3_9_bound_log": "127/127 PASS",
+    "python3_8_bound_log": "127/127 PASS",
+    "pycompile_and_diff_bound_logs": "PASS"
+  },
+  "blocking_finding": {
+    "source_anchor": "oracle.py:2545 successful executable source validation",
+    "producer_anchor": "collector.c:284 seal_source executable-mode rejection",
+    "affected_selectors": [0, 3, 5],
+    "mutation": "Change both report.executable.source_before.mode and source_after.mode from 0100755 to 0100644 while preserving authenticated payload bytes and sizes, sealed backing and SETUP; rebind the report artifact, owner terminal, report I/O sizes and supervisor hashes.",
+    "expected": "oracle rejection because seal_source accepts only a regular source with at least one execute bit and no setuid or setgid bits",
+    "observed": "oracle.validate(root, selector, 0) returned true for selectors 0, 3 and 5",
+    "canonical_mutated_report_sha256": {
+      "selectors_0_and_5": "4efc8d7019921ec87fa3830cce2ebcf6fa842538d0bef4c98eacc4f0b3d67199",
+      "selector_3": "18f399901bb38760ce6d5ee7afbd90067f9b38955dedf84d0a1936bb536c4df8"
+    }
+  },
+  "required_correction": "Require both successful executable source records to be regular files, contain at least one execute bit and contain no setuid or setgid bits, exactly matching seal_source; add complete positive and independently rebound negative controls for selectors 0, 3 and 5.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
