@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 28,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T05:28:56Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-31.tar.gz",
+    "sha256": "b8fb02bdff5f3d7a311316582850b0085bef903112142de0fb1c902b4a64b141",
+    "size": 36917455,
+    "members": 32,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "3c9ed0df096c0f03a68d4eef6e9200bc330ffa21b81574f8ae30f0ef14bd7c6f",
+    "test_collector_storage_fault_packet.py": "ef5648a0a9980adde348c14d6cc3b9012075da3d554f9f5850ed6db51a731390"
+  },
+  "independent_checks": {
+    "outer_source_bindings_match": true,
+    "recursive_safe_envelopes": 28,
+    "recursive_archive_source_bindings": 217,
+    "review_24_through_27_differentials": "6/6 PASS",
+    "prior_malformed_cases": "89/89 reject",
+    "selectors_0_through_6_and_optional_sample": "PASS",
+    "raw_wait_decode_parity": "65536/65536 PASS",
+    "fresh_case_ledger_sha256": "5243fa78ad3ef4890e207cc91cf21160e3eb09d9d83a2143b95f1fd32952e5fe"
+  },
+  "findings": [
+    "Complete selector-0 evidence accepts a proc-exe sample containing a NUL byte or 256 decoded bytes; the producer can retain at most 254 non-NUL serialized bytes. Empty samples remain valid.",
+    "Pre-fork selectors accept invented process start, deadline and completion timestamps, pinned-group state and omitted-child counts that the producer leaves zero or false.",
+    "Selector-0 accepts a zero preparation start even though its preparation clock must be positive.",
+    "The accepted pinned-group cleanup path accepts linux_child.kill_sent true although the producer leaves it false on that path."
+  ],
+  "representative_accepted_canonical_sha256": {
+    "proc_exe_sample_nul": "d6df06955b90023914498e81c102bbc4e2805d6daf3b253ffbdbfe60c342efa0",
+    "proc_exe_sample_oversized": "64027cfbbc570cc7fbdc8b83cdec3d45668bc2ecce10e92bb357e9c976aabdff",
+    "pre_fork_invented_process_state": "06764ee21271b79d0666cd01f2482a688a41d094543de11d23fac2088c4a8a2e",
+    "zero_preparation_start": "7fb47b724a01aac0b654c66d5a82a7176df821f71f2092103dcc85e696e2476b",
+    "pinned_group_child_kill_sent": "b5aacda0f6c833288fabc4ad94407518bcac403a33bd19d0a2c6aa04f2f3882d"
+  },
+  "required_next": [
+    "Preserve the exact attempt-28 correction and focused controls without claiming source acceptance.",
+    "Rerun both pinned full suites and pycompile, freeze a new exact archive and obtain fresh independent source review.",
+    "Only after PASS_SOURCE checkpoint the raw source and draft the separately reviewed conditional UID1000 compiler-only packet."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

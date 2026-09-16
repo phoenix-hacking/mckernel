@@ -1879,3 +1879,52 @@ commit `181598d0ed1bf9148c0458f221b055cd528c15c1`. Local HEAD,
 CURRENT, validation record and evidence-archive blobs matched the fetched remote
 objects exactly; the archive retained SHA256
 `247be40a9b843e7eb1fdd7a7f230a75f29a68c7fb865a78e1c72be36b7f4c39f`.
+
+Window-close checkpoint 22 stops new dispatch at 2026-09-16T05:28:56Z.
+Independent source review 28 returns `FAIL_SOURCE` for archive 31, SHA256
+`b8fb02bdff5f3d7a311316582850b0085bef903112142de0fb1c902b4a64b141`,
+36,917,455 bytes and 32 safe unique members. All 89 prior malformed cases now
+reject, selectors 0 through 6 and the optional-sample positive accept, and all
+65,536 raw wait values match the supervisor decoder. Remaining findings are a
+NUL or overlong proc-exe sample, invented pre-fork lifecycle/ownership state, a
+zero preparation clock and a contradictory pinned-group child-kill flag. The
+exact findings and canonical hashes are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-24.json`.
+
+Bounded correction attempt 28 changed only the still-untracked oracle and test.
+Its review-24-through-28 focused controls pass 7/7 and `git diff --check` passes.
+The current oracle SHA256 is
+`dc7dd7d2a33b694e607fa3e70c7767649f9da353c48f5af21d3bdbb4241d0874`;
+the test SHA256 is
+`42a159c2e4fd08c7b005d9eac4775753ad5b06de4797e5d7c87f5123a2bf1ad2`.
+The window ended before attempt-28 dual full-suite and pycompile runs, so no
+fresh source acceptance is claimed. The raw fixture/test remain untracked and
+rejected, and no compiler packet or execution is released.
+
+The M03 production-authority review returns `FAIL_AUTHORITY_PACKET`. Clear
+failure currently releases XPMEM ownership, TLB completion lacks a generation
+and late-interrupt lifetime permit, existing locking is only partial exclusion,
+descriptor/VM generation and quarantine authorities are absent, and the dirty
+inventory model is not executable equivalence evidence. The exact source-bound
+audit and independent review are retained in
+`stability-pending-free-inventory-production-authority-audit-20260915-1.json`
+and `stability-pending-free-inventory-production-authority-review-20260915-1.json`.
+No M03 integration or credit is released.
+
+All three bounded children are completed and joined. Live campaign identities
+are launcher 1676703, recovered worker 1899017 and Codex app-server 1899019.
+No project build, container build, guest, QEMU, mcexec or IHK process is live;
+unrelated Verilator compiler activity remains outside this project. Host free
+space is 55 GiB and scratch free space is 22 GiB. The launcher has paused future
+goal continuations.
+
+Next tasks, in order: (1) rerun attempt-28 full suites and pycompile under both
+pinned interpreters; (2) freeze a new exact source-review archive and obtain a
+fresh complete independent review; (3) only after `PASS_SOURCE`, checkpoint the
+raw source and draft the separate conditional UID1000 compiler-only packet; (4)
+for M03, specify and independently review the lifecycle/clear-authority packet
+covering descriptor and VM generations, retained partial-clear ownership,
+late-TLB lifetime, lock order and quarantine handoff before any production edit.
+Counters remain 0/273 accepted application cases, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates. The whole-OS
+objective remains incomplete and is neither resumed nor marked complete.

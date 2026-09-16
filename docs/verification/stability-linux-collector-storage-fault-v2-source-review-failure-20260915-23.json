@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 27,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T05:09:50Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-30.tar.gz",
+    "sha256": "d24f23ffddeb7a1c7ebdf8270b23bf892d79033282a93e13928b02c4fac2f547",
+    "size": 36588545,
+    "members": 32,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "f1979a4432a853ffe270c3748a18bbb0323a39da663ce1910ceb10486433c003",
+    "test_collector_storage_fault_packet.py": "a1cd82a391be67f2569bcea4ccfd2416ae3872bf1e0392ff4754888486fb8182"
+  },
+  "independent_checks": {
+    "four_python_sources_read_completely": true,
+    "complete_test_file_lines_read": 4167,
+    "python_3_9_full_suite": "115/115 PASS",
+    "review_24_25_26_differentials": "PASS with retained canonical hashes",
+    "complete_fixture_mutation_sweep": {
+      "cases": 89,
+      "malformed_accepted": 48,
+      "controls_rejected": 41
+    },
+    "authentic_retained_input_archive_sha256": "ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721"
+  },
+  "findings": [
+    "Complete selector-0 and selector-2 reports accept bool/float substitutes for schema_version, collector_pid, first_failure_errno, collector_interruption_signal, eight lifecycle clock fields, group_identity_pinned and all three streams EOF booleans.",
+    "Owner records accept a floating runtime-input size and floats for cleanup trigger/start/deadline/finished timestamps.",
+    "Complete selector-0 evidence accepts negative linux_child ppid, pgid_at_observation or sid_at_observation and accepts identity_observed false despite the pinned positive setup identity.",
+    "The report accepts invented owned_children and an arbitrary subsequent_proc_exe_link_sample value without schema or cardinality validation."
+  ],
+  "representative_accepted_canonical_sha256": {
+    "schema_version_boolean": "3bad4919f40f014729f8a4d031098356257c7d4d7f9e00ad6806a8b604650b56",
+    "collector_pid_float": "952778b720810dcb6a56026312fe792cfefe20013e0768e1a597da1d2e092028",
+    "first_failure_errno_boolean": "4f39976857d2c68e6f719ec98899d0d948683eaa1fa397ab9b107ef8084c244f",
+    "collector_interruption_signal_boolean": "ec187efc37fc893fbe97f7f8822819856b8139741d1bb70df90777e047273f5c",
+    "owned_children_invented": "935008a04308de890c5d678d214cc03f5a89f3c1cf46595c41611f6b23fa734b",
+    "proc_exe_sample_arbitrary": "9f19cc7baa65702cef6871b8b46b083bd8209b0e7ada1270ad417bf539ba1a6f",
+    "owner_runtime_size_float": "45f1977997f9fefe5a79990fa9ddf00e3daec63c73f3e820039f6380a80e0621"
+  },
+  "retained_evidence": {
+    "dispatcher_four_case_archive": {
+      "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-32.tar.gz",
+      "sha256": "6efa32c9ec1391582e06236a8b863ed224630d9c0fdb982aad3db0c112187954",
+      "size": 102400,
+      "members": 22,
+      "note": "Includes the first missing-prerequisite packaging failure and the corrected exact four-case reproduction."
+    },
+    "independent_review_archive": {
+      "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-failure-evidence-20260915-23.tar.gz",
+      "sha256": "62d727843920abbbd206f722dabf0b391ce692c1c014f18a8976a64c757adbf4",
+      "size": 188778,
+      "members": 548,
+      "contents": "review, exact reproducer, complete 89-case result ledger and every mutated report/owner/supervisor/journal JSON binding without duplicated binaries"
+    },
+    "review_sha256": "8070e0a1fc92809dce3a136402ce8753c300192ad48038a5e3f1c15f3cf0ca39",
+    "reproducer_sha256": "7c2ddbd3e148bf52431146116c06df5197eb2d7efc68a6fafe98eb9c2e90d71a",
+    "results_sha256": "b7d53bb5f53b6404c4d87b8ba7dfdec8e47c6797e7761d64fbe6744aa671dcd2"
+  },
+  "required_next": [
+    "Add centralized exact report scalar, boolean, process-identity, owned-child and nullable proc-exe-sample schema validation.",
+    "Add exact owner cleanup timestamp and runtime-input size validation.",
+    "Retain old-accept/current-reject full-fixture controls for both post-fork and pre-fork selectors, rerun both pinned interpreters, freeze a new exact archive and obtain fresh independent review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
