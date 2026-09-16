@@ -1986,3 +1986,32 @@ separately reviewed conditional UID1000 compiler-only packet, otherwise retain
 the new finding and correct it; (3) specify new M03 generation/pin/TLB/quarantine
 mechanisms and the M01 actual-source runner ABI before either implementation.
 Counters remain unchanged and the whole-OS objective remains active.
+
+Continuous checkpoint 24 preserves source-review attempts 30 through 32.
+Review 30 rejected archive 33 because selector-specific source/devnull state,
+successful request creation/relocation and archive31 acceptance controls were
+still incomplete. Correction 30 added those joins and passed 119/119 under both
+pinned interpreters. Review 31 then rejected archive 34, SHA256
+`558fbca30a988b290122a816c38638f790fd2be1a6e124c2dcf9da398eeb3e15`,
+because non-request reached sinks could still claim failed creation or fd
+relocation while retaining later successful evidence. Its exact findings are
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-27.json`.
+
+Correction 31 now requires exact successful new-sink state across all reached
+artifact positions and passes 120/120 under Python 3.9.12 and 3.8.10 plus both
+pycompile runs. Review-input archive 35 is 37,391,676 bytes with 29 safe unique
+members at SHA256
+`701d73ce1a7ff67c538dbdd5522569fbea1fe9f6124e8c8d88b872e5fb41006a`.
+Independent review 32 still returns `FAIL_SOURCE`: selector 2/6 exempted every
+sink from I/O consistency rather than request.bin alone, accepting impossible
+truncated/error/overflowing events counters. Exact hashes are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-28.json`.
+Bounded correction 32 is active on the same two untracked files. No source,
+compiler packet or execution release follows yet.
+
+The live identities remain launcher 1676703, recovered worker 1899017 and
+Codex app-server 1899019. No project heavy build or guest is live. Host free
+space is 54 GiB and scratch free space is 22 GiB. Next tasks remain: finish
+correction/review of the exact source, checkpoint it only after `PASS_SOURCE`,
+then independently review the conditional UID1000 compiler-only packet. M03 and
+M01 retain their source-map blockers. Acceptance counters remain unchanged.
