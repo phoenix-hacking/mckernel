@@ -2471,3 +2471,35 @@ packet; (5) keep M03 closed behind its missing generation/pin/TLB/quarantine
 authority. Counters remain 0/273 application cases, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates. The whole-OS
 objective remains active and incomplete.
+
+Work-window closeout 33 records the user-requested pause after fetched checkpoint
+`87d96366c8264a81ee77ebcec61e3fa2fae9ba74`. No new task was dispatched after
+the pause request. All three bounded child lanes are complete and joined: M01
+state-matrix review 12 returned `FAIL_DESIGN_MATRIX`, storage correction 32 is
+superseded by the retained later correction, and storage correction 39 passes
+both 126-test Python lanes plus pycompile and diff checks. No child operation is
+live. Original failures, review archives, raw validation directories and the
+still-untracked storage source remain preserved; source acceptance is not
+inferred.
+
+Exact live campaign identities at closeout remain launcher PID 1676703,
+recovered worker PID 1899017 and Codex app-server PID 1899019. No project build,
+container build, guest, QEMU, mcexec or IHK process is live. The dispatcher event
+ledger is valid JSONL through 584 records, including the fetched checkpoint event.
+Host free space is 50 GiB and scratch free space is 22 GiB. The launcher owns the
+pause and future continuation; this closeout neither resumes the goal nor marks
+it complete.
+
+Next tasks after an explicit future continuation are: (1) obtain fresh complete
+Astra/high source review 40 of exact archive 43, authenticating and replaying all
+reviews 24-39 and the distinct collector/payload-size launch path; (2) only on a
+terminal `PASS_SOURCE`, preserve its pass record, stage the exact raw storage
+source, checkpoint it and prepare a separately reviewed conditional UID1000
+compiler-only packet; otherwise retain the new failure and make only one bounded
+correction; (3) freeze explicit M01 generic backing/ledger teardown choices and
+prepare only the narrow actual-admission, row03-hold and row12-release packet;
+(4) keep the negative/key-cancel/clock M01 work separate and M03 closed behind
+its generation, descriptor-pin, authenticated-TLB-ack and quarantine-ownership
+blockers. Counters remain 0/273 application cases, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
+acceptance remains incomplete.
