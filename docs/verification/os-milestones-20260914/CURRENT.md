@@ -1767,3 +1767,66 @@ not project build work. Host free space is 59 GiB and scratch free space is
 0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. The whole-OS objective remains
 incomplete and is neither resumed nor marked complete by this checkpoint.
+
+Continuous checkpoint 20 resumes under launcher run
+`.git/os-autopilot/runs/20260916T040529Z-c5b585aa`. Source correction attempt 25
+made established direct-child birth immutable and added old-accept/new-reject
+controls for sentinel and owner wait, signal and signal-error authority. The
+first controls were themselves invalid under archive 27 and are preserved as
+failure archive 30 at SHA256
+`8a756749a091c72a716ea16e9926a7f21d5a900089bfe494422212ab7f111864`;
+its invalid self-manifest entry is corrected additively without changing the
+archive. The replacement exactly reproduces the original review-24 canonical
+hashes `6fe02b2682cbe15f6c4ee97497129cd7a22454cd038cd7b25d1237ab85587242`
+and `b62b0b069a4dfef6f36df22d1e1918e3479e14a923d763ef840b345ad4e6042e`.
+
+Independent review 25 nevertheless returns `FAIL_SOURCE` for two additional
+strict-schema gaps in archive 28 SHA256
+`fe55a4e5ab948f41994d376ad570e73fd814670c6e4be9924784f7d174297b83`:
+boolean `actual_bytes=False` compared equal to integer zero, and SPAWN_FAILED
+accepted malformed normalized-error value types. Their exact selector and
+full-record hashes are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-21.json`.
+The first focused correction then stopped on a test-only module-binding
+NameError; failure archive 31 SHA256 is
+`90f985d3491b16fd29300a7619eb735d7a19e64441b2dad5fed7f8704c2a90f1`.
+
+The corrected archive 29 is 36,475,232 bytes with 33 safe unique members at
+SHA256 `7c57014f865797edd2c3abcafc0d96760fce4391d0e5d1064c7b31f7f682e0ee`.
+Python 3.9.12 and 3.8.10 each pass 113/113, both pycompile the four fixture
+sources, and the envelope now binds raw interpreter versions, paths, metadata
+and executable hashes. Review 26 still returns `FAIL_SOURCE`: a valid
+SPAWN_FAILED record accepts numerically equal floating
+`owner_wait_deadline_ns=220000000100.0`, canonical hash
+`58782272d47280a9075e57022c761c8f3653d3fd28c0c9b6f9ea9ed399bc8ec6`.
+It also flags an unclosed report-schema concern where `wait.exit_code=False`
+may compare equal to zero. The current raw storage fixture/test bytes remain
+untracked and rejected; no compiler packet, compilation, root/native/guest
+execution, application acceptance or production credit is released.
+
+M03 now has an independently accepted proposal-only inventory source contract
+at `stability-pending-free-inventory-source-contract-20260915-1.md`, SHA256
+`00141eb8f17d21ad3ad9b20829a333e6558e8859f70347d72bd3e9b893ae8be8`.
+It requires producer-owned identity/generation/count/range authority, pinned
+arena lifetime, a real lock/lease, validate-before-dereference, typed clear/TLB
+release and separate durable quarantine metadata. The registry, lock and
+acknowledgement producers remain unresolved; candidate 12 remains focused-
+equivalence-only and no M03 integration or gate credit is released.
+
+Next tasks, in order: (1) add exact-integer owner-wait-deadline controls for
+SPAWN_FAILED, preserving integer positives and float/boolean negatives; (2)
+construct the complete report-process `wait.exit_code=False` reproduction and
+audit adjacent top-level scalar/boolean fields against the producer schema; (3)
+rerun both pinned suites, freeze a fresh archive and obtain complete independent
+source review; (4) only after `PASS_SOURCE`, checkpoint the exact raw storage
+source/test bytes and draft a separately reviewed UID1000 compiler-only packet;
+(5) resolve and independently review the concrete M03 registry, lock, generation
+and clear/TLB authority sources before any production edit.
+
+At 2026-09-16T04:45:52Z all three bounded child agents are completed and joined.
+The live campaign identities are launcher 1676703, recovered worker 1899017 and
+Codex app-server 1899019. No project build, compiler, container build, guest,
+QEMU, mcexec or IHK process is live. Host free space is 56 GiB and scratch free
+space is 22 GiB. Counters remain 0/273 accepted application cases, 2/4 narrow
+fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
+The whole-OS objective remains active and incomplete.

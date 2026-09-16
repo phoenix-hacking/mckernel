@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 25,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T04:33:49Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-28.tar.gz",
+    "sha256": "fe55a4e5ab948f41994d376ad570e73fd814670c6e4be9924784f7d174297b83",
+    "size": 36300978,
+    "members": 30,
+    "safe_unique_members": true,
+    "recursive_archive_occurrences": 328,
+    "unique_archives": 21,
+    "verified_source_manifest_bindings": 190,
+    "unavailable_historical_archive_references": 8
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "c62ed382147aa95ee44e46f3792774d43ab7e6ffa592446609f120139ebd2692",
+    "test_collector_storage_fault_packet.py": "1cdf12e94b885447a714e7c0ce220e28ac21d963b13247ab305a71fc2d1eb8eb"
+  },
+  "accepted_subfinding": {
+    "scope": "review24 birth-immutability correction only",
+    "sentinel_canonical_sha256": "6fe02b2682cbe15f6c4ee97497129cd7a22454cd038cd7b25d1237ab85587242",
+    "owner_canonical_sha256": "b62b0b069a4dfef6f36df22d1e1918e3479e14a923d763ef840b345ad4e6042e",
+    "six_old_accept_new_reject_paths": true,
+    "source_acceptance": false
+  },
+  "findings": [
+    {
+      "id": "actual-bytes-exact-integer",
+      "description": "validate_packet_order accepts boolean False as actual_bytes zero although witness_owner rejects it as a non-exact integer.",
+      "selector2_packet_list_sha256": "beab852a1cbfc735be92b6119b3d3b435da152064b214a571b518847c7b36855",
+      "selector6_packet_list_sha256": "7c64633808f2f2ac26e2eac12309f5d62db379d2063b350e0dbdfd917f9526a9"
+    },
+    {
+      "id": "spawn-error-value-types",
+      "description": "The SPAWN_FAILED record branch validates spawn_error keys but accepts errno=True, type=17 and message=[] even though normalized_error cannot produce them.",
+      "boolean_errno_record_sha256": "8475cb8416aa94cdfdefc36cff5be2bcb227e68493f9cc54a2de27edfe2b8f24",
+      "integer_type_record_sha256": "4c17efa02125cb5a55b1f42641b08ddda2efd6e39f64cd3d4e33249089397911",
+      "list_message_record_sha256": "a75b47bcdfac9e69ac1cf17202e672235afbfc98aeb6b0741af970ca9f8b61e9"
+    }
+  ],
+  "evidence_limitations": [
+    "Failure archive 30 has 18 valid non-self manifest bindings, but its sha256sum.txt self-entry was computed before the manifest was finalized and does not match. Preserve the archive and correct this additively.",
+    "Interpreter versions are stated in commands.txt but no raw version or interpreter-binary identity capture is present.",
+    "The root-success retained-payload archive needed for a full archive-only fixture replay is absent."
+  ],
+  "required_next": [
+    "Require exact integer types for request-write byte counts and retain boolean/float negatives plus integer-zero positive controls.",
+    "Validate nonempty string spawn_error type/message and null-or-positive-exact-integer errno with full-record controls.",
+    "Capture raw interpreter versions and binary identities, rerun both suites, freeze a fresh archive and obtain another complete independent source review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

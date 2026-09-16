@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 26,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T04:45:52Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-29.tar.gz",
+    "sha256": "7c57014f865797edd2c3abcafc0d96760fce4391d0e5d1064c7b31f7f682e0ee",
+    "size": 36475232,
+    "members": 33,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "485b094b1fbbe283635550cc4f46de21880fbf12295ee03ac21c479ffe6fcc68",
+    "test_collector_storage_fault_packet.py": "9b67958db59c13f2ed53b576956cf6e6b2b6bba656a2690f110248dc861e442f"
+  },
+  "verified_repairs": [
+    "Review-24 birth immutability: six prefix-accept/current-reject wait, signal and signal-error paths plus both original canonical hashes.",
+    "Review-25 exact integer request-write counts and normalized spawn-error value types: prefix acceptance and current rejection with five exact canonical hashes.",
+    "Both retained interpreter suites pass 113 tests; raw interpreter versions, executable paths, metadata and binary SHA256 identities are present."
+  ],
+  "finding": {
+    "description": "An otherwise valid SPAWN_FAILED record accepts owner_wait_deadline_ns as a numerically equal float because that branch compares the deadline without first requiring an exact integer.",
+    "canonical_json_sha256": "58782272d47280a9075e57022c761c8f3653d3fd28c0c9b6f9ea9ed399bc8ec6"
+  },
+  "additional_source_concern": "validate_report_process does not exact-type-check wait.exit_code before comparing it with the success dictionary, so False may compare equal to integer zero. A complete focused report-fixture reproduction is still required; other top-level scalar/boolean comparisons should be audited in the same bounded packet.",
+  "coverage_limits": [
+    "The reviewer did not complete a fresh line-by-line reread of every unchanged fixture source before the checkpoint stop.",
+    "Nested failure31 raw bindings were not fully reverified.",
+    "The report-process boolean/integer concern lacks a retained complete-fixture reproduction."
+  ],
+  "required_next": [
+    "Require owner_wait_deadline_ns to be a positive exact integer in every owner-identity branch; preserve integer positive and add float/boolean full-record negatives.",
+    "Construct a complete report-process fixture for wait.exit_code False and audit adjacent scalar/boolean fields against producer schema.",
+    "Rerun both pinned suites, freeze a new exact archive and obtain another complete independent review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
