@@ -46,7 +46,14 @@ exactly 161 files: `helper.py`, `record.json`; six named `inputs/` files
 `original-send-gate.rs`); and, for every one of the manifest's exact 51 names,
 the three explicitly named paths `source/<name>`, `originals/<name>`, and
 `diffs/<name>.diff`. This is an exhaustive file allowlist, not a directory/glob
-write grant. Stager output must say `PREPARED_NOT_COMPILED_NOT_EXECUTED`.
+write grant. The same exhaustive allowlist also includes, per mode, exactly
+these evidence files: `stager-pre.json`, `adapter-pre.json`, `adapter.diff`,
+`adapter-inverse.json`, `stager-inverse.json`, `source-audit.txt`,
+`runner-audit.txt`, `result.json`, and `failure.txt`. The fresh root, both mode
+roots, all eight named subdirectories, all 161 stager files, these nine evidence
+files, and the adapter files below are the complete creation allowlist; no
+other path may be created or modified. Stager output must say
+`PREPARED_NOT_COMPILED_NOT_EXECUTED`.
 
 After staging, source edits are restricted to these six generated candidates
 only: `mode{2,3}/source/application_syscall.rs`,
@@ -89,45 +96,78 @@ Immediately before the real second `state.compare_exchange(2, 1, ...)`, the
 gated one-shot hook receives only `&AtomicU64`, mutates that live atomic once to
 force the mismatch, retains no reference, and leaves the existing prefix writes
 observable. The status event is emitted after the final real status store and
-never dereferences released memory. Mode 3 uses only runner-owned atomic
-`ktime_get() -> i64`; mode 2 has no substituted mode-3 clock.
+never dereferences released memory. Both modes provide a positive runner-owned
+atomic `ktime_get() -> i64`; mode 2 supplies it for the selected-send path,
+and mode 3 additionally uses it for the exact two-second recovery deadline.
+
+The negative-TID case is the sole exception to the admitted mailbox runner: the
+test-only, module-local fixture constructs one exclusive `TestResponseMemory`,
+then constructs exactly one `Response::from_memory(&request, memory)` directly
+and extracts that one consuming `Response<M>` into
+`verification_prepare_retained(-1, value)`.  It neither inserts that Response
+in a `Call` nor retains a second response owner; the request, physical address,
+claim, and backing identity must be the same source-proven direct-construction
+values.  `Err((response, -22))` is moved to unfinished Drop/quarantine.  There
+is **zero** `ResponseMemory::release`, its backing remains retained for the
+failure record, and no invented Response release/extraction API is permitted.
 
 ## Exact row matrix and legal sequencing
 
-Every row is a fresh process with fresh mailbox, backing, ledger, and one-shot
-statics. Record arguments, result, selected identity, state/status words,
-callback count, baseline deltas, ledger sequence, first-invalid, quarantine,
-and release/Drop counts.
+Every row and every listed subcase is a fresh process.  Its mandatory prefix is:
+fresh mailbox/backing/ledger/one-shot statics; `Mailbox::new`; `open_worker`;
+real `admit`; `reserve(handle)`; `copied(handle, serial, true)`; real selection
+and claim verification; install phase state **ARMED (1), commits 0, invalid 0**;
+then call unchanged `return_value`.  Thus normal selected preparation is always
+`return_value(...) == Ok(())`, and its real `stability_fault_accepted` changes
+ARMED to ACCEPTED_PENDING (2), with `accepted_selected()` having result
+`stage=2, invalid=0`.  Only after that successful preparation may the runner use
+`test_set_state(stage, commits, invalid)` for the publication condition.  It
+must record separately: preparation result; accepted transition/result; phase
+query timing/result; `publish` result; cancellation result; first-invalid;
+state/status words; callbacks; send/status/release/Drop/quarantine ledger
+events.  A held-stage `Err(-11)` is from the publication send gate, never from
+preparation.  Never cancel while a mutable mailbox borrow or owner lock is held.
+Rows 21--24 are explicitly response-prepare negative fixtures: construct their
+specified response state first, call the named prepare route, and record its
+error/unfinished disposition; they do not claim the normal successful prefix.
 
-* Holds: stages 0, 1, 6, 255, and stage 3 with commits 0 or 2, for both wake
-  values, return publish `-11` and latch invalid `-71`; stages 2, 4, 5 return
-  `-11` with invalid zero. All retain backing with zero publication/release.
-* M01-B-18 is the complete ordinary-unselected control: mismatched PID gives
-  `Ok(None)`, pre-RET publish is `Ok(false)`, then ordinary `return_value` and
-  wake-None publish are `Ok(true)` with exactly one status store/release.
-* Mode 2 selected wake-Some performs the real notification failure `-5` only
-  after publication/release; it never rolls back or claims retention. Mode 3
-  selected wake-Some at `t` makes one fault attempt, `-11`, zero real sends and
-  retains; at `t+1,999,999,999` it is still held; at exactly
-  `t+2,000,000,000` it recovers once, stores status, and releases once.
-* M01-B-20 first completes `return_value`; cancel-before-publication is a
-  distinct serialized case (expected guard `-71`, first-invalid `-125`,
-  quarantine/no release). Its positive publication conclusion uses a fresh
-  completion and, for mode 3, completes the exact two-second recovery before
-  recording post-RET conclusions. Never cancel while a mutable mailbox borrow
-  or owner lock is held.
-* M01-B-25 selects after admitted/copying, then performs serialized
-  cancel-before-RET: `-71`, first-invalid `-125`, quarantine, zero release and
-  no post-release read. M01-B-26 uses separate fresh serialized processes for
-  RET-before-precommit-cancel and cancel-before-RET; it asserts at most one
-  completion/release and no reentry. M01-B-27 fully publishes first (and mode-3
-  fully recovers at two seconds), then cancellation has the unchanged
-  post-publication result with no rollback, relatch, or second release.
-* Negative TID is `-22`; nonzero initial completed status, invalid wake/state,
-  changed selected claim, and forced second CAS are `-71`; the CAS row preserves
-  prefix writes. Changed owner is a real mismatch, not fabricated physical
-  mutation. All other original rows 01--27 retain their reviewed attempt-6
-  method/result definitions; no row earns native ownership credit.
+Immediately after `return_value`, before the test state mutation, query
+`verification_phase_completion(key)`: wake `None` yields `Err(-71)` (the real
+completion has `(true,false)`), while wake `Some` yields
+`Ok(CompletionStatus { present: true, publication_since: None })`.  After a
+successful publish removes the call, the same query yields
+`Ok(CompletionStatus { present: false, publication_since: None })`; it is not
+the pre-publication wake-None error.
+
+| ID | setup and exact expected result |
+|---|---|
+| M01-B-01 | After the mandatory successful ARMED preparation/query, set stage 0, commits 0, invalid 0; `publish` `Err(-11)`, first-invalid `-71`, retained, zero send/status/release. |
+| M01-B-02 | After successful preparation/query, set stage 1, commits 0, invalid 0; `publish` `Err(-11)`, retained, zero send/status/release. |
+| M01-B-03 | After successful preparation/query, set stage 2, commits 0, invalid 0; `publish` `Err(-11)`, invalid 0, retained. |
+| M01-B-04 | After successful preparation/query, set stage 4, commits 0, invalid 0; `publish` `Err(-11)`, invalid 0, retained. |
+| M01-B-05 | After successful preparation/query, set stage 5, commits 0, invalid 0; `publish` `Err(-11)`, invalid 0, retained. |
+| M01-B-06 | After successful preparation/query, set stage 6, commits 0, invalid 0; `publish` `Err(-11)`, first-invalid `-71`, retained. |
+| M01-B-07 | After successful preparation/query, set stage 255, commits 0, invalid 0; `publish` `Err(-11)`, first-invalid `-71`, retained. |
+| M01-B-08 | After successful wake-None preparation and its pre-publication query `Err(-71)`, set stage 3, commits 0, invalid 0; `publish` `Err(-11)`, retained. |
+| M01-B-09 | After successful wake-Some preparation and pre-publication query present/None, set stage 3, commits 0, invalid 0; `publish` `Err(-11)`, retained. |
+| M01-B-10 | After successful wake-None preparation/query, set stage 3, commits 2, invalid 0; `publish` `Err(-11)`, retained. |
+| M01-B-11 | After successful wake-Some preparation/query, set stage 3, commits 2, invalid 0; `publish` `Err(-11)`, retained. |
+| M01-B-12 | After successful wake-None preparation/query, set stage 3, commits 1, invalid 0; `publish` `Ok(true)`, one status/release and zero send callbacks; post-removal phase query is absent. |
+| M01-B-13 | Mode 2: after successful wake-Some preparation/query, set stage 3, commits 1, invalid 0; positive runner-owned `ktime_get`; `publish` `Ok(true)`, one real send/status/release and call removal. Then call exact `stability_fault_notify(os, generation, application, cpu, notify)` with matching selected fields: it returns `Err(-5)`, invokes `notify` zero times, and causes no rollback, second send, second release, or retained owner. |
+| M01-B-14 | Mode 3 fresh process: perform the mandatory successful preparation/query, set stage 3, commits 1, invalid 0, and make the initial `publish` attempt at positive t. It returns `Err(-11)`, performs zero real sends/releases, and establishes `STABILITY_FAULT_SINCE=t`. |
+| M01-B-15 | Mode 3 fresh process: first replay the complete row-14 initial attempt at positive t (including `STABILITY_FAULT_SINCE=t`), then retry the same retained completion at t+1,999,999,999 ns; `publish` remains `Err(-11)`, zero send/release. |
+| M01-B-16 | Mode 3 fresh process: first replay the complete row-14 initial attempt at positive t (including `STABILITY_FAULT_SINCE=t`), then retry the same retained completion at t+2,000,000,000 ns; recovery `publish` `Ok(true)`, exactly one send/status/release and no second Drop/release. |
+| M01-B-17 | Before accepted selection, change exactly one selected-key field in separate subcases—`pid`, `cpu`, `requester`, `delivery`, or `response`—while leaving os/generation/application/worker/ledger claim otherwise valid. `return_value` stays `Ok(())`, accepted state does not transition (stage remains 1); query/publish follow ordinary-unselected behavior, never fabricated selected mutation or release. |
+| M01-B-18 | Fresh ordinary-unselected control with mismatched PID: observer selection `Ok(None)`; pre-RET `publish` `Ok(false)`; ordinary `return_value` `Ok(())`; its wake-None pre-publication phase query `Err(-71)`; ordinary `publish` `Ok(true)`, one status/release; post-removal query absent. |
+| M01-B-19 | After mandatory selected ARMED preparation/query, set stage 2, commits 0, invalid 0 and cancel before publish; `test_cancel_pending` `Err(-71)`, first-invalid `-125`, quarantine/retained, zero release. |
+| M01-B-20 | Fresh subcase A: after selected preparation/query set stage 3, commits 1, invalid 0, serialize cancel before publication; cancellation `Err(-71)`, first-invalid `-125`, quarantine/zero release. Fresh subcase B: same setup and mode-3 initial/recovery history where applicable, publish successfully, then retain the normal one-release conclusion. |
+| M01-B-21 | The exclusive direct route above: `verification_prepare_retained(-1, value)` `Err((response, -22))`; returned Response enters unfinished Drop/quarantine, with zero release and retained backing. |
+| M01-B-22 | Direct response-prepare negative: nonzero initial completed status; `verification_prepare_retained` `Err((response, -71))`, first-invalid `-71`; unfinished Drop/quarantine, retained, zero release. |
+| M01-B-23 | Direct response-prepare negative: invalid wake/state; `verification_prepare_retained` `Err((response, -71))`, first-invalid `-71`; unfinished Drop/quarantine, retained, zero release. |
+| M01-B-24 | Direct response-prepare negative: force the real second CAS failure; `verification_prepare_retained` `Err((response, -71))`, prefix writes preserved, first-invalid `-71`; unfinished Drop/quarantine, retained, zero release. |
+| M01-B-25 | After admit/copy but before `return_value`, set phase stage 1, commits 0, invalid 0 and serialize cancel-before-RET; `return_value` `Err(-71)`, first-invalid `-125`, quarantine, zero release and no post-release read. |
+| M01-B-26 | Separate fresh processes: (A) RET-before-precommit-cancel: successful selected preparation, then stage 2/commits 0/invalid 0, cancel `Err(-71)`; (B) cancel-before-RET: stage 1/commits 0/invalid 0, cancellation then `return_value` `Err(-71)`. Both quarantine, have zero release, no reentry, and at most one completion. |
+| M01-B-27 | Fresh selected process: successful preparation/query, set stage 3, commits 1, invalid 0, then fully publish (`Ok(true)`; mode 3 first establishes `SINCE=t` and recovers only at t+2,000,000,000); one send/status/release and post-removal phase query absent. Then cancel; `test_cancel_pending` `Ok(())` because removal found no call, with no rollback, relatch, second release, or post-release read. |
 
 ## Evidence, restoration, checks, stops
 

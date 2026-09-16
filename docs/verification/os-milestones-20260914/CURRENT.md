@@ -2352,3 +2352,66 @@ until their missing ownership/generation/pin/ack/quarantine authorities are
 specified and independently accepted. Counters remain 0/273 application cases,
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. The whole-OS objective remains incomplete and is not marked complete.
+
+Continuous checkpoint 31 resumes the launcher-owned objective from fetched
+checkpoint `aa5fa4e21d014e6f1fc5a67c7578d85070c8414e`. Independent storage source
+review 38 authenticates archive 41 and returns `FAIL_SOURCE`: post-fork SETUP
+could substitute executable-backing size zero or permissions 0600 while both the
+pre-ACK owner and full oracle accepted it for selectors 0, 3, 4 and 5. The exact
+selector-4 compact packet hashes are
+`59f63e520e309b23bc4f3ebce008cd31c84bedd9835fd07498dcef51389591a1`
+and `f0854a4c4883ecb46218b9bddd6f01234673766456e3755a117aaa627596cbb0`.
+The additive failure record is
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260916-34.json`,
+SHA256 `c658c81e76ca9d439b32b22290c1c87989d9e01f977b651519ef1985473630dc`.
+
+Bounded correction 38 changes only the still-untracked owner, oracle and test.
+Before ACK it now requires the successful regular executable backing to have
+exact permission bits 0500 and the authenticated runtime executable size. The
+oracle enforces the same contract before report-presence branching and joins
+device, inode, mode and size through SETUP, sealed backing and observed post-exec
+backing when a report exists. A new independently rebound archive-41 regression
+proves both old accepts and current rejects for both mutations across all four
+post-fork selectors and computes the two canonical hashes. The dispatcher-owned
+Python 3.9.12 and Python 3.8.10 lanes each pass 125/125; both pycompile lanes and
+`git diff --check` pass. Exact final hashes are owner
+`ddf0e8427a58feb82c830502eafe453eb26953d926c21238ba95345378a608d4`,
+oracle `8769f9bee3f58bade679018b970242180a3862ce9a9ee3af15ccb9410cbd1d93`
+and test `f0695c2ae43a9494afb5a507c5c82fc673d6c42d5a660104f77fc915a27c15ad`.
+Raw validation is retained at
+`/home/holden/mckernel-work/scratch/storage-fault-v2-attempt38-validation-SHftRS`.
+
+Fresh source-review archive 42 is 38,261,570 bytes with 35 safe unique members,
+25 files and 24 verified manifest bindings at SHA256
+`c6e56b1332ec8b457cd3c031a0f1833e72d5edf6ce0d9b17d5417545603181e1`.
+It binds archive 41, review-38 failure record 34, exact current source and all
+dispatcher validation identities, commands, statuses and streams. This remains
+review input only. The raw fixture/test are untracked and unaccepted; compiler,
+root, native, guest, application and production execution remain closed pending
+a fresh terminal `PASS_SOURCE`.
+
+M01 generic packet corrections 10 and 11 both fail fresh Astra/high review.
+Review 10 is retained at SHA256
+`c102ca7832148b3ca7e5d8937f68b17181a00fda7a22264dfa28b66b225f6f6c`.
+The Terra escalation closes preparation ordering, held publication, exact mode-2
+notify, negative-TID ownership and fresh recovery history, but review 11 still
+rejects exact packet SHA256
+`8071bd38119ecc11e58e5e68c5b41ae5bee89a760d461350509442ec7af5744c`.
+Row 20A, rows 25/26B, changed-key row 17 and direct rows 22-24 retain wrong or
+conflated state-machine results, and the matrix still leaves exact latch, wake,
+hook and terminal-ledger values implicit. Review 11 is retained at SHA256
+`64e413b8e0916bba4b48c16587fca9e0c1425b8c6d279c3916d4a4c5c29fe733`.
+Under the bounded retry rule, another cheap packet edit is stopped; M01 returns
+to dispatcher-level exact state-machine consolidation. No implementation is
+released and native backing ownership remains independently blocked.
+
+Next tasks: (1) checkpoint and fetched-blob verify archive 42 and the exact
+failure records; (2) obtain a fresh complete Astra/high source review 39 of
+archive 42, replaying every retained control and adjacent executable-backing
+schema join; (3) only on terminal `PASS_SOURCE`, checkpoint the exact raw source
+and prepare the separately reviewed conditional UID1000 compiler-only packet;
+(4) separately consolidate M01's exact per-operation state matrix before a new
+packet version; (5) retain M03 behind its generation/pin/TLB/quarantine ownership
+blocker. Counters remain 0/273 application cases, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. The whole-OS
+objective remains active and incomplete.

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_actual_method_implementation_packet_review_failure",
+  "task_id": "M01-B-selected-retention-generic-actual-methods",
+  "review_attempt": 11,
+  "recorded_utc": "2026-09-16T08:41:00Z",
+  "status": "FAIL_PACKET",
+  "reviewed_packet": {
+    "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-20260916-8.md",
+    "sha256": "8071bd38119ecc11e58e5e68c5b41ae5bee89a760d461350509442ec7af5744c"
+  },
+  "prior_reviews": [
+    {
+      "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-review-failure-20260916-9.json",
+      "sha256": "10bbc15b9bf9aa68e5145d6722bdba22d242c6d91fc467448504abd9e4dfc4e2"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-review-failure-20260916-10.json",
+      "sha256": "c102ca7832148b3ca7e5d8937f68b17181a00fda7a22264dfa28b66b225f6f6c"
+    }
+  ],
+  "authenticated_inputs": {
+    "source_members": 102,
+    "source_map_stager_six_templates_and_authority_records": "MATCH"
+  },
+  "closed_findings": [
+    "ARMED preparation ordering",
+    "held publication returns -11",
+    "mode-2 publication/send/release before exact notification Err(-5) with zero callback",
+    "exclusive negative-TID unfinished quarantine",
+    "fresh-process recovery history",
+    "row-27 post-publication cancellation Ok(())",
+    "exhaustive allowlist, cfg(test) erasure and inverse restoration constraints"
+  ],
+  "findings": [
+    {
+      "id": "row20a-cancellation-result",
+      "evidence": "At stage 3/commits 1 retention_released is true, stability_retention_cancel returns Ok(()), and cancel_call finds the completion and returns Ok(()).",
+      "required": "Require cancellation success, invalid 0 and the still-owned completion with zero release at this boundary; specify later publication separately."
+    },
+    {
+      "id": "rows25-26b-post-cancel-ret",
+      "evidence": "Precommit cancellation returns -71 and marks the call quarantined; the later return_value immediately returns -32.",
+      "required": "Distinguish cancellation -71, later RET -32 and retained first-invalid -125."
+    },
+    {
+      "id": "row17-selection-versus-owner-key",
+      "evidence": "Owner matching excludes PID, CPU, requester and delivery. Those changes keep the universal publication gate selected, while response changes break ownership matching. Query results also differ by changed key.",
+      "required": "Split every changed-key subcase with exact mutation timing, query key/result, publication result, invalid latch and retention outcome."
+    },
+    {
+      "id": "rows22-24-wrong-latch-route",
+      "evidence": "Direct verification_prepare_retained returns response/error without calling stability_phase::invalid; the selected mailbox return-prepare adapter owns that latch.",
+      "required": "Leave direct-fixture phase invalid at zero and distinguish runner-recorded error, or use the selected mailbox route where selected-error restoration is the subject. Reconcile the direct-construction scope."
+    },
+    {
+      "id": "matrix-not-exhaustive",
+      "evidence": "Rows 02 and 08-11 omit first-invalid -71; rows 14-16 omit explicit wake-Some initialization; row 23 lacks the exact invalid state; row 24 lacks the hook replacement value; multiple cancellation/query and ledger counts remain implicit.",
+      "required": "Supply exact values or explicit not-invoked entries for every operation and terminal ledger count in each row/subcase."
+    }
+  ],
+  "disposition": "The bounded worker correction and Terra escalation both failed independent packet review. Stop another cheap packet retry; return to dispatcher-level exact state-machine consolidation before a new packet version.",
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
