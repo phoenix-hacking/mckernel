@@ -1542,3 +1542,37 @@ Host free space is 63 GiB and scratch free space is 23 GiB. Counters remain
 0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. This checkpoint is progress evidence,
 not whole-OS completion.
+
+Window-end checkpoint 15 adds correction packet 19 at SHA256
+`4566c87f2c6a660a34d384393d3e2d429f8d7997555defe160a0903737189d8c` and
+its independent review record at SHA256
+`d6f8e7e1696973387f6934cce3ea2de5e4f53abf571bf647e8b2fe76a5a88248`.
+The review status is `PASS_CORRECTION_PACKET_ONLY`; it releases only a bounded
+source correction. Packet 19 requires the actual late owner-start sample to be
+the cleanup trigger while retaining the earlier successful sentinel wait as the
+sole narrowly permitted pre-trigger event. It also requires an exact adjacent
+positive identity pair, with supervisor parent, matching PID/birth and permitted
+TERM/KILL phase, before any null-timeout-to-positive-reap join. It forbids null
+wildcards, post-wait or pre-timeout authority, wrong parent/birth/phase and
+revived authority. No source, compiler, root, native, application or production
+acceptance follows.
+
+Next tasks, in order: (1) add packet-19 focused controls for separated trigger
+timestamps and missing, wrong and post-wait identity pairs; (2) preserve the
+expected failures against the current rejected source; (3) implement only the
+reviewed `PreflightFailure` trigger, narrow earlier-sentinel-event exception and
+event-time identity-pair proof; (4) rerun the complete suite under both pinned
+interpreters; (5) freeze a fresh exact-byte source archive and obtain independent
+full source review. Only after `PASS_SOURCE` may a separately reviewed UID1000
+compiler-only packet be drafted. Do not compile, use root, run native code or
+launch a guest before those gates.
+
+At 2026-09-16T02:17:26Z new dispatch is stopped and all three child agents are
+completed and joined. The retained live identities are launcher 1676703, launcher
+worker 1676707 and Codex app-server 1676709, all started 2026-09-15 15:51:14 PDT.
+No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC, Clang or container
+build process is live. Host free space is 63 GiB and scratch free space is 23 GiB.
+The launcher has paused future goal continuations. Counters remain 0/273 accepted
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. The whole-OS objective remains incomplete and is
+neither resumed nor marked complete by this checkpoint.
