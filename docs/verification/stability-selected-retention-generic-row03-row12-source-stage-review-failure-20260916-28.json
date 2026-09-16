@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_source_stage_review",
+  "review_attempt": 28,
+  "recorded_utc": "2026-09-16T10:51:15Z",
+  "status": "FAIL_SOURCE_STAGE",
+  "reviewed_sha256": {
+    "packet25": "576a13a5be0c2fec06c4a62fabd5d25f81f5a994ab54bcdf0dd3733b55906ebb",
+    "review26": "e1e371cf469897d1bfa2f34c765c49ed571063d2e46f91c029a31423005d59e6",
+    "failure27": "be2db7b66c652ab8ee8bfac67baf7faa4205ea6ebafe9905931b863718077eed",
+    "archive27": "3b61378e8fdb9ad1894669ceb136c553ed683a7b1b6a2b273be3df335086f86d"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-source-stage-failure-20260916-27.tar.gz",
+    "size": 990614,
+    "safe_unique_members": 357,
+    "regular_files": 346,
+    "unexpected_paths": 0,
+    "bytecode_files": 0
+  },
+  "genuine_progress": "102 originals,12 inputs and102 stager outputs/diffs authenticate after erasing two cfg(test) include lines per mode. State now owns real Box queues. No scenario coverage follows.",
+  "findings": [
+    "mode2/adapter.rs:1: super::ResponseMemory resolves to the wrong parent module. Missing verification_owner would make real selection fail -95. Status is fabricated in release; preallocation, identity/address observations and drains/deallocation are absent.",
+    "Both runner.rs:1 files contain only strings, not requests or calls. No host crate, phase setters or snapshots exist. Keeping their include inside smp_application_syscall while converting runner.rs into a crate root would recursively include the runner.",
+    "manifest.json:1 enumerates no paths. adapter.diff is prose; inverse records assert inverse:true. Audits contain no checks; final source hashes are absent. Stager hashes describe pre-adapter bytes only.",
+    "result-parser.py:4 asserts two strings; result.json supplies those strings without observations. Exact fields, modes, counts, events, ownership and scope are unchecked."
+  ],
+  "packet_feasible": true,
+  "remediation_ownership": [
+    "Rust implementation owner: replace both adapters/runners coherently, with changes only to the three permitted generated cfg(test) source files. Preserve failed root27; no cheap template retry.",
+    "Use runner.rs as standalone std crate loading the five exact modules with minimal fallible Vec/log/clock compatibility. Replace its source include with inline cfg(test) smp_application_syscall scenarios. Fix trait qualification and fixture visibility.",
+    "Implement packet25:67-87 exact request/Claim/admission chain and phase setters. Preallocate queues/events; retain the driver Arc through snapshots/drains. Add the post-store metadata hook. Transfer Boxes under Mutex; move drain batches out, unlock, drop, then record deallocation. Assert exact row/event/count contracts; never read backing after publication.",
+    "Independent evidence owner: inspect real source before producing genuine unified diffs, member/template inverses, cfg erasure and hashes. Implement strict structural parsing; separate unexecuted expectations from observations. Bind345 finalized files plus the external manifest self-entry; preserve346 paths and all -B/bytecode stops."
+  ],
+  "release_scope": "No implementation/retry release. Packet25 is feasible; directed source implementation and independent evidence review remain required.",
+  "implementation_released": false,
+  "source_staging_released": false,
+  "compiled": false,
+  "compilation_authorized": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

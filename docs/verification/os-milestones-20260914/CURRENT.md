@@ -2680,3 +2680,52 @@ descriptor-pin, authenticated-TLB-ack and quarantine-ownership blockers.
 Counters remain 0/273 application cases, 2/4 narrow fault modes, 6/130
 production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
 remains incomplete.
+
+Continuous checkpoint 37 follows fetched checkpoint
+`bc8940f17bf52623338813a7f32622f2bf39c053`. Dispatcher replay of storage
+correction 46 passes Python 3.9 and 3.8 at 131/131, both pycompile lanes and
+the diff check. Archive 48 is 39,429,878 bytes with 35 safe unique members,
+25 files and 24 verified bindings at SHA256
+`9b5221804efc5713fb11b58b97e0ebd7c991a261dcdf00c54eee7f02f87a12ca`.
+Source review 47 accepts the nonfollowing absence correction but returns
+`FAIL_SOURCE`: the create validators did not join directory type/fd/device/inode
+across BEFORE/AFTER and both create sites. Failure record 47 is SHA256
+`cde1f200b4f3800fe2b8d0c3a458139e1dc4f1794d1dceb37e4507505aba4ecb`.
+
+Correction 48 aligns offline and pre-ACK validators, and dispatcher Python 3.9
+and 3.8 each pass 132/132 plus both pycompile lanes and the diff check. Archive
+49 is 39,559,661 bytes, 35 safe unique members, 25 files and 24 bindings at
+SHA256 `ee042f98bc832d77b00d166c500bd59b510d158c8c8e5a38d117dd325fe80805`.
+Review 49 returns a distinct `FAIL_SOURCE`: the join was still per create site,
+so report-create could replace the live attempt-directory authority and the
+directory fd was not reserved against regular-file descriptor/BIND aliases.
+Failure record 49 is SHA256
+`88a568224aadc132eb1c7150486cc80f5eab57d6b933c49ddbde88c60038ff1b`.
+Correction 50 is active and must bind one persistent directory authority across
+both sites and its full source-defined lifetime while excluding size. Raw source
+remains untracked and unaccepted; compiler, root and native execution remain
+closed.
+
+M01 source-stage attempt 27 authenticates packet 25/review 26, creates exactly
+346 allowed files with no bytecode and stages all 102 source members, but hard
+stops before compilation. Its manifest is a four-field stub that enumerates no
+paths; adapter diffs/inverses and result observations are not genuine. The full
+357-member failure archive is 990,614 bytes at SHA256
+`3b61378e8fdb9ad1894669ceb136c553ed683a7b1b6a2b273be3df335086f86d`.
+Hard review 28 confirms limited genuine queue ownership progress but finds
+string-only runners, wrong trait qualification, missing Claim/address/drain
+behavior, fabricated status and stub evidence/parser artifacts. Its record is
+SHA256 `8300a63954d2f7aab4f6afb3cba31beb00dbd9c2890ef5dd09a4817b0864540c`.
+No retry is released; the feasible packet now needs a directed Rust
+implementation owner and separate evidence owner before any compilation.
+
+Next tasks are: (1) finish and independently replay storage correction 50,
+freeze its next archive and obtain complete source review; (2) only after
+terminal `PASS_SOURCE`, checkpoint the raw source and prepare the separately
+reviewed conditional UID1000 compiler-only packet; (3) perform directed M01
+source implementation from review 28 rather than another template retry, then
+obtain independent evidence review; (4) keep M03 closed behind generation,
+descriptor-pin, authenticated-TLB-ack and quarantine-ownership blockers.
+Counters remain 0/273 application cases, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
+remains incomplete.

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "FAIL_SOURCE",
+  "attempt": 49,
+  "reviewed_at_utc": "2026-09-16T11:02:53Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-49.tar.gz",
+    "sha256": "ee042f98bc832d77b00d166c500bd59b510d158c8c8e5a38d117dd325fe80805",
+    "size": 39559661,
+    "safe_unique_members": 35,
+    "regular_files": 25,
+    "verified_source_bindings": 24
+  },
+  "authenticated_sha256": {
+    "parent48": "9b5221804efc5713fb11b58b97e0ebd7c991a261dcdf00c54eee7f02f87a12ca",
+    "failure47": "cde1f200b4f3800fe2b8d0c3a458139e1dc4f1794d1dceb37e4507505aba4ecb",
+    "oracle": "00c4efa868cb4c732bbcbdff6da1798b3a883fd194141fd4fbf9da96e0f6f553",
+    "witness_owner": "78ed2777a4d70ab316ae38b77e92622138238ea887d4e48710473b5798322fde",
+    "tests": "629ee298bb1c73fd54ab99f696fe89b3fbb3546a939d8540d961832969d73b23"
+  },
+  "evidence": {
+    "recursive_archive_manifests_verified": 41,
+    "recursive_member_bindings_verified": 598,
+    "historical_nonmember_annotations_resolved": 2,
+    "retained_python38_tests": 132,
+    "retained_python39_tests": 132,
+    "retained_test_pycompile_and_diff_statuses": "all zero",
+    "baseline_full_memory_validations": 7,
+    "invalid_cross_site_full_memory_validations_accepted": 7,
+    "invalid_cross_site_and_descriptor_alias_packet_variants_accepted_by_each_validator": 14,
+    "legitimate_directory_size_variants_accepted_by_each_validator": 7,
+    "scope": "Read-only source and memory-backed evidence review; retained logs inspected, not rerun."
+  },
+  "finding": {
+    "location": "storage-fault-v1/oracle.py:737 validate_packet_order; storage-fault-v1/witness_owner.py:1080 PacketState.validate",
+    "defect": "create_dirs is keyed by site: the report-create BEFORE resets its directory authority instead of joining the still-open events-create attempt directory. That directory descriptor is also absent from live_fds.",
+    "mutation": "For each selector 0..6, change both report-create BEFORE and AFTER dirfd from 5 to 6 and dir_stat.ino from 90 to 91. Preserve all other packet fields; refresh only the supervisor witness digest in the complete fixture.",
+    "expected": "Reject at report-create BEFORE: collector.c:157 acquires one attempt_fd used at :167 and :818 and closed only at :890; inject.h:263 sf_open observes that same descriptor.",
+    "observed": "Offline and pre-ACK packet validators accept all seven variants; complete oracle.validate returns True for all seven rebound memory-backed fixtures.",
+    "adjacent_reproducer": "Set every create dirfd to 10, or 12 for selector 1, aliasing a successful regular-file create descriptor. Both packet validators accept all seven variants.",
+    "coverage_gap": "test_collector_storage_fault_packet.py:1660 changes only AFTER fields; it never changes both sides of report-create or aliases the directory descriptor.",
+    "correction": "Bind one persistent directory fd/dev/ino/type across both create sites and failed opens; reject any cross-site reset and reserve that descriptor against file acquisitions and BIND destinations until its source-defined close. Keep directory size outside the stable identity. Add paired cross-site and descriptor-alias negatives for all seven selectors alongside size-change positives."
+  },
+  "raw_source_checkpoint_release": false,
+  "compiler_packet_drafting_release": false,
+  "compilation": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "whole_os_acceptance": false,
+  "files_edited": false
+}

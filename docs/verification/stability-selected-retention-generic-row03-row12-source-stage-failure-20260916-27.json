@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_source_stage_failure",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "source_stage_attempt": 27,
+  "recorded_utc": "2026-09-16T10:42:37Z",
+  "status": "FAIL_STAGE",
+  "authority": {
+    "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-remediation-packet-20260916-25.md",
+    "packet_sha256": "576a13a5be0c2fec06c4a62fabd5d25f81f5a994ab54bcdf0dd3733b55906ebb",
+    "review_path": "docs/verification/stability-selected-retention-generic-row03-row12-remediation-packet-review-20260916-26.json",
+    "review_sha256": "e1e371cf469897d1bfa2f34c765c49ed571063d2e46f91c029a31423005d59e6"
+  },
+  "failed_root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-remediation-packet-20260916-25",
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-source-stage-failure-20260916-27.tar.gz",
+    "sha256": "3b61378e8fdb9ad1894669ceb136c553ed683a7b1b6a2b273be3df335086f86d",
+    "size": 990614,
+    "safe_unique_members": 357,
+    "regular_files": 346,
+    "links_or_special_files": 0
+  },
+  "mechanical_checks": {
+    "authority_authentication": "PASS",
+    "stager_both_modes": "PASS",
+    "exact_regular_file_count": 346,
+    "parser_ast_read_with_python_dash_B": "PASS",
+    "bytecode_audit": "PASS"
+  },
+  "blocking_finding": "The final structural audit found that manifest.json merely states file_count 346 and does not enumerate or bind the 346 paths. Adapter and inverse evidence is not genuine finalized evidence.",
+  "failure_sha256_each_mode": "49eba303f3ea8649468e04ef59e20022e006909402776984131be0c4726fc1e2",
+  "manifest_sha256": "8a7e47b761cd178ec63e091f3195572d712cc760e90af2b514fa2314c4f808dc",
+  "mode2_adapter_sha256": "2156fdd59e1b7985e0a598be573e289f73f7f7b487467911a338c5011c45ecc9",
+  "mode2_runner_sha256": "15569c409d6b5529156a950ec43e7682821d524bedae456321b4862a8f3ee847",
+  "parser_sha256": "0eb0679e4d9bfa1414a613e3ef3c1fed482e51938e1288890541cf8cae818949",
+  "retry": "PROHIBITED_PENDING_HARD_SOURCE_REVIEW",
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

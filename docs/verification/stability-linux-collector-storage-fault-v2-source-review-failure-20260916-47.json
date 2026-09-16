@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "review_attempt": 47,
+  "recorded_utc": "2026-09-16T10:46:05Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-48.tar.gz",
+    "sha256": "9b5221804efc5713fb11b58b97e0ebd7c991a261dcdf00c54eee7f02f87a12ca",
+    "size": 39429878,
+    "safe_unique_members": 35,
+    "regular_files": 25,
+    "source_sha256_bindings": 24
+  },
+  "reviewed_sha256": {
+    "oracle": "c61ff1740cd41b17416103ef5c312a855c73261b4118c2a6b1fe5e04e11f7d9d",
+    "tests": "1c46cad58634f430162398e1a9594613d4432071daa48d14fca3ebc72c51898a",
+    "parent47": "0f1c14cb106d0ec4e055c3fd18b46710111941fa22b7c6cfaf2a5ba6077c88ee",
+    "failure45": "d700b33a157a26ebc992e7203acca086a9b8c31c28ff3bc4c5893893acb78d76"
+  },
+  "verified_evidence": "All archive bindings and 25 nested lineage manifests authenticate. Both retained logs report 131 tests OK; both pycompile statuses and diff status are zero. Prior contracts and unchanged producer sources were rechecked. Seven memory-backed full positive selectors pass.",
+  "absence_correction": "Shared lstat checks reject dangling symlinks, regular files and directories for selectors1/4, accept genuine ENOENT, and propagate PermissionError, NotADirectoryError and other OSError. This correction is sound.",
+  "blocking_finding": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "line": 737,
+    "symbol": "validate_packet_order AFTER-create branch",
+    "related_anchor": "witness_owner.py:1077 PacketState.validate; inject.h:263-280 sf_open; collector.c:157,890 attempt_fd lifetime",
+    "affected_selectors": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "mutation": "In a valid fixture, change only the AFTER events-create packet's dir_stat.mode from 040700 to 0100600. Refresh supervisor-result.json witness_sha256; leave all other evidence unchanged.",
+    "expected": "Reject: the same still-open attempt-directory descriptor cannot become a regular file across sf_open.",
+    "observed": "Full oracle.validate(root, selector, 0) returns True for every selector; owner.validate_packet_schema and PacketState also accept. Protocol replay additionally accepts AFTER dir_stat.ino 90->91 and dirfd 5->6 at both create sites: 42 invalid variants accepted.",
+    "selector0_mutated_packet_sha256": "876379a7b9e92d4f8d96f2d35c63bc5e3f585b7d7db46dee35bd5b896bf9a3be",
+    "cause": "Directory type is checked only BEFORE. Neither validator retains and joins the directory descriptor/device/inode across BEFORE/AFTER and the two create sites.",
+    "correction": "Validate directory type on every create observation and retain the source-bound attempt-directory fd/device/inode identity across both sites, including failed opens. Keep pre-ACK and offline validation aligned. Do not require directory size equality: creating entries may change it. Add complete selector and pre-ACK negatives for type, fd and inode substitutions while preserving valid directory-size changes."
+  },
+  "review_scope": "Read-only source and memory-backed evidence review; no files changed, fixture processes launched, or compilation performed.",
+  "source_accepted": false,
+  "source_checkpoint_released": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
