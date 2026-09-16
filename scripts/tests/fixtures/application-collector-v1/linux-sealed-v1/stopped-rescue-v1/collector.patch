@@ -1,0 +1,27 @@
+--- collector.c
++++ collector.c
+@@ -37,6 +37,7 @@
+ #define OWNED_LIMIT 512U
+ #define SETUP_WORDS 48U
+ #define SETUP_PACKET (SETUP_WORDS * 8U)
++#include "inject.h"
+
+ struct sink {
+     const char *name;
+@@ -504,6 +505,7 @@
+             descriptors[i].st_ino == pipe_identity[i - 1].st_ino;
+     }
+     if (!valid) child_error(setup_fd, 1, ESTALE);
++    m02_stopped_rescue_child_boundary(setup_fd, words);
+     setup_packet(setup_fd, words);
+     char *args[ACRQ_LIST_MAX + 1], *env[ACRQ_LIST_MAX + 1];
+     for (unsigned i = 0; i < request.argc; ++i) args[i] = (char *)literal(request.argv[i]);
+@@ -976,6 +978,8 @@
+     event("\"event\":\"child-created\",\"pid\":%ld,\"startticks\":%" PRIu64, (long)pid, leader.ticks);
+     while (!strcmp(failure, "none")) {
+         pump(); observe_exec(); check_leader();
++        if (m02_stopped_rescue_completed_wait_hook(leader_waitable, !leader.reaped, completion_observed, process_deadline, failure, &interrupted) < 0)
++            fail("COLLECTOR_ERROR", "stopped-rescue-hook", errno ? errno : EIO);
+         if (interrupted) { fail("INTERRUPTED", "collector-interrupted", EINTR); break; }
+         if (leader_waitable) break;
+         if (now_ns() >= process_deadline) { fail("TIMED_OUT", "process-deadline", ETIMEDOUT); break; }

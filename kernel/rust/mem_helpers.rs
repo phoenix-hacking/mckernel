@@ -1,5 +1,7 @@
 use core::ffi::c_void;
 use core::mem::{align_of, offset_of, size_of};
+use core::marker::{PhantomData, PhantomPinned};
+use core::pin::Pin;
 use core::ptr::{null_mut, write_bytes, write_volatile};
 use core::sync::atomic::{AtomicI32, AtomicI64, AtomicPtr, AtomicU64, Ordering};
 
@@ -265,6 +267,171 @@ const RUSAGE_CHECK_OOM_FMT: &[u8] = b"%s: memory used:%ld available:%ld\n\0";
 const RUSAGE_MEMORY_STAT_ADD_NAME: &[u8] = b"rusage_memory_stat_add\0";
 const RUSAGE_MEMORY_STAT_ADD_WITH_PAGE_NAME: &[u8] = b"rusage_memory_stat_add_with_page\0";
 const RUSAGE_MEMORY_STAT_ADD_WARNING_FMT: &[u8] = b"%s: WARNING !page,phys=%lx\n\0";
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum PendingFreeBatchState {
+    Vacant,
+    Retained,
+    Drained,
+}
+
+/// Pinned transaction destination for pending-page ownership transfer.
+/// It is deliberately !Unpin, !Send and !Sync and never frees implicitly.
+struct PendingFreeBatch {
+    head: AbiListHead,
+    state: PendingFreeBatchState,
+    source: *mut AbiListHead,
+    _pin: PhantomPinned,
+    _owner: PhantomData<*mut ()>,
+}
+
+impl PendingFreeBatch {
+    const fn new() -> Self {
+        Self {
+            head: AbiListHead { next: null_mut(), prev: null_mut() },
+            state: PendingFreeBatchState::Vacant,
+            source: null_mut(),
+            _pin: PhantomPinned,
+            _owner: PhantomData,
+        }
+    }
+}
+
+unsafe fn validate_pending_head(head: *mut AbiListHead) -> Result<bool, CInt> {
+    if head.is_null() || (*head).next.is_null() || (*head).prev.is_null() {
+        return Err(-EINVAL);
+    }
+    if (*head).next == head || (*head).prev == head {
+        if (*head).next != head || (*head).prev != head {
+            return Err(-EINVAL);
+        }
+        return Ok(false);
+    }
+    if (*(*head).next).prev != head || (*(*head).prev).next != head {
+        return Err(-EINVAL);
+    }
+
+    // Validate the complete ring before changing either list.  Floyd's
+    // traversal detects a foreign cycle without imposing a node-count cap.
+    let mut slow = (*head).next;
+    let mut fast = (*head).next;
+    loop {
+        if slow == head {
+            break;
+        }
+        if slow.is_null()
+            || (*slow).next.is_null()
+            || (*slow).prev.is_null()
+            || (*(*slow).next).prev != slow
+            || (*(*slow).prev).next != slow
+        {
+            return Err(-EINVAL);
+        }
+        let page = page_from_list(slow);
+        if page.is_null() || (*page).mode != PM_PENDING_FREE {
+            return Err(-EINVAL);
+        }
+        slow = (*slow).next;
+
+        if fast == head {
+            continue;
+        }
+        if fast.is_null() || (*fast).next.is_null() {
+            return Err(-EINVAL);
+        }
+        fast = (*fast).next;
+        if fast == head {
+            continue;
+        }
+        if (*fast).next.is_null() {
+            return Err(-EINVAL);
+        }
+        fast = (*fast).next;
+        if fast == slow && slow != head {
+            return Err(-EINVAL);
+        }
+    }
+    Ok(true)
+}
+
+unsafe fn detach_pending_free_batch(
+    source: *mut AbiListHead,
+    mut destination: Pin<&mut PendingFreeBatch>,
+) -> CInt {
+    // Safety obligations: the caller owns an exclusive, CPU-local source
+    // ring and keeps every live descriptor stable; no producer may edit the
+    // transfer or retained descriptors, and no callback may re-enter while
+    // this transaction is detached. `destination` must remain at this pinned
+    // address until drain (or explicit recovery). Once the source head has
+    // been reset, a later independently owned capture of that source is
+    // permitted while this older pinned batch remains retained.
+    let dest = destination.as_mut().get_unchecked_mut();
+    let dest_head = &raw mut dest.head;
+    if source.is_null()
+        || source == dest_head
+        || dest.state != PendingFreeBatchState::Vacant
+        || !(dest.head.next.is_null() && dest.head.prev.is_null())
+    {
+        return -EINVAL;
+    }
+    let nonempty = match validate_pending_head(source) {
+        Ok(nonempty) => nonempty,
+        Err(_) => return -EINVAL,
+    };
+    if nonempty {
+        let first = (*source).next;
+        let last = (*source).prev;
+        init_list_head(dest_head);
+        (*dest_head).next = first;
+        (*dest_head).prev = last;
+        (*first).prev = dest_head;
+        (*last).next = dest_head;
+        (*source).next = null_mut();
+        (*source).prev = null_mut();
+    } else {
+        init_list_head(dest_head);
+        (*source).next = null_mut();
+        (*source).prev = null_mut();
+    }
+    dest.source = source;
+    dest.state = PendingFreeBatchState::Retained;
+    0
+}
+
+unsafe fn drain_pending_free_batch(
+    source: *mut AbiListHead,
+    mut batch: Pin<&mut PendingFreeBatch>,
+    free_fn: Option<MemPendingFreeFn>,
+) -> CInt {
+    // Safety obligations: `source` must be the exact source captured by
+    // detach, the pinned transaction must outlive this call, and `free_fn`
+    // must not mutate either list or re-enter detach/drain. The caller owns
+    // the exclusive CPU/descriptor lease for the whole operation.
+    let Some(free_fn) = free_fn else { return -EINVAL; };
+    let b = batch.as_mut().get_unchecked_mut();
+    if b.state != PendingFreeBatchState::Retained
+        || b.source != source
+        || validate_pending_head(&raw mut b.head).is_err()
+    {
+        return -EINVAL;
+    }
+    let mut node = b.head.next;
+    let mut count = 0;
+    while node != &raw mut b.head {
+        let next = (*node).next;
+        let page = page_from_list(node);
+        (*page).mode = PM_NONE;
+        list_del_poison(node);
+        free_fn((*page).phys, (*page).offset as CInt, IHK_MC_PG_USER);
+        count += 1;
+        node = next;
+    }
+    b.head.next = null_mut();
+    b.head.prev = null_mut();
+    b.source = null_mut();
+    b.state = PendingFreeBatchState::Drained;
+    count
+}
 
 #[no_mangle]
 pub extern "C" fn round_up(x: CULong, y: CULong) -> CULong {
@@ -6021,4 +6188,89 @@ pub unsafe extern "C" fn kmalloc_cache_alloc(
         Some(kmalloc_cache_prealloc),
         Some(kmalloc_cache_log),
     )
+}
+
+#[cfg(test)]
+mod pending_free_batch_tests {
+    use super::*;
+
+    static mut FREED: CInt = 0;
+
+    unsafe extern "C" fn record_free(_: CULong, npages: CInt, _: CInt) {
+        unsafe { FREED += npages; }
+    }
+
+    unsafe fn page(phys: CULong, npages: CInt) -> MemPage {
+        MemPage {
+            list: AbiListHead { next: null_mut(), prev: null_mut() },
+            hash: AbiListHead { next: null_mut(), prev: null_mut() },
+            mode: PM_PENDING_FREE,
+            phys,
+            count: IhkAtomic { counter: 0 },
+            mapped: IhkAtomic64 { counter64: 0 },
+            offset: npages as OffT,
+            pgshift: PAGE_SHIFT as CInt,
+        }
+    }
+
+    #[test]
+    fn actual_helpers_transfer_drain_reuse_and_reject_atomically() {
+        unsafe {
+            let mut source = AbiListHead { next: null_mut(), prev: null_mut() };
+            init_list_head(&raw mut source);
+            let mut first = page(10, 2);
+            let mut second = page(20, 3);
+            list_add_tail(&raw mut first.list, &raw mut source);
+            list_add_tail(&raw mut second.list, &raw mut source);
+            let mut batch = PendingFreeBatch::new();
+            let mut pinned = Pin::new_unchecked(&mut batch);
+            assert_eq!(detach_pending_free_batch(&raw mut source, pinned.as_mut()), 0);
+            assert!(source.next.is_null() && source.prev.is_null());
+            let view = pinned.as_ref().get_ref();
+            assert_eq!(view.head.next, &raw mut first.list);
+            assert_eq!(view.head.prev, &raw mut second.list);
+            let mut wrong_source = AbiListHead { next: null_mut(), prev: null_mut() };
+            init_list_head(&raw mut wrong_source);
+            assert_eq!(drain_pending_free_batch(
+                &raw mut wrong_source,
+                pinned.as_mut(),
+                Some(record_free),
+            ), -EINVAL);
+            assert_eq!(detach_pending_free_batch(&raw mut source, pinned.as_mut()), -EINVAL);
+            FREED = 0;
+            assert_eq!(drain_pending_free_batch(&raw mut source, pinned, Some(record_free)), 2);
+            assert_eq!(FREED, 5);
+            init_list_head(&raw mut source);
+            let mut empty = PendingFreeBatch::new();
+            let empty_pin = Pin::new_unchecked(&mut empty);
+            assert_eq!(detach_pending_free_batch(&raw mut source, empty_pin), 0);
+            assert!(source.next.is_null() && source.prev.is_null());
+            init_list_head(&raw mut source);
+
+            let mut mixed = PendingFreeBatch::new();
+            mixed.head.next = &raw mut mixed.head;
+            let before = source;
+            assert_eq!(detach_pending_free_batch(
+                &raw mut source,
+                Pin::new_unchecked(&mut mixed),
+            ), -EINVAL);
+            assert_eq!(source.next, before.next);
+            assert_eq!(source.prev, before.prev);
+
+            let mut bad = page(30, 4);
+            let mut invalid = page(40, 5);
+            list_add_tail(&raw mut bad.list, &raw mut source);
+            list_add_tail(&raw mut invalid.list, &raw mut source);
+            invalid.mode = PM_NONE;
+            let before = source;
+            let mut rejected = PendingFreeBatch::new();
+            assert_eq!(detach_pending_free_batch(
+                &raw mut source,
+                Pin::new_unchecked(&mut rejected),
+            ), -EINVAL);
+            assert_eq!(source.next, before.next);
+            assert_eq!(source.prev, before.prev);
+            assert_eq!(bad.list.prev, &raw mut source);
+        }
+    }
 }

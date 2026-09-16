@@ -29,16 +29,28 @@ def snapshot(path):
 
 def should_restart(code, state, watchdog=False, stopped=False):
     if stopped or (state.get("goal") or {}).get("status") in {
-            "complete", "blocked", "usageLimited", "budgetLimited"}:
+            "complete", "usageLimited", "budgetLimited"}:
         return False
-    if state.get("stop_reason") in {"quota_or_rate_limit", "server_error", "turn_failed",
-                                    "needs_user_input", "goal_cleared"}:
+    reason = state.get("stop_reason") or ""
+    if code in {21, 22} or reason in {"quota_exhausted", "quota_or_rate_limit",
+                                     "needs_user_input", "goal_cleared"}:
         return False
     if watchdog:
         return True
-    if code in {0, 10, 20, 21, 22, 23}:
+    if reason == "work_window" or reason.startswith("signal_"):
         return False
+    if reason in {"server_error", "turn_failed", "rate_limit"}:
+        return True
+    if code in {10, 20} and (state.get("goal") or {}).get("status") in {"paused", "blocked"}:
+        return True
+    if code == 0 and (state.get("goal") or {}).get("status") == "active":
+        return True
     return code < 0 or code == 24 or code == 1 and state.get("retryable") is True
+
+
+def restart_delay(initial, restarts):
+    """Cap the exponent as well as the delay for months of continuous recovery."""
+    return min(initial * 2 ** min(max(restarts - 1, 0), 1023), 60)
 
 
 def progress_marker(state, worker_pid):
@@ -207,11 +219,11 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 break
             if not should_restart(final_code, state, watchdog, bool(stop_signals)):
                 break
-            if restarts >= args.max_restarts:
+            if args.max_restarts >= 0 and restarts >= args.max_restarts:
                 record("restart_limit_reached", max_restarts=args.max_restarts)
                 break
             restarts += 1
-            delay = min(args.restart_delay * (2 ** (restarts - 1)), 60)
+            delay = restart_delay(args.restart_delay, restarts)
             record("restarting_saved_session", thread_id=state.get("thread_id"), delay_seconds=delay)
             until = min(time.monotonic() + delay, deadline)
             while not stop_signals and time.monotonic() < until:

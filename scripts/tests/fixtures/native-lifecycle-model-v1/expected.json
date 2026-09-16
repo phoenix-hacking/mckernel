@@ -1,0 +1,434 @@
+{
+  "schema_version": 2,
+  "model_only": true,
+  "corpus_complete": false,
+  "pools": {
+    "P": [1, 0, 1, 1, 1, 0, 1],
+    "T": [1, 0, 1, 1, 1, 1, 1],
+    "U": [1, 0, 1, 1, 1, 2, 1],
+    "W": [1, 0, 1, 1, 1, 3, 1],
+    "X": [9472, 37, 0, 1],
+    "Y": [9472, 37, 0, 4],
+    "ZERO": [0, 0, 0, 0, 0],
+    "N": [{"arg": 0}, {"arg": 0}, 0, false, false, false, 0],
+    "F": [{"arg": 0}, {"arg": 0}, 0, false, false, true, 0],
+    "LOSS": [{"arg": 0}, 0, {"arg": 0}, false, {"arg": 1}, true, 0],
+    "Z": [{"arg": 0}, {"arg": 0}, 0, false, true, {"arg": 1}, 0],
+    "EV": [1, {"arg": 0}, {"arg": 1}, {"arg": 2}, {"arg": 3}, {"arg": 4}, {"arg": 5}, {"arg": 6}, {"arg": 7}, 1, {"arg": 1}],
+    "STEP": [{"arg": 0}, {"arg": 1}, {"arg": 2}, {"arg": 3}, {"arg": 4}, {"arg": 5}],
+
+    "p1": [{"pool": "P"}, null, 100, "Allocated", 1, "E", null, 0, null, false, true, false, null],
+    "p2": [{"pool": "P"}, null, 100, "Allocated", 1, "E", null, 0, {"pool": "T"}, false, true, true, null],
+    "p3": [{"pool": "P"}, null, 100, "Born", 1, "N", null, 0, {"pool": "T"}, false, true, true, null],
+    "p7": [{"pool": "P"}, null, 100, "Terminal", 1, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, true, true, null],
+    "p11": [{"pool": "P"}, null, 100, "Terminal", 1, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, true, null],
+    "p12": [{"pool": "P"}, null, 100, "Terminal", 1, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, false, null],
+    "p13": [{"pool": "P"}, null, 100, "Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, false, null],
+    "p14": [{"pool": "P"}, null, 100, "Retiring", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, false, [{"pool": "P"}, {"pool": "Y"}, 0]],
+    "p15": [{"pool": "P"}, null, 100, "Retired", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, false, [{"pool": "P"}, {"pool": "Y"}, 0]],
+
+    "t2": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Allocated", 1, "E", null, 0, null],
+    "t4": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Born", 1, "N", null, 0, null],
+    "t5": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Runnable", 1, "N", null, 0, null],
+    "t6": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Terminal", 1, "N", {"pool": "X"}, 0, null],
+    "t8": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Terminal", 0, "N", {"pool": "X"}, 0, null],
+    "t9": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Retiring", 0, "N", {"pool": "X"}, 0, [{"pool": "T"}, {"pool": "X"}, 0]],
+    "t10": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Retired", 0, "N", {"pool": "X"}, 0, [{"pool": "T"}, {"pool": "X"}, 0]],
+    "u6": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Allocated", 1, "E", null, 0, null],
+    "u7": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Born", 1, "N", null, 0, null],
+    "u8": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Runnable", 1, "N", null, 0, null],
+    "u9z": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Terminal", 1, "N", [0, 0, 0, 1], 0, null],
+    "u10z": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Terminal", 0, "N", [0, 0, 0, 1], 0, null],
+    "u11z": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Retiring", 0, "N", [0, 0, 0, 1], 0, [{"pool": "U"}, [0, 0, 0, 1], 0]],
+    "u12z": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Retired", 0, "N", [0, 0, 0, 1], 0, [{"pool": "U"}, [0, 0, 0, 1], 0]],
+    "w13": [{"pool": "W"}, {"pool": "P"}, 100, 201, false, "Allocated", 1, "E", null, 0, null],
+    "w14": [{"pool": "W"}, {"pool": "P"}, 100, 201, false, "Born", 1, "N", null, 0, null],
+    "w15": [{"pool": "W"}, {"pool": "P"}, 100, 201, false, "Runnable", 1, "N", null, 0, null],
+    "pG37": [{"pool": "P"}, null, 100, "Terminal", 1, "N", [9472, 37, 0, 2], 0, {"pool": "T"}, false, true, true, null],
+    "pG37r0": [{"pool": "P"}, null, 100, "Terminal", 0, "N", [9472, 37, 0, 2], 0, {"pool": "T"}, false, true, true, null],
+    "p_g1": [{"pool": "P"}, null, 100, "Terminal", 1, "N", [256, 1, 0, 2], 0, {"pool": "T"}, false, true, true, null],
+    "p_g2": [{"pool": "P"}, null, 100, "Terminal", 1, "N", [512, 2, 0, 2], 0, {"pool": "T"}, false, true, true, null],
+    "t_g1": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Terminal", 1, "N", [256, 1, 0, 3], 0, null],
+    "t_g2": [{"pool": "T"}, {"pool": "P"}, 100, 200, true, "Terminal", 1, "N", [512, 2, 0, 3], 0, null],
+    "u_g1": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Terminal", 1, "N", [256, 1, 0, 3], 0, null],
+    "u_g2": [{"pool": "U"}, {"pool": "P"}, 100, 201, false, "Terminal", 1, "N", [512, 2, 0, 3], 0, null],
+    "CA2": [1, 0, 1, 2, 1, 0, 1],
+    "CA3": [1, 0, 1, 3, 1, 0, 1],
+    "CP2": [1, 0, 1, 1, 2, 0, 1],
+    "CP3": [1, 0, 1, 1, 3, 0, 1],
+    "CP4": [1, 0, 1, 1, 4, 0, 1],
+    "CT2": [1, 0, 1, 1, 1, 2, 1],
+    "CT3": [1, 0, 1, 1, 1, 3, 1],
+    "CT4": [1, 0, 1, 1, 1, 4, 1],
+    "CT5": [1, 0, 1, 1, 1, 5, 1],
+    "CT6": [1, 0, 1, 1, 1, 6, 1],
+    "CT7": [1, 0, 1, 1, 1, 7, 1],
+    "CT8": [1, 0, 1, 1, 1, 8, 1],
+    "ca2r": [{"pool": "CA2"}, null, 101, "Allocated", 1, "E", null, 0, null, false, true, false, null],
+    "cp2r": [{"pool": "CP2"}, null, 101, "Allocated", 1, "E", null, 0, null, false, true, false, null],
+    "cp3r": [{"pool": "CP3"}, null, 102, "Allocated", 1, "E", null, 0, null, false, true, false, null],
+    "cp4r": [{"pool": "CP4"}, null, 103, "Allocated", 1, "E", null, 0, null, false, true, false, null],
+    "ct2r": [{"pool": "CT2"}, {"pool": "P"}, 100, 201, false, "Allocated", 1, "E", null, 0, null],
+    "ct3r": [{"pool": "CT3"}, {"pool": "P"}, 100, 202, false, "Allocated", 1, "E", null, 0, null],
+    "ct4r": [{"pool": "CT4"}, {"pool": "P"}, 100, 203, false, "Allocated", 1, "E", null, 0, null],
+    "ct5r": [{"pool": "CT5"}, {"pool": "P"}, 100, 204, false, "Allocated", 1, "E", null, 0, null],
+    "ct6r": [{"pool": "CT6"}, {"pool": "P"}, 100, 205, false, "Allocated", 1, "E", null, 0, null],
+    "ct7r": [{"pool": "CT7"}, {"pool": "P"}, 100, 206, false, "Allocated", 1, "E", null, 0, null],
+    "ct8r": [{"pool": "CT8"}, {"pool": "P"}, 100, 207, false, "Allocated", 1, "E", null, 0, null],
+
+    "e1": {"pool": "EV", "args": [1, 1, "PROCESS_ALLOC", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e2": {"pool": "EV", "args": [2, 2, "THREAD_ALLOC", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e3": {"pool": "EV", "args": [3, 3, "BIRTH", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e4": {"pool": "EV", "args": [4, 4, "BIRTH", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e5": {"pool": "EV", "args": [5, 5, "RUNNABLE", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e6": {"pool": "EV", "args": [6, 6, "THREAD_TERMINAL", {"pool": "T"}, {"pool": "P"}, 100, 200, [9472, 37, 0, 1, 0]]},
+    "e7": {"pool": "EV", "args": [7, 7, "PROCESS_TERMINAL", {"pool": "P"}, null, 100, null, [9472, 37, 0, 4, 0]]},
+    "e8": {"pool": "EV", "args": [8, 8, "REF_DROP", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e9": {"pool": "EV", "args": [9, 9, "THREAD_RETIRE_BEGIN", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e10": {"pool": "EV", "args": [10, 10, "THREAD_RETIRE_DONE", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]},
+    "e11": {"pool": "EV", "args": [11, 11, "VM_RELEASE", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e12": {"pool": "EV", "args": [12, 12, "MAIN_STORAGE_RELEASE", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e13": {"pool": "EV", "args": [13, 13, "REF_DROP", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e14": {"pool": "EV", "args": [14, 14, "PROCESS_RETIRE_BEGIN", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e15": {"pool": "EV", "args": [15, 15, "PROCESS_RETIRE_DONE", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]},
+    "e16": {"pool": "EV", "args": [16, 16, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]},
+
+    "B01": {"pool": "STEP", "args": [1, "OK", [{"pool": "e1"}], [{"pool": "p1"}], [], {"pool": "N", "args": [1]}]},
+    "B02": {"pool": "STEP", "args": [2, "OK", [{"pool": "e2"}], [{"pool": "p2"}], [{"pool": "t2"}], {"pool": "N", "args": [2]}]},
+    "B03": {"pool": "STEP", "args": [3, "OK", [{"pool": "e3"}], [{"pool": "p3"}], [{"pool": "t2"}], {"pool": "N", "args": [3]}]},
+    "B04": {"pool": "STEP", "args": [4, "OK", [{"pool": "e4"}], [{"pool": "p3"}], [{"pool": "t4"}], {"pool": "N", "args": [4]}]},
+    "B05": {"pool": "STEP", "args": [5, "OK", [{"pool": "e5"}], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "N", "args": [5]}]},
+    "B06": {"pool": "STEP", "args": [6, "OK", [{"pool": "e6"}], [{"pool": "p3"}], [{"pool": "t6"}], {"pool": "N", "args": [6]}]},
+    "B07": {"pool": "STEP", "args": [7, "OK", [{"pool": "e7"}], [{"pool": "p7"}], [{"pool": "t6"}], {"pool": "N", "args": [7]}]},
+    "B08": {"pool": "STEP", "args": [8, "OK", [{"pool": "e8"}], [{"pool": "p7"}], [{"pool": "t8"}], {"pool": "N", "args": [8]}]},
+    "B09": {"pool": "STEP", "args": [9, "OK", [{"pool": "e9"}], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "N", "args": [9]}]},
+    "B10": {"pool": "STEP", "args": [10, "OK", [{"pool": "e10"}], [{"pool": "p7"}], [{"pool": "t10"}], {"pool": "N", "args": [10]}]},
+    "B11": {"pool": "STEP", "args": [11, "OK", [{"pool": "e11"}], [{"pool": "p11"}], [{"pool": "t10"}], {"pool": "N", "args": [11]}]},
+    "B12": {"pool": "STEP", "args": [12, "OK", [{"pool": "e12"}], [{"pool": "p12"}], [{"pool": "t10"}], {"pool": "N", "args": [12]}]},
+    "B13": {"pool": "STEP", "args": [13, "OK", [{"pool": "e13"}], [{"pool": "p13"}], [{"pool": "t10"}], {"pool": "N", "args": [13]}]},
+    "B14": {"pool": "STEP", "args": [14, "OK", [{"pool": "e14"}], [{"pool": "p14"}], [{"pool": "t10"}], {"pool": "N", "args": [14]}]},
+    "B15": {"pool": "STEP", "args": [15, "OK", [{"pool": "e15"}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "N", "args": [15]}]},
+    "B16": {"pool": "STEP", "args": [16, "OK", [{"pool": "e16"}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "Z", "args": [16, false]}]},
+    "BASE16": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"}
+    ],
+    "MB06": {"pool": "STEP", "args": [6, "OK", [{"pool": "EV", "args": [6, 6, "THREAD_ALLOC", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u6"}], {"pool": "N", "args": [6]}]},
+    "MB07": {"pool": "STEP", "args": [7, "OK", [{"pool": "EV", "args": [7, 7, "BIRTH", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u7"}], {"pool": "N", "args": [7]}]},
+    "MB08": {"pool": "STEP", "args": [8, "OK", [{"pool": "EV", "args": [8, 8, "RUNNABLE", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u8"}], {"pool": "N", "args": [8]}]},
+    "MB09": {"pool": "STEP", "args": [9, "OK", [{"pool": "EV", "args": [9, 9, "THREAD_TERMINAL", {"pool": "T"}, {"pool": "P"}, 100, 200, [9472, 37, 0, 1, 0]]}], [{"pool": "p3"}], [{"pool": "t6"}, {"pool": "u8"}], {"pool": "N", "args": [9]}]},
+    "MT_THREAD_ONLY": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "MB06"}, {"pool": "MB07"}, {"pool": "MB08"}, {"pool": "MB09"},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "EV", "args": [10, 10, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t6"}, {"pool": "u8"}], {"pool": "Z", "args": [10, true]}]}
+    ],
+    "MT_LAST_THREAD": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "MB06"}, {"pool": "MB07"}, {"pool": "MB08"}, {"pool": "MB09"},
+      {"pool": "STEP", "args": [10, "BUSY", [], [{"pool": "p3"}], [{"pool": "t6"}, {"pool": "u8"}], {"pool": "F", "args": [9]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [10, 11, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t6"}, {"pool": "u8"}], {"pool": "Z", "args": [10, true]}]}
+    ],
+    "MT_LIVE_SIBLING": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "MB06"}, {"pool": "MB07"}, {"pool": "MB08"}, {"pool": "MB09"},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "EV", "args": [10, 10, "PROCESS_TERMINAL", {"pool": "P"}, null, 100, null, [9472, 37, 0, 2, 0]]}], [{"pool": "pG37"}], [{"pool": "t6"}, {"pool": "u8"}], {"pool": "N", "args": [10]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [11, 11, "REF_DROP", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]}], [{"pool": "pG37"}], [{"pool": "t8"}, {"pool": "u8"}], {"pool": "N", "args": [11]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "EV", "args": [12, 12, "THREAD_RETIRE_BEGIN", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]}], [{"pool": "pG37"}], [{"pool": "t9"}, {"pool": "u8"}], {"pool": "N", "args": [12]}]},
+      {"pool": "STEP", "args": [13, "OK", [{"pool": "EV", "args": [13, 13, "THREAD_RETIRE_DONE", {"pool": "T"}, {"pool": "P"}, 100, 200, {"pool": "ZERO"}]}], [{"pool": "pG37"}], [{"pool": "t10"}, {"pool": "u8"}], {"pool": "N", "args": [13]}]},
+      {"pool": "STEP", "args": [14, "OK", [{"pool": "EV", "args": [14, 14, "REF_DROP", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]}], [{"pool": "pG37r0"}], [{"pool": "t10"}, {"pool": "u8"}], {"pool": "N", "args": [14]}]},
+      {"pool": "STEP", "args": [15, "BUSY", [], [{"pool": "pG37r0"}], [{"pool": "t10"}, {"pool": "u8"}], {"pool": "F", "args": [14]}]},
+      {"pool": "STEP", "args": [16, "BUSY", [], [{"pool": "pG37r0"}], [{"pool": "t10"}, {"pool": "u8"}], {"pool": "F", "args": [14]}]},
+      {"pool": "STEP", "args": [17, "OK", [{"pool": "EV", "args": [15, 17, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "pG37r0"}], [{"pool": "t10"}, {"pool": "u8"}], {"pool": "Z", "args": [15, true]}]}
+    ],
+    "MT_GROUP_ORDER_1": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "MB06"}, {"pool": "MB07"},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "EV", "args": [8, 8, "PROCESS_TERMINAL", {"pool": "P"}, null, 100, null, [256, 1, 0, 2, 0]]}], [{"pool": "p_g1"}], [{"pool": "t5"}, {"pool": "u7"}], {"pool": "N", "args": [8]}]},
+      {"pool": "STEP", "args": [9, "STATE", [], [{"pool": "p_g1"}], [{"pool": "t5"}, {"pool": "u7"}], {"pool": "F", "args": [8]}]},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "EV", "args": [9, 10, "THREAD_TERMINAL", {"pool": "T"}, {"pool": "P"}, 100, 200, [256, 1, 0, 3, 0]]}], [{"pool": "p_g1"}], [{"pool": "t_g1"}, {"pool": "u7"}], {"pool": "F", "args": [9]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [10, 11, "THREAD_TERMINAL", {"pool": "U"}, {"pool": "P"}, 100, 201, [256, 1, 0, 3, 0]]}], [{"pool": "p_g1"}], [{"pool": "t_g1"}, {"pool": "u_g1"}], {"pool": "F", "args": [10]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "EV", "args": [11, 12, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p_g1"}], [{"pool": "t_g1"}, {"pool": "u_g1"}], {"pool": "Z", "args": [11, true]}]}
+    ],
+    "MT_GROUP_ORDER_2": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "MB06"}, {"pool": "MB07"},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "EV", "args": [8, 8, "PROCESS_TERMINAL", {"pool": "P"}, null, 100, null, [512, 2, 0, 2, 0]]}], [{"pool": "p_g2"}], [{"pool": "t5"}, {"pool": "u7"}], {"pool": "N", "args": [8]}]},
+      {"pool": "STEP", "args": [9, "STATE", [], [{"pool": "p_g2"}], [{"pool": "t5"}, {"pool": "u7"}], {"pool": "F", "args": [8]}]},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "EV", "args": [9, 10, "THREAD_TERMINAL", {"pool": "T"}, {"pool": "P"}, 100, 200, [512, 2, 0, 3, 0]]}], [{"pool": "p_g2"}], [{"pool": "t_g2"}, {"pool": "u7"}], {"pool": "F", "args": [9]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [10, 11, "THREAD_TERMINAL", {"pool": "U"}, {"pool": "P"}, 100, 201, [512, 2, 0, 3, 0]]}], [{"pool": "p_g2"}], [{"pool": "t_g2"}, {"pool": "u_g2"}], {"pool": "F", "args": [10]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "EV", "args": [11, 12, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p_g2"}], [{"pool": "t_g2"}, {"pool": "u_g2"}], {"pool": "Z", "args": [11, true]}]}
+    ],
+    "MT_TID_REUSE": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "MB06"}, {"pool": "MB07"}, {"pool": "MB08"},
+      {"pool": "STEP", "args": [9, "OK", [{"pool": "EV", "args": [9, 9, "THREAD_TERMINAL", {"pool": "U"}, {"pool": "P"}, 100, 201, [0, 0, 0, 1, 0]]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u9z"}], {"pool": "N", "args": [9]}]},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "EV", "args": [10, 10, "REF_DROP", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u10z"}], {"pool": "N", "args": [10]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [11, 11, "THREAD_RETIRE_BEGIN", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u11z"}], {"pool": "N", "args": [11]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "EV", "args": [12, 12, "THREAD_RETIRE_DONE", {"pool": "U"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u12z"}], {"pool": "N", "args": [12]}]},
+      {"pool": "STEP", "args": [13, "OK", [{"pool": "EV", "args": [13, 13, "THREAD_ALLOC", {"pool": "W"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u12z"}, {"pool": "w13"}], {"pool": "N", "args": [13]}]},
+      {"pool": "STEP", "args": [14, "OK", [{"pool": "EV", "args": [14, 14, "BIRTH", {"pool": "W"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u12z"}, {"pool": "w14"}], {"pool": "N", "args": [14]}]},
+      {"pool": "STEP", "args": [15, "OK", [{"pool": "EV", "args": [15, 15, "RUNNABLE", {"pool": "W"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u12z"}, {"pool": "w15"}], {"pool": "N", "args": [15]}]},
+      {"pool": "STEP", "args": [16, "OK", [{"pool": "EV", "args": [16, 16, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "t5"}, {"pool": "u12z"}, {"pool": "w15"}], {"pool": "Z", "args": [16, true]}]}
+    ],
+    "CAP_APPLICATION": [
+      {"pool": "B01"},
+      {"pool": "STEP", "args": [2, "OK", [{"pool": "EV", "args": [2, 2, "PROCESS_ALLOC", {"pool": "CA2"}, null, 101, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "ca2r"}], [], {"pool": "N", "args": [2]}]},
+      {"pool": "STEP", "args": [3, "LIMIT", [], [{"pool": "p1"}, {"pool": "ca2r"}], [], {"pool": "F", "args": [2]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "EV", "args": [3, 4, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "ca2r"}], [], {"pool": "Z", "args": [3, true]}]}
+    ],
+    "CAP_PROCESS": [
+      {"pool": "B01"},
+      {"pool": "STEP", "args": [2, "OK", [{"pool": "EV", "args": [2, 2, "PROCESS_ALLOC", {"pool": "CP2"}, null, 101, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "cp2r"}], [], {"pool": "N", "args": [2]}]},
+      {"pool": "STEP", "args": [3, "OK", [{"pool": "EV", "args": [3, 3, "PROCESS_ALLOC", {"pool": "CP3"}, null, 102, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "cp2r"}, {"pool": "cp3r"}], [], {"pool": "N", "args": [3]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "EV", "args": [4, 4, "PROCESS_ALLOC", {"pool": "CP4"}, null, 103, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "cp2r"}, {"pool": "cp3r"}, {"pool": "cp4r"}], [], {"pool": "N", "args": [4]}]},
+      {"pool": "STEP", "args": [5, "LIMIT", [], [{"pool": "p1"}, {"pool": "cp2r"}, {"pool": "cp3r"}, {"pool": "cp4r"}], [], {"pool": "F", "args": [4]}]},
+      {"pool": "STEP", "args": [6, "OK", [{"pool": "EV", "args": [5, 6, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p1"}, {"pool": "cp2r"}, {"pool": "cp3r"}, {"pool": "cp4r"}], [], {"pool": "Z", "args": [5, true]}]}
+    ],
+    "CAP_THREAD": [
+      {"pool": "B01"}, {"pool": "B02"},
+      {"pool": "STEP", "args": [3, "OK", [{"pool": "EV", "args": [3, 3, "THREAD_ALLOC", {"pool": "CT2"}, {"pool": "P"}, 100, 201, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}], {"pool": "N", "args": [3]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "EV", "args": [4, 4, "THREAD_ALLOC", {"pool": "CT3"}, {"pool": "P"}, 100, 202, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}], {"pool": "N", "args": [4]}]},
+      {"pool": "STEP", "args": [5, "OK", [{"pool": "EV", "args": [5, 5, "THREAD_ALLOC", {"pool": "CT4"}, {"pool": "P"}, 100, 203, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}], {"pool": "N", "args": [5]}]},
+      {"pool": "STEP", "args": [6, "OK", [{"pool": "EV", "args": [6, 6, "THREAD_ALLOC", {"pool": "CT5"}, {"pool": "P"}, 100, 204, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}], {"pool": "N", "args": [6]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "EV", "args": [7, 7, "THREAD_ALLOC", {"pool": "CT6"}, {"pool": "P"}, 100, 205, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}, {"pool": "ct6r"}], {"pool": "N", "args": [7]}]},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "EV", "args": [8, 8, "THREAD_ALLOC", {"pool": "CT7"}, {"pool": "P"}, 100, 206, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}, {"pool": "ct6r"}, {"pool": "ct7r"}], {"pool": "N", "args": [8]}]},
+      {"pool": "STEP", "args": [9, "OK", [{"pool": "EV", "args": [9, 9, "THREAD_ALLOC", {"pool": "CT8"}, {"pool": "P"}, 100, 207, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}, {"pool": "ct6r"}, {"pool": "ct7r"}, {"pool": "ct8r"}], {"pool": "N", "args": [9]}]},
+      {"pool": "STEP", "args": [10, "LIMIT", [], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}, {"pool": "ct6r"}, {"pool": "ct7r"}, {"pool": "ct8r"}], {"pool": "F", "args": [9]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "EV", "args": [10, 11, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "t2"}, {"pool": "ct2r"}, {"pool": "ct3r"}, {"pool": "ct4r"}, {"pool": "ct5r"}, {"pool": "ct6r"}, {"pool": "ct7r"}, {"pool": "ct8r"}], {"pool": "Z", "args": [10, true]}]}
+    ],
+
+    "ATR": [{"pool": "T"}, {"pool": "P"}, 100, {"arg": 0}, true, {"arg": 1}, {"arg": 2}, {"arg": 3}, {"arg": 4}, {"arg": 5}, {"arg": 6}],
+    "APR": [{"pool": "P"}, null, 100, {"arg": 0}, {"arg": 1}, {"arg": 2}, {"arg": 3}, {"arg": 4}, {"arg": 5}, false, {"arg": 6}, {"arg": 7}, {"arg": 8}],
+    "PRX": [{"pool": "P"}, null, 100, {"arg": 0}, {"arg": 1}, {"arg": 2}, {"arg": 3}, {"arg": 4}, {"arg": 5}, {"arg": 6}, {"arg": 7}, {"arg": 8}, {"arg": 9}],
+    "AE_T": {"pool": "EV", "args": [{"arg": 0}, {"arg": 0}, {"arg": 1}, {"pool": "T"}, {"pool": "P"}, 100, {"arg": 2}, {"arg": 3}]},
+    "AE_P": {"pool": "EV", "args": [{"arg": 0}, {"arg": 0}, {"arg": 1}, {"pool": "P"}, null, 100, null, {"arg": 2}]},
+    "AE_G": {"pool": "EV", "args": [{"arg": 0}, {"arg": 0}, {"arg": 1}, null, null, null, null, {"arg": 2}]},
+
+    "A11E": [
+      {"pool": "B01"},
+      {"pool": "STEP", "args": [2, "OK", [{"pool": "AE_T", "args": [2, "THREAD_ALLOC", {"arg": 0}, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [{"arg": 0}, "Allocated", 1, "E", null, 0, null]}], {"pool": "N", "args": [2]}]},
+      {"pool": "STEP", "args": [3, "OK", [{"pool": "AE_T", "args": [3, "ABORT", {"arg": 0}, [0, 0, 0, 0, {"arg": 1}]]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [{"arg": 0}, "Aborted", 1, "E", null, {"arg": 1}, null]}], {"pool": "N", "args": [3]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "AE_P", "args": [4, "ABORT", [0, 0, 0, 0, {"arg": 1}]]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, {"arg": 1}, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [{"arg": 0}, "Aborted", 1, "E", null, {"arg": 1}, null]}], {"pool": "N", "args": [4]}]},
+      {"pool": "STEP", "args": [5, "OK", [{"pool": "AE_T", "args": [5, "THREAD_RETIRE_BEGIN", {"arg": 0}, {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, {"arg": 1}, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retiring", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [5]}]},
+      {"pool": "STEP", "args": [6, "OK", [{"pool": "AE_T", "args": [6, "THREAD_RETIRE_DONE", {"arg": 0}, {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, {"arg": 1}, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [6]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "AE_P", "args": [7, "VM_RELEASE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, {"arg": 1}, {"pool": "T"}, false, true, null]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [7]}]},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "AE_P", "args": [8, "MAIN_STORAGE_RELEASE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, {"arg": 1}, {"pool": "T"}, false, false, null]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [8]}]},
+      {"pool": "STEP", "args": [9, "OK", [{"pool": "AE_P", "args": [9, "PROCESS_RETIRE_BEGIN", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retiring", 0, "N", null, {"arg": 1}, {"pool": "T"}, false, false, [{"pool": "P"}, null, {"arg": 1}]]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [9]}]},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "AE_P", "args": [10, "PROCESS_RETIRE_DONE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retired", 0, "N", null, {"arg": 1}, {"pool": "T"}, false, false, [{"pool": "P"}, null, {"arg": 1}]]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "N", "args": [10]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "AE_G", "args": [11, "CAPTURE_END", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retired", 0, "N", null, {"arg": 1}, {"pool": "T"}, false, false, [{"pool": "P"}, null, {"arg": 1}]]}], [{"pool": "ATR", "args": [{"arg": 0}, "Retired", 0, "N", null, {"arg": 1}, [{"pool": "T"}, null, {"arg": 1}]]}], {"pool": "Z", "args": [11, false]}]}
+    ],
+
+    "A12E": [
+      {"pool": "B01"},
+      {"pool": "STEP", "args": [2, "OK", [{"pool": "AE_T", "args": [2, "THREAD_ALLOC", 0, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [0, "Allocated", 1, "E", null, 0, null]}], {"pool": "N", "args": [2]}]},
+      {"pool": "STEP", "args": [3, "OK", [{"pool": "AE_T", "args": [3, "TID_ASSIGN", 200, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Allocated", 1, "E", null, 0, null]}], {"pool": "N", "args": [3]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "AE_T", "args": [4, "ABORT", 200, [0, 0, 0, 0, 2]]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Aborted", 1, "E", null, 2, null]}], {"pool": "N", "args": [4]}]},
+      {"pool": "STEP", "args": [5, "OK", [{"pool": "AE_P", "args": [5, "ABORT", [0, 0, 0, 0, 2]]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, 2, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [200, "Aborted", 1, "E", null, 2, null]}], {"pool": "N", "args": [5]}]},
+      {"pool": "STEP", "args": [6, "OK", [{"pool": "AE_T", "args": [6, "THREAD_RETIRE_BEGIN", 200, {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, 2, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [200, "Retiring", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [6]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "AE_T", "args": [7, "THREAD_RETIRE_DONE", 200, {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, 2, {"pool": "T"}, true, true, null]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [7]}]},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "AE_P", "args": [8, "VM_RELEASE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, 2, {"pool": "T"}, false, true, null]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [8]}]},
+      {"pool": "STEP", "args": [9, "OK", [{"pool": "AE_P", "args": [9, "MAIN_STORAGE_RELEASE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Aborted", 1, "E", null, 2, {"pool": "T"}, false, false, null]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [9]}]},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "AE_P", "args": [10, "PROCESS_RETIRE_BEGIN", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retiring", 0, "N", null, 2, {"pool": "T"}, false, false, [{"pool": "P"}, null, 2]]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [10]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "AE_P", "args": [11, "PROCESS_RETIRE_DONE", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retired", 0, "N", null, 2, {"pool": "T"}, false, false, [{"pool": "P"}, null, 2]]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "N", "args": [11]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "AE_G", "args": [12, "CAPTURE_END", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Retired", 0, "N", null, 2, {"pool": "T"}, false, false, [{"pool": "P"}, null, 2]]}], [{"pool": "ATR", "args": [200, "Retired", 0, "N", null, 2, [{"pool": "T"}, null, 2]]}], {"pool": "Z", "args": [12, false]}]}
+    ],
+
+    "END_EV": {"pool": "EV", "args": [{"arg": 0}, {"arg": 1}, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]},
+    "NEG_BIRTH_AFTER_RUNNABLE": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "STEP", "args": [6, "STATE", [], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "F", "args": [5]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "END_EV", "args": [6, 7]}], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "Z", "args": [6, true]}]}
+    ],
+    "NEG_DUPLICATE_TERMINAL": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"},
+      {"pool": "STEP", "args": [7, "STATE", [], [{"pool": "p3"}], [{"pool": "t6"}], {"pool": "F", "args": [6]}]},
+      {"pool": "STEP", "args": [8, "OK", [{"pool": "END_EV", "args": [7, 8]}], [{"pool": "p3"}], [{"pool": "t6"}], {"pool": "Z", "args": [7, true]}]}
+    ],
+    "NEG_MISSING_BIRTH": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"},
+      {"pool": "STEP", "args": [4, "STATE", [], [{"pool": "p3"}], [{"pool": "t2"}], {"pool": "F", "args": [3]}]},
+      {"pool": "STEP", "args": [5, "OK", [{"pool": "END_EV", "args": [4, 5]}], [{"pool": "p3"}], [{"pool": "t2"}], {"pool": "Z", "args": [4, true]}]}
+    ],
+    "NEG_REF_RESURRECTION": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"},
+      {"pool": "STEP", "args": [10, "STATE", [], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "F", "args": [9]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "END_EV", "args": [10, 11]}], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "Z", "args": [10, true]}]}
+    ],
+    "NEG_ACTIVE_TID_ALIAS": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "STEP", "args": [6, "IDENTITY", [], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "F", "args": [5]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "END_EV", "args": [6, 7]}], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "Z", "args": [6, true]}]}
+    ],
+    "NEG_BASE5_FAILURE": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"},
+      {"pool": "STEP", "args": [6, {"arg": 0}, [], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "F", "args": [5]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "END_EV", "args": [6, 7]}], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "Z", "args": [6, true]}]}
+    ],
+
+    "OWN_RETAINED_THREAD": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "AE_T", "args": [7, "REF_ADD", 200, {"pool": "ZERO"}]}], [{"pool": "p3"}], [{"pool": "ATR", "args": [200, "Terminal", 2, "N", {"pool": "X"}, 0, null]}], {"pool": "N", "args": [7]}]},
+      {"pool": "STEP", "args": [8, "REF", [], [{"pool": "p3"}], [{"pool": "ATR", "args": [200, "Terminal", 2, "N", {"pool": "X"}, 0, null]}], {"pool": "F", "args": [7]}]},
+      {"pool": "STEP", "args": [9, "OK", [{"pool": "END_EV", "args": [8, 9]}], [{"pool": "p3"}], [{"pool": "ATR", "args": [200, "Terminal", 2, "N", {"pool": "X"}, 0, null]}], {"pool": "Z", "args": [8, true]}]}
+    ],
+    "OWN_RETAINED_PROCESS": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "STEP", "args": [13, "OK", [{"pool": "AE_P", "args": [13, "REF_ADD", {"pool": "ZERO"}]}], [{"pool": "APR", "args": ["Terminal", 2, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, null]}], [{"pool": "t10"}], {"pool": "N", "args": [13]}]},
+      {"pool": "STEP", "args": [14, "REF", [], [{"pool": "APR", "args": ["Terminal", 2, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, null]}], [{"pool": "t10"}], {"pool": "F", "args": [13]}]},
+      {"pool": "STEP", "args": [15, "OK", [{"pool": "END_EV", "args": [14, 15]}], [{"pool": "APR", "args": ["Terminal", 2, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, null]}], [{"pool": "t10"}], {"pool": "Z", "args": [14, true]}]}
+    ],
+    "OWN_REVOKED_AUTHORITY": [
+      {"pool": "B01"}, {"pool": "B02"},
+      {"pool": "STEP", "args": [3, "OK", [{"pool": "AE_T", "args": [3, "REF_ADD", 200, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Allocated", 2, "N", null, 0, null]}], {"pool": "N", "args": [3]}]},
+      {"pool": "STEP", "args": [4, "OK", [{"pool": "AE_T", "args": [4, "REF_DROP", 200, {"pool": "ZERO"}]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Allocated", 1, "N", null, 0, null]}], {"pool": "N", "args": [4]}]},
+      {"pool": "STEP", "args": [5, "OK", [{"pool": "AE_T", "args": [5, "ABORT", 200, [0, 0, 0, 0, 1]]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Aborted", 1, "N", null, 1, null]}], {"pool": "N", "args": [5]}]},
+      {"pool": "STEP", "args": [6, "REF", [], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Aborted", 1, "N", null, 1, null]}], {"pool": "F", "args": [5]}]},
+      {"pool": "STEP", "args": [7, "OK", [{"pool": "END_EV", "args": [6, 7]}], [{"pool": "p2"}], [{"pool": "ATR", "args": [200, "Aborted", 1, "N", null, 1, null]}], {"pool": "Z", "args": [6, true]}]}
+    ],
+    "OWN_ZOMBIE_REAP": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "STEP", "args": [13, "OK", [{"pool": "AE_P", "args": [13, "ZOMBIE_SET", {"pool": "ZERO"}]}], [{"pool": "PRX", "args": ["Terminal", 1, "N", {"pool": "Y"}, 0, {"pool": "T"}, true, false, false, null]}], [{"pool": "t10"}], {"pool": "N", "args": [13]}]},
+      {"pool": "STEP", "args": [14, "OK", [{"pool": "AE_P", "args": [14, "REF_DROP", {"pool": "ZERO"}]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, true, false, false, null]}], [{"pool": "t10"}], {"pool": "N", "args": [14]}]},
+      {"pool": "STEP", "args": [15, "BUSY", [], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, true, false, false, null]}], [{"pool": "t10"}], {"pool": "F", "args": [14]}]},
+      {"pool": "STEP", "args": [16, "OK", [{"pool": "EV", "args": [15, 16, "PARENT_REAP", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]}], [{"pool": "p13"}], [{"pool": "t10"}], {"pool": "F", "args": [15]}]},
+      {"pool": "STEP", "args": [17, "OK", [{"pool": "EV", "args": [16, 17, "PROCESS_RETIRE_BEGIN", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]}], [{"pool": "p14"}], [{"pool": "t10"}], {"pool": "F", "args": [16]}]},
+      {"pool": "STEP", "args": [18, "OK", [{"pool": "EV", "args": [17, 18, "PROCESS_RETIRE_DONE", {"pool": "P"}, null, 100, null, {"pool": "ZERO"}]}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "F", "args": [17]}]},
+      {"pool": "STEP", "args": [19, "OK", [{"pool": "END_EV", "args": [18, 19]}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "Z", "args": [18, true]}]}
+    ],
+    "OWN_MAIN_STORAGE": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "AE_P", "args": [12, "REF_DROP", {"pool": "ZERO"}]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, true, null]}], [{"pool": "t10"}], {"pool": "N", "args": [12]}]},
+      {"pool": "STEP", "args": [13, "BUSY", [], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, true, null]}], [{"pool": "t10"}], {"pool": "F", "args": [12]}]},
+      {"pool": "STEP", "args": [14, "OK", [{"pool": "END_EV", "args": [13, 14]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, false, true, null]}], [{"pool": "t10"}], {"pool": "Z", "args": [13, true]}]}
+    ],
+    "OWN_VM_HELD": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "AE_P", "args": [11, "REF_DROP", {"pool": "ZERO"}]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, true, true, null]}], [{"pool": "t10"}], {"pool": "N", "args": [11]}]},
+      {"pool": "STEP", "args": [12, "OK", [{"pool": "AE_P", "args": [12, "MAIN_STORAGE_RELEASE", {"pool": "ZERO"}]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, true, false, null]}], [{"pool": "t10"}], {"pool": "N", "args": [12]}]},
+      {"pool": "STEP", "args": [13, "BUSY", [], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, true, false, null]}], [{"pool": "t10"}], {"pool": "F", "args": [12]}]},
+      {"pool": "STEP", "args": [14, "OK", [{"pool": "END_EV", "args": [13, 14]}], [{"pool": "PRX", "args": ["Terminal", 0, "N", {"pool": "Y"}, 0, {"pool": "T"}, false, true, false, null]}], [{"pool": "t10"}], {"pool": "Z", "args": [13, true]}]}
+    ],
+    "CONTROL_TEARDOWN_FAILURE": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"},
+      {"pool": "STEP", "args": [10, "OK", [{"pool": "AE_T", "args": [10, "TEARDOWN_FAIL", 200, {"pool": "ZERO"}]}], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "F", "args": [10]}]},
+      {"pool": "STEP", "args": [11, "OK", [{"pool": "END_EV", "args": [11, 11]}], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "Z", "args": [11, true]}]}
+    ],
+    "CONTROL_LAUNCHER_LOSS": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"}, {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"},
+      {"pool": "STEP", "args": [16, "OK", [{"pool": "AE_G", "args": [16, "LAUNCHER_LOSS", {"pool": "ZERO"}]}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "F", "args": [16]}]},
+      {"pool": "STEP", "args": [17, "OK", [{"pool": "END_EV", "args": [17, 17]}], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "Z", "args": [17, true]}]}
+    ],
+    "CONTROL_MISSING_END": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"}, {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"}, {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"}, {"pool": "B13"}, {"pool": "B14"},
+      {"pool": "STEP", "args": [15, "OK", [{"pool": "e15"}], [{"pool": "p15"}], [{"pool": "t10"}], [15, 15, 0, false, false, true, 0]]}
+    ],
+    "CONTROL_BUFFER_FULL": [
+      {"pool": "STEP", "args": [1, "OK", [], [{"pool": "p1"}], [], {"pool": "LOSS", "args": [1, false]}]},
+      {"pool": "STEP", "args": [2, "OK", [], [{"pool": "p2"}], [{"pool": "t2"}], {"pool": "LOSS", "args": [2, false]}]},
+      {"pool": "STEP", "args": [3, "OK", [], [{"pool": "p3"}], [{"pool": "t2"}], {"pool": "LOSS", "args": [3, false]}]},
+      {"pool": "STEP", "args": [4, "OK", [], [{"pool": "p3"}], [{"pool": "t4"}], {"pool": "LOSS", "args": [4, false]}]},
+      {"pool": "STEP", "args": [5, "OK", [], [{"pool": "p3"}], [{"pool": "t5"}], {"pool": "LOSS", "args": [5, false]}]},
+      {"pool": "STEP", "args": [6, "OK", [], [{"pool": "p3"}], [{"pool": "t6"}], {"pool": "LOSS", "args": [6, false]}]},
+      {"pool": "STEP", "args": [7, "OK", [], [{"pool": "p7"}], [{"pool": "t6"}], {"pool": "LOSS", "args": [7, false]}]},
+      {"pool": "STEP", "args": [8, "OK", [], [{"pool": "p7"}], [{"pool": "t8"}], {"pool": "LOSS", "args": [8, false]}]},
+      {"pool": "STEP", "args": [9, "OK", [], [{"pool": "p7"}], [{"pool": "t9"}], {"pool": "LOSS", "args": [9, false]}]},
+      {"pool": "STEP", "args": [10, "OK", [], [{"pool": "p7"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [10, false]}]},
+      {"pool": "STEP", "args": [11, "OK", [], [{"pool": "p11"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [11, false]}]},
+      {"pool": "STEP", "args": [12, "OK", [], [{"pool": "p12"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [12, false]}]},
+      {"pool": "STEP", "args": [13, "OK", [], [{"pool": "p13"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [13, false]}]},
+      {"pool": "STEP", "args": [14, "OK", [], [{"pool": "p14"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [14, false]}]},
+      {"pool": "STEP", "args": [15, "OK", [], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [15, false]}]},
+      {"pool": "STEP", "args": [16, "OK", [], [{"pool": "p15"}], [{"pool": "t10"}], {"pool": "LOSS", "args": [16, true]}]}
+    ],
+    "CONTROL_COUNTER_OVERFLOW": [
+      {"pool": "STEP", "args": [1, "OK", [], [], [], [1, 0, 18446744073709551615, true, true, true, 0]]}
+    ],
+    "CONTROL_ATTEMPT_OVERFLOW": [
+      {"pool": "STEP", "args": [1, "OK", [], [], [], [18446744073709551615, 0, 18446744073709551615, true, true, true, 0]]}
+    ],
+    "CONTROL_UNFINISHED_RESERVATION": [
+      {"pool": "STEP", "args": [1, "OK", [{"pool": "EV", "args": [1, 1, "CAPTURE_END", null, null, null, null, {"pool": "ZERO"}]}], [], [], [1, 1, 0, false, true, true, 1]]}
+    ],
+    "CLOSED_COMPLETE_17": [17, "CLOSED", [], [[[1, 0, 1, 1, 1, 0, 1], null, 100, "Retired", 0, "N", [9472, 37, 0, 4], 0, [1, 0, 1, 1, 1, 1, 1], false, false, false, [[1, 0, 1, 1, 1, 0, 1], [9472, 37, 0, 4], 0]]], [[[1, 0, 1, 1, 1, 1, 1], [1, 0, 1, 1, 1, 0, 1], 100, 200, true, "Retired", 0, "N", [9472, 37, 0, 1], 0, [[1, 0, 1, 1, 1, 1, 1], [9472, 37, 0, 1], 0]]], [16, 16, 0, false, true, true, 0]],
+    "INCOMPLETE_END_2": [2, "OK", [[1, 2, 2, "CAPTURE_END", null, null, null, null, [0, 0, 0, 0, 0], 1, 2]], [[[1, 0, 1, 1, 1, 0, 1], null, 100, "Allocated", 1, "E", null, 0, null, false, true, false, null]], [], [2, 2, 0, false, true, true, 0]],
+    "INCOMPLETE_CLOSED_3": [3, "CLOSED", [], [[[1, 0, 1, 1, 1, 0, 1], null, 100, "Allocated", 1, "E", null, 0, null, false, true, false, null]], [], [2, 2, 0, false, true, true, 0]]
+  },
+  "vectors": {
+    "immediate-exit": {"pool": "BASE16"},
+    "preparation-abort": {"pool": "A11E", "args": [0, 1]},
+    "assigned-tid-abort": {"pool": "A12E"},
+    "late-clone-abort": {"pool": "A11E", "args": [200, 3]},
+    "birth-after-runnable": {"pool": "NEG_BIRTH_AFTER_RUNNABLE"},
+    "duplicate-terminal": {"pool": "NEG_DUPLICATE_TERMINAL"},
+    "missing-birth": {"pool": "NEG_MISSING_BIRTH"},
+    "ref-resurrection": {"pool": "NEG_REF_RESURRECTION"},
+    "active-tid-alias": {"pool": "NEG_ACTIVE_TID_ALIAS"},
+    "retained-thread-ref": {"pool": "OWN_RETAINED_THREAD"},
+    "retained-process-ref": {"pool": "OWN_RETAINED_PROCESS"},
+    "authority-revoked": {"pool": "OWN_REVOKED_AUTHORITY"},
+    "zombie-before-after-reap": {"pool": "OWN_ZOMBIE_REAP"},
+    "main-storage-held": {"pool": "OWN_MAIN_STORAGE"},
+    "vm-held": {"pool": "OWN_VM_HELD"},
+    "teardown-failure": {"pool": "CONTROL_TEARDOWN_FAILURE"},
+    "launcher-loss": {"pool": "CONTROL_LAUNCHER_LOSS"},
+    "missing-end": {"pool": "CONTROL_MISSING_END"},
+    "buffer-full": {"pool": "CONTROL_BUFFER_FULL"},
+    "counter-overflow": {"pool": "CONTROL_COUNTER_OVERFLOW"},
+    "attempt-counter-overflow": {"pool": "CONTROL_ATTEMPT_OVERFLOW"},
+    "unfinished-reservation": {"pool": "CONTROL_UNFINISHED_RESERVATION"},
+    "wrong-raw-terminal": {"pool": "NEG_BASE5_FAILURE", "args": ["STATUS"]},
+    "wrong-capture": {"pool": "NEG_BASE5_FAILURE", "args": ["KEY"]},
+    "wrong-os-generation": {"pool": "NEG_BASE5_FAILURE", "args": ["KEY"]},
+    "wrong-application": {"pool": "NEG_BASE5_FAILURE", "args": ["KEY"]},
+    "wrong-process": {"pool": "NEG_BASE5_FAILURE", "args": ["KEY"]},
+    "wrong-exec": {"pool": "NEG_BASE5_FAILURE", "args": ["KEY"]},
+    "wrong-domain": {"pool": "NEG_BASE5_FAILURE", "args": ["STATE"]},
+    "thread-only-exit": {"pool": "MT_THREAD_ONLY"},
+    "last-thread-exit": {"pool": "MT_LAST_THREAD"},
+    "live-sibling-retirement": {"pool": "MT_LIVE_SIBLING"},
+    "competing-group-orders": {"pool": "MT_GROUP_ORDER_1"},
+    "inherited-status": {"pool": "MT_GROUP_ORDER_2"},
+    "tid-reuse": {"pool": "MT_TID_REUSE"},
+    "application-limit": {"pool": "CAP_APPLICATION"},
+    "process-limit": {"pool": "CAP_PROCESS"},
+    "thread-limit": {"pool": "CAP_THREAD"},
+    "end-after-complete-end": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"},
+      {"pool": "CLOSED_COMPLETE_17"}
+    ],
+    "end-after-incomplete-end": [
+      {"pool": "B01"}, {"pool": "INCOMPLETE_END_2"},
+      {"pool": "INCOMPLETE_CLOSED_3"}
+    ],
+    "operation-after-end": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"},
+      {"pool": "CLOSED_COMPLETE_17"}
+    ],
+    "wrong-key-after-end": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"},
+      {"pool": "CLOSED_COMPLETE_17"}
+    ],
+    "launcher-loss-after-end": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"},
+      {"pool": "CLOSED_COMPLETE_17"}
+    ],
+    "teardown-fail-after-end": [
+      {"pool": "B01"}, {"pool": "B02"}, {"pool": "B03"}, {"pool": "B04"},
+      {"pool": "B05"}, {"pool": "B06"}, {"pool": "B07"}, {"pool": "B08"},
+      {"pool": "B09"}, {"pool": "B10"}, {"pool": "B11"}, {"pool": "B12"},
+      {"pool": "B13"}, {"pool": "B14"}, {"pool": "B15"}, {"pool": "B16"},
+      {"pool": "CLOSED_COMPLETE_17"}
+    ]
+  }
+}

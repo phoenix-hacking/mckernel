@@ -149,6 +149,41 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
 
+    def test_default_run_has_no_deadline_or_recovery_limit(self):
+        self.args = launcher.arguments([])
+        self.assertEqual(self.args.hours, 0)
+        self.assertEqual(self.args.max_restarts, -1)
+        clock = [100.0]
+        rpc = FakeRPC(self.args, steps=[
+            lambda r: clock.__setitem__(0, 100.0 + 120 * 24 * 3600),
+            lambda r: (r.completed(), r.status("complete"))])
+        with patch.object(launcher.time, "monotonic", side_effect=lambda: clock[0]):
+            state = self.run_campaign(rpc, 0)
+        self.assertIsNone(state["stop_reason"])
+        self.assertFalse(any(m == "turn/steer" for m, p in rpc.calls))
+
+    def test_blocked_resume_replaces_historical_window_instructions(self):
+        self.saved(goal("blocked"))
+        self.args.recovered = True
+        rpc = FakeRPC(self.args, goal("blocked"), [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        params = next(p for m, p in rpc.calls if m == "thread/resume")
+        self.assertIn("no time limit", params["developerInstructions"])
+        self.assertIn("historical and do not pause", params["developerInstructions"])
+        self.assertIn("Reconcile source changes", params["developerInstructions"])
+        self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
+        self.assertEqual(state["goal"]["tokensUsed"], 1234)
+        self.assertFalse(any("objective" in p or "tokenBudget" in p for m, p in rpc.calls))
+
+    def test_explicit_window_instructions_preserve_user_limit(self):
+        self.args.hours = 2
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            self.assertIn("finite work window", campaign.instructions())
+            self.assertNotIn("no time limit", campaign.instructions())
+        finally:
+            campaign.output.close()
+
     def test_new_goal_continues_multiple_turns_without_client_prompt_loop(self):
         def next_turn(rpc):
             rpc.completed()
@@ -188,9 +223,71 @@ class CampaignTests(unittest.TestCase):
         rpc = FakeRPC(self.args, steps=[quota])
         state = self.run_campaign(rpc, 21)
         self.assertEqual(state["goal"]["status"], "usageLimited")
-        self.assertEqual(state["stop_reason"], "quota_or_rate_limit")
+        self.assertEqual(state["stop_reason"], "quota_exhausted")
         self.assertEqual(sum(m == "thread/goal/set" and p.get("status") == "active" for m, p in rpc.calls), 1)
         self.assertFalse(state["cleanup_verified"])
+
+    def test_quota_survives_later_failed_turn_and_blocked_events(self):
+        def quota(rpc):
+            rpc.emit("error", {"threadId": "test-thread", "willRetry": False,
+                "error": {"message": "quota", "codexErrorInfo": "usageLimitExceeded"}})
+            rpc.emit("turn/completed", {"threadId": "test-thread", "turn": {
+                "id": "turn-1", "status": "failed", "error": {"message": "failed"}}})
+            rpc.status("blocked")
+        rpc = FakeRPC(self.args, steps=[quota])
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "quota_exhausted")
+        self.assertFalse(watcher.should_restart(21, state, watchdog=True))
+
+    def test_zero_credit_account_update_preserves_included_plan_allowance(self):
+        def no_credits(rpc):
+            rpc.emit("account/rateLimits/updated", {"rateLimits": {
+                "primary": {"usedPercent": 53},
+                "credits": {"hasCredits": False, "unlimited": False, "balance": "0"},
+                "planType": "pro"}})
+            rpc.completed()
+            rpc.status("complete")
+        rpc = FakeRPC(self.args, steps=[no_credits])
+        state = self.run_campaign(rpc, 0)
+        self.assertIsNone(state["stop_reason"])
+        self.assertEqual(state["last_rate_limits"]["primary"]["usedPercent"], 53)
+        self.assertEqual(state["last_rate_limits"]["credits"]["balance"], "0")
+
+    def test_failed_turn_without_error_event_preserves_credit_exhaustion(self):
+        for info in ("usageLimitExceeded", "sessionBudgetExceeded"):
+            with self.subTest(info=info):
+                def fail(rpc):
+                    rpc.emit("turn/completed", {"threadId": "test-thread", "turn": {
+                        "id": "turn-1", "status": "failed", "error": {"codexErrorInfo": info}}})
+                self.saved(goal())
+                rpc = FakeRPC(self.args, goal(), steps=[fail])
+                state = self.run_campaign(rpc, 21)
+                self.assertEqual(state["stop_reason"], "quota_exhausted")
+                self.assertFalse(watcher.should_restart(21, state))
+
+    def test_automatic_recovery_does_not_resume_exhausted_credits(self):
+        self.saved(goal("usageLimited"))
+        self.args.recovered = True
+        rpc = FakeRPC(self.args, goal("usageLimited"))
+        self.run_campaign(rpc, 21)
+        self.assertFalse(any(m in ("thread/resume", "thread/goal/set") for m, p in rpc.calls))
+
+    def test_capacity_and_temporary_rate_errors_are_recoverable(self):
+        for info, event in (("serverOverloaded", "turn/completed"),
+                            ("rateLimitExceeded", "error")):
+            with self.subTest(info=info):
+                def fail(rpc):
+                    error = {"message": "temporary capacity limit", "codexErrorInfo": info}
+                    if event == "error":
+                        rpc.emit(event, {"threadId": "test-thread", "willRetry": False, "error": error})
+                    else:
+                        rpc.emit(event, {"threadId": "test-thread", "turn": {
+                            "id": "turn-1", "status": "failed", "error": error}})
+                    rpc.status("blocked")
+                self.saved(goal())
+                rpc = FakeRPC(self.args, goal(), steps=[fail])
+                state = self.run_campaign(rpc, 23)
+                self.assertTrue(watcher.should_restart(23, state))
 
     def test_active_resume_is_not_replaced_or_started_twice(self):
         self.saved(goal())
@@ -516,7 +613,7 @@ class WatcherTests(unittest.TestCase):
         self.assertIsNone(watcher.progress_marker(state, 20))
         state["goal"]["status"] = "paused"
         self.assertIsNone(watcher.progress_marker(state, 10))
-        for reason in ("quota_or_rate_limit", "server_error", "needs_user_input", "turn_failed"):
+        for reason in ("quota_or_rate_limit", "quota_exhausted", "needs_user_input", "goal_cleared"):
             self.assertFalse(watcher.should_restart(23, {"stop_reason": reason}, watchdog=True))
 
     def test_agent_stall_recovers_even_when_worker_keeps_writing_heartbeats(self):
@@ -588,11 +685,61 @@ while True:
         self.assertTrue(watcher.should_restart(-9, {}))
         self.assertTrue(watcher.should_restart(24, {}))
         self.assertFalse(watcher.should_restart(1, {"retryable": False}))
-        for status in ("complete", "blocked", "usageLimited", "budgetLimited"):
+        for status in ("complete", "usageLimited", "budgetLimited"):
             self.assertFalse(watcher.should_restart(-9, {"goal": {"status": status}}, watchdog=True))
         for code in (0, 10, 20, 21, 22, 23):
-            self.assertFalse(watcher.should_restart(code, {"retryable": True}))
+            self.assertFalse(watcher.should_restart(code, {}))
         self.assertFalse(watcher.should_restart(-9, {}, stopped=True))
+
+    def test_blocked_paused_and_failed_turns_restart_but_user_stops_do_not(self):
+        for code, state in ((20, {"goal": {"status": "blocked"}}),
+                            (10, {"goal": {"status": "paused"}}),
+                            (23, {"stop_reason": "turn_failed"}),
+                            (23, {"stop_reason": "server_error"}),
+                            (23, {"stop_reason": "rate_limit"})):
+            with self.subTest(code=code, state=state):
+                self.assertTrue(watcher.should_restart(code, state))
+                self.assertFalse(watcher.should_restart(code, state, stopped=True))
+        for reason in ("work_window", "signal_2", "signal_15", "signal_1"):
+            state = {"goal": {"status": "paused"}, "stop_reason": reason}
+            self.assertFalse(watcher.should_restart(10, state))
+        self.assertTrue(watcher.should_restart(10, {"stop_reason": "signal_15"}, watchdog=True))
+
+    def test_backoff_stays_bounded_after_months_of_retries(self):
+        self.assertEqual([watcher.restart_delay(5, n) for n in range(1, 6)], [5, 10, 20, 40, 60])
+        self.assertEqual(watcher.restart_delay(5, 10 ** 9), 60)
+        self.assertEqual(watcher.restart_delay(0, 10 ** 9), 0)
+
+    def test_unlimited_supervisor_recovers_more_than_three_times_then_stops_on_quota(self):
+        source = r'''
+import json,os,sys
+from pathlib import Path
+path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','attempts':0,'windows':[]}
+state['attempts']+=1
+state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
+scenarios=[(23,'blocked','turn_failed'),(20,'blocked',None),(10,'paused',None),
+           (1,'paused','launcher_error'),(24,'active','active_goal_did_not_continue'),
+           (21,'blocked','quota_exhausted')]
+code,status,reason=scenarios[state['attempts']-1]
+state.update(worker_pid=os.getpid(),retryable=True,goal={'status':status},stop_reason=reason)
+path.write_text(json.dumps(state))
+sys.exit(code)
+'''
+        with tempfile.TemporaryDirectory(prefix="os-goal-continuous-") as temp:
+            repo = Path(temp)
+            (repo / "scripts").mkdir()
+            (repo / "scripts/run_os_goal.py").write_text(source)
+            directory = repo / ".git/os-autopilot"
+            args = launcher.arguments(["--restart-delay", "0"])
+            with redirect_stdout(io.StringIO()):
+                code = watcher.supervise(args, repo, directory, [], launcher.Lease, launcher.atomic_json)
+            self.assertEqual(code, 21)
+            state = json.loads((directory / "state.json").read_text())
+            self.assertEqual(state["thread_id"], "retained-thread")
+            self.assertEqual(state["attempts"], 6)
+            self.assertEqual(state["windows"], [0] * 6)
+            self.assertEqual(json.loads((directory / "watcher.json").read_text())["restarts"], 5)
 
     def test_recovery_keeps_thread_and_original_work_window(self):
         source = r'''

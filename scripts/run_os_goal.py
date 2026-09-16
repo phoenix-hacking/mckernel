@@ -43,7 +43,7 @@ OBJECTIVE = (
 )
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
-LIMIT_ERRORS = {"usageLimitExceeded", "rateLimitExceeded", "sessionBudgetExceeded"}
+LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
@@ -75,7 +75,7 @@ def runtime_environment():
 
 
 class RecoverableFailure(RuntimeError):
-    """A transport/process failure that the watcher may retry within its limit."""
+    """A transport/process failure that the watcher may retry."""
 
 
 def utc():
@@ -308,6 +308,21 @@ class Campaign:
         self.goal = goal
         self.save(goal=goal)
 
+    def record_failure(self, error, reason, will_retry=False):
+        self.save(last_error=error)
+        info = (error or {}).get("codexErrorInfo")
+        if isinstance(info, str) and info in LIMIT_ERRORS:
+            self.stop_reason, self.stop_now = "quota_exhausted", True
+        elif self.stop_reason != "quota_exhausted" and not will_retry:
+            self.stop_reason = "rate_limit" if info == "rateLimitExceeded" else reason
+            self.stop_now = True
+
+    def record_rate_limits(self, limits):
+        # Purchased credits are a fallback after the plan's included allowance.
+        # A zero credit balance therefore is not evidence that Codex usage itself
+        # is exhausted; the server reports that separately as a limit error.
+        self.save(last_rate_limits=limits)
+
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
         self.output.event(message)
@@ -337,15 +352,11 @@ class Campaign:
             self.save(last_turn={"thread_id": thread, "id": data["turn"]["id"],
                                  "status": data["turn"]["status"]})
             if data["turn"]["status"] == "failed":
-                self.save(last_error=data["turn"].get("error"))
-                self.stop_reason, self.stop_now = "turn_failed", True
+                self.record_failure(data["turn"].get("error"), "turn_failed")
         elif method == "error":
-            error = data["error"]
-            self.save(last_error=error)
-            info = error.get("codexErrorInfo")
-            if (isinstance(info, str) and info in LIMIT_ERRORS) or not data.get("willRetry", False):
-                self.stop_reason = "quota_or_rate_limit" if isinstance(info, str) and info in LIMIT_ERRORS else "server_error"
-                self.stop_now = True
+            self.record_failure(data["error"], "server_error", data.get("willRetry", False))
+        elif method == "account/rateLimits/updated":
+            self.record_rate_limits(data.get("rateLimits"))
         elif method == "item/agentMessage/delta" and primary:
             # Preserve the existing dispatcher-only transcript for older consumers.
             excerpt = data.get("delta", "")
@@ -353,8 +364,22 @@ class Campaign:
                 stream.write(excerpt)
 
     def instructions(self):
+        continuation = (
+            "This invocation has no time limit. The user explicitly requests continuous "
+            "work until the entire OS objective is accepted or account credits are exhausted. "
+            "Earlier work-window endings, checkpoint pauses and statements that a window "
+            "is authoritative are historical and do not pause this invocation. Continue "
+            "after checkpoints. Repair project-owned prerequisites and pursue independent "
+            "ready work when a task blocks. Preserve real external blockers and recheck "
+            "availability with backoff when no work is ready; do not invent acceptance. "
+            if not self.args.hours else
+            "The user explicitly selected a finite work window for this invocation. "
+            "Earlier window endings are historical; continue until this launcher sends "
+            "a new checkpoint/stop request. "
+        )
         return (
             "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
+            + continuation +
             "The user explicitly authorized full filesystem/network access and no "
             "approval or clarification prompts for this OS campaign. Do not ask "
             "questions: choose reasonable defaults, record assumptions, and dispatch "
@@ -375,9 +400,13 @@ class Campaign:
             "Do not edit or start another launcher, clear/replace this goal, change its "
             "budget, or alter model/permission settings to bypass a blocker. "
             "The launcher controls the work window and goal pausing; agents use goal "
-            "status tools only under their actual tool rules. Keep CURRENT.md updated "
-            "and commit/push verified checkpoints about every 30 minutes and before "
-            "long runs. On a checkpoint request stop new dispatch, finish bounded work, "
+            "status tools only under their actual tool rules. Keep CURRENT.md and "
+            "docs/verification/os-milestones-20260914/PROGRESS.md updated and "
+            "commit/push verified checkpoints about every 30 minutes and before long "
+            "runs. After every accepted packet, diagnosis, or checkpoint, run "
+            "python3 scripts/update_progress_tracker.py so the intermediary-goal bars, "
+            "task ledger, blockers, evidence paths, and next action reflect the new "
+            "state. On a checkpoint request stop new dispatch, finish bounded work, "
             "join/close workers, record any live process identities, checkpoint and return. "
             "If credentials or external resources are unavailable, preserve the blocker "
             "and continue independent ready work. Never store credentials in the plan or logs."
@@ -417,6 +446,7 @@ class Campaign:
                 raise RuntimeError("The saved goal was cleared outside this launcher; inspect state before starting a new campaign.")
             self.controlled = True
             if goal and (goal["status"] == "complete" or
+                         goal["status"] == "usageLimited" and self.args.recovered or
                          goal["status"] == "budgetLimited" and self.args.token_budget is None):
                 self.remember_goal(goal)
                 return
@@ -441,7 +471,8 @@ class Campaign:
         goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
         if goal and goal["objective"] != OBJECTIVE:
             raise RuntimeError("Stored thread has a different objective; it was not replaced.")
-        if goal and goal["status"] == "complete":
+        if goal and (goal["status"] == "complete" or
+                     goal["status"] == "usageLimited" and self.args.recovered):
             self.remember_goal(goal)
             return
         if goal and goal["status"] == "budgetLimited" and self.args.token_budget is None:
@@ -483,12 +514,14 @@ class Campaign:
         if turn:
             self.rpc.call("turn/steer", {"threadId": ident, "expectedTurnId": turn,
                 "input": [{"type": "text", "text":
-                    "This user-requested work window is ending. Stop new task dispatch. "
+                    "The launcher is stopping this invocation following a signal or an "
+                    "explicitly configured time limit. Stop new task dispatch. "
                     "Finish bounded active operations, join/close child agents, preserve "
                     "original evidence and active process identities, update CURRENT.md "
                     "with next tasks, commit/push and verify the checkpoint, then return. "
                     "The launcher has paused future goal continuations. Do not mark the OS "
-                    "complete or resume the goal merely to finish this window."}]})
+                    "complete or resume it during shutdown. A subsequent launcher "
+                    "invocation authorizes continuation; this pause is not permanent."}]})
         self.output.notice("Checkpoint requested; waiting for bounded active work to finish.")
 
     def stop(self):
@@ -534,11 +567,11 @@ class Campaign:
             while True:
                 now = time.monotonic()
                 status = self.goal["status"] if self.goal else None
+                if self.stop_now:
+                    code = 21 if self.stop_reason == "quota_exhausted" else 23
+                    break
                 if status in TERMINAL_CODES and not self.checkpoint_requested:
                     code = TERMINAL_CODES[status]
-                    break
-                if self.stop_now:
-                    code = 21 if self.stop_reason == "quota_or_rate_limit" else 23
                     break
                 if not self.checkpoint_requested and (self.stop_reason or now >= checkpoint_at):
                     self.stop_reason = self.stop_reason or "work_window"
@@ -591,13 +624,13 @@ def arguments(argv=None):
     mode.add_argument("--check", action="store_true", help="Inspect local Codex settings/models; no thread or inference")
     mode.add_argument("--check-sudo", action="store_true", help="Verify private askpass authentication with sudo id -u; no inference")
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
-    parser.add_argument("--hours", type=float, default=12, help="Work window in hours; 0 removes timer (default: 12)")
+    parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
     parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh", "max", "ultra"])
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
-    parser.add_argument("--max-restarts", type=int, default=3, help="Maximum automatic crash recoveries (default: 3)")
+    parser.add_argument("--max-restarts", type=int, default=-1, help="Automatic recoveries; -1 means unlimited, 0 disables (default: -1)")
     parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
     parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
     parser.add_argument("--heartbeat-seconds", type=float, default=15, help="Print liveness and agent activity every N seconds (default: 15)")
@@ -616,10 +649,10 @@ def arguments(argv=None):
         parser.error("stall-seconds must be finite and non-negative")
     if args.stall_seconds and args.stall_seconds <= args.heartbeat_seconds:
         parser.error("stall-seconds must exceed heartbeat-seconds, or be 0 to disable recovery")
-    if (args.max_restarts < 0 or args.max_restarts > 50
+    if (args.max_restarts < -1
             or not math.isfinite(args.restart_delay) or args.restart_delay < 0
             or not math.isfinite(args.watchdog_seconds) or args.watchdog_seconds < 0):
-        parser.error("restart count must be 0-50; recovery timing must be finite and non-negative")
+        parser.error("restart count must be -1 (unlimited) or non-negative; recovery timing must be finite and non-negative")
     return args
 
 

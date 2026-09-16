@@ -19,8 +19,10 @@ model tokens on repeated status prompts or inject a second continuation loop.
 The actual dispatcher still has to obey the plan, review workers and satisfy
 each original acceptance contract. A script cannot guarantee OS correctness.
 
-The default work window is **12 hours**, reserving up to the final ten minutes
-for the dispatcher to join workers and save a checkpoint. Keep the computer
+The default is **no time limit and unlimited recovery attempts**. Work continues
+until the entire goal is accepted, account credits are exhausted, or you stop it.
+Checkpoints do not end the campaign. Earlier window-ending instructions in the
+saved thread are superseded when a new invocation resumes it. Keep the computer
 awake and the terminal/session available, or run the command inside an existing
 persistent terminal session. This launcher does not install a system service or
 change sleep settings. Startup or final shutdown may add bounded overhead.
@@ -40,11 +42,11 @@ this script's lock. The older goal was usageLimited during preparation.
 | `--check-sudo` | Test the private sudo helper with `id -u`, without starting an agent. |
 | `--dry-run` | Print the command, objective and settings without starting a server. |
 | `--hours 4` | Run a four-hour window, including checkpoint time. |
-| `--hours 0` | Continue without a wall-clock cutoff until goal completion or a stop condition. |
+| `--hours 0` | Default: continue without a wall-clock cutoff. |
 | `--grace-seconds 600` | Set the checkpoint reserve; default is 600 seconds. |
 | `--model gpt-5.6-sol --effort medium` | Explicitly select the default coordinator. |
 | `--token-budget N` | Explicitly set the goal's total token budget; omitted means preserve it. |
-| `--max-restarts 3` | Permit up to three automatic runner recoveries; default is three. |
+| `--max-restarts -1` | Default: unlimited automatic recovery attempts. Use 0 to disable or a positive count to cap them. |
 | `--restart-delay 5` | Initial restart backoff; doubles per retry, capped at 60 seconds. |
 | `--watchdog-seconds 180` | Recover a worker whose saved state stops updating; default is 180 seconds. |
 | `--heartbeat-seconds 15` | Print launcher liveness and agent activity every 15 seconds (default). |
@@ -62,9 +64,12 @@ Clarification requests automatically receive the user's standing instruction to
 proceed autonomously. This is explicitly identified as an automatic response;
 it supplies no invented facts, selected approval option or secret. The dispatcher
 records assumptions and continues other ready work when a task lacks information.
-Quota/rate-limit errors, unsupported interactive protocols and unrecoverable server
-errors stop the launcher instead of triggering a retry loop. Rerun the same
-command after quota or the external blocker changes. A budget-limited goal
+Capacity errors, temporary rate limits and failed turns retry with backoff.
+Blocked or self-paused goals resume the same thread with the continuous-run
+instruction. Credit exhaustion stops further inference attempts. Unsupported
+interactive protocols, invalid configuration/state and unresolved process
+ownership still require repair before another run. Rerun the same command
+after replenishing credits or fixing such an error. A budget-limited goal
 requires an explicit adequate `--token-budget` before it resumes. A budget is
 not a dollar cap or a demonstrated account-wide limit across all child usage.
 
@@ -97,9 +102,11 @@ Console timestamps are UTC. Increase heartbeat frequency with, for example,
 ## Watchers
 
 The normal command automatically wraps the runner in `watch_os_goal.py`. It
-restarts recoverable app-server transport failures, unexpected worker exits and
-stalled workers using the same saved thread. Restarts consume the remaining
-original work window; they never reset a 12-hour deadline to another 12 hours.
+restarts recoverable app-server transport failures, capacity errors, failed turns,
+unexpected worker exits, stalled workers and blocked/self-paused goals using the
+same saved thread. The default retry count is unlimited; backoff caps at 60 seconds.
+If you explicitly set `--hours`, retries consume the remaining original window
+and never reset that deadline.
 It keeps a separate supervisor lock and records events in
 `.git/os-autopilot/watcher.jsonl`, with the latest snapshot in `watcher.json`.
 `--status` includes that snapshot. The dispatcher reconciles live process leases
@@ -109,7 +116,7 @@ A second watchdog detects a responsive launcher whose agents produce no new
 item/turn events for 15 minutes. Heartbeats, status polls and account updates do
 not reset this timer. It captures worker/server process state, memory/load and
 the last campaign snapshot to a private `watchdog-*.json` before requesting a
-checkpoint and bounded shutdown. This shares the existing three-restart limit
+checkpoint and bounded shutdown. This shares the configured recovery policy
 and saved thread, and remains disabled while the campaign is paused or starting.
 Set `--stall-seconds 3600` for work expected to produce no agent events for up to
 an hour, or `--stall-seconds 0` to disable progress-based recovery. A positive
@@ -132,12 +139,12 @@ The sudo helper supervises its credential-read child with a five-second timeout
 and at most two retries for a transient read failure, timeout or killed process.
 Only a complete successful result reaches sudo's password pipe. Missing or
 insecure credential files are permanent errors. The watchers do not retry sudo
-authentication denials, quota/budget exhaustion, blocked/completed goals or a
-user stop. Default runner recovery is limited to three restarts.
+authentication denials, quota/budget exhaustion, completed goals or a user stop.
+Blocked goals are resumed with the same objective and retained evidence.
 
 These watchers run while their processes and machine remain available; no boot
 service is installed. After a machine restart, rerun the same command to recover
-the persisted session. Use `--hours 0` when you want no time-based cutoff.
+the persisted session. No time-based cutoff is applied unless you set `--hours`.
 
 ## State and recovery
 
@@ -185,10 +192,10 @@ exhausted quota. `cleanup_verified: false` is intentional until OS evidence prov
 | --- | --- |
 | 0 | The persisted goal reports complete. Assess the original acceptance evidence; this is not a separate OS certification. |
 | 10 | Paused/window ended/controlled interruption. Resume with the same command. |
-| 20 | Goal reports blocked. Read CURRENT.md and retained findings. |
-| 21 | Usage/rate limit. Resume after availability changes. |
+| 20 | Worker goal reports blocked; the watcher automatically resumes it with backoff. |
+| 21 | Credits/usage exhausted. Resume after availability changes. |
 | 22 | Goal token budget exhausted. |
-| 23 | Input required, turn/server error, cleared goal or immediate interruption; inspect the recorded reason. |
+| 23 | Turn/server errors retry; unsupported input, cleared goals and manual stops require attention. Inspect the recorded reason. |
 | 24 | Active goal did not continue while idle; inspect the CLI/server before restarting. |
 | 1 | Launcher/configuration/transport error; inspect state and stderr. |
 
@@ -209,4 +216,4 @@ Recheck configuration after upgrading Codex. The protocol is described in the
 official [App Server documentation](https://learn.chatgpt.com/docs/app-server),
 and durable goals in [Follow a goal](https://learn.chatgpt.com/use-cases/follow-goals).
 Required 168-hour soaks, hardware matrices and larger qualification exposures
-remain part of the OS goal and cannot fit in one 12-hour window.
+remain part of the OS goal, regardless of how long the campaign takes.

@@ -127,15 +127,16 @@ python3 /home/holden/mckernel/scripts/run_os_goal.py
 
 The launcher defaults to Sol/medium, Luna workers, three children maximum and no
 recursive dispatch. It owns a separate persistent goal, records its exact thread
-ID and retains logs under `.git/os-autopilot/`. The default window is 12 hours,
-with up to ten minutes within that window reserved for checkpointing. See
+ID and retains logs under `.git/os-autopilot/`. By default it has no time limit
+and retries recoverable failures and blocked/paused goals without a retry cap.
+It stops on full goal completion, exhausted credits or an explicit user stop. See
 `LAUNCH.md` for status, controls, exit codes and the tested scope. Keep the older
 chat goal paused while the launcher owns this checkout.
 
 For an interactive alternative use GOAL.md and the official
 [goal controls](https://learn.chatgpt.com/use-cases/follow-goals). The older goal
-was observed as usageLimited; changing models does not replenish quota. A
-12-hour window cannot finish the required 168-hour soaks or external exposures.
+was observed as usageLimited; changing models does not replenish quota. The
+required 168-hour soaks and external exposures remain part of completion.
 
 No agent needs the whole history to begin. A concrete dispatch request is:
 

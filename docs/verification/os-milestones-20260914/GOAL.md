@@ -58,13 +58,12 @@ Execution instructions for the dispatcher:
    original failures. Update CURRENT and append-only events with evidence hashes,
    source/binary identity, leases, counters and next three tasks. Commit/push and
    verify fetched blobs about every 30 minutes and before long runs/session end.
-7. Treat a roughly 12-hour unattended session as a work window. Keep making
-   useful progress while the client, machine and quota permit it. It is not a
-   promise of uninterrupted execution or a deadline for the full OS contract;
-   the required 168-hour soaks and larger exposures remain mandatory. The user
-   can pause an interactive goal when returning. The launcher defaults to a
-   12-hour window and reserves up to ten minutes within it for checkpointing.
-   Obey its stop/checkpoint message, join workers and preserve process identities.
+7. Continue until the entire OS objective is accepted or account credits are
+   exhausted, even across months. The launcher has no default time limit or
+   recovery-attempt limit. Continue after checkpoints; previous window closures
+   are historical once a new invocation resumes the goal. Required 168-hour
+   soaks and larger exposures remain mandatory. Obey a new manual stop or an
+   explicitly selected time limit, join workers and preserve process identities.
 8. Before low quota or a controlled stop, save a short restart record and inspect
    active process identities. Do not loop on quota errors, infer permission from
    elapsed time, relax gates to continue, or mark the OS complete at a checkpoint.

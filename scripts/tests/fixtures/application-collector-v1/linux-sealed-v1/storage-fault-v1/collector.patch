@@ -1,0 +1,140 @@
+--- collector.c
++++ storage-fault-v2-collector.c
+@@ -81,6 +81,7 @@
+ static struct stat observed_exec;
+ static char observed_exec_link[256];
+ static volatile sig_atomic_t interrupted;
++#include "storage-fault-v1/inject.h"
+ 
+ static uint64_t now_ns(void)
+ {
+@@ -164,13 +165,16 @@
+ {
+     memset(s, 0, sizeof *s); s->fd = -1; s->name = name; s->limit = limit;
+     ac_sha256_init(&s->hash);
+-    int opened = openat(attempt_fd, name, O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0600);
++    int opened = !strcmp(name, "events.jsonl") ? sf_open(SF_EVENTS_CREATE, SF_EVENTS, attempt_fd, name, O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0600) : openat(attempt_fd, name, O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0600);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+     if (opened < 0) {
+         s->creation_errno = errno;
+         return fail("PREPARATION_ERROR", "artifact-create", s->creation_errno);
+     }
+     s->created = true; /* Record actual creation before optional fd relocation. */
+     s->fd = high_fd(opened);
++    if (!strcmp(name, "events.jsonl") && s->fd >= 0) sf_bind(SF_EVENTS_CREATE, SF_EVENTS, opened, s->fd);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+     if (s->fd < 0) {
+         s->fd_errno = errno; s->io_error = true;
+         return fail("PREPARATION_ERROR", "artifact-fd-relocation", s->fd_errno);
+@@ -188,7 +192,8 @@
+     if (keep != length) s->truncated = true;
+     size_t done = 0;
+     while (done < keep) {
+-        ssize_t n = write(s->fd, bytes + done, keep - done);
++        ssize_t n = s == &request_artifact ? sf_write(SF_REQUEST, s->fd, bytes + done, keep - done) : write(s->fd, bytes + done, keep - done);
++        if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+         if (n < 0 && errno == EINTR) continue;
+         if (n <= 0) { s->io_error = true; return fail("COLLECTOR_ERROR", "artifact-write", n < 0 ? errno : EIO); }
+         if (!ac_sha256_update(&s->hash, bytes + done, (size_t)n)) { s->io_error = true; return fail("COLLECTOR_ERROR", "artifact-hash-bound", EOVERFLOW); }
+@@ -552,7 +557,7 @@
+             if (n < 0 && errno == EINTR) continue;
+             if (n < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) break;
+             if (n < 0) { fail("COLLECTOR_ERROR", "pipe-read", errno); close(s->fd); s->fd = -1; break; }
+-            if (!n) { s->eof = true; close(s->fd); s->fd = -1; break; }
++            if (!n) { int closed_fd = s->fd; s->eof = true; close(s->fd); s->fd = -1; sf_observe_eof(i, closed_fd); if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO); break; }
+             uint64_t offset = s->sink.seen;
+             if (i == 2 && offset < sizeof setup_bytes) {
+                 size_t keep = (size_t)n;
+@@ -639,7 +644,8 @@
+     int raw; pid_t actual = waitpid(p->pid, &raw, WNOHANG);
+     if (actual == 0 || (actual < 0 && errno == EINTR)) return;
+     if (actual != p->pid) { fail("CLEANUP_ERROR", "owned-waitpid", actual < 0 ? errno : ECHILD); return; }
+-    p->raw_wait = raw; p->reaped = true;
++    p->raw_wait = raw; p->reaped = true; sf_observe_reap(p->pid, p->ticks, raw);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+     event("\"event\":\"actual-reap\",\"pid\":%ld,\"raw_wait_status\":%d", (long)p->pid, raw);
+ }
+ 
+@@ -684,6 +690,8 @@
+         if (result < 0 && errno != ECHILD && errno != EINTR) fail("CLEANUP_ERROR", "all-children-waitid", errno);
+         pump();
+         if (no_children && leader.reaped && streams[0].eof && streams[1].eof && streams[2].eof) {
++            sf_observe_cleanup_ready(leader.pid, leader.ticks, leader.raw_wait);
++            if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+             cleanup_complete = true; break;
+         }
+         short_poll();
+@@ -693,6 +701,8 @@
+     if (!cleanup_complete || cleanup_finished >= cleanup_deadline) {
+         cleanup_complete = false; fail("CLEANUP_ERROR", "owned-cleanup-deadline-or-pipe-holder", ETIMEDOUT);
+     }
++    sf_observe_cleanup_final(cleanup_start, cleanup_deadline, cleanup_finished, cleanup_complete, owned_count, owned_omitted, failure);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+ }
+ 
+ static uint64_t read_word(const unsigned char *p)
+@@ -812,10 +822,18 @@
+     struct sink *all[] = { &request_artifact, &manifest_artifact, &argv_artifact, &env_artifact, &events,
+         &executable.artifact, &input.artifact, &streams[0].sink, &streams[1].sink, &streams[2].sink };
+     for (size_t i = 0; i < sizeof all / sizeof *all; ++i)
+-        if (all[i]->fd >= 0 && fsync(all[i]->fd) != 0) fail("COLLECTOR_ERROR", "artifact-fsync", errno);
++        if (all[i]->fd >= 0) {
++            int sync_result = all[i] == &request_artifact ? sf_sync(SF_REQUEST_SYNC, SF_REQUEST, all[i]->fd) : fsync(all[i]->fd);
++            if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
++            if (sync_result != 0) fail("COLLECTOR_ERROR", "artifact-fsync", errno);
++        }
+     if (interrupted) fail("INTERRUPTED", "collector-interrupted", EINTR);
+     if (!strcmp(failure, "none")) status = "COMPLETED";
+-    int fd = high_fd(openat(attempt_fd, "report.json", O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0600));
++    int report_opened = sf_open(SF_REPORT_CREATE, SF_REPORT, attempt_fd, "report.json", O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0600);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
++    int fd = high_fd(report_opened);
++    if (fd >= 0) sf_bind(SF_REPORT_CREATE, SF_REPORT, report_opened, fd);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
+     if (fd < 0) return false;
+     FILE *f = fdopen(fd, "w");
+     if (!f) { close(fd); return false; }
+@@ -867,7 +885,14 @@
+     fputs("],\"streams\":{", f);
+     for (unsigned i = 0; i < 3; ++i) fprintf(f, "%s\"%s_eof\":%s", i ? "," : "", i == 0 ? "stdout" : i == 1 ? "stderr" : "setup", boolean(streams[i].eof));
+     fputs("}}\n", f);
+-    bool ok = fflush(f) == 0 && !ferror(f) && fsync(fd) == 0;
++    int flush_result = sf_flush(fd, f);
++    if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
++    bool ok = flush_result == 0 && !ferror(f);
++    if (ok) {
++        int report_sync_result = sf_sync(SF_REPORT_SYNC, SF_REPORT, fd);
++        if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
++        ok = report_sync_result == 0;
++    }
+     if (fclose(f) != 0) ok = false;
+     if (fsync(attempt_fd) != 0) ok = false;
+     /* A signal during final storage cannot leave a successful outer exit even
+@@ -900,6 +925,7 @@
+     preparation_start = now_ns(); preparation_deadline = preparation_start + 120 * NS;
+     umask(0077);
+     if (argc != 5) { fputs("usage: linux-collector --linux-sealed-infrastructure-v1 REQUEST INPUT_MANIFEST ATTEMPT\n", stderr); return 2; }
++    if (!sf_startup()) return 125;
+     if (!make_attempt(argv[4])) { fputs("fresh attempt creation failed\n", stderr); return 125; }
+     if (!new_sink(&events, "events.jsonl", STREAM_LIMIT)) goto finished;
+     event("\"event\":\"collector-start\",\"pid\":%ld", (long)getpid());
+@@ -968,7 +994,7 @@
+     process_start = now_ns(); process_deadline = process_start + 10 * NS;
+     pid_t pid = fork();
+     int fork_error = errno;
+-    if (pid == 0) child_run(input.fd, pipes[0][1], pipes[1][1], pipes[2][1]);
++    if (pid == 0) { sf_child_close(); child_run(input.fd, pipes[0][1], pipes[1][1], pipes[2][1]); }
+     for (unsigned i = 0; i < 3; ++i) { close(pipes[i][1]); streams[i].fd = pipes[i][0]; }
+     if (pid < 0) { fail("PREPARATION_ERROR", "fork", fork_error); goto finished; }
+     child_created = true; leader.pid = pid;
+@@ -982,6 +1008,10 @@
+         short_poll();
+     }
+     cleanup(); validate_setup();
++    if (child_created) {
++        sf_observe_setup(setup_words, &cwd_identity, &devnull_identity, &pipe_identity[0], &pipe_identity[1], &executable.backing, executable.seals, leader.pid, leader.ticks);
++        if (sf_transport_failed()) fail("COLLECTOR_ERROR", "test-witness", EIO);
++    }
+     if (!leader_waitable && !strcmp(failure, "none")) fail("COLLECTOR_ERROR", "completion-observation-missing", EPROTO);
+ finished:
+     if (interrupted) fail("INTERRUPTED", "collector-interrupted", EINTR);
