@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_implementation_packet_review_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 5,
+  "recorded_utc": "2026-09-16T07:38:00Z",
+  "status": "FAIL_IMPLEMENTATION_PACKET_ONLY",
+  "packet": {
+    "path": "docs/verification/stability-selected-retention-actual-method-implementation-packet-20260916-3.md",
+    "sha256": "71867164f0b8d59c51bd0786ea1af3f76cb1395b0592c87fa8e192f929f81bf7"
+  },
+  "findings": [
+    {
+      "id": "production-method-replacement",
+      "finding": "The packet prescribes a duplicate verification_prepare_retained and replacement Response::prepare instead of preserving the consuming Result<Completion<M>,(Self,i32)> path that returns the selected Response on error.",
+      "required": "Keep both existing methods and actual signatures unchanged; add only gated instrumentation."
+    },
+    {
+      "id": "unselected-row-results",
+      "finding": "verification_read16(Some(other_pid),...) returns Ok(None); before preparation publication is Ok(false); after ordinary return_value absent selection bypasses retention and publication is Ok(true) with one release.",
+      "required": "Use the latter complete sequence for the ordinary unselected control."
+    },
+    {
+      "id": "mode3-recovery-omitted",
+      "finding": "Rows 20 and 27 stop at the selected wake-Some -11 failure rather than executing the positive-time recovery at t+2,000,000,000 before post-publication cancellation assertions.",
+      "required": "Cancel the existing Completion before publication for row20, then execute the mode-specific recovery; complete recovery before row27 cancellation."
+    },
+    {
+      "id": "illegal-cancellation-interleaving",
+      "finding": "test_insert_admitted must use its existing mutable Mailbox and stop after copied; row25 must select before cancellation; row26 cannot reenter cancel_pending while return_value holds the same mutable borrow and owner lock.",
+      "required": "Specify legal serialized before/after interleavings and exact results."
+    },
+    {
+      "id": "hold-results-still-conflated",
+      "finding": "Stages 0,1,6,255 and stage3 commits0/2 return -11 and latch -71; stages2/4/5 hold with invalid zero. Changed-owner bypasses retention; selected precommit cancellation returns -71 and latches -125.",
+      "required": "Specify invalid stage 255 and every exact wake/result/invalid observation after normal selected preparation."
+    },
+    {
+      "id": "creation-permissions-and-evidence-paths",
+      "finding": "The stager creates 161 files, not 160; its enumerated schema conflicts with the blanket write prohibition and unnamed manifest/diff locations.",
+      "required": "Explicitly authorize parent directories and complete creation set while restricting modifications to three candidates; name every evidence path."
+    },
+    {
+      "id": "instrumentation-contract-incomplete",
+      "finding": "The second-CAS hook must accept the live AtomicU64 reference and perform an explicit one-shot mutation; guarded allocation layout/alignment and gating of inserted calls remain incomplete.",
+      "required": "Preserve consuming/error paths and gate helper definitions and every call site."
+    },
+    {
+      "id": "template-pin-missing",
+      "finding": "The original send-gate template hash is absent.",
+      "required": "Pin dac2855ca19e587c33f7bd5a36c30c9090a6ea846f6dca90081abf0543228267 and retain both inverse-restoration stages."
+    }
+  ],
+  "retry_disposition": "Two bounded packet corrections remain insufficient. Do not dispatch implementation; consolidate under dispatcher/hard-review ownership before another packet review.",
+  "implementation_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
