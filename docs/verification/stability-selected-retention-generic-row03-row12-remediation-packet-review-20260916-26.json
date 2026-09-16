@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_remediation_packet_review",
+  "review_attempt": 26,
+  "recorded_utc": "2026-09-16T10:35:54Z",
+  "status": "PASS_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-remediation-packet-20260916-25.md",
+  "packet_sha256": "576a13a5be0c2fec06c4a62fabd5d25f81f5a994ab54bcdf0dd3733b55906ebb",
+  "authenticated_checkpoint": "fa32eddbb0f87732b8b5864e041cdce89584039e",
+  "reviewed_sha256": {
+    "packet11": "0307c1ce54cb297caf3fc98a6f83b70d715a424114806bdf33e62c92744028cb",
+    "review20": "94e76d353f7c223d50d8c49b67d881bc99f47e89b503d7e64e60ae3071ed013d",
+    "packet21": "8fe519aec93d6c45b784d9ee45d7ffafc149944693948b11805b8d4c6f0d5c8d",
+    "failure22": "1d0f1ce85366be2572e36f8edcb01128ee26d4e91c8203ca951d842173b95886",
+    "packet23": "d034fc887703a67ba9d3fb30e6b42d5d9449746492a319f567e294451907162c",
+    "failure24": "f5809a4dfae6bddbabdff227957f3af0133c05252193193b4f28ccf2d7b2be20"
+  },
+  "authentication": "All 21 direct/inherited SHA-256 pins from packet25 and packet11 match, including review17, failures16/18 and their safe archives. Source-map retained inputs, mode authorities, stager, manifest, templates, original-send-gate and all 102 source bindings authenticate. Fresh root25 is absent.",
+  "allowlist": {
+    "mode_count": 2,
+    "source_members_per_mode": 51,
+    "inputs_per_mode": 6,
+    "evidence_files_per_mode": 9,
+    "files_per_mode": 172,
+    "global_files": 2,
+    "total_regular_files": 346
+  },
+  "findings": [],
+  "accepted_review_scope": [
+    "Packet25 preserves packet21's nonconflicting requirements and restores review24's exact event-order, identity, inverse, manifest and cfg-erasure requirements.",
+    "The exact request and Claim support real admission, copied delivery, selection, accepted preparation and row03/row12 private method paths in both modes. Standalone std compatibility and module-local cfg(test) hooks are source-feasible without inventing Call constructors.",
+    "Mutex<State> owns the deferred/quarantine Boxes; release and Drop ordering, pre-drain snapshots, lock-free destruction, post-store metadata hook and no post-publication backing reads are explicit.",
+    "All named paths and the 346-file count are attainable. The manifest self-entry is externally bound without circular size/hash requirements. Genuine inverses, structural parsing, bytecode controls and hard stops remain mandatory."
+  ],
+  "release_scope": "One fresh source-staging attempt under exact packet25 only. Independently review the resulting exact source and evidence before any separately authorized compilation or execution. Fixture semantics are not native or production behavior.",
+  "source_staging_released": true,
+  "compilation_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

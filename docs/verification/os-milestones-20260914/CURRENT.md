@@ -2633,3 +2633,50 @@ behind its generation, descriptor-pin, authenticated-TLB-ack and quarantine
 ownership blockers. Counters remain 0/273 application cases, 2/4 narrow fault
 modes, 6/130 production gates, 350/10,000 points and 0/7 language gates. The
 whole-OS objective remains active, paused by the launcher, and incomplete.
+
+Continuous checkpoint 36 resumes the launcher-owned objective after fetched
+checkpoint `fa32eddbb0f87732b8b5864e041cdce89584039e`. Storage correction 44
+separates historical selector-4 empty-output fixtures from the authentic
+`DEVNULL\n` positive and updates only the canonical hashes changed by that
+output. Independent dispatcher Python 3.9 and 3.8 lanes each pass 130/130;
+both pycompile lanes and the diff check pass. Archive 47 is 39,301,852 bytes,
+37 safe unique members, 27 files and 26 verified bindings at SHA256
+`0f1c14cb106d0ec4e055c3fd18b46710111941fa22b7c6cfaf2a5ba6077c88ee`.
+
+Complete source review 45 authenticates archive 47 and its 24-level lineage but
+returns `FAIL_SOURCE`: `Path.exists()` treated dangling `report.json` and
+`events.jsonl` symlinks as absent for selectors 4 and 1, contradicting the
+producer's `O_NOFOLLOW` semantics. Failure record 45 is SHA256
+`d700b33a157a26ebc992e7203acca086a9b8c31c28ff3bc4c5893893acb78d76`.
+Bounded correction 46 adds one shared `lstat`-based genuine-ENOENT predicate,
+routes all four applicable absence checks through it and adds symlink,
+genuine-absence and lookup-error controls. Worker Python 3.9 and 3.8 each pass
+131/131, both pycompile lanes and the diff check; exact oracle SHA256 is
+`c61ff1740cd41b17416103ef5c312a855c73261b4118c2a6b1fe5e04e11f7d9d`
+and test SHA256 is
+`1c46cad58634f430162398e1a9594613d4432071daa48d14fca3ebc72c51898a`.
+Dispatcher replay, archive 48 and independent review remain pending. Raw source
+is still untracked and unaccepted; no compiler/root/native/runtime gate is open.
+
+M01 remediation packet 21 fails review 22 on a malformed checkpoint ID and a
+circular manifest self-hash requirement. Its bounded correction packet 23 fixes
+those two items but improperly condenses away exact event-order, inverse,
+identity and cfg-erasure requirements, so review 24 also returns `FAIL_PACKET`.
+Both failures are preserved. Escalated packet 25 restores all nonconflicting
+packet-21 requirements, applies only the reviewed pin/self-binding changes and
+adds exact request, Claim and method-chain values. Independent review 26 returns
+`PASS_PACKET`, SHA256
+`e1e371cf469897d1bfa2f34c765c49ed571063d2e46f91c029a31423005d59e6`,
+releasing exactly one fresh 346-file source-staging attempt. It releases no
+compilation, execution, native-backing or acceptance credit.
+
+Next tasks are: (1) independently replay correction 46, freeze archive 48 and
+obtain a fresh complete source review; (2) only on terminal `PASS_SOURCE`,
+checkpoint the exact raw storage source and draft the separately reviewed
+conditional UID1000 compiler-only packet; (3) execute one source-stage-only M01
+attempt under packet 25, preserve its exact evidence and obtain independent
+review before compilation; (4) keep M03 closed behind its generation,
+descriptor-pin, authenticated-TLB-ack and quarantine-ownership blockers.
+Counters remain 0/273 application cases, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
+remains incomplete.

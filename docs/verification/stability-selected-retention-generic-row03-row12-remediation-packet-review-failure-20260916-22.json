@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_remediation_packet_review",
+  "review_attempt": 22,
+  "recorded_utc": "2026-09-16T10:13:16Z",
+  "status": "FAIL_PACKET",
+  "reviewed_packet": "docs/verification/stability-selected-retention-generic-row03-row12-remediation-packet-20260916-21.md",
+  "reviewed_hashes": {
+    "packet21": "8fe519aec93d6c45b784d9ee45d7ffafc149944693948b11805b8d4c6f0d5c8d",
+    "failure18_record": "346dcc884122f7e6a1ebf4032f014d91cfb008f1a37167038b3b6cfcf0997659",
+    "failure18_archive": "7637f909c7b53c3dd4171e4bee696fbe5d086a35ce5fb838da156d8cf988e3e4",
+    "review20": "94e76d353f7c223d50d8c49b67d881bc99f47e89b503d7e64e60ae3071ed013d",
+    "source_map": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131"
+  },
+  "authenticated_scope": "All other direct and inherited authority pins match, including packet11/review17/failure16, stager, manifest, five templates, original gate, three mode records and 102 source members. Failure18 has 357 safe unique members and 346 regular files. The new root is absent; the enumerated allowlist totals 346 files. Review20's source design remains feasible.",
+  "findings": [
+    {
+      "anchor": "packet21:11",
+      "observed": "Packet checkpoint fa32eddb0f87732b8b5864e041cdce89584039e does not resolve.",
+      "correction": "Replace the missing-b ID in an additive packet with authenticated commit fa32eddbb0f87732b8b5864e041cdce89584039e."
+    },
+    {
+      "anchor": "packet21:76-83",
+      "observed": "Requiring hashes for all 346 files includes manifest.json itself, with no self-entry exception or external final-manifest binding.",
+      "correction": "Enumerate all 346 paths; explicitly exempt the manifest self-entry from embedded hashing, hash the other 345 finalized files, and have the dispatcher bind the final raw manifest in separate review/archive evidence without adding a worker output path."
+    }
+  ],
+  "implementation_staging_released": false,
+  "compiled": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

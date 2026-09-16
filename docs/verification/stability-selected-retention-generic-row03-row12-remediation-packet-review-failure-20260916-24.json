@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_remediation_packet_review",
+  "review_attempt": 24,
+  "recorded_utc": "2026-09-16T10:21:40Z",
+  "status": "FAIL_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-remediation-packet-20260916-23.md",
+  "reviewed_sha256": {
+    "packet23": "d034fc887703a67ba9d3fb30e6b42d5d9449746492a319f567e294451907162c",
+    "packet21": "8fe519aec93d6c45b784d9ee45d7ffafc149944693948b11805b8d4c6f0d5c8d",
+    "failure22": "1d0f1ce85366be2572e36f8edcb01128ee26d4e91c8203ca951d842173b95886",
+    "review20": "94e76d353f7c223d50d8c49b67d881bc99f47e89b503d7e64e60ae3071ed013d"
+  },
+  "authenticated_checkpoint": "fa32eddbb0f87732b8b5864e041cdce89584039e",
+  "authentication": "Direct and inherited pins, packet11/review17, failure16/18 records and archives, source map, stager, manifest, templates, original-send-gate, mode authorities and all 102 source bindings verified. Fresh root23 is absent. The 346-file arithmetic is attainable.",
+  "required_corrections": "Checkpoint spelling and externally bound manifest self-entry are corrected.",
+  "findings": [
+    {
+      "anchor": "packet23:51-67; packet21:59; review20.acceptance_requirements",
+      "failure": "The rewrite deletes the explicit genuine deterministic event-order requirement without normatively incorporating packet11's exact sequences. Final counts alone permit a ledger to record deferred insertion before release, or finished Drop before insertion, while satisfying the condensed row12 counters.",
+      "expected": "Require the exact construction/baseline/status/release/deferred/finished/deallocation and held-teardown event sequences, with explicit pre-drain snapshots.",
+      "observed": "Packet23 constrains the status hook and drain ordering but no longer requires the complete ledger sequence. This is a source-contract gap, not an executed failure."
+    },
+    {
+      "anchor": "packet23:72-79; packet21:76-84",
+      "failure": "The evidence rewrite drops manifest inputs/generated-edits/status, explicit restoration of every authenticated original member/template, physical/claim-identity audit, cfg(not(test)) byte restoration, and the prohibition on substring/self-hash oracles. Generic ownership, cfg erasure and structural parsing do not unambiguously retain these checks.",
+      "correction": "Restore packet21's non-conflicting requirements verbatim, retain only the reviewed checkpoint/manifest corrections and fresh-root provenance changes, and explicitly incorporate packet11's exact names, row contracts and evidence requirements. Preserve the noncircular manifest self-entry."
+    }
+  ],
+  "review_scope": "Read-only packet/source feasibility review only; no files changed, compilation or fixture execution performed.",
+  "source_staging_released": false,
+  "implementation_released": false,
+  "compilation_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
