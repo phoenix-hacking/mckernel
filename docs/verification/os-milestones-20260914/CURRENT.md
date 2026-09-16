@@ -2118,3 +2118,65 @@ touching the dirty pending-free candidate. Counters remain 0/273 accepted
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. The whole-OS objective remains active and
 incomplete.
+
+Window-close checkpoint 27 stops all new dispatch at 2026-09-16T07:18:10Z.
+Independent review 34 rejects archive 37 with `FAIL_SOURCE`: the positive
+fixture argv did not match the request-decoded argv, setup words 21 through 26
+did not bind stdout/stderr FIFO identity, lifecycle events admitted disconnected
+or fabricated child identities, and selector 4 could bypass reached-artifact and
+lifecycle validation by omitting its report. The exact finding is retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-30.json`,
+SHA256 `a555152c3e672db19b9603700641849e801edb513a8d31f900893dd3e768b043`.
+
+Bounded correction 34 changes only the two still-untracked storage-fault files.
+It adds request-decoded argv/environment byte binding, FIFO setup-word binding,
+strict selector event identity and ordering, selector-4 report-absence joins and
+the corrected positive argv. Dispatcher-owned Python 3.9.12 and Python 3.8.10
+runs each pass 122/122; both pycompile lanes pass. Their raw final logs remain at
+`/home/holden/mckernel-work/scratch/storage-fault-v2-attempt34-validation-hcJTAK`.
+The worker reported two earlier correction cycles with four and then two legacy
+canonical-hash failures; those interim raw streams were not retained and receive
+no evidence claim. Exact final oracle SHA256 is
+`71aa92b9740ce2b9b3745f711be81e53547ce5f4a15842c1609bc4550c45e27f`;
+test SHA256 is
+`507eb98f214794f36d03c7052b7f184b072edca54dbd763eaae6c001682f6032`.
+No archive 38 or review 35 was started before closeout, so the corrected source
+remains unreviewed and unaccepted. No compiler packet or execution is released.
+
+The first M01 actual-method implementation packet is also rejected. Its exact
+three-file state is preserved in
+`evidence/stability-selected-retention-actual-method-source-failure-20260916-1.tar.gz`,
+SHA256 `4fee427b35ca4f84fb4e7dd966274b9203502b49cf9893a8b7629df4fd8b5c16`,
+with the independent finding in
+`stability-selected-retention-actual-method-source-failure-20260916-1.json`,
+SHA256 `9cbd070645e6571f8337de08c83ca6de51493e5ab8f3f791135f00a0a2c853bf`.
+It used incorrect production trait/method signatures, invented private helpers,
+did not compile or execute the declared rows, and relied on substring and
+self-hash checks. Correction attempt 2 made no source change: truthful owned
+backing, `Claim` identity, private `Call` admission and allocator-compatible
+ledger hooks require a separately reviewed expansion into the generated
+candidate modules. The exact blocker is retained in
+`stability-selected-retention-actual-method-source-blocker-20260916-2.json`,
+SHA256 `cc10877c18b02f6bf9ee070da4bb9df56f2cd3d9db3738ca3121239d35a81734`.
+The rejected three raw files remain untracked and receive no implementation,
+compilation, runtime or gate credit.
+
+All bounded child agents are completed and joined. Exact live campaign identities
+are launcher 1676703, recovered worker 1899017 and Codex app-server 1899019; no
+project build, container build, guest, QEMU, mcexec or IHK process is live.
+Unrelated Verilator activity remains outside this project and was left untouched.
+Host free space is 54 GiB and scratch free space is 22 GiB. The launcher has
+paused future goal continuations.
+
+Next tasks, in order: (1) freeze correction 34, its exact final logs, archive 37
+and review-34 failure as source-review archive 38; (2) obtain a fresh complete
+review 35 replaying reviews 24 through 34 and adjacent schema/producer joins;
+(3) only after terminal `PASS_SOURCE`, checkpoint the raw storage source and
+prepare a separately reviewed conditional UID1000 compiler-only packet; (4)
+independently review exact generated-candidate cfg(test) patch points and a
+narrow expanded M01 allowlist before any further implementation attempt; (5)
+retain M03 at its map-only blocker pending reviewed generation/pin/TLB/quarantine
+authority. Counters remain 0/273 accepted application cases, 2/4 narrow fault
+modes, 6/130 production gates, 350/10,000 points and 0/7 language gates. The
+whole-OS objective remains incomplete and is neither resumed nor marked complete
+by this window checkpoint.
