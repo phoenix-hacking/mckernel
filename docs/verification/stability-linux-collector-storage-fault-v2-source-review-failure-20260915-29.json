@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "review_attempt": 33,
+  "created_utc": "2026-09-16T06:47:30Z",
+  "status": "FAIL_SOURCE",
+  "reviewed_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-36.tar.gz",
+    "sha256": "d1adca4b4904667efe66e8253a42c2d16a46336b34b676b0efa03ba65de011b8"
+  },
+  "findings": [
+    {
+      "id": "setup_bytes_report_disconnect",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2173",
+      "producer_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c:705-746",
+      "accepted_mutations": [
+        {
+          "mutation": "Replace collection/setup.bin with empty bytes and rebind its sink counters/hash while retaining setup_validated=true.",
+          "canonical_report_sha256": "4da18a9e91c19d7a5b07786da6289b4bef65c7bdc982642fc0bf681453cce439"
+        },
+        {
+          "mutation": "Change raw setup word 5 child PID from 70 to 71 while report.setup_words[5] remains 70, then rebind the setup sink.",
+          "canonical_report_sha256": "6290bfff8914fae564e3ec57ec140c58cd937d04554d7929fd79a1d67aaabf70"
+        },
+        {
+          "mutation": "Set report.setup_words[16] to 2**64.",
+          "canonical_report_sha256": "35a1cc630b403c4646163044832d5436653b3dba3a726eccc2bd174766fdb839"
+        }
+      ],
+      "required_correction": "Decode the retained successful setup packet, bind all 48 little-endian uint64 words exactly to the report and enforce uint64 bounds and successful packet shape."
+    },
+    {
+      "id": "selected_inputs_artifact_disconnect",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2204",
+      "producer_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c:220-260",
+      "accepted_mutation": "Replace collection/selected-inputs.bin with b'{}' and rebind its sink counters/hash despite the retained original selected input.",
+      "canonical_report_sha256": "3ce8e9c3319995428da436be6cec46d8a793c54c088ca4a321b6453e4c7b53c4",
+      "required_correction": "Bind the reached selected-input artifact to SELECTED_SHA and the exact retained selected-input bytes, and retain analogous argv/env relationships."
+    },
+    {
+      "id": "child_created_identity_disconnect",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:331-367",
+      "producer_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c:976",
+      "accepted_mutation": "Change the child-created event PID from 70 to 71 while setup, report and actual reap identify PID 70; rebind events and report evidence.",
+      "canonical_report_sha256": "d32296ab2e20d4dfd58dd9ed246f873e605af55e9c33f13d1ab48efcaa136e8b",
+      "required_correction": "Enforce event-specific scalar types and join lifecycle identity, cardinality and ordering to report and witness evidence."
+    }
+  ],
+  "reproduction": [
+    "Create a fresh selector-0 fixture with StorageFaultV2SourceTests.write_fixture(root, 0) and confirm oracle.validate(root, 0, 0).",
+    "Apply one mutation; for changed artifacts update the corresponding report sink seen_bytes, stored_bytes and SHA256.",
+    "Serialize report.json with sorted keys and compact separators, rebind the report and refresh supervisor evidence; additionally rebind events for its mutation.",
+    "The reviewed oracle returned true for each impossible producer state."
+  ],
+  "review_coverage": {
+    "review_24_through_32_controls": "13/13 PASS",
+    "positive_selectors": "7/7 PASS",
+    "generated_diff": "PASS",
+    "nested_archives_checked": 34,
+    "source_manifest_references_checked": 315,
+    "additional_checksum_bindings_checked": 22,
+    "known_preserved_limitation": "The already documented failure30 self-manifest mismatch remains unchanged."
+  },
+  "source_ready": false,
+  "compiler_packet_released": false,
+  "compiled": false,
+  "root_execution": false,
+  "native_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_source_maps_independent_review",
+  "created_utc": "2026-09-16T06:55:30Z",
+  "reviewed_records": [
+    {
+      "path": "docs/verification/stability-pending-free-authority-source-map-20260916-1.json",
+      "reviewed_sha256": "4db941fa87775cb8b68b68444c2593c45b8062f01a53a9e5d29cfddb725dc238",
+      "disposition": "FAIL_SOURCE_MAP_CITATION_ONLY",
+      "finding": "The 5121-5260 mem_helpers range contains mem_remote_flush_tlb_array_body_result but excludes mem_tlb_flush_handler_body_result at 5261-5307, the raw-address dereference and pending-decrement path.",
+      "substantive_assessment": "The missing generation, pinning, partial-clear retention, transaction identity, late acknowledgement, quarantine and recovery assessment is supported and does not release implementation."
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-actual-method-source-map-20260916-1.json",
+      "reviewed_sha256": "d99c984cc3855966c2836655e26ef9372807018a3c56323a3ebf181580491f20",
+      "disposition": "FAIL_SOURCE_MAP",
+      "findings": [
+        "The adapter must target the exact stager-produced selected-retention candidate, not the authenticated held input whose Mailbox lacks the candidate guards.",
+        "Mode-3 stage-3/commit-1/wake-Some first returns -11 and releases only after deterministic recovery beyond two seconds; wake-None bypasses send.",
+        "Address observations must be ledger deltas after construction/preparation, which already call address.",
+        "The -71/-125 cancel expectation is pre-release only; a committed release makes retention_released true and cannot be rolled back.",
+        "A raw NonNull constructor alone does not prove retained ownership, safe unfinished Drop or deterministic second-CAS failure."
+      ]
+    }
+  ],
+  "verified_scope": {
+    "m03_source_hashes": 6,
+    "m03_retained_record_hashes": 5,
+    "m01_mode3_source_hashes": 7,
+    "m01_retained_input_hashes": 5,
+    "m01_authority_record_hashes": 3,
+    "m01_complete_mode_manifests": 2
+  },
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

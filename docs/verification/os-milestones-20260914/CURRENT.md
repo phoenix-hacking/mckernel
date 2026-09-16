@@ -2065,3 +2065,56 @@ The bounded closeout evidence was pushed and fetched-blob verified at commit
 matched. The CURRENT blob and archive-36 blob matched the fetched remote objects
 exactly; archive 36 retained SHA256
 `d1adca4b4904667efe66e8253a42c2d16a46336b34b676b0efa03ba65de011b8`.
+
+Continuous checkpoint 26 resumes the launcher-owned goal and preserves review 33.
+Archive 36 passed the complete review-24-through-32 regression replay, but fresh
+independent source review returned `FAIL_SOURCE`: the oracle accepted empty or
+raw/report-inconsistent setup evidence, an overflowing setup word, substituted
+selected-input bytes and a child-created PID disconnected from the later
+setup/report/reap identity. Five canonical report hashes and the exact reproducer
+are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-29.json`,
+SHA256 `affcd750bf77d7ab091c1ffb6e925213f5b7343e15b9c8b926ed44550b6764c8`.
+
+Bounded correction 33 changes only the still-untracked storage oracle and test.
+It binds exactly one 384-byte successful setup packet and all 48 little-endian
+uint64 words to the report, binds selected-input artifact bytes to the retained
+input, applies event-specific types and joins the one child-created identity to
+setup/report/reap evidence. Dispatcher-owned Python 3.9.12 and 3.8.10 runs each
+pass 122/122, and both pycompile lanes pass. Exact oracle SHA256 is
+`008fea042f2b7b08e5e92d53d3b25bb690ba1aa1b303c89654de79224e67e018`;
+test SHA256 is
+`84bf5fbe57b94f01a9cdb9c0ed2d5f0e5aff1f11dbe6e2971eed54afb4a5510f`.
+Review-input archive 37 has 29 safe unique members, 19 files and size 37,633,412
+bytes at SHA256
+`8864684d5698e30bd0620af915e039b0598b047b1266ad21c1ec46078d637b15`.
+Independent source review 34 is active; source checkpointing and every compiler or
+execution release remain closed until a terminal `PASS_SOURCE`.
+
+Two parallel source-map lanes now pass their corrected map-only reviews. The M03
+map at `stability-pending-free-authority-source-map-20260916-1.json`, SHA256
+`92a35015344c007bdbc0117d889a6bb4683c6c10b2ef97fc9a42878e4674693a`,
+binds the current enqueue/finish, XPMEM clear, TLB body/handler and VM-final-release
+seams while retaining the missing OS/VM generation, descriptor pin, typed late
+acknowledgement and quarantine-owner blockers. The dirty `mem_helpers.rs` remains
+untouched. The M01 actual-method map at
+`stability-selected-retention-actual-method-source-map-20260916-1.json`, SHA256
+`a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131`,
+requires adapters only in exact stager-produced mode-2/mode-3 candidate outputs,
+post-preparation ledger deltas and the mode-3 two-second recovery transition. The
+original strings/counters scaffold remains rejected. The preserved first review
+is `stability-source-maps-review-20260916-1.json`, SHA256
+`7fd7c9aa6d5569433de3be37a6da73d999e04f8acbfb726663791ad5ba0dd731`.
+Neither map releases implementation, compilation, runtime or gate credit.
+
+Live campaign identities remain launcher 1676703, recovered worker 1899017 and
+Codex app-server 1899019. No project build, container build, guest, QEMU, mcexec
+or IHK process is live. Host free space is 54 GiB and scratch free space is 22
+GiB. Next tasks: (1) complete exact source review 34; (2) on `PASS_SOURCE`,
+checkpoint the raw source and prepare the separately reviewed UID1000 compiler-
+only packet, otherwise retain/correct the finding; (3) turn one corrected source
+map at a time into an independently reviewed implementation packet without
+touching the dirty pending-free candidate. Counters remain 0/273 accepted
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. The whole-OS objective remains active and
+incomplete.
