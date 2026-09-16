@@ -2058,3 +2058,10 @@ actual-method runner ABI packets are independently reviewed. Counters remain
 0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. The whole-OS objective remains
 incomplete and is neither resumed nor marked complete by this checkpoint.
+
+The bounded closeout evidence was pushed and fetched-blob verified at commit
+`0d46c61545e84111977a320c17adfffa10461eb1`. Local HEAD,
+`origin/codex/local-native-staging-repair`, `git ls-remote` and fetched HEAD
+matched. The CURRENT blob and archive-36 blob matched the fetched remote objects
+exactly; archive 36 retained SHA256
+`d1adca4b4904667efe66e8253a42c2d16a46336b34b676b0efa03ba65de011b8`.
