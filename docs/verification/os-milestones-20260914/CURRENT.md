@@ -1391,3 +1391,39 @@ The launcher has paused future goal continuations. Counters remain 0/273 accepte
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. The whole-OS goal remains incomplete and is
 neither resumed nor marked complete by this checkpoint.
+
+Continuous checkpoint 13 preserves source review envelope attempts 12 through
+14. Attempt 12 is `FAIL_REVIEW_ENVELOPE` because it retained PASS hashes but
+omitted packet texts 11/13/15. Corrected archive 13 receives `FAIL_SOURCE` for
+six reproduced identity, sentinel-parent, chronology, later-birth, post-fork
+observation and descriptor gaps. Packet 16 is independently rejected for an
+impossible early timeout, unfixed stage budgets and selector-4 report conflation.
+Replacement packet 17 SHA256
+`39c7b15d712a49f8ea94c8ea2d68e48376bd0deee1dba22897a9b21ca7b353f7`
+receives `PASS_CORRECTION_PACKET_ONLY` and releases only its source corrections.
+
+The exact packet-17 implementation in review archive SHA256
+`4394820878dc3bc9792ed3ee2c3e684861e1051254845775cd0c6c6ff06eac1d`
+compiles and passes 75/75 source-only tests under Python 3.9.12 and 3.8.10,
+but fresh independent full review remains `FAIL_SOURCE`. Five reproduced gaps
+remain: TERM/KILL timeouts can suppress the mandatory direct timeout; COMPLETE
+can accept a real-owner wait after 220 seconds; wrong-parent pairs and wrong-
+birth timeouts can claim authority; signal errors can bypass retirement/adopted
+pair checks; and owner adopted waits do not use the terminal raw-wait decoder.
+These bytes are WIP evidence only. Source, compiler, root, native, application
+and production gates remain closed.
+
+Next tasks, in order: (1) restrict producer timeout suppression to an existing
+direct timeout and require a timely real-owner wait for COMPLETE; (2) validate
+later birth and every direct/adopted signal-error against chronological parent,
+phase, unreaped and retirement authority; (3) decode every owner cleanup wait,
+add exact counterexample round trips, rerun both pinned interpreters and request
+a fresh full source review. Do not compile the collector or use root before
+`PASS_SOURCE`.
+
+At 2026-09-16T00:55:47Z the live campaign identities remain launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, all started 2026-09-15
+15:51:14 PDT. Host free space is 64 GiB and scratch free space is 23 GiB. All
+three bounded child agents are completed. Counters remain 0/273 application
+cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and
+0/7 language gates. This checkpoint is not whole-OS completion.

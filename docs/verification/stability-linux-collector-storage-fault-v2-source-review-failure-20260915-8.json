@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 12,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T00:48:43Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-13.tar.gz",
+    "sha256": "29c7aafe1b1dc73c8d3857d205c013d8dc428eaa5e4a1a10ef0c18751896e38d",
+    "size": 89115,
+    "members": 33
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "08ce8557a5ca9c436f0b89f1258689190b549662df628fbb04d51dc942c331d3",
+    "oracle.py": "363fccce06cc7948847b798cdb6f65eae049bc3fbe661f761354a29424cf6058",
+    "test_collector_storage_fault_packet.py": "59dbbce49aacac11b9792efdb10a2759483ded225f239485f20eb7c922057434"
+  },
+  "checks_before_review": {
+    "python3.9.12": "68/68 PASS",
+    "python3.8.10": "68/68 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "findings": [
+    "MISMATCH and UNOBSERVED were not independently distinguishable because the result omitted supervisor PID and did not bound/recompute observations.",
+    "Sentinel signal authority accepted two identity observations with conflicting parent PIDs.",
+    "Cleanup deadlines accepted future timeout evidence and rejected truthful deadline expiration.",
+    "Terminal cleanup rejected a later-established direct-owner birth against the intentionally immutable nullable summary.",
+    "Raw wait, EOF uniqueness and 15-second cleanup checks applied only to selector 4 rather than every post-fork selector.",
+    "The offline descriptor schema accepted negative BIND descriptors rejected by the owner."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
