@@ -1,0 +1,78 @@
+{
+  "schema": "mckernel.verification.window-end.v1",
+  "recorded_at": "2026-09-16T01:02:56Z",
+  "task": "M02-B-storage-fault-v2-source",
+  "status": "FAIL_SOURCE_WIP",
+  "whole_os_complete": false,
+  "source_gate_open": false,
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-window-end-20260915-13.tar.gz",
+    "sha256": "450b8bbe1dd03e6ca168c5a0bb7d25ec71406499c087a6b986ffdc8bc4f078b4"
+  },
+  "current_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "3a8a643e7e55328ca9d410ccca9433124005ec988186715d306a239bde33015b",
+    "oracle.py": "68754c224d13bd059997e2e07e1cddd2200436deaf74d4666403fecb8c270c77",
+    "test_collector_storage_fault_packet.py": "787354f809c49766141abb307f7960c278655993efa094baa05572c204ecac60"
+  },
+  "bounded_validation": [
+    {
+      "interpreter": "Python 3.9.12",
+      "compile": "PASS",
+      "tests": "75/75 PASS"
+    },
+    {
+      "interpreter": "Python 3.8.10",
+      "compile": "PASS",
+      "tests": "75/75 PASS"
+    }
+  ],
+  "implemented_after_failed_review": [
+    "Only a stage=direct timeout can suppress the final direct-timeout record.",
+    "COMPLETE requires the direct owner wait no later than the fixed owner-wait deadline.",
+    "Later birth authority requires the supervisor parent and an exact observation pair.",
+    "Direct and adopted signal-error records now require chronological unreaped authority and a later retirement join.",
+    "Every owner cleanup wait is passed through the terminal raw-wait decoder."
+  ],
+  "remaining_before_review": [
+    "Add exact producer/oracle counterexamples for all five review-9 findings.",
+    "Rerun both pinned interpreters after those tests.",
+    "Freeze a new exact-byte review input and obtain independent full-source PASS_SOURCE."
+  ],
+  "live_processes": [
+    {
+      "pid": 1676703,
+      "role": "launcher",
+      "started": "2026-09-15 15:51:14 PDT"
+    },
+    {
+      "pid": 1676707,
+      "role": "launcher-worker",
+      "started": "2026-09-15 15:51:14 PDT"
+    },
+    {
+      "pid": 1676709,
+      "role": "codex-app-server",
+      "started": "2026-09-15 15:51:14 PDT"
+    }
+  ],
+  "children": "all three bounded child agents completed and joined",
+  "heavy_processes": "none",
+  "free_space": {
+    "host": "64 GiB",
+    "scratch": "23 GiB"
+  },
+  "counters": {
+    "application_cases": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "notes": [
+    "The raw storage-fault source remains untracked and is not release-ready.",
+    "No collector compilation, root operation, native execution or guest execution occurred.",
+    "The launcher has paused future goal continuations; this record does not resume or complete the goal."
+  ]
+}

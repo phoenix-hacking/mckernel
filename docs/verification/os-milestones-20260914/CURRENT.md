@@ -1427,3 +1427,37 @@ launcher worker 1676707 and Codex app-server 1676709, all started 2026-09-15
 three bounded child agents are completed. Counters remain 0/273 application
 cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and
 0/7 language gates. This checkpoint is not whole-OS completion.
+
+Window-end checkpoint 13 preserves the exact post-review-9 correction bytes at
+archive SHA256
+`450b8bbe1dd03e6ca168c5a0bb7d25ec71406499c087a6b986ffdc8bc4f078b4`.
+The producer now limits final-timeout suppression to a direct timeout and gates
+COMPLETE on the fixed real-owner wait deadline. The oracle independently
+establishes later births from exact supervisor-parent observation pairs, joins
+direct and adopted signal errors to chronological unreaped authority and later
+retirement, joins timeout identities, and decodes every owner cleanup wait.
+These are unreviewed WIP corrections, not `PASS_SOURCE`.
+
+Python 3.9.12 and 3.8.10 each compile the edited supervisor and oracle and pass
+the existing 75/75 source-only tests. No collector compilation, root operation,
+native run or guest run occurred. The raw storage-fault fixture remains
+untracked; its exact bytes are retained only by the checkpoint archive pending
+independent acceptance.
+
+Next tasks, in order: (1) add exact producer/oracle counterexamples for the five
+source-review-9 findings, including TERM/KILL plus direct timeout, late owner
+wait, wrong-parent and wrong-birth authority, signal errors after/no authority,
+and invalid adopted raw waits through the owner validator; (2) rerun the entire
+suite under both pinned interpreters; (3) freeze a new exact-byte review archive
+and obtain an independent full-source review. Do not compile the collector, use
+root, run native code or launch a guest before `PASS_SOURCE`.
+
+At 2026-09-16T01:02:56Z the preserved campaign identities are launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, all started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC or
+Clang process is live. All three bounded child agents are completed and joined;
+new dispatch is stopped. Host free space is 64 GiB and scratch free space is
+23 GiB. The launcher has paused future goal continuations. Counters remain
+0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. The whole-OS goal remains incomplete
+and is neither resumed nor marked complete by this checkpoint.
