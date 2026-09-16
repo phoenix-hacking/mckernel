@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 26,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T02:55:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-26.tar.gz",
+    "sha256": "506b7422709a0a931b46b613d1b240c547dd3910e1087ec1ed1b99d6aa034f35",
+    "size": 2198263,
+    "members": 26
+  },
+  "failing_source_sha256": {
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "6a10b72bebea8704aafbf91822377c3a4c341b9ac3df08190f9aac4667931a17",
+    "test_collector_storage_fault_packet.py": "47a58a1d4fbd6309590abbc77e05f8c0bb01374298ac2fddc53d6629236af785"
+  },
+  "failures": [
+    "Four sentinel/owner paths accepted null direct evidence after positive birth establishment and later contradiction.",
+    "Both direct signal and signal-error authority revived after a null-birth adopted reap of the sentinel PID.",
+    "Incomplete sentinel cleanup accepted a direct signal for PID 77 and its sole direct timeout for PID 88."
+  ],
+  "corrected_source_sha256": {
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "d701e4e95ac332726ee46bbc89922bbededa37f018b3c7a97f06540e31ef8268",
+    "test_collector_storage_fault_packet.py": "47a58a1d4fbd6309590abbc77e05f8c0bb01374298ac2fddc53d6629236af785"
+  },
+  "corrected_checks": {
+    "python3.9.12": "100/100 PASS",
+    "python3.8.10": "100/100 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

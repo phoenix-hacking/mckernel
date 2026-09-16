@@ -1576,3 +1576,45 @@ The launcher has paused future goal continuations. Counters remain 0/273 accepte
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. The whole-OS objective remains incomplete and is
 neither resumed nor marked complete by this checkpoint.
+
+Continuous checkpoint 16 preserves packet-19 source-test failure archives 23
+through 26 and full review-input archives 22 through 24. Review attempt 19
+verified archive SHA256
+`e2f24efd31ff7e1e6ee48624344f42d677cb9000291d91f8d7a6fa0f5237063f`
+but returned `FAIL_SOURCE`: exact late-start records could omit/substitute the
+sentinel wait or backdate the trigger, contradictory direct identity did not
+revoke authority, a null adopted sentinel reap allowed PID revival, and
+SPAWN_FAILED admitted an arbitrary direct timeout. Nine full-record controls
+reproduced those findings before the bounded correction.
+
+Review attempt 20 verified archive SHA256
+`ead3fabe0d48e4c02e43789cf603bfd4df9ea8ef965906c9e35ca530d0b48132`
+and also returned `FAIL_SOURCE`. It found that invalidated positive history was
+conflated with never-established null history; sentinel retirement revoked only
+waits rather than signal/signal-error authority; and incomplete sentinel cleanup
+could bind a signal and timeout to different PIDs. Seven additional full-record
+controls reproduce those exact cases in failure archive 26.
+
+The current unaccepted correction separates historical birth from live
+authority, makes sentinel PID retirement sticky across every direct authority
+path, and requires all sentinel direct evidence to use one PID. Python 3.9.12
+and 3.8.10 both compile the four sources and pass 100/100 source-only tests. The
+fresh 61-member review archive SHA256 is
+`1e74749856876abf5f337d30451581a7c8245327af074a6d768250a3780530d5`;
+independent full review is active. These raw fixture/test bytes remain rejected
+and untracked until `PASS_SOURCE`. No compiler, root, native, guest, application
+or production credit follows.
+
+Next tasks, in order: (1) finish the independent exact-byte review of archive
+24; (2) if and only if it returns `PASS_SOURCE`, checkpoint the exact source and
+draft a separately reviewed conditional UID1000 compiler-only packet for
+selectors 0 through 6; otherwise preserve every finding and correct only the
+reviewed source contract; (3) do not compile or use root until both gates pass.
+
+At 2026-09-16T02:56:20Z the live campaign identities remain launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, all started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC,
+Clang or container build process is live. Host free space is 63 GiB and scratch
+free space is 22 GiB. Counters remain 0/273 accepted application cases, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. The whole-OS objective remains incomplete.

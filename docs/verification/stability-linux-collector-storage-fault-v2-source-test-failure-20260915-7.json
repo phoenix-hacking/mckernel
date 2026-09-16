@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 23,
+  "status": "FAIL_SOURCE_TEST_FIXTURE",
+  "recorded_utc": "2026-09-16T02:24:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-23.tar.gz",
+    "sha256": "2f9843acd315c8e208bbd60a47f2a056d0ceaf57d8d80b2b9108678d051bb71b",
+    "size": 97747,
+    "members": 23
+  },
+  "failing_source_sha256": {
+    "supervise.py": "9725513afc2f9b44a5b2fd1fdf925a01d7ef9dcb792f7c9e4e73d414d25eb267",
+    "oracle.py": "3de6a00eea3ec798538a4d1aa584f99fe5d67b4f5a2e405395e89f3d2f464f07",
+    "test_collector_storage_fault_packet.py": "821a793360fa8da21fcf464a331624d11fc2cb0ea4554781e0d087c7e083909c"
+  },
+  "failures": [
+    "The new late-owner-start control used a ten-nanosecond local deadline instead of the production five-second PREFLIGHT_NS and therefore entered the owner path.",
+    "The same run independently reproduced five permissive sentinel null-timeout-to-positive-reap controls."
+  ],
+  "disposition": "The fixture arithmetic was corrected additively; this original failure remains immutable and is superseded only for the next test attempt.",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

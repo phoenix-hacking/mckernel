@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 25,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T02:41:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-25.tar.gz",
+    "sha256": "d28ff2294aa1c42377355176519aabd5ca78cfde28c57d01ec870ac7bd5ca43e",
+    "size": 1097428,
+    "members": 26
+  },
+  "failing_source_sha256": {
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "fb232daed1759baeefbf2c4c88a6c8fcc629d98f58294f50a5f0a1709c7e5172",
+    "test_collector_storage_fault_packet.py": "eb0e15e2efb91fdd4afc956cf167ddb3b00f6a146bf78d4fbf34c311a138eeb2"
+  },
+  "failures": [
+    "Three full-record mutations omitted or substituted the mandatory sentinel wait or backdated the late owner-start trigger.",
+    "Four full-record sentinel/owner mutations retained an old birth after a contradictory parent or birth observation.",
+    "A null-birth adopted sentinel reap was followed by revived positive direct authority and a second reap of the same PID.",
+    "SPAWN_FAILED accepted a fabricated direct timeout for PID 999."
+  ],
+  "corrected_source_sha256": {
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "6a10b72bebea8704aafbf91822377c3a4c341b9ac3df08190f9aac4667931a17",
+    "test_collector_storage_fault_packet.py": "eb0e15e2efb91fdd4afc956cf167ddb3b00f6a146bf78d4fbf34c311a138eeb2"
+  },
+  "corrected_checks": {
+    "python3.9.12": "97/97 PASS",
+    "python3.8.10": "97/97 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
