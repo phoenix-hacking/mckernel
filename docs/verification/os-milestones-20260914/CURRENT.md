@@ -2180,3 +2180,72 @@ authority. Counters remain 0/273 accepted application cases, 2/4 narrow fault
 modes, 6/130 production gates, 350/10,000 points and 0/7 language gates. The
 whole-OS objective remains incomplete and is neither resumed nor marked complete
 by this window checkpoint.
+
+Window-close checkpoint 28 stops all new dispatch after the launcher pause on
+2026-09-16. The last remotely verified checkpoint before closeout is
+`941ea224098f41c11f8b1adcb88925b21e5e3ae1`; local HEAD, its upstream tracking
+reference, `git ls-remote` and a fetched remote archive matched. Review-input
+archive 39 is retained at SHA256
+`d0e8009235dce4bf61d59d28b538747af500891f42fec8cd584ebd9adea6f9bf`.
+
+Independent storage source review 36 rejects archive 39 with `FAIL_SOURCE`.
+Selectors 0/3/5 still depended on synthetic FIFO identities, selector 4 could
+bypass full successful setup semantics and accept a lifecycle birth disconnected
+from SETUP/REAP, and the owner could ACK a SETUP packet whose `setup_words` was
+null. The exact record is
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260916-32.json`,
+SHA256 `5ddb4fc83a98bcac9d1baca408b9ac863b801d8ebaf60ecba64fc02c7b9ca51f`.
+It retains all canonical mutation hashes and gives no compiler, runtime,
+application or production-gate credit.
+
+Bounded correction attempt 36 completed before closeout and changed only the
+still-untracked storage-fault fixture and its test. It adds collector-held stdin
+identity to authenticated SETUP, validates all SETUP types/ranges/stat records
+before ACK, validates the full successful 48-word setup contract before the
+report-present branch, removes the remaining FIFO constants and joins the
+complete leader PID/birth identity through child/group/SETUP/REAP evidence.
+Four focused tests, both Python 3.8 and 3.9 pycompile lanes and
+`git diff --check` pass. No full suite or fresh independent source review was
+started after the close request. Exact final hashes are collector patch
+`e58c48dea6455cf0172dd5295db149cb29b5996b03dda3631513da86e68fb7b2`,
+inject header `0711a9f5bdd60326ed919a8b39d9ac081044dd054431f049aeb8c32e8803b962`,
+owner `be1e3878ad6e7818d42f062ef66496b6af98f71277fcf62c55009a293ff2f94c`,
+oracle `cfdbd7336241ce271d95fe3f82fce88f306a88ea5076e9df865dd03300c5a5d9`,
+prepare helper `2c85d284548a8a9f426943c6c61019bbae8e13b4eabe3e662bc068b94037ab74`
+and test `d1e5134a46c9edc3bae1903218b2827f3bff75e132f88fb1c26dde7c2ca8a9f7`.
+Packet and tests-document hashes remain `b4acc91e6c92677f41eeaed31646cbbe4b556feee4b05a2920f78a195e60abdb`
+and `eb0ad1868c021ce3091caa7095e427a3fd6a2b832dde51378842d9794deb4eb8`.
+The raw source stays untracked and unaccepted.
+
+M03 remains blocked before implementation. Architecture review 5, source audit
+6, prerequisite review 7 and source audit 8 are retained at SHA256
+`1c17cc25a1d63c29e49498579d9127a8f8dc3c69a9afdffe2734f4d82dce53b0`,
+`69312e4be759730187babdd6ceea6ff4c23d5c51396f7855da82ab80b5b4b5e6`,
+`f7c5eeb997b7da467e3941e0e3c3a70dc993ee1a1da77538b21c87a04d5ae392`
+and `383d3c301abf23bc1fe5221e29f06fae10f2f83b2d78cab9f586ba44a626f76e`.
+Descriptor capture must precede hash removal; XPMEM drops ownership upstream;
+the proposed paths contain an ABBA lock inversion; IRQ acknowledgements lack
+authentication; and the required OS/VM generation, pin and teardown authority
+module does not exist. The dirty `mem_helpers.rs` and all candidate files remain
+untouched. M01 remains at rejected packet attempt 5 and needs dispatcher-level
+design consolidation rather than another cheap correction.
+
+All bounded child agents are completed and joined. Exact live campaign identities
+at closeout remain launcher 1676703, recovered worker 1899017 and Codex app-server
+1899019. No project build, container build, guest, QEMU, mcexec or IHK process is
+live; unrelated host activity was left untouched. Host free space is 53 GiB and
+scratch free space is 22 GiB. The launcher controls the pause; this checkpoint
+does not resume it.
+
+Next tasks, in order: (1) independently run the complete Python 3.9 and 3.8
+storage suites for correction 36 while retaining both logs and any original
+failure; (2) on success, freeze archive 40 with archive 39, review-36 failure,
+exact corrected sources and validation logs, then obtain fresh complete source
+review 37; (3) only after terminal `PASS_SOURCE`, checkpoint the raw source and
+prepare the separately reviewed conditional UID1000 compiler-only packet;
+(4) consolidate M01's method/row/lifetime design before another packet review;
+(5) leave M03 blocked until its missing generation/pin/ack/quarantine authority
+is specified and independently reviewed. Counters remain 0/273 accepted
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. The whole-OS objective remains incomplete and is
+not marked complete.
