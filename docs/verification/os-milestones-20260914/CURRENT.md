@@ -1657,3 +1657,63 @@ continuations. Counters remain 0/273 accepted application cases, 2/4 narrow
 fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 The whole-OS objective remains incomplete and is neither resumed nor marked
 complete by this checkpoint.
+
+Continuous checkpoint 18 preserves storage source-test failure archives 27
+through 29, review-input archives 25 through 27 and independent review failures
+22 and 23. Review 22 fully verified archive 25 but returned `FAIL_SOURCE`:
+direct timeout validation discarded prior PID retirement, adopted signal-error
+expiration ignored an equal-time reap, and the archive had used Python 3.8.19
+instead of required 3.8.10. Exact full-record canonical JSON hashes
+`1d63a6ccf565392a6f7af5bee7680c7d43beab7a0f51b7fd3a52ce5905223671`
+and `d68126e2674521cf4a11ed795486d7e7d20884a293d3d7aba1c7de69db008064`
+reproduce both gaps. The first correction incorrectly conflated ECHILD with an
+actual reap and regressed three legitimate timeout paths; its exact source is
+retained. The bounded replacement distinguishes actual waits from ECHILD and
+passes both exact full-record controls plus a later-wait/ECHILD positive.
+
+Review 23 verified archive 26 and the required 3.9.12/3.8.10 107-test logs but
+also returned `FAIL_SOURCE`. A direct sentinel reap did not update the shared
+retired identity/PID sets, allowing later adopted signal, signal-error and a
+second wait for the same lifetime. Exact canonical record
+`7b3291baf911560a9dd2143189015debe63def4809e7391fb258dd9bea4dff22`
+reproduces the positive-birth path. Additional full-record controls reproduce
+null-to-positive, equal-time and adopted-error revival at hashes
+`2f53e2859233b461cb8cd4af424cafd8862ecb96cfa23c275c99704fd07e6aac`,
+`da837c8ca0fa27cf793b56feaa3cd48df620ae1d5628dd0c3125298ec633acd6`
+and `f32bf14caf226ccda0733cd10ef1d655334085c60f2f05e6bfe7fb3bb3660bc9`.
+All four accept under the rejected archive-26 oracle and reject after direct
+waits update both exact and PID retirement state; timestamp-aware adopted-error
+validation still accepts a valid later wait/ECHILD join.
+
+The current raw fixture/test bytes remain untracked and unaccepted. Python
+3.9.12 and `/usr/bin/python3.8` 3.8.10 each pass 110/110, and both pycompile all
+four fixture sources. Fresh 28-member review archive 27 is 36,017,380 bytes at
+SHA256 `85316fd95101c33448090d4fc2e3ce51fbf8a4b22fc0dd5075d5387e0c6f1ffb`;
+independent full source review 24 is active. No compiler packet, compilation,
+root/native/guest execution, application acceptance or production credit is
+released unless that exact review returns `PASS_SOURCE`.
+
+Independent M03 review leaves candidate 12 accepted only for focused
+equivalence. Candidate-13/14 cannot receive a correction-packet pass because
+production has no trusted begin-time descriptor inventory/cardinality/range
+authority. The required private model needs immutable sentinel identity, exact
+capacity/count, descriptor membership/generation and physical range/alignment
+validation, with complete-batch preservation on every mismatch. Production
+integration requires a real producer-maintained registry/count/range API; the
+current raw-cast and physical lookup cannot supply it. No M03 execution or credit
+is released.
+
+Next tasks, in order: (1) finish exact review 24 of archive 27; (2) only on
+`PASS_SOURCE`, checkpoint the exact raw storage source/test bytes and draft a
+separately reviewed conditional UID1000 compiler-only packet for selectors 0
+through 6; otherwise preserve the new finding and continue the bounded source
+correction; (3) specify and independently review the missing M03 production
+inventory API before another pending-free candidate. Do not compile or use root
+before the corresponding release gates.
+
+At 2026-09-16T03:56:48Z the live identities are launcher 1676703, recovered
+worker 1875246 and Codex app-server 1875248. No build, compiler, container,
+guest, QEMU, mcexec or IHK process is live. Host free space is 60 GiB and
+scratch free space is 22 GiB. Counters remain 0/273 accepted application cases,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates. The whole-OS objective remains active and incomplete.
