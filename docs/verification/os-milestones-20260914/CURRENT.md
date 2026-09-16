@@ -2571,3 +2571,65 @@ uses a fresh root; (5) keep M03 behind its generation/pin/authenticated-ack/
 quarantine ownership blockers. Counters remain 0/273 application cases, 2/4
 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. Whole-OS acceptance remains incomplete.
+
+Work-window closeout 35 records the user-requested pause after checkpoint
+`0fffdc1d71b7b1de6601f05d51fef63d1f0d5beb`. No task was dispatched after the
+pause request. All three bounded child lanes are complete and joined; no child
+operation, project build, container build, guest, QEMU, mcexec or IHK process is
+live. The launcher PID is 1676703, recovered worker PID 2172732 and app-server
+PID 2172734. The heavy lease is free. Host free space is 46 GiB and scratch free
+space is 22 GiB. The launcher owns the pause and future continuation; this
+closeout does not resume or complete the OS goal.
+
+Storage review 42 rejected archive 45 because signed-negative report stat fields
+were accepted outside producer ranges. Failure record 38 is SHA256
+`9488b12ca9cfd21a18d607b0b407b624c6e7f60eb782b9b47811a66963bd1fd8`.
+Correction 42 adds the producer-aligned unsigned/signed/nanosecond ranges;
+dispatcher Python 3.9 and 3.8 each passed 129/129 with both pycompile lanes and
+the diff check. Archive 46 is 38,768,062 bytes, 35 safe unique members, 25 files
+and 24 bindings at SHA256
+`15ac775cf137503ae69c10220db13467f9fb3c49a5df650d6514573e5ce94187`.
+Review 43 then returned `FAIL_SOURCE`: the authentic post-fork stdout is exactly
+`DEVNULL\n`, while report-present records could rebind arbitrary output and the
+synthetic selector-4 positive expected empty output. Failure record 39 is SHA256
+`a9abaa2d3f0c9b9c13503f85a10aebf72aa9bf0f465e68d63a0bfa636ba9be96`.
+
+Correction 43 binds exact authenticated stdout/stderr content and its focused
+test passes, but the first full Python 3.9 lane stops at 130 tests with 13
+failures and four errors. Those are the preserved cascade from changed canonical
+fixture hashes and historical empty-output selector-4 oracles; Python 3.8 was not
+run. The exact source, tests, logs and bytecode capture are archived in
+`stability-linux-collector-storage-fault-v2-correction-validation-failure-20260916-43.tar.gz`,
+405,325 bytes at SHA256
+`eddfcfe96959c53e2d39d9f3b2228ee94d94eb36a4e6c15d074e3d58d09948d9`.
+Raw storage source remains untracked and unaccepted. No archive 47, compiler
+packet, compilation, root run, native run or gate credit is released.
+
+M01 packet 11 prevents bytecode creation and receives `PASS_RERUN_PACKET` review
+17, but implementation 18 is a semantic evidence failure. Its adapter drops the
+Box instead of retaining real deferred/quarantine ownership, its runner only
+names the required methods in string literals, and its asserted diff/inverse
+records are not real bindings. The complete immutable failure archive is
+1,001,218 bytes, 357 members and 346 files at SHA256
+`7637f909c7b53c3dd4171e4bee696fbe5d086a35ce5fb838da156d8cf988e3e4`;
+the failure record SHA256 is
+`346dcc884122f7e6a1ebf4032f014d91cfb008f1a37167038b3b6cfcf0997659`.
+Independent escalation 20 returns `PASS_REMEDIATION_DESIGN` only: a future
+standalone host-test crate must invoke the real mailbox chain, use actual
+mutex-owned Box queues, expose only a cfg(test) post-store metadata hook, drain
+outside the lock, and run each row/mode in a fresh process. It releases no
+implementation, compilation, runtime result or acceptance credit.
+
+Next tasks after an explicit future continuation are: (1) correct only the
+storage validation cascade by cloning historical empty-output fixtures and
+rebinding every exact hash changed solely by the authenticated positive output,
+preserving every intermediate failure; (2) rerun complete Python 3.9/3.8,
+pycompile and diff lanes, then freeze archive 47 for a new independent source
+review; (3) only after terminal `PASS_SOURCE`, checkpoint the exact raw storage
+source and prepare the separately reviewed conditional UID1000 compiler-only
+packet; (4) convert M01 remediation review 20 into a new bounded packet before
+any further implementation, compilation or execution; (5) keep M03 closed
+behind its generation, descriptor-pin, authenticated-TLB-ack and quarantine
+ownership blockers. Counters remain 0/273 application cases, 2/4 narrow fault
+modes, 6/130 production gates, 350/10,000 points and 0/7 language gates. The
+whole-OS objective remains active, paused by the launcher, and incomplete.

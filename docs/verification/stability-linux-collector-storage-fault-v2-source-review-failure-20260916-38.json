@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 42,
+  "recorded_utc": "2026-09-16T09:49:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-45.tar.gz",
+    "sha256": "ced17e4703ca50a1797ac5531d95653f0f4ad408215d0d0da4d63e2cb0ee57fb",
+    "size": 38640721,
+    "safe_unique_members": 35,
+    "files": 25,
+    "manifest_bindings": 24,
+    "fetched_checkpoint": "0fffdc1d71b7b1de6601f05d51fef63d1f0d5beb"
+  },
+  "reviewed_source": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "sha256": "f14211e3f7bf1fc42367c58f0617de66d93ff130dd238eb953ce6fc705cd5a11"
+  },
+  "authenticated_replay": {
+    "archive44_and_failure37_lineage": "PASS",
+    "source_bindings": "24/24 PASS",
+    "positive_fixtures": "7/7 PASS",
+    "correction40_size_join": "PASS",
+    "correction41_mode_join": "PASS: old accepts/current rejects canonical records; alternate execute modes accepted; setuid, setgid and directory modes rejected for selectors 0/3/5",
+    "python3_9_bound_log": "128/128 PASS",
+    "python3_8_bound_log": "128/128 PASS",
+    "pycompile_and_diff_bound_logs": "PASS"
+  },
+  "blocking_finding": {
+    "source_anchor": "oracle.py:464 validate_report_stat",
+    "producer_anchor": "collector.c:760-764 json_stat",
+    "affected_selectors": [0, 3, 5],
+    "mutation": "Set both report.executable.source_before.uid and source_after.uid to -1 while preserving every other field and authenticated payload bytes; rebind report artifact, owner terminal, report I/O sizes and supervisor hashes.",
+    "expected": "oracle rejection because json_stat emits UID through uintmax_t/%ju and cannot emit a negative value",
+    "observed": "oracle.validate(root, selector, 0) returned true for selectors 0, 3 and 5",
+    "canonical_mutated_report_sha256": {
+      "selectors_0_and_5": "7c00be4aac0424778084e11c28ed70d388a8d5ecfb2d43f165b60a56c2cf7de4",
+      "selector_3": "06a6c2deb89849b88c86d3b596301e1807508b087c2e82717bfced66fe337d22"
+    }
+  },
+  "required_correction": "Give validate_report_stat producer-bound unsigned, signed and nanosecond ranges while preserving signed timestamp seconds; add complete rebound negative and boundary-positive controls.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_correction_validation_failure",
+  "task_id": "M02-B-storage-fault-v2-source-correction",
+  "correction_attempt": 43,
+  "recorded_utc": "2026-09-16T10:05:00Z",
+  "status": "FAIL_VALIDATION_CASCADE",
+  "authority": {
+    "review_failure_path": "docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-39.json",
+    "review_failure_sha256": "a9abaa2d3f0c9b9c13503f85a10aebf72aa9bf0f465e68d63a0bfa636ba9be96",
+    "review_input_path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-46.tar.gz",
+    "review_input_sha256": "15ac775cf137503ae69c10220db13467f9fb3c49a5df650d6514573e5ce94187"
+  },
+  "candidate": {
+    "oracle_sha256": "b5ee9db9317effe02f46afd151292a14a1607f215566328c15df281cdd45ecb6",
+    "test_sha256": "16a8bf9fe5cf37b8600dffa5d5b9019ffdb7182ec678ae15a55fef81972b9b40",
+    "focused_python3_9": "PASS",
+    "full_python3_9": "130 tests, 13 failures, 4 errors",
+    "python3_8": "NOT_RUN_AFTER_FIRST_FULL_SUITE_FAILURE"
+  },
+  "evidence": {
+    "archive_path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-correction-validation-failure-20260916-43.tar.gz",
+    "archive_sha256": "eddfcfe96959c53e2d39d9f3b2228ee94d94eb36a4e6c15d074e3d58d09948d9",
+    "archive_size": 405325,
+    "original_root": "/home/holden/mckernel-work/scratch/storage-fault-v2-attempt43-validation-20260916-030000",
+    "full_python3_9_log_sha256": "6142ed61407427738a5a591620b4e8a8b9f4e00ededc4729cf297455be6c0625",
+    "statuses_sha256": "44f2176bf0cd5d1ac512f9cb7ae59462b8f0ddbf37a68c0b5e0aa26090e77179"
+  },
+  "blocking_finding": "The authentic DEVNULL newline positive-output mutation correctly changes later canonical fixture hashes and makes historical selector-4 empty-output oracles reject the new positive. Existing fixed-hash and historical-oracle regression expectations must be separated and rebound; they must not be weakened or deleted.",
+  "next": "On a future continuation, preserve every intermediate failure, give historical empty-output checks their own cloned fixture, update every exact canonical hash changed solely by the authenticated positive-output mutation, then rerun the complete Python 3.9 and 3.8 suites, both pycompile lanes and the full diff check before producing another review archive.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

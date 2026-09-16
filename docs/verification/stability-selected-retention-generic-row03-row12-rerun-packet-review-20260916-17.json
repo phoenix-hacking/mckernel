@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_rerun_packet_review",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "review_attempt": 17,
+  "recorded_utc": "2026-09-16T09:50:58Z",
+  "status": "PASS_RERUN_PACKET",
+  "reviewed_packet": {
+    "path": "docs/verification/stability-selected-retention-generic-row03-row12-implementation-packet-20260916-11.md",
+    "sha256": "0307c1ce54cb297caf3fc98a6f83b70d715a424114806bdf33e62c92744028cb"
+  },
+  "authenticated_inputs": {
+    "packet10_and_review15": "PASS",
+    "failure16_record_sha256": "b9e0c07b8daea4a773908f40761c2fe83e6ae755860c2170bd9978299cf69e4b",
+    "failure16_archive_sha256": "43004cea9973639ae59bb4df8af431ebb9d25bf58afac0ff2b0faeb32a475f0c",
+    "source_members": "102/102 PASS",
+    "failure_archive_files": 347,
+    "sole_extra_path": "__pycache__/result-parser.cpython-39.pyc"
+  },
+  "review": {
+    "fresh_root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-packet-20260916-11 absent",
+    "allowlist": "346 unique file paths",
+    "bytecode_control": "Every Python command uses -B; py_compile and bytecode-emitting APIs are forbidden; ast.parse reads without importing or executing the parser; forbidden artifacts are audited after every Python step.",
+    "semantic_delta": "none"
+  },
+  "source_staging_retry_released": true,
+  "compiled": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Run one fresh source-staging retry under packet11 and stop before compilation."
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 43,
+  "recorded_utc": "2026-09-16T09:58:39Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-46.tar.gz",
+    "sha256": "15ac775cf137503ae69c10220db13467f9fb3c49a5df650d6514573e5ce94187",
+    "size": 38768062,
+    "safe_unique_members": 35,
+    "files": 25,
+    "manifest_bindings": 24
+  },
+  "reviewed_source": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "sha256": "554b41c6228e14a74743f9e168ac4cc5c48e5b95af47a47f9324c20e6061fe47"
+  },
+  "authenticated_output_authority": {
+    "archive": "docs/verification/evidence/stability-linux-collector-root-success-20260915-2.tar.gz",
+    "case": "stdin-devnull",
+    "expected_stdout_hex": "4445564e554c4c0a",
+    "expected_stdout_size": 8,
+    "expected_stdout_sha256": "3e6f38dc6dd02d445e4ff7679b89658b97bafabcf93840c3865e05924fab134f",
+    "expected_stderr_size": 0,
+    "fixture_source_anchor": "fixture.c:88"
+  },
+  "blocking_finding": {
+    "source_anchor": "oracle.py:2299 report-absent reached-artifact binding and missing report-present output-content join",
+    "affected_selectors": [0, 3, 4, 5],
+    "selector4_mutation": "Starting from the synthetic passing selector4 record, replace only collection/stdout.bin empty bytes with the authenticated DEVNULL newline bytes.",
+    "selector4_expected": "accept",
+    "selector4_observed": "ValueError: absent report reached artifact binding",
+    "report_present_mutation": "For selectors 0, 3 and 5 replace collection/stdout.bin with WRONG newline and fully rebind the stdout sink/report artifact, owner terminal/report I/O sizes and supervisor hashes.",
+    "report_present_expected": "reject",
+    "report_present_observed": "accept",
+    "cause": "The synthetic positive fixtures self-confirm empty payload output; report-present validation authenticates hashes but never compares output content to the selected fixture contract."
+  },
+  "required_correction": "Bind DEVNULL newline stdout and empty stderr from the exact retained root-success stdin-devnull evidence and fixture source across every post-fork selector 0, 3, 4 and 5; build new positive fixtures from those bytes and retain the historical synthetic empty/wrong variants only as negative regression inputs.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
