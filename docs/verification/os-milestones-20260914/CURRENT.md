@@ -1837,3 +1837,38 @@ Checkpoint 20 evidence was pushed and fetched-blob verified at commit
 CURRENT, archive-29, review-26 failure, M03 contract and M03 contract-review
 blobs matched the fetched remote objects exactly. This verified checkpoint does
 not change any acceptance counter or release the rejected raw storage source.
+
+Window-close checkpoint 21 stops new dispatch at 2026-09-16T04:56:46Z. The
+bounded review-26 correction is implemented only in the still-untracked raw
+storage fixture and test: terminal identity records now require a positive
+exact-integer `owner_wait_deadline_ns`, and complete report wait fields must
+exactly match the result decoded from the exact integer `raw_wait_status`.
+Focused review-24/25/26 controls pass 5/5. The full suite passes 115/115 under
+both Python 3.9.12 and Python 3.8.10; both interpreters also pycompile the four
+fixture sources. The exact current oracle and test hashes are respectively
+`f1979a4432a853ffe270c3748a18bbb0323a39da663ce1910ceb10486433c003`
+and `a1cd82a391be67f2569bcea4ccfd2416ae3872bf1e0392ff4754888486fb8182`.
+Original raw outputs and interpreter identities are preserved in
+`stability-linux-collector-storage-fault-v2-window-validation-20260915-1.tar.gz`,
+584 bytes, SHA256
+`247be40a9b843e7eb1fdd7a7f230a75f29a68c7fb865a78e1c72be36b7f4c39f`.
+This is validation-only evidence, not `PASS_SOURCE`; the raw source remains
+untracked and rejected.
+
+All three bounded children are completed and joined. The only live campaign
+identities are launcher 1676703 (started Tue Sep 15 15:51:14 2026), recovered
+worker 1899017 (started Tue Sep 15 21:05:29 2026), and Codex app-server 1899019
+(started Tue Sep 15 21:05:29 2026). No project build, compiler, container build,
+guest, QEMU, mcexec or IHK process is live. Host free space is 55 GiB and scratch
+free space is 22 GiB. The launcher has paused future goal continuations.
+
+Next tasks, in order: (1) freeze exact source-review archive 30 from the current
+raw fixture/test, validation logs and prior review-26 evidence; (2) obtain fresh
+independent review 27, including decode parity, the review-24/25/26 differential
+hashes and another strict-type audit; (3) only after `PASS_SOURCE`, checkpoint
+the exact raw source and draft a separate conditional UID1000 compiler-only
+packet for independent review; (4) continue M03 only after its concrete registry,
+lock, generation and clear/TLB authorities are independently reviewed. Counters
+remain 0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. The whole-OS objective remains
+incomplete and is neither resumed nor marked complete by this window checkpoint.
