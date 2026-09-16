@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_pending_free_authority_architecture_review_failure",
+  "task_id": "M03-A/M03-B/M03-C",
+  "review_attempt": 5,
+  "recorded_utc": "2026-09-16T07:43:00Z",
+  "status": "FAIL_ARCHITECTURE_PACKET",
+  "source_map": {
+    "path": "docs/verification/stability-pending-free-authority-source-map-20260916-1.json",
+    "sha256": "92a35015344c007bdbc0117d889a6bb4683c6c10b2ef97fc9a42878e4674693a",
+    "retained_inputs_match": true,
+    "production_hashes_match": 16
+  },
+  "reviewed_source_sha256": {
+    "kernel/rust/page_helpers.rs": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+    "kernel/rust/x86_memory_helpers.rs": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+    "kernel/rust/xpmem_helpers.rs": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+    "kernel/rust/mem_helpers.rs": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b"
+  },
+  "findings": [
+    {
+      "id": "capture-after-descriptor-removal",
+      "evidence": "page_unmap_locked_result removes final hash membership before x86_clear_range_old_effects_result releases physical pages; mckernel_free_pages then performs another lookup and can bypass pending enqueue.",
+      "required": "Capture generation-bearing descriptor ownership under the hash lock before removal, route physical release through that captured owner and define destruction/reuse hooks. count is a mapping reference, not a lifetime pin."
+    },
+    {
+      "id": "xpmem-owner-dropped-before-clear",
+      "evidence": "xpmem_detach_body_result unpins and clears private_data before munmap and discards its result; detach_att/clear_ptes have analogous behavior; free_process_range logs clear errors then unreferences and frees.",
+      "required": "Register attachment/AP/segment/backing ownership and a partial-clear journal before unpin, split or removal; retain VA exclusion through recovery."
+    },
+    {
+      "id": "existing-lock-order-cycle",
+      "evidence": "xpmem_detach_body_result takes VM-range then attachment while xpmem_detach_att_body_result takes attachment then VM-range; current noirq locks disable preemption but not interrupts.",
+      "required": "Normalize the ABBA order first; define IRQ-save pending leases, allocation restrictions and an unlocked shootdown phase with retained reservations."
+    },
+    {
+      "id": "irq-ack-unauthenticated",
+      "evidence": "mem_tlb_flush_handler_body_result receives only a vector slot, dereferences its raw address pointer and decrements its counter; senders wait indefinitely and x86 clear frees address storage after a void callback.",
+      "required": "Define target-specific acknowledgement ownership, publish ordering, duplicate handling and nonreused slot retirement; retain address storage through the last possible late reader."
+    },
+    {
+      "id": "vm-os-teardown-owner-missing",
+      "evidence": "process_release_vm_body_result closes descriptors, calls callbacks, frees ranges, detaches the address space and frees VM storage at zero without a registry handoff.",
+      "required": "Register at VM initialization and hand off before destructive release, including initialization rollback and cycle resolution. Bind restart-persistent OS epoch allocation, IRQ quiescence and an enumerable quarantine owner surviving OS destruction."
+    }
+  ],
+  "scope_correction": "A private module may preserve public layouts, but the three proposed call sites are insufficient. Required edits extend to page lifetime, x86 clear/TLB bodies, XPMEM attachment teardown and Rust VM lifecycle.",
+  "required_next_sources": [
+    "host OS create/restart/destroy authority",
+    "descriptor allocation/destruction/reuse authority",
+    "VM initialization and rollback authority",
+    "IRQ quiescence and slot retirement authority"
+  ],
+  "required_executable_tests": [
+    "final-unmap capture/removal races",
+    "generation exhaustion and stale identities",
+    "partial clear",
+    "timeout plus late/duplicate IRQ and slot nonreuse",
+    "caller, VM and OS teardown at every transition",
+    "failed registration",
+    "competing and interrupted recovery",
+    "bounded cursor progress and enumerable terminal quarantine"
+  ],
+  "production_write_allowlist_released": false,
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

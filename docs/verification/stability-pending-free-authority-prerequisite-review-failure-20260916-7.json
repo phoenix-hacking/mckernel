@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_pending_free_authority_prerequisite_review_failure",
+  "task_id": "M03-A/M03-B/M03-C",
+  "review_attempt": 7,
+  "recorded_utc": "2026-09-16T07:52:00Z",
+  "status": "FAIL_PREREQUISITE_SEQUENCE",
+  "source_audit": {
+    "path": "docs/verification/stability-pending-free-authority-source-audit-failure-20260916-6.json",
+    "sha256": "69312e4be759730187babdd6ceea6ff4c23d5c51396f7855da82ab80b5b4b5e6",
+    "hashes_match": true
+  },
+  "boot_epoch_disposition": "A McKernel-boot-scoped epoch is sufficient only if all previous-boot readers, interrupt deliveries and external references drain before memory or identity reuse. Checked counters never reuse issued identities and reject exhaustion within the boot.",
+  "host_drain_findings": [
+    "smp_ihk_os_shutdown ignores reset results while deassigning CPUs and a later unmap assignment overwrites ret before memory reclamation",
+    "smp_ihk_destroy_os frees its object without a demonstrated late-reader drain",
+    "handler unregister deletes a list node while smp_ihk_irq_call_handlers traverses the list; caller-level reader protection is unverified"
+  ],
+  "conditional_sequence": [
+    {
+      "packet": 1,
+      "name": "lifetime foundation",
+      "private_types": [
+        "BootOwner { phase, next_id }",
+        "DescriptorRecord { generation, pins, retired, deferred_release }",
+        "ShootdownRecord { serial, immutable_addresses, targets, acknowledged, readers, phase }"
+      ],
+      "requirements": "Create boot ownership before concurrent admission; publish and retire descriptor generations under the hash lock; defer destruction through pins; publish immutable shootdown state before delivery; acknowledge each target once; retain timed-out slot/storage through reader drain; fail registration before mutation.",
+      "tests": ["identity exhaustion", "pin/removal interleavings", "stale and duplicate acknowledgement", "timeout and late IRQ", "failed registration"],
+      "status": "NOT_RELEASED_MISSING_DESTRUCTION_AND_WIRING_SOURCES"
+    },
+    {
+      "packet": 2,
+      "name": "clear capture and delayed release",
+      "private_type": "ClearJournal { removed_entries, retained_pages, table_pages, cursor, outcome }",
+      "requirements": "Capture descriptors before hash removal; distinguish partial mutation from acknowledged invalidation; release no backing or child table on unknown completion; claim rollback only after restoring every mutation.",
+      "status": "CONDITIONAL"
+    },
+    {
+      "packet": 3,
+      "name": "XPMEM and VM handoff",
+      "private_type": "VmRecord { epoch, phase, transactions }",
+      "requirements": "Normalize VM-range then attachment lock order; register before unpin/split; retain VA exclusion without holding locks across shootdown; transfer at VM final release before callbacks/destruction.",
+      "status": "CONDITIONAL"
+    },
+    {
+      "packet": 4,
+      "name": "quarantine, recovery and OS drain",
+      "private_type": "QuarantineRecord { reason, cursor, retry_budget, lease, retained_resources }",
+      "requirements": "Persist bounded recovery progress; require proven CPU, IRQ and worker quiescence before host reclamation; retain resources on drain failure.",
+      "status": "CONDITIONAL"
+    }
+  ],
+  "remaining_source_required": [
+    "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c ihk_smp_reset_cpu plus IRQ install/remove and work synchronization",
+    "ihk/linux/core/host_driver.c __ihk_os_shutdown and __ihk_device_destroy_os plus callback/IKC drains",
+    "kernel/fileobj.c, kernel/shmobj.c, kernel/object_helpers.c and kernel/rust/object_helpers.rs descriptor allocation/free/error paths",
+    "exact Rust module/build wiring and VM creation/fork rollback consumers"
+  ],
+  "production_write_allowlist_released": false,
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

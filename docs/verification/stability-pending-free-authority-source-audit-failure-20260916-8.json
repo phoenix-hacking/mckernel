@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_pending_free_authority_source_audit_failure",
+  "task_id": "M03-A/M03-B/M03-C",
+  "audit_attempt": 8,
+  "recorded_utc": "2026-09-16T07:55:00Z",
+  "status": "FAIL_SOURCE_MAP",
+  "input_review": {
+    "path": "docs/verification/stability-pending-free-authority-prerequisite-review-failure-20260916-7.json",
+    "sha256": "f7c5eeb997b7da467e3941e0e3c3a70dc993ee1a1da77538b21c87a04d5ae392"
+  },
+  "authorities": [
+    {
+      "scope": "IRQ vector install, removal and CPU reset",
+      "path": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "sha256": "6ec820741ce6e77e4f60ce4c6b6577ed215a42ecf1a7e30207390ed6d0cbb745",
+      "anchors": ["1268-1397", "1709-1784"],
+      "current_behavior": "request_irq/free_irq, irq_free_descs and CPU reset",
+      "missing": "explicit late-reader synchronization and quarantine ownership"
+    },
+    {
+      "scope": "host shutdown and destroy",
+      "path": "ihk/linux/core/host_driver.c",
+      "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+      "anchors": ["380-450", "1601-1650", "1749-1784"],
+      "current_behavior": "os_data_lock protects registry removal, callbacks and forced shutdown",
+      "missing": "restart epoch and enumerable post-destroy reader owner"
+    },
+    {
+      "scope": "file object allocation, reference, index and free",
+      "path": "kernel/fileobj.c",
+      "sha256": "dfc509031aeeaeac00bd8eda4113e470aeb8ce1b20f20b9996002bc7d7f929f6",
+      "anchors": ["289-337", "630-724"]
+    },
+    {
+      "scope": "shared-memory object allocation and free",
+      "path": "kernel/shmobj.c",
+      "sha256": "0a13ac9d0450c3896c2ea664dd04f40d644f7fb70cdc2c4dbf4741c733b68d35",
+      "anchors": ["630-835"]
+    },
+    {
+      "scope": "C object helpers",
+      "path": "kernel/object_helpers.c",
+      "sha256": "b74b8a4aeaf98fbb03a3f346a3c74a1f6032e5e088217867e3cae18859801f5f"
+    },
+    {
+      "scope": "Rust object helpers",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "current_behavior": "tracked kmalloc plus callback/ref/index-driven free",
+      "missing": "generation and reuse quarantine"
+    },
+    {
+      "scope": "VM creation, fork and rollback",
+      "path": "kernel/process_helpers.c",
+      "sha256": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+      "anchors": ["3213-3360", "4295-4405"],
+      "current_behavior": "explicit goto rollback frees process, VM and address-space state",
+      "missing": "epoch and registry handoff"
+    },
+    {
+      "scope": "VM creation and fork callers",
+      "path": "kernel/process.c",
+      "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+      "anchors": ["858-925", "1026-1256"]
+    },
+    {
+      "scope": "Rust module wiring",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+      "finding": "pending_free_authority.rs does not exist and is not wired"
+    }
+  ],
+  "missing_authorities": [
+    "pending-free drain and late-reader ownership",
+    "boot and VM epoch insertion contract",
+    "descriptor generation and reuse quarantine",
+    "post-destroy callback and IRQ reader owner"
+  ],
+  "smallest_next_packet": "The packet must add the missing contracts and include the exact host IRQ/lifecycle, object descriptor, process/VM and Rust wiring paths above; no existing wrapper alone supplies them.",
+  "source_map_complete": false,
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

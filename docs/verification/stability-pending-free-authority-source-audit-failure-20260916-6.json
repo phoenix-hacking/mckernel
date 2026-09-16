@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_pending_free_authority_source_audit_failure",
+  "task_id": "M03-A/M03-B/M03-C",
+  "audit_attempt": 6,
+  "recorded_utc": "2026-09-16T07:47:00Z",
+  "status": "FAIL_SOURCE_MAP",
+  "input_architecture_review": {
+    "path": "docs/verification/stability-pending-free-authority-architecture-review-failure-20260916-5.json",
+    "sha256": "1c17cc25a1d63c29e49498579d9127a8f8dc3c69a9afdffe2734f4d82dce53b0"
+  },
+  "authorities": [
+    {
+      "scope": "host OS create, boot, shutdown and destroy",
+      "path": "ihk/linux/driver/smp/smp-driver.c",
+      "sha256": "90fefdcb66ecd49cff6d43d2f5b8c13ce28010be2bde8043400cb2baebfa2544",
+      "anchors": ["494-528 boot", "1342-1375 shutdown", "3159-3196 create/destroy"],
+      "current_owner": "smp_os_data allocated with kzalloc and destroyed with kfree under existing status/device synchronization",
+      "missing": "restart epoch, late-reader pin and durable quarantine handoff"
+    },
+    {
+      "scope": "guest VM initialization, reference and final release",
+      "path": "kernel/process_helpers.c",
+      "sha256": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+      "anchors": ["3366-3413 initialization", "6157-6215 destruction"],
+      "current_owner": "VM refcount starts at one and locks initialize here",
+      "missing": "registry handoff and complete initialization rollback authority"
+    },
+    {
+      "scope": "guest VM C wrappers",
+      "path": "kernel/process.c",
+      "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+      "anchors": ["741-745 initialization wrapper", "3513-3529 release wrapper"]
+    },
+    {
+      "scope": "page descriptor hash allocation, insertion and removal",
+      "path": "kernel/rust/page_helpers.rs",
+      "sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "anchors": ["229-275 final unmap/removal", "451-493 lookup/insertion", "570-598 removal"],
+      "current_owner": "hash lock and mapping count",
+      "missing": "descriptor generation, independent lifetime pin and reuse authority"
+    },
+    {
+      "scope": "physical allocator initialization and destruction",
+      "path": "kernel/rust/page_alloc.rs",
+      "sha256": "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd",
+      "anchors": ["2737-2779 allocator init/destroy"]
+    },
+    {
+      "scope": "TLB slot publication and IRQ acknowledgement",
+      "path": "kernel/rust/mem_helpers.rs",
+      "sha256": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+      "anchors": ["5121-5220 raw slot/address publication", "5261-5307 IRQ-save handler/pending decrement"],
+      "missing": "authenticated target acknowledgement, slot retirement/nonreuse and durable address pin"
+    },
+    {
+      "scope": "C TLB mirror and clear/free caller",
+      "path": "kernel/mem.c",
+      "sha256": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+      "anchors": ["2245-2279 TLB mirror"]
+    },
+    {
+      "scope": "x86 clear and release callers",
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2"
+    }
+  ],
+  "missing_authorities": [
+    "authoritative restart-persistent OS epoch",
+    "IRQ quiescence before OS memory reclamation",
+    "descriptor destruction/reuse generation owner",
+    "VM initialization rollback and registry owner"
+  ],
+  "smallest_next_review_set": [
+    "ihk/linux/driver/smp/smp-driver.c",
+    "kernel/process_helpers.c",
+    "kernel/process.c",
+    "kernel/rust/page_helpers.rs",
+    "kernel/rust/page_alloc.rs",
+    "kernel/rust/mem_helpers.rs",
+    "kernel/mem.c",
+    "kernel/rust/x86_memory_helpers.rs",
+    "kernel/rust/xpmem_helpers.rs"
+  ],
+  "source_map_complete": false,
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
