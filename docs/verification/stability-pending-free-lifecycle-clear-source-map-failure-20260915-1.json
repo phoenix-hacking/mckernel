@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_lifecycle_clear_source_map_failure",
+  "task_id": "M03-pending-free-inventory-source-contract",
+  "audit_attempt": 3,
+  "status": "FAIL_SOURCE_MAP",
+  "recorded_utc": "2026-09-16T05:42:32Z",
+  "inputs": {
+    "contract_sha256": "00141eb8f17d21ad3ad9b20829a333e6558e8859f70347d72bd3e9b893ae8be8",
+    "production_authority_audit_sha256": "94445654a9a6aa1bb08b5243bfbd1250708ce1d6f42ec22e7aa15fb28e7b3faa",
+    "production_authority_review_sha256": "825868636a822696f21a82648237931a1e61c7aedc8322fc6bd8e40f58ecb2b6"
+  },
+  "source_sha256": {
+    "kernel/rust/xpmem_helpers.rs": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+    "kernel/xpmem.c": "d3399be775f86dbabb4feca6238dc45add64559b45a6091726c588acf8c24a89",
+    "kernel/mem.c": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+    "kernel/rust/mem_helpers.rs": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2"
+  },
+  "established_facts": [
+    "XPMEM clear errors other than ENOENT are logged, after which memobj ownership is dropped and the range is erased, uncached and freed; there is no rollback or quarantine handoff.",
+    "The remote TLB vector retains a caller address pointer until its pending counter reaches zero, but the caller supplies the untyped lifetime and no epoch or late-completion quarantine exists.",
+    "Page insertion and final hash removal share bucket locking but provide neither a descriptor pin nor a generation or destruction permit.",
+    "VM lifetime is a generic refcount/final-free sequence with no global recovery handoff."
+  ],
+  "missing_new_mechanisms": [
+    "checked nonreused 64-bit OS, VM and descriptor generation allocation with explicit exhaustion failure",
+    "descriptor pin joined to hash membership and arena ownership",
+    "immutable clear/TLB permit with an owned address-buffer snapshot and late-completion identity",
+    "global quarantine owner receiving outstanding batches before VM or OS final release",
+    "lock order that releases page/hash and VM locks before shootdown and never waits while holding an IRQ-disabled pending lock"
+  ],
+  "disposition": "Current source cannot supply the authority contract. A source-bound design introducing these mechanisms requires independent ownership and unsafe review before implementation.",
+  "source_integration_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

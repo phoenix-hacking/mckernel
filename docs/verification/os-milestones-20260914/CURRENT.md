@@ -1928,3 +1928,61 @@ late-TLB lifetime, lock order and quarantine handoff before any production edit.
 Counters remain 0/273 accepted application cases, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates. The whole-OS
 objective remains incomplete and is neither resumed nor marked complete.
+
+Continuous checkpoint 23 resumes under the existing launcher invocation.
+Planning-index revalidation still passes with 14 milestones, 68 tasks, 130
+production gates, seven language gates, 273 logical cases and 97 packets;
+`execution_authorized` remains false and grants no runtime release.
+
+Independent storage source review 29 returns `FAIL_SOURCE` for archive 32,
+SHA256 `9638a45a70ead1d310ba1653ef6ad7868b0cdf65ae7aa47b6d181be74b18114c`,
+37,033,713 bytes and 30 safe unique members. Eight impossible producer states
+still validated: pre-fork executable/stdin state, wrong memfd flags, non-root
+post-fork collector credentials and impossible request-sink error states. The
+review also found that the review-28 test named five canonical hashes without
+actually comparing or faithfully reproducing them. Exact findings and four new
+canonical report hashes are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-25.json`.
+
+Correction attempt 29A then ran all 118 Python 3.9 tests and failed one retained
+review-27 canonical assertion because its test fixture incorrectly changed the
+producer's always-3 source flags. The exact log is preserved in
+`stability-linux-collector-storage-fault-v2-source-test-failure-20260915-33.tar.gz`,
+SHA256 `735a635034eaac4aea0372f4fe58a2b654359a42dfb2ce5a88bee8263101bdb2`.
+The worker replaced the still-untracked failure bytes before the dispatcher
+copied them; their reported hashes are retained, but the archive explicitly
+records that the unavailable bytes are not reconstructable evidence.
+
+Correction 29C now binds the producer's exact source/sink state and all five
+review-28 canonical mutations. The current oracle SHA256 is
+`a0f09c2a21a868e9f566dbb5c87f52aa0a17c4e0b244953926d1c278fffbd598`;
+the test SHA256 is
+`aefdc5c6df70b3558f18dc56d9d986d2d43f220e00174fa5a42dcad292cbdd64`.
+Dispatcher reproduction passes 118/118 under Python 3.9.12 and Python 3.8.10;
+both interpreters pycompile all four fixture sources. Review-input archive 33
+is 37,155,456 bytes with 30 safe unique members at SHA256
+`e2ae06d94cd0e532691221462a931112f7d6fb1a5b7fd8f0cd51622101b0495e`.
+Fresh independent source review 30 is active. The raw fixture/test remain
+untracked and unaccepted until a terminal `PASS_SOURCE`; compiler-packet
+drafting and all execution remain closed.
+
+M03 lifecycle/clear source-map attempt 3 returns `FAIL_SOURCE_MAP`: current
+source provides no generation allocator, descriptor pin, owned late-TLB address
+snapshot or global quarantine handoff, and clear failure currently drops XPMEM
+ownership. Its exact source-bound result is retained in
+`stability-pending-free-lifecycle-clear-source-map-failure-20260915-1.json`.
+M01 actual-method audit likewise returns `FAIL_SOURCE_MAP`: the untracked
+16-row scaffold is still strings/counters rather than actual Rust type/module
+linkage and lacks the aligned backing, drop ledger, worker/mailbox construction
+and distinct cancellation executions. Neither lane receives implementation or
+gate credit.
+
+At 2026-09-16T06:01:57Z live campaign identities remain launcher 1676703,
+recovered worker 1899017 and Codex app-server 1899019. No project build,
+container build, guest, QEMU, mcexec or IHK process is live. Host free space is
+55 GiB and scratch free space is 22 GiB. Next tasks: (1) finish exact source
+review 30; (2) on `PASS_SOURCE`, checkpoint the exact raw source and prepare a
+separately reviewed conditional UID1000 compiler-only packet, otherwise retain
+the new finding and correct it; (3) specify new M03 generation/pin/TLB/quarantine
+mechanisms and the M01 actual-source runner ABI before either implementation.
+Counters remain unchanged and the whole-OS objective remains active.
