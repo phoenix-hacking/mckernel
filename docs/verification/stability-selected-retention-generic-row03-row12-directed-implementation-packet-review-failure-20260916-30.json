@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_implementation_packet_review",
+  "review_attempt": 30,
+  "recorded_utc": "2026-09-16T11:26:38Z",
+  "status": "FAIL_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-20260916-29.md",
+  "packet_sha256": "7fa429e0d3e4a960d514296b7cd9fcae71a3e82285efd7513420b9837043e753",
+  "authenticated_checkpoint": "ae184ee592c2f83a4b92ba419b532e6c68462277",
+  "authentication": "HEAD, origin tracking ref and FETCH_HEAD agree with dispatcher event 631 at 2026-09-16T11:06:10Z. Packet25/review26/failure27/archive27/review28 match fetched commit blobs. All 34 named SHA256 pins across packets29/25/11, source-map retained inputs, templates, mode authorities and 102 source members authenticate. Root29 is absent.",
+  "findings": [
+    {
+      "id": "F1",
+      "lines": [
+        61,
+        67,
+        71,
+        74,
+        154
+      ],
+      "symbol": "Phase I failure ownership",
+      "scenario": "An early Phase I hash, anchor or ownership failure requires preserving failure.txt, but Phase I forbids evidence files and Phase II may create failure.txt only after completed Phase I handoff. No owner can satisfy both requirements.",
+      "needed_correction": "Assign emergency failure capture before successful handoff to the dispatcher outside the root or narrowly authorize Phase I failure.txt. Preserve the partial root and stop without retry. Make 346 files a successful-handoff count."
+    }
+  ],
+  "nonblocking_review_scope": [
+    "The success-path count is 2*(51*3+6+2+2+9)+2=346. Independent evidence ownership and 345 finalized hashes plus an externally bound manifest self-entry are feasible.",
+    "The real request/Claim/admission/selection/preparation chain supports the specified row03 hold and row12 wake-None query and committed no-send publication. Five-module standalone runners with inline cfg(test) scenarios avoid recursion.",
+    "Box/Arc/Mutex ownership, preallocation, post-store metadata hook, unlocked drains, exact snapshots/events and cfg erasure are feasible requirements. Genuine inverses and strict expectation/observation separation remain future evidence obligations.",
+    "Raw archive27 contains 357 safe unique members, 346 regular files and no bytecode; its strings-only runner and declaration-only evidence remain failures."
+  ],
+  "release_scope": "No Phase I or Phase II release until the failure-owner conflict is corrected and independently reviewed. Source feasibility establishes no implementation or execution result.",
+  "phase_i_implementation_released": false,
+  "phase_ii_evidence_released": false,
+  "compilation_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

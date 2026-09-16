@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "FAIL_SOURCE",
+  "attempt": 51,
+  "reviewed_at_utc": "2026-09-16T11:23:52Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-51.tar.gz",
+    "sha256": "f5de5ac40efdbafe780500aeb81aa0e5b2dbd6b63e850ee0bf835b8d5074d456",
+    "size": 39690015,
+    "safe_unique_members": 35,
+    "regular_files": 25,
+    "verified_source_bindings": 24
+  },
+  "authenticated_sha256": {
+    "parent49": "ee042f98bc832d77b00d166c500bd59b510d158c8c8e5a38d117dd325fe80805",
+    "failure49": "88a568224aadc132eb1c7150486cc80f5eab57d6b933c49ddbde88c60038ff1b",
+    "oracle": "76e82a0e3ed339a94305ab0903b3cd2a1b8bff38a8c42129a544846a6ca282e9",
+    "witness_owner": "745c1d03b0449909d3da92ec1638f32e74d537117746e415db4ed29622a8da2f",
+    "tests": "9b52d102e41816e081df232ad94f28ce042aaf6afef533c42f72fed36128f0f2",
+    "collector": "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f"
+  },
+  "evidence": {
+    "review_input_lineage_manifests_verified": 27,
+    "review_input_lineage_member_bindings_verified": 491,
+    "retained_python38_tests": 132,
+    "retained_python39_tests": 132,
+    "retained_test_pycompile_and_diff_statuses": "all zero",
+    "prior_directory_negatives_rejected_by_each_packet_validator": 48,
+    "directory_size_positives_accepted_by_each_packet_validator": 7,
+    "full_memory_baselines_accepted": 7,
+    "invalid_eof_aliases_accepted_by_each_packet_validator": 12,
+    "invalid_eof_aliases_accepted_by_full_memory_oracle": 12,
+    "scope": "Read-only source/archive review and pure memory-backed validation; retained suite logs inspected, not rerun. Filesystem read/absence adapters were replaced only for synthetic full-oracle replay."
+  },
+  "finding": {
+    "location": "storage-fault-v1/oracle.py:690,717,728 validate_packet_order; storage-fault-v1/witness_owner.py:1008 validate_packet_schema and :1065 PacketState.validate",
+    "affected_selectors": [
+      0,
+      3,
+      4,
+      5
+    ],
+    "defect": "EOF.closed_fd is not checked against the persistent attempt-directory descriptor or live regular-file descriptors. Both validators accept closure of a capability that subsequent packets still use.",
+    "mutation": "From each valid fixture, set the first EOF.closed_fd to 5 (attempt dirfd), 10 (events fd), or 11 (request fd), one variant at a time. Refresh only supervisor-result.json witness_sha256.",
+    "expected": "Reject each alias at EOF. collector.patch:44 emits EOF immediately after closing a stream fd; collector.c:157,818,890 retains attempt_fd through report creation until close_resources. Events/request sinks also remain open until close_resources.",
+    "observed": "All 12 variants pass both packet validators and complete oracle.validate(root, selector, 0).",
+    "selector0_directory_alias_packet_sha256": "4447da9b8f25688b892261adf60af2f28dc9c5ff70481fdd4d968a7a2036a695",
+    "correction": "Reject EOF.closed_fd aliases of the persistent directory and currently live file capabilities in both pre-ACK and offline validation. Add negatives for every EOF stream on all four post-fork selectors. Preserve legitimate numeric descriptor reuse after actual retirement and directory-size changes.",
+    "prior_fix": "Persistent cross-site fd/dev/ino/mode identity and acquisition/request/BIND exclusions now reject the tested prior counterexamples."
+  },
+  "raw_source_checkpoint_release": false,
+  "compiler_packet_drafting_release": false,
+  "compilation": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "whole_os_acceptance": false,
+  "files_edited": false
+}
