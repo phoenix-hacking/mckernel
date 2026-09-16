@@ -2415,3 +2415,59 @@ packet version; (5) retain M03 behind its generation/pin/TLB/quarantine ownershi
 blocker. Counters remain 0/273 application cases, 2/4 narrow fault modes, 6/130
 production gates, 350/10,000 points and 0/7 language gates. The whole-OS
 objective remains active and incomplete.
+
+Continuous checkpoint 32 preserves independent storage source review 39 and its
+bounded correction. Review 39 authenticates archive 42 but returns `FAIL_SOURCE`:
+the actual owner launch passed the instrumented collector ELF size to SETUP
+validation even though SETUP describes the separately authenticated payload
+fixture. With collector size 24 and valid payload backing size 27,448, all four
+post-fork selectors fail before ACK; changing only the backing size to 24 wrongly
+passes the pre-ACK schedule. The exact finding is
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260916-35.json`,
+SHA256 `e2f0170f8d2ddfaab916c0812a990cc59f2b66f02c939563a8d4946b3c05f44d`.
+Selector-4 complete-fixture SETUP hashes are
+`30cab2013a195b0291ddc845c1aeecc84b3c1f03b446e06ccdd00c67ef658d95`
+for valid size 27,448 and
+`92d4f5d03902cfe5f0dbd372d7d6263b493b2498257c5107daf3e24cd2a03ebf`
+for invalid collector size 24.
+
+Correction 39 changes only the still-untracked owner and test. The actual launch
+now supplies `runtime_inputs["fixture"]["size"]` to pre-ACK validation. A new
+real-launch-path control exercises selectors 0, 3, 4 and 5 with the deliberately
+different collector and payload sizes: valid 27,448 reaches normal EOF and size
+24 rejects before ACK; archive 42 retains the old behavior. Dispatcher-owned
+Python 3.9.12 and 3.8.10 each pass 126/126, both pycompile lanes pass and
+`git diff --check` passes. Exact final owner SHA256 is
+`fc0e5ee9451aa2e9b23a6a7aab4460706453d9eea46a9b96e0f9802369230a2b`;
+test SHA256 is
+`c80bf1e10c0c487e4fec2157dd9be800533b581114e6e4af4a21faa2b431ac21`.
+Raw logs remain at
+`/home/holden/mckernel-work/scratch/storage-fault-v2-attempt39-validation-6k7COf`.
+
+Fresh source-review archive 43 is 38,388,429 bytes with 35 safe unique members,
+25 files and 24 verified manifest bindings at SHA256
+`5251a83bb4d2b2446c39156a7de1cbb6197e20c79e9cf23777b80f851a38da28`.
+It binds archive 42, failure record 35, exact current source and all dispatcher
+validation inputs and outputs. This is review input only; raw storage source stays
+untracked and unaccepted and no compiler or runtime gate is released.
+
+M01 state-machine consolidation 12 returns `FAIL_DESIGN_MATRIX` and is retained
+in `stability-selected-retention-generic-actual-method-design-matrix-failure-20260916-12.json`,
+SHA256 `6cd2e5f52b163a536b32e6473ed3f9eccfe179ff89ceba776f9dfc6a60d9e0ab`.
+It source-derives the disputed row-17, row-20A, row-25/26B, held-latch,
+mode-3 recovery and direct-versus-mailbox results, but correctly refuses to invent
+the remaining fixture values and TestResponseMemory teardown ledger. The smallest
+safe next packet is generic backing/ledger plus only actual admitted preparation,
+row 03 hold and row 12 wake-None release; negative preparation, identity/cancel
+and transport/clock work remain separate later packets. No M01 implementation is
+released.
+
+Next tasks: (1) checkpoint and fetched-blob verify archive 43 and the two new
+failure records; (2) obtain fresh complete Astra/high source review 40 of exact
+archive 43; (3) only on terminal `PASS_SOURCE`, checkpoint the raw storage source
+and begin a separately reviewed conditional UID1000 compiler-only packet; (4)
+freeze explicit M01 backing/ledger teardown choices for the narrow row03/row12
+packet; (5) keep M03 closed behind its missing generation/pin/TLB/quarantine
+authority. Counters remain 0/273 application cases, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates. The whole-OS
+objective remains active and incomplete.

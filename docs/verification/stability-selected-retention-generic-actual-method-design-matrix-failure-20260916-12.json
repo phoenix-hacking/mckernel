@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_actual_method_design_matrix_failure",
+  "task_id": "M01-B-selected-retention-generic-actual-methods",
+  "review_attempt": 12,
+  "recorded_utc": "2026-09-16T08:57:00Z",
+  "status": "FAIL_DESIGN_MATRIX",
+  "reviewed_packet": {
+    "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-20260916-8.md",
+    "sha256": "8071bd38119ecc11e58e5e68c5b41ae5bee89a760d461350509442ec7af5744c"
+  },
+  "authenticated_authority": {
+    "source_map_sha256": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131",
+    "stager_sha256": "c2b8b2a2d35a5fddf648788fbe602f57a5efc365106db458c52a7b4f3ab843b0",
+    "manifest_sha256": "d9d439f4f5c318be801e83cd45349177876c20b8a5d62af18789705709c98d0",
+    "source_members": 102,
+    "templates": 5,
+    "authority_records": 3,
+    "status": "MATCH"
+  },
+  "source_derived_corrections": {
+    "row_20a": "At stage 3/commits 1 cancellation returns Ok(()), invalid remains 0, no quarantine occurs and the completion remains owned until a separately specified publication.",
+    "rows_25_26b": "Precommit cancellation returns Err(-71), latches first-invalid -125 and quarantines the call; subsequent return_value returns Err(-32). With no Completion, phase query returns present=false rather than -71.",
+    "row_17": "PID, CPU, requester and delivery mutations do not break owner matching and retain the selected publication gate; response mutation breaks owner matching. Changed-delivery query is absent, while changed PID/CPU/requester/response queries return -71. Exact query key and mutation time must be explicit.",
+    "rows_02_08_09_10_11": "Held publication returns Err(-11) and latches first-invalid -71.",
+    "rows_14_15_16": "Mode-3 recovery requires wake Some and a fresh-process initial attempt at t to establish STABILITY_FAULT_SINCE before the target retry.",
+    "direct_prepare": "verification_prepare_retained returns Response/error without calling stability_phase::invalid; selected mailbox return-prepare owns restoration, invalid latch and mailbox quarantine.",
+    "row_27": "After successful publication removes the call, cancel_pending returns Ok(()) with no rollback or second release."
+  },
+  "unresolved_fixture_decisions": [
+    "choose direct, selected-mailbox or both routes for rows 22-24 and reconcile the negative-TID sole-direct-exception rule",
+    "choose exact nonzero status for row 22, exact state outside {0,2} for row 23 and exact second-CAS replacement value other than 2 for row 24",
+    "choose exact alternate values for every row-17 key mutation and exact wake subcases for rows whose packet currently omits them",
+    "specify the additional nonselecting real-key construction used by row 18 phase queries",
+    "choose whether row 20A ends at successful cancellation observation or continues to a separately observed publication",
+    "define TestResponseMemory ledger event taxonomy, snapshot boundary and consuming teardown so finished/unfinished Drop and quarantine counts are executable without post-release reads"
+  ],
+  "source_guarantees": {
+    "normal_prefix": "Fresh admitted chain, ARMED stage 1/commits 0/invalid 0, selected return_value Ok(()), accepted transition to stage 2/invalid 0 before any test-state mutation.",
+    "prepublication_phase_query": "wake None returns Err(-71); wake Some returns present=true/publication_since=None. Query errors do not latch invalid.",
+    "postpublication_phase_query": "After call removal returns present=false/publication_since=None.",
+    "held_owner": "Held Completion or failed Response has zero send/status/release at the observation boundary; backing teardown counts require the missing ledger implementation.",
+    "successful_owner": "Successful publication stores status, consumes release and removes the call; mode-2 notification failure is later and cannot restore ownership."
+  },
+  "smallest_safe_packet_sequence": [
+    "shared generic backing/ledger plus actual admitted preparation with only row 03 hold and row 12 wake-None release",
+    "separate response-negative rows 21-24 after fixture decisions",
+    "separate identity/cancellation rows 17-20 and 25-27",
+    "separate selected-send/clock/notification rows 13-16",
+    "extend the initial gate packet with rows 01-02 and 04-11 only after its independent review"
+  ],
+  "next_action": "Dispatcher must freeze the explicit fixture choices and teardown semantics before any new implementation packet; another cheap wording correction is not released.",
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

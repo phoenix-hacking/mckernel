@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 39,
+  "recorded_utc": "2026-09-16T08:58:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-42.tar.gz",
+    "sha256": "c6e56b1332ec8b457cd3c031a0f1833e72d5edf6ce0d9b17d5417545603181e1",
+    "size": 38261570,
+    "members": 35,
+    "files": 25,
+    "manifest_bindings": 24,
+    "safe_unique_members": true,
+    "commit": "c7c6d8d3b37132b964e7bd31c36ef76b03d0218b"
+  },
+  "authenticated_inputs": {
+    "archive_42_exact": true,
+    "nested_archive_manifests_through_24": "PASS",
+    "selected_review_and_positive_groups": "22 PASS after correcting one reviewer-only virtual-filesystem adapter omission",
+    "review_38_archive41_differentials": "PASS",
+    "selector_4_failure34_hashes": "MATCH"
+  },
+  "finding": {
+    "id": "owner-launch-binds-collector-size-instead-of-payload-size",
+    "severity": "source-blocking",
+    "owner_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/witness_owner.py:1328",
+    "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2256",
+    "evidence": "launch passes inputs['elf']['size'], the instrumented collector ELF size, to SETUP executable-backing validation. SETUP describes the sealed payload fixture, whose authenticated size is runtime_inputs['fixture']['size'].",
+    "affected_selectors": [0, 3, 4, 5],
+    "actual_launch_reproduction": {
+      "valid_payload_size": 27448,
+      "synthetic_collector_size": 24,
+      "valid_result": "SETUP sequence 12 raises ValueError('witness executable backing') before journal/ACK; cleanup trigger owner-failure",
+      "mutated_backing_size": 24,
+      "mutated_result": "all pre-ACK packets accepted and launch reaches normal-eof",
+      "full_oracle_mutated_result": "REJECT"
+    },
+    "selector_4_complete_fixture_setup_sha256": {
+      "valid_size_27448": "30cab2013a195b0291ddc845c1aeecc84b3c1f03b446e06ccdd00c67ef658d95",
+      "invalid_collector_size_24": "92d4f5d03902cfe5f0dbd372d7d6263b493b2498257c5107daf3e24cd2a03ebf"
+    }
+  },
+  "required_correction": [
+    "pass the authenticated runtime payload fixture size to pre-ACK SETUP validation",
+    "add actual owner.launch positive and negative controls with deliberately distinct collector and payload sizes",
+    "retain direct archive41 old-accept/current-reject controls"
+  ],
+  "review_limitations": [
+    "review stopped at the concrete source blocker; remaining paths are not exhaustively accepted",
+    "OS, transport, durability and cleanup operations were mocked; no actual process or filesystem execution occurred"
+  ],
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiled": false,
+  "root_execution": false,
+  "native_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
