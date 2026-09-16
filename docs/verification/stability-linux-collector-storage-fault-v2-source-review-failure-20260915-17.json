@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 21,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T03:07:10Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-24.tar.gz",
+    "sha256": "1e74749856876abf5f337d30451581a7c8245327af074a6d768250a3780530d5",
+    "size": 4295234,
+    "members": 61,
+    "safe_unique_members": true,
+    "verified_bindings": 304,
+    "nested_archive_occurrences": 39
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "d701e4e95ac332726ee46bbc89922bbededa37f018b3c7a97f06540e31ef8268",
+    "test_collector_storage_fault_packet.py": "47a58a1d4fbd6309590abbc77e05f8c0bb01374298ac2fddc53d6629236af785"
+  },
+  "findings": [
+    "The oracle ignores earlier array events that share a direct wait timestamp. A contradictory kill identity placed immediately before the positive-birth reap is therefore accepted on both sentinel and owner paths.",
+    "Direct signal-error validation ignores an equal-time adopted retirement. A direct signal error and subsequent timeout are accepted after the same PID and birth have already been reaped."
+  ],
+  "reproduction_canonical_json_sha256": {
+    "sentinel_contradiction": "a9613939bfb7154464d546989f6ea6c4d5f83fe6277a06963938359c2a48de24",
+    "owner_contradiction": "b3738bfdac9bbbd193d7b93ee4b1b19a8bba7d0caf458a31d2d9994058ce3cd8",
+    "retirement_error_tie": "c5ff14d4cebb871d4f2e283db70bd918d6ef2825e1f8792a1fa73c935462fa2b"
+  },
+  "review_scope_note": "The reviewer reproduced both findings from archive bytes without filesystem writes. Checkpoint stop arrived before a complete reread of every source and the entire test file, so this record asserts failure only and not exhaustive acceptance of unaffected paths.",
+  "required_next": [
+    "Add full-record equal-timestamp contradiction and retirement/error controls and preserve their failure against the current rejected bytes.",
+    "Process preceding same-timestamp events by array position for authority invalidation while retaining strict earlier-time requirements for positive proof.",
+    "Make every prior sentinel PID retirement revoke later direct signal, signal-error and timeout authority, then rerun both pinned interpreter suites.",
+    "Freeze a new exact-byte archive and obtain a fresh complete independent source review before drafting any compiler packet."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

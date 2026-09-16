@@ -1618,3 +1618,42 @@ Clang or container build process is live. Host free space is 63 GiB and scratch
 free space is 22 GiB. Counters remain 0/273 accepted application cases, 2/4
 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. The whole-OS objective remains incomplete.
+
+Window-end checkpoint 17 records independent source review attempt 21 as
+`FAIL_SOURCE`. The reviewer verified the 4,295,234-byte, 61-member archive 24 at
+SHA256 `1e74749856876abf5f337d30451581a7c8245327af074a6d768250a3780530d5`,
+including 39 nested archive occurrences and 304 manifest bindings. Two
+independently reproduced equal-timestamp gaps remain. A contradictory identity
+event immediately before a same-timestamp positive-birth reap is ignored on both
+sentinel and owner paths. An adopted retirement immediately before a
+same-timestamp direct signal error is likewise ignored, allowing the error and a
+later timeout after retirement. The exact reproduction hashes and bounded review
+scope are retained in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-17.json`.
+The reviewer did not finish a complete reread before the checkpoint stop, so no
+unaffected path is accepted by implication. The raw fixture/test bytes remain
+untracked and rejected; no compiler packet, build, root action, native run, guest
+run, application acceptance or production credit follows.
+
+Next tasks, in order: (1) add and preserve full-record controls for the two
+equal-timestamp failures; (2) process preceding same-timestamp events by array
+position for authority invalidation while keeping positive proof strictly
+earlier in time; (3) make every prior sentinel retirement revoke later direct
+signal, signal-error and timeout authority; (4) rerun the complete suite under
+both pinned interpreters, freeze a new archive and obtain a fresh complete
+independent source review. Do not draft the conditional UID1000 compiler packet
+or compile anything before `PASS_SOURCE`. M03 candidate 12 remains accepted only
+as focused equivalence and is not integration-ready; its next action is a newly
+reviewed correction/source packet.
+
+At 2026-09-16T03:07:10Z new dispatch is stopped and both bounded child agents are
+completed and joined. The retained live campaign identities are launcher
+1676703, recovered worker 1855986 and Codex app-server 1855988; the launcher
+started 2026-09-15 15:51:14 PDT and the recovered worker/server started
+2026-09-15 20:01:15 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo,
+Rust, GCC, Clang or container build process is live. Host free space is 63 GiB
+and scratch free space is 22 GiB. The launcher has paused future goal
+continuations. Counters remain 0/273 accepted application cases, 2/4 narrow
+fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
+The whole-OS objective remains incomplete and is neither resumed nor marked
+complete by this checkpoint.
