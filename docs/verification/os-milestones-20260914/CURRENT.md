@@ -1717,3 +1717,53 @@ guest, QEMU, mcexec or IHK process is live. Host free space is 60 GiB and
 scratch free space is 22 GiB. Counters remain 0/273 accepted application cases,
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
 language gates. The whole-OS objective remains active and incomplete.
+
+Window-end checkpoint 19 records independent source review attempt 24 as
+`FAIL_SOURCE`. The reviewer verified the 36,017,380-byte, 28-member archive 27
+at SHA256
+`85316fd95101c33448090d4fc2e3ce51fbf8a4b22fc0dd5075d5387e0c6f1ffb`,
+read all four current Python sources, the complete 110-test file, packet 19 and
+the embedded failure descriptions, and independently exercised the six named
+canonical negative controls plus the later adopted-error positive. The
+negative controls reject and the positive accepts, but a new concrete source
+gap remains.
+
+The direct-birth state detects a contradictory birth and then overwrites the
+established birth when a later matched identity pair appears. Exact sentinel
+and owner records can therefore change birth 30 to birth 31 before their direct
+reap and still validate, although the producer pins `last_birth` and cannot
+emit that transition. The incorrectly accepted canonical JSON hashes are
+`6fe02b2682cbe15f6c4ee97497129cd7a22454cd038cd7b25d1237ab85587242`
+for the sentinel and
+`b62b0b069a4dfef6f36df22d1e1918e3479e14a923d763ef840b345ad4e6042e`
+for the owner. Review 24's exact envelope, source bindings, finding and limits
+are preserved in
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260915-20.json`.
+Eight historical archive references were unavailable inside the envelope, and
+the reviewer stopped further inspection for this checkpoint, so the review is
+not exhaustive acceptance.
+
+The raw storage fixture/test bytes remain untracked and rejected. No accepted
+source checkpoint, compiler packet, compilation, root/native/guest execution,
+application acceptance or production credit is released. Next tasks, in order:
+(1) add and preserve exact full-record sentinel and owner controls for changed-
+birth waits, signals and signal errors, retaining legitimate null-to-positive
+establishment; (2) keep an established direct-child birth immutable and reject
+any later identity pair that contradicts it; (3) rerun both pinned interpreter
+suites and pycompile; (4) freeze a new exact archive and obtain fresh complete
+independent source review; (5) only after `PASS_SOURCE`, checkpoint the exact
+source and draft a separately reviewed conditional UID1000 compiler-only packet
+for selectors 0 through 6. M03 still requires a separately reviewed production
+inventory API before another pending-free candidate.
+
+At 2026-09-16T04:02:54Z new dispatch is stopped. Source reviewer 24 and reviewer
+23 are completed and joined; the bounded direct-retirement worker is closed in
+interrupted state with its retained edits represented by archive 27. The live
+campaign identities remain launcher 1676703, recovered worker 1875246 and Codex
+app-server 1875248. No project build, compiler, container build, guest, QEMU,
+mcexec or IHK process is live. The host's pre-existing Docker daemon/proxies are
+not project build work. Host free space is 59 GiB and scratch free space is
+22 GiB. The launcher has paused future goal continuations. Counters remain
+0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. The whole-OS objective remains
+incomplete and is neither resumed nor marked complete by this checkpoint.
