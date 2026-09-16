@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 18,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T02:09:59Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-21.tar.gz",
+    "sha256": "28b1d2c73cb353dd136a8b10ccda018b7739a8e65d4909ebc4cd4fd97418350e",
+    "size": 795718,
+    "members": 48
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "9725513afc2f9b44a5b2fd1fdf925a01d7ef9dcb792f7c9e4e73d414d25eb267",
+    "oracle.py": "3de6a00eea3ec798538a4d1aa584f99fe5d67b4f5a2e405395e89f3d2f464f07",
+    "test_collector_storage_fault_packet.py": "d4afcbf009a922b77a8813087d3793e4ae52ab538d1790967ec5b4ca0882734c"
+  },
+  "checks_before_review": {
+    "python3.9.12": "92/92 PASS",
+    "python3.8.10": "92/92 PASS",
+    "pycompile": "PASS on both interpreters",
+    "review_envelope": "PASS_REVIEW_ENVELOPE_ONLY"
+  },
+  "findings": [
+    "The oracle permits a null-birth sentinel timeout to join a positive-birth reap without the required independently established identity pair at the reap timestamp.",
+    "The late owner-start producer backdates cleanup_trigger_ns to the earlier sentinel reap. Truthful evidence requires separate reap and actual failure timestamps plus a narrowly reviewed exception to packet 17's cleanup-event lower bound."
+  ],
+  "required_next_boundary": "Draft and independently review an additive packet-19 representation/chronology correction before further source edits.",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

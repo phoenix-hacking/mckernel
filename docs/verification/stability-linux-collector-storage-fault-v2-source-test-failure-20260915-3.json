@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 19,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T01:51:49Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-19.tar.gz",
+    "sha256": "bbe8d03d210432789c8cb70d708b9093e8e05b1062505adb7e62cdb4a2a4a224",
+    "size": 90727,
+    "members": 19
+  },
+  "failing_source_sha256": {
+    "supervise.py": "8f7789b100067b41d0aff710feaaf2bcbea10bf83a869faa9bfd300593cedf5c",
+    "oracle.py": "b6725f1b10ea19b6ec98621b6c106936e34b3d7bff8a642ab3dd0e55f41bc967",
+    "test_collector_storage_fault_packet.py": "c208fa47d67ec35147053376506cfd8b126db2cfb6d0bdb636eb3bfc75a1ccb9"
+  },
+  "failure": "The full failed-preflight sentinel-wait record with no direct reap and no direct timeout was accepted.",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

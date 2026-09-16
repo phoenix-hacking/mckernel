@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 17,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T01:55:47Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-19.tar.gz",
+    "sha256": "91d338ed7110984bf20603e53a131ec1ffef81fc5069c56a6d19d79f47f9e68d",
+    "size": 608740,
+    "members": 43
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "8f7789b100067b41d0aff710feaaf2bcbea10bf83a869faa9bfd300593cedf5c",
+    "oracle.py": "d8d43ca5c7a5768e66e1851e66563bb6cbb346efdf99594303779061c7f45252",
+    "test_collector_storage_fault_packet.py": "c208fa47d67ec35147053376506cfd8b126db2cfb6d0bdb636eb3bfc75a1ccb9"
+  },
+  "checks_before_review": {
+    "python3.9.12": "89/89 PASS",
+    "python3.8.10": "89/89 PASS",
+    "pycompile": "PASS on both interpreters",
+    "review_envelope": "PASS_REVIEW_ENVELOPE_ONLY"
+  },
+  "findings": [
+    "A sentinel wait that begins before the five-second deadline but is recorded after it can incorrectly grant successful preflight authority.",
+    "A sticky direct timeout followed by a sentinel reap is not joined to the same PID or required to precede direct retirement; the same chronology gap applies to owner timeouts."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

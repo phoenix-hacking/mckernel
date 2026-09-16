@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 18,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T01:41:46Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-18.tar.gz",
+    "sha256": "d1fc9ee138fed5654231a83c09b86d9a1ed1efe143c7fafb9a84c2ebf65354c6",
+    "size": 90454,
+    "members": 18
+  },
+  "failing_source_sha256": {
+    "supervise.py": "34a19477db81cb8cb6b6766a71c3d0c8f83e4916458fa4a1758125d9c451a5b6",
+    "oracle.py": "2bd26fc8cd200157ee49becc23222be852df154dc4ce16f89f45ea5e77667faa",
+    "test_collector_storage_fault_packet.py": "f7be74233ee1e4375ab29bf5f64cc1aa6d03fb0058e3fb6dce911a2ee0c28fa1"
+  },
+  "focused_result": "3 tests: 1 assertion failure and 2 uncaught errors",
+  "failures": [
+    "First post-fork observe_identity exception escaped run_supervisor before cleanup, pipe retirement and publication.",
+    "Second post-fork observe_identity exception escaped run_supervisor and discarded the first returned observation.",
+    "A full OWNER_ERROR supervisor record with two identical direct wait-timeout records was accepted."
+  ],
+  "corrected_source_sha256": {
+    "supervise.py": "8f7789b100067b41d0aff710feaaf2bcbea10bf83a869faa9bfd300593cedf5c",
+    "oracle.py": "b6725f1b10ea19b6ec98621b6c106936e34b3d7bff8a642ab3dd0e55f41bc967",
+    "test_collector_storage_fault_packet.py": "f7be74233ee1e4375ab29bf5f64cc1aa6d03fb0058e3fb6dce911a2ee0c28fa1"
+  },
+  "corrected_checks": {
+    "python3.9.12": "88/88 PASS",
+    "python3.8.10": "88/88 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

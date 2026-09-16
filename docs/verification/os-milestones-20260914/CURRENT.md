@@ -1503,3 +1503,42 @@ new dispatch is stopped. Host free space is 64 GiB and scratch free space is
 0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. The whole-OS goal remains incomplete
 and is neither resumed nor marked complete by this checkpoint.
+
+Continuous checkpoint 15 preserves source-test failure archives 18 through 22,
+review-input archives 18 through 21 and independent source review failures 12
+through 14. Every review envelope passes. The correction sequence raises both
+pinned interpreter suites from 86 to 92 passing source-only tests and preserves
+each intermediate regression. It adds protected incremental post-fork identity
+observations, exact direct-timeout cardinality, failed-preflight timeout branch
+rules, fixed sentinel wait and owner-start boundaries, strict timeout-before-reap
+chronology and event-time-specific null-to-positive birth handling.
+
+The latest exact review archive SHA256 is
+`28b1d2c73cb353dd136a8b10ccda018b7739a8e65d4909ebc4cd4fd97418350e`.
+Its 48-member envelope and both 92/92 logs pass, but independent full review
+remains `FAIL_SOURCE`. Two representation blockers remain. First, the oracle
+still accepts a null-birth sentinel timeout followed by a positive-birth reap
+without an independently established identity pair. Second, late owner-start
+failure evidence backdates `cleanup_trigger_ns` to the earlier sentinel reap;
+truthful representation requires separate reap and actual failure timestamps,
+while packet 17 currently forbids any cleanup event before the trigger. The
+current raw fixture and tests remain untracked/rejected and must not be staged as
+accepted source.
+
+Next tasks, in order: (1) draft additive packet 19 to represent an earlier retained
+direct reap separately from the actual late owner-start failure trigger, with a
+narrow event-time exception and exact trigger-relative cleanup bound; (2) obtain
+independent packet review; (3) add missing/wrong/post-wait identity-pair controls
+for sentinel null-to-positive birth and a separated-timestamps full-path control;
+(4) implement only the reviewed correction, rerun both interpreters and obtain a
+fresh full exact-byte source review. Do not draft or run the conditional UID1000
+compiler packet, use root, run native code or launch a guest before `PASS_SOURCE`.
+
+At 2026-09-16T02:09:59Z the retained campaign identities remain launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC or
+Clang process is live. All three bounded child agents are completed and joined.
+Host free space is 63 GiB and scratch free space is 23 GiB. Counters remain
+0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. This checkpoint is progress evidence,
+not whole-OS completion.

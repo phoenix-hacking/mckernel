@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 22,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T02:05:41Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-22.tar.gz",
+    "sha256": "d657f6336ff63f1cacc9f740bdb885cb0b79caa315db957ae29a18f15919d540",
+    "size": 91977,
+    "members": 19
+  },
+  "failing_source_sha256": {
+    "supervise.py": "20bf0954a1f03b8a2f725021f7df59bf3bd3059da01c45cdba9eb7e1041febf9",
+    "oracle.py": "6d62badcce558784aa1870352237a407a7f2319c571451ed9c1fbcd7d21d2029",
+    "test_collector_storage_fault_packet.py": "d4afcbf009a922b77a8813087d3793e4ae52ab538d1790967ec5b4ca0882734c"
+  },
+  "failures": [
+    "The full supervisor path attempted owner spawn when the owner-start sample was one nanosecond after the preflight deadline.",
+    "Valid sentinel null-birth timeout followed by positive identity establishment and reap was rejected.",
+    "Valid owner null-birth timeout followed by positive identity establishment and reap was rejected."
+  ],
+  "corrected_source_sha256": {
+    "supervise.py": "9725513afc2f9b44a5b2fd1fdf925a01d7ef9dcb792f7c9e4e73d414d25eb267",
+    "oracle.py": "3de6a00eea3ec798538a4d1aa584f99fe5d67b4f5a2e405395e89f3d2f464f07",
+    "test_collector_storage_fault_packet.py": "d4afcbf009a922b77a8813087d3793e4ae52ab538d1790967ec5b4ca0882734c"
+  },
+  "corrected_checks": {
+    "python3.9.12": "92/92 PASS",
+    "python3.8.10": "92/92 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
