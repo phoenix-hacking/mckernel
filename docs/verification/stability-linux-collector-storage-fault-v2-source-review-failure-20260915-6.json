@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 10,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T23:46:42Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-10.tar.gz",
+    "sha256": "ee5e4a5c42f0d854b8749d3ec60ed312e9537369e22ac3cf2a9d656de6de6c68",
+    "size": 197621,
+    "members": 19
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "2d6211d6c481ddb5ff1c12ad5c82b0b7eafcc5029f3f00662cf47eb5760d8210",
+    "supervise.py": "699a81d13921d8feafa891f09bccb83f56f05c1adf1ca45df7c0608148350716",
+    "oracle.py": "95b482568704dfc61e94d0e85ed82c2e5bfb6ff581b6ecf691fc42f7e6d816e3",
+    "test_collector_storage_fault_packet.py": "3e8c52d383897468a4ca9fc0f57a0ff865a91f3343e4462143795ab30ca01e69"
+  },
+  "checks_before_review": {
+    "python3.9.12": "52/52 PASS",
+    "python3.8.10": "52/52 PASS",
+    "pycompile": "PASS on both interpreters",
+    "planning_index": "PASS: 14 milestones, 68 tasks, 130 gates, 7 language gates, 273 cases"
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "component": "supervise.run_supervisor/cleanup_tree",
+      "finding": "absent sentinel or failed owner spawn seeds direct_reaped false and skips the required empty scans and actual ECHILD"
+    },
+    {
+      "severity": "P1",
+      "component": "oracle supervisor lifecycle",
+      "finding": "legitimate sentinel direct waits reject against the absent owner identity while invented no-sentinel signal failure can pass"
+    },
+    {
+      "severity": "P1",
+      "component": "oracle supervisor and owner cleanup",
+      "finding": "retired adopted births are not tracked, allowing post-reap signals and duplicate waits while rejecting lawful never-observed null-birth reaps"
+    },
+    {
+      "severity": "P1",
+      "component": "witness_owner.launch cleanup fallback",
+      "finding": "unexpected cleanup exceptions discard accumulated state and emit the forbidden cleanup-error unresolved variant"
+    },
+    {
+      "severity": "P1",
+      "component": "oracle.validate_packet_order",
+      "finding": "Boolean acquisition identifiers pass integer equality joins"
+    }
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

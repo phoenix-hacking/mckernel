@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 11,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T00:01:36Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-11.tar.gz",
+    "sha256": "394e8b12ab64e4e6daae63115763e560034f74dba92f129cf0864a6995f7ad3e",
+    "size": 203654,
+    "members": 19
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "c5240c91a9a07be9b90869a507d10243e054ba416ac7084e3d3ea3fda69f1353",
+    "supervise.py": "0529229b6269c953b461615b710ff146a7ce8585c9320fb45ffaa251eeb02280",
+    "oracle.py": "595c49b0a00e7d08df49febd801c3a316dfb39c4906f28ca0f2dcafb00140ae5",
+    "test_collector_storage_fault_packet.py": "a4d1c8cbd383a4f3b159154ae0075a3d8eb0bf960aab97ece12c27f29ead02ca"
+  },
+  "checks_before_review": {
+    "python3.9.12": "60/60 PASS",
+    "python3.8.10": "60/60 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "component": "oracle supervisor cleanup",
+      "finding": "sentinel identity authority is incomplete, legitimate sentinel reap uses wrong wait/deadline joins, and real-owner direct signal errors are misclassified"
+    },
+    {
+      "severity": "P1",
+      "component": "oracle supervisor result",
+      "finding": "SPAWN_FAILED deadline conflicts with the producer and MATCHED/UNOBSERVED/MISMATCH failure alternatives are incomplete"
+    },
+    {
+      "severity": "P1",
+      "component": "oracle packet/order observations",
+      "finding": "exact Boolean types and selector-4 raw wait, EOF descriptor and cleanup-deadline observations can evade validation"
+    },
+    {
+      "severity": "P1",
+      "component": "owner and oracle packet state",
+      "finding": "no live-descriptor ledger rejects retained descriptor collisions after BIND relocation"
+    }
+  ],
+  "verified_prior_corrections": [
+    "absent direct child terminal cleanup",
+    "adopted retired and null-birth validation",
+    "caller-owned owner cleanup state without cleanup-error union drift",
+    "exact integer acquisition identifiers"
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

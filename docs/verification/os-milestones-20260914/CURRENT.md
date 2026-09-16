@@ -1363,3 +1363,31 @@ new dispatch is stopped. Host free space is 68 GiB and scratch free space is
 0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. The whole-OS goal remains
 incomplete and is neither resumed nor marked complete by this checkpoint.
+
+Window-end checkpoint 12 preserves independent source review attempts 10 and 11
+and their exact input archives. Both remain `FAIL_SOURCE`; no later bytes have
+independent acceptance. The exact current WIP is archived at SHA256
+`94c2c22c4f2dd4060e5935f444fee5926e5b16d98089895700db2521407b1c0c`.
+It includes a bounded local raw-wait decoder needed by the new oracle join.
+Python 3.9.12 and 3.8.10 both compile all four edited fixture sources, then each
+passes 60/63 source-only tests. The three retained failures are exact validation-
+order disagreements: owner observations precede owner identity, complete cleanup
+precedes cleanup incomplete, and owner wait precedes direct wait. This is
+`FAIL_SOURCE_WIP`, not source acceptance.
+
+Next tasks, in order: (1) correct only those three oracle validation-order
+failures without weakening identity, cleanup or wait joins; (2) add the missing
+matched-unreaped OWNER_ERROR, owner exit/signal, sentinel signal/error, nullable
+and positive birth, negative-descriptor and raw-wait-join controls; (3) rerun the
+exact suite under both pinned interpreters; (4) request a fresh independent
+exact-byte full source review only after stable PASS results. Do not compile,
+use root, launch a guest or claim any gate before `PASS_SOURCE`.
+
+At 2026-09-16T00:20:13Z the retained live campaign identities are launcher
+1676703, launcher worker 1676707 and Codex app-server 1676709, all started
+2026-09-15 15:51:14 PDT. No new task was dispatched; all three child agents are
+joined/completed. Host free space is 64 GiB and scratch free space is 23 GiB.
+The launcher has paused future goal continuations. Counters remain 0/273 accepted
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. The whole-OS goal remains incomplete and is
+neither resumed nor marked complete by this checkpoint.
