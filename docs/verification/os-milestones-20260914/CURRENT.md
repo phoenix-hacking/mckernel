@@ -2830,3 +2830,52 @@ source-stage attempt; (3) keep M03 closed behind generation, descriptor-pin,
 authenticated-TLB-ack and quarantine-ownership blockers. Counters remain 0/273
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. Whole-OS acceptance remains incomplete.
+
+Work-window closeout 40 follows fetched checkpoint
+`a192c3fee872f0838da6665b7a14fcea1cbc4a2a`. No task was dispatched after the
+user's pause request. The two already-complete M01 child lanes were joined, and
+the active storage reviewer was stopped only after reporting its terminal
+source-bound result. No project build, container build, guest, QEMU, mcexec or
+IHK process is live. Launcher PID 1676703, recovered worker PID 2238392 and
+app-server PID 2238394 remain live for the launcher's paused state. The heavy
+lease is free. Host free space is 42 GiB and scratch free space is 21 GiB. The
+launcher owns future continuation; this closeout neither resumes nor completes
+the OS goal.
+
+Storage review 60 returns `FAIL_SOURCE`. It confirms that all 292 accumulated
+packet negatives reject in both packet validators and the complete memory-backed
+oracle and that 24 retained baseline/size/reuse positives pass, but finds three
+new blockers. Actual child descriptor remapping in `witness_owner.launch` and
+`supervise.spawn_owner` is alias-unsafe for fd 198 and initially closed standard
+descriptors, and was covered only with fake descriptor APIs. Twelve fabricated
+positive acquisition-ID sequences and sixteen aliases between distinct live
+event/request/report inode identities also pass all three validators. The exact
+additive review record SHA256 is
+`7e0dcdefbe396ddd4cde41d8448ab9f4505a02597d7fe26a92a6d130f90765e7`.
+Raw storage source remains untracked and unaccepted; compiler, root, native and
+runtime lanes remain closed.
+
+M01 correction 42 replaces attempt 41's nonexistent forwarding call with an
+exact test-only default method on the real `ResponseMemory` trait, a call
+immediately after the real Release store, and mode-local test overrides that
+record only metadata. Its SHA256 is
+`2532c398642863e9427f4d6b391f6ce247756eab69791bca678bdc2613448e16`.
+Independent review 43 returns `PASS_PACKET` at SHA256
+`a173b29370b77886b067693282bfc4b1a09f5c0dce626bd8d131c066d18655d8`,
+releasing one future fresh source-only attempt under the complete inherited
+packet. The closeout request arrived before that attempt was dispatched. No
+implementation, compilation, execution or acceptance credit follows.
+
+Next tasks after an explicit future launcher continuation are: (1) make one
+bounded storage correction covering alias-safe real descriptor remapping, exact
+producer acquisition sequencing and cross-role live inode ownership, then run
+the focused and complete dual-Python validation and obtain fresh independent
+source review; (2) only on terminal `PASS_SOURCE`, checkpoint the exact raw
+storage source before drafting the separately reviewed conditional UID1000
+compiler-only packet; (3) execute the one released fresh M01 source-stage
+attempt under packet 29 plus corrections 31/34/36/39/42 and review 43, then
+obtain independent complete handoff review before Phase II; (4) keep M03 closed
+behind generation, descriptor-pin, authenticated-TLB-ack and
+quarantine-ownership blockers. Counters remain 0/273 application cases, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. Whole-OS acceptance remains incomplete.

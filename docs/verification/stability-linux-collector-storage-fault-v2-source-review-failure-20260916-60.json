@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "FAIL_SOURCE",
+  "attempt": 60,
+  "reviewed_at_utc": "2026-09-16T12:22:50Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-60.tar.gz",
+    "sha256": "342686df29a5a7c8fe91a34905dac92a794db0b09656a6aa189c23b0605dc47e",
+    "size": 40237424,
+    "safe_unique_members": 39,
+    "regular_files": 29,
+    "verified_source_bindings": 28
+  },
+  "authenticated_sha256": {
+    "review57": "0abed1c3f09eab131c2e3cfc717f782be1ff806f84763eb95c9e7238f0f8b529",
+    "correction58_failure": "262afd22c87890cf61c768b8d01f9a0b2d062e47c4858b2734de8b4f5a8a31c9",
+    "oracle": "dd39db171adba9954f501ac61f4cc785d015a3da6778d9b1bcdce3516240a5e3",
+    "witness_owner": "e1f73261d1ed20c76f4c5b719e19393e12ec59a41bb8593be68b158dcfc37fd4",
+    "tests": "9673663f21a94f9e7fdc09345ec8450948cdd6b6fe44d6e3e062ef1f7c26fead"
+  },
+  "evidence": {
+    "accumulated_packet_negatives_rejected_by_each_validator_and_complete_memory_oracle": 292,
+    "baseline_size_and_reuse_positives_accepted": 24,
+    "fabricated_positive_acquisition_id_variants_accepted_by_each_validator_and_complete_memory_oracle": 12,
+    "distinct_live_inode_alias_variants_accepted_by_each_validator_and_complete_memory_oracle": 16,
+    "scope": "Read-only source, retained archive-lineage and pure memory-backed review. The independent reviewer reached the terminal findings below before the work-window closeout interrupted record preparation; no fixture, compiler, root, native or runtime process was launched."
+  },
+  "findings": [
+    {
+      "id": "child_descriptor_remapping_is_alias_unsafe",
+      "location": "witness_owner.py:1248 launch, especially 1322-1327; supervise.py:501 spawn_owner, especially 512-524",
+      "observed": "The exact remapping branches were exercised only through dictionary-backed fake descriptor APIs. In launch, a child witness socket initially at fd 198 is closed after dup2, and stdout/stderr sources initially at fd 198 clobber the witness stream. In spawn_owner, an initially closed stdin or stdout lets a pipe/open acquire the destination number and later cleanup closes the freshly installed destination. The supervisor also leaves inherited extra descriptors open, so the outer launch path does not exclude fd 198 collisions.",
+      "correction": "Implement and test an alias-safe child remap plan that preserves every source until all destinations are installed, closes only non-destination originals, handles initially closed 0/1/2 and fd 198, and closes unintended inherited descriptors before exec. Exercise the real OS descriptor operations in a subprocess, not only fake dictionaries."
+    },
+    {
+      "id": "acquisition_sequence_not_joined_to_producer",
+      "location": "collector.patch acquisition counter; oracle.py create ordering; witness_owner.py PacketState.validate create ordering",
+      "observed": "Twelve otherwise consistent variants add 100 to positive acquisition IDs and still pass the offline validator, pre-ACK validator and complete memory-backed oracle, although sf_acquisition_next begins at zero and increments once per successful instrumented create.",
+      "correction": "Join every positive acquisition ID to the exact producer sequence, including failed-create non-consumption and both successful create sites, and add gaps, offsets, duplicates and reordering negatives."
+    },
+    {
+      "id": "distinct_live_inode_identities_may_alias",
+      "location": "oracle.py create/request/report identity state; witness_owner.py PacketState.validate create/request/report identity state",
+      "observed": "Sixteen variants alias distinct simultaneously live event, request or report regular-file device/inode identities and pass all three validators.",
+      "correction": "Track live identity ownership across both event outputs, request and report lifetimes and reject cross-role aliases until the source-defined close/retirement point, while preserving legitimate post-close reuse."
+    }
+  ],
+  "reviewer_terminal_result_preserved_after_closeout_interrupt": true,
+  "raw_source_checkpoint_release": false,
+  "compiler_packet_drafting_release": false,
+  "compilation": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "whole_os_acceptance": false,
+  "files_edited": false
+}
