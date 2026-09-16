@@ -1830,3 +1830,10 @@ QEMU, mcexec or IHK process is live. Host free space is 56 GiB and scratch free
 space is 22 GiB. Counters remain 0/273 accepted application cases, 2/4 narrow
 fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 The whole-OS objective remains active and incomplete.
+
+Checkpoint 20 evidence was pushed and fetched-blob verified at commit
+`775718dd5482bb44b4e327dbc54d95c6bc01c859`. Local HEAD,
+`origin/codex/local-native-staging-repair` and `git ls-remote` matched; the
+CURRENT, archive-29, review-26 failure, M03 contract and M03 contract-review
+blobs matched the fetched remote objects exactly. This verified checkpoint does
+not change any acceptance counter or release the rejected raw storage source.
