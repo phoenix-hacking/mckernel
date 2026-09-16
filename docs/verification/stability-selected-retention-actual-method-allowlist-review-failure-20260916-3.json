@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_allowlist_review_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 3,
+  "recorded_utc": "2026-09-16T07:23:16Z",
+  "status": "FAIL_ALLOWLIST_PACKET",
+  "review_role": "independent Astra/high ownership and actual-method source reviewer",
+  "inputs": {
+    "source_map": {
+      "path": "docs/verification/stability-selected-retention-actual-method-source-map-20260916-1.json",
+      "sha256": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131"
+    },
+    "rejected_archive": {
+      "path": "docs/verification/evidence/stability-selected-retention-actual-method-source-failure-20260916-1.tar.gz",
+      "sha256": "4fee427b35ca4f84fb4e7dd966274b9203502b49cf9893a8b7629df4fd8b5c16"
+    },
+    "blocker": {
+      "path": "docs/verification/stability-selected-retention-actual-method-source-blocker-20260916-2.json",
+      "sha256": "cc10877c18b02f6bf9ee070da4bb9df56f2cd3d9db3738ca3121239d35a81734"
+    },
+    "source_manifests": {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/source-manifests.json",
+      "sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0",
+      "bound_members": 102
+    },
+    "stager": {
+      "path": "scripts/tests/prepare_stability_selected_retention.py",
+      "sha256": "c2b8b256bc4ee0997fed3c210f9d6aef1878a6dc507d3fd96fe66ea011b843b0"
+    }
+  },
+  "findings": [
+    {
+      "id": "owned-response-backing-unspecified",
+      "required": "Use production RESPONSE_BYTES=40 and the exact unsafe ResponseMemory signatures physical(&self)->u64, address(&mut self)->*mut u8, unsafe release(self), and verification_owner()->Option<Claim>. Bind an eight-byte-aligned guarded owned backing, exclusive complete Claim identity and external quarantine ownership through unfinished Drop; consuming release removes bookkeeping once without reading response bytes."
+    },
+    {
+      "id": "private-call-admission-unspecified",
+      "required": "Invent no constructor or insertion API. Exercise Mailbox::new, open_worker(tid), admit(request, claim), reserve(handle), copied(handle, serial, true), verification_read16, observer select and return_value. Worker is nongeneric; private assertions and real cancel_pending belong in a module-local cfg(test) module in generated smp_application_syscall.rs."
+    },
+    {
+      "id": "actual-hook-points-unspecified",
+      "required": "In generated application_syscall.rs place one test helper immediately before the second compare_exchange(2,1,...) in verification_prepare_retained, and record a status event immediately after Completion::publish's final status store without dereferencing released memory. Second-CAS failure returns -71 and may preserve prefix writes."
+    },
+    {
+      "id": "phase-runner-boundary-unspecified",
+      "required": "Generated stability_phase.rs may expose only a module-local cfg(test) setter taking (stage:u64, commits:u64, invalid:i32). Run every row in a fresh process because observer and fault statics are one-shot; baseline address/drop/claim counters after preparation."
+    },
+    {
+      "id": "mode3-time-and-cancellation-unspecified",
+      "required": "A runner-owned atomic clock backs kernel::bindings::ktime_get()->i64. At t selected wake publication returns -11 with one fault attempt and zero real send callbacks; retain through t+1,999,999,999 and publish/release once at t+2,000,000,000. Precommit cancellation returns -71, latches first invalid -125 and retains/quarantines; committed cancellation preserves the completion for recovery. Mode 2 publishes then its matching notification fails once with -5; cover wake None separately."
+    },
+    {
+      "id": "write-allowlist-not-enumerated",
+      "required": "Enumerate only the three generated candidate files per mode plus explicitly named fresh runner, allocator/clock shim, owned-memory ledger, parser and manifest files. Bind exact paths, hook signatures, row IDs and expected event sequences. std allocation stays in the host runner and hooks disappear under cfg(not(test))."
+    }
+  ],
+  "required_matrix_results": {
+    "bad_servicing_tid": -22,
+    "invalid_status_or_state": -71,
+    "second_compare_exchange_failure": -71,
+    "mode2_matching_notification_failure": -5,
+    "mode3_selected_wake_fault": -11,
+    "mode3_precommit_cancel": -71,
+    "mode3_first_invalid_latch": -125
+  },
+  "required_precompile_evidence": [
+    "independent pre/post generated-candidate manifests",
+    "exact adapter-only diffs",
+    "inverse restoration",
+    "complete row IDs and event expectations"
+  ],
+  "identity_checks": "All 102 manifest-bound source members, authority records and three archived rejected files matched their bound identities.",
+  "implementation_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

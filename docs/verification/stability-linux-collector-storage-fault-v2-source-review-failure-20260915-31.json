@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 35,
+  "recorded_utc": "2026-09-16T07:31:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-38.tar.gz",
+    "sha256": "6bc27b61823f300727e889983cdf08d216ba93b75acbe48b79e363644cc6ba5b",
+    "size": 37756823,
+    "members": 29,
+    "files": 19,
+    "safe_unique": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "71aa92b9740ce2b9b3745f711be81e53547ce5f4a15842c1609bc4550c45e27f",
+    "test_collector_storage_fault_packet.py": "507eb98f214794f36d03c7052b7f184b072edca54dbd763eaae6c001682f6032"
+  },
+  "findings": [
+    {
+      "id": "synthetic_fifo_identity",
+      "selectors": [0, 3, 4, 5],
+      "source": "oracle.py:2207,2442",
+      "finding": "The oracle hardcodes synthetic stdout/stderr FIFO identities [010600,1,301] and [010600,1,302], while the producer obtains dynamic identities with fstat.",
+      "counterexample": "Consistently replacing the two inode values with 901 and 902 is rejected by setup stream identities even though the identity relationship remains valid.",
+      "required": "Carry bounded collector-origin evidence for the dynamic cwd and stdout/stderr identities and join it to the setup record; generic FIFO type checks alone do not prove identity equality."
+    },
+    {
+      "id": "selector4_absent_report_setup_bypass",
+      "selector": 4,
+      "source": "oracle.py:2210",
+      "counterexamples": [
+        {
+          "mutation": "setup word 0 changed to zero",
+          "artifact_sha256": "230a12a9de937455ce45e435a5ad98155aace4a757aca6ac3ede38c51b1b3d23",
+          "expected_rejection": "malformed setup"
+        },
+        {
+          "mutation": "setup child PID changed from 70 to 71",
+          "artifact_sha256": "b68b44b5447f2eceb7923a2b78564fac49db3dca30d8b2d815e0cdb5021de418",
+          "expected_rejection": "child identity mismatch"
+        },
+        {
+          "mutation": "executable.verified.bin replaced by garbage",
+          "artifact_sha256": "795b6904e54f82411df4b0e27a373a55eea3f9d66dac5a9bce1dd92f7b401da5",
+          "expected_rejection": "executable content mismatch"
+        }
+      ],
+      "required": "Validate successful setup semantics and every reached artifact binding independently of report presence."
+    },
+    {
+      "id": "selector4_birth_not_joined_to_reap",
+      "selector": 4,
+      "source": "oracle.py:425",
+      "mutation": "child-created.startticks and owned-group-kill-attempt.leader_startticks changed to 81 while witness REAP remains 80",
+      "events_sha256": "e44939b0097cb1e388fe972ae97bcc30e5f5a39c2f189a306bbc8d5464680064",
+      "required": "Join the child PID and birth pair to the witness REAP for every post-fork selector."
+    }
+  ],
+  "verification": {
+    "retained_review_24_through_33_groups": 12,
+    "retained_groups_status": "PASS_IN_MEMORY",
+    "review_34_counterexamples": 9,
+    "review_34_status": "ALL_REJECTED",
+    "review_33_rebound_counterexamples": 5,
+    "review_33_status": "ALL_REJECTED",
+    "positive_selectors": 7,
+    "source_diff_header_checks": 2,
+    "nested_safe_unique_archives": 36,
+    "verified_source_references": 349,
+    "additional_checksums": 22,
+    "files_created_by_reviewer": false
+  },
+  "auxiliary_retained_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-root-success-20260915-2.tar.gz",
+    "sha256": "ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721"
+  },
+  "smallest_complete_correction": "Add bounded collector-origin evidence for the dynamic setup identities, including cwd and stdout/stderr, and join it in the oracle even when report creation fails. Preserve all selector schedules and prior negative controls.",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
