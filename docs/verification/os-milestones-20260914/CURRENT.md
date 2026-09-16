@@ -1872,3 +1872,10 @@ lock, generation and clear/TLB authorities are independently reviewed. Counters
 remain 0/273 accepted application cases, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. The whole-OS objective remains
 incomplete and is neither resumed nor marked complete by this window checkpoint.
+
+The window-close evidence checkpoint was pushed and fetched-blob verified at
+commit `181598d0ed1bf9148c0458f221b055cd528c15c1`. Local HEAD,
+`origin/codex/local-native-staging-repair` and `git ls-remote` matched. The
+CURRENT, validation record and evidence-archive blobs matched the fetched remote
+objects exactly; the archive retained SHA256
+`247be40a9b843e7eb1fdd7a7f230a75f29a68c7fb865a78e1c72be36b7f4c39f`.
