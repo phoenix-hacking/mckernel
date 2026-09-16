@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_phase_i_source_stage_failure",
+  "attempt": 33,
+  "recorded_utc": "2026-09-16T11:45:31Z",
+  "status": "FAIL_PHASE_I_HANDOFF",
+  "authority": {
+    "packet29_sha256": "7fa429e0d3e4a960d514296b7cd9fcae71a3e82285efd7513420b9837043e753",
+    "correction31_sha256": "d8bb9c2fd55b8507136cd992d314d5f87ab677fe107e374192678c4f713575a9",
+    "review32_sha256": "e24f4229de75a6d24ceac1b3dcf6f5e2c42718d0d0ea9b6a23a7fbd30507f2b1"
+  },
+  "failed_root": {
+    "path": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260916-29",
+    "regular_files": 326,
+    "mode2_regular_files": 163,
+    "mode3_regular_files": 163,
+    "phase_i_failure_file_present": false,
+    "bytecode_present": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-source-stage-failure-20260916-33.tar.gz",
+    "sha256": "02a538557b4b080df4468d6871e5263ac685fcc337f358c16ccee15e0dc823fa",
+    "size": 1006500,
+    "members": 337,
+    "regular_files": 326
+  },
+  "independent_review": {
+    "path": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-handoff-review-failure-20260916-33.json",
+    "sha256": "a026d76626e14bf43f6cb1d46cdd995a38a9b8af45ecd20f4276559c56422d1e"
+  },
+  "blocking_findings": [
+    "Both modes use incompatible mailbox and request APIs rather than the real mutable mailbox and application_syscall request-decode chain.",
+    "Both adapters implement the wrong trait parent, leave the real verification_owner defaulting to None, and fabricate StatusStore during release rather than observing the real post-store hook.",
+    "Both runners omit required compatibility, setup, measurements, snapshots, drains and exact event assertions.",
+    "The claimed per-mode handoff manifest digests have no retained canonical serialization and cannot be authenticated."
+  ],
+  "next": "Preserve this root and archive unchanged. Any future attempt requires a new independently reviewed implementation packet that incorporates review33 and uses a fresh root; Phase II success evidence, compilation and execution remain prohibited.",
+  "source_handoff_accepted": false,
+  "phase_ii_success_evidence_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

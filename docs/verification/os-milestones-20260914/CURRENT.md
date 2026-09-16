@@ -2775,3 +2775,58 @@ implementation; (4) keep M03 closed behind generation, descriptor-pin,
 authenticated-TLB-ack and quarantine-ownership blockers. Counters remain 0/273
 application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. Whole-OS acceptance remains incomplete.
+
+Continuous checkpoint 39 resumes after fetched checkpoint
+`353dbeb56a5ca7590516d6d9662fe36b73cde68d`. Storage review 55 first confirms
+the complete 36-case EOF alias correction, then returns `FAIL_SOURCE` because
+BIND did not join both old/new sizes to the empty successful-create snapshot.
+Correction 56 adds that join and passes both Python versions at 134/134, but
+review 57 finds three additional producer-model gaps: exact `high_fd`
+transition/domain rules were absent, fixed witness socket fd 198 was not
+reserved, and regular-file identities could alias the live attempt-directory
+device/inode. The exact review-57 record SHA256 is
+`0abed1c3f09eab131c2e3cfc717f782be1ff806f84763eb95c9e7238f0f8b529`.
+
+Correction 58 implements all three invariants and the complete negative matrix.
+Its first full dual-Python run rejects the intended contradictions but changes
+three retained diagnostic precedences; the exact source/log failure archive is
+99,201 bytes at SHA256
+`4be555440fa79fc90e6850699918af739d56341aed2a21e7027718b3e6297e95`.
+Correction 59 restores type/range diagnostic precedence without weakening the
+new rules. The focused high-fd/fd198/inode, BIND-size and EOF matrices pass;
+Python 3.9 and 3.8 each pass 135/135, both pycompile lanes and the diff check.
+Immutable archive 60 is 40,237,424 bytes with 39 safe unique members, 29 files
+and 28 bindings at SHA256
+`342686df29a5a7c8fe91a34905dac92a794db0b09656a6aa189c23b0605dc47e`.
+Complete independent review 60 is active. Raw source remains untracked and no
+compiler, root, native or runtime lane is released.
+
+M01 packet corrections 31/34/36 receive source-staging release after resolving
+early-failure ownership, exact real APIs, canonical handoff identity and final
+manifest self-binding. Phase I attempt 33 nevertheless fails independent review:
+its mailbox/request/trait calls are incompatible, status evidence is fabricated,
+scenarios are incomplete and its claimed handoff hashes have no retained bytes.
+The preserved 326-file archive is SHA256
+`02a538557b4b080df4468d6871e5263ac685fcc337f358c16ccee15e0dc823fa`.
+Attempt 38 then correctly hard-stops when mode3 attempts to re-export the mode2
+adapter; its 325-file archive SHA256 is
+`18653b8eed7614d42e7d72803845fd77f12472762caa3d4569ab7a0a388bef72`.
+Correction 39 independently passes review 40 and forbids all cross-mode backing.
+Attempt 41 independently stages both modes but correctly hard-stops because its
+post-store hook calls nonexistent `stability_observer::status_store`; its exact
+327-file archive SHA256 is
+`3281d44021b6af2adfe22ee4cf9f72bd4731e688d7b49acf74a88a28d5ee419f`.
+No handoff, Phase II, compilation, execution or credit follows any attempt.
+
+Launcher PID 1676703, recovered worker PID 2238392 and app-server PID 2238394
+remain live. The heavy lease is free; no project build, container build, guest,
+QEMU, mcexec or IHK process is live. Host free space is 43 GiB and scratch free
+space is 21 GiB. Next tasks are: (1) finish independent storage review 60 and,
+only on terminal `PASS_SOURCE`, checkpoint exact raw source then draft the
+separately reviewed conditional UID1000 compiler-only packet; otherwise preserve
+the new finding and make one bounded source correction; (2) define and review
+the exact test-only observer metadata recorder for M01 before another fresh
+source-stage attempt; (3) keep M03 closed behind generation, descriptor-pin,
+authenticated-TLB-ack and quarantine-ownership blockers. Counters remain 0/273
+application cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. Whole-OS acceptance remains incomplete.

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_phase_i_handoff_review",
+  "recorded_utc": "2026-09-16T11:44:28Z",
+  "status": "FAIL_PHASE_I_HANDOFF",
+  "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260916-29",
+  "authentication": "Packet29, correction31 and review32 hashes match. Exactly 326 allowlisted regular files exist, 163 per mode, without phase-i-failure.txt or bytecode. All originals, inputs and helpers match their retained authorities; all 102 source files and corresponding diffs match their unchanged stager-record identities.",
+  "reviewed_files_sha256": {
+    "mode2/adapter.rs": "9b73ef88a4b1db47e2080c4977bf0709eda23950a8846121889464e0999288e7",
+    "mode2/runner.rs": "ee3d509e7eaa5fce55c30788e754ef12eccbf742f3b89692d7f90c3d3c8acd74",
+    "mode3/adapter.rs": "bee1e1c1212d35b7f20d29064a95493829494900402442ef41fdf85197bbc1e8",
+    "mode3/runner.rs": "7cda3e2d07b79617e49bb89966294d9258f4eb4ca9e357251e422c7481e82baf"
+  },
+  "findings": [
+    "Both runner.rs::row03/row12: new returns Result<Mailbox>, open_worker returns u64, admit returns bool, and phase query requires Selection. The written chained calls use incompatible receivers/arguments. Both adapter.rs::request functions invent application_rpc::Request. Use the actual mutable Mailbox API and application_syscall::Request::decode(bytes, cpus).",
+    "Both adapter.rs::TestResponseMemory: super::ResponseMemory resolves to adapter, which defines no trait. The inherent verification_owner does not override the trait default None; merely correcting qualification would leave selection failing -95. Implement the actual trait and its Option<Claim> method.",
+    "Both adapter.rs::release fabricate StatusStore. source/application_syscall.rs::Completion::publish has no post-store hook. Add the mandated cfg(test) metadata hook immediately after the real store; release must record only release/ownership events.",
+    "Both runners omit kernel Vec/log/clock compatibility, callable test entry points, inline mailbox scenarios, observer installation, phase setters, baseline invocation, identity/address measurements and complete event assertions. Row03 never explicitly tears down/drains quarantine; row12 drains without required snapshots. All generated sources remain untouched stager output. Implement the complete directed scenarios under a new reviewed attempt.",
+    "The two supplied handoff-manifest digests cannot be authenticated: no manifest bytes or canonical serialization were supplied. The dispatcher confirmed this omission. Preserve and supply the exact handoff manifest bytes; do not infer serialization."
+  ],
+  "preservation": "Preserve this failed root unchanged. No repair, retry or Phase II success evidence. Dispatcher records failure; this reviewer wrote no files.",
+  "source_handoff_accepted": false,
+  "phase_ii_success_evidence_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

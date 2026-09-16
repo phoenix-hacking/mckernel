@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_implementation_packet_review",
+  "review_attempt": 35,
+  "recorded_utc": "2026-09-16T11:52:42Z",
+  "status": "FAIL_PACKET",
+  "correction_path": "docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-correction-20260916-34.md",
+  "correction_sha256": "61dd037ef1363b63f35e7bd29c2bd3e3c6d2e594914f621cc90d6c7b399f451c",
+  "review33_sha256": "a026d76626e14bf43f6cb1d46cdd995a38a9b8af45ecd20f4276559c56422d1e",
+  "archive33_sha256": "02a538557b4b080df4468d6871e5263ac685fcc337f358c16ccee15e0dc823fa",
+  "authenticated_checkpoint": "353dbeb56a5ca7590516d6d9662fe36b73cde68d",
+  "authentication": "Correction34 and all six direct SHA256 pins match retained bytes. HEAD and FETCH_HEAD match the previously authenticated checkpoint. Archive33 has 337 safe unique members, 326 regular files and no bytecode; its four adapter/runner hashes match review33.",
+  "findings": [
+    {
+      "id": "F1",
+      "lines": [
+        29,
+        30
+      ],
+      "symbol": "Phase II manifest binding",
+      "scenario": "The new artifact is phase-i-handoff.json, yet the correction calls the handoff manifest externally bound. Excluding it from the final hash table leaves only 345 ordinary entries; adding a self-hash for manifest.json to reach 346 creates circular evidence. The text does not unambiguously require the intended binding.",
+      "needed_correction": "Require final manifest.json to enumerate 347 paths: 346 ordinary finalized entries including phase-i-handoff.json, each with size and SHA256, plus only manifest.json as externally_bound without self-size/hash. Separately bind raw handoff and final-manifest bytes in dispatcher evidence."
+    },
+    {
+      "id": "F2",
+      "lines": [
+        24,
+        25,
+        36,
+        41
+      ],
+      "symbol": "Canonical handoff root identity",
+      "scenario": "The exact fresh root path must be recorded in the handoff, but the exact schema has no root/path field and prohibits extra keys. A conforming artifact cannot carry the required root identity.",
+      "needed_correction": "Add an exact top-level root field with the canonical absolute fresh path to the normative schema and serialization, or explicitly move root-path recording to a named dispatcher record and remove the in-handoff requirement."
+    }
+  ],
+  "nonblocking_review_scope": "The specified Request decoder, mutable Mailbox return types, real Selection, ResponseMemory Option<Claim> override, five-module compatibility, inline scenarios and post-store metadata hook address the source defects in review33. Packet29 still requires complete row assertions, fresh-process execution design and cfg erasure; future exact source review must verify these. Revised counts are attainable once F1/F2 are fixed. No implementation or execution evidence was established.",
+  "release_scope": "No new source-staging attempt until the combined packet is corrected and independently approved. Preserve root29, archive33 and all packet/review bytes.",
+  "source_staging_released": false,
+  "compilation_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

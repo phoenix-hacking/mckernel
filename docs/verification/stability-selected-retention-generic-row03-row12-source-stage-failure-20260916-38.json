@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_phase_i_source_stage_failure",
+  "attempt": 38,
+  "recorded_utc": "2026-09-16T11:58:55Z",
+  "status": "FAIL_PHASE_I",
+  "authority": {
+    "packet29_sha256": "7fa429e0d3e4a960d514296b7cd9fcae71a3e82285efd7513420b9837043e753",
+    "correction31_sha256": "d8bb9c2fd55b8507136cd992d314d5f87ab677fe107e374192678c4f713575a9",
+    "correction34_sha256": "61dd037ef1363b63f35e7bd29c2bd3e3c6d2e594914f621cc90d6c7b399f451c",
+    "correction36_sha256": "bdbe9b0905eeac9d16bb7527098f16a7f2d63afd347a6bb9050ed215d4d2258a",
+    "review37_sha256": "130c30d31f4581c31699255559c2447f278559d6250b95f92689272b17480113"
+  },
+  "failed_root": {
+    "path": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260916-38",
+    "regular_files": 325,
+    "phase_i_failure_sha256": "9e0b9fb231c293d3ebef63ef0a1dcc94d3b94c60388574838855e0c8aabde77d",
+    "mode2_adapter_sha256": "e0e08bfb240f6f3aaef62eb971d6358c7b3c9a68ec9fc8bb309aad2a0248434b",
+    "mode3_adapter_sha256": "24db40ad311ed5410ae79820af2d927cc7ca2820b38095d04b3999b5bf270f9d",
+    "bytecode_present": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-source-stage-failure-20260916-38.tar.gz",
+    "sha256": "18653b8eed7614d42e7d72803845fd77f12472762caa3d4569ab7a0a388bef72",
+    "size": 1004465,
+    "members": 336,
+    "regular_files": 325
+  },
+  "blocking_finding": "The mode3 adapter attempted to re-export mode2 through ../mode2/adapter.rs, violating the mandatory independent mode-tree/source contract. The authorized Phase I failure record was written and the attempt stopped before runners, source hook, handoff, compilation or execution.",
+  "next": "Preserve the partial root and archive unchanged. A future independently reviewed packet must prohibit cross-mode includes/re-exports explicitly and require independent byte ownership before another fresh attempt.",
+  "source_handoff_accepted": false,
+  "phase_ii_success_evidence_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

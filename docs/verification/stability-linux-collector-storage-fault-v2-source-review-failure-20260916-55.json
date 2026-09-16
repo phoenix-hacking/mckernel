@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "FAIL_SOURCE",
+  "attempt": 55,
+  "reviewed_at_utc": "2026-09-16T11:46:05Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-55.tar.gz",
+    "sha256": "1a975b2e5321f7abf4716541db46c769ba8af11e97841094f851cc8f6e1fdcf3",
+    "size": 39874256,
+    "safe_unique_members": 40,
+    "regular_files": 30,
+    "verified_source_bindings": 29
+  },
+  "authenticated_sha256": {
+    "parent51": "f5de5ac40efdbafe780500aeb81aa0e5b2dbd6b63e850ee0bf835b8d5074d456",
+    "review51": "23cf40bec561751b27d5f70645da9cafc1cbbdb35fff179cfc8fb6f3812c0046",
+    "failure52": "396fa0855ab30710b4ab2a02cf56d40ecf1b895cff0f67986886c23a8ac1e325",
+    "failure53": "9d31424f31c01ff7f8e231fd690007789acc78c9ef93e97d348e18d156ac169c",
+    "failure53_archive": "d6595d5045425e5288ae2a8cbd2e3880b46200d684bd346051ccceabb35ed7c4",
+    "oracle": "67a6ed5bd04a65e91a72a6cfb8621221363542302da3d810729fcfb6195d258a",
+    "witness_owner": "d7084b98d7639279c5095a599529de22421eb6c2e213ffb0bf48cc26287e9760",
+    "tests": "69e38010e9a30c08ca75fd42e9d83424478ad550950d8bf24ed05b770330ae33"
+  },
+  "evidence": {
+    "recursive_archives_verified": 51,
+    "recursive_manifests_verified": 45,
+    "recursive_member_bindings_verified": 654,
+    "nonmember_cross_archive_references_resolved": 11,
+    "retained_focused_tests": 1,
+    "retained_python39_tests": 133,
+    "retained_python38_tests": 133,
+    "retained_test_pycompile_and_diff_statuses": "all zero",
+    "full_memory_baselines_accepted": 7,
+    "eof_aliases_rejected_by_each_packet_validator_and_full_memory_oracle": 36,
+    "directory_size_positives_accepted_by_each_validator": 7,
+    "retired_acquisition_number_positives_accepted_by_each_validator": 7,
+    "eof_number_report_reuse_positives_accepted_by_each_validator": 3,
+    "invalid_bind_size_variants_accepted_by_each_validator": 36,
+    "scope": "Read-only source and complete retained archive-lineage inspection plus pure memory-backed validation. Retained suites were not rerun; full-oracle replay replaced only filesystem read/absence adapters with an in-memory fixture."
+  },
+  "finding": {
+    "location": "storage-fault-v1/oracle.py:787 validate_packet_order BIND branch; storage-fault-v1/witness_owner.py:1130 PacketState.validate BIND branch",
+    "affected_selectors": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "defect": "BIND joins dev/ino/mode but omits size from both old_stat and new_stat, accepting impossible nonempty snapshots of the freshly created empty file.",
+    "mutation": "At each reached events-create/report-create BIND, change old_stat.size alone, new_stat.size alone, or both from 0 to 1. Leave the successful create target_stat.size at 0 and all other evidence unchanged; refresh only supervisor-result.json witness_sha256.",
+    "expected": "Reject at BIND. inject.h:263 sf_open creates the empty file and caches its stat at :276; :285 sf_bind serializes that cached old stat and a new fstat after high_fd. collector.patch:23 and :91 place BIND before any events/report content write.",
+    "observed": "All 36 variants pass offline packet validation, pre-ACK schema/schedule/PacketState validation, and complete oracle.validate(root, selector, 0).",
+    "selector0_events_old_size_packet_sha256": "191a9f56e12fe8f534ab98e379464d4b8a0579d2ad7f2df185a6974a42bbf051",
+    "selector0_events_both_sizes_packet_sha256": "1a705f35044da3f81047cf9d626fde396daf7c9d1aa5b260a2abc15282d3e33b",
+    "correction": "Join both BIND sizes to the successful create target_stat.size, which is already required to be zero, in both validators. Add old-only, new-only and paired size negatives at every reached BIND site across all selectors. Preserve directory-size changes and subsequent write/flush size transitions.",
+    "review51_fix": "The EOF live-capability rule and all-stream regression now satisfy the tested review51 counterexamples, with legitimate retired-number reuse preserved."
+  },
+  "raw_source_checkpoint_release": false,
+  "compiler_packet_drafting_release": false,
+  "compilation": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "whole_os_acceptance": false,
+  "files_edited": false
+}
