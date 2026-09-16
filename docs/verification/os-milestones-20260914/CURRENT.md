@@ -2280,3 +2280,75 @@ independent M01 design consolidation while leaving M03 behind its missing
 generation/pin/ack/quarantine authority. Counters remain 0/273 application cases,
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. The whole-OS objective remains active and incomplete.
+
+Window-close checkpoint 30 stops new dispatch after the user paused future goal
+continuations on 2026-09-16. Independent storage source review 37 rejects archive
+40 with `FAIL_SOURCE`: one hard-coded FIFO-identity oracle remained, selector 4
+accepted a zero executable seal, and pre-ACK owner/oracle integer domains were
+not fully bounded. The exact finding is
+`stability-linux-collector-storage-fault-v2-source-review-failure-20260916-33.json`,
+SHA256 `bc7b38d29f482cf1857af6d6bea506935968aa89ffb09f587a807b4cfff2a62b`.
+No compiler, root, native, application or production-gate credit is granted.
+
+Bounded correction 37 changes only the still-untracked storage fixture and its
+test. It derives the remaining FIFO identities from authenticated setup data,
+requires a nonzero complete executable seal, and bounds the owner/oracle pre-ACK
+integer domains. The dispatcher strengthened the regression so it proves the
+archive-40 behavior against the corrected behavior and binds the canonical setup
+and packet mutations. The final Python 3.9 and 3.8 lanes each pass 124/124, both
+pycompile lanes pass, their outputs are identical, and `git diff --check` passes.
+The complete validation directory is
+`/home/holden/mckernel-work/scratch/storage-fault-v2-attempt37-validation-3uzTam`.
+Final hashes are owner
+`fc863e02ea8a312796b5c0cac7cc9253bc390920cc36dd38b3833b0f3a889912`,
+oracle `84c8d23fbdf740e89d437bc0ad81fff3bcdcc1ff4ea2900c258e1c0ee61e6134`
+and test `62c4fa16a14814a8d744a77664abe78de4d721759143a1934f3aa4c4c58c0596`;
+the collector, inject-header, prepare, packet and tests-document hashes remain
+`e58c48dea6455cf0172dd5295db149cb29b5996b03dda3631513da86e68fb7b2`,
+`0711a9f5bdd60326ed919a8b39d9ac081044dd054431f049aeb8c32e8803b962`,
+`2c85d284548a8a9f426943c6c61019bbae8e13b4eabe3e662bc068b94037ab74`,
+`b4acc91e6c92677f41eeaed31646cbbe4b556feee4b05a2920f78a195e60abdb`
+and `eb0ad1868c021ce3091caa7095e427a3fd6a2b832dde51378842d9794deb4eb8`.
+
+Fresh source-review archive 41 is 38,136,275 bytes with 36 safe members and 26
+files at SHA256
+`b96f2107b6a2857b3995b65e626c9d8b5a47d0a9d5fd8f697489baab6779a5e0`.
+It binds archive 40, failure record 33, the exact final source, both final 124-test
+logs, the earlier correction logs, identities, statuses, pycompile outputs,
+diff-check output, commands and source hashes. It is review input only. No fresh
+review 38 was dispatched before closeout, so the raw source remains untracked and
+unaccepted and no conditional compiler packet is released.
+
+M01 remains blocked before implementation. Design consolidation 6 returns
+`FAIL_DESIGN` at SHA256
+`0453a3908c846ea2ab20455e4d44a808cafb2b84452f3bb608ac4124dbabfc98`:
+the generic actual-method sequence is viable but native ownership remains absent.
+Native backing architecture review 7 returns `FAIL_ARCHITECTURE` at SHA256
+`0b997e2c65f443bf28a99e7e9494eb0c224bbad77f1b3a26eaa74c4894e14f4e`:
+`Memory::new` metadata and copied `Claim` data are not backing leases, and a
+reviewed native owner graph or test-owned ledger model is still required. The
+generic-only implementation packet 8 is retained at SHA256
+`624a7182330e941ee03cd7b9fdc07554b8033710ffe29e88d00033e4917afe5b`,
+but independent review 9 returns `FAIL_PACKET` at SHA256
+`10bbc15b9bf9aa68e5145d6722bdba22d242c6d91fc467448504abd9e4dfc4e2`.
+It requires one authoritative evidence allowlist, corrected return types, a legal
+direct negative-TID route, a complete rows 01-27 result matrix, and explicit
+mode-2 notify and clock wiring. No M01 implementation is released.
+
+All bounded child agents are completed and joined. Exact live campaign identities
+at closeout are launcher 1676703, recovered worker 1899017 and Codex app-server
+1899019. No project build, container build, guest, QEMU, mcexec or IHK process is
+live. Host free space is 52 GiB and scratch free space is 22 GiB. The launcher
+controls the pause; this checkpoint neither resumes nor completes the goal.
+
+Next tasks, after a future launcher continuation, are: (1) obtain a fresh complete
+Astra/high source review 38 of exact archive 41, replaying all historical controls
+and adjacent producer/owner/oracle domains; (2) only on terminal `PASS_SOURCE`,
+checkpoint the raw storage source and prepare the separately reviewed conditional
+UID1000 compiler-only packet, otherwise retain the finding and use one bounded
+correction; (3) make one bounded correction to generic packet 8 from review 9 and
+obtain a fresh independent packet review; (4) keep native M01 and M03 blocked
+until their missing ownership/generation/pin/ack/quarantine authorities are
+specified and independently accepted. Counters remain 0/273 application cases,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. The whole-OS objective remains incomplete and is not marked complete.

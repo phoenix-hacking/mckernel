@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_native_backing_architecture_review_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 7,
+  "recorded_utc": "2026-09-16T08:12:45Z",
+  "status": "FAIL_ARCHITECTURE",
+  "scope": "Native SyscallResponse backing ownership for an actual-method runner",
+  "authenticated_inputs": {
+    "source_manifest": {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/source-manifests.json",
+      "sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0",
+      "verified_members": 102
+    },
+    "attempt6_record": {
+      "path": "docs/verification/stability-selected-retention-actual-method-design-consolidation-failure-20260916-6.json",
+      "sha256": "0453a3908c846ea2ab20455e4d44a808cafb2b84452f3bb608ac4124dbabfc98"
+    },
+    "mode3_source_sha256": {
+      "sysfs_memory.rs": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "smp_resource.rs": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "smp_image.rs": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "smp_memory.rs": "abdaa082804a79b25a749245febc954cf7dcdcbd599d9e56accd79a299c36fb6",
+      "smp_service.rs": "96737eb497b3e84a71747b18d1d93133efd75b2a0d7c23e5d1c452869e82d197",
+      "smp_application_syscall.rs": "b18b2356189a42b9083e09b477bba4b81011a9c3c42aafb9564daebb0f813ee2",
+      "application_syscall.rs": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "stability_observer.rs": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31"
+    }
+  },
+  "findings": [
+    {
+      "id": "no_standalone_native_backing_authority",
+      "source_regions": ["sysfs_memory.rs:103 Memory::new", "smp_resource.rs:89-110", "smp_image.rs:40-112"],
+      "finding": "Memory::new copies OsToken, extents and layout into Arc<Memory> but owns neither original pages nor BootStorage. OsToken::test_only and BootLayout::select validate metadata and do not grant a live lease or backing authority.",
+      "consequence": "A runner allocation plus copied metadata cannot satisfy Memory::new's unsafe started-BootStorage and original-owner precondition."
+    },
+    {
+      "id": "native_lifetime_requires_owner_graph",
+      "source_regions": ["smp_memory.rs:114-225", "smp_memory.rs:888-903", "smp_memory.rs:975-1010", "smp_memory.rs:1300-1385", "smp_memory.rs:1892-1922", "smp_service.rs:990-1092"],
+      "finding": "The production lifetime graph uses PageOwner allocation/drop, complete mapping coverage, ownership assignment, started BootStorage and a continuing Arc<Memory>. Setting started in a fixture would fabricate rather than exercise that authority."
+    },
+    {
+      "id": "real_response_is_downstream_of_missing_authority",
+      "source_regions": ["sysfs_memory.rs:322-354", "smp_application_syscall.rs:149-211", "sysfs_memory.rs:623-650", "sysfs_memory.rs:713"],
+      "finding": "Memory::syscall performs real mapping/generation/conflict checks and inserts the private serial-tagged response. Completion publication and SyscallResponse::release remove exact ledger entries, while unfinished failures quarantine them. Claim is Copy metadata derived afterward and is not lease authority."
+    },
+    {
+      "id": "premature_backing_teardown_scenario",
+      "finding": "A fixture can wrap runner memory and leave a private response tag after preparation failure while dropping the backing guard. Arc<Memory> cannot prevent this because it owns no backing; adding backing to that Arc still needs an independent quarantine owner after the last response drops."
+    }
+  ],
+  "required_architecture_decision": {
+    "capability": "An opaque retained-backing capability whose factory establishes allocation coverage, generation authority and exclusive admission and whose lifetime survives outstanding responses and quarantined tags.",
+    "alternatives": [
+      "A test-only adapter that consumes an already established native owner graph and therefore requires separately authorized native setup.",
+      "A test-only owned allocation/generation model that permits real Memory::syscall ledger-method testing but explicitly excludes native BootStorage and lease ownership proof."
+    ],
+    "invariants": [
+      "Keep private response-ledger insertion/removal unchanged.",
+      "Expose only a scoped runner/report interface within the existing memory/service visibility boundary.",
+      "Reject wrong generation, uncovered or misaligned spans, overlapping claims, invalid initial atomics and premature teardown.",
+      "Demonstrate quarantine after preparation failure and exact release/reuse after publication.",
+      "Preserve application-owner-lock before memory-ledger lock ordering and never reenter either lock from hooks."
+    ]
+  },
+  "disposition": "The generic actual-method prerequisite remains viable, but no complete native implementation packet or write allowlist is released until one authority alternative is selected, specified and independently reviewed.",
+  "files_changed_by_reviewer": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "root_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}
