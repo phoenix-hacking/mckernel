@@ -1461,3 +1461,45 @@ new dispatch is stopped. Host free space is 64 GiB and scratch free space is
 0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. The whole-OS goal remains incomplete
 and is neither resumed nor marked complete by this checkpoint.
+
+Window-end checkpoint 14 preserves the exact source-test failure archive at
+SHA256 `e9236858a64b8ad610b835b39651f4a02374a4ae17387fb435e2301f3996dbb3`
+and review-input archives 15 through 17. Archive 15 is disqualified by its
+retained envelope failure because it replaced an immutable historical record;
+the historical record was restored byte-for-byte and the new failure received
+a distinct identity. Archive 16 receives `FAIL_SOURCE` for four exact findings.
+Packet 18 SHA256
+`45dccc23f26a88ceb5462d5f5f7d54865bffe1858988eb55cbf4a9acc12d60d5`
+receives `PASS_CORRECTION_PACKET_ONLY` and releases only its bounded source
+corrections.
+
+Review archive 17 SHA256
+`73ebe9fcb85c1de6e1d2dcedd227ee11dd6309e361f8fb7e822efb3c26c6ce8d`
+has a passing independent envelope and two 86/86 interpreter runs, but fresh
+full independent review remains `FAIL_SOURCE`. The four archive-16 findings are
+corrected. Two blockers remain: initial post-fork identity observation exceptions
+can bypass cleanup, pipe retirement and publication, and a second exception can
+discard the first observation; the oracle also accepts duplicate direct
+`wait-timeout` records. These exact bytes are evidence only. Source, compiler,
+root, native, application and production gates remain closed.
+
+Next tasks, in order: (1) add failing first- and second-observation exception
+controls and a full-record duplicate-direct-timeout negative; (2) retain initial
+observations incrementally inside the protected post-fork path so every failure
+continues through bounded cleanup, pipe retirement and publication; (3) enforce
+exactly one direct timeout when applicable without conflating TERM/KILL stage
+timeouts; (4) rerun both pinned interpreters, freeze a new exact-byte archive and
+obtain fresh full independent source review. Only after `PASS_SOURCE`, draft and
+independently review the conditional UID1000 compiler-only packet for selectors
+0 through 6; no existing build owner is reusable unchanged. Do not compile, use
+root, run native code or launch a guest before the source and build-packet gates.
+
+At 2026-09-16T01:33:47Z the retained campaign identities are launcher 1676703,
+launcher worker 1676707 and Codex app-server 1676709, started 2026-09-15
+15:51:14 PDT. No build, compiler, guest, QEMU, mcexec, IHK, Cargo, Rust, GCC or
+Clang process is live. All three bounded child agents are completed and joined;
+new dispatch is stopped. Host free space is 64 GiB and scratch free space is
+23 GiB. The launcher has paused future goal continuations. Counters remain
+0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. The whole-OS goal remains incomplete
+and is neither resumed nor marked complete by this checkpoint.

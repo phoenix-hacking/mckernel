@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_envelope",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "status": "FAIL_REVIEW_ENVELOPE",
+  "recorded_utc": "2026-09-16T01:21:38Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-15.tar.gz",
+    "sha256": "75c944561129a75acf7c1e9f36fd451ba67294c7bef2dc1859b9fe57b7dc0d10",
+    "size": 328236,
+    "members": 23
+  },
+  "failure": "The archive captured the new attempt-17 source-test record under the immutable historical attempt-10 filename, omitting the original attempt-10 record and conflating two evidence identities.",
+  "correction": "The tracked historical attempt-10 record was restored byte-for-byte and the new record moved to a distinct source-test-failure filename. A fresh archive must contain both exact records.",
+  "source_review_decision": null,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}
