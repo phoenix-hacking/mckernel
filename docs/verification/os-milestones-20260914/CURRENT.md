@@ -2879,3 +2879,25 @@ behind generation, descriptor-pin, authenticated-TLB-ack and
 quarantine-ownership blockers. Counters remain 0/273 application cases, 2/4
 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. Whole-OS acceptance remains incomplete.
+
+Shutdown closeout 41 follows fetched checkpoint
+`b5fb9995402a840aa6be9efe2418968cd0edf4e2`. The launcher received SIGTERM
+through its documented graceful-stop path after its watcher had restarted two
+workers following terminal `blocked` results. The launcher-owned state now says
+the goal is `paused`. Launcher PID 1676703, recovered worker PID 2293235 and
+app-server PID 2293237 remain live only while this final bounded dispatcher turn
+returns; the watcher must not restart them afterward. No child agent, project
+build, container build, guest, QEMU, mcexec or IHK process is active, and no new
+task was dispatched after the original work-window stop request. The heavy
+lease remains free. This shutdown neither completes the OS goal nor authorizes
+further work; a subsequent launcher invocation is the resume authority.
+
+The next authorized continuation starts from the unchanged tasks in closeout
+40: correct the three source-review-60 storage blockers and independently review
+the complete source; checkpoint only a terminal `PASS_SOURCE` before drafting
+the separately reviewed conditional compiler packet; execute the already
+reviewed M01 source-only attempt and independently review its handoff before
+Phase II; and keep M03 closed behind its listed ownership and acknowledgement
+blockers. Counters remain 0/273 application cases, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
+acceptance remains incomplete.
