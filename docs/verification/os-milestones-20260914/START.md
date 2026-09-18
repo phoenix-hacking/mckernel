@@ -1,105 +1,85 @@
 # Dispatcher entry point
 
-Run `python3 /home/holden/mckernel/scripts/run_os_goal.py` for the autonomous
-campaign. The coordinator is Sol with medium reasoning, as requested by the
-user. See `LAUNCH.md` for status, restart and optional time limits. For this
-existing chat, select Sol/medium and use `GOAL.md`. Dispatcher instructions:
-
-```text
-Continue the full McKernel functionality, stability, Rust/assembly and native
-production goal using docs/verification/os-milestones-20260914/README.md.
-Use milestones, with no calendar deadline. First read
-docs/verification/os-milestones-20260914/CURRENT.md, then follow its active-run
-pointer if present; otherwise run the planning index check and begin M00-A.
-Preserve existing untracked work and original evidence.
-
-Continuous-run instruction, 2026-09-15: the user explicitly requests running
-until the entire OS objective is accepted or account credits are exhausted,
-even if this takes months. There is no default work window or restart limit.
-Previous window closures and checkpoint pauses are historical; a new launcher
-invocation resumes work. Continue after checkpoints, repair project-owned
-blockers and select independent ready work. Preserve real external blockers;
-recheck their availability with backoff when no work is ready. Only a new
-manual stop or explicitly selected time/budget limit shortens this run. Never
-count a checkpoint, partial milestone or blocked state as OS completion.
-
-Operator priority update, 2026-09-15: be bold and push for large, counter-moving
-progress. Prefer substantial implementation, execution-lane repair, accepted
-gate movement and broad verification over small drafting loops. Keep safety,
-ownership, provenance and evidence contracts intact, but do not let caution
-collapse into tiny packets when a larger bounded change can responsibly advance
-the OS. Bias work toward the earliest execution blockers: make the native/root
-collector lifecycle trustworthy, convert accepted packet/source authority into
-reviewed implementation, unlock real root/native/application cases, and
-checkpoint only evidence that advances those goals.
-
-User authorization update, 2026-09-15: the user authorizes all project-scoped
-actions needed to complete the work. Do not remain blocked merely because a
-contract, launcher, verifier, local authority record, clean checkout, root/native
-run, application case, toolchain invocation, or verification artifact must be
-created, repaired, selected, or executed. Build the missing project-owned pieces,
-bind them to exact source/runtime/evidence hashes, obtain the required review,
-and then run the largest authorized root/native/application lane that can
-honestly advance acceptance. Use sudo-A, local toolchains, containers, clean
-checkouts and existing credentials only through the authorized launcher
-mechanisms. Still never invent acceptance, bypass provenance, leak/read
-credentials, publish externally, or sign human/legal agreements; record only
-those truly nondelegable items as external blockers.
-
-I explicitly authorize tiered subagent work. Use the user-selected dispatcher and
-at most three spawned agents: ordinarily two cheap workers and an independent
-reviewer when needed. Start narrow inventory tasks on gpt-5.6-luna/low, specified
-fixture tasks on gpt-5.6-luna/medium, bounded escalations on gpt-5.6-terra/medium,
-and ownership/unsafe/execution-release reviews on gpt-6-astra/high. Use the
-os_auditor, os_worker and os_reviewer project roles where available. Explicitly
-select the child model and effort; use a fresh self-contained context instead
-of forking the full history. Workers must not spawn more agents.
-
-Read the runbook once as dispatcher. Use dispatch.py to select one task and
-its needed gates/cases. Give workers exact input bindings, paths/symbols,
-invariants, write allowlists, allowed checks and a concise result contract.
-The starting source paths in a task are not blanket write permission. Do not
-send workers the whole catalog, progress files or historical log.
-
-Only the dispatcher owns builds/guests, acceptance updates and Git checkpoints.
-Keep heavy work serialized under the existing isolation/resource limits. Current
-runtime contracts and independently reviewed execution packets determine release;
-the planning index never enables execution. Reuse valid evidence where consumed
-inputs still match. Complete required tests; avoid unrelated repeat testing.
-
-Continue ready independent tasks without asking at each packet. After one failed
-attempt and one bounded correction, escalate the affected task with its original
-failure and minimal reproducer. Preserve a small CURRENT.md, append-only events,
-exact evidence hashes, file/runtime leases and the next three tasks. Checkpoint
-about every 30 minutes and before long runs/session end; verify remote blobs.
-On quota exhaustion preserve the cursor and stop repeated spawn attempts.
-
-The user explicitly authorized full permissions and requested no questions for
-the standalone launcher. Do not ask for routine confirmation or clarification.
-Choose reasonable defaults and record assumptions. Log missing facts, credentials
-or hardware as task blockers and continue independent work. Use noninteractive
-commands, including sudo -A with the launcher's inherited SUDO_ASKPASS helper;
-never wait on password prompts or read/print the private credential. Include this policy
-in worker packets. The launcher applies full filesystem/network access and never
-approval policy to each new/resumed dispatcher; it does not grant Linux root.
-
-Priority: published-response retention/fault modes; Linux/native collector and
-paired backend; VM invalidation and physical ring pressure; first accepted cases;
-native restoration; advanced capabilities and vectors/HPC; native/ABI and language
-closure; exact packages; integration, hardware qualification and release.
-Prepare independent later work when useful, but spend effort on the earliest
-execution blocker. Never convert drafting/build/protocol results into runtime
-acceptance. Report exact gate/case/exposure counters and the next blocker.
-```
-
-Single-command local launch (starts or resumes the launcher's own goal):
+Workflow policy updated 2026-09-17. Use GOAL.md for the unchanged whole-OS
+objective, CONVERGENCE.md for execution/review/retry policy, HANDOFF.md for compact
+routing, and LAUNCH.md for the existing launcher controls. Do not reinitialize
+an existing goal or start a second dispatcher just to adopt these instructions.
 
 ```bash
 python3 /home/holden/mckernel/scripts/run_os_goal.py
 ```
 
-This starts account-metered work when issued by the user; preparing/testing the
-launcher did not start the OS campaign. It defaults to no time limit and
-unlimited automatic recovery attempts. Rerun the same command after a manual
-stop or replenishing credits to resume its saved thread. Keep this chat's older goal paused
-while using the launcher; do not dispatch two campaigns on this checkout.
+A normal invocation starts/resumes account-metered work. This documentation
+change does not invoke it. Keep older interactive campaigns paused while the
+launcher owns the checkout. A running dispatcher reloads the new policy at a
+safe checkpoint after reconciling local/remote changes without discarding WIP.
+
+## Dispatcher startup packet
+
+1. Read CONVERGENCE.md and HANDOFF.md. Reconcile actual HEAD, tracked/untracked
+   inputs, the latest relevant CURRENT.md records, launcher-owned state and file/
+   runtime leases. Bootstrap handoff fields are not runtime observations. Record
+   the adopted policy hash. Do not edit launcher-owned state by hand.
+2. Read README.md once, then use the existing planning helper to select the exact
+   task/gate/case and original prerequisites. Do not repeat a repository-wide
+   audit, replay already-valid work, or give every worker the entire catalog.
+3. Select one critical-path behavior and, when genuinely independent, one other
+   ready task. Give each worker an invariant, source bindings, write allowlist,
+   frozen expectations, allowed command/profile, evidence location and cumulative
+   failure-family history. Reserve the third slot for review when needed.
+4. Execute cheap admission under a reusable reviewed profile before broad review:
+   syntax/compile, a real positive, the defect reproducer and a relevant negative.
+   Static keyword checks and named vectors alone establish no semantic behavior.
+   No source-only packet self-authorizes compilation, root work or a guest.
+5. Integrate a coherent repair and obtain the appropriate independent boundary/
+   execution review. Launch the next native/root/guest layer as soon as its actual
+   prerequisites pass; do not wait for unrelated whole-OS capabilities.
+6. After one failed candidate plus one bounded correction for the same invariant,
+   escalate with the complete current findings and minimal reproducer. Do not
+   reset attempts through packet renaming, new reviewers or launcher recovery.
+7. Preserve original failures, append chronological evidence and keep HANDOFF.md
+   compact. Report executed behavior separately from formal gate/case acceptance.
+   Checkpoint coherent changes about every 30 minutes and before long runs/end;
+   label rejected/unexecuted WIP, verify remote blobs, and never force-push.
+
+## Models, ownership and resources
+
+Keep Sol/medium coordination. Use Luna/low for bounded read-only inventories,
+Luna/medium for specified implementation/tests, Terra/medium or high for a bounded
+repair escalation, and Astra/high for ownership, unsafe code, ABI, execution
+release and final evidence. Use os_auditor/os_worker/os_reviewer roles where
+available; explicitly select each child model/effort. At most three spawned
+agents and no recursive dispatch. Final review must be independent of authorship.
+
+Only the dispatcher owns compiler commands, build/guest leases, integration,
+acceptance updates and Git operations. Retain four-CPU/12-GiB ceilings, existing
+isolation/timeouts, measured free-space floors and emergency headroom. Remeasure
+capacity before heavy work. Clean only verified redundant data under the existing
+retention/restoration procedure. Never release a runtime lease on an unverified
+cleanup claim or launch another owner after uncertain process retirement.
+
+## Authorization and continuous work
+
+The user's existing authorization covers project-scoped implementation, fixture/
+oracle repair, toolchains, clean checkouts, isolated native/root/guest runs,
+reviewed execution packets and verified GitHub checkpoints without repeated
+routine questions. Choose reasonable implementation defaults and record them.
+Source paths in a task are not blanket write permission. Exact reviewed execution
+scope and the original safety/acceptance requirements remain mandatory.
+
+Use noninteractive commands and existing credentials only through authorized
+launcher mechanisms. For authorized host operations, use sudo -A with the
+inherited SUDO_ASKPASS helper; never read, print or directly expose the credential.
+Do not fabricate a human signature/approval, publish outside authorized project
+scope, or sign legal agreements. Missing credentials/hardware/authority are real
+blockers; project-owned missing helpers or records should be repaired, not
+repeatedly returned as questions. Privilege granted to an agent is not Linux root.
+
+There is no default calendar deadline or campaign restart cap. Continue after
+checkpoints until full acceptance, exhausted credits or an explicit stop/limit.
+This does not permit unchanged deterministic retry loops. Follow CONVERGENCE.md's
+failure-family limits, external-wait policy and healthy-long-run protections.
+The Python watcher does not yet enforce all of those distinctions; do not claim
+that editing Markdown changed its runtime behavior. Preserve actual leases and
+failures across every restart. Neither a paused packet nor a dashboard completes
+the OS objective.
