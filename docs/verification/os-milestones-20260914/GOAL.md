@@ -1,74 +1,78 @@
 # Autonomous McKernel goal
 
-User-selected setup: Sol with medium reasoning as dispatcher, Luna workers,
-and focused Astra/high reviews only when required. The launcher selects these
-settings itself; changing this chat's model is unnecessary for a script run.
+Workflow policy updated 2026-09-17. The whole-OS objective and original acceptance
+contracts are unchanged. This documentation update neither starts account-metered
+work nor changes the Python launcher or a currently running session.
 
-Run `python3 /home/holden/mckernel/scripts/run_os_goal.py`. See `LAUNCH.md`.
-The launcher owns one separate persistent thread and resumes its exact ID; it
-does not replace the older goal in this chat. Keep that older goal paused while
-the launcher works. The following chat controls are an alternative to the script.
+## Start or resume the existing campaign
 
-This thread already has an unfinished goal, observed as `usageLimited` during
-planning. Preserve it. Once quota is available, send:
-
-```text
-Use docs/verification/os-milestones-20260914/GOAL.md as the execution instructions
-for our existing McKernel goal. Read CURRENT.md and resume the next ready task.
-I explicitly authorize automatic subagent dispatch following this plan.
+```bash
+python3 /home/holden/mckernel/scripts/run_os_goal.py
 ```
 
-Then use `/goal resume` or the client's resume control. Use `/goal` to inspect
-status and `/goal pause` to stop continued dispatch. A normal instruction does
-not itself guarantee the client has resumed a usage-limited goal. These controls
-are documented in [Follow a goal](https://learn.chatgpt.com/use-cases/follow-goals).
-Changing reasoning effort does not replenish quota.
+See LAUNCH.md for the existing command's controls and observed implementation.
+The launcher owns one separate persistent thread and resumes its exact ID. Keep
+any older interactive campaign paused; do not create competing dispatchers on
+the same checkout. Model changes do not replenish quota or prove continuation.
 
-In a new conversation without an unfinished goal, set:
+Keep the user-selected Sol/medium dispatcher, Luna workers, bounded Terra repair
+escalations, and focused Astra/high ownership/unsafe/ABI/release reviews. At most
+three children, no recursive dispatch, and fresh self-contained worker packets.
+Do not change model choices or global configuration merely to apply this policy.
 
-```text
-/goal Complete the McKernel OS functionality, stability, native production and
-Rust/assembly acceptance objective defined in
-docs/verification/os-milestones-20260914/README.md. Follow GOAL.md and CURRENT.md.
-Automatically dispatch bounded cheap subagents, verify their results, and continue
-through dependency-ready milestones. Finish only when all required acceptance
-contracts pass; preserve a verified checkpoint and exact blockers when progress
-requires unavailable quota, hardware, access or user decisions.
-```
+## Mandatory reading and precedence
 
-Execution instructions for the dispatcher:
+The dispatcher reads START.md and CONVERGENCE.md, then the compact HANDOFF.md.
+On the first policy adoption, reconcile that handoff with actual local sources,
+launcher state, active leases and the latest relevant CURRENT.md evidence.
+Read README.md once for the complete objective; thereafter load the selected
+task/gate/case and required contracts, not the entire history at every turn.
+Reload changed workflow instructions on resume or a safe coherent checkpoint.
+Record the adopted policy hash; a remote documentation commit is not proof that
+a local running dispatcher has loaded it.
 
-1. Follow START.md's resource, evidence and dispatch rules. Read README once;
-   resume the current cursor instead of repeating the repository-wide audit.
-2. Own one durable whole-OS objective. Its 14 milestones and 68 tasks are work
-   items, not 68 separately spawned goals. Current tool rules govern goal status.
-3. Automatically choose ready independent tasks and spawn at most three children
-   total: ordinarily two cheap workers and one reviewer as needed. Explicitly use
-   Luna/low for bounded audits, Luna/medium for specified implementation, and
-   Astra/high for hard ownership/unsafe/ABI/release review. Use fresh packets;
-   workers cannot create goals, recursively dispatch or alter acceptance.
-4. Follow each original case/gate contract. Completion means all 130 production
-   gates, seven language gates and required application/configuration coverage
-   accepted on exact artifacts, including full external qualification. Source,
-   compilation, fixtures and local smokes alone do not meet that condition.
-5. Continue after each coherent checkpoint without waiting for routine user
-   confirmation. When one task blocks, preserve it and select unrelated ready
-   work. Keep one build/guest owner under the original isolation and timeouts.
-6. Review worker results, escalate after the bounded retry limit, and preserve
-   original failures. Update CURRENT and append-only events with evidence hashes,
-   source/binary identity, leases, counters and next three tasks. Commit/push and
-   verify fetched blobs about every 30 minutes and before long runs/session end.
-7. Continue until the entire OS objective is accepted or account credits are
-   exhausted, even across months. The launcher has no default time limit or
-   recovery-attempt limit. Continue after checkpoints; previous window closures
-   are historical once a new invocation resumes the goal. Required 168-hour
-   soaks and larger exposures remain mandatory. Obey a new manual stop or an
-   explicitly selected time limit, join workers and preserve process identities.
-8. Before low quota or a controlled stop, save a short restart record and inspect
-   active process identities. Do not loop on quota errors, infer permission from
-   elapsed time, relax gates to continue, or mark the OS complete at a checkpoint.
+CONVERGENCE.md supersedes older workflow-only scheduling, retry, context-loading
+and checkpoint habits, including completed model-switch stops. README.md,
+`final-push.txt`, the original stability/production/case contracts and independent
+execution releases continue to govern technical scope, safety and acceptance.
+Never treat the planning indexes, a generated dashboard or a source-only packet
+as runtime authority. Preserve all immutable originals and existing Rust consumers.
 
-For local CLI sessions keep the computer awake and the session/runtime available.
-The launcher enables goals and supplies Sol/medium, cheap-worker defaults and
-the three-child/no-recursion limits directly. It does not depend on project-local
-configuration being trusted. No 12-hour campaign was started during preparation.
+## Execution contract
+
+Own one durable whole-OS objective, not a new goal for every packet. Continue
+through dependency-ready work until all 130 production gates, seven language
+gates and required application/configuration coverage meet their original
+acceptance contracts, including native, Rust/assembly, platform, full exposure
+and independent external qualification. All required 168-hour soaks remain.
+No calendar deadline or first-subset completion replaces that objective.
+
+For each behavior: freeze its invariant and expected result; obtain the cheapest
+valid executable evidence; repair; independently review the affected boundary;
+then integrate and run the next authorized layer. Admission and failure-family
+limits in CONVERGENCE.md are mandatory. A passing model or infrastructure fixture
+is useful scoped evidence, never automatic product/application acceptance.
+
+Only the dispatcher owns compiler commands, heavy build/guest leases, integration,
+acceptance updates and Git checkpoints. Keep the existing isolation, resource,
+process-identity and cleanup rules. Reconcile actual owners after any interruption.
+A launcher exit, worker report or accepted source packet does not prove cleanup.
+
+Continue after coherent checkpoints without routine confirmation. After one
+failed candidate and one bounded correction in the same failure family, escalate
+the design/implementation; do not reset that history by renaming packets or
+restarting. Fix project-owned blockers, or select independent ready work while a
+real external prerequisite is unavailable. Continuous duration is not permission
+to loop on unchanged deterministic failures or repeatedly restate a blocker.
+
+Preserve exact failures, source/test/oracle identities, commands and results.
+Update HANDOFF.md and the existing chronological evidence/events; promote official
+counters only under the original acceptance rules. Commit coherent code/tests,
+harness changes and reporting separately, verify fetched blobs, and preserve WIP
+at the existing cadence and before long runs or a controlled stop.
+
+Respect a new explicit stop, selected time/budget limit and exhausted credits.
+Do not infer consent, read/print credentials or repeat failed authentication/spawn
+attempts. Keep the campaign recoverable where possible; checkpointing is not
+whole-OS completion. The current watcher's automatic recovery is process-level:
+Markdown does not add machine-enforced convergence or guarantee autonomous uptime.
