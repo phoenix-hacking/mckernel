@@ -3214,3 +3214,45 @@ bytecode deletion remain unstaged. Counters remain 0/273 application cases,
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
 language gates. Whole-OS acceptance remains incomplete; future continuations
 are paused until a subsequent launcher invocation.
+
+Continuation shutdown checkpoint 6, 2026-09-28: all newly dispatched bounded
+lanes reached terminal state before shutdown. The FIFO acknowledgement strategy
+passed strategy review, and its exact draft packet is
+`docs/verification/stability-layer-b-native-owner-fifo-ack-packet-20260928-21.md`,
+SHA256 `4d2931e733c88a7d81de543d5b8b574bfc88a82051524107cad96ecc0136d9d1`.
+It remains `DRAFT_PENDING_INDEPENDENT_REVIEW`; no FIFO, systemd unit, compiler,
+object, link or owner execution was started. Next independently review those
+exact bytes, then only on PASS remeasure capacity and run one fresh root12
+compile-only attempt under its acknowledgement and cleanup contract.
+
+M01 validator-recovery packet60, SHA256
+`4dc69511c0725e9045b6cee38035622118edec363d5fc39a42065638b8a9d126`,
+returns `FAIL_VALIDATOR_RECOVERY_PACKET`. Its six blocking families are the
+incorrect root56 JSON digest binding, opening the `--` argv separator, ineffective
+trailing-whitespace controls, the impossible 327-file pre-handoff count,
+incomplete immutable review hashes, and underspecified candidate installation /
+per-mode isolation. Root58 was not created. Next make one bounded additive
+correction covering all six findings and independently review it; Phase II,
+compilation and runtime remain closed.
+
+The exact application fast-path audit confirms packet-001's reviewed
+`startup.argv-empty` source and oracle, but `run.py` has no execution backend,
+the packet retains only a manifest placeholder, and no compiled payload or
+current-candidate module/image binding exists. The historical QEMU helper is not
+a packet backend. Next prepare and independently review the smallest concrete
+backend/input-manifest packet with a fresh payload and current candidate bindings.
+No application was executed and this diagnostic finding is not M04 acceptance.
+
+Launcher PID 3098066, worker PID 3098071 and app-server PID 3098074, started at
+2026-09-28 02:55:35 -0700, remain the live launcher identities while this
+shutdown returns. The run directory is
+`.git/os-autopilot/runs/20260928T095536Z-095509d1`. All child agents are terminal;
+no project compiler, transient Layer-B unit/cgroup, guest, QEMU, mcexec or IHK
+process is active. Host/scratch free space is 44/21 GiB. Exact results and next
+tasks are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-6.json`.
+Unrelated concurrent launcher-file edits, the LAUNCH/START overlays, bytecode
+deletion and untracked bytecode remain unstaged. Counters remain 0/273 application
+cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates. Whole-OS acceptance remains incomplete; this checkpoint pauses
+rather than completes or resumes the goal.

@@ -1,0 +1,80 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T03:00:59-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "head_before_checkpoint": "81e6b74795ef2ae70ba89aac5d482692b452f704",
+  "launcher": {
+    "pid": 3098066,
+    "worker_pid": 3098071,
+    "app_server_pid": 3098074,
+    "started_local": "2026-09-28T02:55:35-07:00",
+    "run_directory": ".git/os-autopilot/runs/20260928T095536Z-095509d1",
+    "note": "These identities were live when the bounded shutdown checkpoint was recorded; launcher-owned state was not edited."
+  },
+  "policy": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "CONVERGENCE.md": "d211e7dcda735dc98c4557e6aead941d07fb595ffc6c2fdb0bd03317f8dc1eab",
+    "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415",
+    "START.md_live_unstaged": "30a90c799c3031014adcb87daf6e328ff360fae22ec8540f803563514b4c5509",
+    "START.md_expected": "30a90c799c3031014adcb87daf6e328ff360fae22ec8540f803563514b4c5509"
+  },
+  "results": {
+    "layer_b_fifo_strategy": {
+      "result": "PASS_FIFO_STRATEGY",
+      "scope": "strategy-only",
+      "packet": "docs/verification/stability-layer-b-native-owner-fifo-ack-packet-20260928-21.md",
+      "packet_sha256": "4d2931e733c88a7d81de543d5b8b574bfc88a82051524107cad96ecc0136d9d1",
+      "packet_state": "DRAFT_PENDING_INDEPENDENT_REVIEW",
+      "execution": "not run"
+    },
+    "m01_validator_recovery": {
+      "result": "FAIL_VALIDATOR_RECOVERY_PACKET",
+      "packet": "docs/verification/stability-selected-retention-generic-row03-row12-validator-recovery-packet-20260928-60.md",
+      "packet_sha256": "4dc69511c0725e9045b6cee38035622118edec363d5fc39a42065638b8a9d126",
+      "blocking_findings": [
+        "root56 JSON is bound to the phase-i-failure.txt digest instead of its own digest",
+        "the Python validator attempts to open the -- argv separator",
+        "the trailing-space and trailing-tab controls are not detected with keepends=True",
+        "the packet requires 327 files before the handoff although the canonical count is 326 before and 327 after",
+        "review59 and other immutable review inputs are not fully hash-pinned",
+        "candidate installation and per-mode validator isolation are underspecified"
+      ],
+      "execution": "root58 not created; no Phase II, compiler or runtime command"
+    },
+    "diagnostic_application_fast_path": {
+      "result": "DEPENDENCY_GAP_CONFIRMED",
+      "reviewed_source": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+      "reviewed_source_sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+      "reviewed_oracle": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "reviewed_oracle_sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8",
+      "blocker": "run.py has no execution backend, packet-001 has only a reviewed-input-manifest placeholder, and no retained compiled startup.argv-empty payload or current candidate module/image binding exists",
+      "historical_runner_only": "scripts/qemu-rocky-rust-validation.sh",
+      "historical_runner_sha256": "b1b05d094be8742c1ae6e81bbcefc565800f43bdf2aa7e1f48986c68e6907931",
+      "execution": "not run; diagnostic finding is not M04 acceptance"
+    }
+  },
+  "quiescence": {
+    "children": "all terminal",
+    "project_compiler": "none observed",
+    "layer_b_unit_or_cgroup": "none active",
+    "guest_qemu_mcexec_ihk": "none observed",
+    "host_free_gib": 44,
+    "scratch_free_gib": 21,
+    "real_guest_applications_executed_this_window": 0
+  },
+  "next_tasks": [
+    "Independently review packet21 exact bytes before any FIFO acknowledgement compile-only attempt; if it passes, remeasure capacity and use one fresh root12 attempt under the reviewed lifecycle and cleanup rules.",
+    "Issue one bounded additive correction to packet60 covering all six review findings, then independently review it before creating root58; Phase II remains closed.",
+    "Prepare and independently review the smallest concrete application backend/input-manifest packet that binds a fresh startup.argv-empty payload and current candidate module/image; do not substitute the historical helper or count compilation as execution.",
+    "After Layer-B owner execution succeeds, prepare the separately reviewed M03 compile/test packet for the accepted source inventory."
+  ],
+  "acceptance": {
+    "application_cases": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7",
+    "whole_os_complete": false
+  },
+  "preservation": "Unrelated launcher edits, LAUNCH.md/START.md overlays, bytecode deletion and untracked bytecode were not staged or reverted. Original failed attempts and scratch roots remain preserved."
+}
