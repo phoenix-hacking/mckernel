@@ -14,7 +14,10 @@ cd "${repo_root}"
 # The pending-free fixture is appended to exact production source slices by
 # its harness; compiling it alone would test a different ABI. The focused
 # harness retains its own source snapshots, commands, and first failure.
-python3 -B kernel/rust/tests/pending_free_batch_actual_harness.py
+rustc_path="${RUSTC:-$(command -v rustc)}"
+cc_path="${CC:-$(command -v cc)}"
+python3 -B kernel/rust/tests/pending_free_batch_actual_harness.py \
+	--rustc "${rustc_path}" --cc "${cc_path}"
 
 cat > "${tmpdir}/rbtree_equiv.c" <<'EOF_RBTREE'
 #include <stddef.h>
