@@ -498,6 +498,37 @@ def owner_argv(args):
         "--request", str(args.request), "--selected-inputs", str(args.selected_inputs),
         "--fixture", str(args.fixture)]
 
+def install_child_fds(mappings):
+    """Alias-safe stdio installation and inherited-descriptor closure."""
+    destinations = [destination for _source, destination in mappings]
+    if len(destinations) != len(set(destinations)) or set(destinations) - {0, 1, 2}:
+        raise ValueError("child descriptor destinations")
+    saved = {}
+    for source, destination in mappings:
+        if type(source) is not int or source < 0 or \
+                type(destination) is not int or destination < 0:
+            raise ValueError("child descriptor source")
+        if source in destinations and source != destination and source not in saved:
+            saved[source] = fcntl.fcntl(source, fcntl.F_DUPFD_CLOEXEC, 3)
+    resolved = [(saved.get(source, source), destination)
+                for source, destination in mappings]
+    for source, destination in resolved:
+        os.dup2(source, destination, inheritable=True)
+    for source in set(source for source, _destination in mappings) | set(saved.values()):
+        if source not in destinations:
+            os.close(source)
+    for name in os.listdir("/proc/self/fd"):
+        try:
+            descriptor = int(name)
+        except ValueError:
+            continue
+        if descriptor not in destinations:
+            try:
+                os.close(descriptor)
+            except OSError as error:
+                if error.errno != errno.EBADF:
+                    raise
+
 def spawn_owner(args):
     opened = []
     try:
@@ -520,8 +551,7 @@ def spawn_owner(args):
                 flags = fcntl.fcntl(fd, fcntl.F_GETFL)
                 fcntl.fcntl(fd, fcntl.F_SETFL, flags & ~os.O_NONBLOCK)
             null_fd = os.open("/dev/null", os.O_RDONLY | os.O_CLOEXEC)
-            os.dup2(null_fd, 0); os.dup2(stdout_w, 1); os.dup2(stderr_w, 2)
-            os.close(null_fd); os.close(stdout_w); os.close(stderr_w)
+            install_child_fds(((null_fd, 0), (stdout_w, 1), (stderr_w, 2)))
             argv = owner_argv(args)
             environment = {"LANG": "C", "LC_ALL": "C", "PATH": "/usr/bin:/bin",
                            "PYTHONDONTWRITEBYTECODE": "1"}

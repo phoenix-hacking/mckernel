@@ -5,11 +5,11 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-28T07:14:41+00:00`
-- Launcher state heartbeat: `2026-09-16T12:33:17.586940+00:00`
-- Launcher: **STOPPED (resume is operator-controlled)**; phase `stopped`; stop reason `signal_15`
-- Worker PID: `2293235`; server PID: `2293237`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260916T123044Z-40b9ab8c`
+- Dashboard refreshed: `2026-09-28T07:35:08+00:00`
+- Launcher state heartbeat: `2026-09-28T07:34:56.652783+00:00`
+- Launcher: **RUNNING**; phase `running`; stop reason `none`
+- Worker PID: `3033802`; server PID: `3033804`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T072108Z-7569fb1b`
 
 ## Stable kernel core: engineering progress
 
@@ -55,7 +55,7 @@ These are separate engineering states, not a stability percentage. Existing base
 
 ## Current Blockers
 
-- `signal_15`: launcher state is currently `stopped`.
+- `none`: launcher state is currently `running`.
 - The OS objective is not complete: source review and infrastructure packets are not substitutes for native, guest, application, language, platform or release proof.
 - The heavy build/guest lease and free-space policy must be checked immediately before every expensive run.
 - External hardware, hosted CI, and platform-specific acceptance remain later gates even when local preparation is complete.

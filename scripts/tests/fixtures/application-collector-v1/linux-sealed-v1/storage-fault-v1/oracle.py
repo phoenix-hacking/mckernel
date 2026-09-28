@@ -733,6 +733,10 @@ def validate_packet_order(packets, selector, nonce, hashes, expected_count):
 
     request_identity, request_size, report_identity, report_id = None, 0, None, None
     creates, positive_ids, attempt_dir = {}, set(), None
+    # This source supplies no regular-artifact retirement packet.  A claimed
+    # regular-file device/inode therefore remains live until packet validation
+    # completes, while repeated observations of its same role remain valid.
+    live_identities = {}
     # Descriptor numbers remain occupied until the corresponding BIND closes
     # (relocates) them.  This is deliberately independent of acquisition IDs:
     # a forged record must not hide a numeric descriptor collision.
@@ -786,8 +790,16 @@ def validate_packet_order(packets, selector, nonce, hashes, expected_count):
                    packet["target_stat"]["mode"] & 0o170777 != 0o100600 or \
                    packet["acquisition_id"] in positive_ids:
                     raise ValueError("create acquisition")
+                if packet["acquisition_id"] != len(positive_ids) + 1:
+                    raise ValueError("create acquisition")
                 if packet["fd"] == attempt_dir[0] or packet["fd"] in live_fds:
                     raise ValueError("create descriptor collision")
+                identity = (packet["target_stat"]["dev"],
+                            packet["target_stat"]["ino"])
+                owner = live_identities.get(identity)
+                if owner is not None and owner != site:
+                    raise ValueError("live identity collision")
+                live_identities[identity] = site
                 positive_ids.add(packet["acquisition_id"])
                 creates[site] = packet
                 live_fds[packet["fd"]] = (site, packet["acquisition_id"])
@@ -839,6 +851,10 @@ def validate_packet_order(packets, selector, nonce, hashes, expected_count):
             if prior is not None and prior != ("request-write", 0):
                 raise ValueError("request descriptor collision")
             live_fds.setdefault(packet["fd"], ("request-write", 0))
+            identity_owner = live_identities.get(identity[1:3])
+            if identity_owner is not None and identity_owner != "request-write":
+                raise ValueError("live identity collision")
+            live_identities[identity[1:3]] = "request-write"
             occurrence = packet["occurrence"]
             injected = selector in (2, 6)
             requested = 406 if occurrence == 1 else 399

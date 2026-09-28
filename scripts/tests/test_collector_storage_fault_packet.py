@@ -7,6 +7,8 @@ import os
 import struct
 import subprocess
 import shutil
+import socket
+import sys
 import tarfile
 import tempfile
 import types
@@ -4535,6 +4537,159 @@ class StorageFaultV2SourceTests(unittest.TestCase):
                                 value["dev"], value["ino"] = 1, 90
                     rejected(selector, directory_request_alias,
                              "directory inode collision")
+
+    def test_real_child_descriptor_remaps_preserve_abi_and_close_leaks(self):
+        """Exercise the actual post-fork remappers, including a 1/198 cycle.
+
+        The owner case begins with all standard descriptors closed, then makes
+        the witness source fd 1 and stdout source fd 198.  The supervisor case
+        similarly starts closed and obtains /dev/null as fd 0.  Both carry an
+        explicitly inheritable sentinel which must be absent after exec.
+        """
+        def close_quietly(descriptor):
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+
+        def receive_owner_case():
+            witness_parent, witness_child = socket.socketpair()
+            stdout_r, stdout_w = os.pipe()
+            stderr_r, stderr_w = os.pipe()
+            sentinel = os.open("/dev/null", os.O_RDONLY)
+            os.set_inheritable(sentinel, True)
+            pid = os.fork()
+            if pid == 0:
+                try:
+                    witness_parent.close()
+                    close_quietly(0); close_quietly(1); close_quietly(2)
+                    source = witness_child.detach()
+                    os.dup2(source, 1); close_quietly(source)
+                    os.dup2(stdout_w, owner.WITNESS_FD); close_quietly(stdout_w)
+                    os.dup2(stderr_w, 2); close_quietly(stderr_w)
+                    close_quietly(stdout_r); close_quietly(stderr_r)
+                    owner.install_child_fds(((1, owner.WITNESS_FD),
+                                             (owner.WITNESS_FD, 1), (2, 2)))
+                    code = ("import os; s=int(os.environ['M02_SENTINEL']); "
+                            "leak=True\ntry: os.fstat(s)\nexcept OSError: leak=False\n"
+                            "os.write(1, b'owner-out'); os.write(2, b'owner-err'); "
+                            "os.write(198, b'owner-witness:' + str(leak).encode())")
+                    os.execve(sys.executable, [sys.executable, "-c", code],
+                              {"PATH": "/usr/bin:/bin", "M02_SENTINEL": str(sentinel),
+                               "PYTHONDONTWRITEBYTECODE": "1"})
+                finally:
+                    os._exit(127)
+            witness_child.close(); close_quietly(stdout_w); close_quietly(stderr_w)
+            close_quietly(sentinel)
+            _, status = os.waitpid(pid, 0)
+            self.assertEqual(status, 0)
+            self.assertEqual(os.read(stdout_r, 64), b"owner-out")
+            self.assertEqual(os.read(stderr_r, 64), b"owner-err")
+            self.assertEqual(witness_parent.recv(64), b"owner-witness:False")
+            close_quietly(stdout_r); close_quietly(stderr_r); witness_parent.close()
+
+        def receive_supervisor_case():
+            stdout_r, stdout_w = os.pipe()
+            stderr_r, stderr_w = os.pipe()
+            sentinel = os.open("/dev/null", os.O_RDONLY)
+            os.set_inheritable(sentinel, True)
+            pid = os.fork()
+            if pid == 0:
+                try:
+                    close_quietly(0); close_quietly(1); close_quietly(2)
+                    null_fd = os.open("/dev/null", os.O_RDONLY | os.O_CLOEXEC)
+                    os.dup2(stdout_w, 198); close_quietly(stdout_w)
+                    os.dup2(stderr_w, 2); close_quietly(stderr_w)
+                    close_quietly(stdout_r); close_quietly(stderr_r)
+                    supervise.install_child_fds(((null_fd, 0), (198, 1), (2, 2)))
+                    code = ("import os; s=int(os.environ['M02_SENTINEL']); "
+                            "leak=True\ntry: os.fstat(s)\nexcept OSError: leak=False\n"
+                            "os.write(1, b'supervisor-out:' + str((os.read(0, 1), leak)).encode()); "
+                            "os.write(2, b'supervisor-err')")
+                    os.execve(sys.executable, [sys.executable, "-c", code],
+                              {"PATH": "/usr/bin:/bin", "M02_SENTINEL": str(sentinel),
+                               "PYTHONDONTWRITEBYTECODE": "1"})
+                finally:
+                    os._exit(127)
+            close_quietly(stdout_w); close_quietly(stderr_w); close_quietly(sentinel)
+            _, status = os.waitpid(pid, 0)
+            self.assertEqual(status, 0)
+            self.assertEqual(os.read(stdout_r, 96), b"supervisor-out:(b'', False)")
+            self.assertEqual(os.read(stderr_r, 64), b"supervisor-err")
+            close_quietly(stdout_r); close_quietly(stderr_r)
+
+        receive_owner_case()
+        receive_supervisor_case()
+
+    def test_acquisition_sequence_and_live_identity_ownership(self):
+        def apply_packets(selector, packets, message):
+            state = owner.PacketState(selector)
+            with self.assertRaisesRegex(ValueError, message):
+                for packet in packets:
+                    owner.validate_packet_schema(packet, selector)
+                    state.validate(packet)
+            with tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary) / "case"
+                self.write_fixture(root, selector)
+                self.rewrite_journal(root / "witness.jsonl",
+                    lambda rows: rows.__setitem__(slice(None), [
+                        {**row, "packet": packet} for row, packet in
+                        zip(rows, packets)]))
+                self.refresh_supervisor(root)
+                with self.assertRaisesRegex(ValueError, message):
+                    oracle.validate(root, selector, 0)
+
+        for selector in range(7):
+            baseline = self.packets(selector)
+            positives = [packet for packet in baseline if packet["kind"] == "AFTER" and
+                         packet["site"] in ("events-create", "report-create") and
+                         packet["return"] >= 0]
+            if positives:
+                with self.subTest(selector=selector, rule="positive-id-offset"):
+                    packets = copy.deepcopy(baseline)
+                    ids = {packet["acquisition_id"]: packet["acquisition_id"] + 100
+                           for packet in positives}
+                    for packet in packets:
+                        if packet.get("acquisition_id") in ids:
+                            packet["acquisition_id"] = ids[packet["acquisition_id"]]
+                    apply_packets(selector, packets, "create acquisition")
+            if len(positives) == 2:
+                variants = {
+                    "positive-id-gap": {2: 3},
+                    "positive-id-duplicate": {2: 1},
+                    "positive-id-reordered": {1: 2, 2: 1},
+                }
+                for rule, ids in variants.items():
+                    with self.subTest(selector=selector, rule=rule):
+                        packets = copy.deepcopy(baseline)
+                        for packet in packets:
+                            if packet.get("acquisition_id") in ids:
+                                packet["acquisition_id"] = ids[packet["acquisition_id"]]
+                        apply_packets(selector, packets, "create acquisition")
+            failed = [packet for packet in baseline if packet["kind"] == "AFTER" and
+                      packet["site"] in ("events-create", "report-create") and
+                      packet["return"] < 0]
+            if failed:
+                with self.subTest(selector=selector, rule="failed-create-no-id"):
+                    packets = copy.deepcopy(baseline)
+                    next(packet for packet in packets if packet["sequence"] ==
+                         failed[0]["sequence"])["acquisition_id"] = 1
+                    apply_packets(selector, packets, "create failure")
+            for role in ("request.bin", "report.json"):
+                if any(packet["kind"] == "AFTER" and packet["object"] == role and
+                       packet["return"] >= 0 for packet in baseline):
+                    with self.subTest(selector=selector, rule="live-" + role):
+                        packets = copy.deepcopy(baseline)
+                        event = next(packet for packet in packets if
+                                     packet["kind"] == "AFTER" and
+                                     packet["site"] == "events-create")
+                        for packet in packets:
+                            if packet["object"] == role:
+                                for stat_name in ("target_stat", "old_stat", "new_stat"):
+                                    if packet.get(stat_name) is not None:
+                                        packet[stat_name]["dev"] = event["target_stat"]["dev"]
+                                        packet[stat_name]["ino"] = event["target_stat"]["ino"]
+                        apply_packets(selector, packets, "live identity collision")
 
     def test_counterexample_cleanup_exhausts_term_kill_and_keeps_direct_timeout(self):
         now = [100]

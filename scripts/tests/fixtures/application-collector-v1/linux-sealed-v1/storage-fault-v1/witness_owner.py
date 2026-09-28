@@ -3,6 +3,7 @@
 import argparse
 import ctypes
 import errno
+import fcntl
 import hashlib
 import itertools
 import json
@@ -35,6 +36,49 @@ U64_MAX = (1 << 64) - 1
 U32_MAX = (1 << 32) - 1
 I64_MIN, I64_MAX = -(1 << 63), (1 << 63) - 1
 LONG_MAX = (1 << 63) - 1
+
+def install_child_fds(mappings):
+    """Install child descriptors without losing a source to a destination.
+
+    A source which is itself another destination must first be duplicated above
+    the fixed witness descriptor.  This makes the plan safe for cycles such as
+    ``198 -> 1`` plus ``1 -> 198`` and for a source already at its destination.
+    The caller may execute only after this function returns: every inherited
+    descriptor other than the explicit child ABI is closed here.
+    """
+    destinations = [destination for _source, destination in mappings]
+    if len(destinations) != len(set(destinations)) or set(destinations) - {
+            0, 1, 2, WITNESS_FD}:
+        raise ValueError("child descriptor destinations")
+    saved = {}
+    for source, destination in mappings:
+        if type(source) is not int or source < 0 or \
+                type(destination) is not int or destination < 0:
+            raise ValueError("child descriptor source")
+        if source in destinations and source != destination and source not in saved:
+            saved[source] = fcntl.fcntl(source, fcntl.F_DUPFD_CLOEXEC,
+                                        WITNESS_FD + 1)
+    resolved = [(saved.get(source, source), destination)
+                for source, destination in mappings]
+    for source, destination in resolved:
+        os.dup2(source, destination, inheritable=True)
+    for source in set(source for source, _destination in mappings) | set(saved.values()):
+        if source not in destinations:
+            os.close(source)
+    # Python marks most descriptors close-on-exec, but this owner accepts
+    # inherited inputs from an outer launcher.  Close them explicitly rather
+    # than relying on that convention for the child trust boundary.
+    for name in os.listdir("/proc/self/fd"):
+        try:
+            descriptor = int(name)
+        except ValueError:
+            continue
+        if descriptor not in destinations:
+            try:
+                os.close(descriptor)
+            except OSError as error:
+                if error.errno != errno.EBADF:
+                    raise
 
 def attach_secondary(primary, secondary):
     values = list(getattr(primary, "_owner_secondary_exceptions", []))
@@ -1063,6 +1107,10 @@ class PacketState:
         self.creates = {}
         self.attempt_dir = None
         self.positive_ids = set()
+        # Regular-file device/inode identities are capabilities, too.  Their
+        # source lifecycle has no per-artifact close record, so each remains
+        # live through the observed packet stream.
+        self.live_identities = {}
         # Descriptor numbers are process-local capabilities.  A successful
         # open owns its returned number until a BIND relocates that same
         # acquisition; the old number must then be retired immediately.
@@ -1127,10 +1175,17 @@ class PacketState:
                 if packet["return"] < 0 or packet["fd"] != packet["return"] or \
                    type(packet["acquisition_id"]) is not int or \
                    packet["acquisition_id"] <= 0 or \
-                   packet["acquisition_id"] in self.positive_ids or \
                    not stat.S_ISREG(target["mode"]) or \
                    target["mode"] & 0o170777 != 0o100600 or target["size"] != 0:
                     raise ValueError("create success")
+                if packet["acquisition_id"] in self.positive_ids or \
+                        packet["acquisition_id"] != len(self.positive_ids) + 1:
+                    raise ValueError("create acquisition")
+                identity = (target["dev"], target["ino"])
+                owner = self.live_identities.get(identity)
+                if owner is not None and owner != site:
+                    raise ValueError("live identity collision")
+                self.live_identities[identity] = site
                 self.positive_ids.add(packet["acquisition_id"])
                 self.creates[site] = packet
                 self.live_fds[packet["fd"]] = (site, packet["acquisition_id"])
@@ -1179,6 +1234,10 @@ class PacketState:
                 self.live_fds[packet["fd"]] = ("request-write", 0)
             elif owner != ("request-write", 0):
                 raise ValueError("request descriptor collision")
+            identity_owner = self.live_identities.get(identity[1:3])
+            if identity_owner is not None and identity_owner != "request-write":
+                raise ValueError("live identity collision")
+            self.live_identities[identity[1:3]] = "request-write"
             self.request_identity = identity
             if kind == "BEFORE" and target["size"] != before_size:
                 raise ValueError("request before size")
@@ -1320,11 +1379,8 @@ def launch(witness_root, nonce, selector, hashes, input_paths, runtime_paths):
     if pid == 0:
         try:
             parent_endpoint.close()
-            os.dup2(child_endpoint.fileno(), WITNESS_FD, inheritable=True)
-            os.dup2(stdout_fd, 1, inheritable=True)
-            os.dup2(stderr_fd, 2, inheritable=True)
-            child_endpoint.close()
-            os.close(stdout_fd); os.close(stderr_fd)
+            install_child_fds(((child_endpoint.detach(), WITNESS_FD),
+                               (stdout_fd, 1), (stderr_fd, 2)))
             os.execve(argv[0], argv, environment)
         finally:
             os._exit(127)

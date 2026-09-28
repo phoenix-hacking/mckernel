@@ -2945,3 +2945,44 @@ live-polling checks, clarified the result-plumbing versus durable-ownership
 sequence, and tightened application/pressure/load dependencies. Proposed core
 repeat targets remain planning inputs for a separately reviewed run packet,
 not new runtime results or changes to original qualification requirements.
+
+Shutdown checkpoint, 2026-09-28: the resumed launcher received its explicit
+shutdown request before Layer-B review or any compiler/runtime work. All listed
+child agents are terminal. Launcher PID 3033800, worker PID 3033802 and app-server
+PID 3033804, all started at 2026-09-28 00:21:07 -0700, remain the active launcher
+process identities while this bounded closeout returns. No project build, guest,
+QEMU, mcexec or IHK process is active; the heavy lease is free. The launcher run
+directory is `.git/os-autopilot/runs/20260928T072108Z-7569fb1b`. Host/scratch
+free space measured 44/21 GiB. Future continuations are paused by the launcher.
+
+M01 attempt 44 stopped at `FAIL_PHASE_I` because its supplied mode-2 source path
+was absent. The exact 11,962-byte, 15-member failure archive is
+`docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-44.tar.gz`
+at SHA256 `de032f2e45e8defefdbdeafe04d469bdd9f544fd51fb00696a7c8b5d4d47b697`;
+the raw failure SHA256 is
+`f3cdf239225b053ac42d058a4abb0357216708fc5a019d3f7000aae1ed04181b`.
+Independent restoration review returned `FAIL_RESTORE`: the suggested eight-file
+copy included two mode-3 hashes and could not meet the exact 51-member mode-2
+source contract. Preserve attempts 41 and 44. Next issue an additive independently
+reviewed path correction naming the existing complete mode-2 authority tree,
+reauthenticate all 51 members, and only then use a fresh attempt root.
+
+M02 has a static-only unreviewed candidate for alias-safe real descriptor
+remapping, inherited-descriptor closure, exact successful acquisition sequencing,
+and live cross-role device/inode ownership, with focused regressions. M03 has a
+static-only unreviewed independent C/Rust pending-free inventory candidate with
+23 explicit selectors. Python AST parsing and `git diff --check` pass. No real
+descriptor test, compiler, candidate binary, kernel, native or guest execution
+was run. Exact hashes, evidence and next commands are bound by
+`docs/verification/stability-source-candidates-shutdown-checkpoint-20260928-1.json`.
+
+Next continuation tasks are: (1) draft an exact bounded Layer-B profile binding
+the current M02 and M03 hashes, focused descriptor selectors, compiler argv and
+all 23 pending-free selectors; (2) obtain independent `PASS_LAYER_B` before any
+such execution; (3) on a pass, execute in a fresh disposable root and preserve
+the first failure or complete output, then obtain independent source reviews;
+(4) prepare and independently review the M01 complete-mode-2 path correction
+before any fresh attempt. The source candidates are WIP only. Counters remain
+0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. Whole-OS acceptance remains incomplete,
+and this shutdown neither completes nor resumes the goal.
