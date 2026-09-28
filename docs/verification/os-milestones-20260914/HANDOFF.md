@@ -1,9 +1,9 @@
 # Compact dispatcher handoff
 
-Policy bootstrap: 2026-09-17. State: RECONCILIATION REQUIRED.
-This is an instruction-update handoff, NOT a live runner observation, execution
-release, completed task, or acceptance record. No OS or harness code was repaired
-or executed by this documentation change.
+Reconciled for launcher preparation: 2026-09-27. Campaign remains STOPPED at
+the user's request; a later normal launcher invocation authorizes continuation.
+Runner/resource/recovery preparation is recorded in
+`LAUNCH-PREPARATION-20260927.md`. No OS acceptance counter changes follow.
 
 ## First resume
 
@@ -15,9 +15,10 @@ Fetch/inspect remote changes without resetting, cleaning or overwriting local
 work. A running dispatcher must reload the changed instructions at a safe
 checkpoint; a GitHub documentation commit does not restart it.
 
-Reviewed remote baseline: `499e8a70742f4b2e493a8a3dbbfb99b1d5bb3948`, branch
-`codex/local-native-staging-repair`. Subsequent local/remote changes may supersede
-the source findings below. Confirm consumed bytes; do not replay repaired work.
+Preparation baseline: `47262eb3ffd0017011b2cbcdff97579c7677bcf0`, branch
+`codex/local-native-staging-repair`. The M02 and M03 inputs still match their
+retained failed-review hashes. Subsequent changes may supersede those findings;
+confirm consumed bytes and do not replay repaired work.
 Official gate/case/point status remains in the original acceptance records.
 Do not promote any counter for adopting this policy.
 
@@ -77,15 +78,27 @@ wait for unrelated advanced capabilities; do not bypass any actual dependency.
 Keep accepted infrastructure, model/body tests and integrated OS acceptance
 separate. Every release remains bound to the exact tested artifacts.
 
-## Live fields for the dispatcher to replace after reconciliation
+## Preparation cursor; recheck live ownership on launch
 
-- Current source / dirty-input manifest / adopted policy hash: NOT RECONCILED.
-- Active family / cumulative attempts / current strategy: NOT RECONCILED.
-- Last executed command and result / retained evidence: NOT OBSERVED HERE.
-- Reusable cheap-check profile and release / next exact command: NOT RECONCILED.
-- File owners / heavy lease / cleanup evidence: NOT OBSERVED HERE.
-- Blocker class and event permitting recheck: NOT RECONCILED.
-- Next two dependency-ready tasks: select from the families above after review.
+- Source: baseline above plus the launcher-preparation checkpoint. Pre-existing
+  local deletion of `scripts/__pycache__/rust-source-retirement-audit.cpython-36.pyc`
+  was preserved. Launcher records current policy hashes on each invocation.
+- Saved thread: `01a0a312-8c59-7c80-93de-0b64adde646b`; persisted phase stopped,
+  goal paused, stop reason `signal_15`. State and watcher files are unchanged.
+- Active OS families: none executing. M02 retains source failure 60; M03 retains
+  source failure 2. Resume with consolidated expert repair, not a reset budget.
+- Layer-B release is still required for those OS fixtures. The independent
+  launcher tests and container isolation checks do not release OS execution.
+- Existing scratch image restored at its original mount with nodev/nosuid;
+  approximately 21 GiB free. Original 4-CPU/12-GiB/512-task controls restored.
+- Aggressive host scheduling: up to eight children, all affinity CPUs for local
+  commands, up to 24 GiB shared memory budget. One heavy build/guest owner;
+  privileged container profiles retain their independently reviewed limits.
+- Next work: M02 real descriptor/identity repair and independent M03 executable
+  admission; M01 fresh source-only attempt follows its retained review 43 once
+  restored input hashes are authenticated. See the preparation record for paths.
+- Campaign launch is pending the user; no paid goal continuation or OS payload
+  was started by preparation. Reconcile all runtime leases before heavy work.
 
 Keep this cursor compact. Preserve original failures and chronological history
 in CURRENT.md and the existing evidence/event mechanism; do not copy that entire

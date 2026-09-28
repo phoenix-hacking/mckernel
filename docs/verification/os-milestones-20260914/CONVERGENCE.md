@@ -1,7 +1,11 @@
 # Convergent execution policy
 
-Effective 2026-09-17. This is dispatcher workflow policy, not an acceptance
-certificate, a new OS requirement, or a claim that the Python harness enforces it.
+Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
+invocation is explicit authorization to resume; this preparation hold does not
+stop that invocation. Full dedicated-computer scheduling supersedes older
+three-child/workstation scheduling numbers only.
+The 2026-09-17 acceptance, failure-family, evidence and cleanup policy remains;
+this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
@@ -52,9 +56,10 @@ example already identifies the next concrete action.
 
 ## Apply the harness at the appropriate layer
 
-The dispatcher owns compiler commands and all build/guest leases. Workers write
-code and tests within their explicit allowlists; they do not acquire runtime
-permission by creating a fixture or changing a packet status.
+The dispatcher owns compiler-command approval and the heavy build/guest lease.
+Workers write code/tests within explicit allowlists and may run delegated cheap
+checks only within a reviewed profile and their share of the aggregate budget.
+Creating a fixture or changing a packet status grants no runtime permission.
 
 | Layer | Useful evidence | Required boundary |
 | --- | --- | --- |
@@ -79,9 +84,10 @@ renewed review. Do not require a new orchestration design for each test vector.
 Do not execute unknown imports, repository launchers or fixture preparation
 scripts merely because their names sound harmless.
 
-Cheap checks must fit within the established four-CPU/12-GiB ceilings and leave
-headroom for other work. Measure host/scratch capacity before expensive work;
-reuse the existing measured floors rather than inventing a new fixed floor.
+Cheap checks share the measured aggregate CPU/RAM budget below with all concurrent
+work; a per-process limit does not multiply that budget. Measure host/scratch
+capacity before expensive work; reuse existing measured floors rather than
+inventing a new fixed floor.
 Do not lower safety floors or run a root/guest action as an unprivileged test.
 An unavailable compiler/profile is a recorded NOT_RUN dependency, not a pass.
 
@@ -190,14 +196,30 @@ sequence, lifetime and legitimate post-retirement reuse.
 Keep Sol/medium as dispatcher. Use Luna/low for bounded read-only inventory,
 Luna/medium for well-specified repairs/tests, the existing Terra escalation for
 bounded hard repairs, and Astra/high for ownership/unsafe/ABI/release review.
-At most three children total, no recursive dispatch, fresh self-contained packets.
-Do not keep all slots busy when no independently useful work is ready.
+Do not upgrade models. Default `--profile aggressive` permits up to eight children,
+constrained by measured host CPU/RAM, with no recursive dispatch and fresh packets.
+Sizing allows two remote child slots per affinity CPU and a 2-GiB planning share
+per child; the current host resolves to eight children/seven jobs/24 GiB.
+Use all affinity CPUs (currently seven) for the aggregate build-job budget and
+`min(24 GiB, measured available RAM minus 4 GiB headroom)` for memory.
+`--profile balanced` restores three children/four build jobs/12 GiB.
+`--max-agents N --build-jobs N --memory-gib N` override requested limits within
+host capacity. The launcher passes the measured effective child cap over the
+project maximum of eight; verify CLI enforcement via `config/read` before work.
 
-Default work in progress: one critical-path implementation family and one
-independent ready task; reserve the third slot for review when a candidate has
-admission evidence. Assign disjoint file ownership. The dispatcher serializes
-builds/guests and reconciles all active process/runtime leases before another
-heavy operation. Neither worker completion nor launcher exit proves cleanup.
+Suggested allocation, only when useful and disjoint: four implementation/test
+lanes, two audit/oracle lanes and two independent review slots. Prioritize the
+critical path and saturate ready work; do not manufacture tasks to fill slots.
+Assign disjoint file ownership and preserve reviewer independence. The dispatcher
+owns integration/Git and one heavy lease: at most one heavy build or guest at once.
+Bounded cheap test processes may overlap within the shared aggregate CPU/RAM
+budget, including the heavy owner's usage. The launcher sets build environment
+variables through `shell_environment_policy.set.KEY` and checks them via
+`config/read`; these are not a cgroup or a per-child resource allowance.
+Remeasure before heavy work. Pinned guest/privileged runtime profiles still need
+independent resource review before expanding beyond historical four-CPU/12-GiB
+envelopes. Reconcile all process/runtime leases after interruptions; neither
+worker completion nor launcher exit proves cleanup.
 
 A worker packet needs only: task/invariant, consumed inputs, allowed files,
 commands/profile, frozen expectations, current failure-family attempt count,
@@ -207,11 +229,17 @@ Do not delegate an ambiguous cross-kernel lifetime design to a cheap worker.
 
 ## Harness lifecycle is not engineering convergence
 
-The existing `scripts/watch_os_goal.py` can restart paused/blocked goals and
-counts agent events, not accepted engineering results. This Markdown update
-DOES NOT implement a fingerprint circuit breaker or change Python defaults.
-Until those mechanisms exist, the dispatcher enforces the policy after every
-resume. Record a failure to enforce it as a harness defect, not OS progress.
+The watcher honors explicit stops before watchdog recovery. Unclassified paused/
+blocked goals and generic server/turn errors stop. Structured
+`serverOverloaded`/`rateLimitExceeded`, positively retryable transport failures,
+code 24 and eligible watchdog recovery resume the saved thread with backoff.
+Agent events are not accepted engineering results; this Markdown does not
+implement a failure-family circuit breaker or change Python defaults.
+The prepared launcher default is `--stall-seconds 0`: agent-event silence alone
+must not interrupt healthy builds. The worker heartbeat watchdog stays at
+`--watchdog-seconds 180`; silence and an unresponsive worker are different signals.
+The dispatcher still enforces engineering convergence after every resume.
+Record a failure to enforce it as a harness defect, not OS progress.
 
 | Condition | Dispatcher action | Harness behavior to implement/test if absent |
 | --- | --- | --- |

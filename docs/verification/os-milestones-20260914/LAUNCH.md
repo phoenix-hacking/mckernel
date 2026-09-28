@@ -1,6 +1,12 @@
 # Run the complete OS milestone campaign
 
-Start or resume with one command, from any directory:
+Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
+invocation is explicit authorization to resume; this preparation hold does not
+stop that invocation. Full dedicated-computer, aggressive scheduling supersedes
+older three-child/workstation scheduling numbers only; acceptance, failure-family,
+evidence, isolation and cleanup remain.
+
+For a later launch, start or resume with one command, from any directory:
 
 ```bash
 python3 /home/holden/mckernel/scripts/run_os_goal.py
@@ -8,9 +14,11 @@ python3 /home/holden/mckernel/scripts/run_os_goal.py
 
 This starts the watcher and account-metered agent work using the local signed-in Codex CLI.
 It selects **Sol/medium for coordination**, Luna/low for audits, Luna/medium for
-specified implementation, and focused Astra/high reviews under START.md. The
-CLI enforces at most three children and one level of delegation. Workers get
-small task packets; one dispatcher owns builds, guests, integration and evidence.
+specified implementation, bounded Terra repair escalations and focused Astra/high
+reviews under START.md, without model upgrades. Default `--profile aggressive`
+allows up to eight children within measured host CPU/RAM and one delegation level;
+no recursive dispatch. Small disjoint packets feed one dispatcher owning
+integration, Git, evidence and the single heavy build/guest lease.
 
 The objective covers all 14 milestones, 68 tasks, 130 production gates, seven
 language gates and 273 catalog cases. The goal engine continues across turns.
@@ -19,8 +27,10 @@ model tokens on repeated status prompts or inject a second continuation loop.
 The actual dispatcher still has to obey the plan, review workers and satisfy
 each original acceptance contract. A script cannot guarantee OS correctness.
 
-The default is **no time limit and unlimited recovery attempts**. Work continues
-until the entire goal is accepted, account credits are exhausted, or you stop it.
+The default is no time limit and no cap on eligible recovery attempts. Explicit
+stops, unclassified paused/blocked goals and generic server/turn errors stop the
+watcher; recovery eligibility is described below. Completion or credit exhaustion
+also ends work.
 Checkpoints do not end the campaign. Earlier window-ending instructions in the
 saved thread are superseded when a new invocation resumes it. Keep the computer
 awake and the terminal/session available, or run the command inside an existing
@@ -28,10 +38,13 @@ persistent terminal session. This launcher does not install a system service or
 change sleep settings. Startup or final shutdown may add bounded overhead.
 
 The script creates its own durable goal on the first run. Later invocations
-resume that exact thread ID, preserve the objective and usage accounting, and
+resume that exact thread ID, preserve the exact OBJECTIVE and usage accounting, and
 use a repository-wide launcher lock to reject a second launcher. Keep the older
 goal in this chat paused while the launcher works; other clients do not share
 this script's lock. The older goal was usageLimited during preparation.
+The launcher records policy hashes. Read GOAL.md, START.md, CONVERGENCE.md and
+HANDOFF.md in that order; this overrides the preserved OBJECTIVE's older
+read-order text without replacing the objective or thread.
 
 ## Controls
 
@@ -41,17 +54,31 @@ this script's lock. The older goal was usageLimited during preparation.
 | `--check` | Inspect effective settings and advertised models without inference. |
 | `--check-sudo` | Test the private sudo helper with `id -u`, without starting an agent. |
 | `--dry-run` | Print the command, objective and settings without starting a server. |
+| `--profile aggressive` | Default: up to eight children, all affinity CPUs for build jobs (currently seven), and `min(24 GiB, measured available RAM minus 4 GiB headroom)`. Effective limits are constrained by measured host CPU/RAM. |
+| `--profile balanced` | Restore three children, four build jobs and 12 GiB, subject to host capacity. |
+| `--max-agents N --build-jobs N --memory-gib N` | Override requested child/job/memory limits within measured host capacity. |
 | `--hours 4` | Run a four-hour window, including checkpoint time. |
 | `--hours 0` | Default: continue without a wall-clock cutoff. |
 | `--grace-seconds 600` | Set the checkpoint reserve; default is 600 seconds. |
 | `--model gpt-5.6-sol --effort medium` | Explicitly select the default coordinator. |
 | `--token-budget N` | Explicitly set the goal's total token budget; omitted means preserve it. |
-| `--max-restarts -1` | Default: unlimited automatic recovery attempts. Use 0 to disable or a positive count to cap them. |
+| `--max-restarts -1` | Default: no cap on eligible automatic recoveries; not permission to retry every failure. Use 0 to disable or a positive count to cap them. |
 | `--restart-delay 5` | Initial restart backoff; doubles per retry, capped at 60 seconds. |
 | `--watchdog-seconds 180` | Recover a worker whose saved state stops updating; default is 180 seconds. |
 | `--heartbeat-seconds 15` | Print launcher liveness and agent activity every 15 seconds (default). |
-| `--stall-seconds 900` | Recover after 15 minutes without any agent events; 0 disables this progress watchdog. |
+| `--stall-seconds 0` | Default: disable recovery based on agent-event silence so healthy silent builds can continue. A positive interval enables it. |
+| `--agent-windows auto` | Default: each child gets its own `gnome-terminal` window when a desktop is available; main terminal stays with the coordinator. `on` explicitly requests child windows. |
+| `--agent-windows off` | Headless operation; retain per-thread logs without opening child windows. |
 | `--quiet` | Hide live agent output in the terminal, retaining heartbeats and the complete readable log. |
+
+The project `.codex/config.toml` sets a maximum of eight children. Launcher
+profile/explicit overrides take precedence with the measured effective cap;
+`--check` must confirm that cap and injected build environment through CLI
+`config/read`, without inference. Sizing allows two remote child slots per
+affinity CPU and a 2-GiB planning share per child. This host's aggressive default
+is eight children/seven build jobs/24 GiB; remeasure on each invocation.
+These are preparation instructions; reconcile the implemented launcher before
+launch. Configuration reads do not prove actual child execution or OS acceptance.
 
 For example:
 
@@ -64,16 +91,46 @@ Clarification requests automatically receive the user's standing instruction to
 proceed autonomously. This is explicitly identified as an automatic response;
 it supplies no invented facts, selected approval option or secret. The dispatcher
 records assumptions and continues other ready work when a task lacks information.
-Capacity errors, temporary rate limits and failed turns retry with backoff.
-Blocked or self-paused goals resume the same thread with the continuous-run
-instruction. Credit exhaustion stops further inference attempts. Unsupported
+Structured `serverOverloaded`/`rateLimitExceeded`, positively classified retryable
+transport failures and code 24 resume the same thread with backoff. Unclassified
+paused/blocked goals and generic server/turn errors stop; a goal status alone
+does not authorize recovery. Explicit stops take precedence over watchdogs.
+Credit exhaustion stops further inference attempts. Unsupported
 interactive protocols, invalid configuration/state and unresolved process
 ownership still require repair before another run. Rerun the same command
 after replenishing credits or fixing such an error. A budget-limited goal
 requires an explicit adequate `--token-budget` before it resumes. A budget is
 not a dollar cap or a demonstrated account-wide limit across all child usage.
 
+## Dedicated host scheduling
+
+Saturate useful dependency-ready work within the effective cap. Suggested slots
+are four implementation/test lanes, two audit/oracle lanes and two independent
+reviews, only if useful and disjoint; do not manufacture tasks to fill them.
+The dispatcher owns compiler-command approval, integration/Git and the heavy
+lease: one heavy build or guest at once. Bounded cheap tests may run concurrently,
+sharing aggregate CPU/RAM budgets with all other work, including the heavy owner.
+The launcher injects build environment variables through
+`shell_environment_policy.set.KEY` and verifies them with `config/read`; these
+are not a cgroup and do not grant each process its own full budget. Remeasure
+host/scratch capacity before heavy work and retain free-space/cleanup requirements.
+Pinned guest/privileged runtime profiles require independent resource review
+before expansion beyond their historical four-CPU/12-GiB envelopes.
+
 ## Live output and heartbeat
+
+Each child has a separate thread log; window display does not create another
+agent or dispatcher. `--check` and `--dry-run` report the window backend without
+opening windows or starting inference. Open windows only for useful ready
+children within the effective cap (up to eight); filling all slots is optional.
+Window smoke testing is separate from these configuration checks.
+Each run keeps `agents/index.json` and separate thread logs beneath its log
+directory; `--status` includes each observed thread's log path and window state.
+Closing a viewer does not stop its agent. Actually closed/shutdown children close
+their viewers after flushing output. At whole-run exit the remaining viewers
+stop following and offer Enter to dismiss; a later run may open new windows.
+If the desktop is unavailable or a terminal launch fails, the main log reports
+the problem and the per-thread logs remain usable.
 
 Normal runs stream timestamped dispatcher and child-agent messages, command
 starts/output/exit codes, file changes, tool status, compaction and server errors
@@ -101,10 +158,13 @@ Console timestamps are UTC. Increase heartbeat frequency with, for example,
 
 ## Watchers
 
-The normal command automatically wraps the runner in `watch_os_goal.py`. It
-restarts recoverable app-server transport failures, capacity errors, failed turns,
-unexpected worker exits, stalled workers and blocked/self-paused goals using the
-same saved thread. The default retry count is unlimited; backoff caps at 60 seconds.
+The normal command automatically wraps the runner in `watch_os_goal.py`.
+Recovery follows the classifications above, including eligible watchdog stalls;
+an explicit stop wins even when a watchdog fires. Generic errors and unclassified
+paused/blocked states remain stopped. Eligible retries preserve the same saved
+thread, have no default count cap and use backoff capped at 60 seconds.
+Unexpected non-stop worker death or an early exit with an active goal can also
+recover, subject to the same stop/error classifications and ownership checks.
 If you explicitly set `--hours`, retries consume the remaining original window
 and never reset that deadline.
 It keeps a separate supervisor lock and records events in
@@ -112,16 +172,17 @@ It keeps a separate supervisor lock and records events in
 `--status` includes that snapshot. The dispatcher reconciles live process leases
 and retained evidence before resuming a build or guest after recovery.
 
-A second watchdog detects a responsive launcher whose agents produce no new
-item/turn events for 15 minutes. Heartbeats, status polls and account updates do
-not reset this timer. It captures worker/server process state, memory/load and
+A separate progress watchdog is disabled by default (`--stall-seconds 0`) to
+preserve healthy silent builds. Opt in with a positive interval, for example
+`--stall-seconds 3600`, to recover after that many seconds without agent item/turn
+events. Heartbeats, status polls and account updates do not reset this timer.
+When enabled, it captures worker/server process state, memory/load and
 the last campaign snapshot to a private `watchdog-*.json` before requesting a
 checkpoint and bounded shutdown. This shares the configured recovery policy
 and saved thread, and remains disabled while the campaign is paused or starting.
-Set `--stall-seconds 3600` for work expected to produce no agent events for up to
-an hour, or `--stall-seconds 0` to disable progress-based recovery. A positive
-stall interval must exceed the heartbeat interval. Long silent commands or
-compactions can reach this timeout even when healthy.
+A positive stall interval must exceed the heartbeat interval; healthy silent
+commands or compactions can still reach it. The independent worker heartbeat
+watchdog remains `--watchdog-seconds 180`.
 
 A stalled worker first receives a termination/checkpoint request, with up to
 30 seconds (or the shorter configured checkpoint grace) before forced termination.
@@ -133,14 +194,14 @@ that runtime guests or kernel resources were cleaned up.
 
 These process-level guards cannot guarantee recovery from a host kernel hang,
 power loss or an uninterruptible device operation. They do not change existing
-build/guest isolation or the four-CPU/12-GiB execution limits.
+build/guest isolation, the aggregate budget or independently reviewed profile limits.
 
 The sudo helper supervises its credential-read child with a five-second timeout
 and at most two retries for a transient read failure, timeout or killed process.
 Only a complete successful result reaches sudo's password pipe. Missing or
 insecure credential files are permanent errors. The watchers do not retry sudo
 authentication denials, quota/budget exhaustion, completed goals or a user stop.
-Blocked goals are resumed with the same objective and retained evidence.
+Every eligible recovery preserves the exact objective and retained evidence.
 
 These watchers run while their processes and machine remain available; no boot
 service is installed. After a machine restart, rerun the same command to recover
@@ -177,8 +238,8 @@ helper rejects symlinks, insecure file permissions and wrong ownership. Use
 `--check-sudo` to verify authentication without starting the campaign.
 Codex permissions alone do not grant Linux root access
 or override restrictions imposed by the launcher process's host environment.
-Existing OS isolation, four-CPU/12-GiB resource ceilings, reviewed
-execution packets and cleanup contracts remain mandatory dispatcher instructions.
+Existing OS isolation, reviewed execution packets, aggregate budgets, pinned
+profile limits and cleanup contracts remain mandatory dispatcher instructions.
 Unknown approval/authentication protocols are not answered with fabricated consent.
 
 A controlled stop pauses future goal work and interrupts remaining loaded
@@ -191,17 +252,17 @@ exhausted quota. `cleanup_verified: false` is intentional until OS evidence prov
 | Exit code | Meaning |
 | --- | --- |
 | 0 | The persisted goal reports complete. Assess the original acceptance evidence; this is not a separate OS certification. |
-| 10 | Paused/window ended/controlled interruption. Resume with the same command. |
-| 20 | Worker goal reports blocked; the watcher automatically resumes it with backoff. |
+| 10 | Paused/window ended/controlled interruption. No automatic retry from this status alone. |
+| 20 | Worker goal reports blocked. No automatic retry from this status alone; inspect the blocker. |
 | 21 | Credits/usage exhausted. Resume after availability changes. |
 | 22 | Goal token budget exhausted. |
-| 23 | Turn/server errors retry; unsupported input, cleared goals and manual stops require attention. Inspect the recorded reason. |
-| 24 | Active goal did not continue while idle; inspect the CLI/server before restarting. |
-| 1 | Launcher/configuration/transport error; inspect state and stderr. |
+| 23 | Only structured `serverOverloaded`/`rateLimitExceeded` errors retry; generic server/turn errors, unsupported input, cleared goals and manual stops stop recovery. |
+| 24 | Active goal did not continue while idle; eligible for same-thread recovery with backoff unless stopped. |
+| 1 | Retry only a positively classified retryable transport failure; otherwise inspect state/stderr and repair before restarting. |
 
 ## Verified scope
 
-Validation used the installed Codex CLI 0.153.4, its generated experimental
+The earlier validation used Codex CLI 0.153.4, its generated experimental
 JSON-RPC schemas, offline lifecycle/transport tests, configuration/model reads,
 and an empty ephemeral thread to inspect effective permissions. No inference
 turn, paid worker, OS payload or 12-hour campaign was started during preparation.
@@ -211,6 +272,15 @@ automatic clarification handling and the private sudo helper. A separate
 `--check-sudo` invocation passed with effective UID 0; it ran only `id -u`.
 The first live run still has to demonstrate goal continuation, actual subagent
 execution and available quota. The launcher retains failures if any of these fail.
+
+The current preparation uses Codex 0.155.1 with the legacy selected models.
+`--check` verifies the measured child cap and injected build environment through
+`config/read`; aggressive expects 8 children/7 build jobs/24 GiB on this host,
+balanced 3 children/4 build jobs/12 GiB. Preserve those choices and recheck after
+integration. This preparation leaves the campaign ready for later launch and
+performs no OS execution or new runtime release; existing runtime envelopes remain.
+The final tests, restored environment and actual two-window synthetic desktop
+probe are recorded in [LAUNCH-PREPARATION-20260927.md](LAUNCH-PREPARATION-20260927.md).
 
 Recheck configuration after upgrading Codex. The protocol is described in the
 official [App Server documentation](https://learn.chatgpt.com/docs/app-server),

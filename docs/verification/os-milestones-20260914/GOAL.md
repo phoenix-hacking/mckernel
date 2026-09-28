@@ -1,8 +1,11 @@
 # Autonomous McKernel goal
 
-Workflow policy updated 2026-09-17. The whole-OS objective and original acceptance
-contracts are unchanged. This documentation update neither starts account-metered
-work nor changes the Python launcher or a currently running session.
+Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
+invocation is explicit authorization to resume; this preparation hold does not
+stop that invocation. Full dedicated-computer, aggressive scheduling supersedes
+older three-child/workstation scheduling numbers only; the objective, acceptance
+and other policies remain.
+Documentation does not change the launcher or a currently running session.
 
 ## Start or resume the existing campaign
 
@@ -10,26 +13,34 @@ work nor changes the Python launcher or a currently running session.
 python3 /home/holden/mckernel/scripts/run_os_goal.py
 ```
 
-See LAUNCH.md for the existing command's controls and observed implementation.
+For a later launch, use LAUNCH.md for the command's controls and checks.
 The launcher owns one separate persistent thread and resumes its exact ID. Keep
 any older interactive campaign paused; do not create competing dispatchers on
 the same checkout. Model changes do not replenish quota or prove continuation.
 
 Keep the user-selected Sol/medium dispatcher, Luna workers, bounded Terra repair
-escalations, and focused Astra/high ownership/unsafe/ABI/release reviews. At most
-three children, no recursive dispatch, and fresh self-contained worker packets.
+escalations, and focused Astra/high ownership/unsafe/ABI/release reviews. Default
+`--profile aggressive` allows up to eight children within measured host CPU/RAM
+capacity; no recursive dispatch, and fresh self-contained worker packets.
+`--profile balanced` restores three children/four build jobs/12 GiB. Explicit
+`--max-agents N --build-jobs N --memory-gib N` remain subject to host capacity.
+Aggressive uses all affinity CPUs (currently seven) and
+`min(24 GiB, measured available RAM minus 4 GiB headroom)`; see CONVERGENCE.md.
 Do not change model choices or global configuration merely to apply this policy.
 
 ## Mandatory reading and precedence
 
-The dispatcher reads START.md and CONVERGENCE.md, then the compact HANDOFF.md.
+Read GOAL.md, START.md, CONVERGENCE.md, then the compact HANDOFF.md. This order
+overrides the older read-order text in the launcher's exact preserved OBJECTIVE;
+do not rewrite that objective or create a new thread to adopt the policy.
 On the first policy adoption, reconcile that handoff with actual local sources,
 launcher state, active leases and the latest relevant CURRENT.md evidence.
 Read README.md once for the complete objective; thereafter load the selected
 task/gate/case and required contracts, not the entire history at every turn.
 Reload changed workflow instructions on resume or a safe coherent checkpoint.
-Record the adopted policy hash; a remote documentation commit is not proof that
-a local running dispatcher has loaded it.
+The launcher records policy hashes; record the adopted hashes after reading.
+A remote documentation commit is not proof that a local running dispatcher has
+loaded it.
 
 CONVERGENCE.md supersedes older workflow-only scheduling, retry, context-loading
 and checkpoint habits, including completed model-switch stops. README.md,
@@ -53,9 +64,14 @@ then integrate and run the next authorized layer. Admission and failure-family
 limits in CONVERGENCE.md are mandatory. A passing model or infrastructure fixture
 is useful scoped evidence, never automatic product/application acceptance.
 
-Only the dispatcher owns compiler commands, heavy build/guest leases, integration,
-acceptance updates and Git checkpoints. Keep the existing isolation, resource,
-process-identity and cleanup rules. Reconcile actual owners after any interruption.
+Only the dispatcher owns compiler-command approval, the single heavy build/guest
+lease, integration, acceptance updates and Git checkpoints. Share aggregate
+CPU/RAM budgets across bounded cheap test processes. Automatic build environment
+settings are not a cgroup; pinned guest/privileged profiles need independent
+resource review before exceeding their historical four-CPU/12-GiB envelopes.
+Keep existing isolation, process-identity and cleanup rules; reconcile owners
+after any interruption. Default `--stall-seconds 0` preserves silent builds;
+the worker heartbeat watchdog remains 180 seconds.
 A launcher exit, worker report or accepted source packet does not prove cleanup.
 
 Continue after coherent checkpoints without routine confirmation. After one
@@ -72,6 +88,9 @@ harness changes and reporting separately, verify fetched blobs, and preserve WIP
 at the existing cadence and before long runs or a controlled stop.
 
 Respect a new explicit stop, selected time/budget limit and exhausted credits.
+An explicit stop takes precedence over watchdog recovery. Unclassified paused/
+blocked goals and generic server/turn errors stop; only classified recoverable
+faults continue the saved thread with backoff as described in LAUNCH.md.
 Do not infer consent, read/print credentials or repeat failed authentication/spawn
 attempts. Keep the campaign recoverable where possible; checkpointing is not
 whole-OS completion. The current watcher's automatic recovery is process-level:

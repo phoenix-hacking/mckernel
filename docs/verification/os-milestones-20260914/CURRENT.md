@@ -2901,3 +2901,17 @@ Phase II; and keep M03 closed behind its listed ownership and acknowledgement
 blockers. Counters remain 0/273 application cases, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
 acceptance remains incomplete.
+
+Preparation checkpoint, 2026-09-27: the user requested aggressive dedicated-host
+scheduling and separate subagent windows, then explicitly selected preparation
+and testing only. The campaign remains stopped/paused; its launcher-owned state
+and watcher bytes are unchanged. See HANDOFF.md and
+LAUNCH-PREPARATION-20260927.md for the compact resume route and exact evidence.
+The launcher now supports up to eight child agents, measured aggregate host
+budgets, per-agent desktop viewers, and classified recovery that honors stops.
+All 98 focused tests passed, including the installed CLI protocol schemas;
+configuration, sudo, two container isolation probes and an actual synthetic
+two-window desktop test passed. Existing scratch and transient controls were
+restored; no campaign, OS fixture, kernel build or guest was started. Official
+acceptance counters above are unchanged. The next normal launcher invocation
+is the user's explicit resume action.
