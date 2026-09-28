@@ -143,6 +143,12 @@ lease discipline. Evidence is
 not an execution release. Next create and bind the clean checkout/full manifest,
 then seek independent review for the separate networked image-preparation phase.
 
+The first preparation review BLOCKED buffered `docker exec` failure evidence.
+The bounded correction now streams every command to retained files and handles
+TERM/INT through bounded retirement/receipt; SIGKILL tests preserve already
+emitted bytes. All 43 focused tests pass with a retained raw log. Seek fresh
+independent rereview of the exact pushed correction before running preparation.
+
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,
 push and verify fetched blobs. One heavy build/guest maximum; aggregate seven

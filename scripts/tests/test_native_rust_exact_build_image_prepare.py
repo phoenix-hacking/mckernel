@@ -1,6 +1,7 @@
 import copy
 import json
 from pathlib import Path
+import signal
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -10,7 +11,7 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import native_rust_exact_build_image_prepare as prep
 import native_rust_exact_build_container_owner as owner
-from scripts.tests.test_native_rust_exact_build_container_owner import FakeDocker, IMAGE
+from scripts.tests.test_native_rust_exact_build_container_owner import FakeDocker, IMAGE, signal_regression
 
 
 def probe_fixture():
@@ -111,6 +112,22 @@ class PreparationTests(unittest.TestCase):
     def test_wrong_base_rejected_without_docker(self):
         with self.assertRaises(prep.PreparationError):
             prep.prepare(**self.args, base_image='rocky:latest')
+
+    def test_real_preparation_sigterm_preserves_dnf_bytes_and_receipt(self):
+        signal_regression(self, self.root, 'prepare',
+                          {k: str(v) for k, v in self.args.items()}, signal.SIGTERM)
+
+    def test_real_preparation_sigint_preserves_dnf_bytes_and_receipt(self):
+        signal_regression(self, self.root, 'prepare',
+                          {k: str(v) for k, v in self.args.items()}, signal.SIGINT)
+
+    def test_real_preparation_sigkill_preserves_emitted_bytes(self):
+        signal_regression(self, self.root, 'prepare',
+                          {k: str(v) for k, v in self.args.items()}, signal.SIGKILL)
+
+    def test_real_preparation_signal_retains_unproven_lease(self):
+        signal_regression(self, self.root, 'prepare-hold',
+                          {k: str(v) for k, v in self.args.items()}, signal.SIGTERM)
 
 
 if __name__ == '__main__':

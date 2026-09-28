@@ -5342,3 +5342,31 @@ diff checks pass after the correction. The first asset extraction command also
 found host `rpm2cpio` unavailable; the already retained debrand asset was instead
 hardlinked and rehashed (`080bbc72...6b144`) for later in-container comparison
 against the pinned SRPM.
+
+The corrected clean candidate and manifest now pass real input verification.
+`/home/holden/mckernel-exact-candidate-c140d23f` is clean at commit `c140d23f`
+with ihk `3114d9e`; the 1,134,361-byte manifest binds 8,897 regular/symlink
+entries, four exact gitlinks, four source assets and driver SHA-256
+`5bf7dca3...bf01f`. Its SHA-256 is `05fdf00c...9f35`, with a deterministic
+compressed committed copy SHA-256 `6803a253...c6f18`. Evidence is
+`stability-native-exact-build-inputs-success-20260928-1.json`. A fresh
+independent reviewer is evaluating only the networked, source-free tool-image
+preparation command; no Docker container or heavy build has started.
+
+That independent preparation review returned BLOCK on one failure-evidence gap.
+`Docker.call` buffered `docker exec` output, so SIGTERM during dnf could leave the
+lease while losing already-emitted transaction bytes; container logs cannot
+recover exec output. The original decision is retained in
+`stability-native-exact-image-preparation-review-block-20260928-1.json`. One
+bounded correction is active: file-backed streaming from the first byte and
+signal-driven bounded retirement/receipt, with real SIGTERM/SIGINT regressions.
+No preparation command has run.
+
+The bounded correction passes 43 focused tests in 5.269 seconds. Real CLI
+subprocess tests cover SIGTERM, SIGINT and SIGKILL for both owner paths: emitted
+stdout/stderr bytes are file-backed before the signal, orderly signals produce
+atomic failure receipts and bounded cleanup, uncertain retirement retains the
+lease, and SIGKILL still leaves first bytes recoverable. The raw log is
+`evidence/stability-native-exact-boundary-corrected-tests-20260928-1.log.gz`
+(SHA-256 `acfa09a2...bd73f`). This correction still requires fresh independent
+execution rereview before preparation.

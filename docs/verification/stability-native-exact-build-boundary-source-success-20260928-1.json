@@ -18,22 +18,26 @@
     "The runtime owner measures resources, verifies actual Docker profile/mounts/UID/image/driver, runs one network-none cap-drop-all container and retains the lease until terminal retirement is proven.",
     "The offline driver binds every tracked superproject/submodule file and all four source assets, rejects dirty inputs, streams phase evidence and cannot PASS without the exact artifact/checksum set."
     ,"The bounded real-input correction now binds every gitlink by exact Git object ID, recursively binds the consumed ihk files, and does not require unrelated submodules to be materialized."
+    ,"After the independent preparation BLOCK, each Docker client command writes directly to retained stdout/stderr files; CLI-only TERM/INT handling drives bounded retirement and atomic failure receipts, while uncertain retirement keeps the lease."
   ],
   "verification": {
     "command": "python3 -B -m unittest -v scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_offline",
-    "result": "32 tests passed in 0.433 seconds",
+    "result": "43 tests passed in 5.269 seconds",
     "additional": [
       "python3 -m py_compile on all six files: PASS",
       "git diff --check on all six files: PASS",
       "A real local subprocess test preserved partial stdout/stderr and exit 37."
-    ]
+    ],
+    "raw_log": "docs/verification/evidence/stability-native-exact-boundary-corrected-tests-20260928-1.log.gz",
+    "raw_log_sha256": "acfa09a298c5230f1e3686bf0b66c5054f699f8c8b061ccd66f5a8f4991bd73f",
+    "uncompressed_log_sha256": "22ea865c50c9d01c1dd42976d7a77a6ce4714d2d2eec251f637bdd4fa4c9d548"
   },
   "artifact_sha256": {
-    "scripts/native_rust_exact_build_container_owner.py": "f56511ee78bcd30d4d60713f07911243533a92eadbbff556c1b02870f9dbaae0",
-    "scripts/native_rust_exact_build_image_prepare.py": "edc35b4cb4f400589c8e54105e70d556410fa6abf375f9f2670630fe33b3dcf0",
+    "scripts/native_rust_exact_build_container_owner.py": "fb9c52cf764b407fe1f09e53fbb2cf5d8c311b58e52f924701f783086a955a79",
+    "scripts/native_rust_exact_build_image_prepare.py": "7b606423dd8489d280614f2117f51079e5ddd443b15e88b6c3e5c4cd4a7754f2",
     "scripts/native_rust_exact_build_offline.py": "5bf7dca3a7785f0f9ae8e6842a6db4b0508f792085ebe31ac0a0606bcd1bf01f",
-    "scripts/tests/test_native_rust_exact_build_container_owner.py": "6e9ae05f7349fc772303b528fed3119a02e71f5f1e171c19de03f9aec9898aed",
-    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "755d32702c953c31a7ee7867063896104e4634f2847074f91094799398f1b6b2",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "6b5319c5de3a192a83299a3dd318e8890400e5beaff37e24c636db659adeabc3",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "13ceb206982568d4de460c1ca5efa699b2e1cdb7b3d70301e151624de989c695",
     "scripts/tests/test_native_rust_exact_build_offline.py": "5724efbb1c8c19184f2e41a1f7cf9bba121fc5d9039144ae9033f1ca6936a0f2"
   },
   "verified_offline_inputs": {

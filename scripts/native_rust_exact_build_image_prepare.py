@@ -11,7 +11,7 @@ import re
 import uuid
 
 from native_rust_exact_build_container_owner import (
-    Docker, Lease, RESOURCE_ARGS, atomic, check_profile, digest, exact_sha,
+    CliSignals, Docker, Lease, RESOURCE_ARGS, atomic, check_profile, digest, exact_sha,
     inspect, inventory, measure, retire, roots_disjoint,
 )
 
@@ -87,7 +87,7 @@ def validate_probe(probe, pinned):
 
 
 def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_lock,
-            base_image=BASE_IMAGE, runner=None):
+            base_image=BASE_IMAGE, runner=None, signals=None):
     exact_sha(candidate_sha)
     if base_image != BASE_IMAGE:
         raise PreparationError('base image is not pinned')
@@ -101,7 +101,7 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     pinned['kmod'] = 'kmod-0:31-13.el10.x86_64'
     if pinned.get('rust') != 'rust-0:1.92.0-1.el10.x86_64':
         raise PreparationError('Rust package lock differs')
-    docker = runner or Docker(evidence / 'prepare.log')
+    docker = runner or Docker(evidence / 'prepare.log', signals=signals)
     name = 'mckernel-tools-' + uuid.uuid4().hex
     lease = Lease(lease_path, name)
     lease.acquire()
@@ -168,6 +168,8 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     except BaseException as exc:
         receipt['error'] = str(exc)
     finally:
+        if signals:
+            signals.cleaning = True
         if attempted:
             try:
                 terminal = retire(docker, name, lease.nonce)
@@ -181,7 +183,11 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
                 receipt['retirement_error'] = str(exc)
         elif not receipt.get('image_id'):
             receipt['retired'] = True
+        if getattr(docker, 'client_retirement_unproven', False):
+            receipt.update(status='FAIL', retired=False, client_retirement_unproven=True)
         receipt['evidence'] = inventory(evidence)
+        if signals and signals.requested is not None:
+            receipt.update(status='FAIL', interrupted_signal=signals.requested)
         atomic(evidence / 'image-receipt.json', receipt)
         if receipt['status'] == 'PASS':
             (evidence / 'image-receipt.json').chmod(0o444)
@@ -194,7 +200,8 @@ def main():
     parser = argparse.ArgumentParser()
     for name in ('candidate-sha', 'output-root', 'evidence-root', 'lease-path', 'toolchain-lock'):
         parser.add_argument('--' + name, required=True)
-    path = prepare(**vars(parser.parse_args()))
+    with CliSignals() as signals:
+        path = prepare(**vars(parser.parse_args()), signals=signals)
     print(path)
     return 0 if json.loads(path.read_text())['status'] == 'PASS' else 1
 

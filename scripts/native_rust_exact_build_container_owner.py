@@ -7,7 +7,9 @@ import os
 from pathlib import Path
 import re
 import shutil
+import signal
 import subprocess
+import time
 import uuid
 
 LIMITS = {'NanoCpus': 4000000000, 'CpusetCpus': '2-5',
@@ -99,25 +101,102 @@ class Lease:
         self.path.unlink()
 
 
+class OwnerInterrupted(RuntimeError):
+    pass
+
+
+class CliSignals:
+    """CLI-only handlers latch termination; imports do not alter handlers.
+
+    Docker waits observe the latch promptly. Retirement commands run to their
+    bounded deadlines even if a second TERM/INT arrives during cleanup.
+    """
+    def __init__(self):
+        self.requested = None
+        self.cleaning = False
+
+    def __enter__(self):
+        self.previous = {sig: signal.getsignal(sig) for sig in (signal.SIGTERM, signal.SIGINT)}
+        for sig in self.previous:
+            signal.signal(sig, self.receive)
+        return self
+
+    def receive(self, signum, frame):
+        if self.requested is None:
+            self.requested = signum
+
+    def check(self):
+        if self.requested is not None and not self.cleaning:
+            raise OwnerInterrupted('owner interrupted by signal %d' % self.requested)
+
+    def __exit__(self, *exc):
+        for sig, handler in self.previous.items():
+            signal.signal(sig, handler)
+
+
 class Docker:
-    def __init__(self, log):
+    def __init__(self, log, signals=None):
         self.log = Path(log)
+        self.signals = signals
+        self.client_retirement_unproven = False
 
     def call(self, args, timeout=120, check=True):
+        if self.signals:
+            self.signals.check()
+        # These files are the primary evidence, not a buffer flushed by the
+        # owner after command completion. Child writes survive owner SIGKILL.
+        capture = self.log.parent / ('command-' + uuid.uuid4().hex)
+        capture.mkdir()
+        stdout_path, stderr_path = capture / 'stdout', capture / 'stderr'
+        command = ['docker', *args]
+        status = {'argv': command, 'timeout': timeout, 'state': 'starting'}
+        atomic(capture / 'status.json', status)
         with self.log.open('a') as stream:
-            stream.write('$ ' + json.dumps(['docker', *args]) + '\n')
+            stream.write('$ ' + json.dumps(command) + '\n[capture ' + str(capture) + ']\n')
             stream.flush()
-            try:
-                result = subprocess.run(['docker', *args], env=ENV, text=True,
-                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                        timeout=timeout, check=False)
-            except subprocess.TimeoutExpired as exc:
-                for partial in (exc.stdout, exc.stderr):
-                    if partial:
-                        stream.write(partial.decode(errors='replace') if isinstance(partial, bytes) else partial)
-                stream.write('[timeout]\n')
-                raise RuntimeError('docker command timed out: ' + args[0]) from exc
-            stream.write(result.stdout + result.stderr + '\n[exit %d]\n' % result.returncode)
+            os.fsync(stream.fileno())
+        process = None
+        try:
+            with stdout_path.open('xb', buffering=0) as stdout, stderr_path.open('xb', buffering=0) as stderr:
+                # A separate client process group permits exact client rundown;
+                # container retirement remains the owner's independent duty.
+                process = subprocess.Popen(command, env=ENV, stdout=stdout,
+                                           stderr=stderr, start_new_session=True)
+                status.update(state='running', pid=process.pid)
+                atomic(capture / 'status.json', status)
+                deadline = time.monotonic() + timeout
+                while True:
+                    if self.signals:
+                        self.signals.check()
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise RuntimeError('docker command timed out: ' + args[0])
+                    try:
+                        code = process.wait(timeout=min(0.1, remaining))
+                        break
+                    except subprocess.TimeoutExpired:
+                        continue
+                os.fsync(stdout.fileno())
+                os.fsync(stderr.fileno())
+            status.update(state='exited', exit_code=code)
+        except BaseException as exc:
+            status.update(state='failed', error=str(exc))
+            if process is not None:
+                try:
+                    if process.poll() is None:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    status['exit_code'] = process.wait(timeout=5)
+                except BaseException as retirement:
+                    self.client_retirement_unproven = True
+                    status['client_retirement_error'] = str(retirement)
+            raise
+        finally:
+            atomic(capture / 'status.json', status)
+            with self.log.open('a') as stream:
+                stream.write('[command status ' + json.dumps(status) + ']\n')
+        result = subprocess.CompletedProcess(command, code,
+                                             stdout_path.read_text(errors='replace'),
+                                             stderr_path.read_text(errors='replace'))
         if check and result.returncode:
             raise RuntimeError('docker command failed: ' + args[0])
         return result
@@ -170,9 +249,10 @@ def retire(docker, name, nonce):
 
 
 class BuildOwner:
-    def __init__(self, request, docker=None):
+    def __init__(self, request, docker=None, signals=None):
         self.r = dict(request)
         self.docker = docker
+        self.signals = signals
 
     def validate(self):
         r = self.r
@@ -206,7 +286,7 @@ class BuildOwner:
         self.validate()
         r = self.r
         evidence = Path(r['evidence_root'])
-        docker = self.docker or Docker(evidence / 'docker.log')
+        docker = self.docker or Docker(evidence / 'docker.log', signals=self.signals)
         name = 'mckernel-exact-' + uuid.uuid4().hex
         lease = Lease(r['lease_path'], name)
         lease.acquire()
@@ -263,6 +343,8 @@ class BuildOwner:
         except BaseException as exc:
             receipt['error'] = str(exc)
         finally:
+            if self.signals:
+                self.signals.cleaning = True
             if attempted:
                 try:
                     terminal = retire(docker, name, lease.nonce)
@@ -281,8 +363,12 @@ class BuildOwner:
                     receipt['capture_error'] = str(exc)
             else:
                 receipt['retired'] = True
+            if getattr(docker, 'client_retirement_unproven', False):
+                receipt.update(status='FAIL', retired=False, client_retirement_unproven=True)
             receipt['outputs'] = inventory(Path(r['output_root']))
             receipt['evidence'] = inventory(evidence)
+            if self.signals and self.signals.requested is not None:
+                receipt.update(status='FAIL', interrupted_signal=self.signals.requested)
             atomic(evidence / 'receipt.json', receipt)
             if receipt['retired']:
                 lease.release()
@@ -293,7 +379,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('request', type=Path)
     args = parser.parse_args()
-    result = BuildOwner(json.loads(args.request.read_text())).run()
+    with CliSignals() as signals:
+        result = BuildOwner(json.loads(args.request.read_text()), signals=signals).run()
     print(json.dumps(result))
     return 0 if result['status'] == 'PASS' else 1
 
