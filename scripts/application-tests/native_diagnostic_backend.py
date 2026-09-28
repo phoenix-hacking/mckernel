@@ -54,11 +54,24 @@ def _proc_starttime_ticks(pid):
     return ticks
 
 
-def _capture_process_identity(pid):
-    """Capture immutable direct-child identity before ownership transfer."""
+def _capture_process_identity(pid, observed=None):
+    """Capture immutable direct-child identity before ownership transfer.
+
+    ``observed`` is deliberately a caller-owned primitive ledger.  Identity
+    acquisition is fail-closed, but a later read or validation failure must
+    retain the fields already observed; consulting procfs after retirement
+    would no longer be evidence about this child.
+    """
+    if observed is None:
+        observed = {}
+    if type(pid) is int and pid > 0:
+        observed["pid"] = pid
     pgid = os.getpgid(pid)
+    observed["pgid"] = pgid
     sid = os.getsid(pid)
+    observed["sid"] = sid
     starttime_ticks = _proc_starttime_ticks(pid)
+    observed["starttime_ticks"] = starttime_ticks
     if (type(pgid) is not int or type(sid) is not int or pgid != pid or sid != pid):
         raise ValueError("QEMU process group/session identity mismatch")
     return pid, pgid, sid, starttime_ticks
@@ -296,7 +309,7 @@ def _retire_untransferred(child, failure):
     return outcome
 
 
-def _acquisition_evidence(command, child, process_identity, outcome):
+def _acquisition_evidence(command, child, process_identity, outcome, observed=None):
     """Primitive evidence for a child retired before ownership transfer.
 
     This deliberately records absence as ``None`` rather than attempting a
@@ -304,23 +317,33 @@ def _acquisition_evidence(command, child, process_identity, outcome):
     direct PID returned by Popen; every other identity component is present
     only if it was captured before the acquisition failure.
     """
-    pid = None
-    try:
-        candidate = child.pid
-        if type(candidate) is int and candidate > 0:
-            pid = candidate
-    except BaseException:
-        pass
-    pgid = sid = starttime_ticks = None
+    observed = observed if type(observed) is dict else {}
+    pid = observed.get("pid")
+    if type(pid) is not int or pid <= 0:
+        # The Popen PID is a primitive already returned by acquisition; this
+        # fallback does not inspect the retired process.
+        try:
+            candidate = child.pid
+            if type(candidate) is int and candidate > 0:
+                pid = candidate
+        except BaseException:
+            pid = None
+    pgid = observed.get("pgid")
+    sid = observed.get("sid")
+    starttime_ticks = observed.get("starttime_ticks")
     if (type(process_identity) is tuple and len(process_identity) == 4 and
             all(type(item) is int and item > 0 for item in process_identity)):
-        captured_pid, pgid, sid, starttime_ticks = process_identity
+        captured_pid, captured_pgid, captured_sid, captured_starttime = process_identity
         if pid is None:
             pid = captured_pid
         elif pid != captured_pid:
             # The direct PID remains the observed Popen fact; the other
             # fields are incomplete rather than joined to a conflicting PID.
             pgid = sid = starttime_ticks = None
+        else:
+            pgid = captured_pgid if pgid is None else pgid
+            sid = captured_sid if sid is None else sid
+            starttime_ticks = captured_starttime if starttime_ticks is None else starttime_ticks
     return {"argv": list(command), "pid": pid, "pgid": pgid, "sid": sid,
             "starttime_ticks": starttime_ticks,
             "identity_complete": pid is not None and pid == pgid == sid and
@@ -389,6 +412,7 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
         fds = []
         child = None
         process_identity = None
+        observed_identity = {}
         try:
             out_fd = os.open(out_path, flags, 0o600)
             fds.append((out_fd, None))
@@ -408,7 +432,7 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
                                   stdout=out_fd, stderr=err_fd,
                                   shell=False, cwd=cwd, env={"LC_ALL": "C"},
                                   close_fds=True, pass_fds=(), start_new_session=True)
-            process_identity = _capture_process_identity(child.pid)
+            process_identity = _capture_process_identity(child.pid, observed_identity)
             owner.child = child
             owner.pid = child.pid
             owner.identity_pid, owner.pgid, owner.sid, owner.starttime_ticks = process_identity
@@ -423,7 +447,8 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
                 except BaseException as cleanup_failure:
                     _record_secondary_error(failure, "spawn retirement failed", cleanup_failure)
                     outcome = {"reaped": False, "returncode": None}
-                evidence = _acquisition_evidence(command, child, process_identity, outcome)
+                evidence = _acquisition_evidence(command, child, process_identity, outcome,
+                                                 observed_identity)
             _close_fds(fds, failure=failure)
             if child is not None:
                 raise ProcessAcquisitionFailure(failure, evidence) from failure

@@ -122,6 +122,7 @@
     ,"native_diag_attempt_failure2": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-2.json"
     ,"native_diag_mcexec_overlay": "docs/verification/stability-native-diagnostic-mcexec-overlay-success-20260928-1.json"
     ,"native_diag_process_evidence": "docs/verification/stability-native-diagnostic-process-evidence-source-success-20260928-1.json"
+    ,"native_diag_partial_identity": "docs/verification/stability-native-diagnostic-partial-identity-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -521,8 +522,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 2 ran one real diagnostic guest application with exact 91-byte stdout, exit 0 and complete cleanup, then correctly exposed stale marker and mcexec-stderr defects. The observer, mcexec no-source fastpath and current-signal overlay/manifest are now repaired. Independent source review accepts exact outer Docker-client and inner QEMU argv/identity/reap evidence across ordinary and adverse paths; 234 six-module tests pass. No new guest or catalog acceptance follows.",
-      "next_check": "Checkpoint these exact process-evidence sources, issue a fresh packet 4 with a never-used parent and nonce, obtain an independent one-shot release, then rerun startup.argv-empty and retain exact application bytes, raw exit, kernel log, identities and teardown.",
+      "result": "Packet 2 ran one real diagnostic guest application with exact 91-byte stdout, exit 0 and complete cleanup, then correctly exposed stale marker and mcexec-stderr defects. The observer, mcexec no-source fastpath and current-signal overlay/manifest are repaired. Process-evidence review now also accepts progressive partial PID/PGID/SID/starttime retention without granting incomplete signaling authority; 236 six-module tests pass. Packet 4 was rejected before execution and no new guest or catalog acceptance follows.",
+      "next_check": "Checkpoint the partial-identity correction, issue fresh packet 5 with a never-used parent and nonce, obtain an independent one-shot release, then rerun startup.argv-empty and retain exact application bytes, raw exit, kernel log, identities and teardown.",
       "evidence": [
         "history",
         "plan",
@@ -540,7 +541,8 @@
         "native_diag_execution_release2",
         "native_diag_attempt_failure2",
         "native_diag_mcexec_overlay",
-        "native_diag_process_evidence"
+        "native_diag_process_evidence",
+        "native_diag_partial_identity"
       ],
       "depends_on": []
     },

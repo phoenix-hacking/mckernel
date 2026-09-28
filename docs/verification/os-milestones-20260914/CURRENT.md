@@ -4129,3 +4129,31 @@ and assign the three IHK modules as separate implementation lanes. Official
 counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete.
+
+Continuation checkpoint 30, 2026-09-28: packet 4, SHA256
+`1c6701f6...93ec6`, was independently rejected before execution. Its exact
+source, manifest, artifacts, command, profile, oracle, fresh-path state and
+cleanup rules passed review, but both acquisition paths discarded PGID/SID
+already observed when a later starttime read failed. The packet, parent
+`ndcs-20260928-4` and nonce `e8e0bd60...86bee` are permanently nonreusable; the
+additive failure record preserves the reproduction and otherwise-verified
+closure. No root, Docker, QEMU or guest operation occurred.
+
+The one bounded correction now retains PID, PGID, SID and starttime immediately
+after each individual successful read for both inner QEMU and outer Docker
+clients. A later read/validation failure records every observed primitive and
+null only for unobserved fields; no post-retirement identity sampling occurs.
+Complete identity remains mandatory for transfer/signaling, so partial evidence
+does not broaden authority. The final six-module run passes 236/236 in 16.626
+seconds; py_compile, scoped diff checks and strict `bound_manifest()` pass.
+Independent review returns
+`PASS_PARTIAL_IDENTITY_SOURCE_READY_FOR_CHECKPOINT`. Exact hashes and raw
+evidence are in
+`docs/verification/stability-native-diagnostic-partial-identity-source-success-20260928-1.json`.
+
+Next: commit/push and fetched-blob verify these exact bytes, then create packet
+5 with a fresh parent and nonce, obtain a new exact one-shot release, remeasure
+capacity and reconcile the lease immediately before at most one diagnostic.
+Packet 4 grants no authority. Official counters remain 0/273 applications, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. Whole-OS acceptance remains incomplete.

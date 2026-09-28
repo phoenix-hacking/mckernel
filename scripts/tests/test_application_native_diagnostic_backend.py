@@ -304,6 +304,46 @@ class BackendTests(unittest.TestCase):
         self.assertFalse(evidence["identity_complete"])
         self.assertEqual((evidence["reaped"], evidence["returncode"]), (True, -signal.SIGKILL))
 
+    def test_identity_acquisition_retains_each_inner_qemu_field_before_failure(self):
+        original_patch = self._identity_patch
+        original_patch.stop()
+        try:
+            for failed_read, expected in (
+                    ("pgid", {"pid": 12345, "pgid": None, "sid": None,
+                               "starttime_ticks": None}),
+                    ("sid", {"pid": 12345, "pgid": 12345, "sid": None,
+                              "starttime_ticks": None}),
+                    ("starttime", {"pid": 12345, "pgid": 12345, "sid": 12345,
+                                    "starttime_ticks": None})):
+                with self.subTest(failed_read=failed_read):
+                    child = FakeProcess()
+                    factory = self._factory(lambda *args, **kwargs: child)
+                    pgid = mock.Mock(return_value=12345)
+                    sid = mock.Mock(return_value=12345)
+                    start = mock.Mock(return_value=9)
+                    if failed_read == "pgid":
+                        pgid.side_effect = RuntimeError("pgid read")
+                    elif failed_read == "sid":
+                        sid.side_effect = RuntimeError("sid read")
+                    else:
+                        start.side_effect = RuntimeError("starttime read")
+                    with mock.patch.object(backend.os, "getpgid", pgid), \
+                         mock.patch.object(backend.os, "getsid", sid), \
+                         mock.patch.object(backend, "_proc_starttime_ticks", start), \
+                         mock.patch.object(backend, "_retire_untransferred",
+                                            return_value={"reaped": True, "returncode": -9}):
+                        with self.assertRaises(backend.ProcessAcquisitionFailure) as raised:
+                            factory(timeout=1)
+                    evidence = raised.exception._mckernel_qemu_acquisition_evidence
+                    self.assertEqual({key: evidence[key] for key in expected}, expected)
+                    self.assertFalse(evidence["identity_complete"])
+                    for name in ("qemu.stdout", "qemu.stderr"):
+                        path = Path(self.temp.name) / name
+                        if path.exists():
+                            path.unlink()
+        finally:
+            original_patch.start()
+
     def test_secondary_recording_supports_python39_and_closes_all_fds(self):
         class LegacyFailure(Exception):
             add_note = None

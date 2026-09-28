@@ -43,7 +43,7 @@ QEMU_VERSION_STDOUT = (
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
     REPO + "/scripts/application-tests/native_diagnostic.py": "a8017956af1424736a88be15ce7a38db5fe0e0f1f33e1eea006a6b38b4f7f392",
-    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "41bf970ac1f2a7969651eca8d8138c4104b6d3951985d9bf4117a099d6e8a034",
+    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }
 CGROUP = {
@@ -272,6 +272,11 @@ class CommandChild:
     def __init__(self):
         self.pid = None
         self.identity = None
+        # Primitive fields are retained as each read succeeds.  This record
+        # is diagnostic evidence only; incomplete identity never authorizes a
+        # process-group signal or ownership transfer.
+        self.observed_identity = {"pid": None, "pgid": None, "sid": None,
+                                  "proc_starttime": None}
         self.reaped = False
         self.returncode = None
         self.stdout = None
@@ -281,11 +286,14 @@ class CommandChild:
 
     def record(self):
         identity = self.identity
+        observed = self.observed_identity
+        pid = observed["pid"] if observed["pid"] is not None else self.pid
         return {
-            "pid": identity["pid"] if identity is not None else self.pid,
-            "pgid": identity["pgid"] if identity is not None else None,
-            "sid": identity["sid"] if identity is not None else None,
-            "proc_starttime": identity["proc_starttime"] if identity is not None else None,
+            "pid": identity["pid"] if identity is not None else pid,
+            "pgid": identity["pgid"] if identity is not None else observed["pgid"],
+            "sid": identity["sid"] if identity is not None else observed["sid"],
+            "proc_starttime": (identity["proc_starttime"] if identity is not None
+                                else observed["proc_starttime"]),
             "reaped": self.reaped,
             "returncode": self.returncode if self.reaped else None,
         }
@@ -323,11 +331,15 @@ class CommandChild:
             self.pid = os.posix_spawn(argv[0], argv, dict(os.environ) if env is None else env,
                                       file_actions=actions, setpgroup=0, setsigmask=child_mask,
                                       setsigdef=OWNER_SIGNALS + (signal.SIGPIPE, signal.SIGXFSZ))
+            self.observed_identity["pid"] = self.pid
             # Capture identity before releasing acquisition masking.  Every
             # later group signal is conditional on this exact child identity.
             pgid = os.getpgid(self.pid)
+            self.observed_identity["pgid"] = pgid
             sid = os.getsid(self.pid)
+            self.observed_identity["sid"] = sid
             starttime = _proc_starttime(self.pid)
+            self.observed_identity["proc_starttime"] = starttime
             need(type(pgid) is int and pgid == self.pid and type(sid) is int and sid > 0 and
                  type(starttime) is int and starttime > 0, "invalid spawned child identity")
             self.identity = {"pid": self.pid, "pgid": pgid, "sid": sid,

@@ -1034,6 +1034,47 @@ class OwnerTests(unittest.TestCase):
         self.assertTrue(record["reaped"])
         self.assertEqual(record["returncode"], -signal.SIGKILL)
 
+    def test_identity_acquisition_retains_each_outer_command_field_before_failure(self):
+        for failed_read, expected in (
+                ("pgid", {"pid": 54321, "pgid": None, "sid": None,
+                           "proc_starttime": None}),
+                ("sid", {"pid": 54321, "pgid": 54321, "sid": None,
+                          "proc_starttime": None}),
+                ("starttime", {"pid": 54321, "pgid": 54321, "sid": 54321,
+                                "proc_starttime": None}),
+                ("validation", {"pid": 54321, "pgid": 99999, "sid": 54321,
+                                 "proc_starttime": 9})):
+            with self.subTest(failed_read=failed_read):
+                child = owner.CommandChild()
+                pgid = mock.Mock(return_value=54321)
+                sid = mock.Mock(return_value=54321)
+                start = mock.Mock(return_value=9)
+                if failed_read == "pgid":
+                    pgid.side_effect = owner.OwnerError("pgid read")
+                elif failed_read == "sid":
+                    sid.side_effect = owner.OwnerError("sid read")
+                elif failed_read == "starttime":
+                    start.side_effect = owner.OwnerError("starttime read")
+                else:
+                    pgid.return_value = 99999
+                with mock.patch.object(owner.os, "posix_spawn", return_value=54321), \
+                     mock.patch.object(owner.os, "getpgid", pgid), \
+                     mock.patch.object(owner.os, "getsid", sid), \
+                     mock.patch.object(owner, "_proc_starttime", start):
+                    with self.assertRaises(owner.OwnerError):
+                        child.acquire(["/bin/true"], {}, tuple(owner.OWNER_SIGNALS))
+                record = child.record()
+                self.assertEqual({key: record[key] for key in expected}, expected)
+                self.assertIsNone(child.identity)
+                with mock.patch.object(owner.os, "killpg") as kill:
+                    with mock.patch.object(child, "wait", return_value=None):
+                        with self.assertRaises(owner.OwnerError):
+                            child.retire()
+                    kill.assert_not_called()
+                for stream in (child.stdout, child.stderr):
+                    if stream is not None:
+                        stream.close()
+
     def test_pre_spawn_failure_has_no_fabricated_identity(self):
         with self.assertRaises(owner.CommandError) as caught:
             owner.bounded_command(["/no/such/executable"], 1, ledger=owner.CommandLedger())

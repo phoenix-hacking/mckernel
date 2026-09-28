@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.execution-packet-review.v1",
+  "recorded_at": "2026-09-28T09:25:00-07:00",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-4.md",
+  "packet_sha256": "1c6701f6a76960d2725e2a9f45e7c2b3ebdfef5fb03361308a44605af4293ec6",
+  "decision": "FAIL_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+  "executed": false,
+  "commit": "778102e6f6ad594889e856969ac1d1f5e7d251de",
+  "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-4",
+  "nonce": "e8e0bd60422a94a18680321317786bee",
+  "reusable": false,
+  "blocker": "Individually observed identity fields were discarded if a later acquisition read failed, contradicting the packet requirement to retain every field actually captured.",
+  "findings": [
+    {
+      "source": "scripts/application-tests/native_diagnostic_backend.py",
+      "behavior": "_capture_process_identity observed PGID and SID only in locals until starttime succeeded; a starttime failure passed no partial identity to acquisition evidence.",
+      "reproduction": "Observed pid=pgid=sid=12345 followed by injected starttime failure produced pid 12345 with pgid/sid/starttime null and exact reaped=true/returncode=-9."
+    },
+    {
+      "source": "scripts/application-tests/native_diagnostic_container_owner.py",
+      "behavior": "CommandChild.acquire/record used the same all-or-nothing identity publication pattern."
+    }
+  ],
+  "required_correction": "Retain each primitive field immediately after its successful read, retain explicit null only for not-yet-observed fields, keep complete signaling authority all-or-nothing, preserve original failure and exact reap status, and test failure after every identity read.",
+  "otherwise_verified": [
+    "pushed and fetched commit and source blobs",
+    "strict bound_manifest closure and artifact identities",
+    "packet/generated QEMU argv equality and 91-byte oracle",
+    "packet-3 nonreuse history",
+    "fresh parent, attempt and evidence-path absence",
+    "100-byte QMP pathname",
+    "resource profile, deadlines and cleanup uncertainty rules",
+    "234-test retained evidence hashes"
+  ],
+  "capacity_at_review": {
+    "host_free_bytes": 36436701184,
+    "scratch_free_bytes": 21959364608
+  },
+  "acceptance": "No command released; no Docker, QEMU, guest, build, application or production acceptance."
+}
