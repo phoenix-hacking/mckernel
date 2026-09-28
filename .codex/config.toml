@@ -1,7 +1,9 @@
-# Project-local defaults for the milestone run. Primary model remains user-selected.
+# Dedicated-host scheduling override: supersedes older 3-child/workstation limits only.
+# Project ceiling 8; launcher profile/overrides take precedence with a measured effective cap.
+# Primary model remains user-selected; no recursive dispatch.
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 3
+max_concurrent_threads_per_session = 8
 max_depth = 1
 default_subagent_model = "gpt-5.6-luna"
 default_subagent_reasoning_effort = "low"

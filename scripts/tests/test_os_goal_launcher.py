@@ -42,6 +42,7 @@ class FakeRPC:
         self.closed = False
         self.turns = {}
         self.bad_config = False
+        self.bad_environment = False
 
     def factory(self, argv, log_dir, event):
         self.on_event = event
@@ -72,8 +73,11 @@ class FakeRPC:
             return {}
         if method == "config/read":
             return {"config": {"model": self.args.model, "model_reasoning_effort": self.args.effort,
+                "shell_environment_policy": {"set": {} if self.bad_environment else
+                    launcher.resource_environment(launcher.launch_resources(self.args, launcher.REPO))},
                 "approval_policy": "never", "features": {"goals": True}, "agents": {
-                    "enabled": True, "max_concurrent_threads_per_session": 4 if self.bad_config else 3,
+                    "enabled": True, "max_concurrent_threads_per_session":
+                        launcher.launch_resources(self.args, launcher.REPO)["max_agents"] + int(self.bad_config),
                     "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
                     "default_subagent_reasoning_effort": "low"}}}
         if method == "model/list":
@@ -123,7 +127,7 @@ class CampaignTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="os-goal-test-")
         self.directory = Path(self.temp.name)
-        self.args = launcher.arguments(["--hours", "0"])
+        self.args = launcher.arguments(["--hours", "0", "--agent-windows", "off"])
 
     def tearDown(self):
         self.temp.cleanup()
@@ -140,10 +144,15 @@ class CampaignTests(unittest.TestCase):
         self.all_calls.extend(rpc.calls)
         return json.loads((self.directory / "state.json").read_text())
 
-    def test_sol_and_bounded_luna_defaults(self):
+    def test_sol_and_aggressive_bounded_luna_defaults(self):
         self.assertEqual(self.args.model, "gpt-5.6-sol")
         self.assertIsNone(self.args.token_budget)
+        self.assertEqual(self.args.profile, "aggressive")
+        self.assertEqual(self.args.stall_seconds, 0)
         command = launcher.server_argv(self.args, self.directory)
+        resources = launcher.launch_resources(self.args, self.directory)
+        self.assertIn("agents.max_concurrent_threads_per_session=" + str(resources["max_agents"]), command)
+        self.assertIn('shell_environment_policy.set.CARGO_BUILD_JOBS="' + str(resources["build_jobs"]) + '"', command)
         self.assertIn("agents.max_depth=1", command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
         self.assertIn('approval_policy="never"', command)
@@ -326,6 +335,82 @@ class CampaignTests(unittest.TestCase):
         rpc.bad_config = True
         self.run_campaign(rpc, 1)
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
+    def test_misconfigured_build_environment_fails_before_thread_start(self):
+        rpc = FakeRPC(self.args)
+        rpc.bad_environment = True
+        state = self.run_campaign(rpc, 1)
+        self.assertIn("build environment", state["last_error"])
+        self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
+    def test_stop_reason_survives_late_transient_error(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.on_signal(2, None)
+            campaign.record_failure({"codexErrorInfo": "serverOverloaded"}, "server_error")
+            self.assertEqual(campaign.stop_reason, "signal_2")
+            self.assertFalse(campaign.stop_now)
+            self.assertFalse(watcher.should_restart(23, dict(campaign.state, stop_reason=campaign.stop_reason)))
+        finally:
+            campaign.output.close()
+
+    def test_signal_overrides_an_earlier_transient_error(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.record_failure({"codexErrorInfo": "serverOverloaded"}, "server_error")
+            campaign.on_signal(2, None)
+            self.assertEqual(campaign.stop_reason, "signal_2")
+            self.assertFalse(watcher.should_restart(23, dict(campaign.state, stop_reason=campaign.stop_reason)))
+        finally:
+            campaign.output.close()
+
+    def test_resource_rejection_replaces_previous_retryable_worker_snapshot(self):
+        self.saved(goal("paused"))
+        state_path = self.directory / "state.json"
+        saved = json.loads(state_path.read_text())
+        saved.update(worker_pid=-100, retryable=True, stop_reason="server_error",
+                     last_error={"codexErrorInfo": "serverOverloaded"})
+        launcher.atomic_json(state_path, saved)
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        with patch.object(launcher, "check_resources", side_effect=RuntimeError("Insufficient resources")), \
+                redirect_stdout(io.StringIO()):
+            self.assertEqual(campaign.run(), 1)
+        state = json.loads(state_path.read_text())
+        self.assertEqual(state["worker_pid"], os.getpid())
+        self.assertFalse(state["retryable"])
+        self.assertFalse(watcher.should_restart(1, state))
+
+    def test_shutdown_stops_touching_threads_after_objective_ownership_changes(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        rpc = FakeRPC(self.args, goal(objective="Changed outside the launcher"))
+        campaign.rpc, campaign.controlled = rpc, True
+        campaign.state["thread_id"] = "test-thread"
+        try:
+            campaign.stop()
+            self.assertFalse(campaign.controlled)
+            self.assertEqual([method for method, params in rpc.calls], ["thread/goal/get"])
+            self.assertIn("changed externally", campaign.state["stop_errors"][0])
+        finally:
+            campaign.output.close()
+
+    def test_resource_guard_fails_before_starting_server(self):
+        rpc = FakeRPC(self.args)
+        with patch.object(launcher, "check_resources", side_effect=RuntimeError("Insufficient disk")):
+            campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(campaign.run(), 1)
+        self.assertFalse(rpc.calls)
+        self.assertIn("Insufficient disk", json.loads((self.directory / "state.json").read_text())["last_error"])
+
+    def test_resume_receives_profile_and_convergence_without_replacing_goal(self):
+        self.saved(goal("paused"))
+        rpc = FakeRPC(self.args, goal("paused"), [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        params = next(p for m, p in rpc.calls if m == "thread/resume")
+        for name in ("CONVERGENCE.md", "HANDOFF.md", "disjoint", "failure family"):
+            self.assertIn(name, params["developerInstructions"])
+        self.assertEqual(state["settings"]["resources"]["profile"], "aggressive")
+        self.assertFalse(any("objective" in p or "tokenBudget" in p for m, p in rpc.calls))
 
     def test_window_pauses_and_requests_checkpoint(self):
         self.args.hours = 1 / 3600
@@ -691,11 +776,9 @@ while True:
             self.assertFalse(watcher.should_restart(code, {}))
         self.assertFalse(watcher.should_restart(-9, {}, stopped=True))
 
-    def test_blocked_paused_and_failed_turns_restart_but_user_stops_do_not(self):
-        for code, state in ((20, {"goal": {"status": "blocked"}}),
-                            (10, {"goal": {"status": "paused"}}),
-                            (23, {"stop_reason": "turn_failed"}),
-                            (23, {"stop_reason": "server_error"}),
+    def test_only_classified_transients_restart_and_user_stops_do_not(self):
+        for code, state in ((23, {"stop_reason": "turn_failed", "last_error": {"codexErrorInfo": "serverOverloaded"}}),
+                            (23, {"stop_reason": "server_error", "last_error": {"codexErrorInfo": "rateLimitExceeded"}}),
                             (23, {"stop_reason": "rate_limit"})):
             with self.subTest(code=code, state=state):
                 self.assertTrue(watcher.should_restart(code, state))
@@ -703,7 +786,9 @@ while True:
         for reason in ("work_window", "signal_2", "signal_15", "signal_1"):
             state = {"goal": {"status": "paused"}, "stop_reason": reason}
             self.assertFalse(watcher.should_restart(10, state))
-        self.assertTrue(watcher.should_restart(10, {"stop_reason": "signal_15"}, watchdog=True))
+        self.assertFalse(watcher.should_restart(10, {"stop_reason": "signal_15"}, watchdog=True))
+        self.assertFalse(watcher.should_restart(20, {"goal": {"status": "blocked"}}))
+        self.assertFalse(watcher.should_restart(10, {"goal": {"status": "paused"}}))
 
     def test_backoff_stays_bounded_after_months_of_retries(self):
         self.assertEqual([watcher.restart_delay(5, n) for n in range(1, 6)], [5, 10, 20, 40, 60])
@@ -718,11 +803,12 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','attempts':0,'windows':[]}
 state['attempts']+=1
 state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
-scenarios=[(23,'blocked','turn_failed'),(20,'blocked',None),(10,'paused',None),
+scenarios=[(23,'blocked','turn_failed'),(23,'active','server_error'),(23,'paused','rate_limit'),
            (1,'paused','launcher_error'),(24,'active','active_goal_did_not_continue'),
            (21,'blocked','quota_exhausted')]
 code,status,reason=scenarios[state['attempts']-1]
 state.update(worker_pid=os.getpid(),retryable=True,goal={'status':status},stop_reason=reason)
+state['last_error']={'codexErrorInfo':'serverOverloaded'}
 path.write_text(json.dumps(state))
 sys.exit(code)
 '''

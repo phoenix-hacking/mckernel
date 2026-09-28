@@ -28,24 +28,35 @@ def snapshot(path):
 
 
 def should_restart(code, state, watchdog=False, stopped=False):
-    if stopped or (state.get("goal") or {}).get("status") in {
+    status = (state.get("goal") or {}).get("status")
+    if stopped or status in {
             "complete", "usageLimited", "budgetLimited"}:
         return False
     reason = state.get("stop_reason") or ""
     if code in {21, 22} or reason in {"quota_exhausted", "quota_or_rate_limit",
                                      "needs_user_input", "goal_cleared"}:
         return False
-    if watchdog:
-        return True
+    # A watchdog observation cannot revoke a recorded stop. In particular,
+    # signal_* does not prove that this supervisor was the signal's sender.
     if reason == "work_window" or reason.startswith("signal_"):
         return False
-    if reason in {"server_error", "turn_failed", "rate_limit"}:
+    if code in {-signal.SIGINT, -signal.SIGTERM, -signal.SIGHUP} and not watchdog:
+        return False
+    if reason in {"server_error", "turn_failed"}:
+        error = state.get("last_error")
+        info = error.get("codexErrorInfo") if isinstance(error, dict) else None
+        return isinstance(info, str) and info in {"serverOverloaded", "rateLimitExceeded"}
+    if reason == "rate_limit":
         return True
-    if code in {10, 20} and (state.get("goal") or {}).get("status") in {"paused", "blocked"}:
+    # Transport recovery may pause the goal during shutdown. Recover only from
+    # its positive classification, never from paused/blocked status alone.
+    if code == 24 or code == 1 and state.get("retryable") is True:
         return True
-    if code == 0 and (state.get("goal") or {}).get("status") == "active":
+    if status in {"paused", "blocked"}:
+        return False
+    if watchdog:
         return True
-    return code < 0 or code == 24 or code == 1 and state.get("retryable") is True
+    return code < 0 or code == 0 and status == "active"
 
 
 def restart_delay(initial, restarts):
@@ -213,6 +224,10 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             state = snapshot(state_path)
             record("worker_exited", exit_code=final_code, thread_id=state.get("thread_id"),
                    goal_status=(state.get("goal") or {}).get("status"))
+            if state.get("worker_pid") != child.pid:
+                record("recovery_stopped_worker_snapshot_mismatch", observed_worker_pid=state.get("worker_pid"))
+                final_code = 1
+                break
             if not retire_server(state, child.pid):
                 record("recovery_stopped_server_identity_unresolved")
                 final_code = 1

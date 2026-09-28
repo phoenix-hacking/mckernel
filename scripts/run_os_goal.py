@@ -8,6 +8,7 @@ paid/account-metered work. Runtime state stays in the repository's Git directory
 import argparse
 import codecs
 import fcntl
+import hashlib
 import json
 import math
 import os
@@ -24,6 +25,9 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from os_goal_output import LiveOutput
+from os_goal_resources import (check_resources, resolve_resources,
+                               resource_environment, resource_instructions)
+from os_goal_windows import window_capability
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -217,21 +221,40 @@ class RPC:
         self.stderr.close()
 
 
+def launch_resources(args, repo):
+    """Resolve once per worker so configuration, prompts and evidence agree."""
+    if not hasattr(args, "resources"):
+        args.resources = resolve_resources(args.profile, args.max_agents,
+                                           args.build_jobs, args.memory_gib, repo)
+    return args.resources
+
+
+def policy_hashes(repo):
+    return {name: hashlib.sha256((repo / PLAN_REL / name).read_bytes()).hexdigest()
+            for name in ("GOAL.md", "START.md", "CONVERGENCE.md", "HANDOFF.md")
+            if (repo / PLAN_REL / name).is_file()}
+
+
+def agent_settings(args, repo):
+    return {"enabled": True,
+            "max_concurrent_threads_per_session": launch_resources(args, repo)["max_agents"],
+            "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
+            "default_subagent_reasoning_effort": "low"}
+
+
 def server_argv(args, repo):
     settings = {
         "model": args.model,
         "model_reasoning_effort": args.effort,
         "features.goals": True,
-        "agents.enabled": True,
-        "agents.max_concurrent_threads_per_session": 3,
-        "agents.max_depth": 1,
-        "agents.default_subagent_model": "gpt-5.6-luna",
-        "agents.default_subagent_reasoning_effort": "low",
         "approval_policy": "never",
         # The user explicitly authorized full access for the standalone launcher.
         # This is local to this process; global config/project trust are unchanged.
         "sandbox_mode": "danger-full-access",
     }
+    settings.update(("agents." + key, value) for key, value in agent_settings(args, repo).items())
+    settings.update(("shell_environment_policy.set." + key, value)
+                    for key, value in resource_environment(launch_resources(args, repo)).items())
     argv = [args.codex, "--strict-config", "-C", str(repo)]
     for key, value in settings.items():
         argv.extend(["-c", key + "=" + json.dumps(value)])
@@ -244,14 +267,16 @@ def preflight(rpc, args, repo):
     rpc.send({"method": "initialized", "params": {}})
     config = rpc.call("config/read", {"cwd": str(repo), "includeLayers": False})["config"]
     agents = config.get("agents") or {}
-    expected = {"enabled": True, "max_concurrent_threads_per_session": 3,
-                "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
-                "default_subagent_reasoning_effort": "low"}
+    expected = agent_settings(args, repo)
     if (config.get("model") != args.model or config.get("model_reasoning_effort") != args.effort
             or not (config.get("features") or {}).get("goals")
             or config.get("approval_policy") != "never"
             or any(agents.get(key) != value for key, value in expected.items())):
         raise RuntimeError("Effective Codex settings differ from the requested dispatch limits.")
+    build_env = (config.get("shell_environment_policy") or {}).get("set") or {}
+    if any(build_env.get(key) != value
+           for key, value in resource_environment(launch_resources(args, repo)).items()):
+        raise RuntimeError("Effective build environment differs from the requested resource profile.")
     models, cursor = {}, None
     while True:
         page = rpc.call("model/list", {"includeHidden": True, "limit": 100, "cursor": cursor})
@@ -265,6 +290,8 @@ def preflight(rpc, args, repo):
             raise RuntimeError("Required model/effort not advertised: " + model + "/" + effort)
     # Deliberately do not serialize the full personal config or authentication data.
     return {"model": args.model, "effort": args.effort, "agents": expected,
+            "resources": launch_resources(args, repo), "policy_sha256": policy_hashes(repo),
+            "agent_windows": window_capability(args.agent_windows),
             "goals": True, "approval_policy": "never", "sandbox_mode": "danger-full-access",
             "scope": "Configuration and advertised models only; quota and inference untested."}
 
@@ -288,7 +315,7 @@ class Campaign:
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
-        self.output = LiveOutput(self.log_dir, quiet=args.quiet)
+        self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
         self.output.primary = self.state.get("thread_id")
 
     def save(self, **fields):
@@ -299,10 +326,10 @@ class Campaign:
         atomic_json(self.state_path, self.state)
 
     def on_signal(self, signum, frame):
-        if self.stop_reason:
+        if (self.stop_reason or "").startswith("signal_"):
             self.stop_now = True
-        else:
-            self.stop_reason = "signal_" + str(signum)
+        # Signals retain stop authority even if a retryable error arrived first.
+        self.stop_reason = "signal_" + str(signum)
 
     def remember_goal(self, goal):
         self.goal = goal
@@ -310,6 +337,10 @@ class Campaign:
 
     def record_failure(self, error, reason, will_retry=False):
         self.save(last_error=error)
+        if (self.stop_reason or "").startswith("signal_") or self.stop_reason in {
+                "work_window", "needs_user_input", "goal_cleared"}:
+            # A late server error must not turn a requested stop into recovery.
+            return
         info = (error or {}).get("codexErrorInfo")
         if isinstance(info, str) and info in LIMIT_ERRORS:
             self.stop_reason, self.stop_now = "quota_exhausted", True
@@ -391,9 +422,22 @@ class Campaign:
             "credential file, invoke the askpass helper directly, or put its output "
             "in a tool response, shell command, environment value, Git file or log. "
             "If authentication fails, retain the error and continue unrelated work. "
-            "Follow " + PLAN_REL + "/START.md and GOAL.md. The user explicitly authorizes "
+            "First read " + PLAN_REL + "/GOAL.md, START.md, CONVERGENCE.md and HANDOFF.md. "
+            "Read README.md once for the original acceptance requirements. Read only "
+            "the latest relevant CURRENT.md entries and selected evidence, not its entire history. "
+            "This startup order supersedes the historical reading order in the immutable "
+            "stored objective. Reconcile the compact handoff against live sources and leases. "
+            "Adopt and record these policy SHA256 values: " + json.dumps(policy_hashes(self.repo), sort_keys=True) + ". "
+            "The user explicitly authorizes "
             "automatic cheap subagents; use fresh bounded packets and explicit models. "
-            "Maximum three children, no recursive dispatch, one heavy build/guest owner. "
+            + resource_instructions(launch_resources(self.args, self.repo)) + " " +
+            "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
+            "bounded correction per failure family before expert escalation. Carry family "
+            "history across resumed turns; never repeat an unchanged deterministic failure. "
+            "Prioritize executable M02 collector descriptor/identity repairs and independent "
+            "M03 pending-free admission after confirming the current handoff. Keep worker "
+            "write sets disjoint, integrate promptly, close completed children and refill "
+            "available slots with dependency-ready work. Preserve independent final review. "
             "Preserve preexisting untracked work. Read all applicable active instructions. "
             "Write implementation evidence and the live task cursor per the plan. This "
             "launcher's logs are at " + str(self.log_dir) + "; state.json is launcher-owned. "
@@ -410,7 +454,7 @@ class Campaign:
             "join/close workers, record any live process identities, checkpoint and return. "
             "If credentials or external resources are unavailable, preserve the blocker "
             "and continue independent ready work. Never store credentials in the plan or logs."
-            + (" This is automatic crash recovery. Read CURRENT.md and the previous "
+            + (" This is automatic crash recovery. Read HANDOFF.md, relevant CURRENT.md entries and the previous "
                "run/watcher records first. Reconcile source changes and exact live "
                "process/runtime leases before any new build or guest. Resume the "
                "existing thread and acceptance ledger; do not replay completed work."
@@ -418,6 +462,9 @@ class Campaign:
         )
 
     def begin(self):
+        # Admission failures belong to this worker, never the preceding retry.
+        self.save(worker_pid=os.getpid(), server_pid=None, server_start=None, retryable=False)
+        check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
         proc = getattr(self.rpc, "proc", None)
         birth = None
@@ -492,7 +539,8 @@ class Campaign:
             goal = self.rpc.call("thread/goal/set", update)["goal"]
         self.remember_goal(goal)
         self.save(phase="running")
-        self.output.notice("Thread " + ident + "; " + self.args.model + "/" + self.args.effort + "; Luna workers.")
+        self.output.notice("Thread " + ident + "; " + self.args.model + "/" + self.args.effort
+                           + "; resources=" + json.dumps(launch_resources(self.args, self.repo), sort_keys=True))
 
     def pause(self):
         ident = self.state.get("thread_id")
@@ -533,6 +581,9 @@ class Campaign:
             self.pause()
         except Exception as error:
             errors.append(str(error))
+        if not self.controlled:
+            self.save(stop_errors=errors, cleanup_verified=False)
+            return
         # Include loaded descendants even if this client did not receive their events.
         try:
             for ident in self.rpc.call("thread/loaded/list", {})["data"]:
@@ -628,17 +679,28 @@ def arguments(argv=None):
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
     parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh", "max", "ultra"])
+    parser.add_argument("--profile", choices=["aggressive", "balanced"], default="aggressive",
+                        help="Dedicated-machine parallelism (default) or historical balanced limits")
+    parser.add_argument("--max-agents", type=int, help="Child-agent ceiling; default up to 8 aggressive / 3 balanced")
+    parser.add_argument("--build-jobs", type=int, help="Aggregate build jobs; default all affinity CPUs in aggressive mode")
+    parser.add_argument("--memory-gib", type=float, help="Aggregate build memory budget; default up to 24 GiB aggressive / 12 balanced")
+    parser.add_argument("--agent-windows", choices=["auto", "on", "off"], default="auto",
+                        help="Separate live desktop window per child (default: auto when a desktop is available); logs always retained")
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
     parser.add_argument("--max-restarts", type=int, default=-1, help="Automatic recoveries; -1 means unlimited, 0 disables (default: -1)")
     parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
     parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
     parser.add_argument("--heartbeat-seconds", type=float, default=15, help="Print liveness and agent activity every N seconds (default: 15)")
-    parser.add_argument("--stall-seconds", type=float, default=900, help="Recover a running campaign with no agent events for N seconds; 0 disables (default: 900)")
+    parser.add_argument("--stall-seconds", type=float, default=0, help="Opt-in agent-silence watchdog; 0 (default) preserves healthy silent builds/soaks")
     parser.add_argument("--quiet", action="store_true", help="Hide live agent output; keep heartbeats and console.log")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if any(value is not None and value <= 0 for value in (args.max_agents, args.build_jobs)):
+        parser.error("max-agents and build-jobs must be positive")
+    if args.memory_gib is not None and (not math.isfinite(args.memory_gib) or args.memory_gib <= 0):
+        parser.error("memory-gib must be finite and positive")
     if not math.isfinite(args.hours) or args.hours < 0 or not math.isfinite(args.grace_seconds) or args.grace_seconds < 0:
         parser.error("hours and grace-seconds must be finite and non-negative")
     if args.token_budget is not None and args.token_budget <= 0:
@@ -686,6 +748,8 @@ def main(argv=None):
                           "watchdog_seconds": args.watchdog_seconds,
                           "heartbeat_seconds": args.heartbeat_seconds, "live_output": not args.quiet,
                           "stall_seconds": args.stall_seconds,
+                          "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),
+                          "agent_windows": window_capability(args.agent_windows),
                           "permissions": "User-authorized danger-full-access, approval_policy=never; no clarification prompts. Global config unchanged."}, indent=2))
         return 0
     if args.check_sudo:
@@ -708,6 +772,7 @@ def main(argv=None):
                 rpc.close()
         return 0
     if not args.worker:
+        check_resources(launch_resources(args, REPO))
         from watch_os_goal import supervise
         return supervise(args, REPO, directory, list(sys.argv[1:] if argv is None else argv), Lease, atomic_json)
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
