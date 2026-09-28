@@ -136,6 +136,7 @@
     ,"native_diag_files_success": "docs/verification/stability-native-diagnostic-files-success-20260928-1.json"
     ,"native_diag_threads_artifact": "docs/verification/stability-native-diagnostic-threads-artifact-success-20260928-1.json"
     ,"native_diag_threads_release": "docs/verification/stability-native-diagnostic-threads-execution-release-20260928-1.json"
+    ,"native_diag_threads_success": "docs/verification/stability-native-diagnostic-threads-success-20260928-1.json"
   },
   "areas": [
     {
@@ -535,8 +536,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple now independently passes both baseline.core.memory and baseline.core.files diagnostics. Files proves exact 23-byte output/exit 37, observed file syscalls and unlink/ENOENT, retirement, four-reference pager release, 696/696 QMP replies, exact QEMU/Docker identities, authenticated removal and free lock. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "After fetched-blob verification and fresh live preflight, consume the exact released threads command once; independently join its output, TID/futex, retirement, QMP and teardown evidence, then define a genuinely distinct shutdown invariant.",
+      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple now independently passes baseline.core.memory, baseline.core.files and baseline.core.threads diagnostics. Threads proves exact output/exit 37, two workers, barrier, mutex counter 2000, TLS isolation, joins, three published/deleted TIDs and 512 transferred TID bytes, retirement, pager/process release, 696/696 QMP replies and exact QEMU/Docker cleanup. Clone3/futex entries were not separately traced. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
+      "next_check": "Checkpoint threads evidence, then prepare a fresh native stop/release observer and reviewed Rocky boot-workload-stop packet; do not relabel application exit_group, guest poweroff or controlled QEMU cleanup as independent OS shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -568,7 +569,8 @@
         "native_diag_files_release",
         "native_diag_files_success",
         "native_diag_threads_artifact",
-        "native_diag_threads_release"
+        "native_diag_threads_release",
+        "native_diag_threads_success"
       ],
       "depends_on": []
     },
@@ -1772,7 +1774,7 @@
       "title": "Lifecycle state and ownership order",
       "status": "unmeasured",
       "result": "Native shutdown/restoration remains open in the retained baseline.",
-      "next_check": "Specify existing real owner transitions for close admission, drain, stop CPUs, callbacks, mappings, release and unload; enumerate every timeout/failure owner.",
+      "next_check": "Bind a fresh Rocky boot-workload-stop packet to scripts/mcstop+release-smp.sh.in, add exact before/after resource snapshots, and observe stop/destroy/release/unload; separately inventory CPU/callback/mapping owners the legacy cleanup probe cannot prove.",
       "evidence": [
         "app",
         "plan"

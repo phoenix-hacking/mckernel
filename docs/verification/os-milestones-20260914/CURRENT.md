@@ -4652,3 +4652,54 @@ uid/gid 1000 mode 0700 and invoke the released command exactly once without
 retry. Preserve every partial outcome and obtain independent raw runtime review.
 This invocation still has two real diagnostic guest applications and zero
 current-candidate builds; formal counters and whole-OS status remain unchanged.
+
+Continuation checkpoint 47, 2026-09-28: the released threads command was
+consumed exactly once and independent review returns
+`PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE`. The real McKernel application produced
+exact 25-byte stdout `NATIVE_CORE PASS threads\n`, empty stderr, raw wait
+9472/exit 37, complete untruncated EOFs and empty procfs. The bound pthread
+fixture completed two workers, barrier synchronization, mutex-protected counter
+2000, TLS isolation and joins. McKernel published TIDs 256/258/257, transferred
+512 TID bytes and later deleted all three procfs entries.
+
+Twenty-eight sampled syscall deliveries join with 27 returns and 13 correct CPU
+routes; the sole unreturned delivery is `exit_group`. The capture does not
+separately trace clone3 or futex syscall entries/counts, so no such narrower
+trace claim is made. Cleanup ACK is zero, retirement retries from -11 to zero,
+pager handle 20 releases four references to zero and process release reports
+`cleanup_errno=0`.
+
+All 696 QMP requests receive unique successful replies with no error across
+1,396 records. Event order is RESUME, guest SHUTDOWN, STOP and host-QMP-quit
+SHUTDOWN. QEMU PID/PGID/SID 10, starttime 83068581, is reaped with -9 under the
+reviewed controlled cleanup path; this is not natural-exit or independent OS
+shutdown acceptance. All 30 Docker clients have exact identities/reaps;
+container `5d16ec94...21f7` exits zero without OOM, authenticated removal and
+three empty lookups pass, the current lookup is empty and the original
+development lock is free. All copied captures join their originals.
+
+The retained inner result is `671c837d...65230`, outer result
+`a9cbc7a4...62e82`, serial `5d4f1a57...d0438`, QMP transcript
+`4ec0fe34...9ef7` and capture bindings `8b0229e9...2342`. The additive success
+record is
+`docs/verification/stability-native-diagnostic-threads-success-20260928-1.json`.
+Conservative `mckernel_application_executed=false` and
+`application_acceptance=false` fields remain unchanged; the independent review
+establishes only observed diagnostic behavior.
+
+A bounded shutdown-path audit finds the smallest existing real native observer
+in `scripts/rocky-rust-validation.sh`: boot through `mcreboot.sh`, run a workload,
+then `mcstop+release.sh` and `verify_boot_cleanup`. Its stop body is
+`scripts/mcstop+release-smp.sh.in`, which destroys the OS, releases CPU/memory,
+unloads modules and stops `ihkmond`. It lacks a current reviewed packet and exact
+before/after CPU-mask, IRQ, ID, mapping and policy snapshots, so it does not yet
+prove complete drain/restoration/recreate. Model-only lifecycle tests, application
+exit, Linux-guest poweroff and QEMU kill remain explicitly insufficient.
+
+Next: checkpoint/push/fetched-blob verify this threads result. Then bind a fresh
+native stop/release observer and reviewed Rocky boot-workload-stop packet with
+before/after resource snapshots and a recreate workload. Keep the remaining
+CPU/callback/mapping ownership gaps explicit. This invocation now has three real
+diagnostic guest applications and zero current-candidate builds. Formal counters
+remain 0/273 applications, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates; whole-OS acceptance remains incomplete.
