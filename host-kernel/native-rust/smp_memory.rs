@@ -15,7 +15,7 @@ use core::{
     mem::{offset_of, size_of, ManuallyDrop},
     ptr,
     ptr::NonNull,
-    sync::atomic::{AtomicPtr, Ordering},
+    sync::atomic::{AtomicPtr, AtomicU32, Ordering},
 };
 use kernel::{
     bindings,
@@ -44,6 +44,122 @@ const _: () = assert!(bindings::MAX_PAGE_ORDER >= MAX_ORDER);
 const _: () = assert!(core::mem::size_of::<bindings::page>() == 64);
 const _: () = assert!(bindings::NODES_WIDTH == 10 && bindings::SECTIONS_WIDTH == 0);
 const _: () = assert!(bindings::NODES_MASK == 1023);
+
+/// Wire-compatible view of the additive guest IRQ-work descriptor.  This is
+/// intentionally separate from the frozen boot header; the host acquires it
+/// only after checking the exact retained physical extent and generation.
+#[repr(C)]
+pub(crate) struct NativeIrqWorkDescriptorView {
+    pub magic: u32,
+    pub version: u16,
+    pub bytes: u16,
+    pub generation: u64,
+    pub slots_phys: u64,
+    pub slots_count: u32,
+    pub slots_stride: u32,
+    pub state: AtomicU32,
+    pub senders: AtomicU32,
+    pub reserved: [u32; 6],
+}
+
+const _: () = {
+    assert!(core::mem::size_of::<NativeIrqWorkDescriptorView>() == 64);
+    assert!(core::mem::align_of::<NativeIrqWorkDescriptorView>() == 8);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, generation) == 8);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, slots_phys) == 16);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, magic) == 0);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, version) == 4);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, bytes) == 6);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, slots_count) == 24);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, slots_stride) == 28);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, state) == 32);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, senders) == 36);
+    assert!(core::mem::offset_of!(NativeIrqWorkDescriptorView, reserved) == 40);
+};
+
+const NATIVE_IRQ_WORK_MAGIC: u32 = 0x4d43_4957;
+const NATIVE_IRQ_WORK_VERSION: u16 = 1;
+const NATIVE_IRQ_WORK_RELEASE_READY: u32 = 1;
+const NATIVE_IRQ_WORK_SLOT_BYTES: u32 = 64;
+
+impl NativeIrqWorkDescriptorView {
+    fn encode_unpublished(generation: u64, physical: u64, count: u32) -> [u8; 64] {
+        let mut bytes = [0; 64];
+        bytes[0..4].copy_from_slice(&NATIVE_IRQ_WORK_MAGIC.to_le_bytes());
+        bytes[4..6].copy_from_slice(&NATIVE_IRQ_WORK_VERSION.to_le_bytes());
+        bytes[6..8].copy_from_slice(&64_u16.to_le_bytes());
+        bytes[8..16].copy_from_slice(&generation.to_le_bytes());
+        bytes[16..24].copy_from_slice(&physical.to_le_bytes());
+        bytes[24..28].copy_from_slice(&count.to_le_bytes());
+        bytes[28..32].copy_from_slice(&NATIVE_IRQ_WORK_SLOT_BYTES.to_le_bytes());
+        bytes
+    }
+
+    fn end(&self) -> Option<u64> {
+        (self.slots_count as u64)
+            .checked_mul(self.slots_stride as u64)?
+            .checked_add(self.slots_phys)
+    }
+}
+
+fn native_irq_work_state_acquire(descriptor: &NativeIrqWorkDescriptorView) -> u32 {
+    // The wire field is a naturally aligned u32 and is written with the
+    // guest's release store. Read it through the matching atomic type so the
+    // host never validates partially initialized slots.
+    descriptor.state.load(Ordering::Acquire)
+}
+
+/// Validate descriptor geometry against the retained allocation and all other
+/// retained ranges. `retained` must contain the exact page owner range; no
+/// partial/adjacent owner is accepted. `occupied` prevents overlap with any
+/// transport allocation. This helper does not map or free anything.
+fn validate_native_irq_work_descriptor(
+    descriptor: &NativeIrqWorkDescriptorView,
+    generation: u64,
+    retained: &PageOwner,
+    expected_source_cpus: u32,
+    occupied: &[(u64, u64)],
+) -> bool {
+    if native_irq_work_state_acquire(descriptor) != NATIVE_IRQ_WORK_RELEASE_READY
+        || descriptor.magic != NATIVE_IRQ_WORK_MAGIC
+        || descriptor.version != NATIVE_IRQ_WORK_VERSION
+        || descriptor.bytes as usize != core::mem::size_of::<NativeIrqWorkDescriptorView>()
+        || descriptor.generation != generation
+        || generation == 0
+        || descriptor.slots_count != expected_source_cpus
+        || expected_source_cpus == 0 || expected_source_cpus > 512
+        || descriptor.slots_stride != NATIVE_IRQ_WORK_SLOT_BYTES
+        || descriptor.slots_phys % NATIVE_IRQ_WORK_SLOT_BYTES as u64 != 0
+        || descriptor.reserved != [0; 6]
+    {
+        return false;
+    }
+    let Some(end) = descriptor.end() else { return false };
+    if end <= descriptor.slots_phys {
+        return false;
+    }
+    // `slots_count * stride` is logical payload; the PageOwner may retain a
+    // larger power-of-two page allocation. Only that owner may cover it.
+    let exact_owner = descriptor.slots_phys == retained.physical && end <= retained.end();
+    exact_owner
+        && occupied
+            .iter()
+            .all(|&(start, occupied_end)| start < occupied_end
+                && (retained.end() <= start || occupied_end <= retained.physical))
+}
+
+// This closes the actual shared gate, not a host-side copy. A false result
+// retains every owner. It is not callback drain or CPU reclamation authority.
+#[allow(dead_code)]
+fn close_native_irq_work_senders(descriptor: &NativeIrqWorkDescriptorView,
+    mut wait: impl FnMut() -> bool) -> bool {
+    const CLOSED: u32 = 1 << 31;
+    descriptor.senders.fetch_or(CLOSED, Ordering::AcqRel);
+    loop {
+        if descriptor.senders.load(Ordering::Acquire) == CLOSED { return true; }
+        if !wait() { return false; }
+    }
+}
 
 // Linux 6.12 does not expose EOVERFLOW in kernel::error::code. Keep its
 // ordinary errno through the public conversion API without a new C wrapper.
@@ -871,6 +987,8 @@ struct PreparedBoot {
     // started owner remains retained with the rest of PreparedBoot.
     sysfs: Option<super::sysfs_setup::Service>,
     params: BootPages,
+    irq_slots: BootPages,
+    irq_generation: u64,
     _dump: BootPages,
     trampoline: super::smp_trampoline::LowRegion,
     irq: BootIrqRoute,
@@ -883,6 +1001,61 @@ struct PreparedBoot {
     continuing: Option<service::Started>,
     vdso_replied: bool,
     vdso_request: u64,
+}
+
+impl PreparedBoot {
+    fn validate_irq_slots(&self, memory: &MemoryMap) -> Result {
+        let offset = self.params.bytes.checked_sub(64).ok_or(EIO)?;
+        if offset % 8 != 0 { return Err(EIO); }
+        // The retained parameter allocation contains immutable host fields and
+        // two atomic peer-shared words. Acquire reads the actual shared READY.
+        let descriptor = unsafe { &*((self.params.address + offset as u64)
+            as *const NativeIrqWorkDescriptorView) };
+        let occupied = [
+            (self.params.physical(), self.params.pages.end()),
+            (self._dump.physical(), self._dump.pages.end()),
+            (self.trampoline.physical(), self.trampoline.physical() + 4096),
+            {
+                let start = self.params.read64(offset_of!(abi::IhkSmpBootParam, message_buffer))?;
+                let bytes = self.params.read64(offset_of!(abi::IhkSmpBootParam, message_buffer_size))?;
+                (start, start.checked_add(bytes).ok_or(EIO)?)
+            },
+        ];
+        if !validate_native_irq_work_descriptor(descriptor, self.irq_generation,
+            &self.irq_slots.pages, self.cpus.len() as u32, &occupied) {
+            return Err(EIO);
+        }
+        for index in 0..memory.len() {
+            let range = memory.extent(index).ok_or(EIO)?;
+            let end = range.end().map_err(|_| EIO)?;
+            if range.start() < self.irq_slots.pages.end() && self.irq_slots.physical() < end {
+                return Err(EIO);
+            }
+        }
+        for channel in &self.channels {
+            if channel.pages.physical() < self.irq_slots.pages.end()
+                && self.irq_slots.physical() < channel.pages.pages.end() {
+                return Err(EIO);
+            }
+        }
+        Ok(())
+    }
+
+    // Only future reviewed STOP orchestration may call this, then synchronize
+    // callbacks. Timeout permanently retains the closed gate and all owners.
+    #[allow(dead_code)]
+    fn close_irq_senders(&self, memory: &MemoryMap) -> Result {
+        self.validate_irq_slots(memory)?;
+        let descriptor = unsafe { &*((self.params.address + self.params.bytes as u64 - 64)
+            as *const NativeIrqWorkDescriptorView) };
+        let mut remaining = 1000;
+        if close_native_irq_work_senders(descriptor, || {
+            if remaining == 0 { return false; }
+            remaining -= 1;
+            unsafe { bindings::msleep(1) };
+            true
+        }) { Ok(()) } else { Err(EBUSY) }
+    }
 }
 
 /// Turning started on is irreversible without an implemented stop/drain proof.
@@ -1562,7 +1735,8 @@ impl MemoryContext {
         let boot_abi = loaded.native_boot_abi.ok_or(EINVAL)?;
         // Older native images remain loadable but lack the queue completion or
         // generic vDSO contract. Reject before taking any startup resources.
-        if !boot_abi.completed_queue_reads || !boot_abi.generic_vdso {
+        if !boot_abi.completed_queue_reads || !boot_abi.generic_vdso
+            || !boot_abi.irq_work_descriptor {
             return Err(EINVAL);
         }
         let (layout, entry, root) = (loaded.layout, loaded.entry, loaded.tables.plan.root());
@@ -1640,6 +1814,8 @@ impl MemoryContext {
         let param_bytes = distance_offset
             .checked_add(nodes.len() * nodes.len() * 4)
             .ok_or_else(overflow)?
+            .checked_add(core::mem::size_of::<NativeIrqWorkDescriptorView>())
+            .ok_or_else(overflow)?
             .checked_add(4095)
             .ok_or_else(overflow)?
             & !4095;
@@ -1648,6 +1824,11 @@ impl MemoryContext {
         let direct_map = unsafe { bindings::page_offset_base };
         let mut params = BootPages::allocate(param_bytes, direct_map)?;
         let mut dump = BootPages::allocate(dump_bytes, direct_map)?;
+        let logical_irq_slot_bytes = cpus
+            .len()
+            .checked_mul(NATIVE_IRQ_WORK_SLOT_BYTES as usize)
+            .ok_or_else(overflow)?;
+        let irq_slots = BootPages::allocate(logical_irq_slot_bytes, direct_map)?;
         let irq = BootIrqRoute::new(owner, topology)?;
         macro_rules! put64 {
             ($field:ident, $value:expr) => {
@@ -1808,6 +1989,14 @@ impl MemoryContext {
             }
             dump_offset += 16 + words as usize * 8;
         }
+        // The descriptor occupies the final 64 bytes of the retained
+        // parameter allocation. Its logical slot payload may be smaller than
+        // the full power-of-two PageOwner allocation retained in BootStorage.
+        let descriptor_offset = param_bytes
+            .checked_sub(core::mem::size_of::<NativeIrqWorkDescriptorView>())
+            .ok_or_else(overflow)?;
+        params.put(descriptor_offset, &NativeIrqWorkDescriptorView::encode_unpublished(
+            owner.generation(), irq_slots.physical(), cpus.len() as u32))?;
         self.write_image_range(direct_map, layout.startup(), 4096, None)?;
         let code = super::smp_boot_code::startup();
         self.write_image_range(direct_map, layout.startup(), code.len(), Some(code))?;
@@ -1872,6 +2061,8 @@ impl MemoryContext {
             prepared: ManuallyDrop::new(PreparedBoot {
                 sysfs: Some(sysfs),
                 params,
+                irq_slots,
+                irq_generation: owner.generation(),
                 _dump: dump,
                 trampoline,
                 irq,
@@ -2080,6 +2271,7 @@ impl MemoryContext {
                         if entry.channel.port == 503
                             && super::sysfs_request::Kind::from_message(message).is_some()
                         {
+                            prepared.validate_irq_slots(memory_map)?;
                             let started = service::prepare(
                                 memory_map,
                                 owner,

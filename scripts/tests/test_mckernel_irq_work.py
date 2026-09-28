@@ -17,7 +17,7 @@ class McKernelIrqWorkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="mckernel-irq-work-") as temporary:
             for native in (False, True):
                 binary = Path(temporary) / ("native" if native else "legacy")
-                command = [rustc, "--edition=2021", "-Dwarnings", "-Aunused-imports",
+                command = [rustc, "--edition=2021", "-Dwarnings",
                            str(ROOT / "scripts/tests/fixtures/mckernel_irq_work_compile.rs"),
                            "-o", str(binary)]
                 if native:
@@ -29,6 +29,7 @@ class McKernelIrqWorkTests(unittest.TestCase):
                                         universal_newlines=True, timeout=30)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 self.assertIn("callbacks=1027", result.stdout)
+                print(result.stdout, end="")
                 if not native:
                     legacy_output = result.stdout
                 if native:
@@ -36,6 +37,7 @@ class McKernelIrqWorkTests(unittest.TestCase):
                                             stderr=subprocess.PIPE, universal_newlines=True, timeout=30)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertIn("one-allocation callbacks=8192", result.stdout)
+                    print(result.stdout, end="")
             cc = shutil.which("cc")
             self.assertIsNotNone(cc, "C reference compiler is required")
             reference = (ROOT / "ihk/cokernel/smp/ikc.c").read_text()
@@ -78,7 +80,7 @@ extern int ihk_mc_ikc_arch_issue_host_ipi(int, int);
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             binary = Path(temporary) / "c-reference"
-            result = subprocess.run([rustc, "--edition=2021", "-Dwarnings", "-Aunused-imports",
+            result = subprocess.run([rustc, "--edition=2021", "-Dwarnings",
                             "--cfg", "legacy_c_reference", "-C", "link-arg=" + str(c_object),
                             str(ROOT / "scripts/tests/fixtures/mckernel_irq_work_compile.rs"), "-o", str(binary)],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, timeout=120)
@@ -87,6 +89,7 @@ extern int ihk_mc_ikc_arch_issue_host_ipi(int, int);
                                     universal_newlines=True, timeout=30)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual(result.stdout, legacy_output)
+            print(result.stdout, end="")
 
 
 if __name__ == "__main__":

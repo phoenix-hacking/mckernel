@@ -113,6 +113,7 @@ mod image_tests {
                     performance: flag == 1,
                     completed_queue_reads: false,
                     generic_vdso: false,
+                    irq_work_descriptor: false,
                 })
             );
             assert_eq!(plan.load_segments(), 2);
@@ -121,7 +122,7 @@ mod image_tests {
 
     #[test]
     fn native_revisions_advertise_independent_queue_and_vdso_contracts() {
-        for revision in [2, 3] {
+        for revision in [2, 3, 4] {
             for (header_bytes, flag) in [(6656, 0), (7616, 1)] {
                 let mut image = with_native_note(header_bytes, flag);
                 put32(&mut image, 0x318, revision);
@@ -132,7 +133,8 @@ mod image_tests {
                         header_bytes: header_bytes as usize,
                         performance: flag == 1,
                         completed_queue_reads: true,
-                        generic_vdso: revision == 3,
+                        generic_vdso: revision >= 3,
+                        irq_work_descriptor: revision == 4,
                     })
                 );
                 assert_eq!(plan.load_segments(), 2);
@@ -144,7 +146,7 @@ mod image_tests {
     fn wrong_native_abi_version_layout_flags_and_duplicates_are_rejected() {
         for (at, value) in [
             (0x318, 0),
-            (0x318, 4),
+            (0x318, 5), // Revision 4 now explicitly defines the IRQ descriptor.
             (0x31c, 0x0005_0000),
             (0x320, 6656),
             (0x320, 7615),

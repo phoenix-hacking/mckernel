@@ -39,7 +39,11 @@ unsafe extern "C" fn ihk_mc_get_processor_id() -> i32 {
 
 use core::ffi::c_void;
 use core::ptr::null_mut;
-use core::sync::atomic::{AtomicBool, AtomicPtr, AtomicU32, AtomicU64, AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering};
+#[cfg(native_linux_irq_work_v6_12)]
+use core::sync::atomic::AtomicU32;
+#[cfg(not(native_linux_irq_work_v6_12))]
+use core::sync::atomic::AtomicU64;
 use std::cell::Cell;
 
 thread_local! {
@@ -50,9 +54,9 @@ thread_local! {
 #[repr(C, align(64))]
 struct Storage([u8; 512 * 64]);
 #[repr(C, align(8))]
-struct BootPrefix([u8; 4304]);
+struct BootPrefix([u8; 8192]);
 static mut STORAGE: Storage = Storage([0xa5; 512 * 64]);
-static mut PREFIX: BootPrefix = BootPrefix([0; 4304]);
+static mut PREFIX: BootPrefix = BootPrefix([0; 8192]);
 static QUEUE: AtomicPtr<llist::LListNode> = AtomicPtr::new(null_mut());
 static ALLOCATIONS: AtomicUsize = AtomicUsize::new(0);
 static ALLOCATE_FAILS: AtomicBool = AtomicBool::new(false);
@@ -96,6 +100,16 @@ unsafe extern "C" fn _kmalloc(size: i32, flags: i32, _file: *mut i8, _line: i32)
         std::thread::yield_now();
     }
     (&raw mut STORAGE.0).cast()
+}
+
+// ABI4 uses a retained host allocation. Keep the original allocation-failure
+// and race hooks at the corresponding guest mapping acquisition boundary.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+unsafe extern "C" fn map_fixed_area(physical: u64, bytes: u64, flags: u64) -> *mut c_void {
+    assert_eq!(physical, (&raw const STORAGE.0) as u64);
+    assert_eq!(flags, 0);
+    _kmalloc(bytes as i32, 2, null_mut(), 0)
 }
 
 #[no_mangle]
@@ -205,6 +219,12 @@ unsafe fn write_boot<T>(offset: usize, value: T) {
 
 unsafe fn setup() {
     boot_param = (&raw mut PREFIX).cast();
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        write_boot(24, 8192_i32);
+        write_boot(8192 - 64, smp_ikc::NativeIrqWorkDescriptor::unpublished(
+            9, (&raw const STORAGE.0) as u64, num_processors as u32));
+    }
     write_boot(192, (&raw const QUEUE).cast_mut().cast::<c_void>());
     write_boot(
         192 + 511 * 8,
