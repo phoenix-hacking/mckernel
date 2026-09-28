@@ -72,7 +72,8 @@ pub mod bindings {
     #[repr(C)] pub struct lockdep_map {}
     #[repr(C)] pub struct module { pub identity: u32, pub lockdep: lockdep_map }
     #[repr(C)] pub struct class { pub identity: u32 }
-    #[repr(C)] pub struct device { pub identity: u32, pub lockdep: lockdep_map }
+    #[repr(C)] pub struct kobject {}
+    #[repr(C)] pub struct device { pub identity: u32, pub lockdep: lockdep_map, pub kobj: kobject }
     #[repr(C)] pub struct inode { pub i_rdev: u32 }
     #[repr(C)] pub struct file { pub private_data: *mut core::ffi::c_void }
     #[repr(C)] pub struct file_operations {
@@ -94,7 +95,7 @@ impl ThisModule { pub const fn as_ptr(&self) -> *mut bindings::module { core::pt
 pub static THIS_MODULE: ThisModule = ThisModule;
 static MODULE: bindings::module = bindings::module { identity: 1, lockdep: bindings::lockdep_map {} };
 static CLASS: bindings::class = bindings::class { identity: 1 };
-static DEVICE: bindings::device = bindings::device { identity: 1, lockdep: bindings::lockdep_map {} };
+static DEVICE: bindings::device = bindings::device { identity: 1, lockdep: bindings::lockdep_map {}, kobj: bindings::kobject {} };
 #[repr(C, align(8))]
 pub struct IhkExportSymbolRecord {
     license: [u8; 4], namespace: [u8; 16], padding: [u8; 4], symbol: *const u8,
@@ -424,6 +425,33 @@ fn reset_backend() {
 static BOOT_PREPARE_STATUS: AtomicI32 = AtomicI32::new(0);
 static BOOT_START_STATUS: AtomicI32 = AtomicI32::new(0);
 static BOOT_START_CALLS: AtomicI32 = AtomicI32::new(0);
+static SHUTDOWN_STATUS: AtomicI32 = AtomicI32::new(0);
+static SHUTDOWN_CALLS: AtomicI32 = AtomicI32::new(0);
+static SHUTDOWN_IDENTITY: Mutex<Vec<(u32, u64)>> = Mutex::new(Vec::new());
+static APPLICATION_SUCCEED: AtomicBool = AtomicBool::new(false);
+static APPLICATION_CLOSES: AtomicI32 = AtomicI32::new(0);
+static APPLICATION_INVOKES: AtomicI32 = AtomicI32::new(0);
+static APPLICATION_CONTEXT: u8 = 7;
+
+unsafe extern "C" fn application_open(_slot: u32, _generation: u64, _pid: i32,
+    output: *mut *mut core::ffi::c_void) -> i32 {
+    if APPLICATION_SUCCEED.load(Ordering::SeqCst) {
+        unsafe { output.write(core::ptr::addr_of!(APPLICATION_CONTEXT).cast_mut().cast()) };
+        0
+    } else { unsafe { output.write(core::ptr::null_mut()) }; -22 }
+}
+unsafe extern "C" fn application_invoke(_context: *mut core::ffi::c_void, _command: u32,
+    _buffer: *mut u8, _length: usize) -> i64 {
+    APPLICATION_INVOKES.fetch_add(1, Ordering::SeqCst); 17
+}
+unsafe extern "C" fn application_close(_context: *mut core::ffi::c_void) {
+    APPLICATION_CLOSES.fetch_add(1, Ordering::SeqCst);
+}
+unsafe extern "C" fn backend_shutdown(slot: u32, generation: u64) -> i32 {
+    SHUTDOWN_CALLS.fetch_add(1, Ordering::SeqCst);
+    SHUTDOWN_IDENTITY.lock().unwrap().push((slot, generation));
+    SHUTDOWN_STATUS.load(Ordering::SeqCst)
+}
 
 unsafe extern "C" fn backend_prepare_boot(slot: u32, generation: u64, physical: u64, bytes: u64) -> i32 {
     assert!(slot < 64 && generation > 0);
@@ -452,6 +480,98 @@ fn create_boot_backend() -> i64 {
     unsafe { os_runtime::ihk_os_create_unbooted_v3(0, THIS_MODULE.as_ptr().cast(),
         u64::MAX, 1, Some(backend_ioctl), Some(backend_release),
         Some(backend_prepare_boot), Some(backend_start_boot)) }
+}
+
+fn create_shutdown_backend(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i32>) -> i64 {
+    unsafe { os_runtime::ihk_os_create_unbooted_v5(0, THIS_MODULE.as_ptr().cast(), u64::MAX, 1,
+        Some(backend_ioctl), Some(backend_release), Some(backend_prepare_boot),
+        Some(backend_start_boot), Some(application_open), Some(application_invoke),
+        Some(application_close), shutdown) }
+}
+
+#[test]
+fn shutdown_v5_validates_tuple_and_not_booted_idempotence() {
+    with_family(|| {
+        assert_eq!(unsafe { os_runtime::ihk_os_create_unbooted_v5(0, THIS_MODULE.as_ptr().cast(),
+            0, 1, Some(backend_ioctl), Some(backend_release), Some(backend_prepare_boot),
+            Some(backend_start_boot), Some(application_open), Some(application_invoke),
+            Some(application_close), None) }, -22);
+        assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
+        assert_eq!(create(0), 0);
+        let mut file = open(0).unwrap();
+        assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
+        close(file);
+        assert_eq!(destroy(0), 0);
+    });
+}
+
+#[test]
+fn shutdown_v5_callback_identity_commit_and_rollback_preserve_lease() {
+    with_family(|| {
+        BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
+        BOOT_START_STATUS.store(0, Ordering::SeqCst);
+        SHUTDOWN_STATUS.store(0, Ordering::SeqCst);
+        SHUTDOWN_CALLS.store(0, Ordering::SeqCst);
+        SHUTDOWN_IDENTITY.lock().unwrap().clear();
+        assert_eq!(create_shutdown_backend(Some(backend_shutdown)), 0);
+        let mut file = open(0).unwrap();
+        let second = open(0).unwrap();
+        assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), 0);
+        for result in [-4096, 1, -5] {
+            SHUTDOWN_STATUS.store(result, Ordering::SeqCst);
+            assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), -5);
+            assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_READY as i64);
+        }
+        SHUTDOWN_STATUS.store(0, Ordering::SeqCst);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+        BOOT_START_STATUS.store(-5, Ordering::SeqCst);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), -5);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_FAILED as i64);
+        BOOT_START_STATUS.store(0, Ordering::SeqCst);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+        assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
+        assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 5);
+        let identity = SHUTDOWN_IDENTITY.lock().unwrap().clone();
+        assert_eq!(identity.len(), 5);
+        assert_eq!(identity[0].0, 0);
+        assert!(identity.iter().all(|entry| entry.1 == identity[0].1));
+        close(file); close(second);
+        assert_eq!(destroy(0), 0);
+    });
+}
+
+#[test]
+fn application_connection_blocks_shutdown_until_close() {
+    with_family(|| {
+        BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
+        BOOT_START_STATUS.store(0, Ordering::SeqCst);
+        APPLICATION_SUCCEED.store(true, Ordering::SeqCst);
+        APPLICATION_CLOSES.store(0, Ordering::SeqCst);
+        APPLICATION_INVOKES.store(0, Ordering::SeqCst);
+        SHUTDOWN_STATUS.store(0, Ordering::SeqCst);
+        SHUTDOWN_CALLS.store(0, Ordering::SeqCst);
+        assert_eq!(create_shutdown_backend(Some(backend_shutdown)), 0);
+        let mut file = open(0).unwrap();
+        let mut second = open(0).unwrap();
+        assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), 0);
+        let generation = { let mut output = core::ptr::null_mut();
+            assert_eq!(unsafe { os_runtime::open_application(0, 1, 1, 42, &mut output) }, 0);
+            assert!(!output.is_null());
+            assert_eq!(unsafe { os_runtime::invoke_application(output, 1, core::ptr::null_mut(), 0) }, 17);
+            assert_eq!(APPLICATION_INVOKES.load(Ordering::SeqCst), 1);
+            output
+        };
+        assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), -16);
+        assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 0);
+        unsafe { os_runtime::close_application(generation) };
+        assert_eq!(APPLICATION_CLOSES.load(Ordering::SeqCst), 1);
+        assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), 0);
+        close(file); close(second);
+        assert_eq!(destroy(0), 0);
+        APPLICATION_SUCCEED.store(false, Ordering::SeqCst);
+    });
 }
 
 #[test]

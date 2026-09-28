@@ -24,7 +24,7 @@ use kernel::{
 use super::{
     abi::{
         IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_BOOT,
-        IHK_OS_GET_BUILDID, IHK_OS_LOAD, IHK_OS_QUERY_STATUS, IHK_OS_STATUS,
+        IHK_OS_GET_BUILDID, IHK_OS_LOAD, IHK_OS_QUERY_STATUS, IHK_OS_SHUTDOWN, IHK_OS_STATUS,
     },
     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
     ihk_ioctl::IhkIoctlDispatcher,
@@ -189,6 +189,10 @@ type OsBackendPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;
 // any other result retains all possibly reachable resources for proven cleanup.
 // This callback cannot permit unload, assignment or reuse after a start effect.
 type OsBackendStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
+// SAFETY: The callback runs under the per-OS operation lock after the
+// registry has entered PHASE_DESTROYING/Shutdown. It must only perform the
+// provider's shutdown attempt and return a Linux-style errno result.
+type OsBackendShutdownV5 = unsafe extern "C" fn(u32, u64) -> i32;
 
 #[derive(Clone, Copy)]
 struct OsBackendBootV3 {
@@ -209,6 +213,197 @@ struct OsBackend {
     release: OsBackendReleaseV2,
     boot: Option<OsBackendBootV3>,
     application: Option<ApplicationCallbacks>,
+    shutdown: Option<OsBackendShutdownV5>,
+}
+
+// The high bits close/poison admission; the low bits count every callback borrow
+// and every callback context whose Drop will call provider code.  It deliberately
+// does not replace OsLease: the latter pins the object for destruction, while
+// this gate makes shutdown bounded instead of racing a still-live provider
+// context.  All methods are atomic only and therefore may run under the OS
+// operation mutex or in callback-adjacent paths without sleeping.
+struct Admission {
+    word: AtomicU32,
+}
+
+const ADMISSION_CLOSED: u32 = 1 << 31;
+const ADMISSION_OVERFLOW: u32 = 1 << 30;
+const ADMISSION_COUNT_MASK: u32 = !(ADMISSION_CLOSED | ADMISSION_OVERFLOW);
+
+impl Admission {
+    const fn new() -> Self {
+        Self {
+            word: AtomicU32::new(0),
+        }
+    }
+
+    /// Acquire one callback/context admission.  A full count permanently
+    /// closes and poisons the gate, rather than wrapping to zero and admitting
+    /// a callback that shutdown could no longer observe.
+    fn enter(&self) -> Result<AdmissionOwner> {
+        loop {
+            let current = self.word.load(Ordering::Acquire);
+            if current & (ADMISSION_CLOSED | ADMISSION_OVERFLOW) != 0 {
+                return Err(EBUSY);
+            }
+            let count = current & ADMISSION_COUNT_MASK;
+            if count == ADMISSION_COUNT_MASK {
+                let _ = self.word.compare_exchange(
+                    current,
+                    current | ADMISSION_CLOSED | ADMISSION_OVERFLOW,
+                    Ordering::AcqRel,
+                    Ordering::Acquire,
+                );
+                return Err(EBUSY);
+            }
+            if self
+                .word
+                .compare_exchange(current, current + 1, Ordering::AcqRel, Ordering::Acquire)
+                .is_ok()
+            {
+                return Ok(AdmissionOwner {
+                    admission: ptr::from_ref(self),
+                });
+            }
+        }
+    }
+
+    /// Close admission for one shutdown attempt. This is called only under the
+    /// per-OS operation mutex, which is also the order used by serialized
+    /// application/topology callbacks. An idle close left by an earlier
+    /// successful shutdown can be claimed for cleanup retry after a failed
+    /// reboot; an overflow poison can never be claimed or reopened.
+    fn close_for_shutdown(&self) -> Result<ShutdownAdmission> {
+        loop {
+            let current = self.word.load(Ordering::Acquire);
+            if current & ADMISSION_OVERFLOW != 0 {
+                return Err(EBUSY);
+            }
+            let count = current & ADMISSION_COUNT_MASK;
+            if current & ADMISSION_CLOSED != 0 {
+                if count != 0 {
+                    return Err(EBUSY);
+                }
+                return Ok(ShutdownAdmission {
+                    admission: ptr::from_ref(self),
+                    reopen_on_drop: false,
+                    armed: true,
+                });
+            }
+            if self
+                .word
+                .compare_exchange(
+                    current,
+                    current | ADMISSION_CLOSED,
+                    Ordering::AcqRel,
+                    Ordering::Acquire,
+                )
+                .is_ok()
+            {
+                if count != 0 {
+                    // The close was ours, so it is safe to undo immediately.
+                    // Do not wait for drain: shutdown reports bounded EBUSY.
+                    self.reopen_unpoisoned();
+                    return Err(EBUSY);
+                }
+                return Ok(ShutdownAdmission {
+                    admission: ptr::from_ref(self),
+                    reopen_on_drop: true,
+                    armed: true,
+                });
+            }
+        }
+    }
+
+    /// Reopen a non-poisoned gate. Only a ShutdownAdmission that changed the
+    /// gate from open to closed may call this on a pre-effect failure; a
+    /// successful boot also calls it after Ready is committed.
+    fn reopen_unpoisoned(&self) {
+        loop {
+            let current = self.word.load(Ordering::Acquire);
+            if current & ADMISSION_OVERFLOW != 0 {
+                return;
+            }
+            if self
+                .word
+                .compare_exchange(
+                    current,
+                    current & !ADMISSION_CLOSED,
+                    Ordering::Release,
+                    Ordering::Relaxed,
+                )
+                .is_ok()
+            {
+                return;
+            }
+        }
+    }
+
+    fn is_closed(&self) -> bool {
+        self.word.load(Ordering::Acquire) & ADMISSION_CLOSED != 0
+    }
+}
+
+/// An exclusive shutdown-close claim. Its Drop restores admission only when
+/// this attempt changed an open gate to closed. A retry that borrowed a prior
+/// idle close leaves that close intact on failure, while a poisoned gate stays
+/// closed in either case.
+#[must_use = "a shutdown close claim must commit or restore admission"]
+struct ShutdownAdmission {
+    admission: *const Admission,
+    reopen_on_drop: bool,
+    armed: bool,
+}
+
+impl ShutdownAdmission {
+    /// Leave the gate closed after the successful shutdown effect/registry
+    /// commit, or after an impossible post-effect registry corruption.
+    fn commit(mut self) {
+        self.armed = false;
+    }
+}
+
+impl Drop for ShutdownAdmission {
+    fn drop(&mut self) {
+        if !self.armed || !self.reopen_on_drop {
+            return;
+        }
+        // SAFETY: The operation mutex and caller's OsLease retain the object
+        // through the complete shutdown transaction.
+        unsafe { &*self.admission }.reopen_unpoisoned();
+    }
+}
+
+/// The raw pointer is valid because every stored owner also holds the exact
+/// `OsLease` that outlives it. Temporary owners borrow an object protected by
+/// the caller's local `OsLease`. This keeps a resident owner allocation-free.
+#[must_use = "an admitted callback/context must release its admission owner"]
+struct AdmissionOwner {
+    admission: *const Admission,
+}
+
+impl Drop for AdmissionOwner {
+    fn drop(&mut self) {
+        // SAFETY: See the type-level lifetime contract above. The object and
+        // its Admission remain live until this owner has dropped.
+        let admission = unsafe { &*self.admission };
+        loop {
+            let current = admission.word.load(Ordering::Acquire);
+            let count = current & ADMISSION_COUNT_MASK;
+            if count == 0 {
+                // Never underflow into a false live count. This is reachable
+                // only after a trusted owner lifetime violation.
+                return;
+            }
+            if admission
+                .word
+                .compare_exchange(current, current - 1, Ordering::Release, Ordering::Relaxed)
+                .is_ok()
+            {
+                return;
+            }
+        }
+    }
 }
 
 struct OsObject {
@@ -217,6 +412,7 @@ struct OsObject {
     // device_destroy, including while a backend borrows the parent kobject.
     node: AtomicPtr<bindings::device>,
     operations: Pin<Box<Mutex<()>>>,
+    admission: Admission,
     backend: Option<OsBackend>,
     _kmsg: KmsgPages,
     _provider_lease: DeviceOsLease<'static>,
@@ -339,6 +535,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v2(
             release,
             boot: None,
             application: None,
+            shutdown: None,
         },
         _ => return EINVAL.to_errno() as i64,
     };
@@ -374,6 +571,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v3(
             release,
             boot: Some(OsBackendBootV3 { prepare, start }),
             application: None,
+            shutdown: None,
         },
         _ => return EINVAL.to_errno() as i64,
     };
@@ -432,11 +630,70 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v4(
                 invoke,
                 close,
             }),
+            shutdown: None,
         },
         _ => return EINVAL.to_errno() as i64,
     };
     // SAFETY: Publication follows validation and acquisition of the callback
     // module owner, using the same create transaction as the retained versions.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// Add the no-effect shutdown dispatch callback while retaining v1-v4 ABI
+/// signatures and exports. The callback is invoked with the exact published
+/// slot/generation and is rollback-safe until a later effect acknowledgement.
+#[export_name = "ihk_os_create_unbooted_v5"]
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+    open: Option<super::application_abi::Open>,
+    invoke: Option<super::application_abi::Invoke>,
+    close: Option<super::application_abi::Close>,
+    shutdown: Option<OsBackendShutdownV5>,
+) -> i64 {
+    let backend = match (
+        callback_abi,
+        ioctl,
+        release,
+        prepare,
+        start,
+        open,
+        invoke,
+        close,
+        shutdown,
+    ) {
+        (
+            1,
+            Some(ioctl),
+            Some(release),
+            Some(prepare),
+            Some(start),
+            Some(open),
+            Some(invoke),
+            Some(close),
+            Some(shutdown),
+        ) => OsBackend {
+            ioctl,
+            release,
+            boot: Some(OsBackendBootV3 { prepare, start }),
+            application: Some(ApplicationCallbacks {
+                open,
+                invoke,
+                close,
+            }),
+            shutdown: Some(shutdown),
+        },
+        _ => return EINVAL.to_errno() as i64,
+    };
     match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
@@ -477,6 +734,7 @@ unsafe fn create_os(
             provider,
             node: AtomicPtr::new(ptr::null_mut()),
             operations: Box::pin_init(new_mutex!(()), GFP_KERNEL)?,
+            admission: Admission::new(),
             backend,
             _kmsg: KmsgPages::allocate()?,
             _provider_lease: provider_lease,
@@ -630,6 +888,10 @@ pub(crate) unsafe extern "C" fn ihk_os_with_kobject_v1(
             .map_err(|error| errno(error.errno()))?;
         let object = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
         assert!(!object.is_null());
+        // Hold admission until the foreign callback returns. Shutdown closes
+        // this gate before its provider callback and returns EBUSY rather than
+        // racing a borrowed kobject or its callback context.
+        let _admission = unsafe { &*object }.admission.enter()?;
         // SAFETY: The lease keeps this exact object and registered device live.
         // Only form a raw field pointer: Linux owns the device's mutable data.
         let node = unsafe { (*object).node.load(Ordering::Acquire) };
@@ -648,11 +910,20 @@ pub(crate) unsafe extern "C" fn ihk_os_with_kobject_v1(
     result.unwrap_or_else(|error| error.to_errno())
 }
 
-// Fields drop in declaration order: the service closes while its exact OS
-// lease still prevents destruction, minor reuse and provider module release.
+// Fields drop in declaration order: the service and its admission owner drop
+// while the exact OS lease still prevents destruction, minor reuse and provider
+// module release.
 struct OsFile {
-    service: Pin<Box<Mutex<Option<super::os_service::FileService>>>>,
+    service: Pin<Box<Mutex<Option<AttachedFileService>>>>,
     lease: OsLease<'static>,
+}
+
+// Keep the service callback context before its resident admission owner. The
+// close callback therefore runs while shutdown still observes this file as
+// busy, and before the later OS registry/module lease can be released.
+struct AttachedFileService {
+    service: super::os_service::FileService,
+    _admission: AdmissionOwner,
 }
 
 // SAFETY: Linux calls this only with a live inode/file and ihk.ko pinned by
@@ -743,26 +1014,37 @@ unsafe fn os_request(
     let object = unsafe { &*object };
     if super::service_abi::handles(command) {
         // No OS operation lock may cross a blocking application callback. The
-        // lease prevents destruction; shutdown still needs a separate drain.
-        match OS_REGISTRY.snapshot(handle) {
-            Ok(snapshot) if matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) => {}
-            Ok(_) => return EBUSY.to_errno() as core::ffi::c_long,
-            Err(error) => return error.errno() as core::ffi::c_long,
-        }
+        // resident admission owner prevents shutdown from racing this attached
+        // callback context, while the file lease still prevents destruction.
         let (callback, service_context) = {
             let mut service = context.service.lock();
             if service.is_none() {
+                let admission = match object.admission.enter() {
+                    Ok(admission) => admission,
+                    Err(error) => return error.to_errno() as core::ffi::c_long,
+                };
+                match OS_REGISTRY.snapshot(handle) {
+                    Ok(snapshot)
+                        if matches!(snapshot.status, OsStatus::Ready | OsStatus::Running) => {}
+                    Ok(_) => return EBUSY.to_errno() as core::ffi::c_long,
+                    Err(error) => return error.errno() as core::ffi::c_long,
+                }
                 match super::os_service::FileService::open(
                     handle.minor() as u32,
                     handle.generation(),
                 ) {
-                    Ok(attached) => *service = Some(attached),
+                    Ok(attached) => {
+                        *service = Some(AttachedFileService {
+                            service: attached,
+                            _admission: admission,
+                        })
+                    }
                     Err(error) => return error.to_errno() as core::ffi::c_long,
                 }
             }
             // SAFETY: Published service ownership cannot change until final
             // file release. Linux pins this file for the entire ioctl below.
-            unsafe { service.as_ref().unwrap().borrowed_call() }
+            unsafe { service.as_ref().unwrap().service.borrowed_call() }
         };
         // SAFETY: The file owns the context and module pin; publication guards
         // have ended. The argument is only a borrowed user value for this call.
@@ -774,6 +1056,59 @@ unsafe fn os_request(
         };
     }
     let _operation = object.operations.lock();
+    // Shutdown is the sole operation permitted outside the NotBooted-only
+    // generic gate. It atomically closes admission before publishing the
+    // registry Shutdown/DESTROYING transaction and invoking its callback.
+    if command == IHK_OS_SHUTDOWN {
+        let snapshot = match OS_REGISTRY.snapshot(handle) {
+            Ok(snapshot) => snapshot,
+            Err(error) => return error.errno() as core::ffi::c_long,
+        };
+        if snapshot.status == OsStatus::NotBooted {
+            return 0;
+        }
+        let Some(backend) = object.backend else {
+            return EINVAL.to_errno() as core::ffi::c_long;
+        };
+        let Some(shutdown) = backend.shutdown else {
+            // ENOSYS is the defined fail-closed result for v1-v4 providers.
+            return -38;
+        };
+        let admission = match object.admission.close_for_shutdown() {
+            Ok(admission) => admission,
+            Err(error) => return error.to_errno() as core::ffi::c_long,
+        };
+        let guard = match OS_REGISTRY.begin_shutdown(handle) {
+            Ok(guard) => guard,
+            Err(error) => return error.errno() as core::ffi::c_long,
+        };
+        // SAFETY: The lease, operation lock and provider module owner pin the
+        // exact callback and generation. v5 is explicitly pre-effect on every
+        // nonzero result: it must not stop/drain a guest or make any externally
+        // visible teardown effect. Only that contract permits rollback/opening
+        // admission below; SMP/CPU/IRQ/resource teardown is not wired here.
+        let result = unsafe { shutdown(handle.minor() as u32, handle.generation()) };
+        let result = if result == 0 {
+            match guard.commit() {
+                Ok(()) => {
+                    admission.commit();
+                    0
+                }
+                // A callback success is post-effect. The registry corruption
+                // path cannot safely publish callbacks, so retain the close
+                // even though ShutdownGuard restores the registry word.
+                Err(error) => {
+                    admission.commit();
+                    error.errno()
+                }
+            }
+        } else if (-4095..0).contains(&result) {
+            result
+        } else {
+            EIO.to_errno()
+        };
+        return result as core::ffi::c_long;
+    }
     // The immutable compatibility ID is also available on a booted OS, without
     // creating an application service. Resource assignment remains restricted
     // to the initial state, under the same lock as load/boot transitions.
@@ -825,12 +1160,25 @@ unsafe fn os_request(
         if let Err(error) = OS_REGISTRY.transition(handle, state) {
             return error.errno() as core::ffi::c_long;
         }
+        // A successful reboot after committed shutdown makes the normal
+        // callback surface visible again. Failed boot leaves a formerly closed
+        // gate closed, so it cannot expose new service/application callbacks.
+        if started == 0 && object.admission.is_closed() {
+            object.admission.reopen_unpoisoned();
+        }
         return if (-4095..=0).contains(&started) {
             started as core::ffi::c_long
         } else {
             EIO.to_errno() as core::ffi::c_long
         };
     }
+    // Every ordinary backend ioctl has an admission owner throughout the
+    // callback. Take it before a Loading transition so a post-shutdown closed
+    // gate cannot strand the registry in Loading without invoking its backend.
+    let _admission = match object.admission.enter() {
+        Ok(admission) => admission,
+        Err(error) => return error.to_errno() as core::ffi::c_long,
+    };
     let loading = command == IHK_OS_LOAD;
     if loading {
         if let Err(error) = OS_REGISTRY.transition(handle, OsStatus::Loading) {
@@ -895,6 +1243,9 @@ impl Drop for BackendApplication {
 
 struct ApplicationConnection {
     backend: BackendApplication,
+    // BackendApplication drops first so its close callback retains admission;
+    // this owner then drops before the exact OS lease/module release.
+    _admission: AdmissionOwner,
     _lease: OsLease<'static>,
 }
 
@@ -931,8 +1282,15 @@ pub(crate) unsafe extern "C" fn open_application(
         assert!(!raw.is_null());
         // SAFETY: The exact lease excludes OS/backend object destruction.
         let object = unsafe { &*raw };
+        // Keep the legacy serialized Open contract. Taking operations before
+        // admission matches shutdown's operations -> close order, so shutdown
+        // cannot wait on a contender that already holds admission.
+        let _operation = object.operations.lock();
+        // This owner stays with the opaque connection, including every invoke
+        // and its close callback. Shutdown therefore returns EBUSY instead of
+        // racing any application context that escaped open.
+        let admission = object.admission.enter()?;
         let backend = {
-            let _operation = object.operations.lock();
             let snapshot = OS_REGISTRY
                 .snapshot(handle)
                 .map_err(|error| errno(error.errno()))?;
@@ -944,8 +1302,8 @@ pub(crate) unsafe extern "C" fn open_application(
                 .and_then(|backend| backend.application)
                 .ok_or(ENODEV)?;
             let mut context = ptr::null_mut();
-            // SAFETY: The lease pins all callbacks. This short acquisition
-            // reserves owned state without publishing guest work or waiting.
+            // SAFETY: The lease and admission pin all callbacks. The legacy
+            // operation mutex continues to serialize Open with provider state.
             let status = unsafe { (callbacks.open)(slot, generation, pid, &mut context) };
             if status != 0 {
                 if !context.is_null() {
@@ -960,10 +1318,15 @@ pub(crate) unsafe extern "C" fn open_application(
                 callbacks,
             }
         };
+        // Preserve the legacy lock scope: Open is serialized, but fallible
+        // connection allocation and its BackendApplication cleanup are not.
+        // A provider Close may reenter a serialized topology query.
+        drop(_operation);
         // Box allocation failure drops the backend before the retained lease.
         Ok(Box::new(
             ApplicationConnection {
                 backend,
+                _admission: admission,
                 _lease: lease,
             },
             GFP_KERNEL,
@@ -1065,7 +1428,12 @@ pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32
         assert!(!raw.is_null());
         // SAFETY: The exact-generation lease excludes object and backend release.
         let object = unsafe { &*raw };
+        // Retain the v2 backend serialization contract. This lock order is
+        // operations -> admission, matching shutdown and application Open.
         let _operation = object.operations.lock();
+        // Keep shutdown from closing the callback surface through the complete
+        // backend query.
+        let _admission = object.admission.enter()?;
         let snapshot = OS_REGISTRY
             .snapshot(handle)
             .map_err(|error| errno(error.errno()))?;
@@ -1073,8 +1441,8 @@ pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32
             return Err(EBUSY);
         }
         let backend = object.backend.ok_or(ENODEV)?;
-        // SAFETY: Reuse the versioned backend under its original operation lock
-        // and module/OS owners. These two scalar commands ignore argument zero.
+        // SAFETY: The exact OS/module lease, operation mutex and admission
+        // owner pin and serialize the backend callback for this scalar query.
         let value = unsafe { (backend.ioctl)(slot, generation, command, 0, 0) };
         if value < -4095 || value > i32::MAX as i64 {
             return Err(EIO);
@@ -1137,6 +1505,17 @@ pub(crate) static IHK_OS_CREATE_V4_EXPORT: IhkExportSymbolRecord = IhkExportSymb
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_create_unbooted_v4 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_create_unbooted_v5"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_CREATE_V5_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v5 as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

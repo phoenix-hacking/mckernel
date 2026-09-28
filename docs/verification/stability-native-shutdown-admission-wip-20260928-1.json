@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.stability.source-wip.v1",
+  "date": "2026-09-28",
+  "status": "WIP_BLOCKED_REVIEW",
+  "scope": "native v5 shutdown dispatch and callback admission",
+  "base_commit": "710b06c031d9417d29b72a477f189676b76114ed",
+  "source": {
+    "path": "host-kernel/native-rust/os_runtime.rs",
+    "sha256": "5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144"
+  },
+  "fixture": {
+    "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+    "sha256": "0684ee328560cd830e1e14d92609cbcf55c0ca36fc85216389e3d9d4ade3c02d"
+  },
+  "test_driver": {
+    "path": "scripts/tests/test_ihk_os_runtime.py",
+    "sha256": "b1bc0bafec9fb35a2803a812233ba058f1f14b6920e0ac583da27d509e6a34c7"
+  },
+  "verification": {
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -m unittest -v scripts.tests.test_ihk_os_runtime",
+    "result": "PASS",
+    "compiled_rust_tests": 61,
+    "git_diff_check": "PASS"
+  },
+  "preserved_failures": [
+    "initial v5 callback dispatch lacked callback admission",
+    "failed reboot could strand a newly closed admission gate",
+    "application Open and topology callbacks temporarily lost legacy operation serialization",
+    "fallible ApplicationConnection allocation could drop BackendApplication and call provider Close while holding the operation mutex"
+  ],
+  "review": {
+    "result": "BLOCK",
+    "reviewed_source_sha256": "035b6f9b8081e84995dccf4b7aaeb666eb27016846d08a9fe460d8fa9c016906",
+    "remaining_required_test": "force ApplicationConnection allocation failure and prove a provider Close callback can reenter a serialized topology query without deadlock",
+    "additional_gap": "deterministic FileService resident-admission coverage"
+  },
+  "implemented_after_review": [
+    "explicitly release the operation mutex after successful provider Open and before fallible connection allocation",
+    "exercise a successful resident ApplicationConnection: shutdown is EBUSY until close, close precedes successful shutdown"
+  ],
+  "excluded": [
+    "independent PASS review of the final source",
+    "SMP provider wiring",
+    "guest CPU stop acknowledgement",
+    "IRQ or callback drain",
+    "worker join or resource retirement",
+    "kernel or module build",
+    "privileged execution",
+    "guest execution",
+    "SC-LIFE-02 or whole-OS acceptance"
+  ]
+}

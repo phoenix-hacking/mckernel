@@ -4946,3 +4946,50 @@ that backend path is built and separately released. Formal counters remain
 0/273 applications, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates; the four prior diagnostic apps and zero
 current-candidate builds remain unchanged.
+
+Continuation checkpoint 53, 2026-09-28: the launcher requested shutdown, so
+no new work was dispatched and all eight child lanes were joined. The bounded
+native v5 shutdown-dispatch candidate is preserved at exact source SHA-256
+`5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144`.
+It adds an allocation-free per-OS admission gate, resident application/service
+owners, registry rollback on pre-effect callback failure and an additive v5
+shutdown callback without changing v1-v4. It deliberately does not wire the
+SMP backend or claim that guest CPUs or resources stop.
+
+Exact Rust 1.92 execution passes the Python wrapper and all 61 compiled Rust
+tests; rustfmt and `git diff --check` pass. The retained application regression
+proves that a live ApplicationConnection makes shutdown return `EBUSY`, its
+provider close runs before shutdown, and shutdown can then succeed. Independent
+review remains BLOCK, however: after the review found that fallible connection
+allocation could invoke a reentrant provider Close while the operation mutex
+was held, the source now explicitly releases that mutex first, but shutdown
+arrived before the requested forced-allocation-failure/reentrant-topology test
+and a final independent rereview. Deterministic FileService resident-admission
+coverage is also pending. The exact WIP record is
+`docs/verification/stability-native-shutdown-admission-wip-20260928-1.json`.
+No production/lifecycle gate, build, privileged command, container or guest is
+accepted by this checkpoint.
+
+At the checkpoint boundary the campaign identities remain launcher
+PID/PGID/SID 3125264/starttime 80228730, recovered worker PID/PGID/SID
+3170135/starttime 80670556, and app-server PID/PGID/SID 3170137/starttime
+80670562. No diagnostic owner, QEMU or mcexec process is live. Available bytes
+are 26,989,322,240 on the host filesystem and 21,613,768,704 on scratch, with
+29,444,976,640 bytes of MemAvailable. Unrelated launcher-policy changes,
+pycache state and the dirty nested IHK checkout remain unstaged and preserved.
+Formal counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates; four real
+diagnostic applications and zero current-candidate builds remain unchanged.
+This checkpoint neither completes nor resumes the OS goal.
+
+Next invocation: reconcile this exact pushed checkpoint and the three campaign
+process identities. First add the forced ApplicationConnection allocation-
+failure regression whose provider Close reenters `topology_query`, plus a
+deterministic FileService resident-admission regression; rerun exact Rust 1.92
+and obtain independent PASS review of the final source/fixture hashes. Then
+implement the mapped generation-bound guest stop request/ACK protocol before
+wiring the v5 callback: every assigned CPU must release-publish its exact
+request sequence/generation ACK before quiescence, and timeout retains all
+resources. Do not execute the shutdown fixture until stop/ACK, IRQ/callback
+drain, worker join and safe retirement are implemented, built and separately
+released.

@@ -18,8 +18,9 @@ class NativeOsRuntimeTests(unittest.TestCase):
             self.skipTest("rustc is unavailable for native OS adapter execution")
         template = (ROOT / "scripts/tests/fixtures/ihk_os_runtime_compile.rs").read_text()
         modules = []
-        for name in ("abi", "device_registry", "os_registry", "ihk_ioctl", "os_runtime"):
-            relative = "abi/x86_64.rs" if name == "abi" else name + ".rs"
+        for name in ("abi", "application_abi", "service_abi", "device_registry", "os_registry", "ihk_ioctl", "os_service", "os_runtime"):
+            relative = {"abi": "abi/x86_64.rs", "application_abi": "abi/application.rs",
+                        "service_abi": "abi/os_service.rs"}.get(name, name + ".rs")
             path = ROOT / "host-kernel/native-rust" / relative
             # Match the production crate's data-only ABI-module visibility lint.
             attributes = '#[allow(unreachable_pub)]\n' if name == 'abi' else ''
@@ -40,7 +41,7 @@ class NativeOsRuntimeTests(unittest.TestCase):
             result = subprocess.run([str(binary), "--test-threads=1"],
                                     capture_output=True, text=True, timeout=90)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("51 passed; 0 failed", result.stdout)
+            self.assertIn("61 passed; 0 failed", result.stdout)
 
 
 if __name__ == "__main__":
