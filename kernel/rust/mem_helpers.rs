@@ -275,12 +275,98 @@ enum PendingFreeBatchState {
     Drained,
 }
 
+/// Inclusive/exclusive physical authority supplied by the future inventory
+/// producer.  This is deliberately private until that producer can bind the
+/// range to the allocator and Mirror ownership records.
+#[derive(Clone, Copy)]
+struct PendingPhysicalBounds {
+    start: CULong,
+    end: CULong,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct PendingFreeCallbackArgs {
+    phys: CULong,
+    npages: CInt,
+}
+
+/// An exclusive, caller-retained inventory of the exact descriptors which may
+/// be transferred.  Both arrays are preallocated by the caller: validation,
+/// reanchoring, and drain never allocate, log, or free.
+///
+/// # Safety
+/// The caller must keep every descriptor pointer live, distinct, physically
+/// authoritative within `bounds`, and exclusively mutation-owned until the
+/// explicit drain completes.  It must also keep both supplied arrays live and
+/// exclusively available, keep the source ring stable, and prevent callback
+/// re-entry.  These obligations are intentionally not inferred from raw list
+/// links; a later production producer must establish them from allocator
+/// ownership, quarantine, backing-reference, VA, and TLB-acknowledgement
+/// state before this private helper is wired to a caller.
+struct PendingInventoryLease {
+    descriptors: *mut *mut MemPage,
+    descriptor_len: usize,
+    callback_args: *mut PendingFreeCallbackArgs,
+    callback_len: usize,
+    bounds: PendingPhysicalBounds,
+    _pin: PhantomPinned,
+    _not_send_or_sync: PhantomData<*mut ()>,
+}
+
+impl PendingInventoryLease {
+    /// Creates only the private lease representation.  It does not validate
+    /// any descriptor or mutate either input; `validate` is the sole admission
+    /// point and reports a malformed inventory before transfer.
+    unsafe fn new(
+        descriptors: &mut [*mut MemPage],
+        callback_args: &mut [PendingFreeCallbackArgs],
+        bounds: PendingPhysicalBounds,
+    ) -> Self {
+        Self {
+            descriptors: descriptors.as_mut_ptr(),
+            descriptor_len: descriptors.len(),
+            callback_args: callback_args.as_mut_ptr(),
+            callback_len: callback_args.len(),
+            bounds,
+            _pin: PhantomPinned,
+            _not_send_or_sync: PhantomData,
+        }
+    }
+
+    unsafe fn descriptor(&self, index: usize) -> *mut MemPage {
+        *self.descriptors.add(index)
+    }
+
+    unsafe fn descriptor_node(&self, index: usize) -> *mut AbiListHead {
+        &raw mut (*self.descriptor(index)).list
+    }
+
+    unsafe fn descriptor_index(&self, node: *mut AbiListHead) -> Option<usize> {
+        for index in 0..self.descriptor_len {
+            if self.descriptor_node(index) == node {
+                return Some(index);
+            }
+        }
+        None
+    }
+}
+
+/// A consumed admission token.  It exists only after the exact independently
+/// supplied inventory, rather than a discovery walk over suspect links, has
+/// validated the source ring.
+struct ValidatedPendingInventory {
+    lease: PendingInventoryLease,
+    source: *mut AbiListHead,
+    count: usize,
+}
+
 /// Pinned transaction destination for pending-page ownership transfer.
 /// It is deliberately !Unpin, !Send and !Sync and never frees implicitly.
 struct PendingFreeBatch {
     head: AbiListHead,
     state: PendingFreeBatchState,
     source: *mut AbiListHead,
+    lease: Option<PendingInventoryLease>,
     _pin: PhantomPinned,
     _owner: PhantomData<*mut ()>,
 }
@@ -291,10 +377,253 @@ impl PendingFreeBatch {
             head: AbiListHead { next: null_mut(), prev: null_mut() },
             state: PendingFreeBatchState::Vacant,
             source: null_mut(),
+            lease: None,
             _pin: PhantomPinned,
             _owner: PhantomData,
         }
     }
+}
+
+// There is intentionally no `Drop` implementation for the lease, admission
+// token, or batch.  Ownership leaves this helper only through explicit drain.
+
+unsafe fn validate_pending_inventory_metadata(
+    lease: &PendingInventoryLease,
+) -> Result<(), CInt> {
+    if lease.bounds.start >= lease.bounds.end
+        || lease.bounds.start & (PAGE_SIZE - 1) != 0
+        || lease.bounds.end & (PAGE_SIZE - 1) != 0
+        // The public finish return/count contract is CInt.  Reject before any
+        // descriptor-pointer traversal so a hostile oversized lease cannot
+        // turn bounded validation into an unrepresentable drain result.
+        || lease.descriptor_len > CInt::MAX as usize
+        || lease.callback_len < lease.descriptor_len
+    {
+        return Err(-EINVAL);
+    }
+
+    for index in 0..lease.descriptor_len {
+        let page = lease.descriptor(index);
+        if page.is_null() {
+            return Err(-EINVAL);
+        }
+        for previous in 0..index {
+            if lease.descriptor(previous) == page {
+                return Err(-EINVAL);
+            }
+        }
+        if (*page).mode != PM_PENDING_FREE
+            || (*page).offset <= 0
+            || (*page).offset > CInt::MAX as OffT
+            || (*page).phys & (PAGE_SIZE - 1) != 0
+        {
+            return Err(-EINVAL);
+        }
+        let bytes = match ((*page).offset as CULong).checked_mul(PAGE_SIZE) {
+            Some(bytes) => bytes,
+            None => return Err(-EINVAL),
+        };
+        let end = match (*page).phys.checked_add(bytes) {
+            Some(end) => end,
+            None => return Err(-EINVAL),
+        };
+        if (*page).phys < lease.bounds.start || end > lease.bounds.end {
+            return Err(-EINVAL);
+        }
+        for previous in 0..index {
+            let other = lease.descriptor(previous);
+            let other_bytes = match ((*other).offset as CULong).checked_mul(PAGE_SIZE) {
+                Some(bytes) => bytes,
+                None => return Err(-EINVAL),
+            };
+            let other_end = match (*other).phys.checked_add(other_bytes) {
+                Some(end) => end,
+                None => return Err(-EINVAL),
+            };
+            if (*page).phys < other_end && (*other).phys < end {
+                return Err(-EINVAL);
+            }
+        }
+    }
+    Ok(())
+}
+
+/// Checks a ring exclusively through the independently supplied inventory.
+/// Every dereferenced non-sentinel node has first been matched to one of the
+/// inventory entries; links can therefore reject membership, cycles, and
+/// reciprocity faults without discovering liveness from suspect raw pointers.
+unsafe fn validate_pending_inventory_ring(
+    head: *mut AbiListHead,
+    lease: &PendingInventoryLease,
+) -> Result<usize, CInt> {
+    if head.is_null() || (*head).next.is_null() || (*head).prev.is_null() {
+        return Err(-EINVAL);
+    }
+    let count = lease.descriptor_len;
+    if count == 0 {
+        return if (*head).next == head && (*head).prev == head {
+            Ok(0)
+        } else {
+            Err(-EINVAL)
+        };
+    }
+    if (*head).next == head || (*head).prev == head {
+        return Err(-EINVAL);
+    }
+
+    let mut node = (*head).next;
+    let mut previous = head;
+    for _ in 0..count {
+        if lease.descriptor_index(node).is_none()
+            || (*node).prev != previous
+            || (*node).next.is_null()
+        {
+            return Err(-EINVAL);
+        }
+        previous = node;
+        node = (*node).next;
+    }
+    if node != head || (*head).prev != previous || (*previous).next != head {
+        return Err(-EINVAL);
+    }
+
+    // Exact cardinality alone rejects a foreign node, but does not distinguish
+    // duplicate membership from a missing supplied descriptor.  Prove every
+    // independently retained descriptor occurs exactly once in the bounded
+    // ring before permitting a mutation.
+    for index in 0..count {
+        let expected = lease.descriptor_node(index);
+        let mut occurrences = 0usize;
+        let mut candidate = (*head).next;
+        for _ in 0..count {
+            if candidate == expected {
+                occurrences += 1;
+            }
+            candidate = (*candidate).next;
+        }
+        if occurrences != 1 {
+            return Err(-EINVAL);
+        }
+    }
+    Ok(count)
+}
+
+unsafe fn validate_pending_inventory(
+    source: *mut AbiListHead,
+    lease: PendingInventoryLease,
+) -> Result<ValidatedPendingInventory, CInt> {
+    // This admission phase intentionally writes nothing: any error leaves the
+    // source, supplied descriptors, destination candidates, and callback
+    // storage untouched.  The consumed lease has no Drop action.
+    validate_pending_inventory_metadata(&lease)?;
+    let count = validate_pending_inventory_ring(source, &lease)?;
+    Ok(ValidatedPendingInventory { lease, source, count })
+}
+
+impl ValidatedPendingInventory {
+    /// Checks a destination before consuming the token.  An invalid destination
+    /// returns the unchanged token so its owner can choose another pinned batch;
+    /// the successful branch delegates to the infallible reanchor below.
+    unsafe fn try_reanchor_into(
+        self,
+        mut destination: Pin<&mut PendingFreeBatch>,
+    ) -> Result<(), Self> {
+        let dest = destination.as_mut().get_unchecked_mut();
+        if self.source == &raw mut dest.head
+            || dest.state != PendingFreeBatchState::Vacant
+            || dest.lease.is_some()
+            || !dest.head.next.is_null()
+            || !dest.head.prev.is_null()
+        {
+            return Err(self);
+        }
+        self.reanchor_into(destination);
+        Ok(())
+    }
+
+    /// Reanchors a fully validated token without an error path.
+    ///
+    /// # Safety
+    /// `destination` must be the exclusive, pinned, still-vacant batch whose
+    /// head is distinct from `source`; no actor may have changed either after
+    /// validation.  These are transaction-owner obligations, so a valid token
+    /// cannot be partially detached by a later fallible destination check.
+    unsafe fn reanchor_into(self, mut destination: Pin<&mut PendingFreeBatch>) {
+        let dest = destination.as_mut().get_unchecked_mut();
+        let dest_head = &raw mut dest.head;
+        debug_assert!(dest.state == PendingFreeBatchState::Vacant);
+        debug_assert!(dest.head.next.is_null() && dest.head.prev.is_null());
+        debug_assert!(dest.lease.is_none());
+        debug_assert!(self.source != dest_head);
+
+        if self.count == 0 {
+            init_list_head(dest_head);
+        } else {
+            let first = (*self.source).next;
+            let last = (*self.source).prev;
+            init_list_head(dest_head);
+            (*dest_head).next = first;
+            (*dest_head).prev = last;
+            (*first).prev = dest_head;
+            (*last).next = dest_head;
+        }
+        (*self.source).next = null_mut();
+        (*self.source).prev = null_mut();
+        dest.source = self.source;
+        dest.lease = Some(self.lease);
+        dest.state = PendingFreeBatchState::Retained;
+    }
+}
+
+unsafe fn drain_validated_pending_inventory(
+    mut batch: Pin<&mut PendingFreeBatch>,
+    free_fn: Option<MemPendingFreeFn>,
+) -> CInt {
+    let Some(free_fn) = free_fn else { return -EINVAL; };
+    let b = batch.as_mut().get_unchecked_mut();
+    if b.state != PendingFreeBatchState::Retained || b.source.is_null() {
+        return -EINVAL;
+    }
+    let Some(lease) = b.lease.as_mut() else { return -EINVAL; };
+
+    // All fallible checks, including the callback capacity and the complete
+    // retained topology/metadata, happen before page state or any link moves.
+    let count = match validate_pending_inventory_metadata(lease)
+        .and_then(|_| validate_pending_inventory_ring(&raw mut b.head, lease))
+    {
+        Ok(count) => count,
+        Err(_) => return -EINVAL,
+    };
+    let mut node = b.head.next;
+    for index in 0..count {
+        let page = page_from_list(node);
+        *lease.callback_args.add(index) = PendingFreeCallbackArgs {
+            phys: (*page).phys,
+            npages: (*page).offset as CInt,
+        };
+        node = (*node).next;
+    }
+
+    // Make all descriptor/list mutations before the first callback.  Callback
+    // delivery below reads only the pre-captured argument array, never a
+    // descriptor which an earlier allocator callback may have released.
+    node = b.head.next;
+    for _ in 0..count {
+        let next = (*node).next;
+        let page = page_from_list(node);
+        (*page).mode = PM_NONE;
+        list_del_poison(node);
+        node = next;
+    }
+    b.head.next = null_mut();
+    b.head.prev = null_mut();
+    b.source = null_mut();
+    b.state = PendingFreeBatchState::Drained;
+    for index in 0..count {
+        let args = *lease.callback_args.add(index);
+        free_fn(args.phys, args.npages, IHK_MC_PG_USER);
+    }
+    count as CInt
 }
 
 unsafe fn validate_pending_head(head: *mut AbiListHead) -> Result<bool, CInt> {
@@ -370,6 +699,7 @@ unsafe fn detach_pending_free_batch(
     if source.is_null()
         || source == dest_head
         || dest.state != PendingFreeBatchState::Vacant
+        || dest.lease.is_some()
         || !(dest.head.next.is_null() && dest.head.prev.is_null())
     {
         return -EINVAL;
@@ -411,6 +741,7 @@ unsafe fn drain_pending_free_batch(
     let b = batch.as_mut().get_unchecked_mut();
     if b.state != PendingFreeBatchState::Retained
         || b.source != source
+        || b.lease.is_some()
         || validate_pending_head(&raw mut b.head).is_err()
     {
         return -EINVAL;

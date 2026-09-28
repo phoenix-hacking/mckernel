@@ -3042,6 +3042,53 @@ fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 Whole-OS acceptance remains incomplete; future continuations are paused until a
 subsequent launcher invocation.
 
+Continuation shutdown checkpoint 4, 2026-09-28: the changed Layer-B strategy
+passed independent review as `PASS_DIRECT_OBJECT_PACKET`. Its exact packet SHA256
+is `73ed242336988f5f66bb65db7fc81f85e742ff197552047f74b7ec9b3ac4f100`.
+The dispatcher created the canonical mode-0700 root10 and completed only its
+non-following include inventory and preflight. The shutdown request arrived
+before unit-name allocation or the sole compiler submission. No transient unit,
+cgroup identity, compiler, link, owner execution or payload exists. The exact
+preflight-only root is retained in
+`docs/verification/evidence/stability-layer-b-native-owner-bootstrap-preflight-20260928-10.tar.gz`,
+SHA256 `719fee24d51a10fbe665ba855d610985ca08ac2c88a6d3033bb2e3cf5f3b1b64`,
+size 1,654,349 bytes and nine archive members. Preserve the live scratch root.
+Next continuation may resume at packet15's single compile-only submission only
+after rechecking inputs, free space and the absence of a unit/cgroup; linking and
+owner execution remain separately gated.
+
+M01 packet57 independently returns `PASS_RECOVERY_PACKET`. It confirms the
+attempt54 duplicated-VERSION diagnosis was false and releases one future
+source-only root56 attempt after immediate reauthentication. Additive correction:
+root54 did contain partial `runner.rs` scaffolding in both modes, so packet57's
+“before candidate work” means after partial scaffolding but before a complete
+candidate/handoff. Preserve root54 and its complete archive. Phase II and
+compilation remain closed.
+
+M03 independent review returns `FAIL_VALIDATED_INVENTORY_SOURCE` with two
+remaining evidence gaps: exact null-descriptor/immediate-free list preservation,
+and fieldwise lease/token/descriptor-array nonmutation during repeated rejection.
+The product helper remains frozen at SHA256
+`423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985`;
+production callers remain unwired. Next correct only those fixtures and obtain a
+fresh independent source review. M02's full 137-test dependency closure is now
+recorded at SHA256
+`6e4ec66cd0a4e8ad74bd067338342f6bce7a1a6cc9bf02946f8819f2b2bdc03b`,
+but no execution is released by that static manifest.
+
+All eight child agents are terminal. Launcher PID 3052017, worker PID 3052019
+and app-server PID 3052021 remain the active launcher identities while this
+bounded closeout returns; the run directory is
+`.git/os-autopilot/runs/20260928T080459Z-d717ac31`. No compiler, systemd compile
+unit, guest, QEMU, mcexec or IHK process is active. Host/scratch free space is
+44/21 GiB. Exact evidence and next tasks are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-4.json`.
+Unrelated concurrent launcher-file edits, bytecode deletion and untracked
+bytecode remain unstaged. Counters remain 0/273 application cases, 2/4 narrow
+fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
+Whole-OS acceptance remains incomplete; this checkpoint pauses rather than
+completes or resumes the goal.
+
 Continuation shutdown checkpoint 3, 2026-09-28: the replacement Layer-B
 strategy is now a native single-threaded pidfd/subreaper owner rather than the
 rejected Python PGID family. Exact source SHA256

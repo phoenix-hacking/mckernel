@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_object_bootstrap_controller_source_review",
+  "recorded_utc": "2026-09-28T09:48:00Z",
+  "status": "FAIL_CONTROLLER_SOURCE",
+  "controller_sha256": "1f5a2d03403107af227468834e52a47581a6913553be6aafc188fbeb795e977f",
+  "test_sha256": "8c83ca44f27c29ad83e741c2a631d9a29333ffd9b03440b97f6479e1087cac8d",
+  "findings": [
+    "Unit regex and symlink tool admission reject valid documented inputs while run bypasses required preflight.",
+    "Pending/malformed observations and exceptions can escape mandatory cleanup.",
+    "Success identity/timestamps are incomplete and cleanup can accept mismatched or unobserved ownership.",
+    "Compiler trace, dependencies, pre/post identities and generated artifacts are disconnected from run/evidence.",
+    "Make newline and symlink-component handling remain incorrect.",
+    "Evidence loses command results/errors and fake tests contain contradictory or incomplete answer sequences."
+  ],
+  "convergence_decision": "The controller candidate and capable correction both fail the same boundary. Abandon the controller. Use the already reviewed systemd lifecycle/object command directly with a strictly simpler exact prerequisite partition, then independently review once before execution.",
+  "test_or_controller_execution_released": false,
+  "compilation_released": false,
+  "acceptance_credit": false
+}

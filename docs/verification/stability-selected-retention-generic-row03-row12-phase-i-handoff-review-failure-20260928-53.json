@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_phase_i_handoff_review",
+  "review_attempt": 53,
+  "recorded_utc": "2026-09-28T09:34:00Z",
+  "status": "FAIL_HANDOFF",
+  "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-expert-correction-packet-20260928-52",
+  "handoff_sha256": "56337ddd4cd7d76d46f0c6470e5ecf2427f5928b8055b03863a2c324f4ba4ab9",
+  "handoff_size": 12566,
+  "regular_files": 327,
+  "source_members_per_mode": 51,
+  "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-attempt-20260928-52.tar.gz",
+  "archive_sha256": "e29e3b8f47e2dd9572e3d4826c466ef50b05be0744b734c3c00cd397330c3c54",
+  "archive_size": 1013537,
+  "archive_members": 338,
+  "verified_improvements": [
+    "Generic Vec Default is unconditional.",
+    "Detached Box destruction precedes deallocation evidence outside the lock.",
+    "The unique metadata-only post-store hook remains correct, with no post-publication backing read or production drift."
+  ],
+  "blocking_findings": [
+    "The common accepted helper contradicts actual baseline observer count 1 with an assertion for 2.",
+    "Observer capture lacks fresh begin/end interval, sequence, uniqueness and complete parsing at later samples; row12 reuses stale baseline counters.",
+    "Complete verification_mailbox Rows and required phase/owner/commit/close/destruction/drain comparisons remain absent.",
+    "Prohibited address/duplicate release detection and insertion-total versus queue-length accounting are incomplete.",
+    "Publish callbacks do not compare the complete otherwise-zero 128-byte wake packet."
+  ],
+  "authentication": "Canonical root/archive shape, both 51-member authorities, inherited pins, helper/templates/records and stager inverse reconstruction pass.",
+  "phase_ii_released": false,
+  "compilation_or_runtime": false,
+  "acceptance_credit": false,
+  "next": "Preserve attempt52. The reviewed packet design remains valid, but the cheap implementation owner did not implement it. Change implementation strategy to a capable coherent owner at a fresh reviewed root; do not issue another design audit or bounded cheap correction."
+}

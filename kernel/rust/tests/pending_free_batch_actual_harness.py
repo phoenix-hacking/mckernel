@@ -16,6 +16,7 @@ ABI = ROOT / 'kernel/rust/abi.rs'
 MEM = ROOT / 'kernel/rust/mem_helpers.rs'
 RUST = ROOT / 'kernel/rust/tests/pending_free_batch_vectors.rs'
 C = ROOT / 'kernel/rust/tests/pending_free_batch_vectors.c'
+CMEM = ROOT / 'kernel/mem.c'
 RUN = ROOT / 'kernel/rust/tests/run_equivalence.sh'
 # The isolated build owner supplies absolute, immutable compiler paths.  Do not
 # inherit rustup/cargo selection state: it would make the source fixture's
@@ -46,6 +47,7 @@ def prelude():
     parts = ['#![allow(dead_code, unsafe_op_in_unsafe_fn)]\n'
              'use core::marker::{PhantomData,PhantomPinned};\nuse core::pin::Pin;\n'
              'use core::ptr::{null_mut,write_volatile};\n'
+             'use core::ffi::c_void;\n'
              'use core::mem::{size_of,align_of,offset_of};\n']
     bindings = []
     regions = [
@@ -58,14 +60,16 @@ def prelude():
         (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_body_result('),
         (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_body_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_begin_free_pages_pending_public_body_result('),
         (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_free_pages_pending_enqueue_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_body_result('),
+        (MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_mckernel_free_pages_body_result(', '#[no_mangle]\npub unsafe extern "C" fn mem_mckernel_free_pages_public_body_result('),
     ]
     for path, begin, end in regions:
         text, binding = extract(path, begin, end)
         parts.append(text)
         bindings.append(binding)
-    for prefix in ('const EINVAL:', 'const IHK_MC_PG_USER:', 'const PM_NONE:', 'const PM_PENDING_FREE:',
+    for prefix in ('const EINVAL:', 'const PAGE_SHIFT:', 'const PAGE_SIZE:', 'const IHK_MC_PG_USER:', 'const PM_NONE:', 'const PM_PENDING_FREE:',
                    'const LIST_POISON1:', 'const LIST_POISON2:', 'type MemPendingFreeFn =', 'type MemPendingWarnFn =',
-                   'type MemBeginFreePagesPendingFn =', 'type MemVoidFn ='):
+                   'type MemBeginFreePagesPendingFn =', 'type MemVirtToPhysFn =', 'type MemPhysToPageFn =',
+                   'type MemFreeInAllocatorFn =', 'type MemVoidFn ='):
         lines = [line for line in MEM.read_text().splitlines(True) if line.startswith(prefix)]
         assert len(lines) == 1, (prefix, len(lines))
         parts.append(lines[0])
@@ -117,6 +121,98 @@ def success(argv, out, label, ledger):
 
 def rows(text):
     return [json.loads(line[5:]) for line in text.splitlines() if line.startswith('JSON|')]
+
+
+def extract_after(path, begin, end):
+    source = path.read_text()
+    assert source.count(begin) == 1, (path, begin)
+    start = source.index(begin)
+    stop = source.index(end, start)
+    text = source[start:stop]
+    return text, {'path': str(path.relative_to(ROOT)), 'begin': begin, 'end': end,
+                  'start': start, 'end_offset': stop, 'sha256': hashlib.sha256(text.encode()).hexdigest()}
+
+
+def exact_c_partial_release_control():
+    result, result_binding = extract_after(
+        CMEM,
+        'int mem_finish_free_pages_pending_result(struct list_head *pendings,\n\t\tmem_pending_free_fn_t free_fn)\n{',
+        'int mem_finish_free_pages_pending_body_result(struct list_head *pendings,')
+    fallback, fallback_binding = extract_after(
+        CMEM, 'void finish_free_pages_pending(void)\n{', '#endif\n\nstatic struct ihk_mc_pa_ops allocator')
+    support = r'''
+#include <assert.h>
+#include <setjmp.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#define EINVAL 22
+#define PM_NONE 0
+#define PM_PENDING_FREE 1
+#define IHK_MC_PG_USER 1
+struct list_head { struct list_head *next, *prev; };
+struct page { struct list_head list; int mode; unsigned long phys; int offset; };
+typedef void (*mem_pending_free_fn_t)(unsigned long, int, int);
+struct cpu_local { struct list_head pending_free_pages; };
+static struct cpu_local current_cpu;
+static int callbacks, panics;
+static jmp_buf panic_return;
+static void list_del(struct list_head *entry) { entry->prev->next=entry->next; entry->next->prev=entry->prev; }
+static void *phys_to_virt(unsigned long phys) { return (void *)(uintptr_t)phys; }
+#define page_to_phys(page) ((page)->phys)
+static void __mckernel_free_pages_in_allocator(void *ignored, int npages, int user) { (void)ignored; assert(npages==1 && user==1); callbacks++; }
+static struct cpu_local *get_this_cpu_local_var(void) { return &current_cpu; }
+static void panic(const char *ignored) { (void)ignored; panics++; longjmp(panic_return, 1); }
+static void result_callback(unsigned long phys, int npages, int user) { assert(phys==0x1000 && npages==1 && user==1); callbacks++; }
+static void init_two(void) { static struct page pages[2]; struct list_head *h=&current_cpu.pending_free_pages; pages[0].list.next=&pages[1].list; pages[0].list.prev=h; pages[1].list.next=h; pages[1].list.prev=&pages[0].list; pages[0].mode=PM_PENDING_FREE; pages[1].mode=PM_NONE; pages[0].phys=0x1000; pages[1].phys=0x3000; pages[0].offset=1; pages[1].offset=2; h->next=&pages[0].list; h->prev=&pages[1].list; callbacks=0; panics=0; }
+'''
+    controls = r'''
+int main(void) {
+    init_two();
+    assert(mem_finish_free_pages_pending_result(&current_cpu.pending_free_pages, result_callback) == -EINVAL);
+    assert(callbacks == 1);
+    init_two();
+    if (!setjmp(panic_return)) { finish_free_pages_pending(); assert(!"fallback must panic after first callback"); }
+    assert(callbacks == 1 && panics == 1);
+    puts("PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS");
+    return 0;
+}
+'''
+    return support + '\n' + result + '\n' + fallback + '\n' + controls, [result_binding, fallback_binding]
+
+
+def source_only_admission():
+    """Layer-A parser/source gate.  It deliberately performs no build or run."""
+    import ast
+    ast.parse(Path(__file__).read_text(), filename=str(Path(__file__)))
+    mem = MEM.read_text()
+    c_mem = CMEM.read_text()
+    required = (
+        'struct PendingInventoryLease', 'struct ValidatedPendingInventory',
+        'validate_pending_inventory_metadata', 'validate_pending_inventory_ring',
+        'try_reanchor_into', 'reanchor_into', 'drain_validated_pending_inventory',
+        'callback_args.add(index)', 'lease.descriptor_index(node)',
+    )
+    assert all(item in mem for item in required), required
+    cases = ('missing','extra','duplicate','foreign','link','mode','negative-count','count',
+             'alignment','range','end-overflow','overlap','destination')
+    assert all(('"' + case + '"') in RUST.read_text() for case in cases), cases
+    generated_c, c_bindings = exact_c_partial_release_control()
+    assert 'mem_finish_free_pages_pending_result' in generated_c
+    assert 'finish_free_pages_pending' in generated_c
+    assert 'callbacks == 1 && panics == 1' in generated_c
+    assert 'descriptor_len > CInt::MAX as usize' in mem
+    assert 'mem_mckernel_free_pages_body_result' in mem and 'free_in_allocator(va, npages, is_user)' in mem
+    assert "'const PAGE_SHIFT:'" in Path(__file__).read_text()
+    assert "'const PAGE_SIZE:'" in Path(__file__).read_text()
+    rust_body, rust_binding = extract(
+        MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_result(',
+        '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_body_result(')
+    assert 'free_fn' in rust_body
+    return {'status': 'PASS_SOURCE_ONLY_M03_ADMISSION', 'hashes': {
+        str(MEM.relative_to(ROOT)): digest(MEM), str(CMEM.relative_to(ROOT)): digest(CMEM),
+        str(RUST.relative_to(ROOT)): digest(RUST), str(C.relative_to(ROOT)): digest(C),
+    }, 'exact_legacy_extracts': [rust_binding] + c_bindings}
 
 
 EXPECTED = [
@@ -179,14 +275,21 @@ def check_rows(result):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output-dir')
-    parser.add_argument('--rustc', required=True,
+    parser.add_argument('--static-admission', action='store_true',
+                        help='parse/source inspection only; no compiler or fixture execution')
+    parser.add_argument('--rustc',
                         help='absolute Rust compiler selected by the build owner')
-    parser.add_argument('--cc', required=True,
+    parser.add_argument('--cc',
                         help='absolute C compiler selected by the build owner')
     args = parser.parse_args()
+    if args.static_admission:
+        print(json.dumps(source_only_admission(), sort_keys=True))
+        return
+    if not args.rustc or not args.cc:
+        parser.error('--rustc and --cc are required unless --static-admission is selected')
     out = output(args.output_dir)
     ledger = []
-    inputs = (ABI, MEM, RUST, C, RUN, Path(__file__).resolve())
+    inputs = (ABI, MEM, CMEM, RUST, C, RUN, Path(__file__).resolve())
     try:
         # Freeze all sources before the first syntax, compiler, or fixture execution.
         frozen = out / 'inputs'
@@ -226,6 +329,12 @@ def main():
         cb = out/'reference-c'
         success([str(cc),'-std=c11','-Wall','-Wextra','-Werror',str(C),'-o',str(cb)],out,'c-compile',ledger)
         cs = rows(success([str(cb)],out,'c-run',ledger))
+        exact_c, exact_c_bindings = exact_c_partial_release_control()
+        exact_c_path = out/'exact-c-partial-release-controls.c'
+        exact_c_path.write_text(exact_c)
+        exact_c_bin = out/'exact-c-partial-release-controls'
+        success([str(cc),'-std=gnu11','-Wall','-Wextra','-Werror',str(exact_c_path),'-o',str(exact_c_bin)],out,'exact-c-partial-compile',ledger)
+        assert success([str(exact_c_bin)],out,'exact-c-partial-run',ledger).strip() == 'PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS'
         check_rows(rs)
         check_rows(cs)
         assert rs == cs, 'Rust and C complete computed snapshots differ'
@@ -248,18 +357,19 @@ def main():
         assert bad['before']['pages'][1]['mode']==bad['after']['pages'][1]['mode']==0
         assert mr[:-1] == rs[:len(mr)-1], 'mutant failed before target case'
         traits = {}
-        for trait in ('Copy','Clone','Unpin','Send','Sync'):
-            probe = out/(trait+'.rs')
-            probe.write_text(base + '\nfn need<T:'+trait+'>(){} fn main(){need::<PendingFreeBatch>();}\n')
-            rc,stdout,stderr = call(compile_rust+['--error-format=json',str(probe),'-o',str(out/trait)],out,'trait-'+trait,ledger)
-            assert rc != 0 and not stdout
-            diagnostics = [json.loads(line) for line in stderr.splitlines()]
-            coded = [d for d in diagnostics if d.get('code')]
-            assert coded and all(d['level']=='error' and d['code']['code']=='E0277' for d in coded), trait
-            assert not any(d['level']=='warning' for d in diagnostics), trait
-            assert all(trait in d.get('rendered','') and 'PendingFreeBatch' in d.get('rendered','') for d in coded), trait
-            assert all(d.get('code') or d['message'].startswith(('aborting due to','For more information')) for d in diagnostics), trait
-            traits[trait] = {'status':'EXPECTED_E0277_ONLY','diagnostic_count':len(coded)}
+        for target in ('PendingFreeBatch','PendingInventoryLease','ValidatedPendingInventory'):
+            for trait in ('Copy','Clone','Unpin','Send','Sync'):
+                probe = out/(target+'-'+trait+'.rs')
+                probe.write_text(base + '\nfn need<T:'+trait+'>(){} fn main(){need::<'+target+'>();}\n')
+                rc,stdout,stderr = call(compile_rust+['--error-format=json',str(probe),'-o',str(out/(target+'-'+trait))],out,'trait-'+target+'-'+trait,ledger)
+                assert rc != 0 and not stdout
+                diagnostics = [json.loads(line) for line in stderr.splitlines()]
+                coded = [d for d in diagnostics if d.get('code')]
+                assert coded and all(d['level']=='error' and d['code']['code']=='E0277' for d in coded), trait
+                assert not any(d['level']=='warning' for d in diagnostics), trait
+                assert all(trait in d.get('rendered','') and target in d.get('rendered','') for d in coded), trait
+                assert all(d.get('code') or d['message'].startswith(('aborting due to','For more information')) for d in diagnostics), trait
+                traits[target+'-'+trait] = {'status':'EXPECTED_E0277_ONLY','diagnostic_count':len(coded)}
         assert identities == {str(p.relative_to(ROOT)):digest(p) for p in inputs}, 'input changed during execution'
         success(['git','diff','--check'],out,'diff-check',ledger)
         js(out/'manifest.json',{'status':'PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY',

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_object_bootstrap_controller_source_review",
+  "recorded_utc": "2026-09-28T09:36:00Z",
+  "status": "FAIL_CONTROLLER_SOURCE",
+  "controller_path": "scripts/tests/run_layer_b_object_bootstrap_v1.py",
+  "controller_sha256": "19f4bc8218c5896a6bd150fcb84de7995bd9297226259338d76608c8d23cedb7",
+  "test_path": "scripts/tests/test_layer_b_object_bootstrap_v1.py",
+  "test_sha256": "8c67268d05b0e0ad03f5d12d80c297e58f29f6f8e3cec8100d714e05037fe8a0",
+  "blocking_findings": [
+    "Submission errors can proceed to observation; successful state lacks full result/status/timestamp/identity checks and exceptions can skip cleanup.",
+    "Cleanup operations are not bounded or reconciled and do not implement mandatory manager-side kill or recursive cgroup ownership.",
+    "Prerequisite classification allows arbitrary generated suffixes and omits required source/header post-identity checks.",
+    "Inventory collapses symlink chains, misses walk errors/device-inode identity and mishandles consumed internal symlinks.",
+    "Make dependency parsing mishandles continuations, $$ and multiple rules/targets.",
+    "Canonical root/source/unit/tool preflight, complete injected execution/evidence/ET_REL path and terminal state are missing.",
+    "Several fake tests are internally contradictory or do not exercise actual failure transitions."
+  ],
+  "limited_positive": "Import/default paths are source-inspected fail-closed and contain no explicit command or mutation, but no execution occurred.",
+  "next": "Apply one coherent capable correction across controller and fake tests, then independently re-review before even the pure unit suite runs.",
+  "controller_execution_released": false,
+  "compilation_released": false,
+  "acceptance_credit": false
+}
