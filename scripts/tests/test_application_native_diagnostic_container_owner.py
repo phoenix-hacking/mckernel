@@ -60,6 +60,7 @@ def container(obj):
 
 class Fake:
     def __init__(self):
+        self.children = owner.CommandLedger()
         self.calls = []
         self.exists = False
         self.started = False
@@ -300,10 +301,14 @@ class OwnerTests(unittest.TestCase):
         children, reaps, kills = [], [], []
         injected = []
         def spawning(path, argv, env, **kwargs):
+            self.assertEqual(kwargs["setpgroup"], 0)
+            self.assertNotIn("setsid", kwargs)
             self.assertNotIn(signal.SIGTERM, kwargs["setsigmask"])
             self.assertIn(signal.SIGTERM, signal.pthread_sigmask(signal.SIG_BLOCK, []))
             pid = spawn(path, argv, env, **kwargs)
             children.append(pid)
+            self.assertEqual(os.getpgid(pid), pid)
+            self.assertNotEqual(os.getpgid(pid), os.getpgrp())
             if phase == "spawn":
                 injected.append(True)
                 signal.raise_signal(signal.SIGTERM)
@@ -347,7 +352,7 @@ class OwnerTests(unittest.TestCase):
     def test_signal_after_waitpid_cannot_kill_reused_process_group(self):
         self.command_signal_window("reap")
 
-    def test_delayed_create_publication_requires_new_retirement_and_quiet_window(self):
+    def test_create_publication_after_prior_quiet_window_requires_retirement(self):
         original = self.fake.call
         failure = TimeoutError("create reply lost")
         def call(argv, **kwargs):
@@ -357,29 +362,101 @@ class OwnerTests(unittest.TestCase):
                 raise failure
             return response
         self.fake.call = call
-        sleep = self.obj.sleep
-        published = []
-        def delayed(duration):
-            sleep(duration)
-            if not published:
-                published.append(True)
-                self.fake.exists = True
-        self.obj.sleep = delayed
         self.assertIs(self.fails(), failure)
-        self.assertTrue(self.fake.exists)
         self.assertFalse(self.obj.absent)
         self.assertIsNotNone(self.obj.lock)
-        before = self.obj.clock()
+        # Multiple quiet windows cannot complete a request at the daemon.
+        for _ in range(4):
+            self.elapsed[0] += 3
+            self.assertFalse(self.obj._cleanup())
+            self.assertIsNotNone(self.obj.lock)
+        self.fake.exists = True
         self.assertTrue(self.obj._cleanup())
-        self.assertGreaterEqual(self.obj.clock() - before, 2)
         self.obj._release()
         self.obj._flush()
         self.assertFalse(self.fake.exists)
         self.assertIsNone(self.obj.lock)
         self.assertIs(self.obj.failure, failure)
-        records = [json.loads(p.read_text()) for p in self.obj.evidence.glob("absence-*.json")]
-        self.assertTrue(any(not row["empty"] for row in records))
-        self.assertGreaterEqual(sum(row["empty"] for row in records), 3)
+        self.assertTrue(self.obj.create_completed)
+        self.assertEqual([a[3] for a, _ in self.fake.calls if a[3] in ("stop", "kill", "rm")], ["stop", "kill", "rm"])
+
+    def test_never_published_create_retains_lease_without_report(self):
+        original = self.fake.call
+        def call(argv, **kwargs):
+            if argv[3] == "create":
+                raise TimeoutError("request completion unknown")
+            return original(argv, **kwargs)
+        self.fake.call = call
+        self.fails("request completion unknown")
+        for elapsed in (2, 15, 60, 3600, 86400):
+            self.elapsed[0] = elapsed
+            self.assertFalse(self.obj._cleanup())
+            self.assertFalse(self.obj.absent)
+            self.assertIsNotNone(self.obj.lock)
+            self.assertFalse(self.obj.create_completed)
+            with self.assertRaises(owner.OwnerError):
+                self.obj._release()
+            self.assertFalse((self.obj.evidence / "result.json").exists())
+
+    def test_cleanup_deadline_after_empty_lookup_cannot_publish_absence(self):
+        self.obj._acquire()
+        self.obj.absent = True  # A new cleanup must invalidate prior state.
+        calls = []
+        def lookup():
+            self.assertFalse(self.obj.absent)
+            calls.append(True)
+            if len(calls) == 2:
+                self.elapsed[0] = 16
+            return None
+        self.obj._lookup = lookup
+        self.assertFalse(self.obj._cleanup())
+        self.assertFalse(self.obj.absent)
+        self.assertIsNotNone(self.obj.lock)
+        with self.assertRaises(owner.OwnerError):
+            self.obj._release()
+
+    def test_cleanup_signal_after_empty_lookup_cannot_publish_absence(self):
+        self.obj._acquire()
+        self.obj.absent = True
+        calls = []
+        failure = owner.OwnerSignal("cleanup boundary")
+        def lookup():
+            self.assertFalse(self.obj.absent)
+            calls.append(True)
+            if len(calls) == 2:
+                raise failure
+            return None
+        self.obj._lookup = lookup
+        self.assertFalse(self.obj._cleanup())
+        self.assertIs(self.obj.failure, failure)
+        self.assertFalse(self.obj.absent)
+        self.assertIsNotNone(self.obj.lock)
+        with self.assertRaises(owner.OwnerError):
+            self.obj._release()
+
+    def test_pending_local_client_prevents_lookup_release_and_report(self):
+        self.obj._acquire()
+        child = owner.CommandChild()
+        child.pid = 987654321
+        self.fake.children.pending.add(child)
+        failure = OSError("wait ownership unavailable")
+        with mock.patch.object(owner.os, "killpg"), \
+             mock.patch.object(owner.os, "waitpid", side_effect=failure):
+            self.assertFalse(self.obj._cleanup())
+        self.assertEqual(self.fake.calls, [])
+        self.assertFalse(self.obj.absent)
+        self.assertIn(child, self.fake.children.pending)
+        self.assertIn("OSError", self.obj.secondary)
+        with self.assertRaises(owner.OwnerError):
+            self.obj._release()
+        with mock.patch.object(owner.os, "killpg") as kill, \
+             mock.patch.object(owner.os, "waitpid", return_value=(child.pid, 0)):
+            self.assertTrue(self.obj._cleanup())
+            self.fake.children.retire(child)
+            kill.assert_called_once_with(child.pid, signal.SIGKILL)
+        self.assertTrue(child.reaped)
+        self.obj._release()
+        self.assertIsNone(self.obj.lock)
 
     def blocking_writer(self, phase):
         original_call = self.fake.call
@@ -737,12 +814,14 @@ class OwnerTests(unittest.TestCase):
                 owner.main(["--attempt-parent", str(self.parent), "--nonce", NONCE, "--owner-sha256", self.obj.owner_sha])
 
     def test_root_docker_prefix_and_environment_are_exact(self):
+        backend = owner.DockerBackend()
         with mock.patch.object(owner.os, "getuid", return_value=0), mock.patch.object(owner.os, "geteuid", return_value=0), \
              mock.patch.dict(owner.os.environ, {"SUDO_ASKPASS": "/reviewed/helper", "DOCKER_HOST": "evil"}, clear=True), \
              mock.patch.object(owner, "bounded_command", return_value=result()) as command:
-            owner.DockerBackend().call(owner.PREFIX + ["ps"], timeout=4)
+            backend.call(owner.PREFIX + ["ps"], timeout=4)
         command.assert_called_once_with(["/usr/bin/sudo", "-A", "/usr/bin/docker", "ps"], 4,
-            env={"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "SUDO_ASKPASS": "/reviewed/helper"})
+            env={"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "SUDO_ASKPASS": "/reviewed/helper"},
+            ledger=backend.children)
 
     def test_inner_parent_must_stay_uid1000_even_for_root_owner(self):
         with mock.patch.object(owner.os, "geteuid", return_value=0):
@@ -798,6 +877,59 @@ class OwnerTests(unittest.TestCase):
             with self.assertRaises(owner.CommandError) as caught:
                 owner.bounded_command(["/usr/bin/python3", "-c", "print('x'*1000)"], 3)
             self.assertEqual(len(caught.exception.stdout), 33)
+
+    def test_delayed_exact_reap_survives_bounded_command_failure(self):
+        ledger = owner.CommandLedger()
+        try:
+            with mock.patch.object(owner.CommandChild, "wait", side_effect=owner.OwnerError("reap delayed")):
+                with self.assertRaises(owner.CommandError):
+                    owner.bounded_command(["/usr/bin/python3", "-c", "import time; time.sleep(30)"],
+                                          0.05, ledger=ledger)
+            self.assertEqual(len(ledger.pending), 1)
+            child = next(iter(ledger.pending))
+            self.assertFalse(child.reaped)
+            self.assertEqual(len(ledger.errors), 1)
+            with self.assertRaisesRegex(owner.OwnerError, "previous command child"):
+                owner.bounded_command(["/usr/bin/true"], 1, ledger=ledger)
+            ledger.retire_pending()
+            self.assertTrue(child.reaped)
+            self.assertEqual(ledger.pending, set())
+            with mock.patch.object(owner.os, "killpg") as kill:
+                ledger.retire(child)
+                kill.assert_not_called()
+        finally:
+            ledger.retire_pending()
+
+    def test_kill_and_wait_failures_remain_owned_and_preserved(self):
+        ledger = owner.CommandLedger()
+        kill_failure = PermissionError("kill failed")
+        wait_failure = OSError("wait failed")
+        try:
+            with mock.patch.object(owner.os, "killpg", side_effect=kill_failure), \
+                 mock.patch.object(owner.CommandChild, "wait", side_effect=wait_failure):
+                with self.assertRaises(owner.CommandError):
+                    owner.bounded_command(["/usr/bin/python3", "-c", "import time; time.sleep(30)"],
+                                          0.05, ledger=ledger)
+            self.assertEqual(len(ledger.pending), 1)
+            child = next(iter(ledger.pending))
+            self.assertFalse(child.reaped)
+            self.assertEqual(ledger.errors, [wait_failure, kill_failure])
+            ledger.retire_pending()
+            self.assertTrue(child.reaped)
+        finally:
+            ledger.retire_pending()
+
+    def test_child_signal_defaults_survive_ignored_cleanup_handlers(self):
+        previous = {sig: signal.getsignal(sig) for sig in owner.OWNER_SIGNALS}
+        try:
+            for sig in owner.OWNER_SIGNALS:
+                signal.signal(sig, signal.SIG_IGN)
+            response = owner.bounded_command(["/usr/bin/python3", "-c",
+                "import os,signal; os.kill(os.getpid(), signal.SIGTERM)"], 3)
+            self.assertEqual(response.returncode, -signal.SIGTERM)
+        finally:
+            for sig, handler in previous.items():
+                signal.signal(sig, handler)
 
 
 if __name__ == "__main__":

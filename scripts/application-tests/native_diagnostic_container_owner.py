@@ -229,9 +229,11 @@ class CommandChild:
                     except OSError:
                         continue
                     actions.append((os.POSIX_SPAWN_CLOSE, fd))
+            # POSIX_SPAWN_SETPGROUP with zero creates a group led by the child
+            # without requiring the setsid extension missing from host Python.
             self.pid = os.posix_spawn(argv[0], argv, dict(os.environ) if env is None else env,
-                                      file_actions=actions, setsid=True, setsigmask=child_mask,
-                                      setsigdef=(signal.SIGPIPE, signal.SIGXFSZ))
+                                      file_actions=actions, setpgroup=0, setsigmask=child_mask,
+                                      setsigdef=OWNER_SIGNALS + (signal.SIGPIPE, signal.SIGXFSZ))
         finally:
             for fd in self.write_fds:
                 os.close(fd)
@@ -254,25 +256,65 @@ class CommandChild:
                 time.sleep(min(0.01, max(0, end - time.monotonic())))
         return self.returncode
 
-    def retire(self):
+    def retire(self, timeout=1):
         if self.pid is not None and not self.reaped:
             # Only an unreaped direct child reserves this numeric group ID.
+            failure = None
             try:
                 os.killpg(self.pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass
-            self.wait(1)
+            except BaseException as exc:
+                failure = exc
+            try:
+                self.wait(timeout)
+            except BaseException as exc:
+                if failure is not None:
+                    raise exc from failure
+                raise
+            if failure is not None:
+                raise failure
 
 
-def bounded_command(argv, timeout, *, env=None):
+class CommandLedger:
+    """Keep direct-child ownership until exact waitpid completion."""
+    def __init__(self):
+        self.pending = set()
+        self.errors = []
+
+    def retire(self, child, timeout=1):
+        try:
+            child.retire(timeout)
+        except BaseException as exc:
+            self.errors.append(exc)
+            cause = BaseException.__getattribute__(exc, "__cause__")
+            if cause is not None:
+                self.errors.append(cause)
+        finally:
+            if child.pid is None or child.reaped:
+                self.pending.discard(child)
+
+    def retire_pending(self, timeout=1):
+        for child in tuple(self.pending):
+            self.retire(child, timeout)
+        need(not self.pending, "local Docker client retirement unresolved")
+
+
+COMMAND_LEDGER = CommandLedger()
+
+
+def bounded_command(argv, timeout, *, env=None, ledger=None):
     """Drain bounded pipes without communicate()'s unbounded memory capture."""
     need(type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0, "command deadline")
     end = time.monotonic() + timeout
     output = [bytearray(), bytearray()]
     child = CommandChild()
+    ledger = COMMAND_LEDGER if ledger is None else ledger
+    need(not ledger.pending, "previous command child retirement unresolved")
     failure = None
     mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
     try:
+        ledger.pending.add(child)
         try:
             child.acquire(argv, env, mask)
         finally:
@@ -304,10 +346,9 @@ def bounded_command(argv, timeout, *, env=None):
         cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
         try:
             if failure is not None:
-                try:
-                    child.retire()
-                except BaseException:
-                    pass
+                ledger.retire(child)
+            elif child.reaped:
+                ledger.pending.discard(child)
             for stream in (child.stdout, child.stderr):
                 if stream is not None:
                     try:
@@ -324,13 +365,16 @@ def bounded_command(argv, timeout, *, env=None):
 
 
 class DockerBackend:
+    def __init__(self):
+        self.children = CommandLedger()
+
     def call(self, argv, *, timeout):
         need(argv[:3] == PREFIX, "exact sudo Docker argv")
         need(os.getuid() == os.geteuid() == 0, "outer Docker owner must be root for command retirement")
         env = {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"}
         if "SUDO_ASKPASS" in os.environ:
             env["SUDO_ASKPASS"] = os.environ["SUDO_ASKPASS"]
-        return bounded_command(argv, timeout, env=env)
+        return bounded_command(argv, timeout, env=env, ledger=self.children)
 
 
 def bound_manifest(path=MANIFEST):
@@ -377,6 +421,7 @@ class DiagnosticOwner:
         self.secondary_omitted = 0
         self.may_exist = False
         self.create_issued = False
+        self.create_completed = False
         self.sleep = time.sleep
         self.absent = False
         self.cleaning = False
@@ -639,7 +684,8 @@ class DiagnosticOwner:
             raise
 
     def _release(self):
-        need(self.absent, "cannot release uncertain container lease")
+        need(self.absent and not self.backend.children.pending and
+             (not self.create_issued or self.create_completed), "cannot release uncertain container lease")
         if self.lock is not None:
             mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
             try:
@@ -651,12 +697,18 @@ class DiagnosticOwner:
 
     def _cleanup(self):
         """One 15-second cleanup attempt; retain the lock on uncertainty."""
+        self.absent = False
         end = self.clock() + 15
         self.cleaning, self.command_deadline = True, end
         try:
+            self.backend.children.retire_pending(timeout=min(1, end - self.clock()))
             row = self._lookup()
             if row is not None:
                 self.container = row["Id"]
+                # Authentication of the exact name, label and ID resolves an
+                # issued create even when its client response was lost.
+                self.create_completed = True
+                removed = False
                 for args, allowance in ((["stop", "--time=2"], 4), (["kill"], 2),
                                         (["wait"], 1), (["logs", "--timestamps"], 1),
                                         (["inspect"], 1), (["rm", "--force"], 4)):
@@ -667,33 +719,24 @@ class DiagnosticOwner:
                         # rm and final absence remain authoritative.
                         if args[0] == "rm":
                             need(result.returncode == 0, "container removal failed")
+                            removed = True
                     except BaseException as exc:
                         self._remember(exc)
+                need(removed, "authenticated container removal incomplete")
             need(self.clock() < end, "cleanup deadline")
-            self.absent = self._lookup() is None
-            need(self.absent and self.clock() <= end, "container remains after cleanup")
-            if self.create_issued:
-                # A killed CLI can leave a create request in flight at the
-                # daemon. Require repeated exact lookups over a quiet window;
-                # a late owner resets retirement and requires another window.
-                self.absent = False
-                quiet_start = self.clock()
-                samples = 0
-                while self.clock() - quiet_start < 2 or samples < 3:
-                    need(self.clock() + 0.25 < end, "absence quiet-window deadline")
-                    self.sleep(0.25)
-                    late = self._lookup()
-                    samples += 1
-                    self._save("absence-%03d.json" % self.sequence,
-                               {"started": quiet_start, "observed": self.clock(),
-                                "empty": late is None, "sample": samples})
-                    if late is not None:
-                        self.container = late["Id"]
-                        raise OwnerError("late container publication requires renewed retirement")
-                self.absent = True
+            empty = self._lookup() is None
+            need(empty and self.clock() <= end, "container remains after cleanup")
+            need(not self.create_issued or self.create_completed,
+                 "issued create remains unresolved despite empty lookup")
+            need(not self.backend.children.pending, "local Docker client retirement unresolved")
+            self.absent = True
         except BaseException as exc:
+            self.absent = False
             self._remember(exc)
         finally:
+            errors, self.backend.children.errors = self.backend.children.errors, []
+            for exc in errors:
+                self._remember(exc)
             self.cleaning, self.command_deadline = False, None
         return self.absent
 
@@ -757,6 +800,7 @@ class DiagnosticOwner:
             cid = created.stdout.decode("ascii").strip()
             need(HEX.fullmatch(cid) and created.stdout == (cid + "\n").encode(), "create requires full container ID")
             self.container = cid
+            self.create_completed = True
             row = self._lookup()
             need(row is not None, "created container missing")
             self._profile(row, image)

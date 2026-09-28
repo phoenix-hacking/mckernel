@@ -3731,3 +3731,27 @@ the current-signal diagnostic lane and includes checkpoint 16's scoped M03
 result. Resume from the supported process-group correction above. No execution
 packet is released and no guest has run. Whole-OS acceptance remains incomplete
 and the launcher pause remains in force.
+
+Continuation checkpoint 18, 2026-09-28: the exact outer container owner is now
+source-ready for an execution packet. The host-supported `setpgroup=0` path
+creates a child-led process group while parent cancellation is blocked; exact
+reap state prevents stale-PGID signaling. A persistent child ledger retains any
+unreaped Docker client, and an issued create stays unresolved through any finite
+empty lookup sequence until its exact successful response or authenticated
+name/label/container observation. Cleanup no longer publishes tentative absence.
+
+The coordinator independently reproduced 62/62 tests under host Python 3.9;
+raw stderr SHA256 is `77addb5c...`. Independent ownership review returns
+`PASS_SOURCE_READY_FOR_EXACT_EXECUTION_PACKET` for owner `91a9c035...` and tests
+`ada330f0...`. The preserved history includes the Popen acquisition/stale-PGID
+failure, unsupported `setsid=True` failure, finite quiet-window/premature-absence
+failure and one corrected mock-interface expectation. An unresolved daemon create
+intentionally retains the owner and development lock indefinitely. This is
+source/local-process evidence only: no root, Docker, QEMU or McKernel command ran.
+
+Next bind the exact owner and current-signal source/artifact identities into one
+execution packet and obtain a separate independent execution release. Only then
+create a fresh attempt and run one diagnostic guest. Exact evidence and limits
+are in
+`docs/verification/stability-native-diagnostic-container-owner-source-success-20260928-1.json`.
+Official counters remain unchanged; whole-OS acceptance remains incomplete.
