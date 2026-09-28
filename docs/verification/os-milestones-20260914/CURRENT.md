@@ -3863,3 +3863,20 @@ a fresh packet bound to commit `79a1424f...`, a never-used short parent and a
 fresh nonce; obtain a separate independent one-shot release before executing.
 Exact commands, hashes, review history and limits are in
 `docs/verification/stability-native-diagnostic-qemu-version-source-success-20260928-1.json`.
+
+Continuation checkpoint 23, 2026-09-28: fresh current-signal packet 2 has
+independent `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE`. Packet SHA256 is
+`3917e333...`, bound to pushed commit `5f583b2c...`, corrected owner
+`35cd4596...`, parent `/home/holden/mckernel-work/scratch/ndcs-20260928-2` and
+nonce `d5c0db79dea44675abeb1c43c7187add`. Its QMP path is exactly 100 bytes.
+The reviewer rejoined all six committed sources, strict manifest and artifact
+inventory, pinned image/QEMU/full-version bytes, exact QEMU argv, 91-byte oracle,
+process evidence, resource limits, deadlines and fail-closed cleanup. Parent,
+inner attempt and sibling evidence were absent; packet-1 reuse is prohibited.
+
+This releases exactly one diagnostic attempt and grants no application, M04,
+production or whole-OS acceptance. Immediately recheck capacity, lease, source
+and path freshness, create the exact parent once as uid/gid 1000 mode 0700, then
+run only the released command. Preserve all output and do not retry if creation,
+client retirement or owner cleanup becomes uncertain. Exact authority is in
+`docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-2.json`.
