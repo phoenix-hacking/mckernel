@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T06:54:00-07:00",
+  "base_commit": "d6f5cf066fb1874e7d501d85068b1753adf73371",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "launcher_pid": 3125264,
+    "worker_pid": 3170135,
+    "app_server_pid": 3170137,
+    "observed_at_shutdown": "all three identities remain alive; the launcher has paused future continuations",
+    "future_continuations_paused": true
+  },
+  "resources_at_shutdown": {
+    "host_free_gib": 43,
+    "scratch_free_gib": 21,
+    "memory_available_kib": 30064536,
+    "heavy_lease": "free",
+    "project_compiler_or_guest_active": false,
+    "qemu_or_native_runtime_active": false,
+    "docker_inventory": "not observed: unprivileged read-only Docker query was denied; no sudo retry was needed during shutdown"
+  },
+  "completed_results": [
+    {
+      "name": "current-signal diagnostic manifest final audit",
+      "result": "PASS_MANIFEST_ARTIFACT_RECONCILIATION",
+      "manifest": "/home/holden/mckernel-work/scratch/native-diagnostic-manifest-20260928-2/manifest.json",
+      "manifest_sha256": "c7072eeaecdc44e450cc9511a994c13db66540465722443a312479c92e5e2d04",
+      "derived_initramfs_sha256": "40d4924c7c052aba24621f22183e2836f29ef0d207ca6575c4729838fb6d7ac3",
+      "limits": "Artifact/manifest/source reconciliation only; no runtime or application acceptance"
+    },
+    {
+      "name": "pending-free physical-extent admission",
+      "commit": "d6f5cf066fb1874e7d501d85068b1753adf73371",
+      "evidence": "docs/verification/stability-pending-free-extent-admission-success-20260928-1.json",
+      "result": "Pinned C preflight passed 58 candidate rows and two effective guard-removal mutant rows; independent review returned PASS_SOURCE_READY_FOR_NEXT_BUILD_PHYSICAL_EXTENT_PREFLIGHT_ONLY",
+      "limits": "No current kernel build, guest, ownership generation, invalidation acknowledgement, quarantine or M03 closure"
+    }
+  ],
+  "preserved_blocked_candidate": {
+    "name": "native diagnostic outer container owner",
+    "source": "scripts/application-tests/native_diagnostic_container_owner.py",
+    "source_sha256": "c0a4b14a97b00aae45ca4a4b201c0b84d40ee6db62913d1f9dcd75ba7f4aff92",
+    "tests": "scripts/tests/test_application_native_diagnostic_container_owner.py",
+    "tests_sha256": "2229a46bca0cba36d5ba7dbc9854348f54843ecc8a0c04e06dac961d82127498",
+    "syntax_result": "PASS under host Anaconda Python 3.9",
+    "unit_result": "FAIL: 55 tests ran, 52 passed and 3 errored",
+    "failure": "os.posix_spawn rejects setsid=True with NotImplementedError on this host; the bounded command and new spawn/reap cancellation-window regressions cannot complete",
+    "review": "BLOCKED_SOURCE_REVIEW_ONLY",
+    "reviewed_predecessor_source_sha256": "83e1fd997053c7e4875cc14b870b5055744965201845a522597bf560c58a1cd0",
+    "reviewed_predecessor_tests_sha256": "9e03cbd64ffb3a5c1ec995668b96d3c55ad90cb74c83ae01b9215ee917d3d7d2",
+    "resolved_in_current_candidate": "The candidate owns spawn pipes/PID while cancellation is blocked, tracks reap transitions, and adds a repeated two-second exact-absence window after an issued Docker create; the delayed-create regression passes.",
+    "remaining_action": "Replace unsupported setsid=True with a reviewed supported process-group mechanism such as setpgroup=0, run all 55 cheap tests, then obtain independent source review before preparing an execution packet.",
+    "execution_authority": false
+  },
+  "raw_evidence": {
+    "directory": "/home/holden/mckernel-work/scratch/native-diagnostic-container-owner-source-20260928-1",
+    "unittest_stderr_sha256": "7345a40d4683a4c5d7114ee70fb634807c772d4ab50c007dd0d28a752e96992e",
+    "unittest_exit_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "py_compile_exit_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "note": "Raw unit failure and zero exit records are retained outside Git; no Docker, QEMU, root, network, build or guest operation ran."
+  },
+  "next_tasks": [
+    "Correct the outer owner process-group creation without weakening cancellation or reap ownership, rerun all 55 cheap tests and obtain independent source review",
+    "Prepare an exact execution packet binding the corrected owner, committed runner/lifecycle/backend/overlay, manifest c7072eea, current signal module/image, derived initramfs, pinned image/QEMU, deadlines, evidence destinations and cleanup",
+    "Obtain an explicit independent execution release; source review is not execution authority",
+    "Only after release and a fresh resource/lease reconciliation, run one current-signal diagnostic guest and retain application bytes, exit status, kernel log, serial, QMP, Docker status and teardown",
+    "After the diagnostic signal is preserved, build the current pending-free candidate and continue owner/token/generation, invalidation acknowledgement and durable-quarantine integration"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "current_candidate_kernel_builds_this_continuation": 0,
+    "executable_production_body_checks_this_continuation": 1,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

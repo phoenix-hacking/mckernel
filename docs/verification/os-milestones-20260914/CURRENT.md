@@ -3684,3 +3684,50 @@ The independent current-signal diagnostic lane remains active in parallel; no
 real guest application has run in this continuation. Official counters remain
 0/273 applications, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
 points and 0/7 language gates. Whole-OS acceptance remains incomplete.
+
+Continuation shutdown checkpoint 17, 2026-09-28: manifest 2 received a final
+exact artifact/source reconciliation PASS. Its 17 references, current signal
+module and image, collector, payload, derived initramfs `40d4924c...` and exact
+91-byte application oracle match; this is still integration evidence only and
+no guest ran. The independently reviewed pending-free physical-extent admission
+was committed and remotely verified at `d6f5cf06`; its scoped pinned C execution
+is the sole new executable production-body result in this continuation.
+
+The new outer container owner remains deliberately blocked and is preserved as
+a failing WIP candidate. Independent review rejected predecessor `83e1fd99...`
+because a fatal signal could escape during `Popen` acquisition and a delayed
+Docker create could publish after point-in-time absence. Candidate `c0a4b14a...`
+now owns spawn pipes/PID under blocked cancellation, tracks reap, and applies a
+repeated two-second exact-absence window; its delayed-create regression passes.
+The exact host suite nevertheless runs 55 tests with 52 passes and three errors:
+Anaconda Python 3.9 rejects `posix_spawn(setsid=True)`. Syntax compilation passes.
+This candidate has no source PASS and no execution authority. The raw failure is
+retained under `/home/holden/mckernel-work/scratch/native-diagnostic-container-owner-source-20260928-1`.
+
+All child agents are terminal. Launcher PID 3125264, recovered worker PID
+3170135 and app-server PID 3170137 remain alive for
+`.git/os-autopilot/runs/20260928T120120Z-056cff0a`. No project compiler, guest,
+QEMU, mcexec, native-boot or IHK runtime is active. Host/scratch free space is
+43/21 GiB, available memory is 30,064,536 KiB and the heavy lease is free. A
+read-only unprivileged Docker inventory query was denied, so shutdown did not
+infer the two long-lived containerd shim identities were project containers.
+
+Next tasks are: (1) replace unsupported `setsid=True` with a reviewed supported
+process-group mechanism such as `setpgroup=0`, rerun all 55 cheap tests and get
+independent source review; (2) bind the exact corrected owner and all committed
+diagnostic inputs into an execution packet; (3) obtain independent execution
+release; (4) only then run one current-signal diagnostic guest and preserve
+application bytes, exit, kernel log, QMP/serial, Docker state and teardown; and
+(5) after preserving that signal, build the current pending-free candidate and
+continue explicit owner/token/generation, invalidation-acknowledgement and
+durable-quarantine work. Exact identities and limitations are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-17.json`.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
+remains incomplete; this checkpoint pauses rather than resumes or completes it.
+
+Latest continuation cursor: shutdown checkpoint 17 supersedes checkpoint 15 for
+the current-signal diagnostic lane and includes checkpoint 16's scoped M03
+result. Resume from the supported process-group correction above. No execution
+packet is released and no guest has run. Whole-OS acceptance remains incomplete
+and the launcher pause remains in force.
