@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.stability.exact-build-inputs.v1",
+  "date": "2026-09-28",
+  "status": "INPUT_IDENTITY_PASS",
+  "candidate": {
+    "path": "/home/holden/mckernel-exact-candidate-d0947e0c",
+    "commit": "d0947e0c9688106ba853e5846afc63bc94deec03",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "status_entries": 0
+  },
+  "manifest": {
+    "live_path": "/home/holden/mckernel-work/scratch/native-exact-inputs-d0947e0c.json",
+    "sha256": "6b727167079a17c84a6441574dec7d62e4bae8ef2835e4cf152934a8dc3590c8",
+    "bytes": 1134680,
+    "repository_files": 8899,
+    "gitlinks": {
+      "executer/user/lib/libdwarf/libdwarf": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+      "executer/user/lib/syscall_intercept": "66a47ceb1c5c05e1d613ab3f1f7164f42d5aca6f",
+      "executer/user/lib/uti": "8c5a556814efe1f57e5eb58b72318069dd7738b5",
+      "ihk": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+    },
+    "driver_sha256": "5bf7dca3a7785f0f9ae8e6842a6db4b0508f792085ebe31ac0a0606bcd1bf01f",
+    "committed_copy": "docs/verification/evidence/stability-native-exact-input-manifest-d0947e0c-20260928-1.json.gz",
+    "committed_copy_sha256": "545df87d53cf550d85c0e0bca2944bd0afb69519d0ba7ce727e5510cf299f0f7",
+    "superseded_pre_signal_correction_copy": "docs/verification/evidence/stability-native-exact-input-manifest-c140d23f-20260928-1.json.gz",
+    "superseded_pre_signal_correction_copy_sha256": "6803a253e12f80820f996668c7b84d54f39a79f3b3b82e010d28307cde4c6f18"
+  },
+  "assets": {
+    "root": "/home/holden/mckernel-work/scratch/native-exact-assets-16445ab2",
+    "1000-debrand-some-messages.patch": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
+    "kernel-6.12.0-211.44.1.el10_2.src.rpm": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "kernel-x86_64-rhel.config": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d",
+    "linux-6.12.0-211.44.1.el10_2.tar.xz": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533"
+  },
+  "verification": {
+    "command": "native_rust_exact_build_offline.verify_inputs over the live clean d0947e0c checkout, assets and manifest with PYTHONDONTWRITEBYTECODE=1",
+    "result": "PASS; candidate remained clean"
+  },
+  "original_failures": [
+    "The first no-checkout worktree had its index intentionally empty until a non-destructive mixed reset populated it; its initial status was rejected.",
+    "The host lacked rpm2cpio, so the first debrand extraction command failed before output; the retained cached debrand asset was used and will be compared with the pinned SRPM inside the prepared image.",
+    "The first full-manifest generator treated unrelated gitlinks as regular files and failed on a directory; the bounded driver correction now binds exact gitlink object IDs."
+    ,"The clean c140d23f input snapshot was superseded after the signal-evidence source correction; its compressed manifest is retained, and a fresh clean d0947e0c checkout and manifest were independently regenerated."
+  ],
+  "limitations": "Input identity is not image preparation, configured build, runtime or acceptance evidence."
+}

@@ -5370,3 +5370,13 @@ lease, and SIGKILL still leaves first bytes recoverable. The raw log is
 `evidence/stability-native-exact-boundary-corrected-tests-20260928-1.log.gz`
 (SHA-256 `acfa09a2...bd73f`). This correction still requires fresh independent
 execution rereview before preparation.
+
+After the signal correction was pushed at `d0947e0c9688106ba853e5846afc63bc94deec03`,
+the clean candidate and complete input manifest were regenerated rather than
+reusing the earlier hardlinked checkout. The candidate is clean with ihk
+`3114d9e`; 8,899 files and four gitlinks pass real `verify_inputs`. The live
+manifest SHA-256 is `6b727167...590c8`, and its committed compressed copy is
+`evidence/stability-native-exact-input-manifest-d0947e0c-20260928-1.json.gz`
+(SHA-256 `545df87d...9f0f7`). The superseded c140 manifest is retained as original
+pre-correction evidence. Next: independent rereview of the exact d0947e0c
+preparation boundary; no container has run.
