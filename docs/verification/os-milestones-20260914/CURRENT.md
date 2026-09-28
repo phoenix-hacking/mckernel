@@ -3915,3 +3915,42 @@ then rebuild and rebind mcexec, overlay, initramfs and manifest before a fresh
 independently released attempt. Do not reuse packet 2, its parent or nonce.
 Official counters remain 0/273 accepted applications, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates.
+
+Continuation shutdown checkpoint 25, 2026-09-28: no new work was dispatched
+after the shutdown request. All eight child agents are terminal, the heavy lease
+is free, and no QEMU, mcexec, diagnostic owner or project compiler remains.
+Launcher PID 3125264, recovered worker PID 3170135 and app-server PID 3170137
+remain alive for `.git/os-autopilot/runs/20260928T120120Z-056cff0a`; launcher-owned
+state was not edited. Host/scratch free space was 45,725,659,136 and
+22,276,898,816 bytes, with 29,871,928 KiB available memory.
+
+The bounded marker-observer correction is pushed at `41914a86...`. Its fresh
+six-module suite passes 214/214, actual attempt-2 replay now reaches the real
+`wrong payload bytes` result, and independent review returns
+`PASS_SOURCE_READY_FOR_MCEXEC_REPAIR`. The frozen empty-stderr oracle remains
+unchanged. This is observer evidence only and moves no acceptance counter.
+
+A source-only mcexec candidate is preserved in three files. It captures all C
+and Rust preload sources before executable lookup, returns without objdump or a
+warning only when none is requested, and adds exact no-source, existing-source,
+UTI, sched-yield and QLMPI test vectors. `git diff --check` and shell syntax pass.
+The full equivalence suite, compilation, independent ABI review, artifact and
+initramfs rebuild, and any new guest run were deliberately not started during
+shutdown. Candidate hashes are `31030130...` (C), `b77d5443...` (Rust) and
+`f39649ee...` (test harness).
+
+Next: (1) run the complete equivalence suite with raw logs and allow at most one
+bounded correction for this failure family; (2) obtain independent C/Rust/FFI
+review; (3) build and hash-bind corrected mcexec under the reviewed pinned
+profile; (4) rebuild/rebind overlay, initramfs, manifest and diagnostic source
+identities; (5) create a new parent, nonce, packet and independent release; and
+(6) only after fresh resource/lease checks, run one new diagnostic. Do not reuse
+either prior parent/nonce, the stale mcexec artifact `b786e9c9...`, or weaken the
+empty-stderr oracle. Exact shutdown identities, hashes, preserved attempt-2
+paths and limits are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-25.json`.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. One real diagnostic
+guest application ran in this window; current-candidate builds remain zero.
+Whole-OS acceptance remains incomplete, and this checkpoint does not resume or
+complete the goal.

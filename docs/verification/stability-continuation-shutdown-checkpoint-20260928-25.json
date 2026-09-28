@@ -1,0 +1,94 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T07:57:52-07:00",
+  "base_commit": "41914a86067868ed20733afc8dfa7f35d7d55a85",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415"
+  },
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "launcher_pid": 3125264,
+    "worker_pid": 3170135,
+    "app_server_pid": 3170137,
+    "launcher_started": "2026-09-28T03:47:42-07:00",
+    "worker_and_server_started": "2026-09-28T05:01:20-07:00",
+    "observed_at_shutdown": "all three identities remain alive; no launcher-owned state was edited",
+    "future_continuations_paused": true
+  },
+  "agents": {
+    "child_count": 8,
+    "all_terminal": true,
+    "new_dispatch_after_shutdown_request": false
+  },
+  "resources_at_shutdown": {
+    "host_free_bytes": 45725659136,
+    "scratch_free_bytes": 22276898816,
+    "memory_available_kib": 29871928,
+    "heavy_lease": "free",
+    "active_project_compiler": false,
+    "active_qemu_mcexec_guest_or_diagnostic_owner": false
+  },
+  "completed_result": {
+    "name": "current-signal diagnostic observer correction",
+    "commit": "41914a86067868ed20733afc8dfa7f35d7d55a85",
+    "result": "PASS_SOURCE_READY_FOR_MCEXEC_REPAIR",
+    "tests": "214 tests passed; actual attempt-2 replay reaches DiagnosticError: wrong payload bytes",
+    "review": "independent marker review accepted the bounded observer correction",
+    "limits": "Source/observer evidence only; the unchanged 58-byte application-stderr mismatch remains and no acceptance counter moves"
+  },
+  "preserved_unbuilt_candidate": {
+    "purpose": "avoid objdump and warning output when no preload source is requested while preserving configured preload behavior",
+    "files": {
+      "executer/user/mcexec.c": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+      "executer/user/rust/mcexec_helpers.rs": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+      "kernel/rust/tests/run_equivalence.sh": "f39649eee4ef9670c95d9320f35fdb445ce63e5c84fb688305b755b2afda48d0"
+    },
+    "bounded_checks": [
+      "git diff --check on the three files: PASS",
+      "bash -n kernel/rust/tests/run_equivalence.sh: PASS"
+    ],
+    "not_run": [
+      "full run_equivalence.sh",
+      "mcexec compilation",
+      "artifact or initramfs rebuild",
+      "Docker or QEMU execution",
+      "independent ABI/source review"
+    ]
+  },
+  "preserved_runtime_evidence": {
+    "attempt": "packet-2 current-signal diagnostic",
+    "record": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-2.json",
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-2/attempt-d5c0db79dea44675abeb1c43c7187add",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-2.owner-d5c0db79dea44675abeb1c43c7187add",
+    "container_id": "812be46d201992e9f8bda052af54e2bdf5440992253fceba148a96b47401b3e4",
+    "qemu_pid_pgid_sid": "3238385/3238385/3238385 (reaped; evaluator did not publish starttime)",
+    "result": "real app stdout and exit passed; exact 58-byte mcexec stderr violated the frozen empty-stderr oracle; teardown passed"
+  },
+  "next_tasks": [
+    "Run the complete kernel/rust/tests/run_equivalence.sh against the preserved three-file candidate with raw logs; on failure apply at most one bounded correction in this failure family",
+    "Obtain independent C/Rust parity, unsafe FFI and ABI review after the complete suite passes",
+    "Build the corrected mcexec in the reviewed pinned profile and bind its exact source and artifact identities",
+    "Rebuild and rebind the diagnostic overlay, initramfs and manifest; update diagnostic source bindings",
+    "Prepare a fresh parent, nonce, packet and independent execution release, then run one new diagnostic only after resource and lease reconciliation",
+    "Continue pending-free owner/token/generation, invalidation acknowledgement and durable-quarantine work after the diagnostic signal"
+  ],
+  "do_not_repeat": [
+    "Do not reuse ndcs-20260928-1, ndcs-20260928-2 or either released nonce",
+    "Do not rerun the old mcexec artifact b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639 expecting the stderr defect to change",
+    "Do not weaken or filter the frozen empty application-stderr oracle",
+    "Do not count the observer correction or unbuilt mcexec candidate as application or production acceptance"
+  ],
+  "counters": {
+    "real_guest_applications_this_window": 1,
+    "accepted_application_catalog": "0/273",
+    "current_candidate_builds_this_window": 0,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

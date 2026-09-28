@@ -102556,6 +102556,28 @@ int main(void)
 
 		reset_find_libdir_fakes();
 		reset_ld_preload_fakes();
+		fake_ld_preload_cleanup_present = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 0);
+		require(fake_find_libdir_popen_count == 0);
+		require(fake_ld_preload_find_failed_count == 0);
+		require(fake_ld_preload_setenv_count == 0);
+		require(fake_ld_preload_debug_count == 0);
+		require(fake_ld_preload_unsetenv_count == 1);
+		require(fake_ld_preload_getenv_count == 2);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 0);
+		require(fake_find_libdir_popen_count == 0);
+		require(fake_ld_preload_find_failed_count == 0);
+		require(fake_ld_preload_getenv_count == 2);
+		require(fake_ld_preload_setenv_count == 0);
+		require(fake_ld_preload_unsetenv_count == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
 		snprintf(fake_find_libdir_readlink_target,
 			 sizeof(fake_find_libdir_readlink_target), "%s",
 			 "/self/mcexec");
@@ -102566,18 +102588,84 @@ int main(void)
 			 "/opt/mck/lib\n");
 		fake_find_libdir_getline_ret =
 			(ssize_t)strlen(fake_find_libdir_getline_line);
-		fake_ld_preload_cleanup_present = 1;
+		fake_ld_preload_existing_present = 1;
+		snprintf(fake_ld_preload_existing,
+			 sizeof(fake_ld_preload_existing), "%s", "EXISTING");
 		mcexec_ld_preload_init_body();
-		require(fake_ld_preload_setenv_count == 0);
-		require(fake_ld_preload_debug_count == 0);
-		require(fake_ld_preload_unsetenv_count == 1);
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value, "EXISTING") == 0);
+		require(fake_ld_preload_debug_count == 1);
+		require(fake_ld_preload_unsetenv_count == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_enable_uti = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libmck_syscall_intercept.so") == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_disable_sched_yield = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libsched_yield.so.1.0.0") == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_enable_qlmpi = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libqlfort.so") == 0);
 
 		reset_find_libdir_fakes();
 		reset_ld_preload_fakes();
 		fake_find_libdir_readlink_ret = -1;
+		fake_ld_preload_enable_uti = 1;
 		mcexec_ld_preload_init_body();
 		require(fake_ld_preload_find_failed_count == 1);
-		require(fake_ld_preload_getenv_count == 0);
+		require(fake_ld_preload_getenv_count == 1);
 		require(fake_ld_preload_setenv_count == 0);
 
 		reset_find_libdir_fakes();

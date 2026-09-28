@@ -6793,20 +6793,35 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
 pub unsafe extern "C" fn mcexec_ld_preload_init_body() {
     let mut libdir = [0u8; PATH_MAX];
     let mut envbuf = [0u8; PATH_MAX];
+    let enable_uti = unsafe { mcexec_ld_preload_enable_uti_bridge() } != 0;
+    let disable_sched_yield =
+        unsafe { mcexec_ld_preload_disable_sched_yield_bridge() } != 0;
+    let enable_qlmpi = unsafe { mcexec_ld_preload_enable_qlmpi_bridge() } != 0;
+    let existing = unsafe { mcexec_ld_preload_getenv_bridge(MCKERNEL_LD_PRELOAD_ENV.as_ptr()) };
+
+    if !enable_uti && !disable_sched_yield && !enable_qlmpi && existing.is_null() {
+        if !unsafe { mcexec_ld_preload_getenv_bridge(LD_PRELOAD_ENVNAME_LITERAL.as_ptr()) }
+            .is_null()
+        {
+            unsafe {
+                mcexec_ld_preload_unsetenv_bridge();
+            }
+        }
+        return;
+    }
 
     if unsafe { mcexec_find_libdir_body(libdir.as_mut_ptr(), libdir.len()) } < 0 {
         unsafe { mcexec_ld_preload_find_failed_bridge() };
         return;
     }
 
-    let existing = unsafe { mcexec_ld_preload_getenv_bridge(MCKERNEL_LD_PRELOAD_ENV.as_ptr()) };
     let rc = unsafe {
         mcexec_build_ld_preload_result(
             libdir.as_ptr(),
             existing as *const u8,
-            mcexec_ld_preload_enable_uti_bridge(),
-            mcexec_ld_preload_disable_sched_yield_bridge(),
-            mcexec_ld_preload_enable_qlmpi_bridge(),
+            enable_uti as i32,
+            disable_sched_yield as i32,
+            enable_qlmpi as i32,
             envbuf.as_mut_ptr(),
             envbuf.len(),
         )

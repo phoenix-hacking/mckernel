@@ -4555,10 +4555,29 @@ static void ld_preload_init()
 {
 	char envbuf[PATH_MAX];
 	char *ld_preload_str;
+	int source_enable_uti = enable_uti;
+	int source_disable_sched_yield = disable_sched_yield;
+	int source_existing = 0;
+#ifdef ENABLE_QLMPI
+	int source_enable_qlmpi = 1;
+#else
+	int source_enable_qlmpi = 0;
+#endif
 	size_t remainder = PATH_MAX;
 	int nelem = 0;
 	char elembuf[PATH_MAX];
 	char libdir[PATH_MAX];
+
+	/* Capture every preload source before attempting the executable lookup. */
+	ld_preload_str = getenv(ld_preload_envname);
+	source_existing = ld_preload_str != NULL;
+	if (!source_enable_uti && !source_disable_sched_yield &&
+	    !source_enable_qlmpi && !source_existing) {
+		if (getenv("ld_preload_envname")) {
+			unsetenv(ld_preload_envname);
+		}
+		return;
+	}
 
 	if (find_libdir(libdir, sizeof(libdir)) < 0) {
 		fprintf(stderr, "warning: did not set LD_PRELOAD\n");
@@ -4567,23 +4586,24 @@ static void ld_preload_init()
 
 	memset(envbuf, 0, PATH_MAX);
 
-	if (enable_uti) {
+	if (source_enable_uti) {
 		LD_PRELOAD_PREPARE("libmck_syscall_intercept.so");
 		LD_PRELOAD_APPEND;
 	}
 
-	if (disable_sched_yield) {
+	if (source_disable_sched_yield) {
 		LD_PRELOAD_PREPARE("libsched_yield.so.1.0.0");
 		LD_PRELOAD_APPEND;
 	}
 
 #ifdef ENABLE_QLMPI
-	LD_PRELOAD_PREPARE("libqlfort.so");
-	LD_PRELOAD_APPEND;
+	if (source_enable_qlmpi) {
+		LD_PRELOAD_PREPARE("libqlfort.so");
+		LD_PRELOAD_APPEND;
+	}
 #endif
 
 	/* Set LD_PRELOAD to McKernel specific value */
-	ld_preload_str = getenv(ld_preload_envname);
 	if (ld_preload_str) {
 		sprintf(elembuf, "%s%s", nelem > 0 ? ":" : "", ld_preload_str);
 		LD_PRELOAD_APPEND;
