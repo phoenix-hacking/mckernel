@@ -4703,3 +4703,53 @@ CPU/callback/mapping ownership gaps explicit. This invocation now has three real
 diagnostic guest applications and zero current-candidate builds. Formal counters
 remain 0/273 applications, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates; whole-OS acceptance remains incomplete.
+
+Continuation checkpoint 48, 2026-09-28: the launcher requested shutdown, so no
+new work was dispatched and all child agents were joined or interrupted. The
+only active child was stopped during its bounded, unprivileged signals-artifact
+preparation. It completed only the static collector compile: the preserved
+binary is
+`/home/holden/mckernel-work/scratch/native-diagnostic-signals-collector-build-20260928-1/init`,
+mode 0700, size 1,021,968 and SHA256 `e1c7b50e...cdea`. Its exact input record is
+`f43b483a...ac63`, compiler command record `cf1b3838...1c9`, and successful
+compiler result `01ec2574...eb72`; compiler stdout/stderr are empty. The source
+is `e78760ae...ad4a` at HEAD `8607850b...34c4`, selected with
+`-DND_CORE_SIGNALS=1`. No host oracle, overlay, derived initramfs, strict
+manifest, artifact review, execution packet, root command, container, QEMU or
+McKernel signals application was run. The newly created oracle, overlay and
+manifest directories are empty and preserved. Pre-existing empty `ndcs` parent
+and owner-evidence directories remain untouched; their existence means those
+names are forbidden for any future fresh attempt.
+
+The shutdown audit is now bounded more precisely. The existing Rocky lifecycle
+can exercise one real `mcreboot.sh` boot, workload and `mcstop+release.sh` stop,
+and already observes CPU-online state, swappiness, IRQ affinity, processes,
+modules and devices. It does not perform a second recreate cycle, and it lacks
+the current exact mapping/procfs policy contract. Its outer wrapper also stages
+the whole source tree, which is unsuitable for the evidence-heavy working tree
+without a lean exact source binding. There is no current reviewed execution
+release for this Rocky/QEMU profile. Preserve the audited script identities:
+Rocky validator `69c64c51...31bd`, wrapper `b1b05d09...7931`, guest wrapper
+`83f73e40...53dfe`, stop/release body `1de92368...0eb8`, and runtime observer
+`ee98e653...7a5a5`.
+
+At the checkpoint boundary the campaign identities remain launcher
+PID/PGID/SID 3125264/starttime 80228730, recovered worker PID/PGID/SID
+3170135/starttime 80670556, and app-server PID/PGID/SID 3170137/starttime
+80670562. No diagnostic owner, QEMU or mcexec process is live. Available bytes
+are 27,160,174,592 on the host filesystem and 21,905,379,328 on scratch, with
+29,763,592,192 bytes of MemAvailable. The launcher-owned state remains
+untouched. This checkpoint neither completes nor resumes the OS goal.
+
+Next invocation: first reconcile this exact HEAD, the three campaign identities,
+launcher state, dirty submodule/source ownership and the single heavy lease.
+For signals, inspect the preserved compile records, run the exact host oracle
+(`mcexec -t 1 0 ... signals`, exit 37, exact `NATIVE_CORE PASS signals\n`,
+empty stderr), then produce and independently review a fresh overlay and strict
+manifest; never reuse either pre-existing `ndcs` path. For shutdown, bind a lean
+exact source tree and define the missing before/after procfs, mapping and reserved
+resource contract before preparing a separately reviewed Rocky execution packet.
+Run one current-candidate boot/workload/stop diagnostic first, retain its
+one-cycle limitation, then add and review the recreate cycle. This invocation
+still has three real diagnostic guest applications and zero current-candidate
+kernel builds; formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7.
