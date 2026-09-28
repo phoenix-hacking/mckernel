@@ -27,10 +27,16 @@ ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "p
              "native_boot", "loader", "libc")
 MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
 APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+# These are diagnostic records, not generic words.  In particular, the boot
+# command line contains ``panic=-1``, PCI firmware prose can say "report a
+# bug", and the collector emits successful fields such as ``error=0``.  None
+# of those is a kernel/service failure.  Keep the actual failure spellings
+# specific so normal boot output cannot poison an otherwise valid capture.
 BAD_MARKERS = re.compile(
-    r"panic|oops|BUG:|\bBUG\b|\berror\b|WARNING|soft lockup|hard LOCKUP|"
-    r"clear_host_pte failed|rcu_preempt detected stalls|\bFAIL\b|"
-    r"cleanup retained|reap_retained|strncpy_from_user:ioctl:|ret: ", re.I)
+    r"(?i:\bpanic\b(?!\s*=\s*-1\b))|Oops:|BUG:|WARNING:|soft lockup\b|hard LOCKUP\b|"
+    r"clear_host_pte failed\b|rcu_preempt detected stalls\b|\bFAIL\b|"
+    r"continuing service error\b|cleanup retained\b|reap_retained\b|"
+    r"strncpy_from_user:ioctl:|ret:\s")
 STAGING_BLOCKER = "guest staging unavailable: exact derived initramfs join is incomplete"
 DIAGNOSTIC_LIMITATION = "protocol observation only; independent guest execution review is pending"
 FINAL_MEMBERS = {

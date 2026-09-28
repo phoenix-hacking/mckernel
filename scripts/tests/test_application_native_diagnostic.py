@@ -611,9 +611,38 @@ class NativeDiagnosticTests(unittest.TestCase):
                 with self.assertRaises(ND.DiagnosticError): ND.evaluate(self.manifest, obs)
 
     def test_all_original_failure_markers_reject(self):
-        for marker in ("WARNING:", "soft lockup", "clear_host_pte failed", "Kernel panic", "Oops:", "BUG:", "rcu_preempt detected stalls", "hard LOCKUP", "continuing service error", "cleanup retained"):
-            obs = self.observation(); obs["debugcon"] += marker
+        for marker in ("WARNING:", "soft lockup", "clear_host_pte failed", "Kernel panic", "Oops:", "BUG:", "rcu_preempt detected stalls", "hard LOCKUP", "continuing service error", "cleanup retained", "reap_retained", "strncpy_from_user:ioctl:", "FAIL", "ret: "):
+            obs = self.observation(); obs["debugcon"] += "\n" + marker
             with self.assertRaises(ND.DiagnosticError): ND.evaluate(self.manifest, obs)
+
+    def test_normal_boot_prose_and_success_status_fields_are_not_failure_markers(self):
+        obs = self.observation()
+        obs["debugcon"] += (
+            "\ncmdline: panic=-1\n"
+            "cmdline: panic = -1\n"
+            "pci: report a bug to the vendor if this persists\n"
+            "application result error=0\n"
+        )
+        self.assertEqual(ND.evaluate(self.manifest, obs)["status"], "PROTOCOL_PASS")
+
+    def test_concrete_kernel_panics_reject_in_both_logs(self):
+        for marker in ("panic: kernel mode PF", "PANIC: monitor_init() allocation failed.", "panic"):
+            for log in ("serial", "debugcon"):
+                with self.subTest(marker=marker, log=log):
+                    obs = self.observation()
+                    obs[log] += "\n" + marker
+                    with self.assertRaisesRegex(ND.DiagnosticError, "kernel failure marker"):
+                        ND.evaluate(self.manifest, obs)
+
+    def test_actual_objdump_stderr_still_rejects_empty_stderr_oracle(self):
+        report = self.report()
+        payload = b"objdump /proc/self/exe: 2\nwarning: did not set LD_PRELOAD\n"
+        self.assertEqual(len(payload), 58)
+        report["streams"]["stderr"]["hex"] = payload.hex()
+        report["streams"]["stderr"]["observed"] = 58
+        report["streams"]["stderr"]["retained"] = 58
+        with self.assertRaisesRegex(ND.DiagnosticError, "wrong payload bytes"):
+            ND.evaluate(self.manifest, self.observation(report))
 
     def test_nonfinite_timeout_recorded(self):
         for timeout in (math.nan, math.inf, -1, 0, True):
