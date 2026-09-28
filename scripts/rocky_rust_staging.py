@@ -235,6 +235,36 @@ AUDITED_PROVIDER_EXTERN = (
     "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
     "}"
 )
+AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN = (
+    'extern "C" {\n'
+    '    fn ihk_os_service_register_v1(\n'
+    '        owner: *mut c_void,\n'
+    '        version: u32,\n'
+    '        open: Option<service_abi::Open>,\n'
+    '        ioctl: Option<service_abi::Ioctl>,\n'
+    '        close: Option<service_abi::Close>,\n'
+    '    ) -> i32;\n'
+    '    fn ihk_os_service_unregister_v1(owner: *mut c_void);\n'
+    '    fn ihk_os_topology_query_v1(slot: u32, generation: u64, command: u32) -> i64;\n'
+    '}'
+)
+AUDITED_MCCTRL_SERVICE_OPEN_EXTERN = (
+    '// SAFETY: IHK supplies an exact live OS identity, retains this module and gives\n'
+    '// exclusive writable output storage. Pinned mutexes protect process bindings\n'
+    '// during concurrent ioctls; no user memory or independently running work escapes.\n'
+    'unsafe extern "C" fn open(slot: u32, generation: u64, output: *mut *mut c_void) -> i32 {'
+)
+AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN = (
+    '// SAFETY: IHK retains the successful context and module pin, excludes final\n'
+    '// release and supplies normalized compat arguments. No service/file/OS lock\n'
+    '// crosses this call; the IHK topology query may take its short operation lock.\n'
+    'unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {'
+)
+AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN = (
+    '// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n'
+    '// retaining both the OS generation and our module until this returns.\n'
+    'unsafe extern "C" fn close(context: *mut c_void) {'
+)
 AUDITED_IHK_INIT_CALLBACK_TYPE = (
     '// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and\n'
     '// returns only a scalar status consumed before provider publication.\n'
@@ -293,10 +323,7 @@ AUDITED_IHK_DETACH_V2_EXTERN = (
     '#[export_name = "ihk_smp_provider_detach_v2"]\n'
     '// SAFETY: The token and exact retained exit identity name the sole live v2\n'
     '// lease; invariant violations fail stop before provider retirement can return.\n'
-    'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
-    '    token: i64,\n'
-    '    exit: Option<IhkSmpProviderExitV2>,\n'
-    ') {'
+    'pub extern "C" fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>) {'
 )
 AUDITED_IHK_OPEN_EXTERN = (
     '#[doc(hidden)]\n'
@@ -344,22 +371,74 @@ AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
  '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
  '    #[link_name = "ihk_smp_provider_close_v1"]\n'
  '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
- '    #[link_name = "ihk_os_create_unbooted_v2"]\n'
- '    fn ihk_os_create_unbooted_v2(\n'
+ '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
+ '    fn ihk_os_create_unbooted_v4(\n'
  '        provider_minor: u32,\n'
  '        owner: *mut core::ffi::c_void,\n'
  '        argument: u64,\n'
  '        callback_abi: u32,\n'
  '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
  '        release: Option<IhkSmpOsReleaseV2>,\n'
+ '        prepare: Option<IhkSmpPrepareBootV3>,\n'
+ '        start: Option<IhkSmpStartBootV3>,\n'
+ '        application_open: Option<application_abi::Open>,\n'
+ '        application_invoke: Option<application_abi::Invoke>,\n'
+ '        application_close: Option<application_abi::Close>,\n'
  '    ) -> i64;\n'
  '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
  '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
  '}')
 AUDITED_SMP_OS_IOCTL_TYPE = 'type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;'
 AUDITED_SMP_OS_RELEASE_TYPE = 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'
+AUDITED_SMP_PREPARE_BOOT_TYPE = (
+    '// SAFETY: IHK supplies its own live kmsg physical address and allocation size.\n'
+    '// Preparation cannot start CPUs or publish guest work into Linux queues.\n'
+    'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'
+)
+AUDITED_SMP_START_BOOT_TYPE = (
+    '// SAFETY: IHK publishes Booting first and retains owners after any start result.\n'
+    'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+)
 AUDITED_SMP_OS_IOCTL_EXTERN = 'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {'
 AUDITED_SMP_OS_RELEASE_EXTERN = 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'
+AUDITED_SMP_APPLICATION_OPEN_EXTERN = (
+    '// SAFETY: IHK owns writable kernel output, the operation guard and an exact\n'
+    '// OS/module lease. Acquiring a connection cannot publish guest work.\n'
+    'unsafe extern "C" fn application_open(\n'
+    '    slot: u32,\n'
+    '    generation: u64,\n'
+    '    pid: i32,\n'
+    '    output: *mut *mut core::ffi::c_void,\n'
+    ') -> i32 {'
+)
+AUDITED_SMP_APPLICATION_INVOKE_EXTERN = (
+    'unsafe extern "C" fn application_invoke(\n'
+    '    context: *mut core::ffi::c_void,\n'
+    '    command: u32,\n'
+    '    buffer: *mut u8,\n'
+    '    bytes: usize,\n'
+    ') -> i64 {'
+)
+AUDITED_SMP_APPLICATION_CLOSE_EXTERN = (
+    '// SAFETY: IHK returns the unique connection after every invocation has ended,\n'
+    '// retaining the OS/module lease until after this destructor returns.\n'
+    'unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {'
+)
+AUDITED_SMP_PREPARE_BOOT_EXTERN = (
+    '// SAFETY: IHK holds its exact OS lease, per-OS operation mutex and SMP module\n'
+    '// owner. kmsg scalars identify IHK\'s allocation, never an ioctl user pointer.\n'
+    'unsafe extern "C" fn ihk_smp_prepare_boot_v3(\n'
+    '    slot: u32,\n'
+    '    generation: u64,\n'
+    '    kmsg: u64,\n'
+    '    kmsg_bytes: u64,\n'
+    ') -> i32 {'
+)
+AUDITED_SMP_START_BOOT_EXTERN = (
+    '// SAFETY: IHK has already published Booting and excludes resource mutation.\n'
+    '// The native adapter retains every owner before the first CPU-start effect.\n'
+    'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {'
+)
 AUDITED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
 
 AUDITED_SMP_INIT_CALLBACK_EXTERN = (
@@ -1134,14 +1213,38 @@ def _validate_input(repo_root, item, index):
                       ".prepare_insert_free_batch(&ranges, &mut workspace)",
                       ".prepare_remove_free_batch(&ranges, &mut workspace)",
                       "bindings::__alloc_pages_noprof", "bindings::alloc_pages_noprof",
-                      "struct StartupTables {", "tables: StartupTables,",
+                      "struct StartupTables {",
+                      "tables: ManuallyDrop<StartupTables>,",
                       "let tables = StartupTables::new(layout, direct_map)?;",
+                      "tables: ManuallyDrop::new(tables),",
                       "bindings::__free_pages",
                       "drop(core::mem::take(&mut context.pages));"):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks memory owner boundary: {1}".format(label, token))
+        loaded_image_started = """impl LoadedImage {
+    fn started(&self) -> bool {
+        self.boot.as_ref().is_some_and(|boot| boot.started)
+    }
+}"""
+        loaded_image_release = """impl Drop for LoadedImage {
+    fn drop(&mut self) {
+        if !self.started() {
+            // SAFETY: No CPU-start effect occurred. This is the only destructor
+            // for the original startup allocation; the field has no auto-drop.
+            unsafe { ManuallyDrop::drop(&mut self.tables) };
+        }
+        // A started image deliberately retains both tables and BootStorage.
+        // The resource-map guards separately forbid freeing assigned memory.
+    }
+}"""
+        if text.count(loaded_image_started) != 1 or text.count(loaded_image_release) != 1:
+            raise ValidationError(
+                "{0} lacks exact LoadedImage started-state table retention/release".format(label)
+            )
     elif item["destination"] == "os_runtime.rs":
-        for token in ("pub(crate) struct OsDeviceFamily;", "struct KmsgPages(usize);",
+        for token in ("pub(crate) struct OsDeviceFamily {\n"
+                      "    _services: super::os_service::Registry,\n}",
+                      "struct KmsgPages(usize);",
                       "struct ProviderModule(*mut bindings::module);",
                       "const OS_FOPS: bindings::file_operations"):
             if text.count(token) != 1:
@@ -1260,13 +1363,26 @@ def _validate_module(repo_root, module, expected, index):
             AUDITED_SMP_PROVIDER_EXTERN,
             AUDITED_SMP_OS_IOCTL_TYPE,
             AUDITED_SMP_OS_RELEASE_TYPE,
+            AUDITED_SMP_PREPARE_BOOT_TYPE,
+            AUDITED_SMP_START_BOOT_TYPE,
             AUDITED_SMP_OS_IOCTL_EXTERN,
             AUDITED_SMP_OS_RELEASE_EXTERN,
+            AUDITED_SMP_APPLICATION_OPEN_EXTERN,
+            AUDITED_SMP_APPLICATION_INVOKE_EXTERN,
+            AUDITED_SMP_APPLICATION_CLOSE_EXTERN,
+            AUDITED_SMP_PREPARE_BOOT_EXTERN,
+            AUDITED_SMP_START_BOOT_EXTERN,
             AUDITED_SMP_INIT_CALLBACK_EXTERN,
             AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         )
     elif module["crate"] == "mcctrl":
-        allowed_extern_blocks = (AUDITED_PROVIDER_EXTERN,)
+        allowed_extern_blocks = (
+            AUDITED_PROVIDER_EXTERN,
+            AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN,
+            AUDITED_MCCTRL_SERVICE_OPEN_EXTERN,
+            AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN,
+            AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN,
+        )
     escape_text = text
     if module["crate"] == "ihk_smp_x86_64":
         if text.count(COMPAT_BUILD_ID_INCLUDE) != 1:

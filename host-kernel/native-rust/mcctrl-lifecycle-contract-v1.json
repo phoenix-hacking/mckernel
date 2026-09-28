@@ -8,6 +8,38 @@
     "owner_gate_id": "MCC-013",
     "reason": "The selected Linux 6.12 Rust kernel crate has no safe linux_binfmt registration API; this foundation must not claim registration or unregister ownership."
   },
+  "additive_service_boundary": {
+    "abi_version": 1,
+    "built_in_supported": false,
+    "callback_safety_prefixes": {
+      "close": "// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n// retaining both the OS generation and our module until this returns.",
+      "ioctl": "// SAFETY: IHK retains the successful context and module pin, excludes final\n// release and supplies normalized compat arguments. No service/file/OS lock\n// crosses this call; the IHK topology query may take its short operation lock.",
+      "open": "// SAFETY: IHK supplies an exact live OS identity, retains this module and gives\n// exclusive writable output storage. Pinned mutexes protect process bindings\n// during concurrent ioctls; no user memory or independently running work escapes."
+    },
+    "credit_eligible": false,
+    "lifecycle_order": [
+      "registration-error-propagates-before-publication",
+      "close-releases-context-before-unregister",
+      "unregister-runs-during-module-drop"
+    ],
+    "loadable_module_only": true,
+    "registration": {
+      "all_callbacks_required": true,
+      "module_owner_nonnull": true
+    },
+    "runtime_validated": false,
+    "source_block": {
+      "end_line": 62,
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "sha256": "7a370b26baff8a6e1e1dc4304a924df0ad8be45501c861fff7f46ddebee90475",
+      "start_line": 52
+    },
+    "symbols": [
+      "ihk_os_service_register_v1",
+      "ihk_os_service_unregister_v1",
+      "ihk_os_topology_query_v1"
+    ]
+  },
   "dependencies": [
     "ihk"
   ],

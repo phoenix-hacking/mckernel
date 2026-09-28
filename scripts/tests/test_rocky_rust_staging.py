@@ -242,13 +242,24 @@ macro_rules! áinclude { () => {} }
             staging.AUDITED_IHK_DETACH_EXTERN,
             staging.AUDITED_IHK_ATTACH_V2_EXTERN,
             staging.AUDITED_IHK_DETACH_V2_EXTERN,
+            staging.AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN,
+            staging.AUDITED_MCCTRL_SERVICE_OPEN_EXTERN,
+            staging.AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN,
+            staging.AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN,
             staging.AUDITED_SMP_INIT_CALLBACK_TYPE,
             staging.AUDITED_SMP_EXIT_CALLBACK_TYPE,
             staging.AUDITED_SMP_PROVIDER_EXTERN,
             staging.AUDITED_SMP_OS_IOCTL_TYPE,
             staging.AUDITED_SMP_OS_RELEASE_TYPE,
+            staging.AUDITED_SMP_PREPARE_BOOT_TYPE,
+            staging.AUDITED_SMP_START_BOOT_TYPE,
             staging.AUDITED_SMP_OS_IOCTL_EXTERN,
             staging.AUDITED_SMP_OS_RELEASE_EXTERN,
+            staging.AUDITED_SMP_APPLICATION_OPEN_EXTERN,
+            staging.AUDITED_SMP_APPLICATION_INVOKE_EXTERN,
+            staging.AUDITED_SMP_APPLICATION_CLOSE_EXTERN,
+            staging.AUDITED_SMP_PREPARE_BOOT_EXTERN,
+            staging.AUDITED_SMP_START_BOOT_EXTERN,
             staging.AUDITED_SMP_INIT_CALLBACK_EXTERN,
             staging.AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         ):
@@ -311,6 +322,94 @@ macro_rules! áinclude { () => {} }
                     "provider lease source",
                     allowed_extern_blocks=(exact,),
                 )
+
+    def test_smp_v4_provider_imports_and_callback_prefixes_are_closed(self):
+        imports = staging.AUDITED_SMP_PROVIDER_EXTERN
+        self.assertEqual(7, imports.count('#[link_name = '))
+        import_mutations = {
+            "missing": imports.replace(
+                '    #[link_name = "ihk_os_create_unbooted_v4"]\n', "", 1
+            ),
+            "duplicate": imports + "\n" + imports,
+            "signature": imports.replace("callback_abi: u32", "callback_abi: u64", 1),
+            "link-name": imports.replace(
+                '"ihk_os_create_unbooted_v4"', '"ihk_os_create_unbooted_v5"', 1
+            ),
+            "v5": imports.replace("ihk_os_create_unbooted_v4", "ihk_os_create_unbooted_v5"),
+        }
+        for name, mutation in import_mutations.items():
+            with self.subTest(import_mutation=name), self.assertRaisesRegex(
+                staging.ValidationError, "exact audited extern boundary"
+            ):
+                staging._validate_rust_escape_hatches(
+                    mutation,
+                    "SMP provider imports",
+                    allowed_extern_blocks=(imports,),
+                )
+        prefixes = (
+            (staging.AUDITED_SMP_PREPARE_BOOT_TYPE, "IhkSmpPrepareBootV3", "IhkSmpPrepareBootV4"),
+            (staging.AUDITED_SMP_START_BOOT_TYPE, "IhkSmpStartBootV3", "IhkSmpStartBootV4"),
+            (staging.AUDITED_SMP_APPLICATION_OPEN_EXTERN, "application_open", "application_open_v2"),
+            (staging.AUDITED_SMP_APPLICATION_INVOKE_EXTERN, "application_invoke", "application_invoke_v2"),
+            (staging.AUDITED_SMP_APPLICATION_CLOSE_EXTERN, "application_close", "application_close_v2"),
+            (staging.AUDITED_SMP_PREPARE_BOOT_EXTERN, "ihk_smp_prepare_boot_v3", "ihk_smp_prepare_boot_v4"),
+            (staging.AUDITED_SMP_START_BOOT_EXTERN, "ihk_smp_start_boot_v3", "ihk_smp_start_boot_v4"),
+        )
+        for exact, name, replacement in prefixes:
+            mutation = exact.replace(name, replacement, 1)
+            with self.subTest(prefix=name), self.assertRaisesRegex(
+                staging.ValidationError, "exact audited extern boundary"
+            ):
+                staging._validate_rust_escape_hatches(
+                    mutation,
+                    "SMP callback prefix",
+                    allowed_extern_blocks=(exact,),
+                )
+
+    def test_mcctrl_service_provider_boundary_is_exact_and_closed(self):
+        imports = staging.AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN
+        self.assertEqual(
+            "7a370b26baff8a6e1e1dc4304a924df0ad8be45501c861fff7f46ddebee90475",
+            hashlib.sha256(imports.encode("utf-8")).hexdigest(),
+        )
+        import_mutations = {
+            "missing": imports.replace("    fn ihk_os_service_unregister_v1(owner: *mut c_void);\n", "", 1),
+            "duplicate": imports + "\n" + imports,
+            "signature": imports.replace("version: u32", "version: u64", 1),
+            "redirected": imports.replace("ihk_os_topology_query_v1", "ihk_os_topology_query_v2", 1),
+        }
+        for name, mutation in import_mutations.items():
+            with self.subTest(import_mutation=name), self.assertRaisesRegex(
+                staging.ValidationError, "exact audited extern boundary"
+            ):
+                staging._validate_rust_escape_hatches(
+                    mutation,
+                    "mcctrl service provider imports",
+                    allowed_extern_blocks=(imports,),
+                )
+        callbacks = (
+            (staging.AUDITED_MCCTRL_SERVICE_OPEN_EXTERN, "open", "open_v2"),
+            (staging.AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN, "ioctl", "ioctl_v2"),
+            (staging.AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN, "close", "close_v2"),
+        )
+        for exact, name, replacement in callbacks:
+            cases = {
+                "signature": exact.replace(name, replacement, 1),
+                "missing-prefix": exact[exact.index('unsafe extern'):],
+                "comment": exact.replace("SAFETY", "REVIEW", 1),
+                "outer-attribute": "#[cfg(any())]\n" + exact,
+                "modifier": exact.replace("unsafe extern", "pub unsafe extern", 1),
+                "duplicate": exact + "\n" + exact,
+            }
+            for case, mutation in cases.items():
+                with self.subTest(callback=name, mutation=case), self.assertRaisesRegex(
+                    staging.ValidationError, "exact audited extern boundary"
+                ):
+                    staging._validate_rust_escape_hatches(
+                        mutation,
+                        "mcctrl service " + name,
+                        allowed_extern_blocks=(exact,),
+                    )
 
     def test_audited_provider_extern_rejects_outer_attributes_and_modifiers(self):
         prefixes = (
@@ -573,6 +672,106 @@ macro_rules! áinclude { () => {} }
                 queue["sha256"] = digest(path)
                 staging.EXPECTED_INPUTS[3] = expected_queue
                 self.write_manifest()
+
+    def test_memory_requires_exact_startup_table_owner_boundary(self):
+        memory = self.manifest["inputs"][12]
+        path = os.path.join(self.repo, memory["repository_path"])
+        with open(path) as stream:
+            original = stream.read()
+        owner_field = "tables: ManuallyDrop<StartupTables>,"
+        owner_drop = "unsafe { ManuallyDrop::drop(&mut self.tables) };"
+        owner_publish = "tables: ManuallyDrop::new(tables),"
+        for token in (owner_field, owner_drop, owner_publish):
+            self.assertEqual(1, original.count(token))
+        cases = {
+            "missing-owner": original.replace(owner_field, "tables: StartupTables,", 1),
+            "redirected-drop": original.replace(
+                owner_drop, "unsafe { ManuallyDrop::drop(&mut self.boot) };", 1
+            ),
+            "started-retention-reversed": original.replace(
+                "if !self.started() {", "if self.started() {", 1
+            ),
+            "started-always-false": original.replace(
+                "self.boot.as_ref().is_some_and(|boot| boot.started)", "false", 1
+            ),
+            "duplicate-drop": original.replace(
+                owner_drop, owner_drop + "\n            " + owner_drop, 1
+            ),
+            "unconditional-second-drop": original.replace(
+                "        }\n        // A started image deliberately retains",
+                "        }\n        " + owner_drop + "\n"
+                "        // A started image deliberately retains",
+                1,
+            ),
+            "unwrapped-publish": original.replace(owner_publish, "tables,", 1),
+            "duplicate-owner": original.replace(
+                owner_field, owner_field + "\n    " + owner_field, 1
+            ),
+        }
+        expected_memory = staging.EXPECTED_INPUTS[12]
+        try:
+            for name, mutated in cases.items():
+                with self.subTest(name=name):
+                    self.assertNotEqual(original, mutated)
+                    with open(path, "w") as stream:
+                        stream.write(mutated)
+                    memory["sha256"] = digest(path)
+                    staging.EXPECTED_INPUTS[12] = dict(
+                        expected_memory, sha256=memory["sha256"]
+                    )
+                    self.write_manifest()
+                    with self.assertRaisesRegex(
+                        staging.ValidationError, "(?:memory owner|LoadedImage)"
+                    ):
+                        self.plan()
+        finally:
+            with open(path, "w") as stream:
+                stream.write(original)
+            memory["sha256"] = digest(path)
+            staging.EXPECTED_INPUTS[12] = expected_memory
+            self.write_manifest()
+
+    def test_os_runtime_requires_exact_device_family_service_owner(self):
+        runtime = self.manifest["inputs"][13]
+        path = os.path.join(self.repo, runtime["repository_path"])
+        with open(path) as stream:
+            original = stream.read()
+        owner = (
+            "pub(crate) struct OsDeviceFamily {\n"
+            "    _services: super::os_service::Registry,\n}"
+        )
+        self.assertEqual(1, original.count(owner))
+        cases = {
+            "missing-service-owner": original.replace(
+                owner, "pub(crate) struct OsDeviceFamily;", 1
+            ),
+            "redirected-service-owner": original.replace(
+                "_services: super::os_service::Registry,",
+                "_services: super::smp_service::Registry,",
+                1,
+            ),
+            "duplicate-service-owner": original.replace(owner, owner + "\n" + owner, 1),
+        }
+        expected_runtime = staging.EXPECTED_INPUTS[13]
+        try:
+            for name, mutated in cases.items():
+                with self.subTest(name=name):
+                    self.assertNotEqual(original, mutated)
+                    with open(path, "w") as stream:
+                        stream.write(mutated)
+                    runtime["sha256"] = digest(path)
+                    staging.EXPECTED_INPUTS[13] = dict(
+                        expected_runtime, sha256=runtime["sha256"]
+                    )
+                    self.write_manifest()
+                    with self.assertRaisesRegex(staging.ValidationError, "unbooted OS owner"):
+                        self.plan()
+        finally:
+            with open(path, "w") as stream:
+                stream.write(original)
+            runtime["sha256"] = digest(path)
+            staging.EXPECTED_INPUTS[13] = expected_runtime
+            self.write_manifest()
 
     def test_os_registry_is_staged_at_the_module_import_path(self):
         plan = self.plan()

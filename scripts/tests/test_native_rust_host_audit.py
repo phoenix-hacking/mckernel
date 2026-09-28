@@ -8,6 +8,7 @@ import copy
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -278,7 +279,10 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
                 self.mutate_resealed_source(
                     smp, 'extern "C" {', modifier + 'extern "C" {'
                 )
-                with self.assertRaisesRegex(SystemExit, "outer"):
+                # The import has an exact safety prefix.  Inserting a modifier
+                # immediately before its ABI block either violates that prefix
+                # first or, if the prefix stays intact, the outer-boundary rule.
+                with self.assertRaisesRegex(SystemExit, "outer|prefix differs"):
                     host_audit.main()
 
         smp_blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[smp])
@@ -290,7 +294,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             + provider_import
             + "\n};",
         )
-        with self.assertRaisesRegex(SystemExit, "block depth differs"):
+        with self.assertRaisesRegex(SystemExit, "block depth differs|prefix differs"):
             host_audit.main()
 
         for label in (
@@ -380,6 +384,160 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
                     SystemExit, "reviewed Rust escape block differs"
                 ):
                     host_audit.main()
+
+    def test_memory_boot_linux_imports_and_safety_contract_remain_exact(self):
+        relative = "host-kernel/native-rust/smp_memory.rs"
+        blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[relative])
+        imports = blocks["Memory boot Linux imports"]
+        mutations = (
+            (
+                "fn per_cpu_ptr_to_phys(address: *mut core::ffi::c_void) -> u64;",
+                "fn per_cpu_ptr_to_phys(address: *mut core::ffi::c_void) -> i64;",
+            ),
+            (
+                "fn wakeup_secondary_cpu_via_init(apic_id: u32, physical: u64, cpu: u32) -> i32;",
+                "fn wakeup_secondary_cpu_via_init(apic_id: u32, physical: u64, cpu: u32);",
+            ),
+            (
+                "// a Linux task's private page-table lifetime.",
+                "// a caller-owned Rust page-table lifetime.",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
+                self.mutate_resealed_source(relative, old, new)
+                with self.assertRaisesRegex(
+                    SystemExit, "reviewed Rust escape block differs"
+                ):
+                    host_audit.main()
+
+        original = self.original_files[relative].decode("utf-8")
+        self.write_resealed_source(relative, original.replace(imports, "", 1))
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot Linux imports count=0"
+        ):
+            host_audit.main()
+
+        self.write_resealed_source(relative, original + "\n" + imports + "\n")
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot Linux imports count=2"
+        ):
+            host_audit.main()
+
+        self.write_resealed_source(
+            relative, original.replace(imports, "#[cfg(any())]\n" + imports, 1)
+        )
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot Linux imports"
+        ):
+            host_audit.main()
+
+        self.write_resealed_source(
+            relative,
+            original.replace(imports, "mod hidden {\n" + imports + "\n}", 1),
+        )
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot Linux imports.*actual=1 expected=0"
+        ):
+            host_audit.main()
+
+    def test_memory_rdtsc_assembly_and_safety_prefix_remain_exact(self):
+        relative = "host-kernel/native-rust/smp_memory.rs"
+        blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[relative])
+        rdtsc = blocks["Memory boot RDTSC ABI"]
+        prefix = host_audit.REVIEWED_RUST_BLOCK_PREFIXES["Memory boot RDTSC ABI"]
+        mutations = (
+            (
+                'core::arch::asm!("rdtsc", out("eax") low, out("edx") high, options(nomem, nostack))',
+                'core::arch::asm!("rdtsc", out("eax") high, out("edx") low, options(nomem, nostack))',
+            ),
+            (
+                "// SAFETY: RDTSC reads this x86 counter and has no memory side effect.",
+                "// SAFETY: RDTSC may write arbitrary memory.",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
+                self.mutate_resealed_source(relative, old, new)
+                expected = (
+                    "reviewed Rust escape block prefix differs"
+                    if old.startswith("// SAFETY:")
+                    else "reviewed Rust escape block differs"
+                )
+                with self.assertRaisesRegex(SystemExit, expected):
+                    host_audit.main()
+
+        original = self.original_files[relative].decode("utf-8")
+        self.write_resealed_source(relative, original.replace(prefix + rdtsc, "", 1))
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot RDTSC ABI count=0"
+        ):
+            host_audit.main()
+
+        self.write_resealed_source(relative, original + "\n" + prefix + rdtsc + "\n")
+        with self.assertRaisesRegex(
+            SystemExit, "Memory boot RDTSC ABI count=2"
+        ):
+            host_audit.main()
+
+    def test_os_runtime_new_callback_boundary_and_safety_prefix_fail_closed(self):
+        relative = "host-kernel/native-rust/os_runtime.rs"
+        label = "OS backend prepare boot callback type"
+        blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[relative])
+        callback = blocks[label]
+        prefix = host_audit.REVIEWED_RUST_BLOCK_PREFIXES[label]
+        self.mutate_resealed_source(
+            relative,
+            'type OsBackendPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;',
+            'type OsBackendPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u32) -> i32;',
+        )
+        with self.assertRaisesRegex(SystemExit, "reviewed Rust escape block differs"):
+            host_audit.main()
+
+        self.mutate_resealed_source(
+            relative,
+            "// CPU or publishing guest work. All retained storage belongs to this generation.",
+            "// CPU or publishing guest work. Storage may escape this generation.",
+        )
+        with self.assertRaisesRegex(SystemExit, "reviewed Rust escape block prefix differs"):
+            host_audit.main()
+
+        original = self.original_files[relative].decode("utf-8")
+        self.write_resealed_source(relative, original.replace(prefix + callback, "", 1))
+        with self.assertRaisesRegex(SystemExit, "OS backend prepare boot callback type count=0"):
+            host_audit.main()
+
+        self.write_resealed_source(relative, original + "\n" + prefix + callback + "\n")
+        with self.assertRaisesRegex(SystemExit, "OS backend prepare boot callback type count=2"):
+            host_audit.main()
+
+    def test_os_runtime_order_is_canonical_across_fresh_checker_import(self):
+        relative = "host-kernel/native-rust/os_runtime.rs"
+        blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[relative])
+        first_label = "OS application open export record"
+        second_label = "OS application invoke export record"
+        first = host_audit.REVIEWED_RUST_BLOCK_PREFIXES[first_label] + blocks[first_label]
+        second = host_audit.REVIEWED_RUST_BLOCK_PREFIXES[second_label] + blocks[second_label]
+        original = self.original_files[relative].decode("utf-8")
+        marker = "__HOST_AUDIT_FRESH_IMPORT_SWAP__"
+        swapped = original.replace(first, marker, 1)
+        swapped = swapped.replace(second, first, 1).replace(marker, second, 1)
+        self.write_resealed_source(relative, swapped)
+
+        script_directory = os.path.join(self.repo, "scripts")
+        if not os.path.isdir(script_directory):
+            os.makedirs(script_directory)
+        checker = os.path.join(script_directory, "native_rust_host_audit.py")
+        shutil.copy2(os.path.join(REPO_ROOT, "scripts/native_rust_host_audit.py"), checker)
+        result = subprocess.run(
+            [sys.executable, checker],
+            cwd=self.repo,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+        )
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("block order differs", result.stdout)
 
     def test_master_omission_and_digest_drift_fail_closed(self):
         value = self.load_manifest()

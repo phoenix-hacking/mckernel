@@ -69,6 +69,43 @@ EXPECTED_REVIEWED_PROVIDER_LEASE_BOUNDARY = {
     "trusted_noncopy_owner_balance_required": True,
     "token_version": 1,
 }
+EXPECTED_ADDITIVE_SERVICE_BOUNDARY = {
+    "abi_version": 1,
+    "built_in_supported": False,
+    "callback_safety_prefixes": {
+        "close": "// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n"
+        "// retaining both the OS generation and our module until this returns.",
+        "ioctl": "// SAFETY: IHK retains the successful context and module pin, excludes final\n"
+        "// release and supplies normalized compat arguments. No service/file/OS lock\n"
+        "// crosses this call; the IHK topology query may take its short operation lock.",
+        "open": "// SAFETY: IHK supplies an exact live OS identity, retains this module and gives\n"
+        "// exclusive writable output storage. Pinned mutexes protect process bindings\n"
+        "// during concurrent ioctls; no user memory or independently running work escapes.",
+    },
+    "credit_eligible": False,
+    "lifecycle_order": [
+        "registration-error-propagates-before-publication",
+        "close-releases-context-before-unregister",
+        "unregister-runs-during-module-drop",
+    ],
+    "loadable_module_only": True,
+    "registration": {
+        "all_callbacks_required": True,
+        "module_owner_nonnull": True,
+    },
+    "runtime_validated": False,
+    "source_block": {
+        "end_line": 62,
+        "path": "host-kernel/native-rust/mcctrl.rs",
+        "sha256": "7a370b26baff8a6e1e1dc4304a924df0ad8be45501c861fff7f46ddebee90475",
+        "start_line": 52,
+    },
+    "symbols": [
+        "ihk_os_service_register_v1",
+        "ihk_os_service_unregister_v1",
+        "ihk_os_topology_query_v1",
+    ],
+}
 
 
 class ValidationError(Exception):
@@ -369,6 +406,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
     _require_keys(
         contract,
         {
+            "additive_service_boundary",
             "binfmt",
             "dependencies",
             "foundation_status",
@@ -399,6 +437,10 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("mcctrl foundation status overclaims implementation")
     if contract["gate_credit_eligible"] is not False:
         raise ValidationError("MCC-001 credit is forbidden by this source-only contract")
+    if contract["additive_service_boundary"] != EXPECTED_ADDITIVE_SERVICE_BOUNDARY:
+        raise ValidationError(
+            "additive service boundary differs, overclaims runtime, or permits built-in use"
+        )
     if contract["dependencies"] != ["ihk"]:
         raise ValidationError("frozen mcctrl dependency set must be ['ihk']")
     if contract["parameter_count"] != 0:
@@ -534,7 +576,99 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("selected Rust API review scope differs")
 
 
-def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+def _validate_service_boundary(
+    text: str, code: str, contract: dict[str, Any], kconfig_text: str
+) -> None:
+    """Validate the reviewed, loadable-only C service ABI without granting credit."""
+
+    boundary = contract["additive_service_boundary"]
+    source_block = boundary["source_block"]
+    symbols = boundary["symbols"]
+    register, unregister, topology_query = symbols
+    expected_block = (
+        'extern "C" {\n'
+        f"    fn {register}(\n"
+        "        owner: *mut c_void,\n"
+        "        version: u32,\n"
+        "        open: Option<service_abi::Open>,\n"
+        "        ioctl: Option<service_abi::Ioctl>,\n"
+        "        close: Option<service_abi::Close>,\n"
+        "    ) -> i32;\n"
+        f"    fn {unregister}(owner: *mut c_void);\n"
+        f"    fn {topology_query}(slot: u32, generation: u64, command: u32) -> i64;\n"
+        "}"
+    )
+    if source_block["path"] != contract["production_source"]:
+        raise ValidationError("additive service boundary points outside the production source")
+    if hashlib.sha256(expected_block.encode("utf-8")).hexdigest() != source_block["sha256"]:
+        raise ValidationError("additive service boundary reviewed source hash differs")
+    _require_active_count(
+        text, code, expected_block, 1, "native mcctrl additive service boundary"
+    )
+    if text.count(expected_block) != 1:
+        raise ValidationError("native mcctrl service declaration is duplicated or comment-replaced")
+    if len(_active_fragment_positions(text, code, 'extern "C"')) != 4:
+        raise ValidationError("native mcctrl source contains an unreviewed C ABI boundary")
+    if len(_active_fragment_positions(text, code, 'extern "Rust"')) != 1:
+        raise ValidationError("native mcctrl source contains an unreviewed Rust ABI boundary")
+
+    callback_signatures = {
+        "open": 'unsafe extern "C" fn open(slot: u32, generation: u64, output: *mut *mut c_void) -> i32 {',
+        "ioctl": 'unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {',
+        "close": 'unsafe extern "C" fn close(context: *mut c_void) {',
+    }
+    for callback, signature in callback_signatures.items():
+        prefix = boundary["callback_safety_prefixes"][callback]
+        _require_active_count(
+            text, code, prefix + "\n" + signature, 1,
+            f"native mcctrl {callback} callback safety boundary",
+        )
+
+    init = _active_function_body(
+        code,
+        "fn init(_module: &'static ThisModule) -> Result<Self>",
+        "native mcctrl init",
+    )
+    registration = (
+        "kernel::error::to_result(unsafe {\n"
+        f"            {register}(\n"
+        "                THIS_MODULE.as_ptr().cast(),\n"
+        "                service_abi::VERSION,\n"
+        "                Some(open),\n"
+        "                Some(ioctl),\n"
+        "                Some(close),\n"
+        "            )\n"
+        "        })?;"
+    )
+    if registration not in init:
+        raise ValidationError(
+            "native mcctrl registration must use a nonnull module owner, ABI 1, and all callbacks"
+        )
+    if not (
+        init.index("mcctrl_process::Registry::new()?")
+        < init.index(registration)
+        < init.index("Ok(Self")
+    ):
+        raise ValidationError("native mcctrl registration rollback/publication ordering differs")
+    close = _active_function_body(code, callback_signatures["close"], "native mcctrl close")
+    close_allocation = "Box::from_raw(context.cast::<FileContext>())"
+    close_drop = "drop(context)"
+    if (
+        close_allocation not in close
+        or close_drop not in close
+        or close.index(close_allocation) >= close.index(close_drop)
+    ):
+        raise ValidationError("native mcctrl close must release its context before unregister")
+    drop = _active_function_body(code, "fn drop(&mut self)", "native mcctrl drop")
+    if drop.count(f"{unregister}(THIS_MODULE.as_ptr().cast())") != 1:
+        raise ValidationError("native mcctrl module drop must unregister the exact service owner")
+    if kconfig_text.count("\tdepends on MODULES && m\n") != 1:
+        raise ValidationError("native mcctrl service boundary is loadable-module only; built-in CONFIG=y is unsupported")
+
+
+def _validate_rust_source(
+    text: str, contract: dict[str, Any], kconfig_text: str
+) -> None:
     module = contract["module"]
     body = _module_body(text)
     if _module_literal(body, "name") != module["name"]:
@@ -577,8 +711,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     )
     if provider_import not in text or len(re.findall(r'\bextern\s+"Rust"', text)) != 1:
         raise ValidationError("Rust source lacks the exact audited provider-symbol import")
-    if len(re.findall(r'\bextern\s+"', text)) != 1:
-        raise ValidationError("Rust source contains an additional unreviewed extern boundary")
+    code = _mask_rust_comments_and_literals(text)
+    _validate_service_boundary(text, code, contract, kconfig_text)
     provider_reference = (
         "core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))"
     )
@@ -592,7 +726,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError("Rust source lacks paired mcctrl init and exit lifecycle")
     if (
         "fn init(_module: &'static ThisModule) -> Result<Self>" not in text
-        or "Ok(Self)" not in text
+        or "Ok(Self {" not in text
     ):
         raise ValidationError("mcctrl foundation must expose its explicit staging init path")
     for phase in ("load", "unload"):
@@ -601,7 +735,6 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             raise ValidationError(f"Rust source lacks stable {phase} lifecycle diagnostic")
 
     forbidden = (
-        r'extern\s+"C"',
         r"\bextern\s+crate\b",
         r"\binclude(?:_bytes)?!\s*\(",
         r"\b(?:global_asm|asm)!\s*\(",
@@ -624,9 +757,14 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             raise ValidationError("Rust foundation falsely emits a legacy lifecycle success log")
     if re.search(r'b"(?:mcctrl\.)?version=', text):
         raise ValidationError("frozen mcctrl module has no version metadata")
+    approved_imports = {
+        "core::ffi::c_void",
+        "kernel::prelude::*",
+        "mcctrl_process::Context as FileContext",
+    }
     for match in re.finditer(r"^\s*use\s+([^;]+);", text, re.MULTILINE):
         imported = match.group(1).strip()
-        if not imported.startswith(("kernel::", "core::")):
+        if imported not in approved_imports:
             raise ValidationError(f"unreviewed Rust dependency in mcctrl source: {imported}")
 
 
@@ -708,7 +846,7 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         "unsafe impl Sync for IhkExportSymbolRecord {}",
         "const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];",
         "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
-        "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
+        "use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};",
         f'#[export_name = "{symbol}"]',
         "pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;",
         anchor_export_record,
@@ -735,8 +873,9 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         detach_security_boundary,
         detach_function,
         "let unregister = IHK_DEVICE_REGISTRY\n        .begin_unregister(handle)",
-        "IHK_DEVICE_REGISTRY.snapshot(handle)",
-        "    exit();\n    unregister.commit()",
+        "let snapshot = IHK_DEVICE_REGISTRY\n"
+        "        .snapshot(handle)",
+        "    exit();\n    unregister\n        .commit()",
         detach_export_record,
         f'#[export_name = "{open_symbol}"]',
         f'pub extern "C" fn {open_symbol}(minor: u32) -> i64 {{',
@@ -995,9 +1134,12 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     inventory_path = _repo_file(repo, contract["reference_inventory"], "legacy inventory")
     source_lock_path = _repo_file(repo, contract["selected_kernel"]["source_lock"], "source lock")
 
-    _validate_rust_source(_read_text(source_path, "production Rust source"), contract)
+    kconfig_text = _read_text(kconfig_path, "production Kconfig")
+    _validate_kconfig(kconfig_text, contract)
+    _validate_rust_source(
+        _read_text(source_path, "production Rust source"), contract, kconfig_text
+    )
     _validate_provider_source(_read_text(provider_path, "native IHK provider"), contract)
-    _validate_kconfig(_read_text(kconfig_path, "production Kconfig"), contract)
     _validate_kbuild(_read_text(kbuild_path, "production Kbuild"), contract)
     _validate_stage_manifest(
         _load_json(manifest_path), source_path, provider_path, contract

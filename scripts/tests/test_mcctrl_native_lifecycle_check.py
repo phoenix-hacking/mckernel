@@ -120,7 +120,109 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         source = self.repo / self.contract["production_source"]
         with source.open("a", encoding="utf-8") as stream:
             stream.write('extern "C" { fn ihk_unreviewed(); }\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "extern boundary"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed C ABI boundary"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_service_declaration_removal_duplication_and_comment_replacement_are_rejected(self) -> None:
+        declaration = (
+            'extern "C" {\n'
+            "    fn ihk_os_service_register_v1(\n"
+            "        owner: *mut c_void,\n"
+            "        version: u32,\n"
+            "        open: Option<service_abi::Open>,\n"
+            "        ioctl: Option<service_abi::Ioctl>,\n"
+            "        close: Option<service_abi::Close>,\n"
+            "    ) -> i32;\n"
+            "    fn ihk_os_service_unregister_v1(owner: *mut c_void);\n"
+            "    fn ihk_os_topology_query_v1(slot: u32, generation: u64, command: u32) -> i64;\n"
+            "}"
+        )
+        for replacement in ("", declaration + "\n" + declaration, "/*\n" + declaration + "\n*/"):
+            with self.subTest(replacement=replacement[:2]), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                shutil.copytree(self.repo, repo)
+                source = repo / self.contract["production_source"]
+                text = source.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(declaration))
+                source.write_text(text.replace(declaration, replacement, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "service"):
+                    lifecycle.validate_repository(repo)
+
+    def test_service_declaration_signature_and_callback_safety_prefixes_are_exact(self) -> None:
+        mutations = (
+            ("version: u32,", "version: u64,"),
+            (
+                "// SAFETY: IHK supplies an exact live OS identity, retains this module and gives",
+                "// SAFETY: IHK supplies a guessed OS identity, retains this module and gives",
+            ),
+            (
+                'unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {',
+                'pub unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                shutil.copytree(self.repo, repo)
+                source = repo / self.contract["production_source"]
+                text = source.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(old))
+                source.write_text(text.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "mcctrl"):
+                    lifecycle.validate_repository(repo)
+
+    def test_service_registration_requires_nonnull_owner_abi_and_all_callbacks(self) -> None:
+        mutations = (
+            ("THIS_MODULE.as_ptr().cast(),", "core::ptr::null_mut(),"),
+            ("service_abi::VERSION,", "2_u32,"),
+            ("Some(close),", "None,"),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                shutil.copytree(self.repo, repo)
+                source = repo / self.contract["production_source"]
+                text = source.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(old))
+                source.write_text(text.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "registration"):
+                    lifecycle.validate_repository(repo)
+
+    def test_service_lifecycle_requires_error_rollback_close_and_drop_unregister(self) -> None:
+        mutations = (
+            ("        })?;", "        });"),
+            ("Box::from_raw(context.cast::<FileContext>())", "Box::from_raw(core::ptr::null_mut())"),
+            (
+                "ihk_os_service_unregister_v1(THIS_MODULE.as_ptr().cast())",
+                "ihk_os_service_unregister_v1(core::ptr::null_mut())",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                shutil.copytree(self.repo, repo)
+                source = repo / self.contract["production_source"]
+                text = source.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(old))
+                source.write_text(text.replace(old, new, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "mcctrl"):
+                    lifecycle.validate_repository(repo)
+
+    def test_service_boundary_contract_cannot_overclaim_built_in_runtime_or_credit(self) -> None:
+        original = json.loads(json.dumps(self.contract))
+        for field in ("built_in_supported", "runtime_validated", "credit_eligible"):
+            with self.subTest(field=field):
+                contract = json.loads(json.dumps(original))
+                contract["additive_service_boundary"][field] = True
+                self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
+                with self.assertRaisesRegex(lifecycle.ValidationError, "additive service boundary"):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_service_boundary_source_hash_drift_is_rejected(self) -> None:
+        contract = json.loads(json.dumps(self.contract))
+        contract["additive_service_boundary"]["source_block"]["sha256"] = "0" * 64
+        self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), contract)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "additive service boundary"):
             lifecycle.validate_repository(self.repo)
 
     def test_provider_symbol_import_drift_is_rejected(self) -> None:
