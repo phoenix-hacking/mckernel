@@ -4365,3 +4365,37 @@ and obtain independent artifact plus one-shot execution review before any
 runtime. Packet 5 and 6 remain consumed/nonreusable. This continuation still
 has two real diagnostic guest applications and zero current-candidate builds;
 official counters and whole-OS incomplete status are unchanged.
+
+Shutdown checkpoint 39, 2026-09-28: the requested work-window shutdown stopped
+new dispatch before any collector build, overlay, manifest, root, container,
+QEMU or guest operation. All eight child lanes are terminal. The bounded source
+work already in progress is independently accepted for checkpointing. Strict
+manifest startup argv now requires the exact `/bin/mcexec -t 1 0 app` prefix
+and bounds exact UTF-8 arguments, while the collector selects memory, files,
+threads or signals only through mutually exclusive presence flags that map to
+source-fixed literals. Every legacy value-bearing selector rejects. After two
+source corrections and one preserved test-observer failure, the final integrated
+suite passes 280 tests in 22.381 seconds; py_compile and scoped diff checks pass.
+Exact hashes, corrections and raw capture identities are retained in
+`docs/verification/stability-native-diagnostic-memory-profile-source-success-20260928-1.json`.
+
+At 2026-09-28T10:27:13-07:00 the only live campaign processes were launcher
+PID/PGID/SID 3125264 with `/proc` starttime 80228730, recovered worker
+PID/PGID/SID 3170135 with starttime 80670556, and app-server PID/PGID/SID
+3170137 with starttime 80670562. Their parent chain remains
+771805 -> 3125264 -> 3170135. The launcher owns their shutdown and paused
+continuation state. No diagnostic owner, QEMU or matching Docker client was
+live; unprivileged Docker enumeration was unavailable and no privileged check
+was started during shutdown.
+
+Next invocation: reconcile these exact process identities, launcher state,
+repository HEAD and the heavy-runtime lease. Preserve packets 5 and 6 as
+consumed/nonreusable. Build a fresh static collector with `ND_CORE_MEMORY=1`
+under `/home/holden/mckernel-work/scratch/native-diagnostic-memory-collector-build-20260928-1`,
+authenticate its compiler inputs, bytes and ELF properties, then generate a
+fresh overlay and strict memory manifest using the already authenticated core
+payload, loader/libc and exact current signal tuple. Require independent
+artifact/manifest review and a separate exact one-shot release before runtime.
+The continuation count remains two real diagnostic guest applications and zero
+current-candidate builds; official acceptance counters and whole-OS incomplete
+status are unchanged.

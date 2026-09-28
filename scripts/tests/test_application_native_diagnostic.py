@@ -247,6 +247,52 @@ class NativeDiagnosticTests(unittest.TestCase):
         for item in ("/apps/app", "/images/mckernel.img"): self.assertIn(item, plan["overlay"]["guest_destinations"])
         self.assertIn("insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288", plan["overlay"]["init_sequence"])
 
+    def test_payload_argv_accepts_core_memory_tail_and_retains_startup_prefix(self):
+        self.raw["payload"]["argv"] = ["/bin/mcexec", "-t", "1", "0", "app", "memory"]
+        self.manifest_path.write_text(json.dumps(self.raw))
+        manifest = ND.load_manifest(str(self.manifest_path))
+        self.assertEqual(manifest["payload"]["argv"][-1], "memory")
+
+    def test_payload_argv_rejects_empty_oversize_nul_nonstring_and_prefix_drift(self):
+        cases = [
+            ([], "non-empty"),
+            (["/bin/mcexec", "-t", "1", "0", "app"] + ["x"] * ND.PAYLOAD_ARGC_MAX,
+             "argc limit"),
+            (["/bin/mcexec", "-t", "1", "0", "app", "x" * (ND.PAYLOAD_ARG_BYTES_MAX + 1)],
+             "argument byte limit"),
+            (["/bin/mcexec", "-t", "1", "0", "app", "bad\0arg"], "argv item"),
+            (["/bin/mcexec", "-t", "1", "0", "app", True], "argv item"),
+            (["/bin/mcexec", "-x", "1", "0", "app", "A"], "prefix"),
+        ]
+        for argv, message in cases:
+            with self.subTest(argv=argv):
+                value = copy.deepcopy(self.raw)
+                value["payload"]["argv"] = argv
+                self.manifest_path.write_text(json.dumps(value))
+                with self.assertRaisesRegex(ND.DiagnosticError, message):
+                    ND.load_manifest(str(self.manifest_path))
+
+    def test_payload_argv_rejects_total_bytes_surrogate_and_list_subclass(self):
+        total_bytes = ["/bin/mcexec", "-t", "1", "0", "app"] + ["x" * 256] * 9
+        cases = [
+            (total_bytes, "total byte limit"),
+            (["/bin/mcexec", "-t", "1", "0", "app", "\ud800"], "UTF-8"),
+        ]
+        for argv, message in cases:
+            with self.subTest(message=message):
+                value = copy.deepcopy(self.raw)
+                value["payload"]["argv"] = argv
+                with self.assertRaisesRegex(ND.DiagnosticError, message):
+                    ND._validate_manifest(value)
+
+        class ListSubclass(list):
+            pass
+
+        value = copy.deepcopy(self.raw)
+        value["payload"]["argv"] = ListSubclass(value["payload"]["argv"])
+        with self.assertRaisesRegex(ND.DiagnosticError, "non-empty list"):
+            ND._validate_manifest(value)
+
     def test_qemu_starts_only_after_qmp_negotiation(self):
         args = ND.build_command(self.manifest, self.attempt())["argv"]
         self.assertEqual(args.count("-S"), 1)

@@ -33,6 +33,16 @@ static int accelerated_clock_gettime(clockid_t id, struct timespec *t) {
 #undef clock_gettime
 #include <stdlib.h>
 int main(int argc, char **argv) {
+#if defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
+    if (argc == 6) {
+        if (strcmp(argv[0], "/bin/mcexec") || strcmp(argv[1], "-t") ||
+            strcmp(argv[2], "1") || strcmp(argv[3], "0") ||
+            strcmp(argv[4], "app") || strcmp(argv[5], nd_core_case) || argv[6]) return 90;
+        char s[128];
+        int n = snprintf(s, sizeof s, "{\"case\":\"%s\"}\n", nd_core_case);
+        return write(1, s, (size_t)n) == n ? 0 : 91;
+    }
+#else
     if (argc == 8) {
         if (strcmp(argv[0], "/bin/mcexec") || strcmp(argv[1], "-t") ||
             strcmp(argv[2], "1") || strcmp(argv[3], "0") ||
@@ -41,6 +51,7 @@ int main(int argc, char **argv) {
         const char s[] = "{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n";
         return write(1, s, sizeof s - 1) == sizeof s - 1 ? 0 : 91;
     }
+#endif
     if (argc == 3 && !strcmp(argv[1], "child")) {
         if (!strcmp(argv[2], "bytes")) {
             unsigned char out[] = {0, 255, 65, 10}, err[] = {66, 0, 254};
@@ -133,12 +144,14 @@ class CollectorTests(unittest.TestCase):
         cls.temp.cleanup()
 
     @classmethod
-    def build(cls, source, name):
+    def build(cls, source, name, profile=None):
         harness = cls.root / (name + ".c")
         harness.write_text(HARNESS.replace("COLLECTOR_SOURCE", str(source)))
         binary = cls.root / name
-        p = subprocess.run(["cc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-O2",
-                            str(harness), "-o", str(binary)], capture_output=True, timeout=20)
+        command = ["cc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-O2"]
+        if profile:
+            command.append("-DND_CORE_" + profile.upper() + "=1")
+        p = subprocess.run(command + [str(harness), "-o", str(binary)], capture_output=True, timeout=20)
         if p.returncode:
             raise AssertionError(p.stderr.decode()[:4000])
         return binary
@@ -157,6 +170,27 @@ class CollectorTests(unittest.TestCase):
         self.assertTrue(r["procfs_empty"])
         self.assertIn(b"fault=0 timeout=0 clean=1", status)
         self.assertEqual(r["argv"], ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"])
+
+    def test_memory_profile_payload_and_exact_report(self):
+        binary = self.build(SOURCE, "memory", "memory")
+        r, status = self.run_case("argv", binary=binary)
+        self.assertEqual(r["raw_wait_status"], 0)
+        self.assertEqual(r["argv"], ["/bin/mcexec", "-t", "1", "0", "app", "memory"])
+        self.assertEqual(bytes.fromhex(r["streams"]["stdout"]["hex"]), b'{"case":"memory"}\n')
+        self.assertIn(b"fault=0 timeout=0 clean=1", status)
+
+    def test_core_profiles_compile_and_reject_unknown_profile(self):
+        for profile in ("memory", "files", "threads", "signals"):
+            self.build(SOURCE, "profile-" + profile, profile)
+        for defines in (("ND_CORE_MEMORY", "ND_CORE_FILES"), ("ND_CORE_CASE=unsafe",),
+                        ("ND_CORE_CASE=memory+1",), ("ND_CORE_CASE=memory\\\"x\\\"",)):
+            label = "-".join(d.replace("=", "-").replace("+", "-") for d in defines)
+            harness = self.root / ("bad-" + label + ".c")
+            harness.write_text(HARNESS.replace("COLLECTOR_SOURCE", str(SOURCE)))
+            flags = ["-D" + d + ("=1" if "=" not in d else "") for d in defines]
+            p = subprocess.run(["cc", "-std=c11", "-Werror", *flags, str(harness), "-o", str(self.root / ("bad-" + label))],
+                               capture_output=True, timeout=20)
+            self.assertNotEqual(p.returncode, 0)
 
     def test_binary_streams_raw_wait_and_eof(self):
         r, _ = self.run_case("run")

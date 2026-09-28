@@ -127,6 +127,7 @@
     ,"native_diag_qemu_status": "docs/verification/stability-native-diagnostic-qemu-status-source-success-20260928-1.json"
     ,"native_diag_success6": "docs/verification/stability-native-diagnostic-current-signal-success-20260928-1.json"
     ,"native_diag_memory_prep": "docs/verification/stability-native-diagnostic-memory-preparation-source-success-20260928-1.json"
+    ,"native_diag_memory_profile": "docs/verification/stability-native-diagnostic-memory-profile-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -526,8 +527,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 independently passes one real diagnostic McKernel application protocol run: startup.argv-empty produced exact 91-byte stdout, empty stderr, wait status zero, empty procfs, QMP shutdown, complete process retirement, exact QEMU and 30 Docker-client identities, container exit zero/OOM false, authenticated removal and final absence. Inner and outer both report PROTOCOL_PASS; source/artifact and independent archive/oracle replay pass. Packet 5's original outer failure remains preserved. The memory-preparation source now independently passes after one bounded correction: payload SHA256 and manifest path/hash are explicit, manifests beneath the writable attempt parent reject in both outer and inside admission, 260 diagnostic tests pass, and the retained core binary plus loader/libc match the current signal tuple. This is diagnostic preparation, not catalog acceptance.",
-      "next_check": "Checkpoint the reviewed source, generate and strictly replay a fresh native-application-core memory overlay/manifest against the exact signal tuple, obtain an independent one-shot release, then run memory before files, threads and shutdown.",
+      "result": "Packet 6 independently passes one real diagnostic McKernel application protocol run: startup.argv-empty produced exact 91-byte stdout, empty stderr, wait status zero, empty procfs, QMP shutdown, complete process retirement, exact QEMU and 30 Docker-client identities, container exit zero/OOM false, authenticated removal and final absence. Inner and outer both report PROTOCOL_PASS; source/artifact and independent archive/oracle replay pass. Packet 5's original outer failure remains preserved. Memory preparation now has explicit payload and immutable manifest identity plus strict manifest startup argv. Source-fixed presence-only memory/files/threads/signals collector profiles reject multiple or legacy value-bearing selection. Independent review passes; the integrated suite passes 280 tests. This is diagnostic preparation, not catalog acceptance.",
+      "next_check": "Build and authenticate a fresh ND_CORE_MEMORY collector, generate and strictly replay a fresh native-application-core memory overlay/manifest against the exact signal tuple, obtain independent artifact and one-shot execution reviews, then run memory before files, threads and shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -550,7 +551,8 @@
         "native_diag_attempt_failure3",
         "native_diag_qemu_status",
         "native_diag_success6",
-        "native_diag_memory_prep"
+        "native_diag_memory_prep",
+        "native_diag_memory_profile"
       ],
       "depends_on": []
     },

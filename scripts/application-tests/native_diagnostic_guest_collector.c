@@ -46,9 +46,32 @@ struct result {
     uint64_t started, reaped, finished;
 };
 struct child_fault { int stage, number; };
+#if defined(ND_CORE_CASE)
+#error "ND_CORE_CASE is obsolete; use one ND_CORE_* presence flag"
+#endif
+#if (defined(ND_CORE_MEMORY) + defined(ND_CORE_FILES) + \
+     defined(ND_CORE_THREADS) + defined(ND_CORE_SIGNALS)) > 1
+#error "select at most one ND_CORE_* profile"
+#endif
+#if defined(ND_CORE_MEMORY)
+static const char nd_core_case[] = "memory";
+#elif defined(ND_CORE_FILES)
+static const char nd_core_case[] = "files";
+#elif defined(ND_CORE_THREADS)
+static const char nd_core_case[] = "threads";
+#elif defined(ND_CORE_SIGNALS)
+static const char nd_core_case[] = "signals";
+#endif
+#if defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+    defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
+static char *const payload_argv[] = {
+    "/bin/mcexec", "-t", "1", "0", "app", (char *)nd_core_case, NULL
+};
+#else
 static char *const payload_argv[] = {
     "/bin/mcexec", "-t", "1", "0", "app", "A", "", "B", NULL
 };
+#endif
 static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", NULL};
 static char *const helper_env[] = {"PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C", NULL};
 
@@ -280,6 +303,17 @@ static int stream_json(char *b, size_t *n, const struct stream *s)
 static int frame(char *b, const struct result *r, int empty)
 {
     size_t n = 0;
+#if defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+    defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
+    const char *const argv_case = nd_core_case;
+    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
+               "\"app\",\"%s\"],\"cwd\":\"/case/work\","
+               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
+               "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
+               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", argv_case, r->status,
+               (unsigned long long)r->started, (unsigned long long)r->reaped,
+               (unsigned long long)r->finished) ||
+#else
     if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
                "\"app\",\"A\",\"\",\"B\"],\"cwd\":\"/case/work\","
                "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
@@ -287,6 +321,7 @@ static int frame(char *b, const struct result *r, int empty)
                "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
                (unsigned long long)r->started, (unsigned long long)r->reaped,
                (unsigned long long)r->finished) ||
+#endif
         stream_json(b, &n, &r->out) || append(b, &n, ",\"stderr\":") ||
         stream_json(b, &n, &r->err) ||
         append(b, &n, "},\"procfs_empty\":%s}\n",

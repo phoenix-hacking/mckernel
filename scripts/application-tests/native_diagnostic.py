@@ -27,6 +27,13 @@ ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "p
              "native_boot", "loader", "libc")
 MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
 APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+# The launcher prefix is part of the reviewed wire contract.  The tail is
+# deliberately bounded rather than frozen so the same manifest validator can
+# describe startup and the four core-mode payloads.
+PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0", "app")
+PAYLOAD_ARGC_MAX = 32
+PAYLOAD_ARG_BYTES_MAX = 256
+PAYLOAD_ARGV_BYTES_MAX = 2048
 # These are diagnostic records, not generic words.  In particular, the boot
 # command line contains ``panic=-1``, PCI firmware prose can say "report a
 # bug", and the collector emits successful fields such as ``error=0``.  None
@@ -94,6 +101,25 @@ def _ref(ref, name):
 def _typed_string(value, label):
     _need(type(value) is str and "\0" not in value, label)
     return value
+
+
+def _validate_payload_argv(argv):
+    """Validate the bounded mcexec payload argv without normalising it."""
+    _need(type(argv) is list and argv, "payload argv must be a non-empty list")
+    _need(len(argv) <= PAYLOAD_ARGC_MAX, "payload argv argc limit")
+    _need(tuple(argv[:len(PAYLOAD_ARGV_PREFIX)]) == PAYLOAD_ARGV_PREFIX,
+          "payload argv prefix")
+    encoded = 0
+    for item in argv:
+        _need(type(item) is str and "\0" not in item, "payload argv item")
+        try:
+            size = len(item.encode("utf-8"))
+        except UnicodeEncodeError as exc:
+            raise DiagnosticError("payload argv item UTF-8") from exc
+        _need(size <= PAYLOAD_ARG_BYTES_MAX, "payload argv argument byte limit")
+        encoded += size
+    _need(encoded <= PAYLOAD_ARGV_BYTES_MAX, "payload argv total byte limit")
+    return argv
 
 
 def _identity(path):
@@ -194,7 +220,8 @@ def _validate_manifest(obj):
     _need(append == APPEND, "kernel append differs from retained profile")
     _keys(obj["payload"], ("cwd", "argv", "env", "oracle", "stdout_limit_bytes", "stderr_limit_bytes"))
     payload = obj["payload"]
-    _need(payload["cwd"] == "/case/work" and payload["argv"] == ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"], "payload contract")
+    _need(payload["cwd"] == "/case/work", "payload cwd")
+    _validate_payload_argv(payload["argv"])
     _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
     oracle = payload["oracle"]
     _keys(oracle, ("stdout_hex", "stderr_hex", "exit_code"))
