@@ -4542,3 +4542,35 @@ all process/container identities and teardown for independent evidence review.
 This invocation still has one real diagnostic guest application and zero
 current-candidate kernel builds; formal counters and whole-OS status are
 unchanged.
+
+Continuation checkpoint 44, 2026-09-28: the one released files command was
+consumed exactly once and passes independent runtime review. The real
+`native-application-core files` guest produced exact 23-byte stdout
+`NATIVE_CORE PASS files\n`, empty stderr, raw wait 9472/exit 37, complete EOF
+and empty procfs. Thirty-two sampled syscall deliveries, 31 returns and 17
+routes include create/read/write/seek/stat/close, successful unlink and the
+subsequent ENOENT. Cleanup ACK succeeds; retirement retries from -11 to zero;
+pager handle 20 releases four references to zero; procfs deletion and process
+release with `cleanup_errno=0` complete.
+
+All 696 QMP requests have unique successful replies and no error. Guest shutdown
+precedes confirmed shutdown status and host quit; QEMU PID/PGID/SID 10,
+starttime 82863808, is reaped with -9 under the reviewed cleanup path. All six
+captures join. All 30 Docker clients have distinct identities and exact reaps.
+Container `2dbf935f...c0887` exits zero without OOM, authenticated removal
+precedes three empty final lookups, three post-review lookups remain empty and
+the development lock is free. Independent review returns
+`PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE`. The evaluator's unconditional
+`mckernel_application_executed=false` and required `application_acceptance=false`
+fields remain preserved; the additive review establishes only one observed
+diagnostic guest execution, never formal catalog acceptance.
+
+Next: commit/push/fetched-blob verify
+`docs/verification/stability-native-diagnostic-files-success-20260928-1.json`,
+then bind the freshly prepared source-fixed threads collector and exact host
+oracle through independent artifact review, a fresh overlay/strict manifest and
+separate one-shot release. Files packet 1 is consumed and nonreusable. This
+invocation now has two real diagnostic guest applications and zero
+current-candidate kernel builds. Official counters remain 0/273 applications,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates; whole-OS acceptance remains incomplete.

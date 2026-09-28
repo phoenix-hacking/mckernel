@@ -133,6 +133,7 @@
     ,"native_diag_memory_success": "docs/verification/stability-native-diagnostic-memory-success-20260928-1.json"
     ,"native_diag_files_artifact": "docs/verification/stability-native-diagnostic-files-artifact-success-20260928-1.json"
     ,"native_diag_files_release": "docs/verification/stability-native-diagnostic-files-execution-release-20260928-1.json"
+    ,"native_diag_files_success": "docs/verification/stability-native-diagnostic-files-success-20260928-1.json"
   },
   "areas": [
     {
@@ -532,8 +533,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 independently passes one startup diagnostic. The fresh baseline.core.memory diagnostic independently passes on the retained current signal tuple. Files preparation now also passes independent artifact review: the source-fixed collector and 61-member overlay join all 37 userspace ELFs, while corrected host oracle attempt 4 proves exact 23-byte output, exit 37 and fail-closed pre/post cleanup. A fresh exact files packet has separate one-shot release. These are diagnostic protocol/preparation results, not catalog acceptance.",
-      "next_check": "Push/fetch-verify the exact files packet and release, recheck the live heavy-runtime lease and all fail-closed preconditions, then consume at most its one released command and independently review bytes, kernel behavior and teardown before threads and shutdown.",
+      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple now independently passes both baseline.core.memory and baseline.core.files diagnostics. Files proves exact 23-byte output/exit 37, observed file syscalls and unlink/ENOENT, retirement, four-reference pager release, 696/696 QMP replies, exact QEMU/Docker identities, authenticated removal and free lock. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
+      "next_check": "Checkpoint the independently reviewed files evidence, then bind the source-fixed threads collector/host oracle through independent artifact review, fresh overlay/manifest and one separately released threads diagnostic before shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -562,7 +563,8 @@
         "native_diag_memory_release",
         "native_diag_memory_success",
         "native_diag_files_artifact",
-        "native_diag_files_release"
+        "native_diag_files_release",
+        "native_diag_files_success"
       ],
       "depends_on": []
     },

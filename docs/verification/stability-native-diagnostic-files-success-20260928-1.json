@@ -1,0 +1,107 @@
+{
+  "schema": "mckernel.stability-diagnostic-runtime-success.v1",
+  "recorded_at": "2026-09-28T11:14:38-07:00",
+  "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "case_id": "baseline.core.files",
+  "checkpoint": {
+    "commit": "0730349379946319c008367020fadc73f54e6fa3",
+    "branch": "codex/local-native-staging-repair",
+    "push_fetch_verified_at": "2026-09-28T18:05:41.711245+00:00",
+    "protocol_line": 131803
+  },
+  "release": {
+    "packet_path": "docs/verification/stability-native-diagnostic-files-execution-packet-20260928-1.md",
+    "packet_sha256": "fd9b87faeeca50b6c60a91d170b6dfcfe7579d9b515caaf46893af6281a76648",
+    "release_path": "docs/verification/stability-native-diagnostic-files-execution-release-20260928-1.json",
+    "release_sha256": "0db57a0c704cebb066536dd726729a45686d1e104588956880f629e6d6c4f8ad",
+    "preflight_completed_at": "2026-09-28T18:06:37.315971+00:00",
+    "preflight_protocol_lines": [131893, 131907],
+    "result": "Capacity, launcher identities, exclusive lease/process/container absence, development lock, cgroups, every source/artifact and all fresh/forbidden paths passed immediately before launch."
+  },
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndcf-20260928-2",
+    "nonce": "30cd836a7be0fd61d4b43fc1042e6afc",
+    "inner": "/home/holden/mckernel-work/scratch/ndcf-20260928-2/attempt-30cd836a7be0fd61d4b43fc1042e6afc",
+    "outer": "/home/holden/mckernel-work/scratch/ndcf-20260928-2.owner-30cd836a7be0fd61d4b43fc1042e6afc",
+    "command_protocol_lines": [131913, 131987],
+    "started_at": "2026-09-28T18:06:47.682605+00:00",
+    "completed_at": "2026-09-28T18:07:29.997813+00:00",
+    "owner_exit_code": 0,
+    "container_id": "2dbf935f9ef056dccb7d32dea364e539d8c64e098ba3c50383e7a4ce469c0887"
+  },
+  "application": {
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "files"],
+    "cwd": "/case/work",
+    "env": {"COKERNEL_PATH": "/apps", "PATH": "/usr/bin:/bin"},
+    "stdout_hex": "4e41544956455f434f524520504153532066696c65730a",
+    "stdout_size": 23,
+    "stderr_hex": "",
+    "stderr_size": 0,
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "truncated": false,
+    "procfs_empty": true
+  },
+  "kernel_observation": {
+    "sampled_deliveries": 32,
+    "sampled_returns": 31,
+    "sampled_routes": 17,
+    "file_behavior": "create/read/write/seek/stat/close, successful unlink and subsequent ENOENT are observed",
+    "cleanup_ack_errno": 0,
+    "retirement_sequence": [-11, 0],
+    "pager_handle": 20,
+    "pager_released_references": 4,
+    "pager_remaining_references": 0,
+    "procfs_deleted": true,
+    "process_release_cleanup_errno": 0
+  },
+  "qemu_qmp": {
+    "pid": 10,
+    "pgid": 10,
+    "sid": 10,
+    "starttime_ticks": 82863808,
+    "returncode": -9,
+    "transcript_records": 1395,
+    "requests": 696,
+    "successful_replies": 696,
+    "errors": 0,
+    "events": ["RESUME", "SHUTDOWN", "STOP", "SHUTDOWN"],
+    "ordering": "Guest shutdown precedes confirmed shutdown status and host quit under the reviewed cleanup path."
+  },
+  "retained_hashes": {
+    "inner_result": "199d6054d1e16ac54131980449014ad3e5719d2dc6273624d03d205f2862f332",
+    "outer_result": "edaae4a6d59f009d44291e3809f89f0743060f29a1c2b9819660fae51ed03998",
+    "serial": "775ed763e1fe1765e8e5e6761f2c6828b02b2b677f637715aad9ce32c9d0ef4c",
+    "debugcon": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "qmp_transcript": "59c991c0c4382a85bfc7c16744db9d6aac0f5e9e3eb4e48e6d7cc6516decc8f4",
+    "capture_bindings": "c98f70f9e9ceef5481ae5762f20805b5b2b2612e95b3fa4e3a6bb8aaf91ee62b",
+    "qemu_stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ownership_cleanup": {
+    "outer_status": "PROTOCOL_PASS",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "docker_clients": 30,
+    "all_clients_exact_reaped": true,
+    "authenticated_removal": true,
+    "final_empty_lookups": 3,
+    "post_review_empty_lookups": 3,
+    "development_lock_free": true,
+    "six_capture_copies_join": true,
+    "outer_dump_protocol_lines": [132828, 132829],
+    "final_copy_join_protocol_lines": [133256, 133257]
+  },
+  "metadata_interpretation": {
+    "mckernel_application_executed_false": "Preserved unconditional conservative evaluator field pending independent review; the independent decision establishes one observed diagnostic guest application execution only.",
+    "application_acceptance_false": "Correct and preserved: this diagnostic does not satisfy formal catalog or M04 acceptance."
+  },
+  "limitations": [
+    "This is one diagnostic execution on the exact bound artifacts, not formal application acceptance.",
+    "No M04, production-gate, language-gate or whole-OS counter is promoted.",
+    "The retained current signal tuple is not a newly built current-candidate kernel in this invocation.",
+    "Files packet 1 is consumed and nonreusable."
+  ]
+}
