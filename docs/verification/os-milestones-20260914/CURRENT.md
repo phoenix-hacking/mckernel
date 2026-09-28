@@ -4298,3 +4298,39 @@ overlay under the unprivileged reviewed profile; then obtain a new exact release
 for memory before proceeding to files, threads and shutdown. Official counters
 remain 0/273 applications, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains incomplete.
+
+Shutdown checkpoint 37, 2026-09-28: the launcher requested termination of
+this invocation after continuation checkpoint 36. No new task was dispatched,
+all eight existing child lanes are terminal, and no build, guest, container or
+runtime operation was started after the request. At 2026-09-28T17:03:22Z the
+only live campaign processes were launcher PID/PGID/SID 3125264, `/proc`
+starttime 80228730; recovered worker PID/PGID/SID 3170135, starttime 80670556;
+and app-server PID/PGID/SID 3170137, starttime 80670562. Their parent chain was
+771805 -> 3125264 -> 3170135. The launcher owns their shutdown and paused
+continuation state; this checkpoint does not stop, replace or resume them.
+There was no live diagnostic owner, `native_diagnostic.py`, QEMU or Docker
+client. Preserve the packet-6 inner root
+`/home/holden/mckernel-work/scratch/ndcs-20260928-6`, outer root
+`/home/holden/mckernel-work/scratch/ndcs-20260928-6.owner-0f54526bcbdfd2433bbc5ac7d783a9e2`
+and readable review copy
+`/home/holden/mckernel-work/scratch/native-diagnostic-packet6-outer-review-copy-20260928-1`.
+
+Next invocation: first reconcile the three process identities above, launcher
+state, repository HEAD and the heavy-runtime lease. Preserve packet 5 and 6 as
+consumed and nonreusable. Then implement two disjoint unprivileged preparation
+changes: make `native_diagnostic_overlay.py` require and authenticate an
+explicit payload SHA256, and make `native_diagnostic_container_owner.py`
+require and propagate an explicit canonical manifest path and SHA256 through
+the outer/inside boundary. Add strict positive and fail-closed tests and run
+the complete six-suite diagnostic regression before checkpointing. After
+independent source review, authenticate the retained
+`native-application-core` binary SHA256
+`558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a`
+and its loader/libc plus the exact current signal module/image tuple. Generate
+a fresh memory-mode overlay and manifest for `native-application-core memory`,
+expected stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit 37. A fresh
+one-shot execution packet and independent release are required before any
+runtime attempt; proceed to files, threads and shutdown only after preserving
+memory bytes, status, logs, identities and teardown. This shutdown checkpoint
+does not change the two diagnostic-app/zero-current-candidate-build count,
+official acceptance counters, or whole-OS incomplete status.
