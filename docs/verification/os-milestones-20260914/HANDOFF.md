@@ -7,15 +7,17 @@ diagnostic application is never whole-OS completion.
 ## Authority and identity
 
 - Branch: `codex/local-native-staging-repair`.
-- Last verified remote checkpoint:
-  `619aaa45ef531de17f477906351e9363b77cc40d`.
+- Last verified remote checkpoint before this shutdown save:
+  `ecbd002de15330a5c78244f1144322781021da09`.
 - Adopted policy SHA-256: GOAL `76c4f5d1...c0bcc3`, START
   `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, HANDOFF predecessor
   `265cd999...a415`.
 - Launcher wrapper PID/PGID/SID 3399308/starttime 83682487; worker
   3399313/starttime 83682494; app-server 3399317/starttime 83682500.
-- No QEMU, mcexec, diagnostic owner or heavy build/guest lease was live at the
-  last reconciliation. Recheck exact identities and capacity before heavy work.
+- No QEMU, mcexec, diagnostic owner or heavy build/guest lease is live. The
+  failed build owner PID 3488858/starttime 84850867 has exited and its lease is
+  absent. Preserve its exited container and evidence. Recheck exact identities
+  and capacity before heavy work.
 - Preserve unrelated dirty launcher/policy files, deleted/untracked pycache and
   dirty nested `ihk`; stage only campaign-owned paths.
 
@@ -167,10 +169,23 @@ uses catchable TERM before forced retirement, classifies negative sudo-wrapper
 completion on every path, retains the lease on sticky client uncertainty,
 filters SUDO_ASKPASS without logging it and pins the Unix socket. The original
 three-test/seven-failure reproducer is retained and 39 corrected tests pass.
-Final independent rereview PASSes the source boundary and conditionally releases
-one exact offline build only after these bytes are pushed/fetched and the exact
-request, candidate/manifest/driver/image identities, fresh roots, owner and
-resource floors pass dispatcher preflight. No build has run yet.
+Final independent rereview PASSed the source boundary and conditionally released
+one exact offline build after its bytes and request passed preflight. That single
+attempt failed in the offline driver's identity phase before compilation: the
+bind-mounted candidate is a linked worktree whose `.git` points to unmounted
+host metadata. It ran zero build commands, produced no artifacts, and exited 1.
+The original evidence is committed in
+`stability-native-exact-build-identity-failure-20260928-1.json` and
+`evidence/stability-native-exact-build-identity-failure-d0947e0c-20260928-1.tar.gz`.
+Retain exited container `mckernel-exact-272a777b73aa4a5185f607bfa8fad490`
+(ID `110dfe01...799b0`) and do not retry the released request.
+
+Next executable step is one bounded correction for this failure family: make
+Git identity self-contained in `/src` or mount the exact metadata read-only,
+cover the linked-worktree case with a cheap local regression, then use fresh
+attempt-2 roots and obtain a new independent one-shot release. The candidate is
+still clean and attempt-1 output is empty. No successful current-candidate build
+or acceptance counter follows from this failure.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

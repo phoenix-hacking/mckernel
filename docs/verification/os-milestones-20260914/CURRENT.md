@@ -5510,3 +5510,48 @@ run only the smallest `startup.argv-empty` diagnostic while capturing exact
 bytes, exit, kernel logs and teardown. Formal counters remain 0/273, 2/4,
 6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero
 current-candidate builds remain unchanged.
+
+Continuation checkpoint 62, 2026-09-28: the conditionally released exact
+offline build was invoked exactly once and failed safely before compilation.
+The offline driver's first identity command found that `/src/.git` points to the
+host linked-worktree metadata at
+`/home/holden/mckernel/.git/worktrees/mckernel-exact-candidate-d0947e0c`, which
+was not mounted in the source-free container. `git rev-parse HEAD` therefore
+failed in phase `identity`; the driver executed zero build commands, emitted no
+outputs or partial outputs, and returned exit 1. This is the first failure in
+the offline-container linked-worktree-metadata family. The released request
+does not authorize an unchanged retry.
+
+The original evidence root remains
+`/home/holden/mckernel-exact-build-evidence-d0947e0c-1`. Its deterministic
+committed archive is
+`evidence/stability-native-exact-build-identity-failure-d0947e0c-20260928-1.tar.gz`
+(SHA-256 `da36c9ec...698c0`, 8,324 bytes), and the additive result is
+`stability-native-exact-build-identity-failure-20260928-1.json`. The owner was
+PID 3488858/starttime 84850867 with nonce
+`c75243e3228b4afd9fe62543e98492fb`; it has exited. Failed container
+`mckernel-exact-272a777b73aa4a5185f607bfa8fad490`, ID
+`110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0`,
+is deliberately retained exited with code 1, PID 0, running false and
+OOMKilled false. The owner proved retirement and removed the lease. The clean
+candidate still has zero status entries, and the output root remains empty.
+
+Shutdown checkpoint state: no heavy build, guest or child-agent operation is
+active. All child lanes are complete. Preserve launcher wrapper PID 3399308
+(starttime 83682487), worker PID 3399313 (starttime 83682494) and app-server
+PID 3399317 (starttime 83682500); the launcher owns their pause/continuation.
+Do not remove the failed container or original evidence during the next
+continuation.
+
+Next executable task: apply the one allowed bounded correction for this failure
+family by making the clean candidate's Git identity self-contained inside
+`/src`, or by binding the exact required Git metadata read-only without exposing
+unreviewed host state. Add a cheap local regression that reproduces the linked
+worktree `.git` indirection and proves identity plus complete manifest checking
+inside the reviewed mount layout. Then create fresh attempt-2 output, evidence,
+lease and request paths, remeasure capacity and identities, and obtain a new
+independent one-shot execution release. Do not retry attempt 1 unchanged.
+Lifecycle full-suite closure remains separately blocked on semantic review of
+the stale provider/source contract. Formal counters remain 0/273, 2/4,
+6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero successful
+current-candidate builds remain unchanged.

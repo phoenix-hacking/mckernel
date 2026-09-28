@@ -1,0 +1,66 @@
+{
+  "status": "FAIL",
+  "scope": "first exact offline current-candidate build attempt; identity phase only",
+  "candidate_sha": "d0947e0c9688106ba853e5846afc63bc94deec03",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-d0947e0c-1.json",
+    "sha256": "f2047d8a105b8c686e0a3b9cab7c50c65731d059dc05efa75771b7167b83bfe6"
+  },
+  "prepared_image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "owner": {
+    "pid": 3488858,
+    "starttime": "84850867",
+    "nonce": "c75243e3228b4afd9fe62543e98492fb",
+    "state_after_collection": "exited"
+  },
+  "container": {
+    "name": "mckernel-exact-272a777b73aa4a5185f607bfa8fad490",
+    "id": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0",
+    "state": "exited",
+    "exit_code": 1,
+    "oom_killed": false,
+    "running": false,
+    "preserved": true
+  },
+  "result": {
+    "phase": "identity",
+    "commands_executed_by_offline_driver": 0,
+    "outputs": {},
+    "partial_outputs": {},
+    "error": "git rev-parse in /src followed the linked-worktree gitdir /home/holden/mckernel/.git/worktrees/mckernel-exact-candidate-d0947e0c, which was not mounted in the container",
+    "failure_family": "offline container linked-worktree Git metadata visibility"
+  },
+  "retirement": {
+    "owner_receipt_retired": true,
+    "lease_path": "/home/holden/mckernel-work/scratch/native-exact-build-d0947e0c-1.lease",
+    "lease_present_after_collection": false,
+    "failed_container_removed": false
+  },
+  "resources_at_admission": {
+    "host_free_bytes": 25225900032,
+    "scratch_free_bytes": 21611474944,
+    "memory_available_bytes": 30483849216
+  },
+  "evidence": {
+    "original_root": "/home/holden/mckernel-exact-build-evidence-d0947e0c-1",
+    "owner_receipt_sha256": "95929d2155dd6478b1bf54037ecc69356d813393d712fe7aaaf8d86dfbbb6ec0",
+    "build_receipt_sha256": "0e7fa899122d61e7e6fcc9b61c9ebe45f08a6542935bc8b9cc8c235f7e1aed06",
+    "terminal_inspect_sha256": "4ed80714ec96e65f10548715a6ecf7c204926ee7db3973362672a997b1d12630",
+    "archive": "docs/verification/evidence/stability-native-exact-build-identity-failure-d0947e0c-20260928-1.tar.gz",
+    "archive_sha256": "da36c9ec9e8582e9a501bea2316ada3f997e2b9b9b0878c691801e64a69698c0",
+    "archive_size": 8324
+  },
+  "convergence": {
+    "failed_candidate_count_for_family": 1,
+    "unchanged_retry_authorized": false,
+    "bounded_correction_remaining": 1,
+    "next_required_action": "make the clean candidate self-contained for Git identity inside /src or bind exact read-only Git metadata; add a cheap local regression; use fresh attempt paths and obtain a new independent one-shot execution release"
+  },
+  "acceptance": {
+    "current_candidate_builds": 0,
+    "application_cases": "0/273",
+    "production_gates": "6/130",
+    "whole_os": false
+  }
+}
