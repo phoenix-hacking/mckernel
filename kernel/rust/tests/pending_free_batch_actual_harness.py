@@ -134,51 +134,60 @@ def extract_after(path, begin, end):
 
 
 def exact_c_partial_release_control():
+    validator, validator_binding = extract_after(
+        CMEM, 'static int mem_validate_pending_free_ring(struct list_head *head)\n{',
+        'int mem_finish_free_pages_pending_result(struct list_head *pendings,')
     result, result_binding = extract_after(
         CMEM,
         'int mem_finish_free_pages_pending_result(struct list_head *pendings,\n\t\tmem_pending_free_fn_t free_fn)\n{',
         'int mem_finish_free_pages_pending_body_result(struct list_head *pendings,')
-    fallback, fallback_binding = extract_after(
-        CMEM, 'void finish_free_pages_pending(void)\n{', '#endif\n\nstatic struct ihk_mc_pa_ops allocator')
+    body, body_binding = extract_after(
+        CMEM, 'int mem_finish_free_pages_pending_body_result(struct list_head *pendings,\n\t\tmem_finish_free_pages_pending_fn_t finish_fn,\n\t\tmem_pending_free_fn_t free_fn, mem_lifecycle_void_fn_t panic_fn)\n{',
+        'int mem_finish_free_pages_pending_public_body_result(')
+    public, public_binding = extract_after(
+        CMEM, 'int mem_finish_free_pages_pending_public_body_result(\n\t\tmem_pending_pages_fn_t pending_pages_fn,\n\t\tmem_finish_free_pages_pending_fn_t finish_fn,\n\t\tmem_pending_free_fn_t free_fn,\n\t\tmem_lifecycle_void_fn_t panic_fn)\n{',
+        'int mem_free_pages_in_allocator_rbtree_result(')
     support = r'''
 #include <assert.h>
-#include <setjmp.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <limits.h>
 #include <stdio.h>
+#include <string.h>
 #define EINVAL 22
+#define PAGE_SIZE 4096UL
 #define PM_NONE 0
 #define PM_PENDING_FREE 1
 #define IHK_MC_PG_USER 1
 struct list_head { struct list_head *next, *prev; };
 struct page { struct list_head list; int mode; unsigned long phys; int offset; };
 typedef void (*mem_pending_free_fn_t)(unsigned long, int, int);
+typedef int (*mem_finish_free_pages_pending_fn_t)(struct list_head *, mem_pending_free_fn_t);
+typedef struct list_head *(*mem_pending_pages_fn_t)(void);
+typedef void (*mem_lifecycle_void_fn_t)(void);
 struct cpu_local { struct list_head pending_free_pages; };
 static struct cpu_local current_cpu;
-static int callbacks, panics;
-static jmp_buf panic_return;
+static int callbacks;
 static void list_del(struct list_head *entry) { entry->prev->next=entry->next; entry->next->prev=entry->prev; }
-static void *phys_to_virt(unsigned long phys) { return (void *)(uintptr_t)phys; }
 #define page_to_phys(page) ((page)->phys)
-static void __mckernel_free_pages_in_allocator(void *ignored, int npages, int user) { (void)ignored; assert(npages==1 && user==1); callbacks++; }
-static struct cpu_local *get_this_cpu_local_var(void) { return &current_cpu; }
-static void panic(const char *ignored) { (void)ignored; panics++; longjmp(panic_return, 1); }
 static void result_callback(unsigned long phys, int npages, int user) { assert(phys==0x1000 && npages==1 && user==1); callbacks++; }
-static void init_two(void) { static struct page pages[2]; struct list_head *h=&current_cpu.pending_free_pages; pages[0].list.next=&pages[1].list; pages[0].list.prev=h; pages[1].list.next=h; pages[1].list.prev=&pages[0].list; pages[0].mode=PM_PENDING_FREE; pages[1].mode=PM_NONE; pages[0].phys=0x1000; pages[1].phys=0x3000; pages[0].offset=1; pages[1].offset=2; h->next=&pages[0].list; h->prev=&pages[1].list; callbacks=0; panics=0; }
+static struct page pages[2];
+static void init_two(void) { struct list_head *h=&current_cpu.pending_free_pages; pages[0].list.next=&pages[1].list; pages[0].list.prev=h; pages[1].list.next=h; pages[1].list.prev=&pages[0].list; pages[0].mode=PM_PENDING_FREE; pages[1].mode=PM_NONE; pages[0].phys=0x1000; pages[1].phys=0x3000; pages[0].offset=1; pages[1].offset=2; h->next=&pages[0].list; h->prev=&pages[1].list; callbacks=0; }
+static void assert_unchanged(const struct page *before, const struct list_head *head) { assert(!memcmp(before, pages, sizeof(pages))); assert(!memcmp(head, &current_cpu.pending_free_pages, sizeof(*head))); }
 '''
     controls = r'''
 int main(void) {
     init_two();
+    pages[1].mode = PM_NONE;
+    struct page before[2]; struct list_head before_head;
+    memcpy(before, pages, sizeof(before)); memcpy(&before_head, &current_cpu.pending_free_pages, sizeof(before_head));
     assert(mem_finish_free_pages_pending_result(&current_cpu.pending_free_pages, result_callback) == -EINVAL);
-    assert(callbacks == 1);
-    init_two();
-    if (!setjmp(panic_return)) { finish_free_pages_pending(); assert(!"fallback must panic after first callback"); }
-    assert(callbacks == 1 && panics == 1);
-    puts("PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS");
+    assert(callbacks == 0); assert_unchanged(before, &before_head);
+    puts("PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS");
     return 0;
 }
 '''
-    return support + '\n' + result + '\n' + fallback + '\n' + controls, [result_binding, fallback_binding]
+    return support + '\n' + validator + '\n' + result + '\n' + body + '\n' + public + '\n' + controls, [validator_binding, result_binding, body_binding, public_binding]
 
 
 def source_only_admission():
@@ -198,13 +207,22 @@ def source_only_admission():
              'alignment','range','end-overflow','overlap','destination')
     assert all(('"' + case + '"') in RUST.read_text() for case in cases), cases
     generated_c, c_bindings = exact_c_partial_release_control()
-    assert 'mem_finish_free_pages_pending_result' in generated_c
-    assert 'finish_free_pages_pending' in generated_c
-    assert 'callbacks == 1 && panics == 1' in generated_c
+    for helper in ('mem_validate_pending_free_ring',
+                   'mem_finish_free_pages_pending_result',
+                   'mem_finish_free_pages_pending_body_result',
+                   'mem_finish_free_pages_pending_public_body_result'):
+        assert helper in generated_c, helper
+    assert 'callbacks == 0' in generated_c and 'assert_unchanged' in generated_c
+    assert 'PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS' in generated_c
+    for obsolete in ('PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS',
+                     'callbacks == 1 && panics == 1',
+                     'void finish_free_pages_pending(void)'):
+        assert obsolete not in generated_c, obsolete
     assert 'descriptor_len > CInt::MAX as usize' in mem
     assert 'mem_mckernel_free_pages_body_result' in mem and 'free_in_allocator(va, npages, is_user)' in mem
     assert "'const PAGE_SHIFT:'" in Path(__file__).read_text()
     assert "'const PAGE_SIZE:'" in Path(__file__).read_text()
+    assert 'FROZEN_GUARD_REMOVAL_MUTANT' in Path(__file__).read_text()
     vectors = RUST.read_text()
     for evidence in ('DISPATCH_NO_PAGE', 'lease_snapshot', 'token_snapshot',
                      'descriptor_len', 'callback_args_ptr', 'callback_entries',
@@ -350,14 +368,13 @@ def main():
         exact_c_path.write_text(exact_c)
         exact_c_bin = out/'exact-c-partial-release-controls'
         success([str(cc),'-std=gnu11','-Wall','-Wextra','-Werror',str(exact_c_path),'-o',str(exact_c_bin)],out,'exact-c-partial-compile',ledger)
-        assert success([str(exact_c_bin)],out,'exact-c-partial-run',ledger).strip() == 'PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS'
+        assert success([str(exact_c_bin)],out,'exact-c-partial-run',ledger).strip() == 'PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS'
         check_rows(rs)
         check_rows(cs)
         assert rs == cs, 'Rust and C complete computed snapshots differ'
-        # Remove only the new complete-ring preflight and invoke the production
-        # finish loop on the retained ring. This reconstructs the original
-        # valid-prefix release defect; the unmodified production body above now
-        # has independent positive/rejection/recovery controls.
+        # FROZEN_GUARD_REMOVAL_MUTANT: remove only the complete-ring preflight
+        # to preserve the historical valid-prefix release finding. This is a
+        # negative mutant, never evidence about the current implementation.
         needle = 'let rc=drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None});'
         replacement = 'let rc=if name=="later-invalid" {mem_finish_free_pages_pending_result(&raw mut self.b.as_mut().get_unchecked_mut().head,Some(free_page))}else{drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None})};'
         assert fixture.count(needle) == 1

@@ -67,6 +67,30 @@ def _write_all(fd, data):
         pos += n
 
 
+def _secondary_close(exc, label, close_error):
+    """Keep *exc* primary while making a cleanup failure inspectable."""
+    text = "SECONDARY_CLOSE_%s: %r" % (label, close_error)
+    secondary = getattr(exc, "secondary", None)
+    if secondary is not None:
+        secondary.append(text)
+        if hasattr(exc, "args"):
+            exc.args = (str(exc).split("; evidence persistence:", 1)[0] +
+                        "; evidence persistence: " + "; ".join(secondary),)
+    else:
+        notes = getattr(exc, "__notes__", [])
+        notes.append(text)
+        exc.__notes__ = notes
+
+
+def _close_preserving(exc, fd, label):
+    if fd is None:
+        return
+    try:
+        os.close(fd)
+    except Exception as close_error:
+        _secondary_close(exc, label, close_error)
+
+
 def _line(value):
     return (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode()
 
@@ -81,9 +105,13 @@ def _new_file(dirfd, name, data):
         if (identity != _identity(os.stat(name, dir_fd=dirfd, follow_symlinks=False)) or
                 identity["nlink"] != 1 or identity["uid"] != os.geteuid()):
             raise ValueError("new evidence file identity changed: " + name)
-        return {"identity": identity, **_digest(data)}
-    finally:
+        result = {"identity": identity, **_digest(data)}
+    except BaseException as exc:
+        _close_preserving(exc, fd, "NEW_FILE_%s" % name)
+        raise
+    else:
         os.close(fd)
+        return result
 
 
 def _json_at(dirfd, name, value):
@@ -97,10 +125,11 @@ class Journal:
         try:
             os.fsync(self.fd)
             os.fsync(root.fd)
-        except BaseException:
-            os.close(self.fd)
+            self.identity = os.fstat(self.fd)
+        except BaseException as exc:
+            _close_preserving(exc, self.fd, "JOURNAL_INIT_%s" % name)
+            self.fd = None
             raise
-        self.identity = os.fstat(self.fd)
         self.data = b""
 
     def verify(self):
@@ -119,7 +148,9 @@ class Journal:
         self.verify()
 
     def close(self):
-        os.close(self.fd)
+        fd, self.fd = self.fd, None
+        if fd is not None:
+            os.close(fd)
 
 
 def _root_preflight(path):
@@ -166,8 +197,14 @@ class Root:
                 s.st_uid != self.owner):
             raise ValueError("root identity changed: " + str(self.path))
 
-    def close(self):
+    def close(self, on_errors=None):
         errors = []
+        backup = None
+        if on_errors is not None and self.fd is not None:
+            try:
+                backup = os.dup(self.fd)
+            except Exception as exc:
+                errors.append("SECONDARY_CLOSE_ROOT_BACKUP: %r" % (exc,))
         for attr in ("fd", "pfd"):
             fd = getattr(self, attr)
             setattr(self, attr, None)
@@ -175,7 +212,18 @@ class Root:
                 try:
                     os.close(fd)
                 except Exception as exc:
-                    errors.append("close " + str(self.path) + " " + attr + ": " + repr(exc))
+                    errors.append("SECONDARY_CLOSE_ROOT_%s: %r" % (attr.upper(), exc))
+        if on_errors is not None:
+            try:
+                on_errors(errors, backup)
+            finally:
+                if backup is not None:
+                    try:
+                        os.close(backup)
+                    except Exception:
+                        # The original close report is already published; a
+                        # duplicate cleanup close must never replace it.
+                        pass
         return errors
 
 
@@ -197,9 +245,13 @@ def _read_regular(dirfd, name, owner=None):
         if (_identity(os.fstat(fd)) != _identity(before) or
                 _identity(os.stat(name, dir_fd=dirfd, follow_symlinks=False)) != _identity(before)):
             raise ValueError("member changed while reading: " + name)
-        return b"".join(chunks), _identity(before)
-    finally:
+        result = b"".join(chunks), _identity(before)
+    except BaseException as exc:
+        _close_preserving(exc, fd, "READ_REGULAR_%s" % name)
+        raise
+    else:
         os.close(fd)
+        return result
 
 
 def _tree(root):
@@ -221,7 +273,11 @@ def _tree(root):
                     visit(child, rel + "/")
                     if _identity(s) != _identity(os.stat(name, dir_fd=fd, follow_symlinks=False)):
                         raise ValueError("directory changed during traversal: " + rel)
-                finally:
+                except BaseException as exc:
+                    # A traversal failure remains primary if child close fails.
+                    _close_preserving(exc, child, "TREE_%s" % rel)
+                    raise
+                else:
                     os.close(child)
             else:
                 data, identity = _read_regular(fd, name, root.owner)
@@ -246,6 +302,19 @@ def _failure(rootfd, mode, stage, expected, observed):
     vals = tuple(str(v).translate(escapes) for v in vals)
     data = "\n".join("%s=%s" % (k, v) for k, v in zip(("status", "mode", "stage", "expected", "observed", "action"), vals)) + "\n"
     _new_file(rootfd, "phase-i-failure.txt", data.encode())
+
+
+def _cleanup_failure(rootfd, original, errors):
+    data, _ = _read_regular(rootfd, "phase-i-failure.txt")
+    record = {
+        "original_path": "phase-i-failure.txt",
+        "original_sha256": hashlib.sha256(data).hexdigest(),
+        "original_exception_type": type(getattr(original, "original", original)).__name__,
+        "original_stage": getattr(original, "stage", "unknown"),
+        "original_message": str(getattr(original, "original", original)),
+        "cleanup_errors": list(errors),
+    }
+    _new_file(rootfd, "phase-i-cleanup-failure.txt", _line(record))
 
 
 class PhaseIFailure(RuntimeError):
@@ -480,6 +549,19 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
         elif r.created:
             failure = PhaseIFailure(failure.stage, failure.original, failure.secondary + ["failure-record: created root could not be opened safely"])
         raise failure from exc
+    except BaseException as exc:
+        # Preserve termination/cancellation identity and traceback.  The
+        # failure record is still durable evidence, but must not turn a
+        # KeyboardInterrupt/SystemExit into a cleanup-only PhaseIFailure.
+        try:
+            if r.fd is not None:
+                _failure(r.fd, "global", stage, "reviewed Phase-I contract",
+                         type(exc).__name__ + ": " + str(exc))
+            elif r.created:
+                _secondary_close(exc, "FAILURE_RECORD", RuntimeError("created root could not be opened safely"))
+        except BaseException as persist:
+            _secondary_close(exc, "FAILURE_RECORD", persist)
+        raise
     finally:
         active = sys.exc_info()[1]
         errors = []
@@ -487,12 +569,26 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
             try:
                 j.close()
             except Exception as exc:
-                errors.append("journal close: " + repr(exc))
+                errors.append("SECONDARY_CLOSE_JOURNAL: " + repr(exc))
         errors.extend(d.close())
         cleanup_failure = None
+        def publish_cleanup(cleanup_errors, rootfd=None):
+            target = rootfd if rootfd is not None else r.fd
+            if target is None or not cleanup_errors:
+                return
+            try:
+                _cleanup_failure(target, active or cleanup_failure, cleanup_errors)
+            except BaseException as exc:
+                if active is not None:
+                    _secondary_close(active, "CLEANUP_RECORD", exc)
+                elif cleanup_failure is not None:
+                    cleanup_failure.add_secondary(["cleanup-record: " + repr(exc)])
         if errors:
             if isinstance(active, PhaseIFailure):
                 active.add_secondary(errors)
+            elif active is not None:
+                for error in errors:
+                    _secondary_close(active, "FINALIZATION", RuntimeError(error))
             else:
                 cleanup_failure = PhaseIFailure("finalization", RuntimeError("descriptor close failure"), errors)
                 try:
@@ -500,10 +596,18 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
                         _failure(r.fd, "global", "finalization", "all descriptors closed", str(cleanup_failure))
                 except Exception as exc:
                     cleanup_failure.add_secondary(["failure-record: " + repr(exc)])
-        errors = r.close()
+        prior_errors = list(errors)
+        root_cleanup_seen = []
+        def root_close_report(root_errors, backup):
+            root_cleanup_seen.extend(root_errors)
+            publish_cleanup(prior_errors + root_errors, backup)
+        errors = r.close(on_errors=root_close_report)
         if errors:
             if isinstance(active, PhaseIFailure):
                 active.add_secondary(errors)
+            elif active is not None:
+                for error in errors:
+                    _secondary_close(active, "FINALIZATION", RuntimeError(error))
             else:
                 cleanup_failure = cleanup_failure or PhaseIFailure("finalization", RuntimeError("candidate descriptor close failure"))
                 cleanup_failure.add_secondary(errors + ["failure-record: candidate descriptor already closed"])

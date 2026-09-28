@@ -38,6 +38,7 @@ class AcceptedObservation:
     mount_records: tuple[bytes, ...]
     entries: tuple[Entry, ...]
     parents: tuple[Entry, ...]
+    pre_command_member_pids: tuple[int, ...]
 
 
 @dataclass(frozen=True)
@@ -126,8 +127,19 @@ def _mount_records(mountinfo: bytes | str, mapping: Mapping,
         parent = by_id[parent].parent_id
     # Retain complete raw records, including device, source, options and optional
     # fields absent from the resolver's deliberately smaller Mount structure.
-    return tuple(sorted(line for line in _raw(mountinfo).split(b"\n")
-                        if line and int(line.split(b" ", 1)[0]) in retained))
+    result = []
+    for line in _raw(mountinfo).split(b"\n"):
+        if not line:
+            continue
+        try:
+            mount_id = int(line.split(b" ", 1)[0])
+        except (ValueError, IndexError) as exc:
+            raise CgroupObserverError("malformed retained mount record") from exc
+        if mount_id in retained:
+            result.append(line)
+    if len(result) != len(retained):
+        raise CgroupObserverError("incomplete retained mount records")
+    return tuple(result)
 
 
 def _walk(mapping: Mapping, entries: tuple[Entry, ...], parents: tuple[Entry, ...],
@@ -142,8 +154,14 @@ def _walk(mapping: Mapping, entries: tuple[Entry, ...], parents: tuple[Entry, ..
     for path in expected_parents:
         if ancestors[path].kind != "directory":
             raise CgroupObserverError("parent is not a directory")
+    # Verify every edge, including target -> its immediate parent.  The
+    # nearest parent is an independently lstat'ed record, not inferred from
+    # pathname text.
     chain = (target,) + expected_parents
-    for child, parent in zip(chain[1:], chain[2:]):
+    # If the target is absent, its missing edge is the evidence being checked
+    # below; all retained ancestor-to-ancestor edges must still be present.
+    edge_chain = chain if target in nodes else chain[1:]
+    for child, parent in zip(edge_chain, edge_chain[1:]):
         if _raw(posixpath.basename(child)) not in ancestors[parent].children:
             raise CgroupObserverError("parent chain missing from listing")
     listed = _raw(posixpath.basename(target)) in ancestors[expected_parents[0]].children
@@ -185,9 +203,11 @@ def _walk(mapping: Mapping, entries: tuple[Entry, ...], parents: tuple[Entry, ..
 def accept_observation(mountinfo: bytes | str, mapping: Mapping,
                        entries: tuple[Entry, ...], parents: tuple[Entry, ...]) -> AcceptedObservation:
     """Freeze the complete original tree while live pre-command evidence exists."""
-    _walk(mapping, entries, parents, allow_absent=False)
-    records = _mount_records(mountinfo, mapping, tuple(_text(e.raw_path) for e in entries))
-    return AcceptedObservation(mapping, records, entries, parents)
+    _, pids = _walk(mapping, entries, parents, allow_absent=False)
+    records = _mount_records(
+        mountinfo, mapping,
+        tuple(_text(e.raw_path) for e in entries + parents))
+    return AcceptedObservation(mapping, records, entries, parents, pids)
 
 
 def collect_recursive_observation(
@@ -211,7 +231,9 @@ def collect_recursive_observation(
     if not require_retired and not terminal:
         raise CgroupObserverError("live observation requires original ControlGroup")
     absent, pids = _walk(mapping, entries, parents, allow_absent=require_retired)
-    records = _mount_records(mountinfo, mapping, tuple(_text(e.raw_path) for e in entries))
+    records = _mount_records(
+        mountinfo, mapping,
+        tuple(_text(e.raw_path) for e in entries + parents))
     if records != accepted.mount_records:
         raise CgroupObserverError("retained mount ancestry or controller identity changed")
     originals = _index(accepted.entries + accepted.parents)

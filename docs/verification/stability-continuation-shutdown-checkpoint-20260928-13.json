@@ -1,0 +1,118 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T04:56:23-07:00",
+  "base_commit": "5dd488bbf3c914a1df141a08e12db52c7f16ef88",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T104742Z-d8634f08",
+    "launcher_pid": 3125264,
+    "worker_pid": 3125267,
+    "app_server_pid": 3125269,
+    "started": "2026-09-28T03:47:42-07:00",
+    "future_continuations_paused": true
+  },
+  "resources_at_shutdown": {
+    "host_free_gib": 43,
+    "scratch_free_gib": 21,
+    "memory_available_gib": 28,
+    "heavy_lease": "free",
+    "project_compiler_or_guest_active": false
+  },
+  "accepted_results": [
+    {
+      "name": "C pending-free complete-ring preflight",
+      "review": "PASS_SCOPED_C_PENDING_PREFLIGHT_EXECUTION",
+      "source_sha256": {
+        "kernel/mem.c": "66062fafb8c19835e48aedcdae81f6a74545b7f470e415858f17d4b5fae5656a",
+        "kernel/rust/tests/pending_free_c_actual_harness.py": "10a7b6f7bc7dbf350dc7c9e8091692c82c2883171cc439ba0e953f096bb64d1e",
+        "scripts/tests/test_pending_free_c_actual_harness.py": "01f3868d3c6e29c4149f537006aef181216138dbbbe12815df6192eae6cb5a89"
+      },
+      "evidence": "docs/verification/stability-pending-free-c-preflight-success-20260928-11.json",
+      "observed": "48 C rows pass across the result and public-fallback paths; two guard-removal mutants reproduce valid-prefix release",
+      "limits": "Scoped fixture execution only; no ABI, concurrency, VM/token/extent authority, guest or full M03 acceptance"
+    },
+    {
+      "name": "M02 descriptor source component",
+      "review": "PASS_SOURCE_READY_FOR_LAYER_B_REVIEW",
+      "evidence": "docs/verification/stability-m02-descriptor-source-success-20260928-1.json",
+      "observed": "Five focused tests cover 48 real fork/exec permutations over descriptors 0, 1, 2 and 198, including CLOEXEC, sentinel closure and alias negatives",
+      "limits": "No full owner/supervisor/collector integration or privileged execution"
+    },
+    {
+      "name": "native diagnostic lifecycle protocol source",
+      "review": "PASS_PROTOCOL_SOURCE_BLOCKED_RUNTIME",
+      "source_sha256": {
+        "scripts/application-tests/native_diagnostic.py": "6a286832c3180366748770e59dc255ffe60576af6f428c3ddacb9e2268b46751",
+        "scripts/tests/test_application_native_diagnostic.py": "ad851fefe0d431ab2ffca70009b20abdc8166d0f918e4150cc2dd00320132ff9"
+      },
+      "evidence": "docs/verification/stability-native-diagnostic-protocol-source-success-20260928-1.json",
+      "observed": "23 protocol tests pass with teardown-before-final-capture, route joins, terminal exit handling and bounded publication",
+      "limits": "No concrete process/QMP backend, collector, serial transport, derived initramfs, QEMU or guest"
+    }
+  ],
+  "preserved_wip": [
+    {
+      "lane": "native guest collector",
+      "status": "BOUNDED_CORRECTION_INCOMPLETE_UNREVIEWED",
+      "sha256": {
+        "scripts/application-tests/native_diagnostic_guest_collector.c": "59eaaf71b35d1366d5ff7be538114c22a98fb5730f44d681537593e18901fc67",
+        "scripts/tests/test_native_diagnostic_guest_collector.py": "3dc4eaeaaf1b1d3188a8e220d803d76317c41ea393278c8e3425e41b500473a6"
+      },
+      "blocker": "Four source tests pass, but checked pipe/error channels, fair bounded drain, process-group teardown and atomic console publication remain incomplete; no build release"
+    },
+    {
+      "lane": "native initramfs overlay strategy",
+      "status": "INTERRUPTED_UNREVIEWED_PARTIAL",
+      "sha256": {
+        "scripts/application-tests/native_diagnostic_overlay.py": "170857d8e60c980a790d115fce356a989ff9981629c16a7f938c69e39f3c8b01",
+        "scripts/tests/test_application_native_diagnostic_overlay.py": "ea6104b35353459f2c5d8fe3d7e678ba408c0e44660d826dbe4a9ee959ce1763"
+      },
+      "blocker": "Interrupted before bounded completion and independent review; no retained-root derivation was attempted"
+    },
+    {
+      "lane": "native full-tree initramfs stager",
+      "status": "BLOCKED_AFTER_BOUNDED_CORRECTION",
+      "sha256": {
+        "scripts/application-tests/native_diagnostic_stager.py": "068dc11d0bbb210b807229d03a943b83f981e3d4d3999f220a20dffb5032ec0b",
+        "scripts/tests/test_application_native_diagnostic_stager.py": "7d72d85394cd263c466bbd938e2bddc702a2b6e76a5a5e22012369026dc39e40"
+      },
+      "blocker": "Path-race protection, deterministic timestamps, full identity/closure binding, symlink/device semantics, real newc replay and durability remain absent; replace with overlay strategy"
+    },
+    {
+      "lane": "root13 Layer-B executor",
+      "status": "BLOCKED_SOURCE_DO_NOT_EXECUTE",
+      "sha256": {
+        "scripts/tests/run_layer_b_root13.py": "ac8933fc7583d89c3af0149d6faf63e9baf655de262f95137da832c660929b1f",
+        "scripts/tests/test_run_layer_b_root13.py": "e6f45b58ae0770740b232d5b4ab4bbab4720054f1124e67ac19fb0befb7d3088",
+        "packet28": "570d174a2a9fad68b21c445cd5a08df62725647456ede144c4f35f5eaa12311d"
+      },
+      "blocker": "Packet is source-ready, but executor lacks real observer/collector reads, correct deadlines/argv, fail-closed cleanup and complete durable evidence"
+    },
+    {
+      "lane": "combined pending-free build owner",
+      "status": "BLOCKED_SOURCE_DO_NOT_EXECUTE",
+      "blocker": "Command order, trait diagnostics, mutant reconstruction, exact-C semantic verification and success-marker checks do not match the harness"
+    },
+    {
+      "lane": "M01, SC-VM-01 and Linux diagnostic owners",
+      "status": "CONVERGENCE_CORRECTIONS_EXHAUSTED_PRESERVED_WIP",
+      "blocker": "Known close/error publication, fixture/oracle/mutant, and container ownership/cleanup/admission defects remain; do not repeat unchanged candidates"
+    }
+  ],
+  "next_tasks": [
+    "Finish the bounded native overlay implementation, independently review it, and only then derive a new authenticated initramfs",
+    "Complete the collector's pipe, deadline, process-group, retirement and atomic-frame implementation; independently review before pinned static compilation",
+    "After both source releases, compile the collector in the reviewed pinned container and stage the exact retained base initramfs plus overlay",
+    "Implement and review the concrete process/QMP backend and serial collector before the first startup.argv-empty diagnostic guest",
+    "Keep root13, M01, SC-VM-01, Linux-owner and combined pending-free executors stopped until their recorded failure families receive a changed strategy",
+    "Continue M03 VM/token/extent authority and durable quarantine design without treating scoped preflight tests as full acceptance"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "current_candidate_builds_this_window": 0,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

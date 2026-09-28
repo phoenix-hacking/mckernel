@@ -22,8 +22,8 @@ and authenticate these before creating the fresh root:
 | root12 failure record | `stability-layer-b-native-owner-bootstrap-failure-20260928-12.json` |
 | root12 failure review26 | `stability-layer-b-native-owner-bootstrap-failure-review-20260928-26.json` |
 | source review27 | `stability-layer-b-systemd-cgroup-observer-source-review-failure-20260928-27.json` |
-| bounded collector | `scripts/tests/layer_b_systemd_cgroup_collector.py` (`87f13d0e799994eb3637dc93905c7af265c3d0dfd3499aa3a3d1da7fd1ffff2e`) |
-| bounded collector tests | `scripts/tests/test_layer_b_systemd_cgroup_collector.py` (`933b2f70394d67d525ecd7b6eb8de4ca02ffcefd70d8fd302c47d1e219331a88`) |
+| bounded collector | `scripts/tests/layer_b_systemd_cgroup_collector.py` (`f96768d899b784ac3370be98644816c34c797b2623a87eb87d61329a3517c480`) |
+| bounded collector tests | `scripts/tests/test_layer_b_systemd_cgroup_collector.py` (`13b28e23845be813efd57a5e4bdafacb48f8ffdc79cad220c976a243a10cd5be`) |
 | root12 archive | `82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056` |
 | current policy START | `1698d342...` |
 | current policy CONVERGENCE | `f6938bd2...` |
@@ -52,8 +52,8 @@ token.  Create only mode-0700 `R`, `R/home`, `R/tmp`, and `R/logs`, owned by
 the current UID, with canonical non-symlink ancestry.  No repository file is
 writable.  Record UID/GID, affinity/limits, leases, host/scratch capacity and
 retain at least 16 GiB host and 12 GiB scratch free (or the larger active
-capture requirement).  No link/owner/guest/runtime/systemd operation is in
-scope.
+capture requirement).  No link, owner, guest, runtime, or systemd operation
+beyond the explicit allowlist below is in scope.
 
 ## Exact packet24 execution contract, with root13 substitutions
 
@@ -80,8 +80,8 @@ mismatch.  Compile resources are exactly `--cpu=55:55`, `--nofile=256:256`,
 the sanitized environment above.  Header baseline is exactly the three
 packet24 include roots, non-following and identity-complete.
 
-Create the FIFO with exactly `timeout 2s --kill-after 1s /usr/bin/mkfifo
---mode=0600 R/logs/identity.fifo`; metadata-only lstat is permitted, never
+Create the FIFO with exactly `/usr/bin/timeout --signal=TERM --kill-after=1s
+2s /usr/bin/mkfifo --mode=0600 R/logs/identity.fifo`; metadata-only lstat is permitted, never
 open/hash its contents.  Create a regular 0600 one-byte `0x41` token, fsync
 and close it; require SHA256
 `559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd`.
@@ -129,24 +129,28 @@ exit timestamp.
 
 ## Cleanup, evidence, and independent review
 
-Every outcome gets a new independent 30s cleanup deadline.  Reuse the original
-mapping whenever ControlGroup becomes empty; recursively inspect the original
-filesystem path, descendant membership and control files, and bounded parent
-identities.  First issue packet24's bounded `systemctl --user stop U`; on
-timeout/nonzero, residual state, residual membership, or ambiguity use the
-manager-side `systemctl --user --signal=SIGKILL --kill-who=all kill U` fallback,
-then bounded queries.  Capture stop/KILL statuses before reset-failed; reset
-only a resolved failed unit and retain final query.  Never signal a numeric PID,
-delete/reuse a root, or retry a submission/writer.  Unresolved manager,
-uninspectable cgroup, residual process, or exhausted deadline is
-`FAIL_UNRESOLVED`.
+Every outcome gets a new independent 30s cleanup deadline.  On a productive
+failure, first preserve the first-failure record and raw evidence, perform one
+best-effort bounded query, then immediately issue packet24's bounded
+`systemctl --user stop U`; do not continue compile/inspection work.  On
+success, issue that bounded stop immediately.  On stop timeout/nonzero,
+residual state, residual membership, or ambiguity use the manager-side
+`systemctl --user --signal=SIGKILL --kill-who=all kill U` fallback, then perform
+bounded stop/reconciliation queries.  Capture stop/KILL statuses before
+reset-failed; reset only a resolved failed unit and retain final query.  After
+supervision cleanup (for either success or failure), capture the bounded
+packet24 `journalctl --user -u U` result and journal status as a separate
+operation.  Never signal a numeric PID, delete/reuse a root, or retry a
+submission/writer.  Unresolved manager, uninspectable cgroup, residual
+process, or exhausted deadline is `FAIL_UNRESOLVED`.
 
 On the first productive failure stop compile/inspection work immediately,
 retain the first-failure record before cleanup errors, archive/log all raw
 membership and control-file evidence, and preserve the root.  Only after
 successful compile and resolved cleanup may the packet24 dependency parser,
-compiler-stream audit, hashes, `readelf`/`objdump` ET_REL checks and journal
-capture run.  Retain the actual argv/environment/properties, mappings,
+compiler-stream audit, hashes, and `readelf`/`objdump` ET_REL checks run;
+journal capture follows supervision cleanup on every outcome, including
+compile failure.  Retain the actual argv/environment/properties, mappings,
 device/inode/parents, FIFO metadata without content hashing, token/artifact
 hashes, statuses/times, capacities/limits and zero-residual evidence.  An
 independent execution review must verify this exact document and final hash
@@ -169,8 +173,44 @@ Only the user-manager `systemd-run` submission above, exact
 `systemctl --user show` queries, bounded `systemctl --user stop`, manager-side
 `systemctl --user --signal=SIGKILL --kill-who=all kill` fallback, bounded
 queries, and `reset-failed` after resolved cleanup are permitted. On a first
-productive failure, persist the first-failure journal/evidence, perform a
-best-effort query, then issue bounded stop; do not continue compile/inspection
-work. Capture the journal on compile success and compile failure. Recursive
-cleanup deadlines and `FAIL_UNRESOLVED` remain unchanged. This correction is
-ready for independent review only and authorizes no execution.
+productive failure, persist the first-failure evidence (not a delayed journal),
+perform one best-effort query, then issue bounded stop; do not continue
+compile/inspection work. On success issue bounded stop immediately. After
+supervision cleanup, capture the packet24-bounded journal on both compile
+success and compile failure. Recursive cleanup deadlines and
+`FAIL_UNRESOLVED` remain unchanged. This correction is ready for independent
+review only and authorizes no execution.
+
+### Collector contract (root13 immutable baseline)
+
+`accept_observation()` receives the exact `Mapping`, complete immutable
+`Entry` tuples for the target subtree, and complete immutable `Entry` tuples
+for every filesystem parent through the selected mountpoint. Each directory
+listing must account for every child (including `cgroup.procs`), each regular
+control file is identity-checked, and every `cgroup.procs` read is retained as
+raw bytes and parsed into positive numeric PIDs. The accepted result retains
+the selected controller record, its complete mount-parent chain, target and
+parent device/inode identities, raw paths, and the pre-command PID tuple.
+
+`collect_recursive_observation()` revalidates the same target/parent records
+and mount chain. With `require_retired=False` it is only a live
+pre/post-ack observation and requires the original nonempty
+`ControlGroup`; it reports current recursive membership. With
+`require_retired=True` it accepts either the same original tree (which must
+have no members) or a complete nearest-parent listing proving target absence;
+an empty/sibling-only walk, changed parent topology/root/controller, ancestor
+overmount, descendant/file overmount, identity replacement, or nonempty
+replacement `ControlGroup` fails closed. The terminal result always retains
+the original mapping and accepted identities, even when `ControlGroup=` is
+empty.
+
+The only permitted manager operations are the literal packet24
+`systemd-run --user` submission, exact bounded `systemctl --user show`
+queries, bounded `systemctl --user stop`, manager-side
+`systemctl --user --signal=SIGKILL --kill-who=all kill` fallback, bounded
+follow-up queries, and `reset-failed` only after resolved cleanup. On either
+compile success or compile failure, retain the complete success/failure
+status; after supervision cleanup, capture the corresponding
+`journalctl --user -u U` result (with query-before-stop evidence already
+retained on a productive failure). Cleanup errors never replace the first-failure record; unresolved
+manager or cgroup state remains `FAIL_UNRESOLVED`.

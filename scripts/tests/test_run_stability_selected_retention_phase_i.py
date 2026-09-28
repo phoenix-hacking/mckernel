@@ -406,6 +406,75 @@ class DriverTests(unittest.TestCase):
                 else:
                     self.assertEqual(f.failure()["stage"], "finalization")
 
+    def test_system_exit_survives_close_fault_and_all_descriptors_release(self):
+        f = Fixture(self.base)
+        real = driver.Journal.close
+        real_append = driver.Journal.append
+        before = len(os.listdir("/proc/self/fd"))
+        def close(log):
+            real(log)  # The descriptor is genuinely released before fault injection.
+            raise OSError("close-after-release")
+        def append(log, record):
+            if record["event"] == "installation-process":
+                raise SystemExit(41)
+            return real_append(log, record)
+        with mock.patch.object(driver.Journal, "close", close), \
+             mock.patch.object(driver.Journal, "append", append):
+            with self.assertRaises(SystemExit) as raised:
+                f.run()
+        after = len(os.listdir("/proc/self/fd"))
+        self.assertEqual(raised.exception.code, 41)
+        self.assertEqual(before, after)
+        self.assertEqual(f.failure()["stage"], "installation")
+        self.assertIn("SystemExit: 41", f.failure()["observed"])
+        cleanup = json.loads((f.c / "phase-i-cleanup-failure.txt").read_text())
+        primary = (f.c / "phase-i-failure.txt").read_bytes()
+        self.assertEqual(cleanup["original_path"], "phase-i-failure.txt")
+        self.assertEqual(cleanup["original_sha256"], hashlib.sha256(primary).hexdigest())
+        self.assertTrue(any("SECONDARY_CLOSE_JOURNAL" in e for e in cleanup["cleanup_errors"]))
+
+    def test_keyboard_interrupt_rethrows_with_additive_cleanup_record(self):
+        f = Fixture(self.base)
+        real_append, real_close = driver.Journal.append, driver.Journal.close
+        def append(log, record):
+            if record["event"] == "installation-process":
+                raise KeyboardInterrupt("cancelled")
+            return real_append(log, record)
+        def close(log):
+            real_close(log)
+            raise OSError("journal-close")
+        with mock.patch.object(driver.Journal, "append", append), \
+             mock.patch.object(driver.Journal, "close", close):
+            with self.assertRaises(KeyboardInterrupt) as raised:
+                f.run()
+        self.assertEqual(str(raised.exception), "cancelled")
+        cleanup = json.loads((f.c / "phase-i-cleanup-failure.txt").read_text())
+        self.assertEqual(cleanup["original_exception_type"], "KeyboardInterrupt")
+
+    def test_both_root_close_faults_are_additive_and_fd_balanced(self):
+        f = Fixture(self.base)
+        real_append, real_close = driver.Journal.append, os.close
+        before = len(os.listdir("/proc/self/fd"))
+        def append(log, record):
+            if record["event"] == "installation-process":
+                raise SystemExit(43)
+            return real_append(log, record)
+        def close(fd):
+            try:
+                target = os.readlink("/proc/self/fd/%d" % fd)
+            except OSError:
+                target = ""
+            real_close(fd)
+            if target in (str(f.c), str(f.d), str(f.base)):
+                raise OSError("root-close-fault")
+        with mock.patch.object(driver.Journal, "append", append), \
+             mock.patch.object(driver.os, "close", side_effect=close):
+            with self.assertRaises(SystemExit):
+                f.run()
+        self.assertEqual(before, len(os.listdir("/proc/self/fd")))
+        cleanup = json.loads((f.c / "phase-i-cleanup-failure.txt").read_text())
+        self.assertTrue(any("SECONDARY_CLOSE_ROOT_" in e for e in cleanup["cleanup_errors"]))
+
     def test_nonzero_and_result_write_failure_keep_original_exit(self):
         f = Fixture(self.base, tail="raise SystemExit(19)")
         real = driver.Journal.append
@@ -479,6 +548,81 @@ class DriverTests(unittest.TestCase):
                 f.run()
         self.assertEqual(f.failure()["stage"], "root-create")
         self.assertFalse(f.d.exists())
+
+    def test_primary_failures_keep_cleanup_close_as_secondary_and_do_not_leak(self):
+        """Exercise several post-open paths with simultaneous operation/close faults."""
+        real_open, real_close, real_fstat, real_read = driver.os.open, driver.os.close, driver.os.fstat, driver.os.read
+
+        # _new_file: fsync is the primary fault; closing that exact descriptor also fails.
+        fd_holder = []
+        def opening(*args, **kwargs):
+            fd = real_open(*args, **kwargs)
+            fd_holder.append(fd)
+            return fd
+        def closing(fd):
+            if fd == fd_holder[-1]:
+                raise OSError("close-new-file")
+            return real_close(fd)
+        basefd = os.open(str(self.base), driver.DIR_FLAGS)
+        try:
+            with mock.patch.object(driver.os, "open", side_effect=opening), \
+                 mock.patch.object(driver.os, "close", side_effect=closing), \
+                 mock.patch.object(driver.os, "fsync", side_effect=OSError("PRIMARY_NEW_FILE")):
+                with self.assertRaises(OSError) as raised:
+                    driver._new_file(basefd, "new.bin", b"x")
+        finally:
+            real_close(basefd)
+        self.assertIn("PRIMARY_NEW_FILE", str(raised.exception))
+        self.assertTrue(any("SECONDARY_CLOSE_NEW_FILE" in n for n in raised.exception.__notes__))
+        real_close(fd_holder[-1])
+
+        # Journal.__init__: fstat is after both fsyncs and must still close its fd.
+        root = type("Root", (), {"fd": os.open(str(self.base), driver.DIR_FLAGS), "owner": os.geteuid()})()
+        fd_holder = []
+        def opening_j(*args, **kwargs):
+            fd = real_open(*args, **kwargs)
+            fd_holder.append(fd)
+            return fd
+        def fstat_j(fd):
+            if fd == fd_holder[-1]:
+                raise OSError("PRIMARY_JOURNAL_FSTAT")
+            return real_fstat(fd)
+        def closing_j(fd):
+            if fd == fd_holder[-1]:
+                raise OSError("close-journal")
+            return real_close(fd)
+        try:
+            with mock.patch.object(driver.os, "open", side_effect=opening_j), \
+                 mock.patch.object(driver.os, "fstat", side_effect=fstat_j), \
+                 mock.patch.object(driver.os, "close", side_effect=closing_j):
+                with self.assertRaises(OSError) as raised:
+                    driver.Journal(root, "journal.json")
+            self.assertIn("PRIMARY_JOURNAL_FSTAT", str(raised.exception))
+            self.assertTrue(any("SECONDARY_CLOSE_JOURNAL_INIT" in n for n in raised.exception.__notes__))
+            real_close(fd_holder[-1])
+        finally:
+            real_close(root.fd)
+
+        # _read_regular: read is primary and its close failure is secondary.
+        path = self.base / "regular.bin"
+        path.write_bytes(b"x")
+        fd_holder = []
+        def opening_r(*args, **kwargs):
+            fd = real_open(*args, **kwargs)
+            fd_holder.append(fd)
+            return fd
+        def closing_r(fd):
+            if fd == fd_holder[-1]:
+                raise OSError("close-read")
+            return real_close(fd)
+        with mock.patch.object(driver.os, "open", side_effect=opening_r), \
+             mock.patch.object(driver.os, "close", side_effect=closing_r), \
+             mock.patch.object(driver.os, "read", side_effect=OSError("PRIMARY_READ")):
+            with self.assertRaises(OSError) as raised:
+                driver._read_regular(None, str(path))
+        self.assertIn("PRIMARY_READ", str(raised.exception))
+        self.assertTrue(any("SECONDARY_CLOSE_READ_REGULAR" in n for n in raised.exception.__notes__))
+        real_close(fd_holder[-1])
 
 
 if __name__ == "__main__":

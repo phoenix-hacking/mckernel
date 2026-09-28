@@ -84,8 +84,8 @@ class NativeDiagnosticTests(unittest.TestCase):
             "application SCHEDULE os=0 generation=1 pid=12 cpu=0",
             "application procfs published os=0 generation=1 pid=12 tid=12",
             "application_syscall=delivered os=0 generation=1 pid=12 worker=9 delivery=3 cpu=0 number=1",
-            "application_syscall=returned os=0 generation=1 pid=12 worker=9 delivery=3 cpu=0 value=4",
             "application_syscall=return_route os=0 generation=1 pid=12 worker=9 delivery=3 launcher_cpu=1 guest_cpu=0",
+            "application_syscall=returned os=0 generation=1 pid=12 worker=9 delivery=3 cpu=0 value=4",
             "application_syscall=delivered os=0 generation=1 pid=12 worker=9 delivery=4 cpu=0 number=231",
             "application procfs deleted os=0 generation=1 pid=12 tid=12",
             "application retirement os=0 generation=1 pid=12 token=2 errno=0",
@@ -153,7 +153,78 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertFalse(result["mckernel_application_executed"])
         self.assertEqual(result["guest_report"]["raw_wait_status"], 37 << 8)
         self.assertIn("QEMU stdout", (attempt / "qemu.stdout").read_text())
-        self.assertEqual(process.calls, ["communicate", "terminate", "wait"])
+        self.assertEqual(process.calls, ["terminate", "wait", "communicate"])
+
+    def test_final_capture_includes_teardown_warnings(self):
+        for log in ("serial", "debugcon"):
+            for phase in ("terminate", "wait", "qmp-close"):
+                with self.subTest(log=log, phase=phase):
+                    attempt = self.attempt(); process = Process(); qmp = Qmp()
+                    def warn(*args, **kwargs):
+                        with (attempt / (log + ".log")).open("a") as stream:
+                            stream.write("\nWARNING: teardown failure\n")
+                        return 0
+                    setattr(qmp if phase == "qmp-close" else process,
+                            "close" if phase == "qmp-close" else phase, warn)
+                    with self.assertRaisesRegex(ND.DiagnosticError, "kernel failure marker"):
+                        self.exercise(attempt, process, qmp)
+                    result = json.loads((attempt / "result.json").read_text())
+                    self.assertEqual(result["status"], "FAIL")
+                    self.assertTrue(result["cleanup"]["reaped"])
+
+    def test_terminal_capture_is_bounded_after_teardown(self):
+        attempt = self.attempt(); process = Process()
+        def grow(timeout):
+            (attempt / "debugcon.log").write_bytes(b"x" * (ND.MAX_JSON + 1))
+            process.calls.append("wait")
+            return 0
+        process.wait = grow
+        with self.assertRaisesRegex(ND.DiagnosticError, "capture limit"):
+            self.exercise(attempt, process)
+        self.assertIn("wait", process.calls)
+
+    def test_complete_unique_syscall_correspondence(self):
+        original = self.serial().splitlines()
+        delivered, route, returned, terminal = original[2:6]
+        variants = {
+            "orphan returned": original[:5] + [returned.replace("delivery=3", "delivery=99")] + original[5:],
+            "unreturned delivery": original[:5] + [delivered.replace("delivery=3", "delivery=99")] + original[5:],
+            "duplicate delivered": original[:3] + [delivered] + original[3:],
+            "duplicate returned": original[:5] + [returned] + original[5:],
+            "duplicate route": original[:4] + [route] + original[4:],
+            "missing return": original[:4] + original[5:],
+            "missing route": original[:3] + original[4:],
+            "non-group exit returned": [line.replace("number=1", "number=60") for line in original],
+            "duplicate terminal": original[:6] + [terminal] + original[6:],
+            "terminal with return": original[:6] + [returned.replace("delivery=3", "delivery=4")] + original[6:],
+            "terminal with route": original[:5] + [route.replace("delivery=3", "delivery=4")] + original[5:],
+            "malformed trace": original[:5] + [delivered + " extra"] + original[5:],
+            "foreign PID": original[:5] + [delivered.replace("pid=12", "pid=13")] + original[5:],
+            "route after return": original[:3] + [returned, route] + original[5:],
+            "return before delivery": original[:2] + [returned, route, delivered] + original[5:],
+            "second terminal ID": original[:6] + [terminal.replace("delivery=4", "delivery=5")] + original[6:],
+            "missing worker route": original[:5] + [delivered.replace("delivery=3", "delivery=5"),
+                returned.replace("delivery=3", "delivery=5")] + original[5:],
+            "work after exit": original[:6] + [delivered.replace("delivery=3", "delivery=5"),
+                route.replace("delivery=3", "delivery=5"), returned.replace("delivery=3", "delivery=5")] + original[6:],
+        }
+        for name, lines in variants.items():
+            with self.subTest(name=name):
+                observation = self.observation(); observation["serial"] = "\n".join(lines)
+                with self.assertRaises(ND.DiagnosticError): ND.evaluate(self.manifest, observation)
+
+    def test_source_supported_launcher_slots_and_same_cpu_no_route(self):
+        for cpu in ("-1", "0", "2", "3", "9999999999"):
+            observation = self.observation()
+            observation["serial"] = observation["serial"].replace("launcher_cpu=1", "launcher_cpu=" + cpu)
+            with self.subTest(cpu=cpu), self.assertRaises(ND.DiagnosticError):
+                ND.evaluate(self.manifest, observation)
+        # A different worker occupying slot 0 legitimately omits return_route.
+        lines = self.serial().splitlines()
+        equal = [lines[2].replace("worker=9 delivery=3", "worker=8 delivery=2"),
+                 lines[4].replace("worker=9 delivery=3", "worker=8 delivery=2")]
+        observation = self.observation(); observation["serial"] = "\n".join(lines[:2] + equal + lines[2:])
+        self.assertEqual(ND.evaluate(self.manifest, observation)["status"], "PROTOCOL_PASS")
 
     def test_qemu_output_alone_cannot_pass(self):
         attempt = self.attempt(); (attempt / "serial.log").write_text("")
@@ -205,6 +276,51 @@ class NativeDiagnosticTests(unittest.TestCase):
                 self.exercise(attempt, process, qmp, timeout=0.01)
             self.assertIn("wait", process.calls)
             self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_qmp_lookup_failures_never_skip_process_cleanup(self):
+        for phase in ("negotiate", "resume", "wait_shutdown", "terminate", "close"):
+            for failure in ("missing", "raises", "blocks"):
+                with self.subTest(phase=phase, failure=failure):
+                    class FaultyQmp(Qmp):
+                        def __getattribute__(self, name):
+                            if name == phase:
+                                if failure == "missing": raise AttributeError(name)
+                                if failure == "raises": raise RuntimeError("lookup failed")
+                                time.sleep(5)
+                            return super().__getattribute__(name)
+                    attempt = self.attempt(); process = Process(stuck=True)
+                    started = time.monotonic()
+                    with self.assertRaises(ND.DiagnosticError):
+                        self.exercise(attempt, process, FaultyQmp(), timeout=0.03)
+                    self.assertLess(time.monotonic() - started, 1)
+                    self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait"])
+                    self.assertTrue(json.loads((attempt / "result.json").read_text())["cleanup"]["reaped"])
+
+    def test_journal_cannot_delay_retirement(self):
+        attempt = self.attempt(); process = Process(stuck=True)
+        class BrokenQmp(Qmp):
+            def negotiate(self, timeout): raise RuntimeError("first QMP failure")
+            def terminate(self, timeout): raise RuntimeError("second QMP failure")
+        original = ND._append_failure
+        def check_retired(attempt, failure):
+            self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait"])
+            self.assertEqual(failure["error"], "first QMP failure")
+            original(attempt, failure)
+        with mock.patch.object(ND, "_append_failure", side_effect=check_retired):
+            with self.assertRaisesRegex(ND.DiagnosticError, "first QMP failure"):
+                self.exercise(attempt, process, BrokenQmp())
+        self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_blocking_journal_is_bounded_after_reap(self):
+        attempt = self.attempt(); process = Process()
+        (attempt / "serial.log").write_text("missing report")
+        def block(*args):
+            self.assertIn("wait", process.calls)
+            time.sleep(5)
+        start = time.monotonic()
+        with mock.patch.object(ND, "_append_failure", side_effect=block):
+            with self.assertRaises(TimeoutError): self.exercise(attempt, process)
+        self.assertLess(time.monotonic() - start, 3)
 
     def test_journal_write_failure_does_not_skip_reaping(self):
         attempt = self.attempt(); process = Process()

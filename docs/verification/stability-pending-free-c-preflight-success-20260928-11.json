@@ -1,0 +1,35 @@
+{
+  "schema": "mckernel.stability-executable-fixture.v1",
+  "recorded_at": "2026-09-28T04:40:00-07:00",
+  "base_commit": "5dd488bbf3c914a1df141a08e12db52c7f16ef88",
+  "decision": "PASS_SCOPED_C_PENDING_PREFLIGHT_EXECUTION",
+  "source_sha256": {
+    "kernel/mem.c": "66062fafb8c19835e48aedcdae81f6a74545b7f470e415858f17d4b5fae5656a",
+    "kernel/rust/tests/pending_free_c_actual_harness.py": "10a7b6f7bc7dbf350dc7c9e8091692c82c2883171cc439ba0e953f096bb64d1e",
+    "scripts/tests/test_pending_free_c_actual_harness.py": "01f3868d3c6e29c4149f537006aef181216138dbbbe12815df6192eae6cb5a89"
+  },
+  "execution": {
+    "root": "/home/holden/mckernel-work/scratch/m03-pending-c-preflight-20260928-1",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "container_id": "9384488d07ef16f44e5e95b138049985461535c2674bd2f11645b441306a9961",
+    "profile": "cpuset 2-5, four CPUs, 12 GiB memory/no extra swap, 512 tasks, no network, read-only source, UID 1000",
+    "exit_code": 0,
+    "oom_killed": false,
+    "container_removed": true,
+    "result_sha256": "a73770eeaec43514b808b3a165e81871c0219fb1845aa0c29fee85ee89c660e9",
+    "lifecycle_sha256": "f4ad1fa4bcd3fb3d113ec916b60de5cee6d33363af034a7eac46ef78618c2a5a",
+    "compiler_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2"
+  },
+  "verified_behavior": [
+    "Both extracted current C drain paths validate the complete ring before unlink or free callbacks",
+    "All 48 candidate rows pass across result and public fallback routes",
+    "Invalid second/last and all structural/extent controls preserve snapshots and issue zero callbacks",
+    "Repaired fixtures drain in order with exact callback arguments, list poisoning and mode clearing",
+    "Two guard-removal mutant rows reproduce first-page release before rejecting the invalid second page"
+  ],
+  "limitations": [
+    "Allocator free and panic operations are fixture substitutes",
+    "No kernel ABI, concurrent mutation/reentry, VM/token/extent authority, IRQ/migration exclusion, guest runtime, application acceptance or full M03 completion follows",
+    "The combined Rust/C regression harness requires adaptation to the new C behavior before reuse"
+  ]
+}

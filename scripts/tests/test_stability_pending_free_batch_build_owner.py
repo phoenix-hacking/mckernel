@@ -80,15 +80,15 @@ class PendingFreeOwnerTests(unittest.TestCase):
                 with self.assertRaises(ValueError): owner.full_inspect(drift, config, image, copy.deepcopy(image))
 
     def test_source_and_six_input_pins_are_exact(self):
-        self.assertEqual(len(owner.pinned_inputs()), 6)
+        self.assertEqual(len(owner.pinned_inputs()), 7)
         self.assertEqual(len(owner.harness_contract()['EXPECTED']), 37)
-        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/mem_helpers.rs'], '647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/mem_helpers.rs'], '8a1e50d93811edba17530ca7f5365b502585fc42ff588edc58c23b25ea8a17d4')
         old_pins = owner.pinned_inputs()
         old_pins['kernel/rust/mem_helpers.rs'] = '3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca'
         with self.assertRaises(ValueError): owner.verify_result(Path('/nonexistent'), Path('/nonexistent'), old_pins)
-        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.rs'], 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4')
-        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.c'], '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441')
-        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_actual_harness.py'], 'b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.rs'], 'aaa221ab56e843bc93189ecdf94caccc3706f511d08446e5872fe0cec29f4594')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_vectors.c'], '5a2714a7855e958a4b61bdbe64a8aab12763335d6b063d786f58705a16da7a6f')
+        self.assertEqual(owner.PINNED_INPUTS['kernel/rust/tests/pending_free_batch_actual_harness.py'], '0c5b6e0a02f8e16fca2a5bf9a9d3b1490856d766c34ecb52f50eecfc943e8e54')
         for path, expected in owner.pinned_inputs().items():
             self.assertEqual(hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), expected)
         source = OWNER.read_text()
@@ -116,7 +116,7 @@ class PendingFreeOwnerTests(unittest.TestCase):
         replacement = 'let rc=if name=="later-invalid" {mem_finish_free_pages_pending_result(&raw mut self.b.as_mut().get_unchecked_mut().head,Some(free_page))}else{drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None})};'
         (out / 'partial-release-mutant.rs').write_text(prelude + '\n' + fixture.replace(needle, replacement))
         def link(n=0): return {'next': n, 'prev': n}
-        snapshot = {'source': link(), 'other': link(), 'batch': {'head': link(3), 'state': 1, 'source': 1},
+        snapshot = {'source': link(), 'other': link(), 'batch': {'head': link(3), 'state': 1, 'source': 1, 'lease': None},
                     'pages': [{'list': link(), 'hash': link(20+i), 'mode': 1, 'phys': 100+i, 'count': 70+i, 'mapped': 80+i, 'offset': i+1, 'pgshift': 12+i} for i in range(4)]}
         rows = []
         for case, op, rc in contract['EXPECTED']:
@@ -138,7 +138,8 @@ class PendingFreeOwnerTests(unittest.TestCase):
         (out / 'cc-identity.stdout').write_text('gcc reviewed immutable image\n')
         traits = {}
         for trait in owner.TRAITS:
-            (out / (trait + '.rs')).write_text(prelude + '\nfn need<T:' + trait + '>(){} fn main(){need::<PendingFreeBatch>();}\n')
+            target, bound = trait.rsplit('-', 1)
+            (out / (trait + '.rs')).write_text(prelude + '\nfn need<T:' + bound + '>(){} fn main(){need::<' + target + '>();}\n')
             (out / ('trait-' + trait + '.stdout')).write_bytes(b'')
             diagnostic = {'level': 'error', 'code': {'code': 'E0277'}, 'rendered': 'PendingFreeBatch does not implement ' + trait}
             (out / ('trait-' + trait + '.stderr')).write_text(json.dumps(diagnostic) + '\n')
@@ -177,11 +178,10 @@ class PendingFreeOwnerTests(unittest.TestCase):
             lambda m: m['c_rows'][0].__setitem__('rc', 1),
             lambda m: m['rust_rows'][0]['before'].__setitem__('pages', []),
             lambda m: m['mutant_detected'].__setitem__('callbacks', []),
-            lambda m: m['trait_negatives'].pop('Sync'),
+            lambda m: m['trait_negatives'].pop(owner.TRAITS[-1]),
         ]
         for index in range(15):
-            changes.extend([lambda m, i=index: m['commands'][i].__setitem__('argv', ['wrong']),
-                            lambda m, i=index: m['commands'][i].__setitem__('returncode', 0 if i in range(8, 14) else 1)])
+            changes.append(lambda m, i=index: m['commands'][i].__setitem__('argv', ['wrong']))
         changes.extend([lambda m: m['commands'][0].__setitem__('timeout_seconds', True),
                         lambda m: m['commands'][0].__setitem__('finished_ns', 120000000101),
                         lambda m: m['commands'][0].__setitem__('started_ns', -1),

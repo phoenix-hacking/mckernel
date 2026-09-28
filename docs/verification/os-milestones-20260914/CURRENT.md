@@ -3513,3 +3513,54 @@ review blockers and evidence are in
 Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete; this checkpoint pauses rather than resumes or completes the goal.
+
+Continuation shutdown checkpoint 13, 2026-09-28: three bounded results are now
+accepted at their stated scopes. The C pending-free result and public fallback
+prevalidate the complete ring before mutation; 48 candidate rows pass and two
+guard-removal mutants reproduce valid-prefix release in the reviewed pinned
+container. Independent review returns `PASS_SCOPED_C_PENDING_PREFLIGHT_EXECUTION`.
+The M02 descriptor component returns `PASS_SOURCE_READY_FOR_LAYER_B_REVIEW`
+after five focused tests exercise 48 real fork/exec permutations. The native
+diagnostic lifecycle returns `PASS_PROTOCOL_SOURCE_BLOCKED_RUNTIME`; 23 tests
+cover teardown-before-final-capture, complete route joins and bounded evidence
+publication. None of these results is a guest, ABI, concurrency, VM ownership,
+privileged Layer-B or production acceptance result.
+
+The native application fast path remains blocked before compilation. The final
+collector correction is preserved at source SHA256 `59eaaf71...` and test SHA256
+`3dc4eaea...`; four source tests pass, but its worker reports incomplete checked
+pipe/error channels, fair drain, process-group teardown and atomic serial-frame
+publication, so it is unreviewed and unreleased. The replacement append-only
+initramfs overlay was interrupted at SHA256 `170857d8...` / `ea6104b3...` and is
+also unreviewed. The older full-tree stager remains rejected for path races,
+weak identity/closure binding, nondeterministic metadata, absent real newc replay
+and incomplete durability. No retained root was modified and no derived image,
+collector binary, QEMU process or McKernel guest was started.
+
+Root13 packet 28 remains source-ready, but its executor is rejected and must not
+run. The combined pending-free owner is likewise rejected because its command,
+diagnostic, mutant and exact-C evidence contracts do not match the harness. M01,
+SC-VM-01 and the Linux diagnostic owner retain their prior deterministic failure
+families; subsequent work must change strategy rather than replay unchanged
+candidates. All child agents are terminal or interrupted. Launcher PID 3125264,
+worker PID 3125267 and app-server PID 3125269, started at 2026-09-28 03:47:42
+-0700, remain the preserved identities for
+`.git/os-autopilot/runs/20260928T104742Z-d8634f08`. No project compiler, guest,
+QEMU, mcexec, native-boot, IHK runtime, root unit or transient container is
+active. Host/scratch free space is 43/21 GiB, memory available is 28 GiB and the
+heavy lease is free. Real guest applications and current-candidate builds in
+this window: **0** and **0**.
+
+Next tasks are: (1) finish and independently review the append-only overlay;
+(2) finish and independently review the collector lifecycle; (3) only after both
+releases, compile the collector in the pinned container and derive an exact
+authenticated initramfs; (4) implement/review the concrete process/QMP backend
+and serial collector before one startup.argv-empty diagnostic guest; (5) keep
+the rejected root13, M01, SC-VM-01, Linux-owner and combined-owner executors
+stopped until their failure families receive changed strategies; and (6)
+continue M03 VM/token/extent authority and durable-quarantine work. Exact hashes,
+scope limits and blockers are recorded in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-13.json`.
+Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete; this checkpoint pauses rather than resumes or completes the goal.

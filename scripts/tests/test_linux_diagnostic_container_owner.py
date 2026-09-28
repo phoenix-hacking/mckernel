@@ -25,7 +25,8 @@ class Fake:
         if argv[0] == "create":
             return Result(out="container-id\n")
         if argv[0] == "ps":
-            return Result(out="" if any(call[0] == "rm" for call in self.calls) else "container-id\n")
+            made = any(call[0] == "create" for call in self.calls)
+            return Result(out="container-id\n" if made and not any(call[0] == "rm" for call in self.calls) else "")
         if argv[0] == "inspect":
             return Result(out=json.dumps({"Status":"exited", "Running":False, "Paused":False,
                 "Restarting":False, "OOMKilled":False, "Dead":False, "Error":"", "ExitCode":0}))
@@ -55,6 +56,30 @@ class OwnerTests(unittest.TestCase):
             self.assertIn("--network=none", argv)
             self.assertNotIn("sh", argv)
             self.assertEqual(argv[0], "create")
+
+    def test_rejects_duplicate_closure_paths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = {"complete": True, "files": [
+                {"canonical_path": "/a", "sha256": "a" * 64},
+                {"canonical_path": "/a", "sha256": "b" * 64}]}
+            with self.assertRaises(owner.OwnerError):
+                owner.DiagnosticOwner(directory, backend=Fake(), nonce="n").run(
+                    closure_manifest=manifest)
+
+    def test_cleanup_attempts_kill_and_rm_after_stop_failure(self):
+        class StopFails(Fake):
+            def call(self, argv, **kwargs):
+                if argv[0] == "stop":
+                    self.calls.append(argv)
+                    raise RuntimeError("stop fault")
+                return super().call(argv, **kwargs)
+        with tempfile.TemporaryDirectory() as directory:
+            fake = StopFails()
+            with self.assertRaises(owner.OwnerError):
+                owner.DiagnosticOwner(directory, backend=fake, nonce="n").run(
+                    closure_manifest=self.manifest())
+            self.assertTrue(any(c[0] == "kill" for c in fake.calls))
+            self.assertTrue(any(c[0] == "rm" for c in fake.calls))
 
 
 if __name__ == "__main__":

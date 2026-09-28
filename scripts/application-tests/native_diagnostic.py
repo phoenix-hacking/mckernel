@@ -232,18 +232,65 @@ def evaluate(manifest, observation):
                     *[r"application procfs " + op + " " + prefix + " tid=" + schedules[0] + r"\b"
                       for op in ("published", "deleted")]):
         _need(len(re.findall(pattern, serial)) == 1, "retirement/release evidence")
-    delivered = re.findall(r"application_syscall=delivered " + prefix + r" worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)", serial)
-    returned = re.findall(r"application_syscall=returned " + prefix + r" worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)", serial)
-    routes = re.findall(r"application_syscall=return_route " + prefix + r" worker=(\d+) delivery=(\d+) launcher_cpu=(-?\d+) guest_cpu=(\d+)", serial)
-    _need(delivered and returned and routes and any(row[3] == "231" for row in delivered), "missing actual route/exit evidence")
-    for worker, delivery, launcher, guest in routes:
-        _need(guest == "0" and launcher != guest and
-              sum(row[:3] == (worker, delivery, guest) for row in delivered) == 1 and
-              sum(row[:3] == (worker, delivery, guest) for row in returned) == 1, "route identity mismatch")
-    _need(all(row[2] == "0" for row in delivered + returned), "unexpected guest CPU")
+    _check_syscall_trace(serial, prefix)
     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
             "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
             "guest_report": report, "observation": observation, "runtime_blocker": STAGING_BLOCKER}
+
+
+def _check_syscall_trace(serial, prefix):
+    """Join every sampled delivery; exit_group deliberately has no RET.
+
+    mcctrl_process.rs::return_syscall prints return_route only when the Linux
+    worker slot differs from the saved guest CPU, before printing returned.
+    mcexec.c::init_worker_threads allocates slots 0..n_threads inclusive: the
+    frozen -t 1 invocation therefore permits slots 0 and 1, not host CPU IDs.
+    The exit/exit_group branch (and Rust act_exit) retires without RET. This
+    single-thread startup fixture requires one final exit_group (231).
+    """
+    suffixes = {
+        "delivered": r"worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)",
+        "returned": r"worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)",
+        "return_route": r"worker=(\d+) delivery=(\d+) launcher_cpu=(-?\d+) guest_cpu=(\d+)",
+    }
+    records = {name: {} for name in suffixes}
+    for position, line in enumerate(serial.splitlines()):
+        for name, suffix in suffixes.items():
+            marker = "application_syscall=" + name + " "
+            if marker not in line:
+                continue
+            match = re.search(re.escape(marker) + prefix + " " + suffix + r"\s*$", line)
+            _need(match is not None, "malformed or foreign syscall trace")
+            row = tuple(int(value) for value in match.groups())
+            key = row[:2]
+            _need(all(0 < value < 2**64 for value in key), "invalid worker/delivery identity")
+            _need(key not in records[name], "duplicate syscall " + name)
+            records[name][key] = (row[2:], position)
+    delivered, returned, routes = (records[name] for name in suffixes)
+    exits = {key for key, (row, _) in delivered.items() if row[1] == 231}
+    _need(delivered and returned and routes and len(exits) == 1, "missing actual route/exit evidence")
+    _need(all(row[1] != 60 for row, _ in delivered.values()), "unexpected non-group exit")
+    ordinary = set(delivered) - exits
+    _need(set(returned) == ordinary and set(routes) <= ordinary, "incomplete syscall correspondence")
+    exit_position = delivered[next(iter(exits))][1]
+    _need(all(row[0] == 0 for row, _ in delivered.values()) and
+          all(row[0] == 0 for row, _ in returned.values()), "unexpected guest CPU")
+    worker_slots = {}
+    for key in ordinary:
+        begin, end = delivered[key][1], returned[key][1]
+        _need(begin < end < exit_position, "syscall/terminal-exit ordering")
+        slot = 0
+        if key in routes:
+            (launcher, guest), position = routes[key]
+            _need(launcher == 1 and guest == 0 and begin < position < end,
+                  "route identity/CPU mismatch")
+            slot = launcher
+        # An absent route means equal CPU (slot 0), not unknown. A worker
+        # cannot switch its assigned slot between sampled deliveries.
+        _need(worker_slots.setdefault(key[0], slot) == slot, "missing/inconsistent worker route")
+    for marker in ("application retirement ", "application_process=release "):
+        positions = [i for i, line in enumerate(serial.splitlines()) if marker in line]
+        _need(positions and all(i > exit_position for i in positions), "retirement precedes terminal exit")
 
 
 def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300):
@@ -278,38 +325,40 @@ def _alarm(deadline):
         signal.signal(signal.SIGALRM, old)
 
 
-def _call(deadline, method, *args, **kwargs):
+def _method(deadline, owner, name, *, accepts_timeout=True):
+    # Attribute lookup itself can raise or block (properties/proxies). It is
+    # part of the protected operation, not an argument evaluated beforehand.
     with _alarm(deadline) as remaining:
-        return method(*args, timeout=remaining, **kwargs)
+        method = getattr(owner, name)
+        return method(timeout=remaining) if accepts_timeout else method()
 
 
 def _cleanup(process, qmp):
     """Keep each cleanup step independent; QMP errors cannot skip reaping."""
     deadline = time.monotonic() + 5
     errors = []
-    def step(label, function, *args, allowance=1):
+    def step(label, owner, name, allowance=1, accepts_timeout=True):
         try:
-            return _call(min(deadline, time.monotonic() + allowance), function, *args)
+            return _method(min(deadline, time.monotonic() + allowance), owner, name,
+                           accepts_timeout=accepts_timeout)
         except BaseException as exc:
             errors.append({"phase": label, "type": type(exc).__name__, "error": str(exc)})
             return None
     # Never use QMP as the sole process-lifetime authority.
     if qmp is not None:
-        step("qmp-quit", qmp.terminate, allowance=0.5)
+        step("qmp-quit", qmp, "terminate", allowance=0.5)
     reaped = process is None
     if process is not None:
-        def terminate(timeout): process.terminate()
-        def kill(timeout): process.kill()
-        step("terminate", terminate, allowance=0.25)
-        status = step("wait", process.wait, allowance=1)
+        step("terminate", process, "terminate", allowance=0.25, accepts_timeout=False)
+        status = step("wait", process, "wait", allowance=1)
         if type(status) is int:
             reaped = True
         else:
-            step("kill", kill, allowance=0.25)
-            status = step("reap", process.wait, allowance=2)
+            step("kill", process, "kill", allowance=0.25, accepts_timeout=False)
+            status = step("reap", process, "wait", allowance=2)
             reaped = type(status) is int
     if qmp is not None:
-        step("qmp-close", qmp.close, allowance=0.5)
+        step("qmp-close", qmp, "close", allowance=0.5)
     return {"reaped": reaped, "errors": errors}
 
 
@@ -334,12 +383,24 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
             process = process_factory(timeout=remaining)
         with _alarm(deadline) as remaining:
             qmp = qmp_factory(timeout=remaining)
-        _call(deadline, qmp.negotiate)
-        _call(deadline, qmp.resume)
-        terminal = _call(deadline, qmp.wait_shutdown)
-        # QEMU stdout/stderr are diagnostics; never payload streams/status.
-        host_stdout, host_stderr = _call(deadline, process.communicate)
+        _method(deadline, qmp, "negotiate")
+        _method(deadline, qmp, "resume")
+        terminal = _method(deadline, qmp, "wait_shutdown")
+    except BaseException as exc:
+        failure = {"phase": "lifecycle", "type": type(exc).__name__, "error": str(exc)}
+    finally:
+        # No filesystem journal or capture runs before retirement: blocked
+        # storage cannot delay termination/reaping after a QMP failure.
+        cleanup = _cleanup(process, qmp)
+    try:
+        if failure is not None:
+            raise DiagnosticError(failure["error"])
+        _need(cleanup["reaped"] and not cleanup["errors"], "teardown uncertain")
+        # Capture only after QEMU has been reaped, including shutdown/teardown
+        # warnings. QEMU stdout/stderr are never payload streams/status.
+        host_stdout, host_stderr = _method(deadline, process, "communicate")
         _need(type(host_stdout) is bytes and type(host_stderr) is bytes, "backend log types")
+        _need(len(host_stdout) <= MAX_JSON and len(host_stderr) <= MAX_JSON, "host capture limit exceeded")
         with _alarm(deadline):
             for name, data in (("qemu.stdout", host_stdout), ("qemu.stderr", host_stderr)):
                 with (Path(attempt) / name).open("xb") as stream:
@@ -350,30 +411,20 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                     data = stream.read(MAX_JSON + 1)
                 _need(len(data) <= MAX_JSON, "capture limit exceeded")
                 texts[name] = data.decode("utf-8", errors="strict")
-            observation = dict(texts, qmp=terminal, teardown=False, started_at=started,
+            observation = dict(texts, qmp=terminal, teardown=True, started_at=started,
                                finished_at=time.monotonic(), deadline=deadline)
-    except BaseException as exc:
-        failure = {"phase": "lifecycle", "type": type(exc).__name__, "error": str(exc)}
-        try:
-            _append_failure(attempt, failure)
-        except BaseException as journal_error:
-            failure["journal_error"] = type(journal_error).__name__ + ": " + str(journal_error)
-    finally:
-        cleanup = _cleanup(process, qmp)
-    if failure is None:
-        try:
-            _need(cleanup["reaped"] and not cleanup["errors"], "teardown uncertain")
-            observation["teardown"] = True
             record = evaluate(manifest, observation)
-        except BaseException as exc:
+    except BaseException as exc:
+        if failure is None:
             failure = {"phase": "evaluation", "type": type(exc).__name__, "error": str(exc)}
     if failure is not None:
         record = {"status": "FAIL", "application_acceptance": False,
                   "mckernel_application_executed": False, "failure": failure}
     record["cleanup"] = cleanup
-    # Keep the original failure durable before cleanup; append the evaluation
-    # failure only when the lifecycle itself succeeded.
-    write_record(attempt, record, failure if failure and failure["phase"] == "evaluation" else None)
+    # The first observed failure survives cleanup failures; journal only after
+    # retirement, under its own bounded publication deadline.
+    with _alarm(time.monotonic() + 2):
+        write_record(attempt, record, failure)
     if failure is not None:
         raise DiagnosticError(failure["error"])
     return record

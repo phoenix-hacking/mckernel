@@ -1390,6 +1390,55 @@ int mem_free_pages_pending_enqueue_result(struct page *page,
 	return 1;
 }
 
+/* Caller owns stable, live descriptors exclusively through the drain.  This
+ * preflight grants no VM/token, allocator extent, IRQ or reentry authority. */
+static int mem_validate_pending_free_ring(struct list_head *head)
+{
+	struct list_head *slow, *fast;
+	struct page *page;
+	unsigned long bytes;
+	int count = 0;
+
+	if (!head || !head->next || !head->prev)
+		return -EINVAL;
+	if (head->next == head || head->prev == head)
+		return head->next == head && head->prev == head ? 0 : -EINVAL;
+	if (head->next->prev != head || head->prev->next != head)
+		return -EINVAL;
+
+	slow = fast = head->next;
+	while (slow != head) {
+		if (!slow || !slow->next || !slow->prev ||
+				slow->next->prev != slow || slow->prev->next != slow)
+			return -EINVAL;
+		page = (struct page *)((char *)slow - offsetof(struct page, list));
+		if (page->mode != PM_PENDING_FREE || page->offset <= 0 ||
+				page->offset > INT_MAX ||
+				(unsigned long)page->offset > ULONG_MAX / PAGE_SIZE)
+			return -EINVAL;
+		bytes = (unsigned long)page->offset * PAGE_SIZE;
+		if (page->phys > ULONG_MAX - bytes || count == INT_MAX)
+			return -EINVAL;
+		count++;
+		slow = slow->next;
+
+		/* A foreign cycle must terminate validation without changing the ring. */
+		if (fast == head)
+			continue;
+		if (!fast || !fast->next)
+			return -EINVAL;
+		fast = fast->next;
+		if (fast == head)
+			continue;
+		if (!fast->next)
+			return -EINVAL;
+		fast = fast->next;
+		if (fast == slow && slow != head)
+			return -EINVAL;
+	}
+	return count;
+}
+
 int mem_finish_free_pages_pending_result(struct list_head *pendings,
 		mem_pending_free_fn_t free_fn)
 {
@@ -1400,6 +1449,8 @@ int mem_finish_free_pages_pending_result(struct list_head *pendings,
 	if (!pendings || !pendings->next)
 		return 0;
 	if (!free_fn)
+		return -EINVAL;
+	if (mem_validate_pending_free_ring(pendings) < 0)
 		return -EINVAL;
 
 	for (page = ((typeof(*page) *)((char *)((pendings)->next) - offsetof(typeof(*page), list))), next = ((typeof(*page) *)((char *)(page->list.next) - offsetof(typeof(*page), list))); &page->list != (pendings); page = next, next = ((typeof(*next) *)((char *)(next->list.next) - offsetof(typeof(*next), list)))) {
@@ -3901,6 +3952,10 @@ void finish_free_pages_pending(void)
 	struct page *next;
 
 	if (pendings->next == NULL) {
+		return;
+	}
+	if (mem_validate_pending_free_ring(pendings) < 0) {
+		panic("free_pending_pages:invalid ring");
 		return;
 	}
 

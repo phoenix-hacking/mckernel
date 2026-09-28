@@ -41,11 +41,12 @@ BASE_SHA = 'ba1ed0320e36e24cf59c394b7466a25e6906be179f19924f221d54c759bf7979'
 
 PINNED_INPUTS = {
     'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e',
-    'kernel/rust/mem_helpers.rs': '647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b',
-    'kernel/rust/tests/pending_free_batch_vectors.rs': 'fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4',
-    'kernel/rust/tests/pending_free_batch_vectors.c': '23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441',
-    'kernel/rust/tests/run_equivalence.sh': '14cbdf9421c5d284ded0a607324c60a72f5d628fe55e99139d135986e9cbb145',
-    'kernel/rust/tests/pending_free_batch_actual_harness.py': 'b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a',
+    'kernel/rust/mem_helpers.rs': '8a1e50d93811edba17530ca7f5365b502585fc42ff588edc58c23b25ea8a17d4',
+    'kernel/rust/tests/pending_free_batch_vectors.rs': 'aaa221ab56e843bc93189ecdf94caccc3706f511d08446e5872fe0cec29f4594',
+    'kernel/rust/tests/pending_free_batch_vectors.c': '5a2714a7855e958a4b61bdbe64a8aab12763335d6b063d786f58705a16da7a6f',
+    'kernel/rust/tests/run_equivalence.sh': '53c85fb9913d084eb11544477bde591f3a96b512f26b5d41708a9035831a492e',
+    'kernel/rust/tests/pending_free_batch_actual_harness.py': '0c5b6e0a02f8e16fca2a5bf9a9d3b1490856d766c34ecb52f50eecfc943e8e54',
+    'kernel/mem.c': '66062fafb8c19835e48aedcdae81f6a74545b7f470e415858f17d4b5fae5656a',
 }
 
 
@@ -149,7 +150,9 @@ def _artifact(path):
     return raw, {'path': str(path), 'size': len(raw), 'sha256': identity['sha256']}
 
 
-TRAITS = ('Copy', 'Clone', 'Unpin', 'Send', 'Sync')
+TRAITS = tuple(target + '-' + trait for target in
+               ('PendingFreeBatch', 'PendingInventoryLease', 'ValidatedPendingInventory')
+               for trait in ('Copy', 'Clone', 'Unpin', 'Send', 'Sync'))
 
 
 def harness_contract():
@@ -175,6 +178,8 @@ def command_contract():
         ('c-run', [out + '/reference-c']),
         ('mutant-compile', rust + [out + '/partial-release-mutant.rs', '-o', out + '/partial-release-mutant']),
         ('mutant-run', [out + '/partial-release-mutant']),
+        ('exact-c-partial-compile', [GCC, '-std=gnu11', '-Wall', '-Wextra', '-Werror', out + '/exact-c-partial-release-controls.c', '-o', out + '/exact-c-partial-release-controls']),
+        ('exact-c-partial-run', [out + '/exact-c-partial-release-controls']),
     ]
     rows += [('trait-' + trait, rust + ['--error-format=json', out + '/' + trait + '.rs', '-o', out + '/' + trait]) for trait in TRAITS]
     return rows + [('diff-check', ['git', 'diff', '--check'])]
@@ -186,6 +191,7 @@ def artifact_names():
              'partial-release-mutant.rs', 'partial-release-mutant'}
     names.update('inputs/' + Path(path).name for path in PINNED_INPUTS)
     names.update(trait + '.rs' for trait in TRAITS)
+    names.update(('exact-c-partial-release-controls.c', 'exact-c-partial-release-controls'))
     names.update(label + suffix for label, _ in command_contract() for suffix in ('.stdout', '.stderr'))
     return names
 
@@ -199,7 +205,13 @@ def validate_rows(rows, contract):
         for snapshot in (row['before'], row['after']):
             require(type(snapshot) is dict and set(snapshot) == {'source', 'other', 'batch', 'pages'}, 'snapshot fields')
             batch = snapshot['batch']
-            require(type(batch) is dict and set(batch) == {'head', 'state', 'source'} and type(batch['state']) is int and batch['state'] in (0, 1, 2) and type(batch['source']) is int, 'batch fields')
+            require(type(batch) is dict and set(batch) == {'head', 'state', 'source', 'lease'} and type(batch['state']) is int and batch['state'] in (0, 1, 2) and type(batch['source']) is int, 'batch fields')
+            lease = batch['lease']
+            if lease is not None:
+                require(type(lease) is dict and set(lease) == {'descriptors_ptr', 'descriptor_len', 'callback_args_ptr', 'callback_len', 'bounds', 'descriptors', 'callback_entries'}, 'lease fields')
+                require(all(type(lease[k]) is int and lease[k] >= 0 for k in ('descriptors_ptr', 'descriptor_len', 'callback_args_ptr', 'callback_len')), 'lease scalar fields')
+                require(type(lease['bounds']) is dict and set(lease['bounds']) == {'start', 'end'} and all(type(lease['bounds'][k]) is int for k in ('start', 'end')), 'lease bounds')
+                require(type(lease['descriptors']) is list and type(lease['callback_entries']) is list, 'lease arrays')
             pages = snapshot['pages']
             require(type(pages) is list and len(pages) == 4, 'four complete page snapshots')
             links = [snapshot['source'], snapshot['other'], batch['head']]
@@ -276,7 +288,7 @@ def verify_result(mount, host, input_hashes):
     bad = mutant[-1]
     require(bad == manifest['mutant_detected'] and bad['case'] == 'later-invalid' and bad['op'] == 'drain' and type(bad['rc']) is int and bad['rc'] == -22 and bad['callbacks'] == [[100, 1, 1]], 'retained partial-release mutation')
     require(bad['before'] == manifest['rust_rows'][7]['before'] and bad['before']['pages'][0]['mode'] == 1 and bad['after']['pages'][0]['mode'] == 0 and bad['after']['pages'][0]['list'] == {'next': 90, 'prev': 91} and bad['before']['pages'][1]['mode'] == bad['after']['pages'][1]['mode'] == 0 and b'PARTIAL_RELEASE_DETECTED case=later-invalid' in contents['mutant-run.stderr'], 'actual mutant partial release')
-    require(type(manifest['trait_negatives']) is dict and set(manifest['trait_negatives']) == set(TRAITS), 'all five trait negatives')
+    require(type(manifest['trait_negatives']) is dict and set(manifest['trait_negatives']) == set(TRAITS), 'all fifteen trait negatives')
     for trait in TRAITS:
         require(contents['trait-' + trait + '.stdout'] == b'', 'empty negative stdout')
         diagnostics = [strict_json(line) for line in contents['trait-' + trait + '.stderr'].splitlines()]
@@ -294,7 +306,8 @@ def verify_result(mount, host, input_hashes):
     replacement = 'let rc=if name=="later-invalid" {mem_finish_free_pages_pending_result(&raw mut self.b.as_mut().get_unchecked_mut().head,Some(free_page))}else{drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None})};'
     require(fixture.count(needle) == 1 and contents['partial-release-mutant.rs'] == (prelude + '\n' + fixture.replace(needle, replacement)).encode(), 'exact partial-release mutant source')
     for trait in TRAITS:
-        require(contents[trait + '.rs'] == (prelude + '\nfn need<T:' + trait + '>(){} fn main(){need::<PendingFreeBatch>();}\n').encode(), 'exact trait probe source')
+        target, bound = trait.rsplit('-', 1)
+        require(contents[trait + '.rs'] == (prelude + '\nfn need<T:' + bound + '>(){} fn main(){need::<' + target + '>();}\n').encode(), 'exact trait probe source')
     manifest_id = {'path': str(output / 'manifest.json'), 'size': len(contents['manifest.json']), 'sha256': artifacts['manifest.json']}
     write(Path(host) / 'harness-manifest.json', contents['manifest.json'])
     save(Path(host) / 'harness-bindings.json', {'manifest': manifest_id, 'six_inputs': input_hashes, 'compiler_hashes': {'rustc': RUSTC_SHA, 'gcc': GCC_SHA}, 'application_acceptance': False, 'production_gate_credit': False})

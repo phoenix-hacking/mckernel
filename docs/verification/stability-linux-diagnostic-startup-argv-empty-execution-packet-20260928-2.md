@@ -162,7 +162,7 @@ to application acceptance.
 
 The controller under review is
 `scripts/application-tests/linux_diagnostic_container_owner.py`, SHA-256
-`7ee1f8daf86f0960b14f5675d70b840013b2fe87dc3c48100de890500ca7c2ec`. Its private snapshot must contain the exact source
+`3d29c04a0dc7a7474773827e3468566aa72bc380ed4a9a6725c88914ada3fc93`. Its private snapshot must contain the exact source
 hashes: `linux_diagnostic.py`
 `c9932ce4883b1c23c4fc5df0cdb6b4cbe855c140d38787b6abf960f1d75ee409`,
 `runtime_contracts.py`
@@ -171,4 +171,25 @@ hashes: `linux_diagnostic.py`
 `8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873`.
 The strict oracle is retained at
 `docs/verification/evidence/stability-linux-diagnostic-startup-argv-empty-oracle-20260928-1.json`;
-the expected result is collector `PASS`, supervisor `COMPLETED`.
+its current strict file SHA-256 is
+`128b5665885bbebfabc68e59796a753f399066ca5d863d39bc4598750818c43b`; the
+expected result is collector `PASS`, supervisor `COMPLETED`.
+
+## Owner escalation closure (2026-09-28)
+
+The owner is now a fail-closed, single-job controller. Before `create` it
+requires a private 0700 root, a complete nonempty closure with unique absolute
+paths and 64-hex digests, a durable nonce lease, and an exact zero-result
+name/label lookup. It accepts exactly one returned container ID, rechecks the
+same name and label, and records a fsynced append-only owner journal. Stop,
+kill, and force-remove are independent bounded calls; absence is checked after
+all three and the lease is retained on any uncertainty. Collector completion
+is accepted only with the strict state object in the oracle and the retained
+evaluation evidence. No stale container, replacement image, shell, wrapper,
+network, compiler, guest, or Docker execution is authorized by this packet.
+
+Runtime prerequisites remain independent review of the pinned image and full
+loader closure, a fresh controlled root/snapshot, and an external wall
+watchdog whose raw wait and live owner identity are retained. The focused
+unprivileged fake-backend tests cover incomplete/duplicate closure rejection,
+unique create ownership, argv isolation, and continued kill/remove cleanup.

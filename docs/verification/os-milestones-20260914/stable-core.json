@@ -105,6 +105,9 @@
     ,"pending_prod_boundary": "docs/verification/stability-pending-free-production-boundary-review-20260928-9.json"
     ,"application_pilot_audit": "docs/verification/stability-application-pilot-artifact-audit-20260928-1.json"
     ,"pending_prod_preflight": "docs/verification/stability-pending-free-production-preflight-success-20260928-10.json"
+    ,"m02_descriptor": "docs/verification/stability-m02-descriptor-source-success-20260928-1.json"
+    ,"pending_c_preflight": "docs/verification/stability-pending-free-c-preflight-success-20260928-11.json"
+    ,"native_diag_protocol": "docs/verification/stability-native-diagnostic-protocol-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -428,10 +431,11 @@
       "area": "OBS",
       "title": "Real descriptor remapping",
       "status": "partial",
-      "result": "A source candidate implements alias-safe remapping and inherited-FD closure with real fork/exec tests for fd 1/198 cycles and closed stdio. Static parsing passed; Layer-B ownership review prevented execution.",
-      "next_check": "After SC-ENV-04 passes, execute the exact dual-Python focused remap test, retain streams/session cleanup, then run the complete dependency-bound suite and independent source review.",
+      "result": "Independent review accepts the exact alias-safe remapper source. Five focused tests and 48 real fork/exec permutations cover closed stdio, source-equals-destination CLOEXEC clearing, 1/198 cycles and inherited-sentinel closure. This is unprivileged component evidence, not complete Layer-B execution.",
+      "next_check": "After SC-ENV-04 passes, execute the exact dual-Python focused remap test through the complete Layer-B owner, retain streams/session cleanup, then run the complete dependency-bound suite.",
       "evidence": [
-        "storage"
+        "storage",
+        "m02_descriptor"
       ],
       "depends_on": [
         "SC-ENV-04"
@@ -442,10 +446,11 @@
       "area": "OBS",
       "title": "Acquisition sequence validation",
       "status": "partial",
-      "result": "Both packet validators now require sequential successful create acquisition IDs, with focused offset/gap/duplicate/reorder and failed-create-ID regressions. The candidate is static-only pending Layer-B execution.",
-      "next_check": "Execute the focused negative matrix under the reviewed Layer-B owner, then run all 137 tests under both Python versions and obtain complete independent source review.",
+      "result": "Independent review and executable unprivileged probes confirm that only successful instrumented creates consume consecutive IDs starting at one; offsets, gaps, duplicates, reorderings and failed-create consumption reject. Complete Layer-B execution remains pending.",
+      "next_check": "Execute the focused negative matrix under the reviewed Layer-B owner, then run all 137 tests under both Python versions.",
       "evidence": [
-        "storage"
+        "storage",
+        "m02_descriptor"
       ],
       "depends_on": [
         "SC-ENV-04"
@@ -456,10 +461,11 @@
       "area": "OBS",
       "title": "Live file-identity alias rejection",
       "status": "partial",
-      "result": "Both validators now track event/request/report device-inode ownership through the packet stream and include cross-role alias negatives. No source-defined retirement exists in this packet; execution remains blocked by SC-ENV-04.",
-      "next_check": "Execute all focused alias negatives and retained positives, then have an independent reviewer confirm lifecycle scope and no valid-reuse regression.",
+      "result": "Independent review accepts live event/request/report device-inode alias rejection. Seventeen retained/closed-descriptor reuse positives pass and five request/report alias probes reject in both validators. Execution remains blocked by SC-ENV-04.",
+      "next_check": "Execute all focused alias negatives and retained positives through the complete Layer-B owner and preserve actual lifecycle evidence.",
       "evidence": [
-        "storage"
+        "storage",
+        "m02_descriptor"
       ],
       "depends_on": [
         "SC-ENV-04"
@@ -501,12 +507,13 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Exact current module, image, mcexec, Linux boot and startup payload hashes were recovered from live retained inputs. run.py remains metadata-only and no reviewed native guest launch/terminal collector or pilot release exists.",
-      "next_check": "Prepare and independently review one backend/input manifest binding the recovered artifacts, then implement the smallest native launch and terminal-observation adapter that captures real McKernel PID/TID, request generation, output, exit, kernel log and teardown.",
+      "result": "Exact current artifact hashes remain recovered. The native diagnostic protocol now independently passes 23 lifecycle/trace/publication tests: cleanup precedes final capture, teardown warnings reject, syscall records join completely, QMP failures cannot skip tested reaping, and terminal publication is bounded. It still fails closed before spawning because real staging, runtime closure, guest collector/serial transport and process/QMP backends are absent.",
+      "next_check": "Bind the retained root tree and native boot/runtime closure, implement the real framed guest collector plus concrete process/QMP backends, then independently review one execution packet before the smallest startup.argv-empty guest run.",
       "evidence": [
         "history",
         "plan",
-        "application_pilot_audit"
+        "application_pilot_audit",
+        "native_diag_protocol"
       ],
       "depends_on": []
     },
@@ -740,13 +747,14 @@
       "area": "FIX",
       "title": "Sentinel, structural and overflow semantics",
       "status": "partial",
-      "result": "The extracted current Rust production finish body now prevalidates the complete ring before any unlink or allocator callback. In the pinned 4-CPU/12-GiB profile, all 37 Rust/C snapshot rows and 15 trait negatives pass; later-invalid state remains byte-for-byte unchanged with zero callbacks, while removing the preflight reproduces the original first-node release. Independent review accepts this scoped repair under exclusive, live, stable descriptors. Full owner authority is still absent.",
-      "next_check": "Propagate explicit target VM/token ownership through syscall and both XPMEM paths; add allocator extent generations, descriptor leases, preallocated inventory and IRQ/reentry/migration exclusion; repair and execute the matching C fallback. Separately run the 23 finite selectors after Layer-B acceptance.",
+      "result": "Both current Rust and C pending-free finish paths now prevalidate the complete ring before unlink or allocator callbacks. The pinned profile passes the Rust 37-row/15-trait suite and 48 executable C rows; later-invalid snapshots remain unchanged with zero callbacks, while guard-removal mutants reproduce first-node release. Independent reviews accept this scoped repair under exclusive, live, stable descriptors. Full owner authority is still absent.",
+      "next_check": "Adapt and rerun the combined Rust/C regression harness, then propagate explicit target VM/token ownership through syscall and both XPMEM paths; add allocator extent generations, descriptor leases, preallocated inventory and IRQ/reentry/migration exclusion. Separately run the 23 finite selectors after Layer-B acceptance.",
       "evidence": [
         "inventory",
         "pending_validated",
         "pending_prod_boundary",
-        "pending_prod_preflight"
+        "pending_prod_preflight",
+        "pending_c_preflight"
       ],
       "depends_on": [
         "SC-MEM-02"

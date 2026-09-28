@@ -1,10 +1,10 @@
 import unittest
 
 from layer_b_systemd_cgroup_collector import (
-    CgroupObserverError, collect_recursive_observation,
+    AcceptedObservation, Entry, CgroupObserverError, accept_observation,
+    collect_recursive_observation,
 )
-from layer_b_systemd_cgroup_observer import resolve_systemd_mapping, verify_pid_membership
-
+from layer_b_systemd_cgroup_observer import resolve_systemd_mapping
 
 MOUNT = (b"29 23 0:26 / /sys/fs/cgroup rw - tmpfs tmpfs rw,size=10240k\n"
          b"30 29 0:27 / /sys/fs/cgroup/systemd rw - cgroup cgroup rw,name=systemd\n")
@@ -13,40 +13,93 @@ CG = b"7:name=systemd:/user.slice/user-1000.slice\n"
 
 class CollectorTests(unittest.TestCase):
     def setUp(self):
-        self.mapping = resolve_systemd_mapping(MOUNT, CG, "/user.slice/user-1000.slice")
+        self.mapping = resolve_systemd_mapping(MOUNT, CG,
+                                               "/user.slice/user-1000.slice")
+        target = self.mapping.filesystem_path
+        parent = "/sys/fs/cgroup/systemd/user.slice"
+        root = "/sys/fs/cgroup/systemd"
+        self.parents = (
+            Entry(parent.encode(), 10, 10, "directory", (b"user-1000.slice",)),
+            Entry(root.encode(), 10, 11, "directory", (b"user.slice",)),
+        )
+        self.entries = (
+            Entry(target.encode(), 10, 12, "directory", (b"cgroup.procs",)),
+            Entry((target + "/cgroup.procs").encode(), 10, 13, "file",
+                  procs=b"123\n"),
+        )
 
-    def test_recursive_tree_and_raw_bytes(self):
-        paths = (b"/sys/fs/cgroup/systemd/user.slice/user-1000.slice",
-                 b"/sys/fs/cgroup/systemd/user.slice/user-1000.slice/cgroup.procs",
-                 b"/sys/fs/cgroup/systemd/user.slice/user-1000.slice/odd\xff")
-        result = collect_recursive_observation(MOUNT, self.mapping, paths)
-        self.assertEqual(result.raw_paths[-1], paths[-1])
-        self.assertEqual(result.topology[0].parent_mount_id, 29)
+    def test_freezes_recursive_tree_and_precommand_membership(self):
+        accepted = accept_observation(MOUNT, self.mapping, self.entries,
+                                      self.parents)
+        self.assertIsInstance(accepted, AcceptedObservation)
+        self.assertEqual(accepted.pre_command_member_pids, (123,))
+        result = collect_recursive_observation(
+            MOUNT, accepted, self.entries, self.parents,
+            self.mapping.original_control_group, require_retired=False)
+        self.assertEqual(result.member_pids, (123,))
 
-    def test_descendant_and_control_file_overmount_rejected(self):
+    def test_terminal_absence_requires_parent_listing_and_retains_mapping(self):
+        accepted = accept_observation(MOUNT, self.mapping, self.entries,
+                                      self.parents)
+        terminal_parents = (
+            Entry(self.parents[0].raw_path, 10, 10, "directory", ()),
+            self.parents[1],
+        )
+        result = collect_recursive_observation(
+            MOUNT, accepted, (), terminal_parents, b"")
+        self.assertTrue(result.target_absent)
+        self.assertEqual(result.mapping, accepted.mapping)
+
+    def test_target_must_be_listed_by_immediate_parent(self):
+        bad = (Entry(self.parents[0].raw_path, 10, 10, "directory", ()),
+               self.parents[1])
+        with self.assertRaises(CgroupObserverError):
+            accept_observation(MOUNT, self.mapping, self.entries, bad)
+
+    def test_incomplete_walk_and_sibling_only_walk_rejected(self):
+        with self.assertRaises(CgroupObserverError):
+            accept_observation(MOUNT, self.mapping, self.entries[:1],
+                               self.parents)
+        sibling = Entry((self.mapping.filesystem_path + "/sibling").encode(),
+                        10, 20, "directory", (b"cgroup.procs",))
+        with self.assertRaises(CgroupObserverError):
+            accept_observation(MOUNT, self.mapping, (sibling,), self.parents)
+
+    def test_descendant_or_ancestor_overmount_rejected(self):
+        accepted = accept_observation(MOUNT, self.mapping, self.entries,
+                                      self.parents)
         for point in ("/sys/fs/cgroup/systemd/user.slice",
-                      "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/cgroup.procs"):
+                      self.mapping.filesystem_path + "/cgroup.procs"):
             mounts = MOUNT + (f"31 30 0:28 / {point} rw - tmpfs tmpfs rw\n").encode()
             with self.subTest(point=point), self.assertRaises(CgroupObserverError):
-                collect_recursive_observation(mounts, self.mapping, (point,))
+                collect_recursive_observation(mounts, accepted, self.entries,
+                                              self.parents,
+                                              self.mapping.original_control_group,
+                                              require_retired=False)
 
-    def test_opaque_mapping_rejected(self):
-        mounts = MOUNT + b"31 30 0:28 mnt:[9] /sys/fs/cgroup/systemd/user.slice rw - nsfs nsfs rw\n"
+    def test_terminal_replacement_and_parent_identity_drift_rejected(self):
+        accepted = accept_observation(MOUNT, self.mapping, self.entries,
+                                      self.parents)
         with self.assertRaises(CgroupObserverError):
-            collect_recursive_observation(mounts, self.mapping, ("/sys/fs/cgroup/systemd/user.slice",))
+            collect_recursive_observation(
+                MOUNT, accepted, self.entries, self.parents,
+                "/user.slice/replaced.service", require_retired=False)
+        drift = (Entry(self.parents[0].raw_path, 10, 99, "directory",
+                       self.parents[0].children), self.parents[1])
+        with self.assertRaises(CgroupObserverError):
+            collect_recursive_observation(
+                MOUNT, accepted, self.entries, drift,
+                self.mapping.original_control_group, require_retired=False)
 
-    def test_precommand_membership_and_terminal_empty_preserve_mapping(self):
-        self.assertTrue(verify_pid_membership(CG, self.mapping))
-        result = collect_recursive_observation(MOUNT, self.mapping, (self.mapping.filesystem_path,), "")
-        self.assertEqual(result.mapping, self.mapping)
-        self.assertEqual(result.terminal_control_group, self.mapping.original_control_group)
-
-    def test_replaced_mapping_rejected(self):
+    def test_membership_bytes_are_strict_and_not_double_counted(self):
+        malformed = (self.entries[0], Entry(
+            self.entries[1].raw_path, 10, 13, "file", procs=b"123\n123\n"))
         with self.assertRaises(CgroupObserverError):
-            collect_recursive_observation(MOUNT, self.mapping, (self.mapping.filesystem_path,), "/user.slice/replaced.service")
-        changed = MOUNT.replace(b"30 29", b"31 29")
+            accept_observation(MOUNT, self.mapping, malformed, self.parents)
+        bad_bytes = (self.entries[0], Entry(
+            self.entries[1].raw_path, 10, 13, "file", procs=b"12x\n"))
         with self.assertRaises(CgroupObserverError):
-            collect_recursive_observation(changed, self.mapping, (self.mapping.filesystem_path,))
+            accept_observation(MOUNT, self.mapping, bad_bytes, self.parents)
 
 
 if __name__ == "__main__":

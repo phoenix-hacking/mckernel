@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T04:35:00-07:00",
+  "base_commit": "5dd488bbf3c914a1df141a08e12db52c7f16ef88",
+  "scope": "M02 descriptor remapping, successful-create acquisition sequencing, and live file-identity aliases",
+  "decision": "PASS_SOURCE_READY_FOR_LAYER_B_REVIEW",
+  "source_sha256": {
+    "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/witness_owner.py": "4fd01abff28e732778008a221ee26ce2dc3d20e124b705eb53c4f9152f915ade",
+    "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/supervise.py": "0da621baad7b9a32dfac6e22260be39d906dce02844d4c1ae70e714031906e53",
+    "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py": "7363f5a5401f32c1eb8efcd33acef8f1edc60a8d9a53d16e251fed0ba443f135",
+    "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/collector.patch": "e58c48dea6455cf0172dd5295db149cb29b5996b03dda3631513da86e68fb7b2",
+    "scripts/tests/test_collector_storage_fault_packet.py": "86b7b11b51cdea3fcae04daa72f26f834601860159c8b5fe7abc979c0e778128"
+  },
+  "executed": [
+    {
+      "profile": "unprivileged UID 1000, Python 3.9.12, one job",
+      "result": "five focused repository tests passed in 22.691 seconds"
+    },
+    {
+      "profile": "unprivileged real fork/exec inline probe",
+      "result": "48 source-descriptor permutations over 0, 1, 2 and 198 passed with CLOEXEC sources; destination bytes matched and no inheritable sentinel survived"
+    },
+    {
+      "profile": "independent packet/oracle probe",
+      "result": "17 baseline, retired-low-descriptor and closed-EOF reuse positives passed; five request/report inode aliases were rejected by both validators"
+    },
+    {
+      "profile": "generated-source and positive-fixture controls",
+      "result": "exact generated diff and seven positive fixtures passed in 1.021 seconds"
+    }
+  ],
+  "verified_behavior": [
+    "sources vulnerable to destination overwrite are duplicated before remapping",
+    "source-equals-destination clears FD_CLOEXEC",
+    "cleanup preserves ABI destinations and closes inherited descriptors",
+    "only successful creates consume gap-free acquisition IDs starting at one",
+    "event, request and report identities cannot alias while live, but later legitimate descriptor reuse remains accepted"
+  ],
+  "limitations": [
+    "No complete owner, supervisor or collector integration was executed",
+    "No root, container, guest, storage-fault runtime, application or production acceptance follows",
+    "The complete dual-Python suite and Layer-B execution remain gated by SC-ENV-04"
+  ]
+}
