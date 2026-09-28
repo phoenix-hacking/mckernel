@@ -1,0 +1,28 @@
+{
+  "base_commit": "b944260183065c6b6d676e61d1be9249702e2d2b",
+  "driver": {
+    "path": "scripts/tests/run_stability_selected_retention_phase_i.py",
+    "sha256": "3ac88932f9fcdb1dcf01be8e1e3d3d9969cad984ff002b8a4d8306ee508b3a89"
+  },
+  "tests": {
+    "path": "scripts/tests/test_run_stability_selected_retention_phase_i.py",
+    "sha256": "ba6d731ac49161a68e6f954955c4e429628ca60f06dffb825b62bd1dc57a34e4",
+    "supplied_result": "4 passed"
+  },
+  "status": "FAIL_SOURCE",
+  "execution_released": false,
+  "findings": [
+    "five validator control outcomes are fabricated rather than executed and captured",
+    "an arbitrary exit-zero command can pass with an empty unauthenticated candidate",
+    "legitimate candidate directories are rejected instead of validated separately from regular files",
+    "root replacement and diagnostic symlink races can pass or overwrite an outside file",
+    "evidence-write failures can erase the actual process result and required first-failure record",
+    "mode and stage can inject newlines into the claimed six-line failure record"
+  ],
+  "review_context": {
+    "packet62_sha256": "63bf79fc38cabf0787030f1e770fd178edd599e5e1371bdbc3a6f9feee6261be",
+    "failure_review63_sha256": "8fe0bd63db782605e3c545ebaf63946101d3744a16d8fae991ac0810d4d1d5f2",
+    "independent_adversarial_probes": 7
+  },
+  "next": "Make one bounded correction that executes every pinned control, binds the reviewed manifest and expected membership, pins directory descriptors with exclusive no-follow writes, durably records subprocess results before fallible postprocessing and validates all six failure fields; independently review before any fresh root."
+}

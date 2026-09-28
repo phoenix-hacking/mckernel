@@ -1,0 +1,23 @@
+{
+  "base_commit": "b944260183065c6b6d676e61d1be9249702e2d2b",
+  "status": "IDENTITIES_RECOVERED_BACKEND_UNIMPLEMENTED",
+  "artifacts": {
+    "ihk.ko": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+    "ihk-smp-x86_64.ko": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+    "mcctrl.ko": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+    "linux_bzImage": "b6cbd689108f499d37ba8d3768f2cdd6cb0f3422d93a4e091af93680686e94eb",
+    "initramfs": "e6360e6a2d3f33645319ef094bb72c0b9a476b3eab3b717badd84978eb146092",
+    "mckernel_image": "eb58a8b064212d7fa3ca6949778fd811f985433a54aaf26e7f3e2a0f373a4fd8",
+    "mcexec": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+    "startup.argv-empty_payload": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
+  },
+  "provenance_record": "docs/verification/stability-service-failure-inputs-20260913-1.json",
+  "catalog_runner": "scripts/application-tests/run.py",
+  "runner_status": "metadata preflight only; no native guest launch/observation backend",
+  "linux_diagnostic_packet": "docs/verification/stability-linux-diagnostic-startup-argv-empty-execution-packet-20260928-2.md",
+  "linux_diagnostic_packet_sha256": "db95ebf0d4007dd6adeb15ea2742604ddc9b14f2ab3cc801af7d0f154be4a0c2",
+  "linux_diagnostic_release": false,
+  "linux_diagnostic_blocker": "retained interpreter/libc closure does not match the current host and no matching controlled closure is identified",
+  "guest_release": false,
+  "next": "Independently review a backend/input manifest binding these exact artifacts and implement the native launch/terminal observation adapter before any McKernel pilot."
+}

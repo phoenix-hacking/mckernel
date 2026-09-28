@@ -100,6 +100,10 @@
     ,"pending_validated": "docs/verification/stability-pending-free-validated-inventory-source-review-20260928-8.json"
     ,"retention56": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-failure-review-20260928-63.json"
     ,"linux_diagnostic": "docs/verification/stability-linux-diagnostic-source-review-20260928-1.json"
+    ,"layer_b_observer_failure": "docs/verification/stability-layer-b-systemd-cgroup-observer-source-review-failure-20260928-27.json"
+    ,"retention_driver_failure": "docs/verification/stability-selected-retention-phase-i-driver-source-review-failure-20260928-64.json"
+    ,"pending_prod_boundary": "docs/verification/stability-pending-free-production-boundary-review-20260928-9.json"
+    ,"application_pilot_audit": "docs/verification/stability-application-pilot-artifact-audit-20260928-1.json"
   },
   "areas": [
     {
@@ -357,12 +361,13 @@
       "area": "ENV",
       "title": "Reusable unprivileged executable-check profile",
       "status": "partial",
-      "result": "Attempts10/11 remain uncredited. The FIFO acknowledgement design passed execution review, but root12's observer joined ControlGroup below /sys/fs/cgroup instead of the name=systemd mount. It never initiated the writer or gcc and failed closed at the pre-ack deadline. Independent present reconciliation proves the exact unit/correct original cgroup/process absent and releases the heavy lease; the original archive alone does not prove its cleanup claims.",
-      "next_check": "Preserve attempts10-12. Independently review a fresh root13 packet that binds the observer implementation, derives name=systemd hierarchy/mount-root offsets from mountinfo plus /proc/self/cgroup, rejects ambiguity, verifies cat membership and reuses the original mapping during cleanup. Then run exactly one correction attempt; no link or owner execution before acceptance.",
+      "result": "Attempts10-12 remain uncredited. A first root13 observer source candidate passes six supplied tests but fails independent source review against retained root12 mountinfo: it rejects unrelated nsfs roots, assumes the observer is inside the target unit, maps non-root mounts incorrectly, normalizes cgroup path bytes and misses covering mounts. No unit, writer or compiler ran.",
+      "next_check": "Preserve attempts10-12 and the failed observer bytes. Make one bounded source correction covering real mountinfo filtering, sibling observer topology, exact mount-root coordinates, byte-preserving cgroup parsing and covering-mount rejection; independently review it before drafting or executing root13.",
       "evidence": [
         "handoff",
         "policy",
-        "layer_b_failure"
+        "layer_b_failure",
+        "layer_b_observer_failure"
       ],
       "depends_on": []
     },
@@ -495,11 +500,12 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Native collector work exists in the history, but M02-C completion is not established.",
-      "next_check": "Observe real McKernel PID/TID, request generation, delivery, termination, interpreter/DSO mappings and side effects; distinguish launcher from payload.",
+      "result": "Exact current module, image, mcexec, Linux boot and startup payload hashes were recovered from live retained inputs. run.py remains metadata-only and no reviewed native guest launch/terminal collector or pilot release exists.",
+      "next_check": "Prepare and independently review one backend/input manifest binding the recovered artifacts, then implement the smallest native launch and terminal-observation adapter that captures real McKernel PID/TID, request generation, output, exit, kernel log and teardown.",
       "evidence": [
         "history",
-        "plan"
+        "plan",
+        "application_pilot_audit"
       ],
       "depends_on": []
     },
@@ -733,11 +739,12 @@
       "area": "FIX",
       "title": "Sentinel, structural and overflow semantics",
       "status": "partial",
-      "result": "Source review accepts isolated oversized-cardinality, complete link/state preservation, separate active/null and inactive/non-null fallbacks, partial-release controls and exact C/Rust equality. These remain uncompiled and unexecuted.",
-      "next_check": "First design the production prevalidation boundary identified by the mapping audit so an invalid later node cannot partially release earlier nodes; separately, after Layer-B execution acceptance, run all 23 finite-model selectors and compare exact statuses and hashes.",
+      "result": "Finite-model source review remains accepted but unexecuted. Production review confirms valid-prefix release before a later invalid node and rejects direct helper wiring: no capture generation, descriptor lease, allocator-extent authority or explicit target-VM owner exists.",
+      "next_check": "Freeze capture-owner/generation, descriptor-lease, allocator-extent, IRQ/reentry/migration and explicit VM authority; then implement actual-body invalid-second/last admission with zero callbacks and identical snapshots. Separately run the 23 finite selectors after Layer-B acceptance.",
       "evidence": [
         "inventory",
-        "pending_validated"
+        "pending_validated",
+        "pending_prod_boundary"
       ],
       "depends_on": [
         "SC-MEM-02"
@@ -1383,12 +1390,13 @@
       "area": "IPC",
       "title": "Selected response survives cancel/prepare/no-wake paths",
       "status": "blocked",
-      "result": "Expert packet62 passed review and root58 staged/authenticated all ten candidate bytes, but its retained execution evidence violates the packet: validator return code/argv are absent, the failure record has an embedded newline, required authentication/control records are missing and extra diagnostic files are outside the allowlist. No handoff, Phase II or compiler artifact exists.",
-      "next_check": "Preserve roots56/58. Independently review one fresh-root correction using a trusted driver that directly retains argv/returncode/streams, complete authentication and installation identities, five controls, strict diagnostic membership and newline-free six-field failure serialization; only then create and review a handoff.",
+      "result": "Roots56/58 remain failed. A first trusted-driver source candidate passes four supplied tests but fails independent review: it fabricates five controls, accepts arbitrary exit-zero commands without candidate authentication, mishandles legitimate directories, permits root/symlink replacement, loses evidence on write failures and allows multiline failure fields.",
+      "next_check": "Preserve roots56/58 and the failed driver bytes. Make one bounded correction that executes every pinned control, binds exact manifests/membership, pins roots and no-follow outputs, records process evidence before fallible postprocessing and validates all six fields; independently review before any fresh root.",
       "evidence": [
         "retention",
         "handoff",
-        "retention56"
+        "retention56",
+        "retention_driver_failure"
       ],
       "depends_on": [
         "SC-ENV-04"

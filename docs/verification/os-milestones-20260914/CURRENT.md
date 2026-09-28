@@ -3369,3 +3369,57 @@ identities. No project compiler, Layer-B service/cgroup, guest, QEMU, mcexec or
 IHK process is active. Real guest applications executed in this window: **0**.
 Whole-OS acceptance remains incomplete; the launcher-paused continuation is not
 resumed or marked complete by this checkpoint.
+
+Continuation shutdown checkpoint 10, 2026-09-28: this authorized continuation
+adopted the exact policy hashes GOAL `76c4f5d...`, START `30a90c7...`,
+CONVERGENCE `d211e7d...` and HANDOFF `265cd99...`, reconciled live state at
+checkpoint `b9442601`, then stopped new dispatch immediately on the launcher
+signal. All bounded children are terminal. No compiler, systemd unit, guest,
+QEMU, mcexec or IHK runtime was started.
+
+Two source candidates produced executable unit-test evidence but failed
+independent review. The root13 cgroup observer at SHA256
+`0b8f7a8dbf0966859c30423528679ab0d4baadac7c3653c4944d51eed2e02ea0`
+passes six supplied tests, yet retained root12 mountinfo proves that it rejects
+unrelated nsfs roots, incorrectly requires the observer inside the target unit,
+maps non-root mount coordinates incorrectly, normalizes cgroup pathname bytes
+and misses covering mounts. The M01 trusted driver at SHA256
+`3ac88932f9fcdb1dcf01be8e1e3d3d9969cad984ff002b8a4d8306ee508b3a89`
+passes four supplied tests, yet seven adversarial probes show fabricated control
+results, unauthenticated arbitrary exit-zero success, legitimate-directory
+rejection, root/output symlink races, lost first-failure evidence and multiline
+failure-field injection. Neither source grants execution release; preserve both
+failed byte sets and additive reviews 27/64.
+
+M03 production review returns `FAIL_DESIGN_READY`: the valid-prefix partial
+release is real, but safe integration first needs a capture owner and generation,
+descriptor leases, allocator-extent authority, explicit VM/CPU context and
+defined IRQ/nesting/reentry/migration behavior. The frozen helper needs an
+adapter, not direct wiring. Full failed-invalidation acceptance still needs VM
+epoch/lifetime, retained range/backing owners, VA exclusion, authenticated
+clear/TLB/alias acknowledgement and durable quarantine.
+
+The application-pilot audit recovered live retained identities for all three
+modules, Linux bzImage/initramfs, McKernel image, mcexec and the compiled
+startup.argv-empty payload; exact hashes are in
+`stability-application-pilot-artifact-audit-20260928-1.json`. `run.py` remains
+metadata-only and no reviewed guest backend/release exists. A draft Linux-only
+diagnostic packet now binds the correct archive Git blob
+`c9d87b95901c1581057a5ee86b1e5ab6196d3edc`, but remains unreleased because the
+retained interpreter/libc closure differs from the current host and independent
+review is still required.
+
+Next tasks are: (1) make and independently review the one bounded root13 observer
+correction before any packet or unit; (2) make and independently review the one
+bounded M01 trusted-driver correction before any fresh root; (3) resolve a
+controlled matching Linux DSO closure and review the diagnostic packet; (4)
+freeze the M03 production authority contract before implementation; and (5)
+prepare/review the exact guest backend/input manifest before implementing its
+native terminal observer. Real guest applications executed in this window:
+**0**. Launcher PID 3098066, worker PID 3098071 and app-server PID 3098074 remain
+the preserved process identities for
+`.git/os-autopilot/runs/20260928T095536Z-095509d1`. Host/scratch free space is
+44/21 GiB and the heavy lease is released. Counters remain 0/273 applications,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates. Whole-OS acceptance remains incomplete; this checkpoint does not
+resume or complete the launcher-paused goal.
