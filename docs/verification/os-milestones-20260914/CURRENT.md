@@ -4157,3 +4157,48 @@ capacity and reconcile the lease immediately before at most one diagnostic.
 Packet 4 grants no authority. Official counters remain 0/273 applications, 2/4
 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
 gates. Whole-OS acceptance remains incomplete.
+
+Continuation checkpoint 31, 2026-09-28: source checkpoint
+`b020d8476117a309e8b22fe40f08ad9dd17aa8e9` is pushed and fetched-commit
+verified. Fresh packet 5 uses parent `ndcs-20260928-5`, nonce
+`7f531aa8...a01c3` and exact packet SHA256 `e0745c3c...2c57b`; all proposed
+paths remain absent. A fresh independent review returns
+`PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE` for exactly one invocation of the
+packet's sudo-A owner command after coordinator capacity, process, container,
+lock and path preflight. The release binds the strict manifest/artifact closure,
+progressive identity records, exact resource profile, 91-byte stdout/empty
+stderr oracle, deadlines and cleanup uncertainty rules. Packet 3 and 4 remain
+rejected and nonreusable.
+
+Next: commit/push and fetched-blob verify packet 5 plus its additive release,
+then remeasure capacity, authenticate that no prior diagnostic owner/container
+or QEMU holds the lease, create the parent once as uid/gid 1000 mode 0700, and
+run only the released command. Preserve raw stdout/stderr/status, application
+bytes, serial/debugcon/kernel logs, QMP, all process/container identities and
+final absence before interpreting the result. A diagnostic pass remains outside
+formal M04/application/production acceptance. Whole-OS acceptance remains
+incomplete.
+
+Shutdown checkpoint 32, 2026-09-28: the launcher requested termination of
+this invocation before packet 5 execution. No new task was dispatched, all
+eight child agents are terminal, and no diagnostic owner, Docker client, QEMU,
+guest or heavy build was started. The released parent, inner attempt and
+evidence sibling remain absent; packet 5's single execution authorization is
+therefore unconsumed. Preserve the exact active process identities observed at
+2026-09-28T09:35:55-07:00: launcher PID 3125264 (PPID 771805, start
+2026-09-28 03:47:42 PDT), recovered worker PID 3170135 (PPID 3125264, start
+05:01:20 PDT), and app-server PID 3170137 (PPID 3170135, start 05:01:20 PDT).
+The launcher owns their shutdown and future continuation state; this checkpoint
+does not stop, replace or resume them.
+
+Next invocation: first reconcile those process identities, launcher state and
+the heavy-runtime lease. Verify checkpoint 32 and the packet/release blobs from
+the fetched remote commit, then remeasure host/scratch/memory capacity and
+repeat the released fresh path/container/lock checks. If and only if every
+packet-5 precondition still holds, create its parent once as uid/gid 1000 mode
+0700 and consume at most the one exact released sudo-A command. Do not reuse
+packet 3 or 4, do not restart an uncertain attempt, and retain all outer/inner
+process identities plus application bytes, status, logs and teardown evidence.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
+remains incomplete.
