@@ -107,6 +107,7 @@
     ,"pending_prod_preflight": "docs/verification/stability-pending-free-production-preflight-success-20260928-10.json"
     ,"m02_descriptor": "docs/verification/stability-m02-descriptor-source-success-20260928-1.json"
     ,"pending_c_preflight": "docs/verification/stability-pending-free-c-preflight-success-20260928-11.json"
+    ,"pending_extent": "docs/verification/stability-pending-free-extent-admission-success-20260928-1.json"
     ,"native_diag_protocol": "docs/verification/stability-native-diagnostic-protocol-source-success-20260928-1.json"
     ,"native_diag_backend": "docs/verification/stability-native-diagnostic-backend-source-success-20260928-2.json"
     ,"native_diag_collector": "docs/verification/stability-native-diagnostic-collector-build-success-20260928-1.json"
@@ -755,14 +756,15 @@
       "area": "FIX",
       "title": "Sentinel, structural and overflow semantics",
       "status": "partial",
-      "result": "Both current Rust and C pending-free finish paths now prevalidate the complete ring before unlink or allocator callbacks. The pinned profile passes the Rust 37-row/15-trait suite and 48 executable C rows; later-invalid snapshots remain unchanged with zero callbacks, while guard-removal mutants reproduce first-node release. Independent reviews accept this scoped repair under exclusive, live, stable descriptors. Full owner authority is still absent.",
-      "next_check": "Adapt and rerun the combined Rust/C regression harness, then propagate explicit target VM/token ownership through syscall and both XPMEM paths; add allocator extent generations, descriptor leases, preallocated inventory and IRQ/reentry/migration exclusion. Separately run the 23 finite selectors after Layer-B acceptance.",
+      "result": "Both current Rust and C pending-free finish paths prevalidate the complete ring and now also reject unaligned or pairwise-overlapping physical extents before unlink or allocator callbacks. The updated combined suite passes 37 paired rows, production controls and four effective geometry mutants; the pinned profile passes 58 standalone C rows and two original partial-release mutant rows. Independent review accepts this geometry-only repair under exclusive, live, stable descriptors. Full owner authority is still absent.",
+      "next_check": "Build the affected current candidate, then propagate explicit target VM/token ownership through syscall and both XPMEM paths; add allocator extent generations, retained descriptor/backing leases, preallocated frozen inventory, invalidation acknowledgement, durable quarantine and IRQ/reentry/migration exclusion. Separately run the 23 finite selectors after Layer-B acceptance.",
       "evidence": [
         "inventory",
         "pending_validated",
         "pending_prod_boundary",
         "pending_prod_preflight",
-        "pending_c_preflight"
+        "pending_c_preflight",
+        "pending_extent"
       ],
       "depends_on": [
         "SC-MEM-02"

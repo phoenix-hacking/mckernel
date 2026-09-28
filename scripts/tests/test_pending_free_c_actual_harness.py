@@ -18,12 +18,12 @@ def synthetic_rows():
     """Parser fixtures only: these are explicitly not executable C evidence."""
     result = []
     for route in ('result', 'fallback'):
-        cases = [('inactive', 0), ('empty', 0), ('one', 1), ('two', 2)]
+        cases = [('inactive', 0), ('empty', 0), ('one', 1), ('two', 2), ('three', 3)]
         for name in h.CASES[4:]:
-            cases.extend(((name, -22), (name+'-recovery', 3 if name=='invalid-last' else 2)))
+            cases.extend(((name, -22), (name+'-recovery', 3 if name in ('invalid-last','overlap-last') else 2)))
         for name, rc in cases:
             before = {'head':[10,11], 'pages':[
-                {'list':[11,1], 'hash':[20+i,20+i], 'mode':1, 'phys':4096*(i+1),
+                {'list':[11,1], 'hash':[20+i,20+i], 'mode':1, 'phys':(4096,8192,16384)[i],
                  'offset':i+1, 'count':30+i, 'mapped':40+i, 'pgshift':12+i}
                 for i in range(3)]}
             after = copy.deepcopy(before)
@@ -33,7 +33,7 @@ def synthetic_rows():
                     page.update(mode=0, list=[90,91])
             result.append(dict(route=route, case=name, rc=rc, before=before, after=after,
                                panic=int(rc<0 and route=='fallback'),
-                               callbacks=[[4096*(i+1),i+1,1] for i in range(max(0,rc))]))
+                               callbacks=[[(4096,8192,16384)[i],i+1,1] for i in range(max(0,rc))]))
     return result
 
 
@@ -74,7 +74,7 @@ class PendingFreeCActualTests(unittest.TestCase):
         with patch.object(h.subprocess, 'run', side_effect=AssertionError('execution forbidden')):
             result = h.source_only()
         self.assertEqual(result['executed_c_rows'], 0)
-        self.assertEqual(result['planned_rows'], 48)
+        self.assertEqual(result['planned_rows'], 58)
         self.assertEqual(result['planned_mutant_rows'], 2)
         self.assertEqual(len(result['inputs']), 6)
 
@@ -82,7 +82,8 @@ class PendingFreeCActualTests(unittest.TestCase):
         h.check_rows(synthetic_rows())
 
     def test_invalid_later_mutation_or_callback_rejected(self):
-        for name in ('invalid-second', 'invalid-last', 'end-overflow', 'bad-prev'):
+        for name in ('invalid-second', 'invalid-last', 'end-overflow', 'bad-prev',
+                     'overlap', 'overlap-last'):
             for route in ('result','fallback'):
                 for mutation in ('mode','callback'):
                     with self.subTest(name=name, route=route, mutation=mutation):

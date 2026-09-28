@@ -4444,14 +4444,29 @@ pub unsafe extern "C" fn mem_finish_free_pages_pending_result(
     let mut checked_entry = (*pendings).next;
     while checked_entry != pendings {
         let page = page_from_list(checked_entry);
-        if (*page).offset <= 0 || (*page).offset > CInt::MAX as OffT {
+        if (*page).offset <= 0 || (*page).offset > CInt::MAX as OffT
+            || (*page).phys & (PAGE_SIZE - 1) != 0
+        {
             return -EINVAL;
         }
         let Some(bytes) = ((*page).offset as CULong).checked_mul(PAGE_SIZE) else {
             return -EINVAL;
         };
-        if (*page).phys.checked_add(bytes).is_none() {
+        let Some(end) = (*page).phys.checked_add(bytes) else {
             return -EINVAL;
+        };
+        // Earlier extents have already passed the checked arithmetic above.
+        // Reject aliases before either occurrence can reach the allocator.
+        // This checks geometry only: addresses are not allocator ownership or
+        // descriptor-generation evidence, and the caller still excludes edits.
+        let mut previous = (*pendings).next;
+        while previous != checked_entry {
+            let other = page_from_list(previous);
+            let other_end = (*other).phys + (*other).offset as CULong * PAGE_SIZE;
+            if (*page).phys < other_end && (*other).phys < end {
+                return -EINVAL;
+            }
+            previous = (*previous).next;
         }
         let Some(next_count) = checked_count.checked_add(1) else {
             return -EINVAL;

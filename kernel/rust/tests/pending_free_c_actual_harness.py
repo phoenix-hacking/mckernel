@@ -22,7 +22,8 @@ GUARD_PUBLIC = ('\tif (mem_validate_pending_free_ring(pendings) < 0) {\n'
                 '\t\tpanic("free_pending_pages:invalid ring");\n\t\treturn;\n\t}\n')
 CASES = ('inactive', 'empty', 'one', 'two', 'invalid-second', 'invalid-last',
          'zero-count', 'negative-count', 'wide-count', 'end-overflow',
-         'null-next', 'bad-prev', 'mixed-head', 'foreign-cycle')
+         'null-next', 'bad-prev', 'mixed-head', 'foreign-cycle',
+         'overlap', 'overlap-last')
 
 
 def sha(path):
@@ -115,12 +116,14 @@ static int id(const struct list_head *p) {
     return 99;
 }
 static void init(int n) {
+    /* Adjacent extents [1,2), [2,4), [4,7) in PAGE_SIZE units. */
+    static const unsigned long starts[3]={0x1000UL,0x2000UL,0x4000UL};
     memset(&cpu,0,sizeof(cpu)); memset(pages,0,sizeof(pages));
     ncalls=panics=0;
     struct list_head *h=&cpu.pending_free_pages;
     h->next=n ? &pages[0].list : h; h->prev=n ? &pages[n-1].list : h;
     for (int i=0;i<3;i++) {
-        pages[i].mode=PM_PENDING_FREE; pages[i].phys=0x1000UL*(i+1);
+        pages[i].mode=PM_PENDING_FREE; pages[i].phys=starts[i];
         pages[i].offset=i+1; pages[i].pgshift=12+i;
         pages[i].count.counter=30+i; pages[i].mapped.counter=40+i;
         pages[i].hash.next=pages[i].hash.prev=&pages[i].hash;
@@ -165,7 +168,7 @@ static void row(const char *name, int fallback) {
     puts("]}");
 }
 static void invalid(const char *name, int fallback, int kind) {
-    int n=kind==1 ? 3 : 2;
+    int n=(kind==1 || kind==11) ? 3 : 2;
     init(n);
     struct list_head original_head=cpu.pending_free_pages;
     struct page original[3]; memcpy(original,pages,sizeof(pages));
@@ -180,12 +183,15 @@ static void invalid(const char *name, int fallback, int kind) {
     case 7: pages[1].list.prev=&cpu.pending_free_pages; break;
     case 8: cpu.pending_free_pages.prev=&cpu.pending_free_pages; break;
     case 9: pages[1].list.next=&pages[0].list; pages[0].list.prev=&pages[1].list; break;
+    case 10: pages[1].phys=pages[0].phys; break;
+    case 11: pages[2].phys=0x3000UL; break;
     }
     row(name,fallback);
     /* Restore only defect-bearing fields, never the released first node or
      * head.next. Thus the recovery cannot hide a prior valid-prefix mutation. */
     pages[1].mode=original[1].mode; pages[2].mode=original[2].mode;
     pages[1].offset=original[1].offset; pages[1].phys=original[1].phys;
+    pages[2].phys=original[2].phys;
     pages[1].list=original[1].list; pages[0].list.prev=original[0].list.prev;
     cpu.pending_free_pages.prev=original_head.prev;
     char recovery[80]; snprintf(recovery,sizeof(recovery),"%s-recovery",name);
@@ -194,7 +200,8 @@ static void invalid(const char *name, int fallback, int kind) {
 int main(int argc, char **argv) {
     (void)mem_validate_pending_free_ring;
     const char *names[]={"invalid-second","invalid-last","zero-count","negative-count",
-                        "wide-count","end-overflow","null-next","bad-prev","mixed-head","foreign-cycle"};
+                        "wide-count","end-overflow","null-next","bad-prev","mixed-head","foreign-cycle",
+                        "overlap","overlap-last"};
     if (argc==2 && !strcmp(argv[1],"mutant")) {
         for (int route=0;route<2;route++) {
             init(2); pages[1].mode=PM_NONE; row("invalid-second",route);
@@ -207,7 +214,8 @@ int main(int argc, char **argv) {
         init(0); row("empty",route);
         init(1); row("one",route);
         init(2); row("two",route);
-        for (int k=0;k<10;k++) invalid(names[k],route,k);
+        init(3); row("three",route);
+        for (int k=0;k<12;k++) invalid(names[k],route,k);
     }
     return 0;
 }
@@ -225,10 +233,10 @@ def generate(mutant=False):
 def check_rows(rows):
     expected = []
     for route in ('result', 'fallback'):
-        for name, count in (('inactive', 0), ('empty', 0), ('one', 1), ('two', 2)):
+        for name, count in (('inactive', 0), ('empty', 0), ('one', 1), ('two', 2), ('three', 3)):
             expected.append((route, name, count))
         for name in CASES[4:]:
-            expected.extend(((route, name, -22), (route, name+'-recovery', 3 if name=='invalid-last' else 2)))
+            expected.extend(((route, name, -22), (route, name+'-recovery', 3 if name in ('invalid-last','overlap-last') else 2)))
     assert [(r['route'], r['case'], r['rc']) for r in rows] == expected
     for row in rows:
         before, after, rc = row['before'], row['after'], row['rc']
@@ -236,7 +244,7 @@ def check_rows(rows):
         if rc < 0:
             assert before == after and row['callbacks'] == [], row['case']
             continue
-        assert row['callbacks'] == [[4096*(i+1), i+1, 1] for i in range(rc)], row['case']
+        assert row['callbacks'] == [[(4096,8192,16384)[i], i+1, 1] for i in range(rc)], row['case']
         assert after['head'] == [0, 0]
         for i, (old, new) in enumerate(zip(before['pages'], after['pages'])):
             wanted = dict(old)
@@ -264,7 +272,7 @@ def source_only():
     return dict(status='PASS_SOURCE_ONLY_C_PENDING_PREFLIGHT', inputs=inputs(),
                 extracts=bindings, candidate_sha256=hashlib.sha256(candidate.encode()).hexdigest(),
                 mutant_sha256=hashlib.sha256(mutant.encode()).hexdigest(),
-                planned_rows=48, planned_mutant_rows=2, executed_c_rows=0,
+                planned_rows=2*(5+2*(len(CASES)-4)), planned_mutant_rows=2, executed_c_rows=0,
                 scope='Extraction only; no VM/token/extent authority or full M03 acceptance')
 
 

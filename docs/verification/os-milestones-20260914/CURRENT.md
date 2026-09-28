@@ -3653,3 +3653,34 @@ No execution packet was released and no guest ran. Resume by revalidating the
 retained current-signal manifest against the checkpointed source, then prepare
 and independently review the exact container-only execution packet. Whole-OS
 acceptance remains incomplete and the launcher pause remains in force.
+
+Continuation checkpoint 16, 2026-09-28: the current C and Rust pending-free
+finish paths now reject unaligned and pairwise-overlapping physical extents
+before any unlink, mode change or allocator callback. The ABI and existing Rust
+consumers are unchanged. The host combined suite passes 37 paired rows,
+production controls, 15 trait negatives, the original partial-release mutant
+and four effective geometry mutants. A first independent review correctly found
+that the older standalone C recovery fixture itself contained overlapping
+extents; the corrected fixture preserves that failure, uses three adjacent valid
+extents, and adds explicit second/last overlap rejection and recovery.
+
+The exact corrected standalone C harness then passed in pinned container
+`528455e4...`: 58 candidate rows and two guard-removal mutant rows, exit 0,
+OOM false, followed by verified container removal and absence. Result SHA256 is
+`addbc60b...`. Independent review returns
+`PASS_SOURCE_READY_FOR_NEXT_BUILD_PHYSICAL_EXTENT_PREFLIGHT_ONLY`. This proves a
+scoped geometry safety improvement under live, stable, exclusively owned
+descriptors. It does not prove pointer lifetime, concurrency/reentry safety,
+generation/epoch authority, invalidation acknowledgement, retained backing,
+quarantine, a kernel build, guest behavior, M03 closure or production acceptance.
+
+Next for this lane is a current-candidate build followed by explicit owner/token
+and descriptor-generation propagation through syscall and both XPMEM paths,
+preallocated frozen inventory, invalidation acknowledgement and durable
+quarantine. Exact source, commands, container identity, evidence hashes and
+limitations are in
+`docs/verification/stability-pending-free-extent-admission-success-20260928-1.json`.
+The independent current-signal diagnostic lane remains active in parallel; no
+real guest application has run in this continuation. Official counters remain
+0/273 applications, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates. Whole-OS acceptance remains incomplete.

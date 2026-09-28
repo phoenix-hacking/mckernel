@@ -18,6 +18,16 @@ RUST = ROOT / 'kernel/rust/tests/pending_free_batch_vectors.rs'
 C = ROOT / 'kernel/rust/tests/pending_free_batch_vectors.c'
 CMEM = ROOT / 'kernel/mem.c'
 RUN = ROOT / 'kernel/rust/tests/run_equivalence.sh'
+# These requested scenarios cannot be represented by the production (head,
+# callback) ABI. Keep the integration gap explicit; synthetic fields in a
+# fixture must not be reported as execution of a production rejection path.
+MISSING_PRODUCTION_AUTHORITY = [
+    'stale descriptor/allocator generation: no generation producer or field',
+    'mutation epoch change: no epoch or exclusive capture-owner token',
+    'failed invalidation: no authenticated clear/TLB/alias acknowledgement',
+    'quarantine owner mismatch: no durable quarantine owner or retained backing',
+    'bounded frozen inventory: no independently retained descriptor/callback array',
+]
 # The isolated build owner supplies absolute, immutable compiler paths.  Do not
 # inherit rustup/cargo selection state: it would make the source fixture's
 # compiler lane depend on the invoking developer account.
@@ -147,11 +157,15 @@ def exact_c_partial_release_control():
     public, public_binding = extract_after(
         CMEM, 'int mem_finish_free_pages_pending_public_body_result(\n\t\tmem_pending_pages_fn_t pending_pages_fn,\n\t\tmem_finish_free_pages_pending_fn_t finish_fn,\n\t\tmem_pending_free_fn_t free_fn,\n\t\tmem_lifecycle_void_fn_t panic_fn)\n{',
         'int mem_free_pages_in_allocator_rbtree_result(')
+    fallback, fallback_binding = extract_after(
+        CMEM, 'void finish_free_pages_pending(void)\n{',
+        '#endif\n\nstatic struct ihk_mc_pa_ops allocator')
     support = r'''
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <limits.h>
+#include <setjmp.h>
 #include <stdio.h>
 #include <string.h>
 #define EINVAL 22
@@ -160,7 +174,7 @@ def exact_c_partial_release_control():
 #define PM_PENDING_FREE 1
 #define IHK_MC_PG_USER 1
 struct list_head { struct list_head *next, *prev; };
-struct page { struct list_head list; int mode; unsigned long phys; int offset; };
+struct page { struct list_head list; int mode; unsigned long phys; long offset; };
 typedef void (*mem_pending_free_fn_t)(unsigned long, int, int);
 typedef int (*mem_finish_free_pages_pending_fn_t)(struct list_head *, mem_pending_free_fn_t);
 typedef struct list_head *(*mem_pending_pages_fn_t)(void);
@@ -168,26 +182,69 @@ typedef void (*mem_lifecycle_void_fn_t)(void);
 struct cpu_local { struct list_head pending_free_pages; };
 static struct cpu_local current_cpu;
 static int callbacks;
-static void list_del(struct list_head *entry) { entry->prev->next=entry->next; entry->next->prev=entry->prev; }
+static int panics;
+static jmp_buf panic_return;
+static struct { unsigned long phys; int npages, user; } calls[2];
+static struct cpu_local *get_this_cpu_local_var(void) { return &current_cpu; }
+static void panic(const char *s) { (void)s; panics++; longjmp(panic_return, 1); }
+static void list_del(struct list_head *entry) { entry->prev->next=entry->next; entry->next->prev=entry->prev; entry->next=(void *)0x00100129; entry->prev=(void *)0x00200229; }
 #define page_to_phys(page) ((page)->phys)
-static void result_callback(unsigned long phys, int npages, int user) { assert(phys==0x1000 && npages==1 && user==1); callbacks++; }
+static void result_callback(unsigned long phys, int npages, int user) { assert(callbacks<2); calls[callbacks].phys=phys; calls[callbacks].npages=npages; calls[callbacks++].user=user; }
+static void *phys_to_virt(unsigned long phys) { return (void *)(uintptr_t)phys; }
+static void __mckernel_free_pages_in_allocator(void *v, int n, int u) { result_callback((uintptr_t)v,n,u); }
 static struct page pages[2];
-static void init_two(void) { struct list_head *h=&current_cpu.pending_free_pages; pages[0].list.next=&pages[1].list; pages[0].list.prev=h; pages[1].list.next=h; pages[1].list.prev=&pages[0].list; pages[0].mode=PM_PENDING_FREE; pages[1].mode=PM_NONE; pages[0].phys=0x1000; pages[1].phys=0x3000; pages[0].offset=1; pages[1].offset=2; h->next=&pages[0].list; h->prev=&pages[1].list; callbacks=0; }
+static void init_two(void) { struct list_head *h=&current_cpu.pending_free_pages; memset(pages,0,sizeof(pages)); pages[0].list.next=&pages[1].list; pages[0].list.prev=h; pages[1].list.next=h; pages[1].list.prev=&pages[0].list; pages[0].mode=PM_PENDING_FREE; pages[1].mode=PM_PENDING_FREE; pages[0].phys=0x1000; pages[1].phys=0x3000; pages[0].offset=1; pages[1].offset=2; h->next=&pages[0].list; h->prev=&pages[1].list; callbacks=panics=0; }
 static void assert_unchanged(const struct page *before, const struct list_head *head) { assert(!memcmp(before, pages, sizeof(pages))); assert(!memcmp(head, &current_cpu.pending_free_pages, sizeof(*head))); }
 '''
     controls = r'''
+static int finish(int fallback) {
+    if (!fallback) return mem_finish_free_pages_pending_result(&current_cpu.pending_free_pages,result_callback);
+    if (!setjmp(panic_return)) finish_free_pages_pending();
+    return panics ? -EINVAL : callbacks;
+}
+static void valid(int fallback, unsigned long first, unsigned long second) {
+    init_two(); pages[0].phys=first; pages[1].phys=second;
+    assert(finish(fallback)==2 && callbacks==2 && panics==0);
+    assert(calls[0].phys==first && calls[0].npages==1 && calls[0].user==1);
+    assert(calls[1].phys==second && calls[1].npages==2 && calls[1].user==1);
+    assert(!current_cpu.pending_free_pages.next && !current_cpu.pending_free_pages.prev);
+    for (int i=0;i<2;i++) assert(pages[i].mode==PM_NONE && pages[i].list.next==(void *)0x00100129 && pages[i].list.prev==(void *)0x00200229);
+}
 int main(void) {
+  for (int fallback=0;fallback<2;fallback++) {
+    valid(fallback,0x1000,0x3000);
+    valid(fallback,0x1000,0x2000);
+    valid(fallback,0x3000,0x1000);
+    for (int fault=0;fault<9;fault++) {
     init_two();
-    pages[1].mode = PM_NONE;
+    switch (fault) {
+    case 0: pages[1].mode=PM_NONE; break;
+    case 1: pages[1].offset=0; break;
+    case 2: pages[1].offset=-1; break;
+    case 3: pages[1].offset=(long)INT_MAX+1; break;
+    case 4: pages[1].phys=ULONG_MAX & ~(PAGE_SIZE-1); break;
+    case 5: pages[1].phys++; break;
+    case 6: pages[1].phys=pages[0].phys; break;
+    case 7: pages[1].phys=0; break;
+    case 8: pages[1].list.prev=NULL; break;
+    }
     struct page before[2]; struct list_head before_head;
     memcpy(before, pages, sizeof(before)); memcpy(&before_head, &current_cpu.pending_free_pages, sizeof(before_head));
-    assert(mem_finish_free_pages_pending_result(&current_cpu.pending_free_pages, result_callback) == -EINVAL);
-    assert(callbacks == 0); assert_unchanged(before, &before_head);
+    printf("CONTROL|c-production-attempt route=%d fault=%d\n",fallback,fault); fflush(stdout);
+    assert(finish(fallback)==-EINVAL);
+    assert(callbacks == 0 && panics==fallback); assert_unchanged(before, &before_head);
+    printf("CONTROL|c-production-reject route=%d fault=%d\n",fallback,fault);
+    // Repair only the second descriptor, so recovery cannot mask prefix release.
+    pages[1].mode=PM_PENDING_FREE; pages[1].offset=2; pages[1].phys=0x3000;
+    pages[1].list.prev=&pages[0].list; panics=0;
+    assert(finish(fallback)==2 && callbacks==2 && panics==0);
+    }
+  }
     puts("PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS");
     return 0;
 }
 '''
-    return support + '\n' + validator + '\n' + result + '\n' + body + '\n' + public + '\n' + controls, [validator_binding, result_binding, body_binding, public_binding]
+    return support + '\n' + validator + '\n' + result + '\n' + body + '\n' + public + '\n' + fallback + '\n' + controls, [validator_binding, result_binding, body_binding, public_binding, fallback_binding]
 
 
 def source_only_admission():
@@ -215,8 +272,7 @@ def source_only_admission():
     assert 'callbacks == 0' in generated_c and 'assert_unchanged' in generated_c
     assert 'PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS' in generated_c
     for obsolete in ('PASS_EXACT_C_PARTIAL_RELEASE_CONTROLS',
-                     'callbacks == 1 && panics == 1',
-                     'void finish_free_pages_pending(void)'):
+                     'callbacks == 1 && panics == 1'):
         assert obsolete not in generated_c, obsolete
     assert 'descriptor_len > CInt::MAX as usize' in mem
     assert 'mem_mckernel_free_pages_body_result' in mem and 'free_in_allocator(va, npages, is_user)' in mem
@@ -287,11 +343,11 @@ def check_rows(result):
                 assert old[field] == new[field], (r['case'], field)
         wanted = []
         if r['op'] in ('drain','finish') and r['rc'] > 0:
-            wanted = [[100+i,i+1,1] for i in range(r['rc'])]
+            wanted = [[0x1000+i*0x10000,i+1,1] for i in range(r['rc'])]
             if r['case'] == 'other-head-finish':
-                wanted = [[103,4,1]]
+                wanted = [[200704,4,1]]
             if r['case'] == 'source-reuse':
-                wanted = [[102,7,1]]
+                wanted = [[135168,7,1]]
         assert r['callbacks'] == wanted, r['case']
     failed = next(r for r in result if r['case']=='later-invalid')
     recovered = next(r for r in result if r['case']=='later-invalid-repair')
@@ -364,11 +420,12 @@ def main():
         success([str(cc),'-std=c11','-Wall','-Wextra','-Werror',str(C),'-o',str(cb)],out,'c-compile',ledger)
         cs = rows(success([str(cb)],out,'c-run',ledger))
         exact_c, exact_c_bindings = exact_c_partial_release_control()
+        js(out/'exact-c-source-extraction.json',{'items':exact_c_bindings,'inputs':identities})
         exact_c_path = out/'exact-c-partial-release-controls.c'
         exact_c_path.write_text(exact_c)
         exact_c_bin = out/'exact-c-partial-release-controls'
         success([str(cc),'-std=gnu11','-Wall','-Wextra','-Werror',str(exact_c_path),'-o',str(exact_c_bin)],out,'exact-c-partial-compile',ledger)
-        assert success([str(exact_c_bin)],out,'exact-c-partial-run',ledger).strip() == 'PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS'
+        assert success([str(exact_c_bin)],out,'exact-c-partial-run',ledger).strip().endswith('PASS_EXACT_C_INVALID_SECOND_PREFLIGHT_CONTROLS')
         check_rows(rs)
         check_rows(cs)
         assert rs == cs, 'Rust and C complete computed snapshots differ'
@@ -391,11 +448,43 @@ def main():
         mr = rows(stdout)
         assert rc != 0 and 'PARTIAL_RELEASE_DETECTED case=later-invalid' in stderr
         bad = mr[-1]
-        assert bad['case']=='later-invalid' and bad['rc']==-22 and bad['callbacks']==[[100,1,1]]
+        assert bad['case']=='later-invalid' and bad['rc']==-22 and bad['callbacks']==[[4096,1,1]]
         assert bad['before']['pages'][0]['mode']==1 and bad['after']['pages'][0]['mode']==0
         assert bad['after']['pages'][0]['list']=={'next':90,'prev':91}
         assert bad['before']['pages'][1]['mode']==bad['after']['pages'][1]['mode']==0
         assert mr[:-1] == rs[:len(mr)-1], 'mutant failed before target case'
+        # Independent guard mutants prove that the new production negatives
+        # observe each geometry check. Private inventory validation stays intact.
+        geometry_mutants = {}
+        production_start = base.index('pub unsafe extern "C" fn mem_finish_free_pages_pending_result(')
+        production = base[production_start:]
+        for name, needle, replacement, expected_case in (
+            ('alignment', '|| (*page).phys & (PAGE_SIZE - 1) != 0', '|| false', 'later-alignment'),
+            ('overlap', 'if (*page).phys < other_end && (*other).phys < end {\n                return -EINVAL;\n            }',
+             'if (*page).phys < other_end && (*other).phys < end {\n                // Deliberate missing rejection.\n            }', 'later-overlap'),
+        ):
+            assert production.count(needle) == 1
+            path = out/('production-'+name+'-mutant.rs')
+            path.write_text(base[:production_start]+production.replace(needle,replacement)+'\n'+fixture)
+            binary = out/('production-'+name+'-mutant')
+            success(compile_rust+[str(path),'-o',str(binary)],out,name+'-mutant-compile',ledger)
+            rc,stdout,stderr = call([str(binary)],out,name+'-mutant-run',ledger)
+            assert rc != 0 and expected_case in stderr
+            geometry_mutants['rust-'+name] = {'exit_code':rc,'rejected_by':expected_case}
+        for name, needle, replacement, fault in (
+            ('alignment', '(page->phys & (PAGE_SIZE - 1))', '0', 5),
+            ('overlap', 'other->phys < page->phys + bytes)\n\t\t\t\treturn -EINVAL;',
+             'other->phys < page->phys + bytes)\n\t\t\t\t(void)other;', 6),
+        ):
+            assert exact_c.count(needle) == 1
+            path = out/('production-'+name+'-mutant.c')
+            path.write_text(exact_c.replace(needle,replacement))
+            binary = out/('production-c-'+name+'-mutant')
+            success([str(cc),'-std=gnu11','-Wall','-Wextra','-Werror',str(path),'-o',str(binary)],out,'c-'+name+'-mutant-compile',ledger)
+            rc,stdout,stderr = call([str(binary)],out,'c-'+name+'-mutant-run',ledger)
+            assert rc != 0 and 'finish(fallback)==-EINVAL' in stderr
+            assert stdout.splitlines()[-1] == 'CONTROL|c-production-attempt route=0 fault='+str(fault)
+            geometry_mutants['c-'+name] = {'exit_code':rc,'rejected_by_fault':fault}
         traits = {}
         for target in ('PendingFreeBatch','PendingInventoryLease','ValidatedPendingInventory'):
             for trait in ('Copy','Clone','Unpin','Send','Sync'):
@@ -415,7 +504,9 @@ def main():
         js(out/'manifest.json',{'status':'PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY',
                               'scope':'source fixture only; no runtime or production credit',
                               'inputs':identities,'commands':ledger,'expected':EXPECTED,
-                              'rust_rows':rs,'c_rows':cs,'mutant_detected':bad,'trait_negatives':traits})
+                              'rust_rows':rs,'c_rows':cs,'mutant_detected':bad,'trait_negatives':traits,
+                              'geometry_mutants':geometry_mutants,
+                              'production_authority_not_testable':MISSING_PRODUCTION_AUTHORITY})
         print('PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY output='+str(out))
     except Exception as error:
         js(out/'failure.json',{'status':'FAIL','error':repr(error),'commands':ledger})

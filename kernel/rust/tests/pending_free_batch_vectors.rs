@@ -30,7 +30,7 @@ unsafe extern "C" fn fixture_virt_to_phys(_: *mut c_void)->CULong {0xfeed}
 unsafe extern "C" fn fixture_phys_to_page(_: CULong)->*mut MemPage {if DISPATCH_NO_PAGE {null_mut()} else {DISPATCH_PAGE}}
 unsafe extern "C" fn fixture_immediate_free(va:*mut c_void,npages:CInt,is_user:CInt){free_page(va as CULong,npages,is_user)}
 fn head() -> AbiListHead { AbiListHead {next:null_mut(),prev:null_mut()} }
-fn page(i:usize) -> MemPage { MemPage {list:head(),hash:head(),mode:PM_NONE,phys:100+i as u64,count:IhkAtomic{counter:70+i as i32},mapped:IhkAtomic64{counter64:80+i as i64},offset:0,pgshift:12+i as i32} }
+fn page(i:usize) -> MemPage { MemPage {list:head(),hash:head(),mode:PM_NONE,phys:0x1000+(i as u64)*0x10000,count:IhkAtomic{counter:70+i as i32},mapped:IhkAtomic64{counter64:80+i as i64},offset:0,pgshift:12+i as i32} }
 struct World { s:AbiListHead,t:AbiListHead,p:[MemPage;4],b:Pin<Box<PendingFreeBatch>> }
 impl World {
     fn new()->Box<Self>{Box::new(Self{s:head(),t:head(),p:std::array::from_fn(page),b:Box::pin(PendingFreeBatch::new())})}
@@ -101,7 +101,7 @@ unsafe fn validated_inventory_controls() {
     assert_eq!(mem_begin_free_pages_pending_result(&raw mut w.s),0);
     assert_eq!(mem_free_pages_pending_enqueue_result(&raw mut w.p[2],&raw mut w.s,1,None),1);
     assert_eq!(w.retained_destination(),retained);
-    reset();assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),1);assert_eq!(callbacks(),"[[102,1,1]]");
+    reset();assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),1);assert_eq!(callbacks(),"[[135168,1,1]]");
     reset();
     assert_eq!(drain_validated_pending_inventory(w.b.as_mut(),Some(free_page)),2);
     assert_eq!(callbacks(),"[[4096,1,1],[12288,2,1]]");
@@ -193,18 +193,19 @@ unsafe fn free_dispatch_controls(){
     let mut w=World::new();DISPATCH_PAGE=&raw mut w.p[0];DISPATCH_NO_PAGE=false;let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");DISPATCH_NO_PAGE=false;
 }
 /* Exercise the exported production finish body, independently of the private
- * batch/inventory helpers. The C fallback retains its original failing control.
+ * batch/inventory helpers. The harness also extracts the C fallback.
  * These checks assume exclusive, live descriptors; they do not supply the
  * missing production owner/allocator leases or certify callback reentry. */
 unsafe fn production_finish_preflight_controls() {
     for n in [0usize,1,2] {
         let mut w=World::new();w.setup(n,false);reset();
         assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),n as i32);
-        assert_eq!(callbacks(),match n {0=>"[]",1=>"[[100,1,1]]",_=>"[[100,1,1],[101,2,1]]"});
+        assert_eq!(callbacks(),match n {0=>"[]",1=>"[[4096,1,1]]",_=>"[[4096,1,1],[69632,2,1]]"});
         assert!(w.s.next.is_null() && w.s.prev.is_null());
     }
     for case in ["later-mode","later-zero-count","later-negative-count","later-large-count",
-                 "later-end-overflow","later-link","foreign-link","duplicate-link"] {
+                 "later-end-overflow","later-alignment","later-overlap","later-overlap-reverse",
+                 "later-link","foreign-link","duplicate-link"] {
         let mut w=World::new();w.setup(2,false);
         let old_phys=w.p[1].phys;
         match case {
@@ -212,7 +213,10 @@ unsafe fn production_finish_preflight_controls() {
             "later-zero-count"=>w.p[1].offset=0,
             "later-negative-count"=>w.p[1].offset=-1,
             "later-large-count"=>w.p[1].offset=CInt::MAX as OffT+1,
-            "later-end-overflow"=>w.p[1].phys=CULong::MAX,
+            "later-end-overflow"=>w.p[1].phys=CULong::MAX & !(PAGE_SIZE-1),
+            "later-alignment"=>w.p[1].phys+=1,
+            "later-overlap"=>w.p[1].phys=w.p[0].phys,
+            "later-overlap-reverse"=>w.p[1].phys=0,
             "later-link"=>w.p[1].list.prev=null_mut(),
             "foreign-link"=>w.p[1].list.next=&raw mut w.t,
             _=>w.p[0].list.next=&raw mut w.p[0].list,
@@ -228,8 +232,16 @@ unsafe fn production_finish_preflight_controls() {
         w.p[0].list.next=&raw mut w.p[1].list;
         w.p[1].list.prev=&raw mut w.p[0].list;w.p[1].list.next=&raw mut w.s;
         assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),2,"{case}");
-        assert_eq!(callbacks(),"[[100,1,1],[101,2,1]]","{case}");
+        assert_eq!(callbacks(),"[[4096,1,1],[69632,2,1]]","{case}");
         assert!(w.s.next.is_null() && w.s.prev.is_null());
+    }
+    // Adjacent extents are valid in either list order; overlap is strict.
+    for reverse in [false,true] {
+        let mut w=World::new();w.setup(2,false);
+        w.p[0].phys=if reverse {0x3000} else {0x1000};
+        w.p[1].phys=if reverse {0x1000} else {0x2000};
+        reset();assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),2);
+        assert_eq!(callbacks(),if reverse {"[[12288,1,1],[4096,2,1]]"} else {"[[4096,1,1],[8192,2,1]]"});
     }
     println!("CONTROL|production-finish-preflight-positive-rejection-recovery");
 }
@@ -261,7 +273,7 @@ fn main(){unsafe{
     reset();let before=w.snapshot();let rc=mem_free_pages_pending_enqueue_result(&raw mut w.p[2],&raw mut w.s,7,None);w.emit("source-reuse","enqueue",rc,before);
     assert_eq!(w.retained_destination(),retained);assert_eq!(callbacks(),"[]");
     reset();let before=w.snapshot();let rc=mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page));w.emit("source-reuse","finish",rc,before);
-    assert_eq!(w.retained_destination(),retained);assert_eq!(callbacks(),"[[102,7,1]]");
-    w.drain("two-head-isolation",false,true);assert_eq!(callbacks(),"[[100,1,1],[101,2,1]]");
+    assert_eq!(w.retained_destination(),retained);assert_eq!(callbacks(),"[[135168,7,1]]");
+    w.drain("two-head-isolation",false,true);assert_eq!(callbacks(),"[[4096,1,1],[69632,2,1]]");
     reset();let before=w.snapshot();let rc=mem_finish_free_pages_pending_result(&raw mut w.t,Some(free_page));w.emit("other-head-finish","finish",rc,before);
 }}

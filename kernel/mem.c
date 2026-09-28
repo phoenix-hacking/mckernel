@@ -1394,8 +1394,8 @@ int mem_free_pages_pending_enqueue_result(struct page *page,
  * preflight grants no VM/token, allocator extent, IRQ or reentry authority. */
 static int mem_validate_pending_free_ring(struct list_head *head)
 {
-	struct list_head *slow, *fast;
-	struct page *page;
+	struct list_head *slow, *fast, *previous;
+	struct page *page, *other;
 	unsigned long bytes;
 	int count = 0;
 
@@ -1414,11 +1414,21 @@ static int mem_validate_pending_free_ring(struct list_head *head)
 		page = (struct page *)((char *)slow - offsetof(struct page, list));
 		if (page->mode != PM_PENDING_FREE || page->offset <= 0 ||
 				page->offset > INT_MAX ||
+				(page->phys & (PAGE_SIZE - 1)) ||
 				(unsigned long)page->offset > ULONG_MAX / PAGE_SIZE)
 			return -EINVAL;
 		bytes = (unsigned long)page->offset * PAGE_SIZE;
 		if (page->phys > ULONG_MAX - bytes || count == INT_MAX)
 			return -EINVAL;
+		/* Earlier extents passed checked arithmetic.  This proves geometry,
+		 * not allocator ownership or descriptor generation.  The caller's
+		 * exclusive-descriptor obligation still covers both traversals. */
+		for (previous = head->next; previous != slow; previous = previous->next) {
+			other = (struct page *)((char *)previous - offsetof(struct page, list));
+			if (page->phys < other->phys + (unsigned long)other->offset * PAGE_SIZE &&
+					other->phys < page->phys + bytes)
+				return -EINVAL;
+		}
 		count++;
 		slow = slow->next;
 

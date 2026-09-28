@@ -11,7 +11,7 @@ static struct links *link(struct world *w,int id) {
     if(id==3)return &w->batch;
     assert(id>=10&&id<14);return &w->p[id-10].list;
 }
-static void init(struct world*w) {int i;memset(w,0,sizeof(*w));for(i=0;i<4;i++){w->p[i].phys=100+i;w->p[i].count=70+i;w->p[i].mapped=80+i;w->p[i].pgshift=12+i;}}
+static void init(struct world*w) {int i;memset(w,0,sizeof(*w));for(i=0;i<4;i++){w->p[i].phys=0x1000+i*0x10000;w->p[i].count=70+i;w->p[i].mapped=80+i;w->p[i].pgshift=12+i;}}
 static int begin(struct world*w,int h){struct links*l=link(w,h);if(l->next)return -22;l->next=h;l->prev=h;return 0;}
 static void panic_bridge(struct world*w){w->npanic++;}
 static int begin_body(struct world*w,int h){int rc=begin(w,h);if(rc)panic_bridge(w);return rc;}
@@ -55,8 +55,8 @@ int main(void){struct world w,b,retained;int i,rc;const char*names[]={"empty","o
     b=before(&w);rc=enqueue(&w,2,1,7);emit(&w,"source-reuse","enqueue",rc,&b);
     retained_destination(&w,&retained);assert(w.nc==0);
     b=before(&w);rc=finish(&w,1);emit(&w,"source-reuse","finish",rc,&b);
-    retained_destination(&w,&retained);assert(w.nc==1&&w.cb[0][0]==102&&w.cb[0][1]==7&&w.cb[0][2]==1);
-    r(&w,"two-head-isolation",0,1);assert(w.nc==2&&w.cb[0][0]==100&&w.cb[0][1]==1&&w.cb[0][2]==1&&w.cb[1][0]==101&&w.cb[1][1]==2&&w.cb[1][2]==1);
+    retained_destination(&w,&retained);assert(w.nc==1&&w.cb[0][0]==135168&&w.cb[0][1]==7&&w.cb[0][2]==1);
+    r(&w,"two-head-isolation",0,1);assert(w.nc==2&&w.cb[0][0]==4096&&w.cb[0][1]==1&&w.cb[0][2]==1&&w.cb[1][0]==69632&&w.cb[1][1]==2&&w.cb[1][2]==1);
     b=before(&w);rc=finish(&w,2);emit(&w,"other-head-finish","finish",rc,&b);
     return 0;
 }
