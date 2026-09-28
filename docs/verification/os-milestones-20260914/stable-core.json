@@ -1,0 +1,2053 @@
+{
+  "schema_version": 1,
+  "milestone": "SC1",
+  "title": "Stable kernel core — engineering milestone",
+  "as_of": "2026-09-28",
+  "source_revision": "09a09b513c415e84242f2c257895a856b8605150",
+  "status": "NOT YET DEMONSTRATED",
+  "profile": [
+    "First claim is explicitly SC1 on the declared tested configuration, not a generally production-stable or multicore-qualified OS. The reviewed historical application profile is the starting point, not proof of the final candidate.",
+    "Pinned Rocky-derived Linux 6.12.0-211.44.1.el10_2 control kernel; native Rust ihk, ihk-smp-x86_64 and mcctrl modules; existing Rust-heavy McKernel image and unchanged mcexec ABI. Preserve Rust consumers and all original build/acceptance contracts.",
+    "Historical runtime envelope: isolated TCG guest, four Linux vCPUs, two NUMA nodes, 8 GiB guest RAM, one McKernel CPU and 128 MiB assigned memory. Existing native container limits remain four CPUs, 12 GiB and 512 tasks. Reconfirm the exact profile and limits before execution.",
+    "Initial repeatability targets proposed for the core-only packet: 100 application/owner-reuse cycles, 10 full native OS create/boot/workload/stop/destroy/recreate cycles, and 60 minutes of mixed memory/thread/I/O/transport-pressure work across at least three recorded seeds. These are planning targets, not executed results or execution authority; freeze or justify changes in SC-END-01 before running. Preserve any stronger original contract required by a selected test.",
+    "Freeze the supported syscall, process, CPU/xstate and device capability matrix. Unsupported operations must reject safely; an exposed or advertised capability cannot be excluded to evade a failing core test. McKernel multicore scheduling is not claimed by this first profile; host concurrency, preemption and cross-host-CPU alias safety still are."
+  ],
+  "definition": [
+    "Build and reproduce the exact candidate from preserved sources; identify every consumed module/image/ABI and rerun affected existing regressions.",
+    "Boot, schedule basic real workloads and preserve memory, process, thread, exception and enabled architectural state across their full lifetimes.",
+    "On failed invalidation, cancellation, transport pressure, process death and allocation failure, retain or release the correct owners without stale access, double release, silent corruption or unsafe admission.",
+    "Run baseline memory/files/threads/signals, both control ABIs, ordinary signal ABI and futex/child-TID plus the focused defect regressions against the same final candidate.",
+    "Complete the declared lifecycle and mixed-load packet with correct outputs, no unexplained panic/oops/hang/corruption, bounded live resource counts, and verified restoration. Killing the VM is not native resource restoration.",
+    "Close or explicitly prove inapplicable every required row for the frozen profile. No open safety-critical defect in an enabled path. Independent review binds the declaration to exact tested artifacts and states remaining limitations.",
+    "Call out SC1 as an intermediate engineering result. All 130 production gates, seven language gates, 273-case catalog, full Rust/assembly closure and original exposure requirements keep their original meaning and remain separate."
+  ],
+  "scope_notes": [
+    "This is a snapshot, not live telemetry and not a new OS acceptance authority. It was initialized from retained engineering evidence and compact handoff, not a fresh line-by-line audit or new kernel run. The campaign remains stopped; preparation does not resume it.",
+    "Each row is one bounded engineering deliverable. Fixes, source implementations, local checks, integrated runtime behavior and repeated runs are visible without waiting for an entire production gate. Status can regress when a new counterexample appears.",
+    "VERIFIED means the exact scoped row has supporting evidence; BASELINE means a passing older exact artifact or profile, still useful engineering credit but not current-candidate stability. IMPLEMENTED/PARTIAL do not claim executable success; BLOCKED names a concrete defect/dependency; UNMEASURED means no reconciled SC1 result, not absent code.",
+    "No overall completion or time percentage is inferred from row counts, code size, reviews or commits. Enabler progress is reported separately from kernel behavior. Splitting rows never retroactively creates new engineering accomplishments.",
+    "Owner labels are responsibilities for a future dispatch, not currently running agents. Item dependencies are the main implementation sequence, not permission to skip original task, case, execution-release or safety prerequisites.",
+    "Evidence links include source/planning references as well as executed results; only the row's status/result describes the claim. Historical baseline rows must be rebound/replayed after relevant source or profile changes. This initial inventory does not promote source-only fixtures or test models into real kernel results.",
+    "At checkpoints update only touched rows and retain prior failure records in CURRENT.md. Record the command, result counts, tested source/artifact identity, actual execution layer, blocker and next check. Unknown timing stays unknown; estimate only after measured repair/build/run throughput.",
+    "Coverage rule: every enabled consumer, exported interface and reachable failure edge must map to a row/test or an explicit unsupported disposition in SC-ABI-01/SC-END-01. New discoveries extend the worklist with stable IDs and a reason; they do not silently alter historic evidence."
+  ],
+  "exclusions": [
+    {
+      "name": "McKernel multicore, NUMA scaling, CPU hotplug and topology expansion",
+      "route": "M03/M06/M07/M08/M11/M12",
+      "reason": "Explicit follow-on profile, not silently credited from four Linux vCPUs. Enabled host-side concurrency and alias/TLB safety remain required now. Add core tests before advertising new McKernel CPU configurations."
+    },
+    {
+      "name": "Full application catalog and advanced process/IPC/network/debugger capability",
+      "route": "M04/M06",
+      "reason": "All 273 cases, broad fork/COW/adoption, ptrace, IPC and networking qualification remain in the original roadmap. Basic process/exec/wait, file/syscall, signals/futexes and every enabled path still need SC1 proof; unsupported paths must fail safely."
+    },
+    {
+      "name": "Advanced vector ISA, MPI/OpenMP, XPMEM/QLMPI/UTI and HPC breadth",
+      "route": "M03-D/M06/M07",
+      "reason": "Enabled x87/SSE/AVX architectural state preservation and all reachable XPMEM/alias safety are core obligations. Broader instruction correctness, distributed workloads and optional configurations need their own supported profiles."
+    },
+    {
+      "name": "Entire kernel Rust/assembly retirement and every native interface contract",
+      "route": "M08/M09; MK-LANG-001..007",
+      "reason": "Preserve and test existing Rust; never call remaining C safe merely because it is excluded from language completion. Full origin closure is separately required for the whole goal, not a prerequisite to reporting intermediate stability."
+    },
+    {
+      "name": "RPM release, Secure Boot, installer/rollback and external hardware/platform certification",
+      "route": "M10/M11/M12/M13",
+      "reason": "Current build/config/ABI identity is required here; full release packaging, Intel/AMD hardware breadth and independent external qualification stay downstream."
+    },
+    {
+      "name": "Production benchmark targets and original 168-hour soaks",
+      "route": "M12/M13; final-push.txt",
+      "reason": "SC1 has a bounded, explicitly labeled core regression/load run. It neither replaces required production soaks nor proves long-term reliability or production performance."
+    }
+  ],
+  "priority": [
+    "SC-OBS-02",
+    "SC-OBS-03",
+    "SC-OBS-04",
+    "SC-MEM-02",
+    "SC-MEM-03",
+    "SC-VM-01",
+    "SC-IPC-03",
+    "SC-OBS-07"
+  ],
+  "references": {
+    "plan": "docs/verification/os-milestones-20260914/README.md",
+    "handoff": "docs/verification/os-milestones-20260914/HANDOFF.md",
+    "history": "docs/verification/os-milestones-20260914/CURRENT.md",
+    "policy": "docs/verification/os-milestones-20260914/CONVERGENCE.md",
+    "prep": "docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md",
+    "reuse": "docs/verification/rust-reuse-plan.md",
+    "baseline": "docs/verification/stability-service-failure-baseline-20260913-1.json",
+    "run": "docs/verification/stability-run-20260913.md",
+    "app": "docs/verification/native-application-ultra-handoff-20260909.md",
+    "root": "docs/verification/stability-linux-collector-root-success-20260915-2.json",
+    "storage": "docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json",
+    "pending": "kernel/rust/mem_helpers.rs",
+    "inventory": "docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json",
+    "invalidation": "docs/verification/stability-invalidation-ownership-review-20260913.md",
+    "durable": "docs/verification/stability-pending-free-durable-owner-review-20260915-1.md",
+    "retention": "docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json",
+    "hard": "docs/verification/stability-prepublish-hard-independent-review-20260913.json",
+    "permanent": "docs/verification/stability-permanent-backpressure-independent-review-20260913.json",
+    "compiled": "docs/verification/stability-packet001-compile-20260913-1.json",
+    "ffi": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+    "guest_review": "docs/verification/ultra-guest-review-20260909.md",
+    "durable_registry": "docs/verification/stability-pending-free-durable-registry-feasibility-review-20260915-1.md"
+  },
+  "areas": [
+    {
+      "id": "ENV",
+      "title": "Execution environment and preserved baseline",
+      "kind": "enabler",
+      "owner": "Dispatcher / infrastructure worker; unassigned",
+      "task_refs": [
+        "M00-A",
+        "M00-B",
+        "M00-D"
+      ]
+    },
+    {
+      "id": "OBS",
+      "title": "Trustworthy execution and observation",
+      "kind": "enabler",
+      "owner": "Collector repair expert + independent reviewer; unassigned",
+      "task_refs": [
+        "M02-A",
+        "M02-B",
+        "M02-C",
+        "M02-D",
+        "M02-E",
+        "M02-F"
+      ]
+    },
+    {
+      "id": "FIX",
+      "title": "Kernel microtest fixture admission",
+      "kind": "enabler",
+      "owner": "Memory fixture worker + independent reviewer; unassigned",
+      "task_refs": [
+        "M03-A",
+        "M03-B"
+      ]
+    },
+    {
+      "id": "BLD",
+      "title": "Build, source reuse and regression baseline",
+      "kind": "core",
+      "owner": "Build/integration owner + reviewer; unassigned",
+      "task_refs": [
+        "M08-A",
+        "M08-B",
+        "M09-A",
+        "M09-C"
+      ]
+    },
+    {
+      "id": "BOOT",
+      "title": "Boot, resource assignment and basic execution",
+      "kind": "core",
+      "owner": "Native boot/resource worker + integration owner; unassigned",
+      "task_refs": [
+        "M08-C",
+        "M08-D",
+        "M08-E",
+        "M04-A"
+      ]
+    },
+    {
+      "id": "MEM",
+      "title": "Allocator and pending-free primitives",
+      "kind": "core",
+      "owner": "Memory worker + ownership reviewer; unassigned",
+      "task_refs": [
+        "M03-A",
+        "M03-B",
+        "M03-C",
+        "M06-D",
+        "M09-C"
+      ]
+    },
+    {
+      "id": "VM",
+      "title": "Address spaces, failed invalidation and alias safety",
+      "kind": "core",
+      "owner": "VM ownership expert + independent unsafe reviewer; unassigned",
+      "task_refs": [
+        "M03-C",
+        "M03-D",
+        "M06-A",
+        "M06-E"
+      ]
+    },
+    {
+      "id": "CPU",
+      "title": "Scheduling, interrupts, concurrency and architectural state",
+      "kind": "core",
+      "owner": "Scheduler/architecture worker + unsafe reviewer; unassigned",
+      "task_refs": [
+        "M08-B",
+        "M08-D",
+        "M09-B",
+        "M09-C",
+        "M07-A",
+        "M07-C",
+        "M07-D"
+      ]
+    },
+    {
+      "id": "PROC",
+      "title": "Process, thread, signal and futex lifetime",
+      "kind": "core",
+      "owner": "Process worker + lifetime reviewer; unassigned",
+      "task_refs": [
+        "M06-A",
+        "M06-B",
+        "M06-C",
+        "M08-E"
+      ]
+    },
+    {
+      "id": "SYS",
+      "title": "System calls, loading and user boundary",
+      "kind": "core",
+      "owner": "Syscall/loader worker + ABI reviewer; unassigned",
+      "task_refs": [
+        "M02-C",
+        "M02-F",
+        "M04-A",
+        "M04-B",
+        "M06-C",
+        "M08-A",
+        "M08-E"
+      ]
+    },
+    {
+      "id": "IPC",
+      "title": "Transport, publication ownership and real pressure",
+      "kind": "core",
+      "owner": "Transport ownership expert + independent reviewer; unassigned",
+      "task_refs": [
+        "M01-A",
+        "M01-B",
+        "M01-C",
+        "M01-D",
+        "M01-E",
+        "M03-E"
+      ]
+    },
+    {
+      "id": "IO",
+      "title": "Files, control plane and observable kernel objects",
+      "kind": "core",
+      "owner": "I/O/control worker + lifetime reviewer; unassigned",
+      "task_refs": [
+        "M04-B",
+        "M06-C",
+        "M06-E",
+        "M08-A",
+        "M08-C",
+        "M08-E"
+      ]
+    },
+    {
+      "id": "ABI",
+      "title": "Interface coverage, unsafe contracts and evidence identity",
+      "kind": "core",
+      "owner": "Interface auditor + independent unsafe reviewer; unassigned",
+      "task_refs": [
+        "M08-A",
+        "M08-B",
+        "M09-A",
+        "M09-B",
+        "M09-C"
+      ]
+    },
+    {
+      "id": "LIFE",
+      "title": "Native shutdown, drain, restoration and restart",
+      "kind": "core",
+      "owner": "Lifecycle owner + independent runtime reviewer; unassigned",
+      "task_refs": [
+        "M05-A",
+        "M05-B",
+        "M05-C",
+        "M05-D",
+        "M08-B",
+        "M08-C",
+        "M08-D",
+        "M08-E"
+      ]
+    },
+    {
+      "id": "LOAD",
+      "title": "Real faults, bounded pressure and mixed core stress",
+      "kind": "core",
+      "owner": "Regression/fault worker + serialized runtime owner; unassigned",
+      "task_refs": [
+        "M03-E",
+        "M04-D",
+        "M04-E",
+        "M06-D",
+        "M05-B",
+        "M05-C"
+      ]
+    },
+    {
+      "id": "END",
+      "title": "Stable-core declaration and user-facing finish line",
+      "kind": "core",
+      "owner": "Dispatcher + independent final reviewer; unassigned",
+      "task_refs": [
+        "M04-D",
+        "M04-E",
+        "M05-C",
+        "M05-D",
+        "M09-C",
+        "M09-E"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "SC-ENV-01",
+      "area": "ENV",
+      "title": "Parallel runner and worker visibility",
+      "status": "verified",
+      "result": "Prepared runner passed 98 focused tests; two synthetic desktop windows verified. This is tooling, not kernel behavior.",
+      "next_check": "On user launch reconcile measured agent/job/memory limits; no new runner work unless an actual defect appears.",
+      "evidence": [
+        "prep"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-02",
+      "area": "ENV",
+      "title": "Isolated scratch, resources and ownership checks",
+      "status": "verified",
+      "result": "Original scratch and controls restored; native/compat isolation probes passed during preparation.",
+      "next_check": "Recheck free space, exclusive heavy owner and cleanup state immediately before any real build/guest; old preparation is not a live lease.",
+      "evidence": [
+        "prep"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-03",
+      "area": "ENV",
+      "title": "Exact SC1 source, binary and profile manifest",
+      "status": "planned",
+      "result": "Existing exact baseline manifests exist; final SC1 candidate is not selected.",
+      "next_check": "Bind source/dirty state, toolchains, config, Linux kernel, three modules, McKernel image, launcher and payload hashes.",
+      "evidence": [
+        "baseline",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-04",
+      "area": "ENV",
+      "title": "Reusable unprivileged executable-check profile",
+      "status": "blocked",
+      "result": "Handoff says Layer-B release remains required for the M02/M03 fixtures.",
+      "next_check": "Release one bounded real-subprocess/C/Rust microtest profile with resource caps, prohibited side effects and disposable outputs; reuse its allowed envelope.",
+      "evidence": [
+        "handoff",
+        "policy"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-05",
+      "area": "ENV",
+      "title": "Independent expected results and fresh attempts",
+      "status": "partial",
+      "result": "Historical immutable evidence and failed attempts are retained; SC1-specific frozen packet remains to assemble.",
+      "next_check": "Bind independent oracles, expected bytes, original failures and unique attempt/output names before execution.",
+      "evidence": [
+        "policy",
+        "run"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-06",
+      "area": "ENV",
+      "title": "Interruption, crash capture and verified cleanup",
+      "status": "partial",
+      "result": "Launcher recovery is tested; OS interruption/cleanup remains a distinct runtime responsibility.",
+      "next_check": "Prove bounded timeout, capture-before-cleanup, exact PID/container/guest identity and lease release; do not infer success from launcher exit.",
+      "evidence": [
+        "prep",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ENV-07",
+      "area": "ENV",
+      "title": "Checkpoint freshness and restore path",
+      "status": "partial",
+      "result": "Existing Git/evidence preservation workflow is in place; SC1 snapshot is documentary.",
+      "next_check": "Record tested revision, commands and artifacts for each changed row; ensure retained archives restore and the checkpoint is recoverable.",
+      "evidence": [
+        "policy",
+        "history"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-OBS-01",
+      "area": "OBS",
+      "title": "Linux reference positive profile",
+      "status": "baseline",
+      "result": "All 25 Linux infrastructure cases passed on the retained exact profile, including supervised outcomes and cleanup.",
+      "next_check": "Reuse only unchanged bound inputs; rerun affected cases after collector changes.",
+      "evidence": [
+        "root"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-OBS-02",
+      "area": "OBS",
+      "title": "Real descriptor remapping",
+      "status": "blocked",
+      "result": "Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient.",
+      "next_check": "Repair with real subprocess dup/close/exec tests: closed 0/1/2, source=destination, overlapping mappings, preserved stdout/stderr and no unintended inheritance.",
+      "evidence": [
+        "storage"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-OBS-03",
+      "area": "OBS",
+      "title": "Acquisition sequence validation",
+      "status": "blocked",
+      "result": "Twelve fabricated positive acquisition-ID variants pass the existing validators.",
+      "next_check": "Bind IDs to both actual successful create sites and failed-create non-consumption; reject gaps, offsets, duplicates and reordering without breaking valid reuse.",
+      "evidence": [
+        "storage"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-OBS-04",
+      "area": "OBS",
+      "title": "Live file-identity alias rejection",
+      "status": "blocked",
+      "result": "Sixteen aliases between simultaneously live event/request/report identities pass existing validators.",
+      "next_check": "Track cross-role live device/inode ownership; reject simultaneous aliasing and preserve source-defined post-retirement reuse.",
+      "evidence": [
+        "storage"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-OBS-05",
+      "area": "OBS",
+      "title": "Retained validator positives and negatives",
+      "status": "partial",
+      "result": "Memory-backed review rejects 292 bad inputs and preserves 24 valid controls; no real OS descriptor proof follows.",
+      "next_check": "Preserve those controls, add original counterexamples and rerun actual implementations after the coherent repair.",
+      "evidence": [
+        "storage"
+      ],
+      "depends_on": [
+        "SC-OBS-02",
+        "SC-OBS-03",
+        "SC-OBS-04"
+      ]
+    },
+    {
+      "id": "SC-OBS-06",
+      "area": "OBS",
+      "title": "Adverse collector and rescue behavior",
+      "status": "partial",
+      "result": "Positive root profile is done; storage, late-signal/setup, stopped-collector rescue, overflow and loader closure remain.",
+      "next_check": "Exercise real failure paths with correct raw status, bounded ownership and cleanup under the separately released runtime profile.",
+      "evidence": [
+        "root",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-OBS-05"
+      ]
+    },
+    {
+      "id": "SC-OBS-07",
+      "area": "OBS",
+      "title": "Native payload identity and terminal collector",
+      "status": "partial",
+      "result": "Native collector work exists in the history, but M02-C completion is not established.",
+      "next_check": "Observe real McKernel PID/TID, request generation, delivery, termination, interpreter/DSO mappings and side effects; distinguish launcher from payload.",
+      "evidence": [
+        "history",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-OBS-08",
+      "area": "OBS",
+      "title": "Paired runner and strict result/oracle records",
+      "status": "planned",
+      "result": "Three startup fixtures compile; paired eligible catalog execution is not yet established.",
+      "next_check": "Reconcile packet001-v3 schemas/env/umask and immutable payload/path identity; run identical inputs on Linux and McKernel and join exact outcomes.",
+      "evidence": [
+        "compiled",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-OBS-07",
+        "SC-OBS-06"
+      ]
+    },
+    {
+      "id": "SC-OBS-09",
+      "area": "OBS",
+      "title": "Observer negative controls and missing-evidence rejection",
+      "status": "unmeasured",
+      "result": "No final SC1 collector integration result is bound.",
+      "next_check": "Reject stale hashes, wrong signals/raw waits, missing dual streams, timeouts, failed QMP resume and incomplete provenance/loader closure; include legitimate success.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-OBS-08"
+      ]
+    },
+    {
+      "id": "SC-BLD-01",
+      "area": "BLD",
+      "title": "Preserve active Rust consumers",
+      "status": "partial",
+      "result": "Historical reuse inventory maps existing core, native-host, compatibility and user-tool Rust consumers; current SC1 consumer preservation is not yet reconciled.",
+      "next_check": "Confirm affected symbols stay on their intended build paths; avoid rewriting existing implementations or counting fixtures as product code.",
+      "evidence": [
+        "reuse"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-BLD-02",
+      "area": "BLD",
+      "title": "Pinned native modules and image rebuild",
+      "status": "baseline",
+      "result": "Retained repaired module2026091301/image3 passed eight original suites; source changes need fresh artifacts.",
+      "next_check": "Build final candidate using pinned inputs; no prebuilt-object substitution or unrecorded staging drift.",
+      "evidence": [
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-ENV-03"
+      ]
+    },
+    {
+      "id": "SC-BLD-03",
+      "area": "BLD",
+      "title": "Actual helper Rust/C and ABI regression checks",
+      "status": "unmeasured",
+      "result": "Historical equivalence/build work exists; no new SC1 all-affected-surface result is claimed.",
+      "next_check": "Compile and execute complete changed helpers plus required references/fallbacks; test errors independently, not two models sharing the same bug.",
+      "evidence": [
+        "reuse",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-BLD-04",
+      "area": "BLD",
+      "title": "Link, symbol and executable origin checks",
+      "status": "unmeasured",
+      "result": "Full Rust/assembly language closure stays downstream; current candidate dispatch identity still matters.",
+      "next_check": "Check expected consumers, unresolved/duplicate exports, object provenance and unsafe fallback selection on the actual image/modules.",
+      "evidence": [
+        "reuse",
+        "ffi"
+      ],
+      "depends_on": [
+        "SC-BLD-02"
+      ]
+    },
+    {
+      "id": "SC-BLD-05",
+      "area": "BLD",
+      "title": "Existing eight-suite runtime regression",
+      "status": "baseline",
+      "result": "Memory, files, threads, signals, both control ABIs, ordinary signal ABI and futex/child-TID passed the repaired baseline.",
+      "next_check": "Rerun all eight against final integrated artifacts; preserve original assertions and every failed attempt.",
+      "evidence": [
+        "baseline",
+        "run"
+      ],
+      "depends_on": [
+        "SC-BLD-02"
+      ]
+    },
+    {
+      "id": "SC-BLD-06",
+      "area": "BLD",
+      "title": "Clean independent rebuild and replay",
+      "status": "planned",
+      "result": "No final SC1 reproduction candidate is frozen.",
+      "next_check": "Rebuild from pinned sources in a fresh output tree; verify artifact identities and reproduce the agreed core runs.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-END-01",
+        "SC-BLD-05"
+      ]
+    },
+    {
+      "id": "SC-BOOT-01",
+      "area": "BOOT",
+      "title": "Image load, CPU/memory assignment and readiness",
+      "status": "baseline",
+      "result": "Recorded native baseline boots and runs real workloads on its one-McKernel-CPU profile.",
+      "next_check": "Replay both existing startup/control routes on the final candidate and verify assigned boundaries, entry state and exact readiness.",
+      "evidence": [
+        "baseline",
+        "app"
+      ],
+      "depends_on": [
+        "SC-BLD-02"
+      ]
+    },
+    {
+      "id": "SC-BOOT-02",
+      "area": "BOOT",
+      "title": "Invalid image and failed partial initialization",
+      "status": "unmeasured",
+      "result": "Prior source/build work is not a reconciled SC1 failure-path inventory.",
+      "next_check": "Test truncated/wrong-ABI/invalid-range images and injected allocation/setup failures; no executable half-loaded image or leaked owner.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-BOOT-03",
+      "area": "BOOT",
+      "title": "Per-CPU, stack, interrupt and boot-table initialization",
+      "status": "unmeasured",
+      "result": "Historical boot success does not cover every initialization failure or state invariant.",
+      "next_check": "Check current trampoline/page tables/per-CPU and stack ownership, interrupt enabling order and bounds before admission.",
+      "evidence": [
+        "guest_review",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-BOOT-04",
+      "area": "BOOT",
+      "title": "Actual payload scheduling and return path",
+      "status": "baseline",
+      "result": "Ordinary ELF, delegated syscall output and exit routing worked in the retained application baseline.",
+      "next_check": "Observe real guest scheduling, worker/delivery/CPU return identities and expected bytes/exit in final core runs.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-BOOT-01"
+      ]
+    },
+    {
+      "id": "SC-BOOT-05",
+      "area": "BOOT",
+      "title": "Configuration and unsupported topology rejection",
+      "status": "unmeasured",
+      "result": "The initial claim deliberately excludes McKernel multicore and CPU-hotplug qualification.",
+      "next_check": "Freeze supported topology, memory and feature limits; prove unsupported configuration rejects without partial ownership or falsely reporting success.",
+      "evidence": [
+        "app",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-BOOT-06",
+      "area": "BOOT",
+      "title": "Repeated startup without stale registry or queue state",
+      "status": "planned",
+      "result": "Baseline reuse evidence is not repeated final-candidate OS recreation.",
+      "next_check": "Combine fresh generations with real create/boot cycles; verify old IDs, callbacks and channels cannot satisfy new readiness.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-08"
+      ]
+    },
+    {
+      "id": "SC-MEM-01",
+      "area": "MEM",
+      "title": "Existing pinned pending-free destination",
+      "status": "implemented",
+      "result": "PendingFreeBatch, state and detach logic exist in mem_helpers.rs; existence is not ownership closure.",
+      "next_check": "Inspect active consumers and preserve pinning, !Send/!Sync intent, no implicit free and source NULL/NULL reset.",
+      "evidence": [
+        "pending"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-MEM-02",
+      "area": "FIX",
+      "title": "Compilable independent reference and real constructors",
+      "status": "blocked",
+      "result": "Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.",
+      "next_check": "Compile the independent C reference and Rust candidate; construct actual empty/single/two/many states before claiming any vector executes.",
+      "evidence": [
+        "inventory"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-MEM-03",
+      "area": "FIX",
+      "title": "Sentinel, structural and overflow semantics",
+      "status": "blocked",
+      "result": "Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification.",
+      "next_check": "Run valid sentinel-linked positives, self/foreign-cycle negatives and boundary overflows against original semantics; remove spelling-only checks.",
+      "evidence": [
+        "inventory"
+      ],
+      "depends_on": [
+        "SC-MEM-02"
+      ]
+    },
+    {
+      "id": "SC-MEM-04",
+      "area": "MEM",
+      "title": "Actual begin/enqueue/detach/finish helper execution",
+      "status": "partial",
+      "result": "Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior.",
+      "next_check": "Exercise complete selected helpers and ABI dependencies for empty/one/many, order/metadata, source reuse, drain and two-head independence.",
+      "evidence": [
+        "pending",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-MEM-03"
+      ]
+    },
+    {
+      "id": "SC-MEM-05",
+      "area": "MEM",
+      "title": "Unchanged-on-error and duplicate-release protection",
+      "status": "unmeasured",
+      "result": "No final actual-body error/reuse proof is reconciled for SC1.",
+      "next_check": "Inject partial validation failure, invalid/duplicate detach and drain; check every pointer/page flag/count and zero allocator calls on rejection.",
+      "evidence": [
+        "pending",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-MEM-04"
+      ]
+    },
+    {
+      "id": "SC-MEM-06",
+      "area": "MEM",
+      "title": "Allocation extent, alignment and exhaustion boundaries",
+      "status": "unmeasured",
+      "result": "Existing allocation implementation must be retained; current SC1 boundary coverage is unmeasured.",
+      "next_check": "Test zero/oversized/overflowing extents, alignment, accounting and OOM before/after partial acquisition; no overlapping or twice-freed extent.",
+      "evidence": [
+        "reuse",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-MEM-07",
+      "area": "MEM",
+      "title": "Zero-filled first use and safe reuse",
+      "status": "unmeasured",
+      "result": "Historical initial-zeroing checks exist, but neither complete zero-after-reuse nor draining every pending zeroing page is established by the cited baseline.",
+      "next_check": "Verify actual first-use/reuse bytes and stale-data isolation; inventory pending, in-flight, quarantined and free backing.",
+      "evidence": [
+        "app"
+      ],
+      "depends_on": [
+        "SC-MEM-06"
+      ]
+    },
+    {
+      "id": "SC-MEM-08",
+      "area": "MEM",
+      "title": "Durable detached-zeroing inventory",
+      "status": "blocked",
+      "result": "Durable-owner review leaves enumerable backing ownership and traversal/error retention open.",
+      "next_check": "Publish the complete durable inventory and progress before transfer; mid-traversal failure retains visited state and the unvisited suffix, including under terminal quarantine.",
+      "evidence": [
+        "durable",
+        "invalidation",
+        "durable_registry"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-MEM-09",
+      "area": "MEM",
+      "title": "Descriptor and page-table backing lifetime",
+      "status": "blocked",
+      "result": "Trusted physical ownership and descriptor pinning remain unresolved; page data alone is insufficient.",
+      "next_check": "Prove descriptors and page-table backing survive pending/in-flight/alias users; generation-bound ownership prevents allocator reuse until release is safe.",
+      "evidence": [
+        "inventory",
+        "durable"
+      ],
+      "depends_on": [
+        "SC-MEM-04"
+      ]
+    },
+    {
+      "id": "SC-MEM-10",
+      "area": "MEM",
+      "title": "Physical-page accounting under repeated reuse",
+      "status": "planned",
+      "result": "No final mixed-pressure/reuse inventory exists for the candidate.",
+      "next_check": "Account for every live/pending/quarantined/free page over repeated failures and recovery; check balanced terminal ownership without treating retained quarantine as a leak.",
+      "evidence": [
+        "plan",
+        "durable"
+      ],
+      "depends_on": [
+        "SC-MEM-05",
+        "SC-MEM-08",
+        "SC-MEM-09"
+      ]
+    },
+    {
+      "id": "SC-VM-01",
+      "area": "VM",
+      "title": "Propagate failed host-clear results through caller boundaries",
+      "status": "blocked",
+      "result": "Source review finds munmap loses host-clear errors and unconditionally finishes pending pages. No stale write was reproduced.",
+      "next_check": "Repair and test callback/result plumbing so actual clear errors reach every caller. This substep does not close release safety: durable ownership and integrated retention are SC-VM-02/03/04/05, not prerequisites for claiming only correct result propagation.",
+      "evidence": [
+        "invalidation"
+      ],
+      "depends_on": [
+        "SC-MEM-04"
+      ]
+    },
+    {
+      "id": "SC-VM-02",
+      "area": "VM",
+      "title": "Durable transaction across scheduling and migration",
+      "status": "blocked",
+      "result": "Per-CPU pending lists alone do not prove an owner across preemption, failed clear or terminal service state.",
+      "next_check": "Bind transaction generation, pinned descriptors, exact backing and durable owner; test interleaved/preempted completion and stale generation rejection.",
+      "evidence": [
+        "durable",
+        "invalidation"
+      ],
+      "depends_on": [
+        "SC-VM-01",
+        "SC-MEM-09"
+      ]
+    },
+    {
+      "id": "SC-VM-03",
+      "area": "VM",
+      "title": "Partial guest mutation and failure composition",
+      "status": "unmeasured",
+      "result": "Range removal can partially mutate before a later error; restoring an old pointer is not a safe rollback.",
+      "next_check": "Independently test partial range/PTE edits, guest error, host-clear error and blocked publication; no premature release or fictitious rollback.",
+      "evidence": [
+        "invalidation"
+      ],
+      "depends_on": [
+        "SC-VM-02"
+      ]
+    },
+    {
+      "id": "SC-VM-04",
+      "area": "VM",
+      "title": "Host aliases, PFN inheritance and VA reuse exclusion",
+      "status": "blocked",
+      "result": "Inherited Linux aliases and conflicting reuse remain part of the retained invalidation failure contract, even with one guest CPU.",
+      "next_check": "Inventory actual MM/PTE/PFN identities; exclude remap/reuse while any relevant host mapping or retained transaction survives.",
+      "evidence": [
+        "invalidation",
+        "durable"
+      ],
+      "depends_on": [
+        "SC-VM-02"
+      ]
+    },
+    {
+      "id": "SC-VM-05",
+      "area": "VM",
+      "title": "Authenticated TLB completion before release",
+      "status": "blocked",
+      "result": "A response tag is not proof that Linux aliases/TLB entries stopped using backing.",
+      "next_check": "Bind acknowledgements to the exact transaction/address space and verify stale access is impossible before releasing data or page-table storage.",
+      "evidence": [
+        "invalidation",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-VM-04"
+      ]
+    },
+    {
+      "id": "SC-VM-06",
+      "area": "VM",
+      "title": "Every invalidation caller and teardown route",
+      "status": "unmeasured",
+      "result": "SC1 must cover more than ordinary munmap.",
+      "next_check": "Map munmap, MAP_FIXED, mprotect, shmdt, remap_file_pages, enabled XPMEM and exec/exit paths to the same safe transaction rules or proven safe rejection.",
+      "evidence": [
+        "invalidation",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-01"
+      ]
+    },
+    {
+      "id": "SC-VM-07",
+      "area": "VM",
+      "title": "Basic mmap/mprotect/munmap behavior",
+      "status": "baseline",
+      "result": "Baseline exercised mapping data, read-only/read-write protection and fourteen completed host invalidations.",
+      "next_check": "Replay successes plus boundary/unaligned/invalid permissions and bad pointers on the repaired candidate; preserve protection and error semantics.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-VM-05",
+        "SC-VM-06"
+      ]
+    },
+    {
+      "id": "SC-VM-08",
+      "area": "VM",
+      "title": "Pager faults and user/kernel isolation",
+      "status": "unmeasured",
+      "result": "Pager/reference baselines exist, but SC1 failure/isolation coverage is not reconciled.",
+      "next_check": "Test demand/zero/file-backed faults, unmapped and protected addresses, usercopy faults and concurrent death; wrong address spaces must not be modified.",
+      "evidence": [
+        "app",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-VM-09",
+      "area": "VM",
+      "title": "Kill, cancellation and terminal quarantine during MM work",
+      "status": "unmeasured",
+      "result": "Correct terminal retention is required beyond happy-path invalidation.",
+      "next_check": "Inject SIGKILL/cancel/service failure at real MM phases; observe stable enumerable owners at terminal and required later observation, with no unsafe admission.",
+      "evidence": [
+        "invalidation",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-03",
+        "SC-VM-05"
+      ]
+    },
+    {
+      "id": "SC-VM-10",
+      "area": "VM",
+      "title": "Successful post-failure release and address reuse",
+      "status": "planned",
+      "result": "Recovery is not promised for permanently quarantined states.",
+      "next_check": "For paths with an established recovery contract, verify real successful invalidation, one release, safe VA/physical reuse and no stale writes; retain permanent quarantine otherwise.",
+      "evidence": [
+        "invalidation",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-07",
+        "SC-VM-09",
+        "SC-MEM-10"
+      ]
+    },
+    {
+      "id": "SC-CPU-01",
+      "area": "CPU",
+      "title": "Runnable-peer progress and scheduling fairness",
+      "status": "unmeasured",
+      "result": "Existing scheduler/thread code is preserved; a current stress/fairness claim is unmeasured.",
+      "next_check": "Run multiple real runnable and blocked threads on the declared single McKernel CPU; observe progress, bounded scheduling and no starvation/hang.",
+      "evidence": [
+        "reuse",
+        "app"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-02",
+      "area": "CPU",
+      "title": "Sleep/wake, idle and lost-wakeup races",
+      "status": "unmeasured",
+      "result": "Baseline thread success does not exhaust queue-to-sleep race windows.",
+      "next_check": "Race wake-before-sleep, timeout, cancellation and idle entry with real scheduling; verify no lost wake or duplicate runqueue ownership.",
+      "evidence": [
+        "plan",
+        "reuse"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-03",
+      "area": "CPU",
+      "title": "Lock order and IRQ/preemption restoration",
+      "status": "unmeasured",
+      "result": "No complete candidate-specific concurrency result is claimed.",
+      "next_check": "Check lock order and every error unwind; no blocking in atomic context, lock leaks or wrongly restored IRQ/preemption state.",
+      "evidence": [
+        "ffi",
+        "guest_review"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-04",
+      "area": "CPU",
+      "title": "Callbacks, refcounts and memory ordering",
+      "status": "unmeasured",
+      "result": "Single guest CPU still races Linux workers, IRQs and async callbacks.",
+      "next_check": "Exercise publish/consume/acquire/release and last-reference races; drain RCU/work/timer/IRQ users before owner destruction.",
+      "evidence": [
+        "ffi",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-05",
+      "area": "CPU",
+      "title": "Stack bounds including nested callbacks/interrupts",
+      "status": "unmeasured",
+      "result": "Retained prefix sums are explicitly not a complete kernel stack certificate.",
+      "next_check": "Check compiled frames, callback chains and interrupt nesting under the real profile; verify bounds/guard behavior without inventing coverage.",
+      "evidence": [
+        "plan",
+        "guest_review"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-06",
+      "area": "CPU",
+      "title": "TLS context isolation",
+      "status": "baseline",
+      "result": "Retained thread runs observed isolated TLS and real clone3 children; they do not establish complete integer-register isolation.",
+      "next_check": "Replay per-thread TLS through switches, blocking syscalls, interrupts, signals and retirement; integer-register isolation is separately tracked in SC-CPU-11.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-CPU-01"
+      ]
+    },
+    {
+      "id": "SC-CPU-07",
+      "area": "CPU",
+      "title": "Enabled x87/XMM/MXCSR and extended state isolation",
+      "status": "unmeasured",
+      "result": "Excluding advanced ISA qualification does not exclude baseline floating-point state safety.",
+      "next_check": "Observe initialization and preservation across switches/syscalls/signals; reject invalid xstate restore and prevent previous-owner state disclosure.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-08",
+      "area": "CPU",
+      "title": "Truthful CPU feature exposure and kernel SIMD restrictions",
+      "status": "unmeasured",
+      "result": "Current SC1 CPUID/XCR0/compiled opcode agreement is not reconciled.",
+      "next_check": "Bind CPUID/XGETBV capabilities to saved state and signal-frame sizes; inspect actual executable instructions and enforce kernel SIMD policy.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-BLD-04"
+      ]
+    },
+    {
+      "id": "SC-CPU-09",
+      "area": "CPU",
+      "title": "Exceptions and malformed-frame containment",
+      "status": "unmeasured",
+      "result": "No final invalid frame/trap isolation matrix is recorded here.",
+      "next_check": "Trigger supported user faults and malformed return/signal state; affect only the offending process, preserve kernel state and avoid retry loops.",
+      "evidence": [
+        "plan",
+        "guest_review"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-CPU-10",
+      "area": "CPU",
+      "title": "Timer/deadline arithmetic and real expiration",
+      "status": "unmeasured",
+      "result": "Timing APIs have existing implementations, not a current SC1 boundary result.",
+      "next_check": "Test monotonic ordering, zero/past/overflowing deadlines, interrupted waits and timer cancellation/rearm; verify elapsed behavior on the declared profile.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-PROC-01",
+      "area": "PROC",
+      "title": "Process/thread creation and identity generations",
+      "status": "baseline",
+      "result": "Real baseline clone3 children and process identities exist; all flag/failure combinations are not qualified.",
+      "next_check": "Replay supported create/exec/wait/join and partial-init rollback; reject unsupported flags without leaked registry nodes or stale identities.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-PROC-02",
+      "area": "PROC",
+      "title": "Exit, join and child-TID ownership",
+      "status": "baseline",
+      "result": "Baseline passed futex/child-TID and thread-node removal checks.",
+      "next_check": "Exercise normal exit, concurrent joins/waits, invalid TID pointers and clear-TID wake ownership; no double reap or dangling user pointer.",
+      "evidence": [
+        "baseline",
+        "app"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-PROC-03",
+      "area": "PROC",
+      "title": "Worker/launcher death during delegated work",
+      "status": "baseline",
+      "result": "Retained SIGKILL during blocked read showed retirement and process/procfs release.",
+      "next_check": "Repeat against final artifacts at the relevant before/after-publication phases, with finite cleanup and preserved MM owners.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-IPC-03",
+        "SC-VM-09"
+      ]
+    },
+    {
+      "id": "SC-PROC-04",
+      "area": "PROC",
+      "title": "PID/TID reuse and stale-response rejection",
+      "status": "baseline",
+      "result": "Older owner-failure run used 700 Linux forks to reuse both old IDs three times, then eight applications passed in the same OS.",
+      "next_check": "Retain exact original assertions and test generation-bound stale completions after final-candidate owner reuse.",
+      "evidence": [
+        "app"
+      ],
+      "depends_on": [
+        "SC-PROC-03"
+      ]
+    },
+    {
+      "id": "SC-PROC-05",
+      "area": "PROC",
+      "title": "Signals, masks, altstack and ordinary sigreturn",
+      "status": "baseline",
+      "result": "Baseline signals and ordinary signal ABI suites passed on bound artifacts.",
+      "next_check": "Replay masks/pending delivery/altstack/return and documented unsupported flags without silently broadening signal support.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-PROC-06",
+      "area": "PROC",
+      "title": "Signal failure, restart and recipient lifetime",
+      "status": "unmeasured",
+      "result": "Broader malformed-frame, interruption and death races are not established by baseline signals.",
+      "next_check": "Test bad pointers/frames, nested or interrupted operations, recipient exit and syscall restart semantics; safely reject unsupported delivery modes.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-PROC-05",
+        "SC-CPU-09"
+      ]
+    },
+    {
+      "id": "SC-PROC-07",
+      "area": "PROC",
+      "title": "Futex wait/wake and thread synchronization",
+      "status": "baseline",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed.",
+      "next_check": "Replay contention, wake counts and timeout/cancel paths with actual runnable peer progress and correct errno/results.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-CPU-02"
+      ]
+    },
+    {
+      "id": "SC-PROC-08",
+      "area": "PROC",
+      "title": "Futex versus unmap, owner death and unsupported modes",
+      "status": "unmeasured",
+      "result": "Robust/PI/requeue and owner-death capabilities require explicit supported/excluded decisions.",
+      "next_check": "Test enabled wait/wake lifetime during unmap/exit and timeout overflow; unsupported registration must not report working semantics while discarding state.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-PROC-07",
+        "SC-VM-06"
+      ]
+    },
+    {
+      "id": "SC-PROC-09",
+      "area": "PROC",
+      "title": "Fork/COW, credentials and shared-resource disposition",
+      "status": "unmeasured",
+      "result": "Broad guest fork/COW and advanced process capability are downstream, not implicitly supported by basic threads.",
+      "next_check": "Inventory advertised flags/credentials/shared handles; prove permitted isolation and safe refusal of unsupported behavior without skipping reachable teardown paths.",
+      "evidence": [
+        "plan",
+        "app"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-SYS-01",
+      "area": "SYS",
+      "title": "Supported syscall dispatch and safe unknown calls",
+      "status": "unmeasured",
+      "result": "Existing Rust dispatch remains the implementation foundation; SC1 capability matrix is not frozen.",
+      "next_check": "Map each enabled syscall to implementation, consumer and test; verify unknown/unsupported calls return documented errors without side effects.",
+      "evidence": [
+        "reuse",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-SYS-02",
+      "area": "SYS",
+      "title": "Full-span usercopy and pointer/length validation",
+      "status": "unmeasured",
+      "result": "Happy-path libc runs are not invalid-user-memory proof.",
+      "next_check": "Test null/unmapped/cross-page/read-only pointers, zero/huge/overflowing lengths and partial copies; no kernel crash, data leak or cross-MM access.",
+      "evidence": [
+        "plan",
+        "ffi"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-SYS-03",
+      "area": "SYS",
+      "title": "Errno, short results and interrupted delegated calls",
+      "status": "unmeasured",
+      "result": "Result shaping exists, but all enabled error/restart branches lack a reconciled SC1 result.",
+      "next_check": "Check partial success, signed-width conversion, errno, interrupted waits and cancellation without fabricated completion or double side effects.",
+      "evidence": [
+        "reuse",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-SYS-04",
+      "area": "SYS",
+      "title": "ELF/interpreter/DSO and initial process state",
+      "status": "baseline",
+      "result": "Ordinary dynamic-libc baseline loads and runs with the existing mcexec ABI.",
+      "next_check": "Replay argv/env/auxv, stack/TLS, segment permissions and actual interpreter/DSO identities on the frozen profile.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-BOOT-04"
+      ]
+    },
+    {
+      "id": "SC-SYS-05",
+      "area": "SYS",
+      "title": "Malformed executable and loader rollback",
+      "status": "unmeasured",
+      "result": "No final malformed-image/loader-failure matrix is reconciled.",
+      "next_check": "Reject wrong architecture/layout, truncated segments, overflow, missing interpreters and permission violations; restore all acquired resources.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-SYS-04"
+      ]
+    },
+    {
+      "id": "SC-SYS-06",
+      "area": "SYS",
+      "title": "Immutable inputs and startup byte fidelity",
+      "status": "partial",
+      "result": "Three reviewed startup fixtures compile; compilation does not prove their runtime outputs.",
+      "next_check": "Execute exact argv/env/umask/stdout/stderr/binary-stream expectations with immutable input identity and independent oracles.",
+      "evidence": [
+        "compiled"
+      ],
+      "depends_on": [
+        "SC-OBS-08",
+        "SC-OBS-09",
+        "SC-IPC-11",
+        "SC-VM-10"
+      ]
+    },
+    {
+      "id": "SC-SYS-07",
+      "area": "SYS",
+      "title": "Privilege and access checks at enabled boundaries",
+      "status": "unmeasured",
+      "result": "SC1 must not equate trusted test inputs with safe syscall/device boundaries.",
+      "next_check": "Exercise permitted and denied identities, pointers, ioctls and resource operations; preserve access policy on failure and partial completion.",
+      "evidence": [
+        "plan",
+        "ffi"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IPC-01",
+      "area": "IPC",
+      "title": "Hard failure before publication",
+      "status": "baseline",
+      "result": "One actual fault-mode contract passed with physical captures and stable terminal owners for the required later observation.",
+      "next_check": "Rebind or replay after relevant edits; keep injected failure separate from real ring saturation.",
+      "evidence": [
+        "hard"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IPC-02",
+      "area": "IPC",
+      "title": "Permanent backpressure and retained ownership",
+      "status": "baseline",
+      "result": "Second narrow fault-mode contract is independently accepted on its exact artifacts.",
+      "next_check": "Preserve terminal inventories, admission closure and original timings; replay affected behavior on final candidate.",
+      "evidence": [
+        "permanent"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IPC-03",
+      "area": "IPC",
+      "title": "Selected response survives cancel/prepare/no-wake paths",
+      "status": "blocked",
+      "result": "Review 43 releases a corrected source-only implementation attempt, not a working candidate.",
+      "next_check": "Authenticate inputs, implement the retained correction, exercise actual methods and compile; selected Response/Completion/OS backing stays owned until committed release.",
+      "evidence": [
+        "retention",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-ENV-04"
+      ]
+    },
+    {
+      "id": "SC-IPC-04",
+      "area": "IPC",
+      "title": "Actual retention matrix and inverse stager controls",
+      "status": "partial",
+      "result": "Detailed matrix and staged corrections exist, but fresh complete candidate execution remains open.",
+      "next_check": "Cover stages 0/1/2/4/5/invalid, stage3 commit0, wake Some/None, close/cancel, bad identity/status/wake, second CAS and changed claims; reject without release.",
+      "evidence": [
+        "plan",
+        "retention"
+      ],
+      "depends_on": [
+        "SC-IPC-03"
+      ]
+    },
+    {
+      "id": "SC-IPC-05",
+      "area": "IPC",
+      "title": "Post-publication notification failure",
+      "status": "blocked",
+      "result": "One of the two remaining actual fault modes depends on selected ownership and physical retained-span proof.",
+      "next_check": "Run the separately released mode2 guest; observe one real publication, wake-ring behavior, correct return identity and no host access after transfer.",
+      "evidence": [
+        "plan",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-IPC-04",
+        "SC-IPC-12"
+      ]
+    },
+    {
+      "id": "SC-IPC-06",
+      "area": "IPC",
+      "title": "Recoverable backpressure and same-OS recovery",
+      "status": "blocked",
+      "result": "Remaining mode3 is not accepted; retries cannot discard the selected result.",
+      "next_check": "Run mode3 separately; preserve result through retries, then pass eight real subsequent HELLO applications plus AFTER8 in the same OS.",
+      "evidence": [
+        "plan",
+        "handoff"
+      ],
+      "depends_on": [
+        "SC-IPC-04",
+        "SC-IPC-12"
+      ]
+    },
+    {
+      "id": "SC-IPC-07",
+      "area": "IPC",
+      "title": "Physical request-ring saturation and wrap",
+      "status": "unmeasured",
+      "result": "Injected EAGAIN and accepted fault modes do not establish actual full capacity.",
+      "next_check": "Really fill the request direction, delay consumption, observe capacity/wrap/barriers and exact counts, then verify bounded recovery.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-IPC-01",
+        "SC-IPC-02",
+        "SC-IPC-05",
+        "SC-IPC-06",
+        "SC-OBS-09"
+      ]
+    },
+    {
+      "id": "SC-IPC-08",
+      "area": "IPC",
+      "title": "Physical return-ring saturation and wrap",
+      "status": "unmeasured",
+      "result": "Reverse-direction physical pressure has its own ownership and ordering requirements.",
+      "next_check": "Really fill the return direction, delay consumption and verify no loss/duplication/reordering or premature release through wrap/recovery.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-IPC-01",
+        "SC-IPC-02",
+        "SC-IPC-05",
+        "SC-IPC-06",
+        "SC-OBS-09"
+      ]
+    },
+    {
+      "id": "SC-IPC-09",
+      "area": "IPC",
+      "title": "Stale/duplicate/wrong-generation completion rejection",
+      "status": "unmeasured",
+      "result": "Final combined transport identity matrix is not bound.",
+      "next_check": "Inject wrong process/TID/request/delivery generation, duplicate or late completions; preserve current owner and never deliver an old result to a new process.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-PROC-04"
+      ]
+    },
+    {
+      "id": "SC-IPC-10",
+      "area": "IPC",
+      "title": "Terminal service admission and durable owners",
+      "status": "baseline",
+      "result": "H04 repair passed 50 controlled exact-method tests and rebuilt baseline suites; broader failure observations stay separate.",
+      "next_check": "Verify no new work after terminal service failure, owners stable at terminal and required later observation, including MM/zeroing dependencies.",
+      "evidence": [
+        "run",
+        "baseline"
+      ],
+      "depends_on": [
+        "SC-VM-09",
+        "SC-MEM-08"
+      ]
+    },
+    {
+      "id": "SC-IPC-11",
+      "area": "IPC",
+      "title": "Integrated four-mode plus physical-pressure replay",
+      "status": "planned",
+      "result": "No final-candidate combined core transport result exists.",
+      "next_check": "Run all four original fault contracts plus both real full-ring tests on exact artifacts; label verification instrumentation and preserve all failures.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-IPC-01",
+        "SC-IPC-02",
+        "SC-IPC-05",
+        "SC-IPC-06",
+        "SC-IPC-07",
+        "SC-IPC-08",
+        "SC-IPC-09",
+        "SC-IPC-10"
+      ]
+    },
+    {
+      "id": "SC-IO-01",
+      "area": "IO",
+      "title": "Ordinary file and descriptor operations",
+      "status": "baseline",
+      "result": "Retained file test passed 8,209-byte create/write/stat/seek/read/EOF/pwrite/pread/fsync/close/reopen/unlink and ENOENT behavior.",
+      "next_check": "Replay existing assertions against the final candidate; verify offsets, partial results and exact data.",
+      "evidence": [
+        "app",
+        "baseline"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IO-02",
+      "area": "IO",
+      "title": "Descriptor close versus pending operations",
+      "status": "unmeasured",
+      "result": "Historical ordinary I/O does not establish all close/cancel/reuse races.",
+      "next_check": "Race close/dup/reuse/process exit with delegated I/O; bind exact open-file owners and prevent use-after-free or stale-fd delivery.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-PROC-03"
+      ]
+    },
+    {
+      "id": "SC-IO-03",
+      "area": "IO",
+      "title": "x86_64 and i386 control ABI",
+      "status": "baseline",
+      "result": "Both original control suites passed on the retained repaired module/image.",
+      "next_check": "Replay exact ioctl, status, packet layout, errors and physical counters for both ABIs; current build bindings must match.",
+      "evidence": [
+        "baseline"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IO-04",
+      "area": "IO",
+      "title": "Invalid control IDs, ranges and privilege",
+      "status": "unmeasured",
+      "result": "No final SC1 malformed control-input inventory is reconciled.",
+      "next_check": "Reject invalid generations, sizes, ranges, flags, alignment and permissions before mutation; unwind partially registered objects.",
+      "evidence": [
+        "plan",
+        "ffi"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IO-05",
+      "area": "IO",
+      "title": "procfs/sysfs read-remove and unload lifetime",
+      "status": "unmeasured",
+      "result": "Baseline procfs replies and worker reaps are retained; broad read/remove/unload races remain.",
+      "next_check": "Run real readers/callbacks against remove/teardown; hold correct references and reject stale handles without silently implementing unsupported hotplug.",
+      "evidence": [
+        "app",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-IO-06",
+      "area": "IO",
+      "title": "Shared mappings and optional device disposition",
+      "status": "unmeasured",
+      "result": "Optional XPMEM/device features cannot be assumed safe from source presence.",
+      "next_check": "List enabled mapping/device APIs, prove boundary/error handling and alias lifetime; disable/reject unsupported paths explicitly without bypassing reachable invalidation.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-06"
+      ]
+    },
+    {
+      "id": "SC-ABI-01",
+      "area": "ABI",
+      "title": "Every enabled interface mapped to a core check",
+      "status": "partial",
+      "result": "Existing behavior/consumer/FFI maps provide a base, not a final complete SC1 map.",
+      "next_check": "Enumerate exported symbols, syscall/ioctl/control and callback surfaces; assign each enabled success/failure edge to a row/test and unsupported ones to a verified rejection.",
+      "evidence": [
+        "reuse",
+        "ffi",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ABI-02",
+      "area": "ABI",
+      "title": "Rust/C/assembly layout and calling conventions",
+      "status": "unmeasured",
+      "result": "The reuse inventory is not current exact ABI verification.",
+      "next_check": "Validate sizes/offsets/alignment/endianness, register and error conventions against compiled consumers and both supported control ABIs.",
+      "evidence": [
+        "ffi",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-BLD-03"
+      ]
+    },
+    {
+      "id": "SC-ABI-03",
+      "area": "ABI",
+      "title": "Unsafe pointer, pin, refcount and alias invariants",
+      "status": "partial",
+      "result": "Unsafe/FFI ledger exists; pending-free and VM ownership are specific open findings.",
+      "next_check": "Review changed unsafe sites with complete consumers, synchronization and actual compiler context; test the concrete counterexamples independently.",
+      "evidence": [
+        "ffi",
+        "invalidation"
+      ],
+      "depends_on": [
+        "SC-VM-05"
+      ]
+    },
+    {
+      "id": "SC-ABI-04",
+      "area": "ABI",
+      "title": "No uninitialized or retired-owner data exposure",
+      "status": "unmeasured",
+      "result": "SC1 confidentiality/isolation spans more than ordinary functional outputs.",
+      "next_check": "Check user-visible padding, newly allocated pages, callback output, register/xstate and reused buffers; bad input cannot expose stale kernel/other-process data.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-MEM-07",
+        "SC-CPU-07"
+      ]
+    },
+    {
+      "id": "SC-ABI-05",
+      "area": "ABI",
+      "title": "Production versus test instrumentation identity",
+      "status": "unmeasured",
+      "result": "Some fault evidence uses verification-only builds and cannot silently qualify production artifacts.",
+      "next_check": "Inventory hooks/guards/observers and exactly which real body they execute; bind each result to its test or production artifact and required production follow-up.",
+      "evidence": [
+        "plan",
+        "run"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-ABI-06",
+      "area": "ABI",
+      "title": "Changes invalidate affected results, not all preserved work",
+      "status": "planned",
+      "result": "Historical evidence remains immutable; final dependency/source matching is pending.",
+      "next_check": "Trace every candidate diff to affected build, ABI and runtime rows; replay those results, preserve unrelated verified evidence and do not refresh golden expectations to hide failures.",
+      "evidence": [
+        "policy",
+        "reuse"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-LIFE-01",
+      "area": "LIFE",
+      "title": "Lifecycle state and ownership order",
+      "status": "unmeasured",
+      "result": "Native shutdown/restoration remains open in the retained baseline.",
+      "next_check": "Specify existing real owner transitions for close admission, drain, stop CPUs, callbacks, mappings, release and unload; enumerate every timeout/failure owner.",
+      "evidence": [
+        "app",
+        "plan"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-LIFE-02",
+      "area": "LIFE",
+      "title": "Reject new work and drain live applications/senders",
+      "status": "planned",
+      "result": "No final integrated drain result exists.",
+      "next_check": "Race shutdown with new submissions, blocked syscalls and process death; no accepted work without an owner and no callback after retirement.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-01",
+        "SC-IPC-11"
+      ]
+    },
+    {
+      "id": "SC-LIFE-03",
+      "area": "LIFE",
+      "title": "Actual McKernel CPU stop acknowledgement",
+      "status": "unmeasured",
+      "result": "Ending QEMU is not proof that native CPU ownership was stopped safely.",
+      "next_check": "Observe exact native CPU stop before memory/channel reuse; failed or timed-out stop retains ownership and prevents unsafe unload.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-01"
+      ]
+    },
+    {
+      "id": "SC-LIFE-04",
+      "area": "LIFE",
+      "title": "IRQ, work, timers and in-flight readers drained",
+      "status": "unmeasured",
+      "result": "Current whole-boundary callback-drain proof is not reconciled.",
+      "next_check": "Cancel/synchronize every callback class and last reader with correct lock order; late work must not touch retired OS/module state.",
+      "evidence": [
+        "plan",
+        "ffi"
+      ],
+      "depends_on": [
+        "SC-CPU-04",
+        "SC-LIFE-02"
+      ]
+    },
+    {
+      "id": "SC-LIFE-05",
+      "area": "LIFE",
+      "title": "Channel, mapping, registry and module reference retirement",
+      "status": "unmeasured",
+      "result": "No complete final-candidate owner retirement inventory is bound.",
+      "next_check": "After real stop/drain, retire each mapping/ring/registry/device/binfmt/procfs/sysfs owner exactly once; reject busy references and invalid order.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-03",
+        "SC-LIFE-04",
+        "SC-VM-10"
+      ]
+    },
+    {
+      "id": "SC-LIFE-06",
+      "area": "LIFE",
+      "title": "Linux resources restored to measured baseline",
+      "status": "planned",
+      "result": "Historical application cleanup is not full OS CPU/memory/IRQ restoration.",
+      "next_check": "Compare CPU online masks, memory ownership, IRQ affinities, IDs, mappings, files/tasks, device nodes, module refs and policy before/after native release.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-05"
+      ]
+    },
+    {
+      "id": "SC-LIFE-07",
+      "area": "LIFE",
+      "title": "Busy, duplicate, interrupted and failed-stop paths",
+      "status": "unmeasured",
+      "result": "No complete SC1 lifecycle failure matrix is bound.",
+      "next_check": "Exercise busy/double-stop/double-destroy, partial init, signal interruption and stop failure; preserve or release real owners according to each contract.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-01"
+      ]
+    },
+    {
+      "id": "SC-LIFE-08",
+      "area": "LIFE",
+      "title": "Unload/reload/recreate and boot after teardown",
+      "status": "planned",
+      "result": "Full repeated native lifecycle is a remaining engineering outcome.",
+      "next_check": "Actually destroy/release/unload/reload/recreate/boot; reject wrong module order and ensure fresh generations, clean resources and working workload.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-06",
+        "SC-LIFE-07"
+      ]
+    },
+    {
+      "id": "SC-LIFE-09",
+      "area": "LIFE",
+      "title": "Recovery interruption and crash disposition",
+      "status": "unmeasured",
+      "result": "Automatic launcher recovery does not prove kernel recovery.",
+      "next_check": "Interrupt permitted cleanup/recovery paths and inventory ownership; fail safely when real recovery is unsupported, with no second owner or fabricated restoration.",
+      "evidence": [
+        "plan",
+        "policy"
+      ],
+      "depends_on": [
+        "SC-LIFE-07"
+      ]
+    },
+    {
+      "id": "SC-LIFE-10",
+      "area": "LIFE",
+      "title": "Repeated complete lifecycle packet",
+      "status": "planned",
+      "result": "Proposed ten native lifecycle cycles have not run and need packet freeze.",
+      "next_check": "Run declared cycles on final artifacts, checking every restoration boundary and workload result; preserve first failure and cumulative resource measurements.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LIFE-08",
+        "SC-LIFE-09",
+        "SC-END-01"
+      ]
+    },
+    {
+      "id": "SC-LOAD-01",
+      "area": "LOAD",
+      "title": "Real bounded allocation and resource exhaustion",
+      "status": "unmeasured",
+      "result": "Simulated failure fixtures or printed PASS do not establish real exhaustion.",
+      "next_check": "Actually hit configured page/registry/handle/queue limits in the released profile; verify the injection/limit fired, correct errno and balanced owners.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-MEM-06"
+      ]
+    },
+    {
+      "id": "SC-LOAD-02",
+      "area": "LOAD",
+      "title": "Failures before and after mutation",
+      "status": "unmeasured",
+      "result": "Final core fault-site coverage is not reconciled.",
+      "next_check": "Inject failures at real allocation/registration/request/pager/mailbox phases, before and after ownership transfer; observe exact unwind or retained quarantine.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-09",
+        "SC-IPC-11"
+      ]
+    },
+    {
+      "id": "SC-LOAD-03",
+      "area": "LOAD",
+      "title": "Mixed memory, thread, file and transport activity",
+      "status": "planned",
+      "result": "No final-candidate mixed-load run exists.",
+      "next_check": "Run frozen deterministic workloads concurrently within the single-guest-CPU profile; check data/output and progress, not merely elapsed time.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-VM-10",
+        "SC-PROC-08",
+        "SC-IO-02",
+        "SC-IPC-11",
+        "SC-END-01"
+      ]
+    },
+    {
+      "id": "SC-LOAD-04",
+      "area": "LOAD",
+      "title": "Repeated owner and address reuse under pressure",
+      "status": "planned",
+      "result": "Older owner-reuse success is retained, not a final mixed-pressure result.",
+      "next_check": "Run proposed 100 app/owner cycles with current PID/TID/MM/page/descriptor generations; actively probe stale identities and alias reuse.",
+      "evidence": [
+        "app",
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LOAD-03",
+        "SC-PROC-04",
+        "SC-END-01"
+      ]
+    },
+    {
+      "id": "SC-LOAD-05",
+      "area": "LOAD",
+      "title": "Resource trend, retained quarantine and leak discrimination",
+      "status": "planned",
+      "result": "No candidate-wide time series is bound.",
+      "next_check": "Measure live/pending/quarantined/cache/free counters before/during/after workload and shutdown; no unexplained growth, and retained quarantine remains enumerable.",
+      "evidence": [
+        "plan",
+        "durable"
+      ],
+      "depends_on": [
+        "SC-LOAD-04",
+        "SC-LIFE-06"
+      ]
+    },
+    {
+      "id": "SC-LOAD-06",
+      "area": "LOAD",
+      "title": "Bounded duration, seeds and fatal-signature checks",
+      "status": "planned",
+      "result": "Initial target is a proposed 60-minute mixed run and at least three recorded seeds, not a passing soak.",
+      "next_check": "Freeze seed/repetition/timeouts in the packet; record actual duration and counts, panic/oops/lockup/warnings, independent outputs and clean termination.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-LOAD-05",
+        "SC-END-01"
+      ]
+    },
+    {
+      "id": "SC-LOAD-07",
+      "area": "LOAD",
+      "title": "Reproduce and retire each discovered core defect",
+      "status": "planned",
+      "result": "Known original failures are preserved; newly found defects need individual closures.",
+      "next_check": "For each defect retain failing artifact/reproducer, coherent patch, independent expectation, passing regression and downstream replay; no same-strategy review loop as progress.",
+      "evidence": [
+        "policy",
+        "history"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "SC-END-01",
+      "area": "END",
+      "title": "Freeze core capability, artifact and run packet",
+      "status": "planned",
+      "result": "SC1 scope is proposed here; final artifact/capability/test manifest is not released.",
+      "next_check": "Bind exact profile and all enabled/rejected operations, each check's command/expected result, seeds/counts/duration, timeout and cleanup; justify any change to proposed targets before execution.",
+      "evidence": [
+        "plan",
+        "policy"
+      ],
+      "depends_on": [
+        "SC-ABI-01",
+        "SC-ENV-03"
+      ]
+    },
+    {
+      "id": "SC-END-02",
+      "area": "END",
+      "title": "All required rows reconciled on final candidate",
+      "status": "planned",
+      "result": "This tracker is an initial inventory with known blockers and unmeasured areas, not a completion claim.",
+      "next_check": "Reconcile required core/enabler rows and exact evidence scope; preserve baseline credit while replaying affected rows and ensuring no exposed path or safety-critical finding is omitted.",
+      "evidence": [
+        "plan"
+      ],
+      "depends_on": [
+        "SC-BLD-06",
+        "SC-LIFE-10",
+        "SC-LOAD-06"
+      ]
+    },
+    {
+      "id": "SC-END-03",
+      "area": "END",
+      "title": "Independent core safety and limitations review",
+      "status": "planned",
+      "result": "No final SC1 review exists.",
+      "next_check": "Review actual source/ABI/ownership changes, complete core run results, open defects and explicitly unsupported features; a changed test oracle needs independent justification.",
+      "evidence": [
+        "policy"
+      ],
+      "depends_on": [
+        "SC-END-02",
+        "SC-ABI-03",
+        "SC-ABI-04",
+        "SC-ABI-05",
+        "SC-ABI-06"
+      ]
+    },
+    {
+      "id": "SC-END-04",
+      "area": "END",
+      "title": "Reproducible stable-core checkpoint and explicit notification",
+      "status": "planned",
+      "result": "No SC1 completion notification is justified yet.",
+      "next_check": "Record tested commit/artifacts/profile, passing checks and remaining limitations; explicitly announce STABLE CORE ON THIS CONFIGURATION only after independent review and reproducible checkpoint.",
+      "evidence": [
+        "plan",
+        "policy"
+      ],
+      "depends_on": [
+        "SC-END-03"
+      ]
+    },
+    {
+      "id": "SC-END-05",
+      "area": "END",
+      "title": "Next profile and broader OS work preserved",
+      "status": "planned",
+      "result": "SC1 is intermediate; original whole-OS requirements are unchanged.",
+      "next_check": "Publish outstanding multicore/features/language/platform/production work without resetting historical scores or labeling the entire project complete.",
+      "evidence": [
+        "plan",
+        "reuse"
+      ],
+      "depends_on": [
+        "SC-END-04"
+      ]
+    },
+    {
+      "id": "SC-CPU-11",
+      "area": "CPU",
+      "title": "Integer-register and execution-context isolation",
+      "status": "unmeasured",
+      "result": "TLS and basic thread success do not establish full general-purpose register, flags and execution-context preservation.",
+      "next_check": "Use independent poisoned-register observers across real switches, blocking syscalls, interrupts and signals; verify restored state and no previous-owner data exposure.",
+      "depends_on": [
+        "SC-CPU-01"
+      ],
+      "evidence": [
+        "app",
+        "plan"
+      ]
+    },
+    {
+      "id": "SC-IPC-12",
+      "area": "IPC",
+      "title": "Publication physical guards, PRE_INPUT and live polling",
+      "status": "unmeasured",
+      "result": "M01-D requires selected-span physical guards and live-state verification; classifier or source-only results cannot establish the final candidate's polling behavior.",
+      "next_check": "Integrate selected-span read guards, PRE_INPUT retention, release latch, exact UART digest and capture receipt membership. Exercise the retained 16-case guard harness plus actual polling state machine; the 21 classifier cases alone do not prove it.",
+      "depends_on": [
+        "SC-IPC-04"
+      ],
+      "evidence": [
+        "plan",
+        "run"
+      ]
+    }
+  ]
+}

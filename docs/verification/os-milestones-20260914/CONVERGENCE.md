@@ -83,6 +83,22 @@ progress quota. Safety, independent review and original acceptance remain intact
 
 ## Apply the harness at the appropriate layer
 
+### User-requested stable-core engineering reporting
+
+On 2026-09-28 the user explicitly requested detailed tracking of intermediate
+core stability. Root [STABLE-CORE.md](../../../STABLE-CORE.md), generated from
+`stable-core.json`, is that bounded reporting view. This request permits its
+reporting implementation, not further launcher redesign or campaign execution.
+Use its small behavior rows to show implementations, tests, integration, known
+blockers and unchanged historical successes without waiting for a full gate.
+Update only relevant rows at existing checkpoints; no new audit/review loop is
+required merely to update the report. Preserve all original acceptance records.
+Unknown coverage is unmeasured, not missing code; documentation and infrastructure
+success never imply kernel runtime success. A declared tested-profile SC1 result
+must be announced explicitly but does not finish the unchanged whole-OS goal.
+
+### Execution layers
+
 The dispatcher owns compiler-command approval and the heavy build/guest lease.
 Workers write code/tests within explicit allowlists and may run delegated cheap
 checks only within a reviewed profile and their share of the aggregate budget.

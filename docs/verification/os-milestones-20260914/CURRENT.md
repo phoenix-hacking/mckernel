@@ -2915,3 +2915,33 @@ two-window desktop test passed. Existing scratch and transient controls were
 restored; no campaign, OS fixture, kernel build or guest was started. Official
 acceptance counters above are unchanged. The next normal launcher invocation
 is the user's explicit resume action.
+
+Stable-core engineering tracker, 2026-09-28: the user explicitly requested
+comprehensive, granular progress toward a stable kernel core, separately from
+slow-moving production qualification. Root STABLE-CORE.md is generated from
+stable-core.json with 121 bounded substeps across 16 areas. Every item carries
+a stable ID, scoped result, next check, dependencies and evidence; owner roles
+and original task mappings are inherited from its area. Historical passing
+behavior, implemented/partial work, known blockers and unmeasured coverage stay
+distinct. Unknown coverage does not imply absent Rust code. The first proposed
+claim is explicitly one McKernel CPU on the declared profile; host concurrency,
+alias safety and all advertised capabilities remain required. Broader multicore,
+language, application and production obligations are explicitly preserved.
+
+The existing progress updater renders both reports. START/HANDOFF/CONVERGENCE
+route future checkpoint reporting through the relevant rows without adding a
+new execution or review loop. The pure reporting helper and dashboard integration
+pass 46 unit tests; schema/reference/task/dependency checks, deterministic report
+comparison and git diff --check pass. No kernel source, fixture, build, guest,
+module, launcher or production acceptance input was changed or executed. Saved
+state/watcher and original gate-map/tasks/final-push hashes remain unchanged;
+the campaign remains stopped/paused. These tests validate reporting only, not
+kernel stability. SC1 remains NOT YET DEMONSTRATED.
+
+Independent coverage review corrected overbroad zero-after-reuse and integer-
+register baseline implications, current Rust-consumer claims and fixture/core
+classification. It added explicit integer-register and M01-D physical-guard/
+live-polling checks, clarified the result-plumbing versus durable-ownership
+sequence, and tightened application/pressure/load dependencies. Proposed core
+repeat targets remain planning inputs for a separately reviewed run packet,
+not new runtime results or changes to original qualification requirements.

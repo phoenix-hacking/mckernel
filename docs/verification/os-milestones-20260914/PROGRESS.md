@@ -5,11 +5,23 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-16T21:30:39+00:00`
+- Dashboard refreshed: `2026-09-28T07:14:41+00:00`
 - Launcher state heartbeat: `2026-09-16T12:33:17.586940+00:00`
 - Launcher: **STOPPED (resume is operator-controlled)**; phase `stopped`; stop reason `signal_15`
 - Worker PID: `2293235`; server PID: `2293237`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260916T123044Z-40b9ab8c`
+
+## Stable kernel core: engineering progress
+
+Read the [detailed SC1 tracker](../../../STABLE-CORE.md) for every bounded behavior, known result, next check, owner role, dependency and evidence link.
+Engineering snapshot: `2026-09-28` at `09a09b513c415e84242f2c257895a856b8605150`; milestone **NOT YET DEMONSTRATED**. Refreshing this dashboard does not refresh that evidence.
+
+| Work | Verified substeps | Historical baseline | Implemented | Partial | Blocked | Unmeasured | Planned |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Kernel behavior | 0 | 18 | 1 | 6 | 9 | 49 | 20 |
+| Test / execution infrastructure | 2 | 1 | 0 | 6 | 6 | 1 | 2 |
+
+These are separate engineering states, not a stability percentage. Existing baseline behavior is preserved; unmeasured does not mean unimplemented. Infrastructure results never count as kernel results. The full tracker declares the first tested profile and explicitly separates multicore/features/platform qualification.
 
 ## Acceptance Bars
 
@@ -50,6 +62,7 @@
 
 ## Checkpoint Protocol
 
+0. Update touched `stable-core.json` rows with actual source/artifact-bound results, blockers and next checks. Keep historical evidence; do not infer progress from this refresh.
 1. Run `python3 scripts/update_progress_tracker.py` after every accepted packet, diagnosis, or launcher checkpoint.
 2. Record the exact evidence path, source revision, test command, result, blocker, and next action in `CURRENT.md`.
 3. Commit and push the tracker together with the verified checkpoint; never inflate a bar for source-only or rejected work.
@@ -57,6 +70,7 @@
 
 ## Source Of Truth
 
+- `stable-core.json` and root `STABLE-CORE.md` - granular SC1 engineering snapshot; not production acceptance.
 - `docs/verification/os-milestones-20260914/gate-map.json` - contractual gate and point counts.
 - `docs/verification/os-milestones-20260914/tasks.json` - 68 planned task packets and dependencies.
 - `docs/verification/os-milestones-20260914/CURRENT.md` - detailed chronological evidence cursor.

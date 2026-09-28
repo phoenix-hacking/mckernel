@@ -1,0 +1,469 @@
+# Stable kernel core — engineering milestone
+
+Milestone: SC1 — NOT YET DEMONSTRATED
+
+## Snapshot provenance
+
+As of: 2026-09-28. Source revision: `09a09b513c415e84242f2c257895a856b8605150`.
+
+Input: [docs/verification/os-milestones-20260914/stable-core.json](docs/verification/os-milestones-20260914/stable-core.json).
+
+Manual snapshot, not live telemetry. Counts describe only the declared substeps and cited evidence; they do not verify the current checkout or promote the milestone.
+
+Campaign state is not inferred from this snapshot; this helper does not start/resume or change it. Owner labels are responsibility roles, not live runtime status.
+
+## Practical progress counts
+
+Every row is one observable substep. Statuses are counted separately; historical baselines remain separate from verified behavior. There is no weighted score or overall stability percentage. Counts include required and optional rows.
+
+| Kind | Substeps | verified | baseline | implemented | partial | blocked | unmeasured | planned |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| core | 103 | 0 | 18 | 1 | 6 | 9 | 49 | 20 |
+| enabler | 18 | 2 | 1 | 0 | 6 | 6 | 1 | 2 |
+
+| Area | Kind | Substeps | verified | baseline | implemented | partial | blocked | unmeasured | planned |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ENV — Execution environment and preserved baseline | enabler | 7 | 2 | 0 | 0 | 3 | 1 | 0 | 1 |
+| OBS — Trustworthy execution and observation | enabler | 9 | 0 | 1 | 0 | 3 | 3 | 1 | 1 |
+| FIX — Kernel microtest fixture admission | enabler | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| BLD — Build, source reuse and regression baseline | core | 6 | 0 | 2 | 0 | 1 | 0 | 2 | 1 |
+| BOOT — Boot, resource assignment and basic execution | core | 6 | 0 | 2 | 0 | 0 | 0 | 3 | 1 |
+| MEM — Allocator and pending-free primitives | core | 8 | 0 | 0 | 1 | 1 | 2 | 3 | 1 |
+| VM — Address spaces, failed invalidation and alias safety | core | 10 | 0 | 1 | 0 | 0 | 4 | 4 | 1 |
+| CPU — Scheduling, interrupts, concurrency and architectural state | core | 11 | 0 | 1 | 0 | 0 | 0 | 10 | 0 |
+| PROC — Process, thread, signal and futex lifetime | core | 9 | 0 | 6 | 0 | 0 | 0 | 3 | 0 |
+| SYS — System calls, loading and user boundary | core | 7 | 0 | 1 | 0 | 1 | 0 | 5 | 0 |
+| IPC — Transport, publication ownership and real pressure | core | 12 | 0 | 3 | 0 | 1 | 3 | 4 | 1 |
+| IO — Files, control plane and observable kernel objects | core | 6 | 0 | 2 | 0 | 0 | 0 | 4 | 0 |
+| ABI — Interface coverage, unsafe contracts and evidence identity | core | 6 | 0 | 0 | 0 | 2 | 0 | 3 | 1 |
+| LIFE — Native shutdown, drain, restoration and restart | core | 10 | 0 | 0 | 0 | 0 | 0 | 6 | 4 |
+| LOAD — Real faults, bounded pressure and mixed core stress | core | 7 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| END — Stable-core declaration and user-facing finish line | core | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+
+## Status legend
+
+- verified: Scoped completed behavior supported by the cited evidence.
+- baseline: Passing historical exact artifacts; current-source replay is still required.
+- implemented: Source exists; this does not establish accepted runtime behavior.
+- partial: Some of the behavior is supported; the stated remainder is open.
+- blocked: The next check awaits the recorded blocker or dependency.
+- unmeasured: No accepted measurement for this scope; this does not mean code is absent.
+- planned: An observable substep is specified; no completed result is claimed.
+
+## Declared profile
+
+- First claim is explicitly SC1 on the declared tested configuration, not a generally production-stable or multicore-qualified OS. The reviewed historical application profile is the starting point, not proof of the final candidate.
+- Pinned Rocky-derived Linux 6.12.0-211.44.1.el10\_2 control kernel; native Rust ihk, ihk-smp-x86\_64 and mcctrl modules; existing Rust-heavy McKernel image and unchanged mcexec ABI. Preserve Rust consumers and all original build/acceptance contracts.
+- Historical runtime envelope: isolated TCG guest, four Linux vCPUs, two NUMA nodes, 8 GiB guest RAM, one McKernel CPU and 128 MiB assigned memory. Existing native container limits remain four CPUs, 12 GiB and 512 tasks. Reconfirm the exact profile and limits before execution.
+- Initial repeatability targets proposed for the core-only packet: 100 application/owner-reuse cycles, 10 full native OS create/boot/workload/stop/destroy/recreate cycles, and 60 minutes of mixed memory/thread/I/O/transport-pressure work across at least three recorded seeds. These are planning targets, not executed results or execution authority; freeze or justify changes in SC-END-01 before running. Preserve any stronger original contract required by a selected test.
+- Freeze the supported syscall, process, CPU/xstate and device capability matrix. Unsupported operations must reject safely; an exposed or advertised capability cannot be excluded to evade a failing core test. McKernel multicore scheduling is not claimed by this first profile; host concurrency, preemption and cross-host-CPU alias safety still are.
+
+## Finish definition
+
+- Build and reproduce the exact candidate from preserved sources; identify every consumed module/image/ABI and rerun affected existing regressions.
+- Boot, schedule basic real workloads and preserve memory, process, thread, exception and enabled architectural state across their full lifetimes.
+- On failed invalidation, cancellation, transport pressure, process death and allocation failure, retain or release the correct owners without stale access, double release, silent corruption or unsafe admission.
+- Run baseline memory/files/threads/signals, both control ABIs, ordinary signal ABI and futex/child-TID plus the focused defect regressions against the same final candidate.
+- Complete the declared lifecycle and mixed-load packet with correct outputs, no unexplained panic/oops/hang/corruption, bounded live resource counts, and verified restoration. Killing the VM is not native resource restoration.
+- Close or explicitly prove inapplicable every required row for the frozen profile. No open safety-critical defect in an enabled path. Independent review binds the declaration to exact tested artifacts and states remaining limitations.
+- Call out SC1 as an intermediate engineering result. All 130 production gates, seven language gates, 273-case catalog, full Rust/assembly closure and original exposure requirements keep their original meaning and remain separate.
+
+STABLE ON DECLARED PROFILE is a manual declaration allowed only when every required row is verified and the declared scope is valid. Omitted required flags mean required; optional rows are marked below.
+
+## Scope notes
+
+- This is a snapshot, not live telemetry and not a new OS acceptance authority. It was initialized from retained engineering evidence and compact handoff, not a fresh line-by-line audit or new kernel run. The campaign remains stopped; preparation does not resume it.
+- Each row is one bounded engineering deliverable. Fixes, source implementations, local checks, integrated runtime behavior and repeated runs are visible without waiting for an entire production gate. Status can regress when a new counterexample appears.
+- VERIFIED means the exact scoped row has supporting evidence; BASELINE means a passing older exact artifact or profile, still useful engineering credit but not current-candidate stability. IMPLEMENTED/PARTIAL do not claim executable success; BLOCKED names a concrete defect/dependency; UNMEASURED means no reconciled SC1 result, not absent code.
+- No overall completion or time percentage is inferred from row counts, code size, reviews or commits. Enabler progress is reported separately from kernel behavior. Splitting rows never retroactively creates new engineering accomplishments.
+- Owner labels are responsibilities for a future dispatch, not currently running agents. Item dependencies are the main implementation sequence, not permission to skip original task, case, execution-release or safety prerequisites.
+- Evidence links include source/planning references as well as executed results; only the row's status/result describes the claim. Historical baseline rows must be rebound/replayed after relevant source or profile changes. This initial inventory does not promote source-only fixtures or test models into real kernel results.
+- At checkpoints update only touched rows and retain prior failure records in CURRENT.md. Record the command, result counts, tested source/artifact identity, actual execution layer, blocker and next check. Unknown timing stays unknown; estimate only after measured repair/build/run throughput.
+- Coverage rule: every enabled consumer, exported interface and reachable failure edge must map to a row/test or an explicit unsupported disposition in SC-ABI-01/SC-END-01. New discoveries extend the worklist with stable IDs and a reason; they do not silently alter historic evidence.
+
+## Priority queue
+
+### 1. SC-OBS-02 — Real descriptor remapping
+
+State: blocked. Required: yes.
+
+Result: Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient.
+
+Blockers / unmet dependencies: Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+
+Next check: Repair with real subprocess dup/close/exec tests: closed 0/1/2, source=destination, overlapping mappings, preserved stdout/stderr and no unintended inheritance.
+
+Dependencies: SC-ENV-04 (blocked)
+
+### 2. SC-OBS-03 — Acquisition sequence validation
+
+State: blocked. Required: yes.
+
+Result: Twelve fabricated positive acquisition-ID variants pass the existing validators.
+
+Blockers / unmet dependencies: Twelve fabricated positive acquisition-ID variants pass the existing validators.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+
+Next check: Bind IDs to both actual successful create sites and failed-create non-consumption; reject gaps, offsets, duplicates and reordering without breaking valid reuse.
+
+Dependencies: SC-ENV-04 (blocked)
+
+### 3. SC-OBS-04 — Live file-identity alias rejection
+
+State: blocked. Required: yes.
+
+Result: Sixteen aliases between simultaneously live event/request/report identities pass existing validators.
+
+Blockers / unmet dependencies: Sixteen aliases between simultaneously live event/request/report identities pass existing validators.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+
+Next check: Track cross-role live device/inode ownership; reject simultaneous aliasing and preserve source-defined post-retirement reuse.
+
+Dependencies: SC-ENV-04 (blocked)
+
+### 4. SC-MEM-02 — Compilable independent reference and real constructors
+
+State: blocked. Required: yes.
+
+Result: Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.
+
+Blockers / unmet dependencies: Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+
+Next check: Compile the independent C reference and Rust candidate; construct actual empty/single/two/many states before claiming any vector executes.
+
+Dependencies: SC-ENV-04 (blocked)
+
+### 5. SC-MEM-03 — Sentinel, structural and overflow semantics
+
+State: blocked. Required: yes.
+
+Result: Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification.
+
+Blockers / unmet dependencies: Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification.; SC-MEM-02 (blocked): Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.
+
+Next check: Run valid sentinel-linked positives, self/foreign-cycle negatives and boundary overflows against original semantics; remove spelling-only checks.
+
+Dependencies: SC-MEM-02 (blocked)
+
+### 6. SC-VM-01 — Propagate failed host-clear results through caller boundaries
+
+State: blocked. Required: yes.
+
+Result: Source review finds munmap loses host-clear errors and unconditionally finishes pending pages. No stale write was reproduced.
+
+Blockers / unmet dependencies: Source review finds munmap loses host-clear errors and unconditionally finishes pending pages. No stale write was reproduced.; SC-MEM-04 (partial): Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior.
+
+Next check: Repair and test callback/result plumbing so actual clear errors reach every caller. This substep does not close release safety: durable ownership and integrated retention are SC-VM-02/03/04/05, not prerequisites for claiming only correct result propagation.
+
+Dependencies: SC-MEM-04 (partial)
+
+### 7. SC-IPC-03 — Selected response survives cancel/prepare/no-wake paths
+
+State: blocked. Required: yes.
+
+Result: Review 43 releases a corrected source-only implementation attempt, not a working candidate.
+
+Blockers / unmet dependencies: Review 43 releases a corrected source-only implementation attempt, not a working candidate.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+
+Next check: Authenticate inputs, implement the retained correction, exercise actual methods and compile; selected Response/Completion/OS backing stays owned until committed release.
+
+Dependencies: SC-ENV-04 (blocked)
+
+### 8. SC-OBS-07 — Native payload identity and terminal collector
+
+State: partial. Required: yes.
+
+Result: Native collector work exists in the history, but M02-C completion is not established.
+
+Blockers / unmet dependencies: None recorded.
+
+Next check: Observe real McKernel PID/TID, request generation, delivery, termination, interpreter/DSO mappings and side effects; distinguish launcher from payload.
+
+Dependencies: None.
+
+## ENV — Execution environment and preserved baseline
+
+Kind: enabler. Owner role: Dispatcher / infrastructure worker; unassigned.
+
+Original contracts (inherited by every substep): [M00-A](docs/verification/os-milestones-20260914/tasks.json), [M00-B](docs/verification/os-milestones-20260914/tasks.json), [M00-D](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-ENV-01 | Parallel runner and worker visibility | verified | Prepared runner passed 98 focused tests; two synthetic desktop windows verified. This is tooling, not kernel behavior. | On user launch reconcile measured agent/job/memory limits; no new runner work unless an actual defect appears. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md) |
+| SC-ENV-02 | Isolated scratch, resources and ownership checks | verified | Original scratch and controls restored; native/compat isolation probes passed during preparation. | Recheck free space, exclusive heavy owner and cleanup state immediately before any real build/guest; old preparation is not a live lease. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md) |
+| SC-ENV-03 | Exact SC1 source, binary and profile manifest | planned | Existing exact baseline manifests exist; final SC1 candidate is not selected. | Bind source/dirty state, toolchains, config, Linux kernel, three modules, McKernel image, launcher and payload hashes. | None | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-ENV-04 | Reusable unprivileged executable-check profile | blocked | Handoff says Layer-B release remains required for the M02/M03 fixtures. | Release one bounded real-subprocess/C/Rust microtest profile with resource caps, prohibited side effects and disposable outputs; reuse its allowed envelope. | None | [handoff](docs/verification/os-milestones-20260914/HANDOFF.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-ENV-05 | Independent expected results and fresh attempts | partial | Historical immutable evidence and failed attempts are retained; SC1-specific frozen packet remains to assemble. | Bind independent oracles, expected bytes, original failures and unique attempt/output names before execution. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [run](docs/verification/stability-run-20260913.md) |
+| SC-ENV-06 | Interruption, crash capture and verified cleanup | partial | Launcher recovery is tested; OS interruption/cleanup remains a distinct runtime responsibility. | Prove bounded timeout, capture-before-cleanup, exact PID/container/guest identity and lease release; do not infer success from launcher exit. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-ENV-07 | Checkpoint freshness and restore path | partial | Existing Git/evidence preservation workflow is in place; SC1 snapshot is documentary. | Record tested revision, commands and artifacts for each changed row; ensure retained archives restore and the checkpoint is recoverable. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [history](docs/verification/os-milestones-20260914/CURRENT.md) |
+
+## OBS — Trustworthy execution and observation
+
+Kind: enabler. Owner role: Collector repair expert + independent reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M02-A](docs/verification/os-milestones-20260914/tasks.json), [M02-B](docs/verification/os-milestones-20260914/tasks.json), [M02-C](docs/verification/os-milestones-20260914/tasks.json), [M02-D](docs/verification/os-milestones-20260914/tasks.json), [M02-E](docs/verification/os-milestones-20260914/tasks.json), [M02-F](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-OBS-01 | Linux reference positive profile | baseline | All 25 Linux infrastructure cases passed on the retained exact profile, including supervised outcomes and cleanup. | Reuse only unchanged bound inputs; rerun affected cases after collector changes. | None | [root](docs/verification/stability-linux-collector-root-success-20260915-2.json) |
+| SC-OBS-02 | Real descriptor remapping | blocked | Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient. | Repair with real subprocess dup/close/exec tests: closed 0/1/2, source=destination, overlapping mappings, preserved stdout/stderr and no unintended inheritance. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-03 | Acquisition sequence validation | blocked | Twelve fabricated positive acquisition-ID variants pass the existing validators. | Bind IDs to both actual successful create sites and failed-create non-consumption; reject gaps, offsets, duplicates and reordering without breaking valid reuse. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-04 | Live file-identity alias rejection | blocked | Sixteen aliases between simultaneously live event/request/report identities pass existing validators. | Track cross-role live device/inode ownership; reject simultaneous aliasing and preserve source-defined post-retirement reuse. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-05 | Retained validator positives and negatives | partial | Memory-backed review rejects 292 bad inputs and preserves 24 valid controls; no real OS descriptor proof follows. | Preserve those controls, add original counterexamples and rerun actual implementations after the coherent repair. | SC-OBS-02 (blocked), SC-OBS-03 (blocked), SC-OBS-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-06 | Adverse collector and rescue behavior | partial | Positive root profile is done; storage, late-signal/setup, stopped-collector rescue, overflow and loader closure remain. | Exercise real failure paths with correct raw status, bounded ownership and cleanup under the separately released runtime profile. | SC-OBS-05 (partial) | [root](docs/verification/stability-linux-collector-root-success-20260915-2.json), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-OBS-07 | Native payload identity and terminal collector | partial | Native collector work exists in the history, but M02-C completion is not established. | Observe real McKernel PID/TID, request generation, delivery, termination, interpreter/DSO mappings and side effects; distinguish launcher from payload. | None | [history](docs/verification/os-milestones-20260914/CURRENT.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-OBS-08 | Paired runner and strict result/oracle records | planned | Three startup fixtures compile; paired eligible catalog execution is not yet established. | Reconcile packet001-v3 schemas/env/umask and immutable payload/path identity; run identical inputs on Linux and McKernel and join exact outcomes. | SC-OBS-07 (partial), SC-OBS-06 (partial) | [compiled](docs/verification/stability-packet001-compile-20260913-1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-OBS-09 | Observer negative controls and missing-evidence rejection | unmeasured | No final SC1 collector integration result is bound. | Reject stale hashes, wrong signals/raw waits, missing dual streams, timeouts, failed QMP resume and incomplete provenance/loader closure; include legitimate success. | SC-OBS-08 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## FIX — Kernel microtest fixture admission
+
+Kind: enabler. Owner role: Memory fixture worker + independent reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M03-A](docs/verification/os-milestones-20260914/tasks.json), [M03-B](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-MEM-02 | Compilable independent reference and real constructors | blocked | Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders. | Compile the independent C reference and Rust candidate; construct actual empty/single/two/many states before claiming any vector executes. | SC-ENV-04 (blocked) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
+| SC-MEM-03 | Sentinel, structural and overflow semantics | blocked | Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification. | Run valid sentinel-linked positives, self/foreign-cycle negatives and boundary overflows against original semantics; remove spelling-only checks. | SC-MEM-02 (blocked) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
+
+## BLD — Build, source reuse and regression baseline
+
+Kind: core. Owner role: Build/integration owner + reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M08-A](docs/verification/os-milestones-20260914/tasks.json), [M08-B](docs/verification/os-milestones-20260914/tasks.json), [M09-A](docs/verification/os-milestones-20260914/tasks.json), [M09-C](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-BLD-01 | Preserve active Rust consumers | partial | Historical reuse inventory maps existing core, native-host, compatibility and user-tool Rust consumers; current SC1 consumer preservation is not yet reconciled. | Confirm affected symbols stay on their intended build paths; avoid rewriting existing implementations or counting fixtures as product code. | None | [reuse](docs/verification/rust-reuse-plan.md) |
+| SC-BLD-02 | Pinned native modules and image rebuild | baseline | Retained repaired module2026091301/image3 passed eight original suites; source changes need fresh artifacts. | Build final candidate using pinned inputs; no prebuilt-object substitution or unrecorded staging drift. | SC-ENV-03 (planned) | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-BLD-03 | Actual helper Rust/C and ABI regression checks | unmeasured | Historical equivalence/build work exists; no new SC1 all-affected-surface result is claimed. | Compile and execute complete changed helpers plus required references/fallbacks; test errors independently, not two models sharing the same bug. | SC-ENV-04 (blocked) | [reuse](docs/verification/rust-reuse-plan.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-BLD-04 | Link, symbol and executable origin checks | unmeasured | Full Rust/assembly language closure stays downstream; current candidate dispatch identity still matters. | Check expected consumers, unresolved/duplicate exports, object provenance and unsafe fallback selection on the actual image/modules. | SC-BLD-02 (baseline) | [reuse](docs/verification/rust-reuse-plan.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json) |
+| SC-BLD-05 | Existing eight-suite runtime regression | baseline | Memory, files, threads, signals, both control ABIs, ordinary signal ABI and futex/child-TID passed the repaired baseline. | Rerun all eight against final integrated artifacts; preserve original assertions and every failed attempt. | SC-BLD-02 (baseline) | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json), [run](docs/verification/stability-run-20260913.md) |
+| SC-BLD-06 | Clean independent rebuild and replay | planned | No final SC1 reproduction candidate is frozen. | Rebuild from pinned sources in a fresh output tree; verify artifact identities and reproduce the agreed core runs. | SC-END-01 (planned), SC-BLD-05 (baseline) | [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## BOOT — Boot, resource assignment and basic execution
+
+Kind: core. Owner role: Native boot/resource worker + integration owner; unassigned.
+
+Original contracts (inherited by every substep): [M08-C](docs/verification/os-milestones-20260914/tasks.json), [M08-D](docs/verification/os-milestones-20260914/tasks.json), [M08-E](docs/verification/os-milestones-20260914/tasks.json), [M04-A](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-BOOT-01 | Image load, CPU/memory assignment and readiness | baseline | Recorded native baseline boots and runs real workloads on its one-McKernel-CPU profile. | Replay both existing startup/control routes on the final candidate and verify assigned boundaries, entry state and exact readiness. | SC-BLD-02 (baseline) | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json), [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+| SC-BOOT-02 | Invalid image and failed partial initialization | unmeasured | Prior source/build work is not a reconciled SC1 failure-path inventory. | Test truncated/wrong-ABI/invalid-range images and injected allocation/setup failures; no executable half-loaded image or leaked owner. | None | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-BOOT-03 | Per-CPU, stack, interrupt and boot-table initialization | unmeasured | Historical boot success does not cover every initialization failure or state invariant. | Check current trampoline/page tables/per-CPU and stack ownership, interrupt enabling order and bounds before admission. | None | [guest\_review](docs/verification/ultra-guest-review-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-BOOT-04 | Actual payload scheduling and return path | baseline | Ordinary ELF, delegated syscall output and exit routing worked in the retained application baseline. | Observe real guest scheduling, worker/delivery/CPU return identities and expected bytes/exit in final core runs. | SC-BOOT-01 (baseline) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-BOOT-05 | Configuration and unsupported topology rejection | unmeasured | The initial claim deliberately excludes McKernel multicore and CPU-hotplug qualification. | Freeze supported topology, memory and feature limits; prove unsupported configuration rejects without partial ownership or falsely reporting success. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-BOOT-06 | Repeated startup without stale registry or queue state | planned | Baseline reuse evidence is not repeated final-candidate OS recreation. | Combine fresh generations with real create/boot cycles; verify old IDs, callbacks and channels cannot satisfy new readiness. | SC-LIFE-08 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## MEM — Allocator and pending-free primitives
+
+Kind: core. Owner role: Memory worker + ownership reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M03-A](docs/verification/os-milestones-20260914/tasks.json), [M03-B](docs/verification/os-milestones-20260914/tasks.json), [M03-C](docs/verification/os-milestones-20260914/tasks.json), [M06-D](docs/verification/os-milestones-20260914/tasks.json), [M09-C](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-MEM-01 | Existing pinned pending-free destination | implemented | PendingFreeBatch, state and detach logic exist in mem\_helpers.rs; existence is not ownership closure. | Inspect active consumers and preserve pinning, !Send/!Sync intent, no implicit free and source NULL/NULL reset. | None | [pending](kernel/rust/mem_helpers.rs) |
+| SC-MEM-04 | Actual begin/enqueue/detach/finish helper execution | partial | Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior. | Exercise complete selected helpers and ABI dependencies for empty/one/many, order/metadata, source reuse, drain and two-head independence. | SC-MEM-03 (blocked) | [pending](kernel/rust/mem_helpers.rs), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-MEM-05 | Unchanged-on-error and duplicate-release protection | unmeasured | No final actual-body error/reuse proof is reconciled for SC1. | Inject partial validation failure, invalid/duplicate detach and drain; check every pointer/page flag/count and zero allocator calls on rejection. | SC-MEM-04 (partial) | [pending](kernel/rust/mem_helpers.rs), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-MEM-06 | Allocation extent, alignment and exhaustion boundaries | unmeasured | Existing allocation implementation must be retained; current SC1 boundary coverage is unmeasured. | Test zero/oversized/overflowing extents, alignment, accounting and OOM before/after partial acquisition; no overlapping or twice-freed extent. | None | [reuse](docs/verification/rust-reuse-plan.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-MEM-07 | Zero-filled first use and safe reuse | unmeasured | Historical initial-zeroing checks exist, but neither complete zero-after-reuse nor draining every pending zeroing page is established by the cited baseline. | Verify actual first-use/reuse bytes and stale-data isolation; inventory pending, in-flight, quarantined and free backing. | SC-MEM-06 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+| SC-MEM-08 | Durable detached-zeroing inventory | blocked | Durable-owner review leaves enumerable backing ownership and traversal/error retention open. | Publish the complete durable inventory and progress before transfer; mid-traversal failure retains visited state and the unvisited suffix, including under terminal quarantine. | None | [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md), [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [durable\_registry](docs/verification/stability-pending-free-durable-registry-feasibility-review-20260915-1.md) |
+| SC-MEM-09 | Descriptor and page-table backing lifetime | blocked | Trusted physical ownership and descriptor pinning remain unresolved; page data alone is insufficient. | Prove descriptors and page-table backing survive pending/in-flight/alias users; generation-bound ownership prevents allocator reuse until release is safe. | SC-MEM-04 (partial) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json), [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md) |
+| SC-MEM-10 | Physical-page accounting under repeated reuse | planned | No final mixed-pressure/reuse inventory exists for the candidate. | Account for every live/pending/quarantined/free page over repeated failures and recovery; check balanced terminal ownership without treating retained quarantine as a leak. | SC-MEM-05 (unmeasured), SC-MEM-08 (blocked), SC-MEM-09 (blocked) | [plan](docs/verification/os-milestones-20260914/README.md), [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md) |
+
+## VM — Address spaces, failed invalidation and alias safety
+
+Kind: core. Owner role: VM ownership expert + independent unsafe reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M03-C](docs/verification/os-milestones-20260914/tasks.json), [M03-D](docs/verification/os-milestones-20260914/tasks.json), [M06-A](docs/verification/os-milestones-20260914/tasks.json), [M06-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-VM-01 | Propagate failed host-clear results through caller boundaries | blocked | Source review finds munmap loses host-clear errors and unconditionally finishes pending pages. No stale write was reproduced. | Repair and test callback/result plumbing so actual clear errors reach every caller. This substep does not close release safety: durable ownership and integrated retention are SC-VM-02/03/04/05, not prerequisites for claiming only correct result propagation. | SC-MEM-04 (partial) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md) |
+| SC-VM-02 | Durable transaction across scheduling and migration | blocked | Per-CPU pending lists alone do not prove an owner across preemption, failed clear or terminal service state. | Bind transaction generation, pinned descriptors, exact backing and durable owner; test interleaved/preempted completion and stale generation rejection. | SC-VM-01 (blocked), SC-MEM-09 (blocked) | [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md), [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md) |
+| SC-VM-03 | Partial guest mutation and failure composition | unmeasured | Range removal can partially mutate before a later error; restoring an old pointer is not a safe rollback. | Independently test partial range/PTE edits, guest error, host-clear error and blocked publication; no premature release or fictitious rollback. | SC-VM-02 (blocked) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md) |
+| SC-VM-04 | Host aliases, PFN inheritance and VA reuse exclusion | blocked | Inherited Linux aliases and conflicting reuse remain part of the retained invalidation failure contract, even with one guest CPU. | Inventory actual MM/PTE/PFN identities; exclude remap/reuse while any relevant host mapping or retained transaction survives. | SC-VM-02 (blocked) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md) |
+| SC-VM-05 | Authenticated TLB completion before release | blocked | A response tag is not proof that Linux aliases/TLB entries stopped using backing. | Bind acknowledgements to the exact transaction/address space and verify stale access is impossible before releasing data or page-table storage. | SC-VM-04 (blocked) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-VM-06 | Every invalidation caller and teardown route | unmeasured | SC1 must cover more than ordinary munmap. | Map munmap, MAP\_FIXED, mprotect, shmdt, remap\_file\_pages, enabled XPMEM and exec/exit paths to the same safe transaction rules or proven safe rejection. | SC-VM-01 (blocked) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-VM-07 | Basic mmap/mprotect/munmap behavior | baseline | Baseline exercised mapping data, read-only/read-write protection and fourteen completed host invalidations. | Replay successes plus boundary/unaligned/invalid permissions and bad pointers on the repaired candidate; preserve protection and error semantics. | SC-VM-05 (blocked), SC-VM-06 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-VM-08 | Pager faults and user/kernel isolation | unmeasured | Pager/reference baselines exist, but SC1 failure/isolation coverage is not reconciled. | Test demand/zero/file-backed faults, unmapped and protected addresses, usercopy faults and concurrent death; wrong address spaces must not be modified. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-VM-09 | Kill, cancellation and terminal quarantine during MM work | unmeasured | Correct terminal retention is required beyond happy-path invalidation. | Inject SIGKILL/cancel/service failure at real MM phases; observe stable enumerable owners at terminal and required later observation, with no unsafe admission. | SC-VM-03 (unmeasured), SC-VM-05 (blocked) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-VM-10 | Successful post-failure release and address reuse | planned | Recovery is not promised for permanently quarantined states. | For paths with an established recovery contract, verify real successful invalidation, one release, safe VA/physical reuse and no stale writes; retain permanent quarantine otherwise. | SC-VM-07 (baseline), SC-VM-09 (unmeasured), SC-MEM-10 (planned) | [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## CPU — Scheduling, interrupts, concurrency and architectural state
+
+Kind: core. Owner role: Scheduler/architecture worker + unsafe reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M08-B](docs/verification/os-milestones-20260914/tasks.json), [M08-D](docs/verification/os-milestones-20260914/tasks.json), [M09-B](docs/verification/os-milestones-20260914/tasks.json), [M09-C](docs/verification/os-milestones-20260914/tasks.json), [M07-A](docs/verification/os-milestones-20260914/tasks.json), [M07-C](docs/verification/os-milestones-20260914/tasks.json), [M07-D](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-CPU-01 | Runnable-peer progress and scheduling fairness | unmeasured | Existing scheduler/thread code is preserved; a current stress/fairness claim is unmeasured. | Run multiple real runnable and blocked threads on the declared single McKernel CPU; observe progress, bounded scheduling and no starvation/hang. | None | [reuse](docs/verification/rust-reuse-plan.md), [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+| SC-CPU-02 | Sleep/wake, idle and lost-wakeup races | unmeasured | Baseline thread success does not exhaust queue-to-sleep race windows. | Race wake-before-sleep, timeout, cancellation and idle entry with real scheduling; verify no lost wake or duplicate runqueue ownership. | None | [plan](docs/verification/os-milestones-20260914/README.md), [reuse](docs/verification/rust-reuse-plan.md) |
+| SC-CPU-03 | Lock order and IRQ/preemption restoration | unmeasured | No complete candidate-specific concurrency result is claimed. | Check lock order and every error unwind; no blocking in atomic context, lock leaks or wrongly restored IRQ/preemption state. | None | [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json), [guest\_review](docs/verification/ultra-guest-review-20260909.md) |
+| SC-CPU-04 | Callbacks, refcounts and memory ordering | unmeasured | Single guest CPU still races Linux workers, IRQs and async callbacks. | Exercise publish/consume/acquire/release and last-reference races; drain RCU/work/timer/IRQ users before owner destruction. | None | [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-CPU-05 | Stack bounds including nested callbacks/interrupts | unmeasured | Retained prefix sums are explicitly not a complete kernel stack certificate. | Check compiled frames, callback chains and interrupt nesting under the real profile; verify bounds/guard behavior without inventing coverage. | None | [plan](docs/verification/os-milestones-20260914/README.md), [guest\_review](docs/verification/ultra-guest-review-20260909.md) |
+| SC-CPU-06 | TLS context isolation | baseline | Retained thread runs observed isolated TLS and real clone3 children; they do not establish complete integer-register isolation. | Replay per-thread TLS through switches, blocking syscalls, interrupts, signals and retirement; integer-register isolation is separately tracked in SC-CPU-11. | SC-CPU-01 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-CPU-07 | Enabled x87/XMM/MXCSR and extended state isolation | unmeasured | Excluding advanced ISA qualification does not exclude baseline floating-point state safety. | Observe initialization and preservation across switches/syscalls/signals; reject invalid xstate restore and prevent previous-owner state disclosure. | None | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-CPU-08 | Truthful CPU feature exposure and kernel SIMD restrictions | unmeasured | Current SC1 CPUID/XCR0/compiled opcode agreement is not reconciled. | Bind CPUID/XGETBV capabilities to saved state and signal-frame sizes; inspect actual executable instructions and enforce kernel SIMD policy. | SC-BLD-04 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-CPU-09 | Exceptions and malformed-frame containment | unmeasured | No final invalid frame/trap isolation matrix is recorded here. | Trigger supported user faults and malformed return/signal state; affect only the offending process, preserve kernel state and avoid retry loops. | None | [plan](docs/verification/os-milestones-20260914/README.md), [guest\_review](docs/verification/ultra-guest-review-20260909.md) |
+| SC-CPU-10 | Timer/deadline arithmetic and real expiration | unmeasured | Timing APIs have existing implementations, not a current SC1 boundary result. | Test monotonic ordering, zero/past/overflowing deadlines, interrupted waits and timer cancellation/rearm; verify elapsed behavior on the declared profile. | None | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-CPU-11 | Integer-register and execution-context isolation | unmeasured | TLS and basic thread success do not establish full general-purpose register, flags and execution-context preservation. | Use independent poisoned-register observers across real switches, blocking syscalls, interrupts and signals; verify restored state and no previous-owner data exposure. | SC-CPU-01 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## PROC — Process, thread, signal and futex lifetime
+
+Kind: core. Owner role: Process worker + lifetime reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M06-A](docs/verification/os-milestones-20260914/tasks.json), [M06-B](docs/verification/os-milestones-20260914/tasks.json), [M06-C](docs/verification/os-milestones-20260914/tasks.json), [M08-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-PROC-01 | Process/thread creation and identity generations | baseline | Real baseline clone3 children and process identities exist; all flag/failure combinations are not qualified. | Replay supported create/exec/wait/join and partial-init rollback; reject unsupported flags without leaked registry nodes or stale identities. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-PROC-02 | Exit, join and child-TID ownership | baseline | Baseline passed futex/child-TID and thread-node removal checks. | Exercise normal exit, concurrent joins/waits, invalid TID pointers and clear-TID wake ownership; no double reap or dangling user pointer. | None | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json), [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+| SC-PROC-03 | Worker/launcher death during delegated work | baseline | Retained SIGKILL during blocked read showed retirement and process/procfs release. | Repeat against final artifacts at the relevant before/after-publication phases, with finite cleanup and preserved MM owners. | SC-IPC-03 (blocked), SC-VM-09 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-PROC-04 | PID/TID reuse and stale-response rejection | baseline | Older owner-failure run used 700 Linux forks to reuse both old IDs three times, then eight applications passed in the same OS. | Retain exact original assertions and test generation-bound stale completions after final-candidate owner reuse. | SC-PROC-03 (baseline) | [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+| SC-PROC-05 | Signals, masks, altstack and ordinary sigreturn | baseline | Baseline signals and ordinary signal ABI suites passed on bound artifacts. | Replay masks/pending delivery/altstack/return and documented unsupported flags without silently broadening signal support. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-PROC-06 | Signal failure, restart and recipient lifetime | unmeasured | Broader malformed-frame, interruption and death races are not established by baseline signals. | Test bad pointers/frames, nested or interrupted operations, recipient exit and syscall restart semantics; safely reject unsupported delivery modes. | SC-PROC-05 (baseline), SC-CPU-09 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-PROC-07 | Futex wait/wake and thread synchronization | baseline | Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. | Replay contention, wake counts and timeout/cancel paths with actual runnable peer progress and correct errno/results. | SC-CPU-02 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-PROC-08 | Futex versus unmap, owner death and unsupported modes | unmeasured | Robust/PI/requeue and owner-death capabilities require explicit supported/excluded decisions. | Test enabled wait/wake lifetime during unmap/exit and timeout overflow; unsupported registration must not report working semantics while discarding state. | SC-PROC-07 (baseline), SC-VM-06 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-PROC-09 | Fork/COW, credentials and shared-resource disposition | unmeasured | Broad guest fork/COW and advanced process capability are downstream, not implicitly supported by basic threads. | Inventory advertised flags/credentials/shared handles; prove permitted isolation and safe refusal of unsupported behavior without skipping reachable teardown paths. | None | [plan](docs/verification/os-milestones-20260914/README.md), [app](docs/verification/native-application-ultra-handoff-20260909.md) |
+
+## SYS — System calls, loading and user boundary
+
+Kind: core. Owner role: Syscall/loader worker + ABI reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M02-C](docs/verification/os-milestones-20260914/tasks.json), [M02-F](docs/verification/os-milestones-20260914/tasks.json), [M04-A](docs/verification/os-milestones-20260914/tasks.json), [M04-B](docs/verification/os-milestones-20260914/tasks.json), [M06-C](docs/verification/os-milestones-20260914/tasks.json), [M08-A](docs/verification/os-milestones-20260914/tasks.json), [M08-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-SYS-01 | Supported syscall dispatch and safe unknown calls | unmeasured | Existing Rust dispatch remains the implementation foundation; SC1 capability matrix is not frozen. | Map each enabled syscall to implementation, consumer and test; verify unknown/unsupported calls return documented errors without side effects. | None | [reuse](docs/verification/rust-reuse-plan.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-SYS-02 | Full-span usercopy and pointer/length validation | unmeasured | Happy-path libc runs are not invalid-user-memory proof. | Test null/unmapped/cross-page/read-only pointers, zero/huge/overflowing lengths and partial copies; no kernel crash, data leak or cross-MM access. | None | [plan](docs/verification/os-milestones-20260914/README.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json) |
+| SC-SYS-03 | Errno, short results and interrupted delegated calls | unmeasured | Result shaping exists, but all enabled error/restart branches lack a reconciled SC1 result. | Check partial success, signed-width conversion, errno, interrupted waits and cancellation without fabricated completion or double side effects. | None | [reuse](docs/verification/rust-reuse-plan.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-SYS-04 | ELF/interpreter/DSO and initial process state | baseline | Ordinary dynamic-libc baseline loads and runs with the existing mcexec ABI. | Replay argv/env/auxv, stack/TLS, segment permissions and actual interpreter/DSO identities on the frozen profile. | SC-BOOT-04 (baseline) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-SYS-05 | Malformed executable and loader rollback | unmeasured | No final malformed-image/loader-failure matrix is reconciled. | Reject wrong architecture/layout, truncated segments, overflow, missing interpreters and permission violations; restore all acquired resources. | SC-SYS-04 (baseline) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-SYS-06 | Immutable inputs and startup byte fidelity | partial | Three reviewed startup fixtures compile; compilation does not prove their runtime outputs. | Execute exact argv/env/umask/stdout/stderr/binary-stream expectations with immutable input identity and independent oracles. | SC-OBS-08 (planned), SC-OBS-09 (unmeasured), SC-IPC-11 (planned), SC-VM-10 (planned) | [compiled](docs/verification/stability-packet001-compile-20260913-1.json) |
+| SC-SYS-07 | Privilege and access checks at enabled boundaries | unmeasured | SC1 must not equate trusted test inputs with safe syscall/device boundaries. | Exercise permitted and denied identities, pointers, ioctls and resource operations; preserve access policy on failure and partial completion. | None | [plan](docs/verification/os-milestones-20260914/README.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json) |
+
+## IPC — Transport, publication ownership and real pressure
+
+Kind: core. Owner role: Transport ownership expert + independent reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M01-A](docs/verification/os-milestones-20260914/tasks.json), [M01-B](docs/verification/os-milestones-20260914/tasks.json), [M01-C](docs/verification/os-milestones-20260914/tasks.json), [M01-D](docs/verification/os-milestones-20260914/tasks.json), [M01-E](docs/verification/os-milestones-20260914/tasks.json), [M03-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-IPC-01 | Hard failure before publication | baseline | One actual fault-mode contract passed with physical captures and stable terminal owners for the required later observation. | Rebind or replay after relevant edits; keep injected failure separate from real ring saturation. | None | [hard](docs/verification/stability-prepublish-hard-independent-review-20260913.json) |
+| SC-IPC-02 | Permanent backpressure and retained ownership | baseline | Second narrow fault-mode contract is independently accepted on its exact artifacts. | Preserve terminal inventories, admission closure and original timings; replay affected behavior on final candidate. | None | [permanent](docs/verification/stability-permanent-backpressure-independent-review-20260913.json) |
+| SC-IPC-03 | Selected response survives cancel/prepare/no-wake paths | blocked | Review 43 releases a corrected source-only implementation attempt, not a working candidate. | Authenticate inputs, implement the retained correction, exercise actual methods and compile; selected Response/Completion/OS backing stays owned until committed release. | SC-ENV-04 (blocked) | [retention](docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-IPC-04 | Actual retention matrix and inverse stager controls | partial | Detailed matrix and staged corrections exist, but fresh complete candidate execution remains open. | Cover stages 0/1/2/4/5/invalid, stage3 commit0, wake Some/None, close/cancel, bad identity/status/wake, second CAS and changed claims; reject without release. | SC-IPC-03 (blocked) | [plan](docs/verification/os-milestones-20260914/README.md), [retention](docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json) |
+| SC-IPC-05 | Post-publication notification failure | blocked | One of the two remaining actual fault modes depends on selected ownership and physical retained-span proof. | Run the separately released mode2 guest; observe one real publication, wake-ring behavior, correct return identity and no host access after transfer. | SC-IPC-04 (partial), SC-IPC-12 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-IPC-06 | Recoverable backpressure and same-OS recovery | blocked | Remaining mode3 is not accepted; retries cannot discard the selected result. | Run mode3 separately; preserve result through retries, then pass eight real subsequent HELLO applications plus AFTER8 in the same OS. | SC-IPC-04 (partial), SC-IPC-12 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-IPC-07 | Physical request-ring saturation and wrap | unmeasured | Injected EAGAIN and accepted fault modes do not establish actual full capacity. | Really fill the request direction, delay consumption, observe capacity/wrap/barriers and exact counts, then verify bounded recovery. | SC-IPC-01 (baseline), SC-IPC-02 (baseline), SC-IPC-05 (blocked), SC-IPC-06 (blocked), SC-OBS-09 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IPC-08 | Physical return-ring saturation and wrap | unmeasured | Reverse-direction physical pressure has its own ownership and ordering requirements. | Really fill the return direction, delay consumption and verify no loss/duplication/reordering or premature release through wrap/recovery. | SC-IPC-01 (baseline), SC-IPC-02 (baseline), SC-IPC-05 (blocked), SC-IPC-06 (blocked), SC-OBS-09 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IPC-09 | Stale/duplicate/wrong-generation completion rejection | unmeasured | Final combined transport identity matrix is not bound. | Inject wrong process/TID/request/delivery generation, duplicate or late completions; preserve current owner and never deliver an old result to a new process. | SC-PROC-04 (baseline) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IPC-10 | Terminal service admission and durable owners | baseline | H04 repair passed 50 controlled exact-method tests and rebuilt baseline suites; broader failure observations stay separate. | Verify no new work after terminal service failure, owners stable at terminal and required later observation, including MM/zeroing dependencies. | SC-VM-09 (unmeasured), SC-MEM-08 (blocked) | [run](docs/verification/stability-run-20260913.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-IPC-11 | Integrated four-mode plus physical-pressure replay | planned | No final-candidate combined core transport result exists. | Run all four original fault contracts plus both real full-ring tests on exact artifacts; label verification instrumentation and preserve all failures. | SC-IPC-01 (baseline), SC-IPC-02 (baseline), SC-IPC-05 (blocked), SC-IPC-06 (blocked), SC-IPC-07 (unmeasured), SC-IPC-08 (unmeasured), SC-IPC-09 (unmeasured), SC-IPC-10 (baseline) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IPC-12 | Publication physical guards, PRE\_INPUT and live polling | unmeasured | M01-D requires selected-span physical guards and live-state verification; classifier or source-only results cannot establish the final candidate's polling behavior. | Integrate selected-span read guards, PRE\_INPUT retention, release latch, exact UART digest and capture receipt membership. Exercise the retained 16-case guard harness plus actual polling state machine; the 21 classifier cases alone do not prove it. | SC-IPC-04 (partial) | [plan](docs/verification/os-milestones-20260914/README.md), [run](docs/verification/stability-run-20260913.md) |
+
+## IO — Files, control plane and observable kernel objects
+
+Kind: core. Owner role: I/O/control worker + lifetime reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M04-B](docs/verification/os-milestones-20260914/tasks.json), [M06-C](docs/verification/os-milestones-20260914/tasks.json), [M06-E](docs/verification/os-milestones-20260914/tasks.json), [M08-A](docs/verification/os-milestones-20260914/tasks.json), [M08-C](docs/verification/os-milestones-20260914/tasks.json), [M08-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-IO-01 | Ordinary file and descriptor operations | baseline | Retained file test passed 8,209-byte create/write/stat/seek/read/EOF/pwrite/pread/fsync/close/reopen/unlink and ENOENT behavior. | Replay existing assertions against the final candidate; verify offsets, partial results and exact data. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-IO-02 | Descriptor close versus pending operations | unmeasured | Historical ordinary I/O does not establish all close/cancel/reuse races. | Race close/dup/reuse/process exit with delegated I/O; bind exact open-file owners and prevent use-after-free or stale-fd delivery. | SC-PROC-03 (baseline) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IO-03 | x86\_64 and i386 control ABI | baseline | Both original control suites passed on the retained repaired module/image. | Replay exact ioctl, status, packet layout, errors and physical counters for both ABIs; current build bindings must match. | None | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json) |
+| SC-IO-04 | Invalid control IDs, ranges and privilege | unmeasured | No final SC1 malformed control-input inventory is reconciled. | Reject invalid generations, sizes, ranges, flags, alignment and permissions before mutation; unwind partially registered objects. | None | [plan](docs/verification/os-milestones-20260914/README.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json) |
+| SC-IO-05 | procfs/sysfs read-remove and unload lifetime | unmeasured | Baseline procfs replies and worker reaps are retained; broad read/remove/unload races remain. | Run real readers/callbacks against remove/teardown; hold correct references and reject stale handles without silently implementing unsupported hotplug. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-IO-06 | Shared mappings and optional device disposition | unmeasured | Optional XPMEM/device features cannot be assumed safe from source presence. | List enabled mapping/device APIs, prove boundary/error handling and alias lifetime; disable/reject unsupported paths explicitly without bypassing reachable invalidation. | SC-VM-06 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## ABI — Interface coverage, unsafe contracts and evidence identity
+
+Kind: core. Owner role: Interface auditor + independent unsafe reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M08-A](docs/verification/os-milestones-20260914/tasks.json), [M08-B](docs/verification/os-milestones-20260914/tasks.json), [M09-A](docs/verification/os-milestones-20260914/tasks.json), [M09-B](docs/verification/os-milestones-20260914/tasks.json), [M09-C](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-ABI-01 | Every enabled interface mapped to a core check | partial | Existing behavior/consumer/FFI maps provide a base, not a final complete SC1 map. | Enumerate exported symbols, syscall/ioctl/control and callback surfaces; assign each enabled success/failure edge to a row/test and unsupported ones to a verified rejection. | None | [reuse](docs/verification/rust-reuse-plan.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-ABI-02 | Rust/C/assembly layout and calling conventions | unmeasured | The reuse inventory is not current exact ABI verification. | Validate sizes/offsets/alignment/endianness, register and error conventions against compiled consumers and both supported control ABIs. | SC-BLD-03 (unmeasured) | [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-ABI-03 | Unsafe pointer, pin, refcount and alias invariants | partial | Unsafe/FFI ledger exists; pending-free and VM ownership are specific open findings. | Review changed unsafe sites with complete consumers, synchronization and actual compiler context; test the concrete counterexamples independently. | SC-VM-05 (blocked) | [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json), [invalidation](docs/verification/stability-invalidation-ownership-review-20260913.md) |
+| SC-ABI-04 | No uninitialized or retired-owner data exposure | unmeasured | SC1 confidentiality/isolation spans more than ordinary functional outputs. | Check user-visible padding, newly allocated pages, callback output, register/xstate and reused buffers; bad input cannot expose stale kernel/other-process data. | SC-MEM-07 (unmeasured), SC-CPU-07 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-ABI-05 | Production versus test instrumentation identity | unmeasured | Some fault evidence uses verification-only builds and cannot silently qualify production artifacts. | Inventory hooks/guards/observers and exactly which real body they execute; bind each result to its test or production artifact and required production follow-up. | None | [plan](docs/verification/os-milestones-20260914/README.md), [run](docs/verification/stability-run-20260913.md) |
+| SC-ABI-06 | Changes invalidate affected results, not all preserved work | planned | Historical evidence remains immutable; final dependency/source matching is pending. | Trace every candidate diff to affected build, ABI and runtime rows; replay those results, preserve unrelated verified evidence and do not refresh golden expectations to hide failures. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [reuse](docs/verification/rust-reuse-plan.md) |
+
+## LIFE — Native shutdown, drain, restoration and restart
+
+Kind: core. Owner role: Lifecycle owner + independent runtime reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M05-A](docs/verification/os-milestones-20260914/tasks.json), [M05-B](docs/verification/os-milestones-20260914/tasks.json), [M05-C](docs/verification/os-milestones-20260914/tasks.json), [M05-D](docs/verification/os-milestones-20260914/tasks.json), [M08-B](docs/verification/os-milestones-20260914/tasks.json), [M08-C](docs/verification/os-milestones-20260914/tasks.json), [M08-D](docs/verification/os-milestones-20260914/tasks.json), [M08-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-LIFE-01 | Lifecycle state and ownership order | unmeasured | Native shutdown/restoration remains open in the retained baseline. | Specify existing real owner transitions for close admission, drain, stop CPUs, callbacks, mappings, release and unload; enumerate every timeout/failure owner. | None | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-02 | Reject new work and drain live applications/senders | planned | No final integrated drain result exists. | Race shutdown with new submissions, blocked syscalls and process death; no accepted work without an owner and no callback after retirement. | SC-LIFE-01 (unmeasured), SC-IPC-11 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-03 | Actual McKernel CPU stop acknowledgement | unmeasured | Ending QEMU is not proof that native CPU ownership was stopped safely. | Observe exact native CPU stop before memory/channel reuse; failed or timed-out stop retains ownership and prevents unsafe unload. | SC-LIFE-01 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-04 | IRQ, work, timers and in-flight readers drained | unmeasured | Current whole-boundary callback-drain proof is not reconciled. | Cancel/synchronize every callback class and last reader with correct lock order; late work must not touch retired OS/module state. | SC-CPU-04 (unmeasured), SC-LIFE-02 (planned) | [plan](docs/verification/os-milestones-20260914/README.md), [ffi](host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json) |
+| SC-LIFE-05 | Channel, mapping, registry and module reference retirement | unmeasured | No complete final-candidate owner retirement inventory is bound. | After real stop/drain, retire each mapping/ring/registry/device/binfmt/procfs/sysfs owner exactly once; reject busy references and invalid order. | SC-LIFE-03 (unmeasured), SC-LIFE-04 (unmeasured), SC-VM-10 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-06 | Linux resources restored to measured baseline | planned | Historical application cleanup is not full OS CPU/memory/IRQ restoration. | Compare CPU online masks, memory ownership, IRQ affinities, IDs, mappings, files/tasks, device nodes, module refs and policy before/after native release. | SC-LIFE-05 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-07 | Busy, duplicate, interrupted and failed-stop paths | unmeasured | No complete SC1 lifecycle failure matrix is bound. | Exercise busy/double-stop/double-destroy, partial init, signal interruption and stop failure; preserve or release real owners according to each contract. | SC-LIFE-01 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-08 | Unload/reload/recreate and boot after teardown | planned | Full repeated native lifecycle is a remaining engineering outcome. | Actually destroy/release/unload/reload/recreate/boot; reject wrong module order and ensure fresh generations, clean resources and working workload. | SC-LIFE-06 (planned), SC-LIFE-07 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LIFE-09 | Recovery interruption and crash disposition | unmeasured | Automatic launcher recovery does not prove kernel recovery. | Interrupt permitted cleanup/recovery paths and inventory ownership; fail safely when real recovery is unsupported, with no second owner or fabricated restoration. | SC-LIFE-07 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-LIFE-10 | Repeated complete lifecycle packet | planned | Proposed ten native lifecycle cycles have not run and need packet freeze. | Run declared cycles on final artifacts, checking every restoration boundary and workload result; preserve first failure and cumulative resource measurements. | SC-LIFE-08 (planned), SC-LIFE-09 (unmeasured), SC-END-01 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+
+## LOAD — Real faults, bounded pressure and mixed core stress
+
+Kind: core. Owner role: Regression/fault worker + serialized runtime owner; unassigned.
+
+Original contracts (inherited by every substep): [M03-E](docs/verification/os-milestones-20260914/tasks.json), [M04-D](docs/verification/os-milestones-20260914/tasks.json), [M04-E](docs/verification/os-milestones-20260914/tasks.json), [M06-D](docs/verification/os-milestones-20260914/tasks.json), [M05-B](docs/verification/os-milestones-20260914/tasks.json), [M05-C](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-LOAD-01 | Real bounded allocation and resource exhaustion | unmeasured | Simulated failure fixtures or printed PASS do not establish real exhaustion. | Actually hit configured page/registry/handle/queue limits in the released profile; verify the injection/limit fired, correct errno and balanced owners. | SC-MEM-06 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LOAD-02 | Failures before and after mutation | unmeasured | Final core fault-site coverage is not reconciled. | Inject failures at real allocation/registration/request/pager/mailbox phases, before and after ownership transfer; observe exact unwind or retained quarantine. | SC-VM-09 (unmeasured), SC-IPC-11 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LOAD-03 | Mixed memory, thread, file and transport activity | planned | No final-candidate mixed-load run exists. | Run frozen deterministic workloads concurrently within the single-guest-CPU profile; check data/output and progress, not merely elapsed time. | SC-VM-10 (planned), SC-PROC-08 (unmeasured), SC-IO-02 (unmeasured), SC-IPC-11 (planned), SC-END-01 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LOAD-04 | Repeated owner and address reuse under pressure | planned | Older owner-reuse success is retained, not a final mixed-pressure result. | Run proposed 100 app/owner cycles with current PID/TID/MM/page/descriptor generations; actively probe stale identities and alias reuse. | SC-LOAD-03 (planned), SC-PROC-04 (baseline), SC-END-01 (planned) | [app](docs/verification/native-application-ultra-handoff-20260909.md), [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LOAD-05 | Resource trend, retained quarantine and leak discrimination | planned | No candidate-wide time series is bound. | Measure live/pending/quarantined/cache/free counters before/during/after workload and shutdown; no unexplained growth, and retained quarantine remains enumerable. | SC-LOAD-04 (planned), SC-LIFE-06 (planned) | [plan](docs/verification/os-milestones-20260914/README.md), [durable](docs/verification/stability-pending-free-durable-owner-review-20260915-1.md) |
+| SC-LOAD-06 | Bounded duration, seeds and fatal-signature checks | planned | Initial target is a proposed 60-minute mixed run and at least three recorded seeds, not a passing soak. | Freeze seed/repetition/timeouts in the packet; record actual duration and counts, panic/oops/lockup/warnings, independent outputs and clean termination. | SC-LOAD-05 (planned), SC-END-01 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-LOAD-07 | Reproduce and retire each discovered core defect | planned | Known original failures are preserved; newly found defects need individual closures. | For each defect retain failing artifact/reproducer, coherent patch, independent expectation, passing regression and downstream replay; no same-strategy review loop as progress. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [history](docs/verification/os-milestones-20260914/CURRENT.md) |
+
+## END — Stable-core declaration and user-facing finish line
+
+Kind: core. Owner role: Dispatcher + independent final reviewer; unassigned.
+
+Original contracts (inherited by every substep): [M04-D](docs/verification/os-milestones-20260914/tasks.json), [M04-E](docs/verification/os-milestones-20260914/tasks.json), [M05-C](docs/verification/os-milestones-20260914/tasks.json), [M05-D](docs/verification/os-milestones-20260914/tasks.json), [M09-C](docs/verification/os-milestones-20260914/tasks.json), [M09-E](docs/verification/os-milestones-20260914/tasks.json).
+
+| ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| SC-END-01 | Freeze core capability, artifact and run packet | planned | SC1 scope is proposed here; final artifact/capability/test manifest is not released. | Bind exact profile and all enabled/rejected operations, each check's command/expected result, seeds/counts/duration, timeout and cleanup; justify any change to proposed targets before execution. | SC-ABI-01 (partial), SC-ENV-03 (planned) | [plan](docs/verification/os-milestones-20260914/README.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-END-02 | All required rows reconciled on final candidate | planned | This tracker is an initial inventory with known blockers and unmeasured areas, not a completion claim. | Reconcile required core/enabler rows and exact evidence scope; preserve baseline credit while replaying affected rows and ensuring no exposed path or safety-critical finding is omitted. | SC-BLD-06 (planned), SC-LIFE-10 (planned), SC-LOAD-06 (planned) | [plan](docs/verification/os-milestones-20260914/README.md) |
+| SC-END-03 | Independent core safety and limitations review | planned | No final SC1 review exists. | Review actual source/ABI/ownership changes, complete core run results, open defects and explicitly unsupported features; a changed test oracle needs independent justification. | SC-END-02 (planned), SC-ABI-03 (partial), SC-ABI-04 (unmeasured), SC-ABI-05 (unmeasured), SC-ABI-06 (planned) | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-END-04 | Reproducible stable-core checkpoint and explicit notification | planned | No SC1 completion notification is justified yet. | Record tested commit/artifacts/profile, passing checks and remaining limitations; explicitly announce STABLE CORE ON THIS CONFIGURATION only after independent review and reproducible checkpoint. | SC-END-03 (planned) | [plan](docs/verification/os-milestones-20260914/README.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-END-05 | Next profile and broader OS work preserved | planned | SC1 is intermediate; original whole-OS requirements are unchanged. | Publish outstanding multicore/features/language/platform/production work without resetting historical scores or labeling the entire project complete. | SC-END-04 (planned) | [plan](docs/verification/os-milestones-20260914/README.md), [reuse](docs/verification/rust-reuse-plan.md) |
+
+## Explicit exclusions
+
+| Excluded behavior | Route / later obligation | Reason |
+| --- | --- | --- |
+| McKernel multicore, NUMA scaling, CPU hotplug and topology expansion | M03/M06/M07/M08/M11/M12 | Explicit follow-on profile, not silently credited from four Linux vCPUs. Enabled host-side concurrency and alias/TLB safety remain required now. Add core tests before advertising new McKernel CPU configurations. |
+| Full application catalog and advanced process/IPC/network/debugger capability | M04/M06 | All 273 cases, broad fork/COW/adoption, ptrace, IPC and networking qualification remain in the original roadmap. Basic process/exec/wait, file/syscall, signals/futexes and every enabled path still need SC1 proof; unsupported paths must fail safely. |
+| Advanced vector ISA, MPI/OpenMP, XPMEM/QLMPI/UTI and HPC breadth | M03-D/M06/M07 | Enabled x87/SSE/AVX architectural state preservation and all reachable XPMEM/alias safety are core obligations. Broader instruction correctness, distributed workloads and optional configurations need their own supported profiles. |
+| Entire kernel Rust/assembly retirement and every native interface contract | M08/M09; MK-LANG-001..007 | Preserve and test existing Rust; never call remaining C safe merely because it is excluded from language completion. Full origin closure is separately required for the whole goal, not a prerequisite to reporting intermediate stability. |
+| RPM release, Secure Boot, installer/rollback and external hardware/platform certification | M10/M11/M12/M13 | Current build/config/ABI identity is required here; full release packaging, Intel/AMD hardware breadth and independent external qualification stay downstream. |
+| Production benchmark targets and original 168-hour soaks | M12/M13; final-push.txt | SC1 has a bounded, explicitly labeled core regression/load run. It neither replaces required production soaks nor proves long-term reliability or production performance. |
+
+## Updating this report
+
+Edit only [docs/verification/os-milestones-20260914/stable-core.json](docs/verification/os-milestones-20260914/stable-core.json) for tracker updates; do not edit this generated Markdown by hand. Record the snapshot date, full source revision, exact scoped results, evidence and next observable checks. Keep original gates and acceptance contracts unchanged.
+
+From the repository root:
+
+```sh
+python3 -B scripts/stable_core_tracker.py
+python3 -B scripts/stable_core_tracker.py --check
+```
+
+The default command updates only STABLE-CORE.md. --check validates and compares without writing; --stdout validates and prints without writing. The helper never auto-promotes the milestone or resumes the campaign.

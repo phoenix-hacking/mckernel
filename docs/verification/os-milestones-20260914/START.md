@@ -57,6 +57,15 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
    Checkpoint coherent changes about every 30 minutes and before long runs/end;
    label rejected/unexecuted WIP, verify remote blobs, and never force-push.
 
+For the user's intermediate engineering milestone, use the root
+[STABLE-CORE.md](../../../STABLE-CORE.md) and its `stable-core.json` worklist.
+Read the declared profile and selected rows, not all historical evidence at
+every turn. Report newly implemented/tested/integrated behavior and baseline
+reuse separately from production acceptance. Update touched rows and their
+source/evidence bindings at existing checkpoints; the normal progress updater
+renders both reports. SC1 completion is a scoped notification, never whole-OS
+completion or permission to omit a required execution/safety check.
+
 ## Models, ownership and resources
 
 Keep Sol/medium coordination. Use Luna/low for bounded read-only inventories,

@@ -22,6 +22,18 @@ confirm consumed bytes and do not replay repaired work.
 Official gate/case/point status remains in the original acceptance records.
 Do not promote any counter for adopting this policy.
 
+## User-facing stable-core engineering milestone
+
+The user requested a comprehensive intermediate tracker on 2026-09-28:
+[STABLE-CORE.md](../../../STABLE-CORE.md), generated from `stable-core.json`.
+Read its scope/priority queue, then only the rows relevant to a dispatch. Report
+implementation, local tests and integrated behavior independently of production
+gates; preserve historical baseline credit and label unmeasured work honestly.
+Update touched rows at existing checkpoints and run the normal progress updater.
+SC1 is not yet demonstrated; this reporting change does not resume the campaign,
+release execution or change original acceptance requirements. Explicitly report
+the stable-core milestone when its declared profile and independent review pass.
+
 ## Primary family: collector descriptor and identity integrity (M02)
 
 Retained starting review:

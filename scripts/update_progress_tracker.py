@@ -8,6 +8,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+import stable_core_tracker
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TRACKER_DIR = ROOT / "docs/verification/os-milestones-20260914"
@@ -41,7 +43,11 @@ def status_word(state: dict) -> str:
     return str(state.get("phase") or state.get("status") or "UNKNOWN").upper()
 
 
-def render() -> str:
+def render(core_doc=None) -> str:
+    if core_doc is None:
+        core_doc = stable_core_tracker.load_tracker()
+        stable_core_tracker.validate(core_doc, root=ROOT)
+    core_counts = stable_core_tracker.summarize(core_doc)
     state = read_json(ROOT / ".git/os-autopilot/state.json", {})
     watcher = read_json(ROOT / ".git/os-autopilot/watcher.json", {})
     gate_map = read_json(TRACKER_DIR / "gate-map.json", {})
@@ -79,6 +85,28 @@ def render() -> str:
         f"- Launcher: **{status_word(state)}**; phase `{state.get('phase', 'unknown')}`; stop reason `{state.get('stop_reason') or 'none'}`",
         f"- Worker PID: `{state.get('worker_pid') or 'none'}`; server PID: `{state.get('server_pid') or 'none'}`",
         f"- Run directory: `{state.get('run_dir') or state.get('log_dir') or 'not recorded'}`",
+        "",
+        "## Stable kernel core: engineering progress",
+        "",
+        "Read the [detailed SC1 tracker](../../../STABLE-CORE.md) for every bounded behavior, "
+        "known result, next check, owner role, dependency and evidence link.",
+        f"Engineering snapshot: `{core_doc['as_of']}` at `{core_doc['source_revision']}`; "
+        f"milestone **{core_doc['status']}**. Refreshing this dashboard does not refresh that evidence.",
+        "",
+        "| Work | Verified substeps | Historical baseline | Implemented | Partial | Blocked | Unmeasured | Planned |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for kind, label in (("core", "Kernel behavior"), ("enabler", "Test / execution infrastructure")):
+        counts = core_counts["by_kind"][kind]
+        lines.append("| " + label + " | " + " | ".join(
+            str(counts[status]) for status in stable_core_tracker.STATUSES
+        ) + " |")
+    lines += [
+        "",
+        "These are separate engineering states, not a stability percentage. Existing baseline "
+        "behavior is preserved; unmeasured does not mean unimplemented. Infrastructure results "
+        "never count as kernel results. The full tracker declares the first tested profile and "
+        "explicitly separates multicore/features/platform qualification.",
         "",
         "## Acceptance Bars",
         "",
@@ -119,6 +147,8 @@ def render() -> str:
         "",
         "## Checkpoint Protocol",
         "",
+        "0. Update touched `stable-core.json` rows with actual source/artifact-bound results, "
+        "blockers and next checks. Keep historical evidence; do not infer progress from this refresh.",
         "1. Run `python3 scripts/update_progress_tracker.py` after every accepted packet, diagnosis, or launcher checkpoint.",
         "2. Record the exact evidence path, source revision, test command, result, blocker, and next action in `CURRENT.md`.",
         "3. Commit and push the tracker together with the verified checkpoint; never inflate a bar for source-only or rejected work.",
@@ -126,6 +156,7 @@ def render() -> str:
         "",
         "## Source Of Truth",
         "",
+        "- `stable-core.json` and root `STABLE-CORE.md` - granular SC1 engineering snapshot; not production acceptance.",
         "- `docs/verification/os-milestones-20260914/gate-map.json` - contractual gate and point counts.",
         "- `docs/verification/os-milestones-20260914/tasks.json` - 68 planned task packets and dependencies.",
         "- `docs/verification/os-milestones-20260914/CURRENT.md` - detailed chronological evidence cursor.",
@@ -139,8 +170,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=TRACKER_DIR / "PROGRESS.md")
     args = parser.parse_args()
+    core_doc = stable_core_tracker.load_tracker()
+    stable_core_tracker.validate(core_doc, root=ROOT)
+    core_report = stable_core_tracker.render(core_doc)
+    dashboard = render(core_doc)
+    core_output = ROOT / "STABLE-CORE.md"
+    if core_output.is_symlink():
+        raise stable_core_tracker.TrackerError("STABLE-CORE.md must not be a symlink")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(render())
+    core_output.write_text(core_report, encoding="utf-8")
+    args.output.write_text(dashboard, encoding="utf-8")
     print(args.output)
     return 0
 
