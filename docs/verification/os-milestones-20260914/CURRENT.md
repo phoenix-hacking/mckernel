@@ -4756,3 +4756,62 @@ Run one current-candidate boot/workload/stop diagnostic first, retain its
 one-cycle limitation, then add and review the recreate cycle. This invocation
 still has three real diagnostic guest applications and zero current-candidate
 kernel builds; formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7.
+
+Continuation checkpoint 49, 2026-09-28: signals diagnostic preparation and its
+separate execution review now pass, but no privileged/runtime command has yet
+run. The static signals collector is `e1c7b50e...cdea`; the corrected Linux
+payload oracle exits 37 with exact 25-byte `NATIVE_CORE PASS signals\n` stdout,
+empty stderr, exact reap and empty residual inventories. The derived initramfs
+is `9065d03b...e7ef91`; the strict manifest is `99482694...5c2d4` and
+`bound_manifest` passes. Independent artifact review replays the exact base
+prefix and all 61 members with complete userspace ELF closure. The original
+invented-literal observer failure is preserved without weakening the oracle.
+
+Independent execution review returns `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE`
+for packet `86528f64...5663`, parent `ndcs-20260928-7`, nonce
+`c113ad500484ce6fc89659eee237c8ce` and only the release record's exact
+15-element sudo-A command. The generated QEMU argv has 42 exact elements and a
+100-byte QMP pathname. Earlier `ndcs` parents 1, 2, 5 and 6 remain forbidden.
+The release retains the pinned four-CPU/12-GiB/no-swap/no-network/512-task
+container, 300/360-second deadlines, QEMU/image gate, all process/container
+identity and cleanup joins, and uncertainty lock retention. Source checkpoint
+`f8941f1b...be0b` matches the live origin ref and all six runtime source blobs.
+The packet, preparation and release still require this checkpoint's push and
+fetched-blob verification before one fresh preflight and execution.
+
+The shutdown lane also advances without claiming runtime behavior. New pure
+`native_shutdown_observer.py` at `c86c8190...c94a6` plus tests
+`2612f442...15c77` passes seven tests and independent hostile review after one
+bounded correction. The rejected first candidate accepted IRQ-affinity drift
+and self-supplied expectations. The corrected schema binds independent process,
+procfs content-digest, device/sysfs, module/refcount/holder, reserve, CPU,
+IRQ-affinity and policy expectations across seven ordered lifecycle phases;
+affinity, procfs, starttime and numeric-node mutations all reject. It remains a
+source-only validator pending Rocky integration.
+
+A standalone lean Rocky source stage is preserved at
+`/home/holden/mckernel-work/scratch/rocky-lean-source-20260928-2`: outer
+`f8941f1b...be0b`, clean campaign-authored nested IHK `21a0d1e...5f8c`, all
+other exact recursive submodules, 8,420 files and 277,737,472 allocated bytes.
+Its canonical tar digest is `0804ffc6...ae4`; root Git is read-only so the
+validator takes its initialized-submodule branch and cannot reset the intentional
+IHK plus-status. Independent review returns `PASS_WITH_EXACT_LIMITATION`: the
+partial object store has 3,135 missing promisor objects, so any packet must
+forbid historical/tree/blob traversal and lazy fetch. The reviewed validator,
+build and source-retirement path consume present worktree/build files and only
+the frozen safe Git operations. Two failed clone strategies are preserved in
+launcher output; neither left a partial directory.
+
+Next: commit, push and fetched-blob verify the signals preparation, packet,
+release, observer source/tests, lean-source records, tracker and this cursor.
+Then remeasure at least 16/12 GiB disk plus RAM headroom; reconcile the three
+campaign processes and exclusive heavy lease; prove owner/QEMU/mcexec/container
+absence; authenticate the development lock and every released byte; verify all
+three signals paths remain absent; create the parent once as uid/gid 1000 mode
+0700 and consume the exact released command once with no retry. Preserve raw
+bytes/status/logs/identities/teardown for independent evidence review. In
+parallel after that bounded runtime, integrate the reviewed seven-phase observer
+into a Rocky packet; no Rocky build or shutdown run is yet released. This
+invocation has zero new real guest applications and zero current-candidate
+builds so far. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
+whole-OS acceptance remains incomplete.

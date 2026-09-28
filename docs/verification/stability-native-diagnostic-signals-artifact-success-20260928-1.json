@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.stability-artifact-review.v1",
+  "recorded_at": "2026-09-28T12:02:00-07:00",
+  "source_commit": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "scope": "signals collector, Linux payload oracle, derived initramfs and strict manifest",
+  "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+  "candidate": {
+    "path": "docs/verification/stability-native-diagnostic-signals-artifact-candidate-20260928-1.json",
+    "sha256": "5e97c635a9b442819a10d651cafc78dc9abf58135b3419c7cc876b17015aa3d6"
+  },
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-collector-build-20260928-1/init",
+    "sha256": "e1c7b50e3efe559c72ded2288da021ad6c15ace1825074e1ef0e60ae43a0cdea",
+    "size": 1021968,
+    "mode": "0700",
+    "source_sha256": "e78760ae333ca5967da30f6b338f2ee57344ed2f9e9495d80b00e35b6f72ad4a",
+    "profile": "static x86_64 ET_EXEC, no PT_INTERP or PT_DYNAMIC, no dynamic section, non-executable GNU stack, ND_CORE_SIGNALS=1"
+  },
+  "oracle": {
+    "command": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root/lib64/ld-linux-x86-64.so.2 --library-path /home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root/lib64 /home/holden/mckernel-work/scratch/native-diagnostic-memory-inputs-20260928-1/native-application-core signals",
+    "exit_code": 37,
+    "stdout_hex": "4e41544956455f434f52452050415353207369676e616c730a",
+    "stdout_sha256": "25a39fc1f96c43491765d575fab7435730b506c0204320b74fe9575cfed77067",
+    "stdout_size": 25,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_size": 0,
+    "exact_reaped": true,
+    "pre_residuals_empty": true,
+    "post_residuals_empty": true
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-overlay-20260928-1/initramfs.cpio.gz",
+    "sha256": "9065d03bc3b1c89762743dd5d3d16d2b202c3fb19a287d56893b92473e07ef91",
+    "size": 12405306,
+    "mode": "0600",
+    "base_cpio_sha256": "fefbfbe32e2cfb05a200b0e8280f6ffa9be4698171194042fd69af85eea0de57",
+    "base_cpio_size": 38191104,
+    "canonical_manifest_sha256": "06feecc69507b43535a95dd2f981360ea841d69a19bcf8b83c3ad3db76372582",
+    "canonical_manifest_size": 19292,
+    "final_members": 61
+  },
+  "strict_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-manifest-20260928-1/manifest.json",
+    "sha256": "99482694277898df70373f193d89362648f9c1975a4dfdbf18776c4a5b05c2d4",
+    "size": 5296,
+    "mode": "0600",
+    "case_id": "baseline.core.signals",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "signals"],
+    "bound_manifest": "PASS"
+  },
+  "independent_review": {
+    "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+    "verified": "Exact source/compiler/artifact identities, retained original observer failure, Linux oracle and residual/reap evidence, base-prefix and canonical 61-member replay, complete userspace ELF interpreter/dependency/version-provider closure, and strict owner manifest binding."
+  },
+  "limitations": [
+    "No root, Docker, QEMU, guest or McKernel signals application execution occurred.",
+    "A separately reviewed exact one-shot execution packet remains required.",
+    "No M04, application, production-gate or whole-OS acceptance follows."
+  ]
+}
