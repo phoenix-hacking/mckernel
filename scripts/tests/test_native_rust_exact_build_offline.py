@@ -22,6 +22,8 @@ class FakeRunner:
         self.dirty = False
         self.head = candidate
         self.submodule = driver.EXPECTED_IHK_HEAD
+        self.gitlinks = {'ihk': driver.EXPECTED_IHK_HEAD,
+                         'vendor/unconsumed': 'd' * 40}
         self.create_artifacts = True
         self.corrupt = None
 
@@ -38,8 +40,16 @@ class FakeRunner:
             if root != self.repo:
                 files = [p[4:] for p in self.files if p.startswith('ihk/')]
             else:
-                files.append('ihk')
+                files.extend(self.gitlinks)
             return '\0'.join(files) + '\0'
+        if args == ['ls-files', '-s', '-z']:
+            if root != self.repo:
+                return ''.join('100644 %s 0\t%s\0' % ('e' * 40, p[4:])
+                               for p in self.files if p.startswith('ihk/'))
+            ordinary = [p for p in self.files if not p.startswith('ihk/')]
+            return (''.join('100644 %s 0\t%s\0' % ('e' * 40, p) for p in ordinary) +
+                    ''.join('160000 %s 0\t%s\0' % (oid, p)
+                            for p, oid in self.gitlinks.items()))
         raise AssertionError('unexpected git command ' + repr(argv))
 
     def phase(self, script, cwd, env, log):
@@ -85,6 +95,8 @@ class DriverTests(unittest.TestCase):
         self.candidate = 'a' * 40
         self.manifest = self.root / 'manifest.json'
         self.data = {'candidate_sha': self.candidate, 'repository_files': self.rows,
+                     'gitlinks': dict(self.runner.gitlinks) if hasattr(self, 'runner') else {
+                         'ihk': driver.EXPECTED_IHK_HEAD, 'vendor/unconsumed': 'd' * 40},
                      'assets': asset_hashes, 'driver_sha256': driver.sha256(Path(driver.__file__))}
         self.save_manifest()
         self.runner = FakeRunner(self.repo, files, self.candidate)
@@ -139,7 +151,7 @@ class DriverTests(unittest.TestCase):
         self.assertEqual(self.execute()['status'], 'FAIL')
 
     def test_input_mutation_and_incomplete_inventory_reject(self):
-        for name in ('repo', 'asset', 'manifest', 'driver'):
+        for name in ('repo', 'asset', 'manifest', 'driver', 'gitlink'):
             with self.subTest(name=name):
                 original = json.loads(json.dumps(self.data))
                 self.evidence = self.root / ('reject-' + name)
@@ -150,7 +162,10 @@ class DriverTests(unittest.TestCase):
                 elif name == 'manifest':
                     self.data['repository_files'].pop('host-kernel/fixture.rs')
                 else:
-                    self.data['driver_sha256'] = '0' * 64
+                    if name == 'driver':
+                        self.data['driver_sha256'] = '0' * 64
+                    else:
+                        self.data['gitlinks']['vendor/unconsumed'] = 'f' * 40
                 self.save_manifest()
                 result = self.execute()
                 self.assertEqual(result['status'], 'FAIL')

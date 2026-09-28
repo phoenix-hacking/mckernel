@@ -9,6 +9,7 @@
     "The first preparation draft trusted claims, used an undefined evidence variable and had two test errors.",
     "The first runtime-owner draft trusted requested resource/readback values, could release while a timed-out container remained live and did not mount a usable driver.",
     "The first offline-driver draft could report PASS without a kernel or module and omitted most patch, configuration and post-build validation closure."
+    ,"The first real full-manifest generation exposed additional gitlinks beyond ihk; treating every tracked index entry as a regular file failed on a gitlink directory."
   ],
   "bounded_corrections": [
     "One bounded correction was attempted for each draft family and remained insufficient; the family was escalated rather than repeatedly weakening oracles.",
@@ -16,6 +17,7 @@
     "Preparation receives no source mount, validates exact base/tool/RPM/OS identities and retains a source-free immutable image receipt.",
     "The runtime owner measures resources, verifies actual Docker profile/mounts/UID/image/driver, runs one network-none cap-drop-all container and retains the lease until terminal retirement is proven.",
     "The offline driver binds every tracked superproject/submodule file and all four source assets, rejects dirty inputs, streams phase evidence and cannot PASS without the exact artifact/checksum set."
+    ,"The bounded real-input correction now binds every gitlink by exact Git object ID, recursively binds the consumed ihk files, and does not require unrelated submodules to be materialized."
   ],
   "verification": {
     "command": "python3 -B -m unittest -v scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_offline",
@@ -29,10 +31,10 @@
   "artifact_sha256": {
     "scripts/native_rust_exact_build_container_owner.py": "f56511ee78bcd30d4d60713f07911243533a92eadbbff556c1b02870f9dbaae0",
     "scripts/native_rust_exact_build_image_prepare.py": "edc35b4cb4f400589c8e54105e70d556410fa6abf375f9f2670630fe33b3dcf0",
-    "scripts/native_rust_exact_build_offline.py": "02de4bdcc11a85867c8bb2479b66ff54c8b24548e0c05ec4dbd2d67e038c8fda",
+    "scripts/native_rust_exact_build_offline.py": "5bf7dca3a7785f0f9ae8e6842a6db4b0508f792085ebe31ac0a0606bcd1bf01f",
     "scripts/tests/test_native_rust_exact_build_container_owner.py": "6e9ae05f7349fc772303b528fed3119a02e71f5f1e171c19de03f9aec9898aed",
     "scripts/tests/test_native_rust_exact_build_image_prepare.py": "755d32702c953c31a7ee7867063896104e4634f2847074f91094799398f1b6b2",
-    "scripts/tests/test_native_rust_exact_build_offline.py": "f7ede8ec45f3034702c12175ed421ab62d41097a693b0246897211c8a44b8ba4"
+    "scripts/tests/test_native_rust_exact_build_offline.py": "5724efbb1c8c19184f2e41a1f7cf9bba121fc5d9039144ae9033f1ca6936a0f2"
   },
   "verified_offline_inputs": {
     "base_image_id": "sha256:0b5329d806d053ad65ab6b21fc3e49f1025e970cd826547a01a93b3ce9012796",

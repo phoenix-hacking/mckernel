@@ -126,8 +126,26 @@ def verify_inputs(repo, candidate, assets, manifest, runner):
     for root in (repo, repo / 'ihk'):
         if git(root, 'status', '--porcelain', '--untracked-files=all').strip():
             raise BuildError('source checkout is dirty')
-    # Manifest must cover every tracked file, not a convenient hand-picked subset.
-    expected = set(git(repo, 'ls-files', '-z').split('\0')) - {'', 'ihk'}
+    # Bind gitlinks as Git object identities.  Only ihk is consumed by this job,
+    # so its checked-out files are additionally covered below; unrelated
+    # submodules need not be materialized merely to prove their exact gitlinks.
+    gitlinks = {}
+    for row in git(repo, 'ls-files', '-s', '-z').split('\0'):
+        if not row:
+            continue
+        metadata, separator, path = row.partition('\t')
+        fields = metadata.split()
+        if not separator or len(fields) != 3:
+            raise BuildError('malformed git index row')
+        mode, object_id, stage = fields
+        if mode == '160000':
+            if stage != '0' or not re.fullmatch('[0-9a-f]{40}', object_id):
+                raise BuildError('malformed gitlink identity')
+            gitlinks[path] = object_id
+    if manifest.get('gitlinks') != gitlinks or gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
+        raise BuildError('gitlink inventory differs')
+    # Manifest must cover every ordinary tracked file, not a convenient subset.
+    expected = set(git(repo, 'ls-files', '-z').split('\0')) - {''} - set(gitlinks)
     expected |= {'ihk/' + p for p in git(repo / 'ihk', 'ls-files', '-z').split('\0') if p}
     if set(manifest.get('repository_files', {})) != expected:
         raise BuildError('consumed source inventory incomplete')

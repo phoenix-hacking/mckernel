@@ -5332,3 +5332,13 @@ container or build has run. Next: push this source checkpoint, create a clean
 self-contained candidate checkout and manifest, and obtain fresh independent
 review of the networked preparation capabilities/cleanup. Preparation and the
 offline heavy build require separate releases.
+
+The first full-manifest attempt then failed safely on three unrelated gitlinks
+that are tracked directories rather than regular files. No manifest was emitted
+and no container ran. The bounded correction binds every top-level gitlink by
+its exact Git object ID, recursively binds the consumed ihk checkout, and leaves
+unconsumed submodules unmaterialized. All 12 offline-driver tests and syntax/
+diff checks pass after the correction. The first asset extraction command also
+found host `rpm2cpio` unavailable; the already retained debrand asset was instead
+hardlinked and rehashed (`080bbc72...6b144`) for later in-container comparison
+against the pinned SRPM.
