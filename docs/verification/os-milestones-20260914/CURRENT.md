@@ -4739,7 +4739,10 @@ PID/PGID/SID 3125264/starttime 80228730, recovered worker PID/PGID/SID
 80670562. No diagnostic owner, QEMU or mcexec process is live. Available bytes
 are 27,160,174,592 on the host filesystem and 21,905,379,328 on scratch, with
 29,763,592,192 bytes of MemAvailable. The launcher-owned state remains
-untouched. This checkpoint neither completes nor resumes the OS goal.
+untouched. During post-push verification its `state.json` disappeared while
+the same three processes and starttimes remained live; the run directory still
+retains `console.log`, `dispatcher.txt`, `protocol.jsonl` and
+`server.stderr.log`. This checkpoint neither completes nor resumes the OS goal.
 
 Next invocation: first reconcile this exact HEAD, the three campaign identities,
 launcher state, dirty submodule/source ownership and the single heavy lease.
