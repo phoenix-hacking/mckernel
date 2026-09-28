@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "purpose": "additive exact kbuild 0006-0010 staging supplement; non-crediting and not a licensing approval",
+  "source": {
+    "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533"
+  },
+  "checker": {
+    "repository_path": "scripts/secondary_reset_build_supplement.py",
+    "sha256": "8a3121e04d4707a2a54b9442df75b85583382daec0ba79c1274958fc9fd04cdd"
+  },
+  "patches": [
+    {"path":"host-kernel/kbuild/patches/0006-x86-export-owned-secondary-start-primitives.patch","sha256":"3c8ff35227f6943f236e5eecb94a1a2b42d3c431a0eb3edbd938aedd9ba861fd","files":[{"path":"arch/x86/include/asm/smp.h","preimage_sha256":"c583c98d374e6aed661068c9616923115d4b18f640bc9c4c2d48c4a321260bbd","postimage_sha256":"ed13f38dd2fbb831771b9da8a5b3d41ad05213bacc3bd858844bb6e5968f15fc"},{"path":"arch/x86/kernel/smpboot.c","preimage_sha256":"bada9f8d1f2e9dcc5358c1750062481761a1c09a74c1ab2a00ec377c07eaf5f2","postimage_sha256":"d95592b9e83d89230b52207112f9fc1ea1d128576ae37c22f099c2a57d701739"},{"path":"arch/x86/kernel/head_64.S","preimage_sha256":"ffca3e25e809fcc8bedd2603d590cb69e0c21ad4beebb5b91651ca2fe492bf57","postimage_sha256":"7f131e83de5f4bba1a4d5336c202c7a8419d16ce9dd19e9d97ef268c59417417"}]},
+    {"path":"host-kernel/kbuild/patches/0007-rust-bindings-expose-x86-apic-driver.patch","sha256":"2154238ed713a2f25845369f0290ffe086837c3abddb6ebc8edf2a6ebf1c1119","files":[{"path":"rust/bindings/bindings_helper.h","preimage_sha256":"e7590a0468bb99dbf3f32dc5a3d40d2f5f35b4ac50803e9f755825a856ad518c","postimage_sha256":"53606bac03d7820fcfbce20a9ed7c96fbd8cb8b482c70b3e1f87d9da4a794f1a"}]},
+    {"path":"host-kernel/kbuild/patches/0008-rust-expose-existing-x86-vdso-data.patch","sha256":"e5a5d7d6a2683de0fcff22c8c14bf6c285d9ade4b15c1db0f6ba1c484f887d57","files":[{"path":"arch/x86/entry/vdso/vma.c","preimage_sha256":"d6025e648e3323dad88878c52b5a77ee6081038465673f6c9f8a171bb5d1a66e","postimage_sha256":"957431897aea4558d12cb9f6c3b18d4f494f1c4eafe63b81eab0c5764054cead"},{"path":"lib/vdso/datastore.c","preimage_sha256":"edabde9679df6dc1453326ffaca73f9367ff10c00c5bb6bd9c84c4c93137917e","postimage_sha256":"f0f9f207b0a07cd02367eca9a6f5ad88b273d8c2f5e41542fc2013fbbfc0de87"},{"path":"rust/bindings/bindings_helper.h","preimage_sha256":"53606bac03d7820fcfbce20a9ed7c96fbd8cb8b482c70b3e1f87d9da4a794f1a","postimage_sha256":"f68dd76491d2440fff7d3d0ebb9856158a82d3ec70e9c0b049516ce2eec91f18"},{"path":"include/vdso/datapage.h","preimage_sha256":"5a8017b41bd9e827106152c15aa64a07a991b35a92d79192084d5de2c86349af","postimage_sha256":"4009e01ff6911bc660b097de9b3166b51b23d1e17fc2613964cf34cf7ce89f99"}]},
+    {"path":"host-kernel/kbuild/patches/0009-cacheinfo-export-existing-topology-accessor.patch","sha256":"4e7a314f5328c1d55dc5cfa2b33c5e0ee7ae8760f037dfe23786bca9e42250d2","files":[{"path":"drivers/base/cacheinfo.c","preimage_sha256":"dfa377e41880aa791131271ff7992e9cf35bab8a393d4164b052446a9eb0a2b1","postimage_sha256":"1f16fefa3ec4aeede4fc02bf912f0c79244061e33fc5e5da24dc44e219f11988"}]},
+    {"path":"host-kernel/kbuild/patches/0010-v2-x86-export-preempt-protected-secondary-reset.patch","sha256":"a3d7dcac45abbd712d79fbbebba7e7df08eae06037fc347d09415b48fb1db2c6","replacement_0010_v2":true,"files":[{"path":"arch/x86/include/asm/smp.h","preimage_sha256":"ed13f38dd2fbb831771b9da8a5b3d41ad05213bacc3bd858844bb6e5968f15fc","postimage_sha256":"a179d6f3b8a0ff571141a6f86a03d98ca3e17f6919af04b9cd10cd4cd9b8b2fb"},{"path":"arch/x86/kernel/smpboot.c","preimage_sha256":"d95592b9e83d89230b52207112f9fc1ea1d128576ae37c22f099c2a57d701739","postimage_sha256":"480cc27df7624447df9ec710f46623d4b0c77ce5fee5759f351ef97469bb5aec"}]}
+  ],
+  "0010_constraints": {"adds_only": ["declaration", "non-static definition", "EXPORT_SYMBOL_GPL"], "forbidden_tokens": ["SIPI", "STARTUP", "APIC_DM_STARTUP"], "body_sha256": "b3669c4f5f7e144bb093b40832d2784e5bf73f020a524071af0f6f4a953e1e85"},
+  "licensing": {"target_file_gpl_expressions": ["GPL-2.0", "GPL-2.0-or-later"], "authorship_and_provenance_separate": true, "approval_claimed": false},
+  "credit_eligible": false
+}

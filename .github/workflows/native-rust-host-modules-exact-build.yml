@@ -590,6 +590,14 @@ jobs:
           patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0005-irq-work-export-remote-queue-primitives.patch"
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/secondary_reset_build_supplement.py \
+            --repo "$GITHUB_WORKSPACE" --kernel-source "$source_root" --source-archive "$archive" \
+            --output-lock "$source_root/.mckernel-secondary-reset-build.lock"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/secondary_reset_build_supplement.py \
+            --repo "$GITHUB_WORKSPACE" --kernel-source "$source_root" --source-archive "$archive" \
+            --verify-lock "$source_root/.mckernel-secondary-reset-build.lock"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
             --stage-for-evidence "$source_root"
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \

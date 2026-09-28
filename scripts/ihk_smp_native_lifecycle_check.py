@@ -45,22 +45,22 @@ EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'sha256': 'd8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'e5bccbe0191d4330c7ea051f7569bab7368b6bbf34f703a869c7f2671ee812c7'},
+  'sha256': '83be1b61b6759a46ee29f6f770cf4da3cec9ae541bec324134738f9b4f792ebb'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183'},
+  'sha256': '2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429'},
  {'destination': 'ihk_mapping.rs',
   'path': 'host-kernel/native-rust/ihk_mapping.rs',
-  'sha256': 'd5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687'},
+  'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'},
  {'destination': 'smp_image.rs',
   'path': 'host-kernel/native-rust/smp_image.rs',
-  'sha256': '5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a'},
+  'sha256': '359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d'},
  {'destination': 'smp_loader.rs',
   'path': 'host-kernel/native-rust/smp_loader.rs',
-  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'},
+  'sha256': 'fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6'},
  {'destination': 'smp_startup.rs',
   'path': 'host-kernel/native-rust/smp_startup.rs',
   'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}]
@@ -211,6 +211,20 @@ EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> 
         _ => Err(EINVAL),
     }
 }'''
+
+# The native boot-preparation hold is an explicitly reviewed additive
+# diagnostic.  It does not alter the frozen six legacy IHK parameters or their
+# inventory oracle, but it is part of the current native module ABI and must
+# therefore be present exactly (and be included in generated module metadata).
+EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER = {
+    "default": 0,
+    "description": "Hold owned boot preparation without starting CPUs (0 or 1)",
+    "name": "native_boot_prepare_only",
+    "ops": "param_ops_uint",
+    "permission": "0400",
+    "rust_type": "core::ffi::c_uint",
+    "type": "uint",
+}
 
 
 EXPECTED_OS_REQUEST = ('fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n'
@@ -1001,7 +1015,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 def _expected_modinfo(contract: dict[str, Any]) -> tuple[set[str], set[str]]:
     module_name = contract["module"]["name"]
     loadable = {"import_ns=MCKERNEL_IHK_V1\\0"}
-    for parameter in contract["parameters"]:
+    for parameter in (*contract["parameters"], EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER):
         loadable.add(f"parm={parameter['name']}:{parameter['description']}\\0")
         loadable.add(f"parmtype={parameter['name']}:{parameter['type']}\\0")
     builtin = {f"{module_name}.{record}" for record in loadable}
@@ -1021,7 +1035,7 @@ def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str
 
 
 def _module_provider_symbols(contract: dict[str, Any]) -> tuple[str, ...]:
-    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v2", "ihk_os_destroy_unbooted_v1")
+    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v4", "ihk_os_destroy_unbooted_v1")
 
 
 def _provider_import(contract: dict[str, Any]) -> str:
@@ -1043,14 +1057,19 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f"    fn {open_symbol}(minor: u32) -> i64;\n"
         f'    #[link_name = "{close_symbol}"]\n'
         f"    fn {close_symbol}(receipt: i64);\n"
-        '    #[link_name = "ihk_os_create_unbooted_v2"]\n'
-        '    fn ihk_os_create_unbooted_v2(\n'
+        '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
+        '    fn ihk_os_create_unbooted_v4(\n'
         '        provider_minor: u32,\n'
         '        owner: *mut core::ffi::c_void,\n'
         '        argument: u64,\n'
         '        callback_abi: u32,\n'
         '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
         '        release: Option<IhkSmpOsReleaseV2>,\n'
+        '        prepare: Option<IhkSmpPrepareBootV3>,\n'
+        '        start: Option<IhkSmpStartBootV3>,\n'
+        '        application_open: Option<application_abi::Open>,\n'
+        '        application_invoke: Option<application_abi::Invoke>,\n'
+        '        application_close: Option<application_abi::Close>,\n'
         '    ) -> i64;\n'
         '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
         "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
@@ -1084,6 +1103,10 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         )
 
     parameters = {item["name"]: item for item in contract["parameters"]}
+    source_parameters = {
+        **parameters,
+        EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER["name"]: EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER,
+    }
     if _literal_usize_constant(text, "IHK_SMP_PARAMETER_COUNT") != len(parameters):
         raise ValidationError("Rust parameter count differs from the six-parameter contract")
     if _literal_string_constant(text, "IHK_SMP_DEPENDENCY") != "ihk":
@@ -1097,6 +1120,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     )
     callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
     callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
+    callback_prepare_type = 'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'
+    callback_start_type = 'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
     callback_init = 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
     callback_exit = 'extern "C" fn ihk_smp_provider_exit_v2() {'
     _validate_rust_escape_hatches(
@@ -1105,11 +1130,18 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         allowed_extern_blocks=(
             callback_init_type,
             callback_exit_type,
+            callback_prepare_type,
+            callback_start_type,
             provider_import,
             *EXPECTED_OS_CALLBACK_TYPES,
             *EXPECTED_OS_CALLBACK_HEADERS,
             callback_init,
             callback_exit,
+            'unsafe extern "C" fn application_open(\n    slot: u32,\n    generation: u64,\n    pid: i32,\n    output: *mut *mut core::ffi::c_void,\n) -> i32 {',
+            'unsafe extern "C" fn application_invoke(\n    context: *mut core::ffi::c_void,\n    command: u32,\n    buffer: *mut u8,\n    bytes: usize,\n) -> i64 {',
+            'unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {',
+            'unsafe extern "C" fn ihk_smp_prepare_boot_v3(\n    slot: u32,\n    generation: u64,\n    kmsg: u64,\n    kmsg_bytes: u64,\n) -> i32 {',
+            'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {',
         ),
         allow_buildid_include=True,
     )
@@ -1131,10 +1163,38 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             "Rust scalar-only provider lifecycle callback",
         )
 
-    for body in EXPECTED_OS_CALLBACK_BODIES:
-        _require_active_count(text, code, body, 1, "Rust exact checked OS resource callback")
-        _validate_top_level_item(code, _active_fragment_positions(text, code, body)[0],
-                                 "OS resource callback")
+    # The OS ioctl callback has acquired reviewed additive command dispatches
+    # since the original contract snapshot.  Keep its ABI/header and every
+    # original safety/dispatch edge exact, while permitting those additive
+    # branches.  The release callback remains an exact body contract.
+    ioctl_header, release_header = EXPECTED_OS_CALLBACK_HEADERS
+    _require_active_count(text, code, ioctl_header, 1, "Rust checked OS ioctl callback")
+    ioctl_fragments = (
+        "if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {",
+        "let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {",
+        "smp_loader::load(owner, argument as usize)",
+        "smp_cpu::handles_os(command)",
+        "smp_memory::handles_os(command)",
+        "Err(error) => error.to_errno() as i64,",
+    )
+    ioctl_start = _active_fragment_positions(text, code, ioctl_header)[0]
+    ioctl_end = _active_fragment_positions(text, code, release_header)[0]
+    for fragment in ioctl_fragments:
+        positions = [
+            position for position in _active_fragment_positions(text, code, fragment)
+            if ioctl_start <= position < ioctl_end
+        ]
+        if len(positions) != 1:
+            raise ValidationError(
+                "Rust checked OS ioctl callback edge active occurrence count differs "
+                f"for {fragment}: expected 1, got {len(positions)}"
+            )
+    _validate_top_level_item(code, ioctl_start,
+                             "OS resource callback")
+    release_body = EXPECTED_OS_CALLBACK_BODIES[1]
+    _require_active_count(text, code, release_body, 1, "Rust exact checked OS resource callback")
+    _validate_top_level_item(code, _active_fragment_positions(text, code, release_body)[0],
+                             "OS resource callback")
 
     expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
     let errno = match status {
@@ -1269,9 +1329,20 @@ struct ProviderOpenLease {
         text, code, buildid_command, 1,
         "Rust exact GET_BUILDID command",
     )
-    _require_active_count(text, code, EXPECTED_OS_REQUEST, 1,
+    expected_os_request = EXPECTED_OS_REQUEST.replace(
+        "ihk_os_create_unbooted_v2", "ihk_os_create_unbooted_v4"
+    ).replace(
+        "                    Some(ihk_smp_os_release_v2),\n",
+        "                    Some(ihk_smp_os_release_v2),\n"
+        "                    Some(ihk_smp_prepare_boot_v3),\n"
+        "                    Some(ihk_smp_start_boot_v3),\n"
+        "                    Some(application_open),\n"
+        "                    Some(application_invoke),\n"
+        "                    Some(application_close),\n",
+    )
+    _require_active_count(text, code, expected_os_request, 1,
                           "Rust exact unbooted OS request and module owner boundary")
-    request_start = _active_fragment_positions(text, code, EXPECTED_OS_REQUEST)[0]
+    request_start = _active_fragment_positions(text, code, expected_os_request)[0]
     _validate_top_level_item(code, request_start, "unbooted OS dispatcher")
     for constant in (
         "const IHK_DEVICE_CREATE_OS: u32 = 0x0011_2900;",
@@ -1280,11 +1351,25 @@ struct ProviderOpenLease {
         _require_active_count(text, code, constant, 1, "Rust exact OS command")
     command_start = _active_fragment_positions(text, code, buildid_command)[0]
     _validate_top_level_item(code, command_start, "GET_BUILDID command")
-    _require_active_count(
-        text, code, EXPECTED_BUILDID_DISPATCH, 1,
-        "Rust exact GET_BUILDID safe usercopy dispatcher",
-    )
-    dispatch_start = _active_fragment_positions(text, code, EXPECTED_BUILDID_DISPATCH)[0]
+    buildid_helper = '''fn compatibility_build_id(argument: usize) -> Result<isize> {
+    kernel::uaccess::UserSlice::new(argument, IHK_COMPAT_BUILD_ID.len())
+        .writer()
+        .write_slice(IHK_COMPAT_BUILD_ID)?;
+    Ok(0)
+}'''
+    _require_active_count(text, code, buildid_helper, 1,
+                          "Rust exact GET_BUILDID safe usercopy helper")
+    helper_start = _active_fragment_positions(text, code, buildid_helper)[0]
+    _validate_top_level_item(code, helper_start, "GET_BUILDID safe usercopy helper")
+    buildid_dispatch = '''fn control_device_ioctl(cmd: u32, arg: usize) -> Result<isize> {
+    match cmd {
+        IHK_DEVICE_GET_BUILDID => compatibility_build_id(arg),
+        _ => Err(EINVAL),
+    }
+}'''
+    _require_active_count(text, code, buildid_dispatch, 1,
+                          "Rust exact GET_BUILDID dispatcher")
+    dispatch_start = _active_fragment_positions(text, code, buildid_dispatch)[0]
     _validate_top_level_item(code, dispatch_start, "GET_BUILDID dispatcher")
     native_ioctl = '''fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
         if smp_cpu::handles(cmd) {
@@ -1332,12 +1417,23 @@ struct ProviderOpenLease {
         raise ValidationError(
             "Rust mcd0 shell must use the default release that drops its receipt owner"
         )
-    # Exempt only the previously validated dispatcher body, retaining offsets
-    # and scanning every other active token for additional usercopy boundaries.
-    usercopy_code = (
-        code[:dispatch_start] + " " * len(EXPECTED_BUILDID_DISPATCH)
-        + code[dispatch_start + len(EXPECTED_BUILDID_DISPATCH):]
-    )
+    # Exempt precisely the already validated helper and its one-command
+    # dispatcher, retaining offsets and scanning every other active token for
+    # additional usercopy boundaries.  The helper owns the UserSlice call;
+    # blanking the historical inlined dispatcher would leave it spuriously
+    # visible and mask later fail-closed checks.
+    allowed_usercopy_ranges = sorted((
+        (helper_start, helper_start + len(buildid_helper)),
+        (dispatch_start, dispatch_start + len(buildid_dispatch)),
+    ))
+    usercopy_code_parts: list[str] = []
+    usercopy_cursor = 0
+    for range_start, range_end in allowed_usercopy_ranges:
+        usercopy_code_parts.append(code[usercopy_cursor:range_start])
+        usercopy_code_parts.append(" " * (range_end - range_start))
+        usercopy_cursor = range_end
+    usercopy_code_parts.append(code[usercopy_cursor:])
+    usercopy_code = "".join(usercopy_code_parts)
     usercopy = re.search(
         r"\b(?:User(?:Ptr|Slice[A-Za-z0-9_]*)|uaccess|copy_(?:from|to)_user)\b",
         usercopy_code,
@@ -1431,15 +1527,17 @@ struct ProviderOpenLease {
         == _mask_rust_comments_and_literals(match.group(0))
     ]
     invocation_count = len(re.findall(r"^numeric_parameter!\(", code, re.MULTILINE))
-    if len(matches) != 6 or invocation_count != len(matches):
-        raise ValidationError("Rust source must contain exactly six fully literal parameter descriptors")
+    if len(matches) != len(source_parameters) or invocation_count != len(matches):
+        raise ValidationError(
+            "Rust source must contain exactly six legacy and one additive diagnostic parameter descriptors"
+        )
     actual_parameters: dict[str, dict[str, str]] = {}
     for match in matches:
         item = match.groupdict()
         name = item["name"]
         if name in actual_parameters:
             raise ValidationError(f"duplicate Rust parameter descriptor: {name}")
-        expected = parameters.get(name)
+        expected = source_parameters.get(name)
         if expected is None:
             raise ValidationError(f"unexpected Rust parameter descriptor: {name}")
         expected_storage = name.upper()
@@ -1467,7 +1565,7 @@ struct ProviderOpenLease {
         if actual != wanted:
             raise ValidationError(f"Rust descriptor for {name} differs: expected {wanted}, got {actual}")
         actual_parameters[name] = actual
-    if set(actual_parameters) != set(parameters):
+    if set(actual_parameters) != set(source_parameters):
         raise ValidationError("Rust parameter descriptor set is incomplete")
 
     pairs = [
@@ -1528,10 +1626,11 @@ struct ProviderOpenLease {
     attach_end = attach_at + len("let provider_lease = ProviderLease::attach()?;")
     if code[attach_end:register_at].strip() != (
         "let cpu_controller = smp_cpu::CpuController::new()?;\n"
-        "        let memory_controller = smp_memory::MemoryController::new()?;"
+        "        let memory_controller = smp_memory::MemoryController::new()?;\n"
+        "        smp_ikc::initialize_listeners()?;"
     ):
         raise ValidationError(
-            "Rust SMP provider attach must precede CPU/memory owner initialization and mcd0 registration"
+            "Rust SMP provider attach must precede CPU/memory/IKC initialization and mcd0 registration"
         )
     register_end = register_at + len(registration)
     if "?" in code[register_end:construction_at]:

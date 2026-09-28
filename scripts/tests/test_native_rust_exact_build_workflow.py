@@ -1778,6 +1778,31 @@ exec {modinfo_fd}<&-
             self.workflow.count("--fuzz=0 --no-backup-if-mismatch"), 3
         )
 
+    def test_secondary_reset_supplement_is_exactly_staged_and_lock_verified(self):
+        manifest = REPO_ROOT / "host-kernel/kbuild/secondary-reset-build-supplement-v1.json"
+        checker = REPO_ROOT / "scripts/secondary_reset_build_supplement.py"
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        self.assertEqual(data["checker"]["sha256"], hashlib.sha256(checker.read_bytes()).hexdigest())
+        self.assertEqual(
+            ["0006", "0007", "0008", "0009", "0010"],
+            [Path(row["path"]).name[:4] for row in data["patches"]],
+        )
+        self.assertEqual(
+            "a3d7dcac45abbd712d79fbbebba7e7df08eae06037fc347d09415b48fb1db2c6",
+            data["patches"][-1]["sha256"],
+        )
+        self.assertTrue(data["patches"][-1]["replacement_0010_v2"])
+        self.assertIn("0010-v2-x86-export-preempt-protected-secondary-reset.patch", data["patches"][-1]["path"])
+        self.assertFalse(data["credit_eligible"])
+        self.assertFalse(data["licensing"]["approval_claimed"])
+        stage = self.workflow.index("scripts/secondary_reset_build_supplement.py")
+        verify = self.workflow.index("--verify-lock", stage)
+        configuration = self.workflow.index("Resolve the evidence-only module configuration twice")
+        self.assertLess(stage, verify)
+        self.assertLess(verify, configuration)
+        self.assertIn("--source-archive \"$archive\"", self.workflow)
+        self.assertIn("--output-lock \"$source_root/.mckernel-secondary-reset-build.lock\"", self.workflow)
+
     def test_final_config_keeps_warnings_fatal(self):
         second_resolution = self.workflow.index(
             'SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig',

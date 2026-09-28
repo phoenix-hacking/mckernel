@@ -5133,3 +5133,72 @@ live. Host free space is 26,942,808,064 bytes, scratch free space
 remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four real diagnostic apps and zero
 current-candidate builds remain unchanged. This checkpoint neither completes
 nor resumes the OS goal.
+
+Continuation checkpoint 57, 2026-09-28: the launcher requested invocation
+shutdown. No new work was dispatched after that request. All ten visible child
+lanes are completed/retired or interrupted/retired, and no delegated command,
+heavy build, QEMU, mcexec or diagnostic owner remains live.
+
+The replacement x86 reset boundary now keeps the raw Linux
+`send_init_sequence` helper static and byte-identical. It exports only a narrow
+`native_reset_secondary_cpu_via_init(apicid)` wrapper whose reviewed body is
+`preempt_disable`, one INIT attempt, and `preempt_enable`; it sends no SIPI.
+Three exact candidate failures are preserved (post-0006 offset mismatch,
+malformed hunk counts and literal backslash-t content). The corrected patch and
+one-test pinned-source contract pass. The paired native reset/re-online journal
+passes six exact Rust 1.92 fixture tests after repairing the first independent
+review's Send/Sync, durable-barrier, errno/status, partial-recording, diagnostic
+and coverage findings. Its repaired exact hashes still require independent
+rereview, and neither boundary has had a configured kernel/module build or
+privileged execution. Exact files, hashes, commands and failures are recorded in
+`docs/verification/stability-native-shutdown-reset-journal-wip-20260928-1.json`.
+
+An authenticated exact-build supplement now binds the immutable source lock and
+ordered 0006, 0007, 0008, 0009 and replacement 0010-v2 closure, stages with
+fuzz zero, checks pre/post images, and emits/verifies a final supplemental lock.
+Its first positive verify-lock run failed because the verifier compared every
+intermediate writer instead of the final authenticated writer of a path. The
+bounded correction passes both tests in 308.604 seconds; negative cases remain
+enabled. Workflow integration still needs its exact assertion under a compatible
+Python interpreter and independent authority review. The source-only record is
+`docs/verification/stability-native-shutdown-reset-build-supplement-wip-20260928-1.json`.
+
+Independent IRQ-work review remains BLOCK for reclamation. The fixed boot header
+cannot be extended in place; a native-revision-gated descriptor must follow the
+variable tables and publish the retained physical slot range, exact geometry,
+generation and release-ready state. Sender leases must span enqueue and IPI
+result. Because a failed IPI leaves its node linked and BUSY and
+`irq_work_sync()` only waits, recovery must retry the exact IRQ_WORK_VECTOR to
+the retained target; an offline target quarantines the generation. The exact
+design result and smallest two-source/two-target fixture are in
+`docs/verification/stability-native-shutdown-irq-slot-design-review-20260928-1.json`.
+No STOP/ACK ABI or v5 wiring is authorized yet.
+
+The lifecycle checker WIP remains fail-closed and unstaged for acceptance. Its
+v4 provider and split BUILDID focused tests pass, but the full suite currently
+stops on an exact import-order expectation (`IHK_DEVICE_REGISTRY, SharePolicy`
+versus the live `SharePolicy, IHK_DEVICE_REGISTRY`), and its contract carries a
+transient pre-repair `smp_cpu.rs` hash. Resume by correcting only that exact
+source ordering expectation, updating the contract to the final journal hash,
+and requiring the complete 60-test suite and independent review; do not relax
+the oracle.
+
+At shutdown the preserved live process identities are launcher wrapper
+PID/PGID/SID 3399308/starttime 83682487, worker PID/PGID/SID
+3399313/starttime 83682494, and app-server PID/PGID/SID 3399317/starttime
+83682500. Host free space is 26,891,231,232 bytes, scratch free space
+21,613,768,704 bytes and MemAvailable 30,957,010,944 bytes. Preserve the
+unrelated launcher/policy edits, dirty nested IHK checkout and deleted/untracked
+pycache state.
+
+Next invocation: reconcile the pushed tree and these process identities. First
+finish the lifecycle checker exact-order/hash correction and run its full suite.
+Then independently rereview the repaired journal and build supplement, run the
+remaining compatible-interpreter workflow assertion, and perform the reviewed
+configured build before any privileged reset. In a separate implementation
+boundary, add the generation descriptor/sender gate/failed-vector retry fixture.
+Do not freeze STOP/ACK, wire v5, free guest storage or run shutdown until CPU
+reclamation and IRQ/callback drain both pass independent review. Formal counters
+remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic guest apps and
+zero current-candidate builds remain unchanged. This checkpoint neither
+completes nor resumes the OS goal.

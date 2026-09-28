@@ -34,6 +34,11 @@ mod abi;
 // closure. No project-owned C implementation is linked into this module.
 extern "C" {
     fn default_cpu_present_to_apicid(cpu: i32) -> u32;
+    /// The pending native x86 wrapper brackets the existing INIT
+    /// assert/deassert sequence with the required Linux preemption handling.
+    /// It is an attempted reset only: it does not send SIPI or establish that
+    /// Linux has reclaimed a CPU.
+    fn native_reset_secondary_cpu_via_init(phys_apicid: u32);
 }
 
 static BLOCK_ONLINE: [AtomicBool; SMP_MAX_CPUS] = [const { AtomicBool::new(false) }; SMP_MAX_CPUS];
@@ -234,6 +239,149 @@ impl Drop for CpuDevice {
     }
 }
 
+/// A journal-only view of the `CpuDevice` reference retained by `CpuContext`.
+///
+/// `CpuDevice` owns the successful `get_device`; this wrapper never owns or
+/// releases that reference.  The pointer is only compared or passed back to
+/// Linux while `CpuContext` is held by its pinned mutex and the device-hotplug
+/// exclusion is live.  Thus moving the journal with the context cannot create
+/// concurrent device access or outlive the retained `CpuDevice`.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct RetainedCpuDevice(*mut bindings::device);
+
+// SAFETY: See the type invariant above. The raw pointer is an identity token,
+// not an independently accessible or owned device reference.
+unsafe impl Send for RetainedCpuDevice {}
+// SAFETY: Shared journal observations require the same CpuContext mutex and
+// device-hotplug exclusion; the wrapper itself is never dereferenced.
+unsafe impl Sync for RetainedCpuDevice {}
+
+impl RetainedCpuDevice {
+    const fn empty() -> Self {
+        Self(ptr::null_mut())
+    }
+
+    fn is_null(self) -> bool {
+        self.0.is_null()
+    }
+}
+
+/// The first irreversible stage that made a shutdown target uncertain.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ShutdownCpuFailureStage {
+    None,
+    PreResetValidation,
+    DeviceOnline,
+    PostOnlineValidation,
+}
+
+/// Irreversible progress for one retained AP during shutdown reclamation.
+///
+/// This intentionally does not share `CpuChange`: ordinary reserve/return
+/// transactions compensate a failed device transition, while an INIT attempt
+/// must retain every owner until a later, explicit reconciliation proves the
+/// physical state. The journal lives in the static CPU context, so recording
+/// a target or an error cannot allocate after shutdown has closed admission.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct ShutdownCpuJournal {
+    owner_slot: u32,
+    owner_generation: u64,
+    cpu: u32,
+    apic_id: u32,
+    numa_node: u32,
+    device: RetainedCpuDevice,
+    recorded: bool,
+    reset_attempted: bool,
+    online_attempted: bool,
+    /// Exact `device_online` status, retained even when a positive no-op is
+    /// normalized to EIO for the fail-closed public result.
+    online_status: i32,
+    online: bool,
+    retained: bool,
+    first_failure_stage: ShutdownCpuFailureStage,
+    first_failure: i32,
+}
+
+impl ShutdownCpuJournal {
+    const fn empty() -> Self {
+        Self {
+            owner_slot: 0,
+            owner_generation: 0,
+            cpu: 0,
+            apic_id: 0,
+            numa_node: 0,
+            device: RetainedCpuDevice::empty(),
+            recorded: false,
+            reset_attempted: false,
+            online_attempted: false,
+            online_status: 0,
+            online: false,
+            retained: false,
+            first_failure_stage: ShutdownCpuFailureStage::None,
+            first_failure: 0,
+        }
+    }
+
+    fn record(
+        &mut self,
+        owner: OsToken,
+        cpu: usize,
+        snapshot: HostCpuSnapshot,
+        device: *mut bindings::device,
+    ) {
+        *self = Self {
+            owner_slot: owner.slot(),
+            owner_generation: owner.generation(),
+            cpu: cpu as u32,
+            apic_id: snapshot.hardware_id,
+            numa_node: snapshot.numa_node,
+            device: RetainedCpuDevice(device),
+            recorded: true,
+            reset_attempted: false,
+            online_attempted: false,
+            online_status: 0,
+            online: false,
+            retained: false,
+            first_failure_stage: ShutdownCpuFailureStage::None,
+            first_failure: 0,
+        };
+    }
+
+    fn matches_owner(&self, owner: OsToken) -> bool {
+        self.recorded
+            && self.owner_slot == owner.slot()
+            && self.owner_generation == owner.generation()
+    }
+
+    fn reset_attempted(&mut self) {
+        self.reset_attempted = true;
+    }
+
+    fn online(&mut self) {
+        self.online = true;
+    }
+
+    fn online_attempted(&mut self) {
+        self.online_attempted = true;
+    }
+
+    fn online_status(&mut self, status: i32) {
+        self.online_status = status;
+    }
+
+    fn retain(&mut self, stage: ShutdownCpuFailureStage, failure: i32) {
+        self.retained = true;
+        if self.first_failure == 0 {
+            self.first_failure_stage = stage;
+            self.first_failure = failure;
+        }
+    }
+}
+
+fn shutdown_journal_blocks_ordinary_use(journal: &[ShutdownCpuJournal]) -> bool {
+    journal.iter().any(|record| record.recorded)
+}
+
 pub(super) struct ResourceModulePin;
 
 impl ResourceModulePin {
@@ -260,6 +408,7 @@ impl Drop for ResourceModulePin {
 struct CpuContext {
     table: CpuTable<SMP_MAX_CPUS>,
     journal: [CpuChange; SMP_MAX_CPUS],
+    shutdown_journal: [ShutdownCpuJournal; SMP_MAX_CPUS],
     requests: [usize; SMP_MAX_CPUS],
     requested: [bool; SMP_MAX_CPUS],
     devices: [Option<CpuDevice>; SMP_MAX_CPUS],
@@ -272,6 +421,7 @@ impl CpuContext {
         Self {
             table: CpuTable::new(),
             journal: [CpuChange::empty(); SMP_MAX_CPUS],
+            shutdown_journal: [ShutdownCpuJournal::empty(); SMP_MAX_CPUS],
             requests: [0; SMP_MAX_CPUS],
             requested: [false; SMP_MAX_CPUS],
             devices: [const { None }; SMP_MAX_CPUS],
@@ -338,8 +488,13 @@ impl CpuContext {
 
     /// Refuse further published results if owned hardware lost its identity.
     /// The existing pin and online veto stay held until explicit reconciliation.
+    /// A shutdown journal is itself an uncertain physical transition: ordinary
+    /// ioctls, boot and release paths must never treat a later online bit as a
+    /// return to the previous lifecycle. Only shutdown reconciliation below
+    /// deliberately bypasses this ordinary-operation fence.
     fn verify_owned(&mut self, hotplug: &DeviceHotplugGuard) -> Result {
-        if self.poisoned {
+        if self.poisoned || shutdown_journal_blocks_ordinary_use(&self.shutdown_journal) {
+            self.poisoned = true;
             return Err(EIO);
         }
         let mut host = LinuxCpuBatch {
@@ -364,6 +519,219 @@ impl CpuContext {
             }
             self.poisoned = true;
             return Err(EIO);
+        }
+        Ok(())
+    }
+
+    /// Retain every recorded CPU after an INIT attempt or uncertain re-online.
+    /// This is deliberately stronger than ordinary hotplug failure handling:
+    /// no compensation can prove that a reset AP resumed its McKernel state.
+    fn retain_shutdown_failure(
+        &mut self,
+        count: usize,
+        stage: ShutdownCpuFailureStage,
+        failure: Error,
+    ) -> Error {
+        for record in &mut self.shutdown_journal[..count] {
+            if record.recorded {
+                record.retain(stage, failure.to_errno());
+            }
+        }
+        self.poisoned = true;
+        failure
+    }
+
+    /// Complete every fallible lookup before the first journal write. Once a
+    /// record exists, every later error must retain and poison the complete
+    /// selected set; this preflight includes a missing retained device.
+    fn prevalidate_shutdown_targets(
+        &self,
+        owner: OsToken,
+        count: usize,
+        hotplug: &DeviceHotplugGuard,
+    ) -> Result {
+        let read = CpuReadGuard::lock();
+        for index in 0..count {
+            let cpu = self.requests[index];
+            let slot = self.table.slot(cpu).map_err(|_| EIO)?;
+            let device = self
+                .devices
+                .get(cpu)
+                .and_then(Option::as_ref)
+                .ok_or(ENODEV)?;
+            // SAFETY: The two guards stabilize this retained CPU-device
+            // association before the first irreversible journal record.
+            let current = unsafe { bindings::get_cpu_device(cpu as u32) };
+            let actual = observed_cpu(cpu, &read, hotplug)?;
+            if device.0.is_null()
+                || current != device.0
+                || device.1.linux_id as usize != cpu
+                || slot.state() != CpuState::Assigned
+                || slot.owner() != Some(owner)
+                || slot.hardware_id() != device.1.apic_id
+                || slot.numa_node() != actual.numa_node
+                || actual.hardware_id != device.1.apic_id
+                || actual.online
+            {
+                return Err(EIO);
+            }
+        }
+        Ok(())
+    }
+
+    /// Validate one journaled target against the same retained Linux device,
+    /// exact APIC/NUMA identity, canonical assignment and required online bit.
+    /// Caller holds both device-hotplug and CPU read-side exclusion.
+    fn validate_shutdown_target(
+        &self,
+        owner: OsToken,
+        record: ShutdownCpuJournal,
+        expected_online: bool,
+        topology: &CpuReadGuard,
+        hotplug: &DeviceHotplugGuard,
+    ) -> Result {
+        let cpu = record.cpu as usize;
+        if !record.matches_owner(owner) || cpu == 0 || cpu >= SMP_MAX_CPUS {
+            return Err(EIO);
+        }
+        let slot = self.table.slot(cpu).map_err(|_| EIO)?;
+        let retained = self.devices.get(cpu).and_then(Option::as_ref).ok_or(EIO)?;
+        // SAFETY: The two guards stabilize the CPU-device association. The
+        // record was captured from this retained, get_device-owned pointer.
+        let current = unsafe { bindings::get_cpu_device(cpu as u32) };
+        if record.device.is_null()
+            || current != record.device.0
+            || retained.0 != record.device.0
+            || retained.1.linux_id as usize != cpu
+            || retained.1.apic_id != record.apic_id
+            || slot.state() != CpuState::Assigned
+            || slot.owner() != Some(owner)
+            || slot.hardware_id() != record.apic_id
+            || slot.numa_node() != record.numa_node
+        {
+            return Err(EIO);
+        }
+        let actual = observed_cpu(cpu, topology, hotplug)?;
+        if actual.hardware_id != record.apic_id
+            || actual.numa_node != record.numa_node
+            || actual.online != expected_online
+        {
+            return Err(EIO);
+        }
+        Ok(())
+    }
+
+    /// Reset each exact, already-offline assigned AP and require Linux to
+    /// synchronously re-online that same CPU. This primitive is intentionally
+    /// not wired to the v5 shutdown callback: it never releases CPU table,
+    /// memory, IRQ or module ownership and therefore cannot claim a guest is
+    /// stopped or resources are reclaimable on its own.
+    fn shutdown_reset_and_reonline(
+        &mut self,
+        owner: OsToken,
+        hotplug: &DeviceHotplugGuard,
+    ) -> Result {
+        if self.poisoned || shutdown_journal_blocks_ordinary_use(&self.shutdown_journal) {
+            self.poisoned = true;
+            return Err(EIO);
+        }
+        let count = self
+            .table
+            .assigned_cpus(owner, &mut self.requests)
+            .map_err(|_| EIO)?;
+        if count == 0 {
+            return Err(EINVAL);
+        }
+
+        self.prevalidate_shutdown_targets(owner, count, hotplug)?;
+
+        // The complete canonical device/identity preflight above finished
+        // before the first record. Record every target before any reset or
+        // online effect, so every later error has a complete retention set.
+        // The stored device pointer is held live by CpuDevice's get_device
+        // reference until a separate, successful lifecycle release.
+        for index in 0..count {
+            let cpu = self.requests[index];
+            let slot = self
+                .table
+                .slot(cpu)
+                .unwrap_or_else(|_| panic!("shutdown CPU prevalidation lost a canonical slot"));
+            let device = self.devices[cpu]
+                .as_ref()
+                .unwrap_or_else(|| panic!("shutdown CPU prevalidation lost a retained device"));
+            self.shutdown_journal[index].record(
+                owner,
+                cpu,
+                HostCpuSnapshot {
+                    hardware_id: slot.hardware_id(),
+                    numa_node: slot.numa_node(),
+                    online: false,
+                },
+                device.0,
+            );
+        }
+
+        {
+            let read = CpuReadGuard::lock();
+            for index in 0..count {
+                let record = self.shutdown_journal[index];
+                if self
+                    .validate_shutdown_target(owner, record, false, &read, hotplug)
+                    .is_err()
+                {
+                    return Err(self.retain_shutdown_failure(
+                        count,
+                        ShutdownCpuFailureStage::PreResetValidation,
+                        EIO,
+                    ));
+                }
+            }
+            for index in 0..count {
+                let record = &mut self.shutdown_journal[index];
+                // SAFETY: CPU read exclusion fixes this validated APIC target.
+                // The pending native wrapper owns its exact preemption bracket
+                // and returns before this Rust code can reach device_online.
+                unsafe { native_reset_secondary_cpu_via_init(record.apic_id) };
+                record.reset_attempted();
+            }
+        }
+
+        // CPU read-side exclusion is gone here. The wrapper's preemption
+        // bracket also ended before it returned. Linux's synchronous
+        // device_online is sleepable and may invoke CPUHP paths.
+        for index in 0..count {
+            let record = self.shutdown_journal[index];
+            let _permission = TransitionTask::new(record.cpu as usize);
+            self.shutdown_journal[index].online_attempted();
+            // SAFETY: Device-hotplug exclusion and the retained journal device
+            // identity serialize the exact Linux transition. Positive/no-op is
+            // rejected just as strictly as a negative Linux errno.
+            let status = unsafe { bindings::device_online(record.device.0) };
+            self.shutdown_journal[index].online_status(status);
+            if status != 0 {
+                let failure = if status < 0 {
+                    kernel::error::to_result(status).unwrap_err()
+                } else {
+                    EIO
+                };
+                return Err(self.retain_shutdown_failure(
+                    count,
+                    ShutdownCpuFailureStage::DeviceOnline,
+                    failure,
+                ));
+            }
+            let read = CpuReadGuard::lock();
+            if self
+                .validate_shutdown_target(owner, record, true, &read, hotplug)
+                .is_err()
+            {
+                return Err(self.retain_shutdown_failure(
+                    count,
+                    ShutdownCpuFailureStage::PostOnlineValidation,
+                    EIO,
+                ));
+            }
+            self.shutdown_journal[index].online();
         }
         Ok(())
     }
@@ -813,6 +1181,27 @@ pub(super) fn os_ioctl(
         abi::IHK_OS_QUERY_CPU => context.query_os(owner, Some(&request)),
         _ => Err(EINVAL),
     }
+}
+
+/// Bounded native AP reset/re-online primitive for the later shutdown path.
+///
+/// The caller must already hold the exact OS operation/lease and have closed
+/// admission. This is deliberately not registered as a v5 shutdown callback:
+/// it only journals physical CPU reset/re-online proof and retains all logical,
+/// memory, IRQ and module ownership for the remaining shutdown stages.
+#[allow(dead_code)] // Intentionally unwired until the v5 STOP/ACK drain owns it.
+pub(super) fn shutdown_reset_and_reonline(owner: OsToken) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ENODEV);
+    }
+    // SAFETY: A future synchronous backend callback must retain the provider
+    // module and exact owner lease through this operation. No journal reference
+    // escapes the policy mutex or the device-hotplug exclusion.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    context.shutdown_reset_and_reonline(owner, &hotplug)
 }
 
 /// Release both resource classes before the exclusive OS destruction returns.

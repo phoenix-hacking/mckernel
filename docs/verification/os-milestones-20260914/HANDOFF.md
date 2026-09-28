@@ -8,12 +8,12 @@ diagnostic application is never whole-OS completion.
 
 - Branch: `codex/local-native-staging-repair`.
 - Last verified remote checkpoint before the current evidence delta:
-  `a252a47a32b5db5f724b011b2ec8e0a9f71e46a4`.
+  `5af634ce1e71248d7bbe144a49d689443993f449`.
 - Adopted policy SHA-256: GOAL `76c4f5d1...c0bcc3`, START
   `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, HANDOFF predecessor
   `265cd999...a415`.
-- Launcher PID/PGID/SID 3125264/starttime 80228730; recovered worker
-  3170135/starttime 80670556; app-server 3170137/starttime 80670562.
+- Launcher wrapper PID/PGID/SID 3399308/starttime 83682487; worker
+  3399313/starttime 83682494; app-server 3399317/starttime 83682500.
 - No QEMU, mcexec, diagnostic owner or heavy build/guest lease was live at the
   last reconciliation. Recheck exact identities and capacity before heavy work.
 - Preserve unrelated dirty launcher/policy files, deleted/untracked pycache and
@@ -95,14 +95,25 @@ generation/state/sender-count registry: stop new sender leases, wait for every
 publisher, synchronize every retained per-CPU work node, then unpublish the
 route and permit generation reuse. Never remove nodes from `raised_list`.
 
-Next executable source step: implement and semantically test the distinct
-native shutdown reset/re-online journal using the new reset export, without
-wiring v5 or freeing resources. Independently implement and test the
-generation-scoped IRQ-work sender/drain registry. Continue the existing
-lifecycle-checker correction from its exact unstaged WIP; its current 60-test
-run still fails before the intended negative assertions, so it is not an
-accepted oracle. Then freeze STOP/ACK only after both ownership boundaries pass
-independent review. Do not run the shutdown fixture earlier.
+The distinct reset/re-online journal and the replacement preemption-protected
+Linux wrapper now exist as source-only WIP. The journal passes six exact Rust
+1.92 fixture tests after the first independent review's findings were repaired;
+the wrapper passes its pinned-source test after three retained candidate
+failures. An exact-build supplement for patches 0006 through 0010-v2 passes its
+two-test suite after one retained final-writer verification failure. None has a
+configured build, module link/load, privileged execution or final independent
+review. See the two `stability-native-shutdown-reset-*-wip-20260928-1.json`
+records.
+
+Next executable source step: finish the lifecycle checker's exact import-order
+expectation and refresh its `smp_cpu.rs` contract hash, then require the full
+60-test suite. Independently rereview the repaired journal and build supplement,
+run the workflow assertion with a compatible Python interpreter, and then run a
+reviewed configured build. Separately implement the native-revision-gated IRQ
+slot descriptor, sender gate and exact failed-IRQ_WORK_VECTOR retry fixture from
+`stability-native-shutdown-irq-slot-design-review-20260928-1.json`. Freeze
+STOP/ACK only after CPU reclamation and callback drain both pass independent
+review. Do not run the shutdown fixture earlier.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

@@ -85,7 +85,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v2",
                 "ihk_smp_provider_open_v1",
                 "ihk_smp_provider_close_v1",
-                "ihk_os_create_unbooted_v2",
+                "ihk_os_create_unbooted_v4",
                 "ihk_os_destroy_unbooted_v1",
             ],
             summary["provider_symbols"],
@@ -123,8 +123,16 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         ):
             with self.subTest(mutation=old):
                 self.assertIn(old, source)
+                if old == "smp_resource::OsToken::from_ihk_lease_v2(slot, generation)":
+                    ioctl_start = source.index('unsafe extern "C" fn ihk_smp_os_ioctl_v2(')
+                    mutated = (
+                        source[:ioctl_start]
+                        + source[ioctl_start:].replace(old, new, 1)
+                    )
+                else:
+                    mutated = source.replace(old, new, 1)
                 with self.assertRaises(lifecycle.ValidationError):
-                    lifecycle._validate_rust_source(source.replace(old, new, 1), self.contract)
+                    lifecycle._validate_rust_source(mutated, self.contract)
 
     def test_os_resource_bridge_cannot_claim_boot_or_drop_lease_requirement(self) -> None:
         for key, value in (("native_boot_proven", True), ("authority", "userspace slot")):
@@ -660,10 +668,10 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         source = (self.repo / self.contract["production_source"]).read_text(encoding="utf-8")
         cases = (
             ("0x0011_290b", "0x0011_290c", "exact GET_BUILDID command"),
-            (".len())", ".len() - 1)", "safe usercopy dispatcher"),
-            (".write_slice(IHK_COMPAT_BUILD_ID)?;", ".write_slice(IHK_COMPAT_BUILD_ID);", "safe usercopy dispatcher"),
-            ("_ => Err(EINVAL),", "_ => Ok(0),", "safe usercopy dispatcher"),
-            ("UserSlice::new(arg,", "UserSlice::new(0,", "safe usercopy dispatcher"),
+            (".len())", ".len() - 1)", "safe usercopy helper"),
+            (".write_slice(IHK_COMPAT_BUILD_ID)?;", ".write_slice(IHK_COMPAT_BUILD_ID);", "safe usercopy helper"),
+            ("_ => Err(EINVAL),", "_ => Ok(0),", "GET_BUILDID dispatcher"),
+            ("UserSlice::new(argument,", "UserSlice::new(0,", "safe usercopy helper"),
         )
         for old, new, error in cases:
             with self.subTest(mutation=old), self.assertRaisesRegex(lifecycle.ValidationError, error):
@@ -688,6 +696,11 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "GET_BUILDID dispatcher"):
             lifecycle._validate_rust_source(
                 source.replace("fn control_device_ioctl(", "#[cfg(any())]\nfn control_device_ioctl(", 1),
+                self.contract,
+            )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "safe usercopy helper.*unreviewed outer attribute"):
+            lifecycle._validate_rust_source(
+                source.replace("fn compatibility_build_id(", "#[cfg(any())]\nfn compatibility_build_id(", 1),
                 self.contract,
             )
 
