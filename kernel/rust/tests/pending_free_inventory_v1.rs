@@ -86,7 +86,7 @@ impl<'a> FrozenInventory<'a> {
             if descriptor.page_count == 0 { return Err(EINVAL); }
             let bytes = descriptor.page_count.checked_mul(PAGE).ok_or(EOVERFLOW)?;
             let end = descriptor.physical_start.checked_add(bytes).ok_or(EOVERFLOW)?;
-            if descriptor.physical_start < self.arena.physical_base || end > self.arena.physical_limit { return Err(EINVAL); }
+            if descriptor.physical_start % PAGE != 0 || descriptor.physical_start < self.arena.physical_base || end > self.arena.physical_limit { return Err(EINVAL); }
             for prior_index in 0..index {
                 let prior = self.arena.resolve(self.ids[prior_index]).ok_or(EINVAL)?;
                 let prior_bytes = prior.page_count.checked_mul(PAGE).ok_or(EOVERFLOW)?;

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_microtest_profile_review",
+  "recorded_utc": "2026-09-28T07:49:00Z",
+  "status": "FAIL_LAYER_B",
+  "profile_correction": "docs/verification/stability-layer-b-microtest-profile-correction-20260928-2.md",
+  "profile_correction_sha256": "69155942a076692bb0852dc8bfe0dd65c9f26169dad5269e2572097098a429a7",
+  "supervisor_sha256": "66bb449a02be5dadecaf24289bbdafaf067befa561214b76ab494b06984b32d6",
+  "harness_sha256": "85e79cbef3a97443b88017e57c1d1dc9c48d117fc86026a7cecf5789482e7e18",
+  "findings": [
+    "The focused acquisition test consumes three retained members from stability-linux-collector-root-success-20260915-2.tar.gz, but the archive and members were not bound.",
+    "A disappearing temporary file can raise during output-tree observation and abandon a live child because supervisor cleanup is not exception-safe; residual children after leader exit have the same ownership gap.",
+    "If the supervisor terminates M03, the harness and active compiler/vector process receive TERM before the harness persists command argv/timestamps/status or a failure record."
+  ],
+  "retained_archive_sha256": "ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721",
+  "consumed_member_sha256": {
+    "fixture": "9ad70dd23d699e72ad805f59446aec371c4e80b955056b845af921b4ce51f725",
+    "request.bin": "e81b38bbe6116bf1df2807fa968e12dccfd28fe8c3ad225c45f282b36cab6716",
+    "selected-inputs.json": "6b8761a9d2094147f02b9fe2a4c709246905a04c5122d68f6b9951162e01317d"
+  },
+  "execution_or_compilation": false,
+  "acceptance_credit": false,
+  "escalation_required": true,
+  "next": "Escalate the complete failure family for one expert ownership repair; do not silently issue another ordinary correction."
+}

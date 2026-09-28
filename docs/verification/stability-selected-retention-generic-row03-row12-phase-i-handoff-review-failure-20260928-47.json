@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_phase_i_handoff_review",
+  "review_attempt": 47,
+  "recorded_utc": "2026-09-28T08:02:00Z",
+  "status": "FAIL_HANDOFF",
+  "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260928-45",
+  "handoff_path": "phase-i-handoff.json",
+  "handoff_sha256": "db97372717f50f7dd8b6eec67755b3b20fa58736da7d442e4393f27bb1eb3b0b",
+  "handoff_size": 12572,
+  "regular_files": 327,
+  "source_members_per_mode": 51,
+  "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-attempt-20260928-45.tar.gz",
+  "archive_sha256": "e32fa7d1bacbbab76473612fcbcf28dad0052b90d4b283045d216ada19368b70",
+  "archive_size": 1011369,
+  "archive_members": 338,
+  "authentication": "All 56 inherited full SHA pins, both complete source authorities, exact allowlist, original/source/diff/record hashes and attempt44's nine archived files match. All members are regular single-link files; no bytecode or cross-mode indirection exists. Correction42's metadata-only hook is uniquely correct.",
+  "blocking_findings": [
+    "runner.rs aliases std Vec but cannot satisfy the actual fallible two-argument with_capacity and push calls.",
+    "row03 drains quarantine before mailbox destruction transfers the retained backing.",
+    "Both rows place the preparation baseline too early and omit required phase, owner, invalid, commit, address/send, teardown and post-drain assertions.",
+    "TestResponseMemory and Ledger do not instrument address/send deltas or prove guarded span, exclusive identity and alias geometry.",
+    "row12 writes phase state directly instead of driving begin_emitting, commit_held, claim_release and commit_release."
+  ],
+  "phase_ii_released": false,
+  "compilation_or_runtime": false,
+  "acceptance_credit": false,
+  "next": "Preserve attempt45 unchanged and prepare a separately reviewed expert design packet covering all five findings before any fresh source attempt."
+}

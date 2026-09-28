@@ -2986,3 +2986,58 @@ before any fresh attempt. The source candidates are WIP only. Counters remain
 0/273 application cases, 2/4 narrow fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains incomplete,
 and this shutdown neither completes nor resumes the goal.
+
+Continuation shutdown checkpoint 2, 2026-09-28: correction45 fixes attempt44's
+mode-2 source path by binding the existing exact 51-member authority rather than
+constructing an eight-file substitute. Independent review46 returns `PASS_PACKET`.
+The released source-only attempt45 then produces an exactly authenticated
+327-regular-file Phase-I handoff: 51 source members per mode, canonical handoff
+SHA256 `db97372717f50f7dd8b6eec67755b3b20fa58736da7d442e4393f27bb1eb3b0b`,
+all 56 inherited pins and both authorities matching, and no bytecode, links or
+cross-mode indirection. The exact 1,011,369-byte archive has 338 members and
+SHA256 `e32fa7d1bacbbab76473612fcbcf28dad0052b90d4b283045d216ada19368b70`.
+
+Independent review47 returns `FAIL_HANDOFF`, so Phase II remains closed. Both
+modes have an incompatible fallible-Vec runner shim; row03 drains before mailbox
+destruction transfers the backing; both rows omit required phase/owner/delta/
+teardown assertions; geometry/address/send instrumentation is incomplete; and
+row12 directly writes state rather than exercising the real phase transitions.
+Correction42's unique metadata-only post-store hook is correct, but does not cure
+those defects. Preserve attempt45 unchanged. Next prepare an independently
+reviewed expert design packet covering all five findings before any fresh source
+attempt; do not compile or enter Phase II.
+
+The first reusable Layer-B profile and its bounded correction both failed source
+review. An escalated expert candidate binds the retained archive/members,
+persistent M03 evidence and session cleanup, but independent review 3 still
+returns `FAIL_LAYER_B`: interruption can land between spawn and owned identity;
+signalling uses stale numeric PIDs/PGIDs; repeated TERM can reenter and truncate
+M03 lifecycle evidence; and a reap-timeout fallback waits without a bound. No
+unprivileged test or compiler was released or run. This failure family now needs
+a different process-ownership strategy: defer signals across spawn, use
+identity-safe ownership/signalling, append immutable lifecycle records and
+return explicit unresolved ownership after bounded reap. Obtain fresh independent
+review before any command.
+
+M02 nevertheless has static-only candidates for alias-safe fd remapping,
+sequential acquisition IDs and cross-role live inode ownership. A read-only
+audit now enumerates the complete 137-test dependency closure: ten direct inputs,
+the retained root archive, seven historical source-review archives with exact
+dynamically compiled members, and three failure records. M03 has persistent
+per-command evidence support, real C/Rust constructors and the restored
+misaligned-descriptor `-22` check. These are unexecuted WIP, not `PASS_SOURCE`.
+After `PASS_LAYER_B`, run one exact focused M02/M03 admission, preserve its first
+failure, then add the full-suite dependency manifest to a reviewed profile.
+
+The stop request arrived before any executable Layer-B work. All child agents
+are terminal. Launcher PID 3033800, worker PID 3033802 and app-server PID 3033804,
+started at 2026-09-28 00:21:07 -0700, remain the active launcher identities while
+this bounded closeout returns. No project build, guest, QEMU, mcexec, IHK,
+compiler or heavy owner is active; host/scratch free space is 44/21 GiB. Exact
+results and next tasks are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-2.json`.
+Unrelated concurrent launcher-file edits and the pre-existing user-owned bytecode
+deletion remain unstaged. Counters remain 0/273 application cases, 2/4 narrow
+fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
+Whole-OS acceptance remains incomplete; future continuations are paused until a
+subsequent launcher invocation.

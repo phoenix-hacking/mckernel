@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_microtest_profile_review",
+  "recorded_utc": "2026-09-28T08:02:00Z",
+  "status": "FAIL_LAYER_B",
+  "profile_correction": "docs/verification/stability-layer-b-microtest-profile-expert-correction-20260928-3.md",
+  "profile_correction_sha256": "ae115401a0fb82ae44ff4e47749dfa63016c1a5be8cedbe34cc8ff4c80092051",
+  "supervisor_sha256": "09eeadf5986981c254d4f3fcfd2cf8e8dc18640b547cfc5b5f9d2c068d97bd9b",
+  "harness_sha256": "95098a30d43596b3a80be9f0e56ecd4bb13e0514254d60207953be313fca89f1",
+  "verified_improvements": [
+    "The retained root archive and all three consumed member hashes authenticate.",
+    "Persistent streams, direct compiler path, finite commands and descriptor alignment are present."
+  ],
+  "blocking_findings": [
+    "SIGTERM or SIGINT can interrupt Popen before the child handle and identity are installed, leaving a spawned child outside cleanup.",
+    "Cleanup records startticks but signals unverified numeric PIDs and a numeric process group after leader reap, permitting stale-identity signalling.",
+    "Group and per-member TERM can reenter the M03 handler; truncating record updates can erase immutable prelaunch argv.",
+    "The reap-timeout fallback calls an unlimited wait instead of retaining explicit unresolved ownership."
+  ],
+  "execution_released": false,
+  "execution_or_compilation": false,
+  "acceptance_credit": false,
+  "next": "Change process-ownership strategy rather than issue another ordinary correction: defer interruption across spawn, use identity-safe ownership/signalling, immutable lifecycle records and bounded unresolved-owner return, then obtain a fresh independent review."
+}

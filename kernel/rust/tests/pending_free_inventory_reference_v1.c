@@ -27,7 +27,7 @@ static int validate(const struct inventory_case *c) { const struct descriptor *s
   if (!c->ids[i] || c->ids[i] == 1) return REF_EINVAL; for (j = 0; j < i; ++j) if (c->ids[i] == c->ids[j]) return REF_EINVAL; d = resolve(c, c->ids[i]);
   if (!d || d->generation != 7 || d->mode != 1 || d->prev != expected_prev || d->next != expected_next) return REF_EINVAL;
   if (checked_bytes(d->page_count, &bytes) != REF_OK) return checked_bytes(d->page_count, &bytes); if (__builtin_add_overflow(d->physical_start, bytes, &end)) return REF_EOVERFLOW;
-  if (d->physical_start < c->physical_base || end > c->physical_limit) return REF_EINVAL;
+  if (d->physical_start % INV_PAGE || d->physical_start < c->physical_base || end > c->physical_limit) return REF_EINVAL;
   for (j = 0; j < i; ++j) { prior = resolve(c, c->ids[j]); if (!prior) return REF_EINVAL; if (checked_bytes(prior->page_count, &prior_bytes) != REF_OK) return checked_bytes(prior->page_count, &prior_bytes); if (__builtin_add_overflow(prior->physical_start, prior_bytes, &prior_end)) return REF_EOVERFLOW; if (prior->physical_start < end && d->physical_start < prior_end) return REF_EINVAL; }
  }
  return REF_OK; }

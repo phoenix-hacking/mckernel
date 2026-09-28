@@ -19,13 +19,13 @@ Every row is one observable substep. Statuses are counted separately; historical
 | Kind | Substeps | verified | baseline | implemented | partial | blocked | unmeasured | planned |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | core | 103 | 0 | 18 | 1 | 6 | 9 | 49 | 20 |
-| enabler | 18 | 2 | 1 | 0 | 6 | 6 | 1 | 2 |
+| enabler | 18 | 2 | 1 | 0 | 11 | 1 | 1 | 2 |
 
 | Area | Kind | Substeps | verified | baseline | implemented | partial | blocked | unmeasured | planned |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ENV — Execution environment and preserved baseline | enabler | 7 | 2 | 0 | 0 | 3 | 1 | 0 | 1 |
-| OBS — Trustworthy execution and observation | enabler | 9 | 0 | 1 | 0 | 3 | 3 | 1 | 1 |
-| FIX — Kernel microtest fixture admission | enabler | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| OBS — Trustworthy execution and observation | enabler | 9 | 0 | 1 | 0 | 6 | 0 | 1 | 1 |
+| FIX — Kernel microtest fixture admission | enabler | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
 | BLD — Build, source reuse and regression baseline | core | 6 | 0 | 2 | 0 | 1 | 0 | 2 | 1 |
 | BOOT — Boot, resource assignment and basic execution | core | 6 | 0 | 2 | 0 | 0 | 0 | 3 | 1 |
 | MEM — Allocator and pending-free primitives | core | 8 | 0 | 0 | 1 | 1 | 2 | 3 | 1 |
@@ -85,63 +85,63 @@ STABLE ON DECLARED PROFILE is a manual declaration allowed only when every requi
 
 ### 1. SC-OBS-02 — Real descriptor remapping
 
-State: blocked. Required: yes.
+State: partial. Required: yes.
 
-Result: Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient.
+Result: A source candidate implements alias-safe remapping and inherited-FD closure with real fork/exec tests for fd 1/198 cycles and closed stdio. Static parsing passed; Layer-B ownership review prevented execution.
 
-Blockers / unmet dependencies: Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+Blockers / unmet dependencies: SC-ENV-04 (blocked): Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released.
 
-Next check: Repair with real subprocess dup/close/exec tests: closed 0/1/2, source=destination, overlapping mappings, preserved stdout/stderr and no unintended inheritance.
+Next check: After SC-ENV-04 passes, execute the exact dual-Python focused remap test, retain streams/session cleanup, then run the complete dependency-bound suite and independent source review.
 
 Dependencies: SC-ENV-04 (blocked)
 
 ### 2. SC-OBS-03 — Acquisition sequence validation
 
-State: blocked. Required: yes.
+State: partial. Required: yes.
 
-Result: Twelve fabricated positive acquisition-ID variants pass the existing validators.
+Result: Both packet validators now require sequential successful create acquisition IDs, with focused offset/gap/duplicate/reorder and failed-create-ID regressions. The candidate is static-only pending Layer-B execution.
 
-Blockers / unmet dependencies: Twelve fabricated positive acquisition-ID variants pass the existing validators.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+Blockers / unmet dependencies: SC-ENV-04 (blocked): Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released.
 
-Next check: Bind IDs to both actual successful create sites and failed-create non-consumption; reject gaps, offsets, duplicates and reordering without breaking valid reuse.
+Next check: Execute the focused negative matrix under the reviewed Layer-B owner, then run all 137 tests under both Python versions and obtain complete independent source review.
 
 Dependencies: SC-ENV-04 (blocked)
 
 ### 3. SC-OBS-04 — Live file-identity alias rejection
 
-State: blocked. Required: yes.
+State: partial. Required: yes.
 
-Result: Sixteen aliases between simultaneously live event/request/report identities pass existing validators.
+Result: Both validators now track event/request/report device-inode ownership through the packet stream and include cross-role alias negatives. No source-defined retirement exists in this packet; execution remains blocked by SC-ENV-04.
 
-Blockers / unmet dependencies: Sixteen aliases between simultaneously live event/request/report identities pass existing validators.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+Blockers / unmet dependencies: SC-ENV-04 (blocked): Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released.
 
-Next check: Track cross-role live device/inode ownership; reject simultaneous aliasing and preserve source-defined post-retirement reuse.
+Next check: Execute all focused alias negatives and retained positives, then have an independent reviewer confirm lifecycle scope and no valid-reuse regression.
 
 Dependencies: SC-ENV-04 (blocked)
 
 ### 4. SC-MEM-02 — Compilable independent reference and real constructors
 
-State: blocked. Required: yes.
+State: partial. Required: yes.
 
-Result: Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.
+Result: The candidate now contains independent C and Rust constructors, persistent per-command evidence and 23 explicit selectors; static review also repaired per-descriptor physical-start alignment. No compiler was released.
 
-Blockers / unmet dependencies: Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+Blockers / unmet dependencies: SC-ENV-04 (blocked): Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released.
 
-Next check: Compile the independent C reference and Rust candidate; construct actual empty/single/two/many states before claiming any vector executes.
+Next check: First replace the rejected Layer-B process owner, then compile both exact programs in a persistent root and retain compiler streams, binaries and hashes before any vector claim.
 
 Dependencies: SC-ENV-04 (blocked)
 
 ### 5. SC-MEM-03 — Sentinel, structural and overflow semantics
 
-State: blocked. Required: yes.
+State: partial. Required: yes.
 
-Result: Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification.
+Result: The finite candidates model sentinel-linked single/two positives, link/cycle/range/overlap/generation negatives and distinct EINVAL/EOVERFLOW/ENOSPC results with unchanged-state hashes. They remain uncompiled and unexecuted.
 
-Blockers / unmet dependencies: Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification.; SC-MEM-02 (blocked): Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders.
+Blockers / unmet dependencies: SC-MEM-02 (partial): The candidate now contains independent C and Rust constructors, persistent per-command evidence and 23 explicit selectors; static review also repaired per-descriptor physical-start alignment. No compiler was released.
 
-Next check: Run valid sentinel-linked positives, self/foreign-cycle negatives and boundary overflows against original semantics; remove spelling-only checks.
+Next check: Under a passing Layer-B owner, execute both binaries across all 23 selectors and compare exact statuses and before/after hashes; then independently map the finite model to production ownership.
 
-Dependencies: SC-MEM-02 (blocked)
+Dependencies: SC-MEM-02 (partial)
 
 ### 6. SC-VM-01 — Propagate failed host-clear results through caller boundaries
 
@@ -159,11 +159,11 @@ Dependencies: SC-MEM-04 (partial)
 
 State: blocked. Required: yes.
 
-Result: Review 43 releases a corrected source-only implementation attempt, not a working candidate.
+Result: Attempt45 authenticates and stages 327 exact files, but independent handoff review rejects both modes: incompatible fallible Vec shims, premature row03 drain, missing phase/owner/delta/geometry assertions and row12 direct state writes. Phase II remains closed.
 
-Blockers / unmet dependencies: Review 43 releases a corrected source-only implementation attempt, not a working candidate.; SC-ENV-04 (blocked): Handoff says Layer-B release remains required for the M02/M03 fixtures.
+Blockers / unmet dependencies: Attempt45 authenticates and stages 327 exact files, but independent handoff review rejects both modes: incompatible fallible Vec shims, premature row03 drain, missing phase/owner/delta/geometry assertions and row12 direct state writes. Phase II remains closed.; SC-ENV-04 (blocked): Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released.
 
-Next check: Authenticate inputs, implement the retained correction, exercise actual methods and compile; selected Response/Completion/OS backing stays owned until committed release.
+Next check: Preserve attempt45 and change repair strategy: issue an independently reviewed expert packet covering the five source-bound findings and real phase transitions before any fresh source attempt or compilation.
 
 Dependencies: SC-ENV-04 (blocked)
 
@@ -190,7 +190,7 @@ Original contracts (inherited by every substep): [M00-A](docs/verification/os-mi
 | SC-ENV-01 | Parallel runner and worker visibility | verified | Prepared runner passed 98 focused tests; two synthetic desktop windows verified. This is tooling, not kernel behavior. | On user launch reconcile measured agent/job/memory limits; no new runner work unless an actual defect appears. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md) |
 | SC-ENV-02 | Isolated scratch, resources and ownership checks | verified | Original scratch and controls restored; native/compat isolation probes passed during preparation. | Recheck free space, exclusive heavy owner and cleanup state immediately before any real build/guest; old preparation is not a live lease. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md) |
 | SC-ENV-03 | Exact SC1 source, binary and profile manifest | planned | Existing exact baseline manifests exist; final SC1 candidate is not selected. | Bind source/dirty state, toolchains, config, Linux kernel, three modules, McKernel image, launcher and payload hashes. | None | [baseline](docs/verification/stability-service-failure-baseline-20260913-1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
-| SC-ENV-04 | Reusable unprivileged executable-check profile | blocked | Handoff says Layer-B release remains required for the M02/M03 fixtures. | Release one bounded real-subprocess/C/Rust microtest profile with resource caps, prohibited side effects and disposable outputs; reuse its allowed envelope. | None | [handoff](docs/verification/os-milestones-20260914/HANDOFF.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
+| SC-ENV-04 | Reusable unprivileged executable-check profile | blocked | Three source reviews reject the initial, bounded-correction and escalated Layer-B owners. The expert candidate binds inputs and persistent evidence but still has an asynchronous spawn gap, stale numeric signalling, reentrant evidence writes and one unbounded reap path; no command was released. | Change ownership strategy: design a smaller identity-safe process owner that defers signals across spawn, never signals stale numeric identities, writes immutable lifecycle records and returns unresolved ownership after bounded reap; independently review before execution. | None | [handoff](docs/verification/os-milestones-20260914/HANDOFF.md), [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md) |
 | SC-ENV-05 | Independent expected results and fresh attempts | partial | Historical immutable evidence and failed attempts are retained; SC1-specific frozen packet remains to assemble. | Bind independent oracles, expected bytes, original failures and unique attempt/output names before execution. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [run](docs/verification/stability-run-20260913.md) |
 | SC-ENV-06 | Interruption, crash capture and verified cleanup | partial | Launcher recovery is tested; OS interruption/cleanup remains a distinct runtime responsibility. | Prove bounded timeout, capture-before-cleanup, exact PID/container/guest identity and lease release; do not infer success from launcher exit. | None | [prep](docs/verification/os-milestones-20260914/LAUNCH-PREPARATION-20260927.md), [plan](docs/verification/os-milestones-20260914/README.md) |
 | SC-ENV-07 | Checkpoint freshness and restore path | partial | Existing Git/evidence preservation workflow is in place; SC1 snapshot is documentary. | Record tested revision, commands and artifacts for each changed row; ensure retained archives restore and the checkpoint is recoverable. | None | [policy](docs/verification/os-milestones-20260914/CONVERGENCE.md), [history](docs/verification/os-milestones-20260914/CURRENT.md) |
@@ -204,10 +204,10 @@ Original contracts (inherited by every substep): [M02-A](docs/verification/os-mi
 | ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
 | SC-OBS-01 | Linux reference positive profile | baseline | All 25 Linux infrastructure cases passed on the retained exact profile, including supervised outcomes and cleanup. | Reuse only unchanged bound inputs; rerun affected cases after collector changes. | None | [root](docs/verification/stability-linux-collector-root-success-20260915-2.json) |
-| SC-OBS-02 | Real descriptor remapping | blocked | Review 60 identifies fd 198 collisions, closed standard descriptors and inherited-FD leaks; fake descriptor checks were insufficient. | Repair with real subprocess dup/close/exec tests: closed 0/1/2, source=destination, overlapping mappings, preserved stdout/stderr and no unintended inheritance. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
-| SC-OBS-03 | Acquisition sequence validation | blocked | Twelve fabricated positive acquisition-ID variants pass the existing validators. | Bind IDs to both actual successful create sites and failed-create non-consumption; reject gaps, offsets, duplicates and reordering without breaking valid reuse. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
-| SC-OBS-04 | Live file-identity alias rejection | blocked | Sixteen aliases between simultaneously live event/request/report identities pass existing validators. | Track cross-role live device/inode ownership; reject simultaneous aliasing and preserve source-defined post-retirement reuse. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
-| SC-OBS-05 | Retained validator positives and negatives | partial | Memory-backed review rejects 292 bad inputs and preserves 24 valid controls; no real OS descriptor proof follows. | Preserve those controls, add original counterexamples and rerun actual implementations after the coherent repair. | SC-OBS-02 (blocked), SC-OBS-03 (blocked), SC-OBS-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-02 | Real descriptor remapping | partial | A source candidate implements alias-safe remapping and inherited-FD closure with real fork/exec tests for fd 1/198 cycles and closed stdio. Static parsing passed; Layer-B ownership review prevented execution. | After SC-ENV-04 passes, execute the exact dual-Python focused remap test, retain streams/session cleanup, then run the complete dependency-bound suite and independent source review. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-03 | Acquisition sequence validation | partial | Both packet validators now require sequential successful create acquisition IDs, with focused offset/gap/duplicate/reorder and failed-create-ID regressions. The candidate is static-only pending Layer-B execution. | Execute the focused negative matrix under the reviewed Layer-B owner, then run all 137 tests under both Python versions and obtain complete independent source review. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-04 | Live file-identity alias rejection | partial | Both validators now track event/request/report device-inode ownership through the packet stream and include cross-role alias negatives. No source-defined retirement exists in this packet; execution remains blocked by SC-ENV-04. | Execute all focused alias negatives and retained positives, then have an independent reviewer confirm lifecycle scope and no valid-reuse regression. | SC-ENV-04 (blocked) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
+| SC-OBS-05 | Retained validator positives and negatives | partial | Memory-backed review rejects 292 bad inputs and preserves 24 valid controls; no real OS descriptor proof follows. | Preserve those controls, add original counterexamples and rerun actual implementations after the coherent repair. | SC-OBS-02 (partial), SC-OBS-03 (partial), SC-OBS-04 (partial) | [storage](docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-60.json) |
 | SC-OBS-06 | Adverse collector and rescue behavior | partial | Positive root profile is done; storage, late-signal/setup, stopped-collector rescue, overflow and loader closure remain. | Exercise real failure paths with correct raw status, bounded ownership and cleanup under the separately released runtime profile. | SC-OBS-05 (partial) | [root](docs/verification/stability-linux-collector-root-success-20260915-2.json), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
 | SC-OBS-07 | Native payload identity and terminal collector | partial | Native collector work exists in the history, but M02-C completion is not established. | Observe real McKernel PID/TID, request generation, delivery, termination, interpreter/DSO mappings and side effects; distinguish launcher from payload. | None | [history](docs/verification/os-milestones-20260914/CURRENT.md), [plan](docs/verification/os-milestones-20260914/README.md) |
 | SC-OBS-08 | Paired runner and strict result/oracle records | planned | Three startup fixtures compile; paired eligible catalog execution is not yet established. | Reconcile packet001-v3 schemas/env/umask and immutable payload/path identity; run identical inputs on Linux and McKernel and join exact outcomes. | SC-OBS-07 (partial), SC-OBS-06 (partial) | [compiled](docs/verification/stability-packet001-compile-20260913-1.json), [plan](docs/verification/os-milestones-20260914/README.md) |
@@ -221,8 +221,8 @@ Original contracts (inherited by every substep): [M03-A](docs/verification/os-mi
 
 | ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| SC-MEM-02 | Compilable independent reference and real constructors | blocked | Retained inventory failure 2 reports invalid C preprocessing and metadata/zero-count placeholders. | Compile the independent C reference and Rust candidate; construct actual empty/single/two/many states before claiming any vector executes. | SC-ENV-04 (blocked) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
-| SC-MEM-03 | Sentinel, structural and overflow semantics | blocked | Failure 2 rejects legitimate sentinel links and disagrees on overflow/error classification. | Run valid sentinel-linked positives, self/foreign-cycle negatives and boundary overflows against original semantics; remove spelling-only checks. | SC-MEM-02 (blocked) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
+| SC-MEM-02 | Compilable independent reference and real constructors | partial | The candidate now contains independent C and Rust constructors, persistent per-command evidence and 23 explicit selectors; static review also repaired per-descriptor physical-start alignment. No compiler was released. | First replace the rejected Layer-B process owner, then compile both exact programs in a persistent root and retain compiler streams, binaries and hashes before any vector claim. | SC-ENV-04 (blocked) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
+| SC-MEM-03 | Sentinel, structural and overflow semantics | partial | The finite candidates model sentinel-linked single/two positives, link/cycle/range/overlap/generation negatives and distinct EINVAL/EOVERFLOW/ENOSPC results with unchanged-state hashes. They remain uncompiled and unexecuted. | Under a passing Layer-B owner, execute both binaries across all 23 selectors and compare exact statuses and before/after hashes; then independently map the finite model to production ownership. | SC-MEM-02 (partial) | [inventory](docs/verification/stability-pending-free-inventory-source-failure-20260915-2.json) |
 
 ## BLD — Build, source reuse and regression baseline
 
@@ -263,7 +263,7 @@ Original contracts (inherited by every substep): [M03-A](docs/verification/os-mi
 | ID | Behavior | State | Exact result | Next check | Dependencies | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
 | SC-MEM-01 | Existing pinned pending-free destination | implemented | PendingFreeBatch, state and detach logic exist in mem\_helpers.rs; existence is not ownership closure. | Inspect active consumers and preserve pinning, !Send/!Sync intent, no implicit free and source NULL/NULL reset. | None | [pending](kernel/rust/mem_helpers.rs) |
-| SC-MEM-04 | Actual begin/enqueue/detach/finish helper execution | partial | Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior. | Exercise complete selected helpers and ABI dependencies for empty/one/many, order/metadata, source reuse, drain and two-head independence. | SC-MEM-03 (blocked) | [pending](kernel/rust/mem_helpers.rs), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-MEM-04 | Actual begin/enqueue/detach/finish helper execution | partial | Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior. | Exercise complete selected helpers and ABI dependencies for empty/one/many, order/metadata, source reuse, drain and two-head independence. | SC-MEM-03 (partial) | [pending](kernel/rust/mem_helpers.rs), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
 | SC-MEM-05 | Unchanged-on-error and duplicate-release protection | unmeasured | No final actual-body error/reuse proof is reconciled for SC1. | Inject partial validation failure, invalid/duplicate detach and drain; check every pointer/page flag/count and zero allocator calls on rejection. | SC-MEM-04 (partial) | [pending](kernel/rust/mem_helpers.rs), [plan](docs/verification/os-milestones-20260914/README.md) |
 | SC-MEM-06 | Allocation extent, alignment and exhaustion boundaries | unmeasured | Existing allocation implementation must be retained; current SC1 boundary coverage is unmeasured. | Test zero/oversized/overflowing extents, alignment, accounting and OOM before/after partial acquisition; no overlapping or twice-freed extent. | None | [reuse](docs/verification/rust-reuse-plan.md), [plan](docs/verification/os-milestones-20260914/README.md) |
 | SC-MEM-07 | Zero-filled first use and safe reuse | unmeasured | Historical initial-zeroing checks exist, but neither complete zero-after-reuse nor draining every pending zeroing page is established by the cited baseline. | Verify actual first-use/reuse bytes and stale-data isolation; inventory pending, in-flight, quarantined and free backing. | SC-MEM-06 (unmeasured) | [app](docs/verification/native-application-ultra-handoff-20260909.md) |
@@ -354,7 +354,7 @@ Original contracts (inherited by every substep): [M01-A](docs/verification/os-mi
 | --- | --- | --- | --- | --- | --- | --- |
 | SC-IPC-01 | Hard failure before publication | baseline | One actual fault-mode contract passed with physical captures and stable terminal owners for the required later observation. | Rebind or replay after relevant edits; keep injected failure separate from real ring saturation. | None | [hard](docs/verification/stability-prepublish-hard-independent-review-20260913.json) |
 | SC-IPC-02 | Permanent backpressure and retained ownership | baseline | Second narrow fault-mode contract is independently accepted on its exact artifacts. | Preserve terminal inventories, admission closure and original timings; replay affected behavior on final candidate. | None | [permanent](docs/verification/stability-permanent-backpressure-independent-review-20260913.json) |
-| SC-IPC-03 | Selected response survives cancel/prepare/no-wake paths | blocked | Review 43 releases a corrected source-only implementation attempt, not a working candidate. | Authenticate inputs, implement the retained correction, exercise actual methods and compile; selected Response/Completion/OS backing stays owned until committed release. | SC-ENV-04 (blocked) | [retention](docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
+| SC-IPC-03 | Selected response survives cancel/prepare/no-wake paths | blocked | Attempt45 authenticates and stages 327 exact files, but independent handoff review rejects both modes: incompatible fallible Vec shims, premature row03 drain, missing phase/owner/delta/geometry assertions and row12 direct state writes. Phase II remains closed. | Preserve attempt45 and change repair strategy: issue an independently reviewed expert packet covering the five source-bound findings and real phase transitions before any fresh source attempt or compilation. | SC-ENV-04 (blocked) | [retention](docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
 | SC-IPC-04 | Actual retention matrix and inverse stager controls | partial | Detailed matrix and staged corrections exist, but fresh complete candidate execution remains open. | Cover stages 0/1/2/4/5/invalid, stage3 commit0, wake Some/None, close/cancel, bad identity/status/wake, second CAS and changed claims; reject without release. | SC-IPC-03 (blocked) | [plan](docs/verification/os-milestones-20260914/README.md), [retention](docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-review-20260916-43.json) |
 | SC-IPC-05 | Post-publication notification failure | blocked | One of the two remaining actual fault modes depends on selected ownership and physical retained-span proof. | Run the separately released mode2 guest; observe one real publication, wake-ring behavior, correct return identity and no host access after transfer. | SC-IPC-04 (partial), SC-IPC-12 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |
 | SC-IPC-06 | Recoverable backpressure and same-OS recovery | blocked | Remaining mode3 is not accepted; retries cannot discard the selected result. | Run mode3 separately; preserve result through retries, then pass eight real subsequent HELLO applications plus AFTER8 in the same OS. | SC-IPC-04 (partial), SC-IPC-12 (unmeasured) | [plan](docs/verification/os-milestones-20260914/README.md), [handoff](docs/verification/os-milestones-20260914/HANDOFF.md) |

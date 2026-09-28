@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Finite-fixture source gate. Default mode is static; --execute is future Layer-B work."""
+"""Finite-fixture source gate. Default mode is static; --execute is reviewed Layer-B work."""
 import ast
+import hashlib
+import json
+import os
 import re
+import signal
 import subprocess
 import sys
-import tempfile
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -18,15 +22,68 @@ SELECTORS = (
     "invalid-page-count", "page-count-overflow", "misaligned-extent", "foreign-extent",
     "overlapping-extent", "stale-generation", "concurrent-mutation", "valid-single", "valid-two",
 )
-# These are intentionally literal future commands. {output} is a disposable TemporaryDirectory.
 FUTURE_COMPILE_C = ("/usr/bin/gcc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-O2", str(C), "-o", "{output}/pending_free_inventory_reference_v1")
-FUTURE_COMPILE_RUST = ("/home/holden/.cargo/bin/rustc", "--edition=2021", "-C", "panic=abort", str(MODEL), "-o", "{output}/pending_free_inventory_v1")
+FUTURE_COMPILE_RUST = ("/home/holden/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rustc", "--edition=2021", "-C", "panic=abort", str(MODEL), "-o", "{output}/pending_free_inventory_v1")
 FUTURE_RUN_C = ("{output}/pending_free_inventory_reference_v1", "{selector}")
 FUTURE_RUN_RUST = ("{output}/pending_free_inventory_v1", "{selector}")
+ACTIVE = {"command_id": None, "output": None, "pid": None, "started_ns": None}
+
+
+class HarnessInterrupted(InterruptedError):
+    """Outer supervisor owns teardown; this process only preserves its state."""
+
+
+def durable_json(path, value):
+    encoded = (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    fd = os.open(str(path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    try:
+        while encoded:
+            written = os.write(fd, encoded)
+            if written <= 0:
+                raise OSError("short durable JSON write")
+            encoded = encoded[written:]
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def durable_failure(output, error, interrupted=False):
+    if output is None or not output.is_dir():
+        return
+    value = {"active_command_id": ACTIVE["command_id"], "active_pid": ACTIVE["pid"],
+             "active_started_ns": ACTIVE["started_ns"], "error": type(error).__name__,
+             "interrupted": interrupted, "message": str(error), "timestamp_ns": time.time_ns()}
+    try:
+        durable_json(output / "failure.json", value)
+        encoded = (type(error).__name__ + ": " + str(error) + "\n").encode()
+        fd = os.open(str(output / "failure.txt"), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        try:
+            while encoded:
+                written = os.write(fd, encoded)
+                if written <= 0:
+                    raise OSError("short durable failure write")
+                encoded = encoded[written:]
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+    except BaseException:
+        # The original interruption remains authoritative; the outer supervisor retains streams.
+        pass
+
+
+def install_signal_handlers(output):
+    def interrupted(signum, _frame):
+        error = HarnessInterrupted("harness received " + signal.Signals(signum).name)
+        durable_failure(output, error, interrupted=True)
+        raise error
+    signal.signal(signal.SIGTERM, interrupted)
+    signal.signal(signal.SIGINT, interrupted)
+
 
 def expected_statuses(text):
     rows = re.findall(r'Vector\s*\{\s*name:\s*"([^"]+)",\s*expected:\s*(-?\d+)\s*\}', text)
     return [(name, int(status)) for name, status in rows]
+
 
 def future_argv(output, selector):
     fmt = {"output": str(output), "selector": selector}
@@ -36,6 +93,7 @@ def future_argv(output, selector):
         tuple(arg.format(**fmt) for arg in FUTURE_RUN_C),
         tuple(arg.format(**fmt) for arg in FUTURE_RUN_RUST),
     )
+
 
 def static_check():
     ast.parse(Path(__file__).read_text())
@@ -51,34 +109,96 @@ def static_check():
         assert isinstance(command, str) and command
     return expected
 
-def execute_future():
-    """Released Layer-B caller may invoke this exact plan; it is never run by source admission."""
+
+def sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def run_retained(command, output, command_id):
+    """Persist STARTING before fork; outer Layer-B supervisor remains process owner."""
+    stdout_path = output / (command_id + ".stdout")
+    stderr_path = output / (command_id + ".stderr")
+    start_path = output / (command_id + ".start.json")
+    terminal_path = output / (command_id + ".terminal.json")
+    started_ns = time.time_ns()
+    ACTIVE.update(command_id=command_id, output=output, pid=None, started_ns=started_ns)
+    durable_json(start_path, {"argv": list(command), "command_id": command_id,
+                              "started_ns": started_ns, "state": "STARTING"})
+    process = None
+    terminal = {"argv": list(command), "command_id": command_id,
+                "started_ns": started_ns, "state": "UNOBSERVED"}
+    try:
+        with stdout_path.open("wb") as stdout, stderr_path.open("wb") as stderr:
+            process = subprocess.Popen(command, stdin=subprocess.DEVNULL,
+                                       stdout=stdout, stderr=stderr)
+            ACTIVE["pid"] = process.pid
+            durable_json(start_path, {"argv": list(command), "command_id": command_id,
+                                      "pid": process.pid, "started_ns": started_ns,
+                                      "state": "RUNNING"})
+            returncode = process.wait()
+        terminal.update({"ended_ns": time.time_ns(), "pid": process.pid,
+                         "returncode": returncode, "state": "OBSERVED"})
+        durable_json(terminal_path, terminal)
+        ACTIVE.update(command_id=None, pid=None, started_ns=None)
+        return returncode, stdout_path.read_text(), stderr_path.read_text()
+    except BaseException as error:
+        terminal.update({"ended_ns": time.time_ns(), "error": type(error).__name__ + ": " + str(error),
+                         "pid": None if process is None else process.pid, "state": "UNOBSERVED"})
+        try:
+            durable_json(terminal_path, terminal)
+        finally:
+            durable_failure(output, error, interrupted=isinstance(error, HarnessInterrupted))
+        raise
+
+
+def execute_future(output):
+    """Run the exact reviewed plan with persistent evidence; never owns child cleanup."""
     expected = static_check()
-    with tempfile.TemporaryDirectory(prefix="pending-free-inventory-") as output:
-        compile_c, compile_rust, _, _ = future_argv(output, SELECTORS[0])
-        for command in (compile_c, compile_rust):
-            completed = subprocess.run(command, check=False, text=True, capture_output=True)
-            assert completed.returncode == 0, (command, completed.stdout, completed.stderr)
-        executed = 0
-        for selector, status in expected:
-            _, _, run_c, run_rust = future_argv(output, selector)
-            expected_fields = (selector, str(status))
-            for command in (run_c, run_rust):
-                completed = subprocess.run(command, check=False, text=True, capture_output=True)
-                fields = tuple(completed.stdout.strip().split("|"))
-                assert completed.returncode == 0, (command, completed.stdout, completed.stderr)
-                assert fields[:2] == expected_fields and len(fields) == 4 and fields[2] == fields[3], (command, fields)
-                executed += 1
+    output = Path(output)
+    assert output.is_absolute() and output.parent.is_dir() and not output.exists()
+    output.mkdir(mode=0o700)
+    ACTIVE["output"] = output
+    install_signal_handlers(output)
+    durable_json(output / "execution-start.json", {"started_ns": time.time_ns(),
+                "state": "STARTED", "supervisor_owns_cleanup": True})
+    compile_c, compile_rust, _, _ = future_argv(output, SELECTORS[0])
+    for command_id, command in (("compile-c", compile_c), ("compile-rust", compile_rust)):
+        returncode, stdout, stderr = run_retained(command, output, command_id)
+        assert returncode == 0 and stdout == "" and stderr == "", (command, returncode, stdout, stderr)
+    binaries = {"c": output / "pending_free_inventory_reference_v1", "rust": output / "pending_free_inventory_v1"}
+    executed = 0
+    for index, (selector, status) in enumerate(expected):
+        _, _, run_c, run_rust = future_argv(output, selector)
+        expected_fields = (selector, str(status))
+        for program, command in (("c", run_c), ("rust", run_rust)):
+            command_id = "run-%02d-%s-%s" % (index, selector, program)
+            returncode, stdout, stderr = run_retained(command, output, command_id)
+            fields = tuple(stdout.strip().split("|"))
+            assert returncode == 0 and stderr == "", (command, returncode, stdout, stderr)
+            assert fields[:2] == expected_fields and len(fields) == 4 and fields[2] == fields[3], (command, fields)
+            executed += 1
+    result = {"binary_sha256": {name: sha256(path) for name, path in binaries.items()},
+              "executed": executed, "programs": 2, "selectors": len(expected),
+              "source_sha256": {str(path.relative_to(ROOT)): sha256(path) for path in (C, MODEL, RS)},
+              "state_hashes": "equal", "status": "PASS_PENDING_FREE_INVENTORY"}
+    durable_json(output / "result.json", result)
     print(f"PASS_PENDING_FREE_INVENTORY|executed={executed}|selectors={len(expected)}|programs=2|state_hashes=equal")
 
+
 def main():
-    if sys.argv[1:] == ["--execute"]:
-        execute_future()
+    if len(sys.argv) == 4 and sys.argv[1] == "--execute" and sys.argv[2] == "--output":
+        output = Path(sys.argv[3])
+        try:
+            execute_future(output)
+        except BaseException as error:
+            durable_failure(output, error, interrupted=isinstance(error, HarnessInterrupted))
+            raise
     elif not sys.argv[1:]:
         expected = static_check()
         print(f"PASS_SOURCE_INVENTORY_STRUCTURE|selectors={len(expected)}|future_executed=0|compile=disabled|runtime=disabled")
     else:
-        raise SystemExit("usage: pending_free_inventory_harness_v1.py [--execute]")
+        raise SystemExit("usage: pending_free_inventory_harness_v1.py [--execute --output ABSENT]")
+
 
 if __name__ == "__main__":
     main()
