@@ -119,6 +119,7 @@
     ,"native_diag_attempt_failure": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json"
     ,"native_diag_qemu_version": "docs/verification/stability-native-diagnostic-qemu-version-source-success-20260928-1.json"
     ,"native_diag_execution_release2": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-2.json"
+    ,"native_diag_attempt_failure2": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-2.json"
   },
   "areas": [
     {
@@ -518,8 +519,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The preserved one-shot observer failure is corrected: the owner requires the exact pinned QEMU digest and complete retained version stdout, zero status and empty stderr. A fresh six-module suite passes 211 tests after an independently found fixture defect was corrected; final review returns PASS_SOURCE_READY_FOR_FRESH_PACKET. No QEMU or McKernel behavior was exercised.",
-      "next_check": "Remeasure capacity and lease, create the exact fresh parent once, then run the independently released packet-2 command once and preserve application bytes/exit, kernel log, QMP/serial, identities and teardown.",
+      "result": "Packet 2 ran one real diagnostic guest application: exact 91-byte stdout, exit 0, complete streams, procfs cleanup, retirement/release and guest powerdown. Evaluation failed because broad marker words matched normal boot prose; beneath that, exact mcexec launcher diagnostics make stderr 58 bytes instead of the frozen empty oracle. QEMU/container cleanup and lease release are verified; no catalog acceptance follows.",
+      "next_check": "Correct the marker observer while retaining the stderr mismatch, then make the Rust/C mcexec no-preload path avoid objdump/warnings, rebuild and rebind mcexec plus overlay/initramfs/manifest, and obtain a fresh release before rerun.",
       "evidence": [
         "history",
         "plan",
@@ -534,7 +535,8 @@
         "native_diag_execution_release",
         "native_diag_attempt_failure",
         "native_diag_qemu_version",
-        "native_diag_execution_release2"
+        "native_diag_execution_release2",
+        "native_diag_attempt_failure2"
       ],
       "depends_on": []
     },

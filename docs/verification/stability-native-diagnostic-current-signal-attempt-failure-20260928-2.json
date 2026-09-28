@@ -1,0 +1,109 @@
+{
+  "schema": "mckernel.native-diagnostic-current-signal-attempt-failure.v1",
+  "recorded_at": "2026-09-28T07:48:21-07:00",
+  "source_commit": "28d970ce6fee86eb1b0cc6cee6094a97e808062e",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-2.md",
+  "packet_sha256": "3917e33369d7861646b9b07a72f424ecf85581bbfc2898b551d5a3a51ef86b58",
+  "release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-2.json",
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-2",
+    "attempt_directory": "/home/holden/mckernel-work/scratch/ndcs-20260928-2/attempt-d5c0db79dea44675abeb1c43c7187add",
+    "evidence_directory": "/home/holden/mckernel-work/scratch/ndcs-20260928-2.owner-d5c0db79dea44675abeb1c43c7187add",
+    "nonce": "d5c0db79dea44675abeb1c43c7187add",
+    "container_id": "812be46d201992e9f8bda052af54e2bdf5440992253fceba148a96b47401b3e4",
+    "container_created_at": "2026-09-28T14:45:58.393384499Z",
+    "container_started_at": "2026-09-28T14:45:58.605459784Z",
+    "container_finished_at": "2026-09-28T14:46:34.230283948Z",
+    "container_exit_code": 1,
+    "container_oom_killed": false,
+    "outer_result": "FAIL",
+    "inner_failure": "DiagnosticError: kernel failure marker"
+  },
+  "observed_process_identity": {
+    "outer": {
+      "pid": 3238240,
+      "pgid": 3238234,
+      "sid": 3238234,
+      "starttime_ticks": 81658289
+    },
+    "qemu_live_observation": {
+      "pid": 3238385,
+      "pgid": 3238385,
+      "sid": 3238385,
+      "starttime_ticks": null,
+      "limitation": "The dispatcher observed PID/PGID/SID while live, but the failed evaluator did not publish the backend-retained starttime before exact reap"
+    }
+  },
+  "guest_observation": {
+    "qemu_started": true,
+    "guest_booted": true,
+    "application_scheduled": true,
+    "application_pid": 256,
+    "raw_wait_status": 0,
+    "exit_code": 0,
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+    "stdout_bytes": 91,
+    "stdout_matches_oracle": true,
+    "stderr_hex": "6f626a64756d70202f70726f632f73656c662f6578653a20320a7761726e696e673a20646964206e6f7420736574204c445f5052454c4f41440a",
+    "stderr_bytes": 58,
+    "stderr_matches_empty_oracle": false,
+    "streams_eof": true,
+    "streams_truncated": false,
+    "procfs_empty": true,
+    "application_cleanup_ack_errno": 0,
+    "application_final_retirement_errno": 0,
+    "application_process_release_errno": 0,
+    "guest_powered_down": true
+  },
+  "diagnosis": {
+    "reported_family": "observer-kernel-failure-marker",
+    "false_positive_matches": [
+      "four expected panic=-1 kernel command-line echoes",
+      "two lowercase report a bug PCI informational lines",
+      "one successful sysfs setup field error=0"
+    ],
+    "actual_kernel_failure_marker_present": false,
+    "next_failure_after_observer_correction": "The exact combined application stream contains the known 58-byte mcexec launcher diagnostic and therefore differs from the frozen empty application stderr oracle",
+    "oracle_policy": "Preserve the empty stderr oracle; do not filter or accept the launcher diagnostics",
+    "unchanged_retry_allowed": false
+  },
+  "inner_evidence_sha256": {
+    "serial.log": "50931fbdafe7d6060a1aff30e323f2558646e39738913a6f1bd8b186643ad2f7",
+    "debugcon.log": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "qmp.transcript.json": "a92d1275f180d23f85504686dabe4313fdd30c644c4f44c5987bcabd18bad77e",
+    "qemu.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "first-failure.jsonl": "b216e9e94e9697be9facf4b5d455ba0ae8280faa565dd0d6533d4c567e8b8ba5",
+    "result.json": "6276b8f4ae7c97d7e6f50c4726b93d7c2210637d4d3a5c6c9367c834d94b47cc"
+  },
+  "outer_evidence_sha256": {
+    "result.json": "ef1103f430f27a59dd22ac4c5926a53148072b383c5f0f0928ae4ae5f6cb6452",
+    "owner.json": "50b4740d13b6ce4073b7c337656f1672fc39c2f416bff69ea9d74a8c4b014c83",
+    "009-start.json": "0596f1e928d72c4658f7b23034ea0423b9adcbaf6a4412622a9def64761b808c",
+    "009-start.stderr": "4a5ab7668c53b4b66cd256616a3501b4af8a4cfc54f7d4f0c87dbdcc8c4ad56b",
+    "011-logs.stderr": "1c5c9060e7e04e71f851912f053060b7ebc01a2df27bacd87465f3cb730cdc6d",
+    "012-inspect.stdout": "6c33001275fe243827e201ffb5879e3345ce7d1ef0a50e59ebc14b8f9c27bd9b",
+    "016-inspect.stdout": "6c33001275fe243827e201ffb5879e3345ce7d1ef0a50e59ebc14b8f9c27bd9b",
+    "022-rm.stdout": "7b2463fa9743f86c543e3df9976ae727da6c2e1eec84cea4a4cc320c40861e52",
+    "023-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "024-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "025-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "cleanup": {
+    "qemu_reaped": true,
+    "capture_errors": [],
+    "container_removed": true,
+    "three_final_exact_lookups_empty": true,
+    "absence_verified": true,
+    "lease_retained": false,
+    "development_lease_at_record": "free",
+    "secondary_failures": []
+  },
+  "acceptance": {
+    "real_guest_diagnostic_applications_added": 1,
+    "catalog_cases_accepted_added": 0,
+    "application_acceptance": false,
+    "formal_gate_credit_added": 0
+  },
+  "next_action": "Correct the broad marker observer locally while retaining the 58-byte stderr mismatch, then repair the mcexec launcher so the unchanged empty-stderr oracle is met before preparing any fresh runtime packet."
+}

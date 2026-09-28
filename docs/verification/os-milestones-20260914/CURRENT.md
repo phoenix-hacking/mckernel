@@ -3880,3 +3880,38 @@ and path freshness, create the exact parent once as uid/gid 1000 mode 0700, then
 run only the released command. Preserve all output and do not retry if creation,
 client retirement or owner cleanup becomes uncertain. Exact authority is in
 `docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-2.json`.
+
+Continuation checkpoint 24, 2026-09-28: the one released packet-2 attempt
+crossed the previous preflight blocker and ran a real McKernel startup
+application. QEMU PID/PGID/SID 3238385 booted the exact current-signal image;
+guest PID 256 was scheduled, wrote the exact 91-byte stdout, exited with raw
+wait status 0, reached stream EOF without truncation, removed procfs state,
+completed cleanup/retirement/release with final errno 0, and powered down.
+This is one real diagnostic guest application in this work window, but it is
+not a formally accepted catalog case.
+
+The diagnostic reported `kernel failure marker`, but exact replay identifies
+only seven observer false positives: four expected `panic=-1` command-line
+echoes, two lowercase `report a bug` PCI notices and successful `error=0`.
+There is no actual panic/oops/BUG/warning/lockup in the kernel/debug streams.
+After that observer defect, the real application mismatch remains: mcexec wrote
+58 bytes (`objdump /proc/self/exe: 2` plus `warning: did not set LD_PRELOAD`)
+to the captured application stderr, while the frozen oracle remains empty.
+That output must be fixed at its source, not filtered or accepted.
+
+QEMU was exactly reaped, container `812be46d...` exited 1 without OOM and was
+authenticated/removed, three final exact lookups were empty, and the development
+lease is free. The failed evaluator did not publish its internally retained QEMU
+starttime; the live PID/group/session observation is preserved with that explicit
+limitation. Original 136,695-byte serial, QMP transcript, inner failure and all
+outer Docker records remain in their untouched attempt/evidence directories.
+Exact hashes and results are in
+`docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-2.json`.
+
+Next: correct the marker observer locally while proving the 58-byte stream still
+fails the empty oracle; implement and test the Rust/C mcexec no-preload path so
+it does not run objdump or warn when no preload feature/value is requested;
+then rebuild and rebind mcexec, overlay, initramfs and manifest before a fresh
+independently released attempt. Do not reuse packet 2, its parent or nonce.
+Official counters remain 0/273 accepted applications, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates.
