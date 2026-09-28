@@ -54,6 +54,33 @@ Use this cycle:
 Do not start a second design/history audit when a failing compile or positive
 example already identifies the next concrete action.
 
+## User priority: sustained implementation progress
+
+For each active lane, keep four facts in the existing handoff/task packet:
+the responsible owner, concrete defect or missing behavior, next executable
+check, and downstream work it unlocks. Prefer work that removes an execution
+dependency. Once its actual prerequisites pass, run that next layer promptly.
+
+Begin with the retained M02 descriptor/identity repair and independent M03
+compilable reference/state-construction work. Their accumulated failures call
+for consolidated expert repair and executable regressions. Preserve the
+required Layer-B review and subsequent privileged execution releases. Advance
+the already reviewed M01 source-only task when its inputs are authenticated.
+
+Fill useful slots with implementation and regression work. The suggested lane
+counts are flexible: create an audit/review lane only for a specific decision or
+candidate needing it, and reassign idle capacity to ready implementation.
+Integrate completed patches promptly; do not collect a backlog of isolated drafts.
+Further launcher/dashboard work needs a reproduced defect blocking execution,
+correctness or the requested visibility. Keep bookkeeping at the existing cadence.
+
+At each existing checkpoint, report newly verified behavior, actual tests with
+evidence, remaining blockers and the next executable step. Report absent results
+honestly. After two completed cycles without a technical result, apply the
+strategy-change rule below; preserve healthy long operations and required soaks.
+Use the existing handoff/events, with no new reporting framework or invented
+progress quota. Safety, independent review and original acceptance remain intact.
+
 ## Apply the harness at the appropriate layer
 
 The dispatcher owns compiler-command approval and the heavy build/guest lease.

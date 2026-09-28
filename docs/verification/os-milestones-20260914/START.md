@@ -37,6 +37,11 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
    source bindings, write allowlist, frozen expectations, allowed command/profile,
    evidence location and cumulative failure-family history. Assign disjoint file
    ownership and independent reviews.
+   Apply CONVERGENCE.md's implementation-progress priority: every lane names its
+   owner, next executable check and downstream dependency; use review/audit slots
+   only for specific decisions. At checkpoints report verified behavior, actual
+   test evidence, blockers and next executable work. Keep the prepared launcher
+   stable unless a reproduced defect blocks execution, correctness or visibility.
 4. Execute cheap admission under a reusable reviewed profile before broad review:
    syntax/compile, a real positive, the defect reproducer and a relevant negative.
    Static keyword checks and named vectors alone establish no semantic behavior.
