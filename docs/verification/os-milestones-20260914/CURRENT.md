@@ -5080,3 +5080,56 @@ checkout remain unstaged and preserved. Formal counters remain 0/273, 2/4,
 6/130, 350/10,000 and 0/7; four real diagnostic apps and zero current-candidate
 builds remain unchanged. This checkpoint neither completes nor resumes the OS
 goal; the launcher pause is temporary until a later invocation.
+
+Continuation checkpoint 56, 2026-09-28: the resumed launcher produced one
+bounded source implementation and two exact next-boundary decisions before a
+new shutdown request. The new patch
+`host-kernel/kbuild/patches/0010-x86-export-secondary-reset-sequence.patch`
+declares and GPL-exports the existing pinned-Linux x86
+`send_init_sequence(apicid)` while retaining its void return and byte-identical
+body. The first candidate failed because its second unified-diff hunk was
+malformed; that exact SHA/result is retained. One bounded hunk-range correction
+then passes the exact pinned-source temporary-tree application/body test and
+diff check. Patch SHA-256 is
+`14b2796e7ea92243808f36da663e5572f07da561570f0e7a5918d7b52fd771e3`;
+test SHA-256 is
+`4a32e8218a0b9048db3508c67cbee8e7522f279dd5482e0c5a1966750c0e2734`.
+This is source-only: no configured kernel build, module link/load, reset,
+re-online or guest ran.
+
+The IRQ-work audit and coordinator source check confirm pinned Linux exports
+`irq_work_sync(struct irq_work *)`. The next implementation is now exact: a
+private per-generation LIVE/STOPPING route registry retains every per-CPU work
+node and callback owner; publishers hold sender leases through enqueue and IPI
+attempt; retirement blocks new leases, waits for zero publishers, synchronizes
+every retained node, then unpublishes callback/master state and permits
+generation reuse. Removal from the private lockless `raised_list` is forbidden.
+The source-bound decision is
+`docs/verification/stability-native-shutdown-irq-drain-design-review-20260928-1.json`.
+
+The existing IRQ-work producer test passes under exact Rust 1.92. The broader
+native lifecycle checker is stale against accepted additive provider ABI source
+and failed before its intended negative assertions. One bounded correction was
+interrupted by shutdown and remains explicitly unstaged: its 60-test rerun still
+has 100 failed subcases and four errors, next stopping at the current
+`compatibility_build_id` helper boundary. Its exact file/diff hashes and failure
+are retained in
+`docs/verification/stability-native-lifecycle-checker-wip-20260928-1.json`.
+Do not accept or broadly relax that oracle; continue this same correction family
+and require all intended fail-closed assertions plus independent review.
+
+All four new child lanes are joined and no new work was dispatched after the
+shutdown request. Next invocation: first reconcile the unstaged lifecycle-
+checker WIP. Then implement the distinct native per-CPU reset/re-online journal
+and a production-body semantic fixture; separately implement the generation-
+scoped IRQ-work sender/drain registry. Neither may wire v5 or release guest
+storage until independent ownership review passes.
+
+Campaign identities remain launcher PID/PGID/SID 3125264/starttime 80228730,
+recovered worker 3170135/starttime 80670556 and app-server
+3170137/starttime 80670562. No QEMU, mcexec, diagnostic owner or heavy lease is
+live. Host free space is 26,942,808,064 bytes, scratch free space
+21,613,768,704 bytes and MemAvailable 29,276,864,512 bytes. Formal counters
+remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four real diagnostic apps and zero
+current-candidate builds remain unchanged. This checkpoint neither completes
+nor resumes the OS goal.

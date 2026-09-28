@@ -48,6 +48,8 @@ Evidence:
 - `stability-native-shutdown-observer-source-success-20260928-1.json`
 - `stability-native-shutdown-stop-ack-design-review-20260928-1.json`
 - `stability-native-shutdown-x86-reclaim-design-review-20260928-1.json`
+- `stability-native-shutdown-x86-reset-export-source-success-20260928-1.json`
+- `stability-native-shutdown-irq-drain-design-review-20260928-1.json`
 
 This is source/Layer-B evidence only. The v5 callback is not wired to SMP and no
 production module, root command, container or shutdown guest has run. V5 nonzero
@@ -84,14 +86,23 @@ re-online is the reclamation proof. No SIPI belongs in the reset helper, and any
 failed or uncertain reset/online retains all owners in a per-CPU journal. This
 does not solve the separate IRQ-work/callback drain.
 
-Next executable source step: add and test a minimal export of Linux
-`send_init_sequence(apicid)` and a distinct native shutdown reset/re-online
-journal without wiring v5 or freeing resources. In parallel only after the next
-launcher continuation, audit and implement the exact Linux IRQ-work publication
-inventory/unpublish/drain boundary. Then freeze the regular-channel STOP/ACK
-codec and state machine, build the production module/image, obtain independent
-execution release and run the seven-phase observer against an actual
-boot/workload/stop attempt. Do not run the shutdown fixture earlier.
+The minimal Linux `send_init_sequence(apicid)` export now applies to the exact
+retained pinned source and passes its one-test body-preservation contract after
+one retained malformed-hunk failure and one bounded correction. It remains
+source-only and unbuilt. Exact pinned Linux source also confirms that
+`irq_work_sync` is GPL-exported. The reviewed drain boundary uses a private
+generation/state/sender-count registry: stop new sender leases, wait for every
+publisher, synchronize every retained per-CPU work node, then unpublish the
+route and permit generation reuse. Never remove nodes from `raised_list`.
+
+Next executable source step: implement and semantically test the distinct
+native shutdown reset/re-online journal using the new reset export, without
+wiring v5 or freeing resources. Independently implement and test the
+generation-scoped IRQ-work sender/drain registry. Continue the existing
+lifecycle-checker correction from its exact unstaged WIP; its current 60-test
+run still fails before the intended negative assertions, so it is not an
+accepted oracle. Then freeze STOP/ACK only after both ownership boundaries pass
+independent review. Do not run the shutdown fixture earlier.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,
