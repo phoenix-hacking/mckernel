@@ -4202,3 +4202,15 @@ process identities plus application bytes, status, logs and teardown evidence.
 Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
 production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
 remains incomplete.
+
+Shutdown checkpoint 33, 2026-09-28: checkpoint 32, packet 5 and its release
+record were committed as `429b926c09c71fe7531b671a411cf9e5f2816418`,
+pushed to `origin/codex/local-native-staging-repair`, fetched back, and matched
+the exact commit. Fetched blob IDs match locally for CURRENT
+`39f73b7a05bd8754158594d850bb7befacaef337`, PROGRESS
+`31f5f361f9fd78c4fa3a23ed6e37287744508165`, packet 5
+`6351f074e8ff7b5277b0221925cfdd99a8ae93df`, and its release
+`25e0d9031cd168a7b7af737e6d1e9a5d2ae38f68`. No runtime attempt was made and
+the one-shot release remains unconsumed. Resume with checkpoint 32's exact
+identity/lease/capacity preflight and next action; do not treat this shutdown
+record as OS completion or formal acceptance.
