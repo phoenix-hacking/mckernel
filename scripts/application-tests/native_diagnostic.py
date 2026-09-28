@@ -303,10 +303,27 @@ def build_command(manifest, attempt):
                     "runtime_ready": True, "staging": manifest["staging"], "manifest": manifest})
 
 
+def _validate_qemu_evidence(evidence):
+    _keys(evidence, ("argv", "pid", "pgid", "sid", "starttime_ticks", "returncode"))
+    _need(type(evidence["argv"]) is list and
+          all(type(item) is str for item in evidence["argv"]), "QEMU evidence argv")
+    _need(all(type(evidence[name]) is int for name in
+              ("pid", "pgid", "sid", "starttime_ticks", "returncode")),
+          "QEMU evidence identity/status types")
+    _need(evidence["pid"] == evidence["pgid"] == evidence["sid"] and
+          evidence["pid"] > 0 and evidence["starttime_ticks"] > 0,
+          "QEMU evidence process identity")
+
+
 def evaluate(manifest, observation):
     """Validate serial evidence shape; PROTOCOL_PASS is not guest acceptance."""
-    _keys(observation, ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline",
-                        "process_identity"))
+    observation_keys = ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline",
+                        "process_identity")
+    if "qemu_evidence" in observation:
+        observation_keys += ("qemu_evidence",)
+    _keys(observation, observation_keys)
+    if "qemu_evidence" in observation:
+        _validate_qemu_evidence(observation["qemu_evidence"])
     identity = observation["process_identity"]
     _keys(identity, ("pid", "pgid", "sid", "starttime_ticks"))
     _need(all(type(identity[name]) is int and identity[name] > 0
@@ -314,6 +331,10 @@ def evaluate(manifest, observation):
           "invalid process identity types")
     _need(identity["pid"] == identity["pgid"] == identity["sid"],
           "process group/session identity mismatch")
+    if "qemu_evidence" in observation:
+        evidence_identity = {name: observation["qemu_evidence"][name]
+                             for name in ("pid", "pgid", "sid", "starttime_ticks")}
+        _need(evidence_identity == identity, "QEMU evidence/observation identity mismatch")
     for name in ("started_at", "finished_at", "deadline"):
         _need(type(observation[name]) in (int, float) and math.isfinite(observation[name]), "host timestamp")
     _need(0 <= observation["started_at"] <= observation["finished_at"] < observation["deadline"], "late completion")
@@ -592,6 +613,8 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     # cleanup operation failed. Evidence capture has its own bounded deadline;
     # the original error keeps priority over any later capture/evaluation error.
     capture_errors = []
+    qemu_evidence_error = None
+    qemu_evidence = None
     capture_deadline = time.monotonic() + 2
     if qmp is not None:
         try:
@@ -621,11 +644,35 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
             if original is None:
                 original = exc
             capture_errors.append(_failure(exc, "host-capture"))
+        # Capture the command, retained identity and observed wait status only
+        # after cleanup has proved an exact reap.  This is deliberately
+        # independent of QMP/log capture so evaluation failures retain it.
+        try:
+            with _alarm(capture_deadline):
+                evidence_getter = getattr(process, "qemu_evidence", None)
+                _need(callable(evidence_getter), "QEMU evidence accessor unavailable")
+                candidate = evidence_getter()
+                _need(type(candidate) is dict, "QEMU evidence record type")
+                _need(type(candidate.get("argv")) is list and
+                      all(type(item) is str for item in candidate["argv"]),
+                      "QEMU evidence argv")
+                for key in ("pid", "pgid", "sid", "starttime_ticks", "returncode"):
+                    _need(type(candidate.get(key)) is int, "QEMU evidence " + key)
+                qemu_evidence = candidate
+        except BaseException as exc:
+            qemu_evidence_error = _failure(exc, "qemu-evidence")
+            capture_errors.append(qemu_evidence_error)
+    elif process is not None:
+        error = RuntimeError("QEMU process was not exactly reaped")
+        qemu_evidence_error = _failure(error, "qemu-evidence")
+        capture_errors.append(qemu_evidence_error)
+    non_evidence_capture_errors = [item for item in capture_errors
+                                   if item is not qemu_evidence_error]
     if failure is None:
         if cleanup["errors"] or not cleanup["reaped"]:
             failure = {"phase": "cleanup", "type": "DiagnosticError", "error": "teardown uncertain"}
-        elif capture_errors:
-            failure = dict(capture_errors[0])
+        elif non_evidence_capture_errors:
+            failure = dict(non_evidence_capture_errors[0])
     if failure is None:
         try:
             with _alarm(deadline):
@@ -641,15 +688,21 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                 observation = dict(texts, qmp=terminal, teardown=True, started_at=started,
                                    finished_at=time.monotonic(), deadline=deadline,
                                    process_identity=process_identity)
+                if qemu_evidence is not None:
+                    observation["qemu_evidence"] = qemu_evidence
                 record = evaluate(manifest, observation)
         except BaseException as exc:
             original = exc
             failure = _failure(exc, "evaluation")
+    if failure is None and qemu_evidence_error is not None:
+        failure = dict(qemu_evidence_error)
     if failure is not None:
         record = {"status": "FAIL", "application_acceptance": False,
                   "mckernel_application_executed": False, "failure": failure}
     record["cleanup"] = cleanup
     record["capture_errors"] = capture_errors
+    if qemu_evidence is not None:
+        record["qemu_evidence"] = qemu_evidence
     # The first observed failure survives cleanup failures; journal only after
     # retirement, under its own bounded publication deadline.
     try:

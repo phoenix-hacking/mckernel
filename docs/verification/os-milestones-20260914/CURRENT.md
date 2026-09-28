@@ -4043,3 +4043,42 @@ production gates, 350/10,000 points and 0/7 language gates. This work window
 still contains one real diagnostic guest and one current mcexec build. No new
 runtime or acceptance credit follows from source/image preparation. Whole-OS
 acceptance remains incomplete.
+
+Continuation shutdown checkpoint 28, 2026-09-28: new dispatch stopped at the
+shutdown request and all eight child lanes are terminal. The heavy lease is
+free; no project QEMU, diagnostic owner, mcexec compiler or heavy build remains.
+Launcher PID 3125264, recovered worker PID 3170135 and app-server PID 3170137
+remain alive with their original process groups and sessions for
+`.git/os-autopilot/runs/20260928T120120Z-056cff0a`; launcher-owned state was not
+edited. Host/scratch free space is 36,488,355,840 and 21,959,589,888 bytes,
+with 29,706,652 KiB available memory.
+
+Packet 3 is immutably rejected as `FAIL_EXACT_ONE_SHOT_EXECUTION_RELEASE`. It
+and its parent/nonce must never execute or be reused. The exact packet and
+failure record are retained with hashes `01be2070...7ecec9` and
+`0c27ac2c...1ab9e6`. No root, Docker, QEMU or guest operation followed the
+review failure.
+
+The two bounded repair lanes now preserve outer Docker-client identities and
+inner QEMU argv, process identity and exact post-reap return code on success and
+failure. Coordinator integration joins the QEMU record to the observation and
+refreshes the diagnostic/backend source pins. The first combined run correctly
+failed four stale synthetic owner fixtures; after the bounded fixture update,
+all 156 diagnostic/backend/owner tests pass in 11.416 seconds, with py_compile
+and scoped diff checks also passing. This is source/test evidence only: the
+integrated boundary still requires independent review and gains no runtime or
+acceptance credit.
+
+Next: (1) independently review the integrated client/QEMU ownership and evidence
+joins; (2) permit at most one bounded correction for this failure family;
+(3) rerun the full six-module unprivileged suite and actual `bound_manifest()`;
+(4) checkpoint and fetched-blob verify the final source hashes; (5) create
+packet 4 with a fresh short parent and nonce; and (6) only after a distinct
+one-shot release plus fresh capacity/lease checks, execute one diagnostic.
+Separately reconstruct and review the three missing IHK Rust helper prerequisites
+before claiming broad equivalence. Exact identities, hashes, tests and limits
+are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-28.json`.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
+remains incomplete; this checkpoint neither resumes nor completes the goal.

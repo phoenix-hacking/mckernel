@@ -25,7 +25,11 @@ PINNED_QEMU_VERSION_STDOUT = (
 
 
 def result(out=b"", code=0, err=b""):
-    return subprocess.CompletedProcess([], code, out, err)
+    response = subprocess.CompletedProcess([], code, out, err)
+    response.command_record = {"pid": os.getpid(), "pgid": os.getpid(),
+                               "sid": os.getsid(os.getpid()), "proc_starttime": owner._proc_starttime(os.getpid()),
+                               "reaped": True, "returncode": code}
+    return response
 
 
 def image():
@@ -106,10 +110,17 @@ class Fake:
             if self.start_failure is not None:
                 raise self.start_failure
             self.obj.attempt.mkdir(mode=0o700)
+            process_identity = {"pid": 12345, "pgid": 12345, "sid": 12345,
+                                "starttime_ticks": 77}
+            qemu_evidence = {"argv": ["/usr/libexec/qemu-kvm", "-qmp", "unix:test"],
+                             **process_identity, "returncode": 0}
             record = {"status": "PROTOCOL_PASS", "application_acceptance": False,
                       "mckernel_application_executed": False, "case_id": "x",
                       "cleanup": {"reaped": True, "errors": []}, "capture_errors": [],
-                      "observation": {"serial": "SERIAL", "debugcon": "DEBUG", "teardown": True}}
+                      "qemu_evidence": qemu_evidence,
+                      "observation": {"serial": "SERIAL", "debugcon": "DEBUG", "teardown": True,
+                                      "process_identity": process_identity,
+                                      "qemu_evidence": qemu_evidence}}
             self.record_change(record)
             (self.obj.attempt / "result.json").write_text(json.dumps(record))
             for name, data in {"serial.log": b"SERIAL", "debugcon.log": b"DEBUG", "qemu.stdout": b"",
@@ -488,7 +499,9 @@ class OwnerTests(unittest.TestCase):
              mock.patch.object(owner.os, "waitpid", return_value=(child.pid, 0)):
             self.assertTrue(self.obj._cleanup())
             self.fake.children.retire(child)
-            kill.assert_called_once_with(child.pid, signal.SIGKILL)
+            # An unresolved child without a captured identity is never
+            # signaled: fail closed against stale PID/process-group reuse.
+            kill.assert_not_called()
         self.assertTrue(child.reaped)
         self.obj._release()
         self.assertIsNone(self.obj.lock)
@@ -984,6 +997,81 @@ class OwnerTests(unittest.TestCase):
         finally:
             for sig, handler in previous.items():
                 signal.signal(sig, handler)
+
+    def test_command_record_success_and_nonzero_are_exact(self):
+        for code in (0, 7):
+            with self.subTest(code=code):
+                response = owner.bounded_command(["/usr/bin/python3", "-c", "import sys; sys.exit(%d)" % code], 3,
+                                                 ledger=owner.CommandLedger())
+                record = response.command_record
+                self.assertEqual(record["pid"], record["pgid"])
+                self.assertGreater(record["pid"], 0)
+                self.assertGreater(record["sid"], 0)
+                self.assertGreater(record["proc_starttime"], 0)
+                self.assertTrue(record["reaped"])
+                self.assertEqual(record["returncode"], code)
+
+    def test_command_record_timeout_is_reaped_after_kill(self):
+        ledger = owner.CommandLedger()
+        with self.assertRaises(owner.CommandError) as caught:
+            owner.bounded_command(["/usr/bin/python3", "-c", "import time; time.sleep(30)"], .05, ledger=ledger)
+        record = caught.exception.command_record
+        self.assertEqual(record["pid"], record["pgid"])
+        self.assertGreater(record["pid"], 0)
+        self.assertGreater(record["sid"], 0)
+        self.assertGreater(record["proc_starttime"], 0)
+        self.assertTrue(record["reaped"])
+        self.assertEqual(record["returncode"], -signal.SIGKILL)
+
+    def test_pre_spawn_failure_has_no_fabricated_identity(self):
+        with self.assertRaises(owner.CommandError) as caught:
+            owner.bounded_command(["/no/such/executable"], 1, ledger=owner.CommandLedger())
+        self.assertEqual(caught.exception.command_record,
+                         {"pid": None, "pgid": None, "sid": None,
+                          "proc_starttime": None, "reaped": False, "returncode": None})
+
+    def test_unresolved_reap_record_is_unreaped_and_ledger_owned(self):
+        ledger = owner.CommandLedger()
+        try:
+            with mock.patch.object(owner.CommandChild, "wait", side_effect=owner.OwnerError("reap delayed")):
+                with self.assertRaises(owner.CommandError) as caught:
+                    owner.bounded_command(["/usr/bin/python3", "-c", "import time; time.sleep(30)"], .05,
+                                          ledger=ledger)
+            record = caught.exception.command_record
+            self.assertFalse(record["reaped"])
+            self.assertIsNone(record["returncode"])
+            self.assertEqual(len(ledger.pending), 1)
+        finally:
+            ledger.retire_pending()
+
+    def test_owner_signal_retains_exact_reap_record(self):
+        ledger = owner.CommandLedger()
+        original = owner.CommandChild.wait
+        calls = [0]
+        def interrupt_once(child, timeout):
+            calls[0] += 1
+            if calls[0] == 1:
+                raise owner.OwnerSignal("cancelled")
+            return original(child, timeout)
+        with mock.patch.object(owner.CommandChild, "wait", interrupt_once):
+            with self.assertRaises(owner.OwnerSignal) as caught:
+                owner.bounded_command(["/usr/bin/python3", "-c", "pass"], 3,
+                                      ledger=ledger)
+        record = caught.exception.command_record
+        self.assertEqual(record["pid"], record["pgid"])
+        self.assertGreater(record["sid"], 0)
+        self.assertGreater(record["proc_starttime"], 0)
+        self.assertTrue(record["reaped"])
+        self.assertEqual(record["returncode"], 0)
+
+    def test_numbered_command_json_contains_identity_record(self):
+        self.obj.run()
+        # The injected backend has no process primitive, but the schema key is
+        # always emitted for each numbered command.
+        row = json.loads((self.obj.evidence / "001-ps.json").read_text())
+        self.assertIn("command", row)
+        self.assertEqual(row["command"]["pid"], row["command"]["pgid"])
+        self.assertTrue(row["command"]["reaped"])
 
 
 if __name__ == "__main__":

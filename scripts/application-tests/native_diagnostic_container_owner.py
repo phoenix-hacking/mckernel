@@ -42,8 +42,8 @@ QEMU_VERSION_STDOUT = (
 )
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
-    REPO + "/scripts/application-tests/native_diagnostic.py": "b92e6f92084accdaf6e459ee6cf2674b02ad31a7d377a69fe15d5549804823c5",
-    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "ffdde01883c77171d1512769e0c88f2539dda8f7da4bd22ae4e71f69f080a16b",
+    REPO + "/scripts/application-tests/native_diagnostic.py": "64225d81982e672c2123cd1be2b7d35168cf7ba964b9fedcb3c831f600965e8e",
+    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "709b7dd59683bbe089566070cd6037f51e5d83ee8904695e9046843ef9313a35",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }
 CGROUP = {
@@ -240,20 +240,33 @@ def one(raw):
 
 
 class CommandError(OwnerError):
-    def __init__(self, message, stdout=b"", stderr=b""):
+    def __init__(self, message, stdout=b"", stderr=b"", command_record=None):
         super().__init__(message)
         self.stdout, self.stderr = stdout, stderr
+        self.command_record = command_record
 
 
 class CommandChild:
     """Explicit spawn/reap ownership, with cancellation masked at transitions."""
     def __init__(self):
         self.pid = None
+        self.identity = None
         self.reaped = False
         self.returncode = None
         self.stdout = None
         self.stderr = None
         self.write_fds = []
+
+    def record(self):
+        identity = self.identity
+        return {
+            "pid": identity["pid"] if identity is not None else self.pid,
+            "pgid": identity["pgid"] if identity is not None else None,
+            "sid": identity["sid"] if identity is not None else None,
+            "proc_starttime": identity["proc_starttime"] if identity is not None else None,
+            "reaped": self.reaped,
+            "returncode": self.returncode if self.reaped else None,
+        }
 
     def acquire(self, argv, env, child_mask):
         # Called with OWNER_SIGNALS blocked in the parent. POSIX spawn restores
@@ -288,6 +301,15 @@ class CommandChild:
             self.pid = os.posix_spawn(argv[0], argv, dict(os.environ) if env is None else env,
                                       file_actions=actions, setpgroup=0, setsigmask=child_mask,
                                       setsigdef=OWNER_SIGNALS + (signal.SIGPIPE, signal.SIGXFSZ))
+            # Capture identity before releasing acquisition masking.  Every
+            # later group signal is conditional on this exact child identity.
+            pgid = os.getpgid(self.pid)
+            sid = os.getsid(self.pid)
+            starttime = _proc_starttime(self.pid)
+            need(type(pgid) is int and pgid == self.pid and type(sid) is int and sid > 0 and
+                 type(starttime) is int and starttime > 0, "invalid spawned child identity")
+            self.identity = {"pid": self.pid, "pgid": pgid, "sid": sid,
+                             "proc_starttime": starttime}
         finally:
             for fd in self.write_fds:
                 os.close(fd)
@@ -315,7 +337,16 @@ class CommandChild:
             # Only an unreaped direct child reserves this numeric group ID.
             failure = None
             try:
-                os.killpg(self.pid, signal.SIGKILL)
+                need(self.identity is not None, "spawned child identity unavailable")
+                try:
+                    current = {"pid": self.pid, "pgid": os.getpgid(self.pid),
+                               "sid": os.getsid(self.pid),
+                               "proc_starttime": _proc_starttime(self.pid)}
+                except ProcessLookupError:
+                    current = None
+                if current is not None:
+                    need(same(current, self.identity), "spawned child identity changed")
+                    os.killpg(self.identity["pgid"], signal.SIGKILL)
             except ProcessLookupError:
                 pass
             except BaseException as exc:
@@ -390,17 +421,30 @@ def bounded_command(argv, timeout, *, env=None, ledger=None):
                         output[key.data].extend(block[:LIMIT + 1 - len(output[key.data])])
                         need(len(output[key.data]) <= LIMIT, "command output limit")
             code = child.wait(timeout=max(0.001, end - time.monotonic()))
-        return subprocess.CompletedProcess(argv, code, bytes(output[0]), bytes(output[1]))
+        record = child.record()
+        completed = subprocess.CompletedProcess(argv, code, bytes(output[0]), bytes(output[1]))
+        completed.command_record = record
+        return completed
     except BaseException as exc:
         failure = exc
         if type(exc) is OwnerSignal:
+            # Preserve the command record through cancellation; the finally
+            # block replaces it with the post-retirement exact reap state.
+            exc.command_record = child.record()
             raise
-        raise CommandError(safe_error(exc), bytes(output[0]), bytes(output[1])) from exc
+        command_error = CommandError(safe_error(exc), bytes(output[0]), bytes(output[1]),
+                                     child.record())
+        failure = command_error
+        raise command_error from exc
     finally:
         cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
         try:
             if failure is not None:
                 ledger.retire(child)
+                if type(failure) is CommandError:
+                    failure.command_record = child.record()
+                elif type(failure) is OwnerSignal:
+                    failure.command_record = child.record()
             elif child.reaped:
                 ledger.pending.discard(child)
             for stream in (child.stdout, child.stderr):
@@ -585,7 +629,9 @@ class DiagnosticOwner:
         try:
             self._save(prefix + ".json", {"argv": command, "timeout": timeout,
                        "returncode": result.returncode if result is not None else None,
-                       "failure": safe_error(failure) if failure is not None else None})
+                       "failure": safe_error(failure) if failure is not None else None,
+                       "command": (getattr(result, "command_record", None) if result is not None else
+                                    failure.command_record if type(failure) in (CommandError, OwnerSignal) else None)})
         except BaseException as exc:
             if failure is None:
                 failure = exc
@@ -838,8 +884,15 @@ class DiagnosticOwner:
         observation = result.get("observation", {})
         need(observation.get("serial") == texts["serial"] and observation.get("debugcon") == texts["debugcon"] and
              observation.get("teardown") is True, "capture observation join")
+        qemu_evidence = result.get("qemu_evidence")
+        need(type(qemu_evidence) is dict and same(qemu_evidence, observation.get("qemu_evidence")) and
+             qemu_evidence.get("returncode") == 0 and
+             same({key: qemu_evidence.get(key) for key in ("pid", "pgid", "sid", "starttime_ticks")},
+                  observation.get("process_identity")), "QEMU evidence/result join")
         replay = self.diagnostic.evaluate(self.manifest, observation)
-        need(same(replay, {k: v for k, v in result.items() if k not in ("cleanup", "capture_errors")}), "inner oracle replay")
+        need(same(replay, {k: v for k, v in result.items()
+                           if k not in ("cleanup", "capture_errors", "qemu_evidence")}),
+             "inner oracle replay")
         need(not os.path.lexists(self.attempt / "first-failure.jsonl"), "inner failure journal exists")
         self._save("capture-bindings.json", captures)
 

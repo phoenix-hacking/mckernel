@@ -132,17 +132,25 @@ class ProcessOwner:
     """Own QEMU's new session and bounded file-backed host streams."""
 
     def __init__(self, child, stdout_path, stderr_path, identities=None,
-                 process_identity=None):
+                 process_identity=None, command=None):
         self.child = child
         self.pid = child.pid if child is not None else None
         self.stdout_path = Path(stdout_path)
         self.stderr_path = Path(stderr_path)
         self.identities = identities
+        if command is None:
+            self.command = None
+        else:
+            if (type(command) not in (tuple, list) or
+                    any(type(item) is not str for item in command)):
+                raise ValueError("QEMU command must contain primitive strings")
+            self.command = tuple(command)
         if process_identity is None:
             self.identity_pid = self.pgid = self.sid = self.starttime_ticks = None
         else:
             self.identity_pid, self.pgid, self.sid, self.starttime_ticks = process_identity
         self.reaped = False
+        self.returncode = None
 
     def process_identity(self):
         if (type(self.identity_pid) is not int or type(self.pgid) is not int or
@@ -184,8 +192,20 @@ class ProcessOwner:
 
     def wait(self, timeout):
         result = self.child.wait(timeout=timeout)
+        if type(result) is not int:
+            raise RuntimeError("QEMU wait returned non-integer status")
+        self.returncode = result
         self.reaped = True
         return result
+
+    def qemu_evidence(self):
+        """Return immutable command/identity/status evidence after exact reap."""
+        if not self.reaped or type(self.returncode) is not int:
+            raise RuntimeError("QEMU process was not exactly reaped")
+        if self.command is None or any(type(item) is not str for item in self.command):
+            raise RuntimeError("QEMU command unavailable")
+        identity = self.process_identity()
+        return {"argv": list(self.command), **identity, "returncode": self.returncode}
 
     def communicate(self, timeout):
         _deadline(timeout)
@@ -328,7 +348,8 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
             entry = os.fstat(err_fd)
             fds[-1] = (err_fd, (entry.st_dev, entry.st_ino))
             # Construct all owner metadata before Popen can create a child.
-            owner = ProcessOwner(None, out_path, err_path, tuple(item[1] for item in fds))
+            owner = ProcessOwner(None, out_path, err_path, tuple(item[1] for item in fds),
+                                 command=command)
             _remaining(deadline)
             if _private_directory(cwd) != parent_identity or os.path.lexists(qmp_path):
                 raise ValueError("attempt/QMP identity changed before spawn")

@@ -45,6 +45,7 @@ def hostile_exception(base=Exception):
 class Process:
     def __init__(self, stuck=False, never_reap=False):
         self.calls, self.stuck, self.never_reap = [], stuck, never_reap
+        self.returncode = None
     def communicate(self, timeout):
         self.calls.append("communicate")
         return b"QEMU stdout is not payload", b"QEMU stderr is not payload"
@@ -54,9 +55,15 @@ class Process:
         self.calls.append("wait")
         if self.never_reap or (self.stuck and "kill" not in self.calls):
             raise subprocess.TimeoutExpired("fake", timeout)
-        return 0
+        self.returncode = 0
+        return self.returncode
     def process_identity(self):
         return {"pid": 12345, "pgid": 12345, "sid": 12345, "starttime_ticks": 1}
+    def qemu_evidence(self):
+        if self.returncode is None:
+            raise RuntimeError("QEMU process was not exactly reaped")
+        return {"argv": ["/usr/libexec/qemu-kvm", "-qmp", "unix:test"],
+                **self.process_identity(), "returncode": self.returncode}
 
 
 class Qmp:

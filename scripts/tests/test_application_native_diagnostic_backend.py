@@ -752,6 +752,26 @@ class BackendTests(unittest.TestCase):
              mock.patch.object(backend.os, "killpg", side_effect=ProcessLookupError):
             with self.assertRaisesRegex(RuntimeError, "disappeared"): owner._signal_group(15)
 
+    def test_qemu_evidence_is_fail_closed_and_retains_signal_status(self):
+        child = FakeProcess()
+        out = Path(self.temp.name) / "qemu.stdout"
+        err = Path(self.temp.name) / "qemu.stderr"
+        owner = backend.ProcessOwner(child, out, err,
+                                     process_identity=(child.pid, child.pid, child.pid, 77),
+                                     command=(backend.QEMU, "-qmp", "unix:test"))
+        with self.assertRaisesRegex(RuntimeError, "not exactly reaped"):
+            owner.qemu_evidence()
+        child.wait = lambda timeout: setattr(child, "returncode", -signal.SIGKILL) or -signal.SIGKILL
+        self.assertEqual(owner.wait(1), -signal.SIGKILL)
+        self.assertEqual(owner.qemu_evidence(), {
+            "argv": [backend.QEMU, "-qmp", "unix:test"], "pid": child.pid,
+            "pgid": child.pid, "sid": child.pid, "starttime_ticks": 77,
+            "returncode": -signal.SIGKILL})
+        missing = backend.ProcessOwner(child, out, err)
+        missing.reaped = True; missing.returncode = 0
+        with self.assertRaisesRegex(RuntimeError, "command unavailable"):
+            missing.qemu_evidence()
+
     def test_host_output_limit_is_recorded_after_reap_without_losing_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             attempt = Path(directory)
