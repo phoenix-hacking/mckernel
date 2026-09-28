@@ -41,7 +41,7 @@ class NativeOsRuntimeTests(unittest.TestCase):
             result = subprocess.run([str(binary), "--test-threads=1"],
                                     capture_output=True, text=True, timeout=90)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("61 passed; 0 failed", result.stdout)
+            self.assertIn("62 passed; 0 failed", result.stdout)
 
 
 if __name__ == "__main__":

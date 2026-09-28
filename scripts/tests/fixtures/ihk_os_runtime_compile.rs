@@ -6,13 +6,23 @@
 
 extern crate self as kernel;
 
-use std::{collections::BTreeMap, sync::{Mutex, atomic::{AtomicBool, AtomicI32, AtomicPtr, Ordering}}};
+use std::{
+    collections::BTreeMap,
+    sync::{
+        atomic::{AtomicBool, AtomicI32, AtomicI64, AtomicPtr, Ordering},
+        Mutex,
+    },
+};
 
 // SOURCE_MODULES
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Error(i32);
-impl Error { pub fn to_errno(self) -> i32 { self.0 } }
+impl Error {
+    pub fn to_errno(self) -> i32 {
+        self.0
+    }
+}
 pub type Result<T = ()> = std::result::Result<T, Error>;
 pub const EINVAL: Error = Error(-22);
 pub const ENOMEM: Error = Error(-12);
@@ -22,46 +32,86 @@ pub const EIO: Error = Error(-5);
 pub const GFP_KERNEL: u32 = 1;
 pub mod error {
     pub fn to_result(value: i32) -> crate::Result {
-        if value < 0 { Err(crate::Error(value)) } else { Ok(()) }
+        if value < 0 {
+            Err(crate::Error(value))
+        } else {
+            Ok(())
+        }
     }
 }
 pub mod prelude {
-    pub use crate::{Error, Result, EINVAL, ENOMEM, ENODEV, EBUSY, EIO, GFP_KERNEL, TestBox as Box, pr_info};
+    pub use crate::{
+        pr_info, Error, Result, TestBox as Box, EBUSY, EINVAL, EIO, ENODEV, ENOMEM, GFP_KERNEL,
+    };
 }
-#[macro_export] macro_rules! pr_info { ($($arg:tt)*) => { { let _ = format_args!($($arg)*); } }; }
+#[macro_export]
+macro_rules! pr_info { ($($arg:tt)*) => { { let _ = format_args!($($arg)*); } }; }
 pub struct CStr(&'static [u8]);
-impl CStr { pub const fn as_char_ptr(&self) -> *const i8 { self.0.as_ptr().cast() } }
-#[macro_export] macro_rules! c_str { ($s:literal) => { &$crate::CStr(concat!($s, "\0").as_bytes()) }; }
+impl CStr {
+    pub const fn as_char_ptr(&self) -> *const i8 {
+        self.0.as_ptr().cast()
+    }
+}
+#[macro_export]
+macro_rules! c_str {
+    ($s:literal) => {
+        &$crate::CStr(concat!($s, "\0").as_bytes())
+    };
+}
 
 pub struct TestBox<T>(std::boxed::Box<T>);
 impl<T> TestBox<T> {
     pub fn new(value: T, _flags: u32) -> Result<Self> {
-        if FAIL_BOX.swap(false, Ordering::SeqCst) { return Err(ENOMEM); }
+        if FAIL_BOX.swap(false, Ordering::SeqCst) {
+            return Err(ENOMEM);
+        }
         Ok(Self(std::boxed::Box::new(value)))
     }
-    pub fn into_raw(value: Self) -> *mut T { std::boxed::Box::into_raw(value.0) }
-    pub unsafe fn from_raw(value: *mut T) -> Self { Self(unsafe { std::boxed::Box::from_raw(value) }) }
-    pub fn pin_init(value: T, flags: u32) -> Result<core::pin::Pin<Self>> where T: Unpin {
-        if FAIL_PIN.swap(false, Ordering::SeqCst) { return Err(ENOMEM); }
+    pub fn into_raw(value: Self) -> *mut T {
+        std::boxed::Box::into_raw(value.0)
+    }
+    pub unsafe fn from_raw(value: *mut T) -> Self {
+        Self(unsafe { std::boxed::Box::from_raw(value) })
+    }
+    pub fn pin_init(value: T, flags: u32) -> Result<core::pin::Pin<Self>>
+    where
+        T: Unpin,
+    {
+        if FAIL_PIN.swap(false, Ordering::SeqCst) {
+            return Err(ENOMEM);
+        }
         Ok(core::pin::Pin::new(Self::new(value, flags)?))
     }
 }
 impl<T> core::ops::Deref for TestBox<T> {
     type Target = T;
-    fn deref(&self) -> &T { &self.0 }
+    fn deref(&self) -> &T {
+        &self.0
+    }
 }
 impl<T> core::ops::DerefMut for TestBox<T> {
-    fn deref_mut(&mut self) -> &mut T { &mut self.0 }
+    fn deref_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
 }
 pub mod sync {
     pub struct Mutex<T>(std::sync::Mutex<T>);
     impl<T> Mutex<T> {
-        pub const fn new(value: T) -> Self { Self(std::sync::Mutex::new(value)) }
-        pub fn lock(&self) -> std::sync::MutexGuard<'_, T> { self.0.lock().unwrap() }
+        pub const fn new(value: T) -> Self {
+            Self(std::sync::Mutex::new(value))
+        }
+        pub fn lock(&self) -> std::sync::MutexGuard<'_, T> {
+            self.0.lock().unwrap()
+        }
     }
     pub use crate::new_mutex;
 }
-#[macro_export] macro_rules! new_mutex { ($value:expr) => { $crate::sync::Mutex::new($value) }; }
+#[macro_export]
+macro_rules! new_mutex {
+    ($value:expr) => {
+        $crate::sync::Mutex::new($value)
+    };
+}
 
 pub mod bindings {
     // The mock allocation address is also its physical identity. Native Linux
@@ -69,14 +119,35 @@ pub mod bindings {
     pub static mut page_offset_base: u64 = 0;
     // CONFIG_LOCKDEP=n produces this empty C type in the exact Rocky bindings.
     // Typed foreign declarations that transitively expose it must fail linting.
-    #[repr(C)] pub struct lockdep_map {}
-    #[repr(C)] pub struct module { pub identity: u32, pub lockdep: lockdep_map }
-    #[repr(C)] pub struct class { pub identity: u32 }
-    #[repr(C)] pub struct kobject {}
-    #[repr(C)] pub struct device { pub identity: u32, pub lockdep: lockdep_map, pub kobj: kobject }
-    #[repr(C)] pub struct inode { pub i_rdev: u32 }
-    #[repr(C)] pub struct file { pub private_data: *mut core::ffi::c_void }
-    #[repr(C)] pub struct file_operations {
+    #[repr(C)]
+    pub struct lockdep_map {}
+    #[repr(C)]
+    pub struct module {
+        pub identity: u32,
+        pub lockdep: lockdep_map,
+    }
+    #[repr(C)]
+    pub struct class {
+        pub identity: u32,
+    }
+    #[repr(C)]
+    pub struct kobject {}
+    #[repr(C)]
+    pub struct device {
+        pub identity: u32,
+        pub lockdep: lockdep_map,
+        pub kobj: kobject,
+    }
+    #[repr(C)]
+    pub struct inode {
+        pub i_rdev: u32,
+    }
+    #[repr(C)]
+    pub struct file {
+        pub private_data: *mut core::ffi::c_void,
+    }
+    #[repr(C)]
+    pub struct file_operations {
         pub owner: *mut module,
         pub open: Option<unsafe extern "C" fn(*mut inode, *mut file) -> i32>,
         pub release: Option<unsafe extern "C" fn(*mut inode, *mut file) -> i32>,
@@ -91,14 +162,28 @@ pub mod bindings {
     pub const ___GFP_COMP_BIT: u32 = 18;
 }
 pub struct ThisModule;
-impl ThisModule { pub const fn as_ptr(&self) -> *mut bindings::module { core::ptr::addr_of!(MODULE).cast_mut() } }
+impl ThisModule {
+    pub const fn as_ptr(&self) -> *mut bindings::module {
+        core::ptr::addr_of!(MODULE).cast_mut()
+    }
+}
 pub static THIS_MODULE: ThisModule = ThisModule;
-static MODULE: bindings::module = bindings::module { identity: 1, lockdep: bindings::lockdep_map {} };
+static MODULE: bindings::module = bindings::module {
+    identity: 1,
+    lockdep: bindings::lockdep_map {},
+};
 static CLASS: bindings::class = bindings::class { identity: 1 };
-static DEVICE: bindings::device = bindings::device { identity: 1, lockdep: bindings::lockdep_map {}, kobj: bindings::kobject {} };
+static DEVICE: bindings::device = bindings::device {
+    identity: 1,
+    lockdep: bindings::lockdep_map {},
+    kobj: bindings::kobject {},
+};
 #[repr(C, align(8))]
 pub struct IhkExportSymbolRecord {
-    license: [u8; 4], namespace: [u8; 16], padding: [u8; 4], symbol: *const u8,
+    license: [u8; 4],
+    namespace: [u8; 16],
+    padding: [u8; 4],
+    symbol: *const u8,
 }
 unsafe impl Sync for IhkExportSymbolRecord {}
 
@@ -117,11 +202,17 @@ static PAGES: Mutex<BTreeMap<usize, usize>> = Mutex::new(BTreeMap::new());
 static CLASSES: AtomicI32 = AtomicI32::new(0);
 
 #[no_mangle]
-extern "C" fn __register_chrdev(major: u32, base: u32, count: u32, _name: *const i8,
-    operations: *const bindings::file_operations) -> i32
-{
+extern "C" fn __register_chrdev(
+    major: u32,
+    base: u32,
+    count: u32,
+    _name: *const i8,
+    operations: *const bindings::file_operations,
+) -> i32 {
     assert_eq!((major, base, count), (0, 0, 64));
-    if FAIL_REGISTER.swap(false, Ordering::SeqCst) { return -12; }
+    if FAIL_REGISTER.swap(false, Ordering::SeqCst) {
+        return -12;
+    }
     assert!(FOPS.swap(operations.cast_mut(), Ordering::SeqCst).is_null());
     assert_eq!(unsafe { (*operations).owner }, THIS_MODULE.as_ptr());
     240
@@ -134,7 +225,9 @@ extern "C" fn __unregister_chrdev(major: u32, base: u32, count: u32, _name: *con
 }
 #[no_mangle]
 extern "C" fn class_create(_name: *const i8) -> *mut bindings::class {
-    if FAIL_CLASS.swap(false, Ordering::SeqCst) { return (-12isize) as *mut _; }
+    if FAIL_CLASS.swap(false, Ordering::SeqCst) {
+        return (-12isize) as *mut _;
+    }
     assert_eq!(CLASSES.fetch_add(1, Ordering::SeqCst), 0);
     core::ptr::addr_of!(CLASS).cast_mut()
 }
@@ -147,14 +240,24 @@ extern "C" fn class_destroy(class: *const bindings::class) {
 // Fixed x86_64 signature consumes the one %u argument of the production
 // variadic call. No format interpretation or Linux publication is simulated.
 #[no_mangle]
-extern "C" fn device_create(class: *const bindings::class, _parent: *mut bindings::device,
-    dev: u32, data: *mut core::ffi::c_void, format: *const i8, minor: u32) -> *mut bindings::device
-{
+extern "C" fn device_create(
+    class: *const bindings::class,
+    _parent: *mut bindings::device,
+    dev: u32,
+    data: *mut core::ffi::c_void,
+    format: *const i8,
+    minor: u32,
+) -> *mut bindings::device {
     assert_eq!(class, core::ptr::addr_of!(CLASS));
-    assert_eq!(unsafe { std::ffi::CStr::from_ptr(format) }.to_bytes(), b"mcos%u");
+    assert_eq!(
+        unsafe { std::ffi::CStr::from_ptr(format) }.to_bytes(),
+        b"mcos%u"
+    );
     assert_eq!(dev, (240 << 20) | minor);
     assert!(data.is_null());
-    if FAIL_NODE.swap(false, Ordering::SeqCst) { return (-12isize) as *mut _; }
+    if FAIL_NODE.swap(false, Ordering::SeqCst) {
+        return (-12isize) as *mut _;
+    }
     assert!(NODES.lock().unwrap().insert(dev, minor).is_none());
     core::ptr::addr_of!(DEVICE).cast_mut()
 }
@@ -167,7 +270,9 @@ extern "C" fn device_destroy(class: *const bindings::class, dev: u32) {
 extern "C" fn get_free_pages_noprof(flags: u32, order: u32) -> usize {
     assert_eq!(flags, 0x52dc0);
     assert_eq!(order, 10);
-    if FAIL_PAGES.swap(false, Ordering::SeqCst) { return 0; }
+    if FAIL_PAGES.swap(false, Ordering::SeqCst) {
+        return 0;
+    }
     let size = 4096usize << order;
     let layout = std::alloc::Layout::from_size_align(size, 4096).unwrap();
     let address = unsafe { std::alloc::alloc_zeroed(layout) } as usize;
@@ -189,7 +294,9 @@ extern "C" fn free_pages(address: usize, order: u32) {
 #[no_mangle]
 extern "C" fn try_module_get(module: *mut bindings::module) -> bool {
     assert_eq!(module, THIS_MODULE.as_ptr());
-    if FAIL_MODULE.swap(false, Ordering::SeqCst) { return false; }
+    if FAIL_MODULE.swap(false, Ordering::SeqCst) {
+        return false;
+    }
     MODULE_REFS.fetch_add(1, Ordering::SeqCst);
     true
 }
@@ -202,25 +309,50 @@ extern "C" fn module_put(module: *mut bindings::module) {
 fn create(argument: u64) -> i64 {
     unsafe { os_runtime::ihk_os_create_unbooted_v1(0, THIS_MODULE.as_ptr().cast(), argument) }
 }
-fn destroy(minor: u64) -> i64 { os_runtime::ihk_os_destroy_unbooted_v1(0, minor) }
+fn destroy(minor: u64) -> i64 {
+    os_runtime::ihk_os_destroy_unbooted_v1(0, minor)
+}
 fn open(minor: u32) -> std::result::Result<bindings::file, i32> {
-    let mut inode = bindings::inode { i_rdev: (240 << 20) | minor };
-    let mut file = bindings::file { private_data: core::ptr::null_mut() };
+    let mut inode = bindings::inode {
+        i_rdev: (240 << 20) | minor,
+    };
+    let mut file = bindings::file {
+        private_data: core::ptr::null_mut(),
+    };
     let result = unsafe { (*FOPS.load(Ordering::SeqCst)).open.unwrap()(&mut inode, &mut file) };
-    if result == 0 { Ok(file) } else { assert!(file.private_data.is_null()); Err(result) }
+    if result == 0 {
+        Ok(file)
+    } else {
+        assert!(file.private_data.is_null());
+        Err(result)
+    }
 }
 fn status(file: &mut bindings::file, compat: bool, request: u32) -> i64 {
     let fops = unsafe { &*FOPS.load(Ordering::SeqCst) };
-    unsafe { (if compat { fops.compat_ioctl } else { fops.unlocked_ioctl }).unwrap()(file, request, u64::MAX) }
+    unsafe {
+        (if compat {
+            fops.compat_ioctl
+        } else {
+            fops.unlocked_ioctl
+        })
+        .unwrap()(file, request, u64::MAX)
+    }
 }
 fn close(mut file: bindings::file) {
-    assert_eq!(unsafe { (*FOPS.load(Ordering::SeqCst)).release.unwrap()(core::ptr::null_mut(), &mut file) }, 0);
+    assert_eq!(
+        unsafe {
+            (*FOPS.load(Ordering::SeqCst)).release.unwrap()(core::ptr::null_mut(), &mut file)
+        },
+        0
+    );
     assert!(file.private_data.is_null());
 }
 fn with_family(test: impl FnOnce()) {
     let _lock = TEST_LOCK.lock().unwrap();
     let family = os_runtime::OsDeviceFamily::register().unwrap();
-    let token = device_registry::IHK_DEVICE_REGISTRY.attach_provider_token().unwrap();
+    let token = device_registry::IHK_DEVICE_REGISTRY
+        .attach_provider_token()
+        .unwrap();
     test();
     assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
     assert!(NODES.lock().unwrap().is_empty());
@@ -258,7 +390,12 @@ fn lifecycle_status_aliases_busy_close_destroy_and_reuse() {
 #[test]
 fn every_external_create_failure_unwinds_every_owner_and_reuses_minor() {
     with_family(|| {
-        for (failure, expected) in [(&FAIL_MODULE, -16), (&FAIL_PAGES, -12), (&FAIL_BOX, -12), (&FAIL_NODE, -12)] {
+        for (failure, expected) in [
+            (&FAIL_MODULE, -16),
+            (&FAIL_PAGES, -12),
+            (&FAIL_BOX, -12),
+            (&FAIL_NODE, -12),
+        ] {
             failure.store(true, Ordering::SeqCst);
             assert_eq!(create(0), expected);
             assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
@@ -283,7 +420,9 @@ fn failed_open_allocation_releases_os_lease() {
 #[test]
 fn capacity_64_first_free_reuse_and_overflow_arguments() {
     with_family(|| {
-        for minor in 0..64 { assert_eq!(create(0), minor); }
+        for minor in 0..64 {
+            assert_eq!(create(0), minor);
+        }
         assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 64);
         assert_eq!(create(0), -12);
         assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 64);
@@ -292,7 +431,9 @@ fn capacity_64_first_free_reuse_and_overflow_arguments() {
         assert_eq!(open(64).err(), Some(-22));
         assert_eq!(destroy(17), 0);
         assert_eq!(create(0), 17);
-        for minor in (0..64).rev() { assert_eq!(destroy(minor), 0); }
+        for minor in (0..64).rev() {
+            assert_eq!(destroy(minor), 0);
+        }
     });
 }
 
@@ -300,11 +441,19 @@ fn capacity_64_first_free_reuse_and_overflow_arguments() {
 fn concurrent_creation_has_unique_minors_and_balanced_destruction() {
     with_family(|| {
         let results: Vec<_> = (0..8).map(|_| std::thread::spawn(|| create(0))).collect();
-        let mut minors: Vec<_> = results.into_iter().map(|thread| thread.join().unwrap()).collect();
+        let mut minors: Vec<_> = results
+            .into_iter()
+            .map(|thread| thread.join().unwrap())
+            .collect();
         minors.sort_unstable();
         assert_eq!(minors, (0..8).collect::<Vec<_>>());
-        let results: Vec<_> = minors.into_iter().map(|minor| std::thread::spawn(move || destroy(minor as u64))).collect();
-        for result in results { assert_eq!(result.join().unwrap(), 0); }
+        let results: Vec<_> = minors
+            .into_iter()
+            .map(|minor| std::thread::spawn(move || destroy(minor as u64)))
+            .collect();
+        for result in results {
+            assert_eq!(result.join().unwrap(), 0);
+        }
     });
 }
 
@@ -314,19 +463,19 @@ fn concurrent_open_and_destroy_never_free_a_live_file() {
         for _ in 0..40 {
             assert_eq!(create(0), 0);
             std::thread::scope(|scope| {
-                let opener = scope.spawn(|| {
-                    match open(0) {
-                        Ok(mut file) => {
-                            assert_eq!(status(&mut file, false, 0x112a03), 0);
-                            close(file);
-                        }
-                        Err(error) => assert!(error == -2 || error == -16),
+                let opener = scope.spawn(|| match open(0) {
+                    Ok(mut file) => {
+                        assert_eq!(status(&mut file, false, 0x112a03), 0);
+                        close(file);
                     }
+                    Err(error) => assert!(error == -2 || error == -16),
                 });
                 let result = destroy(0);
                 assert!(result == 0 || result == -16);
                 opener.join().unwrap();
-                if result == -16 { assert_eq!(destroy(0), 0); }
+                if result == -16 {
+                    assert_eq!(destroy(0), 0);
+                }
             });
         }
     });
@@ -336,8 +485,16 @@ fn concurrent_open_and_destroy_never_free_a_live_file() {
 fn provider_cannot_retire_with_live_os_and_invalid_provider_cannot_destroy() {
     with_family(|| {
         assert_eq!(create(0), 0);
-        let provider = device_registry::IHK_DEVICE_REGISTRY.resolve_minor(0).unwrap();
-        assert_eq!(device_registry::IHK_DEVICE_REGISTRY.snapshot(provider).unwrap().os_references, 1);
+        let provider = device_registry::IHK_DEVICE_REGISTRY
+            .resolve_minor(0)
+            .unwrap();
+        assert_eq!(
+            device_registry::IHK_DEVICE_REGISTRY
+                .snapshot(provider)
+                .unwrap()
+                .os_references,
+            1
+        );
         assert_eq!(os_runtime::ihk_os_destroy_unbooted_v1(1, 0), -2);
         assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 1);
         assert_eq!(destroy(0), 0);
@@ -347,7 +504,10 @@ fn provider_cannot_retire_with_live_os_and_invalid_provider_cannot_destroy() {
 #[test]
 fn null_provider_module_is_rejected_without_leaking_provider_lease() {
     with_family(|| {
-        assert_eq!(unsafe { os_runtime::ihk_os_create_unbooted_v1(0, core::ptr::null_mut(), 0) }, -22);
+        assert_eq!(
+            unsafe { os_runtime::ihk_os_create_unbooted_v1(0, core::ptr::null_mut(), 0) },
+            -22
+        );
         assert_eq!(create(0), 0);
         assert_eq!(destroy(0), 0);
     });
@@ -379,16 +539,29 @@ static BACKEND_RELEASE_STATUS: AtomicI32 = AtomicI32::new(0);
 static BACKEND_LOAD_STATUS: AtomicI32 = AtomicI32::new(0);
 static BACKEND_ACTIVE: [AtomicI32; 64] = [const { AtomicI32::new(0) }; 64];
 
-unsafe extern "C" fn backend_ioctl(slot: u32, generation: u64, command: u32,
-    address: u64, compat: u32) -> i64
-{
+unsafe extern "C" fn backend_ioctl(
+    slot: u32,
+    generation: u64,
+    command: u32,
+    address: u64,
+    compat: u32,
+) -> i64 {
     assert!(slot < 64 && generation > 0 && compat <= 1);
     assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
     assert!(NODES.lock().unwrap().contains_key(&((240 << 20) | slot)));
-    assert_eq!(BACKEND_ACTIVE[slot as usize].fetch_add(1, Ordering::SeqCst), 0);
+    assert_eq!(
+        BACKEND_ACTIVE[slot as usize].fetch_add(1, Ordering::SeqCst),
+        0
+    );
     std::thread::sleep(std::time::Duration::from_millis(2));
-    BACKEND_CALLS.lock().unwrap().push((slot, generation, command, address, compat));
-    assert_eq!(BACKEND_ACTIVE[slot as usize].fetch_sub(1, Ordering::SeqCst), 1);
+    BACKEND_CALLS
+        .lock()
+        .unwrap()
+        .push((slot, generation, command, address, compat));
+    assert_eq!(
+        BACKEND_ACTIVE[slot as usize].fetch_sub(1, Ordering::SeqCst),
+        1
+    );
     if command == abi::IHK_OS_LOAD {
         let mut observer = open(slot).unwrap();
         assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), 1);
@@ -396,7 +569,13 @@ unsafe extern "C" fn backend_ioctl(slot: u32, generation: u64, command: u32,
         close(observer);
         return BACKEND_LOAD_STATUS.load(Ordering::SeqCst) as i64;
     }
-    if command == 0x112a25 { -14 } else if command == u32::MAX { -4096 } else { 73 }
+    if command == 0x112a25 {
+        -14
+    } else if command == u32::MAX {
+        -4096
+    } else {
+        73
+    }
 }
 
 unsafe extern "C" fn backend_release(slot: u32, generation: u64) -> i32 {
@@ -410,8 +589,14 @@ unsafe extern "C" fn backend_release(slot: u32, generation: u64) -> i32 {
 
 fn create_backend() -> i64 {
     unsafe {
-        os_runtime::ihk_os_create_unbooted_v2(0, THIS_MODULE.as_ptr().cast(),
-            u64::MAX, 1, Some(backend_ioctl), Some(backend_release))
+        os_runtime::ihk_os_create_unbooted_v2(
+            0,
+            THIS_MODULE.as_ptr().cast(),
+            u64::MAX,
+            1,
+            Some(backend_ioctl),
+            Some(backend_release),
+        )
     }
 }
 
@@ -424,6 +609,7 @@ fn reset_backend() {
 
 static BOOT_PREPARE_STATUS: AtomicI32 = AtomicI32::new(0);
 static BOOT_START_STATUS: AtomicI32 = AtomicI32::new(0);
+static BOOT_GENERATION: AtomicI64 = AtomicI64::new(0);
 static BOOT_START_CALLS: AtomicI32 = AtomicI32::new(0);
 static SHUTDOWN_STATUS: AtomicI32 = AtomicI32::new(0);
 static SHUTDOWN_CALLS: AtomicI32 = AtomicI32::new(0);
@@ -431,21 +617,74 @@ static SHUTDOWN_IDENTITY: Mutex<Vec<(u32, u64)>> = Mutex::new(Vec::new());
 static APPLICATION_SUCCEED: AtomicBool = AtomicBool::new(false);
 static APPLICATION_CLOSES: AtomicI32 = AtomicI32::new(0);
 static APPLICATION_INVOKES: AtomicI32 = AtomicI32::new(0);
+static APPLICATION_CLOSE_QUERY: AtomicI64 = AtomicI64::new(0);
+static APPLICATION_CLOSE_GENERATION: AtomicI64 = AtomicI64::new(0);
+static APPLICATION_EVENTS: Mutex<Vec<u8>> = Mutex::new(Vec::new());
 static APPLICATION_CONTEXT: u8 = 7;
+static SERVICE_OPENS: AtomicI32 = AtomicI32::new(0);
+static SERVICE_CLOSES: AtomicI32 = AtomicI32::new(0);
+static SERVICE_COMMAND: AtomicI32 = AtomicI32::new(0);
+static SERVICE_ARGUMENT: AtomicI64 = AtomicI64::new(0);
+static SERVICE_COMPAT: AtomicI32 = AtomicI32::new(-1);
+static SERVICE_CONTEXT: u8 = 9;
 
-unsafe extern "C" fn application_open(_slot: u32, _generation: u64, _pid: i32,
-    output: *mut *mut core::ffi::c_void) -> i32 {
+unsafe extern "C" fn service_open(
+    slot: u32,
+    generation: u64,
+    output: *mut *mut core::ffi::c_void,
+) -> i32 {
+    assert_eq!(slot, 0);
+    assert_eq!(generation, BOOT_GENERATION.load(Ordering::SeqCst) as u64);
+    SERVICE_OPENS.fetch_add(1, Ordering::SeqCst);
+    unsafe { output.write(core::ptr::addr_of!(SERVICE_CONTEXT).cast_mut().cast()) };
+    0
+}
+unsafe extern "C" fn service_ioctl(
+    _context: *mut core::ffi::c_void,
+    command: u32,
+    argument: u64,
+    compat: u32,
+) -> i64 {
+    assert_eq!(command, abi::MCEXEC_UP_PREPARE_IMAGE);
+    SERVICE_COMMAND.store(command as i32, Ordering::SeqCst);
+    SERVICE_ARGUMENT.store(argument as i64, Ordering::SeqCst);
+    SERVICE_COMPAT.store(compat as i32, Ordering::SeqCst);
+    0
+}
+unsafe extern "C" fn service_close(_context: *mut core::ffi::c_void) {
+    SERVICE_CLOSES.fetch_add(1, Ordering::SeqCst);
+}
+
+unsafe extern "C" fn application_open(
+    _slot: u32,
+    _generation: u64,
+    _pid: i32,
+    output: *mut *mut core::ffi::c_void,
+) -> i32 {
     if APPLICATION_SUCCEED.load(Ordering::SeqCst) {
         unsafe { output.write(core::ptr::addr_of!(APPLICATION_CONTEXT).cast_mut().cast()) };
         0
-    } else { unsafe { output.write(core::ptr::null_mut()) }; -22 }
+    } else {
+        unsafe { output.write(core::ptr::null_mut()) };
+        -22
+    }
 }
-unsafe extern "C" fn application_invoke(_context: *mut core::ffi::c_void, _command: u32,
-    _buffer: *mut u8, _length: usize) -> i64 {
-    APPLICATION_INVOKES.fetch_add(1, Ordering::SeqCst); 17
+unsafe extern "C" fn application_invoke(
+    _context: *mut core::ffi::c_void,
+    _command: u32,
+    _buffer: *mut u8,
+    _length: usize,
+) -> i64 {
+    APPLICATION_INVOKES.fetch_add(1, Ordering::SeqCst);
+    17
 }
 unsafe extern "C" fn application_close(_context: *mut core::ffi::c_void) {
     APPLICATION_CLOSES.fetch_add(1, Ordering::SeqCst);
+    APPLICATION_EVENTS.lock().unwrap().push(1); // Close entered.
+    let generation = APPLICATION_CLOSE_GENERATION.load(Ordering::SeqCst) as u64;
+    let result = os_runtime::topology_query(0, generation, abi::MCEXEC_UP_GET_CPU);
+    APPLICATION_CLOSE_QUERY.store(result, Ordering::SeqCst);
+    APPLICATION_EVENTS.lock().unwrap().push(2); // Reentrant query returned.
 }
 unsafe extern "C" fn backend_shutdown(slot: u32, generation: u64) -> i32 {
     SHUTDOWN_CALLS.fetch_add(1, Ordering::SeqCst);
@@ -453,14 +692,29 @@ unsafe extern "C" fn backend_shutdown(slot: u32, generation: u64) -> i32 {
     SHUTDOWN_STATUS.load(Ordering::SeqCst)
 }
 
-unsafe extern "C" fn backend_prepare_boot(slot: u32, generation: u64, physical: u64, bytes: u64) -> i32 {
+unsafe extern "C" fn backend_prepare_boot(
+    slot: u32,
+    generation: u64,
+    physical: u64,
+    bytes: u64,
+) -> i32 {
     assert!(slot < 64 && generation > 0);
-    assert_eq!(PAGES.lock().unwrap().get(&(physical as usize)), Some(&(bytes as usize)));
+    BOOT_GENERATION.store(generation as i64, Ordering::SeqCst);
+    assert_eq!(
+        PAGES.lock().unwrap().get(&(physical as usize)),
+        Some(&(bytes as usize))
+    );
     assert_eq!(bytes, 4 << 20);
     assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
     let mut observer = open(slot).unwrap();
-    assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
-    assert_eq!(status(&mut observer, true, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+    assert_eq!(
+        status(&mut observer, false, abi::IHK_OS_STATUS),
+        abi::IHK_OS_STATUS_NOT_BOOTED as i64
+    );
+    assert_eq!(
+        status(&mut observer, true, abi::IHK_OS_QUERY_STATUS),
+        abi::IHK_OS_STATUS_NOT_BOOTED as i64
+    );
     close(observer);
     BOOT_PREPARE_STATUS.load(Ordering::SeqCst)
 }
@@ -469,33 +723,75 @@ unsafe extern "C" fn backend_start_boot(slot: u32, generation: u64) -> i32 {
     assert!(slot < 64 && generation > 0);
     assert!(MODULE_REFS.load(Ordering::SeqCst) > 0);
     let mut observer = open(slot).unwrap();
-    assert_eq!(status(&mut observer, false, abi::IHK_OS_STATUS), abi::IHK_OS_STATUS_BOOTING as i64);
-    assert_eq!(status(&mut observer, true, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_BOOTING as i64);
+    assert_eq!(
+        status(&mut observer, false, abi::IHK_OS_STATUS),
+        abi::IHK_OS_STATUS_BOOTING as i64
+    );
+    assert_eq!(
+        status(&mut observer, true, abi::IHK_OS_QUERY_STATUS),
+        abi::IHK_OS_STATUS_BOOTING as i64
+    );
     close(observer);
     BOOT_START_CALLS.fetch_add(1, Ordering::SeqCst);
     BOOT_START_STATUS.load(Ordering::SeqCst)
 }
 
 fn create_boot_backend() -> i64 {
-    unsafe { os_runtime::ihk_os_create_unbooted_v3(0, THIS_MODULE.as_ptr().cast(),
-        u64::MAX, 1, Some(backend_ioctl), Some(backend_release),
-        Some(backend_prepare_boot), Some(backend_start_boot)) }
+    unsafe {
+        os_runtime::ihk_os_create_unbooted_v3(
+            0,
+            THIS_MODULE.as_ptr().cast(),
+            u64::MAX,
+            1,
+            Some(backend_ioctl),
+            Some(backend_release),
+            Some(backend_prepare_boot),
+            Some(backend_start_boot),
+        )
+    }
 }
 
 fn create_shutdown_backend(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i32>) -> i64 {
-    unsafe { os_runtime::ihk_os_create_unbooted_v5(0, THIS_MODULE.as_ptr().cast(), u64::MAX, 1,
-        Some(backend_ioctl), Some(backend_release), Some(backend_prepare_boot),
-        Some(backend_start_boot), Some(application_open), Some(application_invoke),
-        Some(application_close), shutdown) }
+    unsafe {
+        os_runtime::ihk_os_create_unbooted_v5(
+            0,
+            THIS_MODULE.as_ptr().cast(),
+            u64::MAX,
+            1,
+            Some(backend_ioctl),
+            Some(backend_release),
+            Some(backend_prepare_boot),
+            Some(backend_start_boot),
+            Some(application_open),
+            Some(application_invoke),
+            Some(application_close),
+            shutdown,
+        )
+    }
 }
 
 #[test]
 fn shutdown_v5_validates_tuple_and_not_booted_idempotence() {
     with_family(|| {
-        assert_eq!(unsafe { os_runtime::ihk_os_create_unbooted_v5(0, THIS_MODULE.as_ptr().cast(),
-            0, 1, Some(backend_ioctl), Some(backend_release), Some(backend_prepare_boot),
-            Some(backend_start_boot), Some(application_open), Some(application_invoke),
-            Some(application_close), None) }, -22);
+        assert_eq!(
+            unsafe {
+                os_runtime::ihk_os_create_unbooted_v5(
+                    0,
+                    THIS_MODULE.as_ptr().cast(),
+                    0,
+                    1,
+                    Some(backend_ioctl),
+                    Some(backend_release),
+                    Some(backend_prepare_boot),
+                    Some(backend_start_boot),
+                    Some(application_open),
+                    Some(application_invoke),
+                    Some(application_close),
+                    None,
+                )
+            },
+            -22
+        );
         assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
         assert_eq!(create(0), 0);
         let mut file = open(0).unwrap();
@@ -520,25 +816,85 @@ fn shutdown_v5_callback_identity_commit_and_rollback_preserve_lease() {
         for result in [-4096, 1, -5] {
             SHUTDOWN_STATUS.store(result, Ordering::SeqCst);
             assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), -5);
-            assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_READY as i64);
+            assert_eq!(
+                status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+                abi::IHK_OS_STATUS_READY as i64
+            );
         }
         SHUTDOWN_STATUS.store(0, Ordering::SeqCst);
         assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
-        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+        assert_eq!(
+            status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+            abi::IHK_OS_STATUS_NOT_BOOTED as i64
+        );
         BOOT_START_STATUS.store(-5, Ordering::SeqCst);
         assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), -5);
-        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_FAILED as i64);
+        assert_eq!(
+            status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+            abi::IHK_OS_STATUS_FAILED as i64
+        );
         BOOT_START_STATUS.store(0, Ordering::SeqCst);
         assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
-        assert_eq!(status(&mut file, false, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_NOT_BOOTED as i64);
+        assert_eq!(
+            status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+            abi::IHK_OS_STATUS_NOT_BOOTED as i64
+        );
         assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
         assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 5);
         let identity = SHUTDOWN_IDENTITY.lock().unwrap().clone();
         assert_eq!(identity.len(), 5);
         assert_eq!(identity[0].0, 0);
         assert!(identity.iter().all(|entry| entry.1 == identity[0].1));
-        close(file); close(second);
+        close(file);
+        close(second);
         assert_eq!(destroy(0), 0);
+    });
+}
+
+#[test]
+fn file_service_resident_admission_blocks_shutdown_until_release() {
+    with_family(|| {
+        BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
+        BOOT_START_STATUS.store(0, Ordering::SeqCst);
+        SHUTDOWN_STATUS.store(0, Ordering::SeqCst);
+        SHUTDOWN_CALLS.store(0, Ordering::SeqCst);
+        SERVICE_OPENS.store(0, Ordering::SeqCst);
+        SERVICE_CLOSES.store(0, Ordering::SeqCst);
+        SERVICE_COMMAND.store(0, Ordering::SeqCst);
+        SERVICE_ARGUMENT.store(0, Ordering::SeqCst);
+        SERVICE_COMPAT.store(-1, Ordering::SeqCst);
+        assert_eq!(create_shutdown_backend(Some(backend_shutdown)), 0);
+        let mut first = open(0).unwrap();
+        let mut second = open(0).unwrap();
+        assert_eq!(status(&mut first, false, abi::IHK_OS_BOOT), 0);
+        assert_eq!(
+            unsafe {
+                os_service::register(
+                    THIS_MODULE.as_ptr().cast(),
+                    service_abi::VERSION,
+                    Some(service_open),
+                    Some(service_ioctl),
+                    Some(service_close),
+                )
+            },
+            0
+        );
+        assert_eq!(status(&mut first, false, abi::MCEXEC_UP_PREPARE_IMAGE), 0);
+        assert_eq!(SERVICE_OPENS.load(Ordering::SeqCst), 1);
+        assert_eq!(
+            SERVICE_COMMAND.load(Ordering::SeqCst) as u32,
+            abi::MCEXEC_UP_PREPARE_IMAGE
+        );
+        assert_eq!(SERVICE_ARGUMENT.load(Ordering::SeqCst) as u64, u64::MAX);
+        assert_eq!(SERVICE_COMPAT.load(Ordering::SeqCst), 0);
+        assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), -16);
+        assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 0);
+        close(first);
+        assert_eq!(SERVICE_CLOSES.load(Ordering::SeqCst), 1);
+        assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), 0);
+        close(second);
+        assert_eq!(destroy(0), 0);
+        unsafe { os_service::unregister(THIS_MODULE.as_ptr().cast()) };
     });
 }
 
@@ -556,10 +912,17 @@ fn application_connection_blocks_shutdown_until_close() {
         let mut file = open(0).unwrap();
         let mut second = open(0).unwrap();
         assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), 0);
-        let generation = { let mut output = core::ptr::null_mut();
-            assert_eq!(unsafe { os_runtime::open_application(0, 1, 1, 42, &mut output) }, 0);
+        let generation = {
+            let mut output = core::ptr::null_mut();
+            assert_eq!(
+                unsafe { os_runtime::open_application(0, 1, 1, 42, &mut output) },
+                0
+            );
             assert!(!output.is_null());
-            assert_eq!(unsafe { os_runtime::invoke_application(output, 1, core::ptr::null_mut(), 0) }, 17);
+            assert_eq!(
+                unsafe { os_runtime::invoke_application(output, 1, core::ptr::null_mut(), 0) },
+                17
+            );
             assert_eq!(APPLICATION_INVOKES.load(Ordering::SeqCst), 1);
             output
         };
@@ -567,8 +930,22 @@ fn application_connection_blocks_shutdown_until_close() {
         assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 0);
         unsafe { os_runtime::close_application(generation) };
         assert_eq!(APPLICATION_CLOSES.load(Ordering::SeqCst), 1);
+        APPLICATION_CLOSE_GENERATION.store(1, Ordering::SeqCst);
+        APPLICATION_CLOSE_QUERY.store(0, Ordering::SeqCst);
+        APPLICATION_EVENTS.lock().unwrap().clear();
+        FAIL_BOX.store(true, Ordering::SeqCst);
+        let mut failed_output = core::ptr::null_mut();
+        assert_eq!(
+            unsafe { os_runtime::open_application(0, 1, 1, 42, &mut failed_output) },
+            -12
+        );
+        assert!(failed_output.is_null());
+        assert_eq!(APPLICATION_CLOSES.load(Ordering::SeqCst), 2);
+        assert_eq!(APPLICATION_CLOSE_QUERY.load(Ordering::SeqCst), 73);
+        assert_eq!(*APPLICATION_EVENTS.lock().unwrap(), [1, 2]);
         assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), 0);
-        close(file); close(second);
+        close(file);
+        close(second);
         assert_eq!(destroy(0), 0);
         APPLICATION_SUCCEED.store(false, Ordering::SeqCst);
     });
@@ -584,8 +961,14 @@ fn boot_prepare_failures_never_start_and_preserve_initial_cleanup() {
                 BOOT_PREPARE_STATUS.store(result, Ordering::SeqCst);
                 assert_eq!(create_boot_backend(), 0);
                 let mut file = open(0).unwrap();
-                assert_eq!(status(&mut file, compat, abi::IHK_OS_BOOT),
-                    if (-4095..0).contains(&result) { result as i64 } else { -5 });
+                assert_eq!(
+                    status(&mut file, compat, abi::IHK_OS_BOOT),
+                    if (-4095..0).contains(&result) {
+                        result as i64
+                    } else {
+                        -5
+                    }
+                );
                 assert_eq!(status(&mut file, compat, abi::IHK_OS_STATUS), 0);
                 assert_eq!(BOOT_START_CALLS.load(Ordering::SeqCst), 0);
                 close(file);
@@ -599,13 +982,25 @@ fn boot_prepare_failures_never_start_and_preserve_initial_cleanup() {
 fn boot_v3_requires_every_callback_before_acquiring_owners() {
     with_family(|| {
         for (version, has_ioctl, has_release, has_prepare, has_start) in [
-            (0, true, true, true, true), (2, true, true, true, true),
-            (1, false, true, true, true), (1, true, false, true, true),
-            (1, true, true, false, true), (1, true, true, true, false),
+            (0, true, true, true, true),
+            (2, true, true, true, true),
+            (1, false, true, true, true),
+            (1, true, false, true, true),
+            (1, true, true, false, true),
+            (1, true, true, true, false),
         ] {
-            let result = unsafe { os_runtime::ihk_os_create_unbooted_v3(0, THIS_MODULE.as_ptr().cast(),
-                0, version, has_ioctl.then_some(backend_ioctl), has_release.then_some(backend_release),
-                has_prepare.then_some(backend_prepare_boot), has_start.then_some(backend_start_boot)) };
+            let result = unsafe {
+                os_runtime::ihk_os_create_unbooted_v3(
+                    0,
+                    THIS_MODULE.as_ptr().cast(),
+                    0,
+                    version,
+                    has_ioctl.then_some(backend_ioctl),
+                    has_release.then_some(backend_release),
+                    has_prepare.then_some(backend_prepare_boot),
+                    has_start.then_some(backend_start_boot),
+                )
+            };
             assert_eq!(result, -22);
             assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
             assert!(NODES.lock().unwrap().is_empty());
@@ -635,16 +1030,35 @@ fn boot_started_generations_cannot_release_resources_or_repeat_start() {
     let result: i32 = result.parse().unwrap();
     let compat = compat == "1";
     let family = os_runtime::OsDeviceFamily::register().unwrap();
-    let _provider = device_registry::IHK_DEVICE_REGISTRY.attach_provider_token().unwrap();
+    let _provider = device_registry::IHK_DEVICE_REGISTRY
+        .attach_provider_token()
+        .unwrap();
     BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
     BOOT_START_STATUS.store(result, Ordering::SeqCst);
     assert_eq!(create_boot_backend(), 0);
     let mut file = open(0).unwrap();
-    assert_eq!(status(&mut file, compat, abi::IHK_OS_BOOT),
-        if (-4095..=0).contains(&result) { result as i64 } else { -5 });
-    assert_eq!(status(&mut file, !compat, abi::IHK_OS_QUERY_STATUS),
-        if result == 0 { abi::IHK_OS_STATUS_READY as i64 } else { abi::IHK_OS_STATUS_FAILED as i64 });
-    for request in [abi::IHK_OS_LOAD, abi::IHK_OS_BOOT, abi::IHK_OS_ASSIGN_CPU, abi::IHK_OS_ASSIGN_MEM] {
+    assert_eq!(
+        status(&mut file, compat, abi::IHK_OS_BOOT),
+        if (-4095..=0).contains(&result) {
+            result as i64
+        } else {
+            -5
+        }
+    );
+    assert_eq!(
+        status(&mut file, !compat, abi::IHK_OS_QUERY_STATUS),
+        if result == 0 {
+            abi::IHK_OS_STATUS_READY as i64
+        } else {
+            abi::IHK_OS_STATUS_FAILED as i64
+        }
+    );
+    for request in [
+        abi::IHK_OS_LOAD,
+        abi::IHK_OS_BOOT,
+        abi::IHK_OS_ASSIGN_CPU,
+        abi::IHK_OS_ASSIGN_MEM,
+    ] {
         assert_eq!(status(&mut file, compat, request), -16);
     }
     assert_eq!(BOOT_START_CALLS.load(Ordering::SeqCst), 1);
@@ -666,8 +1080,10 @@ fn image_load_publishes_loading_and_restores_initial_state_after_every_result() 
         for compat in [false, true] {
             for result in [0, -2, -5, -12, -14, -75, -4096] {
                 BACKEND_LOAD_STATUS.store(result, Ordering::SeqCst);
-                assert_eq!(status(&mut file, compat, abi::IHK_OS_LOAD),
-                           if result == -4096 { -5 } else { result as i64 });
+                assert_eq!(
+                    status(&mut file, compat, abi::IHK_OS_LOAD),
+                    if result == -4096 { -5 } else { result as i64 }
+                );
                 assert_eq!(status(&mut file, compat, abi::IHK_OS_STATUS), 0);
                 assert_eq!(status(&mut file, compat, 0x112a22), 73);
             }
@@ -682,14 +1098,25 @@ fn versioned_backend_validates_callbacks_before_any_publication() {
     with_family(|| {
         reset_backend();
         for (version, ioctl, release) in [
-            (0, true, true), (2, true, true), (1, false, true),
-            (1, true, false), (1, false, false),
+            (0, true, true),
+            (2, true, true),
+            (1, false, true),
+            (1, true, false),
+            (1, false, false),
         ] {
-            assert_eq!(unsafe {
-                os_runtime::ihk_os_create_unbooted_v2(0, THIS_MODULE.as_ptr().cast(),
-                    0, version, if ioctl { Some(backend_ioctl) } else { None },
-                    if release { Some(backend_release) } else { None })
-            }, -22);
+            assert_eq!(
+                unsafe {
+                    os_runtime::ihk_os_create_unbooted_v2(
+                        0,
+                        THIS_MODULE.as_ptr().cast(),
+                        0,
+                        version,
+                        if ioctl { Some(backend_ioctl) } else { None },
+                        if release { Some(backend_release) } else { None },
+                    )
+                },
+                -22
+            );
             assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
             assert!(NODES.lock().unwrap().is_empty());
             assert!(PAGES.lock().unwrap().is_empty());
@@ -776,7 +1203,9 @@ fn backend_minor_reuse_always_receives_new_generation() {
         let releases = BACKEND_RELEASES.lock().unwrap().clone();
         for index in 0..3 {
             assert_eq!(releases[index], (0, calls[index].1));
-            if index > 0 { assert!(calls[index].1 > calls[index - 1].1); }
+            if index > 0 {
+                assert!(calls[index].1 > calls[index - 1].1);
+            }
         }
     });
 }
@@ -786,12 +1215,20 @@ fn backend_serializes_operations_across_concurrent_open_files() {
     with_family(|| {
         reset_backend();
         assert_eq!(create_backend(), 0);
-        let threads: Vec<_> = (0..8).map(|_| std::thread::spawn(|| {
-            let mut file = open(0).unwrap();
-            for _ in 0..4 { assert_eq!(status(&mut file, false, 0x112a22), 73); }
-            close(file);
-        })).collect();
-        for thread in threads { thread.join().unwrap(); }
+        let threads: Vec<_> = (0..8)
+            .map(|_| {
+                std::thread::spawn(|| {
+                    let mut file = open(0).unwrap();
+                    for _ in 0..4 {
+                        assert_eq!(status(&mut file, false, 0x112a22), 73);
+                    }
+                    close(file);
+                })
+            })
+            .collect();
+        for thread in threads {
+            thread.join().unwrap();
+        }
         assert_eq!(BACKEND_CALLS.lock().unwrap().len(), 32);
         assert_eq!(destroy(0), 0);
         assert_eq!(BACKEND_RELEASES.lock().unwrap().len(), 1);
@@ -803,18 +1240,38 @@ fn exclusive_unbooted_cleanup_guard_rejects_loading_and_preserves_instance() {
     let registry = os_registry::OsRegistry::new();
     let dispatcher = ihk_ioctl::IhkIoctlDispatcher::new(&registry);
     let create = dispatcher.prepare_device(0x112900, 0).unwrap();
-    assert_eq!(create.require_unbooted_destroy(), Err(ihk_ioctl::IoctlError::InvalidArgument));
+    assert_eq!(
+        create.require_unbooted_destroy(),
+        Err(ihk_ioctl::IoctlError::InvalidArgument)
+    );
     let handle = create.handle();
     create.commit_after_external_success().unwrap();
-    registry.transition(handle, os_registry::OsStatus::Loading).unwrap();
+    registry
+        .transition(handle, os_registry::OsStatus::Loading)
+        .unwrap();
     {
-        let destroy = dispatcher.prepare_device(0x112901, handle.minor() as u64).unwrap();
-        assert_eq!(destroy.require_unbooted_destroy(), Err(ihk_ioctl::IoctlError::Busy));
-        assert_eq!(registry.acquire(handle).err(), Some(os_registry::RegistryError::Busy));
+        let destroy = dispatcher
+            .prepare_device(0x112901, handle.minor() as u64)
+            .unwrap();
+        assert_eq!(
+            destroy.require_unbooted_destroy(),
+            Err(ihk_ioctl::IoctlError::Busy)
+        );
+        assert_eq!(
+            registry.acquire(handle).err(),
+            Some(os_registry::RegistryError::Busy)
+        );
     }
-    assert_eq!(registry.snapshot(handle).unwrap().status, os_registry::OsStatus::Loading);
-    registry.transition(handle, os_registry::OsStatus::NotBooted).unwrap();
-    let destroy = dispatcher.prepare_device(0x112901, handle.minor() as u64).unwrap();
+    assert_eq!(
+        registry.snapshot(handle).unwrap().status,
+        os_registry::OsStatus::Loading
+    );
+    registry
+        .transition(handle, os_registry::OsStatus::NotBooted)
+        .unwrap();
+    let destroy = dispatcher
+        .prepare_device(0x112901, handle.minor() as u64)
+        .unwrap();
     destroy.require_unbooted_destroy().unwrap();
     destroy.commit_after_external_success().unwrap();
     assert_eq!(registry.live_count(), 0);

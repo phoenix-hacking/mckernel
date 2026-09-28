@@ -142,6 +142,7 @@
     ,"native_diag_signals_success": "docs/verification/stability-native-diagnostic-signals-success-20260928-1.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
+    ,"shutdown_admission": "docs/verification/stability-native-shutdown-admission-source-success-20260928-1.json"
     ,"rocky_lean_source": "docs/verification/stability-rocky-lean-source-success-20260928-1.json"
   },
   "areas": [
@@ -1782,10 +1783,11 @@
       "area": "LIFE",
       "title": "Lifecycle state and ownership order",
       "status": "partial",
-      "result": "The allocation-free native registry shutdown transaction now passes exact Rust 1.92 execution and independent source review: it excludes concurrent admission, preserves lease decrements across rollback/retry, and publishes NotBooted without permitting destruction or minor reuse while leases remain. Native backend CPU stop, callback drain and resource restoration remain unimplemented and unexecuted.",
-      "next_check": "Compile and review the additive host shutdown dispatch, then implement admission drain and acknowledged guest CPU/IRQ/worker teardown before integrating the observer or running the shutdown fixture.",
+      "result": "The allocation-free registry transaction and additive v5 host shutdown/admission boundary pass exact Rust 1.92 execution and independent source review. Live application and file-service contexts reject shutdown before provider invocation; provider Close precedes admission/lease release; pre-effect errors roll back; allocation-failure Close can reenter serialized topology without deadlock. Native SMP CPU stop, IRQ-work drain and resource restoration remain unimplemented and unexecuted.",
+      "next_check": "Implement independently retained guest parking plus an exact per-generation Linux IRQ-work inventory/drain before freezing STOP/ACK or wiring the v5 callback; then build and review the production ABI.",
       "evidence": [
         "shutdown_registry",
+        "shutdown_admission",
         "shutdown_observer",
         "rocky_lean_source",
         "app",
@@ -1797,10 +1799,11 @@
       "id": "SC-LIFE-02",
       "area": "LIFE",
       "title": "Reject new work and drain live applications/senders",
-      "status": "planned",
-      "result": "No final integrated drain result exists.",
-      "next_check": "Race shutdown with new submissions, blocked syscalls and process death; no accepted work without an owner and no callback after retirement.",
+      "status": "partial",
+      "result": "The source-reviewed host admission gate now rejects shutdown while real mocked ApplicationConnection or FileService callback contexts remain live, and closes new callback admission around a successful v5 shutdown transaction. This is exact production-body Layer-B evidence only; sender, syscall-worker, guest and IRQ admission/drain are not integrated.",
+      "next_check": "Add concurrent admission/close and shutdown-overlap tests, then connect the gate to guest sender stop, syscall/process drain and the reviewed parking/IRQ-work retirement sequence; prove no callback after actual retirement.",
       "evidence": [
+        "shutdown_admission",
         "plan"
       ],
       "depends_on": [

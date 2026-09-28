@@ -4993,3 +4993,54 @@ request sequence/generation ACK before quiescence, and timeout retains all
 resources. Do not execute the shutdown fixture until stop/ACK, IRQ/callback
 drain, worker join and safe retirement are implemented, built and separately
 released.
+
+Continuation checkpoint 54, 2026-09-28: the final bounded v5 host
+shutdown/admission candidate passes exact Rust 1.92 execution with 62 compiled
+Rust tests. Source SHA-256 is
+`5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144`,
+fixture SHA-256 is
+`3c380a7695ab5a5c48c9b74a3f5aee9b228ead6c51783b7b74256d00f15579b0`,
+and driver SHA-256 is
+`ad592a7dbc2629039ce02fcd9c3e6c77db18df1bcf7f3eb4714e4857f60d57d5`.
+Rust formatting and diff checks pass. Independent review returns PASS for this
+source/Layer-B boundary.
+
+The allocation-failure regression forces the fallible ApplicationConnection
+allocation after provider Open, observes `-ENOMEM` and null output, then proves
+provider Close runs exactly once and reenters production `topology_query` with
+result 73 and ordered completion. This closes the prior mutex-lifetime review
+block. A second new regression registers the real FileService callbacks,
+attaches one via `MCEXEC_UP_PREPARE_IMAGE`, proves shutdown returns `EBUSY`
+without invoking its provider while the service lives, observes exactly one
+service Close on file release, and then completes shutdown. Together with the
+registry transaction, this establishes scoped host admission, rollback and
+callback-owner behavior; it does not establish a native stop.
+
+The per-CPU stop/ACK review found that the 56-byte master queue is CPU0-only and
+that a regular-channel ACK cannot yet authorize resource reuse. A CPU would
+still execute guest code/stack/page tables, STOP cannot park inside the packet
+handler before packet release/interrupted-context rundown, and guest-allocated
+Linux IRQ-work may remain queued or executing after ACK, including failed IPI
+after publication. Exact blockers and the provisional non-reserved encoding are
+preserved in
+`docs/verification/stability-native-shutdown-stop-ack-design-review-20260928-1.json`.
+Implement independently retained parking or an independently proven host reset,
+plus per-generation Linux IRQ-work inventory/unpublish/drain, before freezing
+the ABI or wiring v5. Timeout must retain every owner.
+
+The stable-core tracker now marks SC-LIFE-02 partial for production-body
+Layer-B admission only; SC-LIFE-03/04 and every production/lifecycle gate remain
+unaccepted. No kernel/module build, privileged command, container or guest ran.
+Campaign identities remain launcher 3125264/starttime 80228730, recovered
+worker 3170135/starttime 80670556 and app-server 3170137/starttime 80670562;
+no QEMU, mcexec or diagnostic owner is live. Host free space is 26,965,172,224
+bytes, scratch free space 21,613,768,704 bytes and MemAvailable 29,322,436,608
+bytes. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four real
+diagnostic apps and zero current-candidate builds remain unchanged.
+
+Next: decide whether the existing x86 INIT assert/deassert reset can become the
+independently confirmed CPU-reclamation transition when all guest storage stays
+retained through later successful Linux `device_online`. Then implement that
+reset/confirmation primitive and the Linux IRQ-work publication inventory/drain
+as separate source/test boundaries. Only after both pass should the per-CPU
+regular-channel STOP/ACK contract be frozen and the v5 SMP callback integrated.
