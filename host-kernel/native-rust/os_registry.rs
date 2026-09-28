@@ -467,8 +467,10 @@ impl Drop for OsLease<'_> {
         let slot = &self.registry.slots[self.handle.minor()];
         loop {
             let current = slot.word.load(Ordering::Acquire);
+            let shutdown =
+                phase(current) == PHASE_DESTROYING && status(current) == Ok(OsStatus::Shutdown);
             if generation(current) != self.handle.generation
-                || phase(current) != PHASE_LIVE
+                || (!shutdown && phase(current) != PHASE_LIVE)
                 || references(current) == 0
             {
                 return;
@@ -524,7 +526,7 @@ impl ShutdownGuard<'_> {
         let current = self.registry.slots[self.handle.minor()]
             .word
             .load(Ordering::Acquire);
-        if current != self.shutdown {
+        if !is_shutdown_word(current, self.handle) {
             return Err(RegistryError::Busy);
         }
         self.irreversible = true;
@@ -532,11 +534,26 @@ impl ShutdownGuard<'_> {
     }
 
     pub(crate) fn commit(mut self) -> Result<(), RegistryError> {
-        let vacant = pack(PHASE_VACANT, OsStatus::NotBooted, 0, self.handle.generation);
-        self.registry.slots[self.handle.minor()]
-            .word
-            .compare_exchange(self.shutdown, vacant, Ordering::Release, Ordering::Acquire)
-            .map_err(|_| RegistryError::Corrupt)?;
+        let slot = &self.registry.slots[self.handle.minor()];
+        loop {
+            let current = slot.word.load(Ordering::Acquire);
+            if !is_shutdown_word(current, self.handle) {
+                return Err(RegistryError::Corrupt);
+            }
+            let not_booted = pack(
+                PHASE_LIVE,
+                OsStatus::NotBooted,
+                references(current),
+                self.handle.generation,
+            );
+            if slot
+                .word
+                .compare_exchange(current, not_booted, Ordering::Release, Ordering::Acquire)
+                .is_ok()
+            {
+                break;
+            }
+        }
         self.armed = false;
         Ok(())
     }
@@ -547,15 +564,32 @@ impl Drop for ShutdownGuard<'_> {
         if !self.armed {
             return;
         }
-        let target = if self.irreversible {
-            self.shutdown & !PHASE_MASK
-        } else {
-            self.original
-        };
-        let _ = self.registry.slots[self.handle.minor()]
-            .word
-            .compare_exchange(self.shutdown, target, Ordering::Release, Ordering::Relaxed);
+        let slot = &self.registry.slots[self.handle.minor()];
+        loop {
+            let current = slot.word.load(Ordering::Acquire);
+            if !is_shutdown_word(current, self.handle) {
+                break;
+            }
+            let target = if self.irreversible {
+                (current & !PHASE_MASK) | PHASE_LIVE
+            } else {
+                (self.original & !REFERENCE_MASK) | (current & REFERENCE_MASK)
+            };
+            if slot
+                .word
+                .compare_exchange(current, target, Ordering::Release, Ordering::Relaxed)
+                .is_ok()
+            {
+                break;
+            }
+        }
     }
+}
+
+fn is_shutdown_word(word: u64, handle: OsHandle) -> bool {
+    generation(word) == handle.generation()
+        && phase(word) == PHASE_DESTROYING
+        && status(word) == Ok(OsStatus::Shutdown)
 }
 
 impl DestroyGuard<'_> {
@@ -681,7 +715,9 @@ mod tests {
         assert_eq!(references(retained), 3);
         let retry = registry.begin_shutdown(handle).unwrap();
         retry.commit().unwrap();
-        assert_eq!(registry.snapshot(handle), Err(RegistryError::NotFound));
+        let snapshot = registry.snapshot(handle).unwrap();
+        assert_eq!(snapshot.status, OsStatus::NotBooted);
+        assert_eq!(snapshot.references, 3);
     }
 
     #[test]
@@ -740,7 +776,7 @@ mod tests {
     }
 
     #[test]
-    fn commit_requires_exact_generation_and_word_and_never_releases_refs() {
+    fn commit_requires_exact_identity_and_preserves_current_refs() {
         let registry = OsRegistry::new();
         let handle = published(&registry, OsStatus::Failed, 11);
         let guard = registry.begin_shutdown(handle).unwrap();
@@ -757,14 +793,100 @@ mod tests {
             ),
             Ordering::Release,
         );
-        assert_eq!(guard.commit(), Err(RegistryError::Corrupt));
-        assert_eq!(
-            phase(registry.slots[handle.minor()].word.load(Ordering::Acquire)),
-            PHASE_DESTROYING
-        );
+        guard.commit().unwrap();
+        let snapshot = registry.snapshot(handle).unwrap();
+        assert_eq!(snapshot.status, OsStatus::NotBooted);
+        assert_eq!(snapshot.references, 10);
         assert!(matches!(
             registry.begin_destroy(handle),
             Err(RegistryError::Busy)
         ));
+    }
+
+    #[test]
+    fn lease_close_during_shutdown_preserves_refs_until_destroy() {
+        let registry = OsRegistry::new();
+        let handle = published(&registry, OsStatus::Running, 0);
+        let lease = registry.acquire(handle).unwrap();
+        {
+            let guard = registry.begin_shutdown(handle).unwrap();
+            drop(guard);
+        }
+        assert_eq!(registry.snapshot(handle).unwrap().status, OsStatus::Running);
+        assert_eq!(registry.snapshot(handle).unwrap().references, 1);
+        let guard = registry.begin_shutdown(handle).unwrap();
+        guard.commit().unwrap();
+        assert_eq!(
+            registry.snapshot(handle).unwrap().status,
+            OsStatus::NotBooted
+        );
+        assert_eq!(registry.snapshot(handle).unwrap().references, 1);
+        drop(lease);
+        registry.begin_destroy(handle).unwrap().commit().unwrap();
+        let replacement = registry.reserve().unwrap().commit().unwrap();
+        assert_eq!(replacement.minor(), handle.minor());
+        assert_eq!(replacement.generation(), handle.generation() + 1);
+    }
+
+    #[test]
+    fn lease_close_while_shutdown_is_armed_reaches_every_terminal_path() {
+        // Reversible failure restores the prior status without reviving a
+        // lease that closed while admission was excluded.
+        let registry = OsRegistry::new();
+        let handle = published(&registry, OsStatus::Running, 0);
+        let closing = registry.acquire(handle).unwrap();
+        let remaining = registry.acquire(handle).unwrap();
+        let guard = registry.begin_shutdown(handle).unwrap();
+        drop(closing);
+        drop(guard);
+        let snapshot = registry.snapshot(handle).unwrap();
+        assert_eq!(snapshot.status, OsStatus::Running);
+        assert_eq!(snapshot.references, 1);
+        assert!(matches!(
+            registry.begin_destroy(handle),
+            Err(RegistryError::Busy)
+        ));
+        drop(remaining);
+        registry.begin_destroy(handle).unwrap().commit().unwrap();
+
+        // An irreversible failure retains Shutdown and the current count so a
+        // retry can complete without recycling the still-referenced slot.
+        let registry = OsRegistry::new();
+        let handle = published(&registry, OsStatus::Ready, 0);
+        let closing = registry.acquire(handle).unwrap();
+        let remaining = registry.acquire(handle).unwrap();
+        let mut guard = registry.begin_shutdown(handle).unwrap();
+        drop(closing);
+        guard.mark_irreversible().unwrap();
+        drop(guard);
+        let snapshot = registry.snapshot(handle).unwrap();
+        assert_eq!(snapshot.status, OsStatus::Shutdown);
+        assert_eq!(snapshot.references, 1);
+        registry.begin_shutdown(handle).unwrap().commit().unwrap();
+        assert!(matches!(
+            registry.begin_destroy(handle),
+            Err(RegistryError::Busy)
+        ));
+        drop(remaining);
+        registry.begin_destroy(handle).unwrap().commit().unwrap();
+
+        // Successful completion publishes NotBooted with the surviving lease;
+        // normal close is still required before destruction and minor reuse.
+        let registry = OsRegistry::new();
+        let handle = published(&registry, OsStatus::Failed, 0);
+        let closing = registry.acquire(handle).unwrap();
+        let remaining = registry.acquire(handle).unwrap();
+        let guard = registry.begin_shutdown(handle).unwrap();
+        drop(closing);
+        guard.commit().unwrap();
+        let snapshot = registry.snapshot(handle).unwrap();
+        assert_eq!(snapshot.status, OsStatus::NotBooted);
+        assert_eq!(snapshot.references, 1);
+        assert!(matches!(
+            registry.begin_destroy(handle),
+            Err(RegistryError::Busy)
+        ));
+        drop(remaining);
+        registry.begin_destroy(handle).unwrap().commit().unwrap();
     }
 }

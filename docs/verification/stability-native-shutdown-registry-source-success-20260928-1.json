@@ -1,0 +1,64 @@
+{
+  "schema": "mckernel.native-shutdown-registry-source-success.v1",
+  "recorded_at": "2026-09-28T12:38:27-07:00",
+  "base_commit": "2c384a367444b8bd72df23dc7e498162ff65a2e5",
+  "task": "M05-B",
+  "status": "PASS_SOURCE_AND_UNPRIVILEGED_FIXTURE",
+  "runtime_executed": false,
+  "production_acceptance": false,
+  "files": {
+    "implementation": {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "size": 30435
+    },
+    "contract": {
+      "path": "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
+      "sha256": "232541e279d9c15b5b4c6bfb6ec7cc4f41c11be5caa43dc0ee34fb4bb8317d95",
+      "readiness": "TODO_NO_CREDIT"
+    },
+    "fixture": {
+      "path": "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+      "sha256": "24ff3e4464f07c8b66451fee1b782be10fcd2d81e7059bbdcd6ac34eaf760e0a"
+    },
+    "checker": {
+      "path": "scripts/ihk_os_registry_check.py",
+      "sha256": "3a984f24cffda4c93fe5dd95ae8a4ae2a99e872093c458aadb90f23726259e28"
+    },
+    "checker_test": {
+      "path": "scripts/tests/test_ihk_os_registry_check.py",
+      "sha256": "53433c7776016763e84de178f378f7fa02a07b9c5f027b2f6c076104684d34db"
+    }
+  },
+  "preserved_failures": [
+    "Initial candidate f4b40177... dropped irreversible Shutdown into PHASE_VACANT; exact Rust 1.92 failed at os_registry.rs line 679 with phase 0 instead of PHASE_LIVE 2.",
+    "Independent review also found lease decrements lost during PHASE_DESTROYING and commit recycling a slot with outstanding leases.",
+    "First correction 0f7a917a... passed its fixture but lacked an actual lease-close-while-armed regression for the changed branch."
+  ],
+  "implemented_behavior": [
+    "begin_shutdown atomically excludes acquire, transition, destroy and concurrent shutdown for the exact generation",
+    "reversible rollback restores the prior status while preserving lease decrements that occur while the guard is armed",
+    "irreversible drop retains a retryable Live/Shutdown state with current references",
+    "commit publishes Live/NotBooted with the same generation and current references; destruction and minor reuse remain excluded until final lease close"
+  ],
+  "checks": [
+    {
+      "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -m unittest -v scripts.tests.test_ihk_os_registry_check",
+      "result": "PASS: 11 Python contract tests and 15 compiled Rust tests"
+    },
+    {
+      "command": "python3 scripts/ihk_os_registry_check.py",
+      "result": "PASS: deterministic contract OK, readiness TODO/no credit"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "independent_review": {
+    "verdict": "PASS_SOURCE_SCOPE",
+    "accepted": "generation/phase exclusion, reference preservation, shutdown rollback/retry and safe-API lifecycle semantics",
+    "excluded": "arbitrary injected reference-count corruption, kernel build, backend stop/drain and runtime behavior"
+  },
+  "next": "Add the versioned host shutdown dispatch and then implement admission drain plus acknowledged guest CPU, IRQ/callback and worker teardown before runtime execution."
+}

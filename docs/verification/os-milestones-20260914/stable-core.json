@@ -141,6 +141,7 @@
     ,"native_diag_signals_release": "docs/verification/stability-native-diagnostic-signals-execution-release-20260928-1.json"
     ,"native_diag_signals_success": "docs/verification/stability-native-diagnostic-signals-success-20260928-1.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
+    ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
     ,"rocky_lean_source": "docs/verification/stability-rocky-lean-source-success-20260928-1.json"
   },
   "areas": [
@@ -1780,10 +1781,11 @@
       "id": "SC-LIFE-01",
       "area": "LIFE",
       "title": "Lifecycle state and ownership order",
-      "status": "unmeasured",
-      "result": "Native shutdown/restoration remains open. A pure seven-phase observer passes independent source/adversarial review, and a 278-MiB lean exact outer/IHK source stage is packet-ready with an explicit no-object-traversal promisor limitation. Neither is integrated or runtime evidence.",
-      "next_check": "Integrate the observer into a fresh Rocky boot-workload-stop packet bound to scripts/mcstop+release-smp.sh.in and the lean source stage; collect exact before/after resources and observe stop/destroy/release/unload. Separately inventory CPU/callback/internal-mapping owners the diagnostic observer cannot prove.",
+      "status": "partial",
+      "result": "The allocation-free native registry shutdown transaction now passes exact Rust 1.92 execution and independent source review: it excludes concurrent admission, preserves lease decrements across rollback/retry, and publishes NotBooted without permitting destruction or minor reuse while leases remain. Native backend CPU stop, callback drain and resource restoration remain unimplemented and unexecuted.",
+      "next_check": "Compile and review the additive host shutdown dispatch, then implement admission drain and acknowledged guest CPU/IRQ/worker teardown before integrating the observer or running the shutdown fixture.",
       "evidence": [
+        "shutdown_registry",
         "shutdown_observer",
         "rocky_lean_source",
         "app",

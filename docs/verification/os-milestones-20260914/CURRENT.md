@@ -4915,3 +4915,34 @@ and admission/in-flight gate, followed by explicit guest CPU stop
 acknowledgement, IRQ/callback drain, worker join and safe resource retirement.
 Do not execute the shutdown fixture until that backend path is implemented,
 built and separately released; its current deterministic result is `EBUSY`.
+
+Continuation checkpoint 52, 2026-09-28: the first native registry shutdown
+candidate failed under the retained exact Rust 1.92 toolchain, proving the
+earlier host-rustc limitation was not a blocker. Irreversible guard drop had
+published phase zero instead of Live/Shutdown; independent review also found
+that lease close during the transaction lost a decrement and successful commit
+could recycle a slot with outstanding leases. The original candidate and exact
+failure are retained in checkpoint 51 and
+`docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json`.
+
+After the single bounded implementation correction and an expert-requested
+actual-lease regression, the registry transaction passes all 15 compiled Rust
+tests and all 11 Python contract tests with exact rustc 1.92.0. Reversible drop
+restores the prior status with current references; irreversible drop retains a
+retryable Live/Shutdown state; commit publishes Live/NotBooted with the same
+generation/current references; destruction and reuse remain busy until the
+last real lease closes. Independent review returns PASS for this source scope.
+The deterministic foundation contract is updated to the exact source hash but
+remains TODO/no-credit. No kernel build, module, root command or guest ran.
+
+The next active bounded implementation is an additive v5 host shutdown dispatch
+that preserves v1-v4 ABIs and rolls back on a missing/failing no-effect callback.
+It deliberately does not wire the SMP backend or claim guest stop. After its
+compile/review, implement the separate application/service admission drain,
+acknowledged stop of every guest CPU, IRQ/callback synchronization, worker join
+and safe boot-resource retirement. The corrected seven-phase observer and
+fixture are independently source-ready but remain prohibited from runtime until
+that backend path is built and separately released. Formal counters remain
+0/273 applications, 2/4 narrow fault modes, 6/130 production gates, 350/10,000
+points and 0/7 language gates; the four prior diagnostic apps and zero
+current-candidate builds remain unchanged.
