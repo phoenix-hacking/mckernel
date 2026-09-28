@@ -134,6 +134,8 @@
     ,"native_diag_files_artifact": "docs/verification/stability-native-diagnostic-files-artifact-success-20260928-1.json"
     ,"native_diag_files_release": "docs/verification/stability-native-diagnostic-files-execution-release-20260928-1.json"
     ,"native_diag_files_success": "docs/verification/stability-native-diagnostic-files-success-20260928-1.json"
+    ,"native_diag_threads_artifact": "docs/verification/stability-native-diagnostic-threads-artifact-success-20260928-1.json"
+    ,"native_diag_threads_release": "docs/verification/stability-native-diagnostic-threads-execution-release-20260928-1.json"
   },
   "areas": [
     {
@@ -534,7 +536,7 @@
       "title": "Native payload identity and terminal collector",
       "status": "partial",
       "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple now independently passes both baseline.core.memory and baseline.core.files diagnostics. Files proves exact 23-byte output/exit 37, observed file syscalls and unlink/ENOENT, retirement, four-reference pager release, 696/696 QMP replies, exact QEMU/Docker identities, authenticated removal and free lock. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Checkpoint the independently reviewed files evidence, then bind the source-fixed threads collector/host oracle through independent artifact review, fresh overlay/manifest and one separately released threads diagnostic before shutdown.",
+      "next_check": "After fetched-blob verification and fresh live preflight, consume the exact released threads command once; independently join its output, TID/futex, retirement, QMP and teardown evidence, then define a genuinely distinct shutdown invariant.",
       "evidence": [
         "history",
         "plan",
@@ -564,7 +566,9 @@
         "native_diag_memory_success",
         "native_diag_files_artifact",
         "native_diag_files_release",
-        "native_diag_files_success"
+        "native_diag_files_success",
+        "native_diag_threads_artifact",
+        "native_diag_threads_release"
       ],
       "depends_on": []
     },

@@ -69,19 +69,16 @@ the private parent. Guest remains q35/TCG, four vCPUs, 8 GiB/two NUMA nodes,
 no NIC/display, one McKernel CPU and 128 MiB. Deadlines remain 300 seconds inner
 and 360 seconds attached container; do not widen them.
 
-The generated QEMU argv has 42 elements and is identical to files packet 1
-except for its fresh attempt paths and threads initramfs. Its QMP argument is:
+The exact generated 42-element QEMU argv is:
 
 ```text
-unix:/home/holden/mckernel-work/scratch/ndct-20260928-1/attempt-9561a169a33ebd6ecbd9ae567abbe869/qmp.sock,server=on,wait=off
+/usr/libexec/qemu-kvm -machine q35 -accel tcg,thread=multi -cpu max,la57=off -smp 4,sockets=2,cores=2,threads=1 -m 8192 -object memory-backend-ram,size=4G,id=ram-node0 -object memory-backend-ram,size=4G,id=ram-node1 -numa node,nodeid=0,cpus=0-1,memdev=ram-node0 -numa node,nodeid=1,cpus=2-3,memdev=ram-node1 -nic none -display none -no-reboot -no-shutdown -S -monitor none -qmp unix:/home/holden/mckernel-work/scratch/ndct-20260928-1/attempt-9561a169a33ebd6ecbd9ae567abbe869/qmp.sock,server=on,wait=off -serial file:/home/holden/mckernel-work/scratch/ndct-20260928-1/attempt-9561a169a33ebd6ecbd9ae567abbe869/serial.log -debugcon file:/home/holden/mckernel-work/scratch/ndct-20260928-1/attempt-9561a169a33ebd6ecbd9ae567abbe869/debugcon.log -global isa-debugcon.iobase=0xe9 -kernel /home/holden/mckernel-work/scratch/native-application-signals-module-20260909-1/bzImage -initrd /home/holden/mckernel-work/scratch/native-diagnostic-threads-overlay-20260928-1/initramfs.cpio.gz -append console=ttyS0,115200n8\ rdinit=/init\ nokaslr\ panic=-1\ memmap=4K%0x80000-1
 ```
 
-The socket pathname is exactly 100 bytes. Kernel is the current signal
-`bzImage`; initrd is
-`/home/holden/mckernel-work/scratch/native-diagnostic-threads-overlay-20260928-1/initramfs.cpio.gz`;
-append is the unchanged single argument
+The QMP socket pathname within its argument is exactly 100 bytes. The escaped
+spaces above represent the single unchanged append argument
 `console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1`.
-Owner and runner must generate and compare the entire argv before launch.
+Owner and runner must reconstruct and compare the entire list before launch.
 
 ## Frozen observation and oracle
 

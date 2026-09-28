@@ -4620,3 +4620,35 @@ one-shot command. Preserve the absent parent/owner paths until that release.
 The two real diagnostic guest applications and zero current-candidate builds
 from this invocation remain unchanged. Formal counters remain 0/273, 2/4,
 6/130, 350/10,000 and 0/7; no application or whole-OS acceptance is claimed.
+
+Continuation checkpoint 46, 2026-09-28: the proposed threads packet was
+expanded before review to freeze its exact generated 42-element QEMU argv rather
+than relying on a files-packet comparison. A local reconstruction matches all
+42 arguments and the 100-byte QMP pathname. The corrected packet SHA256 is
+`1e39b581...fc46`; preparation evidence remains `51e94029...cb4`.
+
+Fresh independent review returns `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE` for
+only the packet's 15-element outer command, parent `ndct-20260928-1`, nonce
+`9561a169a33ebd6ecbd9ae567abbe869`, strict manifest `0a473e55...5ca9`
+and source commit `a2df0eb7...edd74`. The release record is
+`docs/verification/stability-native-diagnostic-threads-execution-release-20260928-1.json`,
+SHA256 `891d2291...94b3`. Review rejoined the immutable artifacts and exact
+oracle, process/container/QEMU ownership, child reaping, authenticated cleanup,
+lock retention and 300/360-second deadlines. It performed no root, Docker, QEMU,
+guest or application operation. Parent, inner and evidence paths remain absent.
+
+A parallel read-only audit confirms that the collector has no distinct shutdown
+selector. The threads diagnostic covers application `exit_group`, process
+retirement, procfs emptiness and subsequent guest `/poweroff`; it must not also
+be counted as independent whole-OS/QEMU shutdown behavior. After threads runtime
+evidence, define a separate shutdown invariant rather than relabeling this run.
+
+Next: commit, push and fetched-blob verify the exact packet, artifact record,
+release, tracker and this cursor. Then recheck live launcher/worker/server
+identities, exclusive heavy lease, host/scratch/RAM floors, development lock,
+all source/artifact bytes, process/container absence and all fresh paths. If and
+only if every released precondition holds, create the exact parent once as
+uid/gid 1000 mode 0700 and invoke the released command exactly once without
+retry. Preserve every partial outcome and obtain independent raw runtime review.
+This invocation still has two real diagnostic guest applications and zero
+current-candidate builds; formal counters and whole-OS status remain unchanged.
