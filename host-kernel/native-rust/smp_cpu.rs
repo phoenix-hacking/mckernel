@@ -845,6 +845,13 @@ impl CpuContext {
     }
 
     fn change_os(&mut self, owner: OsToken, request: &CpuRequest, assign: bool) -> Result<isize> {
+        // A retained shutdown journal is an uncertain physical transition.
+        // Fence it before either changing memory's unstarted boot storage or
+        // accepting a zero-count success: a later ordinary assign/release
+        // must never make those retained owners look releasable again.
+        let hotplug = DeviceHotplugGuard::lock();
+        self.verify_owned(&hotplug)?;
+        drop(hotplug);
         super::smp_memory::retire_os_boot(owner)?;
         if request.count == 0 {
             return Ok(0);

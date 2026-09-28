@@ -1,9 +1,8 @@
-"""Layer-B source/body execution for native shutdown CPU reclamation.
+"""Layer-B execution of the native shutdown CPU reclamation body.
 
-The Rust driver is generated from the exact journal implementation in
-``smp_cpu.rs``. It has no copied journal model. It cannot invoke Linux CPU
-hotplug, so source assertions bind its executable journal semantics to the
-production method's guard/order/no-rollback boundary.
+The Rust driver is generated from the exact journal and shutdown methods in
+``smp_cpu.rs``.  Its small Linux adapter only supplies deterministic mock
+hotplug observations; semantic cases call the extracted production method.
 """
 
 from pathlib import Path
@@ -35,7 +34,7 @@ def balanced_item(source: str, marker: str) -> str:
 class ShutdownCpuReclaimTests(unittest.TestCase):
     maxDiff = None
 
-    def source_journal(self) -> str:
+    def source_shutdown_control(self) -> tuple[str, str]:
         text = SOURCE.read_text(encoding="utf-8")
         wrapper_marker = "#[derive(Clone, Copy, Debug, Eq, PartialEq)]\nstruct RetainedCpuDevice"
         wrapper_start = text.index(wrapper_marker)
@@ -45,18 +44,33 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
         journal = balanced_item(text, "#[derive(Clone, Copy, Debug, Eq, PartialEq)]\nstruct ShutdownCpuJournal")
         journal_impl = balanced_item(text, "impl ShutdownCpuJournal")
         fence = balanced_item(text, "fn shutdown_journal_blocks_ordinary_use(")
-        return "\n\n".join((
+        methods = (
+            balanced_item(text, "fn verify_owned("),
+            balanced_item(text, "fn change_os("),
+            balanced_item(text, "fn retain_shutdown_failure("),
+            balanced_item(text, "fn prevalidate_shutdown_targets("),
+            balanced_item(text, "fn validate_shutdown_target("),
+            balanced_item(text, "fn shutdown_reset_and_reonline("),
+        )
+        support = "\n\n".join((
             wrapper,
-            "unsafe impl Send for RetainedCpuDevice {}",
-            "unsafe impl Sync for RetainedCpuDevice {}",
+            balanced_item(text, "unsafe impl Send for RetainedCpuDevice"),
+            balanced_item(text, "unsafe impl Sync for RetainedCpuDevice"),
             wrapper_impl,
             stage,
             journal,
             journal_impl,
             fence,
+            text[text.index("struct CpuDevice("):text.index(";", text.index("struct CpuDevice(")) + 1],
+            balanced_item(text, "unsafe impl Send for CpuDevice"),
+            balanced_item(text, "impl Drop for CpuDevice"),
+            "#[allow(dead_code)]\n" + balanced_item(text, "struct CpuContext {"),
+            "#[allow(dead_code)]\n" + balanced_item(text, "pub(super) struct CpuController {"),
+            balanced_item(text, "pub(super) fn release_os_resources("),
         ))
+        return support, "\n\n".join(methods)
 
-    def test_exact_production_journal_executes_semantic_cases(self) -> None:
+    def test_exact_production_shutdown_body_executes_semantic_cases(self) -> None:
         rustc = os.environ.get("MCKERNEL_RUSTC_1_92")
         if not rustc:
             self.skipTest("MCKERNEL_RUSTC_1_92 is required for this exact Rust 1.92 fixture")
@@ -64,8 +78,11 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
         self.assertEqual(0, version.returncode, version.stdout + version.stderr)
         self.assertIn("rustc 1.92.0", version.stdout)
         template = FIXTURE.read_text(encoding="utf-8")
+        self.assertEqual(1, template.count("// PRODUCTION_SHUTDOWN_CPU_TYPES"))
         self.assertEqual(1, template.count("// PRODUCTION_SHUTDOWN_CPU_CONTROL"))
-        generated = template.replace("// PRODUCTION_SHUTDOWN_CPU_CONTROL", self.source_journal())
+        support, methods = self.source_shutdown_control()
+        generated = template.replace("// PRODUCTION_SHUTDOWN_CPU_TYPES", support)
+        generated = generated.replace("// PRODUCTION_SHUTDOWN_CPU_CONTROL", methods)
         with tempfile.TemporaryDirectory(prefix="shutdown-cpu-reclaim-") as directory:
             source = Path(directory) / "shutdown_cpu_reclaim.rs"
             binary = Path(directory) / "shutdown_cpu_reclaim"
@@ -75,8 +92,31 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
                 capture_output=True, text=True, timeout=30,
             )
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            result = subprocess.run([str(binary)], capture_output=True, text=True, timeout=30)
+            result = subprocess.run(
+                [str(binary)],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                env={**os.environ, "RUST_TEST_THREADS": "1"},
+            )
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            print(result.stdout, end="")
+            # A raw-pointer journal or device owner must actually break the
+            # protected-context Send bound, not merely lose a searched string.
+            for owner in ("RetainedCpuDevice", "CpuDevice"):
+                with self.subTest(missing_send=owner):
+                    declaration = f"unsafe impl Send for {owner} {{}}"
+                    self.assertEqual(1, generated.count(declaration))
+                    source.write_text(generated.replace(declaration, ""), encoding="utf-8")
+                    rejected = subprocess.run(
+                        [rustc, "--edition=2021", "--test", "-Dwarnings", str(source), "-o", str(binary)],
+                        capture_output=True, text=True, timeout=30,
+                    )
+                    self.assertNotEqual(0, rejected.returncode)
+                    self.assertIn("error[E0277]", rejected.stderr)
+                    self.assertIn("cannot be sent between threads safely", rejected.stderr)
+                    self.assertIn(owner, rejected.stderr)
+                    print(f"compile-fail control {owner}: rejected with E0277 Send bound")
 
     def test_production_body_is_guarded_ordered_and_never_rolls_back(self) -> None:
         text = SOURCE.read_text(encoding="utf-8")
@@ -158,6 +198,16 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
         self.assertIn("first_failure_stage: ShutdownCpuFailureStage", text)
         self.assertIn("kernel::error::to_result(status).unwrap_err()", body)
         self.assertIn("let failure = if status < 0", body)
+
+    def test_ordinary_os_change_fences_before_boot_retirement_or_zero_success(self) -> None:
+        text = SOURCE.read_text(encoding="utf-8")
+        body = balanced_item(text, "fn change_os(")
+        fence = "self.verify_owned(&hotplug)?;"
+        retire = "super::smp_memory::retire_os_boot(owner)?;"
+        zero = "if request.count == 0"
+        self.assertIn(fence, body)
+        self.assertLess(body.index(fence), body.index(retire))
+        self.assertLess(body.index(fence), body.index(zero))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,115 @@
+{
+  "schema": "mckernel.shutdown-reset-journal-expert-caller-check.v1",
+  "date": "2026-09-28",
+  "status": "PASS_LAYER_B_NEEDS_INDEPENDENT_REVIEW",
+  "scope": "Unprivileged exact production-body fixture; no production build, module, root or guest execution.",
+  "failure_family": "M05 shutdown reset/re-online journal ordinary-operation retention and Send bounds",
+  "history": "Expert escalation after two prior review rounds found missing executable caller/fence coverage and lost Send/Sync checks. This candidate preserves the supplied production source unchanged; both executable checks before and after formatting passed.",
+  "adopted_policy_sha256": {
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "HANDOFF.md": "f061d26ff16ed1661edc148b73e4c0c385b4273b684de8d69a893d8d832808f2",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c"
+  },
+  "source_sha256": "b3526bcc1657ba8927716ee4ea2cc7d8c9083aec773fc18b6e288797097f36af",
+  "fixture_sha256": "44aa00b8b769506a2c486ffd0368bba8fd3997c83a6cfd4af50788bc12bd36d2",
+  "driver_sha256": "eb4baf26e93dceb928d7a7e68c23d2a5f2742019bbecb8385c3205d433109dc0",
+  "initial_fixture_sha256": "cb056aa8c280e62ccc550accbaabb84276d345b0c0188cc07fcb7d4adf1b0e2d",
+  "initial_driver_sha256": "addba82c68fbcb8d72b37a0771810b8d531141e1a6ad5aa401386c89e82b701e",
+  "extracted_production_items": [
+    "RetainedCpuDevice and its actual Send/Sync impls",
+    "ShutdownCpuFailureStage",
+    "ShutdownCpuJournal and impl",
+    "shutdown_journal_blocks_ordinary_use",
+    "CpuDevice, actual Send impl and Drop impl",
+    "complete CpuContext fields",
+    "complete CpuController fields",
+    "verify_owned",
+    "change_os",
+    "release_os_resources",
+    "retain_shutdown_failure",
+    "prevalidate_shutdown_targets",
+    "validate_shutdown_target",
+    "shutdown_reset_and_reonline"
+  ],
+  "executed_coverage": {
+    "python_tests": 7,
+    "rust_tests": 9,
+    "ordinary_rejection_vectors": 10,
+    "compile_fail_controls": 2,
+    "rejection_matrix": "success and failed reset journal x verify_owned, zero-count assign, zero-count release, destruction with assigned CPU, destruction for another owner with zero assigned CPUs",
+    "rejection_assertions": [
+      "EIO",
+      "poisoned context",
+      "byte-equal complete journal array",
+      "all CPU owners unchanged",
+      "retained device and module pin still present",
+      "zero boot retire calls",
+      "zero memory releases",
+      "zero transaction begin/commit/rollback calls",
+      "zero device drops",
+      "zero module-pin drops"
+    ],
+    "positive_controls": "No-journal production verify_owned succeeds; zero-count assign/release each reach boot-retire instrumentation; destruction commits CPU and releases memory once; second zero-count destruction reaches memory release without another CPU commit; dropping context triggers one device and module-pin drop.",
+    "trait_checks": "Actual CpuContext fields require Send; journal, production-equivalent ContextMutex, actual CpuController shape and representative module envelope require Send+Sync. std::sync::Mutex carries the same T: Send bound as the pinned Linux Lock for both Send and Sync. Removing either exact RetainedCpuDevice or CpuDevice Send impl produces E0277 cannot-be-sent errors."
+  },
+  "adapter_limits": [
+    "Linux CPU hotplug and topology are deterministic adapters, not Linux execution.",
+    "CpuTable transaction effects are instrumented adapters; ownership-policy correctness is not claimed by this fixture.",
+    "ModuleEnvelope represents propagation of the extracted CPU controller through a module owner; unrelated production module fields are not compiled.",
+    "The exact destruction function sees a temporary synchronous published mutex. No worker, root, module or guest state is accessed."
+  ],
+  "compiler_flags": [
+    "--edition=2021",
+    "--test",
+    "-Dwarnings"
+  ],
+  "resources": {
+    "jobs": 1,
+    "rust_test_threads": 1,
+    "compile_timeout_seconds": 30,
+    "test_timeout_seconds": 30
+  },
+  "checks": [
+    {
+      "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -B -m unittest -v scripts.tests.test_shutdown_cpu_reclaim",
+      "chunk_id": "e7a1b1",
+      "wall_time_seconds": 0.312187688,
+      "exit_code": 0,
+      "original_token_count": 510,
+      "output": "test_bsp_online_and_identity_controls_are_present_before_effects (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_exact_production_shutdown_body_executes_semantic_cases (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_ordinary_os_change_fences_before_boot_retirement_or_zero_success (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_prevalidation_and_raw_online_status_are_fail_closed (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_production_body_is_guarded_ordered_and_never_rolls_back (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_production_context_has_a_narrow_send_sync_journal_and_ordinary_fence (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\ntest_reset_wrapper_is_the_only_pending_native_symbol (scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.411s\n\nOK\n\nrunning 9 tests\ntest fixture::exact_ordinary_callers_reject_successful_and_failed_journals_before_effects ... ok\ntest fixture::exact_ordinary_callers_without_journal_reach_instrumented_effects ... ok\ntest fixture::extracted_entry_rejects_second_call_without_clearing_journal ... ok\ntest fixture::extracted_online_error_keeps_raw_status_and_retains_progress ... ok\ntest fixture::extracted_post_online_identity_uncertainty_retains_all ... ok\ntest fixture::extracted_pre_reset_validation_retains_all_without_reset ... ok\ntest fixture::extracted_preflight_failure_never_creates_a_partial_journal ... ok\ntest fixture::production_field_bounds_propagate_to_mutex_controller_and_module ... ok\ntest fixture::success_runs_extracted_body_and_preserves_progress ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\ncompile-fail control RetainedCpuDevice: rejected with E0277 Send bound\ncompile-fail control CpuDevice: rejected with E0277 Send bound\n"
+    },
+    {
+      "command": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustfmt --edition 2021 --check scripts/tests/fixtures/shutdown_cpu_reclaim.rs host-kernel/native-rust/smp_cpu.rs",
+      "chunk_id": "f496ba",
+      "wall_time_seconds": 0.000004762,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "command": "python3 -B -c 'import py_compile, tempfile; from pathlib import Path; d = tempfile.TemporaryDirectory(prefix=\"shutdown-journal-pycompile-\"); py_compile.compile(\"scripts/tests/test_shutdown_cpu_reclaim.py\", cfile=str(Path(d.name) / \"driver.pyc\"), doraise=True); d.cleanup()'",
+      "chunk_id": "a6d39f",
+      "wall_time_seconds": 0.000005267,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "command": "git diff --check -- host-kernel/native-rust/smp_cpu.rs scripts/tests/fixtures/shutdown_cpu_reclaim.rs scripts/tests/test_shutdown_cpu_reclaim.py",
+      "chunk_id": "9134f2",
+      "wall_time_seconds": 0.000003989,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "command": "sha256sum host-kernel/native-rust/smp_cpu.rs scripts/tests/fixtures/shutdown_cpu_reclaim.rs scripts/tests/test_shutdown_cpu_reclaim.py /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc /home/holden/mckernel-work/scratch/native-pristine-api-source/rust/kernel/sync/lock.rs",
+      "chunk_id": "b0e353",
+      "wall_time_seconds": 0.000004905,
+      "exit_code": 0,
+      "original_token_count": 160,
+      "output": "b3526bcc1657ba8927716ee4ea2cc7d8c9083aec773fc18b6e288797097f36af  host-kernel/native-rust/smp_cpu.rs\n44aa00b8b769506a2c486ffd0368bba8fd3997c83a6cfd4af50788bc12bd36d2  scripts/tests/fixtures/shutdown_cpu_reclaim.rs\neb4baf26e93dceb928d7a7e68c23d2a5f2742019bbecb8385c3205d433109dc0  scripts/tests/test_shutdown_cpu_reclaim.py\n028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1  /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc\n75f3750a489a0518d0804d7ca633e65ab7ed2d3e5dc86e53d15e1115cc0a8c48  /home/holden/mckernel-work/scratch/native-pristine-api-source/rust/kernel/sync/lock.rs\n"
+    }
+  ]
+}
