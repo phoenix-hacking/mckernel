@@ -134,6 +134,15 @@ Separately continue failed-IRQ_WORK_VECTOR retry/offline quarantine, callback
 drain, STOP/v5 integration and CPU reclamation. Do not freeze STOP/ACK or run the
 shutdown fixture before CPU reclamation and callback drain pass review.
 
+The two-boundary source implementation now passes 32 focused tests after expert
+escalation. It reuses the workflow's exact source/stage/configure/compile and
+post-provenance validator bodies; preparation is source-free, and runtime is one
+offline cap-drop-all container with effective-profile readback and terminal
+lease discipline. Evidence is
+`stability-native-exact-build-boundary-source-success-20260928-1.json`. This is
+not an execution release. Next create and bind the clean checkout/full manifest,
+then seek independent review for the separate networked image-preparation phase.
+
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,
 push and verify fetched blobs. One heavy build/guest maximum; aggregate seven

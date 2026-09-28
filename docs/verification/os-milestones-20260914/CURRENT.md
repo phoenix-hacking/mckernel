@@ -5310,3 +5310,25 @@ FP-0006 and RK-006 downstream jobs; and no exclusive owner, disk-floor admission
 or terminal retirement receipt binds the lease. The bounded correction is an
 explicit two-boundary owner: authenticate immutable preparation inputs, then run
 only one offline constrained build with complete partial-failure retention.
+
+The first preparation, runtime-owner and offline-driver candidates remained
+unsafe after one bounded correction: preparation tests errored and trusted
+claims, the owner could mishandle a live timeout, and the driver could PASS
+without kernel/module artifacts. Following the convergence rule, the family was
+escalated instead of iterating weakened drafts. The expert replacement preserves
+the exact workflow bodies and passes 32 focused tests in 0.433 seconds, all six
+`py_compile` checks and `git diff --check`. Stateful tests cover actual-limit and
+mount mutation, exclusive lease/retirement, timeout and uncertain-create paths,
+RPM/tool/OS drift, exact workflow-body extraction, phase failures and missing or
+mutated artifacts. A real subprocess preserves partial output and exit 37.
+
+This source-only infrastructure result is recorded in
+`stability-native-exact-build-boundary-source-success-20260928-1.json`; the
+original execution BLOCK is retained in
+`stability-native-exact-build-execution-review-block-20260928-1.json`. The local
+Rocky base resolves to image ID `sha256:0b5329d8...9012796`; the cached SRPM,
+archive and baseline config rehash to their exact recorded identities. No
+container or build has run. Next: push this source checkpoint, create a clean
+self-contained candidate checkout and manifest, and obtain fresh independent
+review of the networked preparation capabilities/cleanup. Preparation and the
+offline heavy build require separate releases.

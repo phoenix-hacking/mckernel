@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.stability.exact-build-boundary-source.v1",
+  "date": "2026-09-28",
+  "status": "SOURCE_AND_FAKE_EXECUTION_PASS",
+  "base_commit": "e8d5f4d9fdf23c7d48907b290469f015f3441990",
+  "scope": "separate authenticated Rocky tool-image preparation, one offline constrained exact-build owner, and a local adapter preserving the workflow exact-build shell bodies",
+  "original_failures": [
+    "The canonical GitHub workflow dispatch was independently BLOCKED because it did not prove the frozen host profile, mixed network acquisition with compilation, launched downstream jobs and lacked a local owner/lease receipt.",
+    "The first preparation draft trusted claims, used an undefined evidence variable and had two test errors.",
+    "The first runtime-owner draft trusted requested resource/readback values, could release while a timed-out container remained live and did not mount a usable driver.",
+    "The first offline-driver draft could report PASS without a kernel or module and omitted most patch, configuration and post-build validation closure."
+  ],
+  "bounded_corrections": [
+    "One bounded correction was attempted for each draft family and remained insufficient; the family was escalated rather than repeatedly weakening oracles.",
+    "The expert replacement reuses the exact named workflow source, acquisition/stage, configuration, compilation and post-provenance validator bodies. Only network acquisition and GitHub service provenance are adapted.",
+    "Preparation receives no source mount, validates exact base/tool/RPM/OS identities and retains a source-free immutable image receipt.",
+    "The runtime owner measures resources, verifies actual Docker profile/mounts/UID/image/driver, runs one network-none cap-drop-all container and retains the lease until terminal retirement is proven.",
+    "The offline driver binds every tracked superproject/submodule file and all four source assets, rejects dirty inputs, streams phase evidence and cannot PASS without the exact artifact/checksum set."
+  ],
+  "verification": {
+    "command": "python3 -B -m unittest -v scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_offline",
+    "result": "32 tests passed in 0.433 seconds",
+    "additional": [
+      "python3 -m py_compile on all six files: PASS",
+      "git diff --check on all six files: PASS",
+      "A real local subprocess test preserved partial stdout/stderr and exit 37."
+    ]
+  },
+  "artifact_sha256": {
+    "scripts/native_rust_exact_build_container_owner.py": "f56511ee78bcd30d4d60713f07911243533a92eadbbff556c1b02870f9dbaae0",
+    "scripts/native_rust_exact_build_image_prepare.py": "edc35b4cb4f400589c8e54105e70d556410fa6abf375f9f2670630fe33b3dcf0",
+    "scripts/native_rust_exact_build_offline.py": "02de4bdcc11a85867c8bb2479b66ff54c8b24548e0c05ec4dbd2d67e038c8fda",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "6e9ae05f7349fc772303b528fed3119a02e71f5f1e171c19de03f9aec9898aed",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "755d32702c953c31a7ee7867063896104e4634f2847074f91094799398f1b6b2",
+    "scripts/tests/test_native_rust_exact_build_offline.py": "f7ede8ec45f3034702c12175ed421ab62d41097a693b0246897211c8a44b8ba4"
+  },
+  "verified_offline_inputs": {
+    "base_image_id": "sha256:0b5329d806d053ad65ab6b21fc3e49f1025e970cd826547a01a93b3ce9012796",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "kernel_archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "baseline_config_sha256": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d"
+  },
+  "remaining_prerequisites": [
+    "Independent source and execution review must approve the exact networked preparation capabilities and cleanup before it runs.",
+    "A clean self-contained candidate checkout, full repository/assets manifest and extracted debrand asset must be created and hash-bound.",
+    "The prepared image and the subsequent offline heavy build require distinct reviewed execution releases.",
+    "Full production RPM/signature closure remains unclaimed."
+  ],
+  "limitations": "No Docker preparation, configured build, module load, guest, application, production gate or whole-OS acceptance is claimed."
+}

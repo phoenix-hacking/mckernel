@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.stability.execution-review.v1",
+  "date": "2026-09-28",
+  "candidate_commit": "029b41fad7f4a30ae347c9ca282d1b8d58d46ce9",
+  "proposed_command": [
+    "gh",
+    "workflow",
+    "run",
+    "native-rust-host-modules-exact-build.yml",
+    "--repo",
+    "phoenix-hacking/mckernel",
+    "--ref",
+    "codex/local-native-staging-repair",
+    "-f",
+    "validation_sha=029b41fad7f4a30ae347c9ca282d1b8d58d46ce9"
+  ],
+  "decision": "BLOCK",
+  "findings": [
+    "The exact-build job pins Rocky, make -j2 and a 330-minute timeout, but it does not enforce or read back CPUs 2-5, four CPUs, 12 GiB memory with no additional swap, 512 tasks, or no-network.",
+    "dnf bootstrap and source acquisition require network in the same job container that later compiles.",
+    "Successful dispatch automatically schedules FP-0006 and RK-006 downstream jobs, so it is not a one-build execution boundary.",
+    "The workflow has no exact exclusive owner, disk-floor admission, lease lifetime or terminal retirement receipt."
+  ],
+  "measured_local_resources": {
+    "host_free_bytes": 26751692800,
+    "scratch_free_bytes": 21613768704
+  },
+  "verified_offline_inputs": {
+    "base_manifest": "rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
+    "local_base_image_id": "sha256:0b5329d806d053ad65ab6b21fc3e49f1025e970cd826547a01a93b3ce9012796",
+    "base_platform": "linux/amd64",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "source_rpm_bytes": 159328372,
+    "kernel_archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "kernel_archive_bytes": 153374592,
+    "baseline_config_sha256": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d",
+    "baseline_config_bytes": 254653
+  },
+  "preserved_source_scope": {
+    "record": "docs/verification/stability-native-current-source-closure-success-20260928-1.json",
+    "record_sha256": "a2fb2925cf290d5c0a49601eab15753e35706f56767fcc9a62695e9e5ad9620c",
+    "corrected_log": "docs/verification/evidence/stability-native-current-source-integrated-corrected-success-20260928-1.log.gz",
+    "corrected_log_sha256": "bf2686a9f6b6ba5e09333d4102ae7f77f08ee460592fc46e39073ccaa5a267c3",
+    "result": "196 source and Layer-B tests passed; no execution release follows"
+  },
+  "required_correction": [
+    "Prepare and authenticate a source-free immutable Rocky tool image in a separate bounded networked phase.",
+    "Run exactly one offline build container with the frozen resource profile and effective-limit readback.",
+    "Bind one exclusive owner and preserve complete logs, phase and exit status, partial outputs and terminal cleanup evidence.",
+    "Seek fresh independent execution review before either container phase runs."
+  ],
+  "execution": {
+    "workflow_dispatched": false,
+    "container_started": false,
+    "heavy_lease_started": false
+  },
+  "limitations": "No configured build, module load, guest, runtime or OS acceptance is granted."
+}
