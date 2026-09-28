@@ -263,11 +263,55 @@ def _inflate(raw, limit):
         _die(f"invalid gzip: {exc}")
 
 
-def _authenticate_base(raw):
-    if len(raw) != BASE_SIZE or _digest(raw) != BASE_SHA256:
+def _base_hash(value, label):
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-fA-F]{64}", value) is None:
+        _die(f"{label} must be exactly 64 hexadecimal characters")
+    return value.lower()
+
+
+def _base_hash_arg(value, label):
+    try:
+        return _base_hash(value, label)
+    except OverlayError as exc:
+        raise argparse.ArgumentTypeError(str(exc))
+
+
+def _base_size(value, label, ceiling):
+    if (isinstance(value, bool) or not isinstance(value, int) or value <= 0 or
+            value > ceiling):
+        _die(f"{label} must be a positive integer no larger than {ceiling}")
+    return value
+
+
+def _base_size_arg(value, label="base size", ceiling=MAX_SOURCE_SIZE):
+    try:
+        parsed = int(value, 10)
+    except (TypeError, ValueError):
+        raise argparse.ArgumentTypeError(f"{label} must be a positive integer no larger than {ceiling}")
+    try:
+        return _base_size(parsed, label, ceiling)
+    except OverlayError as exc:
+        raise argparse.ArgumentTypeError(str(exc))
+
+
+def _base_cpio_size_arg(value):
+    return _base_size_arg(value, "base CPIO size", MAX_CPIO_SIZE)
+
+
+def _base_identity(base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+    return (_base_hash(base_sha256, "base SHA256"),
+            _base_size(base_size, "base size", MAX_SOURCE_SIZE),
+            _base_hash(base_cpio_sha256, "base CPIO SHA256"),
+            _base_size(base_cpio_size, "base CPIO size", MAX_CPIO_SIZE))
+
+
+def _authenticate_base(raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+    base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
+        base_sha256, base_size, base_cpio_sha256, base_cpio_size)
+    if len(raw) != base_size or _digest(raw) != base_sha256:
         _die("base gzip identity mismatch")
-    data = _inflate(raw, BASE_CPIO_SIZE)
-    if len(data) != BASE_CPIO_SIZE or _digest(data) != BASE_CPIO_SHA256:
+    data = _inflate(raw, base_cpio_size)
+    if len(data) != base_cpio_size or _digest(data) != base_cpio_sha256:
         _die("base cpio identity mismatch")
     return data
 
@@ -318,8 +362,9 @@ def _manifest(final):
             for name, record in sorted(final.items())}
 
 
-def replay(base_raw, overlay_raw):
-    base = _authenticate_base(base_raw)
+def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+    base = _authenticate_base(base_raw, base_sha256=base_sha256, base_size=base_size,
+                              base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
     base_records, _ = parse_newc(base)
     overlay_records, _ = parse_newc(overlay_raw)
     if tuple(r["name"] for r in overlay_records) != OVERLAY_NAMES:
@@ -425,7 +470,10 @@ def _gzip(data):
     return out.getvalue()
 
 
-def build_overlay(base, payload, collector, output, *, collector_sha256):
+def build_overlay(base, payload, collector, output, *, collector_sha256,
+                  base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+    base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
+        base_sha256, base_size, base_cpio_sha256, base_cpio_size)
     collector_sha256 = _collector_hash(collector_sha256)
     try:
         with contextlib.ExitStack() as stack:
@@ -442,7 +490,9 @@ def build_overlay(base, payload, collector, output, *, collector_sha256):
             if len(set(identities)) != len(identities):
                 _die("source inputs alias one another")
             br, pr, cr = (s.data for s in sources)
-            original = _authenticate_base(br)
+            original = _authenticate_base(br, base_sha256=base_sha256, base_size=base_size,
+                                          base_cpio_sha256=base_cpio_sha256,
+                                          base_cpio_size=base_cpio_size)
             if _digest(pr) != PAYLOAD_SHA256:
                 _die("payload hash mismatch")
             if _digest(cr) != collector_sha256:
@@ -451,7 +501,8 @@ def build_overlay(base, payload, collector, output, *, collector_sha256):
             overlay = _archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
                                 ("case/work", b"", 0o040755), ("init", cr, 0o100755),
                                 ("apps/app", pr, 0o100755)))
-            final_map = replay(br, overlay)
+            final_map = replay(br, overlay, base_sha256=base_sha256, base_size=base_size,
+                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
             raw = _gzip(original + overlay)
             for source in sources:
                 source.verify()
@@ -515,9 +566,19 @@ def main(argv=None):
     for name in ("base", "payload", "collector", "output"):
         parser.add_argument(name)
     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
+    parser.add_argument("--base-sha256", required=True,
+                        type=lambda v: _base_hash_arg(v, "base SHA256"))
+    parser.add_argument("--base-size", required=True, type=_base_size_arg)
+    parser.add_argument("--base-cpio-sha256", required=True,
+                        type=lambda v: _base_hash_arg(v, "base CPIO SHA256"))
+    parser.add_argument("--base-cpio-size", required=True,
+                        type=_base_cpio_size_arg)
     args = parser.parse_args(argv)
     print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.output,
-                                   collector_sha256=args.collector_sha256), sort_keys=True))
+                                   collector_sha256=args.collector_sha256,
+                                   base_sha256=args.base_sha256, base_size=args.base_size,
+                                   base_cpio_sha256=args.base_cpio_sha256,
+                                   base_cpio_size=args.base_cpio_size), sort_keys=True))
 
 
 if __name__ == "__main__":

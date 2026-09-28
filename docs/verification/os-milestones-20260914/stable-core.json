@@ -511,8 +511,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The exact startup.argv-empty payload now passes the reviewed retained loader/libc host diagnostic with exit 0 and exact 91-byte stdout. Independent review accepts the process/QMP backend source, the PID1 collector source and its static ELF build, the deterministic five-member overlay source, and the exact derived initramfs bytes. No QEMU or McKernel guest has run. The new manifest/runtime integration candidate passes 43 local tests but remains under independent review; that review found a Python 3.9 backend compatibility defect before any execution release.",
-      "next_check": "Repair and independently review the Python 3.9 cleanup-note compatibility boundary, finish the manifest integration review, then bind all exact bytes in one independently reviewed execution packet before the smallest startup.argv-empty QEMU/McKernel diagnostic run.",
+      "result": "The Python 3.9-safe backend and native diagnostic runner/lifecycle now pass the final 164-test combined suite; independent source review returns PASS_RUNNER_SOURCE_READY_FOR_PACKET. The authenticated current-signal overlay strictly replays 61 final members and binds the current signal module and McKernel image; independent byte review accepts it for manifest integration. No QEMU or McKernel guest has run, and neither source nor byte review is execution authority.",
+      "next_check": "Revalidate the exact current-signal manifest against checkpointed source bytes, bind the reviewed container QEMU, initramfs, kernel, modules, deadlines, evidence and cleanup in an independently reviewed execution packet, then run one diagnostic guest only after release.",
       "evidence": [
         "history",
         "plan",

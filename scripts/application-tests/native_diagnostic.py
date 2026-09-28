@@ -18,6 +18,7 @@ import time
 import signal
 import threading
 from contextlib import contextmanager
+from types import MappingProxyType
 
 QEMU = "/usr/libexec/qemu-kvm"
 MAX_JSON = 4 * 1024 * 1024
@@ -164,6 +165,10 @@ def load_manifest(path):
         obj = json.loads(data.decode("utf-8"), object_pairs_hook=lambda pairs: _pairs(pairs))
     except (UnicodeError, json.JSONDecodeError, DiagnosticError) as exc:
         raise DiagnosticError("malformed manifest") from exc
+    return _validate_manifest(obj)
+
+
+def _validate_manifest(obj):
     _keys(obj, ("schema_version", "kind", "case_id", "artifacts", "modules", "profile", "payload", "staging"))
     _need(type(obj["schema_version"]) is int and obj["schema_version"] == 1 and obj["kind"] == "native-diagnostic-manifest", "manifest identity")
     _need(isinstance(obj["case_id"], str) and obj["case_id"] and "\0" not in obj["case_id"], "case_id")
@@ -198,6 +203,36 @@ def load_manifest(path):
             "payload": dict(payload)}
 
 
+def _freeze(value):
+    """Own an immutable, strictly typed copy, with no caller-owned containers."""
+    if type(value) is dict:
+        _need(all(type(key) is str for key in value), "plan keys must be strings")
+        return MappingProxyType({key: _freeze(item) for key, item in value.items()})
+    if type(value) is list:
+        return tuple(_freeze(item) for item in value)
+    _need(type(value) in (str, int, bool, type(None)), "unsupported plan value")
+    return value
+
+
+def _thaw(value):
+    if type(value) is MappingProxyType:
+        return {key: _thaw(item) for key, item in value.items()}
+    if type(value) is tuple:
+        return [_thaw(item) for item in value]
+    return value
+
+
+def _same_plan(left, right):
+    # bool/int equality must not admit a changed type in a bound contract.
+    if type(left) is not type(right):
+        return False
+    if type(left) is MappingProxyType:
+        return left.keys() == right.keys() and all(_same_plan(left[k], right[k]) for k in left)
+    if type(left) is tuple:
+        return len(left) == len(right) and all(_same_plan(a, b) for a, b in zip(left, right))
+    return left == right
+
+
 def _pairs(pairs):
     out = {}
     for key, value in pairs:
@@ -221,8 +256,7 @@ def prepare_attempt(manifest, parent, name):
         for filename in ("serial.log", "debugcon.log"):
             (attempt / filename).touch(mode=0o600, exist_ok=False)
     except BaseException as exc:
-        write_record(attempt, {"status": "FAIL", "application_acceptance": False},
-                     {"phase": "prepare", "type": type(exc).__name__, "error": str(exc)})
+        record_failure(attempt, exc, "prepare")
         raise
     return attempt
 
@@ -231,12 +265,8 @@ def build_command(manifest, attempt):
     """Return the exact QEMU argv only after the derived-image join is READY."""
     attempt = Path(attempt)
     _need(attempt.is_dir() and (attempt.stat().st_mode & 0o777) == 0o700, "attempt not private")
+    manifest = _validate_manifest(_thaw(_freeze(manifest)))
     a = manifest["artifacts"]
-    for name in ARTIFACTS:
-        _need(_ref(a[name], name) == a[name], "artifact identity changed " + name)
-    for ref in manifest["modules"]:
-        _need(_ref(ref, "module") == ref, "module identity changed")
-    _staging(manifest["staging"], a, manifest["modules"])
     qmp = str(attempt / "qmp.sock")
     _need(not os.path.lexists(qmp), "stale QMP socket")
     for name in ("serial.log", "debugcon.log"):
@@ -251,7 +281,7 @@ def build_command(manifest, attempt):
             "-object", "memory-backend-ram,size=4G,id=ram-node1",
             "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
             "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1",
-            "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-monitor", "none",
+            "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-S", "-monitor", "none",
             "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
             "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
             "-kernel", a["bzImage"]["path"], "-initrd", manifest["staging"]["derived_initramfs"]["path"], "-append", APPEND]
@@ -262,8 +292,8 @@ def build_command(manifest, attempt):
                "init_sequence": ["insmod /modules/ihk.ko", "insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288",
                                  "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
                "transport": "guest collector framed serial report; never QEMU stdout"}
-    return {"argv": argv, "overlay": overlay, "payload": manifest["payload"], "qmp_socket": qmp,
-            "runtime_ready": True, "staging": manifest["staging"]}
+    return _freeze({"argv": argv, "overlay": overlay, "payload": manifest["payload"], "qmp_socket": qmp,
+                    "runtime_ready": True, "staging": manifest["staging"], "manifest": manifest})
 
 
 def evaluate(manifest, observation):
@@ -373,19 +403,75 @@ def _check_syscall_trace(serial, prefix):
         _need(positions and all(i > exit_position for i in positions), "retirement precedes terminal exit")
 
 
-def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300):
+def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300,
+                   expected_plan=None):
     """Exercise only explicit injected factories after the staging join."""
     try:
         _need(process_factory is not None and qmp_factory is not None and
               callable(process_factory) and callable(qmp_factory), "explicit diagnostic factories required")
         plan = build_command(manifest, attempt)
+        if expected_plan is not None:
+            _need(_same_plan(plan, expected_plan),
+                  "diagnostic build plan changed after factory binding")
         _need(plan["runtime_ready"] is True, STAGING_BLOCKER)
-    except DiagnosticError as exc:
-        failure = {"phase": "staging", "type": "DiagnosticError", "error": str(exc)}
-        write_record(attempt, {"status": "BLOCKED", "application_acceptance": False,
-                              "mckernel_application_executed": False, "failure": failure}, failure)
+    except BaseException as exc:
+        record_failure(attempt, exc, "staging")
         raise
-    return exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout)
+    # The lifecycle/evaluator own their own validated snapshot too: neither a
+    # factory closure nor the caller can change the oracle through an alias.
+    return exercise_lifecycle(_thaw(plan["manifest"]), attempt, process_factory, qmp_factory, timeout)
+
+
+def _failure(exc, phase):
+    """Total metadata conversion: reporting must never abort retirement.
+
+    Do not dispatch on exception attributes, str/repr, or custom metaclasses.
+    Unknown metadata uses literals. Read args through the built-in descriptor,
+    and render only bounded exact primitives; a timer cannot make arbitrary
+    formatting safe. Keep the original exception separately from this record.
+    """
+    fallback = {"phase": phase if type(phase) is str else "failure",
+                "type": "BaseException", "error": "<exception metadata unavailable>"}
+    try:
+        cls = type(exc)
+        if type(cls) is not type:
+            return fallback
+        name = type.__getattribute__(cls, "__name__")
+        parts = []
+        for arg in BaseException.args.__get__(exc)[:4]:
+            if type(arg) is str:
+                parts.append(arg[:2048])
+            elif type(arg) is int and arg.bit_length() <= 64:
+                parts.append(str(arg))
+            elif arg is None or type(arg) is bool:
+                parts.append(str(arg))
+            else:
+                parts.append("<exception argument omitted>")
+        return {"phase": fallback["phase"], "type": name,
+                "error": ": ".join(parts) or "<no exception message>"}
+    except BaseException:
+        return fallback
+
+
+def failure_text(exc):
+    return _failure(exc, "reporting")["error"]
+
+
+def record_failure(attempt, exc, phase, *, writer=None):
+    """Best effort terminal evidence; never mask the authoritative exception.
+
+    If the main-thread timer cannot be exclusively acquired, do not call the
+    writer. In particular, an ambient deadline is never stolen or treated as
+    our own bound. No unbounded publication fallback is permitted.
+    """
+    try:
+        with _alarm(time.monotonic() + 2):
+            failure = _failure(exc, phase)
+            record = {"status": "BLOCKED", "application_acceptance": False,
+                      "mckernel_application_executed": False, "failure": failure}
+            (write_record if writer is None else writer)(attempt, record, failure)
+    except BaseException:
+        pass
 
 
 @contextmanager
@@ -403,13 +489,15 @@ def _alarm(deadline):
     def expired(signum, frame):
         raise TimeoutError("absolute deadline expired")
     signal.signal(signal.SIGALRM, expired)
-    signal.setitimer(signal.ITIMER_REAL, remaining)
     try:
+        signal.setitimer(signal.ITIMER_REAL, remaining)
         yield remaining
         _need(time.monotonic() < deadline, "late completion")
     finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        signal.signal(signal.SIGALRM, old)
+        try:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+        finally:
+            signal.signal(signal.SIGALRM, old)
 
 
 def _method(deadline, owner, name, *, accepts_timeout=True):
@@ -424,12 +512,16 @@ def _cleanup(process, qmp):
     """Keep each cleanup step independent; QMP errors cannot skip reaping."""
     deadline = time.monotonic() + 5
     errors = []
+    original = None
     def step(label, owner, name, allowance=1, accepts_timeout=True):
+        nonlocal original
         try:
             return _method(min(deadline, time.monotonic() + allowance), owner, name,
                            accepts_timeout=accepts_timeout)
         except BaseException as exc:
-            errors.append({"phase": label, "type": type(exc).__name__, "error": str(exc)})
+            if original is None:
+                original = exc
+            errors.append(_failure(exc, label))
             return None
     # Never use QMP as the sole process-lifetime authority.
     if qmp is not None:
@@ -446,7 +538,7 @@ def _cleanup(process, qmp):
             reaped = type(status) is int
     if qmp is not None:
         step("qmp-close", qmp, "close", allowance=0.5)
-    return {"reaped": reaped, "errors": errors}
+    return {"reaped": reaped, "errors": errors}, original
 
 
 def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300):
@@ -457,6 +549,7 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     """
     process = qmp = None
     failure = None
+    original = None
     observation = {}
     try:
         _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 3600, "finite deadline")
@@ -472,11 +565,14 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
         _method(deadline, qmp, "resume")
         terminal = _method(deadline, qmp, "wait_shutdown")
     except BaseException as exc:
-        failure = {"phase": "lifecycle", "type": type(exc).__name__, "error": str(exc)}
+        original = exc
+        failure = _failure(exc, "lifecycle")
     finally:
         # No filesystem journal or capture runs before retirement: blocked
         # storage cannot delay termination/reaping after a QMP failure.
-        cleanup = _cleanup(process, qmp)
+        cleanup, cleanup_original = _cleanup(process, qmp)
+        if original is None:
+            original = cleanup_original
     # Retain controls and host streams after teardown even if a lifecycle or
     # cleanup operation failed. Evidence capture has its own bounded deadline;
     # the original error keeps priority over any later capture/evaluation error.
@@ -492,7 +588,9 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                 with (Path(attempt) / "qmp.transcript.json").open("xb") as stream:
                     stream.write(raw)
         except BaseException as exc:
-            capture_errors.append({"phase": "qmp-transcript", "type": type(exc).__name__, "error": str(exc)})
+            if original is None:
+                original = exc
+            capture_errors.append(_failure(exc, "qmp-transcript"))
     if process is not None and cleanup["reaped"]:
         try:
             host_stdout, host_stderr = _method(capture_deadline, process, "communicate")
@@ -505,7 +603,9 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                             stream.write(data[:MAX_JSON + 1])
             _need(len(host_stdout) <= MAX_JSON and len(host_stderr) <= MAX_JSON, "host capture limit exceeded")
         except BaseException as exc:
-            capture_errors.append({"phase": "host-capture", "type": type(exc).__name__, "error": str(exc)})
+            if original is None:
+                original = exc
+            capture_errors.append(_failure(exc, "host-capture"))
     if failure is None:
         if cleanup["errors"] or not cleanup["reaped"]:
             failure = {"phase": "cleanup", "type": "DiagnosticError", "error": "teardown uncertain"}
@@ -524,7 +624,8 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                                    finished_at=time.monotonic(), deadline=deadline)
                 record = evaluate(manifest, observation)
         except BaseException as exc:
-            failure = {"phase": "evaluation", "type": type(exc).__name__, "error": str(exc)}
+            original = exc
+            failure = _failure(exc, "evaluation")
     if failure is not None:
         record = {"status": "FAIL", "application_acceptance": False,
                   "mckernel_application_executed": False, "failure": failure}
@@ -532,10 +633,18 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     record["capture_errors"] = capture_errors
     # The first observed failure survives cleanup failures; journal only after
     # retirement, under its own bounded publication deadline.
-    with _alarm(time.monotonic() + 2):
-        write_record(attempt, record, failure)
+    try:
+        with _alarm(time.monotonic() + 2):
+            write_record(attempt, record, failure)
+    except BaseException:
+        if failure is None:
+            raise
     if failure is not None:
-        raise DiagnosticError(failure["error"])
+        # isinstance may consult an exception's user-defined __class__
+        # property. Classify its actual type without touching the instance.
+        if original is not None and not issubclass(type(original), Exception):
+            raise original
+        raise DiagnosticError(failure["error"]) from original
     return record
 
 

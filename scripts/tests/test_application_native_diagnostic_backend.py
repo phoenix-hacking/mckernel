@@ -87,6 +87,22 @@ class FakeSocket:
             raise OSError("socket close failed")
 
 
+class HostileCleanupError(OSError):
+    def __repr__(self):
+        raise RuntimeError("repr trap")
+
+    def __str__(self):
+        raise RuntimeError("str trap")
+
+    def __getattribute__(self, name):
+        if name in ("args", "errno", "add_note", "_mckernel_secondary_errors"):
+            raise RuntimeError("attribute trap")
+        return super().__getattribute__(name)
+
+    def __setattr__(self, name, value):
+        raise RuntimeError("setattr trap")
+
+
 class BackendTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -253,6 +269,345 @@ class BackendTests(unittest.TestCase):
         self.assertIs(raised.exception, failure)
         popen.assert_not_called()
         self.assertEqual(set(os.listdir("/proc/self/fd")), before)
+
+    def test_secondary_recording_supports_python39_and_closes_all_fds(self):
+        class LegacyFailure(Exception):
+            add_note = None
+
+        failure = LegacyFailure("original")
+        original_args = failure.args
+        close_calls = []
+        close_errors = {
+            101: OSError("close 101"),
+            102: OSError("close 102"),
+            103: OSError("close 103"),
+        }
+        entry = os.stat_result((stat.S_IFREG, 7, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))
+
+        def close(fd):
+            close_calls.append(fd)
+            raise close_errors[fd]
+
+        with mock.patch.object(backend.os, "fstat", return_value=entry), \
+             mock.patch.object(backend.os, "close", side_effect=close):
+            backend._close_fds([(101, (8, 7)), (102, (8, 7)), (103, (8, 7))],
+                               failure=failure)
+        self.assertEqual(close_calls, [101, 101, 102, 102, 103, 103])
+        self.assertEqual(str(failure), "original")
+        self.assertEqual(failure.args, original_args)
+        self.assertGreaterEqual(len(failure._mckernel_secondary_errors), 4)
+        self.assertTrue(any("close 102" in item for item in failure._mckernel_secondary_errors))
+        self.assertTrue(any("close 103" in item for item in failure._mckernel_secondary_errors))
+
+    def test_spawn_recovery_records_retirement_and_post_spawn_cleanup(self):
+        class LegacyFailure(Exception):
+            add_note = None
+
+        failure = LegacyFailure("spawn original")
+        child = mock.Mock(pid=4321)
+        with mock.patch.object(backend.signal, "pthread_sigmask", side_effect=OSError("mask")), \
+             mock.patch.object(backend.signal, "setitimer", side_effect=OSError("timer")), \
+             mock.patch.object(backend.signal, "sigtimedwait", side_effect=OSError("wait alarm")), \
+             mock.patch.object(backend.os, "fstat", return_value=os.stat_result(
+                 (stat.S_IFREG, 7, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))), \
+             mock.patch.object(backend.os, "close", side_effect=OSError("close")):
+            backend._retire_untransferred(child, failure)
+            backend._close_fds([(101, None), (102, None), (103, None)], failure=failure)
+        self.assertEqual(str(failure), "spawn original")
+        details = failure._mckernel_secondary_errors
+        self.assertTrue(any("block alarm" in item for item in details))
+        self.assertTrue(any("cancel alarm" in item for item in details))
+        self.assertTrue(any("descriptor close" in item for item in details))
+        self.assertGreaterEqual(sum("descriptor close" in item for item in details), 6)
+
+    def test_hostile_repr_does_not_stop_all_descriptor_cleanup(self):
+        class BadRepr(OSError):
+            def __repr__(self):
+                raise RuntimeError("repr failed")
+
+        failure = RuntimeError("original")
+        close_calls = []
+        entry = os.stat_result((stat.S_IFREG, 7, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))
+
+        def close(fd):
+            close_calls.append(fd)
+            raise BadRepr("close failed")
+
+        with mock.patch.object(backend.os, "fstat", return_value=entry), \
+             mock.patch.object(backend.os, "close", side_effect=close):
+            backend._close_fds([(101, (8, 7)), (102, (8, 7)), (103, (8, 7))],
+                               failure=failure)
+        self.assertEqual(close_calls, [101, 101, 102, 102, 103, 103])
+        self.assertEqual(str(failure), "original")
+        details = getattr(failure, "_mckernel_secondary_errors", [])
+        details += getattr(failure, "__notes__", [])
+        self.assertTrue(any("unrepresentable" in item for item in details))
+
+    def test_hostile_repr_does_not_stop_retirement_sequence(self):
+        class BadRepr(OSError):
+            def __repr__(self):
+                raise RuntimeError("repr failed")
+
+        failure = RuntimeError("original")
+        child = mock.Mock(pid=4321)
+        getpgid_calls = []
+        with mock.patch.object(backend.os, "getpgid", side_effect=lambda pid:
+                               getpgid_calls.append(pid) or (_ for _ in ()).throw(BadRepr("group"))), \
+             mock.patch.object(backend.os, "waitid", return_value=object()), \
+             mock.patch.object(backend.signal, "pthread_sigmask", return_value={}), \
+             mock.patch.object(backend.signal, "setitimer"), \
+             mock.patch.object(backend.signal, "sigtimedwait"), \
+             mock.patch.object(backend.os, "killpg"):
+            backend._retire_untransferred(child, failure)
+        child.wait.assert_called_once_with(timeout=2)
+        self.assertEqual(getpgid_calls, [4321, 4321])
+        self.assertEqual(str(failure), "original")
+        details = getattr(failure, "_mckernel_secondary_errors", [])
+        details += getattr(failure, "__notes__", [])
+        self.assertTrue(any("unrepresentable" in item for item in details))
+
+    def test_hostile_block_alarm_error_still_retires_child(self):
+        # Regression: the block-alarm handler formerly formatted repr outside
+        # the recorder and aborted before TERM/observe/KILL/reap.
+        class BadRepr(OSError):
+            def __repr__(self):
+                raise RuntimeError("repr failed")
+
+        failure = RuntimeError("original")
+        events = []
+        child = mock.Mock(pid=4321)
+        child.wait.side_effect = lambda **kwargs: events.append("reap")
+        with mock.patch.object(backend.signal, "pthread_sigmask", side_effect=BadRepr("mask")), \
+             mock.patch.object(backend.signal, "setitimer", side_effect=lambda *args: events.append("cancel")), \
+             mock.patch.object(backend.signal, "sigtimedwait", side_effect=lambda *args: events.append("consume")), \
+             mock.patch.object(backend.os, "getpgid", return_value=4321), \
+             mock.patch.object(backend.os, "killpg", side_effect=lambda pid, sig: events.append(sig)), \
+             mock.patch.object(backend.os, "waitid", side_effect=lambda *args: events.append("observe") or object()):
+            backend._retire_untransferred(child, failure)
+        self.assertEqual(events, ["cancel", signal.SIGTERM, "observe", signal.SIGKILL, "reap", "consume"])
+        self.assertEqual(type(failure), RuntimeError)
+        self.assertEqual(failure.args, ("original",))
+
+    def test_recorder_failures_are_nonthrowing_and_fallback_is_fixed_text(self):
+        class BrokenAppend:
+            def append(self, item):
+                raise HostileCleanupError("append")
+
+        class BrokenNote(Exception):
+            def add_note(self, message):
+                raise HostileCleanupError("note")
+
+        class BrokenSetattr(Exception):
+            add_note = None
+            def __setattr__(self, name, value):
+                raise HostileCleanupError("setattr")
+
+        class BrokenDetails(Exception):
+            add_note = None
+            _mckernel_secondary_errors = BrokenAppend()
+
+        for kind in (HostileCleanupError, BrokenNote, BrokenSetattr, BrokenDetails):
+            for broken_fallback in (False, True):
+                with self.subTest(kind=kind.__name__, broken_fallback=broken_fallback):
+                    first = kind("first")
+                    fallback = BrokenAppend() if broken_fallback else backend.deque(maxlen=256)
+                    with mock.patch.object(backend, "_SECONDARY_ERROR_FALLBACK", fallback):
+                        backend._record_secondary_error(first, "cleanup", HostileCleanupError("secondary"))
+                    self.assertIs(type(first), kind)
+                    self.assertEqual(BaseException.args.__get__(first), ("first",))
+                    if not broken_fallback:
+                        self.assertTrue(all(type(item) is str and item == "cleanup diagnostic unavailable"
+                                            for item in fallback))
+        fallback = backend.deque(maxlen=256)
+        with mock.patch.object(backend, "_secondary_message", side_effect=HostileCleanupError("formatter")), \
+             mock.patch.object(backend, "_SECONDARY_ERROR_FALLBACK", fallback):
+            backend._record_secondary_error(RuntimeError("first"), "cleanup", ValueError("secondary"))
+        self.assertEqual(list(fallback), ["cleanup diagnostic unavailable"])
+        with mock.patch.object(backend, "_SECONDARY_ERROR_FALLBACK", fallback):
+            for _ in range(300):
+                backend._record_secondary_error(HostileCleanupError("first"), "cleanup", ValueError("secondary"))
+        self.assertEqual(list(fallback), ["cleanup diagnostic unavailable"] * 256)
+
+    def test_secondary_formatter_never_reads_exception_class_name(self):
+        class HostileType(type):
+            def __getattribute__(cls, name):
+                if name == "__name__":
+                    raise HostileCleanupError("class name")
+                return super().__getattribute__(name)
+
+        class Hostile(HostileCleanupError, metaclass=HostileType):
+            pass
+
+        self.assertEqual(backend._secondary_message("action", Hostile("secondary")),
+                         "action: <unrepresentable cleanup exception>")
+        self.assertEqual(backend._secondary_message(Hostile("label"), Hostile("secondary")),
+                         "cleanup failure")
+        self.assertLessEqual(len(backend._secondary_message("x" * 1000, ValueError("y" * 10000))), 1154)
+
+    def test_all_retirement_failures_and_broken_recording_preserve_action_order(self):
+        class BrokenFallback:
+            def append(self, item):
+                raise HostileCleanupError("fallback")
+
+        for block_fails in (False, True):
+            with self.subTest(block_fails=block_fails):
+                events = []
+                first = HostileCleanupError("first")
+                def fail(label):
+                    events.append(label)
+                    raise HostileCleanupError(label)
+                def mask(how, signals):
+                    if how == signal.SIG_BLOCK:
+                        events.append("block")
+                        if block_fails:
+                            raise HostileCleanupError("block")
+                        return set()
+                    fail("restore")
+                child = mock.Mock(pid=4321)
+                child.wait.side_effect = lambda **kwargs: fail("reap")
+                with mock.patch.object(backend, "_SECONDARY_ERROR_FALLBACK", BrokenFallback()), \
+                     mock.patch.object(backend.signal, "pthread_sigmask", side_effect=mask), \
+                     mock.patch.object(backend.signal, "setitimer", side_effect=lambda *args: fail("cancel")), \
+                     mock.patch.object(backend.signal, "sigtimedwait", side_effect=lambda *args: fail("consume")), \
+                     mock.patch.object(backend.os, "getpgid", side_effect=lambda pid: events.append("identity") or pid), \
+                     mock.patch.object(backend.os, "killpg", side_effect=lambda pid, sig: fail(sig)), \
+                     mock.patch.object(backend.os, "waitid", side_effect=lambda *args: fail("observe")):
+                    backend._retire_untransferred(child, first)
+                self.assertEqual(events, ["block", "cancel", "identity", signal.SIGTERM, "observe",
+                                          "identity", signal.SIGKILL, "reap", "consume"] +
+                                 ([] if block_fails else ["restore"]))
+                self.assertIs(type(first), HostileCleanupError)
+                self.assertEqual(BaseException.args.__get__(first), ("first",))
+
+    def test_descriptor_cleanup_preserves_hostile_first_and_retries_every_fd(self):
+        entry = os.stat_result((stat.S_IFREG, 7, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))
+        for fail_action in ("identity", "close"):
+            for supplied in (False, True):
+                with self.subTest(fail_action=fail_action, supplied=supplied):
+                    first = HostileCleanupError("first")
+                    events = []
+                    def action(kind, fd):
+                        events.append((kind, fd))
+                        if kind == fail_action:
+                            raise first if fd == 101 else HostileCleanupError("later")
+                        return entry
+                    fds = [(fd, (8, 7)) for fd in (101, 102, 103)]
+                    with mock.patch.object(backend.os, "fstat", side_effect=lambda fd: action("identity", fd)), \
+                         mock.patch.object(backend.os, "close", side_effect=lambda fd: action("close", fd)):
+                        if supplied:
+                            backend._close_fds(fds, failure=first)
+                        else:
+                            try:
+                                backend._close_fds(fds)
+                            except BaseException as caught:
+                                self.assertIs(caught, first)
+                            else:
+                                self.fail("first error was not raised")
+                    per_fd = ["identity", "identity"] if fail_action == "identity" else ["identity", "close"] * 2
+                    self.assertEqual(events, [(kind, fd) for fd in (101, 102, 103) for kind in per_fd])
+                    self.assertEqual(fds, [])
+                    self.assertEqual(BaseException.args.__get__(first), ("first",))
+
+    def test_changed_fd_identity_is_never_closed_and_next_fd_is_processed(self):
+        changed = os.stat_result((stat.S_IFREG, 99, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))
+        owned = os.stat_result((stat.S_IFREG, 7, 8, 1, os.getuid(), os.getgid(), 0, 0, 0, 0))
+        with mock.patch.object(backend.os, "fstat", side_effect=[changed, changed, owned]) as identities, \
+             mock.patch.object(backend.os, "close") as close:
+            with self.assertRaisesRegex(RuntimeError, "identity changed"):
+                backend._close_fds([(101, (8, 7)), (102, (8, 7))])
+        self.assertEqual(identities.call_args_list, [mock.call(101), mock.call(101), mock.call(102)])
+        close.assert_called_once_with(102)
+
+    def test_qmp_recovery_keeps_first_error_with_hostile_errno_and_close(self):
+        first = HostileCleanupError("connect")
+        class BrokenSocket(FakeSocket):
+            def connect(self, path):
+                raise first
+            def close(self):
+                self.closed = True
+                raise HostileCleanupError("close")
+        sock = BrokenSocket()
+        try:
+            self.qmp(sock).negotiate(1)
+        except BaseException as caught:
+            self.assertIs(caught, first)
+        else:
+            self.fail("connect failure was not raised")
+        self.assertTrue(sock.closed)
+        self.assertEqual(BaseException.args.__get__(first), ("connect",))
+
+    def test_owner_term_failure_does_not_skip_kill_or_replace_first(self):
+        first = HostileCleanupError("TERM")
+        owner = backend.ProcessOwner(FakeProcess(), "stdout", "stderr")
+        with mock.patch.object(owner, "_signal_group", side_effect=[first, HostileCleanupError("KILL")]) as group:
+            try:
+                owner.terminate()
+            except BaseException as caught:
+                self.assertIs(caught, first)
+            else:
+                self.fail("TERM failure was not raised")
+        self.assertEqual(group.call_args_list,
+                         [mock.call(signal.SIGTERM), mock.call(signal.SIGKILL, allow_absent=True)])
+        self.assertEqual(BaseException.args.__get__(first), ("TERM",))
+
+    def test_spawn_preserves_hostile_first_through_retirement_and_descriptor_failures(self):
+        first = HostileCleanupError("ownership transfer")
+        child = FakeProcess()
+        events = []
+        base_owner = backend.ProcessOwner
+        class BrokenOwner(base_owner):
+            def __setattr__(self, name, value):
+                if name == "child" and value is child:
+                    raise first
+                super().__setattr__(name, value)
+        # Opened descriptors are real; the first close attempt fails and the
+        # identity-checked retry really closes each one.
+        original_close = os.close
+        close_calls = {}
+        def close(fd):
+            events.append(("close", fd))
+            close_calls[fd] = close_calls.get(fd, 0) + 1
+            if close_calls[fd] == 1:
+                raise HostileCleanupError("close")
+            original_close(fd)
+        child.wait = lambda **kwargs: events.append("reap")
+        before = set(os.listdir("/proc/self/fd"))
+        factory = self._factory(lambda *args, **kwargs: child)
+        with mock.patch.object(backend, "ProcessOwner", BrokenOwner), \
+             mock.patch.object(backend.os, "close", side_effect=close), \
+             mock.patch.object(backend.os, "getpgid", return_value=child.pid), \
+             mock.patch.object(backend.os, "killpg", side_effect=lambda pid, sig: events.append(sig)), \
+             mock.patch.object(backend.os, "waitid", side_effect=lambda *args: events.append("observe") or object()):
+            try:
+                factory(timeout=1)
+            except BaseException as caught:
+                self.assertIs(caught, first)
+            else:
+                self.fail("transfer failure was not raised")
+        self.assertEqual(events[:4], [signal.SIGTERM, "observe", signal.SIGKILL, "reap"])
+        self.assertEqual(len(close_calls), 2)
+        self.assertEqual(list(close_calls.values()), [2, 2])
+        self.assertEqual(set(os.listdir("/proc/self/fd")), before)
+        self.assertEqual(BaseException.args.__get__(first), ("ownership transfer",))
+
+    def test_unreadable_child_pid_does_not_skip_reap_or_alarm_cleanup(self):
+        events = []
+        class BrokenPid:
+            @property
+            def pid(self):
+                events.append("pid")
+                raise HostileCleanupError("pid")
+            def wait(self, timeout):
+                events.append("reap")
+        first = RuntimeError("first")
+        with mock.patch.object(backend.signal, "pthread_sigmask", side_effect=lambda *args: events.append("mask") or set()), \
+             mock.patch.object(backend.signal, "setitimer", side_effect=lambda *args: events.append("cancel")), \
+             mock.patch.object(backend.signal, "sigtimedwait", side_effect=lambda *args: events.append("consume")), \
+             mock.patch.object(backend.os, "killpg") as kill:
+            backend._retire_untransferred(BrokenPid(), first)
+        kill.assert_not_called()
+        self.assertEqual(events, ["mask", "cancel", "pid", "pid", "pid", "reap", "consume", "mask"])
+        self.assertEqual(first.args, ("first",))
 
     def test_post_spawn_transfer_faults_retire_and_close(self):
         # No real child is launched: ordered waitid/killpg/wait observations

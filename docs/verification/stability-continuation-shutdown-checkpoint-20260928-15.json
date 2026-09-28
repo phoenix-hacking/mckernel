@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T06:12:01-07:00",
+  "base_commit": "49c513ee19a4c6ccd6c1bf34b541ec066150b79f",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "launcher_pid": 3125264,
+    "worker_pid": 3170135,
+    "app_server_pid": 3170137,
+    "observed_at_shutdown": "all three identities remain alive; future launcher continuations are paused",
+    "future_continuations_paused": true
+  },
+  "resources_at_shutdown": {
+    "host_free_gib": 43,
+    "scratch_free_gib": 21,
+    "memory_available_gib": 28.8,
+    "heavy_lease": "free",
+    "project_compiler_or_guest_active": false,
+    "qemu_or_native_runtime_active": false
+  },
+  "accepted_source_results": [
+    {
+      "name": "Python 3.9-safe backend cleanup boundary",
+      "source_sha256": "1c71b163d7e5eb15b09b5054f45b51974bcc9dcd0ddbcded879b44f2a6ba840f",
+      "tests_sha256": "c5585a81947e736e57a23080ccda5b9587e395c17c519a49a7824c2f1e721e0b",
+      "result": "28 focused tests passed; guarded secondary-error recording preserves the first error and cleanup actions without BaseException.add_note"
+    },
+    {
+      "name": "native diagnostic runner and lifecycle",
+      "review": "PASS_RUNNER_SOURCE_READY_FOR_PACKET",
+      "result": "Independent hostile-error review passed; the final combined six-module run passed 164 tests in 13.953 seconds and the focused runner passed 17 tests in 2.078 seconds",
+      "limits": "Source and host-protocol readiness only; no execution release"
+    },
+    {
+      "name": "current-signal authenticated overlay",
+      "review": "PASS_RETAINED_SIGNAL_OVERLAY_OUTPUT_READY_FOR_MANIFEST_INTEGRATION",
+      "result": "Strict independent replay accepts 61 final members and exact current signal module, McKernel image, collector and payload bytes",
+      "limits": "Byte artifact only; attempt 3 did not retain a command.sh and has no boot or guest claim"
+    }
+  ],
+  "exact_files": {
+    "scripts/application-tests/native_diagnostic.py": "8f0d4cf1d98bf0c5fac695346f8204518cd6616302dc28994cf2b375aa4cd5a8",
+    "scripts/tests/test_application_native_diagnostic.py": "258a888c16d3e74b2493166d27eebe1cac4e73d56f6960b56368111eaaff6f2f",
+    "scripts/application-tests/native_diagnostic_backend.py": "1c71b163d7e736e57a23080ccda5b51974bcc9dcd0ddbcded879b44f2a6ba840f",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "c5585a81947e736e57a23080ccda5b9587e395c17c519a49a7824c2f1e721e0b",
+    "scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "scripts/tests/test_application_native_diagnostic_runner.py": "e57e5c99d1f1f764e6ba4471c12c896854a5c02c1b4bc071551672c5289f47f7",
+    "scripts/application-tests/native_diagnostic_overlay.py": "24c555db4b7490bde1aafdd8a0a6ac5da4cf1f024d44353347d0b9e66b8eba5d",
+    "scripts/tests/test_application_native_diagnostic_overlay.py": "c04676e5f03ae06e8667b9765863d2d2abeb6d38eec6e180e3bdd82e7c0cd4cd"
+  },
+  "retained_artifacts": {
+    "failed_old_base_attempt": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-2",
+    "current_overlay_attempt": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-3",
+    "derived_initramfs_sha256": "40d4924c7c052aba24621f22183e2836f29ef0d207ca6575c4729838fb6d7ac3",
+    "overlay_manifest_sha256": "6b727dcdbfe6641b2f8037ffce74a07dc5981043a1aff4dde168d0aebf70259f",
+    "execution_manifest": "/home/holden/mckernel-work/scratch/native-diagnostic-manifest-20260928-2/manifest.json",
+    "execution_manifest_sha256": "c7072eeaecdc44e450cc9511a994c13db66540465722443a312479c92e5e2d04",
+    "current_ihk_smp_sha256": "5bdcd1b4e285f3f8e23d0cb75e2e62db66161120623887543546f93b5987be90",
+    "current_mckernel_image_sha256": "5f370ee96463a0a606e2b06d0e76e26bd77055f44396e5cb0a4326bf996763a4",
+    "container_image_sha256": "46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "container_qemu_sha256": "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
+  },
+  "preserved_failures": [
+    "Overlay attempt 2 rejected the current signal base against the obsolete hard-coded base identity and created no output",
+    "The pre-correction combined runner suite failed because its poison test assumed qmp_capture was initially absent; the corrected test now verifies exact initially-absent and preloaded-module restoration",
+    "The earlier backend candidate and bounded correction both failed hostile secondary-error formatting before the total metadata strategy was applied"
+  ],
+  "next_tasks": [
+    "Revalidate execution manifest c7072eea against the checkpointed final source bytes",
+    "Prepare an exact container-only execution packet binding the reviewed source, manifest, current signal image/module, derived initramfs, QEMU identity, resource profile, evidence destinations and cleanup",
+    "Obtain independent execution review; do not execute from the host or reuse a source-only review as release",
+    "Only after packet release, run one current-signal diagnostic guest and retain application bytes, exit status, kernel log, serial, QMP, container status and teardown",
+    "If the observer or evidence writer fails, preserve that attempt and repair it with cheap local regression tests before another privileged run"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "current_candidate_kernel_builds_this_window": 0,
+    "derived_current_diagnostic_images_this_window": 1,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

@@ -88,6 +88,10 @@ def fixture(raw=None):
 
 def build(directory, name="out.gz", **kwargs):
     kwargs.setdefault("collector_sha256", digest(collector_elf()))
+    kwargs.setdefault("base_sha256", M.BASE_SHA256)
+    kwargs.setdefault("base_size", M.BASE_SIZE)
+    kwargs.setdefault("base_cpio_sha256", M.BASE_CPIO_SHA256)
+    kwargs.setdefault("base_cpio_size", M.BASE_CPIO_SIZE)
     return M.build_overlay(directory / "base.gz", directory / "app",
                            directory / "collector", directory / name, **kwargs)
 
@@ -143,12 +147,39 @@ class OverlayTests(unittest.TestCase):
             self.assertEqual(result["final_map"]["keep"]["sha256"], digest(b"kept"))
 
     def test_checks_compressed_and_decompressed_identities(self):
-        for constant, value in (("BASE_SHA256", "0" * 64), ("BASE_SIZE", 1),
-                                ("BASE_CPIO_SHA256", "0" * 64), ("BASE_CPIO_SIZE", 1)):
-            with self.subTest(constant=constant), fixture() as (d, _):
-                with mock.patch.object(M, constant, value), self.assertRaises(M.OverlayError):
-                    build(d)
+        for key, value in (("base_sha256", "0" * 64), ("base_size", 1),
+                           ("base_cpio_sha256", "0" * 64), ("base_cpio_size", 1)):
+            with self.subTest(key=key), fixture() as (d, _):
+                with self.assertRaises(M.OverlayError):
+                    build(d, **{key: value})
                 self.assertFalse((d / "out.gz").exists())
+
+    def test_base_identity_binding_is_mandatory_and_strict(self):
+        with fixture() as (d, _):
+            for key, value in (("base_sha256", None), ("base_sha256", True),
+                               ("base_size", True), ("base_size", "1"),
+                               ("base_cpio_sha256", "x"), ("base_cpio_size", 0)):
+                with self.subTest(key=key, value=value), self.assertRaises((M.OverlayError, TypeError)):
+                    build(d, **{key: value})
+                self.assertFalse((d / "out.gz").exists())
+
+    def test_base_identity_size_ceiling_is_common_and_exact(self):
+        with fixture() as (d, _):
+            base = (d / "base.gz").read_bytes()
+            identity = dict(base_sha256=digest(base), base_size=len(base),
+                            base_cpio_sha256=digest(gzip.decompress(base)),
+                            base_cpio_size=len(gzip.decompress(base)))
+            for key, ceiling in (("base_size", M.MAX_SOURCE_SIZE),
+                                 ("base_cpio_size", M.MAX_CPIO_SIZE)):
+                with self.subTest(key=key):
+                    self.assertRaises(M.OverlayError,
+                                      lambda: build(d, **{**identity, key: ceiling + 1}))
+                    self.assertRaises(M.OverlayError,
+                                      lambda: M._authenticate_base(
+                                          base, **{**identity, key: ceiling + 1}))
+                    self.assertRaises(M.OverlayError,
+                                      lambda: M.replay(base, overlay(),
+                                                       **{**identity, key: ceiling + 1}))
 
     def test_changed_inputs_rejected(self):
         for name in ("base.gz", "app", "collector"):
@@ -426,7 +457,10 @@ class OverlayTests(unittest.TestCase):
         with fixture() as (d, _):
             for index, value in enumerate(variants):
                 with self.subTest(index=index), self.assertRaises(M.OverlayError):
-                    M.replay((d / "base.gz").read_bytes(), value)
+                    base = (d / "base.gz").read_bytes()
+                    M.replay(base, value, base_sha256=digest(base), base_size=len(base),
+                             base_cpio_sha256=digest(gzip.decompress(base)),
+                             base_cpio_size=len(gzip.decompress(base)))
 
     def test_static_collector_elf_positive_profiles(self):
         profiles = [collector_elf(), collector_elf(elf_type=3, entry=256,
@@ -507,6 +541,24 @@ class OverlayTests(unittest.TestCase):
                     M.main(args)
                 self.assertEqual(caught.exception.code, 2)
                 self.assertFalse((d / "out.gz").exists())
+
+    def test_cli_rejects_base_size_above_ceiling(self):
+        with fixture() as (d, _):
+            base = (d / "base.gz").read_bytes()
+            args = [str(d / name) for name in ("base.gz", "app", "collector", "out.gz")]
+            args += ["--collector-sha256", digest(collector_elf()),
+                     "--base-sha256", digest(base), "--base-size", str(len(base)),
+                     "--base-cpio-sha256", digest(gzip.decompress(base)),
+                     "--base-cpio-size", str(len(gzip.decompress(base)))]
+            for option, value in (("--base-size", M.MAX_SOURCE_SIZE + 1),
+                                  ("--base-cpio-size", M.MAX_CPIO_SIZE + 1)):
+                with self.subTest(option=option):
+                    invalid = args[:]
+                    invalid[invalid.index(option) + 1] = str(value)
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as caught:
+                        M.main(invalid)
+                    self.assertEqual(caught.exception.code, 2)
+                    self.assertFalse((d / "out.gz").exists())
 
 
 if __name__ == "__main__":

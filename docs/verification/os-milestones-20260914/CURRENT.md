@@ -3514,6 +3514,46 @@ Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete; this checkpoint pauses rather than resumes or completes the goal.
 
+Continuation shutdown checkpoint 15, 2026-09-28: the Python 3.9-safe backend
+and joined runner/lifecycle are preserved at their exact source identities. The
+final combined six-module suite passes 164 tests after a test-only correction
+made the ambient `qmp_capture` oracle restore its exact prior state for both
+initially absent and preloaded cases. Independent review returns
+`PASS_RUNNER_SOURCE_READY_FOR_PACKET`; publication remains bounded best effort
+and this is source/host-protocol readiness, not execution authority. The
+pre-correction combined failure and earlier hostile-formatting failures remain
+preserved as original evidence.
+
+The current-signal overlay source passes 36 tests and independent source review.
+Retained attempt 3 derives initramfs SHA256 `40d4924c...`; strict independent
+replay accepts 61 final members and the exact current ihk-smp `5bdcd1b4...`,
+McKernel image `5f370ee9...`, collector and payload bytes. Manifest 2 is retained
+at SHA256 `c7072eea...`. Failed attempt 2 remains intact with its old-base
+identity rejection. Attempt 3 has no saved command script, so its byte result is
+accepted only for manifest integration. The only usable QEMU is container-local
+QEMU 10.1.0, SHA256 `5c198504...`, in pinned image `46d47ba9...`; direct host
+execution remains forbidden.
+
+All child agents are terminal or interrupted. Launcher PID 3125264, recovered
+worker PID 3170135 and app-server PID 3170137 remain alive for
+`.git/os-autopilot/runs/20260928T120120Z-056cff0a`. No project compiler, guest,
+QEMU, mcexec, native-boot or IHK runtime is active. Host/scratch free space is
+43/21 GiB, memory available is 28.8 GiB and the heavy lease is free. Real guest
+applications and current-candidate kernel builds in this window are **0** and
+**0**; one current diagnostic initramfs was derived.
+
+Next tasks are: (1) revalidate manifest 2 against the final checkpointed source;
+(2) prepare a container-only execution packet binding every source/artifact,
+QEMU, resource, deadline, evidence and cleanup identity; (3) obtain independent
+execution review; (4) only after that release, run one current-signal diagnostic
+guest and preserve application bytes, exit, kernel log, serial, QMP, container
+status and teardown; and (5) repair any observer/evidence defect locally before
+another privileged attempt. Exact identities and original failures are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-15.json`.
+Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete; this checkpoint pauses rather than resumes or completes the goal.
+
 Continuation shutdown checkpoint 14, 2026-09-28: four diagnostic prerequisites
 are accepted at their bounded scopes. The independently reviewed PID1 collector
 source passes 15 tests and its host-static artifact is an x86-64 ET_EXEC with no
@@ -3603,3 +3643,13 @@ scope limits and blockers are recorded in
 Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete; this checkpoint pauses rather than resumes or completes the goal.
+
+Latest continuation cursor: shutdown checkpoint 15 supersedes checkpoints 13
+and 14 for the native diagnostic lane. Its exact source/artifact identities,
+preserved failures, live launcher process identities and next tasks are recorded
+above and in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-15.json`.
+No execution packet was released and no guest ran. Resume by revalidating the
+retained current-signal manifest against the checkpointed source, then prepare
+and independently review the exact container-only execution packet. Whole-OS
+acceptance remains incomplete and the launcher pause remains in force.

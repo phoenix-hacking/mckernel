@@ -12,6 +12,7 @@ import stat
 import subprocess
 import time
 import errno
+from collections import deque
 from pathlib import Path
 
 from qmp_capture import QmpError, QmpSession
@@ -33,6 +34,67 @@ def _remaining(deadline):
     if remaining <= 0:
         raise TimeoutError("backend absolute deadline expired")
     return remaining
+
+
+_SECONDARY_ERROR_FALLBACK = deque(maxlen=256)
+
+
+def _secondary_message(label, error):
+    """Return cleanup context without allowing hostile exception formatting."""
+    try:
+        try:
+            detail = repr(error)
+        except BaseException:
+            detail = "<unrepresentable cleanup exception>"
+        # Do not ask exception classes for names, or use string-subclass hooks.
+        if type(label) is not str or type(detail) is not str:
+            return "cleanup failure"
+        return label[:128] + ": " + detail[:1024]
+    except BaseException:
+        return "cleanup failure"
+
+
+def _record_secondary_error(failure, label, error):
+    """Record cleanup context without changing or replacing *failure*.
+
+    ``BaseException.add_note`` was added after the Python 3.9 runtimes used by
+    the host campaign.  Keep the normal notes when available, and retain a
+    readable attribute (or last-resort module record) when it is not.  Cleanup
+    diagnostics must never become a new cleanup failure.
+    """
+    try:
+        message = _secondary_message(label, error)
+        add_note = getattr(failure, "add_note", None)
+        if callable(add_note):
+            try:
+                add_note(message)
+                return
+            except BaseException:
+                pass
+        details = getattr(failure, "_mckernel_secondary_errors", None)
+        if details is None:
+            details = []
+            setattr(failure, "_mckernel_secondary_errors", details)
+        details.append(message)
+        return
+    except BaseException:
+        # Exception instances normally have a __dict__, but recording must
+        # remain nonthrowing even for unusual BaseException subclasses.
+        try:
+            # Fixed-size text only: no formatting, property reads, exception
+            # references, or traceback retention on this last-resort path.
+            _SECONDARY_ERROR_FALLBACK.append("cleanup diagnostic unavailable")
+        except BaseException:
+            pass
+
+
+def _has_errno(error, expected):
+    """An exception's errno property is untrusted during recovery too."""
+    try:
+        value = error.errno if isinstance(error, OSError) else None
+        return type(value) is int and value == expected
+    except BaseException:
+        return False
 
 
 class ProcessOwner:
@@ -61,7 +123,14 @@ class ProcessOwner:
 
     def terminate(self):
         import signal
-        self._signal_group(signal.SIGTERM)
+        try:
+            self._signal_group(signal.SIGTERM)
+        except BaseException as failure:
+            try:
+                self._signal_group(signal.SIGKILL, allow_absent=True)
+            except BaseException as secondary:
+                _record_secondary_error(failure, "group KILL", secondary)
+            raise
         # Kill the entire group before wait() reaps its leader. A descendant
         # may ignore TERM even when QEMU itself exits promptly.
         self._signal_group(signal.SIGKILL, allow_absent=True)
@@ -109,19 +178,19 @@ def _retire_untransferred(child, failure):
     An outstanding lifecycle alarm must not interrupt this recovery, nor may
     cleanup replace the original exception. Each cleanup action is independent.
     """
-    errors = []
     def attempt(label, action):
         try:
             return action()
         except BaseException as exc:
-            errors.append(label + ": " + repr(exc))
+            _record_secondary_error(failure, label, exc)
 
-    mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGALRM})
+    mask = None
     try:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        pid = child.pid
+        mask = attempt("block alarm", lambda: signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGALRM}))
+        attempt("cancel alarm", lambda: signal.setitimer(signal.ITIMER_REAL, 0))
         def group(signum):
             try:
+                pid = child.pid
                 if os.getpgid(pid) != pid:
                     raise RuntimeError("untransferred child process group ownership changed")
                 os.killpg(pid, signum)
@@ -129,6 +198,7 @@ def _retire_untransferred(child, failure):
                 pass
         attempt("group TERM", lambda: group(signal.SIGTERM))
         def observe_exit():
+            pid = child.pid
             end = time.monotonic() + 0.2
             while time.monotonic() < end:
                 if os.waitid(os.P_PID, pid, os.WEXITED | os.WNOHANG | os.WNOWAIT) is not None:
@@ -140,10 +210,9 @@ def _retire_untransferred(child, failure):
     finally:
         # Consume any alarm that became pending before cancellation. Restoring
         # the mask must not replace the first failure with a second timeout.
-        signal.sigtimedwait({signal.SIGALRM}, 0)
-        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
-    for error in errors:
-        failure.add_note("spawn cleanup " + error)
+        attempt("consume alarm", lambda: signal.sigtimedwait({signal.SIGALRM}, 0))
+        if mask is not None:
+            attempt("restore alarm mask", lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
 
 
 def _close_fds(fds, *, failure=None):
@@ -159,18 +228,16 @@ def _close_fds(fds, *, failure=None):
             if first is None:
                 first = exc
             elif exc is not first:
-                first.add_note("descriptor close: " + repr(exc))
+                _record_secondary_error(first, "descriptor close", exc)
             # A signal can interrupt before close, or immediately after it.
             # Retry only if this descriptor still denotes our own file.
             try:
                 entry = os.fstat(fd)
                 if identity is None or (entry.st_dev, entry.st_ino) == identity:
                     os.close(fd)
-            except OSError as retry:
-                if retry.errno != errno.EBADF:
-                    first.add_note("descriptor close retry: " + repr(retry))
             except BaseException as retry:
-                first.add_note("descriptor close retry: " + repr(retry))
+                if not _has_errno(retry, errno.EBADF):
+                    _record_secondary_error(first, "descriptor close retry", retry)
     fds.clear()
     if failure is None and first is not None:
         raise first
@@ -237,7 +304,7 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
                 try:
                     _retire_untransferred(child, failure)
                 except BaseException as cleanup_failure:
-                    failure.add_note("spawn retirement failed: " + repr(cleanup_failure))
+                    _record_secondary_error(failure, "spawn retirement failed", cleanup_failure)
             _close_fds(fds, failure=failure)
             raise
 
@@ -298,9 +365,9 @@ class QmpBackend:
             except BaseException as error:
                 try:
                     connection.close()
-                except BaseException:
-                    pass
-                if not isinstance(error, OSError) or error.errno != errno.ECONNREFUSED:
+                except BaseException as secondary:
+                    _record_secondary_error(error, "QMP connection close", secondary)
+                if not _has_errno(error, errno.ECONNREFUSED):
                     raise
                 if self._socket_identity() != owned_identity:
                     raise QmpError("QMP socket identity changed during refusal") from error
@@ -319,15 +386,15 @@ class QmpBackend:
                 _remaining(deadline)
                 self.negotiated = True
                 return
-            except BaseException:
+            except BaseException as failure:
                 # Session remains owned for independently reported close. If
                 # identity failed before session assignment, close the socket
                 # while retaining the original failure.
                 if self.session is None:
                     try:
                         connection.close()
-                    except BaseException:
-                        pass
+                    except BaseException as secondary:
+                        _record_secondary_error(failure, "QMP connection close", secondary)
                 raise
 
     def resume(self, timeout):

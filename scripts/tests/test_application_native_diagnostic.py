@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import signal
 from pathlib import Path
 import stat
 import subprocess
@@ -15,6 +16,30 @@ ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("native_diagnostic", ROOT / "scripts/application-tests/native_diagnostic.py")
 ND = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(ND)
+
+
+def hostile_exception(base=Exception):
+    """Metadata that must never run during cleanup or first-error reporting."""
+    calls = []
+    class HostileMeta(type):
+        def __getattribute__(cls, name):
+            if name == "__name__":
+                calls.append("class-name")
+                raise RuntimeError("class-name failure")
+            return super().__getattribute__(name)
+    class Hostile(base, metaclass=HostileMeta):
+        def __getattribute__(self, name):
+            if name in ("args", "__class__"):
+                calls.append(name)
+                raise RuntimeError("exception property failure")
+            return super().__getattribute__(name)
+        def __str__(self):
+            calls.append("str")
+            raise RuntimeError("exception str failure")
+        def __repr__(self):
+            calls.append("repr")
+            raise RuntimeError("exception repr failure")
+    return Hostile("original hostile failure"), calls
 
 
 class Process:
@@ -152,15 +177,70 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertTrue((attempt / "first-failure.jsonl").read_text())
         self.assertFalse((attempt / "root.img").exists())
 
+    def test_staging_os_errors_are_terminal_without_factory_calls(self):
+        for error in (FileNotFoundError("selected artifact disappeared"),
+                      PermissionError("selected artifact unreadable"),
+                      OSError("staging I/O failure")):
+            with self.subTest(error=type(error).__name__):
+                attempt = self.attempt()
+                process_factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+                qmp_factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+                with mock.patch.object(ND, "build_command", side_effect=error):
+                    with self.assertRaises(type(error)) as raised:
+                        ND.run_diagnostic(self.manifest, attempt, process_factory, qmp_factory)
+                self.assertEqual(str(raised.exception), str(error))
+                process_factory.assert_not_called(); qmp_factory.assert_not_called()
+                result = json.loads((attempt / "result.json").read_text())
+                self.assertEqual(result["status"], "BLOCKED")
+                self.assertEqual(result["failure"]["type"], type(error).__name__)
+                journal = (attempt / "first-failure.jsonl").read_text().splitlines()
+                self.assertEqual(len(journal), 1)
+                self.assertEqual(json.loads(journal[0])["error"], str(error))
+
+    def test_staging_publication_failure_does_not_mask_original_os_error(self):
+        attempt = self.attempt()
+        process_factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+        qmp_factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+        original = FileNotFoundError("selected artifact disappeared")
+        with mock.patch.object(ND, "build_command", side_effect=original), \
+             mock.patch.object(ND, "write_record", side_effect=OSError("journal unavailable")) as publish:
+            with self.assertRaises(FileNotFoundError) as raised:
+                ND.run_diagnostic(self.manifest, attempt, process_factory, qmp_factory)
+        self.assertEqual(str(raised.exception), str(original))
+        publish.assert_called_once()
+        process_factory.assert_not_called(); qmp_factory.assert_not_called()
+
+    def test_staging_does_not_normalize_base_exceptions(self):
+        for error in (KeyboardInterrupt("stop"), SystemExit(37)):
+            with self.subTest(error=type(error).__name__):
+                attempt = self.attempt()
+                with mock.patch.object(ND, "build_command", side_effect=error), \
+                     mock.patch.object(ND, "write_record", wraps=ND.write_record) as publish:
+                    with self.assertRaises(type(error)) as raised:
+                        ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock())
+                self.assertIs(raised.exception, error)
+                publish.assert_called_once()
+                self.assertEqual(json.loads((attempt / "result.json").read_text())["failure"]["type"],
+                                 type(error).__name__)
+                self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
     def test_retained_profile_and_payload_plan(self):
         plan = ND.build_command(self.manifest, self.attempt()); args = plan["argv"]
-        self.assertEqual(args[:7], [ND.QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off"])
+        self.assertEqual(args[:7], (ND.QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off"))
         for item in ("4,sockets=2,cores=2,threads=1", "-no-reboot", "-no-shutdown", "-nic", ND.APPEND): self.assertIn(item, args)
         self.assertEqual(args.count("-numa"), 2); self.assertNotIn("-drive", args)
         self.assertTrue(plan["runtime_ready"])
         self.assertEqual(args[args.index("-initrd") + 1], self.raw["staging"]["derived_initramfs"]["path"])
         for item in ("/apps/app", "/images/mckernel.img"): self.assertIn(item, plan["overlay"]["guest_destinations"])
         self.assertIn("insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288", plan["overlay"]["init_sequence"])
+
+    def test_qemu_starts_only_after_qmp_negotiation(self):
+        args = ND.build_command(self.manifest, self.attempt())["argv"]
+        self.assertEqual(args.count("-S"), 1)
+        self.assertNotIn("-S=off", args)
+        self.assertLess(args.index("-S"), args.index("-kernel"))
+        self.assertEqual(args[args.index("-smp") + 1], "4,sockets=2,cores=2,threads=1")
+        self.assertEqual(args[args.index("-initrd") + 1], self.raw["staging"]["derived_initramfs"]["path"])
 
     def test_staging_refs_are_required_and_rechecked_before_factory(self):
         for key in ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"):
@@ -230,6 +310,167 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertEqual(result["status"], "PROTOCOL_PASS")
         self.assertFalse(result["application_acceptance"])
         self.assertFalse(result["mckernel_application_executed"])
+
+    def test_expected_plan_rejects_valid_kernel_change_before_lifecycle(self):
+        attempt = self.attempt()
+        expected = ND.build_command(self.manifest, attempt)
+        # Both references remain valid reviewed files; only the bound kernel
+        # identity changes between the factory-binding and lifecycle checks.
+        self.manifest["artifacts"]["bzImage"] = copy.deepcopy(self.manifest["artifacts"]["initramfs"])
+        process_factory, qmp_factory = mock.Mock(), mock.Mock()
+        lifecycle = mock.Mock(side_effect=AssertionError("must not enter lifecycle"))
+        with mock.patch.object(ND, "exercise_lifecycle", lifecycle):
+            with self.assertRaisesRegex(ND.DiagnosticError, "build plan changed"):
+                ND.run_diagnostic(self.manifest, attempt, process_factory, qmp_factory,
+                                  expected_plan=expected)
+        process_factory.assert_not_called(); qmp_factory.assert_not_called(); lifecycle.assert_not_called()
+        result = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(result["status"], "BLOCKED")
+
+    def test_plan_owns_immutable_nested_inputs(self):
+        plan = ND.build_command(self.manifest, self.attempt())
+        for obj, key, value in ((plan, "runtime_ready", False),
+                                (plan["payload"]["oracle"], "exit_code", 0),
+                                (plan["staging"]["overlay_source"], "path", "/changed"),
+                                (plan["argv"], 0, "/changed"),
+                                (plan["manifest"]["modules"], 0, {})):
+            with self.subTest(key=key), self.assertRaises(TypeError):
+                obj[key] = value
+        self.manifest["payload"]["oracle"]["exit_code"] = 0
+        self.manifest["staging"]["overlay_source"]["path"] = "/changed"
+        self.assertEqual(plan["payload"]["oracle"]["exit_code"], 37)
+        self.assertEqual(plan["staging"]["overlay_source"]["path"], str(self.files["overlay_source"]))
+
+    def test_expected_plan_rejects_nested_valid_drift_and_non_argv_inputs(self):
+        for change in ("staging", "payload", "case"):
+            with self.subTest(change=change):
+                manifest = copy.deepcopy(self.manifest)
+                attempt = self.attempt()
+                expected = ND.build_command(manifest, attempt)
+                if change == "staging":
+                    manifest["staging"]["overlay_source"] = dict(manifest["staging"]["collector"])
+                elif change == "payload":
+                    manifest["payload"]["oracle"]["stdout_hex"] = "42"
+                else:
+                    manifest["case_id"] = "different-case"
+                # The replacement independently validates. Rejection must be
+                # the complete factory-plan join, not incidental bad input.
+                ND.build_command(manifest, attempt)
+                with mock.patch.object(ND, "exercise_lifecycle") as lifecycle:
+                    with self.assertRaisesRegex(ND.DiagnosticError, "build plan changed"):
+                        ND.run_diagnostic(manifest, attempt, mock.Mock(), mock.Mock(), expected_plan=expected)
+                lifecycle.assert_not_called()
+
+    def test_plan_comparison_is_strict_and_lifecycle_owns_its_snapshot(self):
+        attempt = self.attempt()
+        plan = ND.build_command(self.manifest, attempt)
+        changed = ND._thaw(plan)
+        changed["runtime_ready"] = 1
+        self.assertFalse(ND._same_plan(plan, ND._freeze(changed)))
+        def lifecycle(manifest, *args):
+            self.manifest["payload"]["oracle"]["exit_code"] = 0
+            self.assertEqual(manifest["payload"]["oracle"]["exit_code"], 37)
+            return {"status": "PROTOCOL_PASS"}
+        with mock.patch.object(ND, "exercise_lifecycle", side_effect=lifecycle):
+            ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock(), expected_plan=plan)
+
+    def test_failure_reporting_never_formats_hostile_exception_or_arguments(self):
+        class HostileArgument:
+            def __str__(self): raise AssertionError("argument str called")
+            def __repr__(self): raise AssertionError("argument repr called")
+        class HostileError(RuntimeError):
+            def __str__(self): raise AssertionError("exception str called")
+            def __repr__(self): raise AssertionError("exception repr called")
+        error = HostileError(HostileArgument())
+        attempt = self.attempt()
+        with mock.patch.object(ND, "build_command", side_effect=error):
+            with self.assertRaises(HostileError) as raised:
+                ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock())
+        self.assertIs(raised.exception, error)
+        result = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(result["failure"]["error"], "<exception argument omitted>")
+
+    def test_total_failure_metadata_preserves_safe_types_and_ignores_all_hooks(self):
+        self.assertEqual(ND._failure(OSError(5, "disk unavailable"), "cleanup"),
+                         {"phase": "cleanup", "type": "OSError", "error": "5: disk unavailable"})
+        error, calls = hostile_exception()
+        self.assertEqual(ND._failure(error, "cleanup"),
+                         {"phase": "cleanup", "type": "BaseException",
+                          "error": "<exception metadata unavailable>"})
+        self.assertEqual(calls, [])
+        class HostileProperties(Exception):
+            @property
+            def args(self): raise AssertionError("args property called")
+            @property
+            def __class__(self): raise AssertionError("class property called")
+        self.assertEqual(ND._failure(HostileProperties("safe message"), "cleanup"),
+                         {"phase": "cleanup", "type": "HostileProperties", "error": "safe message"})
+        self.assertEqual(ND._failure(object(), "cleanup")["error"], "<exception metadata unavailable>")
+
+    def test_prepare_and_staging_hostile_errors_preserve_identity_and_evidence(self):
+        for phase in ("prepare", "staging"):
+            with self.subTest(phase=phase):
+                original, calls = hostile_exception(BaseException)
+                if phase == "prepare":
+                    attempt = self.root / "prepare-hostile"
+                    with mock.patch.object(Path, "touch", side_effect=original):
+                        with self.assertRaises(BaseException) as raised:
+                            ND.prepare_attempt(self.manifest, self.root, attempt.name)
+                else:
+                    attempt = self.attempt()
+                    with mock.patch.object(ND, "build_command", side_effect=original):
+                        with self.assertRaises(BaseException) as raised:
+                            ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock())
+                self.assertIs(raised.exception, original)
+                self.assertEqual(calls, [])
+                record = json.loads((attempt / "result.json").read_text())
+                self.assertEqual(record["failure"], {"phase": phase, "type": "BaseException",
+                                                     "error": "<exception metadata unavailable>"})
+                self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_failure_publication_declines_ambient_timer_without_stealing_it(self):
+        old_handler = signal.getsignal(signal.SIGALRM)
+        handler = lambda *_args: None
+        signal.signal(signal.SIGALRM, handler)
+        signal.setitimer(signal.ITIMER_REAL, 30, 30)
+        try:
+            with mock.patch.object(ND, "write_record") as publisher, \
+                 mock.patch.object(ND.signal, "setitimer", wraps=signal.setitimer) as timer:
+                ND.record_failure(self.attempt(), RuntimeError("original"), "staging")
+            publisher.assert_not_called()
+            timer.assert_not_called()
+            self.assertIs(signal.getsignal(signal.SIGALRM), handler)
+            remaining, interval = signal.getitimer(signal.ITIMER_REAL)
+            self.assertGreater(remaining, 0)
+            self.assertEqual(interval, 30)
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, old_handler)
+
+    def test_staging_writer_base_exception_preserves_original(self):
+        for publish_error in (KeyboardInterrupt("writer stop"), SystemExit(2)):
+            attempt = self.attempt()
+            original = FileNotFoundError("original")
+            with mock.patch.object(ND, "build_command", side_effect=original), \
+                 mock.patch.object(ND, "write_record", side_effect=publish_error) as publish:
+                with self.assertRaises(FileNotFoundError) as raised:
+                    ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock())
+            self.assertIs(raised.exception, original)
+            publish.assert_called_once()
+
+    def test_publication_restores_alarm_handler_when_arming_fails(self):
+        old = signal.getsignal(signal.SIGALRM)
+        with mock.patch.object(ND.signal, "setitimer", side_effect=OSError("timer unavailable")), \
+             mock.patch.object(ND, "write_record") as publisher:
+            ND.record_failure(self.attempt(), RuntimeError("original"), "staging")
+        publisher.assert_not_called()
+        self.assertIs(signal.getsignal(signal.SIGALRM), old)
+
+    def test_publication_declines_worker_thread_without_calling_writer(self):
+        with mock.patch.object(ND.threading, "current_thread", return_value=object()), \
+             mock.patch.object(ND, "write_record") as publisher:
+            ND.record_failure(self.attempt(), RuntimeError("original"), "staging")
+        publisher.assert_not_called()
 
     def test_manifest_rejects_implicit_oracle_env_profile_and_types(self):
         variants = []
@@ -421,17 +662,133 @@ class NativeDiagnosticTests(unittest.TestCase):
         (attempt / "serial.log").write_text("missing report")
         def block(*args):
             self.assertIn("wait", process.calls)
-            time.sleep(5)
+            signal.pause()
         start = time.monotonic()
         with mock.patch.object(ND, "_append_failure", side_effect=block):
-            with self.assertRaises(TimeoutError): self.exercise(attempt, process)
+            with self.assertRaisesRegex(ND.DiagnosticError, "missing/duplicate"):
+                self.exercise(attempt, process)
         self.assertLess(time.monotonic() - start, 3)
 
     def test_journal_write_failure_does_not_skip_reaping(self):
         attempt = self.attempt(); process = Process()
         (attempt / "serial.log").write_text("no guest report")
         with mock.patch.object(ND, "_append_failure", side_effect=OSError("disk failure")):
-            with self.assertRaises(OSError): self.exercise(attempt, process)
+            with self.assertRaisesRegex(ND.DiagnosticError, "missing/duplicate"):
+                self.exercise(attempt, process)
+        self.assertIn("wait", process.calls)
+
+    def test_lifecycle_abnormal_exit_rethrows_identity_after_retirement_and_evidence(self):
+        for original in (KeyboardInterrupt("stop"), SystemExit(37)):
+            with self.subTest(error=type(original).__name__):
+                attempt = self.attempt(); process = Process(); qmp = Qmp()
+                qmp.negotiate = mock.Mock(side_effect=original)
+                with self.assertRaises(type(original)) as raised:
+                    self.exercise(attempt, process, qmp)
+                self.assertIs(raised.exception, original)
+                self.assertIn("wait", process.calls)
+                record = json.loads((attempt / "result.json").read_text())
+                self.assertEqual(record["failure"]["type"], type(original).__name__)
+                self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_lifecycle_writer_base_exception_cannot_replace_abnormal_exit(self):
+        original = KeyboardInterrupt("first")
+        process, qmp = Process(), Qmp()
+        qmp.negotiate = mock.Mock(side_effect=original)
+        with mock.patch.object(ND, "write_record", side_effect=SystemExit("second")) as publish:
+            with self.assertRaises(KeyboardInterrupt) as raised:
+                self.exercise(self.attempt(), process, qmp)
+        self.assertIs(raised.exception, original)
+        self.assertIn("wait", process.calls)
+        publish.assert_called_once()
+
+    def test_cleanup_abnormal_exit_rethrows_after_remaining_cleanup(self):
+        attempt = self.attempt(); process = Process(); qmp = Qmp()
+        original = SystemExit(37)
+        qmp.terminate = mock.Mock(side_effect=original)
+        with self.assertRaises(SystemExit) as raised:
+            self.exercise(attempt, process, qmp)
+        self.assertIs(raised.exception, original)
+        self.assertIn("wait", process.calls)
+        record = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(record["cleanup"]["errors"][0]["type"], "SystemExit")
+
+    def test_qmp_cleanup_hostile_metadata_never_skips_retirement_or_first_error(self):
+        for prior_failure in (False, True):
+            with self.subTest(prior_failure=prior_failure):
+                attempt = self.attempt(); process = Process(stuck=True); qmp = Qmp()
+                original = RuntimeError("first negotiation failure")
+                hostile, hooks = hostile_exception()
+                if prior_failure:
+                    qmp.negotiate = mock.Mock(side_effect=original)
+                qmp.terminate = mock.Mock(side_effect=hostile)
+                with self.assertRaises(ND.DiagnosticError) as raised:
+                    self.exercise(attempt, process, qmp)
+                self.assertIs(raised.exception.__cause__, original if prior_failure else hostile)
+                self.assertEqual(hooks, [])
+                self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait", "communicate"])
+                record = json.loads((attempt / "result.json").read_text())
+                self.assertTrue(record["cleanup"]["reaped"])
+                self.assertEqual(record["cleanup"]["errors"][0],
+                                 {"phase": "qmp-quit", "type": "BaseException",
+                                  "error": "<exception metadata unavailable>"})
+                self.assertEqual(record["failure"]["error"],
+                                 "first negotiation failure" if prior_failure else "teardown uncertain")
+                self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_hostile_metadata_across_lifecycle_capture_evaluation_and_publication(self):
+        for phase in ("lifecycle", "qmp-transcript", "host-capture", "evaluation", "publication"):
+            with self.subTest(phase=phase):
+                attempt = self.attempt(); process = Process(stuck=phase in ("lifecycle", "publication")); qmp = Qmp()
+                hostile, hooks = hostile_exception(BaseException)
+                original = RuntimeError("first negotiation failure")
+                def raise_hostile(*args, **kwargs):
+                    raise hostile
+                evaluate = ND.evaluate
+                publish = ND.write_record
+                if phase == "lifecycle":
+                    qmp.negotiate = raise_hostile
+                    qmp.terminate = mock.Mock(side_effect=RuntimeError("later cleanup"))
+                elif phase == "qmp-transcript":
+                    class HostileSession(Qmp):
+                        @property
+                        def session(self): raise hostile
+                    qmp = HostileSession()
+                elif phase == "host-capture":
+                    def communicate(timeout):
+                        process.calls.append("communicate")
+                        raise hostile
+                    process.communicate = communicate
+                elif phase == "evaluation":
+                    evaluate = raise_hostile
+                else:
+                    qmp.negotiate = mock.Mock(side_effect=original)
+                    publish = raise_hostile
+                with mock.patch.object(ND, "evaluate", side_effect=evaluate), \
+                     mock.patch.object(ND, "write_record", side_effect=publish) as publisher:
+                    with self.assertRaises(BaseException) as raised:
+                        self.exercise(attempt, process, qmp)
+                self.assertEqual(hooks, [])
+                expected_calls = ["terminate", "wait"]
+                if process.stuck:
+                    expected_calls.extend(["kill", "wait"])
+                self.assertEqual(process.calls, expected_calls + ["communicate"])
+                publisher.assert_called_once()
+                if phase == "publication":
+                    self.assertIs(raised.exception.__cause__, original)
+                else:
+                    self.assertIs(raised.exception, hostile)
+                    record = json.loads((attempt / "result.json").read_text())
+                    self.assertEqual(record["failure"]["type"], "BaseException")
+                    self.assertEqual(len((attempt / "first-failure.jsonl").read_text().splitlines()), 1)
+
+    def test_lifecycle_primary_error_remains_cause_when_writer_fails(self):
+        original = RuntimeError("first QMP failure")
+        process, qmp = Process(), Qmp()
+        qmp.negotiate = mock.Mock(side_effect=original)
+        with mock.patch.object(ND, "write_record", side_effect=SystemExit("writer stop")):
+            with self.assertRaisesRegex(ND.DiagnosticError, "first QMP failure") as raised:
+                self.exercise(self.attempt(), process, qmp)
+        self.assertIs(raised.exception.__cause__, original)
         self.assertIn("wait", process.calls)
 
     def test_dangling_terminal_symlink_cannot_be_replaced(self):
