@@ -7,8 +7,8 @@ diagnostic application is never whole-OS completion.
 ## Authority and identity
 
 - Branch: `codex/local-native-staging-repair`.
-- Last verified remote checkpoint before the current evidence delta:
-  `5af634ce1e71248d7bbe144a49d689443993f449`.
+- Last verified remote checkpoint:
+  `029b41fad7f4a30ae347c9ca282d1b8d58d46ce9`.
 - Adopted policy SHA-256: GOAL `76c4f5d1...c0bcc3`, START
   `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, HANDOFF predecessor
   `265cd999...a415`.
@@ -25,7 +25,19 @@ diagnostic guest applications (memory/files/threads/signals) have run; zero
 current-candidate builds exist. Required hardware/exposure remains unavailable
 locally and does not prevent independent implementation work.
 
-## Active M05 lifecycle family
+## Current source closure and active M05 lifecycle family
+
+The exact current native Rust host source closure is independently PASS for
+source/Layer-B only. The corrected integrated command passes 196 tests and the
+exact-build/workflow subset passes 48 tests. It binds current smp_memory and
+os_runtime escape surfaces, SMP v4, the mcctrl service boundary, literal escape
+ordering and the complete `LoadedImage` owner lifecycle. Preserve the original
+failures and exact inventory in
+`stability-native-current-source-closure-success-20260928-1.json`; the corrected
+independent decision is
+`stability-native-current-source-closure-independent-review-20260928-1.json`.
+Four build-output blockers remain. No configured build or runtime result follows
+from this source decision.
 
 The allocation-free registry shutdown transaction is source-reviewed and passes
 15 exact Rust tests. The additive v5 host shutdown/admission boundary now also
@@ -105,15 +117,22 @@ configured build, module link/load, privileged execution or final independent
 review. See the two `stability-native-shutdown-reset-*-wip-20260928-1.json`
 records.
 
-Next executable source step: finish the lifecycle checker's exact import-order
-expectation and refresh its `smp_cpu.rs` contract hash, then require the full
-60-test suite. Independently rereview the repaired journal and build supplement,
-run the workflow assertion with a compatible Python interpreter, and then run a
-reviewed configured build. Separately implement the native-revision-gated IRQ
-slot descriptor, sender gate and exact failed-IRQ_WORK_VECTOR retry fixture from
-`stability-native-shutdown-irq-slot-design-review-20260928-1.json`. Freeze
-STOP/ACK only after CPU reclamation and callback drain both pass independent
-review. Do not run the shutdown fixture earlier.
+The canonical remote workflow dispatch is independently BLOCKED as an execution
+release. It pins the Rocky digest, `-j2` and 330-minute timeout, but does not
+enforce/read back CPUs 2-5, 12 GiB/no swap, 512 tasks or no-network; its package
+and source acquisition require network; and success automatically starts two
+downstream jobs. It also lacks an exact exclusive owner, disk-floor admission
+and retirement receipt. No workflow was dispatched.
+
+Next executable step: implement and test a two-boundary owner. Authenticated
+preparation must produce immutable tool/image and source-asset identities; the
+single offline build container must enforce/read back the frozen limits, hold an
+exclusive heavy lease, preserve partial evidence and retire before release. Seek
+fresh independent review before execution. After a successful configured build,
+bind its exact kernel/modules to the smallest real McKernel startup application.
+Separately continue failed-IRQ_WORK_VECTOR retry/offline quarantine, callback
+drain, STOP/v5 integration and CPU reclamation. Do not freeze STOP/ACK or run the
+shutdown fixture before CPU reclamation and callback drain pass review.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

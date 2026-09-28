@@ -5262,3 +5262,51 @@ quarantine, callback drain, STOP/v5 integration and CPU reclamation; never free
 or reuse guest storage first. Formal counters remain 0/273, 2/4, 6/130,
 350/10,000 and 0/7; four diagnostic guest apps and zero current-candidate builds
 remain unchanged. This checkpoint neither completes nor resumes the OS goal.
+
+Continuation checkpoint 59, 2026-09-28: exact current-source closure is now
+complete for its explicitly noncrediting source/Layer-B scope. Commit
+`029b41fad7f4a30ae347c9ca282d1b8d58d46ce9` is pushed, fetched and identical at
+local HEAD, FETCH_HEAD and the remote branch. The corrected integrated command
+passes 196 tests in 49.128 seconds (18 host audit, 61 Rocky staging, 60 ihk-smp
+lifecycle, 56 mcctrl lifecycle and one OS-runtime ownership test) with
+ResourceWarning promoted to an error. The exact-build/workflow subset passes 48
+tests in 24.411 seconds under Python 3.12.
+
+The initial independent review's three blocking oracle gaps are repaired.
+Memory imports are now classified at outer depth zero, every reviewed escape
+order is literal rather than candidate-derived, and staging binds the complete
+`LoadedImage::started` and `Drop` bodies. Independent rereview repeated the
+disabled/nested import, fresh-process reordered export, duplicate/unconditional
+destruction and false-started-state mutations; all reject. Its additive decision
+is `stability-native-current-source-closure-independent-review-20260928-1.json`.
+The full evidence inventory and original failures remain in
+`stability-native-current-source-closure-success-20260928-1.json` (SHA-256
+`a2fb2925cf290d5c0a49601eab15753e35706f56767fcc9a62695e9e5ad9620c`).
+
+This does not clear the four build-output blockers or grant a configured build,
+module load, reset/shutdown, guest or application result. A separate independent
+review evaluated exactly one canonical workflow dispatch against commit
+`029b41fa` and returned BLOCK; no heavy lease has started. Preserved launcher identities remain
+wrapper 3399308/starttime 83682487, worker 3399313/starttime 83682494 and
+app-server 3399317/starttime 83682500. No QEMU, mcexec or diagnostic owner was
+live at reconciliation. Host free space was 26,758,045,696 bytes, scratch free
+space 21,613,768,704 bytes and MemAvailable 30,678,401,024 bytes.
+
+Next executable step: repair only the specified execution-boundary defect and
+seek fresh independent rereview. On PASS, execute only the exact pushed SHA,
+preserve the run identity/logs/artifact and first deterministic failure, and do
+one bounded correction for that failure family before escalation.
+After a successful configured build, bind its exact kernel/modules to the
+smallest real McKernel startup application; do not promote diagnostic results to
+formal acceptance. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and
+0/7; four diagnostic guest apps and zero current-candidate builds remain
+unchanged.
+
+Independent configured-build execution review returned BLOCK for the proposed
+canonical GitHub workflow dispatch, so it was not started. The job does not
+enforce or read back CPUs 2-5, 12 GiB/no swap, 512 tasks or no-network; dnf and
+source acquisition require network in the same job; success also schedules the
+FP-0006 and RK-006 downstream jobs; and no exclusive owner, disk-floor admission
+or terminal retirement receipt binds the lease. The bounded correction is an
+explicit two-boundary owner: authenticate immutable preparation inputs, then run
+only one offline constrained build with complete partial-failure retention.

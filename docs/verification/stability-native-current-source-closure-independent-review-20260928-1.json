@@ -1,0 +1,28 @@
+{
+  "schema": "mckernel.stability.independent-source-review.v1",
+  "date": "2026-09-28",
+  "candidate_commit": "029b41fad7f4a30ae347c9ca282d1b8d58d46ce9",
+  "reviewed_record": {
+    "path": "docs/verification/stability-native-current-source-closure-success-20260928-1.json",
+    "sha256": "a2fb2925cf290d5c0a49601eab15753e35706f56767fcc9a62695e9e5ad9620c"
+  },
+  "decision": "PASS_SOURCE_LAYER_B_ONLY",
+  "independent_checks": [
+    "Disabled and nested memory-import mutations reject.",
+    "Reordered OS export records reject after fresh checker initialization.",
+    "Duplicate table destruction and unconditional live-table destruction reject.",
+    "False LoadedImage started-state detection rejects.",
+    "All twelve artifact hashes and all four production-source hashes match the reviewed inventory."
+  ],
+  "corrected_evidence": {
+    "path": "docs/verification/evidence/stability-native-current-source-integrated-corrected-success-20260928-1.log.gz",
+    "sha256": "bf2686a9f6b6ba5e09333d4102ae7f77f08ee460592fc46e39073ccaa5a267c3",
+    "result": "196 tests passed in 49.128 seconds; 18 host-audit, 61 staging, 60 ihk-smp lifecycle, 56 mcctrl lifecycle and one OS-runtime ownership test"
+  },
+  "limitations": [
+    "This decision accepts only the exact reviewed source contracts, mutation oracles and Layer-B checks.",
+    "The four staging build-output blockers remain.",
+    "This is not a configured-build execution release.",
+    "No module load, reset/shutdown, guest, application, production-gate or whole-OS acceptance is granted."
+  ]
+}
