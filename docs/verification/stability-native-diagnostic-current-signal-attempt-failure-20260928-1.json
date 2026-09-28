@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.native-diagnostic-current-signal-attempt-failure.v1",
+  "recorded_at": "2026-09-28T07:30:41-07:00",
+  "source_commit": "891a7971dcdd400b2315e0c0dbac2ef4cad09e91",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-1.md",
+  "packet_sha256": "fec6266a6a2c2f23212932fa4a263f6c9c0cb2dbff2f2a22e70cb1f6060e00ef",
+  "release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-1.json",
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-1",
+    "evidence_directory": "/home/holden/mckernel-work/scratch/ndcs-20260928-1.owner-6ea6a57520d94590b709b46dc011167c",
+    "nonce": "6ea6a57520d94590b709b46dc011167c",
+    "container_id": "16e3d5e4cd8c1023deb47a141b540c560adbac4e3f4a7c38a9fe275438aa5924",
+    "container_created_at": "2026-09-28T14:28:25.394530568Z",
+    "container_started_at": "2026-09-28T14:28:25.584591012Z",
+    "container_finished_at": "2026-09-28T14:28:25.831803492Z",
+    "container_exit_code": 1,
+    "container_oom_killed": false,
+    "result": "FAIL",
+    "failure": "OwnerError: inside QEMU version drift",
+    "qemu_started": false,
+    "guest_started": false,
+    "application_started": false
+  },
+  "source_binding": {
+    "owner_sha256": "4ed6f8498b99f5df7e8203bad440e1e9d722a2d7b343e6fcb3de3fe9acc6b3d3",
+    "owner_expected_first_line": "QEMU emulator version 10.1.0",
+    "retained_pinned_qemu_record": "docs/verification/native-unbooted-24a151fe-local.json",
+    "retained_pinned_qemu_stdout": "QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\nCopyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n",
+    "qemu_sha256": "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
+  },
+  "diagnosis": {
+    "family": "observer-qemu-version-binding",
+    "finding": "The inner observer compared only the first line against a shortened upstream version string. The retained exact version of the pinned QEMU binary contains the Rocky build suffix, so the observer rejected its own pinned input before backend launch.",
+    "classification": "one-shot harness observer defect; no McKernel behavior was exercised",
+    "unchanged_retry_allowed": false
+  },
+  "raw_evidence_sha256": {
+    "result.json": "cf21110623888f0abf8753aedd256c380b8bf3a59fec5d5318138a554a5eed6d",
+    "owner.json": "31eb537b5e848afc52ea44cf29f68d172e0bac36a4c0e3f303505a576531b7c9",
+    "009-start.json": "65c45004f3e64509c512fa333ca6bd7ddbb7ac6066c59756a0210821d318e6a1",
+    "009-start.stderr": "26f55e9bc54307ad6d859db835ecd66f761e5eb854b2d861e257864b43c9ddd5",
+    "012-inspect.stdout": "573ef170af246b2ec8e05c86ec3258f29bcce2c037e3c7e60393a1d22dfbd94e",
+    "016-inspect.stdout": "573ef170af246b2ec8e05c86ec3258f29bcce2c037e3c7e60393a1d22dfbd94e",
+    "022-rm.stdout": "6d83a1fd8149b520c922087593cc43eaa45e247aa7574479af9962c6ae622ddb",
+    "023-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "024-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "025-ps.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "cleanup": {
+    "absence_verified": true,
+    "lease_retained": false,
+    "container_removed": true,
+    "three_final_exact_lookups_empty": true,
+    "secondary_failures": [],
+    "development_lease_at_checkpoint": "free",
+    "active_qemu_mcexec_or_diagnostic_owner_at_checkpoint": false
+  },
+  "acceptance": {
+    "application_acceptance": false,
+    "real_guest_applications_added": 0,
+    "current_candidate_builds_added": 0,
+    "formal_gate_credit_added": 0
+  },
+  "next_action": "Before any new privileged attempt, change the observer to bind the exact retained QEMU version output, add local positive and drift regressions using the real suffix, run the cheap unprivileged suite, obtain independent source review, then create a fresh parent and nonce and obtain a new exact one-shot execution release."
+}

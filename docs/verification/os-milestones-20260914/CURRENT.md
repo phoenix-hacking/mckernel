@@ -3798,3 +3798,46 @@ unbounded and is not a live container/QEMU lease. Next remeasure capacity and
 leases, create the exact parent once, run only the released command, monitor its
 live process/session, and preserve all results. No execution or acceptance
 claim follows from this release itself.
+
+Continuation shutdown checkpoint 21, 2026-09-28: the one released diagnostic
+attempt ran once and failed cleanly inside the container before QEMU launch.
+Container `16e3d5e4...` exited 1 without OOM after 247 ms; the inner traceback is
+`OwnerError: inside QEMU version drift`. The owner then authenticated and removed
+that exact container, three final exact lookups were empty, the development
+lease was released, and no QEMU, mcexec, guest or diagnostic owner remains.
+The original root-owned evidence directory and every command record are retained
+under `/home/holden/mckernel-work/scratch/ndcs-20260928-1.owner-6ea6a57520d94590b709b46dc011167c`.
+
+This is an observer failure, not an OS result. Owner `4ed6f849...` compares the
+first version line to shortened text `QEMU emulator version 10.1.0`, while the
+repository's retained exact record for pinned QEMU `5c198504...` is
+`QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)`. The positive unit
+mock copied the shortened constant and therefore did not model the actual pinned
+binary. No application bytes, kernel log or guest exit exist because the backend
+was never entered. Exact hashes, timings, cleanup receipts and limits are in
+`docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json`.
+The complete live-process/resource/next-task shutdown cursor is
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-21.json`.
+
+All eight child agents are terminal. Launcher PID 3125264, recovered worker PID
+3170135 and app-server PID 3170137, started at 2026-09-28 03:47:42 and 05:01:20
+-0700, remain alive for `.git/os-autopilot/runs/20260928T120120Z-056cff0a`.
+At the shutdown observation, host/scratch free space is 45,754,019,840 and
+22,277,754,880 bytes, available memory is 30,000,996 KiB, and the heavy lease is
+free. Real guest applications and current-candidate builds added by this attempt
+are **0** and **0**.
+
+Next tasks are: (1) bind the observer to the exact retained full QEMU version
+output and add cheap local positive/suffix/extra-output regressions; (2) rerun
+the unprivileged owner/combined suites and obtain independent source review;
+(3) commit that correction, then use a fresh parent and nonce in a newly bound
+packet and obtain a fresh independent one-shot release; (4) only after a new
+resource/lease reconciliation, run one corrected diagnostic and preserve its
+application bytes, exit, kernel log, QMP/serial, process identities and teardown;
+and (5) continue the pending-free owner/token/generation, invalidation-ack and
+durable-quarantine lane after the diagnostic signal. The failed parent/nonce
+must never be reused, and the deterministic observer failure must not be replayed
+unchanged. Official counters remain 0/273 applications, 2/4 narrow fault modes,
+6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
+acceptance remains incomplete; this checkpoint pauses rather than resumes or
+completes the goal.

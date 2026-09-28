@@ -116,6 +116,7 @@
     ,"native_diag_owner": "docs/verification/stability-native-diagnostic-container-owner-source-success-20260928-1.json"
     ,"native_diag_identity": "docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json"
     ,"native_diag_execution_release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-1.json"
+    ,"native_diag_attempt_failure": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json"
   },
   "areas": [
     {
@@ -515,8 +516,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The Python 3.9-safe diagnostic stack now passes a 211-test combined suite. The authenticated current-signal overlay/manifest reconcile exact module, image, collector, payload and derived initramfs bytes. The fail-closed owner retains unresolved creates/clients; the backend now retains QEMU PID/PGID/session/starttime and the outer owner queues process, lock and cgroup identity. Independent review returns PASS_IDENTITY_SOURCE_READY_FOR_PACKET_CORRECTION. No QEMU or McKernel guest has run, and source/byte review is not execution authority.",
-      "next_check": "Run the exact independently released one-shot current-signal diagnostic, preserve application bytes/exit, serial/debugcon/QMP, process/container identities and teardown, then diagnose the first observed runtime failure or advance to the memory smoke.",
+      "result": "The exact released attempt failed cleanly before QEMU launch because the observer compared pinned QEMU against a shortened version string that omitted the retained Rocky build suffix. The exact container exited 1 without OOM, was authenticated and removed, three final lookups were empty and the lease was released. No McKernel behavior or application bytes were observed.",
+      "next_check": "Bind the observer to the exact retained QEMU version output, add local drift regressions, rerun cheap suites and obtain independent source review; then create a fresh parent/nonce and obtain a new exact one-shot release before another privileged attempt.",
       "evidence": [
         "history",
         "plan",
@@ -528,7 +529,8 @@
         "native_diag_closure",
         "native_diag_owner",
         "native_diag_identity",
-        "native_diag_execution_release"
+        "native_diag_execution_release",
+        "native_diag_attempt_failure"
       ],
       "depends_on": []
     },
