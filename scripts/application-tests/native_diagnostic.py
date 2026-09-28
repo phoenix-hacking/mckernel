@@ -8,21 +8,31 @@ acceptance.
 """
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
 import stat
 import tempfile
-import shutil
-import subprocess
 import time
+import signal
+import threading
+from contextlib import contextmanager
 
 QEMU = "/usr/libexec/qemu-kvm"
 MAX_JSON = 4 * 1024 * 1024
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "payload")
 MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
-BAD_MARKERS = re.compile(r"(?:panic|oops|\bBUG\b|\berror\b)", re.I)
+APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+BAD_MARKERS = re.compile(
+    r"panic|oops|BUG:|\bBUG\b|\berror\b|WARNING|soft lockup|hard LOCKUP|"
+    r"clear_host_pte failed|rcu_preempt detected stalls|\bFAIL\b|"
+    r"cleanup retained|reap_retained|strncpy_from_user:ioctl:|ret: ", re.I)
+STAGING_BLOCKER = (
+    "guest staging unavailable: the v1 manifest has no bound retained root-tree "
+    "inventory, native-boot/runtime library closure, or guest raw-wait/EOF "
+    "collector and serial transport; copied initramfs/root files are not staged")
 
 
 class DiagnosticError(ValueError):
@@ -92,21 +102,23 @@ def load_manifest(path):
     profile = obj["profile"]
     _need(all(type(profile[k]) is int for k in ("memory_mib", "vcpus", "numa_nodes")) and
           profile["memory_mib"] == 8192 and profile["vcpus"] == 4 and profile["numa_nodes"] == 2, "profile differs")
-    append = profile.get("append", "console=ttyS0")
-    _need(isinstance(append, str) and "\0" not in append, "kernel append")
-    _need(isinstance(obj["payload"], dict) and set(obj["payload"]) <= {"cwd", "argv", "env", "oracle"}
-          and {"cwd", "argv", "env"} <= set(obj["payload"]), "payload keys")
+    append = profile.get("append", APPEND)
+    _need(append == APPEND, "kernel append differs from retained profile")
+    _keys(obj["payload"], ("cwd", "argv", "env", "oracle", "stdout_limit_bytes", "stderr_limit_bytes"))
     payload = obj["payload"]
     _need(payload["cwd"] == "/case/work" and payload["argv"] == ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"], "payload contract")
-    _need(isinstance(payload["env"], dict) and all(type(k) is str and "=" not in k and "\0" not in k and type(v) is str and "\0" not in v for k, v in payload["env"].items()) and payload["env"].get("PATH") == "/usr/bin:/bin", "frozen PATH")
-    oracle = payload.get("oracle", {"stdout_hex": "", "stderr_hex": "", "exit_code": 0})
+    _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
+    oracle = payload["oracle"]
     _keys(oracle, ("stdout_hex", "stderr_hex", "exit_code"))
     _need(type(oracle["stdout_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stdout_hex"]), "oracle stdout")
     _need(type(oracle["stderr_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stderr_hex"]), "oracle stderr")
     _need(type(oracle["exit_code"]) is int and not isinstance(oracle["exit_code"], bool) and 0 <= oracle["exit_code"] <= 255, "oracle exit")
+    for name in ("stdout", "stderr"):
+        limit = payload[name + "_limit_bytes"]
+        _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[name + "_hex"])) <= limit, "stream limit")
     return {"schema_version": 1, "kind": obj["kind"], "case_id": obj["case_id"], "artifacts": bound,
             "modules": modules, "profile": {"memory_mib": 8192, "vcpus": 4, "numa_nodes": 2, "append": append},
-            "payload": {"cwd": payload["cwd"], "argv": list(payload["argv"]), "env": dict(payload["env"]), "oracle": oracle} }
+            "payload": dict(payload)}
 
 
 def _pairs(pairs):
@@ -118,7 +130,7 @@ def _pairs(pairs):
 
 
 def prepare_attempt(manifest, parent, name):
-    """Create a fresh 0700 attempt and reserve its QMP socket pathname."""
+    """Reserve evidence space, not a bootable guest; see STAGING_BLOCKER."""
     parent = Path(parent)
     _need(parent.is_absolute() and parent.is_dir() and not parent.is_symlink(), "attempt parent")
     _need(isinstance(name, str) and name and "/" not in name and name not in (".", ".."), "attempt name")
@@ -128,120 +140,269 @@ def prepare_attempt(manifest, parent, name):
         os.mkdir(attempt, 0o700)
     except FileExistsError as exc:
         raise DiagnosticError("existing attempt") from exc
-    socket = attempt / "qmp.sock"
-    _need(not os.path.lexists(socket), "stale socket")
-    for filename in ("stdout.bin", "stderr.bin", "serial.log", "debugcon.log"):
-        (attempt / filename).touch(mode=0o600, exist_ok=False)
-    # The retained root image is never attached writable.  Work only on a
-    # private copy; initramfs is likewise copied before overlay preparation.
-    for source_name, target_name in (("root_base", "root.img"), ("initramfs", "initramfs.img")):
-        shutil.copyfile(manifest["artifacts"][source_name]["path"], attempt / target_name)
-        os.chmod(attempt / target_name, 0o600)
-    (attempt / "overlay").mkdir(mode=0o700)
+    try:
+        for filename in ("serial.log", "debugcon.log"):
+            (attempt / filename).touch(mode=0o600, exist_ok=False)
+    except BaseException as exc:
+        write_record(attempt, {"status": "FAIL", "application_acceptance": False},
+                     {"phase": "prepare", "type": type(exc).__name__, "error": str(exc)})
+        raise
     return attempt
 
 
 def build_command(manifest, attempt):
-    """Return the reviewed direct-QEMU argv and initramfs/module overlay plan."""
+    """Return a non-executable staging plan matching retained runner-1.py.
+
+    No staged initrd is produced here.  The runtime entry point fails closed.
+    """
     attempt = Path(attempt)
     _need(attempt.is_dir() and (attempt.stat().st_mode & 0o777) == 0o700, "attempt not private")
     a = manifest["artifacts"]
     qmp = str(attempt / "qmp.sock")
     _need(not os.path.lexists(qmp), "stale QMP socket")
-    argv = [QEMU, "-m", "8192", "-smp", "4", "-numa", "node,nodeid=0", "-numa", "node,nodeid=1",
-            "-nic", "none", "-nodefaults", "-display", "none",
+    argv = [QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off",
+            "-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
+            "-object", "memory-backend-ram,size=4G,id=ram-node0",
+            "-object", "memory-backend-ram,size=4G,id=ram-node1",
+            "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+            "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+            "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-monitor", "none",
             "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
-            "-debugcon", "file:" + str(attempt / "debugcon.log"), "-kernel", a["bzImage"]["path"],
-            "-initrd", str(attempt / "initramfs.img"), "-drive", "file=" + str(attempt / "root.img") + ",if=virtio,format=raw",
-            "-append", manifest["profile"]["append"]]
+            "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
+            "-kernel", a["bzImage"]["path"], "-initrd", str(attempt / "initramfs.cpio.gz"), "-append", APPEND]
     overlay = {"modules": [m["path"] for m in manifest["modules"]], "mckernel_image": a["mckernel_image"]["path"],
                "mcexec": a["mcexec"]["path"], "payload": a["payload"]["path"], "load_modules": list(MODULE_NAMES),
-               "boot_contract": "native-boot-v1", "guest_destinations": {"/boot/mckernel.img": a["mckernel_image"]["path"],
-               "/bin/mcexec": a["mcexec"]["path"], "/case/work/app": a["payload"]["path"]}}
-    return {"argv": argv, "overlay": overlay, "payload": manifest["payload"], "qmp_socket": qmp}
+               "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
+               "/bin/mcexec": a["mcexec"]["path"], "/apps/app": a["payload"]["path"]},
+               "init_sequence": ["insmod /modules/ihk.ko", "insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288",
+                                 "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
+               "transport": "guest collector framed serial report; never QEMU stdout"}
+    return {"argv": argv, "overlay": overlay, "payload": manifest["payload"], "qmp_socket": qmp,
+            "runtime_ready": False, "blocker": STAGING_BLOCKER}
 
 
 def evaluate(manifest, observation):
-    """Evaluate a fully captured fake/real observation; reject uncertainty."""
-    _keys(observation, ("stdout", "stderr", "exit_code", "serial", "debugcon", "qmp", "teardown", "timed_out", "truncated"))
-    _need(type(observation["timed_out"]) is bool and type(observation["truncated"]) is bool and
-          observation["timed_out"] is False and observation["truncated"] is False, "timeout/truncation")
-    _need(type(observation["exit_code"]) is int and 0 <= observation["exit_code"] <= 255, "exit code")
-    _need(type(observation["stdout"]) is bytes and type(observation["stderr"]) is bytes and
-          observation["exit_code"] == manifest["payload"]["oracle"]["exit_code"] and
-          observation["stdout"] == bytes.fromhex(manifest["payload"]["oracle"]["stdout_hex"]) and
-          observation["stderr"] == bytes.fromhex(manifest["payload"]["oracle"]["stderr_hex"]), "wrong exit/output")
-    _need(type(observation["serial"]) is str and type(observation["debugcon"]) is str and
-          not BAD_MARKERS.search(observation["serial"] + "\n" + observation["debugcon"]), "kernel panic/oops marker")
-    _need(isinstance(observation["qmp"], dict) and observation["qmp"].get("status") in ("running", "shutdown"), "QMP status")
+    """Validate serial evidence shape only; this is not runtime acceptance.
+
+    The report must originate in a separately reviewed guest collector.  Until
+    that collector and staging exist, the sole caller is the fake-backend test
+    harness and a passing result is explicitly PROTOCOL_PASS.
+    """
+    _keys(observation, ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline"))
+    for name in ("started_at", "finished_at", "deadline"):
+        _need(type(observation[name]) in (int, float) and math.isfinite(observation[name]), "host timestamp")
+    _need(0 <= observation["started_at"] <= observation["finished_at"] < observation["deadline"], "late completion")
+    serial = observation["serial"]
+    _need(type(serial) is str and type(observation["debugcon"]) is str and
+          not BAD_MARKERS.search(serial + "\n" + observation["debugcon"]), "kernel failure marker")
+    _need(observation["qmp"] == {"status": "shutdown"}, "QMP terminal status")
     _need(observation["teardown"] is True, "teardown uncertain")
+    lines = [line[len("ND_PAYLOAD "):] for line in serial.splitlines() if line.startswith("ND_PAYLOAD ")]
+    _need(len(lines) == 1 and len(lines[0]) <= MAX_JSON, "missing/duplicate/oversize guest payload report")
+    report = json.loads(lines[0], object_pairs_hook=_pairs)
+    _keys(report, ("argv", "cwd", "env", "raw_wait_status", "started_ns", "reaped_ns", "finished_ns", "streams", "procfs_empty"))
+    for name in ("argv", "cwd", "env"):
+        _need(report[name] == manifest["payload"][name], "guest launch contract " + name)
+    for name in ("started_ns", "reaped_ns", "finished_ns"):
+        _need(type(report[name]) is int and report[name] > 0, "guest timestamp")
+    _need(report["started_ns"] <= report["reaped_ns"] <= report["finished_ns"], "guest timestamp ordering")
+    raw = report["raw_wait_status"]
+    _need(type(raw) is int and 0 <= raw <= 65535 and os.WIFEXITED(raw), "raw wait status")
+    _need(os.WEXITSTATUS(raw) == manifest["payload"]["oracle"]["exit_code"], "wrong payload exit")
+    _need(report["procfs_empty"] is True, "guest registrations remain")
+    _keys(report["streams"], ("stdout", "stderr"))
+    for name in ("stdout", "stderr"):
+        stream = report["streams"][name]
+        _keys(stream, ("hex", "eof", "truncated", "observed", "retained", "discarded", "limit", "eof_ns"))
+        _need(type(stream["hex"]) is str and re.fullmatch(r"(?:[0-9a-f]{2})*", stream["hex"]), "stream hex")
+        data = bytes.fromhex(stream["hex"])
+        limit = manifest["payload"][name + "_limit_bytes"]
+        _need(stream["eof"] is True and stream["truncated"] is False, "incomplete stream")
+        for field in ("observed", "retained", "discarded", "limit", "eof_ns"):
+            _need(type(stream[field]) is int and stream[field] >= 0, "stream accounting type")
+        _need(stream["limit"] == limit and stream["observed"] == stream["retained"] == len(data) <= limit
+              and stream["discarded"] == 0, "stream accounting")
+        _need(report["started_ns"] <= stream["eof_ns"] <= report["finished_ns"], "EOF timestamp")
+        _need(data == bytes.fromhex(manifest["payload"]["oracle"][name + "_hex"]), "wrong payload bytes")
+    schedules = re.findall(r"application SCHEDULE os=0 generation=1 pid=(\d+) cpu=0\b", serial)
+    _need(len(schedules) == 1, "guest scheduling evidence")
+    prefix = r"os=0 generation=1 pid=" + schedules[0]
+    for pattern in (r"application retirement " + prefix + r" token=\d+ errno=0\b",
+                    r"application_process=release " + prefix + r" cleanup_errno=0\b",
+                    *[r"application procfs " + op + " " + prefix + " tid=" + schedules[0] + r"\b"
+                      for op in ("published", "deleted")]):
+        _need(len(re.findall(pattern, serial)) == 1, "retirement/release evidence")
+    delivered = re.findall(r"application_syscall=delivered " + prefix + r" worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)", serial)
+    returned = re.findall(r"application_syscall=returned " + prefix + r" worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)", serial)
+    routes = re.findall(r"application_syscall=return_route " + prefix + r" worker=(\d+) delivery=(\d+) launcher_cpu=(-?\d+) guest_cpu=(\d+)", serial)
+    _need(delivered and returned and routes and any(row[3] == "231" for row in delivered), "missing actual route/exit evidence")
+    for worker, delivery, launcher, guest in routes:
+        _need(guest == "0" and launcher != guest and
+              sum(row[:3] == (worker, delivery, guest) for row in delivered) == 1 and
+              sum(row[:3] == (worker, delivery, guest) for row in returned) == 1, "route identity mismatch")
+    _need(all(row[2] == "0" for row in delivered + returned), "unexpected guest CPU")
     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
-            "status": "PASS", "application_acceptance": False, "stdout": observation["stdout"].hex(),
-            "stderr": observation["stderr"].hex(), "exit_code": observation["exit_code"], "serial": observation["serial"],
-            "debugcon": observation["debugcon"], "qmp": observation["qmp"]}
+            "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
+            "guest_report": report, "observation": observation, "runtime_blocker": STAGING_BLOCKER}
 
 
 def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300):
-    """Run only through explicitly supplied factories; absent factories block.
+    """Fail before spawning until real guest staging/collector is implemented."""
+    failure = {"phase": "staging", "type": "DiagnosticError", "error": STAGING_BLOCKER}
+    write_record(attempt, {"status": "BLOCKED", "application_acceptance": False,
+                          "mckernel_application_executed": False, "failure": failure}, failure)
+    raise DiagnosticError(STAGING_BLOCKER)
 
-    This prevents accidental host/QEMU execution while allowing the reviewed
-    lifecycle to be exercised with a fake subprocess and QMP implementation.
-    Factories receive the reviewed argv/socket and return objects implementing
-    ``negotiate``, ``resume``, ``query_status``, ``terminate`` and ``close``.
+
+@contextmanager
+def _alarm(deadline):
+    """Interrupt blocking Python/socket operations, not just check afterwards.
+
+    Main-thread-only Unix test harness. Refuse to steal an existing alarm.
+    A future runtime backend needs its own independent reviewed execution gate.
     """
-    _need(type(timeout) in (int, float) and not isinstance(timeout, bool) and timeout > 0, "deadline")
-    _need(process_factory is not None and qmp_factory is not None, "runtime backend not supplied")
-    command = build_command(manifest, attempt)
-    process = process_factory(command["argv"], cwd=str(attempt), env=manifest["payload"]["env"])
-    qmp = None
-    observation = {"stdout": b"", "stderr": b"", "exit_code": 255, "serial": "", "debugcon": "",
-                   "qmp": {}, "teardown": False, "timed_out": False, "truncated": False}
-    started = time.monotonic()
+    _need(threading.current_thread() is threading.main_thread(), "deadline requires main thread")
+    _need(signal.getitimer(signal.ITIMER_REAL) == (0.0, 0.0), "existing deadline timer")
+    remaining = deadline - time.monotonic()
+    _need(remaining > 0, "absolute deadline expired")
+    old = signal.getsignal(signal.SIGALRM)
+    def expired(signum, frame):
+        raise TimeoutError("absolute deadline expired")
+    signal.signal(signal.SIGALRM, expired)
+    signal.setitimer(signal.ITIMER_REAL, remaining)
     try:
-        qmp = qmp_factory(command["qmp_socket"])
-        qmp.negotiate(); qmp.resume(); qmp.query_status()
-        try:
-            stdout, stderr = process.communicate(timeout=max(0.01, timeout - (time.monotonic() - started)))
-            observation.update(stdout=stdout, stderr=stderr, exit_code=process.returncode)
-        except subprocess.TimeoutExpired:
-            observation["timed_out"] = True
-            raise DiagnosticError("payload/QEMU deadline")
-        observation["qmp"] = qmp.query_status()
-        observation["serial"] = (Path(attempt) / "serial.log").read_text(errors="replace")
-        observation["debugcon"] = (Path(attempt) / "debugcon.log").read_text(errors="replace")
+        yield remaining
+        _need(time.monotonic() < deadline, "late completion")
     finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
+def _call(deadline, method, *args, **kwargs):
+    with _alarm(deadline) as remaining:
+        return method(*args, timeout=remaining, **kwargs)
+
+
+def _cleanup(process, qmp):
+    """Keep each cleanup step independent; QMP errors cannot skip reaping."""
+    deadline = time.monotonic() + 5
+    errors = []
+    def step(label, function, *args, allowance=1):
         try:
-            if qmp is not None:
-                qmp.terminate()
-            if process.poll() is None:
-                process.terminate()
-            process.wait(timeout=5)
-            observation["teardown"] = process.poll() is not None
-        except Exception as exc:
-            observation["teardown"] = False
-            raise DiagnosticError("teardown uncertain") from exc
-        finally:
-            if qmp is not None:
-                qmp.close()
-    return evaluate(manifest, observation)
+            return _call(min(deadline, time.monotonic() + allowance), function, *args)
+        except BaseException as exc:
+            errors.append({"phase": label, "type": type(exc).__name__, "error": str(exc)})
+            return None
+    # Never use QMP as the sole process-lifetime authority.
+    if qmp is not None:
+        step("qmp-quit", qmp.terminate, allowance=0.5)
+    reaped = process is None
+    if process is not None:
+        def terminate(timeout): process.terminate()
+        def kill(timeout): process.kill()
+        step("terminate", terminate, allowance=0.25)
+        status = step("wait", process.wait, allowance=1)
+        if type(status) is int:
+            reaped = True
+        else:
+            step("kill", kill, allowance=0.25)
+            status = step("reap", process.wait, allowance=2)
+            reaped = type(status) is int
+    if qmp is not None:
+        step("qmp-close", qmp.close, allowance=0.5)
+    return {"reaped": reaped, "errors": errors}
+
+
+def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300):
+    """Protocol-only injected-backend exercise; never reports a guest PASS.
+
+    This entry point is solely for local tests, not an execution release. Fake
+    processes receive no QEMU command, so a raw subprocess factory cannot run
+    a guest accidentally. QMP/backend methods accept a remaining timeout; an
+    independent SIGALRM bounds them even if they ignore that argument.
+    """
+    process = qmp = None
+    failure = None
+    observation = {}
+    try:
+        _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 3600, "finite deadline")
+        started = time.monotonic()
+        deadline = started + timeout
+        # Assign owners inside the alarm context. If a factory returns after
+        # the deadline, the post-call check must not lose the returned handle.
+        with _alarm(deadline) as remaining:
+            process = process_factory(timeout=remaining)
+        with _alarm(deadline) as remaining:
+            qmp = qmp_factory(timeout=remaining)
+        _call(deadline, qmp.negotiate)
+        _call(deadline, qmp.resume)
+        terminal = _call(deadline, qmp.wait_shutdown)
+        # QEMU stdout/stderr are diagnostics; never payload streams/status.
+        host_stdout, host_stderr = _call(deadline, process.communicate)
+        _need(type(host_stdout) is bytes and type(host_stderr) is bytes, "backend log types")
+        with _alarm(deadline):
+            for name, data in (("qemu.stdout", host_stdout), ("qemu.stderr", host_stderr)):
+                with (Path(attempt) / name).open("xb") as stream:
+                    stream.write(data)
+            texts = {}
+            for name in ("serial", "debugcon"):
+                with (Path(attempt) / (name + ".log")).open("rb") as stream:
+                    data = stream.read(MAX_JSON + 1)
+                _need(len(data) <= MAX_JSON, "capture limit exceeded")
+                texts[name] = data.decode("utf-8", errors="strict")
+            observation = dict(texts, qmp=terminal, teardown=False, started_at=started,
+                               finished_at=time.monotonic(), deadline=deadline)
+    except BaseException as exc:
+        failure = {"phase": "lifecycle", "type": type(exc).__name__, "error": str(exc)}
+        try:
+            _append_failure(attempt, failure)
+        except BaseException as journal_error:
+            failure["journal_error"] = type(journal_error).__name__ + ": " + str(journal_error)
+    finally:
+        cleanup = _cleanup(process, qmp)
+    if failure is None:
+        try:
+            _need(cleanup["reaped"] and not cleanup["errors"], "teardown uncertain")
+            observation["teardown"] = True
+            record = evaluate(manifest, observation)
+        except BaseException as exc:
+            failure = {"phase": "evaluation", "type": type(exc).__name__, "error": str(exc)}
+    if failure is not None:
+        record = {"status": "FAIL", "application_acceptance": False,
+                  "mckernel_application_executed": False, "failure": failure}
+    record["cleanup"] = cleanup
+    # Keep the original failure durable before cleanup; append the evaluation
+    # failure only when the lifecycle itself succeeded.
+    write_record(attempt, record, failure if failure and failure["phase"] == "evaluation" else None)
+    if failure is not None:
+        raise DiagnosticError(failure["error"])
+    return record
+
+
+def _append_failure(attempt, failure):
+    journal = Path(attempt) / "first-failure.jsonl"
+    fd = os.open(journal, os.O_WRONLY | os.O_CREAT | os.O_APPEND | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        stream.write(json.dumps(failure, sort_keys=True, allow_nan=False) + "\n")
+        stream.flush(); os.fsync(stream.fileno())
 
 
 def write_record(attempt, record, failure=None):
-    """Publish one fsynced first-failure journal and an atomic final record."""
+    """Append failure evidence and atomically link an irreversible final record.
+
+    No replace operation: a concurrent publisher or dangling target symlink
+    cannot overwrite the first terminal result. I/O failures remain failures.
+    """
     attempt = Path(attempt)
     target = attempt / "result.json"
     _need(not os.path.lexists(target), "final record already published")
     if failure is not None:
-        journal = attempt / "first-failure.jsonl"
-        if not journal.exists():
-            with journal.open("x", encoding="utf-8") as stream:
-                stream.write(json.dumps(failure, sort_keys=True, allow_nan=False) + "\n")
-                stream.flush(); os.fsync(stream.fileno())
+        _append_failure(attempt, failure)
     fd, tmp = tempfile.mkstemp(prefix=".result.", dir=attempt)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as stream:
             json.dump(record, stream, sort_keys=True, allow_nan=False); stream.write("\n"); stream.flush(); os.fsync(stream.fileno())
-        os.replace(tmp, target)
+        os.link(tmp, target, follow_symlinks=False)
         dfd = os.open(attempt, os.O_RDONLY | os.O_DIRECTORY); os.fsync(dfd); os.close(dfd)
     finally:
         if os.path.exists(tmp): os.unlink(tmp)

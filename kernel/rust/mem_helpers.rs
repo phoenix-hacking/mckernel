@@ -4432,6 +4432,34 @@ pub unsafe extern "C" fn mem_finish_free_pages_pending_result(
         return 0;
     }
 
+    // Preflight the whole live ring before unlinking or releasing a prefix.
+    // This retains the existing caller obligation to own stable, live list
+    // nodes exclusively. It does not acquire allocator extent authority or
+    // exclude migration, interrupt producers, or callback reentry. Those need
+    // an explicit owner/descriptor lease supplied by the production callers.
+    if validate_pending_head(pendings).is_err() {
+        return -EINVAL;
+    }
+    let mut checked_count: CInt = 0;
+    let mut checked_entry = (*pendings).next;
+    while checked_entry != pendings {
+        let page = page_from_list(checked_entry);
+        if (*page).offset <= 0 || (*page).offset > CInt::MAX as OffT {
+            return -EINVAL;
+        }
+        let Some(bytes) = ((*page).offset as CULong).checked_mul(PAGE_SIZE) else {
+            return -EINVAL;
+        };
+        if (*page).phys.checked_add(bytes).is_none() {
+            return -EINVAL;
+        }
+        let Some(next_count) = checked_count.checked_add(1) else {
+            return -EINVAL;
+        };
+        checked_count = next_count;
+        checked_entry = (*checked_entry).next;
+    }
+
     let mut count: CInt = 0;
     let mut entry = (*pendings).next;
     while entry != pendings {

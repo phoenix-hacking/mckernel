@@ -104,6 +104,7 @@
     ,"retention_driver_failure": "docs/verification/stability-selected-retention-phase-i-driver-source-review-failure-20260928-64.json"
     ,"pending_prod_boundary": "docs/verification/stability-pending-free-production-boundary-review-20260928-9.json"
     ,"application_pilot_audit": "docs/verification/stability-application-pilot-artifact-audit-20260928-1.json"
+    ,"pending_prod_preflight": "docs/verification/stability-pending-free-production-preflight-success-20260928-10.json"
   },
   "areas": [
     {
@@ -739,12 +740,13 @@
       "area": "FIX",
       "title": "Sentinel, structural and overflow semantics",
       "status": "partial",
-      "result": "Finite-model source review remains accepted but unexecuted. Production review confirms valid-prefix release before a later invalid node and rejects direct helper wiring: no capture generation, descriptor lease, allocator-extent authority or explicit target-VM owner exists.",
-      "next_check": "Freeze capture-owner/generation, descriptor-lease, allocator-extent, IRQ/reentry/migration and explicit VM authority; then implement actual-body invalid-second/last admission with zero callbacks and identical snapshots. Separately run the 23 finite selectors after Layer-B acceptance.",
+      "result": "The extracted current Rust production finish body now prevalidates the complete ring before any unlink or allocator callback. In the pinned 4-CPU/12-GiB profile, all 37 Rust/C snapshot rows and 15 trait negatives pass; later-invalid state remains byte-for-byte unchanged with zero callbacks, while removing the preflight reproduces the original first-node release. Independent review accepts this scoped repair under exclusive, live, stable descriptors. Full owner authority is still absent.",
+      "next_check": "Propagate explicit target VM/token ownership through syscall and both XPMEM paths; add allocator extent generations, descriptor leases, preallocated inventory and IRQ/reentry/migration exclusion; repair and execute the matching C fallback. Separately run the 23 finite selectors after Layer-B acceptance.",
       "evidence": [
         "inventory",
         "pending_validated",
-        "pending_prod_boundary"
+        "pending_prod_boundary",
+        "pending_prod_preflight"
       ],
       "depends_on": [
         "SC-MEM-02"

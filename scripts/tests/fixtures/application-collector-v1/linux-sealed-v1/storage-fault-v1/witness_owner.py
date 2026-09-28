@@ -61,7 +61,12 @@ def install_child_fds(mappings):
     resolved = [(saved.get(source, source), destination)
                 for source, destination in mappings]
     for source, destination in resolved:
-        os.dup2(source, destination, inheritable=True)
+        if source == destination:
+            # dup2(fd, fd) does not clear CLOEXEC.  This is the normal shape
+            # when a closed standard descriptor is allocated directly.
+            os.set_inheritable(source, True)
+        else:
+            os.dup2(source, destination, inheritable=True)
     for source in set(source for source, _destination in mappings) | set(saved.values()):
         if source not in destinations:
             os.close(source)

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "stability-pending-free-production-preflight-success",
+  "status": "PASS_SCOPED_VALID_PREFIX_REPAIR",
+  "timestamp_utc": "2026-09-28T11:19:42Z",
+  "base_revision": "c5d95e1cda88d6300ebf9d05bdcde69baf681887",
+  "claim": "The extracted current Rust production finish body validates the complete captured ring before any unlink or allocator callback, so a later invalid entry cannot release a valid prefix under the existing exclusive, live, stable-descriptor assumption.",
+  "source_sha256": {
+    "kernel/rust/mem_helpers.rs": "8a1e50d93811edba17530ca7f5365b502585fc42ff588edc58c23b25ea8a17d4",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "aaa221ab56e843bc93189ecdf94caccc3706f511d08446e5872fe0cec29f4594",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "305fb90adbfbcf4d74619d6db7e01aeb9c9b5a952d2b9e14bb76ddbe35b38e1b"
+  },
+  "execution": {
+    "profile": "pinned unprivileged container, CPUs 2-5, 4 CPUs, 12 GiB, no swap, 512 tasks, no network, read-only source, UID 1000:1000",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "image_manifest_sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+    "evidence_root": "/home/holden/mckernel-work/m03-pending-preflight-20260928-1",
+    "attach_status": 0,
+    "container_state": "exited false false false false false 0",
+    "container_absent_after_cleanup": true,
+    "stdout": "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY output=/work/result",
+    "rust_c_snapshot_rows": 37,
+    "trait_negative_controls": 15,
+    "mutant_exit_status": 101,
+    "mutant_observation": "Removing only the new full-ring preflight reproduces a first callback and first-node unlink before the later invalid entry returns EINVAL."
+  },
+  "evidence_sha256": {
+    "result/manifest.json": "9cc2346a830c4594483bfeab0fe4c093ce306bf09514e3db01b8d8f67a7776d9",
+    "result/artifact-manifest.json": "a983bd2ea3a881878a387a5041e46a2c40ed19d8ac0d1a5ddcdf9d8ea56a602d",
+    "evidence-sha256.txt": "de62460e6efb8caacce5d246858121fcb534c936e74f12528b17013ff4248ee6"
+  },
+  "observer_note": "The initial post-cleanup sha256sum glob included directories and failed after the owned container had already exited cleanly and been removed. evidence-writer-failure.txt retains that failure. A corrected file-only inventory was generated without rerunning the container.",
+  "independent_review": {
+    "status": "PASS_SCOPED_VALID_PREFIX_REPAIR",
+    "finding": "No blocking finding within the scoped invariant; current source, 26 extraction bindings, raw rows, mutant, traits, profile and cleanup evidence match."
+  },
+  "not_proved": [
+    "VM or transaction generation ownership",
+    "allocator extent generations or descriptor leases",
+    "IRQ, reentry, migration or scheduling exclusion",
+    "arbitrary-pointer safety or preallocated inventory capacity",
+    "matching C fallback repair",
+    "failed-invalidation quarantine, alias or TLB acknowledgement",
+    "guest or kernel runtime behavior",
+    "full M03 or production acceptance"
+  ],
+  "next_action": "Propagate explicit target VM/token ownership through syscall and both XPMEM paths, add authoritative allocator extent generations and descriptor leases, then repair and execute the matching C fallback before integration."
+}

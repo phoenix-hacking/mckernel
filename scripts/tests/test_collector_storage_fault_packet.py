@@ -4613,9 +4613,10 @@ class StorageFaultV2SourceTests(unittest.TestCase):
                     os._exit(127)
             close_quietly(stdout_w); close_quietly(stderr_w); close_quietly(sentinel)
             _, status = os.waitpid(pid, 0)
-            self.assertEqual(status, 0)
-            self.assertEqual(os.read(stdout_r, 96), b"supervisor-out:(b'', False)")
-            self.assertEqual(os.read(stderr_r, 64), b"supervisor-err")
+            stdout, stderr = os.read(stdout_r, 96), os.read(stderr_r, 512)
+            self.assertEqual(status, 0, (stdout, stderr))
+            self.assertEqual(stdout, b"supervisor-out:(b'', False)")
+            self.assertEqual(stderr, b"supervisor-err")
             close_quietly(stdout_r); close_quietly(stderr_r)
 
         receive_owner_case()
@@ -4628,19 +4629,20 @@ class StorageFaultV2SourceTests(unittest.TestCase):
                 for packet in packets:
                     owner.validate_packet_schema(packet, selector)
                     state.validate(packet)
-            with tempfile.TemporaryDirectory() as temporary:
-                root = Path(temporary) / "case"
-                self.write_fixture(root, selector)
-                self.rewrite_journal(root / "witness.jsonl",
-                    lambda rows: rows.__setitem__(slice(None), [
-                        {**row, "packet": packet} for row, packet in
-                        zip(rows, packets)]))
-                self.refresh_supervisor(root)
-                with self.assertRaisesRegex(ValueError, message):
-                    oracle.validate(root, selector, 0)
+            hashes = {key: packets[0][key] for key in (
+                "generated_sha256", "header_sha256", "elf_sha256")}
+            with self.assertRaisesRegex(ValueError, message):
+                oracle.validate_packet_order(packets, selector, self.NONCE,
+                                             hashes, self.COUNTS[selector])
 
         for selector in range(7):
             baseline = self.packets(selector)
+            baseline_state = owner.PacketState(selector)
+            for packet in baseline:
+                owner.validate_packet_schema(packet, selector)
+                baseline_state.validate(packet)
+            oracle.validate_packet_order(baseline, selector, self.NONCE,
+                                         self.HASHES, self.COUNTS[selector])
             positives = [packet for packet in baseline if packet["kind"] == "AFTER" and
                          packet["site"] in ("events-create", "report-create") and
                          packet["return"] >= 0]
@@ -4675,9 +4677,12 @@ class StorageFaultV2SourceTests(unittest.TestCase):
                     next(packet for packet in packets if packet["sequence"] ==
                          failed[0]["sequence"])["acquisition_id"] = 1
                     apply_packets(selector, packets, "create failure")
+            event = next((packet for packet in baseline if packet["kind"] == "AFTER" and
+                          packet["site"] == "events-create" and packet["return"] >= 0), None)
             for role in ("request.bin", "report.json"):
-                if any(packet["kind"] == "AFTER" and packet["object"] == role and
-                       packet["return"] >= 0 for packet in baseline):
+                if event is not None and any(packet["kind"] == "AFTER" and
+                        packet["object"] == role and packet["return"] >= 0
+                        for packet in baseline):
                     with self.subTest(selector=selector, rule="live-" + role):
                         packets = copy.deepcopy(baseline)
                         event = next(packet for packet in packets if

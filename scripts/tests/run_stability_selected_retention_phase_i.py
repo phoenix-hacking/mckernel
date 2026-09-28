@@ -25,6 +25,7 @@ import tarfile
 DIAGNOSTIC_NAMES = frozenset(("authentication.json", "installation.json", "validation.json", "controls.json", "cr.bin", "space.bin", "tab.bin", "missing-lf.bin", "extra-blank.bin", "mode2-stage.stdout", "mode2-stage.stderr", "mode3-stage.stdout", "mode3-stage.stderr"))
 CONTROL_CASES = (("cr.bin", b"x\r\n", "CR"), ("space.bin", b"x \n", "TRAILING"), ("tab.bin", b"x\t\n", "TRAILING"), ("missing-lf.bin", b"x", "FINAL_LF"), ("extra-blank.bin", b"x\n\n", "EXTRA_EOF_BLANK"))
 VALIDATOR = '''import sys
+if not __debug__: raise SystemExit("SELF_TESTS_DISABLED")
 def check(b):
     if b"\\r" in b: return "CR"
     if any(line.endswith((b" ", b"\\t")) for line in b.split(b"\\n")): return "TRAILING"
@@ -76,12 +77,17 @@ def _new_file(dirfd, name, data):
         _write_all(fd, data)
         os.fsync(fd)
         os.fsync(dirfd)
+        identity = _identity(os.fstat(fd))
+        if (identity != _identity(os.stat(name, dir_fd=dirfd, follow_symlinks=False)) or
+                identity["nlink"] != 1 or identity["uid"] != os.geteuid()):
+            raise ValueError("new evidence file identity changed: " + name)
+        return {"identity": identity, **_digest(data)}
     finally:
         os.close(fd)
 
 
 def _json_at(dirfd, name, value):
-    _new_file(dirfd, name, _line(value))
+    return _new_file(dirfd, name, _line(value))
 
 
 class Journal:
@@ -95,14 +101,22 @@ class Journal:
             os.close(self.fd)
             raise
         self.identity = os.fstat(self.fd)
+        self.data = b""
+
+    def verify(self):
+        data, identity = _read_regular(self.root.fd, self.name, self.root.owner)
+        if identity != _identity(self.identity) or data != self.data:
+            raise ValueError("journal identity/content changed: " + self.name)
 
     def append(self, value):
-        before = os.stat(self.name, dir_fd=self.root.fd, follow_symlinks=False)
-        if not _same_inode(before, self.identity) or before.st_nlink != 1:
-            raise ValueError("journal identity changed: " + self.name)
-        _write_all(self.fd, _line(value))
+        self.verify()
+        data = _line(value)
+        _write_all(self.fd, data)
         os.fsync(self.fd)
         os.fsync(self.root.fd)
+        self.identity = os.fstat(self.fd)
+        self.data += data
+        self.verify()
 
     def close(self):
         os.close(self.fd)
@@ -153,9 +167,16 @@ class Root:
             raise ValueError("root identity changed: " + str(self.path))
 
     def close(self):
-        for fd in (self.fd, self.pfd):
+        errors = []
+        for attr in ("fd", "pfd"):
+            fd = getattr(self, attr)
+            setattr(self, attr, None)
             if fd is not None:
-                os.close(fd)
+                try:
+                    os.close(fd)
+                except Exception as exc:
+                    errors.append("close " + str(self.path) + " " + attr + ": " + repr(exc))
+        return errors
 
 
 def _read_regular(dirfd, name, owner=None):
@@ -163,7 +184,7 @@ def _read_regular(dirfd, name, owner=None):
     if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
             (owner is not None and before.st_uid != owner)):
         raise ValueError("member must be regular, single-link and owner-local: " + name)
-    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=dirfd)
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=dirfd)
     try:
         if _identity(os.fstat(fd)) != _identity(before):
             raise ValueError("member changed while opening: " + name)
@@ -219,7 +240,10 @@ def _diagnostic_files(root, expected):
 
 def _failure(rootfd, mode, stage, expected, observed):
     vals = ("FAIL_PHASE_I", mode if mode in ("mode2", "mode3", "global") else "global", stage, expected, observed, "PRESERVE_PARTIAL_ROOT_NO_RETRY")
-    vals = tuple(str(v).replace("\r", "\\r").replace("\n", "\\n") for v in vals)
+    # Preserve ordinary diagnostic text while escaping every line separator.
+    escapes = {ord(c): "\\u%04x" % ord(c) for c in "\v\f\x1c\x1d\x1e\x85\u2028\u2029"}
+    escapes.update({ord("\r"): "\\r", ord("\n"): "\\n"})
+    vals = tuple(str(v).translate(escapes) for v in vals)
     data = "\n".join("%s=%s" % (k, v) for k, v in zip(("status", "mode", "stage", "expected", "observed", "action"), vals)) + "\n"
     _new_file(rootfd, "phase-i-failure.txt", data.encode())
 
@@ -228,6 +252,10 @@ class PhaseIFailure(RuntimeError):
     def __init__(self, stage, original, secondary=()):
         self.stage, self.original, self.secondary = stage, original, list(secondary)
         super().__init__(stage + ": " + str(original) + ("; evidence persistence: " + "; ".join(self.secondary) if self.secondary else ""))
+
+    def add_secondary(self, errors):
+        self.secondary.extend(errors)
+        self.args = (self.stage + ": " + str(self.original) + "; evidence persistence: " + "; ".join(self.secondary),)
 
 
 def _relative(name):
@@ -243,7 +271,7 @@ def _pinned(item):
     if not path.is_absolute() or str(path) != item["path"] or path.parent.resolve() != path.parent:
         raise ValueError("input path must be canonical")
     data, identity = _read_regular(None, str(path))
-    if _digest(data)["sha256"] != item["sha256"] or len(data) != item["size"]:
+    if hashlib.sha256(data).hexdigest() != item["sha256"] or len(data) != item["size"]:
         raise ValueError("reviewed input hash/size mismatch: " + str(path))
     return data, identity
 
@@ -252,7 +280,14 @@ def _review(reviewed, command, candidate, diagnostics, cwd):
     if not isinstance(reviewed, dict) or set(reviewed) != {"manifest"}:
         raise ValueError("authenticated reviewed manifest required")
     raw, manifest_identity = _pinned(reviewed["manifest"])
-    contract = json.loads(raw)
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate manifest field: " + key)
+            result[key] = value
+        return result
+    contract = json.loads(raw, object_pairs_hook=unique_object)
     if (contract["command_argv"] != list(command) or contract["cwd"] != cwd or
             contract["candidate_root"] != str(candidate) or contract["diagnostics_root"] != str(diagnostics)):
         raise ValueError("command, cwd or roots are not reviewed")
@@ -322,7 +357,7 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
     if rp == dp or rp in dp.parents or dp in rp.parents:
         raise ValueError("roots overlap")
     r, d = Root(rp, os.geteuid()), Root(dp, os.geteuid())
-    journals, expected_diagnostics = [], set()
+    journals, expected_diagnostics, immutable_diagnostics = [], set(), {}
     stage = "root-create"
 
     def journal(name):
@@ -337,6 +372,19 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
         _, current = _review(reviewed, command, candidate_root, diagnostics_root, cwd)
         if current != authentication:
             raise ValueError("authenticated input identity changed")
+
+    def verify_diagnostics():
+        tree = _diagnostic_files(d, expected_diagnostics)
+        for name, expected in immutable_diagnostics.items():
+            if tree["files"][name] != expected:
+                raise ValueError("diagnostic identity/content changed: " + name)
+        for log in journals:
+            log.verify()
+        return tree
+
+    def publish(name, data):
+        immutable_diagnostics[name] = _new_file(d.fd, name, data)
+        expected_diagnostics.add(name)
 
     def child(argv, log, expected, label):
         # No postprocess, membership or stream-file write precedes publication
@@ -354,20 +402,29 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
             record.update(launch_error=repr(exc), stdout=_digest(getattr(exc, "stdout", None) or b""),
                           stderr=_digest(getattr(exc, "stderr", None) or b""))
             failure = exc
+        secondary = []
         try:
             log.append(record)
         except Exception as exc:
-            raise PhaseIFailure(label, failure or RuntimeError(json.dumps(record)), [repr(exc)]) from exc
+            # Carry the real result even if its journal cannot be persisted.
+            failure = failure or RuntimeError(json.dumps(record))
+            secondary.append(repr(exc))
+        try:
+            verify_roots_inputs()
+        except Exception as exc:
+            if failure is None:
+                failure = exc
+            else:
+                secondary.append("post-child authentication: " + repr(exc))
         if failure is not None:
-            raise PhaseIFailure(label, failure)
-        verify_roots_inputs()
+            raise PhaseIFailure(label, failure, secondary)
         return cp
 
     try:
         r.create()
         d.create()
         stage = "authentication"
-        _json_at(d.fd, "authentication.json", {"authenticated": authentication, "contract": contract,
+        immutable_diagnostics["authentication.json"] = _json_at(d.fd, "authentication.json", {"authenticated": authentication, "contract": contract,
                  "candidate_root": _identity(os.fstat(r.fd)), "diagnostics_root": _identity(os.fstat(d.fd))})
         expected_diagnostics.add("authentication.json")
         install = journal("installation.json")
@@ -377,37 +434,36 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
         cp = child(list(command), install, (0, None, None), "installation-process")
         stage = "installation-streams"
         for name, data in (("mode2-stage.stdout", cp.stdout), ("mode2-stage.stderr", cp.stderr)):
-            _new_file(d.fd, name, data)
-            expected_diagnostics.add(name)
+            publish(name, data)
         stage = "membership"
         post = _membership(r, contract)
         install.append({"event": "post-install", "candidate": post, "archive_mapping": contract["archive_mapping"]})
-        _diagnostic_files(d, expected_diagnostics)
+        verify_diagnostics()
         stage = "candidate-validator"
         validation = journal("validation.json")
         python = str(Path(sys.executable).resolve())
         argv = [python, "-B", "-c", VALIDATOR] + [str(r.path / name) for name in contract["validator_members"]]
         child(argv, validation, (0, b"PASS_WHITESPACE\n", b""), stage)
+        verify_diagnostics()
         if _membership(r, contract) != post:
             raise ValueError("candidate changed during validator")
         stage = "controls"
         control_log = journal("controls.json")
         for name, payload, prefix in CONTROL_CASES:
             stage = "control-" + name
-            _new_file(d.fd, name, payload)
-            expected_diagnostics.add(name)
-            before = _diagnostic_files(d, expected_diagnostics)["files"][name]
+            publish(name, payload)
+            before = verify_diagnostics()["files"][name]
             if before["sha256"] != _digest(payload)["sha256"]:
                 raise ValueError("control input mismatch")
             path = str(d.path / name)
             child([python, "-B", "-c", VALIDATOR, path], control_log, (1, b"", (prefix + ":" + path + "\n").encode()), stage)
-            if _diagnostic_files(d, expected_diagnostics)["files"][name] != before:
+            if verify_diagnostics()["files"][name] != before:
                 raise ValueError("control changed during validator")
             if _membership(r, contract) != post:
                 raise ValueError("candidate changed during control")
         stage = "finalization"
         verify_roots_inputs()
-        _diagnostic_files(d, expected_diagnostics)
+        verify_diagnostics()
         if _membership(r, contract) != post:
             raise ValueError("candidate changed before finalization")
         result = {"status": "PASS_PHASE_I", "argv": list(command), "returncode": cp.returncode,
@@ -425,10 +481,34 @@ def run_phase_i(candidate_root, diagnostics_root, command, *, controls=True, cwd
             failure = PhaseIFailure(failure.stage, failure.original, failure.secondary + ["failure-record: created root could not be opened safely"])
         raise failure from exc
     finally:
+        active = sys.exc_info()[1]
+        errors = []
         for j in journals:
-            j.close()
-        r.close()
-        d.close()
+            try:
+                j.close()
+            except Exception as exc:
+                errors.append("journal close: " + repr(exc))
+        errors.extend(d.close())
+        cleanup_failure = None
+        if errors:
+            if isinstance(active, PhaseIFailure):
+                active.add_secondary(errors)
+            else:
+                cleanup_failure = PhaseIFailure("finalization", RuntimeError("descriptor close failure"), errors)
+                try:
+                    if r.fd is not None:
+                        _failure(r.fd, "global", "finalization", "all descriptors closed", str(cleanup_failure))
+                except Exception as exc:
+                    cleanup_failure.add_secondary(["failure-record: " + repr(exc)])
+        errors = r.close()
+        if errors:
+            if isinstance(active, PhaseIFailure):
+                active.add_secondary(errors)
+            else:
+                cleanup_failure = cleanup_failure or PhaseIFailure("finalization", RuntimeError("candidate descriptor close failure"))
+                cleanup_failure.add_secondary(errors + ["failure-record: candidate descriptor already closed"])
+        if cleanup_failure is not None:
+            raise cleanup_failure
 
 
 def main(argv=None):

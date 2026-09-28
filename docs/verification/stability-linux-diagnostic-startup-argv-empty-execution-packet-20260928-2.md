@@ -1,6 +1,6 @@
 # startup.argv-empty: Linux diagnostic execution packet
 
-**Status: DRAFT — independent review required.** This packet authorizes no
+**Status: READY_FOR_REVIEW — independent execution review required.** This packet authorizes no
 execution by itself. It is a Linux control diagnostic only: it is not a guest
 run, McKernel application execution, M04/M06 acceptance, production-gate
 credit, or catalog acceptance.
@@ -57,7 +57,7 @@ transitive loader dependency is a hard stop. The collector’s documented
 limitations (pathname substitution, provenance, and interpreter/DSO closure)
 are packet gates, not waived risks.
 
-## Proposed pinned-image release (still DRAFT)
+## Pinned-image release (review input; not yet released)
 
 The proposed release is inside the already retained immutable image
 `sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94`,
@@ -83,11 +83,12 @@ Docker create argv is the following (the nonce and root are substituted only
 as shown; no extra arguments are permitted):
 
 ```text
-/usr/bin/docker create --pull=never --init --name mckernel-linux-diagnostic-<nonce> --label mckernel.linux-diagnostic.owner=<nonce> --cpus=4 --cpuset-cpus=2-5 --cgroup-parent=/mckernel-dev --memory=12g --memory-swap=12g --pids-limit=512 --cap-drop=ALL --security-opt=no-new-privileges --read-only --network=none --user=1000:1000 --ulimit core=0 --ulimit nofile=4096:4096 --tmpfs /tmp:rw,nodev,nosuid,size=256m --mount type=bind,src=/home/holden/mckernel,dst=/workspace,readonly --mount type=bind,src=<root>,dst=/work --env TMPDIR=/work/tmp --env HOME=/tmp --env PYTHONDONTWRITEBYTECODE=1 --workdir=/work --entrypoint=/usr/bin/python3 sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94 -B /workspace/scripts/application-tests/linux_diagnostic.py --request /work/request.json
+/usr/bin/docker create --pull=never --init --name mckernel-linux-diagnostic-<nonce> --label mckernel.linux-diagnostic.owner=<nonce> --cpus=4 --cpuset-cpus=2-5 --cgroup-parent=/mckernel-dev --memory=12g --memory-swap=12g --pids-limit=512 --cap-drop=ALL --security-opt=no-new-privileges --read-only --network=none --user=1000:1000 --ulimit core=0 --ulimit nofile=4096:4096 --tmpfs /tmp:rw,nodev,nosuid,size=256m --mount type=bind,src=<root>/snapshot,dst=/snapshot,readonly --mount type=bind,src=<root>,dst=/work --env TMPDIR=/work/tmp --env HOME=/tmp --env PYTHONDONTWRITEBYTECODE=1 --workdir=/work --entrypoint=/usr/bin/python3 sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94 -B /snapshot/linux_diagnostic.py --request /work/request.json
 ```
 
-The repository bind is read-only. `<root>` is a new 0700 controlled root,
-owned and prepared before create, and is the only writable application mount;
+`<root>/snapshot` is a private, hash-verified read-only source snapshot.
+`<root>` is a new 0700 controlled root, owned and prepared before create, and
+is the only writable application mount;
 its `request.json` must name `/work/startup.argv-empty.c`, `/work/oracle.json`,
 `/work/payload`, cwd `/work`, and a fresh `/work/attempt-<nonce>`. The exact
 request remains the schema shown below, with those paths substituted and no
@@ -107,7 +108,7 @@ timeout, owner mismatch, unexpected descendant, cleanup uncertainty, or
 stale-name collision is a hard stop. These records must use fresh names and
 be retained with the collector evidence; no wrapper may be introduced.
 
-## Canonical request (to be created only after review)
+## Canonical request (collector PASS / supervisor COMPLETED)
 
 Create strict JSON at `<root>/request.json` with exactly the collector schema:
 
@@ -121,7 +122,7 @@ must be absent before launch and its parent must remain the same 0700 controlled
 directory. The collector invocation is exactly:
 
 ```text
-python3 -B <collector-absolute-path> --request <root>/request.json
+python3 -B <root>/snapshot/linux_diagnostic.py --request <root>/request.json
 ```
 
 No compiler, shell, sudo, guest, VM, systemd, network, or additional writer is
@@ -147,7 +148,7 @@ to application acceptance.
 
 ## Blockers and release conditions
 
-1. This packet remains **DRAFT**. The existing reviewed profile authorizes only
+1. This packet is **READY_FOR_REVIEW**, not released. The existing reviewed profile authorizes only
    the separate rebuild helper; it does not authorize this diagnostic create,
    closure preflight, payload, or publication. Independent execution review
    must explicitly approve this packet and its exact argv before release.
@@ -158,3 +159,16 @@ to application acceptance.
    root, owner/watchdog/attach/exit/cleanup evidence, limits, and publication
    and teardown plan. Until all three conditions are cleared, do not restore,
    invoke, create, or execute this packet.
+
+The controller under review is
+`scripts/application-tests/linux_diagnostic_container_owner.py`, SHA-256
+`7ee1f8daf86f0960b14f5675d70b840013b2fe87dc3c48100de890500ca7c2ec`. Its private snapshot must contain the exact source
+hashes: `linux_diagnostic.py`
+`c9932ce4883b1c23c4fc5df0cdb6b4cbe855c140d38787b6abf960f1d75ee409`,
+`runtime_contracts.py`
+`6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e`, and
+`supervisor.py`
+`8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873`.
+The strict oracle is retained at
+`docs/verification/evidence/stability-linux-diagnostic-startup-argv-empty-oracle-20260928-1.json`;
+the expected result is collector `PASS`, supervisor `COMPLETED`.

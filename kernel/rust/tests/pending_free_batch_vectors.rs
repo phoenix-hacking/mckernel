@@ -192,11 +192,53 @@ unsafe fn free_dispatch_controls(){
     let mut w=World::new();w.setup(1,false);DISPATCH_PAGE=null_mut();DISPATCH_NO_PAGE=true;let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");
     let mut w=World::new();DISPATCH_PAGE=&raw mut w.p[0];DISPATCH_NO_PAGE=false;let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");DISPATCH_NO_PAGE=false;
 }
+/* Exercise the exported production finish body, independently of the private
+ * batch/inventory helpers. The C fallback retains its original failing control.
+ * These checks assume exclusive, live descriptors; they do not supply the
+ * missing production owner/allocator leases or certify callback reentry. */
+unsafe fn production_finish_preflight_controls() {
+    for n in [0usize,1,2] {
+        let mut w=World::new();w.setup(n,false);reset();
+        assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),n as i32);
+        assert_eq!(callbacks(),match n {0=>"[]",1=>"[[100,1,1]]",_=>"[[100,1,1],[101,2,1]]"});
+        assert!(w.s.next.is_null() && w.s.prev.is_null());
+    }
+    for case in ["later-mode","later-zero-count","later-negative-count","later-large-count",
+                 "later-end-overflow","later-link","foreign-link","duplicate-link"] {
+        let mut w=World::new();w.setup(2,false);
+        let old_phys=w.p[1].phys;
+        match case {
+            "later-mode"=>w.p[1].mode=PM_NONE,
+            "later-zero-count"=>w.p[1].offset=0,
+            "later-negative-count"=>w.p[1].offset=-1,
+            "later-large-count"=>w.p[1].offset=CInt::MAX as OffT+1,
+            "later-end-overflow"=>w.p[1].phys=CULong::MAX,
+            "later-link"=>w.p[1].list.prev=null_mut(),
+            "foreign-link"=>w.p[1].list.next=&raw mut w.t,
+            _=>w.p[0].list.next=&raw mut w.p[0].list,
+        }
+        reset();let before=w.snapshot();
+        assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),-EINVAL,"{case}");
+        assert_eq!(w.snapshot(),before,"{case}");assert_eq!(callbacks(),"[]","{case}");
+        // Failed admission leaves capture active, so nested begin must reject
+        // without overwriting it. Repair only the injected bytes, then drain.
+        assert_eq!(mem_begin_free_pages_pending_result(&raw mut w.s),-EINVAL,"{case}");
+        assert_eq!(w.snapshot(),before,"{case}");
+        w.p[1].mode=PM_PENDING_FREE;w.p[1].offset=2;w.p[1].phys=old_phys;
+        w.p[0].list.next=&raw mut w.p[1].list;
+        w.p[1].list.prev=&raw mut w.p[0].list;w.p[1].list.next=&raw mut w.s;
+        assert_eq!(mem_finish_free_pages_pending_result(&raw mut w.s,Some(free_page)),2,"{case}");
+        assert_eq!(callbacks(),"[[100,1,1],[101,2,1]]","{case}");
+        assert!(w.s.next.is_null() && w.s.prev.is_null());
+    }
+    println!("CONTROL|production-finish-preflight-positive-rejection-recovery");
+}
 fn main(){unsafe{
     assert_eq!(core::mem::offset_of!(MemPage,list),0);assert_eq!(core::mem::size_of::<MemPage>(),80);
     callback_controls();
     free_dispatch_controls();
     validated_inventory_controls();
+    production_finish_preflight_controls();
     for (name,n) in [("empty",0),("one",1),("three-order",3)] {let mut w=World::new();w.setup(n,false);w.detach(name,1);w.drain(name,false,true);}
     let mut w=World::new();w.setup(2,false);w.detach("later-invalid-setup",1);w.p[1].mode=PM_NONE;w.drain("later-invalid",false,true);w.p[1].mode=PM_PENDING_FREE;w.drain("later-invalid-repair",false,true);
     let mut w=World::new();w.setup(1,false);w.detach("missing-callback-setup",1);w.drain("missing-callback",false,false);w.drain("missing-callback-recovery",false,true);

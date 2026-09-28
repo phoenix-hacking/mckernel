@@ -1,10 +1,10 @@
 # Layer-B native-owner bootstrap: root13 execution packet
 
-Status: **DRAFT_PENDING_INDEPENDENT_EXECUTION_REVIEW**.  This is the one fresh
+Status: **READY_FOR_REVIEW**.  This is the one fresh
 root13, compile-only attempt unlocked by `PASS_SOURCE`.  It does not authorize
 recursion, runtime, linking, owner execution, guests, compiler/systemd tests,
 or application acceptance.  No command is executed by preparation of this
-packet.  Base worktree: `fc8832a385b52923ece48071c03384591926e270`.
+packet.  Base worktree: `c5d95e1cda88d6300ebf9d05bdcde69baf681887`.
 
 ## Release gate, bindings, and history
 
@@ -22,6 +22,8 @@ and authenticate these before creating the fresh root:
 | root12 failure record | `stability-layer-b-native-owner-bootstrap-failure-20260928-12.json` |
 | root12 failure review26 | `stability-layer-b-native-owner-bootstrap-failure-review-20260928-26.json` |
 | source review27 | `stability-layer-b-systemd-cgroup-observer-source-review-failure-20260928-27.json` |
+| bounded collector | `scripts/tests/layer_b_systemd_cgroup_collector.py` (`87f13d0e799994eb3637dc93905c7af265c3d0dfd3499aa3a3d1da7fd1ffff2e`) |
+| bounded collector tests | `scripts/tests/test_layer_b_systemd_cgroup_collector.py` (`933b2f70394d67d525ecd7b6eb8de4ca02ffcefd70d8fd302c47d1e219331a88`) |
 | root12 archive | `82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056` |
 | current policy START | `1698d342...` |
 | current policy CONVERGENCE | `f6938bd2...` |
@@ -149,3 +151,26 @@ device/inode/parents, FIFO metadata without content hashing, token/artifact
 hashes, statuses/times, capacities/limits and zero-residual evidence.  An
 independent execution review must verify this exact document and final hash
 before any execution; preparation itself performs no execution.
+
+## Bounded correction: recursive observation and failure ordering
+
+The collector is pure and consumes only the immutable `Mapping` returned by
+`resolve_systemd_mapping`; it performs no reads, writes, systemd calls, or
+normalization of supplied pathname bytes. Every recursively observed directory
+and control-file path must be under the selected mount and have no descendant
+or individual-file covering mount. Opaque mappings and changed mount
+ID/root/mountpoint/parent topology fail closed. The original mapping and raw
+path bytes remain in evidence after terminal `ControlGroup=` becomes empty.
+Pre-command ControlPID membership is live membership; terminal `ControlPID=0`
+and an empty group are accepted only with that retained original mapping. A
+replaced/nonempty mapping is rejected.
+
+Only the user-manager `systemd-run` submission above, exact
+`systemctl --user show` queries, bounded `systemctl --user stop`, manager-side
+`systemctl --user --signal=SIGKILL --kill-who=all kill` fallback, bounded
+queries, and `reset-failed` after resolved cleanup are permitted. On a first
+productive failure, persist the first-failure journal/evidence, perform a
+best-effort query, then issue bounded stop; do not continue compile/inspection
+work. Capture the journal on compile success and compile failure. Recursive
+cleanup deadlines and `FAIL_UNRESOLVED` remain unchanged. This correction is
+ready for independent review only and authorizes no execution.

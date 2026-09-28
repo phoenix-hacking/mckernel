@@ -221,6 +221,9 @@ def source_only_admission():
         MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_result(',
         '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_body_result(')
     assert 'free_fn' in rust_body
+    assert rust_body.index('validate_pending_head(pendings)') < rust_body.index('list_del_poison(entry)')
+    assert rust_body.index('checked_count.checked_add(1)') < rust_body.index('free_fn((*page).phys')
+    assert 'production_finish_preflight_controls();' in vectors
     return {'status': 'PASS_SOURCE_ONLY_M03_ADMISSION', 'hashes': {
         str(MEM.relative_to(ROOT)): digest(MEM), str(CMEM.relative_to(ROOT)): digest(CMEM),
         str(RUST.relative_to(ROOT)): digest(RUST), str(C.relative_to(ROOT)): digest(C),
@@ -337,6 +340,7 @@ def main():
         success(compile_rust+[str(actual),'-o',str(rb)],out,'rust-compile',ledger)
         rsout = success([str(rb)],out,'rust-run',ledger)
         assert 'CONTROL|callback-borrow-and-capacity-observed' in rsout
+        assert 'CONTROL|production-finish-preflight-positive-rejection-recovery' in rsout
         rs = rows(rsout)
         cb = out/'reference-c'
         success([str(cc),'-std=c11','-Wall','-Wextra','-Werror',str(C),'-o',str(cb)],out,'c-compile',ledger)
@@ -350,13 +354,20 @@ def main():
         check_rows(rs)
         check_rows(cs)
         assert rs == cs, 'Rust and C complete computed snapshots differ'
-        # This mutation invokes the extracted production legacy finish loop, which
-        # releases page 100 before discovering invalid page 101 on the retained ring.
+        # Remove only the new complete-ring preflight and invoke the production
+        # finish loop on the retained ring. This reconstructs the original
+        # valid-prefix release defect; the unmodified production body above now
+        # has independent positive/rejection/recovery controls.
         needle = 'let rc=drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None});'
         replacement = 'let rc=if name=="later-invalid" {mem_finish_free_pages_pending_result(&raw mut self.b.as_mut().get_unchecked_mut().head,Some(free_page))}else{drain_pending_free_batch(s,self.b.as_mut(),if callback{Some(free_page)}else{None})};'
         assert fixture.count(needle) == 1
+        preflight_start = base.index('    // Preflight the whole live ring before unlinking or releasing a prefix.')
+        preflight_end = base.index('    let mut count: CInt = 0;', preflight_start)
+        mutant_base = base[:preflight_start] + base[preflight_end:]
+        control_call = '    production_finish_preflight_controls();\n'
+        assert fixture.count(control_call) == 1
         mutant = out/'partial-release-mutant.rs'
-        mutant.write_text(base + '\n' + fixture.replace(needle,replacement))
+        mutant.write_text(mutant_base + '\n' + fixture.replace(control_call, '').replace(needle,replacement))
         mb = out/'partial-release-mutant'
         success(compile_rust+[str(mutant),'-o',str(mb)],out,'mutant-compile',ledger)
         rc,stdout,stderr = call([str(mb)],out,'mutant-run',ledger)

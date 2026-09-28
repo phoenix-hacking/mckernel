@@ -3475,3 +3475,41 @@ repository on local branch `codex/vm-clear-error-propagation-20260928` at commit
 nested commit is not pushed and the outer submodule pointer is intentionally
 unstaged. The outer checkpoint excludes that pointer rather than publishing an
 unfetchable nested object; the exact source SHA256 remains recorded above.
+
+Continuation shutdown checkpoint 12, 2026-09-28: the pinned-container actual-
+body test and independent review accept one narrowly scoped production repair.
+The current Rust pending-free finish path now validates the complete ring before
+any unlink or allocator callback. All 37 Rust/C snapshots and 15 trait-negative
+controls pass; a preflight-removal mutant reproduces valid-prefix release. This
+does not supply VM/token/extent authority, IRQ/reentry/migration exclusion, the
+C fallback repair, guest runtime evidence or full M03 acceptance.
+
+All other lanes are preserved without promotion. The SC-VM-01 harness failed its
+bounded-correction review on fixture completeness, callback oracles, executable
+mutants, packet bindings and durable evidence. The M01 driver failed source
+review because cleanup can mask first failures and leak a Journal descriptor.
+The native diagnostic failed review on teardown ordering, route completeness,
+QMP cleanup isolation and unbounded failure journaling. The M02 real descriptor
+candidate passes five fork/dup/exec and identity tests but still needs independent
+review. The root13 collector and Linux diagnostic owner experts were interrupted
+at source-edit boundaries on shutdown; their exact partial bytes are WIP and do
+not release root, systemd, Docker, compiler or guest execution.
+
+All children are terminal or interrupted. Launcher PID 3125264, worker PID
+3125267 and app-server PID 3125269, started at 2026-09-28 03:47:42 -0700, remain
+the preserved process identities for
+`.git/os-autopilot/runs/20260928T104742Z-d8634f08`. No project compiler, guest,
+QEMU, mcexec, native-boot or IHK runtime is active; host/scratch free space is
+43/21 GiB and the heavy lease is free. Real guest applications executed in this
+window: **0**.
+
+Next tasks are: (1) independently review M02; (2) finish and review the root13
+collector and Linux diagnostic owner corrections; (3) repair and review M01's
+cleanup boundaries; (4) replace and review the SC-VM-01 harness before compile;
+(5) repair the native diagnostic lifecycle; and (6) execute the matching C
+pending-free preflight before continuing durable ownership design. Exact hashes,
+review blockers and evidence are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-12.json`.
+Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete; this checkpoint pauses rather than resumes or completes the goal.
