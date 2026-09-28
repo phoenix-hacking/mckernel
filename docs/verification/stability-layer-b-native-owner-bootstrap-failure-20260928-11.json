@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_object_bootstrap_attempt",
+  "recorded_utc": "2026-09-28T09:50:00Z",
+  "status": "FAIL_BARRIER_TIMEOUT",
+  "packet_review": "docs/verification/stability-layer-b-native-owner-fast-completion-packet-review-20260928-20.json",
+  "root": "/home/holden/mckernel-work/scratch/stability-layer-b-native-owner-bootstrap-20260928-11",
+  "unit": "layer-b-native-owner-bootstrap-20260928-11-9cb2ebc1a76568f7.service",
+  "invocation_id": "023e2b5fa10f4b91863a3df7e3f1d242",
+  "prebound_control_group": "/user.slice/user-1000.slice/user@1000.service/layer-b-native-owner-bootstrap-20260928-11-9cb2ebc1a76568f7.service",
+  "preflight": {
+    "include_entries": 29552,
+    "external_directory_links": 10,
+    "errors": 0,
+    "source_sha256": "2c157335e88b2088c56fc40fd6c0d966dc653ea68b4726e51feb1d4b4e62eafc",
+    "test_sha256": "427f6133497ce0706fce39d9e52051542821bc6deab29d27322733c927efd63d"
+  },
+  "first_failure": "The 60-second observation deadline elapsed before marker publication. The retained pre-start identity was valid, but the marker stayed absent; sleep exited 0, the marker test exited 1, and systemd never started the compiler.",
+  "marker_published": false,
+  "sync_or_rename_attempted": false,
+  "compiler_started": false,
+  "compiler_artifacts_present": false,
+  "cleanup": {
+    "start_monotonic_ns": 798858741207304,
+    "end_monotonic_ns": 798875379737624,
+    "duration_ns": 16638170320,
+    "stop_exit_code": 0,
+    "prebound_paths_absent": true,
+    "final_state": "not-found/inactive/dead",
+    "disposition": "RESOLVED_ABSENT"
+  },
+  "archive_path": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-11.tar.gz",
+  "archive_sha256": "07228da2a5b6827b0c260f080217ea358b7c8c45848505990f30b466fa080d26",
+  "archive_size": 1655104,
+  "archive_members": 18,
+  "retry_permitted": false,
+  "heavy_lease_released": true,
+  "acceptance_credit": false
+}

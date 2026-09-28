@@ -3089,6 +3089,71 @@ fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 Whole-OS acceptance remains incomplete; this checkpoint pauses rather than
 completes or resumes the goal.
 
+Continuation shutdown checkpoint 5, 2026-09-28: policy hashes remain the exact
+adopted GOAL/START/CONVERGENCE/HANDOFF values. This continuation produced three
+technical results and preserved every first failure without acceptance promotion.
+
+Layer-B attempt10 submitted the one reviewed object-only command. GCC exited
+successfully in 199,901 microseconds, but systemd 245 had already pruned the
+terminal `ControlGroup`; the attempt is immutable `FAIL_IDENTITY`. Its generated
+`.i/.s/.o/.d` remain uninspected and uncredited. Original cleanup retention
+failed independent review because raw timing/search evidence was incomplete;
+an additive exact present-state reconciliation independently established current
+quiescence and released only the heavy lease. The retained archive is
+`docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-10.tar.gz`,
+SHA256 `036e05c62f7993fc5787be794f74d38d40c79d97f391e48ac1c59cbede153eff`.
+
+Packet18 plus correction19 then independently passed the fast-completion
+execution review. Fresh root11 rebuilt 29,552 include entries with zero inventory
+errors and captured exact start-pre unit/invocation/cgroup identity. The explicit
+shutdown arrived while the 20-second barrier was active; by the next observation
+the 60-second dispatcher deadline had elapsed. Because the marker was never
+published, `/usr/bin/test` exited 1 and gcc never started. This is
+`FAIL_BARRIER_TIMEOUT`, not a compiler failure. The 16.64-second cleanup ended
+`not-found/inactive/dead` with both prebound cgroup paths absent; no artifact or
+payload process exists. Preserve root11 and its 18-member archive
+`docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-11.tar.gz`,
+SHA256 `07228da2a5b6827b0c260f080217ea358b7c8c45848505990f30b466fa080d26`.
+Do not retry either root. Next change lifecycle strategy to a retained-owner
+acknowledgement barrier that is not dependent on conversation/tool latency,
+obtain independent review, and use a fresh root before any link or owner run.
+
+M03 now has independent `PASS_VALIDATED_INVENTORY_SOURCE` on frozen product
+SHA256 `423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985`,
+harness SHA256 `f53b0ddf9e9d05a9cfe6e24eb09758759f9dba3c759bf8312b9e368f3bc91032`,
+Rust vectors SHA256
+`3c8a5a0ba8305b061ada285c310998508c8fb7adb361d21bff7446d1e9b33a0a`
+and C vectors SHA256
+`5a2714a7855e958a4b61bdbe64a8aab12763335d6b063d786f58705a16da7a6f`.
+This is source readiness only: production callers remain unwired and no compiler,
+fixture or runtime command ran. After Layer-B owner execution passes, prepare and
+independently review the exact M03 compile/test packet, then run actual helper and
+C fallback controls before production integration.
+
+M01 root56 contains a complete candidate and passed both 51-member reconstruction,
+cfg erasure, authority, membership, archive and observer checks. Its final command
+incorrectly applied repository-mode `git diff --check` to an external scratch
+path and exited 128. Root56 remains `FAIL_PHASE_I_VALIDATION_COMMAND` with no
+handoff, but independent source review found all ten candidate files coherent
+against packet52/review53. Preserve its 338-member archive
+`docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-56.tar.gz`,
+SHA256 `8eabf2eb29512ce628da616ffe587bfa5d75775be2e783e55418f67e91d3a59a`.
+Next issue an additive independently reviewed fresh-root packet binding these
+candidate hashes and a scratch-compatible whitespace validator, repeat static
+authentication, create the canonical handoff and independently review it before
+Phase II.
+
+All child agents are terminal. Launcher PID 3052017, worker PID 3052019 and
+app-server PID 3052021 remain the live launcher identities while this shutdown
+returns; the run directory remains
+`.git/os-autopilot/runs/20260928T080459Z-d717ac31`. No project compiler, transient
+Layer-B unit/cgroup, guest, QEMU, mcexec or IHK process remains. Host/scratch free
+space is 44/21 GiB. Unrelated launcher-file edits, bytecode deletion and
+untracked bytecode remain unstaged. Counters remain 0/273 application cases,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates. Whole-OS acceptance remains incomplete; this checkpoint pauses
+rather than completes or resumes the goal.
+
 Continuation shutdown checkpoint 3, 2026-09-28: the replacement Layer-B
 strategy is now a native single-threaded pidfd/subreaper owner rather than the
 rejected Python PGID family. Exact source SHA256

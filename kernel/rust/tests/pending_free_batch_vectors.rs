@@ -25,8 +25,9 @@ fn reset() { LEDGER.with(|c| { let mut l=c.borrow_mut(); l.used=0; l.limit=32; }
 fn callbacks() -> String { LEDGER.with(|c| { let l=c.borrow(); let v:Vec<String>=l.entries[..l.used].iter().map(|x|format!("[{},{},{}]",x.0,x.1,x.2)).collect(); format!("[{}]",v.join(",")) }) }
 fn callback_controls() { reset(); LEDGER.with(|c| { let _held=c.borrow_mut(); unsafe { free_page(1,1,1); } }); assert_eq!(CALLBACK_ERROR.with(Cell::get),1); reset(); LEDGER.with(|c|c.borrow_mut().limit=0); unsafe { free_page(1,1,1); } assert_eq!(CALLBACK_ERROR.with(Cell::get),2); reset(); println!("CONTROL|callback-borrow-and-capacity-observed"); }
 static mut DISPATCH_PAGE:*mut MemPage=null_mut();
+static mut DISPATCH_NO_PAGE:bool=false;
 unsafe extern "C" fn fixture_virt_to_phys(_: *mut c_void)->CULong {0xfeed}
-unsafe extern "C" fn fixture_phys_to_page(_: CULong)->*mut MemPage {DISPATCH_PAGE}
+unsafe extern "C" fn fixture_phys_to_page(_: CULong)->*mut MemPage {if DISPATCH_NO_PAGE {null_mut()} else {DISPATCH_PAGE}}
 unsafe extern "C" fn fixture_immediate_free(va:*mut c_void,npages:CInt,is_user:CInt){free_page(va as CULong,npages,is_user)}
 fn head() -> AbiListHead { AbiListHead {next:null_mut(),prev:null_mut()} }
 fn page(i:usize) -> MemPage { MemPage {list:head(),hash:head(),mode:PM_NONE,phys:100+i as u64,count:IhkAtomic{counter:70+i as i32},mapped:IhkAtomic64{counter64:80+i as i64},offset:0,pgshift:12+i as i32} }
@@ -40,10 +41,24 @@ impl World {
         if x as usize==LIST_POISON1{return 90} if x as usize==LIST_POISON2{return 91} panic!("unknown pointer")
     }
     unsafe fn links(&self,h:&AbiListHead)->String{format!("{{\"next\":{},\"prev\":{}}}",self.id(h.next),self.id(h.prev))}
+    unsafe fn page_id(&self,p:*mut MemPage)->usize {
+        if p.is_null(){return 0}
+        for (i,_) in self.p.iter().enumerate(){if p==(&raw const self.p[i]).cast_mut(){return 10+i}}
+        p as usize
+    }
+    unsafe fn lease_snapshot(&self,lease:&PendingInventoryLease)->String {
+        let descriptors=(0..lease.descriptor_len).map(|i|self.page_id(lease.descriptor(i)).to_string()).collect::<Vec<_>>().join(",");
+        let args=(0..lease.callback_len).map(|i|{let a=*lease.callback_args.add(i);format!("{{\"phys\":{},\"npages\":{}}}",a.phys,a.npages)}).collect::<Vec<_>>().join(",");
+        format!("{{\"descriptors_ptr\":{},\"descriptor_len\":{},\"callback_args_ptr\":{},\"callback_len\":{},\"bounds\":{{\"start\":{},\"end\":{}}},\"descriptors\":[{}],\"callback_entries\":[{}]}}",lease.descriptors as usize,lease.descriptor_len,lease.callback_args as usize,lease.callback_len,lease.bounds.start,lease.bounds.end,descriptors,args)
+    }
+    unsafe fn token_snapshot(&self,token:&ValidatedPendingInventory)->String {
+        format!("{{\"source\":{},\"count\":{},\"lease\":{}}}",self.id(token.source),token.count,self.lease_snapshot(&token.lease))
+    }
     unsafe fn snapshot(&self)->String {
         let pages:Vec<String>=self.p.iter().map(|p|format!("{{\"list\":{},\"hash\":{},\"mode\":{},\"phys\":{},\"count\":{},\"mapped\":{},\"offset\":{},\"pgshift\":{}}}",self.links(&p.list),self.links(&p.hash),p.mode,p.phys,p.count.counter,p.mapped.counter64,p.offset,p.pgshift)).collect();
         let b=self.b.as_ref().get_ref();let state=match b.state{PendingFreeBatchState::Vacant=>0,PendingFreeBatchState::Retained=>1,PendingFreeBatchState::Drained=>2};
-        format!("{{\"source\":{},\"other\":{},\"batch\":{{\"head\":{},\"state\":{},\"source\":{}}},\"pages\":[{}]}}",self.links(&self.s),self.links(&self.t),self.links(&b.head),state,self.id(b.source),pages.join(","))
+        let lease=match b.lease.as_ref(){Some(lease)=>self.lease_snapshot(lease),None=>"null".to_string()};
+        format!("{{\"source\":{},\"other\":{},\"batch\":{{\"head\":{},\"state\":{},\"source\":{},\"lease\":{}}},\"pages\":[{}]}}",self.links(&self.s),self.links(&self.t),self.links(&b.head),state,self.id(b.source),lease,pages.join(","))
     }
     unsafe fn retained_destination(&self)->String {
         let b=self.b.as_ref().get_ref();assert!(b.state==PendingFreeBatchState::Retained);
@@ -163,8 +178,8 @@ unsafe fn validated_inventory_controls() {
     let lease=PendingInventoryLease::new(&mut descriptors,&mut captured,bounds);
     let token=validate_pending_inventory(&raw mut w.s,lease).unwrap();
     w.b.as_mut().get_unchecked_mut().state=PendingFreeBatchState::Retained;
-    reset();let invalid_before=w.snapshot();let captured_before=captured;
-    let token=token.try_reanchor_into(w.b.as_mut()).expect_err("destination");assert_eq!(w.snapshot(),invalid_before);assert_eq!(captured,captured_before);assert_eq!(callbacks(),"[]");
+    reset();let invalid_before=w.snapshot();let token_before=w.token_snapshot(&token);let captured_before=captured;
+    let token=token.try_reanchor_into(w.b.as_mut()).expect_err("destination");assert_eq!(w.snapshot(),invalid_before);assert_eq!(w.token_snapshot(&token),token_before);assert_eq!(captured,captured_before);assert_eq!(callbacks(),"[]");
     w.b.as_mut().get_unchecked_mut().state=PendingFreeBatchState::Vacant;
     token.reanchor_into(w.b.as_mut());
     reset();let before=w.snapshot();assert_eq!(drain_validated_pending_inventory(w.b.as_mut(),None),-EINVAL);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[]");
@@ -172,9 +187,10 @@ unsafe fn validated_inventory_controls() {
     w.p[0].mode=PM_PENDING_FREE;assert_eq!(drain_validated_pending_inventory(w.b.as_mut(),Some(free_page)),1);reset();let repeated_before=w.snapshot();let captured_before=captured;assert_eq!(drain_validated_pending_inventory(w.b.as_mut(),Some(free_page)),-EINVAL);assert_eq!(w.snapshot(),repeated_before);assert_eq!(captured,captured_before);assert_eq!(callbacks(),"[]");
 }
 unsafe fn free_dispatch_controls(){
-    let mut w=World::new();w.setup(0,false);DISPATCH_PAGE=&raw mut w.p[0];
-    let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),1);assert_eq!(callbacks(),"[]");assert_eq!(w.p[0].mode,PM_PENDING_FREE);assert_ne!(w.snapshot(),before);assert_eq!(w.p[0].offset,2);
-    let mut w=World::new();DISPATCH_PAGE=&raw mut w.p[0];let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");
+    let mut w=World::new();w.setup(0,false);DISPATCH_PAGE=&raw mut w.p[0];DISPATCH_NO_PAGE=false;
+    let other_before=w.links(&w.t);let batch_before={let b=w.b.as_ref().get_ref();(w.links(&b.head),b.state,w.id(b.source),b.lease.is_none())};let other_pages=(1..w.p.len()).map(|i|format!("{}:{}:{}:{}:{}:{}:{}:{}",w.links(&w.p[i].list),w.links(&w.p[i].hash),w.p[i].mode,w.p[i].phys,w.p[i].count.counter,w.p[i].mapped.counter64,w.p[i].offset,w.p[i].pgshift)).collect::<Vec<_>>();let hash=w.links(&w.p[0].hash);let phys=w.p[0].phys;let count=w.p[0].count.counter;let mapped=w.p[0].mapped.counter64;let pgshift=w.p[0].pgshift;reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),1);assert_eq!(callbacks(),"[]");assert_eq!(w.links(&w.s),"{\"next\":10,\"prev\":10}");assert_eq!(w.links(&w.p[0].list),"{\"next\":1,\"prev\":1}");assert_eq!(w.p[0].mode,PM_PENDING_FREE);assert_eq!(w.p[0].offset,2);assert_eq!(w.links(&w.p[0].hash),hash);assert_eq!((w.p[0].phys,w.p[0].count.counter,w.p[0].mapped.counter64,w.p[0].pgshift),(phys,count,mapped,pgshift));assert_eq!(w.links(&w.t),other_before);let b=w.b.as_ref().get_ref();assert!((w.links(&b.head),b.state,w.id(b.source),b.lease.is_none())==batch_before);assert_eq!((1..w.p.len()).map(|i|format!("{}:{}:{}:{}:{}:{}:{}:{}",w.links(&w.p[i].list),w.links(&w.p[i].hash),w.p[i].mode,w.p[i].phys,w.p[i].count.counter,w.p[i].mapped.counter64,w.p[i].offset,w.p[i].pgshift)).collect::<Vec<_>>(),other_pages);
+    let mut w=World::new();w.setup(1,false);DISPATCH_PAGE=null_mut();DISPATCH_NO_PAGE=true;let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");
+    let mut w=World::new();DISPATCH_PAGE=&raw mut w.p[0];DISPATCH_NO_PAGE=false;let before=w.snapshot();reset();assert_eq!(mem_mckernel_free_pages_body_result(0xfeedusize as *mut c_void,2,1,&raw mut w.s,Some(fixture_virt_to_phys),Some(fixture_phys_to_page),Some(fixture_immediate_free),None),0);assert_eq!(w.snapshot(),before);assert_eq!(callbacks(),"[[65261,2,1]]");DISPATCH_NO_PAGE=false;
 }
 fn main(){unsafe{
     assert_eq!(core::mem::offset_of!(MemPage,list),0);assert_eq!(core::mem::size_of::<MemPage>(),80);

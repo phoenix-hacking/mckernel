@@ -205,6 +205,18 @@ def source_only_admission():
     assert 'mem_mckernel_free_pages_body_result' in mem and 'free_in_allocator(va, npages, is_user)' in mem
     assert "'const PAGE_SHIFT:'" in Path(__file__).read_text()
     assert "'const PAGE_SIZE:'" in Path(__file__).read_text()
+    vectors = RUST.read_text()
+    for evidence in ('DISPATCH_NO_PAGE', 'lease_snapshot', 'token_snapshot',
+                     'descriptor_len', 'callback_args_ptr', 'callback_entries',
+                     'assert_eq!(callbacks(),"[[65261,2,1]]")',
+                     'assert_eq!(w.links(&w.s),"{\\"next\\":10,\\"prev\\":10}")',
+                     'assert_eq!(w.links(&w.p[0].list),"{\\"next\\":1,\\"prev\\":1}")',
+                     'assert_eq!(w.p[0].mode,PM_PENDING_FREE)',
+                     'assert_eq!(w.p[0].offset,2)',
+                     'b.lease.is_none()',
+                     'DISPATCH_PAGE=null_mut();DISPATCH_NO_PAGE=true'):
+        assert evidence in vectors, evidence
+    assert '\\\"lease\\\":null' in C.read_text()
     rust_body, rust_binding = extract(
         MEM, '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_result(',
         '#[no_mangle]\npub unsafe extern "C" fn mem_finish_free_pages_pending_body_result(')

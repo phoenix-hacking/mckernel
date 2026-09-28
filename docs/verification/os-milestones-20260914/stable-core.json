@@ -96,6 +96,9 @@
     "ffi": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
     "guest_review": "docs/verification/ultra-guest-review-20260909.md",
     "durable_registry": "docs/verification/stability-pending-free-durable-registry-feasibility-review-20260915-1.md"
+    ,"layer_b_failure": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-20260928-10.json"
+    ,"pending_validated": "docs/verification/stability-pending-free-validated-inventory-source-review-20260928-8.json"
+    ,"retention56": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-56.json"
   },
   "areas": [
     {
@@ -353,11 +356,12 @@
       "area": "ENV",
       "title": "Reusable unprivileged executable-check profile",
       "status": "partial",
-      "result": "The replacement native pidfd/subreaper owner passes independent source review on exact source/model hashes, including interpreted seccomp and ownership-state counterexamples. Its first bootstrap packet and one additive correction both fail review; no compiler or owner command was released.",
-      "next_check": "Change the bootstrap strategy to include exact GCC -v commands, a distinct bounded cleanup budget with SIGKILL fallback, immediate normal stop, and a dependency manifest separating persistent inputs from driver temporaries; independently review before compilation.",
+      "result": "Attempt10's compiler exited successfully but failed identity capture and remains uncredited. The corrected fast-completion barrier then passed packet review and root11 captured a pre-start unit/invocation/cgroup, but the launcher stop arrived after its observation deadline: the unpublished marker failed closed, gcc never started, and 16.64-second cleanup proved the unit/cgroup absent.",
+      "next_check": "Preserve attempts10/11. On a later continuation, change strategy rather than retrying the same finite observation window: design an acknowledgement barrier whose deadline is controlled by the retained owner rather than conversation latency, independently review it, then use one fresh root.",
       "evidence": [
         "handoff",
-        "policy"
+        "policy",
+        "layer_b_failure"
       ],
       "depends_on": []
     },
@@ -713,10 +717,11 @@
       "area": "FIX",
       "title": "Compilable independent reference and real constructors",
       "status": "partial",
-      "result": "The candidate now contains independent C and Rust constructors, persistent per-command evidence and 23 explicit selectors; static review also repaired per-descriptor physical-start alignment. No compiler was released.",
+      "result": "Independent PASS_VALIDATED_INVENTORY_SOURCE now binds the frozen production helper and strengthened C/Rust fixtures: complete snapshot parity, real constructors, dual fallback paths, inventory/token nonmutation and actual helper extraction. No compiler or fixture command has run.",
       "next_check": "After an independently accepted native-owner bootstrap and owner behavior packet, compile both exact programs in a persistent root and retain compiler streams, binaries and hashes before any vector claim.",
       "evidence": [
-        "inventory"
+        "inventory",
+        "pending_validated"
       ],
       "depends_on": [
         "SC-ENV-04"
@@ -727,10 +732,11 @@
       "area": "FIX",
       "title": "Sentinel, structural and overflow semantics",
       "status": "partial",
-      "result": "The finite candidates model sentinel-linked single/two positives, link/cycle/range/overlap/generation negatives and distinct EINVAL/EOVERFLOW/ENOSPC results with unchanged-state hashes. They remain uncompiled and unexecuted.",
+      "result": "Source review accepts isolated oversized-cardinality, complete link/state preservation, separate active/null and inactive/non-null fallbacks, partial-release controls and exact C/Rust equality. These remain uncompiled and unexecuted.",
       "next_check": "First design the production prevalidation boundary identified by the mapping audit so an invalid later node cannot partially release earlier nodes; separately, after Layer-B execution acceptance, run all 23 finite-model selectors and compare exact statuses and hashes.",
       "evidence": [
-        "inventory"
+        "inventory",
+        "pending_validated"
       ],
       "depends_on": [
         "SC-MEM-02"
@@ -741,11 +747,12 @@
       "area": "MEM",
       "title": "Actual begin/enqueue/detach/finish helper execution",
       "status": "partial",
-      "result": "Production helper bodies and candidate fixtures exist; finite-model checks do not establish actual-body behavior.",
-      "next_check": "Exercise complete selected helpers and ABI dependencies for empty/one/many, order/metadata, source reuse, drain and two-head independence.",
+      "result": "The frozen helper and actual-body extraction fixtures pass independent source review for preflight-before-mutation, pinned transfer, source reset, callback capture and no post-release descriptor reads. Production callers remain unwired and no actual-body fixture has executed.",
+      "next_check": "After Layer-B owner execution is accepted, compile and execute the complete selected helper/C fallback controls; then wire reviewed production callers while preserving lifetime, physical-authority, exclusivity and non-reentry obligations.",
       "evidence": [
         "pending",
-        "handoff"
+        "handoff",
+        "pending_validated"
       ],
       "depends_on": [
         "SC-MEM-03"
@@ -1375,11 +1382,12 @@
       "area": "IPC",
       "title": "Selected response survives cancel/prepare/no-wake paths",
       "status": "blocked",
-      "result": "Attempt48 preserves a fully authenticated 327-file source handoff and archive, but independent review rejects its generic Vec default, fabricated observer counts, pre-drop deallocation event and incomplete assertion matrix. Escalated packet52 passes independent packet review and releases one fresh source-only attempt; Phase II remains closed.",
-      "next_check": "On a later continuation, reauthenticate packet52 and its inputs, stage exactly one fresh source-only attempt at absent root52, preserve its first result, then obtain independent handoff review before any Phase II or compilation.",
+      "result": "Root56 contains a complete source candidate and passed reconstruction, cfg erasure, authentication and membership checks, but its final validator incorrectly ran git diff --check on an external scratch path and exited 128. Independent review finds all ten candidate files coherent against packet52/review53; root56 remains failed with no handoff.",
+      "next_check": "Issue an additive independently reviewed fresh-root packet binding the exact root56 candidate bytes and a scratch-compatible whitespace validator; repeat authentication/static checks, create the canonical handoff, then obtain independent handoff review before Phase II.",
       "evidence": [
         "retention",
-        "handoff"
+        "handoff",
+        "retention56"
       ],
       "depends_on": [
         "SC-ENV-04"

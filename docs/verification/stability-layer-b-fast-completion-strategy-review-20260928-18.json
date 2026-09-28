@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_fast_completion_strategy_review",
+  "recorded_utc": "2026-09-28T09:42:00Z",
+  "status": "PASS_STRATEGY_ONLY",
+  "attempt10_failure": "FAIL_IDENTITY because the 199901-us compiler process completed before the first observation and systemd v245 pruned the stored ControlGroup path.",
+  "rejected_strategy": "A fixed ExecStartPre sleep with blocking systemd-run is insufficient because Type=exec submission returns only after startup; a finite sleep alone is also only an observation opportunity.",
+  "selected_strategy": "Use --no-block and two ordered ExecStartPre commands: a pinned sleep followed by a pinned test for an identity-bound marker. Publish the marker only after durably retaining loaded/activating/start-pre with exact unit, nonzero InvocationID, nonempty ControlGroup, ControlPID, exact pre-command order and unchanged ExecStart. A missed observation causes the marker test to fail before gcc can start.",
+  "tool_hashes": {
+    "/usr/bin/sleep": "45cf3208dc6704e806bbc5d776e884b5487744bd75171a93930c94e9b9b20ebb",
+    "/usr/bin/test": "17548d1b941255fa61afeb4f46aab5f51c794fe1089c3d2aba7c9111d720cb4a",
+    "/usr/bin/sync": "7ecb2f99a697aa0d3c4eeeedde02a76d30139def1f85401b388a256a6079028f",
+    "/usr/bin/mv": "5d991b919776bb4bc926fe341492762004a334f301dcd62632bc3d87aa24cbf4"
+  },
+  "required_scope": "A fresh exact packet and independent review. Preserve packet10's compiler command, cleanup and object/provenance requirements. Retain every raw command stream/status and monotonic timestamp.",
+  "execution_released": false,
+  "acceptance_credit": false
+}

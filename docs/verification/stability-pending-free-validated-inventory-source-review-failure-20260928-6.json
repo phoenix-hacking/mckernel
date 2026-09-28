@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_source_review",
+  "recorded_utc": "2026-09-28T09:39:00Z",
+  "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+  "source_hashes": {
+    "kernel/rust/mem_helpers.rs": "423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "312a6a8ad3f7e5ef152ccefda6f2bb68f5f8ef8a71ce8a7911d26e390352f073",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "7b56d954e9093eb48b0524825236bb31625d6a3683159c49192feedffed9bc69"
+  },
+  "blocking_findings": [
+    "Rust World::page_id introduces an unused binding while the intended harness compiles with -D warnings.",
+    "Rust snapshots now emit batch.lease but the C snapshot schema omits it, so the complete Rust/C equality assertion necessarily fails.",
+    "Active capture does not assert reciprocal page links, PM_PENDING_FREE, offset 2 or complete unrelated-world preservation, and the separate non-null-page/inactive-source immediate fallback was replaced rather than retained."
+  ],
+  "verified_repairs": [
+    "Null-page/active-source fallback checks exact immediate allocator arguments and full world preservation.",
+    "Lease/token snapshots cover pointer, length, bounds, descriptor and callback entries for invalid-destination and repeated-drain nonmutation.",
+    "Oversized cardinality isolates its guard and actual Rust/C helper extraction remains present."
+  ],
+  "convergence_decision": "Repeated evidence-only correction has exposed a cross-language schema boundary. Escalate one coherent repair owning the complete C/Rust snapshot boundary rather than another two-file cheap correction.",
+  "compilation_or_execution_released": false,
+  "production_integration_released": false,
+  "acceptance_credit": false
+}

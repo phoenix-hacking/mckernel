@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_object_bootstrap_failure_review",
+  "recorded_utc": "2026-09-28T09:36:00Z",
+  "status": "FAIL_FAILURE_RETENTION",
+  "attempt_record": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-20260928-10.json",
+  "archive_path": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-10.tar.gz",
+  "archive_sha256": "036e05c62f7993fc5787be794f74d38d40c79d97f391e48ac1c59cbede153eff",
+  "archive_size": 1715570,
+  "archive_members": 23,
+  "verified": [
+    "Archive compares exactly with retained root and its root identity matches preflight.",
+    "FAIL_IDENTITY is required because the first terminal observation has an empty ControlGroup.",
+    "Generated .i/.s/.o/.d files remain uninspected and uncredited."
+  ],
+  "blocking_findings": [
+    "The original archive retains only summarized cgroup/process absence rather than raw reconciliation argv, streams, statuses and examined parent records.",
+    "Controller-side observation and cleanup-query monotonic timestamps were not retained, so the original independent cleanup budget cannot be reconstructed."
+  ],
+  "review_disposition": "Original failure cleanup is not independently accepted for lease release from the archived evidence alone. Additive present-state reconciliation may prove current quiescence but cannot reconstruct original timing.",
+  "next_strategy": "Prepare a separately reviewed lifecycle correction for fast completion before cgroup capture, with complete raw evidence retention. No retry, compile, link or owner execution is released.",
+  "acceptance_credit": false
+}

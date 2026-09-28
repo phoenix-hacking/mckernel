@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_cleanup_present_state_reconciliation",
+  "purpose": "Additive present-state reconciliation only; this does not reconstruct original cleanup timing or change FAIL_IDENTITY.",
+  "unit": "layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service",
+  "start_monotonic_ns": 798040831092017,
+  "start_realtime_ns": 1790588216148295666,
+  "end_monotonic_ns": 798040855644378,
+  "end_realtime_ns": 1790588216172848393,
+  "checks": [
+    {
+      "name": "exact_unit_cgroup_search",
+      "root": "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/user@1000.service",
+      "argv": ["/usr/bin/find", "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/user@1000.service", "-type", "d", "-name", "layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service", "-print"],
+      "start_monotonic_ns": 798040831094144,
+      "end_monotonic_ns": 798040834131688,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "parent_stat_first_ten_fields": [16877, 758, 30, 45, 1000, 1000, 0, 1789790177, 1790587924, 1790587924]
+    },
+    {
+      "name": "exact_unit_cgroup_search",
+      "root": "/sys/fs/cgroup/unified/user.slice/user-1000.slice/user@1000.service",
+      "argv": ["/usr/bin/find", "/sys/fs/cgroup/unified/user.slice/user-1000.slice/user@1000.service", "-type", "d", "-name", "layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service", "-print"],
+      "start_monotonic_ns": 798040834151759,
+      "end_monotonic_ns": 798040837354390,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "parent_stat_first_ten_fields": [16877, 2422, 29, 45, 1000, 1000, 0, 1789790177, 1790587924, 1790587924]
+    },
+    {
+      "name": "unit_manager_state",
+      "argv": ["/usr/bin/timeout", "--signal=TERM", "--kill-after=1s", "2s", "/usr/bin/systemctl", "--user", "show", "layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service", "-p", "Id", "-p", "LoadState", "-p", "ActiveState", "-p", "SubState", "-p", "Result", "-p", "ExecMainCode", "-p", "ExecMainStatus", "-p", "InvocationID", "-p", "ControlGroup", "-p", "MainPID"],
+      "start_monotonic_ns": 798040837372080,
+      "end_monotonic_ns": 798040841873560,
+      "returncode": 0,
+      "stdout": "MainPID=0\nResult=success\nExecMainCode=0\nExecMainStatus=0\nControlGroup=\nId=layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nInvocationID=\n",
+      "stderr": ""
+    }
+  ],
+  "process_scan": {
+    "method": "Read every non-ancestor /proc/<pid>/cmdline and /proc/<pid>/cgroup and search for the exact unit name.",
+    "excluded_ancestor_pids": [1353, 771621, 3033290, 3052017, 3052019, 3052021, 3090627],
+    "matches": [],
+    "unreadable_count": 0
+  },
+  "present_state_result": "The manager reports not-found/inactive/dead; the exact unit cgroup is absent under both accessible systemd and unified user-manager parents; no non-ancestor process command line or cgroup contains the exact unit name.",
+  "historical_limit": "The original nonempty ControlGroup was never captured and the original cleanup monotonic command timeline is incomplete.",
+  "acceptance_credit": false
+}

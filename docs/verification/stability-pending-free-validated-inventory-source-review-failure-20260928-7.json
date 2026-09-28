@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_source_review",
+  "recorded_utc": "2026-09-28T09:41:00Z",
+  "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+  "source_hashes": {
+    "kernel/rust/mem_helpers.rs": "423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "f53b0ddf9e9d05a9cfe6e24eb09758759f9dba3c759bf8312b9e368f3bc91032",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "df06440927a527217e29dd7c8596b1d1c30ac1957a027bd4a3a5fec995c68df4",
+    "kernel/rust/tests/pending_free_batch_vectors.c": "5a2714a7855e958a4b61bdbe64a8aab12763335d6b063d786f58705a16da7a6f"
+  },
+  "blocking_finding": "free_dispatch_controls uses assert_eq! on a tuple containing PendingFreeBatchState, but the frozen enum lacks Debug, so the intended -D warnings fixture compile would fail with E0277.",
+  "verified_repairs": "All prior warning-binding, C/Rust schema, complete active-world, dual immediate-fallback, lease/token/descriptor nonmutation, cardinality and actual-body extraction findings are source-coherent.",
+  "convergence_decision": "The escalated boundary repair is otherwise coherent. Use the strictly equivalent simpler assertion assert!(actual_tuple == expected_tuple), preserving exact equality while avoiding an irrelevant Debug requirement; do not modify the frozen product enum or reset family history.",
+  "compilation_or_execution_released": false,
+  "production_integration_released": false,
+  "acceptance_credit": false
+}
