@@ -29,6 +29,10 @@ RK006_CAPTURE_CONTRACT = (
     REPO_ROOT
     / "host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json"
 )
+SUPPLEMENTAL_EVIDENCE_CONTRACT = (
+    REPO_ROOT
+    / "host-kernel/rocky/evidence/secondary-reset-build-supplement-evidence-contract-v1.json"
+)
 
 PROVENANCE_STEP_NAME = "Validate built metadata and capture immutable diagnostics"
 PROVENANCE_WORKFLOW_PATH = (
@@ -1795,6 +1799,26 @@ exec {modinfo_fd}<&-
         self.assertIn("0010-v2-x86-export-preempt-protected-secondary-reset.patch", data["patches"][-1]["path"])
         self.assertFalse(data["credit_eligible"])
         self.assertFalse(data["licensing"]["approval_claimed"])
+        self.assertEqual(
+            "dfdde6df9f8e8a38713cb210f7d2fe3a96fbbf19e60b262aa40de340d0059e6b",
+            data["patches"][1]["files"][0]["preimage_sha256"],
+        )
+        self.assertEqual(
+            "72de74580091644ac0f28d4f45c6d49eac403804fa80edf4a2bacc966c4b8bfa",
+            data["patches"][1]["files"][0]["postimage_sha256"],
+        )
+        self.assertEqual(
+            data["patches"][1]["files"][0]["postimage_sha256"],
+            data["patches"][2]["files"][2]["preimage_sha256"],
+        )
+        self.assertEqual(
+            "18092f5038dc029d0bd5504e0a0c09a4a46ddb91ab905a4ad41fcdd505361974",
+            data["patches"][2]["files"][2]["postimage_sha256"],
+        )
+        evidence_contract = json.loads(SUPPLEMENTAL_EVIDENCE_CONTRACT.read_text(encoding="utf-8"))
+        self.assertFalse(evidence_contract["claims"]["credit_eligible"])
+        self.assertEqual("GPL-2.0-only", evidence_contract["licensing"]["target_spdx"][4]["spdx"])
+        self.assertEqual("GPL-2.0-only", evidence_contract["licensing"]["target_spdx"][6]["spdx"])
         stage = self.workflow.index("scripts/secondary_reset_build_supplement.py")
         verify = self.workflow.index("--verify-lock", stage)
         configuration = self.workflow.index("Resolve the evidence-only module configuration twice")
@@ -1802,6 +1826,11 @@ exec {modinfo_fd}<&-
         self.assertLess(verify, configuration)
         self.assertIn("--source-archive \"$archive\"", self.workflow)
         self.assertIn("--output-lock \"$source_root/.mckernel-secondary-reset-build.lock\"", self.workflow)
+        self.assertIn("secondary-reset-build-supplement.lock", self.workflow)
+        self.assertLess(
+            self.workflow.index('cmp "$NATIVE_SOURCE_ROOT/.mckernel-secondary-reset-build.lock"'),
+            self.workflow.index("PRECHECK_SHA256SUMS"),
+        )
 
     def test_final_config_keeps_warnings_fatal(self):
         second_resolution = self.workflow.index(

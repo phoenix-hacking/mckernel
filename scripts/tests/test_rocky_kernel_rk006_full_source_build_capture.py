@@ -58,6 +58,7 @@ RECORDED_PRECHECK_BUILD_MEMBERS = (
     "mcctrl.ko.nm",
     "mcctrl.ko.readelf",
     "module-targets.txt",
+    "secondary-reset-build-supplement.lock",
     "workflow-provenance.json",
     "workflow-state",
 )
@@ -109,6 +110,7 @@ RECORDED_FINAL_MANIFEST_MEMBERS = (
     "mcctrl.mod",
     "module-targets.txt",
     "resolved.config",
+    "secondary-reset-build-supplement.lock",
     "stage-lock.json",
     "workflow-provenance.json",
     "workflow-state",
@@ -217,6 +219,9 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         contents["build-log.exit-code"] = b"0\n"
         contents["build.environment"] = capture.REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES
         contents["workflow-state"] = b"bootstrap-complete\n"
+        contents["secondary-reset-build-supplement.lock"] = (
+            capture._supplemental_lock_receipt(REPO_ROOT)[1]
+        )
         contents["PRECHECK_SHA256SUMS"] = "".join(
             "{}  {}\n".format(hashlib.sha256(contents[name]).hexdigest(), name)
             for name in RECORDED_PRECHECK_BUILD_MEMBERS
@@ -1491,19 +1496,19 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self._build_evidence(root)
-            binding = capture._build_binding(root, document)
+            binding = capture._build_binding(REPO_ROOT, root, document)
         self.assertEqual("technical-build-bound-unreviewed", binding["status"])
         self.assertEqual(capture.FALSE_CLAIMS, binding["claims"])
         self.assertFalse(binding["build_artifact"]["durable"])
         self.assertIsNone(binding["build_artifact"]["outer_artifact_sha256"])
         self.assertEqual("native-rust-exact-build-123-2", binding["build_artifact"]["name"])
         capture._validate_final_build_evidence_rows(
-            document, binding["build_evidence"], binding["build_artifact"]
+            REPO_ROOT, document, binding["build_evidence"], binding["build_artifact"]
         )
 
     def test_actual_compiler_member_inventories_match_both_binding_phases(self):
-        self.assertEqual(50, len(RECORDED_FINAL_MANIFEST_MEMBERS))
-        self.assertEqual(28, len(RECORDED_PRECHECK_BUILD_MEMBERS))
+        self.assertEqual(51, len(RECORDED_FINAL_MANIFEST_MEMBERS))
+        self.assertEqual(29, len(RECORDED_PRECHECK_BUILD_MEMBERS))
         self.assertEqual(
             sorted(RECORDED_FINAL_MANIFEST_MEMBERS + ("SHA256SUMS",)),
             capture.REQUIRED_BUILD_MEMBERS,
@@ -1554,7 +1559,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                             encoding="ascii",
                         )
                     with self.assertRaisesRegex(capture.CaptureError, expected) as caught:
-                        capture._build_binding(root, document)
+                        capture._build_binding(REPO_ROOT, root, document)
                     self.assertIn(name, str(caught.exception))
 
     def test_member_set_diagnostics_bound_missing_and_extra_names(self):
@@ -1573,7 +1578,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 "".join(sorted(rows, key=lambda row: row[66:])), encoding="ascii"
             )
             with self.assertRaisesRegex(capture.CaptureError, "exact member set differs") as caught:
-                capture._build_binding(root, document)
+                capture._build_binding(REPO_ROOT, root, document)
             self.assertIn("missing=['workflow-provenance.json']", str(caught.exception))
             self.assertIn("extra=['unbound-workflow-provenance.json']", str(caught.exception))
 
@@ -1595,7 +1600,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self._build_evidence(root)
-            original = capture._build_binding(root, document)
+            original = capture._build_binding(REPO_ROOT, root, document)
         for name in (
             "build.environment",
             "build.phase",
@@ -1627,14 +1632,14 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                     capture.CaptureError, "fixed evidence differs"
                 ):
                     capture._validate_final_build_evidence_rows(
-                        document, rows, binding["build_artifact"]
+                        REPO_ROOT, document, rows, binding["build_artifact"]
                     )
 
         binding = copy.deepcopy(original)
         binding["build_artifact"]["sha256sums_sha256"] = "f" * 64
         with self.assertRaisesRegex(capture.CaptureError, "manifest digest"):
             capture._validate_final_build_evidence_rows(
-                document, binding["build_evidence"], binding["build_artifact"]
+                REPO_ROOT, document, binding["build_evidence"], binding["build_artifact"]
             )
 
     def test_build_binding_rejects_checksum_status_and_extra_member_mutations(self):
@@ -1670,7 +1675,72 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                     (root / "extra").write_bytes(b"extra")
                     (root / "extra").chmod(0o644)
                 with self.assertRaises(capture.CaptureError):
-                    capture._build_binding(root, document)
+                    capture._build_binding(REPO_ROOT, root, document)
+
+    def test_supplemental_lock_is_required_canonical_and_checksum_bound(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        for mutation in ("missing", "tampered", "self-resealed"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self._build_evidence(root)
+                lock = root / "secondary-reset-build-supplement.lock"
+                if mutation == "missing":
+                    lock.unlink()
+                else:
+                    lock.write_bytes(b"tampered supplemental lock\n")
+                    if mutation == "self-resealed":
+                        for manifest_name in ("PRECHECK_SHA256SUMS", "SHA256SUMS"):
+                            rows = capture._parse_checksum_manifest(
+                                (root / manifest_name).read_bytes(), manifest_name
+                            )
+                            rows[lock.name] = hashlib.sha256(lock.read_bytes()).hexdigest()
+                            (root / manifest_name).write_text(
+                                "".join(
+                                    "{}  {}\n".format(rows[name], name)
+                                    for name in sorted(rows)
+                                ),
+                                encoding="ascii",
+                            )
+                        final_rows = capture._parse_checksum_manifest(
+                            (root / "SHA256SUMS").read_bytes(), "SHA256SUMS"
+                        )
+                        final_rows["PRECHECK_SHA256SUMS"] = hashlib.sha256(
+                            (root / "PRECHECK_SHA256SUMS").read_bytes()
+                        ).hexdigest()
+                        (root / "SHA256SUMS").write_text(
+                            "".join(
+                                "{}  {}\n".format(final_rows[name], name)
+                                for name in sorted(final_rows)
+                            ),
+                            encoding="ascii",
+                        )
+                with self.assertRaisesRegex(capture.CaptureError, "supplemental|member set|checksum"):
+                    capture._build_binding(REPO_ROOT, root, document)
+
+    def test_supplemental_evidence_contract_rejects_missing_and_tampered_inputs(self):
+        paths = (
+            capture.SUPPLEMENTAL_EVIDENCE_CONTRACT_PATH,
+            "host-kernel/kbuild/secondary-reset-build-supplement-v1.json",
+            "scripts/secondary_reset_build_supplement.py",
+        )
+        for mutation in ("missing", "tampered"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                for relative in paths:
+                    destination = root / relative
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(REPO_ROOT / relative, destination)
+                if mutation == "missing":
+                    (root / "scripts/secondary_reset_build_supplement.py").unlink()
+                else:
+                    contract_path = root / capture.SUPPLEMENTAL_EVIDENCE_CONTRACT_PATH
+                    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+                    contract["inputs"]["manifest"]["sha256"] = "0" * 64
+                    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+                with self.assertRaisesRegex(capture.CaptureError, "supplemental"):
+                    capture._supplemental_lock_receipt(root)
 
     def test_build_binding_rejects_reproducible_environment_mutations(self):
         document = {
@@ -1699,7 +1769,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 )
                 (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
                 with self.assertRaisesRegex(capture.CaptureError, r"build\.environment"):
-                    capture._build_binding(root, document)
+                    capture._build_binding(REPO_ROOT, root, document)
 
     def test_build_binding_rejects_self_resealed_precheck_mutations(self):
         document = {
@@ -1731,7 +1801,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 )
                 (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
                 with self.assertRaises(capture.CaptureError):
-                    capture._build_binding(root, document)
+                    capture._build_binding(REPO_ROOT, root, document)
 
     def test_build_checksum_manifest_requires_stable_single_link_0644_identity(self):
         document = {
@@ -1742,7 +1812,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             self._build_evidence(root)
             (root / "SHA256SUMS").chmod(0o600)
             with self.assertRaisesRegex(capture.CaptureError, "manifest.*mode"):
-                capture._build_binding(root, document)
+                capture._build_binding(REPO_ROOT, root, document)
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -1752,7 +1822,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             manifest.rename(target)
             manifest.symlink_to(target.name)
             with self.assertRaises(capture.CaptureError):
-                capture._build_binding(root, document)
+                capture._build_binding(REPO_ROOT, root, document)
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -1760,7 +1830,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             manifest = root / "SHA256SUMS"
             os.link(str(manifest), str(root / "manifest-hardlink"))
             with self.assertRaisesRegex(capture.CaptureError, "hard-linked"):
-                capture._build_binding(root, document)
+                capture._build_binding(REPO_ROOT, root, document)
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -1785,7 +1855,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
 
             with mock.patch.object(capture.os, "read", side_effect=read_then_change_mode):
                 with self.assertRaisesRegex(capture.CaptureError, "changed while it was read"):
-                    capture._build_binding(root, document)
+                    capture._build_binding(REPO_ROOT, root, document)
             self.assertTrue(raced[0])
 
     def test_repository_inputs_require_the_exact_fixed_and_patch_membership(self):

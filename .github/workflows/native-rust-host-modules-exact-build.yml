@@ -1444,6 +1444,13 @@ jobs:
             /usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
             /usr/bin/nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
           done
+          test -f "$NATIVE_SOURCE_ROOT/.mckernel-secondary-reset-build.lock"
+          test ! -L "$NATIVE_SOURCE_ROOT/.mckernel-secondary-reset-build.lock"
+          cp "$NATIVE_SOURCE_ROOT/.mckernel-secondary-reset-build.lock" \
+            "$EVIDENCE_DIR/secondary-reset-build-supplement.lock"
+          chmod 0644 "$EVIDENCE_DIR/secondary-reset-build-supplement.lock"
+          cmp "$NATIVE_SOURCE_ROOT/.mckernel-secondary-reset-build.lock" \
+            "$EVIDENCE_DIR/secondary-reset-build-supplement.lock"
           (
             cd "$EVIDENCE_DIR"
             find . -maxdepth 1 -type f \

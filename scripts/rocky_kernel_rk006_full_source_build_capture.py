@@ -20,6 +20,9 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json"
+SUPPLEMENTAL_EVIDENCE_CONTRACT_PATH = (
+    "host-kernel/rocky/evidence/secondary-reset-build-supplement-evidence-contract-v1.json"
+)
 AUTHORITY_PATH = "host-kernel/rocky/rk006-patch-authority-v1.json"
 CAPTURE_SCRIPT_PATH = "scripts/rocky_kernel_rk006_full_source_build_capture.py"
 CAPTURE_TEST_PATH = "scripts/tests/test_rocky_kernel_rk006_full_source_build_capture.py"
@@ -93,6 +96,7 @@ REQUIRED_BUILD_MEMBERS = [
     "mcctrl.mod",
     "module-targets.txt",
     "resolved.config",
+    "secondary-reset-build-supplement.lock",
     "stage-lock.json",
     "workflow-provenance.json",
     "workflow-state",
@@ -124,8 +128,17 @@ PRECHECK_BUILD_MEMBERS = [
     "mcctrl.ko.nm",
     "mcctrl.ko.readelf",
     "module-targets.txt",
+    "secondary-reset-build-supplement.lock",
     "workflow-provenance.json",
     "workflow-state",
+]
+BASE_REQUIRED_BUILD_MEMBERS = [
+    name for name in REQUIRED_BUILD_MEMBERS
+    if name != "secondary-reset-build-supplement.lock"
+]
+BASE_PRECHECK_BUILD_MEMBERS = [
+    name for name in PRECHECK_BUILD_MEMBERS
+    if name != "secondary-reset-build-supplement.lock"
 ]
 REPRODUCIBLE_BUILD_ENVIRONMENT = {
     "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
@@ -156,6 +169,19 @@ FALSE_GATE = {
     "status": "TODO",
     "tracker_credit": False,
 }
+SUPPLEMENTAL_TARGET_LICENSES = [
+    {"patch": "0006", "path": "arch/x86/include/asm/smp.h", "spdx": "GPL-2.0"},
+    {"patch": "0006", "path": "arch/x86/kernel/head_64.S", "spdx": "GPL-2.0"},
+    {"patch": "0006", "path": "arch/x86/kernel/smpboot.c", "spdx": "GPL-2.0-or-later"},
+    {"patch": "0007", "path": "rust/bindings/bindings_helper.h", "spdx": "GPL-2.0"},
+    {"patch": "0008", "path": "arch/x86/entry/vdso/vma.c", "spdx": "GPL-2.0-only"},
+    {"patch": "0008", "path": "include/vdso/datapage.h", "spdx": "GPL-2.0"},
+    {"patch": "0008", "path": "lib/vdso/datastore.c", "spdx": "GPL-2.0-only"},
+    {"patch": "0008", "path": "rust/bindings/bindings_helper.h", "spdx": "GPL-2.0"},
+    {"patch": "0009", "path": "drivers/base/cacheinfo.c", "spdx": "GPL-2.0"},
+    {"patch": "0010-v2", "path": "arch/x86/include/asm/smp.h", "spdx": "GPL-2.0"},
+    {"patch": "0010-v2", "path": "arch/x86/kernel/smpboot.c", "spdx": "GPL-2.0-or-later"},
+]
 REMAINING_BLOCKERS = [
     "This capture is machine-generated and has not received independent patch authorship, license, provenance, or semantic review.",
     "The patch authority still records unresolved authorship and license questions for repository overlays.",
@@ -943,7 +969,7 @@ def _validate_contract_structure(contract):
         {
             "build_artifact_is_durable": False,
             "build_evidence_checksum_manifest": "SHA256SUMS",
-            "build_evidence_required_members": REQUIRED_BUILD_MEMBERS,
+            "build_evidence_required_members": BASE_REQUIRED_BUILD_MEMBERS,
             "copy_build_payload_into_capture": False,
             "require_commit_sha_match": True,
             "require_complete_build_phase": True,
@@ -1032,11 +1058,85 @@ def _validate_contract_structure(contract):
     _require_exact(contract["remaining_blockers"], REMAINING_BLOCKERS, "remaining blockers")
 
 
+def _supplemental_lock_receipt(repo):
+    contract_data, _ = _read_rooted(
+        repo, SUPPLEMENTAL_EVIDENCE_CONTRACT_PATH, "supplemental evidence contract"
+    )
+    contract = _load_json_bytes(contract_data, "supplemental evidence contract")
+    _require_keys(
+        contract,
+        {"claims", "contract_id", "inputs", "licensing", "lock", "schema_version"},
+        "supplemental evidence contract",
+    )
+    if (
+        contract["schema_version"] != 1
+        or contract["contract_id"] != "secondary-reset-build-supplement-evidence-v1"
+    ):
+        raise CaptureError("supplemental evidence contract identity differs")
+    _require_exact(contract["claims"], {"credit_eligible": False, "tracker_credit": False}, "supplemental evidence claims")
+    _require_exact(
+        contract["lock"],
+        {
+            "evidence_member": "secondary-reset-build-supplement.lock",
+            "source_member": ".mckernel-secondary-reset-build.lock",
+            "verify_before_configuration": True,
+        },
+        "supplemental evidence lock policy",
+    )
+    _require_exact(contract["licensing"], {"target_spdx": SUPPLEMENTAL_TARGET_LICENSES}, "supplemental target SPDX")
+    _require_keys(contract["inputs"], {"checker", "manifest"}, "supplemental evidence inputs")
+    expected_paths = {
+        "checker": "scripts/secondary_reset_build_supplement.py",
+        "manifest": "host-kernel/kbuild/secondary-reset-build-supplement-v1.json",
+    }
+    input_data = {}
+    for name, path in sorted(expected_paths.items()):
+        record = contract["inputs"][name]
+        _require_keys(record, {"path", "sha256"}, "supplemental {} input".format(name))
+        if record["path"] != path or re.fullmatch(r"[0-9a-f]{64}", record["sha256"]) is None:
+            raise CaptureError("supplemental {} input differs".format(name))
+        data, _ = _read_rooted(repo, path, "supplemental {} input".format(name))
+        if _sha256(data) != record["sha256"]:
+            raise CaptureError("supplemental {} bytes differ".format(name))
+        input_data[name] = data
+    manifest = _load_json_bytes(input_data["manifest"], "supplemental manifest")
+    if manifest.get("checker", {}).get("repository_path") != expected_paths["checker"]:
+        raise CaptureError("supplemental checker path differs")
+    if manifest["checker"].get("sha256") != _sha256(input_data["checker"]):
+        raise CaptureError("supplemental checker identity differs")
+    patch_ids = {
+        "0006-x86-export-owned-secondary-start-primitives.patch": "0006",
+        "0007-rust-bindings-expose-x86-apic-driver.patch": "0007",
+        "0008-rust-expose-existing-x86-vdso-data.patch": "0008",
+        "0009-cacheinfo-export-existing-topology-accessor.patch": "0009",
+        "0010-v2-x86-export-preempt-protected-secondary-reset.patch": "0010-v2",
+    }
+    manifest_targets = []
+    for patch in manifest.get("patches", []):
+        patch_id = patch_ids.get(Path(patch.get("path", "")).name)
+        if patch_id is None:
+            raise CaptureError("supplemental manifest patch identity differs")
+        manifest_targets.extend((patch_id, row.get("path")) for row in patch.get("files", []))
+    licensed_targets = [(row["patch"], row["path"]) for row in contract["licensing"]["target_spdx"]]
+    if sorted(manifest_targets) != sorted(licensed_targets):
+        raise CaptureError("supplemental target SPDX coverage differs")
+    receipt = {
+        "schema_version": 1,
+        "credit_eligible": False,
+        "manifest_sha256": _sha256(input_data["manifest"]),
+        "checker_sha256": _sha256(input_data["checker"]),
+        "source": manifest["source"],
+        "patches": manifest["patches"],
+    }
+    return contract, _canonical_json(receipt)
+
+
 def validate_contract(repo, run_authority=True):
     repo = _safe_directory(repo, "repository")
     contract_data, _ = _read_rooted(repo, CONTRACT_PATH, "capture contract")
     contract = _load_json_bytes(contract_data, "capture contract")
     _validate_contract_structure(contract)
+    _supplemental_lock_receipt(repo)
     expected_inputs = {
         "parent_integration_authority": ("host-kernel/kbuild/parent-integration-v1.json", "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55", 2076),
         "patch_authority": (AUTHORITY_PATH, "0c40d8079b3c5f6b90e44f1067f89f27c5c7ac50c67a127609a34a10c224475b", 20327),
@@ -1614,7 +1714,9 @@ def _probe_tools():
 def _repository_input_paths(authority):
     fixed = [
         CONTRACT_PATH,
+        SUPPLEMENTAL_EVIDENCE_CONTRACT_PATH,
         AUTHORITY_PATH,
+        "host-kernel/kbuild/secondary-reset-build-supplement-v1.json",
         "scripts/rocky_kernel_rk006_patch_authority.py",
         "scripts/tests/test_rocky_kernel_rk006_patch_authority.py",
         "host-kernel/kbuild/parent-integration-v1.json",
@@ -1625,6 +1727,8 @@ def _repository_input_paths(authority):
         "scripts/tests/test_rocky_kernel_source_lock.py",
         CAPTURE_SCRIPT_PATH,
         CAPTURE_TEST_PATH,
+        "scripts/secondary_reset_build_supplement.py",
+        "scripts/tests/test_secondary_reset_build_supplement.py",
         WORKFLOW_PATH,
         WORKFLOW_TEST_PATH,
         "scripts/native_rust_runtime_evidence.py",
@@ -1857,8 +1961,9 @@ def _member_set_difference(expected, actual):
     )
 
 
-def _build_binding(build_dir, capture_document):
+def _build_binding(repo, build_dir, capture_document):
     build_dir = _safe_directory(build_dir, "build evidence")
+    supplemental_contract, supplemental_lock = _supplemental_lock_receipt(repo)
     initial_directory_identity = _metadata_identity(build_dir.lstat())
     manifest_data, manifest_metadata = _read_rooted(
         build_dir, "SHA256SUMS", "build checksum manifest"
@@ -1935,6 +2040,10 @@ def _build_binding(build_dir, capture_document):
         data, _ = _read_rooted(build_dir, name, "build status")
         if data != expected:
             raise CaptureError("build status differs: {}".format(name))
+    lock_name = supplemental_contract["lock"]["evidence_member"]
+    lock_data, _ = _read_rooted(build_dir, lock_name, "supplemental build lock")
+    if lock_data != supplemental_lock:
+        raise CaptureError("supplemental build lock differs")
     if (
         _metadata_identity(build_dir.lstat()) != initial_directory_identity
         or sorted(path.name for path in build_dir.iterdir())
@@ -1961,7 +2070,7 @@ def _build_binding(build_dir, capture_document):
     }
 
 
-def _validate_final_build_evidence_rows(document, rows, artifact):
+def _validate_final_build_evidence_rows(repo, document, rows, artifact):
     row_map = {row["path"]: row for row in rows}
     expected_fixed_rows = {
         "build.environment": REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES,
@@ -1978,6 +2087,14 @@ def _validate_final_build_evidence_rows(document, rows, artifact):
             "size": len(data),
         }:
             raise CaptureError("bound build fixed evidence differs: {}".format(name))
+    supplemental_contract, supplemental_lock = _supplemental_lock_receipt(repo)
+    supplemental_name = supplemental_contract["lock"]["evidence_member"]
+    if row_map.get(supplemental_name) != {
+        "path": supplemental_name,
+        "sha256": _sha256(supplemental_lock),
+        "size": len(supplemental_lock),
+    }:
+        raise CaptureError("bound supplemental build lock differs")
     reconstructed_manifest = "".join(
         "{}  {}\n".format(row["sha256"], row["path"])
         for row in rows
@@ -1995,7 +2112,7 @@ def finalize_build(repo, capture_dir, build_dir):
     _validate_capture_document(document, allow_pending=True)
     if document["state"] != "source-capture-complete":
         raise CaptureError("capture is not ready for one-time build finalization")
-    binding = _build_binding(build_dir, document)
+    binding = _build_binding(repo, build_dir, document)
     binding_data = _canonical_json(binding)
     document["build_binding"] = {
         "build_binding_sha256": _sha256(binding_data),
@@ -2693,7 +2810,7 @@ def verify_capture(repo, capture_dir):
             name for name in REQUIRED_BUILD_MEMBERS if name != "SHA256SUMS"
         ]:
             raise CaptureError("bound build evidence exact member set differs")
-        _validate_final_build_evidence_rows(document, rows, artifact)
+        _validate_final_build_evidence_rows(repo, document, rows, artifact)
         expected_name = "native-rust-exact-build-{}-{}".format(
             document["github"]["run_id"], document["github"]["run_attempt"]
         )
