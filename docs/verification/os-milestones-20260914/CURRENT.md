@@ -4461,3 +4461,50 @@ zero current-candidate kernel builds; the latest executable result completed at
 2026-09-28T17:44:31Z. Official counters remain 0/273 applications, 2/4 narrow
 fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 Whole-OS acceptance remains incomplete.
+
+Shutdown checkpoint 42, 2026-09-28: the launcher stop request ended new task
+dispatch before the prepared files diagnostic could become an execution packet.
+No files parent, owner, container, QEMU or guest was created. The bounded
+artifact review was stopped and closed; it verified the strict manifest,
+artifact hashes/modes, the 61-member raw-CPIO prefix and canonical overlay
+replay, final map, static collector profile, raw oracle streams, both preserved
+pre-entry oracle failures, pure QEMU argv, absent execution paths and the
+100-byte QMP pathname. It did not complete the 37-ELF dependency/version audit
+because its host Python lacks `os.memfd_create`, and it did not inspect the
+supplied oracle protocol record before shutdown. It therefore correctly did
+not issue `PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET`.
+
+The prepared files collector remains at
+`/home/holden/mckernel-work/scratch/native-diagnostic-files-collector-build-20260928-1/init`,
+SHA256 `44bdb28f...1ab6`. The derived initramfs is
+`/home/holden/mckernel-work/scratch/native-diagnostic-files-overlay-20260928-1/initramfs.cpio.gz`,
+SHA256 `100e9989...aa15`; its overlay manifest is `60db93f4...aea89`.
+The strict files manifest is
+`/home/holden/mckernel-work/scratch/native-diagnostic-files-manifest-20260928-1/manifest.json`,
+SHA256 `1987e592...4186`, and binds exact stdout
+`NATIVE_CORE PASS files\n`, empty stderr and exit 37. Oracle attempt 1 preserves
+the host-libc version mismatch (`stderr` SHA256 `273c21a1...0578`); attempt 2
+preserves the non-executable extracted-loader failure (`9b5bf98a...5746`).
+Corrected attempt 3 has exact 23-byte stdout SHA256 `e3a3b692...0bee`, empty
+stderr and exit 37, with no residual `/tmp/native-core-*.dat`; its exact command,
+status and cleanup are retained in launcher protocol lines 127829-127830 under
+item `exec-69e213df-a867-4ee1-97da-ce6dd5f25fe3`.
+
+At 2026-09-28T10:56:17-07:00 the live campaign identities remained launcher
+PID/PGID/SID 3125264/starttime 80228730, recovered worker
+PID/PGID/SID 3170135/starttime 80670556, and app-server
+PID/PGID/SID 3170137/starttime 80670562. No diagnostic owner or QEMU was live;
+the proposed `/scratch/ndcf-20260928-1` parent and owner-evidence sibling remain
+absent. The launcher-owned state still reported `phase=running`; this shutdown
+record does not edit that state or resume/complete the goal.
+
+Next invocation: reconcile the exact campaign process identities, launcher
+state, repository HEAD and heavy-runtime lease. Resume the incomplete files
+artifact review with a compatible sealed ELF-audit mechanism, inspect the
+retained oracle protocol record, and require a fresh independent
+`PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET`. Only then create and independently
+review a files execution packet/release; do not reuse the proposed nonce or
+claim that the partial review released execution. Memory packet 1 remains
+consumed and nonreusable. The invocation still has one real diagnostic guest
+application and zero current-candidate kernel builds; formal counters and the
+whole-OS incomplete status are unchanged.
