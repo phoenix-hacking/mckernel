@@ -5,8 +5,8 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-28T16:36:33+00:00`
-- Launcher state heartbeat: `2026-09-28T16:36:19.323644+00:00`
+- Dashboard refreshed: `2026-09-28T16:48:03+00:00`
+- Launcher state heartbeat: `2026-09-28T16:47:51.113622+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `3170135`; server PID: `3170137`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T120120Z-056cff0a`
@@ -14,7 +14,7 @@
 ## Stable kernel core: engineering progress
 
 Read the [detailed SC1 tracker](../../../STABLE-CORE.md) for every bounded behavior, known result, next check, owner role, dependency and evidence link.
-Engineering snapshot: `2026-09-28` at `09a09b513c415e84242f2c257895a856b8605150`; milestone **NOT YET DEMONSTRATED**. Refreshing this dashboard does not refresh that evidence.
+Engineering snapshot: `2026-09-28` at `846ebe49c15bf885cb8982890759bb46746e9591`; milestone **NOT YET DEMONSTRATED**. Refreshing this dashboard does not refresh that evidence.
 
 | Work | Verified substeps | Historical baseline | Implemented | Partial | Blocked | Unmeasured | Planned |
 | --- | --- | --- | --- | --- | --- | --- | --- |

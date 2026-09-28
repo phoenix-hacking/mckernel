@@ -3,7 +3,7 @@
   "milestone": "SC1",
   "title": "Stable kernel core — engineering milestone",
   "as_of": "2026-09-28",
-  "source_revision": "09a09b513c415e84242f2c257895a856b8605150",
+  "source_revision": "846ebe49c15bf885cb8982890759bb46746e9591",
   "status": "NOT YET DEMONSTRATED",
   "profile": [
     "First claim is explicitly SC1 on the declared tested configuration, not a generally production-stable or multicore-qualified OS. The reviewed historical application profile is the starting point, not proof of the final candidate.",
@@ -123,6 +123,8 @@
     ,"native_diag_mcexec_overlay": "docs/verification/stability-native-diagnostic-mcexec-overlay-success-20260928-1.json"
     ,"native_diag_process_evidence": "docs/verification/stability-native-diagnostic-process-evidence-source-success-20260928-1.json"
     ,"native_diag_partial_identity": "docs/verification/stability-native-diagnostic-partial-identity-source-success-20260928-1.json"
+    ,"native_diag_attempt_failure3": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-3.json"
+    ,"native_diag_qemu_status": "docs/verification/stability-native-diagnostic-qemu-status-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -522,8 +524,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 2 ran one real diagnostic guest application with exact 91-byte stdout, exit 0 and complete cleanup, then correctly exposed stale marker and mcexec-stderr defects. The observer, mcexec no-source fastpath and current-signal overlay/manifest are repaired. Process-evidence review now also accepts progressive partial PID/PGID/SID/starttime retention without granting incomplete signaling authority; 236 six-module tests pass. Packet 4 was rejected before execution and no new guest or catalog acceptance follows.",
-      "next_check": "Checkpoint the partial-identity correction, issue fresh packet 5 with a never-used parent and nonce, obtain an independent one-shot release, then rerun startup.argv-empty and retain exact application bytes, raw exit, kernel log, identities and teardown.",
+      "result": "Packet 5 ran one real diagnostic guest application: startup.argv-empty produced the exact 91-byte stdout, empty stderr, wait status zero, empty procfs, QMP shutdown and complete container/QEMU teardown. Its inner protocol passed, but the outer owner correctly retained an authoritative FAIL because it wrongly required QEMU exit zero instead of the intentional -SIGKILL cleanup status. The bounded status-policy correction now accepts only exact 0/-SIGTERM/-SIGKILL, rejects other status classes, replays the immutable raw evidence and passes 244 six-module tests. No catalog acceptance follows.",
+      "next_check": "Prepare packet 6 with a never-used parent and nonce bound to pushed checkpoint 846ebe49, obtain an independent one-shot release, then rerun startup.argv-empty and require both inner and outer protocol success with exact bytes, identities and teardown.",
       "evidence": [
         "history",
         "plan",
@@ -542,7 +544,9 @@
         "native_diag_attempt_failure2",
         "native_diag_mcexec_overlay",
         "native_diag_process_evidence",
-        "native_diag_partial_identity"
+        "native_diag_partial_identity",
+        "native_diag_attempt_failure3",
+        "native_diag_qemu_status"
       ],
       "depends_on": []
     },

@@ -4214,3 +4214,40 @@ the exact commit. Fetched blob IDs match locally for CURRENT
 the one-shot release remains unconsumed. Resume with checkpoint 32's exact
 identity/lease/capacity preflight and next action; do not treat this shutdown
 record as OS completion or formal acceptance.
+
+Continuation checkpoint 34, 2026-09-28: the single released packet-5 command
+was consumed exactly once. One real diagnostic McKernel guest application ran:
+`startup.argv-empty` produced the exact 91-byte stdout, empty stderr, raw wait
+status zero, EOF without truncation, empty procfs and normal application/process
+retirement. QMP observed guest shutdown; QEMU PID/PGID/SID 10 and starttime
+82339040 were exactly reaped with status -9. Container exit was zero, OOM was
+false, every Docker client was reaped, authenticated removal/final absence
+passed, and the development lock is free. No diagnostic owner, QEMU or matching
+container remains. Raw inner and root-owned outer evidence, exact hashes and
+identities are preserved in
+`docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-3.json`.
+
+The inner protocol passed, but the immutable outer result remains FAIL at
+`QEMU evidence/result join`: the outer owner required QEMU status zero even
+though the reviewed `-no-shutdown` cleanup intentionally sends TERM then KILL
+before reap. Independent review verified the application bytes, QMP ordering,
+capture copies, identities and teardown and authorized one bounded source
+correction. The owner now accepts only exact integer statuses 0, -SIGTERM and
+-SIGKILL, preserving the actual status; boolean, null, string, positive failure
+and unrelated signals reject. The final six-module suite passes 244/244 in
+16.507 seconds; py_compile, scoped diff checks, actual `bound_manifest()` and
+independent read-only replay of packet-5 evidence pass. Exact source and test
+hashes are retained in
+`docs/verification/stability-native-diagnostic-qemu-status-source-success-20260928-1.json`.
+Checkpoint `846ebe49c15bf885cb8982890759bb46746e9591` is pushed, fetched and exact
+blob verified.
+
+Next: prepare packet 6 against `846ebe49` with a fresh parent and nonce, preserve
+packet 5 as consumed/nonreusable, and obtain a new independent exact one-shot
+release. After fresh capacity, process, container, lock and path reconciliation,
+run at most that one command and require both inner and outer protocol success.
+This continuation has one real diagnostic guest app and zero current-candidate
+builds; the latest executable result completed at 2026-09-28T16:40:00Z. Official
+counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete.
