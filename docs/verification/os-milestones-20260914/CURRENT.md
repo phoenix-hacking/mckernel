@@ -4815,3 +4815,60 @@ into a Rocky packet; no Rocky build or shutdown run is yet released. This
 invocation has zero new real guest applications and zero current-candidate
 builds so far. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
 whole-OS acceptance remains incomplete.
+
+Continuation checkpoint 50, 2026-09-28: the launcher requested shutdown after
+the exact released signals diagnostic completed, so no further task was
+dispatched. The sole active child finished its bounded independent raw-evidence
+join and returned `PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE`; all children are now
+closed. The consumed attempt is `ndcs-20260928-7`, nonce
+`c113ad500484ce6fc89659eee237c8ce`. Its inner result is `d9941db3...d59d`,
+outer result `6202a1ee...ecd0`, capture binding `cf3cb00d...035e`, serial
+`84765e33...ad3e`, QMP transcript `44339b2f...d2cf4` and debugcon
+`bd87db77...6685`.
+
+The hash-bound `baseline.core.signals` fixture exits 37 with exact 25-byte
+`NATIVE_CORE PASS signals\n` stdout, empty stderr, both EOFs and empty procfs.
+Its own assertions establish blocked/pending SIGUSR1 delivery, mask operations
+and two alternate-stack handler invocations with successful returns. Exact
+review replays 23 deliveries, 22 returns and 11 routes; terminal `exit_group`
+has no return. PID/TID 255 is published and deleted, worker 256 retires, the
+initial retirement `-11` is followed by success, pager handle 20 releases four
+references to zero and process release reports cleanup errno zero. This is not
+a complete signal-event trace or general signal qualification.
+
+All 673 QMP requests have matching successful replies. Guest shutdown precedes
+stopped status and acknowledged quit; QEMU identity 10/10/10 starttime 83268932
+is exactly reaped with controlled return -9. Thirty Docker client records are
+exactly reaped; the reviewed profile passes, the container exits zero without
+OOM, authenticated removal succeeds and three final lookups are empty. No
+owner, QEMU or mcexec remains, and the development lock is free. Module-signature
+taint, negative pathname/rseq results and the transient retirement retry remain
+visible. The additive success record is
+`docs/verification/stability-native-diagnostic-signals-success-20260928-1.json`.
+Its conservative `mckernel_application_executed=false` and
+`application_acceptance=false` fields remain correct: this is one real
+diagnostic guest application, not formal application, M04, production or OS
+acceptance.
+
+At shutdown the campaign identities remain launcher PID/PGID/SID
+3125264/starttime 80228730, recovered worker PID/PGID/SID 3170135/starttime
+80670556, and app-server PID/PGID/SID 3170137/starttime 80670562. Available
+bytes are 27,073,064,960 on the host filesystem and 21,613,768,704 on scratch,
+with 29,733,634,048 bytes of MemAvailable. Raw inner/outer evidence and the
+lean Rocky source stage remain preserved. This invocation now has four real
+diagnostic guest applications (memory, files, threads and signals) and zero
+current-candidate builds. Formal counters remain 0/273 applications, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. This checkpoint neither completes nor resumes the OS goal.
+
+Next invocation: reconcile this exact pushed HEAD, campaign identities, dirty
+submodule/source ownership and exclusive heavy lease. Then bind the reviewed
+seven-phase shutdown observer to the 278-MiB lean Rocky stage and exact
+`mcstop+release-smp.sh.in` lifecycle in a fresh, separately reviewed packet.
+Freeze the stage's 3,135-missing-object promisor limitation: forbid historical,
+tree or blob traversal and lazy fetch; preserve nested campaign-authored IHK
+`21a0d1e...5f8c`. The next executable check is one current-candidate
+boot/workload/stop diagnostic with exact before/after process, procfs, device,
+module/refcount/holder, reserve, CPU, IRQ-affinity and policy snapshots. Preserve
+the one-cycle limitation; independently inventory CPU/callback/internal-mapping
+owners before proposing recreate-cycle or formal lifecycle credit.

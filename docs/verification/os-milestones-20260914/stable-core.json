@@ -139,6 +139,7 @@
     ,"native_diag_threads_success": "docs/verification/stability-native-diagnostic-threads-success-20260928-1.json"
     ,"native_diag_signals_artifact": "docs/verification/stability-native-diagnostic-signals-artifact-success-20260928-1.json"
     ,"native_diag_signals_release": "docs/verification/stability-native-diagnostic-signals-execution-release-20260928-1.json"
+    ,"native_diag_signals_success": "docs/verification/stability-native-diagnostic-signals-success-20260928-1.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"rocky_lean_source": "docs/verification/stability-rocky-lean-source-success-20260928-1.json"
   },
@@ -540,8 +541,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple independently passes baseline.core.memory, baseline.core.files and baseline.core.threads diagnostics. A signals collector, Linux oracle, derived initramfs and strict manifest now pass independent artifact review, and a separate exact one-shot diagnostic release is ready but unconsumed. Threads proves exact output/exit 37, two workers, barrier, mutex counter 2000, TLS isolation, joins, three published/deleted TIDs and 512 transferred TID bytes, retirement, pager/process release, 696/696 QMP replies and exact QEMU/Docker cleanup. Clone3/futex entries were not separately traced. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Commit/push/fetched-blob verify and consume the released signals command once after fresh preflight, then independently review its raw evidence. In parallel, integrate the source-reviewed seven-phase shutdown observer into a separately reviewed Rocky boot-workload-stop packet; do not relabel application exit_group, guest poweroff or controlled QEMU cleanup as independent OS shutdown.",
+      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple independently passes baseline.core.memory, baseline.core.files, baseline.core.threads and baseline.core.signals diagnostics. Signals proves exact output/exit 37, blocked/pending SIGUSR1 and mask fixture assertions, two alternate-stack handler invocations with successful returns, retirement, pager/process release, 673/673 QMP replies and exact QEMU/Docker cleanup. The assertion is not a complete signal-event trace or general signal qualification. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
+      "next_check": "Integrate the source-reviewed seven-phase shutdown observer into a separately reviewed Rocky boot-workload-stop packet bound to the lean source stage; do not relabel application exit_group, guest poweroff or controlled QEMU cleanup as independent OS shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -576,7 +577,8 @@
         "native_diag_threads_release",
         "native_diag_threads_success",
         "native_diag_signals_artifact",
-        "native_diag_signals_release"
+        "native_diag_signals_release",
+        "native_diag_signals_success"
       ],
       "depends_on": []
     },

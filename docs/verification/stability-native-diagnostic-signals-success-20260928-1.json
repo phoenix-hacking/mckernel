@@ -1,0 +1,103 @@
+{
+  "schema": "mckernel.stability-diagnostic-runtime-success.v1",
+  "recorded_at": "2026-09-28T12:19:26-07:00",
+  "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "case_id": "baseline.core.signals",
+  "checkpoint": {
+    "commit": "e8617800098ecfc017a44df9503509aaa7d685d0",
+    "branch": "codex/local-native-staging-repair",
+    "push_fetch_verified": true
+  },
+  "release": {
+    "packet_path": "docs/verification/stability-native-diagnostic-signals-execution-packet-20260928-1.md",
+    "packet_sha256": "86528f6466e8e8ac544678b80fbcdda2f56333e6dc867d0b792573e086505663",
+    "release_path": "docs/verification/stability-native-diagnostic-signals-execution-release-20260928-1.json",
+    "release_sha256": "1f52912e7633065efabf2798754e68378bfdaa64fc8b571df15e60537dc199d9",
+    "result": "Fresh capacity, campaign identity, exclusive lease, process/container absence, development lock, source/artifact identity, generated QEMU argv and path checks passed before the exact command was consumed once."
+  },
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-7",
+    "nonce": "c113ad500484ce6fc89659eee237c8ce",
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-7/attempt-c113ad500484ce6fc89659eee237c8ce",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-7.owner-c113ad500484ce6fc89659eee237c8ce",
+    "owner_exit_code": 0,
+    "container_id": "e039c324df436cdbd58702b332cfef1fd18fd912b9185fa473268e27e1559580"
+  },
+  "application": {
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "signals"],
+    "cwd": "/case/work",
+    "env": {"COKERNEL_PATH": "/apps", "PATH": "/usr/bin:/bin"},
+    "stdout_hex": "4e41544956455f434f52452050415353207369676e616c730a",
+    "stdout_size": 25,
+    "stderr_hex": "",
+    "stderr_size": 0,
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "truncated": false,
+    "procfs_empty": true
+  },
+  "kernel_observation": {
+    "fixture_behavior": "The hash-bound fixture asserts blocked/pending SIGUSR1 delivery, signal-mask operations and two alternate-stack handler invocations with successful returns.",
+    "sampled_deliveries": 23,
+    "sampled_returns": 22,
+    "sampled_routes": 11,
+    "unreturned_delivery": "exit_group",
+    "published_tid": 255,
+    "retired_worker_tid": 256,
+    "deleted_tid": 255,
+    "retirement_sequence": [-11, 0],
+    "pager_handle": 20,
+    "pager_released_references": 4,
+    "pager_remaining_references": 0,
+    "process_release_cleanup_errno": 0,
+    "trace_limit": "Fixture assertions are not a complete signal-event trace or general signal qualification."
+  },
+  "qemu_qmp": {
+    "pid": 10,
+    "pgid": 10,
+    "sid": 10,
+    "starttime_ticks": 83268932,
+    "returncode": -9,
+    "transcript_chunks": 1348,
+    "requests": 673,
+    "successful_replies": 673,
+    "errors": 0,
+    "ordering": "Guest shutdown precedes stopped status and acknowledged QMP quit; controlled cleanup exactly reaps QEMU.",
+    "limitation": "Controlled teardown is not natural QEMU-exit or independent McKernel shutdown acceptance."
+  },
+  "retained_hashes": {
+    "inner_result": "d9941db3f21414635c198b8fc1af487b3e1c4ae2bbcfa2f6b8e64b181e23d59d",
+    "outer_result": "6202a1eed09c68b9956f550e1110c7740413e6bf6b67faab33f2c5152fbbecd0",
+    "serial": "84765e33195f68ccb9985cf4d750e5e69fe95b73da893f6508717c13c1d4ad3e",
+    "debugcon": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "qmp_transcript": "44339b2fc8b89e0326a4f886a06de74b8f5a0518e5662a7fe8f4a9b60d8d2cf4",
+    "capture_bindings": "cf3cb00dcd46fd667da10c255c819e847ea6c2a01e0498d9d5efb7e8492c035e",
+    "qemu_stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ownership_cleanup": {
+    "outer_status": "PROTOCOL_PASS",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "docker_clients": 30,
+    "all_clients_exact_reaped": true,
+    "authenticated_removal": true,
+    "final_empty_lookups": 3,
+    "current_lookup_empty": true,
+    "development_lock_free": true,
+    "six_capture_copies_join": true
+  },
+  "metadata_interpretation": {
+    "mckernel_application_executed_false": "Preserved conservative evaluator field; independent review establishes one observed diagnostic guest application only.",
+    "application_acceptance_false": "Correct and preserved: this diagnostic does not satisfy formal catalog or M04 acceptance."
+  },
+  "limitations": [
+    "This is one diagnostic execution on the exact bound artifacts, not formal application acceptance or general signal qualification.",
+    "No M04, production-gate, language-gate, multicore, independent-shutdown or whole-OS counter is promoted.",
+    "The retained current signal tuple is not a newly built current-candidate kernel in this invocation.",
+    "Signals packet 1 is consumed and nonreusable.",
+    "Module-signature taint, negative pathname/rseq returns and the transient retirement retry remain visible and are not silently reclassified."
+  ]
+}
