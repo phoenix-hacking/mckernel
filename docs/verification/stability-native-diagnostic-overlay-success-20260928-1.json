@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.native-diagnostic-overlay-success.v1",
+  "recorded_at": "2026-09-28T05:31:00-07:00",
+  "status": "PASS_RETAINED_OVERLAY_OUTPUT_READY_FOR_MANIFEST_INTEGRATION",
+  "source": {
+    "scripts/application-tests/native_diagnostic_overlay.py": "f75f0c5f47bda84a332660079b42ecc458586ad2b29d5fe33f1df2cc4b636458",
+    "scripts/tests/test_application_native_diagnostic_overlay.py": "b7bc68dc038ae392203fb4fc47bff4995ff559619c92b0909344f0f65c13abde",
+    "source_review": "PASS_OVERLAY_SOURCE_READY_FOR_RETAINED_DERIVATION",
+    "tests": "33 focused real-newc/synthetic-ELF tests PASS; py_compile PASS"
+  },
+  "inputs": {
+    "base_initramfs": {
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/initramfs.cpio.gz",
+      "sha256": "49fa5ec991faaa5fc745f10111ae1e9e2527621f90a1fd0ae3df02ab33dde293",
+      "compressed_size": 11846636,
+      "decompressed_sha256": "4f36958f2f0e4c6684d3adbd2b8b5860693298b332d11e8bb9e47a063420b265",
+      "decompressed_size": 38358016
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-collector-build-20260928-3/init",
+      "sha256": "78426897fed245e0a8c81996a369896fb264acb9ceb5aab1e5990505d1db4ecb",
+      "size": 1021256
+    },
+    "payload": {
+      "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+      "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+      "size": 20528
+    }
+  },
+  "derivation": {
+    "attempt": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-1",
+    "command_sha256": "31de4e4e702a7ad4b15643436f5ac6f08d23058fb935a802bd771f119a91589d",
+    "time_record_sha256": "875328f37b99313608b8787833f9db91b1ce74b5660a7a93ffce7472fa1f7086",
+    "result": "exit=0 elapsed_seconds=7.86 max_rss_kib=220812 user_seconds=7.66 system_seconds=0.17",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest_sha256": "e1e32c62df83eadc795083b928149d391fb76c42b7a23107563ec818fe6b200d",
+    "overlay_sha256": "9dd1b9d7349aa74ddd0c288105c966f84b1bd6352616dfaf91f2bc575304e915",
+    "overlay_decompressed_size": 1042496
+  },
+  "output": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-1/initramfs.cpio.gz",
+    "sha256": "f2e9f8adf7d4fd6139641a0d7ef1ccced88cffaa4c32725db40ce81497098cd3",
+    "size": 12264234,
+    "mode": "0600",
+    "members": ["apps", "case", "case/work", "init", "apps/app"],
+    "final_init_sha256": "78426897fed245e0a8c81996a369896fb264acb9ceb5aab1e5990505d1db4ecb",
+    "final_payload_sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+    "replay": "58 base members plus five overlay records produce 62 final members; init is the only replacement; manifest and independent strict replay match exactly"
+  },
+  "limits": [
+    "The derived initramfs has not booted.",
+    "Collector execution, McKernel application behavior, retirement and shutdown are unverified.",
+    "The output is ready only for exact manifest/backend integration and a separately reviewed guest execution packet."
+  ],
+  "mckernel_application_executed": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -108,6 +108,10 @@
     ,"m02_descriptor": "docs/verification/stability-m02-descriptor-source-success-20260928-1.json"
     ,"pending_c_preflight": "docs/verification/stability-pending-free-c-preflight-success-20260928-11.json"
     ,"native_diag_protocol": "docs/verification/stability-native-diagnostic-protocol-source-success-20260928-1.json"
+    ,"native_diag_backend": "docs/verification/stability-native-diagnostic-backend-source-success-20260928-2.json"
+    ,"native_diag_collector": "docs/verification/stability-native-diagnostic-collector-build-success-20260928-1.json"
+    ,"native_diag_overlay": "docs/verification/stability-native-diagnostic-overlay-success-20260928-1.json"
+    ,"native_diag_closure": "docs/verification/stability-native-diagnostic-closure-success-20260928-2.json"
   },
   "areas": [
     {
@@ -507,13 +511,17 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Exact current artifact hashes remain recovered. The native diagnostic protocol now independently passes 23 lifecycle/trace/publication tests: cleanup precedes final capture, teardown warnings reject, syscall records join completely, QMP failures cannot skip tested reaping, and terminal publication is bounded. It still fails closed before spawning because real staging, runtime closure, guest collector/serial transport and process/QMP backends are absent.",
-      "next_check": "Bind the retained root tree and native boot/runtime closure, implement the real framed guest collector plus concrete process/QMP backends, then independently review one execution packet before the smallest startup.argv-empty guest run.",
+      "result": "The exact startup.argv-empty payload now passes the reviewed retained loader/libc host diagnostic with exit 0 and exact 91-byte stdout. Independent review accepts the process/QMP backend source, the PID1 collector source and its static ELF build, the deterministic five-member overlay source, and the exact derived initramfs bytes. No QEMU or McKernel guest has run. The new manifest/runtime integration candidate passes 43 local tests but remains under independent review; that review found a Python 3.9 backend compatibility defect before any execution release.",
+      "next_check": "Repair and independently review the Python 3.9 cleanup-note compatibility boundary, finish the manifest integration review, then bind all exact bytes in one independently reviewed execution packet before the smallest startup.argv-empty QEMU/McKernel diagnostic run.",
       "evidence": [
         "history",
         "plan",
         "application_pilot_audit",
-        "native_diag_protocol"
+        "native_diag_protocol",
+        "native_diag_backend",
+        "native_diag_collector",
+        "native_diag_overlay",
+        "native_diag_closure"
       ],
       "depends_on": []
     },

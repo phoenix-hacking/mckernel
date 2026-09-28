@@ -45,10 +45,12 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
         self.files = {}
-        for name in (*ND.ARTIFACTS, *ND.MODULE_NAMES):
+        for name in (*ND.ARTIFACTS, *ND.MODULE_NAMES, "derived", "collector", "overlay_source"):
             path = self.root / name
             path.write_bytes(name.encode()); path.chmod(0o644)
             self.files[name] = path
+        self.files["collector"].chmod(0o700)
+        self.files["payload"].chmod(0o755)
         self.manifest_path = self.root / "manifest.json"
         self.raw = {"schema_version": 1, "kind": "native-diagnostic-manifest", "case_id": "pilot",
                     "artifacts": {name: self.ref(name) for name in ND.ARTIFACTS},
@@ -58,6 +60,38 @@ class NativeDiagnosticTests(unittest.TestCase):
                                 "env": {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"},
                                 "oracle": {"stdout_hex": "4100420a", "stderr_hex": "", "exit_code": 37},
                                 "stdout_limit_bytes": 1024, "stderr_limit_bytes": 1024}}
+        refs = self.raw["artifacts"]
+        staging = {"base_initramfs": refs["initramfs"], "derived_initramfs": self.ref("derived"),
+                   "collector": self.ref("collector"), "overlay_source": self.ref("overlay_source")}
+        all_refs = {**refs, "collector": staging["collector"], **dict(zip(ND.MODULE_NAMES, self.raw["modules"]))}
+        final_map = {}
+        for member, source in ND.FINAL_MEMBERS.items():
+            ref = all_refs[source]
+            final_map[member] = {"mode": stat.S_IFREG | 0o755 if member in ("init", "apps/app") else ref["mode"],
+                                 "uid": 0, "gid": 0, "nlink": 1, "mtime": 0,
+                                 "size": ref["size"], "sha256": ref["sha256"], "rdevmajor": 0, "rdevminor": 0}
+        for member in ("apps", "case", "case/work"):
+            final_map[member] = {"mode": stat.S_IFDIR | 0o755, "uid": 0, "gid": 0, "nlink": 2,
+                                 "mtime": 0, "size": 0, "sha256": hashlib.sha256(b"").hexdigest(),
+                                 "rdevmajor": 0, "rdevminor": 0}
+        overlay = {"base_cpio_sha256": "a" * 64, "base_cpio_size": 1,
+                   "base_sha256": staging["base_initramfs"]["sha256"],
+                   "collector_sha256": staging["collector"]["sha256"], "final_map": final_map,
+                   "output_identity": ND._identity(staging["derived_initramfs"]["path"]),
+                   "output_sha256": staging["derived_initramfs"]["sha256"],
+                   "overlay_sha256": "b" * 64, "payload_sha256": refs["payload"]["sha256"],
+                   "size": staging["derived_initramfs"]["size"],
+                   "sources": {name: {"path": ref["path"], "sha256": ref["sha256"],
+                                         "identity": ND._identity(ref["path"])}
+                               for name, ref in (("base", staging["base_initramfs"]),
+                                                 ("collector", staging["collector"]),
+                                                 ("payload", refs["payload"]))}}
+        self.overlay = overlay
+        overlay_path = self.root / "overlay_manifest.json"
+        overlay_path.write_text(json.dumps(overlay)); overlay_path.chmod(0o644)
+        self.files["overlay_manifest"] = overlay_path
+        staging["overlay_manifest"] = self.ref("overlay_manifest")
+        self.raw["staging"] = staging
         self.manifest_path.write_text(json.dumps(self.raw))
         self.manifest = ND.load_manifest(str(self.manifest_path))
         self.counter = 0
@@ -66,7 +100,8 @@ class NativeDiagnosticTests(unittest.TestCase):
 
     def ref(self, name):
         data = self.files[name].read_bytes()
-        return {"path": str(self.files[name]), "size": len(data), "sha256": hashlib.sha256(data).hexdigest(), "mode": stat.S_IFREG | 0o644}
+        return {"path": str(self.files[name]), "size": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                "mode": self.files[name].stat().st_mode}
 
     def report(self):
         report = {key: copy.deepcopy(self.manifest["payload"][key]) for key in ("argv", "env", "cwd")}
@@ -106,10 +141,10 @@ class NativeDiagnosticTests(unittest.TestCase):
     def exercise(self, attempt, process=None, qmp=None, timeout=1):
         return ND.exercise_lifecycle(self.manifest, attempt, lambda **kw: process or Process(), lambda **kw: qmp or Qmp(), timeout)
 
-    def test_staging_blocker_prevents_spawn_and_records_terminal(self):
+    def test_missing_factories_prevent_spawn_and_record_terminal(self):
         attempt = self.attempt(); factory = mock.Mock(side_effect=AssertionError("must not spawn"))
-        with self.assertRaisesRegex(ND.DiagnosticError, "guest staging unavailable"):
-            ND.run_diagnostic(self.manifest, attempt, factory, factory)
+        with self.assertRaisesRegex(ND.DiagnosticError, "explicit diagnostic factories required"):
+            ND.run_diagnostic(self.manifest, attempt, factory, None)
         factory.assert_not_called()
         result = json.loads((attempt / "result.json").read_text())
         self.assertEqual(result["status"], "BLOCKED")
@@ -122,9 +157,79 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertEqual(args[:7], [ND.QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off"])
         for item in ("4,sockets=2,cores=2,threads=1", "-no-reboot", "-no-shutdown", "-nic", ND.APPEND): self.assertIn(item, args)
         self.assertEqual(args.count("-numa"), 2); self.assertNotIn("-drive", args)
-        self.assertFalse(plan["runtime_ready"])
+        self.assertTrue(plan["runtime_ready"])
+        self.assertEqual(args[args.index("-initrd") + 1], self.raw["staging"]["derived_initramfs"]["path"])
         for item in ("/apps/app", "/images/mckernel.img"): self.assertIn(item, plan["overlay"]["guest_destinations"])
         self.assertIn("insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288", plan["overlay"]["init_sequence"])
+
+    def test_staging_refs_are_required_and_rechecked_before_factory(self):
+        for key in ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"):
+            with self.subTest(key=key):
+                value = copy.deepcopy(self.raw)
+                del value["staging"][key]
+                self.manifest_path.write_text(json.dumps(value))
+                with self.assertRaises(ND.DiagnosticError): ND.load_manifest(str(self.manifest_path))
+        self.manifest_path.write_text(json.dumps(self.raw))
+        attempt = self.attempt(); factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+        self.files["collector"].write_bytes(b"drift")
+        with self.assertRaises(ND.DiagnosticError): ND.run_diagnostic(self.manifest, attempt, factory, factory)
+        factory.assert_not_called()
+        self.assertEqual(json.loads((attempt / "result.json").read_text())["status"], "BLOCKED")
+
+    def test_runtime_rechecks_kernel_and_overlay_manifest_bytes(self):
+        for name in ("bzImage", "overlay_manifest"):
+            with self.subTest(name=name):
+                attempt = self.attempt(); factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+                original = self.files[name].read_bytes()
+                self.files[name].write_bytes(original + b"drift")
+                try:
+                    with self.assertRaises(ND.DiagnosticError):
+                        ND.run_diagnostic(self.manifest, attempt, factory, factory)
+                    factory.assert_not_called()
+                finally:
+                    self.files[name].write_bytes(original)
+
+    def test_base_cannot_be_used_as_derived(self):
+        value = copy.deepcopy(self.raw)
+        value["staging"]["derived_initramfs"] = value["staging"]["base_initramfs"]
+        self.manifest_path.write_text(json.dumps(value))
+        with self.assertRaisesRegex(ND.DiagnosticError, "derived initramfs must differ"):
+            ND.load_manifest(str(self.manifest_path))
+
+    def test_overlay_identity_and_final_map_must_join(self):
+        for change in ("base", "collector", "payload", "derived", "member", "directory"):
+            with self.subTest(change=change):
+                overlay = copy.deepcopy(self.overlay)
+                if change == "base": overlay["base_sha256"] = "0" * 64
+                elif change == "collector": overlay["collector_sha256"] = "0" * 64
+                elif change == "payload": overlay["payload_sha256"] = "0" * 64
+                elif change == "derived": overlay["output_sha256"] = "0" * 64
+                elif change == "member": overlay["final_map"]["modules/mcctrl.ko"]["sha256"] = "0" * 64
+                else: del overlay["final_map"]["case/work"]
+                self.files["overlay_manifest"].write_text(json.dumps(overlay))
+                value = copy.deepcopy(self.raw)
+                value["staging"]["overlay_manifest"] = self.ref("overlay_manifest")
+                self.manifest_path.write_text(json.dumps(value))
+                with self.assertRaises(ND.DiagnosticError): ND.load_manifest(str(self.manifest_path))
+
+    def test_stale_output_rejected_before_factory(self):
+        for name in ("qmp.sock", "qemu.stdout", "qemu.stderr", "qmp.transcript.json"):
+            with self.subTest(name=name):
+                attempt = self.attempt(); (attempt / name).touch()
+                factory = mock.Mock(side_effect=AssertionError("must not spawn"))
+                with self.assertRaises(ND.DiagnosticError):
+                    ND.run_diagnostic(self.manifest, attempt, factory, factory)
+                factory.assert_not_called()
+
+    def test_ready_manifest_invokes_only_injected_factories(self):
+        attempt = self.attempt()
+        process, qmp = Process(), Qmp()
+        pf, qf = mock.Mock(return_value=process), mock.Mock(return_value=qmp)
+        result = ND.run_diagnostic(self.manifest, attempt, pf, qf, timeout=1)
+        pf.assert_called_once(); qf.assert_called_once()
+        self.assertEqual(result["status"], "PROTOCOL_PASS")
+        self.assertFalse(result["application_acceptance"])
+        self.assertFalse(result["mckernel_application_executed"])
 
     def test_manifest_rejects_implicit_oracle_env_profile_and_types(self):
         variants = []
@@ -261,7 +366,7 @@ class NativeDiagnosticTests(unittest.TestCase):
         attempt = self.attempt(); process = Process(stuck=True); start = time.monotonic()
         with self.assertRaisesRegex(ND.DiagnosticError, "absolute deadline"): self.exercise(attempt, process, BrokenQmp(), timeout=0.02)
         self.assertLess(time.monotonic() - start, 0.5)
-        self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait"])
+        self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait", "communicate"])
         result = json.loads((attempt / "result.json").read_text())
         self.assertTrue(result["cleanup"]["reaped"])
         self.assertEqual(result["failure"]["type"], "TimeoutError")
@@ -270,7 +375,7 @@ class NativeDiagnosticTests(unittest.TestCase):
     def test_each_blocking_qmp_or_communicate_step_is_bounded(self):
         for phase in ("negotiate", "resume", "wait_shutdown", "communicate"):
             attempt = self.attempt(); process = Process(); qmp = Qmp()
-            def block(timeout): time.sleep(1)
+            def block(timeout): time.sleep(5 if phase == "communicate" else 1)
             setattr(process if phase == "communicate" else qmp, phase, block)
             with self.assertRaisesRegex(ND.DiagnosticError, "absolute deadline"):
                 self.exercise(attempt, process, qmp, timeout=0.01)
@@ -293,7 +398,7 @@ class NativeDiagnosticTests(unittest.TestCase):
                     with self.assertRaises(ND.DiagnosticError):
                         self.exercise(attempt, process, FaultyQmp(), timeout=0.03)
                     self.assertLess(time.monotonic() - started, 1)
-                    self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait"])
+                    self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait", "communicate"])
                     self.assertTrue(json.loads((attempt / "result.json").read_text())["cleanup"]["reaped"])
 
     def test_journal_cannot_delay_retirement(self):
@@ -303,7 +408,7 @@ class NativeDiagnosticTests(unittest.TestCase):
             def terminate(self, timeout): raise RuntimeError("second QMP failure")
         original = ND._append_failure
         def check_retired(attempt, failure):
-            self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait"])
+            self.assertEqual(process.calls, ["terminate", "wait", "kill", "wait", "communicate"])
             self.assertEqual(failure["error"], "first QMP failure")
             original(attempt, failure)
         with mock.patch.object(ND, "_append_failure", side_effect=check_retired):

@@ -22,17 +22,27 @@ from contextlib import contextmanager
 QEMU = "/usr/libexec/qemu-kvm"
 MAX_JSON = 4 * 1024 * 1024
 SHA = re.compile(r"[0-9a-f]{64}\Z")
-ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "payload")
+ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "payload",
+             "native_boot", "loader", "libc")
 MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
 APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
 BAD_MARKERS = re.compile(
     r"panic|oops|BUG:|\bBUG\b|\berror\b|WARNING|soft lockup|hard LOCKUP|"
     r"clear_host_pte failed|rcu_preempt detected stalls|\bFAIL\b|"
     r"cleanup retained|reap_retained|strncpy_from_user:ioctl:|ret: ", re.I)
-STAGING_BLOCKER = (
-    "guest staging unavailable: the v1 manifest has no bound retained root-tree "
-    "inventory, native-boot/runtime library closure, or guest raw-wait/EOF "
-    "collector and serial transport; copied initramfs/root files are not staged")
+STAGING_BLOCKER = "guest staging unavailable: exact derived initramfs join is incomplete"
+DIAGNOSTIC_LIMITATION = "protocol observation only; independent guest execution review is pending"
+FINAL_MEMBERS = {
+    "init": "collector", "apps/app": "payload", "bin/mcexec": "mcexec",
+    "bin/native-boot": "native_boot", "lib64/ld-linux-x86-64.so.2": "loader",
+    "lib64/libc.so.6": "libc", "images/mckernel.img": "mckernel_image",
+    "modules/ihk.ko": "ihk.ko", "modules/ihk-smp-x86_64.ko": "ihk-smp-x86_64.ko",
+    "modules/mcctrl.ko": "mcctrl.ko",
+}
+OVERLAY_MEMBERS = ("apps", "case", "case/work", "init", "apps/app")
+MAP_FIELDS = ("mode", "uid", "gid", "nlink", "mtime", "size", "sha256", "rdevmajor", "rdevminor")
+IDENTITY_FIELDS = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_uid", "st_gid",
+                   "st_size", "st_mtime_ns", "st_ctime_ns")
 
 
 class DiagnosticError(ValueError):
@@ -79,6 +89,71 @@ def _typed_string(value, label):
     return value
 
 
+def _identity(path):
+    st = os.stat(path, follow_symlinks=False)
+    return {key: getattr(st, key) for key in IDENTITY_FIELDS}
+
+
+def _staging(obj, artifacts, modules):
+    _keys(obj, ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"))
+    refs = {name: _ref(obj[name], name) for name in obj}
+    _need(refs["base_initramfs"] == artifacts["initramfs"], "base initramfs join")
+    _need(refs["base_initramfs"]["path"] != refs["derived_initramfs"]["path"] and
+          refs["base_initramfs"]["sha256"] != refs["derived_initramfs"]["sha256"],
+          "derived initramfs must differ from base")
+    raw = Path(refs["overlay_manifest"]["path"]).read_bytes()
+    _need(hashlib.sha256(raw).hexdigest() == refs["overlay_manifest"]["sha256"],
+          "overlay manifest changed during read")
+    _need(len(raw) <= MAX_JSON, "overlay manifest too large")
+    try:
+        overlay = json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs)
+    except (UnicodeError, json.JSONDecodeError, DiagnosticError) as exc:
+        raise DiagnosticError("malformed overlay manifest") from exc
+    _keys(overlay, ("base_cpio_sha256", "base_cpio_size", "base_sha256", "collector_sha256",
+                    "final_map", "output_identity", "output_sha256", "overlay_sha256",
+                    "payload_sha256", "size", "sources"))
+    _need(type(overlay["base_cpio_size"]) is int and overlay["base_cpio_size"] > 0 and
+          type(overlay["base_cpio_sha256"]) is str and SHA.fullmatch(overlay["base_cpio_sha256"]) and
+          type(overlay["overlay_sha256"]) is str and SHA.fullmatch(overlay["overlay_sha256"]),
+          "overlay archive metadata")
+    _need(overlay["base_sha256"] == refs["base_initramfs"]["sha256"] and
+          overlay["collector_sha256"] == refs["collector"]["sha256"] and
+          overlay["payload_sha256"] == artifacts["payload"]["sha256"] and
+          overlay["output_sha256"] == refs["derived_initramfs"]["sha256"] and
+          overlay["size"] == refs["derived_initramfs"]["size"], "overlay identity join")
+    _keys(overlay["sources"], ("base", "collector", "payload"))
+    for source, ref in (("base", refs["base_initramfs"]), ("collector", refs["collector"]),
+                        ("payload", artifacts["payload"])):
+        row = overlay["sources"][source]
+        _keys(row, ("path", "sha256", "identity"))
+        _keys(row["identity"], IDENTITY_FIELDS)
+        _need(row["path"] == ref["path"] and row["sha256"] == ref["sha256"] and
+              row["identity"] == _identity(ref["path"]), "overlay source join " + source)
+    _keys(overlay["output_identity"], IDENTITY_FIELDS)
+    _need(overlay["output_identity"] == _identity(refs["derived_initramfs"]["path"]),
+          "overlay output identity")
+    final = overlay["final_map"]
+    _need(isinstance(final, dict), "overlay final map")
+    names = {**{name: artifacts[name] for name in ("mcexec", "native_boot", "loader", "libc", "mckernel_image", "payload")},
+             "collector": refs["collector"], **dict(zip(MODULE_NAMES, modules))}
+    for member, source in FINAL_MEMBERS.items():
+        _need(member in final, "missing final member " + member)
+        row = final[member]
+        _keys(row, MAP_FIELDS)
+        ref = names[source]
+        expected_mode = stat.S_IFREG | 0o755 if member in ("init", "apps/app") else ref["mode"]
+        _need(row["sha256"] == ref["sha256"] and row["size"] == ref["size"] and
+              row["mode"] == expected_mode, "final member join " + member)
+    for member in OVERLAY_MEMBERS:
+        _need(member in final, "missing overlay member " + member)
+    for member in ("apps", "case", "case/work"):
+        row = final[member]
+        _keys(row, MAP_FIELDS)
+        _need(row["mode"] == stat.S_IFDIR | 0o755 and row["size"] == 0 and
+              row["sha256"] == hashlib.sha256(b"").hexdigest(), "overlay directory " + member)
+    return refs
+
+
 def load_manifest(path):
     """Load strict canonical JSON and bind every reviewed input."""
     path = os.fspath(path)
@@ -89,7 +164,7 @@ def load_manifest(path):
         obj = json.loads(data.decode("utf-8"), object_pairs_hook=lambda pairs: _pairs(pairs))
     except (UnicodeError, json.JSONDecodeError, DiagnosticError) as exc:
         raise DiagnosticError("malformed manifest") from exc
-    _keys(obj, ("schema_version", "kind", "case_id", "artifacts", "modules", "profile", "payload"))
+    _keys(obj, ("schema_version", "kind", "case_id", "artifacts", "modules", "profile", "payload", "staging"))
     _need(type(obj["schema_version"]) is int and obj["schema_version"] == 1 and obj["kind"] == "native-diagnostic-manifest", "manifest identity")
     _need(isinstance(obj["case_id"], str) and obj["case_id"] and "\0" not in obj["case_id"], "case_id")
     _keys(obj["artifacts"], ARTIFACTS)
@@ -97,6 +172,7 @@ def load_manifest(path):
     _need(isinstance(obj["modules"], list) and len(obj["modules"]) == 3, "exactly three modules")
     modules = [_ref(ref, "module") for ref in obj["modules"]]
     _need(tuple(Path(ref["path"]).name for ref in modules) == MODULE_NAMES, "module inventory")
+    staging = _staging(obj["staging"], bound, modules)
     _need(isinstance(obj["profile"], dict) and set(obj["profile"]) <= {"memory_mib", "vcpus", "numa_nodes", "append"}
           and {"memory_mib", "vcpus", "numa_nodes"} <= set(obj["profile"]), "profile keys")
     profile = obj["profile"]
@@ -117,7 +193,8 @@ def load_manifest(path):
         limit = payload[name + "_limit_bytes"]
         _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[name + "_hex"])) <= limit, "stream limit")
     return {"schema_version": 1, "kind": obj["kind"], "case_id": obj["case_id"], "artifacts": bound,
-            "modules": modules, "profile": {"memory_mib": 8192, "vcpus": 4, "numa_nodes": 2, "append": append},
+            "modules": modules, "staging": staging,
+            "profile": {"memory_mib": 8192, "vcpus": 4, "numa_nodes": 2, "append": append},
             "payload": dict(payload)}
 
 
@@ -151,15 +228,23 @@ def prepare_attempt(manifest, parent, name):
 
 
 def build_command(manifest, attempt):
-    """Return a non-executable staging plan matching retained runner-1.py.
-
-    No staged initrd is produced here.  The runtime entry point fails closed.
-    """
+    """Return the exact QEMU argv only after the derived-image join is READY."""
     attempt = Path(attempt)
     _need(attempt.is_dir() and (attempt.stat().st_mode & 0o777) == 0o700, "attempt not private")
     a = manifest["artifacts"]
+    for name in ARTIFACTS:
+        _need(_ref(a[name], name) == a[name], "artifact identity changed " + name)
+    for ref in manifest["modules"]:
+        _need(_ref(ref, "module") == ref, "module identity changed")
+    _staging(manifest["staging"], a, manifest["modules"])
     qmp = str(attempt / "qmp.sock")
     _need(not os.path.lexists(qmp), "stale QMP socket")
+    for name in ("serial.log", "debugcon.log"):
+        path = attempt / name
+        _need(path.exists() and not path.is_symlink() and stat.S_ISREG(path.stat().st_mode),
+              "invalid capture path: " + name)
+    for name in ("qemu.stdout", "qemu.stderr", "qmp.transcript.json", "result.json", "first-failure.jsonl"):
+        _need(not os.path.lexists(attempt / name), "stale diagnostic output: " + name)
     argv = [QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off",
             "-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
             "-object", "memory-backend-ram,size=4G,id=ram-node0",
@@ -169,7 +254,7 @@ def build_command(manifest, attempt):
             "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-monitor", "none",
             "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
             "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
-            "-kernel", a["bzImage"]["path"], "-initrd", str(attempt / "initramfs.cpio.gz"), "-append", APPEND]
+            "-kernel", a["bzImage"]["path"], "-initrd", manifest["staging"]["derived_initramfs"]["path"], "-append", APPEND]
     overlay = {"modules": [m["path"] for m in manifest["modules"]], "mckernel_image": a["mckernel_image"]["path"],
                "mcexec": a["mcexec"]["path"], "payload": a["payload"]["path"], "load_modules": list(MODULE_NAMES),
                "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
@@ -178,16 +263,11 @@ def build_command(manifest, attempt):
                                  "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
                "transport": "guest collector framed serial report; never QEMU stdout"}
     return {"argv": argv, "overlay": overlay, "payload": manifest["payload"], "qmp_socket": qmp,
-            "runtime_ready": False, "blocker": STAGING_BLOCKER}
+            "runtime_ready": True, "staging": manifest["staging"]}
 
 
 def evaluate(manifest, observation):
-    """Validate serial evidence shape only; this is not runtime acceptance.
-
-    The report must originate in a separately reviewed guest collector.  Until
-    that collector and staging exist, the sole caller is the fake-backend test
-    harness and a passing result is explicitly PROTOCOL_PASS.
-    """
+    """Validate serial evidence shape; PROTOCOL_PASS is not guest acceptance."""
     _keys(observation, ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline"))
     for name in ("started_at", "finished_at", "deadline"):
         _need(type(observation[name]) in (int, float) and math.isfinite(observation[name]), "host timestamp")
@@ -235,7 +315,7 @@ def evaluate(manifest, observation):
     _check_syscall_trace(serial, prefix)
     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
             "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
-            "guest_report": report, "observation": observation, "runtime_blocker": STAGING_BLOCKER}
+            "guest_report": report, "observation": observation, "runtime_blocker": DIAGNOSTIC_LIMITATION}
 
 
 def _check_syscall_trace(serial, prefix):
@@ -294,11 +374,18 @@ def _check_syscall_trace(serial, prefix):
 
 
 def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300):
-    """Fail before spawning until real guest staging/collector is implemented."""
-    failure = {"phase": "staging", "type": "DiagnosticError", "error": STAGING_BLOCKER}
-    write_record(attempt, {"status": "BLOCKED", "application_acceptance": False,
-                          "mckernel_application_executed": False, "failure": failure}, failure)
-    raise DiagnosticError(STAGING_BLOCKER)
+    """Exercise only explicit injected factories after the staging join."""
+    try:
+        _need(process_factory is not None and qmp_factory is not None and
+              callable(process_factory) and callable(qmp_factory), "explicit diagnostic factories required")
+        plan = build_command(manifest, attempt)
+        _need(plan["runtime_ready"] is True, STAGING_BLOCKER)
+    except DiagnosticError as exc:
+        failure = {"phase": "staging", "type": "DiagnosticError", "error": str(exc)}
+        write_record(attempt, {"status": "BLOCKED", "application_acceptance": False,
+                              "mckernel_application_executed": False, "failure": failure}, failure)
+        raise
+    return exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout)
 
 
 @contextmanager
@@ -363,12 +450,10 @@ def _cleanup(process, qmp):
 
 
 def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300):
-    """Protocol-only injected-backend exercise; never reports a guest PASS.
+    """Injected-backend lifecycle exercise; never reports guest acceptance.
 
-    This entry point is solely for local tests, not an execution release. Fake
-    processes receive no QEMU command, so a raw subprocess factory cannot run
-    a guest accidentally. QMP/backend methods accept a remaining timeout; an
-    independent SIGALRM bounds them even if they ignore that argument.
+    This entry point grants no execution release. QMP/backend methods accept a
+    remaining timeout; an independent SIGALRM bounds ignored timeout arguments.
     """
     process = qmp = None
     failure = None
@@ -392,35 +477,59 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
         # No filesystem journal or capture runs before retirement: blocked
         # storage cannot delay termination/reaping after a QMP failure.
         cleanup = _cleanup(process, qmp)
-    try:
-        if failure is not None:
-            raise DiagnosticError(failure["error"])
-        _need(cleanup["reaped"] and not cleanup["errors"], "teardown uncertain")
-        # Capture only after QEMU has been reaped, including shutdown/teardown
-        # warnings. QEMU stdout/stderr are never payload streams/status.
-        host_stdout, host_stderr = _method(deadline, process, "communicate")
-        _need(type(host_stdout) is bytes and type(host_stderr) is bytes, "backend log types")
-        _need(len(host_stdout) <= MAX_JSON and len(host_stderr) <= MAX_JSON, "host capture limit exceeded")
-        with _alarm(deadline):
+    # Retain controls and host streams after teardown even if a lifecycle or
+    # cleanup operation failed. Evidence capture has its own bounded deadline;
+    # the original error keeps priority over any later capture/evaluation error.
+    capture_errors = []
+    capture_deadline = time.monotonic() + 2
+    if qmp is not None:
+        try:
+            with _alarm(capture_deadline):
+                session = getattr(qmp, "session", None)
+                transcript = getattr(session, "transcript", []) if session is not None else []
+                raw = json.dumps(transcript, sort_keys=True, allow_nan=False).encode("utf-8")
+                _need(len(raw) <= 24 * 1024 * 1024, "QMP transcript capture limit")
+                with (Path(attempt) / "qmp.transcript.json").open("xb") as stream:
+                    stream.write(raw)
+        except BaseException as exc:
+            capture_errors.append({"phase": "qmp-transcript", "type": type(exc).__name__, "error": str(exc)})
+    if process is not None and cleanup["reaped"]:
+        try:
+            host_stdout, host_stderr = _method(capture_deadline, process, "communicate")
+            _need(type(host_stdout) is bytes and type(host_stderr) is bytes, "backend log types")
             for name, data in (("qemu.stdout", host_stdout), ("qemu.stderr", host_stderr)):
-                with (Path(attempt) / name).open("xb") as stream:
-                    stream.write(data)
-            texts = {}
-            for name in ("serial", "debugcon"):
-                with (Path(attempt) / (name + ".log")).open("rb") as stream:
-                    data = stream.read(MAX_JSON + 1)
-                _need(len(data) <= MAX_JSON, "capture limit exceeded")
-                texts[name] = data.decode("utf-8", errors="strict")
-            observation = dict(texts, qmp=terminal, teardown=True, started_at=started,
-                               finished_at=time.monotonic(), deadline=deadline)
-            record = evaluate(manifest, observation)
-    except BaseException as exc:
-        if failure is None:
+                path = Path(attempt) / name
+                if not os.path.lexists(path):
+                    with _alarm(capture_deadline):
+                        with path.open("xb") as stream:
+                            stream.write(data[:MAX_JSON + 1])
+            _need(len(host_stdout) <= MAX_JSON and len(host_stderr) <= MAX_JSON, "host capture limit exceeded")
+        except BaseException as exc:
+            capture_errors.append({"phase": "host-capture", "type": type(exc).__name__, "error": str(exc)})
+    if failure is None:
+        if cleanup["errors"] or not cleanup["reaped"]:
+            failure = {"phase": "cleanup", "type": "DiagnosticError", "error": "teardown uncertain"}
+        elif capture_errors:
+            failure = dict(capture_errors[0])
+    if failure is None:
+        try:
+            with _alarm(deadline):
+                texts = {}
+                for name in ("serial", "debugcon"):
+                    with (Path(attempt) / (name + ".log")).open("rb") as stream:
+                        data = stream.read(MAX_JSON + 1)
+                    _need(len(data) <= MAX_JSON, "capture limit exceeded")
+                    texts[name] = data.decode("utf-8", errors="strict")
+                observation = dict(texts, qmp=terminal, teardown=True, started_at=started,
+                                   finished_at=time.monotonic(), deadline=deadline)
+                record = evaluate(manifest, observation)
+        except BaseException as exc:
             failure = {"phase": "evaluation", "type": type(exc).__name__, "error": str(exc)}
     if failure is not None:
         record = {"status": "FAIL", "application_acceptance": False,
                   "mckernel_application_executed": False, "failure": failure}
     record["cleanup"] = cleanup
+    record["capture_errors"] = capture_errors
     # The first observed failure survives cleanup failures; journal only after
     # retirement, under its own bounded publication deadline.
     with _alarm(time.monotonic() + 2):

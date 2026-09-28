@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T05:39:59-07:00",
+  "base_commit": "7e8969325e013986862465cd5a0910184593e3e2",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T104742Z-d8634f08",
+    "launcher_pid": 3125264,
+    "worker_pid": 3125267,
+    "app_server_pid": 3125269,
+    "observed_at_shutdown": "launcher remains alive; worker and app-server identities are preserved but no longer present",
+    "future_continuations_paused": true
+  },
+  "resources_at_shutdown": {
+    "host_free_gib": 43,
+    "scratch_free_gib": 21,
+    "memory_available_gib": 28.9,
+    "heavy_lease": "free",
+    "project_compiler_or_guest_active": false
+  },
+  "accepted_results": [
+    {
+      "name": "native diagnostic backend source",
+      "review": "PASS_BACKEND_SOURCE_READY_FOR_INTEGRATION_WITH_LATER_PYTHON39_DEFECT",
+      "source_sha256": "6f42605db0a7e79eb4e83151a0994ec6ceb7ac2a757988ab1b8442a5c446402f",
+      "tests_sha256": "325602433996279eab2c485fa0ff03343e8454b5942772bfdb97480c098de5aa",
+      "evidence": "docs/verification/stability-native-diagnostic-backend-source-success-20260928-2.json",
+      "observed": "37 focused tests passed before integration review found the Python 3.9 cleanup-note defect",
+      "limits": "Must replace BaseException.add_note with a nonthrowing Python 3.9-compatible secondary-error recorder before packet review"
+    },
+    {
+      "name": "native PID1 collector source and static artifact",
+      "review": "PASS_COLLECTOR_HOST_STATIC_BUILD_READY_FOR_OVERLAY",
+      "source_sha256": "82eb5fd0393b73b3f4ff593558ff40989fe056ad911e01ea90de33871f353ea3",
+      "artifact_sha256": "78426897fed245e0a8c81996a369896fb264acb9ceb5aab1e5990505d1db4ecb",
+      "evidence": "docs/verification/stability-native-diagnostic-collector-build-success-20260928-1.json",
+      "observed": "15 source tests pass; host static build is an x86-64 ET_EXEC with no interpreter or dynamic section",
+      "limits": "Diagnostic build only; no PID1 boot or guest execution"
+    },
+    {
+      "name": "authenticated initramfs overlay",
+      "review": "PASS_RETAINED_OVERLAY_OUTPUT_READY_FOR_MANIFEST_INTEGRATION",
+      "source_sha256": "f75f0c5f47bda84a332660079b42ecc458586ad2b29d5fe33f1df2cc4b636458",
+      "output_sha256": "f2e9f8adf7d4fd6139641a0d7ef1ccced88cffaa4c32725db40ce81497098cd3",
+      "manifest_sha256": "e1e32c62df83eadc795083b928149d391fb76c42b7a23107563ec818fe6b200d",
+      "evidence": "docs/verification/stability-native-diagnostic-overlay-success-20260928-1.json",
+      "observed": "Strict replay validates 62 final members and exact collector and application bytes",
+      "limits": "Byte artifact only; no boot or guest acceptance"
+    },
+    {
+      "name": "native application closure preflight",
+      "review": "PASS_RETAINED_CLOSURE_PREFLIGHT",
+      "source_sha256": "ad20e6f6423802b5ea73cfe71cc85baba1641e29e9bcc3b2cba76946c2b2916a",
+      "evidence": "docs/verification/stability-native-diagnostic-closure-success-20260928-2.json",
+      "observed": "Retained host launch exited 0 with the exact 91-byte oracle and quiescent process group",
+      "limits": "Host diagnostic only; no McKernel guest acceptance"
+    }
+  ],
+  "blocked_integration_candidate": {
+    "source_sha256": "6fa2db9ed71c60ca8e2b8c47034ee30141cc026b05ee1d4029b2eb2cb1bf7ff1",
+    "tests_sha256": "0aa5fe03ae5005cac468910d1582c7e865ed5b65bd06a57402cb891dbd009d2f",
+    "review": "BLOCKED",
+    "verified_scope": "43 tests pass and the derived image strictly joins all 62 manifest members",
+    "blockers": [
+      "Backend BaseException.add_note calls are incompatible with the actual Python 3.9.12 host and can replace the first error or skip later descriptor cleanup",
+      "run_diagnostic does not journal FileNotFoundError, PermissionError or other OSError during authenticated staging before spawn"
+    ]
+  },
+  "next_tasks": [
+    "Replace backend add_note calls with a nonthrowing Python 3.9-compatible secondary-error recorder and independently re-review exact source and tests",
+    "Make run_diagnostic fail closed and durably journal authenticated staging OSError failures before spawn, then independently re-review integration",
+    "After both source reviews pass, prepare and independently review one exact execution packet binding the derived initramfs, collector, kernel, modules, backend, factories, deadlines and evidence destinations",
+    "Only after packet release, run one startup.argv-empty diagnostic guest and preserve serial, QMP, application bytes, exit status, kernel log and teardown",
+    "Continue the deferred M03 VM/token/extent authority and durable-quarantine work without promoting diagnostic evidence to production acceptance"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "current_candidate_builds_this_window": 1,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

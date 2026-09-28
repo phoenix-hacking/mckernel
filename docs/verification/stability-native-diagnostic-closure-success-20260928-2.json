@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.native-diagnostic-closure-success.v1",
+  "recorded_at": "2026-09-28T05:36:00-07:00",
+  "status": "PASS_RETAINED_CLOSURE_PREFLIGHT",
+  "source": {
+    "scripts/application-tests/native_diagnostic_closure_preflight.py": "ad20e6f6423802b5ea73cfe71cc85baba1641e29e9bcc3b2cba76946c2b2916a",
+    "scripts/tests/test_application_native_diagnostic_closure_preflight.py": "7f9112ac84c0b47abba2f746ba745783f103dc140f9e395c3cf62967530f127b",
+    "source_review": "PASS_CLOSURE_HARNESS_SOURCE_READY_FOR_RETAINED_RUN",
+    "tests": "18 synthetic tests PASS; py_compile PASS"
+  },
+  "attempt": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-closure-preflight-20260928-2/attempt-001",
+    "timeout_seconds": 10,
+    "launch_intent_sha256": "85e476a1276e07d8e90ac09866a6e97fad2634150c6af22e804e2d2c642099b4",
+    "result_sha256": "62593e0c7f8a18e1be5ca471a7ffa368bcc3ac5cca9aa804b630c5d33a6046c8",
+    "harness_exit": 0,
+    "elapsed_seconds": 0.16,
+    "status": "PASS",
+    "child_returncode": 0,
+    "timed_out": false,
+    "stream_overflow": false,
+    "process_group_quiescent": true
+  },
+  "observed": {
+    "argv": ["app", "A", "", "B"],
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "stdout_size": 91,
+    "stdout_sha256": "e3ef69c5f8e85e2cdca6bac568664d3b146038ac5523185517595a70364a2884",
+    "stderr_size": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "payload_sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+    "loader_sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+    "libc_sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+    "source_sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465",
+    "oracle_sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8"
+  },
+  "limits": [
+    "This proves exact retained host loader/private-library compatibility only.",
+    "It does not prove actual guest library mappings, mcexec behavior, McKernel execution, retirement or shutdown.",
+    "No formal Linux/McKernel case, application acceptance or production gate credit is awarded."
+  ],
+  "mckernel_application_executed": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

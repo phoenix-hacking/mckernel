@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.native-diagnostic-backend-source-success.v1",
+  "recorded_at": "2026-09-28T05:27:00-07:00",
+  "status": "PASS_BACKEND_SOURCE_READY_FOR_INTEGRATION",
+  "inputs": {
+    "scripts/application-tests/native_diagnostic_backend.py": "6f42605db0a7e79eb4e83151a0994ec6ceb7ac2a757988ab1b8442a5c446402f",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "325602433996279eab2c485fa0ff03343e8454b5942772bfdb97480c098de5aa",
+    "scripts/application-tests/native_diagnostic.py": "ed5d5cb6d162ff12b88522a18e86b2f606b5fd9501a0729f63a31436f63980ad",
+    "scripts/tests/test_application_native_diagnostic.py": "6c099d93efd58244f37ca7176790850c6fb776fc456777fa9683f70dce5e28a3",
+    "scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "validation": {
+    "command": "python3 -m unittest scripts/tests/test_application_native_diagnostic_backend.py scripts/tests/test_application_native_diagnostic.py",
+    "tests_passed": 37,
+    "result": "PASS",
+    "host_subprocess": "One fresh-session Python child ignored TERM, received group KILL, was reaped with status -9, disappeared from procfs and returned ECHILD on subsequent waitpid."
+  },
+  "review": {
+    "decision": "PASS_BACKEND_SOURCE_READY_FOR_INTEGRATION",
+    "resolved": [
+      "Repeated same-inode QMP connection refusal retries until the absolute deadline while identity/type/owner changes reject.",
+      "Every demonstrated post-Popen ownership-transfer failure retires the process group and reaps the direct child without replacing the first failure.",
+      "Exclusive file-backed QEMU streams avoid pipe backpressure and remain available on lifecycle failures.",
+      "QMP transcripts and bounded host streams are captured after cleanup; terminal status and cleanup failures remain fail-closed."
+    ]
+  },
+  "limits": [
+    "QMP transport remains simulated and the actual QEMU process was not started.",
+    "The actual subprocess test contained no descendant or escaped session.",
+    "Stream reads are bounded after teardown; the source does not impose an on-disk growth quota while QEMU runs.",
+    "Staging integration and a separately reviewed execution packet remain required."
+  ],
+  "mckernel_application_executed": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

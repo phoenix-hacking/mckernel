@@ -3514,6 +3514,45 @@ Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete; this checkpoint pauses rather than resumes or completes the goal.
 
+Continuation shutdown checkpoint 14, 2026-09-28: four diagnostic prerequisites
+are accepted at their bounded scopes. The independently reviewed PID1 collector
+source passes 15 tests and its host-static artifact is an x86-64 ET_EXEC with no
+interpreter or dynamic section. The authenticated overlay derives exact
+initramfs SHA256 `f2e9f8ad...`; strict replay validates 62 final members and the
+exact collector/application bytes. The retained host closure preflight exits 0
+with the exact 91-byte oracle and a quiescent process group. These are source,
+byte-artifact and host-diagnostic results only; no McKernel guest ran.
+
+The joined native diagnostic candidate is preserved but rejected for execution.
+Its 43 tests and strict 62-member derived-image join pass, but independent review
+found two concrete error-path blockers: backend `BaseException.add_note` calls
+are unavailable on the actual Python 3.9.12 host and can replace the first error
+or skip descriptor cleanup; authenticated staging `OSError` failures can escape
+without a terminal record or first-failure journal. No execution packet was
+prepared and no QEMU process was started.
+
+All child agents are terminal. Launcher PID 3125264 remains alive; worker PID
+3125267 and app-server PID 3125269 are preserved identities but were no longer
+present at the final process check. Their run directory is
+`.git/os-autopilot/runs/20260928T104742Z-d8634f08`. No project compiler, guest,
+QEMU, mcexec, native-boot or IHK runtime is active. Host/scratch free space is
+43/21 GiB, memory available is 28.9 GiB and the heavy lease is free. Real guest
+applications and current-candidate builds in this window: **0** and **1**; the
+one build is the collector artifact, not a kernel image.
+
+Next tasks are: (1) implement and independently review the Python 3.9-compatible
+backend cleanup-error recorder; (2) journal and fail closed on staging I/O
+errors, then independently re-review integration; (3) after both pass, prepare
+and independently review an exact execution packet; (4) only after release, run
+one startup.argv-empty diagnostic guest and retain application bytes, exit,
+kernel log, QMP/serial and teardown; and (5) continue deferred M03 durable
+ownership work without promoting diagnostic evidence. Exact hashes, evidence
+and blockers are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-14.json`.
+Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete; this checkpoint pauses rather than resumes or completes the goal.
+
 Continuation shutdown checkpoint 13, 2026-09-28: three bounded results are now
 accepted at their stated scopes. The C pending-free result and public fallback
 prevalidate the complete ring before mutation; 48 candidate rows pass and two

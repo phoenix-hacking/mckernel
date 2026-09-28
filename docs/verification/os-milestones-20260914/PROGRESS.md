@@ -5,11 +5,11 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-28T11:57:37+00:00`
-- Launcher state heartbeat: `2026-09-28T11:57:34.442173+00:00`
+- Dashboard refreshed: `2026-09-28T12:40:52+00:00`
+- Launcher state heartbeat: `2026-09-28T12:40:50.581848+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `3125267`; server PID: `3125269`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T104742Z-d8634f08`
+- Worker PID: `3170135`; server PID: `3170137`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T120120Z-056cff0a`
 
 ## Stable kernel core: engineering progress
 
