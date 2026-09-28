@@ -4334,3 +4334,34 @@ runtime attempt; proceed to files, threads and shutdown only after preserving
 memory bytes, status, logs, identities and teardown. This shutdown checkpoint
 does not change the two diagnostic-app/zero-current-candidate-build count,
 official acceptance counters, or whole-OS incomplete status.
+
+Continuation checkpoint 38, 2026-09-28: memory-diagnostic source preparation
+is independently accepted for checkpointing after one bounded correction. The
+overlay now requires an explicit payload SHA256 and checks the bytes before
+creating output; the owner now requires and propagates an explicit canonical
+manifest path/hash through the inspected container command. Outer and inside
+admission reject missing, malformed, wrong, noncanonical, symlinked,
+outside-scratch and drifted identities. The first independent review found
+that a manifest below the writable attempt parent could change before the
+runner reopened it. The corrected owner rejects that subtree before container
+creation and again before inside exec. Final review returns
+`PASS_SOURCE_READY_FOR_CHECKPOINT`; 260 diagnostic tests pass in 17.462
+seconds, with py_compile and scoped diff checks passing. Exact hashes and both
+review decisions are retained in
+`docs/verification/stability-native-diagnostic-memory-preparation-source-success-20260928-1.json`.
+
+The retained core archive SHA256 is `7e2d88ab...ce8cc`. A fresh unprivileged
+copy of its unchanged 39,488-byte payload has SHA256 `558d1607...da9a`; its
+interpreter is `/lib64/ld-linux-x86-64.so.2` and its sole needed DSO is
+`libc.so.6`. The extracted loader and libc compare byte-for-byte with the
+current signal base root. The exact memory oracle is 24-byte stdout
+`NATIVE_CORE PASS memory\n`, empty stderr and exit 37. No overlay, manifest,
+root, container, QEMU or guest execution is accepted by this checkpoint.
+
+Next: commit/push and fetched-blob verify these reviewed source bytes and
+evidence. Then generate a fresh overlay and strict memory manifest against the
+exact current signal module/image tuple, replay every artifact/final-map join,
+and obtain independent artifact plus one-shot execution review before any
+runtime. Packet 5 and 6 remain consumed/nonreusable. This continuation still
+has two real diagnostic guest applications and zero current-candidate builds;
+official counters and whole-OS incomplete status are unchanged.

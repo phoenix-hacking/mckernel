@@ -43,6 +43,7 @@ def container(obj):
     config = {"Hostname": CID[:12], "Domainname": "", "User": "1000:1000", "Image": owner.IMAGE,
               "WorkingDir": str(obj.parent), "Entrypoint": ["/usr/bin/python3"],
               "Cmd": ["-B", owner.SELF, "--inside", "--owner-sha256", obj.owner_sha,
+                      "--manifest", obj.manifest_path, "--manifest-sha256", obj.manifest_sha256,
                       "--attempt-parent", str(obj.parent), "--nonce", NONCE],
               "Labels": {"mckernel.native-diagnostic.owner": NONCE}, "Tty": False, "OpenStdin": False,
               "StdinOnce": False, "AttachStdin": False, "AttachStdout": True, "AttachStderr": True,
@@ -148,8 +149,15 @@ class OwnerTests(unittest.TestCase):
         self.parent = self.root / "attempts"
         self.parent.mkdir(mode=0o700)
         self.patch("SCRATCH", str(self.root))
+        self.manifest_dir = self.root / "manifests"
+        self.manifest_dir.mkdir()
+        self.manifest_path = self.manifest_dir / "manifest.json"
+        self.manifest_path.write_bytes(b'{"case_id":"x"}')
+        self.manifest_sha256 = owner._digest(self.manifest_path)
         self.fake = Fake()
-        self.obj = owner.DiagnosticOwner(str(self.parent), backend=self.fake, nonce=NONCE)
+        self.obj = owner.DiagnosticOwner(str(self.parent), manifest=str(self.manifest_path),
+                                         manifest_sha256=self.manifest_sha256,
+                                         backend=self.fake, nonce=NONCE)
         self.fake.obj = self.obj
         self.elapsed = [0.0]
         self.obj.clock = lambda: self.elapsed[0]
@@ -876,21 +884,85 @@ class OwnerTests(unittest.TestCase):
 
     def test_inside_checks_and_exact_execve(self):
         self.assertEqual(owner.QEMU_VERSION_STDOUT, PINNED_QEMU_VERSION_STDOUT)
-        with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
+        with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else (self.manifest_sha256 if p == str(self.manifest_path) else self.obj.owner_sha)), \
              mock.patch.object(owner, "bounded_command", return_value=result(PINNED_QEMU_VERSION_STDOUT)) as version, \
              mock.patch.object(owner.os, "execve") as execute:
-            owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
-        self.bound.assert_called_once_with()
+            owner._inside(str(self.parent), NONCE, self.obj.owner_sha, str(self.manifest_path), self.manifest_sha256)
+        self.bound.assert_called_once_with(str(self.manifest_path), self.manifest_sha256)
         version.assert_called_once_with([owner.QEMU, "--version"], 5)
         execute.assert_called_once_with("/usr/bin/python3", ["/usr/bin/python3", "-B", owner.RUNNER,
-            "--manifest", owner.MANIFEST, "--attempt-parent", str(self.parent), "--attempt-name", "attempt-" + NONCE,
+            "--manifest", str(self.manifest_path),
+            "--attempt-parent", str(self.parent), "--attempt-name", "attempt-" + NONCE,
             "--timeout", "300"], {"PATH": "/usr/bin:/bin", "HOME": "/tmp", "TMPDIR": "/tmp", "PYTHONDONTWRITEBYTECODE": "1"})
 
     def test_inside_qemu_hash_rejects(self):
-        with mock.patch.object(owner, "_digest", side_effect=lambda p: "0" * 64 if p == owner.QEMU else self.obj.owner_sha), \
+        with mock.patch.object(owner, "_digest", side_effect=lambda p: "0" * 64 if p == owner.QEMU else (self.manifest_sha256 if p == str(self.manifest_path) else self.obj.owner_sha)), \
              mock.patch.object(owner.os, "execve") as execute:
             with self.assertRaisesRegex(owner.OwnerError, "QEMU hash"):
-                owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
+                owner._inside(str(self.parent), NONCE, self.obj.owner_sha, str(self.manifest_path), self.manifest_sha256)
+            execute.assert_not_called()
+
+    def test_manifest_hash_uppercase_is_normalized(self):
+        obj = owner.DiagnosticOwner(str(self.parent), manifest=str(self.manifest_path),
+                                    manifest_sha256=self.manifest_sha256.upper(),
+                                    backend=self.fake, nonce=NONCE)
+        self.assertEqual(obj.manifest_path, str(self.manifest_path))
+        self.assertEqual(obj.manifest_sha256, self.manifest_sha256)
+
+    def test_manifest_identity_rejects_wrong_malformed_and_unsafe_inputs(self):
+        cases = [
+            (self.manifest_sha256[:-1] + ("0" if self.manifest_sha256[-1] != "0" else "1"), "identity drift"),
+            ("x" * 64, "hash spelling"), ("0" * 63, "hash spelling"),
+            ("0" * 65, "hash spelling"), ("0" * 63 + "!", "hash spelling"),
+            ("0" * 63 + "\0", "hash spelling"),
+        ]
+        for digest, message in cases:
+            with self.subTest(digest=digest), self.assertRaisesRegex(owner.OwnerError, message):
+                owner._manifest_identity(str(self.manifest_path), digest)
+        for path in ("manifests/manifest.json", str(self.manifest_path) + "/."):
+            with self.subTest(path=path), self.assertRaises(owner.OwnerError):
+                owner._manifest_identity(path, self.manifest_sha256)
+        outside = self.root.parent / (self.root.name + "-outside.json")
+        outside.write_bytes(b"outside")
+        self.addCleanup(lambda: outside.unlink(missing_ok=True))
+        with self.assertRaisesRegex(owner.OwnerError, "under scratch"):
+            owner._manifest_identity(str(outside), owner._digest(outside))
+        link = self.root / "manifest-link.json"
+        link.symlink_to(self.manifest_path)
+        with self.assertRaisesRegex(owner.OwnerError, "canonical path"):
+            owner._manifest_identity(str(link), self.manifest_sha256)
+
+    def test_manifest_content_drift_after_admission_rejects(self):
+        path, digest = owner._manifest_identity(str(self.manifest_path), self.manifest_sha256)
+        self.manifest_path.write_bytes(b"tampered")
+        with self.assertRaisesRegex(owner.OwnerError, "identity drift"):
+            owner._manifest_identity(path, digest)
+
+    def test_manifest_nested_under_writable_parent_is_rejected(self):
+        nested = self.parent / "manifest.json"
+        nested.write_bytes(b"nested")
+        digest = owner._digest(nested)
+        with self.assertRaisesRegex(owner.OwnerError, "outside writable"):
+            owner.DiagnosticOwner(str(self.parent), manifest=str(nested),
+                                  manifest_sha256=digest, backend=self.fake, nonce=NONCE)
+        with mock.patch.object(owner, "bound_manifest") as bound, \
+             mock.patch.object(owner, "bounded_command") as command:
+            with self.assertRaisesRegex(owner.OwnerError, "outside writable"):
+                owner._inside(str(self.parent), NONCE, self.obj.owner_sha,
+                              str(nested), digest)
+            bound.assert_not_called()
+            command.assert_not_called()
+
+    def test_outer_cli_requires_explicit_manifest_identity(self):
+        base = ["--attempt-parent", str(self.parent), "--nonce", NONCE,
+                "--owner-sha256", self.obj.owner_sha]
+        with mock.patch.object(owner, "execute_owner") as execute:
+            for missing in ("--manifest", "--manifest-sha256"):
+                args = list(base)
+                args += ["--manifest", str(self.manifest_path), "--manifest-sha256", self.manifest_sha256]
+                args.remove(missing)
+                with self.subTest(missing=missing), self.assertRaises(SystemExit):
+                    owner.main(args)
             execute.assert_not_called()
 
     def test_inside_qemu_version_rejects_any_exact_output_drift(self):
@@ -905,25 +977,25 @@ class OwnerTests(unittest.TestCase):
         )
         for stdout in invalid:
             with self.subTest(stdout=stdout):
-                with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
+                with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else (self.manifest_sha256 if p == str(self.manifest_path) else self.obj.owner_sha)), \
                      mock.patch.object(owner, "bounded_command", return_value=result(stdout)), \
                      mock.patch.object(owner.os, "execve") as execute:
                     with self.assertRaisesRegex(owner.OwnerError, "QEMU version"):
-                        owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
+                        owner._inside(str(self.parent), NONCE, self.obj.owner_sha, str(self.manifest_path), self.manifest_sha256)
                     execute.assert_not_called()
 
-        with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
+        with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else (self.manifest_sha256 if p == str(self.manifest_path) else self.obj.owner_sha)), \
              mock.patch.object(owner, "bounded_command", return_value=result(owner.QEMU_VERSION_STDOUT, err=b"warning\n")), \
              mock.patch.object(owner.os, "execve") as execute:
             with self.assertRaisesRegex(owner.OwnerError, "QEMU version"):
-                owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
+                owner._inside(str(self.parent), NONCE, self.obj.owner_sha, str(self.manifest_path), self.manifest_sha256)
             execute.assert_not_called()
 
     def test_inside_manifest_loader_failure_prevents_exec(self):
         self.bound.side_effect = owner.OwnerError("derived initramfs identity")
-        with mock.patch.object(owner, "_digest", return_value=self.obj.owner_sha), mock.patch.object(owner.os, "execve") as execute:
+        with mock.patch.object(owner, "_digest", side_effect=lambda p: self.manifest_sha256 if p == str(self.manifest_path) else self.obj.owner_sha), mock.patch.object(owner.os, "execve") as execute:
             with self.assertRaisesRegex(owner.OwnerError, "derived initramfs"):
-                owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
+                owner._inside(str(self.parent), NONCE, self.obj.owner_sha, str(self.manifest_path), self.manifest_sha256)
             execute.assert_not_called()
 
     def test_docker_backend_rejects_non_sudo_prefix(self):
@@ -935,7 +1007,8 @@ class OwnerTests(unittest.TestCase):
             with self.assertRaisesRegex(owner.OwnerError, "must be root"):
                 owner.DockerBackend().call(owner.PREFIX + ["ps"], timeout=1)
             with self.assertRaisesRegex(owner.OwnerError, "root outer"):
-                owner.main(["--attempt-parent", str(self.parent), "--nonce", NONCE, "--owner-sha256", self.obj.owner_sha])
+                owner.main(["--attempt-parent", str(self.parent), "--nonce", NONCE, "--owner-sha256", self.obj.owner_sha,
+                            "--manifest", str(self.manifest_path), "--manifest-sha256", self.manifest_sha256])
 
     def test_root_docker_prefix_and_environment_are_exact(self):
         backend = owner.DockerBackend()
@@ -958,7 +1031,8 @@ class OwnerTests(unittest.TestCase):
 
     def test_noncanonical_parent_rejected(self):
         with self.assertRaisesRegex(owner.OwnerError, "canonical"):
-            owner.DiagnosticOwner(str(self.parent) + "/.", backend=self.fake)
+            owner.DiagnosticOwner(str(self.parent) + "/.", manifest=str(self.manifest_path),
+                                  manifest_sha256=self.manifest_sha256, backend=self.fake)
 
     def test_unlock_failure_preserves_first_exception(self):
         failure = TimeoutError("original")
@@ -967,31 +1041,30 @@ class OwnerTests(unittest.TestCase):
         self.assertIs(self.fails(), failure)
 
     def test_manifest_and_every_source_pin_before_loader(self):
-        manifest = self.root / "manifest.json"
+        manifest = self.manifest_dir / "manifest.json"
         manifest.write_bytes(b"{}")
         sources = {}
         for name in ("runner", "lifecycle", "backend", "qmp"):
             path = self.root / (name + ".py")
             path.write_bytes(name.encode())
             sources[str(path)] = owner._digest(path)
-        self.patch("MANIFEST", str(manifest))
-        self.patch("MANIFEST_SHA256", owner._digest(manifest))
+        self.patch("SCRATCH", str(self.root))
         self.patch("SOURCE_HASHES", sources)
         module = types.SimpleNamespace(load_manifest=mock.Mock(return_value={"bound": True}))
         loader = types.SimpleNamespace(exec_module=mock.Mock())
         with mock.patch.object(owner.importlib.util, "spec_from_file_location", return_value=types.SimpleNamespace(loader=loader)), \
              mock.patch.object(owner.importlib.util, "module_from_spec", return_value=module):
-            self.assertEqual(BOUND_MANIFEST(str(manifest))[1], {"bound": True})
+            self.assertEqual(BOUND_MANIFEST(str(manifest), owner._digest(manifest))[1], {"bound": True})
             module.load_manifest.assert_called_once_with(str(manifest))
             for path in sources:
                 original = Path(path).read_bytes()
                 Path(path).write_bytes(b"drift")
                 with self.subTest(source=path), self.assertRaisesRegex(owner.OwnerError, "source identity drift"):
-                    BOUND_MANIFEST(str(manifest))
+                    BOUND_MANIFEST(str(manifest), owner._digest(manifest))
                 Path(path).write_bytes(original)
             manifest.write_bytes(b"drift")
             with self.assertRaisesRegex(owner.OwnerError, "manifest identity drift"):
-                BOUND_MANIFEST(str(manifest))
+                BOUND_MANIFEST(str(manifest), self.manifest_sha256)
             self.assertEqual(module.load_manifest.call_count, 1)
 
     def test_bounded_local_command_and_overflow(self):

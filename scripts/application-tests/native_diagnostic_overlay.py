@@ -23,7 +23,6 @@ BASE_SHA256 = "49fa5ec991faaa5fc745f10111ae1e9e2527621f90a1fd0ae3df02ab33dde293"
 BASE_SIZE = 11846636
 BASE_CPIO_SHA256 = "4f36958f2f0e4c6684d3adbd2b8b5860693298b332d11e8bb9e47a063420b265"
 BASE_CPIO_SIZE = 38358016
-PAYLOAD_SHA256 = "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
 OVERLAY_NAMES = ("apps", "case", "case/work", "init", "apps/app", "bin/mcexec")
 OVERLAY_MODES = (0o040755, 0o040755, 0o040755, 0o100755, 0o100755, 0o100755)
 MAX_SOURCE_SIZE = 256 * 1024 * 1024
@@ -269,6 +268,13 @@ def _base_hash(value, label):
     return value.lower()
 
 
+def _sha256(value, label):
+    """Validate an authenticated SHA256 binding and normalize its case."""
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-fA-F]{64}", value) is None:
+        _die(f"{label} must be exactly 64 hexadecimal characters")
+    return value.lower()
+
+
 def _base_hash_arg(value, label):
     try:
         return _base_hash(value, label)
@@ -471,11 +477,13 @@ def _gzip(data):
 
 
 def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256, mcexec_sha256,
-                  base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+                  base_sha256, base_size, base_cpio_sha256, base_cpio_size,
+                  payload_sha256):
     base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
         base_sha256, base_size, base_cpio_sha256, base_cpio_size)
     collector_sha256 = _collector_hash(collector_sha256)
     mcexec_sha256 = _collector_hash(mcexec_sha256)
+    payload_sha256 = _sha256(payload_sha256, "payload SHA256")
     try:
         with contextlib.ExitStack() as stack:
             target = _Path(output)
@@ -494,7 +502,7 @@ def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256,
             original = _authenticate_base(br, base_sha256=base_sha256, base_size=base_size,
                                           base_cpio_sha256=base_cpio_sha256,
                                           base_cpio_size=base_cpio_size)
-            if _digest(pr) != PAYLOAD_SHA256:
+            if _digest(pr) != payload_sha256:
                 _die("payload hash mismatch")
             if _digest(cr) != collector_sha256:
                 _die("collector hash mismatch")
@@ -571,6 +579,8 @@ def main(argv=None):
         parser.add_argument(name)
     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
     parser.add_argument("--mcexec-sha256", required=True, type=_collector_hash)
+    parser.add_argument("--payload-sha256", required=True,
+                        type=lambda v: _sha256(v, "payload SHA256"))
     parser.add_argument("--base-sha256", required=True,
                         type=lambda v: _base_hash_arg(v, "base SHA256"))
     parser.add_argument("--base-size", required=True, type=_base_size_arg)
@@ -582,6 +592,7 @@ def main(argv=None):
     print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec, args.output,
                                    collector_sha256=args.collector_sha256,
                                    mcexec_sha256=args.mcexec_sha256,
+                                   payload_sha256=args.payload_sha256,
                                    base_sha256=args.base_sha256, base_size=args.base_size,
                                    base_cpio_sha256=args.base_cpio_sha256,
                                    base_cpio_size=args.base_cpio_size), sort_keys=True))

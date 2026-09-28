@@ -26,8 +26,6 @@ REPO = "/home/holden/mckernel"
 SCRATCH = "/home/holden/mckernel-work/scratch"
 IMAGE_RECORD = "/home/holden/mckernel-work/logs/image-native.json"
 IMAGE_RECORD_SHA256 = "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a"
-MANIFEST = SCRATCH + "/native-diagnostic-manifest-20260928-3/manifest.json"
-MANIFEST_SHA256 = "ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6"
 RUNNER = REPO + "/scripts/application-tests/native_diagnostic_runner.py"
 SELF = REPO + "/scripts/application-tests/native_diagnostic_container_owner.py"
 LOCK = "/run/lock/mckernel-development.lock"
@@ -550,8 +548,30 @@ class DockerBackend:
         return bounded_command(argv, timeout, env=env, ledger=self.children)
 
 
-def bound_manifest(path=MANIFEST):
-    need(path == MANIFEST and _digest(path) == MANIFEST_SHA256, "manifest identity drift")
+def _manifest_identity(path, digest):
+    need(type(path) is str and type(digest) is str, "explicit manifest identity")
+    value = Path(path)
+    need(value.is_absolute() and str(value.resolve(strict=True)) == path,
+         "manifest canonical path")
+    scratch = Path(SCRATCH).resolve(strict=True)
+    need(scratch == Path(SCRATCH) and scratch in value.parents,
+         "manifest must be under scratch")
+    need(HEX.fullmatch(digest.lower()),
+         "manifest hash spelling")
+    digest = digest.lower()
+    need(_digest(path) == digest, "manifest identity drift")
+    return path, digest
+
+
+def _manifest_outside_writable_parent(path, parent):
+    manifest = Path(path)
+    writable = Path(parent).resolve(strict=True)
+    need(writable.is_dir() and writable not in (manifest, *manifest.parents),
+         "manifest must be outside writable attempt parent")
+
+
+def bound_manifest(path, digest):
+    _manifest_identity(path, digest)
     for source, expected in SOURCE_HASHES.items():
         need(_digest(source) == expected, "source identity drift: " + source)
     source = REPO + "/scripts/application-tests/native_diagnostic.py"
@@ -575,9 +595,12 @@ def env_values(items):
 
 
 class DiagnosticOwner:
-    def __init__(self, attempt_parent, *, backend=None, nonce=None, clock=time.monotonic):
+    def __init__(self, attempt_parent, *, manifest, manifest_sha256, backend=None, nonce=None, clock=time.monotonic):
         need(type(attempt_parent) is str and str(Path(attempt_parent)) == attempt_parent, "canonical attempt parent spelling")
         self.parent = Path(attempt_parent)  # never silently canonicalize input
+        self.manifest_path, self.manifest_sha256 = _manifest_identity(manifest, manifest_sha256)
+        _manifest_outside_writable_parent(self.manifest_path, self.parent)
+        self.manifest = None
         self.backend = backend or DockerBackend()
         self.nonce = nonce or uuid.uuid4().hex
         need(type(self.nonce) is str and re.fullmatch(r"[0-9a-f]{32}", self.nonce), "owner nonce")
@@ -760,6 +783,7 @@ class DiagnosticOwner:
 
     def _inside_args(self):
         return ["-B", SELF, "--inside", "--owner-sha256", self.owner_sha,
+                "--manifest", self.manifest_path, "--manifest-sha256", self.manifest_sha256,
                 "--attempt-parent", str(self.parent), "--nonce", self.nonce]
 
     def _create_argv(self):
@@ -864,10 +888,10 @@ class DiagnosticOwner:
              ("IPAddress", "GlobalIPv6Address", "Gateway", "IPv6Gateway", "MacAddress")) and
              row["NetworkSettings"].get("Ports") in (None, {}), "no network endpoint")
 
-    def _preflight(self, manifest):
+    def _preflight(self):
         self.parent_identity = private_parent(str(self.parent))
         need(not os.path.lexists(self.attempt), "inner attempt already exists")
-        self.diagnostic, self.manifest = bound_manifest(manifest)
+        self.diagnostic, self.manifest = bound_manifest(self.manifest_path, self.manifest_sha256)
         admitted = self.diagnostic.expected_qemu_argv(self.manifest, self.attempt)
         need(type(admitted) is list and admitted and all(type(item) is str for item in admitted),
              "outer admitted QEMU argv")
@@ -1001,9 +1025,9 @@ class DiagnosticOwner:
         need(not os.path.lexists(self.attempt / "first-failure.jsonl"), "inner failure journal exists")
         self._save("capture-bindings.json", captures)
 
-    def run(self, *, manifest=MANIFEST, deadline=360):
+    def run(self, *, deadline=360):
         need(type(deadline) in (int, float) and math.isfinite(deadline) and 330 <= deadline <= 600, "outer deadline must exceed inner cleanup")
-        retained = self._preflight(manifest)
+        retained = self._preflight()
         self.outer_identity = _outer_identity()
         # The evidence sibling is outside the only writable bind mount.
         self.evidence.mkdir(mode=0o700)
@@ -1091,18 +1115,20 @@ class DiagnosticOwner:
         return {"status": "PROTOCOL_PASS", "container": self.container, "application_acceptance": False}
 
 
-def _inside(parent, nonce, owner_sha):
+def _inside(parent, nonce, owner_sha, manifest, manifest_sha256):
     need(os.getuid() == os.geteuid() == 1000, "inside uid1000 required")
     need(HEX.fullmatch(owner_sha) and _digest(SELF) == owner_sha, "inside owner hash drift")
     need(re.fullmatch(r"[0-9a-f]{32}", nonce), "inside nonce")
     private_parent(parent)
+    _manifest_outside_writable_parent(manifest, parent)
     need(not os.path.lexists(Path(parent) / ("attempt-" + nonce)), "inside attempt exists")
-    bound_manifest()
+    _manifest_identity(manifest, manifest_sha256)
+    bound_manifest(manifest, manifest_sha256)
     need(_digest(QEMU) == QEMU_SHA256, "inside QEMU hash drift")
     version = bounded_command([QEMU, "--version"], 5)
     need(version.returncode == 0 and version.stderr == b"" and version.stdout == QEMU_VERSION_STDOUT,
          "inside QEMU version drift")
-    os.execve("/usr/bin/python3", ["/usr/bin/python3", "-B", RUNNER, "--manifest", MANIFEST,
+    os.execve("/usr/bin/python3", ["/usr/bin/python3", "-B", RUNNER, "--manifest", manifest,
               "--attempt-parent", parent, "--attempt-name", "attempt-" + nonce, "--timeout", "300"],
               {"PATH": "/usr/bin:/bin", "HOME": "/tmp", "TMPDIR": "/tmp", "PYTHONDONTWRITEBYTECODE": "1"})
 
@@ -1162,13 +1188,16 @@ def main(argv=None):
     parser.add_argument("--attempt-parent", required=True)
     parser.add_argument("--nonce", required=True)
     parser.add_argument("--owner-sha256", required=True)
+    parser.add_argument("--manifest", required=True)
+    parser.add_argument("--manifest-sha256", required=True)
     args = parser.parse_args(argv)
     need(HEX.fullmatch(args.owner_sha256) and _digest(SELF) == args.owner_sha256, "reviewed owner identity")
     if args.inside:
-        _inside(args.attempt_parent, args.nonce, args.owner_sha256)
+        _inside(args.attempt_parent, args.nonce, args.owner_sha256, args.manifest, args.manifest_sha256)
         return 0
     need(os.getuid() == os.geteuid() == 0, "root outer owner required")
-    execute_owner(DiagnosticOwner(args.attempt_parent, nonce=args.nonce))
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+                                  manifest_sha256=args.manifest_sha256, nonce=args.nonce))
     return 0
 
 

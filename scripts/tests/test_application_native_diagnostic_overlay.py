@@ -77,8 +77,7 @@ def fixture(raw=None):
     raw = base_archive() if raw is None else raw
     compressed = gzip.compress(raw, mtime=0)
     constants = dict(BASE_SHA256=digest(compressed), BASE_SIZE=len(compressed),
-                     BASE_CPIO_SHA256=digest(raw), BASE_CPIO_SIZE=len(raw),
-                     PAYLOAD_SHA256=digest(b"payload"))
+                     BASE_CPIO_SHA256=digest(raw), BASE_CPIO_SIZE=len(raw))
     with tempfile.TemporaryDirectory() as td, mock.patch.multiple(M, **constants):
         directory = Path(td)
         (directory / "base.gz").write_bytes(compressed)
@@ -91,6 +90,7 @@ def fixture(raw=None):
 def build(directory, name="out.gz", **kwargs):
     kwargs.setdefault("collector_sha256", digest(collector_elf()))
     kwargs.setdefault("mcexec_sha256", digest(b"reviewed mcexec"))
+    kwargs.setdefault("payload_sha256", digest(b"payload"))
     kwargs.setdefault("base_sha256", M.BASE_SHA256)
     kwargs.setdefault("base_size", M.BASE_SIZE)
     kwargs.setdefault("base_cpio_sha256", M.BASE_CPIO_SHA256)
@@ -205,6 +205,25 @@ class OverlayTests(unittest.TestCase):
                 with self.subTest(expected=expected), self.assertRaisesRegex(M.OverlayError, "mcexec hash mismatch"):
                     build(d, mcexec_sha256=expected)
                 self.assertFalse((d / "out.gz").exists())
+
+    def test_payload_hash_is_explicit_and_bound_before_output(self):
+        with fixture() as (d, _):
+            with self.assertRaises(TypeError):
+                M.build_overlay(d / "base.gz", d / "app", d / "collector", d / "mcexec", d / "out.gz",
+                                collector_sha256=digest(collector_elf()),
+                                mcexec_sha256=digest(b"reviewed mcexec"),
+                                base_sha256=M.BASE_SHA256, base_size=M.BASE_SIZE,
+                                base_cpio_sha256=M.BASE_CPIO_SHA256, base_cpio_size=M.BASE_CPIO_SIZE)
+            for value in (None, 1, "", "0" * 63, "0" * 65, "g" * 64,
+                          " " + "0" * 63, "0" * 64 + "\n", "0" * 64):
+                with self.subTest(value=value), self.assertRaises(M.OverlayError):
+                    build(d, payload_sha256=value)
+                self.assertFalse((d / "out.gz").exists())
+            with self.assertRaisesRegex(M.OverlayError, "payload hash mismatch"):
+                build(d, payload_sha256="0" * 64)
+            self.assertFalse((d / "out.gz").exists())
+            result = build(d, payload_sha256=digest(b"payload").upper())
+            self.assertEqual(result["payload_sha256"], digest(b"payload"))
 
     def test_source_mutation_during_compression(self):
         for name in ("base.gz", "app", "collector", "mcexec"):
@@ -576,6 +595,7 @@ class OverlayTests(unittest.TestCase):
             args = [str(d / name) for name in ("base.gz", "app", "collector", "mcexec", "out.gz")]
             args += ["--collector-sha256", digest(collector_elf()),
                      "--mcexec-sha256", digest(b"reviewed mcexec"),
+                     "--payload-sha256", digest(b"payload"),
                      "--base-sha256", digest(base), "--base-size", str(len(base)),
                      "--base-cpio-sha256", digest(gzip.decompress(base)),
                      "--base-cpio-size", str(len(gzip.decompress(base)))]
