@@ -4574,3 +4574,49 @@ invocation now has two real diagnostic guest applications and zero
 current-candidate kernel builds. Official counters remain 0/273 applications,
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
 language gates; whole-OS acceptance remains incomplete.
+
+Continuation checkpoint 45, 2026-09-28: shutdown was requested before any
+threads execution review or privileged/runtime operation. The source-fixed
+static threads collector is preserved at
+`/home/holden/mckernel-work/scratch/native-diagnostic-threads-collector-build-20260928-1/init`,
+mode 0700, size 1,021,296 and SHA256 `9dd9388b...9b10`. Its exact host oracle
+passes with 25-byte stdout `NATIVE_CORE PASS threads\n`, empty stderr, exit 37
+and empty pre/post residual inventories; the earlier hard-coded-hash oracle
+failure remains preserved. The derived initramfs is `e16c593d...eec`, its
+overlay manifest is `d97f1201...66e7`, the canonical overlay digest is
+`5991339e...8a17`, and the strict manifest is `0a473e55...5ca9`.
+
+Independent artifact review returns `PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET`:
+the archive preserves the exact base prefix and 61 final members, while all 37
+userspace ELFs join across 52 dependencies, 11 interpreters and 270 required
+version/provider definitions. Preparation evidence and a proposed packet are
+now retained as
+`docs/verification/stability-native-diagnostic-threads-artifact-success-20260928-1.json`
+and
+`docs/verification/stability-native-diagnostic-threads-execution-packet-20260928-1.md`,
+SHA256 `51e94029...cb4` and `75b62e2e...d932`. The proposed parent
+`ndct-20260928-1`, nonce `9561a169a33ebd6ecbd9ae567abbe869`, inner attempt
+and owner-evidence sibling remain absent. These documents are preparation only:
+there is no independent execution-release decision, release record, root
+command, container, QEMU or McKernel threads application attempt.
+
+At the shutdown boundary the campaign processes remain launcher PID/PGID/SID
+3125264/starttime 80228730, recovered worker PID/PGID/SID 3170135/starttime
+80670556, and app-server PID/PGID/SID 3170137/starttime 80670562. The
+launcher-owned state reports `phase=running`; this checkpoint does not edit that
+state and does not resume, pause through goal tooling, or complete the OS goal.
+No diagnostic owner or QEMU process is live. Child agents are closed: all are
+completed except the superseded threads artifact audit, which is interrupted;
+the fresh threads overlay/manifest review completed with the PASS above.
+
+Next invocation: reconcile HEAD, the three exact campaign identities,
+launcher state and the single heavy-runtime lease. Validate the proposed packet
+against the exact 42-element generated QEMU argv and 100-byte QMP pathname,
+expanding the packet if needed, then obtain a fresh independent execution review.
+Only after a PASS should a hash-bound release record be created, checkpointed,
+pushed and fetched-blob verified. Repeat every live resource, identity, lock,
+container, source/artifact and fresh-path precondition immediately before any
+one-shot command. Preserve the absent parent/owner paths until that release.
+The two real diagnostic guest applications and zero current-candidate builds
+from this invocation remain unchanged. Formal counters remain 0/273, 2/4,
+6/130, 350/10,000 and 0/7; no application or whole-OS acceptance is claimed.
