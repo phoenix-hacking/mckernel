@@ -3154,6 +3154,106 @@ untracked bytecode remain unstaged. Counters remain 0/273 application cases,
 language gates. Whole-OS acceptance remains incomplete; this checkpoint pauses
 rather than completes or resumes the goal.
 
+Continuation shutdown checkpoint 8, 2026-09-28: all bounded operations from
+this invocation are terminal and no new work was dispatched after the stop
+request. Root12 and root58 remain preserved as failed evidence attempts, with
+independent additive reviews correcting the claims their original records do
+not prove. The standalone Linux diagnostic collector remains source-approved
+at SHA256 `c9932ce4883b1c23c4fc5df0cdb6b4cbe855c140d38787b6abf960f1d75ee409`;
+all 18 focused process tests pass, but no diagnostic execution packet or guest
+application has been released.
+
+Next tasks, in order, are: (1) draft and independently review a fresh root13
+Layer-B packet whose observer derives the actual `name=systemd` hierarchy from
+mountinfo and `/proc/self/cgroup`, retains the original mapping and verifies cat
+membership; (2) draft and independently review a fresh M01 trusted-driver packet
+that directly retains validator argv, return code, streams, authentication,
+installation identities and all five controls; (3) prepare and independently
+review the startup.argv-empty Linux diagnostic packet using the retained payload
+archive; and (4) bind M03 production VM epoch, descriptor generation/lifetime,
+locking, invalidation acknowledgement and durable quarantine ownership before
+any integration attempt. No root13, fresh M01 root, Linux diagnostic payload,
+compiler, Layer-B service, guest or acceptance run may begin without its stated
+review release.
+
+Real guest applications executed in this work window: **0**. Launcher PID
+3098066, worker PID 3098071 and app-server PID 3098074 remain the preserved
+active process identities for run
+`.git/os-autopilot/runs/20260928T095536Z-095509d1`. No project compiler,
+transient Layer-B unit/cgroup, guest, QEMU, mcexec or IHK process is active.
+Host/scratch free space is 44/21 GiB. Unrelated launcher/LAUNCH/START edits and
+bytecode artifacts remain unstaged. Counters remain 0/273 applications, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. Whole-OS acceptance remains incomplete; this checkpoint does not mark it
+complete or resume the launcher-paused continuation.
+
+Continuation checkpoint 7, 2026-09-28: this resumed window produced executable
+behavior and three independently reviewed technical outcomes without promoting
+any formal acceptance counter.
+
+Layer-B expert FIFO packet24, SHA256
+`ebc8778cda8d667c40b26362e4540e68a7217b0e7110526d31b7d2bf1c7a13a5`,
+passed `PASS_FIFO_EXECUTION_PACKET`. The dispatcher retained the exact strategy,
+review release and rejected-review logs, then ran the sole fresh root12 attempt.
+Systemd invocation `a9ba8caace454337b6ef600c695fa75b` held cat PID 3112143
+in `activating/start-pre` with MainPID 0 and an unstarted main command. The
+observer incorrectly joined ControlGroup below `/sys/fs/cgroup` instead of the
+actual `name=systemd` hierarchy at `/sys/fs/cgroup/systemd`; 1,204 pre-ack
+queries therefore lacked membership and the attempt failed closed at its
+90-second acknowledgement deadline. No writer record, GCC stream or compiler
+artifact exists. Stop succeeded and a later reset left the unit
+`not-found/inactive/dead`. Independent present reconciliation proves the correct
+original group and `/proc/3112143` absent and releases the heavy lease, while
+rejecting overstatements in the original failure record. Preserve root12 and
+archive SHA256 `82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056`.
+Next issue and independently review one fresh root13 correction binding the
+actual observer and an unambiguous mountinfo plus `name=systemd` mapper; do not
+repeat root12 or start linking/owner work.
+
+M01 expert packet62, SHA256
+`63bf79fc38cabf0787030f1e770fd178edd599e5e1371bdbc3a6f9feee6261be`,
+passed independent packet review and released one source-only root58 attempt.
+Both stagers prepared 163 files per mode and all ten candidate hashes match
+root56, but retained execution evidence failed its own contract: no literal
+validator argv/return-code capture proves exit 0, the failure text has an
+embedded newline and seven lines, authentication/install/control evidence is
+incomplete, and two extra stream files violate the diagnostic allowlist. No
+handoff, Phase II or compiler artifact exists. Preserve root58/diagnostics62 and
+archive SHA256 `88b7d69c828ecf2ed399ed609c2b91563877068c7e11f5b380158f2f53ec487a`.
+Next use a separately reviewed fresh-root trusted driver that directly retains
+argv/status/streams, five controls, authentication and exact membership.
+
+The new standalone Linux diagnostic collector now passes independent
+`PASS_SOURCE` at source SHA256
+`c9932ce4883b1c23c4fc5df0cdb6b4cbe855c140d38787b6abf960f1d75ee409`
+and test SHA256
+`ac76db0114d12d737e5e60f4929ce029bb7a889532502801105d18abef52c39c`.
+All 18 process tests pass, including actual exit 7, SIGTERM, timeout, truncation,
+stdin and empty argv; 42 adversarial report mutations reject. The collector is
+controlled-filesystem Linux diagnostic infrastructure only: it does not pin
+pathname execution, prove build/interpreter/DSO closure, enable `run.py`, run a
+guest or earn M02/M04 credit. Next prepare and independently review a packet that
+restores the retained `startup.argv-empty` payload from Git blob `c9d87b...`,
+binds its provenance/oracle/ownership and executes one fresh Linux diagnostic.
+
+M03 audit confirms the frozen source prototype prevalidates the full descriptor
+inventory and snapshots callback arguments before any allocator call, preventing
+valid-prefix release on a later invalid node. Production still uses incremental
+raw-list release in `kernel/mem.c`, and XPMEM shares that begin/finish mechanism.
+Integration remains blocked on explicit VM epoch, descriptor-generation/lifetime,
+lock/IRQ/reentry, clear/TLB acknowledgement and durable quarantine ownership;
+Layer-B execution cannot substitute for those bindings.
+
+Real guest applications executed in this work window: **0**. The exact blocking
+dependency remains a reviewed current-candidate guest backend/input manifest;
+the newly accepted Linux collector is only its paired-control prerequisite.
+Launcher PID 3098066, worker PID 3098071 and app-server PID 3098074 remain live.
+No compiler, Layer-B unit/cgroup, guest, QEMU, mcexec or IHK process is active;
+host/scratch free space remains 44/21 GiB. Unrelated launcher/LAUNCH/START edits
+and bytecode artifacts remain unstaged. Counters remain 0/273 applications, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. Whole-OS acceptance remains incomplete and the goal stays active.
+
 Continuation shutdown checkpoint 3, 2026-09-28: the replacement Layer-B
 strategy is now a native single-threaded pidfd/subreaper owner rather than the
 rejected Python PGID family. Exact source SHA256
@@ -3256,3 +3356,16 @@ deletion and untracked bytecode remain unstaged. Counters remain 0/273 applicati
 cases, 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
 language gates. Whole-OS acceptance remains incomplete; this checkpoint pauses
 rather than completes or resumes the goal.
+
+Continuation shutdown checkpoint 9, 2026-09-28: checkpoint 8 above is the
+authoritative result of this invocation. All bounded operations and child agents
+are terminal, and no new task was dispatched after shutdown. The next executable
+work remains the separately reviewed root13 cgroup-mapping correction, fresh M01
+trusted-driver correction, startup.argv-empty Linux diagnostic packet, and M03
+production-authority binding described in checkpoint 8. Preserve launcher PID
+3098066, worker PID 3098071, app-server PID 3098074 and run directory
+`.git/os-autopilot/runs/20260928T095536Z-095509d1` as the active process
+identities. No project compiler, Layer-B service/cgroup, guest, QEMU, mcexec or
+IHK process is active. Real guest applications executed in this window: **0**.
+Whole-OS acceptance remains incomplete; the launcher-paused continuation is not
+resumed or marked complete by this checkpoint.

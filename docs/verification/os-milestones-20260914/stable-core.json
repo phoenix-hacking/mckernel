@@ -96,9 +96,10 @@
     "ffi": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
     "guest_review": "docs/verification/ultra-guest-review-20260909.md",
     "durable_registry": "docs/verification/stability-pending-free-durable-registry-feasibility-review-20260915-1.md"
-    ,"layer_b_failure": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-20260928-10.json"
+    ,"layer_b_failure": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-review-20260928-26.json"
     ,"pending_validated": "docs/verification/stability-pending-free-validated-inventory-source-review-20260928-8.json"
-    ,"retention56": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-56.json"
+    ,"retention56": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-failure-review-20260928-63.json"
+    ,"linux_diagnostic": "docs/verification/stability-linux-diagnostic-source-review-20260928-1.json"
   },
   "areas": [
     {
@@ -356,8 +357,8 @@
       "area": "ENV",
       "title": "Reusable unprivileged executable-check profile",
       "status": "partial",
-      "result": "Attempt10's compiler exited successfully but failed identity capture and remains uncredited. The corrected fast-completion barrier then passed packet review and root11 captured a pre-start unit/invocation/cgroup, but the launcher stop arrived after its observation deadline: the unpublished marker failed closed, gcc never started, and 16.64-second cleanup proved the unit/cgroup absent.",
-      "next_check": "Preserve attempts10/11. On a later continuation, change strategy rather than retrying the same finite observation window: design an acknowledgement barrier whose deadline is controlled by the retained owner rather than conversation latency, independently review it, then use one fresh root.",
+      "result": "Attempts10/11 remain uncredited. The FIFO acknowledgement design passed execution review, but root12's observer joined ControlGroup below /sys/fs/cgroup instead of the name=systemd mount. It never initiated the writer or gcc and failed closed at the pre-ack deadline. Independent present reconciliation proves the exact unit/correct original cgroup/process absent and releases the heavy lease; the original archive alone does not prove its cleanup claims.",
+      "next_check": "Preserve attempts10-12. Independently review a fresh root13 packet that binds the observer implementation, derives name=systemd hierarchy/mount-root offsets from mountinfo plus /proc/self/cgroup, rejects ambiguity, verifies cat membership and reuses the original mapping during cleanup. Then run exactly one correction attempt; no link or owner execution before acceptance.",
       "evidence": [
         "handoff",
         "policy",
@@ -1382,8 +1383,8 @@
       "area": "IPC",
       "title": "Selected response survives cancel/prepare/no-wake paths",
       "status": "blocked",
-      "result": "Root56 contains a complete source candidate and passed reconstruction, cfg erasure, authentication and membership checks, but its final validator incorrectly ran git diff --check on an external scratch path and exited 128. Independent review finds all ten candidate files coherent against packet52/review53; root56 remains failed with no handoff.",
-      "next_check": "Issue an additive independently reviewed fresh-root packet binding the exact root56 candidate bytes and a scratch-compatible whitespace validator; repeat authentication/static checks, create the canonical handoff, then obtain independent handoff review before Phase II.",
+      "result": "Expert packet62 passed review and root58 staged/authenticated all ten candidate bytes, but its retained execution evidence violates the packet: validator return code/argv are absent, the failure record has an embedded newline, required authentication/control records are missing and extra diagnostic files are outside the allowlist. No handoff, Phase II or compiler artifact exists.",
+      "next_check": "Preserve roots56/58. Independently review one fresh-root correction using a trusted driver that directly retains argv/returncode/streams, complete authentication and installation identities, five controls, strict diagnostic membership and newline-free six-field failure serialization; only then create and review a handoff.",
       "evidence": [
         "retention",
         "handoff",

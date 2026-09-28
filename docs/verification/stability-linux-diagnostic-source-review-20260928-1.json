@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.linux-diagnostic-source-review.v1",
+  "status": "PASS_SOURCE",
+  "reviewer": "/root/linux_diagnostic_expert_review",
+  "collector": {
+    "path": "scripts/application-tests/linux_diagnostic.py",
+    "sha256": "c9932ce4883b1c23c4fc5df0cdb6b4cbe855c140d38787b6abf960f1d75ee409"
+  },
+  "tests": {
+    "path": "scripts/tests/test_application_linux_diagnostic.py",
+    "sha256": "ac76db0114d12d737e5e60f4929ce029bb7a889532502801105d18abef52c39c",
+    "count": 18,
+    "result": "PASS",
+    "covered": [
+      "literal empty argv",
+      "actual exit 7",
+      "SIGTERM",
+      "stdin",
+      "timeout",
+      "truncation",
+      "strict raw/decoded wait",
+      "stream artifact identity and accounting",
+      "request and input mutation",
+      "setup and publication failure durability",
+      "canonical path and schema rejection"
+    ]
+  },
+  "adversarial_report_mutations_rejected": 42,
+  "controlled_filesystem_limitations": "The collector does not pin pathname execution to open descriptors, prevent concurrent ancestor/transient input substitution by another writer, establish source-to-binary provenance or bind interpreter/DSO closure. These remain execution-packet requirements.",
+  "scope": {
+    "linux_diagnostic_source": true,
+    "execution_packet_released": false,
+    "mckernel_guest_executed": false,
+    "application_acceptance": false,
+    "production_gate_credit": false
+  },
+  "next_action": "Prepare and independently review a retained startup.argv-empty Linux diagnostic packet binding the collector, payload archive/provenance, independent oracle, controlled ownership and fresh evidence paths."
+}

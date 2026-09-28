@@ -1,0 +1,33 @@
+{
+  "schema": "mckernel.selected-retention.phase-i-failure-review.v1",
+  "status": "FAIL_EVIDENCE_CONTRACT",
+  "reviewer": "/root/root58_failure_review",
+  "attempt_record": "docs/verification/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-58.json",
+  "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-58.tar.gz",
+  "archive_sha256": "88b7d69c828ecf2ed399ed609c2b91563877068c7e11f5b380158f2f53ec487a",
+  "verified": {
+    "archive_members": 347,
+    "archive_regular_files": 335,
+    "candidate_regular_files": 327,
+    "diagnostic_regular_files": 8,
+    "files_per_mode": 163,
+    "ten_candidate_hashes_match": true,
+    "stager_records_scope": "PREPARED_NOT_COMPILED_NOT_EXECUTED",
+    "validator_stdout": "PASS_WHITESPACE\n",
+    "validator_stderr": "",
+    "handoff_present": false,
+    "phase_ii_present": false,
+    "compiler_artifact_present": false
+  },
+  "unsupported_attempt_record_claims": [
+    "No retained literal validator argv or process return-code capture proves exit status 0.",
+    "No retained execution-shell source proves the unexported-variable cause.",
+    "No authentication.json or complete installation pre/post identity and command record exists."
+  ],
+  "additional_defects": [
+    "phase-i-failure.txt has seven lines because observed contains an embedded newline, violating the six-field newline-free contract.",
+    "validation.stdout and validation.stderr are outside packet62's diagnostic allowlist.",
+    "Five disk controls and controls.json are absent."
+  ],
+  "next_action": "Preserve root58/diagnostics62. A reviewed fresh-root packet must use one trusted driver that directly retains argv, returncode and streams; complete authentication/install identities and five controls; enforce allowed diagnostics and newline-free six-field failure serialization before handoff."
+}
