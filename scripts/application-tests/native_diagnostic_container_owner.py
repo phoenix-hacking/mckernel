@@ -26,8 +26,8 @@ REPO = "/home/holden/mckernel"
 SCRATCH = "/home/holden/mckernel-work/scratch"
 IMAGE_RECORD = "/home/holden/mckernel-work/logs/image-native.json"
 IMAGE_RECORD_SHA256 = "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a"
-MANIFEST = SCRATCH + "/native-diagnostic-manifest-20260928-2/manifest.json"
-MANIFEST_SHA256 = "c7072eeaecdc44e450cc9511a994c13db66540465722443a312479c92e5e2d04"
+MANIFEST = SCRATCH + "/native-diagnostic-manifest-20260928-3/manifest.json"
+MANIFEST_SHA256 = "ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6"
 RUNNER = REPO + "/scripts/application-tests/native_diagnostic_runner.py"
 SELF = REPO + "/scripts/application-tests/native_diagnostic_container_owner.py"
 LOCK = "/run/lock/mckernel-development.lock"
@@ -42,7 +42,7 @@ QEMU_VERSION_STDOUT = (
 )
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
-    REPO + "/scripts/application-tests/native_diagnostic.py": "0ab36565fe4b7019baa66398c4f5cb08801143322ea9e21c12916250278ef02d",
+    REPO + "/scripts/application-tests/native_diagnostic.py": "b92e6f92084accdaf6e459ee6cf2674b02ad31a7d377a69fe15d5549804823c5",
     REPO + "/scripts/application-tests/native_diagnostic_backend.py": "ffdde01883c77171d1512769e0c88f2539dda8f7da4bd22ae4e71f69f080a16b",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }

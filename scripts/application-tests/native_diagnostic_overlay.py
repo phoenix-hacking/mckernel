@@ -24,8 +24,8 @@ BASE_SIZE = 11846636
 BASE_CPIO_SHA256 = "4f36958f2f0e4c6684d3adbd2b8b5860693298b332d11e8bb9e47a063420b265"
 BASE_CPIO_SIZE = 38358016
 PAYLOAD_SHA256 = "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
-OVERLAY_NAMES = ("apps", "case", "case/work", "init", "apps/app")
-OVERLAY_MODES = (0o040755, 0o040755, 0o040755, 0o100755, 0o100755)
+OVERLAY_NAMES = ("apps", "case", "case/work", "init", "apps/app", "bin/mcexec")
+OVERLAY_MODES = (0o040755, 0o040755, 0o040755, 0o100755, 0o100755, 0o100755)
 MAX_SOURCE_SIZE = 256 * 1024 * 1024
 MAX_CPIO_SIZE = 512 * 1024 * 1024
 _DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
@@ -470,11 +470,12 @@ def _gzip(data):
     return out.getvalue()
 
 
-def build_overlay(base, payload, collector, output, *, collector_sha256,
+def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256, mcexec_sha256,
                   base_sha256, base_size, base_cpio_sha256, base_cpio_size):
     base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
         base_sha256, base_size, base_cpio_sha256, base_cpio_size)
     collector_sha256 = _collector_hash(collector_sha256)
+    mcexec_sha256 = _collector_hash(mcexec_sha256)
     try:
         with contextlib.ExitStack() as stack:
             target = _Path(output)
@@ -485,11 +486,11 @@ def build_overlay(base, payload, collector, output, *, collector_sha256,
                 pass
             else:
                 _die("output already exists")
-            sources = [_Source(path, stack) for path in (base, payload, collector)]
+            sources = [_Source(path, stack) for path in (base, payload, collector, mcexec)]
             identities = [(s.identity["st_dev"], s.identity["st_ino"]) for s in sources]
             if len(set(identities)) != len(identities):
                 _die("source inputs alias one another")
-            br, pr, cr = (s.data for s in sources)
+            br, pr, cr, mr = (s.data for s in sources)
             original = _authenticate_base(br, base_sha256=base_sha256, base_size=base_size,
                                           base_cpio_sha256=base_cpio_sha256,
                                           base_cpio_size=base_cpio_size)
@@ -497,10 +498,12 @@ def build_overlay(base, payload, collector, output, *, collector_sha256,
                 _die("payload hash mismatch")
             if _digest(cr) != collector_sha256:
                 _die("collector hash mismatch")
+            if _digest(mr) != mcexec_sha256:
+                _die("mcexec hash mismatch")
             _check_collector(cr)
             overlay = _archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
                                 ("case/work", b"", 0o040755), ("init", cr, 0o100755),
-                                ("apps/app", pr, 0o100755)))
+                                ("apps/app", pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
             final_map = replay(br, overlay, base_sha256=base_sha256, base_size=base_size,
                                base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
             raw = _gzip(original + overlay)
@@ -550,11 +553,12 @@ def build_overlay(base, payload, collector, output, *, collector_sha256,
                     _identity(os.fstat(fd)) != output_identity or
                     os.fstat(fd).st_nlink != 1):
                 _die("output identity changed during final source recheck")
-            return {"sources": dict(zip(("base", "payload", "collector"),
+            return {"sources": dict(zip(("base", "payload", "collector", "mcexec"),
                                         (s.manifest() for s in sources))),
                     "base_sha256": _digest(br), "base_cpio_sha256": _digest(original),
                     "base_cpio_size": len(original), "payload_sha256": _digest(pr),
-                    "collector_sha256": _digest(cr), "overlay_sha256": _digest(overlay),
+                    "collector_sha256": _digest(cr), "mcexec_sha256": _digest(mr),
+                    "overlay_sha256": _digest(overlay),
                     "output_sha256": _digest(raw), "output_identity": output_identity,
                     "size": len(raw), "final_map": final_map}
     except OSError as exc:
@@ -563,9 +567,10 @@ def build_overlay(base, payload, collector, output, *, collector_sha256,
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
-    for name in ("base", "payload", "collector", "output"):
+    for name in ("base", "payload", "collector", "mcexec", "output"):
         parser.add_argument(name)
     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
+    parser.add_argument("--mcexec-sha256", required=True, type=_collector_hash)
     parser.add_argument("--base-sha256", required=True,
                         type=lambda v: _base_hash_arg(v, "base SHA256"))
     parser.add_argument("--base-size", required=True, type=_base_size_arg)
@@ -574,8 +579,9 @@ def main(argv=None):
     parser.add_argument("--base-cpio-size", required=True,
                         type=_base_cpio_size_arg)
     args = parser.parse_args(argv)
-    print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.output,
+    print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec, args.output,
                                    collector_sha256=args.collector_sha256,
+                                   mcexec_sha256=args.mcexec_sha256,
                                    base_sha256=args.base_sha256, base_size=args.base_size,
                                    base_cpio_sha256=args.base_cpio_sha256,
                                    base_cpio_size=args.base_cpio_size), sort_keys=True))

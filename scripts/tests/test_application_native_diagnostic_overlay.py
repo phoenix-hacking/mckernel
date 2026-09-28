@@ -49,6 +49,7 @@ def base_archive():
                   member("dev/console", mode=0o020600, rdevmajor=5, rdevminor=1),
                   member("dev/null", mode=0o020666, rdevmajor=1, rdevminor=3),
                   member("bin", mode=0o040755, nlink=2),
+                  member("bin/mcexec", b"stale launcher"),
                   member("bin/sh", b"busybox", mode=0o120777),
                   member("bin/busybox", b"preserved bytes"))
     return raw + bytes(-len(raw) % 512)
@@ -83,23 +84,27 @@ def fixture(raw=None):
         (directory / "base.gz").write_bytes(compressed)
         (directory / "app").write_bytes(b"payload")
         (directory / "collector").write_bytes(collector_elf())
+        (directory / "mcexec").write_bytes(b"reviewed mcexec")
         yield directory, raw
 
 
 def build(directory, name="out.gz", **kwargs):
     kwargs.setdefault("collector_sha256", digest(collector_elf()))
+    kwargs.setdefault("mcexec_sha256", digest(b"reviewed mcexec"))
     kwargs.setdefault("base_sha256", M.BASE_SHA256)
     kwargs.setdefault("base_size", M.BASE_SIZE)
     kwargs.setdefault("base_cpio_sha256", M.BASE_CPIO_SHA256)
     kwargs.setdefault("base_cpio_size", M.BASE_CPIO_SIZE)
     return M.build_overlay(directory / "base.gz", directory / "app",
-                           directory / "collector", directory / name, **kwargs)
+                           directory / "collector", directory / "mcexec",
+                           directory / name, **kwargs)
 
 
 def overlay():
     return M._archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
                        ("case/work", b"", 0o040755), ("init", b"collector", 0o100755),
-                       ("apps/app", b"payload", 0o100755)))
+                       ("apps/app", b"payload", 0o100755),
+                       ("bin/mcexec", b"reviewed mcexec", 0o100755)))
 
 
 class OverlayTests(unittest.TestCase):
@@ -116,18 +121,22 @@ class OverlayTests(unittest.TestCase):
             self.assertEqual(unpacked[:len(raw)], raw)
             appended, _ = M.parse_newc(unpacked[len(raw):])
             self.assertEqual([r["name"] for r in appended],
-                             ["apps", "case", "case/work", "init", "apps/app"])
+                             ["apps", "case", "case/work", "init", "apps/app", "bin/mcexec"])
             self.assertEqual([r["mode"] for r in appended],
-                             [0o040755, 0o040755, 0o040755, 0o100755, 0o100755])
+                             [0o040755, 0o040755, 0o040755, 0o100755, 0o100755, 0o100755])
             self.assertEqual(appended[3]["data"], (d / "collector").read_bytes())
             self.assertEqual(appended[4]["data"], b"payload")
+            self.assertEqual(appended[5]["data"], b"reviewed mcexec")
+            self.assertEqual(result["mcexec_sha256"], digest(b"reviewed mcexec"))
+            self.assertEqual(result["sources"]["mcexec"]["sha256"], digest(b"reviewed mcexec"))
             for record in appended:
                 self.assertEqual((record["uid"], record["gid"], record["mtime"]), (0, 0, 0))
             self.assertEqual(result["final_map"]["bin/busybox"]["sha256"], digest(b"preserved bytes"))
+            self.assertEqual(result["final_map"]["bin/mcexec"]["sha256"], digest(b"reviewed mcexec"))
             self.assertEqual(result["final_map"]["dev/console"]["rdevmajor"], 5)
             self.assertEqual(result["final_map"]["dev/null"]["rdevminor"], 3)
             self.assertEqual(result["base_cpio_sha256"], digest(raw))
-            for name, filename in (("base", "base.gz"), ("payload", "app"), ("collector", "collector")):
+            for name, filename in (("base", "base.gz"), ("payload", "app"), ("collector", "collector"), ("mcexec", "mcexec")):
                 source = result["sources"][name]
                 self.assertEqual(source["identity"], M._identity((d / filename).stat()))
                 self.assertEqual(source["sha256"], digest((d / filename).read_bytes()))
@@ -138,7 +147,7 @@ class OverlayTests(unittest.TestCase):
         self.assertEqual(M.parse_newc(archive(generated))[0][0]["data"], b"bytes")
 
     def test_multiple_base_archives_and_padding(self):
-        first = archive(member("init", b"first"))
+        first = archive(member("bin", mode=0o040755, nlink=2), member("init", b"first"))
         second = archive(member("init", b"second"), member("keep", b"kept"))
         raw = first + bytes(-len(first) % 512) + second + b"\0" * 12
         with fixture(raw) as (d, original):
@@ -182,7 +191,7 @@ class OverlayTests(unittest.TestCase):
                                                        **{**identity, key: ceiling + 1}))
 
     def test_changed_inputs_rejected(self):
-        for name in ("base.gz", "app", "collector"):
+        for name in ("base.gz", "app", "collector", "mcexec"):
             with self.subTest(name=name), fixture() as (d, _):
                 expected = digest((d / "collector").read_bytes())
                 (d / name).write_bytes(b"changed")
@@ -190,8 +199,15 @@ class OverlayTests(unittest.TestCase):
                     build(d, collector_sha256=expected)
                 self.assertFalse((d / "out.gz").exists())
 
+    def test_stale_or_wrong_mcexec_hash_rejected_before_output(self):
+        with fixture() as (d, _):
+            for expected in (digest(b"stale launcher"), "0" * 64):
+                with self.subTest(expected=expected), self.assertRaisesRegex(M.OverlayError, "mcexec hash mismatch"):
+                    build(d, mcexec_sha256=expected)
+                self.assertFalse((d / "out.gz").exists())
+
     def test_source_mutation_during_compression(self):
-        for name in ("base.gz", "app", "collector"):
+        for name in ("base.gz", "app", "collector", "mcexec"):
             with self.subTest(name=name), fixture() as (d, _):
                 original = M._gzip
                 def mutate(data):
@@ -203,15 +219,16 @@ class OverlayTests(unittest.TestCase):
                 self.assertFalse((d / "out.gz").exists())
 
     def test_source_replacement_same_bytes(self):
-        with fixture() as (d, _):
-            original = M._gzip
-            def replace(data):
-                value = original(data)
-                (d / "new").write_bytes((d / "app").read_bytes())
-                os.replace(d / "new", d / "app")
-                return value
-            with mock.patch.object(M, "_gzip", side_effect=replace), self.assertRaisesRegex(M.OverlayError, "source identity changed"):
-                build(d)
+        for name in ("app", "mcexec"):
+            with self.subTest(name=name), fixture() as (d, _):
+                original = M._gzip
+                def replace(data):
+                    value = original(data)
+                    (d / "new").write_bytes((d / name).read_bytes())
+                    os.replace(d / "new", d / name)
+                    return value
+                with mock.patch.object(M, "_gzip", side_effect=replace), self.assertRaisesRegex(M.OverlayError, "source identity changed"):
+                    build(d)
 
     def test_source_mutation_during_initial_read(self):
         with fixture() as (d, _):
@@ -234,7 +251,7 @@ class OverlayTests(unittest.TestCase):
                 def mutate(fd):
                     original(fd)
                     if stat.S_ISDIR(os.fstat(fd).st_mode) == directory_fsync:
-                        (d / "collector").write_bytes(b"raced after fsync")
+                        (d / "mcexec").write_bytes(b"raced after fsync")
                 with mock.patch.object(M.os, "fsync", side_effect=mutate), self.assertRaisesRegex(M.OverlayError, "source identity changed"):
                     build(d)
                 self.assertTrue((d / "out.gz").exists())
@@ -260,6 +277,11 @@ class OverlayTests(unittest.TestCase):
             os.link(d / "app", d / "collector")
             with self.assertRaisesRegex(M.OverlayError, "source inputs alias"):
                 build(d)
+        with fixture() as (d, _):
+            (d / "mcexec").unlink()
+            os.link(d / "app", d / "mcexec")
+            with self.assertRaisesRegex(M.OverlayError, "source inputs alias"):
+                build(d, mcexec_sha256=digest(b"payload"))
 
     def test_source_symlink_fifo_directory(self):
         for kind in ("symlink", "fifo", "directory"):
@@ -439,12 +461,14 @@ class OverlayTests(unittest.TestCase):
             with fixture(value) as (d, _), self.assertRaisesRegex(M.OverlayError, "ancestor"): build(d)
 
     def test_hardlink_payload_replay_and_ambiguity_rejection(self):
-        raw = archive(member("first", ino=9, nlink=2), member("second", b"shared", ino=9, nlink=2))
+        raw = archive(member("bin", mode=0o040755, nlink=2),
+                      member("first", ino=9, nlink=2), member("second", b"shared", ino=9, nlink=2))
         with fixture(raw) as (d, _):
             result = build(d)
             self.assertEqual(result["final_map"]["first"]["sha256"], digest(b"shared"))
             self.assertEqual(result["final_map"]["second"]["sha256"], digest(b"shared"))
-        raw = archive(member("first", b"one", ino=9, nlink=2), member("second", b"two", ino=9, nlink=2))
+        raw = archive(member("bin", mode=0o040755, nlink=2),
+                      member("first", b"one", ino=9, nlink=2), member("second", b"two", ino=9, nlink=2))
         with fixture(raw) as (d, _), self.assertRaisesRegex(M.OverlayError, "ambiguous newc hardlink"): build(d)
 
     def test_overlay_membership_type_and_canonical_metadata(self):
@@ -525,7 +549,10 @@ class OverlayTests(unittest.TestCase):
     def test_collector_hash_mandatory_and_strict(self):
         with fixture() as (d, _):
             with self.assertRaises(TypeError):
-                M.build_overlay(d / "base.gz", d / "app", d / "collector", d / "out.gz")
+                M.build_overlay(d / "base.gz", d / "app", d / "collector", d / "mcexec", d / "out.gz",
+                                mcexec_sha256=digest(b"reviewed mcexec"),
+                                base_sha256=M.BASE_SHA256, base_size=M.BASE_SIZE,
+                                base_cpio_sha256=M.BASE_CPIO_SHA256, base_cpio_size=M.BASE_CPIO_SIZE)
             for value in (None, 1, "", "0" * 63, "0" * 65, "g" * 64,
                           " " + "0" * 63, "0" * 64 + "\n", "0" * 64):
                 with self.subTest(value=value), self.assertRaises(M.OverlayError):
@@ -535,8 +562,9 @@ class OverlayTests(unittest.TestCase):
 
     def test_cli_requires_valid_collector_hash(self):
         with fixture() as (d, _):
-            paths = [str(d / name) for name in ("base.gz", "app", "collector", "out.gz")]
-            for args in (paths, paths + ["--collector-sha256", "invalid"]):
+            paths = [str(d / name) for name in ("base.gz", "app", "collector", "mcexec", "out.gz")]
+            for args in (paths, paths + ["--collector-sha256", digest(collector_elf())],
+                         paths + ["--collector-sha256", "invalid"]):
                 with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as caught:
                     M.main(args)
                 self.assertEqual(caught.exception.code, 2)
@@ -545,8 +573,9 @@ class OverlayTests(unittest.TestCase):
     def test_cli_rejects_base_size_above_ceiling(self):
         with fixture() as (d, _):
             base = (d / "base.gz").read_bytes()
-            args = [str(d / name) for name in ("base.gz", "app", "collector", "out.gz")]
+            args = [str(d / name) for name in ("base.gz", "app", "collector", "mcexec", "out.gz")]
             args += ["--collector-sha256", digest(collector_elf()),
+                     "--mcexec-sha256", digest(b"reviewed mcexec"),
                      "--base-sha256", digest(base), "--base-size", str(len(base)),
                      "--base-cpio-sha256", digest(gzip.decompress(base)),
                      "--base-cpio-size", str(len(gzip.decompress(base)))]

@@ -46,7 +46,7 @@ FINAL_MEMBERS = {
     "modules/ihk.ko": "ihk.ko", "modules/ihk-smp-x86_64.ko": "ihk-smp-x86_64.ko",
     "modules/mcctrl.ko": "mcctrl.ko",
 }
-OVERLAY_MEMBERS = ("apps", "case", "case/work", "init", "apps/app")
+OVERLAY_MEMBERS = ("apps", "case", "case/work", "init", "apps/app", "bin/mcexec")
 MAP_FIELDS = ("mode", "uid", "gid", "nlink", "mtime", "size", "sha256", "rdevmajor", "rdevminor")
 IDENTITY_FIELDS = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_uid", "st_gid",
                    "st_size", "st_mtime_ns", "st_ctime_ns")
@@ -118,7 +118,7 @@ def _staging(obj, artifacts, modules):
         raise DiagnosticError("malformed overlay manifest") from exc
     _keys(overlay, ("base_cpio_sha256", "base_cpio_size", "base_sha256", "collector_sha256",
                     "final_map", "output_identity", "output_sha256", "overlay_sha256",
-                    "payload_sha256", "size", "sources"))
+                    "payload_sha256", "mcexec_sha256", "size", "sources"))
     _need(type(overlay["base_cpio_size"]) is int and overlay["base_cpio_size"] > 0 and
           type(overlay["base_cpio_sha256"]) is str and SHA.fullmatch(overlay["base_cpio_sha256"]) and
           type(overlay["overlay_sha256"]) is str and SHA.fullmatch(overlay["overlay_sha256"]),
@@ -126,11 +126,12 @@ def _staging(obj, artifacts, modules):
     _need(overlay["base_sha256"] == refs["base_initramfs"]["sha256"] and
           overlay["collector_sha256"] == refs["collector"]["sha256"] and
           overlay["payload_sha256"] == artifacts["payload"]["sha256"] and
+          overlay["mcexec_sha256"] == artifacts["mcexec"]["sha256"] and
           overlay["output_sha256"] == refs["derived_initramfs"]["sha256"] and
           overlay["size"] == refs["derived_initramfs"]["size"], "overlay identity join")
-    _keys(overlay["sources"], ("base", "collector", "payload"))
+    _keys(overlay["sources"], ("base", "collector", "payload", "mcexec"))
     for source, ref in (("base", refs["base_initramfs"]), ("collector", refs["collector"]),
-                        ("payload", artifacts["payload"])):
+                        ("payload", artifacts["payload"]), ("mcexec", artifacts["mcexec"])):
         row = overlay["sources"][source]
         _keys(row, ("path", "sha256", "identity"))
         _keys(row["identity"], IDENTITY_FIELDS)

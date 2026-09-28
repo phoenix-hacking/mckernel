@@ -3999,3 +3999,47 @@ production gates, 350/10,000 points and 0/7 language gates. This work window
 contains one real diagnostic guest and one current mcexec candidate build.
 Whole-OS acceptance remains incomplete; this checkpoint does not resume or
 complete the goal.
+
+Continuation checkpoint 27, 2026-09-28: the current-signal diagnostic image is
+now fully rebound to the reviewed mcexec no-source fastpath without modifying
+the authenticated base. The actual runtime lineage uses the strict concatenated
+overlay, not the older full-tree stager. Overlay and manifest changes pass 93
+focused tests and the fresh six-module closure passes 216/216 in 13.78 seconds.
+Independent source review returns `PASS_SOURCE_READY_FOR_FRESH_OVERLAY`.
+
+Fresh overlay attempt 4 preserves the complete 38,191,104-byte decompressed
+signal base as its exact prefix and appends six canonical members. Independent
+replay proves the only final-map difference from attempt 3 is `bin/mcexec`, from
+stale `b786e9c9...984639` to current `ee1f660b...02d073b`; collector, payload,
+Linux kernel, McKernel image and all modules remain byte-identical. The derived
+initramfs is `19c34476...17fef3f`, 12,395,825 bytes. Raw stderr is empty and the
+artifact review returns `PASS_OVERLAY_ARTIFACT_READY_FOR_STRICT_MANIFEST`.
+
+Strict manifest 3 is `ab290581...a1ecc6` and joins the new overlay source,
+derived image, launcher path/hash/identity and unchanged empty-stderr oracle.
+The owner now binds that exact manifest and diagnostic source; a read-only call
+through its actual `bound_manifest()` succeeds. Independent closure review
+returns `PASS_SOURCE_AND_MANIFEST_READY_FOR_CHECKPOINT`. Old manifests, packets,
+releases, parents and nonces remain immutable and grant no authority to run the
+new image.
+
+The complete broad equivalence suite remains unaccepted for a separate retained
+prerequisite: three IHK Rust helper inputs referenced unconditionally by the
+harness are absent from pinned upstream history and all searched retained
+worktrees. Historical logs prove prior fixture behavior but do not recover exact
+source bytes. Do not skip those modules or treat the focused mcexec harness as
+full equivalence; reconstruct them only against current C bodies and independent
+fixture contracts with fresh review.
+
+Next: (1) commit and fetched-blob verify this source/artifact-binding checkpoint;
+(2) create a never-used short parent and nonce in packet 3 bound to the new
+commit, owner, manifest and derived image; (3) obtain a separate independent
+one-shot execution release; and (4) after fresh capacity, lock, container and
+process checks, execute once and preserve application bytes, raw exit, kernel
+logs, QMP/process identities and teardown. Exact evidence and limits are in
+`docs/verification/stability-native-diagnostic-mcexec-overlay-success-20260928-1.json`.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. This work window
+still contains one real diagnostic guest and one current mcexec build. No new
+runtime or acceptance credit follows from source/image preparation. Whole-OS
+acceptance remains incomplete.

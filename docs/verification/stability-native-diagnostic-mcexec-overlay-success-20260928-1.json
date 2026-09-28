@@ -1,0 +1,106 @@
+{
+  "schema": "mckernel.native-diagnostic-mcexec-overlay-success.v1",
+  "recorded_at": "2026-09-28T08:30:39-07:00",
+  "base_commit": "a60d2a0c2ffe3de4ac8d6c1ba87f9908b9a4ae09",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415"
+  },
+  "observable_behavior": {
+    "defect": "The current-signal diagnostic base embedded stale mcexec b786e9c9...984639, which emitted 58 bytes to application stderr when no preload source was requested.",
+    "invariant": "Keep the authenticated current-signal base, collector, payload, kernel, modules and empty-stderr oracle unchanged while replacing only final bin/mcexec with the reviewed no-source fastpath artifact.",
+    "downstream": "A fresh independently released startup.argv-empty McKernel diagnostic guest"
+  },
+  "source": {
+    "scripts/application-tests/native_diagnostic_overlay.py": "a2d811c1c051644c1b91b4691a0224b96cfaf9572134e3f67800dd01ffc6ac47",
+    "scripts/tests/test_application_native_diagnostic_overlay.py": "d3b28c41b5fc229ca62ec88e90ac5fb00edefbe3ac307b2a3baf44420c759335",
+    "scripts/application-tests/native_diagnostic.py": "b92e6f92084accdaf6e459ee6cf2674b02ad31a7d377a69fe15d5549804823c5",
+    "scripts/tests/test_application_native_diagnostic.py": "bb97971c4b6102b6b5ef262d7562dc3b788f4db69cfe6fc82e379dcc96fbc678",
+    "scripts/application-tests/native_diagnostic_container_owner.py": "e8bd2062ceb30cbd7dc831c29ef0034853b062bece17e368ef7e061713da116f",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "f15fdef9472bfdadbca761db9d060f86c33c17e6808418b1b76580b98b7a6687",
+    "scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "scripts/application-tests/native_diagnostic_backend.py": "ffdde01883c77171d1512769e0c88f2539dda8f7da4bd22ae4e71f69f080a16b",
+    "scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "admission": {
+    "focused_tests": "93 tests passed across overlay and strict-manifest suites",
+    "combined_tests": "216 tests passed across diagnostic, backend, owner, overlay, runner and QMP suites",
+    "combined_evidence": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-mcexec-source-20260928-2",
+    "combined_stderr_sha256": "42886554c264ada8fad1e7a8aa5220dccf63f3acd789acbbac0b35e6f87f85bf",
+    "combined_timing_sha256": "0fdc9e7072ede7f40b1c672ad784e2ec462791e9cf120a5235326d8cf23d2a38",
+    "elapsed_seconds": 13.78,
+    "checks": [
+      "py_compile: PASS",
+      "git diff --check on five changed sources/tests: PASS",
+      "actual owner bound_manifest against manifest 3: PASS"
+    ]
+  },
+  "mcexec": {
+    "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+    "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "size": 453352,
+    "mode": "0755",
+    "closure": "Same /lib64/ld-linux-x86-64.so.2 interpreter and librt/libnuma/libpthread/libc dependencies as the stale base launcher"
+  },
+  "overlay": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-4",
+    "command_sha256": "b04fe6ad02f823be764b53310752105b0f51b5d6cf937099810573f007d1e8c5",
+    "manifest_sha256": "af324719e9f1cf985ced4b6621fb863479e56d5f04829944b79f1ccdbfb7139b",
+    "derived_initramfs": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-overlay-20260928-4/initramfs.cpio.gz",
+      "sha256": "19c3447625ff80c1bd9922a7e68cb0f54f7875b37546e0e0ec483cfd617fef3f",
+      "size": 12395825,
+      "mode": "0600"
+    },
+    "result": "PASS_OVERLAY_ARTIFACT_READY_FOR_STRICT_MANIFEST",
+    "replay": "The 38191104-byte decompressed base is an exact prefix; six canonical members append apps, case, case/work, init, apps/app and bin/mcexec. Replay has 61 final members.",
+    "delta_from_attempt_3": "Only final bin/mcexec changes; collector, payload, Linux kernel, McKernel image and all modules remain byte-identical. No final-map member retains the stale launcher digest.",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "elapsed_seconds": 7.78
+  },
+  "strict_manifest": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-manifest-20260928-3",
+    "builder_sha256": "090219cb0905132e1bc44dab694e2738d2fc89e8259c76184d9cece6b8a27d15",
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-manifest-20260928-3/manifest.json",
+    "sha256": "ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6",
+    "size": 4473,
+    "mode": "0600",
+    "result": "PASS_SOURCE_AND_MANIFEST_READY_FOR_CHECKPOINT",
+    "owner_bound_stdout_sha256": "4b307bd89e6fd382efb286326d9818217652a791fdb8e81b692be61ccd1f8f90"
+  },
+  "reviews": [
+    "PASS_SOURCE_READY_FOR_FRESH_OVERLAY: independent ownership/TOCTOU/newc/manifest review",
+    "PASS_OVERLAY_ARTIFACT_READY_FOR_STRICT_MANIFEST: independent byte replay and delta review",
+    "PASS_SOURCE_AND_MANIFEST_READY_FOR_CHECKPOINT: independent owner/source/artifact closure review"
+  ],
+  "preserved_failure": {
+    "record": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-2.json",
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-2/attempt-d5c0db79dea44675abeb1c43c7187add",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-2.owner-d5c0db79dea44675abeb1c43c7187add",
+    "oracle": "unchanged empty stderr",
+    "reuse": "forbidden"
+  },
+  "broad_equivalence_limit": {
+    "status": "UNACCEPTED",
+    "finding": "The three unconditionally referenced IHK Rust helper files are absent from pinned IHK history and all searched retained worktrees; historical logs do not recover their exact bytes.",
+    "next": "Reconstruct only against current C bodies plus independently authored fixture contracts, with separate review; never skip those modules or claim the focused mcexec harness is full equivalence."
+  },
+  "next_tasks": [
+    "Commit and fetched-blob verify this source/manifest checkpoint",
+    "Prepare a fresh short parent and nonce in a new packet bound to the pushed commit, owner e8bd2062..., manifest ab290581..., overlay 19c34476... and unchanged runtime profile",
+    "Obtain a separate independent exact one-shot execution release",
+    "Reconcile capacity, root lock, Docker/container absence and process identities immediately before executing once",
+    "Preserve application stdout/stderr bytes, raw exit, kernel/serial/debug/QMP, process identities and exact teardown"
+  ],
+  "acceptance": {
+    "runtime_acceptance": false,
+    "application_credit": false,
+    "production_gate_credit": false,
+    "real_guest_applications_this_window": 1,
+    "current_candidate_builds_this_window": 1,
+    "official_counters": "0/273 applications; 2/4 narrow fault modes; 6/130 production gates; 350/10000 points; 0/7 language gates"
+  },
+  "whole_os_complete": false
+}

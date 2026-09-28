@@ -107,12 +107,14 @@ class NativeDiagnosticTests(unittest.TestCase):
                    "output_identity": ND._identity(staging["derived_initramfs"]["path"]),
                    "output_sha256": staging["derived_initramfs"]["sha256"],
                    "overlay_sha256": "b" * 64, "payload_sha256": refs["payload"]["sha256"],
+                   "mcexec_sha256": refs["mcexec"]["sha256"],
                    "size": staging["derived_initramfs"]["size"],
                    "sources": {name: {"path": ref["path"], "sha256": ref["sha256"],
                                          "identity": ND._identity(ref["path"])}
                                for name, ref in (("base", staging["base_initramfs"]),
                                                  ("collector", staging["collector"]),
-                                                 ("payload", refs["payload"]))}}
+                                                 ("payload", refs["payload"]),
+                                                 ("mcexec", refs["mcexec"]))}}
         self.overlay = overlay
         overlay_path = self.root / "overlay_manifest.json"
         overlay_path.write_text(json.dumps(overlay)); overlay_path.chmod(0o644)
@@ -295,6 +297,25 @@ class NativeDiagnosticTests(unittest.TestCase):
                 value["staging"]["overlay_manifest"] = self.ref("overlay_manifest")
                 self.manifest_path.write_text(json.dumps(value))
                 with self.assertRaises(ND.DiagnosticError): ND.load_manifest(str(self.manifest_path))
+
+    def test_mcexec_overlay_hash_path_identity_and_membership_must_join(self):
+        mutations = (
+            ("top-level hash", lambda overlay: overlay.update(mcexec_sha256="0" * 64)),
+            ("source hash", lambda overlay: overlay["sources"]["mcexec"].update(sha256="0" * 64)),
+            ("source path", lambda overlay: overlay["sources"]["mcexec"].update(path=str(self.files["payload"]))),
+            ("source identity", lambda overlay: overlay["sources"]["mcexec"]["identity"].update(st_ino=-1)),
+            ("final membership", lambda overlay: overlay["final_map"].pop("bin/mcexec")),
+        )
+        for label, mutate in mutations:
+            with self.subTest(change=label):
+                overlay = copy.deepcopy(self.overlay)
+                mutate(overlay)
+                self.files["overlay_manifest"].write_text(json.dumps(overlay))
+                value = copy.deepcopy(self.raw)
+                value["staging"]["overlay_manifest"] = self.ref("overlay_manifest")
+                self.manifest_path.write_text(json.dumps(value))
+                with self.assertRaises(ND.DiagnosticError):
+                    ND.load_manifest(str(self.manifest_path))
 
     def test_stale_output_rejected_before_factory(self):
         for name in ("qmp.sock", "qemu.stdout", "qemu.stderr", "qmp.transcript.json"):
