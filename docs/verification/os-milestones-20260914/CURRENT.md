@@ -3755,3 +3755,28 @@ create a fresh attempt and run one diagnostic guest. Exact evidence and limits
 are in
 `docs/verification/stability-native-diagnostic-container-owner-source-success-20260928-1.json`.
 Official counters remain unchanged; whole-OS acceptance remains incomplete.
+
+Continuation checkpoint 19, 2026-09-28: the first exact one-shot packet was
+rejected before execution. Its QMP pathname was 128 bytes, beyond Linux's 107
+usable pathname bytes. It also required process/cgroup identities that the then
+current runtime did not persist and incorrectly described the outer post-cleanup
+write/fsync as bounded. No root, Docker, QEMU or guest command ran; rejected
+packet SHA256 `82e52a97...` and all findings are preserved.
+
+The evidence gap is now implemented. Before ownership transfer the backend
+captures positive QEMU PID, PGID, session and robust `/proc` starttime and keeps
+those primitives through exact reap; evaluation rejects missing or mismatched
+identity. The outer owner queues its own identity, root-lock device/inode/mode/
+owner identity and exact cgroup profile without disk I/O while ownership is
+live. The owner binds the changed diagnostic/backend bytes. After one preserved
+observer-command typo, the corrected six-module suite passes 211/211 tests.
+Independent review returns `PASS_IDENTITY_SOURCE_READY_FOR_PACKET_CORRECTION`
+for diagnostic `0ab36565...`, backend `ffdde018...` and owner `4ed6f849...`.
+
+Next use a shorter fresh parent, prove `qmp.sock` is at most 107 bytes, update
+the packet's exact source identities and explicitly state that only inner
+capture/publication is bounded while the safe post-retirement outer flush can
+block. Then obtain a fresh independent execution release. Evidence is in
+`docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json`
+and the rejected review record. Official counters remain unchanged; no real
+guest application or current kernel build has run in this continuation.

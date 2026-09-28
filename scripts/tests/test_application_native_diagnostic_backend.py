@@ -110,10 +110,26 @@ class BackendTests(unittest.TestCase):
         self.sockpath = str(Path(self.temp.name) / "qmp.sock")
         self.socket_stat = os.stat_result((stat.S_IFSOCK | 0o600, 123, 456, 1,
                                            os.getuid(), os.getgid(), 0, 0, 0, 0))
+        # Most backend tests use a non-running fake Popen result; identity
+        # capture itself is covered by the focused identity tests.
+        self._identity_patch = mock.patch.object(
+            backend, "_capture_process_identity",
+            return_value=(12345, 12345, 12345, 1))
+        self._identity_patch.start()
+        self.addCleanup(self._identity_patch.stop)
 
     def qmp(self, sock):
         return backend.QmpBackend(self.sockpath, socket_factory=lambda *args: sock,
                                   stat_factory=lambda path: self.socket_stat)
+
+    def test_process_stat_parser_rejects_malformed_and_keeps_comm_parentheses(self):
+        good = b"42 (name with ) paren) S " + b" ".join(str(n).encode() for n in range(1, 19)) + b" 98765 23\n"
+        with mock.patch.object(backend.Path, "read_bytes", return_value=good):
+            self.assertEqual(backend._proc_starttime_ticks(42), 98765)
+        for raw in (b"bad", b"42 (x) S 1 2\n", b"42 (x) S " + b" ".join([b"1"] * 18) + b" nope\n"):
+            with self.subTest(raw=raw), mock.patch.object(backend.Path, "read_bytes", return_value=raw):
+                with self.assertRaises(ValueError):
+                    backend._proc_starttime_ticks(42)
 
     def test_direct_popen_exact_arguments_and_no_inherited_environment(self):
         calls = []

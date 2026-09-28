@@ -36,8 +36,8 @@ QEMU_SHA256 = "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
 QEMU_VERSION = "QEMU emulator version 10.1.0"
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
-    REPO + "/scripts/application-tests/native_diagnostic.py": "8f0d4cf1d98bf0c5fac695346f8204518cd6616302dc28994cf2b375aa4cd5a8",
-    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "1c71b163d7e5eb15b09b5054f45b51974bcc9dcd0ddbcded879b44f2a6ba840f",
+    REPO + "/scripts/application-tests/native_diagnostic.py": "0ab36565fe4b7019baa66398c4f5cb08801143322ea9e21c12916250278ef02d",
+    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "ffdde01883c77171d1512769e0c88f2539dda8f7da4bd22ae4e71f69f080a16b",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }
 CGROUP = {
@@ -145,6 +145,54 @@ def regular(path, maximum=LIMIT):
 
 def _digest(path):
     return hashlib.sha256(regular(path, 256 * 1024 * 1024)).hexdigest()
+
+
+def _proc_starttime(pid):
+    """Return the kernel start-time field from /proc/PID/stat.
+
+    The comm field may contain spaces and closing parentheses, so splitting
+    on whitespace alone is not an identity check.  A malformed record is a
+    hard failure; an absent /proc record is reported by the caller as
+    unavailable.
+    """
+    # procfs stat metadata is inherently volatile (notably ctime/size), so
+    # use a bounded descriptor read rather than regular()'s disk-file
+    # identity check.  The record itself is validated below.
+    path = "/proc/%d/stat" % pid
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW)
+        try:
+            raw = os.read(fd, 4097)
+        finally:
+            os.close(fd)
+    except OSError:
+        raise
+    need(len(raw) <= 4096, "malformed owner /proc stat")
+    try:
+        text = raw.decode("ascii")
+    except UnicodeDecodeError as exc:
+        raise OwnerError("malformed owner /proc stat") from exc
+    close = text.rfind(")")
+    need(close > 0 and text.startswith(str(pid) + " ("), "malformed owner /proc stat")
+    fields = text[close + 2:].split()
+    # The suffix starts at field 3; field 22 (starttime) is offset 19.
+    need(len(fields) > 19 and fields[19].isdigit(), "malformed owner /proc stat")
+    return int(fields[19])
+
+
+def _outer_identity():
+    pid = os.getpid()
+    need(type(pid) is int and pid > 0, "invalid owner pid")
+    identity = {"pid": pid, "pgid": os.getpgid(pid), "sid": os.getsid(pid)}
+    for key in ("pgid", "sid"):
+        need(type(identity[key]) is int and identity[key] > 0, "invalid owner process identity")
+    try:
+        identity["proc_starttime"] = _proc_starttime(pid)
+    except OSError:
+        # Some constrained environments do not expose /proc.  Retain the
+        # process-group identity and make the absence explicit.
+        identity["proc_starttime"] = None
+    return identity
 
 
 def private_parent(path):
@@ -430,6 +478,10 @@ class DiagnosticOwner:
         self.pending_bytes = 0
         self.flushing = False
         self.signal_number = None
+        self.outer_identity = None
+        self.lock_identity = None
+        self.cgroup_profile = None
+        self.owner_queued = False
         self.owner_sha = _digest(SELF)
 
     def _remember(self, exc):
@@ -455,6 +507,18 @@ class DiagnosticOwner:
 
     def _save(self, name, value):
         self._queue(self.evidence / name, (_json(value) + "\n").encode())
+
+    def _queue_owner(self):
+        if self.owner_queued:
+            return
+        need(self.outer_identity is not None, "owner identity unavailable")
+        self._save("owner.json", {
+            "owner_sha256": self.owner_sha, "name": self.name, "nonce": self.nonce,
+            "attempt": str(self.attempt), "application_acceptance": False,
+            "outer": self.outer_identity, "lock": self.lock_identity,
+            "cgroup_profile": self.cgroup_profile,
+        })
+        self.owner_queued = True
 
     def _flush(self):
         """Only retired owners may enter a potentially blocking filesystem."""
@@ -665,11 +729,14 @@ class DiagnosticOwner:
         self.diagnostic, self.manifest = bound_manifest(manifest)
         need(_digest(IMAGE_RECORD) == IMAGE_RECORD_SHA256, "image record identity")
         retained = one(regular(IMAGE_RECORD))
+        profile = {}
         for path, value in CGROUP.items():
             # cgroup pseudo-files advertise st_size=0 despite readable content.
             with open(path, "rb") as stream:
                 raw = stream.read(4097)
             need(len(raw) <= 4096 and raw.decode().strip() == value, "cgroup profile drift")
+            profile[path] = value
+        self.cgroup_profile = profile
         return retained
 
     def _acquire(self):
@@ -678,6 +745,9 @@ class DiagnosticOwner:
             info = os.fstat(self.lock)
             need(stat.S_ISREG(info.st_mode) and info.st_uid == 0 and info.st_nlink == 1, "root regular development lock")
             fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            self.lock_identity = {"dev": info.st_dev, "ino": info.st_ino,
+                                  "mode": stat.S_IMODE(info.st_mode), "nlink": info.st_nlink,
+                                  "uid": info.st_uid, "gid": info.st_gid}
         except BaseException:
             os.close(self.lock)
             self.lock = None
@@ -770,13 +840,12 @@ class DiagnosticOwner:
     def run(self, *, manifest=MANIFEST, deadline=360):
         need(type(deadline) in (int, float) and math.isfinite(deadline) and 330 <= deadline <= 600, "outer deadline must exceed inner cleanup")
         retained = self._preflight(manifest)
+        self.outer_identity = _outer_identity()
         # The evidence sibling is outside the only writable bind mount.
         self.evidence.mkdir(mode=0o700)
         info = self.evidence.stat()
         need(info.st_uid == os.geteuid() and stat.S_IMODE(info.st_mode) == 0o700,
              "exclusive owner evidence identity")
-        self._save("owner.json", {"owner_sha256": self.owner_sha, "name": self.name,
-                   "nonce": self.nonce, "attempt": str(self.attempt), "application_acceptance": False})
         started = None
         try:
             # Until the lookup completes, a previous exact owner may exist.
@@ -786,6 +855,9 @@ class DiagnosticOwner:
                 self._acquire()
             finally:
                 signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+            # Queue the complete ownership record only after the root lock is
+            # held.  This remains memory-only until verified retirement.
+            self._queue_owner()
             existing = self._lookup()
             if existing is not None:
                 self.container = existing["Id"]
@@ -831,6 +903,13 @@ class DiagnosticOwner:
             else:
                 # Acquisition failed; we have no authority to assert absence.
                 self.absent = False
+            if not self.owner_queued:
+                try:
+                    # Preserve process/cgroup identity even when lock
+                    # acquisition itself failed; no lock claim is recorded.
+                    self._queue_owner()
+                except BaseException as exc:
+                    self._remember(exc)
             if self.absent:
                 try:
                     self._release()

@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.native-diagnostic-identity-source-success.v1",
+  "recorded_at": "2026-09-28T07:43:00-07:00",
+  "base_commit": "6898d7ef857fe64bfb43e7ed2c1c73c40c4abb78",
+  "decision": "PASS_IDENTITY_SOURCE_READY_FOR_PACKET_CORRECTION",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic.py": "0ab36565fe4b7019baa66398c4f5cb08801143322ea9e21c12916250278ef02d",
+    "scripts/application-tests/native_diagnostic_backend.py": "ffdde01883c77171d1512769e0c88f2539dda8f7da4bd22ae4e71f69f080a16b",
+    "scripts/application-tests/native_diagnostic_container_owner.py": "4ed6f8498b99f5df7e8203bad440e1e9d722a2d7b343e6fcb3de3fe9acc6b3d3",
+    "scripts/tests/test_application_native_diagnostic.py": "fed23a95a26df2f8ed7c9f9ef4ac9da9ac5dd4e325c7197f90aba60dc6e510a3",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "cc881a36f4e5cc6985c7d55fcb8de4e491139fd6e2e78ba7dbc9405d688481bb",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "0ae229cca33b0d62aa952a3f62e856d4c296edfbaf27c48e6e55e1fabc959960"
+  },
+  "integration_test": {
+    "result": "211/211 PASS under host Anaconda Python 3.9",
+    "raw_stderr": "/home/holden/mckernel-work/scratch/native-diagnostic-identity-source-20260928-2/unittest.stderr",
+    "raw_stderr_sha256": "b10a8eff3f61e54fbc845749752e7a24dea674f46ec9abbcb6494d7992729e3d",
+    "py_compile": "PASS",
+    "original_observer_failure": "/home/holden/mckernel-work/scratch/native-diagnostic-identity-source-20260928-1",
+    "original_failure_reason": "The first combined command named a nonexistent scripts.tests.test_application_qmp_capture module; no production/source failure occurred and the corrected command used scripts.tests.test_qmp_capture."
+  },
+  "verified_behavior": [
+    "After Popen and before ownership transfer, the backend captures positive QEMU PID, PGID, session ID and robustly parsed /proc starttime; PID, PGID and session must match the new-session leader",
+    "Capture or transfer failure follows existing TERM, WNOWAIT observation, KILL and exact reap recovery while preserving the original error",
+    "The lifecycle retains primitive QEMU identity after exact reap and the evaluator rejects missing, malformed or mismatched identity",
+    "The outer owner queues its positive process identity, acquired root-lock device/inode/mode/link/owner identity and exact validated cgroup values in memory",
+    "Outer evidence publication remains deferred until authenticated container absence and lock release",
+    "The owner source binds the new diagnostic and backend hashes"
+  ],
+  "limitations": [
+    "Tests establish parser/schema and Python-child ownership behavior, not actual QEMU identity capture",
+    "QEMU identity reaches the final result only on successful evaluation; failure paths retain their existing raw process/capture evidence",
+    "Outer starttime explicitly permits null if procfs is unavailable; the actual packet must require a non-null value on this host",
+    "Uncertain create or client retirement intentionally prevents evidence flush and retains the live owner/lock identity",
+    "This is source readiness only, not execution release or OS/application acceptance"
+  ],
+  "next_action": "Shorten the attempt root so qmp.sock is at most 107 bytes, update all packet source hashes and evidence limits, then obtain a fresh independent one-shot execution review."
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "mckernel.native-diagnostic-execution-review-failure.v1",
+  "recorded_at": "2026-09-28T07:32:00-07:00",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-1.md",
+  "rejected_packet_sha256": "82e52a977d9b5835733e73a0fa2e44dd0a644331ea176c1403e91cbeccc1a7a2",
+  "decision": "BLOCK_EXECUTION_RELEASE",
+  "findings": [
+    "The exact QMP socket pathname was 128 bytes, exceeding Linux sockaddr_un.sun_path's 107 usable pathname bytes",
+    "The packet required process and effective-cgroup evidence but the reviewed runtime did not persist QEMU, owner, root-lock or cgroup identities",
+    "The packet overstated evidence-write bounds: outer post-retirement write/fsync is synchronous and may block after absence and lock release"
+  ],
+  "correction": [
+    "Use a shorter fresh parent and explicitly prove qmp.sock pathname length at most 107 bytes",
+    "Bind independently reviewed source that retains QEMU and outer owner/lock/cgroup identities",
+    "State that inner capture/publication operations are bounded but the outer post-retirement flush has no wall deadline"
+  ],
+  "execution_performed": false,
+  "acceptance_credit": false
+}

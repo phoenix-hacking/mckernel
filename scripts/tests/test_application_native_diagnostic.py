@@ -55,6 +55,8 @@ class Process:
         if self.never_reap or (self.stuck and "kill" not in self.calls):
             raise subprocess.TimeoutExpired("fake", timeout)
         return 0
+    def process_identity(self):
+        return {"pid": 12345, "pgid": 12345, "sid": 12345, "starttime_ticks": 1}
 
 
 class Qmp:
@@ -154,7 +156,9 @@ class NativeDiagnosticTests(unittest.TestCase):
 
     def observation(self, report=None):
         return {"serial": self.serial(report), "debugcon": "guest log", "qmp": {"status": "shutdown"},
-                "teardown": True, "started_at": 1, "finished_at": 2, "deadline": 3}
+                "teardown": True, "started_at": 1, "finished_at": 2, "deadline": 3,
+                "process_identity": {"pid": 12345, "pgid": 12345, "sid": 12345,
+                                      "starttime_ticks": 1}}
 
     def attempt(self):
         self.counter += 1
@@ -500,6 +504,24 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertEqual(result["guest_report"]["raw_wait_status"], 37 << 8)
         self.assertIn("QEMU stdout", (attempt / "qemu.stdout").read_text())
         self.assertEqual(process.calls, ["terminate", "wait", "communicate"])
+
+    def test_evaluate_rejects_malformed_missing_and_aliased_process_identity(self):
+        base = self.observation()
+        variants = []
+        missing = dict(base); del missing["process_identity"]; variants.append(missing)
+        malformed = dict(base); malformed["process_identity"] = {"pid": 1}; variants.append(malformed)
+        aliased = dict(base); aliased["process_identity"] = {
+            "pid": 1, "pgid": 2, "sid": 1, "starttime_ticks": 3}; variants.append(aliased)
+        for observation in variants:
+            with self.subTest(observation=observation):
+                with self.assertRaises(ND.DiagnosticError):
+                    ND.evaluate(self.manifest, observation)
+
+    def test_evaluate_uses_retained_identity_after_reap_without_procfs(self):
+        observation = self.observation()
+        with mock.patch("pathlib.Path.read_bytes", side_effect=AssertionError("post-reap procfs read")):
+            result = ND.evaluate(self.manifest, observation)
+        self.assertEqual(result["observation"]["process_identity"]["starttime_ticks"], 1)
 
     def test_final_capture_includes_teardown_warnings(self):
         for log in ("serial", "debugcon"):

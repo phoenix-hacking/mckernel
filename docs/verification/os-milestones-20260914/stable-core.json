@@ -114,6 +114,7 @@
     ,"native_diag_overlay": "docs/verification/stability-native-diagnostic-overlay-success-20260928-1.json"
     ,"native_diag_closure": "docs/verification/stability-native-diagnostic-closure-success-20260928-2.json"
     ,"native_diag_owner": "docs/verification/stability-native-diagnostic-container-owner-source-success-20260928-1.json"
+    ,"native_diag_identity": "docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -513,8 +514,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The Python 3.9-safe backend and native diagnostic runner/lifecycle pass the final 164-test combined suite. The authenticated current-signal overlay and manifest reconcile exact current module/image, collector, payload and derived initramfs bytes. The fail-closed outer container owner passes 62 local/fake-backend tests and independent ownership review returns PASS_SOURCE_READY_FOR_EXACT_EXECUTION_PACKET: unresolved creates and unreaped clients retain the lease. No QEMU or McKernel guest has run, and source/byte review is not execution authority.",
-      "next_check": "Bind the exact reviewed owner, committed runner/lifecycle/backend/overlay, manifest, container QEMU, initramfs, kernel, modules, deadlines, evidence and cleanup in an independently reviewed execution packet, then run one diagnostic guest only after release.",
+      "result": "The Python 3.9-safe diagnostic stack now passes a 211-test combined suite. The authenticated current-signal overlay/manifest reconcile exact module, image, collector, payload and derived initramfs bytes. The fail-closed owner retains unresolved creates/clients; the backend now retains QEMU PID/PGID/session/starttime and the outer owner queues process, lock and cgroup identity. Independent review returns PASS_IDENTITY_SOURCE_READY_FOR_PACKET_CORRECTION. No QEMU or McKernel guest has run, and source/byte review is not execution authority.",
+      "next_check": "Shorten the exact attempt root to satisfy the 107-byte QMP pathname limit, correct source hashes and outer-writer limits in the packet, obtain independent execution release, then run one diagnostic guest only after release.",
       "evidence": [
         "history",
         "plan",
@@ -524,7 +525,8 @@
         "native_diag_collector",
         "native_diag_overlay",
         "native_diag_closure",
-        "native_diag_owner"
+        "native_diag_owner",
+        "native_diag_identity"
       ],
       "depends_on": []
     },

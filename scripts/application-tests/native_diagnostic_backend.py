@@ -20,6 +20,37 @@ from qmp_capture import QmpError, QmpSession
 QEMU = "/usr/libexec/qemu-kvm"
 
 
+def _proc_starttime_ticks(pid):
+    """Read Linux ``/proc/<pid>/stat`` field 22 without trusting comm text."""
+    if type(pid) is not int or pid <= 0:
+        raise ValueError("positive process PID required")
+    raw = Path("/proc") / str(pid) / "stat"
+    data = raw.read_bytes()
+    # comm is parenthesized and may itself contain ')'; the final ')' before
+    # the state field is the delimiter, so no whitespace split can be used.
+    close = data.rfind(b")")
+    if close < 0:
+        raise ValueError("malformed process stat")
+    fields = data[close + 1:].split()
+    # fields[0] is state (field 3), hence starttime (field 22) is index 19.
+    if len(fields) <= 19 or not fields[19].isdigit():
+        raise ValueError("malformed process stat starttime")
+    ticks = int(fields[19])
+    if ticks <= 0:
+        raise ValueError("invalid process stat starttime")
+    return ticks
+
+
+def _capture_process_identity(pid):
+    """Capture immutable direct-child identity before ownership transfer."""
+    pgid = os.getpgid(pid)
+    sid = os.getsid(pid)
+    starttime_ticks = _proc_starttime_ticks(pid)
+    if (type(pgid) is not int or type(sid) is not int or pgid != pid or sid != pid):
+        raise ValueError("QEMU process group/session identity mismatch")
+    return pid, pgid, sid, starttime_ticks
+
+
 def _deadline(timeout):
     if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("positive finite timeout required")
@@ -100,13 +131,25 @@ def _has_errno(error, expected):
 class ProcessOwner:
     """Own QEMU's new session and bounded file-backed host streams."""
 
-    def __init__(self, child, stdout_path, stderr_path, identities=None):
+    def __init__(self, child, stdout_path, stderr_path, identities=None,
+                 process_identity=None):
         self.child = child
         self.pid = child.pid if child is not None else None
         self.stdout_path = Path(stdout_path)
         self.stderr_path = Path(stderr_path)
         self.identities = identities
+        if process_identity is None:
+            self.identity_pid = self.pgid = self.sid = self.starttime_ticks = None
+        else:
+            self.identity_pid, self.pgid, self.sid, self.starttime_ticks = process_identity
         self.reaped = False
+
+    def process_identity(self):
+        if (type(self.identity_pid) is not int or type(self.pgid) is not int or
+                type(self.sid) is not int or type(self.starttime_ticks) is not int):
+            raise RuntimeError("QEMU process identity unavailable")
+        return {"pid": self.identity_pid, "pgid": self.pgid, "sid": self.sid,
+                "starttime_ticks": self.starttime_ticks}
 
     def _signal_group(self, signum, *, allow_absent=False):
         # A numeric PGID alone is unsafe after retirement and reuse.  Join it
@@ -293,8 +336,10 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
                                   stdout=out_fd, stderr=err_fd,
                                   shell=False, cwd=cwd, env={"LC_ALL": "C"},
                                   close_fds=True, pass_fds=(), start_new_session=True)
+            process_identity = _capture_process_identity(child.pid)
             owner.child = child
             owner.pid = child.pid
+            owner.identity_pid, owner.pgid, owner.sid, owner.starttime_ticks = process_identity
             _close_fds(fds)
             fds.clear()
             _remaining(deadline)

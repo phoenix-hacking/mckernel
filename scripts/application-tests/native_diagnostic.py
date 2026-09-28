@@ -298,7 +298,15 @@ def build_command(manifest, attempt):
 
 def evaluate(manifest, observation):
     """Validate serial evidence shape; PROTOCOL_PASS is not guest acceptance."""
-    _keys(observation, ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline"))
+    _keys(observation, ("serial", "debugcon", "qmp", "teardown", "started_at", "finished_at", "deadline",
+                        "process_identity"))
+    identity = observation["process_identity"]
+    _keys(identity, ("pid", "pgid", "sid", "starttime_ticks"))
+    _need(all(type(identity[name]) is int and identity[name] > 0
+              for name in ("pid", "pgid", "sid", "starttime_ticks")),
+          "invalid process identity types")
+    _need(identity["pid"] == identity["pgid"] == identity["sid"],
+          "process group/session identity mismatch")
     for name in ("started_at", "finished_at", "deadline"):
         _need(type(observation[name]) in (int, float) and math.isfinite(observation[name]), "host timestamp")
     _need(0 <= observation["started_at"] <= observation["finished_at"] < observation["deadline"], "late completion")
@@ -620,8 +628,12 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
                         data = stream.read(MAX_JSON + 1)
                     _need(len(data) <= MAX_JSON, "capture limit exceeded")
                     texts[name] = data.decode("utf-8", errors="strict")
+                identity_getter = getattr(process, "process_identity", None)
+                _need(callable(identity_getter), "process identity unavailable")
+                process_identity = identity_getter()
                 observation = dict(texts, qmp=terminal, teardown=True, started_at=started,
-                                   finished_at=time.monotonic(), deadline=deadline)
+                                   finished_at=time.monotonic(), deadline=deadline,
+                                   process_identity=process_identity)
                 record = evaluate(manifest, observation)
         except BaseException as exc:
             original = exc

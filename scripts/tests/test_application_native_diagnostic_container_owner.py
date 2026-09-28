@@ -155,6 +155,10 @@ class OwnerTests(unittest.TestCase):
         # still closes a real temporary descriptor after verified absence.
         def acquire():
             self.obj.lock = os.open(str(self.root / "lock"), os.O_CREAT | os.O_RDWR, 0o600)
+            info = os.fstat(self.obj.lock)
+            self.obj.lock_identity = {"dev": info.st_dev, "ino": info.st_ino,
+                                      "mode": owner.stat.S_IMODE(info.st_mode), "nlink": info.st_nlink,
+                                      "uid": info.st_uid, "gid": info.st_gid}
         self.obj._acquire = acquire
         self.addCleanup(self.close_lock)
 
@@ -191,6 +195,33 @@ class OwnerTests(unittest.TestCase):
         report = json.loads((self.obj.evidence / "result.json").read_text())
         self.assertTrue(report["absence_verified"])
         self.assertFalse(report["application_acceptance"])
+        owner_record = json.loads((self.obj.evidence / "owner.json").read_text())
+        self.assertEqual(owner_record["outer"]["pid"], os.getpid())
+        self.assertEqual(owner_record["outer"]["pgid"], os.getpgid(os.getpid()))
+        self.assertEqual(owner_record["outer"]["sid"], os.getsid(os.getpid()))
+        self.assertIsInstance(owner_record["outer"]["proc_starttime"], int)
+        self.assertEqual(set(owner_record["lock"]), {"dev", "ino", "mode", "nlink", "uid", "gid"})
+        self.assertEqual(owner_record["lock"]["mode"], 0o600)
+        self.assertEqual(owner_record["cgroup_profile"], {str(self.root / "cgroup"): "512"})
+
+    def test_owner_identity_rejects_malformed_proc_stat(self):
+        path = self.root / "stat"
+        path.write_bytes((str(os.getpid()) + " (owner) S " + " ".join(["1"] * 18) + " nope\n").encode())
+        fd = os.open(path, os.O_RDONLY)
+        with mock.patch.object(owner.os, "open", return_value=fd):
+            with self.assertRaises(owner.OwnerError):
+                owner._proc_starttime(os.getpid())
+
+    def test_owner_record_is_not_written_until_after_retirement(self):
+        seen = []
+        original = self.obj._write_exclusive
+        def writer(path, raw):
+            if Path(path).name == "owner.json":
+                seen.append((self.obj.absent, self.obj.lock))
+            original(path, raw)
+        self.obj._write_exclusive = writer
+        self.obj.run()
+        self.assertEqual(seen, [(True, None)])
 
     def test_preexisting_exact_owner_is_retired_before_unlock_and_report(self):
         self.fake.exists = True
