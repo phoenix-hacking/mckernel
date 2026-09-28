@@ -4508,3 +4508,37 @@ claim that the partial review released execution. Memory packet 1 remains
 consumed and nonreusable. The invocation still has one real diagnostic guest
 application and zero current-candidate kernel builds; formal counters and the
 whole-OS incomplete status are unchanged.
+
+Continuation checkpoint 43, 2026-09-28: files artifact review resumed from the
+shutdown boundary and completed its sealed audit using a compatible
+`memfd_create` path. All 37 userspace ELFs join across 52 dependencies, 11
+interpreters and 270 required-version/provider definitions. The review then
+found that oracle attempt 3's `set -u` command could mask a failed residual-file
+test with its unconditional final output and exit zero. That attempt remains
+preserved as rejected observer evidence. Fresh unprivileged attempt 4 is the one
+bounded correction: under `set -e` it proves empty pre/post residual inventories,
+exit 37, exact 23-byte `NATIVE_CORE PASS files\n` stdout and empty stderr.
+Independent review returns `PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET`.
+
+Fresh files packet 1 uses parent `ndcf-20260928-2` and nonce
+`30cd836a7be0fd61d4b43fc1042e6afc`; the checkpoint-42 proposed nonce and all
+`ndcf-20260928-1` paths are explicitly forbidden and remain unused. The strict
+manifest is `1987e592...4186`, derived initramfs `100e9989...aa15`, collector
+`44bdb28f...1ab6`, packet `fd9b87fa...6648` and preparation evidence
+`f0206739...ec6`. Independent review returns
+`PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE` for only the release record's exact
+sudo-A command, conditional on pushed/fetched blob verification and fresh live
+capacity, identity, lease, lock, source/artifact, container and path checks.
+No root, container, QEMU or McKernel files application execution has occurred.
+
+Next: commit, push and fetched-blob verify the preparation evidence, exact
+packet and release. Reconcile the same launcher/worker/server identities and
+single heavy lease, remeasure at least 16/12 GiB disk plus packet RAM headroom,
+authenticate the development lock, all runtime bytes and fresh/forbidden paths,
+and prove live owner/QEMU/Docker/container absence. If every released precondition
+holds, create the parent once as uid/gid 1000 mode 0700 and consume the command
+once with no retry. Preserve exact application bytes/status, kernel/serial/QMP,
+all process/container identities and teardown for independent evidence review.
+This invocation still has one real diagnostic guest application and zero
+current-candidate kernel builds; formal counters and whole-OS status are
+unchanged.

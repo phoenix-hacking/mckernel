@@ -1,0 +1,92 @@
+{
+  "schema": "mckernel.stability-artifact-review.v1",
+  "recorded_at": "2026-09-28T10:59:54-07:00",
+  "base_commit": "6ca65c063f3688790b4ecedae149ae291ba7222b",
+  "scope": "source-fixed collector, derived initramfs, host oracle and strict manifest for native-application-core files diagnostic",
+  "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+  "collector": {
+    "source": "scripts/application-tests/native_diagnostic_guest_collector.c",
+    "source_sha256": "e78760ae333ca5967da30f6b338f2ee57344ed2f9e9495d80b00e35b6f72ad4a",
+    "command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack -DND_CORE_FILES=1 /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o /home/holden/mckernel-work/scratch/native-diagnostic-files-collector-build-20260928-1/init",
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-collector-build-20260928-1",
+    "artifact_sha256": "44bdb28f6c57d28eee9959bb729a51e56fb67026fcae3d5d5f43159d0b651ab6",
+    "artifact_size": 1021296,
+    "artifact_mode": "0700",
+    "compiler_sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "compiler_version": "gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+    "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timing_sha256": "763a187d14863f63f7497151edc2367a9b7811e0928c43ee9e0351f8ae438d05",
+    "result": "exit 0; static x86_64 ET_EXEC; no PT_INTERP or dynamic section; GNU_STACK is non-executable"
+  },
+  "oracle": {
+    "attempt_1": {
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-oracle-20260928-1",
+      "result": "FAIL before application entry: host libc lacks required GLIBC_2.33/2.34 versions",
+      "stderr_sha256": "273c21a1490a36103186e45bc1318236eed46c22ce0a541238f33d8e2dc70578"
+    },
+    "attempt_2": {
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-oracle-20260928-2",
+      "result": "FAIL before application entry: extracted loader mode 0600 caused status 126",
+      "stderr_sha256": "9b5bf98a4f5bb12bc9aee8f052d83efc3b58c5db0ed62beba605ccd7c9a55746"
+    },
+    "attempt_3": {
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-oracle-20260928-3",
+      "result": "application bytes and status pass, but cleanup observer is rejected because its failed test could be masked by unconditional output/exit zero",
+      "protocol_lines": [127829, 127830],
+      "item_id": "exec-69e213df-a867-4ee1-97da-ce6dd5f25fe3"
+    },
+    "attempt_4": {
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-oracle-20260928-4",
+      "result": "PASS under fail-closed set -e checks: pre/post residual inventories empty, exit 37, exact stdout and empty stderr",
+      "protocol_lines": [130316, 130317],
+      "item_id": "exec-8f988ca9-0158-46ea-9f8e-d7abc5803476",
+      "stdout_sha256": "e3a3b6925663bb7e5a2926de69be9a524689e679485d31c7bae6a32e6d960bee",
+      "stdout_size": 23,
+      "stdout_hex": "4e41544956455f434f524520504153532066696c65730a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_size": 0,
+      "exit_code": 37
+    }
+  },
+  "overlay": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-files-overlay-20260928-1",
+    "base_gzip_sha256": "c7957431335818d1cf448bb0ae24efb5193bbfa226885787ff5311bea45b4265",
+    "base_cpio_sha256": "fefbfbe32e2cfb05a200b0e8280f6ffa9be4698171194042fd69af85eea0de57",
+    "base_cpio_size": 38191104,
+    "payload_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "collector_sha256": "44bdb28f6c57d28eee9959bb729a51e56fb67026fcae3d5d5f43159d0b651ab6",
+    "mcexec_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "overlay_sha256": "f0face7546044904a44825a83518f87f23042129bdab2ad1323e634afabb2906",
+    "derived_initramfs_sha256": "100e9989870491e279470fd87d2d6914b10f25392ebc4e175dcd380b11cfaa15",
+    "derived_initramfs_size": 12405181,
+    "manifest_sha256": "60db93f40e6dddfdca00b0309fd26f23396f8ce2175bb70f275acafb0feaea89",
+    "manifest_size": 14880,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timing_sha256": "7d9367d648d90caa18333bf45958230ffb56b33fdec11afea336001d01eac330",
+    "replay": "Exact base CPIO is a complete prefix; canonical overlay replay reproduces 61 final members and exact collector, payload and mcexec bytes."
+  },
+  "strict_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-files-manifest-20260928-1/manifest.json",
+    "sha256": "1987e5921635cf6b364d0af83f50c61613a66ba4245cc1ddd078f27ca6574186",
+    "size": 4672,
+    "mode": "0600",
+    "case_id": "baseline.core.files",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "files"],
+    "stdout_hex": "4e41544956455f434f524520504153532066696c65730a",
+    "stderr_hex": "",
+    "exit_code": 37,
+    "owner_bound_manifest": "PASS",
+    "qmp_path_bytes_for_proposed_packet": 100
+  },
+  "independent_review": {
+    "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+    "verified": "collector profile and ELF, raw base-prefix preservation, canonical 61-member replay, all 37 userspace ELFs with 52 dependency, 11 interpreter and 270 version-definition joins, exact module/image/runtime closure, strict manifest/oracle joins and 100-byte QMP path feasibility"
+  },
+  "limitations": [
+    "No root, Docker, QEMU, guest or McKernel files application execution occurred.",
+    "Oracle attempt 3 remains preserved as rejected observer evidence; attempt 4 is the bounded correction.",
+    "A separately reviewed exact one-shot execution packet is still required.",
+    "No application, M04, production-gate or whole-OS acceptance follows."
+  ]
+}

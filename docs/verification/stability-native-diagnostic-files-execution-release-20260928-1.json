@@ -1,0 +1,66 @@
+{
+  "schema": "mckernel.stability-execution-release.v1",
+  "recorded_at": "2026-09-28T11:04:22-07:00",
+  "decision": "PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+  "source_commit": "6ca65c063f3688790b4ecedae149ae291ba7222b",
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-files-execution-packet-20260928-1.md",
+    "sha256": "fd9b87faeeca50b6c60a91d170b6dfcfe7579d9b515caaf46893af6281a76648"
+  },
+  "preparation_evidence": {
+    "path": "docs/verification/stability-native-diagnostic-files-artifact-success-20260928-1.json",
+    "sha256": "f02067394d610042081db2a70dfec84af0f750e3716cbb3547ec5b0edcad8ec6"
+  },
+  "command_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndcf-20260928-2",
+    "--nonce",
+    "30cd836a7be0fd61d4b43fc1042e6afc",
+    "--owner-sha256",
+    "c6a6423712fc117ebba9eb56b1e1af1aca718a1a9f1ec9d4ccfc15c2b33ac4b7",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-diagnostic-files-manifest-20260928-1/manifest.json",
+    "--manifest-sha256",
+    "1987e5921635cf6b364d0af83f50c61613a66ba4245cc1ddd078f27ca6574186"
+  ],
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndcf-20260928-2",
+    "nonce": "30cd836a7be0fd61d4b43fc1042e6afc",
+    "inner": "/home/holden/mckernel-work/scratch/ndcf-20260928-2/attempt-30cd836a7be0fd61d4b43fc1042e6afc",
+    "evidence": "/home/holden/mckernel-work/scratch/ndcf-20260928-2.owner-30cd836a7be0fd61d4b43fc1042e6afc",
+    "qmp_path_bytes": 100,
+    "observed_absent_during_review": true,
+    "forbidden_checkpoint_42_nonce": "8808ac26689c76b89677cecedced2474",
+    "forbidden_paths_observed_absent": true
+  },
+  "reviewed_scope": [
+    "All seven runtime/overlay/collector source hashes match source commit blobs.",
+    "Strict manifest and every artifact/staging identity join pass.",
+    "Canonical replay joins 61 members and 37 userspace ELFs: 52 dependencies, 11 interpreters and 270 required-version/provider definitions.",
+    "Generated 42-element QEMU argv and 100-byte QMP path match the packet.",
+    "The files oracle is exit 37, exact 23-byte stdout, empty stderr and fail-closed empty pre/post residual inventories.",
+    "Process acquisition, application route/retirement, failure capture, Docker client reaping, authenticated cleanup and lock-retention rules remain fail closed."
+  ],
+  "preconditions": [
+    "Commit, push and fetched-blob verify this exact packet and release record.",
+    "Immediately remeasure host/scratch/RAM floors and reconcile launcher, heavy lease and live process/container absence.",
+    "Authenticate the development lock, every source/artifact and all fresh and forbidden paths.",
+    "Create the exact parent once as uid/gid 1000 mode 0700, then invoke only the released command once.",
+    "Never retry after start, uncertainty or failure; preserve every partial result and live owner identity."
+  ],
+  "deadlines": {
+    "inner_seconds": 300,
+    "attached_container_seconds": 360,
+    "owner_total": "Unbounded after uncertain retirement; cleanup and evidence processing add time."
+  },
+  "limitations": [
+    "The review performed no privileged command, container, QEMU, guest or application execution.",
+    "The release is valid for one exact diagnostic invocation only.",
+    "No formal M04, application, production-gate or whole-OS acceptance follows from release or a diagnostic pass."
+  ]
+}

@@ -131,6 +131,8 @@
     ,"native_diag_memory_artifact": "docs/verification/stability-native-diagnostic-memory-artifact-success-20260928-1.json"
     ,"native_diag_memory_release": "docs/verification/stability-native-diagnostic-memory-execution-release-20260928-1.json"
     ,"native_diag_memory_success": "docs/verification/stability-native-diagnostic-memory-success-20260928-1.json"
+    ,"native_diag_files_artifact": "docs/verification/stability-native-diagnostic-files-artifact-success-20260928-1.json"
+    ,"native_diag_files_release": "docs/verification/stability-native-diagnostic-files-execution-release-20260928-1.json"
   },
   "areas": [
     {
@@ -530,8 +532,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 independently passes one startup diagnostic. The fresh baseline.core.memory diagnostic now also independently passes on the retained current signal tuple: exact 24-byte stdout, empty stderr, exit 37, complete EOF, empty procfs, matched scheduling/syscall/exit/retirement and pager release, 695/695 successful QMP replies, exact QEMU and 30 Docker-client identities, container exit zero/OOM false, authenticated removal and free lock. Packet 5 and the first memory-overlay failure remain preserved. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Checkpoint the independently reviewed memory evidence, then build and authenticate the source-fixed files collector/overlay/manifest and run one separately released files diagnostic before threads and shutdown.",
+      "result": "Packet 6 independently passes one startup diagnostic. The fresh baseline.core.memory diagnostic independently passes on the retained current signal tuple. Files preparation now also passes independent artifact review: the source-fixed collector and 61-member overlay join all 37 userspace ELFs, while corrected host oracle attempt 4 proves exact 23-byte output, exit 37 and fail-closed pre/post cleanup. A fresh exact files packet has separate one-shot release. These are diagnostic protocol/preparation results, not catalog acceptance.",
+      "next_check": "Push/fetch-verify the exact files packet and release, recheck the live heavy-runtime lease and all fail-closed preconditions, then consume at most its one released command and independently review bytes, kernel behavior and teardown before threads and shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -558,7 +560,9 @@
         "native_diag_memory_profile",
         "native_diag_memory_artifact",
         "native_diag_memory_release",
-        "native_diag_memory_success"
+        "native_diag_memory_success",
+        "native_diag_files_artifact",
+        "native_diag_files_release"
       ],
       "depends_on": []
     },
