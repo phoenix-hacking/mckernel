@@ -7,8 +7,8 @@ diagnostic application is never whole-OS completion.
 ## Authority and identity
 
 - Branch: `codex/local-native-staging-repair`.
-- Last verified remote checkpoint before the current source delta:
-  `8202d93a033d4d5da93e85a0150ac4d3621019c3`.
+- Last verified remote checkpoint before the current evidence delta:
+  `a252a47a32b5db5f724b011b2ec8e0a9f71e46a4`.
 - Adopted policy SHA-256: GOAL `76c4f5d1...c0bcc3`, START
   `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, HANDOFF predecessor
   `265cd999...a415`.
@@ -47,6 +47,7 @@ Evidence:
 - `stability-native-shutdown-admission-source-success-20260928-1.json`
 - `stability-native-shutdown-observer-source-success-20260928-1.json`
 - `stability-native-shutdown-stop-ack-design-review-20260928-1.json`
+- `stability-native-shutdown-x86-reclaim-design-review-20260928-1.json`
 
 This is source/Layer-B evidence only. The v5 callback is not wired to SMP and no
 production module, root command, container or shutdown guest has run. V5 nonzero
@@ -74,12 +75,23 @@ Timeout or malformed/stale/missing ACK retains every CPU, RAM, mapping, queue,
 module pin and ledger owner. Never substitute `nmi_mode`, `arch_cpu_stop`, CPU0
 master activity, guest poweroff or QEMU exit.
 
-Next executable source step: implement and test the parking-storage/terminal
-transition and Linux IRQ-work publication inventory/drain as separate owned
-primitives. Then freeze the regular-channel STOP/ACK codec and state machine,
-build the production module/image, obtain independent execution release and run
-the seven-phase observer against an actual boot/workload/stop attempt. Do not
-run the shutdown fixture earlier.
+Independent x86 review accepts one narrower CPU-reclamation design for an
+explicitly supported native AP profile: retain every owner, issue the existing
+Linux INIT assert/deassert sequence to each validated offline assigned AP, then
+require successful synchronous Linux `device_online` and revalidate its exact
+device/APIC identity plus `cpu_online`. INIT is only a reset attempt; Linux
+re-online is the reclamation proof. No SIPI belongs in the reset helper, and any
+failed or uncertain reset/online retains all owners in a per-CPU journal. This
+does not solve the separate IRQ-work/callback drain.
+
+Next executable source step: add and test a minimal export of Linux
+`send_init_sequence(apicid)` and a distinct native shutdown reset/re-online
+journal without wiring v5 or freeing resources. In parallel only after the next
+launcher continuation, audit and implement the exact Linux IRQ-work publication
+inventory/unpublish/drain boundary. Then freeze the regular-channel STOP/ACK
+codec and state machine, build the production module/image, obtain independent
+execution release and run the seven-phase observer against an actual
+boot/workload/stop attempt. Do not run the shutdown fixture earlier.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

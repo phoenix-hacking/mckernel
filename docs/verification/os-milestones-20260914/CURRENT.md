@@ -5044,3 +5044,39 @@ retained through later successful Linux `device_online`. Then implement that
 reset/confirmation primitive and the Linux IRQ-work publication inventory/drain
 as separate source/test boundaries. Only after both pass should the per-CPU
 regular-channel STOP/ACK contract be frozen and the v5 SMP callback integrated.
+
+Continuation checkpoint 55, 2026-09-28: the launcher requested invocation
+shutdown. No new work was dispatched; all eight bounded child lanes had already
+completed and are joined. The independent x86 reclamation review returns
+PASS_DESIGN for an explicitly supported native AP profile only. It accepts the
+existing Linux `send_init_sequence(apicid)` as an attempted reset, without SIPI,
+followed by successful synchronous Linux `device_online` from the retained
+known-offline identity and an exact device/APIC plus `cpu_online` recheck as the
+CPU-reclamation proof. Any failed or uncertain reset/re-online retains every
+owner and a per-CPU progress ledger; it never restores a guest-running state.
+The exact source-bound review is
+`docs/verification/stability-native-shutdown-x86-reclaim-design-review-20260928-1.json`.
+No implementation, build, privileged command, module, guest or lifecycle gate
+is accepted by this design result.
+
+The separate Linux IRQ-work/callback blocker remains: guest-allocated work may
+still be queued or executing after a STOP ACK, including publication followed
+by failed IPI. Therefore the regular-channel STOP/ACK ABI remains provisional
+and unreserved, v5 remains unwired, and the shutdown observer remains prohibited
+from runtime. Next invocation: reconcile this pushed checkpoint, then add and
+test a minimal export of Linux `send_init_sequence(apicid)` and a distinct
+native shutdown reset/re-online journal that retains all owners and never uses
+ordinary hotplug rollback. Separately audit and implement exact per-generation
+IRQ-work inventory, unpublish and callback drain. Freeze STOP/ACK only after
+both source/test boundaries pass independent review.
+
+At shutdown the preserved campaign identities are launcher PID/PGID/SID
+3125264/starttime 80228730, recovered worker 3170135/starttime 80670556 and
+app-server 3170137/starttime 80670562. No diagnostic owner, QEMU or mcexec is
+live. Host free space is 26,960,207,872 bytes, scratch free space
+21,613,768,704 bytes and MemAvailable 29,334,384,640 bytes. Unrelated dirty
+launcher/policy files, deleted/untracked pycache and the dirty nested IHK
+checkout remain unstaged and preserved. Formal counters remain 0/273, 2/4,
+6/130, 350/10,000 and 0/7; four real diagnostic apps and zero current-candidate
+builds remain unchanged. This checkpoint neither completes nor resumes the OS
+goal; the launcher pause is temporary until a later invocation.
