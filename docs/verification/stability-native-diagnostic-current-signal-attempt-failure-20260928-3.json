@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.diagnostic-attempt.v1",
+  "recorded_at": "2026-09-28T09:46:03-07:00",
+  "decision": "FAIL_OUTER_QEMU_STATUS_JOIN_AFTER_REAL_DIAGNOSTIC_PASS",
+  "source_checkpoint": "826442c0470747cb6b2d344db6d2c25a1147386c",
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-5.md",
+    "sha256": "e0745c3c74bb83527d0b742332dce862f85e6874e701d4f3d3115d118172c57b",
+    "release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-5.json",
+    "release_sha256": "799105874131be1e3f5ce13c064b5aad8919fa282d36f0033c078ff679dcda13",
+    "attempts_consumed": 1,
+    "reusable": false
+  },
+  "command": "/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndcs-20260928-5 --nonce 7f531aa8f8ee209b7ca79955460a01c3 --owner-sha256 c46b7cb0e66d653f644777d140b8e152bf1a572711bcff3d9b6cbaa00bb34d00",
+  "preflight": {
+    "policy_sha256": {
+      "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+      "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+      "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+      "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415"
+    },
+    "development_lock": "available",
+    "matching_container": "absent",
+    "matching_owner_qemu": "absent",
+    "fresh_paths": "parent, inner attempt and outer evidence sibling absent",
+    "host_free_bytes": 36416081920,
+    "scratch_free_bytes": 21959311360,
+    "memory_available_bytes": 30220591104
+  },
+  "raw_evidence": {
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-5/attempt-7f531aa8f8ee209b7ca79955460a01c3",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-5.owner-7f531aa8f8ee209b7ca79955460a01c3",
+    "inner_regular_file_count": 6,
+    "inner_hashset_sha256": "b9ad39bb87474979d17f861a33edbd022dd6f599f42c034808cde76d35181df3",
+    "outer_regular_file_count": 99,
+    "outer_hashset_sha256": "df21a62d27760844c25cd894202d48068939e6fa78151fc8d6123fc843c36058",
+    "hashset_algorithm": "SHA256 of sorted filename NUL decimal-size NUL file-SHA256 newline tuples",
+    "inner_result_sha256": "67ebaf84e384c85248b62783a5e6dd4dc7a3ee5b2a5479b1f91c4e83221e514a",
+    "inner_serial_sha256": "d2c9c69acfe586c66b85a1983b04ed57f40e243998b02c666f142b245adbefec",
+    "inner_debugcon_sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "inner_qmp_sha256": "eeb6218b8e1bfeb5ece02d71944db0c4d6e711ce87e8318339af7cc9f95b9ef6",
+    "outer_result_sha256": "d0620c842834095a40b3ea8b5623e64796215074ee97e04da6a65aaa19a82326",
+    "outer_owner_sha256": "8c76214752110092995304dba01fa00b5c446fad0c1d09f896264298025256ef",
+    "outer_state_sha256": "68b13e9599e1fd777ff5dcbbb6ab22fdf66c74ccac1de6ec312dd3422461f9bc"
+  },
+  "observed_behavior": {
+    "real_diagnostic_guest_apps": 1,
+    "case_id": "startup.argv-empty",
+    "stdout_bytes": 91,
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "procfs_empty": true,
+    "stream_eof": true,
+    "stream_truncated": false,
+    "qmp_terminal": "shutdown",
+    "qemu_identity": {
+      "pid": 10,
+      "pgid": 10,
+      "sid": 10,
+      "starttime_ticks": 82339040,
+      "returncode": -9
+    },
+    "inner_status": "PROTOCOL_PASS",
+    "inner_cleanup": {
+      "reaped": true,
+      "errors": []
+    },
+    "outer_owner": {
+      "pid": 3288882,
+      "pgid": 3288877,
+      "sid": 3288877,
+      "proc_starttime": 82338912
+    },
+    "container_id": "076b5b520c85821ee46e145d024b05477e42ed27dbdde4001e99f41583174e18",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "absence_verified": true,
+    "lease_retained": false
+  },
+  "failure": {
+    "outer_status": "FAIL",
+    "outer_failure_type": "OwnerError",
+    "message": "QEMU evidence/result join",
+    "cause": "The outer owner required QEMU returncode zero although the reviewed backend intentionally sends TERM then KILL before reaping a no-shutdown QEMU; the exact successful teardown status was -SIGKILL.",
+    "source_location": "scripts/application-tests/native_diagnostic_container_owner.py:993"
+  },
+  "independent_review": "PASS_FOR_BOUNDED_CORRECTION_READINESS; guest bytes, QMP shutdown, identities, copied captures, exact reap and final absence verified",
+  "limitations": [
+    "Packet 5, its parent and nonce are consumed and permanently nonreusable.",
+    "The outer FAIL remains authoritative; corrected replay does not retroactively promote it.",
+    "This is one real diagnostic guest application, not a formal catalog case, M04, production gate or whole-OS acceptance."
+  ],
+  "next": "Checkpoint and independently review the bounded status-policy correction, then prepare a fresh packet, parent and nonce for a separately reviewed one-shot attempt."
+}

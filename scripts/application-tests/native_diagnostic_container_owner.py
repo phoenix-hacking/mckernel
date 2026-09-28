@@ -990,7 +990,8 @@ class DiagnosticOwner:
              tuple(admitted_argv) == self.admitted_qemu_argv and
              type(qemu_evidence) is dict and tuple(qemu_evidence.get("argv", ())) == self.admitted_qemu_argv and
              same(qemu_evidence, observation.get("qemu_evidence")) and
-             qemu_evidence.get("returncode") == 0 and
+             type(qemu_evidence.get("returncode")) is int and
+             qemu_evidence.get("returncode") in (0, -signal.SIGTERM, -signal.SIGKILL) and
              same({key: qemu_evidence.get(key) for key in ("pid", "pgid", "sid", "starttime_ticks")},
                   observation.get("process_identity")), "QEMU evidence/result join")
         replay = self.diagnostic.evaluate(self.manifest, observation)

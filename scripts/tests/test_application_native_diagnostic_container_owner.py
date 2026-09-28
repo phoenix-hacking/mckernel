@@ -83,6 +83,7 @@ class Fake:
         self.stdout = None
         self.record_change = lambda row: None
         self.after_start = lambda row: None
+        self.qemu_returncode = 0
 
     def call(self, argv, *, timeout):
         assert argv[:3] == ["/usr/bin/sudo", "-A", "/usr/bin/docker"]
@@ -113,7 +114,7 @@ class Fake:
             process_identity = {"pid": 12345, "pgid": 12345, "sid": 12345,
                                 "starttime_ticks": 77}
             qemu_evidence = {"argv": ["/usr/libexec/qemu-kvm", "-qmp", "unix:test"],
-                             **process_identity, "returncode": 0}
+                             **process_identity, "returncode": self.qemu_returncode}
             record = {"status": "PROTOCOL_PASS", "application_acceptance": False,
                       "mckernel_application_executed": False, "case_id": "x",
                       "cleanup": {"reaped": True, "errors": []}, "capture_errors": [],
@@ -229,6 +230,51 @@ class OwnerTests(unittest.TestCase):
         self.fails("QEMU evidence/result join")
         self.assertTrue(self.obj.absent)
         self.assertIsNone(self.obj.lock)
+
+    def test_outer_accepts_qemu_signal_status_and_copies_exact_evidence(self):
+        self.fake.qemu_returncode = -signal.SIGKILL
+        self.assertEqual(self.obj.run()["status"], "PROTOCOL_PASS")
+        report = json.loads((self.obj.evidence / "inner-result.json").read_text())
+        observation = report["observation"]
+        self.assertEqual(report["qemu_evidence"]["returncode"], -signal.SIGKILL)
+        self.assertEqual(observation["qemu_evidence"]["returncode"], -signal.SIGKILL)
+        self.assertEqual(report["qemu_evidence"], observation["qemu_evidence"])
+
+    def test_outer_accepts_qemu_sigterm_status_and_copies_exact_evidence(self):
+        self.fake.qemu_returncode = -signal.SIGTERM
+        self.assertEqual(self.obj.run()["status"], "PROTOCOL_PASS")
+        report = json.loads((self.obj.evidence / "inner-result.json").read_text())
+        self.assertEqual(report["qemu_evidence"]["returncode"], -signal.SIGTERM)
+        self.assertEqual(report["observation"]["qemu_evidence"]["returncode"], -signal.SIGTERM)
+
+    def test_outer_accepts_qemu_zero_status_and_copies_exact_evidence(self):
+        self.fake.qemu_returncode = 0
+        self.assertEqual(self.obj.run()["status"], "PROTOCOL_PASS")
+        report = json.loads((self.obj.evidence / "inner-result.json").read_text())
+        self.assertEqual(report["qemu_evidence"]["returncode"], 0)
+        self.assertEqual(report["observation"]["qemu_evidence"]["returncode"], 0)
+
+    def test_outer_rejects_noninteger_qemu_status(self):
+        self.fake.qemu_returncode = "-9"
+        self.fails("QEMU evidence/result join")
+        self.assertTrue(self.obj.absent)
+        self.assertIsNone(self.obj.lock)
+
+    def test_outer_rejects_bool_qemu_status(self):
+        self.fake.qemu_returncode = False
+        self.fails("QEMU evidence/result join")
+
+    def test_outer_rejects_null_qemu_status(self):
+        self.fake.qemu_returncode = None
+        self.fails("QEMU evidence/result join")
+
+    def test_outer_rejects_positive_qemu_status(self):
+        self.fake.qemu_returncode = 7
+        self.fails("QEMU evidence/result join")
+
+    def test_outer_rejects_unrelated_signal_qemu_status(self):
+        self.fake.qemu_returncode = -signal.SIGQUIT
+        self.fails("QEMU evidence/result join")
 
     def test_owner_identity_rejects_malformed_proc_stat(self):
         path = self.root / "stat"
