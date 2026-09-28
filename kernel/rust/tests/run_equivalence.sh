@@ -18960,6 +18960,7 @@ static int fake_do_munmap_ro_freed;
 static unsigned long fake_do_munmap_remove_start;
 static unsigned long fake_do_munmap_remove_end;
 static int fake_do_munmap_clear_calls;
+static long fake_do_munmap_clear_rc;
 static unsigned long fake_do_munmap_clear_addr;
 static size_t fake_do_munmap_clear_len;
 static int fake_do_munmap_clear_holding;
@@ -21751,6 +21752,7 @@ fake_do_munmap_reset(int remove_rc, int ro_freed)
 	fake_do_munmap_remove_start = 0;
 	fake_do_munmap_remove_end = 0;
 	fake_do_munmap_clear_calls = 0;
+	fake_do_munmap_clear_rc = 0;
 	fake_do_munmap_clear_addr = 0;
 	fake_do_munmap_clear_len = 0;
 	fake_do_munmap_clear_holding = 0;
@@ -21786,7 +21788,7 @@ fake_do_munmap_remove(void *vm, unsigned long start, unsigned long end,
 	return fake_do_munmap_remove_rc;
 }
 
-static void
+static long
 fake_do_munmap_clear(unsigned long addr, size_t len, int holding)
 {
 	fake_do_munmap_clear_calls++;
@@ -21796,6 +21798,7 @@ fake_do_munmap_clear(unsigned long addr, size_t len, int holding)
 	mix(&fake_do_munmap_digest, addr);
 	mix(&fake_do_munmap_digest, len);
 	mix_signed(&fake_do_munmap_digest, holding);
+	return fake_do_munmap_clear_rc;
 }
 
 static int
@@ -25491,7 +25494,7 @@ extern int do_munmap_body_result(void *, void *, unsigned long, size_t, int,
 				 size_t, size_t, void (*)(void),
 				 int (*)(void *, unsigned long, unsigned long,
 					 int *),
-				 void (*)(unsigned long, size_t, int),
+				 long (*)(unsigned long, size_t, int),
 				 int (*)(unsigned long, size_t, int, int),
 				 void (*)(void),
 				 void (*)(unsigned long, size_t, int));
@@ -29569,6 +29572,24 @@ static void exercise_unmap_protect(unsigned long *digest)
 			require(fake_do_munmap_remove_start == 0x14000UL);
 			require(fake_do_munmap_remove_end == 0x15000UL);
 			require(fake_do_munmap_clear_holding == 1);
+			require(fake_do_munmap_log_calls == 1);
+			mix(digest, fake_do_munmap_digest);
+			mix_signed(digest, rc);
+
+			fake_do_munmap_reset(0, 0);
+			fake_do_munmap_clear_rc = -44;
+			rc = do_munmap_body_result(&fake_vm, &proc, 0x14800UL,
+				PAGE_SIZE, 1,
+				offsetof(struct fake_do_munmap_proc,
+					 straight_va),
+				offsetof(struct fake_do_munmap_proc,
+					 straight_len),
+				fake_do_munmap_begin, fake_do_munmap_remove,
+				fake_do_munmap_clear, fake_do_munmap_sethost,
+				fake_do_munmap_finish, fake_do_munmap_log);
+			require(rc == -44);
+			require(fake_do_munmap_clear_calls == 1);
+			require(fake_do_munmap_log_calls == 1);
 			mix(digest, fake_do_munmap_digest);
 			mix_signed(digest, rc);
 
@@ -29611,6 +29632,7 @@ static void exercise_unmap_protect(unsigned long *digest)
 			mix_signed(digest, rc);
 
 			fake_do_munmap_reset(-12, 0);
+			fake_do_munmap_clear_rc = -45;
 			rc = do_munmap_body_result(&fake_vm, &proc, 0x17000UL,
 				PAGE_SIZE, 1,
 				offsetof(struct fake_do_munmap_proc,
@@ -29623,6 +29645,7 @@ static void exercise_unmap_protect(unsigned long *digest)
 			require(rc == -12);
 			require(fake_do_munmap_clear_calls == 1);
 			require(fake_do_munmap_sethost_calls == 0);
+			require(fake_do_munmap_log_calls == 1);
 			mix(digest, fake_do_munmap_digest);
 			mix_signed(digest, rc);
 

@@ -588,7 +588,7 @@ typedef void (*munmap_log_fn_t)(int event, int cpu, unsigned long addr,
 typedef void (*do_munmap_void_fn_t)(void);
 typedef int (*do_munmap_remove_range_fn_t)(void *vm, unsigned long start,
 		unsigned long end, int *ro_freedp);
-typedef void (*do_munmap_clear_host_fn_t)(unsigned long addr, size_t len,
+typedef long (*do_munmap_clear_host_fn_t)(unsigned long addr, size_t len,
 		int holding_lock);
 typedef void (*do_munmap_log_fn_t)(unsigned long addr, size_t len,
 		int error);
@@ -5473,16 +5473,15 @@ clear_host_pte_log_bridge(long error)
 	kprintf("clear_host_pte failed. %ld\n", error);
 }
 
-void clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
+long clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
 
-	(void)clear_host_pte_body_result(thread->vm, addr, len,
+	return clear_host_pte_body_result(thread->vm, addr, len,
 			holding_memory_range_lock,
 			offsetof(struct process_vm, is_memory_range_lock_taken),
 			ihk_mc_get_processor_id(), __NR_munmap,
 			syscall_do_syscall3_bridge, clear_host_pte_log_bridge);
-	return;
 }
 
 static int set_host_vma(uintptr_t addr, size_t len, int prot, int holding_memory_range_lock)
@@ -5549,10 +5548,10 @@ do_munmap_remove_range_bridge(void *vm, unsigned long start,
 	return remove_process_memory_range(vm, start, end, ro_freedp);
 }
 
-static void
+static long
 do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
 {
-	clear_host_pte(addr, len, holding_lock);
+	return clear_host_pte(addr, len, holding_lock);
 }
 
 static int
@@ -5571,7 +5570,7 @@ do_munmap_finish_bridge(void)
 static void
 do_munmap_log_bridge(unsigned long addr, size_t len, int error)
 {
-	dkprintf("%s: 0x%lx:%lu, error: %ld\n",
+	dkprintf("%s: 0x%lx:%lu, error: %d\n",
 		"do_munmap", addr, len, error);
 }
 
@@ -9451,9 +9450,12 @@ do_munmap_body_result(void *vm, void *proc, unsigned long addr, size_t len,
 	if (!straight_va || addr < straight_va ||
 			addr + len > straight_va + straight_len) {
 		if (error || !ro_freed) {
-			if (clear_host_pte_fn)
-				clear_host_pte_fn(addr, len,
+			if (clear_host_pte_fn) {
+				long clear_error = clear_host_pte_fn(addr, len,
 						holding_memory_range_lock);
+				if (!error)
+					error = (int)clear_error;
+			}
 		}
 		else {
 			error = set_host_vma_fn ? set_host_vma_fn(addr, len,

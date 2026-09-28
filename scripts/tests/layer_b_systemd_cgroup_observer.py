@@ -7,8 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import posixpath
-import shlex
-from typing import Any, Iterable
+from typing import Any
 
 
 class CgroupObserverError(ValueError):
@@ -16,7 +15,9 @@ class CgroupObserverError(ValueError):
 
 
 def _text(data: bytes | str) -> str:
-    return data.decode("utf-8", "strict") if isinstance(data, bytes) else data
+    # Linux pathnames need not be UTF-8. Surrogate escapes retain each original
+    # byte and round-trip through filesystem APIs without changing identity.
+    return data.decode("utf-8", "surrogateescape") if isinstance(data, bytes) else data
 
 
 def _unescape(field: str) -> str:
@@ -43,14 +44,15 @@ def _path(value: str, *, allow_root: bool = True) -> str:
         raise CgroupObserverError("empty cgroup path")
     # Repeated separators do not identify a distinct hierarchy and are rejected
     # to keep the retained identity byte-for-byte canonical.
-    if "//" in value:
+    if "//" in value or (value != "/" and value.endswith("/")):
         raise CgroupObserverError("non-canonical cgroup path")
-    return value if value == "/" else value.rstrip("/")
+    return value
 
 
 @dataclass(frozen=True)
 class Mount:
     mount_id: int
+    parent_id: int
     root: str
     mountpoint: str
     options: tuple[str, ...]
@@ -76,41 +78,110 @@ class Mapping:
 
 def parse_mountinfo(data: bytes | str) -> list[Mount]:
     mounts = []
-    for raw in _text(data).splitlines():
-        if not raw.strip():
+    for raw in _text(data).split("\n"):
+        if not raw:
             continue
         fields = raw.split(" - ", 1)
         if len(fields) != 2:
             raise CgroupObserverError("malformed mountinfo separator")
         left, right = fields
-        a, b = left.split(), right.split()
-        if len(a) < 6 or len(b) < 3:
+        a, b = left.split(" "), right.split(" ")
+        if len(a) < 6 or len(b) < 3 or "" in a or "" in b:
             raise CgroupObserverError("malformed mountinfo record")
-        try: mount_id = int(a[0])
+        try: mount_id, parent_id = int(a[0]), int(a[1])
         except ValueError as exc: raise CgroupObserverError("bad mount id") from exc
-        root, point = _path(_unescape(a[3])), _path(_unescape(a[4]))
-        mounts.append(Mount(mount_id, root, point, tuple(a[5].split(",")),
-                            b[0], tuple(b[2].split(","))))
+        if mount_id <= 0 or parent_id < 0 or any(m.mount_id == mount_id for m in mounts):
+            raise CgroupObserverError("invalid or duplicate mount id")
+        # Non-cgroup mount roots are opaque (nsfs commonly uses mnt:[N])
+        # and must not be subjected to cgroup pathname grammar.
+        fstype = b[0]
+        root_raw, point = _unescape(a[3]), _path(_unescape(a[4]))
+        if fstype in ("cgroup", "cgroup2"):
+            root = _path(root_raw)
+        else:
+            root = root_raw
+        mounts.append(Mount(mount_id, parent_id, root, point, tuple(a[5].split(",")),
+                            fstype, tuple(b[2].split(","))))
     return mounts
 
 
 def parse_cgroup(data: bytes | str) -> list[tuple[str, str, str]]:
     result = []
-    for raw in _text(data).splitlines():
-        line = raw.strip()
-        if not line: continue
-        fields = line.split(":")
-        if len(fields) != 3 or not fields[0].isdigit() or not fields[2].startswith("/"):
+    for line in _text(data).split("\n"):
+        # Do not strip: pathname bytes, including spaces, are identity.  Only
+        # the first two separators delimit the cgroup record.
+        if line == "":
+            continue
+        first, sep, rest = line.partition(":")
+        second, sep2, path = rest.partition(":") if sep else ("", "", "")
+        if not sep or not sep2 or not first.isdigit() or not path.startswith("/"):
             raise CgroupObserverError("malformed proc cgroup record")
-        path = _path(fields[2])
-        result.append((fields[0], fields[1], path))
+        path = _path(path)
+        result.append((first, second, path))
     return result
+
+
+def _under(root: str, value: str) -> str | None:
+    """Return value relative to root, enforcing component containment."""
+    if root == "/":
+        return value
+    if value == root:
+        return "/"
+    if value.startswith(root + "/"):
+        return value[len(root):]
+    return None
+
+
+def _shared_nonroot_parent(left: str, right: str) -> bool:
+    a, b = left.strip("/").split("/"), right.strip("/").split("/")
+    common = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        common += 1
+    return common > 0
+
+
+def _filesystem_path(root: str, mountpoint: str, hierarchy_path: str) -> str:
+    relative = _under(_path(root), _path(hierarchy_path))
+    if relative is None:
+        raise CgroupObserverError("cgroup path is outside selected mount root")
+    point = _path(mountpoint)
+    return point if relative == "/" else posixpath.join(point, relative[1:])
+
+
+def _check_observation_mounts(mounts: list[Mount], selected: Mount,
+                              paths: tuple[str, ...]) -> None:
+    # A normal ancestor mount (e.g. / or the tmpfs at /sys/fs/cgroup) contains
+    # the selected mount in its parent-ID chain. A later overmount at that same
+    # pathname is not in that chain. Path prefixes alone cannot distinguish them.
+    by_id = {m.mount_id: m for m in mounts}
+    ancestors: set[int] = set()
+    seen = {selected.mount_id}
+    parent = selected.parent_id
+    while parent in by_id:
+        if parent in seen:
+            raise CgroupObserverError("cyclic mount topology")
+        seen.add(parent)
+        ancestor = by_id[parent]
+        if (_under(ancestor.mountpoint, selected.mountpoint) is None
+                or ancestor.mountpoint == selected.mountpoint):
+            raise CgroupObserverError("selected systemd mount is stacked or topology is invalid")
+        ancestors.add(parent)
+        parent = ancestor.parent_id
+    # A missing parent is normal when it lies outside this namespace's root.
+    for mount in mounts:
+        if mount.mount_id == selected.mount_id or mount.mount_id in ancestors:
+            continue
+        if any(_under(mount.mountpoint, path) is not None for path in paths):
+            raise CgroupObserverError("systemd observation path is stacked or covered")
 
 
 def resolve_systemd_mapping(mountinfo: bytes | str, self_cgroup: bytes | str,
                             control_group: str) -> Mapping:
     control = _path(control_group)
-    candidates = [m for m in parse_mountinfo(mountinfo)
+    mounts = parse_mountinfo(mountinfo)
+    candidates = [m for m in mounts
                   if m.fstype == "cgroup" and "name=systemd" in m.super_options]
     if len(candidates) != 1:
         raise CgroupObserverError("missing or ambiguous systemd mount")
@@ -121,15 +192,22 @@ def resolve_systemd_mapping(mountinfo: bytes | str, self_cgroup: bytes | str,
         raise CgroupObserverError("missing or ambiguous systemd cgroup mapping")
     _, hierarchy = named[0]
     # ControlGroup and proc cgroup are hierarchy-relative.  A non-/ mount root
-    # is an offset into that hierarchy; accept either kernel spelling (root
-    # included) and retain the canonical hierarchy-relative path.
+    # is an offset into that hierarchy. Both supplied paths must contain it.
     root = mount.root
-    hierarchy_relative = hierarchy[len(root):] if root != "/" and hierarchy.startswith(root + "/") else hierarchy
-    control_relative = control[len(root):] if root != "/" and control.startswith(root + "/") else control
-    if control_relative != hierarchy_relative and not hierarchy_relative.startswith(control_relative.rstrip("/") + "/"):
+    hierarchy_relative = _under(root, hierarchy)
+    control_relative = _under(root, control)
+    if hierarchy_relative is None or control_relative is None:
+        raise CgroupObserverError("cgroup path is outside selected mount root")
+    # The observer may be an external sibling.  It must still be in the same
+    # systemd subtree; ControlPID membership is checked independently.
+    if (hierarchy != control and not hierarchy.startswith(control.rstrip("/") + "/")
+            and not control.startswith(hierarchy.rstrip("/") + "/")
+            and not _shared_nonroot_parent(hierarchy, control)):
         raise CgroupObserverError("ControlGroup does not match systemd hierarchy")
-    fs = posixpath.join(mount.mountpoint, control_relative.lstrip("/"))
-    return Mapping(mount.mount_id, root, mount.mountpoint, hierarchy, control, fs)
+    fs = _filesystem_path(root, mount.mountpoint, control)
+    mapping = Mapping(mount.mount_id, root, mount.mountpoint, hierarchy, control, fs)
+    _check_observation_mounts(mounts, mount, parent_paths(mapping))
+    return mapping
 
 
 def verify_pid_membership(pid_cgroup: bytes | str, mapping: Mapping) -> bool:
@@ -147,10 +225,12 @@ def verify_pid_membership(pid_cgroup: bytes | str, mapping: Mapping) -> bool:
 def parent_paths(mapping: Mapping) -> tuple[str, ...]:
     """Filesystem parents up to (and including) this mountpoint only."""
     value = mapping.original_control_group
-    if mapping.mount_root != "/" and value.startswith(mapping.mount_root + "/"):
-        value = value[len(mapping.mount_root):]
-    rel = value.strip("/").split("/") if value != "/" else []
-    return tuple(posixpath.join(mapping.mountpoint, *rel[:i]) for i in range(len(rel), -1, -1))
+    paths = []
+    while True:
+        paths.append(_filesystem_path(mapping.mount_root, mapping.mountpoint, value))
+        if value == mapping.mount_root:
+            return tuple(paths)
+        value = posixpath.dirname(value)
 
 
 # Explicit aliases make the small API convenient to callers without adding I/O.

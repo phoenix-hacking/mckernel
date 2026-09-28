@@ -48,11 +48,64 @@ evidence. The payload, source, oracle, interpreter and DSO are immutable
 inputs; the request and attempt directories are disposable outputs only.
 
 Before release, independently verify the dynamic-loader closure at the exact
-canonical host paths (no shell, `LD_*` override, or unreviewed substitute) and
-record hashes, modes, ownership, device/inode, size, mtime and ctime. The
-captured interpreter/DSO hashes must match. A mismatch is a hard stop. The
-collector’s documented limitations (pathname substitution, provenance, and
-interpreter/DSO closure) are packet gates, not waived risks.
+canonical paths in the pinned image (not on the host, and not from a bind
+mount), with no shell, `LD_*` override, or unreviewed substitute. Record each
+file’s canonical path, hash, mode, ownership, device/inode, size, mtime and
+ctime. The captured interpreter and DSO hashes above must match exactly. A
+mismatch, a symlink, a changed image `Config`/`RootFS`, or an unaccounted
+transitive loader dependency is a hard stop. The collector’s documented
+limitations (pathname substitution, provenance, and interpreter/DSO closure)
+are packet gates, not waived risks.
+
+## Proposed pinned-image release (still DRAFT)
+
+The proposed release is inside the already retained immutable image
+`sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94`,
+with retained manifest SHA-256
+`c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a`.
+Before any payload is started, independently reauthenticate the image ID,
+architecture/OS, complete `Config`, and complete `RootFS` layer list against
+`/home/holden/mckernel-work/logs/image-native.json`. In that same image and
+the same execution profile, run only a read-only closure preflight against the
+canonical `/lib64/ld-linux-x86-64.so.2` and `/lib/x86_64-linux-gnu/libc.so.6`
+paths (and every loader-discovered regular DSO). The preflight must publish a
+manifest whose canonical loader/libc hashes are respectively
+`0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b` and
+`b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4`, with
+the retained sizes 930600 and 2339896, and whose complete closure hash is
+bound to the same image/profile. This preflight is not payload execution; it
+must fail closed if the canonical paths or closure differ. No host DSO or
+bind-mounted runtime may satisfy the check.
+
+After independent execution review clears that preflight, use a fresh nonce,
+fresh container name, fresh controlled root and fresh attempt name. The exact
+Docker create argv is the following (the nonce and root are substituted only
+as shown; no extra arguments are permitted):
+
+```text
+/usr/bin/docker create --pull=never --init --name mckernel-linux-diagnostic-<nonce> --label mckernel.linux-diagnostic.owner=<nonce> --cpus=4 --cpuset-cpus=2-5 --cgroup-parent=/mckernel-dev --memory=12g --memory-swap=12g --pids-limit=512 --cap-drop=ALL --security-opt=no-new-privileges --read-only --network=none --user=1000:1000 --ulimit core=0 --ulimit nofile=4096:4096 --tmpfs /tmp:rw,nodev,nosuid,size=256m --mount type=bind,src=/home/holden/mckernel,dst=/workspace,readonly --mount type=bind,src=<root>,dst=/work --env TMPDIR=/work/tmp --env HOME=/tmp --env PYTHONDONTWRITEBYTECODE=1 --workdir=/work --entrypoint=/usr/bin/python3 sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94 -B /workspace/scripts/application-tests/linux_diagnostic.py --request /work/request.json
+```
+
+The repository bind is read-only. `<root>` is a new 0700 controlled root,
+owned and prepared before create, and is the only writable application mount;
+its `request.json` must name `/work/startup.argv-empty.c`, `/work/oracle.json`,
+`/work/payload`, cwd `/work`, and a fresh `/work/attempt-<nonce>`. The exact
+request remains the schema shown below, with those paths substituted and no
+additional environment, writer, wrapper, shell, or entrypoint. The owner must
+record the exact create argv, nonce/label, container ID, image inspect and
+Config/RootFS reauthentication, closure-preflight manifest, and immutable
+root/attempt identities before `start --attach <container-id>`.
+
+The independent watchdog must record its own PID/process identity, owner lock,
+deadline, and signal-safe state. Attach must retain stdout/stderr and raw wait
+status. Release requires one owned container lookup by both label and exact
+name, an inspected state of exited/non-running/not-paused/not-restarting,
+`OOMKilled=false`, `Dead=false`, empty error, and exit code 0, followed by
+owner-only removal, repeated absence verification, watchdog disarm/reap with
+raw wait status 0, and a final inventory. Any lookup ambiguity, attach
+timeout, owner mismatch, unexpected descendant, cleanup uncertainty, or
+stale-name collision is a hard stop. These records must use fresh names and
+be retained with the collector evidence; no wrapper may be introduced.
 
 ## Canonical request (to be created only after review)
 
@@ -94,10 +147,14 @@ to application acceptance.
 
 ## Blockers and release conditions
 
-1. Read-only checks found current `/lib64/ld-linux-x86-64.so.2` and
-   `/lib/x86_64-linux-gnu/libc.so.6` hashes different from the retained closure;
-   a matching controlled execution root/closure is not presently identified.
-2. Independent review must confirm the canonical request, closure, root
-   ownership, limits, and publication/teardown plan before release.
-
-Until both are cleared, do not restore, invoke, or execute this packet.
+1. This packet remains **DRAFT**. The existing reviewed profile authorizes only
+   the separate rebuild helper; it does not authorize this diagnostic create,
+   closure preflight, payload, or publication. Independent execution review
+   must explicitly approve this packet and its exact argv before release.
+2. The pinned image ID, manifest SHA, complete `Config`/`RootFS`, and the
+   canonical loader/libc hashes and complete closure must reauthenticate in the
+   same image/profile before payload setup. Any mismatch is a hard stop.
+3. Independent review must confirm the canonical request, fresh controlled
+   root, owner/watchdog/attach/exit/cleanup evidence, limits, and publication
+   and teardown plan. Until all three conditions are cleared, do not restore,
+   invoke, create, or execute this packet.

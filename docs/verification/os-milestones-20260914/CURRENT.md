@@ -3423,3 +3423,55 @@ the preserved process identities for
 2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
 language gates. Whole-OS acceptance remains incomplete; this checkpoint does not
 resume or complete the launcher-paused goal.
+
+Continuation shutdown checkpoint 11, 2026-09-28: the fast diagnostic
+continuation produced one accepted parser repair and one source-reviewed kernel
+error-propagation change, but no compile, root unit or guest was released. The
+root13 cgroup observer at source SHA256 `2f187550...` and test SHA256
+`ce6ebd78...` passes 26 tests plus independent adversarial review. Its exact
+packet 28, SHA256 `7db94664...`, remains unreviewed and cannot run.
+
+The native/Rust `do_munmap` path now returns the exact `clear_host_pte` failure
+after a successful remove, with the whitebox copy updated. Independent source
+review returns `PASS_SOURCE_READY_FOR_BUILD`; no build packet covers these exact
+bytes yet. Draft packet 1, SHA256 `b0a44156...`, is still blocked on a reviewed
+focused host-clear selector. This change does not solve durable page ownership,
+quarantine, VM epochs or invalidation acknowledgement and is not M03 acceptance.
+The pinned Linux startup.argv-empty diagnostic packet, SHA256 `ca308127...`, is
+also draft-only pending independent review and same-image closure preflight.
+
+Both escalated repairs were stopped at safe boundaries. M01 left an unreviewed
+partial manifest-bound driver at SHA256 `9c64dc7...`; its old four-test file is
+not synchronized (two pass, two error), so it has no execution release. The
+native diagnostic expert was interrupted during replacement; the prior exact
+independently failed candidate was restored from its retained agent log at
+SHA256 `fc17200b...`, and its eight isolated tests pass. Its known missing real
+guest transport, deadline, reap and durable failure-publication requirements
+remain open. No QEMU or guest was started.
+
+All child agents are terminal. Launcher PID 3125264, worker PID 3125267 and
+app-server PID 3125269, started at 2026-09-28 03:47:42 -0700, remain the
+preserved process identities for
+`.git/os-autopilot/runs/20260928T104742Z-d8634f08`; that run has no `state.json`.
+No project compiler, transient Layer-B unit/cgroup, guest, QEMU, mcexec or IHK
+runtime is active. Host/scratch free space is 44/21 GiB and the heavy lease is
+free. Real guest applications executed in this window: **0**.
+
+Next tasks are: (1) independently review packet 28 and only on PASS run one
+fresh root13 attempt; (2) finish and independently review the interrupted M01
+driver/tests; (3) review and preflight the Linux diagnostic packet; (4) resolve
+the VM packet's focused-selector blocker, review it, then compile/equivalence
+test the propagation change; (5) repair and review the actual native guest
+diagnostic transport before QEMU; and (6) continue the separate M03 durable
+ownership/quarantine design. Exact results are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-11.json`.
+Counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete; this checkpoint neither resumes nor completes the paused goal.
+
+Checkpoint publication note: the whitebox mirror is preserved in the nested
+repository on local branch `codex/vm-clear-error-propagation-20260928` at commit
+`21a0d1e`. Its HTTPS remote rejected noninteractive authentication, so that
+nested commit is not pushed and the outer submodule pointer is intentionally
+unstaged. The outer checkpoint excludes that pointer rather than publishing an
+unfetchable nested object; the exact source SHA256 remains recorded above.

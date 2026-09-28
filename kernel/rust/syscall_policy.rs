@@ -886,7 +886,7 @@ type MunmapDoFn = unsafe extern "C" fn(*mut c_void, SizeT, CInt) -> CInt;
 type MunmapLogFn = unsafe extern "C" fn(CInt, CInt, CULong, SizeT, CInt);
 type DoMunmapVoidFn = unsafe extern "C" fn();
 type DoMunmapRemoveRangeFn = unsafe extern "C" fn(*mut c_void, CULong, CULong, *mut CInt) -> CInt;
-type DoMunmapClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt);
+type DoMunmapClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt) -> CLong;
 type DoMunmapLogFn = unsafe extern "C" fn(CULong, SizeT, CInt);
 type DoMmapSmallerPageFn = unsafe extern "C" fn(SizeT, *mut CInt) -> CInt;
 type ClearHostPteLogFn = unsafe extern "C" fn(CLong);
@@ -4328,7 +4328,10 @@ pub unsafe extern "C" fn do_munmap_body_result(
     {
         if error != 0 || ro_freed == 0 {
             if let Some(clear_host_pte) = clear_host_pte_fn {
-                clear_host_pte(addr, len, holding_memory_range_lock);
+                let clear_error = clear_host_pte(addr, len, holding_memory_range_lock);
+                if error == 0 {
+                    error = clear_error as CInt;
+                }
             }
         } else {
             error = if let Some(set_host_vma) = set_host_vma_fn {
