@@ -18,6 +18,10 @@ spec.loader.exec_module(owner)
 BOUND_MANIFEST = owner.bound_manifest
 CID = "a" * 64
 NONCE = "b" * 32
+PINNED_QEMU_VERSION_STDOUT = (
+    b"QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\n"
+    b"Copyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+)
 
 
 def result(out=b"", code=0, err=b""):
@@ -801,8 +805,9 @@ class OwnerTests(unittest.TestCase):
                 owner.regular(path)
 
     def test_inside_checks_and_exact_execve(self):
+        self.assertEqual(owner.QEMU_VERSION_STDOUT, PINNED_QEMU_VERSION_STDOUT)
         with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
-             mock.patch.object(owner, "bounded_command", return_value=result((owner.QEMU_VERSION + "\nCopyright\n").encode())) as version, \
+             mock.patch.object(owner, "bounded_command", return_value=result(PINNED_QEMU_VERSION_STDOUT)) as version, \
              mock.patch.object(owner.os, "execve") as execute:
             owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
         self.bound.assert_called_once_with()
@@ -818,9 +823,27 @@ class OwnerTests(unittest.TestCase):
                 owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
             execute.assert_not_called()
 
-    def test_inside_qemu_version_rejects(self):
+    def test_inside_qemu_version_rejects_any_exact_output_drift(self):
+        suffix = b"QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\n"
+        copyright_line = b"Copyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+        invalid = (
+            (b"QEMU emulator version 10.1.0\n" + copyright_line),
+            (b"QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.4)\n" + copyright_line),
+            (suffix + copyright_line + b"extra\n"),
+            suffix,
+            suffix + copyright_line.replace(b"developers", b"developer"),
+        )
+        for stdout in invalid:
+            with self.subTest(stdout=stdout):
+                with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
+                     mock.patch.object(owner, "bounded_command", return_value=result(stdout)), \
+                     mock.patch.object(owner.os, "execve") as execute:
+                    with self.assertRaisesRegex(owner.OwnerError, "QEMU version"):
+                        owner._inside(str(self.parent), NONCE, self.obj.owner_sha)
+                    execute.assert_not_called()
+
         with mock.patch.object(owner, "_digest", side_effect=lambda p: owner.QEMU_SHA256 if p == owner.QEMU else self.obj.owner_sha), \
-             mock.patch.object(owner, "bounded_command", return_value=result(b"QEMU emulator version 10.1.0-evil\n")), \
+             mock.patch.object(owner, "bounded_command", return_value=result(owner.QEMU_VERSION_STDOUT, err=b"warning\n")), \
              mock.patch.object(owner.os, "execve") as execute:
             with self.assertRaisesRegex(owner.OwnerError, "QEMU version"):
                 owner._inside(str(self.parent), NONCE, self.obj.owner_sha)

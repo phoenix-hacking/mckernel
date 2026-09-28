@@ -33,7 +33,13 @@ SELF = REPO + "/scripts/application-tests/native_diagnostic_container_owner.py"
 LOCK = "/run/lock/mckernel-development.lock"
 QEMU = "/usr/libexec/qemu-kvm"
 QEMU_SHA256 = "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
-QEMU_VERSION = "QEMU emulator version 10.1.0"
+# Bind the observer to the complete output of the pinned QEMU binary.  The
+# distribution build suffix is part of the identity: accepting only the first
+# line or a prefix could authorize a different emulator build.
+QEMU_VERSION_STDOUT = (
+    b"QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\n"
+    b"Copyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+)
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
     REPO + "/scripts/application-tests/native_diagnostic.py": "0ab36565fe4b7019baa66398c4f5cb08801143322ea9e21c12916250278ef02d",
@@ -936,7 +942,7 @@ def _inside(parent, nonce, owner_sha):
     bound_manifest()
     need(_digest(QEMU) == QEMU_SHA256, "inside QEMU hash drift")
     version = bounded_command([QEMU, "--version"], 5)
-    need(version.returncode == 0 and version.stderr == b"" and version.stdout.decode("utf-8").splitlines()[0] == QEMU_VERSION,
+    need(version.returncode == 0 and version.stderr == b"" and version.stdout == QEMU_VERSION_STDOUT,
          "inside QEMU version drift")
     os.execve("/usr/bin/python3", ["/usr/bin/python3", "-B", RUNNER, "--manifest", MANIFEST,
               "--attempt-parent", parent, "--attempt-name", "attempt-" + nonce, "--timeout", "300"],
