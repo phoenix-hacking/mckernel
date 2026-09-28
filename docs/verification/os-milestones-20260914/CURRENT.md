@@ -4251,3 +4251,21 @@ builds; the latest executable result completed at 2026-09-28T16:40:00Z. Official
 counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
 gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
 incomplete.
+
+Continuation checkpoint 35, 2026-09-28: packet 6 is bound to pushed/fetched
+source checkpoint `846ebe49c15bf885cb8982890759bb46746e9591`, fresh parent
+`ndcs-20260928-6`, nonce `0f54526b...83a9e2`, corrected owner SHA256
+`038fe292...173f1` and exact packet SHA256 `6cc79499...99de3`. Its generated
+42-argument QEMU plan matches the packet and the private QMP path is 100 bytes.
+The parent, inner attempt and root-owned evidence sibling remain absent.
+Independent review returns `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE` for exactly
+one invocation of the packet's sudo-A command after fresh coordinator capacity,
+process, container, development-lock and path checks. Packet 5 is consumed and
+nonreusable; packets 3 and 4 remain rejected and nonreusable.
+
+Next: commit/push and fetched-blob verify packet 6 plus this release, then
+remeasure capacity and reconcile every runtime owner immediately before setup.
+If all preconditions still hold, create the parent once as uid/gid 1000 mode
+0700 and execute only the released command. Preserve exact application bytes,
+status, serial/debugcon/kernel logs, QMP, every process/container identity and
+final teardown. No formal acceptance follows from release or a diagnostic pass.
