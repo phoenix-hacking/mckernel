@@ -534,6 +534,46 @@ macro_rules! áinclude { () => {} }
             self.assertIn("mod ikc_master;", root)
         self.assertFalse(plan["credit_eligible"])
 
+    def test_queue_requires_exact_wrapper_and_raw_producers(self):
+        queue = self.manifest["inputs"][3]
+        path = os.path.join(self.repo, queue["repository_path"])
+        with open(path) as stream:
+            original = stream.read()
+        wrapper = "self.0.try_enqueue(packet)"
+        self.assertEqual(1, original.count(wrapper))
+        cases = {
+            "redirected": original.replace(wrapper, "self.0.try_dequeue()", 1),
+            "missing-wrapper": original.replace(
+                "pub(crate) fn try_enqueue(&self, packet: &[u8]) -> Result<(), QueueError> {\n"
+                "        self.0.try_enqueue(packet)\n    }",
+                "pub(crate) fn enqueue_wrapper(&self, packet: &[u8]) -> Result<(), QueueError> {\n"
+                "        self.0.try_enqueue(packet)\n    }",
+                1,
+            ),
+            "extra-producer": original + (
+                "\nimpl<'mapping> SharedProducer<'mapping> {\n"
+                "    pub(crate) fn try_enqueue(&self, packet: &[u8]) -> Result<(), QueueError> {\n"
+                "        self.0.try_enqueue(packet)\n"
+                "    }\n}\n"
+            ),
+        }
+        for name, mutated in cases.items():
+            with self.subTest(name=name):
+                self.assertNotEqual(original, mutated)
+                with open(path, "w") as stream:
+                    stream.write(mutated)
+                queue["sha256"] = digest(path)
+                expected_queue = staging.EXPECTED_INPUTS[3]
+                staging.EXPECTED_INPUTS[3] = dict(expected_queue, sha256=queue["sha256"])
+                self.write_manifest()
+                with self.assertRaisesRegex(staging.ValidationError, "queue"):
+                    self.plan()
+                with open(path, "w") as stream:
+                    stream.write(original)
+                queue["sha256"] = digest(path)
+                staging.EXPECTED_INPUTS[3] = expected_queue
+                self.write_manifest()
+
     def test_os_registry_is_staged_at_the_module_import_path(self):
         plan = self.plan()
         kernel = os.path.join(self.temporary, "evidence-kernel")

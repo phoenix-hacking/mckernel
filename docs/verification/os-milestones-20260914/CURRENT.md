@@ -5202,3 +5202,63 @@ reclamation and IRQ/callback drain both pass independent review. Formal counters
 remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic guest apps and
 zero current-candidate builds remain unchanged. This checkpoint neither
 completes nor resumes the OS goal.
+
+Continuation checkpoint 58, 2026-09-28: the launcher requested invocation
+shutdown at 14:33 PDT. No new work was dispatched after that request. Every
+visible child lane is completed or interrupted and retired; no delegated
+command, heavy build, QEMU, mcexec or diagnostic owner is live.
+
+Three bounded source checkpoints were already pushed and fetched at the start
+of shutdown. Commit `1957dd80d6c890e919536a588c82a4fc9d4800ce`
+hardens the native shutdown CPU retention journal and passed its exact Rust
+1.92 caller/Send fixture plus independent review. Commit
+`06aca7eacf465ea07e133bdb35a4a67db15efcc2` publishes the ABI-4 retained IRQ
+work descriptor and sender gate; its Layer-B producer/alias suite and
+independent bounded review pass, while STOP, drain, retry/quarantine and
+runtime acceptance remain open. Commit
+`c8263eb38e01cc3aa229d4045dafa1f0a2623ae8` binds the secondary-reset patch
+closure into the exact-build supplement; its 48-test source/workflow suite and
+independent source review pass. None of these results is a configured build,
+module load, privileged reset or guest acceptance.
+
+The current-source lifecycle/staging correction remains an explicitly
+unaccepted WIP. Its stage manifest, lifecycle contract/checker, staging oracle,
+host audit and focused tests are saved in this checkpoint. The current host
+audit advances past the earlier provider, APIC and mcctrl boundaries and now
+fails closed at `unreviewed Rust escape hatch in
+host-kernel/native-rust/smp_memory.rs: extern`; exit status is 1. Do not accept
+or broadly relax this oracle. Exact WIP SHA-256 values are:
+
+```
+136f597b8702732da160831244ffe64d5db10483badb4e53abb92299889e1f84  host-kernel/kbuild/stage-manifest.json
+8244c9a397b8967231d93374361f557947baada400ef7401387f974c8f08f9a6  host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json
+ad9e6395206c124e3a2049536ec88f4bf8929011090ea794d7c8063b8bb4a70c  scripts/ihk_smp_native_lifecycle_check.py
+e94185f080ae1ad63e17eb3fd9e7f0a3e500f459820dcb0e94e517cee9d0a341  scripts/native_rust_host_audit.py
+6dfd8384846b4b5e5fa164074b7dabe551f2860d1d9346a1514faa02d3c88baf  scripts/tests/test_native_rust_host_audit.py
+511964896d6ada0fe4cb006a4411b9e241667de3f53cbdb002ce48ca5b1f2000  scripts/rocky_rust_staging.py
+1e5857bf42e7614e6fbd72c016a39e4b35c2de48a0e60cd04b17bafbab0b8ca8  scripts/tests/test_rocky_rust_staging.py
+```
+
+The journal evidence wording is also corrected from byte equality to the exact
+property tested, field equality with padding excluded; its saved SHA-256 is
+`be291eb67e4d25d9f35b31dde0ad202de73380ceb08aab1a566ac9aa45383136`.
+All eight campaign files pass `git diff --check`.
+
+Preserved live launcher identities are wrapper PID/PGID/SID 3399308,
+starttime 83682487; worker PID/PGID/SID 3399313, starttime 83682494; and
+app-server PID/PGID/SID 3399317, starttime 83682500. At capture, host free
+space is 26,805,334,016 bytes, scratch free space 21,613,768,704 bytes and
+MemAvailable 30,794,465,280 bytes. Preserve the unrelated launcher/policy
+edits, dirty nested IHK checkout, and deleted/untracked pycache state.
+
+Next invocation: reconcile this pushed WIP and the process identities. Resume
+the same host-audit family at the exact `smp_memory.rs` extern boundary, adding
+only exact reviewed block/prefix coverage and mutation negatives. Then require
+the complete host-audit, Rocky staging and 60-test lifecycle suites under the
+pinned tools, followed by independent review. If those pass, remeasure capacity
+and run the separately reviewed configured exact build before any privileged
+reset or shutdown runtime. Continue later with failed-vector retry/offline
+quarantine, callback drain, STOP/v5 integration and CPU reclamation; never free
+or reuse guest storage first. Formal counters remain 0/273, 2/4, 6/130,
+350/10,000 and 0/7; four diagnostic guest apps and zero current-candidate builds
+remain unchanged. This checkpoint neither completes nor resumes the OS goal.

@@ -131,12 +131,8 @@ class NativeRustHostAuditTests(unittest.TestCase):
                 '    callback_abi: u64,',
             ),
             (
-                'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
-                '    token: i64,\n'
-                '    exit: Option<IhkSmpProviderExitV2>,',
-                'pub extern "C" fn ihk_smp_provider_detach_v2(\n'
-                '    token: i64,\n'
-                '    exit: IhkSmpProviderExitV2,',
+                'pub extern "C" fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>) {',
+                'pub extern "C" fn ihk_smp_provider_detach_v2(token: i64, exit: IhkSmpProviderExitV2) {',
             ),
             (
                 'symbol: ihk_smp_provider_attach_v2 as *const () as *const u8,',
@@ -355,6 +351,30 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
         )
         for relative, old, new in mutations:
             with self.subTest(relative=relative, old=old):
+                self.mutate_resealed_source(relative, old, new)
+                with self.assertRaisesRegex(
+                    SystemExit, "reviewed Rust escape block differs"
+                ):
+                    host_audit.main()
+
+    def test_cpu_apic_imports_remain_exact(self):
+        relative = "host-kernel/native-rust/smp_cpu.rs"
+        mutations = (
+            (
+                "fn default_cpu_present_to_apicid(cpu: i32) -> u32;",
+                "fn default_cpu_present_to_apicid(cpu: u32) -> u32;",
+            ),
+            (
+                "fn native_reset_secondary_cpu_via_init(phys_apicid: u32);",
+                "fn native_reset_secondary_cpu_via_init(phys_apicid: u64);",
+            ),
+            (
+                "fn native_reset_secondary_cpu_via_init(phys_apicid: u32);",
+                "fn native_reset_secondary_cpu_via_init(phys_apicid: u32) -> i32;",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
                 self.mutate_resealed_source(relative, old, new)
                 with self.assertRaisesRegex(
                     SystemExit, "reviewed Rust escape block differs"

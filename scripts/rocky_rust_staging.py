@@ -85,11 +85,11 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'ikc_queue.rs',
   'kind': 'rust_module',
   'repository_path': 'host-kernel/native-rust/ikc_queue.rs',
-  'sha256': '514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40'},
+  'sha256': '3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5'},
  {'destination': 'os_registry.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_registry.rs',
-  'sha256': '9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9'},
+  'sha256': 'b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6'},
  {'destination': 'device_registry.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/device_registry.rs',
@@ -97,7 +97,7 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'ikc_master.rs',
   'kind': 'rust_module',
   'repository_path': 'host-kernel/native-rust/ikc_master.rs',
-  'sha256': 'f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e'},
+  'sha256': '1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3'},
  {'destination': 'ihk_ioctl.rs',
   'kind': 'rust_ioctl_dispatch',
   'repository_path': 'host-kernel/native-rust/ihk_ioctl.rs',
@@ -117,27 +117,27 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_cpu.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'e5bccbe0191d4330c7ea051f7569bab7368b6bbf34f703a869c7f2671ee812c7'},
+  'sha256': 'b3526bcc1657ba8927716ee4ea2cc7d8c9083aec773fc18b6e288797097f36af'},
  {'destination': 'smp_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183'},
+  'sha256': '686c8d30e7955b1051ba41d44650a924d196837cbd6918bffde08b1ff227e215'},
  {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
-  'sha256': 'c66c8d6960f761bdbb393bd4edb416b60e04651a812f624563707bc030eebcea'},
+  'sha256': '5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144'},
  {'destination': 'ihk_mapping.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/ihk_mapping.rs',
-  'sha256': 'd5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687'},
+  'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'},
  {'destination': 'smp_image.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_image.rs',
-  'sha256': '5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a'},
+  'sha256': '4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689'},
  {'destination': 'smp_loader.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_loader.rs',
-  'sha256': '2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba'},
+  'sha256': 'fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6'},
  {'destination': 'smp_startup.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_startup.rs',
@@ -208,7 +208,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': [],
   'source_destination': 'ihk.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk.rs',
-  'source_sha256': 'ea3720403482c66412b476d1e3dfeb1819f7397ba26f35d3aad62c47f1f0c73b'},
+  'source_sha256': '8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec'},
  {'crate': 'ihk_smp_x86_64',
   'normalized_name': 'ihk_smp_x86_64',
   'output': 'ihk-smp-x86_64.ko',
@@ -218,7 +218,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': 'fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750'},
+  'source_sha256': 'f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1'},
  {'crate': 'mcctrl',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
@@ -228,7 +228,7 @@ EXPECTED_MODULES = ({'crate': 'ihk',
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'mcctrl.rs',
   'source_repository_path': 'host-kernel/native-rust/mcctrl.rs',
-  'source_sha256': '1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389'})
+  'source_sha256': 'b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030'})
 AUDITED_PROVIDER_EXTERN = (
     'extern "Rust" {\n'
     '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
@@ -989,13 +989,36 @@ def _validate_input(repo_root, item, index):
         required = (
             "use super::abi::IhkIkcQueueHead;",
             "pub(crate) struct SharedQueue",
-            "pub(crate) fn try_enqueue",
             "pub(crate) fn try_dequeue",
-            "pub(crate) unsafe fn attach",
         )
         for token in required:
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique queue marker: {1}".format(label, token))
+        if text.count("pub(crate) unsafe fn attach") != 2:
+            raise ValidationError("{0} requires exactly two queue attach contexts".format(label))
+        enqueue_matches = list(re.finditer(r"pub\(crate\) fn try_enqueue\s*\(", text))
+        if len(enqueue_matches) != 2:
+            raise ValidationError(
+                "{0} requires exactly two queue producers, found {1}".format(
+                    label, len(enqueue_matches)
+                )
+            )
+        wrapper = enqueue_matches[0]
+        wrapper_impl = text.rfind("impl", 0, wrapper.start())
+        if wrapper_impl < 0 or not re.match(
+            r"impl<'mapping> SharedProducer<'mapping>\s*\{", text[wrapper_impl:]
+        ):
+            raise ValidationError("{0} queue wrapper producer context differs".format(label))
+        wrapper_end = text.find("\n    }", wrapper.end())
+        wrapper_body = text[wrapper.end():wrapper_end] if wrapper_end >= 0 else ""
+        if "self.0.try_enqueue(packet)" not in wrapper_body:
+            raise ValidationError("{0} queue wrapper producer redirect differs".format(label))
+        raw = enqueue_matches[1]
+        raw_impl = text.rfind("impl", 0, raw.start())
+        if raw_impl < 0 or not re.match(
+            r"impl<'mapping> SharedQueue<'mapping>\s*\{", text[raw_impl:]
+        ):
+            raise ValidationError("{0} raw queue producer context differs".format(label))
         lowered = text.lower()
         for forbidden in ("module!",):
             if forbidden in lowered:
