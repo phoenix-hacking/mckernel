@@ -1,0 +1,27 @@
+{
+  "schema": "mckernel.stability.execution-review.v1",
+  "date": "2026-09-28",
+  "scope": "unprivileged offline-build owner with elevated Docker client only",
+  "decision": "BLOCK",
+  "reviewed_source_sha256": "52c8b99ee74d001f7f1d1a776dda5161795dda848a1b12b46913537b5c12a211",
+  "reviewed_test_sha256": "69ed929f1af204b495afbf94485d2dee53606d1918fd55a5d487e11ae3b47820",
+  "finding": "A signaled sudo wrapper can complete the ordinary wait path with a negative code. The later nonzero raise bypasses client-retirement classification, so a surviving elevated Docker descendant can mutate the daemon after container cleanup while the lease is released.",
+  "required_correction": [
+    "Classify abnormal privileged-client termination as retirement-unproven on every completion path, including an already-exited wrapper.",
+    "Conservatively retain the lease unless descendant retirement is independently proved; terminal container observation cannot clear client uncertainty.",
+    "Add a bounded regression for a killed sudo wrapper with a surviving client and delayed daemon mutation, plus already-exited negative classification."
+  ],
+  "accepted_controls": [
+    "Real/effective root rejection and an unprivileged Python owner.",
+    "Fixed absolute sudo/Docker argv and request-independent executable selection.",
+    "Allowlisted environment plus non-serialized inherited SUDO_ASKPASS.",
+    "Unchanged direct/injected preparation transport, container UID/profile and single start-then-wait sequencing.",
+    "The fixed Unix socket plus actual immutable-image inspection sufficiently binds the trusted local daemon for this boundary."
+  ],
+  "execution": {
+    "sudo_invoked": false,
+    "docker_invoked": false,
+    "build_started": false
+  },
+  "limitations": "No source-boundary or one-shot offline-build release is granted. No build, module, guest, runtime or OS acceptance follows."
+}

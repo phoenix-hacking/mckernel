@@ -621,6 +621,71 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 with self.assertRaisesRegex(lifecycle.ValidationError, error):
                     lifecycle._validate_rust_source(mutated, self.contract)
 
+    def test_provider_detach_snapshot_and_teardown_order_are_function_local(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        snapshot = """IHK_DEVICE_REGISTRY
+        .snapshot(handle)"""
+        guard = """if snapshot.provider_references != 0 || snapshot.os_references != 0 {
+        panic!(
+            "v2 provider detach before reference drain: open={} os={}",
+            snapshot.provider_references, snapshot.os_references,
+        );
+    }"""
+        commit = """    exit();
+    unregister
+        .commit()"""
+        callback_clear = """    IHK_SMP_PROVIDER_EXIT_V2
+        .compare_exchange(
+            exit_pointer,
+            core::ptr::null_mut(),
+            Ordering::AcqRel,
+            Ordering::Acquire,
+        )"""
+        mutations = (
+            (snapshot, "IHK_DEVICE_REGISTRY\n        .decode_provider_token(token)",
+             "snapshot boundary"),
+            (snapshot, "IHK_DEVICE_REGISTRY\n        .snapshot(token)",
+             "snapshot boundary"),
+            (guard, "if snapshot.provider_references != 0 && snapshot.os_references != 0 {\n"
+             "        panic!(\n            \"v2 provider detach before reference drain: open={} os={}\",\n"
+             "            snapshot.provider_references, snapshot.os_references,\n        );\n    }",
+             "unpublish-exit-vacate ordering"),
+            (commit, """    unregister
+        .commit();
+    exit();""", "unpublish-exit-vacate ordering"),
+            (commit, """    exit();
+    """ + callback_clear + """
+    unregister
+        .commit()""", "callback identity must clear only after unregister commit"),
+        )
+        for needle, replacement, error in mutations:
+            with self.subTest(error=error):
+                self.assertIn(needle, source)
+                with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                    lifecycle._validate_rust_source(
+                        source.replace(needle, replacement, 1), self.contract
+                    )
+
+    def test_provider_detach_comment_and_string_decoys_do_not_satisfy_snapshot(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        needle = """    let snapshot = IHK_DEVICE_REGISTRY
+        .snapshot(handle)"""
+        self.assertIn(needle, source)
+        decoy = """    // let snapshot = IHK_DEVICE_REGISTRY.snapshot(handle);
+    let snapshot = IHK_DEVICE_REGISTRY
+        .decode_provider_token(token)
+        // IHK_DEVICE_REGISTRY.snapshot(handle)
+        ;"""
+        mutated = source.replace(needle, decoy, 1)
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError, "snapshot boundary|unpublish-exit-vacate ordering"
+        ):
+            lifecycle._validate_rust_source(mutated, self.contract)
+
     def test_provider_open_sites_require_distinct_immediate_safety_annotations(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"
@@ -699,7 +764,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         original = source.read_text(encoding="utf-8")
         for old, new in (
             (
-                "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
+                "use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};",
                 "use self::device_registry::MISSING_DEVICE_REGISTRY;",
             ),
             (

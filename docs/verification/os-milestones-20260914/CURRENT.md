@@ -4947,6 +4947,7 @@ that backend path is built and separately released. Formal counters remain
 points and 0/7 language gates; the four prior diagnostic apps and zero
 current-candidate builds remain unchanged.
 
+
 Continuation checkpoint 53, 2026-09-28: the launcher requested shutdown, so
 no new work was dispatched and all eight child lanes were joined. The bounded
 native v5 shutdown-dispatch candidate is preserved at exact source SHA-256
@@ -5409,5 +5410,103 @@ After successful terminal retirement and receipt validation, checkpoint the
 prepared image and obtain a separate independent execution release for the
 offline heavy build. Do not infer build, module, guest, application or OS
 acceptance from the preparation release. Formal counters remain 0/273, 2/4,
+6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero
+current-candidate builds remain unchanged.
+
+Continuation checkpoint 61, 2026-09-28: the independently released exact
+source-free image preparation executed once and PASSed. The command exited zero,
+installed and observed the exact Rocky 10.2 package/tool closure, retired and
+removed container `mckernel-tools-164c861b277a47b4be3d221a196b2065`, and removed
+its lease. The immutable prepared image is
+`sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d`.
+The image receipt SHA-256 is `18225919...8172`; all 59 receipt-bound evidence
+files rehash, all 18 Docker command records exited zero, and the reviewed stop
+of the sleep entrypoint is terminal exit 143, running false and OOMKilled false.
+The complete 79-entry preparation capture is retained at
+`evidence/stability-native-exact-image-preparation-d0947e0c-20260928-1.tar.gz`
+(SHA-256 `3094e94c...59d9`, 47,704 bytes). The additive result is
+`stability-native-exact-image-preparation-success-20260928-1.json`.
+
+Three lifecycle-checker edits initially propagated into the hardlinked d094
+candidate while preparation was running. The preparation had no source mounts,
+so those bytes never entered its image. The links were broken, exact d094 bytes
+were restored, the candidate returned to zero status entries, and complete
+8,899-file `verify_inputs` PASSed again. The first post-run inventory helper and
+terminal assertion were also corrected without repeating privileged execution:
+the former used the wrong working directory, while the latter incorrectly
+expected the intentional sleep-container stop to exit zero rather than 143.
+Both original observer errors are retained in the preparation result.
+
+A suspected duplicate Docker start was likewise an observation error: two
+overlapping `sed` ranges printed the same line 330 twice. Direct source
+inspection proves exactly one start immediately followed by one wait. A new
+regression freezes that lifecycle; all 21 owner tests pass in 2.740 seconds.
+The compressed raw log is
+`evidence/stability-native-exact-owner-single-start-tests-20260928-1.log.gz`
+(SHA-256 `19f6e428...d049`). No configured kernel build has started.
+
+Fresh build admission found a real host boundary blocker before request
+creation: uid 1000 is not in the Docker group and direct access to
+`/var/run/docker.sock` is denied, while the reviewed owner rejects uid 0. An
+independent privilege review BLOCKed a simple `sudo -A docker` prefix because
+SIGKILL is not reliably relayed to an elevated Docker descendant. One bounded
+correction is active: retain the unprivileged owner and container UID, elevate
+only an immutable absolute Docker client command, pass only the inherited
+SUDO_ASKPASS field without logging it, use catchable TERM plus bounded client
+retirement, retain the lease on every uncertain elevated descendant, and bind
+the actual daemon endpoint. No offline-build execution release exists yet.
+
+The first elevated-client correction passed 35 tests but independent rereview
+returned BLOCK: a sudo wrapper killed during ordinary wait could exit negative
+without descendant classification, then a surviving root Docker client could
+start the container after cleanup had released its lease. The additive BLOCK is
+`stability-native-exact-owner-sudo-review-block-20260928-1.json`. Expert
+escalation first reproduced the defect with three tests and seven failures, then
+made negative sudo-wrapper classification cover ordinary completion,
+already-exited and post-TERM paths. Client uncertainty is sticky across later
+container cleanup and prevents both `retired=true` and lease removal. The
+original extracted log is
+`evidence/stability-native-exact-owner-negative-exit-original-failure-20260928-1.log.gz`
+(SHA-256 `5264b23e...c03`).
+
+The corrected owner/preparation suites pass 39 tests in 5.535 seconds; the raw
+log is `evidence/stability-native-exact-owner-negative-exit-tests-20260928-1.log.gz`
+(SHA-256 `7c2e2c55...8229`). Owner SHA-256 is `63ed1c4a...5602` and test
+SHA-256 is `831c84a6...1afd`. Final independent rereview PASSes the source
+boundary and declares one exact offline build eligible only after a clean
+pushed/fetched checkpoint plus exact request, identity, fresh-path, exclusive
+owner and resource preflight. The decision is
+`stability-native-exact-owner-sudo-review-success-20260928-1.json`. No sudo,
+Docker or build was used for this correction or review.
+
+In the disjoint lifecycle lane, the initial import-order oracle correction
+exposed further stale contiguous snapshot/commit expectations. The unchanged
+production detach retains its Unpublishing guard, checks both reference counts,
+executes the retained callback before commit, commits Vacant, then clears the
+callback identity. The 76-test failure is preserved at
+`evidence/stability-native-ihk-lifecycle-oracle-correction-failure-20260928-1.log.gz`
+(SHA-256 `b20ebb6f...43c`). Independent expert review authorizes only a bounded
+checker/test formatting correction; whole-suite acceptance remains BLOCKED on
+separately reviewed contract/source identity closure. No Rust production edit
+or runtime credit follows.
+
+Lifecycle phase 1 now passes five dispatcher-replayed focused tests with the
+pinned Rust 1.92 compiler path. The two checkers use function-local,
+rustfmt-insensitive active-code matching for snapshot/drain/exit/commit/callback
+clear ordering, and the negative tests reject wrong receivers/handles, weakened
+guards, inversions and comment/string decoys. Evidence is
+`stability-native-ihk-lifecycle-oracle-phase1-wip-20260928-1.json` and
+`evidence/stability-native-ihk-lifecycle-oracle-phase1-tests-20260928-1.log.gz`
+(SHA-256 `029685e3...2118`). The full suites remain intentionally fail-closed
+on the separately reviewed stale contract/source identity closure.
+
+Next executable path: commit, push and verify the reviewed owner bytes and
+preparation checkpoint; then create the exact fresh request, revalidate all
+identities/resource floors/owners and run one offline build under the conditional
+release. Preserve the prepared image and receipt. After a successful build,
+bind exact bzImage/modules/image,
+regenerate the startup packet, obtain a separate one-shot runtime release, and
+run only the smallest `startup.argv-empty` diagnostic while capturing exact
+bytes, exit, kernel logs and teardown. Formal counters remain 0/273, 2/4,
 6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero
 current-candidate builds remain unchanged.

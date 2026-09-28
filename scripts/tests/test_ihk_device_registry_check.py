@@ -322,6 +322,61 @@ class IhkDeviceRegistryContractTests(unittest.TestCase):
             registry.derive_contract(
                 REPO_ROOT, rust_override=self.rust.replace(old, new, 1))
 
+    def test_callback_detach_snapshot_and_commit_are_function_local(self):
+        source = self.crate_root
+        snapshot = b"""let snapshot = IHK_DEVICE_REGISTRY
+        .snapshot(handle)"""
+        commit = b"""    exit();
+    unregister
+        .commit()"""
+        callback_clear = b"""    IHK_SMP_PROVIDER_EXIT_V2
+        .compare_exchange(
+            exit_pointer,
+            core::ptr::null_mut(),
+            Ordering::AcqRel,
+            Ordering::Acquire,
+        )"""
+        mutations = (
+            (snapshot,
+             b"let snapshot = IHK_DEVICE_REGISTRY\n        .decode_provider_token(token)",
+             "snapshot"),
+            (snapshot,
+             b"let snapshot = IHK_DEVICE_REGISTRY\n        .snapshot(token)",
+             "snapshot"),
+            (commit,
+             b"    unregister\n        .commit();\n    exit();",
+             "ordered fragment"),
+            (commit,
+             b"    exit();\n" + callback_clear + b"\n    unregister\n        .commit()",
+             "callback identity must clear only after unregister commit"),
+        )
+        for needle, replacement, error in mutations:
+            with self.subTest(error=error):
+                self.assertIn(needle, source)
+                with self.assertRaisesRegex(
+                    registry.ContractError, "provider-lease boundary|snapshot|" + error
+                ):
+                    registry.derive_contract(
+                        REPO_ROOT, crate_root_override=source.replace(needle, replacement, 1)
+                    )
+
+    def test_callback_detach_comment_and_string_decoys_do_not_satisfy_snapshot(self):
+        source = self.crate_root
+        needle = b"""let snapshot = IHK_DEVICE_REGISTRY
+        .snapshot(handle)"""
+        self.assertIn(needle, source)
+        decoy = (
+            b'let _doc = "let snapshot = IHK_DEVICE_REGISTRY.snapshot(handle)";\n'
+            b"// let snapshot = IHK_DEVICE_REGISTRY.snapshot(handle)\n"
+            b"let snapshot = IHK_DEVICE_REGISTRY\n        .decode_provider_token(token)"
+        )
+        with self.assertRaisesRegex(
+            registry.ContractError, "provider-lease boundary|snapshot"
+        ):
+            registry.derive_contract(
+                REPO_ROOT, crate_root_override=source.replace(needle, decoy, 1)
+            )
+
     def test_drop_cleanup_stale_handles_and_identity_cannot_be_resigned_away(self):
         mutations = (
             (b"let _ = self.abort_inner();", b"let _ = Ok::<(), ()>(());"),

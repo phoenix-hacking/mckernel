@@ -122,7 +122,11 @@ def signal_regression(test, root, mode, request, signum):
             test.assertTrue(any(c[0] == 'stop' for c in commands))
             command_status = json.loads((outputs[0].parent / 'status.json').read_text())
             test.assertEqual(command_status['state'], 'failed')
-            test.assertEqual(command_status['exit_code'], -signal.SIGKILL)
+            # Cancellation first relays TERM to the client group.  A clean
+            # relay is proved by its TERM exit; SIGKILL is reserved for the
+            # separately covered forced path.
+            test.assertEqual(command_status['exit_code'],
+                             -signal.SIGKILL if signum == signal.SIGKILL else -signal.SIGTERM)
             test.assertTrue(os.WIFEXITED(int((root / 'owner.wait').read_text())))
     finally:
         if proc.poll() is None:
@@ -274,6 +278,18 @@ class OwnerTests(unittest.TestCase):
         self.assertIn('container.log', result['evidence'])
         self.assertTrue(any(c[0] == 'rm' for c in fake.commands))
 
+    def test_start_is_once_and_precedes_wait(self):
+        fake = FakeDocker(self.request)
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'PASS', result)
+        lifecycle = [command[0] for command in fake.commands]
+        self.assertEqual(lifecycle.count('start'), 1)
+        start_index = lifecycle.index('start')
+        wait_indices = [index for index, operation in enumerate(lifecycle)
+                        if operation == 'wait']
+        self.assertEqual(len(wait_indices), 1)
+        self.assertEqual(wait_indices[0], start_index + 1)
+
     def test_missing_artifact_cannot_pass_and_container_preserved(self):
         fake = FakeDocker(self.request)
         fake.omit_artifact = True
@@ -378,6 +394,14 @@ class OwnerTests(unittest.TestCase):
             with self.subTest(key=key), self.assertRaises(ValueError):
                 owner.BuildOwner(changed).validate()
 
+    def test_real_and_effective_root_are_rejected(self):
+        for real, effective in ((0, 1000), (1000, 0)):
+            with self.subTest(real=real, effective=effective):
+                with mock.patch.object(owner.os, 'getuid', return_value=real), \
+                     mock.patch.object(owner.os, 'geteuid', return_value=effective):
+                    with self.assertRaisesRegex(ValueError, 'unprivileged'):
+                        owner.BuildOwner(self.request).validate()
+
     def test_create_uncertainty_preserves_lease(self):
         fake = FakeDocker(self.request)
         fake.fail_command = 'create'
@@ -431,16 +455,133 @@ class OwnerTests(unittest.TestCase):
         def local(argv, **kwargs):
             return real_popen([sys.executable, '-u', '-c',
                                'import os,time; os.write(1,b"timeout-out\\n"); os.write(2,b"timeout-err\\n"); time.sleep(10)'], **kwargs)
+        docker = owner.Docker(self.root / 'live.log')
         with mock.patch.object(owner.subprocess, 'Popen', local):
             with self.assertRaisesRegex(RuntimeError, 'timed out'):
-                owner.Docker(self.root / 'live.log').call(['exec', 'local-fixture'], timeout=0.2)
+                docker.call(['exec', 'local-fixture'], timeout=0.2)
         capture = next(self.root.glob('command-*'))
         self.assertEqual((capture / 'stdout').read_bytes(), b'timeout-out\n')
         self.assertEqual((capture / 'stderr').read_bytes(), b'timeout-err\n')
         status = json.loads((capture / 'status.json').read_text())
-        self.assertEqual(status['exit_code'], -signal.SIGKILL)
+        self.assertEqual(status['exit_code'], -signal.SIGTERM)
         with self.assertRaises(ProcessLookupError):
             os.kill(status['pid'], 0)
+        self.assertFalse(docker.client_retirement_unproven)
+
+    def test_real_owner_prefix_is_immutable_and_askpass_is_not_evidence(self):
+        seen = {}
+        real_popen = subprocess.Popen
+        def local(argv, **kwargs):
+            seen['argv'] = list(argv)
+            seen['env'] = dict(kwargs['env'])
+            return real_popen([sys.executable, '-u', '-c', 'print("ok")'], **kwargs)
+        with mock.patch.dict(os.environ, {'SUDO_ASKPASS': 'secret-do-not-log'}, clear=False), \
+             mock.patch.object(owner.subprocess, 'Popen', local):
+            result = owner.Docker(self.root / 'sudo.log', sudo=True).call(['inspect', 'local-fixture'])
+        self.assertEqual(seen['argv'][:4], list(owner.SUDO_DOCKER_PREFIX))
+        self.assertEqual(seen['argv'][4:], ['inspect', 'local-fixture'])
+        self.assertEqual(seen['env']['SUDO_ASKPASS'], 'secret-do-not-log')
+        log = (self.root / 'sudo.log').read_text()
+        self.assertNotIn('secret-do-not-log', log)
+
+    def test_term_is_sent_before_forced_kill_and_forced_path_is_unproven(self):
+        process = mock.Mock(pid=12345, returncode=0)
+        process.poll.side_effect = [None, None, 0]
+        process.wait.side_effect = [subprocess.TimeoutExpired('docker', 5), 0]
+        docker = owner.Docker(self.root / 'term.log')
+        with mock.patch.object(owner.os, 'killpg') as killpg:
+            status = {}
+            docker._retire_client(process, status)
+        self.assertEqual(killpg.call_args_list[0].args, (12345, signal.SIGTERM))
+        self.assertEqual(killpg.call_args_list[1].args, (12345, signal.SIGKILL))
+        self.assertTrue(docker.client_retirement_unproven)
+
+    def test_already_exited_sudo_signal_is_unproven_even_without_group_members(self):
+        for code in (-signal.SIGTERM, -signal.SIGKILL, 1, 0):
+            with self.subTest(code=code):
+                process = mock.Mock(pid=12345, returncode=code)
+                process.poll.return_value = code
+                docker = owner.Docker(self.root / 'already-exited.log', sudo=True)
+                status = {}
+                with mock.patch.object(docker, '_surviving_group_members', return_value=[]), \
+                     mock.patch.object(owner.os, 'killpg') as killpg:
+                    docker._retire_client(process, status)
+                self.assertEqual(status['exit_code'], code)
+                self.assertEqual(docker.client_retirement_unproven, code < 0)
+                killpg.assert_not_called()
+                process.wait.assert_not_called()
+
+    def test_sudo_term_retirement_is_unproven_even_after_wrapper_reap(self):
+        process = mock.Mock(pid=12345, returncode=-signal.SIGTERM)
+        process.poll.side_effect = [None, -signal.SIGTERM]
+        process.wait.return_value = -signal.SIGTERM
+        docker = owner.Docker(self.root / 'term-sudo.log', sudo=True)
+        status = {}
+        with mock.patch.object(docker, '_surviving_group_members', return_value=[]), \
+             mock.patch.object(owner.os, 'killpg') as killpg:
+            docker._retire_client(process, status)
+        killpg.assert_called_once_with(process.pid, signal.SIGTERM)
+        self.assertEqual(status['exit_code'], -signal.SIGTERM)
+        self.assertTrue(docker.client_retirement_unproven)
+        self.assertTrue(status['client_retirement_unproven'])
+
+    def test_normal_wait_classifies_sudo_signal_with_both_check_modes(self):
+        real_popen = subprocess.Popen
+        for sudo, code in ((True, -signal.SIGTERM), (True, -signal.SIGKILL),
+                           (True, 1), (False, -signal.SIGTERM)):
+            for check in (True, False):
+                with self.subTest(sudo=sudo, code=code, check=check):
+                    def local(argv, **kwargs):
+                        program = ('import os,signal; os.kill(os.getpid(), %d)' % -code
+                                   if code < 0 else 'raise SystemExit(%d)' % code)
+                        return real_popen([sys.executable, '-u', '-c', program], **kwargs)
+                    docker = owner.Docker(self.root / 'normal-wait.log', sudo=sudo)
+                    with mock.patch.object(owner.subprocess, 'Popen', local):
+                        if check:
+                            with self.assertRaisesRegex(RuntimeError, 'docker command failed'):
+                                docker.call(['start', 'local-fixture'], check=check)
+                        else:
+                            self.assertEqual(docker.call(['start', 'local-fixture'],
+                                                         check=check).returncode, code)
+                    self.assertEqual(docker.client_retirement_unproven, sudo and code < 0)
+
+    def test_sudo_wrapper_death_and_delayed_start_keep_lease_after_terminal_observation(self):
+        live = owner.Docker(self.root / 'ev' / 'sudo.log', sudo=True)
+        process = mock.Mock(pid=12345, returncode=-signal.SIGKILL)
+        process.wait.return_value = process.poll.return_value = -signal.SIGKILL
+
+        class DelayedClient(FakeDocker):
+            @property
+            def client_retirement_unproven(self):
+                return live.client_retirement_unproven
+
+            def call(self, args, timeout=120, check=True):
+                if args[0] == 'start':
+                    self.commands.append(list(args))
+                    # sudo dies before its escaped client sends the mutation.
+                    return live.call(args, timeout, check)
+                if args[0] == 'logs':
+                    # Retirement has observed 'created'. The surviving client
+                    # sends its delayed start after that final observation.
+                    self.info['State'] = {'Status': 'running', 'Running': True, 'Pid': 1234}
+                return super().call(args, timeout, check)
+
+        fake = DelayedClient(self.request)
+        with mock.patch.object(owner.subprocess, 'Popen', return_value=process), \
+             mock.patch.object(live, '_surviving_group_members', return_value=[]):
+            result = self.execute(fake)
+        terminal = json.loads((self.root / 'ev' / 'inspect-terminal.json').read_text())
+        self.assertEqual(terminal['State']['Status'], 'created')
+        self.assertTrue(fake.info['State']['Running'])
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertFalse(result['retired'])
+        self.assertTrue(result['client_retirement_unproven'])
+        self.assertTrue(Path(self.request['lease_path']).exists())
+        status = json.loads(next((self.root / 'ev').glob('command-*/status.json')).read_text())
+        self.assertEqual(status['exit_code'], -signal.SIGKILL)
+        self.assertTrue(status['client_retirement_unproven'])
+        self.assertEqual([c[0] for c in fake.commands].count('start'), 1)
+        self.assertFalse(any(c[0] in ('wait', 'rm') for c in fake.commands))
 
 
 if __name__ == '__main__':

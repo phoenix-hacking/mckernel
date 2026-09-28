@@ -21,6 +21,18 @@ ENV = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C', 'LC_ALL': 'C',
        'TZ': 'UTC', 'PYTHONHASHSEED': '0', 'GIT_TERMINAL_PROMPT': '0',
        'GIT_NO_REPLACE_OBJECTS': '1', 'GIT_CONFIG_NOSYSTEM': '1',
        'GIT_CONFIG_GLOBAL': '/dev/null'}
+SUDO_DOCKER_PREFIX = ('/usr/bin/sudo', '-A', '/usr/bin/docker',
+                      '--host=unix:///var/run/docker.sock')
+
+
+def docker_env():
+    """Return the reviewed client environment without exposing askpass data."""
+    environment = dict(ENV)
+    if 'SUDO_ASKPASS' in os.environ:
+        # sudo alone receives this inherited value; it is never logged,
+        # serialized, or included in the container environment.
+        environment['SUDO_ASKPASS'] = os.environ['SUDO_ASKPASS']
+    return environment
 
 
 def digest(path):
@@ -135,10 +147,80 @@ class CliSignals:
 
 
 class Docker:
-    def __init__(self, log, signals=None):
+    def __init__(self, log, signals=None, sudo=False):
         self.log = Path(log)
         self.signals = signals
         self.client_retirement_unproven = False
+        self.command_prefix = SUDO_DOCKER_PREFIX if sudo else ('docker',)
+
+    def _surviving_group_members(self, pgid):
+        members = []
+        try:
+            entries = Path('/proc').glob('[0-9]*/stat')
+            for stat in entries:
+                try:
+                    fields = stat.read_text().rsplit(')', 1)[1].split()
+                    if len(fields) > 2 and int(fields[2]) == pgid:
+                        members.append(int(stat.parent.name))
+                except FileNotFoundError:
+                    continue
+                except PermissionError:
+                    self.client_retirement_unproven = True
+                except (ValueError, IndexError):
+                    self.client_retirement_unproven = True
+        except (FileNotFoundError, PermissionError):
+            self.client_retirement_unproven = True
+        return members
+
+    def _record_client_exit(self, code, status):
+        status['exit_code'] = code
+        if self.command_prefix == SUDO_DOCKER_PREFIX and code is not None and code < 0:
+            # A signalled sudo wrapper cannot attest that its privileged child
+            # retired. That child may have escaped this process group, so an
+            # empty group scan or a terminal container snapshot is insufficient.
+            # This latch must survive subsequent successful cleanup commands.
+            self.client_retirement_unproven = True
+            status['client_retirement_unproven'] = True
+
+    def _retire_client(self, process, status):
+        """TERM the client group, then boundedly reap it; KILL is unproven."""
+        if process is None:
+            return
+        if process.poll() is not None:
+            self._record_client_exit(process.returncode, status)
+            survivors = self._surviving_group_members(process.pid)
+            if survivors:
+                self.client_retirement_unproven = True
+                status['client_survivors'] = survivors
+            return
+        try:
+            os.killpg(process.pid, signal.SIGTERM)
+        except BaseException as exc:
+            self.client_retirement_unproven = True
+            status['client_term_error'] = str(exc)
+        try:
+            process.wait(timeout=5)
+        except BaseException as exc:
+            self.client_retirement_unproven = True
+            status['client_term_wait_error'] = str(exc)
+        if process.poll() is None:
+            self.client_retirement_unproven = True
+            status['client_forced'] = True
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except BaseException as exc:
+                self.client_retirement_unproven = True
+                status['client_kill_error'] = str(exc)
+            try:
+                process.wait(timeout=5)
+            except BaseException as exc:
+                self.client_retirement_unproven = True
+                status['client_reap_error'] = str(exc)
+        self._record_client_exit(process.returncode, status)
+        survivors = self._surviving_group_members(process.pid)
+        if survivors:
+            self.client_retirement_unproven = True
+            status['client_survivors'] = survivors
 
     def call(self, args, timeout=120, check=True):
         if self.signals:
@@ -148,7 +230,7 @@ class Docker:
         capture = self.log.parent / ('command-' + uuid.uuid4().hex)
         capture.mkdir()
         stdout_path, stderr_path = capture / 'stdout', capture / 'stderr'
-        command = ['docker', *args]
+        command = [*self.command_prefix, *args]
         status = {'argv': command, 'timeout': timeout, 'state': 'starting'}
         atomic(capture / 'status.json', status)
         with self.log.open('a') as stream:
@@ -160,7 +242,7 @@ class Docker:
             with stdout_path.open('xb', buffering=0) as stdout, stderr_path.open('xb', buffering=0) as stderr:
                 # A separate client process group permits exact client rundown;
                 # container retirement remains the owner's independent duty.
-                process = subprocess.Popen(command, env=ENV, stdout=stdout,
+                process = subprocess.Popen(command, env=docker_env(), stdout=stdout,
                                            stderr=stderr, start_new_session=True)
                 status.update(state='running', pid=process.pid)
                 atomic(capture / 'status.json', status)
@@ -173,6 +255,7 @@ class Docker:
                         raise RuntimeError('docker command timed out: ' + args[0])
                     try:
                         code = process.wait(timeout=min(0.1, remaining))
+                        self._record_client_exit(code, status)
                         break
                     except subprocess.TimeoutExpired:
                         continue
@@ -182,13 +265,7 @@ class Docker:
         except BaseException as exc:
             status.update(state='failed', error=str(exc))
             if process is not None:
-                try:
-                    if process.poll() is None:
-                        os.killpg(process.pid, signal.SIGKILL)
-                    status['exit_code'] = process.wait(timeout=5)
-                except BaseException as retirement:
-                    self.client_retirement_unproven = True
-                    status['client_retirement_error'] = str(retirement)
+                self._retire_client(process, status)
             raise
         finally:
             atomic(capture / 'status.json', status)
@@ -200,6 +277,11 @@ class Docker:
         if check and result.returncode:
             raise RuntimeError('docker command failed: ' + args[0])
         return result
+
+
+# Keep the real implementation distinguishable from test/injected clients;
+# only the former is allowed to receive the privileged owner prefix.
+_REAL_DOCKER = Docker
 
 
 def inspect(docker, name):
@@ -268,7 +350,7 @@ class BuildOwner:
             raise ValueError('fresh output/evidence roots required')
         if not 0 < r['timeout'] <= 19800:
             raise ValueError('timeout exceeds reviewed 330 minutes')
-        if os.getuid() == 0:
+        if os.getuid() == 0 or os.geteuid() == 0:
             raise ValueError('offline build owner must be an unprivileged user')
         for key in ('image_receipt', 'input_manifest', 'driver_path'):
             if digest(regular(r[key])) != r[key + '_sha256']:
@@ -286,7 +368,16 @@ class BuildOwner:
         self.validate()
         r = self.r
         evidence = Path(r['evidence_root'])
-        docker = self.docker or Docker(evidence / 'docker.log', signals=self.signals)
+        # Only this real-owner factory may select the privileged immutable
+        # client prefix. Injected Docker implementations remain unprivileged.
+        if self.docker is not None:
+            docker = self.docker
+        elif Docker is _REAL_DOCKER:
+            docker = Docker(evidence / 'docker.log', signals=self.signals, sudo=True)
+        else:
+            # A substituted client is an injected test/preparation transport;
+            # it must never inherit the real owner's executable prefix.
+            docker = Docker(evidence / 'docker.log', signals=self.signals)
         name = 'mckernel-exact-' + uuid.uuid4().hex
         lease = Lease(r['lease_path'], name)
         lease.acquire()

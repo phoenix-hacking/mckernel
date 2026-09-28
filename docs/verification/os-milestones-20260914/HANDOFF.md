@@ -8,7 +8,7 @@ diagnostic application is never whole-OS completion.
 
 - Branch: `codex/local-native-staging-repair`.
 - Last verified remote checkpoint:
-  `029b41fad7f4a30ae347c9ca282d1b8d58d46ce9`.
+  `619aaa45ef531de17f477906351e9363b77cc40d`.
 - Adopted policy SHA-256: GOAL `76c4f5d1...c0bcc3`, START
   `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, HANDOFF predecessor
   `265cd999...a415`.
@@ -144,10 +144,33 @@ not an execution release. Next create and bind the clean checkout/full manifest,
 then seek independent review for the separate networked image-preparation phase.
 
 The first preparation review BLOCKED buffered `docker exec` failure evidence.
-The bounded correction now streams every command to retained files and handles
+The bounded correction streams every command to retained files and handles
 TERM/INT through bounded retirement/receipt; SIGKILL tests preserve already
-emitted bytes. All 43 focused tests pass with a retained raw log. Seek fresh
-independent rereview of the exact pushed correction before running preparation.
+emitted bytes. All 43 focused tests pass with a retained raw log, and independent
+rereview released only the exact d094 source-free preparation.
+
+That exact preparation now PASSes. Image
+`sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d`
+is locally retained; its receipt SHA is `18225919...8172`. All 59 bound files
+and 18 command statuses verify, the container is absent, and the lease is gone.
+The candidate is clean after three hardlinks were broken/restored and its full
+8,899-file manifest reverified. Evidence is
+`stability-native-exact-image-preparation-success-20260928-1.json` plus archive
+`evidence/stability-native-exact-image-preparation-d0947e0c-20260928-1.tar.gz`.
+No configured build has run.
+
+The immediate build blocker is privilege separation: uid 1000 cannot access the
+Docker socket, but the owner must not run as root. Independent review BLOCKs a
+prefix-only sudo patch because elevated Docker client retirement would be
+unproven. The expert correction now elevates only the immutable Docker client,
+uses catchable TERM before forced retirement, classifies negative sudo-wrapper
+completion on every path, retains the lease on sticky client uncertainty,
+filters SUDO_ASKPASS without logging it and pins the Unix socket. The original
+three-test/seven-failure reproducer is retained and 39 corrected tests pass.
+Final independent rereview PASSes the source boundary and conditionally releases
+one exact offline build only after these bytes are pushed/fetched and the exact
+request, candidate/manifest/driver/image identities, fresh roots, owner and
+resource floors pass dispatcher preflight. No build has run yet.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

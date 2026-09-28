@@ -410,8 +410,15 @@ def _require_pattern(text, pattern, label):
 
 
 def _require_order(text, fragments, label):
+    # Callers pass a function-local, comment/string-masked Rust body. Rustfmt
+    # may split a receiver and method across lines, so whitespace is not part
+    # of this ordering contract.
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"\s*([.(),;{}])\s*", r"\1", text)
     position = -1
     for fragment in fragments:
+        fragment = re.sub(r"\s+", " ", fragment)
+        fragment = re.sub(r"\s*([.(),;{}])\s*", r"\1", fragment)
         position = text.find(fragment, position + 1)
         if position < 0:
             raise ContractError(
@@ -1239,7 +1246,7 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
     if crate_root.count(_rust_code_view(declaration, "device-registry declaration")) != 1:
         raise ContractError("IHK crate root lacks the private device-registry edge")
     required = (
-        "use self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy};",
+        "use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};",
         "IHK_DEVICE_REGISTRY.attach_provider_token()",
         "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
         "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
@@ -1332,6 +1339,14 @@ def _validate_boundaries(crate_root_data, ioctl_contract_data):
         ),
         "IHK callback-bound provider detach export",
     )
+    detach_order = re.sub(r"\s+", " ", detach)
+    detach_order = re.sub(r"\s*([.(),;{}])\s*", r"\1", detach_order)
+    commit_position = detach_order.find("unregister.commit()")
+    compare_position = detach_order.find("compare_exchange(")
+    if compare_position < 0 or commit_position < 0 or compare_position < commit_position:
+        raise ContractError(
+            "IHK callback identity must clear only after unregister commit"
+        )
     _require_active_count(
         source,
         crate_root,

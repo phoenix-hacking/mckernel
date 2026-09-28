@@ -350,6 +350,16 @@ def _require_active_count(text, code, fragment, expected, label):
         )
 
 
+def _require_active_pattern_count(code, pattern, expected, label):
+    """Require an active-code regex count after Rust masking."""
+
+    actual = len(list(re.finditer(pattern, code, re.MULTILINE | re.DOTALL)))
+    if actual != expected:
+        raise ValidationError(
+            f"{label} active occurrence count differs: expected {expected}, got {actual}"
+        )
+
+
 def _require_active_order(text, code, fragments, label):
     cursor = -1
     for fragment in fragments:
@@ -382,8 +392,14 @@ def _active_function_body(text, code, signature, label):
 
 
 def _require_order(text, fragments, label):
+    # Ordering is checked on a function-local comment/string-masked body;
+    # rustfmt whitespace must not become an accidental contract.
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"\s*([.(),;{}])\s*", r"\1", text)
     cursor = -1
     for fragment in fragments:
+        fragment = re.sub(r"\s+", " ", fragment)
+        fragment = re.sub(r"\s*([.(),;{}])\s*", r"\1", fragment)
         cursor = text.find(fragment, cursor + 1)
         if cursor < 0:
             raise ValidationError(f"{label} lacks ordered fragment: {fragment}")
@@ -623,7 +639,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     namespace = lease["import_namespace"]
     registry = lease["registry_static"]
     required_provider_fragments = (
-        f"use self::device_registry::{{{registry}, SharePolicy}};",
+        f"use self::device_registry::{{SharePolicy, {registry}}};",
         f'#[export_name = "{compatibility_attach}"]',
         f'pub extern "C" fn {compatibility_attach}() -> i64 {{',
         f"match {registry}.attach_provider_token()",
@@ -647,7 +663,6 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         f"symbol: {attach} as *const () as *const u8,",
         f'#[export_name = "{detach}"]',
         f'pub extern "C" fn {detach}(',
-        f"{registry}.snapshot(handle)",
         '"provider_lease=detach status=vacant minor={} generation={} callback_abi=1\\n",',
         f'#[export_name = "__export_symbol_{detach}"]',
         f"symbol: {detach} as *const () as *const u8,",
@@ -672,6 +687,12 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         _require_active_count(
             text, code, fragment, 1, "IHK provider-lease exact reviewed boundary"
         )
+    _require_active_pattern_count(
+        code,
+        rf"{re.escape(registry)}\s*\.\s*snapshot\s*\(\s*handle\s*\)",
+        1,
+        "IHK provider-lease snapshot boundary",
+    )
     attach_body = _active_function_body(
         text, code, f'pub extern "C" fn {attach}(', "IHK v2 attach"
     )
@@ -704,6 +725,14 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         ),
         "IHK v2 unpublish-exit-vacate ordering",
     )
+    detach_order = re.sub(r"\s+", " ", detach_body)
+    detach_order = re.sub(r"\s*([.(),;{}])\s*", r"\1", detach_order)
+    commit_position = detach_order.find("unregister.commit()")
+    compare_position = detach_order.find(".compare_exchange(")
+    if compare_position < 0 or commit_position < 0 or compare_position < commit_position:
+        raise ValidationError(
+            "IHK v2 callback identity must clear only after unregister commit"
+        )
     acquire_body = _active_function_body(
         text, code, f'pub extern "C" fn {acquire}(', "IHK provider open"
     )
@@ -802,7 +831,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     for match in re.finditer(r"^\s*use\s+([^;]+);", code, re.MULTILINE):
         imported = match.group(1).strip()
         if not imported.startswith(("kernel::", "core::")) and imported != (
-            "self::device_registry::{IHK_DEVICE_REGISTRY, SharePolicy}"
+            "self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY}"
         ):
             raise ValidationError(f"unreviewed Rust dependency in lifecycle source: {imported}")
 
