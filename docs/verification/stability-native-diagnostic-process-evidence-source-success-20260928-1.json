@@ -1,0 +1,51 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T09:12:13-07:00",
+  "base_commit": "cc45fba2a7cc28ca05419895a287d906a1c6bf43",
+  "scope": "native diagnostic outer Docker-client and inner QEMU process ownership/evidence",
+  "decision": "PASS_SOURCE_READY_FOR_PACKET4",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic.py": "a8017956af1424736a88be15ce7a38db5fe0e0f1f33e1eea006a6b38b4f7f392",
+    "scripts/application-tests/native_diagnostic_backend.py": "41bf970ac1f2a7969651eca8d8138c4104b6d3951985d9bf4117a099d6e8a034",
+    "scripts/application-tests/native_diagnostic_container_owner.py": "9edd23ab1d579f4c96b4d1d080a989bc5acf6797170f841b16bd42865a9bba87",
+    "scripts/tests/test_application_native_diagnostic.py": "48a5d158cadd7210f9ca8c73e20b2c9638a235230b795cc2861af2fe19108b6a",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "17c47d22922e1f8586ee92fa1b0fcc68ef28f55edfa3b3ed24249079abab645c",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "0479ad9ecedd95ae01a8b7b58bf15e93cf21f718c7674f3fe95f74169b389145"
+  },
+  "retained_failure_family": {
+    "rejected_packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-3.md",
+    "rejected_packet_sha256": "01be20700088ed85cb346ef2143b87e7b6e0bd7bfa0f00683a2622bb7f7ecec9",
+    "release_failure": "docs/verification/stability-native-diagnostic-current-signal-execution-review-failure-20260928-3.json",
+    "release_failure_sha256": "0c27ac2c7d539d02363ca7f7a83c37a8c3b8ce9660ab2a0413160e8d551ab9e6",
+    "subsequent_review": "FAIL_SOURCE_NOT_READY_PACKET4: five process-evidence loss paths",
+    "bounded_correction_review": "FAIL_SOURCE_NOT_READY_PACKET4: QEMU first-failure ordering and delayed-reap publication retry",
+    "final_review": "PASS_SOURCE_READY_FOR_PACKET4"
+  },
+  "verified_behavior": [
+    "Every acquired outer command retains primitive PID, process-group, session, proc-starttime and exact reap status; cancellation/finalization paths preserve the command record.",
+    "An initially unresolved outer command retains its immutable first observation and appends a command-linked final reap observation before lease release.",
+    "Delayed-reap records remain ledger-owned across failed serialization/queueing and are acknowledged only after successful queue transfer.",
+    "Post-Popen QEMU ownership-transfer failures retain immutable argv, PID, honestly incomplete identity fields, exact reap status and original first failure.",
+    "Primitive QEMU argv/identity/returncode is captured first under an independent deadline before QMP transcript or host-stream I/O.",
+    "QEMU evidence exceptions remain the first failure and preserve BaseException identity while later capture errors remain secondary.",
+    "The inner recorded QEMU argv is nonempty and joins the exact command independently derived by the outer manifest admission path."
+  ],
+  "tests": {
+    "command": "/home/holden/anaconda3/bin/python3 -m unittest -v scripts.tests.test_application_native_diagnostic scripts.tests.test_application_native_diagnostic_backend scripts.tests.test_application_native_diagnostic_container_owner scripts.tests.test_application_native_diagnostic_overlay scripts.tests.test_application_native_diagnostic_runner scripts.tests.test_qmp_capture",
+    "result": "234 tests passed in 16.522 seconds; exit 0",
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-diagnostic-process-evidence-tests-20260928-3",
+    "sha256sums_sha256": "99bfba2a1088ab388158f78f754762c67a38a241d16b903238227dcff9c3fc6f",
+    "stderr_sha256": "e3445228438efeac19ccecefe976048ebde69982c45878eef29e3049bbf43efe",
+    "timing_sha256": "8b6a00583ff64e1d722c6f6118c6429779e03ee0297c4290f8e3633551bce24f",
+    "py_compile": "PASS",
+    "scoped_diff_check": "PASS",
+    "bound_manifest": "startup.argv-empty; ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6"
+  },
+  "limitations": [
+    "This is source and unprivileged fixture evidence only.",
+    "Packet 3 remains rejected and cannot be executed or reused.",
+    "A fresh packet 4 with a new parent and nonce requires separate independent one-shot execution review.",
+    "No Docker, QEMU, guest, application, production-gate or catalog acceptance follows."
+  ],
+  "next": "Commit and fetched-blob verify these exact bytes, then bind only that commit in a fresh packet 4 and obtain a separate execution release."
+}

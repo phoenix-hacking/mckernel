@@ -399,9 +399,10 @@ class NativeDiagnosticTests(unittest.TestCase):
         changed = ND._thaw(plan)
         changed["runtime_ready"] = 1
         self.assertFalse(ND._same_plan(plan, ND._freeze(changed)))
-        def lifecycle(manifest, *args):
+        def lifecycle(manifest, *args, **kwargs):
             self.manifest["payload"]["oracle"]["exit_code"] = 0
             self.assertEqual(manifest["payload"]["oracle"]["exit_code"], 37)
+            self.assertEqual(kwargs["admitted_argv"], tuple(plan["argv"]))
             return {"status": "PROTOCOL_PASS"}
         with mock.patch.object(ND, "exercise_lifecycle", side_effect=lifecycle):
             ND.run_diagnostic(self.manifest, attempt, mock.Mock(), mock.Mock(), expected_plan=plan)
@@ -533,6 +534,99 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertIn("QEMU stdout", (attempt / "qemu.stdout").read_text())
         self.assertEqual(process.calls, ["terminate", "wait", "communicate"])
 
+    def test_qemu_evidence_is_captured_before_host_timeout_and_retained(self):
+        attempt = self.attempt()
+        class Ordered(Process):
+            def qemu_evidence(self):
+                self.calls.append("qemu-evidence")
+                return super().qemu_evidence()
+            def communicate(self, timeout):
+                self.calls.append("communicate")
+                time.sleep(5)
+        process = Ordered()
+        with self.assertRaisesRegex(ND.DiagnosticError, "absolute deadline"):
+            self.exercise(attempt, process, timeout=.05)
+        self.assertLess(process.calls.index("qemu-evidence"), process.calls.index("communicate"))
+        record = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(record["qemu_evidence"]["returncode"], 0)
+        self.assertEqual(record["failure"]["phase"], "host-capture")
+
+    def test_qemu_evidence_first_base_exception_is_rethrown_after_publication(self):
+        first = KeyboardInterrupt("FIRST")
+        class BrokenEvidence(Process):
+            def qemu_evidence(self): raise first
+        attempt = self.attempt(); process = BrokenEvidence()
+        with self.assertRaises(KeyboardInterrupt) as raised:
+            self.exercise(attempt, process)
+        self.assertIs(raised.exception, first)
+        self.assertIn("communicate", process.calls)
+        record = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(record["failure"], {"phase": "qemu-evidence", "type": "KeyboardInterrupt", "error": "FIRST"})
+        self.assertEqual(record["capture_errors"][0], record["failure"])
+
+    def test_qemu_evidence_first_exception_beats_later_host_capture_failure(self):
+        first = KeyboardInterrupt("FIRST")
+        later = RuntimeError("LATER")
+        class BrokenEvidence(Process):
+            def qemu_evidence(self): raise first
+            def communicate(self, timeout):
+                self.calls.append("communicate")
+                raise later
+        attempt = self.attempt(); process = BrokenEvidence()
+        with self.assertRaises(KeyboardInterrupt) as raised:
+            self.exercise(attempt, process)
+        self.assertIs(raised.exception, first)
+        record = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(record["failure"]["error"], "FIRST")
+        self.assertEqual([item["error"] for item in record["capture_errors"]], ["FIRST", "LATER"])
+
+    def test_admitted_qemu_argv_is_exact_nonempty_and_not_reconstructed(self):
+        admitted = ("/usr/libexec/qemu-kvm", "-qmp", "unix:test")
+        for argv, message in (([], "QEMU evidence argv"),
+                              (["/usr/libexec/qemu-kvm", "-qmp", "unix:other"], "admitted command mismatch")):
+            with self.subTest(argv=argv):
+                attempt = self.attempt()
+                process = Process()
+                process.qemu_evidence = lambda: {"argv": argv, **process.process_identity(), "returncode": 0}
+                with self.assertRaisesRegex(ND.DiagnosticError, message):
+                    ND.exercise_lifecycle(self.manifest, attempt, lambda **kw: process,
+                                          lambda **kw: Qmp(), timeout=1, admitted_argv=admitted)
+                record = json.loads((attempt / "result.json").read_text())
+                self.assertEqual(record["failure"]["phase"], "qemu-evidence")
+        attempt = self.attempt()
+        process = Process()
+        self.assertEqual(ND.exercise_lifecycle(self.manifest, attempt, lambda **kw: process,
+                                               lambda **kw: Qmp(), timeout=1,
+                                               admitted_argv=admitted)["status"], "PROTOCOL_PASS")
+
+    def test_acquisition_failure_evidence_is_durable_without_fabricated_identity(self):
+        attempt = self.attempt()
+        failure = RuntimeError("post-Popen identity failure")
+        carrier = RuntimeError("trusted acquisition carrier")
+        carrier._mckernel_acquisition_original = failure
+        carrier._mckernel_qemu_acquisition_evidence = {
+            "argv": ["/usr/libexec/qemu-kvm", "-qmp", "unix:test"],
+            "pid": 12345, "pgid": None, "sid": None, "starttime_ticks": None,
+            "identity_complete": False, "reaped": True, "returncode": -signal.SIGKILL}
+        with self.assertRaisesRegex(ND.DiagnosticError, "post-Popen identity failure"):
+            ND.exercise_lifecycle(self.manifest, attempt,
+                                  lambda **kw: (_ for _ in ()).throw(carrier), lambda **kw: Qmp())
+        record = json.loads((attempt / "result.json").read_text())
+        retained = record["qemu_acquisition_failure"]
+        self.assertEqual(retained["failure"]["error"], "post-Popen identity failure")
+        self.assertEqual(retained["evidence"]["pid"], 12345)
+        self.assertIsNone(retained["evidence"]["pgid"])
+        self.assertEqual(retained["evidence"]["returncode"], -signal.SIGKILL)
+        attempt = self.attempt()
+        carrier._mckernel_qemu_acquisition_evidence = dict(retained["evidence"], reaped=False,
+                                                            returncode=None)
+        with self.assertRaisesRegex(ND.DiagnosticError, "post-Popen identity failure"):
+            ND.exercise_lifecycle(self.manifest, attempt,
+                                  lambda **kw: (_ for _ in ()).throw(carrier), lambda **kw: Qmp())
+        record = json.loads((attempt / "result.json").read_text())
+        self.assertFalse(record["cleanup"]["reaped"])
+        self.assertEqual(record["cleanup"]["errors"][-1]["phase"], "acquisition-retirement")
+
     def test_evaluate_rejects_malformed_missing_and_aliased_process_identity(self):
         base = self.observation()
         variants = []
@@ -559,6 +653,8 @@ class NativeDiagnosticTests(unittest.TestCase):
                     def warn(*args, **kwargs):
                         with (attempt / (log + ".log")).open("a") as stream:
                             stream.write("\nWARNING: teardown failure\n")
+                        if phase == "wait":
+                            process.returncode = 0
                         return 0
                     setattr(qmp if phase == "qmp-close" else process,
                             "close" if phase == "qmp-close" else phase, warn)
@@ -573,6 +669,7 @@ class NativeDiagnosticTests(unittest.TestCase):
         def grow(timeout):
             (attempt / "debugcon.log").write_bytes(b"x" * (ND.MAX_JSON + 1))
             process.calls.append("wait")
+            process.returncode = 0
             return 0
         process.wait = grow
         with self.assertRaisesRegex(ND.DiagnosticError, "capture limit"):

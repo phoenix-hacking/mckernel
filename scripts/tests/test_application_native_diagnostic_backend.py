@@ -286,6 +286,24 @@ class BackendTests(unittest.TestCase):
         popen.assert_not_called()
         self.assertEqual(set(os.listdir("/proc/self/fd")), before)
 
+    def test_post_popen_identity_failure_retains_primitive_retirement_evidence(self):
+        child = FakeProcess()
+        original = RuntimeError("identity capture failed")
+        factory = self._factory(lambda *args, **kwargs: child)
+        with mock.patch.object(backend, "_capture_process_identity", side_effect=original), \
+             mock.patch.object(backend, "_retire_untransferred",
+                               return_value={"reaped": True, "returncode": -signal.SIGKILL}):
+            with self.assertRaises(backend.ProcessAcquisitionFailure) as raised:
+                factory(timeout=1)
+        self.assertIs(raised.exception.__cause__, original)
+        evidence = raised.exception._mckernel_qemu_acquisition_evidence
+        self.assertEqual(evidence["argv"], [backend.QEMU, "-qmp", "unix:" + self.sockpath + ",server=on,wait=off"])
+        self.assertEqual(evidence["pid"], child.pid)
+        self.assertEqual({key: evidence[key] for key in ("pgid", "sid", "starttime_ticks")},
+                         {"pgid": None, "sid": None, "starttime_ticks": None})
+        self.assertFalse(evidence["identity_complete"])
+        self.assertEqual((evidence["reaped"], evidence["returncode"]), (True, -signal.SIGKILL))
+
     def test_secondary_recording_supports_python39_and_closes_all_fds(self):
         class LegacyFailure(Exception):
             add_note = None
@@ -597,7 +615,8 @@ class BackendTests(unittest.TestCase):
             try:
                 factory(timeout=1)
             except BaseException as caught:
-                self.assertIs(caught, first)
+                self.assertIs(type(caught), backend.ProcessAcquisitionFailure)
+                self.assertIs(caught.__cause__, first)
             else:
                 self.fail("transfer failure was not raised")
         self.assertEqual(events[:4], [signal.SIGTERM, "observe", signal.SIGKILL, "reap"])
@@ -675,12 +694,13 @@ class BackendTests(unittest.TestCase):
                      mock.patch.object(backend.os, "killpg", side_effect=lambda pid, sig: events.append(sig)), \
                      mock.patch.object(backend.os, "waitid", side_effect=lambda *args: events.append("observe") or object()):
                     if point == "alarm":
-                        with self.assertRaises(TimeoutError), diagnostic._alarm(time.monotonic() + 0.01):
+                        with self.assertRaises(backend.ProcessAcquisitionFailure) as raised, diagnostic._alarm(time.monotonic() + 0.01):
                             factory(timeout=1)
                     else:
-                        with self.assertRaises(TimeoutError if point == "deadline" else RuntimeError) as raised:
+                        with self.assertRaises(backend.ProcessAcquisitionFailure) as raised:
                             factory(timeout=0.01 if point == "deadline" else 1)
-                        if point != "deadline": self.assertIs(raised.exception, failure)
+                    if point not in ("deadline", "alarm"):
+                        self.assertIs(raised.exception.__cause__, failure)
                 self.assertEqual(events, [signal.SIGTERM, "observe", signal.SIGKILL, "reap"])
                 self.assertEqual(child.returncode, 0)
                 for fd in descriptors:
@@ -718,9 +738,9 @@ class BackendTests(unittest.TestCase):
         factory = self._factory(popen)
         with diagnostic._alarm(time.monotonic() + 5):
             with mock.patch.object(backend.os, "close", side_effect=close):
-                with self.assertRaises(RuntimeError) as raised:
+                with self.assertRaises(backend.ProcessAcquisitionFailure) as raised:
                     factory(timeout=2)
-        self.assertIs(raised.exception, first)
+        self.assertIs(raised.exception.__cause__, first)
         self.assertEqual(len(children), 1)
         self.assertEqual(children[0].returncode, -signal.SIGKILL)
         with self.assertRaises(ProcessLookupError): os.kill(children[0].pid, 0)
@@ -782,7 +802,9 @@ class BackendTests(unittest.TestCase):
             out.write_bytes(b"x" * (diagnostic.MAX_JSON + 1))
             err.write_bytes(b"tail")
             child = FakeProcess()
-            owner = backend.ProcessOwner(child, out, err)
+            owner = backend.ProcessOwner(child, out, err,
+                                         process_identity=(child.pid, child.pid, child.pid, 1),
+                                         command=(backend.QEMU, "-qmp", "unix:test"))
             sock = FakeSocket()
             qmp = self.qmp(sock)
             with mock.patch.object(backend.os, "getpgid", return_value=child.pid), \

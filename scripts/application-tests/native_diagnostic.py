@@ -282,16 +282,7 @@ def build_command(manifest, attempt):
               "invalid capture path: " + name)
     for name in ("qemu.stdout", "qemu.stderr", "qmp.transcript.json", "result.json", "first-failure.jsonl"):
         _need(not os.path.lexists(attempt / name), "stale diagnostic output: " + name)
-    argv = [QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off",
-            "-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
-            "-object", "memory-backend-ram,size=4G,id=ram-node0",
-            "-object", "memory-backend-ram,size=4G,id=ram-node1",
-            "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
-            "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1",
-            "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-S", "-monitor", "none",
-            "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
-            "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
-            "-kernel", a["bzImage"]["path"], "-initrd", manifest["staging"]["derived_initramfs"]["path"], "-append", APPEND]
+    argv = expected_qemu_argv(manifest, attempt)
     overlay = {"modules": [m["path"] for m in manifest["modules"]], "mckernel_image": a["mckernel_image"]["path"],
                "mcexec": a["mcexec"]["path"], "payload": a["payload"]["path"], "load_modules": list(MODULE_NAMES),
                "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
@@ -303,10 +294,39 @@ def build_command(manifest, attempt):
                     "runtime_ready": True, "staging": manifest["staging"], "manifest": manifest})
 
 
-def _validate_qemu_evidence(evidence):
+def expected_qemu_argv(manifest, attempt):
+    """Derive the exact command from an already validated manifest and path.
+
+    This pure helper intentionally does not inspect generated output paths, so
+    the outer owner can retain the admitted argv before the inner run creates
+    qemu.stdout/qemu.stderr and makes build_command correctly reject staleness.
+    """
+    attempt = Path(attempt)
+    _need(attempt.is_absolute(), "attempt path")
+    manifest = _validate_manifest(_thaw(_freeze(manifest)))
+    a = manifest["artifacts"]
+    qmp = str(attempt / "qmp.sock")
+    return [QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off",
+            "-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
+            "-object", "memory-backend-ram,size=4G,id=ram-node0",
+            "-object", "memory-backend-ram,size=4G,id=ram-node1",
+            "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+            "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+            "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-S", "-monitor", "none",
+            "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
+            "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
+            "-kernel", a["bzImage"]["path"], "-initrd", manifest["staging"]["derived_initramfs"]["path"], "-append", APPEND]
+
+
+def _validate_qemu_evidence(evidence, admitted_argv=None):
     _keys(evidence, ("argv", "pid", "pgid", "sid", "starttime_ticks", "returncode"))
-    _need(type(evidence["argv"]) is list and
+    _need(type(evidence["argv"]) is list and evidence["argv"] and
           all(type(item) is str for item in evidence["argv"]), "QEMU evidence argv")
+    if admitted_argv is not None:
+        _need(type(admitted_argv) is tuple and admitted_argv and
+              all(type(item) is str for item in admitted_argv), "admitted QEMU argv")
+        _need(tuple(evidence["argv"]) == admitted_argv,
+              "QEMU evidence argv/admitted command mismatch")
     _need(all(type(evidence[name]) is int for name in
               ("pid", "pgid", "sid", "starttime_ticks", "returncode")),
           "QEMU evidence identity/status types")
@@ -455,7 +475,13 @@ def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, ti
         raise
     # The lifecycle/evaluator own their own validated snapshot too: neither a
     # factory closure nor the caller can change the oracle through an alias.
-    return exercise_lifecycle(_thaw(plan["manifest"]), attempt, process_factory, qmp_factory, timeout)
+    args = (_thaw(plan["manifest"]), attempt, process_factory, qmp_factory, timeout)
+    # The reviewed runner supplies its frozen plan back as expected_plan. Unit
+    # injection remains useful for lifecycle mechanics without pretending a
+    # synthetic Process object is an admitted QEMU command.
+    if expected_plan is not None:
+        return exercise_lifecycle(*args, admitted_argv=tuple(plan["argv"]))
+    return exercise_lifecycle(*args)
 
 
 def _failure(exc, phase):
@@ -577,7 +603,38 @@ def _cleanup(process, qmp):
     return {"reaped": reaped, "errors": errors}, original
 
 
-def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300):
+def _acquisition_failure_evidence(exc):
+    """Copy only the primitive evidence attached by the backend recovery."""
+    try:
+        value = object.__getattribute__(exc, "_mckernel_qemu_acquisition_evidence")
+    except BaseException:
+        return None
+    if type(value) is not dict or set(value) != {
+            "argv", "pid", "pgid", "sid", "starttime_ticks", "identity_complete",
+            "reaped", "returncode"}:
+        return None
+    if (type(value["argv"]) is not list or not value["argv"] or
+            any(type(item) is not str for item in value["argv"]) or
+            type(value["identity_complete"]) is not bool or type(value["reaped"]) is not bool):
+        return None
+    for name in ("pid", "pgid", "sid", "starttime_ticks", "returncode"):
+        if value[name] is not None and type(value[name]) is not int:
+            return None
+    if value["reaped"] != (type(value["returncode"]) is int):
+        return None
+    return {name: value[name] if name != "argv" else list(value[name]) for name in value}
+
+
+def _acquisition_original(exc):
+    """Read a trusted carrier's original exception without user hooks."""
+    try:
+        original = object.__getattribute__(exc, "_mckernel_acquisition_original")
+    except BaseException:
+        return None
+    return original if isinstance(original, BaseException) else None
+
+
+def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300, *, admitted_argv=None):
     """Injected-backend lifecycle exercise; never reports guest acceptance.
 
     This entry point grants no execution release. QMP/backend methods accept a
@@ -587,6 +644,10 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     failure = None
     original = None
     observation = {}
+    acquisition_failure = None
+    if admitted_argv is not None:
+        _need(type(admitted_argv) is tuple and admitted_argv and
+              all(type(item) is str for item in admitted_argv), "admitted QEMU argv")
     try:
         _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 3600, "finite deadline")
         started = time.monotonic()
@@ -601,12 +662,18 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
         _method(deadline, qmp, "resume")
         terminal = _method(deadline, qmp, "wait_shutdown")
     except BaseException as exc:
-        original = exc
-        failure = _failure(exc, "lifecycle")
+        carried_original = _acquisition_original(exc)
+        original = carried_original if carried_original is not None else exc
+        failure = _failure(original, "lifecycle")
+        acquisition_failure = _acquisition_failure_evidence(exc)
     finally:
         # No filesystem journal or capture runs before retirement: blocked
         # storage cannot delay termination/reaping after a QMP failure.
         cleanup, cleanup_original = _cleanup(process, qmp)
+        if acquisition_failure is not None and not acquisition_failure["reaped"]:
+            cleanup["reaped"] = False
+            cleanup["errors"].append({"phase": "acquisition-retirement", "type": "DiagnosticError",
+                                      "error": "QEMU acquisition child was not exactly reaped"})
         if original is None:
             original = cleanup_original
     # Retain controls and host streams after teardown even if a lifecycle or
@@ -615,10 +682,33 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     capture_errors = []
     qemu_evidence_error = None
     qemu_evidence = None
-    capture_deadline = time.monotonic() + 2
+    # Process evidence is first and has its own budget. QMP transcript and
+    # host streams get independent fresh budgets: a timeout in one class must
+    # not consume another class's evidence opportunity.
+    if process is not None and cleanup["reaped"]:
+        try:
+            with _alarm(time.monotonic() + 2):
+                evidence_getter = getattr(process, "qemu_evidence", None)
+                _need(callable(evidence_getter), "QEMU evidence accessor unavailable")
+                candidate = evidence_getter()
+                _need(type(candidate) is dict, "QEMU evidence record type")
+                _validate_qemu_evidence(candidate, admitted_argv)
+                qemu_evidence = candidate
+        except BaseException as exc:
+            qemu_evidence_error = _failure(exc, "qemu-evidence")
+            capture_errors.append(qemu_evidence_error)
+            # This capture is first after exact reaping. Retain its actual
+            # exception now, before QMP/host evidence continues independently.
+            if original is None:
+                original = exc
+                failure = dict(qemu_evidence_error)
+    elif process is not None:
+        error = RuntimeError("QEMU process was not exactly reaped")
+        qemu_evidence_error = _failure(error, "qemu-evidence")
+        capture_errors.append(qemu_evidence_error)
     if qmp is not None:
         try:
-            with _alarm(capture_deadline):
+            with _alarm(time.monotonic() + 2):
                 session = getattr(qmp, "session", None)
                 transcript = getattr(session, "transcript", []) if session is not None else []
                 raw = json.dumps(transcript, sort_keys=True, allow_nan=False).encode("utf-8")
@@ -631,12 +721,12 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
             capture_errors.append(_failure(exc, "qmp-transcript"))
     if process is not None and cleanup["reaped"]:
         try:
-            host_stdout, host_stderr = _method(capture_deadline, process, "communicate")
+            host_stdout, host_stderr = _method(time.monotonic() + 2, process, "communicate")
             _need(type(host_stdout) is bytes and type(host_stderr) is bytes, "backend log types")
             for name, data in (("qemu.stdout", host_stdout), ("qemu.stderr", host_stderr)):
                 path = Path(attempt) / name
                 if not os.path.lexists(path):
-                    with _alarm(capture_deadline):
+                    with _alarm(time.monotonic() + 2):
                         with path.open("xb") as stream:
                             stream.write(data[:MAX_JSON + 1])
             _need(len(host_stdout) <= MAX_JSON and len(host_stderr) <= MAX_JSON, "host capture limit exceeded")
@@ -644,35 +734,13 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
             if original is None:
                 original = exc
             capture_errors.append(_failure(exc, "host-capture"))
-        # Capture the command, retained identity and observed wait status only
-        # after cleanup has proved an exact reap.  This is deliberately
-        # independent of QMP/log capture so evaluation failures retain it.
-        try:
-            with _alarm(capture_deadline):
-                evidence_getter = getattr(process, "qemu_evidence", None)
-                _need(callable(evidence_getter), "QEMU evidence accessor unavailable")
-                candidate = evidence_getter()
-                _need(type(candidate) is dict, "QEMU evidence record type")
-                _need(type(candidate.get("argv")) is list and
-                      all(type(item) is str for item in candidate["argv"]),
-                      "QEMU evidence argv")
-                for key in ("pid", "pgid", "sid", "starttime_ticks", "returncode"):
-                    _need(type(candidate.get(key)) is int, "QEMU evidence " + key)
-                qemu_evidence = candidate
-        except BaseException as exc:
-            qemu_evidence_error = _failure(exc, "qemu-evidence")
-            capture_errors.append(qemu_evidence_error)
-    elif process is not None:
-        error = RuntimeError("QEMU process was not exactly reaped")
-        qemu_evidence_error = _failure(error, "qemu-evidence")
-        capture_errors.append(qemu_evidence_error)
-    non_evidence_capture_errors = [item for item in capture_errors
-                                   if item is not qemu_evidence_error]
     if failure is None:
         if cleanup["errors"] or not cleanup["reaped"]:
             failure = {"phase": "cleanup", "type": "DiagnosticError", "error": "teardown uncertain"}
-        elif non_evidence_capture_errors:
-            failure = dict(non_evidence_capture_errors[0])
+        else:
+            non_evidence = [item for item in capture_errors if item is not qemu_evidence_error]
+            if non_evidence:
+                failure = dict(non_evidence[0])
     if failure is None:
         try:
             with _alarm(deadline):
@@ -703,6 +771,11 @@ def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=
     record["capture_errors"] = capture_errors
     if qemu_evidence is not None:
         record["qemu_evidence"] = qemu_evidence
+    if admitted_argv is not None:
+        record["admitted_qemu_argv"] = list(admitted_argv)
+    if acquisition_failure is not None:
+        record["qemu_acquisition_failure"] = {"evidence": acquisition_failure,
+                                               "failure": _failure(original, "acquisition")}
     # The first observed failure survives cleanup failures; journal only after
     # retirement, under its own bounded publication deadline.
     try:

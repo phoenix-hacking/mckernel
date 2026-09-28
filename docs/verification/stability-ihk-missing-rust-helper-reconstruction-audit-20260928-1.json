@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.stability-reconstruction-audit.v1",
+  "recorded_at": "2026-09-28T09:12:13-07:00",
+  "decision": "RECONSTRUCTION_FEASIBLE_NOT_IMPLEMENTED",
+  "scope": "three absent IHK Rust helper prerequisites unconditionally consumed by run_equivalence.sh",
+  "superproject_gitlink": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "observed_ihk_head": "21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c",
+  "production_c_equivalence": "Relevant production C bodies are identical; the revision difference is four lines in a whitebox syscall fixture.",
+  "history_result": "None of the three missing paths exists in any inspected IHK history.",
+  "inputs": {
+    "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+    "kernel/rust/tests/ihk_module_helpers_smoke.c": "34f004c090cbaf2dbc92142f2073d1c0a6585ebdda765fdc987e51296c601b0d"
+  },
+  "modules": [
+    {
+      "path": "ihk/linux/core/rust/core_helpers.rs",
+      "scope": "allocator bitmap/public exports, mapping, IKC lifecycle, host-driver boot/shutdown and kmsg callbacks",
+      "authorities": ["ihk/linux/core/mem_alloc.c", "ihk/linux/core/mm.c", "ihk/linux/core/mikc.c", "ihk/linux/core/host_driver.c", "ihk/ikc/linux.c"],
+      "required_vectors": ["allocation exhaustion/free/reuse", "kmsg counts 0/1/2", "boot callback failures and exact unwind order"]
+    },
+    {
+      "path": "ihk/linux/driver/smp/rust/smp_driver_helpers.rs",
+      "scope": "123 exported-symbol assertions covering memory chunks, CPU/status maps, topology, parsing, startup/interrupts and cleanup",
+      "authorities": ["ihk/linux/driver/smp/smp-driver.c", "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c"],
+      "required_vectors": ["left/right/both-neighbor coalescing", "noncontiguous insertion", "allocation/copy failure with unchanged preflight state"]
+    },
+    {
+      "path": "ihk/linux/user/rust/ihklib_helpers.rs",
+      "scope": "88 extern declarations covering CLI/daemon, validation, CPU/memory and open/ioctl/close orchestration",
+      "authorities": ["ihk/linux/user/ihklib.c", "ihk/linux/user/ihkconfig.c", "ihk/linux/user/ihkosctl.c", "ihk/linux/user/ihkmond.c"],
+      "required_vectors": ["open failure", "invalid type", "ioctl failure", "close identity/count", "boot status transitions and timeout"]
+    }
+  ],
+  "preserved_c_quirks": [
+    "ihk_os_boot continues polling after RUNNING because break exits only the switch.",
+    "ihk_os_get_eventfd does not check eventfd failure before ioctl and does not close the eventfd after registration failure."
+  ],
+  "limitations": [
+    "These are substantial new modules, not recoverable known Rust bytes or small shims.",
+    "Existing handwritten models are requirements but are not independent proof of production-C equivalence.",
+    "Current IHK CMake files contain no Rust integration; offline equivalence restoration is not production integration.",
+    "No source was written and no compile or runtime acceptance follows."
+  ],
+  "next": "Assign three disjoint implementation owners against exact hashed C bodies, beginning with the ihklib compile/link fixture, and require independent differential C oracles before the broad suite can pass."
+}

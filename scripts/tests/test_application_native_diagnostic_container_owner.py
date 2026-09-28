@@ -117,6 +117,7 @@ class Fake:
             record = {"status": "PROTOCOL_PASS", "application_acceptance": False,
                       "mckernel_application_executed": False, "case_id": "x",
                       "cleanup": {"reaped": True, "errors": []}, "capture_errors": [],
+                      "admitted_qemu_argv": qemu_evidence["argv"],
                       "qemu_evidence": qemu_evidence,
                       "observation": {"serial": "SERIAL", "debugcon": "DEBUG", "teardown": True,
                                       "process_identity": process_identity,
@@ -155,7 +156,8 @@ class OwnerTests(unittest.TestCase):
         manifest = {"case_id": "x"}
         self.diagnostic = types.SimpleNamespace(evaluate=lambda m, o: {
             "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
-            "case_id": "x", "observation": o})
+            "case_id": "x", "observation": o},
+            expected_qemu_argv=lambda manifest, attempt: ["/usr/libexec/qemu-kvm", "-qmp", "unix:test"])
         patch = mock.patch.object(owner, "bound_manifest", return_value=(self.diagnostic, manifest))
         self.bound = patch.start()
         self.addCleanup(patch.stop)
@@ -218,6 +220,15 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(set(owner_record["lock"]), {"dev", "ino", "mode", "nlink", "uid", "gid"})
         self.assertEqual(owner_record["lock"]["mode"], 0o600)
         self.assertEqual(owner_record["cgroup_profile"], {str(self.root / "cgroup"): "512"})
+
+    def test_outer_rejects_qemu_evidence_argv_not_equal_to_admitted_plan(self):
+        def mismatch(record):
+            record["qemu_evidence"]["argv"] = ["/usr/libexec/qemu-kvm", "-qmp", "unix:wrong"]
+            record["observation"]["qemu_evidence"] = record["qemu_evidence"]
+        self.fake.record_change = mismatch
+        self.fails("QEMU evidence/result join")
+        self.assertTrue(self.obj.absent)
+        self.assertIsNone(self.obj.lock)
 
     def test_owner_identity_rejects_malformed_proc_stat(self):
         path = self.root / "stat"
@@ -1043,6 +1054,91 @@ class OwnerTests(unittest.TestCase):
             self.assertEqual(len(ledger.pending), 1)
         finally:
             ledger.retire_pending()
+
+    def test_delayed_reap_appends_final_record_without_rewriting_initial(self):
+        ledger = owner.CommandLedger()
+        try:
+            with mock.patch.object(owner.CommandChild, "wait", side_effect=owner.OwnerError("reap delayed")):
+                with self.assertRaises(owner.CommandError) as caught:
+                    owner.bounded_command(["/usr/bin/python3", "-c", "import time; time.sleep(30)"], .05,
+                                          ledger=ledger)
+            initial = dict(caught.exception.command_record)
+            self.assertFalse(initial["reaped"])
+            ledger.retire_pending()
+            events = ledger.peek_final_reap_records()
+            self.assertEqual(len(events), 1)
+            self.assertEqual(events[0]["initial"], initial)
+            self.assertTrue(events[0]["final"]["reaped"])
+            self.assertEqual(caught.exception.command_record, initial)
+            ledger.ack_final_reap_records(events)
+        finally:
+            ledger.retire_pending()
+
+    def test_cleanup_retries_delayed_reap_publication_before_lease_release(self):
+        initial = {"pid": 71, "pgid": 71, "sid": 71, "proc_starttime": 9,
+                   "reaped": False, "returncode": None}
+        final = dict(initial, reaped=True, returncode=-signal.SIGKILL)
+        pair = {"initial": initial, "final": final}
+        self.fake.children.final_reap_records.append(pair)
+        self.obj._acquire()
+        original_save = self.obj._save
+        failed = []
+        def save(name, value):
+            if name.startswith("command-retirements-") and not failed:
+                failed.append(name)
+                raise MemoryError("reap evidence queue exhausted")
+            return original_save(name, value)
+        self.obj._save = save
+        self.assertFalse(self.obj._cleanup())
+        self.assertIsNotNone(self.obj.lock)
+        self.assertEqual(self.fake.children.peek_final_reap_records(), (pair,))
+        self.assertEqual(failed, ["command-retirements-001.json"])
+        self.obj._save = original_save
+        self.assertTrue(self.obj._cleanup())
+        self.assertEqual(self.fake.children.peek_final_reap_records(), ())
+        queued = [(path, raw) for path, raw in self.obj.pending_evidence
+                  if path.name == "command-retirements-001.json"]
+        self.assertEqual(len(queued), 1)
+        self.assertEqual(json.loads(queued[0][1]), [pair])
+        self.obj._release()
+        self.assertIsNone(self.obj.lock)
+
+    def test_final_signal_mask_restoration_carries_terminal_record(self):
+        real = owner.signal.pthread_sigmask
+        restores = []
+        def mask(how, values):
+            result = real(how, values)
+            if how == signal.SIG_SETMASK:
+                restores.append(True)
+                if len(restores) == 3:
+                    raise owner.OwnerSignal("final mask restoration")
+            return result
+        with mock.patch.object(owner.signal, "pthread_sigmask", side_effect=mask):
+            with self.assertRaises(owner.OwnerSignal) as caught:
+                owner.bounded_command(["/usr/bin/python3", "-c", "pass"], 3,
+                                      ledger=owner.CommandLedger())
+        record = caught.exception.command_record
+        self.assertTrue(record["reaped"])
+        self.assertEqual(record["returncode"], 0)
+
+    def test_stream_close_finalizer_error_carries_terminal_command_record(self):
+        original = owner.CommandChild.acquire
+        class CloseFails:
+            def __init__(self, stream): self.stream = stream
+            def fileno(self): return self.stream.fileno()
+            def close(self):
+                self.stream.close()
+                raise OSError("close finalizer failed")
+        def acquire(child, *args):
+            original(child, *args)
+            child.stdout = CloseFails(child.stdout)
+        with mock.patch.object(owner.CommandChild, "acquire", acquire):
+            with self.assertRaises(owner.CommandError) as caught:
+                owner.bounded_command(["/usr/bin/python3", "-c", "pass"], 3,
+                                      ledger=owner.CommandLedger())
+        record = caught.exception.command_record
+        self.assertTrue(record["reaped"])
+        self.assertEqual(record["returncode"], 0)
 
     def test_owner_signal_retains_exact_reap_record(self):
         ledger = owner.CommandLedger()

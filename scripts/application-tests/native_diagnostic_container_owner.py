@@ -42,8 +42,8 @@ QEMU_VERSION_STDOUT = (
 )
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
-    REPO + "/scripts/application-tests/native_diagnostic.py": "64225d81982e672c2123cd1be2b7d35168cf7ba964b9fedcb3c831f600965e8e",
-    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "709b7dd59683bbe089566070cd6037f51e5d83ee8904695e9046843ef9313a35",
+    REPO + "/scripts/application-tests/native_diagnostic.py": "a8017956af1424736a88be15ce7a38db5fe0e0f1f33e1eea006a6b38b4f7f392",
+    REPO + "/scripts/application-tests/native_diagnostic_backend.py": "41bf970ac1f2a7969651eca8d8138c4104b6d3951985d9bf4117a099d6e8a034",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }
 CGROUP = {
@@ -246,6 +246,27 @@ class CommandError(OwnerError):
         self.command_record = command_record
 
 
+def _command_record(value):
+    """Fetch only our exact primitive command record without user hooks."""
+    if type(value) not in (subprocess.CompletedProcess, CommandError, OwnerSignal):
+        return None
+    try:
+        record = object.__getattribute__(value, "__dict__").get("command_record")
+    except BaseException:
+        return None
+    required = {"pid", "pgid", "sid", "proc_starttime", "reaped", "returncode"}
+    if type(record) is not dict or set(record) != required:
+        return None
+    if type(record["reaped"]) is not bool:
+        return None
+    for key in ("pid", "pgid", "sid", "proc_starttime", "returncode"):
+        if record[key] is not None and type(record[key]) is not int:
+            return None
+    if record["reaped"] != (type(record["returncode"]) is int):
+        return None
+    return dict(record)
+
+
 class CommandChild:
     """Explicit spawn/reap ownership, with cancellation masked at transitions."""
     def __init__(self):
@@ -256,6 +277,7 @@ class CommandChild:
         self.stdout = None
         self.stderr = None
         self.write_fds = []
+        self.initial_observation = None
 
     def record(self):
         identity = self.identity
@@ -366,6 +388,14 @@ class CommandLedger:
     def __init__(self):
         self.pending = set()
         self.errors = []
+        self.final_reap_records = []
+
+    def remember_unresolved(self, child, record):
+        # Copy only primitive command state. The raised CommandError retains
+        # this initial observation permanently; a later reap appends rather
+        # than mutating historical evidence.
+        if child.initial_observation is None:
+            child.initial_observation = dict(record)
 
     def retire(self, child, timeout=1):
         try:
@@ -378,11 +408,25 @@ class CommandLedger:
         finally:
             if child.pid is None or child.reaped:
                 self.pending.discard(child)
+                if child.initial_observation is not None:
+                    self.final_reap_records.append({"initial": child.initial_observation,
+                                                   "final": child.record()})
+                    child.initial_observation = None
 
     def retire_pending(self, timeout=1):
         for child in tuple(self.pending):
             self.retire(child, timeout)
         need(not self.pending, "local Docker client retirement unresolved")
+
+    def peek_final_reap_records(self):
+        """Return an immutable publication snapshot without relinquishing it."""
+        return tuple(self.final_reap_records)
+
+    def ack_final_reap_records(self, records):
+        """Drop only the exact snapshot successfully queued as evidence."""
+        need(type(records) is tuple and records == tuple(self.final_reap_records),
+             "final reap evidence changed before acknowledgement")
+        self.final_reap_records.clear()
 
 
 COMMAND_LEDGER = CommandLedger()
@@ -437,29 +481,48 @@ def bounded_command(argv, timeout, *, env=None, ledger=None):
         failure = command_error
         raise command_error from exc
     finally:
-        cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
+        cleanup_mask = None
+        finalization_failure = None
+        try:
+            cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
+        except BaseException as exc:
+            finalization_failure = exc
         try:
             if failure is not None:
                 ledger.retire(child)
                 if type(failure) is CommandError:
-                    failure.command_record = child.record()
+                    if not child.reaped:
+                        ledger.remember_unresolved(child, failure.command_record)
+                    else:
+                        failure.command_record = child.record()
                 elif type(failure) is OwnerSignal:
-                    failure.command_record = child.record()
+                    if not child.reaped:
+                        ledger.remember_unresolved(child, failure.command_record)
+                    else:
+                        failure.command_record = child.record()
             elif child.reaped:
                 ledger.pending.discard(child)
             for stream in (child.stdout, child.stderr):
                 if stream is not None:
                     try:
                         stream.close()
-                    except BaseException:
-                        if failure is None:
-                            raise
+                    except BaseException as exc:
+                        if finalization_failure is None:
+                            finalization_failure = exc
         finally:
-            try:
-                signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
-            except BaseException:
-                if failure is None:
-                    raise
+            if cleanup_mask is not None:
+                try:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
+                except BaseException as exc:
+                    if finalization_failure is None:
+                        finalization_failure = exc
+        if finalization_failure is not None and failure is None:
+            record = child.record()
+            if type(finalization_failure) is OwnerSignal:
+                finalization_failure.command_record = record
+                raise finalization_failure
+            raise CommandError(safe_error(finalization_failure), bytes(output[0]),
+                               bytes(output[1]), record) from finalization_failure
 
 
 class DockerBackend:
@@ -532,6 +595,8 @@ class DiagnosticOwner:
         self.lock_identity = None
         self.cgroup_profile = None
         self.owner_queued = False
+        self.retirement_sequence = 0
+        self.admitted_qemu_argv = None
         self.owner_sha = _digest(SELF)
 
     def _remember(self, exc):
@@ -604,21 +669,34 @@ class DiagnosticOwner:
         prefix = "%03d-%s" % (self.sequence, argv[0])
         command = PREFIX + argv
         result = None
+        result_returncode = None
         failure = None
         try:
             result = self.backend.call(command, timeout=timeout)
-            need(type(result.returncode) is int and type(result.stdout) is bytes and type(result.stderr) is bytes,
+            values = object.__getattribute__(result, "__dict__") if type(result) is subprocess.CompletedProcess else {}
+            result_returncode = values.get("returncode")
+            result_stdout = values.get("stdout")
+            result_stderr = values.get("stderr")
+            need(type(result_returncode) is int and type(result_stdout) is bytes and type(result_stderr) is bytes,
                  "typed command result")
-            need(len(result.stdout) <= LIMIT and len(result.stderr) <= LIMIT, "command output limit")
-            if result.returncode and not allow_failure:
+            need(len(result_stdout) <= LIMIT and len(result_stderr) <= LIMIT, "command output limit")
+            if result_returncode and not allow_failure:
                 raise OwnerError("docker command failed: " + argv[0])
         except BaseException as exc:
             failure = exc
         # Only bounded primitive bytes are queued while ownership is live.
         # No writer, fsync, exception formatting, or user callback runs here.
         command_failure = failure
-        for suffix, raw in (("stdout", result.stdout if result is not None else failure.stdout if type(failure) is CommandError else b""),
-                            ("stderr", result.stderr if result is not None else failure.stderr if type(failure) is CommandError else b"")):
+        def command_bytes(value, name):
+            if type(value) not in (subprocess.CompletedProcess, CommandError):
+                return b""
+            try:
+                raw = object.__getattribute__(value, "__dict__").get(name, b"")
+            except BaseException:
+                return b""
+            return raw if type(raw) is bytes else b""
+        for suffix, raw in (("stdout", command_bytes(result if result is not None else failure, "stdout")),
+                            ("stderr", command_bytes(result if result is not None else failure, "stderr"))):
             try:
                 self._queue(self.evidence / (prefix + "." + suffix), raw)
             except BaseException as exc:
@@ -628,10 +706,9 @@ class DiagnosticOwner:
                     self._secondary(exc)
         try:
             self._save(prefix + ".json", {"argv": command, "timeout": timeout,
-                       "returncode": result.returncode if result is not None else None,
+                       "returncode": result_returncode if result is not None else None,
                        "failure": safe_error(failure) if failure is not None else None,
-                       "command": (getattr(result, "command_record", None) if result is not None else
-                                    failure.command_record if type(failure) in (CommandError, OwnerSignal) else None)})
+                       "command": _command_record(result if result is not None else failure)})
         except BaseException as exc:
             if failure is None:
                 failure = exc
@@ -779,6 +856,10 @@ class DiagnosticOwner:
         self.parent_identity = private_parent(str(self.parent))
         need(not os.path.lexists(self.attempt), "inner attempt already exists")
         self.diagnostic, self.manifest = bound_manifest(manifest)
+        admitted = self.diagnostic.expected_qemu_argv(self.manifest, self.attempt)
+        need(type(admitted) is list and admitted and all(type(item) is str for item in admitted),
+             "outer admitted QEMU argv")
+        self.admitted_qemu_argv = tuple(admitted)
         need(_digest(IMAGE_RECORD) == IMAGE_RECORD_SHA256, "image record identity")
         retained = one(regular(IMAGE_RECORD))
         profile = {}
@@ -807,6 +888,7 @@ class DiagnosticOwner:
 
     def _release(self):
         need(self.absent and not self.backend.children.pending and
+             not self.backend.children.final_reap_records and
              (not self.create_issued or self.create_completed), "cannot release uncertain container lease")
         if self.lock is not None:
             mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
@@ -824,6 +906,12 @@ class DiagnosticOwner:
         self.cleaning, self.command_deadline = True, end
         try:
             self.backend.children.retire_pending(timeout=min(1, end - self.clock()))
+            reaps = self.backend.children.peek_final_reap_records()
+            if reaps:
+                next_sequence = self.retirement_sequence + 1
+                self._save("command-retirements-%03d.json" % next_sequence, reaps)
+                self.backend.children.ack_final_reap_records(reaps)
+                self.retirement_sequence = next_sequence
             row = self._lookup()
             if row is not None:
                 self.container = row["Id"]
@@ -885,13 +973,17 @@ class DiagnosticOwner:
         need(observation.get("serial") == texts["serial"] and observation.get("debugcon") == texts["debugcon"] and
              observation.get("teardown") is True, "capture observation join")
         qemu_evidence = result.get("qemu_evidence")
-        need(type(qemu_evidence) is dict and same(qemu_evidence, observation.get("qemu_evidence")) and
+        admitted_argv = result.get("admitted_qemu_argv")
+        need(self.admitted_qemu_argv is not None and type(admitted_argv) is list and
+             tuple(admitted_argv) == self.admitted_qemu_argv and
+             type(qemu_evidence) is dict and tuple(qemu_evidence.get("argv", ())) == self.admitted_qemu_argv and
+             same(qemu_evidence, observation.get("qemu_evidence")) and
              qemu_evidence.get("returncode") == 0 and
              same({key: qemu_evidence.get(key) for key in ("pid", "pgid", "sid", "starttime_ticks")},
                   observation.get("process_identity")), "QEMU evidence/result join")
         replay = self.diagnostic.evaluate(self.manifest, observation)
         need(same(replay, {k: v for k, v in result.items()
-                           if k not in ("cleanup", "capture_errors", "qemu_evidence")}),
+                           if k not in ("cleanup", "capture_errors", "qemu_evidence", "admitted_qemu_argv")}),
              "inner oracle replay")
         need(not os.path.lexists(self.attempt / "first-failure.jsonl"), "inner failure journal exists")
         self._save("capture-bindings.json", captures)

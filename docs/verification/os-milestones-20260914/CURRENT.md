@@ -4082,3 +4082,50 @@ are in
 Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
 production gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance
 remains incomplete; this checkpoint neither resumes nor completes the goal.
+
+Continuation checkpoint 29, 2026-09-28: packet 3 remains immutably rejected and
+unexecuted, but its complete process-evidence failure family is now repaired at
+source level. The first correction passed 231 six-module tests yet independent
+review reproduced five acquisition/capture/finalization/retirement/argv gaps.
+The escalated coherent repair closed those gaps; its first re-review then found
+two additional failures: a QEMU-evidence `BaseException` could be demoted behind
+later host capture, and a delayed-reap pair could be consumed before successful
+queueing. The one bounded correction now preserves exact first-failure identity
+and makes delayed reap publication transactional through peek/ack and retry.
+
+The coordinator's fresh final six-module run passes 234/234 in 16.522 seconds,
+with py_compile, scoped diff checks and actual `bound_manifest()` for strict
+manifest `ab290581...a1ecc6` all passing. Independent re-review returns
+`PASS_SOURCE_READY_FOR_PACKET4`. Exact source/test hashes, both preserved review
+failures and raw scratch evidence are recorded in
+`docs/verification/stability-native-diagnostic-process-evidence-source-success-20260928-1.json`.
+This is source readiness only; packet 3, its parent and nonce remain unusable,
+and no Docker, QEMU, guest or application ran in this continuation.
+
+The unchanged M02 descriptor/identity component also received fresh executable
+and independent confirmation: real closed-stdio/source-equals-destination/
+fd-198 remaps preserve exact exec descriptors; successful-create IDs are bound
+to the producer counter; live identities cannot alias while 17 legitimate
+post-retirement reuse cases pass. The reviewer returns
+`PASS_SOURCE_READY_FOR_LAYER_B`, matching the retained exact source manifest.
+Layer-B/root13 remains closed because its current executor strategy is rejected;
+no unchanged packet was replayed.
+
+The broad equivalence blocker is now precisely scoped. The three absent IHK
+Rust inputs have no recoverable history and are substantial core, SMP and
+ihklib modules, not shims. Relevant production C is identical across the pinned
+gitlink and observed IHK HEAD. Their authorities, symbol counts, differential
+vectors and two C quirks that must not be silently repaired are retained in
+`docs/verification/stability-ihk-missing-rust-helper-reconstruction-audit-20260928-1.json`.
+No broad-equivalence or production-integration claim follows.
+
+Next: (1) commit/push and fetched-blob verify this exact source checkpoint;
+(2) create packet 4 with a fresh short parent and nonce bound to that commit,
+manifest, derived image and owner hash; (3) obtain a separate one-shot execution
+release; and (4) after fresh capacity/lease checks execute once and preserve
+application bytes, raw exit, kernel log, QMP/process/container identities and
+teardown. In parallel, change the rejected Layer-B strategy before M02 runtime
+and assign the three IHK modules as separate implementation lanes. Official
+counters remain 0/273 applications, 2/4 narrow fault modes, 6/130 production
+gates, 350/10,000 points and 0/7 language gates. Whole-OS acceptance remains
+incomplete.

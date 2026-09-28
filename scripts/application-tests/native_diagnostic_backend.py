@@ -20,6 +20,19 @@ from qmp_capture import QmpError, QmpSession
 QEMU = "/usr/libexec/qemu-kvm"
 
 
+class ProcessAcquisitionFailure(RuntimeError):
+    """Trusted carrier for evidence acquired before ProcessOwner transfer.
+
+    The original exception remains the cause and is explicitly retained for
+    lifecycle first-failure reporting; unlike arbitrary exception instances,
+    this carrier always has writable trusted storage for primitive evidence.
+    """
+    def __init__(self, original, evidence):
+        super().__init__("QEMU ownership transfer failed")
+        self._mckernel_acquisition_original = original
+        self._mckernel_qemu_acquisition_evidence = evidence
+
+
 def _proc_starttime_ticks(pid):
     """Read Linux ``/proc/<pid>/stat`` field 22 without trusting comm text."""
     if type(pid) is not int or pid <= 0:
@@ -247,6 +260,7 @@ def _retire_untransferred(child, failure):
         except BaseException as exc:
             _record_secondary_error(failure, label, exc)
 
+    outcome = {"reaped": False, "returncode": None}
     mask = None
     try:
         mask = attempt("block alarm", lambda: signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGALRM}))
@@ -269,13 +283,49 @@ def _retire_untransferred(child, failure):
                 time.sleep(0.01)
         attempt("wait without reaping", observe_exit)
         attempt("group KILL", lambda: group(signal.SIGKILL))
-        attempt("reap", lambda: child.wait(timeout=2))
+        status = attempt("reap", lambda: child.wait(timeout=2))
+        if type(status) is int:
+            outcome["reaped"] = True
+            outcome["returncode"] = status
     finally:
         # Consume any alarm that became pending before cancellation. Restoring
         # the mask must not replace the first failure with a second timeout.
         attempt("consume alarm", lambda: signal.sigtimedwait({signal.SIGALRM}, 0))
         if mask is not None:
             attempt("restore alarm mask", lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
+    return outcome
+
+
+def _acquisition_evidence(command, child, process_identity, outcome):
+    """Primitive evidence for a child retired before ownership transfer.
+
+    This deliberately records absence as ``None`` rather than attempting a
+    post-retirement procfs lookup.  The child object is trusted only for the
+    direct PID returned by Popen; every other identity component is present
+    only if it was captured before the acquisition failure.
+    """
+    pid = None
+    try:
+        candidate = child.pid
+        if type(candidate) is int and candidate > 0:
+            pid = candidate
+    except BaseException:
+        pass
+    pgid = sid = starttime_ticks = None
+    if (type(process_identity) is tuple and len(process_identity) == 4 and
+            all(type(item) is int and item > 0 for item in process_identity)):
+        captured_pid, pgid, sid, starttime_ticks = process_identity
+        if pid is None:
+            pid = captured_pid
+        elif pid != captured_pid:
+            # The direct PID remains the observed Popen fact; the other
+            # fields are incomplete rather than joined to a conflicting PID.
+            pgid = sid = starttime_ticks = None
+    return {"argv": list(command), "pid": pid, "pgid": pgid, "sid": sid,
+            "starttime_ticks": starttime_ticks,
+            "identity_complete": pid is not None and pid == pgid == sid and
+            type(starttime_ticks) is int and starttime_ticks > 0,
+            "reaped": outcome["reaped"], "returncode": outcome["returncode"]}
 
 
 def _close_fds(fds, *, failure=None):
@@ -338,6 +388,7 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
         flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC
         fds = []
         child = None
+        process_identity = None
         try:
             out_fd = os.open(out_path, flags, 0o600)
             fds.append((out_fd, None))
@@ -368,10 +419,14 @@ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
         except BaseException as failure:
             if child is not None:
                 try:
-                    _retire_untransferred(child, failure)
+                    outcome = _retire_untransferred(child, failure)
                 except BaseException as cleanup_failure:
                     _record_secondary_error(failure, "spawn retirement failed", cleanup_failure)
+                    outcome = {"reaped": False, "returncode": None}
+                evidence = _acquisition_evidence(command, child, process_identity, outcome)
             _close_fds(fds, failure=failure)
+            if child is not None:
+                raise ProcessAcquisitionFailure(failure, evidence) from failure
             raise
 
     return spawn
