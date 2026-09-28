@@ -4269,3 +4269,32 @@ If all preconditions still hold, create the parent once as uid/gid 1000 mode
 0700 and execute only the released command. Preserve exact application bytes,
 status, serial/debugcon/kernel logs, QMP, every process/container identity and
 final teardown. No formal acceptance follows from release or a diagnostic pass.
+
+Continuation checkpoint 36, 2026-09-28: packet 6 consumed its single release
+and passes both inner and outer protocols. One real diagnostic McKernel
+`startup.argv-empty` application again produced the exact 91-byte stdout, empty
+stderr, raw wait status zero, complete EOF, empty procfs and normal retirement.
+QMP has 1,348 records and 672 matched successful request/reply pairs through
+guest shutdown and host quit. QEMU PID/PGID/SID 11, starttime 82440018 and
+status -9 match the admitted command and reviewed cleanup policy. All 30 Docker
+clients have exact identity/reap records; the container exited zero without OOM,
+removal and three final empty lookups passed, the development lock is free, and
+no matching owner, QEMU or container remains.
+
+Independent review returns `PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE` after checking
+the exact source/artifact closure, archive and oracle replay, application bytes,
+QMP ordering, capture bindings, process/container identities and teardown. Raw
+inner/outer paths, tuple hashsets and key file hashes are retained in
+`docs/verification/stability-native-diagnostic-current-signal-success-20260928-1.json`.
+Packet 6 is consumed/nonreusable. This continuation now has two real diagnostic
+guest applications (packet 5 exposed the outer join defect; packet 6 passed)
+and zero current-candidate builds. The latest executable result completed at
+2026-09-28T16:56:49Z.
+
+Next: adapt the now-passing owner/runner boundary to the unchanged dynamically
+linked `native-application-core` memory mode. Authenticate its retained binary,
+loader/libc and current signal module/image tuple; generate a fresh manifest and
+overlay under the unprivileged reviewed profile; then obtain a new exact release
+for memory before proceeding to files, threads and shutdown. Official counters
+remain 0/273 applications, 2/4 narrow fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates. Whole-OS acceptance remains incomplete.
