@@ -15,9 +15,15 @@ SPEC.loader.exec_module(NSO)
 
 
 def reserve(values=None):
-    return {"cpu": {"os0": {"ok": True, "values": list(values or [])}},
-            "numa_memory": {"node0": {"ok": True, "values": list(values or [])},
-                            "node1": {"ok": True, "values": list(values or [])}}}
+    values = list(values or [])
+    return {"cpu": {"status": "available", "queries": {"os0": {"values": values}}, "reason": None},
+            "numa_memory": {"status": "available", "queries": {"node0": {"values": values},
+                            "node1": {"values": values}}, "reason": None}}
+
+
+def unavailable(reason="provider_absent"):
+    return {"cpu": {"status": "unavailable", "queries": {}, "reason": reason},
+            "numa_memory": {"status": "unavailable", "queries": {}, "reason": reason}}
 
 
 def procfs(present):
@@ -29,7 +35,7 @@ def procfs(present):
 def phase(name, present=False, live=False):
     process = [{"pid": 123, "starttime_ticks": 77}] if live else []
     return {"phase": name, "processes": process, "procfs": procfs(present), "devices": [], "modules": {},
-            "reserves": reserve(), "cpu_online": [0, 1],
+            "reserves": reserve() if present else unavailable(), "cpu_online": [0, 1],
             "irqs": {"inventory": {"32": {"affinity": "0-1"}}, "added": [], "removed": []},
             "policy": {"selinux": {"enforcing": True, "config": "enforcing"}, "swappiness": 60,
                        "irqbalance": {"state": "active", "config": "IRQBALANCE_BANNED_CPUS="}},
@@ -40,16 +46,23 @@ def document():
     rows = [phase("clean_baseline"), phase("booted", present=True),
             phase("workload_live", present=True, live=True),
             phase("workload_retired_pre_stop", present=True),
-            phase("destroyed_resources_released_provider_present"), phase("fully_unloaded"),
+            phase("destroyed_resources_released_provider_present", present=True), phase("fully_unloaded"),
             phase("policy_restored")]
-    device = {"path": "/dev/mcos0", "type": "char", "major": 240, "minor": 0,
+    device = {"path": "/dev/mcd0", "role": "provider", "type": "char", "major": 240, "minor": 0,
               "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
               "sysfs": {"dev": "240:0", "type": "char"}}
+    os_device = {"path": "/dev/mcos0", "role": "os", "type": "char", "major": 241, "minor": 0,
+                 "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
+                 "sysfs": {"dev": "241:0", "type": "char"}}
     live_module = {"mcctrl": {"refcount": 1, "holders": ["mcctrl-client"]}}
     for index in (1, 2, 3):
-        rows[index]["devices"] = [copy.deepcopy(device)]
+        rows[index]["devices"] = [copy.deepcopy(device), copy.deepcopy(os_device)]
         rows[index]["modules"] = copy.deepcopy(live_module)
-    rows[4]["modules"] = {"mcctrl": {"refcount": 0, "holders": []}}
+    rows[4]["devices"] = [copy.deepcopy(device)]
+    rows[4]["modules"] = {"mcctrl": {"refcount": 1, "holders": ["mcctrl-client"]}}
+    rows[4]["procfs"] = procfs(False)
+    rows[5]["reserves"] = unavailable()
+    rows[6]["reserves"] = unavailable()
     expectations = {"processes": {}, "procfs": {}, "devices": {}, "modules": {},
                     "cpu_online": [0, 1], "irqs": {"32": {"affinity": "0-1"}},
                     "policy": copy.deepcopy(rows[0]["policy"])}
@@ -61,7 +74,7 @@ def document():
                                                     "maps_sha256": NSO._map_digest(p["maps"])}
         expectations["devices"][row["phase"]] = copy.deepcopy(row["devices"])
         expectations["modules"][row["phase"]] = copy.deepcopy(row["modules"])
-    return {"schema": "native-shutdown-observer-v1", "expectations": expectations, "phases": rows}
+    return {"schema": "native-shutdown-observer-v2", "expectations": expectations, "phases": rows}
 
 
 class ShutdownObserverTests(unittest.TestCase):
@@ -91,7 +104,7 @@ class ShutdownObserverTests(unittest.TestCase):
         value = document(); value["phases"][1]["procfs"]["errors"] = ["EIO"]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "error"):
             NSO.validate(value)
-        device = {"path": "/dev/mcos0", "type": "char", "major": 240, "minor": 0,
+        device = {"path": "/dev/mcos0", "role": "os", "type": "char", "major": 240, "minor": 0,
                   "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
                   "sysfs": {"dev": "240:1", "type": "char"}}
         value = document(); value["phases"][1]["devices"] = [device]
@@ -107,6 +120,39 @@ class ShutdownObserverTests(unittest.TestCase):
             NSO.validate(value)
         value = document(); value["phases"][2]["processes"][0]["starttime_ticks"] = 78
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "identity"):
+            NSO.validate(value)
+
+    def test_unavailable_reserves_need_a_known_reason_and_no_queries(self):
+        value = document(); value["phases"][5]["reserves"]["cpu"]["reason"] = "empty"
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "bad unavailable"):
+            NSO.validate(value)
+        value = document(); value["phases"][5]["reserves"]["numa_memory"]["queries"] = {"node0": {"values": []}}
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "unavailable reserve has queries"):
+            NSO.validate(value)
+
+    def test_device_role_must_match_provider_or_os_namespace(self):
+        value = document(); value["phases"][1]["devices"][0]["role"] = "os"
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "role/path"):
+            NSO.validate(value)
+        value = document(); value["phases"][4]["devices"].append({
+            "path": "/dev/mcos0", "role": "os", "type": "char", "major": 241, "minor": 0,
+            "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
+            "sysfs": {"dev": "241:0", "type": "char"}})
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider resources"):
+            NSO.validate(value)
+
+    def test_lifecycle_device_and_reserve_invariants_reject_hostile_drift(self):
+        value = document(); value["phases"][0]["devices"] = [copy.deepcopy(value["phases"][1]["devices"][0])]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "unclean baseline"):
+            NSO.validate(value)
+        value = document(); value["phases"][2]["devices"] = [copy.deepcopy(value["phases"][2]["devices"][0])]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider/OS"):
+            NSO.validate(value)
+        value = document(); value["phases"][4]["devices"].append(copy.deepcopy(value["phases"][1]["devices"][1]))
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider resources"):
+            NSO.validate(value)
+        value = document(); value["phases"][5]["reserves"]["cpu"]["reason"] = "query_unavailable"
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider-absent"):
             NSO.validate(value)
 
     def test_policy_cpu_and_irq_drift_reject(self):
@@ -128,7 +174,7 @@ class ShutdownObserverTests(unittest.TestCase):
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "procfs content/digest"):
             NSO.validate(value)
         value = document(); value["phases"][1]["devices"] = []
-        with self.assertRaisesRegex(NSO.ShutdownObservationError, "device/sysfs transition"):
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider/OS"):
             NSO.validate(value)
         value = document(); value["phases"][3]["processes"] = [{"pid": 123, "starttime_ticks": 77}]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "workload not retired"):

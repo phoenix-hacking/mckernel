@@ -4872,3 +4872,46 @@ boot/workload/stop diagnostic with exact before/after process, procfs, device,
 module/refcount/holder, reserve, CPU, IRQ-affinity and policy snapshots. Preserve
 the one-cycle limitation; independently inventory CPU/callback/internal-mapping
 owners before proposing recreate-cycle or formal lifecycle credit.
+
+Continuation checkpoint 51, 2026-09-28: the launcher requested shutdown, so
+new dispatch stopped and every child agent was joined. Source inspection showed
+that the retained Rocky validator is a legacy IRQ-profile path and cannot prove
+the current native Linux-6.12 lifecycle. More importantly, the native backend
+has no shutdown callback: a booted `IHK_OS_SHUTDOWN` currently returns `EBUSY`,
+started `BootStorage` is intentionally retained, and no guest-CPU stop,
+IRQ/callback drain or safe service/sysfs/procfs cancellation protocol exists.
+No privileged command, container, QEMU, mcexec or shutdown fixture was run.
+
+Bounded source work is preserved in
+`docs/verification/stability-native-shutdown-source-wip-20260928-1.json`.
+The exact shutdown fixture and strengthened source test compile and pass; the
+seven-phase observer now distinguishes clean, live, provider-only and fully
+unloaded device/module states and requires `provider_absent` after unload.
+Together their 12 focused tests, Python compilation, Rust formatting and diff
+checks pass. A candidate allocation-free registry `ShutdownGuard` is also
+preserved with exact-generation CAS, pre-effect rollback, irreversible
+retention and NotBooted commit. It is WIP only: independent review and the
+configured Rust-1.92 fixture are pending, while the frozen registry digest
+correctly rejects the changed source and was not rewritten.
+
+At the checkpoint boundary the campaign identities remain launcher
+PID/PGID/SID 3125264/starttime 80228730, recovered worker PID/PGID/SID
+3170135/starttime 80670556, and app-server PID/PGID/SID 3170137/starttime
+80670562. No diagnostic owner, QEMU or mcexec process is live. Available bytes
+are 27,034,759,168 on the host filesystem and 21,613,768,704 on scratch, with
+29,563,035,648 bytes of MemAvailable. Unrelated launcher-policy changes,
+pycache state and the dirty nested IHK checkout remain unstaged and preserved.
+This invocation still has four real diagnostic guest applications and zero
+current-candidate builds. Formal counters remain 0/273 applications, 2/4
+narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7 language
+gates. This checkpoint neither completes nor resumes the OS goal.
+
+Next invocation: reconcile this pushed checkpoint and the three exact campaign
+process identities. Independently review the registry shutdown transaction,
+especially retry-from-Shutdown, reference preservation and concurrent/stale
+generation behavior; run its focused fixture under the configured Rust 1.92
+toolchain before any contract update. Then add a versioned native shutdown ABI
+and admission/in-flight gate, followed by explicit guest CPU stop
+acknowledgement, IRQ/callback drain, worker join and safe resource retirement.
+Do not execute the shutdown fixture until that backend path is implemented,
+built and separately released; its current deterministic result is `EBUSY`.

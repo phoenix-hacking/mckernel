@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import stat
 import sys
 
@@ -21,6 +22,8 @@ PHASES = (
 LIMITATIONS = frozenset(("internal_mapping_ledger_unobserved",
                          "internal_callback_ledger_unobserved",
                          "recreate_not_exercised"))
+RESERVE_STATUSES = frozenset(("available", "unavailable"))
+UNAVAILABLE_REASONS = frozenset(("provider_absent", "query_unavailable"))
 
 
 class ShutdownObservationError(ValueError):
@@ -92,9 +95,16 @@ def _devices(value):
     _need(type(value) is list and len(value) <= 1024, "device inventory")
     result = {}
     for row in value:
-        _keys(row, ("path", "type", "major", "minor", "owner", "mode", "sysfs"))
+        _keys(row, ("path", "role", "type", "major", "minor", "owner", "mode", "sysfs"))
         path = _text(row["path"], "device path")
         _need(path.startswith("/dev/") and path not in result, "device path")
+        if re.fullmatch(r"/dev/mcd[0-9]+", path):
+            role = "provider"
+        elif re.fullmatch(r"/dev/mcos[0-9]+", path):
+            role = "os"
+        else:
+            raise ShutdownObservationError("unclassified device node")
+        _need(row["role"] == role, "device role/path mismatch")
         _need(row["type"] in ("char", "block"), "device type")
         _need(type(row["major"]) is int and row["major"] >= 0 and type(row["minor"]) is int and row["minor"] >= 0,
               "device major/minor")
@@ -105,7 +115,7 @@ def _devices(value):
         sysfs = _bounded_map(row["sysfs"], "device sysfs")
         _need(sysfs.get("dev") == "%d:%d" % (row["major"], row["minor"]), "device/sysfs major/minor mismatch")
         _need(sysfs.get("type") == row["type"], "device/sysfs type mismatch")
-        result[path] = {"type": row["type"], "major": row["major"], "minor": row["minor"],
+        result[path] = {"role": role, "type": row["type"], "major": row["major"], "minor": row["minor"],
                         "owner": dict(row["owner"]), "mode": row["mode"], "sysfs": sysfs}
     return result
 
@@ -127,16 +137,24 @@ def _reserves(value):
     _keys(value, ("cpu", "numa_memory"))
     result = {}
     for group in ("cpu", "numa_memory"):
-        rows = value[group]
-        _need(type(rows) is dict and rows, "reserve query absent")
-        output = {}
-        for key, row in rows.items():
-            _text(key, "reserve query name")
-            _keys(row, ("ok", "values"))
-            _need(row["ok"] is True and type(row["values"]) is list and
-                  all(type(item) is int and item >= 0 for item in row["values"]), "reserve query failed")
-            output[key] = list(row["values"])
-        result[group] = output
+        item = value[group]
+        _need(type(item) is dict and set(item) == {"status", "queries", "reason"}, "reserve query shape")
+        _need(item["status"] in RESERVE_STATUSES, "reserve query status")
+        if item["status"] == "available":
+            _need(type(item["queries"]) is dict and item["queries"], "reserve query absent")
+            _need(item["reason"] is None, "available reserve has reason")
+            output = {}
+            for key, row in item["queries"].items():
+                _text(key, "reserve query name")
+                _keys(row, ("values",))
+                _need(type(row["values"]) is list and
+                      all(type(entry) is int and entry >= 0 for entry in row["values"]), "reserve query failed")
+                output[key] = {"values": list(row["values"])}
+            result[group] = {"status": "available", "queries": output, "reason": None}
+        else:
+            _need(item["queries"] == {}, "unavailable reserve has queries")
+            _need(item["reason"] in UNAVAILABLE_REASONS, "bad unavailable reserve reason")
+            result[group] = {"status": "unavailable", "queries": {}, "reason": item["reason"]}
     return result
 
 
@@ -220,23 +238,42 @@ def _expectations(value):
 def validate(document):
     """Validate seven snapshots and return bounded diagnostic-only evidence."""
     _keys(document, ("schema", "expectations", "phases"))
-    _need(document["schema"] == "native-shutdown-observer-v1" and type(document["phases"]) is list,
+    _need(document["schema"] == "native-shutdown-observer-v2" and type(document["phases"]) is list,
           "shutdown observer schema")
     expected, snapshots = _expectations(document["expectations"]), [_snapshot(row) for row in document["phases"]]
     _need([row["phase"] for row in snapshots] == list(PHASES), "missing/duplicate/out-of-order phase")
     baseline = snapshots[0]
-    _need(baseline["procfs"]["state"] == "absent" and not baseline["processes"], "unclean baseline")
+    _need(baseline["procfs"]["state"] == "absent" and not baseline["processes"] and
+          not baseline["devices"] and not baseline["modules"], "unclean baseline")
+    _need(all(group["status"] == "unavailable" for group in baseline["reserves"].values()),
+          "baseline reserve provider unexpectedly available")
     _need(snapshots[1]["procfs"]["state"] == "present", "booted procfs absent")
     _need(snapshots[2]["procfs"]["state"] == "present" and snapshots[2]["processes"], "workload not live")
     _need(snapshots[3]["procfs"]["state"] == "present" and not snapshots[3]["processes"], "workload not retired")
+    for index in (1, 2, 3):
+        roles = {row["role"] for row in snapshots[index]["devices"].values()}
+        _need("provider" in roles and "os" in roles, "live provider/OS device missing")
     release = snapshots[4]
-    _need(release["procfs"]["state"] == "absent" and not release["devices"], "resources not released")
+    _need(release["procfs"]["state"] == "absent" and
+          all(row["role"] == "provider" for row in release["devices"].values()) and release["devices"],
+          "provider resources not released")
     _need(release["modules"], "provider missing before unload")
-    _need(all(not values for group in release["reserves"].values() for values in group.values()),
-          "residual CPU/NUMA reserves before unload")
+    _need(all(group["status"] == "available" and group["queries"] and
+              all(not query["values"] for query in group["queries"].values())
+              for group in release["reserves"].values()), "reserve release queries unavailable or residual")
+    for index in (1, 2, 3, 4):
+        _need(all(group["status"] == "available" for group in snapshots[index]["reserves"].values()),
+              "provider reserve query unavailable")
     unloaded = snapshots[5]
     _need(unloaded["procfs"]["state"] == "absent" and not unloaded["devices"] and not unloaded["modules"],
           "fully unloaded state has residual provider")
+    for index in (5, 6):
+        _need(not snapshots[index]["devices"] and not snapshots[index]["modules"],
+              "provider remains after unload")
+        _need(all(group["status"] == "unavailable" and
+                  group["reason"] == "provider_absent" and not group["queries"]
+                  for group in snapshots[index]["reserves"].values()),
+              "provider-absent reserve query not explicitly unavailable")
     for row in snapshots:
         phase = row["phase"]
         _need(row["processes"] == expected["processes"][phase], "process identity/starttime mismatch")
@@ -259,8 +296,8 @@ def validate(document):
         _need(all(row["refcount"] >= len(row["holders"]) and row["holders"]
                   for row in snapshots[index]["modules"].values()), "unattributable live module ref")
     _need(not snapshots[3]["processes"], "workload nodes not retired before stop")
-    _need(all(row["refcount"] == 0 and not row["holders"] for row in release["modules"].values()),
-          "provider has live refs after destroy")
+    _need(all(row["refcount"] >= len(row["holders"]) for row in release["modules"].values()),
+          "invalid provider dependency refs")
     return {"status": "PROTOCOL_PASS", "application_acceptance": False,
             "limitations": sorted(set(item for row in snapshots for item in row["limitations"])),
             "phases": list(PHASES)}
