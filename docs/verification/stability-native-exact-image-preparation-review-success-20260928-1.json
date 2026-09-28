@@ -1,0 +1,37 @@
+{
+  "schema": "mckernel.stability.execution-review.v1",
+  "date": "2026-09-28",
+  "candidate_commit": "d0947e0c9688106ba853e5846afc63bc94deec03",
+  "scope": "networked source-free Rocky tool-image preparation only",
+  "decision": "PASS",
+  "reviewed_command": "sudo -A /usr/bin/python3 -B /home/holden/mckernel-exact-candidate-d0947e0c/scripts/native_rust_exact_build_image_prepare.py --candidate-sha d0947e0c9688106ba853e5846afc63bc94deec03 --output-root /home/holden/mckernel-work/scratch/native-exact-image-output-d0947e0c-1 --evidence-root /home/holden/mckernel-exact-image-evidence-d0947e0c-1 --lease-path /home/holden/mckernel-work/scratch/native-exact-image-d0947e0c-1.lease --toolchain-lock /home/holden/mckernel-exact-candidate-d0947e0c/host-kernel/rocky/toolchain-lock.json",
+  "verified_inputs": {
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "toolchain_lock_sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
+    "owner_sha256": "fb9c52cf764b407fe1f09e53fbb2cf5d8c311b58e52f924701f783086a955a79",
+    "preparation_sha256": "7b606423dd8489d280614f2117f51079e5ddd443b15e88b6c3e5c4cd4a7754f2",
+    "owner_tests_sha256": "6b5319c5de3a192a83299a3dd318e8890400e5beaff37e24c636db659adeabc3",
+    "preparation_tests_sha256": "13ceb206982568d4de460c1ca5efa699b2e1cdb7b3d70301e151624de989c695",
+    "compressed_test_log_sha256": "acfa09a298c5230f1e3686bf0b66c5054f699f8c8b061ccd66f5a8f4991bd73f",
+    "focused_tests": 43
+  },
+  "accepted_controls": [
+    "Each command streams stdout and stderr directly to exclusive evidence files and atomically records command status.",
+    "SIGTERM and SIGINT interrupt the wait, bound client reaping and enter bounded container retirement; uncertain retirement retains the lease.",
+    "SIGKILL leaves bytes already emitted and the ownership lease recoverable.",
+    "Effective CPUs 2-5, four CPUs, 12 GiB/no additional swap, 512 tasks, private IPC, network and capability controls are inspected before start."
+  ],
+  "execution_prerequisites": [
+    "Reverify the exact clean candidate and input manifest immediately before execution.",
+    "Require output, evidence and lease targets to be absent and reconcile every conflicting owner.",
+    "Require at least 16 GiB host free, 12 GiB scratch free and 16 GiB MemAvailable.",
+    "Reconcile pinned base digest e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176 with local image ID sha256:0b5329d806d053ad65ab6b21fc3e49f1025e970cd826547a01a93b3ce9012796."
+  ],
+  "checkpoint_state": {
+    "preparation_executed": false,
+    "container_started": false,
+    "heavy_build_started": false,
+    "reason": "The launcher requested an immediate checkpoint after review completion; the released command is preserved as the next executable task."
+  },
+  "limitations": "This is only a technical release for the exact preparation boundary. It grants no offline build, module, guest, runtime, production-package or OS acceptance."
+}

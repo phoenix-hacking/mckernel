@@ -5380,3 +5380,34 @@ manifest SHA-256 is `6b727167...590c8`, and its committed compressed copy is
 (SHA-256 `545df87d...9f0f7`). The superseded c140 manifest is retained as original
 pre-correction evidence. Next: independent rereview of the exact d0947e0c
 preparation boundary; no container has run.
+
+Continuation checkpoint 60, 2026-09-28: independent rereview now PASSes only
+the exact d0947e0c source-free image-preparation boundary. The reviewer verified
+the clean candidate and ihk identities, exact source/test hashes, the 43-test
+raw log and the corrected first-byte output, orderly signal, bounded retirement
+and lease-retention controls. The additive decision is
+`stability-native-exact-image-preparation-review-success-20260928-1.json`; the
+original c140 BLOCK and all correction evidence remain unchanged.
+
+The launcher requested a checkpoint immediately after the review completed, so
+the released preparation command was deliberately not started. No exact-build
+output, evidence or lease target exists; no preparation container, heavy build,
+QEMU or mcexec owner is active. The clean candidate remains
+`d0947e0c9688106ba853e5846afc63bc94deec03` with ihk
+`3114d9e7101ad52030eb3effa849a5c108972a1f`. Preserved launcher processes are
+wrapper PID 3399308 (starttime 83682487), worker PID 3399313 (starttime
+83682494) and app-server PID 3399317 (starttime 83682500). All child review and
+implementation lanes are complete; none owns a live operation.
+
+Next executable task after a subsequent launcher continuation: perform a fresh
+preflight of the exact clean candidate and manifest, absent output/evidence/lease
+targets, pinned Rocky digest and local image ID, conflicting owners, and the
+16-GiB host / 12-GiB scratch / 16-GiB MemAvailable floors. If all checks pass,
+run exactly the released preparation command recorded in the PASS decision and
+retain every command capture, status, inspection, receipt and owner identity.
+After successful terminal retirement and receipt validation, checkpoint the
+prepared image and obtain a separate independent execution release for the
+offline heavy build. Do not infer build, module, guest, application or OS
+acceptance from the preparation release. Formal counters remain 0/273, 2/4,
+6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero
+current-candidate builds remain unchanged.
