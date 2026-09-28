@@ -4430,3 +4430,34 @@ bytes/status, serial/debugcon/kernel/QMP, every process/container identity and
 final teardown. Packet 5/6 remain consumed and memory overlay attempt 1 remains
 historical. No diagnostic result promotes formal counters; the continuation
 still has two real guest applications and zero current-candidate kernel builds.
+
+Continuation checkpoint 41, 2026-09-28: the one released memory command was
+consumed exactly once and passes both inner and outer protocols. The real
+`native-application-core memory` guest produced exact 24-byte stdout
+`NATIVE_CORE PASS memory\n`, empty stderr, raw wait status 9472/exit 37,
+complete EOF and empty procfs. Scheduling, sampled syscall delivery/return/route,
+terminal exit-group, retirement, four-reference pager release, procfs deletion
+and process release all join. QMP has 1,393 records: all 695 requests have
+successful replies, guest shutdown precedes shutdown-status confirmation and
+host quit. QEMU PID/PGID/SID 10, starttime 82726129 and return -9 match the
+reviewed cleanup path.
+
+All six inner/outer captures match. All 30 Docker clients have distinct exact
+identities and completed reaps. Container
+`e4c295f0...69418` exited zero without OOM; authenticated removal preceded
+three empty lookups, and the development lock is free. Independent review
+returns `PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE`. The release record's hand-entered
+`recorded_at` incorrectly says 10:51; it remains immutable. Additive correction
+in `docs/verification/stability-native-diagnostic-memory-success-20260928-1.json`
+binds authoritative Git/fetch at 17:42:45-53Z, successful live preflight at
+17:43:40Z and container start at 17:43:55Z. No ordering gap exists.
+
+Next: commit/push/fetch-verify the reviewed memory result, then reuse the same
+unprivileged preparation profile to build `ND_CORE_FILES=1`, establish the exact
+host files oracle, derive a fresh overlay and strict manifest, and obtain a new
+artifact/packet/release review before one files diagnostic. Memory packet 1 is
+consumed and nonreusable. This invocation has one real diagnostic guest app and
+zero current-candidate kernel builds; the latest executable result completed at
+2026-09-28T17:44:31Z. Official counters remain 0/273 applications, 2/4 narrow
+fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
+Whole-OS acceptance remains incomplete.
