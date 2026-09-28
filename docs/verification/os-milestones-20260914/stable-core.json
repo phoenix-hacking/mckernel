@@ -117,6 +117,7 @@
     ,"native_diag_identity": "docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json"
     ,"native_diag_execution_release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-1.json"
     ,"native_diag_attempt_failure": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json"
+    ,"native_diag_qemu_version": "docs/verification/stability-native-diagnostic-qemu-version-source-success-20260928-1.json"
   },
   "areas": [
     {
@@ -516,8 +517,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The exact released attempt failed cleanly before QEMU launch because the observer compared pinned QEMU against a shortened version string that omitted the retained Rocky build suffix. The exact container exited 1 without OOM, was authenticated and removed, three final lookups were empty and the lease was released. No McKernel behavior or application bytes were observed.",
-      "next_check": "Bind the observer to the exact retained QEMU version output, add local drift regressions, rerun cheap suites and obtain independent source review; then create a fresh parent/nonce and obtain a new exact one-shot release before another privileged attempt.",
+      "result": "The preserved one-shot observer failure is corrected: the owner requires the exact pinned QEMU digest and complete retained version stdout, zero status and empty stderr. A fresh six-module suite passes 211 tests after an independently found fixture defect was corrected; final review returns PASS_SOURCE_READY_FOR_FRESH_PACKET. No QEMU or McKernel behavior was exercised.",
+      "next_check": "Prepare a fresh packet bound to pushed commit 79a1424fac318f692355f47669632f298cc84947 and a never-used parent/nonce, obtain independent one-shot release, then run once and preserve application bytes/exit, kernel log, QMP/serial, identities and teardown.",
       "evidence": [
         "history",
         "plan",
@@ -530,7 +531,8 @@
         "native_diag_owner",
         "native_diag_identity",
         "native_diag_execution_release",
-        "native_diag_attempt_failure"
+        "native_diag_attempt_failure",
+        "native_diag_qemu_version"
       ],
       "depends_on": []
     },

@@ -3841,3 +3841,25 @@ unchanged. Official counters remain 0/273 applications, 2/4 narrow fault modes,
 6/130 production gates, 350/10,000 points and 0/7 language gates. Whole-OS
 acceptance remains incomplete; this checkpoint pauses rather than resumes or
 completes the goal.
+
+Continuation checkpoint 22, 2026-09-28: the first runtime attempt's observer
+failure is corrected in pushed commit `79a1424f...`. The inner owner now binds
+both the existing exact QEMU binary digest and the complete retained stdout,
+including the Rocky `10.1.0-16.el10_2.5` suffix and copyright line; return status
+must be zero and stderr empty. The positive fixture independently spells those
+bytes. Missing/altered suffix, extra output, missing/altered copyright and
+nonempty-stderr negatives all reject before runner exec.
+
+The coordinator's fresh unprivileged six-module suite passes 211/211 in 12.539
+seconds; raw stderr SHA256 is `725d0bc0...`. The first independent review found
+two singleton-tuple negatives and a self-consistent positive fixture, so that
+candidate was not accepted. After the bounded correction, independent review
+returns `PASS_SOURCE_READY_FOR_FRESH_PACKET` for owner `35cd4596...` and tests
+`f15fdef9...`. Fetched remote commit and both source blobs match locally.
+
+This is source/fixture evidence only. No Docker, root, QEMU, guest, build or
+application command ran, and official counters remain unchanged. Next prepare
+a fresh packet bound to commit `79a1424f...`, a never-used short parent and a
+fresh nonce; obtain a separate independent one-shot release before executing.
+Exact commands, hashes, review history and limits are in
+`docs/verification/stability-native-diagnostic-qemu-version-source-success-20260928-1.json`.
