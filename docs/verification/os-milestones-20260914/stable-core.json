@@ -128,6 +128,8 @@
     ,"native_diag_success6": "docs/verification/stability-native-diagnostic-current-signal-success-20260928-1.json"
     ,"native_diag_memory_prep": "docs/verification/stability-native-diagnostic-memory-preparation-source-success-20260928-1.json"
     ,"native_diag_memory_profile": "docs/verification/stability-native-diagnostic-memory-profile-source-success-20260928-1.json"
+    ,"native_diag_memory_artifact": "docs/verification/stability-native-diagnostic-memory-artifact-success-20260928-1.json"
+    ,"native_diag_memory_release": "docs/verification/stability-native-diagnostic-memory-execution-release-20260928-1.json"
   },
   "areas": [
     {
@@ -527,8 +529,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 independently passes one real diagnostic McKernel application protocol run: startup.argv-empty produced exact 91-byte stdout, empty stderr, wait status zero, empty procfs, QMP shutdown, complete process retirement, exact QEMU and 30 Docker-client identities, container exit zero/OOM false, authenticated removal and final absence. Inner and outer both report PROTOCOL_PASS; source/artifact and independent archive/oracle replay pass. Packet 5's original outer failure remains preserved. Memory preparation now has explicit payload and immutable manifest identity plus strict manifest startup argv. Source-fixed presence-only memory/files/threads/signals collector profiles reject multiple or legacy value-bearing selection. Independent review passes; the integrated suite passes 280 tests. This is diagnostic preparation, not catalog acceptance.",
-      "next_check": "Build and authenticate a fresh ND_CORE_MEMORY collector, generate and strictly replay a fresh native-application-core memory overlay/manifest against the exact signal tuple, obtain independent artifact and one-shot execution reviews, then run memory before files, threads and shutdown.",
+      "result": "Packet 6 independently passes one real startup diagnostic McKernel application protocol run. Packet 5's original outer failure remains preserved. The fresh memory collector is static x86_64 with source-fixed argv, and the corrected overlay strictly replays 61 members with all 37 final userspace ELF provider joins. The strict baseline.core.memory manifest binds the current signal tuple, exact 24-byte stdout, empty stderr and exit 37. Independent artifact review passes, and a separate reviewer released exactly one packet invocation after remote checkpoint verification and fresh live preflight. This is diagnostic preparation, not catalog acceptance.",
+      "next_check": "Push/fetch-verify the exact memory packet and release, remeasure and reconcile the live runtime lease, then consume at most the single released command and preserve bytes, status, kernel logs, identities and teardown before proceeding to files, threads and shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -552,7 +554,9 @@
         "native_diag_qemu_status",
         "native_diag_success6",
         "native_diag_memory_prep",
-        "native_diag_memory_profile"
+        "native_diag_memory_profile",
+        "native_diag_memory_artifact",
+        "native_diag_memory_release"
       ],
       "depends_on": []
     },

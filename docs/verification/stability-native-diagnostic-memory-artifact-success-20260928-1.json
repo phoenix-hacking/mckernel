@@ -1,0 +1,72 @@
+{
+  "schema": "mckernel.stability-artifact-review.v1",
+  "recorded_at": "2026-09-28T10:45:00-07:00",
+  "base_commit": "d1552173a70f8ef195cac8475047a0579060c784",
+  "scope": "fresh source-fixed collector, derived initramfs and strict manifest for native-application-core memory diagnostic",
+  "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+  "collector": {
+    "source": "scripts/application-tests/native_diagnostic_guest_collector.c",
+    "source_sha256": "e78760ae333ca5967da30f6b338f2ee57344ed2f9e9495d80b00e35b6f72ad4a",
+    "command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack -DND_CORE_MEMORY=1 /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o /home/holden/mckernel-work/scratch/native-diagnostic-memory-collector-build-20260928-1/init",
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-collector-build-20260928-1",
+    "artifact_sha256": "247433d68fa712f0f456366baead6040848832284b5ff14d89fced108b200556",
+    "artifact_size": 1021296,
+    "artifact_mode": "0700",
+    "compiler_sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "compiler_version": "gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+    "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timing_sha256": "12a4f2e398ca769e972ba7272cbd85fbcfdf27b4802e4c53e6da05585f7f81ee",
+    "result": "exit 0; static x86_64 ET_EXEC; no PT_INTERP or dynamic section; GNU_STACK is non-executable",
+    "independent_review": "PASS_ARTIFACT_READY_FOR_OVERLAY"
+  },
+  "overlay_failure": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-overlay-20260928-1",
+    "result": "FAIL before output creation: supplied base CPIO digest had a transcribed middle value",
+    "stderr_sha256": "1916a45974fc58041b05fc8e7b6cf07f06fb9237c0835897b2453cb1ff2ca968",
+    "timing_sha256": "9bab5e35f85f3dfcec4573a58ba3611efee29385f22f61125557fe9ffa92160e",
+    "correction": "Recompute and use the exact authenticated base CPIO digest in a fresh root; do not reuse or overwrite attempt 1."
+  },
+  "overlay": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-overlay-20260928-2",
+    "base_gzip_sha256": "c7957431335818d1cf448bb0ae24efb5193bbfa226885787ff5311bea45b4265",
+    "base_gzip_size": 11803083,
+    "base_cpio_sha256": "fefbfbe32e2cfb05a200b0e8280f6ffa9be4698171194042fd69af85eea0de57",
+    "base_cpio_size": 38191104,
+    "payload_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "collector_sha256": "247433d68fa712f0f456366baead6040848832284b5ff14d89fced108b200556",
+    "mcexec_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "overlay_sha256": "67e9b39a5b010715bbf82e2d066007df9447f12182b29a4572b64013adbdbef9",
+    "overlay_size": 1514972,
+    "derived_initramfs_sha256": "3fff2b945f6dc5d0a4d1052c283c1613b3eadb138640f85ccfafa5d8106ee662",
+    "derived_initramfs_size": 12405186,
+    "manifest_sha256": "46083fc17c46fd16ef864b340f79551f18fe7baebb75e9344198a2214d4b07b2",
+    "manifest_size": 14881,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timing_sha256": "5d86a18ae0a43b6a08bf8b4ed516a798f663cb34a0efbddced6f77372e438b18",
+    "replay": "The exact base CPIO is a complete prefix; canonical overlay replay reproduces 61 final members and exact collector, payload and mcexec bytes."
+  },
+  "strict_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-manifest-20260928-1/manifest.json",
+    "sha256": "10bbde5a2d9c0a85c415630c19db0345122bd2d13d162c0c549c52409be0660d",
+    "size": 5289,
+    "mode": "0600",
+    "case_id": "baseline.core.memory",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "memory"],
+    "stdout_hex": "4e41544956455f434f52452050415353206d656d6f72790a",
+    "stderr_hex": "",
+    "exit_code": 37,
+    "owner_bound_manifest": "PASS",
+    "qmp_path_bytes_for_proposed_packet": 100
+  },
+  "independent_review": {
+    "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+    "verified": "collector profile and ELF, raw base-prefix preservation, canonical 61-member replay, all 37 userspace ELF dependency/provider joins, exact module/image/runtime closure, strict path/hash/schema/mode/argv/oracle joins and pure QEMU command generation"
+  },
+  "limitations": [
+    "No root, Docker, QEMU, guest or McKernel memory application execution occurred.",
+    "The proposed attempt parent, attempt and owner-evidence sibling remain absent.",
+    "A separately reviewed exact one-shot execution packet is still required.",
+    "No application, M04, production-gate or whole-OS acceptance follows."
+  ]
+}

@@ -4399,3 +4399,34 @@ artifact/manifest review and a separate exact one-shot release before runtime.
 The continuation count remains two real diagnostic guest applications and zero
 current-candidate builds; official acceptance counters and whole-OS incomplete
 status are unchanged.
+
+Continuation checkpoint 40, 2026-09-28: the source-fixed memory collector built
+successfully as a static x86-64 ET_EXEC with SHA256 `247433d6...0556`, no
+interpreter/dynamic section and a non-executable stack. Independent audit returns
+`PASS_ARTIFACT_READY_FOR_OVERLAY`. The first overlay command used a transcribed
+base-CPIO digest and failed before output; its root remains preserved. The one
+bounded correction used fresh attempt 2 and the actual authenticated digest
+`fefbfbe3...0de57`. Strict replay preserves the complete 38,191,104-byte base
+prefix and joins 61 final members. The derived initramfs is `3fff2b94...e662`.
+
+The strict `baseline.core.memory` manifest is SHA256 `10bbde5a...0660d` and
+binds `/bin/mcexec -t 1 0 app memory`, exact 24-byte stdout
+`NATIVE_CORE PASS memory\n`, empty stderr and exit 37. Independent review
+returns `PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET`, including all 37 final
+userspace ELF provider joins and the exact signal module/image/runtime tuple.
+Fresh packet 1 has SHA256 `057872d9...cece`, parent `ndcm-20260928-1`, nonce
+`5759bc5f...f3c8a`, and a 100-byte QMP pathname. A separate independent review
+returns `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE` for only its exact sudo-A command,
+conditional on pushed/fetched packet/release blobs and fresh live preflight.
+No root, container, QEMU or guest operation has occurred yet.
+
+Next: commit, push and fetched-blob verify the artifact evidence, packet and
+release. Then remeasure the 16/12-GiB disk and packet memory floors, reconcile
+launcher identities and the single heavy lease, authenticate the real
+development lock, Docker/container absence, every source/artifact and the three
+fresh paths. If all remain exact, create the parent once as uid/gid 1000 mode
+0700 and consume at most the single released command. Preserve application
+bytes/status, serial/debugcon/kernel/QMP, every process/container identity and
+final teardown. Packet 5/6 remain consumed and memory overlay attempt 1 remains
+historical. No diagnostic result promotes formal counters; the continuation
+still has two real guest applications and zero current-candidate kernel builds.
