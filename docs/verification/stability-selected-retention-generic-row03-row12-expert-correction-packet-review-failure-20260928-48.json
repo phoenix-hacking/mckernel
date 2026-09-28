@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_expert_correction_packet_review",
+  "review_attempt": 48,
+  "recorded_utc": "2026-09-28T08:14:00Z",
+  "status": "FAIL_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-expert-correction-packet-20260928-48.md",
+  "packet_sha256": "d0528c1022f19d6ae555edee745630ac43966b8b5b4c5d64a7dee3b95d5c2000",
+  "findings": [
+    "Wake-none completion has verification state (true,false), so the real query must return Err(-71) without latching invalid; present=true was contradictory.",
+    "The fixture omitted the actual address calls: totals are two before the preparation baseline and three after successful publication; observer totals exclude the first pre-selection call.",
+    "close_worker cancellation must change invalid from 0 to -125 and preserve -125 through destruction/drain.",
+    "The packet prohibited invoking the stager while fresh construction requires the authenticated correction45 source-only stager."
+  ],
+  "source_attempt_released": false,
+  "phase_ii_released": false,
+  "compilation_or_runtime": false,
+  "acceptance_credit": false,
+  "next": "Apply one bounded additive packet correction preserving the real method outcomes, then obtain independent review."
+}

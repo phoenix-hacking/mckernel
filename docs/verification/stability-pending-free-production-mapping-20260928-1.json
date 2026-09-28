@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_production_boundary_mapping",
+  "recorded_utc": "2026-09-28T08:22:00Z",
+  "status": "PASS_SOURCE_MAP_ONLY",
+  "production_boundaries": {
+    "per_cpu_head": "kernel/mem.c:3827-3830 mem_pending_free_pages_bridge",
+    "begin": [
+      "kernel/mem.c:1324-1331 mem_begin_free_pages_pending_result",
+      "kernel/rust/mem_helpers.rs:3995-4001"
+    ],
+    "enqueue": [
+      "kernel/mem.c:1374-1390",
+      "kernel/rust/mem_helpers.rs:4066-4089"
+    ],
+    "finish": [
+      "kernel/mem.c:1393-1417",
+      "kernel/rust/mem_helpers.rs:4093-4115"
+    ],
+    "free_dispatch": [
+      "kernel/mem.c:1850-1868",
+      "kernel/rust/mem_helpers.rs:4815-4837"
+    ],
+    "detached_batch": "kernel/rust/mem_helpers.rs:272-434 PendingFreeBatch/validate/detach/drain"
+  },
+  "finite_fixture_scope": {
+    "selectors": 23,
+    "production_abi_consumed": false,
+    "covered_concepts": [
+      "finite capacity/count validation",
+      "descriptor identity and ring links",
+      "mode/page/range/overlap validation",
+      "generation and mutation epoch",
+      "unchanged input hashes on errors"
+    ],
+    "not_present_in_current_production_boundary": [
+      "stable descriptor identity registry",
+      "caller-supplied inventory capacity/claimed count",
+      "generation or mutation epoch",
+      "physical extent overlap inventory",
+      "durable quarantine transaction owner",
+      "host-alias or TLB-generation acknowledgement"
+    ]
+  },
+  "critical_finding": "Current C and Rust finish traversal can release earlier valid nodes before a later invalid node returns EINVAL. The finite model's unchanged-on-error result cannot be mapped directly to finish.",
+  "smallest_next_boundary": [
+    "Compile and execute the finite independent C/Rust validators only after PASS_LAYER_B.",
+    "Add a source-bound adapter test using actual AbiListHead and MemPage around begin, enqueue, validate/detach and drain helpers.",
+    "Prevalidate a frozen inventory into exclusive retained ownership before calling any allocator callback; retain source/batch on every validation error.",
+    "Keep generation, durable quarantine, VA exclusion, Mirror::clear outcome and authenticated TLB/alias acknowledgement as a separate production transaction-owner requirement."
+  ],
+  "non_releases": [
+    "No production helper change, compilation, runtime test or execution release occurred.",
+    "The private finite fixture does not prove production pending-free ownership.",
+    "No production, application, language or whole-OS acceptance credit follows."
+  ]
+}

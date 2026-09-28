@@ -3041,3 +3041,64 @@ deletion remain unstaged. Counters remain 0/273 application cases, 2/4 narrow
 fault modes, 6/130 production gates, 350/10,000 points and 0/7 language gates.
 Whole-OS acceptance remains incomplete; future continuations are paused until a
 subsequent launcher invocation.
+
+Continuation shutdown checkpoint 3, 2026-09-28: the replacement Layer-B
+strategy is now a native single-threaded pidfd/subreaper owner rather than the
+rejected Python PGID family. Exact source SHA256
+`2c157335e88b2088c56fc40fd6c0d966dc653ea68b4726e51feb1d4b4e62eafc`
+and source-model SHA256
+`427f6133497ce0706fce39d9e52051542821bc6deab29d27322733c927efd63d`
+pass 17 static tests and independent `PASS_SOURCE`. This covers interpreted
+seccomp branches, spawn gating, pidfd-only direct signalling, durable terminal
+status before reap, direct/adopted deduplication and retained unresolved
+supervision. It is source evidence only.
+
+The separately reviewed compile-only bootstrap remains closed. Packet 8 failed
+six findings; additive correction 9 fixed the environment, working directory,
+macro conflict, static ELF inspection and kill syntax, but independent review 9
+still returns `FAIL_BOOTSTRAP_PACKET`: both exact GCC commands omit `-v`, normal
+retained units lack immediate stop, timeout cleanup lacks its own bounded budget
+and SIGKILL fallback, and the dependency manifest conflates persistent inputs
+with deleted GCC temporaries. No compiler, systemd transient unit, owner or
+payload was run. This bootstrap family has used its bounded correction; change
+strategy and independently review a new packet before compilation.
+
+M01 expert attempt48 produced an exact 327-regular-file source handoff and the
+1,011,877-byte archive
+`docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-attempt-20260928-48.tar.gz`
+at SHA256
+`6bb534ea6893e113e136a890660ccebe9f1b122d10f84546c2e1fbffb92d6cd8`.
+Independent review51 returns `FAIL_HANDOFF`: generic derived Default prevents
+the required `mem::take`, observer counters are fabricated, deallocation is
+recorded before Box destruction, and the assertion matrix remains incomplete.
+Preserve root48 and its archive. Escalated packet52, SHA256
+`846605e3c35c48e65ff892ae65ec67182eee1c5e38a43f3d5e83e651aa968568`,
+passes independent `PASS_PACKET` and releases exactly one future source-only
+attempt at absent root52 after reauthentication. Shutdown arrived before that
+attempt; Phase II, compilation and runtime remain closed.
+
+The M03 production mapping records a critical mismatch between the finite
+23-selector model and production: current finish can release earlier valid
+nodes before a later invalid node returns EINVAL. The next production step is a
+reviewed prevalidation boundary that freezes the actual ABI list into exclusive
+retained ownership before any allocator callback, followed separately by the
+generation/quarantine/VA-exclusion/invalidation transaction owner. No production
+behavior is accepted from this mapping.
+
+The stop request arrived before any newly released source attempt or executable
+work. All child agents are terminal. Launcher PID 3052017, worker PID 3052019
+and app-server PID 3052021, started at 2026-09-28 01:04:58 -0700, remain the
+active launcher identities while this closeout returns. No project build,
+guest, QEMU, mcexec, IHK, compiler or heavy owner is active; host/scratch free
+space is 44/21 GiB. The active launcher run directory is
+`.git/os-autopilot/runs/20260928T080459Z-d717ac31`. Next tasks are: (1) change and independently review the
+Layer-B bootstrap strategy before any compilation; (2) reauthenticate and run
+the single packet52 source-only root52 attempt, then independently review its
+handoff; (3) design/review M03 production prevalidation before integration.
+Exact results are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-3.json`.
+Unrelated concurrent launcher-file edits and the pre-existing user-owned
+bytecode deletion remain unstaged. Counters remain 0/273 application cases,
+2/4 narrow fault modes, 6/130 production gates, 350/10,000 points and 0/7
+language gates. Whole-OS acceptance remains incomplete; future continuations
+are paused until a subsequent launcher invocation.

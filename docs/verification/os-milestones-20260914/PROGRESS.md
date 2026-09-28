@@ -5,11 +5,11 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-28T08:03:04+00:00`
-- Launcher state heartbeat: `2026-09-28T08:02:51.042473+00:00`
+- Dashboard refreshed: `2026-09-28T08:56:18+00:00`
+- Launcher state heartbeat: `2026-09-28T08:56:09.605347+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `3033802`; server PID: `3033804`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T072108Z-7569fb1b`
+- Worker PID: `3052019`; server PID: `3052021`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260928T080459Z-d717ac31`
 
 ## Stable kernel core: engineering progress
 
@@ -19,7 +19,7 @@ Engineering snapshot: `2026-09-28` at `09a09b513c415e84242f2c257895a856b8605150`
 | Work | Verified substeps | Historical baseline | Implemented | Partial | Blocked | Unmeasured | Planned |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Kernel behavior | 0 | 18 | 1 | 6 | 9 | 49 | 20 |
-| Test / execution infrastructure | 2 | 1 | 0 | 11 | 1 | 1 | 2 |
+| Test / execution infrastructure | 2 | 1 | 0 | 12 | 0 | 1 | 2 |
 
 These are separate engineering states, not a stability percentage. Existing baseline behavior is preserved; unmeasured does not mean unimplemented. Infrastructure results never count as kernel results. The full tracker declares the first tested profile and explicitly separates multicore/features/platform qualification.
 

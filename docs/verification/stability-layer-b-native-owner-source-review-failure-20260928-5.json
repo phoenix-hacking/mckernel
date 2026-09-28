@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_source_review",
+  "recorded_utc": "2026-09-28T08:28:00Z",
+  "status": "FAIL_SOURCE",
+  "owner_sha256": "1689eff6a9e222d3f3ee79d36e169f0cc0bde1c02ffb4d8aa8c62c49109d8458",
+  "static_test_sha256": "989d7dc548ea765beb59665810923103d257cf2a4a72e1fa85f58a566d244e80",
+  "blocking_findings": [
+    "The seccomp BPF branches were reversed, permitted INET sockets, denied ordinary syscalls, omitted sys/socket.h and did not handle x32.",
+    "P_ALL with si_pid zero was mistaken for ECHILD, allowing live descendants to escape.",
+    "Post-fork pidfd, record and gate failures bypassed cleanup and SIGPIPE was unhandled.",
+    "Payload inherited blocked TERM/INT/CHLD.",
+    "Payload failure status was discarded as owner success.",
+    "Inherited descriptors survived and execvp permitted an ENOEXEC shell fallback.",
+    "Constant ACK did not authenticate management takeover and could block or busy-loop.",
+    "Ownership capacity was cumulative and adopted children lacked durable acquisition records."
+  ],
+  "compilation_or_execution": false,
+  "profile_released": false,
+  "acceptance_credit": false,
+  "next": "Apply one consolidated source-only correction, independently review it, then prepare a separate pinned bootstrap compile packet."
+}
