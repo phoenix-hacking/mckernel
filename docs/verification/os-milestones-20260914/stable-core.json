@@ -115,6 +115,7 @@
     ,"native_diag_closure": "docs/verification/stability-native-diagnostic-closure-success-20260928-2.json"
     ,"native_diag_owner": "docs/verification/stability-native-diagnostic-container-owner-source-success-20260928-1.json"
     ,"native_diag_identity": "docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json"
+    ,"native_diag_execution_release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-1.json"
   },
   "areas": [
     {
@@ -515,7 +516,7 @@
       "title": "Native payload identity and terminal collector",
       "status": "partial",
       "result": "The Python 3.9-safe diagnostic stack now passes a 211-test combined suite. The authenticated current-signal overlay/manifest reconcile exact module, image, collector, payload and derived initramfs bytes. The fail-closed owner retains unresolved creates/clients; the backend now retains QEMU PID/PGID/session/starttime and the outer owner queues process, lock and cgroup identity. Independent review returns PASS_IDENTITY_SOURCE_READY_FOR_PACKET_CORRECTION. No QEMU or McKernel guest has run, and source/byte review is not execution authority.",
-      "next_check": "Shorten the exact attempt root to satisfy the 107-byte QMP pathname limit, correct source hashes and outer-writer limits in the packet, obtain independent execution release, then run one diagnostic guest only after release.",
+      "next_check": "Run the exact independently released one-shot current-signal diagnostic, preserve application bytes/exit, serial/debugcon/QMP, process/container identities and teardown, then diagnose the first observed runtime failure or advance to the memory smoke.",
       "evidence": [
         "history",
         "plan",
@@ -526,7 +527,8 @@
         "native_diag_overlay",
         "native_diag_closure",
         "native_diag_owner",
-        "native_diag_identity"
+        "native_diag_identity",
+        "native_diag_execution_release"
       ],
       "depends_on": []
     },

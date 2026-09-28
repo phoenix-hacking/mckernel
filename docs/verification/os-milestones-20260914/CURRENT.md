@@ -3780,3 +3780,21 @@ block. Then obtain a fresh independent execution release. Evidence is in
 `docs/verification/stability-native-diagnostic-identity-source-success-20260928-1.json`
 and the rejected review record. Official counters remain unchanged; no real
 guest application or current kernel build has run in this continuation.
+
+Continuation checkpoint 20, 2026-09-28: the corrected current-signal packet
+now has `PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE`. It is bound to pushed commit
+`c059d839...`, packet SHA256 `fec6266a...`, short fresh parent
+`/home/holden/mckernel-work/scratch/ndcs-20260928-1` and nonce
+`6ea6a57520d94590b709b46dc011167c`. The exact QMP pathname is 100 bytes, both
+parent and evidence paths are absent, and the review rejoined all six runtime
+sources, manifest/artifact/image/QEMU identities, the 91-byte oracle, resource
+profile, deadlines, process evidence and fail-closed cleanup.
+
+This releases exactly one root-outer, UID1000-container diagnostic under CPUs
+2-5, 12 GiB/no additional swap, 512 tasks and no network. An unresolved create
+or client retains the owner and development lock indefinitely; it must not be
+killed or retried. The outer post-retirement evidence flush is intentionally
+unbounded and is not a live container/QEMU lease. Next remeasure capacity and
+leases, create the exact parent once, run only the released command, monitor its
+live process/session, and preserve all results. No execution or acceptance
+claim follows from this release itself.
