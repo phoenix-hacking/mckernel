@@ -1,0 +1,112 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T08:20:25-07:00",
+  "base_commit": "a1914e59db11bcb97435583b643bade4a280d73b",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415"
+  },
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "launcher_pid": 3125264,
+    "worker_pid": 3170135,
+    "app_server_pid": 3170137,
+    "launcher_started": "2026-09-28T03:47:42-07:00",
+    "worker_and_server_started": "2026-09-28T05:01:20-07:00",
+    "observed_at_shutdown": "all three identities remain alive; no launcher-owned state was edited",
+    "future_continuations_paused": true
+  },
+  "agents": {
+    "child_count": 8,
+    "all_terminal": true,
+    "new_dispatch_after_shutdown_request": false
+  },
+  "resources_at_shutdown": {
+    "host_free_bytes": 36542033920,
+    "scratch_free_bytes": 21972135936,
+    "memory_available_kib": 29793836,
+    "heavy_lease": "free",
+    "active_project_compiler": false,
+    "active_qemu_mcexec_guest_or_diagnostic_owner": false
+  },
+  "source_and_equivalence": {
+    "candidate_commit": "a1914e59db11bcb97435583b643bade4a280d73b",
+    "remote_branch_verified_at_start": true,
+    "compiler_forwarding_sha256": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+    "focused_result": "PASS_SOURCE_READY_FOR_BUILD",
+    "focused_stdout_sha256": "7664a517099d6ead15071762071f1aabe8bd27d0da6162c81b513b01467eb31e",
+    "focused_output": "mcexec_helpers ok digest=773c9d116a5f0f88",
+    "review": "independent C/Rust parity and FFI review found no blocking defect in the preload fastpath",
+    "broad_suite": "UNACCEPTED",
+    "broad_attempt_stderr_sha256": [
+      "f200a85a37898840118040218ce9f758983428e6043e095909251648b93ae0fc",
+      "50c6da38ff55d7d9a24517b8c5c22ba3c5a26c2fff11c3f02c846591818a4102",
+      "6440c7c66b84096ee71b4d92537226813a3c2aee87ddfebc35713f9e3595a4f6",
+      "ec0e72fc3feb274619cbd349df8f35fb3415674130c683f0f7710a4a444ae2ca"
+    ],
+    "broad_limit": "The focused pending-free portion passed, but the complete suite is not runnable with the current inventory: native stable Rust is incompatible and three unconditionally compiled IHK Rust inputs are absent. No check was skipped."
+  },
+  "build": {
+    "evidence_root": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1",
+    "profile": "historical CMake Debug launcher profile in pinned compatibility container, four build jobs",
+    "rust_artifact": {
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352,
+      "mode": "0755"
+    },
+    "fallback_artifact": {
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/fallback/executer/user/mcexec",
+      "sha256": "67dd5fef446a1418ddf63cce7fbe7294973d5611291918623973fadc70722241",
+      "size": 220816,
+      "mode": "0755"
+    },
+    "result": "PASS_ARTIFACT_READY_FOR_DIAGNOSTIC_STAGING",
+    "review": "all 14 artifact hashes, normalized CMake caches, compile/link rules, helper object, ELF dependencies, symbols and fastpath disassemblies passed independent review",
+    "limitations": "The independent reviewer did not reverify Git/network/container identity and the retained submodule record alone does not prove populated submodule bytes. No runtime or application acceptance follows."
+  },
+  "stager_rebind": {
+    "files": {
+      "scripts/application-tests/native_diagnostic_stager.py": "bdcf87582c594775dd5c6d6c78c4934d632c0e4569c6aae18a24f1ccb8c588c0",
+      "scripts/tests/test_application_native_diagnostic_stager.py": "e4ad6a1940fc8422006c4c29fee643092d2d170a82b7067149dcc6d8fb66ad23"
+    },
+    "result": "PASS_LOCAL_SOURCE_ONLY",
+    "tests": "5 tests passed; py_compile and scoped git diff --check passed",
+    "test_stderr_sha256": "37ef25a91f6009e6b1e36a7de41cb22cf2a899172e5a24ee68de4a66576e5af5",
+    "binding": "new Rust mcexec ee1f660b...02d073b accepted and stale b786e9c9...984639 explicitly rejected"
+  },
+  "preserved_runtime_evidence": {
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-2/attempt-d5c0db79dea44675abeb1c43c7187add",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-2.owner-d5c0db79dea44675abeb1c43c7187add",
+    "result": "original 91-byte stdout and exit zero passed; original 58-byte launcher stderr violated the unchanged empty-stderr oracle; cleanup passed",
+    "reuse": "forbidden"
+  },
+  "next_tasks": [
+    "Inspect the retained diagnostic staging and overlay evidence to recover the exact non-duplicating initramfs regeneration sequence",
+    "Create a fresh base/root and final initramfs containing mcexec ee1f660b...02d073b without mutating any historical root or attempt",
+    "Regenerate the strict diagnostic manifest and update owner manifest/source bindings, including current diagnostic.py 8a597d...5d439",
+    "Run the complete unprivileged combined suite and obtain independent source/artifact review",
+    "Commit and verify the fully rebound diagnostic, then prepare a fresh parent, nonce, packet and independent one-shot execution release",
+    "Only after fresh resource and lease reconciliation, run one new diagnostic and preserve application bytes, exit, kernel log, QMP, process identities and teardown",
+    "Repair the broad equivalence suite's missing IHK Rust inputs as an independent prerequisite lane without treating the focused pass as full-suite acceptance"
+  ],
+  "do_not_repeat": [
+    "Do not rerun the unchanged broad equivalence attempts under the same incompatible or incomplete inputs",
+    "Do not reuse either prior diagnostic parent or nonce",
+    "Do not mutate the historical signal guest root or the packet-2 evidence",
+    "Do not use stale mcexec b786e9c9...984639 or weaken the frozen empty-stderr oracle",
+    "Do not count source, focused harness, artifact build or staging tests as application or production acceptance"
+  ],
+  "counters": {
+    "real_guest_applications_this_window": 1,
+    "accepted_application_catalog": "0/273",
+    "current_candidate_builds_this_window": 1,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

@@ -33,6 +33,16 @@ class StagerTests(unittest.TestCase):
         self.gzip.write_text("#!/bin/sh\nprintf 'GZIP-FAKE'\n")
         self.cpio.chmod(0o755); self.gzip.chmod(0o755)
 
+    def test_mcexec_expected_digest_is_current_artifact(self):
+        self.assertEqual(
+            S.MCEEXEC_SHA256,
+            "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        )
+        self.assertNotEqual(
+            S.MCEEXEC_SHA256,
+            "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+        )
+
     def tearDown(self): self.tmp.cleanup()
 
     def test_stages_replays_and_does_not_modify_source(self):

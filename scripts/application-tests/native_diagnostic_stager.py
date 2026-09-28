@@ -16,6 +16,7 @@ import stat
 import subprocess
 import tempfile
 
+MCEEXEC_SHA256 = "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b"
 BASE_ROOT = Path("/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root")
 PAYLOAD = Path("/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload")
 EXPECTED = {
@@ -23,7 +24,7 @@ EXPECTED = {
     "modules/ihk-smp-x86_64.ko": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
     "modules/mcctrl.ko": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
     "images/mckernel.img": "eb58a8b064212d7fa3ca6949778fd811f985433a54aaf26e7f3e2a0f373a4fd8",
-    "bin/mcexec": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+    "bin/mcexec": MCEEXEC_SHA256,
     "bin/native-boot": "4558995",  # full identity is checked by retained-prefix binding below
 }
 PAYLOAD_SHA256 = "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"

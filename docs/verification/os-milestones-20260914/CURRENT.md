@@ -3954,3 +3954,48 @@ production gates, 350/10,000 points and 0/7 language gates. One real diagnostic
 guest application ran in this window; current-candidate builds remain zero.
 Whole-OS acceptance remains incomplete, and this checkpoint does not resume or
 complete the goal.
+
+Continuation shutdown checkpoint 26, 2026-09-28: no new work was dispatched
+after the shutdown request. All eight children are terminal, the heavy lease is
+free, and no QEMU, mcexec, diagnostic owner or project compiler remains.
+Launcher PID 3125264, recovered worker PID 3170135 and app-server PID 3170137
+remain alive for `.git/os-autopilot/runs/20260928T120120Z-056cff0a`; launcher-owned
+state was not edited. Host/scratch free space is 36,542,033,920 and
+21,972,135,936 bytes, with 29,793,836 KiB available memory.
+
+The source candidate and compiler-forwarding prerequisite are pushed at
+`a1914e59...`. Four complete broad-equivalence attempts are retained with their
+distinct failures. The focused pending-free test passed, but the broad suite
+remains unaccepted: the native compiler is incompatible with the kernel Rust
+surface and the current inventory lacks three inputs which that suite compiles
+unconditionally. No module was skipped and no oracle was weakened. The exact
+focused mcexec harness passes with digest `773c9d116a5f0f88`, and independent
+C/Rust/FFI review returns `PASS_SOURCE_READY_FOR_BUILD`.
+
+One exact current mcexec build now passes in the pinned compatibility profile.
+The Rust artifact is `ee1f660b...02d073b` (453,352 bytes) and the C fallback is
+`67dd5fef...0722241` (220,816 bytes). Independent inspection verified all 14
+artifact hashes, normalized CMake profiles, compile/link rules, helper object,
+ELF dependencies, symbols and both fastpath disassemblies, returning
+`PASS_ARTIFACT_READY_FOR_DIAGNOSTIC_STAGING`. Its explicit limits remain: no
+runtime, application, full-equivalence or production acceptance follows.
+
+The diagnostic stager is bound to the new Rust artifact and has an explicit
+regression against stale `b786e9c9...984639`; the coordinator reproduced all
+5 tests plus py_compile and scoped diff checks. The fresh initramfs and manifest
+were deliberately not started during shutdown. Next: (1) recover the exact
+retained staging/overlay sequence; (2) create a fresh root/initramfs without
+mutating historical inputs; (3) regenerate the strict manifest and update all
+owner source bindings; (4) run the complete unprivileged combined suite and
+obtain independent review; (5) checkpoint the fully rebound diagnostic and
+obtain a fresh packet/release; and (6) only after a new resource/lease check,
+run one new diagnostic. Separately repair the broad suite's missing IHK Rust
+prerequisite rather than treating the focused pass as complete equivalence.
+
+Exact paths, hashes, limitations, active identities and non-reuse rules are in
+`docs/verification/stability-continuation-shutdown-checkpoint-20260928-26.json`.
+Official counters remain 0/273 applications, 2/4 narrow fault modes, 6/130
+production gates, 350/10,000 points and 0/7 language gates. This work window
+contains one real diagnostic guest and one current mcexec candidate build.
+Whole-OS acceptance remains incomplete; this checkpoint does not resume or
+complete the goal.
