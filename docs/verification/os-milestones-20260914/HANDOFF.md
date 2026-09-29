@@ -1291,3 +1291,19 @@ commit a retirement template or construct a release until source review PASSes.
 Candidate 26/47678 and backup 26/58429 remain intact. Launcher identities are
 3399308/83682487, 3399313/83682494 and 3399317/83682500. No retirement, build or
 guest ran; counters remain 6/130, 350/10000 and 0/273 applications.
+
+Checkpoint 173 supersedes the failed draft cursor. Expert escalation repaired
+the whole six-file retirement boundary and independent Astra review returns
+`PASS_SOURCE`. Exact reviewed hashes are packet `efef4b6e...4ee7`, packet test
+`3399b957...7959`, helper `f589ba43...378a`, helper test `5774766d...515e`,
+observer `e8800a59...5374d`, and observer test `b4eaac82...1321`. Python 3.9
+passes 183 tests independently; Python 3.8 author runs pass 127+56. The current
+retained identity contract is 10,716 = 10,629+87, not historical 10,611.
+
+Candidate 26/47678 and backup 26/58429 remain intact; no retirement/build lease
+or guest exists. Current launcher identities are 4041681/92434707,
+4041684/92434713 and 4041686/92434719. `RELEASE_HASH_REQUIRED` remains. Next
+push/fetch-verify this immutable template, then mechanically add one release JSON
+and replace only that literal. Obtain independent execution review and repeat
+fresh root/process/lease/capacity/Docker checks before one invocation. Source
+PASS grants no retirement, build, application or OS acceptance.

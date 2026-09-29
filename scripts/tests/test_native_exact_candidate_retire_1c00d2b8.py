@@ -53,7 +53,12 @@ class Tests(unittest.TestCase):
   mpath=base/'retention.json';mpath.write_text(json.dumps(manifest,sort_keys=True));capsule=base/'retained.tar';archive.build_archive(str(mpath),str(roots[0]),str(roots[1]),str(capsule))
   capsha=M.digest_bytes(capsule.read_bytes());msha=M.digest_bytes(mpath.read_bytes())
   msha=M.digest_bytes(mpath.read_bytes());host=dict(SecurityOpt=[],Privileged=False,ReadonlyRootfs=True,NanoCpus=0,Memory=0,PidsLimit=0,CpusetCpus='',RestartPolicy=dict(Name='no',MaximumRetryCount=0),AutoRemove=False);state=dict(Status='exited',Running=False,Paused=False,Restarting=False,Dead=False,Pid=0,ExitCode=1,OOMKilled=False);config=dict(Config=dict(Image='reviewed',User='',Cmd=['x']),HostConfig=host,Mounts=[])
-  return dict(schema='mckernel.ordinary-retirement-release.v1',operational_exclusion='released operational exclusion spans observation and deletion',sealed=dict(retention_manifest_path=str(mpath),capsule_path=str(capsule),retention_manifest_sha256=msha,retention_manifest_pushed_sha256=msha,retention_manifest_fetched_sha256=msha,capsule_sha256=capsha,capsule_pushed_sha256=capsha,capsule_fetched_sha256=capsha),roots=rows,observer=dict(observer_sha256=M.digest_bytes((HERE.parent/'docs/verification/evidence/native-exact-candidate-live-reference-observer-1c00d2b8-1.py').read_bytes()),boot_id=M.current_boot_id()),docker=dict(terminal=dict(id=M.TERMINAL_CONTAINER_ID,state=state,exact_config=config)))
+  result=dict(schema='mckernel.ordinary-retirement-release.v1',operational_exclusion='released operational exclusion spans observation and deletion',sealed=dict(retention_manifest_path=str(mpath),capsule_path=str(capsule),retention_manifest_sha256=msha,retention_manifest_pushed_sha256=msha,retention_manifest_fetched_sha256=msha,capsule_sha256=capsha,capsule_pushed_sha256=capsha,capsule_fetched_sha256=capsha),roots=rows,observer=dict(observer_sha256=M.digest_bytes((HERE.parent/'docs/verification/evidence/native-exact-candidate-live-reference-observer-1c00d2b8-1.py').read_bytes()),boot_id=M.current_boot_id()),docker=dict(terminal=dict(id=M.TERMINAL_CONTAINER_ID,state=state,exact_config=config)))
+  result['docker']['terminal_containers']={}
+  for identifier in M.TERMINAL_CONTAINER_IDS:
+   mounts=[] if identifier==M.TERMINAL_CONTAINER_ID else [dict(Source=M.REPOSITORY_ANCESTOR if identifier.startswith('8943') else M.CANDIDATE_ROOT,Destination='/input')]
+   result['docker']['terminal_containers'][identifier]=dict(Id=identifier,State=dict(state),Config=dict(config['Config']),HostConfig=dict(host),Mounts=mounts)
+  return result
  def observer(self,r,mutate=None):
   def run(qs,members):
    rounds=[dict(round=i,target_references=[],permission_denials=[],tree_revalidation_failures=[],unscanned_final_identities=[],unresolved_churn=[],closure_nonconvergent=False,complete_mount_proofs=True,clean=True) for i in (1,2)]
@@ -63,7 +68,13 @@ class Tests(unittest.TestCase):
   return run
  def terminal(self,r,mounts=None):
   x=dict(Id=M.TERMINAL_CONTAINER_ID,State=r['docker']['terminal']['state'],Config=r['docker']['terminal']['exact_config']['Config'],HostConfig=r['docker']['terminal']['exact_config']['HostConfig'],Mounts=mounts if mounts is not None else r['docker']['terminal']['exact_config']['Mounts']);return x
- def census(self,r,rows=None): return lambda:dict(ps_all=[x['Id'] for x in rows if x] if rows is not None else [M.TERMINAL_CONTAINER_ID],inspect=rows if rows is not None else [self.terminal(r)])
+ def census(self,r,rows=None):
+  # Fixtures always seal the complete expected set. Only the supplied live
+  # census is mutated by rejection vectors.
+  r['docker']['terminal_containers'][M.TERMINAL_CONTAINER_ID]=self.terminal(r)
+  others=[x for key,x in r['docker']['terminal_containers'].items() if key!=M.TERMINAL_CONTAINER_ID]
+  supplied=others+([self.terminal(r)] if rows is None else rows)
+  return lambda:dict(ps_all=[x['Id'] for x in supplied],inspect=supplied)
  def execute(self,roots,r,obs=None,census=None): return M.retire(roots,r,roots[0].parent/'claim',roots[0].parent/'journal',roots[0].parent/'evidence',obs or self.observer(r),census or self.census(r))
  def test_temp_tree_state_machine_safe_symlinks(self):
   with tempfile.TemporaryDirectory() as t:
@@ -107,6 +118,19 @@ class Tests(unittest.TestCase):
    mutated=[dict(mounts[1]),dict(mounts[0])];mutated[0]['Mode']='ro,delegated'
    with self.assertRaises(M.RetirementError):self.execute(roots,r,census=self.census(r,[self.terminal(r,mutated)]))
   with self.assertRaisesRegex(M.RetirementError,'not an object'):M.canonical_mounts([1])
+ def test_every_terminal_is_required_and_fully_bound(self):
+  import copy
+  with tempfile.TemporaryDirectory() as t:
+   r=self.release(self.trees(t));census=self.census(r)()
+   M.validate_docker_census(census,r['docker'],[M.CANDIDATE_ROOT])
+   for identifier in M.TERMINAL_CONTAINER_IDS:
+    broken=copy.deepcopy(r['docker']);broken['terminal_containers'].pop(identifier)
+    with self.assertRaisesRegex(M.RetirementError,'terminal set'):M.validate_docker_census(census,broken,[])
+    for field in ('State','Config','HostConfig','Mounts'):
+     live=copy.deepcopy(census);row=next(x for x in live['inspect'] if x['Id']==identifier)
+     if field=='Mounts':row[field].append({'Source':'/unexpected','Destination':'/extra'})
+     else:row[field]['changed']=True
+     with self.subTest(identifier=identifier,field=field),self.assertRaises(M.RetirementError):M.validate_docker_census(live,r['docker'],[])
  def test_short_zero_and_collision_writes_and_boundary_failure_survivor_record(self):
   with tempfile.TemporaryDirectory() as t:
    fd=os.open(str(Path(t)/'x'),os.O_CREAT|os.O_WRONLY,0o600)

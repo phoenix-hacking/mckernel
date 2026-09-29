@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -100,7 +101,7 @@ class ObserverV3Tests(unittest.TestCase):
                     os.close(fd)
                 except OSError:
                     pass
-            self.assertEqual(result['status'], 'PASS')
+            self.assertEqual(result['status'], 'FAIL')  # Empty proc census never authorizes deletion.
             self.assertEqual(result['roots'][0]['uid'], real_info.st_uid)
             self.assertEqual(result['roots'][0]['gid'], real_info.st_gid)
 
@@ -232,6 +233,93 @@ class ObserverV3Tests(unittest.TestCase):
             self.assertFalse(result['successful'])
             self.assertTrue(any(item.get('resolution') == 'malformed-entry'
                                 for item in result['incomplete']))
+
+    def scan_fixture(self, coverage=None):
+        o = self.observer
+        a = o.audit_module()
+        return o.scan_identity((7, 8, '123'), [], {}, {(1, 42)}, 999, set(),
+                               identity_reader=lambda pid, tid: a._identity(pid, tid),
+                               stat_reader=lambda path: a.os.stat(str(path)),
+                               mount_reader=lambda pid, tid: [], mount_coverage=coverage)
+
+    def test_exact_reviewed_audit_bytes_are_imported(self):
+        import hashlib
+        o = self.observer
+        path = ROOT / 'scripts/native_exact_candidate_deleted_inode_audit.py'
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), o.AUDIT_SHA256)
+        self.assertEqual(o.audit_module()._read_stat(os.getpid())[1], 'ordinary')
+        with mock.patch.object(o, '_AUDIT', None), mock.patch.object(o, 'AUDIT_SHA256', '0' * 64):
+            with self.assertRaisesRegex(RuntimeError, 'audit source hash'):
+                o.audit_module()
+
+    def test_typed_special_absence_and_all_existing_surfaces(self):
+        from scripts.tests import test_native_exact_candidate_deleted_inode_audit as reference
+        a = self.observer.audit_module()
+        for kind in ('kernel-thread', 'zombie'):
+            with self.subTest(kind=kind), mock.patch.object(reference, 'audit', a):
+                fixture = reference.SpecialProcFixture(kind)
+                with fixture:
+                    coverage = {'observed': set(), 'full': []}
+                    # The leader authenticates the namespace's full '/' view.
+                    errors = []
+                    a._scan_mountinfo(7, errors, (), 7, (7, 7, '123'), kind, coverage)
+                    result = self.scan_fixture(coverage)
+                    a._finish_mount_coverage(coverage, errors)
+                    self.assertEqual(errors, [])
+                    self.assertTrue(result['successful'], result)
+                    self.assertEqual({x['field'] for x in result['expected_absences']}, {'cwd', 'root', 'exe'})
+                for surface in ('cwd', 'root', 'exe', 'fd/3', 'map_files/1000-2000'):
+                    fixture = reference.SpecialProcFixture(kind)
+                    if surface.startswith('map_files/'):
+                        fixture.absent.remove('/proc/7/map_files')
+                    elif surface.startswith('fd/'):
+                        fixture.absent.remove('/proc/7/task/8/fd')
+                        fixture.directories['/proc/7/task/8/fd'] = ['3']
+                    else:
+                        fixture.absent.remove('/proc/7/task/8/' + surface)
+                    with self.subTest(surface=surface), fixture:
+                        result = self.scan_fixture()
+                        self.assertFalse(result['successful'])
+                        self.assertTrue(any(x['field'] == surface for x in result['references']), result)
+
+    def test_ordinary_absence_denial_and_classification_churn_fail_closed(self):
+        from scripts.tests import test_native_exact_candidate_deleted_inode_audit as reference
+        a = self.observer.audit_module()
+        with mock.patch.object(reference, 'audit', a):
+            for kind in ('ordinary', 'kernel-thread'):
+                fixture = reference.SpecialProcFixture(kind)
+                if kind == 'kernel-thread':
+                    fixture.errors['/proc/7/task/8/exe'] = PermissionError(13, 'denied')
+                with fixture:
+                    result = self.scan_fixture()
+                    self.assertFalse(result['successful'])
+                    if kind == 'ordinary':
+                        self.assertTrue(any(x['field'] == 'exe' for x in result['incomplete']))
+                    else:
+                        self.assertTrue(any(x['field'] == 'exe' for x in result['denials']))
+            with reference.SpecialProcFixture('kernel-thread'):
+                with mock.patch.object(a, '_classification_bound', side_effect=['kernel-thread'] + ['ordinary'] * 100):
+                    result = self.scan_fixture()
+                    self.assertFalse(result['successful'])
+                    self.assertTrue(any('classification-churn' in x.get('resolution', '') for x in result['incomplete']))
+
+    def test_namespace_coverage_and_parser_use_actual_reviewed_implementation(self):
+        from scripts.tests import test_native_exact_candidate_deleted_inode_audit as reference
+        a = self.observer.audit_module()
+        # These retained vectors invoke the actual scanner and finalizer now
+        # consumed by this observer, including full census and nsfs controls.
+        names = ('test_full_census_chroot_views_require_exact_full_representative',
+                 'test_full_census_no_complete_representative_fails',
+                 'test_full_census_root_and_namespace_errors_are_not_covered_by_peer',
+                 'test_complete_representative_must_survive_final_revalidation',
+                 'test_empty_open_mountinfo_only_defers_to_namespace_coverage',
+                 'test_nsfs_mount_root_vectors_are_strict',
+                 'test_stat_rejects_negative_unsigned_fields_and_flag_exploits',
+                 'test_stat_linux_lp64_width_boundaries')
+        with mock.patch.object(reference, 'audit', a):
+            for name in names:
+                with self.subTest(vector=name):
+                    getattr(reference.DeletedInodeAuditTests(), name)()
 
 
 if __name__ == '__main__':

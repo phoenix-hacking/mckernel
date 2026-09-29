@@ -386,11 +386,7 @@ def validate_docker_census(census,docker,protected):
     if len(ids)!=len(set(ids)) or any(not isinstance(x,str) or len(x)!=64 for x in ids) or len(rows)!=len(ids) or {x.get('Id') for x in rows if isinstance(x,dict)}!=set(ids):fail('Docker reconciliation')
     terminal=docker.get('terminal') if isinstance(docker,dict) else None
     released=docker.get('terminal_containers') if isinstance(docker,dict) else None
-    # Legacy pure unit fixtures contain only the main terminal. A released
-    # packet must provide the exact three-ID map and is checked strictly below.
-    if released is None:
-        released={}
-    if not isinstance(released,dict) or (released and set(released)!=TERMINAL_CONTAINER_IDS):fail('released terminal set')
+    if not isinstance(released,dict) or set(released)!=TERMINAL_CONTAINER_IDS:fail('released terminal set')
     if any(not isinstance(v,dict) for v in released.values()):fail('released terminal record')
     terminal_rows=[x for x in rows if isinstance(x,dict) and x.get('Id')==TERMINAL_CONTAINER_ID]
     if not isinstance(terminal,dict) or terminal.get('id')!=TERMINAL_CONTAINER_ID or len(terminal_rows)!=1:fail('required terminal container missing')
@@ -408,13 +404,15 @@ def validate_docker_census(census,docker,protected):
             if actual_row.get(field)!=expected_row.get(field):fail('terminal '+field+' mutation')
         if canonical_mounts(actual_row.get('Mounts'))!=canonical_mounts(expected_row.get('Mounts')):fail('terminal Mounts mutation')
         state=actual_row.get('State');host=actual_row.get('HostConfig');config=actual_row.get('Config')
-        if (not isinstance(state,dict) or state.get('Status')!='exited' or state.get('Running') is not False
+        if (expected_row.get('Id')!=identifier or not isinstance(state,dict) or state.get('Status')!='exited' or state.get('Running') is not False or state.get('Paused') is not False
                 or state.get('Restarting') is not False or state.get('Dead') is not False or state.get('Pid')!=0
                 or state.get('OOMKilled') is not False or not isinstance(host,dict)
                 or host.get('RestartPolicy') not in ({'Name':'no','MaximumRetryCount':0},{'Name':'no'})
                 or host.get('ReadonlyRootfs') is not True or host.get('Privileged') is not False
                 or host.get('AutoRemove') is not False or not isinstance(config,dict)):
             fail('released terminal state/config mutation')
+        if any(k not in config for k in ('Image','User','Cmd')) or any(k not in host for k in ('SecurityOpt','NanoCpus','Memory','PidsLimit','CpusetCpus')):
+            fail('incomplete released terminal configuration')
         paths=mount_paths(actual_row)
         if identifier in TERMINAL_CONTAINER_IDS - {TERMINAL_CONTAINER_ID}:
             required=CANDIDATE_ROOT if identifier != '8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10' else REPOSITORY_ANCESTOR

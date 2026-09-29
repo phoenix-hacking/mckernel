@@ -23,6 +23,7 @@ import os
 import re
 import stat
 import sys
+import types
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
@@ -36,6 +37,46 @@ MAX_ROUNDS = 5
 MAX_TREE_ATTEMPTS = 3
 MAX_CLOSURE_PASSES = 5
 PROGRESS = {'roots': [], 'rounds': [], 'tree_observation_transients': []}
+AUDIT_SHA256 = '641c39a3f3be3a1012a47f6e073c5e9df4149512acb1944b45d90e3f900d7ab2'
+_AUDIT = None
+
+
+def audit_module():
+    """Reuse the reviewed actual classifier/mount scanner, never a reduced model.
+
+    The packet persists the audit next to the observer in its root-private
+    directory. resolve() also handles execution through /proc/self/fd/N.
+    Standalone source tests consume the same hash-bound repository bytes.
+    """
+    global _AUDIT
+    if _AUDIT is None:
+        here = Path(__file__).resolve()
+        path = (here.with_name('deleted-audit.sealed.py') if here.name == 'observer.sealed.py'
+                else here.parents[3] / 'scripts/native_exact_candidate_deleted_inode_audit.py')
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK)
+        try:
+            before = os.fstat(fd)
+            if not stat.S_ISREG(before.st_mode) or before.st_size > 1 << 20:
+                raise RuntimeError('audit source type/size')
+            source = b''
+            while len(source) <= 1 << 20:
+                part = os.read(fd, (1 << 20) + 1 - len(source))
+                if not part:
+                    break
+                source += part
+            if len(source) != before.st_size or hashlib.sha256(source).hexdigest() != AUDIT_SHA256:
+                raise RuntimeError('audit source hash')
+            after = os.fstat(fd)
+            if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) != (
+                    after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns):
+                raise RuntimeError('audit source changed')
+        finally:
+            os.close(fd)
+        module = types.ModuleType('_retirement_reviewed_audit')
+        module.__file__ = str(path)
+        exec(compile(source, str(path), 'exec'), module.__dict__)
+        _AUDIT = module
+    return _AUDIT
 
 
 def utcnow():
@@ -57,9 +98,14 @@ def starttime(path):
 
 def identity(pid, tid):
     try:
-        return (pid, tid, starttime(Path('/proc') / str(pid) / 'task' / str(tid) / 'stat'))
+        return audit_module()._identity(pid, tid)
     except FileNotFoundError:
-        return None
+        # A missing stat alone does not authenticate disappearance.
+        try:
+            (Path('/proc') / str(pid) / 'task' / str(tid)).stat()
+        except FileNotFoundError:
+            return None
+        raise RuntimeError('existing task has no stat')
 
 
 def task_set():
@@ -82,7 +128,11 @@ def task_set():
 def mount_rows(pid, tid):
     rows = []
     path = Path('/proc') / str(pid) / 'task' / str(tid) / 'mountinfo'
-    for line in path.read_text(encoding='utf-8').splitlines():
+    data = path.read_text(encoding='utf-8')
+    if not data:
+        return []  # Never complete alone; coverage requires a parsed '/' representative.
+    audit_module()._mount_rows(data)  # strict paths, nsfs, IDs and complete nonempty input
+    for line in data.splitlines():
         left, marker, right = line.partition(' - ')
         fields, tail = left.split(), right.split()
         if not marker or len(fields) < 6 or len(tail) < 3 or ':' not in fields[2]:
@@ -234,7 +284,7 @@ def mount_proof(rows, targets, reference):
     violations = mount_bad(rows, targets, reference)
     if len(ids) > 1:
         violations.append({'kind': 'ambiguous-canonical-dev-shm', 'mount_ids': ids})
-    return violations, ids[0] if len(ids) == 1 else None, len(ids) <= 1
+    return violations, ids[0] if len(ids) == 1 else None, bool(rows) and len(ids) <= 1
 
 
 def safe_proc_absence(field):
@@ -277,7 +327,7 @@ def identity_state(who, identity_reader=identity):
 def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
                   proc_root=Path('/proc'), identity_reader=identity,
                   mount_reader=mount_rows, stat_reader=None,
-                  link_reader=os.readlink):
+                  link_reader=os.readlink, mount_coverage=None):
     """Scan one task identity, using /proc/<tgid>/map_files for VMAs."""
     result = {'identity': who, 'successful': False, 'state': None, 'references': [],
               'denials': [], 'incomplete': [], 'expected_absences': [], 'mount_proof': None,
@@ -294,6 +344,20 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
     pid, tid, _ = who
     task_base = Path(proc_root) / str(pid) / 'task' / str(tid)
     process_base = Path(proc_root) / str(pid)
+    audit = audit_module()
+    classification = None
+    try:
+        classification = audit._classification_bound(who, True)
+    except (OSError, ValueError):
+        result['incomplete'].append({'identity': who, 'field': 'classification'})
+
+    def special_absence(label):
+        failures = []
+        allowed = (classification in ('kernel-thread', 'zombie') and
+                   audit._revalidate_classification(who, classification, failures, True))
+        result['incomplete'].extend({'identity': who, 'field': label, 'resolution': value}
+                                    for value in failures)
+        return allowed
 
     def probe(path, label):
         try:
@@ -309,12 +373,12 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
                     reference_record['link_diagnostic_failure'] = repr(error)
                 result['references'].append(reference_record)
             return True
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
             if observed_state() != 'same':
                 return False
-            if label == 'exe':
+            if label in ('cwd', 'root', 'exe') and special_absence(label):
                 result['expected_absences'].append({'identity': who, 'field': label,
-                                                     'reason': 'kernel-thread-no-exe'})
+                                                     'reason': classification + '-absent-surface'})
             elif label.startswith('fd/') or label.startswith('map_files/'):
                 result['expected_absences'].append({'identity': who, 'field': label,
                                                      'reason': 'per-entry-procfs-absence'})
@@ -331,14 +395,18 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
             return result
 
     try:
-        with os.scandir(task_base / 'fd') as iterator:
+        with os.scandir(str(task_base / 'fd')) as iterator:
             for child in iterator:
-                if not probe(Path(child.path), 'fd/' + child.name):
+                if not child.name.isdigit():
+                    result['incomplete'].append({'identity': who, 'field': 'fd', 'resolution': 'malformed-entry'})
+                    continue
+                if not probe(task_base / 'fd' / child.name, 'fd/' + child.name):
                     return result
     except FileNotFoundError:
         if observed_state() != 'same':
             return result
-        result['incomplete'].append({'identity': who, 'field': 'fd', 'resolution': 'still-live'})
+        if not special_absence('fd'):
+            result['incomplete'].append({'identity': who, 'field': 'fd', 'resolution': 'still-live'})
     except PermissionError:
         result['denials'].append({'identity': who, 'field': 'fd'})
 
@@ -347,54 +415,58 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
     # disappearing after revalidation is an expected procfs race.
     map_dir = process_base / 'map_files'
     try:
-        with os.scandir(map_dir) as iterator:
+        with os.scandir(str(map_dir)) as iterator:
             for child in iterator:
                 name = child.name
                 if not valid_map_range(name):
                     result['incomplete'].append({'identity': who, 'field': 'map_files',
                                                  'entry': name, 'resolution': 'malformed-entry'})
                     continue
-                if not probe(Path(child.path), 'map_files/' + name):
+                if not probe(map_dir / name, 'map_files/' + name):
                     return result
     except FileNotFoundError:
         if observed_state() != 'same':
             return result
-        result['incomplete'].append({'identity': who, 'field': 'map_files',
-                                     'resolution': 'whole-directory-missing-while-live'})
+        if not special_absence('map_files'):
+            result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                         'resolution': 'whole-directory-missing-while-live'})
     except PermissionError:
         if observed_state() == 'same':
             result['incomplete'].append({'identity': who, 'field': 'map_files',
                                          'resolution': 'whole-directory-denied-while-live'})
-        return result
     except OSError as error:
         if observed_state() == 'same':
             result['incomplete'].append({'identity': who, 'field': 'map_files',
                                          'resolution': 'whole-directory-parse-failure',
                                          'diagnostic': repr(error)})
-        return result
 
+    coverage = mount_coverage if mount_coverage is not None else {'observed': set(), 'full': []}
+    failures = []
+    # Read namespace/root independently of mountinfo. The reviewed scanner
+    # preserves aliases even when another surface is absent or malformed.
+    audit._scan_mountinfo(pid, failures,
+                         tuple((target['device_number'], target['filesystem_root']) for target in targets),
+                         tid, who, classification if classification in ('kernel-thread', 'zombie') else None,
+                         coverage)
     try:
-        namespace = link_reader(task_base / 'ns/mnt')
         rows = mount_reader(pid, tid)
-        result['field_counts']['ns/mnt'] += 1
         result['field_counts']['mountinfo'] += len(rows)
+        violations = mount_bad(rows, targets, reference)
+        result['references'].extend({'identity': who, 'field': 'mount-violation', 'detail': value}
+                                    for value in violations)
     except FileNotFoundError:
-        if observed_state() == 'same':
-            result['incomplete'].append({'identity': who, 'field': 'ns-or-mountinfo',
-                                         'resolution': 'still-live'})
-        return result
-    except PermissionError:
-        result['denials'].append({'identity': who, 'field': 'ns-or-mountinfo'})
-        return result
-    violations, canonical_id, complete = mount_proof(rows, targets, reference)
-    result['references'].extend({'identity': who, 'field': 'mount-violation', 'detail': value}
-                                for value in violations)
-    result['mount_proof'] = {'identity': who, 'namespace': namespace,
-                             'mount_ids': [row['mount_id'] for row in rows],
-                             'canonical_mount_id': canonical_id, 'complete': complete}
-    if not complete:
-        result['incomplete'].append({'identity': who, 'field': 'mount-proof',
-                                     'resolution': 'incomplete'})
+        if observed_state() == 'same' and not special_absence('mountinfo'):
+            failures.append('mountinfo-missing')
+    except (OSError, ValueError, RuntimeError) as error:
+        failures.append('mountinfo-uninspected:' + repr(error))
+    if mount_coverage is None:
+        audit._finish_mount_coverage(coverage, failures)
+    if classification is not None:
+        audit._revalidate_classification(who, classification, failures, True)
+    result['incomplete'].extend({'identity': who, 'field': 'mount-proof', 'resolution': value}
+                                for value in failures)
+    result['mount_proof'] = {'identity': who, 'namespaces': sorted(coverage['observed']),
+                             'complete': not failures}
     state = observed_state()
     result['state'] = state
     if state == 'same' and not result['references'] and not result['denials'] and not result['incomplete']:
@@ -491,8 +563,16 @@ def observe(target_paths):
         reference, allowed_self_fds = canonical(self_rows, targets), set(open_fds)
         rounds, reconciled, expected_absences, persistent_tree_failures, streak = [], [], [], [], 0
         for number in range(1, MAX_ROUNDS + 1):
+            coverage = {'observed': set(), 'full': []}
             result = closure_round(lambda who: scan_identity(who, targets, reference, inode_ids,
-                                                              own_pid, allowed_self_fds), task_set)
+                                                              own_pid, allowed_self_fds,
+                                                              mount_coverage=coverage), task_set)
+            mount_failures = []
+            audit_module()._finish_mount_coverage(coverage, mount_failures)
+            if not result['final_live']:
+                mount_failures.append('empty-task-census')
+            result['incomplete'].extend(mount_failures)
+            result['clean'] = result['clean'] and not mount_failures
             tree_failures = [failure for failure in (revalidate_tree(tree) for tree in trees)
                              if failure is not None]
             persistent_tree_failures.extend(tree_failures)
@@ -514,6 +594,13 @@ def observe(target_paths):
                             'unscanned_final_identities': [list(item) for item in sorted(result['missing_final'])],
                             'closure_nonconvergent': result['nonconvergent'], 'tree_revalidation_failures': tree_failures,
                             'mount_proofs': proof_rows,
+                            'mount_namespace_coverage': {
+                                'observed': sorted(coverage['observed']),
+                                'root_representatives': [
+                                    {'namespace': namespace, 'identity': list(who),
+                                     'task': task, 'classification': classification, 'root': '/'}
+                                    for namespace, who, task, classification in coverage['full']],
+                                'failures': mount_failures},
                             'complete_mount_proofs': not result['incomplete'],
                             'clean': result['clean'] and not persistent_tree_failures}
             rounds.append(round_record)

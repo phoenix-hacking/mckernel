@@ -8295,3 +8295,46 @@ template/release/push/fetch/execution-review sequence. Formal counters remain
 zero, application acceptance remains 0/273, and the OS is incomplete. The
 launcher pause is temporary; do not mark the goal complete or resume it during
 shutdown.
+
+Continuation checkpoint 173, 2026-09-29: the new launcher generation is wrapper
+4041681/92434707, worker 4041684/92434713 and app-server 4041686/92434719; the
+three checkpoint-172 identities are absent. Policy hashes remain GOAL
+`76c4f5d1...bcc3`, START `1698d342...16c`, and CONVERGENCE
+`f6938bd2...e86a`. The planning index still validates exactly 130 production
+gates, seven language gates, 273 logical cases and 97 packets.
+
+The retirement failure family consumed its required expert escalation. Fresh
+reconciliation corrected the stale historical post-delete target: retention
+inventory `841dedac...34f89` contains 10,714 non-root entries, split 10,628 and
+86, while the protected trees contain 10,716 distinct identities including the
+two roots, split 10,629 and 87. Candidate 26/47678 remains allocated
+9,140,117,504 bytes and backup 26/58429 remains allocated 1,355,776 bytes. No
+retirement process or active build lease exists.
+
+Expert repair across the exact six WIP files now separates support and candidate
+revisions, validates 7,833 main and 1,296 IHK reconstructible objects plus 918
+capsule entries, uses one exact three-container contract, imports the sealed
+corrected audit for typed special-process and complete namespace coverage, makes
+release-transition tests immutable, and gates terminal PASS on a durable
+three-round post-delete census of the exact 10,716 identities. It explicitly
+rejects historical 10,611. Python 3.9 passes 183 tests; Python 3.8 passes the
+127 retirement and 56 audit tests. Explicit temporary compilation and scoped
+diff checks pass.
+
+Independent Astra review returns `PASS_SOURCE` on packet `efef4b6e...4ee7`,
+packet test `3399b957...7959`, helper `f589ba43...378a`, helper test
+`5774766d...515e`, observer `e8800a59...5374d`, and observer test
+`b4eaac82...1321`. It independently passes all 183 tests under a two-CPU/4-GiB
+cap. The observer's `field_counts['ns/mnt']` diagnostic remains zero even for
+successful namespace scans; authorization uses explicit namespace coverage, so
+that counter must not be interpreted quantitatively. Record
+`stability-native-exact-retirement-source-success-b4208879-20260929-1.json`
+preserves the history and decision.
+
+This is source/template eligibility only. `RELEASE_HASH_REQUIRED` still prevents
+execution. After this checkpoint is pushed and fetch-verified, construct a
+mechanical two-path finalization: add one exact release JSON and replace only the
+packet release-hash literal. Obtain independent execution review and repeat
+current process/root/lease/capacity/Docker reconciliation immediately before one
+invocation. No build or real guest application ran; counters remain 6/130,
+350/10000 and 0/273 applications, and the OS remains incomplete.

@@ -17,7 +17,7 @@ RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retire
 RELEASE_SHA256='RELEASE_HASH_REQUIRED'
 # The support/template commit is distinct from the candidate revision whose
 # retained inventory is being retired.  Both are independently authenticated.
-SUPPORT_MAIN='1c00d2b81fb75dbb93a3c74d29edf96cb1c31fda'
+SUPPORT_MAIN='b4208879ea1f0c0549e33fa42a60efd57bb439f6'
 MAIN='f5d8d914f816d4a677990719854f7b4d312a430b'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-f5d8d914-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-f5d8d914-1'
 QUARANTINES=('/dev/shm/.mckernel-retirement-candidate-1c00d2b8-1','/dev/shm/.mckernel-retirement-metadata-backup-1c00d2b8-1')
@@ -26,12 +26,13 @@ CAPSULE=SOURCE/'docs/verification/evidence/stability-native-exact-candidate-rete
 SUCCESS=SOURCE/'docs/verification/stability-native-exact-retention-preparation-success-9e5ab03d-20260929-1.json'
 INV_SHA='841dedac9c2a2f1bff7ecb903bd34500b6c5e8184a5466e744ee1a7154734f89'; CAP_SHA='624da324e6559bbee08c34e1cc70a12eb46727b0c338a0828815ba70c55ea6a4'; SUCCESS_SHA='98d2afc416b88f3bb5f2ebf95be82b30fe08733d50dfc833366250840210e4f5'
 HELPER=SOURCE/'scripts/native_exact_candidate_retire_1c00d2b8.py'; OBSERVER=SOURCE/'docs/verification/evidence/native-exact-candidate-live-reference-observer-1c00d2b8-1.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
-HELPER_SHA256='HELPER_HASH_REQUIRED'; OBSERVER_SHA256='OBSERVER_HASH_REQUIRED'; ARCHIVE_SHA256='ARCHIVE_HASH_REQUIRED'; HELPER_TEST_SHA256='HELPER_TEST_HASH_REQUIRED'; OBSERVER_TEST_SHA256='OBSERVER_TEST_HASH_REQUIRED'
+HELPER_SHA256='f589ba4303543caad42d3aee2ec7ee47a79a5818e50746f3b0ac1d12ef8d378a'; OBSERVER_SHA256='e8800a59c8126d9b0b8f7b949cbfb92d5e268cd03cbe9a1bf53788b116f5374d'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='5774766d209fad92af678f11a011fdb33a6e2e10e15eb2b3e5ac0898562a515e'; OBSERVER_TEST_SHA256='b4eaac8271c54df3349ae26ea2b131bfe81e17fc3521e371ed315c25804e1321'
 HELPER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_retire_1c00d2b8.py'; OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_observer_1c00d2b8.py'
 DELETED_AUDIT=SOURCE/'scripts/native_exact_candidate_deleted_inode_audit.py'; DELETED_AUDIT_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_deleted_inode_audit.py'
-DELETED_AUDIT_SHA256='DELETED_AUDIT_HASH_REQUIRED'; DELETED_AUDIT_TEST_SHA256='DELETED_AUDIT_TEST_HASH_REQUIRED'
-DELETED_AUDIT_SCHEMA='native-exact-deleted-inode-audit.v1'; DELETED_IDENTITY_COUNT=10611; DELETED_ROOT_COUNTS=(10524,87)
+DELETED_AUDIT_SHA256='641c39a3f3be3a1012a47f6e073c5e9df4149512acb1944b45d90e3f900d7ab2'; DELETED_AUDIT_TEST_SHA256='af9ab213144c295783d8a6274a3cf73955f4af36d4d3c887d96c512936126904'
+DELETED_AUDIT_SCHEMA='mckernel.native-exact-deleted-inode-audit.v1'; DELETED_IDENTITY_COUNT=10716; DELETED_ROOT_COUNTS=(10629,87)
 MAIN_RECONSTRUCTIBLE_NONDIR_COUNT=7833; IHK_RECONSTRUCTIBLE_COUNT=1296
+TERMINAL_CONTAINER_IDS=frozenset(('1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'))
 FLOORS={'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30}
 OUT=('claim-1c00d2b8-1.json','journal-1c00d2b8-1.jsonl','evidence-1c00d2b8-1.json','post-delete-audit.stdout','post-delete-audit.stderr','post-delete-audit.status','post-delete-audit.result.json','packet.status','packet.status.pending','packet.failure','packet.failure.pending','helper.sealed.py','archive.sealed.py','observer.sealed.py','deleted-audit.sealed.py','deleted-audit-test.sealed.py','observer.stdout','observer.stderr','observer.status','docker-ps.stdout','docker-ps.stderr','docker-ps.status','docker-inspect.stdout','docker-inspect.stderr','docker-inspect.status','docker-ps-after.stdout','docker-ps-after.stderr','docker-ps-after.status')
 RENAME_NOREPLACE=1
@@ -713,13 +714,14 @@ def stream_store(directory,records):
   if cleanup is not None:raise_primary(primary,cleanup)
 def verify_inventory(inv):
  if (not isinstance(inv,dict) or inv.get('format')!='native-exact-candidate-retention-v1'
+     or set(inv)!={'format','revisions','entries','capsule_required','roots'}
      or inv.get('revisions')!={'main':MAIN,'ihk':IHK} or not isinstance(inv.get('entries'),list)
      or len(inv['entries'])!=10714 or not isinstance(inv.get('capsule_required'),list)
      or len(inv['capsule_required'])!=918):bad('inventory schema/revision/count')
  roots=inv.get('roots')
  if roots!=[{'identity':{'dev':26,'gid':1000,'inode':47678,'mode':0o755,'uid':1000},'name':'candidate','path':CANDIDATE},
             {'identity':{'dev':26,'gid':1000,'inode':58429,'mode':0o755,'uid':1000},'name':'metadata-backup','path':BACKUP}]:bad('inventory roots')
- main=[];ihk=[]
+ main=[];ihk=[];seen=set();capsule=[]
  common={'classification','gid','mode','path','root','size','type','uid'}
  for r in inv['entries']:
   if not isinstance(r,dict):bad('inventory record shape')
@@ -727,11 +729,15 @@ def verify_inventory(inv):
   if typ not in ('directory','regular','symlink') or classification not in ('reconstructible','capsule-required'):bad('inventory record type/classification')
   expected=common|({'git_oids','sha256'} if typ=='regular' else {'git_oids','target'} if typ=='symlink' else set())
   if set(r)!=expected:bad('inventory record fields')
-  if r.get('root') not in ('candidate','metadata-backup') or not isinstance(r.get('path'),str) or not r['path'] or r['path'].startswith('/') or '\x00' in r['path'] or '..' in r['path'].split('/') :bad('inventory path/root')
-  if not all(isinstance(r.get(k),int) and r[k]>=0 for k in ('uid','gid','mode','size')) or r['size']>(MAX_FILE if typ=='directory' else MAX_BLOB):bad('inventory metadata')
+  if r.get('root') not in ('candidate','metadata-backup') or not isinstance(r.get('path'),str) or not r['path'] or r['path'].startswith('/') or '\x00' in r['path'] or any(x in ('','.','..') for x in r['path'].split('/')) :bad('inventory path/root')
+  key=r['root']+':'+r['path']
+  if key in seen:bad('duplicate inventory path')
+  seen.add(key)
+  if classification=='capsule-required':capsule.append(key)
+  if not all(type(r.get(k)) is int and r[k]>=0 for k in ('uid','gid','mode','size')) or r['mode']>0o7777 or r['size']>(MAX_FILE if typ=='directory' else MAX_BLOB):bad('inventory metadata')
   if typ=='directory':continue
   ids=r.get('git_oids')
-  if not isinstance(ids,dict) or set(ids)!=set(('sha1','sha256')) or not H40.fullmatch(ids['sha1']) or not H64.fullmatch(ids['sha256']):bad('reconstructible oid')
+  if not isinstance(ids,dict) or set(ids)!=set(('sha1','sha256')) or not isinstance(ids['sha1'],str) or not isinstance(ids['sha256'],str) or not H40.fullmatch(ids['sha1']) or not H64.fullmatch(ids['sha256']):bad('reconstructible oid')
   if typ=='regular' and not H64.fullmatch(r.get('sha256','')):bad('regular digest')
   if classification!='reconstructible':continue
   if r['root']!='candidate':bad('reconstructible root')
@@ -743,6 +749,7 @@ def verify_inventory(inv):
    wanted=sha(target)
   (ihk if r['path'].startswith('ihk/') else main).append((ids['sha1'],wanted,r['size'],ids['sha256']))
  if len(main)!=MAIN_RECONSTRUCTIBLE_NONDIR_COUNT or len(ihk)!=IHK_RECONSTRUCTIBLE_COUNT:bad('canonical object routing/count')
+ if inv['capsule_required']!=sorted(capsule):bad('capsule selection mismatch')
  # No subprocess is spawned until every record above has passed validation.
  stream_store(GIT,main);stream_store(IHK_GIT,ihk)
 def mechanical(release,fetched):
@@ -750,6 +757,7 @@ def mechanical(release,fetched):
  if not isinstance(t,dict) or not isinstance(f,dict) or not H40.fullmatch(t.get('commit','')) or f.get('prior_ancestor')!=t['commit']:bad('template ancestor')
  if f.get('allowed_changed_paths')!=[PACKET_REL,RELEASE_PATH]:bad('allowed changed paths')
  if run_bounded(gargv(GIT,'merge-base','--is-ancestor',t['commit'],fetched))[2]!=0:bad('template not ancestor')
+ if run_bounded(gargv(GIT,'merge-base','--is-ancestor',SUPPORT_MAIN,t['commit']))[2]!=0:bad('support not template ancestor')
  if gout(GIT,'diff','--name-only',t['commit'],fetched).decode('utf8','strict').splitlines()!=[PACKET_REL,RELEASE_PATH]:bad('nonmechanical changed path')
  template=blob(GIT,t['commit'],PACKET_REL)
  if sha(template)!=t.get('packet_sha256') or sha(blob(GIT,t['commit'],TEST_REL))!=t.get('test_sha256'):bad('template hash')
@@ -863,14 +871,17 @@ def validate_release(r,fetched,inv):
  if set(tomb)!={'path','immutable','schema','parent_uid','parent_gid','parent_mode','filesystem_device'} or tomb.get('path')!=str(BUILD_LEASE) or tomb.get('immutable') is not True or tomb.get('schema')!='mckernel.retirement-build-owner-exclusion.v2' or (tomb.get('parent_uid'),tomb.get('parent_gid'),tomb.get('parent_mode'))!=(1000,1000,0o700) or not isinstance(tomb.get('filesystem_device'),int) or tomb['filesystem_device']<0:bad('shared immutable tombstone binding')
  namespace=r['evidence_namespace']
  if set(namespace)!={'parent','name','device','uid','gid','mode','sticky'} or namespace.get('parent')!=str(EVIDENCE_PARENT) or namespace.get('name')!=EVIDENCE_DIR.name or not isinstance(namespace.get('device'),int) or namespace['device']<0 or (namespace.get('uid'),namespace.get('gid'),namespace.get('mode'),namespace.get('sticky'))!=(0,0,0o1777,True):bad('sticky evidence namespace binding')
- terminal_ids={'1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
+ terminal_ids=TERMINAL_CONTAINER_IDS
  if not isinstance(r['docker'].get('terminal'),dict) or r['docker']['terminal'].get('id')!=terminal or not isinstance(r['docker'].get('terminal_containers'),dict) or set(r['docker']['terminal_containers'])!=terminal_ids:bad('helper Docker preflight')
  for cid,row in r['docker']['terminal_containers'].items():
-  if not isinstance(row,dict) or not isinstance(row.get('State'),dict) or row['State'].get('Status')!='exited' or any(row['State'].get(k) not in (False,0,None) for k in ('Running','Restarting','Dead','OOMKilled')) or row['State'].get('Pid',0)!=0:bad('terminal state')
+  if not isinstance(row,dict) or row.get('Id')!=cid or not isinstance(row.get('State'),dict) or row['State'].get('Status')!='exited' or any(row['State'].get(k) is not False for k in ('Running','Paused','Restarting','Dead','OOMKilled')) or type(row['State'].get('Pid')) is not int or row['State']['Pid']!=0:bad('terminal state')
   host=row.get('HostConfig');config=row.get('Config');mounts=row.get('Mounts')
   if not isinstance(host,dict) or host.get('RestartPolicy')!={'Name':'no','MaximumRetryCount':0} or host.get('ReadonlyRootfs') is not True or host.get('Privileged') is not False or host.get('AutoRemove') is not False or not isinstance(config,dict) or not isinstance(mounts,list):bad('terminal config')
+  if any(k not in config for k in ('Image','User','Cmd')) or any(k not in host for k in ('SecurityOpt','NanoCpus','Memory','PidsLimit','CpusetCpus')):bad('incomplete terminal configuration')
   roots=(CANDIDATE,) if cid in terminal_ids-{terminal,'8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'} else (str(SOURCE),) if cid=='8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10' else (CANDIDATE,)
   if not any(isinstance(m,dict) and any(isinstance(m.get(k),str) and any(os.path.realpath(m[k]).startswith(os.path.realpath(root).rstrip('/')+'/') or os.path.realpath(m[k])==os.path.realpath(root) for root in roots) for k in ('Source','Destination')) for m in mounts):bad('terminal mount overlap')
+ primary=r['docker']['terminal'];exact=r['docker']['terminal_containers'][terminal]
+ if primary.get('state')!=exact['State'] or primary.get('exact_config')!={key:exact[key] for key in ('Config','HostConfig','Mounts')}:bad('inconsistent primary terminal binding')
  mechanical(r,fetched);canonical_stores();verify_inventory(inv)
 def admit(release_arg):
  draft_guard()
@@ -920,6 +931,18 @@ class OutputDir(object):
   if not isinstance(name,str) or '/' in name or name in ('','.','..'):bad('unsafe output member')
   try:os.stat(name,dir_fd=self.fd,follow_symlinks=False);return True
   except FileNotFoundError:return False
+ def read(self,name):
+  self.assert_bound()
+  if name not in OUT:bad('unreleased capture read')
+  fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|os.O_CLOEXEC,dir_fd=self.fd)
+  try:
+   before=os.fstat(fd)
+   if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1:bad('capture is not single regular file')
+   data=stable_fd(fd,before.st_size);after=os.fstat(fd);named=os.stat(name,dir_fd=self.fd,follow_symlinks=False)
+   fields=lambda s:(s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+   if fields(before)!=fields(after) or fields(after)!=fields(named):bad('capture changed during read')
+   self.assert_bound();return data
+  finally:os.close(fd)
  def assert_bound(self):
   """Revalidate the namespace after mutation without requiring emptiness."""
   try:named=os.lstat(str(self.path));opened=os.fstat(self.fd)
@@ -1105,12 +1128,12 @@ def docker_callback(base,docker,lease):
   after=call(['/usr/bin/docker','ps','--all','--quiet','--no-trunc'],base,'docker-ps-after').decode('ascii','strict').splitlines()
   if after!=ids:bad('Docker churn after inspect')
   terminals=docker.get('terminal_containers') if isinstance(docker,dict) else None
-  want={'1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
+  want=TERMINAL_CONTAINER_IDS
   if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=canonical_docker_row(v) for i,v in terminals.items()):bad('terminal config')
- lease.assert_held()
- return {'ps_all':ids,'inspect':rows}
+  lease.assert_held()
+  return {'ps_all':ids,'inspect':rows}
  return run
-def post_delete_audit(base, release, sources, evidence_name='evidence-1c00d2b8-1.json'):
+def post_delete_census(base, release, sources, evidence_name='evidence-1c00d2b8-1.json', progress=None):
  """Run three fresh current-state rounds after physical root deletion.
 
  The sealed corrected audit is driven from the descriptor-relative retirement
@@ -1120,37 +1143,68 @@ def post_delete_audit(base, release, sources, evidence_name='evidence-1c00d2b8-1
  """
  audit_source=sources.get('deleted_audit');audit_test=sources.get('deleted_audit_test')
  if not isinstance(audit_source,bytes) or not isinstance(audit_test,bytes):bad('deleted audit sources missing')
+ if sha(audit_source)!=DELETED_AUDIT_SHA256 or sha(audit_test)!=DELETED_AUDIT_TEST_SHA256:bad('deleted audit source hash')
+ if base.read('deleted-audit.sealed.py')!=audit_source or base.read('deleted-audit-test.sealed.py')!=audit_test:bad('deleted audit sealed bytes')
  audit=sealed_module(base/'deleted-audit.sealed.py','_deleted_inode_audit_sealed',audit_source)
  # Compile/import the test bytes as a syntax and provenance gate without
  # allowing its module-level harness to touch live state.
  compile(audit_test,str(base/'deleted-audit-test.sealed.py'),'exec')
- evidence=exact_json(output_read(base.fd,evidence_name))
+ evidence=exact_json(base.read(evidence_name))
  observation=evidence.get('observation')
  if not isinstance(observation,dict):bad('post-delete audit observation missing')
  rows=observation.get('roots')
  if not isinstance(rows,list) or len(rows)!=2:bad('post-delete audit roots missing')
  deleted=set();root_counts=[]
- for row in rows:
+ for row,released,path in zip(rows,release['roots'],QUARANTINES):
   values=row.get('tree_member_identities') if isinstance(row,dict) else None
   if not isinstance(values,list) or not isinstance(row.get('tree_inode_count'),int) or row['tree_inode_count']!=len(values):bad('post-delete identity tree incomplete')
+  if row.get('path')!=path:bad('post-delete root path')
+  expected={(member['device'],member['inode']) for member in [released['root']]+released['members']}
+  found=set()
   root_counts.append(len(values))
   for value in values:
-   if not isinstance(value,list) or len(value)<2 or not all(isinstance(x,int) for x in value[:2]):bad('post-delete identity malformed')
-   deleted.add((value[0],value[1]))
+   if not isinstance(value,list) or len(value)!=6 or not all(type(x) is int and x>=0 for x in value):bad('post-delete identity malformed')
+   found.add((value[0],value[1]))
+  if len(found)!=len(values) or found!=expected or deleted.intersection(found):bad('post-delete retained identity mismatch')
+  deleted.update(found)
  if len(deleted)!=DELETED_IDENTITY_COUNT or tuple(root_counts)!=DELETED_ROOT_COUNTS:bad('post-delete identity counts')
  try:mount_roots=audit.retained_mount_roots(observation)
  except BaseException as error:bad('post-delete mount baseline: '+str(error))
  rounds=[];previous=None;failures=[]
+ if progress is not None:progress.update(target={'identity_count':len(deleted),'root_counts':root_counts},rounds=rounds)
+ anchors=[audit._identity(os.getpid()),audit._identity(os.getppid())]
+ def absence_and_boot():
+  if Path('/proc/sys/kernel/random/boot_id').read_text().strip()!=release['boot_id'] or observation.get('boot_id')!=release['boot_id']:bad('post-delete boot mismatch')
+  for path in (CANDIDATE,BACKUP)+QUARANTINES:
+   try:os.lstat(path)
+   except FileNotFoundError:continue
+   bad('post-delete root present: '+path)
+ absence_and_boot()
  for number in range(1,4):
   reconciled=[]
   identities,errors,references,counters=audit.audit_round(deleted,mount_roots,reconciled)
   current=sorted(set(identities));churn=[] if previous is None else sorted(set(previous).symmetric_difference(current))
+  errors=list(errors)+['anchor-missing:'+repr(anchor) for anchor in anchors if anchor not in current]
   row={'round':number,'processes':counters.get('processes'),'tasks':counters.get('tasks'),'map_files_entries':counters.get('map_files_entries'),'map_files_denials':counters.get('map_files_denials'),'identity_count':len(current),'failures':sorted(set(errors)),'references':references,'reconciled_exits':sorted(set(reconciled)),'churn':churn}
   rounds.append(row);failures.extend(row['failures']);failures.extend('reference:'+repr(x) for x in references);failures.extend(row['reconciled_exits']);failures.extend('identity-churn' for _ in churn)
   if not current or not counters.get('tasks'):failures.append('empty-complete-census')
   previous=current
+  absence_and_boot()
  result={'schema':DELETED_AUDIT_SCHEMA,'status':'PASS' if not failures else 'FAIL','source_sha256':DELETED_AUDIT_SHA256,'test_source_sha256':DELETED_AUDIT_TEST_SHA256,'target':{'identity_count':len(deleted),'root_counts':root_counts},'rounds':rounds,'failures':sorted(set(failures))}
- data=(json.dumps(result,sort_keys=True,separators=(',',':'))+'\n').encode('utf8');capture(base,'post-delete-audit.stdout',b'');capture(base,'post-delete-audit.stderr',b'');capture(base,'post-delete-audit.status',b'0\n' if result['status']=='PASS' else b'1\n');capture(base,'post-delete-audit.result.json',data)
+ return result
+def post_delete_audit(base,release,sources):
+ """Persist every census failure before permitting terminal PASS publication."""
+ failure=None;progress={}
+ try:result=post_delete_census(base,release,sources,progress=progress)
+ except BaseException as error:
+  failure=error;result=dict(progress,schema=DELETED_AUDIT_SCHEMA,status='FAIL',failure=error_record(error))
+ data=(json.dumps(result,sort_keys=True,separators=(',',':'))+'\n').encode('utf8')
+ try:
+  capture(base,'post-delete-audit.stdout',data);capture(base,'post-delete-audit.stderr',b'')
+  capture(base,'post-delete-audit.result.json',data)
+  capture(base,'post-delete-audit.status',b'0\n' if result['status']=='PASS' else b'1\n')
+ except BaseException as error:raise_primary(failure,error)
+ if failure is not None:raise failure
  if result['status']!='PASS':bad('post-delete audit failed')
  return result
 def sealed_module(path,name,source):

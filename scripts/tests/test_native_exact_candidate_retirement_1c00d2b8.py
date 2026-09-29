@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Pure tests only; no roots, Docker, observer, Git, or candidate is touched."""
-import hashlib, importlib.util, io, os, stat, struct, subprocess, sys, tempfile, time, unittest
+import copy, hashlib, importlib.util, io, json, os, py_compile, stat, struct, subprocess, sys, tempfile, time, unittest
 from pathlib import Path
 from unittest import mock
 ROOT=Path(__file__).parents[2]; PACKET=ROOT/'docs/verification/evidence/native-exact-candidate-retirement-1c00d2b8-1.py'
@@ -25,10 +25,15 @@ class T(unittest.TestCase):
   self.assertEqual(M.CAP_SHA,'624da324e6559bbee08c34e1cc70a12eb46727b0c338a0828815ba70c55ea6a4')
   self.assertEqual(M.SUCCESS_SHA,'98d2afc416b88f3bb5f2ebf95be82b30fe08733d50dfc833366250840210e4f5')
   self.assertEqual(M.OBSERVER_TEST.name,'test_native_exact_candidate_live_reference_observer_1c00d2b8.py')
-  self.assertTrue(M.OBSERVER_TEST_SHA256.endswith('_HASH_REQUIRED'))
-  self.assertEqual(M.RELEASE_SHA256,'RELEASE_HASH_REQUIRED')
-  for value in (M.HELPER_SHA256,M.OBSERVER_SHA256,M.ARCHIVE_SHA256,M.HELPER_TEST_SHA256,M.OBSERVER_TEST_SHA256): self.assertTrue(value.endswith('_HASH_REQUIRED'))
-  with self.assertRaisesRegex(M.Error,'DRAFT_NOT_RELEASED'): M.draft_guard()
+  for name,path in (('HELPER',M.HELPER),('OBSERVER',M.OBSERVER),('ARCHIVE',M.ARCHIVE),('HELPER_TEST',M.HELPER_TEST),('OBSERVER_TEST',M.OBSERVER_TEST),('DELETED_AUDIT',M.DELETED_AUDIT),('DELETED_AUDIT_TEST',M.DELETED_AUDIT_TEST)):
+   value=getattr(M,name+'_SHA256')
+   if value.endswith('_HASH_REQUIRED'):
+    self.assertEqual(M.RELEASE_SHA256,'RELEASE_HASH_REQUIRED')
+   else:self.assertEqual(value,hashlib.sha256(path.read_bytes()).hexdigest())
+  if M.RELEASE_SHA256=='RELEASE_HASH_REQUIRED':
+   with self.assertRaisesRegex(M.Error,'DRAFT_NOT_RELEASED'):M.draft_guard()
+  else:
+   self.assertRegex(M.RELEASE_SHA256,r'^[0-9a-f]{64}$');M.draft_guard()
  def test_no_stale_consumed_failure_inputs_are_bound(self):
   text=PACKET.read_text()
   for stale in ('FAILURE_RECORD','FAILURE_ARCHIVE','FAILURE_CHECKPOINT','704f6654','68cf089a','67589154'):
@@ -57,7 +62,7 @@ class T(unittest.TestCase):
   s=Path(path).parent.stat()
   return {'path':str(path),'immutable':True,'schema':'mckernel.retirement-build-owner-exclusion.v2','parent_uid':s.st_uid,'parent_gid':s.st_gid,'parent_mode':stat.S_IMODE(s.st_mode),'filesystem_device':s.st_dev}
  def test_draft_no_side_effect(self):
-  with mock.patch.object(M.os,'geteuid',side_effect=AssertionError),mock.patch.object(M,'gscalar',side_effect=AssertionError):
+  with mock.patch.object(M,'RELEASE_SHA256','RELEASE_HASH_REQUIRED'),mock.patch.object(M.os,'geteuid',side_effect=AssertionError),mock.patch.object(M,'gscalar',side_effect=AssertionError):
    with self.assertRaisesRegex(M.Error,'DRAFT_NOT_RELEASED'):M.execute('/x')
  def test_mechanical_single_replacement(self):
   raw=b"RELEASE_SHA256='RELEASE_HASH_REQUIRED'"
@@ -279,7 +284,7 @@ class T(unittest.TestCase):
    base=self.output(d);primary=M.Error('primary')
    with mock.patch.object(M,'status',side_effect=OSError('disk full')):
     with self.assertRaisesRegex(M.Error,'status durability failure'):M.fail_status(base,primary)
-   sources={'helper':b'X=1\n','archive':b'Y=2\n','observer':b'Z=3\n'}
+   sources={'helper':b'X=1\n','archive':b'Y=2\n','observer':b'Z=3\n','deleted_audit':b'A=4\n','deleted_audit_test':b'B=5\n'}
    h,observer=M.helper(base,sources)
    try:
     self.assertEqual((base.path/'helper.sealed.py').read_bytes(),sources['helper'])
@@ -317,9 +322,9 @@ class T(unittest.TestCase):
     def retire(self,*x,**kw):events.append('retire');received['args']=x;received['kwargs']=kw;return {'status':'PASS'}
    def make_output(_):output.mkdir(0o700);return M.OutputDir(output)
    observer=os.open('/dev/null',os.O_RDONLY)
-   with mock.patch.object(M,'admit',return_value=(r,{'helper':b'','archive':b'','observer':b''})),mock.patch.object(M,'fresh_output',side_effect=make_output),mock.patch.object(M,'helper',side_effect=lambda *x:(events.append('helper') or (H(),observer))),mock.patch.object(M,'proc_starttime',return_value=7),mock.patch.object(M,'free_bytes',return_value=1<<50),mock.patch.object(M,'memory_available_bytes',return_value=20<<30),mock.patch.object(M.os,'listdir',side_effect=lambda p:[] if p=='/proc' else real_listdir(p)),mock.patch.object(Path,'read_text',return_value='boot'):
+   with mock.patch.object(M,'post_delete_audit',side_effect=lambda *args:events.append('census')),mock.patch.object(M,'admit',return_value=(r,{'helper':b'','archive':b'','observer':b''})),mock.patch.object(M,'fresh_output',side_effect=make_output),mock.patch.object(M,'helper',side_effect=lambda *x:(events.append('helper') or (H(),observer))),mock.patch.object(M,'proc_starttime',return_value=7),mock.patch.object(M,'free_bytes',return_value=1<<50),mock.patch.object(M,'memory_available_bytes',return_value=20<<30),mock.patch.object(M.os,'listdir',side_effect=lambda p:[] if p=='/proc' else real_listdir(p)),mock.patch.object(Path,'read_text',return_value='boot'):
     self.assertEqual(M.execute('ignored'),{'status':'PASS'})
-    self.assertEqual(events,['helper','retire']);self.assertTrue((output/'packet.status').exists())
+    self.assertEqual(events,['helper','retire','census']);self.assertTrue((output/'packet.status').exists())
     self.assertEqual(received['args'][2:5],M.OUT[:3]);self.assertEqual(received['kwargs']['output_dir_fd']>=0,True);self.assertFalse(any('/proc/self/fd/' in x for x in received['args'][2:5]))
  def test_delete_boundary_checks_before_and_after_and_blocks_lost_lease(self):
   events=[]
@@ -335,6 +340,12 @@ class T(unittest.TestCase):
   events[:]=[];h=H();M.bind_delete_boundary(h,L(True))
   with self.assertRaisesRegex(M.Error,'replaced'):h.remove_root(None,None)
   self.assertEqual(events,['check'])
+ def complete_docker_fixture(self,r):
+  for row in r['docker']['terminal_containers'].values():
+   row['Config'].update(Image='bound',User='1000:1000',Cmd=['test'])
+   row['HostConfig'].update(SecurityOpt=['no-new-privileges'],NanoCpus=0,Memory=12<<30,PidsLimit=512,CpusetCpus='2-5')
+  primary=r['docker']['terminal'];exact=r['docker']['terminal_containers'][primary['id']]
+  primary.update(state=copy.deepcopy(exact['State']),exact_config={key:copy.deepcopy(exact[key]) for key in ('Config','HostConfig','Mounts')})
  def test_packet_schema_rejects_extra_root_member_and_unrelated_seal(self):
   self.final()
   root={'device':26,'inode':25166,'uid':1000,'gid':1000,'mode':0o755,'kind':'directory','size':0};backup=dict(root,inode=35798)
@@ -345,11 +356,20 @@ class T(unittest.TestCase):
   r={'schema':'mckernel.ordinary-retirement-release.v1','status':'PASS_ONE_SHOT_RETIRE','one_shot':True,'retry':False,'rollback':False,'main_commit':M.MAIN,'ihk_commit':M.IHK,'candidate':M.CANDIDATE,'metadata_backup':M.BACKUP,'inventory_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'success_sha256':M.SUCCESS_SHA,'source_hashes':{'helper':M.HELPER_SHA256,'observer':M.OBSERVER_SHA256,'archive':M.ARCHIVE_SHA256,'helper_test':M.HELPER_TEST_SHA256,'observer_test':M.OBSERVER_TEST_SHA256},'roots':[row(M.CANDIDATE,root,M.QUARANTINES[0].rsplit('/',1)[1],[member]),row(M.BACKUP,backup,M.QUARANTINES[1].rsplit('/',1)[1],[])],'sealed':{'retention_manifest_sha256':M.INV_SHA,'retention_manifest_pushed_sha256':M.INV_SHA,'retention_manifest_fetched_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'capsule_pushed_sha256':M.CAP_SHA,'capsule_fetched_sha256':M.CAP_SHA,'retention_manifest_path':str(M.INVENTORY),'capsule_path':str(M.CAPSULE)},'observer':{'observer_sha256':M.OBSERVER_SHA256,'boot_id':'b'},'docker':{'terminal':{'id':'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9'},'terminal_containers':{}},'boot_id':'b','launcher_identities':[{'pid':1,'starttime':1}],'operational_exclusion':str(M.BUILD_LEASE),'exclusion_tombstone':{'path':str(M.BUILD_LEASE),'immutable':True,'schema':'mckernel.retirement-build-owner-exclusion.v2','parent_uid':1000,'parent_gid':1000,'parent_mode':0o700,'filesystem_device':1},'conflict_basenames':list(M.CONFLICT_BASENAMES),'heavy_lease_paths':[str(M.BUILD_LEASE)],'resource_floors':M.FLOORS,'output_dir':str(M.EVIDENCE_DIR),'evidence_namespace':{'parent':'/dev/shm','name':M.EVIDENCE_DIR.name,'device':1,'uid':0,'gid':0,'mode':0o1777,'sticky':True},'template':{},'finalization':{}}
   r['docker']['terminal']['id']='1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4';r['docker']['terminal_containers']={'1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4':{}}
   r['support_commit']=M.SUPPORT_MAIN;r['source_hashes'].update({'deleted_audit':M.DELETED_AUDIT_SHA256,'deleted_audit_test':M.DELETED_AUDIT_TEST_SHA256})
-  state={'Status':'exited','Running':False,'Restarting':False,'Dead':False,'Pid':0,'OOMKilled':False};host={'RestartPolicy':{'Name':'no','MaximumRetryCount':0},'ReadonlyRootfs':True,'Privileged':False,'AutoRemove':False}
+  state={'Status':'exited','Running':False,'Paused':False,'Restarting':False,'Dead':False,'Pid':0,'OOMKilled':False};host={'RestartPolicy':{'Name':'no','MaximumRetryCount':0},'ReadonlyRootfs':True,'Privileged':False,'AutoRemove':False}
   r['docker']['terminal_containers']={i:{'Id':i,'State':dict(state),'HostConfig':dict(host),'Config':{},'Mounts':[{'Source':M.CANDIDATE,'Destination':'/candidate'} if i!='8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10' else {'Source':str(M.SOURCE),'Destination':'/repo'}]} for i in ('1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10')}
+  self.complete_docker_fixture(r)
   inv={'roots':[{'name':'candidate','path':M.CANDIDATE,'identity':{'dev':26,'inode':25166,'uid':1000,'gid':1000,'mode':0o755}},{'name':'metadata-backup','path':M.BACKUP,'identity':{'dev':26,'inode':35798,'uid':1000,'gid':1000,'mode':0o755}}],'entries':[entry]}
   with mock.patch.object(M,'mechanical'),mock.patch.object(M,'canonical_stores'),mock.patch.object(M,'verify_inventory'):
    M.validate_release(r,'f',inv)
+   for cid in M.TERMINAL_CONTAINER_IDS:
+    for field,key in (('State','Paused'),('HostConfig','SecurityOpt'),('Config','Image')):
+     broken=copy.deepcopy(r);broken['docker']['terminal_containers'][cid][field].pop(key)
+     with self.subTest(cid=cid,field=field),self.assertRaises(M.Error):M.validate_release(broken,'f',inv)
+    broken=copy.deepcopy(r);broken['docker']['terminal_containers'].pop(cid)
+    with self.assertRaisesRegex(M.Error,'Docker preflight'):M.validate_release(broken,'f',inv)
+   broken=copy.deepcopy(r);broken['docker']['terminal']['state']['Pid']=123
+   with self.assertRaisesRegex(M.Error,'inconsistent primary'):M.validate_release(broken,'f',inv)
    r['roots'][0]['root']['extra']=1
    with self.assertRaisesRegex(M.Error,'root/parent/member'):M.validate_release(r,'f',inv)
    r['roots'][0]['root'].pop('extra');r['sealed']['unrelated']='x'
@@ -367,7 +387,8 @@ class T(unittest.TestCase):
    try:
     release={'schema':'mckernel.ordinary-retirement-release.v1','status':'PASS_ONE_SHOT_RETIRE','one_shot':True,'retry':False,'rollback':False,'main_commit':M.MAIN,'ihk_commit':M.IHK,'candidate':M.CANDIDATE,'metadata_backup':M.BACKUP,'inventory_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'success_sha256':M.SUCCESS_SHA,'source_hashes':{'helper':M.HELPER_SHA256,'observer':M.OBSERVER_SHA256,'archive':M.ARCHIVE_SHA256,'helper_test':M.HELPER_TEST_SHA256,'observer_test':M.OBSERVER_TEST_SHA256},'roots':rows,'sealed':{'retention_manifest_sha256':M.INV_SHA,'retention_manifest_pushed_sha256':M.INV_SHA,'retention_manifest_fetched_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'capsule_pushed_sha256':M.CAP_SHA,'capsule_fetched_sha256':M.CAP_SHA,'retention_manifest_path':str(M.INVENTORY),'capsule_path':str(M.CAPSULE)},'observer':{'observer_sha256':M.OBSERVER_SHA256,'boot_id':'b'},'docker':{'terminal':{'id':'1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4'},'terminal_containers':{'1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4':{}}},'boot_id':'b','launcher_identities':[{'pid':1,'starttime':1}],'operational_exclusion':str(build),'exclusion_tombstone':self.tomb(build),'conflict_basenames':list(M.CONFLICT_BASENAMES),'heavy_lease_paths':[str(build)],'resource_floors':M.FLOORS,'output_dir':str(M.EVIDENCE_DIR),'template':{},'finalization':{}}
     release['support_commit']=M.SUPPORT_MAIN;release['source_hashes'].update({'deleted_audit':M.DELETED_AUDIT_SHA256,'deleted_audit_test':M.DELETED_AUDIT_TEST_SHA256})
-    state={'Status':'exited','Running':False,'Restarting':False,'Dead':False,'Pid':0,'OOMKilled':False};host={'RestartPolicy':{'Name':'no','MaximumRetryCount':0},'ReadonlyRootfs':True,'Privileged':False,'AutoRemove':False};ids=('1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10');release['docker']['terminal_containers']={i:{'Id':i,'State':dict(state),'HostConfig':dict(host),'Config':{},'Mounts':[{'Source':str(paths[0]),'Destination':'/candidate'} if i!='8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10' else {'Source':str(M.SOURCE),'Destination':'/repo'}]} for i in ids}
+    state={'Status':'exited','Running':False,'Paused':False,'Restarting':False,'Dead':False,'Pid':0,'OOMKilled':False};host={'RestartPolicy':{'Name':'no','MaximumRetryCount':0},'ReadonlyRootfs':True,'Privileged':False,'AutoRemove':False};ids=('1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4','3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10');release['docker']['terminal_containers']={i:{'Id':i,'State':dict(state),'HostConfig':dict(host),'Config':{},'Mounts':[{'Source':str(paths[0]),'Destination':'/candidate'} if i!='8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10' else {'Source':str(M.SOURCE),'Destination':'/repo'}]} for i in ids}
+    self.complete_docker_fixture(release)
     release['evidence_namespace']={'parent':'/dev/shm','name':M.EVIDENCE_DIR.name,'device':1,'uid':0,'gid':0,'mode':0o1777,'sticky':True}
     inv={'roots':mroots,'entries':[]}
     with mock.patch.object(M,'mechanical'),mock.patch.object(M,'canonical_stores'),mock.patch.object(M,'verify_inventory'):M.validate_release(release,'f',inv)
@@ -412,10 +433,7 @@ class T(unittest.TestCase):
   self.assertEqual(M.parse_memavailable(b'MemAvailable: 20835143 kB\n'),20835143*1024)
  def test_fresh_output_and_release_sentinel(self):
   with self.assertRaises(M.Error):M.fresh_output({'output_dir':'/tmp/no'})
-  self.assertTrue(M.HELPER_SHA256.endswith('_HASH_REQUIRED'))
-  self.assertTrue(M.HELPER_TEST_SHA256.endswith('_HASH_REQUIRED'))
-  self.assertTrue(M.OBSERVER_SHA256.endswith('_HASH_REQUIRED'))
-  self.assertEqual(PACKET.read_bytes().count(b"RELEASE_SHA256='RELEASE_HASH_REQUIRED'"),1)
+  self.assertEqual(PACKET.read_bytes().count(("RELEASE_SHA256='"+M.RELEASE_SHA256+"'").encode()),1)
   self.assertNotIn('"/usr/bin/sudo"',PACKET.read_text())
  def test_descriptor_output_substitution_and_immutable_reopen_fail_closed(self):
   with tempfile.TemporaryDirectory() as d:
@@ -695,7 +713,7 @@ class T(unittest.TestCase):
    popen.assert_not_called()
  def test_loaded_helper_composite_all_leaves_reach_terminal_failure_json(self):
   with tempfile.TemporaryDirectory() as d:
-   base=self.output(d);helper,observer=M.helper(base,{'helper':M.HELPER.read_bytes(),'archive':M.ARCHIVE.read_bytes(),'observer':b'# never executed\n'})
+   base=self.output(d);helper,observer=M.helper(base,{'helper':M.HELPER.read_bytes(),'archive':M.ARCHIVE.read_bytes(),'observer':b'# never executed\n','deleted_audit':M.DELETED_AUDIT.read_bytes(),'deleted_audit_test':M.DELETED_AUDIT_TEST.read_bytes()})
    journal=mock.Mock();journal.write.side_effect=[ValueError('operation primary'),OSError('failure journal error')];journal.close.side_effect=OSError('journal close error')
    try:
     with mock.patch.object(helper,'release_roots',return_value=[]),mock.patch.object(helper,'survivors',return_value={}),mock.patch.object(helper,'Journal',return_value=journal):
@@ -772,31 +790,188 @@ class T(unittest.TestCase):
   with mock.patch.object(M.os,'waitid',side_effect=ChildProcessError('already reaped')),mock.patch.object(M,'proc_row',return_value=dict(self.leader(),starttime=10)),mock.patch.object(M,'pidfd_open') as opened,mock.patch.object(M.os,'kill') as sent,mock.patch.object(M,'session_members',return_value=[]):
    with self.assertRaisesRegex(M.Error,'unreaped direct-child identity unavailable'):M.retire_process(p,{})
   opened.assert_not_called();sent.assert_not_called();self.assertFalse(p._mckernel_retired)
+ def retained_inventory(self):
+  raw=M.INVENTORY.read_bytes()
+  self.assertEqual(hashlib.sha256(raw).hexdigest(),'841dedac9c2a2f1bff7ecb903bd34500b6c5e8184a5466e744ee1a7154734f89')
+  return json.loads(raw)
  def test_inventory_validates_symlink_and_all_records_before_any_reader_spawn(self):
-  common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000}
-  regular=dict(common,type='regular',path='main-file',size=3,sha256=hashlib.sha256(b'abc').hexdigest(),git_oids={'sha1':'0'*40,'sha256':'1'*64})
-  link=dict(common,type='symlink',path='ihk/link',size=3,target='abc',git_oids={'sha1':'2'*40,'sha256':'3'*64})
-  entries=[dict(regular,path='main-%d'%i) for i in range(7728)]+[dict(link,path='ihk/link-%d'%i) for i in range(1296)]
-  with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries})
-  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7728,1296])
-  bad=dict(link,target='\udcff')
-  with self.assertRaises(M.Error):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries[:-1]+[bad]})
-  streams.assert_has_calls([])
-  capsule=dict(regular,classification='capsule-required',path='capsule-large',size=M.MAX_FILE+1)
-  with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[capsule]})
-  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7728,1296])
-  with self.assertRaisesRegex(M.Error,'inventory metadata'):
-   M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[dict(capsule,size=M.MAX_BLOB+1)]})
-  for wrong in (entries[:-1], entries+[dict(regular,path='main-extra')]):
-   with mock.patch.object(M,'stream_store') as streams:
-    with self.assertRaisesRegex(M.Error,'canonical object routing/count'):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':wrong})
-    streams.assert_not_called()
+  inv=self.retained_inventory()
+  with mock.patch.object(M,'stream_store') as streams:M.verify_inventory(inv)
+  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7833,1296])
+  self.assertEqual(M.SUPPORT_MAIN,'b4208879ea1f0c0549e33fa42a60efd57bb439f6')
+  self.assertEqual(M.MAIN,'f5d8d914f816d4a677990719854f7b4d312a430b')
+  self.assertNotEqual(M.MAIN,M.SUPPORT_MAIN)
+  original=next(i for i,x in enumerate(inv['entries']) if x['type']=='symlink')
+  inv['entries'][original]['target']='different-size'
+  with mock.patch.object(M,'stream_store') as streams:
+   with self.assertRaisesRegex(M.Error,'symlink target size'):M.verify_inventory(inv)
+   streams.assert_not_called()
  def test_inventory_rejects_malformed_digest_oid_and_record_shape_before_spawn(self):
-  common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000,'type':'regular','path':'x','size':3,'sha256':'a'*64,'git_oids':{'sha1':'0'*40,'sha256':'1'*64}}
-  for change in (dict(common,sha256='bad'),dict(common,git_oids={'sha1':'bad','sha256':'1'*64}),dict(common,extra=1),dict(common,size=-1)):
-   with mock.patch.object(M,'stream_store') as streams:
-    with self.assertRaises(M.Error):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':[change]})
+  baseline=self.retained_inventory()
+  index=next(i for i,x in enumerate(baseline['entries']) if x['type']=='regular')
+  mutations=(lambda inv:inv['entries'][index].update(sha256='bad'),
+             lambda inv:inv['entries'][index].update(git_oids={'sha1':False,'sha256':'1'*64}),
+             lambda inv:inv['entries'][index].update(extra=1),
+             lambda inv:inv['entries'][index].update(size=-1),
+             lambda inv:inv['entries'][index].update(size=True),
+             lambda inv:inv['entries'][index].update(path='a//b'),
+             lambda inv:inv['entries'].__setitem__(1,dict(inv['entries'][0])),
+             lambda inv:inv['capsule_required'].__setitem__(0,'candidate:absent'),
+             lambda inv:inv.update(extra=1),
+             lambda inv:inv['revisions'].update(main=M.SUPPORT_MAIN),
+             lambda inv:inv['entries'].pop(),
+             lambda inv:inv['capsule_required'].pop())
+  for change in mutations:
+   inv=copy.deepcopy(baseline);change(inv)
+   with self.subTest(change=change),mock.patch.object(M,'stream_store') as streams:
+    with self.assertRaises(M.Error):M.verify_inventory(inv)
     streams.assert_not_called()
+ def test_explicit_temporary_compile_has_no_repository_cache_output(self):
+  paths=(PACKET,M.HELPER,M.OBSERVER,M.HELPER_TEST,M.OBSERVER_TEST,Path(__file__))
+  with tempfile.TemporaryDirectory() as directory:
+   for index,path in enumerate(paths):
+    py_compile.compile(str(path),cfile=str(Path(directory)/('%d.pyc'%index)),doraise=True)
+ def docker_rows(self):
+  return {cid:{'Id':cid,'State':{'Status':'exited','Running':False,'Paused':False,'Restarting':False,'Dead':False,'Pid':0,'OOMKilled':False},'HostConfig':{'RestartPolicy':{'Name':'no','MaximumRetryCount':0},'ReadonlyRootfs':True,'Privileged':False,'AutoRemove':False},'Config':{'Image':'bound'},'Mounts':[{'Source':str(M.SOURCE) if cid.startswith('8943') else M.CANDIDATE,'Destination':'/input','RW':False}]} for cid in M.TERMINAL_CONTAINER_IDS}
+ def test_callback_exact_three_containers_and_every_bound_field(self):
+  terminals=self.docker_rows();ids=sorted(terminals)
+  def invoke(rows,expected=terminals):
+   raw=('\n'.join(ids)+'\n').encode()
+   with mock.patch.object(M,'call',side_effect=[raw,json.dumps(rows).encode(),raw]):
+    return M.docker_callback(None,{'terminal_containers':expected},self.lease())()
+  self.assertEqual(invoke(list(terminals.values()))['ps_all'],ids)
+  for cid in ids:
+   for field in ('State','HostConfig','Config','Mounts'):
+    rows=copy.deepcopy(terminals)
+    if field=='Mounts':rows[cid][field][0]['RW']=True
+    else:rows[cid][field]['changed']=True
+    with self.subTest(cid=cid,field=field),self.assertRaisesRegex(M.Error,'terminal config'):
+     invoke(list(rows.values()))
+  with self.assertRaisesRegex(M.Error,'terminal config'):
+   invoke(list(terminals.values()),{ids[0]:terminals[ids[0]]})
+ def test_support_hash_checks_work_for_populated_draft_and_release(self):
+  names=('HELPER','OBSERVER','ARCHIVE','HELPER_TEST','OBSERVER_TEST','DELETED_AUDIT','DELETED_AUDIT_TEST')
+  hashes={name+'_SHA256':hashlib.sha256(getattr(M,name).read_bytes()).hexdigest() for name in names}
+  with mock.patch.multiple(M,**hashes):
+   self.test_retention_and_observer_bindings_are_exact_but_release_stays_draft()
+   with mock.patch.object(M,'RELEASE_SHA256','a'*64):
+    self.test_retention_and_observer_bindings_are_exact_but_release_stays_draft()
+   with mock.patch.object(M,'HELPER_SHA256','b'*64):
+    with self.assertRaises(AssertionError):self.test_retention_and_observer_bindings_are_exact_but_release_stays_draft()
+ def test_output_reader_is_descriptor_bound_and_rejects_special_aliases(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d)
+   try:
+    base.write('observer.stdout',b'bound')
+    self.assertEqual(base.read('observer.stdout'),b'bound')
+    with self.assertRaisesRegex(M.Error,'unreleased'):base.read('../observer.stdout')
+    os.link(base.path/'observer.stdout',base.path/'observer.stderr')
+    with self.assertRaisesRegex(M.Error,'single regular'):base.read('observer.stdout')
+    (base.path/'observer.status').symlink_to('observer.stdout')
+    with self.assertRaises(OSError):base.read('observer.status')
+   finally:base.close()
+ def census_fixture(self,base):
+  sources={'deleted_audit':M.DELETED_AUDIT.read_bytes(),'deleted_audit_test':M.DELETED_AUDIT_TEST.read_bytes()}
+  base.write('deleted-audit.sealed.py',sources['deleted_audit']);base.write('deleted-audit-test.sealed.py',sources['deleted_audit_test'])
+  roots=[];observed=[];next_inode=1
+  for path,count in zip(M.QUARANTINES,(10629,87)):
+   values=[[26,next_inode+i,1000,1000,stat.S_IFREG,0o644] for i in range(count)]
+   values[0][4:]=[stat.S_IFDIR,0o700]
+   roots.append({'root':{'device':26,'inode':next_inode},'members':[{'device':26,'inode':x[1]} for x in values[1:]]})
+   observed.append({'path':path,'tree_member_identities':values,'tree_inode_count':count,'device_number':26,'filesystem_root':'/'+Path(path).name,'observer_mount':{'device':'0:26','root':'/','mountpoint':'/dev/shm'}})
+   next_inode+=count
+  release={'roots':roots,'boot_id':'boot'}
+  evidence={'observation':{'roots':observed,'boot_id':'boot'}}
+  audit=M.sealed_module(base.path/'deleted-audit.sealed.py','test_deleted_audit',sources['deleted_audit'])
+  identities=[(os.getpid(),os.getpid(),'1'),(os.getppid(),os.getppid(),'1')]
+  counters={'processes':2,'tasks':2,'map_files_entries':0,'map_files_denials':0}
+  return sources,release,evidence,audit,identities,counters
+ def run_census_fixture(self,base,fixture,round_result=None):
+  sources,release,evidence,audit,identities,counters=fixture
+  base.write(M.OUT[2],(json.dumps(evidence)+'\n').encode())
+  original_lstat=os.lstat
+  def absent(path,*args,**kwargs):
+   if str(path) in (M.CANDIDATE,M.BACKUP)+M.QUARANTINES:raise FileNotFoundError(str(path))
+   return original_lstat(path,*args,**kwargs)
+  with mock.patch.object(M,'sealed_module',return_value=audit),mock.patch.object(audit,'_identity',side_effect=lambda pid:(pid,pid,'1')),mock.patch.object(audit,'audit_round',side_effect=round_result if isinstance(round_result,Exception) or callable(round_result) else None,return_value=round_result or (identities,[],[],counters)) as scan,mock.patch.object(M.os,'lstat',side_effect=absent),mock.patch.object(Path,'read_text',return_value='boot'):
+   result=M.post_delete_audit(base,release,sources)
+  return result,scan
+ def test_postdelete_exact_retained_set_three_fresh_rounds_and_durable_outputs(self):
+  inv=self.retained_inventory()
+  derived=tuple(1+sum(x['root']==label for x in inv['entries']) for label in ('candidate','metadata-backup'))
+  self.assertEqual(derived,(10629,87));self.assertEqual(sum(derived),10716)
+  self.assertEqual((M.DELETED_IDENTITY_COUNT,M.DELETED_ROOT_COUNTS),(10716,(10629,87)))
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d)
+   try:
+    result,scan=self.run_census_fixture(base,self.census_fixture(base))
+    self.assertEqual(result['status'],'PASS');self.assertEqual(scan.call_count,3)
+    self.assertEqual(len(scan.call_args.args[0]),10716)
+    self.assertEqual(result['target'],{'identity_count':10716,'root_counts':[10629,87]})
+    self.assertEqual(base.read('post-delete-audit.status'),b'0\n')
+    self.assertEqual(json.loads(base.read('post-delete-audit.stdout')),result)
+    self.assertEqual(json.loads(base.read('post-delete-audit.result.json')),result)
+   finally:base.close()
+ def test_postdelete_stale_count_source_and_identity_mismatch_are_durable_failures(self):
+  for defect in ('historical-count','substituted-inode','source','duplicate','wrong-boot'):
+   with self.subTest(defect=defect),tempfile.TemporaryDirectory() as d:
+    base=self.output(d)
+    try:
+     fixture=self.census_fixture(base);sources,release,evidence,audit,ids,counters=fixture
+     if defect=='historical-count':
+      # 10611/(10524,87) belongs to the predecessor, not this inventory.
+      row=evidence['observation']['roots'][0];row['tree_member_identities']=row['tree_member_identities'][:10524];row['tree_inode_count']=10524
+     elif defect=='substituted-inode':evidence['observation']['roots'][0]['tree_member_identities'][1][1]=999999
+     elif defect=='source':sources['deleted_audit']+=b'\n'
+     elif defect=='wrong-boot':evidence['observation']['boot_id']='different'
+     else:evidence['observation']['roots'][0]['tree_member_identities'][1]=evidence['observation']['roots'][0]['tree_member_identities'][2]
+     with self.assertRaises(M.Error):self.run_census_fixture(base,fixture)
+     self.assertEqual(base.read('post-delete-audit.status'),b'1\n')
+     self.assertEqual(json.loads(base.read('post-delete-audit.result.json'))['status'],'FAIL')
+    finally:base.close()
+ def test_postdelete_scan_failure_reference_empty_anchor_and_interrupt_never_pass(self):
+  for defect in ('denial','reference','empty','anchor','interrupt','churn'):
+   with self.subTest(defect=defect),tempfile.TemporaryDirectory() as d:
+    base=self.output(d)
+    try:
+     fixture=self.census_fixture(base);sources,release,evidence,audit,ids,counters=fixture
+     result=(ids,['denied'],[],counters) if defect=='denial' else (ids,[],[{'identity':[26,1],'source':'map_files'}],counters) if defect=='reference' else ([],[],[],counters) if defect=='empty' else (ids[:1],[],[],counters) if defect=='anchor' else M.Interrupted('audit interrupted')
+     if defect=='churn':
+      sequence=iter([(ids,[],[],counters),(ids+[(99,99,'1')],[],[],counters),(ids,[],[],counters)])
+      result=lambda *args:next(sequence)
+     with self.assertRaises(M.Error):self.run_census_fixture(base,fixture,result)
+     self.assertEqual(base.read('post-delete-audit.status'),b'1\n')
+    finally:base.close()
+ def test_postdelete_writer_failure_preserves_interrupt_and_refuses_terminal_pass(self):
+  with mock.patch.object(M,'post_delete_census',side_effect=M.Interrupted('audit signal')),mock.patch.object(M,'capture',side_effect=OSError('write failed')):
+   with self.assertRaises(M.CompositeError) as raised:M.post_delete_audit(None,{}, {})
+  value=M.error_record(raised.exception)
+  self.assertTrue(value['interrupted']);self.assertEqual(value['cleanup']['message'],'write failed')
+ def test_postdelete_partial_rounds_survive_later_scanner_exception(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d)
+   try:
+    fixture=self.census_fixture(base);ids,counters=fixture[-2:];calls=[]
+    def scan(*args):
+     calls.append(1)
+     if len(calls)==2:raise M.Interrupted('second round signal')
+     return ids,[],[],counters
+    with self.assertRaises(M.Interrupted):self.run_census_fixture(base,fixture,scan)
+    saved=json.loads(base.read('post-delete-audit.result.json'))
+    self.assertEqual(len(saved['rounds']),1);self.assertTrue(saved['failure']['interrupted'])
+   finally:base.close()
+ def test_execute_census_failure_never_publishes_pass_after_deletion(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d);path=Path(d)/'lease';M.BUILD_LEASE=path
+   release={'operational_exclusion':str(path),'boot_id':'b','exclusion_tombstone':self.tomb(path),'docker':{}}
+   class H:
+    def remove_root(self,*args):pass
+    def retire(self,*args,**kwargs):return {'status':'PASS'}
+   observer=os.open('/dev/null',os.O_RDONLY)
+   with mock.patch.object(M,'admit',return_value=(release,{})),mock.patch.object(M,'fresh_output',return_value=base),mock.patch.object(M,'live_gate'),mock.patch.object(M,'helper',return_value=(H(),observer)),mock.patch.object(M,'post_delete_audit',side_effect=M.Error('census denied')),mock.patch.object(M,'proc_starttime',return_value=7):
+    with self.assertRaisesRegex(M.Error,'census denied'):M.execute('unused')
+   self.assertFalse((base.path/'packet.status').exists())
+   self.assertEqual(json.loads((base.path/'packet.failure').read_bytes())['status'],'FAIL')
  def test_stream_blob_requires_requested_git_sha1_and_sha256_objects(self):
   data=b'abc';oid=hashlib.sha1(b'blob 3\0'+data).hexdigest();oid256=hashlib.sha256(b'blob 3\0'+data).hexdigest();digest=hashlib.sha256(data).hexdigest()
   class P:
