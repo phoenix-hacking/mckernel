@@ -1307,3 +1307,18 @@ push/fetch-verify this immutable template, then mechanically add one release JSO
 and replace only that literal. Obtain independent execution review and repeat
 fresh root/process/lease/capacity/Docker checks before one invocation. Source
 PASS grants no retirement, build, application or OS acceptance.
+
+Shutdown checkpoint 174 leaves the source template fetched at `5b8f6482...2f65`
+and the packet hard-blocked by `RELEASE_HASH_REQUIRED`. Bounded generation made
+an unreviewed 2,415,286-byte draft release JSON SHA `f7b48994...06efa`; 127
+populated-form tests passed before the literal was restored. It binds roots
+26/47678 and 26/58429, the three exact terminal containers, current boot and
+launcher identities 4041681/92434707, 4041684/92434713 and 4041686/92434719.
+No runtime action occurred and all children are terminal.
+
+Because this checkpoint changes ancestry, next verify its fetched commit and
+live state, rebind the draft's template/finalization commit plus any changed
+launcher facts, recompute its hash, and make an exact two-path finalization:
+release JSON and packet literal only. Push/fetch it, then obtain independent
+Astra execution review before one possible `sudo -A` invocation. Do not execute
+the checkpoint-174 draft. Counters remain 6/130, 350/10000 and 0/273 apps.

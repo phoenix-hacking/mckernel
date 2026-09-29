@@ -8338,3 +8338,38 @@ packet release-hash literal. Obtain independent execution review and repeat
 current process/root/lease/capacity/Docker reconciliation immediately before one
 invocation. No build or real guest application ran; counters remain 6/130,
 350/10000 and 0/273 applications, and the OS remains incomplete.
+
+Shutdown checkpoint 174, 2026-09-29: the launcher stop arrived after the
+immutable source template `5b8f64827bacf2f5f49c94d33c4b41e4bfc12f65` was
+pushed and fetch-verified and while the bounded mechanical release generation
+was active. No new dispatch followed the stop. Both children are terminal, and
+no retirement/helper/observer/deleted-audit process, build or guest is active.
+
+Generation produced an exact but deliberately unreviewed draft release JSON,
+`stability-native-exact-candidate-retirement-1c00d2b8-1.release.json`, SHA
+`f7b48994f7678b1a71fd399940980818ce5e9a2c40a7f7e7d3c429c2d1006efa`,
+2,415,286 bytes. It binds the 10,714 inventory members, protected roots
+26/47678 and 26/58429, the exact three terminal Docker records, boot
+`c733d83b-a5ae-4f91-9ce6-9f8ccf119afd`, and launcher wrapper
+4041681/92434707, worker 4041684/92434713 and app-server 4041686/92434719.
+All three identities remain live at checkpoint time. The candidate, backup,
+quarantines, evidence directory and build lease remain respectively intact or
+absent as required.
+
+The packet release literal was restored to `RELEASE_HASH_REQUIRED` before this
+shutdown checkpoint, so the draft cannot pass admission. Its populated-form
+cheap regression ran 127 tests in 5.821 seconds before restoration and passed;
+JSON parsing, exact SHA and scoped diff checks passed. This is not independent
+execution review and not a release. Since this shutdown documentation changes
+the fetched ancestry, the next invocation must treat the draft only as generation
+input: verify this fetched checkpoint and live identities, update the release's
+template/finalization commit and any changed live facts, recompute its hash, and
+then commit exactly the release JSON plus packet literal. Only after push/fetch
+may an independent Astra execution reviewer decide whether one `sudo -A`
+invocation is released.
+
+At checkpoint, host, scratch and tmpfs have 105,518,501,888, 21,515,587,584 and
+7,445,069,824 bytes available; `MemAvailable` is 21,058,896 KiB. No real guest
+application ran, formal counters remain 6/130 and 350/10000, application
+acceptance remains 0/273, and the OS is incomplete. The launcher pause is
+temporary; do not mark the goal complete or resume it during shutdown.
