@@ -6574,6 +6574,39 @@ does not itself release the offline heavy build; obtain independent one-shot
 review for the fresh request before Docker execution. Preserve the consumed
 recovery-3 outputs and every earlier failure/archive.
 
+Continuation checkpoint 101, 2026-09-29: a wholly fresh preparation-only
+packet for fetched source checkpoint `675891545c881b8d625256ade56fe66ac69fe794`
+now has independent CONDITIONAL PASS. Packet `34249db...5a33` differs from the
+historical reviewed packet only in the full source commit, corrected terminal-
+container owner hash `a8c4c9fc...9155`, and all nine fresh `67589154-1`
+mutable identities. Its pure test `3815ef4d...e0b9` normalizes the bytes exactly
+to the prior packet and passes five cases plus shell syntax, temporary-output
+compilation and diff checks. The initial import-style unittest command is
+retained as exit 1 (`scripts` was not importable under `-I`); the direct isolated
+test command then exposed and corrected two test-only assumptions before PASS.
+
+Read-only source identity review proves that kernel, host-kernel, workflow,
+offline driver, manifest producer, all six workflow patches and external assets
+are byte-identical to candidate `68cf089a`; only the build-control owner changed.
+The outer Git commit and index still pin IHK `3114d9e7`. The live clean nested
+checkout at local-only `21a0d1e` differs only in a whitebox test mirror and is
+explicitly excluded: the packet clones the bare store and checks out the pinned
+gitlink. Deterministic artifact equality remains an expectation until rebuilt,
+and the new full manifest/request hashes must not reuse the old attempt.
+
+Execution release
+`stability-native-exact-candidate-preparation-67589154-execution-release-20260929-1.json`
+is `3342e097...dfaa`. It conditionally authorizes one non-root packet only after
+commit/push/fetched verification and fresh complete preflight. It separately
+releases exactly one read-only `sudo -A docker --host
+unix:///var/run/docker.sock ps --all --no-trunc` capture; no other privileged
+operation is authorized. All nine destinations were absent at review. The
+packet creates no Docker client, lease, build or guest and ends at
+`BuildOwner.validate()`. `runtime_acceptance=false` and `build_acceptance=false`.
+Next push/fetch these exact three files, capture fresh O_EXCL process/locks/all-
+lease/Docker/capacity/target evidence, and run the packet once only if every
+gate is clean. Preserve all outputs on failure; no retry or automatic cleanup.
+
 Continuation checkpoint 96, 2026-09-29: the single released recovery-v2 packet
 ran once and failed closed in 0.25 seconds during root source admission, before
 claim or journal creation and before Docker, observer or deletion. The sanitized

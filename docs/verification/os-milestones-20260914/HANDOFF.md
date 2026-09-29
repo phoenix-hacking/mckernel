@@ -618,3 +618,14 @@ closure, modes, standalone metadata, at least 4-GiB tmpfs reserve and the pinned
 12-GiB container accounting. Preparation does not release Docker build; seek a
 fresh independent one-shot heavy-build review for the exact request. Preserve
 all recovery outputs and historical failures.
+
+Checkpoint 101 conditionally releases fresh candidate preparation only. Exact
+packet `34249db...5a33`, five-test contract `3815ef4d...e0b9` and release record
+`3342e097...dfaa` bind fetched source `675891545c881b8d625256ade56fe66ac69fe794`,
+pinned IHK `3114d9e7`, corrected owner `a8c4c9fc...9155` and nine fresh
+`67589154-1` targets. Independent review permits one non-root packet after
+pushed/fetched verification and clean fresh preflight, plus exactly one
+read-only privileged Docker `ps` capture. No build, lease, Docker mutation or
+guest is released. The live nested IHK `21a0d1e` is a clean local-only whitebox
+test change and is excluded by the pinned bare-store checkout. Preserve every
+failure; preparation remains non-runtime/non-acceptance evidence.
