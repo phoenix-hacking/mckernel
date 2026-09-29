@@ -4,7 +4,7 @@ set -Eeuo pipefail
 # Fresh validation-only recovery after the retained copy/correction failures.
 # This packet never repairs or deletes either tree and never builds or acquires
 # a lease. The copy-time inventory, not the corrupt tmpfs tree, is authoritative.
-readonly RELEASE_HASH=RELEASE_HASH_REQUIRED
+readonly RELEASE_HASH=f0a625768a4d10c6bf42794cc502148c5bac6b13683f5c3bb37138a4f922f303
 readonly ROOT=/home/holden/mckernel-work/scratch
 readonly REPO=/home/holden/mckernel
 readonly CANDIDATE="$ROOT/mckernel-exact-candidate-76ae20b5-disk-1"
