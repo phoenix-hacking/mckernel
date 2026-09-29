@@ -149,6 +149,88 @@ class RetentionCapsuleTests(unittest.TestCase):
         os.unlink(os.path.join(self.c, "link")); os.symlink("missing", os.path.join(self.c, "link"))
         with self.assertRaises(InventoryError): build_plan(self.c, self.m, rev)
 
+    def test_dirty_tracked_regular_requires_explicit_policy_and_capsule(self):
+        rev = self._git()
+        with open(os.path.join(self.c, "tracked"), "wb") as out: out.write(b"changed\n")
+        with self.assertRaises(InventoryError): build_plan(self.c, self.m, rev)
+        plan = build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+        row = {(x["root"], x["path"]): x for x in plan["entries"]}[("candidate", "tracked")]
+        self.assertEqual(row["classification"], "capsule-required")
+        self.assertIn("candidate:tracked", plan["capsule_required"])
+
+    def test_dirty_gitlink_and_nested_regular_are_allowed_only_by_policy(self):
+        self._config_git(self.c)
+        ihk = os.path.join(self.c, "ihk")
+        self._config_git(ihk)
+        with open(os.path.join(ihk, "source"), "wb") as out: out.write(b"ihk\n")
+        subprocess.check_call(["git", "-C", ihk, "add", "source"])
+        subprocess.check_call(["git", "-C", ihk, "commit", "-qm", "ihk"])
+        ihk_rev = subprocess.check_output(["git", "-C", ihk, "rev-parse", "HEAD"], universal_newlines=True).strip()
+        subprocess.check_call(["git", "-C", self.c, "add", "ihk"])
+        subprocess.check_call(["git", "-C", self.c, "commit", "-qm", "main"])
+        main_rev = subprocess.check_output(["git", "-C", self.c, "rev-parse", "HEAD"], universal_newlines=True).strip()
+        with open(os.path.join(ihk, "source"), "wb") as out: out.write(b"nested changed\n")
+        with self.assertRaises(InventoryError): build_plan(self.c, self.m, main_rev, ihk_rev)
+        with self.assertRaises(InventoryError):
+            build_plan(self.c, self.m, main_rev, None, allow_dirty_tracked_regular=True)
+        wrong_ihk_rev = "0" * 40
+        with self.assertRaises(InventoryError):
+            build_plan(self.c, self.m, main_rev, wrong_ihk_rev, allow_dirty_tracked_regular=True)
+        with open(os.path.join(ihk, "source"), "wb") as out: out.write(b"nested changed again\n")
+        plan = build_plan(self.c, self.m, main_rev, ihk_rev, allow_dirty_tracked_regular=True)
+        rows = {(x["root"], x["path"]): x for x in plan["entries"]}
+        self.assertEqual(rows[("candidate", "ihk/source")]["classification"], "capsule-required")
+
+    def test_dirty_policy_rejects_staged_regular_changes(self):
+        rev = self._git()
+        with open(os.path.join(self.c, "tracked"), "wb") as out: out.write(b"staged\n")
+        subprocess.check_call(["git", "-C", self.c, "add", "tracked"])
+        with self.assertRaises(InventoryError):
+            build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+
+    def test_content_write_during_git_proof_is_rejected_even_with_restored_stat(self):
+        rev = self._git()
+        path = os.path.join(self.c, "tracked")
+        with open(path, "rb") as source:
+            original = source.read()
+        import scripts.native_exact_candidate_retention_capsule as capsule
+        real_git, changed = capsule._git, [False]
+        def mutate_after_tree(root, args):
+            answer = real_git(root, args)
+            if args[:2] == ["ls-tree", "-rz"] and not changed[0]:
+                changed[0] = True
+                st = os.stat(path)
+                with open(path, "r+b") as out:
+                    out.seek(0); out.write(b"post-walk corruption\n")
+                    out.truncate()
+                os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns))
+            return answer
+        with mock.patch.object(capsule, "_git", side_effect=mutate_after_tree):
+            with self.assertRaises(InventoryError):
+                build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+        with open(path, "wb") as out: out.write(original)
+
+    def test_unchanged_stat_metadata_corruption_is_hashed_and_captured(self):
+        rev = self._git()
+        path = os.path.join(self.c, "tracked")
+        before = os.stat(path)
+        with open(path, "r+b") as out:
+            out.seek(0); out.write(b"corrupt")
+        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+        plan = build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+        row = {(x["root"], x["path"]): x for x in plan["entries"]}[("candidate", "tracked")]
+        self.assertEqual(row["classification"], "capsule-required")
+
+    def test_dirty_policy_still_rejects_deleted_regular_and_symlink_drift(self):
+        rev = self._git()
+        os.unlink(os.path.join(self.c, "tracked"))
+        with self.assertRaises(InventoryError):
+            build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+        with open(os.path.join(self.c, "tracked"), "wb") as out: out.write(b"stable\n")
+        os.symlink("missing", os.path.join(self.c, "link"))
+        with self.assertRaises(InventoryError):
+            build_plan(self.c, self.m, rev, allow_dirty_tracked_regular=True)
+
     def test_special_and_cross_root_hardlink_rejected(self):
         os.mkfifo(os.path.join(self.c, "fifo"))
         with self.assertRaises(InventoryError): build_plan(self.c, self.m)

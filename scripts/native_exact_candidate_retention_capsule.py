@@ -190,13 +190,68 @@ def _tree_path(path):
     return bool(path) and not path.startswith(b"/") and all(x not in (b"", b".", b"..") for x in path.split(b"/"))
 
 
-def _git_tree(root, revision, prefix=""):
+def _git_status_paths(root, tree, prefix, allow_dirty, allow_dirty_gitlink=False):
+    """Validate worktree dirt without weakening the committed-tree proof.
+
+    Only tracked regular files may be content-dirty.  A main repository's
+    ``ihk`` gitlink is also allowed to be dirty because its nested repository
+    is checked independently.  Deletions, type changes, symlink changes and
+    all other tracked changes remain fail-closed; coverage and exact symlink
+    checks below provide the second line of defence.
+    """
+    raw = _git(root, ["status", "--porcelain=v1", "-z", "--untracked-files=no"])
+    if not raw:
+        return
+    if not allow_dirty:
+        raise InventoryError("Git repository is not clean: " + root)
+    pos = 0
+    while pos < len(raw):
+        if pos + 3 > len(raw):
+            raise InventoryError("malformed Git status record")
+        status = raw[pos:pos + 2]
+        pos += 2
+        if pos < len(raw) and raw[pos:pos + 1] == b" ":
+            pos += 1
+        end = raw.find(b"\0", pos)
+        if end < 0:
+            raise InventoryError("unterminated Git status record")
+        path_raw = raw[pos:end]
+        pos = end + 1
+        if status[0:1] in (b"R", b"C"):
+            end = raw.find(b"\0", pos)
+            if end < 0:
+                raise InventoryError("unterminated Git rename record")
+            # Renames/copies are never an allowed regular-file modification:
+            # the old/new coverage and exact tree path checks must reject them.
+            raise InventoryError("tracked rename/copy is not permitted")
+        try:
+            rel = os.fsdecode(path_raw)
+        except UnicodeError:
+            raise InventoryError("invalid Git status path")
+        if not _tree_path(path_raw):
+            raise InventoryError("unsafe Git status path")
+        path = prefix + rel
+        value = tree.get(path)
+        if value is None:
+            raise InventoryError("Git status path is not in committed tree: " + path)
+        if value["mode"] in (0o100644, 0o100755):
+            # A tracked regular modification is retained as capsule-required
+            # if its descriptor walk finds it and its blob differs.
+            if status != b" M":
+                raise InventoryError("staged tracked change is not permitted: " + path)
+            continue
+        if (value["mode"] == 0o160000 and path == "ihk" and
+                allow_dirty_gitlink and status == b" M"):
+            continue
+        raise InventoryError("only unstaged tracked regular files may be dirty: " + path)
+
+
+def _git_tree(root, revision, prefix="", allow_dirty=False, allow_dirty_gitlink=False):
     if not revision: return {}, None
     fmt = _git(root, ["rev-parse", "--show-object-format"]).decode("ascii", "strict").strip()
     if fmt not in ("sha1", "sha256"): raise InventoryError("unsupported Git object format: " + fmt)
     head = _git(root, ["rev-parse", "--verify", "HEAD^{commit}"]).decode("ascii", "strict").strip()
     if not _valid_oid(head, fmt) or revision != head: raise InventoryError("Git repository is not requested exact HEAD: " + root)
-    if _git(root, ["status", "--porcelain", "--untracked-files=no"]): raise InventoryError("Git repository is not clean: " + root)
     raw = _git(root, ["ls-tree", "-rz", "-r", head])
     result, raw_paths = {}, set()
     for record in raw.split(b"\0"):
@@ -216,6 +271,7 @@ def _git_tree(root, revision, prefix=""):
         rel = prefix + rel0
         if path in raw_paths or rel in result: raise InventoryError("duplicate/colliding Git tree path")
         raw_paths.add(path); result[rel] = {"mode": mode, "type": typ, "oid": oid, "format": fmt}
+    _git_status_paths(root, result, prefix, allow_dirty, allow_dirty_gitlink)
     return result, fmt
 
 
@@ -238,7 +294,8 @@ def _revalidate_root(path, expected, label):
         raise InventoryError("root changed during combined inventory: " + label)
 
 
-def build_plan(candidate_root, metadata_root, main_revision=None, ihk_revision=None):
+def build_plan(candidate_root, metadata_root, main_revision=None, ihk_revision=None,
+               allow_dirty_tracked_regular=False):
     candidate_root, metadata_root = os.path.abspath(candidate_root), os.path.abspath(metadata_root)
     if _path_overlap(candidate_root, metadata_root): raise InventoryError("roots must not contain or alias one another")
     if ihk_revision and not main_revision: raise InventoryError("IHK revision requires main revision")
@@ -248,8 +305,11 @@ def build_plan(candidate_root, metadata_root, main_revision=None, ihk_revision=N
     seen = set()
     candidate_ident, candidate_entries, candidate_before = _walk(candidate_root, "candidate", seen)
     metadata_ident, metadata_entries, metadata_before = _walk(metadata_root, "metadata-backup", seen)
-    main_tree, main_fmt = _git_tree(candidate_root, main_revision)
-    ihk_tree, _ = _git_tree(os.path.join(candidate_root, "ihk"), ihk_revision, "ihk/") if ihk_revision else ({}, None)
+    main_tree, main_fmt = _git_tree(candidate_root, main_revision, "", allow_dirty_tracked_regular,
+                                    bool(ihk_revision))
+    ihk_tree, _ = (_git_tree(os.path.join(candidate_root, "ihk"), ihk_revision, "ihk/",
+                             allow_dirty_tracked_regular)
+                   if ihk_revision else ({}, None))
     if ihk_revision:
         expected = {"mode": 0o160000, "type": "commit", "oid": ihk_revision, "format": main_fmt}
         if main_tree.get("ihk") != expected: raise InventoryError("main IHK gitlink does not bind requested IHK revision")
@@ -260,6 +320,16 @@ def build_plan(candidate_root, metadata_root, main_revision=None, ihk_revision=N
     # Git proof is an external reader, so prove both roots stayed stable after it.
     _revalidate_root(candidate_root, candidate_before, "candidate")
     _revalidate_root(metadata_root, metadata_before, "metadata-backup")
+    # Root stat checks do not detect an in-place regular-file write.  Repeat
+    # the complete descriptor/hash walk after Git proof and require byte-for-
+    # byte equality with the original snapshot before classifying anything.
+    seen_after = set()
+    candidate_ident_after, candidate_entries_after, candidate_after = _walk(candidate_root, "candidate", seen_after)
+    metadata_ident_after, metadata_entries_after, metadata_after = _walk(metadata_root, "metadata-backup", seen_after)
+    if (candidate_ident_after, candidate_entries_after, candidate_after) != (candidate_ident, candidate_entries, candidate_before):
+        raise InventoryError("candidate member changed during combined inventory")
+    if (metadata_ident_after, metadata_entries_after, metadata_after) != (metadata_ident, metadata_entries, metadata_before):
+        raise InventoryError("metadata-backup member changed during combined inventory")
     active = {r["path"]: r for r in candidate_entries if not _is_metadata(r["path"])}
     tracked_links = {p for p, v in tree.items() if v["mode"] == 0o120000}
     actual_links = {p for p, r in active.items() if r["type"] == "symlink"}
@@ -341,11 +411,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate-root", required=True); parser.add_argument("--metadata-backup-root", required=True)
     parser.add_argument("--main-revision", "--main-commit", dest="main_revision"); parser.add_argument("--ihk-revision", "--ihk-commit", dest="ihk_revision")
+    parser.add_argument("--allow-dirty-tracked-regular", action="store_true",
+                        help="allow tracked regular content changes; classify them as capsule-required")
     parser.add_argument("--output", required=True); args = parser.parse_args(argv)
     output = os.path.abspath(args.output)
     for root in (os.path.abspath(args.candidate_root), os.path.abspath(args.metadata_backup_root)):
         if _path_overlap(root, output): raise InventoryError("output must not contain, be inside, or alias an input root")
-    write_atomic(output, build_plan(args.candidate_root, args.metadata_backup_root, args.main_revision, args.ihk_revision)); return 0
+    write_atomic(output, build_plan(args.candidate_root, args.metadata_backup_root, args.main_revision,
+                                    args.ihk_revision, args.allow_dirty_tracked_regular)); return 0
 
 
 if __name__ == "__main__":
