@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.native-exact-retirement-704f-template-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_DRAFT_SOURCE_REVIEW_ONLY",
+  "retention_preparation": {
+    "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+    "release_commit": "abc5d67afd6ec2c3dc6d96083db90638ac944efc",
+    "inventory_sha256": "4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1",
+    "capsule_sha256": "b6c85e40cbe7782fa3f1652d43d314091bb25fbf3777312c7d455390d42ecec1",
+    "success_record_sha256": "be700dd5335fdde0d33c0096a865cf6326cb9c72a99a983ec3764f99e7eeed4d",
+    "raw_archive_sha256": "b06ce4f41174a37e161da640d4e4e8f04dbf0511f38f5baea607a4ea0ef2cd72",
+    "entries": 10609,
+    "archive_members": 924,
+    "tracked_links": 49,
+    "main_objects": 7728,
+    "ihk_objects": 1296,
+    "canonical_bytes": 9054576822
+  },
+  "retirement_template": {
+    "packet": "docs/verification/evidence/native-exact-candidate-retirement-704f6654-1.py",
+    "packet_sha256": "51d7c6d0f4a7aa915ad9e68ffde2c7ed655d8053c8be5ceffe32178c03aee215",
+    "packet_tests": "scripts/tests/test_native_exact_candidate_retirement_704f6654.py",
+    "packet_tests_sha256": "2e6e4e5802303e65ff565deb49fcd7514940fb026e5f6c0e5657ac70e6083f75",
+    "helper": "scripts/native_exact_candidate_retire_704f.py",
+    "helper_sha256": "4631190894a214821f02142670a2ce6f77058dc7fae986c0f6295214c705c517",
+    "helper_tests": "scripts/tests/test_native_exact_candidate_retire_704f.py",
+    "helper_tests_sha256": "404dc83f6b3881141513040e7adadace3f84e90c0536fd36eef4ae2be47099c1",
+    "release_sentinel": "RELEASE_HASH_REQUIRED",
+    "execution_released": false
+  },
+  "failure_lineage": {
+    "rejected_packet_sha256": "19f598b39fb176c2a3fe345ce4ac0608660be34c2f4d09ec59195986a05d5f6d",
+    "rejected_tests_sha256": "88e97ff35568f89753581286c03f0844da9c40b903ffb6c0606125722c193da4",
+    "findings": [
+      "stale prior-candidate Docker identities would reject the preserved 704f terminal container after quarantine",
+      "declared 704f build-failure evidence was not consumed by admission"
+    ],
+    "corrections": [
+      "additive helper validates the exact four 704f terminal container inspect records and rejects every unknown protected-tree mount",
+      "packet admission checks the failure record, failure archive and shutdown checkpoint hashes before euid, output or tombstone activity"
+    ]
+  },
+  "tests": {
+    "python39": "PASS 121",
+    "python38": "PASS 121",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "generic_helper_unchanged_sha256": "704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b"
+  },
+  "independent_review": {
+    "status": "PASS_SOURCE_ONLY",
+    "prior_findings_closed": true,
+    "execution_authority": false,
+    "limitations": "no retirement packet, privileged mutation or Docker operation executed; separately reviewed mechanical release and fresh full preflight remain mandatory"
+  },
+  "acceptance": {
+    "retirement": false,
+    "kernel_build": false,
+    "runtime": false,
+    "guest": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "commit/push/fetch this exact DRAFT template and retained preparation evidence, then mechanically generate a two-path retirement release and obtain separate execution review"
+}

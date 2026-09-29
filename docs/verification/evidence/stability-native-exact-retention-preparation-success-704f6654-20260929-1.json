@@ -1,0 +1,130 @@
+{
+  "schema": "native-exact-retention-preparation-success-v1",
+  "recorded_at_utc": "2026-09-29T14:29:03Z",
+  "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+  "release_commit": "abc5d67afd6ec2c3dc6d96083db90638ac944efc",
+  "packet_sha256": "77d91e63ab9e4e91a3d94061a450a07ec281bf0d11747f84da42b1dc6606cc9d",
+  "release_sha256": "5615dfacca55d67bd41cfaf28a0432b4349a5372ea2d17b78348c149f5d2064a",
+  "command_exit_status": 0,
+  "artifacts": {
+    "inventory": {
+      "path": "docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json",
+      "sha256": "4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1",
+      "size": 5268390
+    },
+    "capsule": {
+      "path": "docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.tar",
+      "sha256": "b6c85e40cbe7782fa3f1652d43d314091bb25fbf3777312c7d455390d42ecec1",
+      "size": 11612160,
+      "members": 924
+    },
+    "receipt": {
+      "source_path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-704f6654-1/receipt.json",
+      "sha256": "c595b973f6bc602a093217bf0aa6c7e45f84b0f3f216e000797de9873ec95318",
+      "size": 1207
+    },
+    "postflight_manifest": {
+      "source_path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-704f6654-1/postflight-manifest.json",
+      "sha256": "4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1",
+      "size": 5268390
+    },
+    "raw_archive": {
+      "path": "docs/verification/evidence/stability-native-exact-retention-preparation-success-raw-704f6654-20260929-1.tar.gz",
+      "sha256": "b06ce4f41174a37e161da640d4e4e8f04dbf0511f38f5baea607a4ea0ef2cd72",
+      "size": 7492564,
+      "members": 35
+    }
+  },
+  "inventory": {
+    "entries": 10609,
+    "capsule_required": 918,
+    "reconstructible": 9691,
+    "tracked_links": 49,
+    "canonical_objects": 9024,
+    "canonical_bytes": 9054576822,
+    "main_objects": 7728,
+    "main_bytes": 9049219104,
+    "ihk_objects": 1296,
+    "ihk_bytes": 5357718,
+    "main_commit": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+  },
+  "workers": [
+    {
+      "role": "planner",
+      "pid": 3893811,
+      "starttime": 90191746,
+      "pgid": 3893811,
+      "exit": 0,
+      "retired": true
+    },
+    {
+      "role": "archive",
+      "pid": 3894238,
+      "starttime": 90193774,
+      "pgid": 3894238,
+      "exit": 0,
+      "retired": true
+    },
+    {
+      "role": "postflight_planner",
+      "pid": 3894258,
+      "starttime": 90194657,
+      "pgid": 3894258,
+      "exit": 0,
+      "retired": true
+    },
+    {
+      "role": "packet",
+      "pid": 3893798,
+      "starttime": 90191735,
+      "exit": 0,
+      "retired": true
+    },
+    {
+      "role": "supervisor",
+      "pid": 3893796,
+      "starttime": 90191735,
+      "exit": 0,
+      "retired": true
+    }
+  ],
+  "postflight": {
+    "manifest_byte_identical": true,
+    "claim_absent": true,
+    "lease_absent": true,
+    "build_lease_absent": true,
+    "partial_outputs_absent": true,
+    "candidate_identity_preserved": "26/36767",
+    "metadata_backup_identity_preserved": "26/47413",
+    "capacity_floors_pass": true,
+    "docker_census_sha256": "b5f12da61db67f83f8fdcd5603b7884e785a999f6550cac6c0a36b9d9b8c819c",
+    "all_17_container_ids_preserved": true
+  },
+  "independent_review": {
+    "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+    "archive_exact_ustar_reconstruction": true,
+    "live_entries_verified": 10609,
+    "canonical_reconstructible_blobs_verified": 9024,
+    "main_blobs": 7728,
+    "ihk_blobs": 1296
+  },
+  "restoration_dependencies": [
+    {
+      "path": "/home/holden/mckernel/.git",
+      "commit": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+      "required": true
+    },
+    {
+      "path": "/home/holden/mckernel/.git/modules/ihk",
+      "commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "required": true
+    }
+  ],
+  "limitations": [
+    "The capsule is intentionally not standalone because candidate Git metadata omits most reconstructible blobs.",
+    "No extraction or restoration replay was executed.",
+    "No retirement, build, guest, application or acceptance action is authorized by this result."
+  ],
+  "next_action": "Bind this exact result, inventory and capsule into the independently reviewed retirement DRAFT, checkpoint and fetched-blob verify it, then create a separate acyclic privileged retirement release."
+}

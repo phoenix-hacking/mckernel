@@ -1,6 +1,29 @@
 # Compact dispatcher handoff
 
-## Latest continuation: checkpoint 149
+## Latest continuation: checkpoint 152
+
+Checkpoint 151 supersedes the storage-bridge status. Retention preparation now
+PASSes independent evidence review: inventory `4067c653...61b8e1`, capsule
+`b6c85e40...ecec1`, success record `be700dd5...eed4d`, 10,609 live entries,
+924 capsule members, 49 links and 9,024 canonical objects. All workers retired;
+candidate/backup remain 26/36767 and 26/47413; claims/leases are absent.
+
+The first bound retirement DRAFT was independently BLOCKed on stale Docker IDs
+and unenforced failure artifacts. Corrected DRAFT `51d7c6d0...ee215`, additive
+helper `46311908...c517` and their tests pass 121 cases under Python 3.8/3.9;
+independent rereview PASSes source only. The exact four 704f terminal candidate
+users and preserved build-failure artifacts are now enforced. The release
+sentinel remains, so no retirement is authorized.
+
+Next fetched-verify this template checkpoint, mechanically create the two-path
+retirement release, obtain separate execution review and complete all fresh
+privileged preflight gates. Only after accepted retirement may tmpfs capacity be
+used for a wholly fresh commit-derived build candidate. Counts remain unchanged.
+The launcher shutdown leaves every child terminal and no heavy operation active;
+preserve wrapper/worker/server identities 3399308/83682487,
+3399313/83682494 and 3399317/83682500. The release sentinel remains authoritative,
+the OS is incomplete, and a later launcher invocation may continue from this
+temporary pause.
 
 Checkpoint 150 adds the required storage bridge. Fresh candidate preparation
 needs retirement of consumed `704f6654-1`, but retirement cannot precede an

@@ -7582,3 +7582,67 @@ retirement release. Record
 `stability-native-exact-retention-704f-template-success-20260929-1.json`
 preserves this scope. Formal counters remain unchanged, successful builds remain
 zero and no real guest application has run in this work window.
+
+Continuation checkpoint 151, 2026-09-29: fetched release `abc5d67a...44efc`
+authorized one ordinary-user retention-preparation run. An outer supervisor
+preflight first rejected an incorrectly expanded abbreviated packet hash before
+creating any path or invoking the packet; the corrected full hash then ran once.
+Supervisor 3893796/90191735, packet 3893798/90191735 and planner/archive/
+postflight workers 3893811/90191746, 3894238/90193774 and 3894258/90194657
+all exited 0 and are absent with no group/session survivors.
+
+Independent result review PASSes 10,609 live entries, byte-identical original
+and postflight inventories `4067c653...61b8e1`, exact 924-member USTAR capsule
+`b6c85e40...ecec1`, 49 reconstructible links and canonical streaming of 7,728
+main plus 1,296 IHK objects totaling 9,054,576,822 bytes. Candidate/backup
+identities remain 26/36767 and 26/47413; claims, leases and partial files are
+absent. Fresh postflight Docker evidence preserves all 17 IDs and the four
+terminal containers referencing the candidate. Raw evidence archive
+`stability-native-exact-retention-preparation-success-raw-704f6654-20260929-1.tar.gz`
+has SHA256 `b06ce4f4...2cd72`. This capsule depends on the canonical Git stores;
+no extraction replay or retirement follows from it.
+
+Full retirement-template review then BLOCKed rejected packet
+`19f598b3...d5f6d`: it retained prior-candidate Docker IDs and declared but did
+not read the preserved 704f build-failure artifacts. The additive correction
+keeps generic helper `704a3f5f...df54b` unchanged. New 704f helper
+`46311908...c517` validates exact full Config/HostConfig/State/Mounts for the
+four terminal candidate users and rejects every unknown protected-tree mount.
+Packet admission now checks the failure record, archive and shutdown checkpoint
+hashes before euid, output or tombstone activity. Corrected packet
+`51d7c6d0...ee215` and tests `2e6e4e58...83f75` bind the accepted retention
+artifacts and exact 7,728/1,296 routing. Python 3.8 and 3.9 each pass 121 tests;
+independent rereview PASSes source only. `RELEASE_HASH_REQUIRED` remains.
+
+Next commit/push/fetch this exact DRAFT template and retained evidence, then
+mechanically generate a retirement release changing only the packet sentinel
+plus one release JSON. Obtain separate exact execution review and fresh complete
+root/member/object, Docker, observer, lease, namespace, immutable-filesystem and
+resource preflight before any one-shot `sudo -A` invocation. No retirement,
+new build, guest, application or formal counter advance has occurred; real guest
+applications this work window remain zero.
+
+Shutdown checkpoint 152, 2026-09-29: new dispatch stopped on the launcher
+shutdown request. Every child lane is terminal and no bounded operation, heavy
+build, guest or lease remains active. Preserve launcher wrapper 3399308/83682487,
+worker 3399313/83682494 and app-server 3399317/83682500. The completed
+retention-preparation process identities remain supervisor 3893796/90191735,
+packet 3893798/90191735, planner 3893811/90191746, archive
+3894238/90193774 and postflight 3894258/90194657; all exited 0 and are absent.
+
+Candidate `704f6654-1` and its metadata backup remain untouched at device/inode
+26/36767 and 26/47413. Terminal build container `68881c05...927a6` remains
+exited 1, PID 0, non-OOM with restart disabled. Host, scratch and tmpfs available
+bytes at shutdown are 23,548,321,792, 21,533,806,592 and 7,502,585,856;
+MemAvailable is 19,383,656 KiB. The retirement packet still contains
+`RELEASE_HASH_REQUIRED`, so no privileged retirement is authorized.
+
+The next authorized invocation must first reconcile those identities and exact
+retained hashes. Then fetch-verify this checkpoint, generate only the mechanical
+two-path retirement release, obtain separate execution review, and repeat the
+complete live preflight before considering its one-shot `sudo -A` execution.
+Only accepted retirement may unlock a wholly fresh commit-derived candidate.
+Never rerun the consumed `704f6654-1` build request. Formal counters remain
+unchanged, successful current-candidate builds remain zero, real guest apps this
+window remain zero, and the OS remains incomplete; this launcher pause is
+temporary.

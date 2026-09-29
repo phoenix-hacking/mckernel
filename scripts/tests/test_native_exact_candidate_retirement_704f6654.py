@@ -17,11 +17,16 @@ class T(unittest.TestCase):
   self.ioc=mock.patch.object(M.fcntl,'ioctl',side_effect=ioctl);self.ioc.start()
  def tearDown(self):self.ioc.stop();M.RELEASE_SHA256,M.HELPER_SHA256,M.OBSERVER_SHA256,M.ARCHIVE_SHA256,M.HELPER_TEST_SHA256,M.OBSERVER_TEST_SHA256,M.INV_SHA,M.CAP_SHA,M.SUCCESS_SHA,M.BUILD_LEASE=self.old
  def final(self):M.RELEASE_SHA256=M.HELPER_SHA256=M.OBSERVER_SHA256=M.ARCHIVE_SHA256=M.HELPER_TEST_SHA256=M.OBSERVER_TEST_SHA256=M.INV_SHA=M.CAP_SHA=M.SUCCESS_SHA='a'*64
- def test_missing_retention_bindings_are_explicit_draft_sentinels(self):
+ def test_retention_and_observer_bindings_are_exact_but_release_stays_draft(self):
+  self.assertEqual(M.INVENTORY.name,'stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json')
+  self.assertEqual(M.CAPSULE.name,'stability-native-exact-candidate-retention-704f6654-20260929-1.tar')
+  self.assertEqual(M.SUCCESS.name,'stability-native-exact-retention-preparation-success-704f6654-20260929-1.json')
+  self.assertEqual(M.INV_SHA,'4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1')
+  self.assertEqual(M.CAP_SHA,'b6c85e40cbe7782fa3f1652d43d314091bb25fbf3777312c7d455390d42ecec1')
+  self.assertEqual(M.SUCCESS_SHA,'be700dd5335fdde0d33c0096a865cf6326cb9c72a99a983ec3764f99e7eeed4d')
+  self.assertEqual(M.OBSERVER_TEST.name,'test_native_exact_candidate_live_reference_observer_67589154.py')
+  self.assertEqual(M.OBSERVER_TEST_SHA256,'b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4')
   self.assertEqual(M.RELEASE_SHA256,'RELEASE_HASH_REQUIRED')
-  self.assertTrue(M.INV_SHA.endswith('_REQUIRED'))
-  self.assertTrue(M.CAP_SHA.endswith('_REQUIRED'))
-  self.assertTrue(M.SUCCESS_SHA.endswith('_REQUIRED'))
   with self.assertRaisesRegex(M.Error,'DRAFT_NOT_RELEASED'): M.draft_guard()
  def test_consumed_failure_inputs_are_exactly_bound(self):
   self.assertEqual(M.FAILURE_RECORD_SHA,'9ce279484127f50d309cdabc50daf36517de8a37c737014056a117dc3ccd89bb')
@@ -331,6 +336,7 @@ class T(unittest.TestCase):
   def row(path,identity,q,members):return {'path':path,'root':identity,'parent':parent,'members':members,'quarantine_name':q,'quarantine_uid':0,'quarantine_gid':0,'quarantine_mode':0o700}
   entry={'root':'candidate','path':'member','type':'directory','uid':1000,'gid':1000,'mode':0o755,'size':0}
   r={'schema':'mckernel.ordinary-retirement-release.v1','status':'PASS_ONE_SHOT_RETIRE','one_shot':True,'retry':False,'rollback':False,'main_commit':M.MAIN,'ihk_commit':M.IHK,'candidate':M.CANDIDATE,'metadata_backup':M.BACKUP,'inventory_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'success_sha256':M.SUCCESS_SHA,'source_hashes':{'helper':M.HELPER_SHA256,'observer':M.OBSERVER_SHA256,'archive':M.ARCHIVE_SHA256,'helper_test':M.HELPER_TEST_SHA256,'observer_test':M.OBSERVER_TEST_SHA256},'roots':[row(M.CANDIDATE,root,M.QUARANTINES[0].rsplit('/',1)[1],[member]),row(M.BACKUP,backup,M.QUARANTINES[1].rsplit('/',1)[1],[])],'sealed':{'retention_manifest_sha256':M.INV_SHA,'retention_manifest_pushed_sha256':M.INV_SHA,'retention_manifest_fetched_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'capsule_pushed_sha256':M.CAP_SHA,'capsule_fetched_sha256':M.CAP_SHA,'retention_manifest_path':str(M.INVENTORY),'capsule_path':str(M.CAPSULE)},'observer':{'observer_sha256':M.OBSERVER_SHA256,'boot_id':'b'},'docker':{'terminal':{'id':'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9'},'terminal_containers':{}},'boot_id':'b','launcher_identities':[{'pid':1,'starttime':1}],'operational_exclusion':str(M.BUILD_LEASE),'exclusion_tombstone':{'path':str(M.BUILD_LEASE),'immutable':True,'schema':'mckernel.retirement-build-owner-exclusion.v2','parent_uid':1000,'parent_gid':1000,'parent_mode':0o700,'filesystem_device':1},'conflict_basenames':list(M.CONFLICT_BASENAMES),'heavy_lease_paths':[str(M.BUILD_LEASE)],'resource_floors':M.FLOORS,'output_dir':str(M.EVIDENCE_DIR),'evidence_namespace':{'parent':'/dev/shm','name':M.EVIDENCE_DIR.name,'device':1,'uid':0,'gid':0,'mode':0o1777,'sticky':True},'template':{},'finalization':{}}
+  r['docker']['terminal']['id']='68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6';r['docker']['terminal_containers']={i:{} for i in ('68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6','d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44','bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2','e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e')}
   inv={'roots':[{'name':'candidate','path':M.CANDIDATE,'identity':{'dev':26,'inode':25166,'uid':1000,'gid':1000,'mode':0o755}},{'name':'metadata-backup','path':M.BACKUP,'identity':{'dev':26,'inode':35798,'uid':1000,'gid':1000,'mode':0o755}}],'entries':[entry]}
   with mock.patch.object(M,'mechanical'),mock.patch.object(M,'canonical_stores'),mock.patch.object(M,'verify_inventory'):
    M.validate_release(r,'f',inv)
@@ -349,7 +355,7 @@ class T(unittest.TestCase):
     inv=h.inventory_root(p);rows.append({'path':str(p),'root':inv['root'],'parent':h.root_identity(p.parent),'members':inv['members'],'quarantine_name':q,'quarantine_uid':0,'quarantine_gid':0,'quarantine_mode':0o700});i=inv['root'];mroots.append({'name':name,'path':str(p),'identity':{'dev':i['device'],'inode':i['inode'],'uid':i['uid'],'gid':i['gid'],'mode':i['mode']}})
    build=Path(d)/'build';old=(M.CANDIDATE,M.BACKUP,M.QUARANTINES,M.BUILD_LEASE);M.CANDIDATE,M.BACKUP,M.QUARANTINES,M.BUILD_LEASE=str(paths[0]),str(paths[1]),(str(Path(d)/'.qc'),str(Path(d)/'.qb')),build
    try:
-    release={'schema':'mckernel.ordinary-retirement-release.v1','status':'PASS_ONE_SHOT_RETIRE','one_shot':True,'retry':False,'rollback':False,'main_commit':M.MAIN,'ihk_commit':M.IHK,'candidate':M.CANDIDATE,'metadata_backup':M.BACKUP,'inventory_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'success_sha256':M.SUCCESS_SHA,'source_hashes':{'helper':M.HELPER_SHA256,'observer':M.OBSERVER_SHA256,'archive':M.ARCHIVE_SHA256,'helper_test':M.HELPER_TEST_SHA256,'observer_test':M.OBSERVER_TEST_SHA256},'roots':rows,'sealed':{'retention_manifest_sha256':M.INV_SHA,'retention_manifest_pushed_sha256':M.INV_SHA,'retention_manifest_fetched_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'capsule_pushed_sha256':M.CAP_SHA,'capsule_fetched_sha256':M.CAP_SHA,'retention_manifest_path':str(M.INVENTORY),'capsule_path':str(M.CAPSULE)},'observer':{'observer_sha256':M.OBSERVER_SHA256,'boot_id':'b'},'docker':{'terminal':{'id':'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9'},'terminal_containers':{}},'boot_id':'b','launcher_identities':[{'pid':1,'starttime':1}],'operational_exclusion':str(build),'exclusion_tombstone':self.tomb(build),'conflict_basenames':list(M.CONFLICT_BASENAMES),'heavy_lease_paths':[str(build)],'resource_floors':M.FLOORS,'output_dir':str(M.EVIDENCE_DIR),'template':{},'finalization':{}}
+    release={'schema':'mckernel.ordinary-retirement-release.v1','status':'PASS_ONE_SHOT_RETIRE','one_shot':True,'retry':False,'rollback':False,'main_commit':M.MAIN,'ihk_commit':M.IHK,'candidate':M.CANDIDATE,'metadata_backup':M.BACKUP,'inventory_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'success_sha256':M.SUCCESS_SHA,'source_hashes':{'helper':M.HELPER_SHA256,'observer':M.OBSERVER_SHA256,'archive':M.ARCHIVE_SHA256,'helper_test':M.HELPER_TEST_SHA256,'observer_test':M.OBSERVER_TEST_SHA256},'roots':rows,'sealed':{'retention_manifest_sha256':M.INV_SHA,'retention_manifest_pushed_sha256':M.INV_SHA,'retention_manifest_fetched_sha256':M.INV_SHA,'capsule_sha256':M.CAP_SHA,'capsule_pushed_sha256':M.CAP_SHA,'capsule_fetched_sha256':M.CAP_SHA,'retention_manifest_path':str(M.INVENTORY),'capsule_path':str(M.CAPSULE)},'observer':{'observer_sha256':M.OBSERVER_SHA256,'boot_id':'b'},'docker':{'terminal':{'id':'68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6'},'terminal_containers':{i:{} for i in ('68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6','d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44','bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2','e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e')}},'boot_id':'b','launcher_identities':[{'pid':1,'starttime':1}],'operational_exclusion':str(build),'exclusion_tombstone':self.tomb(build),'conflict_basenames':list(M.CONFLICT_BASENAMES),'heavy_lease_paths':[str(build)],'resource_floors':M.FLOORS,'output_dir':str(M.EVIDENCE_DIR),'template':{},'finalization':{}}
     release['evidence_namespace']={'parent':'/dev/shm','name':M.EVIDENCE_DIR.name,'device':1,'uid':0,'gid':0,'mode':0o1777,'sticky':True}
     inv={'roots':mroots,'entries':[]}
     with mock.patch.object(M,'mechanical'),mock.patch.object(M,'canonical_stores'),mock.patch.object(M,'verify_inventory'):M.validate_release(release,'f',inv)
@@ -371,7 +377,7 @@ class T(unittest.TestCase):
    with self.assertRaisesRegex(M.Error,'resource floor'):M.live_gate(r,mock.Mock(),mock.Mock())
  def test_fresh_output_and_release_sentinel(self):
   with self.assertRaises(M.Error):M.fresh_output({'output_dir':'/tmp/no'})
-  self.assertEqual(M.HELPER_SHA256,'704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b')
+  self.assertEqual(M.HELPER_SHA256,'4631190894a214821f02142670a2ce6f77058dc7fae986c0f6295214c705c517')
   self.assertEqual(M.HELPER_SHA256,M.sha(M.HELPER.read_bytes()));self.assertEqual(M.HELPER_TEST_SHA256,M.sha(M.HELPER_TEST.read_bytes()))
   self.assertEqual(M.OBSERVER_SHA256,'3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666')
   self.assertEqual(PACKET.read_bytes().count(b"RELEASE_SHA256='RELEASE_HASH_REQUIRED'"),1)
@@ -735,17 +741,21 @@ class T(unittest.TestCase):
   common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000}
   regular=dict(common,type='regular',path='main-file',size=3,sha256=hashlib.sha256(b'abc').hexdigest(),git_oids={'sha1':'0'*40,'sha256':'1'*64})
   link=dict(common,type='symlink',path='ihk/link',size=3,target='abc',git_oids={'sha1':'2'*40,'sha256':'3'*64})
-  entries=[dict(regular,path='main-%d'%i) for i in range(7715)]+[dict(link,path='ihk/link-%d'%i) for i in range(1296)]
+  entries=[dict(regular,path='main-%d'%i) for i in range(7728)]+[dict(link,path='ihk/link-%d'%i) for i in range(1296)]
   with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries})
-  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7715,1296])
+  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7728,1296])
   bad=dict(link,target='\udcff')
   with self.assertRaises(M.Error):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries[:-1]+[bad]})
   streams.assert_has_calls([])
   capsule=dict(regular,classification='capsule-required',path='capsule-large',size=M.MAX_FILE+1)
   with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[capsule]})
-  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7715,1296])
+  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7728,1296])
   with self.assertRaisesRegex(M.Error,'inventory metadata'):
    M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[dict(capsule,size=M.MAX_BLOB+1)]})
+  for wrong in (entries[:-1], entries+[dict(regular,path='main-extra')]):
+   with mock.patch.object(M,'stream_store') as streams:
+    with self.assertRaisesRegex(M.Error,'canonical object routing/count'):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':wrong})
+    streams.assert_not_called()
  def test_inventory_rejects_malformed_digest_oid_and_record_shape_before_spawn(self):
   common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000,'type':'regular','path':'x','size':3,'sha256':'a'*64,'git_oids':{'sha1':'0'*40,'sha256':'1'*64}}
   for change in (dict(common,sha256='bad'),dict(common,git_oids={'sha1':'bad','sha256':'1'*64}),dict(common,extra=1),dict(common,size=-1)):

@@ -18,13 +18,10 @@ RELEASE_SHA256='RELEASE_HASH_REQUIRED'
 MAIN='704f6654fe95819f7dfd0e4d3665dc44fab63561'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-704f6654-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-704f6654-1'
 QUARANTINES=('/dev/shm/.mckernel-retirement-candidate-704f6654-1','/dev/shm/.mckernel-retirement-metadata-backup-704f6654-1')
-INVENTORY=SOURCE/'docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-REQUIRED.inventory.json'
-CAPSULE=SOURCE/'docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-REQUIRED.tar'
-SUCCESS=SOURCE/'docs/verification/evidence/stability-native-exact-retention-preparation-success-704f6654-REQUIRED.json'
-# No retention inventory/capsule/preparation-success record exists yet for this
-# failed 704f6654-1 attempt. These sentinels intentionally fail closed until
-# an independently reviewed archive supplies exact bindings.
-INV_SHA='RETENTION_INVENTORY_HASH_REQUIRED'; CAP_SHA='RETENTION_CAPSULE_HASH_REQUIRED'; SUCCESS_SHA='RETENTION_SUCCESS_HASH_REQUIRED'
+INVENTORY=SOURCE/'docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json'
+CAPSULE=SOURCE/'docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.tar'
+SUCCESS=SOURCE/'docs/verification/evidence/stability-native-exact-retention-preparation-success-704f6654-20260929-1.json'
+INV_SHA='4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1'; CAP_SHA='b6c85e40cbe7782fa3f1652d43d314091bb25fbf3777312c7d455390d42ecec1'; SUCCESS_SHA='be700dd5335fdde0d33c0096a865cf6326cb9c72a99a983ec3764f99e7eeed4d'
 # Immutable source-bound failure inputs for the consumed phase-0 attempt. The
 # retention inventory/capsule above remain separate required prerequisites.
 FAILURE_RECORD=SOURCE/'docs/verification/stability-native-exact-build-704f6654-failure-20260929-1.json'
@@ -33,10 +30,10 @@ FAILURE_CHECKPOINT=SOURCE/'docs/verification/stability-shutdown-checkpoint-20260
 FAILURE_RECORD_SHA='9ce279484127f50d309cdabc50daf36517de8a37c737014056a117dc3ccd89bb'
 FAILURE_ARCHIVE_SHA='e09ca937456ede3494c81c611c96d45960f5f633e7874817dd1c54a309568417'
 FAILURE_CHECKPOINT_SHA='4dfd1ca41e62a31e95112a5cf907ac32dc9973fb38e452611962e6dadbd3b64c'
-HELPER=SOURCE/'scripts/native_exact_candidate_retire.py'; OBSERVER=SOURCE/'docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
+HELPER=SOURCE/'scripts/native_exact_candidate_retire_704f.py'; OBSERVER=SOURCE/'docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
 # Corrected owner/observer boundary is concurrently pending independent review.
-HELPER_SHA256='704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='c2a65c45468cd6440ac63e5daee744b0249f4e48250cebdfea14b57d25463d68'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
-HELPER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_retire.py'; OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_observer_704f6654.py'
+HELPER_SHA256='4631190894a214821f02142670a2ce6f77058dc7fae986c0f6295214c705c517'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='404dc83f6b3881141513040e7adadace3f84e90c0536fd36eef4ae2be47099c1'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
+HELPER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_retire_704f.py'; OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_observer_67589154.py'
 FLOORS={'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30}
 OUT=('claim-704f6654-1.json','journal-704f6654-1.jsonl','evidence-704f6654-1.json','packet.status','packet.status.pending','packet.failure','packet.failure.pending','helper.sealed.py','archive.sealed.py','observer.sealed.py','observer.stdout','observer.stderr','observer.status','docker-ps.stdout','docker-ps.stderr','docker-ps.status','docker-inspect.stdout','docker-inspect.stderr','docker-inspect.status','docker-ps-after.stdout','docker-ps-after.stderr','docker-ps-after.status')
 RENAME_NOREPLACE=1
@@ -740,7 +737,7 @@ def verify_inventory(inv):
    if len(target)!=r['size']:bad('symlink target size')
    wanted=sha(target)
   (ihk if r['path'].startswith('ihk/') else main).append((ids['sha1'],wanted,r['size'],ids['sha256']))
- if len(main)!=7715 or len(ihk)!=1296:bad('canonical object routing/count')
+ if len(main)!=7728 or len(ihk)!=1296:bad('canonical object routing/count')
  # No subprocess is spawned until every record above has passed validation.
  stream_store(GIT,main);stream_store(IHK_GIT,ihk)
 def mechanical(release,fetched):
@@ -831,16 +828,20 @@ def validate_release(r,fetched,inv):
  seal=r['sealed'];needed=('retention_manifest_sha256','retention_manifest_pushed_sha256','retention_manifest_fetched_sha256','capsule_sha256','capsule_pushed_sha256','capsule_fetched_sha256','retention_manifest_path','capsule_path')
  if set(seal)!=set(needed) or any(not H64.fullmatch(seal[k]) for k in needed[:6]) or seal['retention_manifest_path']!=str(INVENTORY) or seal['capsule_path']!=str(CAPSULE) or any(seal[k]!=INV_SHA for k in needed[:3]) or any(seal[k]!=CAP_SHA for k in needed[3:6]):bad('helper sealed preflight')
  if r['observer'].get('observer_sha256')!=OBSERVER_SHA256 or r['observer'].get('boot_id')!=r['boot_id']:bad('helper observer preflight')
- terminal='decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9'
+ terminal='68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6'
  if r['operational_exclusion']!=str(BUILD_LEASE) or r['heavy_lease_paths']!=[str(BUILD_LEASE)]:bad('shared build lease binding')
  tomb=r['exclusion_tombstone']
  if set(tomb)!={'path','immutable','schema','parent_uid','parent_gid','parent_mode','filesystem_device'} or tomb.get('path')!=str(BUILD_LEASE) or tomb.get('immutable') is not True or tomb.get('schema')!='mckernel.retirement-build-owner-exclusion.v2' or (tomb.get('parent_uid'),tomb.get('parent_gid'),tomb.get('parent_mode'))!=(1000,1000,0o700) or not isinstance(tomb.get('filesystem_device'),int) or tomb['filesystem_device']<0:bad('shared immutable tombstone binding')
  namespace=r['evidence_namespace']
  if set(namespace)!={'parent','name','device','uid','gid','mode','sticky'} or namespace.get('parent')!=str(EVIDENCE_PARENT) or namespace.get('name')!=EVIDENCE_DIR.name or not isinstance(namespace.get('device'),int) or namespace['device']<0 or (namespace.get('uid'),namespace.get('gid'),namespace.get('mode'),namespace.get('sticky'))!=(0,0,0o1777,True):bad('sticky evidence namespace binding')
- if not isinstance(r['docker'].get('terminal'),dict) or r['docker']['terminal'].get('id')!=terminal or not isinstance(r['docker'].get('terminal_containers'),dict):bad('helper Docker preflight')
+ terminal_ids={'68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6','d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44','bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2','e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e'}
+ if not isinstance(r['docker'].get('terminal'),dict) or r['docker']['terminal'].get('id')!=terminal or not isinstance(r['docker'].get('terminal_containers'),dict) or set(r['docker']['terminal_containers'])!=terminal_ids:bad('helper Docker preflight')
  mechanical(r,fetched);canonical_stores();verify_inventory(inv)
 def admit(release_arg):
  draft_guard()
+ # Bind preserved phase-0 failure inputs before any release/output/tombstone
+ # activity; missing or substituted evidence fails closed.
+ checked(FAILURE_RECORD,FAILURE_RECORD_SHA);checked(FAILURE_ARCHIVE,FAILURE_ARCHIVE_SHA);checked(FAILURE_CHECKPOINT,FAILURE_CHECKPOINT_SHA)
  if os.geteuid()!=0:bad('root euid required')
  canonical=SOURCE/RELEASE_PATH
  if Path(release_arg)!=canonical:bad('release argument must be canonical')
@@ -1070,7 +1071,7 @@ def docker_callback(base,docker,lease):
   after=call(['/usr/bin/docker','ps','--all','--quiet','--no-trunc'],base,'docker-ps-after').decode('ascii','strict').splitlines()
   if after!=ids:bad('Docker churn after inspect')
   terminals=docker.get('terminal_containers') if isinstance(docker,dict) else None
-  want={'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
+  want={'68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6','d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44','bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2','e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e'}
   if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=canonical_docker_row(v) for i,v in terminals.items()):bad('terminal config')
   lease.assert_held()
   return {'ps_all':ids,'inspect':rows}
