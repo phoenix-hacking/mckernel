@@ -14,7 +14,7 @@ SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ih
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-1c00d2b8-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_1c00d2b8.py'
 RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retirement-1c00d2b8-1.release.json'
-RELEASE_SHA256='RELEASE_HASH_REQUIRED'
+RELEASE_SHA256='c249f717f2a68b3de8656d8127b208f24023ecdfffba53137a3ccaf92df54752'
 # The support/template commit is distinct from the candidate revision whose
 # retained inventory is being retired.  Both are independently authenticated.
 SUPPORT_MAIN='b4208879ea1f0c0549e33fa42a60efd57bb439f6'
