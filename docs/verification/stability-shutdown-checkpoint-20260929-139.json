@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.os-shutdown-checkpoint.v1",
+  "status": "PASS_CHECKPOINT_ONLY",
+  "timestamp_utc": "2026-09-29T13:32:06Z",
+  "reason": "launcher stop request",
+  "os_complete": false,
+  "launcher_pause_temporary": true,
+  "new_dispatch_stopped": true,
+  "children_joined": true,
+  "active_bounded_operations": [],
+  "privileged_retirement_executed": false,
+  "build_executed": false,
+  "guest_executed": false,
+  "real_guest_applications_this_window": 0,
+  "current_candidate_builds": 0,
+  "template_commit": "33eab9563bc047958252c3e072bc375b958a9b88",
+  "release": {
+    "path": "docs/verification/evidence/stability-native-exact-candidate-retirement-67589154-1.release.json",
+    "sha256": "0f60c2f26ea9b398e1e57682c57490962744e5a6b9a7949c30fd60e5b665a8d0",
+    "size": 2369338,
+    "packet_path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+    "finalized_packet_sha256": "a05ea9ada640964380a05b7b674ce305a017f855790bd885909a380bdfe8407c",
+    "execution_review": "PENDING",
+    "execution": "NOT_RUN"
+  },
+  "live_identity": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "launcher": {"pid": 3399308, "starttime": 83682487},
+    "worker": {"pid": 3399313, "starttime": 83682494},
+    "app_server": {"pid": 3399317, "starttime": 83682500},
+    "candidate": {"device": 26, "inode": 25166, "mode": 755, "uid": 1000, "gid": 1000},
+    "metadata_backup": {"device": 26, "inode": 35798, "mode": 755, "uid": 1000, "gid": 1000},
+    "terminal_containers": [
+      "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9",
+      "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10"
+    ]
+  },
+  "absence_checks": {
+    "heavy_build_lease": true,
+    "retirement_output": true,
+    "candidate_quarantine": true,
+    "backup_quarantine": true
+  },
+  "available_bytes": {
+    "host": 24128962560,
+    "scratch": 21555707904,
+    "tmpfs": 7516635136,
+    "memory": 20155097088
+  },
+  "validation": {
+    "packet_py_compile": "PASS",
+    "scoped_diff_check": "PASS",
+    "full_release_admission": "PENDING_FETCHED_COMMIT",
+    "docker_recheck": "UNAVAILABLE_DURING_SHUTDOWN_PERMISSION_DENIED; release retains complete earlier canonical census"
+  },
+  "next_actions": [
+    "Verify the fetched checkpoint and run full unprivileged validate_release against its fetched commit.",
+    "Obtain a fresh independent exact mechanical and execution review of the fetched release.",
+    "Reconcile all live identities, Docker census, capacity floors and immutable-filesystem support.",
+    "Only after PASS review, perform at most one sudo-A retirement invocation and preserve its complete evidence.",
+    "After accepted retirement, review preparation 704f6654-1, run one serialized current-candidate build, then the smallest real memory application diagnostic."
+  ]
+}

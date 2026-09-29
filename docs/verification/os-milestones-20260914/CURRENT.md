@@ -7360,3 +7360,31 @@ template. Then regenerate the release against it, verify the exact two-path
 delta and complete full fetched admission, followed by separate execution
 review before one-shot sudo. Current-candidate builds and real guest apps this
 window remain zero; applications remain 0/273 and formal counters are unchanged.
+
+Shutdown checkpoint 139, 2026-09-29: the launcher stop request ended all new
+dispatch before privileged retirement. Every child lane is terminal and no
+bounded operation, heavy lease, build or guest remains active. The mechanically
+generated release is preserved, not executed: release JSON
+`0f60c2f2...a8d0` (2,369,338 bytes) and finalized packet
+`a05ea9ad...07c` are bound to fetched DRAFT template commit
+`33eab956...9b88`. The packet compiles and its exact scoped diff check passes.
+Full fetched-commit admission and independent execution review remain pending.
+
+Preserve boot `c733d83b...9afd`; launcher identities 3399308/83682487,
+3399313/83682494 and 3399317/83682500; candidate/backup identities 26/25166
+and 26/35798; and terminal containers `decd7cf9...c6b9` and
+`8943e497...c10`. The operational lease, output and both quarantine paths are
+absent. Available bytes are host 24,128,962,560, scratch 21,555,707,904,
+tmpfs 7,516,635,136 and memory 20,155,097,088. The shutdown-time Docker
+recheck lacked socket permission; the release retains the earlier complete
+canonical census, but the next invocation must reconcile it freshly.
+
+Next verify this checkpoint's fetched bytes and run full unprivileged
+`validate_release` against its fetched commit. Obtain a fresh independent exact
+mechanical/execution review, then reconcile identities, Docker, resource floors
+and immutable-filesystem support. Only after PASS may one `sudo -A` retirement
+run occur. After accepted retirement, review preparation `704f6654-1`, run one
+serialized current-candidate build, then the smallest real memory application
+diagnostic. Record `stability-shutdown-checkpoint-20260929-139.json` is the live
+cursor. Formal counters remain unchanged, builds remain zero, applications
+remain 0/273, the OS is incomplete, and this launcher pause is temporary.
