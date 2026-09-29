@@ -7867,3 +7867,34 @@ new fetched commit as template authority, regenerate the exact four paths,
 obtain fresh independent execution review and repeat the complete external
 preflight before one one-shot wrapper invocation. Formal counters, builds and
 real guest applications remain zero; applications remain 0/273.
+
+Continuation checkpoint 160, 2026-09-29: corrected fetched release
+`ef8dffa1...9986` passed fresh independent and coordinator preflight, then ran
+exactly once. The durable journal records 21,226 ordered deletion entries and
+`terminal-success` with null failure. All 10,523 candidate and 86 metadata
+members, both quarantine roots and both original names are absent. Observer
+3952221/91172574 exited 0 and retired without survivors; Docker before/after
+safe summaries are byte-identical. Claim 1831/31475, journal 1831/31476 and
+output 1831/2907441 remain root-owned, historical evidence 26/47525 and immutable
+tombstone 1831/31474 remain unchanged. Archive
+`stability-native-exact-quarantine-continuation-success-704f6654-20260929-1.tar.gz`
+SHA `16cafe64...af2` preserves all ten live artifacts. Physical cleanup reclaimed
+tmpfs to 16,587,804,672 available bytes.
+
+Independent postflight nevertheless BLOCKs complete retirement proof. Observer
+v7 scanned `/proc/<pid>/task/<tid>/map_files`; that directory is absent on this
+host, while process-level `/proc/<pid>/map_files` is populated. Both rounds
+therefore report zero mapping entries and 1,636 accepted directory absences. An
+mmap-only reference after descriptor close could have been missed. The packet is
+consumed and must never rerun; the trees stay deleted and the physical result is
+not retroactively promoted. Wrapper/packet PID attribution was also not retained;
+only observer identity is exact.
+
+Record `stability-native-exact-quarantine-continuation-runtime-blocked-704f6654-20260929-1.json`
+separates physical success from deficient reference proof. Next create an
+additive corrected observer using process-level `map_files`, fail closed on
+uninspected live address spaces, add an mmap-only regression, independently
+review it, and run a fresh current-state deleted-inode audit over every retained
+inventory identity before authorizing a wholly fresh candidate build. Formal
+counters, successful current-candidate builds and real guest applications remain
+zero; applications remain 0/273.

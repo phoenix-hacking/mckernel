@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.quarantine-continuation-runtime-result.v1",
+  "timestamp": "2026-09-29T10:14:00-07:00",
+  "status": "BLOCKED_REFERENCE_PROOF_AFTER_PHYSICAL_SUCCESS",
+  "execution": {
+    "commit": "ef8dffa1325184d224eaa82132eb81f8cbae9986",
+    "release_sha256": "a1b46aadec808e877669c8471cd3cb15f025ac224b832fedae41cfeca7bb5808",
+    "one_shot_consumed": true,
+    "retry": false,
+    "rollback": false,
+    "terminal_journal_phase": "terminal-success",
+    "terminal_failure": null
+  },
+  "physical_result": {
+    "candidate_members_deleted": 10523,
+    "metadata_members_deleted": 86,
+    "journal_records": 21226,
+    "candidate_quarantine_absent": true,
+    "metadata_quarantine_absent": true,
+    "candidate_original_absent": true,
+    "metadata_original_absent": true,
+    "docker_before_after_identical": true,
+    "observer_process": {"pid": 3952221, "starttime": 91172574, "returncode": 0, "retired": true, "no_survivors": true}
+  },
+  "live_survivors": {
+    "claim": {"device": 1831, "inode": 31475, "uid": 0, "gid": 0, "mode": 384},
+    "journal": {"device": 1831, "inode": 31476, "uid": 0, "gid": 0, "mode": 384},
+    "output": {"device": 1831, "inode": 2907441, "uid": 0, "gid": 0, "mode": 448},
+    "historical_evidence": {"device": 26, "inode": 47525, "uid": 0, "gid": 0, "mode": 448},
+    "immutable_tombstone": {"device": 1831, "inode": 31474, "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123"}
+  },
+  "evidence": {
+    "archive": "docs/verification/evidence/stability-native-exact-quarantine-continuation-success-704f6654-20260929-1.tar.gz",
+    "archive_sha256": "16cafe645dfe2ca70eccddfb5d1f3127797643d4a66f24a9f1b2902020625af2",
+    "claim_sha256": "e317221a575ca6c81cae41ac6247c7d9dc211433d6c2bbf39067a517fe5a005a",
+    "journal_sha256": "aa22037a443e68e9a33050e61fdba978489b36a9eaa532e4fd27f3b6e03ede8e",
+    "observer_status_sha256": "7c7bb6a2d9075cad6e99d4016a1f06d8ef1fe1c6247ccf1a5ab494e0f1670020",
+    "observer_stdout_sha256": "780edb7fae406840433cd3094b9fb7cce9a009cc17acbacad63fc5e5f1a90121",
+    "observer_stderr_sha256": "5ccdeb82c580455bbf386bc3fe3d52fa1380ca6877a85dc4dc494e5dfa7adb11",
+    "terminal_sha256": "9e190d61a9e3c84c11452f8fbf6dec84ebcde92c17aa075c7040bab39e4155da",
+    "docker_before_sha256": "17c4c026678b9225caaf6ffe8463198015809efeaffef6380bd9947ce4a6f5bb",
+    "docker_after_sha256": "17c4c026678b9225caaf6ffe8463198015809efeaffef6380bd9947ce4a6f5bb"
+  },
+  "independent_postflight": {
+    "status": "BLOCK",
+    "finding": "observer scanned /proc/<pid>/task/<tid>/map_files, which is absent on this host, and classified the whole-directory ENOENT as safe",
+    "observed_rounds": 2,
+    "tasks_per_round": 818,
+    "map_files_entries_scanned": 0,
+    "map_files_directory_absences": 1636,
+    "live_control": "a current /proc/<pid>/map_files existed with 76 entries while /proc/<pid>/task/<tid>/map_files was absent",
+    "risk": "an mmap-only reference with its file descriptor closed could have been missed",
+    "required_correction": "use process-level map_files, fail closed on uninspected live address spaces, test an mmap-only reference, and perform a new current-state deleted-inode reference audit"
+  },
+  "acceptance": {
+    "physical_cleanup_success": true,
+    "complete_live_reference_proof": false,
+    "retirement_accepted": false,
+    "production_gate_changed": false,
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "os_complete": false
+  },
+  "resources_after_cleanup": {"host_available_bytes": 23419334656, "scratch_available_bytes": 21522378752, "tmpfs_available_bytes": 16587804672, "mem_available_kib": 27885520},
+  "next": "Never rerun the consumed packet. Preserve physical success as deficient reference proof. Implement and independently review an additive corrected observer that scans process-level map_files and rejects uninspected live address spaces; then run a fresh current-state audit against every deleted device/inode identity from the retained inventory before authorizing a wholly fresh candidate build."
+}

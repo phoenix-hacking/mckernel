@@ -1122,3 +1122,19 @@ that commit as the new template ancestor, regenerate exactly four release paths,
 obtain fresh execution review, and repeat the full external preflight. Never run
 the superseded `fc529820` release. No retirement state or acceptance counter
 changed.
+
+Checkpoint 160 records one-shot physical cleanup success but BLOCKed reference
+proof. Release `ef8dffa1...9986` deleted 10,523 candidate and 86 metadata members,
+both roots are absent, journal terminal failure is null, observer retired, and
+Docker before/after match. Exact archive `16cafe64...af2` plus record
+`stability-native-exact-quarantine-continuation-runtime-blocked-704f6654-20260929-1.json`
+preserve the result.
+
+Do not accept or rerun it: both observer rounds scanned zero mapping links because
+they used nonexistent task-level `map_files` and accepted 1,636 directory
+absences. An mmap-only reference could have been missed. Next implement an
+additive process-level-map-files observer with an mmap-only regression, obtain
+independent review, then perform a current-state audit against all deleted
+device/inode identities from the retained inventory. Only that current-state
+audit may unlock a wholly fresh clean candidate; it cannot retroactively make
+the consumed retirement proof complete. Builds/apps/formal counters remain zero.
