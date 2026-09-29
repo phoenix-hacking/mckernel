@@ -6122,3 +6122,31 @@ Do not mutate or build candidate `68cf089a-1`; preserve it and its backup until
 the replacement is accepted. This continuation has zero new guest applications
 and zero successful current-candidate builds. Formal counters remain 0/273,
 2/4, 6/130, 350/10,000 and 0/7; the OS goal remains incomplete.
+
+Continuation checkpoint 80, 2026-09-28: the terminal-container evidence defect
+that blocked the fresh heavy build is corrected and independently PASSes at the
+source/test-contract layer. `BuildOwner.run` no longer removes any container.
+After a create attempt, reconciliation and cleanup are always separate reviewed
+operations. Receipt truth is now tri-state: no-attempt is false, uncertain
+existence/retirement is null, and retained is true only after an owned terminal
+observation plus proven client retirement. A later client uncertainty preserves
+the snapshot as historical, marks it non-current and retains the lease.
+
+Owner `a8c4c9fc...9155` and tests `c96d25c0...0857` pass all 65 focused tests.
+The five compatible exact-build suites pass 118 tests across metadata relocation,
+owner lifecycle, image preparation, manifest generation and offline build. The
+attempted sixth workflow import retains its pre-test failure: launcher Python
+3.9 cannot evaluate an existing Python-3.10 union annotation in
+`native_rust_runtime_evidence.py`. No oracle was weakened and no Docker/build
+command ran. Exact results and independent review are in
+`stability-native-exact-owner-terminal-retention-source-success-20260929-1.json`.
+
+Next commit and fetched-blob verify these exact bytes, then release cleanup of
+the now-superseded prepared `68cf089a-1` candidate only after proving no process,
+mount or descriptor references it. Preserve its preparation archive and never
+mutate/build it. Reclaiming that tmpfs allocation is required before a new
+commit-derived candidate can fit while retaining the 4-GiB emergency reserve.
+After cleanup, generate one new SHA-bound preparation packet, prepare/validate
+the replacement, and seek a fresh heavy-build release. This source correction
+changes no formal counter; there are still zero new guest applications and zero
+successful current-candidate builds in this continuation.

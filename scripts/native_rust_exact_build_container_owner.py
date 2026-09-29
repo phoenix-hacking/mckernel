@@ -918,7 +918,17 @@ class BuildOwner:
         lease.acquire()
         receipt = {'status': 'FAIL', 'candidate_sha': r['candidate_sha'],
                    'container_name': name, 'owner': lease.record, 'request': r,
-                   'measurement': self.measurement, 'retired': False}
+                   'measurement': self.measurement, 'retired': False,
+                   # Terminal containers are evidence.  They remain available
+                   # for the separately reviewed cleanup operation after the
+                   # final receipt has been durably published.
+                   'terminal_container_retained': False,
+                   'terminal_container_retention_state': 'not_attempted',
+                   'terminal_container_name': name,
+                   'terminal_container_label': 'mckernel.owner=' + lease.nonce,
+                   'terminal_container_info': None,
+                   'terminal_container_info_current': False,
+                   'cleanup_separately_required': False}
         attempted = False
         try:
             image = json.loads(docker.call(['image', 'inspect', r['image_id']]).stdout)[0]
@@ -972,9 +982,18 @@ class BuildOwner:
             if self.signals:
                 self.signals.cleaning = True
             if attempted:
+                # Creation was attempted, so reconciliation/cleanup is always
+                # separately required; existence is not yet proven.
+                receipt['terminal_container_retained'] = None
+                receipt['terminal_container_retention_state'] = 'unresolved'
+                receipt['cleanup_separately_required'] = True
                 try:
                     terminal = retire(docker, name, lease.nonce)
                     atomic(evidence / 'inspect-terminal.json', terminal)
+                    receipt['terminal_container_info'] = terminal
+                    # This snapshot is historical until all client-retirement
+                    # evidence has been checked below.
+                    receipt['terminal_container_info_current'] = False
                     receipt['retired'] = True
                 except BaseException as exc:
                     receipt['status'] = 'FAIL'
@@ -982,15 +1001,25 @@ class BuildOwner:
                 try:
                     logs = docker.call(['logs', name])
                     (evidence / 'container.log').write_text(logs.stdout + logs.stderr)
-                    if receipt['status'] == 'PASS' and receipt['retired']:
-                        docker.call(['rm', name])
                 except BaseException as exc:
                     receipt['status'] = 'FAIL'
                     receipt['capture_error'] = str(exc)
             else:
                 receipt['retired'] = True
             if getattr(docker, 'client_retirement_unproven', False):
-                receipt.update(status='FAIL', retired=False, client_retirement_unproven=True)
+                receipt.update(status='FAIL', retired=False,
+                               client_retirement_unproven=True)
+                if receipt['terminal_container_info'] is not None:
+                    receipt['terminal_container_retention_state'] = \
+                        'unresolved_after_historical_terminal_observation'
+                receipt['terminal_container_retained'] = None
+                receipt['terminal_container_info_current'] = False
+            elif (attempted and receipt['retired'] and
+                  receipt['terminal_container_info'] is not None):
+                receipt['terminal_container_retained'] = True
+                receipt['terminal_container_retention_state'] = \
+                    'verified_owned_terminal_retained'
+                receipt['terminal_container_info_current'] = True
             try:
                 for binding in self.measurement.get('memory_allocation_bindings', []):
                     _revalidate_allocation_binding(binding)

@@ -415,3 +415,17 @@ FAIL. Next retain the terminal container through final reconciliation, add
 cleanup-time TERM and late-allocation-revalidation regressions, independently
 review, commit and prepare a new SHA-bound candidate. Preparation earns no
 build, guest or formal acceptance credit; counts remain unchanged.
+
+Checkpoint 80 repairs the heavy-owner evidence blocker at source level. Exact
+owner `a8c4c9fc...9155` never removes a terminal container; its tri-state receipt
+distinguishes no attempt, unresolved retention, verified owned terminal retention
+and a historical snapshot invalidated by client uncertainty. Exact tests
+`c96d25c0...0857` pass 65 focused and 118 integrated compatible cases with
+independent source review PASS. See
+`stability-native-exact-owner-terminal-retention-source-success-20260929-1.json`.
+
+No build is released yet. Preserve candidate `68cf089a-1` unchanged. Its 9.07-GiB
+tmpfs allocation must be independently observed and cleaned before a replacement
+commit-derived candidate can preserve the 4-GiB reserve. Then rebind the new
+owner/test hashes, prepare a new candidate/request and obtain fresh heavy-build
+review. The Python-3.9 workflow import failure is retained; do not weaken it.

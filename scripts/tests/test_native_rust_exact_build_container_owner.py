@@ -301,7 +301,16 @@ class OwnerTests(unittest.TestCase):
         self.assertTrue(result['retired'])
         self.assertFalse(Path(self.request['lease_path']).exists())
         self.assertIn('container.log', result['evidence'])
-        self.assertTrue(any(c[0] == 'rm' for c in fake.commands))
+        self.assertFalse(any(c[0] == 'rm' for c in fake.commands))
+        self.assertTrue(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'],
+                         'verified_owned_terminal_retained')
+        self.assertEqual(result['terminal_container_name'], result['container_name'])
+        self.assertEqual(result['terminal_container_label'],
+                         'mckernel.owner=' + result['owner']['nonce'])
+        self.assertEqual(result['terminal_container_info']['Name'],
+                         '/' + result['container_name'])
+        self.assertTrue(result['cleanup_separately_required'])
 
     def test_candidate_mode_admission_precedes_lease_and_docker(self):
         manifest_path = Path(self.request['input_manifest'])
@@ -376,6 +385,39 @@ class OwnerTests(unittest.TestCase):
         self.assertTrue(lease['starttime'].isdigit())
         self.assertEqual(len(lease['nonce']), 32)
         self.assertTrue(any(c[0] == 'kill' for c in fake.commands))
+        self.assertIsNone(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'], 'unresolved')
+        self.assertFalse(result['terminal_container_info_current'])
+
+    def test_create_failure_after_object_exists_retains_verified_terminal(self):
+        class CreateAfterObjectFailure(FakeDocker):
+            def call(inner, args, **kwargs):
+                result = super().call(args, **kwargs)
+                if args[0] == 'create':
+                    raise RuntimeError('injected post-create failure')
+                return result
+
+        fake = CreateAfterObjectFailure(self.request)
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['retired'])
+        self.assertTrue(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'],
+                         'verified_owned_terminal_retained')
+        self.assertTrue(result['terminal_container_info_current'])
+        self.assertFalse(any(c[0] == 'rm' for c in fake.commands))
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_unproven_client_retirement_downgrades_historical_terminal(self):
+        fake = FakeDocker(self.request)
+        fake.client_retirement_unproven = True
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertIsNone(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'],
+                         'unresolved_after_historical_terminal_observation')
+        self.assertFalse(result['terminal_container_info_current'])
+        self.assertTrue(Path(self.request['lease_path']).exists())
 
     def test_effective_limits_reject_before_start(self):
         for key in owner.LIMITS:
@@ -415,6 +457,52 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(result['status'], 'FAIL')
         self.assertEqual(result['exit_code'], 37)
         self.assertIsNotNone(fake.info)
+
+    def test_latched_signal_during_log_capture_fails_and_retains_terminal(self):
+        signals = SimpleNamespace(requested=None, cleaning=False)
+        fake = FakeDocker(self.request)
+        original = fake.call
+
+        def capture_signal(args, **kwargs):
+            result = original(args, **kwargs)
+            if args[0] == 'logs':
+                signals.requested = signal.SIGTERM
+            return result
+
+        fake.call = capture_signal
+        result = owner.BuildOwner(self.request, fake, signals=signals).run()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['interrupted_signal'], signal.SIGTERM)
+        self.assertTrue(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'],
+                         'verified_owned_terminal_retained')
+        self.assertTrue(result['terminal_container_info'])
+        self.assertFalse(any(c[0] == 'rm' for c in fake.commands))
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_final_allocation_revalidation_failure_fails_and_retains_terminal(self):
+        fake = FakeDocker(self.request)
+        original = owner._revalidate_allocation_binding
+        calls = {'count': 0}
+
+        def fail_final(binding):
+            calls['count'] += 1
+            # measure() performs three binding checks (capture, per-root,
+            # aggregate); the fourth is the run() final reconciliation.
+            if calls['count'] >= 4:
+                raise RuntimeError('injected final allocation binding failure')
+            return original(binding)
+
+        with mock.patch.object(owner, '_revalidate_allocation_binding', side_effect=fail_final):
+            result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertIn('final allocation binding failure', result['allocation_revalidation_error'])
+        self.assertTrue(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'],
+                         'verified_owned_terminal_retained')
+        self.assertTrue(result['terminal_container_info'])
+        self.assertFalse(any(c[0] == 'rm' for c in fake.commands))
+        self.assertFalse(Path(self.request['lease_path']).exists())
 
     def test_actual_image_identity_mismatch_before_create(self):
         fake = FakeDocker(self.request)
@@ -1050,6 +1138,9 @@ class OwnerTests(unittest.TestCase):
         fake.fail_command = 'create'
         result = self.execute(fake)
         self.assertFalse(result['retired'])
+        self.assertIsNone(result['terminal_container_retained'])
+        self.assertEqual(result['terminal_container_retention_state'], 'unresolved')
+        self.assertTrue(result['cleanup_separately_required'])
         self.assertTrue(Path(self.request['lease_path']).exists())
 
     def test_real_cli_sigterm_captures_partial_bytes_and_retires(self):
