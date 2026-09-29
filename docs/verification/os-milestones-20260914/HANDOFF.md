@@ -1091,3 +1091,19 @@ independent mechanical/execution review, and repeat complete live preflight.
 Do not execute, retry, rename, delete or roll back retirement state while
 recovering this checkpoint. The OS remains incomplete and 0/273 applications
 are accepted.
+
+Checkpoint 158 supersedes the finalization cursor with one required source
+correction. A live harmless probe showed the exact wrapper's sudo parent carries
+the forbidden packet basename. The first bare-PID correction was independently
+BLOCKed by reproduced post-validation PID reuse and status/argv defects. Expert
+DRAFT packet `ae2f6d07...a1e9` plus tests `fadd0322...18b6` now retain and
+revalidate sudo parent/child and launcher identities, exact executable/NUL argv
+and parsed credentials. All 35 tests pass on Python 3.8/3.9 and independent
+review PASSes source only. Wrapper/basis remain unchanged and inert; no release
+or runtime action exists.
+
+Next commit/push/fetch this correction, then use that fetched commit as the new
+template ancestor for the exact packet/wrapper/basis plus external-release
+four-path finalization. Review mechanics and live authority independently and
+repeat every preflight before one one-shot sudo continuation. Retained roots,
+tombstone and formal/application counters remain unchanged.

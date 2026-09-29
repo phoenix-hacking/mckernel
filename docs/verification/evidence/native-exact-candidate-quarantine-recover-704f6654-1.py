@@ -1240,6 +1240,102 @@ def _proc_cmdline_stable(row):
     return before, data
 
 
+def _census_identity(pid, proc):
+    """Read only stable identity/relationship fields, never volatile counters."""
+    try:
+        text = (proc / str(pid) / 'stat').read_text()
+        fields = text.rsplit(')', 1)[1].split()
+        if int(text.split('(', 1)[0]) != pid or len(fields) <= 19:
+            fail('census process stat malformed')
+        value = {'pid': pid, 'ppid': int(fields[1]), 'starttime': int(fields[19])}
+        if value['ppid'] < 0 or value['starttime'] < 0:
+            fail('census process stat malformed')
+        return value
+    except (OSError, IndexError, ValueError) as exc:
+        fail('census process identity unreadable: ' + str(exc))
+
+
+def _sudo_credentials(text):
+    credentials = {}
+    for line in text.splitlines():
+        key, separator, value = line.partition(':')
+        if separator and key in ('Uid', 'Gid'):
+            if key in credentials:
+                fail('direct sudo parent duplicate credentials')
+            fields = value.split()
+            if len(fields) != 4 or any(re.fullmatch('[0-9]+', item) is None for item in fields):
+                fail('direct sudo parent credentials malformed')
+            credentials[key] = tuple(int(item) for item in fields)
+    if set(credentials) != {'Uid', 'Gid'}:
+        fail('direct sudo parent credentials missing')
+    return credentials
+
+
+def _direct_sudo_parent(proc=Path('/proc')):
+    """Admit an exact direct parent and retain both process incarnations.
+
+    Callers must revalidate this token when applying the exemption and at
+    census completion. These observations do not constitute an atomic /proc
+    proof; the packet's operational exclusion remains required.
+    """
+    child = _census_identity(os.getpid(), proc)
+    ppid = child['ppid']
+    if ppid <= 0 or ppid == child['pid']:
+        return None
+    parent = proc / str(ppid)
+    try:
+        before = _census_identity(ppid, proc)
+        exe = os.readlink(str(parent / 'exe'))
+        cmdline = (parent / 'cmdline').read_bytes()
+        credentials = _sudo_credentials((parent / 'status').read_text())
+        exe_again = os.readlink(str(parent / 'exe'))
+        cmdline_again = (parent / 'cmdline').read_bytes()
+        credentials_again = _sudo_credentials((parent / 'status').read_text())
+        after = _census_identity(ppid, proc)
+        child_again = _census_identity(child['pid'], proc)
+    except (OSError, IndexError, ValueError) as exc:
+        fail('direct sudo parent identity unreadable: ' + str(exc))
+    if (before != after or child != child_again or exe_again != exe or
+            cmdline_again != cmdline or credentials_again != credentials):
+        fail('direct sudo parent identity changed')
+    expected = [b'/usr/bin/sudo', b'-A', b'/usr/bin/python3', b'-E', b'-s', b'-B',
+                os.fsencode(str(PACKET)), b'--release', os.fsencode(str(EXECUTION_RELEASE))]
+    if exe != '/usr/bin/sudo' or cmdline != b'\0'.join(expected) + b'\0':
+        return None
+    if credentials != {'Uid': (0, 0, 0, 0), 'Gid': (0, 0, 0, 0)}:
+        return None
+    return {'parent': before, 'child': child}
+
+
+def _revalidate_sudo_parent(token, proc):
+    if _direct_sudo_parent(proc) != token:
+        fail('direct sudo parent exemption changed')
+
+
+def _revalidate_census_identity(identity, proc):
+    actual = _census_identity(identity['pid'], proc)
+    if actual['starttime'] != identity['starttime']:
+        fail('allowed process identity changed')
+
+
+def _census_allowances(allowed, proc):
+    result = {}
+    for identity in allowed:
+        if (not isinstance(identity, dict) or set(identity) != {'pid', 'starttime'} or
+                type(identity['pid']) is not int or identity['pid'] <= 0 or
+                type(identity['starttime']) is not int or identity['starttime'] < 0 or
+                identity['pid'] in result):
+            fail('allowed process identity schema')
+        _revalidate_census_identity(identity, proc)
+        result[identity['pid']] = dict(identity)
+    own = _census_identity(os.getpid(), proc)
+    own = {'pid': own['pid'], 'starttime': own['starttime']}
+    if own['pid'] in result and result[own['pid']] != own:
+        fail('allowed self identity changed')
+    result[own['pid']] = own
+    return result
+
+
 def validate_conflicts(proc=Path('/proc'), boot_path=Path('/proc/sys/kernel/random/boot_id'), admitted_boot=None, allowed=(), conflict_basenames=None):
     try:
         boot = boot_path.read_text().strip()
@@ -1256,9 +1352,18 @@ def validate_conflicts(proc=Path('/proc'), boot_path=Path('/proc/sys/kernel/rand
         if not forbidden.issubset(set(conflict_basenames)):
             fail('runtime conflict coverage')
         forbidden = set(conflict_basenames)
-    allowed = set(allowed) | {os.getpid()}
+    allowed = _census_allowances(allowed, proc)
+    direct_sudo = _direct_sudo_parent(proc)
     for row in proc.iterdir():
-        if not row.name.isdigit() or int(row.name) in allowed:
+        if not row.name.isdigit():
+            continue
+        pid = int(row.name)
+        # The sudo proof takes precedence even if a release also names it.
+        if direct_sudo is not None and pid == direct_sudo['parent']['pid']:
+            _revalidate_sudo_parent(direct_sudo, proc)
+            continue
+        if pid in allowed:
+            _revalidate_census_identity(allowed[pid], proc)
             continue
         result = _proc_cmdline_stable(row)
         if result is None:
@@ -1268,6 +1373,10 @@ def validate_conflicts(proc=Path('/proc'), boot_path=Path('/proc/sys/kernel/rand
         names = {os.path.basename(value.decode('utf-8', 'surrogateescape')) for value in values if value}
         if forbidden.intersection(names):
             fail('conflicting process or guest')
+    for identity in allowed.values():
+        _revalidate_census_identity(identity, proc)
+    if direct_sudo is not None:
+        _revalidate_sudo_parent(direct_sudo, proc)
     return boot
 
 
@@ -1288,12 +1397,14 @@ def validate_runtime_admission(runtime, proc=Path('/proc'), boot_path=Path('/pro
         fail('runtime launcher identities')
     allowed = []
     for row in launchers:
-        if not isinstance(row, dict) or set(row) != {'pid', 'starttime'} or not isinstance(row['pid'], int) or not isinstance(row['starttime'], int):
+        if (not isinstance(row, dict) or set(row) != {'pid', 'starttime'} or
+                type(row['pid']) is not int or row['pid'] <= 0 or
+                type(row['starttime']) is not int or row['starttime'] < 0):
             fail('runtime launcher schema')
         actual = _proc_identity_pid(row['pid'], proc)
         if actual['starttime'] != row['starttime']:
             fail('runtime launcher PID reuse')
-        allowed.append(row['pid'])
+        allowed.append(dict(row))
     leases = runtime['heavy_lease_paths']
     tomb = runtime['immutable_tombstone']
     if not isinstance(leases, list) or len(leases) != len(set(leases)) or str(TOMBSTONE) not in leases or not isinstance(tomb, dict):

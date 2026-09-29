@@ -327,8 +327,10 @@ class Tests(unittest.TestCase):
 
     def test_conflict_permission_pid_reuse_and_boot_fail_closed(self):
         m = self.m
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory() as temp, mock.patch.object(m.os, 'getpid', return_value=100):
             proc = Path(temp); row = proc / '7'; row.mkdir(); (row / 'stat').write_text('7 (x) ' + ' '.join(['S'] + ['0'] * 19) + '\n')
+            child = proc / '100'; child.mkdir()
+            (child / 'stat').write_bytes(self.census_stat(100, 0, 11))
             (row / 'cmdline').write_bytes(b'qemu-system-aarch64\0')
             boot = proc / 'boot'; boot.write_text('boot\n')
             with self.assertRaisesRegex(m.Error, 'conflicting'):
@@ -338,6 +340,241 @@ class Tests(unittest.TestCase):
                     m.validate_conflicts(proc, boot)
             with self.assertRaisesRegex(m.Error, 'boot binding changed'):
                 m.validate_conflicts(proc, boot, admitted_boot='other')
+
+    def test_direct_sudo_parent_is_exact_live_exception_only(self):
+        m = self.m
+
+        def stat_line(pid, ppid, start):
+            fields = ['S', str(ppid), str(pid), str(pid)] + ['0'] * 15 + [str(start)] + ['0'] * 2
+            return ('%d (sudo) %s\n' % (pid, ' '.join(fields))).encode()
+
+        def fixture(temp, child=100, parent=200, child_ppid=None, parent_start=22,
+                    child_start=11, exe='/usr/bin/sudo', argv=None, uid='0 0 0 0', gid='0 0 0 0',
+                    unreadable=None):
+            child_ppid = parent if child_ppid is None else child_ppid
+            child_dir = temp / str(child); parent_dir = temp / str(parent)
+            child_dir.mkdir(); parent_dir.mkdir()
+            (child_dir / 'stat').write_bytes(stat_line(child, child_ppid, child_start))
+            (parent_dir / 'stat').write_bytes(stat_line(parent, 1, parent_start))
+            expected = [b'/usr/bin/sudo', b'-A', b'/usr/bin/python3', b'-E', b'-s', b'-B',
+                        os.fsencode(str(m.PACKET)), b'--release', os.fsencode(str(m.EXECUTION_RELEASE))]
+            (parent_dir / 'cmdline').write_bytes(b'\0'.join(expected if argv is None else argv) + b'\0')
+            (parent_dir / 'status').write_text('Uid:\t%s\nGid:\t%s\n' % (uid, gid))
+            os.symlink(exe, parent_dir / 'exe')
+            if unreadable == 'parent-stat': (parent_dir / 'stat').unlink()
+            if unreadable == 'parent-cmdline': (parent_dir / 'cmdline').unlink()
+            if unreadable == 'parent-status': (parent_dir / 'status').unlink()
+            if unreadable == 'child-stat': (child_dir / 'stat').unlink()
+            return temp / 'boot'
+
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory); boot = temp / 'boot'; boot.write_text('boot\n')
+            with mock.patch.object(m, 'PACKET', temp / 'packet.py'), mock.patch.object(m, 'EXECUTION_RELEASE', temp / 'release.json'), \
+                 mock.patch.object(m.os, 'getpid', return_value=100):
+                for defect in ('exact', 'wrong-exe', 'wrong-argv', 'wrong-uid', 'wrong-ppid', 'pid-reuse',
+                               'unreadable'):
+                    with self.subTest(defect=defect):
+                        for path in temp.iterdir():
+                            if path.name != 'boot':
+                                if path.is_dir():
+                                    for item in path.iterdir(): item.unlink()
+                                    path.rmdir()
+                                else: path.unlink()
+                        kwargs = {}
+                        if defect == 'wrong-exe': kwargs['exe'] = '/usr/bin/python3'
+                        if defect == 'wrong-argv': kwargs['argv'] = [b'/usr/bin/sudo', b'-A', b'/usr/bin/python3']
+                        if defect == 'wrong-uid': kwargs['uid'] = '1000 0 0 0'
+                        if defect == 'wrong-ppid': kwargs['child_ppid'] = 201
+                        if defect == 'unreadable': kwargs['unreadable'] = 'parent-cmdline'
+                        fixture(temp, **kwargs)
+                        if defect == 'exact':
+                            self.assertEqual(m._direct_sudo_parent(temp), {
+                                'parent': {'pid': 200, 'ppid': 1, 'starttime': 22},
+                                'child': {'pid': 100, 'ppid': 200, 'starttime': 11}})
+                        elif defect in ('wrong-exe', 'wrong-argv', 'wrong-uid'):
+                            self.assertIsNone(m._direct_sudo_parent(temp))
+                        elif defect == 'wrong-ppid':
+                            with self.assertRaises(m.Error): m._direct_sudo_parent(temp)
+                        elif defect == 'pid-reuse':
+                            parent_stat = temp / '200' / 'stat'
+                            original = parent_stat.read_bytes()
+                            changed = original.replace(b'22', b'33', 1)
+                            reads = [original, changed]
+                            real_read_text = Path.read_text
+                            def changing_read_text(path, *args, **kwargs):
+                                if path == parent_stat:
+                                    return reads.pop(0).decode()
+                                return real_read_text(path, *args, **kwargs)
+                            with mock.patch.object(Path, 'read_text', autospec=True,
+                                                   side_effect=changing_read_text):
+                                with self.assertRaises(m.Error): m._direct_sudo_parent(temp)
+                        else:
+                            with self.assertRaises(m.Error): m._direct_sudo_parent(temp)
+
+    @staticmethod
+    def census_stat(pid, ppid, start):
+        fields = ['S', str(ppid), str(pid), str(pid)] + ['0'] * 15 + [str(start)]
+        return ('%d (name with ) parentheses) %s\n' % (pid, ' '.join(fields))).encode()
+
+    def census_fixture(self, proc):
+        m = self.m
+        for pid, ppid, start in ((100, 200, 11), (200, 1, 22), (300, 1, 33), (400, 1, 44)):
+            row = proc / str(pid); row.mkdir()
+            (row / 'stat').write_bytes(self.census_stat(pid, ppid, start))
+            (row / 'cmdline').write_bytes(b'ordinary\0')
+        argv = [b'/usr/bin/sudo', b'-A', b'/usr/bin/python3', b'-E', b'-s', b'-B',
+                os.fsencode(str(m.PACKET)), b'--release', os.fsencode(str(m.EXECUTION_RELEASE))]
+        (proc / '200' / 'cmdline').write_bytes(b'\0'.join(argv) + b'\0')
+        (proc / '200' / 'status').write_text('Name:\tsudo\nUid:\t0 0 0 0\nGid:\t0 0 0 0\nvoluntary_ctxt_switches:\t1\n')
+        os.symlink('/usr/bin/sudo', proc / '200' / 'exe')
+        (proc / '300' / 'cmdline').write_bytes(b'qemu-system-x86_64\0')
+        boot = proc / 'boot'; boot.write_text('boot\n')
+        return boot, [{'pid': 300, 'starttime': 33}]
+
+    def test_census_exact_sudo_and_identity_bound_launcher(self):
+        m = self.m
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(m.os, 'getpid', return_value=100):
+            proc = Path(directory); boot, allowed = self.census_fixture(proc)
+            self.assertEqual(m.validate_conflicts(proc, boot, allowed=allowed), 'boot')
+            # A same-basename process elsewhere must still be rejected.
+            (proc / '400' / 'cmdline').write_bytes((proc / '200' / 'cmdline').read_bytes())
+            with self.assertRaisesRegex(m.Error, 'conflicting'):
+                m.validate_conflicts(proc, boot, allowed=allowed)
+
+    def test_census_sudo_exact_fields_and_unreadable_fail_closed(self):
+        m = self.m
+        defects = ('exe', 'argv', 'trailing-empty', 'missing-nul', 'uid', 'gid', 'ppid',
+                   'missing-uid', 'duplicate-gid', 'malformed-uid', 'stat', 'cmdline', 'status',
+                   'exe-unreadable', 'child-stat')
+        for defect in defects:
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory, \
+                    mock.patch.object(m.os, 'getpid', return_value=100):
+                proc = Path(directory); boot, allowed = self.census_fixture(proc)
+                parent = proc / '200'
+                if defect == 'exe':
+                    (parent / 'exe').unlink(); os.symlink('/usr/bin/other', parent / 'exe')
+                elif defect in ('argv', 'trailing-empty', 'missing-nul'):
+                    data = (parent / 'cmdline').read_bytes()
+                    data = data.replace(b'-A\0', b'-n\0') if defect == 'argv' else data + b'\0' if defect == 'trailing-empty' else data[:-1]
+                    (parent / 'cmdline').write_bytes(data)
+                elif defect in ('uid', 'gid', 'missing-uid', 'duplicate-gid', 'malformed-uid'):
+                    data = (parent / 'status').read_text()
+                    if defect in ('uid', 'gid'):
+                        key = defect.capitalize(); data = data.replace(key + ':\t0', key + ':\t1')
+                    elif defect == 'missing-uid': data = data.replace('Uid:\t0 0 0 0\n', '')
+                    elif defect == 'duplicate-gid': data += 'Gid:\t0 0 0 0\n'
+                    else: data = data.replace('Uid:\t0', 'Uid:\tbad')
+                    (parent / 'status').write_text(data)
+                elif defect == 'ppid':
+                    (proc / '100' / 'stat').write_bytes(self.census_stat(100, 0, 11))
+                elif defect == 'exe-unreadable': (parent / 'exe').unlink()
+                elif defect == 'child-stat': (proc / '100' / 'stat').unlink()
+                else: (parent / defect).unlink()
+                with self.assertRaises(m.Error):
+                    m.validate_conflicts(proc, boot, allowed=allowed)
+
+    def test_census_ignores_volatile_status_but_rejects_credential_churn(self):
+        m = self.m
+        for credentials_change in (False, True):
+            with self.subTest(credentials_change=credentials_change), tempfile.TemporaryDirectory() as directory, \
+                    mock.patch.object(m.os, 'getpid', return_value=100):
+                proc = Path(directory); boot, allowed = self.census_fixture(proc)
+                real_read = Path.read_text; reads = [0]
+                def changing_status(path, *args, **kwargs):
+                    data = real_read(path, *args, **kwargs)
+                    if path == proc / '200' / 'status':
+                        reads[0] += 1
+                        data = data.replace('switches:\t1', 'switches:\t%d' % reads[0])
+                        if credentials_change and reads[0] > 1: data = data.replace('Uid:\t0', 'Uid:\t1')
+                    return data
+                with mock.patch.object(Path, 'read_text', autospec=True, side_effect=changing_status):
+                    if credentials_change:
+                        with self.assertRaises(m.Error): m.validate_conflicts(proc, boot, allowed=allowed)
+                    else:
+                        self.assertEqual(m.validate_conflicts(proc, boot, allowed=allowed), 'boot')
+                        self.assertGreaterEqual(reads[0], 6)
+
+    def test_census_post_admission_churn_rejected_at_skip_and_completion(self):
+        m = self.m
+        for target in ('sudo', 'launcher'):
+            for timing in ('before-skip', 'after-skip'):
+                for defect in ('reuse', 'disappear', 'reparent', 'child-reuse', 'exe', 'argv', 'uid', 'gid') if target == 'sudo' else ('reuse', 'disappear'):
+                    with self.subTest(target=target, timing=timing, defect=defect), \
+                            tempfile.TemporaryDirectory() as directory, mock.patch.object(m.os, 'getpid', return_value=100):
+                        proc = Path(directory); boot, allowed = self.census_fixture(proc)
+                        victim = 200 if target == 'sudo' else 300
+                        def mutate():
+                            row = proc / str(victim)
+                            if defect == 'reuse':
+                                (row / 'stat').write_bytes(self.census_stat(victim, 1, 999))
+                            elif defect == 'disappear':
+                                for member in row.iterdir(): member.unlink()
+                                row.rmdir()
+                            elif defect == 'reparent': (proc / '100' / 'stat').write_bytes(self.census_stat(100, 400, 11))
+                            elif defect == 'child-reuse': (proc / '100' / 'stat').write_bytes(self.census_stat(100, 200, 999))
+                            elif defect == 'exe':
+                                (row / 'exe').unlink(); os.symlink('/usr/bin/other', row / 'exe')
+                            elif defect == 'argv':
+                                (row / 'cmdline').write_bytes((row / 'cmdline').read_bytes() + b'\0')
+                            else:
+                                key = defect.capitalize()
+                                (row / 'status').write_text((row / 'status').read_text().replace(key + ':\t0', key + ':\t1'))
+                        real_iterdir = Path.iterdir
+                        def census_rows(path):
+                            if path != proc:
+                                yield from real_iterdir(path); return
+                            # Mutation happens only after the admission snapshot.
+                            if timing == 'before-skip': mutate()
+                            yield proc / str(victim)
+                            if timing == 'after-skip': mutate()
+                            for pid in (100, 200, 300, 400):
+                                if pid != victim: yield proc / str(pid)
+                        with mock.patch.object(Path, 'iterdir', autospec=True, side_effect=census_rows):
+                            with self.assertRaises(m.Error):
+                                m.validate_conflicts(proc, boot, allowed=allowed)
+
+    def test_census_bare_pid_allowance_is_rejected(self):
+        m = self.m
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(m.os, 'getpid', return_value=100):
+            proc = Path(directory); boot, _allowed = self.census_fixture(proc)
+            for allowed in ([300], [{'pid': True, 'starttime': 33}],
+                            [{'pid': 300, 'starttime': 33}, {'pid': 300, 'starttime': 33}]):
+                with self.subTest(allowed=allowed), self.assertRaisesRegex(m.Error, 'identity schema'):
+                    m.validate_conflicts(proc, boot, allowed=allowed)
+
+    def test_runtime_admission_preserves_launcher_identity_through_census(self):
+        m = self.m
+        for defect in ('exact', 'reuse', 'disappear'):
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory, \
+                    mock.patch.object(m.os, 'getpid', return_value=100):
+                proc = Path(directory); boot, launchers = self.census_fixture(proc)
+                runtime = {'boot_id': 'boot', 'launcher_identities': launchers,
+                    'conflict_basenames': ['qemu-system-x86_64', 'qemu-system-aarch64', 'qemu-kvm', 'mcexec',
+                        'native_rust_exact_build_container_owner.py', 'native_exact_candidate_retire.py',
+                        'native_exact_candidate_quarantine_recover.py', 'native-exact-candidate-retirement-704f6654-1.py',
+                        'native-exact-candidate-retirement-704f6654-2.py', 'native-exact-candidate-quarantine-recover-704f6654-1.py',
+                        'native-exact-candidate-quarantine-recovery-execution-704f6654-1.sh'],
+                    'heavy_lease_paths': [str(m.TOMBSTONE)],
+                    'immutable_tombstone': {'path': str(m.TOMBSTONE), 'immutable': True, 'device': 1831, 'inode': 31474,
+                        'sha256': '482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123'}}
+                real_identity = m._proc_identity_pid
+                def admitted_then_changed(pid, proc):
+                    value = real_identity(pid, proc)
+                    if defect == 'reuse':
+                        (proc / str(pid) / 'stat').write_bytes(self.census_stat(pid, 1, 999))
+                    elif defect == 'disappear':
+                        for member in (proc / str(pid)).iterdir(): member.unlink()
+                        (proc / str(pid)).rmdir()
+                    return value
+                observed = (1831, 31474, None, None, None, None, None, runtime['immutable_tombstone']['sha256'])
+                with mock.patch.object(m, '_proc_identity_pid', side_effect=admitted_then_changed), \
+                        mock.patch.object(m, 'tombstone_fd', return_value=(98765, observed)) as tombstone, \
+                        mock.patch.object(m, 'revalidate_tombstone'), mock.patch.object(m.os, 'close'):
+                    if defect == 'exact':
+                        self.assertEqual(m.validate_runtime_admission(runtime, proc, boot), 'boot')
+                    else:
+                        with self.assertRaises(m.Error): m.validate_runtime_admission(runtime, proc, boot)
+                        tombstone.assert_not_called()
 
     def test_descriptor_cleanup_is_bounded_and_closes_real_temporary_fds(self):
         m = self.m

@@ -7807,3 +7807,33 @@ sudo continuation. Record `stability-shutdown-checkpoint-20260929-157.json` is
 the live cursor. Formal counters, successful current-candidate builds and real
 guest applications remain zero; applications remain 0/273 and the OS remains
 incomplete. The launcher pause is temporary.
+
+Continuation checkpoint 158, 2026-09-29: resumption found and repaired a
+deterministic launch blocker before generating an execution release. A harmless
+sudo ancestry probe proved the wrapper's direct `/usr/bin/sudo` parent retains
+the canonical packet pathname in argv, so the accepted conflict scanner would
+reject its own launch. The first bounded correction `6a29b462...00882` passed
+29 tests but independent review BLOCKed it: the census exempted a bare parent
+PID after validation, allowing reproduced reparent/PID reuse, compared volatile
+status counters, and accepted extra trailing NUL argv fields.
+
+Per convergence policy, an Astra expert replaced that candidate with exact DRAFT
+packet `ae2f6d07...a1e9` and tests `fadd0322...18b6`. Direct sudo authority now
+retains parent and child PID/starttime/PPID tokens, exact executable, exact
+NUL-terminated argv and parsed root Uid/Gid. Both the sudo and released launcher
+identities are revalidated when an exemption is applied and again before census
+success; bare PID allowances reject and the complete forbidden set is unchanged.
+Thirty-five tests pass under Python 3.8 and 3.9, including all four prior
+post-admission/post-skip reuse windows, disappearance, reparent, credential/
+argv/executable churn, malformed inputs and harmless volatile status changes.
+Compilation and diff checks pass. Independent review PASSes source only.
+
+No external release, protected-root operation, Docker mutation, deletion, build
+or guest occurred. The packet and wrapper remain inert. Record
+`stability-native-exact-quarantine-continuation-sudo-parent-success-704f6654-20260929-1.json`
+preserves the failure lineage. Next commit/push/fetch this source correction and
+use that fetched commit as the template ancestor for the exact four-path
+finalization. Then obtain independent mechanical/execution review and repeat
+the full live preflight before any one-shot sudo continuation. Formal counters,
+current-candidate builds and real guest applications remain zero; applications
+remain 0/273.
