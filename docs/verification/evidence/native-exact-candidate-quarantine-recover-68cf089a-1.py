@@ -441,8 +441,8 @@ def reconstruct_inventory():
     if type(rows) is not list or not rows:
         fail('inventory rows missing')
     expected = {}
-    prefixes = {str(C.relative_to('/')): (C, QC, 26, 14117, 10462),
-                str(B.relative_to('/')): (B, QB, 26, 24701, 87)}
+    prefixes = {str(original.relative_to('/')): (original, quarantine, device, inode, count)
+                for original, quarantine, device, inode, count in ROOTS}
     for row in rows:
         if type(row) is not dict or set(row) != {'path', 'type', 'mode', 'sha256'}:
             fail('inventory row malformed')
@@ -548,8 +548,6 @@ def delete_verified(fd, expected, prefix, device, journal, root_name):
         first = os.stat(name, dir_fd=fd, follow_symlinks=False)
         if first.st_dev != device or not same(first, wanted, wanted['type']):
             fail('descriptor identity mismatch: ' + rel)
-        journal.write('delete-entry', {'root': root_name, 'path': rel,
-                                       'inode': first.st_ino, 'type': wanted['type']})
         if wanted['type'] == 'directory':
             child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
             try:
@@ -560,6 +558,9 @@ def delete_verified(fd, expected, prefix, device, journal, root_name):
                 os.close(child)
             if not same(os.stat(name, dir_fd=fd, follow_symlinks=False), wanted, 'directory'):
                 fail('directory changed before rmdir: ' + rel)
+            journal.write('delete-entry', {'root': root_name, 'path': rel,
+                                           'inode': first.st_ino, 'type': wanted['type'],
+                                           'validated': True, 'operation': 'rmdir'})
             os.rmdir(name, dir_fd=fd)
         elif wanted['type'] == 'file':
             child = os.open(name, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
@@ -574,12 +575,21 @@ def delete_verified(fd, expected, prefix, device, journal, root_name):
                 fail('file content/identity mismatch: ' + rel)
             if not same(os.stat(name, dir_fd=fd, follow_symlinks=False), wanted, 'file'):
                 fail('file changed before unlink: ' + rel)
+            journal.write('delete-entry', {'root': root_name, 'path': rel,
+                                           'inode': first.st_ino, 'type': wanted['type'],
+                                           'validated': True, 'operation': 'unlink',
+                                           'sha256': digest.hexdigest()})
             os.unlink(name, dir_fd=fd)
         elif wanted['type'] == 'symlink':
-            if hashlib.sha256(os.fsencode(os.readlink(name, dir_fd=fd))).hexdigest() != wanted['sha256']:
+            digest = hashlib.sha256(os.fsencode(os.readlink(name, dir_fd=fd))).hexdigest()
+            if digest != wanted['sha256']:
                 fail('symlink target mismatch: ' + rel)
             if not same(os.stat(name, dir_fd=fd, follow_symlinks=False), wanted, 'symlink'):
                 fail('symlink changed before unlink: ' + rel)
+            journal.write('delete-entry', {'root': root_name, 'path': rel,
+                                           'inode': first.st_ino, 'type': wanted['type'],
+                                           'validated': True, 'operation': 'unlink',
+                                           'sha256': digest})
             os.unlink(name, dir_fd=fd)
         else:
             fail('unsupported verified type')
@@ -587,6 +597,53 @@ def delete_verified(fd, expected, prefix, device, journal, root_name):
 
 def scoped(expected, quarantine):
     return {relative: value for (root, relative), value in expected.items() if root == str(quarantine)}
+
+
+def remove_old_lease(journal):
+    parent = OLD_LEASE.parent
+    parentfd = os.open(parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    leasefd = None
+    try:
+        leasefd = os.open(OLD_LEASE.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parentfd)
+        info = os.fstat(leasefd)
+        if (not stat.S_ISREG(info.st_mode) or
+                (info.st_dev, info.st_ino, stat.S_IMODE(info.st_mode), info.st_uid, info.st_gid) != OLD_LEASE_ID):
+            fail('old lease descriptor identity mismatch')
+        content = bytearray()
+        while True:
+            block = os.read(leasefd, 1 << 20)
+            if not block:
+                break
+            content.extend(block)
+        digest = hashlib.sha256(content).hexdigest()
+        if digest != OLD_LEASE_SHA:
+            fail('old lease descriptor hash mismatch')
+        lease = json.loads(bytes(content).decode('utf-8'), object_pairs_hook=reject_duplicates)
+        if lease != {'schema': 'mckernel.native-exact-candidate-cleanup-lease.v1',
+                     'pid': OLD_HELPER_PID, 'started_at_utc': '2026-09-29T05:32:34.727836Z'}:
+            fail('old lease descriptor bytes/schema mismatch')
+        if Path('/proc/%d' % OLD_HELPER_PID).exists():
+            fail('old helper PID exists or was reused')
+        current = os.stat(OLD_LEASE.name, dir_fd=parentfd, follow_symlinks=False)
+        if ((current.st_dev, current.st_ino, stat.S_IMODE(current.st_mode), current.st_uid, current.st_gid) !=
+                OLD_LEASE_ID or not stat.S_ISREG(current.st_mode)):
+            fail('old lease changed before unlink')
+        journal.write('old-lease-remove-before', {'lease': lstat_id(OLD_LEASE),
+                                                  'lease_sha256': digest,
+                                                  'archive_sha256': RAW_ARCHIVE_SHA,
+                                                  'validated': True})
+        current = os.stat(OLD_LEASE.name, dir_fd=parentfd, follow_symlinks=False)
+        if ((current.st_dev, current.st_ino, stat.S_IMODE(current.st_mode), current.st_uid, current.st_gid) !=
+                OLD_LEASE_ID or not stat.S_ISREG(current.st_mode)):
+            fail('old lease changed after journal')
+        os.unlink(OLD_LEASE.name, dir_fd=parentfd)
+        os.fsync(parentfd)
+    finally:
+        if leasefd is not None:
+            os.close(leasefd)
+        os.close(parentfd)
+    if OLD_LEASE.exists() or OLD_LEASE.is_symlink():
+        fail('old lease remains after unlink')
 
 
 def main():
@@ -646,7 +703,9 @@ def main():
                 finally:
                     os.close(fd)
                 current = os.stat(quarantine.name, dir_fd=parentfd, follow_symlinks=False)
-                if (current.st_dev, current.st_ino) != (device, inode):
+                if ((current.st_dev, current.st_ino, stat.S_IMODE(current.st_mode),
+                     current.st_uid, current.st_gid) != (device, inode, 0o700, 0, 0) or
+                        not stat.S_ISDIR(current.st_mode)):
                     fail('quarantine root changed before final rmdir')
                 os.rmdir(quarantine.name, dir_fd=parentfd)
                 fsync_dir('/dev/shm')
@@ -656,14 +715,7 @@ def main():
             os.close(parentfd)
         for path in (C, B, QC, QB):
             assert_absent(path)
-        validate_old_lease()
-        journal.write('old-lease-remove-before', {'lease': lstat_id(OLD_LEASE),
-                                                  'lease_sha256': sha(OLD_LEASE),
-                                                  'archive_sha256': RAW_ARCHIVE_SHA})
-        os.unlink(OLD_LEASE)
-        fsync_dir(SB)
-        if OLD_LEASE.exists() or OLD_LEASE.is_symlink():
-            fail('old lease remains after unlink')
+        remove_old_lease(journal)
         result = {'schema': 'mckernel.native-exact-candidate-quarantine-recovery-result.v1',
                   'targets_absent': True, 'old_lease_absent': True,
                   'claim_path': str(CLAIM), 'claim_sha256': sha(CLAIM),

@@ -6370,3 +6370,25 @@ and old-lease removal only after all four protected paths are absent. Formal
 counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic apps and
 zero successful current-candidate builds remain. The OS goal is incomplete and
 the launcher pause is temporary.
+
+Continuation checkpoint 89, 2026-09-28: the distinct quarantine-recovery
+template now PASSes independent source review and remains impossible to execute.
+Exact helper `d55fedef...188e`, packet `0298aea1...728`, DRAFT basis
+`f26ee96c...6bd` and ten-test suite `84f8982d...318` pass the focused suite,
+helper self-test, Python compilation, shell syntax, JSON parsing and diff checks.
+The correction makes the inventory consume one root authority, journals each
+validated deletion intent only after descriptor/content checks, descriptor-binds
+the old lease through its final unlink, rechecks quarantine metadata before root
+removal, and durably writes the packet capacity record. The original observer
+failure, raw archive, old lease and quarantines remain unchanged.
+
+This is Layer-A/temporary-filesystem evidence only. No recovery, sudo, Docker,
+build, guest or application ran; this work window has zero new real guest apps,
+and there are still zero successful current-candidate builds. See
+`stability-native-exact-quarantine-recovery-template-readiness-20260929-1.json`.
+Next commit/push/fetch these exact template bytes. Then change only the basis
+source checkpoint/status, helper release pin and packet helper/release pins;
+rerun all checks, obtain an independent exact mechanical-diff/execution review,
+commit/push/fetch final bytes, and only then perform one fresh non-root packet
+attempt. Never rerun or roll back the original cleanup. Formal counters remain
+0/273, 2/4, 6/130, 350/10,000 and 0/7.

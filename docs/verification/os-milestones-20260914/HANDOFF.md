@@ -496,3 +496,11 @@ has three fixture failures while self-test, compilation, syntax, JSON and diff
 checks pass. Next fix only those pure regressions, obtain independent source
 review, checkpoint the templates, mechanically finalize them, and seek a
 separate execution release. Never rerun or roll back the failed cleanup.
+
+Checkpoint 89 repairs and independently source-reviews the recovery template.
+Helper `d55fedef...188e`, packet `0298aea1...728`, DRAFT basis
+`f26ee96c...6bd` and ten-test suite `84f8982d...318` PASS; the release sentinels
+still make execution impossible. Commit/push/fetch these exact bytes, then make
+only the four authorized final substitutions and seek a separate exact
+mechanical-diff/execution review. Both quarantines and old lease remain protected;
+no cleanup, build, guest, app or acceptance result follows from this source PASS.

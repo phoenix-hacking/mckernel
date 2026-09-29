@@ -91,6 +91,7 @@ class RecoveryTests(unittest.TestCase):
             qc.mkdir(mode=0o700); qb.mkdir(mode=0o700)
             (qc / 'file').write_bytes(b'payload')
             (qb / 'link').symlink_to('target')
+            (qc / 'file').chmod(0o644)
             dev = os.lstat(qc).st_dev
             rows = [
                 {'path': str(c.relative_to('/')), 'type': 'directory', 'mode': '0755', 'sha256': None},
@@ -113,11 +114,13 @@ class RecoveryTests(unittest.TestCase):
             self.assertEqual(result[(str(qb), 'link')]['sha256'], hashlib.sha256(b'target').hexdigest())
 
     def test_descriptor_delete_hash_checks_and_journals_each_entry(self):
-        module = load_helper()
         with tempfile.TemporaryDirectory() as raw:
+            module = load_helper()
             root = Path(raw)
-            (root / 'd').mkdir()
+            (root / 'd').mkdir(mode=0o755)
+            (root / 'd').chmod(0o755)
             (root / 'd' / 'f').write_bytes(b'bytes')
+            (root / 'd' / 'f').chmod(0o644)
             file_info = os.lstat(root / 'd' / 'f')
             dir_info = os.lstat(root / 'd')
             expected = {
@@ -133,20 +136,46 @@ class RecoveryTests(unittest.TestCase):
                 os.close(fd)
             self.assertEqual(os.listdir(root), [])
             self.assertEqual([phase for phase, _ in journal.records], ['delete-entry', 'delete-entry'])
+            self.assertEqual([record['operation'] for _, record in journal.records], ['unlink', 'rmdir'])
+            self.assertTrue(all(record['validated'] is True for _, record in journal.records))
 
     def test_wrong_file_digest_stops_before_unlink(self):
         module = load_helper()
         with tempfile.TemporaryDirectory() as raw:
-            root = Path(raw); path = root / 'f'; path.write_bytes(b'actual'); info = os.lstat(path)
+            root = Path(raw); path = root / 'f'; path.write_bytes(b'actual'); path.chmod(0o644); info = os.lstat(path)
             expected = {'f': {'type': 'file', 'mode': '0644', 'sha256': hashlib.sha256(b'wrong').hexdigest(),
                               'dev': info.st_dev, 'inode': info.st_ino}}
             fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY)
+            journal = MemoryJournal()
             try:
                 with self.assertRaisesRegex(RuntimeError, 'content/identity'):
-                    module.delete_verified(fd, expected, '', info.st_dev, MemoryJournal(), 'fixture')
+                    module.delete_verified(fd, expected, '', info.st_dev, journal, 'fixture')
             finally:
                 os.close(fd)
             self.assertTrue(path.exists())
+            self.assertEqual(journal.records, [])
+
+    def test_old_lease_is_descriptor_verified_journaled_then_removed(self):
+        module = load_helper()
+        with tempfile.TemporaryDirectory() as raw:
+            lease = Path(raw) / 'lease.json'
+            helper_pid = 99999999
+            data = (json.dumps({'schema': 'mckernel.native-exact-candidate-cleanup-lease.v1',
+                                'pid': helper_pid,
+                                'started_at_utc': '2026-09-29T05:32:34.727836Z'},
+                               sort_keys=True, separators=(',', ':')) + '\n').encode()
+            lease.write_bytes(data)
+            lease.chmod(0o600)
+            info = os.lstat(lease)
+            module.OLD_LEASE = lease
+            module.OLD_LEASE_ID = (info.st_dev, info.st_ino, 0o600, info.st_uid, info.st_gid)
+            module.OLD_LEASE_SHA = hashlib.sha256(data).hexdigest()
+            module.OLD_HELPER_PID = helper_pid
+            journal = MemoryJournal()
+            module.remove_old_lease(journal)
+            self.assertFalse(lease.exists())
+            self.assertEqual([phase for phase, _ in journal.records], ['old-lease-remove-before'])
+            self.assertTrue(journal.records[0][1]['validated'])
 
     def released_fixture(self, directory):
         release = json.loads(json.dumps(self.basis))
@@ -176,11 +205,12 @@ class RecoveryTests(unittest.TestCase):
     def test_lease_removal_is_after_all_path_absence_checks(self):
         source = HELPER.read_text()
         absence = source.index('for path in (C, B, QC, QB):')
-        revalidate = source.index('validate_old_lease()', absence)
-        unlink = source.index('os.unlink(OLD_LEASE)', revalidate)
+        remove = source.index('remove_old_lease(journal)', absence)
+        unlink = source.index("os.unlink(OLD_LEASE.name, dir_fd=parentfd)")
+        journal = source.index("journal.write('old-lease-remove-before'", source.index('def remove_old_lease'))
         terminal = source.index("journal.write('terminal-success'", unlink)
-        self.assertLess(absence, revalidate)
-        self.assertLess(revalidate, unlink)
+        self.assertLess(absence, remove)
+        self.assertLess(journal, unlink)
         self.assertLess(unlink, terminal)
 
 

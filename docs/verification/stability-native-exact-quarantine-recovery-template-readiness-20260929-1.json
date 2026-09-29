@@ -1,0 +1,58 @@
+{
+  "acceptance_credit": false,
+  "base_checkpoint": "7c54f7954d8f7fe6bfc3f324cabf32373eeb9e4d",
+  "checks": [
+    {
+      "command": "python3 -B -m unittest -v scripts.tests.test_native_exact_candidate_quarantine_recovery",
+      "result": "PASS_10_TESTS"
+    },
+    {
+      "command": "python3 -B docs/verification/evidence/native-exact-candidate-quarantine-recover-68cf089a-1.py --self-test",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -B -m py_compile docs/verification/evidence/native-exact-candidate-quarantine-recover-68cf089a-1.py scripts/tests/test_native_exact_candidate_quarantine_recovery.py",
+      "result": "PASS"
+    },
+    {
+      "command": "bash -n docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-68cf089a-1.sh",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -m json.tool docs/verification/evidence/native-exact-candidate-quarantine-recovery-release-basis-68cf089a-1.json",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "corrected_observer_sha256": "e6f46761aeaa64a4dffc30dee0865dea7784a920333b730dfc42f98c44688e4d",
+  "created_at_utc": "2026-09-29T05:57:25Z",
+  "failure_family": "prepared-candidate quarantine cleanup and retained old lease after observer failure",
+  "helper_sha256": "d55fedefac45865ba3d4c50940e75a7d29cb757ecb8e6256a2e8b3388428188e",
+  "independent_review": {
+    "decision": "PASS_TEMPLATE_SOURCE_ONLY",
+    "reviewed_scope": "historical failure bindings, permanent claim and journal, inventory reconstruction, corrected observation, descriptor deletion, old-lease removal, packet admission and acyclic finalization",
+    "runtime_acceptance": false,
+    "unexecuted": [
+      "privileged live observation",
+      "quarantine deletion",
+      "old lease removal",
+      "timeout and signal delivery",
+      "crash durability"
+    ]
+  },
+  "original_failure_archive_sha256": "cc38687005d52ecc4b0d48ffa9ff650832169ba9d426add604b0c4e0f8893eea",
+  "original_failure_record_sha256": "d2150a0a8173c0caaa4c5a6050653947e372480cd059d8d9ff49656dac76ed97",
+  "packet_sha256": "0298aea12efdaf2df287cf591a975e3413612a300527646c301fd553ac64d728",
+  "record_kind": "native_exact_candidate_quarantine_recovery_template_readiness",
+  "release_basis_sha256": "f26ee96cef03097e1c25fbb0c9e11e1a486b037990ce2b5899082f71507ed6bd",
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "PASS_TEMPLATE_SOURCE_ONLY_NOT_RELEASED",
+  "test_sha256": "84f8982d6aa0761528206c33bd4121cd91b5ad98650635e8c95d590700410318",
+  "template_is_executable": false,
+  "template_release_sentinel": "UNSET-REQUIRES-INDEPENDENT-RECOVERY-RELEASE-SHA256",
+  "template_source_checkpoint": "UNSET_REQUIRES_RECOVERY_TEMPLATE_CHECKPOINT"
+}

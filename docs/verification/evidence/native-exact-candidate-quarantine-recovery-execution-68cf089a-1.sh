@@ -144,8 +144,15 @@ PY
 /usr/bin/python3 - "$SB" "$E/capacity.json" <<'PY'
 import json,os,sys
 v={n:(lambda s:s.f_bavail*s.f_frsize)(os.statvfs(p)) for n,p in (('host','/'),('scratch',sys.argv[1]),('tmpfs','/dev/shm'))};d=(json.dumps(v,sort_keys=True,separators=(',',':'))+'\n').encode();f=os.open(sys.argv[2],os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
-try:os.write(f,d);os.fsync(f)
+try:
+ o=0
+ while o<len(d):
+  n=os.write(f,d[o:])
+  if n<=0:raise RuntimeError('short capacity write')
+  o+=n
+ os.fsync(f)
 finally:os.close(f)
+z=os.open(os.path.dirname(sys.argv[2]),os.O_RDONLY|os.O_DIRECTORY);os.fsync(z);os.close(z)
 if v['host']<16*1024**3 or v['scratch']<12*1024**3 or v['tmpfs']<4*1024**3:raise SystemExit(1)
 PY
 /usr/bin/ps -eo pid=,ppid=,args= >"$E/processes.txt" || die ps
