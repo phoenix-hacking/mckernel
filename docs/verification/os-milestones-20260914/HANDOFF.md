@@ -579,3 +579,15 @@ immutable input. No execution is authorized. Commit/push/fetch this template,
 mechanically finalize the acyclic pins, then require a separate exact execution
 review and fetched checkpoint before one attempt. Preserve the old lease/roots
 and never retry or alter `-2`.
+
+Shutdown checkpoint 98 preserves the pushed/fetched DRAFT at
+`7aa1c02763d517fa2267f2d3ce67e097ddfc7734` without finalizing or executing it.
+All child lanes are joined; launcher wrapper/worker/app-server identities remain
+3399308/3399313/3399317 with starttimes 83682487/83682494/83682500. Preserve
+both sealed quarantine inodes 14117 and 24701, the old lease inode 31447, all
+prior failure evidence and the absence of recovery-3 claim/journal outputs. On
+the next authorized continuation, reconcile those identities, mechanically
+finalize only the reviewed recovery-3 pins/status, rerun all pure checks, obtain
+independent exact execution review, and push/fetch a separate release before at
+most one non-root attempt. No runtime or acceptance counter changed; the OS is
+incomplete and this launcher pause is temporary.

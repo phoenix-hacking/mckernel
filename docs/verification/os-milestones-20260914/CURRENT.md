@@ -6588,3 +6588,36 @@ unchanged. No live or privileged operation ran. Next commit/push/fetch this
 template, mechanically finalize its acyclic pins, obtain an independent exact
 execution review, then push/fetch before at most one new packet attempt. Never
 reuse `-2`; counters and app/build counts remain unchanged.
+
+Shutdown checkpoint 98, 2026-09-29: the launcher stop request arrived after
+the independently reviewed recovery-3 DRAFT template was committed, pushed and
+fetched byte-identically at `7aa1c02763d517fa2267f2d3ce67e097ddfc7734`.
+No recovery-3 finalization, execution-release record, sudo, Docker, observer,
+cleanup, build, module, guest or application operation ran after the stop
+request. All child lanes are joined. Launcher wrapper PID 3399308/starttime
+83682487, worker PID 3399313/starttime 83682494 and app-server PID
+3399317/starttime 83682500 remain live and were not disturbed.
+
+Preserve the original root:root 0700 quarantines at device/inode 26/14117 and
+26/24701, the absent original candidate and metadata-backup paths, and the old
+root:root 0600 lease at device/inode 1831/31447 with SHA `69ced239...47e3`.
+Recovery-3 claim and journal outputs remain absent. Preserve every recovery-1
+and recovery-2 claim, journal, preflight, release, failure record and raw
+archive; never retry, truncate or reuse the consumed `-2` packet or outputs.
+Available capacity at shutdown was 24,566,345,728 bytes on the repository
+filesystem, 21,588,471,808 bytes on scratch, and 21,060,419,584 bytes of host
+memory. No heavy QEMU, mcexec or recovery-3 process was live.
+
+The next authorized continuation must first reconcile this fetched checkpoint,
+the three launcher identities and the protected live objects. Then mechanically
+finalize recovery-3 exactly as specified by its reviewed basis: replace only
+the four basis fields and the three helper/packet pins, rerun the complete 30
+pure tests plus self-test, temporary-output Python compilation, shell syntax,
+JSON and diff checks, and obtain an independent exact mechanical/execution
+review. Create a separate execution-release record, commit/push/fetch and verify
+all final blobs before at most one non-root packet invocation. Do not execute
+the DRAFT or infer cleanup/runtime acceptance from source review. Formal
+counters remain 0/273 applications, 2/4 fault modes, 6/130 production gates,
+350/10,000 points and 0/7 language gates; there are four historical diagnostic
+apps and zero successful current-candidate builds. The OS goal remains
+incomplete, and this launcher pause is temporary.
