@@ -559,29 +559,93 @@ def _mount_intersects(source, target):
     return os.path.commonpath((source, target)) in (source, target)
 
 
+def docker_record_sha256(row):
+    """Hash the complete inspect object in memory; never persist its bytes."""
+    return digest(json.dumps(_canon_mounts(row), sort_keys=True, separators=(',', ':'),
+                             ensure_ascii=True, allow_nan=False).encode('utf-8'))
+
+
+def protected_docker_mounts(row):
+    protected = [str(path) for path in ORIGINALS + QUARANTINES]
+    return [mount for mount in _canon_mounts(row)['Mounts']
+            if any(_mount_intersects(mount.get('Source'), path) for path in protected)]
+
+
+def docker_safe_summary(records):
+    """Only explicit non-secret audit fields cross the persistence boundary."""
+    result = []
+    state_types = {'Status': str, 'Running': bool, 'Paused': bool, 'Restarting': bool,
+                   'OOMKilled': bool, 'Dead': bool, 'Pid': int, 'ExitCode': int}
+    mount_types = {'Type': str, 'Name': str, 'Source': str, 'Destination': str,
+                   'Driver': str, 'Mode': str, 'RW': bool, 'Propagation': str}
+    for row in records:
+        ident = row.get('Id')
+        if not isinstance(ident, str) or H64.fullmatch(ident) is None:
+            fail('Docker safe-summary identifier')
+        state = row.get('State')
+        policy = row.get('HostConfig', {}).get('RestartPolicy')
+        if not isinstance(state, dict) or not isinstance(policy, dict):
+            fail('Docker safe-summary state/policy schema')
+        safe_state = {}
+        for key, kind in state_types.items():
+            if type(state.get(key)) is not kind:
+                fail('Docker safe-summary state field: ' + key)
+            safe_state[key] = state[key]
+        if safe_state['Status'] not in ('created', 'restarting', 'running', 'removing', 'paused', 'exited', 'dead'):
+            fail('Docker safe-summary status')
+        if type(row.get('RestartCount')) is not int or row['RestartCount'] < 0:
+            fail('Docker safe-summary restart count')
+        if policy.get('Name') not in ('', 'no', 'always', 'unless-stopped', 'on-failure') or type(policy.get('MaximumRetryCount')) is not int:
+            fail('Docker safe-summary restart policy')
+        mounts = []
+        for mount in protected_docker_mounts(row):
+            safe_mount = {}
+            for key, kind in mount_types.items():
+                if key in mount:
+                    if type(mount[key]) is not kind:
+                        fail('Docker safe-summary mount field: ' + key)
+                    safe_mount[key] = mount[key]
+            mounts.append(safe_mount)
+        result.append({'id': ident, 'record_sha256': docker_record_sha256(row),
+                       'protected_mounts': mounts, 'terminal_state': safe_state,
+                       'restart_count': row['RestartCount'],
+                       'restart_policy': {'Name': policy['Name'],
+                                          'MaximumRetryCount': policy['MaximumRetryCount']}})
+    return {'schema': 'mckernel.docker-census-safe-summary.v1',
+            'records': sorted(result, key=lambda row: row['id'])}
+
+
 def validate_docker(records, release):
     """Authenticate every current container; ordering of independent mounts is harmless."""
     docker = release.get('docker', {})
-    want = docker.get('authenticated_current_records')
+    if not isinstance(docker, dict) or set(docker) != {'authenticated_current_record_sha256', 'terminal_candidate_mount_exceptions'}:
+        fail('Docker release schema')
+    want = docker.get('authenticated_current_record_sha256')
     exceptions = docker.get('terminal_candidate_mount_exceptions', {})
     if not isinstance(want, dict) or len(want) != 17 or not isinstance(exceptions, dict) or len(exceptions) != 4:
         fail('Docker full census/released exception set')
     if set(exceptions) - set(want):
         fail('Docker exception not in authenticated IDs')
+    if any(not isinstance(ident, str) or H64.fullmatch(ident) is None or
+           not isinstance(pin, str) or H64.fullmatch(pin) is None for ident, pin in want.items()):
+        fail('Docker authenticated hash syntax')
     if not isinstance(records, list) or len(records) != 17:
         fail('Docker full census count')
     got = {row.get('Id'): _canon_mounts(row) for row in records if isinstance(row, dict)}
     if len(got) != 17 or set(got) != set(want):
         fail('Docker census omission/churn')
-    protected = [str(path) for path in ORIGINALS + QUARANTINES]
     for ident, row in got.items():
-        if row != _canon_mounts(want[ident]):
+        if docker_record_sha256(row) != want[ident]:
             fail('Docker authenticated record')
-        observed = [mount for mount in row['Mounts'] if any(_mount_intersects(mount.get('Source'), path) for path in protected)]
+        observed = protected_docker_mounts(row)
         allowed = exceptions.get(ident, [])
         if ident in exceptions:
             state = row.get('State')
-            if not isinstance(state, dict) or state.get('Status') != 'exited' or state.get('Running') is not False or type(state.get('Pid')) is not int or state['Pid'] != 0 or state.get('OOMKilled') is not False or row.get('RestartCount') != 0:
+            if (not isinstance(state, dict) or state.get('Status') != 'exited' or
+                    any(state.get(key) is not False for key in ('Running', 'Paused', 'Restarting', 'OOMKilled', 'Dead')) or
+                    type(state.get('Pid')) is not int or state['Pid'] != 0 or
+                    type(state.get('ExitCode')) is not int or type(row.get('RestartCount')) is not int or row['RestartCount'] != 0 or
+                    row.get('HostConfig', {}).get('RestartPolicy') != {'Name': 'no', 'MaximumRetryCount': 0}):
                 fail('Docker terminal exception state')
             if _canon_mounts({'Mounts': observed})['Mounts'] != _canon_mounts({'Mounts': allowed})['Mounts']:
                 fail('Docker terminal mount exception mismatch')
@@ -1537,11 +1601,11 @@ def execute_final(execution_release):
         revalidate_tombstone(tomb_fd, tomb)
         expected = validate_quarantines(historical_release)
         before = docker_census()
-        exclusive_json(OUTPUT / 'docker.before.json', before)
+        exclusive_json(OUTPUT / 'docker.before.json', docker_safe_summary(before))
         validate_docker(before, execution_release)
         seal_and_run_observer(expected, admitted_boot)
         after = docker_census()
-        exclusive_json(OUTPUT / 'docker.after.json', after)
+        exclusive_json(OUTPUT / 'docker.after.json', docker_safe_summary(after))
         validate_docker(after, execution_release)
         append_journal(journal_fd, 'proofs-complete')
         for (_original, quarantine, device, inode), members in zip(ROOTS, expected):

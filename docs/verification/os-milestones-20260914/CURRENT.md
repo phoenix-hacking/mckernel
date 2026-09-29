@@ -7754,3 +7754,34 @@ fresh complete live preflight before one one-shot sudo run. Record
 `stability-native-exact-quarantine-continuation-source-success-704f6654-20260929-1.json`
 is source evidence only. Formal counters, successful current-candidate builds
 and real guest applications remain zero; applications remain 0/273.
+
+Continuation checkpoint 156, 2026-09-29: read-only release preflight found the
+expected 17 Docker containers and the exact four exited protected-mount users,
+but it also exposed a credential-retention risk before release generation. Full
+`docker inspect` objects contain arbitrary `Config.Env` values and therefore
+must not be committed or written into evidence. The first ordinary-user Docker
+command correctly failed permission-denied without changing state; the repeated
+read-only census used `sudo -A`. No environment values were printed or stored,
+and the accidentally created empty `/tmp` output was verified size zero and
+unlinked.
+
+Packet `a1539505...3edf` now hashes each complete canonical inspect object only
+in memory. The future external release stores exactly 17 ID-to-SHA256 bindings
+and four safe protected-mount exceptions. Only Mounts array order is normalized;
+all other fields and array order remain exact, so any secret-value mutation
+changes the digest. Before/after evidence persists only ID, record digest,
+selected terminal state, restart policy and protected mounts; Config, Env,
+labels, state error text and arbitrary inspect data cannot enter the evidence.
+
+Tests `f9c38fbb...70e9` pass 28 cases under Python 3.8 and 3.9, including secret
+mutation/redaction, mount-order normalization and the 17/four/state/restart/
+unknown-mount gates. Independent review PASSes the exact packet, unchanged
+wrapper `7b41bb6f...e4ef`, basis `241feb5c...ac1f` and test hashes. This remains
+source-only; no release, Docker mutation, protected-root access, deletion,
+build or guest occurred. Next push/fetch this DRAFT privacy correction, then
+mechanically finalize exactly packet, wrapper and basis while adding the safe
+external release as the fourth changed path. Obtain independent mechanical and
+execution review before sudo continuation. Record
+`stability-native-exact-quarantine-continuation-docker-privacy-success-704f6654-20260929-1.json`
+preserves this correction. Formal counters and real guest applications remain
+unchanged.

@@ -1066,3 +1066,16 @@ Obtain independent mechanical/execution review and repeat complete live
 preflight before any one-shot sudo continuation. Never retry or roll back the
 consumed v2 packet. Builds and real guest applications remain zero; application
 acceptance remains 0/273.
+
+Checkpoint 156 adds a mandatory credential-safe Docker binding before release
+generation. Exact packet `a1539505...3edf` and tests `f9c38fbb...70e9`
+independently PASS 28 cases on Python 3.8/3.9. The external release must retain
+only 17 ID-to-hash bindings plus four safe terminal mount exceptions; complete
+inspect records are hashed in memory and never serialized. Evidence may contain
+only ID, digest, selected terminal state, restart policy and protected mounts.
+
+Push/fetch this DRAFT correction, then mechanically change packet, wrapper and
+basis and add one external release as the exact fourth path. Review both the
+mechanical derivation and safe runtime authority before any sudo execution.
+Quarantines and permanent tombstone remain unchanged; no runtime acceptance or
+formal counter moved.

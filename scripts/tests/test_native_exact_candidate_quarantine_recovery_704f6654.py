@@ -83,7 +83,7 @@ class Tests(unittest.TestCase):
         allowed = [str(path.relative_to(m.REPO)) for path in (m.PACKET, m.WRAPPER, m.BASIS, m.EXECUTION_RELEASE)]
         release = dict(schema='mckernel.quarantine-continuation-execution-release.v2', status='PASS',
                        execution_authorized=True, one_shot=True, retry=False, rollback=False,
-                       authenticated_sources=pins, runtime={}, docker={},
+                       authenticated_sources=pins, runtime={}, docker=self.docker_fixture()[1]['docker'],
                        finalization=dict(template_commit='a' * 40,
                                          template_hashes={name: m.digest(data) for name, data in templates.items()},
                                          allowed_changed_paths=allowed))
@@ -205,14 +205,27 @@ class Tests(unittest.TestCase):
             finally:
                 m.OUTPUT = prior; os.close(fd)
 
-    def test_docker_full_census_rejects_unknown_protected_or_omitted(self):
+    def docker_fixture(self):
         m = self.m
         ids = [format(number, '064x') for number in range(17)]
-        rows = [dict(Id=i, Mounts=[], State={'Status': 'exited', 'Running': False, 'Pid': 0, 'OOMKilled': False}, RestartCount=0) if number < 4 else dict(Id=i, Mounts=[])
+        rows = [dict(Id=i, Mounts=[], State={'Status': 'exited', 'Running': False, 'Pid': 0,
+                     'OOMKilled': False, 'Paused': False, 'Restarting': False, 'Dead': False, 'ExitCode': 0},
+                     RestartCount=0, HostConfig={'RestartPolicy': {'Name': 'no', 'MaximumRetryCount': 0}},
+                     Config={'Env': ['TOKEN=synthetic-private-env-' + str(number)],
+                             'Labels': {'private': 'synthetic-private-label'}})
                 for number, i in enumerate(ids)]
-        exceptions = {ident: [] for ident in ids[:4]}
-        release = {'docker': {'authenticated_current_records': {row['Id']: row for row in rows},
+        for row in rows[:4]:
+            row['Mounts'] = [dict(Type='bind', Source=str(m.ORIGINALS[0]), Destination='/candidate',
+                                  Mode='ro', RW=False, Propagation='rprivate')]
+        exceptions = {row['Id']: copy.deepcopy(row['Mounts']) for row in rows[:4]}
+        release = {'docker': {'authenticated_current_record_sha256':
+                              {row['Id']: m.docker_record_sha256(row) for row in rows},
                               'terminal_candidate_mount_exceptions': exceptions}}
+        return rows, release
+
+    def test_docker_full_census_rejects_unknown_protected_or_omitted(self):
+        m = self.m
+        rows, release = self.docker_fixture()
         m.validate_docker(rows, release)
         changed = copy.deepcopy(rows); changed[0]['Mounts'] = [dict(Source=str(m.QUARANTINES[0]))]
         with self.assertRaises(m.Error): m.validate_docker(changed, release)
@@ -220,6 +233,73 @@ class Tests(unittest.TestCase):
         changed = copy.deepcopy(rows); changed[0]['State']['Running'] = True
         with self.assertRaises(m.Error):
             m.validate_docker(changed, release)
+
+    def test_docker_secrets_bound_by_hash_but_never_persisted(self):
+        m = self.m
+        rows, release = self.docker_fixture()
+        m.validate_docker(rows, release)
+        summary = m.docker_safe_summary(rows)
+        encoded_release = json.dumps(release).encode()
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'docker.before.json'
+            m.exclusive_json(path, summary)
+            evidence = path.read_bytes()
+        for data in (encoded_release, evidence):
+            self.assertNotIn(b'synthetic-private', data)
+            self.assertNotIn(b'"Config"', data)
+            self.assertNotIn(b'"Env"', data)
+            self.assertNotIn(b'"Labels"', data)
+        self.assertEqual(summary['schema'], 'mckernel.docker-census-safe-summary.v1')
+        self.assertEqual(len(summary['records']), 17)
+        self.assertEqual([row['id'] for row in summary['records']], sorted(row['Id'] for row in rows))
+        for row in summary['records']:
+            self.assertEqual(set(row), {'id', 'record_sha256', 'protected_mounts', 'terminal_state',
+                                        'restart_count', 'restart_policy'})
+            self.assertEqual(row['restart_policy'], {'Name': 'no', 'MaximumRetryCount': 0})
+        self.assertEqual(summary['records'][0]['protected_mounts'], rows[0]['Mounts'])
+        self.assertEqual(summary['records'][0]['terminal_state']['Pid'], 0)
+        changed = copy.deepcopy(rows)
+        changed[0]['Config']['Env'] = ['TOKEN=synthetic-private-replaced']
+        self.assertNotEqual(m.docker_record_sha256(changed[0]), m.docker_record_sha256(rows[0]))
+        with self.assertRaisesRegex(m.Error, 'authenticated record'):
+            m.validate_docker(changed, release)
+        # Fields outside the explicit audit projection stay private, including
+        # unexpected additions within otherwise permitted inspect structures.
+        changed = copy.deepcopy(rows)
+        changed[0]['State']['Error'] = 'synthetic-private-state-error'
+        changed[0]['HostConfig']['RestartPolicy']['Private'] = 'synthetic-private-policy'
+        changed[0]['Mounts'][0]['Private'] = 'synthetic-private-mount'
+        self.assertNotIn('synthetic-private', json.dumps(m.docker_safe_summary(changed)))
+        # Only Mounts ordering is normalized; other array ordering binds.
+        ordered = copy.deepcopy(rows[0])
+        ordered['Mounts'].append(dict(Source='/unprotected', Destination='/other'))
+        reverse = copy.deepcopy(ordered); reverse['Mounts'].reverse()
+        self.assertEqual(m.docker_record_sha256(ordered), m.docker_record_sha256(reverse))
+        ordered['Config']['Env'] = ['first', 'second']
+        reverse = copy.deepcopy(ordered); reverse['Config']['Env'].reverse()
+        self.assertNotEqual(m.docker_record_sha256(ordered), m.docker_record_sha256(reverse))
+
+    def test_docker_hash_census_and_terminal_exception_gates(self):
+        m = self.m
+        for defect in ('omitted', 'duplicate', 'unknown-mount', 'fewer-exceptions', 'outside-exception',
+                       'OOMKilled', 'Restarting', 'Paused', 'Dead', 'restart-count', 'restart-policy'):
+            with self.subTest(defect=defect):
+                rows, release = self.docker_fixture()
+                exceptions = release['docker']['terminal_candidate_mount_exceptions']
+                if defect == 'omitted': rows.pop()
+                elif defect == 'duplicate': rows[-1] = copy.deepcopy(rows[-2])
+                elif defect == 'unknown-mount':
+                    rows[-1]['Mounts'] = [dict(Source=str(m.QUARANTINES[0]), Destination='/unknown')]
+                elif defect == 'fewer-exceptions': exceptions.pop(next(iter(exceptions)))
+                elif defect == 'outside-exception': exceptions['f' * 64] = exceptions.pop(next(iter(exceptions)))
+                elif defect == 'restart-count': rows[0]['RestartCount'] = 1
+                elif defect == 'restart-policy': rows[0]['HostConfig']['RestartPolicy']['Name'] = 'always'
+                else: rows[0]['State'][defect] = True
+                # Bind the changed complete objects so these checks exercise
+                # census/terminal/mount invariants beyond mere hash rejection.
+                release['docker']['authenticated_current_record_sha256'] = {
+                    row['Id']: m.docker_record_sha256(row) for row in rows}
+                with self.assertRaises(m.Error): m.validate_docker(rows, release)
 
     def test_checked_delete_temp_tree_and_no_delete_before_proof(self):
         m = self.m
@@ -359,6 +439,7 @@ class Tests(unittest.TestCase):
 
     def test_terminal_faults_keep_primary_and_all_cleanup_errors(self):
         m = self.m
+        docker_rows, _release = self.docker_fixture()
         for faults in ({'primary'}, {'close'}, {'journal'}, {'status'}, {'primary', 'close', 'journal', 'status'}):
             with self.subTest(faults=faults), tempfile.TemporaryDirectory() as temp, ExitStack() as stack:
                 base = Path(temp); tomb = base / 'tomb'; tomb.write_bytes(b'kept')
@@ -373,7 +454,7 @@ class Tests(unittest.TestCase):
                 stack.enter_context(mock.patch.object(m, 'validate_runtime_admission', return_value='boot'))
                 stack.enter_context(mock.patch.object(m, 'tombstone_fd', return_value=(fd, ())))
                 stack.enter_context(mock.patch.object(m, 'validate_quarantines', return_value=[]))
-                stack.enter_context(mock.patch.object(m, 'docker_census', return_value=[]))
+                stack.enter_context(mock.patch.object(m, 'docker_census', return_value=docker_rows))
                 stack.enter_context(mock.patch.object(m, 'seal_and_run_observer',
                                                      side_effect=RuntimeError('primary-fault') if 'primary' in faults else None))
                 close, append, write = m.os.close, m.append_journal, m.exclusive_json
@@ -397,6 +478,10 @@ class Tests(unittest.TestCase):
                 self.assertEqual(record['status'], 'FAIL_RETAINED')
                 self.assertTrue((base / 'claim').exists())
                 self.assertTrue((base / 'native-exact-candidate-quarantine-recovery-704f6654-1.survivors.json').exists())
+                before = json.loads((base / 'output' / 'docker.before.json').read_text())
+                self.assertEqual(before['schema'], 'mckernel.docker-census-safe-summary.v1')
+                for path in (base / 'output').glob('*.json'):
+                    self.assertNotIn(b'synthetic-private', path.read_bytes())
 
     def assert_failure_tree(self, error, *messages):
         encoded = json.dumps(self.m.error_record(error))
