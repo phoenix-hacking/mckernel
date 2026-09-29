@@ -8,13 +8,18 @@ from pathlib import Path
 import re
 import shutil
 import signal
+import stat
 import subprocess
+import sys
 import time
 import uuid
 
 LIMITS = {'NanoCpus': 4000000000, 'CpusetCpus': '2-5',
           'Memory': 12 * 2**30, 'MemorySwap': 12 * 2**30,
           'PidsLimit': 512, 'NetworkMode': 'none'}
+# This is the reviewed host-wide aggregate budget.  A source on tmpfs consumes
+# host memory in addition to the container's fixed cgroup reservation.
+MEMORY_AGGREGATE_LIMIT = 24 * 2**30
 RESOURCE_ARGS = ['--cpus=4', '--cpuset-cpus=2-5', '--memory=12g',
                  '--memory-swap=12g', '--pids-limit=512']
 ENV = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C', 'LC_ALL': 'C',
@@ -146,9 +151,133 @@ def validate_git_roots(source_root):
     _validate_git_metadata(Path(source_root) / 'ihk', 'source_root/ihk')
 
 
-def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30):
-    observed = {'host_free': shutil.disk_usage(host).free,
-                'scratch_free': shutil.disk_usage(scratch).free}
+def _filesystem_type(path):
+    """Return the mounted filesystem type, when /proc/mounts is readable."""
+    try:
+        target = str(Path(path).resolve(strict=True))
+        best = None
+        for line in Path('/proc/mounts').read_text().splitlines():
+            fields = line.split()
+            if len(fields) < 3:
+                continue
+            mount = fields[1].replace('\\040', ' ').replace('\\011', '\t')
+            if target == mount or target.startswith(mount.rstrip('/') + '/'):
+                if best is None or len(mount) > len(best[0]):
+                    best = (mount, fields[2])
+        return best[1] if best else 'unknown'
+    except (OSError, ValueError, IndexError):
+        return 'unknown'
+
+
+def _allocated_bytes(root):
+    """Count allocated blocks on root's device without crossing mounts/links.
+
+    This is admission accounting, so an unreadable directory or a raced entry
+    is not equivalent to an empty one.  Fail closed before the lease exists.
+    """
+    root = Path(root)
+    try:
+        root_info = os.lstat(str(root))
+    except OSError as exc:
+        raise RuntimeError('candidate allocation root lstat failed: ' + str(exc))
+    if stat.S_ISLNK(root_info.st_mode) or not stat.S_ISDIR(root_info.st_mode):
+        raise RuntimeError('candidate allocation root is not a directory')
+    device = root_info.st_dev
+
+    def failed_walk(exc):
+        raise RuntimeError('candidate allocation walk failed: ' + str(exc))
+
+    def entry_info(path):
+        try:
+            return os.lstat(str(path))
+        except OSError as exc:
+            raise RuntimeError('candidate allocation lstat failed: %s: %s' % (path, exc))
+
+    def allocated(info, path):
+        blocks = info.st_blocks
+        if (not isinstance(blocks, int) or isinstance(blocks, bool) or
+                blocks < 0):
+            raise RuntimeError('candidate allocation blocks invalid: ' + str(path))
+        # Python integers cannot overflow, but the receipt must remain
+        # representable by the reviewed host accounting interface.  Do not
+        # conflate a large non-tmpfs source with host-memory consumption.
+        if blocks > sys.maxsize // 512:
+            raise RuntimeError('candidate allocation blocks overflow: ' + str(path))
+        return blocks * 512
+
+    total = 0
+    for directory, directories, files in os.walk(str(root), followlinks=False,
+                                                 onerror=failed_walk):
+        directory_info = entry_info(directory)
+        if (directory_info.st_dev != device or stat.S_ISLNK(directory_info.st_mode) or
+                not stat.S_ISDIR(directory_info.st_mode)):
+            raise RuntimeError('candidate allocation walk escaped root device')
+        kept = []
+        for name in directories:
+            entry = Path(directory) / name
+            info = entry_info(entry)
+            if info.st_dev == device and not stat.S_ISLNK(info.st_mode):
+                value = allocated(info, entry)
+                if total > sys.maxsize - value:
+                    raise RuntimeError('candidate allocation total overflow')
+                total += value
+                kept.append(name)
+        directories[:] = kept
+        for name in files:
+            entry = Path(directory) / name
+            info = entry_info(entry)
+            if info.st_dev == device and not stat.S_ISLNK(info.st_mode):
+                value = allocated(info, entry)
+                if total > sys.maxsize - value:
+                    raise RuntimeError('candidate allocation total overflow')
+                total += value
+    value = allocated(root_info, root)
+    if total > sys.maxsize - value:
+        raise RuntimeError('candidate allocation total overflow')
+    total += value
+    return total
+
+
+def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30,
+            source_root=None, output_root=None):
+    host = Path(host)
+    scratch = Path(scratch)
+    host_free = shutil.disk_usage(str(host)).free
+    scratch_free = shutil.disk_usage(str(scratch)).free
+    observed = {'host_free': host_free, 'host_device': host.stat().st_dev,
+                'scratch_free': scratch_free, 'scratch_device': scratch.stat().st_dev}
+    if source_root is not None and output_root is not None:
+        source = Path(source_root)
+        output = Path(output_root)
+        source_type = _filesystem_type(source)
+        if source_type == 'unknown':
+            raise RuntimeError('candidate memory filesystem classification unknown')
+        candidate_allocated = _allocated_bytes(source)
+        if (not isinstance(candidate_allocated, int) or
+                isinstance(candidate_allocated, bool) or candidate_allocated < 0):
+            raise RuntimeError('candidate allocation unknown')
+        observed.update(source_free=shutil.disk_usage(str(source)).free,
+                        source_device=source.stat().st_dev,
+                        source_filesystem=source_type,
+                        output_free=shutil.disk_usage(str(output)).free,
+                        output_device=output.stat().st_dev,
+                        output_filesystem=_filesystem_type(output),
+                        candidate_allocated_bytes=candidate_allocated,
+                        container_tmpfs_bytes=256 * 2**20)
+        if source_type == 'tmpfs':
+            observed['candidate_memory_effect'] = {
+                'classification': 'tmpfs',
+                'bytes': candidate_allocated}
+        else:
+            observed['candidate_memory_effect'] = {
+                'classification': 'none',
+                'bytes': 0}
+        observed['aggregate_memory_limit'] = MEMORY_AGGREGATE_LIMIT
+        observed['aggregate_memory_required'] = (
+            observed['candidate_memory_effect']['bytes'] + LIMITS['Memory'])
+        if observed['aggregate_memory_required'] > MEMORY_AGGREGATE_LIMIT:
+            raise RuntimeError('candidate/container memory aggregate failed: ' +
+                               json.dumps(observed))
     mem = Path('/proc/meminfo').read_text().split('MemAvailable:', 1)[1].split()[0]
     observed['memory_available'] = int(mem) * 1024
     if (observed['host_free'] < max(16 * 2**30, host_floor) or
@@ -407,10 +536,17 @@ class BuildOwner:
         exact_sha(r['candidate_sha'])
         if not re.fullmatch('sha256:[0-9a-f]{64}', r['image_id']):
             raise ValueError('full immutable image ID required')
-        for key in ('source_root', 'assets_root', 'output_root', 'evidence_root'):
+        root_keys = ('source_root', 'assets_root', 'output_root', 'evidence_root',
+                     'host_measure_root', 'scratch_measure_root')
+        for key in root_keys:
+            if key not in r:
+                raise ValueError('missing required root: ' + key)
             p = Path(r[key])
             if not p.is_absolute() or p.is_symlink() or not p.is_dir() or ',' in str(p):
                 raise ValueError('invalid root: ' + key)
+        measurement_roots = [Path(r['host_measure_root']), Path(r['scratch_measure_root'])]
+        if measurement_roots[0].stat().st_dev == measurement_roots[1].stat().st_dev:
+            raise ValueError('measurement roots must be on distinct devices')
         validate_git_roots(r['source_root'])
         roots_disjoint([r[k] for k in ('source_root', 'assets_root', 'output_root', 'evidence_root')])
         if any(any(Path(r[k]).iterdir()) for k in ('output_root', 'evidence_root')):
@@ -428,8 +564,9 @@ class BuildOwner:
         manifest = json.loads(Path(r['input_manifest']).read_text())
         if manifest.get('candidate_sha') != r['candidate_sha']:
             raise ValueError('manifest candidate mismatch')
-        self.measurement = measure(r['source_root'], r['output_root'],
-                                   r.get('host_floor', 0), r.get('scratch_floor', 0))
+        self.measurement = measure(r['host_measure_root'], r['scratch_measure_root'],
+                                   r.get('host_floor', 0), r.get('scratch_floor', 0),
+                                   source_root=r['source_root'], output_root=r['output_root'])
 
     def run(self):
         self.validate()

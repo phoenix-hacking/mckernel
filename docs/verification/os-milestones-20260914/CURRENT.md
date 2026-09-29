@@ -5689,3 +5689,51 @@ real startup application before proceeding through memory, file, thread and
 shutdown diagnostics. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and
 0/7; four diagnostic guest apps and zero successful current-candidate builds
 remain unchanged. The OS goal is paused for launcher shutdown, not complete.
+
+Continuation checkpoint 66, 2026-09-28: the resumed launcher adopted GOAL
+`76c4f5d...c0bcc3`, START `1698d342...6216c`, CONVERGENCE
+`f6938bd2...3e86a` and live HANDOFF `b9d076bb...99359`, then reconciled no
+active heavy lease or McKernel container. The intentionally retained failed
+container `110dfe01...799b0` remains exited. The previous turn was progress, not
+a wait: fetched checkpoint `2fec3948...e59a4` contained the accepted lifecycle
+and mapping source closure.
+
+The first fresh `--no-hardlinks` host clone was stopped at coordinator PIDs
+3529337/3529767 when checkout reduced host free space to 8,379,637,760 bytes,
+below the mandatory 16-GiB floor. The exact incomplete path contained no unique
+work and was removed after HEAD verification; host free recovered to about
+25.1 GB. Reflinks are unsupported. Independent resource review confirmed a
+normal host clone remains inadmissible because the exact tracked checkout is
+about 9.03 GB, dominated by retained evidence. The protected d094 candidate,
+metadata backup/evidence, restore roots and failed container were untouched.
+
+The missing exact-manifest generator is now implemented together with a hardened
+offline consumer. Several retained candidates failed before final closure: the
+initial/bounded versions omitted schema or attacks; an expert version allowed
+`core.symlinks=false`, assume-unchanged bytes and racing-output substitution;
+the larger correction initially normalized CR/CRLF bytes in NUL-delimited Git
+paths. The accepted bytes keep path plumbing raw, bind HEAD tree/index mode,
+OID and path, verify actual type/executable/blob identity independently, bind
+main/IHK/gitlinks/assets/driver, and publish without replacement. Independent
+real-Git review reproduced the prior attacks and now PASSes all of them.
+
+The owner now measures declared host and scratch filesystems separately from
+source/output, records bounded allocation, fails closed on traversal/type
+uncertainty, and rejects tmpfs-candidate allocation plus the pinned 12-GiB
+container above the aggregate 24-GiB ceiling before lease/Docker. Its first two
+candidates mislabelled measurements and then omitted the aggregate/error checks;
+the expert correction independently PASSes. The consolidated source run passes
+80 tests with no failures; exact hashes and retained log are in
+`stability-native-exact-manifest-owner-source-success-20260928-1.json`. No
+Docker, build or guest ran, and this earns no acceptance credit.
+
+Next executable task: after fetched verification of this checkpoint, obtain a
+fresh independent command-level release for an exact non-hardlinked candidate
+in `/dev/shm`, using a temporary shared clone only until the already reviewed
+standalone metadata transaction removes all external Git indirection. Measure
+tmpfs allocation, MemAvailable, host/scratch floors, backup/evidence bytes and
+zero source inode overlap; generate and independently verify the canonical
+manifest. Then run the complete offline source phase in the pinned image. Only
+a source-phase PASS may proceed to a separate one-shot heavy-build release.
+Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic
+guest apps and zero successful current-candidate builds remain unchanged.

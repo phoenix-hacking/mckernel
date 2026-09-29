@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.native-exact-manifest-owner-source.v1",
+  "recorded_at_utc": "2026-09-29T01:19:00Z",
+  "status": "PASS_SOURCE_ONLY",
+  "base_commit": "2fec3948a59cfb1ea0b7f7d678078e5f388e59a4",
+  "adopted_policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "b9d076bb1866f51e07bf769b0c98b7ae6f12d18b3f3d7f65649127460a399359"
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_build_input_manifest.py": "59c852ab964f5aa49691289bd135b927c6bf84c8808ed9e822b8ffebc728228e",
+    "scripts/tests/test_native_rust_exact_build_input_manifest.py": "f8b4016064d80070a324c0687f8fb04e6126a4db8c10bf98a0cb24fb0e125f50",
+    "scripts/native_rust_exact_build_offline.py": "beced6952782ad3fbacd280aa27c1bb722674ba7c138c903d9b2b0192c4b8dbc",
+    "scripts/tests/test_native_rust_exact_build_offline.py": "34dd51faf6a0ac076989f4c77811b055ce31d41e427c0a754fc9e6e2ec8e520d",
+    "scripts/native_rust_exact_build_container_owner.py": "266d400b1ea47d1683e7ff7fefcc890433a23a1f9e14ea2a6ed257855314ddf3",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "5de2291e72e508204051b5cdab5486e0556672d4157fabba3818d45bec7cd1d8"
+  },
+  "verified_behavior": [
+    "The repository-owned manifest generator emits the complete canonical schema and refuses an existing or racing output.",
+    "Generator and offline consumer bind every main and IHK path to identical HEAD-tree/index mode and object identity, actual filesystem type, executable semantics and independently computed Git blob bytes.",
+    "The retained core.symlinks=false, assume-unchanged, mode-drift, forged-manifest and CR/CRLF pathname substitutions are rejected.",
+    "The owner measures explicit distinct host/scratch roots, records actual source/output allocation, fails closed on unknown or incomplete walks, and rejects tmpfs candidate allocation plus the pinned 12-GiB container above the 24-GiB aggregate limit before lease or Docker."
+  ],
+  "combined_tests": {
+    "tests": 80,
+    "failures": 0,
+    "raw_sha256": "ddaa78ce208197674b26752667f1ca16c397de61b415ab99258e47a2e0ab8cb0",
+    "evidence": "docs/verification/evidence/stability-native-exact-manifest-owner-source-tests-20260928-1.log.gz",
+    "evidence_sha256": "a1d1f53cb32d795ac2c0d9d5a22ae8cf008cb6b6d894820cb3a6986b75d105d4"
+  },
+  "independent_review": {
+    "manifest_provenance": "PASS",
+    "owner_measurement": "PASS",
+    "execution_release": false
+  },
+  "preserved_failures": [
+    "Initial generator omitted schema/IHK binding and required negative coverage.",
+    "Bounded correction and first expert candidate missed actual-type, assume-unchanged and no-replace attacks.",
+    "The larger repair initially normalized CR/CRLF path bytes in the consumer; the exact independent reproducer is now a regression.",
+    "The first owner correction mislabeled source/output measurements; its next candidate admitted 25 GiB against a 24-GiB aggregate and suppressed traversal errors. Both findings are regressions.",
+    "A full --no-hardlinks host clone at coordinator PIDs 3529337/3529767 was stopped when host free space fell to 8,379,637,760 bytes. The incomplete exact path /home/holden/mckernel-exact-candidate-2fec3948 was removed after identity verification, restoring about 25.1 GB free. It contained no unique work."
+  ],
+  "resource_strategy": {
+    "host_clone": "REJECTED_CAPACITY",
+    "reflink": "UNSUPPORTED",
+    "next_candidate_filesystem": "/dev/shm tmpfs",
+    "tmpfs_capacity_bytes_observed": 16599851008,
+    "tracked_candidate_bytes_estimate": 9030897722,
+    "container_memory_limit_bytes": 12884901888,
+    "aggregate_limit_bytes": 25769803776,
+    "next_requirement": "Fresh independent review of exact tmpfs candidate construction, metadata conversion and cleanup commands after this fetched checkpoint."
+  },
+  "limitations": [
+    "No candidate checkout, metadata conversion, Docker source phase, build or guest is accepted by this record.",
+    "Stable source-directory ownership remains required during manifest generation and both pre/post build verification.",
+    "Conversion backups and concurrent allocations must be included in the execution packet's measured aggregate."
+  ],
+  "acceptance_credit": false
+}

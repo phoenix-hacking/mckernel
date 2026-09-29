@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import sys
 import time
@@ -26,7 +27,9 @@ ASSET_HASHES = {
     ARCHIVE: '4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533',
     BASELINE: '5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d',
     SRPM: '2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb',
+    DEBRAND: '080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144',
 }
+INPUT_SCHEMA = 'mckernel.native-exact-build-inputs.v1'
 STEPS = (
     'Verify source-only contracts without claiming readiness',
     'Acquire, patch, and credit-forbidden-stage the exact source',
@@ -51,6 +54,137 @@ ARTIFACTS = ('bzImage', 'ihk.ko', 'ihk-smp-x86_64.ko', 'mcctrl.ko',
 
 class BuildError(RuntimeError):
     pass
+
+
+def safe_relative(raw):
+    try:
+        text = raw.decode('utf-8') if isinstance(raw, bytes) else raw
+        text.encode('utf-8')
+    except (UnicodeError, AttributeError):
+        raise BuildError('non-UTF-8 input path')
+    if (not text or Path(text).is_absolute() or '\x00' in text or
+            any(part in ('', '.', '..') for part in text.split('/'))):
+        raise BuildError('path escapes checkout: ' + repr(text))
+    return text
+
+
+def git_rows(raw, tree=False):
+    """Parse NUL-delimited plumbing output, retaining exact modes and OIDs."""
+    if not isinstance(raw, bytes):
+        raise BuildError('path-bearing Git output must be raw bytes')
+    if raw and not raw.endswith(b'\0'):
+        raise BuildError('unterminated git row')
+    rows = {}
+    for item in raw.split(b'\0')[:-1]:
+        metadata, separator, raw_path = item.partition(b'\t')
+        fields = metadata.split()
+        if not separator or len(fields) != 3:
+            raise BuildError('malformed git index/tree row')
+        path = safe_relative(raw_path)
+        if tree:
+            mode, kind, object_id = fields
+            if kind != (b'commit' if mode == b'160000' else b'blob'):
+                raise BuildError('unsupported tree object type: ' + path)
+        else:
+            mode, object_id, stage = fields
+            if stage != b'0':
+                raise BuildError('non-stage-0 index row: ' + path)
+        if (mode not in (b'100644', b'100755', b'120000', b'160000') or
+                not re.fullmatch(b'[0-9a-f]{40}', object_id)):
+            raise BuildError('unsupported mode or object ID: ' + path)
+        if path in rows:
+            raise BuildError('duplicate git index/tree row: ' + path)
+        rows[path] = (mode.decode('ascii'), object_id.decode('ascii'))
+    return rows
+
+
+def git_head(raw):
+    """Decode only a fixed scalar, requiring Git's exact single LF terminator."""
+    if not isinstance(raw, bytes) or not re.fullmatch(b'[0-9a-f]{40}\n', raw):
+        raise BuildError('malformed Git HEAD identity')
+    return raw[:-1].decode('ascii')
+
+
+def checked_input(root, relative, allow_missing=False):
+    # A tracked path may be a link, but none of its parents may be links.
+    root = Path(root)
+    current = root
+    if root.is_symlink() or not root.is_dir():
+        raise BuildError('checkout is not a directory: ' + str(root))
+    for part in Path(safe_relative(relative)).parts[:-1]:
+        current /= part
+        if allow_missing and not os.path.lexists(str(current)):
+            continue
+        if not stat.S_ISDIR(current.lstat().st_mode):
+            raise BuildError('input parent is not a directory: ' + relative)
+    return root / relative
+
+
+def tracked_digest(path, mode, object_id):
+    """Hash raw bytes ourselves: no Git filters, stat cache or index flags."""
+    metadata = path.lstat()
+    if mode == '120000':
+        if not stat.S_ISLNK(metadata.st_mode):
+            raise BuildError('indexed symlink type differs: ' + str(path))
+        data = os.fsencode(os.readlink(str(path)))
+        blob = hashlib.sha1(b'blob ' + str(len(data)).encode('ascii') + b'\0' + data)
+        digest = hashlib.sha256(data)
+    else:
+        if not stat.S_ISREG(metadata.st_mode):
+            raise BuildError('indexed regular file type differs: ' + str(path))
+        # Git records the owner's execute bit (not group/other permissions).
+        if bool(metadata.st_mode & stat.S_IXUSR) != (mode == '100755'):
+            raise BuildError('indexed executable mode differs: ' + str(path))
+        fd = os.open(str(path), os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(fd, 'rb') as stream:
+            opened = os.fstat(stream.fileno())
+            if (opened.st_dev, opened.st_ino, opened.st_mode, opened.st_size) != (
+                    metadata.st_dev, metadata.st_ino, metadata.st_mode, metadata.st_size):
+                raise BuildError('input changed while opening: ' + str(path))
+            blob = hashlib.sha1(b'blob ' + str(opened.st_size).encode('ascii') + b'\0')
+            digest = hashlib.sha256()
+            for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                blob.update(chunk)
+                digest.update(chunk)
+    if blob.hexdigest() != object_id:
+        raise BuildError('Git blob bytes differ: ' + str(path))
+    return digest.hexdigest()
+
+
+def source_inventory(repo, git):
+    """One provenance invariant for manifest production and consumption."""
+    repo = Path(repo)
+    inventories = []
+    for root in (repo, repo / 'ihk'):
+        index = git_rows(git(root, 'ls-files', '-s', '-z'))
+        tree = git_rows(git(root, 'ls-tree', '-r', '-z', '--full-tree', 'HEAD'), tree=True)
+        if index != tree:
+            raise BuildError('index differs from HEAD tree: ' + str(root))
+        inventories.append(index)
+        untracked = git(root, 'ls-files', '--others', '--exclude-standard', '-z')
+        if not isinstance(untracked, bytes):
+            raise BuildError('path-bearing Git output must be raw bytes')
+        if untracked:
+            raise BuildError('source checkout is dirty: ' + str(root))
+    main, ihk = inventories
+    if any(p.startswith('ihk/') or p == 'ihk' and m != '160000'
+           for p, (m, unused) in main.items()):
+        raise BuildError('main/IHK inventory collision')
+    files, gitlinks = {}, {}
+    for root, rows, prefix in ((repo, main, ''), (repo / 'ihk', ihk, 'ihk/')):
+        for relative, (mode, object_id) in rows.items():
+            path = checked_input(root, relative, allow_missing=(mode == '160000'))
+            if mode == '160000':
+                if prefix:
+                    raise BuildError('nested IHK gitlink is not a file: ' + relative)
+                # Unconsumed submodules may be absent. A present object must
+                # still be a real directory, never a symlink or ordinary file.
+                if os.path.lexists(str(path)) and not stat.S_ISDIR(path.lstat().st_mode):
+                    raise BuildError('indexed gitlink type differs: ' + relative)
+                gitlinks[relative] = object_id
+            else:
+                files[prefix + relative] = tracked_digest(path, mode, object_id)
+    return files, gitlinks
 
 
 def sha256(path):
@@ -97,11 +231,14 @@ def bound_files(root, rows, links=False):
 
 
 class Runner:
-    def text(self, argv, cwd):
-        result = subprocess.run(argv, cwd=cwd, env=ENV, text=True,
+    def bytes(self, argv, cwd):
+        # NUL-delimited Git paths may contain CR and CRLF. Text-mode pipes
+        # normalize those bytes and can redirect provenance checks to a decoy.
+        result = subprocess.run(argv, cwd=cwd, env=ENV,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         if result.returncode:
-            raise BuildError('identity command failed: ' + json.dumps(argv) + ': ' + result.stderr)
+            raise BuildError('identity command failed: ' + json.dumps(argv) + ': ' +
+                             result.stderr.decode('utf-8', 'replace'))
         return result.stdout
 
     def phase(self, script, cwd, env, log):
@@ -114,42 +251,27 @@ class Runner:
 
 
 def verify_inputs(repo, candidate, assets, manifest, runner):
+    if (not isinstance(manifest, dict) or manifest.get('schema') != INPUT_SCHEMA or
+            manifest.get('ihk_sha') != EXPECTED_IHK_HEAD):
+        raise BuildError('input schema or IHK identity differs')
     if not re.fullmatch('[0-9a-f]{40}', candidate) or manifest.get('candidate_sha') != candidate:
         raise BuildError('candidate identity differs')
     def git(root, *args):
-        return runner.text(['/usr/bin/git', '-c', 'safe.directory=' + str(root),
+        return runner.bytes(['/usr/bin/git', '-c', 'safe.directory=' + str(root),
+                            '-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null',
                             '-C', str(root), *args], repo)
-    if git(repo, 'rev-parse', 'HEAD').strip() != candidate:
+    if git_head(git(repo, 'rev-parse', 'HEAD')) != candidate:
         raise BuildError('HEAD differs')
-    if git(repo / 'ihk', 'rev-parse', 'HEAD').strip() != EXPECTED_IHK_HEAD:
+    if git_head(git(repo / 'ihk', 'rev-parse', 'HEAD')) != EXPECTED_IHK_HEAD:
         raise BuildError('submodule identity differs')
-    for root in (repo, repo / 'ihk'):
-        if git(root, 'status', '--porcelain', '--untracked-files=all').strip():
-            raise BuildError('source checkout is dirty')
-    # Bind gitlinks as Git object identities.  Only ihk is consumed by this job,
-    # so its checked-out files are additionally covered below; unrelated
-    # submodules need not be materialized merely to prove their exact gitlinks.
-    gitlinks = {}
-    for row in git(repo, 'ls-files', '-s', '-z').split('\0'):
-        if not row:
-            continue
-        metadata, separator, path = row.partition('\t')
-        fields = metadata.split()
-        if not separator or len(fields) != 3:
-            raise BuildError('malformed git index row')
-        mode, object_id, stage = fields
-        if mode == '160000':
-            if stage != '0' or not re.fullmatch('[0-9a-f]{40}', object_id):
-                raise BuildError('malformed gitlink identity')
-            gitlinks[path] = object_id
+    files, gitlinks = source_inventory(repo, git)
     if manifest.get('gitlinks') != gitlinks or gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
         raise BuildError('gitlink inventory differs')
     # Manifest must cover every ordinary tracked file, not a convenient subset.
-    expected = set(git(repo, 'ls-files', '-z').split('\0')) - {''} - set(gitlinks)
-    expected |= {'ihk/' + p for p in git(repo / 'ihk', 'ls-files', '-z').split('\0') if p}
-    if set(manifest.get('repository_files', {})) != expected:
+    if set(manifest.get('repository_files', {})) != set(files):
         raise BuildError('consumed source inventory incomplete')
-    bound_files(repo, manifest['repository_files'], links=True)
+    if manifest['repository_files'] != files:
+        raise BuildError('input bytes differ from manifest')
     if set(manifest.get('assets', {})) != {ARCHIVE, BASELINE, SRPM, DEBRAND}:
         raise BuildError('asset inventory incomplete')
     for name, expected_hash in ASSET_HASHES.items():

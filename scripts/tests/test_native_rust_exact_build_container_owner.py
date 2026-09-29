@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -240,6 +241,9 @@ class OwnerTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
+        # Candidate source/output roots may live on different filesystems;
+        # model that explicitly with the host's tmpfs for focused validation.
+        self.measure_output = Path(tempfile.mkdtemp(prefix='mckernel-owner-', dir='/dev/shm'))
         for directory in ('src', 'assets', 'out', 'ev'):
             (self.root / directory).mkdir()
         # The owner admits only standalone repositories; keep the ordinary
@@ -250,6 +254,8 @@ class OwnerTests(unittest.TestCase):
         self.request = {'candidate_sha': 'a' * 40, 'image_id': IMAGE, 'timeout': 20,
                         'source_root': str(self.root / 'src'), 'assets_root': str(self.root / 'assets'),
                         'output_root': str(self.root / 'out'), 'evidence_root': str(self.root / 'ev'),
+                        'host_measure_root': str(self.root),
+                        'scratch_measure_root': str(self.measure_output),
                         'lease_path': str(self.root / 'lease')}
         files = {'driver_path': 'driver', 'image_receipt': json.dumps({'status': 'PASS', 'image_id': IMAGE}),
                  'input_manifest': json.dumps({'candidate_sha': 'a' * 40})}
@@ -269,6 +275,7 @@ class OwnerTests(unittest.TestCase):
     def tearDown(self):
         self.mem.stop()
         self.disk.stop()
+        shutil.rmtree(str(self.measure_output))
         self.temp.cleanup()
 
     def execute(self, fake=None):
@@ -380,6 +387,196 @@ class OwnerTests(unittest.TestCase):
         with mock.patch.object(owner.shutil, 'disk_usage', return_value=SimpleNamespace(free=1)):
             with self.assertRaisesRegex(RuntimeError, 'measured resource'):
                 self.execute()
+
+    def test_measurement_uses_declared_roots_and_records_devices_and_tmpfs(self):
+        calls = []
+        usage = SimpleNamespace(free=64 * 2**30)
+        with mock.patch.object(owner.shutil, 'disk_usage', side_effect=lambda path: calls.append(path) or usage):
+            result = owner.BuildOwner(self.request).validate()
+        self.assertEqual(calls, [self.request['host_measure_root'],
+                                 self.request['scratch_measure_root'],
+                                 self.request['source_root'], self.request['output_root']])
+        measurement = owner.BuildOwner(self.request)
+        measurement.validate()
+        self.assertEqual(measurement.measurement['source_free'], usage.free)
+        self.assertEqual(measurement.measurement['output_free'], usage.free)
+        self.assertEqual(measurement.measurement['host_device'],
+                         Path(self.request['host_measure_root']).stat().st_dev)
+        self.assertEqual(measurement.measurement['scratch_device'],
+                         Path(self.request['scratch_measure_root']).stat().st_dev)
+        self.assertEqual(measurement.measurement['source_device'],
+                         Path(self.request['source_root']).stat().st_dev)
+        self.assertEqual(measurement.measurement['output_device'],
+                         Path(self.request['output_root']).stat().st_dev)
+        self.assertEqual(measurement.measurement['container_tmpfs_bytes'], 256 * 2**20)
+        self.assertEqual(measurement.measurement['candidate_memory_effect']['classification'],
+                         'none')
+
+    def test_measurement_roots_missing_symlink_or_same_device_rejected_before_lease(self):
+        cases = {
+            'missing': str(self.root / 'does-not-exist'),
+            'symlink': str(self.root / 'measure-link'),
+            'same-device': self.request['host_measure_root'],
+        }
+        Path(cases['symlink']).symlink_to(self.measure_output, target_is_directory=True)
+        for label, value in cases.items():
+            with self.subTest(label=label):
+                changed = dict(self.request, scratch_measure_root=value)
+                fake = FakeDocker(changed)
+                with self.assertRaises(ValueError):
+                    owner.BuildOwner(changed, fake).run()
+                self.assertEqual(fake.commands, [])
+                self.assertFalse(Path(changed['lease_path']).exists())
+
+    def test_measurement_floor_failure_precedes_lease_and_docker(self):
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner.shutil, 'disk_usage',
+                               side_effect=[SimpleNamespace(free=1),
+                                            SimpleNamespace(free=64 * 2**30),
+                                            SimpleNamespace(free=64 * 2**30),
+                                            SimpleNamespace(free=64 * 2**30)]):
+            with self.assertRaisesRegex(RuntimeError, 'measured resource'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_tmpfs_source_allocation_is_candidate_memory_effect(self):
+        source = Path(tempfile.mkdtemp(prefix='mckernel-source-', dir='/dev/shm'))
+        try:
+            for git_root in (source / '.git', source / 'ihk' / '.git'):
+                git_root.mkdir(parents=True)
+                (git_root / 'config').write_text('[core]\n\trepositoryformatversion = 0\n')
+            (source / 'candidate.bin').write_bytes(b'x' * 4096)
+            changed = dict(self.request, source_root=str(source))
+            checked = owner.BuildOwner(changed)
+            checked.validate()
+            measurement = checked.measurement
+            self.assertEqual(measurement['source_filesystem'], 'tmpfs')
+            self.assertGreater(measurement['candidate_allocated_bytes'], 0)
+            self.assertEqual(measurement['candidate_memory_effect']['classification'], 'tmpfs')
+            self.assertEqual(measurement['candidate_memory_effect']['bytes'],
+                             measurement['candidate_allocated_bytes'])
+        finally:
+            shutil.rmtree(str(source))
+
+    def test_tmpfs_candidate_plus_container_over_aggregate_rejected_before_lease(self):
+        fake = FakeDocker(self.request)
+        source = Path(self.request['source_root'])
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'tmpfs' if Path(path) == source else 'ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
+            with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_tmpfs_candidate_at_aggregate_limit_is_admitted_with_16g_available(self):
+        fake = FakeDocker(self.request)
+        source = Path(self.request['source_root'])
+        sixteen_gib = 16 * 2**30
+        original_read_text = owner.Path.read_text
+
+        def read_with_sixteen_gib(path, *args, **kwargs):
+            if str(path) == '/proc/meminfo':
+                return 'MemAvailable: %d kB\n' % (sixteen_gib // 1024)
+            return original_read_text(path, *args, **kwargs)
+
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'tmpfs' if Path(path) == source else 'ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=12 * 2**30), \
+             mock.patch.object(owner.Path, 'read_text', new=read_with_sixteen_gib):
+            result = self.execute(fake)
+        self.assertEqual(result['status'], 'PASS', result)
+        self.assertEqual(result['measurement']['aggregate_memory_required'], 24 * 2**30)
+        self.assertEqual(result['measurement']['memory_available'], sixteen_gib)
+
+    def test_non_tmpfs_candidate_allocation_does_not_consume_memory_aggregate(self):
+        source = Path(self.request['source_root'])
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'ext4' if Path(path) == source else 'xfs'), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
+            checked = owner.BuildOwner(self.request)
+            checked.validate()
+        self.assertEqual(checked.measurement['candidate_memory_effect'],
+                         {'classification': 'none', 'bytes': 0})
+        self.assertEqual(checked.measurement['aggregate_memory_required'], 12 * 2**30)
+
+    def test_unknown_source_filesystem_rejected_before_allocation_lease_or_docker(self):
+        fake = FakeDocker(self.request)
+        allocated = mock.Mock(return_value=0)
+        with mock.patch.object(owner, '_filesystem_type', return_value='unknown'), \
+             mock.patch.object(owner, '_allocated_bytes', allocated):
+            with self.assertRaisesRegex(RuntimeError, 'filesystem classification unknown'):
+                owner.BuildOwner(self.request, fake).run()
+        allocated.assert_not_called()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_unknown_candidate_allocation_rejected_before_lease_or_docker(self):
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner, '_filesystem_type', return_value='ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=None):
+            with self.assertRaisesRegex(RuntimeError, 'candidate allocation unknown'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_allocated_bytes_scandir_and_lstat_fail_closed_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        raced = source / 'allocation-race'
+        raced.write_text('race')
+        original_walk = owner.os.walk
+
+        def denied_walk(path, followlinks=False, onerror=None):
+            if Path(path) == source:
+                onerror(PermissionError(13, 'permission denied', str(source)))
+                return iter(())
+            return original_walk(path, followlinks=followlinks, onerror=onerror)
+
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner.os, 'walk', side_effect=denied_walk):
+            with self.assertRaisesRegex(RuntimeError, 'allocation walk failed'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+        original_lstat = owner.os.lstat
+
+        def denied_lstat(path):
+            if Path(path) == raced:
+                raise PermissionError(13, 'permission denied', str(raced))
+            return original_lstat(path)
+
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner.os, 'lstat', side_effect=denied_lstat):
+            with self.assertRaisesRegex(RuntimeError, 'allocation lstat failed'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_allocated_bytes_skips_symlinks_and_other_devices(self):
+        root = self.root / 'allocation-root'
+        root.mkdir()
+        counted = root / 'counted'
+        counted.write_bytes(b'x' * 4096)
+        other_device = root / 'other-device'
+        other_device.mkdir()
+        (other_device / 'not-counted').write_bytes(b'y' * 4096)
+        (root / 'link').symlink_to(other_device / 'not-counted')
+        original_lstat = owner.os.lstat
+        root_info = original_lstat(str(root))
+        counted_info = original_lstat(str(counted))
+
+        def cross_device_lstat(path):
+            info = original_lstat(path)
+            if Path(path) == other_device:
+                return SimpleNamespace(st_mode=info.st_mode, st_blocks=info.st_blocks,
+                                       st_dev=root_info.st_dev + 1)
+            return info
+
+        with mock.patch.object(owner.os, 'lstat', side_effect=cross_device_lstat):
+            measured = owner._allocated_bytes(root)
+        self.assertEqual(measured, (root_info.st_blocks + counted_info.st_blocks) * 512)
 
     def test_lease_exclusive_and_cannot_steal(self):
         lease = owner.Lease(self.request['lease_path'], 'test')

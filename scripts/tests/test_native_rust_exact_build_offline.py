@@ -26,30 +26,35 @@ class FakeRunner:
                          'vendor/unconsumed': 'd' * 40}
         self.create_artifacts = True
         self.corrupt = None
+        self.objects = {p: hashlib.sha1(b'blob ' + str(len(text.encode())).encode() +
+                                      b'\0' + text.encode()).hexdigest()
+                        for p, text in files.items()}
 
-    def text(self, argv, cwd):
-        if argv[:2] != ['/usr/bin/git', '-c'] or argv[3] != '-C':
+    def bytes(self, argv, cwd):
+        if argv[:2] != ['/usr/bin/git', '-c'] or '-C' not in argv:
             raise AssertionError('unexpected identity command ' + repr(argv))
-        root, args = Path(argv[4]), argv[5:]
+        c = argv.index('-C')
+        root, args = Path(argv[c + 1]), argv[c + 2:]
         if args == ['rev-parse', 'HEAD']:
-            return (self.head if root == self.repo else self.submodule) + '\n'
-        if args == ['status', '--porcelain', '--untracked-files=all']:
-            return ' M mutated\n' if self.dirty else ''
+            return ((self.head if root == self.repo else self.submodule) + '\n').encode('ascii')
+        if args == ['ls-files', '--others', '--exclude-standard', '-z']:
+            return b'mutated\0' if self.dirty else b''
         if args == ['ls-files', '-z']:
             files = [p for p in self.files if not p.startswith('ihk/')]
             if root != self.repo:
                 files = [p[4:] for p in self.files if p.startswith('ihk/')]
             else:
                 files.extend(self.gitlinks)
-            return '\0'.join(files) + '\0'
-        if args == ['ls-files', '-s', '-z']:
-            if root != self.repo:
-                return ''.join('100644 %s 0\t%s\0' % ('e' * 40, p[4:])
-                               for p in self.files if p.startswith('ihk/'))
-            ordinary = [p for p in self.files if not p.startswith('ihk/')]
-            return (''.join('100644 %s 0\t%s\0' % ('e' * 40, p) for p in ordinary) +
-                    ''.join('160000 %s 0\t%s\0' % (oid, p)
-                            for p, oid in self.gitlinks.items()))
+            return ('\0'.join(files) + '\0').encode('utf-8')
+        if args in (['ls-files', '-s', '-z'], ['ls-tree', '-r', '-z', '--full-tree', 'HEAD']):
+            tree = args[0] == 'ls-tree'
+            rows = [(p if root == self.repo else p[4:], '100644', self.objects[p])
+                    for p in self.files if p.startswith('ihk/') != (root == self.repo)]
+            if root == self.repo:
+                rows += [(p, '160000', oid) for p, oid in self.gitlinks.items()]
+            return ''.join(('%s %s %s\t%s\0' % (mode, 'commit' if mode == '160000' else 'blob', oid, p)
+                            if tree else '%s %s 0\t%s\0' % (mode, oid, p))
+                           for p, mode, oid in rows).encode('utf-8')
         raise AssertionError('unexpected git command ' + repr(argv))
 
     def phase(self, script, cwd, env, log):
@@ -95,6 +100,7 @@ class DriverTests(unittest.TestCase):
         self.candidate = 'a' * 40
         self.manifest = self.root / 'manifest.json'
         self.data = {'candidate_sha': self.candidate, 'repository_files': self.rows,
+                     'schema': driver.INPUT_SCHEMA, 'ihk_sha': driver.EXPECTED_IHK_HEAD,
                      'gitlinks': dict(self.runner.gitlinks) if hasattr(self, 'runner') else {
                          'ihk': driver.EXPECTED_IHK_HEAD, 'vendor/unconsumed': 'd' * 40},
                      'assets': asset_hashes, 'driver_sha256': driver.sha256(Path(driver.__file__))}
@@ -179,6 +185,32 @@ class DriverTests(unittest.TestCase):
             setattr(self.runner, key, value)
             self.assertEqual(self.execute()['status'], 'FAIL')
             setattr(self.runner, key, old)
+
+    def test_schema_and_ihk_manifest_fields_are_required(self):
+        for key in ('schema', 'ihk_sha'):
+            for value in (None, 'forged'):
+                with self.subTest(key=key, value=value):
+                    data = dict(self.data)
+                    if value is None:
+                        data.pop(key)
+                    else:
+                        data[key] = value
+                    with self.assertRaisesRegex(driver.BuildError, 'schema or IHK'):
+                        driver.verify_inputs(self.repo, self.candidate, self.assets,
+                                             data, self.runner)
+
+    def test_forged_manifest_cannot_bless_changed_tracked_bytes(self):
+        for relative in ('host-kernel/fixture.rs', 'ihk/frozen.rs'):
+            with self.subTest(relative=relative):
+                path = self.repo / relative
+                original = path.read_bytes()
+                path.write_bytes(b'forged source')
+                data = dict(self.data, repository_files=dict(self.rows))
+                data['repository_files'][relative] = driver.sha256(path)
+                with self.assertRaisesRegex(driver.BuildError, 'Git blob bytes differ'):
+                    driver.verify_inputs(self.repo, self.candidate, self.assets,
+                                         data, self.runner)
+                path.write_bytes(original)
 
     def test_repository_symlink_is_bound_as_link_text(self):
         link = self.repo / 'link'

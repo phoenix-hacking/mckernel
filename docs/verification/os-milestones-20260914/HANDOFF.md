@@ -216,3 +216,21 @@ any heavy build. Preserve launcher wrapper PID 3399308/starttime 83682487,
 worker PID 3399313/starttime 83682494 and app-server PID 3399317/starttime
 83682500 as the shutdown identities. Formal counters and diagnostic-app/build
 counts remain unchanged; this is a temporary launcher pause, not OS completion.
+
+Checkpoint 66 resumes the campaign and supersedes the host-filesystem candidate
+step. A full non-hardlinked host clone breached the 16-GiB floor and was stopped
+and removed; reflinks are unsupported. The repository now has an independently
+PASSed canonical manifest producer/consumer and corrected owner resource
+admission. Eighty consolidated source tests pass, including retained symlink,
+assume-unchanged, mode, forged-manifest, CR/CRLF path, publication-race,
+allocation-walk and 24-GiB aggregate negatives. See
+`stability-native-exact-manifest-owner-source-success-20260928-1.json`.
+
+Next, after fetched verification, seek a command-level release for a fresh
+non-hardlinked candidate in `/dev/shm`, standalone metadata conversion, exact
+manifest generation and complete offline source phase. Recheck candidate plus
+12-GiB container against the aggregate 24-GiB limit, MemAvailable >=16 GiB and
+the unchanged host/scratch floors. No build/guest is released yet. Preserve the
+old d094 roots/container and all failed provenance/resource candidates. Counts
+remain 0/273, 2/4, 6/130, 350/10,000, 0/7, four diagnostic apps and zero
+successful current-candidate builds.
