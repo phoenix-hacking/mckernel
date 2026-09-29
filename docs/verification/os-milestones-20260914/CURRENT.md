@@ -6541,3 +6541,31 @@ once as non-root. Direct helper execution, retry, rollback, claim removal or
 output reuse is prohibited. Preserve any failure for separate review. Formal
 counters, real guest application count and current-candidate build count remain
 unchanged.
+
+Continuation checkpoint 96, 2026-09-29: the single released recovery-v2 packet
+ran once and failed closed in 0.25 seconds during root source admission, before
+claim or journal creation and before Docker, observer or deletion. The sanitized
+root helper's `git -c safe.directory=... -C ... rev-parse HEAD` returned 128:
+command-scope `safe.directory` did not satisfy Git's protected-configuration
+ownership check for the user-owned repository. A separate read-only diagnostic
+reproduced that exact error and showed that explicit `--git-dir` plus
+`--work-tree` resolves discovery without changing repository state. No retry or
+rollback occurred.
+
+Both quarantines retain device/inode/mode/owner 26/14117/root:root0700 and
+26/24701/root:root0700; both originals remain absent. The old lease remains
+dev/inode 1831/31447 root:root0600 with SHA `69ced239...47e3`; the prior claim
+and journal remain `f2d59c24...41f3` and `d9a17002...50d4`. New recovery-v2
+claim and journal paths are absent, and there are zero deletion phases. Failure
+record `stability-native-exact-quarantine-recovery2-failure-20260929-1.json` is
+`fbdffcf7...3e3b`; its nine-member raw archive is `93fde8f0...e424`, with all
+eight regular members verified byte-for-byte against live originals.
+
+The released `-2` packet and every `-2` output are permanently consumed. Do not
+retry, truncate or reuse them. This is a distinct execution-admission defect,
+not an observer result. Make one bounded correction under a fresh `-3` identity:
+preserve the reviewed state machine, replace only root Git discovery with exact
+explicit git-dir/work-tree access, add a regression/source binding and fresh
+outputs, then obtain independent source/mechanical/execution review before one
+new attempt. No build can start while the unchanged old lease/quarantines remain.
+Counters and application/build counts remain unchanged.

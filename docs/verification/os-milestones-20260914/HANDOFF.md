@@ -560,3 +560,13 @@ record `7dc1b2b1...adc0d` binds the one-shot/no-retry/no-rollback contract and
 the operational exclusion through observation and deletion. Invoke only the
 non-root packet after its fresh gates pass; preserve every output/failure and
 never run the helper directly. Cleanup success changes no acceptance counter.
+
+Checkpoint 96 records that one recovery-v2 attempt as FAIL before claim,
+journal, Docker, observer or deletion. Sanitized root Git rejected repository
+ownership on the `-C` discovery path; failure record `fbdffcf7...3e3b` and raw
+archive `93fde8f0...e424` preserve all outputs. Both roots, the old lease and the
+prior claim/journal are unchanged; new claim/journal are absent. Never retry or
+reuse `-2`. One bounded fresh `-3` correction may replace root Git discovery
+with explicit git-dir/work-tree access and otherwise preserve the reviewed state
+machine, then requires independent review and a new fetched release. No build or
+acceptance work may cross the retained lease.
