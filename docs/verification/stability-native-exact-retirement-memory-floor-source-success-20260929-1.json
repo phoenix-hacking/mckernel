@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.native-exact-retirement-memory-floor-source-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_ONLY",
+  "failure_family": "704f candidate retirement resource admission after canonical object verification",
+  "blocked_v1": {
+    "commit": "342de408fc9332dd8030cdd3688f2e6039e418f5",
+    "packet_sha256": "50eb555564267ac4c7ca1db4917f1f3e79bbea4334ff3fbb31640053398b13c2",
+    "release_sha256": "1dfd498b0a61f43b8979420532e68b0454a23fcee2bbdd7b2b0dd33e49ab01a1",
+    "executed": false,
+    "review_result": "BLOCK_RESOURCE_FLOOR",
+    "strict_free_bytes_observed_by_independent_preflight": 3232337920,
+    "strict_free_bytes_after_coordinator_read_only_admission": 3269971968,
+    "strict_free_bytes_before_coordinator_read_only_admission": 11151843328,
+    "coordinator_read_only_admission_seconds": 38.215,
+    "memavailable_bytes_after_coordinator_read_only_admission": 19827306496,
+    "cause": "the packet used SC_AVPHYS_PAGES after streaming 7728 main and 1296 IHK canonical objects; reclaimable pack cache reduced strictly free pages below the unchanged 4 GiB floor"
+  },
+  "independent_preflight": {
+    "passed_before_stop": [
+      "HEAD/upstream/FETCH_HEAD and exact two-path finalization",
+      "all 10609 live member identities and complete content hashes",
+      "fresh privileged 17-container census and all four terminal records",
+      "boot and launcher identities",
+      "lease, quarantine and evidence namespace absence",
+      "host, scratch and tmpfs floors",
+      "CAP_LINUX_IMMUTABLE and scratch GETFLAGS support"
+    ],
+    "not_run_after_memory_stop": [
+      "canonical object stream in the independent review",
+      "full conflict census",
+      "retirement packet"
+    ]
+  },
+  "correction": {
+    "packet": "docs/verification/evidence/native-exact-candidate-retirement-704f6654-2.py",
+    "packet_sha256": "84015a3fe9dff2a6114f7e6d902b8e672b30d3b03c72af54f63c79bf75043e3b",
+    "tests": "scripts/tests/test_native_exact_candidate_retirement_704f6654_2.py",
+    "tests_sha256": "de7a3448972846fe01e78c77b35ee552f3c31aff932a5d4e23570ecfdb737ac1",
+    "release_sentinel": "RELEASE_HASH_REQUIRED",
+    "behavior": "parse exactly one nonzero bounded Linux MemAvailable decimal kB field with ASCII alignment and apply the unchanged 4 GiB floor",
+    "shared_build_exclusion": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json",
+    "fresh_namespaces": [
+      "/dev/shm/.mckernel-retirement-candidate-704f6654-2",
+      "/dev/shm/.mckernel-retirement-metadata-backup-704f6654-2",
+      "/dev/shm/.mckernel-retirement-evidence-704f6654-2"
+    ]
+  },
+  "failure_lineage": [
+    "the first v2 parser candidate rejected the real aligned MemAvailable line and was corrected to accept only ASCII spaces/tabs around the decimal",
+    "independent review blocked an erroneous fresh -2 build lease; the corrected packet retains the consumed build owner's exact -1 exclusion path"
+  ],
+  "checks": {
+    "python39": "PASS 110 packet/helper/observer tests",
+    "python38": "PASS 110 packet/helper/observer tests",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "live_memavailable_bytes": 19778138112,
+    "source_review": "PASS_SOURCE_ONLY"
+  },
+  "acceptance": {
+    "execution_released": false,
+    "retirement": false,
+    "kernel_build": false,
+    "guest": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "checkpoint and fetch-verify the v2 DRAFT, generate an exact v2 two-path release, obtain fresh independent execution review and full preflight, then run at most one sudo -A retirement if released"
+}

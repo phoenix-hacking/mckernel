@@ -7646,3 +7646,36 @@ Never rerun the consumed `704f6654-1` build request. Formal counters remain
 unchanged, successful current-candidate builds remain zero, real guest apps this
 window remain zero, and the OS remains incomplete; this launcher pause is
 temporary.
+
+Continuation checkpoint 153, 2026-09-29: finalized v1 retirement release
+`1dfd498b...ab01a1` was pushed/fetched at `342de408...18f5` and independently
+passed its exact two-path mechanical binding, all 10,609 live identity/content
+checks, fresh privileged 17-container/four-terminal census, boot/launcher/path
+checks and immutable-filesystem capability inspection. It was correctly BLOCKed
+before execution: after read-only verification, `SC_AVPHYS_PAGES` reported only
+3,232,337,920 bytes against the unchanged 4-GiB floor. No output, tombstone,
+quarantine, deletion or retirement packet execution occurred.
+
+A coordinator read-only admission reproduction began with 11,151,843,328 strict
+free bytes, streamed the exact 7,728 main plus 1,296 IHK objects in 38.215 seconds,
+and ended with 3,269,971,968 strict free bytes while Linux MemAvailable remained
+19,827,306,496. This proves an observer-ordering defect: reclaimable canonical
+pack cache was counted as unavailable by the old SC_AVPHYS metric. V1 remains
+immutable, blocked and unexecuted.
+
+Additive v2 DRAFT `84015a3f...43e3b` replaces only that observation with a
+fail-closed parser for Linux's unique nonzero bounded `MemAvailable` decimal kB
+field, retaining the numeric 4-GiB floor and every retirement/ownership check.
+Its first parser candidate rejected Linux's aligned spaces; the bounded
+correction accepts only ASCII spaces/tabs. Independent review then BLOCKed an
+unsafe fresh `-2` build lease; the correction restores the consumed owner's exact
+`native-exact-build-lease-704f6654-1.json` shared exclusion while keeping v2
+quarantine/evidence names fresh. Corrected tests `de7a3448...7ac1` pass 110 cases
+under Python 3.8 and 3.9; live MemAvailable is 19,778,138,112 bytes and independent
+rereview PASSes source only. `RELEASE_HASH_REQUIRED` remains.
+
+Next checkpoint/push/fetch this v2 DRAFT and failure lineage, then mechanically
+generate a v2 release changing only its sentinel plus one release JSON. Obtain
+fresh independent execution review and repeat every live preflight before at
+most one `sudo -A` run. No retirement, build, guest, application or formal
+counter advance has occurred; real guest apps this work window remain zero.

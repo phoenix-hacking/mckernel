@@ -1,6 +1,25 @@
 # Compact dispatcher handoff
 
-## Latest continuation: checkpoint 152
+## Latest continuation: checkpoint 153
+
+Checkpoint 153 supersedes the retirement release state. Fetched v1 release
+`342de408...18f5` passed mechanical, complete live content, Docker and immutable
+capability review but was BLOCKed before execution: its post-canonical-scan
+SC_AVPHYS value was 3.23 GiB although Linux MemAvailable remained 19.83 GiB.
+Read-only reproduction confirmed the canonical pack-cache ordering defect. V1
+remains immutable and unexecuted; no tombstone or quarantine exists.
+
+Additive v2 DRAFT `84015a3f...43e3b` and tests `de7a3448...7ac1` use a strict
+Linux MemAvailable parser with the unchanged 4-GiB floor. After preserving the
+aligned-format failure and correcting an independent review BLOCK on the shared
+lease, v2 retains exact build exclusion `native-exact-build-lease-704f6654-1.json`
+and uses fresh v2 quarantine/evidence names. Python 3.8/3.9 each pass 110 tests;
+independent rereview PASSes source only. The release sentinel remains.
+
+Next push/fetch the v2 template, mechanically finalize its two-path release,
+then obtain a fresh execution review and full live preflight before any one-shot
+retirement. Only accepted retirement unlocks a fresh build candidate. Counts
+remain unchanged and the OS is incomplete.
 
 Checkpoint 151 supersedes the storage-bridge status. Retention preparation now
 PASSes independent evidence review: inventory `4067c653...61b8e1`, capsule
