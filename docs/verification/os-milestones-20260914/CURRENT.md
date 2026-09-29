@@ -8065,3 +8065,34 @@ reuse `67589154-1`/`704f6654-1` artifacts. Obtain independent preparation review
 before its one-shot execution, then seek a distinct build release. Formal
 counters remain 6/130 and 350/10000; current-candidate builds and real guest
 applications remain zero, applications remain 0/273, and the OS is incomplete.
+
+Continuation checkpoint 167, 2026-09-29: fetched preparation packet
+`7e3c4897...a0010` and release `45c61dac...f0d1` passed independent execution
+review and ran exactly once. It exited 0 with the exact topology line and outer
+`LOG_FINAL_FSYNC=PASS`, empty stderr, and no surviving timeout, packet,
+process-group, session or descendant identities. Candidate
+`/dev/shm/mckernel-exact-candidate-f5d8d914-1` is 26/47678, uid/gid 1000,
+mode 0755, and pins fetched main `f5d8d914...430b` plus IHK `3114d9e7...72a1f`.
+Metadata backup is 26/58429 with the same ownership and mode.
+
+Independent postflight returned `PASS_PREPARATION_EVIDENCE`. All 9,129 tracked
+inputs, four gitlinks and four assets pass; 9,080 regular files are distinct
+tmpfs objects. Clean indices, installed metadata, historical blobs, main/IHK
+closures, shared ABI, manifest verification and owner validate-only all pass.
+Manifest `b37c4f7c...a6d8`, request `9f1b1653...5fd8`, receipt
+`6d076fd8...3a7a` and log `b09c18b3...6599` are retained. Output/evidence roots
+are empty, the fresh lease and staging residue are absent, and unrelated running
+containers mount no target. Candidate plus backup consumes 9,141,473,280 bytes;
+the planned aggregate is 22,026,375,168 under 24 GiB. Archive
+`69976447...a5ae` matches all 96 live members.
+
+This accepts preparation evidence only. After this checkpoint is pushed and
+fetch-verified, derive and independently review a fresh one-shot heavy-build
+release for exact owner command `/usr/bin/python3 -E -s -B
+/dev/shm/mckernel-exact-candidate-f5d8d914-1/scripts/native_rust_exact_build_container_owner.py
+/home/holden/mckernel-work/scratch/native-exact-build-request-f5d8d914-1.json`.
+Use the pinned CPUs 2-5, 12-GiB, 512-task, no-swap/no-network profile and `-j2`;
+remeasure capacity and leases first. The candidate contains the reviewed queue
+executable-root repair for the consumed 704f phase-0 failure. No build, guest or
+application has run yet; formal counters remain 6/130 and 350/10000,
+applications remain 0/273, and the OS is incomplete.

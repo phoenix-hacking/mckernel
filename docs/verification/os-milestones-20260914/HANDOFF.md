@@ -1208,3 +1208,19 @@ then generate a new-nonce preparation packet from the fetched main commit and
 IHK `3114d9e7101ad52030eb3effa849a5c108972a1f`; never use the dirty nested IHK
 or any `67589154-1`/`704f6654-1` path. Obtain independent preparation review
 before one preparation run. Builds and real guest applications remain zero.
+
+Checkpoint 167 supersedes preparation routing. Fresh packet `7e3c4897...a0010`
+ran once after independent release and produced candidate `f5d8d914-1` at
+26/47678 plus metadata backup 26/58429. Main is exact fetched
+`f5d8d914f816d4a677990719854f7b4d312a430b`; IHK is `3114d9e7...72a1f`.
+Manifest `b37c4f7c...a6d8`, request `9f1b1653...5fd8`, metadata receipt
+`6d076fd8...3a7a` and log `b09c18b3...6599` pass independent preparation
+review. All 9,129 tracked inputs pass, output/evidence are empty, the lease is
+absent, all processes retired, and archive `69976447...a5ae` matches 96 live
+members. Aggregate planned memory is 22,026,375,168 under 24 GiB.
+
+Preparation grants no build execution. Next checkpoint/push/fetch this evidence,
+then independently release the exact owner command for request `9f1b1653...5fd8`
+under the pinned 4-CPU/12-GiB/no-network profile. The candidate includes the
+reviewed queue executable-root correction that addresses the consumed 704f
+phase-0 failure. Builds and real guest applications remain zero.

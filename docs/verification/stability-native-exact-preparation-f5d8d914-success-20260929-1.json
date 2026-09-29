@@ -1,0 +1,98 @@
+{
+  "schema": "mckernel.native-exact-preparation-success.v1",
+  "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+  "timestamp_utc": "2026-09-29T19:09:27Z",
+  "release": {
+    "path": "docs/verification/stability-native-exact-preparation-execution-release-f5d8d914-20260929-1.json",
+    "sha256": "45c61daca7dc15761d5a8c607b13f16a7f5c7835834cfc552791355300a4f0d1",
+    "independent_execution_review": "PASS_EXECUTION_RELEASE"
+  },
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-f5d8d914-1.sh",
+    "sha256": "7e3c48970bf3ff1b4a339ff09d645f4a44bea1533691d7608331b2e1d49a0010"
+  },
+  "execution": {
+    "one_shot_consumed": true,
+    "retry": false,
+    "exit_status": 0,
+    "packet_pid": 3994479,
+    "packet_starttime": 91872019,
+    "timeout_pid": 3994476,
+    "outer_stdout_sha256": "f80e35ab122d0c2c2343c82a76b94346c9115bf037a088973b0786c2574630d2",
+    "outer_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outer_receipt_sha256": "86803ae5ef298d883131de87b1f22fa30179ad860e4ee5b03775b9d911740a78",
+    "log_final_fsync": "PASS"
+  },
+  "candidate": {
+    "path": "/dev/shm/mckernel-exact-candidate-f5d8d914-1",
+    "commit": "f5d8d914f816d4a677990719854f7b4d312a430b",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "device": 26,
+    "inode": 47678,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0755",
+    "allocated_bytes": 9140117504
+  },
+  "metadata_backup": {
+    "path": "/dev/shm/mckernel-exact-metadata-backup-f5d8d914-1",
+    "device": 26,
+    "inode": 58429,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0755",
+    "allocated_bytes": 1355776
+  },
+  "artifacts": {
+    "log_sha256": "b09c18b31de7cd286ae6907fd2373c5f2b024eb4f253157b6cff42a479c96599",
+    "manifest_sha256": "b37c4f7c9b75dea92be27bc8ee9d99c53d037721cefee8c6ad9a86254505a6d8",
+    "request_sha256": "9f1b1653b66894ae1384ebdbc60ba113b621c596de4d53f98aa3376f00ce5fd8",
+    "metadata_receipt_sha256": "6d076fd804c30a66f65430bfab2b01de426023805a5a00da1fa0b6e984963a7a",
+    "archive": "docs/verification/evidence/stability-native-exact-preparation-f5d8d914-20260929-1.tar.gz",
+    "archive_sha256": "6997644766f61f94452e2f87329abeb7ab80867dbcd70aa80825c28e9158a5ae",
+    "archive_members": 96
+  },
+  "source_admission": {
+    "tracked_inputs": 9129,
+    "regular_tracked_files": 9080,
+    "gitlinks": 4,
+    "pinned_assets": 4,
+    "main_closure_count": 2934,
+    "main_closure_sha256": "7cd54320a871c86d3603a13c829289d4bf1d1d8d2709bf6e70d53fcef358b0d2",
+    "ihk_closure_count": 17,
+    "ihk_closure_sha256": "1538fd9965d068b16604834ae14d526c2f5ddacf953b72c5f827ab9ff84f7f78",
+    "verify_inputs": "PASS",
+    "clean_indices_and_commits": true,
+    "metadata_external_indirection_absent": true
+  },
+  "owner_validation": {
+    "status": "PASS_VALIDATE_ONLY",
+    "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "aggregate_memory_required": 22026375168,
+    "aggregate_memory_limit": 25769803776,
+    "output_empty": true,
+    "evidence_empty": true,
+    "new_lease_absent": true
+  },
+  "postflight": {
+    "packet_parent_process_group_and_session_absent": true,
+    "metadata_staging_residue_absent": true,
+    "running_docker_target_mounts": 0,
+    "candidate_and_backup_preserved": true
+  },
+  "independent_review": {
+    "status": "PASS_PREPARATION_EVIDENCE",
+    "archive_live_members_verified": 96,
+    "scope": "candidate source identity, metadata conversion, manifest/request, validate-only owner, resources and process/Docker postflight"
+  },
+  "acceptance": {
+    "exact_build_review_unlocked": true,
+    "build_execution_authorized": false,
+    "guest_execution_authorized": false,
+    "production_gate_credit": false,
+    "application_acceptance": false,
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch-verify this preparation evidence. Then create and independently review a fresh one-shot exact-build release for request 9f1b1653b66894ae1384ebdbc60ba113b621c596de4d53f98aa3376f00ce5fd8 before invoking its owner command."
+}
