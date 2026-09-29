@@ -7973,3 +7973,34 @@ basis/release bound to that fetched commit and obtain fresh independent executio
 review. Never execute attempt 1 and never treat a later sampled PASS as
 retrospective retirement acceptance. Formal counters, builds and applications
 remain unchanged.
+
+Continuation checkpoint 164, 2026-09-29: fetched attempt-2 release
+`149d458e...1e84` independently PASSed execution review and ran exactly once.
+It exited 1 after 2.149 seconds with empty streams and durable root-owned result
+1831/31477 SHA `f5c1e35e...ee8`. All three rounds scanned 271 processes,
+47 tasks and 33,881 mapping entries with zero mapping denials and zero retained
+target references, but each failed closed on 267 mountinfo parser errors; the
+cascade cleared identities and produced three missing anchors, one unstable
+census and one process-census-churn failure. Archive `e0e206b3...e171` retains
+the exact result/release/basis/source-review. It lacks a separate outer-status
+receipt, so the coordinator capture is the authority for exit 1/empty streams.
+
+The immediate cause was absolute-only parsing of canonical nsfs roots such as
+`mnt:[id]`. A further live root diagnostic found ordinary chrooted PID 868/398
+has root `/etc/avahi`, an empty filtered mountinfo and namespace
+`mnt:[4026531841]`, while PID 1, PID 2 and the launcher share that namespace with
+root `/` and a complete view. Equal namespace tokens plus an empty chroot view
+cannot prove alias absence because Linux filters mounts outside the task root.
+After the ordinary correction was BLOCKed on this coverage gap, an Astra expert
+implemented namespace-level completeness. Exact helper `641c39a3...d7ab2` and
+tests `af9ab213...6904` independently PASS source: 56 tests pass on Python
+3.8/3.9, and every observed namespace now requires a revalidated root-`/`,
+nonempty parsed representative; filtered views defer only within that exact
+namespace.
+
+Record
+`stability-native-exact-deleted-inode-audit-runtime-failure-704f6654-20260929-2.json`
+preserves the result and correction. Attempt 2 is consumed and must never retry.
+No current-state reference-absence, build, guest, application or production
+acceptance exists. Next commit/push/fetch this correction, then create a fresh
+attempt-3 basis/output/release and obtain independent execution review.

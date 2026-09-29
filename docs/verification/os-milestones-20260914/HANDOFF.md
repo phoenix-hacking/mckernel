@@ -1177,3 +1177,17 @@ Commit/push/fetch the corrected source, then create a fresh attempt-2 exact basi
 and root read-only proposal and obtain fresh execution review. No privileged
 audit has run. A future current-state PASS is sampled evidence only and cannot
 repair the consumed retirement proof; builds/apps/formal counters remain zero.
+
+Checkpoint 164 supersedes attempt-2 execution state. Released attempt 2 ran once
+and FAILed closed: durable result `f5c1e35e...ee8`, archive `e0e206b3...e171`,
+three rounds each with 33,881 map entries and zero retained references, but 267
+mountinfo parse failures cleared the census. Never retry it. Canonical nsfs roots
+caused most failures; ordinary chroot PID 868/398 exposed the deeper rule that a
+filtered view cannot prove namespace-wide alias absence.
+
+Expert helper `641c39a3...d7ab2` plus tests `af9ab213...6904` now independently
+PASS source with 56 tests on Python 3.8/3.9. Every observed mount namespace needs
+a revalidated root-`/`, parsed nonempty representative; chroot/empty views defer
+only within that exact namespace. Commit/push/fetch this correction, then derive
+fresh attempt 3 and seek independent execution review. No audit PASS, fresh
+candidate build or application acceptance exists.

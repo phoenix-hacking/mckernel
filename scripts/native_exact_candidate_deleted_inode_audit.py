@@ -286,6 +286,22 @@ def _mount_path(encoded):
     return value
 
 
+_NAMESPACE_ROOT = re.compile(
+    r"(?:cgroup|ipc|mnt|net|pid|pid_for_children|time|time_for_children|user|uts):\[[1-9][0-9]*\]\Z")
+
+
+def _mount_root(encoded, filesystem_type):
+    """Decode a mountinfo root, with the kernel's opaque nsfs exception."""
+    if filesystem_type == "nsfs":
+        # Namespace roots are opaque tokens, not pathnames.  They are emitted
+        # by the kernel without mountinfo pathname escapes; accepting any
+        # other spelling would turn a relative or escaped root into an alias.
+        if "\\" in encoded or not _NAMESPACE_ROOT.fullmatch(encoded):
+            raise ValueError("namespace mount root")
+        return encoded
+    return _mount_path(encoded)
+
+
 def _mount_rows(data):
     if not data or not data.endswith("\n"):
         raise ValueError("empty or incomplete mountinfo")
@@ -303,7 +319,8 @@ def _mount_rows(data):
             raise ValueError("mount row")
         ids.add(fields[0])
         major, minor = map(int, fields[2].split(":"))
-        rows.append((os.makedev(major, minor), _mount_path(fields[3]), _mount_path(fields[4])))
+        rows.append((os.makedev(major, minor), _mount_root(fields[3], tail[0]),
+                     _mount_path(fields[4])))
     if not rows:
         raise ValueError("empty mountinfo")
     return rows
@@ -334,7 +351,15 @@ def _scan_namespace(base, name, failures, bound=None, allowed_absence=None, task
         failures.append("namespace:%s:malformed" % label)
 
 
-def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None, bound=None, allowed_absence=None):
+def _proc_root(base):
+    value = os.readlink(base + "/root")
+    if not _absolute_path(value) or value.endswith(" (deleted)"):
+        raise ValueError("malformed proc root")
+    return value
+
+
+def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None, bound=None, allowed_absence=None,
+                    coverage=None):
     base = _base(pid, task_tid)
     label = "%d:%d" % (pid, task_tid if task_tid is not None else pid)
     task = task_tid is not None
@@ -342,19 +367,39 @@ def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None, bound=None, al
     # both independently, retaining aliases even if the namespace is invalid.
     namespaces = []
     namespace_errors = []
+    roots = []
+    root_errors = []
+    first_error = len(failures)
+    classification = None
+    if bound is not None:
+        try:
+            classification = _classification_bound(bound, task)
+        except (OSError, ValueError):
+            failures.append("mount-identity-uninspected:" + label)
     def read_namespace():
         try:
             namespaces.append(_namespace(base, "mnt"))
         except (OSError, ValueError) as e:
             namespace_errors.append(e)
+    def read_root():
+        try:
+            roots.append(_proc_root(base))
+        except (OSError, ValueError) as e:
+            root_errors.append(e)
     read_namespace()
+    read_root()
     data = None
     mount_error = None
+    mount_opened = False
+    mount_read_complete = False
     try:
         with open(base + "/mountinfo", "r") as f:
+            mount_opened = True
             data = f.read()
+            mount_read_complete = True
     except OSError as e:
         mount_error = e
+    parsed = False
     if data:
         try:
             for dev, root, _ in _mount_rows(data):
@@ -362,24 +407,59 @@ def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None, bound=None, al
                                              or root == target + " (deleted)")
                        for target_dev, target in mount_roots):
                     failures.append("mount-alias:" + label)
+            parsed = True
         except (ValueError, OverflowError):
             failures.append("mountinfo-uninspected:" + label)
-    else:
+    elif not mount_read_complete:
         absence = mount_error if mount_error is not None else OSError(errno.ENOENT, "empty mountinfo")
-        if not _allow_absent_surface(absence, label, failures, bound, allowed_absence, task):
+        if (mount_opened or
+                not _allow_absent_surface(absence, label, failures, bound, allowed_absence, task)):
             failures.append("mountinfo-uninspected:" + label)
+    read_root()
     read_namespace()
     if len(namespaces) == 2 and namespaces[0] != namespaces[1]:
         failures.append("mount-namespace-churn:" + label)
-    # Even typed absence must be stable across this read.  Missing namespace
-    # links are legitimate only alongside an absent/empty mountinfo file;
-    # access denial and malformed links always fail closed.
+    # A missing namespace cannot be assigned to a representative. Never infer
+    # namespace membership from parentage, process class or mount rows.
     if len(namespaces) == 1:
         failures.append("mount-namespace-churn:" + label)
     for error in namespace_errors:
-        if (data or not isinstance(error, OSError)
+        failures.append("mountinfo-uninspected:" + label)
+    if len(roots) == 1 or (len(roots) == 2 and roots[0] != roots[1]):
+        failures.append("mount-root-churn:" + label)
+    for error in root_errors:
+        if (not isinstance(error, OSError)
                 or not _allow_absent_surface(error, label, failures, bound, allowed_absence, task)):
-            failures.append("mountinfo-uninspected:" + label)
+            failures.append("mount-root-uninspected:" + label)
+    if bound is not None and classification is not None:
+        _revalidate_classification(bound, classification, failures, task)
+    if coverage is not None and len(namespaces) == 2 and namespaces[0] == namespaces[1]:
+        namespace = namespaces[0]
+        coverage["observed"].add(namespace)
+        # proc mountinfo filters mounts outside the target task's chroot. Only
+        # an authenticated, stable '/' view proves namespace-wide coverage.
+        if (bound is not None and classification is not None and parsed
+                and roots == ["/", "/"] and len(failures) == first_error):
+            coverage["full"].append((namespace, bound, task, classification))
+
+
+def _finish_mount_coverage(coverage, failures):
+    complete = set()
+    for namespace, bound, task, classification in coverage["full"]:
+        base = _base(bound[0], bound[1] if task else None)
+        if not _revalidate_classification(bound, classification, failures, task):
+            continue
+        try:
+            if _namespace(base, "mnt") != namespace or _proc_root(base) != "/":
+                failures.append("mount-representative-churn:%d:%d" % bound[:2])
+                continue
+        except (OSError, ValueError):
+            failures.append("mount-representative-uninspected:%d:%d" % bound[:2])
+            continue
+        if _revalidate_classification(bound, classification, failures, task):
+            complete.add(namespace)
+    for namespace in sorted(coverage["observed"] - complete):
+        failures.append("mount-namespace-uncovered:" + namespace)
 
 
 def _scan_fds(base, bound, task, deleted, failures, refs, reconciled, allowed_absence=None):
@@ -399,7 +479,8 @@ def _scan_fds(base, bound, task, deleted, failures, refs, reconciled, allowed_ab
             failures.append("fd-directory:%s:%s" % (label, e.errno))
 
 
-def _scan_process(pid, deleted, failures, refs, counters, reconciled=None, mount_roots=(), classifications=None):
+def _scan_process(pid, deleted, failures, refs, counters, reconciled=None, mount_roots=(), classifications=None,
+                  mount_coverage=None):
     first_error = len(failures)
     try:
         ident = _identity(pid)
@@ -420,7 +501,8 @@ def _scan_process(pid, deleted, failures, refs, counters, reconciled=None, mount
     _scan_fds(base, ident, False, deleted, failures, refs, reconciled,
               classification if classification in ("kernel-thread", "zombie") else None)
     _scan_mountinfo(pid, failures, mount_roots, bound=ident,
-                    allowed_absence=classification if classification in ("kernel-thread", "zombie") else None)
+                    allowed_absence=classification if classification in ("kernel-thread", "zombie") else None,
+                    coverage=mount_coverage)
     mapdir = os.path.join(base, "map_files")
     map_absent_allowed = False
     try:
@@ -456,13 +538,15 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
     counters = {"processes": 0, "tasks": 0, "map_files_entries": 0, "map_files_denials": 0}
     identities = []
     classifications = {}
+    mount_coverage = {"observed": set(), "full": []}
     try:
         pids = sorted(int(x) for x in os.listdir("/proc") if PROC_RE.match(x))
     except OSError as e:
         return identities, failures + ["proc-list:%s" % e.errno], refs, counters
     for pid in pids:
         first_error = len(failures)
-        ident = _scan_process(pid, deleted, failures, refs, counters, reconciled, mount_roots, classifications)
+        ident = _scan_process(pid, deleted, failures, refs, counters, reconciled, mount_roots, classifications,
+                              mount_coverage)
         if ident is None:
             continue
         candidates = [(ident, False)]
@@ -493,7 +577,8 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
             _scan_fds(tbase, tident, True, deleted, failures, refs, reconciled,
                       tclassification if tclassification in ("kernel-thread", "zombie") else None)
             _scan_mountinfo(pid, failures, mount_roots, tid, tident,
-                            tclassification if tclassification in ("kernel-thread", "zombie") else None)
+                            tclassification if tclassification in ("kernel-thread", "zombie") else None,
+                            mount_coverage)
             if _revalidate(tident, failures, reconciled, True) == IdentityState.LIVE:
                 _revalidate_classification(tident, tclassification, failures, True)
                 classifications[(tident, True)] = tclassification
@@ -526,6 +611,7 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
             failures.append("process-census-churn")
     except OSError:
         failures.append("process-census-uninspected")
+    _finish_mount_coverage(mount_coverage, failures)
     # Any failure invalidates this round's authorization set, even if the same
     # PID/starttime was also seen through a successfully scanned leader task.
     identities = [] if failures else verified

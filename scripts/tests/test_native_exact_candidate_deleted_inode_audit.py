@@ -48,7 +48,7 @@ class ProcFixture:
                 ("_classification_bound", lambda bound, task=False: "ordinary"),
                 ("os.listdir", lambda p: self.directories[p]),
                 ("os.scandir", scandir),
-                ("os.readlink", lambda p: p.rsplit("/", 1)[1] + ":[41]")]:
+                ("os.readlink", lambda p: "/" if p.endswith("/root") else p.rsplit("/", 1)[1] + ":[41]")]:
             self.stack.enter_context(mock.patch.object(audit, target, value) if "." not in target
                                      else mock.patch("native_exact_candidate_deleted_inode_audit." + target, value))
         self.stack.enter_context(mock.patch("builtins.open", mock.mock_open(
@@ -73,6 +73,12 @@ class SpecialProcFixture(ProcFixture):
             self.absent.update(base + "/ns/" + name for name in
                                ("pid", "net", "user", "uts", "ipc", "mnt"))
         self.absent.add("/proc/7/map_files")
+        # Namespace membership must always be observable. The leader task is
+        # an independent full-root representative for the other absent views.
+        for base in ("/proc/7", "/proc/7/task/7", "/proc/7/task/8"):
+            self.absent.remove(base + "/ns/mnt")
+        self.absent.remove("/proc/7/task/7/root")
+        self.absent.remove("/proc/7/task/7/mountinfo")
 
     def check(self, path):
         if path in self.errors:
@@ -88,10 +94,13 @@ class SpecialProcFixture(ProcFixture):
         def guarded(fn):
             def call(path, *args, **kwargs):
                 self.check(path)
+                if fn == original_stat and path == "/proc/7/task/7/root":
+                    return SimpleNamespace(st_dev=2, st_ino=43)
                 return fn(path, *args, **kwargs)
             return call
         def read(path, *args, **kwargs):
-            if self.empty_mountinfo and path.endswith("/mountinfo") and path not in self.errors:
+            if (self.empty_mountinfo and path.endswith("/mountinfo") and path not in self.errors
+                    and path != "/proc/7/task/7/mountinfo"):
                 return mock.mock_open(read_data="")(path, *args, **kwargs)
             return guarded(original_open)(path, *args, **kwargs)
         for target, value in [("stat", guarded(original_stat)), ("listdir", guarded(original_listdir)),
@@ -138,6 +147,133 @@ class StatProcFixture(SpecialProcFixture):
 
 
 class DeletedInodeAuditTests(unittest.TestCase):
+    @contextmanager
+    def mount_views(self, roots=None, namespaces=None, data=None):
+        """Override only proc mount surfaces; run the entire production census."""
+        roots, namespaces, data = roots or {}, namespaces or {}, data or {}
+        counts = {}
+        original_link, original_open = audit.os.readlink, open
+        def value(table, base, fallback):
+            result = table.get(base, fallback)
+            if isinstance(result, list):
+                key = (id(table), base)
+                index = counts.get(key, 0)
+                counts[key] = index + 1
+                result = result[min(index, len(result) - 1)]
+            if isinstance(result, Exception):
+                raise result
+            return result
+        def linked(path):
+            if path.endswith("/root"):
+                return value(roots, path[:-5], "/")
+            if path.endswith("/ns/mnt"):
+                return value(namespaces, path[:-7], "mnt:[41]")
+            return original_link(path)
+        def opened(path, *args, **kwargs):
+            if path.endswith("/mountinfo"):
+                content = value(data, path[:-10], "31 26 0:26 / /dev/shm rw - tmpfs tmpfs rw\n")
+                return mock.mock_open(read_data=content)(path, *args, **kwargs)
+            return original_open(path, *args, **kwargs)
+        with mock.patch.object(audit.os, "readlink", side_effect=linked), \
+                mock.patch("builtins.open", side_effect=opened):
+            yield
+
+    def test_full_census_chroot_views_require_exact_full_representative(self):
+        peer = "/proc/7/task/8"
+        for content in ("", "31 26 0:27 /subdir /inside rw - tmpfs tmpfs rw\n"):
+            for namespace, accepted in (("mnt:[41]", True), ("mnt:[42]", False)):
+                with ProcFixture(), self.mount_views({peer: "/etc/avahi"}, {peer: namespace}, {peer: content}):
+                    identities, failures, _, _ = audit.audit_round(set())
+                self.assertEqual(bool(identities), accepted, failures)
+                self.assertEqual(not failures, accepted, failures)
+                if not accepted:
+                    self.assertIn("mount-namespace-uncovered:mnt:[42]", failures)
+
+    def test_full_census_no_complete_representative_fails(self):
+        bases = ("/proc/7", "/proc/7/task/7", "/proc/7/task/8")
+        for content in ("", "31 26 0:26 / /visible rw - tmpfs tmpfs rw\n"):
+            with ProcFixture(), self.mount_views(dict.fromkeys(bases, "/jail"), data=dict.fromkeys(bases, content)):
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("mount-namespace-uncovered:mnt:[41]", failures)
+        with ProcFixture(), self.mount_views(data=dict.fromkeys(bases, "")):
+            identities, failures, _, _ = audit.audit_round(set())
+        self.assertEqual(identities, [])
+        self.assertIn("mount-namespace-uncovered:mnt:[41]", failures)
+
+    def test_full_census_root_and_namespace_errors_are_not_covered_by_peer(self):
+        peer = "/proc/7/task/8"
+        for bad in ("relative", "//", "/a/../b", "/gone (deleted)", "/bad\0name",
+                    PermissionError(errno.EACCES, "denied"), FileNotFoundError(errno.ENOENT, "absent"),
+                    ["/jail", "/changed"]):
+            with self.subTest(root=bad), ProcFixture(), self.mount_views({peer: bad}, data={peer: ""}):
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertTrue(any(x.startswith("mount-root-") for x in failures), failures)
+        for bad in (["mnt:[41]", "mnt:[42]"], "mnt:bad", FileNotFoundError(errno.ENOENT, "gone")):
+            with ProcFixture(), self.mount_views({peer: "/jail"}, {peer: bad}, {peer: ""}):
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertTrue(failures)
+        for error in (OSError(errno.EIO, "read"), PermissionError(errno.EACCES, "denied")):
+            with ProcFixture(), self.mount_views({peer: "/jail"}, data={peer: error}):
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("mountinfo-uninspected:7:8", failures)
+        with ProcFixture(), self.mount_views({peer: "/jail"}, data={peer: "malformed\n"}):
+            identities, failures, _, _ = audit.audit_round(set())
+        self.assertEqual(identities, [])
+        self.assertIn("mountinfo-uninspected:7:8", failures)
+
+    def test_aliases_are_reported_in_full_and_filtered_views(self):
+        for base in ("/proc/7", "/proc/7/task/7", "/proc/7/task/8"):
+            for root in ("/", "/jail"):
+                with ProcFixture(), self.mount_views({base: root}, data={base:
+                        "31 26 0:26 /retained/child /visible rw - tmpfs tmpfs rw\n"}):
+                    identities, failures, _, _ = audit.audit_round(set(), ((26, "/retained"),))
+                self.assertEqual(identities, [])
+                self.assertTrue(any(x.startswith("mount-alias:") for x in failures), failures)
+
+    def test_complete_representative_must_survive_final_revalidation(self):
+        bases = ("/proc/7", "/proc/7/task/7", "/proc/7/task/8")
+        roots = dict.fromkeys(bases, "/jail")
+        for replacement in ("/later-chroot", PermissionError(errno.EACCES, "denied")):
+            roots["/proc/7/task/7"] = ["/", "/", replacement]
+            with ProcFixture(), self.mount_views(roots):
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("mount-namespace-uncovered:mnt:[41]", failures)
+        roots["/proc/7/task/7"] = "/"
+        with ProcFixture(), self.mount_views(roots, {"/proc/7/task/7": ["mnt:[41]", "mnt:[41]", "mnt:[42]"]}):
+            identities, failures, _, _ = audit.audit_round(set())
+        self.assertEqual(identities, [])
+        self.assertIn("mount-representative-churn:7:7", failures)
+
+    def test_special_mount_absence_needs_observed_exact_namespace(self):
+        for classification in ("kernel-thread", "zombie"):
+            for missing in ("/proc/7/ns/mnt", "/proc/7/task/8/ns/mnt"):
+                with SpecialProcFixture(classification) as proc:
+                    proc.absent.add(missing)
+                    identities, failures, _, _ = audit.audit_round(set())
+                self.assertEqual(identities, [])
+                self.assertTrue(any(x.startswith("mountinfo-uninspected:") for x in failures), failures)
+            with SpecialProcFixture(classification) as proc:
+                proc.absent.add("/proc/7/task/7/root")
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("mount-namespace-uncovered:mnt:[41]", failures)
+
+    def test_real_unprivileged_mount_view_authenticates_full_root(self):
+        pid = os.getpid()
+        self.assertEqual(os.readlink("/proc/self/root"), "/")
+        coverage = {"observed": set(), "full": []}
+        failures = []
+        audit._scan_mountinfo(pid, failures, bound=audit._identity(pid), coverage=coverage)
+        audit._finish_mount_coverage(coverage, failures)
+        self.assertEqual(failures, [])
+        self.assertEqual(coverage["observed"], {os.readlink("/proc/self/ns/mnt")})
+        self.assertEqual(len(coverage["full"]), 1)
+
     def test_identity_set_and_canonical_hash_are_stable(self):
         values = [(2, 4), (1, 3)]
         expected = audit.hashlib.sha256(audit.canonical_json(sorted(set(values))).encode()).hexdigest()
@@ -268,10 +404,12 @@ class DeletedInodeAuditTests(unittest.TestCase):
             data = "24 26 %s %s %s rw - tmpfs tmpfs rw\n" % (device, root, mountpoint)
             failures = []
             with self.subTest(root=root, device=device), mock.patch("builtins.open", mock.mock_open(read_data=data)) as opened, \
-                    mock.patch.object(audit.os, "readlink", return_value="mnt:[42]") as linked:
+                    mock.patch.object(audit.os, "readlink", side_effect=lambda p: "/" if p.endswith("/root") else "mnt:[42]") as linked:
                 audit._scan_mountinfo(7, failures, ((26, "/retained"),), 8)
                 opened.assert_called_once_with("/proc/7/task/8/mountinfo", "r")
-                self.assertEqual(linked.call_args_list, [mock.call("/proc/7/task/8/ns/mnt")] * 2)
+                self.assertEqual(linked.call_args_list, [mock.call("/proc/7/task/8/ns/mnt"),
+                    mock.call("/proc/7/task/8/root"), mock.call("/proc/7/task/8/root"),
+                    mock.call("/proc/7/task/8/ns/mnt")])
             self.assertEqual(bool(failures), reject, failures)
 
     def test_mountinfo_rejects_empty_malformed_incomplete_and_duplicate(self):
@@ -285,12 +423,103 @@ class DeletedInodeAuditTests(unittest.TestCase):
             with self.subTest(data=data), self.assertRaises((ValueError, OverflowError)):
                 audit._mount_rows(data)
 
+    def test_empty_open_mountinfo_only_defers_to_namespace_coverage(self):
+        cases = [
+            ("stable", {"read_data": ""}, "mnt:[42]", False),
+            ("missing", {"side_effect": FileNotFoundError(errno.ENOENT, "gone")},
+             "mnt:[42]", True),
+            ("malformed", {"read_data": ""}, "mnt:bad", True),
+            ("denied", {"read_data": ""}, PermissionError(errno.EACCES, "denied"), True),
+        ]
+        for name, opening, link, rejected in cases:
+            if "side_effect" in opening:
+                open_patch = mock.patch("builtins.open", side_effect=opening["side_effect"])
+            else:
+                open_patch = mock.patch("builtins.open", mock.mock_open(read_data=opening["read_data"]))
+            def linked(path):
+                if path.endswith("/root"):
+                    return "/chroot"
+                if isinstance(link, Exception):
+                    raise link
+                return link
+            link_patch = mock.patch.object(audit.os, "readlink", side_effect=linked)
+            with self.subTest(name=name), open_patch, link_patch:
+                failures = []
+                coverage = {"observed": set(), "full": []}
+                audit._scan_mountinfo(7, failures, coverage=coverage)
+            self.assertEqual(bool(failures), rejected, failures)
+            self.assertEqual(coverage["full"], [])
+            audit._finish_mount_coverage(coverage, failures)
+            self.assertTrue(failures)
+        failures = []
+        links = iter(["mnt:[1]", "mnt:[2]"])
+        with mock.patch("builtins.open", mock.mock_open(read_data="")), \
+                mock.patch.object(audit.os, "readlink", side_effect=lambda p: "/chroot" if p.endswith("/root") else next(links)):
+            audit._scan_mountinfo(7, failures)
+        self.assertTrue(any(x.startswith("mount-namespace-churn:") for x in failures), failures)
+
+    def test_open_success_read_error_never_passes_empty_mountinfo(self):
+        class ReadErrorFile:
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                return False
+            def read(self):
+                raise OSError(errno.EIO, "read error")
+
+        for allowed in (None, "kernel-thread"):
+            failures = []
+            with self.subTest(allowed=allowed), \
+                    mock.patch("builtins.open", return_value=ReadErrorFile()), \
+                    mock.patch.object(audit.os, "readlink", return_value="mnt:[42]"):
+                audit._scan_mountinfo(7, failures, bound=(7, 7, "123") if allowed else None,
+                                      allowed_absence=allowed)
+            self.assertTrue(any(x.startswith("mountinfo-uninspected:") for x in failures), failures)
+
+    def test_live_mountinfo_accepts_kernel_nsfs_roots(self):
+        with open("/proc/self/mountinfo") as mountinfo:
+            rows = audit._mount_rows(mountinfo.read())
+        self.assertTrue(rows)
+        nsfs = [root for _, root, _ in rows if ":" in root and not root.startswith("/")]
+        self.assertTrue(nsfs)
+        for root in nsfs:
+            self.assertRegex(root, r"^(?:cgroup|ipc|mnt|net|pid|pid_for_children|time|time_for_children|user|uts):\[[1-9][0-9]*\]$")
+
+    def test_nsfs_mount_root_vectors_are_strict(self):
+        for token in ("mnt:[1]", "net:[4026532874]", "pid_for_children:[7]"):
+            data = "24 26 0:4 %s /run/ns rw - nsfs nsfs rw\n" % token
+            self.assertEqual(audit._mount_rows(data)[0][1], token)
+        for fstype, token in (("tmpfs", "mnt:[1]"), ("nsfs", "relative"),
+                              ("nsfs", "mnt:[0]"), ("nsfs", "mnt:[1]/x"),
+                              ("nsfs", r"mnt:\040[1]"), ("nsfs", "mnt:[1] (deleted)")):
+            data = "24 26 0:4 %s /run/ns rw - %s %s rw\n" % (token, fstype, fstype)
+            with self.subTest(fstype=fstype, token=token), self.assertRaises(ValueError):
+                audit._mount_rows(data)
+
+    def test_tmpfs_descendant_alias_rules_remain_strict(self):
+        for root in ("/retained/descendant", "/retained-other", r"/retained\040(deleted)"):
+            data = "24 26 0:26 %s /alias rw - tmpfs tmpfs rw\n" % root
+            failures = []
+            with mock.patch("builtins.open", mock.mock_open(read_data=data)), \
+                    mock.patch.object(audit.os, "readlink", return_value="mnt:[42]"):
+                audit._scan_mountinfo(7, failures, ((26, "/retained"),))
+            self.assertEqual(any(x.startswith("mount-alias:") for x in failures),
+                             root != "/retained-other")
+
     def test_mount_namespace_format_and_churn_fail(self):
         for links in [["mnt:[1]", "mnt:[2]"], ["mnt:bad"], ["pid:[1]"], ["mnt:[0]"],
                       [PermissionError(errno.EACCES, "denied")]]:
             failures = []
+            values = iter(links if len(links) == 2 else links * 2)
+            def linked(path):
+                if path.endswith("/root"):
+                    return "/"
+                value = next(values)
+                if isinstance(value, Exception):
+                    raise value
+                return value
             with mock.patch("builtins.open", mock.mock_open(read_data="24 26 0:26 / /dev/shm rw - tmpfs tmpfs rw\n")), \
-                    mock.patch.object(audit.os, "readlink", side_effect=links if len(links) == 2 else links * 2):
+                    mock.patch.object(audit.os, "readlink", side_effect=linked):
                 audit._scan_mountinfo(7, failures)
             self.assertTrue(failures)
 
@@ -474,8 +703,8 @@ class DeletedInodeAuditTests(unittest.TestCase):
                 with self.subTest(classification=classification, empty=empty), SpecialProcFixture(classification, empty):
                     identities, failures, refs, counters = audit.audit_round(set())
                 self.assertEqual(failures, [])
-                self.assertEqual(refs, [])
                 self.assertEqual(set(identities), {(7, 7, "123"), (7, 8, "123")})
+                self.assertEqual(refs, [])
                 self.assertEqual(counters["map_files_denials"], 0)
 
     def test_special_full_census_denial_of_each_surface_fails(self):
@@ -494,6 +723,8 @@ class DeletedInodeAuditTests(unittest.TestCase):
                 for name in ("cwd", "root", "exe", "fd", "map_files"):
                     if name == "map_files" and base != "/proc/7":
                         continue
+                    if name == "root" and base == "/proc/7/task/7":
+                        continue  # separately authenticated representative root
                     with self.subTest(classification=classification, base=base, name=name), SpecialProcFixture(classification) as proc:
                         proc.absent.remove(base + "/" + name)
                         if name == "fd":
@@ -544,7 +775,7 @@ class DeletedInodeAuditTests(unittest.TestCase):
                     with mock.patch.object(audit.os, "readlink", side_effect=readlink):
                         identities, failures, _, _ = audit.audit_round(set())
                 self.assertEqual(identities, [])
-                self.assertIn("mountinfo-uninspected:7:8", failures)
+                self.assertTrue(any(x.startswith("mountinfo-uninspected:") for x in failures), failures)
 
     def test_special_task_identity_reuse_during_absence_fails(self):
         for classification in ("kernel-thread", "zombie"):

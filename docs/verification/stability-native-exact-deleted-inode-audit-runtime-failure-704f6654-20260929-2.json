@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.native-exact-deleted-inode-audit-runtime-failure.v1",
+  "timestamp": "2026-09-29T11:46:31-07:00",
+  "status": "FAIL_CLOSED_HARNESS_MOUNTINFO_COVERAGE",
+  "attempt": 2,
+  "consumed": true,
+  "retry": false,
+  "execution": {
+    "fetched_commit": "372403f589b53410c21549cd8773efea4c3dbc5c",
+    "release_path": "docs/verification/stability-native-exact-deleted-inode-audit-execution-release-704f6654-20260929-2.json",
+    "release_sha256": "149d458e8c6d9ccfaacf5f5edefd2d29574f35c00f21a48c63982cdab191e84a",
+    "basis_sha256": "b54c6dd4739cf320af2fc1f68ae2df879e9c7eec27294e2b04cb879a1541baa6",
+    "independent_release_review": "PASS_EXECUTION_RELEASE",
+    "outer_exit_status": 1,
+    "stdout": "empty",
+    "stderr": "empty",
+    "elapsed_seconds": 2.149003047
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-2.json",
+    "device": 1831,
+    "inode": 31477,
+    "uid": 0,
+    "gid": 0,
+    "mode": "0600",
+    "size": 38387,
+    "sha256": "f5c1e35ef45226af40722bd62d8dc7b8fedff2cf56bf4ea12ce19e3f25500ee8",
+    "schema": "mckernel.native-exact-deleted-inode-audit.v1",
+    "status": "FAIL"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-exact-deleted-inode-audit-runtime-failure-704f6654-20260929-2.tar.gz",
+    "sha256": "e0e206b387c1e6fe67a9235e457c87544192569183df9da57afe1e07e612e171",
+    "members": 4,
+    "limitation": "The archive contains the exact result/release/basis/source-review records, but not a separate outer-status or stream receipt; coordinator execution capture supplies exit 1 and empty streams."
+  },
+  "rounds": [
+    {"round": 1, "processes": 271, "tasks": 47, "map_files_entries": 33881, "map_files_denials": 0, "references": 0, "identity_count": 0, "failures": 272},
+    {"round": 2, "processes": 271, "tasks": 47, "map_files_entries": 33881, "map_files_denials": 0, "references": 0, "identity_count": 0, "failures": 272},
+    {"round": 3, "processes": 271, "tasks": 47, "map_files_entries": 33881, "map_files_denials": 0, "references": 0, "identity_count": 0, "failures": 272}
+  ],
+  "failure_breakdown_each_round": {"mountinfo_uninspected": 267, "anchor_missing": 3, "empty_or_unstable_proc_census": 1, "process_census_churn": 1},
+  "diagnosis": {
+    "primary": "the absolute-only mount-root parser rejected canonical nsfs roots such as mnt:[id] and net:[id]",
+    "remaining_runtime_shape": "ordinary chrooted PID 868/starttime 398 shares mnt:[4026531841] with full-root host processes but has a legitimately empty chroot-filtered mountinfo view",
+    "linux_semantics": "proc mountinfo omits namespace mounts outside the target task root, so equal namespace tokens and an empty view alone cannot prove namespace-wide alias absence"
+  },
+  "corrected_source": {
+    "helper_sha256": "641c39a3f3be3a1012a47f6e073c5e9df4149512acb1944b45d90e3f900d7ab2",
+    "test_sha256": "af9ab213144c295783d8a6274a3cf73955f4af36d4d3c887d96c512936126904",
+    "tests_python_3_8": 56,
+    "tests_python_3_9": 56,
+    "independent_review": "PASS_SOURCE",
+    "behavior": [
+      "strict canonical namespace tokens are accepted only for nsfs rows",
+      "existing nonempty views always parse and retain alias findings",
+      "every observed stable mount namespace requires an authenticated stable root-/ representative with parsed nonempty mountinfo",
+      "chroot-filtered or empty views defer only to complete coverage of the exact same namespace",
+      "representative identity, classification, namespace and root are revalidated at round end",
+      "missing namespace identity, uncovered namespaces, read errors, reuse and churn fail closed"
+    ]
+  },
+  "acceptance": {
+    "runtime_pass": false,
+    "current_state_reference_absence": false,
+    "retrospective_retirement_acceptance": false,
+    "fresh_candidate_preparation_unlocked": false,
+    "production_gate_changed": false,
+    "application_cases": "0/273",
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch the corrected namespace-coverage source and this immutable failure evidence. Then create a fresh attempt-3 root read-only release with a fresh output name and obtain independent execution review. Never rerun attempt 2."
+}
