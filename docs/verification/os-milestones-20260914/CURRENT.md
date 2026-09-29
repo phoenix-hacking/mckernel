@@ -8004,3 +8004,34 @@ preserves the result and correction. Attempt 2 is consumed and must never retry.
 No current-state reference-absence, build, guest, application or production
 acceptance exists. Next commit/push/fetch this correction, then create a fresh
 attempt-3 basis/output/release and obtain independent execution review.
+
+Shutdown checkpoint 165, 2026-09-29: the corrected attempt-3 read-only root
+audit is prepared and independently `PASS_EXECUTION_RELEASE` at fetched commit
+`ce0a39ee73c55e410c79ed57f989fbc9a4f32f6f`. Basis
+`be181ad8...9c75`, release `4760b966...cb98`, helper `641c39a3...7ab2` and
+tests `af9ab213...6904` remain byte-exact. The release authorizes one invocation
+of its recorded `sudo -A` argv only after its complete immediate preflight,
+including privileged verification of the immutable tombstone flag and bytes,
+and requires a separate durable exit/stdout/stderr receipt plus independent
+runtime review before any candidate preparation.
+
+The shutdown arrived before that preflight or invocation. No sudo command,
+root audit, build, Docker operation or guest ran in this shutdown window. Fresh
+output
+`/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-3.json`
+is absent, so attempt 3 is authorized but unconsumed. Attempts 1 and 2 remain
+permanently non-runnable. All child agents are terminal. Launcher wrapper
+3399308/83682487, worker 3399313/83682494 and app-server 3399317/83682500 still
+match their preserved process identities; historical evidence 26/47525 and
+immutable tombstone 1831/31474 remain the retained-state anchors.
+
+The next launcher continuation must verify this fetched shutdown checkpoint,
+reconcile those live identities, keep dispatch quiescent, and perform the full
+released attempt-3 preflight. If every condition still matches, invoke the
+exact released command once, preserve the result and a distinct outer-status
+receipt without retry, then obtain independent runtime review. Only a reviewed
+PASS may unlock wholly fresh candidate preparation; it cannot retroactively
+accept the consumed retirement. Formal counters remain 6/130 and 350/10000,
+successful current-candidate builds and real guest applications remain zero,
+applications remain 0/273, and the OS remains incomplete. The launcher pause
+is temporary.
