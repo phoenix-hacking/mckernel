@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.native-exact-preparation-success.v1",
+  "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+  "timestamp_utc": "2026-09-29T13:53:00Z",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-704f6654-1.sh",
+    "sha256": "7502c748b46766379db480cd51a48c7a107ef8c4315db7ba5d09432f5bfb3a0a"
+  },
+  "execution": {
+    "command": "/usr/bin/timeout --signal=TERM --kill-after=10s 600s /bin/bash /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-preparation-704f6654-1.sh",
+    "attempts": 1,
+    "exit_status": 0,
+    "supervisor_pid": 3874908,
+    "packet_pid": 3874909,
+    "outer_stdout": [
+      "TOPOLOGY_PASS scratch_dev=1831 shm_dev=26",
+      "LOG_FINAL_FSYNC=PASS"
+    ],
+    "outer_stderr": ""
+  },
+  "candidate": {
+    "path": "/dev/shm/mckernel-exact-candidate-704f6654-1",
+    "commit": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "device": 26,
+    "inode": 36767,
+    "mode": 755,
+    "uid": 1000,
+    "gid": 1000,
+    "allocated_bytes": 9083990016
+  },
+  "metadata_backup": {
+    "path": "/dev/shm/mckernel-exact-metadata-backup-704f6654-1",
+    "device": 26,
+    "inode": 47413,
+    "mode": 755,
+    "uid": 1000,
+    "gid": 1000,
+    "allocated_bytes": 1339392
+  },
+  "artifacts": {
+    "log_sha256": "dade9c20575ac6094519eb9c037ee89cbb7aebe68f5e4effc8895349cdbdf643",
+    "manifest_sha256": "b8d89bf81ec3f6c9d10955070bb7ec48672e44a064ae37c6ddd01e444835e3b1",
+    "request_sha256": "891c24c0aaffe322aa206ecb84cd3b0d32c7ec1dd6144d64e65dd97b9e403a2f",
+    "metadata_receipt_sha256": "050558895bbe8073dbc53c48c6de4af5900d6b6dc626297eca7b0f1cf05ae6e8",
+    "archive": "docs/verification/evidence/stability-native-exact-preparation-704f6654-20260929-1.tar.gz",
+    "archive_sha256": "e9ae5ac4162b7329d4e35f285faf35a5b6e71dc11454a0ed4db012034799f306"
+  },
+  "source_closure": {
+    "main_count": 2593,
+    "main_sha256": "f52083df6db10674e75db604badba51fa97f8c23a0a63b777005721ec69706ca",
+    "ihk_count": 17,
+    "ihk_sha256": "1538fd9965d068b16604834ae14d526c2f5ddacf953b72c5f827ab9ff84f7f78"
+  },
+  "owner_validation": {
+    "status": "PASS_VALIDATE_ONLY",
+    "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "aggregate_memory_required": 21970231296,
+    "aggregate_memory_limit": 25769803776,
+    "output_empty": true,
+    "evidence_empty": true,
+    "new_lease_absent": true
+  },
+  "postconditions": {
+    "supervisor_and_descendants_absent": true,
+    "metadata_staging_residue_absent": true,
+    "candidate_and_backup_preserved": true
+  },
+  "independent_review": {
+    "review": 145,
+    "status": "PASS_PREPARATION_EVIDENCE",
+    "next_scope": "separate one-shot heavy-build execution review"
+  },
+  "acceptance_limits": "No compilation, build, guest, application, production-gate, language-gate or whole-OS acceptance follows."
+}

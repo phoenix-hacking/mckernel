@@ -918,3 +918,16 @@ then run it once only if released and its nine target names remain absent. Revie
 that result before one serialized heavy build and the smallest real memory app
 diagnostic. No formal acceptance counter changed; builds remain zero and
 applications remain 0/273.
+
+Checkpoint 145 supersedes checkpoint 143's preparation state. Exact packet
+`7502c748...3a0a` ran once and independently PASSes preparation evidence.
+Candidate `704f6654...63561` / IHK `3114d9e7...72a1f` is dev/inode 26/36767,
+backup 26/47413; manifest `b8d89bf8...e3b1`, request `891c24c0...a2f`, receipt
+`05055889...e6e8` and archive `e9ae5ac4...f306` are retained. Owner validation
+requires 21,970,231,296 bytes under the 24-GiB aggregate limit; destinations are
+empty and the new lease is absent.
+
+Next obtain fresh independent one-shot heavy-build review for the exact request
+and owner command, then run only on PASS. Review the retained terminal container
+and build artifacts before the smallest real memory application diagnostic.
+Builds remain zero and applications remain 0/273.

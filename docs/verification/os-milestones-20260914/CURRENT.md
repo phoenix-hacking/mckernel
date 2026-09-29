@@ -7436,3 +7436,28 @@ result before one serialized heavy current-candidate build, then run the
 smallest real memory application diagnostic. Current-candidate builds remain
 zero and real guest applications this window remain zero; applications remain
 0/273 and formal counters remain unchanged.
+
+Continuation checkpoint 145, 2026-09-29: independently reviewed preparation
+packet `7502c748...3a0a` ran once under its 600-second supervisor and exited 0.
+Outer evidence retained `TOPOLOGY_PASS` and `LOG_FINAL_FSYNC=PASS`; the durable
+log `dade9c20...f643` ends terminal/preparation RC 0 with no live children.
+Independent review 145 PASSes preparation evidence: candidate
+`704f6654...63561` and IHK `3114d9e7...72a1f` are exact at dev/inode 26/36767,
+backup 26/47413, both 0755 and uid/gid 1000. Installed metadata, closure, index,
+ABI and manifest verification pass.
+
+Manifest `b8d89bf8...e3b1`, request `891c24c0...a2f` and receipt
+`05055889...e6e8` are preserved with the metadata backup in archive
+`evidence/stability-native-exact-preparation-704f6654-20260929-1.tar.gz`
+SHA256 `e9ae5ac4...f306`. Independent `BuildOwner.validate()` passes with
+21,970,231,296 bytes required under the 24-GiB aggregate ceiling; output and
+evidence roots are empty and the new lease is absent. Preserve the 9.08-GiB
+candidate and backup unchanged.
+
+Next obtain a fresh independent one-shot heavy-build release for exact command
+`/usr/bin/python3 -E -s -B /dev/shm/mckernel-exact-candidate-704f6654-1/scripts/native_rust_exact_build_container_owner.py /home/holden/mckernel-work/scratch/native-exact-build-request-704f6654-1.json`.
+Bind current roots, request, owner/driver, image, empty destinations, resources,
+all leases and Docker state. Only after PASS run one serialized build, review its
+retained terminal container/evidence, then start the smallest real memory app
+diagnostic. Builds remain zero; real guest apps this window remain zero;
+applications remain 0/273 and formal counters are unchanged.
