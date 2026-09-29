@@ -8471,3 +8471,42 @@ unchanged 4-CPU/12-GiB/no-swap/no-network profile and `-j<=4`. A successful
 artifact build then unlocks fresh diagnostic startup, memory, files,
 threads/futexes, signals and shutdown runs. Diagnostics remain non-accepting;
 formal counters stay 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 178, 2026-09-29: the disk build admission wrapper is
+source-approved and fetched at commit `21fb56e340995def52a37d9cefda266bd048c5f4`.
+Independent adversarial review first reproduced pre-authentication candidate
+code execution and malformed zero-memory accounting, then found one
+owner-versus-offline-driver binding regression in the bounded correction.  The
+expert-directed final correction passes all 12 focused tests.  Wrapper SHA is
+`ca838820d1e21d522023e09890fd963a4d931e03ab99d39bb70c2a9c0b5b4bbd`;
+test SHA is `7e091b0547797fa861f1c77373a6ed3d802a55d3479fd8e3292cd935d66b2513`.
+It now executes only descriptor-authenticated source bytes, rejects link and
+path escapes, validates the complete disk-only resource formula, and binds the
+actual offline driver.  The old disk-validation request lacks the two new
+owner/provenance hash fields and is intentionally not executable; create a
+fresh externally bound request after tmpfs retirement.
+
+Two draft retention-preparation packets were rejected without execution.  The
+first lacked shared exclusion and stable postflight binding; its one bounded
+correction retained a contradictory release preflight, path-reopen races and
+detached-child cleanup gaps.  Both failures remain in the working tree as
+unreleased templates.  Expert escalation selected the accepted `9e5ab03d`
+Python supervisor as the new base, with additional common exclusion, sealed
+helper-byte execution, complete tmpfs and disk pre/post inventories and a
+success receipt published last.  That fresh packet is now the only retirement
+prerequisite lane.  The tmpfs roots remain present and forbidden as build
+authority; the accepted disk roots and corrupt seal remain intact.  Live
+launcher identities are wrapper/launcher `4055285`/`4055286` (launcher
+starttime `92631630`), worker `4055294/92631636`, and server
+`4055298/92631642`; no build or guest was active at reconciliation.
+
+The diagnostic protocol remains non-accepting but ready for new artifacts: 156
+focused evaluator/backend/runner/stager/overlay tests pass.  Historical guest
+manifests bind the old image/modules and will not be reused.  A current-source
+`mckernel.img` still needs a separately reviewed four-CPU image build; the
+current exact host build produces only `bzImage` and three host modules.
+Next execute the expert-reviewed retention preparation, bind its real
+inventory/capsule into the retirement packet, retire the two tmpfs roots, then
+run the fresh disk build and current image build serially under the one heavy
+lease before startup, memory, files, threads/futexes, signals and shutdown
+diagnostics.  Formal counters remain 6/130, 350/10000 and 0/273 applications.
