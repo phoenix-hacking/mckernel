@@ -451,3 +451,13 @@ the independently reviewed release record, and invokes the root helper once.
 Obtain Astra execution review before any sudo or mutation. Any failure retains
 the cleanup lease, journal, captures and quarantines without retry. Success only
 reclaims tmpfs for a new commit-derived candidate; it moves no acceptance count.
+
+Shutdown checkpoint 84 preserves the first execution-packet draft without
+release or execution. Packet `39fbd9c2...be46` and basis `d50f9840...b844`
+parse, but deliberately stop before mutation and still contain unset pins plus
+the fixed-input-loop, capacity, Git-admission and circular-hash defects listed
+in `CURRENT.md`. All child lanes are complete; the three launcher process
+identities and both original tmpfs roots remain live and unchanged. Next repair
+and independently review the draft, then mechanically pin and review the exact
+final helper/packet before any one-shot root run. Do not treat this checkpoint
+as cleanup authority, retry authority, build acceptance or OS completion.

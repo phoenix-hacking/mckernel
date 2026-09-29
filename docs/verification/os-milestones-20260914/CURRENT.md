@@ -6233,3 +6233,39 @@ automatically. After a successful cleanup checkpoint, prepare a fresh
 commit-derived candidate and seek the heavy-build release. Formal counters and
 the four diagnostic applications/zero successful current-candidate builds are
 unchanged.
+
+Shutdown checkpoint 84, 2026-09-28: dispatch stopped on the launcher stop
+request and every child lane is joined in completed state. No cleanup, sudo,
+Docker, build, module, guest or application command was run. The launcher
+wrapper PID 3399308/starttime 83682487, worker PID 3399313/starttime 83682494
+and Codex app-server PID 3399317/starttime 83682500 remain the active process
+identities. The prepared candidate root remains dev 26/inode 14117/mode 0755/
+uid 1000/gid 1000 and the metadata-backup root remains dev 26/inode 24701/
+mode 0755/uid 1000/gid 1000. Host, scratch and tmpfs have 24,670,347,264,
+21,606,010,880 and 7,524,667,392 bytes available; MemAvailable is
+21,169,287,168 bytes.
+
+The bounded execution-packet lane produced only a fail-closed draft:
+`evidence/native-exact-candidate-cleanup-execution-68cf089a-1.sh` SHA-256
+`39fbd9c2...be46` and release basis
+`evidence/native-exact-candidate-cleanup-release-basis-68cf089a-1.json`
+SHA-256 `d50f9840...b844`. `bash -n` and JSON parsing pass, but the packet stops
+unconditionally before creating a release/preflight or invoking the helper;
+its final helper/release pins remain unset. It also retains a broken indirect
+fixed-input hash loop, lacks candidate/IHK clean and commit admission, enforces
+too little tmpfs reserve, and the draft basis contains an impossible mutual
+final-helper/release-record hash cycle. This exact draft is preservation of an
+unfinished design, not independent review or root-execution authority.
+
+Next continuation: correct the draft without executing it. Replace the hash
+loop with direct checks; enforce 16-GiB host, 12-GiB scratch and 4-GiB tmpfs
+floors; validate candidate `68cf089a` and IHK `3114d9e7` with hardened clean
+Git checks; remove the circular final-helper/release hashes from the basis;
+write and fsync the exact O_EXCL release and v2 preflight; add the single
+sanitized `sudo -A` invocation and durable result capture. Then obtain an
+independent exact-draft review, promote only the reviewed basis, mechanically
+pin its hash in the deleter and packet, obtain a final execution review, and
+commit/push/fetch those exact bytes before one fresh preflight. No automatic
+retry is permitted. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and
+0/7; four diagnostic applications and zero successful current-candidate
+builds remain. The OS goal is incomplete and this launcher pause is temporary.
