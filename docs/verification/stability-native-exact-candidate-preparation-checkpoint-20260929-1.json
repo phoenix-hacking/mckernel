@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-checkpoint.v1",
+  "date": "2026-09-29",
+  "status": "PASS_PREPARATION_BUILD_BLOCKED",
+  "branch_checkpoint_before_record": "db652cb3de4b0c6d2b6b2d2a33ccd537bfd3d9ca",
+  "candidate": {
+    "path": "/dev/shm/mckernel-exact-candidate-68cf089a-1",
+    "source_commit": "68cf089a22b0a0c034a7f1fcc695853fbf5c07eb",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-68cf089a-1",
+    "tracked_regular_tmpfs_files": 8913,
+    "candidate_clean": true,
+    "ihk_clean": true
+  },
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-68cf089a-1.sh",
+    "sha256": "15f40733a88bcc1e94d89cac43e0eeba4056ace5fe023051cd566b5006f07461",
+    "review": "PASS_PREPARATION_ONLY",
+    "execution_rc": 0,
+    "outer_fsync_rc": 0,
+    "launcher_protocol_event": {
+      "path": ".git/os-autopilot/runs/20260928T202320Z-7ccc5e4c/protocol.jsonl",
+      "line": 169240,
+      "item_id": "exec-3cbb3138-3213-4766-8d06-5b640f1e1279",
+      "exit_code": 0,
+      "duration_ms": 72102
+    }
+  },
+  "preflight": {
+    "attempt_1_receipt_sha256": "8d9f38a898ff2b047cfc80a89ffa015afb4e13328f7d554acd35570a3bccac36",
+    "attempt_1_result": "FAIL_OBSERVER_ONLY: procps-ng 3.3.16 rejected trailing --ww; every other observation returned zero",
+    "attempt_2_receipt_sha256": "de432c9598effae599bf6840cec16fdf1a8650d2ba0386eb4e0cdd7bbb5738e4",
+    "attempt_2_result": "PASS after host-compatible trailing ww; all seven command statuses zero",
+    "native_exact_leases": 0,
+    "conflicting_heavy_processes": 0,
+    "docker_rows": 11,
+    "running_unrelated_containers": 2,
+    "retained_exited_mckernel_containers": 2
+  },
+  "results": {
+    "inner_log_sha256": "d4585576b00fcd0d88ccf3fb50646ba3247172650076c29e0c1962714e321615",
+    "outer_log_sha256": "3a2f4803bd8de9b6f81afd82e0e71053e7fd9735960bfb45fc066fe95fe59f57",
+    "metadata_receipt_sha256": "543dbe6ecba2096f3c7db596a1a7a7028ae4477ccb63213da7682781cf7976ac",
+    "input_manifest_sha256": "ae0c5f74e3e3f06176c46f2f174b1109c11a4e88f23ee71fd7432e6325262abd",
+    "request_sha256": "25f820e2994d41427ed16cf5f062d647125ccb7144f63afe618e88ccce7f576c",
+    "source_main_closure": "e90422e5803af3e59bc2310ac6e42de235fa4549cede41a43eee26f98c59b0ba",
+    "source_ihk_closure": "1538fd9965d068b16604834ae14d526c2f5ddacf953b72c5f827ab9ff84f7f78",
+    "verify_inputs": "PASS",
+    "build_owner_validate_only": "PASS",
+    "lease_absent": true,
+    "build_output_empty": true,
+    "build_evidence_empty": true,
+    "surviving_preparation_processes": 0,
+    "postflight_receipt_sha256": "672fd9e3bebb56d0ead7116ba612aa33fd8f87b0d42be78e974232a825a3e818"
+  },
+  "allocation": {
+    "candidate_allocated_bytes": 9071476736,
+    "backup_allocated_bytes": 1331200,
+    "aggregate_required_bytes": 21957709824,
+    "aggregate_limit_bytes": 25769803776,
+    "post_preparation_host_free_bytes": 24734339072,
+    "post_preparation_scratch_free_bytes": 21608366080,
+    "post_preparation_tmpfs_free_bytes": 7524667392,
+    "post_preparation_memory_available_bytes": 21266833408
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-exact-candidate-preparation-68cf089a-20260929-1.tar.gz",
+    "sha256": "78e2b5c44e9ae00f2f463ac8b93723e26d00877fbbe7ecfb285d1d89d6404264",
+    "bytes": 506989,
+    "members": 48
+  },
+  "heavy_build_review": {
+    "status": "BLOCK",
+    "owner_sha256": "0a4386a9965a99e3b47a469f9f97a2d8180ceab91cdb53aeccd98d1fee04b72d",
+    "defect": "BuildOwner.run removes a provisionally successful terminal container before allocation-binding revalidation, final inventories, latched-signal processing and durable receipt publication. A late failure can therefore lose its required terminal container.",
+    "required_correction": "Retain the terminal container through all final failure-prone checks and durable result publication; use separately reviewed cleanup only after successful reconciliation. Add cleanup-time interruption and allocation-revalidation regressions, rebind the owner and prepare a new exact candidate before another execution review."
+  },
+  "acceptance": {
+    "candidate_preparation": "accepted for the exact paths and hashes above",
+    "native_build": "none",
+    "guest_application": "none",
+    "formal_counters_changed": false,
+    "successful_current_candidate_builds": 0,
+    "real_guest_apps_this_window": 0
+  }
+}

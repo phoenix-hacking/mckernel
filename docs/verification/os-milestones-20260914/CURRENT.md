@@ -6082,3 +6082,43 @@ before Docker or the owner CLI. Never reuse the failed 80b names. Formal
 counters, four diagnostic guest apps and zero successful current-candidate
 builds remain unchanged. The OS goal is incomplete and the launcher pause is
 temporary.
+
+Continuation checkpoint 79, 2026-09-28: the fresh exact candidate preparation
+now PASSes independently, but heavy build execution is BLOCKed on a newly
+source-traced owner-lifecycle defect. The corrected immutable preparation packet
+is `15f40733...7461`. It replaced the stale-HEAD dependency, fail-open closure
+capture, Python-3.8 import exposure, partial umask, unjoined logger, weak mount
+placement and global residue check without reviving the rejected generic
+wrapper. Its independently released one-shot execution returned inner and outer
+RC 0 with both log fsyncs passing.
+
+Candidate `68cf089a` plus pinned IHK `3114d9e7` are clean under fresh tmpfs
+paths. All 8,913 tracked regular files have distinct tmpfs identities; both
+source Git closures remained stable. Metadata relocation, shared ABI,
+`verify_inputs` and `BuildOwner.validate()` PASS. The request is
+`25f820e2...576c`; measured aggregate allocation is 21,957,709,824 bytes below
+the 25,769,803,776-byte ceiling. The build output/evidence roots are empty, the
+lease is absent and no preparation process survives. The first preflight is
+retained as an observer-only failure because procps 3.3.16 rejects `--ww`; its
+host-compatible `ww` correction and the complete postflight return all zero.
+Two unrelated long-running Kasper containers coexist; both failed McKernel
+containers remain exited and retained.
+
+The complete 48-member preparation archive is
+`evidence/stability-native-exact-candidate-preparation-68cf089a-20260929-1.tar.gz`
+(SHA-256 `78e2b5c4...4264`). Exact paths, hashes, measurements and the launcher-owned
+outer-RC event are in
+`stability-native-exact-candidate-preparation-checkpoint-20260929-1.json`.
+
+Independent heavy-build review found that the exact candidate owner removes a
+provisionally successful terminal container before final allocation-binding
+revalidation, inventory capture, latched-signal handling and durable receipt
+publication. A cleanup-time TERM or late allocation failure can therefore turn
+the result into FAIL after destroying required failure evidence. No build was
+released or run. Next correct this owner boundary with explicit cleanup-time
+interruption and late-revalidation regressions, independently review it, commit
+and prepare a new source-bound candidate before seeking another heavy release.
+Do not mutate or build candidate `68cf089a-1`; preserve it and its backup until
+the replacement is accepted. This continuation has zero new guest applications
+and zero successful current-candidate builds. Formal counters remain 0/273,
+2/4, 6/130, 350/10,000 and 0/7; the OS goal remains incomplete.

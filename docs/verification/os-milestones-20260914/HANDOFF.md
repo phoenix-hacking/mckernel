@@ -399,3 +399,19 @@ review PASS plus clean preflight permits preparation; build execution remains a
 separate later release. Preserve launcher wrapper 3399308/83682487, worker
 3399313/83682494 and app server 3399317/83682500 as the shutdown identities.
 The OS is incomplete; acceptance counters did not move.
+
+Checkpoint 79 accepts preparation only for exact candidate `68cf089a-1` and
+pinned IHK `3114d9e7`. The independently reviewed packet
+`15f40733...7461` returns inner/outer RC 0, stable source closures, clean Git,
+metadata/ABI/manifest/owner validation PASS, empty build/evidence roots, absent
+lease and complete postflight. See
+`stability-native-exact-candidate-preparation-checkpoint-20260929-1.json` and
+archive `evidence/stability-native-exact-candidate-preparation-68cf089a-20260929-1.tar.gz`.
+
+Do not build or mutate this candidate. Heavy-build review is BLOCKed because
+`BuildOwner.run` can remove a provisionally successful container before late
+allocation, interruption, inventory and durable-receipt checks convert it to
+FAIL. Next retain the terminal container through final reconciliation, add
+cleanup-time TERM and late-allocation-revalidation regressions, independently
+review, commit and prepare a new SHA-bound candidate. Preparation earns no
+build, guest or formal acceptance credit; counts remain unchanged.
