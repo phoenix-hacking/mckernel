@@ -224,6 +224,75 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         with self.assertRaises(audit.AuditError):
             audit.audit(self.repo)
 
+    def test_manifest_cannot_redirect_new_service_sources(self):
+        for destination in (
+            "os_service.rs",
+            "abi/os_service.rs",
+            "abi/application.rs",
+        ):
+            with self.subTest(destination=destination):
+                manifest = self.load_manifest()
+                for item in manifest["inputs"]:
+                    if item["destination"] == destination:
+                        item["repository_path"] = "host-kernel/native-rust/README.md"
+                        item["sha256"] = digest(os.path.join(
+                            self.repo, "host-kernel", "native-rust", "README.md"))
+                        break
+                self.write_manifest(manifest)
+                with self.assertRaises(audit.AuditError):
+                    audit.audit(self.repo)
+                shutil.copyfile(
+                    os.path.join(REPO_ROOT, "host-kernel", "kbuild", "stage-manifest.json"),
+                    self.manifest_path,
+                )
+
+    def test_manifest_cannot_replace_new_service_sources(self):
+        for destination in (
+            "os_service.rs",
+            "abi/os_service.rs",
+            "abi/application.rs",
+        ):
+            with self.subTest(destination=destination):
+                manifest = self.load_manifest()
+                replacement = "host-kernel/native-rust/ikc_master.rs"
+                for item in manifest["inputs"]:
+                    if item["destination"] == destination:
+                        item["repository_path"] = replacement
+                        item["sha256"] = digest(os.path.join(
+                            self.repo, *replacement.split("/")))
+                        break
+                self.write_manifest(manifest)
+                with self.assertRaises(audit.AuditError):
+                    audit.audit(self.repo)
+                shutil.copyfile(
+                    os.path.join(REPO_ROOT, "host-kernel", "kbuild", "stage-manifest.json"),
+                    self.manifest_path,
+                )
+
+    def test_manifest_rejects_missing_or_extra_locked_sources(self):
+        manifest = self.load_manifest()
+        manifest["inputs"] = [
+            item for item in manifest["inputs"] if item["destination"] != "os_service.rs"
+        ]
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, "host-kernel", "kbuild", "stage-manifest.json"),
+            self.manifest_path,
+        )
+        manifest = self.load_manifest()
+        manifest["inputs"].append({
+            "destination": "unexpected.rs",
+            "repository_path": "host-kernel/native-rust/README.md",
+            "sha256": digest(os.path.join(
+                self.repo, "host-kernel", "native-rust", "README.md")),
+        })
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
     def test_authoritative_kconfig_rejects_legacy_symbol_family(self):
         self.mutate_authority(
             "Kconfig", "MCKERNEL_IHK_RUST", "MCKERNEL_RUST_IHK"

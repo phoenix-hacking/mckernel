@@ -296,3 +296,15 @@ one-shot release. Never rerun the unchanged 80b request. Launcher wrapper PID
 active shutdown identities. No child agent or heavy operation remains. This is
 a temporary pause, not OS completion; formal counters and the four diagnostic
 apps/zero successful current-candidate builds are unchanged.
+
+Checkpoint 71 closes only the exact 18-versus-21 audit mismatch. Exact source
+hashes `bddd9a10...be9dc` and `1a2726e9...d537e` pass 22 tests, the direct audit
+and independent review; see
+`stability-native-build-surface-audit-correction-20260928-1.json`.
+
+Before any fresh candidate, fix the separately proven recursive source closure:
+the three crate roots require 31 unconditional inputs not copied by the current
+manifest/stager (29 Rust and two included assembly files). Add a hash-bound
+closure oracle, then update the exact manifest/staging inventory with focused
+negative tests and independent review. Never rerun the old 80b request. Preserve
+its candidate/evidence and both terminal containers. Counts remain unchanged.

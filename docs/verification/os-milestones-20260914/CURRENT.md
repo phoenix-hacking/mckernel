@@ -5866,3 +5866,28 @@ remains active. Launcher wrapper PID 3399308/starttime 83682487 and worker PID
 is temporary; the OS goal is not complete and was not resumed during shutdown.
 Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic
 guest apps and zero successful current-candidate builds remain unchanged.
+
+Continuation checkpoint 71, 2026-09-28: the first phase-0 failure family is
+closed at source level. The failed candidate's manifest correctly contained 21
+locked inputs, but `native_rust_build_surface_audit.py` still expected 18 and
+omitted `os_service.rs`, `abi/os_service.rs` and `abi/application.rs`. The one
+bounded correction adds exactly those existing staging/lifecycle authorities.
+Twenty-two focused tests, the direct repository audit, `py_compile` and
+`git diff --check` PASS. Independent review accepts exact audit SHA-256
+`bddd9a10...be9dc` and test SHA-256 `1a2726e9...d537e` for this failure family
+only. Evidence is
+`stability-native-build-surface-audit-correction-20260928-1.json` and its
+compressed log.
+
+Read-only recursive closure inspection found the next deterministic source
+blocker before another build: the stager copies only the 21 manifest inputs and
+three crate roots, while those roots unconditionally require 31 additional
+compile inputs (29 Rust files and two `include_str!` assembly files). The
+generated compatibility build-ID is not missing. Next implement a hash-bound
+recursive module/include closure oracle, then correct the manifest/stager exact
+list with omission, redirection, order and digest negatives and independent
+review. Do not prepare a candidate or seek another heavy-build release until
+that source closure passes at a pushed/fetched checkpoint. The failed 80b
+candidate/request and both terminal containers remain preserved and must not be
+reused. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
+diagnostic guest apps and zero successful current-candidate builds remain.

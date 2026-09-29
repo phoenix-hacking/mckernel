@@ -1,0 +1,64 @@
+{
+  "schema": "mckernel.stability.native-build-surface-correction.v1",
+  "recorded_at_utc": "2026-09-29T02:09:00Z",
+  "status": "PASS_SOURCE_ONLY",
+  "base_checkpoint": "fd6ccc469dabe0b29c866e68d230b689cd24dbe0",
+  "failure_record": "docs/verification/stability-native-exact-build-phase0-failure-20260928-1.json",
+  "failure_family": "stage manifest fixed-set audit omitted three already-authorized Rust service inputs",
+  "original_failure": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "container_id": "c6917efd594a3ec0311371a4e9e5c8d5f9a598b25687a3820e8f56138f9f0772",
+    "phase": "Verify source-only contracts without claiming readiness",
+    "compile_started": false,
+    "diagnostic": "stage manifest must name exactly the build authorities and locked supplemental inputs"
+  },
+  "diagnosis": {
+    "audit_expected_input_count": 18,
+    "manifest_input_count": 21,
+    "missing_from_audit": {
+      "os_service.rs": "host-kernel/native-rust/os_service.rs",
+      "abi/os_service.rs": "host-kernel/native-rust/abi/os_service.rs",
+      "abi/application.rs": "host-kernel/native-rust/abi/application.rs"
+    },
+    "live_and_failed_candidate_manifest_sha256": "81ed3777007eadd1fd5a8568e41eab0c9ce643cfbf98c43302ec889e862077cf",
+    "cause": "the manifest and staging/lifecycle contracts advanced at 2fec3948 while the separate exact-set audit remained stale"
+  },
+  "correction": {
+    "files": {
+      "scripts/native_rust_build_surface_audit.py": "bddd9a10ed61eabd4f821e0665457f736710e51ba2968ed83825f327a28be9dc",
+      "scripts/tests/test_native_rust_build_surface_audit.py": "1a2726e9301372c536610afcd6a384a02ac7606ddb89f3a99c6dae29cc4d537e"
+    },
+    "scope": "lock the three existing service sources and add redirect, replacement, missing and extra negatives",
+    "bounded_correction_count": 1
+  },
+  "verification": {
+    "focused_unittest": "PASS: 22 tests",
+    "direct_repository_audit": "PASS: 3 modules; Kconfig and Kbuild authorities",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "independent_review": "PASS for this exact failure family only",
+    "log": "docs/verification/evidence/stability-native-build-surface-audit-correction-20260928-1.log.gz",
+    "log_sha256": "36b9f77d654f452d64c045ca8e957a3aad2abf08d224c740ab557e50b3659485"
+  },
+  "limitations": {
+    "build_run": false,
+    "guest_run": false,
+    "acceptance_credit": false,
+    "old_candidate_reusable": false,
+    "known_next_blocker": "the explicit staging plan omits 31 unconditional recursive crate inputs: 29 Rust sources and two included assembly sources"
+  },
+  "next": [
+    "Create a hash-bound recursive Rust module/include closure check for the three crate roots.",
+    "Correct the manifest and staging exact list for every proven compile input, with focused omission/redirection/order/digest tests and independent review.",
+    "Only after a pushed/fetched source checkpoint prepare a fresh candidate and obtain a new one-shot build release; never reuse or rerun the failed 80b request."
+  ],
+  "formal_counters_unchanged": {
+    "application_cases": "0/273",
+    "fault_modes": "2/4",
+    "gates": "6/130",
+    "stress_iterations": "350/10000",
+    "language_gates": "0/7",
+    "real_guest_apps": 4,
+    "successful_current_candidate_builds": 0
+  }
+}
