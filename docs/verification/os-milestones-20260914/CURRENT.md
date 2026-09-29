@@ -8510,3 +8510,32 @@ inventory/capsule into the retirement packet, retire the two tmpfs roots, then
 run the fresh disk build and current image build serially under the one heavy
 lease before startup, memory, files, threads/futexes, signals and shutdown
 diagnostics.  Formal counters remain 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 179, 2026-09-29: exact tmpfs retention preparation is
+accepted and retained at fetched commit
+`3bbf61aa122671901738e0504ebf9882518c269f`.  The first released packet stopped
+before mutation on its overbroad Git worktree-config check.  Its corrected,
+newly released successor ran once as UID 1000 on CPU 6 and independently passes
+postflight.  Inventory SHA `585fc0f5...504fd` covers 10,749 entries, including
+922 capsule-required entries.  Archive SHA `fd26f227...e3d7` is 52,039,680
+bytes with exactly 937 verified members.  Receipt SHA `cfd7b5d5...565b`
+records release `0dad43e9...c167`, identical complete tmpfs pre/post inventory
+SHA `375e025c...f30d`, accepted disk inventory `842f4522...d526ae`, zero
+helper errors/signals and released exclusions.
+
+Fresh independent scans reproduce both complete inventories.  Tmpfs identities
+`26:58679` and `26:69465`, disk identities `1831:4194306` and `1831:4204970`,
+and corruption seal `1831:4849667` remain exact.  The retained corrupt member
+is capsule-required with SHA `192f8fe1...b1c2`.  Wrapper/owner PIDs
+`4142687/4142688` and every recorded descendant/session/group are absent; all
+five operational exclusions and the retirement tombstone are absent.  The raw
+18-member execution archive SHA is `2374d9ea...ebcf`; additive success record
+SHA is `3b42a154...0ac4`.
+
+Retention preparation does not delete anything and earns no application or OS
+credit.  The retirement template now binds these real artifacts, receipt,
+counts and common-exclusion contract and is under independent source review.
+Only after its separately fetched root release passes may the two tmpfs roots
+be retired.  The disk build wrapper and image driver have additional source
+corrections in progress; no heavy build or guest has run.  Formal counters
+remain 6/130, 350/10000 and 0/273 applications.
