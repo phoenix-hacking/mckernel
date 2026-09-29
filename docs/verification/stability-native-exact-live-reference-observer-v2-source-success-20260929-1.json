@@ -1,0 +1,39 @@
+{
+  "acceptance_credit": false,
+  "base_checkpoint": "48c6a200105342f621d3dd919fcfe8900e813bd6",
+  "checks": [
+    {"command": "python3 -B -m unittest -v scripts.tests.test_native_exact_candidate_live_reference_observer_v2", "result": "PASS_16_TESTS"},
+    {"command": "python3 -B docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-2.py --self-test", "result": "PASS"},
+    {"command": "python3 -B -m py_compile docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-2.py scripts/tests/test_native_exact_candidate_live_reference_observer_v2.py", "result": "PASS"},
+    {"command": "git diff --check -- docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-2.py scripts/tests/test_native_exact_candidate_live_reference_observer_v2.py", "result": "PASS"}
+  ],
+  "contract": {
+    "atomic_global_census": false,
+    "bounded_closure_passes": 5,
+    "clean_rounds_required": 2,
+    "exited_identity_can_reconcile_safe": true,
+    "final_returned_census_requires_exact_successful_identity_scan": true,
+    "operational_assumptions": [
+      "root-owned mode-0700 quarantines prevent new non-root pathname opens",
+      "packet and operator exclude privileged or adversarial mutation and reference acquisition or transfer throughout observation"
+    ]
+  },
+  "created_at_utc": "2026-09-29T06:20:28Z",
+  "failure_family_history": [
+    "original cleanup observer rejected ordinary procfs absences and isolated mount namespaces",
+    "first recovery observer required two globally identical task sets and failed root service thread churn",
+    "initial expert v2 candidate was blocked on production scanner, reference persistence, tree drift and census overclaim",
+    "one bounded in-place expert correction closes those source findings"
+  ],
+  "independent_review": {
+    "decision": "PASS_SOURCE_DEPENDENCY_FOR_NEW_DRAFT_RECOVERY_ONLY",
+    "execution_authorized": false,
+    "runtime_acceptance": false
+  },
+  "observer_sha256": "71fc9f54c6f7ac8a2e8030ac5a802e2c1354ac0f0ed4cf2737c0c9486a7d3bfa",
+  "record_kind": "native_exact_live_reference_observer_v2_source_success",
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "PASS_SOURCE_ONLY",
+  "test_sha256": "092061125463eda4a332c3354d8a94190bc9ca4c9f5c1ad5269ea08d7bae5a19"
+}

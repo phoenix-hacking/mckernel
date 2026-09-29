@@ -6439,3 +6439,24 @@ observer and new recovery identity bound to both retained failures and both
 permanent claims. Independent ownership/source review and a distinct execution
 release remain required. No build can start while the old lease/quarantines
 remain. No real guest app or current-candidate build ran; counters stay unchanged.
+
+Continuation checkpoint 92, 2026-09-28: expert strategy change produces a new
+immutable v2 observer `71fc9f54...3bfa` with test suite `09206112...5a19`.
+Sixteen tests, self-test, Python compilation and diff checks PASS; independent
+review accepts it only as a source dependency for a new DRAFT recovery. The
+production scanner now distinguishes safe exits from reuse, persists an inode
+hit even when diagnostic `readlink` disappears, binds opened child identities,
+and revalidates each exact root and complete member-inode set after every round.
+References, denials, incomplete proofs, reuse, unscanned returned-census members
+and any tree drift remain sticky failures.
+
+The scoped contract is bounded repeated-census closure, not an atomic global
+snapshot. It requires sealed root-owned 0700 quarantines and independent packet/
+operational exclusion of privileged or adversarial mutation and reference
+acquisition/transfer during observation. See
+`stability-native-exact-live-reference-observer-v2-source-success-20260929-1.json`.
+No live observer or cleanup ran. Next commit/push/fetch these exact bytes, then
+create a distinct fail-closed recovery template that binds both failure records,
+both raw archives, both permanent claims/journals, unchanged old lease and roots,
+the v2 observer, and an explicit operational-assumption preflight. Independent
+source and execution reviews remain mandatory; no retry of either old packet.

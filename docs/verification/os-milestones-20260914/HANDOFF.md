@@ -520,3 +520,11 @@ Preserve failure record/archive `0a3e13ec...78b5`; never retry or roll back eith
 packet. This is the family's second execution failure, so expert strategy change
 must implement a bounded final-live-identity closure scan and a new recovery
 identity bound to both failures before independent review and any further run.
+
+Checkpoint 92 independently accepts v2 observer `71fc9f54...3bfa` and 16-test
+suite `09206112...5a19` as a source dependency only. It performs bounded closure
+over exact identities in returned censuses, safely reconciles exits, persists
+reference hits and revalidates exact tree membership. It explicitly does not
+claim atomic census; a new DRAFT packet must enforce the sealed-0700/no privileged
+or adversarial mutation assumption and bind both retained failures/claims. No
+live execution or deletion is authorized, and neither old packet may be retried.
