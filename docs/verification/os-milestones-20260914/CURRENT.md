@@ -6518,3 +6518,26 @@ rerun all pure checks, obtain independent exact-diff/execution review, and
 commit/push/fetch before any one-shot packet invocation. Neither older packet
 may be retried. Formal counters and the four diagnostic apps/zero successful
 current-candidate builds remain unchanged.
+
+Continuation checkpoint 95, 2026-09-29: recovery-v2 final bytes now have an
+independent CONDITIONAL PASS for exactly one non-root cleanup packet after this
+final state and its execution-release record are committed, pushed and fetched
+byte-identically. Mechanical finalization changed only the four reviewed basis
+fields and three reviewed pins. Final basis is `4c50f12c...f8b5a`, helper
+`5ac3601b...2f641`, packet `cc20d877...27d46`, and the unchanged 26-test suite
+is `5d25dc07...6b195`. Reversing those substitutions reproduces the exact
+template blobs at `bdbf16ea07f35767d3e8d72f5523545c034f6889`; the dependency
+remains acyclic. Execution release
+`stability-native-exact-quarantine-recovery2-execution-release-20260929-1.json`
+is `7dc1b2b1...adc0d` and grants cleanup only, never runtime or OS acceptance.
+
+Do not execute until the exact final artifacts plus release record are pushed
+and fetched, then fresh packet admission confirms source, boot/time, capacity,
+processes, Docker mounts, retained history/current identities and absent `-2`
+outputs. The operational exclusion of privileged/adversarial mutation and
+reference acquisition/transfer must remain true through observation and
+deletion. If all gates pass, invoke only `/bin/bash` with the exact packet path
+once as non-root. Direct helper execution, retry, rollback, claim removal or
+output reuse is prohibited. Preserve any failure for separate review. Formal
+counters, real guest application count and current-candidate build count remain
+unchanged.

@@ -3,8 +3,8 @@
 set -Eeuo pipefail
 REPO=/home/holden/mckernel
 HELPER=$REPO/docs/verification/evidence/native-exact-candidate-quarantine-recover-68cf089a-2.py
-FINAL_HELPER_SHA=__REPLACE_WITH_FINAL_RECOVERY2_HELPER_SHA256__
-RELEASE_SHA=UNSET-REQUIRES-INDEPENDENT-RECOVERY2-RELEASE-SHA256
+FINAL_HELPER_SHA=5ac3601bb9dc95cc1dba48793239769c06a26651ef6d75cec9a7793f6962f641
+RELEASE_SHA=4c50f12c5b500d2ecde1750f47b07b820ba43721c613d13176427440294f8b5a
 die(){ echo "FAIL-CLOSED: $*" >&2; exit 1; }
 [[ "$EUID" -ne 0 ]] || die root-launch-prohibited
 [[ "$FINAL_HELPER_SHA" =~ ^[0-9a-f]{64}$ ]] || die draft-helper-pin

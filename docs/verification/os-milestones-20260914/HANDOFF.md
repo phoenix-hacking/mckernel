@@ -551,3 +551,12 @@ only reviewed pins/status, then obtain a separate exact execution review and a
 second fetched checkpoint before any new one-shot packet. Preserve the explicit
 non-atomic operational exclusion through observation and deletion; never retry
 either old packet or start a build while the lease remains.
+
+Checkpoint 95 conditionally releases one exact recovery-v2 cleanup attempt only
+after final commit/push/fetched verification. Final basis `4c50f12c...f8b5a`,
+helper `5ac3601b...2f641`, packet `cc20d877...27d46` and unchanged tests
+`5d25dc07...6b195` pass the independent mechanical/execution review. Execution
+record `7dc1b2b1...adc0d` binds the one-shot/no-retry/no-rollback contract and
+the operational exclusion through observation and deletion. Invoke only the
+non-root packet after its fresh gates pass; preserve every output/failure and
+never run the helper directly. Cleanup success changes no acceptance counter.
