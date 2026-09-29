@@ -6204,3 +6204,32 @@ build release. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
 there are four diagnostic guest apps, zero successful current-candidate builds
 and zero new guest apps in this continuation. The OS goal remains incomplete,
 and this launcher pause is temporary.
+
+Continuation checkpoint 83, 2026-09-28: the superseded-candidate cleanup
+prerequisite now has independently accepted source readiness, but root deletion
+is still not released. Three successively rejected designs remain preserved.
+The final strategy is an exclusive cleanup lease, root-owned atomic quarantine,
+helper-controlled per-thread/mount observation, and one sealed descriptor-only
+verification/deletion pass with durable per-entry recovery records. Exact
+observer `4a15271d...8e05` and inventory-pinned/release-unset deleter
+`3803cf64...1eb0` pass their pure self-tests and independent source review.
+
+The untouched live roots produced a fresh observational inventory in 7.9
+seconds and an independent replay in 8.2 seconds. It contains 10,549 unique
+rows: 10,462 candidate entries (925 directories, 9,488 files and 49 symlinks)
+and 87 backup entries (39 directories and 48 files). Exact inventory SHA-256 is
+`743c0564...82c0`; its deterministic committed archive is
+`evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz`
+(SHA-256 `6be734da...b044`). This is preservation and cleanup infrastructure only;
+it is not an atomic snapshot, deletion result, build or OS behavior.
+
+Next construct and independently review one exact preflight/root execution
+packet. It must bind the final helper, observer, inventory, release record,
+boot/time, source-clean result, exact root identities and a fresh root Docker
+no-bind observation. Only the released packet may fill the remaining release
+pin and execute once. On failure retain the cleanup lease, journal, raw observer
+streams and every surviving original/quarantine identity; never retry
+automatically. After a successful cleanup checkpoint, prepare a fresh
+commit-derived candidate and seek the heavy-build release. Formal counters and
+the four diagnostic applications/zero successful current-candidate builds are
+unchanged.

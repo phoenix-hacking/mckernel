@@ -437,3 +437,17 @@ Checkpoint 81 pushes the pre-cleanup retention capsule for prepared candidate
 tmpfs roots remain live. Delete only after fetched verification, root-complete
 zero-reference observation, clean lease/container preflight and independent
 review of the exact two-root deletion packet. No other path is in cleanup scope.
+
+Checkpoint 83 supersedes the initial cleanup design. Exact observer
+`4a15271d...8e05` and inventory-pinned/release-unset deleter
+`3803cf64...1eb0` now PASS independent source review after three rejected
+designs. The 10,549-row observational inventory is `743c0564...82c0`; committed
+archive `evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz`
+is `6be734da...b044`. Both live roots remain untouched.
+
+Next build one exact packet that creates a fresh v2 preflight from source-clean,
+boot/time, root-identity and root Docker no-bind observations, mechanically pins
+the independently reviewed release record, and invokes the root helper once.
+Obtain Astra execution review before any sudo or mutation. Any failure retains
+the cleanup lease, journal, captures and quarantines without retry. Success only
+reclaims tmpfs for a new commit-derived candidate; it moves no acceptance count.
