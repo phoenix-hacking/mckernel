@@ -14,7 +14,7 @@ SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ih
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_67589154.py'
 RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retirement-67589154-1.release.json'
-RELEASE_SHA256='RELEASE_HASH_REQUIRED'
+RELEASE_SHA256='e9c03ce437dde8a1ed7933a57a2602fb466cae59622c7f0ba41e596bf2f77fa5'
 MAIN='675891545c881b8d625256ade56fe66ac69fe794'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-67589154-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-67589154-1'
 QUARANTINES=('/dev/shm/.mckernel-retirement-candidate-67589154-1','/dev/shm/.mckernel-retirement-metadata-backup-67589154-1')
