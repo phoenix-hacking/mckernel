@@ -53,6 +53,7 @@ class PreparationPacketContractTests(unittest.TestCase):
         for forbidden in ("docker run", "docker build", "sudo", "qemu-system", "git -C ihk checkout"):
             self.assertNotIn(forbidden, self.packet)
         self.assertIn("21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c", self.packet)
+        self.assertIn("--ignore-submodules=dirty", self.packet)
 
     def test_shell_syntax_and_digest(self):
         self.assertRegex(hashlib.sha256(PACKET.read_bytes()).hexdigest(), r"^[0-9a-f]{64}$")

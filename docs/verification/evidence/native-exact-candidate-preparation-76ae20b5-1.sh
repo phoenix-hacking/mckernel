@@ -261,7 +261,10 @@ test "$(sha256sum "$C/ihk/test/ihklib/whitebox/src/driver/mckernel/syscall.c" | 
 
 test "$("${GIT_ENV[@]}" --git-dir="$C/.git" --work-tree="$C" rev-parse HEAD)" = "$SHA"
 test "$("${GIT_ENV[@]}" --git-dir="$C/ihk/.git" --work-tree="$C/ihk" rev-parse HEAD)" = "$IHK_SHA"
-test -z "$("${GIT_ENV[@]}" --git-dir="$C/.git" --work-tree="$C" status --porcelain=1 --untracked-files=all)"
+# The reviewed nested overlay intentionally makes the superproject report a
+# dirty gitlink.  Admit no main-tree change while checking the nested tree
+# exactly below.
+test -z "$("${GIT_ENV[@]}" --git-dir="$C/.git" --work-tree="$C" status --porcelain=1 --untracked-files=all --ignore-submodules=dirty)"
 test "$(${GIT_ENV[@]} --git-dir="$C/ihk/.git" --work-tree="$C/ihk" status --porcelain=1 --untracked-files=all)" = " M test/ihklib/whitebox/src/driver/mckernel/syscall.c"
 test ! -e "$C/.git/objects/info/alternates"
 test ! -e "$C/.git/commondir"
