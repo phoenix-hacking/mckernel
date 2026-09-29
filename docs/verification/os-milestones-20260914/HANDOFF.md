@@ -931,3 +931,18 @@ Next obtain fresh independent one-shot heavy-build review for the exact request
 and owner command, then run only on PASS. Review the retained terminal container
 and build artifacts before the smallest real memory application diagnostic.
 Builds remain zero and applications remain 0/273.
+
+Checkpoint 147 supersedes checkpoint 145's build state. Independently released
+build `704f6654-1` ran once and failed after 19.99 seconds in phase 0: exact
+rustc returned success, but the queue checker rejected its `/tmp` fixture as
+not executable/absent. Earlier checks and the prior parser repair passed; no
+compile phase or artifact output began. Retained terminal container
+`68881c05...927a6` is exited 1, PID 0, non-OOM. Owner/clients retired and the
+lease is absent. Preserve failure archive `e09ca937...8417`, candidate, backup,
+container and all evidence.
+
+Do not rerun this request. Make one bounded checker/output-location correction,
+prove exact Rust compile plus seven-test execution in the reviewed light
+profile, independently review it, then prepare a wholly fresh commit-derived
+candidate before any later heavy build. Builds remain zero and applications
+remain 0/273.

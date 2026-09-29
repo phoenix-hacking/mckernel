@@ -7461,3 +7461,28 @@ all leases and Docker state. Only after PASS run one serialized build, review it
 retained terminal container/evidence, then start the smallest real memory app
 diagnostic. Builds remain zero; real guest apps this window remain zero;
 applications remain 0/273 and formal counters are unchanged.
+
+Continuation checkpoint 147, 2026-09-29: the independently released exact
+`704f6654-1` heavy build ran once and failed after 19.99 seconds in phase 0.
+Every earlier source contract passed, including the prior queue-parser repair;
+the first failing command was the exact Rust queue checker. Rustc returned 0
+with empty stderr, then the checker reported `rustc did not create an executable
+queue fixture` for its temporary output. This is a new output-location family,
+not a retry of the `67589154-1` parser failure. No compilation phase or artifact
+output began.
+
+Owner 3881008/90041045 and all Docker clients retired; the exact lease is absent.
+Terminal container `68881c05...927a6` is retained, exited 1, PID 0, non-OOM and
+restart disabled. Owner receipt `f49164f5...5914`, build receipt
+`63f155fb...1286`, driver log `c61ca4ed...6b46`, container log
+`449c39bc...ad3c` and terminal inspect `eeb4f261...134c` are archived at
+`evidence/stability-native-exact-build-704f6654-failure-20260929-1.tar.gz`
+SHA256 `e09ca937...8417`. Preserve candidate, backup, container and evidence.
+
+Do not rerun the unchanged request. The one bounded correction is to add exact
+post-compile diagnostics and select a verified writable executable fixture
+location, then run an isolated exact Rust compile/seven-test regression under
+the reviewed light profile. Only after source review and a wholly fresh
+commit-derived candidate/request may another heavy build be considered.
+Successful current-candidate builds remain zero, real guest apps this window
+remain zero, applications remain 0/273 and formal counters are unchanged.

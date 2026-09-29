@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-exact-build-failure.v1",
+  "status": "FAIL_PRESERVED",
+  "date": "2026-09-29",
+  "failure_family": "phase-0 exact Rust queue fixture executable output location",
+  "source_checkpoint": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+  "execution_release_commit": "6b210185c9fbc12f518211d5f25fdeaf615485e3",
+  "execution_release_sha256": "c5a68e5d6d7514dd70ce755b339c4e902b998842a002a95770148d351756ce18",
+  "command": "/usr/bin/python3 -E -s -B /dev/shm/mckernel-exact-candidate-704f6654-1/scripts/native_rust_exact_build_container_owner.py /home/holden/mckernel-work/scratch/native-exact-build-request-704f6654-1.json",
+  "invocations": 1,
+  "exit_status": 1,
+  "owner": {"pid": 3881008, "starttime": 90041045, "nonce": "8b0152c9598d4e43b223066d7981c8f3"},
+  "container": {
+    "id": "68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6",
+    "name": "mckernel-exact-f6bd6ce729004b2d92c650ae3e0d2e4e",
+    "status": "exited", "exit_code": 1, "pid": 0, "oom_killed": false,
+    "restart": "no", "retained": true
+  },
+  "first_failure": {
+    "phase": "Verify source-only contracts without claiming readiness",
+    "phase_script_sha256": "a1042bc7639515f0bdd38fd89e0335f043f86fc47fd753fe8b720df67fb41b7c",
+    "command": "scripts/ihk_native_queue_check.py --repo $GITHUB_WORKSPACE --rustc /usr/bin/rustc --require-rustc",
+    "message": "ihk-native-queue-check: FAIL: rustc did not create an executable queue fixture",
+    "compiler_result": "exit 0 with empty stderr, followed by missing-or-nonexecutable temporary output",
+    "partial_outputs": false,
+    "prior_queue_parser_failure_fixed": true
+  },
+  "hashes": {
+    "owner_receipt": "f49164f50ee409510ef26a44ee962faa4f92f7f536a1f6ea27ff7476d1135914",
+    "build_receipt": "63f155fb6a9d6bfc00fd73557b981ccba96c73cb4d6e3f230a4caeeec18e1286",
+    "driver_log": "c61ca4edb2fe2ca41c07876c1e6eab7e489d190cb38aa5955acf87ecff586b46",
+    "container_log": "449c39bc2b85675c181bbb6050b01b01df92ec8ff79112d2fc579369ca47ad3c",
+    "terminal_inspect": "eeb4f26151b48f29d2a3418451c9461e47afeedf16ad663c569b0c00ed94134c",
+    "queue_checker": "c9b4d0121632e7985300b85b062a982802e684fdcb8267bff182f730b7a1aa96",
+    "queue_fixture": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b",
+    "archive": "e09ca937456ede3494c81c611c96d45960f5f633e7874817dd1c54a309568417"
+  },
+  "postconditions": {
+    "owner_and_clients_absent": true, "lease_absent": true,
+    "terminal_container_retained": true, "candidate_and_backup_preserved": true,
+    "evidence_preserved": true
+  },
+  "bounded_correction": "Add fail-closed post-compile diagnostics and select a verified writable executable output location; prove it with an isolated exact-Rust compile/run regression before any fresh candidate or heavy build.",
+  "acceptance_limits": "No successful current-candidate build, runtime, guest, application or formal acceptance follows. The unchanged request must never be rerun."
+}
