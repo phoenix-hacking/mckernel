@@ -260,3 +260,17 @@ main/IHK identity, distinct tmpfs inodes, conversion PASS, installed-only Git
 consumers, canonical manifest plus separate verification, and
 `BuildOwner.validate()` with candidate and backup roots. This releases no
 Docker build or guest; those still require separate review.
+
+Checkpoint 69 prepared exact candidate `80b8c492...b7d0a` successfully on
+`/dev/shm`. Standalone metadata, installed-only Git consumers, the canonical
+manifest and independent `verify_inputs` all PASS. Validate-only accounting is
+21,951,848,448/25,769,803,776 bytes with 7,530,528,768 bytes still free on
+tmpfs; no lease or Docker ran. See
+`stability-native-exact-candidate-preparation-success-20260928-1.json`.
+
+Preserve candidate `/dev/shm/mckernel-exact-candidate-80b8c492-1`, backup,
+durable metadata evidence/manifest/request/log and the old d094 roots/container.
+Command provenance review corrected the prior routing: the offline driver's five
+phases already include the heavy kernel/module compile and artifact validation;
+there is no separately released Docker source phase. Next obtain an independent
+one-shot heavy-build release for the exact request/image receipt.

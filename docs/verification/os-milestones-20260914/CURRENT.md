@@ -5799,3 +5799,38 @@ with both candidate and backup allocation roots. No Docker/build/guest is yet
 released. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
 diagnostic guest apps and zero successful current-candidate builds remain
 unchanged.
+
+Continuation checkpoint 69, 2026-09-28: fresh candidate preparation for fetched
+checkpoint `80b8c492...b7d0a` PASSes under the independently released packet.
+The main and pinned IHK shared clones were detached, fully materialized on
+`/dev/shm`, and converted to standalone metadata. All 8,896 regular tracked
+files reside on tmpfs with no source inode identity. The transactional receipt,
+same-device backup and durable evidence are retained; staging is absent.
+
+Installed-only current/historical/IHK consumers pass, including the exact four
+historical ABI blobs and the 163-constant/28-layout shared-ABI check. The actual
+Git object/ref/config source closure is byte-metadata-identical before and after
+conversion. Canonical manifest `a95019f3...3826a` was generated and separately
+accepted by `verify_inputs`. Validate-only owner admission records candidate
+9,065,619,456 bytes plus backup 1,327,104 bytes and the fixed 12-GiB container
+reservation: 21,951,848,448 bytes total under 25,769,803,776. No lease or Docker
+operation occurred. `/dev/shm` retains 7,530,528,768 bytes free, above the 4-GiB
+emergency floor; host/scratch/MemAvailable floors pass.
+
+Original observer and invocation failures remain retained: two malformed
+placement observers, an overbroad launcher-log fingerprint plus one malformed
+replacement, and a manifest invocation that created one untracked Python-3.8
+bytecode file before correctly rejecting the dirty candidate. The exact file
+identity was captured, only that disposable generated file was removed, and the
+one bounded `-B` correction passed without weakening the manifest. Complete
+paths, hashes and the compressed raw log are in
+`stability-native-exact-candidate-preparation-success-20260928-1.json`.
+
+Command provenance review corrected the earlier cursor: the offline driver's
+five phases include the exact kernel/module compilation and artifact validation,
+so there is no separately released Docker "source phase." Next obtain an
+independent one-shot heavy-build release for the exact prepared request and
+image receipt. Preserve any failure; no build or guest is released by this
+checkpoint. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
+four diagnostic guest apps and zero successful current-candidate builds remain
+unchanged.
