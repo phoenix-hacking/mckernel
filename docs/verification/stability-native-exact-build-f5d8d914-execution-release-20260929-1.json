@@ -1,0 +1,136 @@
+{
+  "schema": "mckernel.native-exact-build-execution-release.v1",
+  "date": "2026-09-29",
+  "status": "PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "one_shot": true,
+  "maximum_invocations": 1,
+  "retry": false,
+  "review_scope": "one exact unprivileged offline native build; no module load, guest, application, cleanup or retry",
+  "source_checkpoint": "f5d8d914f816d4a677990719854f7b4d312a430b",
+  "release_checkpoint_before_record": "9ed73aa266be7409afc241a6b7f8ddf3597498c9",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff9fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "aeb4ff536dbfb97583ca5bd42161f82a815c82f3cc3d9f4012b23eb38a4e7156"
+  },
+  "inputs": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-f5d8d914-1",
+    "candidate_device": 26,
+    "candidate_inode": 47678,
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-f5d8d914-1",
+    "metadata_backup_device": 26,
+    "metadata_backup_inode": 58429,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-f5d8d914-1.json",
+    "request_sha256": "9f1b1653b66894ae1384ebdbc60ba113b621c596de4d53f98aa3376f00ce5fd8",
+    "manifest_sha256": "b37c4f7c9b75dea92be27bc8ee9d99c53d037721cefee8c6ad9a86254505a6d8",
+    "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "image_receipt_sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172",
+    "preparation_archive_sha256": "6997644766f61f94452e2f87329abeb7ab80867dbcd70aa80825c28e9158a5ae"
+  },
+  "failure_family": {
+    "consumed_request": "704f6654-1",
+    "consumed_failure_archive_sha256": "e09ca937456ede3494c81c611c96d45960f5f633e7874817dd1c54a309568417",
+    "failure": "phase-0 Rust queue fixture compiler returned success but executable output was absent on the container tmpfs",
+    "correction": "select the reviewed writable executable evidence root and fail closed on missing, non-regular, symlink or non-executable output",
+    "queue_checker_sha256": "84634d6262d6da86b86ec2d65841a686100ff8a1667043b198553f3080dba46c",
+    "queue_test_sha256": "83032bf2098b4228b7f19bb333b0dbb029cc4dcbaa3cce664aef8e2e777a41c8",
+    "unchanged_consumed_request_retry": false
+  },
+  "profile": {
+    "cpus": "2-5",
+    "cpu_count": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "root_filesystem": "read-only",
+    "tmpfs_tmp_bytes": 268435456,
+    "capabilities": "all dropped",
+    "no_new_privileges": true,
+    "container_user": "1000:1000",
+    "build_jobs": 2,
+    "timeout_seconds": 19800
+  },
+  "resource_admission": {
+    "aggregate_required_bytes": 22026375168,
+    "aggregate_limit_bytes": 25769803776,
+    "candidate_and_backup_mount": "tmpfs device 26 with no descendant mounts",
+    "required_host_free_bytes": 17179869184,
+    "required_scratch_free_bytes": 12884901888,
+    "required_tmpfs_free_bytes": 4294967296,
+    "required_memory_available_bytes": 17179869184
+  },
+  "preflight": {
+    "fresh_checks_required": [
+      "fetched release and exact input hashes",
+      "candidate and metadata-backup device/inode/mode and clean pinned commits",
+      "empty output/evidence roots and absent exact lease and lock",
+      "all relevant leases, launcher/process identities and competing build/guest owners",
+      "complete privileged read-only Docker census and mount exclusion",
+      "host and MemAvailable at least 16 GiB, scratch at least 12 GiB, tmpfs at least 4 GiB",
+      "aggregate requirement at most 24 GiB with the dispatcher as sole heavy owner"
+    ],
+    "failure_rule": "Any changed input, nonempty destination, active owner/lock, Docker conflict, incomplete census or failed resource floor blocks execution."
+  },
+  "execution": {
+    "argv": [
+      "/usr/bin/python3",
+      "-E",
+      "-s",
+      "-B",
+      "/dev/shm/mckernel-exact-candidate-f5d8d914-1/scripts/native_rust_exact_build_container_owner.py",
+      "/home/holden/mckernel-work/scratch/native-exact-build-request-f5d8d914-1.json"
+    ],
+    "invocations": 1,
+    "run_as": "ordinary user",
+    "outer_timeout": "none shorter than owner 19800-second wait plus cleanup/evidence publication",
+    "outer_capture": "exclusive stdout/stderr, start/end, exact argv, exit and owner PID/starttime",
+    "unchanged_retry": false,
+    "automatic_cleanup": false
+  },
+  "retention": {
+    "always_keep": [
+      "owner and build receipts",
+      "all phase commands, statuses and logs",
+      "partial and final outputs",
+      "prestart and terminal container inspections",
+      "owner/client/descendant identities and retirement observations",
+      "lease state and signal history",
+      "all original failures and preparation evidence"
+    ],
+    "success_outputs": [
+      "bzImage",
+      "ihk.ko",
+      "ihk-smp-x86_64.ko",
+      "mcctrl.ko",
+      "SHA256SUMS",
+      "stage-lock.json",
+      "secondary-reset-build-supplement.lock",
+      "kbuild-link-closure.json",
+      "kconfig-solver-matrix.json",
+      "resolved.config",
+      "kernel.release"
+    ]
+  },
+  "required_postflight": [
+    "preserve exact owner exit and streams plus owner PID/starttime",
+    "retain the exact lease, owner/build receipts, phase logs and terminal container inspection",
+    "independently inspect every expected output and source binding",
+    "prove owner, Docker client and descendants retired before considering any later runtime owner",
+    "archive success or failure without automatic cleanup or retry"
+  ],
+  "acceptance": {
+    "existing_build_success": false,
+    "runtime_acceptance": false,
+    "guest_application_acceptance": false,
+    "formal_counters_changed": false,
+    "cleanup_released": false,
+    "os_complete": false
+  },
+  "next_on_success": "independently inspect exact artifacts and complete evidence, then seek separate current-candidate diagnostic application execution release",
+  "next_diagnostic": "smallest real libc memory application smoke; diagnostic only, not formal M04 acceptance"
+}
