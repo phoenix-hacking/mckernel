@@ -8198,3 +8198,29 @@ separately release retirement. Only verified retirement unlocks a wholly fresh
 candidate from the fetched corrected commit and a new heavy-build release.
 Formal counters remain 6/130 and 350/10000, real guest applications this window
 remain zero, and application acceptance remains 0/273.
+
+Continuation checkpoint 170, 2026-09-29: fresh retention-preparation template
+`native-exact-candidate-retention-preparation-9e5ab03d-1.py` SHA
+`91bacf83...f60ab` and immutable tests SHA `2be61b93...aa53` now independently
+`PASS_SOURCE`. The template binds candidate 26/47678, backup 26/58429, allocated
+bytes 9,140,117,504 plus 1,355,776, exact candidate main `f5d8d914...430b`, IHK
+`3114d9e7...72a1f`, current support hashes and an entirely fresh `9e5ab03d-1`
+inventory/archive/scratch/claim/lease family. `RELEASE_HASH_REQUIRED` still
+blocks execution.
+
+Initial review preserved two test defects: the immutable suite would fail after
+the release literal changed, and its compile check could write beside the packet.
+The bounded correction fixed compilation but still normalized only the
+placeholder. Per convergence policy, expert escalation normalized the loaded
+current literal and added an already-populated-packet regression. Independent
+rereview passes the same 20 tests against both placeholder and populated packet
+forms; explicit temporary `cfile` compilation and scoped diff checks pass.
+
+No retention or retirement has run. This checkpoint establishes the immutable
+template ancestor only. After push/fetch verification, construct a release JSON
+binding this exact prior commit, packet/test/support hashes and exact execute
+inputs. The subsequent release commit may change exactly two paths: add that
+release JSON and replace only the packet release-hash literal. Then obtain fresh
+independent execution review and remeasure identities, allocations, capacity,
+processes, leases and Docker mounts before a single ordinary-user run. Formal
+counters and application acceptance remain unchanged.

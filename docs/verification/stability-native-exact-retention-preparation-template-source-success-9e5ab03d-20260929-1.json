@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.native-exact-candidate-retention-preparation.template-review.v1",
+  "recorded_at_utc": "2026-09-29T19:56:00Z",
+  "status": "PASS_SOURCE",
+  "execution_released": false,
+  "template": {
+    "packet_path": "docs/verification/evidence/native-exact-candidate-retention-preparation-9e5ab03d-1.py",
+    "packet_sha256": "91bacf836f9bb30b1fe8f9d8acd473b7b01a5fc217e1e65f8455daf488ef60ab",
+    "test_path": "scripts/tests/test_native_exact_candidate_retention_preparation_9e5ab03d.py",
+    "test_sha256": "2be61b93982eac03582c798ba2d95e3d10eee6540d3842358ded4b853613aa53",
+    "release_literal": "RELEASE_HASH_REQUIRED"
+  },
+  "inputs": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-f5d8d914-1",
+    "candidate_identity": "26/47678 uid/gid 1000/1000 mode 0755",
+    "candidate_allocated_bytes": 9140117504,
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-f5d8d914-1",
+    "metadata_backup_identity": "26/58429 uid/gid 1000/1000 mode 0755",
+    "metadata_backup_allocated_bytes": 1355776,
+    "candidate_main_commit": "f5d8d914f816d4a677990719854f7b4d312a430b",
+    "candidate_ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+  },
+  "support_sha256": {
+    "scripts/native_exact_candidate_retention_capsule.py": "ac3bb0354d1353928fd5f63ddf6743b636642fab79a4f5a3ec9195d5721d0b26",
+    "scripts/native_exact_candidate_retention_archive.py": "6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e",
+    "scripts/tests/test_native_exact_candidate_retention_capsule.py": "ae6f129ac8f86379d98ad2ca1eec1e03034d3754a6786300014c140320743c9a",
+    "scripts/tests/test_native_exact_candidate_retention_archive.py": "fa9d727d74e462a9d6fdb2d96f3a3a597ccdab331b4321b92a2d11eaeb48355e"
+  },
+  "review_history": [
+    "Initial review BLOCKED a test that required the placeholder after release and a py_compile check that could write beside the packet.",
+    "The bounded correction fixed explicit temporary compilation but remained BLOCKED because it normalized only the placeholder literal.",
+    "Expert escalation normalized the loaded current literal and added an already-populated-packet regression.",
+    "Independent rereview passed the same immutable 20 tests against both placeholder and populated packet forms."
+  ],
+  "verified_properties": [
+    "Acyclic template-commit to exact two-path release-commit admission.",
+    "Exact roots, identities, revisions, support hashes and entirely fresh 9e5ab03d-1 output family.",
+    "Fail-closed capacity, process census, signal handling, process-group retirement, evidence sealing, archive membership and postflight inventory equality.",
+    "Draft execution exits 3 without state; retention output is inventory/restoration capsule only and performs no retirement or cleanup."
+  ],
+  "tests": {
+    "count": 20,
+    "draft_result": "PASS",
+    "populated_release_copy_result": "PASS",
+    "py_compile_explicit_cfile": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "limitations": [
+    "This is source/template evidence only; no release or execution is authorized.",
+    "Allocation values require fresh preflight measurement.",
+    "Process-group checks do not alone establish detached-descendant retirement.",
+    "Archive verification establishes reconstructibility inputs, not an executed restore.",
+    "No retention, retirement, build, runtime, application, production or language gate is accepted."
+  ]
+}

@@ -1247,3 +1247,15 @@ separate one-shot retirement release complete. Never direct-delete, patch the
 candidate, or reuse blocked/historical packets. After verified retirement,
 prepare a wholly fresh candidate from the fetched corrected commit and seek a
 new heavy-build release. Builds and real guest applications remain zero.
+
+Checkpoint 170 establishes the retention-preparation template ancestor only.
+Packet `91bacf83...f60ab` and immutable tests `2be61b93...aa53` independently
+PASS source after expert correction of the release-transition fixture; the same
+20 tests pass against placeholder and already-populated forms. Exact roots are
+candidate 26/47678 and backup 26/58429; all outputs use fresh `9e5ab03d-1`
+names. `RELEASE_HASH_REQUIRED` still forbids execution.
+
+Next push/fetch this exact template commit, then create one release JSON binding
+that prior commit and change only it plus the packet literal in a second commit.
+Obtain independent execution review and full live preflight before one ordinary-
+user retention-preparation run. No retention, retirement or build is accepted.
