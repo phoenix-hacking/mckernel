@@ -6621,3 +6621,29 @@ counters remain 0/273 applications, 2/4 fault modes, 6/130 production gates,
 350/10,000 points and 0/7 language gates; there are four historical diagnostic
 apps and zero successful current-candidate builds. The OS goal remains
 incomplete, and this launcher pause is temporary.
+
+Continuation checkpoint 99, 2026-09-29: recovery-3 final bytes now have an
+independent CONDITIONAL PASS for exactly one non-root cleanup packet after this
+final state and its execution-release record are committed, pushed and fetched
+byte-identically. Mechanical finalization changed only the four reviewed basis
+fields and three reviewed helper/packet pins. Final basis is
+`46a9e891...47270`, helper `74460f72...9842f`, packet
+`bf26d3b3...7e56`, and the unchanged 30-test suite is
+`aec12790...8ad07`. Reversing those substitutions reproduces the exact template
+blobs at `7aa1c02763d517fa2267f2d3ce67e097ddfc7734`; the dependency
+remains acyclic. All 30 tests, helper self-test, temporary-output Python
+compilation, shell syntax, JSON validation and diff checks PASS.
+
+Execution release
+`stability-native-exact-quarantine-recovery3-execution-release-20260929-1.json`
+is `1a683afc...2154a` and grants cleanup only, never runtime or OS acceptance.
+Do not execute until the exact final artifacts plus release record are pushed
+and fetched, then fresh packet admission confirms source, boot/time, capacity,
+processes, Docker mounts, retained history/current identities and absent `-3`
+outputs. The operational exclusion of privileged/adversarial mutation and
+reference acquisition/transfer must remain true throughout observation and
+deletion. If all gates pass, invoke only `/bin/bash` with the exact packet path
+once as non-root. Direct helper execution, retry, rollback, claim removal or
+output reuse is prohibited. Preserve any failure for separate review. Formal
+counters, real guest application count and current-candidate build count remain
+unchanged.

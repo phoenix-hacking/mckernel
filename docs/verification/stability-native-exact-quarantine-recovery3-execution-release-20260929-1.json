@@ -1,0 +1,40 @@
+{
+  "acceptance_credit": false,
+  "allowed_command_argv": [
+    "/bin/bash",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-68cf089a-3.sh"
+  ],
+  "basis_sha256": "46a9e89174b816b492d2069d2ac554cbde43dfcffc61f692d353861df9d47270",
+  "created_at_utc": "2026-09-29T07:20:21Z",
+  "helper_sha256": "74460f728b8ad4701256f54dd0ade2d6e2e17a3256847642994a146a0cf9842f",
+  "independent_review": {
+    "decision": "CONDITIONAL_PASS_ONE_SHOT_AFTER_COMMIT_PUSH_FETCH_AND_FRESH_PREFLIGHT",
+    "runtime_acceptance": false,
+    "scope": "exact non-root packet invocation only; direct helper execution, retry, rollback, claim removal and output reuse prohibited"
+  },
+  "one_shot": true,
+  "operational_threat_assumption": "Quarantines remain root-owned 0700; privileged/adversarial target mutation, reference acquisition, and reference transfer are independently excluded throughout observation AND deletion. This is an operational assumption, not machine proof or an atomic census.",
+  "packet_sha256": "bf26d3b3dfacf2a999fb5d8c2834630d5712e3dfceb65ccd62500a46e1457e56",
+  "record_kind": "native_exact_candidate_quarantine_recovery3_execution_release",
+  "required_before_execution": [
+    "exact final basis, helper, packet, unchanged tests and this execution-release record committed and pushed",
+    "fetched HEAD, upstream and FETCH_HEAD equal with exact committed blobs",
+    "old lease, all prior failures, claims and journals, inventory and observer inputs unchanged",
+    "original paths absent and exact root-owned 0700 quarantine identities retained",
+    "fresh capacity, process, Docker no-bind, boot/time and substantive preflight checks pass",
+    "all recovery-3 mutable outputs absent before the one attempt",
+    "operational exclusion remains true throughout observation and deletion"
+  ],
+  "retry": false,
+  "rollback": false,
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "source_checkpoint": "7aa1c02763d517fa2267f2d3ce67e097ddfc7734",
+  "status": "PASS_ONE_SHOT_QUARANTINE_RECOVERY3_EXECUTION",
+  "test_sha256": "aec127904379f66d4744a90c3c63068b5eb286b8168a474dde1af13906b8ad07",
+  "timeout": {
+    "helper_seconds": 900,
+    "kill_grace_seconds": 10,
+    "observer_seconds": 180
+  }
+}

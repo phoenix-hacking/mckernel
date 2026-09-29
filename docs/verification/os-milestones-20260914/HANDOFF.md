@@ -591,3 +591,13 @@ finalize only the reviewed recovery-3 pins/status, rerun all pure checks, obtain
 independent exact execution review, and push/fetch a separate release before at
 most one non-root attempt. No runtime or acceptance counter changed; the OS is
 incomplete and this launcher pause is temporary.
+
+Checkpoint 99 conditionally releases one exact recovery-3 cleanup attempt only
+after final commit/push/fetched verification. Final basis
+`46a9e891...47270`, helper `74460f72...9842f`, packet
+`bf26d3b3...7e56` and unchanged tests `aec12790...8ad07` pass the independent
+mechanical/execution review. Execution record `1a683afc...2154a` binds the
+one-shot/no-retry/no-rollback contract and operational exclusion through
+observation and deletion. Invoke only the non-root packet after its fresh gates
+pass; preserve every output/failure and never run the helper directly. Cleanup
+success changes no acceptance counter.
