@@ -476,3 +476,23 @@ helper `5500e77e...c753`, packet `d3d4c064...5729`, basis
 then invoke the packet once as non-root from the repository root. Preserve every
 failure artifact and never retry or run the helper directly. This authorizes
 cleanup only, not a build, guest, application or acceptance promotion.
+
+Checkpoint 87 records the single attempt as FAIL before deletion. Both roots
+are now sealed root:root 0700 under the exact quarantine names; originals are
+absent and the root lease/journal remain. Five observer rounds produced the
+same false blockers: 815 stable-task `map_files` absences and 48 namespaces with
+no host-canonical `/dev/shm`, with zero permission denials. Preserve all paths
+and hashes in `stability-native-exact-cleanup-failure-20260929-1.json`. Do not
+rerun or roll back. Fix/test the observer locally, then obtain independent
+review of a new exact quarantine-resume packet bound to the retained failure.
+
+Shutdown checkpoint 88 stops before recovery. All child lanes are joined; the
+launcher PIDs 3399308/3399313/3399317 remain live. Preserve both root:root 0700
+quarantines, the old lease `69ced239...47e3`, journal `6bf12958...ebe`, and the
+raw failure archive. Corrected observer `e6f46761...e4d` has independent source
+review PASS, but recovery helper `ad0db6b...f3b`, packet `c59ed2d4...1473` and
+basis `fec0e99d...9a6` remain DRAFT/non-executable. Their local regression run
+has three fixture failures while self-test, compilation, syntax, JSON and diff
+checks pass. Next fix only those pure regressions, obtain independent source
+review, checkpoint the templates, mechanically finalize them, and seek a
+separate execution release. Never rerun or roll back the failed cleanup.

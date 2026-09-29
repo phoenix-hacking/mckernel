@@ -6311,3 +6311,62 @@ running-container bind before creating the v2 preflight and making one sanitized
 not invoke the helper directly, bypass a gate, retry, roll back or delete any
 failure evidence/quarantine. Cleanup success is still unproven and earns no OS
 acceptance credit.
+
+Continuation checkpoint 87, 2026-09-28: the one released cleanup packet ran
+exactly once and failed closed in 6.0 seconds. All non-root admission checks
+passed. The helper acquired and retained the root lease, validated the full
+inventory, sealed both roots root:root mode 0700 and atomically renamed them to
+their exact quarantine names. It closed its target descriptors, then stopped
+before any `delete-entry` phase because the post-seal observer returned FAIL.
+Original paths are absent; quarantine dev/inode identities 26/14117 and
+26/24701 remain intact. No retry or rollback occurred.
+
+The original failure is preserved in
+`stability-native-exact-cleanup-failure-20260929-1.json`: journal
+`6bf12958...ebe`, observer result `8eb6762e...c06`, observer progress
+`e9e65262...4d68` and lease `69ced239...47e3`. Five complete rounds each saw
+815 tasks, zero permission denials, 815 systematic `map_files` churn records and
+48 `missing-or-ambiguous-canonical-dev-shm` records. There were no deletion
+phases. Source inspection shows the observer classifies every vanished/absent
+`map_files` probe on a still-live task as churn and requires every isolated
+mount namespace to expose exactly one host-canonical `/dev/shm`; these are
+observer semantics defects, not cleanup success evidence.
+
+Next fix that observer with synthetic positive and negative regressions. Then
+independently review a quarantine-resume protocol that binds the retained lease,
+journal prefix, exact quarantine identities, inventory and a fresh corrected
+zero-reference observation. It must use a new recovery packet/evidence identity,
+never rerun the failed packet, never roll back the quarantine and release the
+old lease only after verified terminal deletion success. No build can start
+while this retained lease/root state remains. Counters and application/build
+counts remain unchanged.
+
+Shutdown checkpoint 88, 2026-09-28: dispatch is stopped and every child lane is
+joined in completed state. No recovery, sudo, Docker, build, module, guest or
+application command ran after the stop request. Launcher wrapper PID
+3399308/starttime 83682487, worker PID 3399313/starttime 83682494 and app-server
+PID 3399317/starttime 83682500 remain live. Preserve the old root lease
+`native-exact-build-lease-68cf089a-1.json` SHA-256 `69ced239...47e3`, the old
+journal `6bf12958...ebe`, and both root:root 0700 quarantines at dev/inode
+26/14117 and 26/24701. The originals remain absent. Do not rerun the old cleanup,
+roll back either quarantine, or remove the old lease.
+
+The corrected observer `e6f46761...e4d` and its ten synthetic regressions
+`22043101...eb78` have independent source-review PASS. A distinct recovery
+helper `ad0db6b...f3b`, packet `c59ed2d4...1473` and DRAFT basis
+`fec0e99d...9a6` are preserved but are non-executable and have no independent
+recovery review or release. Their nine-test regression suite currently FAILs
+closed: two fixture metadata/descriptor identity mismatches and one expected
+error-string mismatch; helper self-test, Python compilation, shell syntax, JSON
+parsing and `git diff --check` pass. No recovery evidence was promoted.
+
+Next continuation must first correct those three local regression failures
+without touching protected state, rerun the pure checks, and independently
+review the exact helper/packet/basis against the retained failure. Only after a
+pushed/fetched template checkpoint may it mechanically bind final hashes and
+seek a separate execution review. A released recovery must use its new O_EXCL
+claim/journal, two clean corrected-observer rounds, descriptor-bound deletion
+and old-lease removal only after all four protected paths are absent. Formal
+counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic apps and
+zero successful current-candidate builds remain. The OS goal is incomplete and
+the launcher pause is temporary.

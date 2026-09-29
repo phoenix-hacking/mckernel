@@ -155,6 +155,37 @@ def mount_bad(rows, targets, reference):
     return result
 
 
+def safe_proc_absence(field):
+    """Per-entry fd/map_files races do not create a retained target reference."""
+    return field == 'fd' or field.startswith('fd/') or field == 'map_files' or field.startswith('map_files/')
+
+
+def mount_proof(rows, targets, reference):
+    """A namespace isolated from host /dev/shm is safe if it exposes no target."""
+    ids = [row['mount_id'] for row in rows if is_canonical(row, reference)]
+    violations = mount_bad(rows, targets, reference)
+    if len(ids) > 1:
+        violations.append({'kind': 'ambiguous-canonical-dev-shm', 'mount_ids': ids})
+    # Zero canonical mounts is intentionally complete: mount_bad already proves
+    # this namespace does not bind or mount a coordinate of either target.
+    return violations, ids[0] if len(ids) == 1 else None, len(ids) <= 1
+
+
+def finish_round(current, ending, refs, denials, churn, proofs):
+    """A clean round must cover one unchanged task-identity set end to end."""
+    for who in sorted(current - ending):
+        churn.append({'identity': who, 'field': 'end-of-round', 'resolution': 'exited-or-reused'})
+    for who in sorted(ending - current):
+        churn.append({'identity': who, 'field': 'end-of-round', 'resolution': 'appeared-or-reused'})
+    complete = ({tuple(proof['identity']) for proof in proofs} == current and ending == current and
+                all(proof['complete'] for proof in proofs))
+    return complete, not refs and not denials and not churn and complete
+
+
+def advance_streak(prior, current, clean, streak):
+    return streak + 1 if prior is not None and current == prior and clean else 0
+
+
 def task_set():
     result = set()
     for proc in Path('/proc').iterdir():
@@ -235,8 +266,13 @@ def observe(target_paths):
                 if value is None or value != who:
                     all_reconciled.append({'identity': who, 'field': field,
                                            'resolution': 'exited' if value is None else 'reused'})
+                    churn.append({'identity': who, 'field': field,
+                                  'resolution': 'exited' if value is None else 'reused'})
                 elif field == 'exe':
                     expected_absences.append({'identity': who, 'field': 'exe', 'reason': 'kernel-thread-no-exe'})
+                elif safe_proc_absence(field):
+                    expected_absences.append({'identity': who, 'field': field,
+                                               'reason': 'per-entry-procfs-absence'})
                 else:
                     churn.append({'identity': who, 'field': field, 'resolution': 'still-live'})
 
@@ -284,22 +320,17 @@ def observe(target_paths):
                 except PermissionError:
                     denials.append({'identity': who, 'field': 'ns-or-mountinfo'})
                     continue
-                ids = [row['mount_id'] for row in rows if is_canonical(row, reference)]
-                violations = mount_bad(rows, targets, reference)
-                if len(ids) != 1:
-                    violations.append({'kind': 'missing-or-ambiguous-canonical-dev-shm', 'mount_ids': ids})
+                violations, canonical_id, proof_complete = mount_proof(rows, targets, reference)
                 refs.extend({'identity': who, 'field': 'mount-violation', 'detail': value} for value in violations)
                 proofs.append({'identity': who, 'namespace': namespace, 'mount_ids': [row['mount_id'] for row in rows],
-                               'canonical_mount_id': ids[0] if len(ids) == 1 else None})
+                               'canonical_mount_id': canonical_id, 'complete': proof_complete})
                 if identity(pid, tid) != who:
                     gone(who, 'post-scan')
-            complete_proofs = {tuple(proof['identity']) for proof in proofs} == current
-            clean = not refs and not denials and not churn and complete_proofs
-            if prior is not None and current == prior and clean:
-                pass_streak += 1
-            else:
-                pass_streak = 0
+            ending = task_set()
+            complete_proofs, clean = finish_round(current, ending, refs, denials, churn, proofs)
+            pass_streak = advance_streak(prior, current, clean, pass_streak)
             rounds.append({'round': number, 'task_identities': len(current), 'rescanned_identities': len(current),
+                           'ending_task_identities': len(ending),
                            'identities': [list(item) for item in sorted(current)], 'field_counts': counts,
                            'permission_denials': denials, 'target_references': refs, 'unresolved_churn': churn,
                            'mount_proofs': proofs, 'complete_mount_proofs': complete_proofs,
@@ -341,6 +372,7 @@ if __name__ == '__main__':
     if sys.argv[1:] == ['--self-test']:
         assert self_fd_reference_allowed((8, 8, '1'), 'fd/9', 8, {9})
         assert not self_fd_reference_allowed((8, 8, '1'), 'fd/x', 8, {9})
+        assert safe_proc_absence('map_files/7-8') and not safe_proc_absence('mountinfo')
         assert failure_record(RuntimeError('synthetic'))['status'] == 'FAIL'
         print('observer pure synthetic assertions passed')
     else:
