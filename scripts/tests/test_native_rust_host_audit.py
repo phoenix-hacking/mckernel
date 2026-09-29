@@ -18,6 +18,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
 
 import native_rust_host_audit as host_audit  # noqa: E402
+import rocky_rust_staging as staging  # noqa: E402
 
 
 class NativeRustHostAuditTests(unittest.TestCase):
@@ -44,19 +45,33 @@ class NativeRustHostAuditTests(unittest.TestCase):
         self.manifest = os.path.join(self.repo, *self.manifest_relative.split("/"))
         self.old_root = host_audit.ROOT
         self.old_manifest = host_audit.MANIFEST
+        self.old_expected_inputs = staging.EXPECTED_INPUTS
+        self.old_expected_modules = staging.EXPECTED_MODULES
+        self.original_expected_inputs = copy.deepcopy(staging.EXPECTED_INPUTS)
+        self.original_expected_modules = copy.deepcopy(staging.EXPECTED_MODULES)
         host_audit.ROOT = self.repo
         host_audit.MANIFEST = self.manifest
 
     def tearDown(self):
         host_audit.ROOT = self.old_root
         host_audit.MANIFEST = self.old_manifest
+        staging.EXPECTED_INPUTS = self.old_expected_inputs
+        staging.EXPECTED_MODULES = self.old_expected_modules
         self.temporary.cleanup()
 
     def load_manifest(self):
         with open(self.manifest, "r", encoding="utf-8") as stream:
             return json.load(stream)
 
-    def write_manifest(self, value):
+    def write_manifest(self, value, expected_inputs=None, expected_modules=None):
+        staging.EXPECTED_INPUTS = copy.deepcopy(
+            self.original_expected_inputs
+            if expected_inputs is None else expected_inputs
+        )
+        staging.EXPECTED_MODULES = copy.deepcopy(
+            self.original_expected_modules
+            if expected_modules is None else expected_modules
+        )
         with open(self.manifest, "w", encoding="utf-8") as stream:
             json.dump(value, stream, indent=2, sort_keys=True)
             stream.write("\n")
@@ -80,7 +95,11 @@ class NativeRustHostAuditTests(unittest.TestCase):
         ]
         self.assertEqual(1, len(matches), relative)
         matches[0]["sha256"] = host_audit.sha256(path)
-        self.write_manifest(value)
+        expected_modules = copy.deepcopy(self.original_expected_modules)
+        for module in expected_modules:
+            if module["source_repository_path"] == relative:
+                module["source_sha256"] = matches[0]["sha256"]
+        self.write_manifest(value, expected_modules=expected_modules)
 
     def mutate_resealed_source(self, relative, old, new):
         original = self.original_files[relative].decode("utf-8")
@@ -125,7 +144,7 @@ class NativeRustHostAuditTests(unittest.TestCase):
         value = self.load_manifest()
         value["inputs"] = [item for item in value["inputs"]
                            if item["destination"] != "smp_startup_entry.S"]
-        self.write_manifest(value)
+        self.write_manifest(value, expected_inputs=value["inputs"])
         with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
         self.write_manifest(copy.deepcopy(self.original_manifest))
@@ -562,6 +581,30 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
         with self.assertRaisesRegex(SystemExit, "OS backend prepare boot callback type count=2"):
             host_audit.main()
 
+    def test_os_runtime_create_v5_safety_contract_remains_exact(self):
+        relative = "host-kernel/native-rust/os_runtime.rs"
+        self.mutate_resealed_source(
+            relative,
+            "/// stop, drain, release, or visible teardown.",
+            "/// stop, drain, release, or visible retention.",
+        )
+        with self.assertRaisesRegex(
+            SystemExit, "reviewed Rust escape block prefix differs"
+        ):
+            host_audit.main()
+
+        self.mutate_resealed_source(
+            relative,
+            "/// locking retain the callback surface through the query, and this C ABI never\n"
+            "/// unwinds.",
+            "/// locking retain the callback surface through the query, and this C ABI may\n"
+            "/// unwind.",
+        )
+        with self.assertRaisesRegex(
+            SystemExit, "reviewed Rust escape block prefix differs"
+        ):
+            host_audit.main()
+
     def test_os_runtime_order_is_canonical_across_fresh_checker_import(self):
         relative = "host-kernel/native-rust/os_runtime.rs"
         blocks = dict(host_audit.REVIEWED_RUST_ESCAPE_BLOCKS[relative])
@@ -599,7 +642,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
         value["inputs"] = [
             item for item in value["inputs"] if item.get("destination") != "ikc_master.rs"
         ]
-        self.write_manifest(value)
+        self.write_manifest(value, expected_inputs=value["inputs"])
         with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
 
@@ -621,7 +664,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
                     item for item in value["inputs"]
                     if item.get("destination") != destination
                 ]
-                self.write_manifest(value)
+                self.write_manifest(value, expected_inputs=value["inputs"])
                 with self.assertRaisesRegex(SystemExit, "support input closure"):
                     host_audit.main()
 
@@ -641,7 +684,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             item for item in value["inputs"]
             if item.get("destination") != "device_registry.rs"
         ]
-        self.write_manifest(value)
+        self.write_manifest(value, expected_inputs=value["inputs"])
         with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
 
@@ -661,7 +704,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             item for item in value["inputs"]
             if item.get("destination") != "ihk_ioctl.rs"
         ]
-        self.write_manifest(value)
+        self.write_manifest(value, expected_inputs=value["inputs"])
         with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
 
@@ -681,7 +724,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             item for item in value["inputs"]
             if item.get("destination") != "smp_resource.rs"
         ]
-        self.write_manifest(value)
+        self.write_manifest(value, expected_inputs=value["inputs"])
         with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
 

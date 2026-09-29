@@ -6012,3 +6012,39 @@ wrapper PID 3399308/starttime 83682487 and worker PID 3399313/starttime
 containers and the recoverable 80b capsule remain retained. Formal counters,
 four diagnostic guest apps and zero successful current-candidate builds remain
 unchanged. The launcher pause is temporary and the OS goal is not complete.
+
+Continuation checkpoint 77, 2026-09-28: the phase-0 recursive staging and
+unsafe/FFI source failure family is independently accepted on the exact current
+bytes. The host audit now binds the complete create-v5 and topology-query Safety
+prefixes without weakening exact count/order/top-level/remaining-escape checks.
+Its fixture authority reseal preserves production hard locks while all intended
+negative oracles execute again. The IHK lifecycle contract's sole update binds
+the already-reviewed OS-runtime contract digest without changing readiness or
+credit.
+
+The authoritative fail-fast matrix embeds HEAD, exact file hashes, every
+command, per-command return code and `MATRIX_RC=0`. It passes 119 recursive
+staging/build-surface/host-audit tests, 22 unsafe-ledger tests and 55 IHK
+lifecycle tests (196 total), plus all 16 direct checks. The ledger remains 55
+inputs/637 sites; all 22 Rust files retain the exact non-comment token stream
+from base `1129961b...61f`; closure is `c1ae16ed...47c6`. The optional mapping
+fixture remains skipped because no configured Rust 1.92 was available.
+
+Original harness and evidence-writer failures remain retained: unsupported
+inventory output syntax, 39 fixture early-failure subcases, one stale lifecycle
+contract digest, a non-fail-fast composite, and one passing but provenance-weak
+log. The corrected matrix is
+`native-rust-source-closure-final-20260928-2.log`, SHA-256
+`944e572c...857`; the six-log archive is
+`evidence/stability-native-rust-source-closure-20260928-1.tar.gz`, SHA-256
+`6e9700a2...b1bb`. Exact results and limitations are in
+`stability-native-rust-source-closure-checkpoint-20260928-1.json`.
+
+This is source closure only. Rocky still reports four readiness blockers;
+RS-011 remains NOT_READY, compiler-expanded capture/review is missing and
+credit is forbidden. No build, module load, guest or application ran. After
+this checkpoint is pushed and fetched, obtain a new command-level preparation
+release and create one fresh correctly-moded commit-derived candidate under
+new SHA-derived names with `umask 0022`. Never reuse the deleted failed-80b
+request or paths. Formal counters, four diagnostic guest apps and zero
+successful current-candidate builds remain unchanged.

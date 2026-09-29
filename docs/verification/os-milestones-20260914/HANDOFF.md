@@ -369,3 +369,18 @@ independent review. Only then checkpoint and prepare a fresh correctly-moded
 candidate. No heavy operation is active. Preserve launcher wrapper PID
 3399308/starttime 83682487 and worker PID 3399313/starttime 83682494. The OS
 goal remains incomplete and the launcher pause is temporary.
+
+Checkpoint 77 closes the phase-0 recursive staging/unsafe-ledger source family
+on exact reviewed bytes. The fail-fast matrix passes 196 tests and all 16 direct
+checks; the ledger binds 55 inputs/637 sites and all 22 Rust documentation edits
+are non-comment-token-equivalent to base `1129961b...61f`. See
+`stability-native-rust-source-closure-checkpoint-20260928-1.json` and archive
+`evidence/stability-native-rust-source-closure-20260928-1.tar.gz`.
+
+This grants source preparation only: Rocky retains four readiness blockers,
+RS-011 remains NOT_READY and no build/runtime credit moves. After fetched
+verification, obtain an independent command-level release for one fresh
+SHA-derived candidate, explicitly using `umask 0022`, exact Git mode admission,
+fresh candidate/backup/evidence/manifest/request/output/lease paths, and the
+existing resource floors. Never reuse failed-80b names. Candidate preparation
+does not release Docker execution; any heavy build still needs separate review.

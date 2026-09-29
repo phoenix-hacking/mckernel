@@ -642,6 +642,14 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
     'OS create v5 ABI': '''/// Add the no-effect shutdown dispatch callback while retaining v1-v4 ABI
 /// signatures and exports. The callback is invoked with the exact published
 /// slot/generation and is rollback-safe until a later effect acknowledgement.
+///
+/// # Safety
+/// `owner` is the trusted live native module owner retained by `create_os`'s
+/// initial reference. All eight callbacks remain resident, use their declared
+/// ABI without unwinding, and obey the existing ownership, concurrency, and
+/// locking rules. `shutdown` receives the exact generation under the operation
+/// lock; a nonzero result is pre-effect or rollback-safe, so it performs no
+/// stop, drain, release, or visible teardown.
 ''',
 })
 
@@ -725,7 +733,14 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
     'OS application close ABI': '''/// # Safety
 /// Return the unique successful open after all concurrent invocations end.
 ''',
-    'OS topology query ABI': '/// Query only the running OS\'s retained topology, never a user pointer.\n',
+    'OS topology query ABI': '''/// Query only the running OS's retained topology, never a user pointer.
+///
+/// # Safety
+/// Callers provide only scalar slot, generation, and command values. The exact
+/// generation is leased before any object dereference; operation and admission
+/// locking retain the callback surface through the query, and this C ABI never
+/// unwinds.
+''',
     'OS application open export record': '// SAFETY: These immutable relocations name module-resident ABI exports.\n',
     'OS application invoke export record': '// SAFETY: Immutable relocation with the same module lifetime and namespace.\n',
     'OS application close export record': '// SAFETY: Immutable relocation with the same module lifetime and namespace.\n',
