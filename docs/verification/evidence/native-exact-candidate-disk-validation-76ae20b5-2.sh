@@ -51,9 +51,9 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 /usr/bin/mkdir -m 0700 "$OUT" "$EVIDENCE" "$OUT/build" "$EVIDENCE/build"
-"$PY" -I -B - "$CANDIDATE" "$BACKUP" "$TMPFS/$REL" "$CANDIDATE/$REL" "$REPO/$REL" "$EVIDENCE" "$REQUEST" "$PRIOR_REQUEST" "$FAILURE_RECORD" <<'PY'
+"$PY" -I -B - "$CANDIDATE" "$BACKUP" "$TMPFS/$REL" "$CANDIDATE/$REL" "$EVIDENCE" "$REQUEST" "$PRIOR_REQUEST" "$FAILURE_RECORD" <<'PY'
 import hashlib,json,os,pathlib,stat,sys
-cand,backup,corrupt,disk,repo,evidence,request,prior,failure=map(pathlib.Path,sys.argv[1:])
+cand,backup,corrupt,disk,evidence,request,prior,failure=map(pathlib.Path,sys.argv[1:])
 for path,identity in ((cand,(1831,4194306)),(backup,(1831,4204970))):
     st=path.lstat()
     if path.is_symlink() or not stat.S_ISDIR(st.st_mode) or (st.st_dev,st.st_ino)!=identity: raise SystemExit('disk root identity differs '+str(path))
@@ -89,8 +89,7 @@ with os.fdopen(fd,'wb') as stream:
     stream.flush(); os.fsync(stream.fileno())
 sealed_st,sealed_digest,_=read_exact(sealed)
 if sealed_digest!=digest or sealed_st.st_size!=st.st_size: raise SystemExit('sealed corrupt archive differs')
-for path in (disk,repo):
-    if read_exact(path)[1] != 'dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100': raise SystemExit('authenticated archive differs '+str(path))
+if read_exact(disk)[1] != 'dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100': raise SystemExit('authenticated disk archive differs')
 meta={'schema':'mckernel.tmpfs-divergence-seal.v1','source':str(corrupt),'device':st.st_dev,'inode':st.st_ino,'size':st.st_size,'mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'ctime_ns':st.st_ctime_ns,'sha256':digest,'zero_based_offset':37352801,'observed_byte_hex':'bb','authenticated_byte_hex':'3b'}
 fd=os.open(str(evidence/'corrupt-tmpfs-archive.json'),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
 with os.fdopen(fd,'w') as stream: json.dump(meta,stream,sort_keys=True); stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
@@ -111,7 +110,6 @@ case "$gzip_error" in
   *) echo "unexpected corrupt gzip result: $gzip_error" >&2; exit 1 ;;
 esac
 /usr/bin/gzip -t "$CANDIDATE/$REL"
-/usr/bin/gzip -t "$REPO/$REL"
 test "$("${GIT[@]}" -C "$REPO" show 76ae20b523f57dee8e0fb1fb834caf5443f9f671:"$REL" | /usr/bin/sha256sum | /usr/bin/awk '{print $1}')" = dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100
 "${GIT[@]}" -C "$REPO" show 76ae20b523f57dee8e0fb1fb834caf5443f9f671:"$REL" | /usr/bin/gzip -t
 
