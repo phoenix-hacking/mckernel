@@ -607,11 +607,12 @@ class OwnerTests(unittest.TestCase):
 
         original_walk = owner.os.walk
 
-        def denied_backup_walk(path, followlinks=False, onerror=None):
+        def denied_backup_walk(path, topdown=True, onerror=None, followlinks=False):
             if Path(path) == backup:
                 onerror(PermissionError(13, 'permission denied', str(backup)))
                 return iter(())
-            return original_walk(path, followlinks=followlinks, onerror=onerror)
+            return original_walk(path, topdown=topdown, onerror=onerror,
+                                 followlinks=followlinks)
 
         fake = FakeDocker(changed)
         with mock.patch.object(owner.os, 'walk', side_effect=denied_backup_walk):
