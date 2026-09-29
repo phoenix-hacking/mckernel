@@ -1,6 +1,8 @@
 import hashlib
 import json
+import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -18,6 +20,7 @@ class FakeRunner:
     def __init__(self, repo, files, candidate):
         self.repo, self.files, self.candidate = repo, files, candidate
         self.phases = []
+        self.environments = []
         self.fail_phase = None
         self.dirty = False
         self.head = candidate
@@ -59,6 +62,7 @@ class FakeRunner:
 
     def phase(self, script, cwd, env, log):
         self.phases.append(script.read_text())
+        self.environments.append(dict(env))
         with log.open('a') as stream:
             stream.write('phase %d executed\n' % len(self.phases))
         if self.fail_phase == len(self.phases):
@@ -127,6 +131,123 @@ class DriverTests(unittest.TestCase):
         self.assertEqual([r['exit_code'] for r in result['commands']], [0] * 5)
         self.assertIn('native-rust-build-evidence/bzImage', result['inventory'])
         self.assertFalse(json.loads((self.evidence / 'local-provenance.json').read_text())['github_run'])
+        for env in self.runner.environments:
+            for key in ('RUNNER_TEMP', 'TMPDIR', 'TMP', 'TEMP'):
+                self.assertEqual(env[key], str(self.evidence))
+            self.assertEqual(env['SOURCE_PARENT'], str(self.output / 'source'))
+            self.assertEqual(env['BUILD_DIR'], str(self.output / 'build'))
+        self.assertEqual(self.runner.phases,
+                         list(driver.workflow_bodies(WORKFLOW_TEXT).values()))
+
+    def test_temporary_root_rejects_invalid_paths(self):
+        build = self.root / 'build'
+        build.mkdir()
+        regular = build / 'ordinary-file'
+        regular.write_text('not a directory')
+        link = build / 'link'
+        link.symlink_to(build, target_is_directory=True)
+        outside = self.root / 'outside'
+        outside.mkdir()
+        for path in (Path('relative'), build / '..' / 'outside', outside,
+                     build / 'missing', regular, link, link / 'child'):
+            with self.subTest(path=str(path)):
+                with self.assertRaises(driver.BuildError):
+                    driver.temporary_environment(path, build)
+        for mode in (0o555, 0o666, 0o000):
+            with self.subTest(mode=oct(mode)):
+                build.chmod(mode)
+                try:
+                    with self.assertRaisesRegex(driver.BuildError, 'writable/searchable'):
+                        driver.temporary_environment(build, build)
+                finally:
+                    build.chmod(0o700)
+        with mock.patch.object(driver.os, 'access', return_value=False):
+            with self.assertRaisesRegex(driver.BuildError, 'writable/searchable'):
+                driver.temporary_environment(build, build)
+        child = build / 'child'
+        child.mkdir()
+        self.assertEqual(driver.temporary_environment(child, build),
+                         {k: str(child) for k in ('RUNNER_TEMP', 'TMPDIR', 'TMP', 'TEMP')})
+
+    def test_run_rejects_symlinked_evidence_ancestor_before_creation(self):
+        link = self.root / 'evidence-link'
+        link.symlink_to(self.output, target_is_directory=True)
+        self.evidence = link / 'build'
+        with self.assertRaisesRegex(driver.BuildError, 'real directory'):
+            self.execute()
+        self.assertFalse((self.output / 'build').exists())
+        self.assertEqual(self.runner.phases, [])
+
+    def test_fresh_python_tempfile_compiles_and_executes_in_bound_root(self):
+        compiler = shutil.which('cc', path=driver.ENV['PATH'])
+        if compiler is None:
+            self.skipTest('host C compiler unavailable')
+        self.evidence.mkdir()
+        env = dict(driver.ENV, **driver.temporary_environment(self.evidence, self.evidence))
+        # The coordinator process has already cached a different temp directory.
+        self.assertNotEqual(Path(tempfile.gettempdir()), self.evidence)
+        probe = '''import os
+from pathlib import Path
+import subprocess
+import tempfile
+root = Path(os.environ['RUNNER_TEMP'])
+assert Path(tempfile.gettempdir()) == root
+with tempfile.TemporaryDirectory() as name:
+    directory = Path(name)
+    assert directory.parent == root
+    source = directory / 'registry.c'
+    binary = directory / 'registry-tests'
+    source.write_text('#include <stdio.h>\\nint main(void) { puts("registry-temp-ok"); return 0; }\\n')
+    subprocess.run([COMPILER, str(source), '-o', str(binary)], check=True)
+    result = subprocess.run([str(binary)], stdout=subprocess.PIPE, check=True)
+    assert result.stdout == b'registry-temp-ok\\n'
+    print(result.stdout.decode('ascii'), end='')
+assert not directory.exists()
+'''.replace('COMPILER', repr(compiler))
+        script = self.root / 'registry-temp-phase.sh'
+        # Match the workflow's fresh isolated Python invocation, through the
+        # production phase runner rather than changing this process's cache.
+        script.write_text("/usr/bin/python3 -E -s <<'PY'\n" + probe + 'PY\n')
+        log = self.root / 'registry-temp-phase.log'
+        self.assertEqual(driver.Runner().phase(script, self.repo, env, log), 0,
+                         log.read_text())
+        self.assertEqual(log.read_bytes(), b'registry-temp-ok\n')
+        self.assertEqual(list(self.evidence.iterdir()), [])
+
+    def test_runner_temp_alone_does_not_select_python_tempfile_root(self):
+        self.evidence.mkdir()
+        default = self.root / 'default-temp'
+        default.mkdir()
+        env = dict(driver.ENV, RUNNER_TEMP=str(self.evidence), TMPDIR=str(default))
+        probe = ('import os, tempfile; from pathlib import Path; '
+                 'assert Path(tempfile.gettempdir()) != Path(os.environ["RUNNER_TEMP"]); '
+                 'print(tempfile.gettempdir())')
+        result = subprocess.run(['/usr/bin/python3', '-E', '-s', '-c', probe],
+                                env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), os.fsencode(default))
+
+    def test_phase_execution_denial_remains_failure(self):
+        self.evidence.mkdir()
+        env = dict(driver.ENV, **driver.temporary_environment(self.evidence, self.evidence))
+        script = self.root / 'denied-execution.sh'
+        # Model the EACCES exec failure from a noexec mount with file permissions;
+        # this needs no mount privilege and is not evidence of mount policy.
+        script.write_text("""/usr/bin/python3 -E -s <<'PY'
+from pathlib import Path
+import subprocess
+import tempfile
+with tempfile.TemporaryDirectory() as name:
+    binary = Path(name) / 'registry-tests'
+    binary.write_text('#!/bin/sh\\nexit 0\\n')
+    binary.chmod(0o644)
+    subprocess.run([str(binary)], check=True)
+PY
+""")
+        log = self.root / 'denied-execution.log'
+        self.assertNotEqual(driver.Runner().phase(script, self.repo, env, log), 0)
+        self.assertIn(b'PermissionError: [Errno 13] Permission denied', log.read_bytes())
+        self.assertEqual(list(self.evidence.iterdir()), [])
 
     def test_successful_commands_without_artifacts_fail(self):
         self.runner.create_artifacts = False

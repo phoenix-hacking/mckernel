@@ -349,14 +349,46 @@ def verify_artifacts(root):
     bound_files(root, rows)
 
 
+def temporary_environment(root, evidence_root):
+    """Bind every phase's temporary files to the reviewed executable mount.
+
+    Do not resolve links before checking them: a lexical evidence path must not
+    silently redirect fixture executables outside the retained build evidence.
+    Mount execution policy remains part of the separately reviewed container
+    profile; directory search permission alone cannot prove a mount is exec.
+    """
+    root, evidence_root = Path(root), Path(evidence_root)
+    if any(not p.is_absolute() or '..' in p.parts for p in (root, evidence_root)):
+        raise BuildError('temporary root must be absolute without traversal')
+    try:
+        root.relative_to(evidence_root)
+    except ValueError:
+        raise BuildError('temporary root escapes evidence build root')
+    try:
+        for path in reversed((root,) + tuple(root.parents)):
+            if not stat.S_ISDIR(path.lstat().st_mode):
+                raise BuildError('temporary root component is not a real directory: ' + str(path))
+        mode = root.lstat().st_mode
+        if (not mode & 0o222 or not mode & 0o111 or
+                not os.access(str(root), os.W_OK | os.X_OK)):
+            raise BuildError('temporary root is not writable/searchable: ' + str(root))
+    except OSError as exc:
+        raise BuildError('temporary root is unavailable: ' + str(root) + ': ' + str(exc))
+    return {key: str(root) for key in ('RUNNER_TEMP', 'TMPDIR', 'TMP', 'TEMP')}
+
+
 def run(repo, candidate, assets, output, evidence, manifest, runner=None):
-    repo, assets, output, evidence = [Path(p).resolve() for p in (repo, assets, output, evidence)]
+    repo, assets, output = [Path(p).resolve() for p in (repo, assets, output)]
+    evidence = Path(evidence)
+    # Validate existing ancestors before creating a fresh evidence directory.
+    temporary_environment(evidence.parent, evidence.parent)
     evidence.mkdir(parents=True, exist_ok=False)
     runner = runner or Runner()
     receipt = {'status': 'FAIL', 'candidate_sha': candidate, 'phase': 'identity',
                'scope': 'local exact-build only; no application/production acceptance',
                'commands': [], 'started_at': time.time()}
     try:
+        temporary_env = temporary_environment(evidence, evidence)
         if any(output.iterdir()):
             raise BuildError('output is not fresh')
         for i, path in enumerate((repo, assets, output, evidence)):
@@ -367,9 +399,13 @@ def run(repo, candidate, assets, output, evidence, manifest, runner=None):
         verify_inputs(repo, candidate, assets, inputs, runner)
         bodies = workflow_bodies(regular(repo / WORKFLOW).read_text())
         env = dict(ENV, GITHUB_WORKSPACE=str(repo), EXPECTED_HEAD_SHA=candidate,
-                   RUNNER_TEMP=str(evidence), SOURCE_ASSETS=str(assets),
+                   SOURCE_ASSETS=str(assets),
                    SOURCE_PARENT=str(output / 'source'), BUILD_DIR=str(output / 'build'),
                    GITHUB_ENV=str(evidence / 'phase.env'), GITHUB_PATH=str(evidence / 'phase.path'))
+        # Runner.phase execs a fresh shell, and workflow Python commands start
+        # fresh interpreters. Thus tempfile's cached parent-process choice does
+        # not override this environment (including under Python -E -s).
+        env.update(temporary_env)
         (evidence / 'phase.env').touch()
         (evidence / 'phase.path').touch()
         atomic(evidence / 'local-provenance.json', {
