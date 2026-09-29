@@ -9,6 +9,8 @@ import ctypes
 import hashlib
 import json
 import os
+import re
+import signal
 import stat
 import subprocess
 import sys
@@ -36,6 +38,7 @@ INPUTS = SCRATCH / 'native-exact-inputs-68cf089a-1.json'
 REQUEST = SCRATCH / 'native-exact-build-request-68cf089a-1.json'
 INVENTORY = SCRATCH / 'native-exact-complete-worktree-inventory-68cf089a-1.json'
 RELEASE = SCRATCH / 'native-exact-candidate-delete-release-68cf089a-1.json'
+PACKET = Path('/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-cleanup-execution-68cf089a-1.sh')
 RET_SHA = 'eed1879bd35c62d7aa629189dfc0c46254680209ab02f933278c70c8cf9880c6'
 PREP_SHA = '78e2b5c44e9ae00f2f463ac8b93723e26d00877fbbe7ecfb285d1d89d6404264'
 INPUTS_SHA = 'ae0c5f74e3e3f06176c46f2f174b1109c11a4e88f23ee71fd7432e6325262abd'
@@ -45,10 +48,21 @@ RET_RECORD_SHA = '129d25f80a29fc321cae94c3e1f4db4279e42c1b100ea41c6406a3a3e133f7
 OBSERVER_SHA = '4a15271df7e14f1a95136579f157f0fc719048143547be6a54a242b99c3f8e05'
 INVENTORY_SHA = '743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0'
 RELEASE_SHA = 'UNSET-REQUIRES-INDEPENDENT-RELEASE-SHA256'
+RELEASE_SENTINEL = 'UNSET-REQUIRES-INDEPENDENT-RELEASE-SHA256'
+FINAL_DELETER_SENTINEL = '__REPLACE_WITH_FINAL_DELETER_SHA256__'
+PACKET_RELEASE_SENTINEL = '__REPLACE_WITH_RELEASE_SHA256__'
 ROOTS = ((C, QC, 26, 14117, 10462), (B, QB, 26, 24701, 87))
 FRESHNESS_SECONDS = 300
 RENAME_NOREPLACE = 1
 LIBC = ctypes.CDLL(None, use_errno=True)
+
+
+class TerminationRequested(RuntimeError):
+    pass
+
+
+def request_termination(signum, _frame):
+    raise TerminationRequested('termination signal ' + str(signum))
 
 
 def fail(message):
@@ -67,10 +81,32 @@ def sha(path):
     return digest.hexdigest()
 
 
+def reject_duplicate_pairs(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            fail('duplicate JSON key: ' + key)
+        result[key] = value
+    return result
+
+
+def exact_regular_bytes(path):
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    try:
+        if not stat.S_ISREG(os.fstat(fd).st_mode):
+            fail('required regular input has wrong type: ' + str(path))
+        chunks = []
+        while True:
+            block = os.read(fd, 1 << 20)
+            if not block:
+                return b''.join(chunks)
+            chunks.append(block)
+    finally:
+        os.close(fd)
+
+
 def exact_json(path):
-    if path.is_symlink() or not path.is_file():
-        fail('required regular input missing: ' + str(path))
-    return json.loads(path.read_text(encoding='utf-8'))
+    return json.loads(exact_regular_bytes(path).decode('utf-8'), object_pairs_hook=reject_duplicate_pairs)
 
 
 def write_all(fd, data):
@@ -155,7 +191,110 @@ def parse_utc(value):
     return datetime.fromisoformat(value[:-1] + '+00:00').timestamp()
 
 
-def validate_receipt():
+def require_exact_keys(value, keys, label):
+    if type(value) is not dict or set(value) != set(keys):
+        fail(label + ' keys mismatch')
+
+
+def require_path_hash(value, path, digest, label):
+    require_exact_keys(value, ('path', 'sha256'), label)
+    if type(value['path']) is not str or type(value['sha256']) is not str:
+        fail(label + ' types mismatch')
+    if value != {'path': path, 'sha256': digest}:
+        fail(label + ' binding mismatch')
+
+
+def validate_release():
+    release_bytes = exact_regular_bytes(RELEASE)
+    if hashlib.sha256(release_bytes).hexdigest() != RELEASE_SHA:
+        fail('release record hash mismatch')
+    release = json.loads(release_bytes.decode('utf-8'), object_pairs_hook=reject_duplicate_pairs)
+    require_exact_keys(release, (
+        'schema_version', 'record_kind', 'status', 'packet_id', 'source_checkpoint',
+        'template_deleter', 'template_packet', 'observer', 'generator', 'inventory',
+        'candidate', 'backup', 'artifacts', 'one_shot', 'retry', 'rollback',
+        'acceptance_credit'), 'release')
+    if (type(release['schema_version']) is not int or release['schema_version'] != 3 or
+            release['record_kind'] != 'native_exact_candidate_cleanup_release_basis' or
+            release['status'] != 'PASS_ONE_SHOT_CLEANUP' or
+            release['packet_id'] != 'native-exact-candidate-cleanup-68cf089a-1' or
+            type(release['source_checkpoint']) is not str or
+            re.fullmatch(r'[0-9a-f]{40}', release['source_checkpoint']) is None or
+            type(release['one_shot']) is not bool or release['one_shot'] is not True or
+            type(release['retry']) is not bool or release['retry'] is not False or
+            type(release['rollback']) is not bool or release['rollback'] is not False or
+            type(release['acceptance_credit']) is not bool or release['acceptance_credit'] is not False):
+        fail('release scalar contract mismatch')
+    require_path_hash(release['observer'], str(OBSERVER), OBSERVER_SHA, 'observer')
+    require_path_hash(release['generator'], 'scripts/native_rust_exact_candidate_inventory.py',
+                      'ed2c2eaf1200da67625ed3438d4790c55f6dbf60f9ba105505c7df8807bf1678', 'generator')
+    inventory = release['inventory']
+    require_exact_keys(inventory, ('path', 'sha256', 'archive_path', 'archive_sha256'), 'inventory')
+    if inventory != {
+            'path': str(INVENTORY), 'sha256': INVENTORY_SHA,
+            'archive_path': 'docs/verification/evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz',
+            'archive_sha256': '6be734da7ee54eec0523fa961a0264b5242637c26d56952f524b84c907f0b044'}:
+        fail('inventory release binding mismatch')
+    identity_keys = ('path', 'quarantine_path', 'device_number', 'inode', 'uid', 'gid',
+                     'mode', 'tree_inode_count')
+    candidate_keys = identity_keys + ('commit', 'ihk_commit')
+    require_exact_keys(release['candidate'], candidate_keys, 'candidate')
+    require_exact_keys(release['backup'], identity_keys, 'backup')
+    expected_candidate = {'path': str(C), 'quarantine_path': str(QC), 'device_number': 26,
+                          'inode': 14117, 'uid': 1000, 'gid': 1000, 'mode': '0755',
+                          'tree_inode_count': 10462,
+                          'commit': '68cf089a22b0a0c034a7f1fcc695853fbf5c07eb',
+                          'ihk_commit': '3114d9e7101ad52030eb3effa849a5c108972a1f'}
+    expected_backup = {'path': str(B), 'quarantine_path': str(QB), 'device_number': 26,
+                       'inode': 24701, 'uid': 1000, 'gid': 1000, 'mode': '0755',
+                       'tree_inode_count': 87}
+    if release['candidate'] != expected_candidate or release['backup'] != expected_backup:
+        fail('release root identity mismatch')
+    for item in (release['candidate'], release['backup']):
+        for key in ('device_number', 'inode', 'uid', 'gid', 'tree_inode_count'):
+            if type(item[key]) is not int:
+                fail('release root integer type mismatch: ' + key)
+    artifacts = release['artifacts']
+    expected_artifacts = {
+        'inputs': (str(INPUTS), INPUTS_SHA), 'request': (str(REQUEST), REQUEST_SHA),
+        'preparation_archive': (str(PREP), PREP_SHA),
+        'preparation_record': (str(PREP_RECORD), PREP_RECORD_SHA),
+        'retention_capsule': (str(RET), RET_SHA),
+        'retention_record': (str(RET_RECORD), RET_RECORD_SHA)}
+    require_exact_keys(artifacts, expected_artifacts, 'artifacts')
+    for key, (path, digest) in expected_artifacts.items():
+        require_path_hash(artifacts[key], path, digest, 'artifact ' + key)
+    require_exact_keys(release['template_deleter'], ('path', 'sha256'), 'template deleter')
+    require_exact_keys(release['template_packet'], ('path', 'sha256'), 'template packet')
+    if release['template_deleter']['path'] != 'docs/verification/evidence/native-exact-candidate-delete-68cf089a-1.py':
+        fail('template deleter path mismatch')
+    if release['template_packet']['path'] != 'docs/verification/evidence/native-exact-candidate-cleanup-execution-68cf089a-1.sh':
+        fail('template packet path mismatch')
+    for field in ('template_deleter', 'template_packet'):
+        if type(release[field]['sha256']) is not str or re.fullmatch(r'[0-9a-f]{64}', release[field]['sha256']) is None:
+            fail(field + ' digest malformed')
+    helper = Path(__file__).read_bytes()
+    helper_line = ("RELEASE_SHA = '" + RELEASE_SHA + "'").encode()
+    sentinel_line = ("RELEASE_SHA = '" + RELEASE_SENTINEL + "'").encode()
+    if helper.count(helper_line) != 1:
+        fail('final helper release assignment count mismatch')
+    helper_template = helper.replace(helper_line, sentinel_line)
+    if hashlib.sha256(helper_template).hexdigest() != release['template_deleter']['sha256']:
+        fail('final helper differs from reviewed template')
+    packet = PACKET.read_bytes()
+    pattern = re.compile(rb'(?m)^FINAL_DELETER_SHA=([0-9a-f]{64}); RELEASE_SHA=([0-9a-f]{64})$')
+    matches = list(pattern.finditer(packet))
+    if len(matches) != 1 or matches[0].group(1).decode() != sha(Path(__file__)) or matches[0].group(2).decode() != RELEASE_SHA:
+        fail('final packet pin assignment mismatch')
+    replacement = ('FINAL_DELETER_SHA=' + FINAL_DELETER_SENTINEL +
+                   '; RELEASE_SHA=' + PACKET_RELEASE_SENTINEL).encode()
+    packet_template = pattern.sub(replacement, packet)
+    if hashlib.sha256(packet_template).hexdigest() != release['template_packet']['sha256']:
+        fail('final packet differs from reviewed template')
+    return release
+
+
+def validate_receipt(release):
     receipt = exact_json(PREFLIGHT)
     required = {'schema': 'mckernel.native-exact-candidate-delete-preflight.v2',
                 'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
@@ -165,18 +304,30 @@ def validate_receipt():
                 'retention_record_sha256': RET_RECORD_SHA, 'request_sha256': REQUEST_SHA,
                 'inputs_sha256': INPUTS_SHA, 'release_record_path': str(RELEASE),
                 'release_record_sha256': RELEASE_SHA, 'candidate_sha': '68cf089a22b0a0c034a7f1fcc695853fbf5c07eb',
-                'ihk_sha': '3114d9e7101ad52030eb3effa849a5c108972a1f', 'no_active_docker_binds': True}
+                'ihk_sha': '3114d9e7101ad52030eb3effa849a5c108972a1f', 'no_active_docker_binds': True,
+                'source_checkpoint': release['source_checkpoint'], 'packet_sha256': sha(PACKET),
+                'candidate_git_clean': True, 'ihk_git_clean': True}
+    if set(receipt) != set(required) | {'observed_at_utc', 'admission_started_boottime_ns', 'roots'}:
+        fail('preflight receipt keys mismatch')
     for key, value in required.items():
-        if receipt.get(key) != value:
+        if type(receipt.get(key)) is not type(value) or receipt.get(key) != value:
             fail('preflight receipt mismatch: ' + key)
     observed = parse_utc(receipt.get('observed_at_utc'))
     if observed > time.time() + 5 or time.time() - observed > FRESHNESS_SECONDS:
         fail('preflight receipt stale')
+    started = receipt.get('admission_started_boottime_ns')
+    now_boottime = time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+    if type(started) is not int or started > now_boottime or now_boottime - started > FRESHNESS_SECONDS * 1_000_000_000:
+        fail('preflight admission window stale')
     receipt_roots = receipt.get('roots')
     if type(receipt_roots) is not list or len(receipt_roots) != 2:
         fail('preflight roots malformed')
     expected = {(str(original), dev, inode) for original, _q, dev, inode, _count in ROOTS}
-    actual = {(item.get('path'), item.get('device_number'), item.get('inode')) for item in receipt_roots if type(item) is dict}
+    if not all(type(item) is dict and set(item) == {'path', 'device_number', 'inode'} and
+               type(item['path']) is str and type(item['device_number']) is int and
+               type(item['inode']) is int for item in receipt_roots):
+        fail('preflight root field types mismatch')
+    actual = {(item.get('path'), item.get('device_number'), item.get('inode')) for item in receipt_roots}
     if actual != expected:
         fail('preflight root identities mismatch')
 
@@ -426,6 +577,9 @@ def capture_observer():
 def main():
     if os.geteuid() != 0:
         fail('root-only helper')
+    signal.signal(signal.SIGTERM, request_termination)
+    signal.signal(signal.SIGINT, request_termination)
+    release = validate_release()
     journal = Journal()
     lease = False
     try:
@@ -435,7 +589,7 @@ def main():
                                          'inventory_sha256': INVENTORY_SHA, 'inputs_sha256': INPUTS_SHA,
                                          'release_sha256': RELEASE_SHA, 'free_before': before,
                                          'planned_roots': survivors()})
-        validate_receipt()
+        validate_receipt(release)
         for path, value in ((RET, RET_SHA), (PREP, PREP_SHA), (PREP_RECORD, PREP_RECORD_SHA),
                             (RET_RECORD, RET_RECORD_SHA), (INPUTS, INPUTS_SHA), (REQUEST, REQUEST_SHA),
                             (INVENTORY, INVENTORY_SHA), (RELEASE, RELEASE_SHA), (OBSERVER, OBSERVER_SHA)):

@@ -461,3 +461,11 @@ identities and both original tmpfs roots remain live and unchanged. Next repair
 and independently review the draft, then mechanically pin and review the exact
 final helper/packet before any one-shot root run. Do not treat this checkpoint
 as cleanup authority, retry authority, build acceptance or OS completion.
+
+Checkpoint 85 supersedes that defective draft: helper `0324772c...9c80`, packet
+`c9303cfb...562c` and acyclic DRAFT basis `a6983f74...f593a` PASS independent
+source-template review and ten pure regressions. They remain non-executable by
+construction. Commit/push/fetch these exact templates, set only the reviewed
+source/status/helper/release pins, then seek independent final execution review
+before any sudo or mutation. The original roots and all retained evidence stay
+protected; success would reclaim space only and changes no acceptance count.

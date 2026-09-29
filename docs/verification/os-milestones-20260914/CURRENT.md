@@ -6269,3 +6269,26 @@ commit/push/fetch those exact bytes before one fresh preflight. No automatic
 retry is permitted. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and
 0/7; four diagnostic applications and zero successful current-candidate
 builds remain. The OS goal is incomplete and this launcher pause is temporary.
+
+Continuation checkpoint 85, 2026-09-28: the cleanup release design now PASSes
+independent source-template review without root execution. The reviewed helper
+`0324772c...9c80` hashes and parses the same release bytes, rejects duplicate
+keys and scalar type aliases, validates the exact v3 release/v2 preflight, and
+normalizes only its release pin plus the packet's two final pins. Reviewed
+packet `c9303cfb...562c` fixes the retention-record path, direct input hashes,
+zero-container capture, ordinary QEMU matching, 16/12/4-GiB capacity floors,
+hardened candidate/IHK cleanliness, BOOTTIME-bounded admission, raw O_EXCL
+release/preflight writes, self-normalization before sudo, a TERM exception path
+and one sanitized helper attempt. Draft basis `a6983f74...f593a` contains no
+final/self hash cycle and remains fail-closed with DRAFT status, an unset source
+checkpoint and unset final pins.
+
+Ten pure regressions PASS, including an executable temporary final-join model:
+the helper accepts exactly the normalized template/basis/helper/packet closure
+and rejects duplicate JSON keys and integer-for-boolean substitution. See
+`stability-native-exact-cleanup-template-readiness-20260929-1.json`. No cleanup,
+sudo, Docker, build, module, guest or application ran; both tmpfs roots remain
+untouched. Next commit/push/fetch this exact template. Then make only the four
+review-authorized substitutions, rerun the checks, obtain an independent exact
+mechanical-diff/execution review, commit/push/fetch final bytes and remeasure
+the fresh preflight before the single root attempt. Counters remain unchanged.

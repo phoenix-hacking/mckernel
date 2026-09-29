@@ -1,25 +1,81 @@
 {
-  "allowed_mechanical_substitutions": ["final_deleter_sha256", "release_record_sha256", "status to PASS_ONE_SHOT_CLEANUP after independent review"],
-  "candidate": {"commit": "68cf089a22b0a0c034a7f1fcc695853fbf5c07eb", "identity": "dev=26,inode=14117,mode=0755,count=10462"},
-  "backup": {"identity": "dev=26,inode=24701,mode=0755,count=87", "name": "mckernel-exact-metadata-backup-68cf089a-1"},
-  "complete_inventory_archive": {"path": "docs/verification/evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz", "sha256": "6be734da7ee54eec0523fa961a0264b5242637c26d56952f524b84c907f0b044"},
-  "expected_independent_reviewer_status": "PASS_ONE_SHOT_CLEANUP",
-  "final_deleter_sha256": "UNSET_REQUIRES_FINAL_LOCAL_DELETER_PIN",
-  "inputs_sha256": "ae0c5f74e3e3f06176c46f2f174b1109c11a4e88f23ee71fd7432e6325262abd",
-  "inventory_sha256": "743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0",
-  "observer_sha256": "4a15271df7e14f1a95136579f157f0fc719048143547be6a54a242b99c3f8e05",
+  "acceptance_credit": false,
+  "artifacts": {
+    "inputs": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-68cf089a-1.json",
+      "sha256": "ae0c5f74e3e3f06176c46f2f174b1109c11a4e88f23ee71fd7432e6325262abd"
+    },
+    "preparation_archive": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-preparation-68cf089a-20260929-1.tar.gz",
+      "sha256": "78e2b5c44e9ae00f2f463ac8b93723e26d00877fbbe7ecfb285d1d89d6404264"
+    },
+    "preparation_record": {
+      "path": "/home/holden/mckernel/docs/verification/stability-native-exact-candidate-preparation-checkpoint-20260929-1.json",
+      "sha256": "bc8b3a6d819208b7266e39bb91862ddbacba5ec700dcf14b960fe7857aa2be99"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-68cf089a-1.json",
+      "sha256": "25f820e2994d41427ed16cf5f062d647125ccb7144f63afe618e88ccce7f576c"
+    },
+    "retention_capsule": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-prepared-candidate-retention-68cf089a-20260929-1.tar.gz",
+      "sha256": "eed1879bd35c62d7aa629189dfc0c46254680209ab02f933278c70c8cf9880c6"
+    },
+    "retention_record": {
+      "path": "/home/holden/mckernel/docs/verification/stability-native-exact-prepared-candidate-retention-20260929-1.json",
+      "sha256": "129d25f80a29fc321cae94c3e1f4db4279e42c1b100ea41c6406a3a3e133f7b6"
+    }
+  },
+  "backup": {
+    "device_number": 26,
+    "gid": 1000,
+    "inode": 24701,
+    "mode": "0755",
+    "path": "/dev/shm/mckernel-exact-metadata-backup-68cf089a-1",
+    "quarantine_path": "/dev/shm/.mckernel-quarantine-mckernel-exact-metadata-backup-68cf089a-1",
+    "tree_inode_count": 87,
+    "uid": 1000
+  },
+  "candidate": {
+    "commit": "68cf089a22b0a0c034a7f1fcc695853fbf5c07eb",
+    "device_number": 26,
+    "gid": 1000,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "inode": 14117,
+    "mode": "0755",
+    "path": "/dev/shm/mckernel-exact-candidate-68cf089a-1",
+    "quarantine_path": "/dev/shm/.mckernel-quarantine-mckernel-exact-candidate-68cf089a-1",
+    "tree_inode_count": 10462,
+    "uid": 1000
+  },
+  "generator": {
+    "path": "scripts/native_rust_exact_candidate_inventory.py",
+    "sha256": "ed2c2eaf1200da67625ed3438d4790c55f6dbf60f9ba105505c7df8807bf1678"
+  },
+  "inventory": {
+    "archive_path": "docs/verification/evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz",
+    "archive_sha256": "6be734da7ee54eec0523fa961a0264b5242637c26d56952f524b84c907f0b044",
+    "path": "/home/holden/mckernel-work/scratch/native-exact-complete-worktree-inventory-68cf089a-1.json",
+    "sha256": "743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0"
+  },
+  "observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-1.py",
+    "sha256": "4a15271df7e14f1a95136579f157f0fc719048143547be6a54a242b99c3f8e05"
+  },
+  "one_shot": true,
   "packet_id": "native-exact-candidate-cleanup-68cf089a-1",
-  "preparation_archive_sha256": "78e2b5c44e9ae00f2f463ac8b93723e26d00877fbbe7ecfb285d1d89d6404264",
-  "preparation_record_sha256": "bc8b3a6d819208b7266e39bb91862ddbacba5ec700dcf14b960fe7857aa2be99",
-  "prohibited_changes": ["target identity, inventory, capsule, source checkpoint, observer, candidate or backup semantics", "release before independent PASS_ONE_SHOT_CLEANUP review", "retry, rollback, cleanup, or deletion of failed packet evidence"],
   "record_kind": "native_exact_candidate_cleanup_release_basis",
-  "release_record_sha256": "UNSET_REQUIRES_FINAL_RELEASE_RECORD_PIN",
-  "request_sha256": "25f820e2994d41427ed16cf5f062d647125ccb7144f63afe618e88ccce7f576c",
-  "retention_capsule_sha256": "eed1879bd35c62d7aa629189dfc0c46254680209ab02f933278c70c8cf9880c6",
-  "retention_record_sha256": "129d25f80a29fc321cae94c3e1f4db4279e42c1b100ea41c6406a3a3e133f7b6",
-  "schema_version": 2,
-  "source_checkpoint": "7e008f468932c016e1768e29867271f325d642ab",
+  "retry": false,
+  "rollback": false,
+  "schema_version": 3,
+  "source_checkpoint": "UNSET_REQUIRES_TEMPLATE_CHECKPOINT",
   "status": "DRAFT_NOT_RELEASED",
-  "template_deleter_sha256": "3803cf64023f06a030a795a7c035177f0dd32563efd660ba3dde4e36f4fe1eb0",
-  "terminology": {"candidate": "mckernel-exact-candidate-68cf089a-1", "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"}
+  "template_deleter": {
+    "path": "docs/verification/evidence/native-exact-candidate-delete-68cf089a-1.py",
+    "sha256": "0324772c7b07f0b087cca07c7424423d12cc3c0fed1bd1ea9554c8c716a19c80"
+  },
+  "template_packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-cleanup-execution-68cf089a-1.sh",
+    "sha256": "c9303cfb984f73d78b3dda5e7ec65395815b892e509b5babe16e53488a81562c"
+  }
 }
