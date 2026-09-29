@@ -8,6 +8,13 @@ from pathlib import Path
 TERMINAL_CONTAINER_ID = 'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9'
 RENAME_NOREPLACE = 1
 OBSERVER_SOURCE = Path(__file__).resolve().parents[1] / 'docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-2.py'
+READ_CHUNK = 1 << 20
+# These bind the two retained inputs, rather than allowing an attacker to turn
+# a path replacement or a growing file into an unbounded root-side read.  The
+# released inputs are currently 5.3 MiB and 11.6 MiB respectively.
+MAX_MANIFEST_BYTES = 16 << 20
+MAX_CAPSULE_BYTES = 32 << 20
+MAX_OBSERVER_SOURCE_BYTES = 16 << 20
 class RetirementError(RuntimeError): pass
 def fail(s): raise RetirementError(s)
 def digest_bytes(b): return hashlib.sha256(b).hexdigest()
@@ -31,18 +38,36 @@ def same(actual,wanted,root=False):
     if not isinstance(wanted,dict) or any(actual.get(k)!=wanted.get(k) for k in fields) or actual['kind'] != wanted.get('kind','directory' if root else None): fail(('root' if root else 'member')+' identity mismatch')
 def safe_name(n):
     if not isinstance(n,str) or not n or n in ('.','..') or '/' in n or '\0' in n: fail('unsafe name')
-def readfd(fd):
-    a=[]
+def readfd(fd, limit, expected_size=None):
+    """Read one already-open regular file with an explicit finite bound."""
+    if not isinstance(limit,int) or limit < 0: fail('invalid read cap')
+    if expected_size is not None and (not isinstance(expected_size,int) or expected_size < 0 or expected_size > limit): fail('artifact oversize')
+    a=[]; total=0
     while True:
-        b=os.read(fd,1<<20)
-        if not b:return b''.join(a)
+        b=os.read(fd,min(READ_CHUNK,limit-total+1))
+        if not b:
+            if expected_size is not None and total != expected_size: fail('artifact short read')
+            return b''.join(a)
+        total += len(b)
+        if total > limit: fail('artifact oversize')
         a.append(b)
-def stable_read(path):
+def digest_fd(fd, expected_size, limit=None):
+    """Hash a fixed-size candidate member without retaining its bytes."""
+    if limit is None: limit=expected_size
+    if not isinstance(expected_size,int) or expected_size < 0 or expected_size > limit: fail('candidate member oversize')
+    h=hashlib.sha256(); left=expected_size
+    while left:
+        b=os.read(fd,min(READ_CHUNK,left))
+        if not b: fail('candidate member short read')
+        h.update(b); left-=len(b)
+    if os.read(fd,1): fail('candidate member grew while read')
+    return h.hexdigest()
+def stable_read(path, limit):
     fd=os.open(os.fspath(path),flags())
     try:
         before=os.fstat(fd)
-        if not stat.S_ISREG(before.st_mode):fail('artifact is not regular')
-        data=readfd(fd);after=os.fstat(fd);named=os.stat(os.fspath(path),follow_symlinks=False)
+        if not stat.S_ISREG(before.st_mode) or before.st_size < 0 or before.st_size > limit:fail('artifact is not regular or exceeds cap')
+        data=readfd(fd,limit,before.st_size);after=os.fstat(fd);named=os.stat(os.fspath(path),follow_symlinks=False)
         if identity(before)!=identity(after) or identity(named)!=identity(after):fail('artifact changed while read')
         return data
     finally:os.close(fd)
@@ -85,6 +110,30 @@ def exclusive_fd(path):
     fd=os.open(os.fspath(path),os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|getattr(os,'O_CLOEXEC',0),0o600)
     try: fsync_dir(os.path.dirname(os.path.abspath(os.fspath(path)))); return fd
     except BaseException: os.close(fd); raise
+def exclusive_fd_at(dirfd,name):
+    safe_name(name)
+    fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|getattr(os,'O_CLOEXEC',0),0o600,dir_fd=dirfd)
+    try:
+        os.fsync(fd);check=os.dup(dirfd)
+        try:os.fsync(check)
+        finally:os.close(check)
+        return fd
+    except BaseException: os.close(fd); raise
+def output_stat(dirfd,name):
+    safe_name(name)
+    return os.stat(name,dir_fd=dirfd,follow_symlinks=False)
+def output_exists(dirfd,name):
+    try: output_stat(dirfd,name); return True
+    except FileNotFoundError: return False
+def output_read(dirfd,name,limit=MAX_MANIFEST_BYTES):
+    safe_name(name);fd=os.open(name,flags(),dir_fd=dirfd)
+    try:
+        before=os.fstat(fd)
+        if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1:fail('output member is not a single regular file')
+        data=readfd(fd,limit,before.st_size);after=os.fstat(fd);named=output_stat(dirfd,name)
+        if identity(before)!=identity(after) or identity(named)!=identity(after):fail('output member changed')
+        return data
+    finally:os.close(fd)
 def full_write_json(path,value):
     data=(json.dumps(value,sort_keys=True,separators=(',',':'))+'\n').encode(); fd=exclusive_fd(path)
     try: full_write(fd,data); os.fsync(fd)
@@ -92,7 +141,7 @@ def full_write_json(path,value):
     return digest_bytes(data)
 write_durable=full_write_json
 class Journal:
-    def __init__(self,path): self.path=os.fspath(path);self.fd=exclusive_fd(path)
+    def __init__(self,path,dirfd=None): self.path=os.fspath(path);self.dirfd=dirfd;self.fd=exclusive_fd(self.path) if dirfd is None else exclusive_fd_at(dirfd,self.path)
     def write(self,phase,**kw):
         data=(json.dumps(dict(phase=phase,**kw),sort_keys=True,separators=(',',':'))+'\n').encode();full_write(self.fd,data);os.fsync(self.fd)
     def close(self):
@@ -125,7 +174,7 @@ def inventory_root(path):
                 try:
                     if row['kind']=='file':
                         if os.fstat(child).st_nlink!=1:fail('hardlink alias: '+rel)
-                        row['sha256']=digest_bytes(readfd(child));same(identity(os.fstat(child)),row)
+                        row['sha256']=digest_fd(child,row['size']);same(identity(os.fstat(child)),row)
                     else:walk(child,rel)
                     same(identity(os.stat(name,dir_fd=fd,follow_symlinks=False)),row)
                 finally:os.close(child)
@@ -158,7 +207,7 @@ def artifact_paths(seal,roots):
     return paths
 def manifest_authority(release,roots):
     seal=release['sealed'];manifest_path,capsule_path=artifact_paths(seal,roots)
-    manifest_bytes,capsule_bytes=stable_read(manifest_path),stable_read(capsule_path)
+    manifest_bytes,capsule_bytes=stable_read(manifest_path,MAX_MANIFEST_BYTES),stable_read(capsule_path,MAX_CAPSULE_BYTES)
     for key,data in (('retention_manifest_sha256',manifest_bytes),('retention_manifest_pushed_sha256',manifest_bytes),('retention_manifest_fetched_sha256',manifest_bytes),('capsule_sha256',capsule_bytes),('capsule_pushed_sha256',capsule_bytes),('capsule_fetched_sha256',capsule_bytes)):
         if digest_bytes(data)!=seal.get(key):fail('retention artifact hash mismatch: '+key)
     manifest=exact_json(manifest_bytes)
@@ -257,7 +306,7 @@ def current_boot_id():
     except OSError:fail('current boot id unavailable')
 def validate_observation(v,binding,quarantines,members,root_ids,started,ended):
     if not isinstance(v,dict) or v.get('schema')!='mckernel.read-only-live-reference-snapshot.v7' or v.get('status')!='PASS' or v.get('scan_complete') is not True or v.get('failure') is not None:fail('observer v7 scalar')
-    actual_source=digest_bytes(stable_read(OBSERVER_SOURCE))
+    actual_source=digest_bytes(stable_read(OBSERVER_SOURCE,MAX_OBSERVER_SOURCE_BYTES))
     if v.get('observer_sha256')!=actual_source or binding.get('observer_sha256')!=actual_source or v.get('boot_id')!=binding.get('boot_id') or v.get('boot_id')!=current_boot_id():fail('observer source/boot')
     if not isinstance(v.get('observer_pid'),int) or v['observer_pid']<=0 or not isinstance(v.get('observer_starttime'),str):fail('observer process identity')
     observed_start,observed_end=parse_utc(v.get('started_at_utc')),parse_utc(v.get('ended_at_utc'))
@@ -308,7 +357,7 @@ def verify_entry(fd,name,wanted,dev):
     if actual['kind']=='file':
         c=open_checked(fd,name,wanted)
         try:
-            if os.fstat(c).st_nlink!=1 or digest_bytes(readfd(c))!=wanted.get('sha256'):fail('file changed/hardlinked')
+            if os.fstat(c).st_nlink!=1 or digest_fd(c,wanted['size'])!=wanted.get('sha256'):fail('file changed/hardlinked')
             same(identity(os.fstat(c)),wanted)
         finally:os.close(c)
     elif actual['kind']=='symlink':
@@ -329,7 +378,9 @@ def delete_verified(fd,expected,prefix,dev,journal,rootname,wanted_dir):
         else:
             journal.write('delete-entry-before',root=rootname,path=rel,operation='unlink');verify_entry(fd,name,wanted,dev);os.unlink(name,dir_fd=fd);fsync_dir(fd);journal.write('delete-entry-after',root=rootname,path=rel,operation='unlink')
     same(identity(os.fstat(fd)),wanted_dir,True)
-def survivors(items,claim,journal,evidence): return dict(originals={x['path']:os.path.lexists(x['path']) for x in items},quarantines={x['quarantine']:os.path.lexists(x['quarantine']) for x in items},claim=os.path.lexists(claim),journal=os.path.lexists(journal),evidence=os.path.lexists(evidence))
+def survivors(items,claim,journal,evidence,output_dir_fd=None):
+    exists=(lambda x:os.path.lexists(x)) if output_dir_fd is None else (lambda x:output_exists(output_dir_fd,x))
+    return dict(originals={x['path']:os.path.lexists(x['path']) for x in items},quarantines={x['quarantine']:os.path.lexists(x['quarantine']) for x in items},claim=exists(claim),journal=exists(journal),evidence=exists(evidence))
 def remove_root(item,journal):
     r=item['record'];p=os.open(item['parent'],flags(True))
     try:
@@ -343,26 +394,43 @@ def remove_root(item,journal):
             journal.write('root-rmdir-before',root=item['quarantine']);same(identity(os.fstat(p)),r['parent'],True);same(identity(os.stat(r['quarantine_name'],dir_fd=p,follow_symlinks=False)),wanted_root,True);os.rmdir(r['quarantine_name'],dir_fd=p);fsync_dir(p);journal.write('root-rmdir-after',root=item['quarantine'])
         finally:os.close(fd)
     finally:os.close(p)
-def retire(roots,release,claim_path,journal_path,evidence_path,observer_runner,docker_census):
+def retire(roots,release,claim_path,journal_path,evidence_path,observer_runner,docker_census,output_dir_fd=None):
+    """Retire sealed roots; output_dir_fd makes all mutable records dirfd-relative."""
     items=release_roots(release,roots)
-    for x in (claim_path,journal_path,evidence_path):
-        if os.path.lexists(x):fail('one-shot output exists: '+os.fspath(x))
-    j=Journal(journal_path)
+    if output_dir_fd is not None:
+        if not isinstance(output_dir_fd,int) or output_dir_fd<0:fail('invalid output directory fd')
+        bound=os.fstat(output_dir_fd)
+        if not stat.S_ISDIR(bound.st_mode):fail('output directory fd is not directory')
+        for x in (claim_path,journal_path,evidence_path):
+            safe_name(x)
+            if output_exists(output_dir_fd,x):fail('one-shot output exists: '+x)
+        def durable(name,value):
+            data=(json.dumps(value,sort_keys=True,separators=(',',':'))+'\n').encode();fd=exclusive_fd_at(output_dir_fd,name)
+            try:full_write(fd,data);os.fsync(fd)
+            finally:os.close(fd)
+            os.fsync(output_dir_fd);return digest_bytes(data)
+        def read(name):return output_read(output_dir_fd,name)
+    else:
+        for x in (claim_path,journal_path,evidence_path):
+            if os.path.lexists(x):fail('one-shot output exists: '+os.fspath(x))
+        durable=full_write_json
+        def read(name):return stable_read(name,MAX_MANIFEST_BYTES)
+    j=Journal(journal_path,output_dir_fd)
     try:
         rsha=digest_bytes(json.dumps(release,sort_keys=True,separators=(',',':')).encode());claim=dict(schema='mckernel.ordinary-retirement-claim.v1',release_sha256=rsha,created=int(time.time()),roots=[x['path'] for x in items])
-        j.write('journal-created',survivors=survivors(items,claim_path,journal_path,evidence_path));full_write_json(claim_path,claim)
-        with open(claim_path,'rb') as claim_input: claim_digest=digest_bytes(claim_input.read())
+        j.write('journal-created',survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd));durable(claim_path,claim)
+        claim_digest=digest_bytes(read(claim_path))
         j.write('claim-created',claim_sha256=claim_digest)
         for x in items:quarantine(x,j)
         members=[sorted([observer_member_identity(x.get('quarantine_root',x['record']['root']))]+[observer_member_identity(r) for r in x['record']['members']]) for x in items];qs=[x['quarantine'] for x in items];rootids=[x.get('quarantine_root',x['record']['root']) for x in items]
         observed_at=time.time();observation=observer_runner(qs,members);observed_done=time.time();validate_observation(observation,release.get('observer',{}),qs,members,rootids,observed_at,observed_done);census=docker_census();validate_docker_census(census,release.get('docker',{}),[x['path'] for x in items]+qs)
-        evidence=dict(schema='mckernel.ordinary-retirement-evidence.v1',release_sha256=rsha,operational_exclusion=release['operational_exclusion'],observation=observation,docker_census=census);full_write_json(evidence_path,evidence)
-        with open(evidence_path,'rb') as evidence_input: evidence_digest=digest_bytes(evidence_input.read())
+        evidence=dict(schema='mckernel.ordinary-retirement-evidence.v1',release_sha256=rsha,operational_exclusion=release['operational_exclusion'],observation=observation,docker_census=census);durable(evidence_path,evidence)
+        evidence_digest=digest_bytes(read(evidence_path))
         j.write('proofs-passed',evidence_sha256=evidence_digest)
         for x in items:remove_root(x,j)
-        result=dict(status='PASS',runtime_acceptance=False);j.write('terminal-success',result=result,survivors=survivors(items,claim_path,journal_path,evidence_path));return result
+        result=dict(status='PASS',runtime_acceptance=False);j.write('terminal-prepared',result=result,survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd));return result
     except BaseException as e:
-        try:j.write('terminal-failure',error=repr(e),survivors=survivors(items,claim_path,journal_path,evidence_path))
+        try:j.write('terminal-failure',error=repr(e),survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd))
         except BaseException:pass
         raise
     finally:j.close()

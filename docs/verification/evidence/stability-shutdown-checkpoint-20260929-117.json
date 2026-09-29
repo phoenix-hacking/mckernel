@@ -1,0 +1,131 @@
+{
+  "schema": "mckernel-stability-shutdown-checkpoint-v1",
+  "checkpoint": 117,
+  "recorded_at": "2026-09-29T04:23:53-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "reason": "launcher stop request",
+  "head_before_checkpoint": "2004dc71c3568930fd692940b8b566b55a17f28b",
+  "joined_children": {
+    "active": 0,
+    "retirement_helper_boundary_repair_116": "completed",
+    "retirement_helper_rereview_116": "completed on superseded hashes"
+  },
+  "bounded_result": {
+    "helper": {
+      "path": "scripts/native_exact_candidate_retire.py",
+      "sha256": "7860b315247585f64df2adac7709b1d1405e553d884c08923501b1926a57226b"
+    },
+    "helper_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retire.py",
+      "sha256": "846ef1adb3bd1d39dd7dabe3a110a57c9470504ef82fc9170ff0c219aaa7f225"
+    },
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "sha256": "c98d30354361608c62a3c3c2b086263ae9ca2d0349b3d8b09b504ac9659a51eb"
+    },
+    "packet_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py",
+      "sha256": "6522ab03d16896906b940c929768ae1a9092cbaced776290c1115d5b9924e649"
+    },
+    "dispatcher_checks": [
+      "Python 3.8: combined 48/48 PASS",
+      "Python 3.9: combined 48/48 PASS",
+      "py_compile PASS for helper and packet",
+      "scoped git diff --check PASS"
+    ],
+    "acceptance": "UNREVIEWED_SOURCE_WIP",
+    "review_note": "The latest independent BLOCK reviewed superseded hashes de53fbd5/edbe08b1/85d5fd30/bcddd30a, not these exact files. It grants no approval to this WIP."
+  },
+  "preserved_failure_lineage": [
+    {
+      "packet": "59b3bedf62638f1e938bf4b347f49af9790e574c451f1050bd1f179ff01dc483",
+      "test": "8c57021a110262cba9521de5ebd43498096129d4cf7b0954f8308f6fd4abd5c8",
+      "result": "BLOCK",
+      "families": [
+        "ineffective output-local lease",
+        "incomplete callback cleanup and captures",
+        "unbounded I/O",
+        "incomplete schema/helper bridge",
+        "unbound archive source",
+        "status durability"
+      ]
+    },
+    {
+      "packet": "28182dd9e10c9e475f98af167f3e67c841d7ffaf3f37ce7d6899a93a9c96eae1",
+      "test": "0ccf206bee391c21cbb94ce6cd18eaa51f505382ad9a8430be5bb15c3fdad9b9",
+      "result": "BLOCK",
+      "families": [
+        "output namespace substitution",
+        "user-parent lease deletion",
+        "PASS publication before final close",
+        "cat-file lifecycle",
+        "unbounded helper reads"
+      ]
+    },
+    {
+      "packet": "de53fbd5174c9eb64f2bd0f8e60976244553ba8c349aa6effca14e9aefaeb05d",
+      "test": "edbe08b1351621d96661b9e97e637a33c013be756f2d4eb7c55e4a0e08c0726e",
+      "helper": "85d5fd3001d2de47eca78ce2415f2be1fd43c20fa71b9301f2f2b3ab82539bc1",
+      "helper_test": "bcddd30a41de497ea96e55b646d0a81f0377ba1016dfaa33113acb29674172c3",
+      "result": "BLOCK",
+      "families": [
+        "procfd directory-parent ENOTDIR",
+        "exited leader with live descendants not signalled",
+        "misleading PASS on close or fsync failure"
+      ]
+    }
+  ],
+  "live_processes": [
+    {"pid": 3399308, "starttime": 83682487, "role": "launcher-wrapper"},
+    {"pid": 3399313, "starttime": 83682494, "role": "launcher-worker"},
+    {"pid": 3399317, "starttime": 83682500, "role": "codex-app-server"}
+  ],
+  "retained_roots": [
+    {"path": "/dev/shm/mckernel-exact-candidate-67589154-1", "device": 26, "inode": 25166, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/dev/shm/mckernel-exact-metadata-backup-67589154-1", "device": 26, "inode": 35798, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-1", "device": 1831, "inode": 2907338, "uid": 1000, "gid": 1000, "mode": "0700"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2", "device": 1831, "inode": 2907339, "uid": 1000, "gid": 1000, "mode": "0700"}
+  ],
+  "retained_terminal_containers": [
+    {"id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9", "status": "exited", "exit_code": 1, "pid": 0, "oom_killed": false, "restart": "no"},
+    {"id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10", "status": "exited", "exit_code": 0, "pid": 0, "oom_killed": false, "restart": "no"}
+  ],
+  "object_store": {
+    "main_commit": "675891545c881b8d625256ade56fe66ac69fe794",
+    "main_present": true,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "ihk_present": true
+  },
+  "capacity": {
+    "host_free_bytes": 24228782080,
+    "scratch_free_bytes": 21560459264,
+    "tmpfs_free_bytes": 7516635136,
+    "memory_available_bytes": 20484620288
+  },
+  "active_heavy_lease": false,
+  "active_candidate_claim_or_build_lease": false,
+  "operations_not_run": [
+    "retirement packet",
+    "privileged mutation",
+    "candidate or backup traversal",
+    "rename or deletion",
+    "Docker mutation",
+    "build",
+    "module",
+    "guest",
+    "application"
+  ],
+  "next_tasks": [
+    "reconcile the recorded process, root, container, object-store and capacity identities",
+    "obtain a fresh independent source review of exact hashes c98d3035/6522ab03/7860b315/846ef1ad, including nonempty helper-dirfd integration, pidfd cleanup/retry, immutable lease failure cleanup and terminal publication",
+    "if and only if source review passes, checkpoint and fetch-verify the immutable template before mechanically creating its acyclic release",
+    "obtain a separate independent execution review and fetched release before any one-shot sudo retirement invocation",
+    "after accepted retirement and measured capacity recovery, independently review preparation 704f6654-1 before any heavy build",
+    "after a successful current-candidate build, run the smallest real memory application diagnostic before files, threads and shutdown"
+  ],
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "accepted_application_cases": "0/273",
+  "os_complete": false,
+  "pause_temporary": true
+}

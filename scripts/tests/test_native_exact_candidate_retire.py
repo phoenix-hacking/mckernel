@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import importlib.util
-import os, json, tarfile, time
+import os, json, stat, tarfile, time
 from datetime import datetime, timezone
 import tempfile
 import unittest
@@ -189,4 +189,36 @@ class Tests(unittest.TestCase):
    def mutate(v):
     root=v['roots'][0];member=next(x for x in root['tree_member_identities'] if x[:2]==[root['device_number'],root['inode']]);member[2]+=1
    with self.assertRaises(M.RetirementError):self.execute(roots,r,self.observer(r,mutate))
+ def test_bounded_artifact_and_streaming_candidate_reads_reject_oversize_short_and_growth(self):
+  with tempfile.TemporaryDirectory() as t:
+   p=Path(t)/'artifact';p.write_bytes(b'abcd')
+   with self.assertRaisesRegex(M.RetirementError,'exceeds cap'):M.stable_read(p,3)
+   fd=os.open(str(p),os.O_RDONLY)
+   try:
+    with self.assertRaisesRegex(M.RetirementError,'short read'):M.readfd(fd,8,5)
+   finally:os.close(fd)
+   fd=os.open(str(p),os.O_RDONLY)
+   try:self.assertEqual(M.digest_fd(fd,4),M.digest_bytes(b'abcd'))
+   finally:os.close(fd)
+   fd=os.open(str(p),os.O_RDONLY)
+   try:
+    original=M.os.read;calls=[]
+    def growing(which,count):
+     b=original(which,count);calls.append(b)
+     if len(calls)==1:p.write_bytes(b'abcdef')
+     return b
+    M.os.read=growing
+    with self.assertRaisesRegex(M.RetirementError,'grew'):M.digest_fd(fd,4)
+   finally:
+    M.os.read=original;os.close(fd)
+ def test_dirfd_output_api_never_uses_output_paths_and_rejects_bad_names(self):
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots);out=Path(t)/'out';out.mkdir();fd=os.open(str(out),os.O_RDONLY|os.O_DIRECTORY)
+   try:
+    result=M.retire(roots,r,'claim','journal','evidence',self.observer(r),self.census(r),output_dir_fd=fd)
+    self.assertEqual(result['status'],'PASS')
+    for n in ('claim','journal','evidence'):
+     row=os.stat(n,dir_fd=fd,follow_symlinks=False);self.assertTrue(stat.S_ISREG(row.st_mode));self.assertGreater(row.st_size,0)
+    with self.assertRaises(M.RetirementError):M.exclusive_fd_at(fd,'bad/name')
+   finally:os.close(fd)
 if __name__=='__main__':unittest.main()

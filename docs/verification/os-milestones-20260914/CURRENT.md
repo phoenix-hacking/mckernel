@@ -7151,3 +7151,39 @@ and measured capacity recovery, independently review preparation `704f6654-1`
 before any heavy build. Formal counters remain unchanged, current-candidate
 builds remain zero, accepted applications remain 0/273, the OS is incomplete,
 and this launcher pause is temporary.
+
+Shutdown checkpoint 117, 2026-09-29: the launcher stop request again ended new
+dispatch. All child lanes are closed and no bounded operation remains active.
+The retirement helper/packet correction is preserved at exact hashes helper
+`7860b315...226b`, helper test `846ef1ad...f225`, packet
+`c98d3035...a51eb` and packet test `6522ab03...e649`. Python 3.8 and 3.9 each
+passed the combined 48 tests; pycompile and scoped diff checks passed. This is
+unreviewed source WIP only. The latest independent BLOCK applied to superseded
+hashes `de53fbd5`/`edbe08b1`/`85d5fd30`/`bcddd30a`, so it neither rejects nor
+approves these exact files. All earlier rejected hashes and their output-
+namespace, exclusion, subprocess-lifecycle, bounded-I/O, helper-bridge and
+durable-terminal-status findings remain preserved in checkpoint 117.
+
+No retirement packet, candidate traversal, sudo mutation, Docker mutation,
+rename, deletion, build, module, guest or application ran. Preserve launcher
+identities 3399308/83682487, 3399313/83682494 and 3399317/83682500; candidate
+and backup identities 26/25166 and 26/35798; evidence roots 1831/2907338 and
+1831/2907339; and terminal containers `decd7cf9...c6b9` (exit 1) and
+`8943e497...bc10` (exit 0). Both exact source commits remain available in
+their object stores. No current candidate claim, build lease or heavy process
+is active. Measured free bytes are host 24,228,782,080, scratch 21,560,459,264,
+tmpfs 7,516,635,136 and memory 20,484,620,288.
+
+The next invocation must first reconcile those identities, then obtain fresh
+independent source review of all four exact hashes. The review must cover an
+actual nonempty descriptor-relative helper bridge, leader-first descendant and
+pidfd error/retry behavior, immutable-lease creation failure cleanup, bounded
+reads, sticky-parent output safety and terminal publication/finalization. Only
+after PASS may the template be committed/fetch-verified, an acyclic release be
+mechanically constructed, and a separate execution review authorize a one-shot
+sudo run. After accepted retirement and capacity recovery, review preparation
+`704f6654-1`, run one heavy current-candidate build, then use the smallest real
+memory application diagnostic before broader smokes. Record
+`stability-shutdown-checkpoint-20260929-117.json` is the live cursor. Formal
+counters remain unchanged, current-candidate builds remain zero, applications
+remain 0/273, the OS is incomplete, and the launcher pause is temporary.
