@@ -729,3 +729,20 @@ one-shot packet for live `67589154-1` manifest+archive generation only. Verify
 the actual 49 links, full member coverage and stable postflight identities.
 Do not rename/delete either root or treat that preparation as cleanup release.
 See `stability-native-exact-retention-source-checkpoint-20260929-1.json`.
+
+Shutdown checkpoint 108 interrupts the first correction of the live-retention
+preparation packet before review or execution. Packet `ab1471e8...4742` is
+source-only WIP; its unchanged test `63abe211...27defa` currently has three
+passes and one stale-token failure. No inventory, capsule/archive, cleanup,
+build or guest operation ran, and the sole active child is joined. Preserve the
+three launcher identities, both retained terminal containers and both consumed
+roots exactly as recorded in
+`stability-shutdown-checkpoint-20260929-108.json`.
+
+At the next authorized continuation, reconcile live state, complete and test
+the packet correction, obtain independent source review, and checkpoint/fetch-
+verify the exact bytes before creating a separate acyclic one-shot preparation
+release. Preparation grants no retirement authority. Independent capsule review
+and a separate privileged retirement release remain mandatory before any root
+rename or deletion. The OS remains incomplete; successful current-candidate
+builds and formal counters remain unchanged.

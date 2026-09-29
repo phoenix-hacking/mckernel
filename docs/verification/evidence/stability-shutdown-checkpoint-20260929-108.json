@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel-os-shutdown-checkpoint-v1",
+  "checkpoint": 108,
+  "recorded_at_utc": "2026-09-29T09:02:18Z",
+  "status": "paused_incomplete",
+  "os_complete": false,
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "real_guest_apps_this_checkpoint": 0,
+  "launcher_processes": [
+    {"role": "wrapper", "pid": 3399308, "starttime": 83682487},
+    {"role": "worker", "pid": 3399313, "starttime": 83682494},
+    {"role": "app_server", "pid": 3399317, "starttime": 83682500}
+  ],
+  "retained_containers": [
+    {"id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9", "status": "exited", "exit_code": 1, "pid": 0, "oom_killed": false, "restart_policy": "no"},
+    {"id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10", "status": "exited", "exit_code": 0, "pid": 0, "oom_killed": false, "restart_policy": "no"}
+  ],
+  "retained_roots": [
+    {"path": "/dev/shm/mckernel-exact-candidate-67589154-1", "dev": 26, "inode": 25166, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/dev/shm/mckernel-exact-metadata-backup-67589154-1", "dev": 26, "inode": 35798, "uid": 1000, "gid": 1000, "mode": "0755"}
+  ],
+  "free_bytes": {"host": 24389771264, "scratch": 21565747200, "tmpfs": 7516635136, "memory_available": 20874715136},
+  "interrupted_lane": {
+    "owner": "/root/live_retention_packet_108",
+    "packet": "docs/verification/evidence/native-exact-candidate-retention-preparation-67589154-1.py",
+    "packet_sha256": "ab1471e844fb145ab5111cdb318d008083f8aa4bc1c860f3a11adea85fd04742",
+    "test": "scripts/tests/test_native_exact_candidate_retention_preparation_67589154.py",
+    "test_sha256": "63abe21198811a6e5b44bf837a7c6e5706a3982f00256ed1ac3c56087f27defa",
+    "execution": "never_executed",
+    "release": "absent",
+    "py_compile": "pass",
+    "tests": "fail_3_pass_1_fail",
+    "failure": "test_no_privileged_or_runtime_operations rejects the packet's qemu process-census token; the interrupted correction is not reviewed or executable authority"
+  },
+  "outputs": {
+    "inventory": "absent",
+    "archive": "absent",
+    "scratch_evidence_root": "absent"
+  },
+  "next_tasks": [
+    "Reconcile launcher, retained root, Docker, process, lease and capacity identities on the next authorized invocation.",
+    "Resume the interrupted preparation packet as source-only WIP; correct its release binding, Git admission, process-group cleanup, durable writes, full manifest coverage and tests without executing it.",
+    "Obtain independent source review, commit and fetched-blob verification, then create a separate acyclic one-shot execution release for manifest/archive preparation only.",
+    "Run no retirement or deletion until the generated capsule has independent evidence review and a separate privileged ordinary-retirement release.",
+    "After reviewed space recovery, independently review and execute fresh candidate preparation 704f6654-1, then seek a separate heavy-build release."
+  ]
+}

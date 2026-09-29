@@ -6944,3 +6944,40 @@ archive generation only. That read-only/source-preservation execution must
 verify the live 49-link set, full restoration coverage, archive members and
 postflight identities. It grants no retirement: a separate later root/Docker
 execution release remains required before any rename or deletion.
+
+Continuation shutdown checkpoint 108, 2026-09-29: the launcher requested a
+stop while the first bounded correction of the live-retention preparation
+packet was in progress. New dispatch stopped and the sole running child was
+interrupted and joined. No packet, capsule, archive, retirement, cleanup,
+Docker, build, module or guest command ran. The planned inventory, archive and
+scratch evidence root are all absent. Formal counters remain unchanged,
+successful current-candidate builds remain zero and no real guest application
+ran in this checkpoint.
+
+The interrupted packet is preserved as source-only WIP at
+`native-exact-candidate-retention-preparation-67589154-1.py`, hash
+`ab1471e8...4742`; its unchanged test is `63abe211...27defa`. Both compile, but
+the four-test suite reports three passes and one failure because its stale
+no-runtime token assertion rejects the packet's process-census string `qemu`.
+The packet also has no independent review or release and must not be executed.
+Resume its bounded correction by auditing the acyclic release binding, exact
+Git admission, process-group failure cleanup, durable writes, manifest/member
+coverage and postflight checks, then broaden and pass pure synthetic tests.
+
+Preserve launcher wrapper 3399308/starttime 83682487, worker
+3399313/83682494 and app-server 3399317/83682500. Preserve terminal containers
+`decd7cf9...c6b9` (exited 1/PID 0/non-OOM/no restart) and
+`8943e497...bc10` (exited 0/PID 0/non-OOM/no restart). Candidate and backup
+remain unchanged at device/inode 26/25166 and 26/35798, uid/gid 1000/1000,
+mode 0755. Measured free bytes are host 24,389,771,264, scratch
+21,565,747,200, tmpfs 7,516,635,136 and available memory 20,874,715,136.
+
+On the next authorized invocation, reconcile all identities and resources,
+finish and independently review the source-only preparation packet, then
+checkpoint/fetch-verify it and obtain a separate acyclic one-shot release for
+manifest/archive preparation only. Independently review the resulting capsule
+before designing a separate privileged retirement release. Only after reviewed
+space recovery may fresh preparation `704f6654-1` advance toward a separately
+released heavy build. Record
+`stability-shutdown-checkpoint-20260929-108.json` is the live cursor. The OS is
+incomplete and this launcher pause is temporary.
