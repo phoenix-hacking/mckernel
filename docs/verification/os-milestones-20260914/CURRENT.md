@@ -8096,3 +8096,64 @@ remeasure capacity and leases first. The candidate contains the reviewed queue
 executable-root repair for the consumed 704f phase-0 failure. No build, guest or
 application has run yet; formal counters remain 6/130 and 350/10000,
 applications remain 0/273, and the OS is incomplete.
+
+Shutdown checkpoint 168, 2026-09-29: the prepared `f5d8d914-1` candidate did
+not enter a heavy build. Heavy release v1 was independently BLOCKed before
+execution by an incorrect GOAL policy hash and an overstated historical output
+claim. Additive v2 corrected those defects, passed candidate binding and census,
+then was independently BLOCKed because its queue-only executable-root repair did
+not cover later Python `tempfile.TemporaryDirectory()` fixtures while `/tmp` is
+noexec. Neither release consumed the owner, build or lease; both are permanently
+non-runnable. The exact owner command remains historical evidence only.
+
+The escalated central correction at fetched commit
+`57133e95944b3a808c3f38b912d4446ffc298eb1` binds `RUNNER_TEMP`, `TMPDIR`,
+`TMP` and `TEMP` to the validated evidence build root for every phase-entry
+shell. Exact driver `afc035bb...c629` and tests `1371bc9f...11ba` independently
+PASS source; all 19 tests pass on Python 3.8/current. Path validation is not
+descriptor-pinned, requires trusted stable ancestors, and does not itself prove
+mount executability. Nested workflow `env -i` commands still intentionally
+clear these variables. This grants no build or runtime acceptance.
+
+Fresh light container `mckernel-offline-temp-57133e95-1`, identity
+`1e92f6fb...828c4`, ran under the reviewed unprivileged profile with `/tmp`
+noexec and `/evidence` executable. It exited 1 without OOM or restart after the
+mount/compiler probes, all 19 offline-driver tests, the exact queue fixture and
+the OS registry, device registry, ioctl and SMP-resource checks passed. It then
+preserved two terminal failures: the standalone SMP loader fixture omitted the
+new production `super::user_string` dependency, and the Rust-1.92 allocator
+test asked rustc to create `/src/rmeta*` under the read-only source bind. Archive
+`stability-native-offline-exec-temp-root-light-failure-57133e95-20260929-1.tar.gz`
+SHA `f6c0c49a...d0b1` retains eight raw members; record
+`stability-native-offline-exec-temp-root-light-failure-57133e95-20260929-1.json`
+separates passed diagnostics from the failure and makes no acceptance claim.
+
+Bounded candidate corrections are preserved at fixture `1296dc6f...81d6`, SMP
+test `3be601ce...87c6` and compatibility test `755bbc1d...dc0`. The loader
+fixture compiles and runs 40 tests with Rust 1.85.1 and its three Python tests
+pass; the compatibility module passes 12 host tests with its exact Rust-1.92
+test skipped. The host default Rust 1.60 failures only demonstrate that the
+old compiler cannot parse current production Rust; they are not authoritative
+regressions. Shutdown arrived before independent correction review or a fresh
+pinned-Rust-1.92 container retry, so these edits remain candidate fixes.
+
+All child lanes are terminal and no build or guest is active. The exited light
+container is intentionally retained. Candidate 26/47678 and metadata backup
+26/58429 remain intact, but are now obsolete for a corrected build and must be
+retired only through reviewed retention/retirement machinery. Launcher wrapper
+3399308/83682487, worker 3399313/83682494 and app-server 3399317/83682500 remain
+live. At shutdown, host, scratch and tmpfs had about 22, 21 and 7 GiB available;
+memory available was about 17 GiB. No current-candidate build or real guest app
+ran; formal counters remain 6/130 and 350/10000, applications remain 0/273, and
+the OS is incomplete.
+
+The next invocation must first verify this fetched checkpoint and reconcile the
+three launcher identities and retained container. Then independently review the
+three candidate corrections and run a freshly named light container under the
+same isolation profile: execute the two failed tests first, then the remaining
+page-allocator, page-owner and mapping checks, preserving all results. Only a
+passing chain may unlock safe retirement of `f5d8d914-1`, preparation of a
+wholly fresh candidate from the corrected fetched commit, and a new heavy-build
+request/release. Never patch the existing candidate in place or execute the
+blocked v1/v2 releases. The launcher pause is temporary and the goal must not be
+marked complete or resumed during shutdown.

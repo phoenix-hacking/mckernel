@@ -515,8 +515,14 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             "#[rustc_std_internal_symbol]\n"
             "fn __rust_no_alloc_shim_is_unstable_v2() {}\n"
         )
+        repository_entries = {
+            path.relative_to(REPO_ROOT)
+            for path in REPO_ROOT.iterdir()
+        }
+        temporary_root = None
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            temporary_root = root
             source_path = root / "allocator_shim.rs"
             object_path = root / "allocator_shim.o"
             source_path.write_text(source, encoding="utf-8")
@@ -530,12 +536,15 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     "--edition=2021",
                     "-Dwarnings",
                     "--emit=obj=" + str(object_path),
+                    "--out-dir",
+                    str(root),
                     str(source_path),
                 ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
                 env=environment,
+                cwd=str(root),
             )
             self.assertEqual(0, compile_result.returncode, compile_result.stderr)
             symbols = subprocess.run(
@@ -556,6 +565,15 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 "__rustc::__rust_no_alloc_shim_is_unstable\n",
                 symbols.stdout,
             )
+        self.assertEqual(
+            repository_entries,
+            {
+                path.relative_to(REPO_ROOT)
+                for path in REPO_ROOT.iterdir()
+            },
+        )
+        self.assertIsNotNone(temporary_root)
+        self.assertFalse(temporary_root.exists())
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe

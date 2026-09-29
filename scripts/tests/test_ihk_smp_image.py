@@ -13,7 +13,11 @@ class NativeSmpImageTests(unittest.TestCase):
         self.compile_and_run("ihk_smp_image_compile.rs")
 
     def test_bounded_linux_file_owner(self):
-        self.compile_and_run("ihk_smp_loader_compile.rs")
+        output = self.compile_and_run("ihk_smp_loader_compile.rs")
+        self.assertIn(
+            "test usercopy_failure_and_missing_terminator_never_open_a_file ... ok",
+            output,
+        )
 
     def test_startup_page_tables_match_independent_address_translation(self):
         self.compile_and_run("ihk_smp_startup_compile.rs")
@@ -32,6 +36,7 @@ class NativeSmpImageTests(unittest.TestCase):
                                     capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             self.assertIn("test result: ok.", result.stdout)
+            return result.stdout
 
 
 if __name__ == "__main__":

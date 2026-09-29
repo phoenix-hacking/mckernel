@@ -5,6 +5,10 @@ use std::sync::Mutex;
 
 #[path = "../../../host-kernel/native-rust/smp_resource.rs"]
 mod smp_resource;
+// Include the production bounded user-string reader so this standalone
+// fixture tracks the smp_loader dependency and its exact error semantics.
+#[path = "../../../host-kernel/native-rust/user_string.rs"]
+mod user_string;
 #[path = "../../../host-kernel/native-rust/smp_loader.rs"]
 mod smp_loader;
 
