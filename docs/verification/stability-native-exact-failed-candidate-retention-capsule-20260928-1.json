@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.failed-candidate-retention-capsule-record.v1",
+  "recorded_at": "2026-09-28T20:02:00-07:00",
+  "status": "PASS_CAPSULE_CLEANUP_NOT_RELEASED",
+  "source_checkpoint": "2d9b983bec46927ee34c51f236df933eb3225133",
+  "failed_candidate": {
+    "root": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "commit": "80b8c492be5fdaf227c5559f637a4473de6b7d0a",
+    "device": 26,
+    "inode": 3088,
+    "tracked_main_blobs": 7649,
+    "tracked_ihk_blobs": 1296,
+    "tracked_blob_mismatches": 0,
+    "manifest_entries": 8945,
+    "manifest_mismatches": 0
+  },
+  "metadata_backup": {
+    "root": "/dev/shm/mckernel-exact-metadata-backup-80b8c492-1",
+    "device": 26,
+    "inode": 13660
+  },
+  "unique_untracked_files": [
+    {
+      "path": "scripts/__pycache__/native_rust_build_surface_audit.cpython-39.pyc",
+      "sha256": "f0531e16e4ce5d6c3bb76f213019e6fd2c16c5c176b67ccbe1191ca68c6ac34d"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_rk006_patch_authority.cpython-39.pyc",
+      "sha256": "2afcf85a3a6e9e1822ead38962dcb7110d8fa4a9e0b939a642ad6c1bd0e08dc7"
+    }
+  ],
+  "capsule": {
+    "path": "docs/verification/evidence/stability-native-exact-failed-candidate-retention-capsule-80b8c492-20260928-1.tar.gz",
+    "bytes": 4363203,
+    "sha256": "4f634ee1694584b5ee7c2ca4f9cb61c7ee79e14566c1fee8c33da3d80a409691",
+    "inventory_path": "docs/verification/evidence/stability-native-exact-failed-candidate-retention-capsule-80b8c492-20260928-1.inventory.json",
+    "inventory_bytes": 372489,
+    "inventory_sha256": "30577bf628f52cc4bbabd8cd9c1539162f58d84b30dc5bf28b887cf89e486b40",
+    "inventory_entries": 924,
+    "archive_members": 925,
+    "member_verification": "PASS"
+  },
+  "retained_contents": [
+    "installed main .git metadata",
+    "installed pinned-IHK .git metadata",
+    "main and IHK metadata backups",
+    "two candidate-only Python bytecode files",
+    "canonical input manifest",
+    "exact build request",
+    "metadata conversion receipt",
+    "candidate placement observer",
+    "Git source-closure observer",
+    "complete path/type/mode/uid/gid/size/mtime/hash inventory"
+  ],
+  "prior_phase0_archive": {
+    "path": "docs/verification/evidence/stability-native-exact-build-phase0-failure-80b8c492-20260928-1.tar.gz",
+    "sha256": "5f9f9ab17d3dcb576ba9a472c529a1d999e4e1523ab3e63fe954ac34a6a8dec6",
+    "files_verified": 32
+  },
+  "resource_snapshot": {
+    "host_available_bytes": 24860192768,
+    "scratch_available_bytes": 21609988096,
+    "dev_shm_available_bytes": 7530475520,
+    "floors_preserved": true
+  },
+  "preservation": {
+    "candidate_deleted": false,
+    "backup_deleted": false,
+    "terminal_containers_to_retain": [
+      "c6917efd...f9f0772",
+      "110dfe01...799b0"
+    ],
+    "restoration": "Restore tracked bytes from the exact main and IHK commits with the recorded 0600/0700 modes, then overlay the capsule members according to the inventory. Historical replay requires a separate execution release."
+  },
+  "next_action": "Push and fetch-verify the capsule and inventory, then obtain independent deletion rereview before removing either tmpfs root."
+}

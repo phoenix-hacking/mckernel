@@ -334,3 +334,12 @@ Do not prepare a candidate until phase 0 is source-clean; never reuse the failed
 80b request. No heavy operation remains active. Preserve launcher wrapper PID
 3399308/starttime 83682487 and worker PID 3399313/starttime 83682494 as the
 shutdown identities. Counts remain unchanged and the OS goal is not complete.
+
+Checkpoint 74 adds the missing small retention capsule for failed candidate 80b:
+installed main/IHK Git metadata, both backups, two unique bytecode files and the
+exact manifest/request/receipt/observers. The 4,363,203-byte archive and its
+924-entry inventory pass member-by-member verification; see
+`stability-native-exact-failed-candidate-retention-capsule-20260928-1.json`.
+The candidate and backup remain untouched. After fetched verification, obtain
+independent deletion rereview; retain both terminal containers. This changes no
+runtime or acceptance count.

@@ -4947,6 +4947,28 @@ that backend path is built and separately released. Formal counters remain
 points and 0/7 language gates; the four prior diagnostic apps and zero
 current-candidate builds remain unchanged.
 
+Continuation checkpoint 74, 2026-09-28: the failed 80b candidate remains
+untouched, but its deletion prerequisite is now durably captured. Independent
+review verified zero mismatches across 7,649 main blobs, 1,296 pinned-IHK blobs
+and all 8,945 canonical-manifest entries. It found two candidate-only Python
+bytecode files plus execution-specific installed/backup Git metadata that were
+not present in the earlier phase-0 archive, so cleanup correctly remained
+blocked.
+
+A new 4,363,203-byte retention capsule records both installed `.git` trees,
+both metadata backups, the two unique bytecode files, canonical manifest,
+request, metadata receipt and both observers. Its 372,489-byte inventory binds
+924 entries by path, type, mode, owner, size, time, link target and regular-file
+SHA-256. Direct archive verification PASSes all 925 members. Exact hashes and
+restoration mapping are in
+`stability-native-exact-failed-candidate-retention-capsule-20260928-1.json`.
+
+Next fetch-verify this checkpoint and obtain independent cleanup rereview. Do
+not delete either tmpfs root until that review passes exact identity, no-new-file,
+no-mount, no-lease and no-live-reference checks. Both terminal failed containers
+must remain. The capsule is preservation infrastructure only: no build, guest,
+application or acceptance counter changes.
+
 
 Continuation checkpoint 53, 2026-09-28: the launcher requested shutdown, so
 no new work was dispatched and all eight child lanes were joined. The bounded
