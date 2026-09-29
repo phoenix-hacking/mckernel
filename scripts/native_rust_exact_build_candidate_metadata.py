@@ -15,6 +15,23 @@ import uuid
 
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 
+# These are the only historical main-tree objects read by the offline exact
+# build. ``x86_64_shared_abi.py`` uses ``git show`` for exactly these locks.
+# Keep this contract local so relocation never trusts a replaceable checker to
+# decide what historical metadata to import.
+HISTORICAL_MAIN_COMMIT = "f2eb735212e6ab0494e638497e80d9ae78b2848e"
+HISTORICAL_MAIN_LOCKS = (
+    ("CMakeLists.txt", "252c4fec699ac747817c91fa1ac98f95097ebbaf", 14511,
+     "e60b304fd38bd2dcddd4f7f8c6217bf887bacfc997741e7aed321dd9222899da"),
+    ("kernel/include/syscall.h", "d3556195b8ef0e28cde1f7e595dba41b274fb3cd", 20816,
+     "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8"),
+    ("executer/include/uprotocol.h", "13ada852e45a0973b878c473fd220f5f096b5853", 9756,
+     "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"),
+    ("executer/kernel/mcctrl/mcctrl.h", "880a90f295136a26055f49cfee3fd9f874abe4e2", 17637,
+     "f57a0a6d7e0b0a07cf3ffabd9c88953bed4ae5a2cb8d68d13af5ffe30afaa8d8"),
+)
+IHK_PINNED_REF = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+
 
 class Reject(RuntimeError):
     pass
@@ -101,35 +118,121 @@ def object_bytes(source, kind, oid):
     return data
 
 
-def collect_trees(source, tree, result):
-    if tree in result:
-        return
-    raw = object_bytes(source, "tree", tree)
-    result[tree] = raw
-    # cat-file --batch-check is deliberately avoided: parse canonical tree bytes.
+def tree_entries(raw):
+    """Return canonical tree entries without asking Git to walk extra paths."""
+    result = {}
     pos = 0
     while pos < len(raw):
         nul = raw.find(b"\0", pos)
         if nul < 0 or b" " not in raw[pos:nul]:
             raise Reject("malformed tree stream")
         mode, name = raw[pos:nul].split(b" ", 1)
-        if not re.fullmatch(rb"[0-7]{5,6}", mode) or not name or b"/" in name:
+        if (not re.fullmatch(rb"[0-7]{5,6}", mode) or not name or b"/" in name
+                or name in result):
             raise Reject("malformed tree entry")
         start = nul + 1
         oid = raw[start:start + 20]
         if len(oid) != 20:
             raise Reject("truncated tree entry")
+        result[name] = (mode, oid.hex())
         pos = start + 20
+    return result
+
+
+def collect_trees(source, tree, result):
+    if tree in result:
+        return
+    raw = object_bytes(source, "tree", tree)
+    result[tree] = raw
+    # cat-file --batch-check is deliberately avoided: parse canonical tree bytes.
+    for mode, oid in tree_entries(raw).values():
         if mode == b"40000":
-            collect_trees(source, oid.hex(), result)
+            collect_trees(source, oid, result)
 
 
 def install_objects(destination, commit, trees):
-    for oid, raw in [(commit[0], commit[1]), *trees.items()]:
-        got = run(["hash-object", "-t", "commit" if oid == commit[0] else "tree", "-w", "--stdin"],
-                  git_dir=destination, input_bytes=raw).decode().strip()
-        if got != oid:
-            raise Reject("object identity changed while installing")
+    install_object(destination, "commit", commit[0], commit[1])
+    for oid, raw in trees.items():
+        install_object(destination, "tree", oid, raw)
+
+
+def install_object(destination, kind, oid, raw):
+    got = run(["hash-object", "-t", kind, "-w", "--stdin"],
+              git_dir=destination, input_bytes=raw).decode().strip()
+    if got != oid:
+        raise Reject("object identity changed while installing")
+
+
+def commit_tree(raw, expected_commit):
+    first, separator, _ = raw.partition(b"\n")
+    if not separator or not first.startswith(b"tree "):
+        raise Reject("malformed historical commit: " + expected_commit)
+    tree = first[len(b"tree "):].decode("ascii", "strict")
+    if not HEX40.fullmatch(tree):
+        raise Reject("malformed historical commit tree: " + expected_commit)
+    return tree
+
+
+def historical_main_closure(source):
+    """Read the fixed root commit and only trees/blobs needed by Git show."""
+    commit = exact_sha(HISTORICAL_MAIN_COMMIT)
+    commit_raw = object_bytes(source, "commit", commit)
+    root_tree = commit_tree(commit_raw, commit)
+    trees, blobs, paths = {}, {}, []
+    for path, expected_blob, expected_size, expected_sha256 in HISTORICAL_MAIN_LOCKS:
+        parts = path.split("/")
+        if not parts or any(not part or part in (".", "..") for part in parts):
+            raise Reject("malformed historical path contract")
+        tree = root_tree
+        for index, part in enumerate(parts):
+            raw = trees.get(tree)
+            if raw is None:
+                raw = object_bytes(source, "tree", tree)
+                trees[tree] = raw
+            entry = tree_entries(raw).get(part.encode("utf-8"))
+            if entry is None:
+                raise Reject("historical path is absent: " + path)
+            mode, oid = entry
+            if index + 1 != len(parts):
+                if mode != b"40000":
+                    raise Reject("historical path is not a directory: " + path)
+                tree = oid
+                continue
+            if mode != b"100644" or oid != expected_blob:
+                raise Reject("historical blob identity differs: " + path)
+            blob = object_bytes(source, "blob", oid)
+            if len(blob) != expected_size or hashlib.sha256(blob).hexdigest() != expected_sha256:
+                raise Reject("historical blob content differs: " + path)
+            blobs[oid] = blob
+            paths.append({"path": path, "blob": oid, "size": expected_size,
+                          "sha256": expected_sha256})
+    return {"commit": (commit, commit_raw), "trees": trees, "blobs": blobs,
+            "paths": paths}
+
+
+def install_historical_main_closure(destination, closure):
+    install_object(destination, "commit", *closure["commit"])
+    for oid, raw in closure["trees"].items():
+        install_object(destination, "tree", oid, raw)
+    for oid, raw in closure["blobs"].items():
+        install_object(destination, "blob", oid, raw)
+    for row in closure["paths"]:
+        data = run(["show", HISTORICAL_MAIN_COMMIT + ":" + row["path"]],
+                   git_dir=destination)
+        if (len(data) != row["size"] or hashlib.sha256(data).hexdigest() != row["sha256"]):
+            raise Reject("installed historical blob differs: " + row["path"])
+    return {"commit": HISTORICAL_MAIN_COMMIT, "trees": len(closure["trees"]),
+            "blobs": len(closure["blobs"]), "paths": closure["paths"]}
+
+
+def validate_pinned_ihk_ref(source, destination=None):
+    raw = object_bytes(source, "commit", exact_sha(IHK_PINNED_REF))
+    if destination is not None:
+        observed = run(["rev-parse", "--verify", IHK_PINNED_REF + "^{commit}"],
+                       git_dir=destination).decode().strip()
+        if observed != IHK_PINNED_REF:
+            raise Reject("installed IHK pinned ref differs")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def install_index_symlink_blobs(destination, source, index_bytes):
@@ -173,9 +276,19 @@ def build_metadata(stage, source, index_source, worktree, commit_sha, tree, full
     raw = object_bytes(source, "commit", commit_sha)
     trees = {}
     collect_trees(source, tree, trees)
+    historical = None
+    if not full_objects:
+        # The exact ABI checker reads this older root commit after the candidate
+        # has been mounted without its original object database.
+        historical = historical_main_closure(source)
+    else:
+        # Full IHK history is intentionally retained because several exact
+        # consumers read the pinned commit by object ID, not merely HEAD.
+        pinned_ihk_commit_sha256 = validate_pinned_ihk_ref(source)
     # The commit is installed after the tree traversal, and no blob is requested.
     if not full_objects:
         install_objects(stage, (commit_sha, raw), trees)
+        historical_info = install_historical_main_closure(stage, historical)
     run(["update-ref", "refs/heads/exact-candidate", commit_sha], git_dir=stage)
     index = stage / "index"
     if not (index_source / "index").is_file() or (index_source / "index").is_symlink():
@@ -185,8 +298,15 @@ def build_metadata(stage, source, index_source, worktree, commit_sha, tree, full
                       work_tree=worktree)
     symlink_blobs = 0 if full_objects else install_index_symlink_blobs(
         stage, source, index_bytes)
-    return {"head": commit_sha, "tree": tree, "index": str(index),
-            "symlink_blobs": symlink_blobs}
+    result = {"head": commit_sha, "tree": tree, "index": str(index),
+              "symlink_blobs": symlink_blobs}
+    if full_objects:
+        result["pinned_commit"] = IHK_PINNED_REF
+        result["pinned_commit_sha256"] = pinned_ihk_commit_sha256
+        validate_pinned_ihk_ref(stage)
+    else:
+        result["historical_main"] = historical_info
+    return result
 
 
 def clean_without_blobs(worktree, metadata, expected_index, expected_ihk=None):

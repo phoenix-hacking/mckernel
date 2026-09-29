@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.stability.native-exact-standalone-metadata-source-success.v1",
+  "recorded_at": "2026-09-28T17:11:54-07:00",
+  "status": "PASS_SOURCE_AND_CONVERSION_REVIEW",
+  "scope": "self-contained Git metadata for the exact d094 offline-build candidate",
+  "source": {
+    "helper": {
+      "path": "scripts/native_rust_exact_build_candidate_metadata.py",
+      "sha256": "b68a8b5d18a6642ef0043b791984e7a4ea2503a61b8d9153a781827a2277a10a"
+    },
+    "test": {
+      "path": "scripts/tests/test_native_rust_exact_build_candidate_metadata.py",
+      "sha256": "ef9d32cf65c7b45a9ccf87869ad3e4e5bc192595c88e64346221f48f2244a01e"
+    },
+    "owner": {
+      "path": "scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "8efdaea5f2c7c70add81cdac4ef5d4234e80e2dc0bdbc15047367f54b6d0ce37"
+    }
+  },
+  "consumer_inventory": {
+    "offline_identity": [
+      "root and IHK rev-parse HEAD",
+      "root and IHK status",
+      "root and IHK ls-files",
+      "root gitlink identity"
+    ],
+    "historical_main": {
+      "consumer": "scripts/x86_64_shared_abi.py --check",
+      "commit": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+      "trees": 7,
+      "blobs": 4,
+      "paths": [
+        "CMakeLists.txt",
+        "kernel/include/syscall.h",
+        "executer/include/uprotocol.h",
+        "executer/kernel/mcctrl/mcctrl.h"
+      ]
+    },
+    "ihk": {
+      "commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "commit_object_sha256": "a43f16fb55d2900d698e28dc9f9ea7f8f5a5e1c0cc1d6666aad54367ec171f82",
+      "policy": "retain the complete local IHK object/ref closure"
+    },
+    "excluded": "the online workflow provenance/fetch block is removed by the reviewed offline adaptation"
+  },
+  "tests": {
+    "count": 52,
+    "result": "PASS",
+    "elapsed_seconds": 7.170,
+    "raw_sha256": "e37ede838c9c6cf569456963ad761ed2ad592379802134c1cb5c41c765c9facf",
+    "log": "docs/verification/evidence/stability-native-exact-standalone-metadata-expert-tests-20260928-1.log.gz",
+    "log_sha256": "2f90e4436a91c2ef642d615c05801d773201ea9b7ed2f7df3105bccbee072899",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "regressions": [
+      "original source and metadata stores hidden before historical reads",
+      "wrong historical SHA-256 rejected",
+      "wrong historical blob identity rejected",
+      "missing historical blob rejected before mutation",
+      "current identity, index, symlink and clean status preserved",
+      "IHK historical access preserved"
+    ]
+  },
+  "independent_review": {
+    "conversion": "PASS",
+    "attempt2_eligibility_after_conversion_verification": "PASS",
+    "build_execution": "NOT_AUTHORIZED",
+    "resolved_finding": "the withdrawn scratch backup was on a different filesystem and incompatible with os.replace"
+  },
+  "released_conversion": {
+    "candidate": "/home/holden/mckernel-exact-candidate-d0947e0c",
+    "ihk": "/home/holden/mckernel-exact-candidate-d0947e0c/ihk",
+    "source_main": "/home/holden/mckernel/.git",
+    "source_ihk": "/home/holden/mckernel/.git/modules/ihk",
+    "backup": "/home/holden/mckernel-exact-metadata-backup-d0947e0c-1",
+    "evidence": "/home/holden/mckernel-exact-metadata-evidence-d0947e0c-1",
+    "filesystem_device": 66306
+  },
+  "limitations": [
+    "conversion has not yet executed",
+    "rollback tests cover a caught second-move failure, not power loss or every crash point",
+    "no build, guest, application, runtime or production acceptance follows",
+    "attempt 2 requires a separate request and independent execution release"
+  ],
+  "next": "checkpoint these bytes, execute the exact released conversion once, then verify the receipt, installed-only Git consumers, full manifest, owner admission and clean identities"
+}

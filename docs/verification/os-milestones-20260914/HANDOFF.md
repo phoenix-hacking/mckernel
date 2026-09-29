@@ -180,12 +180,17 @@ The original evidence is committed in
 Retain exited container `mckernel-exact-272a777b73aa4a5185f607bfa8fad490`
 (ID `110dfe01...799b0`) and do not retry the released request.
 
-Next executable step is one bounded correction for this failure family: make
-Git identity self-contained in `/src` or mount the exact metadata read-only,
-cover the linked-worktree case with a cheap local regression, then use fresh
-attempt-2 roots and obtain a new independent one-shot release. The candidate is
-still clean and attempt-1 output is empty. No successful current-candidate build
-or acceptance counter follows from this failure.
+Expert escalation and independent review now PASS the bounded source correction.
+The helper retains current identity/index, the exact historical root commit,
+seven necessary trees, four locked ABI blobs and complete pinned IHK history;
+52 tests pass with original stores hidden. Review caught and withdrew a
+cross-filesystem scratch backup before execution. After checkpointing the exact
+helper/test bytes, execute the released conversion once using the same-device
+backup `/home/holden/mckernel-exact-metadata-backup-d0947e0c-1` and evidence
+`/home/holden/mckernel-exact-metadata-evidence-d0947e0c-1`. Verify every Git
+consumer, full manifest, owner admission and clean identities before seeking a
+fresh attempt-2 one-shot release. No successful current-candidate build or
+acceptance counter follows from source review or conversion.
 
 Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,

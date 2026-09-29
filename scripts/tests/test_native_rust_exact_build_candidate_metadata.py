@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -28,6 +29,26 @@ class MetadataRelocationTest(unittest.TestCase):
         self._commit(self.ihk_source, "current.txt", "current\n", "current")
         self.ihk_sha = self._sha(self.ihk_source)
         subprocess.check_call(["git", "-C", str(self.ihk_source), "tag", "historical"])
+        # Use a distinct main ancestor whose paths mimic the fixed ABI reader.
+        # The test patches the production lock values to these independently
+        # created objects, then hides every original source/object store.
+        self.historical_paths = {
+            "CMakeLists.txt": "profile\n",
+            "kernel/include/syscall.h": "syscall\n",
+            "executer/include/uprotocol.h": "uprotocol\n",
+            "executer/kernel/mcctrl/mcctrl.h": "mcctrl\n",
+        }
+        for name, text in self.historical_paths.items():
+            target = self.source / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(text)
+        subprocess.check_call(["git", "-C", str(self.source), "add", "."])
+        subprocess.check_call(["git", "-C", str(self.source), "commit", "-qm", "historical ABI sources"])
+        self.historical_main = self._sha(self.source)
+        self.historical_locks = tuple(
+            (name, self._sha(self.source, self.historical_main + ":" + name),
+             len(text.encode()), hashlib.sha256(text.encode()).hexdigest())
+            for name, text in self.historical_paths.items())
         self._commit(self.source, "main.txt", "main\n", "main")
         # A gitlink exercises index parsing without requiring main blobs in the
         # relocated object store.
@@ -73,22 +94,36 @@ class MetadataRelocationTest(unittest.TestCase):
         values.update(extra)
         return type("Args", (), values)()
 
-    def test_relocation_has_only_required_main_symlink_blobs_and_retains_ihk_history(self):
+    def _relocate(self, args):
+        # The production lock is immutable. A test-local lock lets this real
+        # Git fixture prove the same commit/tree/blob closure without needing
+        # the production history in its temporary repository.
+        with mock.patch.multiple(relocator,
+                                 HISTORICAL_MAIN_COMMIT=self.historical_main,
+                                 HISTORICAL_MAIN_LOCKS=self.historical_locks,
+                                 IHK_PINNED_REF=self.ihk_sha):
+            return relocator.relocate(args)
+
+    def test_relocation_has_only_required_main_blobs_and_retains_ihk_history(self):
         # The explicit object source may have a different HEAD/index; only its
         # exact requested objects are consumed.
         subprocess.check_call(["git", "-C", str(self.ihk_source), "update-ref", "HEAD", self.old_ihk])
         link_mode = (self.candidate / "link").lstat().st_mode
         link_text = os.readlink(self.candidate / "link")
-        result = relocator.relocate(self._args())
+        result = self._relocate(self._args())
         self.assertEqual(result["status"], "PASS")
         self.assertTrue((self.candidate / ".git").is_dir())
         self.assertTrue((self.ihk / ".git").is_dir())
         self.assertEqual(subprocess.check_output(["git", "-C", str(self.ihk), "show", "historical:old.txt"], text=True), "old\n")
         types = subprocess.check_output(["git", "--git-dir", str(self.candidate / ".git"),
                                          "cat-file", "--batch-all-objects", "--batch-check"], text=True)
-        self.assertEqual(sum(line.split()[1] == "blob" for line in types.splitlines()), 1)
+        # One tracked symlink blob plus the four fixed historical ABI blobs;
+        # ordinary current-tree source blobs remain deliberately absent.
+        self.assertEqual(sum(line.split()[1] == "blob" for line in types.splitlines()), 5)
         self.assertEqual(result["installed"]["main"]["symlink_blobs"], 1)
-        self.assertEqual(subprocess.check_output(["git", "-C", str(self.candidate), "ls-files"], text=True).splitlines(), ["ihk", "link", "main.txt"])
+        self.assertEqual(subprocess.check_output(
+            ["git", "-C", str(self.candidate), "ls-files"], text=True).splitlines(),
+            sorted([*self.historical_paths, "ihk", "link", "main.txt"]))
         self.assertEqual((self.candidate / "link").lstat().st_mode, link_mode)
         self.assertEqual(os.readlink(self.candidate / "link"), link_text)
         # The original external/shared stores can disappear after conversion.
@@ -98,6 +133,10 @@ class MetadataRelocationTest(unittest.TestCase):
         (self.root / "ihk-meta").rename(self.root / "ihk-meta-hidden")
         self.assertEqual(self._sha(self.candidate), self.main_sha)
         self.assertEqual(self._sha(self.ihk), self.ihk_sha)
+        for name, expected in self.historical_paths.items():
+            self.assertEqual(subprocess.check_output(
+                ["git", "-C", str(self.candidate), "show", self.historical_main + ":" + name],
+                text=True), expected)
         self.assertEqual(subprocess.check_output(["git", "-C", str(self.ihk), "show", "historical:old.txt"], text=True), "old\n")
         self.assertEqual(subprocess.check_output(["git", "-C", str(self.candidate), "status", "--porcelain"], text=True), "")
         (self.candidate / "main.txt").write_text("changed\n")
@@ -106,14 +145,17 @@ class MetadataRelocationTest(unittest.TestCase):
         self.assertEqual(receipt["status"], "PASS")
         self.assertEqual(receipt["installed"]["main"]["index"],
                          str(self.candidate / ".git" / "index"))
+        self.assertEqual(receipt["installed"]["main"]["historical_main"]["commit"],
+                         self.historical_main)
+        self.assertEqual(receipt["installed"]["ihk"]["pinned_commit"], self.ihk_sha)
 
     def test_wrong_sha_and_dirty_inputs_rejected_before_mutation(self):
         bad = self._args(main_sha="0" * 40)
         with self.assertRaises(relocator.Reject):
-            relocator.relocate(bad)
+            self._relocate(bad)
         (self.candidate / "untracked").write_text("dirty")
         with self.assertRaises(relocator.Reject):
-            relocator.relocate(self._args(backup=self.root / "backup2", evidence=self.root / "evidence2"))
+            self._relocate(self._args(backup=self.root / "backup2", evidence=self.root / "evidence2"))
         self.assertTrue((self.candidate / ".git").is_file())
 
     def test_missing_source_object_rejected_without_output(self):
@@ -125,7 +167,7 @@ class MetadataRelocationTest(unittest.TestCase):
         shutil.rmtree(objects)
         objects.mkdir()
         with self.assertRaises(relocator.Reject):
-            relocator.relocate(self._args(backup=self.root / "backup3", evidence=self.root / "evidence3"))
+            self._relocate(self._args(backup=self.root / "backup3", evidence=self.root / "evidence3"))
         self.assertTrue((self.candidate / ".git").is_file())
 
     def test_post_move_failure_restores_both_original_gitfiles(self):
@@ -139,11 +181,43 @@ class MetadataRelocationTest(unittest.TestCase):
 
         with mock.patch.object(relocator.os, "replace", side_effect=fail_second):
             with self.assertRaises(OSError):
-                relocator.relocate(self._args(backup=backup, evidence=evidence))
+                self._relocate(self._args(backup=backup, evidence=evidence))
         self.assertTrue((self.candidate / ".git").is_file())
         self.assertTrue((self.ihk / ".git").is_file())
         receipt = json.loads((evidence / "receipt.json").read_text())
         self.assertEqual(receipt["rollback"], "restored")
+
+    def test_missing_or_wrong_historical_object_rejected_before_candidate_mutation(self):
+        first_path, first_oid, first_size, first_digest = self.historical_locks[0]
+        wrong_digest_locks = ((first_path, first_oid, first_size, "0" * 64),) + self.historical_locks[1:]
+        with mock.patch.multiple(relocator,
+                                 HISTORICAL_MAIN_COMMIT=self.historical_main,
+                                 HISTORICAL_MAIN_LOCKS=wrong_digest_locks,
+                                 IHK_PINNED_REF=self.ihk_sha):
+            with self.assertRaisesRegex(relocator.Reject, "historical blob content differs"):
+                relocator.relocate(self._args(backup=self.root / "backup-digest",
+                                               evidence=self.root / "evidence-digest"))
+        self.assertTrue((self.candidate / ".git").is_file())
+        self.assertFalse((self.root / "backup-digest").exists())
+
+        wrong_locks = ((first_path, "0" * 40, first_size, first_digest),) + self.historical_locks[1:]
+        with mock.patch.multiple(relocator,
+                                 HISTORICAL_MAIN_COMMIT=self.historical_main,
+                                 HISTORICAL_MAIN_LOCKS=wrong_locks,
+                                 IHK_PINNED_REF=self.ihk_sha):
+            with self.assertRaisesRegex(relocator.Reject, "historical blob identity differs"):
+                relocator.relocate(self._args(backup=self.root / "backup-wrong",
+                                               evidence=self.root / "evidence-wrong"))
+        self.assertTrue((self.candidate / ".git").is_file())
+        self.assertFalse((self.root / "backup-wrong").exists())
+
+        historical_object = self.source / ".git" / "objects" / first_oid[:2] / first_oid[2:]
+        self.assertTrue(historical_object.is_file())
+        historical_object.unlink()
+        with self.assertRaises(relocator.Reject):
+            self._relocate(self._args(backup=self.root / "backup-historical-missing",
+                                      evidence=self.root / "evidence-historical-missing"))
+        self.assertTrue((self.candidate / ".git").is_file())
 
 
 if __name__ == "__main__":

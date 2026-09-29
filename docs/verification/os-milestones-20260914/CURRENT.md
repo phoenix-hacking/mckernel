@@ -5607,3 +5607,40 @@ backup, evidence, output and lease paths. Do not repeat the current correction
 unchanged. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
 diagnostic guest apps and zero successful current-candidate builds remain
 unchanged.
+
+Continuation checkpoint 64, 2026-09-28: expert escalation closed the source
+design defect in the standalone Git metadata candidate. A read-only inventory
+bound every Git consumer actually executed by the offline adaptation. The main
+metadata now retains current identity/tree/index and symlink blobs plus the
+exact historical commit `f2eb735212e6ab0494e638497e80d9ae78b2848e`, seven
+necessary trees and four size/SHA-1/SHA-256-bound blobs consumed by
+`x86_64_shared_abi.py`. The complete local IHK object/ref closure remains, and
+the pinned `3114d9e...` commit is explicitly validated. Online provenance fetch
+logic is not executed by the offline adaptation.
+
+The dispatcher replay passes 52 tests in 7.170 seconds, including hidden
+original stores, real historical `git show`, missing/wrong object rejection,
+current clean identity and IHK history. `py_compile` and diff checks pass. The
+raw log SHA-256 is `e37ede83...c9facf`; its deterministic compressed evidence
+is `evidence/stability-native-exact-standalone-metadata-expert-tests-20260928-1.log.gz`
+(SHA-256 `2f90e443...72899`). Helper SHA-256 is `b68a8b5d...7a10a` and test
+SHA-256 is `ef9d32cf...4a01e`.
+
+Independent review PASSes actual candidate conversion and eligibility to seek
+a separate attempt-2 release only after conversion verification. It caught one
+command-level issue before execution: the initially proposed scratch backup was
+on a different filesystem, so `os.replace` would return `EXDEV`. The released
+same-device roots are candidate
+`/home/holden/mckernel-exact-candidate-d0947e0c`, backup
+`/home/holden/mckernel-exact-metadata-backup-d0947e0c-1`, and evidence
+`/home/holden/mckernel-exact-metadata-evidence-d0947e0c-1`; both destinations
+are fresh and all relevant parents report device 66306. The exact source record
+is `stability-native-exact-standalone-metadata-source-success-20260928-1.json`.
+
+No conversion or build has run at this checkpoint. Next execute the released
+conversion exactly once, preserve its backup and receipt, then verify installed-
+only historical/main/IHK consumers, full manifest, owner admission, identities
+and clean status. Only after a verified conversion and fetched checkpoint may a
+fresh attempt-2 request receive independent execution review. Formal counters
+remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic guest apps and
+zero successful current-candidate builds remain unchanged.
