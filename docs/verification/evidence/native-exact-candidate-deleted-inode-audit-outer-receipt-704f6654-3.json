@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel.native-exact-deleted-inode-audit-outer-receipt.v1",
+  "attempt": 3,
+  "one_shot_consumed": true,
+  "retry": false,
+  "completed_at": "2026-09-29T11:56:29.671259922-07:00",
+  "elapsed_seconds": 8.673624604,
+  "exact_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/python3.8",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_exact_candidate_deleted_inode_audit.py",
+    "--archive",
+    "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-quarantine-continuation-success-704f6654-20260929-1.tar.gz",
+    "--inventory",
+    "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json",
+    "--output",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-3.json",
+    "--rounds",
+    "3",
+    "--delay",
+    "0.1",
+    "--anchor",
+    "3399308:83682487",
+    "--anchor",
+    "3399313:83682494",
+    "--anchor",
+    "3399317:83682500"
+  ],
+  "outer_exit_status": 0,
+  "stdout": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-3.json",
+    "device": 1831,
+    "inode": 31478,
+    "uid": 0,
+    "gid": 0,
+    "mode": "0600",
+    "size": 1128,
+    "sha256": "ed82eba00b94872bf883d030b6ad9611c60c6c478932877a913e3fd4a4057903"
+  },
+  "capture_note": "The execution transport returned no output bytes; therefore both captured stdout and stderr were empty. The exact released argv was invoked once using shell exec so the shell was replaced by sudo."
+}

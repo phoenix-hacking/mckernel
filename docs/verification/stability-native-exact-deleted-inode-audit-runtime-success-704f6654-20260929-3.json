@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.native-exact-deleted-inode-audit-runtime-result.v1",
+  "timestamp": "2026-09-29T11:56:29.671259922-07:00",
+  "status": "PASS_SAMPLED_CURRENT_STATE",
+  "attempt": 3,
+  "execution": {
+    "one_shot_consumed": true,
+    "retry": false,
+    "outer_exit_status": 0,
+    "elapsed_seconds": 8.673624604,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "release_sha256": "4760b966366c4f2b2d5cf0833b164ae5a8ee4d7f1bfb7d5e6631ac53a1f0cb98",
+    "basis_sha256": "be181ad8eb7ac2e6393cdb1b7721357837ffd1b5d580dfd85e4665092fe49c75",
+    "receipt_sha256": "1401bb834fdabd724c9e6316a1f317b25e8e9b967ca0245bd62170cbbc35dfb6"
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-3.json",
+    "device": 1831,
+    "inode": 31478,
+    "uid": 0,
+    "gid": 0,
+    "mode": "0600",
+    "size": 1128,
+    "sha256": "ed82eba00b94872bf883d030b6ad9611c60c6c478932877a913e3fd4a4057903",
+    "schema": "mckernel.native-exact-deleted-inode-audit.v1",
+    "status": "PASS",
+    "target_identity_count": 10611,
+    "target_identity_sha256": "3ee0942c4e5f1934220c8dafed3c4664ae47d05cb30ed4679ec0fe6cadd0a1e8",
+    "root_identity_counts": [10524, 87]
+  },
+  "rounds": [
+    {"round": 1, "processes": 271, "tasks": 816, "identity_count": 816, "map_files_entries": 33882, "map_files_denials": 0, "references": 0, "failures": 0, "reconciled_exits": 0},
+    {"round": 2, "processes": 271, "tasks": 816, "identity_count": 816, "map_files_entries": 33882, "map_files_denials": 0, "references": 0, "failures": 0, "reconciled_exits": 0},
+    {"round": 3, "processes": 271, "tasks": 816, "identity_count": 816, "map_files_entries": 33882, "map_files_denials": 0, "references": 0, "failures": 0, "reconciled_exits": 0}
+  ],
+  "preflight_and_postflight": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "launcher_identities": ["3399308:83682487", "3399313:83682494", "3399317:83682500"],
+    "output_parent": {"device": 1831, "inode": 2, "uid": 1000, "gid": 1000, "mode": "0700"},
+    "historical_evidence": {"device": 26, "inode": 47525, "uid": 0, "gid": 0, "mode": "0700"},
+    "immutable_tombstone": {"device": 1831, "inode": 31474, "uid": 0, "gid": 0, "mode": "0600", "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123", "immutable_flag": true},
+    "original_and_quarantine_tree_names_absent": true,
+    "conflicting_mckernel_build_or_guest_processes": 0
+  },
+  "independent_runtime_review": {
+    "status": "PASS_RUNTIME_REVIEW",
+    "scope": "exact attempt-3 raw result, helper, target reconstruction, receipt, preflight and live postflight",
+    "finding": "No blocking finding within the sampled current-state audit scope.",
+    "limitation": "The result retains namespace and census conclusions rather than individual namespace rows or census tuples; it proves three sampled observations, not continuous absence."
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-exact-deleted-inode-audit-runtime-success-704f6654-20260929-3.tar.gz",
+    "sha256": "842f5d3f6d94c38add4ee1aa84877cd0d342492a42200fd622065fbe4cdab8be",
+    "contents": ["release", "basis", "outer receipt", "raw root-owned result"]
+  },
+  "acceptance": {
+    "fresh_candidate_preparation_unlocked": true,
+    "retrospective_retirement_acceptance": false,
+    "build_authorization": false,
+    "guest_authorization": false,
+    "production_gate_credit": false,
+    "application_acceptance": false,
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch-verify this scoped runtime evidence. Then derive a wholly fresh preparation packet from the fetched main commit and IHK 3114d9e7101ad52030eb3effa849a5c108972a1f, using new nonce/path families and independent preparation review before execution."
+}

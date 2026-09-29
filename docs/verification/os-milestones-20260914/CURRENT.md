@@ -8035,3 +8035,33 @@ accept the consumed retirement. Formal counters remain 6/130 and 350/10000,
 successful current-candidate builds and real guest applications remain zero,
 applications remain 0/273, and the OS remains incomplete. The launcher pause
 is temporary.
+
+Continuation checkpoint 166, 2026-09-29: the attempt-3 deleted-inode audit
+passed its complete immediate preflight and ran exactly once with the released
+argv. It exited 0 after 8.673624604 seconds with empty stdout and stderr. The
+exclusive root-owned result is 1831/31478, mode 0600, size 1,128 and SHA
+`ed82eba0...7903`. All three rounds report 271 processes, 816 tasks and stable
+identities, 33,882 map-file entries, and zero references, failures, denials or
+reconciled exits. The sealed target remains exactly 10,611 identities with
+canonical digest `3ee0942c...a1e8` and root counts 10,524 plus 87.
+
+Fresh independent review returned `PASS_RUNTIME_REVIEW`. It recomputed the
+target from the archived observer, inspected namespace completeness and every
+round, matched the exact release/basis/helper/toolchain bindings and receipt,
+and rechecked the live boot, three launcher identities, scratch parent,
+historical evidence 26/47525, immutable tombstone 1831/31474 and absent tree
+names. Receipt `1401bb83...fb6` and archive `842f5d3f...b8be` preserve the outer
+status and the release, basis, receipt and raw result. Attempt 3 is consumed and
+must never run again.
+
+This is sampled current-state absence only. It does not retroactively repair the
+consumed retirement proof and grants no build, guest, production-gate or
+application acceptance. It unlocks fresh candidate preparation. After this
+record is committed, pushed and fetch-verified, derive an entirely new nonce
+and path family from the fetched main commit plus IHK
+`3114d9e7101ad52030eb3effa849a5c108972a1f`, using the existing preparation
+profile only as a template. Never use the dirty nested IHK checkout directly or
+reuse `67589154-1`/`704f6654-1` artifacts. Obtain independent preparation review
+before its one-shot execution, then seek a distinct build release. Formal
+counters remain 6/130 and 350/10000; current-candidate builds and real guest
+applications remain zero, applications remain 0/273, and the OS is incomplete.

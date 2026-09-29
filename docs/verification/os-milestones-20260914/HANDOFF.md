@@ -1191,3 +1191,20 @@ a revalidated root-`/`, parsed nonempty representative; chroot/empty views defer
 only within that exact namespace. Commit/push/fetch this correction, then derive
 fresh attempt 3 and seek independent execution review. No audit PASS, fresh
 candidate build or application acceptance exists.
+
+Checkpoint 166 supersedes the audit execution cursor. Released attempt 3 ran
+exactly once after complete preflight and independently `PASS_RUNTIME_REVIEW`.
+Root result `ed82eba0...7903` records three identical clean rounds: 271
+processes, 816 stable task identities, 33,882 map-file entries, and zero
+references, failures, denials or reconciled exits. The target reconstructs to
+10,611 identities with digest `3ee0942c...a1e8`. Receipt `1401bb83...fb6`
+preserves exit 0, 8.673624604 seconds and empty streams; archive
+`842f5d3f...b8be` preserves release, basis, receipt and raw root result.
+
+This sampled current-state PASS unlocks wholly fresh candidate preparation only.
+It cannot retroactively accept the consumed retirement and grants no build,
+guest, application or gate credit. Next commit/push/fetch this exact evidence,
+then generate a new-nonce preparation packet from the fetched main commit and
+IHK `3114d9e7101ad52030eb3effa849a5c108972a1f`; never use the dirty nested IHK
+or any `67589154-1`/`704f6654-1` path. Obtain independent preparation review
+before one preparation run. Builds and real guest applications remain zero.
