@@ -7227,3 +7227,36 @@ execution review plus fresh live prerequisite/immutable-filesystem support
 checks are mandatory before at most one sudo invocation. Accepted applications
 remain 0/273, current-candidate builds remain zero and formal counters do not
 move from source-template work.
+
+Shutdown checkpoint 128, 2026-09-29: the launcher stop request ended new
+dispatch. All child lanes are joined and closed, and no bounded operation
+remains active. Source-template commit `325e7c2e...689a2` is already pushed,
+fetched and exact: packet `f1cb3db7...c363`, packet test
+`41ad8074...c4b6`, helper `2218e7fe...010`, helper test
+`c350fc3e...95c1`, and source-success record `b892d3c3...36d8` match their
+fetched blobs. The DRAFT sentinel remains and no release JSON exists.
+
+Release-schema audit 127 completed without traversing either candidate root or
+creating a release. It fixes the required 25-field schema, immutable template
+binding and exact two-path finalization delta. Preserve boot
+`c733d83b...9afd`; launcher identities 3399308/83682487,
+3399313/83682494 and 3399317/83682500; candidate/backup identities 26/25166
+and 26/35798; preparation evidence identities 1831/2907338 and 1831/2907339;
+and both terminal containers. Both source commits remain present. No claim,
+heavy lease, build or guest is active. Measured free bytes are host
+24,170,889,216, scratch 21,560,459,264, tmpfs 7,516,635,136 and memory
+20,251,942,912.
+
+On the next authorized invocation, first reconcile these identities. Then
+mechanically generate the acyclic release from fetched template `325e7c2e`,
+including fresh complete live-root inventories and full terminal Docker
+records. Change only the packet sentinel plus the new release JSON, verify and
+push/fetch that exact delta, and obtain separate independent mechanical and
+execution review plus fresh immutable-filesystem support checks before at most
+one sudo retirement invocation. After accepted retirement and measured space
+recovery, independently review preparation `704f6654-1`, run one serialized
+current-candidate build, and start the smallest real memory application
+diagnostic. Record
+`stability-shutdown-checkpoint-20260929-128.json` is the live cursor. Formal
+counters remain unchanged, current-candidate builds remain zero, applications
+remain 0/273, the OS is incomplete, and this launcher pause is temporary.

@@ -850,3 +850,17 @@ execution review and fresh live support gates. A permanent child-pidfd failure
 is an explicit fail-closed survivor state, not cleanup success. No candidate,
 build, guest, application or acceptance counter changed; successful current-
 candidate builds remain zero and applications remain 0/273.
+
+Shutdown checkpoint 128: immutable source-template commit
+`325e7c2e00995726c094649168a8e854dd5689a2` is pushed and fetch-verified.
+All child lanes are closed. Release-schema audit 127 completed, but the packet
+still contains its DRAFT sentinel and no release JSON exists. No root traversal,
+retirement, privilege, Docker mutation, build or guest ran. Preserve the exact
+live identities and capacities in
+`stability-shutdown-checkpoint-20260929-128.json`.
+
+Next: reconcile live state, mechanically bind the release to `325e7c2e` with
+fresh complete root/Docker observations, verify the exact packet-plus-release
+delta, push/fetch it, and obtain independent mechanical/execution review before
+any one-shot sudo retirement. The OS remains incomplete; this pause is
+temporary.
