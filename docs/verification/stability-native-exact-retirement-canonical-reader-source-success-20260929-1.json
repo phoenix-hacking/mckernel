@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel-retirement-canonical-reader-source-success-v1",
+  "recorded_at": "2026-09-29T07:02:00-07:00",
+  "status": "PASS_SOURCE_TEMPLATE_ONLY",
+  "failure_lineage": [
+    {
+      "path": "docs/verification/stability-native-exact-retirement-release-admission-failure-20260929-1.json",
+      "sha256": "e65f81baca0bbac078fcc32f1c32b79f125e741db3c2342e1681d544cd724461",
+      "result": "512-MiB address-space limit rejected the retained pack mapping before object bytes"
+    },
+    {
+      "path": "docs/verification/stability-native-exact-retirement-release-admission-correction-failure-20260929-1.json",
+      "sha256": "017ecd6b1f100c5c5ffdc625b61d4c913c8354b37f2a9068166c718a54683200",
+      "result": "12-GiB bounded correction reached a wrong symlink digest authority, consumed about 7.9 GiB RSS and timed out reader cleanup"
+    },
+    {
+      "path": "docs/verification/stability-native-exact-retirement-canonical-reader-review-failure-20260929-1.json",
+      "sha256": "f1eaa1f2a39f299a7a55f84bc481bcdacd8470e3951c97ea5bde79dfd98e4bdd",
+      "result": "first expert candidate could drop a natural-exit primary when output closes also failed"
+    }
+  ],
+  "reviewed_sources": {
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "sha256": "6f2be938de641ecbc3dc245fc6cfdcaebb9caa0c76f22c3028ae09ba92d5ebc2"
+    },
+    "packet_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py",
+      "sha256": "e26918a6851364d82e4e49770922918c303684de9e28ebd0d4e6879e5e8e5cf1"
+    },
+    "helper": {
+      "path": "scripts/native_exact_candidate_retire.py",
+      "sha256": "704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b"
+    }
+  },
+  "verified_behavior": [
+    "Only canonical readers receive Git packed-window/cache overrides and a 2-GiB address-space limit.",
+    "All inventory record shapes and exact main/IHK routing counts validate before a reader spawns.",
+    "Regular content uses retained SHA256; symlink content uses exact target bytes and validates size.",
+    "Streaming independently verifies content SHA256, Git SHA1 object ID and Git SHA256 object ID.",
+    "Primary failures close stdin boundedly, then always attempt anchored TERM/KILL retirement while output pipes remain available through census.",
+    "Cycle-bounded identity-only failure containment prevents both duplicate and lost primary errors.",
+    "Durable-file and callback limits remain unchanged; a separate 128-MiB blob bound covers the retained 69,246,795-byte maximum."
+  ],
+  "tests": {
+    "python_3_8": "116/116 PASS",
+    "python_3_9": "116/116 PASS",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "independent_review": "retirement_canonical_reader_review_137 PASS_SOURCE_TEMPLATE_ONLY"
+  },
+  "full_streams": [
+    {
+      "runtime": "python3.8",
+      "status": "PASS",
+      "objects": 9011,
+      "bytes": 9050119070,
+      "elapsed_seconds": 33.846,
+      "maximum_resident_kib": 259632,
+      "swaps": 0,
+      "readers": [
+        {"store": "/home/holden/mckernel/.git", "pid": 3863590, "starttime": 89816164, "session": 3863590, "returncode": 0, "retired": true, "leader_fd_released": true, "final_session_members": []},
+        {"store": "/home/holden/mckernel/.git/modules/ihk", "pid": 3863995, "starttime": 89819522, "session": 3863995, "returncode": 0, "retired": true, "leader_fd_released": true, "final_session_members": []}
+      ]
+    },
+    {
+      "runtime": "python3.9",
+      "status": "PASS",
+      "objects": 9011,
+      "bytes": 9050119070,
+      "elapsed_seconds": 34.381,
+      "maximum_resident_kib": 259540,
+      "swaps": 0,
+      "readers": [
+        {"store": "/home/holden/mckernel/.git", "pid": 3864007, "starttime": 89820392, "session": 3864007, "returncode": 0, "retired": true, "leader_fd_released": true, "final_session_members": []},
+        {"store": "/home/holden/mckernel/.git/modules/ihk", "pid": 3864035, "starttime": 89823803, "session": 3864035, "returncode": 0, "retired": true, "leader_fd_released": true, "final_session_members": []}
+      ]
+    }
+  ],
+  "limitations": [
+    "The invalid finalized release remains preserved at Git commit aa763d01d7dcb0444d8db7636301b61ec3349d02 and is removed from the new DRAFT template.",
+    "A new acyclic release, fetched validation and separate execution review are required before privilege.",
+    "No retirement, build, guest, application or formal acceptance counter is established."
+  ]
+}

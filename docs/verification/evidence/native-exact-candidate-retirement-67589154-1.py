@@ -14,7 +14,7 @@ SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ih
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_67589154.py'
 RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retirement-67589154-1.release.json'
-RELEASE_SHA256='e9c03ce437dde8a1ed7933a57a2602fb466cae59622c7f0ba41e596bf2f77fa5'
+RELEASE_SHA256='RELEASE_HASH_REQUIRED'
 MAIN='675891545c881b8d625256ade56fe66ac69fe794'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-67589154-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-67589154-1'
 QUARANTINES=('/dev/shm/.mckernel-retirement-candidate-67589154-1','/dev/shm/.mckernel-retirement-metadata-backup-67589154-1')
@@ -35,7 +35,7 @@ EVIDENCE_PARENT=Path('/dev/shm')
 EVIDENCE_DIR=EVIDENCE_PARENT/'.mckernel-retirement-evidence-67589154-1'
 FS_IOC_GETFLAGS=0x80086601; FS_IOC_SETFLAGS=0x40086602; FS_IMMUTABLE_FL=0x00000010
 CONFLICT_BASENAMES=('qemu-system-x86_64','qemu-kvm','qemu-system-aarch64','native_rust_exact_build_container_owner.py','native_exact_candidate_retire.py')
-MAX_FILE=64<<20; MAX_CALLBACK=8<<20; COMMAND_TIMEOUT=180; TERM_TIMEOUT=5; KILL_TIMEOUT=5
+MAX_FILE=64<<20; MAX_BLOB=128<<20; MAX_CALLBACK=8<<20; COMMAND_TIMEOUT=180; TERM_TIMEOUT=5; KILL_TIMEOUT=5
 class Error(RuntimeError): pass
 class Interrupted(Error): _retirement_interrupted=True
 class CompositeError(Error):
@@ -45,6 +45,18 @@ class CompositeError(Error):
   self.primary=primary;self.cleanup=cleanup
   super().__init__('primary failure: '+str(primary)+'; cleanup failure: '+str(cleanup))
 class CompositeInterrupted(CompositeError,Interrupted):pass
+def failure_contains(root,target):
+ """Bounded identity-only search of an explicit failure tree."""
+ if root is target:return True
+ pending=[root];seen=set();budget=128
+ while pending and budget:
+  value=pending.pop();budget-=1
+  if id(value) in seen:continue
+  seen.add(id(value))
+  if value is target:return True
+  if getattr(value,'_retirement_composite',False) is True:
+   pending.extend((getattr(value,'primary',None),getattr(value,'cleanup',None)))
+ return False
 def error_record(error):
  active=set();budget=[128]
  def visit(value,depth):
@@ -112,6 +124,14 @@ def checked(path,wanted):
  return b
 def genv():return {'PATH':'/usr/bin:/bin','GIT_CONFIG_NOSYSTEM':'1','GIT_CONFIG_GLOBAL':'/dev/null','GIT_TERMINAL_PROMPT':'0','GIT_ASKPASS':'/bin/false','GIT_OPTIONAL_LOCKS':'0','LC_ALL':'C'}
 def gargv(directory,*a):return ['/usr/bin/git','--no-optional-locks','--git-dir='+str(directory),'--work-tree='+str(SOURCE),*a]
+def reader_argv(directory,*a):
+ # Keep only the canonical reader's pack mapping bounded without changing
+ # either repository's configuration or repacking its objects.
+ return ['/usr/bin/git','--no-optional-locks',
+         '-c','core.packedGitWindowSize=32m',
+         '-c','core.packedGitLimit=128m',
+         '-c','core.deltaBaseCacheLimit=32m',
+         '--git-dir='+str(directory),'--work-tree='+str(SOURCE),*a]
 SYS_pidfd_open=434;SYS_pidfd_send_signal=424
 def proc_row(pid):
  try:fields=(Path('/proc')/str(pid)/'stat').read_text().rsplit(')',1)[1].split()
@@ -327,6 +347,17 @@ def close_streams(streams):
     except BaseException as e:failure=combined(failure,e);break
    else:failure=combined(failure,Error('pipe close repeatedly interrupted'))
  return failure
+def close_stdin(streams):
+ stream=streams.get('stdin')
+ if stream is None:return None
+ failure=None
+ for unused in range(8):
+  try:stream.close();return failure
+  except (KeyboardInterrupt,Interrupted) as e:failure=combined(failure,e)
+  except BaseException as e:return combined(failure,e)
+ return combined(failure,Error('stdin close repeatedly interrupted'))
+def close_outputs(streams):
+ return close_streams({'stdout':streams.get('stdout'),'stderr':streams.get('stderr')})
 def cleanup_process(p,streams):
  """One post-spawn retirement path; callers retain both failure families."""
  if p is None:return (bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))),None
@@ -523,12 +554,13 @@ def final_bytes(template,release_hash):
 def canonical_stores():
  if gscalar(GIT,'rev-parse',MAIN+'^{commit}')!=MAIN or gscalar(IHK_GIT,'rev-parse',IHK+'^{commit}')!=IHK:bad('canonical commit')
  if gout(GIT,'ls-tree',MAIN,'ihk').decode('ascii','strict').strip()!='160000 commit '+IHK+'\tihk':bad('IHK gitlink')
+def canonical_reader_limits():
+ # Git maps the retained pack; stream_blob_process never buffers a blob.
+ resource.setrlimit(resource.RLIMIT_AS,(2<<30,2<<30));resource.setrlimit(resource.RLIMIT_CPU,(900,900))
 def _reader(directory):
- def limit():
-  resource.setrlimit(resource.RLIMIT_AS,(512<<20,512<<20));resource.setrlimit(resource.RLIMIT_CPU,(900,900))
  p=None;streams={};owner=spawn_owner()
  try:
-  p,streams=owned_spawn(owner,gargv(directory,'cat-file','--batch'),env=genv(),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,preexec_fn=limit,start_new_session=True)
+  p,streams=owned_spawn(owner,reader_argv(directory,'cat-file','--batch'),env=genv(),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,preexec_fn=canonical_reader_limits,start_new_session=True)
   try:os.set_blocking(p.stdin.fileno(),False);os.set_blocking(p.stdout.fileno(),False)
   except (AttributeError,OSError):pass # pure test doubles have no descriptor
   return p
@@ -567,79 +599,138 @@ def pipe_write(pipe,data,deadline):
   at+=n
 def finish_reader(p):
  streams=process_streams(p)
+ # A primary reader failure must never wait for cat-file's natural EOF.  The
+ # marker is set by stream_store/stream_blob before this compatibility entry
+ # point is called, so old callers and their failure-tree tests retain the
+ # same one-argument API.
+ primary=p.__dict__.get('_mckernel_reader_primary')
+ if primary is not None:
+  # Closing stdin first is bounded and may itself fail, but never prevents
+  # anchored TERM/KILL retirement.  Output pipes stay open through census.
+  close_error=close_stdin(streams)
+  unused,cleanup=cleanup_process(p,streams)
+  cleanup=combined(close_error,cleanup)
+  cleanup=combined(cleanup,close_outputs(streams))
+  p._mckernel_reader_primary=None
+  p._mckernel_reader_finished=getattr(p,'_mckernel_retired',False) is True
+  raise_primary(primary,cleanup)
+ close_error=None
  try:
   if getattr(p,'_mckernel_retired',False) is True:return p.returncode
+  close_error=close_stdin(streams)
+  if close_error is not None:raise close_error
   deadline=time.monotonic()+5
   while True:
+   # Keep stderr/stdout open until natural retirement/census is complete;
+   # diagnostics are checked after all bytes have been drained.
+   if isinstance(getattr(p,'pid',None),int):
+    try:
+     streams['stdout'].fileno();streams['stderr'].fileno()
+    except (AttributeError,OSError,ValueError):pass
+    else:_drain(p,streams,MAX_CALLBACK,deadline)
    rc=complete_process(p)
-   if rc is not None:p._mckernel_reader_finished=True;return rc
+   if rc is not None:
+    if streams.get('stderr_data') or streams.get('stdout_data'):
+     bad('canonical reader diagnostics or trailing output')
+    p._mckernel_reader_finished=True;return rc
    if time.monotonic()>=deadline:raise subprocess.TimeoutExpired('canonical reader',5)
    time.sleep(.01)
  except BaseException as primary:
   unused,cleanup=cleanup_process(p,streams)
+  cleanup=combined(cleanup,close_outputs(streams))
+  p._mckernel_reader_primary=None
   if getattr(p,'_mckernel_retired',False) is True:p._mckernel_reader_finished=True
   raise_primary(primary,cleanup)
 def stream_blob_process(p,oid,wanted,size,alternate,deadline):
  """One record from a long-lived batch reader, never buffering a blob."""
- if not H40.fullmatch(oid) or not H64.fullmatch(wanted) or not H64.fullmatch(alternate) or not isinstance(size,int) or size<0:bad('malformed blob record')
+ if not H40.fullmatch(oid) or not H64.fullmatch(wanted) or not H64.fullmatch(alternate) or not isinstance(size,int) or size<0 or size>MAX_BLOB:bad('malformed blob record')
  if time.monotonic()>deadline:bad('canonical reader deadline')
  try:
   pipe_write(p.stdin,(oid+'\n').encode('ascii'),deadline); h=pipe_line(p.stdout,deadline).decode('ascii','strict').strip().split()
   if len(h)!=3 or h[0]!=oid or h[1]!='blob' or not h[2].isdigit() or int(h[2])!=size:bad('blob header/type/size')
-  left=size; d=hashlib.sha256(); obj=hashlib.sha256(('blob '+str(size)+'\0').encode('ascii'))
+  left=size; d=hashlib.sha256(); obj=hashlib.sha1(); obj256=hashlib.sha256(); header=('blob '+str(size)+'\0').encode('ascii'); obj.update(header); obj256.update(header)
   while left:
    if time.monotonic()>deadline:bad('canonical reader deadline')
    b=pipe_read(p.stdout,min(1<<20,left),deadline)
    if not b:bad('short blob')
-   d.update(b);obj.update(b);left-=len(b)
+   d.update(b);obj.update(b);obj256.update(b);left-=len(b)
   if pipe_read(p.stdout,1,deadline)!=b'\n':bad('blob terminator')
  except (OSError,UnicodeError) as e:bad('blob stream: '+str(e))
- if d.hexdigest()!=wanted or obj.hexdigest()!=alternate:bad('blob digest/object id')
+ if d.hexdigest()!=wanted or obj.hexdigest()!=oid or obj256.hexdigest()!=alternate:bad('blob digest/object id')
 def stream_blob(directory,oid,wanted,size,alternate=None):
  """Testable one-record wrapper; production uses stream_store below."""
  if alternate is None:alternate=hashlib.sha256(('blob '+str(size)+'\0').encode('ascii')+b'abc').hexdigest()
  p=None;primary=None
  try:
   p=_reader(directory);stream_blob_process(p,oid,wanted,size,alternate,time.monotonic()+900)
-  p.stdin.close()
   if finish_reader(p)!=0:bad('blob reader exit')
   p._mckernel_reader_finished=True
  except (OSError,UnicodeError) as e:
   primary=Error('blob stream: '+str(e));raise primary
  except BaseException as e:
-  primary=e;raise
+  primary=e
+  if p is not None:p._mckernel_reader_primary=primary
+  raise
  finally:
   cleanup=None
   if p is not None and not getattr(p,'_mckernel_reader_finished',False):
    try:finish_reader(p);p._mckernel_reader_finished=True
-   except BaseException as e:cleanup=e
+   except BaseException as e:
+    # The real finalizer already wrapped the original stream failure.  Do not
+    # wrap that same primary a second time in this outer compatibility block.
+    if primary is not None and failure_contains(e,primary):primary=None
+    cleanup=e
   cleanup=combined(cleanup,close_streams(process_streams(p) if p is not None else {}))
+  if primary is not None and failure_contains(cleanup,primary):primary=None
   if cleanup is not None:raise_primary(primary,cleanup)
 def stream_store(directory,records):
  p=None;primary=None
  try:
   p=_reader(directory);deadline=time.monotonic()+900
   for oid,wanted,size,alternate in records:stream_blob_process(p,oid,wanted,size,alternate,deadline)
-  p.stdin.close()
   if finish_reader(p)!=0:bad('canonical reader exit')
   p._mckernel_reader_finished=True
  except BaseException as e:
-  primary=e;raise
+  primary=e
+  if p is not None:p._mckernel_reader_primary=primary
+  raise
  finally:
   cleanup=None
   if p is not None and not getattr(p,'_mckernel_reader_finished',False):
    try:finish_reader(p);p._mckernel_reader_finished=True
-   except BaseException as e:cleanup=e
+   except BaseException as e:
+    if primary is not None and failure_contains(e,primary):primary=None
+    cleanup=e
   cleanup=combined(cleanup,close_streams(process_streams(p) if p is not None else {}))
+  if primary is not None and failure_contains(cleanup,primary):primary=None
   if cleanup is not None:raise_primary(primary,cleanup)
 def verify_inventory(inv):
  if not isinstance(inv,dict) or inv.get('revisions')!={'main':MAIN,'ihk':IHK} or not isinstance(inv.get('entries'),list):bad('inventory revision/entries')
  main=[];ihk=[]
+ common={'classification','gid','mode','path','root','size','type','uid'}
  for r in inv['entries']:
-  if not isinstance(r,dict) or r.get('classification')!='reconstructible' or r.get('type') not in ('regular','symlink'):continue
+  if not isinstance(r,dict):bad('inventory record shape')
+  typ=r.get('type');classification=r.get('classification')
+  if typ not in ('directory','regular','symlink') or classification not in ('reconstructible','capsule-required'):bad('inventory record type/classification')
+  expected=common|({'git_oids','sha256'} if typ=='regular' else {'git_oids','target'} if typ=='symlink' else set())
+  if set(r)!=expected:bad('inventory record fields')
+  if r.get('root') not in ('candidate','metadata-backup') or not isinstance(r.get('path'),str) or not r['path'] or r['path'].startswith('/') or '\x00' in r['path'] or '..' in r['path'].split('/') :bad('inventory path/root')
+  if not all(isinstance(r.get(k),int) and r[k]>=0 for k in ('uid','gid','mode','size')) or r['size']>(MAX_FILE if typ=='directory' else MAX_BLOB):bad('inventory metadata')
+  if typ=='directory':continue
   ids=r.get('git_oids')
-  if not isinstance(ids,dict):bad('reconstructible oid')
-  (ihk if r.get('path','').startswith('ihk/') else main).append((ids.get('sha1',''),r.get('sha256',''),r.get('size'),ids.get('sha256','')))
+  if not isinstance(ids,dict) or set(ids)!=set(('sha1','sha256')) or not H40.fullmatch(ids['sha1']) or not H64.fullmatch(ids['sha256']):bad('reconstructible oid')
+  if typ=='regular' and not H64.fullmatch(r.get('sha256','')):bad('regular digest')
+  if classification!='reconstructible':continue
+  if r['root']!='candidate':bad('reconstructible root')
+  wanted=r.get('sha256')
+  if typ=='symlink':
+   if not isinstance(r.get('target'),str):bad('symlink target')
+   target=os.fsencode(r['target'])
+   if len(target)!=r['size']:bad('symlink target size')
+   wanted=sha(target)
+  (ihk if r['path'].startswith('ihk/') else main).append((ids['sha1'],wanted,r['size'],ids['sha256']))
+ if len(main)!=7715 or len(ihk)!=1296:bad('canonical object routing/count')
+ # No subprocess is spawned until every record above has passed validation.
  stream_store(GIT,main);stream_store(IHK_GIT,ihk)
 def mechanical(release,fetched):
  t=release.get('template');f=release.get('finalization')

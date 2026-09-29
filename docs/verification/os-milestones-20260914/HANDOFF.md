@@ -890,3 +890,17 @@ missing/duplicate tokens reject.
 Commit/push/fetch this exact template before regenerating the release. Then
 obtain independent exact mechanical/execution review before any privileged
 retirement. No runtime or acceptance counter changed.
+
+Checkpoint 138 supersedes checkpoint 134's release state. Release
+`aa763d01...9d02` is preserved as an unprivileged admission FAIL: its 512-MiB
+reader could not map the 7.89-GiB pack. A 12-GiB bounded correction exposed the
+wrong authority for 49 symlink digests, 7.9-GiB RSS and an EOF-wait cleanup
+defect. Expert redesign and one independent review correction now PASS exact
+DRAFT packet `6f2be938...ebc2` and test `e26918a6...5cf1`.
+
+Both runtimes pass 116 tests and complete all 9,011 canonical objects/
+9,050,119,070 bytes at about 260 MiB peak RSS with four recorded reader
+identities, rc 0, retired state and empty final censuses. The current worktree
+removes the invalid release JSON and restores DRAFT. Commit/push/fetch it as the
+new template, then regenerate the exact two-path release and obtain separate
+execution review before sudo. No retirement/build/guest/application credit.

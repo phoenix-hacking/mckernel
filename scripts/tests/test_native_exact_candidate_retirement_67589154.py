@@ -42,8 +42,9 @@ class T(unittest.TestCase):
   self.assertEqual(M.final_bytes(raw,'a'*64),b"RELEASE_SHA256='"+b'a'*64+b"'")
   with self.assertRaises(M.Error):M.final_bytes(raw+raw,'a'*64)
  def test_exact_git_argv(self):
-  self.assertEqual(M.gargv(M.GIT,'rev-parse','HEAD')[:4],['/usr/bin/git','--no-optional-locks','--git-dir=/home/holden/mckernel/.git','--work-tree=/home/holden/mckernel'])
-  self.assertNotIn('-C',M.gargv(M.GIT,'x'));self.assertEqual(M.genv()['GIT_ASKPASS'],'/bin/false')
+  self.assertEqual(M.gargv(M.GIT,'rev-parse','HEAD'),['/usr/bin/git','--no-optional-locks','--git-dir=/home/holden/mckernel/.git','--work-tree=/home/holden/mckernel','rev-parse','HEAD'])
+  self.assertEqual(M.reader_argv(M.GIT,'cat-file','--batch')[2:8],['-c','core.packedGitWindowSize=32m','-c','core.packedGitLimit=128m','-c','core.deltaBaseCacheLimit=32m'])
+  self.assertIn('core.deltaBaseCacheLimit=32m',M.reader_argv(M.GIT,'x'));self.assertNotIn('-C',M.gargv(M.GIT,'x'));self.assertEqual(M.genv()['GIT_ASKPASS'],'/bin/false')
  def test_root_and_release_path_fail_closed(self):
   self.final()
   with mock.patch.object(M.os,'geteuid',return_value=1000):
@@ -55,7 +56,7 @@ class T(unittest.TestCase):
    def __init__(self,b):self.pid=None;self.stdin=io.BytesIO();self.stdout=io.BytesIO(b);self.stderr=io.BytesIO()
    def wait(self):return 0
    def poll(self):return 0
-  oid='0'*40;d=hashlib.sha256(b'abc').hexdigest()
+  oid='f2ba8f84ab5c1bce84a7b441cb1959cfc7093b7f';d=hashlib.sha256(b'abc').hexdigest()
   with mock.patch.object(M.subprocess,'Popen',return_value=P((oid+' blob 3\n').encode()+b'abc\n')):M.stream_blob(M.GIT,oid,d,3)
   for raw in ((oid+' tree 3\n').encode()+b'abc\n',(oid+' blob 4\n').encode()+b'abc\n',(oid+' blob 3\n').encode()+b'ab'):
    with mock.patch.object(M.subprocess,'Popen',return_value=P(raw)):
@@ -69,6 +70,10 @@ class T(unittest.TestCase):
   with mock.patch.object(M,'retire_process',return_value=(b'',b'')) as retire:
    with self.assertRaises(subprocess.TimeoutExpired):M.finish_reader(p)
   retire.assert_called_once()
+ def test_canonical_reader_virtual_limit_covers_retained_pack_mapping(self):
+  with mock.patch.object(M.resource,'setrlimit') as setlimit:M.canonical_reader_limits()
+  self.assertEqual(setlimit.call_args_list,[mock.call(M.resource.RLIMIT_AS,(2<<30,2<<30)),mock.call(M.resource.RLIMIT_CPU,(900,900))])
+  self.assertLess(2<<30,7890604289)
  def test_raw_child_is_retired_if_binding_fails(self):
   class Pipe(io.BytesIO):
    def __init__(self):super().__init__();self.closed_by_packet=False
@@ -445,9 +450,9 @@ class T(unittest.TestCase):
    p.wait.side_effect=M.Interrupted('wait interrupted')
    def retired(*args):p._mckernel_retired=True;return b'',b''
    with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process',side_effect=M.Error('blob failed')),mock.patch.object(M,'retire_process',side_effect=retired) as cleanup:
-    with self.assertRaises(M.CompositeInterrupted) as raised:invoke()
+    with self.assertRaises(M.Error) as raised:invoke()
    cleanup.assert_called_once();record=M.error_record(raised.exception)
-   self.assertEqual(record['primary']['message'],'blob failed');self.assertEqual(record['cleanup']['message'],'wait interrupted')
+   self.assertEqual(record['message'],'blob failed')
    self.assertTrue(p.stdout.closed);self.assertTrue(p.stderr.closed)
  def test_wait_census_and_drain_errors_do_not_abort_kill_escalation(self):
   for failure in (RuntimeError('wait defect'),M.Interrupted('wait signal'),KeyboardInterrupt('wait keyboard')):
@@ -714,4 +719,66 @@ class T(unittest.TestCase):
   with mock.patch.object(M.os,'waitid',side_effect=ChildProcessError('already reaped')),mock.patch.object(M,'proc_row',return_value=dict(self.leader(),starttime=10)),mock.patch.object(M,'pidfd_open') as opened,mock.patch.object(M.os,'kill') as sent,mock.patch.object(M,'session_members',return_value=[]):
    with self.assertRaisesRegex(M.Error,'unreaped direct-child identity unavailable'):M.retire_process(p,{})
   opened.assert_not_called();sent.assert_not_called();self.assertFalse(p._mckernel_retired)
+ def test_inventory_validates_symlink_and_all_records_before_any_reader_spawn(self):
+  common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000}
+  regular=dict(common,type='regular',path='main-file',size=3,sha256=hashlib.sha256(b'abc').hexdigest(),git_oids={'sha1':'0'*40,'sha256':'1'*64})
+  link=dict(common,type='symlink',path='ihk/link',size=3,target='abc',git_oids={'sha1':'2'*40,'sha256':'3'*64})
+  entries=[dict(regular,path='main-%d'%i) for i in range(7715)]+[dict(link,path='ihk/link-%d'%i) for i in range(1296)]
+  with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries})
+  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7715,1296])
+  bad=dict(link,target='\udcff')
+  with self.assertRaises(M.Error):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries[:-1]+[bad]})
+  streams.assert_has_calls([])
+  capsule=dict(regular,classification='capsule-required',path='capsule-large',size=M.MAX_FILE+1)
+  with mock.patch.object(M,'stream_store') as streams:M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[capsule]})
+  self.assertEqual([len(x.args[1]) for x in streams.call_args_list],[7715,1296])
+  with self.assertRaisesRegex(M.Error,'inventory metadata'):
+   M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':entries+[dict(capsule,size=M.MAX_BLOB+1)]})
+ def test_inventory_rejects_malformed_digest_oid_and_record_shape_before_spawn(self):
+  common={'classification':'reconstructible','gid':1000,'mode':0o644,'root':'candidate','uid':1000,'type':'regular','path':'x','size':3,'sha256':'a'*64,'git_oids':{'sha1':'0'*40,'sha256':'1'*64}}
+  for change in (dict(common,sha256='bad'),dict(common,git_oids={'sha1':'bad','sha256':'1'*64}),dict(common,extra=1),dict(common,size=-1)):
+   with mock.patch.object(M,'stream_store') as streams:
+    with self.assertRaises(M.Error):M.verify_inventory({'revisions':{'main':M.MAIN,'ihk':M.IHK},'entries':[change]})
+    streams.assert_not_called()
+ def test_stream_blob_requires_requested_git_sha1_and_sha256_objects(self):
+  data=b'abc';oid=hashlib.sha1(b'blob 3\0'+data).hexdigest();oid256=hashlib.sha256(b'blob 3\0'+data).hexdigest();digest=hashlib.sha256(data).hexdigest()
+  class P:
+   def __init__(self,raw):self.stdin=io.BytesIO();self.stdout=io.BytesIO(raw);self.stderr=io.BytesIO()
+  M.stream_blob_process(P((oid+' blob 3\n').encode()+data+b'\n'),oid,digest,3,oid256,time.monotonic()+1)
+  with self.assertRaisesRegex(M.Error,'blob digest/object id'):
+   M.stream_blob_process(P(('0'*40+' blob 3\n').encode()+data+b'\n'),'0'*40,digest,3,oid256,time.monotonic()+1)
+ def test_reader_primary_failure_retires_eof_waiting_child_without_natural_wait(self):
+  p=subprocess.Popen([sys.executable,'-c','import sys;sys.stdin.read()'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
+  try:
+   M.bind_process(p);p._mckernel_reader_primary=M.Error('injected record failure');started=time.monotonic()
+   with self.assertRaises(M.Error):M.finish_reader(p)
+   self.assertLess(time.monotonic()-started,2);self.assertTrue(p._mckernel_retired);self.assertTrue(p.stdin.closed);self.assertTrue(p.stdout.closed);self.assertTrue(p.stderr.closed)
+  finally:
+   if p.poll() is None:p.kill()
+   try:p.wait(timeout=2)
+   except subprocess.TimeoutExpired:pass
+ def test_reader_primary_stdin_close_and_retirement_failures_are_both_composite(self):
+  p=self.anchored();p.stdin=mock.Mock();p.stdin.close.side_effect=OSError('stdin close failed');p.stdout=io.BytesIO();p.stderr=io.BytesIO();p._mckernel_reader_primary=M.Error('record failed')
+  with mock.patch.object(M,'cleanup_process',return_value=((b'',b''),M.Error('retirement failed'))):
+   with self.assertRaises(M.CompositeError) as raised:M.finish_reader(p)
+  tree=M.error_record(raised.exception)
+  messages=[]
+  def walk(x):
+   messages.append(x.get('message',''))
+   for key in ('primary','cleanup'):
+    if key in x:walk(x[key])
+  walk(tree);self.assertIn('record failed',messages);self.assertIn('stdin close failed',messages);self.assertIn('retirement failed',messages);self.assertTrue(p.stdout.closed);self.assertTrue(p.stderr.closed)
+ def test_reader_nonzero_exit_retains_both_output_close_failures(self):
+  for invoke in (lambda:M.stream_blob(M.GIT,'0'*40,'a'*64,3),lambda:M.stream_store(M.GIT,[('0'*40,'a'*64,3,'b'*64)])):
+   p=self.proc();p._mckernel_reader_finished=False;p.stdout=mock.Mock();p.stderr=mock.Mock();p.stdin=mock.Mock()
+   p.stdout.close.side_effect=OSError('stdout close failed');p.stderr.close.side_effect=OSError('stderr close failed')
+   with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process'),mock.patch.object(M,'finish_reader',return_value=7):
+    with self.assertRaises(M.CompositeError) as raised:invoke()
+   text=str(raised.exception);self.assertTrue('canonical reader exit' in text or 'blob reader exit' in text);self.assertIn('stdout close failed',text);self.assertIn('stderr close failed',text)
+ def test_reader_embedded_primary_identity_is_not_duplicated(self):
+  p=self.proc();p._mckernel_reader_finished=False;primary=M.Error('record identity')
+  embedded=M.CompositeError(primary,M.Error('retirement identity'))
+  with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process',side_effect=primary),mock.patch.object(M,'finish_reader',side_effect=embedded):
+   with self.assertRaises(M.CompositeError) as raised:M.stream_blob(M.GIT,'0'*40,'a'*64,3)
+  record=M.error_record(raised.exception);self.assertEqual(record['primary']['message'],'record identity');self.assertEqual(record['cleanup']['message'],'retirement identity')
 if __name__=='__main__':unittest.main()

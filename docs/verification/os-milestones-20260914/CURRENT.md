@@ -7320,3 +7320,43 @@ change exactly the packet sentinel and add its release JSON; it still requires
 separate exact mechanical/execution review and fresh support checks before any
 one-shot sudo invocation. Builds remain zero, real applications this window
 remain zero, applications remain 0/273 and formal counters remain unchanged.
+
+Continuation checkpoint 138, 2026-09-29: fetched two-path release commit
+`aa763d01...9d02` was mechanically correct but failed its first unprivileged
+full admission before root euid or runtime mutation. The canonical Git child
+could not map the retained 7,890,604,289-byte pack under its 512-MiB virtual
+limit and exited 128 before the first object. The one bounded 12-GiB correction
+then reached record 5,634 and exposed 49 symlinks whose content hash must derive
+from their target bytes; it also measured 7,900,852 KiB RSS and compounded the
+primary with a five-second EOF-wait cleanup timeout. Records
+`stability-native-exact-retirement-release-admission-failure-20260929-1.json`
+and `...-admission-correction-failure-20260929-1.json` preserve both failures.
+The invalid release remains immutable in Git history and is deleted from the
+new DRAFT worktree; no privileged retirement occurred.
+
+Expert escalation 135 replaced that family coherently. Canonical readers alone
+use 32-MiB packed windows, 128-MiB packed mapping limit, 32-MiB delta cache and
+a 2-GiB address-space cap. Before spawn, the packet validates all retained
+record shapes and routes exactly 7,715 main plus 1,296 IHK objects. It derives
+symlink content digests from target bytes, uses a separate 128-MiB blob bound,
+and streams content SHA256 plus both Git SHA1/SHA256 object identities. Reader
+failure closes stdin boundedly, performs anchored retirement with output pipes
+retained through census, and preserves complete identity-based failure trees.
+
+Independent review 137 first BLOCKed packet `70e3637c...68ad` because unrelated
+composite close errors could hide a natural-exit primary; record
+`stability-native-exact-retirement-canonical-reader-review-failure-20260929-1.json`
+preserves the reproducer. Final packet `6f2be938...ebc2` and test
+`e26918a6...5cf1` PASS independent re-review. Python 3.8 and 3.9 each pass 116
+tests. Exact final-source full runs each verify all 9,011 objects and
+9,050,119,070 bytes in 33.846/34.381 seconds with 259,632/259,540 KiB peak RSS,
+zero swap, and four recorded readers exiting 0, retired, pidfd released and
+empty final census. Record
+`stability-native-exact-retirement-canonical-reader-source-success-20260929-1.json`
+preserves identities and measurements.
+
+Next commit/push/fetch this DRAFT source and failure lineage as the new immutable
+template. Then regenerate the release against it, verify the exact two-path
+delta and complete full fetched admission, followed by separate execution
+review before one-shot sudo. Current-candidate builds and real guest apps this
+window remain zero; applications remain 0/273 and formal counters are unchanged.

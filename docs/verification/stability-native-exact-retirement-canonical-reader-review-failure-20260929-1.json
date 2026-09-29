@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel-retirement-canonical-reader-review-failure-v1",
+  "recorded_at": "2026-09-29T06:45:00-07:00",
+  "status": "BLOCK_SOURCE_TEMPLATE",
+  "review_task": "retirement_canonical_reader_review_137",
+  "reviewed": {
+    "packet_sha256": "70e3637c216981b64d45fea2dbb1f7d31a675fee35c47f6e9eb8078c107068ad",
+    "packet_test_sha256": "c1155212eed167c70afe44f0d3a6305e79bda270025bab338d0fd46441c17bcb",
+    "helper_sha256": "704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b"
+  },
+  "finding": "stream_store and stream_blob cleared any primary whenever cleanup was a CompositeError, without proving that cleanup already contained that same exception object.",
+  "reproducer": {
+    "primary": "canonical reader exit from natural rc 7",
+    "cleanup": ["stdout close failed", "stderr close failed"],
+    "observed_serialized_result": "only the two close failures; primary omitted",
+    "required_result": "primary plus both cleanup failures"
+  },
+  "required_correction": "Use cycle/budget-bounded exception identity containment or one explicit composition path. Never infer duplicate ownership from exception type or string equality. Cover both wrappers and the already-embedded-identical-primary case.",
+  "independent_checks": {
+    "python_3_8": "114/114 PASS but missing this path",
+    "python_3_9": "114/114 PASS but missing this path",
+    "real_eof_stderr_trailing_output_probes": "PASS with empty final session censuses",
+    "other_blocking_findings": "none in reader limits, content authority, routing, streamed hashes or normal finalization"
+  },
+  "side_effects": {
+    "files_edited_by_reviewer": false,
+    "privileged_operation": false,
+    "candidate_traversal": false,
+    "retirement_execution": false,
+    "build_or_guest": false
+  }
+}

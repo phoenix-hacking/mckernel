@@ -1,0 +1,35 @@
+{
+  "schema": "mckernel-retirement-release-admission-failure-v1",
+  "recorded_at": "2026-09-29T06:18:00-07:00",
+  "status": "FAIL_FETCHED_UNPRIVILEGED_ADMISSION",
+  "release_commit": "aa763d01d7dcb0444d8db7636301b61ec3349d02",
+  "release_sha256": "e9c03ce437dde8a1ed7933a57a2602fb466cae59622c7f0ba41e596bf2f77fa5",
+  "packet_sha256": "5fea88fb4acf4fd36c12209ef63889f20a967f9983d50a83939a1f9b1622d72c",
+  "failed_stage": "validate_release.verify_inventory.stream_store first main object",
+  "first_object": {
+    "sha1": "eb940da54013c60062ca7bb5b9c1d50c19205b50",
+    "sha256": "b37b4adbf97d72358e4cd663450d875f1682be2a2b8e342bc252e60f1888e6d8",
+    "size": 819,
+    "git_sha256_object": "4a9ef6cb9ec234ed14f00031065c0ae4fb0c99e0cc8d45dfc19bbb4878d7b209"
+  },
+  "error": "blob header/type/size",
+  "child_exit": 128,
+  "child_stderr": "fatal: packfile /home/holden/mckernel/.git/objects/pack/pack-60e4f5f092bbfb766490c13e676f957cac2adb1e.pack cannot be mapped: Cannot allocate memory",
+  "diagnosis": {
+    "pack_path": "/home/holden/mckernel/.git/objects/pack/pack-60e4f5f092bbfb766490c13e676f957cac2adb1e.pack",
+    "pack_size": 7890604289,
+    "reader_address_space_limit": 536870912,
+    "independent_batch_check": "all 7715 main and 1296 IHK object headers, types and sizes match",
+    "cause": "The child virtual-address limit was smaller than the immutable pack mapping; the streaming verifier did not reach object bytes."
+  },
+  "side_effects": {
+    "root_euid_entered": false,
+    "candidate_or_backup_traversed_by_packet": false,
+    "retirement_executed": false,
+    "privilege_mutation": false,
+    "docker_mutation": false,
+    "build_or_guest": false,
+    "release_commit_preserved_in_git": true
+  },
+  "correction_boundary": "Raise only the canonical Git reader virtual-address ceiling to 12 GiB so the 7.9-GiB pack can map; retain streaming, 900-second wall/CPU bounds, 1-MiB chunks, digest/object checks and child retirement. Measure actual maximum RSS during the full verifier."
+}
