@@ -429,3 +429,11 @@ tmpfs allocation must be independently observed and cleaned before a replacement
 commit-derived candidate can preserve the 4-GiB reserve. Then rebind the new
 owner/test hashes, prepare a new candidate/request and obtain fresh heavy-build
 review. The Python-3.9 workflow import failure is retained; do not weaken it.
+
+Checkpoint 81 pushes the pre-cleanup retention capsule for prepared candidate
+`68cf089a-1`: 920 installed-Git/backup/manifest/request members, SHA-256
+`eed1879b...80c6`. See
+`stability-native-exact-prepared-candidate-retention-20260929-1.json`. Both
+tmpfs roots remain live. Delete only after fetched verification, root-complete
+zero-reference observation, clean lease/container preflight and independent
+review of the exact two-root deletion packet. No other path is in cleanup scope.

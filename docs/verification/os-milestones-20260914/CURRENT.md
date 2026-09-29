@@ -6150,3 +6150,18 @@ After cleanup, generate one new SHA-bound preparation packet, prepare/validate
 the replacement, and seek a fresh heavy-build release. This source correction
 changes no formal counter; there are still zero new guest applications and zero
 successful current-candidate builds in this continuation.
+
+Continuation checkpoint 81, 2026-09-28: the superseded prepared candidate's
+small unique state is preserved before any cleanup. The 4,283,649-byte capsule
+contains 920 unique supported members: both installed Git directories, the
+complete metadata backup, metadata receipt, exact manifest and request. Capsule
+SHA-256 is `eed1879b...80c6`; its additive record is
+`stability-native-exact-prepared-candidate-retention-20260929-1.json`.
+
+Both tmpfs roots remain present and unchanged. Deletion is held until this
+capsule is pushed/fetched, a root-complete inode/filesystem-coordinate observer
+reports zero permission denials and zero process/fd/map/mount references, fresh
+lease/container preflight is clean, and an exact two-root deletion packet passes
+independent review. Restoration uses main `68cf089a`, IHK `3114d9e7`, Git index
+modes and the capsule; historical replay still needs a new execution release.
+This preservation changes no build, guest or acceptance count.

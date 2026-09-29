@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.native-exact-prepared-candidate-retention.v1",
+  "date": "2026-09-29",
+  "status": "PRESERVED_BEFORE_CLEANUP",
+  "candidate": {
+    "path": "/dev/shm/mckernel-exact-candidate-68cf089a-1",
+    "device": 26,
+    "inode": 14117,
+    "mode": "0755",
+    "source_commit": "68cf089a22b0a0c034a7f1fcc695853fbf5c07eb",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "tree_entries": 10462
+  },
+  "metadata_backup": {
+    "path": "/dev/shm/mckernel-exact-metadata-backup-68cf089a-1",
+    "device": 26,
+    "inode": 24701,
+    "mode": "0755",
+    "tree_entries": 87
+  },
+  "capsule": {
+    "path": "docs/verification/evidence/stability-native-exact-prepared-candidate-retention-68cf089a-20260929-1.tar.gz",
+    "sha256": "eed1879bd35c62d7aa629189dfc0c46254680209ab02f933278c70c8cf9880c6",
+    "bytes": 4283649,
+    "members": 920,
+    "regular_files": 626,
+    "directories": 294,
+    "symlinks": 0,
+    "contents": [
+      "installed candidate main Git metadata",
+      "installed candidate IHK Git metadata",
+      "complete pre-conversion main/IHK metadata backup",
+      "metadata receipt",
+      "exact input manifest",
+      "exact build request"
+    ]
+  },
+  "existing_preparation_evidence": {
+    "record": "docs/verification/stability-native-exact-candidate-preparation-checkpoint-20260929-1.json",
+    "record_sha256": "bc8b3a6d819208b7266e39bb91862ddbacba5ec700dcf14b960fe7857aa2be99",
+    "archive": "docs/verification/evidence/stability-native-exact-candidate-preparation-68cf089a-20260929-1.tar.gz",
+    "archive_sha256": "78e2b5c44e9ae00f2f463ac8b93723e26d00877fbbe7ecfb285d1d89d6404264",
+    "input_manifest_sha256": "ae0c5f74e3e3f06176c46f2f174b1109c11a4e88f23ee71fd7432e6325262abd",
+    "request_sha256": "25f820e2994d41427ed16cf5f062d647125ccb7144f63afe618e88ccce7f576c"
+  },
+  "restoration": "Restore the clean worktrees from the exact main and IHK commits with Git index modes, then restore the installed Git directories and metadata backup from the capsule. Revalidate the committed manifest, request, preparation record and source closures before any historical replay. Historical execution still requires a fresh independent release.",
+  "cleanup_hold": "Do not delete either tmpfs root until this record and capsule are pushed/fetched, a root-complete live inode/mount/process snapshot has zero permission denials and zero references, Docker/lease preflight is clean, and the exact deletion packet passes independent review.",
+  "acceptance_credit": false
+}
