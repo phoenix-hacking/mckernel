@@ -10,7 +10,7 @@ class DiskCopyPacketTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls): cls.text=PACKET.read_text()
     def test_exact_inputs_and_fresh_outputs(self):
-        for token in ('76ae20b523f57dee8e0fb1fb834caf5443f9f671','5c893b1af09e0728aed3c220ab3811d3f1047d013a83e59f05c762db43e9ce75','a483f42764f27b9785ff1465d35fd22632c9a2535664868b8f81655e96044d4a','9a1a4b0c6e98b9b09ef934962dbcd9dac7ed3d23e90104c1561d6a4953cc348c','RELEASE_HASH_REQUIRED','76ae20b5-disk-1'):
+        for token in ('76ae20b523f57dee8e0fb1fb834caf5443f9f671','5c893b1af09e0728aed3c220ab3811d3f1047d013a83e59f05c762db43e9ce75','a483f42764f27b9785ff1465d35fd22632c9a2535664868b8f81655e96044d4a','9a1a4b0c6e98b9b09ef934962dbcd9dac7ed3d23e90104c1561d6a4953cc348c','448246856c1abdeb140704f6ecba8f063a24292b976cc4e2ab95eab38de3d2c6','76ae20b5-disk-1'):
             self.assertIn(token,self.text)
     def test_copy_is_non_destructive_and_exact(self):
         for token in ('--no-clobber','--reflink=never','mckernel.exact-tree-inventory.v2','copy inventory differs','source-post.json','O_NOFOLLOW','st_nlink != 1','os.fsync','--ignore-submodules=dirty','memory_allocation_memory_backed_bytes','renameat2','escaping, dangling, or cyclic symlink','st_mtime_ns','st_ctime_ns','for parent in sys.argv[5:]'):

@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 # One-shot copy/validation packet. It never deletes a source, invokes Docker,
 # compiles, acquires a build lease, or runs a guest.
-readonly RELEASE_HASH=RELEASE_HASH_REQUIRED
+readonly RELEASE_HASH=448246856c1abdeb140704f6ecba8f063a24292b976cc4e2ab95eab38de3d2c6
 readonly SOURCE=/dev/shm/mckernel-exact-candidate-76ae20b5-1
 readonly SOURCE_BACKUP=/dev/shm/mckernel-exact-metadata-backup-76ae20b5-1
 readonly SCRATCH=/home/holden/mckernel-work/scratch
