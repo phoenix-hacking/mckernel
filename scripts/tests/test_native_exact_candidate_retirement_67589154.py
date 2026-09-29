@@ -357,7 +357,7 @@ class T(unittest.TestCase):
   self.assertEqual(M.HELPER_SHA256,'704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b')
   self.assertEqual(M.HELPER_SHA256,M.sha(M.HELPER.read_bytes()));self.assertEqual(M.HELPER_TEST_SHA256,M.sha(M.HELPER_TEST.read_bytes()))
   self.assertEqual(M.OBSERVER_SHA256,'3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666')
-  self.assertIn('RELEASE_HASH_REQUIRED',PACKET.read_text())
+  self.assertEqual(PACKET.read_bytes().count(b"RELEASE_SHA256='RELEASE_HASH_REQUIRED'"),1)
   self.assertNotIn('"/usr/bin/sudo"',PACKET.read_text())
  def test_descriptor_output_substitution_and_immutable_reopen_fail_closed(self):
   with tempfile.TemporaryDirectory() as d:

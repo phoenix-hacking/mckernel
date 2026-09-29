@@ -517,7 +517,7 @@ def gscalar(directory,*a):
  return x
 def blob(directory,commit,path):return gout(directory,'show',commit+':'+path)
 def final_bytes(template,release_hash):
- old=b"RELEASE_SHA256='RELEASE_HASH_REQUIRED'"; new=b"RELEASE_SHA256='"+release_hash.encode('ascii')+b"'"
+ old=b'RELEASE_SHA256='+bytes((39,))+b'RELEASE_HASH_REQUIRED'+bytes((39,)); new=b"RELEASE_SHA256='"+release_hash.encode('ascii')+b"'"
  if template.count(old)!=1:bad('release sentinel not unique')
  return template.replace(old,new)
 def canonical_stores():

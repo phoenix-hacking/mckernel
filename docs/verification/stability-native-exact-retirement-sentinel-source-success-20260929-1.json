@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel-retirement-sentinel-source-success-v1",
+  "recorded_at": "2026-09-29T06:12:00-07:00",
+  "status": "PASS_SOURCE_TEMPLATE_ONLY",
+  "failure_record": {
+    "path": "docs/verification/stability-native-exact-retirement-release-generation-failure-20260929-2.json",
+    "sha256": "7c3ab4d4ebff0998de333879081c59982bccad5b256e5493fcd2d0a9969235ea"
+  },
+  "raw_failed_release": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-retirement-release-generation-67589154-2/release-candidate-2.json",
+    "sha256": "5a28247b133f897e10dd703f03f8f79f62d137694e9c9b03a996c4f36289bb34",
+    "size": 2369338
+  },
+  "reviewed_sources": {
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "sha256": "aaf4ac877d00dbf690b36b84dc6dbfa7201a9c130d4241ae981f016cf1f3de87"
+    },
+    "packet_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py",
+      "sha256": "7a563aaccfc2c6ff15feb1c3fefe2e65d9476cc8ef394bf01c53244d7850d346"
+    }
+  },
+  "verified_behavior": [
+    "The DRAFT packet source contains exactly one complete release sentinel token.",
+    "final_bytes constructs the search token without embedding a second complete occurrence.",
+    "The exact-one guard and exact declaration-only replacement remain unchanged in strength.",
+    "Missing and duplicated sentinels reject.",
+    "Docker comparison, admission, ownership, cleanup and retirement behavior are unchanged."
+  ],
+  "checks": {
+    "prior_template_reproducer": "PASS: two tokens reject with release sentinel not unique",
+    "corrected_actual_packet": "PASS: one token and declaration-only finalization",
+    "python_3_8_combined": "108/108 PASS",
+    "python_3_9_combined": "108/108 PASS",
+    "py_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "independent_review": {
+    "task": "retirement_sentinel_review_133",
+    "status": "PASS_SOURCE_TEMPLATE_ONLY"
+  },
+  "limitations": [
+    "The retained release candidate binds the rejected prior template and is failure evidence only.",
+    "No regenerated release or privileged execution is approved.",
+    "No build, guest, application or formal acceptance counter changes."
+  ],
+  "next_action": "Commit, push and fetched-blob verify the corrected DRAFT template, then mechanically regenerate and independently review the exact two-path release."
+}

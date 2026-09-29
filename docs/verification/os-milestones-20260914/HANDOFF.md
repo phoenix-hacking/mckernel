@@ -878,3 +878,15 @@ Commit/push/fetch this DRAFT template and the two new records. Then regenerate
 the acyclic release against that fetched commit, change only packet plus release
 paths, and obtain separate mechanical/execution review before sudo retirement.
 No build, guest, application or acceptance counter changed.
+
+Checkpoint 134 supersedes checkpoint 132's template hashes. Release candidate
+2 `5a28247b...bb34` passed root/archive/Docker validation but exposed a second
+complete sentinel token embedded inside `final_bytes`; the exact-one guard
+correctly blocked it. The raw candidate and failure are preserved. Corrected
+DRAFT packet `aaf4ac87...de87` and test `7a563aac...d346` independently PASS:
+the source now has one token, finalization changes only its declaration, and
+missing/duplicate tokens reject.
+
+Commit/push/fetch this exact template before regenerating the release. Then
+obtain independent exact mechanical/execution review before any privileged
+retirement. No runtime or acceptance counter changed.

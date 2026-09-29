@@ -7292,3 +7292,31 @@ release bound to that commit, changing exactly the packet sentinel and adding
 the release JSON; obtain separate exact mechanical/execution review before any
 one-shot sudo run. Current-candidate builds remain zero, real applications this
 window remain zero, applications remain 0/273, and formal counters do not move.
+
+Continuation checkpoint 134, 2026-09-29: release candidate 2
+`5a28247b...bb34` passed schema, both full root/archive checks and three fresh
+13-container Docker censuses, then failed its precommit exact-byte finalization.
+The fetched template contained the complete sentinel twice: once in the release
+declaration and once as the literal inside `final_bytes`, so the intended
+exact-one guard deterministically rejected it. The raw 2,369,338-byte candidate
+is retained at scratch device/inode 1831/2907354 and record
+`stability-native-exact-retirement-release-generation-failure-20260929-2.json`
+preserves the result. The DRAFT declaration is restored. No release commit,
+retirement, privileged mutation, Docker mutation, build or guest occurred.
+
+The one bounded sentinel correction independently PASSes packet
+`aaf4ac87...de87` and test `7a563aac...d346`. It constructs the same search
+bytes from pieces so only the declaration contains the complete token; the
+exact-one guard and exact replacement remain intact. The prior fetched source
+reproduces the two-token failure, while the corrected actual packet has one
+token and finalizes only line 17. Missing and duplicated tokens reject. Both
+Python versions again pass 108 tests; compilation and diff checks pass. Record
+`stability-native-exact-retirement-sentinel-source-success-20260929-1.json`
+preserves independent review 133.
+
+Next commit/push/fetch these exact DRAFT bytes as the new immutable template,
+then regenerate the acyclic release against that commit. The release commit may
+change exactly the packet sentinel and add its release JSON; it still requires
+separate exact mechanical/execution review and fresh support checks before any
+one-shot sudo invocation. Builds remain zero, real applications this window
+remain zero, applications remain 0/273 and formal counters remain unchanged.
