@@ -6569,3 +6569,22 @@ explicit git-dir/work-tree access, add a regression/source binding and fresh
 outputs, then obtain independent source/mechanical/execution review before one
 new attempt. No build can start while the unchanged old lease/quarantines remain.
 Counters and application/build counts remain unchanged.
+
+Continuation checkpoint 97, 2026-09-29: the one bounded correction for the
+sanitized-root Git admission defect now PASSes independent DRAFT source review
+under a fresh recovery-3 identity. Exact helper `b68ff713...72d7e`, packet
+`d4353972...e1547`, basis `e887a35c...68ebe` and 30-test suite
+`aec12790...8ad07` pass all prior 26 regressions plus consumed-recovery2 history,
+fresh-output and exact Git-argv tests. Self-test, Python compilation, shell
+syntax, JSON parsing and diff checks also pass. See
+`stability-native-exact-quarantine-recovery3-template-readiness-20260929-1.json`.
+
+Every Git query now uses explicit `/home/holden/mckernel/.git` and work-tree
+arguments, with no `-C` discovery or `safe.directory` reliance. All recovery-3
+outputs are fresh; consumed recovery-2 bytes, failure record/archive, absent
+claim/journal and retained preflight/release/evidence are immutable admission
+inputs. The reviewed observer/deletion/lease/failure state machine is otherwise
+unchanged. No live or privileged operation ran. Next commit/push/fetch this
+template, mechanically finalize its acyclic pins, obtain an independent exact
+execution review, then push/fetch before at most one new packet attempt. Never
+reuse `-2`; counters and app/build counts remain unchanged.

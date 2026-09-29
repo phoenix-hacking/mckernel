@@ -570,3 +570,12 @@ reuse `-2`. One bounded fresh `-3` correction may replace root Git discovery
 with explicit git-dir/work-tree access and otherwise preserve the reviewed state
 machine, then requires independent review and a new fetched release. No build or
 acceptance work may cross the retained lease.
+
+Checkpoint 97 independently PASSes the fresh recovery-3 DRAFT correction:
+helper `b68ff713...72d7e`, packet `d4353972...e1547`, basis
+`e887a35c...68ebe`, tests `aec12790...8ad07`. All Git queries use explicit
+git-dir/work-tree; every `-3` output is fresh, and consumed `-2` evidence is
+immutable input. No execution is authorized. Commit/push/fetch this template,
+mechanically finalize the acyclic pins, then require a separate exact execution
+review and fetched checkpoint before one attempt. Preserve the old lease/roots
+and never retry or alter `-2`.

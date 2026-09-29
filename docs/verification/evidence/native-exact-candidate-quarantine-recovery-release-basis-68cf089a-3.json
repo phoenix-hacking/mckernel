@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "record_kind": "native_exact_candidate_quarantine_recovery3_release_basis",
+  "status": "DRAFT_NOT_RELEASED",
+  "source_checkpoint": "UNSET_REQUIRES_FETCHED_TEMPLATE_CHECKPOINT",
+  "template_basis_sha256": "UNSET_REQUIRES_FETCHED_TEMPLATE_CHECKPOINT",
+  "execution_authorized": false,
+  "runtime_acceptance": false,
+  "template_helper": {
+    "path": "docs/verification/evidence/native-exact-candidate-quarantine-recover-68cf089a-3.py",
+    "sha256": "b68ff7138868bbb072d6d54f53212012494b24f17264a2aef2931d12ab472d7e"
+  },
+  "template_packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-68cf089a-3.sh",
+    "sha256": "d4353972c25fc7a05e305753394779c21797947010a6cc517357c7a7a36e1547"
+  },
+  "template_test": {
+    "path": "scripts/tests/test_native_exact_candidate_quarantine_recovery_v3.py",
+    "sha256": "aec127904379f66d4744a90c3c63068b5eb286b8168a474dde1af13906b8ad07"
+  },
+  "historical_bindings": {
+    "original_record": "d2150a0a8173c0caaa4c5a6050653947e372480cd059d8d9ff49656dac76ed97",
+    "original_raw": "cc38687005d52ecc4b0d48ffa9ff650832169ba9d426add604b0c4e0f8893eea",
+    "original_journal": "6bf129586cd9edc9bb2b89519bdad2fb697606dea876eb6ecac1a86d43a04ebe",
+    "old_lease": "69ced2395f7c16019b70d9d1b2de45ff2519014178ee145a453e2ed2a24f47e3",
+    "recovery1_record": "2cb8dc42fccd68bcb9c5db1b6a78fa0eb9b478e9f81e5c46c14a8514d7948a7c",
+    "recovery1_raw": "0a3e13ec06ba3e7efd0282ab3efd9f51ad18e6261bef6c0691a1ec29700878b5",
+    "recovery1_claim": "f2d59c24e20b589f5cb9aa9cba1ec4c9c9ba4a84895fe3a468de35d7b5bb41f3",
+    "recovery1_journal": "d9a17002fe43df822c367219a4dc58e7a7bb000bce6597a79a5dc6721fe850d4",
+    "recovery1_preflight": "e7af78ba3189eddfc940101f5051038143d3e3624fd65c6c44817a5f736468cf",
+    "recovery1_basis": "bef067a447793acefc51c0afdf15698766e18f984473c22a80ebda43ffd47983",
+    "recovery1_observer_stdout": "23b098adccd1986cbd6026904e620fc6d997cf256c0d20f66c4dffd7bbb027bd",
+    "recovery1_observer_stderr": "65efce0898ea451dc4af0a0682296e194bcef16707fafaa641bfbd36eabc9512",
+    "recovery1_helper": "dcb7283805a012590ab35d734ba10cc3992db9d587e32e70c2031296669c9735",
+    "recovery1_packet": "ab2283d612591d76a92898bdee107d48da331d3588ec63bf9d660e214886abac",
+    "recovery1_execution_release": "4223d34efeb0eddbd919ce9f7cb11d10eec46d3760a54e7a362cef543e9931b7",
+    "observer": "71fc9f54c6f7ac8a2e8030ac5a802e2c1354ac0f0ed4cf2737c0c9486a7d3bfa",
+    "observer_test": "092061125463eda4a332c3354d8a94190bc9ca4c9f5c1ad5269ea08d7bae5a19",
+    "observer_source_record": "2b4532f37ebbe29980ee93cbf7888dce461f247361ce445c54a59f8fba0b2259",
+    "inventory": "743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0",
+    "recovery2_record": "fbdffcf75f073f22434bbdf43e52281e7bb8a99a30d14c9b1783f057ee133e3b",
+    "recovery2_raw": "93fde8f0143931fb2e3105c2a30b94f5480b933dd8f6d9c9348fc5195edce424",
+    "recovery2_basis": "4c50f12c5b500d2ecde1750f47b07b820ba43721c613d13176427440294f8b5a",
+    "recovery2_helper": "5ac3601bb9dc95cc1dba48793239769c06a26651ef6d75cec9a7793f6962f641",
+    "recovery2_packet": "cc20d87719f2827f21d695cf275bb5890085251ae44e5c2819c7487e10627d46",
+    "recovery2_test": "5d25dc0779568f652f6d11d13d20e7e0862f92c2fc95da85eeaf2f15ee86b195",
+    "recovery2_execution_release": "7dc1b2b15c45408f4bd899f640d80e456ef6bc93cc9070eceabdecd278badc0d",
+    "recovery2_preflight": "468b1d4d765b8d3ff35ff3c638ebcfec16abae153a78ede2097c9a33e1441dec"
+  },
+  "operational_threat_assumption": "Quarantines remain root-owned 0700; privileged/adversarial target mutation, reference acquisition, and reference transfer are independently excluded throughout observation AND deletion. This is an operational assumption, not machine proof or an atomic census.",
+  "mechanical_finalization": [
+    "Commit/push/fetch the four exact template inputs and independently review this source boundary.",
+    "Make final basis: source_checkpoint=the fetched template commit; template_basis_sha256=the exact template basis blob SHA256; status=PASS_ONE_SHOT_QUARANTINE_RECOVERY3; execution_authorized=true. No other basis changes. Hash final basis as R.",
+    "Substitute only helper RELEASE_SHA sentinel with R. Hash final helper as H.",
+    "Substitute only packet RELEASE_SHA with R and FINAL_HELPER_SHA with H. Tests remain exact template bytes.",
+    "Obtain separate independent execution review binding R,H,packet,test and source_checkpoint in the fixed execution-release record; commit/push/fetch all final bytes and that record.",
+    "Run the packet once as non-root only after its exact independent execution release. A failure permanently consumes fresh outputs; no retry/rollback."
+  ],
+  "execution_release_path": "docs/verification/stability-native-exact-quarantine-recovery3-execution-release-20260929-1.json",
+  "resource_floors_bytes": {
+    "host_free": 17179869184,
+    "scratch_free": 12884901888,
+    "tmpfs_free": 4294967296,
+    "mem_available": 4294967296
+  },
+  "preflight_max_age_seconds": 120,
+  "timeout_seconds": 900,
+  "kill_after_seconds": 10,
+  "previous_claim_preserved": true,
+  "one_shot": true,
+  "retry": false,
+  "rollback": false,
+  "correction_family": "Sanitized-root Git source admission: explicit --git-dir and --work-tree for every Git query; no safe.directory or -C discovery.",
+  "recovery2_failure_preserved": true
+}
