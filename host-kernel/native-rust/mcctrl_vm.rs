@@ -48,6 +48,8 @@ struct MmIdentity(NonNull<bindings::mm_struct>);
 // SAFETY: Only identity and Linux's atomic structural reference are shared.
 // VMA access additionally requires a transient current mm_users reference/lock.
 unsafe impl Send for MmIdentity {}
+// SAFETY: Shared MmIdentity use exposes only immutable identity while its owned
+// structural reference keeps the opaque mm alive until the single Drop balance.
 unsafe impl Sync for MmIdentity {}
 impl MmIdentity {
     fn from_current(mm: &CurrentMm) -> Result<Self> {
@@ -165,6 +167,8 @@ impl Mirror {
             if promoted.is_null() {
                 return Err(ENOMEM);
             }
+            // SAFETY: prepare_creds returned this unpublished current-task copy;
+            // override/revert and abort are paired before it can escape this call.
             let address = unsafe {
                 (*promoted).cap_effective.val |= 1 << 17; // CAP_SYS_RAWIO
                 let original = bindings::override_creds(promoted);
@@ -298,8 +302,12 @@ unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<Faul
             (*vmf).flags,
         )
     };
+    // SAFETY: lookup_fault's caller retains the locked live VMA and file;
+    // mmap installed a non-null MappingFile private_data of this exact type.
     let private = unsafe { &*(*(*vma).vm_file).private_data.cast::<MappingFile>() };
     let mirror = &private.mirror;
+    // SAFETY: The same locked live VMA remains valid while its MM identity is
+    // compared against the MappingFile owner before any request is issued.
     if unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
         || address < mirror.start
         || address >= mirror.end
@@ -366,6 +374,8 @@ unsafe extern "C" fn pfn_mkwrite(vmf: *mut bindings::vm_fault) -> bindings::vm_f
 unsafe extern "C" fn mprotect(_: *mut bindings::vm_area_struct, _: u64, _: u64, _: u64) -> i32 {
     errno(-95).to_errno()
 }
+// SAFETY: Linux invokes this module-resident callback with a live VMA, but this
+// unsupported operation reads neither pointer nor VMA state and changes nothing.
 unsafe extern "C" fn mremap(_: *mut bindings::vm_area_struct) -> i32 {
     errno(-95).to_errno()
 }
@@ -384,6 +394,8 @@ struct FileOperations(bindings::file_operations);
 struct VmOperations(bindings::vm_operations_struct);
 // SAFETY: Immutable tables contain module-resident callbacks and module identity.
 unsafe impl Sync for FileOperations {}
+// SAFETY: The initialized VM table is immutable and contains only module-retained
+// callbacks, so concurrent readers cannot mutate or outlive its contents.
 unsafe impl Sync for VmOperations {}
 static FILE_OPERATIONS: FileOperations = FileOperations({
     // SAFETY: Null pointers/optional callbacks and zero flags are valid defaults.

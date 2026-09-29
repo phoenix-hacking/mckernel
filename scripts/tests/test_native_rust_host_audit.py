@@ -94,6 +94,33 @@ class NativeRustHostAuditTests(unittest.TestCase):
     def test_integrated_repository_closure_passes(self):
         self.assertEqual(0, host_audit.main())
 
+    def test_manifest_input_order_and_module_roots_are_exact(self):
+        value = self.load_manifest()
+        value["inputs"][2], value["inputs"][3] = value["inputs"][3], value["inputs"][2]
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "input order differs"):
+            host_audit.main()
+
+        cases = (
+            ("destination", "redirected.rs"),
+            ("repository_path", "host-kernel/native-rust/mcctrl.rs"),
+            ("sha256", "0" * 64),
+        )
+        for field, replacement in cases:
+            with self.subTest(field=field):
+                value = copy.deepcopy(self.original_manifest)
+                value["modules"][0]["source"][field] = replacement
+                self.write_manifest(value)
+                with self.assertRaisesRegex(SystemExit, "module root source binding differs"):
+                    host_audit.main()
+
+        self.write_manifest(copy.deepcopy(self.original_manifest))
+        root = self.repository_path("host-kernel/native-rust/ihk.rs")
+        with open(root, "a") as stream:
+            stream.write("\n// root drift\n")
+        with self.assertRaisesRegex(SystemExit, "crate root digest drift"):
+            host_audit.main()
+
     def test_recursive_assembly_source_is_required_and_digest_bound(self):
         value = self.load_manifest()
         value["inputs"] = [item for item in value["inputs"]

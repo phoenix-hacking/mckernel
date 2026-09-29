@@ -4,6 +4,19 @@
     "capacity": 64,
     "create_argument": "scalar ignored by the frozen SMP create path",
     "create_command": "0x00112900",
+    "current_boot_application_service_shutdown": {
+      "boot_prepare": "runs only while registry status is NotBooted; a nonzero result returns before Booting, remains NotBooted and leaves prior admission state unchanged",
+      "boot_start": "publishes Booting before start; zero publishes Ready, nonzero publishes Failed",
+      "boot_start_nonzero": "may have CPU effects and retains non-destroyable generation, owners and resources",
+      "closed_gate_retry": "an idle closed non-poisoned gate can be borrowed for a shutdown retry and remains closed if that retry fails",
+      "owner_release_order": "FileService or BackendApplication Close runs before its AdmissionOwner release, which runs before the OS lease release",
+      "reboot": "only successful start reopens a closed non-poisoned gate after Ready publication; a nonzero reboot start publishes Failed and leaves the prior closed gate closed",
+      "resident_application_or_service": "returns EBUSY before v5 shutdown callback until its resident admission owner releases",
+      "shutdown_admission": "close_for_shutdown closes an open idle gate; successful shutdown commits and leaves the gate closed",
+      "shutdown_admission_rollback": "ShutdownAdmission drop reopens only an open gate closed by this attempt; a borrowed prior close and overflow poison stay closed",
+      "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
+      "successful_shutdown": "commits NotBooted with admission closed"
+    },
     "destroy_command": "0x00112901",
     "destroy_order": [
       "exclude new opens",
@@ -17,19 +30,6 @@
     ],
     "destroy_with_open_files_errno": -16,
     "file_owner": "ihk.ko .owner plus one generation-checked OS lease per open file",
-    "current_boot_application_service_shutdown": {
-      "boot_prepare": "runs only while registry status is NotBooted; a nonzero result returns before Booting, remains NotBooted and leaves prior admission state unchanged",
-      "boot_start": "publishes Booting before start; zero publishes Ready, nonzero publishes Failed",
-      "boot_start_nonzero": "may have CPU effects and retains non-destroyable generation, owners and resources",
-      "closed_gate_retry": "an idle closed non-poisoned gate can be borrowed for a shutdown retry and remains closed if that retry fails",
-      "reboot": "only successful start reopens a closed non-poisoned gate after Ready publication; a nonzero reboot start publishes Failed and leaves the prior closed gate closed",
-      "resident_application_or_service": "returns EBUSY before v5 shutdown callback until its resident admission owner releases",
-      "shutdown_admission": "close_for_shutdown closes an open idle gate; successful shutdown commits and leaves the gate closed",
-      "shutdown_admission_rollback": "ShutdownAdmission drop reopens only an open gate closed by this attempt; a borrowed prior close and overflow poison stay closed",
-      "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
-      "successful_shutdown": "commits NotBooted with admission closed",
-      "owner_release_order": "FileService or BackendApplication Close runs before its AdmissionOwner release, which runs before the OS lease release"
-    },
     "historical_unbooted_v1": {
       "backend_abi": {
         "allowed_status": "NotBooted",
@@ -85,8 +85,8 @@
   "inputs": [
     {
       "path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144",
-      "size": 62064
+      "sha256": "3a9ed51277c8ce0475c11c720152bb3e3020a971c06c912ae9a2517486261aa6",
+      "size": 63720
     },
     {
       "path": "host-kernel/native-rust/abi/x86_64.rs",

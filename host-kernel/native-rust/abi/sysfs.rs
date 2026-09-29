@@ -34,7 +34,14 @@ pub(crate) unsafe fn read_setup(request: *mut u8) -> Result<(u64, usize), i32> {
     if busy.load(Ordering::Acquire) != 1 {
         return Err(-16);
     }
+    // SAFETY: `request` names the retained, 8-aligned `SetupRequest` promised
+    // by the caller. Its complete `physical` field is within that mapping;
+    // acquire of `busy` observed the peer's publication, and the sole peer
+    // writer leaves input fields unchanged until this service releases busy.
     let physical = unsafe { ptr::read_volatile(ptr::addr_of!((*request).physical)) };
+    // SAFETY: The same retained `SetupRequest` contains this aligned `bytes`
+    // field. It remains initialized and unmodified while busy is one, so the
+    // volatile scalar read neither creates a reference nor races a writer.
     let bytes = unsafe { ptr::read_volatile(ptr::addr_of!((*request).bytes)) };
     if bytes != DATA_BYTES as i64 || physical == 0 || physical % DATA_BYTES as u64 != 0 {
         return Err(-22);
@@ -55,6 +62,9 @@ pub(crate) unsafe fn complete_setup(request: *mut u8, error: i32) -> Result<(), 
     if busy.load(Ordering::Relaxed) != 1 {
         return Err(-16);
     }
+    // SAFETY: The exclusive retained `SetupRequest` remains live until the
+    // following release store clears busy. `error` is its aligned, in-bounds
+    // response field, and no peer reads it before that publication.
     unsafe { ptr::write_volatile(ptr::addr_of_mut!((*request).error), error) };
     busy.store(0, Ordering::Release);
     Ok(())

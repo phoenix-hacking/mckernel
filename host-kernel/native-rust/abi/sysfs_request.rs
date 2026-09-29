@@ -138,12 +138,19 @@ pub(crate) unsafe fn read(kind: Kind, request: *mut u8) -> Result<Request, i32> 
     if request.is_null() || request as usize % layout.alignment != 0 {
         return Err(-22);
     }
+    // SAFETY: The caller retains the complete kind-specific request through
+    // completion, so `layout.busy` is an aligned, in-bounds AtomicI32 field.
+    // No Rust reference escapes; this sole responder acquires the peer's
+    // publication before reading its otherwise stable input scalars.
     let busy = unsafe { AtomicI32::from_ptr(request.add(layout.busy).cast()) };
     if busy.load(Ordering::Acquire) != 1 {
         return Err(-16);
     }
     let operation = match kind {
         Kind::Create => {
+            // SAFETY: The caller's retained Create request includes its
+            // aligned mode at offset zero. The acquired busy value witnesses
+            // peer initialization and the peer does not mutate inputs yet.
             let mode = unsafe { ptr::read_volatile(request.cast::<i32>()) };
             if mode < 0 || mode & !0o777 != 0 {
                 return Err(-22);
@@ -151,13 +158,22 @@ pub(crate) unsafe fn read(kind: Kind, request: *mut u8) -> Result<Request, i32> 
             Operation::Create {
                 mode: mode as u16,
                 client: Client {
+                    // SAFETY: Offset 8 is the aligned, in-bounds Create
+                    // client_ops scalar in the retained request; busy's
+                    // acquire makes its peer initialization observable.
                     operations: unsafe { ptr::read_volatile(request.add(8).cast()) },
+                    // SAFETY: Offset 16 is likewise the aligned, in-bounds
+                    // Create client_instance scalar. It is copied as a token,
+                    // never dereferenced as a Linux pointer or borrowed.
                     instance: unsafe { ptr::read_volatile(request.add(16).cast()) },
                 },
             }
         }
         Kind::Mkdir => Operation::Mkdir,
         Kind::Symlink => {
+            // SAFETY: The retained WithHandle request has an aligned u64 at
+            // offset 8. Busy acquire precedes this volatile read and the peer
+            // keeps its Symlink target stable through completion.
             let target = unsafe { ptr::read_volatile(request.add(8).cast::<u64>()) };
             if target == 0 || target > i64::MAX as u64 {
                 return Err(-22);
@@ -166,6 +182,9 @@ pub(crate) unsafe fn read(kind: Kind, request: *mut u8) -> Result<Request, i32> 
         }
         Kind::Lookup => Operation::Lookup,
         Kind::Unlink => {
+            // SAFETY: The retained, layout-aligned Unlink request contains
+            // its u32 flags at offset zero; busy acquire witnesses its stable
+            // initialization and the scalar is not reinterpreted as a pointer.
             let flags = unsafe { ptr::read_volatile(request.cast::<u32>()) };
             if flags & !1 != 0 {
                 return Err(-22);
@@ -179,6 +198,9 @@ pub(crate) unsafe fn read(kind: Kind, request: *mut u8) -> Result<Request, i32> 
         length: 0,
     };
     for index in 0..PATH_BYTES {
+        // SAFETY: `layout.path + index` stays within the complete retained
+        // kind-specific request because `index < PATH_BYTES`; the acquired
+        // busy claim keeps the peer's NUL-terminated input stable while copied.
         let byte = unsafe { ptr::read_volatile(request.add(layout.path + index)) };
         if byte == 0 {
             result.length = index;
@@ -208,13 +230,22 @@ pub(crate) unsafe fn complete(
     {
         return Err(-22);
     }
+    // SAFETY: The caller retains the complete kind-specific request through
+    // this final response, so `layout.busy` is an aligned, in-bounds AtomicI32
+    // field. No Rust reference escapes before its release permits peer reuse.
     let busy = unsafe { AtomicI32::from_ptr(request.add(layout.busy).cast()) };
     if busy.load(Ordering::Relaxed) != 1 {
         return Err(-16);
     }
     if let Some(handle) = handle {
+        // SAFETY: A successful handle-returning kind uses the aligned,
+        // in-bounds response slot at offset 8. This caller exclusively owns
+        // the retained request, and busy remains one until the release below.
         unsafe { ptr::write_volatile(request.add(8).cast(), handle) };
     }
+    // SAFETY: `layout.error` identifies the aligned, in-bounds error field of
+    // this retained kind-specific request. The exclusive claim prevents alias
+    // writers, and the following release publishes this final scalar response.
     unsafe { ptr::write_volatile(request.add(layout.error).cast(), error) };
     busy.store(0, Ordering::Release);
     Ok(())

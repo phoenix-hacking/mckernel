@@ -1294,10 +1294,10 @@ def reject_unreviewed_rust_escapes(relative, text, locked_digest=None):
 def main():
     if __package__:
         from .native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
-        from .rocky_rust_staging import EXPECTED_INPUTS, LOCKED_ESCAPE_SUPPORT
+        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT
     else:
         from native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
-        from rocky_rust_staging import EXPECTED_INPUTS, LOCKED_ESCAPE_SUPPORT
+        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT
     with open(MANIFEST, "r", encoding="utf-8") as f:
         manifest = json.load(f)
     contract = manifest["build_contract"]
@@ -1308,10 +1308,31 @@ def main():
     if contract.get("prebuilt_project_objects_forbidden") is not True:
         die("prebuilt project objects must be forbidden")
 
-    destinations = set()
     modules = manifest.get("modules", [])
     if len(modules) != 3:
         die("expected exactly three native host modules")
+    for index, module in enumerate(modules):
+        expected_module = EXPECTED_MODULES[index]
+        expected_source = {
+            "destination": expected_module["source_destination"],
+            "repository_path": expected_module["source_repository_path"],
+            "sha256": expected_module["source_sha256"],
+        }
+        if not isinstance(module, dict) or module.get("source") != expected_source:
+            die("module root source binding differs at index {0}".format(index))
+    inputs = manifest.get("inputs")
+    if not isinstance(inputs, list):
+        die("stage manifest inputs must be a list")
+    actual_order = []
+    for item in inputs:
+        if not isinstance(item, dict):
+            die("stage manifest inputs must contain objects")
+        actual_order.append(item.get("destination"))
+    expected_order = [item["destination"] for item in EXPECTED_INPUTS]
+    if actual_order != expected_order:
+        die("stage manifest input order differs from hard-locked canonical sequence")
+
+    destinations = set()
     for module in modules:
         source = module["source"]
         relative = source["repository_path"]

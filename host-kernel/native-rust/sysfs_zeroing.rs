@@ -74,6 +74,10 @@ impl Memory {
             // Its immutable ID identifies an actual boot NUMA rank. Atomic
             // controls exclude host service aliases without borrowing peer RAM.
             let id = unsafe { ptr::read_volatile(address as *const i32) };
+            // SAFETY: The checked node contains the four-byte-aligned workers
+            // word at offset 40. The held ledger lock and preceding conflict
+            // check exclude concurrent host claims; guest and host share this
+            // word only through atomic operations, so no Rust reference forms.
             let workers = unsafe { AtomicI32::from_ptr((address + 40) as *mut i32) };
             if id < 0 || id as usize >= self.numa_nodes || workers.load(Ordering::Acquire) <= 0 {
                 return Err(EINVAL);
@@ -125,6 +129,9 @@ impl Memory {
                 )?;
                 link = next;
             }
+            // SAFETY: The retained aligned node covers pending at offset 44,
+            // and the still-held control tag excludes host aliases. Pending is
+            // the guest/host atomic accounting word and is not borrowed here.
             let pending = unsafe { AtomicI32::from_ptr((address + 44) as *mut i32) };
             if pending.load(Ordering::Acquire) < pages {
                 return Err(EINVAL);
@@ -148,6 +155,9 @@ impl Memory {
                     offset += 8;
                 }
                 if offset < chunk.bytes {
+                    // SAFETY: This dedicated kernel thread holds no Linux or
+                    // guest lock across the yield; all chunk data remains
+                    // retained by its ledger tag while the scheduler sleeps.
                     unsafe {
                         bindings::msleep(1);
                     }
@@ -162,8 +172,14 @@ impl Memory {
             .iter()
             .position(|old| old.serial == control.serial)
             .ok_or(EIO)?;
+        // SAFETY: The node was validated and the control tag remains held
+        // under this ledger lock. Offset 44 is aligned and shared solely as
+        // an atomic accounting word, without creating a Rust reference.
         let pending =
             unsafe { AtomicI32::from_ptr((address + 44) as *mut i32) }.load(Ordering::Acquire);
+        // SAFETY: The same retained control span covers the aligned workers
+        // word at offset 40. This final atomic decrement occurs before its
+        // ledger claim is released, so no host alias can access it.
         let workers = unsafe { AtomicI32::from_ptr((address + 40) as *mut i32) };
         let before = workers
             .fetch_update(Ordering::SeqCst, Ordering::SeqCst, |value| {
@@ -198,6 +214,9 @@ impl Memory {
             .iter()
             .position(|old| old.serial == chunk.tag.serial)
             .ok_or(EIO)?;
+        // SAFETY: The caller retains the complete checked node and its control
+        // tag remains in the held ledger. Offset 44 is four-byte aligned and
+        // shared only through atomics, so this does not borrow guest memory.
         let pending = unsafe { AtomicI32::from_ptr((node_address + 44) as *mut i32) };
         if pending.load(Ordering::Acquire) < chunk.pages {
             return Err(EINVAL);
@@ -216,6 +235,10 @@ impl Memory {
                     return Err(EBUSY);
                 }
             }
+            // SAFETY: This chunk's retained, aligned header remains private
+            // under its ledger tag until the following CAS publishes it. The
+            // link field lies in that checked header; volatile access creates
+            // no Rust reference and no guest may reuse it before publication.
             unsafe {
                 ptr::write_volatile((chunk.address + wire::LINK_OFFSET) as *mut u64, first);
             }

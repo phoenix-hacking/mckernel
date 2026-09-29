@@ -110,6 +110,60 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         self.assertNotIn("ihk-compat-build-id.bin", closure)
         audit.audit(self.repo)
 
+    def test_dependency_macro_alias_or_forwarding_fails_closed(self):
+        relative = "host-kernel/native-rust/smp_service.rs"
+        path = os.path.join(self.repo, relative)
+        cases = (
+            'use core::include_str as read; const DATA: &str = read!("unbound.txt");',
+            'macro_rules! forward { ($m:ident, $p:expr) => { $m!($p) }; }\n'
+            'const DATA: &str = forward!(include_str, "unbound.txt");',
+        )
+        for addition in cases:
+            with self.subTest(addition=addition):
+                shutil.copyfile(os.path.join(REPO_ROOT, relative), path)
+                with open(path, "a") as stream:
+                    stream.write("\n" + addition + "\n")
+                self.rehash("smp_service.rs")
+                with self.assertRaisesRegex(audit.AuditError, "dependency macro identifier use"):
+                    audit.audit(self.repo)
+
+    def test_unrelated_macro_remains_permitted(self):
+        relative = "host-kernel/native-rust/smp_service.rs"
+        path = os.path.join(self.repo, relative)
+        with open(path, "a") as stream:
+            stream.write("\nmacro_rules! answer { () => { 42 }; }\nconst ANSWER: u8 = answer!();\n")
+        self.rehash("smp_service.rs")
+        audit.audit(self.repo)
+
+    def test_manifest_input_order_and_module_roots_are_exact(self):
+        manifest = self.load_manifest()
+        manifest["inputs"][2], manifest["inputs"][3] = manifest["inputs"][3], manifest["inputs"][2]
+        self.write_manifest(manifest)
+        with self.assertRaisesRegex(audit.AuditError, "input order differs"):
+            audit.audit(self.repo)
+
+        cases = (
+            ("destination", "redirected.rs"),
+            ("repository_path", "host-kernel/native-rust/mcctrl.rs"),
+            ("sha256", "0" * 64),
+        )
+        for field, value in cases:
+            with self.subTest(field=field):
+                with open(os.path.join(REPO_ROOT, audit.MANIFEST)) as stream:
+                    manifest = json.load(stream)
+                manifest["modules"][0]["source"][field] = value
+                self.write_manifest(manifest)
+                with self.assertRaisesRegex(audit.AuditError, "module root binding differs"):
+                    audit.audit(self.repo)
+
+        with open(os.path.join(REPO_ROOT, audit.MANIFEST)) as stream:
+            self.write_manifest(json.load(stream))
+        root = os.path.join(self.repo, "host-kernel", "native-rust", "ihk.rs")
+        with open(root, "a") as stream:
+            stream.write("\n// root drift\n")
+        with self.assertRaisesRegex(audit.AuditError, "module root digest drift"):
+            audit.audit(self.repo)
+
     def test_nested_mod_and_explicit_path_require_new_manifest_inputs(self):
         relative = "host-kernel/native-rust/smp_service.rs"
         path = os.path.join(self.repo, relative)

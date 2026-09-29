@@ -79,12 +79,19 @@ unsafe extern "C" fn boot_irq_callback<const SLOT: usize>(_work: *mut core::ffi:
     }
 }
 
+// SAFETY: Each literal is in 0..=63 and selects one resident module callback.
+// The published master has the exact live generation; the slot is reusable
+// only after sender stop and Linux callback drain. The IRQ callback never
+// sleeps.
 macro_rules! boot_irq_callbacks {
     ($($slot:literal),* $(,)?) => {
         [$(boot_irq_callback::<$slot> as unsafe extern "C" fn(*mut core::ffi::c_void)),*]
     };
 }
 
+// SAFETY: This table contains only the 64 resident callbacks above. Each entry
+// is used for its exact live generation and is retained until sender stop and
+// Linux callback drain complete; hard IRQ invocation cannot sleep.
 const BOOT_IRQ_CALLBACKS: [unsafe extern "C" fn(*mut core::ffi::c_void); 64] = boot_irq_callbacks!(
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,

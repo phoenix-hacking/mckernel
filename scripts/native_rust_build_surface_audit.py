@@ -55,6 +55,7 @@ SUPPLEMENTAL_INPUTS = {
 }
 CRATE_ROOTS = ("ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs")
 GENERATED_INPUTS = frozenset(("ihk-compat-build-id.bin",))
+DEPENDENCY_MACROS = frozenset(("include", "include_str", "include_bytes"))
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))
 EXPECTED_SYMBOLS = (
     "MCKERNEL_IHK_RUST",
@@ -236,8 +237,30 @@ def _include_dependency(tokens, index, label):
     return _literal_relative(tokens[index + 3][1], label), index + 5
 
 
+def _reject_dependency_macro_forwarding(tokens, label):
+    """Reject dependency macro names except at reviewed direct call sites.
+
+    The closure model deliberately supports only literal direct invocations.
+    In particular, Rust permits an include macro to be imported under an alias
+    or passed through another macro.  Neither form has a statically bounded
+    target in this small parser, so accepting it would silently shorten the
+    staged dependency graph.  Unrelated macros do not use these three names
+    and remain outside this restriction.
+    """
+    for index, token in enumerate(tokens):
+        if token[0] != "ident" or token[1] not in DEPENDENCY_MACROS:
+            continue
+        if _include_dependency(tokens, index, label) is None:
+            raise AuditError(
+                "unsupported dependency macro identifier use in {0}: {1}".format(
+                    label, token[1]
+                )
+            )
+
+
 def _dependencies(source, label):
     tokens = _rust_tokens(source, label)
+    _reject_dependency_macro_forwarding(tokens, label)
     modules = []
     includes = []
     pending_path = None
@@ -382,6 +405,10 @@ def _check_manifest(repo):
     manifest_path = _repository_file(repo, MANIFEST, "stage manifest")
     manifest = _read_json(manifest_path)
     inputs = manifest.get("inputs")
+    if __package__:
+        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES
+    else:
+        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES
     expected_inputs = dict(AUTHORITATIVE_INPUTS)
     closure = discover_native_closure(repo)
     expected_inputs.update(dict(
@@ -390,6 +417,14 @@ def _check_manifest(repo):
     ))
     if not isinstance(inputs, list):
         raise AuditError("stage manifest inputs must be a list")
+    actual_order = []
+    for item in inputs:
+        if not isinstance(item, dict):
+            raise AuditError("stage manifest inputs must contain objects")
+        actual_order.append(item.get("destination"))
+    expected_order = [item["destination"] for item in EXPECTED_INPUTS]
+    if actual_order != expected_order:
+        raise AuditError("stage manifest input order differs from hard-locked canonical sequence")
     by_destination = {}
     for index, item in enumerate(inputs):
         if not isinstance(item, dict):
@@ -429,6 +464,28 @@ def _check_manifest(repo):
         if _sha256(path) != expected_digest:
             raise AuditError("{0} authority digest drift".format(destination))
         paths[destination] = path
+
+    modules = manifest.get("modules")
+    if not isinstance(modules, list) or len(modules) != len(EXPECTED_MODULES):
+        raise AuditError("stage manifest modules differ from locked crate-root bindings")
+    for index, expected in enumerate(EXPECTED_MODULES):
+        module = modules[index]
+        expected_source = {
+            "destination": expected["source_destination"],
+            "repository_path": expected["source_repository_path"],
+            "sha256": expected["source_sha256"],
+        }
+        if not isinstance(module, dict) or module.get("source") != expected_source:
+            raise AuditError(
+                "stage manifest module root binding differs at index {0}".format(index)
+            )
+        source_path = _repository_file(
+            repo, expected_source["repository_path"], "module root " + expected_source["destination"]
+        )
+        if _sha256(source_path) != expected_source["sha256"]:
+            raise AuditError(
+                "module root digest drift: {0}".format(expected_source["destination"])
+            )
     return dict((name, paths[name]) for name in AUTHORITATIVE_INPUTS)
 
 

@@ -125,6 +125,9 @@ impl Executable {
         owned.denied = true;
         // Reuse the initialized heap buffer after open_exec has finished with
         // the user filename. d_path returns a pointer into this bounded buffer.
+        // SAFETY: The checked non-null file reference remains owned by `owned`;
+        // addr_of forms no Rust reference and its f_path field stays live through
+        // the synchronous d_path call below.
         let path = unsafe { ptr::addr_of!((*owned.file.as_ptr()).f_path) };
         // SAFETY: This file reference pins its immutable path; the output buffer
         // is exclusively borrowed, initialized and exactly PATH_MAX bytes long.

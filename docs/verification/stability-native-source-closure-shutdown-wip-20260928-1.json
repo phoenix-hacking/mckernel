@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-29T03:03:25Z",
+  "status": "WIP_BLOCKED_AT_EXACT_HOST_AUDIT_EXPECTATION",
+  "scope": "recursive Rust staging closure, unsafe/FFI ledger reconciliation, and shutdown preservation",
+  "base_commit": "1129961b56a3fff54f473b9ca63fe6101f787e70",
+  "results": {
+    "recursive_suite_before_final_ledger_reseal": {
+      "command": "python3 -B -m unittest -v scripts.tests.test_rocky_rust_staging scripts.tests.test_native_rust_build_surface_audit scripts.tests.test_native_rust_host_audit",
+      "result": "PASS (114 tests)",
+      "seconds": 93.302,
+      "log": "/home/holden/mckernel-work/scratch/native-rust-recursive-stage-closure-20260928-2.log",
+      "log_sha256": "07b6405767102fa6a2c759cf4decb393533346dc8f0d0eaf2d5957b70c5596f6",
+      "limitation": "This run predates the final unsafe-ledger manifest reseal and therefore is not final integrated acceptance."
+    },
+    "unsafe_ffi_ledger": {
+      "inputs": 55,
+      "sites": 637,
+      "historical_mappings_preserved": "156/156",
+      "new_pending_ids": 481,
+      "closure_sha256": "c1ae16ed3306db6ae7d566891f5181461e92085aa924f3bd76025b7e918947c6",
+      "canonical_ids_sha256": "eee9c941a0a5e83bf7d7c6948876b64c187a81ab0908ffda5934a530e6567bc4",
+      "canonical_ledger_digest": "e46ffbd83fcb9f65de2b3570c06950da626fa7fc652835e0ddc6ef9feee81d55",
+      "ledger_file_sha256": "7188fbdec447e4482a667879d857e0af9613f43cb4023c8fd9a7931a1588b8c9",
+      "focused_tests": "PASS (22/22)",
+      "other_checks": ["inventory PASS", "ledger check PASS", "lifecycle/mapping/runtime source checks PASS", "py_compile PASS", "git diff --check PASS"],
+      "fixture_note": "The optional mapping fixture was skipped because no configured Rust 1.92 toolchain was available."
+    },
+    "rust_safety_documentation": {
+      "files": 22,
+      "property": "comment-only relative to the base Rust token stream",
+      "site_discovery": "PASS for every edited Rust source"
+    }
+  },
+  "current_hashes": {
+    "scripts/native_rust_build_surface_audit.py": "baa1d891424838d847e011e9541dfd5870a37715e93cb302bcbd195e2a6fe587",
+    "scripts/native_rust_host_audit.py": "64ba52e2cb394f896d79d998c384b27866993ec9ed52f36c0ca228f334d303c9",
+    "scripts/tests/test_native_rust_build_surface_audit.py": "ff8d13d28d97121e0316e64ca7eb2f731d1356ab4bbdf4a8f14b44e39dd6c624",
+    "scripts/tests/test_native_rust_host_audit.py": "714cf9bd7fc9ebe3c458e09b52429d9811f93731198da5b61020e326d39345bb",
+    "scripts/native_rust_unsafe_ffi_ledger.py": "bf9a8ea3fc5402aa3946860f416570d81420e387619f20513d8f97bc21bcdfee",
+    "scripts/tests/test_native_rust_unsafe_ffi_ledger.py": "beae27e3bee3262b66563c7b8b71f3533f1031761e1bd93664f6b10644176e25",
+    "host-kernel/kbuild/stage-manifest.json": "c5f9974480500ade646bf42a126451bb6151037ef851f57b5b1fd5b0c500e500",
+    "scripts/rocky_rust_staging.py": "fad50104153e260da54abf56fee70d1b09140f03cd417849b1480c1e2469cef6"
+  },
+  "preserved_blocker": {
+    "family": "native_rust_host_audit v5 exact escape-prefix expectation",
+    "effect": "rocky_rust_staging.py --check and its 63-test suite fail closed after source comments and manifest hashes changed",
+    "fanout_observed_by_worker": "15 errors and 4 downstream assertion failures from one root mismatch",
+    "correction_budget": "No correction was attempted during shutdown.",
+    "next_check": "Update only the exact expected v5 escape blocks for the comment-only source changes, retain all oracle strength, then run the integrated 114-test recursive suite, 22 ledger tests, direct inventory/check, staging --check, and independent final review."
+  },
+  "runtime_state": {
+    "heavy_build_or_guest_active": false,
+    "launcher_wrapper": {"pid": 3399308, "proc_starttime": 83682487},
+    "launcher_worker": {"pid": 3399313, "proc_starttime": 83682494},
+    "free_bytes": {"/dev/shm": 16597475328, "/home/holden/mckernel": 24830353408, "/home/holden/mckernel-work/scratch": 21609963520},
+    "retained_failed_containers": ["c6917efd594a3ec0311371a4e9e5c8d5f9a598b25687a3820e8f56138f9f0772", "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0"]
+  },
+  "acceptance": {
+    "application_catalog": "0/273",
+    "narrow_fault_modes": "2/4",
+    "native_production_gates": "6/130",
+    "contractual_points": "350/10000",
+    "language_gates": "0/7",
+    "diagnostic_guest_apps": 4,
+    "successful_current_candidate_builds": 0,
+    "claim": "Source-only WIP; no application, production, language, build, guest, or whole-OS acceptance is granted."
+  }
+}

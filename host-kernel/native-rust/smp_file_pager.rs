@@ -37,6 +37,9 @@ struct File {
 // All operations use Linux's concurrent positional-I/O interface and private
 // kernel buffers. No file position or borrowed pointer escapes this owner.
 unsafe impl Send for File {}
+// SAFETY: Sharing only duplicates Arc ownership of the fget reference. Linux
+// serializes file internals, and this wrapper exposes positional operations
+// with caller-private buffers rather than mutable file-position access.
 unsafe impl Sync for File {}
 
 impl Drop for File {
@@ -65,6 +68,9 @@ impl File {
             )
         };
         kernel::error::to_result(result)?;
+        // SAFETY: vfs_getattr returned success after receiving the complete
+        // writable kstat allocation, so Linux initialized every byte that this
+        // binding reads. The value is copied out and retains no file reference.
         Ok(unsafe { stat.assume_init() })
     }
 
@@ -94,6 +100,9 @@ impl Prepared {
         if stat.mode as u32 & bindings::S_IFMT != bindings::S_IFREG {
             return Err(errno(-3)); // Original guest switches to the device pager.
         }
+        // SAFETY: The retained fget reference pins the file, path, mount, inode,
+        // and superblock during these scalar reads. The fields are only sampled
+        // for this request; no borrowed Linux pointer escapes the block.
         let (mode, mount_flags, magic) = unsafe {
             // SAFETY: File pins inode, superblock and mount. f_mode is immutable
             // after open; mount flags are copied once, as in the Linux check.
@@ -126,6 +135,9 @@ impl Prepared {
             return Err(EACCES);
         }
         let mut path = buffer(wire::PATH_BYTES)?;
+        // SAFETY: fget retains this file path and path is a writable private
+        // kernel buffer with the exact signed length supplied to d_path. The
+        // returned pointer is consumed before the buffer or file can change.
         let resolved = unsafe {
             bindings::d_path(
                 ptr::addr_of!((*file.pointer.as_ptr()).f_path),

@@ -404,11 +404,15 @@ impl<M: ResponseMemory> Response<M> {
         // mapping cover all these aligned fields for this complete operation.
         let address = self.memory.address();
         let status = unsafe { AtomicU64::from_ptr(address.add(8).cast()) };
+        // SAFETY: The same exclusive retained response mapping contains the
+        // independently aligned state word at byte offset 16 for this operation.
         let state = unsafe { AtomicU64::from_ptr(address.add(16).cast()) };
         if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
             return Err(-71);
         }
         // Preserve ttid, fault_address, the guest-only pde_data and all guards.
+        // SAFETY: The exclusive response claim keeps these two aligned writable
+        // fields live; volatile writes touch only the host-owned protocol words.
         unsafe {
             ptr::write_volatile(address.add(4).cast::<i32>(), servicing_tid);
             ptr::write_volatile(address.add(24).cast::<i64>(), value);

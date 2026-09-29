@@ -122,7 +122,10 @@ impl Entry {
                 .retirement
                 .as_ref()
                 .is_none_or(|query| query.result() == Some(-11));
-            // Existing exported monotonic seconds clock bounds repeated queries.
+            // SAFETY: ktime_get_seconds is a permanent Linux monotonic-clock
+            // export, callable while this mutex is held and independent of any
+            // retiring application. Its scalar result neither borrows nor
+            // changes the retained exchange state.
             let now = unsafe { bindings::ktime_get_seconds() } as u64;
             if retry && now >= self.retirement_after {
                 let mut query =
@@ -220,6 +223,9 @@ impl Remote {
         // This task continues even if the original RET waiter is dying. No
         // intentionally blocking user syscall is timed: only accepted results
         // whose response/wake has not reached real publication are bounded.
+        // SAFETY: ktime_get_seconds is the same permanent, non-sleeping Linux
+        // clock export used for retirement retries. Reading it while slots is
+        // locked cannot alias application-owned memory or publish a response.
         let now = unsafe { bindings::ktime_get_seconds() } as u64;
         if let Err(error) = self.expire_publications(&mut slots, now) {
             drop(slots);
@@ -355,6 +361,10 @@ impl Remote {
                         pr_info!("IHK-SMP: application retirement os={} generation={} pid={} token={} errno={}\n",
                             self.owner.slot(), self.owner.generation(), query.pid(), query.token().wire(), result);
                         if result == -11 {
+                            // SAFETY: This reads only Linux's permanent
+                            // monotonic clock while the entry remains covered
+                            // by slots; the value is copied into a local retry
+                            // deadline and has no application-memory lifetime.
                             entry.retirement_after =
                                 unsafe { bindings::ktime_get_seconds() } as u64 + 1;
                         } else if result != 0 {

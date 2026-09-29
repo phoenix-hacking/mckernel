@@ -54,11 +54,17 @@ pub(crate) unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Re
     let mut request = [0; BYTES];
     request[..8].copy_from_slice(&busy.load(Ordering::Acquire).to_le_bytes());
     for (offset, byte) in request.iter_mut().enumerate().skip(8) {
+        // SAFETY: The caller retains all BYTES of the aligned exchange and
+        // this sole responder owns the request while busy is one. `offset` is
+        // 8..BYTES, so destination.add(offset) stays in that live mapping.
         *byte = unsafe { read_volatile(destination.add(offset)) };
     }
     Descriptor::decode(&request).validate_request()?;
     let encoded = response.encode();
     for (offset, byte) in encoded.iter().copied().enumerate().skip(8) {
+        // SAFETY: The same exclusive, live BYTES-byte exchange contains this
+        // in-bounds response byte. The peer only polls busy; the release below
+        // publishes all volatile payload writes before it may inspect them.
         unsafe { write_volatile(destination.add(offset), byte) };
     }
     busy.store(0, Ordering::Release);
@@ -78,6 +84,9 @@ pub(crate) unsafe fn read_response(source: *const u8) -> Result<Descriptor, Erro
     }
     let mut bytes = [0; BYTES];
     for (offset, byte) in bytes.iter_mut().enumerate().skip(8) {
+        // SAFETY: `source` names the retained, aligned BYTES-byte exchange.
+        // Its acquire observation of the responder's busy=0 release makes the
+        // in-bounds response payload observable before this raw scalar copy.
         *byte = unsafe { read_volatile(source.add(offset)) };
     }
     let response = Descriptor::decode(&bytes);
@@ -328,6 +337,9 @@ pub(crate) fn tsc_nanoseconds(
 #[inline(always)]
 fn read_barrier() {
     // Match Linux's read-begin/read-retry barriers, including compiler order.
+    // SAFETY: `lfence` has no operands or memory addresses, preserves flags,
+    // does not adjust the stack, and is valid in this x86 kernel context. The
+    // compiler-visible fence orders only the surrounding raw time-page reads.
     unsafe { core::arch::asm!("lfence", options(nostack, preserves_flags)) };
 }
 
@@ -352,6 +364,10 @@ pub(crate) unsafe fn read_clock(
     if !coarse && !matches!(clock_id, 0 | 1 | 4 | 7 | 11) {
         return None;
     }
+    // SAFETY: `data` satisfies the function's retained, aligned TimeData
+    // contract. `clock_data` has exactly two Clock elements and the boolean
+    // index is zero or one; addr_of! forms no reference into concurrently
+    // updated Linux storage, and the resulting pointer stays in that mapping.
     let clock = unsafe {
         addr_of!((*data).clock_data)
             .cast::<Clock>()
@@ -360,33 +376,60 @@ pub(crate) unsafe fn read_clock(
     // A bounded retry permits the normal syscall fallback if a host update
     // remains in progress. It never publishes a sample from an odd sequence.
     for _ in 0..1024 {
+        // SAFETY: `clock` is one in-bounds Clock in the retained time page.
+        // Linux may update its scalar fields, so this raw, aligned volatile
+        // read is used under the sequence protocol without creating a borrow.
         let seq = unsafe { read_volatile(addr_of!((*clock).seq)) };
         if seq & 1 != 0 {
             core::hint::spin_loop();
             continue;
         }
         read_barrier();
+        // SAFETY: `clock_mode` is an aligned in-bounds scalar of the same
+        // retained Clock. The even sequence was sampled immediately before;
+        // retry discards this snapshot if Linux changes it concurrently.
         let mode = unsafe { read_volatile(addr_of!((*clock).clock_mode)) };
         if mode == i32::MAX || (!coarse && mode != CLOCK_TSC) {
             return None;
         }
+        // SAFETY: `basetime` contains exactly twelve Timestamp elements and
+        // accepted clock IDs are 0, 1, 4, 5, 6, 7, or 11. Each is therefore
+        // an in-bounds index; addr_of! avoids making a reference to Linux data.
         let timestamp = unsafe {
             addr_of!((*clock).basetime)
                 .cast::<Timestamp>()
                 .add(clock_id as usize)
         };
+        // SAFETY: `timestamp` is the in-bounds, aligned element derived above
+        // from retained TimeData. Volatile scalar access is synchronized by
+        // the surrounding sequence retry and creates no shared reference.
         let sec = unsafe { read_volatile(addr_of!((*timestamp).sec)) };
+        // SAFETY: `nsec` is the other aligned scalar in the same valid
+        // Timestamp. A changed sequence below rejects this pair before use.
         let base = unsafe { read_volatile(addr_of!((*timestamp).nsec)) };
         let nsec = if coarse {
             base
         } else {
+            // SAFETY: `cycle_last` is an aligned, in-bounds Clock scalar in
+            // retained Linux storage; the final sequence comparison validates
+            // this volatile sample against concurrent Linux publication.
             let last = unsafe { read_volatile(addr_of!((*clock).cycle_last)) };
+            // SAFETY: `max_cycles` is the next in-bounds aligned Clock scalar
+            // under the same sequence snapshot and is read without a borrow.
             let max = unsafe { read_volatile(addr_of!((*clock).max_cycles)) };
+            // SAFETY: `mult` is an aligned in-bounds scalar of `clock`; Linux
+            // updates are detected by the retry rather than assumed absent.
             let mult = unsafe { read_volatile(addr_of!((*clock).mult)) };
+            // SAFETY: `shift` is an aligned in-bounds scalar in the retained
+            // Clock. tsc_nanoseconds rejects values that would make shifting
+            // invalid after this sequence-governed volatile read.
             let shift = unsafe { read_volatile(addr_of!((*clock).shift)) };
             tsc_nanoseconds(cycles() & i64::MAX as u64, last, max, mult, shift, base)?
         };
         read_barrier();
+        // SAFETY: This repeats the aligned in-bounds sequence scalar read from
+        // the retained Clock. Its volatile value detects an overlapping Linux
+        // update before this loop returns any fields sampled above.
         if seq != unsafe { read_volatile(addr_of!((*clock).seq)) } {
             continue;
         }

@@ -352,3 +352,20 @@ The fetched capsule/inventory and both terminal containers remain preserved.
 See `stability-native-exact-failed-candidate-cleanup-20260928-1.json`. Do not
 prepare a fresh candidate until the active recursive-stage and unsafe-ledger
 source closure is independently accepted and fetched.
+
+Shutdown checkpoint 76 preserves the joined source lanes as WIP. The unsafe/FFI
+ledger now binds 55 inputs and 637 sites, preserves 156 historical mappings and
+adds 481 pending IDs; its 22 focused tests and direct inventory/check pass.
+Twenty-two Rust files have comment-only safety documentation. See
+`stability-native-source-closure-shutdown-wip-20260928-1.json` for exact hashes,
+checks and limitations.
+
+The final integrated staging gate still fails closed on one stale v5 exact
+escape-prefix expectation in `native_rust_host_audit.py`; do not treat the
+earlier 114-test pass as final because it predates the manifest reseal. Next make
+one bounded expectation correction without weakening the audit, rerun the full
+recursive and ledger suites plus direct staging/inventory checks, and obtain
+independent review. Only then checkpoint and prepare a fresh correctly-moded
+candidate. No heavy operation is active. Preserve launcher wrapper PID
+3399308/starttime 83682487 and worker PID 3399313/starttime 83682494. The OS
+goal remains incomplete and the launcher pause is temporary.

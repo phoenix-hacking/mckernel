@@ -666,10 +666,18 @@ struct Entry {
 
 /// The callback owns its Box only if it actually enters. Linux may satisfy
 /// kthread_stop before calling a freshly created task's callback.
+///
+/// # Safety
+/// `data` must be the unique `Entry` allocation transferred by `Thread::new`.
+/// Its task owner retains that allocation until this callback takes it, while
+/// a joined callback that never entered leaves reclamation to `Thread::drop`.
 unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
     // SAFETY: Thread owns this unique allocation until entry or joined stop.
     let entry = unsafe { Box::from_raw(data.cast::<Entry>()) };
     entry.entered.store(true, Ordering::Release);
+    // SAFETY: This callback is executing as the kthread created by Thread::new;
+    // Linux owns the current task and this query only reads its stop request.
+    // The resulting bool is consumed locally before any callback state drops.
     while !unsafe { bindings::kthread_should_stop() } {
         match entry.role {
             Role::Packets => entry.runtime.pump(),
@@ -687,6 +695,9 @@ unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
         // Polling also notices host-initiated show/store calls; waiting solely
         // for a guest IRQ would strand those outgoing exchanges. Yield even
         // during sustained metadata traffic so the worker stays bounded.
+        // SAFETY: This is process context in the dedicated kthread, never an
+        // IRQ or lock-held callback. The fixed sleep owns no foreign pointer
+        // and gives Linux a bounded scheduling point before the next poll.
         unsafe { bindings::msleep(1) };
     }
     0
@@ -818,6 +829,9 @@ impl Started {
                 return Ok(());
             }
             // All CPU/device/topology/memory guards ended before activation.
+            // SAFETY: activate_and_wait runs in its sleepable launcher context
+            // with no borrowed resource guard held. This fixed delay only lets
+            // the retained worker tasks publish their atomic entered flags.
             unsafe { bindings::msleep(10) };
         }
         pr_info!("IHK-SMP: continuing boot incomplete os={} generation={} status={} sysfs_requests={}; workers and resources retained\n",

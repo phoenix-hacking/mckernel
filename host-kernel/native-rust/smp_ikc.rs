@@ -67,6 +67,9 @@ pub(super) fn validate_apic() -> Result {
     // SAFETY: Linux initializes this permanent read-only driver before module
     // loading. Bindgen generated the exact header and bitfield accessors.
     let driver = unsafe { bindings::apic };
+    // SAFETY: A non-null APIC driver is permanent after module load; this exact
+    // bindgen accessor performs only its read-only destination-mode query and
+    // does not retain a pointer beyond the validation call.
     if driver.is_null() || unsafe { bindings::apic::dest_mode_logical_raw(driver) } != 0 {
         return Err(ENODEV);
     }

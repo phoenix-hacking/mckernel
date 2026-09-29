@@ -25,22 +25,44 @@ pub(crate) mod abi {
     #[repr(C)]
     pub(crate) struct Operations {
         pub flags: u32,
+        // SAFETY: Linux invokes this resident callback only while the proc
+        // entry and its module-owned Operations descriptor remain published.
         pub open: Option<unsafe extern "C" fn(*mut bindings::inode, *mut bindings::file) -> i32>,
+        // SAFETY: Linux retains the file callback target and follows the pinned
+        // C ABI while proc_entry_rundown prevents descriptor retirement.
         pub read: Option<
             unsafe extern "C" fn(*mut bindings::file, *mut c_char, usize, *mut i64) -> isize,
         >,
+        // SAFETY: The optional iterator target is resident for each published
+        // descriptor and Linux calls it only with its declared C ABI.
         pub read_iter: Option<unsafe extern "C" fn(*mut c_void, *mut c_void) -> isize>,
+        // SAFETY: Linux retains this resident write target through procfs
+        // rundown and supplies only the declared C ABI arguments.
         pub write: Option<
             unsafe extern "C" fn(*mut bindings::file, *const c_char, usize, *mut i64) -> isize,
         >,
+        // SAFETY: The resident seek target is called only under Linux's pinned
+        // file-operation ABI and descriptor lifetime.
         pub seek: Option<unsafe extern "C" fn(*mut bindings::file, i64, i32) -> i64>,
+        // SAFETY: Linux retains the resident release target until the matching
+        // file-operation rundown completes.
         pub release: Option<unsafe extern "C" fn(*mut bindings::inode, *mut bindings::file) -> i32>,
+        // SAFETY: Linux owns poll arguments and invokes this resident target
+        // only while the published descriptor remains alive.
         pub poll: Option<unsafe extern "C" fn(*mut bindings::file, *mut c_void) -> u32>,
+        // SAFETY: Linux dispatches this resident ioctl target using the pinned
+        // file-operation C ABI for the descriptor lifetime.
         pub ioctl: Option<unsafe extern "C" fn(*mut bindings::file, u32, usize) -> i64>,
         #[cfg(CONFIG_COMPAT)]
+        // SAFETY: The compat callback shares the resident descriptor lifetime
+        // and exact C ABI constraints of the ordinary ioctl entry.
         pub compat_ioctl: Option<unsafe extern "C" fn(*mut bindings::file, u32, usize) -> i64>,
+        // SAFETY: Linux calls this resident mmap target only during the
+        // published descriptor lifetime and with its declared C ABI.
         pub mmap:
             Option<unsafe extern "C" fn(*mut bindings::file, *mut bindings::vm_area_struct) -> i32>,
+        // SAFETY: Linux retains this resident address-selection target through
+        // procfs rundown and supplies only its declared C ABI arguments.
         pub get_unmapped_area:
             Option<unsafe extern "C" fn(*mut bindings::file, usize, usize, usize, usize) -> usize>,
     }
@@ -48,6 +70,9 @@ pub(crate) mod abi {
     // code. File owners complete Linux rundown before their module may unload.
     unsafe impl Sync for Operations {}
 
+    // SAFETY: These pinned Linux procfs exports consume only their declared C
+    // ABI values. Linux owns returned entries and requires procfs rundown
+    // before descriptor/module retirement; no foreign call may unwind to Rust.
     extern "C" {
         pub(super) fn proc_mkdir_mode(
             name: *const c_char,
@@ -361,7 +386,11 @@ unsafe extern "C" fn open<T: FileOps>(
         // successful backend open receives exactly one release even under OOM.
         let session = Box::pin_init(new_mutex!(None::<T::Session>), GFP_KERNEL)?;
         let open = Box::new(Open { session }, GFP_KERNEL)?;
+        // SAFETY: Linux pins inode and its i_private payload for this open;
+        // the typed data pointer is used only for this immediate callback.
         *open.session.lock() = Some(unsafe { &*data }.open()?);
+        // SAFETY: This successful open uniquely owns `open`; storing its raw
+        // allocation in Linux private_data transfers it to release/rundown.
         unsafe { (*file).private_data = Box::into_raw(open).cast() };
         Ok(())
     })();
@@ -406,8 +435,12 @@ unsafe extern "C" fn read<T: FileOps>(
         if count == 0 {
             return Ok(0);
         }
+        // SAFETY: The live procfs open installed this exact allocation, and
+        // Linux excludes release for the full callback before this shared borrow.
         let open = unsafe { &*(*file).private_data.cast::<Open<T::Session>>() };
         let mut session = open.session.lock();
+        // SAFETY: Linux supplies a valid mutable file-position pointer for this
+        // serialized read callback; it is neither retained nor aliased later.
         let before = unsafe { *position };
         let mut output = self::buffer(count.min(IO_BYTES))?;
         let bytes = session.as_mut().unwrap().read(before, &mut output)?;
@@ -417,6 +450,8 @@ unsafe extern "C" fn read<T: FileOps>(
         UserSlice::new(buffer as usize, bytes)
             .writer()
             .write_slice(&output[..bytes])?;
+        // SAFETY: The same live serialized VFS position pointer remains valid
+        // through this callback and is updated only after a successful read.
         unsafe { *position = before.wrapping_add(bytes as i64) };
         Ok(bytes)
     })();
@@ -435,8 +470,12 @@ unsafe extern "C" fn write<T: FileOps>(
         if count == 0 {
             return Ok(0);
         }
+        // SAFETY: The live procfs open installed this exact allocation, and
+        // Linux excludes release for the full callback before this shared borrow.
         let open = unsafe { &*(*file).private_data.cast::<Open<T::Session>>() };
         let mut session = open.session.lock();
+        // SAFETY: Linux supplies a valid mutable file-position pointer for this
+        // serialized write callback; it is neither retained nor aliased later.
         let before = unsafe { *position };
         let bytes = count.min(IO_BYTES);
         let mut input = self::buffer(bytes)?;
@@ -447,6 +486,8 @@ unsafe extern "C" fn write<T: FileOps>(
         if written > bytes {
             return Err(overflow());
         }
+        // SAFETY: The same live serialized VFS position pointer remains valid
+        // through this callback and is updated only after a successful write.
         unsafe { *position = before.wrapping_add(written as i64) };
         Ok(written)
     })();

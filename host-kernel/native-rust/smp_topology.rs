@@ -34,7 +34,9 @@ impl CpuMask {
         cpu < MAX_CPUS && self.words[cpu / 64] & (1_u64 << (cpu % 64)) != 0
     }
 
-    /// The caller keeps this exact Linux mask live under CPU hotplug exclusion.
+    /// # Safety
+    /// The caller keeps this exact Linux mask live under CPU hotplug exclusion
+    /// and supplies a bound from that same stabilized topology generation.
     unsafe fn copy(mask: *const bindings::cpumask, limit: usize) -> Result<Self> {
         if mask.is_null() || limit == 0 || limit > MAX_CPUS {
             return Err(EINVAL);
@@ -149,6 +151,11 @@ impl Cpu {
 /// Reuse the established native raised_list per-CPU address calculation.
 /// This is a Linux linker token plus its runtime offset, not Rust allocation
 /// pointer arithmetic between two unrelated allocations.
+///
+/// # Safety
+/// `symbol` must name a live Linux per-CPU allocation of `T`, and `cpu` must
+/// be within the caller's hotplug-stabilized CPU bound while its offset table
+/// remains live. The returned pointer must not outlive that exclusion.
 unsafe fn per_cpu<T>(symbol: *const T, cpu: usize) -> *const T {
     // SAFETY: The capture caller has checked nr_cpu_ids and holds CPU exclusion.
     let offset = unsafe {
@@ -204,6 +211,9 @@ pub(crate) unsafe fn capture(cpu: usize) -> Result<Cpu> {
     }
     // SAFETY: Both returned masks are live under the supplied hotplug guard.
     let core_siblings = unsafe { CpuMask::copy(core, limit)? };
+    // SAFETY: The sibling-map pointer is likewise a live per-CPU cpumask under
+    // the caller's unchanged hotplug exclusion; copy consumes only its checked
+    // bound and returns owned words with no borrowed Linux mask remaining.
     let thread_siblings = unsafe { CpuMask::copy(thread, limit)? };
     if !core_siblings.contains(cpu) || !thread_siblings.contains(cpu) {
         return Err(EIO);

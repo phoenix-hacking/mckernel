@@ -645,6 +645,14 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v4(
 /// Add the no-effect shutdown dispatch callback while retaining v1-v4 ABI
 /// signatures and exports. The callback is invoked with the exact published
 /// slot/generation and is rollback-safe until a later effect acknowledgement.
+///
+/// # Safety
+/// `owner` is the trusted live native module owner retained by `create_os`'s
+/// initial reference. All eight callbacks remain resident, use their declared
+/// ABI without unwinding, and obey the existing ownership, concurrency, and
+/// locking rules. `shutdown` receives the exact generation under the operation
+/// lock; a nonzero result is pre-effect or rollback-safe, so it performs no
+/// stop, drain, release, or visible teardown.
 #[export_name = "ihk_os_create_unbooted_v5"]
 pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
     provider_minor: u32,
@@ -694,6 +702,9 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
         },
         _ => return EINVAL.to_errno() as i64,
     };
+    // SAFETY: The validated trusted owner is retained through create_os's
+    // initial reference, and all eight ABI-correct resident callbacks are
+    // transferred into its existing ownership/concurrency transaction.
     match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
@@ -891,11 +902,18 @@ pub(crate) unsafe extern "C" fn ihk_os_with_kobject_v1(
         // Hold admission until the foreign callback returns. Shutdown closes
         // this gate before its provider callback and returns EBUSY rather than
         // racing a borrowed kobject or its callback context.
+        // SAFETY: The exact-generation registry lease retains the published,
+        // initialized, aligned, nonnull OsObject and its admission field
+        // through this callback and its drop. Admission excludes shutdown but
+        // is not the pointer-lifetime proof; the lease and field drop order are.
         let _admission = unsafe { &*object }.admission.enter()?;
         // SAFETY: The lease keeps this exact object and registered device live.
         // Only form a raw field pointer: Linux owns the device's mutable data.
         let node = unsafe { (*object).node.load(Ordering::Acquire) };
         assert!(!node.is_null());
+        // SAFETY: The same registry lease retains the Linux device allocation
+        // and embedded kobject. addr_of_mut forms only the raw kobject field
+        // pointer; it neither dereferences nor aliases Linux-owned mutable data.
         let parent = unsafe { ptr::addr_of_mut!((*node).kobj) };
         // SAFETY: The caller owns callback/context and obeys the borrowed-parent
         // contract above. No operation mutex is acquired across reentry from a
@@ -1231,6 +1249,8 @@ struct BackendApplication {
 // SAFETY: The registered callback contract supplies a concurrency-safe opaque
 // owner. Only invoke borrows it; final Drop follows the last such borrow.
 unsafe impl Send for BackendApplication {}
+// SAFETY: The same registered opaque owner permits shared references; invoke
+// serializes its callback contract, and final Drop follows every such borrow.
 unsafe impl Sync for BackendApplication {}
 
 impl Drop for BackendApplication {
@@ -1409,6 +1429,12 @@ pub(crate) static APPLICATION_CLOSE_EXPORT: IhkExportSymbolRecord = IhkExportSym
 };
 
 /// Query only the running OS's retained topology, never a user pointer.
+///
+/// # Safety
+/// Callers provide only scalar slot, generation, and command values. The exact
+/// generation is leased before any object dereference; operation and admission
+/// locking retain the callback surface through the query, and this C ABI never
+/// unwinds.
 #[export_name = "ihk_os_topology_query_v1"]
 pub(crate) extern "C" fn topology_query(slot: u32, generation: u64, command: u32) -> i64 {
     let result = (|| -> Result<i64> {

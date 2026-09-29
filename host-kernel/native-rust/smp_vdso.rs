@@ -7,6 +7,10 @@ use core::mem::{align_of, offset_of, size_of};
 use core::ptr::{addr_of, read_volatile};
 use kernel::{bindings, prelude::*};
 
+// SAFETY: These exported Linux getters have the declared C ABI and return only
+// permanent kernel-lifetime clock metadata (or a scalar PFN). Their optional
+// feature gates match the bound kernel configuration; this module never owns
+// or mutates their returned storage.
 extern "C" {
     // Existing exported Linux getters. Their return is an opaque pointer or
     // PFN; this adapter never constructs or mutates a private clock object.
@@ -55,6 +59,9 @@ fn physical(address: u64) -> Result<u64> {
 /// pointer. Optional clock pages come from the original exported getters.
 pub(super) fn collect() -> Result<Descriptor> {
     #[cfg(CONFIG_AMD_MEM_ENCRYPT)]
+    // SAFETY: sme_me_mask is immutable platform configuration initialized
+    // before module loading. This reads one scalar and rejects unsupported
+    // encrypted mappings before any VDSO address is translated or retained.
     if unsafe { bindings::sme_me_mask } != 0 {
         // The current native startup and mapping contract uses plain RAM. A
         // decrypted PV page needs a separately verified encrypted-memory path.
@@ -62,6 +69,10 @@ pub(super) fn collect() -> Result<Descriptor> {
             .err()
             .unwrap_or(EINVAL));
     }
+    // SAFETY: These Linux VDSO globals are initialized before module load and
+    // remain resident for the kernel lifetime. Volatile reads copy only their
+    // published pointer/scalar values; all null, size, and range checks occur
+    // before this adapter translates or exposes any address.
     let (text, bytes, time, rng) = unsafe {
         let image = addr_of!(bindings::vdso_image_64);
         (

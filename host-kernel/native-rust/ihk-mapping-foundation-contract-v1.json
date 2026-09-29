@@ -222,24 +222,48 @@
   },
   "schema_version": 1,
   "semantic_bindings": {
-    "arithmetic": ["checked_sub", "checked_add", "checked_mul"],
+    "arithmetic": [
+      "checked_sub",
+      "checked_add",
+      "checked_mul"
+    ],
     "consumer_sources": [
       {
         "path": "host-kernel/native-rust/smp_memory.rs",
-        "sha256": "686c8d30e7955b1051ba41d44650a924d196837cbd6918bffde08b1ff227e215",
-        "size": 107749
+        "sha256": "2dd118117f07cd5a2b59f92fbd6d0ac1f8850ac78ad37079a93e736f967b5de4",
+        "size": 109016
       },
       {
         "path": "host-kernel/native-rust/smp_vdso.rs",
-        "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
-        "size": 5863
+        "sha256": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+        "size": 6664
       }
     ],
     "consumers": [
-      {"path": "host-kernel/native-rust/smp_memory.rs", "function": "linux_boot_root", "helper": "kernel_image_physical", "limit": "IDENTITY_WINDOW_END"},
-      {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "physical", "helper": "kernel_image_physical", "limit": "wire::PHYSICAL_LIMIT"},
-      {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "physical", "helper": "kernel_linear_physical", "limit": "wire::PHYSICAL_LIMIT"},
-      {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "collect", "helper": "physical", "limit": ""}
+      {
+        "function": "linux_boot_root",
+        "helper": "kernel_image_physical",
+        "limit": "IDENTITY_WINDOW_END",
+        "path": "host-kernel/native-rust/smp_memory.rs"
+      },
+      {
+        "function": "physical",
+        "helper": "kernel_image_physical",
+        "limit": "wire::PHYSICAL_LIMIT",
+        "path": "host-kernel/native-rust/smp_vdso.rs"
+      },
+      {
+        "function": "physical",
+        "helper": "kernel_linear_physical",
+        "limit": "wire::PHYSICAL_LIMIT",
+        "path": "host-kernel/native-rust/smp_vdso.rs"
+      },
+      {
+        "function": "collect",
+        "helper": "physical",
+        "limit": "",
+        "path": "host-kernel/native-rust/smp_vdso.rs"
+      }
     ],
     "descriptor_validation": "checked subtraction/addition; non-empty half-open ranges; exclusive limits; trusted producer preconditions"
   },

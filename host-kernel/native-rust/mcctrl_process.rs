@@ -637,6 +637,8 @@ impl ProcessId {
 // SAFETY: Linux permits owned PID references to move between tasks; the opaque
 // object is accessed only by its exported reference operations and identity.
 unsafe impl Send for ProcessId {}
+// SAFETY: Shared ProcessId access performs only Linux's exported reference and
+// identity operations; the owned PID reference remains valid until its one Drop.
 unsafe impl Sync for ProcessId {}
 
 impl Drop for ProcessId {
@@ -747,6 +749,8 @@ struct Reaper {
 // SAFETY: Only Registry activates this owned task and its unique destructor
 // stops/joins it. Callback ownership is tracked independently of task entry.
 unsafe impl Send for Reaper {}
+// SAFETY: Shared Reaper access cannot transfer its task/context ownership; only
+// its unique destructor stops and joins the task before either pointer is freed.
 unsafe impl Sync for Reaper {}
 
 impl Reaper {
@@ -769,6 +773,8 @@ impl Reaper {
             )
         };
         if task.is_null() || (-4095..0).contains(&(task as isize)) {
+            // SAFETY: Failed creation has not transferred the unique Box context
+            // to a task; this is its sole from_raw reconstruction and drop.
             unsafe { drop(Box::from_raw(context)) };
             return Err(if task.is_null() {
                 ENOMEM
@@ -798,6 +804,8 @@ impl Reaper {
         self.task = ptr::null_mut();
         if !self.entered.load(Ordering::Acquire) {
             // A never-entered stopped task did not consume the unique Box.
+            // SAFETY: The completed join and false entered flag prove reap never
+            // reconstructed this unique context, so this is its sole reclamation.
             unsafe { drop(Box::from_raw(self.context)) };
         }
     }
@@ -859,6 +867,8 @@ unsafe extern "C" fn reap(context: *mut c_void) -> i32 {
         }
         // Bounded snapshots prevent one large inherited-file registry from
         // monopolizing a CPU. This scan does not depend on another ioctl.
+        // SAFETY: reap is a kernel-thread callback in sleepable process context;
+        // no registry mutex or borrowed process state is held across this delay.
         unsafe { bindings::msleep(10) };
     }
     0

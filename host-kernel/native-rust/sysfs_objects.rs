@@ -208,6 +208,9 @@ unsafe extern "C" fn show<T: AttributeOps>(
     // SAFETY: The entire Linux output page is exclusively lent to show. Clear
     // it before exposing safe readable bytes, and reserve a trailing NUL.
     unsafe { ptr::write_bytes(buffer, 0, PAGE_BYTES) };
+    // SAFETY: The non-null, exclusively lent PAGE_SIZE buffer was completely
+    // initialized above. A byte slice has no alignment requirement, and this
+    // exact PAGE_BYTES - 1 extent leaves the final byte for the required NUL.
     let output = unsafe { core::slice::from_raw_parts_mut(buffer.cast(), PAGE_BYTES - 1) };
     match state.show(output) {
         Ok(bytes) if bytes < PAGE_BYTES => {

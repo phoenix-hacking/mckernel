@@ -524,7 +524,7 @@ def canonical_token_digest(tokens, begin, end):
     return sha256_bytes(canonical_bytes(values))
 
 
-def _item_end(tokens, pairs, start_index):
+def _item_end(tokens, pairs, start_index, stop_at_field_comma=False):
     nesting = 0
     index = start_index
     while index < len(tokens):
@@ -535,6 +535,8 @@ def _item_end(tokens, pairs, start_index):
         if value == "{":
             return pairs[index]
         if value == ";" and nesting == 0:
+            return index
+        if stop_at_field_comma and value == "," and nesting == 0:
             return index
         index += 1
     raise LedgerError("cannot find the end of an unsafe/FFI item")
@@ -551,6 +553,19 @@ def _statement_end(tokens, pairs, start_index):
             return index
         index += 1
     raise LedgerError("cannot find the end of a static declaration")
+
+
+def _extern_callback_field(tokens, extern_index):
+    """Recognize a typed callback field without changing extern-item parsing."""
+
+    cursor = extern_index - 1
+    if cursor >= 0 and tokens[cursor]["text"] == "unsafe":
+        cursor -= 1
+    while cursor >= 0 and tokens[cursor]["text"] not in (";", "{", "}"):
+        if tokens[cursor]["text"] == ":":
+            return True
+        cursor -= 1
+    return False
 
 
 def _export_item_end(tokens, pairs, start_index):
@@ -633,7 +648,16 @@ def discover_sites(relative, raw, text):
             add("foreign_block", begin, pairs[cursor])
         elif cursor < len(tokens) and tokens[cursor]["text"] == "fn":
             begin = index - 1 if index > 0 and tokens[index - 1]["text"] == "unsafe" else index
-            add("extern_function", begin, _item_end(tokens, pairs, begin))
+            add(
+                "extern_function",
+                begin,
+                _item_end(
+                    tokens,
+                    pairs,
+                    begin,
+                    stop_at_field_comma=_extern_callback_field(tokens, index),
+                ),
+            )
         elif cursor < len(tokens) and tokens[cursor]["text"] == "crate":
             continue
 
@@ -734,8 +758,46 @@ def decode_rust_string(token, label):
     return body
 
 
-def _path_attribute(tokens, pairs, attrs, mod_index):
+def _visibility_attribute_cursor(tokens, pairs, mod_index):
+    """Return the token before a legal visibility, or the original predecessor.
+
+    Rust permits a visibility before an external module item.  Keep this
+    deliberately narrow: accepting arbitrary parenthesized tokens here would
+    let malformed source hide a preceding `#[path]` from the closure walker.
+    """
+
     cursor = mod_index - 1
+    if cursor < 0:
+        return cursor
+    if tokens[cursor]["text"] == "pub":
+        return cursor - 1
+    if tokens[cursor]["text"] != ")":
+        return cursor
+    opening = pairs.get(cursor)
+    if opening is None or opening == 0 or tokens[opening - 1]["text"] != "pub":
+        return cursor
+    body = tokens[opening + 1 : cursor]
+    simple = len(body) == 1 and body[0]["text"] in ("crate", "self", "super")
+    nested = len(body) >= 2 and body[0]["text"] == "in"
+    if nested:
+        path = body[1:]
+        nested = bool(path) and path[0]["text"] in ("crate", "self", "super")
+        index = 1
+        while nested and index < len(path):
+            if index + 1 >= len(path) or path[index]["text"] != ":" or path[index + 1]["text"] != ":":
+                nested = False
+                break
+            if index + 2 >= len(path) or path[index + 2]["kind"] != "ident":
+                nested = False
+                break
+            index += 3
+    if not simple and not nested:
+        return cursor
+    return opening - 2
+
+
+def _path_attribute(tokens, pairs, attrs, mod_index):
+    cursor = _visibility_attribute_cursor(tokens, pairs, mod_index)
     matching = []
     while cursor >= 0 and tokens[cursor]["text"] == "]":
         begin_bracket = pairs[cursor]

@@ -13,6 +13,9 @@ const FIRST_ALLOWED: u64 = 64 << 10;
 const LIMIT: u64 = 640 << 10;
 const RAM: u32 = 1;
 
+// SAFETY: These boot-time Linux helpers retain the stable E820 ABI declared by
+// the C witness. Calls use checked, nonempty physical ranges and only query
+// immutable post-boot map state; no Rust reference crosses this boundary.
 extern "C" {
     // Exact x86 E820 prototypes are checked in the separate C data witness.
     fn e820__mapped_raw_any(start: u64, end: u64, kind: u32) -> bool;

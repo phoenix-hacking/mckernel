@@ -5981,3 +5981,34 @@ from the exact main/IHK commits, recorded modes/symlinks and fetched capsule.
 This cleanup enables a fresh candidate but grants no build, guest or acceptance
 credit. Next finish and review the active recursive-stage/unsafe-ledger source
 closure before preparing that fresh candidate.
+
+Shutdown checkpoint 76, 2026-09-28: no new task was dispatched after the
+launcher stop request, all child lanes joined, and no heavy build, guest, QEMU
+or mcexec operation remains active. The bounded source integration is preserved
+as WIP. Twenty-two Rust files now carry site-specific safety documentation with
+an unchanged non-comment token stream. The reconciled unsafe/FFI inventory has
+55 inputs and 637 sites, preserves all 156 historical mappings, and assigns 481
+new pending IDs. Its inventory/check, 22 focused tests, lifecycle/mapping/runtime
+source checks, `py_compile` and `diff-check` PASS. Closure digest is
+`c1ae16ed...47c6`; canonical ledger digest is `e46ffbd8...1d55`.
+
+The earlier recursive-staging bytes passed all 114 tests, but that run preceded
+the final ledger/manifest reseal. Final integrated staging remains fail-closed
+on one preserved deterministic mismatch: `native_rust_host_audit.py` has a
+stale v5 exact escape-prefix expectation after the comment-only source changes.
+Its 15 errors and four downstream assertion failures are one root family. No
+shutdown correction was attempted and no passing integrated suite is claimed.
+Exact hashes, checks, limitation and process/resource state are in
+`stability-native-source-closure-shutdown-wip-20260928-1.json`.
+
+Next continuation: make one bounded correction only to the host audit's exact
+expected v5 escape blocks without weakening the oracle. Run the complete
+114-test recursive suite, all 22 unsafe-ledger tests, direct inventory/check and
+staging `--check`, then obtain independent review of the exact integrated bytes.
+Only after a pushed/fetched source-clean checkpoint may a fresh correctly-moded
+candidate be prepared; never reuse the deleted failed-80b request. Launcher
+wrapper PID 3399308/starttime 83682487 and worker PID 3399313/starttime
+83682494 remain the preserved shutdown identities. Both terminal failed
+containers and the recoverable 80b capsule remain retained. Formal counters,
+four diagnostic guest apps and zero successful current-candidate builds remain
+unchanged. The launcher pause is temporary and the OS goal is not complete.

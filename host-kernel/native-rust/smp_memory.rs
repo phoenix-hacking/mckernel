@@ -1007,8 +1007,11 @@ impl PreparedBoot {
     fn validate_irq_slots(&self, memory: &MemoryMap) -> Result {
         let offset = self.params.bytes.checked_sub(64).ok_or(EIO)?;
         if offset % 8 != 0 { return Err(EIO); }
-        // The retained parameter allocation contains immutable host fields and
-        // two atomic peer-shared words. Acquire reads the actual shared READY.
+        // SAFETY: params retains this final 64-byte extent for this borrow;
+        // `checked_sub` and the 8-byte offset check establish its aligned
+        // descriptor address. The encoded representation is initialized before
+        // READY, immutable nonatomics are not modified, and the peer-shared
+        // words use compatible atomic accesses.
         let descriptor = unsafe { &*((self.params.address + offset as u64)
             as *const NativeIrqWorkDescriptorView) };
         let occupied = [
@@ -1046,12 +1049,17 @@ impl PreparedBoot {
     #[allow(dead_code)]
     fn close_irq_senders(&self, memory: &MemoryMap) -> Result {
         self.validate_irq_slots(memory)?;
+        // SAFETY: validate_irq_slots checked the retained final 64-byte,
+        // 8-byte-aligned descriptor for this generation. This short borrow
+        // precedes the sender-close wait and does not release its owner.
         let descriptor = unsafe { &*((self.params.address + self.params.bytes as u64 - 64)
             as *const NativeIrqWorkDescriptorView) };
         let mut remaining = 1000;
         if close_native_irq_work_senders(descriptor, || {
             if remaining == 0 { return false; }
             remaining -= 1;
+            // SAFETY: This STOP-only caller runs in sleepable context. Timeout
+            // returns false and retains the closed gate and every owner.
             unsafe { bindings::msleep(1) };
             true
         }) { Ok(()) } else { Err(EBUSY) }
@@ -1075,6 +1083,9 @@ impl Drop for BootStorage {
     }
 }
 
+// SAFETY: These are the pinned Linux exports and permanent symbols. Their
+// addresses are used only under the existing boot/resource lifetime rules;
+// raised_list remains Linux-owned and no foreign callback can unwind into Rust.
 extern "C" {
     // Exact existing Linux APIs, with patch 0006 exporting the unchanged start
     // implementation and permanent data symbol. Opaque addresses never borrow
@@ -1089,6 +1100,8 @@ fn linux_boot_root() -> Result<u64> {
     // The preserved guest owns four-level mappings. Reject an active LA57
     // Linux root before exposing it to the guest's existing page-table walker.
     #[cfg(CONFIG_X86_5LEVEL)]
+    // SAFETY: pgdir_shift is Linux boot-initialized immutable configuration and
+    // is read only to reject an incompatible active page-table layout.
     if unsafe { bindings::pgdir_shift } != 39 {
         return Err(EINVAL);
     }
@@ -1860,6 +1873,8 @@ impl MemoryContext {
         }
         // Same documented scaled nanoseconds-per-TSC fallback as the pinned
         // IHK calc_ns_per_tsc, using Linux's calibrated exported frequency.
+        // SAFETY: tsc_khz is Linux's boot-calibrated scalar; this read neither
+        // borrows nor mutates it and zero is rejected before division.
         let khz = unsafe { bindings::tsc_khz };
         if khz == 0 {
             return Err(EIO);
@@ -2143,6 +2158,8 @@ impl MemoryContext {
                 .params
                 .read64(offset_of!(abi::IhkSmpBootParam, master_ikc_queue_send))?;
             let queue_bytes = (4 * prepared.cpus.len() * 56).div_ceil(4096) * 4096;
+            // SAFETY: page_offset_base is Linux's immutable direct-map base;
+            // checked_guest_queue validates each derived range before use.
             let direct_map = unsafe { bindings::page_offset_base };
             let receive_pointer =
                 checked_guest_queue(memory_map, owner, direct_map, receive, queue_bytes)?;

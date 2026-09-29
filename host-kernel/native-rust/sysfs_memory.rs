@@ -194,6 +194,10 @@ impl Memory {
         if ledger.procfs.len() == 4096 + METADATA_CAPACITY + 2 {
             return Err(EAGAIN);
         }
+        // SAFETY: `address` names the checked four-byte, four-byte-aligned
+        // CREATE field in a retained owner extent. Holding `ledger` excludes
+        // every host alias; the guest shares this field only through atomic
+        // accesses, and `from_ptr` creates no borrowed reference.
         if create
             && unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire) != 0
         {
@@ -338,6 +342,10 @@ impl Memory {
         // SAFETY: The checked exact-generation RAM is aligned and disjoint
         // from every active service access. The guest owns only atomic state.
         let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
+        // SAFETY: The same retained, response-sized mapping covers the
+        // eight-byte-aligned state word at offset 16. The held ledger claim
+        // excludes host aliases, while the guest accesses this shared word
+        // atomically; this creates no Rust reference to guest memory.
         let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
         if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
             return Err(errno(-71));
@@ -449,8 +457,10 @@ impl ProcfsRegion {
         {
             return Err(EINVAL);
         }
-        // The private owner excludes RELEASE publication throughout this read.
-        // The terminal native answer made all of this guest page immutable.
+        // SAFETY: This live non-CREATE region retains a checked 4096-byte
+        // mapping, and its private ledger claim excludes RELEASE and all host
+        // aliases. The terminal native answer makes the guest page immutable;
+        // the bounded byte offset is valid and creates no shared reference.
         for (index, byte) in output.iter_mut().enumerate() {
             *byte = unsafe { ptr::read_volatile((self.address as *const u8).add(offset + index)) };
         }
@@ -598,10 +608,10 @@ impl SyscallResponse {
         {
             return Err(EINVAL);
         }
-        // The mailbox's in-kernel reservation or complete transfer critical
-        // section excludes completion/cancellation throughout this copy.
-        // This unique payload tag excludes every other host service mapping;
-        // no file operation or userspace access occurs while the caller locks it.
+        // SAFETY: The bounded offset lies in the retained payload span. The
+        // mailbox reservation or complete-transfer critical section excludes
+        // completion and cancellation, and its unique tag excludes every host
+        // mapping; byte accesses need no stronger alignment or Rust reference.
         for (index, byte) in bytes.iter_mut().enumerate() {
             unsafe {
                 let pointer = (address as *mut u8).add(offset + index);
