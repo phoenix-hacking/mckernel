@@ -504,3 +504,10 @@ still make execution impossible. Commit/push/fetch these exact bytes, then make
 only the four authorized final substitutions and seek a separate exact
 mechanical-diff/execution review. Both quarantines and old lease remain protected;
 no cleanup, build, guest, app or acceptance result follows from this source PASS.
+
+Checkpoint 90 conditionally releases one exact non-root recovery packet after a
+final commit/push/fetched-blob match and fresh live preflight. Final helper
+`dcb72838...9735`, packet `ab2283d6...abac`, basis `bef067a4...7983` and tests
+`aef2cce5...cb08` pass independent mechanical/execution review. Invoke only the
+packet once; direct helper execution, retry, rollback and output reuse are
+prohibited. Any failure retains the claim/evidence and may leave partial deletion.

@@ -6392,3 +6392,21 @@ rerun all checks, obtain an independent exact mechanical-diff/execution review,
 commit/push/fetch final bytes, and only then perform one fresh non-root packet
 attempt. Never rerun or roll back the original cleanup. Formal counters remain
 0/273, 2/4, 6/130, 350/10,000 and 0/7.
+
+Continuation checkpoint 90, 2026-09-28: final recovery bytes now have an
+independent CONDITIONAL PASS for exactly one non-root packet invocation after
+commit/push/fetched-blob verification and fresh live preflight. Final helper is
+`dcb72838...9735`, packet `ab2283d6...abac`, release basis
+`bef067a4...7983`, and state-aware ten-test suite `aef2cce5...cb08`. Normalizing
+the three release pins reproduces the exact pushed template at `13aef461...3c6b`;
+the basis/helper/packet dependency is acyclic. See
+`stability-native-exact-quarantine-recovery-execution-release-20260929-1.json`.
+
+Do not execute until these final bytes and this release record are committed,
+pushed and fetched byte-identically. Then revalidate the old lease/historical
+evidence, absent originals, exact quarantine identities, absent old helper PID,
+absent recovery outputs, capacity floors, processes and Docker bindings. If all
+packet gates pass, invoke only `/usr/bin/bash` with the exact packet path once.
+Never invoke the helper directly, retry, roll back, remove a claim, or reuse an
+output. A failure may leave partial deletion and must be preserved for separate
+review. This releases cleanup only and moves no OS acceptance counter.

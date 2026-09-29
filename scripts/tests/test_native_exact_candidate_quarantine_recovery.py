@@ -44,11 +44,27 @@ class RecoveryTests(unittest.TestCase):
         cls.module = load_helper()
         cls.basis = json.loads(BASIS.read_text())
 
-    def test_draft_is_acyclic_and_exact(self):
-        self.assertEqual(self.basis['status'], 'DRAFT_NOT_RELEASED')
-        self.assertEqual(self.basis['source_checkpoint'], 'UNSET_REQUIRES_RECOVERY_TEMPLATE_CHECKPOINT')
-        self.assertEqual(self.basis['template_helper']['sha256'], digest(HELPER))
-        self.assertEqual(self.basis['template_packet']['sha256'], digest(PACKET))
+    def test_release_state_is_acyclic_and_exact(self):
+        self.assertIn(self.basis['status'], ('DRAFT_NOT_RELEASED', 'PASS_ONE_SHOT_QUARANTINE_RECOVERY'))
+        if self.basis['status'] == 'DRAFT_NOT_RELEASED':
+            self.assertEqual(self.basis['source_checkpoint'], 'UNSET_REQUIRES_RECOVERY_TEMPLATE_CHECKPOINT')
+            helper_template = HELPER.read_bytes()
+            packet_template = PACKET.read_bytes()
+        else:
+            self.assertRegex(self.basis['source_checkpoint'], r'^[0-9a-f]{40}$')
+            helper_source = HELPER.read_bytes()
+            release_match = re.search(rb"(?m)^RELEASE_SHA = '([0-9a-f]{64})'$", helper_source)
+            self.assertIsNotNone(release_match)
+            helper_template = helper_source[:release_match.start(1)] + (
+                b'UNSET-REQUIRES-INDEPENDENT-RECOVERY-RELEASE-SHA256') + helper_source[release_match.end(1):]
+            packet_source = PACKET.read_bytes()
+            pattern = re.compile(rb'(?m)^FINAL_HELPER_SHA=([0-9a-f]{64}); RELEASE_SHA=([0-9a-f]{64})$')
+            packet_template, count = pattern.subn(
+                b'FINAL_HELPER_SHA=__REPLACE_WITH_FINAL_RECOVERY_HELPER_SHA256__; '
+                b'RELEASE_SHA=__REPLACE_WITH_FINAL_RECOVERY_RELEASE_SHA256__', packet_source)
+            self.assertEqual(count, 1)
+        self.assertEqual(self.basis['template_helper']['sha256'], hashlib.sha256(helper_template).hexdigest())
+        self.assertEqual(self.basis['template_packet']['sha256'], hashlib.sha256(packet_template).hexdigest())
         for field in ('final_helper_sha256', 'final_packet_sha256', 'release_sha256'):
             self.assertNotIn(field, self.basis)
 
@@ -179,16 +195,19 @@ class RecoveryTests(unittest.TestCase):
 
     def released_fixture(self, directory):
         release = json.loads(json.dumps(self.basis))
-        release['status'] = 'PASS_ONE_SHOT_QUARANTINE_RECOVERY'
-        release['source_checkpoint'] = '2' * 40
+        if release['status'] == 'DRAFT_NOT_RELEASED':
+            release['status'] = 'PASS_ONE_SHOT_QUARANTINE_RECOVERY'
+            release['source_checkpoint'] = '2' * 40
         data = (json.dumps(release, sort_keys=True, separators=(',', ':')) + '\n').encode()
         release_hash = hashlib.sha256(data).hexdigest()
-        helper = HELPER.read_bytes().replace(
-            b"RELEASE_SHA = 'UNSET-REQUIRES-INDEPENDENT-RECOVERY-RELEASE-SHA256'",
-            ("RELEASE_SHA = '" + release_hash + "'").encode())
+        helper_source = HELPER.read_bytes()
+        helper, count = re.subn(
+            rb"(?m)^RELEASE_SHA = '(?:UNSET-REQUIRES-INDEPENDENT-RECOVERY-RELEASE-SHA256|[0-9a-f]{64})'$",
+            ("RELEASE_SHA = '" + release_hash + "'").encode(), helper_source)
+        self.assertEqual(count, 1)
         helper_hash = hashlib.sha256(helper).hexdigest()
         packet, count = re.subn(
-            rb'(?m)^FINAL_HELPER_SHA=__REPLACE_WITH_FINAL_RECOVERY_HELPER_SHA256__; RELEASE_SHA=__REPLACE_WITH_FINAL_RECOVERY_RELEASE_SHA256__$',
+            rb'(?m)^FINAL_HELPER_SHA=(?:__REPLACE_WITH_FINAL_RECOVERY_HELPER_SHA256__|[0-9a-f]{64}); RELEASE_SHA=(?:__REPLACE_WITH_FINAL_RECOVERY_RELEASE_SHA256__|[0-9a-f]{64})$',
             ('FINAL_HELPER_SHA=' + helper_hash + '; RELEASE_SHA=' + release_hash).encode(), PACKET.read_bytes())
         self.assertEqual(count, 1)
         paths = {name: directory / name for name in ('release', 'helper', 'packet')}

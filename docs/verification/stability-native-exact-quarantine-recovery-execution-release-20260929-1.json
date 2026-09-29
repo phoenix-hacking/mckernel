@@ -1,0 +1,41 @@
+{
+  "acceptance_credit": false,
+  "allowed_command_argv": [
+    "/usr/bin/bash",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-68cf089a-1.sh"
+  ],
+  "created_at_utc": "2026-09-29T06:02:27Z",
+  "execution_status": "NOT_YET_RUN",
+  "helper_sha256": "dcb7283805a012590ab35d734ba10cc3992db9d587e32e70c2031296669c9735",
+  "independent_review": {
+    "decision": "CONDITIONAL_PASS_ONE_SHOT_AFTER_COMMIT_PUSH_FETCH_AND_FRESH_PREFLIGHT",
+    "runtime_acceptance": false,
+    "scope": "exact non-root packet invocation only; direct helper execution, retry, rollback, claim removal and output reuse prohibited"
+  },
+  "one_shot": true,
+  "packet_sha256": "ab2283d612591d76a92898bdee107d48da331d3588ec63bf9d660e214886abac",
+  "record_kind": "native_exact_candidate_quarantine_recovery_execution_release",
+  "release_basis_sha256": "bef067a447793acefc51c0afdf15698766e18f984473c22a80ebda43ffd47983",
+  "required_before_execution": [
+    "exact final bytes committed and pushed",
+    "fetched remote commit and artifact hashes equal local",
+    "old lease and historical evidence unchanged",
+    "original paths absent and quarantine identities exact",
+    "old helper PID absent",
+    "fresh process and Docker no-bind checks",
+    "host, scratch and tmpfs capacity floors pass",
+    "all recovery claim, journal, preflight, release, observer and execution outputs absent"
+  ],
+  "retry": false,
+  "rollback": false,
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "source_template_checkpoint": "13aef461cddc0b13f636864f3164a42288733c6b",
+  "status": "CONDITIONAL_PASS_ONE_SHOT_AFTER_FETCHED_VERIFICATION",
+  "test_sha256": "aef2cce51c21ed10d91da3ba78cc99928b5a3725ca75e8794305398cc24ccb08",
+  "timeout": {
+    "helper_seconds": 900,
+    "kill_grace_seconds": 10,
+    "observer_seconds": 180
+  }
+}
