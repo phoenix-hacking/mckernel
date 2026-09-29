@@ -521,7 +521,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "ikc_queue.rs",
             "path": "host-kernel/native-rust/ikc_queue.rs",
-            "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+            "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
         },
         {
             "destination": "device_registry.rs",
@@ -531,7 +531,22 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "ikc_master.rs",
             "path": "host-kernel/native-rust/ikc_master.rs",
-            "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
+            "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+        },
+        {
+            "destination": "os_service.rs",
+            "path": "host-kernel/native-rust/os_service.rs",
+            "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+        },
+        {
+            "destination": "abi/os_service.rs",
+            "path": "host-kernel/native-rust/abi/os_service.rs",
+            "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+        },
+        {
+            "destination": "abi/application.rs",
+            "path": "host-kernel/native-rust/abi/application.rs",
+            "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
         },
     ]
     if contract["crate_modules"] != expected_modules:

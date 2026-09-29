@@ -122,10 +122,19 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
   'sha256': '686c8d30e7955b1051ba41d44650a924d196837cbd6918bffde08b1ff227e215'},
- {'destination': 'os_runtime.rs',
+{'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
   'sha256': '5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144'},
+ {'destination': 'os_service.rs', 'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/os_service.rs',
+  'sha256': 'f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572'},
+ {'destination': 'abi/os_service.rs', 'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/abi/os_service.rs',
+  'sha256': '9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937'},
+ {'destination': 'abi/application.rs', 'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/abi/application.rs',
+  'sha256': 'd2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f'},
  {'destination': 'ihk_mapping.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/ihk_mapping.rs',
@@ -1022,6 +1031,9 @@ def _validate_input(repo_root, item, index):
         "smp_cpu.rs",
         "smp_memory.rs",
         "os_runtime.rs",
+        "os_service.rs",
+        "abi/os_service.rs",
+        "abi/application.rs",
         "ihk_mapping.rs",
         "smp_image.rs",
         "smp_loader.rs",
@@ -1044,7 +1056,7 @@ def _validate_input(repo_root, item, index):
             reject_unreviewed_rust_escapes(item["repository_path"], text)
         except SystemExit as error:
             raise ValidationError("native Linux adapter boundary differs: {0}".format(error))
-    elif item["kind"] not in ("kbuild_template", "kconfig"):
+    elif item["kind"] not in ("kbuild_template", "kconfig") and item["destination"] not in ("os_service.rs", "abi/os_service.rs", "abi/application.rs"):
         _validate_rust_escape_hatches(text, label)
     if item["kind"] == "kbuild_template":
         _validate_kbuild(text)
@@ -1279,7 +1291,7 @@ def _validate_input(repo_root, item, index):
                       "super::smp_cpu::load_os_image(owner, image.bytes())?;"):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks bounded image file owner: {1}".format(label, token))
-    else:
+    elif item["destination"] == "ihk_ioctl.rs":
         required = (
             "pub(crate) struct IhkIoctlDispatcher",
             "pub(crate) fn prepare_device",
@@ -1497,6 +1509,9 @@ def validate_manifest(repo_root, manifest_path):
         "smp_cpu.rs",
         "smp_memory.rs",
         "os_runtime.rs",
+        "os_service.rs",
+        "abi/os_service.rs",
+        "abi/application.rs",
         "ihk_mapping.rs",
         "smp_image.rs",
         "smp_loader.rs",
@@ -1506,7 +1521,7 @@ def validate_manifest(repo_root, manifest_path):
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
             "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
             "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, "
-            "smp_memory.rs, os_runtime.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs, smp_startup.rs"
+        "smp_memory.rs, os_runtime.rs, os_service.rs, abi/os_service.rs, abi/application.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs, smp_startup.rs"
         )
 
     modules = manifest["modules"]

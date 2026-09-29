@@ -196,3 +196,23 @@ Keep original failures in CURRENT.md/evidence. At the next coherent checkpoint
 update touched stable-core rows, run `scripts/update_progress_tracker.py`, commit,
 push and verify fetched blobs. One heavy build/guest maximum; aggregate seven
 jobs/24 GiB, pinned container at CPUs 2-5/12 GiB/no swap/512 tasks/no network.
+
+Shutdown checkpoint 65 supersedes the preceding next step. The standalone Git
+metadata conversion PASSed and is preserved, but independent review BLOCKed the
+d094 build on three deterministic stale source-contract families. Lifecycle and
+mapping corrections now pass independent source review and exact Rust 1.92
+diagnostics (78 scoped tests, one intentional skip); the corrected container is
+retired and no build/guest ran. The d094 candidate is quarantined because six
+later edits propagated through shared hardlinks. See
+`stability-native-exact-metadata-conversion-success-20260928-1.json`,
+`stability-native-lifecycle-mapping-contract-checkpoint-20260928-1.json` and
+CURRENT checkpoint 65.
+
+On the next authorized continuation, create a fresh non-hardlinked candidate
+from the fetched checkpoint, bind a new full manifest, install standalone Git
+metadata under fresh backup/evidence roots and run the complete offline source
+phase in the pinned image. Obtain independent one-shot execution review before
+any heavy build. Preserve launcher wrapper PID 3399308/starttime 83682487,
+worker PID 3399313/starttime 83682494 and app-server PID 3399317/starttime
+83682500 as the shutdown identities. Formal counters and diagnostic-app/build
+counts remain unchanged; this is a temporary launcher pause, not OS completion.

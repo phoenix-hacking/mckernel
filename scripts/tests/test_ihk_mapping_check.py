@@ -44,6 +44,8 @@ class IhkMappingCheckTests(unittest.TestCase):
             "host-kernel/kbuild/Kbuild.in",
             "host-kernel/kbuild/stage-manifest.json",
             "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+            "host-kernel/native-rust/smp_memory.rs",
+            "host-kernel/native-rust/smp_vdso.rs",
             ".github/workflows/native-rust-host-modules-exact-build.yml",
             ".github/workflows/rocky-kernel-source-evidence.yml",
         }
@@ -333,6 +335,63 @@ class IhkMappingCheckTests(unittest.TestCase):
         self.mutate_and_resign(binding["path"], "MappingError, PageGeometry", "MmapTransaction, PageGeometry", binding)
         with self.assertRaisesRegex(mapping_check.ValidationError, "image geometry import"):
             mapping_check.validate_contract(self.repo)
+
+    def test_consumer_source_digest_drift_fails_closed(self):
+        path = self.repo / "host-kernel/native-rust/smp_memory.rs"
+        path.write_text(path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(mapping_check.ValidationError, "consumer source size"):
+            mapping_check.validate_contract(self.repo)
+
+    def test_rehashed_consumer_mutations_fail_function_local_semantics(self):
+        mutations = [
+            (
+                "host-kernel/native-rust/smp_memory.rs",
+                "        IDENTITY_WINDOW_END,\n    )\n    .ok_or(EIO)?;",
+                "        u64::MAX,\n    )\n    .ok_or(EIO)?;",
+                "boot-root image translation",
+            ),
+            (
+                "host-kernel/native-rust/smp_vdso.rs",
+                "data[wire::RNG_PAGE] = physical(rng as u64)?;",
+                "data[wire::RNG_PAGE] = rng as u64;",
+                "vDSO data translation",
+            ),
+            (
+                "host-kernel/native-rust/smp_vdso.rs",
+                "read_volatile(addr_of!(bindings::vdso_k_time_data))",
+                "core::ptr::null_mut()",
+                "vDSO trusted producer",
+            ),
+            (
+                "host-kernel/native-rust/smp_vdso.rs",
+                "address, physical_base, wire::PHYSICAL_LIMIT",
+                "address, linear_base, wire::PHYSICAL_LIMIT",
+                "vDSO helper, arguments, limit",
+            ),
+            (
+                "host-kernel/native-rust/smp_vdso.rs",
+                "data[wire::TIME_PAGE] = physical(time as u64)?;",
+                "data[wire::TIME_PAGE] = physical(time as u64).unwrap_or(0);",
+                "vDSO data translation",
+            ),
+        ]
+        for relative, old, new, failure in mutations:
+            with self.subTest(relative=relative, old=old):
+                binding = next(
+                    row for row in self.contract["semantic_bindings"]["consumer_sources"]
+                    if row["path"] == relative
+                )
+                path = self.repo / relative
+                original = path.read_text(encoding="utf-8")
+                original_digest = binding["sha256"]
+                original_size = binding["size"]
+                self.mutate_and_resign(relative, old, new, binding)
+                with self.assertRaisesRegex(mapping_check.ValidationError, failure):
+                    mapping_check.validate_contract(self.repo)
+                path.write_text(original, encoding="utf-8")
+                binding["sha256"] = original_digest
+                binding["size"] = original_size
+                self.write_contract()
 
     def test_geometry_consumer_source_drift_is_rejected(self):
         for row in self.contract["geometry_reuse"]["sources"]:

@@ -483,4 +483,38 @@ mod tests {
             Err(MappingError::Misaligned)
         );
     }
+
+    #[test]
+    fn kernel_image_geometry_edges_use_checked_arithmetic() {
+        assert_eq!(super::ihk_mapping::kernel_image_physical(0xffff_ffff_8000_0000, 0x1000, 0x20_0000), Some(0x1000));
+        assert_eq!(super::ihk_mapping::kernel_image_physical(0xffff_ffff_8000_0001, u64::MAX, u64::MAX), None);
+        let limit = 0x20_0000;
+        assert_eq!(
+            super::ihk_mapping::kernel_image_physical(
+                0xffff_ffff_8000_0000 + limit - 1, 0, limit),
+            Some(limit - 1)
+        );
+        assert_eq!(
+            super::ihk_mapping::kernel_image_physical(
+                0xffff_ffff_8000_0000 + limit, 0, limit),
+            None
+        );
+        assert_eq!(
+            super::ihk_mapping::kernel_image_physical(
+                0xffff_ffff_8000_0000 + ((1 << 30) - 1), 0, u64::MAX),
+            Some((1 << 30) - 1)
+        );
+        assert_eq!(super::ihk_mapping::kernel_image_physical(0xffff_ffff_8000_0000 + (1 << 30), 0, u64::MAX), None);
+        assert_eq!(super::ihk_mapping::kernel_image_physical(0, u64::MAX, u64::MAX), None);
+        assert_eq!(super::ihk_mapping::kernel_image_physical(0xffff_ffff_8000_0000, 0, 0), None);
+    }
+
+    #[test]
+    fn kernel_linear_geometry_edges_use_checked_arithmetic() {
+        assert_eq!(super::ihk_mapping::kernel_linear_physical(0x1000, 0x1000, 0x2000), Some(0));
+        assert_eq!(super::ihk_mapping::kernel_linear_physical(0xfff, 0x1000, 0x2000), None);
+        assert_eq!(super::ihk_mapping::kernel_linear_physical(0x2fff, 0x1000, 0x2000), Some(0x1fff));
+        assert_eq!(super::ihk_mapping::kernel_linear_physical(0x3000, 0x1000, 0x2000), None);
+        assert_eq!(super::ihk_mapping::kernel_linear_physical(0x1000, 0x1000, 0), None);
+    }
 }

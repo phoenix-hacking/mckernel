@@ -72,7 +72,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual("1.7.0rc4", summary["version"])
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
-        self.assertEqual(4, summary["transitive_module_count"])
+        self.assertEqual(7, summary["transitive_module_count"])
         self.assertEqual(7, summary["support_sources"])
         self.assertTrue(summary["provider_lease_validated"])
         self.assertEqual(

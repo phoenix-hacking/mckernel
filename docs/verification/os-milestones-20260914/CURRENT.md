@@ -5644,3 +5644,48 @@ and clean status. Only after a verified conversion and fetched checkpoint may a
 fresh attempt-2 request receive independent execution review. Formal counters
 remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic guest apps and
 zero successful current-candidate builds remain unchanged.
+
+Continuation checkpoint 65, 2026-09-28: shutdown joined every child lane and
+retired the only active test container. The released standalone Git metadata
+conversion ran exactly once and PASSed transactionally with no rollback. Its
+same-device backup, receipt and original main/IHK metadata remain at the paths
+recorded in `stability-native-exact-metadata-conversion-success-20260928-1.json`.
+Installed-only current and historical Git consumers, owner admission and the
+8,899-file manifest passed. Independent post-conversion review accepts only the
+metadata relocation and BLOCKS an attempt-2 build: d094 has deterministic stale
+ioctl-registry, device-import-order and mapping source-contract bindings.
+
+The lifecycle/runtime and mapping source corrections now pass independent final
+semantic review. The corrected runtime contract distinguishes prepare failure,
+effectful start failure, shutdown ownership/rollback and closed-gate reboot
+semantics. The mapping contract binds exact consumers, checked boundaries,
+trusted physical producers and failure propagation. The initial exact Rust
+diagnostic failed only because its `/tmp` was non-executable; that original
+failure is retained. The one bounded harness correction put TMPDIR on the
+existing evidence filesystem without widening the reviewed profile. Attempt 2
+then PASSed with Rust 1.92: the exact mapping fixture verified and 78 scoped
+Python tests completed with zero failures and one intentional unconfigured
+Rocky-source skip. Container `mckernel-rust-contracts-20260928-2` is absent.
+Complete hashes and retained logs are in
+`stability-native-lifecycle-mapping-contract-checkpoint-20260928-1.json`.
+
+No build or guest ran. The old d094 candidate is explicitly quarantined: later
+main-worktree edits propagated through shared hardlinks into six mapping/staging
+paths. Preserve that dirty observation, the conversion backup/evidence and both
+small restore roots; do not build or silently reuse d094. Host available space
+is 25,120,907,264 bytes, scratch available is 21,611,433,984 bytes and
+MemAvailable is 29,492,152 kB. Shutdown process identities are launcher wrapper
+PID 3399308/starttime 83682487, worker PID 3399313/starttime 83682494 and
+app-server PID 3399317/starttime 83682500. No child agent, test container, heavy
+build, guest, QEMU or mcexec remains active.
+
+Next executable task after a subsequent launcher continuation: start from the
+new fetched checkpoint, create a fresh non-hardlinked clean candidate and full
+manifest, install standalone metadata with fresh backup/evidence roots, and run
+the complete offline source phase in the pinned image. Preserve any failure and
+obtain an independent one-shot execution release before the first corrected
+heavy build. If that build passes, bind its exact kernel/modules to the smallest
+real startup application before proceeding through memory, file, thread and
+shutdown diagnostics. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and
+0/7; four diagnostic guest apps and zero successful current-candidate builds
+remain unchanged. The OS goal is paused for launcher shutdown, not complete.

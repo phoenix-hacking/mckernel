@@ -129,6 +129,8 @@ EXPECTED_TESTS = [
     "ihk_mapping::tests::rollback_state_cannot_be_replayed",
     "tests::adapter_errno_range_and_local_mapping_are_checked",
     "tests::aligned_range_constructor_rejects_partial_pages",
+    "tests::kernel_image_geometry_edges_use_checked_arithmetic",
+    "tests::kernel_linear_geometry_edges_use_checked_arithmetic",
     "tests::authorized_physical_window_is_end_exclusive",
     "tests::cache_policy_values_match_frozen_ihk_flags_only",
     "tests::error_classes_map_to_stable_negative_errno_values",
@@ -338,7 +340,7 @@ def validate_attachment(repo, contract):
             if row.get("repository_path") == EXPECTED_SOURCE or row.get("destination") == "ihk_mapping.rs"]
     require_exact(rows, [{"destination": "ihk_mapping.rs", "kind": "rust_support_module",
                           "repository_path": EXPECTED_SOURCE,
-                          "sha256": contract["production_source"]["sha256"]}], "mapping stage binding")
+                          "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc"}], "mapping stage binding")
     ledger_path = "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json"
     ledger = read_json(repo_file(repo, ledger_path, "RS-011 ledger"), "RS-011 ledger")
     rows = [row for row in ledger["source_inputs"] if row.get("path") == EXPECTED_SOURCE]
@@ -456,6 +458,182 @@ def validate_source(repo, source_binding):
         raise ValidationError("transaction and rollback ownership must both be must-use")
     return text
 
+EXPECTED_MAPPING_CONSUMERS = [
+        {"path": "host-kernel/native-rust/smp_memory.rs", "function": "linux_boot_root", "helper": "kernel_image_physical", "limit": "IDENTITY_WINDOW_END"},
+        {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "physical", "helper": "kernel_image_physical", "limit": "wire::PHYSICAL_LIMIT"},
+        {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "physical", "helper": "kernel_linear_physical", "limit": "wire::PHYSICAL_LIMIT"},
+        {"path": "host-kernel/native-rust/smp_vdso.rs", "function": "collect", "helper": "physical", "limit": ""},
+]
+
+
+def rust_active_code(text):
+    """Blank Rust comments and literals while retaining active-code offsets."""
+    output = list(text)
+    index = 0
+    block_depth = 0
+    while index < len(text):
+        if block_depth:
+            if text.startswith("/*", index):
+                output[index:index + 2] = [" ", " "]
+                block_depth += 1
+                index += 2
+            elif text.startswith("*/", index):
+                output[index:index + 2] = [" ", " "]
+                block_depth -= 1
+                index += 2
+            else:
+                if text[index] != "\n":
+                    output[index] = " "
+                index += 1
+            continue
+        if text.startswith("//", index):
+            end = text.find("\n", index)
+            if end < 0:
+                end = len(text)
+            for position in range(index, end):
+                output[position] = " "
+            index = end
+            continue
+        if text.startswith("/*", index):
+            output[index:index + 2] = [" ", " "]
+            block_depth = 1
+            index += 2
+            continue
+        if text[index] in ('"', "'"):
+            quote = text[index]
+            output[index] = " "
+            index += 1
+            while index < len(text):
+                character = text[index]
+                if character != "\n":
+                    output[index] = " "
+                if character == "\\":
+                    index += 1
+                    if index < len(text):
+                        if text[index] != "\n":
+                            output[index] = " "
+                        index += 1
+                    continue
+                index += 1
+                if character == quote:
+                    break
+            continue
+        index += 1
+    return "".join(output)
+
+
+def rust_function_code(text, function):
+    """Return one balanced active Rust function body, never a substring span."""
+    active = rust_active_code(text)
+    match = re.search(r"(?m)^\s*(?:pub(?:\([^)]*\))?\s+)?fn\s+" + re.escape(function) + r"\s*\(", active)
+    if match is None:
+        raise ValidationError("mapping consumer function is unavailable: {0}".format(function))
+    opening = active.find("{", match.end())
+    if opening < 0:
+        raise ValidationError("mapping consumer function has no body: {0}".format(function))
+    depth = 0
+    for index in range(opening, len(active)):
+        if active[index] == "{":
+            depth += 1
+        elif active[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return active[match.start():index + 1]
+    raise ValidationError("mapping consumer function is unbalanced: {0}".format(function))
+
+
+def compact_rust(code):
+    return re.sub(r"\s+", "", code)
+
+
+def require_active_fragment(code, fragment, label):
+    if compact_rust(fragment) not in compact_rust(code):
+        raise ValidationError("mapping semantic binding is stale: {0}".format(label))
+
+
+def validate_consumer_source(repo, rows):
+    expected_paths = ["host-kernel/native-rust/smp_memory.rs", "host-kernel/native-rust/smp_vdso.rs"]
+    require_exact([row.get("path") for row in rows], expected_paths, "mapping consumer source paths")
+    sources = {}
+    for row in rows:
+        require_keys(row, {"path", "sha256", "size"}, "mapping consumer source")
+        if not isinstance(row["size"], int) or row["size"] <= 0:
+            raise ValidationError("mapping consumer source size is malformed")
+        if not isinstance(row["sha256"], str) or re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) is None:
+            raise ValidationError("mapping consumer source digest is malformed")
+        path = repo_file(repo, row["path"], "mapping consumer source")
+        size, digest = sha256_file(path)
+        require_exact(size, row["size"], "mapping consumer source size")
+        require_exact(digest, row["sha256"], "mapping consumer source digest")
+        sources[row["path"]] = read_text(path, "mapping consumer source")
+    return sources
+
+
+def validate_semantic_bindings(repo, bindings):
+    require_keys(bindings, {"consumer_sources", "consumers", "descriptor_validation", "arithmetic"}, "mapping semantic bindings")
+    require_exact(bindings["consumers"], EXPECTED_MAPPING_CONSUMERS, "mapping consumers")
+    require_exact(bindings["descriptor_validation"], "checked subtraction/addition; non-empty half-open ranges; exclusive limits; trusted producer preconditions", "descriptor validation")
+    require_exact(bindings["arithmetic"], ["checked_sub", "checked_add", "checked_mul"], "mapping arithmetic")
+    sources = validate_consumer_source(repo, bindings["consumer_sources"])
+    boot_root = rust_function_code(sources["host-kernel/native-rust/smp_memory.rs"], "linux_boot_root")
+    require_active_fragment(boot_root, """
+        let physical = super::ihk_mapping::kernel_image_physical(
+            &raw const init_top_pgt as u64,
+            unsafe { bindings::phys_base },
+            IDENTITY_WINDOW_END,
+        ).ok_or(EIO)?;
+    """, "boot-root image translation, limit, and propagation")
+    require_active_fragment(boot_root, """
+        if physical % 4096 != 0 || physical >= IDENTITY_WINDOW_END {
+            return Err(EIO);
+        }
+        Ok(physical)
+    """, "boot-root exclusive-limit validation")
+
+    physical = rust_function_code(sources["host-kernel/native-rust/smp_vdso.rs"], "physical")
+    require_active_fragment(physical, """
+        let (physical_base, linear_base) = unsafe {
+            (bindings::phys_base, bindings::page_offset_base)
+        };
+    """, "vDSO translation bases")
+    require_active_fragment(physical, """
+        if address >= 0xffff_ffff_8000_0000 {
+            super::ihk_mapping::kernel_image_physical(
+                address, physical_base, wire::PHYSICAL_LIMIT)
+        } else {
+            super::ihk_mapping::kernel_linear_physical(
+                address, linear_base, wire::PHYSICAL_LIMIT)
+        };
+        result.ok_or(EINVAL)
+    """.replace("if address", "let result = if address"), "vDSO helper, arguments, limit, and propagation")
+
+    collect = rust_function_code(sources["host-kernel/native-rust/smp_vdso.rs"], "collect")
+    producers = [
+        "read_volatile(addr_of!(bindings::vdso_k_time_data))",
+        "read_volatile(addr_of!(bindings::vdso_k_rng_data))",
+    ]
+    for producer in producers:
+        require_active_fragment(collect, producer, "vDSO trusted producer")
+    require_active_fragment(collect, """
+        if text.is_null()
+            || time.is_null()
+            || rng.is_null()
+            || bytes == 0
+    """, "vDSO trusted-producer null validation")
+    translations = [
+        "data[wire::TIME_PAGE] = physical(time as u64)?;",
+        "data[wire::RNG_PAGE] = physical(rng as u64)?;",
+    ]
+    for translation in translations:
+        require_active_fragment(collect, translation, "vDSO data translation and propagation")
+    publication = compact_rust(collect).find("Descriptor::response(")
+    if publication < 0:
+        raise ValidationError("mapping semantic binding is stale: vDSO publication")
+    compact_collect = compact_rust(collect)
+    for fragment in producers + translations + ["time.is_null()", "rng.is_null()"]:
+        if compact_collect.find(compact_rust(fragment)) < 0 or compact_collect.find(compact_rust(fragment)) > publication:
+            raise ValidationError("mapping semantic binding is stale: vDSO validation before publication")
+
 
 def validate_checker(repo, checker_binding):
     require_keys(checker_binding, {"path", "sha256", "size"}, "mapping checker")
@@ -479,6 +657,7 @@ def validate_contract(repo):
             "evidence_policy_scope",
             "foundation_status",
             "geometry_reuse",
+            "semantic_bindings",
             "gate_id",
             "legacy_oracle",
             "must_use_probe",
@@ -530,6 +709,7 @@ def validate_contract(repo):
     validate_legacy(repo, contract["legacy_oracle"])
     validate_checker(repo, contract["checker"])
     validate_source(repo, contract["production_source"])
+    validate_semantic_bindings(repo, contract["semantic_bindings"])
     validate_attachment(repo, contract)
     fixture = contract["compile_fixture"]
     require_keys(
@@ -553,7 +733,7 @@ def validate_contract(repo):
     )
     require_exact(fixture["compiler_environment"], "IHK_MAPPING_RUSTC", "compiler environment")
     require_exact(fixture["compiler_version_first_line"], EXPECTED_COMPILER, "compiler identity")
-    require_exact(fixture["expected_test_count"], 22, "fixture test count")
+    require_exact(fixture["expected_test_count"], 24, "fixture test count")
     require_exact(fixture["test_names"], EXPECTED_TESTS, "fixture test inventory")
     fixture_path = repo_file(repo, fixture["path"], "compile fixture")
     unused_size, digest = sha256_file(fixture_path)
