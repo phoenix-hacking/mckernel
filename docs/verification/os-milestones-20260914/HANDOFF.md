@@ -682,3 +682,20 @@ forwarder plus duplicate-target rejection. After independent source review,
 commit/push/fetch and prepare an entirely fresh candidate/request/namespace;
 the consumed release grants nothing further. Build count, apps and counters are
 unchanged.
+
+Checkpoint 105 closes the queue-checker prerequisite through the required expert
+strategy. Checker `c9b4d012...aa96`, tests `fca20469...6e11` and contract
+`b64022b8...f9fd` preserve production source `3163d9cc...e9c5`, ABI and fixture,
+scope method extraction to exact `SharedQueue`, and bind the real three internal/
+seven total tests. Both host Python suites pass 31/31. The separately reviewed
+2-CPU/2-GiB Rocky fixture run PASSes all seven named tests with exact rustc 1.92;
+container `8943e497...9bc10` is retained exited 0/non-OOM and binary is
+`ceb5db9f...f43d`.
+
+Success record `849d4bee...d036`, release `8affa38e...0062` and 61-member raw
+archive `bb26afcc...90d6` have independent evidence PASS; all 59 regular archive
+members match. This is source/fixture evidence only, not a kernel build, runtime,
+guest, app or gate credit. Commit/push/fetch it, then prepare a wholly fresh
+candidate/request/output/evidence/lease namespace and obtain a separate heavy-
+build release. Never reuse `67589154-1`; retain both failed-heavy and passing-
+fixture containers.

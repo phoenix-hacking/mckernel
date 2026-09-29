@@ -5,7 +5,7 @@
     "type": "IhkIkcQueueHead"
   },
   "compile_fixture": {
-    "expected_test_count": 5,
+    "expected_test_count": 7,
     "fixture_test_names": [
       "sequential_capacity_fifo_and_legacy_results",
       "counters_wrap_without_changing_slot_order",
@@ -13,6 +13,8 @@
       "concurrent_producers_and_consumers_transfer_each_packet_once"
     ],
     "internal_test_names": [
+      "initial_packet_is_published_once_even_after_peer_consumption",
+      "invalid_initial_packet_leaves_the_queue_unpublished",
       "consumer_claim_is_exclusive_and_released_on_every_error"
     ],
     "path": "scripts/tests/fixtures/ihk_native_queue_compile.rs",
@@ -58,7 +60,7 @@
   },
   "production_source": {
     "path": "host-kernel/native-rust/ikc_queue.rs",
-    "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+    "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5"
   },
   "protocol": {
     "capacity": "packet_count - 1",

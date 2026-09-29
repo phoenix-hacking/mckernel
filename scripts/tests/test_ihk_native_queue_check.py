@@ -54,7 +54,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
         version: str = (
             "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
         ),
-        passed: int = 5,
+        passed: int = 7,
         compile_exit: int = 0,
     ) -> Path:
         compiler = Path(self.temporary.name) / "rustc"
@@ -96,6 +96,51 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
         self.assertFalse(summary["teardown_validated"])
         self.assertFalse(summary["performance_parity_validated"])
 
+    def test_shared_queue_methods_ignore_allowed_forwarding_wrappers(self) -> None:
+        # SharedProducer intentionally forwards these names to SharedQueue.
+        # The source contract must inspect the implementation, not the whole file.
+        source = (REPO_ROOT / self.contract["production_source"]["path"]).read_text(
+            encoding="utf-8"
+        )
+        self.assertEqual(2, source.count("fn snapshot("))
+        self.assertEqual(2, source.count("fn try_enqueue("))
+        queue_impl = queue_check._shared_queue_impl_body(source)
+        queue_check._function_body(queue_impl, "snapshot")
+        queue_check._function_body(queue_impl, "try_enqueue")
+
+    def test_duplicate_target_method_inside_shared_queue_impl_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]["path"]
+        text = source.read_text(encoding="utf-8")
+        duplicate = (
+            "    pub(crate) fn snapshot(&self) -> Result<QueueSnapshot, QueueError> {\n"
+            "        Err(QueueError::Corrupt)\n"
+            "    }\n\n"
+        )
+        marker = "    pub(crate) fn try_dequeue(&self, packet: &mut [u8])"
+        self.assertIn(marker, text)
+        mutated = text.replace(marker, duplicate + marker, 1)
+        with self.assertRaisesRegex(queue_check.ValidationError, "fn snapshot exactly once"):
+            queue_check._validate_source(mutated, self.contract)
+
+    def test_missing_shared_queue_impl_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]["path"]
+        text = source.read_text(encoding="utf-8")
+        mutated = text.replace(
+            "impl<'mapping> SharedQueue<'mapping> {",
+            "impl<'mapping> OtherQueue<'mapping> {",
+            1,
+        )
+        with self.assertRaisesRegex(queue_check.ValidationError, "SharedQueue.*exactly once"):
+            queue_check._validate_source(mutated, self.contract)
+
+    def test_duplicate_shared_queue_impl_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]["path"]
+        text = source.read_text(encoding="utf-8")
+        with self.assertRaisesRegex(queue_check.ValidationError, "SharedQueue.*exactly once"):
+            queue_check._validate_source(
+                text + "\nimpl<'mapping> SharedQueue<'mapping> {}\n", self.contract
+            )
+
     def test_cli_reports_honest_compiler_skip_without_pass_or_credit(self) -> None:
         output = io.StringIO()
         with mock.patch.dict(os.environ, {"IHK_NATIVE_QUEUE_RUSTC": ""}), mock.patch.object(
@@ -128,7 +173,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
         self.assertEqual("SKIPPED_NO_CONFIGURED_RUSTC", result["fixture_status"])
         which.assert_not_called()
 
-    def test_exact_configured_rustc_compiles_and_runs_five_tests(self) -> None:
+    def test_exact_configured_rustc_compiles_and_runs_seven_tests(self) -> None:
         compiler = self.fake_rustc()
         result = queue_check.validate_configured_fixture(
             REPO_ROOT, rustc=str(compiler), require_rustc=True
@@ -150,7 +195,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
             queue_check.validate_configured_fixture(REPO_ROOT, rustc=str(compiler))
 
     def test_fixture_test_count_drift_is_rejected(self) -> None:
-        compiler = self.fake_rustc(passed=4)
+        compiler = self.fake_rustc(passed=6)
         with self.assertRaisesRegex(queue_check.ValidationError, "exact contracted test count"):
             queue_check.validate_configured_fixture(REPO_ROOT, rustc=str(compiler))
 
@@ -162,6 +207,27 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
                 self.write_contract(mutated)
                 with self.assertRaisesRegex(queue_check.ValidationError, "cannot claim"):
                     queue_check.validate_repository(self.repo)
+
+    def test_internal_test_inventory_missing_name_is_rejected(self) -> None:
+        mutated = json.loads(json.dumps(self.contract))
+        mutated["compile_fixture"]["internal_test_names"].pop(0)
+        self.write_contract(mutated)
+        with self.assertRaisesRegex(queue_check.ValidationError, "internal queue regression"):
+            queue_check.validate_repository(self.repo)
+
+    def test_internal_test_inventory_extra_name_is_rejected(self) -> None:
+        mutated = json.loads(json.dumps(self.contract))
+        mutated["compile_fixture"]["internal_test_names"].append("unexpected_test")
+        self.write_contract(mutated)
+        with self.assertRaisesRegex(queue_check.ValidationError, "internal queue regression"):
+            queue_check.validate_repository(self.repo)
+
+    def test_configured_fixture_count_policy_is_seven(self) -> None:
+        mutated = json.loads(json.dumps(self.contract))
+        mutated["compile_fixture"]["expected_test_count"] = 6
+        self.write_contract(mutated)
+        with self.assertRaisesRegex(queue_check.ValidationError, "exactly seven"):
+            queue_check.validate_repository(self.repo)
 
     def test_explicit_remote_dequeue_exclusion_is_mandatory(self) -> None:
         mutated = json.loads(json.dumps(self.contract))

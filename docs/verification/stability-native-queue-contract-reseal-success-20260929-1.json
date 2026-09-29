@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.native-queue-contract-reseal-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_AND_EXACT_FIXTURE_EXECUTION",
+  "failure_family": {
+    "original_build_failure": "ihk-native-queue-check: FAIL: Rust source must define fn snapshot exactly once",
+    "original_failure_record_sha256": "2402d856d78dce44dcd3aea7f27721ab23969dcbacb11477c9cf720fdbbe03e6",
+    "bounded_correction": "scope method extraction to the exact SharedQueue<'mapping> implementation",
+    "exposed_drift": "frozen contract named one internal Rust test and five total while current production legitimately contains three internal tests and seven total",
+    "expert_strategy": "preserve production Rust, ABI and fixture; coherently reseal source digest, ordered inventory and count with expanded fail-closed regressions",
+    "unchanged_heavy_retry_forbidden": true
+  },
+  "implementation": {
+    "checker": {
+      "path": "scripts/ihk_native_queue_check.py",
+      "sha256": "c9b4d0121632e7985300b85b062a982802e684fdcb8267bff182f730b7a1aa96"
+    },
+    "checker_tests": {
+      "path": "scripts/tests/test_ihk_native_queue_check.py",
+      "sha256": "fca204692cb1aa2af2d4ee6ca30ea95fb0e4ed4517e748ef1a637adeb4056e11"
+    },
+    "contract": {
+      "path": "host-kernel/native-rust/ihk-ikc-queue-contract-v1.json",
+      "sha256": "b64022b87356394ddc7eb4313f604100fd05889ddc9b1b7ac232a78d0e49f9fd",
+      "production_source_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "fixture_sha256": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b",
+      "canonical_abi_sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "internal_test_count": 3,
+      "configured_test_count": 7
+    },
+    "production_rust_changed": false,
+    "fixture_changed": false,
+    "abi_changed": false
+  },
+  "host_regressions": {
+    "python38": "PASS 31 tests",
+    "python38_log_sha256": "283a4a8745e175d82836cd6161869d2d3eb2e737bae3feb9c621b53890dd24cf",
+    "python39": "PASS 31 tests",
+    "python39_log_sha256": "4af64d1d12b8fe975324f4fe2ee5640e94de2fd6ae08621a9595eb3aadfeafd0",
+    "direct_contract": "SOURCE-CONTRACT-VERIFIED; compiler absent; no credit",
+    "direct_contract_log_sha256": "73b5f341ce1f52392d8208aceacc362f880c403aa843a764682302289e8c1925",
+    "pycompile": "PASS",
+    "json": "PASS",
+    "diff_check": "PASS"
+  },
+  "fixture_execution": {
+    "release_sha256": "8affa38ee6fd9f5fdd93d4f58f4e0c7d79106e958e13491930526cb44cc00062",
+    "preflight_receipt_sha256": "e88d41974b0c562ac2399d88ba542220a5eebd5c5f48de2359d43b29a1c193df",
+    "result_receipt_sha256": "2eb835a215ccf83d74a9a82f48528b9e52436ef066c7f9e116d819974a9f3616",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "container_id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10",
+    "container_name": "mckernel-queue-fixture-20260929-1",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "container_retained": true,
+    "binary_sha256": "ceb5db9f847dc7796b5c93000a58cb57da717f941b43b4901dff40e88154f43d",
+    "binary_bytes": 14710944,
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "tests_ignored": 0,
+    "tests_measured": 0,
+    "tests_filtered_out": 0,
+    "inputs_unchanged_pre_post": true,
+    "stderr_classification": "two expected dead-code warnings for the unused SharedProducer wrapper in this bounded fixture"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-queue-fixture-success-raw-20260929-1.tar.gz",
+    "sha256": "bb26afccd544d23bd35cd2c0d6311ce407daef22dd2d73c44c27e41ecfc090d6",
+    "bytes": 3438176,
+    "members": 61,
+    "regular_members": 59,
+    "all_regular_members_match_live_originals": true
+  },
+  "independent_review": {
+    "status": "PASS_CURRENT_SOURCE_QUEUE_FIXTURE_ONLY",
+    "receipt_files_verified": 43,
+    "input_archive_live_identity": "PASS",
+    "profile_and_terminal_state": "PASS",
+    "scope_exclusions": "no kernel/module build, SharedProducer execution, guest interoperability, application acceptance or gate credit"
+  },
+  "acceptance": {
+    "source_contract_reseal": true,
+    "exact_fixture_execution": true,
+    "kernel_build": false,
+    "module": false,
+    "runtime": false,
+    "guest": false,
+    "application": false,
+    "gate_credit": false,
+    "formal_counters_changed": false,
+    "successful_current_candidate_builds": 0
+  },
+  "next": "commit/push/fetch the reviewed reseal and evidence, then prepare a wholly fresh commit-derived candidate and seek a new one-shot heavy-build review; never reuse 67589154-1"
+}

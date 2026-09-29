@@ -6826,3 +6826,43 @@ is `2402d856...03e6`. Its 193-member raw archive
 candidate, backup, both preflights, outer capture, request/manifest, complete
 owner/build evidence and terminal container. Successful current-candidate build
 count remains zero; no module, guest, diagnostic app or formal counter changed.
+
+Continuation checkpoint 105, 2026-09-29: expert escalation closes the queue-
+checker prerequisite without changing production Rust, ABI or fixture bytes.
+Checker `c9b4d012...aa96` now selects exactly one
+`impl SharedQueue<'mapping>` so valid `SharedProducer` forwarders do not collide,
+while missing/duplicate impls and duplicate target methods fail closed. Contract
+`b64022b8...f9fd` binds current source `3163d9cc...e9c5`, the exact ordered
+three internal tests and seven configured tests. Test contract
+`fca20469...6e11` covers missing/extra inventory, wrong totals, forwarders,
+target uniqueness and all prior safety/order/hash/compiler/credit mutations.
+Python 3.8 and 3.9 each pass 31 tests; the direct host check reports source-
+contract verified and honestly skips its unavailable exact compiler.
+
+Independent review then conditionally released one light, current-source Rocky
+Rust fixture under 2 CPUs, 2 GiB/no swap, 128 PIDs, no network, read-only root,
+unprivileged UID/GID 1000, dropped capabilities and no-new-privileges. Release
+`stability-native-queue-fixture-execution-release-20260929-1.json` is
+`8affa38e...0062`. Fresh preflight `e88d4197...93df` verified all six input
+hashes, the immutable image, fresh private roots, no lease/heavy conflict,
+absent container name, resource floors and the untouched failed heavy container.
+
+The one released container PASSed. Rocky rustc is exact 1.92.0; all seven named
+tests pass with zero failure/ignored/measured/filtered results. Inputs remain
+unchanged, executable `queue-tests` is `ceb5db9f...f43d`, and retained container
+`8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10`
+is exited 0, PID zero and non-OOM. Result receipt is `2eb835a2...3616`.
+Independent final evidence review PASSes all 43 receipt files and every archive
+member.
+
+Success record `stability-native-queue-contract-reseal-success-20260929-1.json`
+is `849d4bee...d036`. Its 61-member archive
+`stability-native-queue-fixture-success-raw-20260929-1.tar.gz` is
+`bb26afcc...90d6`; all 59 regular members match live originals. This proves the
+current-source bounded queue fixture only, not a kernel/module build,
+`SharedProducer` runtime path, guest interoperability, application acceptance or
+IHK-008 credit. Successful current-candidate builds remain zero and formal
+counters are unchanged. Next push/fetch these exact bytes, then prepare a wholly
+fresh commit-derived candidate/request/output/evidence/lease namespace and seek
+a separate heavy-build review. Never reuse `67589154-1` or clean either retained
+container through this decision.

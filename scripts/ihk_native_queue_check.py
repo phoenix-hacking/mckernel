@@ -133,13 +133,7 @@ def _require_order(text: str, fragments: Iterable[str], label: str) -> None:
         position = found
 
 
-def _function_body(text: str, name: str) -> str:
-    matches = list(re.finditer(rf"\bfn\s+{re.escape(name)}\s*\(", text))
-    if len(matches) != 1:
-        raise ValidationError(f"Rust source must define fn {name} exactly once")
-    opening = text.find("{", matches[0].end())
-    if opening < 0:
-        raise ValidationError(f"fn {name} has no body")
+def _balanced_body(text: str, opening: int, label: str) -> str:
     depth = 0
     for index in range(opening, len(text)):
         byte = text[index]
@@ -149,7 +143,29 @@ def _function_body(text: str, name: str) -> str:
             depth -= 1
             if depth == 0:
                 return text[opening + 1 : index]
-    raise ValidationError(f"fn {name} has an unterminated body")
+    raise ValidationError(f"{label} has an unterminated body")
+
+
+def _shared_queue_impl_body(text: str) -> str:
+    matches = list(
+        re.finditer(r"\bimpl\s*<\s*'mapping\s*>\s+SharedQueue\s*<\s*'mapping\s*>\s*\{", text)
+    )
+    if len(matches) != 1:
+        raise ValidationError(
+            "Rust source must define impl SharedQueue<'mapping> exactly once"
+        )
+    opening = text.find("{", matches[0].end() - 1)
+    return _balanced_body(text, opening, "SharedQueue<'mapping> impl")
+
+
+def _function_body(text: str, name: str) -> str:
+    matches = list(re.finditer(rf"\bfn\s+{re.escape(name)}\s*\(", text))
+    if len(matches) != 1:
+        raise ValidationError(f"Rust source must define fn {name} exactly once")
+    opening = text.find("{", matches[0].end())
+    if opening < 0:
+        raise ValidationError(f"fn {name} has no body")
+    return _balanced_body(text, opening, f"fn {name}")
 
 
 def _validate_contract(contract: dict[str, Any]) -> None:
@@ -211,11 +227,13 @@ def _validate_contract(contract: dict[str, Any]) -> None:
     if fixture["fixture_test_names"] != expected_fixture_tests:
         raise ValidationError("compile fixture test inventory differs")
     if fixture["internal_test_names"] != [
-        "consumer_claim_is_exclusive_and_released_on_every_error"
+        "initial_packet_is_published_once_even_after_peer_consumption",
+        "invalid_initial_packet_leaves_the_queue_unpublished",
+        "consumer_claim_is_exclusive_and_released_on_every_error",
     ]:
         raise ValidationError("internal queue regression test inventory differs")
-    if fixture["expected_test_count"] != 5:
-        raise ValidationError("configured fixture must execute exactly five tests")
+    if fixture["expected_test_count"] != 7:
+        raise ValidationError("configured fixture must execute exactly seven tests")
     for item, label in (
         (contract["canonical_abi"], "canonical ABI"),
         (contract["production_source"], "production source"),
@@ -398,7 +416,8 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         "release-store consumer claim guard",
     )
 
-    initialize = _function_body(text, "initialize")
+    queue_impl = _shared_queue_impl_body(text)
+    initialize = _function_body(queue_impl, "initialize")
     for fragment, label in (
         ("packet_bytes % size_of::<u64>() != 0", "8-byte packet alignment rejection"),
         ("packet_count < 2", "minimum packet-count rejection"),
@@ -411,7 +430,7 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         if fragment not in initialize:
             raise ValidationError(f"queue initialize lacks {label}")
 
-    snapshot = _function_body(text, "snapshot")
+    snapshot = _function_body(queue_impl, "snapshot")
     for fragment, label in (
         ("packet_size % size_of::<u64>() != 0", "attached packet alignment check"),
         ("packet_count < 2", "attached packet-count check"),
@@ -433,11 +452,11 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         "stable queue snapshot bracket",
     )
 
-    packet_pointer = _function_body(text, "packet_pointer")
+    packet_pointer = _function_body(queue_impl, "packet_pointer")
     if "sequence % state.packet_count" not in packet_pointer:
         raise ValidationError("packet slot selection must wrap by packet_count")
 
-    overlap = _function_body(text, "overlaps_mapping")
+    overlap = _function_body(queue_impl, "overlaps_mapping")
     for fragment in (
         "mapping_start + self.mapping_bytes",
         "start.checked_add(bytes)",
@@ -446,7 +465,7 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         if fragment not in overlap:
             raise ValidationError("mapping overlap rejection is incomplete")
 
-    enqueue = _function_body(text, "try_enqueue")
+    enqueue = _function_body(queue_impl, "try_enqueue")
     for fragment, label in (
         ("let mut full_attempts = 0_usize;", "per-call full retry counter"),
         ("full_attempts > LEGACY_WRITE_QUEUE_RETRY", "legacy 128-retry limit"),
@@ -484,7 +503,7 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         "reserve-copy-publish sequence",
     )
 
-    dequeue = _function_body(text, "try_dequeue")
+    dequeue = _function_body(queue_impl, "try_dequeue")
     for fragment, label in (
         ("consumer_active", "process-local consumer guard"),
         ("Ordering::Acquire, Ordering::Relaxed", "consumer claim ordering"),
@@ -514,14 +533,14 @@ def _validate_source(text: str, contract: dict[str, Any]) -> None:
         "claim-snapshot-copy-release dequeue sequence",
     )
 
-    internal_tests = set(
-        re.findall(r"#\[test\]\s*fn\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", text)
+    internal_tests = re.findall(
+        r"#\[test\]\s*fn\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", text
     )
-    expected_internal = set(contract["compile_fixture"]["internal_test_names"])
+    expected_internal = contract["compile_fixture"]["internal_test_names"]
     if internal_tests != expected_internal:
         raise ValidationError(
-            f"internal queue tests differ: expected={sorted(expected_internal)}, "
-            f"actual={sorted(internal_tests)}"
+            f"internal queue tests differ: expected={expected_internal}, "
+            f"actual={internal_tests}"
         )
     internal = _function_body(
         text, "consumer_claim_is_exclusive_and_released_on_every_error"
