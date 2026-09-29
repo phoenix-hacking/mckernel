@@ -7486,3 +7486,31 @@ the reviewed light profile. Only after source review and a wholly fresh
 commit-derived candidate/request may another heavy build be considered.
 Successful current-candidate builds remain zero, real guest apps this window
 remain zero, applications remain 0/273 and formal counters are unchanged.
+
+Shutdown checkpoint 148, 2026-09-29: new dispatch stopped immediately on the
+launcher shutdown request. All child lanes are terminal, no bounded operation
+is running, the heavy lease is absent, and no build or guest remains active.
+Preserve boot `c733d83b...9afd` and launcher identities 3399308/83682487,
+3399313/83682494 and 3399317/83682500. The failed owner 3881008/90041045 and
+its Docker clients are retired.
+
+The original phase-0 evidence stays authoritative and unchanged. Candidate
+`704f6654-1` remains at device/inode 26/36767, its metadata backup at 26/47413,
+and terminal container `68881c05...927a6` remains exited 1, PID 0, non-OOM,
+restart disabled. The artifact output root is empty; the evidence root retains
+the driver, per-command results, container records and receipt. Available bytes
+at shutdown were host 23,679,508,480, scratch 21,554,311,168 and tmpfs
+7,502,585,856, with 19,563,268 KiB MemAvailable. No cleanup or retry occurred.
+
+On the next authorized invocation, first reconcile these identities and retained
+roots. Then reproduce whether the reviewed container temporary filesystem is
+non-executable, apply one bounded queue-checker correction with exact
+post-compile diagnostics and a verified executable fixture location, and run
+the isolated exact Rust compile/seven-test regression under the reviewed light
+profile. Obtain independent source review, then prepare a wholly fresh
+commit-derived candidate/request before considering another serialized heavy
+build. Never rerun the unchanged `704f6654-1` request. Record
+`stability-shutdown-checkpoint-20260929-148.json` is the live cursor. Formal
+counters do not move, successful current-candidate builds remain zero, real
+guest applications this window remain zero, applications remain 0/273, and the
+OS remains incomplete; the launcher pause is temporary.
