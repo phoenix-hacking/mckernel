@@ -5834,3 +5834,35 @@ image receipt. Preserve any failure; no build or guest is released by this
 checkpoint. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
 four diagnostic guest apps and zero successful current-candidate builds remain
 unchanged.
+
+Shutdown checkpoint 70, 2026-09-28: the independently released exact one-shot
+build ran once and failed cleanly in phase 0 before compilation. The preserved
+diagnostic is `native Rust build-surface audit failed: stage manifest must name
+exactly the build authorities and locked supplemental inputs`. Owner PID
+3570990/starttime 85681355, nonce `a1484c...2271`, and Docker wait PIDs
+3571094/3571097 have retired; the lease is absent and the output root is empty.
+The terminal non-OOM container is retained as
+`mckernel-exact-917e1468d2664989aa026baf667b2b7b` (ID
+`c6917efd...f9f0772`, exit 1), alongside the earlier retained failed container.
+The complete receipts, command captures, terminal inspection and phase log are
+archived in
+`evidence/stability-native-exact-build-phase0-failure-80b8c492-20260928-1.tar.gz`;
+the additive record is
+`stability-native-exact-build-phase0-failure-20260928-1.json`.
+
+This is a new deterministic source-contract failure family. Do not rerun the
+unchanged request. On the next authorized continuation, first reproduce the
+stage-manifest authority mismatch locally without Docker and capture the exact
+expected and observed authority sets. Apply at most one bounded correction,
+run focused local regressions, and obtain independent source review. A passing
+correction requires a new pushed/fetched checkpoint and fresh candidate,
+manifest, request, output, evidence and lease names before any new execution
+review. Preserve the failed 80b candidate, metadata backup, durable evidence
+and both terminal containers.
+
+All child lanes are complete and no heavy build, guest, QEMU or mcexec process
+remains active. Launcher wrapper PID 3399308/starttime 83682487 and worker PID
+3399313/starttime 83682494 remain the shutdown identities. The launcher pause
+is temporary; the OS goal is not complete and was not resumed during shutdown.
+Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic
+guest apps and zero successful current-candidate builds remain unchanged.

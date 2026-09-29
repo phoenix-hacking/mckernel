@@ -274,3 +274,25 @@ Command provenance review corrected the prior routing: the offline driver's five
 phases already include the heavy kernel/module compile and artifact validation;
 there is no separately released Docker source phase. Next obtain an independent
 one-shot heavy-build release for the exact request/image receipt.
+
+Shutdown checkpoint 70 supersedes that next action until a later launcher
+continuation. The released request ran exactly once and failed in source-only
+phase 0 before compilation because the stage manifest did not name exactly the
+build authorities and locked supplemental inputs. Preserve exact record
+`stability-native-exact-build-phase0-failure-20260928-1.json`, archive
+`evidence/stability-native-exact-build-phase0-failure-80b8c492-20260928-1.tar.gz`,
+candidate `/dev/shm/mckernel-exact-candidate-80b8c492-1`, its metadata backup,
+and both terminal failed containers. The latest container is
+`c6917efd...f9f0772` / `mckernel-exact-917e1468d2664989aa026baf667b2b7b`,
+exit 1, PID 0, non-OOM. Its owner and Docker wait processes retired, its lease
+is absent, and its output root is empty.
+
+Next: reproduce the exact stage-manifest expected/observed set locally without
+Docker; make only one bounded correction for this failure family; run focused
+regressions and independent review. Then checkpoint and prepare wholly fresh
+candidate/manifest/request/output/evidence/lease names before seeking another
+one-shot release. Never rerun the unchanged 80b request. Launcher wrapper PID
+3399308/starttime 83682487 and worker PID 3399313/starttime 83682494 are the
+active shutdown identities. No child agent or heavy operation remains. This is
+a temporary pause, not OS completion; formal counters and the four diagnostic
+apps/zero successful current-candidate builds are unchanged.
