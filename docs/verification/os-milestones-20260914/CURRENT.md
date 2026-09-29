@@ -6048,3 +6048,37 @@ release and create one fresh correctly-moded commit-derived candidate under
 new SHA-derived names with `umask 0022`. Never reuse the deleted failed-80b
 request or paths. Formal counters, four diagnostic guest apps and zero
 successful current-candidate builds remain unchanged.
+
+Shutdown checkpoint 78, 2026-09-28: no new work was dispatched after the stop
+request, every child lane is complete, and no candidate preparation, Docker,
+build, module, guest or application command was started. The launcher wrapper
+PID 3399308/starttime 83682487, worker PID 3399313/starttime 83682494 and Codex
+app-server PID 3399317/starttime 83682500 remain the active process identities.
+No qemu, mcexec, native exact build, Rocky build or Docker-build command was
+observed. Host, scratch and tmpfs have 24,751,034,368, 21,609,820,160 and
+16,597,475,328 bytes available; MemAvailable is 29,889,921,024 bytes.
+
+The rejected generic candidate-preparation wrapper is retained only as original
+failure/review evidence in
+`evidence/stability-native-exact-candidate-wrapper-rejected-20260928-1.tar.gz`
+(SHA-256 `1fea2ea3...879b`). The wrapper sources themselves remain removed and
+must not be revived or executed. A replacement immutable preparation-only
+packet is preserved at
+`evidence/native-exact-candidate-preparation-68cf089a-1.sh` (SHA-256
+`7cd0555c...eed9`, 13,520 bytes). It passes `bash -n` only. It is unreviewed,
+unreleased and unexecuted; syntax success grants no preparation, build or
+runtime credit. The exact state and next actions are in
+`stability-native-exact-candidate-preparation-shutdown-wip-20260928-1.json`.
+
+Next continuation: independently review that exact one-shot packet before any
+execution. In particular, check observer return-code handling, use of the bare
+source Git directory for `cat-file`, metadata-staging scope, and the external
+process/container preflight boundary. Make at most one bounded correction for a
+concrete defect, then capture complete process, lease, container and capacity
+preflight under a separately released privileged observation where required.
+Only after review PASS and clean preflight may preparation run. A successful
+preparation still requires its own checkpoint and separate heavy-build review
+before Docker or the owner CLI. Never reuse the failed 80b names. Formal
+counters, four diagnostic guest apps and zero successful current-candidate
+builds remain unchanged. The OS goal is incomplete and the launcher pause is
+temporary.

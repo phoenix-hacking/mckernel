@@ -384,3 +384,18 @@ SHA-derived candidate, explicitly using `umask 0022`, exact Git mode admission,
 fresh candidate/backup/evidence/manifest/request/output/lease paths, and the
 existing resource floors. Never reuse failed-80b names. Candidate preparation
 does not release Docker execution; any heavy build still needs separate review.
+
+Shutdown checkpoint 78 preserves, but does not release, the replacement
+preparation-only one-shot packet for commit `68cf089a`. It passes shell syntax
+only and has not been independently reviewed or executed. The rejected generic
+wrapper remains archived as historical BLOCK evidence; its source files remain
+removed. See
+`stability-native-exact-candidate-preparation-shutdown-wip-20260928-1.json`.
+
+On continuation, review the exact one-shot packet first, correct at most one
+concrete defect, and obtain explicit release for any privileged Docker
+observation. Then capture process/lease/container/resource preflight. Only a
+review PASS plus clean preflight permits preparation; build execution remains a
+separate later release. Preserve launcher wrapper 3399308/83682487, worker
+3399313/83682494 and app server 3399317/83682500 as the shutdown identities.
+The OS is incomplete; acceptance counters did not move.

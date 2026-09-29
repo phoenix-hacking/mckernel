@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.shutdown-wip.v1",
+  "recorded_at": "2026-09-28T20:48:13-07:00",
+  "source_commit": "68cf089a22b0a0c034a7f1fcc695853fbf5c07eb",
+  "status": "WIP_NOT_RELEASED_NOT_EXECUTED",
+  "summary": "Shutdown preserved the rejected generic preparation-wrapper evidence and a new immutable one-shot preparation packet. The one-shot packet passes bash syntax only; it has not received independent command review and was not executed.",
+  "preserved_artifacts": [
+    {
+      "path": "docs/verification/evidence/stability-native-exact-candidate-wrapper-rejected-20260928-1.tar.gz",
+      "sha256": "1fea2ea34c9b5a082b5e69c2ab71df724f24cb0b30feee749ad388bc9e61879b",
+      "bytes": 7946,
+      "meaning": "Rejected generic-wrapper sources, tests and independent BLOCK review. It is historical failure evidence and must not be executed as a released packet."
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-preparation-68cf089a-1.sh",
+      "sha256": "7cd0555c18b7d53f4cea1807ab136ae8cbb32bdb3f1c04ece500bbbca1bfeed9",
+      "bytes": 13520,
+      "mode": "0600",
+      "validation": "bash -n PASS",
+      "meaning": "Unreviewed preparation-only one-shot packet. Syntax success is not execution release, preparation success, build success or acceptance."
+    }
+  ],
+  "not_run": [
+    "candidate preparation",
+    "Docker or container query",
+    "native build",
+    "module load",
+    "guest or application"
+  ],
+  "active_process_identities": [
+    {"role": "launcher_wrapper", "pid": 3399308, "proc_starttime_ticks": 83682487},
+    {"role": "launcher_worker", "pid": 3399313, "proc_starttime_ticks": 83682494},
+    {"role": "codex_app_server", "pid": 3399317, "proc_starttime_ticks": 83682500}
+  ],
+  "shutdown_capacity_bytes": {
+    "host_available": 24751034368,
+    "scratch_available": 21609820160,
+    "tmpfs_available": 16597475328,
+    "memory_available": 29889921024
+  },
+  "heavy_process_observation": "No qemu, mcexec, native exact build, Rocky build or Docker-build command was observed. The pgrep invocation matched only its own bounded observer shell and is excluded.",
+  "formal_counters": {
+    "application_catalog": "0/273",
+    "fault_modes": "2/4",
+    "native_gates": "6/130",
+    "contractual_points": "350/10000",
+    "language_gates": "0/7",
+    "diagnostic_guest_apps": 4,
+    "successful_current_candidate_builds": 0
+  },
+  "next_actions": [
+    "Independently review the exact one-shot packet without executing it, including its observer return-code handling, bare source-Git cat-file invocation, metadata staging scope and external process/container preflight boundary.",
+    "Apply at most one bounded correction for a concrete packet defect, then rerun bash syntax and cheap non-mutating packet checks; never retry an unchanged deterministic failure.",
+    "Obtain explicit release for any privileged Docker observation, then capture complete preflight process, lease, container and resource evidence.",
+    "Only after packet PASS and clean preflight, execute preparation under the fresh 68cf089a-1 paths. Preserve any failure without an unchanged retry.",
+    "If preparation passes, checkpoint it and obtain a separate heavy-build execution review before any owner CLI or Docker build."
+  ],
+  "limitations": [
+    "No independent review was performed on the new one-shot packet before shutdown.",
+    "No privileged Docker state was queried during shutdown.",
+    "The OS objective remains incomplete and was not resumed or marked complete."
+  ]
+}
