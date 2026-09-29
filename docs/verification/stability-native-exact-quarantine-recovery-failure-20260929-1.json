@@ -1,0 +1,63 @@
+{
+  "acceptance_credit": false,
+  "attempt": {
+    "elapsed_seconds": 6.2,
+    "ended_at_utc": "2026-09-29T06:03:52.154703Z",
+    "exit_status": 1,
+    "started_at_utc": "2026-09-29T06:03:46.645757Z"
+  },
+  "execution_checkpoint": "d9e2f5ced5611b90932d1bc8726eff06abd4f663",
+  "failure": {
+    "error": "RuntimeError('corrected recovery observer failed; captures retained')",
+    "family": "prepared-candidate quarantine cleanup and retained old lease after observer convergence failure",
+    "no_retry": true,
+    "phase": "observer before deletion",
+    "strategy_change_required": true
+  },
+  "observer": {
+    "failure": "two consecutive clean, complete stable rounds not obtained",
+    "rounds": [
+      {"clean": true, "ending_task_identities": 818, "round": 1, "task_identities": 818, "unresolved_churn": 0},
+      {"clean": false, "ending_task_identities": 1024, "new_or_reused": 206, "round": 2, "task_identities": 818, "unresolved_churn": 206},
+      {"clean": false, "ending_task_identities": 818, "exited_or_reused": 154, "pre_scan_exits": 154, "round": 3, "task_identities": 972, "unresolved_churn": 308},
+      {"clean": true, "ending_task_identities": 818, "round": 4, "task_identities": 818, "unresolved_churn": 0},
+      {"clean": false, "ending_task_identities": 820, "new_or_reused": 2, "round": 5, "task_identities": 818, "unresolved_churn": 2}
+    ],
+    "scan_complete": false,
+    "status": "FAIL",
+    "target_references_all_rounds": 0,
+    "permission_denials_all_rounds": 0,
+    "tree_observation_transients": 0
+  },
+  "record_kind": "native_exact_candidate_quarantine_recovery_failure",
+  "retained_artifacts": {
+    "claim_sha256": "f2d59c24e20b589f5cb9aa9cba1ec4c9c9ba4a84895fe3a468de35d7b5bb41f3",
+    "journal_sha256": "d9a17002fe43df822c367219a4dc58e7a7bb000bce6597a79a5dc6721fe850d4",
+    "observer_stderr_sha256": "65efce0898ea451dc4af0a0682296e194bcef16707fafaa641bfbd36eabc9512",
+    "observer_stdout_sha256": "23b098adccd1986cbd6026904e620fc6d997cf256c0d20f66c4dffd7bbb027bd",
+    "outer_log_sha256": "795b9f820d60f2a38ae943384232d64d299681ef2c34a97a32639c03f050cc01",
+    "preflight_sha256": "e7af78ba3189eddfc940101f5051038143d3e3624fd65c6c44817a5f736468cf",
+    "raw_archive": "docs/verification/evidence/stability-native-exact-quarantine-recovery-failure-raw-20260929-1.tar.gz",
+    "raw_archive_sha256": "0a3e13ec06ba3e7efd0282ab3efd9f51ad18e6261bef6c0691a1ec29700878b5",
+    "recovery_rc_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "recovery_stderr_sha256": "1cb96ba443f260b6547749c7610f1d6a8a7cc239f08d6cb34fd96f268d71caa2",
+    "recovery_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release_sha256": "bef067a447793acefc51c0afdf15698766e18f984473c22a80ebda43ffd47983"
+  },
+  "retained_state": {
+    "deletion_phase_count": 0,
+    "journal_phases": ["recovery-claimed", "inventory-reconstructed", "terminal-failure"],
+    "old_lease": {"device_number": 1831, "gid": 0, "inode": 31447, "mode": "0600", "sha256": "69ced2395f7c16019b70d9d1b2de45ff2519014178ee145a453e2ed2a24f47e3", "uid": 0},
+    "original_paths_absent": true,
+    "quarantines": [
+      {"device_number": 26, "gid": 0, "inode": 14117, "mode": "0700", "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-candidate-68cf089a-1", "uid": 0},
+      {"device_number": 26, "gid": 0, "inode": 24701, "mode": "0700", "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-metadata-backup-68cf089a-1", "uid": 0}
+    ],
+    "recovery_claim_retained": true
+  },
+  "retry": false,
+  "rollback": false,
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "FAIL_OBSERVER_TASK_CHURN_BEFORE_DELETION"
+}

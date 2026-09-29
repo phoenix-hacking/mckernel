@@ -6410,3 +6410,32 @@ packet gates pass, invoke only `/usr/bin/bash` with the exact packet path once.
 Never invoke the helper directly, retry, roll back, remove a claim, or reuse an
 output. A failure may leave partial deletion and must be preserved for separate
 review. This releases cleanup only and moves no OS acceptance counter.
+
+Continuation checkpoint 91, 2026-09-28: the single released recovery packet ran
+once and failed closed in 6.2 seconds before deletion. The new permanent claim
+and three-record journal are retained; phases are `recovery-claimed`,
+`inventory-reconstructed`, and `terminal-failure`. Both exact quarantines and
+old lease retain their prior device/inode/mode/owner identities, both originals
+remain absent, and there are zero `delete-entry`, `delete-complete` or lease
+removal phases. No retry or rollback occurred.
+
+The corrected observer completed five rounds with zero target references, zero
+permission denials and zero tree transients, but could not obtain two consecutive
+globally identical task sets. Rounds 1 and 4 were clean at 818 identities; round
+2 ended with 206 new root service threads, round 3 reconciled 154 exiting
+threads, and round 5 ended with two new identities. The churn is produced by
+root PID/TGID 2545 `clearpass-agentcontroller-service`. Exact failure evidence is
+in `stability-native-exact-quarantine-recovery-failure-20260929-1.json`; its
+31-member raw archive `stability-native-exact-quarantine-recovery-failure-raw-20260929-1.tar.gz`
+is `0a3e13ec...78b5` and 30 regular members match live originals byte-for-byte.
+
+This is the second execution failure in the same cleanup/observer convergence
+family, so another cheap correction or unchanged packet is prohibited. Expert
+strategy change is active: define a bounded identity-closure scan that treats
+exited tasks as unable to retain references but fully scans every newly appeared
+or reused identity still live at the accepted cut, preserving all reference,
+denial, incomplete-proof and mount/alias failures. It must use a new immutable
+observer and new recovery identity bound to both retained failures and both
+permanent claims. Independent ownership/source review and a distinct execution
+release remain required. No build can start while the old lease/quarantines
+remain. No real guest app or current-candidate build ran; counters stay unchanged.

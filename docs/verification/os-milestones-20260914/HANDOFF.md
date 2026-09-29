@@ -511,3 +511,12 @@ final commit/push/fetched-blob match and fresh live preflight. Final helper
 `aef2cce5...cb08` pass independent mechanical/execution review. Invoke only the
 packet once; direct helper execution, retry, rollback and output reuse are
 prohibited. Any failure retains the claim/evidence and may leave partial deletion.
+
+Checkpoint 91 records that single attempt as FAIL before deletion. Both
+quarantines and the old lease are unchanged; originals are absent; the new claim
+and journal are permanent. Five rounds found zero references/denials, but root
+PID 2545 thread churn prevented two consecutive identical global task sets.
+Preserve failure record/archive `0a3e13ec...78b5`; never retry or roll back either
+packet. This is the family's second execution failure, so expert strategy change
+must implement a bounded final-live-identity closure scan and a new recovery
+identity bound to both failures before independent review and any further run.
