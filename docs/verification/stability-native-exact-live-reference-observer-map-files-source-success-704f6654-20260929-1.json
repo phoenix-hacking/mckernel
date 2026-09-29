@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.live-reference-observer-map-files-source.v1",
+  "timestamp": "2026-09-29T10:25:00-07:00",
+  "status": "PASS_SOURCE_ONLY",
+  "historical_observer": {
+    "path": "docs/verification/evidence/native-exact-candidate-live-reference-observer-704f6654-2.py",
+    "sha256": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+    "changed": false,
+    "runtime_result": "BLOCKED_MAP_FILES_COVERAGE"
+  },
+  "corrected_observer": {
+    "path": "docs/verification/evidence/native-exact-candidate-live-reference-observer-704f6654-3.py",
+    "sha256": "14789e10b5d31d95f6292f3abceca25c96ce6638213115449704ff2fb8c97139",
+    "test_path": "scripts/tests/test_native_exact_candidate_live_reference_observer_704f6654_3.py",
+    "test_sha256": "9e1451332d06df4394ce2e986d31ed4976c616a8f99f590af688d58c85153956",
+    "behavior": [
+      "scans process-level /proc/<tgid>/map_files while retaining task-specific proc and mount checks",
+      "rejects missing, denied or unreadable whole map_files directories for a stable live identity",
+      "reconciles individual disappearing entries only after identity revalidation",
+      "requires strict bounded hexadecimal VMA ranges with start less than end",
+      "records exact referenced device and inode"
+    ]
+  },
+  "failure_lineage": {
+    "first_candidate_sha256": "e0306339b32479079c4a12038ba68d64ca3bae14a3b42c8534ad1ceaebaf81f5",
+    "first_test_sha256": "dee404e6fba15870f7187ba0b2fced2ce57278bbfd10124c04d5df23caa5b74e",
+    "review": "BLOCK",
+    "findings": ["equal/reversed VMA ranges accepted", "mmap regression did not call production scan_identity"]
+  },
+  "verification": [
+    {"command": "python3.8 focused v3 unittest and self-test", "result": "PASS", "tests": 8},
+    {"command": "python3.9 focused v3 unittest and self-test", "result": "PASS", "tests": 8},
+    {"command": "py_compile under Python 3.8 and 3.9", "result": "PASS"},
+    {"command": "git diff --check", "result": "PASS"}
+  ],
+  "independent_review": {
+    "status": "PASS_SOURCE",
+    "runtime_acceptance": false,
+    "retrospective_acceptance": false
+  },
+  "acceptance": {
+    "production_gate_changed": false,
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "os_complete": false
+  },
+  "next": "Complete expert review of the separate deleted-inode audit, create a fresh root read-only execution release, and run that audit against the sealed 10,611-identity baseline. V3 source success does not repair the consumed retirement proof."
+}

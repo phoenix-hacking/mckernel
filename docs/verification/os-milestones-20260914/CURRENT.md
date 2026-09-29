@@ -7898,3 +7898,24 @@ review it, and run a fresh current-state deleted-inode audit over every retained
 inventory identity before authorizing a wholly fresh candidate build. Formal
 counters, successful current-candidate builds and real guest applications remain
 zero; applications remain 0/273.
+
+Continuation checkpoint 161, 2026-09-29: additive observer v3 repairs the
+mapping-coverage defect without changing historical v2. Exact v3
+`14789e10...7139` and tests `9e145133...3956` scan process-level
+`/proc/<tgid>/map_files`, fail closed when a live address space cannot be
+inspected, revalidate individual disappearance, require bounded hexadecimal
+VMA ranges with `start < end`, and retain referenced device/inode. The first
+candidate was independently BLOCKed for accepting equal/reversed ranges and a
+vacuous mmap test; its bounded correction routes a real descriptor-closed libc
+mapping through production `scan_identity` and rejects all prior range probes.
+Eight tests and self-test pass on Python 3.8/3.9; independent rereview PASSes
+source only.
+
+This cannot retroactively accept checkpoint 160. A separate current-state
+deleted-inode audit remains required against the sealed 10,611-identity set.
+Its first candidate and bounded correction were both independently BLOCKed for
+mount alias, identity reconciliation and map-entry error false PASSes, so that
+lane is now under expert redesign. Record
+`stability-native-exact-live-reference-observer-map-files-source-success-704f6654-20260929-1.json`
+preserves v3 source evidence. No new root audit, build or guest has run; formal
+counters, builds and applications remain unchanged.

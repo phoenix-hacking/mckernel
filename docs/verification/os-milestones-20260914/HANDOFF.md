@@ -1123,6 +1123,16 @@ obtain fresh execution review, and repeat the full external preflight. Never run
 the superseded `fc529820` release. No retirement state or acceptance counter
 changed.
 
+Checkpoint 161 adds independently source-PASSed observer v3
+`14789e10...7139` with process-level map-files coverage and a real
+descriptor-closed mmap regression. Historical v2 remains exact and its consumed
+proof remains BLOCKed. The separate post-deletion audit has two rejected source
+candidates and is now in expert redesign for typed exit/error reconciliation,
+baseline-bound descendant mount aliases, stable namespace proof and exact mmap
+detection. Do not run the rejected audit or authorize a build. Next review the
+expert audit, then obtain a fresh root read-only release and execute it against
+the sealed 10,611 deleted identities.
+
 Checkpoint 160 records one-shot physical cleanup success but BLOCKed reference
 proof. Release `ef8dffa1...9986` deleted 10,523 candidate and 86 metadata members,
 both roots are absent, journal terminal failure is null, observer retired, and
