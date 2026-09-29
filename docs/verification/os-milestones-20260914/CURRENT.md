@@ -7123,3 +7123,31 @@ consumed candidate. This is unexecuted placeholder source only. Commit/push/
 fetch it with the attempt-1 failure record, then create and independently review
 an attempt-2 release before any invocation. Formal counters, real guest apps and
 successful current-candidate builds remain unchanged.
+
+Shutdown checkpoint 114, 2026-09-29: the launcher stop request ended new
+dispatch. The one active expert correction completed and is joined; every child
+lane is now closed. Corrected retirement packet `59b3bedf...dc483` and test
+`8c57021a...d5c8` pass 15 tests on each of Python 3.8 and 3.9, pycompile and
+scoped diff checks. This is unreviewed source WIP only. It has not received the
+required fresh independent source or execution review, immutable fetched
+template checkpoint or acyclic release. No retirement packet, sudo mutation,
+candidate traversal, Docker mutation, rename, deletion, build, module, guest or
+application ran.
+
+Preserve launcher identities 3399308/83682487, 3399313/83682494 and
+3399317/83682500; candidate and backup identities 26/25166 and 26/35798;
+evidence-root identities 1831/2907338 and 1831/2907339; and terminal containers
+`decd7cf9...c6b9` (exit 1) and `8943e497...bc10` (exit 0). Measured free bytes
+are host 24,276,938,752, scratch 21,560,459,264, tmpfs 7,516,635,136 and memory
+20,682,653,696. Record
+`stability-shutdown-checkpoint-20260929-114.json` is the exact live cursor.
+
+Next invocation must reconcile those identities, then obtain fresh independent
+source review of the exact packet/test against all five retained blockers. If
+and only if that passes, checkpoint and fetch-verify the immutable template,
+mechanically create the acyclic release, and obtain separate execution review
+before any one-shot sudo invocation. After independently accepted retirement
+and measured capacity recovery, independently review preparation `704f6654-1`
+before any heavy build. Formal counters remain unchanged, current-candidate
+builds remain zero, accepted applications remain 0/273, the OS is incomplete,
+and this launcher pause is temporary.
