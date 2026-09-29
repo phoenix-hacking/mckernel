@@ -1,0 +1,89 @@
+{
+  "schema": "mckernel.quarantine-continuation-execution-release.v2",
+  "status": "PASS",
+  "execution_authorized": true,
+  "one_shot": true,
+  "retry": false,
+  "rollback": false,
+  "authenticated_sources": {
+    "packet": "5ab179febfb90c44b31a3fb606f5fda9419a76dc26ae7eaf7697d6d0f0ed93a2",
+    "wrapper": "dc291352c52534987b5c3f35b8dc4a390eb76de80bed6ea27a17aee088e92e9b",
+    "basis": "76c497d668832571a2de8149ba8bfeed329e4433a240978442fd5538d9713b58",
+    "observer": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+    "test": "fadd032209173d597713d3f12e16f95fd830a80bc435e5d730ca07d2b1af18b6"
+  },
+  "finalization": {
+    "template_commit": "1c992f200c96700cc244fa95c12a3bf2b0660c8c",
+    "template_hashes": {
+      "packet": "ae2f6d078c79a424d7d974d3ca218c32d68791bd012d7bc447815600ddeea1e9",
+      "wrapper": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+      "basis": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+      "observer": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+      "test": "fadd032209173d597713d3f12e16f95fd830a80bc435e5d730ca07d2b1af18b6"
+    },
+    "allowed_changed_paths": [
+      "docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py",
+      "docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-704f6654-1.sh",
+      "docs/verification/evidence/native-exact-candidate-quarantine-recovery-release-basis-704f6654-1.json",
+      "docs/verification/stability-native-exact-candidate-quarantine-recovery-execution-release-704f6654-1.json"
+    ]
+  },
+  "runtime": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "launcher_identities": [
+      {"pid": 3399308, "starttime": 83682487},
+      {"pid": 3399313, "starttime": 83682494},
+      {"pid": 3399317, "starttime": 83682500}
+    ],
+    "conflict_basenames": [
+      "qemu-system-x86_64",
+      "qemu-system-aarch64",
+      "qemu-kvm",
+      "mcexec",
+      "native_rust_exact_build_container_owner.py",
+      "native_exact_candidate_retire.py",
+      "native_exact_candidate_quarantine_recover.py",
+      "native-exact-candidate-retirement-704f6654-1.py",
+      "native-exact-candidate-retirement-704f6654-2.py",
+      "native-exact-candidate-quarantine-recover-704f6654-1.py",
+      "native-exact-candidate-quarantine-recovery-execution-704f6654-1.sh"
+    ],
+    "heavy_lease_paths": [
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json"
+    ],
+    "immutable_tombstone": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json",
+      "immutable": true,
+      "device": 1831,
+      "inode": 31474,
+      "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123"
+    }
+  },
+  "docker": {
+    "authenticated_current_record_sha256": {
+      "07c9fd324f4b6e8e0cfbe87307951206e6ca6ae5e6faee6c9ab91b46375fb55d": "12cfbc090f75001410b2ceadd1bcadb45fe5aeafa60355885ba80454ee7ceaca",
+      "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0": "0e1944b7071fb3c8af8ebeeeb38b0bbb453592f2a5b08d83bfe0195d1d6da332",
+      "1e470f1cba7ba44dc96d8441404f88cb8b086c9e12a7869e717dfff9575050b5": "7cdd6ed9b046826d73e349db8c962650a98d98f8ea42b358ee4952c74b98d816",
+      "3970e77c8bc807296f4a7b4178715ac52075108bd5e92c04432097598340d142": "2b6b5aae24a2106789973a76a685cb8adc4f177f3b01b184fc0c8a631dbb02bf",
+      "4afc749b8b6f551648e879331e9f932561c4f7ed43d2ee36d742ff9b757cc374": "a273737b64e0fdc65ed2ef491f1ff2c75c9023ca822c8c484c2c73ea817e95d9",
+      "68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6": "b2c22ea8ac18b4aeac241f5cf3233a9992fc984b40a2151bf420a7a280afab5d",
+      "7483628a8dd980c14d01fb3ca37bfa349195fd863889b569163f4870da86d168": "16d1a1c2746085925ddd9a2e6d66bcf981078aca5be85c499079efa4f00e29b8",
+      "846762d532ece70e91d97c3795fc54213c2d860deaa96bfe7aa75518a5155a13": "e7647ddf3f97644f926989e4bded35a4d25d0fc56800b0ff9023523ba12abe6f",
+      "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10": "f6cba2bf97bf625c53e70b6629dc9a9cb19a8056aae3ac71a41164ad76fe5435",
+      "8da74b66cf274dcf833954acd1c40fe431e5feb1dddff93f087e80fbaa3e97a3": "baf25c9c3d60675d7bd318592c58c1bf8353fa96285198bd2076fe9485c15164",
+      "bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2": "16916f8a3ae38eea3f03ee1ab064578eeff4105c37231e1136943ee730f849f3",
+      "c6912fd4c08b8e44100b2371c5cd784f41df21d171fe75cbba487ccd6c842342": "c956e4753d88153f7c55d0dc770968df793b98e0f18de8bd8353a2e991a817a5",
+      "c6917efd594a3ec0311371a4e9e5c8d5f9a598b25687a3820e8f56138f9f0772": "dcfdfce13009263bdc61c079a860165ad70dc78a1386b50da4d73d962e456f3d",
+      "d522c0981bc89959d1f90761f5543345430e9e239a1c0635a30d2420b290a8e2": "d8e13933e5c7fe000dd5c7f7f1c02fceffb9760f4d1c645969952ecad72f55d0",
+      "d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44": "1728de1aa61c67646f5f2467bd23c3b31c7aee1e3e89dcdb64f16d94fbe7ed94",
+      "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9": "07f9831a42e81f53d9f9c9ea5c3b7bb85adf59181e86ecc09572d9bc3e860d2f",
+      "e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e": "84a3179b5af60e7480cd5321379a2aa4441ddb32c3a16f45d3d03d98ebc5fe23"
+    },
+    "terminal_candidate_mount_exceptions": {
+      "d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44": [{"Destination":"/src","Mode":"","Propagation":"rprivate","RW":false,"Source":"/dev/shm/mckernel-exact-candidate-704f6654-1","Type":"bind"}],
+      "bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2": [{"Destination":"/src","Mode":"","Propagation":"rprivate","RW":false,"Source":"/dev/shm/mckernel-exact-candidate-704f6654-1","Type":"bind"}],
+      "e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e": [{"Destination":"/src","Mode":"","Propagation":"rprivate","RW":false,"Source":"/dev/shm/mckernel-exact-candidate-704f6654-1","Type":"bind"}],
+      "68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6": [{"Destination":"/driver.py","Mode":"","Propagation":"rprivate","RW":false,"Source":"/dev/shm/mckernel-exact-candidate-704f6654-1/scripts/native_rust_exact_build_offline.py","Type":"bind"},{"Destination":"/src","Mode":"","Propagation":"rprivate","RW":false,"Source":"/dev/shm/mckernel-exact-candidate-704f6654-1","Type":"bind"}]
+    }
+  }
+}
