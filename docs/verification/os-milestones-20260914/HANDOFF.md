@@ -1107,3 +1107,18 @@ template ancestor for the exact packet/wrapper/basis plus external-release
 four-path finalization. Review mechanics and live authority independently and
 repeat every preflight before one one-shot sudo continuation. Retained roots,
 tombstone and formal/application counters remain unchanged.
+
+Checkpoint 159 supersedes release `fc529820...ae607`: independent review passed
+it, but the coordinator's external read-only preflight found an exact harness
+defect before wrapper invocation or claim. The pinned tar directory header omits
+the trailing slash required by `validate_raw_history`. Packet
+`682a3791...dcc8` and tests `a8df1959...76c2` correct only that TarInfo name;
+the pinned SHA, exact eleven-member/type/duplicate checks and all live/tombstone
+byte comparisons remain. Actual retained history passes, 37 tests pass on
+Python 3.8/3.9 and independent review PASSes source only.
+
+Packet/wrapper/basis are back in DRAFT. Commit/push/fetch this correction, use
+that commit as the new template ancestor, regenerate exactly four release paths,
+obtain fresh execution review, and repeat the full external preflight. Never run
+the superseded `fc529820` release. No retirement state or acceptance counter
+changed.

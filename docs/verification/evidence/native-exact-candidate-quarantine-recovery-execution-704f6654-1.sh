@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Literal-only source finalization; independent fetched release remains required.
 set -Eeuo pipefail
-SOURCE_TEMPLATE_ONLY=false
+SOURCE_TEMPLATE_ONLY=true
 if "$SOURCE_TEMPLATE_ONLY"; then
   echo DRAFT_NOT_RELEASED >&2
   exit 1

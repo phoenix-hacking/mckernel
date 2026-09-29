@@ -7837,3 +7837,33 @@ finalization. Then obtain independent mechanical/execution review and repeat
 the full live preflight before any one-shot sudo continuation. Formal counters,
 current-candidate builds and real guest applications remain zero; applications
 remain 0/273.
+
+Continuation checkpoint 159, 2026-09-29: fetched four-path release
+`fc529820...ae607` independently PASSed mechanical/execution review, but the
+coordinator's immediately preceding external read-only preflight correctly
+stopped before wrapper invocation, claim or deletion. `validate_raw_history`
+reported `raw archive membership`: the pinned raw archive's directory TarInfo
+name is `.mckernel-retirement-evidence-704f6654-2` without a trailing slash,
+while the source expected the slash form. All eleven actual members, the pinned
+archive SHA and retained roots remained unchanged. This also corrects the prior
+review's overly broad live-preflight statement; it had not executed this exact
+validator.
+
+The local packet, wrapper and basis were immediately restored to inert DRAFT
+before tests. Bounded packet `682a3791...dcc8` and tests `a8df1959...76c2`
+accept the exact TarInfo directory name while preserving the pinned SHA, exact
+eleven-member set/type, duplicate rejection, live name/byte equality and exact
+tombstone bytes. The actual retained history now passes read-only validation;
+37 tests pass under Python 3.8 and 3.9 with positive no-slash and missing/extra/
+wrong-type/duplicate negatives. Independent review PASSes source only and
+confirms the failed fetched release rejects against the changed DRAFT bytes.
+
+No wrapper execution, claim, journal, output, Docker mutation, root deletion,
+build or guest occurred. Release `fc529820` remains immutable in Git history and
+must never run. Record
+`stability-native-exact-quarantine-continuation-archive-member-source-success-704f6654-20260929-1.json`
+preserves this failure and correction. Next commit/push/fetch the DRAFT, use the
+new fetched commit as template authority, regenerate the exact four paths,
+obtain fresh independent execution review and repeat the complete external
+preflight before one one-shot wrapper invocation. Formal counters, builds and
+real guest applications remain zero; applications remain 0/273.

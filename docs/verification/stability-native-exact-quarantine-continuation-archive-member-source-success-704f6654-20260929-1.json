@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.quarantine-continuation-archive-member-source.v1",
+  "timestamp": "2026-09-29T10:04:11-07:00",
+  "status": "PASS_SOURCE_ONLY",
+  "failed_release": {
+    "commit": "fc529820d49b859f6c38134ff346d929b1cae607",
+    "release_sha256": "5b600bac02878978fc87fe7f99de2edcc19530ad034a60cbcd6ed49525a13f02",
+    "independent_review": "PASS_EXECUTION_RELEASE_BEFORE_EXTERNAL_PREFLIGHT",
+    "execution_attempted": false,
+    "claim_created": false,
+    "journal_created": false,
+    "output_created": false,
+    "deletion_started": false
+  },
+  "preflight_failure": {
+    "phase": "external read-only validate_raw_history",
+    "error": "raw archive membership",
+    "cause": "the pinned tar directory TarInfo name omits a trailing slash while the validator expected one",
+    "archive_sha256": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806",
+    "actual_directory_member": ".mckernel-retirement-evidence-704f6654-2",
+    "actual_member_count": 11
+  },
+  "correction": {
+    "packet_sha256": "682a3791be0a7ab396471bdbcbb9f2eece7865f9ce44c32f5a11f61e033adcc8",
+    "test_sha256": "a8df1959aa9ddf1d394be58fa3c98e71b3526384f17c2c9eb32ee94289a876c2",
+    "wrapper_sha256": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+    "basis_sha256": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+    "template_inert": true,
+    "preserved_checks": [
+      "pinned raw archive SHA256",
+      "exact eleven-member set and directory type",
+      "duplicate member rejection",
+      "exact live evidence names and bytes",
+      "exact tombstone bytes"
+    ]
+  },
+  "verification": [
+    {"command": "read-only validate_raw_history against the actual retained archive/evidence/tombstone", "result": "PASS"},
+    {"command": "python3.8 scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS", "tests": 37},
+    {"command": "python3.9 scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS", "tests": 37},
+    {"command": "py_compile under Python 3.8 and 3.9", "result": "PASS"},
+    {"command": "git diff --check", "result": "PASS"}
+  ],
+  "independent_review": {
+    "status": "PASS_SOURCE",
+    "execution_acceptance": false
+  },
+  "acceptance": {
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "formal_counters_changed": false,
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch the restored DRAFT correction. Treat that fetched commit as a new template ancestor, regenerate the exact four-path release, obtain fresh independent execution review, and repeat the complete external live preflight before any one-shot wrapper invocation."
+}

@@ -64,7 +64,7 @@ CAPSULE_SHA = 'b6c85e40cbe7782fa3f1652d43d314091bb25fbf3777312c7d455390d42ecec1'
 SUCCESS_SHA = 'be700dd5335fdde0d33c0096a865cf6326cb9c72a99a983ec3764f99e7eeed4d'
 HELPER_SHA = '4631190894a214821f02142670a2ce6f77058dc7fae986c0f6295214c705c517'
 RAW_SHA = 'ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806'
-SOURCE_TEMPLATE_ONLY = False
+SOURCE_TEMPLATE_ONLY = True
 OBSERVER_SHA = '6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42'
 MAX_FILE = 64 << 20
 MAX_CALLBACK = 8 << 20
@@ -346,16 +346,17 @@ def validate_raw_history(archive=RAW, evidence=EVIDENCE, tombstone=TOMBSTONE):
     if digest(read_regular(archive)) != RAW_SHA:
         fail('raw archive hash')
     members = archive_members(archive)
-    prefix = '.mckernel-retirement-evidence-704f6654-2/'
-    expected = {prefix, 'native-exact-build-lease-704f6654-1.json'}
+    directory = '.mckernel-retirement-evidence-704f6654-2'
+    prefix = directory + '/'
+    expected = {directory, 'native-exact-build-lease-704f6654-1.json'}
     expected.update(prefix + name for name in ('archive.sealed.py', 'claim-704f6654-2.json', 'helper.sealed.py', 'journal-704f6654-2.jsonl', 'observer.sealed.py', 'observer.status', 'observer.stderr', 'observer.stdout', 'packet.failure'))
-    if set(members) != expected or not members[prefix].isdir():
+    if set(members) != expected or not members[directory].isdir():
         fail('raw archive membership')
     live = os.lstat(str(evidence))
     if not stat.S_ISDIR(live.st_mode) or (live.st_uid, live.st_gid, stat.S_IMODE(live.st_mode)) != (0, 0, 0o700):
         fail('historical evidence identity')
     names = set(os.listdir(str(evidence)))
-    archived_names = {name[len(prefix):] for name in expected if name.startswith(prefix) and name != prefix}
+    archived_names = {name[len(prefix):] for name in expected if name.startswith(prefix)}
     if names != archived_names:
         fail('historical evidence membership')
     for name in sorted(archived_names):

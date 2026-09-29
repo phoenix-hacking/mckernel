@@ -7,6 +7,7 @@ import os
 import signal
 import stat
 import subprocess
+import tarfile
 import tempfile
 import types
 from contextlib import ExitStack
@@ -981,6 +982,75 @@ class Tests(unittest.TestCase):
             with tarfile.open(str(archive), 'w:gz') as stream: stream.add(str(tomb), arcname='wrong')
             with mock.patch.object(m, 'RAW_SHA', m.digest(archive.read_bytes())):
                 with self.assertRaises(m.Error): m.validate_raw_history(archive, evidence, tomb)
+
+    def test_raw_history_accepts_tar_directory_header_without_trailing_slash(self):
+        m = self.m
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp); evidence = base / '.mckernel-retirement-evidence-704f6654-2'; evidence.mkdir(mode=0o700)
+            tomb = base / 'native-exact-build-lease-704f6654-1.json'; tomb.write_bytes(b'tomb')
+            names = ('archive.sealed.py', 'claim-704f6654-2.json', 'helper.sealed.py',
+                     'journal-704f6654-2.jsonl', 'observer.sealed.py', 'observer.status',
+                     'observer.stderr', 'observer.stdout', 'packet.failure')
+            for name in names: (evidence / name).write_bytes(('fixture:' + name).encode())
+            archive = base / 'good.tar.gz'
+            with tarfile.open(str(archive), 'w:gz') as stream:
+                directory = tarfile.TarInfo(evidence.name)
+                directory.type = tarfile.DIRTYPE
+                directory.mode = 0o700
+                stream.addfile(directory)
+                for name in names:
+                    stream.add(str(evidence / name), arcname=evidence.name + '/' + name, recursive=False)
+                stream.add(str(tomb), arcname=tomb.name, recursive=False)
+            with mock.patch.object(m, 'RAW_SHA', m.digest(archive.read_bytes())):
+                actual_lstat = m.os.lstat
+                def root_owned(path):
+                    info = actual_lstat(path)
+                    if str(path) != str(evidence): return info
+                    values = list(info); values[4] = values[5] = 0
+                    return os.stat_result(values)
+                with mock.patch.object(m.os, 'lstat', side_effect=root_owned):
+                    m.validate_raw_history(archive, evidence, tomb)
+
+    def test_raw_history_rejects_wrong_directory_header_type_and_exact_membership(self):
+        m = self.m
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp); evidence = base / '.mckernel-retirement-evidence-704f6654-2'; evidence.mkdir(mode=0o700)
+            tomb = base / 'native-exact-build-lease-704f6654-1.json'; tomb.write_bytes(b'tomb')
+            names = ('archive.sealed.py', 'claim-704f6654-2.json', 'helper.sealed.py',
+                     'journal-704f6654-2.jsonl', 'observer.sealed.py', 'observer.status',
+                     'observer.stderr', 'observer.stdout', 'packet.failure')
+            for name in names: (evidence / name).write_bytes(('fixture:' + name).encode())
+
+            def make_archive(path, directory_name=evidence.name, directory_type=tarfile.DIRTYPE,
+                             extra=None, duplicate=False):
+                with tarfile.open(str(path), 'w:gz') as stream:
+                    directory = tarfile.TarInfo(directory_name)
+                    directory.type = directory_type
+                    directory.mode = 0o700
+                    stream.addfile(directory)
+                    for name in names:
+                        stream.add(str(evidence / name), arcname=evidence.name + '/' + name, recursive=False)
+                    if extra is not None:
+                        stream.add(str(evidence / names[0]), arcname=evidence.name + '/' + extra, recursive=False)
+                    if duplicate:
+                        stream.add(str(evidence / names[0]), arcname=evidence.name + '/' + names[0], recursive=False)
+                    stream.add(str(tomb), arcname=tomb.name, recursive=False)
+
+            for defect in ('missing', 'extra', 'wrong-type', 'duplicate'):
+                archive = base / (defect + '.tar.gz')
+                if defect == 'missing':
+                    names = names[:-1]
+                    make_archive(archive)
+                    names = names + ('packet.failure',)
+                elif defect == 'extra':
+                    make_archive(archive, extra='unexpected')
+                elif defect == 'wrong-type':
+                    make_archive(archive, directory_type=tarfile.REGTYPE)
+                else:
+                    make_archive(archive, duplicate=True)
+                with self.subTest(defect=defect), mock.patch.object(m, 'RAW_SHA', m.digest(archive.read_bytes())):
+                    with self.assertRaisesRegex(m.Error, '(?:raw archive membership|duplicate archive member)'):
+                        m.validate_raw_history(archive, evidence, tomb)
 
 
 if __name__ == '__main__':
