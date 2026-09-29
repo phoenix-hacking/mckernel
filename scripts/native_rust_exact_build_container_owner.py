@@ -80,6 +80,72 @@ def roots_disjoint(paths):
             raise ValueError('input/output roots overlap')
 
 
+def _git_config_entries(config):
+    """Yield lower-case (section, key, value) entries without includes."""
+    section = ''
+    for number, raw in enumerate(config.read_text().splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith(('#', ';')):
+            continue
+        if line.startswith('[') and line.endswith(']'):
+            header = line[1:-1].strip()
+            section = header.split(None, 1)[0].lower()
+            if section in ('include', 'includeif'):
+                raise ValueError('git config include indirection: %s:%d' % (config, number))
+            continue
+        if '=' not in line:
+            raise ValueError('invalid git config entry: %s:%d' % (config, number))
+        key, value = (part.strip() for part in line.split('=', 1))
+        yield section, key.lower(), value
+
+
+def _validate_git_metadata(source_root, label):
+    """Require a self-contained, non-linked Git metadata directory."""
+    source_root = Path(source_root)
+    git_dir = source_root / '.git'
+    if git_dir.is_symlink() or not git_dir.is_dir():
+        raise ValueError('%s requires a self-contained .git directory' % label)
+
+    # A symlink anywhere below .git can redirect object, config, or hook reads
+    # outside the sole /src bind.  lstat-based walking also catches broken links.
+    for directory, subdirectories, files in os.walk(git_dir, followlinks=False):
+        for name in [*subdirectories, *files]:
+            entry = Path(directory) / name
+            if entry.is_symlink():
+                raise ValueError('%s .git metadata symlink: %s' % (label, entry))
+
+    if (git_dir / 'commondir').exists():
+        raise ValueError('%s .git commondir indirection' % label)
+    for alternate in (git_dir / 'objects' / 'info' / 'alternates',
+                      git_dir / 'objects' / 'info' / 'http-alternates'):
+        if alternate.exists():
+            raise ValueError('%s .git alternates indirection' % label)
+
+    config = git_dir / 'config'
+    if config.is_symlink() or not config.is_file():
+        raise ValueError('%s .git config is not a regular file' % label)
+    for section, key, value in _git_config_entries(config):
+        if section in ('include', 'includeif'):
+            raise ValueError('%s .git config include indirection' % label)
+        if (section == 'core' and key in ('hooksPath'.lower(), 'fsmonitor')) or \
+                (section == 'core' and key in ('excludesfile', 'attributesfile')):
+            raise ValueError('%s .git config metadata indirection: core.%s' % (label, key))
+        if section == 'core' and key == 'worktree' and value:
+            candidate = Path(value).expanduser()
+            if not candidate.is_absolute():
+                candidate = git_dir / candidate
+            candidate = candidate.resolve(strict=False)
+            root = source_root.resolve(strict=True)
+            if candidate != root and root not in candidate.parents:
+                raise ValueError('%s external core.worktree' % label)
+
+
+def validate_git_roots(source_root):
+    """Validate both repositories before any lease or container is created."""
+    _validate_git_metadata(source_root, 'source_root')
+    _validate_git_metadata(Path(source_root) / 'ihk', 'source_root/ihk')
+
+
 def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30):
     observed = {'host_free': shutil.disk_usage(host).free,
                 'scratch_free': shutil.disk_usage(scratch).free}
@@ -345,6 +411,7 @@ class BuildOwner:
             p = Path(r[key])
             if not p.is_absolute() or p.is_symlink() or not p.is_dir() or ',' in str(p):
                 raise ValueError('invalid root: ' + key)
+        validate_git_roots(r['source_root'])
         roots_disjoint([r[k] for k in ('source_root', 'assets_root', 'output_root', 'evidence_root')])
         if any(any(Path(r[k]).iterdir()) for k in ('output_root', 'evidence_root')):
             raise ValueError('fresh output/evidence roots required')

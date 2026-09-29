@@ -668,6 +668,29 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                         source.replace(needle, replacement, 1), self.contract
                     )
 
+    def test_provider_detach_current_import_and_multiline_body_are_accepted(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            "use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};",
+            source,
+        )
+        detach_body = lifecycle._active_function_body(
+            source,
+            lifecycle._mask_rust_comments_and_literals(source),
+            'pub extern "C" fn ihk_smp_provider_detach_v2(',
+            "IHK v2 detach",
+        )
+        for fragment in (
+            "let snapshot = IHK_DEVICE_REGISTRY\n        .snapshot(handle)",
+            "if snapshot.provider_references != 0 || snapshot.os_references != 0",
+            "exit();\n    unregister\n        .commit()",
+            "IHK_SMP_PROVIDER_EXIT_V2\n        .compare_exchange(",
+        ):
+            self.assertIn(fragment, detach_body)
+        lifecycle._validate_rust_source(source, self.contract)
+
     def test_provider_detach_comment_and_string_decoys_do_not_satisfy_snapshot(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(
             encoding="utf-8"

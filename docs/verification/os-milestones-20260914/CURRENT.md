@@ -5555,3 +5555,55 @@ Lifecycle full-suite closure remains separately blocked on semantic review of
 the stale provider/source contract. Formal counters remain 0/273, 2/4,
 6/130, 350/10,000 and 0/7; four diagnostic guest apps and zero successful
 current-candidate builds remain unchanged.
+
+Continuation checkpoint 63, 2026-09-28: shutdown joined all child lanes and
+preserves a source-only bounded correction plus its independent BLOCK. The new
+standalone-metadata helper transactionally replaces linked main/IHK Git
+metadata, the owner rejects external Git indirection before lease acquisition,
+and the existing six-mount boundary is unchanged. The first local regression
+failed because reduced metadata omitted a tracked symlink blob; that original
+failure is retained at
+`evidence/stability-native-exact-standalone-metadata-correction-failure-20260928-1.log.gz`
+(SHA-256 `7a0f4775...bf2f0`). The one bounded correction installs the exact indexed
+symlink blobs. A combined 51-test run then PASSed the metadata helper, owner,
+image-preparation and three focused lifecycle checks; its retained log is
+`evidence/stability-native-exact-standalone-metadata-tests-20260928-1.log.gz`
+(SHA-256 `e0c567eb...e34e`). No Docker, build or guest ran.
+
+Independent review nevertheless BLOCKs both actual candidate conversion and
+attempt-2 eligibility. The unchanged exact workflow runs
+`scripts/x86_64_shared_abi.py --check`, which requires `git show` access to
+historical main commit `f2eb735212e6ab0494e638497e80d9ae78b2848e` and four
+regular blobs: `CMakeLists.txt`, `kernel/include/syscall.h`,
+`executer/include/uprotocol.h`, and `executer/kernel/mcctrl/mcctrl.h`. The
+reviewed reduced metadata contains the current commit/tree/index and symlink
+blobs but not that historical closure. Its relocation regression therefore
+does not cover every real workflow consumer. The complete additive record is
+`stability-native-exact-standalone-metadata-wip-20260928-1.json`. Preserve the
+failed attempt-1 container and archive unchanged; the actual d094 candidate was
+not converted.
+
+The disjoint lifecycle lane adds an explicit positive regression for the
+unchanged `{SharePolicy, IHK_DEVICE_REGISTRY}` import and multiline detach
+ordering. Five focused tests pass. No Rust production source changed, and the
+complete lifecycle suites remain fail-closed on separately stale source and
+contract identities; this earns no runtime or gate credit.
+
+Shutdown process identities remain launcher wrapper PID 3399308/starttime
+83682487, worker PID 3399313/starttime 83682494 and app-server PID
+3399317/starttime 83682500. No child agent, heavy build, guest, QEMU or mcexec
+operation is active. Host free space is about 24 GiB, scratch free space about
+21 GiB and MemAvailable about 28.3 GiB; the configured floors still pass, but
+must be remeasured before heavy work.
+
+Next executable task after a subsequent launcher continuation: escalate the
+second correction to an expert, inventory every Git consumer actually invoked
+by the exact offline workflow, and extend the self-contained metadata contract
+with the exact hash-checked historical main commit/tree/blob closure. Add a
+real regression proving those historical reads while original object stores
+are unavailable, then obtain independent review. Only a PASS may authorize
+conversion of the actual candidate and a fresh attempt-2 request with new
+backup, evidence, output and lease paths. Do not repeat the current correction
+unchanged. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
+diagnostic guest apps and zero successful current-candidate builds remain
+unchanged.

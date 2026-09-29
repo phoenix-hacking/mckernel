@@ -242,6 +242,11 @@ class OwnerTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         for directory in ('src', 'assets', 'out', 'ev'):
             (self.root / directory).mkdir()
+        # The owner admits only standalone repositories; keep the ordinary
+        # fixture representative of the checked-in source layout.
+        for git_root in (self.root / 'src' / '.git', self.root / 'src' / 'ihk' / '.git'):
+            git_root.mkdir(parents=True)
+            (git_root / 'config').write_text('[core]\n\trepositoryformatversion = 0\n')
         self.request = {'candidate_sha': 'a' * 40, 'image_id': IMAGE, 'timeout': 20,
                         'source_root': str(self.root / 'src'), 'assets_root': str(self.root / 'assets'),
                         'output_root': str(self.root / 'out'), 'evidence_root': str(self.root / 'ev'),
@@ -393,6 +398,64 @@ class OwnerTests(unittest.TestCase):
             changed = dict(self.request, **{key: value})
             with self.subTest(key=key), self.assertRaises(ValueError):
                 owner.BuildOwner(changed).validate()
+
+    def test_standalone_git_directories_are_admitted(self):
+        owner.BuildOwner(self.request).validate()
+
+    def test_main_and_ihk_gitfiles_are_rejected_before_lease(self):
+        for relative in ('.git', 'ihk/.git'):
+            with self.subTest(relative=relative):
+                git_dir = Path(self.request['source_root']) / relative
+                config = git_dir / 'config'
+                config.unlink()
+                git_dir.rmdir()
+                git_dir.write_text('gitdir: /outside/worktree/.git\n')
+                with self.assertRaisesRegex(ValueError, 'self-contained'):
+                    owner.BuildOwner(self.request).validate()
+                git_dir.unlink()
+                git_dir.mkdir()
+                config = git_dir / 'config'
+                config.write_text('[core]\n\trepositoryformatversion = 0\n')
+
+    def test_git_external_metadata_indirections_are_rejected(self):
+        git_dir = Path(self.request['source_root']) / '.git'
+        cases = [
+            ('commondir', 'gitdir: /outside/common\n'),
+            ('objects/info/alternates', '/outside/objects\n'),
+            ('config', '[include]\n\tpath = /outside/config\n'),
+            ('config', '[core]\n\tworktree = /outside/worktree\n'),
+            ('config', '[core]\n\thooksPath = /outside/hooks\n'),
+            ('config', '[core]\n\tfsmonitor = /outside/fsmonitor\n'),
+        ]
+        for relative, contents in cases:
+            with self.subTest(relative=relative, contents=contents):
+                target = git_dir / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(contents)
+                with self.assertRaises(ValueError):
+                    owner.BuildOwner(self.request).validate()
+                target.unlink()
+
+    def test_git_metadata_symlink_is_rejected(self):
+        git_dir = Path(self.request['source_root']) / '.git'
+        target = self.root / 'outside-metadata'
+        target.write_text('not metadata')
+        link = git_dir / 'objects' / 'info' / 'link'
+        link.parent.mkdir(parents=True, exist_ok=True)
+        link.symlink_to(target)
+        with self.assertRaisesRegex(ValueError, 'metadata symlink'):
+            owner.BuildOwner(self.request).validate()
+
+    def test_git_admission_does_not_add_metadata_mount(self):
+        fake = FakeDocker(self.request)
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'PASS', result)
+        create = next(command for command in fake.commands if command[0] == 'create')
+        mounts = [create[index + 1] for index, value in enumerate(create) if value == '--mount']
+        self.assertEqual(len(mounts), 6)
+        self.assertEqual(sum(',dst=/src' in mount for mount in mounts), 1)
+        self.assertFalse(any('/.git' in mount or 'git' in mount.lower() and '/src' not in mount
+                             for mount in mounts))
 
     def test_real_and_effective_root_are_rejected(self):
         for real, effective in ((0, 1000), (1000, 0)):
