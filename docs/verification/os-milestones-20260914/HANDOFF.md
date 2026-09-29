@@ -904,3 +904,17 @@ identities, rc 0, retired state and empty final censuses. The current worktree
 removes the invalid release JSON and restores DRAFT. Commit/push/fetch it as the
 new template, then regenerate the exact two-path release and obtain separate
 execution review before sudo. No retirement/build/guest/application credit.
+
+Checkpoint 143 supersedes checkpoint 138's retirement state. Corrected fetched
+release `431df62c...2f35c` passed all 9,011-object admission, independent
+execution review and its single `sudo -A` invocation. Independent runtime review
+PASSes complete removal of the 10,509-member candidate and 86-member metadata
+backup with clean observer/Docker evidence and no surviving packet processes.
+Archive `stability-native-exact-retirement-runtime-67589154-20260929-1.tar.gz`
+is `840c1e95...c0d`; preserve immutable tombstone `ac3d1895...f34` unchanged.
+
+Next independently review preparation `704f6654-1` packet `7502c748...3a0a`,
+then run it once only if released and its nine target names remain absent. Review
+that result before one serialized heavy build and the smallest real memory app
+diagnostic. No formal acceptance counter changed; builds remain zero and
+applications remain 0/273.

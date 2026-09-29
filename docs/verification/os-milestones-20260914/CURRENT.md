@@ -7408,3 +7408,31 @@ JSON. Then run full fetched admission across all 9,011 objects and obtain fresh
 independent exact mechanical/execution review before any `sudo -A` retirement.
 Current-candidate builds remain zero, real guest applications this window remain
 zero, applications remain 0/273 and formal counters remain unchanged.
+
+Continuation checkpoint 143, 2026-09-29: exact fetched release
+`431df62c...2f35c` passed full admission across 9,011 objects and
+9,050,119,070 bytes in 35.15 seconds at 259,508 KiB max RSS and zero swap.
+Independent execution review 141 PASSed the design after fresh root traversal,
+stable 13-container privileged Docker reconciliation and an exact scratch-device
+immutable-flag probe. The reviewed `sudo -A` command ran once: wrapper
+3871615/89921496 and packet 3871619/89921507 exited 0 with empty stdout/stderr.
+
+Independent runtime review 143 PASSes retirement of candidate `67589154-1` and
+its metadata backup. The 21,202-record journal pairs every deletion for 10,509
+candidate and 86 backup members, removes both roots, and ends terminal PASS.
+Two observer rounds were clean, the complete Docker census stayed stable, all
+packet/observer/reader processes retired, and originals plus quarantines are
+absent. Live packet status `aaab70bd...ae97`, evidence `3004ef56...e24`, journal
+`0f87b33a...c1a` and claim `25357a94...44be` are archived completely at
+`evidence/stability-native-exact-retirement-runtime-67589154-20260929-1.tar.gz`
+SHA256 `840c1e95...c0d`. Preserve the immutable consumed-attempt tombstone at
+scratch device/inode 1831/31470, SHA256 `ac3d1895...f34`; it is not an active
+build owner and does not conflict with the distinct `704f6654-1` lease.
+
+Next obtain independent source/execution review of preparation packet
+`native-exact-candidate-preparation-704f6654-1.sh` SHA256 `7502c748...3a0a`,
+then reconcile its nine absent targets and run it once if released. Review its
+result before one serialized heavy current-candidate build, then run the
+smallest real memory application diagnostic. Current-candidate builds remain
+zero and real guest applications this window remain zero; applications remain
+0/273 and formal counters remain unchanged.
