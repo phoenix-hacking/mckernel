@@ -629,3 +629,23 @@ read-only privileged Docker `ps` capture. No build, lease, Docker mutation or
 guest is released. The live nested IHK `21a0d1e` is a clean local-only whitebox
 test change and is excluded by the pinned bare-store checkout. Preserve every
 failure; preparation remains non-runtime/non-acceptance evidence.
+
+Shutdown checkpoint 102 records one successful preparation-only invocation.
+Candidate `/dev/shm/mckernel-exact-candidate-67589154-1` remains clean at
+device/inode 26/25166; its standalone metadata backup remains at 26/35798. Exact
+manifest `c5204af6...6ef9` and build request `a2c37952...aa7c` validate, while
+the output/evidence roots remain empty and the build lease remains absent.
+Record `05972423...dae8` and 75-member archive `53003c8e...a084` preserve the
+run; every regular archive member matches its live original. No Docker client,
+build, guest or acceptance operation ran, and current-candidate build count is
+still zero.
+
+All child lanes are joined for launcher shutdown. Preserve launcher identities
+3399308/3399313/3399317 with starttimes 83682487/83682494/83682500 and preserve
+the exact candidate, backup, request, manifest, empty roots, receipts and logs.
+At the next authorized continuation, reconcile those identities and fresh
+resource/process/Docker/lease state, then obtain independent one-shot heavy-
+build execution review for request `a2c37952...aa7c`. Commit/push/fetch that
+release before any owner invocation; this shutdown checkpoint authorizes no
+build, retry, module, guest or acceptance work. The OS remains incomplete and
+the launcher pause is temporary.

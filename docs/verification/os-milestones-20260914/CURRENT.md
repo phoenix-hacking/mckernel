@@ -6712,3 +6712,45 @@ once as non-root. Direct helper execution, retry, rollback, claim removal or
 output reuse is prohibited. Preserve any failure for separate review. Formal
 counters, real guest application count and current-candidate build count remain
 unchanged.
+
+Shutdown checkpoint 102, 2026-09-29: the released preparation packet ran
+exactly once and PASSed without creating a Docker client, build lease, build or
+guest. Fresh preflight found all nine targets absent, zero active conflicts,
+zero build leases, zero running McKernel Docker owners and zero fresh Docker
+bindings. The resulting clean candidate is
+`/dev/shm/mckernel-exact-candidate-67589154-1` at device/inode 26/25166 mode
+0755, with standalone metadata backup device/inode 26/35798 mode 0755. It pins
+main source `675891545c881b8d625256ade56fe66ac69fe794` and IHK
+`3114d9e7101ad52030eb3effa849a5c108972a1f`.
+
+Manifest `c5204af6...6ef9` and request `a2c37952...aa7c` pass exact input
+verification and owner validation only. Main/IHK closure observations contain
+2,260/17 entries with hashes `6ce41301...8313` and `1538fd99...7f78`.
+Output and evidence roots are empty, the lease is absent, no preparation
+process survives, and inner/outer logs closed with RC 0 and final fsync PASS.
+The aggregate candidate + backup + prospective 12-GiB container requirement is
+21,965,742,080 bytes, below the 24-GiB budget; postflight retains
+24,512,708,608 host-free, 21,581,594,624 scratch-free, 7,516,635,136 tmpfs-free
+and 20,995,428,352 MemAvailable bytes.
+
+Checkpoint record
+`stability-native-exact-candidate-preparation-67589154-checkpoint-20260929-1.json`
+is `05972423...dae8`. Its 75-member archive
+`stability-native-exact-candidate-preparation-67589154-20260929-1.tar.gz` is
+`53003c8e...a084`; all 72 regular members match live originals. This is
+preparation infrastructure only: `runtime_acceptance=false`, no native build or
+guest ran, formal counters remain unchanged, and successful current-candidate
+builds remain zero.
+
+The launcher shutdown request arrived before heavy-build review or execution.
+All child lanes are joined. Wrapper PID 3399308/starttime 83682487, worker PID
+3399313/starttime 83682494 and app-server PID 3399317/starttime 83682500 remain
+live and were not disturbed. Preserve the candidate, metadata backup, manifest,
+request, empty output/evidence roots, all preparation logs and receipts, and
+every earlier failure/archive. On a subsequent authorized continuation, first
+reconcile these identities and fresh capacity/process/Docker/lease state, then
+obtain independent one-shot heavy-build execution review for exact request
+`a2c37952...aa7c`. Only after a fetched release may the non-root owner command
+run once. No build retry, guest, module or acceptance operation is released by
+this checkpoint. The OS goal remains incomplete and the launcher pause is
+temporary.
