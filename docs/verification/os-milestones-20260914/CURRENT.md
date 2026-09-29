@@ -6460,3 +6460,31 @@ create a distinct fail-closed recovery template that binds both failure records,
 both raw archives, both permanent claims/journals, unchanged old lease and roots,
 the v2 observer, and an explicit operational-assumption preflight. Independent
 source and execution reviews remain mandatory; no retry of either old packet.
+
+Shutdown checkpoint 93, 2026-09-28: the launcher stop request halted new
+dispatch before the recovery-v2 expert produced any workspace file. The lane
+was interrupted at a safe boundary and all other child lanes were already
+complete. No observer, recovery, sudo, Docker, build, module, guest or
+application command ran after the stop request. Repository HEAD and its tracked
+remote remain byte-identical at `4add99009253bf8341cfacdec9dc077a3a52bf7e`.
+Launcher wrapper PID 3399308/starttime 83682487, worker PID
+3399313/starttime 83682494 and app-server PID 3399317/starttime 83682500 remain
+live and are intentionally not disturbed during this temporary launcher pause.
+
+Preserve both failure records and raw archives, both permanent recovery claims
+and journals, the unchanged old lease `69ced239...47e3`, and both root:root 0700
+quarantines at device/inode 26/14117 and 26/24701. Both original paths remain
+absent. Do not retry either old cleanup/recovery packet, remove a claim or
+lease, roll back a quarantine, or start a build while this state remains.
+
+Next continuation must reconcile this exact pushed checkpoint and the three
+launcher identities, then create the still-missing recovery-v2 DRAFT as a new
+identity. It must bind both historical failure records/archives/claims/journals,
+the unchanged lease and quarantine identities, and reviewed observer v2
+`71fc9f54...3bfa`; enforce the explicit sealed-root/no-privileged-mutation
+operational assumption; and remain non-executable pending independent source
+review. Only after a pushed/fetched template, mechanical finalization and a
+separate execution review may a new packet run once. Formal counters remain
+0/273, 2/4, 6/130, 350/10,000 and 0/7; there are four historical diagnostic
+apps and zero successful current-candidate builds. The OS goal is incomplete,
+and this launcher pause is temporary.

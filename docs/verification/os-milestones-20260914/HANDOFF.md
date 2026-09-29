@@ -528,3 +528,14 @@ reference hits and revalidates exact tree membership. It explicitly does not
 claim atomic census; a new DRAFT packet must enforce the sealed-0700/no privileged
 or adversarial mutation assumption and bind both retained failures/claims. No
 live execution or deletion is authorized, and neither old packet may be retried.
+
+Shutdown checkpoint 93 records a clean scheduling stop at pushed HEAD
+`4add99009253bf8341cfacdec9dc077a3a52bf7e`. The recovery-v2 expert was
+interrupted before producing any workspace file; all other child lanes were
+already complete. No privileged or runtime operation followed the stop request.
+Preserve launcher wrapper/worker/app-server identities 3399308/3399313/3399317
+with starttimes 83682487/83682494/83682500, both sealed quarantines, the old
+lease, both failures and both permanent recovery claims/journals. On the next
+authorized continuation, create a new DRAFT recovery-v2 identity bound to all
+of that retained state and observer v2, then obtain independent source review;
+do not retry either old packet or begin a build. The OS remains incomplete.
