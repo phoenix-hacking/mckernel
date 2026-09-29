@@ -1361,3 +1361,24 @@ After their retirement, use the unchanged 4-CPU/12-GiB/no-swap/no-network build
 profile at `-j<=4`. Then build the smallest candidate and begin fresh diagnostic
 startup, memory, files, threads/futexes, signals and separate shutdown checks.
 Diagnostics remain non-accepting. Counters remain 6/130, 350/10000 and 0/273.
+
+Checkpoint 177 accepts the disk candidate, not a build. Copy-time inventories
+were exact; a correction retained/restored two Git indexes and then preserved
+a separate one-bit tmpfs gzip divergence rather than weakening equality. The
+fresh validation at fetched `080e31a7...c7c0` exits 0 with independent
+`PASS_VALIDATION`: disk candidate `1831:4194306`, backup `1831:4204970`, all
+10,751 rows/9,736 files, and exact PRE/POST SHA `842f4522...26ae` match the
+authenticated source inventory. No-lock BuildOwner validation passes; output,
+evidence, lease and children are empty/absent. Failure record
+`stability-native-exact-candidate-disk-copy-failures-76ae20b5-20260929-1.json`,
+success record and raw archive `ea1cdf88...ea35` preserve the result. The full
+corrupt 40,004,941-byte seal remains protected on scratch and is reconstructible
+from pinned Git plus the recorded one-byte delta.
+
+Next retire only tmpfs roots 26/58679 and 26/69465 through a fresh independently
+reviewed current-helper packet; never build or copy from them. Then bind the
+validated disk request and source-approved exact budget wrapper SHA
+`587bb769...d487`, remeasure resources, and release one pinned 4-CPU/12-GiB
+offline build at `-j<=4`. On build success start fresh non-accepting diagnostic
+startup, memory, files, threads/futexes, signals and shutdown checks. Formal
+counters remain 6/130, 350/10000 and 0/273.

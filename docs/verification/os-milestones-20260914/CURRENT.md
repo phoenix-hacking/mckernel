@@ -8436,3 +8436,38 @@ is not selected because no successful current exact-build peak supports it.
 Formal counters remain 6/130 and 350/10000; current-candidate builds and real
 guest applications remain zero, application acceptance remains 0/273, and the
 OS remains incomplete.
+
+Continuation checkpoint 177, 2026-09-29: disk-backed candidate preparation is
+accepted after preserving two failed validation attempts. The original copy
+was byte-exact at copy time, but post-copy Git commands refreshed two index
+files. The reviewed correction durably sealed their original bytes and restored
+them, then correctly failed when its unchanged equality oracle discovered a
+later one-bit divergence in one tmpfs gzip member. The divergent tmpfs byte is
+`0xbb` at zero-based offset 37,352,801; the authenticated disk/pinned-Git byte
+is `0x3b`. Tmpfs SHA `192f8fe1...b1c2` fails gzip CRC; disk/pinned Git SHA
+`dbe24f5b...b5100` passes. No hardware cause is claimed.
+
+Fresh fetched validation commit `080e31a708618d67510dd819d385c306673ec7c0`
+then ran once and exited 0 in 33.301 seconds with outer
+`LOG_FINAL_FSYNC=PASS`. Independent postflight returns `PASS_VALIDATION`:
+candidate `1831:4194306`, backup `1831:4204970`, all 10,751 entries and 9,736
+regular-file hashes match the authenticated copy-time inventory; exact PRE and
+POST both hash `842f4522...26ae`. No-lock BuildOwner validation passes, build
+output/evidence remain empty, the lease is absent and no child survives.
+The 40,004,941-byte corrupt source is sealed on scratch with SHA
+`192f8fe1...b1c2`; its one-byte delta from the pinned Git member makes it exactly
+reconstructible. Raw archive `stability-native-exact-candidate-disk-validation-success-raw-76ae20b5-20260929-1.tar.gz`
+SHA `ea1cdf88...ea35` retains 27 smaller records. The additive failure and
+success JSON records preserve the full identities, hashes, outer events and
+limitations.
+
+The tmpfs candidate and backup remain present and are forbidden as build/copy
+authority. Next create and independently review a fresh retirement packet for
+both identities 26/58679 and 26/69465, preserving the corrupt seal and using the
+current retirement helper. After `PASS_RETIREMENT`, execute the disk request
+through the independently source-approved launcher-budget wrapper
+`native_rust_exact_disk_build_wrapper.py` SHA `587bb769...d487`, under the
+unchanged 4-CPU/12-GiB/no-swap/no-network profile and `-j<=4`. A successful
+artifact build then unlocks fresh diagnostic startup, memory, files,
+threads/futexes, signals and shutdown runs. Diagnostics remain non-accepting;
+formal counters stay 6/130, 350/10000 and 0/273 applications.
