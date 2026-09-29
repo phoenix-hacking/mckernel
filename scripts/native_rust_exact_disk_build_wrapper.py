@@ -13,6 +13,8 @@ import json
 import os
 from pathlib import Path
 import types
+import hashlib
+import stat
 
 
 LAUNCHER_AGGREGATE_GIB = "16.2158"
@@ -46,11 +48,66 @@ def _owner_path(request, source_root):
     return path
 
 
+def _stable_file_bytes(root, path, expected, label):
+    """Read authenticated bytes through a descriptor-relative no-follow walk."""
+    root = Path(root); path = Path(path)
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        raise AdmissionError("%s escapes source_root" % label)
+    flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    fds = []
+    try:
+        fd = os.open(str(root), flags)
+        fds.append(fd)
+        for component in rel.parts[:-1]:
+            if component in ("", ".", ".."):
+                raise AdmissionError("invalid component in %s" % label)
+            nxt = os.open(component, flags, dir_fd=fd)
+            fds.append(nxt); fd = nxt
+        if not rel.parts or rel.parts[-1] in ("", ".", ".."):
+            raise AdmissionError("invalid file path for %s" % label)
+        leaf = os.open(rel.parts[-1], os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0), dir_fd=fd)
+        fds.append(leaf)
+        opened = os.fstat(leaf)
+        if not stat.S_ISREG(opened.st_mode) or opened.st_nlink != 1:
+            raise AdmissionError("%s is not a unique regular file" % label)
+        chunks = []
+        while True:
+            block = os.read(leaf, 1 << 20)
+            if not block: break
+            chunks.append(block)
+        data = b"".join(chunks)
+        after = os.fstat(leaf)
+        if (after.st_dev, after.st_ino, after.st_size, after.st_mode) != (opened.st_dev, opened.st_ino, opened.st_size, opened.st_mode):
+            raise AdmissionError("%s identity changed during read" % label)
+    except AdmissionError:
+        raise
+    except OSError as exc:
+        raise AdmissionError("cannot read %s: %s" % (label, exc))
+    finally:
+        for item in reversed(fds):
+            try: os.close(item)
+            except OSError: pass
+    if not isinstance(expected, str) or hashlib.sha256(data).hexdigest() != expected:
+        raise AdmissionError("%s hash mismatch" % label)
+    return data
+
+
 def _load_owner(request):
     source_root = Path(request.get("source_root", ""))
     if not source_root.is_absolute() or not source_root.is_dir() or source_root.is_symlink():
         raise AdmissionError("source_root is not a regular directory")
+    source_root = source_root.resolve(strict=True)
     path = _owner_path(request, source_root)
+    try:
+        path.relative_to(source_root)
+    except ValueError:
+        raise AdmissionError("owner_path escapes source_root")
+    owner_hash = request.get("owner_path_sha256")
+    if owner_hash is None:
+        raise AdmissionError("owner_path_sha256 is required before import")
+    owner_bytes = _stable_file_bytes(source_root, path, owner_hash, "owner_path")
     # Both modules are loaded under a private candidate package.  The owner
     # uses a relative provenance import; this prevents a preloaded generic
     # ``native_rust_exact_build_offline`` module from contaminating admission.
@@ -64,25 +121,33 @@ def _load_owner(request):
     try:
         provenance_name = package + ".native_rust_exact_build_offline"
         provenance_path = path.parent / "native_rust_exact_build_offline.py"
-        provenance_spec = importlib.util.spec_from_file_location(
-            provenance_name, str(provenance_path))
-        if provenance_spec is None or provenance_spec.loader is None:
-            raise AdmissionError("cannot load candidate provenance")
-        provenance = importlib.util.module_from_spec(provenance_spec)
+        try:
+            provenance_path.relative_to(source_root)
+        except ValueError:
+            raise AdmissionError("provenance path escapes source_root")
+        provenance_hash = request.get("provenance_path_sha256")
+        if provenance_hash is None:
+            raise AdmissionError("provenance_path_sha256 is required before import")
+        provenance_bytes = _stable_file_bytes(source_root, provenance_path, provenance_hash, "provenance_path")
+        driver_path = Path(request.get("driver_path", ""))
+        if driver_path != provenance_path:
+            raise AdmissionError("driver_path must equal authenticated provenance_path")
+        if request.get("driver_path_sha256") != provenance_hash:
+            raise AdmissionError("driver_path hash must equal provenance hash")
+        provenance = types.ModuleType(provenance_name)
+        provenance.__file__ = str(provenance_path)
+        provenance.__package__ = package
         sys.modules[provenance_name] = provenance
         loaded.append(provenance_name)
-        provenance_spec.loader.exec_module(provenance)
+        exec(compile(provenance_bytes, str(provenance_path), "exec"), provenance.__dict__)
         name = package + ".native_rust_exact_build_container_owner"
-        spec = importlib.util.spec_from_file_location(name, str(path))
-        if spec is None or spec.loader is None:
-            raise AdmissionError("cannot load BuildOwner")
-        module = importlib.util.module_from_spec(spec)
+        module = types.ModuleType(name)
+        module.__file__ = str(path)
+        module.__package__ = package
         sys.modules[name] = module
         loaded.append(name)
-        spec.loader.exec_module(module)
-        if Path(module.__file__).resolve(strict=True) != path.resolve(strict=True):
-            raise AdmissionError("loaded owner path differs from request")
-        if Path(module.provenance.__file__).resolve(strict=True) != provenance_path.resolve(strict=True):
+        exec(compile(owner_bytes, str(path), "exec"), module.__dict__)
+        if module.provenance.__file__ != str(provenance_path):
             raise AdmissionError("loaded provenance path differs from source_root")
         return module
     finally:
@@ -127,16 +192,44 @@ def _check_measurement(measurement, budget):
     backed = measurement.get("memory_allocation_memory_backed_bytes")
     if backed is None:
         backed = measurement.get("candidate_memory_effect", {}).get("bytes")
-    if backed != 0:
+    if not isinstance(backed, int) or isinstance(backed, bool) or backed != 0:
         raise AdmissionError("owner measurement has nonzero memory-backed bytes")
     rows = measurement.get("memory_allocation_roots", [])
     if not isinstance(rows, list) or not rows:
         raise AdmissionError("owner allocation measurement is missing")
-    if any(row.get("filesystem") == "tmpfs" for row in rows if isinstance(row, dict)):
-        raise AdmissionError("owner measurement includes a tmpfs source root")
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("filesystem"), str):
+            raise AdmissionError("owner allocation measurement row is malformed")
+        if row["filesystem"] not in ("ext4", "xfs"):
+            raise AdmissionError("owner measurement includes unsupported filesystem")
+        effect = row.get("memory_effect_bytes")
+        if not isinstance(effect, int) or isinstance(effect, bool) or effect != 0:
+            raise AdmissionError("owner allocation row has nonzero memory effect")
+        allocated = row.get("allocated_bytes")
+        if not isinstance(allocated, int) or isinstance(allocated, bool) or allocated < 0:
+            raise AdmissionError("owner allocation row total is malformed")
+        total = locals().get("row_total", 0) + allocated
+        row_total = total
     aggregate = measurement.get("aggregate_memory_required")
     if not isinstance(aggregate, int) or isinstance(aggregate, bool):
         raise AdmissionError("owner aggregate measurement is missing")
+    total_field = measurement.get("memory_allocation_total_bytes")
+    if not isinstance(total_field, int) or isinstance(total_field, bool):
+        raise AdmissionError("owner allocation total is missing")
+    if total_field != row_total:
+        raise AdmissionError("owner allocation total is inconsistent")
+    tmpfs_total = measurement.get("memory_allocation_tmpfs_bytes")
+    if not isinstance(tmpfs_total, int) or isinstance(tmpfs_total, bool) or tmpfs_total != 0:
+        raise AdmissionError("owner tmpfs total is nonzero or missing")
+    effect = measurement.get("candidate_memory_effect")
+    if not isinstance(effect, dict) or effect.get("classification") != "none":
+        raise AdmissionError("candidate memory effect classification is not none")
+    effect_bytes = effect.get("bytes")
+    if not isinstance(effect_bytes, int) or isinstance(effect_bytes, bool) or effect_bytes != 0:
+        raise AdmissionError("candidate memory effect is nonzero")
+    expected_aggregate = EXPECTED_LIMITS["Memory"] + effect_bytes
+    if aggregate != expected_aggregate:
+        raise AdmissionError("owner aggregate measurement is inconsistent")
     if aggregate < EXPECTED_LIMITS["Memory"]:
         raise AdmissionError("owner aggregate measurement is below pinned container memory")
     if aggregate > budget:

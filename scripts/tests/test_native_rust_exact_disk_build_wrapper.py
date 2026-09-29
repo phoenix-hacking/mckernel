@@ -6,6 +6,7 @@ import types
 import unittest
 from unittest import mock
 import sys
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -61,8 +62,11 @@ class WrapperTests(unittest.TestCase):
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
             "memory_allocation_memory_backed_bytes": 0,
-            "memory_allocation_roots": [{"filesystem": "ext4"}],
-            "aggregate_memory_required": wrapper.LAUNCHER_AGGREGATE_BYTES,
+            "memory_allocation_roots": [{"filesystem": "ext4", "memory_effect_bytes": 0, "allocated_bytes": 1}],
+            "memory_allocation_total_bytes": 1,
+            "memory_allocation_tmpfs_bytes": 0,
+            "candidate_memory_effect": {"classification": "none", "bytes": 0},
+            "aggregate_memory_required": wrapper.EXPECTED_LIMITS["Memory"],
         }
 
     def invoke(self, req, aggregate=wrapper.LAUNCHER_AGGREGATE_GIB):
@@ -148,10 +152,55 @@ class WrapperTests(unittest.TestCase):
             sentinel.__file__ = "/host/sentinel.py"
             with mock.patch.dict(sys.modules,
                                  {"native_rust_exact_build_offline": sentinel}):
-                loaded = wrapper._load_owner({"source_root": str(source)})
+                req = {"source_root": str(source),
+                       "driver_path": str(scripts / "native_rust_exact_build_offline.py"),
+                       "owner_path_sha256": hashlib.sha256((scripts / "native_rust_exact_build_container_owner.py").read_bytes()).hexdigest(),
+                       "driver_path_sha256": hashlib.sha256((scripts / "native_rust_exact_build_offline.py").read_bytes()).hexdigest(),
+                       "provenance_path_sha256": hashlib.sha256((scripts / "native_rust_exact_build_offline.py").read_bytes()).hexdigest()}
+                loaded = wrapper._load_owner(req)
             self.assertNotEqual(loaded.provenance, sentinel)
             self.assertEqual(Path(loaded.provenance.__file__).resolve(),
                              (scripts / "native_rust_exact_build_offline.py").resolve())
+
+    def test_owner_as_driver_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            source = Path(td); scripts = source / "scripts"; scripts.mkdir()
+            owner = scripts / "native_rust_exact_build_container_owner.py"
+            provenance = scripts / "native_rust_exact_build_offline.py"
+            shutil.copy(ROOT / "scripts" / owner.name, owner)
+            shutil.copy(ROOT / "scripts" / provenance.name, provenance)
+            owner_hash = hashlib.sha256(owner.read_bytes()).hexdigest()
+            prov_hash = hashlib.sha256(provenance.read_bytes()).hexdigest()
+            with self.assertRaisesRegex(wrapper.AdmissionError, "driver_path must equal"):
+                wrapper._load_owner({"source_root": str(source),
+                    "driver_path": str(owner), "driver_path_sha256": owner_hash,
+                    "owner_path_sha256": owner_hash, "provenance_path_sha256": prov_hash})
+
+    def test_untrusted_candidate_is_rejected_before_import(self):
+        with tempfile.TemporaryDirectory() as td:
+            source = Path(td); scripts = source / "scripts"; scripts.mkdir()
+            owner = scripts / "native_rust_exact_build_container_owner.py"
+            provenance = scripts / "native_rust_exact_build_offline.py"
+            owner.write_text("raise RuntimeError('sentinel executed')\n")
+            provenance.write_text("raise RuntimeError('provenance executed')\n")
+            with self.assertRaisesRegex(wrapper.AdmissionError, "owner_path hash mismatch"):
+                wrapper._load_owner({"source_root": str(source),
+                    "owner_path_sha256": "0" * 64,
+                    "provenance_path_sha256": "0" * 64})
+
+    def test_ramfs_and_inconsistent_rows_rejected(self):
+        FakeOwner.measurement["memory_allocation_roots"][0]["filesystem"] = "ramfs"
+        with self.assertRaises(wrapper.AdmissionError):
+            self.invoke(request)
+        FakeOwner.measurement["memory_allocation_roots"][0]["filesystem"] = "ext4"
+        FakeOwner.measurement["memory_allocation_roots"][0]["memory_effect_bytes"] = 1
+        with self.assertRaises(wrapper.AdmissionError):
+            self.invoke(request)
+
+    def test_missing_total_rejected(self):
+        del FakeOwner.measurement["memory_allocation_total_bytes"]
+        with self.assertRaises(wrapper.AdmissionError):
+            self.invoke(request)
 
 
 if __name__ == "__main__":
