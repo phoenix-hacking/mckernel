@@ -1224,3 +1224,26 @@ then independently release the exact owner command for request `9f1b1653...5fd8`
 under the pinned 4-CPU/12-GiB/no-network profile. The candidate includes the
 reviewed queue executable-root correction that addresses the consumed 704f
 phase-0 failure. Builds and real guest applications remain zero.
+
+Checkpoint 169 supersedes build routing. Both heavy releases for prepared
+candidate `f5d8d914-1` were BLOCKed before execution; never use them. Central
+phase temp-root repair at fetched `57133e95...8eb1` passed source review. The
+first isolated light run exposed two fixture defects, preserved in archive
+`f6c0c49a...2d0b1`; bounded corrections are now in fetched `66ced088...fe17`.
+
+Fresh isolated container `3c169e5c...5366` with pinned Rust 1.92 exited 0 under
+the same 2-CPU/2-GiB/no-network/read-only/noexec-`/tmp` profile. Four focused
+tests, 19 driver tests, the queue fixture, 84/85 consolidated Python tests and
+page allocator/page owner/mapping checks pass; the sole skip is the unchanged
+external Rocky-source audit. Final marker and empty temp root pass. Archive
+`1c3ec354...81f6` and record
+`stability-native-offline-exec-temp-root-light-success-66ced088-20260929-2.json`
+retain the result. Additive correction `80b31e0a...dcfa` fixes three copied
+member hashes in the immutable prior failure record; rereview PASSes.
+
+This is light infrastructure evidence only. Preserve obsolete candidate
+26/47678 and backup 26/58429 until a fresh reviewed retention capsule and
+separate one-shot retirement release complete. Never direct-delete, patch the
+candidate, or reuse blocked/historical packets. After verified retirement,
+prepare a wholly fresh candidate from the fetched corrected commit and seek a
+new heavy-build release. Builds and real guest applications remain zero.

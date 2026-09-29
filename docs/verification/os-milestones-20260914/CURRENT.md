@@ -8157,3 +8157,44 @@ wholly fresh candidate from the corrected fetched commit, and a new heavy-build
 request/release. Never patch the existing candidate in place or execute the
 blocked v1/v2 releases. The launcher pause is temporary and the goal must not be
 marked complete or resumed during shutdown.
+
+Continuation checkpoint 169, 2026-09-29: independent source review PASSed all
+three bounded fixture/test corrections at fetched commit `66ced088...fe17`.
+Fresh container `mckernel-offline-temp-66ced088-2`, identity
+`3c169e5c...5366`, used the same reviewed unprivileged profile: CPUs 2-3,
+2 GiB/no swap, 128 tasks, no network, read-only root/source, all capabilities
+dropped, no-new-privileges, uid/gid 1000, `/tmp` noexec and executable ext4
+`/evidence`. Exact image `0f8ad280...775d` remains retained. It exited 0 after
+30.56 seconds with no OOM or restart.
+
+Pinned Rust 1.92 ran four focused tests without skips, including the production
+`user_string` loader dependency and exact warning-clean allocator symbol probe.
+All 19 offline-driver tests and the queue fixture passed. The consolidated
+Python chain ran 85 tests: 84 passed and only the unchanged external Rocky source
+audit skipped. Compiled registry/ioctl/resource fixtures passed, followed by the
+page allocator, page owner and mapping checks. Final marker
+`EXACT_PHASE0_TEMP_ROOT_PASS` is present and the evidence build root is empty.
+Raw stdout `8a046650...7b10`, stderr `641ff4a5...755`, inspect
+`8d4bb3bc...6baa` and exit receipt `9a271f2a...86aa` are retained in 13-member
+archive `stability-native-offline-exec-temp-root-light-success-66ced088-20260929-2.tar.gz`
+SHA `1c3ec354...81f6`.
+
+The first independent postflight correctly BLOCKed three copied member hashes
+in checkpoint 168's failure JSON. The original record and archive remain exact
+and unchanged. Additive correction
+`stability-native-offline-exec-temp-root-light-failure-record-correction-57133e95-20260929-1.json`
+SHA `80b31e0a...dcfa` binds the original wrong values to direct archive-member
+hashes. Bounded rereview returned `PASS_LIGHT_VALIDATION`; no oracle was
+weakened. This accepts isolated phase-0 infrastructure only, not a full build,
+kernel runtime, application, production gate or language gate.
+
+Candidate `f5d8d914-1` at 26/47678 and metadata backup 26/58429 are now proven
+obsolete for the corrected build but remain intact. Their combined ~9.14-GiB
+tmpfs allocation must be retired only through fresh, reviewed retention and
+one-shot retirement packets; direct deletion and reuse of any blocked v1/v2 or
+historical 675/704 packet are forbidden. Next prepare and independently review
+a fresh two-root retention capsule, run it once, review reconstructibility, then
+separately release retirement. Only verified retirement unlocks a wholly fresh
+candidate from the fetched corrected commit and a new heavy-build release.
+Formal counters remain 6/130 and 350/10000, real guest applications this window
+remain zero, and application acceptance remains 0/273.
