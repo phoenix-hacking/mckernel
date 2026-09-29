@@ -666,3 +666,19 @@ terminal containers and evidence; do not retry or clean automatically. No
 existing build, guest, runtime, application or acceptance credit is granted.
 Success requires independent artifact/evidence review before a separately
 released `startup.argv-empty` current-candidate diagnostic.
+
+Checkpoint 104 records the consumed build attempt as FAIL before compilation.
+Phase 0 stopped on `ihk-native-queue-check`: the checker demands one file-wide
+`snapshot`, but production validly has a forwarding `SharedProducer` method and
+the target `SharedQueue` implementation; `try_enqueue` has the same shape.
+Record `2402d856...03e6` and 193-member archive `a6e2fff0...b46d` preserve both
+preflights, the complete one-shot run and every live regular member. Terminal
+container `decd7cf9...c6b9` remains retained, exited 1/non-OOM; owner/clients
+retired, lease is absent and output is empty. Never retry, clean or reuse it.
+
+Apply one bounded checker-only correction scoped to exact
+`impl SharedQueue<'mapping>`, preserving semantic body checks and adding allowed
+forwarder plus duplicate-target rejection. After independent source review,
+commit/push/fetch and prepare an entirely fresh candidate/request/namespace;
+the consumed release grants nothing further. Build count, apps and counters are
+unchanged.

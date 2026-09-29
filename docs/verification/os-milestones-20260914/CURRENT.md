@@ -6792,3 +6792,37 @@ failure. A successful build must receive independent artifact/evidence review
 before a separate current-candidate `startup.argv-empty` diagnostic release.
 That fixture expects exit 0, empty stderr and exact JSON stdout, and remains
 diagnostic rather than formal M04 acceptance.
+
+Continuation checkpoint 104, 2026-09-29: the single released `67589154-1`
+build attempt ran once and FAILed closed in phase 0 after 37 seconds, before
+compilation. The owner retired normally, the two Docker wait processes retired,
+the lease was released after proven retirement, and terminal container
+`decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9`
+remains retained, exited 1, non-OOM, under the exact reviewed profile. Output is
+empty. Never retry, clean or reuse this request, namespace or container.
+
+Preflight attempt 1 is permanently `FAIL_OBSERVER_ONLY`: this host rejected the
+known-incompatible trailing `--ww`, leaving an empty process census. It made no
+mutation. Fresh attempt 2 changed only that observer to trailing `ww` and PASSed
+all hashes, identities, empty targets, locks, leases, process/resource floors,
+11 exact Docker inspections and mount/owner exclusions. Receipts are
+`3c4af543...142d5` and `e76fd4e0...14749`.
+
+The new failure is exact:
+`ihk-native-queue-check: FAIL: Rust source must define fn snapshot exactly once`.
+Earlier phase-0 contracts passed through the IHK lifecycle check; compilation
+did not start. Read-only diagnosis finds valid forwarding and implementation
+methods named `snapshot` (and the same structure for `try_enqueue`), while the
+checker incorrectly applies uniqueness across the entire Rust file. The defect
+is the checker scope, not the production queue. One bounded correction may
+scope extraction to the exact `impl SharedQueue<'mapping>` block while retaining
+all body invariants and adding an allowed-wrapper positive plus duplicate-in-
+target-impl rejection. A fresh candidate is mandatory after review.
+
+Failure record `stability-native-exact-build-67589154-failure-20260929-1.json`
+is `2402d856...03e6`. Its 193-member raw archive
+`stability-native-exact-build-67589154-failure-raw-20260929-1.tar.gz` is
+`a6e2fff0...b46d`; all 180 regular members match live originals. Preserve the
+candidate, backup, both preflights, outer capture, request/manifest, complete
+owner/build evidence and terminal container. Successful current-candidate build
+count remains zero; no module, guest, diagnostic app or formal counter changed.
