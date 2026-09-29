@@ -343,3 +343,12 @@ exact manifest/request/receipt/observers. The 4,363,203-byte archive and its
 The candidate and backup remain untouched. After fetched verification, obtain
 independent deletion rereview; retain both terminal containers. This changes no
 runtime or acceptance count.
+
+Checkpoint 75 supersedes that cleanup hold. After a corrected privileged
+device/inode and filesystem-root observer passed independent rereview, only the
+two exact failed-80b tmpfs roots were removed. Both are absent and
+9,066,999,808 bytes were recovered; tmpfs now has 16,597,475,328 bytes free.
+The fetched capsule/inventory and both terminal containers remain preserved.
+See `stability-native-exact-failed-candidate-cleanup-20260928-1.json`. Do not
+prepare a fresh candidate until the active recursive-stage and unsafe-ledger
+source closure is independently accepted and fetched.

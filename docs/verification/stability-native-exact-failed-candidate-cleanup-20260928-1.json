@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.failed-candidate-cleanup-record.v1",
+  "recorded_at": "2026-09-28T20:18:00-07:00",
+  "status": "PASS_CLEANUP_ONLY",
+  "source_checkpoint": "3018375746269d23e1bba8b9b9f19259e26a8e09",
+  "deleted": [
+    {"path": "/dev/shm/mckernel-exact-candidate-80b8c492-1", "device": 26, "inode": 3088},
+    {"path": "/dev/shm/mckernel-exact-metadata-backup-80b8c492-1", "device": 26, "inode": 13660}
+  ],
+  "deletion_release": {
+    "review_result": "PASS",
+    "scope": "one-shot deletion of the two exact tmpfs roots only",
+    "capsule_checkpoint_fetched": true,
+    "capsule_sha256": "4f634ee1694584b5ee7c2ca4f9cb61c7ee79e14566c1fee8c33da3d80a409691",
+    "inventory_sha256": "30577bf628f52cc4bbabd8cd9c1539162f58d84b30dc5bf28b887cf89e486b40"
+  },
+  "pre_delete_snapshot": {
+    "path": "/home/holden/mckernel-work/scratch/failed-candidate-live-reference-snapshot-80b8c492-20260928-4.json",
+    "sha256": "384d2d475e1c0ad70a9f319637adb8f941081a4e4178f4778f8949cc99c732d5",
+    "processes": 274,
+    "mount_namespaces": 19,
+    "permission_denials": 0,
+    "target_references": 0,
+    "candidate_tree_inodes": 10400,
+    "backup_tree_inodes": 87
+  },
+  "preserved_observer_failures": [
+    {"attempt": 1, "failure": "Python 3.9 lacks str.removesuffix; observer exited before a result"},
+    {"attempt": 2, "sha256": "7efc898db128f683f91107311aad354f06ce5a3f5c2b7ecb237fc88cfb8aefaa", "failure": "host-path matching could miss namespace bind aliases"},
+    {"attempt": 3, "sha256": "4639ba37a8804b856a4c0f18dba729bb680f6d17f863fd00ef6fdfc02047d738", "result": "corrected observer passed independent review"}
+  ],
+  "result": {
+    "sha256": "393790c7baabbb9ac4c3efd0d6fc6b540a114596de038f23b2af062b0c64febc",
+    "dev_shm_before_available_bytes": 7530475520,
+    "dev_shm_after_available_bytes": 16597475328,
+    "dev_shm_recovered_bytes": 9066999808,
+    "host_after_available_bytes": 24841457664,
+    "scratch_after_available_bytes": 21609967616,
+    "paths_absent": true,
+    "free_space_floors_preserved": true
+  },
+  "evidence_archive": {
+    "path": "docs/verification/evidence/stability-native-exact-failed-candidate-cleanup-80b8c492-20260928-1.tar.gz",
+    "bytes": 7460,
+    "sha256": "03f2929b4d5a7292a7f11e589581a14acb6f1111eb9d8338c4dee32f6e3c83f2"
+  },
+  "terminal_containers": [
+    {"id": "c6917efd594a3ec0311371a4e9e5c8d5f9a598b25687a3820e8f56138f9f0772", "status": "exited", "pid": 0, "exit_code": 1, "oom_killed": false, "retained": true},
+    {"id": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0", "status": "exited", "pid": 0, "exit_code": 1, "oom_killed": false, "retained": true}
+  ],
+  "restoration": "Restore tracked bytes from main commit 80b8c492be5fdaf227c5559f637a4473de6b7d0a and IHK commit 3114d9e7101ad52030eb3effa849a5c108972a1f with recorded modes/symlinks, then overlay the fetched retention capsule according to its inventory. Historical execution requires separate release.",
+  "acceptance_credit": false
+}

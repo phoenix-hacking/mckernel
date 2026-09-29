@@ -4947,29 +4947,6 @@ that backend path is built and separately released. Formal counters remain
 points and 0/7 language gates; the four prior diagnostic apps and zero
 current-candidate builds remain unchanged.
 
-Continuation checkpoint 74, 2026-09-28: the failed 80b candidate remains
-untouched, but its deletion prerequisite is now durably captured. Independent
-review verified zero mismatches across 7,649 main blobs, 1,296 pinned-IHK blobs
-and all 8,945 canonical-manifest entries. It found two candidate-only Python
-bytecode files plus execution-specific installed/backup Git metadata that were
-not present in the earlier phase-0 archive, so cleanup correctly remained
-blocked.
-
-A new 4,363,203-byte retention capsule records both installed `.git` trees,
-both metadata backups, the two unique bytecode files, canonical manifest,
-request, metadata receipt and both observers. Its 372,489-byte inventory binds
-924 entries by path, type, mode, owner, size, time, link target and regular-file
-SHA-256. Direct archive verification PASSes all 925 members. Exact hashes and
-restoration mapping are in
-`stability-native-exact-failed-candidate-retention-capsule-20260928-1.json`.
-
-Next fetch-verify this checkpoint and obtain independent cleanup rereview. Do
-not delete either tmpfs root until that review passes exact identity, no-new-file,
-no-mount, no-lease and no-live-reference checks. Both terminal failed containers
-must remain. The capsule is preservation infrastructure only: no build, guest,
-application or acceptance counter changes.
-
-
 Continuation checkpoint 53, 2026-09-28: the launcher requested shutdown, so
 no new work was dispatched and all eight child lanes were joined. The bounded
 native v5 shutdown-dispatch candidate is preserved at exact source SHA-256
@@ -5970,3 +5947,37 @@ active shutdown identities. The launcher pause is temporary; the OS goal is not
 complete and was not resumed. Formal counters remain 0/273, 2/4, 6/130,
 350/10,000 and 0/7; four diagnostic guest apps and zero successful
 current-candidate builds remain unchanged.
+
+Continuation checkpoint 74, 2026-09-28: the failed 80b candidate remained
+untouched while its deletion prerequisite was durably captured. Independent
+review verified zero mismatches across 7,649 main blobs, 1,296 pinned-IHK blobs
+and all 8,945 canonical-manifest entries. A 4,363,203-byte retention capsule
+records both installed `.git` trees, both metadata backups, two unique bytecode
+files, canonical manifest, request, metadata receipt and both observers. Its
+372,489-byte inventory binds 924 entries; all 925 archive members verify. See
+`stability-native-exact-failed-candidate-retention-capsule-20260928-1.json`.
+
+Continuation checkpoint 75, 2026-09-28: the independently released cleanup of
+the two failed-80b tmpfs roots PASSes. Two observer attempts remain preserved:
+the first used a Python-3.9-incompatible string method, and the next matched host
+path strings and could miss namespace bind aliases. The corrected observer binds
+all 10,400 candidate and 87 backup inode identities, scans cwd/root/exe/fd and
+mapped-file identities, and compares mount roots by device/filesystem coordinate.
+Its exact pre-delete snapshot covered 274 processes and 19 mount namespaces with
+zero permission denials and zero target references.
+
+Only `/dev/shm/mckernel-exact-candidate-80b8c492-1` (device/inode 26/3088) and
+`/dev/shm/mckernel-exact-metadata-backup-80b8c492-1` (26/13660) were removed.
+Both are absent. The operation recovered 9,066,999,808 tmpfs bytes, leaving
+16,597,475,328 bytes available; host and scratch retain 24,841,457,664 and
+21,609,967,616 bytes. The fetched capsule and inventory hashes remain unchanged.
+Both exact terminal failed containers remain exited, PID 0, exit 1 and non-OOM.
+
+Complete observer sources, snapshots and the cleanup result are retained in
+`evidence/stability-native-exact-failed-candidate-cleanup-80b8c492-20260928-1.tar.gz`;
+the additive record is
+`stability-native-exact-failed-candidate-cleanup-20260928-1.json`. Restoration is
+from the exact main/IHK commits, recorded modes/symlinks and fetched capsule.
+This cleanup enables a fresh candidate but grants no build, guest or acceptance
+credit. Next finish and review the active recursive-stage/unsafe-ledger source
+closure before preparing that fresh candidate.
