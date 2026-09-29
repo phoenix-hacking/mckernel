@@ -18,7 +18,7 @@ class Tests(unittest.TestCase):
   return answer
  def release(self,roots):
   rows=[]
-  for i,r in enumerate(roots): rows.append(dict(path=str(r),parent=M.root_identity(r.parent),root=M.root_identity(r),quarantine_name='.q%d'%i,quarantine_mode=0o700,members=M.inventory_root(r)['members']))
+  for i,r in enumerate(roots): rows.append(dict(path=str(r),parent=M.root_identity(r.parent),root=M.root_identity(r),quarantine_name='.q%d'%i,quarantine_mode=0o700,quarantine_uid=os.getuid(),quarantine_gid=os.getgid(),members=M.inventory_root(r)['members']))
   base=roots[0].parent;archive=M._archive_module();entries=[]
   for label,row in zip(('candidate','metadata-backup'),rows):
    for member in row['members']:
@@ -34,7 +34,7 @@ class Tests(unittest.TestCase):
  def observer(self,r,mutate=None):
   def run(qs,members):
    rounds=[dict(round=i,target_references=[],permission_denials=[],tree_revalidation_failures=[],unscanned_final_identities=[],unresolved_churn=[],closure_nonconvergent=False,complete_mount_proofs=True,clean=True) for i in (1,2)]
-   now=datetime.now(timezone.utc).isoformat().replace('+00:00','Z');x=dict(schema='mckernel.read-only-live-reference-snapshot.v7',status='PASS',scan_complete=True,failure=None,observer_sha256=r['observer']['observer_sha256'],boot_id=r['observer']['boot_id'],observer_pid=os.getpid(),observer_starttime='1',started_at_utc=now,ended_at_utc=now,persistent_tree_revalidation_failures=[],tree_observation_transients=[],roots=[dict(path=q,mode='0700',device_number=os.stat(q).st_dev,inode=os.stat(q).st_ino,tree_member_identities=m) for q,m in zip(qs,members)],rounds=rounds)
+   now=datetime.now(timezone.utc).isoformat().replace('+00:00','Z');x=dict(schema='mckernel.read-only-live-reference-snapshot.v7',status='PASS',scan_complete=True,failure=None,observer_sha256=r['observer']['observer_sha256'],boot_id=r['observer']['boot_id'],observer_pid=os.getpid(),observer_starttime='1',started_at_utc=now,ended_at_utc=now,persistent_tree_revalidation_failures=[],tree_observation_transients=[],roots=[dict(path=q,mode='0700',device_number=os.stat(q).st_dev,inode=os.stat(q).st_ino,uid=os.stat(q).st_uid,gid=os.stat(q).st_gid,tree_member_identities=m) for q,m in zip(qs,members)],rounds=rounds)
    if mutate:mutate(x)
    return x
   return run
@@ -147,4 +147,46 @@ class Tests(unittest.TestCase):
     with self.assertRaises(M.RetirementError):self.execute(roots,r)
    finally:M.Journal.write=old
    self.assertTrue(replaced);self.assertIn('terminal-failure',(Path(t)/'journal').read_text())
+ def test_quarantine_ownership_transition_is_explicit_and_revalidated(self):
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots);self.assertEqual(self.execute(roots,r)['status'],'PASS')
+   self.assertEqual(os.getuid(),r['roots'][0]['quarantine_uid']);self.assertEqual(os.getgid(),r['roots'][0]['quarantine_gid'])
+   rows=[json.loads(line) for line in (Path(t)/'journal').read_text().splitlines()]
+   before=[row for row in rows if row['phase']=='quarantine-before'][0];after=[row for row in rows if row['phase']=='quarantine-after'][0]
+   target=dict(r['roots'][0]['root'],uid=r['roots'][0]['quarantine_uid'],gid=r['roots'][0]['quarantine_gid'],mode=0o700)
+   self.assertEqual(before['released_root'],r['roots'][0]['root']);self.assertEqual(before['ownership_transition_target'],target)
+   self.assertEqual(after['released_root'],r['roots'][0]['root']);self.assertEqual(after['ownership_transition_target'],target);self.assertEqual(after['observed_quarantine_root'],target)
+ def test_transition_failure_or_changed_identity_records_no_after_and_cannot_retry(self):
+  for name in ('fchown','fchmod'):
+   with self.subTest(name=name),tempfile.TemporaryDirectory() as t:
+    roots=self.trees(t);r=self.release(roots);old=getattr(M.os,name)
+    if name=='fchown':M.os.fchown=lambda *a: (_ for _ in ()).throw(OSError('injected fchown'))
+    else:M.os.fchmod=lambda fd,mode: old(fd,0o711)
+    try:
+     with self.assertRaises((OSError,M.RetirementError)):self.execute(roots,r)
+    finally:setattr(M.os,name,old)
+    rows=[json.loads(line) for line in (Path(t)/'journal').read_text().splitlines()]
+    self.assertEqual(len([row for row in rows if row['phase']=='quarantine-before']),1);self.assertFalse([row for row in rows if row['phase']=='quarantine-after'])
+    self.assertIn('terminal-failure',[row['phase'] for row in rows]);self.assertTrue((Path(t)/'.q0').exists())
+    with self.assertRaises(Exception):self.execute(roots,r)
+ def test_missing_or_changed_quarantine_owner_binding_rejects(self):
+  for change in (lambda row: row.pop('quarantine_uid'),lambda row: row.update(quarantine_gid=-1)):
+   with self.subTest(change=change),tempfile.TemporaryDirectory() as t:
+    roots=self.trees(t);r=self.release(roots);change(r['roots'][0])
+    with self.assertRaises(M.RetirementError):self.execute(roots,r)
+ def test_post_transition_owner_change_and_observer_owner_mismatch_reject(self):
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots)
+   def mutate(v):
+    v['roots'][0]['uid'] += 1
+   with self.assertRaises(M.RetirementError):self.execute(roots,r,self.observer(r,mutate))
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots)
+   def mutate(v): v['roots'][0].pop('uid')
+   with self.assertRaises(M.RetirementError):self.execute(roots,r,self.observer(r,mutate))
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots)
+   def mutate(v):
+    root=v['roots'][0];member=next(x for x in root['tree_member_identities'] if x[:2]==[root['device_number'],root['inode']]);member[2]+=1
+   with self.assertRaises(M.RetirementError):self.execute(roots,r,self.observer(r,mutate))
 if __name__=='__main__':unittest.main()

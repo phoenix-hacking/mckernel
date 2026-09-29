@@ -802,3 +802,18 @@ fetched checkpoint before designing the separate privileged retirement release. 
 after independently reviewed retirement and measured capacity recovery may
 fresh preparation `704f6654-1` proceed toward a new heavy build. The OS is
 incomplete and the launcher pause is temporary.
+
+Checkpoint 113: expert-corrected retirement helper/observer boundary independently
+PASSes source review. Exact hashes are helper `2ba70074...8964e`, helper test
+`e7630fa2...20981`, current observer `3562b1d3...53666` and observer test
+`b5f48e7b...922e4`; Python 3.8/3.9 tests and observer self-tests pass. It now
+durably journals and revalidates the root:root/0700 transition and carries
+uid/gid/type/mode through full-tree v7 revalidation. See
+`stability-native-exact-retirement-owner-observer-source-success-20260929-1.json`.
+
+This is source-only. The integration packet's initial, bounded-correction and
+first expert candidates remain rejected; latest `22f19e81...80eb` has five
+retained blockers covering schema compatibility, bounded Git I/O, procfs
+completeness, child retirement and held operational exclusion. A single larger
+coherent correction is active. Obtain independent source/execution review and a
+fetched release before any sudo, rename or deletion. Counts remain unchanged.

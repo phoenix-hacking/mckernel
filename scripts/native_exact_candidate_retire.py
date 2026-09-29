@@ -187,6 +187,8 @@ def release_roots(release,roots):
         authority=manifest_roots[label]
         if not isinstance(r,dict) or r.get('path')!=p or authority.get('path')!=p or not isinstance(authority.get('identity'),dict):fail('released/manifest root path')
         safe_name(r.get('quarantine_name'));parent=os.path.dirname(p)
+        for ownership in ('quarantine_uid','quarantine_gid'):
+            if not isinstance(r.get(ownership),int) or r[ownership] < 0: fail('quarantine ownership binding')
         if os.path.basename(p)==r['quarantine_name']:fail('nonfresh quarantine')
         root_authority=authority['identity']
         if any(r.get('root',{}).get(ours)!=root_authority.get(theirs) for ours,theirs in (('device','dev'),('inode','inode'),('uid','uid'),('gid','gid'),('mode','mode'))):fail('released root differs from planner')
@@ -209,6 +211,15 @@ def rename_noreplace(parent,old,new):
     fn.argtypes=(ctypes.c_int,ctypes.c_char_p,ctypes.c_int,ctypes.c_char_p,ctypes.c_uint);fn.restype=ctypes.c_int
     if fn(parent,os.fsencode(old),parent,os.fsencode(new),RENAME_NOREPLACE)!=0:
         e=ctypes.get_errno();raise OSError(e,os.strerror(e),new)
+def quarantine_target(record):
+    """The exact descriptor-visible identity required after the transition."""
+    if record.get('quarantine_mode') is None:return dict(record['root'])
+    if record['quarantine_mode']!=0o700:fail('unreleased quarantine chmod')
+    return dict(record['root'],uid=record['quarantine_uid'],gid=record['quarantine_gid'],mode=0o700)
+def observer_member_identity(row):
+    kinds={'directory':stat.S_IFDIR,'file':stat.S_IFREG,'symlink':stat.S_IFLNK}
+    try:return [row['device'],row['inode'],row['uid'],row['gid'],kinds[row['kind']],row['mode']]
+    except (KeyError,TypeError):fail('released observer member identity')
 def quarantine(item,journal):
     r=item['record'];fd=os.open(item['parent'],flags(True))
     try:
@@ -216,20 +227,24 @@ def quarantine(item,journal):
         same(identity(os.stat(old,dir_fd=fd,follow_symlinks=False)),r['root'],True)
         try:os.stat(new,dir_fd=fd,follow_symlinks=False);fail('quarantine collision')
         except FileNotFoundError:pass
-        journal.write('quarantine-before',path=item['path'],quarantine=item['quarantine']);rename_noreplace(fd,old,new);fsync_dir(fd)
+        target=quarantine_target(r)
+        journal.write('quarantine-before',path=item['path'],quarantine=item['quarantine'],released_root=r['root'],ownership_transition_target=target);rename_noreplace(fd,old,new);fsync_dir(fd)
         same(identity(os.stat(new,dir_fd=fd,follow_symlinks=False)),r['root'],True)
         if r.get('quarantine_mode') is not None:
-            if r['quarantine_mode']!=0o700:fail('unreleased quarantine chmod')
             rootfd=open_checked(fd,new,r['root'])
             try:
+                os.fchown(rootfd,r['quarantine_uid'],r['quarantine_gid'])
+                same(identity(os.fstat(rootfd)),dict(r['root'],uid=r['quarantine_uid'],gid=r['quarantine_gid']),True)
                 os.fchmod(rootfd,0o700);os.fsync(rootfd)
             finally:os.close(rootfd)
             fsync_dir(fd)
-            item['quarantine_root']=dict(r['root'],mode=0o700)
+            rootfd=open_checked(fd,new,target)
+            try: item['quarantine_root']=identity(os.fstat(rootfd))
+            finally: os.close(rootfd)
             same(identity(os.stat(new,dir_fd=fd,follow_symlinks=False)),item['quarantine_root'],True)
         else:
             item['quarantine_root']=dict(r['root'])
-        journal.write('quarantine-after',path=item['path'],quarantine=item['quarantine'])
+        journal.write('quarantine-after',path=item['path'],quarantine=item['quarantine'],released_root=r['root'],ownership_transition_target=target,observed_quarantine_root=item['quarantine_root'])
     finally:os.close(fd)
 def clean_list(x,k):
     if not isinstance(x.get(k),list) or x[k]:fail('observer sticky '+k)
@@ -255,8 +270,9 @@ def validate_observation(v,binding,quarantines,members,root_ids,started,ended):
     if not isinstance(rows,list) or len(rows)!=2 or not isinstance(rounds,list) or not 2<=len(rounds)<=5:fail('observer roots/rounds')
     if not isinstance(v.get('tree_observation_transients'),list):fail('observer transients missing')
     for row,p,m,rootid in zip(rows,quarantines,members,root_ids):
-        if row.get('path')!=p or row.get('mode')!='0700' or row.get('tree_member_identities')!=m or not isinstance(row.get('device_number'),int) or not isinstance(row.get('inode'),int):fail('observer root/member proof')
-        if [row['device_number'],row['inode']]!=[rootid['device'],rootid['inode']] or [rootid['device'],rootid['inode']] not in m:fail('observer root identity mismatch')
+        if row.get('path')!=p or row.get('mode')!='0700' or row.get('tree_member_identities')!=m or not isinstance(row.get('device_number'),int) or not isinstance(row.get('inode'),int) or row.get('uid')!=rootid['uid'] or row.get('gid')!=rootid['gid']:fail('observer root/member proof')
+        root_member=observer_member_identity(rootid)
+        if [row['device_number'],row['inode']]!=[rootid['device'],rootid['inode']] or root_member not in m:fail('observer root identity mismatch')
     for num,row in enumerate(rounds,1):
         if not isinstance(row,dict) or row.get('round')!=num:fail('round sequence')
         for k in ('target_references','permission_denials','tree_revalidation_failures'):clean_list(row,k)
@@ -338,7 +354,7 @@ def retire(roots,release,claim_path,journal_path,evidence_path,observer_runner,d
         with open(claim_path,'rb') as claim_input: claim_digest=digest_bytes(claim_input.read())
         j.write('claim-created',claim_sha256=claim_digest)
         for x in items:quarantine(x,j)
-        members=[sorted([[x['record']['root']['device'],x['record']['root']['inode']]]+[[r['device'],r['inode']] for r in x['record']['members']]) for x in items];qs=[x['quarantine'] for x in items];rootids=[x.get('quarantine_root',x['record']['root']) for x in items]
+        members=[sorted([observer_member_identity(x.get('quarantine_root',x['record']['root']))]+[observer_member_identity(r) for r in x['record']['members']]) for x in items];qs=[x['quarantine'] for x in items];rootids=[x.get('quarantine_root',x['record']['root']) for x in items]
         observed_at=time.time();observation=observer_runner(qs,members);observed_done=time.time();validate_observation(observation,release.get('observer',{}),qs,members,rootids,observed_at,observed_done);census=docker_census();validate_docker_census(census,release.get('docker',{}),[x['path'] for x in items]+qs)
         evidence=dict(schema='mckernel.ordinary-retirement-evidence.v1',release_sha256=rsha,operational_exclusion=release['operational_exclusion'],observation=observation,docker_census=census);full_write_json(evidence_path,evidence)
         with open(evidence_path,'rb') as evidence_input: evidence_digest=digest_bytes(evidence_input.read())

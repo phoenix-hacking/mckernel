@@ -6098,6 +6098,33 @@ review fresh candidate preparation `704f6654-1` before any heavy build. The OS
 remains incomplete, current-candidate builds remain zero, real accepted apps
 remain zero of 273, and this launcher pause is temporary.
 
+Continuation checkpoint 113, 2026-09-29: retirement integration review found
+that the previously reviewed helper renamed and chmodded the consumed roots but
+left them owned by uid/gid 1000, violating the v7 observer's root-owned
+quarantine assumption. The historical observer also accepted only the old
+`68cf089a` root names. No retirement command ran.
+
+Expert-corrected helper `2ba70074...8964e`, test `e7630fa2...20981`, current
+observer `3562b1d3...53666` and test `b5f48e7b...922e4` receive independent
+`PASS_SOURCE_BOUNDARY`. The helper now journals the exact released, target and
+observed post-transition identities around descriptor-bound fchown/fchmod. The
+observer binds device/inode/uid/gid/type/mode for every tree member and catches
+root or child ownership mutation while preserving device/inode reference
+matching and all v7 closure/mount checks. Python 3.8 and 3.9 each pass the same
+50 dispatcher-run tests; the independent six-suite run reports 76 passes on
+each. Both observer self-tests, pycompile and diff checks pass.
+
+Record `stability-native-exact-retirement-owner-observer-source-success-20260929-1.json`
+preserves the original findings and exact scope. This is source-only: the helper
+remains callback-bound and no live 1000:1000 to root:root transition, census,
+Docker check or deletion ran. The first packet `c27ee0e5...6324` and bounded
+correction `2bd085ef...61e` were rejected; expert packet `22f19e81...80eb` was
+also BLOCKed on incompatible root schemas, unbounded Git I/O, fail-open procfs
+errors, incomplete interrupted-child retirement and absence of a held exclusion
+through deletion. One larger coherent correction is in progress. Do not execute
+or finalize it before a fresh independent source and execution review. Counts
+remain zero current-candidate builds and zero accepted applications.
+
 Shutdown checkpoint 78, 2026-09-28: no new work was dispatched after the stop
 request, every child lane is complete, and no candidate preparation, Docker,
 build, module, guest or application command was started. The launcher wrapper

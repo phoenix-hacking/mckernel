@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.native-exact-retirement-owner-observer-source-success.v1",
+  "recorded_at_utc": "2026-09-29T10:55:00Z",
+  "status": "PASS_SOURCE_AND_PURE_FIXTURES_ONLY",
+  "inputs": {
+    "scripts/native_exact_candidate_retire.py": "2ba700743d01060b0d35114c3b4380cb9b25865d2d973ca05a3d83df3d38964e",
+    "scripts/tests/test_native_exact_candidate_retire.py": "e7630fa2cf7c374fe6f27ebf29c01af7ec3913c811bdbd003e4c8fe565f20981",
+    "docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py": "3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666",
+    "scripts/tests/test_native_exact_candidate_live_reference_observer_67589154.py": "b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4"
+  },
+  "preserved_findings": [
+    "The previously reviewed retirement helper left a renamed quarantine owned by uid/gid 1000 while relying on root-owned mode-0700 isolation.",
+    "The first bounded ownership correction did not durably journal the exact post-transition identity, and the observer did not revalidate uid/gid.",
+    "The historical v7 observer accepts only the old 68cf089a root pairs and cannot observe the current 67589154 retirement roots."
+  ],
+  "verified_behavior": [
+    "Release entries explicitly bind quarantine uid/gid and the helper performs descriptor-bound fchown followed by fchmod and exact post-transition revalidation.",
+    "The durable before/after journal records released identity, intended transition identity and observed post-transition identity; transition failure records no after phase and cannot retry.",
+    "The current observer accepts only the exact ordered current original or retirement-quarantine root pair.",
+    "Observer membership and revalidation bind device, inode, uid, gid, file type and mode while process-reference matching projects device/inode.",
+    "The helper binds emitted ownership-bearing membership while retaining v7 source, boot, time, mount, sticky-failure and two-final-clean-round checks."
+  ],
+  "tests": [
+    {"command": "/usr/bin/python3 -B -m unittest scripts.tests.test_native_exact_candidate_retention_capsule scripts.tests.test_native_exact_candidate_retention_archive scripts.tests.test_native_exact_candidate_retire scripts.tests.test_native_exact_candidate_live_reference_observer_67589154", "result": "50/50 PASS"},
+    {"command": "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_exact_candidate_retention_capsule scripts.tests.test_native_exact_candidate_retention_archive scripts.tests.test_native_exact_candidate_retire scripts.tests.test_native_exact_candidate_live_reference_observer_67589154", "result": "50/50 PASS"},
+    {"command": "python3 -B docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py --self-test", "result": "PASS on Python 3.8 and 3.9"},
+    {"command": "python3 -m py_compile <four exact inputs> and git diff --check -- <four exact inputs>", "result": "PASS"}
+  ],
+  "independent_review": {
+    "status": "PASS_SOURCE_BOUNDARY",
+    "additional_result": "Six retention/helper/observer suites reported 76/76 PASS on Python 3.8 and 3.9",
+    "limitation": "The generic helper remains callback-only and defaults to the historical observer. A separately reviewed integration packet must rebind OBSERVER_SOURCE to the exact current observer before use."
+  },
+  "not_proved": [
+    "Privileged uid/gid transition on the live candidate",
+    "Live process, mount or Docker exclusion",
+    "Candidate retirement or recovered capacity",
+    "Build, guest, application or formal acceptance"
+  ],
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "guest_applications_this_checkpoint": 0,
+  "next_action": "Complete and independently review the current hash-bound retirement integration packet; do not execute any retirement from this source-only result."
+}
