@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.native-exact-deleted-inode-audit-source.v1",
+  "timestamp": "2026-09-29T10:49:07-07:00",
+  "status": "PASS_SOURCE_ONLY",
+  "helper": {"path": "scripts/native_exact_candidate_deleted_inode_audit.py", "sha256": "997c8b808885c4eb89704bba46f69121d7def304d0aaa4480f09eb96ed352406"},
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate_deleted_inode_audit.py",
+    "sha256": "cbe06f646c620694a71be1d12462f6e485a5b3bf5e8f1b4a7ba496dcdc108ab8",
+    "python_3_8": {"result": "PASS", "count": 22},
+    "python_3_9": {"result": "PASS", "count": 22}
+  },
+  "baseline": {
+    "archive_path": "docs/verification/evidence/stability-native-exact-quarantine-continuation-success-704f6654-20260929-1.tar.gz",
+    "archive_sha256": "16cafe645dfe2ca70eccddfb5d1f3127797643d4a66f24a9f1b2902020625af2",
+    "inventory_path": "docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json",
+    "inventory_sha256": "4067c653e4767e63d99f8cc396587e1121dba601ea4f51f1020168cd4c61b8e1",
+    "unique_identities": 10611,
+    "root_identity_counts": [10524, 87],
+    "canonical_identity_set_sha256": "3ee0942c4e5f1934220c8dafed3c4664ae47d05cb30ed4679ec0fe6cadd0a1e8"
+  },
+  "failure_lineage": [
+    {"candidate_helper_sha256": "9f84f6c49322d6430866a7a4d741f756e7867368c5e475033c8fecdd0fefbc72", "review": "BLOCK", "families": ["mount-alias coverage", "identity errors", "empty census", "short writes", "mmap fixture"]},
+    {"candidate_helper_sha256": "97bdc6bb0d1c5ab3e7c357de2f98fdd0d19c84a051ef5aa847d44f0732c7b237", "candidate_test_sha256": "06d956109a619ddbbf713b6fe6bddaec1cbd65849b651616e22133a4b31f81ff", "review": "BLOCK", "families": ["denied or malformed identity reconciliation", "map-entry error reconciliation", "descendant mount aliases", "mountinfo and namespace stability", "vacuous mmap outcome"]}
+  ],
+  "verified_behavior": [
+    "typed identity states distinguish proven disappearance from denial, malformed identity and PID or TID reuse",
+    "anchors require successful current observations and empty census fails closed",
+    "process-level map_files errors fail closed and exact device/inode detection has synthetic coverage",
+    "mount roots are resolved from the pinned filesystem root with strict task-specific mountinfo and stable namespace identities",
+    "exclusive mode-0600 output handles short writes and requires file and parent-directory fsync",
+    "self-enumeration descriptors are excluded without weakening target enumeration"
+  ],
+  "independent_review": {
+    "status": "PASS_SOURCE",
+    "fault_probes": "PASS",
+    "privileged_execution_release": false,
+    "runtime_acceptance": false,
+    "retrospective_retirement_acceptance": false,
+    "limitation": "The descriptor-free mmap probe reached the exact mapping but unprivileged target stat returned EPERM; fail-closed behavior and synthetic exact detection pass, while successful real device/inode detection remains for the separately authorized root audit."
+  },
+  "live_process_identities": [
+    {"role": "launcher-wrapper", "pid": 3399308, "starttime": 83682487},
+    {"role": "launcher-worker", "pid": 3399313, "starttime": 83682494},
+    {"role": "app-server", "pid": 3399317, "starttime": 83682500}
+  ],
+  "retained_state": {
+    "historical_evidence": {"path": "/dev/shm/.mckernel-retirement-evidence-704f6654-2", "device": 26, "inode": 47525, "uid": 0, "gid": 0, "mode": "0700"},
+    "immutable_tombstone": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json", "device": 1831, "inode": 31474, "uid": 0, "gid": 0, "mode": "0600", "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123"},
+    "consumed_build_request": "must not be rerun",
+    "consumed_quarantine_packet": "must not be rerun"
+  },
+  "acceptance": {"production_gate_changed": false, "successful_current_candidate_builds": 0, "real_guest_applications_this_window": 0, "application_cases": "0/273", "os_complete": false},
+  "next": "After a later launcher continuation, preserve this fetched source checkpoint, create and independently review a fresh exact root read-only execution release, then run exactly three audit rounds against the pinned 10,611-identity baseline. Do not execute during this shutdown checkpoint, do not rerun either consumed packet, and do not treat sampled current-state evidence as retrospective retirement proof."
+}

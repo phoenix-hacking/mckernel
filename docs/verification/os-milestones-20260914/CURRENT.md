@@ -7919,3 +7919,31 @@ lane is now under expert redesign. Record
 `stability-native-exact-live-reference-observer-map-files-source-success-704f6654-20260929-1.json`
 preserves v3 source evidence. No new root audit, build or guest has run; formal
 counters, builds and applications remain unchanged.
+
+Shutdown checkpoint 162, 2026-09-29: the expert deleted-inode audit source is
+now independently PASS_SOURCE at helper `997c8b80...2406` and tests
+`cbe06f64...9ab8`. Twenty-two tests pass under both Python 3.8 and 3.9. The
+review replayed the prior identity-reconciliation, PID/TID reuse, stale-anchor,
+empty-census, map-entry, mount-alias, malformed/changing namespace, short/zero
+write, fsync and self-FD failure families. The actual retained archive and
+inventory remain pinned to 10,611 distinct identities with canonical identity
+set SHA `3ee0942c...a1e8` and root counts 10,524 plus 87.
+
+This is source-only evidence. No privileged audit, build, Docker operation or
+guest ran, and the consumed retirement proof is still BLOCKED. The unprivileged
+descriptor-free mmap probe found its exact mapping but target stat returned
+EPERM, so successful real device/inode observation remains an explicit root-run
+requirement. All child lanes are terminal. Launcher wrapper 3399308/83682487,
+worker 3399313/83682494 and app-server 3399317/83682500 remain live; historical
+evidence 26/47525 and immutable tombstone 1831/31474 remain preserved. Record
+`stability-native-exact-deleted-inode-audit-source-success-704f6654-20260929-1.json`
+is the shutdown cursor.
+
+The next launcher continuation must first verify this fetched checkpoint and
+the three live identities, then create an exact fresh root read-only execution
+release and obtain independent execution review. Only then run exactly three
+audit rounds against the sealed baseline. Never rerun either consumed packet;
+never promote sampled current-state evidence to retrospective retirement proof.
+Formal counters remain 6/130 and 350/10000, successful current-candidate builds
+and real guest applications remain zero, applications remain 0/273, and the OS
+is incomplete. The launcher pause is temporary.

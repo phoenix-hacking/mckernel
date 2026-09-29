@@ -1148,3 +1148,18 @@ independent review, then perform a current-state audit against all deleted
 device/inode identities from the retained inventory. Only that current-state
 audit may unlock a wholly fresh clean candidate; it cannot retroactively make
 the consumed retirement proof complete. Builds/apps/formal counters remain zero.
+
+Shutdown checkpoint 162 supersedes only the live cursor. Exact expert audit
+helper `997c8b80...2406` and tests `cbe06f64...9ab8` independently PASS source;
+22 tests pass under Python 3.8/3.9 and the sealed baseline remains exactly
+10,611 identities with digest `3ee0942c...a1e8`. No root audit or runtime action
+ran. All children are terminal. Preserve launcher wrapper 3399308/83682487,
+worker 3399313/83682494, app-server 3399317/83682500, historical evidence
+26/47525 and immutable tombstone 1831/31474.
+
+On the next authorized continuation, verify the fetched checkpoint and these
+identities, prepare a fresh exact root read-only execution release, obtain
+independent execution review, and only then run three audit rounds. Do not rerun
+the consumed build or quarantine packets. A successful current-state audit
+cannot retroactively repair the consumed retirement proof. The OS remains
+incomplete and application acceptance remains 0/273.
