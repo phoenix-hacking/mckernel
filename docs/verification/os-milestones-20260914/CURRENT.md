@@ -5891,3 +5891,26 @@ that source closure passes at a pushed/fetched checkpoint. The failed 80b
 candidate/request and both terminal containers remain preserved and must not be
 reused. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
 diagnostic guest apps and zero successful current-candidate builds remain.
+
+Continuation checkpoint 72, 2026-09-28: candidate admission now rejects exact
+filesystem-mode drift before a lease or Docker operation. The preserved 80b
+candidate was inode-independent but inherited launcher umask `0077`: 7,342 Git
+`100644` files became `0600` and 258 Git `100755` files became `0700`. This
+caused the RK-006 preimage closure to differ (`d2da4c4...d575b3f` expected,
+`a27144f2...395fe9d7` observed). The strict RK-006 oracle was not weakened.
+
+The generator, offline verifier and owner now require exact `0644`/`0755`
+materialization for every main and pinned-IHK regular file. Independent review
+first caught umask-sensitive test fixtures and missing pre-lease validation,
+then caught a missing/null/list inventory bypass. The final owner calls the
+same bound verifier unconditionally before lease acquisition or Docker
+construction. Ninety-eight combined tests PASS under umask `0077`; independent
+real-Git probes reject all four main/IHK permission drifts with zero lease or
+Docker activity. Exact hashes and the retained log are in
+`stability-native-exact-candidate-mode-admission-20260928-1.json`.
+
+The failed 80b candidate remains preserved and is not reusable. A future
+candidate must be created under umask `0022` or have every tracked permission
+normalized exactly from its Git index, then pass both generator and owner
+admission. The separate 57-file Rust staging closure and unsafe-ledger inventory
+remain in progress; no build/guest ran and counters remain unchanged.

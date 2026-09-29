@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel.stability.exact-candidate-mode-admission.v1",
+  "recorded_at_utc": "2026-09-29T02:28:00Z",
+  "status": "PASS_SOURCE_ONLY",
+  "base_checkpoint": "03e7704a335e267e176d744ceb527f8d89000647",
+  "defect": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "umask": "0077",
+    "git_100644_observed_0600": 7342,
+    "git_100755_observed_0700": 258,
+    "effect": "RK-006 fixture preimage closure mismatch before build",
+    "expected_closure_sha256": "d2da4c4b8eb24a055ab636c43538168148c08b9ef4476138cf6a19124d575b3f",
+    "observed_closure_sha256": "a27144f2a5cf2d3561df6665b940f530661bf13fa685bf627cb0b523395fe9d7"
+  },
+  "correction": {
+    "policy": "tracked regular files must materialize exactly as Git 100644->0644 or 100755->0755 in main and pinned IHK",
+    "generator_sha256": "28112e13a9932796080d8183e66e493b1bf0655631413b42775af865798c1d3f",
+    "offline_verifier_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "container_owner_sha256": "0a4386a9965a99e3b47a469f9f97a2d8180ceab91cdb53aeccd98d1fee04b72d",
+    "input_tests_sha256": "64462b96e236cfbaabd601c4192decdd792e68b5e5832909f1b35912066317ec",
+    "offline_tests_sha256": "e8c3d5eaee4c40073acd87cd5e0ab4c957c1bfa0f4da37d5b336d256f0e39dad",
+    "owner_tests_sha256": "418d20e87cb406bc57edd709ba2f695d5969355b692df9537888428f3a2a0a88",
+    "owner_ordering": "unconditional verify_inputs before lease acquisition or Docker construction"
+  },
+  "verification": {
+    "combined_tests": 98,
+    "combined_result": "PASS under umask 0077",
+    "independent_review": "PASS after two retained fail-open findings were corrected",
+    "real_git_mode_probes": "PASS exact 0644/0755; reject main and IHK 0600/0700 with zero lease/Docker actions",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "log": "docs/verification/evidence/stability-native-exact-candidate-mode-admission-20260928-1.log.gz",
+    "log_sha256": "3b051479640feb88b3ff6f851d6514293517cf055d508ec25566590d68444b26"
+  },
+  "failure_history": [
+    "Initial consumer correction broke restrictive-umask fixtures and did not run before the owner lease.",
+    "First owner correction conditionally skipped verification for missing, null or list repository_files and could reach Docker.",
+    "Final correction verifies every execution request unconditionally and proves malformed inventories and mode drift cause zero lease/Docker actions."
+  ],
+  "decision": {
+    "rk006_mode_normalization_rejected": true,
+    "reason": "normalizing 0600 to 0644 in the RK-006 oracle would hide a malformed candidate; admission now preserves the original strict preimage contract",
+    "old_candidate_reusable": false,
+    "build_or_guest_run": false,
+    "acceptance_credit": false
+  },
+  "next": [
+    "Complete and independently review the separate 57-file Rust staging closure correction.",
+    "Resolve remaining phase-0 unsafe-ledger source inventory without weakening its not-ready/review requirements.",
+    "At the next pushed/fetched source checkpoint create a fresh tmpfs candidate under umask 0022 or normalize every tracked mode exactly from the Git index, then require both generator and owner admission to pass."
+  ]
+}

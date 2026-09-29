@@ -89,9 +89,11 @@ class DriverTests(unittest.TestCase):
             path = self.repo / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text)
+            path.chmod(0o644)
         self.rows = {name: driver.sha256(self.repo / name) for name in files}
         for name in (driver.ARCHIVE, driver.BASELINE, driver.SRPM, driver.DEBRAND):
             (self.assets / name).write_text('test bytes for ' + name)
+            (self.assets / name).chmod(0o644)
         asset_hashes = {p.name: driver.sha256(p) for p in self.assets.iterdir()}
         # Substitute small frozen fixture archive identities, not hash behavior.
         self.pins = mock.patch.dict(driver.ASSET_HASHES,

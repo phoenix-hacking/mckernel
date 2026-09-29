@@ -28,6 +28,9 @@ sys.path.insert(0, sys.argv[3])
 import native_rust_exact_build_container_owner as owner
 import native_rust_exact_build_image_prepare as prep
 from scripts.tests.test_native_rust_exact_build_container_owner import FakeDocker
+# Signal lifecycle coverage uses a minimal synthetic request; provenance is
+# covered by the in-process admission tests.
+owner.provenance.verify_inputs = lambda *args, **kwargs: None
 if ctypes.CDLL(None, use_errno=True).prctl(36, 1, 0, 0, 0) != 0:
     raise RuntimeError('private subreaper setup failed')
 pid = os.fork()
@@ -275,9 +278,15 @@ class OwnerTests(unittest.TestCase):
         self.mem = mock.patch.object(owner.Path, 'read_text', lambda p, *a, **kw:
             'MemAvailable: 33554432 kB\n' if str(p) == '/proc/meminfo' else original(p, *a, **kw))
         self.mem.start()
+        # Lifecycle tests use intentionally minimal request fixtures; the
+        # dedicated admission tests below exercise the real verifier.
+        self.provenance = mock.patch.object(owner.provenance, 'verify_inputs',
+                                            return_value=None)
+        self.provenance.start()
 
     def tearDown(self):
         self.mem.stop()
+        self.provenance.stop()
         self.disk.stop()
         shutil.rmtree(str(self.measure_output))
         self.temp.cleanup()
@@ -293,6 +302,41 @@ class OwnerTests(unittest.TestCase):
         self.assertFalse(Path(self.request['lease_path']).exists())
         self.assertIn('container.log', result['evidence'])
         self.assertTrue(any(c[0] == 'rm' for c in fake.commands))
+
+    def test_candidate_mode_admission_precedes_lease_and_docker(self):
+        manifest_path = Path(self.request['input_manifest'])
+        manifest_path.write_text(json.dumps({'candidate_sha': self.request['candidate_sha'],
+                                             'repository_files': {}}))
+        self.request['input_manifest_sha256'] = owner.digest(manifest_path)
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner.provenance, 'verify_inputs',
+                               side_effect=owner.provenance.BuildError(
+                                   'indexed executable mode differs')):
+            with self.assertRaisesRegex(ValueError, 'candidate input admission failed'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_missing_or_malformed_inventory_cannot_reach_lease_or_docker(self):
+        self.provenance.stop()
+        try:
+            for value in ('missing', None, []):
+                with self.subTest(repository_files=value):
+                    manifest = {'candidate_sha': self.request['candidate_sha']}
+                    if value != 'missing':
+                        manifest['repository_files'] = value
+                    path = Path(self.request['input_manifest'])
+                    path.write_text(json.dumps(manifest))
+                    self.request['input_manifest_sha256'] = owner.digest(path)
+                    fake = FakeDocker(self.request)
+                    with self.assertRaisesRegex(ValueError, 'candidate input admission failed'):
+                        owner.BuildOwner(self.request, fake).run()
+                    self.assertEqual(fake.commands, [])
+                    self.assertFalse(Path(self.request['lease_path']).exists())
+        finally:
+            self.provenance = mock.patch.object(owner.provenance, 'verify_inputs',
+                                                return_value=None)
+            self.provenance.start()
 
     def test_start_is_once_and_precedes_wait(self):
         fake = FakeDocker(self.request)

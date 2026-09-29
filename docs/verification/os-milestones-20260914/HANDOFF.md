@@ -308,3 +308,12 @@ manifest/stager (29 Rust and two included assembly files). Add a hash-bound
 closure oracle, then update the exact manifest/staging inventory with focused
 negative tests and independent review. Never rerun the old 80b request. Preserve
 its candidate/evidence and both terminal containers. Counts remain unchanged.
+
+Checkpoint 72 closes the tmpfs candidate permission-admission defect. The 80b
+checkout's `0600/0700` modes are now rejected by the generator, offline verifier
+and unconditional pre-lease owner check; 98 tests and independent real-Git
+probes PASS under umask `0077`. See
+`stability-native-exact-candidate-mode-admission-20260928-1.json`. Preserve the
+old candidate unchanged. Future preparation must use umask `0022` or exact
+index-mode normalization and then pass both admission layers. Continue the
+separate 57-file staging closure and unsafe-ledger repair before a fresh build.

@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import sys
 import uuid
@@ -95,6 +96,31 @@ def _index_rows(root):
         raise ManifestError(str(error))
 
 
+def _validate_checkout_modes(repo):
+    """Admit only worktree modes represented exactly by the Git index.
+
+    Git records only 0644/0755 for regular files, but a candidate checkout
+    must retain those complete permission bits: an umask-modified 0600/0700
+    tree is not an exact source preimage.  lstat keeps links un-followed and
+    checked_input applies the same parent/path confinement as inventory.
+    """
+    for root in (Path(repo), Path(repo) / 'ihk'):
+        for relative, mode, unused_oid in _index_rows(root):
+            if mode == '160000':
+                continue
+            path = _checked_input(root, relative)
+            metadata = path.lstat()
+            if mode == '120000':
+                if not stat.S_ISLNK(metadata.st_mode):
+                    raise ManifestError('indexed symlink type differs: ' + str(path))
+                continue
+            if not stat.S_ISREG(metadata.st_mode):
+                raise ManifestError('indexed regular file type differs: ' + str(path))
+            expected = 0o755 if mode == '100755' else 0o644
+            if stat.S_IMODE(metadata.st_mode) != expected:
+                raise ManifestError('indexed executable mode differs: ' + str(path))
+
+
 def _head(root):
     try:
         return provenance.git_head(_git(root, 'rev-parse', 'HEAD'))
@@ -108,10 +134,15 @@ def _clean(root):
 
 
 def _inventory(repo):
+    # Run both sides of inventory admission so a mode change during the
+    # provenance walk cannot be self-blessed by a stale pre-check.
+    _validate_checkout_modes(repo)
     try:
-        return provenance.source_inventory(repo, _git)
+        result = provenance.source_inventory(repo, _git)
     except provenance.BuildError as error:
         raise ManifestError(str(error))
+    _validate_checkout_modes(repo)
+    return result
 
 
 def generate(repo, assets, output, candidate_sha):

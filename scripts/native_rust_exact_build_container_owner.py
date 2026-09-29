@@ -14,6 +14,11 @@ import sys
 import time
 import uuid
 
+if __package__:
+    from . import native_rust_exact_build_offline as provenance
+else:
+    import native_rust_exact_build_offline as provenance
+
 LIMITS = {'NanoCpus': 4000000000, 'CpusetCpus': '2-5',
           'Memory': 12 * 2**30, 'MemorySwap': 12 * 2**30,
           'PidsLimit': 512, 'NetworkMode': 'none'}
@@ -880,6 +885,15 @@ class BuildOwner:
         manifest = json.loads(Path(r['input_manifest']).read_text())
         if manifest.get('candidate_sha') != r['candidate_sha']:
             raise ValueError('manifest candidate mismatch')
+        # Run the same bounded provenance verifier before lease acquisition or
+        # any Docker client construction. No partial/legacy manifest may reach
+        # the privileged build path.
+        try:
+            provenance.verify_inputs(Path(r['source_root']), r['candidate_sha'],
+                                     Path(r['assets_root']), manifest,
+                                     provenance.Runner())
+        except provenance.BuildError as error:
+            raise ValueError('candidate input admission failed: ' + str(error))
         self.measurement = measure(r['host_measure_root'], r['scratch_measure_root'],
                                    r.get('host_floor', 0), r.get('scratch_floor', 0),
                                    source_root=r['source_root'], output_root=r['output_root'],

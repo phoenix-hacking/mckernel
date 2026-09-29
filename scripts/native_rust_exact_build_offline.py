@@ -132,8 +132,10 @@ def tracked_digest(path, mode, object_id):
     else:
         if not stat.S_ISREG(metadata.st_mode):
             raise BuildError('indexed regular file type differs: ' + str(path))
-        # Git records the owner's execute bit (not group/other permissions).
-        if bool(metadata.st_mode & stat.S_IXUSR) != (mode == '100755'):
+        # Git records regular inputs as exact 0644 or 0755 modes.  Checking
+        # every permission bit rejects umask-drifted candidate preimages.
+        expected_mode = 0o755 if mode == '100755' else 0o644
+        if stat.S_IMODE(metadata.st_mode) != expected_mode:
             raise BuildError('indexed executable mode differs: ' + str(path))
         fd = os.open(str(path), os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         with os.fdopen(fd, 'rb') as stream:

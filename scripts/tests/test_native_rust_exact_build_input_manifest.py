@@ -27,13 +27,16 @@ class ManifestGeneratorTest(unittest.TestCase):
         (self.repo / 'scripts').mkdir()
         shutil.copy(Path(__file__).parents[1] / 'native_rust_exact_build_offline.py',
                     self.repo / 'scripts/native_rust_exact_build_offline.py')
+        (self.repo / 'scripts/native_rust_exact_build_offline.py').chmod(0o644)
         (self.repo / 'tracked').write_bytes(b'input')
+        (self.repo / 'tracked').chmod(0o644)
         (self.repo / 'link').symlink_to('tracked')
         git(self.repo, 'add', '.')
         self.ihk = self.repo / 'ihk'
         self.ihk.mkdir()
         git(self.ihk, 'init', '-q')
         (self.ihk / 'nested').write_bytes(b'ihk')
+        (self.ihk / 'nested').chmod(0o644)
         (self.ihk / 'nested-link').symlink_to('nested')
         git(self.ihk, 'add', '.')
         git(self.ihk, '-c', 'user.name=test', '-c', 'user.email=test@example',
@@ -264,6 +267,22 @@ class ManifestGeneratorTest(unittest.TestCase):
                 self.assert_rejected_by_both(data, 'executable mode differs')
                 path.chmod(original)
 
+    def test_complete_regular_permission_mode_is_exact_for_main_and_ihk(self):
+        data = self.generate()
+        for root, name, bad_mode in ((self.repo, 'tracked', 0o600),
+                                     (self.ihk, 'nested', 0o700)):
+            with self.subTest(root=str(root), mode=oct(bad_mode)):
+                path = root / name
+                path.chmod(bad_mode)
+                with self.assertRaisesRegex(generator.ManifestError,
+                                             'indexed executable mode differs'):
+                    self.generate(Path(self.temp.name) / ('bad-' + name + '.json'))
+                with self.assertRaisesRegex(offline.BuildError,
+                                             'indexed executable mode differs'):
+                    self.verify(data)
+                path.chmod(0o644)
+        self.verify(data)
+
     def test_index_oid_and_mode_must_equal_head_in_both_repositories(self):
         data = self.generate()
         for root, name in ((self.repo, 'tracked'), (self.ihk, 'nested')):
@@ -272,10 +291,17 @@ class ManifestGeneratorTest(unittest.TestCase):
                     if mutation == 'oid':
                         (root / name).write_bytes(b'changed and staged')
                         git(root, 'add', name)
+                        self.assert_rejected_by_both(data, 'index differs from HEAD tree')
                     else:
                         git(root, 'update-index', '--chmod=+x', name)
-                    self.assert_rejected_by_both(data, 'index differs from HEAD tree')
+                        with self.assertRaisesRegex(generator.ManifestError,
+                                                     'indexed executable mode differs'):
+                            self.generate(Path(self.temp.name) / 'rejected-mode.json')
+                        with self.assertRaisesRegex(offline.BuildError,
+                                                     'index differs from HEAD tree'):
+                            self.verify(data)
                     git(root, 'restore', '--source=HEAD', '--staged', '--worktree', name)
+                    (root / name).chmod(0o644)
 
     def test_racing_output_is_preserved_and_temporary_removed(self):
         output = Path(self.temp.name) / 'race.json'
@@ -380,6 +406,7 @@ class ManifestGeneratorTest(unittest.TestCase):
         for root in (self.repo, self.ihk):
             for i, name in enumerate(names):
                 (root / name).write_bytes(('distinct source %d' % i).encode('ascii'))
+                (root / name).chmod(0o644)
         self.commit_fixture_paths()
         data = self.generate()
         self.verify(data)
@@ -396,6 +423,7 @@ class ManifestGeneratorTest(unittest.TestCase):
         for root in (self.repo, self.ihk):
             for name in names:
                 (root / name).write_bytes(b'original tracked bytes')
+                (root / name).chmod(0o644)
         self.commit_fixture_paths()
         for root in (self.repo, self.ihk):
             (root / '.git/info/exclude').write_text('carriage*name\ncrlf*name\n')
