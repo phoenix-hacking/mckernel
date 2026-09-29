@@ -46,18 +46,24 @@ class FakeOwner:
     def run(self):
         self.validate()
         FakeOwner.calls += 1
-        return {"status": "PASS"}
+        return {"status": "PASS", "retired": True,
+                "cleanup_separately_required": False,
+                "terminal_container_info": None,
+                "terminal_container_info_current": True}
 
 
 def request(source):
     return {
         "source_root": str(source),
         "memory_allocation_roots": [str(source)],
+        "operational_exclusion_path": wrapper.OPERATIONAL_EXCLUSION_PATH,
     }
 
 
 class WrapperTests(unittest.TestCase):
     def setUp(self):
+        self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
+        wrapper.OPERATIONAL_EXCLUSION_PATH = str(self.lock_dir / "operational.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -68,6 +74,12 @@ class WrapperTests(unittest.TestCase):
             "candidate_memory_effect": {"classification": "none", "bytes": 0},
             "aggregate_memory_required": wrapper.EXPECTED_LIMITS["Memory"],
         }
+
+    def tearDown(self):
+        lock = Path(wrapper.OPERATIONAL_EXCLUSION_PATH)
+        if lock.exists():
+            lock.unlink()
+        self.lock_dir.rmdir()
 
     def invoke(self, req, aggregate=wrapper.LAUNCHER_AGGREGATE_GIB):
         with tempfile.TemporaryDirectory() as td:
@@ -89,6 +101,35 @@ class WrapperTests(unittest.TestCase):
         self.assertEqual(FakeOwner.validations, 2)
         self.assertEqual(FakeOwner.CliSignals.entered, 1)
         self.assertEqual(FakeOwner.CliSignals.exited, 1)
+
+    def test_existing_exclusion_fails_closed(self):
+        lock = Path(wrapper.OPERATIONAL_EXCLUSION_PATH)
+        lock.write_text("partial")
+        with self.assertRaisesRegex(wrapper.AdmissionError, "already exists"):
+            self.invoke(request)
+
+    def test_exclusion_record_short_writes_are_completed(self):
+        original_write = wrapper.os.write
+        writes = []
+        def short_write(fd, data):
+            if len(data) > 1:
+                chunk = data[:max(1, len(data) // 2)]
+                writes.append(len(chunk))
+                return original_write(fd, chunk)
+            return original_write(fd, data)
+        with mock.patch.object(wrapper.os, "write", side_effect=short_write):
+            result = self.invoke(request)
+        self.assertEqual(result["status"], "PASS")
+        self.assertGreater(len(writes), 1)
+
+    def test_uncertain_owner_result_retains_exclusion(self):
+        result = {"status": "PASS", "retired": True,
+                  "cleanup_separately_required": True,
+                  "terminal_container_info": {"Id": "retained"},
+                  "terminal_container_info_current": True}
+        with mock.patch.object(FakeOwner, "run", return_value=result):
+            self.invoke(request)
+        self.assertTrue(Path(wrapper.OPERATIONAL_EXCLUSION_PATH).exists())
         self.assertEqual(FakeOwner.provenance.ENV["GIT_OPTIONAL_LOCKS"], "0")
 
     def test_excess_aggregate_rejected_without_run(self):

@@ -30,10 +30,76 @@ EXPECTED_LIMITS = {
     "PidsLimit": 512,
     "NetworkMode": "none",
 }
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
 
 
 class AdmissionError(ValueError):
     pass
+
+
+def _request_hash(request):
+    return hashlib.sha256(json.dumps(request, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def _starttime(pid):
+    return Path("/proc") .joinpath(str(pid), "stat").read_text().rsplit(")", 1)[1].split()[19]
+
+
+def _acquire_exclusion(request):
+    path = Path(request.get("operational_exclusion_path", ""))
+    if str(path) != OPERATIONAL_EXCLUSION_PATH:
+        raise AdmissionError("operational exclusion path is not the reviewed exact path")
+    record = {"schema": "mckernel.native-exact-operational-exclusion.v1",
+              "pid": os.getpid(), "starttime": _starttime(os.getpid()),
+              "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+              "request_sha256": _request_hash(request)}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        fd = os.open(str(path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError:
+        raise AdmissionError("operational exclusion already exists; reconciliation required")
+    try:
+        record.update({"device": os.fstat(fd).st_dev, "inode": os.fstat(fd).st_ino})
+        data = json.dumps(record, sort_keys=True).encode()
+        offset = 0
+        while offset < len(data):
+            written = os.write(fd, data[offset:])
+            if not isinstance(written, int) or written <= 0:
+                raise AdmissionError("operational exclusion record write made no progress")
+            offset += written
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    parent_fd = os.open(str(path.parent), os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0))
+    try: os.fsync(parent_fd)
+    finally: os.close(parent_fd)
+    return path, record
+
+
+def _release_exclusion(lock, record, result):
+    if not (isinstance(result, dict) and result.get("status") == "PASS" and
+            result.get("retired") is True and result.get("cleanup_separately_required") is False and
+            result.get("terminal_container_info") is None and
+            result.get("terminal_container_info_current") is True):
+        return False
+    try:
+        parent_fd = os.open(str(lock.parent), os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0))
+        try:
+            fd = os.open(lock.name, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0), dir_fd=parent_fd)
+            try:
+                current = json.loads(os.read(fd, 1 << 20).decode())
+                identity = os.fstat(fd)
+                if current != record or identity.st_dev != record["device"] or identity.st_ino != record["inode"]:
+                    return False
+                os.unlink(lock.name, dir_fd=parent_fd)
+                os.fsync(parent_fd)
+            finally:
+                os.close(fd)
+        finally:
+            os.close(parent_fd)
+        return True
+    except (OSError, ValueError, json.JSONDecodeError):
+        return False
 
 
 def _owner_path(request, source_root):
@@ -241,26 +307,34 @@ def run_request(request, aggregate_gib=LAUNCHER_AGGREGATE_GIB):
     budget = _aggregate_argument(aggregate_gib)
     if "launcher_aggregate_memory_gib" in request:
         _aggregate_argument(request["launcher_aggregate_memory_gib"])
-    owner = _load_owner(request)
-    _require_profile(owner, request)
-    # The offline provenance runner consumes this environment.  Set the
-    # reviewed value before owner validation and retain all other owner values.
-    owner.provenance.ENV["GIT_OPTIONAL_LOCKS"] = "0"
-    with owner.CliSignals() as signals:
-        checked = owner.BuildOwner(request, signals=signals)
-        original_validate = checked.validate
+    lock, lock_record = _acquire_exclusion(request)
+    try:
+        owner = _load_owner(request)
+        _require_profile(owner, request)
+        # The offline provenance runner consumes this environment.  Set the
+        # reviewed value before owner validation and retain all other owner values.
+        owner.provenance.ENV["GIT_OPTIONAL_LOCKS"] = "0"
+        with owner.CliSignals() as signals:
+            checked = owner.BuildOwner(request, signals=signals)
+            original_validate = checked.validate
 
-        def guarded_validate():
-            result = original_validate()
-            _check_measurement(getattr(checked, "measurement", None), budget)
-            return result
+            def guarded_validate():
+                result = original_validate()
+                _check_measurement(getattr(checked, "measurement", None), budget)
+                return result
 
-        # BuildOwner.run() calls self.validate() again immediately before
-        # lease acquisition.  Guard that call too: a changed second measure
-        # must never reach Docker or a lease.
-        checked.validate = guarded_validate
-        guarded_validate()
-        return checked.run()
+            # BuildOwner.run() calls self.validate() again immediately before
+            # lease acquisition.  Guard that call too: a changed second measure
+            # must never reach Docker or a lease.
+            checked.validate = guarded_validate
+            guarded_validate()
+            result = checked.run()
+        _release_exclusion(lock, lock_record, result)
+        return result
+    except BaseException:
+        # Retain the exclusion on every exception: cleanup/lease state is not
+        # positively proven, so a later run must explicitly quarantine it.
+        raise
 
 
 def main(argv=None):
