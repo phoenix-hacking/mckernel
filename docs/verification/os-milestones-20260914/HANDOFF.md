@@ -1079,3 +1079,15 @@ basis and add one external release as the exact fourth path. Review both the
 mechanical derivation and safe runtime authority before any sudo execution.
 Quarantines and permanent tombstone remain unchanged; no runtime acceptance or
 formal counter moved.
+
+Shutdown checkpoint 157 (2026-09-29) supersedes the live cursor only: all child
+lanes are terminal, the three launcher identities remain live, and the consumed
+packet remains absent. The quarantine/evidence roots and immutable tombstone are
+unchanged. Source checkpoint `f89cc5b8640fbae4119f851571c9254d38579f55`
+is fetched and upstream; no execution release exists. Next reconcile identities
+and roots, inspect the exact release schemas, mechanically create the exact
+four-path finalization from that fetched template, commit it separately, obtain
+independent mechanical/execution review, and repeat complete live preflight.
+Do not execute, retry, rename, delete or roll back retirement state while
+recovering this checkpoint. The OS remains incomplete and 0/273 applications
+are accepted.

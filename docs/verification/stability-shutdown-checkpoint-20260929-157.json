@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.os-shutdown-checkpoint.v1",
+  "checkpoint": 157,
+  "timestamp": "2026-09-29T09:32:12-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "head_before_checkpoint": "f89cc5b8640fbae4119f851571c9254d38579f55",
+  "tree_before_checkpoint": "4e22ce470ffbc1bdcb25f2f262f84742c7814643",
+  "launcher_processes": [
+    {"role": "wrapper", "pid": 3399308, "starttime": 83682487},
+    {"role": "worker", "pid": 3399313, "starttime": 83682494},
+    {"role": "app_server", "pid": 3399317, "starttime": 83682500}
+  ],
+  "retirement_packet_process": {"pid": 3912447, "starttime": 90493097, "terminal": true},
+  "retained_state": {
+    "candidate_quarantine": {"path": "/dev/shm/.mckernel-retirement-candidate-704f6654-2", "device": 26, "inode": 36767, "uid": 0, "gid": 0, "mode": 448},
+    "metadata_quarantine": {"path": "/dev/shm/.mckernel-retirement-metadata-backup-704f6654-2", "device": 26, "inode": 47413, "uid": 0, "gid": 0, "mode": 448},
+    "evidence_root": {"path": "/dev/shm/.mckernel-retirement-evidence-704f6654-2", "device": 26, "inode": 47525, "uid": 0, "gid": 0, "mode": 448},
+    "immutable_tombstone": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json", "device": 1831, "inode": 31474, "uid": 0, "gid": 0, "mode": 384, "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123", "immutable": true},
+    "deletion_started": false,
+    "rollback_authorized": false,
+    "retry_authorized": false
+  },
+  "source_checkpoint": {
+    "privacy_checkpoint_commit": "f89cc5b8640fbae4119f851571c9254d38579f55",
+    "packet_sha256": "a15395055c087b086369188162483a5aba64ef18108b20c2d1b885f83e9a3edf",
+    "wrapper_sha256": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+    "basis_sha256": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+    "observer_sha256": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+    "tests_sha256": "f9c38fbb2084cc3418844f277c37914176bc5af5e4207375c6b72e2f6a6d70e9",
+    "independent_review": "PASS_SOURCE_ONLY",
+    "execution_release_exists": false
+  },
+  "resources": {"host_available_bytes": 23469813760, "scratch_available_bytes": 21529010176, "tmpfs_available_bytes": 7502475264, "mem_available_kib": 19183704},
+  "acceptance": {"successful_current_candidate_builds": 0, "real_guest_applications_this_window": 0, "application_cases": "0/273", "formal_counters_changed": false, "os_complete": false},
+  "next": "On the next authorized invocation, first reconcile the three launcher identities, the absent consumed packet process, the three retained quarantine/evidence roots and the immutable tombstone. Inspect the exact runtime and Docker release schemas, then mechanically finalize exactly packet, wrapper and basis and add the safe external release as the fourth changed path from fetched template commit f89cc5b8640fbae4119f851571c9254d38579f55. Commit that exact four-path finalization separately, obtain independent mechanical and execution review, and repeat the complete live preflight before considering one one-shot sudo continuation. Do not execute, retry, rename, delete or roll back retirement state during checkpoint recovery."
+}

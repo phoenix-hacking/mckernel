@@ -7785,3 +7785,25 @@ execution review before sudo continuation. Record
 `stability-native-exact-quarantine-continuation-docker-privacy-success-704f6654-20260929-1.json`
 preserves this correction. Formal counters and real guest applications remain
 unchanged.
+
+Shutdown checkpoint 157, 2026-09-29: the launcher requested an immediate
+checkpoint before finalization or execution. No new task was dispatched; all
+child lanes are terminal. Wrapper 3399308/83682487, worker 3399313/83682494 and
+app-server 3399317/83682500 remain live, while consumed packet
+3912447/90493097 remains absent. Candidate quarantine 26/36767, metadata
+quarantine 26/47413, historical evidence 26/47525 and immutable tombstone
+1831/31474 remain unchanged; deletion, retry and rollback remain forbidden.
+
+Fetched/upstream source checkpoint `f89cc5b8640fbae4119f851571c9254d38579f55`
+retains the independently source-reviewed privacy correction. No external
+execution release exists and no finalization, protected-root traversal, Docker
+mutation, deletion, build or guest occurred. On the next authorized invocation,
+reconcile the identities and retained roots first; inspect the exact runtime and
+Docker release schemas; then derive the exact four-path finalization (packet,
+wrapper, basis and safe external release) from fetched `f89cc5b8`. Commit that
+mechanical finalization alone, obtain independent mechanical and execution
+review, and repeat the complete live preflight before considering one one-shot
+sudo continuation. Record `stability-shutdown-checkpoint-20260929-157.json` is
+the live cursor. Formal counters, successful current-candidate builds and real
+guest applications remain zero; applications remain 0/273 and the OS remains
+incomplete. The launcher pause is temporary.
