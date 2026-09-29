@@ -1163,3 +1163,17 @@ independent execution review, and only then run three audit rounds. Do not rerun
 the consumed build or quarantine packets. A successful current-state audit
 cannot retroactively repair the consumed retirement proof. The OS remains
 incomplete and application acceptance remains 0/273.
+
+Checkpoint 163 supersedes the root-audit release cursor. Fetched attempt-1
+proposal `cd3aa38f...2e74` was independently BLOCKed before sudo because stable
+kernel threads lack required process resources; never execute it. After the
+ordinary bounded correction and first expert candidate were separately BLOCKed
+on negative flags, skipped mount aliases, LP64 overflow and oversized VMAs, the
+expert correction now independently PASSes source at helper `47e741e7...6d88`
+and tests `0e217fbb...9e3`. Python 3.8/3.9 each pass 44 tests and 59 independent
+complete-census probes pass.
+
+Commit/push/fetch the corrected source, then create a fresh attempt-2 exact basis
+and root read-only proposal and obtain fresh execution review. No privileged
+audit has run. A future current-state PASS is sampled evidence only and cannot
+repair the consumed retirement proof; builds/apps/formal counters remain zero.

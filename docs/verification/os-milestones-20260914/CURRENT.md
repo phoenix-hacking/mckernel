@@ -7947,3 +7947,29 @@ never promote sampled current-state evidence to retrospective retirement proof.
 Formal counters remain 6/130 and 350/10000, successful current-candidate builds
 and real guest applications remain zero, applications remain 0/273, and the OS
 is incomplete. The launcher pause is temporary.
+
+Continuation checkpoint 163, 2026-09-29: proposed root audit release attempt 1
+at fetched `dcc3f8f8...ab6e` was independently BLOCKed before sudo. Stable host
+PF_KTHREAD tasks, including PID 2/starttime 13, legitimately lack process
+resources, so helper `997c8b80...2406` could not satisfy its promised clean
+census. The proposal `cd3aa38f...2e74` was never executed and must never run.
+
+The first bounded surface correction was independently BLOCKed because negative
+flags granted PF_KTHREAD absence and missing mount namespaces skipped present
+mountinfo aliases. Per convergence policy, an Astra expert redesigned the typed
+surface handling. Its first candidate was also BLOCKed on out-of-range LP64 stat
+fields and greater-than-64-bit VMA ranges; the bounded expert correction now
+independently PASSes helper `47e741e7...6d88` and tests `0e217fbb...9e3`.
+Forty-four tests pass on Python 3.8/3.9 and 59 additional complete-census probes
+pass. Valid self/PID2 rows parse; malformed special rows, permission errors,
+reuse, class/census churn, mount aliases and invalid VMA ranges fail closed,
+while every existing special-process surface remains inspected.
+
+Record
+`stability-native-exact-deleted-inode-audit-proc-surface-source-success-704f6654-20260929-1.json`
+preserves the full failure family. No privileged audit, build, Docker operation
+or guest ran. Next commit/push/fetch this source, then generate a fresh attempt-2
+basis/release bound to that fetched commit and obtain fresh independent execution
+review. Never execute attempt 1 and never treat a later sampled PASS as
+retrospective retirement acceptance. Formal counters, builds and applications
+remain unchanged.

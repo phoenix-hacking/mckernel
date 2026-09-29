@@ -45,6 +45,7 @@ class ProcFixture:
             yield iter(SimpleNamespace(name=x) for x in self.directories[path])
         for target, value in [
                 ("_identity", self.identity), ("os.stat", self.stat),
+                ("_classification_bound", lambda bound, task=False: "ordinary"),
                 ("os.listdir", lambda p: self.directories[p]),
                 ("os.scandir", scandir),
                 ("os.readlink", lambda p: p.rsplit("/", 1)[1] + ":[41]")]:
@@ -56,6 +57,84 @@ class ProcFixture:
 
     def __exit__(self, *args):
         self.stack.close()
+
+
+class SpecialProcFixture(ProcFixture):
+    """Stable typed identities with every permitted surface initially absent."""
+    def __init__(self, classification, empty_mountinfo=False):
+        super().__init__()
+        self.classes = {(7, None): classification, (7, 7): classification, (7, 8): classification}
+        self.absent = set()
+        self.errors = {}
+        self.empty_mountinfo = empty_mountinfo
+        for base in ("/proc/7", "/proc/7/task/7", "/proc/7/task/8"):
+            self.absent.update(base + "/" + name for name in
+                               ("cwd", "root", "exe", "fd", "mountinfo"))
+            self.absent.update(base + "/ns/" + name for name in
+                               ("pid", "net", "user", "uts", "ipc", "mnt"))
+        self.absent.add("/proc/7/map_files")
+
+    def check(self, path):
+        if path in self.errors:
+            raise self.errors[path]
+        if path in self.absent:
+            raise FileNotFoundError(errno.ENOENT, "typed absence", path)
+
+    def __enter__(self):
+        super().__enter__()
+        original_stat, original_listdir = audit.os.stat, audit.os.listdir
+        original_scandir, original_readlink = audit.os.scandir, audit.os.readlink
+        original_open = open
+        def guarded(fn):
+            def call(path, *args, **kwargs):
+                self.check(path)
+                return fn(path, *args, **kwargs)
+            return call
+        def read(path, *args, **kwargs):
+            if self.empty_mountinfo and path.endswith("/mountinfo") and path not in self.errors:
+                return mock.mock_open(read_data="")(path, *args, **kwargs)
+            return guarded(original_open)(path, *args, **kwargs)
+        for target, value in [("stat", guarded(original_stat)), ("listdir", guarded(original_listdir)),
+                              ("scandir", guarded(original_scandir)), ("readlink", guarded(original_readlink))]:
+            self.stack.enter_context(mock.patch.object(audit.os, target, value))
+        self.stack.enter_context(mock.patch.object(audit, "_classification_bound",
+            side_effect=lambda bound, task=False: self.classes[(bound[0], bound[1] if task else None)]))
+        self.stack.enter_context(mock.patch("builtins.open", side_effect=read))
+        return self
+
+
+def stat_row(pid, overrides=None, classification="kernel-thread"):
+    fields = ["S"] + ["0"] * 49
+    fields[6] = str(0x00200000 if classification == "kernel-thread" else 0)
+    fields[0] = "Z" if classification == "zombie" else "S"
+    fields[19] = "123"
+    for number, value in (overrides or {}).items():
+        fields[number - 3] = str(value)
+    return "%d (fixture) %s\n" % (pid, " ".join(fields))
+
+
+class StatProcFixture(SpecialProcFixture):
+    """Run the production identity/classification parser throughout a census."""
+    def __init__(self, classification, overrides):
+        super().__init__(classification)
+        self.overrides = overrides
+
+    def __enter__(self):
+        identity, classify = audit._identity, audit._classification_bound
+        super().__enter__()
+        ordinary_open = open
+        def read(path, *args, **kwargs):
+            if path.endswith("/stat"):
+                parts = path.split("/")
+                pid = int(parts[-2])
+                key = (int(parts[2]), pid if "task" in parts else None)
+                data = stat_row(pid, self.overrides.get(path), self.classes[key])
+                return mock.mock_open(read_data=data)(path, *args, **kwargs)
+            return ordinary_open(path, *args, **kwargs)
+        self.stack.enter_context(mock.patch.object(audit, "_identity", identity))
+        self.stack.enter_context(mock.patch.object(audit, "_classification_bound", classify))
+        self.stack.enter_context(mock.patch("builtins.open", side_effect=read))
+        return self
 
 
 class DeletedInodeAuditTests(unittest.TestCase):
@@ -211,7 +290,7 @@ class DeletedInodeAuditTests(unittest.TestCase):
                       [PermissionError(errno.EACCES, "denied")]]:
             failures = []
             with mock.patch("builtins.open", mock.mock_open(read_data="24 26 0:26 / /dev/shm rw - tmpfs tmpfs rw\n")), \
-                    mock.patch.object(audit.os, "readlink", side_effect=links):
+                    mock.patch.object(audit.os, "readlink", side_effect=links if len(links) == 2 else links * 2):
                 audit._scan_mountinfo(7, failures)
             self.assertTrue(failures)
 
@@ -232,6 +311,347 @@ class DeletedInodeAuditTests(unittest.TestCase):
                      body.replace(" 0 ", " bad ", 1), "8 (x) S " + "0 " * 19]:
             with mock.patch("builtins.open", mock.mock_open(read_data=data)), self.assertRaises(ValueError):
                 audit._identity(7, 8)
+
+    def test_stat_classification_uses_pf_kthread_or_zombie_state(self):
+        fields = ["S", "2", "0", "0", "0", "-1"] + ["0"] * 44
+        fields[6] = str(0x00200000)
+        fields[19] = "123"
+        kthread = "7 (bracketed-user-name) " + " ".join(fields)
+        with mock.patch("builtins.open", mock.mock_open(read_data=kthread)):
+            self.assertEqual(audit._read_stat(7), ("123", "kernel-thread"))
+        fields[0] = "Z"
+        fields[6] = "0"
+        zombie = "7 (ordinary-looking-name) " + " ".join(fields)
+        with mock.patch("builtins.open", mock.mock_open(read_data=zombie)):
+            self.assertEqual(audit._read_stat(7), ("123", "zombie"))
+        fields[0] = "S"
+        fields[6] = "0"
+        ordinary = "7 (kworker/0:1) " + " ".join(fields)
+        with mock.patch("builtins.open", mock.mock_open(read_data=ordinary)):
+            self.assertEqual(audit._read_stat(7), ("123", "ordinary"))
+
+    def test_stat_rejects_negative_unsigned_fields_and_flag_exploits(self):
+        # Proc field numbers, independent of the parser's zero-based indices.
+        nonnegative = [4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 20, 22, 23,
+                       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                       39, 40, 41, 42, 43, 45, 46, 47, 48, 49, 50, 51]
+        for number, value in [(n, "-1") for n in nonnegative] + [(9, "-2097152"), (9, "4297064448")]:
+            with self.subTest(field=number, value=value):
+                fields = ["S"] + ["0"] * 49
+                fields[19] = "123"
+                fields[number - 3] = value
+                with mock.patch("builtins.open", mock.mock_open(read_data="7 (x) " + " ".join(fields))):
+                    with self.assertRaises(ValueError):
+                        audit._read_stat(7)
+                    with self.assertRaises(ValueError):
+                        audit._classification_bound((7, 7, "123"))
+
+    def test_stat_preserves_legitimately_signed_fields_and_real_self(self):
+        fields = ["S"] + ["0"] * 49
+        fields[19] = "123"
+        for number in (7, 8, 16, 17, 18, 19, 21, 24, 38, 44, 52):
+            fields[number - 3] = "-1"
+        with mock.patch("builtins.open", mock.mock_open(read_data="7 (x) " + " ".join(fields))):
+            self.assertEqual(audit._read_stat(7), ("123", "ordinary"))
+        self.assertEqual(audit._read_stat(os.getpid())[1], "ordinary")
+
+    def test_stat_linux_lp64_width_boundaries(self):
+        # Local proc(5) format declarations: %d, %u, %ld, %lu/%llu.
+        groups = [([7, 8, 38, 52], -(1 << 31), (1 << 31) - 1),
+                  ([4, 5, 6, 39], 0, (1 << 31) - 1),
+                  ([9, 40, 41], 0, (1 << 32) - 1),
+                  ([16, 17, 18, 19, 21, 24, 44], -(1 << 63), (1 << 63) - 1),
+                  ([20], 0, (1 << 63) - 1),
+                  ([10, 11, 12, 13, 14, 15, 22, 23, 25, 26, 27, 28, 29, 30,
+                    31, 32, 33, 34, 35, 36, 37, 42, 43, 45, 46, 47, 48, 49, 50, 51],
+                   0, (1 << 64) - 1)]
+        self.assertEqual(sorted(n for numbers, _, _ in groups for n in numbers), list(range(4, 53)))
+        for numbers, minimum, maximum in groups:
+            for number in numbers:
+                for value in (minimum, maximum, minimum - 1, maximum + 1):
+                    with self.subTest(field=number, value=value), \
+                            mock.patch("builtins.open", mock.mock_open(read_data=stat_row(7, {number: value}))):
+                        if minimum <= value <= maximum:
+                            audit._read_stat(7)
+                        else:
+                            with self.assertRaises(ValueError):
+                                audit._read_stat(7)
+        for pid in (0, 1 << 31):
+            with mock.patch("builtins.open", mock.mock_open(read_data=stat_row(pid))), self.assertRaises(ValueError):
+                audit._read_stat(pid)
+
+    def test_full_census_malformed_stat_cannot_grant_special_absence(self):
+        invalid = [(4, 1 << 31), (7, -(1 << 31) - 1), (8, 1 << 31),
+                   (9, 1 << 32), (10, 1 << 64), (18, -(1 << 63) - 1),
+                   (20, 1 << 63), (22, 1 << 64), (23, 1 << 64),
+                   (24, 1 << 63), (39, 1 << 31), (40, 1 << 32),
+                   (41, 1 << 32), (44, -(1 << 63) - 1), (52, 1 << 31)]
+        for classification in ("kernel-thread", "zombie"):
+            for path in ("/proc/7/stat", "/proc/7/task/7/stat", "/proc/7/task/8/stat"):
+                for number, value in invalid:
+                    with self.subTest(classification=classification, path=path, field=number), \
+                            StatProcFixture(classification, {path: {number: value}}):
+                        identities, failures, refs, _ = audit.audit_round(set())
+                    self.assertEqual(identities, [])
+                    self.assertEqual(refs, [])
+                    expected = "identity:7:malformed" if path == "/proc/7/stat" else "task-identity:7:" + path.split("/")[-2]
+                    self.assertIn(expected, failures)
+
+    def test_full_census_valid_stat_boundaries_preserve_special_absence(self):
+        valid = {7: -(1 << 31), 8: -1, 10: (1 << 64) - 1, 18: -(1 << 63),
+                 19: -20, 22: (1 << 64) - 1, 23: (1 << 64) - 1,
+                 24: (1 << 63) - 1, 25: (1 << 64) - 1, 44: -(1 << 63), 52: -(1 << 31)}
+        for classification in ("kernel-thread", "zombie"):
+            overrides = {path: valid for path in ("/proc/7/stat", "/proc/7/task/7/stat", "/proc/7/task/8/stat")}
+            with StatProcFixture(classification, overrides):
+                identities, failures, refs, _ = audit.audit_round(set())
+            self.assertEqual(failures, [])
+            self.assertEqual(refs, [])
+            self.assertEqual(set(identities), {(7, 7, str((1 << 64) - 1)), (7, 8, str((1 << 64) - 1))})
+
+    def test_real_pid2_stat_when_exposed(self):
+        try:
+            parsed = audit._read_stat(2)
+        except FileNotFoundError:
+            self.skipTest("PID 2 is absent in this PID namespace")
+        self.assertTrue(parsed[0].isdigit())
+        self.assertIn(parsed[1], ("ordinary", "kernel-thread", "zombie"))
+
+    def test_full_census_map_files_requires_unsigned_64bit_ordered_addresses(self):
+        for entry in ("10000000000000000-10000000000001000", "1-10000000000000000",
+                      "ffffffffffffffff-ffffffffffffffff", "ffffffffffffffff-0"):
+            with self.subTest(entry=entry), ProcFixture() as proc:
+                proc.directories["/proc/7/map_files"] = [entry]
+                identities, failures, refs, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("malformed-map-entry:7", failures)
+            self.assertEqual(refs, [])
+        for entry in ("0-1", "fffffffffffffffe-ffffffffffffffff", "0-ffffffffffffffff"):
+            with self.subTest(entry=entry), ProcFixture() as proc:
+                proc.directories["/proc/7/map_files"] = [entry]
+                identities, failures, refs, counters = audit.audit_round({(1, 42)})
+            self.assertTrue(identities)
+            self.assertEqual(failures, [])
+            self.assertEqual(counters["map_files_entries"], 1)
+            self.assertIn({"identity": [1, 42], "source": "map_files/7/" + entry}, refs)
+
+    def test_missing_or_invalid_mnt_namespace_never_hides_existing_alias(self):
+        data = "24 26 0:26 /retained/child /elsewhere rw - tmpfs tmpfs rw\n"
+        for classification in ("kernel-thread", "zombie", "ordinary"):
+            for error in (FileNotFoundError(errno.ENOENT, "gone"),
+                          PermissionError(errno.EACCES, "denied"), ValueError("malformed")):
+                for tid in (None, 8):
+                    with self.subTest(classification=classification, error=error, tid=tid):
+                        failures = []
+                        with mock.patch.object(audit, "_namespace", side_effect=error), \
+                                mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                                mock.patch.object(audit, "_classification_bound", return_value=classification), \
+                                mock.patch("builtins.open", mock.mock_open(read_data=data)) as read:
+                            audit._scan_mountinfo(7, failures, ((os.makedev(0, 26), "/retained"),), tid,
+                                                  (7, tid or 7, "123"), classification)
+                        label = "7:%d" % (tid or 7)
+                        self.assertIn("mount-alias:" + label, failures)
+                        self.assertIn("mountinfo-uninspected:" + label, failures)
+                        read.assert_called_once_with(audit._base(7, tid) + "/mountinfo", "r")
+
+    def test_mount_namespace_churn_does_not_hide_alias_or_empty_file(self):
+        for data in ("", "24 26 0:26 /retained /elsewhere rw - tmpfs tmpfs rw\n"):
+            for after in ("mnt:[43]", FileNotFoundError(errno.ENOENT, "gone")):
+                failures = []
+                with mock.patch.object(audit, "_namespace", side_effect=["mnt:[42]", after]), \
+                        mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                        mock.patch.object(audit, "_classification_bound", return_value="kernel-thread"), \
+                        mock.patch("builtins.open", mock.mock_open(read_data=data)):
+                    audit._scan_mountinfo(7, failures, ((os.makedev(0, 26), "/retained"),),
+                                          bound=(7, 7, "123"), allowed_absence="kernel-thread")
+                self.assertIn("mount-namespace-churn:7:7", failures)
+                if data:
+                    self.assertIn("mount-alias:7:7", failures)
+
+    def test_special_full_census_absent_and_empty_surfaces(self):
+        for classification in ("kernel-thread", "zombie"):
+            for empty in (False, True):
+                with self.subTest(classification=classification, empty=empty), SpecialProcFixture(classification, empty):
+                    identities, failures, refs, counters = audit.audit_round(set())
+                self.assertEqual(failures, [])
+                self.assertEqual(refs, [])
+                self.assertEqual(set(identities), {(7, 7, "123"), (7, 8, "123")})
+                self.assertEqual(counters["map_files_denials"], 0)
+
+    def test_special_full_census_denial_of_each_surface_fails(self):
+        for classification in ("kernel-thread", "zombie"):
+            surfaces = SpecialProcFixture(classification).absent
+            for path in sorted(surfaces):
+                with self.subTest(classification=classification, path=path), SpecialProcFixture(classification) as proc:
+                    proc.errors[path] = PermissionError(errno.EACCES, "denied")
+                    identities, failures, _, _ = audit.audit_round(set())
+                self.assertEqual(identities, [])
+                self.assertTrue(failures)
+
+    def test_special_full_census_inspects_every_existing_target(self):
+        for classification in ("kernel-thread", "zombie"):
+            for base in ("/proc/7", "/proc/7/task/7", "/proc/7/task/8"):
+                for name in ("cwd", "root", "exe", "fd", "map_files"):
+                    if name == "map_files" and base != "/proc/7":
+                        continue
+                    with self.subTest(classification=classification, base=base, name=name), SpecialProcFixture(classification) as proc:
+                        proc.absent.remove(base + "/" + name)
+                        if name == "fd":
+                            proc.directories[base + "/fd"] = ["9"]
+                        identities, failures, refs, _ = audit.audit_round({(1, 42)})
+                    self.assertEqual(failures, [])
+                    self.assertTrue(identities)
+                    self.assertEqual(len(refs), 1, refs)
+                    self.assertEqual(refs[0]["identity"], [1, 42])
+
+    def test_special_task_class_is_never_inherited_from_leader(self):
+        for classification in ("kernel-thread", "zombie"):
+            with SpecialProcFixture(classification) as proc:
+                proc.classes[(7, 8)] = "ordinary"
+                identities, failures, _, _ = audit.audit_round(set())
+            self.assertEqual(identities, [])
+            self.assertIn("unresolved-target-churn:7/8/cwd", failures)
+
+    def test_ordinary_map_files_absence_is_mandatory_and_typed_parameter_is_checked(self):
+        with ProcFixture():
+            listing = audit.os.listdir
+            def missing(path):
+                if path == "/proc/7/map_files":
+                    raise FileNotFoundError(errno.ENOENT, "gone")
+                return listing(path)
+            with mock.patch.object(audit.os, "listdir", side_effect=missing):
+                identities, failures, _, counters = audit.audit_round(set())
+        self.assertEqual(identities, [])
+        self.assertIn("map_files-directory:7:2", failures)
+        self.assertEqual(counters["map_files_denials"], 1)
+        failures = []
+        with mock.patch.object(audit.os, "stat", side_effect=FileNotFoundError(errno.ENOENT, "gone")), \
+                mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                mock.patch.object(audit, "_classification_bound", return_value="ordinary"):
+            audit._stat_target("/proc/7/cwd", set(), failures, [], "7/cwd", bound=(7, 7, "123"),
+                               allowed_absence="ordinary")
+        self.assertIn("unresolved-target-churn:7/cwd", failures)
+
+    def test_special_empty_mountinfo_never_excuses_malformed_namespace(self):
+        for classification in ("kernel-thread", "zombie"):
+            for link in ("mnt:bad", "pid:[41]", "mnt:[0]"):
+                with SpecialProcFixture(classification, empty_mountinfo=True):
+                    original = audit.os.readlink
+                    def readlink(path):
+                        if path == "/proc/7/task/8/ns/mnt":
+                            return link
+                        return original(path)
+                    with mock.patch.object(audit.os, "readlink", side_effect=readlink):
+                        identities, failures, _, _ = audit.audit_round(set())
+                self.assertEqual(identities, [])
+                self.assertIn("mountinfo-uninspected:7:8", failures)
+
+    def test_special_task_identity_reuse_during_absence_fails(self):
+        for classification in ("kernel-thread", "zombie"):
+            for key in ((7, None), (7, 7), (7, 8)):
+                with self.subTest(classification=classification, key=key), SpecialProcFixture(classification) as proc:
+                    proc.identity_faults[(key, 2)] = (7, key[1] or 7, "999")
+                    identities, failures, _, _ = audit.audit_round(set())
+                self.assertEqual(identities, [])
+                self.assertIn("identity-reused:7:%d" % (key[1] or 7), failures)
+
+    def test_every_identity_class_is_revalidated_through_final_census(self):
+        for classification, changed in (("kernel-thread", "ordinary"), ("zombie", "kernel-thread"),
+                                         ("ordinary", "zombie")):
+            for key in ((7, None), (7, 7), (7, 8)):
+                for change_at in (2, 3):  # end-of-surface and final census reads
+                    with self.subTest(classification=classification, key=key, change_at=change_at), ProcFixture():
+                        counts = {}
+                        def classify(bound, task=False):
+                            current = (bound[0], bound[1] if task else None)
+                            counts[current] = counts.get(current, 0) + 1
+                            return changed if current == key and counts[current] >= change_at else classification
+                        with mock.patch.object(audit, "_classification_bound", side_effect=classify):
+                            identities, failures, _, _ = audit.audit_round(set())
+                    self.assertEqual(identities, [])
+                    self.assertIn("classification-churn:7:%d" % (key[1] or 7), failures)
+
+    def test_only_bound_kernel_thread_or_zombie_absence_is_allowed(self):
+        bound = (7, 7, "123")
+        for classification in ("kernel-thread", "zombie"):
+            failures, refs = [], []
+            with mock.patch.object(audit.os, "stat", side_effect=FileNotFoundError(errno.ENOENT, "gone")), \
+                    mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                    mock.patch.object(audit, "_classification_bound", return_value=classification):
+                self.assertFalse(audit._stat_target("/proc/7/cwd", set(), failures, refs, "7/cwd",
+                                                    bound=bound, allowed_absence=classification))
+            self.assertEqual(failures, [])
+        failures, refs = [], []
+        with mock.patch.object(audit.os, "stat", side_effect=FileNotFoundError(errno.ENOENT, "gone")), \
+                mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE):
+            audit._stat_target("/proc/7/cwd", set(), failures, refs, "7/cwd", bound=bound,
+                               allowed_absence="ordinary")
+        self.assertTrue(any(x.startswith("unresolved-target-churn:") for x in failures), failures)
+
+    def test_absence_classification_change_and_existing_reference_fail_or_record(self):
+        bound = (7, 7, "123")
+        failures, refs = [], []
+        with mock.patch.object(audit.os, "stat", side_effect=FileNotFoundError(errno.ENOENT, "gone")), \
+                mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                mock.patch.object(audit, "_classification_bound", return_value="ordinary"):
+            audit._stat_target("/proc/7/root", set(), failures, refs, "7/root", bound=bound,
+                               allowed_absence="zombie")
+        self.assertIn("classification-churn:7:7", failures)
+        failures, refs = [], []
+        with mock.patch.object(audit.os, "stat", return_value=SimpleNamespace(st_dev=1, st_ino=42)), \
+                mock.patch.object(audit, "_identity_state", return_value=audit.IdentityState.LIVE), \
+                mock.patch.object(audit, "_classification_bound", return_value="kernel-thread"):
+            self.assertTrue(audit._stat_target("/proc/7/exe", {(1, 42)}, failures, refs, "7/exe", bound=bound,
+                                               allowed_absence="kernel-thread"))
+        self.assertEqual(refs, [{"identity": [1, 42], "source": "7/exe"}])
+        self.assertEqual(failures, [])
+
+    def test_full_process_scan_allows_only_typed_kernel_or_zombie_surfaces(self):
+        for classification in ("kernel-thread", "zombie"):
+            with self.subTest(classification=classification), ProcFixture() as proc:
+                real_stat = proc.stat
+                def stat(path):
+                    if path in ("/proc/7/cwd", "/proc/7/root", "/proc/7/exe"):
+                        raise FileNotFoundError(errno.ENOENT, "gone")
+                    return real_stat(path)
+                real_scandir = audit.os.scandir
+                def scandir(path):
+                    if path == "/proc/7/fd":
+                        raise FileNotFoundError(errno.ENOENT, "gone")
+                    return real_scandir(path)
+                real_listdir = audit.os.listdir
+                def listdir(path):
+                    if path == "/proc/7/map_files":
+                        raise FileNotFoundError(errno.ENOENT, "gone")
+                    return real_listdir(path)
+                with mock.patch.object(audit, "_classification_bound", return_value=classification), \
+                        mock.patch.object(audit.os, "stat", side_effect=stat), \
+                        mock.patch.object(audit.os, "scandir", side_effect=scandir), \
+                        mock.patch.object(audit.os, "listdir", side_effect=listdir), \
+                        mock.patch("builtins.open", mock.mock_open(read_data="")):
+                    failures, refs, counters = [], [], {"processes": 0, "tasks": 0,
+                                                        "map_files_entries": 0, "map_files_denials": 0}
+                    result = audit._scan_process(7, set(), failures, refs, counters)
+                self.assertEqual(result, (7, 7, "123"))
+                self.assertEqual(failures, [])
+
+    def test_ordinary_process_missing_surface_and_namespace_denial_fail(self):
+        with ProcFixture() as proc:
+            real_stat = proc.stat
+            def stat(path):
+                if path == "/proc/7/cwd":
+                    raise FileNotFoundError(errno.ENOENT, "gone")
+                return real_stat(path)
+            with mock.patch.object(audit.os, "stat", side_effect=stat), \
+                    mock.patch.object(audit, "_classification_bound", return_value="ordinary"):
+                failures, refs, counters = [], [], {"processes": 0, "tasks": 0,
+                                                    "map_files_entries": 0, "map_files_denials": 0}
+                self.assertIsNone(audit._scan_process(7, set(), failures, refs, counters))
+                self.assertTrue(any(x.startswith("unresolved-target-churn:") for x in failures), failures)
+        failures = []
+        with mock.patch.object(audit, "_namespace", side_effect=PermissionError(errno.EACCES, "denied")):
+            audit._scan_namespace("/proc/7", "pid", failures, (7, 7, "123"), "kernel-thread")
+        self.assertTrue(any(x.endswith(":13") for x in failures), failures)
 
     def test_three_round_run_authenticates_only_exact_live_anchors(self):
         root = {"device_number": 26, "filesystem_root": "/retained", "path": "/dev/shm/retained",

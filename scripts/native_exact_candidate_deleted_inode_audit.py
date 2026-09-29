@@ -103,19 +103,74 @@ def _base(pid, tid=None):
     return "/proc/%d" % pid if tid is None else "/proc/%d/task/%d" % (pid, tid)
 
 
-def _starttime(pid, tid=None):
+def _read_stat(pid, tid=None):
     with open(_base(pid, tid) + "/stat", "r") as f:
         line = f.read()
     close = line.rfind(")")
     expected = tid if tid is not None else pid
-    if close < 0 or not line.startswith("%d (" % expected):
+    if (not 0 < expected <= 0x7fffffff or close < 0
+            or not line.startswith("%d (" % expected) or close <= len(str(expected)) + 2):
         raise ValueError("malformed stat")
+    comm = line[len(str(expected)) + 2:close]
     fields = line[close + 2:].split()
-    if (len(fields) < 50 or fields[0] not in ("R", "S", "D", "Z", "T", "t", "X", "x", "K", "W", "P", "I")
+    if (line[close + 1:close + 2] != " " or len(fields) < 50
+            or fields[0] not in ("R", "S", "D", "Z", "T", "t", "X", "x", "K", "W", "P", "I")
             or any(not re.fullmatch(r"-?[0-9]+", value) for value in fields[1:])
             or not fields[19].isdigit()):
         raise ValueError("malformed starttime")
-    return fields[19]
+    # Linux proc stat fields 4..52.  tty_nr/tpgid, child CPU times,
+    # priority/nice, itrealvalue, RSS, exit_signal, cguest_time and exit_code
+    # are signed.  The other known fields are unsigned or nonnegative IDs /
+    # counts.  In particular a negative flags value must never gain the
+    # PF_KTHREAD exemption through Python's infinite-width bit operations.
+    # This audit's retained Linux target is LP64: int is 32 bits and long /
+    # unsigned long / unsigned long long are 64 bits.  Validate representable
+    # values before any identity or PF_KTHREAD classification is returned.
+    signed_int_fields = {4, 5, 6, 7, 8, 38, 39, 52}
+    unsigned_int_fields = {9, 40, 41}
+    signed_long_fields = {16, 17, 18, 19, 20, 21, 24, 44}
+    nonnegative_signed_fields = {4, 5, 6, 20, 39}
+    for number in range(4, 53):
+        value = int(fields[number - 3])
+        if number in signed_int_fields:
+            minimum, maximum = -(1 << 31), (1 << 31) - 1
+        elif number in unsigned_int_fields:
+            minimum, maximum = 0, (1 << 32) - 1
+        elif number in signed_long_fields:
+            minimum, maximum = -(1 << 63), (1 << 63) - 1
+        else:
+            minimum, maximum = 0, (1 << 64) - 1
+        if number in nonnegative_signed_fields:
+            minimum = 0
+        if not minimum <= value <= maximum:
+            raise ValueError("out-of-range stat field %d" % number)
+    if not comm:
+        raise ValueError("malformed comm")
+    # Fields are strictly parsed from proc(5).  PF_KTHREAD is the kernel's
+    # identity-bound marker (field 9, represented here as fields[6]); do not
+    # infer this class from names or parent/session relationships.  A zombie
+    # is a separate permitted class because its process resources are gone.
+    state = fields[0]
+    flags = int(fields[6])
+    if state == "Z":
+        classification = "zombie"
+    elif flags & 0x00200000:
+        classification = "kernel-thread"
+    else:
+        classification = "ordinary"
+    return fields[19], classification
+
+
+def _starttime(pid, tid=None):
+    return _read_stat(pid, tid)[0]
+
+
+def _classification_bound(bound, task=False):
+    pid, tid, start = bound
+    got_start, classification = _read_stat(pid, tid if task else None)
+    if got_start != start:
+        raise ValueError("identity changed during classification")
+    return classification
 
 
 def _identity(pid, tid=None):
@@ -164,11 +219,31 @@ def _revalidate(bound, failures, reconciled, task=False):
     return state
 
 
-def _stat_target(path, deleted, failures, refs, label, reconciled=None, bound=None, task=False):
+def _revalidate_classification(bound, expected, failures, task=False):
+    """Re-read stat and require both the bound identity and class to persist."""
+    state = _identity_state(bound, task)
+    if state != IdentityState.LIVE:
+        failures.append("identity-%s:%d:%d" % (state.value, bound[0], bound[1]))
+        return False
+    try:
+        actual = _classification_bound(bound, task)
+    except (OSError, IOError, ValueError):
+        failures.append("classification-uninspected:%d:%d" % bound[:2])
+        return False
+    if actual != expected:
+        failures.append("classification-churn:%d:%d" % bound[:2])
+        return False
+    return True
+
+
+def _stat_target(path, deleted, failures, refs, label, reconciled=None, bound=None, task=False,
+                 allowed_absence=None):
     try:
         s = os.stat(path)
     except OSError as e:
         if e.errno in (errno.ENOENT, errno.ESRCH) and bound is not None:
+            if _allow_absent_surface(e, label, failures, bound, allowed_absence, task):
+                return False
             state = _revalidate(bound, failures, reconciled, task)
             if state != IdentityState.EXITED:
                 failures.append("unresolved-target-churn:%s" % label)
@@ -241,26 +316,73 @@ def _namespace(base, name):
     return value
 
 
-def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None):
+def _allow_absent_surface(error, label, failures, bound=None, allowed_absence=None, task=False):
+    if (error.errno not in (errno.ENOENT, errno.ESRCH) or bound is None
+            or allowed_absence not in ("kernel-thread", "zombie")):
+        return False
+    return _revalidate_classification(bound, allowed_absence, failures, task)
+
+
+def _scan_namespace(base, name, failures, bound=None, allowed_absence=None, task=False):
+    label = base + "/ns/" + name
+    try:
+        _namespace(base, name)
+    except OSError as e:
+        if not _allow_absent_surface(e, label, failures, bound, allowed_absence, task):
+            failures.append("namespace:%s:%s" % (label, e.errno))
+    except ValueError:
+        failures.append("namespace:%s:malformed" % label)
+
+
+def _scan_mountinfo(pid, failures, mount_roots=(), task_tid=None, bound=None, allowed_absence=None):
     base = _base(pid, task_tid)
     label = "%d:%d" % (pid, task_tid if task_tid is not None else pid)
+    task = task_tid is not None
+    # Namespace absence cannot suppress an existing mountinfo surface.  Read
+    # both independently, retaining aliases even if the namespace is invalid.
+    namespaces = []
+    namespace_errors = []
+    def read_namespace():
+        try:
+            namespaces.append(_namespace(base, "mnt"))
+        except (OSError, ValueError) as e:
+            namespace_errors.append(e)
+    read_namespace()
+    data = None
+    mount_error = None
     try:
-        before = _namespace(base, "mnt")
         with open(base + "/mountinfo", "r") as f:
-            rows = _mount_rows(f.read())
-        after = _namespace(base, "mnt")
-        if before != after:
-            failures.append("mount-namespace-churn:" + label)
-        for dev, root, _ in rows:
-            if any(dev == target_dev and (root == target or root.startswith(target + "/")
-                                         or root == target + " (deleted)")
-                   for target_dev, target in mount_roots):
-                failures.append("mount-alias:" + label)
-    except (OSError, ValueError, OverflowError):
-        failures.append("mountinfo-uninspected:" + label)
+            data = f.read()
+    except OSError as e:
+        mount_error = e
+    if data:
+        try:
+            for dev, root, _ in _mount_rows(data):
+                if any(dev == target_dev and (root == target or root.startswith(target + "/")
+                                             or root == target + " (deleted)")
+                       for target_dev, target in mount_roots):
+                    failures.append("mount-alias:" + label)
+        except (ValueError, OverflowError):
+            failures.append("mountinfo-uninspected:" + label)
+    else:
+        absence = mount_error if mount_error is not None else OSError(errno.ENOENT, "empty mountinfo")
+        if not _allow_absent_surface(absence, label, failures, bound, allowed_absence, task):
+            failures.append("mountinfo-uninspected:" + label)
+    read_namespace()
+    if len(namespaces) == 2 and namespaces[0] != namespaces[1]:
+        failures.append("mount-namespace-churn:" + label)
+    # Even typed absence must be stable across this read.  Missing namespace
+    # links are legitimate only alongside an absent/empty mountinfo file;
+    # access denial and malformed links always fail closed.
+    if len(namespaces) == 1:
+        failures.append("mount-namespace-churn:" + label)
+    for error in namespace_errors:
+        if (data or not isinstance(error, OSError)
+                or not _allow_absent_surface(error, label, failures, bound, allowed_absence, task)):
+            failures.append("mountinfo-uninspected:" + label)
 
 
-def _scan_fds(base, bound, task, deleted, failures, refs, reconciled):
+def _scan_fds(base, bound, task, deleted, failures, refs, reconciled, allowed_absence=None):
     label = "%d:%d" % bound[:2]
     try:
         # Keep the enumeration descriptor alive while inspecting it when the
@@ -273,42 +395,59 @@ def _scan_fds(base, bound, task, deleted, failures, refs, reconciled):
                 _stat_target(base + "/fd/" + entry.name, deleted, failures, refs,
                              label + "/fd/" + entry.name, reconciled, bound, task)
     except OSError as e:
-        failures.append("fd-directory:%s:%s" % (label, e.errno))
+        if not _allow_absent_surface(e, label, failures, bound, allowed_absence, task):
+            failures.append("fd-directory:%s:%s" % (label, e.errno))
 
 
-def _scan_process(pid, deleted, failures, refs, counters, reconciled=None, mount_roots=()):
+def _scan_process(pid, deleted, failures, refs, counters, reconciled=None, mount_roots=(), classifications=None):
     first_error = len(failures)
     try:
         ident = _identity(pid)
     except (OSError, IOError, ValueError) as e:
         failures.append("identity:%d:%s" % (pid, getattr(e, "errno", "malformed"))); return None
+    try:
+        classification = _classification_bound(ident)
+    except (OSError, IOError, ValueError):
+        failures.append("classification:%d" % pid); return None
     counters["processes"] += 1
     base = "/proc/%d" % pid
     for name in ("cwd", "root", "exe"):
-        _stat_target(os.path.join(base, name), deleted, failures, refs, "%s/%s" % (pid, name), reconciled, ident)
+        _stat_target(os.path.join(base, name), deleted, failures, refs, "%s/%s" % (pid, name), reconciled, ident,
+                     allowed_absence=classification if classification in ("kernel-thread", "zombie") else None)
     for name in ("pid", "net", "user", "uts", "ipc"):
-        try:
-            _namespace(base, name)
-        except (OSError, ValueError):
-            failures.append("namespace:%s:%s" % (pid, name))
-    _scan_fds(base, ident, False, deleted, failures, refs, reconciled)
-    _scan_mountinfo(pid, failures, mount_roots)
+        _scan_namespace(base, name, failures, ident,
+                        classification if classification in ("kernel-thread", "zombie") else None)
+    _scan_fds(base, ident, False, deleted, failures, refs, reconciled,
+              classification if classification in ("kernel-thread", "zombie") else None)
+    _scan_mountinfo(pid, failures, mount_roots, bound=ident,
+                    allowed_absence=classification if classification in ("kernel-thread", "zombie") else None)
     mapdir = os.path.join(base, "map_files")
+    map_absent_allowed = False
     try:
         entries = os.listdir(mapdir)
     except OSError as e:
-        failures.append("map_files-directory:%d:%s" % (pid, e.errno)); entries = None
+        map_absent_allowed = _allow_absent_surface(
+            e, mapdir, failures, ident,
+            classification if classification in ("kernel-thread", "zombie") else None)
+        if not map_absent_allowed:
+            failures.append("map_files-directory:%d:%s" % (pid, e.errno))
+        entries = None
     if entries is None:
-        counters["map_files_denials"] += 1
+        if not map_absent_allowed:
+            counters["map_files_denials"] += 1
     else:
         counters["map_files_entries"] += len(entries)
         for ent in entries:
             if (not re.fullmatch(r"[0-9a-f]+-[0-9a-f]+", ent)
-                    or int(ent.split("-")[0], 16) >= int(ent.split("-")[1], 16)):
+                    or not 0 <= int(ent.split("-")[0], 16) < int(ent.split("-")[1], 16) <= 0xffffffffffffffff):
                 failures.append("malformed-map-entry:%d" % pid)
                 continue
             _stat_target(os.path.join(mapdir, ent), deleted, failures, refs, "map_files/%s/%s" % (pid, ent), reconciled, ident)
     state = _revalidate(ident, failures, reconciled)
+    if state == IdentityState.LIVE:
+        _revalidate_classification(ident, classification, failures)
+    if classifications is not None and state == IdentityState.LIVE and len(failures) == first_error:
+        classifications[(ident, False)] = classification
     return ident if state == IdentityState.LIVE and len(failures) == first_error else None
 
 
@@ -316,13 +455,14 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
     failures, refs = [], []
     counters = {"processes": 0, "tasks": 0, "map_files_entries": 0, "map_files_denials": 0}
     identities = []
+    classifications = {}
     try:
         pids = sorted(int(x) for x in os.listdir("/proc") if PROC_RE.match(x))
     except OSError as e:
         return identities, failures + ["proc-list:%s" % e.errno], refs, counters
     for pid in pids:
         first_error = len(failures)
-        ident = _scan_process(pid, deleted, failures, refs, counters, reconciled, mount_roots)
+        ident = _scan_process(pid, deleted, failures, refs, counters, reconciled, mount_roots, classifications)
         if ident is None:
             continue
         candidates = [(ident, False)]
@@ -337,14 +477,26 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
             except (OSError, IOError, ValueError):
                 failures.append("task-identity:%d:%d" % (pid, tid)); continue
             counters["tasks"] += 1
+            try:
+                tclassification = _classification_bound(tident, True)
+            except (OSError, IOError, ValueError):
+                failures.append("classification:%d:%d" % (pid, tid)); continue
             # Per-task descriptors and namespaces are read, but map_files is
             # intentionally process-level: task map_files is absent on Linux.
             tbase = "/proc/%d/task/%d" % (pid, tid)
             for name in ("cwd", "root", "exe"):
-                _stat_target(os.path.join(tbase, name), deleted, failures, refs, "%d/%d/%s" % (pid, tid, name), reconciled, tident, True)
-            _scan_fds(tbase, tident, True, deleted, failures, refs, reconciled)
-            _scan_mountinfo(pid, failures, mount_roots, tid)
+                _stat_target(os.path.join(tbase, name), deleted, failures, refs, "%d/%d/%s" % (pid, tid, name), reconciled, tident, True,
+                             tclassification if tclassification in ("kernel-thread", "zombie") else None)
+            for name in ("pid", "net", "user", "uts", "ipc"):
+                _scan_namespace(tbase, name, failures, tident,
+                                tclassification if tclassification in ("kernel-thread", "zombie") else None, True)
+            _scan_fds(tbase, tident, True, deleted, failures, refs, reconciled,
+                      tclassification if tclassification in ("kernel-thread", "zombie") else None)
+            _scan_mountinfo(pid, failures, mount_roots, tid, tident,
+                            tclassification if tclassification in ("kernel-thread", "zombie") else None)
             if _revalidate(tident, failures, reconciled, True) == IdentityState.LIVE:
+                _revalidate_classification(tident, tclassification, failures, True)
+                classifications[(tident, True)] = tclassification
                 candidates.append((tident, True))
         try:
             final_tids = sorted(int(x) for x in os.listdir(taskdir) if PROC_RE.fullmatch(x))
@@ -363,6 +515,8 @@ def audit_round(deleted, mount_roots=(), reconciled=None):
     live_processes = []
     for ident, task in identities:
         if _revalidate(ident, failures, reconciled, task) == IdentityState.LIVE:
+            if not _revalidate_classification(ident, classifications[(ident, task)], failures, task):
+                continue
             verified.append(ident)
             if not task:
                 live_processes.append(ident[0])
