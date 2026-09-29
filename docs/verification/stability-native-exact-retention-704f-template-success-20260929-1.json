@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.native-exact-retention-704f-template-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_DRAFT_SOURCE_DESIGN_ONLY",
+  "retention_preparation": {
+    "packet": "docs/verification/evidence/native-exact-candidate-retention-preparation-704f6654-1.py",
+    "packet_sha256": "3c684c86cdb77d5af801fb14b448e9ea936325bab2e8367a9f29f50f5c6e8b86",
+    "tests": "scripts/tests/test_native_exact_candidate_retention_preparation_704f6654.py",
+    "tests_sha256": "a5496af24b032551d46566e3f0c4ac36214783470f4f18e8318b714b0d9c59c4",
+    "release_sentinel": "RELEASE_HASH_REQUIRED",
+    "execution_released": false
+  },
+  "future_retirement": {
+    "packet": "docs/verification/evidence/native-exact-candidate-retirement-704f6654-1.py",
+    "packet_sha256": "3fd47e3782d844d72d7cb5da4f6ac845f2f9b61d645dd7baf4dce547eb51bb37",
+    "tests": "scripts/tests/test_native_exact_candidate_retirement_704f6654.py",
+    "tests_sha256": "bfeffba9f81020f54399ebd71a827102959b0ca0d2376677c22e2f10c0743b6d",
+    "release_sentinel": "RELEASE_HASH_REQUIRED",
+    "retention_inventory_sentinel": "RETENTION_INVENTORY_HASH_REQUIRED",
+    "retention_capsule_sentinel": "RETENTION_CAPSULE_HASH_REQUIRED",
+    "retention_success_sentinel": "RETENTION_SUCCESS_HASH_REQUIRED",
+    "execution_released": false
+  },
+  "bindings": {
+    "main_commit": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "candidate": "/dev/shm/mckernel-exact-candidate-704f6654-1",
+    "candidate_device": 26,
+    "candidate_inode": 36767,
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-704f6654-1",
+    "metadata_backup_device": 26,
+    "metadata_backup_inode": 47413,
+    "planner_sha256": "ac3bb0354d1353928fd5f63ddf6743b636642fab79a4f5a3ec9195d5721d0b26",
+    "archiver_sha256": "6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e",
+    "capsule_tests_sha256": "ae6f129ac8f86379d98ad2ca1eec1e03034d3754a6786300014c140320743c9a",
+    "archive_tests_sha256": "fa9d727d74e462a9d6fdb2d96f3a3a597ccdab331b4321b92a2d11eaeb48355e"
+  },
+  "tests": {
+    "retention_preparation_packet": "PASS 18",
+    "retention_preparation_plus_support_python38": "PASS 46",
+    "retention_preparation_plus_support_python39": "PASS 46",
+    "future_retirement_packet": "PASS 79",
+    "py_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "independent_review": {
+    "status": "PASS_DRAFT_SOURCE_EXECUTION_DESIGN",
+    "blocking_findings": 0,
+    "scope": "non-destructive retention preparation template only",
+    "execution_authority": false,
+    "required_next": "immutable fetched template, mechanically exact two-path release, separate execution review and complete fresh preflight"
+  },
+  "preservation": {
+    "candidate_traversed": false,
+    "archive_generated": false,
+    "candidate_or_backup_mutated": false,
+    "retirement_attempted": false,
+    "build_or_guest_run": false,
+    "consumed_build_container": "68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6"
+  },
+  "acceptance": {
+    "retention_preparation": false,
+    "retirement": false,
+    "kernel_build": false,
+    "runtime": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "commit/push/fetch this exact DRAFT template, create an acyclic release changing only the retention-preparation packet sentinel and adding its release JSON, then obtain separate mechanical/execution review before one ordinary-user run"
+}

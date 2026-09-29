@@ -7550,3 +7550,35 @@ fresh preparation review before one preparation run, review its result, and seek
 a new one-shot heavy-build release only after capacity passes. Never reuse or
 rerun `704f6654-1`. Formal counters remain unchanged, successful current-candidate
 builds remain zero and real guest applications this work window remain zero.
+
+Continuation checkpoint 150, 2026-09-29: fresh candidate preparation cannot
+start while consumed `704f6654-1` occupies 9,083,990,016 allocated tmpfs bytes.
+No ad-hoc deletion is permitted. The accepted retirement flow first requires a
+small exact inventory/restoration capsule; the existing preparation and failure
+archives do not contain the candidate checkout and cannot substitute for it.
+
+Non-destructive retention-preparation DRAFT `3c684c86...e8b86` and tests
+`a5496af2...c59c4` differ from the accepted 675 packet only in exact main
+commit, candidate/backup identities, fresh output names, competing lease name
+and the unreleased sentinel. Eighteen packet tests pass; the packet plus capsule
+and archive support suites pass 46 tests on both Python 3.8 and default Python
+3.9.12. Independent review PASSes its source/execution design with no blocking
+finding, but releases no execution. It remains `RELEASE_HASH_REQUIRED`.
+
+The later retirement DRAFT `3fd47e37...1bb37` and tests
+`bfeffba9...43b6d` pass 79 tests and bind the exact consumed build failure, but
+they deliberately retain inventory, capsule, success and release sentinels.
+They fail closed before privileged action and cannot be finalized until the
+retention outputs exist and receive independent result review. Candidate and
+backup 26/36767 and 26/47413 remain untouched; no traversal, capsule, archive,
+retirement, Docker mutation, build or guest occurred.
+
+Next commit/push/fetch this exact DRAFT template, mechanically generate a
+retention-preparation release that changes exactly its sentinel and adds one
+release JSON, and obtain separate exact mechanical/execution review. After one
+ordinary-user run, independently inspect inventory, capsule, child retirement,
+claim/lease cleanup and reconstructible Git objects before finalizing any
+retirement release. Record
+`stability-native-exact-retention-704f-template-success-20260929-1.json`
+preserves this scope. Formal counters remain unchanged, successful builds remain
+zero and no real guest application has run in this work window.

@@ -2,6 +2,21 @@
 
 ## Latest continuation: checkpoint 149
 
+Checkpoint 150 adds the required storage bridge. Fresh candidate preparation
+needs retirement of consumed `704f6654-1`, but retirement cannot precede an
+exact inventory/restoration capsule. Non-destructive preparation DRAFT
+`3c684c86...e8b86` and tests `a5496af2...c59c4` pass independent design review
+and 46 combined tests on Python 3.8/3.9; it remains unreleased. Future retirement
+DRAFT `3fd47e37...1bb37` passes 79 tests but remains blocked by explicit
+inventory/capsule/success/release sentinels.
+
+Next fetch-verify the DRAFT template commit, generate an acyclic release changing
+only the retention-preparation packet sentinel plus its new release JSON, then
+obtain separate mechanical/execution review and complete preflight. The first
+run is ordinary-user, read-only over candidate/backup, and writes only fresh
+inventory/archive/scratch evidence. Independently accept those outputs before
+any privileged retirement release. No build, runtime or counter advances.
+
 The `704f6654-1` heavy request is consumed and must never be rerun. Its phase-0
 queue-fixture failure is now exactly reproduced: `/tmp` is `noexec`, while an
 evidence-style bind mount compiles and executes the unchanged seven-test fixture.
