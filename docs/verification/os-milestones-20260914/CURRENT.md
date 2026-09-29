@@ -7514,3 +7514,39 @@ build. Never rerun the unchanged `704f6654-1` request. Record
 counters do not move, successful current-candidate builds remain zero, real
 guest applications this window remain zero, applications remain 0/273, and the
 OS remains incomplete; the launcher pause is temporary.
+
+Continuation checkpoint 149, 2026-09-29: the `704f6654-1` phase-0 failure is
+now reproduced and corrected without rerunning its consumed heavy request. The
+pinned container mounts `/tmp` `noexec`: exact Rust 1.92 creates a regular 0755
+fixture there, but `access(X_OK)` is false and execution returns 126. The same
+unchanged fixture on the writable evidence-style bind mount executes all seven
+tests. Corrected cause-probe container `bfd1b859...cbe2` exits 0. The first
+probe `e24b84b4...f331e` is retained as an observer failure: it omitted the
+image's `/usr/bin/sleep` entrypoint override and performed no fixture action.
+
+Checker `84634d62...a46c` now uses the offline driver's existing
+`RUNNER_TEMP=/evidence/build` after fail-closed absolute-directory validation,
+preserves the safe tempfile default when unset, and distinguishes missing,
+non-regular and non-executable compiler output. Tests `83032bf2...41c8` pass
+34 cases under the default Python 3.9.12 and `/usr/bin/python3.8`; compilation
+and diff checks pass. Independent review PASSes this bounded source correction
+with no blocking finding. Production Rust, contract, fixture and seven-test
+oracle are unchanged.
+
+Corrected checker container `d778b8fa...bc44` uses the reviewed unprivileged
+2-CPU/2-GiB/no-network profile, exact Rust 1.92 and executable bind-backed
+`RUNNER_TEMP`; it verifies the source contract, executes all seven tests, cleans
+its temporary directory and exits 0, non-OOM, restart disabled. Archive
+`evidence/stability-native-queue-fixture-exec-location-success-20260929-1.tar.gz`
+SHA256 `9002fe60...3d6c` preserves all three terminal inspections/logs, exact
+source/contract/driver bindings and the passing binary. This is light fixture
+evidence only: no current-candidate build, module, guest, application or gate
+credit follows.
+
+Next commit/push/fetch these exact bytes. Then use the prior preparation packet
+only as a template to bind the fetched correction into a wholly fresh candidate,
+metadata backup, manifest, request, output, evidence and lease namespace. Obtain
+fresh preparation review before one preparation run, review its result, and seek
+a new one-shot heavy-build release only after capacity passes. Never reuse or
+rerun `704f6654-1`. Formal counters remain unchanged, successful current-candidate
+builds remain zero and real guest applications this work window remain zero.

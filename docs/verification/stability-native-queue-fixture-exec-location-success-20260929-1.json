@@ -1,0 +1,92 @@
+{
+  "schema": "mckernel.native-queue-fixture-exec-location-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_AND_EXACT_LIGHT_CONTAINER_REGRESSION",
+  "failure_family": {
+    "original_record": "docs/verification/stability-native-exact-build-704f6654-failure-20260929-1.json",
+    "original_record_sha256": "9ce279484127f50d309cdabc50daf36517de8a37c737014056a117dc3ccd89bb",
+    "original_failure": "rustc returned zero but the checker rejected its temporary queue fixture as absent or non-executable",
+    "root_cause": "the pinned container mounts /tmp noexec; rustc created a regular mode-0755 fixture there, but access(X_OK) was false and execution returned 126",
+    "bounded_correction": "use the offline driver's validated RUNNER_TEMP when configured and classify missing, non-regular and non-executable compiler output separately",
+    "unchanged_heavy_retry_forbidden": true
+  },
+  "policy_adoption": {
+    "goal_sha256": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "start_sha256": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "convergence_sha256": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "handoff_live_pre_update_sha256": "2b3031ade36da6a00d6974300cee5768a8b0dd14450a22f9facf33391948943a",
+    "handoff_launcher_predecessor_sha256": "f061d26ff16ed1661edc148b73e4c0c385b4273b684de8d69a893d8d832808f2",
+    "handoff_reconciliation": "the live handoff contains later checkpoint history and therefore supersedes the launcher predecessor byte hash"
+  },
+  "implementation": {
+    "checker": "scripts/ihk_native_queue_check.py",
+    "checker_sha256": "84634d6262d6da86b86ec2d65841a686100ff8a1667043b198553f3080dba46c",
+    "tests": "scripts/tests/test_ihk_native_queue_check.py",
+    "tests_sha256": "83032bf2098b4228b7f19bb333b0dbb029cc4dcbaa3cce664aef8e2e777a41c8",
+    "offline_driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "contract_sha256": "b64022b87356394ddc7eb4313f604100fd05889ddc9b1b7ac232a78d0e49f9fd",
+    "production_queue_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+    "fixture_sha256": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b",
+    "production_rust_changed": false,
+    "contract_changed": false,
+    "fixture_changed": false
+  },
+  "host_regressions": {
+    "python_default": "PASS 34 tests",
+    "python38": "PASS 34 tests",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "python39_explicit_path_attempt": "NOT_RUN: /usr/bin/python3.9 is absent; the default interpreter is Python 3.9.12"
+  },
+  "light_container_regressions": {
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "profile": "network none, read-only root, all capabilities dropped, no-new-privileges, uid/gid 1000, CPUs 2-3, 2 GiB/no swap, 128 tasks",
+    "failed_observer": {
+      "container_id": "e24b84b4125491472539946a8a17a6796040e165eb7c05c0d1222cc5c56f331e",
+      "exit": 1,
+      "failure": "probe omitted the image's /usr/bin/sleep entrypoint override and executed no fixture action",
+      "unchanged_retry": false
+    },
+    "root_cause_probe": {
+      "container_id": "bfd1b85928daa3197f7579ab1ec0a12ddda4772b25924addd112f20fea69cbe2",
+      "exit": 0,
+      "tmp_mount": "tmpfs rw,nosuid,nodev,noexec",
+      "tmp_result": "compile 0; regular 0755; access_x false; execution 126",
+      "bind_result": "compile 0; access_x true; execution 0; seven passed",
+      "binary_sha256": "70c6a018a7d1fa049e579c0a6e7f7b3c13a80ff2a40f8f0215d617d17b7737b1"
+    },
+    "corrected_checker_probe": {
+      "container_id": "d778b8facf1016fd8318309e6045225143af5192f4519647ae73b4be3c87bc44",
+      "exit": 0,
+      "oom_killed": false,
+      "restart_policy": "no",
+      "rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+      "fixture_status": "EXACT_ROCKY_RUSTC_FIXTURE_VERIFIED",
+      "source_contract_validated": true,
+      "runner_temp_cleanup": "PASS"
+    }
+  },
+  "independent_review": {
+    "status": "PASS_BOUNDED_SOURCE_CORRECTION",
+    "blocking_findings": 0,
+    "limitations": "trusted stable ancestors are assumed; the proportional isolated-container boundary does not eliminate ancestor replacement races; this is no build or runtime release"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-queue-fixture-exec-location-success-20260929-1.tar.gz",
+    "sha256": "9002fe604572553efdcf709a0519e8169fbda77e5ca000c2cc6bddde9bac3d6c",
+    "bytes": 3423518,
+    "members": 15
+  },
+  "acceptance": {
+    "kernel_build": false,
+    "module": false,
+    "runtime": false,
+    "guest": false,
+    "application": false,
+    "gate_credit": false,
+    "formal_counters_changed": false,
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0
+  },
+  "next": "commit, push and verify these exact source/evidence bytes; then create a fresh commit-derived candidate and request with entirely new roots and obtain independent preparation/build releases"
+}

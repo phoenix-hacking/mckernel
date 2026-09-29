@@ -17,6 +17,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -658,6 +659,44 @@ def _run_command(command: list[str], label: str, timeout: int) -> subprocess.Com
     return result
 
 
+def _fixture_temp_root() -> Path | None:
+    """Return a validated RUNNER_TEMP, or None for tempfile's safe default.
+
+    A configured root is an execution input, so silently falling back when it
+    is malformed could put the artifact in an unintended filesystem.  Keep
+    the default behavior unchanged when the setting is absent.
+    """
+    configured = os.environ.get("RUNNER_TEMP", "").strip()
+    if not configured:
+        return None
+    root = Path(configured)
+    if not root.is_absolute():
+        raise ValidationError("configured RUNNER_TEMP must be an absolute directory")
+    try:
+        root_info = root.lstat()
+    except OSError as error:
+        raise ValidationError(f"configured RUNNER_TEMP is unavailable: {error}") from error
+    if stat.S_ISLNK(root_info.st_mode) or not stat.S_ISDIR(root_info.st_mode):
+        raise ValidationError("configured RUNNER_TEMP must be a non-symlink directory")
+    if not os.access(root, os.W_OK | os.X_OK):
+        raise ValidationError("configured RUNNER_TEMP must be writable and searchable")
+    return root
+
+
+def _check_fixture_output(binary: Path) -> None:
+    """Classify output failures without exposing unrelated process state."""
+    try:
+        info = binary.lstat()
+    except FileNotFoundError as error:
+        raise ValidationError("queue fixture output is missing") from error
+    except OSError as error:
+        raise ValidationError(f"queue fixture output cannot be inspected: {error}") from error
+    if not stat.S_ISREG(info.st_mode):
+        raise ValidationError("queue fixture output is non-regular")
+    if not os.access(binary, os.X_OK):
+        raise ValidationError("queue fixture output is non-executable")
+
+
 def validate_configured_fixture(
     repo: Path,
     contract_path: Path = DEFAULT_CONTRACT,
@@ -702,14 +741,17 @@ def validate_configured_fixture(
     fixture = _repo_file(
         repo, contract["compile_fixture"]["path"], "queue compile fixture"
     )
-    with tempfile.TemporaryDirectory(prefix="ihk-native-queue-fixture-") as temporary:
+    temporary_root = _fixture_temp_root()
+    temporary_kwargs = {"dir": str(temporary_root)} if temporary_root else {}
+    with tempfile.TemporaryDirectory(
+        prefix="ihk-native-queue-fixture-", **temporary_kwargs
+    ) as temporary:
         binary = Path(temporary) / "ihk-native-queue-tests"
         command = [str(compiler)]
         command.extend(contract["configured_fixture"]["compile_arguments"])
         command.extend([str(fixture), "-o", str(binary)])
         _run_command(command, "queue fixture compilation", 180)
-        if not binary.is_file() or not os.access(binary, os.X_OK):
-            raise ValidationError("rustc did not create an executable queue fixture")
+        _check_fixture_output(binary)
         run_command = [str(binary)] + contract["configured_fixture"]["run_arguments"]
         run = _run_command(run_command, "queue fixture execution", 180)
         expected_count = contract["compile_fixture"]["expected_test_count"]

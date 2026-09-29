@@ -1,5 +1,31 @@
 # Compact dispatcher handoff
 
+## Latest continuation: checkpoint 149
+
+The `704f6654-1` heavy request is consumed and must never be rerun. Its phase-0
+queue-fixture failure is now exactly reproduced: `/tmp` is `noexec`, while an
+evidence-style bind mount compiles and executes the unchanged seven-test fixture.
+Checker `84634d62...a46c` and tests `83032bf2...41c8` implement and independently
+PASS one bounded correction using the offline driver's existing executable
+`RUNNER_TEMP=/evidence/build`; production Rust and the oracle are unchanged.
+Corrected light container `d778b8fa...bc44` exits 0 under exact Rust 1.92.
+Evidence is `stability-native-queue-fixture-exec-location-success-20260929-1.json`
+and archive SHA256 `9002fe60...3d6c`. No build, guest or formal counter advances.
+
+Next checkpoint and verify these exact bytes, then derive a wholly fresh
+candidate and request from that fetched commit using new names for candidate,
+backup, manifest, request, output, evidence and lease. The old preparation
+packet is a template only; its execution/review authorities are consumed.
+Require fresh preparation review/evidence review and then a separate one-shot
+heavy-build release. Preserve candidate/backup 26/36767 and 26/47413, failed
+container `68881c05...927a6`, all three light probe containers, and launcher
+identities 3399308/83682487, 3399313/83682494 and 3399317/83682500.
+
+The active policy hashes loaded for this continuation are GOAL `76c4f5d1...c0bcc3`,
+START `1698d342...6216c`, CONVERGENCE `f6938bd2...3e86a`, and the live pre-update
+HANDOFF `2b3031ad...43a`; the latter contains later checkpoints than the
+launcher's stored predecessor hash. The whole-OS objective remains incomplete.
+
 Reconciled 2026-09-28 during the active aggressive launcher invocation. The
 whole-OS goal remains active and incomplete. A checkpoint, stable-core row or
 diagnostic application is never whole-OS completion.

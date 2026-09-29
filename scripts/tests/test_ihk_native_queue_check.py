@@ -56,6 +56,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
         ),
         passed: int = 7,
         compile_exit: int = 0,
+        output_mode: str = "normal",
     ) -> Path:
         compiler = Path(self.temporary.name) / "rustc"
         compiler.write_text(
@@ -65,6 +66,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
             f"VERSION = {version!r}\n"
             f"PASSED = {passed!r}\n"
             f"COMPILE_EXIT = {compile_exit!r}\n"
+            f"OUTPUT_MODE = {output_mode!r}\n"
             "if sys.argv[1:] == ['--version']:\n"
             "    print(VERSION)\n"
             "    raise SystemExit(0)\n"
@@ -72,6 +74,11 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
             "    print('synthetic compile failure', file=sys.stderr)\n"
             "    raise SystemExit(COMPILE_EXIT)\n"
             "output = sys.argv[sys.argv.index('-o') + 1]\n"
+            "if OUTPUT_MODE == 'missing':\n"
+            "    raise SystemExit(0)\n"
+            "if OUTPUT_MODE == 'directory':\n"
+            "    os.mkdir(output)\n"
+            "    raise SystemExit(0)\n"
             "body = (\n"
             "    '#!/usr/bin/env python3\\n'\n"
             "    \"print('test result: ok. %d passed; 0 failed; 0 ignored; \"\n"
@@ -79,7 +86,7 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
             ")\n"
             "with open(output, 'w', encoding='utf-8') as stream:\n"
             "    stream.write(body)\n"
-            "os.chmod(output, 0o755)\n",
+            "os.chmod(output, 0o644 if OUTPUT_MODE == 'nonexecutable' else 0o755)\n",
             encoding="utf-8",
         )
         compiler.chmod(0o755)
@@ -183,6 +190,50 @@ class IhkNativeQueueCheckTests(unittest.TestCase):
             "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
             result["compiler_version"],
         )
+
+    def test_runner_temp_is_used_when_configured(self) -> None:
+        compiler = self.fake_rustc()
+        runner_temp = Path(self.temporary.name) / "runner-temp"
+        runner_temp.mkdir()
+        with mock.patch.dict(os.environ, {"RUNNER_TEMP": str(runner_temp)}), mock.patch.object(
+            queue_check.tempfile, "TemporaryDirectory", wraps=queue_check.tempfile.TemporaryDirectory
+        ) as temporary_directory:
+            queue_check.validate_configured_fixture(
+                REPO_ROOT, rustc=str(compiler), require_rustc=True
+            )
+        self.assertEqual(str(runner_temp), temporary_directory.call_args.kwargs["dir"])
+
+    def test_invalid_runner_temp_is_rejected_without_fallback(self) -> None:
+        compiler = self.fake_rustc()
+        invalid_roots = [
+            "relative-runner-temp",
+            str(Path(self.temporary.name) / "missing-runner-temp"),
+        ]
+        regular_file = Path(self.temporary.name) / "runner-file"
+        regular_file.write_text("not a directory", encoding="utf-8")
+        invalid_roots.append(str(regular_file))
+        for invalid_root in invalid_roots:
+            with self.subTest(invalid_root=invalid_root), mock.patch.dict(
+                os.environ, {"RUNNER_TEMP": invalid_root}
+            ), self.assertRaisesRegex(queue_check.ValidationError, "RUNNER_TEMP"):
+                queue_check.validate_configured_fixture(
+                    REPO_ROOT, rustc=str(compiler), require_rustc=True
+                )
+
+    def test_fixture_output_diagnostics_distinguish_missing_nonregular_and_nonexecutable(
+        self,
+    ) -> None:
+        for mode, expected in (
+            ("missing", "missing"),
+            ("directory", "non-regular"),
+            ("nonexecutable", "non-executable"),
+        ):
+            with self.subTest(mode=mode):
+                compiler = self.fake_rustc(output_mode=mode)
+                with self.assertRaisesRegex(queue_check.ValidationError, expected):
+                    queue_check.validate_configured_fixture(
+                        REPO_ROOT, rustc=str(compiler), require_rustc=True
+                    )
 
     def test_configured_rustc_version_drift_is_rejected(self) -> None:
         compiler = self.fake_rustc(version="rustc 1.92.0 (unlocked)")
