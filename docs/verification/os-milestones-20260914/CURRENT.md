@@ -6165,3 +6165,42 @@ lease/container preflight is clean, and an exact two-root deletion packet passes
 independent review. Restoration uses main `68cf089a`, IHK `3114d9e7`, Git index
 modes and the capsule; historical replay still needs a new execution release.
 This preservation changes no build, guest or acceptance count.
+
+Shutdown checkpoint 82, 2026-09-28: dispatch stopped on the launcher stop
+request and all child lanes are complete. No cleanup, Docker, build, module,
+guest or application command was started after the request. The launcher
+wrapper PID 3399308/starttime 83682487, worker PID 3399313/starttime 83682494
+and Codex app-server PID 3399317/starttime 83682500 remain the active process
+identities. No qemu, mcexec, native-exact build, Rocky build or Docker-build
+process was observed. Host, scratch and tmpfs have 24,694,710,272,
+21,608,222,720 and 7,524,667,392 bytes available; MemAvailable is
+21,187,031,040 bytes. The prepared candidate and backup remain present.
+
+The first cleanup design remains rejected as unsafe; its independent review is
+preserved in the agent result and must not be treated as an execution release.
+The escalated source-only repair produced observer
+`evidence/native-exact-candidate-live-reference-observer-68cf089a-1.py`
+(SHA-256 `a1ce4fc6...615e`) and deleter
+`evidence/native-exact-candidate-delete-68cf089a-1.py` (SHA-256
+`74b5ec11...20b4`). They received only `py_compile`, pure synthetic assertions
+and diff checking. Neither helper was executed. The deleter deliberately fails
+closed because `WORKTREE_INVENTORY_SHA` is unset; a fresh post-seal observer
+receipt and external lease/Docker no-bind preflight are also absent. Therefore
+no deletion sequence is released, and the preserved candidate roots must not be
+mutated or removed.
+
+Next continuation: inspect and test these exact helper bytes, then define and
+generate the required immutable complete inventory for both candidate roots.
+It must account for every name, type, mode, byte payload and symlink target,
+including ignored/untracked build entries and the complete IHK tree, while
+preserving the capsule-bound Git metadata and backup. Independently review the
+inventory schema, generated object and final helper hash before replacing the
+UNSET pin. Only after that review PASS may a fresh per-thread/process/mount
+observer, external lease/container no-bind preflight and the exact one-shot
+root cleanup be considered. Preserve every partial journal and prohibit an
+automatic retry. After a successful cleanup checkpoint, create a new
+commit-derived candidate under new SHA-derived names and seek a fresh heavy
+build release. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7;
+there are four diagnostic guest apps, zero successful current-candidate builds
+and zero new guest apps in this continuation. The OS goal remains incomplete,
+and this launcher pause is temporary.
