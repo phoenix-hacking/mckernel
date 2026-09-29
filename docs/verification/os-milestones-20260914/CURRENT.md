@@ -8255,3 +8255,43 @@ source and execution review, canonical reconstruction admission and fresh
 process/mount/reference checks before one invocation. Builds and real guest
 applications remain zero; formal counters and 0/273 application acceptance do
 not change.
+
+Shutdown checkpoint 172, 2026-09-29: the launcher requested an immediate
+checkpoint while the fresh two-root retirement packet was undergoing its first
+bounded source correction. No retirement, deletion, restore, build or guest ran.
+The sole active worker stopped and all child lanes are terminal. Launcher wrapper
+3399308/83682487, worker 3399313/83682494 and app-server 3399317/83682500 remain
+live; no retirement/helper/observer/deleted-inode-audit process is active.
+
+The initial independent source review BLOCKed the retirement draft on wrong
+candidate revision/counts, contradictory Docker sets, incomplete mount-namespace
+proof, missing special-process classification, tests that could not survive
+sealing, and absence of a post-delete inode census. The bounded correction is
+preserved but remains unverified and non-runnable. Its attempted cheap suite ran
+112 tests with one failure and six errors; its compile invocation was malformed
+and is not evidence. Current exact file hashes are packet
+`f25b695c...726ed`, packet test `3370660d...dfa2`, helper
+`7aa052bc...e18`, helper test `ed7bd0e0...1441`, observer
+`34a4e4bc...54a3`, and observer test `66b08586...3707`.
+
+The correction has separated support and candidate revisions, bound the exact
+inventory counts and three terminal container identities, and integrated the
+sealed deleted-inode audit. It still has a `docker_callback` indentation defect
+that raises `NameError: ids`, helper fixtures omit newly required audit sources,
+inventory tests retain old schema/counts, and one signal-cleanup assertion fails.
+These are source defects, not an execution result; `RELEASE_HASH_REQUIRED` and
+independent source/execution review remain mandatory.
+
+At shutdown, host, scratch and tmpfs have 23,012,728,832, 21,515,587,584 and
+7,445,069,824 bytes available; `MemAvailable` is 18,075,304 KiB. Candidate
+26/47678 and backup 26/58429 remain protected by the accepted retention inputs.
+Next invocation must verify this fetched checkpoint and launcher identities,
+then escalate this same failure family to an expert correction per convergence
+policy rather than applying another ordinary bounded tweak. Rereview all six
+original findings, deleted-inode integration and immutable release-transition
+tests before any template commit. Only a source PASS may unlock the separate
+template/release/push/fetch/execution-review sequence. Formal counters remain
+6/130 and 350/10000, current-candidate builds and real guest applications remain
+zero, application acceptance remains 0/273, and the OS is incomplete. The
+launcher pause is temporary; do not mark the goal complete or resume it during
+shutdown.

@@ -1273,3 +1273,21 @@ Next checkpoint/fetch-verify these bytes, then create a fresh two-root retiremen
 packet bound to the exact inventory/archive/root identities. Require independent
 source and execution review plus fresh canonical reconstruction, process, mount
 and reference checks. No restore, retirement, deletion or build is yet accepted.
+
+Shutdown checkpoint 172 supersedes the retirement-draft cursor. The initial
+source review BLOCKed six semantic families. The sole worker stopped after one
+bounded correction attempt; no packet executed and all children are terminal.
+The six preserved files hash to packet `f25b695c...726ed`, packet test
+`3370660d...dfa2`, helper `7aa052bc...e18`, helper test `ed7bd0e0...1441`,
+observer `34a4e4bc...54a3` and observer test `66b08586...3707`. The attempted
+112-test run has one failure and six errors; there is no valid compile result.
+
+Remaining defects are a `docker_callback` indentation/`NameError`, missing
+deleted-audit sources in helper fixtures, stale inventory schema/count fixtures,
+and a failing signal-cleanup assertion. Per convergence policy, use an expert
+correction for this same failure family next; then independently rereview every
+initial finding plus post-delete audit and release-transition behavior. Do not
+commit a retirement template or construct a release until source review PASSes.
+Candidate 26/47678 and backup 26/58429 remain intact. Launcher identities are
+3399308/83682487, 3399313/83682494 and 3399317/83682500. No retirement, build or
+guest ran; counters remain 6/130, 350/10000 and 0/273 applications.
