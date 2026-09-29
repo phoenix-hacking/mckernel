@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.native-exact-candidate-retirement-success.v1",
+  "status": "PASS_RETIREMENT",
+  "recorded_at": "2026-09-29T14:29:23-07:00",
+  "source_commit": "5386f60cf88ddacf2170aee0ba8433f76c591d37",
+  "source_commit_remote_verified": true,
+  "command": "/usr/bin/sudo -A /usr/bin/python3 -E -s -B /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-retirement-1c00d2b8-1.py --release /home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retirement-1c00d2b8-1.release.json",
+  "outer_exit_status": 0,
+  "outer_elapsed_seconds": 79.5,
+  "packet_sha256": "7eda1cf2780f979db9cc36c9816fd3572cb1cb00a4443c24515d4dc1bba5a756",
+  "release_file_sha256": "c249f717f2a68b3de8656d8127b208f24023ecdfffba53137a3ccaf92df54752",
+  "release_canonical_sha256": "e6551bfc50469697bbe0824162a66965bfb20b88126b59e18b7d6529904ddfa2",
+  "raw_archive": {
+    "path": "docs/verification/evidence/stability-native-exact-candidate-retirement-success-raw-1c00d2b8-20260929-1.tar.gz",
+    "sha256": "75946dc081890900e24b9777a4afa53ce7ca7de18a052019af53f8b736623829",
+    "member_count": 27,
+    "contents": "evidence directory, its 25 files, and immutable tombstone"
+  },
+  "execution": {
+    "journal_records": 21440,
+    "journal_sha256": "8b4b503d5c8d3be6996e85c64667e350e244eeb49902d5c4417e9435e73f3ca8",
+    "evidence_sha256": "08bdfac20bf3644114d0b4c234aae126b7c0d4100d89e9916fb23dbcfdb8d9a6",
+    "terminal_status_sha256": "080dc7c7b0d0d66ffc87fa14e3c6156612295e960748e7105d3d30185646fafe",
+    "observer_clean_rounds": 2,
+    "observer_task_identity_counts": [820, 821],
+    "observer_mount_namespace_count": 19,
+    "deleted_member_pairs": 10714,
+    "deleted_root_pairs": 2,
+    "post_delete_rounds": 3,
+    "post_delete_identity_count": 819,
+    "post_delete_target_identity_count": 10716,
+    "post_delete_target_root_counts": [10629, 87],
+    "post_delete_result_sha256": "16e678fa354a33b514ea271d42be9016f210919968e0c0d88f080803e7850029",
+    "remaining_references": 0,
+    "remaining_roots": 0
+  },
+  "tombstone": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-f5d8d914-1.json",
+    "sha256": "30477fdce5425bb6e1a76b801e21542062eb99d8c7ec6d7333f8b31dda3e29e5",
+    "owner": "root:root",
+    "mode": "0600",
+    "immutable": true,
+    "reuse_forbidden": true
+  },
+  "review": {
+    "source_decision": "PASS_SOURCE",
+    "execution_release_decision": "PASS_EXECUTION_RELEASE",
+    "postflight_decision": "PASS_RETIREMENT",
+    "reviewer": "independent Astra",
+    "reviewer_notes": "All 21,440 journal records, sealed-source hashes, Docker captures, observer rounds, deleted-inode rounds, cleanup, lease closure and terminal publication reconcile."
+  },
+  "preserved_non_product_failures": [
+    "Independent execution review first used an incompatible RLIMIT_CPU=60 wrapper while tests deliberately set CPU=900; the corrected bounded wrapper passed without source change.",
+    "Coordinator final preflight first compared raw Docker Mounts array ordering; canonical comparison required by the reviewed packet passed without source or release change."
+  ],
+  "capacity": {
+    "tmpfs_free_before_bytes_coordinator_only": 7445069824,
+    "tmpfs_free_after_bytes": 16578727936,
+    "delta_bytes": 9133658112,
+    "delta_gib": 8.506381989,
+    "pre_measurement_independently_retained": false,
+    "host_free_after_bytes": 52602118144,
+    "scratch_free_after_bytes": 72183169024,
+    "mem_available_after_kib": 29982240
+  },
+  "scope": {
+    "retirement_accepted": true,
+    "fresh_differently_named_candidate_preparation_unlocked": true,
+    "build_accepted": false,
+    "guest_accepted": false,
+    "application_accepted": false,
+    "os_accepted": false
+  }
+}

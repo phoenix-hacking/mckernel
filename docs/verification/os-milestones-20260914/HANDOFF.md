@@ -1322,3 +1322,22 @@ launcher facts, recompute its hash, and make an exact two-path finalization:
 release JSON and packet literal only. Push/fetch it, then obtain independent
 Astra execution review before one possible `sudo -A` invocation. Do not execute
 the checkpoint-174 draft. Counters remain 6/130, 350/10000 and 0/273 apps.
+Checkpoint 175 accepts exact retirement of obsolete candidate `f5d8d914-1`.
+One released invocation at fetched `5386f60c...1d37` exited 0; independent
+postflight returns `PASS_RETIREMENT` over 21,440 journal records, two clean
+observer rounds, and three clean post-delete rounds covering all 10,716 target
+identities. The candidate, backup and quarantines are absent, no references
+remain, and immutable tombstone `30477fdc...29e5` forbids name reuse. Raw archive
+`75946dc0...3829` and decision record
+`stability-native-exact-candidate-retirement-success-5386f60c-20260929-1.json`
+are the durable evidence. The measured recovery is 9,133,658,112 bytes (8.506
+GiB); its pre-value is coordinator-only and is not an independent capacity claim.
+
+Next create a wholly fresh candidate-preparation packet. Bind fetched main plus
+pinned IHK `3114...` and the reviewed `clear_host_pte` overlay without consuming
+the dirty nested checkout. Reconcile current helper hashes and use a fresh nonce.
+Independent source/execution review is required before preparation. Then build
+the smallest candidate under the one pinned heavy lease (`-j<=4`) and start the
+real diagnostic sequence: startup, memory, files, threads/futexes, signals, and
+separate shutdown. Record app bytes, exit, kernel log and teardown; diagnostics
+are not acceptance. Counters remain 6/130, 350/10000 and 0/273 applications.

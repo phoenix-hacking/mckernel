@@ -8373,3 +8373,34 @@ At checkpoint, host, scratch and tmpfs have 105,518,501,888, 21,515,587,584 and
 application ran, formal counters remain 6/130 and 350/10000, application
 acceptance remains 0/273, and the OS is incomplete. The launcher pause is
 temporary; do not mark the goal complete or resume it during shutdown.
+Continuation checkpoint 175, 2026-09-29: exact candidate retirement is accepted.
+The one released `sudo -A` invocation from fetched commit
+`5386f60cf88ddacf2170aee0ba8433f76c591d37` exited 0 in about 79.5 seconds.
+Independent postflight returns `PASS_RETIREMENT`: all 21,440 journal rows,
+10,714 member deletion pairs, two root deletion pairs, two clean observer
+rounds over 820/821 task identities and 19 mount namespaces, and three clean
+post-delete rounds over all 10,716 target identities reconcile. Candidate
+`f5d8d914-1`, its backup and both quarantine roots are absent with zero surviving
+references. The immutable root-owned tombstone SHA is `30477fdc...29e5` and
+permanently forbids attempt-name reuse.
+
+Raw archive `stability-native-exact-candidate-retirement-success-raw-1c00d2b8-20260929-1.tar.gz`
+SHA `75946dc0...3829` durably retains the 25 evidence files and tombstone. Additive
+decision record `stability-native-exact-candidate-retirement-success-5386f60c-20260929-1.json`
+preserves hashes, exact command, results, limitations and review. Correcting an
+earlier unit label, the coordinator-only before/after tmpfs measurements imply
+9,133,658,112 bytes = 8.506 GiB reclaimed; only the after value is independently
+rechecked. This does not affect the inode/reference proof.
+
+Fresh differently named candidate preparation is now unlocked under its own
+source and execution admission. Bind the current fetched main commit and pinned
+IHK `3114...` with only the reviewed `clear_host_pte` overlay; never consume the
+dirty nested IHK checkout directly. Reconcile current preparation support hashes,
+use a fresh nonce/path, independently review it, then prepare and build the
+smallest candidate in the pinned 4-CPU/12-GiB/no-network profile with `-j<=4`.
+After a successful artifact build, run a fresh diagnostic startup guest, then
+memory, files, threads/futexes and signals in fresh guests, and a separate
+shutdown lifecycle check. Preserve exact stdout/stderr, exit status, kernel log
+and teardown. Diagnostics remain separate from formal application acceptance.
+Formal counters remain 6/130 and 350/10000; current-candidate builds and real
+guest applications remain zero and the OS remains incomplete.
