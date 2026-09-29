@@ -1,0 +1,82 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-success.v1",
+  "status": "PASS_PREPARATION",
+  "recorded_at": "2026-09-29T15:00:00-07:00",
+  "reviewed_packet_commit": "d2417ecd0421812551091d14938cfd48eeea89cb",
+  "candidate_source_commit": "76ae20b523f57dee8e0fb1fb834caf5443f9f671",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-76ae20b5-1.sh",
+    "sha256": "ec401522c02582a2780903a2680a2565b1aa51fbb7bd19e36ab54103a95bda59"
+  },
+  "execution": {
+    "command": "/usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C TZ=UTC GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null GIT_NO_REPLACE_OBJECTS=1 GIT_TERMINAL_PROMPT=0 GIT_ALLOW_PROTOCOL=file /bin/bash --noprofile --norc /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-preparation-76ae20b5-1.sh",
+    "exit_status": 0,
+    "elapsed_milliseconds": 69587,
+    "terminal_output": "LOG_FINAL_FSYNC=PASS\n",
+    "launcher_protocol_path": "/home/holden/mckernel/.git/os-autopilot/runs/20260929T211451Z-2714e735/protocol.jsonl",
+    "launcher_protocol_event_id": "exec-9b44e6b9-bbb4-40c4-a723-e36c12ddcbe0",
+    "launcher_protocol_line_sha256": "43193cec16a1d5acdb3f33e7cf05fe8beed415446e9558f3031d5ce26838bdb8"
+  },
+  "outputs": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-76ae20b5-1",
+    "candidate_device_inode": "26:58679",
+    "candidate_allocated_bytes": 9168855040,
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-76ae20b5-1",
+    "metadata_backup_device_inode": "26:69465",
+    "metadata_backup_allocated_bytes": 1359872,
+    "log_sha256": "cc095274b39bf1d6b1f33df8a619d73cb91efc94c8c0f5f75783b386af7811d3",
+    "input_manifest_sha256": "5c893b1af09e0728aed3c220ab3811d3f1047d013a83e59f05c762db43e9ce75",
+    "build_request_sha256": "a483f42764f27b9785ff1465d35fd22632c9a2535664868b8f81655e96044d4a",
+    "metadata_receipt_sha256": "9de0ec645b9852ec22a308c556e1f3bbf95da09306c792a7ecd16685acee4883",
+    "output_directory_empty": true,
+    "evidence_directory_empty": true,
+    "lease_absent": true
+  },
+  "overlay": {
+    "patch_sha256": "cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7",
+    "base_file_sha256": "91fe5688f3282c1617a75f08c4b435a793200f2cf9beafe432cef7ad3ca0bd4c",
+    "result_file_sha256": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77",
+    "mode": "0644",
+    "exact_dirty_paths": [
+      "test/ihklib/whitebox/src/driver/mckernel/syscall.c"
+    ]
+  },
+  "raw_archive": {
+    "path": "docs/verification/evidence/stability-native-exact-candidate-preparation-success-raw-76ae20b5-20260929-1.tar.gz",
+    "sha256": "d62620632de5b5fa9ed32937779a9a51c0b72f6347c9142c442614d77c37e703",
+    "member_count": 92
+  },
+  "review": {
+    "source_support_decision": "PASS_SOURCE",
+    "packet_source_decision": "PASS_SOURCE",
+    "execution_release_decision": "PASS_EXECUTION_RELEASE",
+    "postflight_decision": "PASS_PREPARATION",
+    "preserved_failures": [
+      "Initial overlay support review BLOCKed permission drift admitted by the special overlay inventory path; the bounded correction restored exact mode and opened-file identity checks.",
+      "Initial preparation review BLOCKed the inherited superproject-clean assertion because the exact nested overlay reports a dirty gitlink; the bounded correction ignores only submodule dirtiness and retains exact nested checks."
+    ]
+  },
+  "light_regression": {
+    "profile": "existing reviewed Rust 1.92 container, 2 CPUs, 2 GiB, no network",
+    "ikc_queue_tests": 7,
+    "status": "PASS",
+    "log_sha256": "2bb8d899b33b472c26a06d31575829e953de835f88167f08e7ebc4d124e472df",
+    "binary_sha256": "ceb5db9f847dc7796b5c93000a58cb57da717f941b43b4901dff40e88154f43d"
+  },
+  "resource_blocker": {
+    "launcher_aggregate_memory_gib": 16.2158,
+    "candidate_plus_pinned_container_bytes": 22055116800,
+    "candidate_plus_pinned_container_gib": 20.540428,
+    "obsolete_owner_limit_bytes": 25769803776,
+    "build_released": false,
+    "next_action": "exactly copy and verify the candidate on scratch, independently retire both tmpfs roots, then retain the pinned 12-GiB build profile under the launcher cap"
+  },
+  "scope": {
+    "preparation_accepted": true,
+    "build_accepted": false,
+    "boot_accepted": false,
+    "application_accepted": false,
+    "os_accepted": false
+  }
+}

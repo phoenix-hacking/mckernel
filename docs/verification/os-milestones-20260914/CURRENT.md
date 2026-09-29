@@ -8404,3 +8404,35 @@ shutdown lifecycle check. Preserve exact stdout/stderr, exit status, kernel log
 and teardown. Diagnostics remain separate from formal application acceptance.
 Formal counters remain 6/130 and 350/10000; current-candidate builds and real
 guest applications remain zero and the OS remains incomplete.
+Continuation checkpoint 176, 2026-09-29: fresh exact candidate preparation
+`76ae20b5-1` is accepted. The one released ordinary-user invocation exited 0
+in 69.587 seconds, with the original outer `LOG_FINAL_FSYNC=PASS` retained in
+launcher protocol event `exec-9b44e6b9-bbb4-40c4-a723-e36c12ddcbe0`.
+Independent postflight returns `PASS_PREPARATION`. Candidate 26/58679 binds
+main `76ae20b5...f671`, pinned IHK `3114d9e7...72a1f`, and exactly one mode-0644
+whitebox overlay with diff `cbaaec7b...49e7` and result `7abb77fd...bf77`.
+Metadata receipt, manifest and build request pass; output/evidence roots are
+empty, the attempt lease is absent, and no owner/container/guest survives.
+
+The support repair also has independent `PASS_SOURCE`. Its initial review
+correctly BLOCKed mode drift in the overlay exception; the bounded correction
+restored exact permissions, no-follow open and opened-file identity checks.
+Forty-eight combined focused tests pass, including production manifest/offline
+round-trip and 0600/0755 rejection. An existing reviewed Rust 1.92 light profile
+also passes all seven IKC queue fixture tests. Raw preparation archive
+`stability-native-exact-candidate-preparation-success-raw-76ae20b5-20260929-1.tar.gz`
+SHA `d6262063...e703` retains 92 log/manifest/request/metadata members; additive
+decision record `stability-native-exact-candidate-preparation-success-76ae20b5-20260929-1.json`
+preserves exact identities and review history.
+
+Heavy execution is not released. Candidate plus the pinned 12-GiB container is
+22,055,116,800 bytes = 20.540428 GiB, exceeding this launcher's 16.2158-GiB
+aggregate cap. The owner's historical 24-GiB admission is obsolete for this
+invocation. Independent resource review selects exact copy to a fresh scratch
+candidate, complete equality/provenance verification, and separately reviewed
+retirement of both tmpfs roots. Only after retirement may the unchanged
+4-CPU/12-GiB/no-swap/no-network profile build with `-j<=4`. A smaller container
+is not selected because no successful current exact-build peak supports it.
+Formal counters remain 6/130 and 350/10000; current-candidate builds and real
+guest applications remain zero, application acceptance remains 0/273, and the
+OS remains incomplete.

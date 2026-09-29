@@ -1341,3 +1341,23 @@ the smallest candidate under the one pinned heavy lease (`-j<=4`) and start the
 real diagnostic sequence: startup, memory, files, threads/futexes, signals, and
 separate shutdown. Record app bytes, exit, kernel log and teardown; diagnostics
 are not acceptance. Counters remain 6/130, 350/10000 and 0/273 applications.
+Checkpoint 176 accepts fresh preparation `76ae20b5-1`, not a build. One released
+ordinary-user invocation exited 0 in 69.587 seconds; independent postflight
+returns `PASS_PREPARATION`. Candidate 26/58679 and backup 26/69465 bind main
+`76ae20b5...f671`, IHK `3114d9e7...72a1f`, exact overlay `cbaaec7b...49e7`,
+manifest `5c893b1a...ce75` and request `a483f427...d4a`. The lease is absent and
+no process/container survives. Raw archive `d6262063...e703` and decision record
+`stability-native-exact-candidate-preparation-success-76ae20b5-20260929-1.json`
+are durable evidence. The original fsync PASS is launcher protocol event
+`exec-9b44e6b9-bbb4-40c4-a723-e36c12ddcbe0`.
+
+Do not start the heavy owner yet. Tmpfs candidate allocation 9,170,214,912 bytes
+plus the pinned 12-GiB container equals 20.540428 GiB and violates the launcher
+16.2158-GiB aggregate cap; historical 24-GiB owner validation does not override
+it. Next source-review a bounded exact copy to fresh scratch paths, verify full
+member/Git/overlay/provenance equality, generate a distinct disk-source request,
+then independently retain and retire both tmpfs roots with a post-delete audit.
+After their retirement, use the unchanged 4-CPU/12-GiB/no-swap/no-network build
+profile at `-j<=4`. Then build the smallest candidate and begin fresh diagnostic
+startup, memory, files, threads/futexes, signals and separate shutdown checks.
+Diagnostics remain non-accepting. Counters remain 6/130, 350/10000 and 0/273.
