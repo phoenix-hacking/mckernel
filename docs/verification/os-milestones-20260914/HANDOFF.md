@@ -1048,3 +1048,21 @@ durable terminal evidence/cleanup. On continuation, reconcile record
 correction and obtain fresh independent review. No release or privileged run is
 authorized. Builds remain zero, applications remain 0/273, and the OS remains
 incomplete.
+
+Checkpoint 155 supersedes checkpoint 154's blocked source design, not its live
+retained state. After two rejected correction cycles, an Astra redesign now
+independently PASSes exact DRAFT packet `0f3c4400...418b`, wrapper
+`7b41bb6f...e4ef`, basis `241feb5c...ac1f` and tests `1f409919...3ae4`.
+Twenty-six tests pass on Python 3.8 and 3.9. The acyclic fetched-commit model,
+real observer schema/owned retirement, complete Docker/runtime gates,
+descriptor-safe deletion, combined cleanup evidence and bounded signal-storm
+closure are source-reviewed.
+
+No execution release or runtime acceptance exists. Preserve quarantine roots
+26/36767 and 26/47413, historical evidence 26/47525 and immutable tombstone
+1831/31474. Next push/fetch the DRAFT template, then mechanically change only
+packet, wrapper and basis while adding the external release as the fourth path.
+Obtain independent mechanical/execution review and repeat complete live
+preflight before any one-shot sudo continuation. Never retry or roll back the
+consumed v2 packet. Builds and real guest applications remain zero; application
+acceptance remains 0/273.

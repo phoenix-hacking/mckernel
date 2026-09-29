@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.native-exact-quarantine-continuation-source-review.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_ONLY",
+  "source_checkpoint_parent": "5ea46c7545a015e67d51a043c65ecfc3b8f4e472",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md_at_adoption": "14e147209aa806bcf48662b1a24cced0bb52877315da092f63144c2dafe7b7b3"
+  },
+  "source_sha256": {
+    "packet": "0f3c44003cbd3cb27cfbd53bb2bc8a158f12847ac7ce8ceffd57ed72304a418b",
+    "wrapper": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+    "basis": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+    "tests": "1f40991908bbe53db00ddf70b5dbf3b48a98d4d55252b109796a010b68903ae4",
+    "observer": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+    "historical_failure_archive": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806"
+  },
+  "verification": [
+    {"command": "/usr/bin/python3.8 -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_704f6654", "result": "PASS", "tests": 26},
+    {"command": "python3 -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_704f6654", "runtime": "Python 3.9.12", "result": "PASS", "tests": 26},
+    {"command": "python3 -m py_compile docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS"},
+    {"command": "bash -n docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-704f6654-1.sh", "result": "PASS"},
+    {"command": "git diff --check", "result": "PASS"}
+  ],
+  "independent_review": {
+    "result": "PASS_SOURCE",
+    "accepted_families": [
+      "acyclic fetched-commit finalization and inert DRAFT invocation",
+      "sealed observer identity and bounded owned-process retirement",
+      "actual six-field v7 observer schema and numeric-string starttime",
+      "authenticated 17-container census and four terminal exceptions",
+      "released boot, launcher, conflict, heavy-lease and immutable-tombstone admission",
+      "immediate no-follow deletion revalidation with mutable directory-size exclusion",
+      "durable combined primary, cleanup, survivor and bounded signal-storm evidence"
+    ],
+    "runtime_acceptance": false
+  },
+  "retained_live_state": {
+    "candidate_quarantine": {"path": "/dev/shm/.mckernel-retirement-candidate-704f6654-2", "device": 26, "inode": 36767},
+    "metadata_quarantine": {"path": "/dev/shm/.mckernel-retirement-metadata-backup-704f6654-2", "device": 26, "inode": 47413},
+    "historical_evidence": {"path": "/dev/shm/.mckernel-retirement-evidence-704f6654-2", "device": 26, "inode": 47525},
+    "immutable_tombstone": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json", "device": 1831, "inode": 31474, "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123"}
+  },
+  "acceptance": {
+    "execution_release": false,
+    "retirement": false,
+    "kernel_build": false,
+    "guest": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "Commit, push and fetch-verify this DRAFT source checkpoint. Then mechanically derive packet, wrapper and basis plus one external execution release from the fetched template; obtain independent exact mechanical and execution review before any one-shot sudo invocation."
+}

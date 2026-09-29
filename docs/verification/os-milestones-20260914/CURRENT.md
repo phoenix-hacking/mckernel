@@ -7717,3 +7717,40 @@ fresh independently reviewed release and complete live preflight exist. Record
 counters remain unchanged, successful current-candidate builds remain zero,
 real guest apps this window remain zero, applications remain 0/273, and the OS
 remains incomplete; the launcher pause is temporary.
+
+Continuation checkpoint 155, 2026-09-29: the consumed v2 failure remains
+unchanged, but its fresh quarantine continuation now passes independent source
+review after a required strategy change. Two Terra correction cycles exposed
+cyclic self-hashes, an impossible finalized invocation, mismatched observer and
+Docker schemas, incomplete descendant retirement and lossy failure cleanup.
+Rather than rename or retry that design, a fresh Astra owner replaced it with
+an acyclic fetched-commit authority. Packet and wrapper each have one exact
+DRAFT boolean; the non-authorizing basis receives only literal JSON-value
+source hashes; a future external release binds the template ancestor, exact
+four-path diff, derived final blobs and live runtime authority without carrying
+or injecting its own hash.
+
+Exact DRAFT packet `0f3c4400...418b`, wrapper `7b41bb6f...e4ef`, basis
+`241feb5c...ac1f` and tests `1f409919...3ae4` pass 26 cases under Python 3.8
+and default Python 3.9.12. The tests mechanically finalize the real templates,
+execute finalized main with runtime mutation mocked, and reject substituted
+artifacts, ancestry/diff/schema/path errors. They also cover actual six-field
+observer output, inherited sealed FDs, bounded pidfd/session retirement,
+17-container/four-exception validation, boot/PID/lease conflicts, no-follow
+hash/target/name deletion, mutable tmpfs directory size, combined primary and
+cleanup faults, terminal-write signals and a continuous TERM/INT storm. Syntax,
+compilation and diff checks pass.
+
+Independent rereview PASSes these exact source hashes. Termination uses two
+fixed saturating latch slots and finite blocked snapshots; terminal persistence
+has at most eight attempts and fails closed with signals blocked if arrivals do
+not settle. No release was created and no sudo, Docker, build, guest, protected
+root traversal or deletion occurred. Preserve quarantines 26/36767 and
+26/47413, historical evidence 26/47525 and immutable tombstone 1831/31474.
+Next commit/push/fetch this DRAFT source checkpoint, then mechanically derive
+only packet, wrapper, basis and a new external execution release from the
+fetched template. Obtain independent exact mechanical/execution review and a
+fresh complete live preflight before one one-shot sudo run. Record
+`stability-native-exact-quarantine-continuation-source-success-704f6654-20260929-1.json`
+is source evidence only. Formal counters, successful current-candidate builds
+and real guest applications remain zero; applications remain 0/273.

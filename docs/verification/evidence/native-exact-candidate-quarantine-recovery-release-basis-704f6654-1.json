@@ -8,18 +8,18 @@
   "v2_release_sha256": "19093ec1c3db71f16d5fd93264f474a200c823161b6da522400bbd4b238cc281",
   "raw_archive_sha256": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806",
   "observer_sha256": "OBSERVER_SHA_REQUIRED",
-  "release_sha256": "RELEASE_SHA_REQUIRED",
   "packet_sha256": "PACKET_SHA_REQUIRED",
   "test_sha256": "TEST_SHA_REQUIRED",
+  "wrapper_sha256": "WRAPPER_SHA_REQUIRED",
   "one_shot": true,
   "retry": false,
   "rollback": false,
   "runtime_acceptance": false,
   "operational_threat_assumption": "Root-owned 0700 quarantines and explicit privileged/adversarial mutation, reference acquisition, and reference-transfer exclusion are operational controls during observation AND deletion, not an atomic global proof.",
   "mechanical_finalization": [
-    "Independently review and fetch the corrected observer; replace only OBSERVER_SHA_REQUIRED with its fetched SHA256.",
-    "Commit, push, and fetch the exact packet, wrapper, basis, and test; bind their final hashes and the fetched source commit in a new PASS basis.",
-    "Obtain a separate root execution release binding the final basis, packet, wrapper, test, observer, raw archive, and v2 authorities.",
+    "Independently review and fetch the exact packet, wrapper, basis, accepted observer and test templates.",
+    "Change only the packet and wrapper SOURCE_TEMPLATE_ONLY boolean literals; derive final basis through exact JSON-value replacements for status and the four source hashes.",
+    "Obtain a separate root execution release binding the ancestor template commit, all five template hashes, final source hashes, exact four changed paths including the new release, current Docker census and runtime authority. Fetch and authenticate final bytes before execution.",
     "A release may run exactly once. Failure retains claim/journal/evidence and never retries, rolls back, renames roots, or changes the historical tombstone."
   ]
 }

@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
-# DRAFT only.  This wrapper has no execution authority and must fail before
-# invoking Python, sudo, Docker, or touching any packet output.
+# Literal-only source finalization; independent fetched release remains required.
 set -Eeuo pipefail
-RELEASE_SHA_REQUIRED=RELEASE_SHA_REQUIRED
-OBSERVER_SHA_REQUIRED=OBSERVER_SHA_REQUIRED
-PACKET_SHA_REQUIRED=PACKET_SHA_REQUIRED
-TEST_SHA_REQUIRED=TEST_SHA_REQUIRED
-die() { echo "DRAFT_NOT_RELEASED: $*" >&2; exit 1; }
-[[ "$RELEASE_SHA_REQUIRED" =~ ^[0-9a-f]{64}$ ]] || die release-sentinel
-[[ "$OBSERVER_SHA_REQUIRED" =~ ^[0-9a-f]{64}$ ]] || die observer-sentinel
-[[ "$PACKET_SHA_REQUIRED" =~ ^[0-9a-f]{64}$ ]] || die packet-sentinel
-[[ "$TEST_SHA_REQUIRED" =~ ^[0-9a-f]{64}$ ]] || die test-sentinel
-die independent-execution-release-required
+SOURCE_TEMPLATE_ONLY=true
+if "$SOURCE_TEMPLATE_ONLY"; then
+  echo DRAFT_NOT_RELEASED >&2
+  exit 1
+fi
+exec /usr/bin/sudo -A /usr/bin/python3 -E -s -B /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py \
+  --release /home/holden/mckernel/docs/verification/stability-native-exact-candidate-quarantine-recovery-execution-release-704f6654-1.json
