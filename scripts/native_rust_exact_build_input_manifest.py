@@ -133,12 +133,13 @@ def _clean(root):
         raise ManifestError('source checkout is dirty: ' + str(root))
 
 
-def _inventory(repo):
+def _inventory(repo, allow_ihk_overlay=False):
     # Run both sides of inventory admission so a mode change during the
     # provenance walk cannot be self-blessed by a stale pre-check.
     _validate_checkout_modes(repo)
     try:
-        result = provenance.source_inventory(repo, _git)
+        result = provenance.source_inventory(
+            repo, _git, allow_ihk_overlay=allow_ihk_overlay)
     except provenance.BuildError as error:
         raise ManifestError(str(error))
     _validate_checkout_modes(repo)
@@ -160,9 +161,18 @@ def generate(repo, assets, output, candidate_sha):
         raise ManifestError('main HEAD differs from candidate')
     if _head(repo / 'ihk') != EXPECTED_IHK_HEAD:
         raise ManifestError('IHK HEAD differs')
-    files, gitlinks = _inventory(repo)
+    production_overlay = EXPECTED_IHK_HEAD == provenance.REVIEWED_IHK_HEAD
+    files, gitlinks = _inventory(repo, allow_ihk_overlay=production_overlay)
     if gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
         raise ManifestError('IHK gitlink differs')
+    # Preparation applies the one reviewed overlay to the pinned IHK checkout
+    # before manifest generation.  Bind that exact resulting state.
+    if production_overlay:
+        try:
+            provenance.verify_ihk_overlay(repo, _git, applied=True)
+        except provenance.BuildError as error:
+            raise ManifestError(str(error))
+        files['ihk/' + provenance.IHK_OVERLAY_PATH] = provenance.IHK_OVERLAY_RESULT_SHA256
     asset_rows = {}
     for name, expected in ASSET_HASHES.items():
         asset_rows[name] = _sha256(assets / name)
@@ -174,6 +184,14 @@ def generate(repo, assets, output, candidate_sha):
                 'ihk_sha': EXPECTED_IHK_HEAD,
                 'repository_files': files,
                 'schema': provenance.INPUT_SCHEMA}
+    if production_overlay:
+        manifest['ihk_overlay'] = {
+            'asset': provenance.IHK_OVERLAY_ASSET,
+            'path': provenance.IHK_OVERLAY_PATH,
+            'patch_sha256': provenance.IHK_OVERLAY_PATCH_SHA256,
+            'base_sha256': provenance.IHK_OVERLAY_BASE_SHA256,
+            'result_sha256': provenance.IHK_OVERLAY_RESULT_SHA256,
+        }
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_name(output.name + '.tmp-' + uuid.uuid4().hex)
     try:

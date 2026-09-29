@@ -118,6 +118,70 @@ class ManifestGeneratorTest(unittest.TestCase):
         finally:
             generator.EXPECTED_IHK_HEAD, generator.ASSET_HASHES = old_head, old_hashes
 
+    def test_reviewed_ihk_overlay_manifest_round_trips_through_offline_driver(self):
+        path = self.ihk / 'test/ihklib/whitebox/src/driver/mckernel/syscall.c'
+        path.parent.mkdir(parents=True)
+        overlay_path = 'test/ihklib/whitebox/src/driver/mckernel/syscall.c'
+        base = subprocess.check_output(['/usr/bin/git', '-C', str(Path(__file__).parents[2] / 'ihk'),
+                                        'show', '3114d9e7101ad52030eb3effa849a5c108972a1f:' + overlay_path])
+        result = subprocess.check_output(['/usr/bin/git', '-C', str(Path(__file__).parents[2] / 'ihk'),
+                                          'show', '21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c:' + overlay_path])
+        path = self.ihk / overlay_path
+        path.write_bytes(base)
+        path.chmod(0o644)
+        git(self.ihk, 'add', '.')
+        git(self.ihk, '-c', 'user.name=test', '-c', 'user.email=test@example',
+            'commit', '-qm', 'overlay base')
+        self.ihk_head = git(self.ihk, 'rev-parse', 'HEAD').decode().strip()
+        asset = self.repo / 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'
+        asset.parent.mkdir(parents=True)
+        source_asset = Path(__file__).parents[2] / 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'
+        shutil.copy2(source_asset, asset)
+        asset.chmod(0o644)
+        git(self.repo, 'add', 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch')
+        git(self.repo, 'add', '-f', 'ihk')
+        git(self.repo, '-c', 'user.name=test', '-c', 'user.email=test@example',
+            'commit', '-qm', 'overlay candidate')
+        self.candidate = git(self.repo, 'rev-parse', 'HEAD').decode().strip()
+        patch_values = {
+            'REVIEWED_IHK_HEAD': self.ihk_head,
+            'EXPECTED_IHK_HEAD': self.ihk_head,
+            'IHK_OVERLAY_PATCH_SHA256': generator.provenance.sha256(asset),
+            'IHK_OVERLAY_BASE_SHA256': hashlib.sha256(base).hexdigest(),
+            'IHK_OVERLAY_RESULT_SHA256': hashlib.sha256(result).hexdigest(),
+        }
+        path.write_bytes(result)
+        with patch.object(generator.provenance, 'REVIEWED_IHK_HEAD', self.ihk_head), \
+                patch.object(generator.provenance, 'EXPECTED_IHK_HEAD', self.ihk_head), \
+                patch.object(generator.provenance, 'IHK_OVERLAY_PATCH_SHA256', patch_values['IHK_OVERLAY_PATCH_SHA256']), \
+                patch.object(generator.provenance, 'IHK_OVERLAY_BASE_SHA256', patch_values['IHK_OVERLAY_BASE_SHA256']), \
+                patch.object(generator.provenance, 'IHK_OVERLAY_RESULT_SHA256', patch_values['IHK_OVERLAY_RESULT_SHA256']), \
+                patch.object(generator, 'EXPECTED_IHK_HEAD', self.ihk_head), \
+                patch.object(generator, 'ASSET_HASHES', self.asset_hashes):
+            output = Path(self.temp.name) / 'overlay-manifest.json'
+            generator.generate(self.repo, self.assets, output, self.candidate)
+            data = json.loads(output.read_text())
+        old = {name: getattr(offline, name) for name in patch_values}
+        old_assets = offline.ASSET_HASHES
+        try:
+            for name, value in patch_values.items():
+                setattr(offline, name, value)
+            offline.ASSET_HASHES = self.asset_hashes
+            offline.verify_inputs(self.repo, self.candidate, self.assets, data, offline.Runner())
+            git(self.ihk, 'config', 'core.filemode', 'false')
+            for mode in (0o600, 0o755):
+                path.chmod(mode)
+                with self.assertRaisesRegex(offline.BuildError, 'permission|mode'):
+                    offline.verify_inputs(self.repo, self.candidate, self.assets, data, offline.Runner())
+                path.chmod(0o644)
+        finally:
+            for name, value in old.items():
+                setattr(offline, name, value)
+            offline.ASSET_HASHES = old_assets
+        self.assertEqual(data['repository_files']['ihk/' + generator.provenance.IHK_OVERLAY_PATH],
+                         patch_values['IHK_OVERLAY_RESULT_SHA256'])
+        self.assertEqual(data['ihk_overlay']['result_sha256'], patch_values['IHK_OVERLAY_RESULT_SHA256'])
+
     def test_dirty_checkout_rejected(self):
         (self.repo / 'new').write_text('untracked')
         old_head, old_hashes = generator.EXPECTED_IHK_HEAD, generator.ASSET_HASHES

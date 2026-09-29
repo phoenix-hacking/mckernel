@@ -19,6 +19,12 @@ import uuid
 
 WORKFLOW = '.github/workflows/native-rust-host-modules-exact-build.yml'
 EXPECTED_IHK_HEAD = '3114d9e7101ad52030eb3effa849a5c108972a1f'
+REVIEWED_IHK_HEAD = EXPECTED_IHK_HEAD
+IHK_OVERLAY_PATH = 'test/ihklib/whitebox/src/driver/mckernel/syscall.c'
+IHK_OVERLAY_ASSET = 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'
+IHK_OVERLAY_PATCH_SHA256 = 'cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7'
+IHK_OVERLAY_BASE_SHA256 = '91fe5688f3282c1617a75f08c4b435a793200f2cf9beafe432cef7ad3ca0bd4c'
+IHK_OVERLAY_RESULT_SHA256 = '7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77'
 ARCHIVE = 'linux-6.12.0-211.44.1.el10_2.tar.xz'
 BASELINE = 'kernel-x86_64-rhel.config'
 SRPM = 'kernel-6.12.0-211.44.1.el10_2.src.rpm'
@@ -120,7 +126,7 @@ def checked_input(root, relative, allow_missing=False):
     return root / relative
 
 
-def tracked_digest(path, mode, object_id):
+def tracked_digest(path, mode, object_id, alternate_sha256=None):
     """Hash raw bytes ourselves: no Git filters, stat cache or index flags."""
     metadata = path.lstat()
     if mode == '120000':
@@ -148,12 +154,14 @@ def tracked_digest(path, mode, object_id):
             for chunk in iter(lambda: stream.read(1024 * 1024), b''):
                 blob.update(chunk)
                 digest.update(chunk)
+    digest_hex = digest.hexdigest()
     if blob.hexdigest() != object_id:
-        raise BuildError('Git blob bytes differ: ' + str(path))
-    return digest.hexdigest()
+        if alternate_sha256 is None or digest_hex != alternate_sha256:
+            raise BuildError('Git blob bytes differ: ' + str(path))
+    return digest_hex
 
 
-def source_inventory(repo, git):
+def source_inventory(repo, git, allow_ihk_overlay=False):
     """One provenance invariant for manifest production and consumption."""
     repo = Path(repo)
     inventories = []
@@ -185,8 +193,43 @@ def source_inventory(repo, git):
                     raise BuildError('indexed gitlink type differs: ' + relative)
                 gitlinks[relative] = object_id
             else:
+                if (allow_ihk_overlay and root == repo / 'ihk' and
+                        relative == IHK_OVERLAY_PATH):
+                    files[prefix + relative] = tracked_digest(
+                        path, mode, object_id, alternate_sha256=IHK_OVERLAY_RESULT_SHA256)
+                    continue
                 files[prefix + relative] = tracked_digest(path, mode, object_id)
     return files, gitlinks
+
+
+def verify_ihk_overlay(repo, git, applied):
+    """Admit only the reviewed one-file IHK working-tree overlay.
+
+    The IHK gitlink remains pinned to EXPECTED_IHK_HEAD.  Preparation applies
+    this patch after the pristine checkout, so the ordinary Git blob check is
+    intentionally replaced for this one path by a base/result byte check.
+    """
+    repo = Path(repo)
+    asset = regular(repo / IHK_OVERLAY_ASSET)
+    if sha256(asset) != IHK_OVERLAY_PATCH_SHA256:
+        raise BuildError('IHK overlay patch asset differs')
+    raw = git(repo / 'ihk', 'show', 'HEAD:' + IHK_OVERLAY_PATH)
+    if not isinstance(raw, bytes) or hashlib.sha256(raw).hexdigest() != IHK_OVERLAY_BASE_SHA256:
+        raise BuildError('IHK overlay base differs')
+    current = regular(repo / 'ihk' / IHK_OVERLAY_PATH)
+    expected = IHK_OVERLAY_RESULT_SHA256 if applied else IHK_OVERLAY_BASE_SHA256
+    if sha256(current) != expected:
+        state = 'applied' if applied else 'pristine'
+        raise BuildError('IHK overlay ' + state + ' bytes differ')
+    ihk = repo / 'ihk'
+    status = git(ihk, 'status', '--porcelain=1', '--untracked-files=all', '-z')
+    expected_status = (b' M ' + IHK_OVERLAY_PATH.encode('utf-8') + b'\0') if applied else b''
+    if status != expected_status:
+        raise BuildError('IHK overlay worktree has unexpected changes')
+    diff = git(ihk, 'diff', '--no-ext-diff', '--binary', 'HEAD', '--', IHK_OVERLAY_PATH)
+    expected_diff = IHK_OVERLAY_PATCH_SHA256 if applied else hashlib.sha256(b'').hexdigest()
+    if hashlib.sha256(diff).hexdigest() != expected_diff:
+        raise BuildError('IHK overlay diff differs')
 
 
 def sha256(path):
@@ -266,7 +309,24 @@ def verify_inputs(repo, candidate, assets, manifest, runner):
         raise BuildError('HEAD differs')
     if git_head(git(repo / 'ihk', 'rev-parse', 'HEAD')) != EXPECTED_IHK_HEAD:
         raise BuildError('submodule identity differs')
-    files, gitlinks = source_inventory(repo, git)
+    # The production candidate is prepared from pristine IHK and then has the
+    # single reviewed overlay applied.  Test fixtures may substitute another
+    # IHK identity; those retain the historical pristine-only contract.
+    production_overlay = EXPECTED_IHK_HEAD == REVIEWED_IHK_HEAD
+    overlay = manifest.get('ihk_overlay')
+    if production_overlay:
+        expected_overlay = {
+            'asset': IHK_OVERLAY_ASSET,
+            'path': IHK_OVERLAY_PATH,
+            'patch_sha256': IHK_OVERLAY_PATCH_SHA256,
+            'base_sha256': IHK_OVERLAY_BASE_SHA256,
+            'result_sha256': IHK_OVERLAY_RESULT_SHA256,
+        }
+        if overlay != expected_overlay:
+            raise BuildError('IHK overlay contract differs')
+    elif overlay is not None:
+        raise BuildError('unexpected IHK overlay contract')
+    files, gitlinks = source_inventory(repo, git, allow_ihk_overlay=production_overlay)
     if manifest.get('gitlinks') != gitlinks or gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
         raise BuildError('gitlink inventory differs')
     # Manifest must cover every ordinary tracked file, not a convenient subset.
@@ -274,6 +334,8 @@ def verify_inputs(repo, candidate, assets, manifest, runner):
         raise BuildError('consumed source inventory incomplete')
     if manifest['repository_files'] != files:
         raise BuildError('input bytes differ from manifest')
+    if production_overlay:
+        verify_ihk_overlay(repo, git, applied=True)
     if set(manifest.get('assets', {})) != {ARCHIVE, BASELINE, SRPM, DEBRAND}:
         raise BuildError('asset inventory incomplete')
     for name, expected_hash in ASSET_HASHES.items():

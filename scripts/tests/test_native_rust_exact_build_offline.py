@@ -84,6 +84,11 @@ class DriverTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
+        # This fixture models the historical pristine-only contract.  The
+        # production pinned IHK identity additionally requires the exact
+        # reviewed working-tree overlay, exercised by focused tests below.
+        self.ihk_pin = mock.patch.object(driver, 'EXPECTED_IHK_HEAD', 'f' * 40)
+        self.ihk_pin.start()
         self.repo, self.assets, self.output, self.evidence = [self.root / p for p in ('repo', 'assets', 'out', 'ev')]
         for path in (self.repo, self.assets, self.output):
             path.mkdir()
@@ -115,6 +120,7 @@ class DriverTests(unittest.TestCase):
 
     def tearDown(self):
         self.pins.stop()
+        self.ihk_pin.stop()
         self.temp.cleanup()
 
     def save_manifest(self):
@@ -138,6 +144,46 @@ class DriverTests(unittest.TestCase):
             self.assertEqual(env['BUILD_DIR'], str(self.output / 'build'))
         self.assertEqual(self.runner.phases,
                          list(driver.workflow_bodies(WORKFLOW_TEXT).values()))
+
+    def test_ihk_overlay_rejects_missing_wrong_and_extra_changes(self):
+        """The pinned IHK may have exactly one reviewed unstaged diff."""
+        pinned = '3114d9e7101ad52030eb3effa849a5c108972a1f'
+        repo = self.root / 'overlay-repo'
+        ihk = repo / 'ihk'
+        repo.mkdir()
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'init', '-q'], check=True)
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'config', 'user.name', 'test'], check=True)
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'config', 'user.email', 'test@example'], check=True)
+        source_ihk = ROOT / 'ihk'
+        subprocess.run(['/usr/bin/git', 'clone', '-q', str(source_ihk), str(ihk)], check=True)
+        subprocess.run(['/usr/bin/git', '-C', str(ihk), 'checkout', '-q', pinned], check=True)
+        asset = repo / driver.IHK_OVERLAY_ASSET
+        asset.parent.mkdir(parents=True)
+        shutil.copy2(ROOT / driver.IHK_OVERLAY_ASSET, asset)
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'add', str(asset.relative_to(repo))], check=True)
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'update-index', '--add', '--cacheinfo',
+                        '160000,' + pinned + ',ihk'], check=True)
+        subprocess.run(['/usr/bin/git', '-C', str(repo), 'commit', '-qm', 'overlay fixture'], check=True)
+
+        def git(root, *args):
+            return subprocess.check_output(['/usr/bin/git', '-C', str(root), *args])
+
+        driver.verify_ihk_overlay(repo, git, applied=False)
+        target = ihk / driver.IHK_OVERLAY_PATH
+        result = git(ihk, 'show', '21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c:' + driver.IHK_OVERLAY_PATH)
+        target.write_bytes(result)
+        driver.verify_ihk_overlay(repo, git, applied=True)
+        target.chmod(0o600)
+        with self.assertRaisesRegex(driver.BuildError, 'permission|mode'):
+            driver.source_inventory(repo, git, allow_ihk_overlay=True)
+        target.chmod(0o644)
+        target.write_bytes(b'wrong overlay bytes')
+        with self.assertRaisesRegex(driver.BuildError, 'applied bytes differ'):
+            driver.verify_ihk_overlay(repo, git, applied=True)
+        target.write_bytes(result)
+        (ihk / 'untracked-extra').write_bytes(b'extra')
+        with self.assertRaisesRegex(driver.BuildError, 'unexpected changes'):
+            driver.verify_ihk_overlay(repo, git, applied=True)
 
     def test_temporary_root_rejects_invalid_paths(self):
         build = self.root / 'build'

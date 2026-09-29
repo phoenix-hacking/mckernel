@@ -1,0 +1,22 @@
+diff --git a/test/ihklib/whitebox/src/driver/mckernel/syscall.c b/test/ihklib/whitebox/src/driver/mckernel/syscall.c
+index a3cebda..2ee639b 100644
+--- a/test/ihklib/whitebox/src/driver/mckernel/syscall.c
++++ b/test/ihklib/whitebox/src/driver/mckernel/syscall.c
+@@ -1504,7 +1504,7 @@ SYSCALL_DECLARE(exit_group)
+   return 0;
+ }
+ 
+-void clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
++long clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
+ {
+   ihk_mc_user_context_t ctx;
+   long lerror;
+@@ -1529,7 +1529,7 @@ void clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
+   if (lerror) {
+     kprintf("clear_host_pte failed. %ld\n", lerror);
+   }
+-  return;
++  return lerror;
+ }
+ 
+ static int set_host_vma(uintptr_t addr, size_t len, int prot, int holding_memory_range_lock)
