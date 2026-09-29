@@ -151,14 +151,23 @@ class CleanupPacketContractTests(unittest.TestCase):
             mutation(release)
         release_bytes = (json.dumps(release, sort_keys=True, separators=(",", ":")) + "\n").encode()
         release_hash = hashlib.sha256(release_bytes).hexdigest()
-        helper_bytes = DELETER.read_bytes().replace(
+        helper_template, helper_count = re.subn(
+            rb"(?m)^RELEASE_SHA = '(?:[0-9a-f]{64}|UNSET-REQUIRES-INDEPENDENT-RELEASE-SHA256)'$",
+            b"RELEASE_SHA = 'UNSET-REQUIRES-INDEPENDENT-RELEASE-SHA256'", DELETER.read_bytes())
+        self.assertEqual(helper_count, 1)
+        helper_bytes = helper_template.replace(
             b"RELEASE_SHA = 'UNSET-REQUIRES-INDEPENDENT-RELEASE-SHA256'",
             ("RELEASE_SHA = '" + release_hash + "'").encode())
         helper_hash = hashlib.sha256(helper_bytes).hexdigest()
+        packet_template, template_count = re.subn(
+            rb"(?m)^FINAL_DELETER_SHA=(?:[0-9a-f]{64}|__REPLACE_WITH_FINAL_DELETER_SHA256__); RELEASE_SHA=(?:[0-9a-f]{64}|__REPLACE_WITH_RELEASE_SHA256__)$",
+            b"FINAL_DELETER_SHA=__REPLACE_WITH_FINAL_DELETER_SHA256__; RELEASE_SHA=__REPLACE_WITH_RELEASE_SHA256__",
+            PACKET.read_bytes())
+        self.assertEqual(template_count, 1)
         packet_bytes, count = re.subn(
             rb"(?m)^FINAL_DELETER_SHA=__REPLACE_WITH_FINAL_DELETER_SHA256__; RELEASE_SHA=__REPLACE_WITH_RELEASE_SHA256__$",
             ("FINAL_DELETER_SHA=" + helper_hash + "; RELEASE_SHA=" + release_hash).encode(),
-            PACKET.read_bytes())
+            packet_template)
         self.assertEqual(count, 1)
         release_path = directory / "release.json"
         helper_path = directory / "deleter.py"

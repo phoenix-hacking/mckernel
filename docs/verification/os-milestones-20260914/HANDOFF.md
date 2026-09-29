@@ -469,3 +469,10 @@ construction. Commit/push/fetch these exact templates, set only the reviewed
 source/status/helper/release pins, then seek independent final execution review
 before any sudo or mutation. The original roots and all retained evidence stay
 protected; success would reclaim space only and changes no acceptance count.
+
+Checkpoint 86 has final independent one-shot release after remote verification:
+helper `5500e77e...c753`, packet `d3d4c064...5729`, basis
+`704c8409...7323`, tests `aebc02ec...d9f7`. Commit/push/fetch these exact bytes,
+then invoke the packet once as non-root from the repository root. Preserve every
+failure artifact and never retry or run the helper directly. This authorizes
+cleanup only, not a build, guest, application or acceptance promotion.

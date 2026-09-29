@@ -6292,3 +6292,22 @@ untouched. Next commit/push/fetch this exact template. Then make only the four
 review-authorized substitutions, rerun the checks, obtain an independent exact
 mechanical-diff/execution review, commit/push/fetch final bytes and remeasure
 the fresh preflight before the single root attempt. Counters remain unchanged.
+
+Continuation checkpoint 86, 2026-09-28: template checkpoint
+`5c7f598bcde4660000296500468fb0abcf7a2602` is pushed and fetched. The only
+execution-artifact changes after it are independently verified as mechanical:
+basis source/status, helper release pin and packet helper/release pins. Final
+helper is `5500e77e...c753`, packet `d3d4c064...5729`, basis
+`704c8409...7323`, and ten-test suite `aebc02ec...d9f7`; all local checks PASS.
+Independent review conditionally releases exactly one non-root invocation of
+the packet after these exact final bytes are committed, pushed and fetched.
+See `stability-native-exact-cleanup-execution-release-20260929-1.json`.
+
+The released command is `/usr/bin/bash` on the exact packet from the repository
+root. Its gates must freshly prove branch/source bindings, candidate/IHK clean
+commits, exact roots and inputs, 16/12/4-GiB capacity, no owner process and no
+running-container bind before creating the v2 preflight and making one sanitized
+`sudo -A` helper attempt. Timeout is 300 seconds with 10-second kill grace. Do
+not invoke the helper directly, bypass a gate, retry, roll back or delete any
+failure evidence/quarantine. Cleanup success is still unproven and earns no OS
+acceptance credit.
