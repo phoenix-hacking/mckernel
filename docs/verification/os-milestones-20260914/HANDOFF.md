@@ -785,8 +785,9 @@ and retire; claims/leases are absent. Independent review verifies all live
 entries, exact USTAR bytes and 9,011 reconstructible canonical blobs.
 
 The capsule requires preserved main `67589154...fe794` in the root object store
-and IHK `3114d9e7...72a1f` in `.git/modules/ihk`; it is not standalone. Commit/
-push/fetch all artifacts, then obtain a separate privileged retirement release
+and IHK `3114d9e7...72a1f` in `.git/modules/ihk`; it is not standalone. Artifact
+commit `3c36091c...cf4bb` is pushed/fetched and its four evidence blobs match.
+Next obtain a separate privileged retirement release
 binding both stores, exact roots, fresh quarantine, two closure rounds and full
 Docker/process/mount evidence. No retirement, space recovery, build, guest or
 acceptance credit exists. See
@@ -796,8 +797,8 @@ Shutdown checkpoint 112: no new work was dispatched after the stop request;
 all child lanes and retention workers are joined. Preserve launcher identities
 3399308/83682487, 3399313/83682494 and 3399317/83682500, both retained terminal
 containers, both consumed roots, and attempt-1/attempt-2 evidence roots. The
-next invocation must verify the fetched checkpoint and reconcile those live
-identities before designing the separate privileged retirement release. Only
+next invocation must reconcile those live identities and the already verified
+fetched checkpoint before designing the separate privileged retirement release. Only
 after independently reviewed retirement and measured capacity recovery may
 fresh preparation `704f6654-1` proceed toward a new heavy build. The OS is
 incomplete and the launcher pause is temporary.

@@ -6073,8 +6073,10 @@ Reviewer diagnostic PID 3788795 was stopped after a buffered Git-blob check
 briefly reached about 17 GiB RSS, above the profile; exit 143 changed no
 evidence. Bounded streaming verification then PASSed. Record
 `stability-native-exact-retention-preparation-success-20260929-2.json` preserves
-the result. Next checkpoint/fetch-verify all artifacts, then separately review
-a privileged retirement packet binding both stores, exact roots, fresh
+the result. Artifact commit `3c36091c...cf4bb` is pushed and fetched; HEAD,
+upstream, FETCH_HEAD and the remote branch agree, and the four fetched evidence
+blobs reproduce their recorded hashes. Next separately review a privileged
+retirement packet binding both stores, exact roots, fresh
 quarantine, two closure rounds and full Docker/process/mount evidence. No space
 recovery, build, guest, application or formal credit is claimed.
 
@@ -6088,7 +6090,7 @@ wrapper PID 3399308/starttime 83682487, worker 3399313/83682494 and app-server
 
 Post-run free bytes are host 24,329,093,120, scratch 21,560,459,264, tmpfs
 7,516,635,136 and available memory 20,822,495,232. The next invocation must
-first reconcile these identities and the fetched checkpoint. It may then create
+first reconcile these identities and verified fetched checkpoint. It may then create
 and independently review the separate privileged ordinary-retirement release
 described above; no root rename, deletion or cleanup is authorized by this
 checkpoint. After reviewed retirement and capacity recovery, independently
