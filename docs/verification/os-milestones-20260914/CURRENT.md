@@ -6488,3 +6488,33 @@ separate execution review may a new packet run once. Formal counters remain
 0/273, 2/4, 6/130, 350/10,000 and 0/7; there are four historical diagnostic
 apps and zero successful current-candidate builds. The OS goal is incomplete,
 and this launcher pause is temporary.
+
+Continuation checkpoint 94, 2026-09-28: the expert cleanup strategy now has an
+independently PASSed recovery-v2 source template after the first draft and its
+single bounded correction were both rejected. The required strategy change was
+a larger coherent four-file boundary replacement, not another renamed retry.
+Exact DRAFT helper `fb229489...f8d8c`, packet `5bafd304...6d1d7`, basis
+`f2a19915...11ff` and 26-test suite `5d25dc07...6b195` pass the complete pure/
+temporary-filesystem suite, helper self-test, Python compilation, shell syntax,
+JSON parsing and diff checks. Independent review accepts only the non-executable
+source-template scope; see
+`stability-native-exact-quarantine-recovery2-template-readiness-20260929-1.json`.
+
+The template binds both retained failures and archives, both claims/journals,
+the unchanged lease and quarantine identities, exact inventory and reviewed v2
+observer. It uses the acyclic template checkpoint -> final basis -> final helper
+-> final packet chain, requires a separately fetched execution-release record,
+preserves unrelated dirty work, reserves fresh outputs, retains substantive
+process/Docker/preflight evidence, and validates exact v7 membership plus two
+final closure-clean rounds. Deletion and lease release are descriptor-bound and
+failure evidence reports actual survivors. The operational exclusion of
+privileged/adversarial mutation and reference acquisition/transfer must hold
+through observation and deletion; this is not an atomic census claim.
+
+No live observer, cleanup, sudo, Docker, build, guest or application ran in this
+checkpoint. Next commit/push/fetch these exact template bytes. Then mechanically
+finalize only the reviewed source checkpoint/status/basis and helper/packet pins,
+rerun all pure checks, obtain independent exact-diff/execution review, and
+commit/push/fetch before any one-shot packet invocation. Neither older packet
+may be retried. Formal counters and the four diagnostic apps/zero successful
+current-candidate builds remain unchanged.

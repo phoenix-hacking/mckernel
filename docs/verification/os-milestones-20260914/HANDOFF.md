@@ -539,3 +539,15 @@ lease, both failures and both permanent recovery claims/journals. On the next
 authorized continuation, create a new DRAFT recovery-v2 identity bound to all
 of that retained state and observer v2, then obtain independent source review;
 do not retry either old packet or begin a build. The OS remains incomplete.
+
+Checkpoint 94 supersedes the missing recovery-v2 draft. After an initial BLOCK,
+a failed bounded correction and the required larger strategy change, exact
+non-executable template helper `fb229489...f8d8c`, packet `5bafd304...6d1d7`,
+basis `f2a19915...11ff` and 26-test suite `5d25dc07...6b195` independently PASS
+source review. They bind both failures/claims/journals, the old lease, sealed
+roots, inventory and observer v2 with an acyclic finalization chain. No live
+operation is authorized. Commit/push/fetch the template, mechanically finalize
+only reviewed pins/status, then obtain a separate exact execution review and a
+second fetched checkpoint before any new one-shot packet. Preserve the explicit
+non-atomic operational exclusion through observation and deletion; never retry
+either old packet or start a build while the lease remains.
