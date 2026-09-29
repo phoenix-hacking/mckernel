@@ -6542,6 +6542,38 @@ output reuse is prohibited. Preserve any failure for separate review. Formal
 counters, real guest application count and current-candidate build count remain
 unchanged.
 
+Continuation checkpoint 100, 2026-09-29: the single released recovery-3 packet
+ran once and PASSed cleanup in 31 seconds. The v7 observer completed two clean
+closure rounds across 1,636 task scans with zero target references, zero
+permission denials, zero tree transients and zero persistent revalidation
+failures; four exited identities were safely reconciled. The descriptor-bound
+journal contains 10,555 records: 10,547 delete entries, two root removals, one
+old-lease removal and terminal success. Both exact quarantine roots, both
+original paths and the old root lease are absent. Recovery-3 claim and journal
+remain preserved; no retry or rollback occurred.
+
+Success record
+`stability-native-exact-quarantine-recovery3-success-20260929-1.json` is
+`b9870848...c92ae`. Its 23-member raw archive
+`stability-native-exact-quarantine-recovery3-success-raw-20260929-1.tar.gz` is
+`8a08748c...7388f`; all 22 regular members match the live originals
+byte-for-byte. Preflight measured 24,560,197,632 host-free,
+21,588,443,136 scratch-free, 7,524,667,392 tmpfs-free and 21,056,061,440
+MemAvailable bytes. Post-cleanup tmpfs free is 16,597,475,328 bytes. This is
+cleanup infrastructure only: `runtime_acceptance=false`, and all formal
+counters plus the four diagnostic apps/zero successful current-candidate builds
+remain unchanged.
+
+The heavy/build lease is now clear. Next commit/push/fetch this exact success
+record and archive, then prepare a wholly fresh commit-derived candidate,
+standalone metadata backup, manifest, request, output/evidence roots and lease
+identity under the already reviewed preparation/owner constraints. Revalidate
+the current source closure, correct modes, aggregate candidate+backup+12-GiB
+container accounting and at least 4-GiB tmpfs reserve. Candidate preparation
+does not itself release the offline heavy build; obtain independent one-shot
+review for the fresh request before Docker execution. Preserve the consumed
+recovery-3 outputs and every earlier failure/archive.
+
 Continuation checkpoint 96, 2026-09-29: the single released recovery-v2 packet
 ran once and failed closed in 0.25 seconds during root source admission, before
 claim or journal creation and before Docker, observer or deletion. The sanitized

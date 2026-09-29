@@ -601,3 +601,20 @@ one-shot/no-retry/no-rollback contract and operational exclusion through
 observation and deletion. Invoke only the non-root packet after its fresh gates
 pass; preserve every output/failure and never run the helper directly. Cleanup
 success changes no acceptance counter.
+
+Checkpoint 100 closes the stale quarantine/lease blocker. The single recovery-3
+attempt PASSed after two clean v7 observer rounds: zero references, denials or
+tree failures across 1,636 task scans. Its 10,555-record journal proves 10,547
+descriptor-bound deletions, two root removals, old-lease removal and terminal
+success. Both quarantines, both originals and the old lease are absent; the new
+claim/journal remain preserved. Success record `b9870848...c92ae` and
+23-member archive `8a08748c...7388f` bind every live output; all 22 regular
+members match. This grants no runtime or acceptance credit.
+
+After fetched verification, prepare a wholly fresh commit-derived candidate and
+all fresh backup/manifest/request/output/evidence/lease identities under the
+reviewed preparation and aggregate resource constraints. Revalidate source
+closure, modes, standalone metadata, at least 4-GiB tmpfs reserve and the pinned
+12-GiB container accounting. Preparation does not release Docker build; seek a
+fresh independent one-shot heavy-build review for the exact request. Preserve
+all recovery outputs and historical failures.
