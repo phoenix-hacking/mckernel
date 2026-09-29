@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel-stability-shutdown-checkpoint-v1",
+  "checkpoint": 106,
+  "captured_at_utc": "2026-09-29T08:16:38Z",
+  "status": "WIP_PAUSED_BY_LAUNCHER",
+  "os_complete": false,
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "new_guest_applications": 0,
+  "launcher_processes": [
+    {"role": "wrapper", "pid": 3399308, "proc_starttime": 83682487},
+    {"role": "worker", "pid": 3399313, "proc_starttime": 83682494},
+    {"role": "app_server", "pid": 3399317, "proc_starttime": 83682500}
+  ],
+  "retained_containers": [
+    {"id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9", "status": "exited", "pid": 0, "exit_code": 1, "oom_killed": false, "restart_policy": "no"},
+    {"id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10", "status": "exited", "pid": 0, "exit_code": 0, "oom_killed": false, "restart_policy": "no"}
+  ],
+  "fresh_preparation_wip": {
+    "source_commit": "704f6654fe95819f7dfd0e4d3665dc44fab63561",
+    "packet": "docs/verification/evidence/native-exact-candidate-preparation-704f6654-1.sh",
+    "packet_sha256": "7502c748b46766379db480cd51a48c7a107ef8c4315db7ba5d09432f5bfb3a0a",
+    "test": "scripts/tests/test_native_exact_candidate_preparation_704f6654.py",
+    "test_sha256": "ba67804fcefc5000b3b14dfa66fd0c3e1da4348eb2ce03649259b24e08d91d8c",
+    "test_result": "5/5 PASS",
+    "executed": false,
+    "execution_released": false
+  },
+  "resource_snapshot_bytes": {"host_free": 24444002304, "scratch_free": 21565747200, "tmpfs_free": 7516635136},
+  "blocked_cleanup": {
+    "candidate_root": "/dev/shm/mckernel-exact-candidate-67589154-1",
+    "metadata_backup_root": "/dev/shm/mckernel-exact-metadata-backup-67589154-1",
+    "decision": "BLOCK_DELETION",
+    "reason": "The retained preparation archive does not cover installed Git metadata or the complete metadata backup, and the retained failed container still has configuration references to the candidate and driver. No fresh privileged process/mount census or reviewed terminal-container exception exists.",
+    "required_next_step": "After launcher resumption, build and test a complete inventory/restoration capsule and one ordinary-retirement packet with an exact terminal-container exception, then obtain independent execution review before any deletion."
+  },
+  "next_tasks": [
+    "Reconcile launcher PIDs/starttimes, retained containers, candidate roots, lease/locks and capacity.",
+    "Prepare and verify the complete candidate/backup restoration capsule and mapping without deleting either root.",
+    "Implement and regression-test the fresh ordinary-retirement packet, including exact terminal-container acceptance and all changed/running/unknown-container rejections.",
+    "Obtain independent execution release, checkpoint it, and only then invoke the one-shot retirement operation.",
+    "After space is safely recovered, independently review and invoke the fresh 704f6654-1 candidate preparation; then seek a separate heavy-build release."
+  ]
+}

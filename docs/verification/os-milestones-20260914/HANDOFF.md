@@ -699,3 +699,16 @@ guest, app or gate credit. Commit/push/fetch it, then prepare a wholly fresh
 candidate/request/output/evidence/lease namespace and obtain a separate heavy-
 build release. Never reuse `67589154-1`; retain both failed-heavy and passing-
 fixture containers.
+
+Shutdown checkpoint 106 (2026-09-29): all child lanes are joined and no new
+execution was started. Preserve launcher identities 3399308/83682487,
+3399313/83682494 and 3399317/83682500 and retained terminal containers
+`decd7cf9...c6b9` (exit 1) and `8943e497...bc10` (exit 0). Fresh preparation
+packet `7502c748...b3a0a` plus test `ba67804f...d8c` pass their five pure tests
+but are unexecuted and unreleased. Cleanup review blocks deleting the consumed
+candidate and backup until a complete restoration capsule and reviewed ordinary-
+retirement packet support the exact unchanged terminal-container exception and
+fresh live-reference closure. See
+`stability-shutdown-checkpoint-20260929-106.json` and CURRENT checkpoint 106 for
+the precise next tasks. Formal counters and successful current-candidate builds
+remain unchanged; the launcher pause is temporary and the OS is incomplete.

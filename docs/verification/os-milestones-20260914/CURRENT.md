@@ -6866,3 +6866,43 @@ counters are unchanged. Next push/fetch these exact bytes, then prepare a wholly
 fresh commit-derived candidate/request/output/evidence/lease namespace and seek
 a separate heavy-build review. Never reuse `67589154-1` or clean either retained
 container through this decision.
+
+Continuation checkpoint 106, 2026-09-29: the launcher requested a shutdown
+checkpoint before any new execution. Every child lane is joined and no heavy,
+guest, cleanup or candidate-preparation operation is active. Wrapper PID
+3399308/starttime 83682487, worker PID 3399313/starttime 83682494 and app-server
+PID 3399317/starttime 83682500 remain live and undisturbed. Retained failed
+container `decd7cf9...c6b9` remains exited 1/PID 0/non-OOM/no-restart; retained
+queue-fixture container `8943e497...bc10` remains exited 0/PID 0/non-OOM/no-
+restart. Preserve both exactly and never restart or reuse them.
+
+Fresh source-commit `704f6654...63561` preparation WIP is retained but was not
+executed or released. Packet `native-exact-candidate-preparation-704f6654-1.sh`
+is `7502c748...b3a0a` and its five-test contract
+`test_native_exact_candidate_preparation_704f6654.py` is `ba67804f...d8c`;
+bash syntax, temporary-output Python 3.8 compilation, JSON/diff/source-contract
+normalization and all five tests pass. It names nine fresh targets and preserves
+the unchanged owner, IHK pin and request contracts. This is preparation WIP
+only, not a build, runtime result or acceptance result.
+
+Independent read-only cleanup review BLOCKS deletion of consumed candidate
+`/dev/shm/mckernel-exact-candidate-67589154-1` and metadata backup
+`/dev/shm/mckernel-exact-metadata-backup-67589154-1`. The existing preparation
+archive lacks complete installed Git metadata and backup coverage, while the
+failed terminal container still records candidate/driver bindings. No fresh
+privileged live-reference census or reviewed exact terminal-container exception
+exists. Host/scratch/tmpfs free bytes at shutdown are 24,444,002,304 /
+21,565,747,200 / 7,516,635,136. Do not improvise cleanup.
+
+On the next authorized launcher continuation, first reconcile all identities,
+leases, locks, mounts, Docker state and resource floors. Then prepare a complete
+candidate/backup inventory and restoration capsule, plus one ordinary-retirement
+packet using descriptor-relative no-follow checks, durable journal, two clean
+closure rounds and an exact exception only for the unchanged terminal container.
+Regression-test changed/running/restarting/paused/unknown container rejection
+and obtain independent execution release before deleting anything. Only after
+safe space recovery may the fresh `704f6654-1` preparation receive independent
+review and one-shot execution, followed by a separate heavy-build release.
+Record `stability-shutdown-checkpoint-20260929-106.json` preserves this cursor.
+The OS remains incomplete; formal counters and successful current-candidate
+build count remain unchanged at zero. The launcher pause is temporary.
