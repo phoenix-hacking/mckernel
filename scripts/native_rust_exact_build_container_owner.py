@@ -182,37 +182,266 @@ def validate_git_roots(source_root):
     _validate_git_metadata(Path(source_root) / 'ihk', 'source_root/ihk')
 
 
-def _filesystem_type(path):
-    """Return the mounted filesystem type, when /proc/mounts is readable."""
+_MEMORY_BACKED_FILESYSTEMS = frozenset(('tmpfs', 'ramfs'))
+# Deliberately small: these are the reviewed ordinary-storage filesystems for
+# this owner.  Treating an unfamiliar type as disk can undercount host RAM
+# (for example a memory-backed FUSE filesystem), so it is not an admission
+# shortcut.
+_ORDINARY_STORAGE_FILESYSTEMS = frozenset(('ext4', 'xfs'))
+
+
+def _unescape_mountinfo_path(value):
+    """Strictly decode the four pathname escapes emitted by show_mountinfo."""
+    if not isinstance(value, bytes):
+        raise RuntimeError('mount inventory pathname is not bytes')
+    decoded = bytearray()
+    index = 0
+    allowed = {0o40, 0o11, 0o12, 0o134}
+    while index < len(value):
+        byte = value[index]
+        if byte != ord('\\'):
+            if byte in (0, ord(' '), ord('\t'), ord('\n')):
+                raise RuntimeError('unescaped mount inventory pathname byte')
+            decoded.append(byte)
+            index += 1
+            continue
+        escaped = value[index + 1:index + 4]
+        if len(escaped) != 3 or any(digit < ord('0') or digit > ord('7')
+                                    for digit in escaped):
+            raise RuntimeError('malformed mount inventory escape')
+        character = int(escaped, 8)
+        if character not in allowed:
+            raise RuntimeError('unsupported mount inventory escape')
+        decoded.append(character)
+        index += 4
+    if b'\0' in decoded:
+        raise RuntimeError('NUL mount inventory pathname')
+    return bytes(decoded)
+
+
+def _mountinfo_token(value, label):
     try:
-        target = str(Path(path).resolve(strict=True))
-        best = None
-        for line in Path('/proc/mounts').read_text().splitlines():
-            fields = line.split()
-            if len(fields) < 3:
-                continue
-            mount = fields[1].replace('\\040', ' ').replace('\\011', '\t')
-            if target == mount or target.startswith(mount.rstrip('/') + '/'):
-                if best is None or len(mount) > len(best[0]):
-                    best = (mount, fields[2])
-        return best[1] if best else 'unknown'
-    except (OSError, ValueError, IndexError):
+        return value.decode('ascii')
+    except UnicodeDecodeError as exc:
+        raise RuntimeError('non-ASCII mount inventory %s: %s' % (label, exc))
+
+
+def _mountinfo_path(value, number):
+    value = _unescape_mountinfo_path(value)
+    if not value.startswith(b'/'):
+        raise RuntimeError('nonabsolute mount inventory path: %d' % number)
+    if value != b'/':
+        components = value.split(b'/')[1:]
+        if (value.endswith(b'/') or b'' in components or
+                any(component in (b'.', b'..') for component in components)):
+            raise RuntimeError('nonnormalized mount inventory path: %d' % number)
+    return os.fsdecode(value)
+
+
+def _mountinfo_device(value, number):
+    fields = value.split(b':')
+    if len(fields) != 2 or not all(field.isdigit() for field in fields):
+        raise RuntimeError('invalid mount inventory major:minor: %d' % number)
+    major, minor = (int(field) for field in fields)
+    if major < 0 or minor < 0:
+        raise RuntimeError('invalid mount inventory major:minor: %d' % number)
+    return '%d:%d' % (major, minor)
+
+
+def _mountinfo_options(value, number):
+    options = value.split(b',')
+    if not options or any(not option for option in options) or not any(
+            option in (b'ro', b'rw') for option in options):
+        raise RuntimeError('invalid mount inventory options: %d' % number)
+
+
+def _mountinfo_optional_fields(values, number):
+    for value in values:
+        if value == b'unbindable':
+            continue
+        name, separator, identifier = value.partition(b':')
+        if (not separator or name not in (b'shared', b'master', b'propagate_from') or
+                not identifier.isdigit()):
+            raise RuntimeError('invalid mount inventory optional field: %d' % number)
+
+
+def _mount_inventory():
+    """Return authoritative mounts in this namespace, or fail closed.
+
+    ``st_dev`` cannot distinguish a same-device bind mount from its parent.
+    Mountinfo names every mountpoint, including file mounts, and is therefore
+    the admission authority for a root's descendants.
+    """
+    try:
+        records = []
+        raw = Path('/proc/self/mountinfo').read_bytes()
+        lines = raw.split(b'\n')
+        for number, line in enumerate(lines, 1):
+            if not line:
+                if number == len(lines):
+                    continue
+                raise RuntimeError('empty mount inventory record: %d' % number)
+            left, separator, right = line.partition(b' - ')
+            fields = left.split(b' ')
+            trailer = right.split(b' ')
+            if (not separator or len(fields) < 6 or len(trailer) < 3 or
+                    any(not field for field in [*fields, *trailer])):
+                raise RuntimeError('invalid mount inventory record: %d' % number)
+            if not fields[0].isdigit() or int(fields[0]) <= 0:
+                raise RuntimeError('invalid mount inventory ID: %d' % number)
+            if not fields[1].isdigit():
+                raise RuntimeError('invalid mount inventory parent ID: %d' % number)
+            _mountinfo_options(fields[5], number)
+            _mountinfo_optional_fields(fields[6:], number)
+            records.append({'mount_id': _mountinfo_token(fields[0], 'ID'),
+                            'parent_id': _mountinfo_token(fields[1], 'parent ID'),
+                            'mountpoint': _mountinfo_path(fields[4], number),
+                            'filesystem': _mountinfo_token(trailer[0], 'filesystem'),
+                            'device': _mountinfo_device(fields[2], number)})
+        if not records:
+            raise RuntimeError('empty mount inventory')
+        return records
+    except (OSError, ValueError) as exc:
+        raise RuntimeError('mount inventory unavailable: ' + str(exc))
+
+
+def _mount_for_path(path, mounts=None):
+    """Return one unambiguous most-specific mount record containing *path*."""
+    target = Path(path).resolve(strict=True)
+    matches = []
+    for record in _mount_inventory() if mounts is None else mounts:
+        mountpoint = Path(record['mountpoint'])
+        if target == mountpoint or mountpoint in target.parents:
+            matches.append(record)
+    if not matches:
+        raise RuntimeError('filesystem classification unknown')
+    longest = max(len(record['mountpoint']) for record in matches)
+    selected = [record for record in matches if len(record['mountpoint']) == longest]
+    if len(selected) != 1:
+        raise RuntimeError('ambiguous stacked mount for allocation root: ' + str(target))
+    return selected[0]
+
+
+def _filesystem_type(path, binding=None):
+    """Return the filesystem type from the authoritative mount inventory."""
+    try:
+        if binding is not None:
+            if str(Path(path).resolve(strict=True)) != binding['path']:
+                raise RuntimeError('allocation binding path mismatch')
+            return binding['mount']['filesystem']
+        return _mount_for_path(path)['filesystem']
+    except (OSError, ValueError, KeyError, RuntimeError):
         return 'unknown'
 
 
-def _allocated_bytes(root):
-    """Count allocated blocks on root's device without crossing mounts/links.
+def _filesystem_classification(filesystem):
+    if filesystem in _MEMORY_BACKED_FILESYSTEMS:
+        return 'memory-backed'
+    if filesystem in _ORDINARY_STORAGE_FILESYSTEMS:
+        return 'ordinary-storage'
+    raise RuntimeError('memory allocation filesystem unsupported: ' + str(filesystem))
+
+
+def _reject_descendant_mounts(root, mounts):
+    """Reject any nested mount, even when it shares root's device number."""
+    root = Path(root).resolve(strict=True)
+    for record in mounts:
+        mountpoint = Path(record['mountpoint'])
+        if root in mountpoint.parents:
+            raise RuntimeError('candidate allocation root contains nested mount: ' +
+                               str(mountpoint))
+
+
+def _root_identity(root):
+    """Return the lstat identity that must remain bound to an admission root."""
+    canonical = Path(root).resolve(strict=True)
+    try:
+        info = os.lstat(str(canonical))
+    except OSError as exc:
+        raise RuntimeError('candidate allocation root lstat failed: ' + str(exc))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+        raise RuntimeError('candidate allocation root is not a directory')
+    return {'path': str(canonical), 'device': info.st_dev, 'inode': info.st_ino,
+            'file_type': stat.S_IFMT(info.st_mode)}
+
+
+def _mount_identity(record):
+    """The complete procfs identity that binds a root to its visible mount."""
+    try:
+        return {'mount_id': record['mount_id'], 'parent_id': record['parent_id'],
+                'device': record['device'], 'mountpoint': record['mountpoint'],
+                'filesystem': record['filesystem']}
+    except KeyError as exc:
+        raise RuntimeError('mount inventory identity missing field: ' + str(exc))
+
+
+def _mount_scope(root, mounts):
+    """Capture the root mount plus every strict descendant mount identity."""
+    root = Path(root).resolve(strict=True)
+    selected = _mount_identity(_mount_for_path(root, mounts))
+    descendants = sorted((_mount_identity(record) for record in mounts
+                          if root in Path(record['mountpoint']).parents),
+                         key=lambda record: (record['mountpoint'], record['mount_id']))
+    if descendants:
+        raise RuntimeError('candidate allocation root contains nested mount: ' +
+                           descendants[0]['mountpoint'])
+    return {'mount': selected, 'descendants': descendants}
+
+
+def _validate_root_mount_device(root, scope):
+    """Bind the visible mount's major:minor to the root lstat device."""
+    actual = '%d:%d' % (os.major(root['device']), os.minor(root['device']))
+    if scope['mount']['device'] != actual:
+        raise RuntimeError('allocation root mount device mismatch: expected %s got %s' %
+                           (actual, scope['mount']['device']))
+
+
+def _capture_allocation_binding(root):
+    """Take a stable root/mount snapshot, rejecting changes while it is read."""
+    before_mounts = _mount_inventory()
+    before_root = _root_identity(root)
+    before_scope = _mount_scope(before_root['path'], before_mounts)
+    after_mounts = _mount_inventory()
+    after_root = _root_identity(before_root['path'])
+    after_scope = _mount_scope(after_root['path'], after_mounts)
+    if before_root != after_root or before_scope != after_scope:
+        raise RuntimeError('candidate allocation root mount identity changed during binding')
+    _validate_root_mount_device(before_root, before_scope)
+    return {'path': before_root['path'], 'root': before_root,
+            'mount': before_scope['mount'], 'descendants': before_scope['descendants']}
+
+
+def _revalidate_allocation_binding(binding):
+    """Fail closed if root identity, selected mount, or nested mounts changed."""
+    root = binding['path']
+    identity = _root_identity(root)
+    mounts = _mount_inventory()
+    scope = _mount_scope(root, mounts)
+    if (identity != binding['root'] or scope['mount'] != binding['mount'] or
+            scope['descendants'] != binding['descendants']):
+        raise RuntimeError('candidate allocation root mount identity changed')
+    _validate_root_mount_device(identity, scope)
+
+
+def _allocated_bytes(root, binding=None):
+    """Count allocated blocks after proving root has no descendant mounts.
 
     This is admission accounting, so an unreadable directory or a raced entry
     is not equivalent to an empty one.  Fail closed before the lease exists.
     """
-    root = Path(root)
+    if binding is None:
+        binding = _capture_allocation_binding(root)
+    root = Path(binding['path'])
+    current_root = _root_identity(root)
+    if current_root != binding['root']:
+        raise RuntimeError('candidate allocation root mount identity changed before walk')
     try:
         root_info = os.lstat(str(root))
     except OSError as exc:
         raise RuntimeError('candidate allocation root lstat failed: ' + str(exc))
-    if stat.S_ISLNK(root_info.st_mode) or not stat.S_ISDIR(root_info.st_mode):
-        raise RuntimeError('candidate allocation root is not a directory')
+    if ({'path': str(root), 'device': root_info.st_dev, 'inode': root_info.st_ino,
+         'file_type': stat.S_IFMT(root_info.st_mode)} != binding['root']):
+        raise RuntimeError('candidate allocation root mount identity changed before walk')
     device = root_info.st_dev
 
     def failed_walk(exc):
@@ -247,25 +476,36 @@ def _allocated_bytes(root):
         for name in directories:
             entry = Path(directory) / name
             info = entry_info(entry)
-            if info.st_dev == device and not stat.S_ISLNK(info.st_mode):
-                value = allocated(info, entry)
-                if total > sys.maxsize - value:
-                    raise RuntimeError('candidate allocation total overflow')
-                total += value
-                kept.append(name)
+            if stat.S_ISLNK(info.st_mode):
+                continue
+            if info.st_dev != device:
+                raise RuntimeError('candidate allocation walk crossed device: ' + str(entry))
+            if not stat.S_ISDIR(info.st_mode):
+                raise RuntimeError('candidate allocation walk contains non-directory: ' + str(entry))
+            value = allocated(info, entry)
+            if total > sys.maxsize - value:
+                raise RuntimeError('candidate allocation total overflow')
+            total += value
+            kept.append(name)
         directories[:] = kept
         for name in files:
             entry = Path(directory) / name
             info = entry_info(entry)
-            if info.st_dev == device and not stat.S_ISLNK(info.st_mode):
-                value = allocated(info, entry)
-                if total > sys.maxsize - value:
-                    raise RuntimeError('candidate allocation total overflow')
-                total += value
+            if stat.S_ISLNK(info.st_mode):
+                continue
+            if info.st_dev != device:
+                raise RuntimeError('candidate allocation walk crossed device: ' + str(entry))
+            value = allocated(info, entry)
+            if total > sys.maxsize - value:
+                raise RuntimeError('candidate allocation total overflow')
+            total += value
     value = allocated(root_info, root)
     if total > sys.maxsize - value:
         raise RuntimeError('candidate allocation total overflow')
     total += value
+    # A mount created while walking must not turn a successful pre-walk probe
+    # into an implicit exclusion.  Recheck before returning the admission sum.
+    _revalidate_allocation_binding(binding)
     return total
 
 
@@ -284,22 +524,34 @@ def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30,
         allocation_rows = []
         allocation_total = 0
         tmpfs_total = 0
+        memory_backed_total = 0
+        memory_backed_filesystems = set()
+        allocation_bindings = []
         source_row = None
         for root in memory_allocation_roots:
             root = Path(root)
-            filesystem = _filesystem_type(root)
+            binding = _capture_allocation_binding(root)
+            filesystem = _filesystem_type(root, binding=binding)
             if filesystem == 'unknown':
                 raise RuntimeError('memory allocation filesystem classification unknown')
-            allocated = _allocated_bytes(root)
+            classification = _filesystem_classification(filesystem)
+            allocated = _allocated_bytes(root, binding=binding)
+            _revalidate_allocation_binding(binding)
             if (not isinstance(allocated, int) or isinstance(allocated, bool) or
                     allocated < 0 or allocation_total > sys.maxsize - allocated):
                 raise RuntimeError('memory allocation unknown')
             row = {'path': str(root), 'device': root.stat().st_dev,
                    'filesystem': filesystem, 'free': shutil.disk_usage(str(root)).free,
                    'allocated_bytes': allocated,
-                   'memory_effect_bytes': allocated if filesystem == 'tmpfs' else 0}
+                   'memory_effect_bytes': allocated if classification == 'memory-backed' else 0}
             allocation_rows.append(row)
+            allocation_bindings.append(binding)
             allocation_total += allocated
+            if classification == 'memory-backed':
+                if memory_backed_total > sys.maxsize - allocated:
+                    raise RuntimeError('memory allocation memory-backed total overflow')
+                memory_backed_total += allocated
+                memory_backed_filesystems.add(filesystem)
             if filesystem == 'tmpfs':
                 if tmpfs_total > sys.maxsize - allocated:
                     raise RuntimeError('memory allocation tmpfs total overflow')
@@ -308,6 +560,11 @@ def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30,
                 source_row = row
         if source_row is None:
             raise RuntimeError('source root missing from memory allocation measurement')
+        # Root A may change while root B is being scanned.  The aggregate is
+        # admissible only when every captured binding still names the exact
+        # lstat/mount snapshot that supplied its accounting contribution.
+        for binding in allocation_bindings:
+            _revalidate_allocation_binding(binding)
         observed.update(source_free=source_row['free'],
                         source_device=source_row['device'],
                         source_filesystem=source_row['filesystem'],
@@ -316,14 +573,22 @@ def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30,
                         output_filesystem=_filesystem_type(output),
                         candidate_allocated_bytes=source_row['allocated_bytes'],
                         memory_allocation_roots=allocation_rows,
+                        memory_allocation_bindings=allocation_bindings,
                         memory_allocation_total_bytes=allocation_total,
                         memory_allocation_tmpfs_bytes=tmpfs_total,
+                        memory_allocation_memory_backed_bytes=memory_backed_total,
                         container_tmpfs_bytes=256 * 2**20)
+        if not memory_backed_filesystems:
+            effect_classification = 'none'
+        elif len(memory_backed_filesystems) == 1:
+            effect_classification = next(iter(memory_backed_filesystems))
+        else:
+            effect_classification = 'mixed-memory-backed'
         observed['candidate_memory_effect'] = {
-            'classification': 'tmpfs' if tmpfs_total else 'none',
-            'bytes': tmpfs_total}
+            'classification': effect_classification,
+            'bytes': memory_backed_total}
         observed['aggregate_memory_limit'] = MEMORY_AGGREGATE_LIMIT
-        observed['aggregate_memory_required'] = tmpfs_total + LIMITS['Memory']
+        observed['aggregate_memory_required'] = memory_backed_total + LIMITS['Memory']
         if observed['aggregate_memory_required'] > MEMORY_AGGREGATE_LIMIT:
             raise RuntimeError('candidate/container memory aggregate failed: ' +
                                json.dumps(observed))
@@ -712,6 +977,11 @@ class BuildOwner:
                 receipt['retired'] = True
             if getattr(docker, 'client_retirement_unproven', False):
                 receipt.update(status='FAIL', retired=False, client_retirement_unproven=True)
+            try:
+                for binding in self.measurement.get('memory_allocation_bindings', []):
+                    _revalidate_allocation_binding(binding)
+            except BaseException as exc:
+                receipt.update(status='FAIL', allocation_revalidation_error=str(exc))
             receipt['outputs'] = inventory(Path(r['output_root']))
             receipt['evidence'] = inventory(evidence)
             if self.signals and self.signals.requested is not None:

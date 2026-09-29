@@ -5768,3 +5768,34 @@ operation remains active. Formal counters remain 0/273, 2/4, 6/130,
 350/10,000 and 0/7; four diagnostic guest apps and zero successful
 current-candidate builds remain unchanged. The launcher pause is temporary;
 the OS goal is not complete and was not resumed during shutdown.
+
+Continuation checkpoint 68, 2026-09-28: the owner-allocation failure family is
+closed at source level after expert escalation and three independently retained
+fail-open findings. The initial sibling-backup correction omitted nested mount
+allocations and ramfs; the first expert candidate mishandled stacked mounts and
+root replacement; the second used Unicode whitespace parsing and failed to
+revalidate an earlier root after scanning a later root. None was retried
+unchanged.
+
+The accepted owner parses mountinfo as raw bytes, binds canonical root
+inode/device/type to full mount identity and major:minor, rejects stacked or
+descendant mounts, counts tmpfs/ramfs, permits only reviewed ext4/xfs ordinary
+storage, and revalidates every binding before `validate()` returns. The exact
+owner SHA-256 is `9cb8565e...65ea2`; tests are `6bdf439f...0797f`.
+The dispatcher passes 111 combined owner/metadata/manifest/offline/image tests.
+Independent review passes 59 tests and every retained bypass. Complete scope,
+failure history and constraints are in
+`stability-native-exact-owner-allocation-final-source-success-20260928-1.json`.
+
+Candidate preparation is conditionally released only after this checkpoint is
+pushed and fetched. Use fresh commit-derived names, candidate plus backup on
+`/dev/shm`, durable scratch evidence/log/manifest paths, and at least 4 GiB free
+staging/emergency headroom before checkout, before conversion and afterward.
+Hold exclusive source-object/mount ownership, record exact process identities,
+verify clean detached main/IHK trees and distinct tmpfs inodes, require the
+standalone conversion and installed-only consumers to PASS, generate and
+separately verify the canonical manifest, then run `BuildOwner.validate()` only
+with both candidate and backup allocation roots. No Docker/build/guest is yet
+released. Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four
+diagnostic guest apps and zero successful current-candidate builds remain
+unchanged.

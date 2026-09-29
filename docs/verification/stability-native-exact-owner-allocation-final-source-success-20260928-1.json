@@ -1,0 +1,66 @@
+{
+  "schema": "mckernel.native-exact-owner-allocation-final-source.v1",
+  "recorded_at_utc": "2026-09-29T01:44:00Z",
+  "status": "PASS_SOURCE_AND_CANDIDATE_PREPARATION_RELEASE",
+  "base_commit": "13aca45f99a11fea260fa835c0eb0c305690c3be",
+  "source_sha256": {
+    "scripts/native_rust_exact_build_container_owner.py": "9cb8565e385c7dff9a638c7fab83e9a1705cdeb6744233f817ff976566765ea2",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "6bdf439fadfbe0d711c02beb5425425bc8f952fa53fb41417dc5bad390d0797f"
+  },
+  "verified_behavior": [
+    "All declared source and retained-backup allocation roots are canonical, disjoint, measured, and revalidated before owner validation returns.",
+    "Raw-byte mountinfo parsing preserves kernel pathname bytes and rejects malformed escapes, ambiguous stacked roots, descendant mounts and device mismatches.",
+    "Root inode/device/type and full mount identity remain bound through allocation traversal and aggregate-wide final revalidation.",
+    "tmpfs and ramfs allocations count against the 24-GiB aggregate with the pinned 12-GiB container reservation; only reviewed ext4/xfs roots are ordinary storage.",
+    "All rejection paths precede lease acquisition and Docker activity."
+  ],
+  "dispatcher_regression": {
+    "command": "python3 -m unittest scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_build_candidate_metadata scripts.tests.test_native_rust_exact_build_input_manifest scripts.tests.test_native_rust_exact_build_offline scripts.tests.test_native_rust_exact_build_image_prepare",
+    "result": "PASS",
+    "tests": 111
+  },
+  "independent_review": {
+    "result": "PASS",
+    "tests": 59,
+    "elapsed_seconds": 4.061,
+    "reproduced_negatives": [
+      "different-device directory and file",
+      "same-device descendant bind/file mount",
+      "ramfs allocation",
+      "unsupported filesystem",
+      "stacked exact-root mounts",
+      "root mount replacement during scan",
+      "first-root replacement during second-root scan",
+      "Unicode nonbreaking-space pathname truncation",
+      "mount major/minor mismatch"
+    ]
+  },
+  "preserved_failure_history": [
+    "The sibling-backup correction silently pruned nested device crossings and treated ramfs as zero memory.",
+    "The first expert candidate selected the first equal-length stacked mount and failed to bind root mount replacement.",
+    "The second expert candidate used Unicode whitespace parsing and did not revalidate earlier roots after later scans."
+  ],
+  "candidate_preparation_release": {
+    "released": true,
+    "build_or_guest_released": false,
+    "requirements": [
+      "commit, push, fetch and verify these exact bytes before creating paths",
+      "fresh candidate and backup on /dev/shm; durable scratch evidence, logs, manifest and assets",
+      "at least 4 GiB free staging/emergency headroom before checkout, before conversion and after conversion",
+      "host at least 16 GiB, scratch at least 12 GiB and MemAvailable at least 16 GiB",
+      "exclusive source-object, candidate, backup and mount-topology ownership",
+      "record and reconcile exact process/session IDs and starttimes on interruption",
+      "prove exact detached main/IHK identities, clean trees, tmpfs placement and no source inode sharing",
+      "require conversion PASS, installed-only Git consumers, canonical manifest and separate verify_inputs",
+      "run BuildOwner.validate only with memory_allocation_roots containing candidate and backup"
+    ]
+  },
+  "execution": {
+    "candidate_created": false,
+    "lease": false,
+    "docker": false,
+    "build": false,
+    "guest": false
+  },
+  "acceptance_credit": false
+}

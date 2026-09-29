@@ -246,6 +246,9 @@ class OwnerTests(unittest.TestCase):
         self.measure_output = Path(tempfile.mkdtemp(prefix='mckernel-owner-', dir='/dev/shm'))
         for directory in ('src', 'assets', 'out', 'ev'):
             (self.root / directory).mkdir()
+        source_info = (self.root / 'src').stat()
+        self.source_device = '%d:%d' % (os.major(source_info.st_dev),
+                                        os.minor(source_info.st_dev))
         # The owner admits only standalone repositories; keep the ordinary
         # fixture representative of the checked-in source layout.
         for git_root in (self.root / 'src' / '.git', self.root / 'src' / 'ihk' / '.git'):
@@ -464,7 +467,7 @@ class OwnerTests(unittest.TestCase):
                        memory_allocation_roots=[str(source), str(backup)])
         fake = FakeDocker(changed)
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'unknown' if Path(path) == backup else 'ext4'):
+                               side_effect=lambda path, **unused: 'unknown' if Path(path) == backup else 'ext4'):
             with self.assertRaisesRegex(RuntimeError, 'filesystem classification unknown'):
                 owner.BuildOwner(changed, fake).run()
         self.assertEqual(fake.commands, [])
@@ -521,7 +524,7 @@ class OwnerTests(unittest.TestCase):
         fake = FakeDocker(self.request)
         source = Path(self.request['source_root'])
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'tmpfs' if Path(path) == source else 'ext4'), \
+                               side_effect=lambda path, **unused: 'tmpfs' if Path(path) == source else 'ext4'), \
              mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
             with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
                 owner.BuildOwner(self.request, fake).run()
@@ -536,11 +539,11 @@ class OwnerTests(unittest.TestCase):
         changed = dict(self.request,
                        memory_allocation_roots=[str(source), str(backup)])
 
-        def allocated(path):
+        def allocated(path, **unused):
             return 8 * 2**30 if Path(path) == source else 5 * 2**30
 
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
+                               side_effect=lambda path, **unused: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
              mock.patch.object(owner, '_allocated_bytes', side_effect=allocated):
             with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
                 owner.BuildOwner(changed, fake).run()
@@ -559,7 +562,7 @@ class OwnerTests(unittest.TestCase):
             return original_read_text(path, *args, **kwargs)
 
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'tmpfs' if Path(path) == source else 'ext4'), \
+                               side_effect=lambda path, **unused: 'tmpfs' if Path(path) == source else 'ext4'), \
              mock.patch.object(owner, '_allocated_bytes', return_value=12 * 2**30), \
              mock.patch.object(owner.Path, 'read_text', new=read_with_sixteen_gib):
             result = self.execute(fake)
@@ -582,11 +585,11 @@ class OwnerTests(unittest.TestCase):
                 return 'MemAvailable: %d kB\n' % (sixteen_gib // 1024)
             return original_read_text(path, *args, **kwargs)
 
-        def allocated(path):
+        def allocated(path, **unused):
             return 8 * 2**30 if Path(path) == source else 4 * 2**30
 
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
+                               side_effect=lambda path, **unused: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
              mock.patch.object(owner, '_allocated_bytes', side_effect=allocated), \
              mock.patch.object(owner.Path, 'read_text', new=read_with_sixteen_gib):
             result = owner.BuildOwner(changed, fake).run()
@@ -606,7 +609,7 @@ class OwnerTests(unittest.TestCase):
     def test_non_tmpfs_candidate_allocation_does_not_consume_memory_aggregate(self):
         source = Path(self.request['source_root'])
         with mock.patch.object(owner, '_filesystem_type',
-                               side_effect=lambda path: 'ext4' if Path(path) == source else 'xfs'), \
+                               side_effect=lambda path, **unused: 'ext4' if Path(path) == source else 'xfs'), \
              mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
             checked = owner.BuildOwner(self.request)
             checked.validate()
@@ -667,29 +670,252 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(fake.commands, [])
         self.assertFalse(Path(self.request['lease_path']).exists())
 
-    def test_allocated_bytes_skips_symlinks_and_other_devices(self):
+    def test_allocated_bytes_skips_symlinks_but_rejects_other_device_directory_and_file(self):
         root = self.root / 'allocation-root'
         root.mkdir()
         counted = root / 'counted'
         counted.write_bytes(b'x' * 4096)
         other_device = root / 'other-device'
         other_device.mkdir()
-        (other_device / 'not-counted').write_bytes(b'y' * 4096)
+        other_file = root / 'other-file'
+        other_file.write_bytes(b'y' * 4096)
         (root / 'link').symlink_to(other_device / 'not-counted')
         original_lstat = owner.os.lstat
         root_info = original_lstat(str(root))
-        counted_info = original_lstat(str(counted))
 
         def cross_device_lstat(path):
             info = original_lstat(path)
-            if Path(path) == other_device:
+            if Path(path) in (other_device, other_file):
                 return SimpleNamespace(st_mode=info.st_mode, st_blocks=info.st_blocks,
                                        st_dev=root_info.st_dev + 1)
             return info
 
         with mock.patch.object(owner.os, 'lstat', side_effect=cross_device_lstat):
-            measured = owner._allocated_bytes(root)
-        self.assertEqual(measured, (root_info.st_blocks + counted_info.st_blocks) * 512)
+            with self.assertRaisesRegex(RuntimeError, 'crossed device'):
+                owner._allocated_bytes(root)
+
+        # A file crossing must be rejected as well; it used to be silently
+        # omitted by the allocator's same-device filter.
+        def file_only_cross_device_lstat(path):
+            info = original_lstat(path)
+            if Path(path) == other_file:
+                return SimpleNamespace(st_mode=info.st_mode, st_blocks=info.st_blocks,
+                                       st_dev=root_info.st_dev + 1)
+            return info
+
+        with mock.patch.object(owner.os, 'lstat', side_effect=file_only_cross_device_lstat):
+            with self.assertRaisesRegex(RuntimeError, 'crossed device'):
+                owner._allocated_bytes(root)
+
+    def test_nested_mount_inventory_rejected_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        nested = source / 'same-device-bind-alias'
+        nested.mkdir()
+        self.assertEqual(source.stat().st_dev, nested.stat().st_dev)
+        fake = FakeDocker(self.request)
+        inventory = [
+            {'mount_id': '10', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': self.source_device},
+            {'mount_id': '11', 'parent_id': '10', 'mountpoint': str(nested),
+             'filesystem': 'ext4', 'device': self.source_device},
+        ]
+        with mock.patch.object(owner, '_filesystem_type', return_value='ext4'), \
+             mock.patch.object(owner, '_mount_inventory', return_value=inventory):
+            with self.assertRaisesRegex(RuntimeError, 'nested mount'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_raw_mountinfo_nonbreaking_space_tmpfs_is_memory_backed_before_lease(self):
+        # U+00A0 is a pathname byte sequence, not a mountinfo field separator.
+        # Unicode split() used to truncate this path and select the outer ext4.
+        source = self.root / 'source-with-\u00a0space'
+        for git_root in (source / '.git', source / 'ihk' / '.git'):
+            git_root.mkdir(parents=True)
+            (git_root / 'config').write_text('[core]\n\trepositoryformatversion = 0\n')
+        device = '%d:%d' % (os.major(source.stat().st_dev), os.minor(source.stat().st_dev))
+        raw = (b'1 0 ' + device.encode('ascii') + b' / / rw - ext4 /dev/mock rw\n' +
+               b'30 1 ' + device.encode('ascii') + b' / ' + os.fsencode(str(source)) +
+               b' rw - tmpfs tmpfs rw\n')
+        changed = dict(self.request, source_root=str(source),
+                       memory_allocation_roots=[str(source)])
+        fake = FakeDocker(changed)
+        with mock.patch.object(owner.Path, 'read_bytes', return_value=raw), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
+            with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
+                owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
+    def test_raw_mountinfo_malformed_bytes_and_escapes_fail_closed(self):
+        cases = {
+            'malformed-escape': b'1 0 8:1 / /bad\\999 rw - ext4 /dev/mock rw\n',
+            'nul-path': b'1 0 8:1 / /bad\0path rw - ext4 /dev/mock rw\n',
+            'raw-tab-path': b'1 0 8:1 / /bad\tpath rw - ext4 /dev/mock rw\n',
+            'raw-space-path': b'1 0 8:1 / /bad path rw - ext4 /dev/mock rw\n',
+            'bad-device': b'1 0 device / / rw - ext4 /dev/mock rw\n',
+        }
+        for label, raw in cases.items():
+            with self.subTest(label=label), \
+                 mock.patch.object(owner.Path, 'read_bytes', return_value=raw):
+                with self.assertRaises(RuntimeError):
+                    owner._mount_inventory()
+
+    def test_mount_device_mismatch_rejected_before_allocation_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        fake = FakeDocker(self.request)
+        allocated = mock.Mock(return_value=0)
+        inventory = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '30', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': '0:0'},
+        ]
+        with mock.patch.object(owner, '_mount_inventory', return_value=inventory), \
+             mock.patch.object(owner, '_allocated_bytes', allocated):
+            with self.assertRaisesRegex(RuntimeError, 'mount device mismatch'):
+                owner.BuildOwner(self.request, fake).run()
+        allocated.assert_not_called()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_first_root_replacement_during_second_root_scan_rejected_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        backup_device = '%d:%d' % (os.major(backup.stat().st_dev), os.minor(backup.stat().st_dev))
+        changed = dict(self.request,
+                       memory_allocation_roots=[str(source), str(backup)])
+        fake = FakeDocker(changed)
+        stable = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '30', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': self.source_device},
+            {'mount_id': '31', 'parent_id': '1', 'mountpoint': str(backup),
+             'filesystem': 'ext4', 'device': backup_device},
+        ]
+        replaced = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '32', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'tmpfs', 'device': '0:42'},
+            {'mount_id': '31', 'parent_id': '1', 'mountpoint': str(backup),
+             'filesystem': 'ext4', 'device': backup_device},
+        ]
+        # Four reads validate/scan source.  The replacement starts while the
+        # second root is being bound/scanned; only the aggregate-wide final
+        # revalidation of source can close this cross-root race.
+        with mock.patch.object(owner, '_mount_inventory',
+                               side_effect=[stable] * 6 + [replaced] * 3):
+            with self.assertRaisesRegex(RuntimeError, 'mount identity changed'):
+                owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
+    def test_stacked_exact_root_mount_is_rejected_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        fake = FakeDocker(self.request)
+        allocated = mock.Mock(return_value=0)
+        inventory = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '20', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': self.source_device},
+            # An upper tmpfs mounted at the identical path must never be
+            # selected according to procfs row order.
+            {'mount_id': '21', 'parent_id': '20', 'mountpoint': str(source),
+             'filesystem': 'tmpfs', 'device': '0:42'},
+        ]
+        with mock.patch.object(owner, '_mount_inventory', return_value=inventory), \
+             mock.patch.object(owner, '_allocated_bytes', allocated):
+            with self.assertRaisesRegex(RuntimeError, 'ambiguous stacked mount'):
+                owner.BuildOwner(self.request, fake).run()
+        allocated.assert_not_called()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_root_mount_replacement_during_allocation_rejected_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        fake = FakeDocker(self.request)
+        stable = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '30', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': self.source_device},
+        ]
+        replacement = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '31', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'tmpfs', 'device': '0:42'},
+        ]
+        # The third read is the allocation post-walk binding check.  A root
+        # remount can preserve the pathname, so both mount identity and fs
+        # type are checked instead of relying on the earlier ext4 label.
+        with mock.patch.object(owner, '_mount_inventory',
+                               side_effect=[stable, stable, replacement]):
+            with self.assertRaisesRegex(RuntimeError, 'mount identity changed'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_unambiguous_exact_root_mount_binding_remains_admissible(self):
+        source = Path(self.request['source_root'])
+        fake = FakeDocker(self.request)
+        inventory = [
+            {'mount_id': '1', 'parent_id': '0', 'mountpoint': '/',
+             'filesystem': 'ext4', 'device': '8:1'},
+            {'mount_id': '30', 'parent_id': '1', 'mountpoint': str(source),
+             'filesystem': 'ext4', 'device': self.source_device},
+        ]
+        with mock.patch.object(owner, '_mount_inventory', return_value=inventory):
+            result = owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(result['status'], 'PASS', result)
+        self.assertEqual(result['measurement']['memory_allocation_bindings'][0]['mount'],
+                         {'mount_id': '30', 'parent_id': '1', 'device': self.source_device,
+                          'mountpoint': str(source), 'filesystem': 'ext4'})
+
+    def test_ramfs_allocation_counts_against_aggregate_before_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        fake = FakeDocker(self.request)
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path, **unused: 'ramfs' if Path(path) == source else 'ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
+            with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
+                owner.BuildOwner(self.request, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_unsupported_allocation_filesystem_precedes_allocation_lease_or_docker(self):
+        fake = FakeDocker(self.request)
+        allocated = mock.Mock(return_value=0)
+        with mock.patch.object(owner, '_filesystem_type', return_value='fuse.memoryfs'), \
+             mock.patch.object(owner, '_allocated_bytes', allocated):
+            with self.assertRaisesRegex(RuntimeError, 'filesystem unsupported'):
+                owner.BuildOwner(self.request, fake).run()
+        allocated.assert_not_called()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(self.request['lease_path']).exists())
+
+    def test_ext4_and_xfs_allocation_roots_remain_zero_memory_effect(self):
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        changed = dict(self.request,
+                       memory_allocation_roots=[str(source), str(backup)])
+
+        def filesystem(path, **unused):
+            return 'ext4' if Path(path) == source else 'xfs'
+
+        with mock.patch.object(owner, '_filesystem_type', side_effect=filesystem), \
+             mock.patch.object(owner, '_allocated_bytes', return_value=13 * 2**30):
+            checked = owner.BuildOwner(changed)
+            checked.validate()
+        self.assertEqual(checked.measurement['candidate_memory_effect'],
+                         {'classification': 'none', 'bytes': 0})
+        self.assertEqual(checked.measurement['memory_allocation_memory_backed_bytes'], 0)
+        self.assertEqual(checked.measurement['aggregate_memory_required'], 12 * 2**30)
 
     def test_lease_exclusive_and_cannot_steal(self):
         lease = owner.Lease(self.request['lease_path'], 'test')

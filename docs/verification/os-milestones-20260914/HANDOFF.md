@@ -246,3 +246,17 @@ explicit staging/emergency headroom bound. See
 checkpoint 67. No preparation/build/guest ran; preserve the exited failed
 container and launcher PIDs/starttimes. Counts remain unchanged, and this is a
 temporary launcher pause rather than OS completion.
+
+Checkpoint 68 resumes and closes the owner-allocation source block. Exact owner
+`9cb8565e...65ea2` and tests `6bdf439f...0797f` pass independent review after
+raw-byte mount parsing, root/mount identity binding, memory-backed filesystem
+accounting and aggregate-wide revalidation. See
+`stability-native-exact-owner-allocation-final-source-success-20260928-1.json`.
+
+After fetched verification, prepare one fresh commit-derived candidate and
+same-device backup on `/dev/shm`; keep evidence/logs/manifest on durable scratch
+and maintain at least 4 GiB staging/emergency headroom. Require exact clean
+main/IHK identity, distinct tmpfs inodes, conversion PASS, installed-only Git
+consumers, canonical manifest plus separate verification, and
+`BuildOwner.validate()` with candidate and backup roots. This releases no
+Docker build or guest; those still require separate review.
