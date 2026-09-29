@@ -360,6 +360,19 @@ def mount_paths(row):
     mounts=row.get('Mounts',row.get('mounts',[]))
     if not isinstance(mounts,list):fail('Docker mount list')
     return [m[k] for m in mounts if isinstance(m,dict) for k in ('Source','Destination') if k in m]
+def canonical_mounts(value):
+    """Compare Docker mount records independent of inspect-array ordering.
+
+    Docker does not promise a stable order for the Mounts array between
+    equivalent inspect calls.  Every object and field remains part of the
+    comparison; only the array order is canonicalized.
+    """
+    if not isinstance(value,list):fail('Docker mount list')
+    if any(not isinstance(item,dict) for item in value):fail('Docker mount record is not an object')
+    try:
+        return sorted(value,key=lambda item:json.dumps(item,sort_keys=True,separators=(',',':'),ensure_ascii=False))
+    except (TypeError,ValueError) as error:
+        fail('Docker mount record is not canonical JSON: '+str(error))
 def validate_docker_census(census,docker,protected):
     if not isinstance(census,dict) or not isinstance(census.get('ps_all'),list) or not isinstance(census.get('inspect'),list):fail('Docker census missing')
     ids=census['ps_all'];rows=census['inspect']
@@ -370,7 +383,10 @@ def validate_docker_census(census,docker,protected):
     exact=terminal_rows[0]; state=exact.get('State'); restart=exact.get('HostConfig',{}).get('RestartPolicy')
     if not isinstance(state,dict) or state.get('Status')!='exited' or any(state.get(k) is not False for k in ('Running','Paused','Restarting','Dead')) or state.get('Pid')!=0 or state.get('ExitCode')!=1 or state.get('OOMKilled') is not False or restart not in ({'Name':'no','MaximumRetryCount':0},{'Name':'no'}) or exact.get('HostConfig',{}).get('AutoRemove') is not False:fail('terminal state mutation')
     expected=terminal.get('exact_config')
-    if not isinstance(expected,dict) or set(expected)!={'Config','HostConfig','Mounts'} or any(exact.get(k)!=v for k,v in expected.items()) or exact.get('State')!=terminal.get('state'):fail('terminal config mutation')
+    if not isinstance(expected,dict) or set(expected)!= {'Config','HostConfig','Mounts'}:fail('terminal config mutation')
+    expected_compare=dict(expected);actual_compare={k:exact.get(k) for k in expected}
+    expected_compare['Mounts']=canonical_mounts(expected_compare['Mounts']);actual_compare['Mounts']=canonical_mounts(actual_compare['Mounts'])
+    if actual_compare!=expected_compare or exact.get('State')!=terminal.get('state'):fail('terminal config mutation')
     config,host=expected['Config'],expected['HostConfig']
     if not isinstance(config,dict) or not isinstance(host,dict) or any(k not in config for k in ('Image','User','Cmd')) or any(k not in host for k in ('SecurityOpt','Privileged','ReadonlyRootfs','NanoCpus','Memory','PidsLimit','CpusetCpus','RestartPolicy','AutoRemove')):fail('incomplete released container configuration')
     for row in rows:

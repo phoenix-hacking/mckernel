@@ -864,3 +864,17 @@ fresh complete root/Docker observations, verify the exact packet-plus-release
 delta, push/fetch it, and obtain independent mechanical/execution review before
 any one-shot sudo retirement. The OS remains incomplete; this pause is
 temporary.
+
+Checkpoint 132 supersedes checkpoint 128's exact template hashes. The first
+generated release `26bf80ff...e8a8d` failed precommit because Docker Mounts
+ordering changes across equivalent inspect calls; no runtime mutation occurred
+and the raw candidate is retained. The bounded packet/helper correction now
+independently PASSes exact hashes `7e3581fb...0daf` and
+`704a3f5f...f54b`, with tests `1e878802...e4f1` and
+`c2a65c45...3d68`. Both sides canonicalize only full-object Mounts ordering;
+all other Docker and retirement safety fields remain exact.
+
+Commit/push/fetch this DRAFT template and the two new records. Then regenerate
+the acyclic release against that fetched commit, change only packet plus release
+paths, and obtain separate mechanical/execution review before sudo retirement.
+No build, guest, application or acceptance counter changed.

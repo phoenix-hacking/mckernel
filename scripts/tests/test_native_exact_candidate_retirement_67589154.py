@@ -172,6 +172,14 @@ class T(unittest.TestCase):
      with self.assertRaisesRegex(M.Error,'omission/churn'):M.docker_callback(b,{'terminal_containers':t},self.lease())()
     self.assertEqual(run.call_args_list[0].args[0],['/usr/bin/docker','ps','--all','--quiet','--no-trunc']);self.assertEqual(run.call_args_list[1].args[0],['/usr/bin/docker','inspect',i])
    finally:b.close()
+ def test_docker_mount_order_is_canonical_but_fields_remain_exact(self):
+  mounts=[{'Type':'bind','Source':'/a','Destination':'/x','Mode':'ro','RW':False,'Propagation':'rprivate'},{'Type':'bind','Source':'/b','Destination':'/y','Mode':'rw','RW':True,'Propagation':'rprivate'}]
+  left={'Id':'a'*64,'State':{'Status':'exited'},'Mounts':mounts,'Config':{'Image':'x'}}
+  right=dict(left,Mounts=list(reversed(mounts)))
+  self.assertEqual(M.canonical_docker_row(left),M.canonical_docker_row(right))
+  changed=[dict(mounts[0],RW=True),mounts[1]]
+  self.assertNotEqual(M.canonical_docker_row(left),M.canonical_docker_row(dict(left,Mounts=changed)))
+  with self.assertRaisesRegex(M.Error,'mount record'):M.canonical_docker_row(dict(left,Mounts=[1]))
  def test_timeout_retires_real_process_group_and_keeps_captures(self):
   with tempfile.TemporaryDirectory() as d:
    argv=[sys.executable,'-u','-c','import subprocess,time; subprocess.Popen(["/bin/sleep","30"]); print("partial"); time.sleep(30)']
@@ -346,7 +354,7 @@ class T(unittest.TestCase):
    with self.assertRaisesRegex(M.Error,'resource floor'):M.live_gate(r,mock.Mock(),mock.Mock())
  def test_fresh_output_and_release_sentinel(self):
   with self.assertRaises(M.Error):M.fresh_output({'output_dir':'/tmp/no'})
-  self.assertEqual(M.HELPER_SHA256,'2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010')
+  self.assertEqual(M.HELPER_SHA256,'704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b')
   self.assertEqual(M.HELPER_SHA256,M.sha(M.HELPER.read_bytes()));self.assertEqual(M.HELPER_TEST_SHA256,M.sha(M.HELPER_TEST.read_bytes()))
   self.assertEqual(M.OBSERVER_SHA256,'3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666')
   self.assertIn('RELEASE_HASH_REQUIRED',PACKET.read_text())

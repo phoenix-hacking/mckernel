@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel-retirement-release-generation-failure-v1",
+  "recorded_at": "2026-09-29T05:52:00-07:00",
+  "status": "FAIL_PRECOMMIT_RELEASE_VALIDATION",
+  "template_commit": "abf23321fd8f05c440148c605cfe66a09c6864d3",
+  "release_candidate": {
+    "retained_path": "/home/holden/mckernel-work/scratch/native-exact-retirement-release-generation-67589154-1/release-candidate-1.json",
+    "sha256": "26bf80ff4d9a8e7ae5ea7daeeeb450e8b431c9b20bc8cfb8f45ad355e16e8a8d",
+    "size": 2369338,
+    "device": 1831,
+    "inode": 2907341,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0600",
+    "candidate_members": 10509,
+    "metadata_backup_members": 86
+  },
+  "failed_check": "scripts.native_exact_candidate_retire.validate_docker_census",
+  "failure": "terminal config mutation",
+  "cause": "Docker returned the same six full mount records for the protected failed terminal container in nondeterministic list order; exact list equality incorrectly treated ordering alone as configuration mutation.",
+  "reproduction": {
+    "docker_ids_stable": true,
+    "consecutive_terminal_row_sha256": [
+      "0a72f58d1b18d016ebdad4aa9df212f03970206fe1814be26871f9869e276ba7",
+      "3c5058f100d75e62a70c8de712a4f8e952e03a273ba69c73d8a476754977c836",
+      "91e32cde7686dbcb43fb2eb4385e213234dd1cd108e7327e9c887547586fefee"
+    ],
+    "consecutive_mount_list_sha256": [
+      "80b9132c92a151cab7f3d870219af15e1d458666c2eda1b1f809a6d23efae1dd",
+      "d9ea5ba3a90efed6512633bd2219f6e6107c8b61b8c8d5aa41e4e6d7e388a832",
+      "7fb4d1bcd77abf019a5df41093cfbcb5e43a49aa6a52a52268147ac342f2eda3"
+    ]
+  },
+  "side_effects": {
+    "candidate_or_backup_mutated": false,
+    "retirement_executed": false,
+    "privilege_mutation": false,
+    "docker_mutation": false,
+    "build_or_guest": false,
+    "release_committed": false,
+    "draft_sentinel_restored": true
+  },
+  "correction_boundary": "Canonicalize only Docker Mounts ordering using the complete mount objects on both released and live rows; preserve every field, exact Config/HostConfig/State equality, full census, and protected-path checks. One bounded correction is allowed before expert escalation."
+}

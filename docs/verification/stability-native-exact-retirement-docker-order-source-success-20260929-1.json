@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel-retirement-docker-order-source-success-v1",
+  "recorded_at": "2026-09-29T06:00:00-07:00",
+  "status": "PASS_SOURCE_TEMPLATE_ONLY",
+  "failure_record": {
+    "path": "docs/verification/stability-native-exact-retirement-release-generation-failure-20260929-1.json",
+    "sha256": "4e0058307deca8b7e4aa7f5f168e8a3570e0bab4c1bea713c43c9a199f7b5f38"
+  },
+  "raw_failed_release": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-retirement-release-generation-67589154-1/release-candidate-1.json",
+    "sha256": "26bf80ff4d9a8e7ae5ea7daeeeb450e8b431c9b20bc8cfb8f45ad355e16e8a8d",
+    "size": 2369338
+  },
+  "reviewed_sources": {
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "sha256": "7e3581fb1d6608de416ca3052a5d84addd3113191ed8f34d3cdafabc7b3c0daf"
+    },
+    "packet_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py",
+      "sha256": "1e8788029c089dc27f273ab8d898da314568d1ac699836fc3bc2be507069e4f1"
+    },
+    "helper": {
+      "path": "scripts/native_exact_candidate_retire.py",
+      "sha256": "704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b"
+    },
+    "helper_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retire.py",
+      "sha256": "c2a65c45468cd6440ac63e5daee744b0249f4e48250cebdfea14b57d25463d68"
+    }
+  },
+  "verified_behavior": [
+    "Docker Mounts ordering alone is canonicalized using each complete mount object as the sort key.",
+    "Mount object multiplicity and every field remain part of exact comparison.",
+    "Config, HostConfig, State, full container census and protected-path intersection checks remain fail closed.",
+    "Packet and sealed helper agree on the corrected comparison boundary.",
+    "Process ownership, quarantine, deletion and finalization boundaries are unchanged."
+  ],
+  "checks": {
+    "python_3_8_combined": "108/108 PASS",
+    "python_3_9_combined": "108/108 PASS",
+    "retained_mount_permutations": "720/720 PASS",
+    "live_repeated_canonical_rounds": "3/3 PASS across 13-container censuses",
+    "negative_controls": "duplicate, omitted, changed-field, malformed, duplicate-key, config/state and protected-mount cases reject",
+    "py_compile": "PASS on Python 3.8 and 3.9",
+    "diff_check": "PASS"
+  },
+  "independent_review": {
+    "task": "retirement_docker_mount_order_review_131",
+    "status": "PASS_SOURCE_TEMPLATE_ONLY"
+  },
+  "limitations": [
+    "The three historical repeated inspect responses were not retained verbatim; their hashes and the first full release candidate are retained.",
+    "No regenerated release or privileged execution is approved by this source result.",
+    "No build, guest, application or formal acceptance counter changes."
+  ],
+  "next_action": "Commit, push and fetched-blob verify this exact DRAFT template; then regenerate the two-path acyclic release and obtain separate exact mechanical/execution review."
+}

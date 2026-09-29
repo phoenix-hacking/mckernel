@@ -97,6 +97,16 @@ class Tests(unittest.TestCase):
    with self.subTest(k=k),tempfile.TemporaryDirectory() as t:
     roots=self.trees(t);r=self.release(roots);mounts=[dict(Source=str(Path(t)/'.q0'),Destination='/x')];r['docker']['terminal']['exact_config']['Mounts']=mounts;row=self.terminal(r,mounts);row[k]=v
     with self.assertRaises(M.RetirementError):self.execute(roots,r,census=self.census(r,[row]))
+ def test_terminal_mount_order_is_canonical_but_mount_field_mutation_fails(self):
+  mounts=[dict(Source='/srv/retirement-a',Destination='/mnt/a',Mode='ro',RW=False,Type='bind'),dict(Source='/srv/retirement-b',Destination='/mnt/b',Mode='rw',RW=True,Type='bind')]
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots);r['docker']['terminal']['exact_config']['Mounts']=mounts
+   self.assertEqual(self.execute(roots,r,census=self.census(r,[self.terminal(r,list(reversed(mounts)))]))['status'],'PASS')
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);r=self.release(roots);r['docker']['terminal']['exact_config']['Mounts']=mounts
+   mutated=[dict(mounts[1]),dict(mounts[0])];mutated[0]['Mode']='ro,delegated'
+   with self.assertRaises(M.RetirementError):self.execute(roots,r,census=self.census(r,[self.terminal(r,mutated)]))
+  with self.assertRaisesRegex(M.RetirementError,'not an object'):M.canonical_mounts([1])
  def test_short_zero_and_collision_writes_and_boundary_failure_survivor_record(self):
   with tempfile.TemporaryDirectory() as t:
    fd=os.open(str(Path(t)/'x'),os.O_CREAT|os.O_WRONLY,0o600)

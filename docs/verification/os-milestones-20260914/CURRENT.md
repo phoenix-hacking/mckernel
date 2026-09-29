@@ -7260,3 +7260,35 @@ diagnostic. Record
 `stability-shutdown-checkpoint-20260929-128.json` is the live cursor. Formal
 counters remain unchanged, current-candidate builds remain zero, applications
 remain 0/273, the OS is incomplete, and this launcher pause is temporary.
+
+Continuation checkpoint 132, 2026-09-29: the first mechanically generated
+retirement release candidate failed precommit integrated validation before any
+retirement or privileged mutation. Its fresh inventory covered all 10,595
+members, but Docker returned the same six complete mount objects for terminal
+container `decd7cf9...c6b9` in a different list order. Three further identical
+13-container censuses retained stable IDs but three different terminal-row and
+mount-list hashes. Raw failed release candidate `26bf80ff...e8a8d` remains at
+scratch device/inode 1831/2907341; record
+`stability-native-exact-retirement-release-generation-failure-20260929-1.json`
+preserves the command result, identity, hashes and absence of side effects. The
+DRAFT sentinel was restored and no unchanged release retry occurred.
+
+The one bounded correction independently PASSes at exact hashes packet
+`7e3581fb...0daf`, packet test `1e878802...e4f1`, helper
+`704a3f5f...f54b` and helper test `c2a65c45...3d68`. Packet and sealed helper
+canonicalize only the `Mounts` array ordering using each full mount object;
+they retain multiplicity, every field, exact Config/HostConfig/State, full
+census reconciliation and protected-path rejection. Python 3.8 and 3.9 each
+pass 108 tests, all 720 retained six-mount permutations pass, negative mutation
+controls reject, and three fresh live canonical comparisons pass across all 13
+containers. Independent review 131 PASSes source-template scope only.
+
+Record
+`stability-native-exact-retirement-docker-order-source-success-20260929-1.json`
+preserves the correction and its limitation that only hashes, not raw bytes, of
+the three follow-up inspect responses were retained. Next commit/push/fetch
+these exact DRAFT bytes as a new immutable template. Then regenerate an acyclic
+release bound to that commit, changing exactly the packet sentinel and adding
+the release JSON; obtain separate exact mechanical/execution review before any
+one-shot sudo run. Current-candidate builds remain zero, real applications this
+window remain zero, applications remain 0/273, and formal counters do not move.

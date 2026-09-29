@@ -24,7 +24,7 @@ SUCCESS=SOURCE/'docs/verification/evidence/stability-native-exact-retention-prep
 INV_SHA='ce0c47f5a20e16216513c3ea6ef1dc7a72a9893e95bf1ae999a27217e90e1d10'; CAP_SHA='94fe0c364e6aaae5b280cc5d21b8e156cf3bb6d28804f1e529bcc378c4e712c8'; SUCCESS_SHA='e7fc78077ac612cfdd5eab53d8196260ec566fee72f1babbe1216ae1537bf8f2'
 HELPER=SOURCE/'scripts/native_exact_candidate_retire.py'; OBSERVER=SOURCE/'docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
 # Corrected owner/observer boundary is concurrently pending independent review.
-HELPER_SHA256='2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='c350fc3e5eae5752fed76cddfe1102f253ddf758fab5c9c50acae5f5c40b95c1'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
+HELPER_SHA256='704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='c2a65c45468cd6440ac63e5daee744b0249f4e48250cebdfea14b57d25463d68'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
 HELPER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_retire.py'; OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_observer_67589154.py'
 FLOORS={'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30}
 OUT=('claim-67589154-1.json','journal-67589154-1.jsonl','evidence-67589154-1.json','packet.status','packet.status.pending','packet.failure','packet.failure.pending','helper.sealed.py','archive.sealed.py','observer.sealed.py','observer.stdout','observer.stderr','observer.status','docker-ps.stdout','docker-ps.stderr','docker-ps.status','docker-inspect.stdout','docker-inspect.stderr','docker-inspect.status','docker-ps-after.stdout','docker-ps-after.stderr','docker-ps-after.status')
@@ -945,6 +945,17 @@ def observer_callback(base,lease,observer_path):
   if not isinstance(x,dict):bad('observer JSON object')
   return x
  return run
+def canonical_docker_row(row):
+ """Preserve every inspect field while removing Docker's Mounts order noise."""
+ if not isinstance(row,dict) or not isinstance(row.get('Mounts'),list):bad('Docker inspect row')
+ mounts=[]
+ for mount in row['Mounts']:
+  if not isinstance(mount,dict):bad('Docker mount record')
+  try:key=json.dumps(mount,sort_keys=True,separators=(',',':'))
+  except (TypeError,ValueError) as e:bad('Docker mount record: '+str(e))
+  mounts.append((key,mount))
+ answer=dict(row);answer['Mounts']=[mount for unused,mount in sorted(mounts,key=lambda x:x[0])]
+ return answer
 def docker_callback(base,docker,lease):
  def run():
   lease.assert_held()
@@ -953,11 +964,12 @@ def docker_callback(base,docker,lease):
   if ids:rows=exact_json(call(['/usr/bin/docker','inspect',*ids],base,'docker-inspect'))
   else: rows=[];capture(base,'docker-inspect.stdout',b'[]');capture(base,'docker-inspect.stderr',b'');capture(base,'docker-inspect.status',b'0\n')
   if not isinstance(rows,list) or len(rows)!=len(ids) or {x.get('Id') for x in rows if isinstance(x,dict)}!=set(ids):bad('Docker omission/churn')
+  rows=[canonical_docker_row(x) for x in rows]
   after=call(['/usr/bin/docker','ps','--all','--quiet','--no-trunc'],base,'docker-ps-after').decode('ascii','strict').splitlines()
   if after!=ids:bad('Docker churn after inspect')
   terminals=docker.get('terminal_containers') if isinstance(docker,dict) else None
   want={'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
-  if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=v for i,v in terminals.items()):bad('terminal config')
+  if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=canonical_docker_row(v) for i,v in terminals.items()):bad('terminal config')
   lease.assert_held()
   return {'ps_all':ids,'inspect':rows}
  return run
