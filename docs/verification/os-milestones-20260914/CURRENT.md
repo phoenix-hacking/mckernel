@@ -5737,3 +5737,34 @@ manifest. Then run the complete offline source phase in the pinned image. Only
 a source-phase PASS may proceed to a separate one-shot heavy-build release.
 Formal counters remain 0/273, 2/4, 6/130, 350/10,000 and 0/7; four diagnostic
 guest apps and zero successful current-candidate builds remain unchanged.
+
+Shutdown checkpoint 67, 2026-09-28: the authoritative launcher stop prevented
+new dispatch and joined every child lane. The last bounded source correction
+adds mandatory `memory_allocation_roots` owner admission: source and retained
+backup roots must be absolute, existing, nonsymlink, canonical and disjoint;
+each is measured fail-closed, and every tmpfs allocation is summed with the
+pinned 12-GiB container reservation before lease or Docker activity. The exact
+owner/test bytes pass 48 focused tests, `py_compile` and `git diff --check`.
+Evidence is
+`stability-native-exact-owner-allocation-roots-wip-20260928-1.json`.
+
+These exact bytes have not received independent review, so the prior command-
+level candidate packet remains BLOCKED. No candidate preparation, lease,
+Docker operation, build or guest ran. The next continuation must independently
+review owner SHA-256 `32e0c28d...e0d5f` and test SHA-256
+`d4db50d2...8c3a9`; then submit a corrected command packet with durable scratch
+evidence/log paths and an explicit staging/emergency tmpfs headroom bound. Only
+a PASS may create a fresh candidate at the newly fetched checkpoint. Do not
+reuse the earlier `78e7178c` candidate names or repeat the blocked packet.
+
+Host available space is 25,067,454,464 bytes, scratch available is
+21,611,433,984 bytes, `/dev/shm` available is 16,597,475,328 bytes and
+MemAvailable is 29,074,920 kB. Retain failed container
+`110dfe01...799b0` (`mckernel-exact-272a777b73aa4a5185f607bfa8fad490`),
+exited with status 1. Launcher identities remain wrapper PID 3399308/starttime
+83682487, worker PID 3399313/starttime 83682494 and app-server PID
+3399317/starttime 83682500. No child agent, heavy build, guest, QEMU or mcexec
+operation remains active. Formal counters remain 0/273, 2/4, 6/130,
+350/10,000 and 0/7; four diagnostic guest apps and zero successful
+current-candidate builds remain unchanged. The launcher pause is temporary;
+the OS goal is not complete and was not resumed during shutdown.

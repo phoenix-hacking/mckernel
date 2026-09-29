@@ -85,6 +85,37 @@ def roots_disjoint(paths):
             raise ValueError('input/output roots overlap')
 
 
+def validate_memory_allocation_roots(source_root, values):
+    """Return canonical, disjoint allocation roots for host-memory admission."""
+    if not isinstance(values, list) or not values:
+        raise ValueError('memory_allocation_roots must be a nonempty JSON list')
+    source = Path(source_root).resolve(strict=True)
+    roots = []
+    for value in values:
+        if not isinstance(value, str):
+            raise ValueError('memory allocation root is not a path string')
+        root = Path(value)
+        if not root.is_absolute() or root.is_symlink() or not root.is_dir():
+            raise ValueError('invalid memory allocation root: ' + str(root))
+        resolved = root.resolve(strict=True)
+        # A symlink in any supplied path component makes the root an alias,
+        # even if its final component is itself an ordinary directory.
+        component = Path(root.anchor)
+        for part in root.parts[1:]:
+            component /= part
+            if component.is_symlink():
+                raise ValueError('memory allocation root contains symlink: ' + str(root))
+        for other in roots:
+            if (resolved == other or resolved.samefile(other)):
+                raise ValueError('duplicate or alias memory allocation root')
+            if resolved in other.parents or other in resolved.parents:
+                raise ValueError('overlapping memory allocation roots')
+        roots.append(resolved)
+    if source not in roots:
+        raise ValueError('memory_allocation_roots must include source_root')
+    return roots
+
+
 def _git_config_entries(config):
     """Yield lower-case (section, key, value) entries without includes."""
     section = ''
@@ -239,42 +270,60 @@ def _allocated_bytes(root):
 
 
 def measure(host, scratch, host_floor=16 * 2**30, scratch_floor=12 * 2**30,
-            source_root=None, output_root=None):
+            source_root=None, output_root=None, memory_allocation_roots=None):
     host = Path(host)
     scratch = Path(scratch)
     host_free = shutil.disk_usage(str(host)).free
     scratch_free = shutil.disk_usage(str(scratch)).free
     observed = {'host_free': host_free, 'host_device': host.stat().st_dev,
                 'scratch_free': scratch_free, 'scratch_device': scratch.stat().st_dev}
-    if source_root is not None and output_root is not None:
-        source = Path(source_root)
+    if (source_root is not None and output_root is not None and
+            memory_allocation_roots is not None):
+        source = Path(source_root).resolve(strict=True)
         output = Path(output_root)
-        source_type = _filesystem_type(source)
-        if source_type == 'unknown':
-            raise RuntimeError('candidate memory filesystem classification unknown')
-        candidate_allocated = _allocated_bytes(source)
-        if (not isinstance(candidate_allocated, int) or
-                isinstance(candidate_allocated, bool) or candidate_allocated < 0):
-            raise RuntimeError('candidate allocation unknown')
-        observed.update(source_free=shutil.disk_usage(str(source)).free,
-                        source_device=source.stat().st_dev,
-                        source_filesystem=source_type,
+        allocation_rows = []
+        allocation_total = 0
+        tmpfs_total = 0
+        source_row = None
+        for root in memory_allocation_roots:
+            root = Path(root)
+            filesystem = _filesystem_type(root)
+            if filesystem == 'unknown':
+                raise RuntimeError('memory allocation filesystem classification unknown')
+            allocated = _allocated_bytes(root)
+            if (not isinstance(allocated, int) or isinstance(allocated, bool) or
+                    allocated < 0 or allocation_total > sys.maxsize - allocated):
+                raise RuntimeError('memory allocation unknown')
+            row = {'path': str(root), 'device': root.stat().st_dev,
+                   'filesystem': filesystem, 'free': shutil.disk_usage(str(root)).free,
+                   'allocated_bytes': allocated,
+                   'memory_effect_bytes': allocated if filesystem == 'tmpfs' else 0}
+            allocation_rows.append(row)
+            allocation_total += allocated
+            if filesystem == 'tmpfs':
+                if tmpfs_total > sys.maxsize - allocated:
+                    raise RuntimeError('memory allocation tmpfs total overflow')
+                tmpfs_total += allocated
+            if root == source:
+                source_row = row
+        if source_row is None:
+            raise RuntimeError('source root missing from memory allocation measurement')
+        observed.update(source_free=source_row['free'],
+                        source_device=source_row['device'],
+                        source_filesystem=source_row['filesystem'],
                         output_free=shutil.disk_usage(str(output)).free,
                         output_device=output.stat().st_dev,
                         output_filesystem=_filesystem_type(output),
-                        candidate_allocated_bytes=candidate_allocated,
+                        candidate_allocated_bytes=source_row['allocated_bytes'],
+                        memory_allocation_roots=allocation_rows,
+                        memory_allocation_total_bytes=allocation_total,
+                        memory_allocation_tmpfs_bytes=tmpfs_total,
                         container_tmpfs_bytes=256 * 2**20)
-        if source_type == 'tmpfs':
-            observed['candidate_memory_effect'] = {
-                'classification': 'tmpfs',
-                'bytes': candidate_allocated}
-        else:
-            observed['candidate_memory_effect'] = {
-                'classification': 'none',
-                'bytes': 0}
+        observed['candidate_memory_effect'] = {
+            'classification': 'tmpfs' if tmpfs_total else 'none',
+            'bytes': tmpfs_total}
         observed['aggregate_memory_limit'] = MEMORY_AGGREGATE_LIMIT
-        observed['aggregate_memory_required'] = (
-            observed['candidate_memory_effect']['bytes'] + LIMITS['Memory'])
+        observed['aggregate_memory_required'] = tmpfs_total + LIMITS['Memory']
         if observed['aggregate_memory_required'] > MEMORY_AGGREGATE_LIMIT:
             raise RuntimeError('candidate/container memory aggregate failed: ' +
                                json.dumps(observed))
@@ -555,6 +604,8 @@ class BuildOwner:
             raise ValueError('timeout exceeds reviewed 330 minutes')
         if os.getuid() == 0 or os.geteuid() == 0:
             raise ValueError('offline build owner must be an unprivileged user')
+        self.memory_allocation_roots = validate_memory_allocation_roots(
+            r['source_root'], r.get('memory_allocation_roots'))
         for key in ('image_receipt', 'input_manifest', 'driver_path'):
             if digest(regular(r[key])) != r[key + '_sha256']:
                 raise ValueError(key + ' hash mismatch')
@@ -566,7 +617,8 @@ class BuildOwner:
             raise ValueError('manifest candidate mismatch')
         self.measurement = measure(r['host_measure_root'], r['scratch_measure_root'],
                                    r.get('host_floor', 0), r.get('scratch_floor', 0),
-                                   source_root=r['source_root'], output_root=r['output_root'])
+                                   source_root=r['source_root'], output_root=r['output_root'],
+                                   memory_allocation_roots=self.memory_allocation_roots)
 
     def run(self):
         self.validate()

@@ -234,3 +234,15 @@ the unchanged host/scratch floors. No build/guest is released yet. Preserve the
 old d094 roots/container and all failed provenance/resource candidates. Counts
 remain 0/273, 2/4, 6/130, 350/10,000, 0/7, four diagnostic apps and zero
 successful current-candidate builds.
+
+Shutdown checkpoint 67 supersedes that next action until a later launcher
+continuation. The exact owner now admits all declared preparation-owned memory
+roots and sums their tmpfs allocations with the pinned 12-GiB container before
+lease/Docker; 48 focused tests pass. Independent review of owner SHA-256
+`32e0c28d...e0d5f` and test SHA-256 `d4db50d2...8c3a9` is still required.
+The command packet also still needs durable scratch evidence/logs and an
+explicit staging/emergency headroom bound. See
+`stability-native-exact-owner-allocation-roots-wip-20260928-1.json` and CURRENT
+checkpoint 67. No preparation/build/guest ran; preserve the exited failed
+container and launcher PIDs/starttimes. Counts remain unchanged, and this is a
+temporary launcher pause rather than OS completion.

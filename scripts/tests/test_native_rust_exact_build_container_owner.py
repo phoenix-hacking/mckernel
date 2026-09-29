@@ -256,6 +256,7 @@ class OwnerTests(unittest.TestCase):
                         'output_root': str(self.root / 'out'), 'evidence_root': str(self.root / 'ev'),
                         'host_measure_root': str(self.root),
                         'scratch_measure_root': str(self.measure_output),
+                        'memory_allocation_roots': [str(self.root / 'src')],
                         'lease_path': str(self.root / 'lease')}
         files = {'driver_path': 'driver', 'image_receipt': json.dumps({'status': 'PASS', 'image_id': IMAGE}),
                  'input_manifest': json.dumps({'candidate_sha': 'a' * 40})}
@@ -428,6 +429,62 @@ class OwnerTests(unittest.TestCase):
                 self.assertEqual(fake.commands, [])
                 self.assertFalse(Path(changed['lease_path']).exists())
 
+    def test_memory_allocation_roots_require_source_and_reject_aliases_overlap_and_symlinks(self):
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        link = self.root / 'metadata-link'
+        link.symlink_to(backup, target_is_directory=True)
+        cases = {
+            'missing-field': None,
+            'missing-source': [str(backup)],
+            'duplicate': [str(source), str(source)],
+            'alias': [str(source), str(source / '..' / source.name)],
+            'overlap': [str(source), str(source / 'ihk')],
+            'symlink': [str(source), str(link)],
+        }
+        for label, roots in cases.items():
+            with self.subTest(label=label):
+                changed = dict(self.request)
+                if roots is None:
+                    changed.pop('memory_allocation_roots')
+                else:
+                    changed['memory_allocation_roots'] = roots
+                fake = FakeDocker(changed)
+                with self.assertRaises(ValueError):
+                    owner.BuildOwner(changed, fake).run()
+                self.assertEqual(fake.commands, [])
+                self.assertFalse(Path(changed['lease_path']).exists())
+
+    def test_memory_allocation_unknown_and_backup_walk_failure_precede_lease_or_docker(self):
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        changed = dict(self.request,
+                       memory_allocation_roots=[str(source), str(backup)])
+        fake = FakeDocker(changed)
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'unknown' if Path(path) == backup else 'ext4'):
+            with self.assertRaisesRegex(RuntimeError, 'filesystem classification unknown'):
+                owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
+        original_walk = owner.os.walk
+
+        def denied_backup_walk(path, followlinks=False, onerror=None):
+            if Path(path) == backup:
+                onerror(PermissionError(13, 'permission denied', str(backup)))
+                return iter(())
+            return original_walk(path, followlinks=followlinks, onerror=onerror)
+
+        fake = FakeDocker(changed)
+        with mock.patch.object(owner.os, 'walk', side_effect=denied_backup_walk):
+            with self.assertRaisesRegex(RuntimeError, 'allocation walk failed'):
+                owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
     def test_measurement_floor_failure_precedes_lease_and_docker(self):
         fake = FakeDocker(self.request)
         with mock.patch.object(owner.shutil, 'disk_usage',
@@ -447,7 +504,8 @@ class OwnerTests(unittest.TestCase):
                 git_root.mkdir(parents=True)
                 (git_root / 'config').write_text('[core]\n\trepositoryformatversion = 0\n')
             (source / 'candidate.bin').write_bytes(b'x' * 4096)
-            changed = dict(self.request, source_root=str(source))
+            changed = dict(self.request, source_root=str(source),
+                           memory_allocation_roots=[str(source)])
             checked = owner.BuildOwner(changed)
             checked.validate()
             measurement = checked.measurement
@@ -470,6 +528,25 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(fake.commands, [])
         self.assertFalse(Path(self.request['lease_path']).exists())
 
+    def test_tmpfs_candidate_and_backup_over_aggregate_rejected_before_lease(self):
+        fake = FakeDocker(self.request)
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        changed = dict(self.request,
+                       memory_allocation_roots=[str(source), str(backup)])
+
+        def allocated(path):
+            return 8 * 2**30 if Path(path) == source else 5 * 2**30
+
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', side_effect=allocated):
+            with self.assertRaisesRegex(RuntimeError, 'memory aggregate'):
+                owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
     def test_tmpfs_candidate_at_aggregate_limit_is_admitted_with_16g_available(self):
         fake = FakeDocker(self.request)
         source = Path(self.request['source_root'])
@@ -489,6 +566,42 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(result['status'], 'PASS', result)
         self.assertEqual(result['measurement']['aggregate_memory_required'], 24 * 2**30)
         self.assertEqual(result['measurement']['memory_available'], sixteen_gib)
+
+    def test_tmpfs_candidate_and_backup_at_aggregate_limit_record_receipt_rows(self):
+        source = Path(self.request['source_root'])
+        backup = self.root / 'metadata-backup'
+        backup.mkdir()
+        changed = dict(self.request,
+                       memory_allocation_roots=[str(source), str(backup)])
+        fake = FakeDocker(changed)
+        sixteen_gib = 16 * 2**30
+        original_read_text = owner.Path.read_text
+
+        def read_with_sixteen_gib(path, *args, **kwargs):
+            if str(path) == '/proc/meminfo':
+                return 'MemAvailable: %d kB\n' % (sixteen_gib // 1024)
+            return original_read_text(path, *args, **kwargs)
+
+        def allocated(path):
+            return 8 * 2**30 if Path(path) == source else 4 * 2**30
+
+        with mock.patch.object(owner, '_filesystem_type',
+                               side_effect=lambda path: 'tmpfs' if Path(path) in (source, backup) else 'ext4'), \
+             mock.patch.object(owner, '_allocated_bytes', side_effect=allocated), \
+             mock.patch.object(owner.Path, 'read_text', new=read_with_sixteen_gib):
+            result = owner.BuildOwner(changed, fake).run()
+        self.assertEqual(result['status'], 'PASS', result)
+        measurement = result['measurement']
+        self.assertEqual(measurement['aggregate_memory_required'], 24 * 2**30)
+        self.assertEqual(measurement['memory_allocation_tmpfs_bytes'], 12 * 2**30)
+        self.assertEqual(measurement['memory_allocation_total_bytes'], 12 * 2**30)
+        self.assertEqual(measurement['memory_allocation_roots'], [
+            {'path': str(source), 'device': source.stat().st_dev, 'filesystem': 'tmpfs',
+             'free': 64 * 2**30, 'allocated_bytes': 8 * 2**30,
+             'memory_effect_bytes': 8 * 2**30},
+            {'path': str(backup), 'device': backup.stat().st_dev, 'filesystem': 'tmpfs',
+             'free': 64 * 2**30, 'allocated_bytes': 4 * 2**30,
+             'memory_effect_bytes': 4 * 2**30}])
 
     def test_non_tmpfs_candidate_allocation_does_not_consume_memory_aggregate(self):
         source = Path(self.request['source_root'])
@@ -516,7 +629,7 @@ class OwnerTests(unittest.TestCase):
         fake = FakeDocker(self.request)
         with mock.patch.object(owner, '_filesystem_type', return_value='ext4'), \
              mock.patch.object(owner, '_allocated_bytes', return_value=None):
-            with self.assertRaisesRegex(RuntimeError, 'candidate allocation unknown'):
+            with self.assertRaisesRegex(RuntimeError, 'memory allocation unknown'):
                 owner.BuildOwner(self.request, fake).run()
         self.assertEqual(fake.commands, [])
         self.assertFalse(Path(self.request['lease_path']).exists())
