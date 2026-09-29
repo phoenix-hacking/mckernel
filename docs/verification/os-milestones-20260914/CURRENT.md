@@ -7388,3 +7388,23 @@ serialized current-candidate build, then the smallest real memory application
 diagnostic. Record `stability-shutdown-checkpoint-20260929-139.json` is the live
 cursor. Formal counters remain unchanged, builds remain zero, applications
 remain 0/273, the OS is incomplete, and this launcher pause is temporary.
+
+Continuation checkpoint 140, 2026-09-29: full unprivileged admission of fetched
+commit `66611e18...cd92` failed before canonical object streaming because the
+shutdown checkpoint and the finalized release shared one commit. Relative to
+template `33eab956...9b88`, five paths changed, while the independently reviewed
+release correctly permits only the packet and release JSON. The exact failure
+was `nonmechanical changed path` after 0.23 seconds and 54,940 KiB max RSS;
+record `stability-native-exact-retirement-release-admission-failure-20260929-2.json`
+preserves it. No root traversal, privileged action, runtime mutation, build,
+guest or application occurred.
+
+The bounded correction does not weaken the oracle or rewrite Git history. This
+commit becomes a fresh DRAFT template by retaining checkpoint 139 and its
+documentation, restoring `RELEASE_HASH_REQUIRED`, and deleting the rejected
+release from the live tree. After fetched verification, generate a new release
+bound to this exact template and commit only the packet sentinel plus release
+JSON. Then run full fetched admission across all 9,011 objects and obtain fresh
+independent exact mechanical/execution review before any `sudo -A` retirement.
+Current-candidate builds remain zero, real guest applications this window remain
+zero, applications remain 0/273 and formal counters remain unchanged.
