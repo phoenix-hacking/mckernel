@@ -7017,3 +7017,33 @@ the packet release-hash declaration, and commit exactly packet plus new release
 JSON. Only after fresh fetched preflight may the ordinary-user packet run once.
 No execution, cleanup, application or formal gate credit is granted; current-
 candidate builds and real guest applications remain zero.
+
+Continuation checkpoint 110, 2026-09-29: the first released preparation packet
+at commit `148e3101...e89fa` failed immediately with exit 2 before claim, lease,
+planner, archive or root traversal. It observed PID 3780193 from `/proc`, then
+treated the PID's normal disappearance before identity read as
+`unreadable process identity`. PID 3780193 was absent at immediate postflight;
+inventory and archive remain absent. Empty scratch attempt 1 is preserved at
+device/inode 1831/2907338, uid/gid 1000/1000, mode 0700. Record
+`stability-native-exact-retention-preparation-failure-20260929-1.json` preserves
+the exact command, exit and side effects. No unchanged retry occurred.
+
+The bounded census correction initially exposed two further source-review
+defects: string `/proc` names did not reach `proc_identity`, and empty cmdlines
+were not proven kernel threads or zombies. Final placeholder packet
+`abe54826...b21b` plus tests `40dd25d3...8e93` receive independent source/test-
+design PASS. `proc_identity` now parses integer PID, state, flags and starttime;
+missing PIDs skip only after confirmed absence, protected executable links use
+readable cmdline fallback, double-inaccessible identities reject, and empty
+identities require state Z or `PF_KTHREAD`. Exact compiler/guest basenames and
+`qemu-system-` prefixes still conflict. Both Python versions pass 18 tests,
+including real string-PID parsing and live-userspace empty-identity rejection;
+direct live census PASSes with no conflicts.
+
+The retained input candidate and backup remain attempt 1 with their exact
+identities. Only release, inventory, archive, scratch, claim and lease move to
+fresh attempt 2; the attempt-1 competing build lease remains bound to the
+consumed candidate. This is unexecuted placeholder source only. Commit/push/
+fetch it with the attempt-1 failure record, then create and independently review
+an attempt-2 release before any invocation. Formal counters, real guest apps and
+successful current-candidate builds remain unchanged.

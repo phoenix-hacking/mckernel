@@ -763,3 +763,16 @@ the following release commit may change exactly the packet release literal and
 add that JSON. Do not execute before fetched admission and one-shot release.
 No capsule, cleanup, build or guest ran; counters remain unchanged. See
 `stability-native-exact-retention-preparation-template-review-20260929-1.json`.
+
+Checkpoint 110 preserves released attempt 1 as an observer FAIL: PID 3780193
+vanished between `/proc` enumeration and identity read, before claim, planner,
+archive or root traversal. Inventory/archive remain absent and the empty attempt-
+1 scratch directory is retained. See
+`stability-native-exact-retention-preparation-failure-20260929-1.json`.
+
+Corrected placeholder packet `abe54826...b21b` and test `40dd25d3...8e93`
+receive independent source/test PASS after 18 tests on each Python. Candidate
+and backup stay at attempt 1; only release/output/evidence paths use attempt 2.
+Commit/push/fetch this template, then independently review and mechanically
+finalize a fresh attempt-2 release. Never retry attempt 1 or remove its empty
+scratch evidence. No runtime, cleanup, build, guest or formal credit changed.

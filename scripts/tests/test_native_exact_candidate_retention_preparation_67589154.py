@@ -1,6 +1,7 @@
 """Behavioral, tempdir-only tests for the draft retention packet."""
 from __future__ import print_function
-import hashlib, importlib.util, io, json, os, shutil, signal, subprocess, sys, tarfile, tempfile, time, unittest
+import errno, hashlib, importlib.util, io, json, os, shutil, signal, subprocess, sys, tarfile, tempfile, time, unittest
+from contextlib import ExitStack
 from pathlib import Path
 from unittest import mock
 
@@ -150,6 +151,42 @@ class PacketTests(unittest.TestCase):
     def test_process_census_uses_exact_basename_not_substring(self):
         m=load();text=PACKET.read_text();self.assertNotIn("in cmd",text);self.assertIn("base in relevant",text);self.assertIn("base.startswith(\"qemu-system-\")",text);self.assertIn("starttime",text)
 
+    def test_process_census_skips_only_confirmed_proc_disappearance(self):
+        m=load()
+        with mock.patch.object(m.os,"listdir",return_value=["3780193"]), mock.patch.object(m.os,"getpid",return_value=1), mock.patch.object(m.os,"getppid",return_value=1), mock.patch.object(m.os,"readlink",side_effect=OSError(errno.ENOENT,"gone")), mock.patch.object(m,"proc_vanished",return_value=True):
+            self.assertEqual(m.census()["observed"],[])
+        mocked_open=mock.mock_open();mocked_open.side_effect=OSError(errno.EACCES,"denied")
+        with mock.patch.object(m.os,"listdir",return_value=["3780193"]), mock.patch.object(m.os,"getpid",return_value=1), mock.patch.object(m.os,"getppid",return_value=1), mock.patch.object(m.os,"readlink",side_effect=OSError(errno.EACCES,"denied")), mock.patch.object(m,"proc_vanished",return_value=False), mock.patch("builtins.open",mocked_open):
+            with self.assertRaisesRegex(RuntimeError,"unreadable process identity"):m.census()
+
+    def test_process_census_uses_cmdline_fallback_and_skips_kernel_thread(self):
+        m=load()
+        with mock.patch.object(m.os,"listdir",return_value=["42"]), mock.patch.object(m.os,"getpid",return_value=1), mock.patch.object(m.os,"getppid",return_value=1), mock.patch.object(m.os,"readlink",side_effect=OSError(errno.EACCES,"hidden")), mock.patch.object(m,"proc_vanished",return_value=False), mock.patch("builtins.open",mock.mock_open(read_data=b"/usr/bin/gcc\0-c\0")), mock.patch.object(m,"proc_identity",return_value={"pid":42,"starttime":9}):
+            with self.assertRaisesRegex(RuntimeError,"conflicting executable census"):m.census()
+        with mock.patch.object(m.os,"listdir",return_value=["2"]), mock.patch.object(m.os,"getpid",return_value=1), mock.patch.object(m.os,"getppid",return_value=1), mock.patch.object(m.os,"readlink",side_effect=OSError(errno.EACCES,"hidden")), mock.patch.object(m,"proc_vanished",return_value=False), mock.patch.object(m,"proc_identity",return_value={"pid":2,"state":"S","flags":0x00200000,"starttime":7}), mock.patch("builtins.open",mock.mock_open(read_data=b"")):
+            self.assertEqual(m.census()["observed"],[])
+        with mock.patch.object(m.os,"listdir",return_value=["43"]), mock.patch.object(m.os,"getpid",return_value=1), mock.patch.object(m.os,"getppid",return_value=1), mock.patch.object(m.os,"readlink",side_effect=OSError(errno.EACCES,"hidden")), mock.patch.object(m,"proc_vanished",return_value=False), mock.patch.object(m,"proc_identity",return_value={"pid":43,"state":"S","flags":0,"starttime":8}), mock.patch("builtins.open",mock.mock_open(read_data=b"")):
+            with self.assertRaisesRegex(RuntimeError,"live userspace process has empty identity"):m.census()
+
+    def test_proc_identity_accepts_real_string_pid(self):
+        m=load();identity=m.proc_identity(str(os.getpid()))
+        self.assertEqual(identity["pid"],os.getpid())
+        self.assertIn(identity["state"],"RSDTtXZPI")
+        self.assertIsInstance(identity["flags"],int)
+        self.assertGreater(identity["starttime"],0)
+
+    def test_process_census_rechecks_relevant_identity_after_race(self):
+        m=load()
+        common=[mock.patch.object(m.os,"listdir",return_value=["3780193"]),mock.patch.object(m.os,"getpid",return_value=1),mock.patch.object(m.os,"getppid",return_value=1),mock.patch.object(m.os,"readlink",return_value="/usr/bin/gcc"),mock.patch.object(m,"proc_identity",return_value=None)]
+        with ExitStack() as stack:
+            stack.enter_context(mock.patch.object(m,"proc_vanished",return_value=True))
+            for patcher in common: stack.enter_context(patcher)
+            self.assertEqual(m.census()["observed"],[])
+        with ExitStack() as stack:
+            stack.enter_context(mock.patch.object(m,"proc_vanished",return_value=False))
+            for patcher in common: stack.enter_context(patcher)
+            with self.assertRaisesRegex(RuntimeError,"unstable conflicting process"): m.census()
+
     def test_postflight_manifest_mismatch_is_rejected(self):
         m=load();m.postflight_equal({"bytes":b"same"},{"bytes":b"same"})
         with self.assertRaisesRegex(RuntimeError,"post-archive"):
@@ -158,7 +195,7 @@ class PacketTests(unittest.TestCase):
     def test_mocked_orchestration_reserves_children_and_success_removes_own_leases(self):
         m=load()
         def exercise(td,broken=False):
-            root=Path(td);source=root/"source";source.mkdir();candidate=root/"candidate";backup=root/"backup";candidate.mkdir();backup.mkdir();scratch=root/"scratch";out=root/"inventory";archive=root/"archive";claim=scratch/"claim-67589154-1.json";lease=scratch/"lease-67589154-1.json"
+            root=Path(td);source=root/"source";source.mkdir();candidate=root/"candidate";backup=root/"backup";candidate.mkdir();backup.mkdir();scratch=root/"scratch";out=root/"inventory";archive=root/"archive";claim=scratch/"claim-67589154-2.json";lease=scratch/"lease-67589154-2.json"
             def fake_run(argv,label,scratch=None,timeout=None):
                 if broken: raise RuntimeError("bounded planner failure")
                 output=Path(argv[argv.index("--output")+1]);output.write_bytes(b"manifest")
@@ -171,7 +208,7 @@ class PacketTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             with self.assertRaisesRegex(RuntimeError,"planner failure"):
                 exercise(td,True)
-            scratch=Path(td)/"scratch";self.assertTrue((scratch/"claim-67589154-1.json").exists());self.assertTrue((scratch/"lease-67589154-1.json").exists())
+            scratch=Path(td)/"scratch";self.assertTrue((scratch/"claim-67589154-2.json").exists());self.assertTrue((scratch/"lease-67589154-2.json").exists())
 
     def test_python_compiles(self):
         with tempfile.TemporaryDirectory() as td:

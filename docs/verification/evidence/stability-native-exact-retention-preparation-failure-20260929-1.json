@@ -1,0 +1,31 @@
+{
+  "schema": "native-exact-retention-preparation-failure-v1",
+  "recorded_at_utc": "2026-09-29T09:39:21Z",
+  "status": "FAIL_OBSERVER_PROCESS_CENSUS_RACE",
+  "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-retention-preparation-67589154-1.py --release-hash 1b09c036262ab419b948f555a4a042574ce52e3d4a9fa675416a30dceb0c1b4e",
+  "exit_status": 2,
+  "stderr": "retention preparation failed: unreadable process identity: 3780193",
+  "failed_pid": 3780193,
+  "failed_pid_postflight": "absent",
+  "release_commit": "148e310125fb9cd28a6764a4cb285bfa1d9e89fa",
+  "packet_sha256": "9a2b7a94ea3d974b9dced44132aa0318f74c6f3a464bb1240cfc71d2e87412ac",
+  "release_sha256": "1b09c036262ab419b948f555a4a042574ce52e3d4a9fa675416a30dceb0c1b4e",
+  "side_effects": {
+    "scratch": {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-1", "state": "empty_directory_preserved", "dev": 1831, "inode": 2907338, "uid": 1000, "gid": 1000, "mode": "0700"},
+    "claim": "absent",
+    "lease": "absent",
+    "inventory": "absent",
+    "archive": "absent",
+    "planner_started": false,
+    "archiver_started": false,
+    "roots_read_by_planner": false
+  },
+  "retained_roots": {
+    "candidate": {"path": "/dev/shm/mckernel-exact-candidate-67589154-1", "dev": 26, "inode": 25166, "uid": 1000, "gid": 1000, "mode": "0755", "git_commit": "675891545c881b8d625256ade56fe66ac69fe794", "clean": true},
+    "metadata_backup": {"path": "/dev/shm/mckernel-exact-metadata-backup-67589154-1", "dev": 26, "inode": 35798, "uid": 1000, "gid": 1000, "mode": "0755"},
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+  },
+  "classification": "packet_observer_defect_not_retention_or_os_behavior",
+  "retry_policy": "no_unchanged_retry",
+  "next_action": "Review and checkpoint the bounded vanished-PID census correction with fresh attempt-2 output and release namespaces."
+}

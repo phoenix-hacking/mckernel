@@ -6,7 +6,7 @@ release-hash literal below and adds a release JSON binding the prior template
 commit/blobs.  Dynamic HEAD==upstream==FETCH_HEAD binds that release commit.
 """
 from __future__ import print_function
-import argparse, hashlib, importlib.util, io, json, os, signal, stat, subprocess, sys, tarfile, time
+import argparse, errno, hashlib, importlib.util, io, json, os, signal, stat, subprocess, sys, tarfile, time
 
 SOURCE="/home/holden/mckernel"; MAIN_COMMIT="675891545c881b8d625256ade56fe66ac69fe794"; IHK_COMMIT="3114d9e7101ad52030eb3effa849a5c108972a1f"
 CANDIDATE="/dev/shm/mckernel-exact-candidate-67589154-1"; BACKUP="/dev/shm/mckernel-exact-metadata-backup-67589154-1"
@@ -14,8 +14,8 @@ CANDIDATE_ID={"dev":26,"inode":25166,"uid":1000,"gid":1000,"mode":0o755}; BACKUP
 PLANNER="scripts/native_exact_candidate_retention_capsule.py"; ARCHIVER="scripts/native_exact_candidate_retention_archive.py"; PACKET_TEST="scripts/tests/test_native_exact_candidate_retention_preparation_67589154.py"; CAPSULE_TEST="scripts/tests/test_native_exact_candidate_retention_capsule.py"; ARCHIVE_TEST="scripts/tests/test_native_exact_candidate_retention_archive.py"
 PLANNER_SHA="ac3bb0354d1353928fd5f63ddf6743b636642fab79a4f5a3ec9195d5721d0b26"; ARCHIVER_SHA="6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e"
 CAPSULE_TEST_SHA="ae6f129ac8f86379d98ad2ca1eec1e03034d3754a6786300014c140320743c9a"; ARCHIVE_TEST_SHA="fa9d727d74e462a9d6fdb2d96f3a3a597ccdab331b4321b92a2d11eaeb48355e"
-RELEASE_PATH="docs/verification/evidence/stability-native-exact-candidate-retention-preparation-67589154-20260929-1.release.json"; RELEASE_SHA256="1b09c036262ab419b948f555a4a042574ce52e3d4a9fa675416a30dceb0c1b4e"
-OUT=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-1.inventory.json"; ARCHIVE=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-1.tar"; SCRATCH="/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-1"; CLAIM=SCRATCH+"/claim-67589154-1.json"; LEASE=SCRATCH+"/lease-67589154-1.json"
+RELEASE_PATH="docs/verification/evidence/stability-native-exact-candidate-retention-preparation-67589154-20260929-2.release.json"; RELEASE_SHA256="RELEASE_HASH_REQUIRED"
+OUT=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-2.inventory.json"; ARCHIVE=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-2.tar"; SCRATCH="/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2"; CLAIM=SCRATCH+"/claim-67589154-2.json"; LEASE=SCRATCH+"/lease-67589154-2.json"
 NOFOLLOW=getattr(os,"O_NOFOLLOW",0); NONBLOCK=getattr(os,"O_NONBLOCK",0); DFLAGS=os.O_RDONLY|getattr(os,"O_DIRECTORY",0)|NOFOLLOW|NONBLOCK; FFLAGS=os.O_RDONLY|NOFOLLOW|NONBLOCK
 def fail(s): raise RuntimeError(s)
 def sha_b(b): return hashlib.sha256(b).hexdigest()
@@ -159,9 +159,15 @@ def capacity_delta(before,after,maxima={"host":512<<20,"scratch":512<<20,"tmpfs"
         if before[n]-after[n]>m: fail("allocation delta exceeds bound: "+n)
 def proc_identity(pid):
     try:
+        pid=int(pid)
         with open("/proc/%d/stat"%pid) as f: raw=f.read()
-        end=raw.rfind(")");return {"pid":int(pid),"starttime":int(raw[end+2:].split()[19])}
-    except (OSError,IOError,ValueError,IndexError): return None
+        end=raw.rfind(")");fields=raw[end+2:].split()
+        return {"pid":pid,"state":fields[0],"flags":int(fields[6]),"starttime":int(fields[19])}
+    except (OSError,IOError,TypeError,ValueError,IndexError): return None
+def proc_vanished(pid):
+    """Return true only when /proc/<pid> is confirmed absent."""
+    try: os.stat("/proc/%s"%pid,follow_symlinks=False); return False
+    except OSError as exc: return exc.errno in (errno.ENOENT,errno.ESRCH)
 def census(lease_paths=()):
     ours={os.getpid()}; parent=os.getppid()
     while parent>1 and parent not in ours:
@@ -173,13 +179,27 @@ def census(lease_paths=()):
     for name in os.listdir("/proc"):
         if not name.isdigit() or int(name) in ours: continue
         try: base=os.path.basename(os.readlink("/proc/"+name+"/exe"))
-        except OSError:
+        except OSError as exc:
+            if exc.errno in (errno.ENOENT,errno.ESRCH) and proc_vanished(name): continue
             try:
-                with open("/proc/"+name+"/cmdline","rb") as f: base=os.path.basename(f.read().split(b"\0",1)[0].decode("utf-8","surrogateescape"))
-            except OSError: fail("unreadable process identity: "+name)
+                with open("/proc/"+name+"/cmdline","rb") as cmdline:
+                    first=cmdline.read().split(b"\0",1)[0]
+                base=os.path.basename(first.decode("utf-8","surrogateescape")) if first else ""
+            except OSError as second:
+                if second.errno in (errno.ENOENT,errno.ESRCH) and proc_vanished(name): continue
+                fail("unreadable process identity: "+name)
+        if not base:
+            identity=proc_identity(name)
+            if identity is None:
+                if proc_vanished(name): continue
+                fail("unstable empty process identity: "+name)
+            if identity["state"]=="Z" or identity["flags"] & 0x00200000: continue
+            fail("live userspace process has empty identity: "+name)
         if base in relevant or base.startswith("qemu-system-"):
-            ident=proc_identity(name)
-            if ident is None: fail("unstable conflicting process: "+name)
+            ident=proc_identity(int(name))
+            if ident is None:
+                if proc_vanished(name): continue
+                fail("unstable conflicting process: "+name)
             found.append(dict(ident,basename=base))
     if found: fail("conflicting executable census: "+repr(found))
     for p in lease_paths:
@@ -301,7 +321,7 @@ def execute(provided_release_sha=None):
     if RELEASE_SHA256=="RELEASE_HASH_REQUIRED" or provided_release_sha!=RELEASE_SHA256: print("DRAFT_NOT_RELEASED",file=sys.stderr);return 3
     if os.geteuid()==0:fail("ordinary user required")
     cfg={"source":SOURCE,"release_path":RELEASE_PATH,"release_sha256":RELEASE_SHA256,"packet_path":os.path.relpath(__file__,SOURCE),"test_path":PACKET_TEST,"support_hashes":{CAPSULE_TEST:CAPSULE_TEST_SHA,ARCHIVE_TEST:ARCHIVE_TEST_SHA},"inputs":{"planner_sha256":PLANNER_SHA,"archiver_sha256":ARCHIVER_SHA,"capsule_test_path":CAPSULE_TEST,"capsule_test_sha256":CAPSULE_TEST_SHA,"archive_test_path":ARCHIVE_TEST,"archive_test_sha256":ARCHIVE_TEST_SHA,"main_commit":MAIN_COMMIT,"ihk_commit":IHK_COMMIT,"candidate":CANDIDATE_ID,"metadata_backup":BACKUP_ID,"output":OUT,"archive":ARCHIVE,"scratch":SCRATCH,"claim":CLAIM,"lease":LEASE}};admission,release=admit_repository(cfg)
-    prepare_scratch(OUT,ARCHIVE,SCRATCH,("claim-67589154-1.json","lease-67589154-1.json","planner.stdout","planner.stderr","planner.status","archive.stdout","archive.stderr","archive.status","postflight-planner.stdout","postflight-planner.stderr","postflight-planner.status","postflight-manifest.json","receipt.json"))
+    prepare_scratch(OUT,ARCHIVE,SCRATCH,("claim-67589154-2.json","lease-67589154-2.json","planner.stdout","planner.stderr","planner.status","archive.stdout","archive.stderr","archive.status","postflight-planner.stdout","postflight-planner.stderr","postflight-planner.status","postflight-manifest.json","receipt.json"))
     if root_id(CANDIDATE)!=CANDIDATE_ID or root_id(BACKUP)!=BACKUP_ID:fail("root identity mismatch")
     if sha(os.path.join(SOURCE,PLANNER))!=PLANNER_SHA or sha(os.path.join(SOURCE,ARCHIVER))!=ARCHIVER_SHA:fail("tool digest")
     before=capacity();leases=("/home/holden/mckernel-work/scratch/native-exact-build-lease-67589154-1.json",);census(leases)
