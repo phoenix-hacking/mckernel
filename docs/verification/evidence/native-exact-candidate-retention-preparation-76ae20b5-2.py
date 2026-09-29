@@ -6,7 +6,7 @@ release-hash literal below and adds a release JSON binding the prior template
 commit/blobs.  Dynamic HEAD==upstream==FETCH_HEAD binds that release commit.
 """
 from __future__ import print_function
-import argparse, ctypes, errno, fcntl, hashlib, io, json, os, signal, stat, subprocess, sys, tarfile, time, types
+import argparse, ctypes, errno, fcntl, hashlib, io, json, os, re, signal, stat, subprocess, sys, tarfile, time, types
 
 SOURCE="/home/holden/mckernel"
 MAIN_COMMIT="76ae20b523f57dee8e0fb1fb834caf5443f9f671"
@@ -32,7 +32,7 @@ PLANNER_SHA="d0bd9ce3b1fe110b71aee47362728997c7500216802e5740befd57b8273bbae1"
 ARCHIVER_SHA="6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e"
 PACKET_TEST="scripts/tests/test_native_exact_candidate_retention_preparation_76ae20b5_v2.py"
 RELEASE_PATH="docs/verification/evidence/stability-native-exact-candidate-retention-preparation-76ae20b5-2.release.json"
-RELEASE_SHA256="2beaa5cae3a3727cf65846b525875846a84326d17e607c1efe95ca85e9292a3f"
+RELEASE_SHA256="RELEASE_HASH_REQUIRED"
 OUT=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-76ae20b5-20260929-2.inventory.json"
 ARCHIVE=SOURCE+"/docs/verification/evidence/stability-native-exact-candidate-retention-76ae20b5-20260929-2.tar"
 SCRATCH=WORK+"/native-exact-candidate-retention-76ae20b5-2"
@@ -117,12 +117,45 @@ def prepare_scratch(out,archive,scratch,children):
     os.mkdir(scratch,0o700);fsync_parent(scratch)
     for name in children: absent(os.path.join(scratch,name))
 def git_env(): return {"PATH":"/usr/bin:/bin","HOME":"/nonexistent","LANG":"C","LC_ALL":"C","TZ":"UTC","GIT_CONFIG_NOSYSTEM":"1","GIT_CONFIG_GLOBAL":"/dev/null","GIT_TERMINAL_PROMPT":"0","GIT_NO_REPLACE_OBJECTS":"1","GIT_OPTIONAL_LOCKS":"0","GIT_EXTERNAL_DIFF":"0","GIT_PAGER":"cat","GIT_EDITOR":"true","GIT_ASKPASS":"/bin/false"}
+def validate_git_config(raw):
+    """Parse inert bytes with Git's grammar, without includes or repo discovery.
+
+    Credential helpers are never effective in this packet: all repository Git
+    commands are local-only and explicitly reset the base and reviewed scoped
+    helper. The sole shell-shaped allowance is the exact live GitHub setting.
+    """
+    command=["/usr/bin/git","config","--null","--no-includes","--file","-","--list"]
+    parsed=subprocess.check_output(command,input=raw,cwd="/",env=git_env(),stderr=subprocess.PIPE,timeout=30)
+    for record in parsed.split(b"\0"):
+        if not record:continue
+        key,separator,value=record.partition(b"\n")
+        try:key=key.decode("ascii").lower();value=value.decode("utf-8")
+        except UnicodeError:fail("unsafe Git config encoding")
+        section=key.split(".",1)[0];leaf=key.rsplit(".",1)[-1]
+        if section=="extensions":
+            if key!="extensions.worktreeconfig" or value!="true":fail("unsafe Git config extension: "+key)
+            continue
+        if section in ("include","includeif","alias","filter") or key in ("core.worktree","core.hookspath","core.fsmonitor","core.sshcommand","core.gitproxy","core.askpass","core.pager","core.editor","sequence.editor","interactive.difffilter","diff.external"):
+            fail("unsafe Git config: "+key)
+        if (section=="diff" and leaf in ("command","textconv")) or (section=="merge" and leaf=="driver") or (section in ("gpg","ssh") and leaf=="program") or (section=="remote" and leaf in ("uploadpack","receivepack","vcs")):
+            fail("unsafe Git config execution: "+key)
+        if section=="protocol" and (leaf!="allow" or value!="never"):
+            fail("unsafe Git config protocol: "+key)
+        if section=="credential" and leaf=="helper":
+            inert_builtin=value in ("","store","cache")
+            reviewed_github=key=="credential.https://github.com.helper" and value=="!gh auth git-credential"
+            if not (inert_builtin or reviewed_github):fail("unsafe Git config credential helper")
+        if section=="credential" and leaf in ("interactive","guiprompt") and value not in ("false","never"):
+            fail("unsafe Git config credential prompting")
+    return parsed
+
 def safe_git_metadata(repo):
     """Fingerprint bounded Git control-plane state, never object/log payloads."""
     meta=os.path.join(repo,".git"); st=os.lstat(meta)
     if not stat.S_ISDIR(st.st_mode) or stat.S_ISLNK(st.st_mode): fail(".git must be a real directory (no gitfile)")
     digest=hashlib.sha256()
-    controls={"config","HEAD","FETCH_HEAD","index","packed-refs","shallow","ORIG_HEAD"}
+    controls={"config","config.worktree","HEAD","FETCH_HEAD","index","packed-refs","shallow","ORIG_HEAD"}
+    configs={}
     def visit(path,rel,read_contents=True):
         names=sorted(os.listdir(path));digest.update(rel.encode("utf-8","surrogateescape")+b"\0"+"\0".join(names).encode("utf-8","surrogateescape"))
         for name in names:
@@ -145,19 +178,26 @@ def safe_git_metadata(repo):
             elif read_contents and (rel=="" and name in controls or rel=="refs" or rel.startswith("refs/")):
                 value=snapshot(full,"Git control metadata")["bytes"]
                 digest.update(child.encode("utf-8","surrogateescape")+b"\0"+hashlib.sha256(value).digest())
+                if child in ("config","config.worktree"):configs[child]=value
     visit(meta,"",True)
-    cfg=os.path.join(meta,"config"); raw=snapshot(cfg,"Git config")["bytes"] if os.path.exists(cfg) else b""
-    for x in (b"[include",b"includeif",b"worktree",b"hookspath",b"fsmonitor",b"external",b"sshcommand"):
-        if x in raw.lower(): fail("unsafe Git config: "+x.decode())
+    for name,raw in configs.items():
+        validate_git_config(raw)
+        if snapshot(os.path.join(meta,name),"Git config post-parse")["bytes"]!=raw:fail("Git config changed during validation")
     hooks=os.path.join(meta,"hooks")
     if os.path.isdir(hooks):
         with os.scandir(hooks) as scan:
             if any(not x.name.endswith(".sample") for x in scan): fail("active Git hook")
     return digest.hexdigest()
+def git_prefix(repo):
+    return ["/usr/bin/git","--no-optional-locks","-c","core.hooksPath=/dev/null","-c","core.fsmonitor=false","-c","credential.helper=","-c","credential.https://github.com.helper=","-c","credential.interactive=false","-c","protocol.allow=never","-c","protocol.file.allow=never","-C",repo]
 def git(repo,args):
-    return subprocess.check_output(["/usr/bin/git","--no-optional-locks","-c","core.hooksPath=/dev/null","-c","core.fsmonitor=false","-c","credential.helper=","-c","protocol.file.allow=never","-C",repo]+args,env=git_env(),stderr=subprocess.PIPE,timeout=30).decode().strip()
+    local_revision=len(args)==2 and args[0]=="rev-parse" and args[1] in ("HEAD","@{upstream}","FETCH_HEAD")
+    local_pair=len(args)==4 and args[:2] in (["merge-base","--is-ancestor"],["diff","--name-only"]) and all(re.fullmatch(r"[0-9a-f]{40}",v) for v in args[2:])
+    if not (local_revision or local_pair):fail("nonlocal or unreviewed Git command")
+    return subprocess.check_output(git_prefix(repo)+args,env=git_env(),stderr=subprocess.PIPE,timeout=30).decode().strip()
 def git_blob(repo,commit,path):
-    return subprocess.check_output(["/usr/bin/git","--no-optional-locks","-c","core.hooksPath=/dev/null","-c","core.fsmonitor=false","-c","credential.helper=","-c","protocol.file.allow=never","-C",repo,"show",commit+":"+path],env=git_env(),stderr=subprocess.PIPE,timeout=30)
+    if not re.fullmatch(r"[0-9a-f]{40}",commit) or not path or path.startswith("/") or any(p in ("",".","..") for p in path.split("/")) or "\0" in path:fail("invalid local Git blob")
+    return subprocess.check_output(git_prefix(repo)+["show",commit+":"+path],env=git_env(),stderr=subprocess.PIPE,timeout=30)
 def normalize_packet(b,release_sha=RELEASE_SHA256): return b.replace(release_sha.encode(),b"RELEASE_HASH_REQUIRED")
 def admit_repository(cfg):
     """Acyclic template-commit -> release-commit admission (testable in temp Git)."""

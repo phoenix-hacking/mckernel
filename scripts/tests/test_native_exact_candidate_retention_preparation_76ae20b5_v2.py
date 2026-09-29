@@ -15,6 +15,64 @@ def git_env():
 def blob(data): return hashlib.sha256(data).hexdigest()
 
 class PacketTests(unittest.TestCase):
+    def test_precise_config_allows_reviewed_worktree_extension_and_live_helper(self):
+        m=load()
+        raw=b'[extensions]\n worktreeConfig = true\n[credential "https://github.com"]\n helper = !gh auth git-credential\n[remote "origin"]\n url = https://example.invalid/worktree-hooksPath-external\n# core.worktree is deliberately only a comment\n'
+        parsed=m.validate_git_config(raw)
+        self.assertIn(b'extensions.worktreeconfig\ntrue\0',parsed)
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);run(["git","init",td],root,git_env())
+            config=root/".git"/"config";config.write_bytes(config.read_bytes()+raw)
+            self.assertEqual(len(m.safe_git_metadata(td)),64)
+        prefix=m.git_prefix("/unused")
+        for override in ("credential.helper=","credential.https://github.com.helper=","credential.interactive=false","protocol.allow=never"):
+            self.assertIn(override,prefix)
+        self.assertEqual(m.git_env()["GIT_TERMINAL_PROMPT"],"0")
+        self.assertEqual(m.git_env()["GIT_ASKPASS"],"/bin/false")
+        with mock.patch.object(m.subprocess,"check_output") as executed:
+            for command in (["fetch","origin"],["credential","fill"],["config","--get","core.bare"],["rev-parse","--git-dir"]):
+                with self.assertRaisesRegex(RuntimeError,"unreviewed"):m.git("/unused",command)
+            executed.assert_not_called()
+
+    def test_precise_config_rejects_execution_and_other_extensions(self):
+        m=load()
+        cases=(
+            b'[core]\n worktree = /tmp/other\n',
+            b'[include]\n path = /tmp/included\n',
+            b'[includeIf "gitdir:/"]\n path = /tmp/included\n',
+            b'[core]\n hooksPath = /tmp/hooks\n',
+            b'[core]\n fsmonitor = true\n',
+            b'[diff]\n external = command\n',
+            b'[diff "driver"]\n textconv = command\n',
+            b'[core]\n sshCommand = command\n',
+            b'[extensions]\n worktreeConfig = false\n',
+            b'[extensions]\n worktreeConfig = TRUE\n',
+            b'[extensions]\n otherWorktree = true\n',
+            b'[extensions]\n objectFormat = sha256\n',
+            b'[extensions "other"]\n worktreeConfig = true\n',
+            b'[credential]\n helper = !execute-command\n',
+            b'[credential "https://github.com"]\n helper = !gh auth git-credential --other\n',
+            b'[credential "https://other.invalid"]\n helper = !gh auth git-credential\n',
+            b'[protocol "ext"]\n allow = always\n',
+            b'[filter "driver"]\n process = command\n',
+        )
+        for raw in cases:
+            with self.subTest(raw=raw):
+                with self.assertRaisesRegex(RuntimeError,"unsafe Git config"):m.validate_git_config(raw)
+
+    def test_worktree_config_is_fingerprinted_and_has_same_policy(self):
+        m=load()
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);run(["git","init",td],root,git_env())
+            config=root/".git"/"config";config.write_bytes(config.read_bytes()+b'[extensions]\n worktreeConfig = true\n')
+            first=m.safe_git_metadata(td);worktree=root/".git"/"config.worktree"
+            worktree.write_bytes(b'[core]\n bare = false\n')
+            second=m.safe_git_metadata(td);self.assertNotEqual(first,second)
+            worktree.write_bytes(b'[core]\n bare = true\n')
+            self.assertNotEqual(second,m.safe_git_metadata(td))
+            worktree.write_bytes(b'[core]\n worktree = /tmp/other\n')
+            with self.assertRaisesRegex(RuntimeError,"unsafe Git config"):m.safe_git_metadata(td)
+
     def test_draft_refuses_with_no_state(self):
         with tempfile.TemporaryDirectory() as td:
             r=subprocess.run([sys.executable,"-E","-s","-B",str(PACKET)],cwd=td,capture_output=True,text=True)
