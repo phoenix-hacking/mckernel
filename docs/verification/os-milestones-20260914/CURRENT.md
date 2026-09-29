@@ -6049,6 +6049,53 @@ new SHA-derived names with `umask 0022`. Never reuse the deleted failed-80b
 request or paths. Formal counters, four diagnostic guest apps and zero
 successful current-candidate builds remain unchanged.
 
+Continuation checkpoint 111, 2026-09-29: corrected retention preparation
+attempt 2 PASSes its single released ordinary-user invocation at commit
+`38b08c31...20a3e`. Owner PID 3786420/starttime 88524458, planner
+3786435/88524474, archive 3786482/88526551 and postflight planner
+3786857/88527431 all exit zero and retire with their groups. Claim and lease
+are absent after receipt publication. No Docker, root, build or guest ran.
+
+Inventory `ce0c47f5...e1d10` has 10,595 exact entries: 917 capsule-required,
+9,678 reconstructible and 49 safe links. Capsule `94fe0c36...712c8` is
+11,591,680 bytes with 923 exact USTAR members. The second planner produces the
+same inventory bytes; receipt `1d244143...e949e` binds all worker identities,
+capacity samples and hashes. Raw archive `e91de69b...845df` retains all 12
+scratch members.
+
+Independent review reconstructs every archive header/payload/order/ancestor,
+matches all live descendants, and verifies all 9,011 omitted regular/link blobs
+from canonical main/IHK stores (7,715 + 1,296). The capsule is intentionally
+not standalone: restoration requires main `67589154...fe794` in the root object
+store and IHK `3114d9e7...72a1f` in `.git/modules/ihk`. No restoration ran.
+
+Reviewer diagnostic PID 3788795 was stopped after a buffered Git-blob check
+briefly reached about 17 GiB RSS, above the profile; exit 143 changed no
+evidence. Bounded streaming verification then PASSed. Record
+`stability-native-exact-retention-preparation-success-20260929-2.json` preserves
+the result. Next checkpoint/fetch-verify all artifacts, then separately review
+a privileged retirement packet binding both stores, exact roots, fresh
+quarantine, two closure rounds and full Docker/process/mount evidence. No space
+recovery, build, guest, application or formal credit is claimed.
+
+Shutdown checkpoint 112, 2026-09-29: the launcher stop request ended new
+dispatch after checkpoint 111. Every child lane is complete and joined; no
+heavy owner, retention worker, build or guest remains active. Preserve launcher
+wrapper PID 3399308/starttime 83682487, worker 3399313/83682494 and app-server
+3399317/83682500. Preserve terminal containers `decd7cf9...c6b9` (exit 1) and
+`8943e497...bc10` (exit 0), both consumed roots at device/inodes 26/25166 and
+26/35798, and attempt evidence roots at scratch inodes 2907338 and 2907339.
+
+Post-run free bytes are host 24,329,093,120, scratch 21,560,459,264, tmpfs
+7,516,635,136 and available memory 20,822,495,232. The next invocation must
+first reconcile these identities and the fetched checkpoint. It may then create
+and independently review the separate privileged ordinary-retirement release
+described above; no root rename, deletion or cleanup is authorized by this
+checkpoint. After reviewed retirement and capacity recovery, independently
+review fresh candidate preparation `704f6654-1` before any heavy build. The OS
+remains incomplete, current-candidate builds remain zero, real accepted apps
+remain zero of 273, and this launcher pause is temporary.
+
 Shutdown checkpoint 78, 2026-09-28: no new work was dispatched after the stop
 request, every child lane is complete, and no candidate preparation, Docker,
 build, module, guest or application command was started. The launcher wrapper

@@ -1,0 +1,32 @@
+{
+  "schema": "native-exact-retention-preparation-success-v1",
+  "recorded_at_utc": "2026-09-29T10:00:00Z",
+  "status": "PASS_PREPARATION_EVIDENCE_ONLY",
+  "release_commit": "38b08c3186b6c6ee435bad5dde1fbfa13a420a3e",
+  "packet_sha256": "7b146530e8204195522546be8a91f5eeb96f951a9f4b1ffa903fa320fa3fba66",
+  "release_sha256": "d496c43001c30bac6c53e6af5468783acac6173d81d87d69ca5f4c299a36126b",
+  "command_exit_status": 0,
+  "artifacts": {
+    "inventory": {"path": "docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-2.inventory.json", "sha256": "ce0c47f5a20e16216513c3ea6ef1dc7a72a9893e95bf1ae999a27217e90e1d10", "size": 5261043},
+    "capsule": {"path": "docs/verification/evidence/stability-native-exact-candidate-retention-67589154-20260929-2.tar", "sha256": "94fe0c364e6aaae5b280cc5d21b8e156cf3bb6d28804f1e529bcc378c4e712c8", "size": 11591680, "members": 923},
+    "receipt": {"source_path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2/receipt.json", "sha256": "1d244143162e4b40b3a4adfc41977e9d9d2c546ffd24e32a29e0ebbf842e949e", "size": 1207},
+    "postflight_manifest": {"source_path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2/postflight-manifest.json", "sha256": "ce0c47f5a20e16216513c3ea6ef1dc7a72a9893e95bf1ae999a27217e90e1d10", "size": 5261043},
+    "raw_archive": {"path": "docs/verification/evidence/stability-native-exact-retention-preparation-success-raw-20260929-2.tar.gz", "sha256": "e91de69bb7352b5d2b85f208262e5254ec08a295aba119ea17caa8cd565845df", "size": 1183285, "members": 12}
+  },
+  "inventory": {"entries": 10595, "capsule_required": 917, "reconstructible": 9678, "tracked_links": 49, "main_commit": "675891545c881b8d625256ade56fe66ac69fe794", "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"},
+  "workers": [
+    {"role": "planner", "pid": 3786435, "starttime": 88524474, "pgid": 3786435, "exit": 0, "retired": true},
+    {"role": "archive", "pid": 3786482, "starttime": 88526551, "pgid": 3786482, "exit": 0, "retired": true},
+    {"role": "postflight_planner", "pid": 3786857, "starttime": 88527431, "pgid": 3786857, "exit": 0, "retired": true},
+    {"role": "owner", "pid": 3786420, "starttime": 88524458, "exit": 0, "retired": true}
+  ],
+  "postflight": {"manifest_byte_identical": true, "claim_absent": true, "lease_absent": true, "partial_outputs_absent": true, "candidate_clean": true, "ihk_clean": true, "capacity_floors_pass": true},
+  "independent_review": {"status": "PASS_PREPARATION_EVIDENCE_ONLY", "archive_exact_ustar_reconstruction": true, "live_entries_verified": 10595, "canonical_reconstructible_blobs_verified": 9011, "main_blobs": 7715, "ihk_blobs": 1296},
+  "restoration_dependencies": [
+    {"path": "/home/holden/mckernel/.git", "commit": "675891545c881b8d625256ade56fe66ac69fe794", "required": true},
+    {"path": "/home/holden/mckernel/.git/modules/ihk", "commit": "3114d9e7101ad52030eb3effa849a5c108972a1f", "required": true}
+  ],
+  "limitations": ["The capsule is intentionally not standalone because candidate Git metadata omits most reconstructible blobs.", "No extraction or restoration replay was executed.", "No retirement rename deletion cleanup build guest application or acceptance action is authorized by this result."],
+  "review_diagnostic": {"aborted_pid": 3788795, "exit_status": 143, "issue": "buffered canonical Git blob diagnostic briefly reached approximately 17 GiB RSS and exceeded the 12-GiB profile", "correction": "bounded streaming verification completed successfully", "evidence_changed": false},
+  "next_action": "Commit and fetched-blob verify these exact artifacts, then independently review a separate privileged ordinary-retirement packet binding the capsule and both canonical repository dependencies."
+}
