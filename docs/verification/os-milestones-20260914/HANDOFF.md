@@ -712,3 +712,20 @@ fresh live-reference closure. See
 `stability-shutdown-checkpoint-20260929-106.json` and CURRENT checkpoint 106 for
 the precise next tasks. Formal counters and successful current-candidate builds
 remain unchanged; the launcher pause is temporary and the OS is incomplete.
+
+Checkpoint 107 closes the source-only restoration/retirement prerequisite after
+preserving rejected attempt hashes and their concrete safety defects. Final
+planner/archive/retirement hashes are `ac3bb035...d0b26`,
+`6a28184e...ac06e`, `744beace...21b5d`; final test hashes are
+`ae6f129a...43c9a`, `fa9d727d...8355e`, `3605a65b...2fce`. Python 3.8 and
+3.9 each pass 40/40. Independent integrated review PASSes those exact bytes for
+source and temporary fixtures only, including actual-v7-shaped integration,
+strict restoration authority, deterministic byte-snapshot archive verification,
+original+quarantine Docker rejection and post-journal substitution safety.
+
+No live capsule, cleanup, build or guest ran; builds/apps/counters remain zero.
+After push/fetch verification, prepare and independently review one fresh
+one-shot packet for live `67589154-1` manifest+archive generation only. Verify
+the actual 49 links, full member coverage and stable postflight identities.
+Do not rename/delete either root or treat that preparation as cleanup release.
+See `stability-native-exact-retention-source-checkpoint-20260929-1.json`.

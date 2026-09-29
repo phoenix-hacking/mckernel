@@ -6906,3 +6906,41 @@ review and one-shot execution, followed by a separate heavy-build release.
 Record `stability-shutdown-checkpoint-20260929-106.json` preserves this cursor.
 The OS remains incomplete; formal counters and successful current-candidate
 build count remain unchanged at zero. The launcher pause is temporary.
+
+Continuation checkpoint 107, 2026-09-29: the blocked cleanup family now has a
+source-complete restoration/retirement toolchain after preserving two rejected
+designs and the expert-integration failures. Exact final hashes are capsule
+planner `ac3bb035...d0b26`, deterministic archive builder
+`6a28184e...ac06e`, callback-bound retirement template
+`744beace...21b5d`, and tests `ae6f129a...43c9a`,
+`fa9d727d...8355e`, `3605a65b...2fce`. Both system Python 3.8 and Anaconda
+Python 3.9 pass the same 40 tests; pycompile and diff checks pass.
+
+Independent integrated review PASSes only these frozen source/pure-fixture
+bytes. It reran 40/40 on Python 3.8 and verified direct planner -> archive ->
+retirement behavior with the actual v7 observer top-level shape. The final
+boundary proves exact main/IHK Git+gitlink and safe tracked-symlink handling,
+descriptor-rooted/no-follow inventory, metadata and backup coverage,
+deterministic normalized archive bytes, byte-snapshot verification, exact
+original+quarantine Docker intersection rejection, the sole exact retained
+terminal exception, durable quarantine/deletion journaling and post-journal
+name revalidation. Arbitrary hashes, unrelated/partial capsules, nested roots,
+metadata symlinks, FIFO/hardlink substitutions, stale observations, malformed
+closure evidence and a replaced post-journal file all reject; the replacement
+survives.
+
+Record `stability-native-exact-retention-source-checkpoint-20260929-1.json`
+preserves the rejected source hashes and concrete findings instead of erasing
+the failure family. No live candidate or backup was read by the final reviewer,
+no capsule was created, no root was renamed/deleted, and no Docker/build/guest
+operation ran. Current-candidate builds remain zero, real guest applications
+this checkpoint remain zero, and formal counters are unchanged.
+
+Next checkpoint these exact bytes and fetch-verify them. Then create a new
+one-shot preparation packet that binds candidate `67589154-1`, backup identity,
+exact commits, fresh manifest/archive/evidence names and the final six source
+hashes. Obtain a separate independent execution review for live manifest and
+archive generation only. That read-only/source-preservation execution must
+verify the live 49-link set, full restoration coverage, archive members and
+postflight identities. It grants no retirement: a separate later root/Docker
+execution release remains required before any rename or deletion.
