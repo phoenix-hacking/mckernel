@@ -6754,3 +6754,41 @@ obtain independent one-shot heavy-build execution review for exact request
 run once. No build retry, guest, module or acceptance operation is released by
 this checkpoint. The OS goal remains incomplete and the launcher pause is
 temporary.
+
+Continuation checkpoint 103, 2026-09-29: exact fresh request
+`a2c37952...aa7c` now has independent CONDITIONAL PASS for one offline native
+build after this release is committed, pushed and fetched byte-identically and
+fresh fail-closed preflight passes. Release record
+`stability-native-exact-build-67589154-execution-release-20260929-1.json` is
+`d657a75e...8869`. It binds candidate `67589154...fe794`, pinned IHK
+`3114d9e7`, manifest `c5204af6...6ef9`, owner `a8c4c9fc...9155`, driver
+`1e522a60...962b`, immutable source-free image
+`sha256:0f8ad280...775d` and image receipt `18225919...8172`.
+
+Run at most once as the ordinary user with exact `/usr/bin/python3 -E -s -B`
+owner command after fresh complete process/lock/lease/identity/capacity/source
+checks and separately released absolute `/usr/bin/sudo -A` read-only Docker
+`ps --all` plus exact returned-ID `inspect` observations. The reviewed profile
+is CPUs 2-5, 12 GiB/no swap, 512 PIDs, no network, read-only root, dropped
+capabilities, no-new-privileges, unprivileged container user, 256-MiB `/tmp`,
+`-j2` and 19,800-second timeout. All concurrent work must remain within seven
+jobs/24 GiB with four-GiB headroom and one heavy owner. Permission denial,
+incomplete inventory, changed input, unresolved owner/mount conflict, a failed
+floor, or a nonempty target blocks execution.
+
+The pre-review `/usr/bin/python3` regression exposed one test-only Python 3.8
+mock-signature error before Docker/lease creation. The bounded correction
+`b187b587...9ae5` accepts and forwards the full `os.walk` signature while
+preserving the denial oracle; both Python 3.8 and 3.9 pass all 65 owner tests.
+Evidence record `stability-native-exact-owner-py38-fixture-success-20260929-1.json`
+is `2ac8de95...032a`, pushed/fetched at
+`4a25e8b683fd1ba4b723e1cbfe2cf4f84cb8c4c2`. Independent review confirms this
+test-only fix does not require candidate regeneration.
+
+This release grants no existing build success, cleanup, module, guest, runtime,
+application or counter credit. Preserve every partial output, receipt, log,
+container terminal state, process identity, lease/signal observation and prior
+failure. A successful build must receive independent artifact/evidence review
+before a separate current-candidate `startup.argv-empty` diagnostic release.
+That fixture expects exit 0, empty stderr and exact JSON stdout, and remains
+diagnostic rather than formal M04 acceptance.

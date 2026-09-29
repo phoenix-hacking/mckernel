@@ -649,3 +649,20 @@ build execution review for request `a2c37952...aa7c`. Commit/push/fetch that
 release before any owner invocation; this shutdown checkpoint authorizes no
 build, retry, module, guest or acceptance work. The OS remains incomplete and
 the launcher pause is temporary.
+
+Checkpoint 103 conditionally releases one exact offline native build. Release
+`d657a75e...8869` binds request `a2c37952...aa7c`, candidate
+`67589154...fe794`, IHK `3114d9e7`, manifest `c5204af6...6ef9`, corrected
+terminal-retaining owner `a8c4c9fc...9155`, driver `1e522a60...962b` and the
+immutable source-free image. The separately observed Python 3.8 test-fixture
+error is corrected at `b187b587...9ae5`; both host Python versions pass 65/65,
+and production bytes/candidate remain unchanged.
+
+Commit/push/fetch the exact release, then perform fresh complete unprivileged
+and released absolute-sudo read-only Docker preflight. Only if all input,
+identity, empty-target, lease, process, ownership, mount, capacity and aggregate
+budget gates pass may the ordinary-user owner command run once. Retain all
+terminal containers and evidence; do not retry or clean automatically. No
+existing build, guest, runtime, application or acceptance credit is granted.
+Success requires independent artifact/evidence review before a separately
+released `startup.argv-empty` current-candidate diagnostic.
