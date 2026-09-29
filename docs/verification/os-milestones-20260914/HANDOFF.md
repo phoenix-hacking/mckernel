@@ -1259,3 +1259,17 @@ Next push/fetch this exact template commit, then create one release JSON binding
 that prior commit and change only it plus the packet literal in a second commit.
 Obtain independent execution review and full live preflight before one ordinary-
 user retention-preparation run. No retention, retirement or build is accepted.
+
+Checkpoint 171 accepts retention preparation only. Released commit
+`610b7bb4...d32f` ran once as ordinary user and exited 0 in 51.644925029 seconds.
+Inventory `841dedac...34f89` is byte-identical to postflight; restoration archive
+`624da324...a6a4` passes all 924 production-verifier members. All packet/child
+processes retired, streams are empty, claims/leases are absent, and candidate
+26/47678 plus backup 26/58429 remain clean and unchanged. Raw archive
+`7bd51f30...83cf` preserves 23 members; independent review returns
+`PASS_RETENTION_PREPARATION`.
+
+Next checkpoint/fetch-verify these bytes, then create a fresh two-root retirement
+packet bound to the exact inventory/archive/root identities. Require independent
+source and execution review plus fresh canonical reconstruction, process, mount
+and reference checks. No restore, retirement, deletion or build is yet accepted.

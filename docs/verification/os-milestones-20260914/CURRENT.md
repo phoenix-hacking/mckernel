@@ -8224,3 +8224,34 @@ release JSON and replace only the packet release-hash literal. Then obtain fresh
 independent execution review and remeasure identities, allocations, capacity,
 processes, leases and Docker mounts before a single ordinary-user run. Formal
 counters and application acceptance remain unchanged.
+
+Continuation checkpoint 171, 2026-09-29: fetched release commit
+`610b7bb4...d32f` changed exactly the retention packet literal plus one release
+JSON. Independent execution review PASSed exact roots, allocations, revisions,
+fresh paths, processes, leases, capacity and a sanitized 19-container census.
+The two candidate mounts and one repository-ancestor mount are terminal,
+PID-zero, read-only and `restart=no`. The exact ordinary-user command ran once,
+exited 0 in 51.644925029 seconds and emitted empty outer streams.
+
+Inventory `841dedac...34f89` contains 10,714 entries and is byte-identical to
+postflight. Restoration archive `624da324...a6a4` passes the production verifier
+for all 924 exact ordered members: 918 capsule-required entries plus their
+ancestor closure. Independent review rederived 9,796 reconstructible entries
+from exact main/IHK Git trees and confirmed retained blob availability. Receipt
+`e054ef28...5a84` records PASS. Planner 4028910/92235567, archiver
+4028943/92237651, postflight planner 4028967/92238545 and packet
+4028897/92235556 are absent with no child process-group survivors. Claims and
+leases are absent; roots 26/47678 and 26/58429 remain clean, unchanged and exact.
+Raw archive `stability-native-exact-retention-preparation-success-raw-9e5ab03d-20260929-1.tar.gz`
+SHA `7bd51f30...83cf` preserves 23 members.
+
+Independent postflight returns `PASS_RETENTION_PREPARATION`. This proves
+reconstruction inputs in the declared scope, not an executed restore, original
+inode/layout/timestamps/ACL/xattr fidelity, retirement or deletion. After this
+checkpoint is pushed and fetch-verified, design a wholly fresh two-root
+retirement packet bound to inventory `841dedac...34f89`, restoration archive
+`624da324...a6a4`, candidate 26/47678 and backup 26/58429. It requires separate
+source and execution review, canonical reconstruction admission and fresh
+process/mount/reference checks before one invocation. Builds and real guest
+applications remain zero; formal counters and 0/273 application acceptance do
+not change.
