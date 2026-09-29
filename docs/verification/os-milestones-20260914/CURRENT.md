@@ -7187,3 +7187,43 @@ memory application diagnostic before broader smokes. Record
 `stability-shutdown-checkpoint-20260929-117.json` is the live cursor. Formal
 counters remain unchanged, current-candidate builds remain zero, applications
 remain 0/273, the OS is incomplete, and the launcher pause is temporary.
+
+Continuation checkpoint 126, 2026-09-29: the retirement integration source
+boundary now independently PASSes after preserving the complete rejected-hash
+lineage from reviews 118 through 124. Exact reviewed hashes are packet
+`f1cb3db7...c363`, packet test `41ad8074...c4b6`, helper
+`2218e7fe...010` and helper test `c350fc3e...95c1`. The unchanged observer and
+archive remain `3562b1d3...3666` and `6a28184e...06e`. Python 3.8 and 3.9 each
+pass all 106 packet/helper/observer/archive tests sequentially; pycompile and
+scoped diff checks pass.
+
+Verified source behavior includes an unreaped leader/pidfd session anchor, raw
+child/stream ownership before decoration, pre-spawn pidfd support checks,
+identity-bracketed transient recovery, no replacement-session signalling,
+bounded non-abortable retirement, identity-safe anchor close, descriptor-bound
+outputs, and explicit helper/packet primary-plus-cleanup failure trees. A
+permanent child-pidfd failure remains deliberately fail closed: only the proved
+unreaped direct child may be signalled, surviving descendants are recorded,
+retirement cannot PASS and the immutable exclusion tombstone blocks later work.
+The one-shot terminal writer has the independently accepted limitation that its
+read-only descriptor closes best effort after durable publication and otherwise
+dies with the process; it cannot alter the published bytes.
+
+Records
+`stability-native-exact-retirement-integration-review-failures-20260929-1.json`
+and `stability-native-exact-retirement-integration-source-success-20260929-1.json`
+preserve the complete findings and accepted scope. This remains a DRAFT source
+template. No candidate traversal, live Git streaming, immutable ioctl, sudo
+retirement, Docker mutation, build, module, guest or application ran. Adopted
+policy hashes remain GOAL `76c4f5d1...bcc3`, START `1698d342...216c`,
+CONVERGENCE `f6938bd2...86a`; the launcher-recorded HANDOFF predecessor is
+`f061d26f...8f2`, while the reconciled live HANDOFF before this append was
+`61b477b7...821b`.
+
+Next commit/push/fetch-verify these exact DRAFT bytes. Then construct an acyclic
+release mechanically from the fetched template commit, changing only the packet
+release sentinel and adding the release JSON. Independent exact mechanical and
+execution review plus fresh live prerequisite/immutable-filesystem support
+checks are mandatory before at most one sudo invocation. Accepted applications
+remain 0/273, current-candidate builds remain zero and formal counters do not
+move from source-template work.

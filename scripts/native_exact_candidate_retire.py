@@ -16,6 +16,31 @@ MAX_MANIFEST_BYTES = 16 << 20
 MAX_CAPSULE_BYTES = 32 << 20
 MAX_OBSERVER_SOURCE_BYTES = 16 << 20
 class RetirementError(RuntimeError): pass
+class RetirementCompositeError(RetirementError):
+    """Explicit cross-module failure tree; implicit exception context is unused."""
+    _retirement_composite=True
+    def __init__(self,primary,cleanup):
+        self.primary=primary;self.cleanup=cleanup
+        super().__init__('primary failure: '+str(primary)+'; cleanup failure: '+str(cleanup))
+def combine_failures(primary,cleanup):
+    if primary is None:return cleanup
+    if cleanup is None:return primary
+    return RetirementCompositeError(primary,cleanup)
+def failure_record(error):
+    active=set();budget=[128]
+    def visit(value,depth):
+        if id(value) in active:return dict(type='FailureTreeCycle',message='explicit failure tree cycle',interrupted=False)
+        if depth>=32 or budget[0]<=0:return dict(type='FailureTreeLimit',message='explicit failure tree limit',interrupted=False)
+        budget[0]-=1
+        interrupted=isinstance(value,KeyboardInterrupt) or getattr(value,'_retirement_interrupted',False) is True
+        if getattr(value,'_retirement_composite',False) is True:
+            active.add(id(value))
+            try:primary=visit(value.primary,depth+1);cleanup=visit(value.cleanup,depth+1)
+            finally:active.remove(id(value))
+            return dict(type=type(value).__name__,primary=primary,cleanup=cleanup,interrupted=interrupted or primary['interrupted'] or cleanup['interrupted'])
+        message=str(value)
+        return dict(type=type(value).__name__,message=message[:4096],message_truncated=len(message)>4096,interrupted=interrupted)
+    return visit(error,0)
 def fail(s): raise RetirementError(s)
 def digest_bytes(b): return hashlib.sha256(b).hexdigest()
 def exact_json(b):
@@ -415,7 +440,7 @@ def retire(roots,release,claim_path,journal_path,evidence_path,observer_runner,d
             if os.path.lexists(x):fail('one-shot output exists: '+os.fspath(x))
         durable=full_write_json
         def read(name):return stable_read(name,MAX_MANIFEST_BYTES)
-    j=Journal(journal_path,output_dir_fd)
+    j=Journal(journal_path,output_dir_fd);failure=None;result=None
     try:
         rsha=digest_bytes(json.dumps(release,sort_keys=True,separators=(',',':')).encode());claim=dict(schema='mckernel.ordinary-retirement-claim.v1',release_sha256=rsha,created=int(time.time()),roots=[x['path'] for x in items])
         j.write('journal-created',survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd));durable(claim_path,claim)
@@ -428,12 +453,16 @@ def retire(roots,release,claim_path,journal_path,evidence_path,observer_runner,d
         evidence_digest=digest_bytes(read(evidence_path))
         j.write('proofs-passed',evidence_sha256=evidence_digest)
         for x in items:remove_root(x,j)
-        result=dict(status='PASS',runtime_acceptance=False);j.write('terminal-prepared',result=result,survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd));return result
+        result=dict(status='PASS',runtime_acceptance=False);j.write('terminal-prepared',result=result,survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd))
     except BaseException as e:
-        try:j.write('terminal-failure',error=repr(e),survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd))
-        except BaseException:pass
-        raise
-    finally:j.close()
+        failure=e
+        try:j.write('terminal-failure',error=failure_record(e),survivors=survivors(items,claim_path,journal_path,evidence_path,output_dir_fd))
+        except BaseException as journal_error:failure=combine_failures(failure,journal_error)
+    finally:
+        try:j.close()
+        except BaseException as close_error:failure=combine_failures(failure,close_error)
+    if failure is not None:raise failure
+    return result
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--release',required=True);p.add_argument('--execute',action='store_true');a=p.parse_args(argv)
     if a.execute:fail('execution disabled: separately hash-bound packet must integrate callbacks')

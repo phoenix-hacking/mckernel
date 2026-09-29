@@ -1,0 +1,145 @@
+{
+  "schema": "mckernel.stability.native-exact-retirement-integration-review-failures.v1",
+  "recorded_at": "2026-09-29T04:47:34-07:00",
+  "base_fetched_commit": "fcc854f75fa3fc84e12630e12ceb0b5097f3c1c9",
+  "status": "BLOCK",
+  "scope": "source-template and temporary/mock test design only",
+  "immutable_inputs": {
+    "helper": {
+      "path": "scripts/native_exact_candidate_retire.py",
+      "sha256": "7860b315247585f64df2adac7709b1d1405e553d884c08923501b1926a57226b"
+    },
+    "helper_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retire.py",
+      "sha256": "846ef1adb3bd1d39dd7dabe3a110a57c9470504ef82fc9170ff0c219aaa7f225"
+    },
+    "prior_lineage": "docs/verification/evidence/stability-shutdown-checkpoint-20260929-117.json"
+  },
+  "reviews": [
+    {
+      "review_id": "retirement_exact_review_118",
+      "packet_sha256": "c98d30354361608c62a3c3c2b086263ae9ca2d0349b3d8b09b504ac9659a51eb",
+      "packet_test_sha256": "6522ab03d16896906b940c929768ae1a9092cbaced776290c1115d5b9924e649",
+      "decision": "BLOCK",
+      "findings": [
+        "run_bounded, _reader and call lost a successfully spawned child when bind_process failed",
+        "stream_blob and stream_store skipped session finalization for an exited leader with surviving descendants",
+        "a repeated interruption after TERM escaped before KILL and final empty-session proof",
+        "ExclusionLease.__exit__ skipped close when fsync failed"
+      ],
+      "positive_results": [
+        "45 of 45 selected pure/mock tests passed sequentially on Python 3.8 and Python 3.9",
+        "loaded helper and bound archive retired two nonempty temporary file/directory/symlink trees through descriptor-relative outputs",
+        "scoped diff check passed"
+      ],
+      "retained_anomalies": [
+        "an initial concurrent Python 3.9 test run observed archive temporary-parent identity churn and was not counted as a pass",
+        "one intermediate reproducer had an incorrect missing-stream-key harness and was corrected before the finding was accepted"
+      ]
+    },
+    {
+      "review_id": "retirement_lifecycle_rereview_119",
+      "packet_sha256": "1bad3aa470cf47192b0e268d061f8b4e33950cb34a1126e64581e283f00256d7",
+      "packet_test_sha256": "361d72dfd2394713afe190177e9db6bb72c64638147bda3521e5d6c96aef36e3",
+      "decision": "BLOCK",
+      "findings": [
+        "closing reader stdout before finish_reader made retirement drain raise ValueError after TERM and bypass KILL/final census",
+        "run_bounded still skipped cleanup for a post-spawn OSError",
+        "run_bounded and call could replace or drop the primary failure when cleanup also failed"
+      ],
+      "reproduced_outcome": {
+        "signals": [15, 15],
+        "sigkill_observed": false,
+        "retired": false
+      },
+      "test_result": "both concurrently launched 54-test suites had one temporary-parent identity error; no full-suite PASS was claimed by the reviewer"
+    },
+    {
+      "review_id": "retirement_lifecycle_final_review_120",
+      "packet_sha256": "233935d1b903088749207072e645570202a4b3896cb2307a2515b7ad08a94d3d",
+      "packet_test_sha256": "d651cef528153511520831da033479e429587530279cf202b9552c48c69398e4",
+      "decision": "BLOCK",
+      "findings": [
+        "finish_reader routed only TimeoutExpired through retirement, so an interrupted or otherwise failed wait could abandon a live reader session",
+        "_reader and streaming finalizers still discarded cleanup errors when a primary error existed, and interruption cleanup metadata was absent from durable failure JSON",
+        "pidfd checks protected newly observed tasks but did not bind them to the original session incarnation; a reused leader PID/starttime mismatch was signalled"
+      ],
+      "reproduced_outcomes": [
+        "blob mismatch followed by interrupted wait called retire_process zero times and closed stdout",
+        "bind failure plus retirement failure returned only the bind failure",
+        "saved leader starttime 9 versus observed replacement starttime 10 still received SIGTERM and was marked retired"
+      ],
+      "positive_results": [
+        "56 of 56 tests passed sequentially on Python 3.8",
+        "56 of 56 tests passed sequentially on Python 3.9",
+        "closed-stdout and absent-stderr retirement reached TERM, KILL and empty proof",
+        "pycompile and scoped diff checks passed"
+      ]
+    },
+    {
+      "review_id": "retirement_anchor_final_review_122",
+      "packet_sha256": "d2266f14e3283faebf84e9f634b6b99379183da0e8fc769a0c7c33ae5fe1b9b9",
+      "packet_test_sha256": "a113690fb89d88ea8e0fae5bf87025520417505b671bcbb45ba4af5fd8cab1c0",
+      "decision": "BLOCK",
+      "findings": [
+        "a failure after leader-pidfd acquisition but before starttime capture made cleanup reject its own partial anchor and leave a real child alive",
+        "helper primary plus ExclusionLease cleanup failure propagated and serialized only the cleanup error",
+        "close_anchor cleared descriptor ownership before an interrupted close and could not safely retry"
+      ],
+      "positive_results": [
+        "unreaped waitid WNOWAIT leader anchoring rejected the earlier replacement-session reproducer",
+        "84 of 84 related tests passed sequentially on both Python versions",
+        "pycompile and scoped diff checks passed"
+      ]
+    },
+    {
+      "review_id": "retirement_anchor_rereview_123",
+      "packet_sha256": "2f3074be62231b349e2c74799a427d193041dc85174037160a013c43b600c7cb",
+      "packet_test_sha256": "56a79c8b6d1a98dfe03e93159ec01d69bc2b4e7c5926d489fec652e3f3230700",
+      "helper_sha256": "7860b315247585f64df2adac7709b1d1405e553d884c08923501b1926a57226b",
+      "helper_test_sha256": "846ef1adb3bd1d39dd7dabe3a110a57c9470504ef82fc9170ff0c219aaa7f225",
+      "decision": "BLOCK",
+      "findings": [
+        "process_streams ran before born_process in all three Popen callers, leaving a signal window that abandoned a real local child",
+        "the helper retire finally block replaced an active operation failure when failure-journal close also failed, and packet serialization omitted the primary"
+      ],
+      "positive_results": [
+        "partial-bind pidfd recovery and identity-checked anchor close passed focused review",
+        "lease and packet cleanup aggregation passed its focused tests",
+        "the post-publication terminal-writer best-effort close was accepted for the one-shot CLI scope",
+        "93 of 93 related tests passed sequentially on both Python versions"
+      ]
+    },
+    {
+      "review_id": "retirement_owned_spawn_review_124",
+      "packet_sha256": "1b2b8f2d8718f07731c277b3cc4dd860a4f2608beede0562b77545f55c440161",
+      "packet_test_sha256": "f7108674131aff94f8356be5959355145271572d8d7bf5c95e4957e619ef6b13",
+      "helper_sha256": "2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010",
+      "helper_test_sha256": "c350fc3e5eae5752fed76cddfe1102f253ddf758fab5c9c50acae5f5c40b95c1",
+      "decision": "BLOCK",
+      "findings": [
+        "born_process still preceded raw stream and minimal session recording, so an injected birth failure abandoned real children in every caller",
+        "a transient first pidfd_open failure left both anchor fields unset and cleanup made no bounded reacquisition attempt"
+      ],
+      "positive_results": [
+        "the owned_spawn signal-mask boundary and explicit helper operation/failure-journal/close composite passed focused review",
+        "100 of 100 related tests passed sequentially on both Python versions",
+        "all reviewer probe children were explicitly cleaned and final censuses were empty"
+      ]
+    }
+  ],
+  "strategy_change": "Replace piecemeal exception handling with one session-incarnation anchor, one non-abortable retirement state machine and one explicit serializable primary-plus-cleanup failure representation before another review.",
+  "not_run": [
+    "live candidate or backup traversal",
+    "canonical live Git object streaming",
+    "privileged retirement",
+    "immutable filesystem ioctl",
+    "Docker mutation",
+    "build",
+    "module",
+    "guest",
+    "application"
+  ],
+  "runtime_acceptance": false,
+  "formal_counters_changed": false
+}

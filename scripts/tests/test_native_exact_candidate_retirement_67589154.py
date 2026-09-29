@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Pure tests only; no roots, Docker, observer, Git, or candidate is touched."""
-import hashlib, importlib.util, io, os, stat, struct, subprocess, sys, tempfile, unittest
+import hashlib, importlib.util, io, os, stat, struct, subprocess, sys, tempfile, time, unittest
 from pathlib import Path
 from unittest import mock
 ROOT=Path(__file__).parents[2]; PACKET=ROOT/'docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py'
@@ -18,7 +18,13 @@ class T(unittest.TestCase):
  def tearDown(self):self.ioc.stop();M.RELEASE_SHA256,M.HELPER_SHA256,M.OBSERVER_SHA256,M.ARCHIVE_SHA256,M.HELPER_TEST_SHA256,M.OBSERVER_TEST_SHA256,M.BUILD_LEASE=self.old
  def final(self):M.RELEASE_SHA256=M.HELPER_SHA256=M.OBSERVER_SHA256=M.ARCHIVE_SHA256=M.HELPER_TEST_SHA256=M.OBSERVER_TEST_SHA256='a'*64
  def proc(self,out=b'',err=b'',rc=0):
-  p=mock.Mock();p.stdout=io.BytesIO();p.stderr=io.BytesIO();p.communicate.return_value=(out,err);p.returncode=rc;p.poll.return_value=rc;return p
+  p=mock.Mock();p.stdout=io.BytesIO();p.stderr=io.BytesIO();p.communicate.return_value=(out,err);p.returncode=rc;p.poll.return_value=rc;p.wait.return_value=rc;return p
+ def anchored(self):
+  p=self.proc();p.pid=77;p._mckernel_session=77;p._mckernel_leader_fd=11;p._mckernel_leader_starttime=9;p._mckernel_retired=False;p._mckernel_reader_finished=False;p._mckernel_leader_token=(1,2)
+  return p
+ def leader(self):return {'pid':77,'pgrp':77,'session':77,'starttime':9}
+ def member(self):return {'pid':78,'pgrp':77,'session':77,'starttime':10}
+ def row(self,pid):return self.leader() if pid==77 else self.member()
  def lease(self):
   class L:
    def assert_held(self):pass
@@ -46,7 +52,7 @@ class T(unittest.TestCase):
    with self.assertRaisesRegex(M.Error,'canonical'):M.admit('/tmp/x')
  def test_stream_short_type_size_hash(self):
   class P:
-   def __init__(self,b):self.stdin=io.BytesIO();self.stdout=io.BytesIO(b);self.stderr=io.BytesIO()
+   def __init__(self,b):self.pid=None;self.stdin=io.BytesIO();self.stdout=io.BytesIO(b);self.stderr=io.BytesIO()
    def wait(self):return 0
    def poll(self):return 0
   oid='0'*40;d=hashlib.sha256(b'abc').hexdigest()
@@ -59,8 +65,81 @@ class T(unittest.TestCase):
    def fileno(self):return 9
   with mock.patch.object(M.select,'select',return_value=([],[],[])),mock.patch.object(M.time,'monotonic',side_effect=[0,2]):
    with self.assertRaisesRegex(M.Error,'wall timeout'):M.pipe_read(F(),1,1)
-  p=mock.Mock();p.wait.side_effect=[subprocess.TimeoutExpired(['x'],5),7]
-  with mock.patch.object(M,'retire_process',return_value=(b'',b'')) as retire:self.assertEqual(M.finish_reader(p),7);retire.assert_called_once()
+  p=mock.Mock();p.wait.side_effect=subprocess.TimeoutExpired(['x'],5)
+  with mock.patch.object(M,'retire_process',return_value=(b'',b'')) as retire:
+   with self.assertRaises(subprocess.TimeoutExpired):M.finish_reader(p)
+  retire.assert_called_once()
+ def test_raw_child_is_retired_if_binding_fails(self):
+  class Pipe(io.BytesIO):
+   def __init__(self):super().__init__();self.closed_by_packet=False
+   def close(self):self.closed_by_packet=True;super().close()
+  def child():
+   p=mock.Mock();p.pid=321;p.stdin=Pipe();p.stdout=Pipe();p.stderr=Pipe();return p
+  for invoke in (
+   lambda:p and M.run_bounded(['x']),
+   lambda:p and M._reader(M.GIT),
+   lambda:p and M.call(['x'],self.output(d),'observer')):
+   with tempfile.TemporaryDirectory() as d:
+    p=child()
+    with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Error('bind failed')),mock.patch.object(M,'retire_process',return_value=(b'',b'')) as retire:
+     with self.assertRaises(M.Error):invoke()
+    retire.assert_called_once_with(p,mock.ANY)
+    self.assertEqual(p._mckernel_session,p.pid);self.assertTrue(p.stdin.closed_by_packet);self.assertTrue(p.stdout.closed_by_packet);self.assertTrue(p.stderr.closed_by_packet)
+ def test_stream_finalizes_exited_leader_with_descendants(self):
+  p=self.proc();p._mckernel_session=91;p._mckernel_reader_finished=False;p.poll.return_value=0
+  oid='0'*40;digest=hashlib.sha256(b'abc').hexdigest()
+  with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process',side_effect=M.Error('record failed')),mock.patch.object(M,'finish_reader',return_value=0) as finish:
+   with self.assertRaisesRegex(M.Error,'record failed'):M.stream_blob(M.GIT,oid,digest,3)
+  finish.assert_called_once_with(p)
+  p=self.proc();p._mckernel_session=92;p._mckernel_reader_finished=False;p.poll.return_value=0
+  with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process',side_effect=M.Error('record failed')),mock.patch.object(M,'finish_reader',return_value=0) as finish:
+   with self.assertRaisesRegex(M.Error,'record failed'):M.stream_store(M.GIT,[(oid,digest,3,'a'*64)])
+  finish.assert_called_once_with(p)
+ def test_stream_reader_keeps_pipes_open_through_term_kill_and_empty_census(self):
+  class Pipe(io.BytesIO):
+   def __init__(self):super().__init__();self.closed_by_packet=False
+   def close(self):self.closed_by_packet=True;super().close()
+  p=self.anchored();p.stdin=Pipe();p.stdout=Pipe();p.stderr=Pipe()
+  row=self.member();signals=[]
+  census=[[row],[row],[row],[row],[self.leader()],[]]
+  def sent(fd,sig):signals.append((sig,p.stdout.closed_by_packet))
+  with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process'),mock.patch.object(M,'session_members',side_effect=census),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_send',side_effect=sent),mock.patch.object(M.os,'close'),mock.patch.object(M,'_drain',return_value=(b'',b'')):
+   with self.assertRaisesRegex(M.Error,'descendants survived'):M.stream_store(M.GIT,[('0'*40,hashlib.sha256(b'abc').hexdigest(),3,'a'*64)])
+  self.assertEqual([x[0] for x in signals],[M.signal.SIGTERM,M.signal.SIGKILL]);self.assertEqual([x[1] for x in signals],[False,False]);self.assertTrue(p._mckernel_retired);self.assertTrue(p.stdout.closed_by_packet)
+ def test_repeated_interrupt_after_term_census_kills_then_propagates(self):
+  p=self.anchored();row=self.member();signals=[]
+  census=[[row],M.Interrupted('second'),[row],[row],[self.leader()],[]]
+  with mock.patch.object(M,'session_members',side_effect=census),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_send',side_effect=lambda fd,sig:signals.append(sig)),mock.patch.object(M.os,'close'),mock.patch.object(M,'_drain',return_value=(b'',b'')):
+   with self.assertRaises(M.Interrupted):M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
+  self.assertEqual(signals,[M.signal.SIGTERM,M.signal.SIGKILL]);self.assertTrue(p._mckernel_retired)
+ def test_run_bounded_preserves_first_interruption_after_cleanup_signal(self):
+  p=self.proc();p.pid=321;first=M.Interrupted('first interruption')
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=lambda x:x),mock.patch.object(M,'_drain',side_effect=first),mock.patch.object(M,'retire_process',side_effect=M.Interrupted('second interruption')):
+   with self.assertRaisesRegex(M.Interrupted,'first interruption'):M.run_bounded(['x'])
+ def test_postspawn_permission_and_cleanup_failures_are_preserved(self):
+  p=self.proc();p.pid=321
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=PermissionError('denied')),mock.patch.object(M,'retire_process',return_value=(b'',b'')) as retire:
+   with self.assertRaisesRegex(M.Error,'admission command: denied'):M.run_bounded(['x'])
+  retire.assert_called_once_with(p,mock.ANY)
+  p=self.proc();p.pid=322
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Error('run primary')),mock.patch.object(M,'retire_process',side_effect=M.Error('run cleanup')):
+   with self.assertRaisesRegex(M.Error,'primary failure:.*run primary.*cleanup failure:.*run cleanup'):M.run_bounded(['x'])
+  with tempfile.TemporaryDirectory() as d:
+   p=self.proc();p.pid=323;base=self.output(d)
+   try:
+    with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Error('call primary')),mock.patch.object(M,'retire_process',side_effect=M.Error('call cleanup')):
+     with self.assertRaisesRegex(M.Error,'primary failure:.*call primary.*cleanup failure:.*call cleanup'):M.call(['x'],base,'observer')
+    self.assertIn(b'call primary',(base.path/'observer.stderr').read_bytes())
+   finally:base.close()
+ def test_failed_retirement_does_not_mark_early_and_can_retry(self):
+  p=self.anchored();row=self.member()
+  with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M.os,'close'),mock.patch.object(M,'KILL_TIMEOUT',0):
+   with mock.patch.object(M,'session_members',return_value=[row]),mock.patch.object(M,'pidfd_open',side_effect=M.Error('pidfd unavailable')):
+    with self.assertRaisesRegex(M.Error,'pidfd unavailable'):M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
+   self.assertFalse(p._mckernel_retired);self.assertIsNone(p._mckernel_leader_fd)
+   with mock.patch.object(M,'session_members',side_effect=[[self.leader()],[self.leader()],[]]),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_token',return_value=(1,2)),mock.patch.object(M,'unreaped_child',return_value=None),mock.patch.object(M,'pidfd_send'):
+    M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
+   self.assertTrue(p._mckernel_retired)
  def test_observer_exact_argv_capture_and_duplicate_json(self):
   self.final()
   with tempfile.TemporaryDirectory() as d:
@@ -141,6 +220,25 @@ class T(unittest.TestCase):
      os.replace(str(replacement),str(lease_path))
      with self.assertRaisesRegex(M.Error,'replaced'):held.assert_held()
      self.assertEqual(original.st_ino,held.identity.st_ino)
+ def test_lease_failures_close_descriptors_and_preserve_tombstone(self):
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/'lease';M.BUILD_LEASE=path;r={'operational_exclusion':str(path),'boot_id':'b','exclusion_tombstone':self.tomb(path)}
+   lease=M.ExclusionLease(r)
+   with mock.patch.object(M,'proc_starttime',return_value=7),mock.patch.object(lease,'_make_immutable',side_effect=M.Error('immutable failed')):
+    with self.assertRaisesRegex(M.Error,'immutable failed'):lease.__enter__()
+   self.assertTrue(path.exists());self.assertIsNone(lease.fd)
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/'lease';M.BUILD_LEASE=path;r={'operational_exclusion':str(path),'boot_id':'b','exclusion_tombstone':self.tomb(path)}
+   with mock.patch.object(M,'proc_starttime',return_value=7):lease=M.ExclusionLease(r);lease.__enter__()
+   with mock.patch.object(M.os,'fsync',side_effect=OSError('durability failed')):
+    with self.assertRaisesRegex(OSError,'durability failed'):lease.finalize()
+   self.assertIsNone(lease.fd)
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/'lease';M.BUILD_LEASE=path;r={'operational_exclusion':str(path),'boot_id':'b','exclusion_tombstone':self.tomb(path)}
+   with mock.patch.object(M,'proc_starttime',return_value=7):lease=M.ExclusionLease(r);lease.__enter__()
+   with mock.patch.object(M.os,'fsync',side_effect=OSError('durability failed')):
+    with self.assertRaisesRegex(OSError,'durability failed'):lease.__exit__(None,None,None)
+   self.assertIsNone(lease.fd)
  def test_status_failure_is_composite_and_sealed_modules_use_checked_bytes(self):
   with tempfile.TemporaryDirectory() as d:
    base=self.output(d);primary=M.Error('primary')
@@ -248,7 +346,8 @@ class T(unittest.TestCase):
    with self.assertRaisesRegex(M.Error,'resource floor'):M.live_gate(r,mock.Mock(),mock.Mock())
  def test_fresh_output_and_release_sentinel(self):
   with self.assertRaises(M.Error):M.fresh_output({'output_dir':'/tmp/no'})
-  self.assertEqual(M.HELPER_SHA256,'7860b315247585f64df2adac7709b1d1405e553d884c08923501b1926a57226b')
+  self.assertEqual(M.HELPER_SHA256,'2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010')
+  self.assertEqual(M.HELPER_SHA256,M.sha(M.HELPER.read_bytes()));self.assertEqual(M.HELPER_TEST_SHA256,M.sha(M.HELPER_TEST.read_bytes()))
   self.assertEqual(M.OBSERVER_SHA256,'3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666')
   self.assertIn('RELEASE_HASH_REQUIRED',PACKET.read_text())
   self.assertNotIn('"/usr/bin/sudo"',PACKET.read_text())
@@ -268,12 +367,11 @@ class T(unittest.TestCase):
  def test_pid_reuse_proof_loss_never_signals_a_numeric_group(self):
   p=mock.Mock();p.pid=123;p._mckernel_session=123;p._mckernel_retired=False;p.poll.return_value=None;p.wait.return_value=0
   with mock.patch.object(M.os,'getpgid',side_effect=ProcessLookupError()),mock.patch.object(M.os,'killpg') as kill,mock.patch.object(M,'session_members',return_value=[]):
-   M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
+   with self.assertRaisesRegex(M.Error,'unreaped direct-child identity unavailable'):M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
   kill.assert_not_called()
  def test_pidfd_failure_fails_closed_without_numeric_group_signal(self):
-  p=mock.Mock();p._mckernel_session=77;p._mckernel_retired=False;p.poll.return_value=None
-  row={'pid':77,'pgrp':77,'session':77,'starttime':9}
-  with mock.patch.object(M,'session_members',return_value=[row]),mock.patch.object(M,'pidfd_open',side_effect=M.Error('pidfd unavailable')),mock.patch.object(M.os,'killpg') as kill:
+  p=self.anchored();row=self.member()
+  with mock.patch.object(M,'session_members',return_value=[row]),mock.patch.object(M,'pidfd_open',side_effect=M.Error('pidfd unavailable')),mock.patch.object(M.os,'killpg') as kill,mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M.os,'close'),mock.patch.object(M,'KILL_TIMEOUT',0):
    with self.assertRaisesRegex(M.Error,'pidfd unavailable'):M.retire_process(p,{'stdout_data':bytearray(),'stderr_data':bytearray()})
   kill.assert_not_called()
  def test_atomic_pass_status_fsync_failure_leaves_no_canonical_pass(self):
@@ -291,13 +389,321 @@ class T(unittest.TestCase):
  def test_real_leader_exit_descendant_survival_is_retired_by_pidfd(self):
   if not Path('/proc').is_dir():self.skipTest('Linux proc required')
   p=M.bind_process(subprocess.Popen([sys.executable,'-c','import subprocess; subprocess.Popen(["/bin/sleep","30"])'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True))
-  self.assertEqual(p.wait(timeout=5),0)
+  deadline=time.monotonic()+5
+  while M.observe_exit(p) is None and time.monotonic()<deadline:time.sleep(.01)
+  self.assertEqual(M.observe_exit(p),0);self.assertIsNone(p.returncode)
   M.retire_process(p,{'stdout':p.stdout,'stderr':p.stderr,'stdout_data':bytearray(),'stderr_data':bytearray()})
   self.assertEqual(M.session_members(p._mckernel_session),[])
   p.stdout.close();p.stderr.close()
  def test_fast_start_new_session_exit_is_admitted_and_censused(self):
   p=subprocess.Popen(['/bin/true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
-  p.wait(timeout=5);M.bind_process(p)
+  time.sleep(.05);M.bind_process(p)
+  self.assertEqual(M.observe_exit(p),0);self.assertEqual(M.complete_process(p),0)
   self.assertEqual(M.session_members(p._mckernel_session),[])
   p.stdout.close();p.stderr.close()
+ def test_reused_sid_rejects_replacement_leader_and_members_without_signals(self):
+  for fd_pid in (77,-1):
+   p=self.anchored();replacement=dict(self.leader(),starttime=10)
+   with mock.patch.object(M,'pidfd_identity',return_value=fd_pid),mock.patch.object(M,'proc_row',return_value=replacement),mock.patch.object(M,'session_members',return_value=[replacement,self.member()]),mock.patch.object(M,'pidfd_send') as send,mock.patch.object(M.os,'killpg') as kill,mock.patch.object(M.os,'close') as close:
+    with self.assertRaisesRegex(M.Error,'session incarnation'):M.retire_process(p,{})
+   send.assert_not_called();kill.assert_not_called();close.assert_called_once_with(11)
+   self.assertFalse(p._mckernel_retired);self.assertIsNone(p._mckernel_leader_fd)
+ def test_leader_first_exit_uses_anchor_and_reaps_only_after_descendants(self):
+  p=self.anchored();events=[]
+  def census(unused):
+   events.append('census')
+   return [] if 'reap' in events else ([self.leader()] if 'kill' in events else [self.leader(),self.member()])
+  def send(fd,sig):events.append('kill' if sig==M.signal.SIGKILL else 'term')
+  def reap(**kw):events.append('reap');return 0
+  p.wait.side_effect=reap
+  with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'session_members',side_effect=census),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_send',side_effect=send),mock.patch.object(M.os,'close') as close:
+   M.retire_process(p,{})
+  self.assertLess(events.index('kill'),events.index('reap'));self.assertTrue(p._mckernel_retired);close.assert_any_call(11)
+  with mock.patch.object(M,'session_members',side_effect=AssertionError('retirement must not repeat')):M.retire_process(p,{})
+ def test_bind_primary_cleanup_tree_survives_reader_and_terminal_json(self):
+  p=self.proc();p.pid=321
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Interrupted('bind interrupted')),mock.patch.object(M,'retire_process',side_effect=M.Error('cleanup uncertain')):
+   with self.assertRaises(M.CompositeInterrupted) as raised:M._reader(M.GIT)
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d)
+   try:
+    M.fail_status(base,raised.exception);record=M.exact_json((base.path/'packet.failure').read_bytes())
+    self.assertEqual(record['schema'],'mckernel.packet-failure.v2');self.assertEqual(record['status'],'FAIL')
+    self.assertEqual(record['error']['primary']['message'],'bind interrupted');self.assertEqual(record['error']['cleanup']['message'],'cleanup uncertain');self.assertTrue(record['error']['interrupted'])
+   finally:base.close()
+ def test_blob_primary_wait_interrupt_retires_and_preserves_both(self):
+  for invoke in (lambda:M.stream_blob(M.GIT,'0'*40,'a'*64,3),lambda:M.stream_store(M.GIT,[('0'*40,'a'*64,3,'b'*64)])):
+   p=self.proc();p._mckernel_reader_finished=False
+   p.wait.side_effect=M.Interrupted('wait interrupted')
+   def retired(*args):p._mckernel_retired=True;return b'',b''
+   with mock.patch.object(M,'_reader',return_value=p),mock.patch.object(M,'stream_blob_process',side_effect=M.Error('blob failed')),mock.patch.object(M,'retire_process',side_effect=retired) as cleanup:
+    with self.assertRaises(M.CompositeInterrupted) as raised:invoke()
+   cleanup.assert_called_once();record=M.error_record(raised.exception)
+   self.assertEqual(record['primary']['message'],'blob failed');self.assertEqual(record['cleanup']['message'],'wait interrupted')
+   self.assertTrue(p.stdout.closed);self.assertTrue(p.stderr.closed)
+ def test_wait_census_and_drain_errors_do_not_abort_kill_escalation(self):
+  for failure in (RuntimeError('wait defect'),M.Interrupted('wait signal'),KeyboardInterrupt('wait keyboard')):
+   p=self.proc();p.wait.side_effect=failure
+   with mock.patch.object(M,'retire_process',side_effect=M.Error('retirement uncertainty')) as cleanup:
+    with self.assertRaises(M.CompositeError) as raised:M.finish_reader(p)
+   cleanup.assert_called_once();self.assertIn(str(failure),str(raised.exception));self.assertIn('retirement uncertainty',str(raised.exception))
+  for stage in ('census','drain'):
+   p=self.anchored();signals=[]
+   rows=[RuntimeError('census defect'),[self.member()],[self.member()],[self.leader()],[]] if stage=='census' else [[self.member()],[self.member()],[self.member()],[self.leader()],[]]
+   with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'session_members',side_effect=rows),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_send',side_effect=lambda fd,sig:signals.append(sig)),mock.patch.object(M,'_drain',side_effect=RuntimeError('drain defect') if stage=='drain' else None,return_value=(b'',b'')),mock.patch.object(M.os,'close'):
+    with self.assertRaisesRegex(RuntimeError if stage=='census' else M.CompositeError,stage+' defect'):M.retire_process(p,{})
+   self.assertIn(M.signal.SIGKILL,signals);self.assertTrue(p._mckernel_retired)
+ def test_closed_pipes_and_repeated_interrupts_do_not_block_escalation(self):
+  p=self.anchored();p.stdout.close();p.stderr.close();signals=[];attempts=[]
+  def send(fd,sig):
+   attempts.append(sig)
+   if len(attempts) in (1,2,4,5):raise M.Interrupted('repeated signal')
+   signals.append(sig)
+  with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'session_members',side_effect=[[self.member()],[self.member()],[self.member()],[self.leader()],[]]),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_send',side_effect=send),mock.patch.object(M.os,'close'):
+   with self.assertRaises(M.Interrupted):M.retire_process(p,M.process_streams(p))
+  self.assertEqual(signals,[M.signal.SIGTERM,M.signal.SIGKILL]);self.assertTrue(p._mckernel_retired);self.assertEqual(len(attempts),6)
+ def test_member_esrch_does_not_signal_replacement_and_still_proves_empty(self):
+  p=self.anchored()
+  with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'session_members',side_effect=[[self.member()],[self.leader()],[]]),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_open',side_effect=FileNotFoundError('member exited')),mock.patch.object(M,'pidfd_send') as send,mock.patch.object(M.os,'close'):
+   M.retire_process(p,{})
+  send.assert_not_called();self.assertTrue(p._mckernel_retired)
+ def test_capture_failure_keeps_primary_and_cleanup_tree(self):
+  p=self.proc();p.pid=321
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Error('bind failed')),mock.patch.object(M,'retire_process',side_effect=M.Error('cleanup failed')),mock.patch.object(M,'capture',side_effect=OSError('capture failed')):
+   with self.assertRaises(M.CompositeError) as raised:M.call(['x'],None,'observer')
+  record=M.error_record(raised.exception)
+  self.assertEqual(record['primary']['primary']['message'],'bind failed');self.assertEqual(record['primary']['cleanup']['message'],'cleanup failed');self.assertEqual(record['cleanup']['message'],'capture failed')
+ def test_actual_packet_signal_handlers_latch_until_retired_then_restore(self):
+  p=self.anchored();old={sig:M.signal.getsignal(sig) for sig in (M.signal.SIGINT,M.signal.SIGTERM)};signals=[]
+  def send(fd,sig):
+   signals.append(sig)
+   for unused in range(50):
+    for incoming in old:M.signal.getsignal(incoming)(incoming,None)
+  with mock.patch.object(M,'pidfd_identity',return_value=77),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M,'session_members',side_effect=[[self.member()],[self.member()],[self.member()],[self.leader()],[]]),mock.patch.object(M,'observe_exit',return_value=0),mock.patch.object(M,'pidfd_open',return_value=12),mock.patch.object(M,'pidfd_send',side_effect=send),mock.patch.object(M.os,'close'):
+   with self.assertRaises(M.CompositeInterrupted) as raised:M.retire_process(p,{})
+  self.assertEqual(signals,[M.signal.SIGTERM,M.signal.SIGKILL]);self.assertTrue(p._mckernel_retired)
+  self.assertIn('additional retirement interruptions: 199',str(raised.exception));M.json.dumps(M.error_record(raised.exception))
+  self.assertEqual({sig:M.signal.getsignal(sig) for sig in old},old)
+ def test_pipe_close_failure_cannot_replace_bind_or_retirement_failures(self):
+  p=self.proc();p.pid=321;p.stdout=mock.Mock();p.stdout.close.side_effect=[M.Interrupted('close interrupted'),None]
+  p.stderr=mock.Mock();p.stderr.close.side_effect=OSError('close failed')
+  with mock.patch.object(M.subprocess,'Popen',return_value=p),mock.patch.object(M,'bind_process',side_effect=M.Error('bind failed')),mock.patch.object(M,'retire_process',side_effect=M.Error('retirement failed')):
+   with self.assertRaises(M.CompositeInterrupted) as raised:M.run_bounded(['x'])
+  for message in ('bind failed','retirement failed','close interrupted','close failed'):self.assertIn(message,str(raised.exception))
+  self.assertEqual(p.stdout.close.call_count,2);p.stderr.close.assert_called_once()
+ def test_partial_bind_proc_permission_failure_retires_real_child_itself(self):
+  children=[];calls=[];real_popen=M.subprocess.Popen;real_row=M.proc_row
+  def spawn(*args,**kwargs):
+   child=real_popen(*args,**kwargs);children.append(child);return child
+  def row(pid):
+   if pid==os.getpid():return real_row(pid)
+   calls.append(pid)
+   if len(calls)==1:raise PermissionError('one partial bind failure')
+   return real_row(pid)
+  with mock.patch.object(M.subprocess,'Popen',side_effect=spawn),mock.patch.object(M,'proc_row',side_effect=row):
+   with self.assertRaisesRegex(M.Error,'one partial bind failure'):M.run_bounded(['/bin/sleep','30'])
+  self.assertEqual(len(children),1);child=children[0]
+  self.assertGreater(len(calls),1);self.assertIn(child.returncode,(-M.signal.SIGTERM,-M.signal.SIGKILL))
+  self.assertTrue(child._mckernel_retired);self.assertIsNone(child._mckernel_leader_fd)
+  self.assertEqual(M.session_members(child.pid),[]);self.assertTrue(child.stdout.closed);self.assertTrue(child.stderr.closed)
+ def test_partial_bind_recovery_rejects_pidfd_or_leader_replacement(self):
+  for identities,rows in (([88],[]),([77,88],[self.leader(),self.leader()]),([77],[self.leader(),dict(self.leader(),starttime=10)])):
+   p=self.anchored();p._mckernel_leader_starttime=None
+   with mock.patch.object(M,'pidfd_identity',side_effect=identities),mock.patch.object(M,'proc_row',side_effect=rows):
+    with self.assertRaises(M.Error):M.recover_anchor(p)
+   self.assertIsNone(p._mckernel_leader_starttime)
+ def test_close_anchor_retries_only_same_identity_and_retains_error(self):
+  for error in (M.Interrupted('close interrupted'),InterruptedError('close EINTR')):
+   p=self.anchored()
+   with mock.patch.object(M,'pidfd_identity',side_effect=[77,77]),mock.patch.object(M,'pidfd_token',return_value=(1,2)),mock.patch.object(M,'proc_row',side_effect=self.row),mock.patch.object(M.os,'close',side_effect=[error,None]) as close:
+    with self.assertRaises(type(error)):M.close_anchor(p)
+   self.assertEqual(close.call_args_list,[mock.call(11),mock.call(11)]);self.assertIsNone(p._mckernel_leader_fd)
+ def test_close_anchor_absence_after_error_proves_closed_without_retry(self):
+  p=self.anchored()
+  with mock.patch.object(M,'pidfd_identity',side_effect=[77,FileNotFoundError('closed')]),mock.patch.object(M.os,'close',side_effect=M.Interrupted('close interrupted')) as close:
+   with self.assertRaises(M.Interrupted):M.close_anchor(p)
+  close.assert_called_once_with(11);self.assertIsNone(p._mckernel_leader_fd)
+ def test_close_anchor_replacement_never_closes_reused_slot(self):
+  p=self.anchored()
+  with mock.patch.object(M,'pidfd_identity',side_effect=[77,88]),mock.patch.object(M.os,'close',side_effect=M.Interrupted('close interrupted')) as close:
+   with self.assertRaisesRegex(M.CompositeInterrupted,'descriptor identity changed'):M.close_anchor(p)
+  close.assert_called_once_with(11);self.assertIsNone(p._mckernel_leader_fd)
+ def test_close_anchor_reaped_or_replaced_object_refuses_ambiguous_retry(self):
+  for identity,token in ((-1,(1,2)),(77,(1,3))):
+   p=self.anchored()
+   with mock.patch.object(M,'pidfd_identity',return_value=identity),mock.patch.object(M,'pidfd_token',return_value=token),mock.patch.object(M.os,'close',side_effect=M.Interrupted('close interrupted')) as close:
+    with self.assertRaisesRegex(M.CompositeInterrupted,'uncertain pidfd close'):M.close_anchor(p)
+   close.assert_called_once_with(11);self.assertEqual(p._mckernel_leader_fd,11)
+ def test_spawn_preflight_rejects_ignored_sigchld_before_popen(self):
+  with mock.patch.object(M.signal,'getsignal',return_value=M.signal.SIG_IGN),mock.patch.object(M.subprocess,'Popen') as popen:
+   with self.assertRaisesRegex(M.Error,'default SIGCHLD'):M.run_bounded(['x'])
+  popen.assert_not_called()
+ def execute_failure_record(self,lease_errors=False,final_errors=False):
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/'lease';M.BUILD_LEASE=path;base=self.output(d)
+   r={'operational_exclusion':str(path),'boot_id':'b','exclusion_tombstone':self.tomb(path),'docker':{}}
+   lease=M.ExclusionLease(r);observer=os.open('/dev/null',os.O_RDONLY);armed={};real_fsync=M.os.fsync;real_close=M.os.close;real_signal=M.signal.signal;real_output_close=base.close
+   previous={sig:M.signal.getsignal(sig) for sig in (M.signal.SIGINT,M.signal.SIGTERM)}
+   class H:
+    def remove_root(self,*args):pass
+    def retire(self,*args,**kwargs):armed['fd']=lease.fd;raise M.Error('helper primary')
+   def fsync(fd):
+    if lease_errors and armed.get('fd')==fd and not armed.get('fsync'):
+     armed['fsync']=True;raise OSError('lease fsync cleanup')
+    return real_fsync(fd)
+   def close(fd):
+    real_close(fd)
+    if lease_errors and armed.get('fd')==fd and not armed.get('close'):
+     armed['close']=True;raise OSError('lease close cleanup')
+   def restore(sig,handler):
+    real_signal(sig,handler)
+    if final_errors and armed and handler==previous[sig]:raise M.Interrupted('signal restore cleanup '+str(int(sig)))
+   def output_close():
+    real_output_close()
+    if final_errors:raise OSError('output close cleanup')
+   with mock.patch.object(M,'admit',return_value=(r,{})),mock.patch.object(M,'fresh_output',return_value=base),mock.patch.object(M,'ExclusionLease',return_value=lease),mock.patch.object(M,'live_gate'),mock.patch.object(M,'helper',return_value=(H(),observer)),mock.patch.object(M,'proc_starttime',return_value=7),mock.patch.object(M.os,'fsync',side_effect=fsync),mock.patch.object(M.os,'close',side_effect=close),mock.patch.object(M.signal,'signal',side_effect=restore),mock.patch.object(base,'close',side_effect=output_close):
+    with self.assertRaises(M.CompositeError) as raised:M.execute('ignored')
+   record=M.exact_json((base.path/'packet.failure').read_bytes())
+   self.assertFalse((base.path/'packet.status').exists());self.assertEqual(record['error'],M.error_record(raised.exception));self.assertIsNone(base.fd);self.assertIsNone(base.parent_fd);self.assertIsNone(lease.fd)
+   self.assertEqual({sig:M.signal.getsignal(sig) for sig in previous},previous)
+   return record
+ def test_execute_helper_primary_lease_fsync_close_all_in_terminal_json(self):
+  record=self.execute_failure_record(lease_errors=True)
+  self.assertEqual(record['error']['primary']['message'],'helper primary')
+  self.assertEqual(record['error']['cleanup']['primary']['message'],'lease fsync cleanup')
+  self.assertEqual(record['error']['cleanup']['cleanup']['message'],'lease close cleanup')
+ def test_execute_primary_signal_restore_and_output_close_all_in_terminal_json(self):
+  record=self.execute_failure_record(final_errors=True)
+  self.assertTrue(record['error']['interrupted']);self.assertEqual(record['error']['cleanup']['message'],'output close cleanup')
+  serialized=M.json.dumps(record,sort_keys=True)
+  for message in ('helper primary','signal restore cleanup 2','signal restore cleanup 15','output close cleanup'):self.assertIn(message,serialized)
+ def spawn_gap_case(self,kind,mode):
+  real_spawn=M.subprocess.Popen;real_mask=M.signal.pthread_sigmask;real_streams=M.process_streams;children=[];restore_calls=[];parent=os.getpid()
+  old_mask=real_mask(M.signal.SIG_BLOCK,[]);previous=M.signal.getsignal(M.signal.SIGTERM)
+  def interrupted(signum,frame):raise M.Interrupted('pending termination')
+  def spawn(argv,**kwargs):
+   child=real_spawn(['/bin/sleep','30'],**kwargs);children.append(child);return child
+  def streams(child):
+   self.assertEqual(child._mckernel_session,child.pid);self.assertIsInstance(child._mckernel_leader_starttime,int)
+   self.assertTrue({M.signal.SIGTERM,M.signal.SIGINT}.issubset(real_mask(M.signal.SIG_BLOCK,[])))
+   if mode=='pending':os.kill(parent,M.signal.SIGTERM);return real_streams(child)
+   raise M.Interrupted('stream capture primary')
+  def mask(how,values):
+   if mode=='restore' and os.getpid()==parent and how==M.signal.SIG_SETMASK:
+    restore_calls.append(how)
+    if len(restore_calls)<=3:raise OSError('mask restoration cleanup')
+   return real_mask(how,values)
+  M.signal.signal(M.signal.SIGTERM,interrupted)
+  try:
+   with tempfile.TemporaryDirectory() as d:
+    base=self.output(d)
+    try:
+     with mock.patch.object(M.subprocess,'Popen',side_effect=spawn),mock.patch.object(M,'process_streams',side_effect=streams),mock.patch.object(M.signal,'pthread_sigmask',side_effect=mask):
+      with self.assertRaises(M.Interrupted) as raised:
+       if kind=='run':M.run_bounded(['ignored'])
+       elif kind=='reader':M._reader(M.GIT)
+       else:M.call(['ignored'],base,'observer')
+     text=M.json.dumps(M.error_record(raised.exception))
+     self.assertIn('pending termination' if mode=='pending' else 'stream capture primary',text)
+     if mode=='restore':self.assertIn('mask restoration cleanup',text);self.assertGreaterEqual(len(restore_calls),4)
+    finally:base.close()
+   self.assertEqual(len(children),1);child=children[0]
+   self.assertTrue(child._mckernel_retired);self.assertIn(child.returncode,(-M.signal.SIGTERM,-M.signal.SIGKILL));self.assertIsNone(child._mckernel_leader_fd)
+   self.assertEqual(M.session_members(child.pid),[]);self.assertTrue(child.stdout.closed);self.assertTrue(child.stderr.closed)
+   if child.stdin is not None:self.assertTrue(child.stdin.closed)
+   self.assertEqual(real_mask(M.signal.SIG_BLOCK,[]),old_mask)
+  finally:real_mask(M.signal.SIG_SETMASK,old_mask);M.signal.signal(M.signal.SIGTERM,previous)
+ def test_each_spawn_stream_capture_gap_retires_real_owned_child(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.spawn_gap_case(kind,'capture')
+ def test_each_spawn_pending_signal_retires_real_owned_child(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.spawn_gap_case(kind,'pending')
+ def test_each_spawn_mask_restoration_failure_preserves_primary_and_retires(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.spawn_gap_case(kind,'restore')
+ def test_spawn_mask_capability_and_wrong_thread_fail_before_popen(self):
+  for patch in (mock.patch.object(M.signal,'pthread_sigmask',None),mock.patch.object(M.threading,'current_thread',return_value=object())):
+   with patch,mock.patch.object(M.subprocess,'Popen') as popen:
+    with self.assertRaisesRegex(M.Error,'single main thread and pthread_sigmask'):M.run_bounded(['ignored'])
+   popen.assert_not_called()
+ def test_loaded_helper_composite_all_leaves_reach_terminal_failure_json(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d);helper,observer=M.helper(base,{'helper':M.HELPER.read_bytes(),'archive':M.ARCHIVE.read_bytes(),'observer':b'# never executed\n'})
+   journal=mock.Mock();journal.write.side_effect=[ValueError('operation primary'),OSError('failure journal error')];journal.close.side_effect=OSError('journal close error')
+   try:
+    with mock.patch.object(helper,'release_roots',return_value=[]),mock.patch.object(helper,'survivors',return_value={}),mock.patch.object(helper,'Journal',return_value=journal):
+     with self.assertRaises(helper.RetirementCompositeError) as raised:helper.retire([],{},'claim-67589154-1.json','journal-67589154-1.jsonl','evidence-67589154-1.json',None,None,output_dir_fd=base.fd)
+    error=raised.exception;M.fail_status(base,error);record=M.exact_json((base.path/'packet.failure').read_bytes())
+    self.assertEqual(record['error'],helper.failure_record(error));self.assertEqual(record['error']['primary']['primary']['message'],'operation primary');self.assertEqual(record['error']['primary']['cleanup']['message'],'failure journal error');self.assertEqual(record['error']['cleanup']['message'],'journal close error')
+    error.primary=error;self.assertIn('FailureTreeCycle',M.json.dumps(M.error_record(error)))
+   finally:os.close(observer);base.close()
+ def early_owner_case(self,kind,mode):
+  real_spawn=M.subprocess.Popen;real_open=M.pidfd_open;real_born=M.born_process;parent=os.getpid();children=[];child_opens=[];raw_owners=[]
+  real_owner=M.spawn_owner;original_mask=M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[])
+  def owner():
+   value=real_owner();raw_owners.append(value);return value
+  def spawn(argv,**kwargs):
+   child=real_spawn(['/bin/sleep','30'],**kwargs);children.append(child);return child
+  def born(child):
+   if mode=='born':
+    record=raw_owners[0]
+    self.assertIs(record['p'],child);self.assertEqual(record['pid'],child.pid);self.assertEqual(record['session'],child.pid)
+    self.assertIs(record['streams']['stdout'],child.stdout);self.assertIs(record['streams']['stderr'],child.stderr)
+    self.assertTrue({M.signal.SIGINT,M.signal.SIGTERM}.issubset(M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[])))
+    raise M.Interrupted('born decoration primary')
+   return real_born(child)
+  def pidfd(pid):
+   if pid!=parent:
+    child_opens.append(pid)
+    if mode=='permanent' or mode=='transient' and len(child_opens)==1:raise M.Error('child pidfd acquisition '+mode)
+   return real_open(pid)
+  with tempfile.TemporaryDirectory() as d:
+   base=self.output(d)
+   try:
+    with mock.patch.object(M,'spawn_owner',side_effect=owner),mock.patch.object(M.subprocess,'Popen',side_effect=spawn),mock.patch.object(M,'born_process',side_effect=born),mock.patch.object(M,'pidfd_open',side_effect=pidfd),mock.patch.object(M.os,'killpg') as group_signal:
+     with self.assertRaises(M.Error) as raised:
+      if kind=='run':M.run_bounded(['ignored'])
+      elif kind=='reader':M._reader(M.GIT)
+      else:M.call(['ignored'],base,'observer')
+    group_signal.assert_not_called();error=M.error_record(raised.exception);text=M.json.dumps(error)
+    self.assertIn('born decoration primary' if mode=='born' else 'child pidfd acquisition '+mode,text)
+    if mode=='transient':self.assertGreaterEqual(len(child_opens),2)
+    if mode=='permanent':
+     self.assertEqual(len(child_opens),4);self.assertIn('uncertain pidfd cleanup',text);self.assertIn('pidfd fallback outcome',text)
+     def leaves(value):return leaves(value['primary'])+leaves(value['cleanup']) if 'primary' in value else [value.get('message','')]
+     outcome=next(message for message in leaves(error) if message.startswith('pidfd fallback outcome: '));evidence=M.json.loads(outcome.split(': ',1)[1])
+     self.assertTrue(evidence['retired']);self.assertEqual(evidence['observed_numeric_session_members'],[])
+     M.fail_status(base,raised.exception);self.assertEqual(M.exact_json((base.path/'packet.failure').read_bytes())['error'],error)
+    self.assertEqual(len(children),1);child=children[0]
+    self.assertIn(child.returncode,(-M.signal.SIGTERM,-M.signal.SIGKILL));self.assertTrue(child._mckernel_retired);self.assertIsNone(child._mckernel_leader_fd)
+    self.assertEqual(M.session_members(child.pid),[]);self.assertTrue(child.stdout.closed);self.assertTrue(child.stderr.closed)
+    if child.stdin is not None:self.assertTrue(child.stdin.closed)
+    self.assertEqual(M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[]),original_mask)
+   finally:base.close()
+ def test_each_born_decoration_failure_consumes_raw_owner_and_reaps_child(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.early_owner_case(kind,'born')
+ def test_each_first_child_pidfd_failure_is_reacquired_and_reaped(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.early_owner_case(kind,'transient')
+ def test_each_permanent_child_pidfd_failure_records_uncertainty_and_leak_census(self):
+  for kind in ('run','reader','call'):
+   with self.subTest(kind=kind):self.early_owner_case(kind,'permanent')
+ def test_pidfd_self_preflight_fails_before_spawn_and_restores_mask(self):
+  previous=M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[])
+  with mock.patch.object(M,'pidfd_open',side_effect=M.Error('no pidfd capability')) as opened,mock.patch.object(M.subprocess,'Popen') as spawn:
+   with self.assertRaisesRegex(M.Error,'no pidfd capability'):M.run_bounded(['ignored'])
+  opened.assert_called_once_with(os.getpid());spawn.assert_not_called();self.assertEqual(M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[]),previous)
+ def test_pidfd_self_preflight_identity_failure_closes_probe_without_spawning(self):
+  for broken in (mock.patch.object(M,'pidfd_identity',return_value=os.getpid()+1),mock.patch.object(M,'pidfd_identity',side_effect=PermissionError('self fdinfo denied'))):
+   before=len(list(Path('/proc/self/fd').iterdir()));mask=M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[])
+   with broken,mock.patch.object(M.subprocess,'Popen') as spawn:
+    with self.assertRaises(M.Error):M.run_bounded(['ignored'])
+   spawn.assert_not_called();self.assertEqual(len(list(Path('/proc/self/fd').iterdir())),before);self.assertEqual(M.signal.pthread_sigmask(M.signal.SIG_BLOCK,[]),mask)
+ def test_reacquire_or_numeric_fallback_never_adopts_reaped_replacement(self):
+  p=self.anchored();p._mckernel_leader_fd=None
+  with mock.patch.object(M.os,'waitid',side_effect=ChildProcessError('already reaped')),mock.patch.object(M,'proc_row',return_value=dict(self.leader(),starttime=10)),mock.patch.object(M,'pidfd_open') as opened,mock.patch.object(M.os,'kill') as sent,mock.patch.object(M,'session_members',return_value=[]):
+   with self.assertRaisesRegex(M.Error,'unreaped direct-child identity unavailable'):M.retire_process(p,{})
+  opened.assert_not_called();sent.assert_not_called();self.assertFalse(p._mckernel_retired)
 if __name__=='__main__':unittest.main()

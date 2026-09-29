@@ -833,3 +833,20 @@ template, mechanically bind an acyclic release, and obtain separate execution
 review. Do not run sudo retirement before that release. Retirement and measured
 space recovery precede review of preparation `704f6654-1` and any heavy build.
 The OS remains incomplete and the pause is temporary.
+
+Checkpoint 126 supersedes checkpoint 114's retirement-template state. After
+preserving independent BLOCKs 118 through 124, exact DRAFT packet
+`f1cb3db7...c363`, packet test `41ad8074...c4b6`, helper
+`2218e7fe...010` and helper test `c350fc3e...95c1` receive independent
+source-template PASS. Python 3.8 and 3.9 each pass 106 related tests
+sequentially. The boundary retains child identity and streams before decoration,
+uses an unreaped pidfd leader anchor, rejects SID reuse, accumulates retirement
+errors and preserves helper/packet composite failures in terminal JSON.
+
+This is not an execution release. Commit/push/fetch the exact template and its
+two review records first. Then mechanically add an acyclic release JSON and
+replace only the packet's release sentinel, followed by separate independent
+execution review and fresh live support gates. A permanent child-pidfd failure
+is an explicit fail-closed survivor state, not cleanup success. No candidate,
+build, guest, application or acceptance counter changed; successful current-
+candidate builds remain zero and applications remain 0/273.

@@ -4,6 +4,7 @@ import os, json, stat, tarfile, time
 from datetime import datetime, timezone
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parents[1]
@@ -11,6 +12,28 @@ SPEC=importlib.util.spec_from_file_location('retire',HERE/'native_exact_candidat
 M=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(M)
 
 class Tests(unittest.TestCase):
+ def test_operation_failure_journal_and_close_survive_as_explicit_tree(self):
+  with tempfile.TemporaryDirectory() as t:
+   roots=self.trees(t);release=self.release(roots);write=M.Journal.write;close=M.Journal.close
+   def journal_write(journal,phase,**kwargs):
+    if phase=='terminal-failure':raise OSError('failure journal error')
+    return write(journal,phase,**kwargs)
+   def journal_close(journal):close(journal);raise OSError('journal close error')
+   with mock.patch.object(M,'quarantine',side_effect=M.RetirementError('operation primary')),mock.patch.object(M.Journal,'write',new=journal_write),mock.patch.object(M.Journal,'close',new=journal_close):
+    with self.assertRaises(M.RetirementCompositeError) as raised:self.execute(roots,release)
+   record=M.failure_record(raised.exception)
+   self.assertEqual(record['primary']['primary']['message'],'operation primary')
+   self.assertEqual(record['primary']['cleanup']['message'],'failure journal error')
+   self.assertEqual(record['cleanup']['message'],'journal close error')
+   self.assertTrue(all(root.exists() for root in roots))
+ def test_explicit_failure_record_is_bounded_cycle_safe_and_ignores_context(self):
+  error=M.RetirementCompositeError(ValueError('primary'),OSError('cleanup'));error.primary=error
+  error.__context__=ValueError('implicit context excluded')
+  encoded=json.dumps(M.failure_record(error),sort_keys=True)
+  self.assertIn('FailureTreeCycle',encoded);self.assertNotIn('implicit context excluded',encoded)
+  error=ValueError('first')
+  for unused in range(40):error=M.RetirementCompositeError(error,OSError('later'))
+  self.assertIn('FailureTreeLimit',json.dumps(M.failure_record(error)))
  def trees(self,t):
   answer=[]
   for n in ('one','two'):

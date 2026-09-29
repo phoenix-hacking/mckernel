@@ -7,7 +7,7 @@ askpass program.  While any digest sentinel remains, it fails before euid,
 Git, subprocess, output, Docker, observer, rename, or deletion activity.
 """
 from __future__ import print_function
-import argparse, ctypes, fcntl, hashlib, json, os, re, resource, select, signal, stat, struct, subprocess, sys, time, types
+import argparse, ctypes, fcntl, hashlib, json, os, re, resource, select, signal, stat, struct, subprocess, sys, threading, time, types
 from pathlib import Path
 
 SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ihk'
@@ -24,7 +24,7 @@ SUCCESS=SOURCE/'docs/verification/evidence/stability-native-exact-retention-prep
 INV_SHA='ce0c47f5a20e16216513c3ea6ef1dc7a72a9893e95bf1ae999a27217e90e1d10'; CAP_SHA='94fe0c364e6aaae5b280cc5d21b8e156cf3bb6d28804f1e529bcc378c4e712c8'; SUCCESS_SHA='e7fc78077ac612cfdd5eab53d8196260ec566fee72f1babbe1216ae1537bf8f2'
 HELPER=SOURCE/'scripts/native_exact_candidate_retire.py'; OBSERVER=SOURCE/'docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
 # Corrected owner/observer boundary is concurrently pending independent review.
-HELPER_SHA256='7860b315247585f64df2adac7709b1d1405e553d884c08923501b1926a57226b'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='846ef1adb3bd1d39dd7dabe3a110a57c9470504ef82fc9170ff0c219aaa7f225'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
+HELPER_SHA256='2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010'; OBSERVER_SHA256='3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='c350fc3e5eae5752fed76cddfe1102f253ddf758fab5c9c50acae5f5c40b95c1'; OBSERVER_TEST_SHA256='b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4'
 HELPER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_retire.py'; OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_observer_67589154.py'
 FLOORS={'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30}
 OUT=('claim-67589154-1.json','journal-67589154-1.jsonl','evidence-67589154-1.json','packet.status','packet.status.pending','packet.failure','packet.failure.pending','helper.sealed.py','archive.sealed.py','observer.sealed.py','observer.stdout','observer.stderr','observer.status','docker-ps.stdout','docker-ps.stderr','docker-ps.status','docker-inspect.stdout','docker-inspect.stderr','docker-inspect.status','docker-ps-after.stdout','docker-ps-after.stderr','docker-ps-after.status')
@@ -37,7 +37,34 @@ FS_IOC_GETFLAGS=0x80086601; FS_IOC_SETFLAGS=0x40086602; FS_IMMUTABLE_FL=0x000000
 CONFLICT_BASENAMES=('qemu-system-x86_64','qemu-kvm','qemu-system-aarch64','native_rust_exact_build_container_owner.py','native_exact_candidate_retire.py')
 MAX_FILE=64<<20; MAX_CALLBACK=8<<20; COMMAND_TIMEOUT=180; TERM_TIMEOUT=5; KILL_TIMEOUT=5
 class Error(RuntimeError): pass
-class Interrupted(Error): pass
+class Interrupted(Error): _retirement_interrupted=True
+class CompositeError(Error):
+ """Serializable failure tree; cleanup never overwrites the causal failure."""
+ _retirement_composite=True
+ def __init__(self,primary,cleanup):
+  self.primary=primary;self.cleanup=cleanup
+  super().__init__('primary failure: '+str(primary)+'; cleanup failure: '+str(cleanup))
+class CompositeInterrupted(CompositeError,Interrupted):pass
+def error_record(error):
+ active=set();budget=[128]
+ def visit(value,depth):
+  if id(value) in active:return {'type':'FailureTreeCycle','message':'explicit failure tree cycle','interrupted':False}
+  if depth>=32 or budget[0]<=0:return {'type':'FailureTreeLimit','message':'explicit failure tree limit','interrupted':False}
+  budget[0]-=1
+  interrupted=isinstance(value,KeyboardInterrupt) or getattr(value,'_retirement_interrupted',False) is True
+  if getattr(value,'_retirement_composite',False) is True:
+   active.add(id(value))
+   try:primary=visit(value.primary,depth+1);cleanup=visit(value.cleanup,depth+1)
+   finally:active.remove(id(value))
+   return {'type':type(value).__name__,'interrupted':interrupted or primary['interrupted'] or cleanup['interrupted'],'primary':primary,'cleanup':cleanup}
+  message=str(value)
+  return {'type':type(value).__name__,'message':message[:4096],'message_truncated':len(message)>4096,'interrupted':interrupted}
+ return visit(error,0)
+def combined(primary,cleanup):
+ if primary is None:return cleanup
+ if cleanup is None:return primary
+ cls=CompositeInterrupted if error_record(primary)['interrupted'] or error_record(cleanup)['interrupted'] else CompositeError
+ return cls(primary,cleanup)
 def bad(s): raise Error(s)
 def sha(b): return hashlib.sha256(b).hexdigest()
 def full_write(fd,data):
@@ -114,28 +141,215 @@ def _syscall(number,*args):
  return result
 def pidfd_open(pid):return _syscall(SYS_pidfd_open,pid,0)
 def pidfd_send(fd,sig):_syscall(SYS_pidfd_send_signal,fd,sig,0,0)
+def pidfd_identity(fd):
+ try:
+  rows=(Path('/proc/self/fdinfo')/str(fd)).read_text().splitlines()
+  values=[int(row.split(':',1)[1]) for row in rows if row.startswith('Pid:')]
+ except FileNotFoundError:raise
+ except (OSError,ValueError) as e:bad('leader pidfd identity unavailable: '+str(e))
+ if len(values)!=1:bad('leader pidfd identity missing')
+ return values[0]
+def pidfd_token(fd):
+ value=os.fstat(fd);return (value.st_dev,value.st_ino)
+def prove_anchor(p):
+ """A pidfd alone does not reserve a reaped PID. Keep the child unreaped."""
+ fd=getattr(p,'_mckernel_leader_fd',None);start=getattr(p,'_mckernel_leader_starttime',None)
+ if not isinstance(fd,int) or not isinstance(start,int):bad('session incarnation anchor unavailable')
+ if pidfd_identity(fd)!=p._mckernel_session:bad('session incarnation anchor lost')
+ row=proc_row(p._mckernel_session)
+ if row!={'pid':p._mckernel_session,'pgrp':p._mckernel_session,'session':p._mckernel_session,'starttime':start}:bad('session incarnation changed')
+ if pidfd_identity(fd)!=p._mckernel_session:bad('session incarnation anchor lost')
+ return row
+def close_anchor(p):
+ fd=getattr(p,'_mckernel_leader_fd',None)
+ if not isinstance(fd,int):return
+ p._mckernel_close_attempted=False
+ failure=None
+ try:expected=pidfd_identity(fd)
+ except FileNotFoundError:p._mckernel_leader_fd=None;return
+ for unused in range(3):
+  try:p._mckernel_close_attempted=True;os.close(fd);p._mckernel_leader_fd=None;break
+  except BaseException as e:
+   failure=combined(failure,e)
+   try:current=pidfd_identity(fd)
+   except FileNotFoundError:p._mckernel_leader_fd=None;break
+   except BaseException as proof_error:failure=combined(failure,proof_error);break
+   if current!=expected:
+    # Relinquish the numeric slot: it is no longer our descriptor to close.
+    p._mckernel_leader_fd=None
+    failure=combined(failure,Error('uncertain pidfd close: descriptor identity changed'));break
+   try:
+    token=getattr(p,'_mckernel_leader_token',None)
+    if token is None or pidfd_token(fd)!=token:bad('uncertain pidfd close: descriptor object changed')
+    # On older anonymous-inode pidfds, all dead handles can share an inode
+    # and Pid=-1. Never retry that ambiguous case merely by numeric fd.
+    if expected<=0:bad('uncertain pidfd close: reaped identity cannot authorize retry')
+    if proc_row(expected)['starttime']!=p._mckernel_leader_starttime:bad('uncertain pidfd close: process incarnation changed')
+   except BaseException as proof_error:failure=combined(failure,proof_error);break
+ else:failure=combined(failure,Error('uncertain pidfd close: bounded retry exhausted'))
+ if failure is not None:raise failure
+def recover_anchor(p):
+ """Complete a partial bind only through its still-retained born pidfd."""
+ fd=getattr(p,'_mckernel_leader_fd',None);session=p._mckernel_session
+ if not isinstance(fd,int):bad('session incarnation anchor unavailable')
+ if pidfd_identity(fd)!=session:bad('session incarnation anchor lost')
+ if getattr(p,'_mckernel_leader_token',None) is None:p._mckernel_leader_token=pidfd_token(fd)
+ first=proc_row(session);again=proc_row(session)
+ if first!=again or first['pid']!=session or first['pgrp']!=session or first['session']!=session:bad('new session identity unavailable')
+ if pidfd_identity(fd)!=session:bad('session incarnation anchor lost')
+ previous=getattr(p,'_mckernel_leader_starttime',None)
+ if previous is not None and previous!=first['starttime']:bad('session incarnation changed')
+ p._mckernel_leader_starttime=first['starttime'];return prove_anchor(p)
+def unreaped_child(p):
+ """WNOWAIT proves this numeric PID is still our reserved direct child."""
+ if getattr(p,'returncode',None) is not None:bad('unreaped direct-child identity unavailable: Popen already reaped')
+ try:return os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+ except (ChildProcessError,ProcessLookupError) as error:bad('unreaped direct-child identity unavailable: '+str(error))
+def direct_child_row(p):
+ unreaped_child(p);first=proc_row(p.pid);again=proc_row(p.pid);unreaped_child(p)
+ if first!=again or first['pid']!=p.pid or first['pgrp']!=p.pid or first['session']!=p.pid:bad('unreaped direct-child session changed')
+ previous=getattr(p,'_mckernel_leader_starttime',None)
+ if previous is not None and previous!=first['starttime']:bad('unreaped direct-child incarnation changed')
+ p._mckernel_leader_starttime=first['starttime'];return first
+def reacquire_anchor(p):
+ """No PID can be adopted unless it remains an unreaped direct child."""
+ failure=None
+ for unused in range(3):
+  try:
+   first=direct_child_row(p)
+   if not isinstance(getattr(p,'_mckernel_leader_fd',None),int):p._mckernel_leader_fd=pidfd_open(p.pid)
+   p._mckernel_leader_token=pidfd_token(p._mckernel_leader_fd)
+   if pidfd_identity(p._mckernel_leader_fd)!=p.pid or proc_row(p.pid)!=first:bad('reacquired pidfd incarnation changed')
+   unreaped_child(p);return recover_anchor(p)
+  except BaseException as error:failure=combined(failure,error)
+ raise failure
+def pidfd_preflight():
+ pid=os.getpid();probe=types.SimpleNamespace(pid=pid,_mckernel_session=pid,_mckernel_leader_fd=None,_mckernel_leader_token=None,_mckernel_leader_starttime=None);failure=None
+ try:
+  probe._mckernel_leader_fd=pidfd_open(pid);probe._mckernel_leader_token=pidfd_token(probe._mckernel_leader_fd);probe._mckernel_leader_starttime=proc_row(pid)['starttime']
+  if pidfd_identity(probe._mckernel_leader_fd)!=pid:bad('pidfd self identity preflight failed')
+ except BaseException as error:failure=error
+ finally:
+  try:close_anchor(probe)
+  except BaseException as cleanup:
+   failure=combined(failure,cleanup)
+   # This fresh self-probe has never been handed to another owner. If fdinfo
+   # failed before any close syscall, one close of that retained descriptor
+   # is safe; never repeat a close whose outcome is already ambiguous.
+   if isinstance(probe._mckernel_leader_fd,int) and getattr(probe,'_mckernel_close_attempted',False) is False:
+    try:os.close(probe._mckernel_leader_fd);probe._mckernel_leader_fd=None
+    except BaseException as last:failure=combined(failure,last)
+ if failure is not None:raise failure
+def spawn_preflight(check_pidfd=False):
+ if not callable(getattr(signal,'pthread_sigmask',None)) or threading.current_thread() is not threading.main_thread() or threading.active_count()!=1:bad('owned spawn requires single main thread and pthread_sigmask')
+ if signal.getsignal(signal.SIGCHLD)!=signal.SIG_DFL:bad('unreaped leader requires default SIGCHLD')
+ if not all(hasattr(os,name) for name in ('waitid','WNOWAIT','WEXITED','WNOHANG')):bad('unreaped leader observation unavailable')
+ if check_pidfd:pidfd_preflight()
+def spawn_owner():return {'p':None,'pid':None,'session':None,'streams':{},'mask':None,'mask_pending':False}
+def recover_born_owner(owner):
+ """Consume the raw owner independently of any failed decoration helper."""
+ p=owner['p'];pid=owner['pid']
+ if p is None or not isinstance(pid,int):return p
+ if p.pid!=pid or owner['session']!=pid:bad('raw born owner identity changed')
+ fields={'_mckernel_session':pid,'_mckernel_leader_starttime':None,'_mckernel_leader_fd':None,'_mckernel_leader_token':None}
+ for key,value in fields.items():
+  if key not in p.__dict__:object.__setattr__(p,key,value)
+ if p._mckernel_session!=pid:bad('decorated born owner identity changed')
+ return p
+def restore_spawn_mask(owner):
+ """Keep restoration errors even when pending signals interrupt the return."""
+ if not owner['mask_pending']:return None
+ failure=None
+ for unused in range(3):
+  try:signal.pthread_sigmask(signal.SIG_SETMASK,owner['mask'])
+  except BaseException as error:failure=combined(failure,error)
+  try:
+   if signal.pthread_sigmask(signal.SIG_BLOCK,[])==owner['mask']:
+    owner['mask_pending']=False;break
+  except BaseException as error:failure=combined(failure,error)
+ else:failure=combined(failure,Error('spawn signal mask restoration uncertain'))
+ return failure
+def owned_spawn(owner,argv,**kwargs):
+ """Publish ownership while TERM/INT are blocked, including the Popen return.
+
+ The mutable owner exists before spawning, so callers can retire the child
+ even when stream capture, binding or mask restoration raises. The child
+ restores the original mask before exec; it must remain TERM-retirable.
+ """
+ spawn_preflight();failure=None
+ owner['mask']=signal.pthread_sigmask(signal.SIG_BLOCK,{signal.SIGTERM,signal.SIGINT});owner['mask_pending']=True
+ child_setup=kwargs.pop('preexec_fn',None)
+ def before_exec():
+  signal.pthread_sigmask(signal.SIG_SETMASK,owner['mask'])
+  if child_setup is not None:child_setup()
+ try:
+  pidfd_preflight()
+  owner['p']=subprocess.Popen(argv,preexec_fn=before_exec,**kwargs)
+  p=owner['p'];owner['pid']=p.pid;owner['session']=p.pid
+  # Only plain record/attribute operations occur between Popen and this raw
+  # ownership record; no decoration or adapter may precede it.
+  owner['streams']={'stdin':getattr(p,'stdin',None),'stdout':getattr(p,'stdout',None),'stderr':getattr(p,'stderr',None),'stdout_data':bytearray(),'stderr_data':bytearray()}
+  born_process(p)
+  bind_process(p);owner['streams']=process_streams(p)
+ except BaseException as error:failure=error
+ finally:failure=combined(failure,restore_spawn_mask(owner))
+ if failure is not None:raise failure
+ return owner['p'],owner['streams']
+def observe_exit(p):
+ """Observe exit without freeing the leader PID/session incarnation anchor."""
+ if not isinstance(getattr(p,'pid',None),int):return p.poll() # pure test double
+ prove_anchor(p)
+ result=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+ if result is None:return None
+ return result.si_status if result.si_code==os.CLD_EXITED else -result.si_status
 def bind_process(p):
- """Record a born start-new-session leader before any wait can lose identity."""
+ """Pin an unreaped born leader; no poll/wait may run before retirement."""
  if not isinstance(getattr(p,'pid',None),int):return p # in-memory pure test double
- p._mckernel_session=p.pid;p._mckernel_leader_starttime=None
- try:row=proc_row(p.pid)
- except FileNotFoundError:
-  # start_new_session guarantees the numeric session while alive.  A confirmed
-  # immediate exit has no leader to inspect; later session census proves that
-  # it did not leave a descendant behind.
-  if p.poll() is not None:return p
-  bad('new session leader disappeared without confirmed exit')
- if row['pgrp']!=p.pid or row['session']!=p.pid:bad('new session identity unavailable')
- p._mckernel_leader_starttime=row['starttime'];return p
+ born_process(p)
+ spawn_preflight()
+ p._mckernel_leader_fd=pidfd_open(p.pid)
+ p._mckernel_leader_token=pidfd_token(p._mckernel_leader_fd)
+ recover_anchor(p);return p
+def born_process(p):
+ """Keep a just-created session leader reachable even if binding fails."""
+ if not isinstance(getattr(p,'pid',None),int):return p
+ p._mckernel_session=p.pid;p._mckernel_leader_starttime=None;p._mckernel_leader_fd=None;p._mckernel_leader_token=None
+ return p
+def process_streams(p):
+ return {'stdin':getattr(p,'stdin',None),'stdout':getattr(p,'stdout',None),'stderr':getattr(p,'stderr',None),'stdout_data':bytearray(),'stderr_data':bytearray()}
+def close_streams(streams):
+ failure=None
+ for stream in (streams.get('stdin'),streams.get('stdout'),streams.get('stderr')):
+  if stream is not None:
+   for unused in range(8):
+    try:stream.close();break
+    except (KeyboardInterrupt,Interrupted) as e:failure=combined(failure,e)
+    except BaseException as e:failure=combined(failure,e);break
+   else:failure=combined(failure,Error('pipe close repeatedly interrupted'))
+ return failure
+def cleanup_process(p,streams):
+ """One post-spawn retirement path; callers retain both failure families."""
+ if p is None:return (bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))),None
+ try:return retire_process(p,streams),None
+ except BaseException as e:return (bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))),e
+def cleanup_owned(owner):
+ streams=owner['streams']
+ try:p=recover_born_owner(owner)
+ except BaseException as error:return (bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))),error
+ return cleanup_process(p,streams)
+def raise_primary(primary,cleanup):
+ raise combined(primary,cleanup)
 def _drain(p,streams,limit,deadline):
  """Drain both callback pipes without an unbounded communicate buffer."""
  fds={}
  for k in ('stdout','stderr'):
   s=streams.get(k)
   if s is None:continue
-  try:fds[s.fileno()]=k
-  except (AttributeError,OSError):
-   bad('callback pipe has no descriptor')
+  try:fd=s.fileno()
+  except ValueError:continue # a caller may already have closed this pipe
+  except (AttributeError,OSError):bad('callback pipe has no descriptor')
+  if not isinstance(fd,int) or fd<0:bad('callback pipe has no descriptor')
+  fds[fd]=k
  while fds:
   left=deadline-time.monotonic()
   if left<=0:break
@@ -152,82 +366,147 @@ def _drain(p,streams,limit,deadline):
    bucket.extend(block)
  return bytes(streams['stdout_data']),bytes(streams['stderr_data'])
 def retire_process(p,streams=None):
- """Retire every identity-proved original-session member via pidfd only."""
- streams=streams or {}
+ """Bounded TERM/KILL/empty proof with an unreaped session-leader anchor.
+
+ Census and signal failures are accumulated, never exits from escalation.
+ A retry may reopen the same unreaped leader; it cannot adopt a new SID.
+ """
+ streams=streams or {};streams.setdefault('stdout_data',bytearray());streams.setdefault('stderr_data',bytearray())
  if getattr(p,'_mckernel_retired',False) is True:return bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))
  if getattr(p,'_mckernel_retiring',False) is True:bad('concurrent process retirement')
- try:p._mckernel_retiring=True
- except BaseException:pass
+ p._mckernel_retiring=True
+ deferred=[];errors=[];old={};counts={'interrupts':0,'omitted_errors':0}
+ def record_interrupt(error):
+  counts['interrupts']+=1
+  if not deferred:deferred.append(error)
+ def record_error(error):
+  if len(errors)<32:errors.append(error)
+  else:counts['omitted_errors']+=1
+ def remember(signum,frame):record_interrupt(Interrupted('signal '+str(signum)))
  def shield(fn):
-  while True:
+  # Actual packet signals are latched by remember; this finite retry also
+  # covers injected Interrupted/KeyboardInterrupt and interrupted syscalls.
+  for unused in range(8):
    try:return fn()
-   except (KeyboardInterrupt,Interrupted):continue # a second signal never skips retirement
- def collect(seconds):
-  try:return shield(lambda:_drain(p,streams,MAX_CALLBACK,time.monotonic()+seconds))
-  except Error:return bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))
+   except (KeyboardInterrupt,Interrupted) as e:
+    record_interrupt(e)
+  bad('retirement operation repeatedly interrupted')
+ def attempt(fn):
+  try:return True,shield(fn)
+  except BaseException as e:record_error(e);return False,None
  try:
+  for sig in (signal.SIGINT,signal.SIGTERM):
+   old[sig]=signal.getsignal(sig);attempt(lambda sig=sig:signal.signal(sig,remember))
   session=getattr(p,'_mckernel_session',None)
   if not isinstance(session,int) or session<=0:bad('process session was not recorded')
+  def anchor():
+   if not isinstance(getattr(p,'_mckernel_leader_fd',None),int):
+    return reacquire_anchor(p)
+   if getattr(p,'_mckernel_leader_starttime',None) is None:return recover_anchor(p)
+   return prove_anchor(p)
+  def census():
+   anchor();rows=session_members(session);anchor()
+   for row in rows:
+    if row['pid']==session and row['starttime']!=p._mckernel_leader_starttime:bad('session incarnation changed')
+   return rows
   def signal_session(sig):
-   rows=session_members(session);errors=[]
+   rows=shield(census)
    for row in rows:
     fd=None
     try:
-     try:fd=pidfd_open(row['pid'])
+     try:fd=shield(lambda:pidfd_open(row['pid']))
      except FileNotFoundError:continue # ESRCH: this specific member exited
-     try:again=proc_row(row['pid'])
+     try:again=shield(lambda:proc_row(row['pid']))
      except FileNotFoundError:continue
-     if again!=row or again['session']!=session:errors.append(Error('process identity changed during pidfd admission'));continue
-     try:pidfd_send(fd,sig)
+     if again!=row or again['session']!=session:bad('process identity changed during pidfd admission')
+     shield(anchor) # never signal a new session with the same numeric SID
+     try:shield(lambda:pidfd_send(fd,sig))
      except FileNotFoundError:continue
-     except Error as e:errors.append(e)
+    except BaseException as e:record_error(e)
     finally:
-     if fd is not None:os.close(fd)
-   if errors:raise errors[0]
-   return bool(rows)
-  errors=[]
-  try:signal_session(signal.SIGTERM)
-  except Error as e:errors.append(e)
-  collect(TERM_TIMEOUT)
-  if session_members(session):
-   try:signal_session(signal.SIGKILL)
-   except Error as e:errors.append(e)
-   collect(KILL_TIMEOUT)
-  if errors:raise errors[0]
-  deadline=time.monotonic()+KILL_TIMEOUT
-  while session_members(session):
-   if time.monotonic()>=deadline:bad('uncertain child retirement')
-   try:shield(lambda:p.wait(timeout=min(.1,deadline-time.monotonic())))
-   except subprocess.TimeoutExpired:pass
-   except TypeError:break # pure test double
-  p._mckernel_retired=True
-  return bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))
+     if fd is not None:attempt(lambda:os.close(fd))
+  def finish_if_empty():
+   rows=census()
+   if any(row['pid']!=session for row in rows) or observe_exit(p) is None:return False
+   # The direct child is the last session member. Only now may wait reap it.
+   p.wait(timeout=.1)
+   if session_members(session):bad('session nonempty after leader reap')
+   p._mckernel_retired=True;return True
+  def direct_signal(sig):
+   # A failed pidfd path never authorizes numeric group signalling. This
+   # single reserved direct child is the only possible numeric fallback.
+   direct_child_row(p);unreaped_child(p);os.kill(p.pid,sig)
+  def finish_direct_if_empty():
+   direct_child_row(p);rows=session_members(session)
+   if any(row['pid']!=session for row in rows) or unreaped_child(p) is None:return False
+   direct_child_row(p);p.wait(timeout=.1)
+   if session_members(session):bad('uncertain fallback session survivors')
+   p._mckernel_retired=True;return True
+  fallback_used=False
+  for sig,seconds in ((signal.SIGTERM,TERM_TIMEOUT),(signal.SIGKILL,KILL_TIMEOUT)):
+   deadline=time.monotonic()+seconds
+   signalled,unused=attempt(lambda:signal_session(sig))
+   fallback=not signalled and not isinstance(getattr(p,'_mckernel_leader_fd',None),int)
+   if fallback:
+    fallback_used=True
+    record_error(Error('uncertain pidfd cleanup: bounded acquisition exhausted; direct-child fallback only'))
+    attempt(lambda:direct_signal(sig))
+   attempt(lambda:_drain(p,streams,MAX_CALLBACK,deadline))
+   ok,finished=attempt(finish_direct_if_empty if fallback else finish_if_empty)
+   if ok and finished:break
+   if sig==signal.SIGKILL:
+    while ok and time.monotonic()<deadline:
+     attempt(lambda:time.sleep(.01))
+     attempt(lambda:direct_signal(signal.SIGKILL) if fallback else signal_session(signal.SIGKILL))
+     ok,finished=attempt(finish_direct_if_empty if fallback else finish_if_empty)
+     if ok and finished:break
+  if fallback_used:
+   observed,rows=attempt(lambda:session_members(session))
+   record_error(Error('pidfd fallback outcome: '+json.dumps({'leader_pid':p.pid,'session':session,'retired':getattr(p,'_mckernel_retired',False) is True,'census_available':observed,'observed_numeric_session_members':rows[:32] if observed else None,'members_truncated':observed and len(rows)>32},sort_keys=True,separators=(',',':'))))
+  if getattr(p,'_mckernel_retired',False) is not True:record_error(Error('uncertain child retirement'))
+ except BaseException as e:record_error(e)
  finally:
-  try:p._mckernel_retiring=False
-  except BaseException:pass
+  # close_anchor owns its identity-checked retry. The generic interrupt
+  # shield must not retry an ambiguous close after it has refused a retry.
+  try:close_anchor(p)
+  except BaseException as e:record_error(e)
+  p._mckernel_retiring=False
+  for sig,handler in old.items():attempt(lambda sig=sig,handler=handler:signal.signal(sig,handler))
+ failure=None
+ if counts['omitted_errors']:errors.append(Error('additional retirement failures: '+str(counts['omitted_errors'])))
+ if counts['interrupts']>1:errors.append(Error('additional retirement interruptions: '+str(counts['interrupts']-1)))
+ for error in errors:failure=combined(failure,error)
+ for error in reversed(deferred):failure=combined(error,failure)
+ if failure is not None:raise failure
+ return bytes(streams['stdout_data']),bytes(streams['stderr_data'])
+def complete_process(p):
+ """Accept natural completion only after anchored census and final empty proof."""
+ if not isinstance(getattr(p,'pid',None),int):return p.wait() # pure test double
+ rc=observe_exit(p)
+ if rc is None:return None
+ prove_anchor(p)
+ if any(row['pid']!=p.pid for row in session_members(p._mckernel_session)):bad('process descendants survived')
+ prove_anchor(p);p.wait(timeout=.1)
+ if session_members(p._mckernel_session):bad('session nonempty after leader reap')
+ p._mckernel_retired=True;close_anchor(p);return rc
 def run_bounded(argv,timeout=60,cap=MAX_FILE):
  """Admission command with bounded wall time, output and process-group retirement."""
- p=None;streams={}
+ p=None;streams={};primary=None;cleanup=None;result=None;owner=spawn_owner()
  try:
-  p=bind_process(subprocess.Popen(argv,env=genv(),stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True))
-  streams={'stdout':p.stdout,'stderr':p.stderr,'stdout_data':bytearray(),'stderr_data':bytearray()}
+  p,streams=owned_spawn(owner,argv,env=genv(),stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
   out,err=_drain(p,streams,cap,time.monotonic()+timeout)
-  if p.poll() is None:out,err=retire_process(p,streams);bad('admission command timeout')
-  if session_members(p._mckernel_session):retire_process(p,streams);bad('admission process group survived')
-  if p.returncode:return out,err,p.returncode
-  return out,err,0
- except (KeyboardInterrupt,Interrupted):
-  if p is not None:retire_process(p,streams)
-  raise
- except OSError as e:bad('admission command: '+str(e))
- except BaseException:
-  if p is not None:retire_process(p,streams)
-  raise
+  rc=complete_process(p)
+  if rc is None:bad('admission command timeout')
+  result=(out,err,rc)
+ except BaseException as error:
+  primary=error;p=owner['p'];streams=owner['streams']
+  unused,cleanup=cleanup_owned(owner)
+  if isinstance(primary,OSError):primary=Error('admission command: '+str(primary))
  finally:
-  for stream in (streams.get('stdout'),streams.get('stderr')):
-   if stream is not None:
-    try:stream.close()
-    except OSError:pass
+  cleanup=combined(cleanup,close_streams(streams))
+  cleanup=combined(cleanup,restore_spawn_mask(owner))
+ if primary is not None or cleanup is not None:raise_primary(primary,cleanup)
+ return result
 def gout(directory,*a):
  out,err,rc=run_bounded(gargv(directory,*a))
  if rc:bad('Git admission: '+err.decode('utf8','replace'))
@@ -247,10 +526,16 @@ def canonical_stores():
 def _reader(directory):
  def limit():
   resource.setrlimit(resource.RLIMIT_AS,(512<<20,512<<20));resource.setrlimit(resource.RLIMIT_CPU,(900,900))
- p=bind_process(subprocess.Popen(gargv(directory,'cat-file','--batch'),env=genv(),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,preexec_fn=limit,start_new_session=True))
- try:os.set_blocking(p.stdin.fileno(),False);os.set_blocking(p.stdout.fileno(),False)
- except (AttributeError,OSError):pass # pure test doubles have no descriptor
- return p
+ p=None;streams={};owner=spawn_owner()
+ try:
+  p,streams=owned_spawn(owner,gargv(directory,'cat-file','--batch'),env=genv(),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,preexec_fn=limit,start_new_session=True)
+  try:os.set_blocking(p.stdin.fileno(),False);os.set_blocking(p.stdout.fileno(),False)
+  except (AttributeError,OSError):pass # pure test doubles have no descriptor
+  return p
+ except BaseException as primary:
+  p=owner['p'];streams=owner['streams']
+  unused,cleanup=cleanup_owned(owner)
+  cleanup=combined(cleanup,close_streams(streams));cleanup=combined(cleanup,restore_spawn_mask(owner));raise_primary(primary,cleanup)
 def pipe_read(pipe,count,deadline):
  """No batch reader I/O is allowed to overrun the wall-clock deadline."""
  try:fd=pipe.fileno()
@@ -281,18 +566,19 @@ def pipe_write(pipe,data,deadline):
   if n<=0:bad('canonical writer short write')
   at+=n
 def finish_reader(p):
+ streams=process_streams(p)
  try:
-  try:rc=p.wait(timeout=5)
-  except TypeError:return p.wait() # pure in-memory test double
- except subprocess.TimeoutExpired:rc=None
- if rc is not None:
-  if session_members(getattr(p,'_mckernel_session',-1)):retire_process(p,{'stdout':getattr(p,'stdout',None),'stderr':getattr(p,'stderr',None),'stdout_data':bytearray(),'stderr_data':bytearray()});bad('canonical reader descendants survived')
-  return rc
- streams={'stdout':getattr(p,'stdout',None),'stderr':getattr(p,'stderr',None),'stdout_data':bytearray(),'stderr_data':bytearray()}
- try:retire_process(p,streams)
- except Error:bad('uncertain canonical reader retirement')
- try:return p.wait(timeout=5)
- except (subprocess.TimeoutExpired,TypeError):bad('uncertain canonical reader retirement')
+  if getattr(p,'_mckernel_retired',False) is True:return p.returncode
+  deadline=time.monotonic()+5
+  while True:
+   rc=complete_process(p)
+   if rc is not None:p._mckernel_reader_finished=True;return rc
+   if time.monotonic()>=deadline:raise subprocess.TimeoutExpired('canonical reader',5)
+   time.sleep(.01)
+ except BaseException as primary:
+  unused,cleanup=cleanup_process(p,streams)
+  if getattr(p,'_mckernel_retired',False) is True:p._mckernel_reader_finished=True
+  raise_primary(primary,cleanup)
 def stream_blob_process(p,oid,wanted,size,alternate,deadline):
  """One record from a long-lived batch reader, never buffering a blob."""
  if not H40.fullmatch(oid) or not H64.fullmatch(wanted) or not H64.fullmatch(alternate) or not isinstance(size,int) or size<0:bad('malformed blob record')
@@ -312,23 +598,40 @@ def stream_blob_process(p,oid,wanted,size,alternate,deadline):
 def stream_blob(directory,oid,wanted,size,alternate=None):
  """Testable one-record wrapper; production uses stream_store below."""
  if alternate is None:alternate=hashlib.sha256(('blob '+str(size)+'\0').encode('ascii')+b'abc').hexdigest()
- p=None
+ p=None;primary=None
  try:
   p=_reader(directory);stream_blob_process(p,oid,wanted,size,alternate,time.monotonic()+900)
-  p.stdin.close();p.stdout.close()
+  p.stdin.close()
   if finish_reader(p)!=0:bad('blob reader exit')
- except (OSError,UnicodeError) as e:bad('blob stream: '+str(e))
+  p._mckernel_reader_finished=True
+ except (OSError,UnicodeError) as e:
+  primary=Error('blob stream: '+str(e));raise primary
+ except BaseException as e:
+  primary=e;raise
  finally:
-  if p is not None and p.poll() is None:finish_reader(p)
+  cleanup=None
+  if p is not None and not getattr(p,'_mckernel_reader_finished',False):
+   try:finish_reader(p);p._mckernel_reader_finished=True
+   except BaseException as e:cleanup=e
+  cleanup=combined(cleanup,close_streams(process_streams(p) if p is not None else {}))
+  if cleanup is not None:raise_primary(primary,cleanup)
 def stream_store(directory,records):
- p=None
+ p=None;primary=None
  try:
   p=_reader(directory);deadline=time.monotonic()+900
   for oid,wanted,size,alternate in records:stream_blob_process(p,oid,wanted,size,alternate,deadline)
-  p.stdin.close();p.stdout.close()
+  p.stdin.close()
   if finish_reader(p)!=0:bad('canonical reader exit')
+  p._mckernel_reader_finished=True
+ except BaseException as e:
+  primary=e;raise
  finally:
-  if p is not None and p.poll() is None:finish_reader(p)
+  cleanup=None
+  if p is not None and not getattr(p,'_mckernel_reader_finished',False):
+   try:finish_reader(p);p._mckernel_reader_finished=True
+   except BaseException as e:cleanup=e
+  cleanup=combined(cleanup,close_streams(process_streams(p) if p is not None else {}))
+  if cleanup is not None:raise_primary(primary,cleanup)
 def verify_inventory(inv):
  if not isinstance(inv,dict) or inv.get('revisions')!={'main':MAIN,'ihk':IHK} or not isinstance(inv.get('entries'),list):bad('inventory revision/entries')
  main=[];ihk=[]
@@ -486,8 +789,14 @@ class OutputDir(object):
   except OSError as e:bad('output unavailable: '+str(e))
   if (named.st_dev,named.st_ino,named.st_mode,named.st_uid,named.st_gid)!=(opened.st_dev,opened.st_ino,opened.st_mode,opened.st_uid,opened.st_gid) or (opened.st_dev,opened.st_ino)!=(self.identity.st_dev,self.identity.st_ino):bad('output substituted')
  def close(self):
-  if self.fd is not None:os.close(self.fd);self.fd=None
-  if self.parent_fd is not None:os.close(self.parent_fd);self.parent_fd=None
+  failure=None
+  for name in ('fd','parent_fd'):
+   fd=getattr(self,name)
+   if fd is None:continue
+   try:os.close(fd)
+   except BaseException as e:failure=combined(failure,e)
+   finally:setattr(self,name,None)
+  if failure is not None:raise failure
 def fresh_output(r):
  p=Path(r['output_dir'])
  if p!=EVIDENCE_DIR or p.exists():bad('fresh root-owned evidence output')
@@ -507,6 +816,18 @@ def fresh_output(r):
 class ExclusionLease(object):
  """The exact build-owner O_EXCL lease; its durable tombstone is never removed."""
  def __init__(self,release):self.release=release;self.fd=None;self.identity=None
+ def _close(self,durable=False):
+  """Drop the descriptor even when its durability operation fails."""
+  fd=self.fd;self.fd=None
+  if fd is None:return
+  primary=None
+  if durable:
+   try:os.fsync(fd)
+   except BaseException as e:primary=e
+  try:os.close(fd)
+  except BaseException as e:
+   primary=combined(primary,e)
+  if primary is not None:raise primary
  def __enter__(self):
   path=BUILD_LEASE
   if self.release.get('operational_exclusion')!=str(path):bad('shared build lease binding')
@@ -521,8 +842,11 @@ class ExclusionLease(object):
    # testable in an unprivileged model without changing production ownership.
    if self.identity.st_uid!=os.geteuid() or self.identity.st_gid!=os.getegid() or stat.S_IMODE(self.identity.st_mode)!=0o600 or self.identity.st_nlink!=1 or self.identity.st_dev!=parent.st_dev:bad('shared lease identity')
    self._make_immutable();self.assert_held();fsync_parent(path);return self
-  except BaseException:
-   os.close(self.fd);self.fd=None;raise
+  except BaseException as primary:
+   # Keep the named tombstone as fail-closed evidence, but never leak its fd.
+   try:self._close()
+   except BaseException as cleanup:raise_primary(primary,cleanup)
+   raise
  def assert_held(self):
   if self.fd is None:bad('operational exclusion lease absent')
   named=os.lstat(str(BUILD_LEASE));opened=os.fstat(self.fd)
@@ -541,14 +865,17 @@ class ExclusionLease(object):
   if self._flags()&FS_IMMUTABLE_FL==0:bad('immutable lease flag not latched')
  def finalize(self):
   """A PASS may follow only a closed and freshly reopened immutable inode."""
-  self.assert_held();os.fsync(self.fd);os.close(self.fd);self.fd=None
-  fd=os.open(str(BUILD_LEASE),os.O_RDONLY|os.O_NOFOLLOW|getattr(os,'O_CLOEXEC',0))
   try:
-   self.fd=fd;self.assert_held();os.fsync(fd)
-  finally:
-   if self.fd is not None:os.close(self.fd);self.fd=None
- def __exit__(self,*unused):
-  if self.fd is not None:os.fsync(self.fd);os.close(self.fd);self.fd=None
+   self.assert_held();self._close(durable=True)
+   self.fd=os.open(str(BUILD_LEASE),os.O_RDONLY|os.O_NOFOLLOW|getattr(os,'O_CLOEXEC',0))
+   self.assert_held();self._close(durable=True)
+  except BaseException as primary:
+   try:self._close()
+   except BaseException as cleanup:raise_primary(primary,cleanup)
+   raise
+ def __exit__(self,exc_type,exc,tb):
+  try:self._close(durable=True)
+  except BaseException as cleanup:raise_primary(exc,cleanup)
 def stable_fd(fd,size):
  if not isinstance(size,int) or size<0 or size>MAX_FILE:bad('lease size')
  a=[];left=size
@@ -589,33 +916,22 @@ def status(base,value,success=False):
   raise
 def call(argv,base,stem,pass_fds=()):
  """One callback attempt.  Timeout retires its whole new process group."""
- p=None;streams={};out=err=b'';rc=125;interrupted=None;cleanup_error=None
- def safe_retire():
-  try:return retire_process(p,streams),None
-  except BaseException as e:return (bytes(streams.get('stdout_data',b'')),bytes(streams.get('stderr_data',b''))),e
+ p=None;streams={};out=err=b'';rc=125;primary=None;cleanup_error=None;owner=spawn_owner()
  try:
-  p=bind_process(subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True,pass_fds=tuple(pass_fds)))
-  streams={'stdout':p.stdout,'stderr':p.stderr,'stdout_data':bytearray(),'stderr_data':bytearray()}
+  p,streams=owned_spawn(owner,argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True,pass_fds=tuple(pass_fds))
   out,err=_drain(p,streams,MAX_CALLBACK,time.monotonic()+COMMAND_TIMEOUT)
-  if p.poll() is None:
-   (out,err),cleanup_error=safe_retire();rc=124
-  elif session_members(p._mckernel_session):
-   (out,err),cleanup_error=safe_retire();rc=125
-  else:rc=p.returncode
- except (KeyboardInterrupt,Interrupted) as e:
-  interrupted=e
-  if p is not None:(out,err),cleanup_error=safe_retire()
-  else:err=str(e).encode('utf8','replace')
+  rc=complete_process(p)
+  if rc is None:
+   (out,err),cleanup_error=cleanup_process(p,streams);rc=124
  except BaseException as e:
-  if p is not None:(out,err),cleanup_error=safe_retire()
-  else:err=str(e).encode('utf8','replace')
- for stream in (streams.get('stdout'),streams.get('stderr')):
-  if stream is not None:
-   try:stream.close()
-   except OSError:pass
- capture(base,stem+'.stdout',out);capture(base,stem+'.stderr',err);capture(base,stem+'.status',(str(rc)+'\n').encode('ascii'))
- if interrupted is not None:raise interrupted
- if cleanup_error is not None:raise Error(stem+' cleanup failed: '+repr(cleanup_error))
+  primary=e;p=owner['p'];streams=owner['streams'];(out,err),cleanup_error=cleanup_owned(owner)
+  if not err:err=str(e).encode('utf8','replace')
+ cleanup_error=combined(cleanup_error,close_streams(streams))
+ cleanup_error=combined(cleanup_error,restore_spawn_mask(owner))
+ try:capture(base,stem+'.stdout',out);capture(base,stem+'.stderr',err);capture(base,stem+'.status',(str(rc)+'\n').encode('ascii'))
+ except BaseException as evidence_error:raise_primary(combined(primary,cleanup_error),evidence_error)
+ if primary is not None:raise_primary(primary,cleanup_error)
+ if cleanup_error is not None:raise_primary(Error(stem+' callback failed'),cleanup_error)
  if rc:bad(stem+' callback failed')
  return out
 def observer_callback(base,lease,observer_path):
@@ -665,21 +981,34 @@ def bind_delete_boundary(h,lease):
  original=h.remove_root
  def guarded(item,journal):
   lease.assert_held()
-  try:return original(item,journal)
-  finally:lease.assert_held()
+  try:result=original(item,journal)
+  except BaseException as primary:
+   try:lease.assert_held()
+   except BaseException as cleanup:raise_primary(primary,cleanup)
+   raise
+  lease.assert_held();return result
  h.remove_root=guarded
 def fail_status(base,error):
- try:status(base,{'status':'FAIL','release_sha256':RELEASE_SHA256,'error':repr(error)})
- except BaseException as status_error:raise Error('primary failure '+repr(error)+'; status durability failure '+repr(status_error)) from error
+ try:status(base,{'schema':'mckernel.packet-failure.v2','status':'FAIL','release_sha256':RELEASE_SHA256,'error':error_record(error)})
+ except BaseException as status_error:raise_primary(error,combined(Error('status durability failure'),status_error))
 def execute(release_arg):
- b=None;observer_fd=None;published=False;restored=False;old={sig:signal.getsignal(sig) for sig in (signal.SIGTERM,signal.SIGINT)}
+ b=None;publisher=None;observer_fd=None;failure=None;result=None;old={sig:signal.getsignal(sig) for sig in (signal.SIGTERM,signal.SIGINT)}
  def interrupted(signum,frame):raise Interrupted('signal '+str(signum))
+ def collect(fn):
+  nonlocal failure
+  try:return fn()
+  except BaseException as error:failure=combined(failure,error)
  try:
   # Latch before Git/cat-file admission: an interrupt can never strand one of
   # those session leaders without passing through the common retire path.
   for sig in old:signal.signal(sig,interrupted)
   r,sources=admit(release_arg)
   b=fresh_output(r)
+  # Reserve a descriptor-bound terminal writer before any work. Ordinary
+  # output close errors must be captured before the terminal record is built.
+  publisher=object.__new__(OutputDir);publisher.__dict__.update(b.__dict__)
+  publisher.fd=None;publisher.parent_fd=None;publisher.fd=os.dup(b.fd)
+  publisher.assert_bound()
   # This is deliberately before all live census/root validation and remains a tombstone.
   with ExclusionLease(r) as lease:
    lease.assert_held()
@@ -687,31 +1016,33 @@ def execute(release_arg):
    h,observer_fd=helper(b,sources);lease.assert_held();bind_delete_boundary(h,lease)
    result=h.retire([CANDIDATE,BACKUP],r,OUT[0],OUT[1],OUT[2],observer_callback(b,lease,observer_fd),docker_callback(b,r['docker'],lease),output_dir_fd=b.fd)
    lease.assert_held();b.assert_bound()
-   if observer_fd is not None:os.close(observer_fd);observer_fd=None
+   if observer_fd is not None:
+    fd=observer_fd;observer_fd=None;os.close(fd)
    lease.finalize();b.assert_bound()
-  # Signal restoration is deliberately a pre-publication operation: any
-  # error here leaves only non-authoritative evidence and failure status.
-  for sig,previous in old.items():signal.signal(sig,previous)
-  restored=True;b.assert_bound();os.fsync(b.fd)
-  # The atomic rename + directory fsync below is the sole authoritative PASS.
-  status(b,{'status':'PASS','release_sha256':RELEASE_SHA256},success=True);published=True
-  try:b.close()
-  except OSError:pass
-  b=None
+ except BaseException as error:failure=combined(failure,error)
+ # All fallible campaign cleanup precedes serialization; there is no finally
+ # that can replace the primary after the failure record has been published.
+ if observer_fd is not None:collect(lambda:os.close(observer_fd));observer_fd=None
+ for sig,previous in old.items():collect(lambda sig=sig,previous=previous:signal.signal(sig,previous))
+ if b is not None:collect(b.close)
+ try:
+  if publisher is not None and publisher.fd is not None:
+   collect(publisher.assert_bound);collect(lambda:os.fsync(publisher.fd))
+   if failure is not None:fail_status(publisher,failure)
+   else:
+    try:status(publisher,{'status':'PASS','release_sha256':RELEASE_SHA256},success=True)
+    except BaseException as error:
+     failure=combined(failure,error);fail_status(publisher,failure)
+  if failure is not None:raise failure
   return result
- except BaseException as e:
-  if b is not None and not published:fail_status(b,e)
-  raise
  finally:
-  if observer_fd is not None:
-   try:os.close(observer_fd)
-   except OSError:pass
-  if not restored:
-   for sig,previous in old.items():signal.signal(sig,previous)
-  if b is not None:
-   try:b.close()
-   except OSError:
-    if not published:raise
+  # The terminal writer is only a read-only directory descriptor. Once its
+  # record is durable, releasing this descriptor cannot alter that record or
+  # replace the reported result. Process exit also releases it if close fails.
+  if publisher is not None and publisher.fd is not None:
+   try:os.close(publisher.fd)
+   except BaseException:pass
+   publisher.fd=None
 def main(argv=None):
  p=argparse.ArgumentParser();p.add_argument('--release',required=True);execute(p.parse_args(argv).release)
 if __name__=='__main__':
