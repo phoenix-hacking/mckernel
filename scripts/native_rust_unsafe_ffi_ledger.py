@@ -304,6 +304,7 @@ def lex_rust(text, label="Rust source"):
             comments.append(
                 {
                     "kind": "line",
+                    "doc": text.startswith("///", index),
                     "start": index,
                     "end": end,
                     "line_start": start_line,
@@ -334,6 +335,7 @@ def lex_rust(text, label="Rust source"):
             comments.append(
                 {
                     "kind": "block",
+                    "doc": text.startswith("/**", index),
                     "start": index,
                     "end": cursor,
                     "line_start": start_line,
@@ -439,6 +441,8 @@ def normalize_comment(raw):
         value = line.strip()
         if value.startswith("//"):
             value = value[2:]
+            if value.startswith("/"):
+                value = value[1:]
         elif value.startswith("/*"):
             value = value[2:]
         if value.endswith("*/"):
@@ -470,8 +474,35 @@ def safety_comments(text, comments):
         normalized = normalize_comment(raw)
         marker = normalized.find("SAFETY:")
         if marker < 0:
-            continue
-        normalized = normalized[marker:]
+            # Rust's conventional `/// # Safety` documentation is a valid
+            # contract only when the complete adjacent comment group is doc
+            # comments and contains one non-empty Safety section.  Keeping
+            # this separate from the explicit marker preserves the latter's
+            # historical, line-comment-compatible behavior.
+            if not all(comment.get("doc") for comment in group):
+                continue
+            # ``normalize_comment`` intentionally flattens explicit markers;
+            # retain doc-comment line boundaries so a heading is a section,
+            # rather than merely text appearing somewhere in a paragraph.
+            lines = []
+            for comment in group:
+                lines.extend(
+                    normalize_comment(line)
+                    for line in comment["raw"].splitlines()
+                )
+            headings = [
+                index for index, line in enumerate(lines)
+                if re.match(r"^#\s+Safety\s*$", line)
+            ]
+            if len(headings) != 1:
+                continue
+            heading = headings[0]
+            body = " ".join(item.strip() for item in lines[heading + 1:] if item.strip())
+            if not body:
+                continue
+            normalized = "# Safety " + body
+        else:
+            normalized = normalized[marker:]
         result.append(
             {
                 "text": normalized,
@@ -480,6 +511,7 @@ def safety_comments(text, comments):
                 "line_end": group[-1]["line_end"],
                 "start": start,
                 "end": end,
+                "doc": marker < 0,
             }
         )
     return result
@@ -630,6 +662,7 @@ def discover_sites(relative, raw, text):
 
     safety = safety_comments(text, comments)
     used_comments = set()
+    used_comment_spans = {}
     sites = []
     for kind, begin, end, token_begin, unused_token_end in sorted(spans, key=lambda item: (item[1], item[2], item[0])):
         del unused_token_end
@@ -638,7 +671,10 @@ def discover_sites(relative, raw, text):
         candidates = [
             (idx, comment)
             for idx, comment in enumerate(safety)
-            if idx not in used_comments
+            if (idx not in used_comments or any(
+                prior_begin < end and begin < prior_end
+                for prior_begin, prior_end in used_comment_spans.get(idx, ())
+            ))
             and comment["end"] <= begin
             and start_line - comment["line_end"] <= 8
             and "\n\n" not in text[comment["end"] : begin].replace("\r", "")
@@ -649,6 +685,7 @@ def discover_sites(relative, raw, text):
             )
         comment_index, comment = max(candidates, key=lambda item: item[1]["end"])
         used_comments.add(comment_index)
+        used_comment_spans.setdefault(comment_index, []).append((begin, end))
         macro_name = None
         for name, macro_begin, macro_end in macros:
             if macro_begin <= token_begin <= macro_end:

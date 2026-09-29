@@ -1212,7 +1212,15 @@ def _rust_brace_depth(masked, end, relative):
     return depth
 
 
-def reject_unreviewed_rust_escapes(relative, text):
+def reject_unreviewed_rust_escapes(relative, text, locked_digest=None):
+    if locked_digest is not None:
+        # Newly reached files with existing foreign ABI, assembly or #[path]
+        # sites are admitted only at the independently frozen source digest.
+        # A changed file cannot inherit that escape allowance by resealing the
+        # manifest; it must acquire reviewed blocks or a new source lock.
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() != locked_digest:
+            die("unreviewed Rust escape hatch or locked source drift in {0}".format(relative))
+        return
     original_masked = _mask_rust_comments_and_literals(text, relative)
     masked = list(original_masked)
     previous_end = 0
@@ -1284,6 +1292,12 @@ def reject_unreviewed_rust_escapes(relative, text):
 
 
 def main():
+    if __package__:
+        from .native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+        from .rocky_rust_staging import EXPECTED_INPUTS, LOCKED_ESCAPE_SUPPORT
+    else:
+        from native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+        from rocky_rust_staging import EXPECTED_INPUTS, LOCKED_ESCAPE_SUPPORT
     with open(MANIFEST, "r", encoding="utf-8") as f:
         manifest = json.load(f)
     contract = manifest["build_contract"]
@@ -1317,50 +1331,48 @@ def main():
             die("duplicate staged destination: {0}".format(destination))
         destinations.add(destination)
 
-    support = [
-        item for item in manifest.get("inputs", [])
-        if item.get("kind") in (
-            "shared_rust_abi", "rust_ioctl_dispatch", "rust_module",
-            "rust_support_module"
-        )
-    ]
-    if [item.get("destination") for item in support] != [
-        "abi/x86_64.rs",
-        "ikc_queue.rs",
-        "os_registry.rs",
-        "device_registry.rs",
-        "ikc_master.rs",
-        "ihk_ioctl.rs",
-        "page_allocator.rs",
-        "page_owner_registry.rs",
-        "smp_resource.rs",
-        "smp_cpu.rs",
-        "smp_memory.rs",
-        "os_runtime.rs",
-        "ihk_mapping.rs",
-        "smp_image.rs",
-        "smp_loader.rs",
-        "smp_startup.rs",
-    ]:
-        die(
-            "Rust support input closure differs from the locked ABI, queue, "
-            "OS registry, device registry, IKC master, IHK ioctl dispatcher, page allocator, "
-            "page-owner registry, SMP resource policy, unbooted OS runtime, "
-            "mapping geometry, image policy and bounded file loader"
-        )
+    support = [item for item in manifest.get("inputs", [])
+               if item.get("destination") not in ("Kbuild", "Kconfig")]
+    expected = {item["destination"]: item for item in EXPECTED_INPUTS}
+    legacy_scanned = frozenset((
+        "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs", "device_registry.rs",
+        "ikc_master.rs", "ihk_ioctl.rs", "page_allocator.rs", "page_owner_registry.rs",
+        "smp_resource.rs", "smp_cpu.rs", "smp_memory.rs", "os_runtime.rs",
+        "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs",
+    ))
     for item in support:
         relative = item.get("repository_path")
-        if not isinstance(relative, str) or not relative.endswith(".rs"):
-            die("non-Rust support input: {0}".format(relative))
+        destination = item.get("destination")
+        if destination not in legacy_scanned and item != expected.get(destination):
+            die("support input differs from exact source binding: {0}".format(destination))
+        if destination in legacy_scanned and item.get("kind") != expected[destination]["kind"]:
+            die("support input kind differs: {0}".format(destination))
+        if not isinstance(relative, str) or relative != "host-kernel/native-rust/" + destination:
+            die("redirected support input: {0}".format(relative))
+        if not (destination.endswith(".rs") or destination.endswith(".S")):
+            die("unsupported support input: {0}".format(relative))
         path = regular_repo_file(relative)
         if sha256(path) != item.get("sha256"):
             die("support input digest drift: {0}".format(relative))
-        text = read_text(path)
-        reject_unreviewed_rust_escapes(relative, text)
-        destination = item.get("destination")
+        if destination.endswith(".rs"):
+            reject_unreviewed_rust_escapes(
+                relative, read_text(path),
+                expected[destination]["sha256"] if destination in LOCKED_ESCAPE_SUPPORT else None,
+            )
+        # The two .S files are include_str! data consumed by smp_boot_code.rs.
+        # They are copied and hashed, never admitted as project link objects.
         if destination in destinations:
             die("duplicate staged destination: {0}".format(destination))
         destinations.add(destination)
+    try:
+        closure = discover_native_closure(ROOT)
+    except AuditError as error:
+        die("recursive Rust support closure differs: {0}".format(error))
+    actual_support = destinations - set(CRATE_ROOTS)
+    required_support = closure - set(CRATE_ROOTS)
+    if actual_support != required_support or len(support) != len(required_support):
+        die("Rust support input closure differs from recursive crate graph: missing={0}, extra={1}".format(
+            sorted(required_support - actual_support), sorted(actual_support - required_support)))
 
     kbuild = regular_repo_file("host-kernel/kbuild/Kbuild.in")
     ktext = read_text(kbuild).lower()

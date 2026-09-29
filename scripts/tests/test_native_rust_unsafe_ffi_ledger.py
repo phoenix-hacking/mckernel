@@ -392,6 +392,40 @@ class LexerAndSiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ledger.LedgerError, "unclassified unsafe"):
             make_source("// SAFETY: future syntax.\nunsafe move || work();\n")
 
+    def test_doc_safety_sections_are_bound_only_when_unique_and_nonempty(self):
+        line_doc = make_source(
+            "/// # Safety\n/// caller retains the pointer.\n"
+            "unsafe fn call() {}\n"
+        )[0]
+        self.assertEqual(line_doc["safety_comment"]["text"], "# Safety caller retains the pointer.")
+        block_doc = make_source(
+            "/** # Safety\n * caller retains the pointer.\n */\n"
+            "unsafe { call(); }\n"
+        )[0]
+        self.assertEqual(block_doc["safety_comment"]["text"], "# Safety caller retains the pointer.")
+        for text in (
+            "/// # Safety\nunsafe { call(); }\n",
+            "/// # Safety\n/// one\n/// # Safety\n/// two\nunsafe { call(); }\n",
+            'const DOC: &str = "/// # Safety";\nunsafe { call(); }\n',
+        ):
+            with self.assertRaisesRegex(ledger.LedgerError, "SAFETY"):
+                make_source(text)
+
+    def test_current_os_service_uses_doc_safety_exports(self):
+        path = os.path.join(REPO_ROOT, "host-kernel/native-rust/os_service.rs")
+        with open(path, "rb") as stream:
+            raw = stream.read()
+        sites = ledger.discover_sites(path, raw, raw.decode("utf-8"))[0]
+        exports = [site for site in sites if site["kind"] == "ffi_export"]
+        self.assertEqual(len(exports), 4)
+        self.assertTrue(any(site["safety_comment"]["text"].startswith("# Safety") for site in exports))
+        overlap = [site for site in sites if site["line_start"] in (69, 70)]
+        self.assertEqual({site["kind"] for site in overlap}, {"extern_function", "ffi_export"})
+        self.assertEqual(
+            {site["safety_comment"]["text"] for site in overlap},
+            {"# Safety The caller supplies its own live Linux module and module-resident callbacks. It must unregister on init failure or unload, before any callback code or module storage can disappear. Callback semantics are specified by service_abi."},
+        )
+
 
 class SyntheticClosureTests(unittest.TestCase):
     def setUp(self):

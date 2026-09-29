@@ -150,7 +150,147 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_startup.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_startup.rs',
-  'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}]
+  'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'},
+ {'destination': 'abi/sysfs.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/abi/sysfs.rs',
+  'sha256': 'fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a'},
+ {'destination': 'abi/sysfs_request.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/abi/sysfs_request.rs',
+  'sha256': '30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946'},
+ {'destination': 'abi/vdso.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/abi/vdso.rs',
+  'sha256': 'd33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1'},
+ {'destination': 'application_image.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/application_image.rs',
+  'sha256': '25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2'},
+ {'destination': 'application_pager.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/application_pager.rs',
+  'sha256': 'adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19'},
+ {'destination': 'application_rpc.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/application_rpc.rs',
+  'sha256': '9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39'},
+ {'destination': 'application_syscall.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/application_syscall.rs',
+  'sha256': 'a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd'},
+ {'destination': 'mcctrl_exec.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/mcctrl_exec.rs',
+  'sha256': '02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced'},
+ {'destination': 'mcctrl_process.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/mcctrl_process.rs',
+  'sha256': '392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925'},
+ {'destination': 'mcctrl_vm.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/mcctrl_vm.rs',
+  'sha256': '74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d'},
+ {'destination': 'procfs_objects.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/procfs_objects.rs',
+  'sha256': 'd6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641'},
+ {'destination': 'smp_application.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_application.rs',
+  'sha256': 'c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0'},
+ {'destination': 'smp_application_image.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_application_image.rs',
+  'sha256': '7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985'},
+ {'destination': 'smp_application_syscall.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_application_syscall.rs',
+  'sha256': '4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55'},
+ {'destination': 'smp_boot_code.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_boot_code.rs',
+  'sha256': '51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7'},
+ {'destination': 'smp_file_pager.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_file_pager.rs',
+  'sha256': '08c427f5333b859b6628e3946668b679d1777a4abf49ceb2d08666dac28aefec'},
+ {'destination': 'smp_ikc.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_ikc.rs',
+  'sha256': '87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2'},
+ {'destination': 'smp_procfs.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_procfs.rs',
+  'sha256': '7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5'},
+ {'destination': 'smp_service.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_service.rs',
+  'sha256': '0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478'},
+ {'destination': 'smp_topology.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_topology.rs',
+  'sha256': '83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7'},
+ {'destination': 'smp_trampoline.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_trampoline.rs',
+  'sha256': 'acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca'},
+ {'destination': 'smp_vdso.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/smp_vdso.rs',
+  'sha256': '872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1'},
+ {'destination': 'sysfs_memory.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_memory.rs',
+  'sha256': '11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73'},
+ {'destination': 'sysfs_objects.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_objects.rs',
+  'sha256': '17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980'},
+ {'destination': 'sysfs_os.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_os.rs',
+  'sha256': 'ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2'},
+ {'destination': 'sysfs_remote.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_remote.rs',
+  'sha256': '8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee'},
+ {'destination': 'sysfs_rpc.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_rpc.rs',
+  'sha256': 'd1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e'},
+ {'destination': 'sysfs_setup.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_setup.rs',
+  'sha256': 'aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62'},
+ {'destination': 'sysfs_snoop.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_snoop.rs',
+  'sha256': 'c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d'},
+ {'destination': 'sysfs_tree.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_tree.rs',
+  'sha256': '3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232'},
+ {'destination': 'sysfs_zeroing.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/sysfs_zeroing.rs',
+  'sha256': '221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290'},
+ {'destination': 'user_string.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/user_string.rs',
+  'sha256': 'fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2'},
+ {'destination': 'zero_pages.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/zero_pages.rs',
+  'sha256': '47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def'},
+ {'destination': 'smp_startup_entry.S',
+  'kind': 'embedded_assembly_source',
+  'repository_path': 'host-kernel/native-rust/smp_startup_entry.S',
+  'sha256': 'b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2'},
+ {'destination': 'smp_trampoline.S',
+  'kind': 'embedded_assembly_source',
+  'repository_path': 'host-kernel/native-rust/smp_trampoline.S',
+  'sha256': '18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf'}]
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -1009,6 +1149,19 @@ def _validate_kconfig(text):
         raise ValidationError("Kconfig policy violation: {0}".format(error))
 
 
+# These reached sources already contain assembly or foreign ABI surfaces. Their
+# exact bytes are pinned by EXPECTED_INPUTS; changing any byte needs a new
+# explicit boundary review instead of an automatic escape-hatch allowance.
+LOCKED_ESCAPE_SUPPORT = frozenset((
+    "os_service.rs", "abi/os_service.rs", "abi/application.rs", "abi/sysfs_request.rs",
+    "abi/vdso.rs", "application_pager.rs", "mcctrl_exec.rs", "mcctrl_process.rs",
+    "mcctrl_vm.rs", "procfs_objects.rs", "smp_boot_code.rs", "smp_file_pager.rs",
+    "smp_procfs.rs", "smp_service.rs", "smp_trampoline.rs", "smp_vdso.rs",
+    "sysfs_memory.rs", "sysfs_objects.rs", "sysfs_os.rs", "sysfs_setup.rs",
+    "sysfs_tree.rs", "sysfs_zeroing.rs", "zero_pages.rs",
+))
+
+
 def _validate_input(repo_root, item, index):
     label = "inputs[{0}]".format(index)
     _require_keys(item, {"destination", "kind", "repository_path", "sha256"}, label)
@@ -1022,23 +1175,9 @@ def _validate_input(repo_root, item, index):
     }.get(item["kind"])
     if item["kind"] == "rust_module":
         expected_destination = item["destination"]
-    elif item["kind"] == "rust_support_module" and item["destination"] in (
-        "os_registry.rs",
-        "device_registry.rs",
-        "page_allocator.rs",
-        "page_owner_registry.rs",
-        "smp_resource.rs",
-        "smp_cpu.rs",
-        "smp_memory.rs",
-        "os_runtime.rs",
-        "os_service.rs",
-        "abi/os_service.rs",
-        "abi/application.rs",
-        "ihk_mapping.rs",
-        "smp_image.rs",
-        "smp_loader.rs",
-        "smp_startup.rs",
-    ):
+    elif item["kind"] == "rust_support_module" and item["destination"].endswith(".rs"):
+        expected_destination = item["destination"]
+    elif item["kind"] == "embedded_assembly_source" and item["destination"].endswith(".S"):
         expected_destination = item["destination"]
     if expected_destination is None:
         raise ValidationError("{0}.kind is not a locked staging input kind".format(label))
@@ -1046,6 +1185,8 @@ def _validate_input(repo_root, item, index):
         raise ValidationError("{0}.destination must be {1}".format(label, expected_destination))
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
+    if item["kind"] == "embedded_assembly_source":
+        return {"destination": item["destination"], "path": path, "sha256": item["sha256"]}
     text = _read_text(path, label)
     if item["destination"] in ("os_runtime.rs", "smp_cpu.rs", "smp_memory.rs"):
         if __package__:
@@ -1056,7 +1197,7 @@ def _validate_input(repo_root, item, index):
             reject_unreviewed_rust_escapes(item["repository_path"], text)
         except SystemExit as error:
             raise ValidationError("native Linux adapter boundary differs: {0}".format(error))
-    elif item["kind"] not in ("kbuild_template", "kconfig") and item["destination"] not in ("os_service.rs", "abi/os_service.rs", "abi/application.rs"):
+    elif item["kind"] not in ("kbuild_template", "kconfig") and item["destination"] not in LOCKED_ESCAPE_SUPPORT:
         _validate_rust_escape_hatches(text, label)
     if item["kind"] == "kbuild_template":
         _validate_kbuild(text)
@@ -1487,42 +1628,11 @@ def validate_manifest(repo_root, manifest_path):
 
     inputs = manifest["inputs"]
     if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
-        raise ValidationError(
-            "inputs must contain exactly Kbuild, Kconfig, the shared x86_64 ABI, "
-            "the IHK queue module, OS registry, IKC master module, ioctl dispatcher, "
-            "device registry, page allocator, page-owner registry, and SMP resource policy"
-        )
+        raise ValidationError("inputs must contain exactly the hard-locked staging inputs")
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
-    if destinations != [
-        "Kbuild",
-        "Kconfig",
-        "abi/x86_64.rs",
-        "ikc_queue.rs",
-        "os_registry.rs",
-        "device_registry.rs",
-        "ikc_master.rs",
-        "ihk_ioctl.rs",
-        "page_allocator.rs",
-        "page_owner_registry.rs",
-        "smp_resource.rs",
-        "smp_cpu.rs",
-        "smp_memory.rs",
-        "os_runtime.rs",
-        "os_service.rs",
-        "abi/os_service.rs",
-        "abi/application.rs",
-        "ihk_mapping.rs",
-        "smp_image.rs",
-        "smp_loader.rs",
-        "smp_startup.rs",
-    ]:
-        raise ValidationError(
-            "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
-            "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs, smp_cpu.rs, "
-        "smp_memory.rs, os_runtime.rs, os_service.rs, abi/os_service.rs, abi/application.rs, ihk_mapping.rs, smp_image.rs, smp_loader.rs, smp_startup.rs"
-        )
+    if destinations != [item["destination"] for item in EXPECTED_INPUTS]:
+        raise ValidationError("inputs differ from the hard-locked staging order")
 
     modules = manifest["modules"]
     if not isinstance(modules, list) or len(modules) != len(EXPECTED_MODULES):
@@ -1532,6 +1642,18 @@ def validate_manifest(repo_root, manifest_path):
         source, module_blockers = _validate_module(repo_root, modules[index], expected, index)
         blockers.extend(module_blockers)
         staged_files.append(source)
+    if __package__:
+        from .native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+    else:
+        from native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+    try:
+        closure = discover_native_closure(repo_root)
+    except AuditError as error:
+        raise ValidationError("recursive Rust staging closure differs: {0}".format(error))
+    staged_native = {item["destination"] for item in staged_files if item["destination"] not in ("Kbuild", "Kconfig")}
+    if staged_native != closure or not set(CRATE_ROOTS).issubset(staged_native):
+        raise ValidationError("recursive Rust staging closure differs: missing={0}, extra={1}".format(
+            sorted(closure - staged_native), sorted(staged_native - closure)))
 
     _require_keys(manifest["readiness"], {"blockers", "checkpoint", "credit_eligible"}, "readiness")
     if manifest["readiness"] != {

@@ -317,3 +317,20 @@ probes PASS under umask `0077`. See
 old candidate unchanged. Future preparation must use umask `0022` or exact
 index-mode normalization and then pass both admission layers. Continue the
 separate 57-file staging closure and unsafe-ledger repair before a fresh build.
+
+Shutdown checkpoint 73 preserves the completed bounded parser correction as
+WIP. The 57-file recursive stage closure passes the four exact reviewer
+regressions and direct source checks, but the post-correction full 114-test run
+and independent rereview are still required. The unsafe-ledger parser's seven
+focused tests pass, but real missing safety documentation begins at
+`host-kernel/native-rust/os_runtime.rs:648` and the durable ledger has not been
+reconciled. See
+`stability-native-recursive-stage-and-unsafe-ledger-shutdown-wip-20260928-1.json`.
+
+Next run the full recursive suite and independent rereview, then close that
+family only if both pass. Follow with one expert-reviewed safety-documentation
+and full-ledger reconciliation pass, including affected manifest/stager hashes.
+Do not prepare a candidate until phase 0 is source-clean; never reuse the failed
+80b request. No heavy operation remains active. Preserve launcher wrapper PID
+3399308/starttime 83682487 and worker PID 3399313/starttime 83682494 as the
+shutdown identities. Counts remain unchanged and the OS goal is not complete.

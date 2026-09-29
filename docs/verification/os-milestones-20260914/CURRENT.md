@@ -5914,3 +5914,37 @@ candidate must be created under umask `0022` or have every tracked permission
 normalized exactly from its Git index, then pass both generator and owner
 admission. The separate 57-file Rust staging closure and unsafe-ledger inventory
 remain in progress; no build/guest ran and counters remain unchanged.
+
+Shutdown checkpoint 73, 2026-09-28: no new task was dispatched. The bounded
+recursive-staging correction finished before shutdown. The manifest/stager now
+bind 57 reached inputs (three roots, 52 Rust support files and two embedded
+assembly files). The worker corrected all four concrete independent-review
+findings: attribute-embedded dependencies, quoted-brace token handling,
+separate reached/parsed state and explicit paths below inline modules. The four
+exact regressions, three direct source checks, `py_compile` and `diff --check`
+PASS on the recorded bytes. The full 114-test suite and independent rereview
+remain pending, so this is WIP rather than source acceptance.
+
+The unsafe-ledger parser WIP preserves the historical overlapping
+`extern_function`/`ffi_export` identities while recognizing unique adjacent
+Rust `# Safety` docs; seven focused tests pass. Its next real blocker is
+`host-kernel/native-rust/os_runtime.rs:648`, and the full durable ledger digest
+and source hashes are not reconciled. Do not update only the top-level digest
+or claim RS-011 acceptance. Exact hashes and limitations are in
+`stability-native-recursive-stage-and-unsafe-ledger-shutdown-wip-20260928-1.json`.
+
+Next continuation: first run the complete 114-test recursive-stage suite and
+obtain independent rereview of the committed correction. If accepted, close
+that failure family additively. Then use an expert-reviewed bounded pass to add
+genuine missing safety documentation and reconcile the full unsafe ledger plus
+every affected manifest/stager hash. Only after all phase-0 source checks pass
+may a fresh, correctly-moded commit-derived candidate be prepared. Never reuse
+the failed 80b request; preserve its candidate, backup, evidence and terminal
+containers.
+
+No heavy build, guest, QEMU or mcexec process is active. Launcher wrapper PID
+3399308/starttime 83682487 and worker PID 3399313/starttime 83682494 remain the
+active shutdown identities. The launcher pause is temporary; the OS goal is not
+complete and was not resumed. Formal counters remain 0/273, 2/4, 6/130,
+350/10,000 and 0/7; four diagnostic guest apps and zero successful
+current-candidate builds remain unchanged.

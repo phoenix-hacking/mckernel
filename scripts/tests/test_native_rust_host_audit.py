@@ -94,6 +94,30 @@ class NativeRustHostAuditTests(unittest.TestCase):
     def test_integrated_repository_closure_passes(self):
         self.assertEqual(0, host_audit.main())
 
+    def test_recursive_assembly_source_is_required_and_digest_bound(self):
+        value = self.load_manifest()
+        value["inputs"] = [item for item in value["inputs"]
+                           if item["destination"] != "smp_startup_entry.S"]
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "support input closure"):
+            host_audit.main()
+        self.write_manifest(copy.deepcopy(self.original_manifest))
+        assembly = self.repository_path("host-kernel/native-rust/smp_startup_entry.S")
+        with open(assembly, "ab") as stream:
+            stream.write(b"\n# drift\n")
+        with self.assertRaisesRegex(SystemExit, "digest drift"):
+            host_audit.main()
+
+    def test_resealed_nested_module_is_not_admitted_without_input(self):
+        relative = "host-kernel/native-rust/smp_service.rs"
+        self.append_resealed_source(relative, "\nmod unexpected_nested;\n")
+        nested = self.repository_path("host-kernel/native-rust/smp_service/unexpected_nested.rs")
+        os.makedirs(os.path.dirname(nested))
+        with open(nested, "w") as stream:
+            stream.write("pub const PRESENT: bool = true;\n")
+        with self.assertRaises(SystemExit):
+            host_audit.main()
+
     def test_reviewed_ihk_provider_abi_and_export_records_are_exact(self):
         relative = "host-kernel/native-rust/ihk.rs"
         mutations = (
@@ -529,6 +553,10 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             os.makedirs(script_directory)
         checker = os.path.join(script_directory, "native_rust_host_audit.py")
         shutil.copy2(os.path.join(REPO_ROOT, "scripts/native_rust_host_audit.py"), checker)
+        for dependency in ("native_rust_build_surface_audit.py", "rocky_rust_staging.py",
+                           "native_rust_kconfig_policy.py"):
+            shutil.copy2(os.path.join(REPO_ROOT, "scripts", dependency),
+                         os.path.join(script_directory, dependency))
         result = subprocess.run(
             [sys.executable, checker],
             cwd=self.repo,
@@ -545,7 +573,7 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             item for item in value["inputs"] if item.get("destination") != "ikc_master.rs"
         ]
         self.write_manifest(value)
-        with self.assertRaisesRegex(SystemExit, "IKC master"):
+        with self.assertRaisesRegex(SystemExit, "support input closure"):
             host_audit.main()
 
         value = copy.deepcopy(self.original_manifest)

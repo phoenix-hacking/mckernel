@@ -15,6 +15,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from scripts import rocky_rust_staging as staging
+from scripts import native_rust_build_surface_audit as surface
 
 
 def digest(path):
@@ -103,32 +104,8 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_TARGET, plan["manifest"]["target"])
         staged = {item["destination"] for item in plan["files"]}
         self.assertEqual(
-            {
-                "Kbuild",
-                "Kconfig",
-                "abi/x86_64.rs",
-                "ikc_queue.rs",
-                "os_registry.rs",
-                "device_registry.rs",
-                "ikc_master.rs",
-                "ihk_ioctl.rs",
-                "page_allocator.rs",
-                "page_owner_registry.rs",
-                "smp_resource.rs",
-                "smp_cpu.rs",
-                "smp_memory.rs",
-                "os_runtime.rs",
-                "os_service.rs",
-                "abi/os_service.rs",
-                "abi/application.rs",
-                "ihk_mapping.rs",
-                "smp_image.rs",
-                "smp_loader.rs",
-                "smp_startup.rs",
-                "ihk.rs",
-                "ihk_smp_x86_64.rs",
-                "mcctrl.rs",
-            },
+            {item["destination"] for item in staging.EXPECTED_INPUTS}
+            | {item["source_destination"] for item in staging.EXPECTED_MODULES},
             staged,
         )
 
@@ -489,39 +466,59 @@ macro_rules! áinclude { () => {} }
         with self.assertRaises(staging.ValidationError):
             staging.stage_for_evidence(plan, kernel)
 
+    def test_every_recursive_source_is_staged_at_its_exact_path_and_no_extra_is_accepted(self):
+        plan = self.plan()
+        closure = surface.discover_native_closure(self.repo)
+        self.assertEqual(closure, {item["destination"] for item in plan["files"]
+                                   if item["destination"] not in ("Kbuild", "Kconfig")})
+        kernel = os.path.join(self.temporary, "complete-closure-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        for relative in closure:
+            with self.subTest(relative=relative):
+                self.assertEqual(
+                    digest(os.path.join(self.repo, "host-kernel", "native-rust", relative)),
+                    digest(os.path.join(target, relative)),
+                )
+        self.assertEqual(target, staging.verify_evidence_stage(plan, kernel))
+        self.assertTrue(os.path.isfile(os.path.join(target, "ihk-compat-build-id.bin")))
+        self.assertNotIn("ihk-compat-build-id.bin", closure)
+        with open(os.path.join(target, "unexpected.rs"), "w") as stream:
+            stream.write("extra\n")
+        with self.assertRaisesRegex(staging.ValidationError, "closure differs"):
+            staging.verify_evidence_stage(plan, kernel)
+
+    def test_embedded_assembly_input_omission_redirect_and_drift_are_rejected(self):
+        original = copy.deepcopy(self.manifest)
+        self.manifest["inputs"] = [item for item in self.manifest["inputs"]
+                                   if item["destination"] != "smp_trampoline.S"]
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+        self.manifest = copy.deepcopy(original)
+        item = next(item for item in self.manifest["inputs"]
+                    if item["destination"] == "smp_trampoline.S")
+        item["repository_path"] = "host-kernel/native-rust/smp_startup_entry.S"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+        self.manifest = copy.deepcopy(original)
+        self.write_manifest()
+        assembly = os.path.join(self.repo, "host-kernel/native-rust/smp_trampoline.S")
+        with open(assembly, "ab") as stream:
+            stream.write(b"\n# drift\n")
+        with self.assertRaisesRegex(staging.ValidationError, "digest mismatch"):
+            self.plan()
+
     def test_stage_lock_binds_crate_roots_and_target_identity(self):
         plan = self.plan()
         lock = staging._stage_lock(plan)
         self.assertEqual(staging.EXPECTED_TARGET, lock["target"])
         paths = {item["path"] for item in lock["files"]}
         self.assertEqual(
-            {
-                "Kbuild",
-                "Kconfig",
-                "abi/x86_64.rs",
-                "ikc_queue.rs",
-                "os_registry.rs",
-                "device_registry.rs",
-                "ikc_master.rs",
-                "ihk_ioctl.rs",
-                "page_allocator.rs",
-                "page_owner_registry.rs",
-                "smp_resource.rs",
-                "smp_cpu.rs",
-                "smp_memory.rs",
-                "os_runtime.rs",
-                "os_service.rs",
-                "abi/os_service.rs",
-                "abi/application.rs",
-                "ihk_mapping.rs",
-                "smp_image.rs",
-                "smp_loader.rs",
-                "smp_startup.rs",
-                "ihk.rs",
-                "ihk_smp_x86_64.rs",
-                "mcctrl.rs",
-                "ihk-compat-build-id.bin",
-            },
+            {item["destination"] for item in staging.EXPECTED_INPUTS}
+            | {item["source_destination"] for item in staging.EXPECTED_MODULES}
+            | {"ihk-compat-build-id.bin"},
             paths,
         )
 

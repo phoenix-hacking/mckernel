@@ -1,0 +1,80 @@
+{
+  "schema": "mckernel.shutdown-checkpoint.v1",
+  "status": "WIP_NOT_ACCEPTED",
+  "recorded_at": "2026-09-28T19:30:21-07:00",
+  "source_head_before_checkpoint": "b54db08c44b86e62095df951a4f5b5fd759a4301",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a"
+  },
+  "recursive_stage_closure": {
+    "state": "bounded_correction_complete_review_pending",
+    "closure_files": 57,
+    "crate_roots": 3,
+    "rust_support_files": 52,
+    "embedded_assembly_files": 2,
+    "reviewer_original_result": "BLOCK",
+    "reviewer_findings_corrected": [
+      "dependency include_str inside attributes",
+      "brace tracking restricted to punctuation tokens",
+      "reached-data and parsed-module state separated",
+      "explicit path inside inline module resolved from the correct Rust module base"
+    ],
+    "post_correction_checks": {
+      "four_exact_reviewer_regressions": "PASS",
+      "rocky_rust_staging_check": "PASS",
+      "native_rust_build_surface_audit": "PASS",
+      "native_rust_host_audit": "PASS",
+      "py_compile_six_files": "PASS",
+      "git_diff_check": "PASS",
+      "full_114_test_suite": "NOT_RUN_AFTER_CORRECTION_DUE_TO_SHUTDOWN",
+      "independent_rereview": "PENDING"
+    },
+    "sha256": {
+      "host-kernel/kbuild/stage-manifest.json": "8463aab8630cf13d1c329f36c0dd2343f4145d824075b0ed06c7d93cfd3b422a",
+      "scripts/rocky_rust_staging.py": "5e854a7ed365317f4d3e8a95e4614d671085f7052a269c9fb6aca4f4449fdba0",
+      "scripts/native_rust_build_surface_audit.py": "2503f794518e8b87c25000769d75679464d33a9e92541b947dadff98939f35e4",
+      "scripts/native_rust_host_audit.py": "e91b2a2c370d0acec040ed206ac25bd6b7b365a447d88969a1d71ccf31753c20",
+      "scripts/tests/test_rocky_rust_staging.py": "410e449a799782fa5035592bca75a7741cf59dff5b18eafe3d9fbe135a0c9ea9",
+      "scripts/tests/test_native_rust_build_surface_audit.py": "39b90ea537cba97a5cfae3217f6ab4a0ac80f439368fbb3aee5434f3beb92e19",
+      "scripts/tests/test_native_rust_host_audit.py": "5fbb89500220a13fb8fd4caac155d939be4bb9c3104a69721cd2d4394d3772a6"
+    }
+  },
+  "unsafe_ffi_ledger": {
+    "state": "parser_correction_complete_source_and_ledger_reconciliation_pending",
+    "focused_tests": "7_PASS",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "next_observed_blocker": "host-kernel/native-rust/os_runtime.rs:648 ffi_export lacks a unique nearby SAFETY comment",
+    "sha256": {
+      "scripts/native_rust_unsafe_ffi_ledger.py": "59ae2bc7406dcd3612cdced27a7796727c82baa5539b5beb06e60b7170a29cb3",
+      "scripts/tests/test_native_rust_unsafe_ffi_ledger.py": "50cf417b4277d1148859a6ac83e956ba2f862ccabd93e5c6d047a20e0d9b0888"
+    }
+  },
+  "runtime": {
+    "heavy_build_or_guest_active": false,
+    "launcher_wrapper": {"pid": 3399308, "starttime_ticks": 83682487},
+    "launcher_worker": {"pid": 3399313, "starttime_ticks": 83682494},
+    "preserved_failed_candidate": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "preserved_metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-80b8c492-1",
+    "preserved_terminal_container": "c6917efd...f9f0772"
+  },
+  "acceptance": {
+    "application_catalog": "0/273",
+    "fault_modes": "2/4",
+    "native_production_gates": "6/130",
+    "earned_points": "350/10000",
+    "language_gates": "0/7",
+    "diagnostic_guest_apps": 4,
+    "successful_current_candidate_builds": 0,
+    "os_complete": false
+  },
+  "next_actions": [
+    "Run the full 114-test recursive-stage suite on the committed bytes.",
+    "Obtain independent rereview of the four parser corrections and exact hashes.",
+    "If accepted, close the recursive-stage failure family in additive evidence.",
+    "Apply one expert-reviewed unsafe-source documentation and ledger reconciliation pass, updating all affected manifest and staging hashes.",
+    "Only after phase-0 source gates pass, prepare a fresh correctly-moded candidate; never reuse the failed 80b request."
+  ]
+}
