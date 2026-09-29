@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.os-shutdown-checkpoint.v1",
+  "checkpoint": 154,
+  "timestamp": "2026-09-29T08:33:44-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "head_before_checkpoint": "cd4d7e63f0c736f2135834a4372a05fa1c3b29c4",
+  "launcher_processes": [
+    {"role": "wrapper", "pid": 3399308, "starttime": 83682487},
+    {"role": "worker", "pid": 3399313, "starttime": 83682494},
+    {"role": "app_server", "pid": 3399317, "starttime": 83682500}
+  ],
+  "retirement_packet_process": {
+    "pid": 3912447,
+    "starttime": 90493097,
+    "terminal": true
+  },
+  "retained_state": {
+    "candidate_quarantine": {"path": "/dev/shm/.mckernel-retirement-candidate-704f6654-2", "device": 26, "inode": 36767, "uid": 0, "gid": 0, "mode": 448},
+    "metadata_quarantine": {"path": "/dev/shm/.mckernel-retirement-metadata-backup-704f6654-2", "device": 26, "inode": 47413, "uid": 0, "gid": 0, "mode": 448},
+    "evidence_root": {"path": "/dev/shm/.mckernel-retirement-evidence-704f6654-2", "device": 26, "inode": 47525, "uid": 0, "gid": 0, "mode": 448},
+    "immutable_tombstone": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json", "device": 1831, "inode": 31474, "uid": 0, "gid": 0, "mode": 384, "sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123", "immutable": true},
+    "deletion_started": false,
+    "rollback_authorized": false,
+    "retry_authorized": false
+  },
+  "evidence": {
+    "failure_record": "docs/verification/stability-native-exact-retirement-704f6654-failure-20260929-1.json",
+    "failure_record_sha256": "1e63a02eb9b29f1ec3ec0a4142543ca523720e19c0676f6a30048c3f1b34d7e0",
+    "raw_failure_archive": "docs/verification/evidence/stability-native-exact-retirement-704f6654-failure-20260929-1.tar.gz",
+    "raw_failure_archive_sha256": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806",
+    "observer": "docs/verification/evidence/native-exact-candidate-live-reference-observer-704f6654-2.py",
+    "observer_sha256": "6feda9c9cb08b98e7e9763fba92ff79d3f07e9e2ee78c4d94edd4926afa10a42",
+    "continuation_draft": "docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py",
+    "continuation_draft_sha256": "fe7a22fa28c995c21c3329b9a0dc60fefbdc81dea72189932cfa23ce2d0bd40a"
+  },
+  "review": {
+    "observer_source": "PASS_NARROW_PATH_ADAPTATION_ONLY",
+    "continuation": "BLOCKED",
+    "blocking_families": [
+      "missing finalized invocation and release authentication",
+      "observer file descriptor is not inherited and callback retirement is incomplete",
+      "observer output validator does not match the real schema",
+      "Docker validator contradicts the complete 17-container state",
+      "process exclusion fails open and omits released identities",
+      "deletion lacks hash-at-unlink and descriptor/name revalidation",
+      "evidence and failure closure are not durably complete"
+    ]
+  },
+  "resources": {
+    "host_available_bytes": 23420751872,
+    "scratch_available_bytes": 21529010176,
+    "tmpfs_available_bytes": 7502475264,
+    "mem_available_kib": 19231856
+  },
+  "acceptance": {
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "formal_counters_changed": false,
+    "os_complete": false
+  },
+  "next": "Reconcile the recorded identities and quarantines, then perform one expert correction of the seven reviewed continuation defects. Rerun only source/unit review; do not execute, retry or roll back retirement until a fresh independently reviewed release and complete live preflight exist."
+}

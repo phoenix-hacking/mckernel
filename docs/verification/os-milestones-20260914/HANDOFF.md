@@ -1029,3 +1029,22 @@ prove exact Rust compile plus seven-test execution in the reviewed light
 profile, independently review it, then prepare a wholly fresh commit-derived
 candidate before any later heavy build. Builds remain zero and applications
 remain 0/273.
+
+Shutdown checkpoint 154 supersedes checkpoint 147's live retirement state.
+The v2 retirement packet ran once, quarantined candidate 26/36767 and metadata
+26/47413, then failed closed before deletion because its sealed historical
+observer rejected the new quarantine names. Preserve evidence root 26/47525,
+immutable consumed-build tombstone 1831/31474, failure archive
+`ba74523d...8806`, and failure record `1e63a02e...d7e0`. Never retry or roll
+back the consumed packet.
+
+The exact-path observer adaptation `6feda9c9...10a42` is narrowly reviewed.
+Continuation DRAFT `fe7a22fa...d40a` is not executable and independent review
+BLOCKS it on seven families: release authentication/invocation, callback FD and
+process retirement, real observer schema binding, full Docker census handling,
+fail-closed process exclusion, hash-at-unlink descriptor/name revalidation, and
+durable terminal evidence/cleanup. On continuation, reconcile record
+`stability-shutdown-checkpoint-20260929-154.json`, then make one expert bounded
+correction and obtain fresh independent review. No release or privileged run is
+authorized. Builds remain zero, applications remain 0/273, and the OS remains
+incomplete.

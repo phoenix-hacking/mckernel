@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_exact_candidate_quarantine_continuation_basis",
+  "status": "DRAFT_NOT_RELEASED",
+  "execution_authorized": false,
+  "v2_fetched_commit": "cd4d7e63f0c736f2135834a4372a05fa1c3b29c4",
+  "v2_packet_sha256": "27753f96ddc358218cad6a8ade00680894b378190f7ddb981df5b945bfc7c582",
+  "v2_release_sha256": "19093ec1c3db71f16d5fd93264f474a200c823161b6da522400bbd4b238cc281",
+  "raw_archive_sha256": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806",
+  "observer_sha256": "OBSERVER_SHA_REQUIRED",
+  "release_sha256": "RELEASE_SHA_REQUIRED",
+  "packet_sha256": "PACKET_SHA_REQUIRED",
+  "test_sha256": "TEST_SHA_REQUIRED",
+  "one_shot": true,
+  "retry": false,
+  "rollback": false,
+  "runtime_acceptance": false,
+  "operational_threat_assumption": "Root-owned 0700 quarantines and explicit privileged/adversarial mutation, reference acquisition, and reference-transfer exclusion are operational controls during observation AND deletion, not an atomic global proof.",
+  "mechanical_finalization": [
+    "Independently review and fetch the corrected observer; replace only OBSERVER_SHA_REQUIRED with its fetched SHA256.",
+    "Commit, push, and fetch the exact packet, wrapper, basis, and test; bind their final hashes and the fetched source commit in a new PASS basis.",
+    "Obtain a separate root execution release binding the final basis, packet, wrapper, test, observer, raw archive, and v2 authorities.",
+    "A release may run exactly once. Failure retains claim/journal/evidence and never retries, rolls back, renames roots, or changes the historical tombstone."
+  ]
+}

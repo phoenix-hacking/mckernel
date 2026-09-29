@@ -7679,3 +7679,41 @@ generate a v2 release changing only its sentinel plus one release JSON. Obtain
 fresh independent execution review and repeat every live preflight before at
 most one `sudo -A` run. No retirement, build, guest, application or formal
 counter advance has occurred; real guest apps this work window remain zero.
+
+Shutdown checkpoint 154, 2026-09-29: the released v2 packet ran once and failed
+closed after atomically quarantining the exact candidate and metadata roots but
+before deletion. Packet 3912447/90493097 is terminal and absent. The sealed
+historical observer rejected the new quarantine names; its journal records
+terminal failure and no deletion phase. Preserve candidate quarantine
+26/36767, metadata quarantine 26/47413, root-owned evidence 26/47525, and the
+immutable consumed-build tombstone 1831/31474. Never retry or roll back this
+consumed packet. Failure record
+`stability-native-exact-retirement-704f6654-failure-20260929-1.json` and raw
+archive `stability-native-exact-retirement-704f6654-failure-20260929-1.tar.gz`
+retain the original evidence; the archive intentionally excludes the 9-GiB
+quarantine contents.
+
+Observer adaptation `6feda9c9...10a42` and its six tests pass under Python 3.8
+and 3.9; independent review accepts only its exact four-path-literal change.
+The first continuation DRAFT `fe7a22fa...d40a` plus wrapper/basis/tests remains
+BLOCKED despite nine passing tests per runtime. Independent review identifies
+seven required corrections: authenticate and invoke a finalized acyclic
+release; inherit and retire the observer callback FD/process group; validate
+the observer's real six-field set schema; reconcile all 17 containers and four
+terminal exceptions; restore fail-closed PID/starttime/boot/conflict gates;
+rehash and rebind descriptors/names immediately at unlink; and durably publish
+all success/failure/survivor evidence under partial-write, fsync, close and
+interruption faults. No execution release exists.
+
+All child lanes are terminal. Preserve launcher wrapper 3399308/83682487,
+worker 3399313/83682494 and app-server 3399317/83682500. Shutdown capacity is
+host 23,420,751,872, scratch 21,529,010,176 and tmpfs 7,502,475,264 available
+bytes, with 19,231,856 KiB MemAvailable. On the next authorized invocation,
+first reconcile these identities and retained roots, then make one expert
+correction covering the seven review findings and rerun source/unit review.
+Do not execute, retry, rename, delete or roll back any retirement state until a
+fresh independently reviewed release and complete live preflight exist. Record
+`stability-shutdown-checkpoint-20260929-154.json` is the live cursor. Formal
+counters remain unchanged, successful current-candidate builds remain zero,
+real guest apps this window remain zero, applications remain 0/273, and the OS
+remains incomplete; the launcher pause is temporary.
