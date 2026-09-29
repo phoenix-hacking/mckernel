@@ -13,6 +13,7 @@ class DiskCopyCorrectionTests(unittest.TestCase):
     def test_shell_and_template(self):
         self.assertEqual(subprocess.run(['/usr/bin/bash','-n',str(PACKET)]).returncode, 0)
         self.assertIn('RELEASE_HASH_REQUIRED', self.text)
+        self.assertIn('6603bc25f3c4b4f49a909fac73097a2d5f54b59d4da292868393e0a4b57030db', self.text)
         self.assertRegex(hashlib.sha256(PACKET.read_bytes()).hexdigest(), r'^[0-9a-f]{64}$')
 
     def test_binds_originals_and_fresh_outputs(self):

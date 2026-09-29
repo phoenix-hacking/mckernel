@@ -5,7 +5,7 @@ set -Eeuo pipefail
 # source-reviewed only: it preserves the original failure before repairing the
 # two destination Git indexes, performs validate-only provenance checks, and
 # never builds, acquires a lease, deletes a root, or starts a guest.
-readonly RELEASE_HASH=RELEASE_HASH_REQUIRED
+readonly RELEASE_HASH=6603bc25f3c4b4f49a909fac73097a2d5f54b59d4da292868393e0a4b57030db
 readonly SOURCE=/dev/shm/mckernel-exact-candidate-76ae20b5-1
 readonly SOURCE_BACKUP=/dev/shm/mckernel-exact-metadata-backup-76ae20b5-1
 readonly DEST=/home/holden/mckernel-work/scratch/mckernel-exact-candidate-76ae20b5-disk-1
