@@ -746,3 +746,20 @@ release. Preparation grants no retirement authority. Independent capsule review
 and a separate privileged retirement release remain mandatory before any root
 rename or deletion. The OS remains incomplete; successful current-candidate
 builds and formal counters remain unchanged.
+
+Checkpoint 109 closes the source/test-design prerequisite for live retention
+preparation after preserving four rejected/interrupted candidate hashes and
+their findings. Exact reviewed placeholder packet `c57ed38d...8f1c` and test
+`57152321...dfa8` pass 14 behavioral tests on Python 3.8 and 3.9 plus
+pycompile/diff checks. Independent review PASSes only this source boundary:
+acyclic template/release admission, exact fetched blobs and release delta,
+bounded standalone Git control metadata, fresh scratch/claim lifecycle,
+signal-safe group cleanup, one-read snapshots, exact archive ancestor closure
+and second-planner postflight equality.
+
+Commit/push/fetch this placeholder template first. Then construct an
+independently reviewed release JSON binding that prior commit and exact inputs;
+the following release commit may change exactly the packet release literal and
+add that JSON. Do not execute before fetched admission and one-shot release.
+No capsule, cleanup, build or guest ran; counters remain unchanged. See
+`stability-native-exact-retention-preparation-template-review-20260929-1.json`.

@@ -6981,3 +6981,39 @@ space recovery may fresh preparation `704f6654-1` advance toward a separately
 released heavy build. Record
 `stability-shutdown-checkpoint-20260929-108.json` is the live cursor. The OS is
 incomplete and this launcher pause is temporary.
+
+Continuation checkpoint 109, 2026-09-29: the launcher continuation reconciled
+checkpoint 108 and resumed the blocked retention-preparation family. Live
+launcher identities, candidate/backup inodes and commits, absent outputs and
+both retained terminal containers remain unchanged. No heavy build, guest,
+capsule, cleanup or retirement ran. Adopted policy hashes are GOAL
+`76c4f5d1...bcc3`, START `1698d342...216c`, CONVERGENCE
+`f6938bd2...86a` and current HANDOFF `a1cf9115...d24`.
+
+The cheap correction `36a145f2...ec9` passed seven tests but independent review
+BLOCKed it on seven release, archive, capacity, Git, process, snapshot and lease
+defects. Per the failure-family limit, a Terra expert replaced the boundary.
+Its first reviewed candidate `3727a43b...b175c` was BLOCKed on fresh-scratch
+ordering, incomplete finalization-delta binding and an unprotected child-launch
+signal interval. The dispatcher selected one larger coherent boundary repair;
+every rejected hash and finding remains preserved.
+
+Final placeholder packet `c57ed38d...8f1c` and test `57152321...dfa8` receive
+independent source/test-design PASS. Python 3.8 and 3.9 each pass 14 behavioral
+tests; pycompile and diff checks pass. Coverage includes an acyclic temporary
+Git template/release chain, exact changed paths and fetched blobs, supporting-
+test tampering, current sample hooks/worktree administration, top-level shared-
+metadata rejection, bounded control-plane fingerprinting, fresh scratch claims,
+real SIGTERM injection, timeout descendant retirement, snapshot substitution,
+nested IHK archive ancestor closure, capacity deltas and second-planner mutation
+rejection. Direct current-repository metadata admission passes in 0.020 seconds
+without reading the 9.9-GiB Git object payload.
+
+Record `stability-native-exact-retention-preparation-template-review-20260929-1.json`
+contains the failure lineage and review scope. This is template source evidence
+only. Next commit/push/fetch the exact placeholder template, create an
+independently reviewed release JSON bound to that immutable commit, replace only
+the packet release-hash declaration, and commit exactly packet plus new release
+JSON. Only after fresh fetched preflight may the ordinary-user packet run once.
+No execution, cleanup, application or formal gate credit is granted; current-
+candidate builds and real guest applications remain zero.

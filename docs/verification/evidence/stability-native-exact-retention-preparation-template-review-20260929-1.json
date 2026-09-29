@@ -1,0 +1,20 @@
+{
+  "schema": "native-exact-retention-preparation-template-review-v1",
+  "recorded_at_utc": "2026-09-29T09:32:45Z",
+  "status": "PASS_SOURCE_TEST_DESIGN_ONLY",
+  "execution_release": false,
+  "live_packet_executed": false,
+  "packet": {"path": "docs/verification/evidence/native-exact-candidate-retention-preparation-67589154-1.py", "sha256": "c57ed38de903246666a8e9e7b1e87a6a687c325cdc1d3608196ee634d2598f1c", "release_literal": "RELEASE_HASH_REQUIRED"},
+  "tests": {"path": "scripts/tests/test_native_exact_candidate_retention_preparation_67589154.py", "sha256": "571523211bcec97c86bbbad4bf27b70d355e970d80feda475e6f3b1b7477dfa8", "python_3_8": "14_pass", "python_3_9": "14_pass", "py_compile": "pass", "diff_check": "pass", "raw_log_files": "not_created_dispatcher_reported"},
+  "policy_sha256": {"GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3", "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c", "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a", "HANDOFF.md": "a1cf91157008c70b14f9af36c27dbef1226e4092b00b74a7545bbfbc5f9d1d24"},
+  "failure_family": [
+    {"packet_sha256": "9e0a57c632816e1f2d8708eac05ded4b4afd714b08c3f958ef7e42aa97b7d423", "result": "initial_design_rejected"},
+    {"packet_sha256": "ab1471e844fb145ab5111cdb318d008083f8aa4bc1c860f3a11adea85fd04742", "result": "interrupted_correction_unreviewed"},
+    {"packet_sha256": "36a145f2ffa3a2d74b6379e65a903c5dc95775182ce9651ff0af78be9dd94ec9", "result": "bounded_correction_blocked_seven_findings"},
+    {"packet_sha256": "3727a43bef528f1a294c7b68533efa84ea65956d3dc4f10dd361537de02b175c", "result": "expert_candidate_blocked_three_findings"},
+    {"packet_sha256": "c57ed38de903246666a8e9e7b1e87a6a687c325cdc1d3608196ee634d2598f1c", "result": "expert_integrated_source_review_pass"}
+  ],
+  "reviewed_properties": ["acyclic prior-template and later fetched-release binding", "exact packet test supporting-test and two-path release delta", "standalone bounded Git control-plane admission without object payload scans", "fresh scratch reservation and durable claim lease evidence lifecycle", "structured process census and signal-safe process-group cleanup", "single-snapshot manifest archive and release validation", "exact archive ancestor member ordering and metadata", "second planner postflight byte equality"],
+  "nonblocking_limits": ["children inherit blocked TERM HUP INT; parent owns SIGKILL process-group cancellation", "Git object-pack and reflog payload immutability is outside the bounded metadata fingerprint", "actual live capacity process census release admission and preparation remain unverified"],
+  "next_action": "Commit and fetch-verify this exact placeholder template, create an independently reviewed release JSON bound to that template commit, then make a second commit changing exactly the packet release literal and adding the release JSON."
+}
