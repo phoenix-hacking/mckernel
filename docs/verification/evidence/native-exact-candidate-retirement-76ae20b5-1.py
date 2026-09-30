@@ -39,6 +39,7 @@ RETENTION_SUCCESS_SHA='3b42a154ca9fc1280a1fff99d72444ecf055108111a65bbd24a562bee
 CORRUPT_MEMBER='docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-57.tar.gz'
 INV_SHA='585fc0f5a4bca638d9684592fe61e52a3929490260fe0ad0c34d8df1ba3504fd'; CAP_SHA='fd26f227fef7a850e013494600e32c51108375cb4137119b205136b24b41e3d7'; SUCCESS_SHA='9a1a4b0c6e98b9b09ef934962dbcd9dac7ed3d23e90104c1561d6a4953cc348c'
 ROUTING_COUNTS={'main':7864,'ihk':1295}; POST_DELETE_ROUNDS=3; RETENTION_MEMBER_COUNT=937; RETENTION_CAPSULE_REQUIRED=922
+RETENTION_CAPSULE_BYTES=52039680
 PREPARATION_COMMIT='f5db92dfbdd76c06335177d09a350154c727f08e'; PREPARATION_RELEASE_SHA='0dad43e96598491fe8f7607758a2c9fa52a7b9501c07edfc6a57a15b97cec167'; RECEIPT=Path('/home/holden/mckernel-work/scratch/native-exact-candidate-retention-76ae20b5-2/receipt.json'); RECEIPT_SHA='cfd7b5d54918d59dde074476ef2475a739bfdcc0aabb5c39347242a7e413565b'; TMPFS_INVENTORY_SHA='375e025ce48892555382759f6f65508ead7655052e6a06f09192ee5b26b9f30d'
 HELPER=SOURCE/'scripts/native_exact_candidate_retire.py'; ARCHIVE=SOURCE/'scripts/native_exact_candidate_retention_archive.py'
 HELPER_SHA256='704a3f5f8f2ab259af493b3fbc0dd5bf1d461b8a0d67301d2176052b520df54b'; ARCHIVE_SHA256='6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e'; HELPER_TEST_SHA256='c2a65c45468cd6440ac63e5daee744b0249f4e48250cebdfea14b57d25463d68'
@@ -972,6 +973,7 @@ def fetched_checked(path,digest,fetch):
  return raw
 def verify_corrupt_capsule():
  raw=checked(CAPSULE,CAP_SHA)
+ if len(raw)!=RETENTION_CAPSULE_BYTES:bad('retention capsule exact size')
  import io
  with tarfile.open(fileobj=io.BytesIO(raw),mode='r:') as archive:
   members=archive.getmembers();selected=[m for m in members if m.name=='candidate/'+CORRUPT_MEMBER]
@@ -1331,10 +1333,17 @@ def docker_callback(base,docker,lease):
 def sealed_module(path,name,source):
  """Execute only the immutable bytes just persisted in this private output."""
  m=types.ModuleType(name);m.__file__=str(path);m.__package__='';exec(compile(source,str(path),'exec'),m.__dict__);return m
+def bind_retention_capsule_limit(module):
+ """Expand only the sealed legacy reader to this exact authenticated capsule."""
+ if type(module.MAX_CAPSULE_BYTES) is not int or module.MAX_CAPSULE_BYTES!=32<<20:bad('unbound helper capsule limit')
+ raw=checked(CAPSULE,CAP_SHA)
+ if len(raw)!=RETENTION_CAPSULE_BYTES:bad('retention capsule exact size')
+ module.MAX_CAPSULE_BYTES=RETENTION_CAPSULE_BYTES
 def helper(base,sources):
  hp=base/'helper.sealed.py';ap=base/'archive.sealed.py';op=base/'observer.sealed.py'
  capture(base,hp.name,sources['helper']);capture(base,ap.name,sources['archive']);capture(base,op.name,sources['observer'])
  archive=sealed_module(ap,'_retention_archive_sealed',sources['archive']);m=sealed_module(hp,'_retire_sealed',sources['helper'])
+ bind_retention_capsule_limit(m)
  m._archive_module=lambda:archive
  original_census_validator=m.validate_docker_census
  # Full terminal canonical digests and projections were compared in the callback.

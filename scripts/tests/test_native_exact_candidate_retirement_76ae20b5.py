@@ -117,6 +117,31 @@ class RetirementPacketTests(unittest.TestCase):
         M.evidence_bindings(*self.evidence())
         M.verify_corrupt_capsule()
 
+    def test_exact_accepted_capsule_limit_and_historical_failure(self):
+        spec=importlib.util.spec_from_file_location('retire_helper_capsule_test',M.HELPER)
+        helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+        self.assertEqual(M.CAPSULE.stat().st_size,52039680)
+        self.assertEqual(helper.MAX_CAPSULE_BYTES,33554432)
+        with self.assertRaisesRegex(helper.RetirementError,'exceeds cap'):helper.stable_read(M.CAPSULE,helper.MAX_CAPSULE_BYTES)
+        M.bind_retention_capsule_limit(helper)
+        self.assertEqual(helper.MAX_CAPSULE_BYTES,52039680)
+        self.assertEqual(M.sha(helper.stable_read(M.CAPSULE,helper.MAX_CAPSULE_BYTES)),M.CAP_SHA)
+
+    def test_capsule_limit_rejects_old_oversize_and_unbound_inputs(self):
+        for size in (33554432,52039679,52039681,1<<40):
+            with self.subTest(size=size):
+                raw=mock.MagicMock();raw.__len__.return_value=size
+                helper=mock.Mock(MAX_CAPSULE_BYTES=33554432)
+                with mock.patch.object(M,'checked',return_value=raw):
+                    with self.assertRaisesRegex(M.Error,'exact size'):M.bind_retention_capsule_limit(helper)
+                self.assertEqual(helper.MAX_CAPSULE_BYTES,33554432)
+        for value in (True,52039680,1<<60,None):
+            with self.subTest(value=value):
+                with mock.patch.object(M,'checked',side_effect=AssertionError('must reject before read')):
+                    with self.assertRaisesRegex(M.Error,'unbound helper capsule limit'):M.bind_retention_capsule_limit(mock.Mock(MAX_CAPSULE_BYTES=value))
+        with mock.patch.object(M,'CAP_SHA','0'*64):
+            with self.assertRaises(M.Error):M.bind_retention_capsule_limit(mock.Mock(MAX_CAPSULE_BYTES=33554432))
+
     def test_each_evidence_closure_rejection(self):
         originals=self.evidence()
         mutations=[(0,('status',),'PASS_PREPARATION_EVIDENCE_ONLY'),
