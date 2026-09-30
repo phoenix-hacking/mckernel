@@ -1301,9 +1301,14 @@ def sanitized_docker_row(row,terminal=False):
   answer['State']={k:state.get(k) for k in ('Status','Running','Paused','Restarting','Dead','Pid','ExitCode','OOMKilled')}
  return answer
 def sanitized_terminal_release(docker):
- terminal=docker['terminal'];row=docker['terminal_containers'][terminal['id']]
- safe=sanitized_docker_row(row,True)
+ terminal=docker['terminal'];binding=docker['terminal_containers'][terminal['id']]
+ if not isinstance(binding,dict) or set(binding)!={'canonical_sha256','sanitized'} or not H64.fullmatch(binding.get('canonical_sha256','')) or not isinstance(binding.get('sanitized'),dict):bad('Docker terminal release binding')
+ safe=binding['sanitized']
  return {'terminal':{'id':safe['Id'],'state':safe['State'],'exact_config':{k:safe[k] for k in ('Config','HostConfig','Mounts')}}}
+def terminal_binding(row):
+ """Retain exact canonical equality through a digest, never raw settings."""
+ raw=json.dumps(canonical_docker_row(row),sort_keys=True,separators=(',',':')).encode()
+ return {'canonical_sha256':sha(raw),'sanitized':sanitized_docker_row(row,True)}
 def docker_callback(base,docker,lease):
  def run():
   lease.assert_held()
@@ -1316,7 +1321,8 @@ def docker_callback(base,docker,lease):
   if after!=ids:bad('Docker churn after inspect')
   terminals=docker.get('terminal_containers') if isinstance(docker,dict) else None
   want={'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
-  if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=canonical_docker_row(v) for i,v in terminals.items()):bad('terminal config')
+  by_id={x['Id']:x for x in rows}
+  if not isinstance(terminals,dict) or set(terminals)!=want or any(i not in by_id or terminal_binding(by_id[i])!=v for i,v in terminals.items()):bad('terminal config')
   lease.assert_held()
   census={'ps_all':ids,'inspect':[sanitized_docker_row(row,row['Id'] in want) for row in rows]}
   capture(base,'docker-census.json',(json.dumps(census,sort_keys=True,separators=(',',':'))+'\n').encode())
@@ -1331,7 +1337,7 @@ def helper(base,sources):
  archive=sealed_module(ap,'_retention_archive_sealed',sources['archive']);m=sealed_module(hp,'_retire_sealed',sources['helper'])
  m._archive_module=lambda:archive
  original_census_validator=m.validate_docker_census
- # Full terminal bytes were compared in docker_callback before projection.
+ # Full terminal canonical digests and projections were compared in the callback.
  # Give the helper the identical projection of its release so its state and
  # mount-isolation checks remain unchanged without retaining Config.Env.
  m.validate_docker_census=lambda census,docker,protected:original_census_validator(census,sanitized_terminal_release(docker),protected)

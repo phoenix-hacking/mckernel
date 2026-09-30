@@ -232,7 +232,7 @@ class RetirementPacketTests(unittest.TestCase):
         rows=[]
         for identity in ids:
             rows.append({'Id':identity,'Config':{'Image':'image','User':'0','Cmd':['test',secret],'Env':['PASSWORD='+secret],'Labels':{'password':secret}},'State':{'Status':'exited','Running':False,'Paused':False,'Restarting':False,'Dead':False,'Pid':0,'ExitCode':1,'OOMKilled':False,'Error':secret},'HostConfig':{'SecurityOpt':[secret],'Privileged':False,'ReadonlyRootfs':True,'NanoCpus':4,'Memory':1024,'PidsLimit':512,'CpusetCpus':'2-5','RestartPolicy':{'Name':'no','MaximumRetryCount':0},'AutoRemove':False},'Mounts':[{'Source':'/safe/source','Destination':'/safe/destination','Credential':secret}]})
-        docker={'terminal_containers':{r['Id']:r for r in rows[:2]},'terminal':{'id':ids[0],'state':rows[0]['State'],'exact_config':{k:rows[0][k] for k in ('Config','HostConfig','Mounts')}}}
+        docker={'terminal_containers':{r['Id']:M.terminal_binding(r) for r in rows[:2]},'terminal':{'id':ids[0]}}
         return ids,rows,docker
 
     def test_docker_secrets_never_enter_captures_or_helper_evidence(self):
@@ -261,6 +261,21 @@ class RetirementPacketTests(unittest.TestCase):
         with mock.patch.object(M,'owned_spawn',return_value=(object(),{})),mock.patch.object(M,'_drain',side_effect=[(ps,b''),(json.dumps(changed).encode(),b''),(ps,b'')]),mock.patch.object(M,'complete_process',return_value=0),mock.patch.object(M,'close_streams',return_value=None),mock.patch.object(M,'restore_spawn_mask',return_value=None),mock.patch.object(M,'capture',side_effect=lambda base,name,data:captures.update({name:data})):
             with self.assertRaisesRegex(M.Error,'terminal config') as failure:M.docker_callback(None,docker,mock.Mock(unsafe=True))()
         self.assertNotIn(secret,str(failure.exception));self.assertNotIn(secret.encode(),b'\n'.join(captures.values()))
+
+    def test_release_terminal_binding_contains_no_raw_settings_or_secrets(self):
+        secret='RELEASE-ENV-CREDENTIAL-TEST';ids,rows,docker=self.docker_fixture(secret)
+        encoded=json.dumps(docker)
+        self.assertNotIn(secret,encoded);self.assertNotIn('"Env"',encoded);self.assertNotIn('"Labels"',encoded)
+        for row in rows[:2]:
+            binding=docker['terminal_containers'][row['Id']]
+            self.assertEqual(set(binding),{'canonical_sha256','sanitized'})
+            self.assertNotEqual(binding['sanitized']['Config'],row['Config'])
+            self.assertNotEqual(binding['sanitized']['HostConfig'],row['HostConfig'])
+            changed=copy.deepcopy(row);changed['Config']['Env']=['PASSWORD=changed']
+            rebound=M.terminal_binding(changed)
+            self.assertNotEqual(binding['canonical_sha256'],rebound['canonical_sha256'])
+            self.assertEqual(binding['sanitized'],rebound['sanitized'])
+            self.assertNotIn(secret,json.dumps(rebound))
 
     def test_docker_parse_failure_does_not_echo_secret_or_raw_output(self):
         secret='MALFORMED-JSON-SECRET';ids,rows,docker=self.docker_fixture(secret)
