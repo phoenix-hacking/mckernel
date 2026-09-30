@@ -1,0 +1,99 @@
+{
+  "schema": "mckernel.candidate12-cleanup-release.v1",
+  "status": "PASS",
+  "finalization": "PASS",
+  "source_commit": "fd4de5b1b79320ecf10b96acc2826705a19c1069",
+  "tool_sha256": "43afae3704644fe73bea48a2e02cee73e6869378618dc763c8a46da887c0fff9",
+  "tool_blob": "f0ff65c7c11b5c0f18bf098f3b1cc6f62fce3ef9",
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-source-audit-reviewed-20260930-1.json",
+    "sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+    "size": 1612448,
+    "dev": 1831,
+    "ino": 90650,
+    "mode": 384,
+    "nlink": 1,
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12",
+    "identity": "1831:3693246",
+    "commit": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "count": 2507,
+    "bytes": 9096966061,
+    "allocated": 9102798848
+  },
+  "command": [
+    "/usr/bin/python3",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+    "--execute",
+    "--plan",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate12-source-audit-reviewed-20260930-1.json",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate12-planbound-cleanup-release-20260930-1.json",
+    "--journal",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.journal.jsonl",
+    "--receipt",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.receipt.json",
+    "--status",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.status.json",
+    "--quarantine",
+    "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-1"
+  ],
+  "outputs": {
+    "journal": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.journal.jsonl",
+    "receipt": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.receipt.json",
+    "status": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.status.json",
+    "quarantine": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-1"
+  },
+  "absent_leases": [
+    "/home/holden/mckernel-work/scratch/native-exact-build-lease-4e99a82c-scratch-12.json",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-lease-4e99a82c-exportset-24.json"
+  ],
+  "dispatcher_exclusive": true,
+  "retained_containers": {
+    "053b5528de7605a712b7842b0145c7e777843c2fd14225174ac8959918a7d24f": {
+      "Name": "/mckernel-image-69d5302ef1b74816aec831cf959404ee",
+      "ExitCode": 1,
+      "proof": {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-24/owner-receipt.json",
+        "sha256": "4681bd9cdc65f62a1802cea888700437ba6c01b154cc8a094dd1719b0ec2080a",
+        "size": 17574,
+        "dev": 1831,
+        "ino": 1721765,
+        "mode": 384,
+        "nlink": 1
+      },
+      "Mounts": [
+        {"Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12", "Destination": "/src", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-4e99a82c-exportset-23.json", "Destination": "/libdwarf-inputs.json", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-24.json", "Destination": "/toolchain.json", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_offline.py", "Destination": "/driver.py", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-build-output-4e99a82c-scratch-12", "Destination": "/out", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-inputs-4e99a82c-scratch-12.json", "Destination": "/inputs.json", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-4e99a82c-exportset-23", "Destination": "/src/executer/user/lib/libdwarf/libdwarf", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel/scripts/native_rust_exact_build_offline.py", "Destination": "/native_rust_exact_build_offline.py", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-24", "Destination": "/work", "RW": true, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu", "Destination": "/nightly", "RW": false, "Type": "bind"}
+      ]
+    },
+    "4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86": {
+      "Name": "/mckernel-exact-a97aabd626bd41f59032728f2c1b5282",
+      "ExitCode": 0,
+      "proof": {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12/inspect-terminal.json",
+        "sha256": "96eb113aaba4436105c411d522928a80d1023a5a0e4060ba010cd37db22b36e6",
+        "size": 9713,
+        "dev": 1831,
+        "ino": 6641738,
+        "mode": 384,
+        "nlink": 1
+      },
+      "Mounts": [
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12", "Destination": "/evidence", "RW": true, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/scripts/native_rust_exact_build_offline.py", "Destination": "/driver.py", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-inputs-4e99a82c-scratch-12.json", "Destination": "/inputs.json", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12", "Destination": "/src", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-assets-16445ab2", "Destination": "/assets", "RW": false, "Type": "bind"},
+        {"Source": "/home/holden/mckernel-work/scratch/native-exact-build-output-4e99a82c-scratch-12", "Destination": "/out", "RW": true, "Type": "bind"}
+      ]
+    }
+  }
+}

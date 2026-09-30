@@ -10674,3 +10674,27 @@ Next checkpoint this source, fetch-verify it, author and independently review a
 separate one-shot release, then remeasure capacity before executing exactly
 once.  The OS goal remains incomplete; no diagnostic, application or
 production acceptance changes here.
+
+Continuation checkpoint 254, 2026-09-30: exact cleanup release 1 hashes to
+`2dd558b7...e09` and independently passes precommit execution-release review.
+It binds fetched source `fd4de5b1...1069`, tool `43afae37...fff9`/blob
+`f0ff65c7...e3ef9`, plan `eaba225b...f957`, all 2,507 targets, four fresh
+outputs, both absent leases, dispatcher exclusivity and both exact terminal
+containers.  Fresh read-only Docker observation matches all sixteen retained
+mount tuples and terminal states.  Cleanup still has not run; the release only
+authorizes one invocation after its exact descendant commit is pushed, fetched
+and commit-bound.
+
+Fresh scratch-13 preparation source also independently passes.  Packet/test
+hashes are `3694e530...328d` and `750ba961...d45e`; 43/43 tests pass.  It
+authenticates and preserves consumed exportset-16 evidence, explicitly marks
+the generated host-build request non-executable, and requires fresh
+exportset-25 absence.  Candidate preparation, Docker and build did not run.
+Exact combined review evidence is
+`docs/verification/evidence/native-exact-candidate12-cleanup-release-and-scratch13-preparation-review-20260930.json`.
+
+Next push/fetch this exact release, obtain final commit-bound confirmation and
+execute cleanup once.  On a PASS receipt, verify restoration metadata, trim
+scratch, remeasure the 16/12/16-GiB floors, then separately release and run the
+scratch-13 preparation packet.  No acceptance bar changes at this source-only
+checkpoint; the OS goal remains incomplete.

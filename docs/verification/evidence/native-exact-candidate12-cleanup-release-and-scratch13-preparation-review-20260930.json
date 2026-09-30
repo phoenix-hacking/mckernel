@@ -1,0 +1,41 @@
+{
+  "schema": "mckernel.cleanup-release-preparation-review.v1",
+  "recorded_at": "2026-09-30T16:32:00-07:00",
+  "cleanup_release": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-release-20260930-1.json",
+    "sha256": "2dd558b70a911c65cc5c1f966d11fadadc1ddd796fc2cd876edd6a065217be09",
+    "review": "PASS_EXECUTION_RELEASE_PRECOMMIT",
+    "source_commit": "fd4de5b1b79320ecf10b96acc2826705a19c1069",
+    "source_tool_sha256": "43afae3704644fe73bea48a2e02cee73e6869378618dc763c8a46da887c0fff9",
+    "source_tool_blob": "f0ff65c7c11b5c0f18bf098f3b1cc6f62fce3ef9",
+    "plan_sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+    "target_count": 2507,
+    "allocated_bytes": 9102798848,
+    "execution_count": 0
+  },
+  "scratch13_preparation": {
+    "packet": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-13.sh",
+    "packet_sha256": "3694e53026002e4cd419df895511749b21296711fb9bb4e64b9288a84c8d328d",
+    "tests": "scripts/tests/test_native_exact_candidate_preparation_scratch_20260930_13.py",
+    "tests_sha256": "750ba961f8454202a6a82cb5efdeedd8959b6646b17801f09291b599104bd45e",
+    "result": "43 tests, PASS",
+    "review": "PASS_PREPARATION_SOURCE",
+    "candidate_commit": "9a6eb5b4e26b1ade6c9b32d4789ffe23f9d37684",
+    "retained_exportset16_authenticated": true,
+    "host_build_request_execution_released": false,
+    "image_exportset25_exclusion_required_absent": true,
+    "executed": false
+  },
+  "resource_observation": {
+    "host_free_bytes": 31039619072,
+    "scratch_free_bytes": 17105330176,
+    "mem_available_kib": 28729872
+  },
+  "heavy_process_live": false,
+  "cleanup_executed": false,
+  "preparation_executed": false,
+  "diagnostic_acceptance": false,
+  "production_acceptance": false,
+  "os_complete": false,
+  "next": "Commit and fetch-verify exact bytes; bind release to the fetched descendant commit; execute cleanup once; verify receipt/restoration evidence; trim and run scratch-13 preparation under its own release."
+}
