@@ -9410,3 +9410,49 @@ image request is prepared.  Then regenerate source-bound startup/memory/files/
 threads/signals/shutdown diagnostic packets.  Current-candidate builds in this
 loop: two failed and zero completed.  Real diagnostic guest applications: zero;
 no retention or preparation result is acceptance credit.
+
+Continuation checkpoint 208, 2026-09-30: the exact `c658175a` build executed
+once and failed closed in phase 0 before compilation because the isolated
+runtime checker normalized SHA-256 no longer matched its refreshed embedded
+self identity.  Container `4a0ffec...c7df2` exited 1 without OOM; the original
+request, manifest, empty output/evidence roots, owner/build receipts, driver
+log, operational exclusion, and failure record remain.  The portable 48-member
+failure archive is 1,402,880 bytes at scratch identity `1831:57617`, SHA
+`ee326adc...6cef`; it excludes the source tree.
+
+The bounded correction refreshed only the eight-file runtime-checker digest
+cascade.  The normalized digest is `36346f23...1b3`; the full checker SHA is
+`84f2eb8a...ce17f`.  Three focused controls, the runtime contract validator,
+38 namespace tests, and independent source review pass.  The candidate
+operational namespace advanced from `runtimeblob-12` to `selfdigest-13`; this
+is source/light-regression evidence, not a successful build.
+
+The large failed candidate is retained without consuming the scratch build
+floor.  The first relocation packet bound the wrong archive, the second failed
+while routing its preserved failure record, and the verification-only retry
+then exposed an unbound `FAILURE` variable.  All three failures and their
+zero-byte lock/log identities are preserved.  The final `resume3` fixture
+executes the real 25-argument `main()` to record-routing boundary, catches the
+missing binding, and passes 11 tests plus independent source and execution
+review at fetched commit `8fcc4d47`.
+
+The reviewed live resume hashed all 10,746 source and temporary entries,
+checked metadata/hardlinks and an empty checksum-mode rsync delta, atomically
+promoted temporary identity `66306:47753167`, rechecked both trees, and only
+then deleted source identity `1831:6684719`.  The destination is
+`/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7`;
+both the scratch source and temporary pathname are absent.  Terminal/log SHA
+is `36a8c132...51d6`.  Targeted scratch trim returned 13,027,381,248 bytes;
+post-trim host/scratch availability is 34,776,424,448/29,093,855,232 bytes.
+The additive result is
+`docs/verification/evidence/native-exact-candidate-relocation-c658175a-resume3-result-20260930.json`.
+
+Next prepare one fresh exact candidate from the corrected pushed head using
+the `selfdigest-13` wrapper/image-owner namespace and a new scratch/output
+namespace.  Bind the post-clone capacity gate only to metadata plus emergency
+headroom, then obtain a fresh heavy-build release and run one exact build.  It
+must clear the retained phase-0 self-digest and objtool failure families before
+image preparation and real startup/memory/files/threads/signals/shutdown
+diagnostic applications.  Current-candidate builds in this loop: three failed,
+zero completed.  Real diagnostic guest applications: zero; diagnostics remain
+separate from formal acceptance.
