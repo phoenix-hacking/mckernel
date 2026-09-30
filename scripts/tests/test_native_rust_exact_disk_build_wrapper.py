@@ -64,7 +64,7 @@ class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-exportset-15.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-exportset-16.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -107,7 +107,7 @@ class WrapperTests(unittest.TestCase):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-exportset-15.json"))
+            "native-exact-candidate-operational-exclusion-exportset-16.json"))
         for rejected_path in (
             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
