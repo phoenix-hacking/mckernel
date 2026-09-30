@@ -9914,3 +9914,33 @@ first diagnostic oracle remains `baseline.core.memory`: stdout exactly
 `NATIVE_CORE PASS memory\n`, stderr empty, exit 37/raw wait 9472.  Current-
 candidate builds remain six failed and one completed; real current diagnostic
 guest applications remain zero.
+
+Continuation checkpoint 225, 2026-09-30: the exact refreshed tool-image
+command has an independently reviewed `PASS_EXECUTION` release after one
+rejected packet and one bounded harness correction.  The first review correctly
+found that the root-owned Docker socket lacked the reviewed `sudo -A` client
+and that `runtime_network=none` was merely declared.  The correction now uses
+the privileged Docker transport only from the host owner, retires/commits/
+removes the bridge-connected preparation container, then reuses the same
+durably leased name and nonce for a fresh offline verification container.
+
+The offline container is network-none, read-only, host uid/gid, cap-drop ALL,
+no mounts, private IPC, 4 CPUs pinned to 2-5, 12 GiB without swap expansion,
+and 512 PIDs.  It repeats the complete package/tool/RPM probe and must match the
+networked observation byte-for-structure before the receipt can record
+`runtime_network=none`.  Failure retains the phase-specific evidence and
+container; uncertain retirement retains a lease naming the actual survivor.
+The combined preparation and owner suite passes 81 tests, including an explicit
+offline-unretirable identity regression; `py_compile` and diff-check pass.
+Reviewed production/test/harness SHAs are `3af27f6d...dca8`,
+`3073e43f...e96a`, and `7aee2f1f...5a61`.  Exact release evidence is
+`docs/verification/evidence/native-exact-tool-image-execution-release-20260930.json`.
+
+No Docker mutation or package installation has yet occurred under this release.
+The one allowed command uses fresh host output/evidence paths and scratch lease
+`native-exact-image-preparation-lease-f0a97d42-1.json`.  Immediately before
+execution remeasure the 16/12-GiB host/scratch floors and confirm no live heavy
+owner.  Then run it exactly once, retain actual CMake/tool observations, image
+ID, both terminal inspections and lease retirement.  Current-candidate builds
+remain six failed and one completed; real current diagnostic guest applications
+remain zero.  This release grants no image-build, guest or acceptance credit.

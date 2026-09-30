@@ -30,6 +30,69 @@ def probe_fixture():
             'rpm_inventory': '\n'.join(inventory)}
 
 
+class OfflineMismatchDocker(FakeDocker):
+    """Use one observation for preparation and another for the offline probe."""
+    def __init__(self):
+        super().__init__()
+        self.probe = probe_fixture()
+        self.offline_probe = copy.deepcopy(self.probe)
+        self.offline_probe['tools']['make']['sha256'] = 'e' * 64
+        self.create_count = 0
+
+    def call(self, args, timeout=120, check=True):
+        if args[0] == 'create':
+            self.create_count += 1
+        if args[0] == 'exec' and self.create_count == 2:
+            original, self.probe = self.probe, self.offline_probe
+            try:
+                return super().call(args, timeout, check)
+            finally:
+                self.probe = original
+        return super().call(args, timeout, check)
+
+
+class RecordingDocker(FakeDocker):
+    instances = []
+
+    def __init__(self, log, signals=None, sudo=False):
+        super().__init__()
+        self.probe = probe_fixture()
+        self.log = log
+        self.signals = signals
+        self.sudo = sudo
+        self.instances.append(self)
+
+
+class OfflineProfileDocker(FakeDocker):
+    def __init__(self):
+        super().__init__()
+        self.probe = probe_fixture()
+        self.create_count = 0
+
+    def call(self, args, timeout=120, check=True):
+        result = super().call(args, timeout, check)
+        if args[0] == 'create':
+            self.create_count += 1
+            if self.create_count == 2:
+                self.mutate = lambda info: info['HostConfig'].update(NetworkMode='bridge')
+        return result
+
+
+class OfflineUnretirableDocker(FakeDocker):
+    def __init__(self):
+        super().__init__()
+        self.probe = probe_fixture()
+        self.create_count = 0
+
+    def call(self, args, timeout=120, check=True):
+        result = super().call(args, timeout, check)
+        if args[0] == 'create':
+            self.create_count += 1
+            if self.create_count == 2:
+                self.unretirable = self.timeout = True
+        return result
+
+
 class PreparationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -61,9 +124,63 @@ class PreparationTests(unittest.TestCase):
         self.assertTrue(result['source_free'])
         self.assertFalse((self.root / 'lease').exists())
         creates = [c for c in fake.commands if c[0] == 'create']
-        self.assertEqual(len(creates), 1)
+        self.assertEqual(len(creates), 2)
+        self.assertEqual(creates[0][creates[0].index('--name') + 1],
+                         creates[1][creates[1].index('--name') + 1])
         self.assertNotIn('--mount', creates[0])
-        self.assertEqual(fake.commands[-1][0], 'rm')
+        self.assertIn('--network=bridge', creates[0])
+        self.assertIn('--cap-add=' + prep.PREP_CAPS[0], creates[0])
+        self.assertIn('--network=none', creates[1])
+        self.assertIn('--read-only', creates[1])
+        self.assertIn('--user', creates[1])
+        self.assertIn('--tmpfs', creates[1])
+        self.assertNotIn('--mount', creates[1])
+        self.assertFalse(any(arg.startswith('--cap-add=') for arg in creates[1]))
+        self.assertEqual(fake.commands[-1], ['rm', creates[1][creates[1].index('--name') + 1]])
+        self.assertEqual(json.loads((self.root / 'ev' / 'offline-tool-observation.json').read_text()),
+                         fake.probe)
+        self.assertTrue((self.root / 'ev' / 'offline-inspect-terminal.json').exists())
+
+    def test_production_docker_uses_reviewed_sudo_client(self):
+        RecordingDocker.instances.clear()
+        with mock.patch.object(prep, 'Docker', RecordingDocker):
+            result = self.execute(None)
+        self.assertEqual(result['status'], 'PASS', result)
+        self.assertEqual(len(RecordingDocker.instances), 1)
+        self.assertTrue(RecordingDocker.instances[0].sudo)
+
+    def test_offline_observation_mismatch_fails_and_preserves_container_log(self):
+        fake = OfflineMismatchDocker()
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['retired'])
+        self.assertIn('offline tool observation differs', result['error'])
+        self.assertTrue((self.root / 'ev' / 'offline-container.log').exists())
+        self.assertEqual(sum(command[0] == 'rm' for command in fake.commands), 1)
+        self.assertIsNotNone(fake.info)
+
+    def test_offline_profile_mutation_blocks_probe_and_preserves_container(self):
+        fake = OfflineProfileDocker()
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertIn('effective limit mismatch: NetworkMode', result['error'])
+        starts = [command for command in fake.commands if command[0] == 'start']
+        self.assertEqual(len(starts), 1)
+        self.assertTrue((self.root / 'ev' / 'offline-container.log').exists())
+        self.assertEqual(sum(command[0] == 'rm' for command in fake.commands), 1)
+
+    def test_offline_unproven_retirement_keeps_matching_owner_lease(self):
+        fake = OfflineUnretirableDocker()
+        result = self.execute(fake)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertFalse(result['retired'])
+        lease = json.loads((self.root / 'lease').read_text())
+        self.assertEqual(lease['container_name'], result['owner']['container_name'])
+        self.assertEqual(fake.info['Name'], '/' + lease['container_name'])
+        creates = [command for command in fake.commands if command[0] == 'create']
+        self.assertEqual(creates[0][creates[0].index('--name') + 1],
+                         creates[1][creates[1].index('--name') + 1])
+        self.assertEqual(sum(command[0] == 'rm' for command in fake.commands), 1)
 
     def test_wrong_runtime_evidence_fails_closed(self):
         for key, value in [('arch', 'aarch64'), ('rustc', 'rustc 1.92.0 forged'),

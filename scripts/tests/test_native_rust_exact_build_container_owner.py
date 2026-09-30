@@ -51,8 +51,11 @@ def local_popen(argv, **kwargs):
 owner.subprocess.Popen = local_popen
 owner.measure = prep.measure = lambda *a, **kw: {'host_free': 64 * 2**30, 'scratch_free': 64 * 2**30, 'memory_available': 32 * 2**30}
 class Hybrid(FakeDocker):
-    def __init__(self, log, signals=None):
+    def __init__(self, log, signals=None, sudo=False):
         super().__init__(request if mode.startswith('owner') else None)
+        # The signal fixture replaces the daemon client with a local emitter;
+        # accept the production sudo selection without invoking host sudo.
+        self.sudo = sudo
         self.live = RealDocker(log, signals=signals)
         self.injected = False
         self.unretirable = mode.endswith('-hold')

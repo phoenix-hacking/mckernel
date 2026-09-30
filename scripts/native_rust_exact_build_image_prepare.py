@@ -6,6 +6,7 @@ separate Rocky packaging/signature-closure production gate is accepted.
 """
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import uuid
@@ -130,11 +131,15 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     pinned['cmake'] = PINNED_CMAKE
     if pinned.get('rust') != 'rust-0:1.92.0-1.el10.x86_64':
         raise PreparationError('Rust package lock differs')
-    docker = runner or Docker(evidence / 'prepare.log', signals=signals)
+    # The daemon socket is host authority.  The reviewed sudo -A client path
+    # keeps that authority out of the preparation/offline containers while
+    # retaining the Docker command capture and client-retirement accounting.
+    docker = runner or Docker(evidence / 'prepare.log', signals=signals, sudo=True)
     name = 'mckernel-tools-' + uuid.uuid4().hex
     lease = Lease(lease_path, name)
     lease.acquire()
     attempted = False
+    phase = 'preparation'
     receipt = {'status': 'FAIL', 'candidate_sha': candidate_sha, 'base_image': base_image,
                'measurement': measurement, 'owner': lease.record, 'retired': False,
                'toolchain_lock_sha256': digest(toolchain_lock), 'source_free': False}
@@ -191,6 +196,45 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
         atomic(evidence / 'image-inspect.json', image)
         docker.call(['rm', name])
         attempted = False
+        # ``runtime_network=none`` is an observed property, not a declaration
+        # about the image.  Re-run the complete RPM/tool probe in a fresh,
+        # sequential offline container before allowing the receipt to state it.
+        # Reuse the exact leased name after the retired preparation container
+        # has been removed.  A crash in either phase therefore leaves the
+        # durable lease naming the one surviving owned container.
+        phase = 'offline'
+        args = ['create', '--name', name, '--label', 'mckernel.owner=' + lease.nonce,
+                '--init', '--network=none', '--ipc=private', *RESOURCE_ARGS,
+                '--user', '%d:%d' % (os.getuid(), os.getgid()),
+                '--read-only', '--cap-drop=ALL', '--security-opt=no-new-privileges',
+                '--tmpfs', '/tmp:rw,nodev,nosuid,size=256m',
+                '--entrypoint', '/usr/bin/sleep', committed, 'infinity']
+        attempted = True
+        docker.call(args)
+        offline_before = inspect(docker, name)
+        atomic(evidence / 'offline-inspect-before-start.json', offline_before)
+        check_profile(offline_before, committed, lease.nonce, network='none', readonly=True)
+        if (offline_before.get('Mounts') or
+                offline_before['HostConfig'].get('Tmpfs') !=
+                {'/tmp': 'rw,nodev,nosuid,size=256m'} or
+                offline_before['Config'].get('User') != '%d:%d' % (os.getuid(), os.getgid()) or
+                offline_before['Config'].get('Entrypoint') != ['/usr/bin/sleep'] or
+                offline_before['Config'].get('Cmd') != ['infinity']):
+            raise PreparationError('offline verification mounts/capabilities/command differ')
+        docker.call(['start', name])
+        offline_probe = json.loads(docker.call(
+            ['exec', '--env', 'EXPECTED_PACKAGES=' + json.dumps(PACKAGES),
+             '--env', 'EXPECTED_TOOLS=' + json.dumps(TOOLS), name,
+             '/usr/bin/python3', '-I', '-c', PROBE]).stdout)
+        atomic(evidence / 'offline-tool-observation.json', offline_probe)
+        validate_probe(offline_probe, pinned)
+        if offline_probe != probe:
+            raise PreparationError('offline tool observation differs from preparation')
+        terminal = retire(docker, name, lease.nonce)
+        atomic(evidence / 'offline-inspect-terminal.json', terminal)
+        receipt['retired'] = True
+        docker.call(['rm', name])
+        attempted = False
         receipt.update(status='PASS', image_id=committed, source_free=True,
                        source_free_basis='no host mounts/copies; fixed bootstrap/probe command set',
                        runtime_network='none', packages=probe['packages'], tools=probe['tools'])
@@ -202,14 +246,19 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
         if attempted:
             try:
                 terminal = retire(docker, name, lease.nonce)
-                atomic(evidence / 'inspect-terminal.json', terminal)
+                atomic(evidence / ('offline-inspect-terminal.json'
+                                   if phase == 'offline' else 'inspect-terminal.json'), terminal)
                 receipt['retired'] = True
-                logs = docker.call(['logs', name])
-                (evidence / 'container.log').write_text(logs.stdout + logs.stderr)
-                # Preserve failed containers for diagnosis; remove only success.
             except BaseException as exc:
                 receipt['retired'] = False
                 receipt['retirement_error'] = str(exc)
+            try:
+                logs = docker.call(['logs', name])
+                (evidence / ('offline-container.log' if phase == 'offline'
+                             else 'container.log')).write_text(logs.stdout + logs.stderr)
+                # Preserve failed containers for diagnosis; remove only success.
+            except BaseException as exc:
+                receipt['log_error'] = str(exc)
         elif not receipt.get('image_id'):
             receipt['retired'] = True
         if getattr(docker, 'client_retirement_unproven', False):

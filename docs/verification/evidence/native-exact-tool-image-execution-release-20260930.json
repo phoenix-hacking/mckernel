@@ -1,0 +1,72 @@
+{
+  "schema": "mckernel.native-exact-tool-image-execution-release.v1",
+  "recorded_at": "2026-09-30T11:39:00-07:00",
+  "base_commit": "f0a97d428275354453ea6458dd07d9a4b6b2dddb",
+  "status": "PASS_EXECUTION",
+  "scope": "one source-free Rocky tool-image preparation plus one sequential offline identity probe",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "command": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_prepare.py",
+    "--candidate-sha", "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "--output-root", "/home/holden/mckernel-exact-image-f0a97d42-1",
+    "--evidence-root", "/home/holden/mckernel-exact-image-evidence-f0a97d42-1",
+    "--lease-path", "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-1.json",
+    "--toolchain-lock", "/home/holden/mckernel/host-kernel/rocky/toolchain-lock.json"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "3af27f6de16cfefa2e74cc792b04b708a98969176266ced1323ce3f351d1dca8",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "3073e43f7a68ada8e848682161046238ee063b1f3f54e8bfb98af3e7f23ee96a",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "7aee2f1fd8eafe103e1f98453f274a5cfca00c453beb396fee04f496aa865a61",
+    "host-kernel/rocky/toolchain-lock.json": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  },
+  "failure_and_correction": {
+    "first_review": "FAIL_EXECUTION",
+    "first_blockers": [
+      "the root-owned Docker socket was approached without the reviewed sudo-A client",
+      "runtime_network none was declared without an actual offline probe"
+    ],
+    "correction": [
+      "production Docker client is explicitly sudo-enabled",
+      "networked preparation is retired, committed, and removed before a fresh offline container",
+      "offline container is network-none, read-only, unprivileged uid/gid, cap-drop ALL, no mounts, private IPC and fixed resources",
+      "the complete offline package/tool observation must equal the preparation observation",
+      "both sequential containers reuse the one durable leased name and nonce"
+    ],
+    "ownership_followup": "PASS_EXECUTION after explicit offline-unretirable identity regression"
+  },
+  "tests": {
+    "command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_container_owner",
+    "result": "PASS",
+    "tests_run": 81,
+    "elapsed_seconds": 6.554,
+    "py_compile": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "review": {
+    "reviewer": "/root/tool_image_execution_review_227",
+    "result": "PASS_EXECUTION",
+    "bound_source_sha256": "3af27f6de16cfefa2e74cc792b04b708a98969176266ced1323ce3f351d1dca8",
+    "bound_test_sha256": "3073e43f7a68ada8e848682161046238ee063b1f3f54e8bfb98af3e7f23ee96a"
+  },
+  "preflight": {
+    "paths": "absent",
+    "lease": "absent",
+    "live_heavy_build_guest_qemu_mcexec": "none",
+    "base_image_present_bytes": 236246984,
+    "historical_tool_image_bytes": 1618568510,
+    "host_free_bytes_observed": 24641900544,
+    "scratch_free_bytes_observed": 15496278016,
+    "mem_available_kib_observed": 29929444,
+    "hard_floors": "PASS; remeasure immediately before execution"
+  },
+  "limits": {
+    "cpus": "2-5",
+    "cpu_count": 4,
+    "memory_bytes": 12884901888,
+    "swap_expansion": false,
+    "pids": 512,
+    "preparation_network": "bridge",
+    "verification_network": "none"
+  },
+  "acceptance": "This is an execution release only. Actual package availability, image identity, offline probe, retirement, image build, guest behavior and OS acceptance remain unproven."
+}
