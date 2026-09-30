@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.native-exact-build-failure.v1",
+  "status": "FAIL",
+  "scope": "diagnostic exact build; no image, boot, guest, application, or acceptance credit",
+  "candidate_sha": "f021bdee206944fc9c68a3f1f2e0f6683a849435",
+  "request_sha256": "afa27486e1aa6419e407d90d42d09ec05beb81568b4b26c17cb3c50b60e637e9",
+  "manifest_sha256": "595382ec869d6be32f2b476d79ffafab56f91b8a04a4d4a4a145e9a834af40af",
+  "failure_family": "ihk-native-lifecycle-stale-export-allowlist",
+  "phase": "post-compilation-metadata-validation",
+  "observed": "ihk-native-lifecycle-check rejected 11 intentional GPL MCKERNEL_IHK_V1 export metadata triplets absent from its frozen nine-symbol allowlist",
+  "compile_result": {
+    "build_exit_code": 0,
+    "build_phase": "complete",
+    "bzimage_ready": true,
+    "rust_host_modules_linked": ["ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko"]
+  },
+  "artifacts": {
+    "bzImage": {"identity": "1831:6888095", "size": 16130048, "sha256": "12e6b40bf7d8cd16d98414c66ab93c58d35b4942d89a57cfef312b07166754c6"},
+    "ihk.ko": {"identity": "1831:334315", "size": 1425960, "sha256": "b4dbf04c47c8b8175462982cfee6e833bd40a2b7d6cadd947d68d4612c97dc9f"},
+    "ihk-smp-x86_64.ko": {"identity": "1831:334314", "size": 11075136, "sha256": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb"},
+    "mcctrl.ko": {"identity": "1831:334311", "size": 1914824, "sha256": "d927bc4460d23c175660f0a23ad8d9dec79b9e5c144e4ae0c898091bcc98a019"}
+  },
+  "intentional_missing_allowlist_entries": [
+    "ihk_os_application_close_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_open_v1",
+    "ihk_os_create_unbooted_v2",
+    "ihk_os_create_unbooted_v3",
+    "ihk_os_create_unbooted_v4",
+    "ihk_os_create_unbooted_v5",
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_with_kobject_v1"
+  ],
+  "retained": {
+    "candidate_identity": "1831:5242921",
+    "output_allocated_bytes": 5166764032,
+    "evidence_allocated_bytes": 486010880,
+    "owner_receipt": {"identity": "1831:6760124", "size": 89348483, "sha256": "f1f58d4878e6dcd8bd83995cd5e359809a2975d304952211461848347f961f3c"},
+    "build_receipt": {"identity": "1831:6760121", "size": 87614009, "sha256": "49d1a8300edae2bfd8f583c6920c74222dd87c5e9a7981ea3d237669c6e74ae5"},
+    "inspect_terminal": {"identity": "1831:6684786", "size": 9700, "sha256": "5e7dbe6f1c0ae4a8dceb3dfa2e177623268cba81bf4cd165891b39e097f8b1df"},
+    "driver_log": {"identity": "1831:6684792", "size": 415060, "sha256": "1aefe4c089af81e3572d8a5a0c9ccd81265488ed711a0c02fb489519fd2529ef"},
+    "operational_exclusion": {"identity": "1831:57635", "present": true},
+    "lease_absent": true
+  },
+  "container": {
+    "id": "b34323f6c4352e8bae669d006e11076a64a5734ed165a6ce866bd4e7aa04c001",
+    "name": "mckernel-exact-d01624939ead44118fc2352bc4d83860",
+    "status": "exited",
+    "exit_code": 1,
+    "oom_killed": false,
+    "pid": 0,
+    "retained": true
+  },
+  "resources_after": {
+    "host_available_bytes": 18574798848,
+    "scratch_available_bytes": 14200975360
+  },
+  "next": "apply one bounded exact-20-symbol lifecycle/runtime contract correction, replay both validators against this preserved module, then prepare a fresh source-bound candidate after reviewed capacity recovery"
+}
