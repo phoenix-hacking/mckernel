@@ -19,6 +19,10 @@ from native_rust_exact_build_container_owner import (
 BASE_IMAGE = 'rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176'
 PACKAGES = tuple('bc binutils bison bindgen-cli bpftool cargo clang cmake cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd'.split())
 EXPECTED_RUST = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
+# RPM's gpg-pubkey pseudo-packages report ``(none)`` as their architecture.
+# Keep this exception bounded to the architecture field of a full inventory
+# identity; requested package/tool NEVRA observations still use parse_nevra.
+RPM_INVENTORY_RE = re.compile(r'[A-Za-z0-9_.+:-]+\.(?:[A-Za-z0-9_]+|\(none\))')
 # This is the exact Rocky 10.2 update RPM, including its epoch.  Do not derive
 # a package identity from the executable banner: RPM NEVRA and ``--version``
 # are independent observations.
@@ -85,7 +89,7 @@ def validate_probe(probe, pinned):
         raise PreparationError('package observation incomplete')
     inventory_lines = probe.get('rpm_inventory', '').splitlines()
     if (not inventory_lines or len(inventory_lines) != len(set(inventory_lines)) or
-            any(not re.fullmatch(r'[A-Za-z0-9_.+:-]+', line) for line in inventory_lines)):
+            any(not RPM_INVENTORY_RE.fullmatch(line) for line in inventory_lines)):
         raise PreparationError('RPM inventory incomplete or malformed')
     def parse_nevra(nevra):
         match = re.fullmatch(r'([A-Za-z0-9_.+~-]+)-(\d+):([A-Za-z0-9_.+~]+)-([A-Za-z0-9_.+~]+)\.([A-Za-z0-9_]+)', nevra)

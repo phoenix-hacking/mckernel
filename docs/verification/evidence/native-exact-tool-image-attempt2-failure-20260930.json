@@ -1,0 +1,72 @@
+{
+  "schema": "mckernel.native-exact-tool-image-failure.v1",
+  "recorded_at": "2026-09-30T11:54:44-07:00",
+  "base_commit": "ecd392bf2f310db4cd6d8252cbe179821c071b7f",
+  "status": "FAIL",
+  "scope": "source-free Rocky tool-image preparation attempt2",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "output_root": {
+    "path": "/home/holden/mckernel-exact-image-f0a97d42-2",
+    "identity": "66306:45495128",
+    "allocated_bytes": 0
+  },
+  "evidence_root": {
+    "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-2",
+    "identity": "66306:45495129",
+    "allocated_bytes": 389120
+  },
+  "receipt_sha256": "3153b2a442ebddea5fb93658038fa14cff36acf71eaa6afd40ebb6d7d63689cf",
+  "tool_observation_sha256": "cb669ce8e31f9b5b33453b6b5c5d9b4192ad9498bdd6e3656f4bfdbe937580a4",
+  "terminal_inspect_sha256": "0cb148ba1a4e67f440e08256400f8a0472526e78afd7e4f7616bf36e36add2b3",
+  "observed_failure": {
+    "phase": "networked preparation observation validation after a complete successful package/tool probe",
+    "error": "RPM inventory incomplete or malformed",
+    "inventory_lines": 474,
+    "unique_inventory_lines": 474,
+    "only_rejected_line": "gpg-pubkey-0:6fedfc85-682ae1a9.(none)",
+    "cause": "the inventory validator rejected RPM's legitimate (none) architecture token for the gpg-pubkey pseudo-package",
+    "image_created": false,
+    "offline_probe_started": false
+  },
+  "successful_observations_before_failure": {
+    "cmake_nevra": "cmake-0:3.31.8-1.el10.x86_64",
+    "cmake_version": "3.31.8",
+    "ld_lld_path": "/usr/bin/ld.lld",
+    "ld_lld_target": "/usr/bin/lld",
+    "ld_lld_version": "LLD 21.1.8 (compatible with GNU linkers)",
+    "ld_lld_sha256": "52029c7d731c74ab72a2eca8126d578547242b3192ba74e27c94c1b51be001f9",
+    "probe_exit": 0
+  },
+  "container": {
+    "id": "f406877754439e74e05ccdef490f2722dab44d10945d5341292ca2212c5710c4",
+    "name": "mckernel-tools-8d0cabb2913c4327b657f56cb174e76e",
+    "nonce": "83095ec15ca84032be7af4b78784a395",
+    "state": "exited",
+    "exit_code": 143,
+    "oom_killed": false,
+    "pid": 0,
+    "retained": true
+  },
+  "lease_after_retirement": "absent",
+  "bounded_correction": {
+    "source_sha256": "3a43e305da551c549fe9ba6cbf2c863d562ad5034af22c6cd328138e22e59ba7",
+    "test_sha256": "c2fdbaad9d4d69254aadfb60aaa95d813c809ec51ca05a8e9eb49eea254f3809",
+    "behavior": "accept (none) only as a terminal RPM inventory architecture token while retaining strict requested-package and tool NEVRA parsing",
+    "tests": "84 combined preparation/owner tests PASS; py_compile and diff-check PASS",
+    "independent_review": "pending for fresh attempt3"
+  },
+  "attempt3_paths": {
+    "output": "/home/holden/mckernel-exact-image-f0a97d42-3",
+    "evidence": "/home/holden/mckernel-exact-image-evidence-f0a97d42-3",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-3.json"
+  },
+  "shutdown": {
+    "attempt3_started": false,
+    "active_heavy_process": false,
+    "host_free_bytes": 21650976768,
+    "scratch_free_bytes": 15496278016,
+    "memory_available_kib": 29709432,
+    "launcher_processes": [1442141, 1442142, 1442145, 1442149]
+  },
+  "acceptance": "No tool image, McKernel image, guest, application or OS acceptance is established by this failure or bounded correction."
+}

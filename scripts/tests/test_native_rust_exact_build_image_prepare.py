@@ -216,6 +216,18 @@ class PreparationTests(unittest.TestCase):
         probe['tools']['cmake']['rpm_nevra'] = probe['packages']['cmake']
         prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
 
+    def test_gpg_pubkey_inventory_identity_allows_none_architecture(self):
+        probe = probe_fixture()
+        probe['rpm_inventory'] += '\ngpg-pubkey-0:6fedfc85-682ae1a9.(none)'
+        prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
+
+    def test_inventory_none_architecture_is_bounded(self):
+        for suffix in ('(none', '(none)!', 'none)', '[none]'):
+            probe = probe_fixture()
+            probe['rpm_inventory'] += '\ngpg-pubkey-0:6fedfc85-682ae1a9.' + suffix
+            with self.subTest(suffix=suffix), self.assertRaises(prep.PreparationError):
+                prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
+
     def test_probe_versions_preserve_lookup_argv0_for_multicall_tools(self):
         # ld.lld is commonly a symlink to the generic lld dispatcher.  RPM
         # ownership/hash/NEVRA must use the canonical target, while --version

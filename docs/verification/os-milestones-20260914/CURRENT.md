@@ -9969,3 +9969,41 @@ fresh attempt2 exactly once.  Do not reuse attempt1 paths or remove its failed
 container/evidence.  Current-candidate builds remain six failed and one
 completed; current tool-image attempts are one failed and zero completed; real
 current diagnostic guest applications remain zero.  No acceptance bar moves.
+
+Continuation checkpoint 227, 2026-09-30: shutdown preserves source-free
+tool-image attempt2 as a distinct observer-validation failure.  The complete
+networked probe now exits zero, proving the prior `ld.lld` argv0 correction;
+it observes CMake `3.31.8-1.el10`, `ld.lld` 21.1.8 at lookup path
+`/usr/bin/ld.lld` with canonical target `/usr/bin/lld`, and 474 unique RPM
+inventory lines.  Validation rejects exactly the legitimate pseudo-package
+line `gpg-pubkey-0:6fedfc85-682ae1a9.(none)`, so no image was committed and
+the offline probe did not start.  Receipt/tool-observation/terminal-inspect
+SHAs are `3153b2a4...9cf`, `cb669ce8...80a4` and `0cb148ba...d2b3`.
+
+The exact failed container `f4068777...10c4` is retained as
+`mckernel-tools-8d0cabb2913c4327b657f56cb174e76e`, exited 143, OOM false,
+PID 0; its lease is absent after proven retirement.  Output/evidence identities
+`66306:45495128`/`66306:45495129` remain.  The bounded correction accepts
+`(none)` only as a terminal inventory architecture token and leaves strict
+requested-package/tool NEVRA parsing unchanged.  All 84 combined preparation
+and owner tests, `py_compile`, and diff-check pass.  Source/test SHAs are
+`3a43e305...ba7` and `c2fdbaad...809`.  Full original-evidence binding is in
+`docs/verification/evidence/native-exact-tool-image-attempt2-failure-20260930.json`.
+
+No child agent, heavy build, QEMU guest, mcexec, or image-preparation process
+remains live.  The launcher wrapper/launcher/worker/server identities remain
+1442141/1442142/1442145/1442149, all started 2026-09-30 10:46:42 -0700.
+Host/scratch free bytes are 21,650,976,768/15,496,278,016 and MemAvailable is
+29,709,432 KiB.  Both failed tool-image containers and all raw evidence remain
+retained; attempt3 was not started.
+
+Next obtain an independent execution review of this correction, remeasure the
+16/12-GiB floors and emergency headroom, confirm fresh attempt3 paths and no
+live heavy owner, then run exactly one attempt3 at the paths recorded above.
+If it passes, authenticate the source-free image and prepare the actual-schema
+current `mckernel.img` request; only after a separate root/guest release run
+strict `baseline.core.memory`, then files, threads/futexes, signals and
+shutdown.  Current-candidate builds remain six failed and one completed;
+tool-image attempts are two failed and zero completed; real current diagnostic
+guest applications remain zero.  No acceptance bar moves, and this launcher
+pause does not complete the OS goal.
