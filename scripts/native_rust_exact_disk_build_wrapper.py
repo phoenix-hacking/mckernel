@@ -30,7 +30,12 @@ EXPECTED_LIMITS = {
     "PidsLimit": 512,
     "NetworkMode": "none",
 }
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
+# The original path is a retained immutable tombstone.  Fresh attempts must
+# use the reviewed replacement so a stale exclusion can never be mistaken for
+# the current build's lease.
+RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
+REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
+OPERATIONAL_EXCLUSION_PATH = REVIEWED_OPERATIONAL_EXCLUSION_PATH
 
 
 class AdmissionError(ValueError):

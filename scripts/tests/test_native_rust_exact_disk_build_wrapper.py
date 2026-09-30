@@ -102,6 +102,30 @@ class WrapperTests(unittest.TestCase):
         self.assertEqual(FakeOwner.CliSignals.entered, 1)
         self.assertEqual(FakeOwner.CliSignals.exited, 1)
 
+    def test_fresh_exclusion_replaces_retired_tombstone(self):
+        self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
+                            wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
+        self.assertTrue(wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH.endswith(
+            "native-exact-candidate-operational-exclusion-76ae20b5-2.json"))
+        old_request = request
+        def retired_request(source):
+            value = old_request(source)
+            value["operational_exclusion_path"] = (
+                wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
+            return value
+        with self.assertRaisesRegex(wrapper.AdmissionError,
+                                    "reviewed exact path"):
+            self.invoke(retired_request)
+        self.assertEqual(FakeOwner.calls, 0)
+        lock, record = wrapper._acquire_exclusion(
+            {"operational_exclusion_path": wrapper.OPERATIONAL_EXCLUSION_PATH})
+        self.assertTrue(lock.exists())
+        self.assertEqual(record["request_sha256"], wrapper._request_hash(
+            {"operational_exclusion_path": wrapper.OPERATIONAL_EXCLUSION_PATH}))
+        lock.unlink()
+        result = self.invoke(request)
+        self.assertEqual(result["status"], "PASS")
+
     def test_existing_exclusion_fails_closed(self):
         lock = Path(wrapper.OPERATIONAL_EXCLUSION_PATH)
         lock.write_text("partial")
