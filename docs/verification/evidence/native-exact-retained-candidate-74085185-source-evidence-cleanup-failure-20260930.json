@@ -1,0 +1,22 @@
+{
+  "schema": "mckernel.exact-git-source-cleanup-failure.v1",
+  "status": "AUDIT_FAIL_CLOSED",
+  "command": "python3 docs/verification/evidence/native-exact-retained-candidate-74085185-source-evidence-cleanup-20260930.py --plan /home/holden/mckernel-work/scratch/native-exact-cleanup-74085185-plan.json --write-plan",
+  "returncode": 1,
+  "message": "request binding mode differs: expected 0600, live mode 0644; inputs and preparation terminal had the same incorrect mode expectation",
+  "plan_path": "/home/holden/mckernel-work/scratch/native-exact-cleanup-74085185-plan.json",
+  "plan_published": false,
+  "deletion_started": false,
+  "candidate": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-74085185-scratch-3",
+    "device": 1831,
+    "inode": 3932163,
+    "intact": true
+  },
+  "scratch10": {
+    "path": "/home/holden/mckernel-work/scratch",
+    "device": 1831,
+    "intact": true
+  },
+  "correction": "REQUEST, INPUTS, and PREP_TERM are mode 0644; PREP_LOG remains mode 0600."
+}

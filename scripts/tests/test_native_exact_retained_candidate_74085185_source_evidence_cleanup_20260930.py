@@ -15,6 +15,12 @@ def test_pins_candidate_identity_and_commit():
     assert mod.CANDIDATE_IDENTITY == "1831:3932163"
     assert str(mod.CANDIDATE_ROOT).endswith("mckernel-exact-candidate-74085185-scratch-3")
 
+def test_protected_file_modes_match_live_bindings():
+    assert mod.EXPECTED_FILES[mod.REQUEST][3] == 0o644
+    assert mod.EXPECTED_FILES[mod.INPUTS][3] == 0o644
+    assert mod.EXPECTED_FILES[mod.PREP_TERM][3] == 0o644
+    assert mod.EXPECTED_FILES[mod.PREP_LOG][3] == 0o600
+
 def test_census_accepts_empty_lsof_and_exact_scratch_mount(): mod.validate_census(census_ok())
 
 @pytest.mark.parametrize("bad", [
