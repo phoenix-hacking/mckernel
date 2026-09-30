@@ -131,6 +131,27 @@ EXPECTED_PROVIDER_CLOSE_FFI_SITE = (
     "// faults fail stop inside the kernel and no unwind may cross the module boundary.\n"
     'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {'
 )
+"""Additional IHK Rust ABI exports implemented by the reviewed OS/service path.
+
+These are intentionally explicit: the artifact oracle must admit the complete
+current ABI surface while continuing to reject every unreviewed symbol and all
+non-GPL export metadata.
+"""
+EXPECTED_NATIVE_LIFECYCLE_EXPORTS = frozenset(
+    {
+        "ihk_os_application_open_v1",
+        "ihk_os_application_invoke_v1",
+        "ihk_os_application_close_v1",
+        "ihk_os_create_unbooted_v2",
+        "ihk_os_create_unbooted_v3",
+        "ihk_os_create_unbooted_v4",
+        "ihk_os_create_unbooted_v5",
+        "ihk_os_service_register_v1",
+        "ihk_os_service_unregister_v1",
+        "ihk_os_topology_query_v1",
+        "ihk_os_with_kobject_v1",
+    }
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 BOUND_MODINFO_ENVIRONMENT = {
     "LANG": "C",
@@ -1388,7 +1409,7 @@ def _validate_provider_export_symbols(
         )
 
     provider_definition_pattern = re.compile(
-        r"^ihk(?:_smp)?_provider_[A-Za-z0-9_]+$"
+        r"^(?:ihk(?:_smp)?_provider_[A-Za-z0-9_]+|ihk_os_[A-Za-z0-9_]+)$"
     )
     unexpected_provider_definitions = sorted(
         symbol
@@ -1423,7 +1444,8 @@ def validate_module_artifact(
     if _artifact_modinfo(module_path, None, modinfo_fd) != "":
         raise ValidationError("built ihk.ko unexpectedly exposes module parameters")
     _validate_provider_export_symbols(
-        _defined_symbols(module_path), set(summary["provider_symbols"])
+        _defined_symbols(module_path),
+        set(summary["provider_symbols"]) | EXPECTED_NATIVE_LIFECYCLE_EXPORTS,
     )
     data = module_path.read_bytes()
     namespace_record = (

@@ -17,8 +17,8 @@ from scripts import ihk_native_lifecycle_check as lifecycle
 
 
 def reviewed_artifact_symbols(provider_symbols):
-    symbols = set(provider_symbols)
-    for provider_symbol in provider_symbols:
+    symbols = set(provider_symbols) | set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+    for provider_symbol in tuple(symbols):
         symbols.update(
             {
                 f"__ksymtab_{provider_symbol}",
@@ -893,6 +893,40 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         ):
             with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
                 lifecycle.validate_module_artifact(module, summary)
+
+    def test_reviewed_native_lifecycle_exports_are_exact_and_gpl_metadata_bound(self) -> None:
+        expected = {
+            "ihk_os_application_open_v1",
+            "ihk_os_application_invoke_v1",
+            "ihk_os_application_close_v1",
+            "ihk_os_create_unbooted_v2",
+            "ihk_os_create_unbooted_v3",
+            "ihk_os_create_unbooted_v4",
+            "ihk_os_create_unbooted_v5",
+            "ihk_os_service_register_v1",
+            "ihk_os_service_unregister_v1",
+            "ihk_os_topology_query_v1",
+            "ihk_os_with_kobject_v1",
+        }
+        self.assertEqual(expected, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS))
+        symbols = reviewed_artifact_symbols([])
+        lifecycle._validate_provider_export_symbols(
+            symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+        )
+        symbols.remove("__ksymtab_ihk_os_service_register_v1")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "lacks provider GPL export metadata"):
+            lifecycle._validate_provider_export_symbols(
+                symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+            )
+
+    def test_unknown_unexported_ihk_os_definition_is_rejected(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        symbols = reviewed_artifact_symbols(summary["provider_symbols"])
+        symbols.add("ihk_os_unreviewed_v99")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed provider definitions"):
+            lifecycle._validate_provider_export_symbols(
+                symbols, set(summary["provider_symbols"]) | lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS
+            )
 
     def test_built_artifact_requires_all_provider_definitions(self) -> None:
         module = self.repo / "ihk.ko"

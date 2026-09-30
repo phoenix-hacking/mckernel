@@ -1160,6 +1160,25 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 with self.assertRaisesRegex(evidence.EvidenceError, diagnostic):
                     evidence._validate_module_symbol_graph(module, item)
 
+    def test_ihk_runtime_symbol_graph_rejects_unknown_unexported_ihk_os_symbol(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = contract["modules"][0]
+        module = self.root / "ihk.ko"
+        module.write_bytes(evidence.PROVIDER_EXPORT_NAMESPACE.encode("ascii") + b"\0")
+        unknown = "ihk_os_unreviewed_v9"
+        with mock.patch.object(
+            evidence,
+            "_nm",
+            side_effect=(
+                provider_global_nm(tuple(evidence.PROVIDER_DEFINED_SYMBOLS) + (unknown,)),
+                provider_all_defined_nm(),
+            ),
+        ):
+            with self.assertRaisesRegex(evidence.EvidenceError, "global definitions"):
+                evidence._validate_module_symbol_graph(module, item)
+
     def test_ihk_runtime_symbol_graph_requires_global_definitions_and_namespace_bytes(self) -> None:
         contract = json.loads(
             (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")

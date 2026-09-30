@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:36346f2332b22b494f622ea9b6f69122152f4f6334eafb3e4ad071230f6071b3"
+    "ISOLATED_SELF_DIGEST:06e7bc24ebaf026ce564c56dc768fb1f4661f70212af7e62fd34fa9d912bfacb"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -379,6 +379,19 @@ PROVIDER_OPEN_SYMBOL = "ihk_smp_provider_open_v1"
 PROVIDER_CLOSE_SYMBOL = "ihk_smp_provider_close_v1"
 OS_CREATE_SYMBOL = "ihk_os_create_unbooted_v1"
 OS_DESTROY_SYMBOL = "ihk_os_destroy_unbooted_v1"
+NATIVE_LIFECYCLE_SYMBOLS = (
+    "ihk_os_application_open_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_close_v1",
+    "ihk_os_create_unbooted_v2",
+    "ihk_os_create_unbooted_v3",
+    "ihk_os_create_unbooted_v4",
+    "ihk_os_create_unbooted_v5",
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_with_kobject_v1",
+)
 PROVIDER_EXPORT_NAMESPACE = "MCKERNEL_IHK_V1"
 PROVIDER_DEFINED_SYMBOLS = (
     PROVIDER_ANCHOR_SYMBOL,
@@ -390,7 +403,7 @@ PROVIDER_DEFINED_SYMBOLS = (
     PROVIDER_CLOSE_SYMBOL,
     OS_CREATE_SYMBOL,
     OS_DESTROY_SYMBOL,
-)
+) + NATIVE_LIFECYCLE_SYMBOLS
 PROVIDER_SMP_IMPORT_SYMBOLS = (
     PROVIDER_ANCHOR_SYMBOL,
     PROVIDER_ATTACH_SYMBOL,
