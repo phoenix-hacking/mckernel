@@ -1,0 +1,83 @@
+{
+  "schema": "mckernel.native-exact-build-diagnostic-failure.v1",
+  "status": "FAIL_BUILD_DIAGNOSTIC_ONLY",
+  "acceptance_credit": false,
+  "candidate_sha": "dce800af8c19d014ef509e102ca4f4b1c473e2ab",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-dce800af-scratch-5.json",
+    "sha256": "d0cdd1e89dd2bcd4f498bcf4b276b51842ad75f5cc2d57c3b62aa3f563c7b039"
+  },
+  "execution": {
+    "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-dce800af-scratch-5.json --launcher-aggregate-gib 16.2158",
+    "container_id": "6efd149e8b8c4333ff62080ea7031f1dc1c47c718e1222bed3b6c4dbdeb85870",
+    "container_name": "mckernel-exact-335486d4b4fe4f2c96257d986fcc703e",
+    "started_at": "2026-09-30T06:26:35.447985277Z",
+    "finished_at": "2026-09-30T06:58:22.961327532Z",
+    "exit_code": 1,
+    "terminal_pid": 0,
+    "oom_killed": false,
+    "profile": {
+      "cpus": "2-5",
+      "nano_cpus": 4000000000,
+      "memory_bytes": 12884901888,
+      "memory_swap_bytes": 12884901888,
+      "network_mode": "none",
+      "pids_limit": 512,
+      "actual_jobs": 2
+    }
+  },
+  "failure": {
+    "phase": "phase-3-build",
+    "family": "rust-1.92-objtool-vec-swap-remove-noreturn-classification",
+    "diagnostics": [
+      "Memory::publish_zero() falls through to next function Memory::zero_address()",
+      "Vec<Tagged>::swap_remove() falls through to next function Runtime::fail()"
+    ],
+    "interpretation": "The exact workflow applied patch 0024 but omitted the already reviewed patch 0025 that recognizes Rust 1.92 Vec::swap_remove::assert_failed as noreturn. Objtool remained enabled and rejected both zeroing call sites.",
+    "bounded_correction": "Apply existing exact patch 0025 after patch 0024 and update only authenticated workflow/consumer bindings. Do not change Rust zeroing code or broaden/disable objtool."
+  },
+  "retained_evidence": {
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-dce800af-scratch-5/receipt.json",
+      "sha256": "b36a9d8f7bd923d0ff37d9d5d0b3e5c53ea9d48e857a53bf2c1270607458e0af",
+      "size": 89341714
+    },
+    "driver_log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-dce800af-scratch-5/build/driver.log",
+      "sha256": "425dc05f5b9105cef4b2c82db9830e39d61fdc045afd0337ee34cf8231052808",
+      "size": 413616
+    },
+    "build_log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-dce800af-scratch-5/build/native-rust-build-evidence/build.log",
+      "sha256": "e8c8af7ae3b619f78c7e8431bd99703b0061023de0f49b833e0f7211ca018eb3",
+      "size": 237401
+    },
+    "output_root": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-output-dce800af-scratch-5",
+      "identity": "1831:5373997",
+      "allocated_tree_bytes_at_capture": 4806345307
+    },
+    "evidence_root": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-dce800af-scratch-5",
+      "identity": "1831:5373998",
+      "allocated_tree_bytes_at_capture": 443932572
+    },
+    "operational_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json",
+      "identity": "1831:57580",
+      "sha256": "ef89d2384f417e02c4ae41192726ac76601376e189f0325e1932384add02c7c6"
+    },
+    "lease_absent_after_exit": true,
+    "container_retained": true,
+    "cleanup_separately_required": true
+  },
+  "correction_validation": {
+    "focused_tests": {
+      "passed": 132,
+      "skipped": 1,
+      "unrelated_failure": "Synthetic provenance fetch from github.com/example/project.git rejected an unadvertised random object."
+    },
+    "observer_issue": "An interrupted FP-0006 frozen-checkout fixture left a 9.22-GB /tmp tree. The exact disposable tree was removed, restoring host/scratch availability to 18,969,935,872/20,216,266,752 bytes. No build evidence was removed."
+  },
+  "next": "Durably archive and relocate the consumed candidate/failure roots, advance to a fresh exclusion namespace, prepare a new candidate from the corrected checkpoint, and run one independently released exact build."
+}

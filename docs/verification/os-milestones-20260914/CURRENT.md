@@ -9250,3 +9250,34 @@ Next push/fetch this preparation checkpoint, reconcile the single heavy lease
 and obtain exact execution release for request SHA `d0cdd1e8...b039`.  Run no
 other heavy operation.  A successful run must compile past Rust E0107 before
 any image or diagnostic boot is attempted.
+
+Continuation checkpoint 204, 2026-09-30: the exact `dce800af` candidate passed
+all earlier phase-0 source bindings, completed the Kconfig matrix and built the
+Linux kernel, then failed during native-module objtool validation after 31m47s.
+Container `6efd149e8b8c...` exited 1/PID 0, was not OOM-killed and remains
+retained.  Objtool reported exactly two Rust fall-through diagnostics at
+`Memory::publish_zero` and `Vec<Tagged>::swap_remove`; no module/image/guest
+result is accepted.  Receipt/driver/build-log SHAs are
+`b36a9d8f...8e0a`/`425dc05f...2808`/`e8c8af7a...8eb3`.  The 4.81-GB output,
+444-MB evidence root, source candidate and consumed `lifecyclebinding-10`
+exclusion identity `1831:57580` remain unchanged; the build lease is absent.
+
+The bounded correction activates the already reviewed Rust-1.92 patch 0025
+immediately after patch 0024 in the exact build workflow.  Patch 0025 is
+specific to `Vec::swap_remove::assert_failed`, documents these two native
+zeroing call sites, and preserves all objtool checks and unknown-callee
+controls.  No Rust implementation or oracle changed.  The workflow prefix,
+staging step and active runtime/FP-0006/RS-006 consumer hashes were rebound
+exactly.  The focused workflow/patch suite has 132 passes and one configured
+Rust-1.92 skip; its only failure is an unrelated synthetic GitHub fetch of an
+unadvertised random object.  A separate interrupted FP-0006 checkout fixture
+left a disposable 9.22-GB `/tmp` tree; removing only that tree restored
+host/scratch availability to 18.97/20.22 GB without deleting build evidence.
+
+Next durably archive the original failure roots and relocate the consumed
+candidate, advance build/image/preparation owners to a fresh exclusion
+namespace, and prepare one new candidate from the pushed correction.  Obtain
+fresh independent execution release before the next exact build.  It must pass
+the two retained objtool diagnostics before image preparation or diagnostic
+startup/memory/files/threads/signals/teardown execution.  Diagnostic results
+remain separate from formal acceptance.

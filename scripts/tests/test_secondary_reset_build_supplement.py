@@ -33,6 +33,7 @@ ROCKY_WORKFLOW_PATCHES = (
     "0020a-rust-miscdevice-bind-file-operations-to-module.patch", "0021-objtool-recognize-rust-1.92-panic-const.patch",
     "0022-x86-pvh-annotate-noendbr.patch", "0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
     "0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch",
+    "0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch",
 )
 KBUILD_WORKFLOW_PATCHES = (
     "0001-drivers-misc-add-mckernel-rust-host-modules.patch", "0002-rust-bindings-expose-module-parameters.patch",
@@ -69,7 +70,7 @@ class SecondaryResetBuildSupplementTests(unittest.TestCase):
         parent=root/"full-workflow-source"; parent.mkdir()
         tree=parent/"linux-6.12.0-211.44.1.el10_2"; tree.mkdir()
         vendor=ARCHIVE.parent/"1000-debrand-some-messages.patch"
-        self.assertNotIn("0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch", ROCKY_WORKFLOW_PATCHES)
+        self.assertEqual("0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch", ROCKY_WORKFLOW_PATCHES[-1])
         predecessors=[vendor]+[repo/"host-kernel/rocky/patches"/name for name in ROCKY_WORKFLOW_PATCHES]+[repo/"host-kernel/kbuild/patches"/name for name in KBUILD_WORKFLOW_PATCHES]
         self.assertTrue(all(source.is_file() for source in predecessors))
         wanted=set()

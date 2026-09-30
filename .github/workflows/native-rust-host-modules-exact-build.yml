@@ -57,6 +57,7 @@ on:
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
       - host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch
+      - host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -205,6 +206,7 @@ on:
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
       - host-kernel/rocky/patches/0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch
+      - host-kernel/rocky/patches/0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -572,7 +574,8 @@ jobs:
             0021-objtool-recognize-rust-1.92-panic-const.patch \
             0022-x86-pvh-annotate-noendbr.patch \
             0023-rust-update-no-alloc-shim-marker-rust-1.92.patch \
-            0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch
+            0024-objtool-recognize-rust-1.92-sort-and-vec-panics.patch \
+            0025-objtool-recognize-rust-1.92-vec-swap-remove-panic.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"
