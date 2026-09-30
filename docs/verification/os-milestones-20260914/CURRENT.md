@@ -8684,3 +8684,66 @@ will not run until its remaining authentication, tmpfs, evidence-confinement
 and under-exclusion measurement defects are repaired.  Formal counters remain
 6/130, 350/10000 and 0/273; no current-candidate artifact or diagnostic app has
 yet passed.
+
+Continuation checkpoint 184, 2026-09-30: the reviewed scratch preparation ran
+once from fetched commit `9f4072a3d57531d015291a6590215476eeafef6f` and
+passes both its own validation and independent postflight audit.  Candidate
+`/home/holden/mckernel-work/scratch/mckernel-exact-candidate-5aff8eef-scratch-1`
+is disk-backed with identity `1831:6553601`, source commit
+`5aff8eef75f1d1788eb5c9d37135b789609dd57e`, IHK
+`3114d9e7101ad52030eb3effa849a5c108972a1f`, all four exact Git links and
+reviewed overlay SHA `cbaaec7b...f49e7`.  Its validated allocation is
+9,236,361,216 bytes with zero memory-backed bytes.  Preparation log SHA is
+`5b9ff681...1d639`, terminal SHA is `da988a39...b31c9`, metadata receipt SHA
+is `ae62b53d...4dec7`, input manifest SHA is `29144b4d...a9998`, and request
+SHA is `be455b54...9fe6e`.  Output and evidence roots were empty before the
+build; the fresh lease and `-3` exclusion were absent.  This preparation earns
+no build, runtime, application or acceptance credit.
+
+The independently released exact host command then ran once in the pinned
+offline four-CPU/12-GiB/no-swap/512-task container and failed before
+compilation after 669 source tests with four failures and one error.  Terminal
+container `b5a32f491e35d06aec1e0dca3f2ad29f4d4a96e46d4ce60c9e59478adce08f51`
+(`mckernel-exact-5eb6988440f3492299214641b485eeb6`) exited 1 with PID 0 and
+remains retained under owner nonce `7550ac9037a04edda56859767dc73fd6`.
+The immutable `-3` exclusion is identity `1831:31523`, SHA
+`20d1dfab...ad8db`; driver log SHA is `4a015d00...851d`, owner receipt SHA is
+`9d1c05c7...f66b`, and driver receipt SHA is `ae207b88...7f08`.  No artifact
+was produced.  The 1,576,960-byte, 47-member failure archive SHA is
+`daf0bfb4...8eff`; independent archive review confirms it retains every
+failure and the exact terminal identity.
+The additive failure record is
+`docs/verification/evidence/native-exact-build-5aff8eef-scratch-1-failure-20260930.json`,
+SHA `b86732e5...c488`.
+
+Continuation checkpoint 185, 2026-09-30: the bounded correction fixes all five
+observed source-contract defects without weakening their oracles.  The
+build-ID fixture now supplies the exact current compatibility query, v3 boot,
+application callback and v4 create signatures; its focused test compiles and
+runs all eight Rust checks, and independent source review passes.  The Kbuild
+closure now binds the real stager set and all actual IHK, SMP and mcctrl crate
+edges, including restricted `smp_procfs.rs`, both assembly inputs in retained
+compiler order, `X86_5LEVEL`, and the three vDSO configuration inputs.  All 29
+focused tests pass.  Independent parsing accepts the retained raw records with
+13, 44 and 9 project dependencies respectively and rejects the previously
+incorrect assembly order.  These are source-contract results only.
+
+The direct and transitive semantic-authority, contract and normalized
+self-digest rebinding now independently passes 159 affected tests: 90 core,
+four native-runtime, 22 FP-0006 integration, 40 isolated acceptance-closure
+and three targeted RS-006 tests.  No stale active binding to the reviewed
+changed files remains.  The fresh wrapper independently passes 18 tests and
+permits only
+`native-exact-candidate-operational-exclusion-closurefix-4.json`, rejecting
+the retired, `-2` and `-3` paths before owner invocation.  Seven unrelated
+full RS-006 consumer mismatches are confirmed pre-existing and remain separate;
+no RS-006 or acceptance credit is claimed.
+
+Next commit/push/fetch the corrected source and additive failure record, then
+prepare a fresh `scratch-2` candidate with the new `-4` exclusion.  Only one
+separately reviewed exact host build may run.  Preserve both stopped
+failure containers, all old exclusions and both failure archives.  A successful
+host artifact is still required before repairing/releasing the image owner and
+running startup, memory, files, threads/futexes, signals and shutdown diagnostic
+applications.  Formal counters remain 6/130, 350/10000 and 0/273; diagnostic
+results remain separate from formal acceptance.

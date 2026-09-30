@@ -114,10 +114,89 @@ unsafe fn ihk_os_create_unbooted_v2(_minor: u32, _owner: *mut kernel::bindings::
     assert!(ioctl.is_some() && release.is_some());
     -12
 }
+unsafe fn ihk_os_create_unbooted_v4(
+    _minor: u32,
+    _owner: *mut core::ffi::c_void,
+    _argument: u64,
+    callback_abi: u32,
+    ioctl: Option<unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64>,
+    release: Option<unsafe extern "C" fn(u32, u64) -> i32>,
+    prepare: Option<unsafe extern "C" fn(u32, u64, u64, u64) -> i32>,
+    start: Option<unsafe extern "C" fn(u32, u64) -> i32>,
+    open: Option<application_abi::Open>,
+    invoke: Option<application_abi::Invoke>,
+    close: Option<application_abi::Close>,
+) -> i64 {
+    assert_eq!(callback_abi, 1);
+    assert!(ioctl.is_some() && release.is_some() && prepare.is_some() && start.is_some());
+    assert!(open.is_some() && invoke.is_some() && close.is_some());
+    -12
+}
 unsafe fn ihk_os_destroy_unbooted_v1(_provider: u32, _minor: u64) -> i64 { -22 }
 
 struct ProviderOpenLease;
 struct IhkSmpControlDevice;
+
+// These are the exact callback shapes consumed by the extracted production
+// CREATE_OS branch.  The fixture does not model an OS or application; it only
+// proves that production dispatch supplies the complete v4 callback bundle.
+mod application_abi {
+    pub type Open = unsafe extern "C" fn(
+        u32,
+        u64,
+        i32,
+        *mut *mut core::ffi::c_void,
+    ) -> i32;
+    pub type Invoke = unsafe extern "C" fn(
+        *mut core::ffi::c_void,
+        u32,
+        *mut u8,
+        usize,
+    ) -> i64;
+    pub type Close = unsafe extern "C" fn(*mut core::ffi::c_void);
+}
+
+fn compatibility_build_id(argument: usize) -> Result<isize> {
+    kernel::uaccess::UserSlice::new(argument, IHK_COMPAT_BUILD_ID.len())
+        .writer()
+        .write_slice(IHK_COMPAT_BUILD_ID)?;
+    Ok(0)
+}
+
+unsafe extern "C" fn ihk_smp_prepare_boot_v3(
+    _slot: u32,
+    _generation: u64,
+    _kmsg: u64,
+    _kmsg_bytes: u64,
+) -> i32 {
+    -11
+}
+
+unsafe extern "C" fn ihk_smp_start_boot_v3(_slot: u32, _generation: u64) -> i32 {
+    -11
+}
+
+unsafe extern "C" fn application_open(
+    _slot: u32,
+    _generation: u64,
+    _pid: i32,
+    output: *mut *mut core::ffi::c_void,
+) -> i32 {
+    // The mock never publishes an application context.
+    unsafe { output.write(core::ptr::null_mut()) };
+    -12
+}
+
+unsafe extern "C" fn application_invoke(
+    _context: *mut core::ffi::c_void,
+    _command: u32,
+    _buffer: *mut u8,
+    _bytes: usize,
+) -> i64 {
+    -22
+}
+
+unsafe extern "C" fn application_close(_context: *mut core::ffi::c_void) {}
 
 impl IhkSmpControlDevice {
     // PRODUCTION_NATIVE_IOCTL

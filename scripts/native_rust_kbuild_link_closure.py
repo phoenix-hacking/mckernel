@@ -65,7 +65,16 @@ MODULES = (
 EXPECTED_STAGED_FILES = (
     "Kbuild",
     "Kconfig",
+    "abi/application.rs",
+    "abi/os_service.rs",
+    "abi/sysfs.rs",
+    "abi/sysfs_request.rs",
+    "abi/vdso.rs",
     "abi/x86_64.rs",
+    "application_image.rs",
+    "application_pager.rs",
+    "application_rpc.rs",
+    "application_syscall.rs",
     "device_registry.rs",
     "ihk-compat-build-id.bin",
     "ihk.rs",
@@ -75,16 +84,45 @@ EXPECTED_STAGED_FILES = (
     "ikc_master.rs",
     "ikc_queue.rs",
     "mcctrl.rs",
+    "mcctrl_exec.rs",
+    "mcctrl_process.rs",
+    "mcctrl_vm.rs",
     "os_registry.rs",
     "os_runtime.rs",
+    "os_service.rs",
     "page_allocator.rs",
     "page_owner_registry.rs",
+    "procfs_objects.rs",
+    "smp_application.rs",
+    "smp_application_image.rs",
+    "smp_application_syscall.rs",
+    "smp_boot_code.rs",
     "smp_cpu.rs",
+    "smp_file_pager.rs",
+    "smp_ikc.rs",
     "smp_image.rs",
     "smp_loader.rs",
     "smp_memory.rs",
+    "smp_procfs.rs",
     "smp_resource.rs",
+    "smp_service.rs",
     "smp_startup.rs",
+    "smp_startup_entry.S",
+    "smp_topology.rs",
+    "smp_trampoline.S",
+    "smp_trampoline.rs",
+    "smp_vdso.rs",
+    "sysfs_memory.rs",
+    "sysfs_objects.rs",
+    "sysfs_os.rs",
+    "sysfs_remote.rs",
+    "sysfs_rpc.rs",
+    "sysfs_setup.rs",
+    "sysfs_snoop.rs",
+    "sysfs_tree.rs",
+    "sysfs_zeroing.rs",
+    "user_string.rs",
+    "zero_pages.rs",
 )
 EXPECTED_STAGED_RUST_SOURCES = tuple(
     item for item in EXPECTED_STAGED_FILES if item.endswith(".rs")
@@ -121,23 +159,48 @@ _PROJECT_DEPENDENCIES = {
         "page_allocator.rs",
         "page_owner_registry.rs",
         "os_runtime.rs",
+        "os_service.rs",
+        "abi/os_service.rs",
+        "abi/application.rs",
     ),
     "ihk-smp-x86_64": (
-        "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
-        "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs",
+        "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_topology.rs",
+        "smp_memory.rs", "smp_service.rs", "sysfs_memory.rs", "sysfs_zeroing.rs",
+        "smp_procfs.rs", "sysfs_snoop.rs", "procfs_objects.rs", "ihk_mapping.rs", "smp_image.rs",
+        "smp_loader.rs", "user_string.rs", "smp_startup.rs", "smp_trampoline.rs",
+        "smp_boot_code.rs",
+        "ikc_queue.rs", "ikc_master.rs", "smp_ikc.rs",
+        "abi/vdso.rs", "smp_vdso.rs", "sysfs_objects.rs", "sysfs_os.rs",
+        "sysfs_tree.rs", "sysfs_setup.rs", "abi/sysfs.rs", "abi/sysfs_request.rs",
+        "sysfs_rpc.rs", "sysfs_remote.rs", "abi/application.rs", "application_rpc.rs",
+        "application_syscall.rs", "application_image.rs", "smp_application.rs",
+        "smp_application_syscall.rs", "smp_application_image.rs", "application_pager.rs",
+        "smp_file_pager.rs", "zero_pages.rs", "smp_trampoline.S", "smp_startup_entry.S",
     ),
-    "mcctrl": (),
+    "mcctrl": (
+        "mcctrl_exec.rs", "mcctrl_process.rs", "mcctrl_vm.rs", "user_string.rs",
+        "application_image.rs", "abi/x86_64.rs", "abi/os_service.rs", "abi/application.rs",
+    ),
 }
 _GENERATED_METADATA_DEPENDENCIES = {
     "ihk": (),
     "ihk-smp-x86_64": EXPECTED_GENERATED_METADATA_INPUTS,
     "mcctrl": (),
 }
+_COMPILER_SOURCE_SET = frozenset(
+    module["crate_root"] for module in MODULES
+) | frozenset(
+    path for dependencies in _PROJECT_DEPENDENCIES.values() for path in dependencies
+)
+EXPECTED_COMPILER_SOURCES = tuple(
+    item for item in EXPECTED_STAGED_FILES if item in _COMPILER_SOURCE_SET
+)
 # Rocky fixdep scans the crate root before its other dependencies and emits
 # configuration dependencies immediately after the source that mentions them.
 # The SMP root and IHK's os_runtime.rs each use CONFIG_COMPAT; smp_memory.rs
-# additionally binds its four required memory-layout options. Preserve the
-# exact four-space grammar and each source's configuration dependency position.
+# additionally binds its five required memory-layout options, while smp_vdso.rs
+# binds the three architecture/virtualization options below. Preserve exact
+# four-space grammar and each source's configuration dependency position.
 _FIXDEP_CONFIG_DEPENDENCIES = {
     "ihk": ("$(wildcard include/config/COMPAT)",),
     "ihk-smp-x86_64": (
@@ -146,6 +209,10 @@ _FIXDEP_CONFIG_DEPENDENCIES = {
         "$(wildcard include/config/SPARSEMEM_VMEMMAP)",
         "$(wildcard include/config/MEMORY_HOTPLUG)",
         "$(wildcard include/config/DYNAMIC_MEMORY_LAYOUT)",
+        "$(wildcard include/config/X86_5LEVEL)",
+        "$(wildcard include/config/PARAVIRT_CLOCK)",
+        "$(wildcard include/config/HYPERV_TIMER)",
+        "$(wildcard include/config/AMD_MEM_ENCRYPT)",
     ),
     "mcctrl": (),
 }
@@ -153,7 +220,8 @@ _FIXDEP_CONFIG_AFTER_SOURCE = {
     "ihk": {"os_runtime.rs": ("$(wildcard include/config/COMPAT)",)},
     "ihk-smp-x86_64": {
         "ihk_smp_x86_64.rs": ("$(wildcard include/config/COMPAT)",),
-        "smp_memory.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][1:],
+        "smp_memory.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][1:6],
+        "smp_vdso.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][6:],
     },
     "mcctrl": {},
 }
@@ -792,7 +860,7 @@ def _project_references(text, label):
 
 
 def _validate_reference_surface(name, references, module):
-    known = set(EXPECTED_STAGED_RUST_SOURCES)
+    known = set(EXPECTED_STAGED_FILES)
     if name == _cmd_name(module["rust_object"]):
         known.update(_GENERATED_METADATA_DEPENDENCIES[module["name"]])
     for item in MODULES:
@@ -1403,11 +1471,11 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
 
     if len(source_prefixes) != 1:
         raise LinkClosureError("Rust crate roots do not share one staged source tree")
-    if tuple(sorted(all_sources)) != tuple(sorted(EXPECTED_STAGED_RUST_SOURCES)):
+    if tuple(sorted(all_sources)) != tuple(sorted(EXPECTED_COMPILER_SOURCES)):
         raise LinkClosureError(
             "compiler Rust source closure differs: missing={0}, extra={1}".format(
-                sorted(set(EXPECTED_STAGED_RUST_SOURCES) - all_sources),
-                sorted(all_sources - set(EXPECTED_STAGED_RUST_SOURCES)),
+                sorted(set(EXPECTED_COMPILER_SOURCES) - all_sources),
+                sorted(all_sources - set(EXPECTED_COMPILER_SOURCES)),
             )
         )
 
@@ -1471,7 +1539,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
         "schema_id": SCHEMA_ID,
         "source_closure": [
             {"path": path, "stage_sha256": stage_digests[path]}
-            for path in EXPECTED_STAGED_RUST_SOURCES
+            for path in EXPECTED_COMPILER_SOURCES
         ],
         "source_closure_scope": (
             "staged McKernel Rust project sources named by rustc dependency records; "

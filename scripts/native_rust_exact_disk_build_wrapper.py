@@ -34,10 +34,11 @@ EXPECTED_LIMITS = {
 # use the reviewed replacement so a stale exclusion can never be mistaken for
 # the current build's lease.
 RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
-# The failed -2 attempt is retained evidence, never a reusable lease.  Fresh
-# requests are bound to this exact attempt-specific -3 path.
+# The failed -2 and -3 attempts are retained evidence, never reusable leases.
+# Fresh requests are bound to the new closure-fix path below.
 REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
+SUPERSEDED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-closurefix-4.json"
 
 
 class AdmissionError(ValueError):

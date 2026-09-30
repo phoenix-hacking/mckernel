@@ -214,10 +214,13 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         for item in dependencies:
             body.append("  {0}{1} " .format(SOURCE_PREFIX, item) + chr(92))
             if module["name"] == "ihk-smp-x86_64" and item == "smp_memory.rs":
-                for name in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT"):
+                for name in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT", "X86_5LEVEL"):
                     body.append("    $(wildcard include/config/{0}) ".format(name) + chr(92))
-        if module["name"] == "ihk":
-            body.append("    $(wildcard include/config/COMPAT) \\")
+            if module["name"] == "ihk-smp-x86_64" and item == "smp_vdso.rs":
+                for name in ("PARAVIRT_CLOCK", "HYPERV_TIMER", "AMD_MEM_ENCRYPT"):
+                    body.append("    $(wildcard include/config/{0}) ".format(name) + chr(92))
+            if module["name"] == "ihk" and item == "os_runtime.rs":
+                body.append("    $(wildcard include/config/COMPAT) \\")
         body.extend(
             "  {0} \\".format(item) for item in closure._KERNEL_RUST_DEPENDENCIES
         )
@@ -414,14 +417,17 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         )
         source_root = b"/__w/_temp/native-rust-source/linux-6.12.0-211.44.1.el10_2"
         self.assertIn(source_root, captured)
+        with open(self.path(".ihk.o.cmd"), "rb") as stream:
+            current = stream.read()
         self.write_bytes(".ihk.o.cmd", captured.replace(source_root, SOURCE_ROOT.encode("ascii")))
-        value = closure.validate_kbuild_link_closure(
-            self.records, stage_lock_path=self.stage_lock_path
-        )
+        with self.assertRaises(closure.LinkClosureError):
+            closure.validate_kbuild_link_closure(self.records, stage_lock_path=self.stage_lock_path)
+        self.write_bytes(".ihk.o.cmd", current)
+        value = closure.validate_kbuild_link_closure(self.records, stage_lock_path=self.stage_lock_path)
         source_paths = [item["path"] for item in value["source_closure"]]
         self.assertIn("os_runtime.rs", source_paths)
         self.assertEqual(
-            sorted(item["path"] for item in stage_lock["files"] if item["path"].endswith(".rs")),
+            list(closure.EXPECTED_COMPILER_SOURCES),
             source_paths,
         )
         self.assertFalse(value["claims"]["runtime_proven"])
@@ -432,12 +438,15 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 native_root = os.path.join(REPO_ROOT, "host-kernel", "native-rust")
                 seen = {module["crate_root"]}
                 dependencies = []
+                included_inputs = []
 
                 def visit(relative):
                     with open(os.path.join(native_root, relative), "r", encoding="utf-8") as stream:
                         source = stream.read()
                     edges = re.findall(
-                        r'(?m)^(?:#\[path = "([^"]+)"\]\n)?mod ([a-z0-9_]+);$', source
+                        r'(?m)^(?:#\[path\s*=\s*"([^"]+)"\]\s*\n)?'
+                        r'(?:pub(?:\s*\([^)]*\))?\s+)?mod\s+([a-z0-9_]+)\s*;$',
+                        source,
                     )
                     for explicit, name in edges:
                         # Current external children are top-level Rust files;
@@ -449,11 +458,31 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                             seen.add(child)
                             dependencies.append(child)
                             visit(child)
+                    for included in re.findall(r'include_str!\s*\(\s*"([^"]+)"\s*\)', source):
+                        child = os.path.normpath(os.path.join(os.path.dirname(relative), included))
+                        if child not in included_inputs:
+                            included_inputs.append(child)
 
                 visit(module["crate_root"])
+                for child in included_inputs:
+                    if child not in seen:
+                        seen.add(child)
+                        dependencies.append(child)
                 self.assertEqual(
                     tuple(dependencies), closure._PROJECT_DEPENDENCIES[module["name"]]
                 )
+
+    def test_stage_file_set_and_order_match_the_real_stager(self):
+        # The validator's copied stage-lock contract must track the producer;
+        # derive the lock from the checked-in manifest rather than duplicating
+        # its file list in this regression fixture.
+        plan = staging.validate_manifest(
+            REPO_ROOT, os.path.join(REPO_ROOT, staging.DEFAULT_MANIFEST)
+        )
+        produced = tuple(
+            item["path"] for item in staging._evidence_stage_lock(plan)["files"]
+        )
+        self.assertEqual(produced, closure.EXPECTED_STAGED_FILES)
 
     def test_valid_closure_is_exact_canonical_and_credit_forbidden(self):
         value = closure.validate_kbuild_link_closure(
@@ -473,7 +502,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             value["claims"],
         )
         self.assertEqual(
-            list(closure.EXPECTED_STAGED_RUST_SOURCES),
+            list(closure.EXPECTED_COMPILER_SOURCES),
             [item["path"] for item in value["source_closure"]],
         )
         self.assertTrue(all(item["stage_sha256"] for item in value["source_closure"]))
@@ -495,7 +524,9 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 if module["module"] == "ihk-smp-x86_64" else [],
                 module["generated_metadata_inputs"],
             )
-            self.assertTrue(all(path.endswith(".rs") for path in module["source_dependencies"]))
+            self.assertTrue(
+                all(path.endswith((".rs", ".S")) for path in module["source_dependencies"])
+            )
         closure.write_kbuild_link_closure(
             self.records, self.output, stage_lock_path=self.stage_lock_path
         )
@@ -950,13 +981,10 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         module = closure.MODULES[1]
         target = "drivers/misc/mckernel/ihk_smp_x86_64.o"
         name = ".ihk_smp_x86_64.o.cmd"
-        self.assertEqual(
-            ROCKY_FIXDEP_SMP_RECORD.splitlines()[1:],
-            self.read_text(name).splitlines()[1:],
-        )
-        self.assertEqual(
-            ["ihk_smp_x86_64.rs", "smp_resource.rs", "smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs",
-             "ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs"],
+        # Retain the historical Rocky capture as a stale-graph regression:
+        # current production roots have additional module edges, so accepting
+        # this old dependency body would reopen the original closure defect.
+        with self.assertRaises(closure.LinkClosureError):
             closure._parse_rust_dependency_body(
                 name,
                 target,
@@ -964,8 +992,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 SOURCE_PREFIX + "ihk_smp_x86_64.rs",
                 SOURCE_ROOT,
                 module,
-            ),
-        )
+            )
 
     def test_fixdep_config_record_is_required_exact_and_module_specific(self):
         name = ".ihk_smp_x86_64.o.cmd"
@@ -1009,8 +1036,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         self.mutate_once(name, config, config.replace("    ", "  ", 1))
         self.mutate_once(name, config, config.replace("COMPAT)", "IA32_EMULATION)"))
         self.mutate_once(name, source + config, config + source)
-        kernel = "  ./rust/libcore.rmeta \\\n"
-        self.mutate_once(name, config + kernel, kernel + config)
+        next_source = "  " + SOURCE_PREFIX + "os_service.rs \\\n"
+        self.mutate_once(name, config + next_source, next_source + config)
 
     def test_fixdep_config_record_order_and_extra_dependencies_are_rejected(self):
         name = ".ihk_smp_x86_64.o.cmd"
@@ -1020,16 +1047,19 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         metadata = "  " + SOURCE_PREFIX + "ihk-compat-build-id.bin \\\n"
         kernel = "  ./rust/libcore.rmeta \\\n"
         self.mutate_once(name, config + resource, resource + config)
-        source_dependencies = resource + "".join(
-            "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
-            for item in ("smp_cpu.rs", "abi/x86_64.rs", "smp_memory.rs")
-        ) + "".join(
-            "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
-            for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
-        ) + "".join(
-            "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
-            for item in ("ihk_mapping.rs", "smp_image.rs", "smp_loader.rs", "smp_startup.rs")
-        )
+        source_dependencies = ""
+        for item in closure._PROJECT_DEPENDENCIES["ihk-smp-x86_64"]:
+            source_dependencies += "  " + SOURCE_PREFIX + item + " " + chr(92) + "\n"
+            if item == "smp_memory.rs":
+                source_dependencies += "".join(
+                    "    $(wildcard include/config/" + name + ") " + chr(92) + "\n"
+                    for name in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT", "X86_5LEVEL")
+                )
+            if item == "smp_vdso.rs":
+                source_dependencies += "".join(
+                    "    $(wildcard include/config/" + name + ") " + chr(92) + "\n"
+                    for name in ("PARAVIRT_CLOCK", "HYPERV_TIMER", "AMD_MEM_ENCRYPT")
+                )
         self.mutate_once(name, source_dependencies + metadata, metadata + source_dependencies)
         for anchor in (resource, metadata, kernel):
             with self.subTest(anchor=anchor):
@@ -1052,7 +1082,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         source = "  " + SOURCE_PREFIX + "smp_memory.rs " + chr(92) + "\n"
         lines = [
             "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
-            for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT")
+            for item in ("NUMA", "SPARSEMEM_VMEMMAP", "MEMORY_HOTPLUG", "DYNAMIC_MEMORY_LAYOUT", "X86_5LEVEL")
         ]
         config = "".join(lines)
         self.mutate_once(name, source + config, config + source)
@@ -1075,6 +1105,21 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                     self.assert_rejected()
                 finally:
                     self.write_text(name, original)
+
+    def test_smp_vdso_config_dependencies_follow_source_exactly(self):
+        name = ".ihk_smp_x86_64.o.cmd"
+        source = "  " + SOURCE_PREFIX + "smp_vdso.rs " + chr(92) + "\n"
+        lines = [
+            "    $(wildcard include/config/" + item + ") " + chr(92) + "\n"
+            for item in ("PARAVIRT_CLOCK", "HYPERV_TIMER", "AMD_MEM_ENCRYPT")
+        ]
+        config = "".join(lines)
+        self.mutate_once(name, source + config, config + source)
+        self.mutate_once(name, config, "".join(reversed(lines)))
+        for line in lines:
+            self.mutate_once(name, line, "")
+            self.mutate_once(name, line, line + line)
+        self.mutate_once(name, lines[1], lines[1].replace("HYPERV_TIMER", "PARAVIRT_CLOCK"))
 
     def test_image_loader_dependencies_cannot_be_omitted_duplicated_or_substituted(self):
         name = ".ihk_smp_x86_64.o.cmd"

@@ -64,7 +64,7 @@ class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-97fb67a7-3.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-closurefix-4.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -107,16 +107,20 @@ class WrapperTests(unittest.TestCase):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-97fb67a7-3.json"))
-        old_request = request
-        def retired_request(source):
-            value = old_request(source)
-            value["operational_exclusion_path"] = (
-                wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
-            return value
-        with self.assertRaisesRegex(wrapper.AdmissionError,
-                                    "reviewed exact path"):
-            self.invoke(retired_request)
+            "native-exact-candidate-operational-exclusion-closurefix-4.json"))
+        for rejected_path in (
+            wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
+            wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
+            wrapper.SUPERSEDED_OPERATIONAL_EXCLUSION_PATH,
+        ):
+            old_request = request
+            def rejected_request(source, path=rejected_path):
+                value = old_request(source)
+                value["operational_exclusion_path"] = path
+                return value
+            with self.assertRaisesRegex(wrapper.AdmissionError,
+                                        "reviewed exact path"):
+                self.invoke(rejected_request)
         self.assertEqual(FakeOwner.calls, 0)
         lock, record = wrapper._acquire_exclusion(
             {"operational_exclusion_path": wrapper.OPERATIONAL_EXCLUSION_PATH})
@@ -133,6 +137,18 @@ class WrapperTests(unittest.TestCase):
             value = old_request(source)
             value["operational_exclusion_path"] = (
                 wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH)
+            return value
+        with self.assertRaisesRegex(wrapper.AdmissionError,
+                                    "reviewed exact path"):
+            self.invoke(failed_request)
+        self.assertEqual(FakeOwner.calls, 0)
+
+    def test_failed_minus_three_exclusion_is_rejected(self):
+        old_request = request
+        def failed_request(source):
+            value = old_request(source)
+            value["operational_exclusion_path"] = (
+                wrapper.SUPERSEDED_OPERATIONAL_EXCLUSION_PATH)
             return value
         with self.assertRaisesRegex(wrapper.AdmissionError,
                                     "reviewed exact path"):

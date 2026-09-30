@@ -454,7 +454,7 @@ class AcceptanceClosureTests(unittest.TestCase):
             result = self.run_public()
         self.assertEqual(
             result["contract"]["sha256"],
-            "245af1512ebc0e3f651f75784f6a4c1ba203d156c415258b02062bc7842087c2",
+            "be97a270c68e641938b29f1291015cb247bc6adde14adfafaf71205d607a6a6e",
         )
         self.assertEqual(result["contract"]["size"], 5938)
 
