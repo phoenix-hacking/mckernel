@@ -190,11 +190,13 @@ class OwnerTests(unittest.TestCase):
         owner.EXPECTED_DRIVER_SHA256 = digest(self.driver)
         owner.COMMON_EXCLUSION = str(self.common)
 
-    def test_current_selfdigest_namespace_retires_runtimeblob(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
+    def test_current_exportset_namespace_retires_selfdigest(self):
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-14.json"
+        retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("selfdigest-13.json"))
+        self.assertTrue(current.endswith("exportset-14.json"))
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
+        self.assertIn(retired_selfdigest, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json",
