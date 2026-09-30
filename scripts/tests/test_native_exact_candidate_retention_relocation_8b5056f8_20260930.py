@@ -1,4 +1,6 @@
 import importlib.util
+import io
+import contextlib
 import os
 import pathlib
 import stat
@@ -96,6 +98,27 @@ class RetentionRelocationPacketTests(unittest.TestCase):
         self.assertIn("os.fstat(fd)", text)
         self.assertIn("temp_identity = (stat_result.st_dev, stat_result.st_ino)", text)
         self.assertIn("(current.st_dev, current.st_ino) == temp_identity", text)
+
+    def test_main_requires_audit_for_prepare_and_keeps_default_read_only(self):
+        m = load()
+        with mock.patch.dict(os.environ, {}, clear=True), mock.patch.object(m, "audit_inputs") as audit, mock.patch.object(m, "prepare_archive") as prepare:
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(m.main(), 0)
+            self.assertIn("AUDIT_NOT_REQUESTED", output.getvalue())
+            audit.assert_not_called()
+            prepare.assert_not_called()
+        with mock.patch.dict(os.environ, {"RETENTION_PREPARE_RELEASE": "1"}, clear=True):
+            with self.assertRaisesRegex(SystemExit, "PREPARATION_REQUIRES_AUDIT"):
+                m.main()
+
+    def test_main_explicit_release_calls_audited_archive(self):
+        m = load()
+        with mock.patch.dict(os.environ, {"RETENTION_AUDIT": "1", "RETENTION_PREPARE_RELEASE": "1"}, clear=True), mock.patch.object(m, "audit_inputs", return_value={"status": "AUDIT_ONLY"}) as audit, mock.patch.object(m, "prepare_archive", return_value={"archive": "/tmp/exact.tar"}) as prepare:
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(m.main(), 0)
+            audit.assert_called_once_with()
+            prepare.assert_called_once_with()
+            self.assertIn("/tmp/exact.tar", output.getvalue())
     def test_archive_requires_release_and_excludes_candidate(self):
         m = load()
         with self.assertRaisesRegex(RuntimeError, "PREPARATION_RELEASE_REQUIRED"):

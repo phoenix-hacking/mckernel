@@ -346,7 +346,14 @@ def relocation_plan() -> dict:
 
 
 def main() -> int:
-    print(json.dumps({"audit": audit_inputs() if os.environ.get("RETENTION_AUDIT") == "1" else "AUDIT_NOT_REQUESTED", "relocation": relocation_plan()}, sort_keys=True))
+    audit_requested = os.environ.get("RETENTION_AUDIT") == "1"
+    prepare_requested = os.environ.get("RETENTION_PREPARE_RELEASE") == "1"
+    if prepare_requested and not audit_requested:
+        raise SystemExit("PREPARATION_REQUIRES_AUDIT")
+    result = {"audit": audit_inputs() if audit_requested else "AUDIT_NOT_REQUESTED", "relocation": relocation_plan()}
+    if prepare_requested:
+        result["archive"] = prepare_archive()
+    print(json.dumps(result, sort_keys=True))
     return 0
 
 
