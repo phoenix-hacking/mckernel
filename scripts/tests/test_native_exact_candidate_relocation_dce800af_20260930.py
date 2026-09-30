@@ -3,6 +3,8 @@ import os
 import shutil
 import subprocess
 import tempfile
+from types import SimpleNamespace
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
@@ -19,7 +21,7 @@ def helpers():
     end = next(i for i in range(start, len(lines)) if lines[i] == "def main():")
     tree = ast.parse("\n".join(lines[start:end]))
     wanted = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
-    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"durable", "under", "inventory", "equal_inventory", "mount_points", "proc_references", "safe_remove"}]
+    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"durable", "under", "inventory", "equal_inventory", "mount_points", "proc_references", "privileged_references", "safe_remove"}]
     ns = {"__name__": "fixture"}
     exec(compile(ast.Module(body=wanted, type_ignores=[]), "relocation-fixture", "exec"), ns)
     return ns
@@ -116,9 +118,28 @@ def test_distinct_deletion_intent_and_terminal_success_sequence():
     h = helpers()
     with tempfile.TemporaryDirectory() as td:
         root = Path(td) / "source"; root.mkdir(); (root / "payload").write_bytes(b"x")
+        outside = Path(td) / "outside"; outside.write_bytes(b"preserved")
+        (root / "internal-link").symlink_to("payload")
+        (root / "external-link").symlink_to(outside)
         delete_intent = Path(td) / "delete-intent.json"
         terminal = Path(td) / "terminal.json"
         h["durable"](delete_intent, b'{"status":"VERIFIED_DESTINATION_DELETION_START"}\n')
         h["safe_remove"](root, os.stat(root).st_dev, os.stat(root).st_ino)
         h["durable"](terminal, b'{"status":"PASS"}\n')
-        assert delete_intent.exists() and terminal.exists() and not root.exists()
+        assert delete_intent.exists() and terminal.exists() and not root.exists() and outside.read_bytes() == b"preserved"
+
+
+def test_privileged_reference_census_distinguishes_clean_from_tool_failure():
+    h = helpers()
+    with tempfile.TemporaryDirectory() as td:
+        clean = SimpleNamespace(returncode=1, stdout="", stderr="")
+        with mock.patch.object(h["subprocess"], "run", return_value=clean):
+            assert h["privileged_references"]([td]) == []
+        auth_failure = SimpleNamespace(returncode=1, stdout="", stderr="sudo: authentication failed\n")
+        with mock.patch.object(h["subprocess"], "run", return_value=auth_failure):
+            try:
+                h["privileged_references"]([td])
+            except RuntimeError as exc:
+                assert str(exc) == "privileged-reference-census-failed"
+            else:
+                raise AssertionError("sudo/lsof failure was accepted as a clean census")

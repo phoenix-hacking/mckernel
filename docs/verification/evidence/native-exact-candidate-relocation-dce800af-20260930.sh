@@ -53,7 +53,7 @@ exec 8>"$LOG"
 import ctypes, datetime, fcntl, hashlib, json, os, pathlib, re, shutil, stat, subprocess, sys
 C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,DEST_PARENT,DEST,LOG,TERMINAL,INTENT,DELETE_INTENT,BUILD_EXCLUSION,EXCLUSION=sys.argv[1:]
 SRC_DEV,DEST_DEV=1831,66306
-REPO='/home/holden/mckernel'; CANDIDATE='dce800af8c19d014ef509e102ca4f4b1c473e2ab'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
+REPO='/home/holden/mckernel'; CANDIDATE='dce800af8c19d014ef509e102ca4f4b1c473e2ab'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'; PREP_RELEASE='b13f7065cc16bff1608a6f3d89ff65870400c3c6'
 PREP_PACKET_PATH='docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-5.sh'
 OVERLAY='host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'; RESULT='ihk/test/ihklib/whitebox/src/driver/mckernel/syscall.c'
 OVERLAY_SHA='cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7'; RESULT_SHA='7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77'; BASE_SHA='91fe5688f3282c1617a75f08c4b435a793200f2cf9beafe432cef7ad3ca0bd4c'
@@ -133,8 +133,8 @@ def privileged_references(targets):
  for target in targets:
   if not pathlib.Path(target).exists(): continue
   r=subprocess.run(['/usr/bin/sudo','-A','/usr/bin/lsof','-nP','-w','+D',target],check=False,text=True,capture_output=True)
-  if r.returncode not in (0,1): raise RuntimeError('privileged-reference-census-failed')
-  if r.stdout.strip(): hits.append(target)
+  if r.returncode not in (0,1) or r.stderr.strip() or (r.returncode==1 and r.stdout.strip()): raise RuntimeError('privileged-reference-census-failed')
+  if r.returncode==0 and r.stdout.strip(): hits.append(target)
  return hits
 def safe_remove(root,dev,ino):
  p=pathlib.Path(root); par=os.open(str(p.parent),os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW); fd=os.open(p.name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=par)
@@ -144,8 +144,9 @@ def safe_remove(root,dev,ino):
   def walk(d):
    for ent in os.scandir(d):
     z=ent.stat(follow_symlinks=False)
-    if z.st_dev!=dev or stat.S_ISLNK(z.st_mode): raise RuntimeError('delete-symlink-or-mount')
-    if stat.S_ISDIR(z.st_mode):
+    if z.st_dev!=dev: raise RuntimeError('delete-foreign-device-or-mount')
+    if stat.S_ISLNK(z.st_mode): os.unlink(ent.name,dir_fd=d)
+    elif stat.S_ISDIR(z.st_mode):
      c=os.open(ent.name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=d)
      try: walk(c)
      finally: os.close(c)
@@ -193,9 +194,10 @@ def main():
   source_ancestors.append((str(ancestor),s.st_dev,s.st_ino))
  if source_ancestors[-1][1]!=SRC_DEV or mount_points(open('/proc/self/mountinfo',errors='replace').read(),C): raise RuntimeError('source-mount')
  src_inv=inventory(C,SRC_DEV); src_ino=os.stat(C).st_ino
- fail=json.load(open(FAILURE));
- if fail.get('candidate_sha')!=CANDIDATE or fail.get('source_preparation',{}).get('candidate_root')!=C: raise RuntimeError('failure-provenance')
- if fail.get('archive',{}).get('sha256')!='f8522be9649def629b04a93d065f3ab79a5c7acdd7a2f2f221b7d759384c5952': raise RuntimeError('archive-provenance')
+ fail=json.load(open(FAILURE)); retained=fail.get('retained_evidence',{})
+ if (fail.get('candidate_sha')!=CANDIDATE or fail.get('request',{}).get('path')!=REQUEST or
+     retained.get('output_root',{}).get('path')!=O or retained.get('evidence_root',{}).get('path')!=E or
+     retained.get('operational_exclusion',{}).get('path')!=BUILD_EXCLUSION): raise RuntimeError('failure-provenance')
  if git('rev-parse','refs/remotes/origin/codex/local-native-staging-repair') != os.environ['RELOCATION_RELEASE_COMMIT']: raise RuntimeError('release-not-fetched')
  if git('cat-file','-t',os.environ['RELOCATION_RELEASE_COMMIT'])!='commit': raise RuntimeError('release-missing')
  env=dict(os.environ,GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_NO_REPLACE_OBJECTS='1',GIT_TERMINAL_PROMPT='0',PATH='/usr/bin:/bin',HOME='/nonexistent')
@@ -203,7 +205,8 @@ def main():
  if hashlib.sha256(blob).hexdigest()!=os.environ['RELOCATION_PACKET_SHA256']: raise RuntimeError('packet-binding')
  test_blob=subprocess.check_output(['/usr/bin/git','-C',REPO,'show',os.environ['RELOCATION_RELEASE_COMMIT']+':scripts/tests/test_native_exact_candidate_relocation_dce800af_20260930.py'],env=env)
  if hashlib.sha256(test_blob).hexdigest()!=os.environ['RELOCATION_TEST_SHA256']: raise RuntimeError('test-binding')
- prep_blob=subprocess.check_output(['/usr/bin/git','-C',REPO,'show',os.environ['RELOCATION_RELEASE_COMMIT']+':'+PREP_PACKET_PATH],env=env)
+ if git('cat-file','-t',PREP_RELEASE)!='commit': raise RuntimeError('preparation-release-missing')
+ prep_blob=subprocess.check_output(['/usr/bin/git','-C',REPO,'show',PREP_RELEASE+':'+PREP_PACKET_PATH],env=env)
  if hashlib.sha256(prep_blob).hexdigest()!='c334449c9d1081911a0de951a3b130b4b06de24414da5755801687407698a996' or hashlib.sha256(pathlib.Path(PREP_TERMINAL).read_bytes()).hexdigest()!='2788c195965f7a12f92f1463065f70074ce48f2875d406fce2cfa293c6c9dcd9': raise RuntimeError('preparation-binding')
  if hashlib.sha256(pathlib.Path(C+'/'+OVERLAY).read_bytes()).hexdigest()!=OVERLAY_SHA or hashlib.sha256(pathlib.Path(C+'/'+RESULT).read_bytes()).hexdigest()!=RESULT_SHA: raise RuntimeError('overlay-result-binding')
  if subprocess.run(['/usr/bin/git','-C',C,'rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=CANDIDATE or subprocess.run(['/usr/bin/git','-C',C+'/ihk','rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=IHK: raise RuntimeError('commit-binding')
