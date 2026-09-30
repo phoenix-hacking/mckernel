@@ -9603,3 +9603,25 @@ preparation packet bound to pushed runtime-corrected HEAD, remeasure the narrow
 scratch margin, prepare the candidate, and run the single exact build.  Current-
 candidate builds remain four failed and zero completed; real diagnostic guest
 applications remain zero.
+
+Continuation checkpoint 213, 2026-09-30: fresh scratch-10 preparation passes
+for runtime-corrected candidate `e8bece7fd55a862599facb6c5e81e7597a4a5c0d`.
+The independently reviewed packet preserves the four-CPU/12-GiB/no-network
+profile and `exportset-14` namespace; 41 focused tests pass.  Candidate identity
+is `1831:5111900`; manifest/request SHAs are `61500ea9...24ec` and
+`2f02bce2...8f9c`.  Terminal/log SHAs are `e9440d52...8c50` and
+`b91c1d9a...30e4`, with preparation PID 954964, starttime 98609654 and return
+0.  Output/evidence identities `1831:4457328`/`1831:4457329` are empty; build
+lease and exclusion are absent.  Full bindings are in
+`docs/verification/evidence/native-exact-candidate-preparation-scratch10-result-20260930.json`.
+
+Post-preparation host/scratch/memory availability is
+27,357,286,400/14,546,067,456/29,309,054,976 bytes.  Although the immediate
+12-GiB reserve still passes, the prior exact build produced about 5 GiB of
+output; starting it now would cross the reserve.  Do not run the heavy build
+until at least that measured requirement plus emergency headroom is recovered.
+Next apply a separately reviewed Git-identical cleanup to one older retained
+candidate, preserving its deltas/output/failure records, remeasure capacity,
+then obtain a fresh heavy-build release for request `2f02bce2...8f9c`.
+Current-candidate builds remain four failed and zero completed; real diagnostic
+guest applications remain zero.
