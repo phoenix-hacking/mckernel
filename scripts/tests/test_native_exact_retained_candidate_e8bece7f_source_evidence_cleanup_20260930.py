@@ -2,10 +2,10 @@ import importlib.util,json,stat,tempfile
 from pathlib import Path
 import pytest
 SRC=Path(__file__).parents[2]/"docs/verification/evidence/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-20260930.py";s=importlib.util.spec_from_file_location("e8",SRC);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-def ok():return {"lsof":{"returncode":1,"output":"","stderr":""},"mount":{"returncode":0,"output":"SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n"},"docker":{"returncode":0,"output":json.dumps({"ID":m.EXPECTED_CONTAINER,"State":"exited","Names":"mckernel-exact-retained"})}}
+def ok():return {"lsof":{"returncode":1,"output":"","stderr":""},"mount":{"returncode":0,"output":"SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n"},"docker":{"returncode":0,"output":json.dumps({"ID":m.EXPECTED_CONTAINER[:12],"State":"exited","Names":"mckernel-exact-4c0bc3419f8447f1a060f4edaef6ad8d"})},"retained_inspect":{"returncode":0,"output":json.dumps({"Status":"exited","ExitCode":1,"OOMKilled":False,"Pid":0}),"stderr":""}}
 def test_pins():assert m.CANDIDATE_COMMIT.startswith("e8bece7f") and m.CANDIDATE_IDENTITY=="1831:5111900"
 def test_census_ok():m.validate_census(ok())
-@pytest.mark.parametrize("k",["lsof","mount","docker"])
+@pytest.mark.parametrize("k",["lsof","mount","docker","retained_inspect"])
 def test_census_failures(k):
  c=ok();c[k]["returncode"]=2
  with pytest.raises(SystemExit):m.validate_census(c)
@@ -19,8 +19,12 @@ def test_running_container():
  c=ok();c["docker"]["output"]+="\n"+json.dumps({"State":"running","Names":"mckernel-exact-8"})
  with pytest.raises(SystemExit):m.validate_census(c)
 def test_retained_container_absent_or_live():
- for output in ("",json.dumps({"ID":m.EXPECTED_CONTAINER,"State":"running","Names":"mckernel-exact-retained"})):
+ for output in ("",json.dumps({"ID":m.EXPECTED_CONTAINER[:12],"State":"running","Names":"mckernel-exact-4c0bc3419f8447f1a060f4edaef6ad8d"})):
   c=ok();c["docker"]["output"]=output
+  with pytest.raises(SystemExit):m.validate_census(c)
+def test_retained_container_terminal_identity():
+ for key,value in (("Status","running"),("ExitCode",0),("OOMKilled",True),("Pid",1)):
+  c=ok();state=json.loads(c["retained_inspect"]["output"]);state[key]=value;c["retained_inspect"]["output"]=json.dumps(state)
   with pytest.raises(SystemExit):m.validate_census(c)
 def test_no_replace(tmp_path):
  p=tmp_path/"x";m.write(p,{"a":1})

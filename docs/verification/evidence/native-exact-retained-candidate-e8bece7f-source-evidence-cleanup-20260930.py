@@ -29,7 +29,7 @@ def census(root):
         try:
             p=subprocess.run(a,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=20);return {"argv":a,"returncode":p.returncode,"output":p.stdout,"stderr":p.stderr}
         except Exception as e:return {"argv":a,"error":type(e).__name__+":"+str(e)}
-    c={"lsof":run(["sudo","-A","lsof","-nP","-w","+D",str(root)]),"mount":run(["findmnt","-T",str(root),"-o","SOURCE,FSTYPE,MAJ:MIN,TARGET"]),"docker":run(["sudo","-A","docker","ps","-a","--format","{{json .}}"]),"protected":[str(x) for x in (EVIDENCE,OUTPUT,EXCLUSION,FAILURE)],"container_removal":False}; validate_census(c);return c
+    c={"lsof":run(["sudo","-A","lsof","-nP","-w","+D",str(root)]),"mount":run(["findmnt","-T",str(root),"-o","SOURCE,FSTYPE,MAJ:MIN,TARGET"]),"docker":run(["sudo","-A","docker","ps","-a","--format","{{json .}}"]),"retained_inspect":run(["sudo","-A","docker","inspect","--format","{{json .State}}",EXPECTED_CONTAINER]),"protected":[str(x) for x in (EVIDENCE,OUTPUT,EXCLUSION,FAILURE)],"container_removal":False}; validate_census(c);return c
 def validate_census(c):
     l=c["lsof"]
     if l.get("returncode") not in (0,1) or l.get("stderr","").strip() or [x for x in l.get("output","").splitlines() if x and not x.startswith("COMMAND")]:fail("open reference census")
@@ -40,11 +40,16 @@ def validate_census(c):
     for line in c["docker"].get("output","").splitlines():
         try:o=json.loads(line)
         except json.JSONDecodeError:fail("docker syntax")
-        if o.get("ID")==EXPECTED_CONTAINER:
+        if EXPECTED_CONTAINER.startswith(str(o.get("ID",""))) and o.get("Names")=="mckernel-exact-4c0bc3419f8447f1a060f4edaef6ad8d":
             retained=True
             if str(o.get("State","")).lower()!="exited":fail("retained container state")
         if str(o.get("State","")).lower() in ("running","restarting") and ("mckernel-exact" in str(o.get("Names","")) or "/home/holden/mckernel-work" in str(o.get("Mounts",""))):fail("running relevant container")
     if not retained:fail("retained container absent")
+    i=c.get("retained_inspect",{})
+    if i.get("returncode")!=0 or i.get("stderr","").strip():fail("retained container inspect")
+    try:state=json.loads(i.get("output",""))
+    except json.JSONDecodeError:fail("retained container inspect syntax")
+    if state.get("Status")!="exited" or state.get("ExitCode")!=1 or state.get("OOMKilled") is not False or state.get("Pid")!=0:fail("retained container terminal identity")
 def audit(root=CANDIDATE_ROOT,repo=REPO,commit=CANDIDATE_COMMIT):
     guard(root,repo,commit); b,rb=base(root); safety=census(root); targets=[]; preserved=[]
     for p in sorted(b.rglob("*")):
