@@ -69,7 +69,7 @@ def census(root):
         except json.JSONDecodeError: owner=None
         item["owner_record"]={k:owner.get(k) for k in ("pid","starttime","state","immutable") if owner} if owner else None
         records.append(item)
-    result={"open_processes":run(["sudo","-A","lsof","-nP","+D",str(root)]),
+    result={"open_processes":run(["sudo","-A","lsof","-nP","-w","+D",str(root)]),
             "mount_device":run(["findmnt","-T",str(root),"-o","SOURCE,FSTYPE,MAJ:MIN,TARGET"]),
             "docker_all":run(["sudo","-A","docker","ps","-a","--no-trunc","--format","{{json .}}"]),
             "lease_exclusion_paths":records,
@@ -82,7 +82,8 @@ def census(root):
 def validate_census(c):
     l=c["open_processes"]
     if l.get("returncode") not in (0,1): die("lsof census failed")
-    payload=[x for x in (l.get("output","")+"\n"+l.get("stderr","")).splitlines() if x and not x.startswith("lsof:") and not x.startswith("COMMAND")]
+    if l.get("stderr","").strip(): die("lsof census error")
+    payload=[x for x in l.get("output","").splitlines() if x and not x.startswith("COMMAND")]
     if l.get("returncode")==1 and payload: die("lsof reported open reference")
     if l.get("returncode")==0 and payload: die("lsof reported open reference")
     m=c["mount_device"]

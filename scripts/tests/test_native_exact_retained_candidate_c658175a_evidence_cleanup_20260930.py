@@ -42,7 +42,7 @@ def test_preserves_mismatches_and_untracked_content_by_design():
 
 def test_safety_census_is_read_only_commands():
     text=PACKET.read_text()
-    assert '"sudo","-A","lsof"' in text
+    assert '"sudo","-A","lsof","-nP","-w"' in text
     assert '"findmnt"' in text and '"docker","ps","-a"' in text
     assert 'os.replace' not in text
     assert 'os.link(tmp,path)' in text
@@ -87,3 +87,9 @@ def test_protected_disjoint_live_exclusion_owner_allowed(tmp_path):
 def test_active_lsof_reference_rejected():
     c=good_census(); c['open_processes']={"returncode":0,"output":"COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME\nworker 42 holden cwd DIR 1831 4096 1 /candidate\n","stderr":""}
     with pytest.raises(SystemExit,match='lsof reported'): M.validate_census(c)
+
+def test_lsof_warning_or_error_stderr_is_not_ignored():
+    c=good_census(); c['open_processes']={"returncode":1,"output":"","stderr":"lsof: WARNING: inaccessible FUSE mount\n"}
+    with pytest.raises(SystemExit,match='lsof census error'): M.validate_census(c)
+    c['open_processes']={"returncode":0,"output":"COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME\n","stderr":""}
+    M.validate_census(c)
