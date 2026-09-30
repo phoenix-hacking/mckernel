@@ -5,7 +5,7 @@ set -Eeuo pipefail
 umask 077
 readonly SCRATCH=/home/holden/mckernel-work/scratch
 readonly C="$SCRATCH/mckernel-exact-candidate-c658175a-scratch-7"
-readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-16-retry2
+readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1
 readonly DEST=/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7
 readonly FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-build-c658175a-scratch7-runtime-self-digest-failure-20260930.json
 readonly RELOCATION_FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-relocation-c658175a-archive-path-failure-20260930.json
