@@ -8974,3 +8974,51 @@ exactly one build-wrapper invocation using the generated request, and execute
 no other heavy work.  Preserve all four current stopped failure containers,
 all historical exclusions and archives.  No artifact, boot or diagnostic app
 has passed.
+
+Continuation checkpoint 194, 2026-09-30: the independently released
+`scratch-4` build ran exactly once.  All 671 source tests, phase 1 and the full
+54-case Kconfig matrix passed.  The host kernel linked through final `vmlinux`,
+System.map, relocations and post-link tests.  The first current-source compile
+defect then appeared while building `ihk_smp_x86_64`: Rust E0107 at
+`smp_memory.rs:1007` and `:1050`, where two references omitted the const
+generic required by `MemoryMap`.  This is a real module compile failure, not a
+harness failure.  There are zero accepted final artifacts and no boot or app
+result.
+
+Terminal container
+`f93945ad8b4e8439c607a17ac37541de9eaa36fa9ab2f416ed7972edfac972dd`
+(`mckernel-exact-d55b9d6762a243b884dfbbd675d5934d`) exited 1 with PID 0
+and remains retained under owner nonce `7960e9b4c3384ccd80773ec7a8264358`.
+The `offlinecwd-6` exclusion is identity `1831:31541`, SHA
+`0ea742e4...75bb`; top receipt SHA is `5899087a...97f8`, build receipt SHA is
+`2f0498d8...2ac6`, and driver log SHA is `9b98ae21...7829`.  The receipt-bound
+partial output is 4.8 GiB and evidence is 429 MiB.  The independently verified
+portable archive is 873,400,320 bytes with 286,248 members and SHA
+`217c5618...d58e`; it omits exactly 55 unsafe absolute container-only
+symlinks and contains no links or special files.  The original
+`1561de5a...611a` archive remains retained unchanged but is rejected as
+portable evidence.  Additive failure record
+`docs/verification/evidence/native-exact-build-e1c5e4e2-scratch-4-failure-20260930.json`
+has corrected SHA `ba821459...9988`.
+
+The one bounded source correction for this family independently passes review:
+both `PreparedBoot` helpers now take `MemoryMap<MAX_EXTENTS>`, matching the
+production `MemoryContext` field, caller and adjacent helpers.  The exact
+two-line diff changes no bodies, ABI, ownership or timeout behavior.  Nine
+resource source-contract tests pass; source SHA is `1809dfde...334f`.  The
+local host lacks Rust 1.92, so the next exact container build remains the real
+compiler check.
+
+The future McKernel image owner also independently passes source hardening at
+commit `531f9c3af6a5982d01d323bfd0a7c9ad62b99d02`: 17 focused tests and 14
+adversarial probes verify authenticated bootstrap, exact tmpfs/profile,
+complete confined inventories, no-follow path handling, under-lease resource
+refresh and early-log retention.  This is not image-build or boot authority.
+
+Next independently verify the failure archive, checkpoint this correction,
+then recover scratch capacity through a separately reviewed retention cleanup
+before advancing to a fresh exclusion/candidate.  Current scratch free space
+is 17,455,497,216 bytes, insufficient for another approximately 9.3-GB
+candidate while retaining the 12-GiB floor.  Preserve all five current stopped
+failure containers and original evidence identities.  Formal counters remain
+6/130, 350/10000 and 0/273 applications.

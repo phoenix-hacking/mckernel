@@ -1004,7 +1004,7 @@ struct PreparedBoot {
 }
 
 impl PreparedBoot {
-    fn validate_irq_slots(&self, memory: &MemoryMap) -> Result {
+    fn validate_irq_slots(&self, memory: &MemoryMap<MAX_EXTENTS>) -> Result {
         let offset = self.params.bytes.checked_sub(64).ok_or(EIO)?;
         if offset % 8 != 0 { return Err(EIO); }
         // SAFETY: params retains this final 64-byte extent for this borrow;
@@ -1047,7 +1047,7 @@ impl PreparedBoot {
     // Only future reviewed STOP orchestration may call this, then synchronize
     // callbacks. Timeout permanently retains the closed gate and all owners.
     #[allow(dead_code)]
-    fn close_irq_senders(&self, memory: &MemoryMap) -> Result {
+    fn close_irq_senders(&self, memory: &MemoryMap<MAX_EXTENTS>) -> Result {
         self.validate_irq_slots(memory)?;
         // SAFETY: validate_irq_slots checked the retained final 64-byte,
         // 8-byte-aligned descriptor for this generation. This short borrow
