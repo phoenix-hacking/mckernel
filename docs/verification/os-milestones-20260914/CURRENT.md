@@ -9704,6 +9704,29 @@ manifest/request identities, and then obtain a fresh heavy-build release.
 Current-candidate builds remain five failed and zero completed; real diagnostic
 guest applications remain zero.
 
+Continuation checkpoint 219, 2026-09-30: scratch-11 again completed kernel and
+all three native module builds, then failed one later lifecycle oracle.  Module
+SHAs remain `b4dbf04c...dc9f`, `268d6d3b...4bbb` and `d927bc44...019f`.
+Retained container `d1972570...d954` exited 1 without OOM; driver log SHA is
+`83d488a7...7333`.  The prior temp-root failure is cleared: configured registry
+fixtures execute and pass.  The new failure is exact and additive: the module
+contains reviewed read-only parameter `native_boot_prepare_only`, while the
+built-artifact checker compared raw metadata only against the six frozen legacy
+parameters.
+
+The bounded checker correction adds the reviewed diagnostic parameter only to
+current native artifact `parm`, `parmtype` and rendered-metadata expectations.
+The legacy contract remains exactly six parameters, and unknown extras remain
+fail-closed.  Sixty focused tests pass, including a new unexpected-parameter
+negative.  Full retained failure and artifact identities are in
+`docs/verification/evidence/native-exact-build-scratch11-additive-parameter-failure-20260930.json`.
+
+Next commit/push the correction, recover only reviewed Git-identical source
+evidence while preserving scratch-11 output/evidence/container, prepare a fresh
+source-bound candidate/request, and run one new exact build.  Current-candidate
+builds are now six failed and zero completed; real diagnostic guest applications
+remain zero.
+
 Continuation checkpoint 218, 2026-09-30: the first scratch-11 heavy-build
 review correctly blocked before execution because the measured prior output
 would leave scratch 195,735,552 bytes below the hard 12-GiB reserve and

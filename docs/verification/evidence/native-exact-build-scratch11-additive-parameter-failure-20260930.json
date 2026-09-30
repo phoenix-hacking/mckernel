@@ -1,0 +1,41 @@
+{
+  "status": "FAIL_ORACLE_CORRECTED_LIGHT",
+  "acceptance": "No build, boot, guest, or application acceptance is claimed.",
+  "candidate": {
+    "commit": "acd4197b6e1f53715f75cad6e2e7677d8ab24bc0",
+    "request_sha256": "002b13dc012109c69c4925b588c00d39ae1bbc84bca4c44463c81b3fc48d9db0",
+    "manifest_sha256": "241a53dda1ffed4a3dc2f7696db22a23a1336ad0caed81c11563a84d33171587"
+  },
+  "retained_attempt": {
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-acd4197b-scratch-11",
+    "evidence_identity": "1831:3933548",
+    "output_root": "/home/holden/mckernel-work/scratch/native-exact-build-output-acd4197b-scratch-11",
+    "output_identity": "1831:3933547",
+    "container_id": "d19725703c7fbfd35a76a0d36a7d3dac4eb0d09c095ce91e7a83a36f4746d954",
+    "container_name": "mckernel-exact-91c18291f5dd49308177d6c9d41a5089",
+    "container_terminal": "exited; exit 1; OOMKilled false; PID 0",
+    "started_utc": "2026-09-30T15:55:53.132117152Z",
+    "finished_utc": "2026-09-30T16:32:06.428531733Z",
+    "driver_log_sha256": "83d488a7b530049a1bb5b1edaf7460168172e826629abd80d0423064d86f6733",
+    "executed_phase4_sha256": "687e5469e9992fe82d0c6040cced2db24dfbba0cf3d7d0072641b539fd9c644b",
+    "inspect_terminal_sha256": "2f7c50f6a64a72c90845bad86bb3c04a7d4a6e77281936b6dccb1de608ede36e"
+  },
+  "compiled_modules": {
+    "ihk.ko": "b4dbf04c47c8b8175462982cfee6e833bd40a2b7d6cadd947d68d4612c97dc9f",
+    "ihk-smp-x86_64.ko": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb",
+    "mcctrl.ko": "d927bc4460d23c175660f0a23ad8d9dec79b9e5c144e4ae0c898091bcc98a019"
+  },
+  "failure": {
+    "checker": "scripts/ihk_smp_native_lifecycle_check.py",
+    "observed": "Built SMP raw parameter descriptions contained reviewed native_boot_prepare_only in addition to the six frozen legacy parameters, but the artifact expectation included only the legacy list.",
+    "classification": "current-native artifact oracle omission; compiled module matches the reviewed source ABI"
+  },
+  "correction": {
+    "behavior": "Artifact-only parm, parmtype, and rendered metadata expectations include EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER; the frozen legacy contract remains exactly six parameters.",
+    "unknown_extra_parameters_rejected": true,
+    "focused_tests": "60/60 PASS",
+    "checker_sha256": "cd8f6881f09b205437dcfaa8bc6c8f3666e1974b1c795b083deebebf8eb8a214",
+    "test_sha256": "08e8ff5a25faf21baa387cfa233c579a07ae0c06e11bd52c66e19271f56cb0b2"
+  },
+  "next": "Commit/push the oracle correction, retire only reviewed Git-identical candidate source evidence as needed, prepare a fresh candidate/request, and run one new exact build."
+}

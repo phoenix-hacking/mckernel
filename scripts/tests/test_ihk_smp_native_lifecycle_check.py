@@ -1175,7 +1175,7 @@ macro_rules! áinclude { () => {} }
         contract = json.loads(
             (REPO_ROOT / lifecycle.DEFAULT_CONTRACT).read_text(encoding="utf-8")
         )
-        parameters = contract["parameters"]
+        parameters = (*contract["parameters"], lifecycle.EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER)
         raw_records = [
             f"parm={item['name']}:{item['description']}" for item in parameters
         ] + [f"parmtype={item['name']}:{item['type']}" for item in parameters]
@@ -1321,7 +1321,7 @@ macro_rules! áinclude { () => {} }
         contract = json.loads(
             (REPO_ROOT / lifecycle.DEFAULT_CONTRACT).read_text(encoding="utf-8")
         )
-        parameters = contract["parameters"]
+        parameters = (*contract["parameters"], lifecycle.EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER)
         raw_records = [
             f"parm={item['name']}:{item['description']}" for item in parameters
         ] + [f"parmtype={item['name']}:{item['type']}" for item in parameters]
@@ -1366,6 +1366,11 @@ macro_rules! áinclude { () => {} }
                 + ["parmtype=ihk_cores"]
                 + raw_records[first_type + 1 :],
                 "raw parameter types differ",
+            ),
+            (
+                "unexpected-parm",
+                raw_records + ["parm=unreviewed_parameter:unexpected"],
+                "raw parameter descriptions differ",
             ),
         )
         for label, records, error in cases:

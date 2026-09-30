@@ -2343,7 +2343,10 @@ def validate_module_artifact(
     for field in contract["module"]["forbidden_static_metadata"]:
         if _artifact_modinfo(module_path, field, modinfo_fd):
             raise ValidationError(f"built SMP module unexpectedly carries {field} metadata")
-    parameters = {item["name"]: item for item in contract["parameters"]}
+    parameters = {
+        item["name"]: item
+        for item in (*contract["parameters"], EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER)
+    }
     raw_records = _raw_modinfo_records(module_path)
     raw_parm = sorted(
         record for record in raw_records if record.startswith("parm=")
