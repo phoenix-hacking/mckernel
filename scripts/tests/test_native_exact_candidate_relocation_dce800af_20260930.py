@@ -19,7 +19,7 @@ def helpers():
     end = next(i for i in range(start, len(lines)) if lines[i] == "def main():")
     tree = ast.parse("\n".join(lines[start:end]))
     wanted = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
-    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"under", "inventory", "equal_inventory", "mount_points", "proc_references", "safe_remove"}]
+    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"durable", "under", "inventory", "equal_inventory", "mount_points", "proc_references", "safe_remove"}]
     ns = {"__name__": "fixture"}
     exec(compile(ast.Module(body=wanted, type_ignores=[]), "relocation-fixture", "exec"), ns)
     return ns
@@ -87,10 +87,14 @@ def test_mount_process_existing_destination_and_exclusion_guards_are_present():
     with tempfile.TemporaryDirectory() as td:
         proc = Path(td) / "proc"; (proc / "123" / "fd").mkdir(parents=True)
         (proc / "123" / "fd" / "0").symlink_to("/candidate/file")
-        (proc / "123" / "maps").write_text("candidate mapping")
+        (proc / "123" / "cwd").symlink_to("/candidate")
+        (proc / "123" / "maps").write_text("unrelated mapping")
         assert h["proc_references"](proc, ["/candidate"])
+        (proc / "124").mkdir()
+        (proc / "124" / "maps").write_text("7f00-7f10 r--p 00000000 00:00 0 /candidate/mapped (deleted)\n")
+        assert str(proc / "124") in h["proc_references"](proc, ["/candidate"])
     text = source()
-    for needle in ("destination-exists", "source-mount-before-delete", "active-process-reference", "active-build-or-guest", "active-docker", "active-lease", "exclusion", "os.O_EXCL", "rename_noreplace(tmp,DEST,DEST_PARENT)", "safe_remove(C,SRC_DEV,src_ino)", "scratch_free_bytes_before", "host_free_bytes_after", "RELOCATION_TEST_SHA256", "preparation-binding", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "rsync-verification"):
+    for needle in ("destination-exists", "source-mount-before-delete", "active-process-reference", "privileged-reference-census-failed", "/usr/bin/lsof", "active-build-or-guest", "active-docker", "active-lease", "insufficient-host-capacity", "emergency_reserve", "exclusion", "os.O_EXCL", "rename_noreplace(tmp,DEST,DEST_PARENT)", "safe_remove(C,SRC_DEV,src_ino)", "scratch_free_bytes_before", "host_free_bytes_after", "RELOCATION_TEST_SHA256", "preparation-binding", "DELETE_INTENT", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "rsync-verification"):
         assert needle in text
     assert "rm -rf" not in text and "shutil.rmtree" not in text
 
@@ -103,4 +107,18 @@ def test_packet_never_replaces_existing_exclusion_or_destination():
     assert "os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW" in text
     assert "if pathlib.Path(DEST).exists() or pathlib.Path(DEST).is_symlink()" in text
     assert "durable(INTENT" in text
+    assert "durable(DELETE_INTENT" in text
+    assert text.count("durable(TERMINAL") == 2  # mutually exclusive failure or final PASS
     assert "fsync_tree(tmp)" in text
+
+
+def test_distinct_deletion_intent_and_terminal_success_sequence():
+    h = helpers()
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td) / "source"; root.mkdir(); (root / "payload").write_bytes(b"x")
+        delete_intent = Path(td) / "delete-intent.json"
+        terminal = Path(td) / "terminal.json"
+        h["durable"](delete_intent, b'{"status":"VERIFIED_DESTINATION_DELETION_START"}\n')
+        h["safe_remove"](root, os.stat(root).st_dev, os.stat(root).st_ino)
+        h["durable"](terminal, b'{"status":"PASS"}\n')
+        assert delete_intent.exists() and terminal.exists() and not root.exists()

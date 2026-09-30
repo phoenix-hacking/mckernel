@@ -18,6 +18,7 @@ readonly MANIFEST="$SCRATCH/native-exact-inputs-dce800af-scratch-5.json"
 readonly LOG="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930.log"
 readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930-terminal.json"
 readonly INTENT="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930-intent.json"
+readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930-deletion-intent.json"
 readonly BUILD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
 readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation-dce800af-12.json"
 readonly LOCK="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930.lock"
@@ -41,16 +42,16 @@ sha(){ /usr/bin/sha256sum -- "$1" | /usr/bin/awk '{print $1}'; }
 : "${RELOCATION_PACKET_SHA256:?set reviewed relocation packet blob hash}"
 : "${RELOCATION_TEST_SHA256:?set reviewed relocation test blob hash}"
 [[ "$RELOCATION_RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || die release-format
-for p in "$LOG" "$TERMINAL" "$INTENT" "$EXCLUSION"; do [[ ! -e "$p" && ! -L "$p" ]] || die output-exists; done
+for p in "$LOG" "$TERMINAL" "$INTENT" "$DELETE_INTENT" "$EXCLUSION"; do [[ ! -e "$p" && ! -L "$p" ]] || die output-exists; done
 for p in "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
 [[ "$(sha "$FAILURE")" == "$FAILURE_SHA" ]] || die failure-hash
 [[ "$(sha "$ARCHIVE")" == "$ARCHIVE_SHA" ]] || die archive-hash
 [[ "$(sha "$BUILD_EXCLUSION")" == "$BUILD_EXCLUSION_SHA" ]] || die build-exclusion-hash
 exec 9>>"$LOCK"; /usr/bin/flock -n 9 || die relocation-busy
 exec 8>"$LOG"
-/usr/bin/python3 - "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$DEST_PARENT" "$DEST" "$LOG" "$TERMINAL" "$INTENT" "$BUILD_EXCLUSION" "$EXCLUSION" <<'PY'
+/usr/bin/python3 - "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$DEST_PARENT" "$DEST" "$LOG" "$TERMINAL" "$INTENT" "$DELETE_INTENT" "$BUILD_EXCLUSION" "$EXCLUSION" <<'PY'
 import ctypes, datetime, fcntl, hashlib, json, os, pathlib, re, shutil, stat, subprocess, sys
-C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,DEST_PARENT,DEST,LOG,TERMINAL,INTENT,BUILD_EXCLUSION,EXCLUSION=sys.argv[1:]
+C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,DEST_PARENT,DEST,LOG,TERMINAL,INTENT,DELETE_INTENT,BUILD_EXCLUSION,EXCLUSION=sys.argv[1:]
 SRC_DEV,DEST_DEV=1831,66306
 REPO='/home/holden/mckernel'; CANDIDATE='dce800af8c19d014ef509e102ca4f4b1c473e2ab'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 PREP_PACKET_PATH='docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-5.sh'
@@ -111,17 +112,29 @@ def proc_references(proc_root,targets):
  for q in pathlib.Path(proc_root).glob('[0-9]*'):
   try:
    refs=[]
-   for n in ('root','cwd','fd'):
+   for n in ('root','cwd'):
     x=q/n
-    if x.is_dir(): refs.extend(os.readlink(z) for z in x.iterdir() if z.is_symlink())
+    if x.is_symlink(): refs.append(os.readlink(x))
+   x=q/'fd'
+   if x.is_dir(): refs.extend(os.readlink(z) for z in x.iterdir() if z.is_symlink())
    maps=q/'maps'
    try:
     text=maps.read_text(errors='replace')
    except PermissionError: raise RuntimeError('unreadable-process-reference')
-   if any(t in text for t in targets): refs.append(text)
+   for line in text.splitlines():
+    fields=line.split(None,5)
+    if len(fields)==6 and fields[5].startswith('/'): refs.append(fields[5])
    if any(any(str(v)==t or str(v).startswith(t+'/') for t in targets) for v in refs): hits.append(str(q))
   except FileNotFoundError: pass
   except PermissionError: raise RuntimeError('unreadable-process-reference')
+ return hits
+def privileged_references(targets):
+ hits=[]
+ for target in targets:
+  if not pathlib.Path(target).exists(): continue
+  r=subprocess.run(['/usr/bin/sudo','-A','/usr/bin/lsof','-nP','-w','+D',target],check=False,text=True,capture_output=True)
+  if r.returncode not in (0,1): raise RuntimeError('privileged-reference-census-failed')
+  if r.stdout.strip(): hits.append(target)
  return hits
 def safe_remove(root,dev,ino):
  p=pathlib.Path(root); par=os.open(str(p.parent),os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW); fd=os.open(p.name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=par)
@@ -155,7 +168,7 @@ def rename_noreplace(src,dst,parent):
    err=ctypes.get_errno(); raise OSError(err,os.strerror(err))
  finally: os.close(pfd)
 def fail_if_active():
- if proc_references('/proc',[C,O,E,DEST]): raise RuntimeError('active-process-reference')
+ if privileged_references([C,O,E,DEST]): raise RuntimeError('active-process-reference')
  ps=subprocess.run(['/usr/bin/ps','-eo','pid=,args='],check=True,text=True,capture_output=True).stdout
  if re.search(r'native[_-]rust[_-]exact|qemu-system|qemu-kvm|mcexec|docker build',ps): raise RuntimeError('active-build-or-guest')
  dp=subprocess.run(['/usr/bin/sudo','-A','/usr/bin/docker','ps','--no-trunc','--format','{{.ID}} {{.Names}}'],check=False,text=True,capture_output=True)
@@ -200,6 +213,11 @@ def main():
  scratch_path=str(pathlib.Path(C).parent)
  before_scratch=os.statvfs(scratch_path).f_bavail*os.statvfs(scratch_path).f_frsize
  before_host=os.statvfs(DEST_PARENT).f_bavail*os.statvfs(DEST_PARENT).f_frsize
+ source_regular=[os.lstat(p) for p in pathlib.Path(C).rglob('*') if p.is_file() and not p.is_symlink()]
+ source_copy_bytes=max(sum(s.st_size for s in source_regular),sum(s.st_blocks*512 for s in source_regular))
+ host_floor=16*1024**3; emergency_reserve=512*1024**2
+ required_host_free=host_floor+emergency_reserve+source_copy_bytes
+ if before_host < required_host_free: raise RuntimeError('insufficient-host-capacity')
  exfd=os.open(EXCLUSION,os.O_RDWR|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
  try:
   fcntl.flock(exfd,fcntl.LOCK_EX|fcntl.LOCK_NB)
@@ -230,13 +248,12 @@ def main():
    current_ancestors.append((name,s.st_dev,s.st_ino))
   if inventory(C,SRC_DEV)!=src_inv or os.stat(C).st_ino!=src_ino: raise RuntimeError('source-changed-before-delete')
   fail_if_active()
-  durable(TERMINAL,(json.dumps({'schema':'mckernel.native-exact-candidate-relocation-deletion-start.v1','status':'VERIFIED_DESTINATION_DELETION_START','source':C,'destination':DEST},sort_keys=True)+'\n').encode())
+  durable(DELETE_INTENT,(json.dumps({'schema':'mckernel.native-exact-candidate-relocation-deletion-start.v1','status':'VERIFIED_DESTINATION_DELETION_START','source':C,'destination':DEST},sort_keys=True)+'\n').encode())
   try: safe_remove(C,SRC_DEV,src_ino)
   except Exception as exc:
-   if pathlib.Path(TERMINAL).exists(): pathlib.Path(TERMINAL).unlink()
    durable(TERMINAL,(json.dumps({'schema':'mckernel.native-exact-candidate-relocation-partial-failure.v1','status':'PARTIAL_DELETION_FAILURE','source':C,'destination':DEST,'error':repr(exc)},sort_keys=True)+'\n').encode())
    raise
-  after_scratch=os.statvfs(scratch_path); after_host=os.statvfs(DEST_PARENT); rec={'schema':'mckernel.native-exact-candidate-relocation-dce800af.v1','status':'PASS','source':C,'destination':DEST,'source_device':SRC_DEV,'destination_device':DEST_DEV,'scratch_free_bytes_before':before_scratch,'scratch_free_bytes_after':after_scratch.f_bavail*after_scratch.f_frsize,'host_free_bytes_before':before_host,'host_free_bytes_after':after_host.f_bavail*after_host.f_frsize,'observed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')}
+  after_scratch=os.statvfs(scratch_path); after_host=os.statvfs(DEST_PARENT); rec={'schema':'mckernel.native-exact-candidate-relocation-dce800af.v1','status':'PASS','source':C,'destination':DEST,'source_device':SRC_DEV,'destination_device':DEST_DEV,'scratch_free_bytes_before':before_scratch,'scratch_free_bytes_after':after_scratch.f_bavail*after_scratch.f_frsize,'host_free_bytes_before':before_host,'host_free_bytes_after':after_host.f_bavail*after_host.f_frsize,'source_copy_bytes':source_copy_bytes,'host_floor_bytes':host_floor,'emergency_reserve_bytes':emergency_reserve,'required_host_free_before':required_host_free,'observed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')}
   durable(TERMINAL,(json.dumps(rec,sort_keys=True)+'\n').encode()); open(LOG,'a').write(json.dumps(rec,sort_keys=True)+'\n')
  finally: os.close(exfd)
 main()
