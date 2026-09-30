@@ -702,6 +702,116 @@ class Fixture(unittest.TestCase):
         record = next(e for e in self.events() if e['event'] == 'stage-reconciled')
         self.assertEqual(record['locations'], {'source': 'wrong-or-unreadable', 'quarantine': 'expected'})
 
+    def unwind_interruption(self, stage, close_target):
+        close = os.close
+        append = m.Journal.append
+        armed = False
+        fired = False
+        calls = 0
+        expected = {'staged': ['staged'] * 3,
+                    'partial': ['deleted', 'staged', 'staged'],
+                    'complete': ['deleted'] * 3}[stage]
+        target = str(self.root) if close_target == 'root' else self.outputs['quarantine']
+
+        def collector(root):
+            nonlocal calls, armed
+            calls += 1
+            c = self.census()
+            if stage == 'staged' and calls == 2:
+                # A genuine post-staging admission failure starts unwinding;
+                # then the real close syscall succeeds just before SIGINT.
+                c['lsof']['stderr'] = 'fixture observer unavailable'
+                armed = True
+            return c
+
+        def record(journal, row):
+            nonlocal armed
+            if stage == 'partial' and row.get('event') == 'delete-intent' and row['index'] == 1:
+                armed = True
+                raise OSError('fixture stop after first deletion')
+            value = append(journal, row)
+            if stage == 'complete' and row.get('event') == 'complete':
+                armed = True
+            return value
+
+        def interrupted_close(fd):
+            nonlocal fired
+            # Examine the real descriptor, then perform the real close. No
+            # filesystem mutation is mocked, including the successful syscall.
+            hit = armed and not fired and os.readlink('/proc/self/fd/' + str(fd)) == target
+            close(fd)
+            if hit:
+                fired = True
+                raise KeyboardInterrupt()
+
+        with mock.patch.object(m.os, 'close', side_effect=interrupted_close), \
+             mock.patch.object(m.Journal, 'append', record):
+            result, count = self.execute_fixture(collector)
+        self.assertTrue(fired)
+        self.assertEqual(count, 2)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['states'], expected)
+        self.assertNotEqual(result['phase'], 'preflight')
+        self.assertEqual(result['error'], 'KeyboardInterrupt')
+        self.assertTrue(result['interrupted'])
+        self.assertTrue(result['escaped_after_transaction_entry'])
+        receipt = json.loads(Path(self.outputs['receipt']).read_text())
+        self.assertEqual(receipt, result)
+        self.assertEqual(json.loads(Path(self.outputs['status']).read_text())['status'], 'FAIL')
+        self.assertEqual(self.events()[-1]['event'], 'transaction-unwind-failure')
+        self.assertFalse(any(e.get('phase') == 'preflight' for e in self.events()))
+        for i, state in enumerate(expected):
+            self.assertFalse(Path(self.rows[i]['path']).exists())
+            q = Path(self.outputs['quarantine'], str(i))
+            if state == 'deleted':
+                self.assertFalse(q.exists())
+            else:
+                with m.opened(str(q)) as fd: m.verify_fd(fd, self.rows[i])
+
+    def test_execute_staged_quarantine_close_interruption(self):
+        self.unwind_interruption('staged', 'quarantine')
+
+    def test_execute_staged_root_unwinding_interruption(self):
+        self.unwind_interruption('staged', 'root')
+
+    def test_execute_partial_delete_quarantine_close_interruption(self):
+        self.unwind_interruption('partial', 'quarantine')
+
+    def test_execute_partial_delete_root_unwinding_interruption(self):
+        self.unwind_interruption('partial', 'root')
+
+    def test_execute_complete_quarantine_close_interruption(self):
+        self.unwind_interruption('complete', 'quarantine')
+
+    def test_execute_complete_root_unwinding_interruption(self):
+        self.unwind_interruption('complete', 'root')
+
+    def test_execute_escaped_transaction_return_retains_shared_result(self):
+        transact = m.transact
+        def interrupted_return(plan, outputs, journal, progress):
+            result = transact(plan, outputs, journal, progress)
+            self.assertEqual(result['status'], 'PASS')
+            raise KeyboardInterrupt()
+        with mock.patch.object(m, 'transact', side_effect=interrupted_return):
+            result, count = self.execute_fixture(lambda root: self.census())
+        self.assertEqual(count, 2)
+        self.assertEqual(result['states'], ['deleted'] * 3)
+        self.assertEqual(result['phase'], 'complete')
+        self.assertTrue(result['interrupted'])
+        self.assertEqual(result['prior_status'], 'PASS')
+        self.assertEqual(json.loads(Path(self.outputs['receipt']).read_text()), result)
+        self.assertFalse(any(e.get('phase') == 'preflight' for e in self.events()))
+
+    def test_execute_escape_before_transaction_initialization_is_uncertain(self):
+        with mock.patch.object(m, 'transact', side_effect=KeyboardInterrupt()):
+            result, count = self.execute_fixture(lambda root: self.census())
+        self.assertEqual(count, 1)
+        self.assertEqual(result['phase'], 'transaction-entered')
+        self.assertEqual(result['states'], ['transaction-uncertain'] * 3)
+        self.assertTrue(result['interrupted'])
+        self.assert_originals()
+        self.assertEqual(json.loads(Path(self.outputs['receipt']).read_text()), result)
+
 
 if __name__ == '__main__':
     unittest.main()

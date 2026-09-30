@@ -673,13 +673,53 @@ def reconcile_rename(row, qfd, index):
     return 'uncertain', observations
 
 
-def transact(plan, outputs, journal):
+def transaction_progress(plan):
+    # This owner survives every transaction stack frame and descriptor cleanup.
+    # Until the transaction initializes its state, original locations are unknown.
+    return {'phase': 'transaction-entered', 'attempted': None, 'result': None,
+            'states': ['transaction-uncertain'] * len(plan['targets'])}
+
+
+def escaped_transaction(plan, outputs, journal, progress, error):
+    previous = progress['result']
+    result = dict(previous) if previous is not None else {
+        'phase': progress['phase'], 'attempted': progress['attempted'],
+        'restore_commit': plan['candidate_commit'], 'restoration': plan['targets'],
+        'quarantine': outputs['quarantine'],
+    }
+    result.update(status='FAIL', states=list(progress['states']),
+                  error=str(error) if isinstance(error, Refusal) else type(error).__name__,
+                  interrupted=result.get('interrupted', False) or isinstance(error, KeyboardInterrupt),
+                  escaped_after_transaction_entry=True)
+    if previous is not None:
+        result['prior_status'] = previous['status']
+    # Publish the in-memory result first: failure even in the evidence writer
+    # must not destroy the known per-file states seen by execute's outer owner.
+    progress['result'] = result
+    try:
+        journal.append({'event': 'transaction-unwind-failure', **result})
+    except BaseException:
+        result['journal_failure'] = True
+    return result
+
+
+def transact(plan, outputs, journal, progress=None):
+    progress = transaction_progress(plan) if progress is None else progress
+    try:
+        return _transact(plan, outputs, journal, progress)
+    except BaseException as error:
+        # Covers quarantine close, root-directory __exit__, and interrupted
+        # failure handling/return, which lie outside _transact's rollback block.
+        return escaped_transaction(plan, outputs, journal, progress, error)
+
+
+def _transact(plan, outputs, journal, progress):
     """Called only after release, flock, full validation, and durable census."""
     root = plan['candidate_root']
     rows = plan['targets']
-    states = ['original'] * len(rows)
-    attempted = None
-    phase = 'staging'
+    states = progress['states'] = ['original'] * len(rows)
+    attempted = progress['attempted'] = None
+    phase = progress['phase'] = 'staging'
     qname = Path(outputs['quarantine']).name
     qfd = None
     result = None
@@ -696,7 +736,7 @@ def transact(plan, outputs, journal):
             require(os.fstat(qfd).st_dev == os.fstat(rfd).st_dev, 'quarantine-device')
             journal.append({'event': 'quarantine-created', 'identity': metadata(os.fstat(qfd))})
             for i, row in enumerate(rows):
-                attempted = i
+                attempted = progress['attempted'] = i
                 verify_quarantine(rfd, qname, qfd)
                 target = Path(row['path'])
                 name = str(i)
@@ -718,8 +758,8 @@ def transact(plan, outputs, journal):
             validate_protected(plan)
             journal.append({'event': 'staging-complete', 'count': len(rows)})
             # A failed fresh admission keeps the complete staged set recoverable.
-            phase = 'staged-admission'
-            attempted = None
+            phase = progress['phase'] = 'staged-admission'
+            attempted = progress['attempted'] = None
             owned = pinned_references((rfd, root), (qfd, outputs['quarantine']))
             census = collect_census(root)
             journal.append({'event': 'post-staging-census', 'census': census,
@@ -732,9 +772,9 @@ def transact(plan, outputs, journal):
             verify_quarantine(rfd, qname, qfd)
             quarantine_shape(qfd, rows)
             journal.append({'event': 'irreversible-delete-admitted', 'count': len(rows)})
-            phase = 'deleting'
+            phase = progress['phase'] = 'deleting'
             for i, row in enumerate(rows):
-                attempted = i
+                attempted = progress['attempted'] = i
                 verify_quarantine(rfd, qname, qfd)
                 journal.append({'event': 'delete-intent', 'index': i, 'restore': row})
                 verify_name(qfd, str(i), row)
@@ -744,10 +784,12 @@ def transact(plan, outputs, journal):
                 os.fsync(qfd)
                 states[i] = 'deleted'
                 journal.append({'event': 'deleted', 'index': i})
-            attempted = None
+            attempted = progress['attempted'] = None
             result = {'status': 'PASS', 'phase': 'complete', 'attempted': attempted,
                       'states': states, 'restore_commit': plan['candidate_commit'],
                       'restoration': rows, 'quarantine': outputs['quarantine']}
+            progress['result'] = result
+            phase = progress['phase'] = 'complete'
             journal.append({'event': 'complete', 'count': len(rows)})
         except BaseException as error:
             code = str(error) if isinstance(error, Refusal) else type(error).__name__
@@ -820,6 +862,7 @@ def transact(plan, outputs, journal):
                       'states': states, 'rollback': rollback,
                       'restore_commit': plan['candidate_commit'], 'restoration': rows,
                       'quarantine': outputs['quarantine']}
+            progress['result'] = result
             try:
                 journal.append({'event': 'failure', **result})
             except BaseException:
@@ -863,13 +906,23 @@ def execute(plan_path, release_path, release_commit, outputs, command):
                 check_census(census, plan['candidate_root'])
                 for lease in release['absent_leases']:
                     require(not os.path.lexists(lease), 'active-lease')
-                result = transact(plan, outputs, journal)
             except BaseException as error:
                 result = {'status': 'FAIL', 'phase': 'preflight', 'attempted': None,
                           'states': ['original'] * len(plan['targets']),
                           'error': str(error) if isinstance(error, Refusal) else type(error).__name__,
+                          'interrupted': isinstance(error, KeyboardInterrupt),
                           'restore_commit': plan['candidate_commit'], 'restoration': plan['targets']}
                 journal.append({'event': 'failure', **result})
+            else:
+                # The untouched-originals handler above is unreachable once we
+                # enter the transaction. Keep the state owner across the call
+                # in case an interruption escapes even its unwind handler.
+                progress = transaction_progress(plan)
+                try:
+                    journal.append({'event': 'transaction-entered'})
+                    result = transact(plan, outputs, journal, progress)
+                except BaseException as error:
+                    result = escaped_transaction(plan, outputs, journal, progress, error)
             # Publication failure leaves the already durable journal intact.
             publish(outputs['receipt'], result)
             publish(outputs['status'], {'status': result['status'], 'receipt': outputs['receipt'],

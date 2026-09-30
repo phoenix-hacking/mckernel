@@ -10657,3 +10657,20 @@ the retained runtime tuple into fresh startup, memory, files, threads/futexes,
 signals and shutdown diagnostic packets.  Diagnostic output remains distinct
 from acceptance.  The OS goal remains incomplete and is neither resumed nor
 completed during this shutdown.
+
+Continuation checkpoint 253, 2026-09-30: the candidate-12 plan-bound cleanup
+source now independently passes final source integration review.  Tool/test
+hashes are `43afae37...fff9` and `3a683af7...c36a`; all 59 focused tests pass.
+Eight new end-to-end disposable cases prove truthful staged, partial-delete,
+complete-delete, quarantine/root descriptor-unwind, post-return and
+pre-initialization states.  The exact read-only validation command also passes
+against plan `eaba225b...f957`.  Earlier exact subtree, second-census, two
+terminal-container and rename-reconciliation corrections remain intact.
+
+This is source evidence only.  The cleanup still has no execution release, has
+not run, and removed zero candidate files.  Exact review evidence is
+`docs/verification/evidence/native-exact-candidate12-planbound-cleanup-source-review-20260930.json`.
+Next checkpoint this source, fetch-verify it, author and independently review a
+separate one-shot release, then remeasure capacity before executing exactly
+once.  The OS goal remains incomplete; no diagnostic, application or
+production acceptance changes here.
