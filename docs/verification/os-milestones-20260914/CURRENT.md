@@ -10363,3 +10363,49 @@ the released invocation.  Immediately before it, recheck the 16-GiB host and
 12-GiB scratch floors: the last independent host observation was only
 128,393,216 bytes above its floor.  Any admission failure is preserved and not
 bypassed.  No guest may overlap the build.
+
+Shutdown checkpoint 241, 2026-09-30: the fetched exportset-22 checkpoint was
+executed exactly once under its independent release.  Admission passed at
+17,304,039,424 host bytes, 15,078,907,904 scratch bytes and 30,615,584,768
+available-memory bytes.  The reviewed four-CPU/12-GiB/no-network container ran
+for about one minute and failed safely in its single CMake configure command.
+The repaired Clang/LLD external-module probe and the libnuma probe now pass.
+Configure instead found that the candidate records its required nested
+libdwarf gitlink but does not materialize its source, so `libdwarf.h.in` and
+`config.h.in.cmake` are absent.  This is new failure evidence and exportset-22
+must not be repeated unchanged.
+
+The complete record is
+`docs/verification/evidence/native-exact-mckernel-image-exportset22-failure-20260930.json`.
+Owner receipt `6f35ae64...c0255`, driver receipt `36a7cf06...ad9`, stderr
+`fa96d87c...a91f` and provenance `4f3b206e...d5ab` remain in their original
+scratch roots.  Container `4dc6377e...2707` / name
+`mckernel-image-d6f5a553c80b41c48f52ec26afb90439` is retained exited, PID0,
+exit1 and not OOM-killed; the heavy lease is absent and the exportset-22 common
+exclusion remains present.  No image artifact or guest was produced.
+
+Three bounded investigations agree on the defect.  The source gitlink is exact
+commit `ab9230b2b8aa66a3d1d52e4be11fca17a3b63753`; the current checkout has its
+clean complete 412-file object closure, while scratch candidate 12 has an empty
+nested directory.  The two required templates hash to `727cd79f...527c` and
+`58ffc3c9...c68`.  Top-level CMake requires DWARF for `mcinspect`; do not disable
+that production surface or vendor-copy unauthenticated bytes.  The expert
+confirmed that merely populating the directory under the present manifest
+would leave consumed bytes unauthenticated, then was interrupted for shutdown.
+
+Next design an additive exact-gitlink dependency closure which binds the clean
+local libdwarf commit and every consumed byte while preserving the retained
+host-kernel output.  Obtain independent source and execution review, advance to
+a fresh owner/exclusion namespace, checkpoint, then run one corrected build.
+After an authenticated smallest `mckernel.img`, run the frozen real memory
+diagnostic, then files, threads/futexes, signals and shutdown, labeling these
+diagnostic rather than acceptance results.  Current-candidate builds gain no
+success and real current diagnostic guest applications remain zero.
+
+Shutdown state: all child agents are completed or closed; no QEMU or mcexec is
+live.  The retained failed container above is the only active process identity
+requiring later cleanup reconciliation.  Launcher wrapper/launcher/worker/
+server identities remain `1442141/1442142/1442145/1442149`, all started
+2026-09-30 10:46:42 PDT and left untouched.  Host/scratch free bytes are
+17,285,165,056/15,074,672,640 and MemAvailable is 29,990,784 KiB.  The OS goal
+remains incomplete and is not resumed or completed by this shutdown.
