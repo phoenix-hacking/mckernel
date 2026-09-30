@@ -16,14 +16,18 @@ from scripts.tests.test_native_rust_exact_build_container_owner import FakeDocke
 
 def probe_fixture():
     packages = {p: p + '-0:1-1.el10.x86_64' for p in prep.PACKAGES}
-    packages.update(rust='rust-0:1.92.0-1.el10.x86_64', kmod='kmod-0:31-13.el10.x86_64')
+    packages.update(cmake=prep.PINNED_CMAKE, rust='rust-0:1.92.0-1.el10.x86_64',
+                    kmod='kmod-0:31-13.el10.x86_64')
+    inventory = list(packages.values()) + ['rpm-0:4.19.1.1-23.el10.x86_64']
     tools = {n: {'path': '/usr/bin/' + n, 'target': '/usr/bin/' + n,
-                 'owner': p, 'sha256': 'd' * 64} for n, p in prep.TOOLS.items()}
+                 'owner': p, 'rpm_nevra': next(x for x in inventory if x.startswith(p + '-0:')),
+                 'executable_version': n + ' fixture --version',
+                 'sha256': 'd' * 64} for n, p in prep.TOOLS.items()}
     tools['kmod']['sha256'] = prep.KMOD_SHA
     return {'arch': 'x86_64', 'os_release': 'ID="rocky"\nVERSION_ID="10.2"\n',
             'rustc': prep.EXPECTED_RUST, 'packages': packages, 'tools': tools,
             'rpm_verify': {'exit_code': 0, 'stdout': '', 'stderr': ''},
-            'rpm_inventory': '\n'.join(packages.values())}
+            'rpm_inventory': '\n'.join(inventory)}
 
 
 class PreparationTests(unittest.TestCase):
@@ -74,7 +78,10 @@ class PreparationTests(unittest.TestCase):
                      lambda p: p['rpm_verify'].__setitem__('exit_code', 1),
                      lambda p: p['packages'].__setitem__('rust', 'rust-0:1.91.0-1.el10.x86_64'),
                      lambda p: p.__setitem__('rpm_inventory', ''),
+                     lambda p: p.__setitem__('rpm_inventory', p['rpm_inventory'] + '\n' + next(iter(p['packages'].values()))),
                      lambda p: p['tools']['rustc'].__setitem__('owner', 'wrong'),
+                     lambda p: p['tools']['cmake'].__setitem__('rpm_nevra', 'cmake-1:3.31.8-1.el10.x86_64'),
+                     lambda p: p['tools']['cmake'].__setitem__('executable_version', ''),
                      lambda p: p['tools']['kmod'].__setitem__('sha256', '0' * 64),
                      lambda p: p['tools']['make'].__setitem__('path', '/tmp/make')]
         for mutation in mutations:
@@ -82,6 +89,14 @@ class PreparationTests(unittest.TestCase):
             mutation(probe)
             with self.assertRaises(prep.PreparationError):
                 prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
+
+    def test_nonzero_epoch_nevra_is_parsed_and_bound(self):
+        probe = probe_fixture()
+        probe['packages']['cmake'] = prep.PINNED_CMAKE.replace('-0:', '-7:')
+        probe['rpm_inventory'] = probe['rpm_inventory'].replace(prep.PINNED_CMAKE,
+                                                                  probe['packages']['cmake'])
+        probe['tools']['cmake']['rpm_nevra'] = probe['packages']['cmake']
+        prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
 
     def test_failed_probe_retired_and_preserved(self):
         fake = FakeDocker()

@@ -27,6 +27,9 @@ import native_rust_exact_build_offline as provenance
 
 INPUT_SCHEMA = "mckernel.native-exact-mckernel-image-inputs.v1"
 TOOLCHAIN_SCHEMA = "mckernel.native-exact-mckernel-image-toolchain.v1"
+TOOLCHAIN_SCHEMA_V2 = "mckernel.native-exact-mckernel-image-toolchain.v2"
+KERNEL_BINDING_V2_KEYS = frozenset(("container_root", "container_kernel_dir",
+                                    "closure_inventory"))
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-receipt.v1"
 IHK_HEAD = provenance.EXPECTED_IHK_HEAD
 MAX_JSON = 256 * 1024 * 1024
@@ -362,7 +365,7 @@ def _validate_source(source, candidate_sha, ihk_sha, manifest_path, git_tool):
             "manifest_sha256": _sha256(manifest_path)}
 
 
-def _tree_inventory(root):
+def _tree_inventory(root, symlink_binding=None, visible_roots=None, allow_visible_root=False):
     """Exact prepared-tree closure, including directories and symlink contents.
 
     Symlinks may only resolve inside this same closure.  Separate system library
@@ -379,9 +382,31 @@ def _tree_inventory(root):
             st = path.lstat()
             row = {"mode": stat.S_IMODE(st.st_mode)}
             if stat.S_ISLNK(st.st_mode):
-                _fail(root in path.resolve(strict=True).parents,
+                try:
+                    target = Path(os.readlink(path))
+                    if visible_roots is not None and target.is_absolute():
+                        target = _container_path(str(target), visible_roots, "closure symlink")
+                    elif symlink_binding is not None and target.is_absolute():
+                        container_root, mapped_root = symlink_binding
+                        target = mapped_root / target.relative_to(container_root)
+                    resolved = target if target.is_absolute() else path.parent / target
+                    resolved = resolved.resolve(strict=True)
+                except (OSError, RuntimeError) as exc:
+                    raise ImageBuildError("closure symlink is dangling or cyclic: " + str(path)) from exc
+                containment = (next((Path(host) for host in visible_roots.values()
+                                    if root == Path(host) or Path(host) in root.parents), root)
+                               if visible_roots is not None and allow_visible_root else root if visible_roots is not None else
+                               symlink_binding[1] if symlink_binding is not None else root)
+                _fail(resolved == containment or containment in resolved.parents,
                       "closure symlink escapes root: " + str(path))
                 row.update(type="symlink", target=os.readlink(path))
+                if visible_roots is not None:
+                    owning = [(Path(name), Path(host)) for name, host in visible_roots.items()
+                              if resolved == Path(host) or Path(host) in resolved.parents]
+                    _fail(len(owning) == 1, "closure symlink crosses visible roots: " + str(path))
+                    container_root, host_root = owning[0]
+                    row.update(resolved=str(resolved.relative_to(host_root)),
+                               container_target=str(container_root / resolved.relative_to(host_root)))
             elif stat.S_ISDIR(st.st_mode):
                 row.update(type="directory")
             else:
@@ -392,24 +417,107 @@ def _tree_inventory(root):
     return result
 
 
-def _validate_toolchain(path):
+def _container_path(raw, roots, label):
+    """Resolve a v2 container path through an explicit visible-root map.
+
+    Production calls use ``None`` and therefore validate paths exactly as the
+    container sees them.  The optional map exists only for the unprivileged
+    temporary fixture: it models bind mounts without placing host paths in the
+    manifest or requiring privileged mounts in the test process.
+    """
+    _fail(isinstance(raw, str) and raw.startswith("/"), label + " must be absolute")
+    candidate = Path(raw)
+    if roots is None:
+        translated = candidate
+    else:
+        matched = [(Path(name), Path(root)) for name, root in roots.items()
+                   if candidate == Path(name) or Path(name) in candidate.parents]
+        _fail(len(matched) == 1, label + " is outside container root")
+        container_root, host_root = matched[0]
+        translated = host_root / candidate.relative_to(container_root)
+    _no_symlink_parents(translated, label)
+    return translated
+
+
+def _validate_toolchain(path, container_roots=None):
     data = _json(path, "toolchain manifest")
-    _fail(data.get("schema") == TOOLCHAIN_SCHEMA, "toolchain manifest schema")
-    tools = data.get("tools")
-    _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
-          "toolchain tools incomplete")
+    schema = data.get("schema")
+    _fail(schema in (TOOLCHAIN_SCHEMA, TOOLCHAIN_SCHEMA_V2), "toolchain manifest schema")
+    v2 = schema == TOOLCHAIN_SCHEMA_V2
+    binding = None
+    visible_roots = None
+    if v2:
+        binding = data.get("kernel_binding")
+        _fail(isinstance(binding, dict) and set(binding) == KERNEL_BINDING_V2_KEYS,
+              "kernel binding schema differs")
+        _fail(binding["container_root"] == "/out" and binding["container_kernel_dir"] == "/out/build",
+              "kernel binding container mapping differs")
+        _fail(isinstance(binding["closure_inventory"], dict) and binding["closure_inventory"],
+              "kernel binding closure inventory missing")
+        if container_roots is not None:
+            _fail(isinstance(container_roots, dict) and set(container_roots) >= {"/out", "/nightly"},
+                  "fixture container roots incomplete")
+            visible_roots = {name: _canonical(root, "fixture visible root")
+                             for name, root in container_roots.items()}
+            _fail(all(root.is_dir() for root in visible_roots.values()),
+                  "fixture visible root is not a directory")
+    if v2 and ("image_tools" in data or "mounted_tools" in data):
+        image_tools = data.get("image_tools")
+        mounted_tools = data.get("mounted_tools")
+        _fail(isinstance(image_tools, dict) and isinstance(mounted_tools, dict),
+              "toolchain tool classes incomplete")
+        _fail(not (set(image_tools) & set(mounted_tools)),
+              "toolchain tool is ambiguously bound")
+        tools = {**image_tools, **mounted_tools}
+        _fail(set(tools) == set(REQUIRED_TOOLS), "toolchain tools incomplete")
+    else:
+        tools = data.get("tools")
+        _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
+              "toolchain tools incomplete")
     _fail(all(isinstance(tools[name].get("version"), str) and tools[name]["version"]
               for name in REQUIRED_TOOLS), "toolchain tool versions incomplete")
-    bound = {name: _tool_descriptor(tools[name], "tool " + name)
-             for name in REQUIRED_TOOLS}
-    _fail(isinstance(data.get("kernel_dir"), str), "kernel directory path")
-    kernel_dir = _canonical(data["kernel_dir"], "kernel directory")
+    if v2:
+        bound = {}
+        for name in REQUIRED_TOOLS:
+            descriptor = tools[name]
+            _fail(isinstance(descriptor, dict) and
+                  set(descriptor) >= {"path", "sha256", "version"},
+                  "tool " + name + " descriptor")
+            _fail(isinstance(descriptor["sha256"], str) and
+                  re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]),
+                  "tool " + name + " hash")
+            bound[name] = {"path": descriptor["path"], "sha256": descriptor["sha256"],
+                           "version": descriptor["version"]}
+    else:
+        bound = {name: _tool_descriptor(tools[name], "tool " + name)
+                 for name in REQUIRED_TOOLS}
+    if v2:
+        # Descriptor hashes are over host files, while their names are the
+        # container-visible paths.  Translate only after validating the raw
+        # descriptor and retain the reviewed digest.
+        for name in REQUIRED_TOOLS:
+            raw = tools[name]["path"]
+            mounted = ("mounted_tools" not in data or
+                       name in (data.get("mounted_tools") or {}))
+            translated = (_container_path(raw, visible_roots, "tool " + name + " path")
+                          if mounted else Path(raw))
+            translated = _canonical(translated, "tool " + name + " path")
+            _fail(translated.is_file() and not translated.is_symlink(),
+                  "tool " + name + " path is missing")
+            _fail(_sha256(translated) == tools[name]["sha256"], "tool " + name + " hash drift")
+            bound[name]["path"] = str(translated)
+    _fail(isinstance(data.get("kernel_dir"), str) or v2, "kernel directory path")
+    raw_kernel = binding["container_kernel_dir"] if v2 else data["kernel_dir"]
+    kernel_dir = (_container_path(raw_kernel, visible_roots, "kernel directory")
+                  if v2 else Path(data["kernel_dir"]))
+    kernel_dir = _canonical(kernel_dir, "kernel directory")
     _fail(kernel_dir.is_dir(), "kernel directory must be a directory")
     probe = data.get("linux_probe")
     _fail(isinstance(probe, dict) and
           set(probe) >= {"arch", "release", "kernel_dir"},
           "Linux probe prerequisites missing")
-    _fail(probe["arch"] == "x86_64" and probe["kernel_dir"] == str(kernel_dir),
+    expected_probe_kernel = binding["container_kernel_dir"] if v2 else str(kernel_dir)
+    _fail(probe["arch"] == "x86_64" and probe["kernel_dir"] == expected_probe_kernel,
           "Linux probe identity differs")
     _fail(isinstance(probe["release"], str) and probe["release"],
           "Linux probe release missing")
@@ -418,7 +526,12 @@ def _validate_toolchain(path):
         item = kernel_dir / relative
         _fail(item.is_file() and not item.is_symlink(),
               "Linux probe prerequisite missing: " + relative)
-    _fail(_tree_inventory(kernel_dir) == data.get("kernel_inventory"),
+    expected_kernel_inventory = data.get("kernel_inventory")
+    if v2:
+        expected_kernel_inventory = data.get("kernel_inventory")
+    kernel_inventory = _tree_inventory(kernel_dir, visible_roots=visible_roots,
+                                       allow_visible_root=v2)
+    _fail(kernel_inventory == expected_kernel_inventory,
           "complete kernel inventory differs")
     release = REPRO_ENV["EXPECTED_KERNEL_RELEASE"]
     _fail(probe["release"] == release and
@@ -437,18 +550,37 @@ def _validate_toolchain(path):
     for closure in closures:
         _fail(isinstance(closure, dict) and set(closure) == {"path", "inventory"},
               "toolchain closure fields")
-        root = _canonical(closure["path"], "toolchain closure")
-        _fail(_tree_inventory(root) == closure["inventory"], "complete toolchain inventory differs")
+        raw_root = closure["path"]
+        root = (_container_path(raw_root, visible_roots, "toolchain closure")
+                if v2 else Path(raw_root))
+        root = _canonical(root, "toolchain closure")
+        inventory = _tree_inventory(root, visible_roots=visible_roots)
+        _fail(inventory == closure["inventory"], "complete toolchain inventory differs")
         roots.append(root)
-    _disjoint(roots + [kernel_dir])
-    _fail(all(any(root in Path(ref["path"]).parents for root in roots)
-              for ref in bound.values()), "tool outside complete toolchain closure")
+    if not v2:
+        _disjoint(roots + [kernel_dir])
+    _fail(all((name not in (data.get("mounted_tools") or {}) if v2 and "mounted_tools" in data
+               else False) or any(root in Path(ref["path"]).parents for root in roots)
+              for name, ref in bound.items()), "tool outside complete toolchain closure")
     path_dirs = data.get("path_dirs")
     _fail(isinstance(path_dirs, list) and path_dirs, "bound PATH missing")
+    translated_path_dirs = []
     for directory in path_dirs:
+        if v2:
+            # Image tools may be host-bound and therefore use a host PATH
+            # directory; mounted tools retain the /out translation.
+            directory = (_container_path(directory, visible_roots, "PATH directory")
+                         if directory.startswith("/out/") or directory.startswith("/nightly/") else Path(directory))
+        else:
+            directory = Path(directory)
         directory = _canonical(directory, "PATH directory")
-        _fail(directory.is_dir() and any(root == directory or root in directory.parents
-                                        for root in roots), "PATH outside toolchain closure")
+        in_closure = any(root == directory or root in directory.parents for root in roots)
+        image_dir = v2 and any(name not in (data.get("mounted_tools") or {}) and
+                                Path(ref["path"]).parent == directory
+                                for name, ref in bound.items())
+        _fail(directory.is_dir() and (in_closure or image_dir), "PATH outside toolchain closure")
+        translated_path_dirs.append(directory)
+    path_dirs = translated_path_dirs
     for name, descriptor in bound.items():
         selected = next((Path(directory) / name for directory in path_dirs
                          if os.access(str(Path(directory) / name), os.X_OK)), None)
@@ -463,7 +595,7 @@ def _validate_toolchain(path):
     _fail(not environment, "unreviewed toolchain environment")
     return {"manifest": data, "manifest_sha256": _sha256(path), "tools": bound,
             "kernel_dir": str(kernel_dir), "environment": dict(environment),
-            "path": os.pathsep.join(path_dirs)}
+            "path": os.pathsep.join(str(directory) for directory in path_dirs)}
 
 
 def _tool_versions(toolchain, evidence):
@@ -680,7 +812,7 @@ def run(*args, **kwargs):
 
 
 def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evidence,
-        *, jobs=4, timeout=19800):
+        *, jobs=4, timeout=19800, container_roots=None):
     _fail(isinstance(jobs, int) and not isinstance(jobs, bool) and 1 <= jobs <= 4,
           "jobs must be between 1 and 4")
     _fail(isinstance(timeout, int) and not isinstance(timeout, bool) and 1 <= timeout <= MAX_TIMEOUT,
@@ -694,7 +826,7 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
     _fail(not output.exists() and not output.is_symlink(), "output must be fresh")
     _fail(not evidence.exists() and not evidence.is_symlink(), "evidence must be fresh")
     _disjoint((source_root, output, evidence, manifest, toolchain))
-    tools = _validate_toolchain(toolchain)
+    tools = _validate_toolchain(toolchain, container_roots=container_roots)
     source = _validate_source(source_root, candidate_sha, ihk_sha, manifest, tools["tools"]["git"])
     _check_signal()
     output.mkdir(mode=0o700, parents=False)
@@ -768,7 +900,7 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
               "source changed during build")
         _fail(source_after["manifest_sha256"] == source["manifest_sha256"],
               "source manifest changed during build")
-        tools_after = _validate_toolchain(toolchain)
+        tools_after = _validate_toolchain(toolchain, container_roots=container_roots)
         _fail(tools_after["manifest_sha256"] == tools["manifest_sha256"],
               "toolchain manifest changed during build")
         copied = {}

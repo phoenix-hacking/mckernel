@@ -10,6 +10,7 @@ import unittest
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import native_rust_exact_mckernel_image_container_owner as owner
+import native_rust_exact_mckernel_image_offline as driver
 
 
 def digest(path):
@@ -191,10 +192,14 @@ class OwnerTests(unittest.TestCase):
         owner.COMMON_EXCLUSION = str(self.common)
 
     def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json"
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json"
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-16.json"))
+        self.assertTrue(current.endswith("exportset-17.json"))
+        self.assertIn(
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json",
+            owner.RETIRED_COMMON_EXCLUSIONS,
+        )
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired_selfdigest, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
@@ -350,6 +355,86 @@ class OwnerTests(unittest.TestCase):
         self.common.write_text("held\n")
         with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
             owner.ImageOwner(request, docker=FakeDocker(self.evidence, self.image)).run()
+
+    def test_v2_owner_admission_and_offline_container_fixture(self):
+        """One v2 closure is admitted by the owner and consumed as /out,/nightly.
+
+        The raw /out/source link is deliberately kept in the host closure;
+        the offline driver receives no host path in its JSON document.
+        """
+        out, nightly = self.root / "v2-out", self.root / "v2-nightly"
+        (out / "build").mkdir(parents=True)
+        shutil.copytree(self.kernel, out / "build", dirs_exist_ok=True)
+        release = driver.REPRO_ENV["EXPECTED_KERNEL_RELEASE"]
+        for relative, text in {
+            ".config": "CONFIG_X86_64=y\nCONFIG_64BIT=y\n",
+            "include/config/kernel.release": release + "\n",
+            "include/generated/autoconf.h": "#define CONFIG_X86_64 1\n#define CONFIG_64BIT 1\n",
+            "include/generated/utsrelease.h": '#define UTS_RELEASE "' + release + '"\n',
+        }.items():
+            path = out / "build" / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text)
+        (out / "source").mkdir()
+        (out / "build" / "source").symlink_to("/out/source")
+        (nightly / "bin").mkdir(parents=True)
+        shutil.copy2(self.tools / "rustc", nightly / "bin/rustc")
+        (nightly / "bin/rustc").chmod(0o755)
+        image_tools = {}
+        for name in owner.REQUIRED_TOOLS:
+            if name == "rustc":
+                continue
+            system_name = {"cc": "cc"}.get(name, name)
+            found = shutil.which(system_name)
+            self.assertIsNotNone(found, name)
+            path = Path(found).resolve()
+            image_tools[name] = {"path": str(path), "sha256": digest(path),
+                                 "version": subprocess.check_output([str(path), "--version"], text=True).strip(),
+                                 "rpm_nevra": name + "-0:fixture-1.el10.x86_64",
+                                 "executable_version": subprocess.check_output([str(path), "--version"], text=True).strip()}
+        mounted = {"rustc": {"path": "/nightly/bin/rustc", "sha256": digest(nightly / "bin/rustc"),
+                              "version": "rustc nightly fixture"}}
+        closure_out = owner._closure_inventory(out, out, Path("/out"))
+        closure_nightly = owner._closure_inventory(nightly, nightly, Path("/nightly"))
+        receipt = self.root / "image-receipt.json"
+        receipt.write_text(json.dumps({"status": "PASS", "image_id": self.image,
+                                       "source_free": True, "runtime_network": "none",
+                                       "tools": image_tools}, sort_keys=True))
+        self.toolchain.write_text(json.dumps({
+            "schema": driver.TOOLCHAIN_SCHEMA_V2,
+            "kernel_binding": {"container_root": "/out", "container_kernel_dir": "/out/build",
+                               "closure_inventory": closure_out},
+            "kernel_inventory": driver._tree_inventory(out / "build", visible_roots={"/out": out, "/nightly": nightly},
+                                                         allow_visible_root=True),
+            "image_tools": image_tools, "mounted_tools": mounted,
+            "toolchain_roots": [{"path": "/out", "inventory": closure_out},
+                                {"path": "/nightly", "inventory": closure_nightly}],
+            "path_dirs": ["/nightly/bin"] + sorted({str(Path(row["path"]).parent)
+                                                        for row in image_tools.values()}),
+            "linux_probe": {"arch": "x86_64", "release": release, "kernel_dir": "/out/build"},
+            "environment": {}}, sort_keys=True))
+        request = self.request()
+        request.update(toolchain_manifest_sha256=digest(self.toolchain), image_receipt=str(receipt),
+                       image_receipt_sha256=digest(receipt),
+                       toolchain_roots=[{"host_path": str(out), "container_path": "/out", "inventory": closure_out},
+                                        {"host_path": str(nightly), "container_path": "/nightly", "inventory": closure_nightly}],
+                       path_dirs=json.loads(self.toolchain.read_text())["path_dirs"])
+        bound = owner.ImageOwner(request).validate()
+        self.assertEqual(bound["kernel_root"], out)
+        tools = driver._validate_toolchain(self.toolchain,
+                                           container_roots={"/out": out, "/nightly": nightly})
+        self.assertEqual(tools["kernel_dir"], str(out / "build"))
+        self.assertEqual((out / "build" / "source").readlink(), "/out/source")
+
+    def test_v2_rejects_receipt_network_boolean_and_host_schema_leak(self):
+        # The integrated fixture above establishes the positive shape; these
+        # are the two reviewer reproductions that previously slipped through.
+        self.test_v2_owner_admission_and_offline_container_fixture()
+        data = json.loads(self.toolchain.read_text())
+        data["kernel_binding"]["host_root"] = str(self.root)
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        with self.assertRaisesRegex(owner.OwnerError, "kernel binding schema"):
+            owner._validate_kernel_binding(data, self.root / "v2-out")
 
     def test_consumed_exclusions_are_rejected(self):
         request = self.request()

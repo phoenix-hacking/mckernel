@@ -168,7 +168,62 @@ exit 2
                        toolchain=self.toolchain, output=self.root / "output",
                        evidence=self.root / "evidence", jobs=2, timeout=30)
         options.update(kwargs)
+        if getattr(self, "v2_roots", None) is not None:
+            options["container_roots"] = self.v2_roots
         return driver.run(**options)
+
+    def _write_v2_toolchain(self):
+        """Prepare a container-shaped /out closure backed by a temp host root."""
+        host = self.root / "v2-root"
+        (host / "build").mkdir(parents=True)
+        shutil.copytree(self.kernel, host / "build", dirs_exist_ok=True)
+        shutil.copytree(self.tools, host / "tools")
+        (host / "source").mkdir()
+        (host / "build" / "source").symlink_to("/out/source")
+        data = json.loads(self.toolchain.read_text())
+        data["schema"] = driver.TOOLCHAIN_SCHEMA_V2
+        data.pop("kernel_dir", None)
+        binding = (Path("/out"), host)
+        closure = driver._tree_inventory(host, binding)
+        data["kernel_binding"] = {"container_root": "/out", "container_kernel_dir": "/out/build",
+                                   "closure_inventory": closure}
+        data["kernel_inventory"] = driver._tree_inventory(host / "build",
+                                                            visible_roots={"/out": host, "/nightly": host / "tools"},
+                                                            allow_visible_root=True)
+        data["toolchain_roots"] = [{"path": "/out", "inventory": closure}]
+        data["path_dirs"] = ["/out/tools"]
+        data["linux_probe"]["kernel_dir"] = "/out/build"
+        data["tools"] = {name: {**ref, "path": "/out/tools/" + name}
+                          for name, ref in data["tools"].items()}
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        self.v2_roots = {"/out": host, "/nightly": host / "tools"}
+        return host
+
+    def test_v2_container_kernel_binding_positive(self):
+        self._write_v2_toolchain()
+        result = self.execute()
+        self.assertEqual(result["status"], "PASS", result)
+
+    def test_v2_container_mapping_escape_rejected(self):
+        self._write_v2_toolchain()
+        data = json.loads(self.toolchain.read_text())
+        data["tools"]["cc"]["path"] = "/usr/bin/cc"
+        self.toolchain.write_text(json.dumps(data))
+        with self.assertRaisesRegex(driver.ImageBuildError, "outside container root"):
+            self.execute()
+
+    def test_v2_closure_extra_member_rejected(self):
+        host = self._write_v2_toolchain()
+        (host / "extra").write_text("not reviewed\n")
+        with self.assertRaisesRegex(driver.ImageBuildError, "complete toolchain inventory"):
+            self.execute()
+
+    def test_v2_symlink_text_drift_rejected(self):
+        host = self._write_v2_toolchain()
+        (host / "build" / "source").unlink()
+        (host / "build" / "source").symlink_to("/out/build")
+        with self.assertRaisesRegex(driver.ImageBuildError, "complete kernel inventory|complete toolchain inventory"):
+            self.execute()
 
     def test_positive_fake_configure_build_and_receipt(self):
         result = self.execute()

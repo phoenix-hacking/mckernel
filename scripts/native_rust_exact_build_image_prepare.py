@@ -16,16 +16,22 @@ from native_rust_exact_build_container_owner import (
 )
 
 BASE_IMAGE = 'rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176'
-PACKAGES = tuple('bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd'.split())
+PACKAGES = tuple('bc binutils bison bindgen-cli bpftool cargo clang cmake cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd'.split())
 EXPECTED_RUST = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
+# This is the exact Rocky 10.2 update RPM, including its epoch.  Do not derive
+# a package identity from the executable banner: RPM NEVRA and ``--version``
+# are independent observations.
+PINNED_CMAKE = 'cmake-0:3.31.8-1.el10.x86_64'
 KMOD_SHA = '7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55'
 # Package installation needs these filesystem ownership capabilities. The build
 # boundary drops all capabilities. Neither profile includes host/module powers.
 PREP_CAPS = ['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'SETFCAP', 'SETGID', 'SETUID']
 TOOLS = {'rustc': 'rust', 'clang': 'clang', 'ld.lld': 'lld', 'bindgen': 'bindgen-cli',
-         'make': 'make', 'git': 'git-core', 'openssl': 'openssl', 'nm': 'binutils',
-         'readelf': 'binutils', 'kmod': 'kmod', 'python3': 'python3', 'rpm': 'rpm',
-         'tar': 'tar', 'patch': 'patch', 'cpio': 'cpio'}
+         'cmake': 'cmake', 'cc': 'gcc', 'nm': 'binutils', 'readelf': 'binutils',
+         'make': 'make', 'ld': 'binutils', 'objcopy': 'binutils', 'ar': 'binutils',
+         'ranlib': 'binutils', 'git': 'git-core', 'openssl': 'openssl',
+         'kmod': 'kmod', 'python3': 'python3', 'rpm': 'rpm', 'tar': 'tar',
+         'patch': 'patch', 'cpio': 'cpio'}
 
 
 class PreparationError(RuntimeError):
@@ -49,6 +55,11 @@ for name in tools:
     target = pathlib.Path(path).resolve()
     data['tools'][name] = {'path':path, 'target':str(target),
         'owner':output(['rpm','-qf','--qf','%{NAME}',str(target)]),
+        'rpm_nevra':output(['rpm','-qf','--qf','%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}',str(target)]),
+        'executable_version':output([str(target),'--version']),
+        # ``version`` is retained for v1 consumers; v2 admission binds the
+        # unambiguous executable_version and rpm_nevra fields above.
+        'version':output([str(target),'--version']),
         'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
 verified = subprocess.run(['rpm', '-V', '--noconfig', *packages], text=True,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -67,8 +78,18 @@ def validate_probe(probe, pinned):
         raise PreparationError('wrong actual OS/architecture/Rust toolchain')
     if set(probe['packages']) != set(PACKAGES):
         raise PreparationError('package observation incomplete')
+    inventory_lines = probe.get('rpm_inventory', '').splitlines()
+    if (not inventory_lines or len(inventory_lines) != len(set(inventory_lines)) or
+            any(not re.fullmatch(r'[A-Za-z0-9_.+:-]+', line) for line in inventory_lines)):
+        raise PreparationError('RPM inventory incomplete or malformed')
+    def parse_nevra(nevra):
+        match = re.fullmatch(r'([A-Za-z0-9_.+~-]+)-(\d+):([A-Za-z0-9_.+~]+)-([A-Za-z0-9_.+~]+)\.([A-Za-z0-9_]+)', nevra)
+        if not match:
+            raise PreparationError('malformed installed RPM identity')
+        return match.groups()
     for name, nevra in probe['packages'].items():
-        if not nevra.startswith(name + '-') or not re.fullmatch(r'[A-Za-z0-9_.+:~-]+', nevra):
+        parsed = parse_nevra(nevra)
+        if parsed[0] != name:
             raise PreparationError('malformed installed RPM identity')
         if name in pinned and nevra != pinned[name]:
             raise PreparationError('pinned installed RPM mismatch: ' + name)
@@ -78,8 +99,12 @@ def validate_probe(probe, pinned):
         raise PreparationError('tool observation incomplete')
     for name, owner in TOOLS.items():
         tool = probe['tools'][name]
-        if (tool['owner'] != owner or not tool['path'].startswith('/usr/bin/') or
+        tool_nevra = tool.get('rpm_nevra')
+        parse_nevra(tool_nevra) if isinstance(tool_nevra, str) else (_ for _ in ()).throw(PreparationError('tool RPM identity missing: ' + name))
+        if (tool['owner'] != owner or not tool['path'].startswith('/usr/') or
                 not tool['target'].startswith('/usr/') or
+                tool_nevra not in inventory_lines or parse_nevra(tool_nevra)[0] != owner or
+                not isinstance(tool.get('executable_version'), str) or not tool['executable_version'] or '\x00' in tool['executable_version'] or
                 not re.fullmatch('[0-9a-f]{64}', tool['sha256'])):
             raise PreparationError('tool ownership/path mismatch: ' + name)
     if probe['tools']['kmod']['sha256'] != KMOD_SHA:
@@ -99,6 +124,9 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     lock = json.loads(Path(toolchain_lock).read_text())
     pinned = {row['name']: row['nevra'] for row in lock['direct_artifacts'] if row['name'] in PACKAGES}
     pinned['kmod'] = 'kmod-0:31-13.el10.x86_64'
+    if 'cmake' in pinned and pinned['cmake'] != PINNED_CMAKE:
+        raise PreparationError('CMake package lock differs')
+    pinned['cmake'] = PINNED_CMAKE
     if pinned.get('rust') != 'rust-0:1.92.0-1.el10.x86_64':
         raise PreparationError('Rust package lock differs')
     docker = runner or Docker(evidence / 'prepare.log', signals=signals)

@@ -37,14 +37,14 @@ EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb70
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
         "76ae20b5", "76ae20b5-2", "97fb67a7-3", "closurefix-4",
         "runtimeclosure-5", "offlinecwd-5", "offlinecwd-6", "memorymap-7",
         "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
-        "objtoolbinding-11", "runtimeblob-12", "selfdigest-13",
+        "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
     )
 )
 LIMITS = {
@@ -305,6 +305,140 @@ def _tree_inventory(root):
     return observed
 
 
+def _closure_inventory(root, host_root=None, container_root=None):
+    """Inventory a translated build closure, retaining symlink spelling.
+
+    ``Path.rglob`` follows enough link metadata to make a closure admission
+    race-prone.  Walk with lstat instead, and validate every link's lexical
+    target and resolved target against the host root.  The container target is
+    recorded separately because an absolute host link must be translated to
+    its ``/out`` spelling without changing bytes on disk.
+    """
+    root = Path(root)
+    host_root = root if host_root is None else Path(host_root)
+    container_root = Path("/out") if container_root is None else Path(container_root)
+    _fail(root == host_root or root in host_root.parents,
+          "closure root is outside host root")
+    result = {}
+    active = set()
+    seen_objects = {}
+
+    def translated(path):
+        resolved = path.resolve(strict=True)
+        _fail(resolved == host_root or host_root in resolved.parents,
+              "closure symlink escapes host root")
+        return container_root / resolved.relative_to(host_root)
+
+    def visit(directory):
+        info = os.lstat(directory)
+        marker = (info.st_dev, info.st_ino)
+        _fail(marker not in active, "closure directory cycle")
+        active.add(marker)
+        try:
+            entries = sorted(os.scandir(directory), key=lambda item: item.name)
+            for entry in entries:
+                item = Path(entry.path)
+                relative = str(item.relative_to(host_root))
+                st = os.lstat(item)
+                mode = st.st_mode
+                if stat.S_ISLNK(mode):
+                    raw = os.readlink(item)
+                    _fail(raw != "", "closure symlink has empty target")
+                    # The on-disk spelling is container-facing.  Translate an
+                    # absolute /out edge solely for host admission, retaining
+                    # its original bytes in ``target`` below.
+                    raw_path = Path(raw)
+                    if raw_path.is_absolute() and (raw_path == container_root or
+                                                   container_root in raw_path.parents):
+                        target = host_root / raw_path.relative_to(container_root)
+                    else:
+                        target = raw_path if raw_path.is_absolute() else item.parent / raw_path
+                    _fail(not target.is_symlink(), "closure symlink alias/cycle")
+                    target = target.resolve(strict=True)
+                    _fail(target == host_root or host_root in target.parents,
+                          "closure symlink escapes host root")
+                    target_stat = os.lstat(target)
+                    _fail(stat.S_ISREG(target_stat.st_mode) or stat.S_ISDIR(target_stat.st_mode),
+                          "closure symlink targets special file")
+                    # A link to another link is an alias chain, not a stable
+                    # closure edge; reject it so the translated graph is
+                    # deterministic and cannot hide a cycle.
+                    row = {"mode": stat.S_IMODE(mode), "type": "symlink",
+                           "target": raw, "resolved": str(target.relative_to(host_root)),
+                           "container_target": str(container_root / target.relative_to(host_root))}
+                    result[relative] = row
+                elif stat.S_ISDIR(mode):
+                    result[relative] = {"mode": stat.S_IMODE(mode), "type": "directory"}
+                    visit(item)
+                elif stat.S_ISREG(mode):
+                    object_key = (st.st_dev, st.st_ino)
+                    _fail(object_key not in seen_objects,
+                          "closure contains aliased regular files")
+                    seen_objects[object_key] = item
+                    result[relative] = {"mode": stat.S_IMODE(mode), "type": "file",
+                                        "size": st.st_size, "sha256": _sha256(item)}
+                else:
+                    raise OwnerError("closure contains special file")
+        finally:
+            active.remove(marker)
+
+    visit(root)
+    return result
+
+
+def _validate_kernel_binding(toolchain_doc, host_root):
+    binding = toolchain_doc.get("kernel_binding")
+    _fail(isinstance(binding, dict) and
+          set(binding) == {"container_root", "container_kernel_dir", "closure_inventory"},
+          "kernel binding schema differs")
+    host_root = _canonical(host_root, "kernel host root", directory=True)
+    host_kernel = _canonical(host_root / "build", "kernel host directory", directory=True)
+    _fail(host_kernel == host_root / "build", "kernel host directory must be host_root/build")
+    _fail(binding["container_root"] == "/out" and
+          binding["container_kernel_dir"] == "/out/build",
+          "kernel container translation differs")
+    inventory = binding["closure_inventory"]
+    _fail(isinstance(inventory, dict) and inventory,
+          "kernel closure inventory missing")
+    observed = _closure_inventory(host_root, host_root, Path("/out"))
+    _fail(observed == inventory, "kernel closure inventory differs")
+    return host_root, host_kernel
+
+
+def _validate_v2_image_tools(request, toolchain_doc):
+    """Authenticate the immutable image tool closure without mounting it."""
+    receipt = _regular(request.get("image_receipt", ""), "image receipt")
+    expected = request.get("image_receipt_sha256")
+    _fail(isinstance(expected, str) and re.fullmatch(r"[0-9a-f]{64}", expected),
+          "image receipt hash binding")
+    _fail(_sha256(receipt) == expected, "image receipt hash drift")
+    document = _load_json(receipt, "image receipt")
+    _fail(document.get("status") == "PASS" and document.get("image_id") == request["image_id"],
+          "image receipt identity differs")
+    _fail(document.get("source_free") is True and document.get("runtime_network") == "none",
+          "image receipt is not source-free and offline")
+    image_tools = toolchain_doc.get("image_tools")
+    mounted_tools = toolchain_doc.get("mounted_tools")
+    _fail(isinstance(image_tools, dict) and isinstance(mounted_tools, dict),
+          "v2 image/mounted tool partitions missing")
+    _fail(set(image_tools) | set(mounted_tools) == set(REQUIRED_TOOLS) and
+          not set(image_tools) & set(mounted_tools), "v2 tool partition overlaps")
+    _fail("rustc" in mounted_tools and "rustc" not in image_tools,
+          "nightly rustc must be mounted")
+    for name, descriptor in image_tools.items():
+        _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
+              descriptor["path"].startswith("/usr/"),
+              "image tool descriptor incomplete: " + name)
+        _fail(re.fullmatch(r"[0-9a-f]{64}", str(descriptor.get("sha256", ""))),
+              "image tool hash missing: " + name)
+        receipt_tools = document.get("tools", {})
+        _fail(isinstance(receipt_tools, dict) and receipt_tools.get(name) == descriptor and
+              isinstance(descriptor.get("rpm_nevra"), str) and
+              isinstance(descriptor.get("executable_version"), str),
+              "image receipt tool differs: " + name)
+    return image_tools, mounted_tools
+
+
 def _check_identity(path, expected, label, directory=True):
     actual = _identity(path)
     _fail(isinstance(expected, dict), label + " identity missing")
@@ -344,6 +478,57 @@ def _toolchain_roots(request):
     return seen
 
 
+def _v2_mount_roots(request, toolchain_doc):
+    """Bind host closures to their container spelling without leaking it into v2.
+
+    The v2 toolchain document is consumed verbatim inside the image and hence
+    contains only ``/out``/``/nightly`` paths.  The owner-only request supplies
+    the separate host mapping and is checked against the same inventories.
+    """
+    document_rows = toolchain_doc.get("toolchain_roots")
+    request_rows = request.get("toolchain_roots")
+    _fail(isinstance(document_rows, list) and isinstance(request_rows, list) and
+          document_rows and len(document_rows) == len(request_rows),
+          "v2 toolchain roots missing")
+    document = {}
+    for row in document_rows:
+        _fail(isinstance(row, dict) and set(row) == {"path", "inventory"} and
+              row["path"] in ("/out", "/nightly") and isinstance(row["inventory"], dict),
+              "v2 container root row")
+        _fail(row["path"] not in document, "duplicate v2 container root")
+        document[row["path"]] = row["inventory"]
+    mounted = {}
+    for row in request_rows:
+        _fail(isinstance(row, dict) and set(row) == {"host_path", "container_path", "inventory"},
+              "v2 host root row")
+        target = row["container_path"]
+        _fail(target in document and target not in mounted and row["inventory"] == document[target],
+              "v2 host/container root binding differs")
+        host = _canonical(row["host_path"], "v2 host toolchain root", directory=True)
+        observed = _closure_inventory(host, host, Path(target))
+        _fail(observed == row["inventory"], "v2 toolchain root inventory differs")
+        mounted[target] = host
+    _fail(set(mounted) == set(document) and set(mounted) == {"/out", "/nightly"},
+          "v2 mounted roots incomplete")
+    return mounted
+
+
+def _v2_host_path(raw, mounts, label, directory=False):
+    _fail(isinstance(raw, str) and raw.startswith("/"), label + " must be absolute")
+    path = Path(raw)
+    choices = [(Path(target), root) for target, root in mounts.items()
+               if path == Path(target) or Path(target) in path.parents]
+    _fail(len(choices) == 1, label + " is outside v2 mounted roots")
+    target, root = choices[0]
+    candidate = root / path.relative_to(target)
+    candidate = _canonical(candidate, label, directory=directory)
+    if directory:
+        _fail(candidate.is_dir(), label + " must be a directory")
+    else:
+        _fail(stat.S_ISREG(candidate.lstat().st_mode), label + " must be regular")
+    return candidate
+
+
 def _authenticated_provenance(path):
     module_name = "_mckernel_exact_owner_provenance_%d" % os.getpid()
     module = importlib.util.module_from_spec(importlib.util.spec_from_loader(module_name, loader=None))
@@ -372,9 +557,9 @@ def _git_factory(tool):
     return git
 
 
-def _validate_authenticated_source(source, manifest, candidate, ihk, toolchain_doc, provenance_path):
+def _validate_authenticated_source(source, manifest, candidate, ihk, tools, provenance_path):
     provenance = _authenticated_provenance(provenance_path)
-    git = _git_factory(toolchain_doc["tools"]["git"])
+    git = _git_factory(tools["git"])
     try:
         _fail(git(source, "rev-parse", "HEAD").decode().strip() == candidate,
               "source HEAD differs from candidate")
@@ -499,15 +684,31 @@ def _validate_request(request):
     disk = request.get("disk_identity")
     _fail(isinstance(disk, dict) and disk.get("path") == str(source), "disk identity binding")
     _check_identity(source, disk, "disk candidate")
-    roots = _toolchain_roots(request)
     toolchain_doc = _load_json(toolchain, "toolchain manifest")
-    _fail(toolchain_doc.get("schema") == "mckernel.native-exact-mckernel-image-toolchain.v1",
+    toolchain_schema = toolchain_doc.get("schema")
+    _fail(toolchain_schema in ("mckernel.native-exact-mckernel-image-toolchain.v1",
+                               "mckernel.native-exact-mckernel-image-toolchain.v2"),
           "toolchain manifest schema")
-    tools = toolchain_doc.get("tools")
-    _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
-          "toolchain tools incomplete")
-    _fail(isinstance(toolchain_doc.get("kernel_dir"), str), "kernel directory binding")
-    kernel_dir = _canonical(toolchain_doc["kernel_dir"], "kernel directory", directory=True)
+    if toolchain_schema.endswith(".v2"):
+        mounts_by_target = _v2_mount_roots(request, toolchain_doc)
+        roots = list(mounts_by_target.values())
+        image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
+        tools = {**image_tools, **mounted_tools}
+    else:
+        mounts_by_target = None
+        roots = _toolchain_roots(request)
+        tools = toolchain_doc.get("tools")
+        _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
+              "toolchain tools incomplete")
+    if toolchain_schema.endswith(".v2"):
+        kernel_root = mounts_by_target["/out"]
+        kernel_root, kernel_dir = _validate_kernel_binding(toolchain_doc, kernel_root)
+        # v2's kernel is deliberately not a second bind: it is part of the
+        # read-only host_root -> /out translation.
+    else:
+        _fail(isinstance(toolchain_doc.get("kernel_dir"), str), "kernel directory binding")
+        kernel_root = None
+        kernel_dir = _canonical(toolchain_doc["kernel_dir"], "kernel directory", directory=True)
     for name in REQUIRED_TOOLS:
         descriptor = tools[name]
         _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
@@ -515,25 +716,45 @@ def _validate_request(request):
               re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]) and
               isinstance(descriptor.get("version"), str) and descriptor["version"],
               "toolchain tool identity incomplete: " + name)
-        tool_path = _regular(descriptor["path"], "tool " + name)
-        _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
-    _fail(isinstance(toolchain_doc.get("kernel_inventory"), dict) and
-          _tree_inventory(kernel_dir) == toolchain_doc["kernel_inventory"],
-          "kernel inventory differs")
-    _fail(toolchain_doc.get("toolchain_roots") == request.get("toolchain_roots"),
-          "toolchain root manifest differs")
-    _fail(toolchain_doc.get("path_dirs") == request.get("path_dirs"),
-          "PATH manifest differs")
+        if toolchain_schema.endswith(".v2") and name in mounted_tools:
+            tool_path = _v2_host_path(descriptor["path"], mounts_by_target, "tool " + name)
+            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+        elif not (toolchain_schema.endswith(".v2") and name in image_tools):
+            tool_path = _regular(descriptor["path"], "tool " + name)
+            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+    if toolchain_schema.endswith(".v2"):
+        _fail(toolchain_doc.get("kernel_dir") in (None, "/out/build"),
+              "container kernel directory binding")
+    else:
+        _fail(isinstance(toolchain_doc.get("kernel_inventory"), dict) and
+              _tree_inventory(kernel_dir) == toolchain_doc["kernel_inventory"],
+              "kernel inventory differs")
+    if not toolchain_schema.endswith(".v2"):
+        _fail(toolchain_doc.get("toolchain_roots") == request.get("toolchain_roots"),
+              "toolchain root manifest differs")
+        _fail(toolchain_doc.get("path_dirs") == request.get("path_dirs"),
+              "PATH manifest differs")
     _fail(isinstance(toolchain_doc.get("linux_probe"), dict) and
-          toolchain_doc["linux_probe"].get("kernel_dir") == str(kernel_dir),
+          toolchain_doc["linux_probe"].get("kernel_dir") ==
+          ("/out/build" if toolchain_schema.endswith(".v2") else str(kernel_dir)),
           "Linux probe manifest differs")
     _fail(isinstance(toolchain_doc.get("environment"), dict) and not toolchain_doc["environment"],
           "toolchain environment is not sealed")
-    _fail(isinstance(toolchain_doc["tools"].get("rustc"), dict), "toolchain Rust identity")
-    rust_version = toolchain_doc["tools"]["rustc"].get("version", "")
+    _fail(isinstance(tools.get("rustc"), dict), "toolchain Rust identity")
+    rust_version = tools["rustc"].get("version", "")
     _fail(isinstance(rust_version, str) and "nightly" in rust_version.lower(),
           "toolchain Rust is not nightly")
-    _validate_authenticated_source(source, source_doc, candidate, ihk, toolchain_doc, provenance)
+    source_tools = dict(tools)
+    if toolchain_schema.endswith(".v2"):
+        for name in mounted_tools:
+            source_tools[name] = {**source_tools[name], "path": str(_v2_host_path(
+                source_tools[name]["path"], mounts_by_target, "source tool " + name))}
+        for name in image_tools:
+            image_path = _regular(source_tools[name]["path"], "image source tool " + name)
+            _fail(_sha256(image_path) == source_tools[name]["sha256"],
+                  "image source tool hash drift: " + name)
+            source_tools[name] = {**source_tools[name], "path": str(image_path)}
+    _validate_authenticated_source(source, source_doc, candidate, ihk, source_tools, provenance)
     backup_raw = request.get("backup_root", request.get("source_backup_root"))
     backup = _canonical(backup_raw, "source backup", directory=True)
     _check_identity(backup, request.get("backup_identity"), "source backup")
@@ -541,12 +762,15 @@ def _validate_request(request):
           "source backup inventory missing")
     _fail(_tree_inventory(backup) == request["backup_inventory"],
           "source backup inventory differs")
-    path_dirs = request.get("path_dirs")
+    path_dirs = toolchain_doc.get("path_dirs") if toolchain_schema.endswith(".v2") else request.get("path_dirs")
     _fail(isinstance(path_dirs, list) and path_dirs, "path_dirs manifest missing")
     for row in path_dirs:
         _fail(isinstance(row, str), "path_dirs row")
-        path = _canonical(row, "path_dirs entry", directory=True)
-        _fail(any(path == other or other in path.parents for other in roots),
+        path = (_v2_host_path(row, mounts_by_target, "path_dirs entry", directory=True)
+                if toolchain_schema.endswith(".v2") and row.startswith(("/out/", "/nightly/"))
+                else _canonical(row, "path_dirs entry", directory=True))
+        _fail(path.is_dir() and (toolchain_schema.endswith(".v2") or
+              any(path == other or other in path.parents for other in roots)),
               "PATH directory escapes toolchain roots")
     nightly = request.get("nightly")
     _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
@@ -561,8 +785,11 @@ def _validate_request(request):
           "common exclusion path differs or is retired")
     lease = _regular(request.get("lease_path", ""), "lease path") if Path(request.get("lease_path", "")).exists() else Path(request.get("lease_path", ""))
     _no_symlink_parents(lease, "lease path")
-    _disjoint((source, manifest, toolchain, driver, provenance, host_owner,
-               owner_evidence, work_root, *roots, backup, kernel_dir))
+    disjoint_paths = (source, manifest, toolchain, driver, provenance, host_owner,
+                      owner_evidence, work_root, *roots, backup)
+    if not toolchain_schema.endswith(".v2"):
+        disjoint_paths += (kernel_dir,)
+    _disjoint(disjoint_paths)
     _fail(work_root != owner_evidence and work_root not in owner_evidence.parents and
           owner_evidence not in work_root.parents, "work/evidence roots overlap")
     try:
@@ -588,9 +815,13 @@ def _validate_request(request):
             "work": work_root, "backup": backup, "measurement": measurement,
             "host_owner": authenticated_host,
             "host_owner_path": host_owner, "roots": roots, "kernel": kernel_dir,
+            "kernel_root": kernel_root, "toolchain_schema": toolchain_schema,
             "allocation_roots": allocation_paths,
-            "path_dirs": [_canonical(row, "PATH directory", directory=True)
-                                                                  for row in path_dirs],
+            "path_dirs": [_v2_host_path(row, mounts_by_target, "PATH directory", directory=True)
+                          if row.startswith(("/out/", "/nightly/")) else
+                          _canonical(row, "PATH directory", directory=True)
+                          for row in path_dirs] if toolchain_schema.endswith(".v2") else
+            [_canonical(row, "PATH directory", directory=True) for row in path_dirs],
             "lease": lease}
 
 
@@ -743,8 +974,27 @@ def _revalidate_inputs(bound, request):
           "authenticated host owner changed")
     source_doc = _load_json(bound["manifest"], "source manifest")
     toolchain_doc = _load_json(bound["toolchain"], "toolchain manifest")
+    if bound.get("toolchain_schema", "").endswith(".v2"):
+        host_root, host_kernel = _validate_kernel_binding(toolchain_doc, bound["kernel_root"])
+        _fail(host_root == bound["kernel_root"] and host_kernel == bound["kernel"],
+              "kernel binding changed")
+        _validate_v2_image_tools(request, toolchain_doc)
+    if bound.get("toolchain_schema", "").endswith(".v2"):
+        image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
+        mounts = _v2_mount_roots(request, toolchain_doc)
+        source_tools = {**image_tools, **mounted_tools}
+        for name in mounted_tools:
+            source_tools[name] = {**source_tools[name], "path": str(_v2_host_path(
+                source_tools[name]["path"], mounts, "source tool " + name))}
+        for name in image_tools:
+            image = _regular(source_tools[name]["path"], "image source tool " + name)
+            _fail(_sha256(image) == source_tools[name]["sha256"],
+                  "image source tool hash drift: " + name)
+            source_tools[name] = {**source_tools[name], "path": str(image)}
+    else:
+        source_tools = toolchain_doc["tools"]
     _validate_authenticated_source(bound["source"], source_doc, request["candidate_sha"],
-                                   request["ihk_sha"], toolchain_doc, bound["provenance"])
+                                   request["ihk_sha"], source_tools, bound["provenance"])
 
 
 class ImageOwner:
@@ -788,10 +1038,19 @@ class ImageOwner:
                       (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
                       (bound["provenance"], "/native_rust_exact_build_offline.py", True),
                       (bound["output"].parent, "/work", False)]
-            # Tool and kernel paths remain byte-identical inside the container;
-            # the offline driver intentionally records those absolute paths.
-            for root in bound["roots"] + [bound["kernel"]]:
-                row = (root, str(root), True)
+            # v2 translates the complete host build output to /out.  It is a
+            # single read-only mount: never mount /build separately or copy
+            # and rewrite closure bytes.
+            mount_roots = bound["roots"]
+            if bound["toolchain_schema"].endswith(".v2"):
+                mount_roots = mount_roots + [bound["kernel_root"]]
+            else:
+                mount_roots = mount_roots + [bound["kernel"]]
+            for root in mount_roots:
+                if bound["toolchain_schema"].endswith(".v2") and root == bound["kernel_root"]:
+                    row = (root, "/out", True)
+                else:
+                    row = (root, str(root), True)
                 if row not in mounts: mounts.append(row)
             rw_mounts = [(source, target) for source, target, readonly in mounts if not readonly]
             _fail(rw_mounts == [(bound["work"], "/work")],

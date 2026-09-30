@@ -9843,3 +9843,42 @@ real startup/HELLO diagnostic and capture exact stdout, exit 37, kernel/QMP
 logs, process retirement and teardown.  Continue with memory, file,
 thread/futex, signal and shutdown diagnostics in fresh attempts.  None of
 these diagnostic runs may be promoted to formal application acceptance.
+
+Continuation checkpoint 223, 2026-09-30: shutdown preserves the first image
+mapping/source correction as rejected WIP.  Independent integration review
+found seven real contract defects despite the earlier isolated green tests:
+the owner/driver binding schemas disagreed, real `/out` symlink translation
+failed, host and container tool namespaces leaked into each other, receipt and
+tool-version contracts disagreed, the old tool schema remained in two owner
+paths, RPM epoch/CMake pin evidence was invalid, and the authenticated driver
+hash was stale.  One bounded coherent correction was allowed to proceed, then
+was stopped at the requested shutdown boundary without Docker, image, root,
+guest, or application execution.
+
+The exact shutdown regression ran 58 focused tests and failed with three
+errors: both owner integrated fixtures report `PATH tool differs from bound
+tool: ld`, and the offline positive v2 fixture reports `complete toolchain
+inventory differs`.  `git diff --check` passes.  The six source/test files are
+checkpointed as WIP so their exact bytes and failures survive; they are not an
+execution release.  Full evidence is
+`docs/verification/evidence/native-exact-image-mapping-shutdown-wip-20260930.json`.
+
+The successful scratch-12 build remains intact at output/evidence identities
+`1831:6555351`/`1831:6555352`; exportset-16 remains `1831:72288`, and retained
+container `4d15b349...e4f86` remains exited 0, OOM false, PID 0.  No heavy
+build, QEMU guest, or mcexec process is live.  Launcher wrapper/launcher/worker/
+server PIDs are 1442141/1442142/1442145/1442149, all originating at
+2026-09-30 10:46:42 -0700.  Host/scratch free space is
+24,678,674,432/15,496,278,016 bytes; MemAvailable is 30,157,432 KiB.
+
+Next resume this same failure family rather than dispatching a new one: repair
+the `ld` PATH fixture and complete-inventory mismatch, rerun all 58 focused
+tests, and obtain independent integration re-review against the real scratch12
+`/out` link and nightly mapping.  Only after a pushed PASS_SOURCE checkpoint,
+prepare and independently release a refreshed source-free tool image with the
+repository-supported CMake 3.31.8 package.  Then build the smallest current
+`mckernel.img` and seek a separate root/guest release for strict
+`baseline.core.memory`, followed by files, threads/futexes, signals and
+shutdown.  Current-candidate builds remain six failed and one completed; real
+current diagnostic guest applications remain zero.  No acceptance bar moves,
+and the launcher pause does not complete the OS goal.
