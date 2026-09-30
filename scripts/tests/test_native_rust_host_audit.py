@@ -7,6 +7,7 @@ import ast
 import copy
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -510,6 +511,24 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
             SystemExit, "Memory boot Linux imports.*actual=1 expected=0"
         ):
             host_audit.main()
+
+    def test_prepared_boot_memory_map_signatures_keep_const_extent_capacity(self):
+        """Guard the Rust 1.92 const-generic fix without requiring that toolchain."""
+        source = REPO_ROOT + "/host-kernel/native-rust/smp_memory.rs"
+        with open(source, "r", encoding="utf-8") as stream:
+            text = stream.read()
+
+        for name in ("validate_irq_slots", "close_irq_senders"):
+            pattern = (
+                r"fn\s+" + name
+                + r"\s*\(\s*&self\s*,\s*memory\s*:\s*"
+                + r"&MemoryMap<MAX_EXTENTS>\s*\)"
+            )
+            self.assertEqual(
+                len(re.findall(pattern, text)),
+                1,
+                "{} must retain MemoryMap<MAX_EXTENTS>".format(name),
+            )
 
     def test_memory_rdtsc_assembly_and_safety_prefix_remain_exact(self):
         relative = "host-kernel/native-rust/smp_memory.rs"

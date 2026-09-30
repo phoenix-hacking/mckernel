@@ -334,6 +334,17 @@ class OwnerTests(unittest.TestCase):
         with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
             owner.ImageOwner(request, docker=FakeDocker(self.evidence, self.image)).run()
 
+    def test_consumed_exclusions_are_rejected(self):
+        request = self.request()
+        saved = owner.COMMON_EXCLUSION
+        try:
+            owner.COMMON_EXCLUSION = next(iter(owner.RETIRED_COMMON_EXCLUSIONS))
+            request["common_exclusion_path"] = owner.COMMON_EXCLUSION
+            with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
+                owner.ImageOwner(request).validate()
+        finally:
+            owner.COMMON_EXCLUSION = saved
+
     def test_identity_and_manifest_mounts_are_required(self):
         request = self.request()
         request["disk_identity"] = dict(request["disk_identity"], inode=0)

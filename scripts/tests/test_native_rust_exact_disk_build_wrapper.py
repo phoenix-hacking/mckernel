@@ -64,7 +64,7 @@ class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-memorymap-7.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-memorymap-relocated-8.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -107,7 +107,7 @@ class WrapperTests(unittest.TestCase):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-memorymap-7.json"))
+            "native-exact-candidate-operational-exclusion-memorymap-relocated-8.json"))
         for rejected_path in (
             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
@@ -115,6 +115,7 @@ class WrapperTests(unittest.TestCase):
             wrapper.CLOSUREFIX_OPERATIONAL_EXCLUSION_PATH,
             wrapper.RUNTIMECLOSURE_OPERATIONAL_EXCLUSION_PATH,
             wrapper.OFFLINECWD_OPERATIONAL_EXCLUSION_PATH,
+            wrapper.MEMORYMAP_OPERATIONAL_EXCLUSION_PATH,
         ):
             old_request = request
             def rejected_request(source, path=rejected_path):

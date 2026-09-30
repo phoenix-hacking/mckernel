@@ -9041,3 +9041,53 @@ path was removed.  One corrected packet and behavioral tests are in progress.
 Next push/fetch the wrapper checkpoint, complete independent cleanup source and
 execution review, recover the exact scratch-1 allocation, then prepare a fresh
 candidate from this correction.  Do not reuse scratch-4 or `offlinecwd-6`.
+
+Continuation checkpoint 196, 2026-09-30: scratch capacity was recovered by
+relocating the complete superseded scratch-1 candidate before retiring its
+scratch copy.  Two complete `rsync -acHAXni --delete` comparisons were empty;
+their four stdout/stderr captures each have the empty-file SHA
+`e3b0c442...2b855`.  The retained candidate is identity `66306:47475936` at
+`/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-5aff8eef-scratch-1`,
+with Git HEAD `5aff8eef...d57e` and IHK HEAD `3114d9e7...2a1f`.  The original
+and atomically renamed retiring paths are absent after a final privileged
+process, mount and container-reference census, literal no-follow deletion and
+scratch-parent fsync.
+
+The permanent `memorymap-7` exclusion and deletion-start record remain.  The
+operational terminal SHA is `56846c46...b673`; independent postflight passes
+and also confirms stopped historical container `b5a32f491e35...` remains
+retained.  Scratch free space rose from 16,582,082,560 to 25,816,915,968 bytes,
+recovering exactly 9,234,833,408 bytes.  The additive checkpoint is
+`docs/verification/evidence/native-exact-candidate-relocation-scratch1-terminal-20260930.json`.
+This is storage evidence only: it creates no artifact, boot, app or acceptance
+result.
+
+Continuation checkpoint 197, 2026-09-30: the source/build boundary is ready
+for a fresh frozen candidate.  The disk-build wrapper now permits only
+`memorymap-relocated-8` and independently rejects every historical exclusion
+through `memorymap-7`; 19 tests pass, wrapper SHA is
+`31deba72...cf9`, and test SHA is `f10905f4...dd9e`.  The future image owner
+uses the same fresh namespace and explicitly retains the consumed namespace
+set.  Its focused 18-test suite passes; this is source readiness, not image
+execution authority.
+
+The two-line `MemoryMap<MAX_EXTENTS>` correction is now bound into both the
+stage manifest and Rocky staging table.  A dedicated signature regression was
+added, and the combined host-audit, image-owner and disk-wrapper run passes all
+60 tests.  The exact container compiler remains the required check.
+
+The first scratch-5 preparation draft was rejected before execution because it
+discarded manifest/metadata/closure production, pinned the prior wrapper and
+contained a literal-tab defect.  It was replaced once from the complete
+accepted scratch-4 workflow.  The corrected template independently passes 35
+tests and source review, with packet SHA `2ff88daa...c81c` and test SHA
+`3ded01e2...d6e0`; unresolved candidate/release/wrapper bindings fail closed.
+
+Next push and fetched-blob verify this checkpoint, bind the scratch-5 template
+to that exact candidate/release and wrapper SHA, then perform the separately
+reviewed unprivileged preparation.  Recheck the one-heavy-lease census and
+16-GiB host/12-GiB scratch floors before the next exact four-job build.  If it
+compiles, prepare a distinct reviewed image request before the startup,
+memory, files, threads/futexes, signals and controlled-shutdown diagnostics.
+No current-candidate artifact or diagnostic application has passed; formal
+counters remain 6/130, 350/10000 and 0/273 applications.
