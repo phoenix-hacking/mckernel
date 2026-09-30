@@ -9482,3 +9482,48 @@ only `scripts/native_rust_exact_disk_build_wrapper.py` from the prepared
 candidate with the exact scratch-8 request.  This is the single active heavy
 lease.  It must clear the preserved self-digest and objtool families before
 image preparation; no preparation result is build or runtime acceptance.
+
+Continuation checkpoint 210, 2026-09-30: scratch-8 cleared the prior phase-0
+self-digest and objtool families and completed the real Linux/kernel-module
+compile.  `bzImage` is 16,130,048 bytes, SHA `12e6b40b...4c6`; Rust-linked
+`ihk.ko`, `ihk-smp-x86_64.ko`, and `mcctrl.ko` have SHAs
+`b4dbf04c...dc9f`, `268d6d3b...4bbb`, and `d927bc44...019`.  Build phase is
+`complete` with exit 0.  This is a compiled diagnostic artifact set, not a
+completed exact build or bootable McKernel image.
+
+The post-compile lifecycle oracle then failed on 11 intentional
+`MCKERNEL_IHK_V1` GPL exports absent from its frozen nine-symbol allowlist.
+Independent source and ELF review binds all 20 exact definitions and 60 GPL
+metadata relocations.  Container `b34323f6...c001` is retained, exited 1,
+OOM false; owner/build/inspect receipt SHAs are `f1f58d48...f3c`,
+`49d1a830...ae5`, and `5e7dbe6f...1df`.  The original driver log SHA is
+`1aefe4c0...29ef`, and the source/output/evidence/exclusion remain.  Evidence
+is `docs/verification/evidence/native-exact-build-f021bdee-scratch8-export-allowlist-failure-20260930.json`.
+
+The bounded correction extends both lifecycle and downstream runtime evidence
+contracts to the exact source-confirmed 20-symbol set while retaining rejection
+of missing, unknown, unexported `ihk_os_*`, non-GPL, and namespace-drift cases.
+Its digest/closure cascade is under final independent source review; do not
+prepare a new candidate until that review passes and the exact corrected files
+are pushed.
+
+Capacity recovery removed only 2,452 single-link files byte-identical to exact
+c658 Git blobs from retained identity `66306:47753167`.  The complete 1,597,062-
+byte restoration plan SHA is `300fa3d2...0aee`; 9,101,340,672 allocated bytes
+were recovered and the checkout fell from 9,244,356,608 to 143,015,936 bytes.
+Its commit/identity are unchanged; all planned targets are absent and all
+non-target state remains.  Two cleanup-harness failures occurred before any
+deletion: unrelated lsof FUSE warnings were misrouted as references, then a
+fresh dynamic census was compared byte-for-byte with the stored census.  Both
+original messages, zero-deletion checks, bounded corrections, 20 regressions,
+and the passing result are retained in
+`docs/verification/evidence/native-exact-retained-candidate-c658175a-evidence-cleanup-result-20260930.json`.
+
+Host/scratch availability is now approximately 27.42/14.20 GB.  Next reclaim
+only Git-identical evidence copies inside the stopped f021 source, preserving
+its source delta, build output/evidence, receipts, exclusion and exited
+container.  Then prepare a fresh corrected candidate, rerun the single exact
+build, and proceed to image/startup diagnostics only after a complete build
+receipt.  Current-candidate builds in this loop: four failed, zero completed;
+one produced a complete compile/artifact set before oracle failure.  Real
+diagnostic guest applications: zero.
