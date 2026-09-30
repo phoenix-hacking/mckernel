@@ -250,15 +250,32 @@ with tempfile.TemporaryDirectory() as name:
     print(result.stdout.decode('ascii'), end='')
 assert not directory.exists()
 '''.replace('COMPILER', repr(compiler))
+        validation = driver.workflow_bodies(WORKFLOW_TEXT)[driver.STEPS[4]]
+        environment_start = validation.index('isolated_environment=(')
+        environment_end = validation.index(' TEMP="$TEMP")\n', environment_start)
+        environment_end += len(' TEMP="$TEMP")\n')
+        environment = validation[environment_start:environment_end]
         script = self.root / 'registry-temp-phase.sh'
-        # Match the workflow's fresh isolated Python invocation, through the
-        # production phase runner rather than changing this process's cache.
-        script.write_text("/usr/bin/python3 -E -s <<'PY'\n" + probe + 'PY\n')
+        # Cross the real phase-4 env -i boundary rather than invoking Python
+        # directly with the outer runner environment.
+        script.write_text(
+            environment +
+            '"${kbuild_environment[@]}" /usr/bin/python3 -E -s <<\'PY\'\n' +
+            probe + 'PY\n')
         log = self.root / 'registry-temp-phase.log'
         self.assertEqual(driver.Runner().phase(script, self.repo, env, log), 0,
                          log.read_text())
         self.assertEqual(log.read_bytes(), b'registry-temp-ok\n')
         self.assertEqual(list(self.evidence.iterdir()), [])
+
+    def test_postcheck_temp_environment_anchor_is_unique_and_fail_closed(self):
+        original = 'kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin)'
+        for mutated in (
+                WORKFLOW_TEXT.replace(original, original + '\n          ' + original, 1),
+                WORKFLOW_TEXT.replace(original, 'kbuild_environment=("${isolated_environment[@]}")', 1)):
+            with self.assertRaisesRegex(
+                    driver.BuildError, 'postcheck environment adaptation anchor changed'):
+                driver.workflow_bodies(mutated)
 
     def test_runner_temp_alone_does_not_select_python_tempfile_root(self):
         self.evidence.mkdir()
@@ -411,6 +428,9 @@ PY
         self.assertNotIn('cd "$GITHUB_WORKSPACE"', phase2)
         validation = bodies[driver.STEPS[4]]
         self.assertIn('scripts/native_rust_kbuild_link_closure.py', validation)
+        self.assertIn(
+            'RUNNER_TEMP="$RUNNER_TEMP" TMPDIR="$TMPDIR" TMP="$TMP" TEMP="$TEMP")',
+            validation)
         self.assertNotIn('github_run_id =', validation)
         # All artifact validators after the provenance block survive byte-exact.
         suffix = WORKFLOW_TEXT.split('          # Preserve the exact binaries', 1)[1]

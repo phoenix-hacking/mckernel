@@ -9651,3 +9651,28 @@ no swap expansion, 512 PIDs and no network.  It must clear the preserved
 post-compile exact-export failure and the newly corrected runtime consumer
 graph before image preparation.  Current-candidate builds remain four failed
 and zero completed; real diagnostic guest applications remain zero.
+
+Continuation checkpoint 215, 2026-09-30: scratch-10 compiled all three native
+modules, then failed its offline postcheck.  The exact retained module SHAs are
+`b4dbf04c...dc9f`, `268d6d3b...4bbb` and `d927bc44...019f`; container
+`8c56b137...401a` exited 1 without OOM.  The unchanged configured OS-registry
+fixture attempted to execute `/tmp/ihk-os-registry-rust-*/registry-tests` and
+received EACCES: phase 4 had reconstructed `kbuild_environment` with `env -i`
+but dropped the driver's reviewed `RUNNER_TEMP`, `TMPDIR`, `TMP` and `TEMP`.
+This is an offline harness failure, not build or Rust-registry acceptance.
+Scratch-10 output, evidence, 89-MiB receipt and exited container remain intact.
+
+The bounded correction is in the phase-4 offline adapter.  It requires one
+exact environment anchor, carries all four temporary variables across the
+isolation boundary, and leaves `/tmp` noexec and the fixture/oracle unchanged.
+The offline suite passes 21/21.  A fresh light container with read-only source,
+no network, one CPU, 1 GiB, noexec `/tmp` and executable evidence storage passes
+the configured Python suite 11/11 and its Rust fixture 15/15.  Two probe-only
+failures (the image sleep entrypoint and Git safe-directory ownership) are
+preserved with the successful output.  Full evidence is
+`docs/verification/evidence/native-exact-build-scratch10-temp-environment-failure-20260930.json`.
+
+Next commit/push this correction, prepare a fresh candidate and request bound
+to that commit, independently review it, and run exactly one new heavy build.
+Do not reuse scratch-10 or its attempt names.  Current-candidate builds are now
+five failed and zero completed; real diagnostic guest applications remain zero.

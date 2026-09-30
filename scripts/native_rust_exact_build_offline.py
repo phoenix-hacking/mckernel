@@ -408,7 +408,14 @@ cmp "$RUNNER_TEMP/srpm-check/1000-debrand-some-messages.patch" "$SOURCE_ASSETS/1
         raise BuildError('GitHub provenance adaptation anchor changed')
     before, remainder = validation.split(start, 1)
     _, after = remainder.split(end, 1)
-    result[STEPS[4]] = before + '# Local provenance is retained by the offline owner.\n# Preserve the exact binaries' + after
+    validation = before + '# Local provenance is retained by the offline owner.\n# Preserve the exact binaries' + after
+    environment = 'kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin)\n'
+    if validation.count(environment) != 1:
+        raise BuildError('postcheck environment adaptation anchor changed')
+    bound_environment = '''kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin
+  RUNNER_TEMP="$RUNNER_TEMP" TMPDIR="$TMPDIR" TMP="$TMP" TEMP="$TEMP")
+'''
+    result[STEPS[4]] = validation.replace(environment, bound_environment, 1)
     return result
 
 
