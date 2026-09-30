@@ -9527,3 +9527,44 @@ build, and proceed to image/startup diagnostics only after a complete build
 receipt.  Current-candidate builds in this loop: four failed, zero completed;
 one produced a complete compile/artifact set before oracle failure.  Real
 diagnostic guest applications: zero.
+
+Continuation checkpoint 211, 2026-09-30: the exact-20 export correction is
+pushed.  It passes 57 lifecycle tests, 169 pinned-Python-3.12 runtime tests,
+runtime/closure contract validation, and replay against preserved `ihk.ko` SHA
+`b4dbf04c...dc9f`.  The strict missing/unknown/unexported `ihk_os_*`, non-GPL,
+and namespace controls remain.  Current lifecycle/runtime checker SHAs are
+`8773eb0d...67ec` and `d86b2177...ec8d`; runtime contract SHA is
+`bf94a508...767e`.  FP capture, RS006 and FP closure digest cascades are
+`cbf580e8...e8d0`, `14c4b671...27f`, and `2c7fbe7e...6657`.
+
+Broader preexisting gates remain explicit: the FP full-repository fixture
+exceeded its bounded 512-MiB tmpfs, its direct validator rejects an existing
+hardlinked witness, closure tests retain 17 nlink-guard failures, and RS006
+retains seven HEAD inventory mismatches plus hardlink/fixture compilation
+failures.  These are not waived and are not attributed to the bounded export
+correction.
+
+The stopped f021 source now retains only non-duplicate state.  A reviewed
+2,479-target plan removed 9,102,540,800 allocated bytes identical to exact
+`f021bdee` Git blobs.  Candidate identity `1831:5242921` and HEAD are unchanged;
+allocation fell from 9,237,291,008 to 134,750,208 bytes.  Build output/evidence,
+request, manifest, preparation records, metadata, `selfdigest-13` exclusion,
+and stopped container `b34323f6...c001` remain.  The complete restoration plan
+SHA is `cb35c05d...52cb`.
+
+Two delegated-cleanup failures occurred before deletion: the first retained
+host mount expectation rejected scratch device `1831`; the second adapter used
+a zero-argument audit signature while the proven apply path supplied three
+pinned arguments.  Both original errors, full-present target checks, bounded
+corrections and eight apply-integration regressions are recorded in
+`docs/verification/evidence/native-exact-retained-candidate-f021bdee-scratch8-evidence-cleanup-result-20260930.json`.
+The corrected apply passed, then targeted trim returned 13,968,592,896 bytes.
+
+Host/scratch availability is approximately 37.04/23.30 GB.  The exact fresh-
+clone floor remains about 0.43 GB higher on scratch.  Next archive and retire
+only the stopped build's expanded evidence root, preserving exact contents and
+all compiled outputs, then prepare a new source-bound candidate from the pushed
+exact-20 correction and rerun one build.  Current-candidate builds remain four
+failed and zero completed; one has a complete compiled artifact set but failed
+the now-corrected post-compile oracle.  Real diagnostic guest applications:
+zero.
