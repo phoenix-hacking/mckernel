@@ -24,11 +24,11 @@ def test_embedded_python_compiles_and_lease_guard_is_inside_main():
     lease_guards = [node for node in ast.walk(main)
                     if isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call)
                     and isinstance(node.exc.func, ast.Name) and node.exc.func.id == "RuntimeError"
-                    and any(isinstance(part, ast.Constant) and part.value == "terminal-lease-tombstone-missing"
+                        and any(isinstance(part, ast.Constant) and "terminal-lease-tombstone-missing" in str(part.value)
                             for part in ast.walk(node))]
     assert lease_guards
     assert not any(isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call)
-                   and any(isinstance(part, ast.Constant) and part.value == "terminal-lease-tombstone-missing"
+                   and any(isinstance(part, ast.Constant) and "terminal-lease-tombstone-missing" in str(part.value)
                            for part in ast.walk(node)) for node in tree.body if node is not main)
 
 def helpers():
@@ -43,10 +43,10 @@ def helpers():
 def test_packet_and_bindings_are_fail_closed():
     subprocess.run(["/usr/bin/bash", "-n", str(PACKET)], check=True)
     text = source()
-    for needle in ("c658175a-scratch7", "relocation-15", "1831", "66306", "runtimeblob-12", "RELOCATION_PACKET_SHA256", "RELOCATION_TEST_SHA256", "release-not-fetched", "release-blob-binding", "local-byte-binding", "privileged-reference-census-failed", "insufficient-capacity-floor", "PRIOR_INTENT_PATH", "rsync-verification", "temporary-mutated-during-copy", "rename_noreplace(TMP,DEST,parent)", "source-mount-before-delete", "ancestor-changed-before-delete", "safe_remove(C,SRC_DEV", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "POST_RENAME_FAILURE", "docker-census-failed"):
+    for needle in ("c658175a-scratch7", "relocation-16", "1831", "66306", "runtimeblob-12", "RELOCATION_PACKET_SHA256", "RELOCATION_TEST_SHA256", "release-not-fetched", "release-blob-binding", "local-byte-binding", "privileged-reference-census-failed", "insufficient-capacity-floor", "PRIOR_INTENT_PATH", "rsync-verification", "temporary-mutated-during-copy", "rename_noreplace(TMP,DEST,parent)", "source-mount-before-delete", "ancestor-changed-before-delete", "safe_remove(C,SRC_DEV", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "POST_RENAME_FAILURE", "docker-census-failed"):
         assert needle in text
     assert "mckernel-exact-candidate-preparation-scratch-20260929-1.sh" not in text
-    assert "'-aHAX'" in text and "rsync-verification" in text
+    assert "'-aHAX'" not in text and "rsync-verification" in text
     assert "rm -rf" not in text and "shutil.rmtree" not in text
 
 def test_archive_digest_is_required_and_bound_before_copy():
@@ -55,14 +55,14 @@ def test_archive_digest_is_required_and_bound_before_copy():
     assert 'RELOCATION_ARCHIVE_SHA256" =~ ^[0-9a-f]{64}$' in text
     assert '$(sha "$ARCHIVE")" == "$RELOCATION_ARCHIVE_SHA256"' in text
     assert "archive_sha256':os.environ['RELOCATION_ARCHIVE_SHA256']" in text
-    assert text.index('archive-hash') < text.index("rsync','-aHAX")
+    assert text.index('archive-hash') < text.index("rsync-verification")
     assert 'ARCHIVE_SHA_RUNTIME=1' not in text
 
 def test_retry15_paths_and_live_embedded_bindings_are_exact():
     text = source()
     assert 'scratch-7-retry1-20260930-1.tar' in text
-    assert 'tmp-relocation-15-retry1' in text
-    assert 'relocation15-retry1' in text
+    assert 'tmp-relocation-16-retry2' in text
+    assert 'relocation16-retry2' in text
     assert 'native-exact-candidate-relocation-c658175a-archive-path-failure-20260930.json' in text
     assert 'c046cb5572a7ef102f6069c330f256c3a89d95e8dccdbc284e0a3f95469bda54' in text
     assert "TEST='scripts/tests/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.py'" in text

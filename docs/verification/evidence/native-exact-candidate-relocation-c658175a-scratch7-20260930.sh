@@ -5,7 +5,7 @@ set -Eeuo pipefail
 umask 077
 readonly SCRATCH=/home/holden/mckernel-work/scratch
 readonly C="$SCRATCH/mckernel-exact-candidate-c658175a-scratch-7"
-readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1
+readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-16-retry2
 readonly DEST=/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7
 readonly FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-build-c658175a-scratch7-runtime-self-digest-failure-20260930.json
 readonly RELOCATION_FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-relocation-c658175a-archive-path-failure-20260930.json
@@ -18,12 +18,14 @@ readonly BUILD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-
 readonly OLD_INTENT="$SCRATCH/native-exact-candidate-preparation-c658175a-scratch-7-terminal.json"
 readonly OLD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 readonly OLD_LOG="$SCRATCH/native-exact-candidate-preparation-c658175a-scratch-7.log"
-readonly LOG="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.log"
-readonly INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-intent.json"
-readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-terminal.json"
-readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-deletion-intent.json"
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation15-retry1.json"
-readonly LOCK="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.lock"
+readonly LOG="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930.log"
+readonly INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930-intent.json"
+readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930-terminal.json"
+readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930-deletion-intent.json"
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation16-retry2.json"
+readonly LOCK="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930.lock"
+readonly PRIOR_RETRY_LOG="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.log"
+readonly PRIOR_RETRY_LOCK="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.lock"
 readonly SRC_DEV=1831 DEST_DEV=66306
 readonly CANDIDATE_COMMIT=c658175ae1831e2caef6ecf59730a272f1324645
 readonly IHK_COMMIT=3114d9e7101ad52030eb3effa849a5c108972a1f
@@ -46,9 +48,11 @@ sha(){ /usr/bin/sha256sum -- "$1" | /usr/bin/awk '{print $1}'; }
 : "${RELOCATION_TEST_SHA256:?set reviewed resume test blob hash}"
 : "${RELOCATION_ARCHIVE_SHA256:?set exact retained archive sha256}"
 : "${RELOCATION_FAILURE_SHA256:?set committed archive-path failure sha256}"
+: "${RELOCATION_PROVENANCE_FAILURE_SHA256:?set committed provenance failure sha256}"
 [[ "$RELOCATION_RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || die release-format
 [[ "$RELOCATION_ARCHIVE_SHA256" =~ ^[0-9a-f]{64}$ ]] || die archive-sha-format
 [[ "$RELOCATION_FAILURE_SHA256" =~ ^[0-9a-f]{64}$ ]] || die failure-sha-format
+[[ "$RELOCATION_PROVENANCE_FAILURE_SHA256" =~ ^[0-9a-f]{64}$ ]] || die provenance-failure-sha-format
 if [[ ! -e "$ARCHIVE" && ! -L "$ARCHIVE" ]]; then
   readonly ARCHIVE_TMP="$ARCHIVE.tmp-relocation-15-retry1"
   [[ ! -e "$ARCHIVE_TMP" && ! -L "$ARCHIVE_TMP" ]] || die archive-temp-exists
@@ -65,9 +69,11 @@ if [[ ! -e "$ARCHIVE" && ! -L "$ARCHIVE" ]]; then
 fi
 [[ "$(sha "$ARCHIVE")" == "$RELOCATION_ARCHIVE_SHA256" ]] || die archive-hash
 for p in "$LOG" "$INTENT" "$TERMINAL" "$DELETE_INTENT" "$EXCLUSION"; do [[ ! -e "$p" && ! -L "$p" ]] || die output-exists; done
-for p in "$C" "$FAILURE" "$RELOCATION_FAILURE" "$WRONG_ARCHIVE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION" "$OLD_INTENT" "$OLD_EXCLUSION" "$OLD_LOG"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
+readonly PROVENANCE_FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-relocation-c658175a-failure-provenance-failure-20260930.json
+for p in "$C" "$FAILURE" "$RELOCATION_FAILURE" "$PROVENANCE_FAILURE" "$WRONG_ARCHIVE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION" "$OLD_INTENT" "$OLD_EXCLUSION" "$OLD_LOG" "$PRIOR_RETRY_LOG" "$PRIOR_RETRY_LOCK"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
 [[ "$(sha "$FAILURE")" == "$FAILURE_SHA" ]] || die failure-hash
 [[ "$(sha "$RELOCATION_FAILURE")" == "$RELOCATION_FAILURE_SHA256" ]] || die relocation-failure-hash
+[[ "$(sha "$PROVENANCE_FAILURE")" == "$RELOCATION_PROVENANCE_FAILURE_SHA256" ]] || die provenance-failure-hash
 [[ "$(sha "$WRONG_ARCHIVE")" == "c046cb5572a7ef102f6069c330f256c3a89d95e8dccdbc284e0a3f95469bda54" ]] || die wrong-archive-hash
 [[ "$(sha "$PREP_TERMINAL")" == "$PREP_TERMINAL_SHA" ]] || die preparation-terminal-hash
 [[ "$(sha "$REQUEST")" == "$REQUEST_SHA" ]] || die request-hash
@@ -78,10 +84,10 @@ for p in "$C" "$FAILURE" "$RELOCATION_FAILURE" "$WRONG_ARCHIVE" "$ARCHIVE" "$PRE
 [[ "$(sha "$OLD_LOG")" == "$OLD_LOG_SHA" ]] || die old-log-hash
 exec 9>>"$LOCK"; /usr/bin/flock -n 9 || die relocation-busy
 exec 8>"$LOG"
-/usr/bin/python3 - "$C" "$TMP" "$DEST" "$LOG" "$INTENT" "$TERMINAL" "$DELETE_INTENT" "$EXCLUSION" "$RELOCATION_FAILURE" <<'PY'
+/usr/bin/python3 - "$C" "$TMP" "$DEST" "$LOG" "$INTENT" "$TERMINAL" "$DELETE_INTENT" "$EXCLUSION" "$RELOCATION_FAILURE" "$PROVENANCE_FAILURE" <<'PY'
 import ctypes,datetime,fcntl,hashlib,json,os,pathlib,re,stat,subprocess,sys
-C,TMP,DEST,LOG,INTENT,TERMINAL,DELETE_INTENT,EXCLUSION,RELOCATION_FAILURE=sys.argv[1:]
-SRC_DEV,DEST_DEV=1831,66306; SOURCE_ID=(1831,6684719); TMP_ID=None
+C,TMP,DEST,LOG,INTENT,TERMINAL,DELETE_INTENT,EXCLUSION,RELOCATION_FAILURE,PROVENANCE_FAILURE=sys.argv[1:]
+SRC_DEV,DEST_DEV=1831,66306; SOURCE_ID=(1831,6684719); TMP_ID=(66306,47753167)
 REPO='/home/holden/mckernel'; CANDIDATE='c658175ae1831e2caef6ecf59730a272f1324645'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 PACKET='docs/verification/evidence/native-exact-candidate-relocation-c658175a-scratch7-20260930.sh'; TEST='scripts/tests/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.py'
 def durable(path,data):
@@ -190,14 +196,8 @@ def require_hash(path,expected):
 def main():
  if pathlib.Path(DEST).exists() or pathlib.Path(DEST).is_symlink(): raise RuntimeError('destination-exists')
  if (os.stat(C).st_dev,os.stat(C).st_ino)!=SOURCE_ID: raise RuntimeError('identity-binding')
- if pathlib.Path(TMP).exists() or pathlib.Path(TMP).is_symlink(): raise RuntimeError('temporary-exists')
- pathlib.Path(TMP).mkdir(mode=0o700)
- try:
-  cp=subprocess.run(['/usr/bin/rsync','-aHAX','--numeric-ids','--delete','--',C+'/',TMP+'/'],capture_output=True,text=True)
-  if cp.returncode or cp.stderr: raise RuntimeError('cross-fs-copy-failed')
-  if (os.stat(TMP).st_dev,os.stat(TMP).st_ino)[0] != DEST_DEV: raise RuntimeError('temporary-device')
- except Exception:
-  safe_remove(TMP,DEST_DEV,os.stat(TMP).st_ino); raise
+ if pathlib.Path(TMP).is_symlink() or (os.stat(TMP).st_dev,os.stat(TMP).st_ino)!=TMP_ID: raise RuntimeError('temporary-identity-binding')
+ if not pathlib.Path(TMP).is_dir(): raise RuntimeError('temporary-missing')
  ancestor_paths=('/home','/home/holden','/home/holden/mckernel-work','/home/holden/mckernel-work/scratch',C,'/home/holden/mckernel-work/retained-exact-candidates',TMP)
  ancestor_ids=[]
  for p in ancestor_paths:
@@ -215,9 +215,12 @@ def main():
   if hashlib.sha256(blob).hexdigest()!=os.environ[key]: raise RuntimeError('release-blob-binding')
  if subprocess.run(['/usr/bin/git','-C',C,'rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=CANDIDATE: raise RuntimeError('candidate-commit-binding')
  if subprocess.run(['/usr/bin/git','-C',C+'/ihk','rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=IHK: raise RuntimeError('ihk-commit-binding')
+ build_failure=json.load(open(FAILURE))
+ if build_failure.get('candidate_sha')!=CANDIDATE or build_failure.get('phase')!='phase-0-before-compilation' or build_failure.get('retained_evidence',{}).get('lease_absent') is not True: raise RuntimeError('build-failure-routing; terminal-lease-tombstone-missing')
  failure=json.load(open(RELOCATION_FAILURE))
- if failure.get('candidate_sha')!=CANDIDATE or failure.get('phase')!='phase-0-before-compilation': raise RuntimeError('failure-record-provenance')
- if failure.get('execution',{}).get('lease_absent') is not True and failure.get('retained_evidence',{}).get('lease_absent') is not True: raise RuntimeError('terminal-lease-tombstone-missing')
+ if failure.get('schema')!='mckernel.native-exact-candidate-relocation-archive-path-failure.v1': raise RuntimeError('archive-failure-schema')
+ provenance=json.load(open(PROVENANCE_FAILURE))
+ if provenance.get('schema')!='mckernel.native-exact-candidate-relocation-failure-provenance.v1': raise RuntimeError('provenance-failure-schema')
  active()
  if privileged_references([C,TMP,DEST]): raise RuntimeError('active-process-reference')
  if any(os.statvfs(p).f_bavail*os.statvfs(p).f_frsize < floor+512*1024**2 for p,floor in ((str(pathlib.Path(C).parent),12*1024**3),(str(pathlib.Path(DEST).parent),16*1024**3))): raise RuntimeError('insufficient-capacity-floor')
