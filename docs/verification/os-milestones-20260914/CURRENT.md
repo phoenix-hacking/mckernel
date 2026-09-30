@@ -9139,3 +9139,36 @@ Next require an exact one-shot build execution decision using request SHA
 retain its exclusion/container/process identities and checkpoint its first
 compiler result.  No current-candidate artifact, boot or diagnostic application
 has passed.
+
+Continuation checkpoint 200, 2026-09-30: the independently released scratch-5
+build ran exactly once and stopped in 28 seconds during phase 0, before any
+compilation.  The fail-closed IHK-007 mapping contract still bound the prior
+109,016-byte `smp_memory.rs`; the reviewed const-generic correction made the
+file 109,042 bytes with SHA `1809dfde...334f`.  Exact failure text is
+`mapping consumer source size differs: actual=109042, expected=109016`.
+There are zero compiled artifacts, no image, and no runtime result.
+
+Terminal container `f64d0a94e8cc1ab5550be5a3f026e3aabc98f3c101fc6a2f5003d3a3d30a172d`
+(`mckernel-exact-d3bc830f8349442382a6197bbe1be32e`) exited 1 with PID 0
+and remains retained under owner nonce `3e2b534d6b0e4d7993446e495a197df4`.
+The `memorymap-relocated-8` exclusion is identity `1831:57554`, SHA
+`03b43991...bb8`; owner receipt SHA is `3dc0c127...254`, build receipt SHA is
+`5706ea81...d83`, and driver log SHA is `d8646cbe...dbe`.  Output contains no
+build files and evidence allocation is 217,088 bytes.  Additive failure record
+`docs/verification/evidence/native-exact-build-61bfbb6c-scratch5-failure-20260930.json`
+preserves these identities.
+
+The one bounded correction for this failure family changes only the
+`smp_memory.rs` source size/SHA row in
+`host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json`.  No mapping
+consumer, arithmetic, ownership, limit, marker or oracle changes.  All 23
+focused mapping tests pass and independent source review passes; corrected
+contract SHA is `cb5d9694...89ef`.  A related optional host/workflow suite did
+not start under local Python 3.9 because an existing annotation requires a
+newer interpreter; this is not counted as a pass or a new kernel failure.
+
+Next advance both build and image owners to a fresh exclusion namespace,
+freeze and push the correction, then prepare a fresh candidate.  Never rerun
+the deterministic scratch-5 request or reuse `memorymap-relocated-8`.  Preserve
+its candidate, evidence, exclusion and stopped container until durable
+retention is independently verified.  No diagnostic app has run.

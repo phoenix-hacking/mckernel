@@ -35,15 +35,17 @@ EXPECTED_LIMITS = {
 # the current build's lease.
 RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
 # The failed -2, -3, closurefix-4, runtimeclosure-5, offline-cwd-6, and
-# memory-map-7 attempts are retained evidence, never reusable leases. Fresh
-# requests are bound to the relocated memory-map-8 path below.
+# memory-map-7 and relocated-memory-map-8 attempts are retained evidence,
+# never reusable leases. Fresh requests are bound to the mapping-binding-9
+# path below.
 REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
 SUPERSEDED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
 CLOSUREFIX_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-closurefix-4.json"
 RUNTIMECLOSURE_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeclosure-5.json"
 OFFLINECWD_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-offlinecwd-6.json"
 MEMORYMAP_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-memorymap-7.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-memorymap-relocated-8.json"
+MEMORYMAP_RELOCATED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-memorymap-relocated-8.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-mappingbinding-9.json"
 
 
 class AdmissionError(ValueError):
