@@ -1059,13 +1059,94 @@ def _validate_modules_end_probe(build, toolchain, evidence):
     return observed
 
 
+def _validate_gitlink_closure(source_root, manifest_path, base_manifest_path,
+                              candidate_sha, ihk_sha, git_tool):
+    """Validate the separately mounted libdwarf tree before and after build."""
+    document = _json(manifest_path, "gitlink manifest")
+    _fail(document.get("schema") == "mckernel.native-exact-mckernel-gitlink-inputs.v1",
+          "gitlink manifest schema")
+    _fail(document.get("candidate_sha") == candidate_sha and document.get("ihk_sha") == ihk_sha,
+          "gitlink manifest identity")
+    base_manifest = _json(base_manifest_path, "base source manifest")
+    _fail(document.get("base_manifest_sha256") == _sha256(base_manifest_path),
+          "gitlink base manifest hash differs")
+    consumed = document.get("consumed_gitlinks")
+    _fail(isinstance(consumed, dict) and set(consumed) ==
+          {"executer/user/lib/libdwarf/libdwarf"}, "consumed gitlink set differs")
+    row = consumed["executer/user/lib/libdwarf/libdwarf"]
+    _fail(isinstance(row, dict) and row.get("path") ==
+          "executer/user/lib/libdwarf/libdwarf", "libdwarf gitlink row missing")
+    _fail((base_manifest.get("gitlinks") or {}).get(row["path"]) == row.get("commit") and
+          re.fullmatch(r"[0-9a-f]{40}", str(row.get("commit", ""))) and
+          re.fullmatch(r"[0-9a-f]{40}", str(row.get("tree", ""))),
+          "base manifest gitlink differs")
+    root = _canonical(source_root / "executer/user/lib/libdwarf/libdwarf",
+                      "libdwarf checkout", directory=source_root)
+    git = lambda *args: _git(root, *args, tool=git_tool).decode()
+    for args, expected, label in ((["rev-parse", "HEAD"], row.get("commit"), "HEAD"),
+                                  (["rev-parse", "HEAD^{tree}"], row.get("tree"), "tree")):
+        _fail(git(*args).strip() == expected, "libdwarf " + label + " differs")
+    _fail(not git("status", "--porcelain=v1", "--ignored=matching", "--untracked-files=all"),
+          "libdwarf checkout is dirty")
+    try:
+        index_rows = provenance.git_rows(_git(root, "ls-files", "--stage", "-z", tool=git_tool))
+        tree_rows = provenance.git_rows(
+            _git(root, "ls-tree", "-r", "--full-tree", "-z", "HEAD", tool=git_tool),
+            tree=True)
+    except provenance.BuildError as exc:
+        raise ImageBuildError(str(exc)) from exc
+    _fail(index_rows == tree_rows, "libdwarf index differs from HEAD tree")
+    _fail(set(index_rows) == set(row.get("files", {})), "libdwarf tracked file set differs")
+    observed = {}
+    for relative, expected in row.get("files", {}).items():
+        _fail(isinstance(relative, str) and relative and not Path(relative).is_absolute() and
+              ".." not in Path(relative).parts and "\\" not in relative and "\0" not in relative,
+              "libdwarf path escapes checkout")
+        path = root / relative
+        _fail(path.resolve(strict=False) == path and path.is_file() and not path.is_symlink(),
+              "libdwarf path differs: " + relative)
+        mode = format(stat.S_IFMT(path.lstat().st_mode) | stat.S_IMODE(path.lstat().st_mode), "06o")
+        blob = git("hash-object", "--no-filters", "--", relative).strip()
+        observed[relative] = {"mode": mode, "blob": blob, "sha256": _sha256(path)}
+        _fail((mode, blob) == tree_rows[relative],
+              "libdwarf worktree differs from HEAD tree: " + relative)
+        _fail(observed[relative] == expected, "libdwarf tracked path differs: " + relative)
+    git_meta = _canonical(root / ".git", "libdwarf Git metadata", directory=root)
+    git_dir = git("rev-parse", "--absolute-git-dir").strip()
+    common_raw = git("rev-parse", "--git-common-dir").strip()
+    common = Path(common_raw)
+    if not common.is_absolute():
+        common = (root / common).resolve()
+    _fail(Path(git_dir) == git_meta and common == git_meta,
+          "libdwarf uses external Git metadata")
+    _fail(not (git_meta / "objects/info/alternates").exists() and
+          not (git_meta / "shallow").exists() and
+          git("rev-parse", "--is-shallow-repository").strip() == "false" and
+          not git("for-each-ref", "--format=%(refname)", "refs/replace").strip(),
+          "libdwarf uses external or replacement Git objects")
+    metadata = {}
+    for item in sorted(git_meta.rglob("*")):
+        relative = item.relative_to(git_meta).as_posix()
+        _fail(relative and ".." not in Path(relative).parts,
+              "libdwarf Git metadata path differs")
+        info = item.lstat()
+        _fail(not stat.S_ISLNK(info.st_mode), "libdwarf Git metadata contains symlink")
+        _fail(stat.S_ISREG(info.st_mode) or stat.S_ISDIR(info.st_mode),
+              "libdwarf Git metadata contains special file")
+        if stat.S_ISREG(info.st_mode):
+            metadata[relative] = {"mode": format(stat.S_IMODE(info.st_mode), "04o"),
+                                  "size": info.st_size, "sha256": _sha256(item)}
+    _fail(metadata == row.get("git_metadata"), "libdwarf Git metadata differs")
+    return document
+
+
 def run(*args, **kwargs):
     with SignalLatch():
         return _run(*args, **kwargs)
 
 
 def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evidence,
-        *, jobs=4, timeout=19800, container_roots=None):
+        *, jobs=4, timeout=19800, container_roots=None, gitlink_manifest=None):
     _fail(isinstance(jobs, int) and not isinstance(jobs, bool) and 1 <= jobs <= 4,
           "jobs must be between 1 and 4")
     _fail(isinstance(timeout, int) and not isinstance(timeout, bool) and 1 <= timeout <= MAX_TIMEOUT,
@@ -1081,6 +1162,9 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
     _disjoint((source_root, output, evidence, manifest, toolchain))
     tools = _validate_toolchain(toolchain, container_roots=container_roots)
     source = _validate_source(source_root, candidate_sha, ihk_sha, manifest, tools["tools"]["git"])
+    gitlink = (_validate_gitlink_closure(source_root, gitlink_manifest, manifest,
+                                         candidate_sha, ihk_sha, tools["tools"]["git"])
+               if gitlink_manifest is not None else None)
     _check_signal()
     output.mkdir(mode=0o700, parents=False)
     evidence.mkdir(mode=0o700, parents=False)
@@ -1159,6 +1243,9 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
         artifacts = _validate_image(build, tools, evidence)
         source_after = _validate_source(source_root, candidate_sha, ihk_sha, manifest,
                                         tools["tools"]["git"])
+        if gitlink_manifest is not None:
+            _validate_gitlink_closure(source_root, gitlink_manifest, manifest,
+                                      candidate_sha, ihk_sha, tools["tools"]["git"])
         _fail(source_after["repository_files"] == source["repository_files"],
               "source changed during build")
         _fail(source_after["manifest_sha256"] == source["manifest_sha256"],
@@ -1185,7 +1272,15 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
                                   "compile_database_exclusions": list(FORBIDDEN_C_SOURCES)},
                   "evidence_artifacts": copied, "output_root": str(output),
                   "evidence_root": str(evidence)}
+        if gitlink is not None:
+            result["gitlink_manifest_sha256"] = _sha256(gitlink_manifest)
     except BaseException as exc:
+        if gitlink_manifest is not None:
+            try:
+                _validate_gitlink_closure(source_root, gitlink_manifest, manifest,
+                                          candidate_sha, ihk_sha, tools["tools"]["git"])
+            except BaseException as closure_exc:
+                exc = ImageBuildError(str(exc) + "; gitlink closure revalidation failed: " + str(closure_exc))
         progress["status"] = "FAIL"
         progress["error"] = str(exc)
         _atomic_json(evidence / "progress.json", progress)
@@ -1244,6 +1339,7 @@ def main(argv=None):
     parser.add_argument("--evidence", required=True, type=Path)
     parser.add_argument("--jobs", required=True, type=int)
     parser.add_argument("--timeout", required=True, type=int)
+    parser.add_argument("--gitlink-manifest", type=Path)
     args = parser.parse_args(argv)
     result = run(**vars(args))
     print(json.dumps(result, sort_keys=True))

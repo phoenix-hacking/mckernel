@@ -1,0 +1,21 @@
+{
+  "schema": "mckernel.additive-evidence-correction.v1",
+  "recorded_at": "2026-09-30T14:20:00-07:00",
+  "corrects": {
+    "path": "docs/verification/evidence/native-exact-mckernel-image-exportset22-failure-20260930.json",
+    "sha256": "0dcc4f0bca486aa5489e4c60411af77fa89ed58d8703f04e2ed30bb30f70d291",
+    "field": "diagnosis.libdwarf_h_in_sha256"
+  },
+  "incorrect_value_preserved": "727cd79fecf8b9f469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c",
+  "correct_value": "727cd79fecf8f9b469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c",
+  "source": {
+    "gitlink_path": "executer/user/lib/libdwarf/libdwarf",
+    "commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "tracked_path": "libdwarf/libdwarf.h.in"
+  },
+  "verification": [
+    "sha256sum of the clean materialized worktree file",
+    "sha256sum of git show HEAD:libdwarf/libdwarf.h.in"
+  ],
+  "effect": "Corrects a transcription error only. The retained exportset22 failure, missing path, raw logs and next repair family are unchanged."
+}

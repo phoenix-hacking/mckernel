@@ -146,7 +146,8 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
             lease_path, common_exclusion_path=owner.COMMON_EXCLUSION,
             toolchain_manifest=None, request_path=None, jobs=4, timeout=19800,
             host_root=None, scratch_root=None, disk_admission=None,
-            expected_toolchain_lock_sha256=None):
+            expected_toolchain_lock_sha256=None, gitlink_manifest=None,
+            gitlink_root=None):
     """Return and optionally publish a validated REQUEST_SCHEMA v1 request."""
     manifest = _file(candidate_manifest, "candidate/input manifest")
     source = _directory(source_root, "source root")
@@ -230,6 +231,20 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
     _fail(receipt.get("candidate_sha") == source_doc.get("candidate_sha"), "tool-image receipt candidate differs")
     _fail(receipt.get("retired") is True and receipt.get("base_image") == owner.PREPARER_BASE_IMAGE,
           "tool-image receipt lifecycle/base differs")
+    supplemental = None
+    bound_gitlink_root = None
+    if gitlink_manifest is not None:
+        supplemental = _file(gitlink_manifest, "gitlink manifest")
+        _fail(gitlink_root is not None, "gitlink checkout root required")
+        bound_gitlink_root = _directory(gitlink_root, "gitlink checkout root")
+        try:
+            owner._disjoint((source, bound_gitlink_root))
+        except owner.OwnerError as exc:
+            raise PreparationError("gitlink checkout overlaps source") from exc
+        supplemental_doc = json.loads(supplemental.read_text(encoding="utf-8"))
+        owner._validate_gitlink_manifest(supplemental_doc, supplemental, bound_gitlink_root,
+                                         manifest, source_doc.get("candidate_sha"),
+                                         source_doc.get("ihk_sha"))
     _fail(toolchain_manifest is not None and request_path is not None,
           "explicit toolchain and request publication paths required")
     final_tc = _fresh(toolchain_manifest, "toolchain manifest")
@@ -238,6 +253,8 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
                  receipt_path, _file(driver_path, "driver"),
                  _file(provenance_path, "provenance"),
                  _file(host_owner_path, "host owner"))
+    if supplemental is not None:
+        protected += (supplemental, bound_gitlink_root)
     try:
         owner._disjoint((*protected, final_tc, final_request))
     except owner.OwnerError as exc:
@@ -264,8 +281,15 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
         "common_exclusion_path": common_exclusion_path, "lease_path": str(lease_path), "owner_evidence_root": str(evidence_owner),
         "attempt_root": str(attempt_root), "work_root": str(work), "output_root": str(fresh_output),
         "evidence_root": str(fresh_evidence), "launcher_aggregate_memory_gib": owner.LAUNCHER_AGGREGATE_GIB,
-        "memory_backed_bytes": 0, "aggregate_memory_required": owner.LIMITS["Memory"], "memory_allocation_roots": [str(source), str(backup)], "disk_admission": disk,
+        "memory_backed_bytes": 0, "aggregate_memory_required": owner.LIMITS["Memory"], "memory_allocation_roots": [str(source), str(backup)] + ([str(bound_gitlink_root)] if bound_gitlink_root is not None else []), "disk_admission": disk,
     }
+    if supplemental is not None:
+        common.update({"gitlink_manifest": str(supplemental),
+                       "gitlink_manifest_sha256": _digest(supplemental),
+                       "gitlink_root": str(bound_gitlink_root)})
+        common["mounts"] = dict(common["mounts"],
+                                 gitlink_manifest="/libdwarf-inputs.json",
+                                 gitlink="/src/executer/user/lib/libdwarf/libdwarf")
     _fail(common["candidate_sha"] and common["ihk_sha"], "candidate manifest identities missing")
 
     def make_request(bound_toolchain):

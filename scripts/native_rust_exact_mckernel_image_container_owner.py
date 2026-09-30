@@ -30,14 +30,14 @@ import uuid
 REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
-EXPECTED_DRIVER_SHA256 = "417175f7c42f3f2baf19b9aa432c4eb80dcc85ce301029936f999dafafbde3dc"
+EXPECTED_DRIVER_SHA256 = "fa3ea29e03653cffcd79ccb0529cded2e53e6466b6c069a0ed5aa66db5262bd8"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
 EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
 # The image owner advances with the disk-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-22.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-23.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
@@ -46,7 +46,7 @@ RETIRED_COMMON_EXCLUSIONS = frozenset(
         "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
         "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
         "exportset-17", "exportset-18", "exportset-19", "exportset-20",
-        "exportset-21",
+        "exportset-21", "exportset-22",
     )
 )
 LIMITS = {
@@ -155,6 +155,115 @@ _HOST_OWNER = _load_reviewed_host_owner(
 
 class OwnerError(RuntimeError):
     pass
+
+
+def _gitlink_rows(raw, tree=False):
+    _fail(isinstance(raw, bytes) and (not raw or raw.endswith(b"\0")),
+          "malformed libdwarf Git rows")
+    rows = {}
+    for item in raw.split(b"\0")[:-1]:
+        metadata, separator, raw_path = item.partition(b"\t")
+        _fail(separator and raw_path, "malformed libdwarf Git row")
+        try:
+            relative = raw_path.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise OwnerError("non-UTF-8 libdwarf path") from exc
+        _fail(relative and not Path(relative).is_absolute() and "\\" not in relative and
+              "\0" not in relative and all(part not in ("", ".", "..")
+              for part in relative.split("/")), "libdwarf Git path escapes checkout")
+        fields = metadata.split()
+        if tree:
+            _fail(len(fields) == 3 and fields[1] == b"blob", "unsupported libdwarf tree entry")
+            mode, blob = fields[0], fields[2]
+        else:
+            _fail(len(fields) == 3 and fields[2] == b"0", "unsupported libdwarf index entry")
+            mode, blob = fields[0], fields[1]
+        _fail(mode in (b"100644", b"100755") and re.fullmatch(b"[0-9a-f]{40}", blob),
+              "unsupported libdwarf mode or blob")
+        _fail(relative not in rows, "duplicate libdwarf Git path")
+        rows[relative] = {"mode": mode.decode(), "blob": blob.decode()}
+    return rows
+
+
+def _validate_gitlink_manifest(document, manifest_path, checkout, base_manifest,
+                               candidate, ihk, git_tool=None):
+    """Authenticate the supplemental self-contained libdwarf closure."""
+    _fail(isinstance(document, dict) and
+          document.get("schema") == "mckernel.native-exact-mckernel-gitlink-inputs.v1",
+          "gitlink manifest schema")
+    _fail(document.get("candidate_sha") == candidate and document.get("ihk_sha") == ihk,
+          "gitlink manifest identity differs")
+    base = _regular(base_manifest, "base source manifest")
+    _fail(document.get("base_manifest_sha256") == _sha256(base),
+          "gitlink base manifest hash differs")
+    rows = document.get("consumed_gitlinks")
+    _fail(isinstance(rows, dict) and set(rows) == {"executer/user/lib/libdwarf/libdwarf"},
+          "consumed gitlink set differs")
+    checkout = _canonical(checkout, "libdwarf checkout", directory=True)
+    row = rows["executer/user/lib/libdwarf/libdwarf"]
+    _fail(isinstance(row, dict) and row.get("path") == "executer/user/lib/libdwarf/libdwarf",
+          "libdwarf gitlink path differs")
+    _fail(((_load_json(base, "base source manifest").get("gitlinks") or {}).get(row["path"]) ==
+           row.get("commit") and re.fullmatch(r"[0-9a-f]{40}", str(row.get("commit", ""))) and
+           re.fullmatch(r"[0-9a-f]{40}", str(row.get("tree", "")))),
+          "base manifest gitlink differs")
+    git = _git_factory(git_tool or {"path": "/usr/bin/git"})
+    # The source tree itself is the authenticated closure; no worktree state,
+    # alternate object database, replacement refs, or nested repository is
+    # accepted.  Use the reviewed helper's exact inventory shape when present.
+    _fail(git(checkout, "rev-parse", "HEAD").decode().strip() == row.get("commit"),
+          "libdwarf HEAD differs from manifest")
+    _fail(git(checkout, "rev-parse", "HEAD^{tree}").decode().strip() == row.get("tree"),
+          "libdwarf tree differs from manifest")
+    _fail(not git(checkout, "status", "--porcelain=v1", "--ignored=matching",
+                  "--untracked-files=all").decode(), "libdwarf checkout is dirty")
+    index_rows = _gitlink_rows(git(checkout, "ls-files", "--stage", "-z"))
+    tree_rows = _gitlink_rows(git(checkout, "ls-tree", "-r", "--full-tree", "-z", "HEAD"),
+                              tree=True)
+    _fail(index_rows == tree_rows, "libdwarf index differs from HEAD tree")
+    _fail(set(index_rows) == set(row.get("files", {})), "libdwarf tracked file set differs")
+    observed = {}
+    for raw, expected in row.get("files", {}).items():
+        path = checkout / raw
+        _fail(path.resolve(strict=False) == path and path.is_file() and not path.is_symlink(),
+              "libdwarf tracked path differs: " + raw)
+        info = os.lstat(path)
+        mode = format(stat.S_IFMT(info.st_mode) | stat.S_IMODE(info.st_mode), "06o")
+        _fail(mode in ("100644", "100755"),
+              "libdwarf tracked mode differs: " + raw)
+        observed[raw] = {"mode": mode,
+                         "blob": git(checkout, "hash-object", "--no-filters", "--", raw).decode().strip(),
+                         "sha256": _sha256(path)}
+        _fail({"mode": mode, "blob": observed[raw]["blob"]} == tree_rows[raw],
+              "libdwarf worktree differs from HEAD tree")
+    _fail(observed == row.get("files"), "libdwarf tracked inventory differs")
+    git_meta = _canonical(checkout / ".git", "libdwarf Git metadata", directory=True)
+    git_dir = git(checkout, "rev-parse", "--absolute-git-dir").decode().strip()
+    common_raw = git(checkout, "rev-parse", "--git-common-dir").decode().strip()
+    common = Path(common_raw)
+    if not common.is_absolute():
+        common = (checkout / common).resolve()
+    _fail(Path(git_dir) == git_meta and common == git_meta,
+          "libdwarf uses external Git metadata")
+    _fail(not (git_meta / "objects/info/alternates").exists() and
+          not (git_meta / "shallow").exists() and
+          git(checkout, "rev-parse", "--is-shallow-repository").decode().strip() == "false" and
+          not git(checkout, "for-each-ref", "--format=%(refname)", "refs/replace").decode().strip(),
+          "libdwarf uses external or replacement Git objects")
+    metadata = {}
+    for item in sorted(git_meta.rglob("*")):
+        relative = item.relative_to(git_meta).as_posix()
+        _fail(relative and not Path(relative).is_absolute() and ".." not in Path(relative).parts,
+              "libdwarf Git metadata path differs")
+        info = item.lstat()
+        _fail(not stat.S_ISLNK(info.st_mode), "libdwarf Git metadata contains symlink")
+        _fail(stat.S_ISREG(info.st_mode) or stat.S_ISDIR(info.st_mode),
+              "libdwarf Git metadata contains special file")
+        if stat.S_ISREG(info.st_mode):
+            metadata[relative] = {"mode": format(stat.S_IMODE(info.st_mode), "04o"),
+                                  "size": info.st_size, "sha256": _sha256(item)}
+    _fail(metadata == row.get("git_metadata"), "libdwarf Git metadata differs")
+    return checkout
 
 
 def _fail(condition, message):
@@ -847,6 +956,20 @@ def _validate_request(request):
         tools = toolchain_doc.get("tools")
         _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
               "toolchain tools incomplete")
+    gitlink_manifest = request.get("gitlink_manifest")
+    if gitlink_manifest is not None:
+        gitlink_manifest = _regular(gitlink_manifest, "gitlink manifest")
+        _fail(isinstance(request.get("gitlink_manifest_sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", request["gitlink_manifest_sha256"]) and
+              _sha256(gitlink_manifest) == request["gitlink_manifest_sha256"],
+              "gitlink manifest hash drift")
+        gitlink_root = _canonical(request.get("gitlink_root", ""), "libdwarf checkout", directory=True)
+        _disjoint((source, gitlink_root))
+        _fail(gitlink_root in allocation_paths, "memory allocation roots do not bind libdwarf")
+        git_descriptor = host_git if toolchain_schema.endswith(".v2") else tools["git"]
+        _validate_gitlink_manifest(_load_json(gitlink_manifest, "gitlink manifest"),
+                                   gitlink_manifest, gitlink_root, manifest, candidate, ihk,
+                                   git_descriptor)
     if toolchain_schema.endswith(".v2"):
         kernel_root = mounts_by_target["/out"]
         kernel_root, kernel_dir = _validate_kernel_binding(toolchain_doc, kernel_root)
@@ -924,11 +1047,14 @@ def _validate_request(request):
     nightly = request.get("nightly")
     _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
           "nightly" in nightly["rustc_version"].lower(), "nightly manifest")
-    _fail(request.get("mounts") == {"source": "/src", "manifest": "/inputs.json",
+    expected_mounts = {"source": "/src", "manifest": "/inputs.json",
                                  "toolchain": "/toolchain.json", "driver": "/driver.py",
                                  "provenance": "/native_rust_exact_build_offline.py",
-                                 "work": "/work"},
-          "mount manifest differs")
+                                 "work": "/work"}
+    if request.get("gitlink_manifest") is not None:
+        expected_mounts.update({"gitlink_manifest": "/libdwarf-inputs.json",
+                                "gitlink": "/src/executer/user/lib/libdwarf/libdwarf"})
+    _fail(request.get("mounts") == expected_mounts, "mount manifest differs")
     common = request.get("common_exclusion_path")
     _fail(common == COMMON_EXCLUSION and common not in RETIRED_COMMON_EXCLUSIONS,
           "common exclusion path differs or is retired")
@@ -936,6 +1062,11 @@ def _validate_request(request):
     _no_symlink_parents(lease, "lease path")
     disjoint_paths = (source, manifest, toolchain, driver, provenance, host_owner,
                       owner_evidence, work_root, *roots, backup)
+    gitlink_root = None
+    if request.get("gitlink_manifest") is not None:
+        gitlink_root = _canonical(request.get("gitlink_root", ""), "libdwarf checkout", directory=True)
+        _disjoint((source, gitlink_root))
+        disjoint_paths += (gitlink_root, _regular(request["gitlink_manifest"], "gitlink manifest"))
     if not toolchain_schema.endswith(".v2"):
         disjoint_paths += (kernel_dir,)
     _disjoint(disjoint_paths)
@@ -967,6 +1098,9 @@ def _validate_request(request):
             "kernel_root": kernel_root, "toolchain_schema": toolchain_schema,
             "mounts_by_target": mounts_by_target, "host_git": host_git,
             "allocation_roots": allocation_paths,
+            "gitlink_root": gitlink_root,
+            "gitlink_manifest": _regular(request["gitlink_manifest"], "gitlink manifest")
+            if request.get("gitlink_manifest") is not None else None,
             "path_dirs": [_v2_host_path(row, mounts_by_target, "PATH directory", directory=True)
                           if row.startswith(("/out/", "/nightly/")) else Path(row)
                           for row in path_dirs] if toolchain_schema.endswith(".v2") else
@@ -1046,6 +1180,9 @@ def _validate_driver_result(evidence, output, result, request):
     _fail(result.get("source_manifest_sha256") == request["source_manifest_sha256"] and
           result.get("toolchain_manifest_sha256") == request["toolchain_manifest_sha256"],
           "driver receipt provenance differs")
+    if request.get("gitlink_manifest") is not None:
+        _fail(result.get("gitlink_manifest_sha256") == request["gitlink_manifest_sha256"],
+              "driver gitlink provenance differs")
     inventory = result.get("inventory")
     _fail(isinstance(inventory, dict), "driver evidence inventory missing")
     observed_inventory = {}
@@ -1116,6 +1253,9 @@ def _revalidate_inputs(bound, request):
           "source manifest changed")
     _fail(_sha256(bound["toolchain"]) == request["toolchain_manifest_sha256"],
           "toolchain manifest changed")
+    if bound.get("gitlink_manifest") is not None:
+        _fail(_sha256(bound["gitlink_manifest"]) == request["gitlink_manifest_sha256"],
+              "gitlink manifest changed")
     _fail(_sha256(bound["driver"]) == EXPECTED_DRIVER_SHA256 and
           _sha256(bound["provenance"]) == EXPECTED_PROVENANCE_SHA256,
           "authenticated helper bytes changed")
@@ -1135,6 +1275,11 @@ def _revalidate_inputs(bound, request):
         source_tools = toolchain_doc["tools"]
     _validate_authenticated_source(bound["source"], source_doc, request["candidate_sha"],
                                    request["ihk_sha"], source_tools, bound["provenance"])
+    if bound.get("gitlink_manifest") is not None:
+        _validate_gitlink_manifest(_load_json(bound["gitlink_manifest"], "gitlink manifest"),
+                                   bound["gitlink_manifest"], bound["gitlink_root"],
+                                   bound["manifest"], request["candidate_sha"],
+                                   request["ihk_sha"], source_tools["git"])
 
 
 class ImageOwner:
@@ -1178,6 +1323,9 @@ class ImageOwner:
                       (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
                       (bound["provenance"], "/native_rust_exact_build_offline.py", True),
                       (bound["output"].parent, "/work", False)]
+            if bound.get("gitlink_manifest") is not None:
+                mounts.insert(2, (bound["gitlink_manifest"], "/libdwarf-inputs.json", True))
+                mounts.insert(3, (bound["gitlink_root"], "/src/executer/user/lib/libdwarf/libdwarf", True))
             # v2 translates the complete host build output to /out.  It is a
             # single read-only mount: never mount /build separately or copy
             # and rewrite closure bytes.
@@ -1204,6 +1352,8 @@ class ImageOwner:
                        "--output", "/work/" + bound["output"].name,
                        "--evidence", "/work/" + evidence.name, "--jobs", str(r["jobs"]),
                        "--timeout", str(r["timeout"])]
+            if bound.get("gitlink_manifest") is not None:
+                command += ["--gitlink-manifest", "/libdwarf-inputs.json"]
             args += ["--entrypoint", "/usr/bin/python3", r["image_id"], *command]
             attempted = True
             created = docker.call(args); receipt["container_id"] = created.stdout.strip()
@@ -1254,6 +1404,11 @@ class ImageOwner:
                     receipt["client_retirement_unproven"] = True
             else:
                 receipt["retired"] = True
+            try:
+                _revalidate_inputs(bound, r)
+            except BaseException as exc:
+                receipt["status"] = "FAIL"
+                receipt["input_revalidation_error"] = str(exc)
             if self.signals and self.signals.requested is not None:
                 receipt["status"] = "FAIL"
                 receipt["interrupted_signal"] = self.signals.requested

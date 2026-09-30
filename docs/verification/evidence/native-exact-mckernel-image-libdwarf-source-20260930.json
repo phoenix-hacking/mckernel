@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-libdwarf-source.v1",
+  "recorded_at": "2026-09-30T14:39:12-07:00",
+  "status": "PASS_SOURCE_CORRECTION",
+  "scope": "Additive authenticated bundled-libdwarf closure for current McKernel image configuration",
+  "failure_family": {
+    "source": "docs/verification/evidence/native-exact-mckernel-image-exportset22-failure-20260930.json",
+    "symptom": "CMake selected bundled libdwarf but the retained candidate did not materialize its nested gitlink",
+    "required_gitlink": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "required_tree": "dcc29777813bf8625dce8bfb239c225d5535d668"
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_mckernel_gitlink_prepare.py": "d1cee2c5ab37c2d86328b6a5999f5a7f15cea38ba80c0948ae749aab79f6a597",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "a30ec8cceda22ea8c9378b9d183bac307c1608568d78c0e9525302a034868095",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "fa3ea29e03653cffcd79ccb0529cded2e53e6466b6c069a0ed5aa66db5262bd8",
+    "scripts/native_rust_exact_mckernel_image_request_prepare.py": "16b8c1c9b5ecf87171f0af4cd9a9ecaa160cb98a2ff1b1658112de0846b5de4f",
+    "scripts/tests/test_native_rust_exact_mckernel_gitlink_prepare.py": "36de598637de26b87a3568f9c614a95dd2a5c530be11a2d0c9db82981c1c7b28",
+    "scripts/tests/test_native_rust_exact_mckernel_gitlink_integration.py": "7cec44bb57ece8fafe1f0f370f7008aadb617c3bab21d4c02244c986654fb3e3",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "f8452abc037e5116853d12492fb513d8b0e053cca939a3c5019b4ee4e96f79e7"
+  },
+  "behavior": [
+    "Creates a fresh non-shared local checkout of the full exact commit without network access",
+    "Binds candidate, IHK, base-manifest hash, commit, tree, 412 tracked paths, Git modes, raw unfiltered blob IDs, SHA-256 bytes and 21 Git metadata files",
+    "Rejects external gitdirs/common dirs, alternates, shallow repositories, replacement refs, dirty or ignored extras, symlinks, special files and nested gitlinks",
+    "Mounts the separately disjoint checkout read-only at the exact nested /src gitlink path while leaving the retained candidate and host output unchanged",
+    "Revalidates the closure before and after execution, including configure/build failure paths"
+  ],
+  "tests": {
+    "command": "python3 -m unittest scripts.tests.test_native_rust_exact_mckernel_gitlink_prepare scripts.tests.test_native_rust_exact_mckernel_gitlink_integration scripts.tests.test_native_rust_exact_mckernel_image_request_prepare scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_mckernel_image_offline",
+    "result": "PASS",
+    "count": 100,
+    "seconds": 36.157,
+    "log": "/home/holden/mckernel-work/scratch/libdwarf-full-tests-20260930.log",
+    "log_sha256": "743bdab0fc22b84ab3a55384d4f9978612558a13c4b52713155c7c40a6a9d5e8",
+    "adversarial_case": "core.autocrlf plus skip-worktree cannot substitute CRLF bytes for the pinned LF blob"
+  },
+  "reviews": {
+    "strategy": "PASS: exact bundled gitlink closure is preferred over changing to system libdwarf-devel",
+    "source": "PASS_SOURCE_CORRECTION after closing checkout, environment, raw-byte, index/tree, metadata and failure-path gaps",
+    "namespace": "PASS_SOURCE_NAMESPACE for active exportset23 with exportset22 retired"
+  },
+  "correction": "docs/verification/evidence/native-exact-mckernel-image-exportset22-hash-correction-20260930.json",
+  "acceptance": "Source and fixture evidence only; no build, guest, application or production gate moves."
+}

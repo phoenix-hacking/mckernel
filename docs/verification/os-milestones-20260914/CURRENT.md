@@ -10409,3 +10409,49 @@ server identities remain `1442141/1442142/1442145/1442149`, all started
 2026-09-30 10:46:42 PDT and left untouched.  Host/scratch free bytes are
 17,285,165,056/15,074,672,640 and MemAvailable is 29,990,784 KiB.  The OS goal
 remains incomplete and is not resumed or completed by this shutdown.
+
+Continuation checkpoint 244, 2026-09-30: exportset-22's missing bundled
+libdwarf source is repaired at the image-input boundary without mutating
+scratch candidate 12 or rebuilding its authenticated host kernel/modules.  A
+fresh no-network helper creates a non-shared local checkout of exact gitlink
+`ab9230b2b8aa66a3d1d52e4be11fca17a3b63753` / tree
+`dcc29777813bf8625dce8bfb239c225d5535d668`.  Its supplemental manifest binds
+the unchanged candidate/IHK/base manifest, all 412 tracked file paths, Git
+modes, raw unfiltered blob identities, SHA-256 bytes and all 21 self-contained
+Git metadata files.  Owner and offline driver validate that closure before and
+after work, including failure paths, and mount the separate root read-only at
+the exact nested `/src` gitlink path.  System libdwarf-devel was rejected as an
+unnecessary dependency-profile change.
+
+The initial implementation review blocked checkout stderr handling, inherited
+Git controls, abbreviated identities, external metadata/object stores,
+incomplete index/tree checks, filtered hash-object behavior and missing failure
+revalidation.  All are closed.  The complete five-suite run passes 100 tests
+in 36.157 seconds; its log hashes to `743bdab0...d5e8`.  The adversarial suite
+includes the former `core.autocrlf` plus skip-worktree raw-byte bypass.
+Independent rereview returns `PASS_SOURCE_CORRECTION`; namespace rereview
+returns `PASS_SOURCE_NAMESPACE`.  Exact hashes and the additive correction to
+the earlier transcribed template hash are retained in
+`docs/verification/evidence/native-exact-mckernel-image-libdwarf-source-20260930.json`.
+
+Exportset-23 is prepared and independently `PASS_PACKET_EXPORTSET23` plus
+`PASS_EXECUTION_EXPORTSET23` for one serialized owner invocation.  Request
+`6a62fd97...b1305` binds unchanged toolchain `6f653072...a26d`, supplemental
+manifest `de08d8c...5309`, current owner `a30ec8cc...8095`, current driver
+`fa3ea29e...2bd8`, and the attempt5 tool image.  Independent audit verifies
+all 132,191 retained host-output entries with zero mismatches.  Work and owner
+evidence roots remain empty mode0700, and lease/exclusion are absent.  Exact
+packet identities and profile are recorded in
+`docs/verification/evidence/native-exact-mckernel-image-exportset23-preparation-20260930.json`.
+
+Six disposable helper regression roots totaling 243 MiB were removed after
+their expected failures/successes; targeted scratch trim returned their sparse
+blocks and additional old free blocks to the host.  No retained evidence was
+removed.  Current host/scratch free bytes are
+17,562,431,488/14,907,523,072 and MemAvailable is 29,755,780 KiB.  Next commit,
+push and fetch-verify these exact bytes, remeasure capacity, and invoke the
+exportset-23 owner exactly once.  On an authenticated `mckernel.img`, prepare
+fresh current-image diagnostic packets in serial startup, memory, files,
+threads/futexes, signals and separately reviewed shutdown order.  Old frozen
+diagnostic packets bind a different image and must not be reused.  No build or
+guest acceptance counter moves at this source/packet checkpoint.
