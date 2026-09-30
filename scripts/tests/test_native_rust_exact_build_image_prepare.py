@@ -83,7 +83,8 @@ class PreparationTests(unittest.TestCase):
                      lambda p: p['tools']['cmake'].__setitem__('rpm_nevra', 'cmake-1:3.31.8-1.el10.x86_64'),
                      lambda p: p['tools']['cmake'].__setitem__('executable_version', ''),
                      lambda p: p['tools']['kmod'].__setitem__('sha256', '0' * 64),
-                     lambda p: p['tools']['make'].__setitem__('path', '/tmp/make')]
+                     lambda p: p['tools']['make'].__setitem__('path', '/tmp/make'),
+                     lambda p: p['tools']['make'].__setitem__('target', '/tmp/make')]
         for mutation in mutations:
             probe = probe_fixture()
             mutation(probe)

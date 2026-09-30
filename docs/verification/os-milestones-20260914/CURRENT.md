@@ -9882,3 +9882,35 @@ repository-supported CMake 3.31.8 package.  Then build the smallest current
 shutdown.  Current-candidate builds remain six failed and one completed; real
 current diagnostic guest applications remain zero.  No acceptance bar moves,
 and the launcher pause does not complete the OS goal.
+
+Continuation checkpoint 224, 2026-09-30: the escalated image-mapping correction
+now passes its bounded source gate.  All 58 preparation/owner/offline focused
+tests pass in 17.746 seconds; `py_compile`, `git diff --check`, and the owner's
+authenticated driver-hash equality also pass.  The corrected driver SHA is
+`3867f6cc...5fcf`.  Independent Astra review returns `PASS_SOURCE` after
+checking the real scratch12 absolute link and all previously blocking
+boundaries.
+
+The repair keeps owner and driver on identical `/out` and `/nightly` namespace
+mappings, mounts each validated host root at its explicit container destination,
+and records consistent `target`/`resolved`/`container_target` link metadata.
+Host source admission now uses a separately hash-bound host Git; it no longer
+pretends an image `/usr` binary is the host binary.  Image tool descriptors bind
+their lookup spelling and canonical target separately, including strict leaf-
+symlink, hash and PATH-selection checks.  Actual negatives cover boolean
+`runtime_network`, target mismatch, PATH shadow, host-schema leakage and stale
+helper bytes.  Full source identities and review scope are retained in
+`docs/verification/evidence/native-exact-image-mapping-source-pass-20260930.json`.
+
+This is source-only evidence.  No Docker preparation, network operation,
+McKernel image build, root action, guest or application ran, and no acceptance
+counter changes.  The historical source-free image remains unusable because it
+lacks CMake and several required tool observations.  Next fetched-blob verify
+this checkpoint, then obtain an independent execution release for one fresh
+source-free Rocky tool image.  Its actual receipt must establish CMake
+`3.31.8-1.el10`, complete package/tool observations and the offline runtime
+profile before a deterministic current-image request is prepared.  The strict
+first diagnostic oracle remains `baseline.core.memory`: stdout exactly
+`NATIVE_CORE PASS memory\n`, stderr empty, exit 37/raw wait 9472.  Current-
+candidate builds remain six failed and one completed; real current diagnostic
+guest applications remain zero.

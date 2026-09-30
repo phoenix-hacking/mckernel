@@ -30,7 +30,7 @@ import uuid
 REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
-EXPECTED_DRIVER_SHA256 = "0535385e0866e20a2d8c6401683e1746453711e9ab14058b6a654faac719a116"
+EXPECTED_DRIVER_SHA256 = "3867f6ccfe345f69d15dbca9bc6b1a3b2f7df28d74ab5156eaa073c9ed885fcf"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
 EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
 # The image owner advances with the disk-candidate namespace.  Keep consumed
@@ -427,7 +427,8 @@ def _validate_v2_image_tools(request, toolchain_doc):
           "nightly rustc must be mounted")
     for name, descriptor in image_tools.items():
         _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
-              descriptor["path"].startswith("/usr/"),
+              isinstance(descriptor.get("target"), str) and
+              descriptor["path"].startswith("/usr/") and descriptor["target"].startswith("/usr/"),
               "image tool descriptor incomplete: " + name)
         _fail(re.fullmatch(r"[0-9a-f]{64}", str(descriptor.get("sha256", ""))),
               "image tool hash missing: " + name)
@@ -437,6 +438,25 @@ def _validate_v2_image_tools(request, toolchain_doc):
               isinstance(descriptor.get("executable_version"), str),
               "image receipt tool differs: " + name)
     return image_tools, mounted_tools
+
+
+def _v2_host_git(request):
+    """Bind the host-side Git used before the offline container starts.
+
+    Image tools are authenticated by the preparation receipt and may only be
+    observed inside the image.  Source admission happens on the host, so it
+    needs a separate, explicitly hash-bound Git executable; borrowing the
+    image descriptor would silently compare host ``/usr`` with image bytes.
+    """
+    descriptor = request.get("host_git")
+    _fail(isinstance(descriptor, dict) and set(descriptor) == {"path", "sha256"},
+          "v2 host Git binding")
+    path = _regular(descriptor.get("path", ""), "v2 host Git")
+    expected = descriptor.get("sha256")
+    _fail(isinstance(expected, str) and re.fullmatch(r"[0-9a-f]{64}", expected),
+          "v2 host Git hash")
+    _fail(_sha256(path) == expected, "v2 host Git hash drift")
+    return {"path": str(path), "sha256": expected}
 
 
 def _check_identity(path, expected, label, directory=True):
@@ -693,9 +713,11 @@ def _validate_request(request):
         mounts_by_target = _v2_mount_roots(request, toolchain_doc)
         roots = list(mounts_by_target.values())
         image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
+        host_git = _v2_host_git(request)
         tools = {**image_tools, **mounted_tools}
     else:
         mounts_by_target = None
+        host_git = None
         roots = _toolchain_roots(request)
         tools = toolchain_doc.get("tools")
         _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
@@ -746,14 +768,10 @@ def _validate_request(request):
           "toolchain Rust is not nightly")
     source_tools = dict(tools)
     if toolchain_schema.endswith(".v2"):
-        for name in mounted_tools:
-            source_tools[name] = {**source_tools[name], "path": str(_v2_host_path(
-                source_tools[name]["path"], mounts_by_target, "source tool " + name))}
-        for name in image_tools:
-            image_path = _regular(source_tools[name]["path"], "image source tool " + name)
-            _fail(_sha256(image_path) == source_tools[name]["sha256"],
-                  "image source tool hash drift: " + name)
-            source_tools[name] = {**source_tools[name], "path": str(image_path)}
+        # Authentication of the source checkout is a host operation.  Do not
+        # read image /usr paths here: the container's receipt is their only
+        # host-side authority.  Git alone is needed by source admission.
+        source_tools = {"git": host_git}
     _validate_authenticated_source(source, source_doc, candidate, ihk, source_tools, provenance)
     backup_raw = request.get("backup_root", request.get("source_backup_root"))
     backup = _canonical(backup_raw, "source backup", directory=True)
@@ -764,14 +782,20 @@ def _validate_request(request):
           "source backup inventory differs")
     path_dirs = toolchain_doc.get("path_dirs") if toolchain_schema.endswith(".v2") else request.get("path_dirs")
     _fail(isinstance(path_dirs, list) and path_dirs, "path_dirs manifest missing")
+    image_path_dirs = ({str(Path(row["path"]).parent) for row in image_tools.values()}
+                       if toolchain_schema.endswith(".v2") else set())
     for row in path_dirs:
         _fail(isinstance(row, str), "path_dirs row")
-        path = (_v2_host_path(row, mounts_by_target, "path_dirs entry", directory=True)
-                if toolchain_schema.endswith(".v2") and row.startswith(("/out/", "/nightly/"))
-                else _canonical(row, "path_dirs entry", directory=True))
-        _fail(path.is_dir() and (toolchain_schema.endswith(".v2") or
-              any(path == other or other in path.parents for other in roots)),
-              "PATH directory escapes toolchain roots")
+        if toolchain_schema.endswith(".v2"):
+            if row.startswith(("/out/", "/nightly/")):
+                path = _v2_host_path(row, mounts_by_target, "path_dirs entry", directory=True)
+                _fail(path.is_dir(), "PATH directory escapes toolchain roots")
+            else:
+                _fail(row in image_path_dirs, "image PATH directory differs")
+        else:
+            path = _canonical(row, "path_dirs entry", directory=True)
+            _fail(path.is_dir() and any(path == other or other in path.parents for other in roots),
+                  "PATH directory escapes toolchain roots")
     nightly = request.get("nightly")
     _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
           "nightly" in nightly["rustc_version"].lower(), "nightly manifest")
@@ -816,10 +840,10 @@ def _validate_request(request):
             "host_owner": authenticated_host,
             "host_owner_path": host_owner, "roots": roots, "kernel": kernel_dir,
             "kernel_root": kernel_root, "toolchain_schema": toolchain_schema,
+            "mounts_by_target": mounts_by_target, "host_git": host_git,
             "allocation_roots": allocation_paths,
             "path_dirs": [_v2_host_path(row, mounts_by_target, "PATH directory", directory=True)
-                          if row.startswith(("/out/", "/nightly/")) else
-                          _canonical(row, "PATH directory", directory=True)
+                          if row.startswith(("/out/", "/nightly/")) else Path(row)
                           for row in path_dirs] if toolchain_schema.endswith(".v2") else
             [_canonical(row, "PATH directory", directory=True) for row in path_dirs],
             "lease": lease}
@@ -980,17 +1004,8 @@ def _revalidate_inputs(bound, request):
               "kernel binding changed")
         _validate_v2_image_tools(request, toolchain_doc)
     if bound.get("toolchain_schema", "").endswith(".v2"):
-        image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
-        mounts = _v2_mount_roots(request, toolchain_doc)
-        source_tools = {**image_tools, **mounted_tools}
-        for name in mounted_tools:
-            source_tools[name] = {**source_tools[name], "path": str(_v2_host_path(
-                source_tools[name]["path"], mounts, "source tool " + name))}
-        for name in image_tools:
-            image = _regular(source_tools[name]["path"], "image source tool " + name)
-            _fail(_sha256(image) == source_tools[name]["sha256"],
-                  "image source tool hash drift: " + name)
-            source_tools[name] = {**source_tools[name], "path": str(image)}
+        _validate_v2_image_tools(request, toolchain_doc)
+        source_tools = {"git": _v2_host_git(request)}
     else:
         source_tools = toolchain_doc["tools"]
     _validate_authenticated_source(bound["source"], source_doc, request["candidate_sha"],
@@ -1041,16 +1056,12 @@ class ImageOwner:
             # v2 translates the complete host build output to /out.  It is a
             # single read-only mount: never mount /build separately or copy
             # and rewrite closure bytes.
-            mount_roots = bound["roots"]
             if bound["toolchain_schema"].endswith(".v2"):
-                mount_roots = mount_roots + [bound["kernel_root"]]
+                mount_roots = [(root, target) for target, root in bound["mounts_by_target"].items()]
             else:
-                mount_roots = mount_roots + [bound["kernel"]]
-            for root in mount_roots:
-                if bound["toolchain_schema"].endswith(".v2") and root == bound["kernel_root"]:
-                    row = (root, "/out", True)
-                else:
-                    row = (root, str(root), True)
+                mount_roots = [(root, str(root)) for root in bound["roots"] + [bound["kernel"]]]
+            for root, target in mount_roots:
+                row = (root, target, True)
                 if row not in mounts: mounts.append(row)
             rw_mounts = [(source, target) for source, target, readonly in mounts if not readonly]
             _fail(rw_mounts == [(bound["work"], "/work")],

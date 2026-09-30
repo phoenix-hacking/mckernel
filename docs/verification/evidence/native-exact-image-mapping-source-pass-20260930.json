@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.native-exact-image-mapping-source-pass.v1",
+  "recorded_at": "2026-09-30T11:30:42-07:00",
+  "base_commit": "3333610dc41ea6d4afc331af3a50a19122cac3a7",
+  "status": "PASS_SOURCE",
+  "scope": "image preparation probe, image owner mapping/authentication, offline image driver mapping, and focused fixtures only",
+  "failure_family": {
+    "prior_status": "WIP_REJECTED",
+    "prior_evidence": "docs/verification/evidence/native-exact-image-mapping-shutdown-wip-20260930.json",
+    "prior_reproduced_errors": 3,
+    "escalation": "Terra/high coherent correction followed by independent Astra/high source review"
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "5018d8c063da1544208c9b2ec99feae383aa92dcb4836896d9b1d952664831d7",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "813c3da33a583e2014968fd75ef782046d427e0e6d384af42db225114191c2fe",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "6ac7ab731f32ff3f6083c4de4d09c89d3be6d5cb805212641c01b6fb1a3936bd",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "61ab46def190b164b6a63821ed428220c929ad8f013bb513ca3d655b8203d5be",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "3867f6ccfe345f69d15dbca9bc6b1a3b2f7df28d74ab5156eaa073c9ed885fcf",
+    "scripts/tests/test_native_rust_exact_mckernel_image_offline.py": "4c81e4cf8a41411e17bc9fa631d1b41e15cac15cacacbd190eee99faec0e151d"
+  },
+  "verified_repairs": [
+    "owner and driver share explicit /out and /nightly mappings and mount both at their container destinations",
+    "the real scratch12 absolute /out/source link is represented by matching target, resolved, and container_target fields",
+    "host source authentication uses a separate hash-bound host Git and never hashes image /usr tools on the host",
+    "image tool descriptors retain lookup and canonical target paths and validate leaf symlinks without weakening target/hash checks",
+    "runtime_network boolean, mismatched tool target, PATH shadow, host schema leak, and stale helper hash reject",
+    "the owner authenticates the corrected offline driver SHA256"
+  ],
+  "tests": {
+    "command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_mckernel_image_offline",
+    "result": "PASS",
+    "tests_run": 58,
+    "elapsed_seconds": 17.746,
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "driver_hash_binding": "PASS"
+  },
+  "independent_review": {
+    "reviewer": "/root/image_mapping_review_226",
+    "result": "PASS_SOURCE",
+    "actual_scratch12_link_checked": "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "execution_release": false
+  },
+  "retained_build": {
+    "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "output_root_identity": "1831:6555351",
+    "evidence_root_identity": "1831:6555352",
+    "current_candidate_builds_failed": 6,
+    "current_candidate_builds_completed": 1,
+    "real_current_diagnostic_guest_apps": 0
+  },
+  "limitations": [
+    "No complete scratch12 or nightly inventory was validated by this source review.",
+    "No container, network, root, McKernel image build, guest, or application ran.",
+    "The historical source-free image receipt lacks CMake and required tool observations and is not reusable.",
+    "CMake 3.31.8 availability still needs an actual refreshed package/tool observation.",
+    "A separate reviewed execution packet is required for source-free tool-image preparation."
+  ],
+  "next_action": "Checkpoint and fetched-blob verify these source bytes, then prepare and independently release one fresh source-free Rocky tool image with actual CMake 3.31.8/tool observations before creating the current mckernel.img request."
+}

@@ -101,7 +101,8 @@ def validate_probe(probe, pinned):
         tool = probe['tools'][name]
         tool_nevra = tool.get('rpm_nevra')
         parse_nevra(tool_nevra) if isinstance(tool_nevra, str) else (_ for _ in ()).throw(PreparationError('tool RPM identity missing: ' + name))
-        if (tool['owner'] != owner or not tool['path'].startswith('/usr/') or
+        if (tool['owner'] != owner or not isinstance(tool.get('path'), str) or
+                not isinstance(tool.get('target'), str) or not tool['path'].startswith('/usr/') or
                 not tool['target'].startswith('/usr/') or
                 tool_nevra not in inventory_lines or parse_nevra(tool_nevra)[0] != owner or
                 not isinstance(tool.get('executable_version'), str) or not tool['executable_version'] or '\x00' in tool['executable_version'] or

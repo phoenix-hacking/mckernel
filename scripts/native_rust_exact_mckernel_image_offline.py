@@ -246,13 +246,13 @@ def _atomic_json(path, value):
         os.close(fd)
 
 
-def _no_symlink_parents(path, label):
+def _no_symlink_parents(path, label, allow_leaf_symlink=False):
     path = Path(path)
     _fail(path.is_absolute(), label + " must be absolute")
     current = Path(path.anchor)
-    for component in path.parts[1:]:
+    for index, component in enumerate(path.parts[1:], start=1):
         current /= component
-        if current.is_symlink():
+        if current.is_symlink() and not (allow_leaf_symlink and index == len(path.parts) - 1):
             raise ImageBuildError(label + " has symlink parent: " + str(current))
 
 
@@ -407,6 +407,10 @@ def _tree_inventory(root, symlink_binding=None, visible_roots=None, allow_visibl
                     container_root, host_root = owning[0]
                     row.update(resolved=str(resolved.relative_to(host_root)),
                                container_target=str(container_root / resolved.relative_to(host_root)))
+                elif symlink_binding is not None:
+                    container_root, host_root = symlink_binding
+                    row.update(resolved=str(resolved.relative_to(host_root)),
+                               container_target=str(container_root / resolved.relative_to(host_root)))
             elif stat.S_ISDIR(st.st_mode):
                 row.update(type="directory")
             else:
@@ -417,7 +421,7 @@ def _tree_inventory(root, symlink_binding=None, visible_roots=None, allow_visibl
     return result
 
 
-def _container_path(raw, roots, label):
+def _container_path(raw, roots, label, allow_leaf_symlink=False):
     """Resolve a v2 container path through an explicit visible-root map.
 
     Production calls use ``None`` and therefore validate paths exactly as the
@@ -435,7 +439,7 @@ def _container_path(raw, roots, label):
         _fail(len(matched) == 1, label + " is outside container root")
         container_root, host_root = matched[0]
         translated = host_root / candidate.relative_to(container_root)
-    _no_symlink_parents(translated, label)
+    _no_symlink_parents(translated, label, allow_leaf_symlink=allow_leaf_symlink)
     return translated
 
 
@@ -454,6 +458,10 @@ def _validate_toolchain(path, container_roots=None):
               "kernel binding container mapping differs")
         _fail(isinstance(binding["closure_inventory"], dict) and binding["closure_inventory"],
               "kernel binding closure inventory missing")
+        # In production these are the actual isolated container paths.  The
+        # optional mapping substitutes private fixture roots without putting
+        # host paths in the v2 manifest.
+        visible_roots = {"/out": Path("/out"), "/nightly": Path("/nightly")}
         if container_roots is not None:
             _fail(isinstance(container_roots, dict) and set(container_roots) >= {"/out", "/nightly"},
                   "fixture container roots incomplete")
@@ -483,6 +491,9 @@ def _validate_toolchain(path, container_roots=None):
             _fail(isinstance(descriptor, dict) and
                   set(descriptor) >= {"path", "sha256", "version"},
                   "tool " + name + " descriptor")
+            if name in (data.get("image_tools") or {}):
+                _fail(isinstance(descriptor.get("target"), str),
+                      "image tool " + name + " canonical target")
             _fail(isinstance(descriptor["sha256"], str) and
                   re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]),
                   "tool " + name + " hash")
@@ -492,19 +503,32 @@ def _validate_toolchain(path, container_roots=None):
         bound = {name: _tool_descriptor(tools[name], "tool " + name)
                  for name in REQUIRED_TOOLS}
     if v2:
-        # Descriptor hashes are over host files, while their names are the
-        # container-visible paths.  Translate only after validating the raw
-        # descriptor and retain the reviewed digest.
+        # v2 descriptors retain the lookup spelling and canonical executable
+        # target independently.  The prepared image may use a leaf symlink
+        # such as /usr/bin/ld; only the resolved target is hash-bound.
         for name in REQUIRED_TOOLS:
-            raw = tools[name]["path"]
             mounted = ("mounted_tools" not in data or
                        name in (data.get("mounted_tools") or {}))
-            translated = (_container_path(raw, visible_roots, "tool " + name + " path")
-                          if mounted else Path(raw))
-            translated = _canonical(translated, "tool " + name + " path")
-            _fail(translated.is_file() and not translated.is_symlink(),
-                  "tool " + name + " path is missing")
-            _fail(_sha256(translated) == tools[name]["sha256"], "tool " + name + " hash drift")
+            if mounted:
+                raw = tools[name]["path"]
+                translated = _container_path(raw, visible_roots, "tool " + name + " path")
+                translated = _canonical(translated, "tool " + name + " path")
+                _fail(translated.is_file() and not translated.is_symlink(),
+                      "tool " + name + " path is missing")
+                _fail(_sha256(translated) == tools[name]["sha256"], "tool " + name + " hash drift")
+            else:
+                lookup = Path(tools[name]["path"])
+                target = Path(tools[name]["target"])
+                _no_symlink_parents(lookup, "image tool " + name + " lookup",
+                                    allow_leaf_symlink=True)
+                _no_symlink_parents(target, "image tool " + name + " target")
+                target = _canonical(target, "image tool " + name + " target")
+                _fail(lookup.is_file() and target.is_file() and not target.is_symlink(),
+                      "image tool " + name + " path is missing")
+                _fail(lookup.resolve(strict=True) == target,
+                      "image tool " + name + " lookup target differs")
+                _fail(_sha256(target) == tools[name]["sha256"], "tool " + name + " hash drift")
+                translated = target
             bound[name]["path"] = str(translated)
     _fail(isinstance(data.get("kernel_dir"), str) or v2, "kernel directory path")
     raw_kernel = binding["container_kernel_dir"] if v2 else data["kernel_dir"]
@@ -567,8 +591,8 @@ def _validate_toolchain(path, container_roots=None):
     translated_path_dirs = []
     for directory in path_dirs:
         if v2:
-            # Image tools may be host-bound and therefore use a host PATH
-            # directory; mounted tools retain the /out translation.
+            # Image PATH entries remain in the image namespace; mounted tools
+            # retain their explicit /out or /nightly translation.
             directory = (_container_path(directory, visible_roots, "PATH directory")
                          if directory.startswith("/out/") or directory.startswith("/nightly/") else Path(directory))
         else:

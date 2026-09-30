@@ -380,18 +380,21 @@ class OwnerTests(unittest.TestCase):
         (nightly / "bin").mkdir(parents=True)
         shutil.copy2(self.tools / "rustc", nightly / "bin/rustc")
         (nightly / "bin/rustc").chmod(0o755)
+        # This unbound executable is retained in the mounted closure so the
+        # v2 PATH ordering check has a real image-tool shadow to reject.
+        shutil.copy2(self.tools / "cc", nightly / "bin/cc")
+        (nightly / "bin/cc").chmod(0o755)
         image_tools = {}
         for name in owner.REQUIRED_TOOLS:
             if name == "rustc":
                 continue
-            system_name = {"cc": "cc"}.get(name, name)
-            found = shutil.which(system_name)
-            self.assertIsNotNone(found, name)
-            path = Path(found).resolve()
-            image_tools[name] = {"path": str(path), "sha256": digest(path),
-                                 "version": subprocess.check_output([str(path), "--version"], text=True).strip(),
+            lookup = Path("/usr/bin") / name
+            self.assertTrue(lookup.exists(), name)
+            target = lookup.resolve(strict=True)
+            image_tools[name] = {"path": str(lookup), "target": str(target), "sha256": digest(target),
+                                 "version": subprocess.check_output([str(target), "--version"], text=True).strip(),
                                  "rpm_nevra": name + "-0:fixture-1.el10.x86_64",
-                                 "executable_version": subprocess.check_output([str(path), "--version"], text=True).strip()}
+                                 "executable_version": subprocess.check_output([str(target), "--version"], text=True).strip()}
         mounted = {"rustc": {"path": "/nightly/bin/rustc", "sha256": digest(nightly / "bin/rustc"),
                               "version": "rustc nightly fixture"}}
         closure_out = owner._closure_inventory(out, out, Path("/out"))
@@ -409,8 +412,7 @@ class OwnerTests(unittest.TestCase):
             "image_tools": image_tools, "mounted_tools": mounted,
             "toolchain_roots": [{"path": "/out", "inventory": closure_out},
                                 {"path": "/nightly", "inventory": closure_nightly}],
-            "path_dirs": ["/nightly/bin"] + sorted({str(Path(row["path"]).parent)
-                                                        for row in image_tools.values()}),
+            "path_dirs": ["/usr/bin", "/nightly/bin"],
             "linux_probe": {"arch": "x86_64", "release": release, "kernel_dir": "/out/build"},
             "environment": {}}, sort_keys=True))
         request = self.request()
@@ -418,23 +420,62 @@ class OwnerTests(unittest.TestCase):
                        image_receipt_sha256=digest(receipt),
                        toolchain_roots=[{"host_path": str(out), "container_path": "/out", "inventory": closure_out},
                                         {"host_path": str(nightly), "container_path": "/nightly", "inventory": closure_nightly}],
-                       path_dirs=json.loads(self.toolchain.read_text())["path_dirs"])
+                       path_dirs=json.loads(self.toolchain.read_text())["path_dirs"],
+                       host_git={"path": str(self.tools / "git"), "sha256": digest(self.tools / "git")})
         bound = owner.ImageOwner(request).validate()
         self.assertEqual(bound["kernel_root"], out)
+        mismatched_host_git = dict(request, host_git={"path": str(self.tools / "git"),
+                                                      "sha256": image_tools["git"]["sha256"]})
+        with self.assertRaisesRegex(owner.OwnerError, "v2 host Git hash drift"):
+            owner.ImageOwner(mismatched_host_git).validate()
         tools = driver._validate_toolchain(self.toolchain,
                                            container_roots={"/out": out, "/nightly": nightly})
         self.assertEqual(tools["kernel_dir"], str(out / "build"))
-        self.assertEqual((out / "build" / "source").readlink(), "/out/source")
+        self.assertEqual(str((out / "build" / "source").readlink()), "/out/source")
+        fake = FakeDocker(self.evidence, self.image)
+        fake.candidate_sha = self.candidate
+        fake.ihk_sha = self.ihk
+        fake.source_manifest_sha256 = digest(self.manifest)
+        fake.toolchain_manifest_sha256 = digest(self.toolchain)
+        result = owner.ImageOwner(request, docker=fake).run()
+        self.assertEqual(result["status"], "PASS", result)
+        destinations = {row["Destination"] for row in fake.mounts}
+        self.assertIn("/out", destinations)
+        self.assertIn("/nightly", destinations)
+        self.assertNotIn(str(nightly), destinations)
 
     def test_v2_rejects_receipt_network_boolean_and_host_schema_leak(self):
         # The integrated fixture above establishes the positive shape; these
         # are the two reviewer reproductions that previously slipped through.
         self.test_v2_owner_admission_and_offline_container_fixture()
         data = json.loads(self.toolchain.read_text())
-        data["kernel_binding"]["host_root"] = str(self.root)
-        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        leaked = json.loads(json.dumps(data))
+        leaked["kernel_binding"]["host_root"] = str(self.root)
         with self.assertRaisesRegex(owner.OwnerError, "kernel binding schema"):
-            owner._validate_kernel_binding(data, self.root / "v2-out")
+            owner._validate_kernel_binding(leaked, self.root / "v2-out")
+        receipt = self.root / "image-receipt.json"
+        receipt_data = json.loads(receipt.read_text())
+        receipt_data["runtime_network"] = False
+        receipt.write_text(json.dumps(receipt_data, sort_keys=True))
+        request = self.request()
+        request.update(image_receipt=str(receipt), image_receipt_sha256=digest(receipt),
+                       host_git={"path": str(self.tools / "git"), "sha256": digest(self.tools / "git")})
+        with self.assertRaisesRegex(owner.OwnerError, "source-free and offline"):
+            owner._validate_v2_image_tools(request, data)
+        bad_target = json.loads(json.dumps(data))
+        bad_target["image_tools"]["ld"]["target"] = bad_target["image_tools"]["cc"]["target"]
+        self.toolchain.write_text(json.dumps(bad_target, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "image tool ld lookup target differs"):
+            driver._validate_toolchain(self.toolchain,
+                                       container_roots={"/out": self.root / "v2-out",
+                                                        "/nightly": self.root / "v2-nightly"})
+        shadow = json.loads(json.dumps(data))
+        shadow["path_dirs"] = ["/nightly/bin", "/usr/bin"]
+        self.toolchain.write_text(json.dumps(shadow, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "PATH tool differs from bound tool: cc"):
+            driver._validate_toolchain(self.toolchain,
+                                       container_roots={"/out": self.root / "v2-out",
+                                                        "/nightly": self.root / "v2-nightly"})
 
     def test_consumed_exclusions_are_rejected(self):
         request = self.request()
