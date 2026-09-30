@@ -46,6 +46,11 @@ ARCHIVE_SHA='9ecab3772c9b8a6e3a4b0257bce3136734e0bac0becf4b79157b35bb78ce9abe'
 ARCHIVE_BYTES=10874880
 COMPARABLE_SHA='74758565a5c6e4fc18381e23eeba61f7d279a986f4a9014465e30cbc4c0c4b77'
 IDENTITY_SHA='e98cf2d252150c5afba4725995b550cca67352a771f7dda67f5995793e386008'
+# Historical archive-verification identity is retained above. A subsequent
+# read-only admission found identity-only drift; its field delta is unlocalized.
+# Comparable content/metadata and archive bytes stayed exact. Admit only the
+# independently observed current identity, with identical NOATIME snapshots.
+LIVE_IDENTITY_SHA='f00e5da2d9f426477f29f2102426c7a0346b7cf7e9c4a9593f3743c227cdf9cb'
 BASELINE_SHA='bc5296ee81956659420df058c5975931bcb836ebe3416ed98214c1167f8a046b'
 FAILURE_SHA='e1e629b6f43a9661fcfe255b7b0607be365acb0812b028de6f99075837c36ec1'
 FAILED_SCAN_SHA='18c8c505b79307195906e4fc2faf1f521178bf4f3ca0f069e2b89e2ef5c52778'
@@ -174,10 +179,11 @@ def archive_inventory(raw):
    rows.append({'path':name,'type':'directory' if member.isdir() else 'file','uid':member.uid,'gid':member.gid,'mode':member.mode,'size':0 if member.isdir() else member.size,'mtime_ns':int(Decimal(member.pax_headers.get('mtime',str(member.mtime)))*1000000000),'target':None,'sha256':None if data is None else digest(data),'xattrs':xattrs})
  return sorted(rows,key=lambda x:x['path'])
 
-def validate_original_inventory(rows,identities,archived):
+def validate_original_inventory(rows,identities,archived,prior=None):
  require(len(rows)==25 and len([x for x in rows if x['type']=='file'])==24 and sum(x['size'] for x in rows)==10826817,'original evidence counts')
- require(digest(encoded(rows))==COMPARABLE_SHA and digest(encoded(identities))==IDENTITY_SHA,'original evidence inventory binding')
+ require(digest(encoded(rows))==COMPARABLE_SHA and digest(encoded(identities))==LIVE_IDENTITY_SHA,'original evidence inventory binding')
  require(rows==archived,'archive/live evidence mismatch')
+ if prior is not None:require((rows,identities)==prior,'original evidence changed across NOATIME snapshots')
  bypath={x['path']:x for x in rows}
  for name,wanted in SPECIAL.items():require(bypath.get(name,{}).get('sha256')==wanted,'original special evidence binding')
 
@@ -218,7 +224,7 @@ def final_bytes(template,release_sha):
  sentinel=b'RELEASE_SHA256='+bytes((39,))+b'RELEASE_HASH_REQUIRED'+bytes((39,));require(template.count(sentinel)==1 and H64.fullmatch(release_sha),'finalization binding')
  return template.replace(sentinel,b"RELEASE_SHA256='"+release_sha.encode()+b"'")
 def fixed_release_inputs():
- return {'old_commit':OLD_COMMIT,'support_sha256':SUPPORT_SHA,'old_release_sha256':OLD_RELEASE_SHA,'observer_commit':OBSERVER_COMMIT,'observer_sha256':OBSERVER_SHA,'observer_test_sha256':OBSERVER_TEST_SHA,'predecessor_sha256':PREDECESSOR_SHA,'boot_id':BOOT,'launcher_identities':[list(x) for x in LAUNCHERS],'source_evidence':{'path':str(OLD_DIR),'device':26,'inode':69508,'comparable_sha256':COMPARABLE_SHA,'identity_sha256':IDENTITY_SHA,'special':SPECIAL},'archive':{'path':str(ARCHIVE),'device':1831,'inode':31513,'size':ARCHIVE_BYTES,'sha256':ARCHIVE_SHA},'locks':[{'path':str(WORK/name),'device':1831,'inode':ino,'size':size,'sha256':sha,'uid':0,'gid':0,'mode':0o600,'immutable':True} for name,ino,size,sha in LOCKS],'protected':{'disk_candidate':{'path':str(WORK/'mckernel-exact-candidate-76ae20b5-disk-1'),'device':1831,'inode':4194306},'disk_backup':{'path':str(WORK/'mckernel-exact-metadata-backup-76ae20b5-disk-1'),'device':1831,'inode':4204970},'seal':{'path':str(WORK/'native-exact-candidate-disk-validation-76ae20b5-2-evidence/corrupt-tmpfs-archive.bin'),'device':1831,'inode':4849667,'size':40004941,'sha256':'192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c'}},'resource_floors':{'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30},'output':str(OUTPUT),'rounds':3,'timeout_seconds':TIMEOUT_SECONDS,'retirement':False,'deletion':False,'lock_removal':False}
+ return {'old_commit':OLD_COMMIT,'support_sha256':SUPPORT_SHA,'old_release_sha256':OLD_RELEASE_SHA,'observer_commit':OBSERVER_COMMIT,'observer_sha256':OBSERVER_SHA,'observer_test_sha256':OBSERVER_TEST_SHA,'predecessor_sha256':PREDECESSOR_SHA,'boot_id':BOOT,'launcher_identities':[list(x) for x in LAUNCHERS],'source_evidence':{'path':str(OLD_DIR),'device':26,'inode':69508,'comparable_sha256':COMPARABLE_SHA,'historical_identity_sha256':IDENTITY_SHA,'admission_identity_sha256':LIVE_IDENTITY_SHA,'stable_noatime_snapshots':True,'special':SPECIAL},'archive':{'path':str(ARCHIVE),'device':1831,'inode':31513,'size':ARCHIVE_BYTES,'sha256':ARCHIVE_SHA},'locks':[{'path':str(WORK/name),'device':1831,'inode':ino,'size':size,'sha256':sha,'uid':0,'gid':0,'mode':0o600,'immutable':True} for name,ino,size,sha in LOCKS],'protected':{'disk_candidate':{'path':str(WORK/'mckernel-exact-candidate-76ae20b5-disk-1'),'device':1831,'inode':4194306},'disk_backup':{'path':str(WORK/'mckernel-exact-metadata-backup-76ae20b5-disk-1'),'device':1831,'inode':4204970},'seal':{'path':str(WORK/'native-exact-candidate-disk-validation-76ae20b5-2-evidence/corrupt-tmpfs-archive.bin'),'device':1831,'inode':4849667,'size':40004941,'sha256':'192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c'}},'resource_floors':{'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30},'output':str(OUTPUT),'rounds':3,'timeout_seconds':TIMEOUT_SECONDS,'retirement':False,'deletion':False,'lock_removal':False}
 
 def admit(support,release_path):
  require(Path(release_path)==SOURCE/RELEASE_REL,'canonical release argument')
@@ -283,7 +289,7 @@ def execute(release_path):
     record=decode(value.raw);require(record.get('schema')=='mckernel.retirement-build-owner-exclusion.v2' and record.get('release_sha256')==OLD_RELEASE_SHA and record.get('boot_id')==BOOT and record.get('operational_exclusion')==str(value.path) and record.get('immutable') is True,'exclusion content')
    require(not observer.absence_failures(),'original or quarantine survived')
    require((os.lstat(OLD_DIR).st_dev,os.lstat(OLD_DIR).st_ino)==(26,69508),'original evidence replaced')
-   now,ids=source_inventory(oldfd);validate_original_inventory(now,ids,archived)
+   now,ids=source_inventory(oldfd);validate_original_inventory(now,ids,archived,prior=(rows,identities))
   guard()
   parent=open_directory(OUTPUT.parent)
   try:

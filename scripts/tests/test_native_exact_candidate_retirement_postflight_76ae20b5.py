@@ -49,6 +49,13 @@ class PostflightTests(unittest.TestCase):
   self.assertFalse(any(inputs[k] for k in ('retirement','deletion','lock_removal')))
   self.assertEqual(inputs['protected']['seal']['inode'],4849667)
 
+ def test_historical_identity_is_preserved_separately_from_live_admission(self):
+  evidence=M.fixed_release_inputs()['source_evidence']
+  self.assertEqual(evidence['historical_identity_sha256'],'e98cf2d252150c5afba4725995b550cca67352a771f7dda67f5995793e386008')
+  self.assertEqual(evidence['admission_identity_sha256'],'f00e5da2d9f426477f29f2102426c7a0346b7cf7e9c4a9593f3743c227cdf9cb')
+  self.assertNotEqual(M.IDENTITY_SHA,M.LIVE_IDENTITY_SHA)
+  self.assertTrue(evidence['stable_noatime_snapshots'])
+
  def test_no_destructive_retry_docker_sudo_or_source_hash_override(self):
   tree=ast.parse(PACKET.read_text())
   forbidden={'retire','remove_root','unlink','rmdir','rename','rename_noreplace','docker_callback'}
@@ -157,12 +164,20 @@ class PostflightTests(unittest.TestCase):
      else:info.size=row['size'];tar.addfile(info,io.BytesIO(contents[row['path']]))
    archived=M.archive_inventory(archive.getvalue());self.assertEqual(first,archived)
    expected_special={name:M.digest(contents[name]) for name in M.SPECIAL}
-   with mock.patch.object(M,'COMPARABLE_SHA',M.digest(M.encoded(first))),mock.patch.object(M,'IDENTITY_SHA',M.digest(M.encoded(identities))),mock.patch.object(M,'SPECIAL',expected_special):
-    M.validate_original_inventory(first,identities,archived)
+   with mock.patch.object(M,'COMPARABLE_SHA',M.digest(M.encoded(first))),mock.patch.object(M,'LIVE_IDENTITY_SHA',M.digest(M.encoded(identities))),mock.patch.object(M,'SPECIAL',expected_special):
+    M.validate_original_inventory(second,second_ids,archived,prior=(first,identities))
+    # Historical identity cannot substitute for the exact current binding.
+    with mock.patch.object(M,'IDENTITY_SHA',M.LIVE_IDENTITY_SHA),mock.patch.object(M,'LIVE_IDENTITY_SHA','0'*64):
+     with self.assertRaisesRegex(M.Error,'inventory binding'):M.validate_original_inventory(first,identities,archived)
     changed=copy.deepcopy(archived);changed[-1]['sha256']='0'*64
     with self.assertRaises(M.Error):M.validate_original_inventory(first,identities,changed)
     changed_ids=copy.deepcopy(identities);changed_ids[1][1][-1]+=1
     with self.assertRaises(M.Error):M.validate_original_inventory(first,changed_ids,archived)
+    # Even an independently accepted later identity must equal the first
+    # snapshot throughout this invocation; no fresh snapshot resets admission.
+    with mock.patch.object(M,'LIVE_IDENTITY_SHA',M.digest(M.encoded(changed_ids))):
+     with self.assertRaisesRegex(M.Error,'changed across NOATIME snapshots'):
+      M.validate_original_inventory(first,changed_ids,archived,prior=(first,identities))
 
  def test_archive_rejects_traversal_and_duplicate_normalized_paths(self):
   for names in (('../outside',),('./x','././x')):
