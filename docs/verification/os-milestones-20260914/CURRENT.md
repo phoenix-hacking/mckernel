@@ -10556,3 +10556,57 @@ host/scratch free bytes are 17,674,272,768/14,079,119,360 and MemAvailable is
 current-candidate build records, zero linked smallest-current images, one exact
 current-crate compile and zero real current-image diagnostic guest apps.  The
 OS goal remains incomplete and is neither resumed nor completed by shutdown.
+
+Continuation checkpoint 251, 2026-09-30: shutdown resumed from the prior
+exportset-24 failure checkpoint only long enough to join the two already active
+bounded source lanes, preserve their bytes, and checkpoint them.  No new task
+was dispatched after the stop request.  Every child is now completed.  No
+QEMU, mcexec, image owner or heavy build is live, and the heavy lease is
+absent.  The retained exportset-24 failure container remains exited/PID0/exit1/
+OOMfalse with exact ID `053b5528...d24f` and name
+`mckernel-image-69d5302ef1b74816aec831cf959404ee`.
+
+The bounded final-link correction sets the C linker-wrapper flag and separator
+empty only in `kernel/`, allowing the existing raw-ld rule to receive CMake's
+bare dependency option while compiler-driven sibling targets retain wrapping.
+Its exact source/test hashes are `0fb85281...f616e35` and
+`969f6e05...02651`; independent review is PASS.  Retained host CMake 3.25.1
+and exact-image CMake 3.31.8 regressions each pass 1/1.  The hardened
+exportset-25 driver `d236409d...c9974` now binds the final raw-link inputs and
+revalidates them after image inspection.  Owner `67923ab7...a7047a` pins it,
+advances to exportset-25 and retires exportset-24.  The combined owner/offline
+suite passes 61/61, but the correction landed after the last independent BLOCK
+review: a fresh independent review remains mandatory before execution.
+
+The candidate-12 storage helper was narrowed to a read-only audit-plan
+generator after the prior apply-capable design was blocked.  Exact helper/test
+hashes are `f4a49c1e...9cbf15` and `ef73db77...c1a450`; 11/11 focused tests,
+Python compilation and diff checks pass.  It has no apply, deletion, Docker
+mutation, build or guest path, and it has not been run against the candidate.
+A fresh independent review is still required before its read-only inventory.
+No candidate file was removed.  One bounded system-journal vacuum preceding
+shutdown removed approximately 408 MiB of archived journal segments and left
+about 1.9 GiB of journal data; those archived segments are not recoverable.
+
+Exact source, checks, failure identity, resource readings, review state and
+next tasks are recorded in
+`docs/verification/evidence/native-exact-exportset25-link-contract-shutdown-20260930.json`.
+At shutdown, host/scratch free bytes are
+17,564,483,584/14,079,066,112 and MemAvailable is 29,857,984,512 bytes.
+Launcher wrapper/launcher/worker/server identities remain
+`1442141/1442142/1442145/1442149`, all started 2026-09-30 10:46:42 PDT.
+The cursor remains nine failed plus one completed current-candidate build
+records, zero linked smallest-current images, one exact current-crate compile,
+and zero real current-image diagnostic guest apps.
+
+Next continuation must first independently rereview both corrected source
+packets.  After a fetched checkpoint and PASS, run only the read-only candidate
+inventory to a fresh external plan path.  Review that actual plan, then create
+and separately review a new plan-bound deletion program before removing any
+duplicate evidence.  Remeasure the 16/12/16-GiB floors, prepare a fresh
+scratch-13/exportset-25 packet, and run one serialized smallest-current image
+build.  Only after artifact validation, prepare fresh startup, memory, files,
+threads/futexes, signals and separately reviewed shutdown diagnostic packets.
+Diagnostic output remains distinct from application or production acceptance.
+The OS goal remains incomplete and is neither resumed nor completed during
+this shutdown.

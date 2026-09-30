@@ -1,0 +1,82 @@
+{
+  "schema": "mckernel.native-exact-exportset25-link-contract-shutdown.v1",
+  "recorded_at": "2026-09-30T15:36:05-07:00",
+  "source_parent_commit": "4de57315093eb03f7f49aaf53be8da0570b588c7",
+  "branch": "codex/local-native-staging-repair",
+  "classification": "implementation-only shutdown checkpoint; no execution release or acceptance",
+  "policy_sha256": {
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "HANDOFF.md": "bdc946109f96d5681a02c43542efa2036af5cb842c1d21e1f82e642c110af8c5",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c"
+  },
+  "changes": {
+    "kernel/CMakeLists.txt": {
+      "sha256": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+      "result": "directory-local empty C linker-wrapper flag and separator preserve the raw-ld rule"
+    },
+    "scripts/tests/test_native_exact_mckernel_link_wrapper.py": {
+      "sha256": "969f6e05da488f471b54afe78a54aca22325044cbab8b38a09c51fab56b02651",
+      "result": "reproduces wrapped-option rejection and checks raw depfile plus compiler siblings"
+    },
+    "scripts/native_rust_exact_mckernel_image_offline.py": {
+      "sha256": "d236409ddb71dfbc31a70b072bb1acfe3a1f33bb29cf51707ce8bb536d7c9974",
+      "result": "binds final raw-ld inputs and revalidates them after artifact inspection"
+    },
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": {
+      "sha256": "67923ab7bc46983a763b3717f44b74d15c1202b527b8ea68103b2f1ee1a7047a",
+      "result": "pins the corrected driver, advances exportset-25, and retires exportset-24"
+    },
+    "docs/verification/evidence/native-exact-retained-candidate-4e99a82c-source-evidence-cleanup-20260930.py": {
+      "sha256": "f4a49c1eaa3fb6ae7e1bac6341f9805344604e6fb3b0ed610ab543a6749cbf15",
+      "result": "read-only audit-plan generator only; no apply or deletion path"
+    },
+    "scripts/tests/test_native_exact_retained_candidate_4e99a82c_source_evidence_cleanup_20260930.py": {
+      "sha256": "ef73db77d1cb95ed02015ad5033eeb172496eca4b3e2a30927d272a530c1a450"
+    }
+  },
+  "bounded_checks": [
+    {"command": "python3 -B -m unittest scripts.tests.test_native_exact_mckernel_link_wrapper", "result": "PASS; 1 test"},
+    {"command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_offline scripts.tests.test_native_rust_exact_mckernel_image_container_owner", "result": "PASS; 61 tests"},
+    {"command": "python3 -B -m pytest -q scripts/tests/test_native_exact_retained_candidate_4e99a82c_source_evidence_cleanup_20260930.py", "result": "PASS; 11 tests"},
+    {"command": "python3 -m py_compile <three changed Python programs>; git diff --check", "result": "PASS"}
+  ],
+  "independent_review": {
+    "link_wrapper": "PASS for exact source/test hashes and retained CMake 3.25.1/3.31.8 logs",
+    "exportset25_validator": "previous BLOCK findings corrected after review; fresh rereview remains mandatory",
+    "candidate_cleanup": "apply-capable design was BLOCKED and replaced with audit-only source; fresh rereview remains mandatory before inventory"
+  },
+  "preserved_failure": {
+    "evidence": "docs/verification/evidence/native-exact-mckernel-image-exportset24-failure-20260930.json",
+    "container_id": "053b5528de7605a712b7842b0145c7e777843c2fd14225174ac8959918a7d24f",
+    "container_name": "mckernel-image-69d5302ef1b74816aec831cf959404ee",
+    "container_state": "exited",
+    "container_pid": 0,
+    "container_exit_code": 1,
+    "container_oom_killed": false
+  },
+  "shutdown_state": {
+    "child_agents": "all joined/completed",
+    "heavy_lease": "absent",
+    "qemu_mcexec_or_image_owner": "none live",
+    "launcher_processes": [1442141, 1442142, 1442145, 1442149],
+    "launcher_started": "2026-09-30T10:46:42-07:00",
+    "host_free_bytes": 17564483584,
+    "scratch_free_bytes": 14079066112,
+    "mem_available_bytes": 29857984512
+  },
+  "accounting": {
+    "current_candidate_build_failures": 9,
+    "completed_current_candidate_build_records": 1,
+    "linked_smallest_current_images": 0,
+    "real_current_image_diagnostic_apps": 0
+  },
+  "next": [
+    "fresh independent review of corrected exportset-25 driver and audit-only inventory packet",
+    "after fetched checkpoint and review PASS, run only the read-only inventory to a fresh external plan",
+    "review the plan, then separately implement and review a plan-bound deletion program",
+    "remeasure floors, prepare scratch-13/exportset-25, and run one serialized current-image build",
+    "after artifact validation, run fresh startup, memory, files, threads/futexes, signals, and separately reviewed shutdown diagnostics"
+  ],
+  "acceptance": {"diagnostic": false, "application": false, "production": false, "whole_os": false}
+}

@@ -30,14 +30,14 @@ import uuid
 REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
-EXPECTED_DRIVER_SHA256 = "fa3ea29e03653cffcd79ccb0529cded2e53e6466b6c069a0ed5aa66db5262bd8"
+EXPECTED_DRIVER_SHA256 = "d236409ddb71dfbc31a70b072bb1acfe3a1f33bb29cf51707ce8bb536d7c9974"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
 EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
 # The image owner advances with the disk-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-24.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
@@ -46,7 +46,7 @@ RETIRED_COMMON_EXCLUSIONS = frozenset(
         "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
         "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
         "exportset-17", "exportset-18", "exportset-19", "exportset-20",
-        "exportset-21", "exportset-22", "exportset-23",
+        "exportset-21", "exportset-22", "exportset-23", "exportset-24",
     )
 )
 LIMITS = {

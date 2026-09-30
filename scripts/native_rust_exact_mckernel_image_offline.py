@@ -752,6 +752,45 @@ def _artifact(path, label):
             "mtime_ns": st.st_mtime_ns, "ctime_ns": st.st_ctime_ns, "sha256": digest.hexdigest()}
 
 
+def _stable_bytes(path, label):
+    """Read one no-follow regular inode and reject replacement or byte drift."""
+    path = _regular(path, label)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        before = os.fstat(fd)
+        data = b""
+        with os.fdopen(fd, "rb", closefd=False) as stream:
+            data = stream.read()
+        after = os.fstat(fd)
+        current = path.lstat()
+        signature = lambda item: (item.st_dev, item.st_ino, item.st_mode,
+                                  item.st_size, item.st_mtime_ns, item.st_ctime_ns)
+        _fail(signature(before) == signature(after) == signature(current),
+              label + " changed during read")
+        return data
+    finally:
+        os.close(fd)
+
+
+def _stable_snapshot(path, label):
+    """Return bytes plus the bound inode signature for post-write replay."""
+    path = _regular(path, label)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        before = os.fstat(fd)
+        with os.fdopen(fd, "rb", closefd=False) as stream:
+            data = stream.read()
+        after = os.fstat(fd)
+        current = path.lstat()
+        signature = lambda item: (item.st_dev, item.st_ino, item.st_mode,
+                                  item.st_size, item.st_mtime_ns, item.st_ctime_ns)
+        bound = signature(before)
+        _fail(bound == signature(after) == signature(current), label + " changed during read")
+        return data, bound
+    finally:
+        os.close(fd)
+
+
 def _run_process(argv, cwd, env, stdout, stderr, timeout, label, latch=None):
     _check_signal(latch)
     _fail(timeout > 0 and timeout <= MAX_TIMEOUT, "invalid timeout")
@@ -858,6 +897,7 @@ def _validate_image(build, toolchain, evidence):
         _fail(not any(str(source).replace("\\", "/").endswith(item)
                       for item in FORBIDDEN_C_SOURCES),
               "C fallback source compiled: " + str(source))
+    link_snapshot = _validate_link_contract(build, evidence, toolchain)
     readelf = toolchain["tools"]["readelf"]["path"]
     header = _bounded_output([readelf, "-h", str(required["mckernel.img"])], "readelf")
     _fail("ELF64" in header and "Advanced Micro Devices X86-64" in header and
@@ -879,8 +919,108 @@ def _validate_image(build, toolchain, evidence):
     for name, path in required.items():
         _fail(_artifact(path, "validated artifact") == artifacts[name],
               "artifact changed during validation")
+    _revalidate_link_contract_snapshots(build, evidence, link_snapshot)
     _check_signal()
     return artifacts
+
+
+def _validate_link_contract(build, evidence, toolchain):
+    """Require the final image's direct raw-ld command and live depfile."""
+    link = Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.txt"
+    _fail(link.is_file() and not link.is_symlink(), "image link command missing")
+    link_bytes, link_snapshot = _stable_snapshot(link, "image link command")
+    _fail(link_bytes.endswith(b"\n") and b"\r" not in link_bytes and
+          link_bytes.count(b"\n") == 1, "image link command must contain one line")
+    try:
+        tokens = shlex.split(link_bytes.decode("utf-8", errors="strict"))
+    except ValueError as exc:
+        raise ImageBuildError("image link command malformed") from exc
+    expected_ld = toolchain["tools"]["ld"]["path"]
+    _fail(tokens and tokens[0] == expected_ld, "image link is not the bound raw ld")
+    _fail(not any(token.startswith(("-Wl,", "-Xlinker")) for token in tokens),
+          "image link uses compiler linker wrapper")
+    _fail(not any(token.startswith("@") for token in tokens), "image link response file is not allowed")
+    _fail(not any(any(character in token for character in (";", "|", "&", "<", ">", "`")) or
+                  "$((" in token or "$(" in token for token in tokens),
+          "image link shell control is not allowed")
+    dependency_tokens = []
+    for index, token in enumerate(tokens):
+        if token == "--dependency-file":
+            _fail(index + 1 < len(tokens), "image link dependency-file argument missing")
+            dependency_tokens.append(tokens[index + 1])
+        elif token.startswith("--dependency-file="):
+            dependency_tokens.append(token.split("=", 1)[1])
+    _fail(len(dependency_tokens) == 1, "image link dependency-file is duplicated or missing")
+    dependency = dependency_tokens[0]
+    _fail(dependency == "CMakeFiles/mckernel.img.dir/link.d" or
+          dependency == str(Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.d"),
+          "image link dependency-file spelling differs")
+    entry_tokens = [tokens[i + 1] for i, token in enumerate(tokens[:-1]) if token == "-e"]
+    _fail(len(entry_tokens) == 1 and entry_tokens[0] == "arch_start" and
+          not any(token.startswith("--entry") or (token.startswith("-e") and token != "-e")
+                  for token in tokens), "image link entry differs")
+    script_tokens = [tokens[i + 1] for i, token in enumerate(tokens[:-1]) if token == "-T"]
+    _fail(len(script_tokens) == 1, "image link script is duplicated or missing")
+    script = script_tokens[0]
+    expected_script = str(Path(build) / "kernel/config/smp-x86.lds")
+    _fail(script is not None and script == expected_script and
+          not any(token.startswith("--script") or (token.startswith("-T") and token != "-T")
+                  for token in tokens),
+          "image link script differs")
+    _fail(sum(token == "--build-id" for token in tokens) == 1 and
+          not any(token.startswith("--build-id=") for token in tokens),
+          "image link build-id option differs")
+    expected_map = str(Path(build) / "kernel/mckernel.img.map")
+    map_tokens = [token[5:] for token in tokens if token.startswith("-Map=")]
+    _fail(len(map_tokens) == 1 and map_tokens[0] == expected_map and
+          not any(token.startswith("-Map") and token != "-Map=" + expected_map for token in tokens),
+          "image link map differs")
+    forbidden_exact = {"-lc", "-lgcc", "-lstdc++", "--default-lib"}
+    forbidden_lib_names = {"libc.a", "libc.so", "libpthread.a", "libpthread.so",
+                           "libm.a", "libm.so", "libdl.a", "libdl.so", "libgcc_s.so"}
+    crt_names = {"crt1.o", "crti.o", "crtn.o", "crtbegin.o", "crtend.o",
+                 "crtbeginS.o", "crtendS.o", "crtbeginT.o", "crtendT.o"}
+    forbidden_crt = lambda token: Path(token).name in crt_names
+    forbidden_lib = lambda token: Path(token).name in forbidden_lib_names or \
+        Path(token).name in {"libc.a", "libc.so", "libgcc.a", "libgcc_s.so"}
+    library_pairs = any(tokens[i:i + 2] in (["-l", "c"], ["-l", "gcc"], ["--library", "c"],
+                                            ["--library", "gcc"]) for i in range(len(tokens) - 1))
+    library_colon = any(token in ("-l:libc.a", "-l:libgcc.a") for token in tokens)
+    _fail(not any(token in forbidden_exact or forbidden_crt(token) or forbidden_lib(token)
+                  for token in tokens) and not library_pairs and not library_colon,
+          "image link includes CRT/default library")
+    depfile = Path(dependency)
+    if not depfile.is_absolute():
+        depfile = Path(build) / "kernel" / depfile
+    depfile_bytes, dep_snapshot = _stable_snapshot(depfile, "image link dependency file")
+    _fail(depfile_bytes, "image link dependency file missing")
+    _write_fsync(evidence / "image-link-contract.txt", link_bytes.decode("utf-8"))
+    _write_fsync(evidence / "image-link-dependency.d", depfile_bytes.decode("utf-8"))
+    link_after, link_after_snapshot = _stable_snapshot(link, "image link command")
+    dep_after, dep_after_snapshot = _stable_snapshot(depfile, "image link dependency file")
+    _fail((link_after, link_after_snapshot) == (link_bytes, link_snapshot) and
+          (dep_after, dep_after_snapshot) == (depfile_bytes, dep_snapshot),
+          "image link inputs changed after evidence write")
+    evidence_link, _ = _stable_snapshot(evidence / "image-link-contract.txt", "image link evidence")
+    evidence_dep, _ = _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence")
+    _fail(evidence_link == link_bytes and evidence_dep == depfile_bytes,
+          "image link evidence changed after write")
+    return (link_bytes, link_snapshot, depfile_bytes, dep_snapshot)
+
+
+def _revalidate_link_contract_snapshots(build, evidence, snapshots):
+    """Recheck link inputs/evidence after all final image inspection work."""
+    link_bytes, link_snapshot, depfile_bytes, dep_snapshot = snapshots
+    link = Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.txt"
+    depfile = Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.d"
+    current_link = _stable_snapshot(link, "image link command")
+    current_dep = _stable_snapshot(depfile, "image link dependency file")
+    _fail(current_link == (link_bytes, link_snapshot) and
+          current_dep == (depfile_bytes, dep_snapshot),
+          "image link inputs changed during final validation")
+    _fail(_stable_snapshot(evidence / "image-link-contract.txt", "image link evidence")[0] == link_bytes and
+          _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence")[0] == depfile_bytes,
+          "image link evidence changed during final validation")
 
 
 def _validate_modules_end_probe(build, toolchain, evidence):

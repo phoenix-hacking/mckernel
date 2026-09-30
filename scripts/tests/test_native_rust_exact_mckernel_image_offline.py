@@ -60,8 +60,10 @@ class ImageOfflineTests(unittest.TestCase):
 if [ "$1" = "--version" ]; then echo 'cmake version 3.30.0'; exit 0; fi
 if [ "$1" = "-S" ]; then
   build=""
+  ld_path="/usr/bin/ld"
   while [ "$#" -gt 0 ]; do
     if [ "$1" = "-B" ]; then build="$2"; shift 2; continue; fi
+    case "$1" in -DCMAKE_LINKER=*) ld_path="${1#*=}";; esac
     shift
   done
   mkdir -p "$build/kernel/CMakeFiles/mckernel_rust_obj.dir" "$build/kernel/CMakeFiles/mckernel.img.dir" "$build/kernel/config" "$build/kernel/rust"
@@ -72,10 +74,13 @@ if [ "$1" = "-S" ]; then
   printf 'C_FLAGS = -DMAP_KERNEL_START=0xffff800000000000UL -DKERNEL_RAM_VADDR=0xffff800000000000\n' > "$build/kernel/CMakeFiles/mckernel.img.dir/flags.make"
   printf '[{"file":"kernel/rust/native.rs","command":"rustc native.rs -DMAP_KERNEL_START=0xffff800000000000UL -DKERNEL_RAM_VADDR=0xffff800000000000"}]\n' > "$build/compile_commands.json"
   printf 'native_linux_irq_work_v6_12\n' > "$build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"
+  printf '%s\n' "$ld_path" > "$build/.bound-ld"
   exit 0
 fi
 if [ "$1" = "--build" ]; then
   build="$2"
+  printf '%s -e arch_start -T %s/kernel/config/smp-x86.lds --build-id -Map=%s/kernel/mckernel.img.map --dependency-file=CMakeFiles/mckernel.img.dir/link.d\n' "$(/bin/cat "$build/.bound-ld")" "$build" "$build" > "$build/kernel/CMakeFiles/mckernel.img.dir/link.txt"
+  printf 'mckernel.img: kernel/rust/mckernel_rust.o\n' > "$build/kernel/CMakeFiles/mckernel.img.dir/link.d"
   printf 'fake ELF image\n' > "$build/kernel/mckernel.img"
   printf 'fake map\n' > "$build/kernel/mckernel.img.map"
   printf 'fake Rust object\n' > "$build/kernel/rust/mckernel_rust.o"
@@ -181,6 +186,88 @@ exit 2
         if getattr(self, "v2_roots", None) is not None:
             options["container_roots"] = self.v2_roots
         return driver.run(**options)
+
+    def _link_contract_fixture(self, line=None, dep=b"image: object.o\n"):
+        build = self.root / ("contract-build-" + str(len(list(self.root.glob("contract-build-*")))))
+        link_dir = build / "kernel/CMakeFiles/mckernel.img.dir"
+        link_dir.mkdir(parents=True)
+        link = link_dir / "link.txt"
+        if line is None:
+            line = (str(self.ld) + " -e arch_start -T " + str(build / "kernel/config/smp-x86.lds") +
+                    " --build-id -Map=" + str(build / "kernel/mckernel.img.map") +
+                    " --dependency-file=CMakeFiles/mckernel.img.dir/link.d\n")
+        link.write_bytes(line.encode() if isinstance(line, str) else line)
+        (link_dir / "link.d").write_bytes(dep)
+        evidence = self.root / ("contract-evidence-" + str(len(list(self.root.glob("contract-evidence-*")))))
+        evidence.mkdir()
+        return build, evidence, {"tools": {"ld": {"path": str(self.ld)}}}, link, link_dir / "link.d"
+
+    def test_link_contract_exact_positive_and_evidence_bytes(self):
+        build, evidence, tools, link, depfile = self._link_contract_fixture()
+        driver._validate_link_contract(build, evidence, tools)
+        self.assertEqual((evidence / "image-link-contract.txt").read_bytes(), link.read_bytes())
+        self.assertEqual((evidence / "image-link-dependency.d").read_bytes(), depfile.read_bytes())
+
+    def test_link_contract_rejects_adversarial_flags_and_paths(self):
+        cases = (
+            (str(self.root / "other-ld") + " -e arch_start", "raw ld"),
+            (None, "entry"),
+            (None, "build-id"),
+            (None, "script"),
+            (None, "line"),
+            (None, "shell"),
+            (None, "libc"),
+            (None, "crt"),
+        )
+        base = str(self.ld) + " -e arch_start -T /tmp/config/smp-x86.lds --build-id -Map=/tmp/mckernel.img.map --dependency-file=CMakeFiles/mckernel.img.dir/link.d\n"
+        mutations = {
+            "raw ld": cases[0][0] + "\n",
+            "entry": base.replace("-e arch_start", "-e arch_start -e main"),
+            "build-id": base.replace("--build-id", "--build-id=none"),
+            "script": base.replace("-T /tmp/config/smp-x86.lds", "-T /tmp/config/smp-x86.lds -T /tmp/override.lds"),
+            "line": base + "/usr/bin/cc -c x.c\n",
+            "shell": base.replace("--build-id", "--build-id;echo pwned"),
+            "libc": base.replace("--build-id", "/usr/lib64/libc.a --build-id"),
+            "crt": base.replace("--build-id", "/tmp/crt1.o --build-id"),
+        }
+        for _unused, label in cases:
+            with self.subTest(label=label):
+                build, evidence, tools, _link, _dep = self._link_contract_fixture(mutations[label])
+                with self.assertRaises(driver.ImageBuildError):
+                    driver._validate_link_contract(build, evidence, tools)
+
+    def test_link_contract_accepts_benign_crt_notes_and_rejects_symlink(self):
+        build, evidence, tools, link, _dep = self._link_contract_fixture()
+        line = (str(self.ld) + " -e arch_start -T " + str(build / "kernel/config/smp-x86.lds") + " --build-id "
+                "-Map=" + str(build / "kernel/mckernel.img.map") + " /tmp/crt_notes.o "
+                "--dependency-file=CMakeFiles/mckernel.img.dir/link.d\n")
+        link.write_text(line)
+        driver._validate_link_contract(build, evidence, tools)
+        target = link.with_name("real-link.txt")
+        target.write_bytes(link.read_bytes())
+        link.unlink(); link.symlink_to(target)
+        with self.assertRaises(driver.ImageBuildError):
+            driver._validate_link_contract(build, evidence, tools)
+
+    def test_link_contract_rejects_identical_inode_replacement_after_evidence_write(self):
+        build, evidence, tools, link, depfile = self._link_contract_fixture()
+        original_write = driver._write_fsync
+        replaced = {"done": False}
+
+        def write_then_replace(path, text):
+            original_write(path, text)
+            if not replaced["done"]:
+                replaced["done"] = True
+                replacement = link.with_name("replacement-link.txt")
+                replacement.write_bytes(link.read_bytes())
+                os.replace(replacement, link)
+                replacement = depfile.with_name("replacement-link.d")
+                replacement.write_bytes(depfile.read_bytes())
+                os.replace(replacement, depfile)
+
+        with mock.patch.object(driver, "_write_fsync", side_effect=write_then_replace):
+            with self.assertRaisesRegex(driver.ImageBuildError, "changed after evidence write"):
+                driver._validate_link_contract(build, evidence, tools)
 
     def _write_v2_toolchain(self):
         """Prepare a container-shaped /out closure backed by a temp host root."""
