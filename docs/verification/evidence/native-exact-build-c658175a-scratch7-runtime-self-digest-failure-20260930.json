@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-build-failure.v1",
+  "status": "FAIL",
+  "failure_family": "runtime-checker-self-digest-binding",
+  "candidate_sha": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-c658175a-scratch-7-retry1.json",
+    "sha256": "7a0a654c353f63e7680245f04d92dd361086abbe29e9e024e0ea42122faad826"
+  },
+  "manifest_sha256": "e63cd03b1bf914e563d48e8b268c9aaebd4f04b99e59a3eb018c49daae9470a3",
+  "observed_error": "native-rust-runtime-evidence: FAIL: runtime config fragment policy violation: isolated runtime checker normalized SHA-256 differs",
+  "phase": "phase-0-before-compilation",
+  "compiled_artifacts": 0,
+  "container": {
+    "id": "4a0ffec1584f2023683102efe211e61e9d18867329c713924a979797574c7df2",
+    "name": "mckernel-exact-bf18420f5e5b4b9dbb574e7c29d6e2a3",
+    "owner_nonce": "81bd268a0b9c4ddca292aabe87f4a0b2",
+    "status": "exited",
+    "exit_code": 1,
+    "pid": 0,
+    "oom_killed": false,
+    "retained": true
+  },
+  "retained_evidence": {
+    "output_identity": "1831:5111838",
+    "output_allocated_bytes": 4096,
+    "evidence_identity": "1831:5111853",
+    "evidence_allocated_bytes": 229376,
+    "operational_exclusion_identity": "1831:57616",
+    "operational_exclusion_sha256": "9859dc32c9781a96ba6c0b6f86d14ae8fbf4af61ba0c838169b45ff53336997e",
+    "owner_receipt_sha256": "64352f2b201467ee43fc7ec5bbd66d8f9e0b40b81b3204f6a84fa71fa8592c6e",
+    "build_receipt_sha256": "10445c1a1654fa11545888714d13ec56b8f8d96c1b630c149afd4344a59d27fc",
+    "driver_log_sha256": "484295d5c8ae461ba09c6509f462153c151cdea21d24525e1e5b7659764c3bee",
+    "lease_absent": true
+  },
+  "diagnosis": {
+    "recorded_normalized_self_digest": "a797f11ac0c6371559971a9c34adcc2374287a6eb6cd394ca99cb1b81fa74dd6",
+    "actual_normalized_self_digest": "36346f2332b22b494f622ea9b6f69122152f4f6334eafb3e4ad071230f6071b3",
+    "cause": "Workflow identity updates changed the checker bytes without mechanically refreshing its normalized self-digest marker."
+  },
+  "bounded_correction": "Update only the normalized self-digest marker and cascade the exact resulting script identity through its direct contracts/checkers; preserve every semantic check.",
+  "acceptance": "No compilation, image, boot, diagnostic application or production acceptance."
+}

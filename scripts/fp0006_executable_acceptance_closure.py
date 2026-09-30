@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = 'd7d0feb9c7e025df75d8590a79be9a056a0e5e0e1f51b17da56dafffada30b81'
+EXPECTED_CONTRACT_SHA256 = '452ec2f3166d0f76cf32022c74b8d32689e79ab201a29c58dacaf516d9d9cbf6'
 EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
