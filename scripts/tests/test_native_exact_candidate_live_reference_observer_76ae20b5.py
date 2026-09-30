@@ -313,12 +313,111 @@ class PostDeleteTests(unittest.TestCase):
         self.assertEqual(record['status'], 'PASS')
         self.assertEqual(record['censuses'], [[list(WHO)], [list(WHO)]])
 
-    def test_exits_and_entry_churn_reject(self):
+    def test_exact_exit_after_successful_scan_is_reconciled(self):
         snapshots = iter(({WHO}, set()))
-        self.assertEqual(self.round(snapshot=lambda: next(snapshots))['status'], 'FAIL')
+        result = self.round(snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'PASS')
+        self.assertFalse(result['task_churn'])
+        self.assertTrue(result['task_census_changed'])
+        self.assertEqual(result['reconciled_exits'], [{'identity': list(WHO), 'resolution': 'exited'}])
+
+    def test_exit_during_scan_is_reconciled_only_if_absent_from_final_census(self):
         def exited(who):
             return dict(clean_record(who), state='exited', successful=False)
+        snapshots = iter(({WHO}, set()))
+        result = self.round(scanner=exited, snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'PASS')
+        self.assertFalse(result['task_churn'])
         self.assertEqual(self.round(scanner=exited)['status'], 'FAIL')
+
+    def test_new_identity_is_scanned_before_convergent_closure_passes(self):
+        new = (400, 401, '456')
+        snapshots = iter(({WHO}, {WHO, new}, {WHO, new}))
+        scanned = []
+        def scanner(who):
+            scanned.append(who)
+            return clean_record(who)
+        result = self.round(scanner=scanner, snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(scanned, [WHO, new])
+        self.assertEqual(result['closure_passes'], 2)
+        self.assertTrue(result['task_census_changed'])
+        self.assertFalse(result['task_churn'])
+        self.assertEqual(result['unscanned_final_identities'], [])
+
+    def test_new_identity_failure_is_not_hidden_by_convergent_census(self):
+        new = (400, 401, '456')
+        snapshots = iter(({WHO}, {WHO, new}, {WHO}))
+        def scanner(who):
+            record = clean_record(who)
+            if who == new:
+                record.update(successful=False, references=[{'field': 'map_files/1-2'}])
+            return record
+        result = self.round(scanner=scanner, snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['target_references'])
+
+    def test_replacement_during_scan_remains_rejected_even_after_exit(self):
+        snapshots = iter(({WHO}, set()))
+        result = self.round(scanner=lambda who: dict(clean_record(who), state='reused', successful=False),
+                            snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['identity_replacements'])
+        self.assertTrue(result['task_churn'])
+        self.assertEqual(result['reconciled_exits'], [])
+
+    def test_same_pid_tid_new_starttime_between_clean_scans_is_replacement(self):
+        old, new = (400, 401, '123'), (400, 401, '456')
+        snapshots = iter(({old}, {new}, {new}))
+        scanned = []
+        def scanner(who):
+            scanned.append(who)
+            return clean_record(who)
+        result = self.round(scanner=scanner, snapshot=lambda: next(snapshots))
+        self.assertEqual(scanned, [old, new])
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['task_churn'])
+        self.assertFalse(result['closure_nonconvergent'])
+        self.assertEqual(result['unscanned_final_identities'], [])
+        self.assertEqual(result['reconciled_exits'], [])
+        self.assertEqual(result['identity_replacements'], [
+            {'identity': old, 'replacement_identity': new,
+             'resolution': 'reused-across-censuses', 'census_index': 1}])
+
+    def test_reuse_after_pair_absent_from_intermediate_census_is_not_an_exit(self):
+        old, new = (400, 401, '123'), (400, 401, '456')
+        pending = (500, 500, '789')
+        # The unrelated addition keeps closure open while the old pair exits
+        # and is then reused; an intermediate absence must not reset history.
+        snapshots = iter(({old}, {pending}, {pending, new}, {pending, new}))
+        result = self.round(snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['task_churn'])
+        self.assertEqual(result['reconciled_exits'], [])
+        self.assertEqual(result['identity_replacements'][0]['replacement_identity'], new)
+
+    def test_nonreusing_exit_and_addition_remain_valid(self):
+        old, new = (400, 401, '123'), (500, 501, '456')
+        snapshots = iter(({old}, {new}, {new}))
+        result = self.round(snapshot=lambda: next(snapshots))
+        self.assertEqual(result['status'], 'PASS')
+        self.assertFalse(result['task_churn'])
+        self.assertEqual(result['identity_replacements'], [])
+        self.assertEqual(result['reconciled_exits'], [{'identity': list(old), 'resolution': 'exited'}])
+
+    def test_persistent_new_identities_reach_bounded_nonconvergence(self):
+        count = [0]
+        def snapshot():
+            count[0] += 1
+            return {(400 + offset, 400 + offset, '456') for offset in range(count[0])}
+        result = self.round(snapshot=snapshot)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['closure_passes'], o.MAX_CLOSURE_PASSES)
+        self.assertTrue(result['closure_nonconvergent'])
+        self.assertTrue(result['task_churn'])
+        self.assertTrue(result['unscanned_final_identities'])
+
+    def test_entry_churn_remains_rejected(self):
         def entry_churn(who):
             return dict(clean_record(who), expected_absences=[{'reason': 'per-entry-procfs-absence'}])
         self.assertEqual(self.round(scanner=entry_churn)['status'], 'FAIL')

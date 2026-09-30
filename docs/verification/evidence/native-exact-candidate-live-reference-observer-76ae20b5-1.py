@@ -18,7 +18,9 @@ transfer/acquisition or a privileged mutator during observation.  Sequential
 
 Post-delete mode authenticates a same-source, same-boot pre-delete observation
 and uses its retained member inode identities without reopening deleted roots.
-It requires three complete scans, rejects all observed task/entry churn, and
+It requires three complete closure scans, reconciles exact identities which
+exit, scans new identities until closure converges, rejects unresolved task
+churn and every observed entry disappearance, and
 writes separate exclusive/fsynced round records in a root-owned 0700 evidence
 directory. Original and quarantine pathnames must remain absent. The caller
 must retain operational exclusion and close all target descriptors first.
@@ -661,7 +663,7 @@ def absence_failures(paths=ORIGINAL + QUARANTINE):
 
 def post_delete_round(number, baseline_hash, targets, reference, inode_ids,
                       scanner=None, snapshot=None, absence_reader=None):
-    """One complete round; post-delete mode rejects even reconciled task churn."""
+    """One V2 closure round; final live identities need complete bound scans."""
     started = utcnow()
     own_pid = os.getpid()
     snapshot = snapshot or task_set
@@ -669,18 +671,39 @@ def post_delete_round(number, baseline_hash, targets, reference, inode_ids,
     scanner = scanner or (lambda who: scan_identity(who, targets, reference, inode_ids, own_pid, set()))
     paths_before = absence_reader()
     censuses = []
+    first_starttimes, census_replacements, replacement_events = {}, [], set()
+    replaced_pairs = set()
 
     def census():
         seen = set(snapshot())
+        for who in sorted(seen):
+            pair, start = who[:2], who[2]
+            first = first_starttimes.setdefault(pair, start)
+            if first != start:
+                replaced_pairs.add(pair)
+                event = pair + (first, start)
+                if event not in replacement_events:
+                    replacement_events.add(event)
+                    census_replacements.append({'identity': pair + (first,),
+                                                'replacement_identity': who,
+                                                'resolution': 'reused-across-censuses',
+                                                'census_index': len(censuses)})
         censuses.append(seen)
         return seen
 
     result = closure_round(scanner, census)
+    result['replacements'].extend(census_replacements)
+    replaced_pairs.update(tuple(row['identity'][:2]) for row in result['replacements'])
     paths_after = absence_reader()
-    # A post-delete round must cover an unchanged set of exact live identities.
+    # V2 does not require an identical global census: an exited identity cannot
+    # retain references, and a new identity is safe only after its own complete
+    # scan. closure_round rejects reuse during a scan and any unscanned final
+    # live identity; census() additionally rejects reuse between scans.
     # No descriptors owned by this observer are exempt in this mode.
-    churn = any(seen != censuses[0] for seen in censuses[1:]) or any(
-        record.get('state') != 'same' for record in result['records'])
+    census_changed = any(seen != censuses[0] for seen in censuses[1:])
+    churn = bool(result['replacements'] or result['missing_final'] or result['nonconvergent'])
+    reconciled_exits = {who for who in set().union(*censuses) - result['final_live']
+                       if who[:2] not in replaced_pairs}
     entry_churn = [item for record in result['records'] for item in record.get('expected_absences', [])
                    if item.get('reason') == 'per-entry-procfs-absence']
     clean = result['clean'] and not (paths_before or paths_after or churn or entry_churn)
@@ -690,7 +713,10 @@ def post_delete_round(number, baseline_hash, targets, reference, inode_ids,
             'path_failures_before': paths_before, 'path_failures_after': paths_after,
             'target_references': result['references'], 'permission_denials': result['denials'],
             'incomplete': result['incomplete'], 'identity_replacements': result['replacements'],
-            'task_churn': churn, 'entry_churn': entry_churn,
+            'task_churn': churn, 'task_census_changed': census_changed,
+            'reconciled_exits': [{'identity': list(who), 'resolution': 'exited'}
+                                 for who in sorted(reconciled_exits)],
+            'entry_churn': entry_churn,
             'closure_passes': result['closure_passes'], 'closure_nonconvergent': result['nonconvergent'],
             'unscanned_final_identities': [list(who) for who in sorted(result['missing_final'])],
             'censuses': [[list(who) for who in sorted(seen)] for seen in censuses],
