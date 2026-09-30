@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.exact-evidence-cleanup-result.v1",
+  "status": "PASS",
+  "candidate_commit": "61bfbb6cc059f5382b0b19361ff96bf51409620c",
+  "candidate_root": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-61bfbb6c-scratch-5",
+  "candidate_identity": "66306:47622717",
+  "helper_sha256": "23aa25c0d2b1955b0af1f25457f0aeb491f817b9aed8c7b7957cad9aa288eb52",
+  "audit_plan_sha256": "6bbfaac184a8ea892e7a8845dc2429424a0c3e99ae9b06bbbd971eeecea6ceb7",
+  "audit_plan_identity": "1831:57617",
+  "audit_plan_archive_sha256": "052963add20270f3d9a4bab4abf1105cd65ca9a96aecf553b3a72a656dfdf8b5",
+  "apply_result_sha256": "cb6d2f62a7e0aba5695ae724fddedc9a62ab64a63ebda37406378d3669af3c23",
+  "apply_result_identity": "1831:57619",
+  "restoration_map_sha256": "42ac6f3862ab8cbe3d99ae7cd785155f6a25ea64936153ca135ce6d80618ab6a",
+  "apply_stdout_sha256": "78f8bf3f36284d56374316456e9fe41af87b19fdd52e376bae4e84617a328b96",
+  "removed_files": 2430,
+  "removed_allocated_bytes": 9100681216,
+  "candidate_allocated_bytes_after": 142934016,
+  "host_available_bytes_after": 35127750656,
+  "scratch_available_bytes_after": 19860688896,
+  "execution_review": {
+    "result": "PASS_EXECUTION_WITH_HELPER_REVALIDATION",
+    "metadata_targets_verified": 2430,
+    "no_open_files": true,
+    "no_candidate_mount": true,
+    "no_active_build_lease": true,
+    "no_running_candidate_container": true,
+    "note": "The committed helper performed the complete fresh Git-byte audit and per-inode revalidation immediately before unlinking."
+  },
+  "recovery": "Restore each path from the exact Git blob recorded in native-exact-retained-candidate-61bfbb6c-evidence-cleanup-map-20260930.json.gz.",
+  "acceptance": "Storage maintenance only; no build, boot, application or production acceptance."
+}
