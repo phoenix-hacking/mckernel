@@ -8648,3 +8648,39 @@ only after it produces exact `bzImage` and module artifacts may the current
 McKernel image build and diagnostic startup, memory, files, threads/futexes,
 signals and shutdown apps proceed.  Formal counters remain 6/130, 350/10000
 and 0/273; this prebuild failure is diagnostic evidence, not acceptance.
+
+Continuation checkpoint 183, 2026-09-30: the complete workflow-identity repair
+and transitive contract bindings independently pass and are fetched from
+commit `97fb67a7932af8928e8f1340fdae6403795f256b`.  The native full contract,
+all eight source-derived workflow step hashes and mutation controls, normalized
+self-digest, and focused FP-0006/RS-006 consumers pass.  This fixes the exact
+prebuild failure family without weakening its oracle; it does not prove a
+build.  The next wrapper namespace is independently accepted and fetched at
+`5aff8eef75f1d1788eb5c9d37135b789609dd57e`.  It permits only the fresh
+`native-exact-candidate-operational-exclusion-97fb67a7-3.json` path and rejects
+the retained `-2` failure exclusion and historical names.
+
+The failed container and `-2` exclusion remain preserved.  Repeated cleanup
+packet drafts were rejected for fetched-release, Docker-absence, pathname-race
+and durable-publication defects and were never executed.  The strategy has
+changed: the stopped container consumes no heavy lease, so the next attempt
+uses the reviewed fresh `-3` namespace rather than risking deletion of original
+failure evidence.
+
+A full 419-line scratch preparation packet is now independently source-accepted.
+Packet SHA is `c27f1c65...d4359e`, placement observer SHA is
+`e4cc1cbb...ca032`, and tests SHA is `8df54fe3...93dc8`.  All 80 bounded tests
+pass.  It binds source `5aff8eef...d57e`, IHK `3114d9e7...972a1f`, all four
+exact Git links, clean metadata conversion before the reviewed overlay,
+candidate-local manifests and owner validation, full request/profile inputs,
+disk-backed zero-memory accounting, pre/post resource floors, and durable
+partial/terminal evidence.  Actual preparation has not run yet.
+
+Next commit/fetch this exact preparation template, execute it once with its
+fetched release commit after live resource/process reconciliation, and
+independently verify the resulting candidate/request.  Then run one serialized
+four-CPU exact host build.  Image-owner work remains rejected source WIP and
+will not run until its remaining authentication, tmpfs, evidence-confinement
+and under-exclusion measurement defects are repaired.  Formal counters remain
+6/130, 350/10000 and 0/273; no current-candidate artifact or diagnostic app has
+yet passed.
