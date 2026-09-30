@@ -10738,3 +10738,20 @@ no-replace staging, rollback and truthful unwind protections remain.  Attempt
 This is not an execution release; the corrected cleanup has not run.  Next
 checkpoint/fetch this source and author a new release with fresh attempt-2
 outputs.  The OS goal and current image/runtime work remain incomplete.
+
+Continuation checkpoint 257, 2026-09-30: cleanup release 2 independently
+passes precommit execution review.  Exact release SHA is
+`b2a601c0...3eec`; it binds fetched source `93cc9559...d130`, corrected tool
+`dcb2a0d6...b712`/blob `32f08267...602c`, plan `eaba225b...f957`, the
+explicit six-container inventory and entirely fresh attempt-2 outputs.  The
+complete sanitized read-only census `49ef2f4d...e8be` contains all 41 container
+records and independently yields exactly six candidate intersections with
+zero unknown intersections.  All six proof files, 50 mount tuples, nonces,
+restart counts and complete terminal states match.
+
+Attempt 1 evidence remains byte-identical and proves it stopped before staging.
+Host/scratch free bytes are 31,006,511,104/17,102,430,208 and MemAvailable is
+28,896,288 KiB, above floors.  Release 2 remains unexecuted until these exact
+bytes are committed, pushed, fetched and finally commit-bound.  Next perform
+that verification and invoke it once; do not reuse release 1.  No OS acceptance
+or diagnostic result changes.
