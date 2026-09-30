@@ -9625,3 +9625,29 @@ candidate, preserving its deltas/output/failure records, remeasure capacity,
 then obtain a fresh heavy-build release for request `2f02bce2...8f9c`.
 Current-candidate builds remain four failed and zero completed; real diagnostic
 guest applications remain zero.
+
+Continuation checkpoint 214, 2026-09-30: the older retained `74085185`
+candidate supplied the measured build headroom without losing original
+evidence.  A reviewed immutable plan identified 2,424 nlink-1 files under its
+candidate evidence tree that were byte-identical to pinned Git blobs, with
+zero differing files and 9,100,578,816 allocated bytes.  Apply re-audited the
+entire plan, removed exactly those targets, and returned 0.  Plan identity is
+`66306:47496551`, SHA `fbfa4cc7...461b0`; all targets are absent.  Candidate
+identity `1831:3932163` and HEAD `74085185...f3954e6` are unchanged, and its
+allocation is now 134,406,144 bytes.  Build output/evidence, metadata, request,
+manifest, preparation records, original failure record/archive, operational
+exclusion and stopped container all remain; the build lease remains absent.
+
+The first live audit failed before plan publication or deletion because three
+protected 0644 records were incorrectly frozen as 0600.  Its additive failure
+record and the bounded 22-test correction are preserved.  Targeted trim
+returned 11,894,759,424 bytes.  Host/scratch/memory availability is now
+36,231,135,232/23,646,646,272/29,310,828,544 bytes.  Full result:
+`docs/verification/evidence/native-exact-retained-candidate-74085185-source-evidence-cleanup-result-20260930.json`.
+
+Next obtain a fresh heavy-build execution release for prepared scratch-10
+request `2f02bce2...8f9c` and run exactly one build under CPUs 2-5, 12 GiB,
+no swap expansion, 512 PIDs and no network.  It must clear the preserved
+post-compile exact-export failure and the newly corrected runtime consumer
+graph before image preparation.  Current-candidate builds remain four failed
+and zero completed; real diagnostic guest applications remain zero.
