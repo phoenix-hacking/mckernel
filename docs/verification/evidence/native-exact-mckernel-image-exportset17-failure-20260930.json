@@ -1,0 +1,72 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-failure.v1",
+  "recorded_at": "2026-09-30T12:49:15-07:00",
+  "base_commit": "748dcf1de3ade6c5f5b87425d61a3baefe680d4d",
+  "status": "FAIL_IDENTITY",
+  "attempt": "exportset-17",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "command": [
+    "python3", "-I", "-B",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-17.json"
+  ],
+  "failure": {
+    "phase": "identity",
+    "error": "cc version differs",
+    "driver_exit_code": 1,
+    "commands_executed": 0,
+    "build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evidence": {
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-17/evidence/receipt.json",
+      "sha256": "b445816dc979e1eb795387e85844c4255b5a0a8b9259310ffaf6fecf2c2e55c1",
+      "identity": "1831:1712434",
+      "size": 743
+    },
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-17/owner-receipt.json",
+      "sha256": "0fc0386d22935c9310815421077698f784e514d4770b8a5f0c00d40617db5b56",
+      "identity": "1831:1712444",
+      "size": 15335
+    },
+    "docker_log_sha256": "b1c2b974f7f396acd14c146efbfc39b069a9b63849b9afa85aaf3339c3705f98",
+    "container_log_sha256": "b1091e172adb7687b8dbd8360df56f7e8ab3e0c62fa6f2a6990dbd1637a65c8b",
+    "common_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
+      "sha256": "6a4c544ee0fcdc3298902259f854e669a8720bbc36a6feaf170a362cd12e68c1",
+      "identity": "1831:72289",
+      "preserved": true
+    }
+  },
+  "owner": {
+    "pid": 1609818,
+    "starttime": "100692872",
+    "container_id": "282dff5ea9f3775fe8a8e2cdf8d767f86ea81b0f5a9a516a0e6ff817d1d36dde",
+    "container_name": "mckernel-image-2c383743e89540908f12dc9583e2847c",
+    "owner_nonce": "44a459e57c534808bce9837596e1f125",
+    "terminal": "exited 1, PID 0, OOM false",
+    "retired": true,
+    "container_retained": true,
+    "lease_absent_after_proven_retirement": true
+  },
+  "cause": "v2 admission authenticated the /usr/bin/cc lookup and /usr/bin/gcc canonical target, then replaced the execution spelling with the target; argv0-sensitive GCC version output therefore began with gcc rather than the receipt-bound cc",
+  "bounded_correction": {
+    "driver_sha256": "c7d8956f0e6a00a82dc234756b705f9c665addf341fb3906894a0f3ca5a304fa",
+    "owner_sha256": "08e336b38d41b8f2194b7c964ae7f32eb2aef43e3abd65a228d35eb47ccdbe33",
+    "offline_test_sha256": "0d3c235069bbb2bfed8fa7134f2963ae81e9048e4fa3327bd564560f7a69ade7",
+    "owner_test_sha256": "bd8b2e7f7acfd8b7838eed8300b5fcbe46167200b5622e40bf26eba68ddd817a",
+    "behavior": "execute and version-check the authenticated lookup spelling while hash/PATH-authenticating its canonical target; keep literal /usr container paths separate from fixture translations",
+    "namespace": "exportset-18 active; exportset-17 retired",
+    "tests": "81 combined tests plus focused argv0-sensitive regression, py_compile and diff-check PASS",
+    "independent_review": "PASS_SOURCE_CORRECTION"
+  },
+  "resources": {
+    "host_free_bytes": 19846000640,
+    "scratch_free_bytes": 15371440128,
+    "memory_available_kib": 30007312
+  },
+  "next": "Commit and verify the bounded correction, create fresh exportset-18 packet roots, obtain exact packet/execution review and run at most one corrected attempt.",
+  "acceptance": "This is a preserved pre-build failure and source correction. No current mckernel.img, guest behavior, application acceptance or OS completion is established."
+}

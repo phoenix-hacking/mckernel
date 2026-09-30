@@ -192,10 +192,14 @@ class OwnerTests(unittest.TestCase):
         owner.COMMON_EXCLUSION = str(self.common)
 
     def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json"
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json"
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-17.json"))
+        self.assertTrue(current.endswith("exportset-18.json"))
+        self.assertIn(
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
+            owner.RETIRED_COMMON_EXCLUSIONS,
+        )
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json",
             owner.RETIRED_COMMON_EXCLUSIONS,

@@ -10120,6 +10120,41 @@ oracle remains stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit
 37/raw wait 9472.  Real current diagnostic guest applications remain zero and
 no acceptance bar moves.
 
+Continuation checkpoint 232, 2026-09-30: the one released exportset-17 image
+attempt failed safely before compilation.  The driver receipt is
+`b445816d...e55c1`, status FAIL, phase `identity`, exact error
+`cc version differs`, with zero commands and empty build stdout/stderr.  Owner
+receipt `0fc0386d...b5b56` preserves PID/starttime `1609818/100692872`,
+container `282dff5e...d36dde`, owner nonce `44a459e5...1f125` and terminal
+state exited1/PID0/OOMfalse.  Retirement is proven, the lease is absent, the
+failed container is retained, and consumed exportset-17 exclusion
+`6a4c544e...e68c1` remains preserved.
+
+The exact cause is argv0-sensitive tool identity.  V2 admission authenticated
+lookup `/usr/bin/cc` and canonical target `/usr/bin/gcc`, but replaced the
+execution spelling with the target.  Runtime `gcc --version` therefore differed
+from the producer's receipt-bound `cc --version` even though executable bytes
+matched.  No build command ran and no product defect is inferred from this
+observer failure.  Exact failure evidence is
+`docs/verification/evidence/native-exact-mckernel-image-exportset17-failure-20260930.json`.
+
+The one bounded correction retains the authenticated lookup spelling for
+execution/version while continuing to hash and PATH-check its canonical target.
+Literal container `/usr` paths stay literal; only fixture `/out` and `/nightly`
+paths translate.  An argv0-sensitive symlink regression now returns `cc fake 1`
+through the lookup and `cc-target fake 1` through the target, so the original
+bug cannot pass.  Exportset-18 becomes active and exportset-17 is retired.
+All 81 combined tests, the focused regression, `py_compile` and diff-check pass.
+Corrected driver/owner/test SHAs are `c7d8956f...04fa`,
+`08e336b3...be33`, `0d3c2350...ade7` and `bd8b2e7f...817a`.
+Independent review returns `PASS_SOURCE_CORRECTION`.
+
+Next commit/push/fetch-verify these exact source bytes, create fresh exportset-18
+packet/work/evidence roots while preserving every exportset-17 artifact, obtain
+new packet and execution review, and run at most one corrected image attempt.
+Real current diagnostic guest applications remain zero and no acceptance bar
+moves.
+
 Continuation checkpoint 231, 2026-09-30: actual exportset-17 preparation now
 passes against the retained scratch12 build and the source-free attempt3 tool
 image.  The atomically published toolchain manifest is 80,765,577 bytes at

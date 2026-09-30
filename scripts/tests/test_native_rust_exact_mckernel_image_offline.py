@@ -204,13 +204,100 @@ exit 2
         result = self.execute()
         self.assertEqual(result["status"], "PASS", result)
 
+    def test_v2_image_tool_preserves_lookup_argv0(self):
+        host = self._write_v2_toolchain()
+        cc = host / "tools/cc"
+        target = host / "tools/cc-target"
+        cc.rename(target)
+        cc.symlink_to("cc-target")
+        target.write_text(
+            "#!/bin/sh\nset -eu\n"
+            "[ \"$1\" = \"--version\" ] && { echo \"${0##*/} fake 1\"; exit 0; }; exit 2\n"
+        )
+        target.chmod(0o755)
+        nightly = self.root / "nightly"
+        nightly.mkdir()
+        self.v2_roots["/nightly"] = nightly
+        data = json.loads(self.toolchain.read_text())
+        ref = data["tools"]["cc"]
+        ref["path"] = "/out/tools/cc"
+        ref["target"] = "/out/tools/cc-target"
+        ref["sha256"] = sha(target)
+        data["image_tools"] = {"cc": ref}
+        data["mounted_tools"] = {name: value for name, value in data["tools"].items()
+                                  if name != "cc"}
+        data["tools"] = {**data["mounted_tools"], "cc": ref}
+        data["toolchain_roots"][0]["inventory"] = driver._tree_inventory(
+            host, visible_roots=self.v2_roots, allow_visible_root=True)
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        result = self.execute()
+        self.assertEqual(result["status"], "PASS", result)
+        versions = (self.root / "evidence/tool-versions.txt").read_text()
+        self.assertIn("[cc]\ncc fake 1\n", versions)
+
+    def test_v2_image_tool_target_mismatch_rejected(self):
+        host = self._write_v2_toolchain()
+        cc = host / "tools/cc"
+        target = host / "tools/cc-target"
+        cc.rename(target)
+        cc.symlink_to("cc-target")
+        nightly = self.root / "nightly"
+        nightly.mkdir()
+        self.v2_roots["/nightly"] = nightly
+        data = json.loads(self.toolchain.read_text())
+        ref = data["tools"]["cc"]
+        ref.update(path="/out/tools/cc", target="/out/tools/rustc")
+        data["image_tools"] = {"cc": ref}
+        data["mounted_tools"] = {name: value for name, value in data["tools"].items()
+                                  if name != "cc"}
+        data["tools"] = {**data["mounted_tools"], "cc": ref}
+        data["toolchain_roots"][0]["inventory"] = driver._tree_inventory(
+            host, visible_roots=self.v2_roots, allow_visible_root=True)
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "lookup target differs"):
+            self.execute()
+
+    def test_v2_image_tool_path_shadow_rejected(self):
+        host = self._write_v2_toolchain()
+        cc = host / "tools/cc"
+        target = host / "tools/cc-target"
+        cc.rename(target)
+        cc.symlink_to("cc-target")
+        nightly = self.root / "nightly"
+        nightly.mkdir()
+        self.v2_roots["/nightly"] = nightly
+        shadow = host / "tools/shadow"
+        shadow.mkdir()
+        (shadow / "cc").write_text("#!/bin/sh\nexit 0\n")
+        (shadow / "cc").chmod(0o755)
+        data = json.loads(self.toolchain.read_text())
+        ref = data["tools"]["cc"]
+        ref.update(path="/out/tools/cc", target="/out/tools/cc-target")
+        data["image_tools"] = {"cc": ref}
+        data["mounted_tools"] = {name: value for name, value in data["tools"].items()
+                                  if name != "cc"}
+        data["tools"] = {**data["mounted_tools"], "cc": ref}
+        data["path_dirs"].insert(0, "/out/tools/shadow")
+        data["toolchain_roots"][0]["inventory"] = driver._tree_inventory(
+            host, visible_roots=self.v2_roots, allow_visible_root=True)
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "PATH tool differs"):
+            self.execute()
+
     def test_v2_container_mapping_escape_rejected(self):
         self._write_v2_toolchain()
         data = json.loads(self.toolchain.read_text())
         data["tools"]["cc"]["path"] = "/usr/bin/cc"
         self.toolchain.write_text(json.dumps(data))
-        with self.assertRaisesRegex(driver.ImageBuildError, "outside container root"):
+        with self.assertRaisesRegex(driver.ImageBuildError,
+                                    "outside container root|symlink parent"):
             self.execute()
+
+    def test_v2_real_usr_tool_path_is_not_fixture_mapped(self):
+        roots = {"/out": self.root / "v2-root", "/nightly": self.root / "nightly"}
+        self.assertEqual(driver._v2_tool_path("/usr/bin/cc", roots, "tool path",
+                                             allow_leaf_symlink=True),
+                         Path("/usr/bin/cc"))
 
     def test_v2_closure_extra_member_rejected(self):
         host = self._write_v2_toolchain()

@@ -443,6 +443,19 @@ def _container_path(raw, roots, label, allow_leaf_symlink=False):
     return translated
 
 
+def _v2_tool_path(raw, visible_roots, label, allow_leaf_symlink=False):
+    """Translate prepared fixture mounts, while retaining literal image paths."""
+    _fail(isinstance(raw, str) and raw.startswith("/"), label + " must be absolute")
+    if visible_roots is not None and (raw.startswith("/out/") or
+                                      raw.startswith("/nightly/")):
+        path = _container_path(raw, visible_roots, label,
+                               allow_leaf_symlink=allow_leaf_symlink)
+    else:
+        path = Path(raw)
+    _no_symlink_parents(path, label, allow_leaf_symlink=allow_leaf_symlink)
+    return path
+
+
 def _validate_toolchain(path, container_roots=None):
     data = _json(path, "toolchain manifest")
     schema = data.get("schema")
@@ -511,14 +524,17 @@ def _validate_toolchain(path, container_roots=None):
                        name in (data.get("mounted_tools") or {}))
             if mounted:
                 raw = tools[name]["path"]
-                translated = _container_path(raw, visible_roots, "tool " + name + " path")
+                translated = _v2_tool_path(raw, visible_roots, "tool " + name + " path")
                 translated = _canonical(translated, "tool " + name + " path")
                 _fail(translated.is_file() and not translated.is_symlink(),
                       "tool " + name + " path is missing")
                 _fail(_sha256(translated) == tools[name]["sha256"], "tool " + name + " hash drift")
             else:
-                lookup = Path(tools[name]["path"])
-                target = Path(tools[name]["target"])
+                lookup = _v2_tool_path(tools[name]["path"], visible_roots,
+                                       "image tool " + name + " lookup",
+                                       allow_leaf_symlink=True)
+                target = _v2_tool_path(tools[name]["target"], visible_roots,
+                                       "image tool " + name + " target")
                 _no_symlink_parents(lookup, "image tool " + name + " lookup",
                                     allow_leaf_symlink=True)
                 _no_symlink_parents(target, "image tool " + name + " target")
@@ -528,7 +544,11 @@ def _validate_toolchain(path, container_roots=None):
                 _fail(lookup.resolve(strict=True) == target,
                       "image tool " + name + " lookup target differs")
                 _fail(_sha256(target) == tools[name]["sha256"], "tool " + name + " hash drift")
-                translated = target
+                # Keep the reviewed lookup spelling for argv[0]-sensitive
+                # tools; the canonical target remains the authenticated path.
+                bound[name]["path"] = str(lookup)
+                bound[name]["target"] = str(target)
+                continue
             bound[name]["path"] = str(translated)
     _fail(isinstance(data.get("kernel_dir"), str) or v2, "kernel directory path")
     raw_kernel = binding["container_kernel_dir"] if v2 else data["kernel_dir"]
@@ -608,7 +628,8 @@ def _validate_toolchain(path, container_roots=None):
     for name, descriptor in bound.items():
         selected = next((Path(directory) / name for directory in path_dirs
                          if os.access(str(Path(directory) / name), os.X_OK)), None)
-        _fail(selected is not None and selected.resolve(strict=True) == Path(descriptor["path"]),
+        expected = Path(descriptor.get("target", descriptor["path"]))
+        _fail(selected is not None and selected.resolve(strict=True) == expected,
               "PATH tool differs from bound tool: " + name)
     environment = data.get("environment", {})
     _fail(isinstance(environment, dict) and all(isinstance(k, str) and isinstance(v, str)
