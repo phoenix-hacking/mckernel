@@ -48,7 +48,7 @@ def guard():
  p=subprocess.run(['findmnt','-T',str(SOURCE),'-o','SOURCE,FSTYPE,MAJ:MIN,TARGET'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=15,check=False)
  lines=[x.split() for x in p.stdout.splitlines() if x.strip() and not x.startswith('SOURCE')]
  if p.returncode or lines != [['/dev/loop39','ext4','7:39','/home/holden/mckernel-work/scratch']]: die('mount census')
- p=subprocess.run(['sudo','-A','docker','inspect','--no-trunc',CONTAINER['id']],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=15,check=False)
+ p=subprocess.run(['sudo','-A','docker','inspect',CONTAINER['id']],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=15,check=False)
  if p.returncode: die('docker census')
  try: d=json.loads(p.stdout)[0]
  except Exception: die('docker census malformed')

@@ -94,3 +94,15 @@ def test_result_replacement_before_pass_rejected(monkeypatch,tmp_path):
 
 def test_result_inode_is_canonical_and_not_temp_alias(monkeypatch,tmp_path):
  root=setup_retire(tmp_path,monkeypatch); M.retire(); st=M.RESULT.stat(); assert st.st_nlink==1 and st.st_size>0
+
+def test_docker_inspect_argv_uses_full_id_without_invalid_flag(monkeypatch):
+ calls=[]
+ class P:
+  returncode=0; stdout='[{"Name":"/'+M.CONTAINER['name']+'","State":{"Running":false,"OOMKilled":false,"Pid":0,"ExitCode":1,"Status":"exited"}}]'; stderr=''
+ def run(argv,**kwargs):
+  calls.append(argv)
+  if argv[:3]==['sudo','-A','docker']: return P()
+  q=P(); q.stdout='SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n' if 'findmnt' in argv else ''; return q
+ monkeypatch.setattr(M.subprocess,'run',run); monkeypatch.setattr(M,'bound_bytes',lambda *a: b'0'); monkeypatch.setattr(M,'digest',lambda *a:'x'); monkeypatch.setattr(M,'FAILURE_SHA','x')
+ M.guard()
+ docker=[x for x in calls if x[:3]==['sudo','-A','docker']][0]; assert docker==['sudo','-A','docker','inspect',M.CONTAINER['id']] and '--no-trunc' not in docker
