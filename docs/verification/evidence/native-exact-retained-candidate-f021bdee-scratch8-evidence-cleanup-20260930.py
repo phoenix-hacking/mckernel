@@ -22,6 +22,7 @@ LIVE_CANDIDATE=CANDIDATE_ROOT
 LIVE_FAILURE=REPO/'docs/verification/evidence/native-exact-build-f021bdee-scratch8-export-allowlist-failure-20260930.json'
 LIVE_EVIDENCE=LIVE_PATHS[1]; LIVE_OUTPUT=LIVE_PATHS[0]; PROTECTED_LIVE_EXCLUSION=LIVE_PATHS[-1]
 PROTECTED_CONTAINER={"id":"b34323f6c4352e8bae669d006e11076a64a5734ed165a6ce866bd4e7aa04c001","name":"mckernel-exact-d01624939ead44118fc2352bc4d83860","state":"exited","exit_code":1}
+EXPECTED_SCRATCH_MOUNT=["/dev/loop39","ext4","7:39","/home/holden/mckernel-work/scratch"]
 
 for name,value in {'CANDIDATE_COMMIT':CANDIDATE_COMMIT,'CANDIDATE_ROOT':CANDIDATE_ROOT,'CANDIDATE_IDENTITY':CANDIDATE_IDENTITY,'REPO':REPO,'LIVE_SCRATCH':LIVE_SCRATCH,'LIVE_CANDIDATE':LIVE_CANDIDATE,'LIVE_FAILURE':LIVE_FAILURE,'LIVE_EVIDENCE':LIVE_EVIDENCE,'LIVE_OUTPUT':LIVE_OUTPUT,'PROTECTED_LIVE_EXCLUSION':PROTECTED_LIVE_EXCLUSION}.items(): setattr(BASE,name,value)
 BASE.EXPECTED_IDENTITIES={}; BASE.EXPECTED_DEVICES={}
@@ -36,6 +37,16 @@ def live_guard(root):
 BASE.live_guard=live_guard
 
 _BASE_AUDIT=BASE.audit
+_BASE_VALIDATE=BASE.validate_census
+def validate_census(census):
+    actual=[x.split() for x in census['mount_device'].get('output','').splitlines() if x.strip() and not x.startswith('SOURCE')]
+    if census['mount_device'].get('returncode') != 0 or len(actual)!=1 or actual[0][:4] != EXPECTED_SCRATCH_MOUNT:
+        BASE.die('unexpected nested mount/device')
+    # Reuse the proven evaluator for all non-mount safety dimensions.
+    shadow=dict(census); shadow['mount_device']={'returncode':0,'output':'SOURCE FSTYPE MAJ:MIN TARGET\n/dev/nvme0n1p2 ext4 259:2 /\n','stderr':''}
+    return _BASE_VALIDATE(shadow)
+BASE.validate_census=validate_census
+
 def audit():
     result=_BASE_AUDIT(CANDIDATE_ROOT,REPO,CANDIDATE_COMMIT)
     result['protected_f021_runtime']={'paths':[str(p) for p in LIVE_PATHS],'container':PROTECTED_CONTAINER}

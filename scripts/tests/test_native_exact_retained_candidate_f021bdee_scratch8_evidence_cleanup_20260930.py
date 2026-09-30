@@ -37,3 +37,15 @@ def test_no_heavy_execution_in_packet():
     text=PACKET.read_text().lower()
     assert 'docker' not in text and 'qemu' not in text
     assert 'subprocess.run' not in text
+
+def census_mount(output):
+    return {"open_processes":{"returncode":1,"output":"","stderr":""},"mount_device":{"returncode":0,"output":output,"stderr":""},"docker_all":{"returncode":0,"output":"","stderr":""},"lease_exclusion_paths":[]}
+
+def test_exact_scratch_mount_allowed():
+    M.validate_census(census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n'))
+
+def test_wrong_or_nested_mount_rejected():
+    with pytest.raises(SystemExit,match='nested mount'):
+        M.validate_census(census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/nvme0n1p2 ext4 259:2 /\n'))
+    with pytest.raises(SystemExit,match='nested mount'):
+        M.validate_census(census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n/dev/loop40 ext4 7:40 /nested\n'))
