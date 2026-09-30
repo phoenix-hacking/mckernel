@@ -8916,3 +8916,23 @@ that frozen repair commit.  Never rerun the deterministic `scratch-3` request.
 Preserve all four stopped failure containers, prior exclusions and archives.
 No current-candidate artifact or diagnostic application has passed; formal
 counters remain 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 192, 2026-09-30: the independently reviewed wrapper
+successor now permits only the fresh absolute `offlinecwd-6` exclusion and
+rejects all five historical paths through `runtimeclosure-5` before loading or
+invoking the owner.  Nineteen focused tests pass.  Wrapper SHA is
+`3a42e268...b5e1f` and test SHA is `92125ae8...8a1`.
+
+Read-only capacity reconciliation measures 36,814,290,944 host bytes,
+33,144,688,640 scratch bytes and 30,642,696,192 available-memory bytes.  A
+fresh approximately 9.3-GB disk candidate retains more than the 16-GiB host and
+12-GiB scratch floors.  No build, guest, QEMU, mcexec, make or cargo process is
+active; the launcher identities remain live.  Docker and lease metadata need
+the already authorized dispatcher/root census before execution because the
+unprivileged audit could not read them.  All four stopped build-failure
+container identities remain protected.
+
+Next freeze and push this wrapper commit, create a separately reviewed
+`scratch-4` preparation packet bound to it and the corrected offline driver,
+then run preparation and obtain a fresh exact-build release.  No artifact,
+boot or diagnostic application result exists yet.
