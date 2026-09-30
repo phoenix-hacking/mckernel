@@ -5,11 +5,12 @@ set -Eeuo pipefail
 umask 077
 readonly SCRATCH=/home/holden/mckernel-work/scratch
 readonly C="$SCRATCH/mckernel-exact-candidate-c658175a-scratch-7"
-readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-14
+readonly TMP=/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1
 readonly DEST=/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7
 readonly FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-build-c658175a-scratch7-runtime-self-digest-failure-20260930.json
-readonly RELOCATION_FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-build-c658175a-scratch7-runtime-self-digest-failure-20260930.json
-readonly ARCHIVE="$SCRATCH/native-exact-build-failure-c658175a-scratch-7-20260930-1.tar"
+readonly RELOCATION_FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-relocation-c658175a-archive-path-failure-20260930.json
+readonly WRONG_ARCHIVE="$SCRATCH/native-exact-build-failure-c658175a-scratch-7-20260930-1.tar"
+readonly ARCHIVE="$SCRATCH/native-exact-build-failure-c658175a-scratch-7-retry1-20260930-1.tar"
 readonly PREP_TERMINAL="$SCRATCH/native-exact-candidate-preparation-c658175a-scratch-7-retry1-terminal.json"
 readonly REQUEST="$SCRATCH/native-exact-build-request-c658175a-scratch-7-retry1.json"
 readonly MANIFEST="$SCRATCH/native-exact-inputs-c658175a-scratch-7-retry1.json"
@@ -17,17 +18,16 @@ readonly BUILD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-
 readonly OLD_INTENT="$SCRATCH/native-exact-candidate-preparation-c658175a-scratch-7-terminal.json"
 readonly OLD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 readonly OLD_LOG="$SCRATCH/native-exact-candidate-preparation-c658175a-scratch-7.log"
-readonly LOG="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-20260930.log"
-readonly INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-20260930-intent.json"
-readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-20260930-terminal.json"
-readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-20260930-deletion-intent.json"
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-resume-c658175a-13.json"
-readonly LOCK="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-20260930.lock"
+readonly LOG="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.log"
+readonly INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-intent.json"
+readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-terminal.json"
+readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930-deletion-intent.json"
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation15-retry1.json"
+readonly LOCK="$SCRATCH/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.lock"
 readonly SRC_DEV=1831 DEST_DEV=66306
 readonly CANDIDATE_COMMIT=c658175ae1831e2caef6ecf59730a272f1324645
 readonly IHK_COMMIT=3114d9e7101ad52030eb3effa849a5c108972a1f
 readonly FAILURE_SHA=5cbb715b9f0b99e82f9df36b3c5641ce6fdc83499594d606398a1732ee617c84
-readonly RELOCATION_FAILURE_SHA=5cbb715b9f0b99e82f9df36b3c5641ce6fdc83499594d606398a1732ee617c84
 readonly PREP_TERMINAL_SHA=99e4f0bf1f52f72a77233d5561b32f13de2eed9c4053efeb25a410ff74466ac4
 readonly REQUEST_SHA=7a0a654c353f63e7680245f04d92dd361086abbe29e9e024e0ea42122faad826
 readonly MANIFEST_SHA=e63cd03b1bf914e563d48e8b268c9aaebd4f04b99e59a3eb018c49daae9470a3
@@ -45,10 +45,12 @@ sha(){ /usr/bin/sha256sum -- "$1" | /usr/bin/awk '{print $1}'; }
 : "${RELOCATION_PACKET_SHA256:?set reviewed resume packet blob hash}"
 : "${RELOCATION_TEST_SHA256:?set reviewed resume test blob hash}"
 : "${RELOCATION_ARCHIVE_SHA256:?set exact retained archive sha256}"
+: "${RELOCATION_FAILURE_SHA256:?set committed archive-path failure sha256}"
 [[ "$RELOCATION_RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || die release-format
 [[ "$RELOCATION_ARCHIVE_SHA256" =~ ^[0-9a-f]{64}$ ]] || die archive-sha-format
+[[ "$RELOCATION_FAILURE_SHA256" =~ ^[0-9a-f]{64}$ ]] || die failure-sha-format
 if [[ ! -e "$ARCHIVE" && ! -L "$ARCHIVE" ]]; then
-  readonly ARCHIVE_TMP="$ARCHIVE.tmp-relocation-14"
+  readonly ARCHIVE_TMP="$ARCHIVE.tmp-relocation-15-retry1"
   [[ ! -e "$ARCHIVE_TMP" && ! -L "$ARCHIVE_TMP" ]] || die archive-temp-exists
   /usr/bin/tar --format=posix -cf "$ARCHIVE_TMP" -C "$SCRATCH" \
     "native-exact-build-output-c658175a-scratch-7-retry1" \
@@ -63,9 +65,10 @@ if [[ ! -e "$ARCHIVE" && ! -L "$ARCHIVE" ]]; then
 fi
 [[ "$(sha "$ARCHIVE")" == "$RELOCATION_ARCHIVE_SHA256" ]] || die archive-hash
 for p in "$LOG" "$INTENT" "$TERMINAL" "$DELETE_INTENT" "$EXCLUSION"; do [[ ! -e "$p" && ! -L "$p" ]] || die output-exists; done
-for p in "$C" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION" "$OLD_INTENT" "$OLD_EXCLUSION" "$OLD_LOG"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
+for p in "$C" "$FAILURE" "$RELOCATION_FAILURE" "$WRONG_ARCHIVE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION" "$OLD_INTENT" "$OLD_EXCLUSION" "$OLD_LOG"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
 [[ "$(sha "$FAILURE")" == "$FAILURE_SHA" ]] || die failure-hash
-[[ "$(sha "$RELOCATION_FAILURE")" == "$RELOCATION_FAILURE_SHA" ]] || die relocation-failure-hash
+[[ "$(sha "$RELOCATION_FAILURE")" == "$RELOCATION_FAILURE_SHA256" ]] || die relocation-failure-hash
+[[ "$(sha "$WRONG_ARCHIVE")" == "c046cb5572a7ef102f6069c330f256c3a89d95e8dccdbc284e0a3f95469bda54" ]] || die wrong-archive-hash
 [[ "$(sha "$PREP_TERMINAL")" == "$PREP_TERMINAL_SHA" ]] || die preparation-terminal-hash
 [[ "$(sha "$REQUEST")" == "$REQUEST_SHA" ]] || die request-hash
 [[ "$(sha "$MANIFEST")" == "$MANIFEST_SHA" ]] || die manifest-hash
@@ -80,7 +83,7 @@ import ctypes,datetime,fcntl,hashlib,json,os,pathlib,re,stat,subprocess,sys
 C,TMP,DEST,LOG,INTENT,TERMINAL,DELETE_INTENT,EXCLUSION,RELOCATION_FAILURE=sys.argv[1:]
 SRC_DEV,DEST_DEV=1831,66306; SOURCE_ID=(1831,6684719); TMP_ID=None
 REPO='/home/holden/mckernel'; CANDIDATE='c658175ae1831e2caef6ecf59730a272f1324645'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
-PACKET='docs/verification/evidence/native-exact-candidate-relocation-c658175a-scratch7-20260930.sh'; TEST='scripts/tests/test_native_exact_candidate_relocation_resume_c658175a_20260930.py'
+PACKET='docs/verification/evidence/native-exact-candidate-relocation-c658175a-scratch7-20260930.sh'; TEST='scripts/tests/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.py'
 def durable(path,data):
  fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
  try:
@@ -210,7 +213,6 @@ def main():
  for path,key in ((PACKET,'RELOCATION_PACKET_SHA256'),(TEST,'RELOCATION_TEST_SHA256')):
   blob=subprocess.check_output(['/usr/bin/git','-C',REPO,'show',os.environ['RELOCATION_RELEASE_COMMIT']+':'+path],env=env)
   if hashlib.sha256(blob).hexdigest()!=os.environ[key]: raise RuntimeError('release-blob-binding')
- if hashlib.sha256(subprocess.check_output(['/usr/bin/git','-C',REPO,'show',os.environ['RELOCATION_RELEASE_COMMIT']+':docs/verification/evidence/native-exact-candidate-relocation-c658175a-copy-verification-failure-20260930.json'],env=env)).hexdigest()!='0a98a1ea5c62bd80999fb73bdc1ab8b7a107f629d387933535b84dd2a39480a1': raise RuntimeError('failure-record-release-binding')
  if subprocess.run(['/usr/bin/git','-C',C,'rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=CANDIDATE: raise RuntimeError('candidate-commit-binding')
  if subprocess.run(['/usr/bin/git','-C',C+'/ihk','rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=IHK: raise RuntimeError('ihk-commit-binding')
  failure=json.load(open(RELOCATION_FAILURE))
@@ -252,7 +254,7 @@ def main():
    try: safe_remove(C,SRC_DEV,SOURCE_ID[1])
    except Exception as exc:
     durable(TERMINAL,(json.dumps({'schema':'mckernel.native-exact-candidate-relocation-resume-partial-failure.v1','status':'PARTIAL_DELETION_FAILURE','source':C,'destination':DEST,'error':repr(exc)},sort_keys=True)+'\n').encode()); raise
-   rec={'schema':'mckernel.native-exact-candidate-relocation-c658175a-scratch7.v1','status':'PASS','source':C,'destination':DEST,'archive':ARCHIVE,'archive_sha256':os.environ['RELOCATION_ARCHIVE_SHA256'],'resume_namespace':'relocation-14','entry_count':len(src),'observed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')}
+   rec={'schema':'mckernel.native-exact-candidate-relocation-c658175a-scratch7.v1','status':'PASS','source':C,'destination':DEST,'archive':ARCHIVE,'archive_sha256':os.environ['RELOCATION_ARCHIVE_SHA256'],'resume_namespace':'relocation-15','entry_count':len(src),'observed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')}
    data=(json.dumps(rec,sort_keys=True)+'\n').encode(); durable(TERMINAL,data); append_log(data)
   except Exception as exc:
    if not pathlib.Path(TERMINAL).exists(): durable(TERMINAL,(json.dumps({'schema':'mckernel.native-exact-candidate-relocation-resume-post-rename-failure.v1','status':'POST_RENAME_FAILURE','source':C,'destination':DEST,'source_present':pathlib.Path(C).exists(),'error':repr(exc)},sort_keys=True)+'\n').encode())

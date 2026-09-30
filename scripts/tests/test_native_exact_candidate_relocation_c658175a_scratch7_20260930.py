@@ -43,7 +43,7 @@ def helpers():
 def test_packet_and_bindings_are_fail_closed():
     subprocess.run(["/usr/bin/bash", "-n", str(PACKET)], check=True)
     text = source()
-    for needle in ("c658175a-scratch7", "relocation-14", "1831", "66306", "runtimeblob-12", "RELOCATION_PACKET_SHA256", "RELOCATION_TEST_SHA256", "release-not-fetched", "release-blob-binding", "local-byte-binding", "privileged-reference-census-failed", "insufficient-capacity-floor", "PRIOR_INTENT_PATH", "rsync-verification", "temporary-mutated-during-copy", "rename_noreplace(TMP,DEST,parent)", "source-mount-before-delete", "ancestor-changed-before-delete", "safe_remove(C,SRC_DEV", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "POST_RENAME_FAILURE", "docker-census-failed"):
+    for needle in ("c658175a-scratch7", "relocation-15", "1831", "66306", "runtimeblob-12", "RELOCATION_PACKET_SHA256", "RELOCATION_TEST_SHA256", "release-not-fetched", "release-blob-binding", "local-byte-binding", "privileged-reference-census-failed", "insufficient-capacity-floor", "PRIOR_INTENT_PATH", "rsync-verification", "temporary-mutated-during-copy", "rename_noreplace(TMP,DEST,parent)", "source-mount-before-delete", "ancestor-changed-before-delete", "safe_remove(C,SRC_DEV", "VERIFIED_DESTINATION_DELETION_START", "PARTIAL_DELETION_FAILURE", "POST_RENAME_FAILURE", "docker-census-failed"):
         assert needle in text
     assert "mckernel-exact-candidate-preparation-scratch-20260929-1.sh" not in text
     assert "'-aHAX'" in text and "rsync-verification" in text
@@ -57,6 +57,17 @@ def test_archive_digest_is_required_and_bound_before_copy():
     assert "archive_sha256':os.environ['RELOCATION_ARCHIVE_SHA256']" in text
     assert text.index('archive-hash') < text.index("rsync','-aHAX")
     assert 'ARCHIVE_SHA_RUNTIME=1' not in text
+
+def test_retry15_paths_and_live_embedded_bindings_are_exact():
+    text = source()
+    assert 'scratch-7-retry1-20260930-1.tar' in text
+    assert 'tmp-relocation-15-retry1' in text
+    assert 'relocation15-retry1' in text
+    assert 'native-exact-candidate-relocation-c658175a-archive-path-failure-20260930.json' in text
+    assert 'c046cb5572a7ef102f6069c330f256c3a89d95e8dccdbc284e0a3f95469bda54' in text
+    assert "TEST='scripts/tests/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.py'" in text
+    assert 'native-exact-candidate-relocation-c658175a-copy-verification-failure-20260930.json' not in text
+    assert 'native-exact_candidate_relocation_resume_c658175a_20260930.py' not in text
 
 def test_cross_filesystem_directory_sizes_are_ignored_but_regulars_are_not():
     h = helpers()

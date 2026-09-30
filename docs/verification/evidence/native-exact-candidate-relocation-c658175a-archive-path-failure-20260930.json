@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-failure.v1",
+  "status": "FAIL_CLOSED",
+  "failure_family": "archive-path-binding",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "candidate_identity": "1831:6684719",
+  "release_commit": "cbcadad175ae7b6a684f81feb3d967602ada4f93",
+  "packet_sha256": "3b06ecde402794de40c159fe2e4993a982f151c47ae0b249258f2b377f9987ca",
+  "test_sha256": "47820729d5278e019b3413c485f0efc8bb32086bc8bd7b82366e6e55ad234dac",
+  "supplied_archive_sha256": "ee326adc5d98ba5949cc7d16705e58e25546d2493197692feda62ae218ab6cef",
+  "verified_archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-c658175a-scratch-7-retry1-20260930-1.tar",
+    "identity": "1831:57617",
+    "sha256": "ee326adc5d98ba5949cc7d16705e58e25546d2493197692feda62ae218ab6cef",
+    "size": 1402880
+  },
+  "attempt_created_archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-c658175a-scratch-7-20260930-1.tar",
+    "identity": "1831:57620",
+    "sha256": "c046cb5572a7ef102f6069c330f256c3a89d95e8dccdbc284e0a3f95469bda54",
+    "size": 1402880,
+    "preserved": true
+  },
+  "observed_error": "FAIL-CLOSED: archive-hash",
+  "root_cause": "The relocation packet omitted `retry1` from its archive constant, created a second ad-hoc tar at the wrong path, then correctly rejected its digest before lock/log/copy creation.",
+  "postflight": {
+    "source_preserved": true,
+    "destination_absent": true,
+    "temporary_copy_absent": true,
+    "relocation_log_absent": true,
+    "relocation_lock_absent": true,
+    "source_deletion_started": false
+  },
+  "additional_source_findings": [
+    "The embedded release test path named a nonexistent file.",
+    "The embedded release binding named a nonexistent copy-verification failure record."
+  ],
+  "bounded_correction": "Use fresh relocation-15/retry1 identities, bind the exact verified retry1 archive and this failure record, correct the test path, and remove the nonexistent stale record binding.",
+  "acceptance": "No relocation, build, image, boot, diagnostic application or production acceptance."
+}
