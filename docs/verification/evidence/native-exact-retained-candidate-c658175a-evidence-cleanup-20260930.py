@@ -138,11 +138,16 @@ def atomic_write(path,obj):
             st=os.lstat(tmp)
             if (st.st_dev,st.st_ino)==(temp_identity.st_dev,temp_identity.st_ino): os.unlink(tmp)
 
+def stable_plan(plan):
+    return {k:v for k,v in plan.items() if k not in ("safety_census","fresh_safety_census","fresh_safety_census_sha256")}
+
 def apply(plan):
     if plan.get("schema") != "mckernel.exact-evidence-cleanup.v1" or plan.get("status") != "AUDIT_PASS": die("invalid plan")
     root=Path(plan.get("candidate_root","")); commit=plan.get("candidate_commit",""); root_guard(root,REPO,commit)
     fresh=audit(root,REPO,commit)
-    if fresh != plan: die("audit plan differs from fresh audit")
+    if stable_plan(fresh) != stable_plan(plan): die("audit plan differs from fresh audit")
+    plan["fresh_safety_census"] = fresh["safety_census"]
+    plan["fresh_safety_census_sha256"] = sha(json.dumps(fresh["safety_census"],sort_keys=True,separators=(",",":")).encode())
     _,resolved=evidence_base(root)
     for row in plan["targets"]:
         p=Path(row["path"]); st=p.lstat()

@@ -93,3 +93,31 @@ def test_lsof_warning_or_error_stderr_is_not_ignored():
     with pytest.raises(SystemExit,match='lsof census error'): M.validate_census(c)
     c['open_processes']={"returncode":0,"output":"COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME\n","stderr":""}
     M.validate_census(c)
+
+def make_apply_fixture(tmp_path):
+    p=tmp_path/'duplicate'; p.write_bytes(b'exact')
+    st=p.stat(); row={"path":str(p),"restore_git_path":"docs/verification/evidence/x","blob":"a"*40,"mode":st.st_mode & 0o7777,"mtime_ns":st.st_mtime_ns,"size":st.st_size,"sha256":M.sha(p.read_bytes()),"allocated_bytes":st.st_blocks*512,"dev":st.st_dev,"ino":st.st_ino}
+    base=tmp_path
+    plan={"schema":"mckernel.exact-evidence-cleanup.v1","status":"AUDIT_PASS","candidate_commit":M.CANDIDATE_COMMIT,"candidate_root":str(M.CANDIDATE_ROOT),"candidate_identity":M.CANDIDATE_IDENTITY,"targets":[row],"preserved":[],"safety_census":good_census(),"recovery":"r","live_failure_untouched":"f","live_build_inputs_untouched":["e"]}
+    return p,plan,base
+
+def test_apply_allows_only_dynamic_census_drift(monkeypatch,tmp_path):
+    p,plan,base=make_apply_fixture(tmp_path); fresh=dict(plan); fresh["safety_census"]={**good_census(),"docker_all":{"returncode":0,"output":"different","stderr":""}}
+    monkeypatch.setattr(M,"root_guard",lambda *args:None); monkeypatch.setattr(M,"evidence_base",lambda *args:(base,base)); monkeypatch.setattr(M,"audit",lambda *args:fresh)
+    M.apply(plan); assert not p.exists() and "fresh_safety_census" in plan
+
+@pytest.mark.parametrize("change", ["targets","preserved","candidate_root"])
+def test_apply_rejects_stable_binding_drift(monkeypatch,tmp_path,change):
+    p,plan,base=make_apply_fixture(tmp_path); fresh=dict(plan); fresh["safety_census"]=good_census()
+    if change=="targets": fresh["targets"]=[]
+    elif change=="preserved": fresh["preserved"]=[{"path":"x"}]
+    else: fresh["candidate_root"]="/changed"
+    monkeypatch.setattr(M,"root_guard",lambda *args:None); monkeypatch.setattr(M,"evidence_base",lambda *args:(base,base)); monkeypatch.setattr(M,"audit",lambda *args:fresh)
+    with pytest.raises(SystemExit,match="audit plan differs"): M.apply(plan)
+    assert p.exists()
+
+def test_apply_rejects_fresh_census_failure(monkeypatch,tmp_path):
+    p,plan,base=make_apply_fixture(tmp_path)
+    monkeypatch.setattr(M,"root_guard",lambda *args:None); monkeypatch.setattr(M,"audit",lambda *args: (_ for _ in ()).throw(SystemExit("FAIL_CLOSED: census")))
+    with pytest.raises(SystemExit,match="census"): M.apply(plan)
+    assert p.exists()
