@@ -14,7 +14,7 @@ SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ih
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-76ae20b5-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_76ae20b5.py'
 RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retirement-76ae20b5-1.release.json'
-RELEASE_SHA256='RELEASE_HASH_REQUIRED'
+RELEASE_SHA256='d725b00db634fe553fc2029ff5c83bf1b03630b80d062520a60a5b688f61c9ce'
 MAIN='76ae20b523f57dee8e0fb1fb834caf5443f9f671'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-76ae20b5-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-76ae20b5-1'
 # These are source-bound facts from the completed copy validation.  The
