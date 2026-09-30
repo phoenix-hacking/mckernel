@@ -50,6 +50,7 @@ OBSERVER_TEST=SOURCE/'scripts/tests/test_native_exact_candidate_live_reference_o
 FLOORS={'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30}
 OUT=('claim-76ae20b5-1.json','journal-76ae20b5-1.jsonl','evidence-76ae20b5-1.json','post-delete-scan-1.json','post-delete-scan-2.json','post-delete-scan-3.json','packet.status','packet.status.pending','packet.failure','packet.failure.pending','helper.sealed.py','archive.sealed.py','observer.sealed.py','observer.stdout','observer.stderr','observer.status','docker-ps.stdout','docker-ps.stderr','docker-ps.status','docker-inspect.stdout','docker-inspect.stderr','docker-inspect.status','docker-ps-after.stdout','docker-ps-after.stderr','docker-ps-after.status')
 OUT+=tuple('closure-%d.%s'%(n,s) for n in range(1,4) for s in ('stdout','stderr','status'))+('closure-input.json',)
+OUT+=('docker-census.json',)
 RENAME_NOREPLACE=1
 H40=re.compile(r'^[0-9a-f]{40}$'); H64=re.compile(r'^[0-9a-f]{64}$')
 BUILD_LEASE=Path('/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-retirement-1.json')
@@ -1212,7 +1213,7 @@ def status(base,value,success=False):
    try:os.unlink(final,dir_fd=base.fd);os.fsync(base.fd)
    except OSError:pass
   raise
-def call(argv,base,stem,pass_fds=()):
+def call(argv,base,stem,pass_fds=(),private=False):
  """One callback attempt.  Timeout retires its whole new process group."""
  p=None;streams={};out=err=b'';rc=125;primary=None;cleanup_error=None;owner=spawn_owner()
  try:
@@ -1226,7 +1227,17 @@ def call(argv,base,stem,pass_fds=()):
   if not err:err=str(e).encode('utf8','replace')
  cleanup_error=combined(cleanup_error,close_streams(streams))
  cleanup_error=combined(cleanup_error,restore_spawn_mask(owner))
- try:capture(base,stem+'.stdout',out);capture(base,stem+'.stderr',err);capture(base,stem+'.status',(str(rc)+'\n').encode('ascii'))
+ captured_out,captured_err=out,err
+ if private:
+  # Docker inspect may contain unrelated service passwords. Raw stdout/stderr
+  # remain memory-only even on parse, timeout, cleanup, or capture failures.
+  captured_out=(json.dumps({'raw_output_retained':False,'bytes':len(out)},sort_keys=True)+'\n').encode()
+  captured_err=(json.dumps({'raw_output_retained':False,'bytes':len(err)},sort_keys=True)+'\n').encode()
+  def opaque(error):
+   if error is None:return None
+   return (Interrupted if getattr(error,'_retirement_interrupted',False) else Error)('private Docker callback failure: '+type(error).__name__)
+  primary=opaque(primary);cleanup_error=opaque(cleanup_error)
+ try:capture(base,stem+'.stdout',captured_out);capture(base,stem+'.stderr',captured_err);capture(base,stem+'.status',(str(rc)+'\n').encode('ascii'))
  except BaseException as evidence_error:raise_primary(combined(primary,cleanup_error),evidence_error)
  if primary is not None:raise_primary(primary,cleanup_error)
  if cleanup_error is not None:raise_primary(Error(stem+' callback failed'),cleanup_error)
@@ -1255,22 +1266,61 @@ def canonical_docker_row(row):
   mounts.append((key,mount))
  answer=dict(row);answer['Mounts']=[mount for unused,mount in sorted(mounts,key=lambda x:x[0])]
  return answer
+def docker_json(raw):
+ try:return exact_json(raw)
+ except BaseException:raise Error('Docker JSON rejected') from None
+def docker_ids(raw):
+ try:ids=raw.decode('ascii','strict').splitlines()
+ except BaseException:raise Error('Docker identifiers rejected') from None
+ if len(ids)!=len(set(ids)) or any(not H64.fullmatch(x) for x in ids):bad('Docker identifiers')
+ return ids
+def sanitized_docker_row(row,terminal=False):
+ """Keep required mount coordinates; encode configuration only as digests."""
+ if not isinstance(row,dict) or not H64.fullmatch(row.get('Id','')) or not isinstance(row.get('Mounts'),list):bad('Docker census shape')
+ mounts=[]
+ for source in row['Mounts']:
+  if not isinstance(source,dict):bad('Docker mount shape')
+  mount={}
+  for key in ('Source','Destination'):
+   if key in source:
+    value=source[key]
+    if not isinstance(value,str) or not value.startswith('/') or '\0' in value:bad('Docker mount coordinate')
+    mount[key]=value
+  mounts.append(mount)
+ answer={'Id':row['Id'],'Mounts':sorted(mounts,key=lambda x:json.dumps(x,sort_keys=True))}
+ if terminal:
+  config=row.get('Config');host=row.get('HostConfig');state=row.get('State')
+  if not all(isinstance(x,dict) for x in (config,host,state)):bad('Docker terminal shape')
+  if any(type(host.get(k)) is not bool for k in ('Privileged','ReadonlyRootfs','AutoRemove')) or any(type(host.get(k)) is not int for k in ('NanoCpus','Memory','PidsLimit')) or not isinstance(host.get('CpusetCpus'),str) or re.fullmatch(r'[0-9,-]*',host['CpusetCpus']) is None or host.get('RestartPolicy') not in ({'Name':'no'},{'Name':'no','MaximumRetryCount':0}):bad('Docker terminal resource shape')
+  if state.get('Status') not in ('created','running','paused','restarting','removing','exited','dead') or any(type(state.get(k)) is not bool for k in ('Running','Paused','Restarting','Dead','OOMKilled')) or any(type(state.get(k)) is not int for k in ('Pid','ExitCode')):bad('Docker terminal state shape')
+  def digest(value):return 'sha256:'+sha(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+  answer['Config']={k:digest(config.get(k)) for k in ('Image','User','Cmd')}
+  keys=('SecurityOpt','Privileged','ReadonlyRootfs','NanoCpus','Memory','PidsLimit','CpusetCpus','RestartPolicy','AutoRemove')
+  answer['HostConfig']={k:host.get(k) for k in keys}
+  answer['HostConfig']['SecurityOpt']=digest(host.get('SecurityOpt'))
+  answer['State']={k:state.get(k) for k in ('Status','Running','Paused','Restarting','Dead','Pid','ExitCode','OOMKilled')}
+ return answer
+def sanitized_terminal_release(docker):
+ terminal=docker['terminal'];row=docker['terminal_containers'][terminal['id']]
+ safe=sanitized_docker_row(row,True)
+ return {'terminal':{'id':safe['Id'],'state':safe['State'],'exact_config':{k:safe[k] for k in ('Config','HostConfig','Mounts')}}}
 def docker_callback(base,docker,lease):
  def run():
   lease.assert_held()
-  ids=call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','ps','--all','--quiet','--no-trunc'],base,'docker-ps').decode('ascii','strict').splitlines()
-  if len(ids)!=len(set(ids)) or any(not H64.fullmatch(x) for x in ids):bad('Docker identifiers')
-  if ids:rows=exact_json(call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','inspect',*ids],base,'docker-inspect'))
+  ids=docker_ids(call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','ps','--all','--quiet','--no-trunc'],base,'docker-ps',private=True))
+  if ids:rows=docker_json(call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','inspect',*ids],base,'docker-inspect',private=True))
   else: rows=[];capture(base,'docker-inspect.stdout',b'[]');capture(base,'docker-inspect.stderr',b'');capture(base,'docker-inspect.status',b'0\n')
   if not isinstance(rows,list) or len(rows)!=len(ids) or {x.get('Id') for x in rows if isinstance(x,dict)}!=set(ids):bad('Docker omission/churn')
   rows=[canonical_docker_row(x) for x in rows]
-  after=call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','ps','--all','--quiet','--no-trunc'],base,'docker-ps-after').decode('ascii','strict').splitlines()
+  after=docker_ids(call(['/usr/bin/docker','--host=unix:///var/run/docker.sock','ps','--all','--quiet','--no-trunc'],base,'docker-ps-after',private=True))
   if after!=ids:bad('Docker churn after inspect')
   terminals=docker.get('terminal_containers') if isinstance(docker,dict) else None
   want={'decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10'}
   if not isinstance(terminals,dict) or set(terminals)!=want or any({x['Id']:x for x in rows}.get(i)!=canonical_docker_row(v) for i,v in terminals.items()):bad('terminal config')
   lease.assert_held()
-  return {'ps_all':ids,'inspect':rows}
+  census={'ps_all':ids,'inspect':[sanitized_docker_row(row,row['Id'] in want) for row in rows]}
+  capture(base,'docker-census.json',(json.dumps(census,sort_keys=True,separators=(',',':'))+'\n').encode())
+  return census
  return run
 def sealed_module(path,name,source):
  """Execute only the immutable bytes just persisted in this private output."""
@@ -1280,6 +1330,11 @@ def helper(base,sources):
  capture(base,hp.name,sources['helper']);capture(base,ap.name,sources['archive']);capture(base,op.name,sources['observer'])
  archive=sealed_module(ap,'_retention_archive_sealed',sources['archive']);m=sealed_module(hp,'_retire_sealed',sources['helper'])
  m._archive_module=lambda:archive
+ original_census_validator=m.validate_docker_census
+ # Full terminal bytes were compared in docker_callback before projection.
+ # Give the helper the identical projection of its release so its state and
+ # mount-isolation checks remain unchanged without retaining Config.Env.
+ m.validate_docker_census=lambda census,docker,protected:original_census_validator(census,sanitized_terminal_release(docker),protected)
  # The observer is spawned from the exact fd, never from a pathname which a
  # non-root writer could replace between source sealing and callback launch.
  fd=os.open('observer.sealed.py',os.O_RDONLY|os.O_NOFOLLOW|getattr(os,'O_CLOEXEC',0),dir_fd=base.fd)

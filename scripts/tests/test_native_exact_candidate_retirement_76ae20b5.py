@@ -227,6 +227,54 @@ class RetirementPacketTests(unittest.TestCase):
         self.assertEqual(env['DOCKER_HOST'],'unix:///var/run/docker.sock')
         self.assertNotIn('DOCKER_CONTEXT',env);self.assertNotIn('PYTHONPATH',env)
 
+    def docker_fixture(self,secret):
+        ids=['decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9','8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10','a'*64]
+        rows=[]
+        for identity in ids:
+            rows.append({'Id':identity,'Config':{'Image':'image','User':'0','Cmd':['test',secret],'Env':['PASSWORD='+secret],'Labels':{'password':secret}},'State':{'Status':'exited','Running':False,'Paused':False,'Restarting':False,'Dead':False,'Pid':0,'ExitCode':1,'OOMKilled':False,'Error':secret},'HostConfig':{'SecurityOpt':[secret],'Privileged':False,'ReadonlyRootfs':True,'NanoCpus':4,'Memory':1024,'PidsLimit':512,'CpusetCpus':'2-5','RestartPolicy':{'Name':'no','MaximumRetryCount':0},'AutoRemove':False},'Mounts':[{'Source':'/safe/source','Destination':'/safe/destination','Credential':secret}]})
+        docker={'terminal_containers':{r['Id']:r for r in rows[:2]},'terminal':{'id':ids[0],'state':rows[0]['State'],'exact_config':{k:rows[0][k] for k in ('Config','HostConfig','Mounts')}}}
+        return ids,rows,docker
+
+    def test_docker_secrets_never_enter_captures_or_helper_evidence(self):
+        secret='UNRELATED-ENV-CREDENTIAL-TEST';ids,rows,docker=self.docker_fixture(secret)
+        ps=('\n'.join(ids)+'\n').encode();raw=json.dumps(rows).encode();captures={}
+        def capture(base,name,data):captures[name]=data
+        guard=mock.Mock(unsafe=True)
+        with mock.patch.object(M,'owned_spawn',return_value=(object(),{})),mock.patch.object(M,'_drain',side_effect=[(ps,b''),(raw,secret.encode()),(ps,b'')]),mock.patch.object(M,'complete_process',return_value=0),mock.patch.object(M,'close_streams',return_value=None),mock.patch.object(M,'restore_spawn_mask',return_value=None),mock.patch.object(M,'capture',side_effect=capture):
+            census=M.docker_callback(None,docker,guard)()
+        persisted=b'\n'.join(captures.values())+json.dumps(census).encode()
+        self.assertNotIn(secret.encode(),persisted);self.assertNotIn(b'"Env"',persisted)
+        self.assertIn('docker-census.json',captures)
+        self.assertEqual(census['inspect'][2],{'Id':'a'*64,'Mounts':[{'Source':'/safe/source','Destination':'/safe/destination'}]})
+        projected=M.sanitized_terminal_release(docker)
+        self.assertNotIn(secret,json.dumps(projected))
+        spec=importlib.util.spec_from_file_location('retire_helper_secret_test',M.HELPER)
+        helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+        helper.validate_docker_census(census,projected,[M.CANDIDATE,M.BACKUP,*M.QUARANTINES])
+        census['inspect'][2]['Mounts'][0]['Source']=M.CANDIDATE
+        with self.assertRaisesRegex(Exception,'unexpected candidate container'):helper.validate_docker_census(census,projected,[M.CANDIDATE,M.BACKUP,*M.QUARANTINES])
+
+    def test_terminal_env_change_still_rejected_without_disclosure(self):
+        secret='CHANGED-TERMINAL-ENV-SECRET';ids,rows,docker=self.docker_fixture('original')
+        changed=copy.deepcopy(rows);changed[0]['Config']['Env']=['PASSWORD='+secret]
+        ps=('\n'.join(ids)+'\n').encode();captures={}
+        with mock.patch.object(M,'owned_spawn',return_value=(object(),{})),mock.patch.object(M,'_drain',side_effect=[(ps,b''),(json.dumps(changed).encode(),b''),(ps,b'')]),mock.patch.object(M,'complete_process',return_value=0),mock.patch.object(M,'close_streams',return_value=None),mock.patch.object(M,'restore_spawn_mask',return_value=None),mock.patch.object(M,'capture',side_effect=lambda base,name,data:captures.update({name:data})):
+            with self.assertRaisesRegex(M.Error,'terminal config') as failure:M.docker_callback(None,docker,mock.Mock(unsafe=True))()
+        self.assertNotIn(secret,str(failure.exception));self.assertNotIn(secret.encode(),b'\n'.join(captures.values()))
+
+    def test_docker_parse_failure_does_not_echo_secret_or_raw_output(self):
+        secret='MALFORMED-JSON-SECRET';ids,rows,docker=self.docker_fixture(secret)
+        ps=('\n'.join(ids)+'\n').encode();captures={}
+        with mock.patch.object(M,'owned_spawn',return_value=(object(),{})),mock.patch.object(M,'_drain',side_effect=[(ps,b''),(('{'+'"'+secret+'":1,"'+secret+'":2}').encode(),secret.encode())]),mock.patch.object(M,'complete_process',return_value=0),mock.patch.object(M,'close_streams',return_value=None),mock.patch.object(M,'restore_spawn_mask',return_value=None),mock.patch.object(M,'capture',side_effect=lambda base,name,data:captures.update({name:data})):
+            with self.assertRaisesRegex(M.Error,'Docker JSON rejected') as failure:M.docker_callback(None,docker,mock.Mock(unsafe=True))()
+        self.assertNotIn(secret,str(failure.exception));self.assertNotIn(secret.encode(),b'\n'.join(captures.values()))
+
+    def test_private_subprocess_failure_scrubs_exception_and_stderr(self):
+        secret='SUBPROCESS-ERROR-SECRET';captures={}
+        with mock.patch.object(M,'owned_spawn',side_effect=OSError(secret)),mock.patch.object(M,'cleanup_owned',return_value=((secret.encode(),secret.encode()),OSError(secret))),mock.patch.object(M,'close_streams',return_value=None),mock.patch.object(M,'restore_spawn_mask',return_value=None),mock.patch.object(M,'capture',side_effect=lambda base,name,data:captures.update({name:data})):
+            with self.assertRaises(M.Error) as failure:M.call(['docker'],None,'docker-inspect',private=True)
+        self.assertNotIn(secret,json.dumps(M.error_record(failure.exception)));self.assertNotIn(secret.encode(),b'\n'.join(captures.values()))
+
     def test_observer_sentinel_blocks_even_with_release_hash(self):
         with mock.patch.object(M,'RELEASE_SHA256','a'*64),mock.patch.object(M,'OBSERVER_SHA256','OBSERVER_HASH_REQUIRED'),mock.patch.object(M.os,'geteuid',side_effect=AssertionError('root queried')):
             with self.assertRaisesRegex(M.Error,'DRAFT_NOT_RELEASED'):M.admit('anything')
