@@ -8747,3 +8747,28 @@ host artifact is still required before repairing/releasing the image owner and
 running startup, memory, files, threads/futexes, signals and shutdown diagnostic
 applications.  Formal counters remain 6/130, 350/10000 and 0/273; diagnostic
 results remain separate from formal acceptance.
+
+Continuation checkpoint 186, 2026-09-30: the complete source-contract repair,
+transitive bindings, fresh wrapper namespace, additive second-build failure
+record and tracker are pushed and fetched at
+`6323598141241dc7f734f42bac78c939bf5ae292`.  HEAD and origin match.  This is
+the frozen source candidate for the next build; it does not claim an artifact
+or runtime result.
+
+The fresh `scratch-2` preparation packet now independently passes source
+review.  Packet SHA is `5cf9ef17...53dbd` and test SHA is
+`84633af8...0b0d`; both current and prior preparation suites pass, 68 tests
+total, and both packets pass shell syntax checks.  It binds candidate
+`63235981...e292`, the exact current helper and wrapper bytes, pinned IHK and
+overlay/assets, eleven absent fresh `63235981-scratch-2` targets, and only
+`native-exact-candidate-operational-exclusion-closurefix-4.json`.  Candidate
+commit and later fetched packet release remain separate to avoid a binding
+fixed point.  This is preparation source approval only.
+
+Next push/fetch the packet release, reconcile live processes, stopped
+containers, leases and resource floors, then execute this one preparation as
+the unprivileged launcher user.  Independently audit the generated candidate,
+request and empty output/evidence roots before seeking a new single-build
+execution decision.  Preserve both prior terminal containers, all old
+exclusions and failure archives.  Formal counters remain 6/130, 350/10000 and
+0/273 applications.
