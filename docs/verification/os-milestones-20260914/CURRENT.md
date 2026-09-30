@@ -10517,3 +10517,41 @@ current-crate compile, and zero real current-image diagnostic guest apps.
 Launcher wrapper/launcher/worker/server remain
 `1442141/1442142/1442145/1442149`, all started 2026-09-30 10:46:42 PDT; no
 QEMU, mcexec or image owner is live.
+
+Continuation checkpoint 250, 2026-09-30: exportset-24 ran exactly once after
+its fetched checkpoint.  The exact Rust 1.95 correction worked: configure
+passed, the current Rust crate and all C/assembly objects compiled, and the
+build reached the final image link.  The raw `/usr/bin/ld` command then
+rejected CMake 3.31.8's compiler-driver spelling
+`-Wl,--dependency-file=CMakeFiles/mckernel.img.dir/link.d`; build exit is 2.
+The actual Rust object is 12,587,464 bytes and hashes to `c32ff593...23e2`,
+but no `mckernel.img` was linked and no guest ran.  The original receipts,
+logs, command and partial-object hashes are retained in
+`docs/verification/evidence/native-exact-mckernel-image-exportset24-failure-20260930.json`.
+Container `053b5528...d24f`, name
+`mckernel-image-69d5302ef1b74816aec831cf959404ee`, nonce
+`09c96c3b...5b751`, is retained exited/PID0/exit1/OOMfalse; its lease is
+absent and exportset-24's exclusion is consumed.  Do not retry it unchanged.
+
+Independent final-link review confirms `kernel/CMakeLists.txt` deliberately
+uses raw `ld` while CMake's GNU compiler module wrapped the injected linker
+depfile option for a compiler driver.  The next bounded correction is
+directory-local empty `CMAKE_C_LINKER_WRAPPER_FLAG` and
+`CMAKE_C_LINKER_WRAPPER_FLAG_SEP`, preserving dependency generation.  Before
+exportset-25, reproduce the old rejected command, prove the corrected raw
+`--dependency-file` spelling creates a depfile and relinks on linker-script
+change, prove compiler-driven sibling targets retain wrapping, and compare
+Rust/fallback object sets plus entry/script/map/no-CRT options.  An interrupted
+worker's incomplete alternate depfile-disabling edit and placeholder were
+discarded; source remains at the fetched `3acdc449` checkpoint.
+
+Shutdown handoff: all child agents are completed or closed and no new task was
+dispatched after the stop request.  No QEMU, mcexec, image owner or heavy build
+is live.  Launcher wrapper/launcher/worker/server identities remain
+`1442141/1442142/1442145/1442149`, started 2026-09-30 10:46:42 PDT; the active
+agent-log follower is PID `1970570`, started 2026-09-30 15:07:57 PDT.  Current
+host/scratch free bytes are 17,674,272,768/14,079,119,360 and MemAvailable is
+30,176,075,776 bytes.  The cursor now has nine failed and one completed
+current-candidate build records, zero linked smallest-current images, one exact
+current-crate compile and zero real current-image diagnostic guest apps.  The
+OS goal remains incomplete and is neither resumed nor completed by shutdown.
