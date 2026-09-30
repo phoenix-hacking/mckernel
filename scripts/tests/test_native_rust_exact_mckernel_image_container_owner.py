@@ -190,6 +190,15 @@ class OwnerTests(unittest.TestCase):
         owner.EXPECTED_DRIVER_SHA256 = digest(self.driver)
         owner.COMMON_EXCLUSION = str(self.common)
 
+    def test_current_objtool_namespace_is_not_retired(self):
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-objtoolbinding-11.json"
+        self.assertTrue(current.endswith("objtoolbinding-11.json"))
+        self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
+        self.assertIn(
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json",
+            owner.RETIRED_COMMON_EXCLUSIONS,
+        )
+
     def tearDown(self):
         owner.EXPECTED_DRIVER_SHA256 = self.old_driver_hash
         owner.COMMON_EXCLUSION = self.old_common

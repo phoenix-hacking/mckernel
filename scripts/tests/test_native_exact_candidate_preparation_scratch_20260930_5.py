@@ -259,7 +259,7 @@ class PacketAdmission(unittest.TestCase):
         self.assertIn('PREPARATION_WRAPPER_SHA:?', self.text)
         released = self.text.replace('${PREPARATION_CANDIDATE_SHA:?frozen candidate commit required}', 'b' * 40).replace('${PREPARATION_RELEASE_COMMIT:?independently reviewed fetched release commit required}', 'c' * 40).replace('${PREPARATION_WRAPPER_SHA:?frozen wrapper hash required}', 'd' * 64)
         self.assertNotIn('${PREPARATION_', released)
-        self.assertIn('lifecyclebinding-10.json', released)
+        self.assertIn('objtoolbinding-11.json', released)
 
     def test_shell_syntax(self):
         subprocess.run(['/bin/bash', '-n', str(PACKET)], check=True)

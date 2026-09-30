@@ -37,13 +37,13 @@ EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb70
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-objtoolbinding-11.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
         "76ae20b5", "76ae20b5-2", "97fb67a7-3", "closurefix-4",
         "runtimeclosure-5", "offlinecwd-5", "offlinecwd-6", "memorymap-7",
-        "memorymap-relocated-8", "mappingbinding-9",
+        "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
     )
 )
 LIMITS = {
