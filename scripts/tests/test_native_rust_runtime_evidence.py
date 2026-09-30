@@ -1083,7 +1083,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             if module.name == "ihk-smp-x86_64.ko" and arguments == ["-u"]:
                 return provider_undefined_nm(evidence.PROVIDER_SMP_IMPORT_SYMBOLS)
             if module.name == "mcctrl.ko" and arguments == ["-u"]:
-                return provider_undefined_nm((evidence.PROVIDER_ANCHOR_SYMBOL,))
+                return provider_undefined_nm(evidence.PROVIDER_MCCTRL_IMPORT_SYMBOLS)
             self.fail("unexpected nm request: {0} {1}".format(module, arguments))
 
         with mock.patch.object(evidence, "_nm", side_effect=nm_output) as nm:
@@ -1111,8 +1111,30 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             smp["undefined_provider_symbols"],
         )
         self.assertEqual(
-            [evidence.PROVIDER_ANCHOR_SYMBOL], mcctrl["undefined_provider_symbols"]
+            list(evidence.PROVIDER_MCCTRL_IMPORT_SYMBOLS), mcctrl["undefined_provider_symbols"]
         )
+
+    def test_runtime_symbol_graph_rejects_independent_missing_and_unknown_mcctrl_imports(self) -> None:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        item = next(module for module in contract["modules"] if module["name"] == "mcctrl")
+        expected = list(evidence.PROVIDER_MCCTRL_IMPORT_SYMBOLS)
+        for mutation, label in (
+            (expected[:-1], "missing reviewed import"),
+            (expected + ["ihk_os_unreviewed_v99"], "unknown import"),
+        ):
+            with self.subTest(label=label):
+                mutated = dict(item, undefined_provider_symbols=mutation)
+                contract["modules"] = [
+                    mutated if module["name"] == "mcctrl" else module
+                    for module in contract["modules"]
+                ]
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(evidence.EvidenceError, "runtime module graph differs"):
+                    evidence.validate_contract(repo)
 
     def test_ihk_runtime_symbol_graph_rejects_non_gpl_and_unexported_definitions(self) -> None:
         contract = json.loads(
@@ -1652,9 +1674,9 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                         "depends": ["ihk"],
                         "import_namespaces": [evidence.PROVIDER_EXPORT_NAMESPACE],
                         "sha256": digest,
-                        "undefined_provider_symbols": [
-                            evidence.PROVIDER_ANCHOR_SYMBOL
-                        ],
+                        "undefined_provider_symbols": list(
+                            evidence.PROVIDER_MCCTRL_IMPORT_SYMBOLS
+                        ),
                     },
                 },
                 "scope": {

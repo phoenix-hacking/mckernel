@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:06e7bc24ebaf026ce564c56dc768fb1f4661f70212af7e62fd34fa9d912bfacb"
+    "ISOLATED_SELF_DIGEST:3a4e2caf2d9d2e438d21f53516167451ca053b21e75a68f3d56eae6b8174a2cc"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -410,8 +410,18 @@ PROVIDER_SMP_IMPORT_SYMBOLS = (
     PROVIDER_DETACH_SYMBOL,
     PROVIDER_OPEN_SYMBOL,
     PROVIDER_CLOSE_SYMBOL,
-    OS_CREATE_SYMBOL,
+    "ihk_os_create_unbooted_v4",
     OS_DESTROY_SYMBOL,
+    "ihk_os_with_kobject_v1",
+)
+PROVIDER_MCCTRL_IMPORT_SYMBOLS = (
+    PROVIDER_ANCHOR_SYMBOL,
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_application_open_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_close_v1",
 )
 # Retain the public helper name for the complete provider definition/export set.
 PROVIDER_SYMBOLS = PROVIDER_DEFINED_SYMBOLS
@@ -3499,7 +3509,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "file": "mcctrl.ko",
             "import_namespace": PROVIDER_EXPORT_NAMESPACE,
             "name": "mcctrl",
-            "undefined_provider_symbols": [PROVIDER_ANCHOR_SYMBOL],
+            "undefined_provider_symbols": list(PROVIDER_MCCTRL_IMPORT_SYMBOLS),
         },
     ]
     if not _exact_typed_equal(contract["modules"], expected_modules):
@@ -7364,7 +7374,7 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
         "mcctrl": {
             "depends": ["ihk"],
             "import_namespaces": [PROVIDER_EXPORT_NAMESPACE],
-            "undefined_provider_symbols": [PROVIDER_ANCHOR_SYMBOL],
+            "undefined_provider_symbols": list(PROVIDER_MCCTRL_IMPORT_SYMBOLS),
         },
     }
     for name, expected in expected_module_facts.items():
