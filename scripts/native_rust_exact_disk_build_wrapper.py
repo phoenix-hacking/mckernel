@@ -38,7 +38,7 @@ RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-
 # memory-map-7, relocated-memory-map-8, mapping-binding-9,
 # lifecycle-binding-10, objtool-binding-11, runtime-blob-12, and self-digest-13
 # attempts are retained evidence, never reusable leases. Fresh requests are
-# bound to the exportset-14 path below.
+# bound to the exportset-15 path below; exportset-14 is retained by scratch-10.
 REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
 SUPERSEDED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
 CLOSUREFIX_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-closurefix-4.json"
@@ -51,7 +51,7 @@ LIFECYCLEBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratc
 OBJTOOLBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-objtoolbinding-11.json"
 RUNTIMEBLOB_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 SELFDIGEST_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-14.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-15.json"
 
 
 class AdmissionError(ValueError):
