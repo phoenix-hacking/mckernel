@@ -10211,3 +10211,38 @@ and do not retry automatically on failure.  If it passes, independently review
 the exact `mckernel.img`, then bind it into a fresh strict memory diagnostic
 packet/release.  Real current diagnostic guest applications remain zero and no
 acceptance bar moves.
+
+Continuation checkpoint 234, 2026-09-30: the one released exportset-18
+bounded correction attempt terminated safely and is preserved as a configure
+failure.  Identity checks now pass and CMake starts, proving the exportset-17
+`cc` lookup-spelling correction.  Its kernel-module probe then uses GCC 14.3.1
+against the retained host kernel tree built by Clang 21.1.8; GCC rejects
+`-mretpoline-external-thunk`.  Configuration subsequently reports `error:
+couldn't find libnuma`.  Exactly one CMake command ran and no `mckernel.img`
+was produced.
+
+Driver receipt `dd5c53b9...8272` records status FAIL, phase `configure`; owner
+receipt `79297720...558c` preserves owner PID/starttime
+`1634914/100793649`, container `a6e3772f...cb0ae` and nonce
+`db5dfd5b...a42ed`.  Terminal state is exited1/PID0/OOMfalse, retirement is
+proven, the lease is absent, and both the container and complete scratch
+evidence remain retained.  Consumed exportset-18 exclusion
+`d8c94e1b...3216` is preserved.  Exact hashes and paths are recorded in
+`docs/verification/evidence/native-exact-mckernel-image-exportset18-failure-20260930.json`.
+
+This is the bounded corrected attempt for the current-image build-contract
+family.  Do not repeat it unchanged.  Next obtain expert source/toolchain review
+of the Clang-built kernel compiler contract and sealed `libnuma` availability,
+then implement one reviewed correction with cheap regression coverage before a
+fresh packet and heavy attempt.  The strict memory diagnostic remains frozen
+at stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit 37/raw wait 9472,
+but cannot be rebound until a current `mckernel.img` exists.  Real current
+diagnostic guest applications remain zero; this diagnostic build failure moves
+no acceptance bar.
+
+Shutdown checkpoint: no image owner, QEMU or mcexec process remains.  The
+launcher wrapper/launcher/worker/server identities are respectively
+`1442141/1442142/1442145/1442149`, all started 2026-09-30 10:46:42 PDT and
+left untouched for the launcher-controlled pause.  All child agents are
+completed.  Host/scratch free bytes are 19,711,766,528/15,243,829,248 and
+MemAvailable is 30,018,120 KiB.
