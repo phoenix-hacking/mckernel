@@ -37,7 +37,7 @@ EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb70
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-23.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-24.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
@@ -46,7 +46,7 @@ RETIRED_COMMON_EXCLUSIONS = frozenset(
         "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
         "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
         "exportset-17", "exportset-18", "exportset-19", "exportset-20",
-        "exportset-21", "exportset-22",
+        "exportset-21", "exportset-22", "exportset-23",
     )
 )
 LIMITS = {
@@ -85,6 +85,7 @@ PREPARER_BASE_IMAGE = (
 )
 PINNED_CMAKE_RPM = "cmake-0:3.31.8-1.el10.x86_64"
 PINNED_RUST_RPM = "rust-0:1.92.0-1.el10.x86_64"
+EXPECTED_V2_RUSTC_VERSION = "rustc 1.95.0-nightly (c04308580 2026-02-18)"
 _PREPARATION_EVIDENCE = (
     "image-inspect.json", "inspect-before-start.json", "tool-observation.json",
     "inspect-terminal.json", "offline-inspect-before-start.json",
@@ -1012,8 +1013,8 @@ def _validate_request(request):
           "toolchain environment is not sealed")
     _fail(isinstance(tools.get("rustc"), dict), "toolchain Rust identity")
     rust_version = tools["rustc"].get("version", "")
-    _fail(isinstance(rust_version, str) and "nightly" in rust_version.lower(),
-          "toolchain Rust is not nightly")
+    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION,
+          "toolchain Rust version is not the supported exact nightly")
     source_tools = dict(tools)
     if toolchain_schema.endswith(".v2"):
         # Authentication of the source checkout is a host operation.  Do not
@@ -1046,7 +1047,8 @@ def _validate_request(request):
                   "PATH directory escapes toolchain roots")
     nightly = request.get("nightly")
     _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
-          "nightly" in nightly["rustc_version"].lower(), "nightly manifest")
+          nightly["rustc_version"] == EXPECTED_V2_RUSTC_VERSION and
+          nightly["rustc_version"] == rust_version, "nightly manifest")
     expected_mounts = {"source": "/src", "manifest": "/inputs.json",
                                  "toolchain": "/toolchain.json", "driver": "/driver.py",
                                  "provenance": "/native_rust_exact_build_offline.py",
@@ -1264,6 +1266,7 @@ def _revalidate_inputs(bound, request):
     source_doc = _load_json(bound["manifest"], "source manifest")
     toolchain_doc = _load_json(bound["toolchain"], "toolchain manifest")
     if bound.get("toolchain_schema", "").endswith(".v2"):
+        _v2_mount_roots(request, toolchain_doc)
         host_root, host_kernel = _validate_kernel_binding(toolchain_doc, bound["kernel_root"])
         _fail(host_root == bound["kernel_root"] and host_kernel == bound["kernel"],
               "kernel binding changed")
@@ -1273,6 +1276,13 @@ def _revalidate_inputs(bound, request):
         source_tools = {"git": _v2_host_git(request)}
     else:
         source_tools = toolchain_doc["tools"]
+    rust_descriptor = (toolchain_doc.get("mounted_tools", {}).get("rustc", {})
+                       if bound.get("toolchain_schema", "").endswith(".v2")
+                       else toolchain_doc.get("tools", {}).get("rustc", {}))
+    rust_version = rust_descriptor.get("version", "")
+    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION and
+          request.get("nightly", {}).get("rustc_version") == rust_version,
+          "toolchain Rust version drifted")
     _validate_authenticated_source(bound["source"], source_doc, request["candidate_sha"],
                                    request["ihk_sha"], source_tools, bound["provenance"])
     if bound.get("gitlink_manifest") is not None:

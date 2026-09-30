@@ -12,6 +12,10 @@ from scripts.tests.test_native_rust_exact_mckernel_image_container_owner import 
 
 
 class RequestPrepareTests(unittest.TestCase):
+    def test_supported_v2_rustc_identity_is_exact(self):
+        self.assertEqual(prepare.owner.EXPECTED_V2_RUSTC_VERSION,
+                         "rustc 1.95.0-nightly (c04308580 2026-02-18)")
+
     def test_publish_validates_staged_then_final_and_writes_request_last(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); toolchain = root / "toolchain.json"; request = root / "request.json"
@@ -103,7 +107,7 @@ class RequestPrepareTests(unittest.TestCase):
             fixture.test_v2_owner_admission_and_offline_container_fixture()
             nightly = fixture.root / "v2-nightly"
             rustc = nightly / "bin/rustc"
-            rustc.write_text("#!/bin/sh\necho 'rustc nightly fixture'\n", encoding="utf-8")
+            rustc.write_text("#!/bin/sh\necho '" + prepare.owner.EXPECTED_V2_RUSTC_VERSION + "'\n", encoding="utf-8")
             rustc.chmod(0o755)
             toolchain = json.loads(fixture.toolchain.read_text(encoding="utf-8"))
             toolchain["mounted_tools"]["rustc"]["sha256"] = prepare._digest(rustc)

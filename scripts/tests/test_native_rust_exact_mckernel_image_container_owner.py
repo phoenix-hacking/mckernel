@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -144,7 +145,7 @@ class OwnerTests(unittest.TestCase):
         self.tools = self.root / "tools"
         self.tools.mkdir()
         for name in owner.REQUIRED_TOOLS:
-            (self.tools / name).write_text(("rustc nightly fixture\n" if name == "rustc"
+            (self.tools / name).write_text((owner.EXPECTED_V2_RUSTC_VERSION + "\n" if name == "rustc"
                                             else name + " fixture\n"))
         (self.tools / "git").write_text("#!/bin/sh\nexec /usr/bin/git \"$@\"\n")
         (self.tools / "git").chmod(0o755)
@@ -192,17 +193,18 @@ class OwnerTests(unittest.TestCase):
         owner.COMMON_EXCLUSION = str(self.common)
 
     def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-23.json"
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-24.json"
         retired_exportsets = [
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-19.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-20.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-21.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-22.json",
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-23.json",
         ]
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-23.json"))
+        self.assertTrue(current.endswith("exportset-24.json"))
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
@@ -237,6 +239,19 @@ class OwnerTests(unittest.TestCase):
         self.assertIs(owner.Signals, owner._HOST_OWNER.CliSignals)
         self.assertIs(owner._inspect, owner._HOST_OWNER.inspect)
         self.assertIs(owner._retire, owner._HOST_OWNER.retire)
+
+    def test_v2_exact_rustc_identity_rejects_legacy_and_other_nightly(self):
+        self.assertNotEqual("rustc 1.60.0", owner.EXPECTED_V2_RUSTC_VERSION)
+        self.assertNotEqual("rustc 1.94.0-nightly (arbitrary)", owner.EXPECTED_V2_RUSTC_VERSION)
+
+    def test_v2_admission_rejects_legacy_and_arbitrary_nightly_manifest(self):
+        for version in ("rustc 1.60.0", "rustc 1.94.0-nightly (arbitrary)"):
+            request = self.request()
+            request["nightly"] = {"rustc_version": version}
+            with mock.patch.object(owner.shutil, "disk_usage",
+                                   return_value=shutil._ntuple_diskusage(64 * 2**30, 1, 64 * 2**30)):
+                with self.assertRaisesRegex(owner.OwnerError, "nightly manifest"):
+                    owner.ImageOwner(request).validate()
 
     def test_exact_exclusion_work_root_and_authenticated_import_bindings(self):
         request = self.request()
@@ -281,7 +296,7 @@ class OwnerTests(unittest.TestCase):
             "schema": "mckernel.native-exact-mckernel-image-toolchain.v1",
             "tools": {name: {"path": str(self.tools / name),
                               "sha256": digest(self.tools / name),
-                              "version": ("rustc nightly fixture" if name == "rustc"
+                              "version": (owner.EXPECTED_V2_RUSTC_VERSION if name == "rustc"
                                            else name + " fixture")}
                        for name in owner.REQUIRED_TOOLS},
             "kernel_dir": str(self.kernel),
@@ -310,7 +325,7 @@ class OwnerTests(unittest.TestCase):
             "host_owner_path": str(owner._HOST_OWNER_PATH),
             "host_owner_sha256": digest(owner._HOST_OWNER_PATH),
             "toolchain_roots": [{"path": str(self.tools), "inventory": inventory(self.tools)}],
-            "path_dirs": [str(self.tools)], "nightly": {"rustc_version": "rustc nightly fixture"},
+            "path_dirs": [str(self.tools)], "nightly": {"rustc_version": owner.EXPECTED_V2_RUSTC_VERSION},
             "mounts": {"source": "/src", "manifest": "/inputs.json", "toolchain": "/toolchain.json",
                         "driver": "/driver.py", "provenance": "/native_rust_exact_build_offline.py",
                         "work": "/work"},
@@ -428,7 +443,7 @@ class OwnerTests(unittest.TestCase):
                         "headers": {"/usr/include/libudev.h": library("/usr/include/libudev.h", "systemd-devel")}},
         }
         mounted = {"rustc": {"path": "/nightly/bin/rustc", "sha256": digest(nightly / "bin/rustc"),
-                              "version": "rustc nightly fixture"}}
+                              "version": owner.EXPECTED_V2_RUSTC_VERSION}}
         closure_out = owner._closure_inventory(out, out, Path("/out"))
         closure_nightly = owner._closure_inventory(nightly, nightly, Path("/nightly"))
         receipt = self.root / "image-receipt.json"

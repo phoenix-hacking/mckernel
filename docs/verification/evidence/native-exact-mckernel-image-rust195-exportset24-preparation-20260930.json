@@ -1,0 +1,101 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-rust195-exportset24-preparation.v1",
+  "recorded_at": "2026-09-30T15:10:00-07:00",
+  "status": "PASS_SOURCE_PACKET_AND_EXECUTION_RELEASE",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "failure_closed": {
+    "attempt": "exportset-23",
+    "evidence": "docs/verification/evidence/native-exact-mckernel-image-exportset23-failure-20260930.json",
+    "classification": "authenticated but incompatible Rust 1.60 nightly closure",
+    "configure_exit": 0,
+    "build_exit": 2,
+    "reported_errors": 3898,
+    "image_produced": false
+  },
+  "correction": {
+    "compiler": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "commit": "c043085801b7a884054add21a94882216df5971c",
+    "llvm": "22.1.0",
+    "closure": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+    "closure_identity": "1831:6453911",
+    "closure_regular_files": 2465,
+    "closure_symlinks": 0,
+    "rustc_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "rust_src_core_sha256": "e274e9d5ccee70b26d254f9bf9f41df337c482bc7e5d0ff8b9115992b18fbe75",
+    "owner_sha256": "e03793c9ec1f0a0a103f573350a054b3400832d56dba9593f238ed7544396bb6",
+    "request_preparer_sha256": "ec3f70b1325a4f91ef1f60dbfba8dd7898440bb6384357fb03c599fa45b41e75",
+    "owner_test_sha256": "db3cd49f7c8f844c77591d9756d8b7c43a7e1793779859eef6094d3035b2d156",
+    "preparer_test_sha256": "d398edd134769b5cc3c329e2d30df5741da594197a019e20670e60192bcdbbd0",
+    "tests": {
+      "command": "PYTHONPATH=. python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_mckernel_image_request_prepare",
+      "result": "58 PASS",
+      "log": "/home/holden/mckernel-work/scratch/rust-toolchain-guard-tests-20260930-2.log",
+      "log_sha256": "08879d0edac5aa66604db7f4d40336e16e88bdfa1a774c78c37be773ac1895f4"
+    },
+    "independent_source_review": "PASS_SOURCE_TOOLCHAIN"
+  },
+  "current_crate_probe": {
+    "compiler_jobs": 1,
+    "cpu": 2,
+    "timeout_seconds": 600,
+    "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/kernel/rust/lib.rs",
+    "flags": "exportset23 generated Rust command with no-redzone, no-vectorize and disabled SSE/AVX target features",
+    "exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "fff9a5564c43ecb7e18c917e8ef2b7e0dd271a9d8e53577dba5b03b779a94dc7",
+    "warnings": 37,
+    "errors": 0,
+    "object_size": 12589664,
+    "object_sha256": "8ecb2043ecb652847fb71317b15729af8a372121713df2edf5ec4a0f8aeba004",
+    "scope": "Compile compatibility only; warnings remain review work and no linked image or runtime behavior is accepted."
+  },
+  "packet": {
+    "namespace": "exportset-24",
+    "inputs": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-prepare-inputs-4e99a82c-exportset-24.json",
+      "sha256": "a52770e81a04475338a6718baed6c5f8bf0a61926f7f69bb8ed262db80ce0915",
+      "size": 15068
+    },
+    "toolchain": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-24.json",
+      "sha256": "de4bcafc0e0c33e5d19fb50e3b88c4b9470e3c4c27d7478b3da6c08abb81cf83",
+      "size": 72685013
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-24.json",
+      "sha256": "cdfbbf6b373a71fde8bff3831fb1e9f67af8f5b9c65a84f828e590245f19c54c",
+      "size": 35806268
+    },
+    "gitlink_manifest_sha256": "de08d8c4a7c980e6b76ce9ca38abbaf1905fe5429a29c0eb1d096530ddf55309",
+    "work_identity": "1831:1721231",
+    "owner_evidence_identity": "1831:1721232",
+    "parents_mode": "0700",
+    "children_lease_exclusion": "absent as required before O_EXCL acquisition",
+    "independent_packet_review": "PASS_PACKET_EXPORTSET24",
+    "independent_execution_review": "PASS_EXECUTION_EXPORTSET24 for exactly one serialized owner invocation after fetched checkpoint verification"
+  },
+  "resources_after_preparation": {
+    "host_free_bytes": 17931227136,
+    "scratch_free_bytes": 14100279296,
+    "memory_available_bytes": 30375432192,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "profile": "CPUs2-5, -j4, 12GiB/no swap expansion, 512 PIDs, no network"
+  },
+  "storage_maintenance": {
+    "retired_intermediate_bytes": 1338163200,
+    "scratch_trim_bytes": 1751281664,
+    "journal_archives_removed_bytes": 1711276032,
+    "journal_retained": "2.3 GiB current/recent data",
+    "recovery": "The removed rustup staging root is reproducible; exact required closure remains. Removed journal archives are not recoverable."
+  },
+  "acceptance": {
+    "compiled_current_crate": 1,
+    "linked_current_mckernel_images": 0,
+    "real_current_diagnostic_guest_apps": 0,
+    "application_catalog_accepted": 0,
+    "production_acceptance": false
+  },
+  "next": "After independent execution review and fetched checkpoint verification, run the exportset24 owner exactly once; authenticate any linked mckernel.img before preparing fresh startup and application diagnostic packets."
+}

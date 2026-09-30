@@ -215,8 +215,8 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
         "environment": {},
     }
     _fail((nightly / "bin/rustc").is_file(), "nightly rustc missing")
-    _fail("nightly" in toolchain["mounted_tools"]["rustc"]["version"].lower(),
-          "nightly rustc version is not nightly")
+    _fail(toolchain["mounted_tools"]["rustc"]["version"] == owner.EXPECTED_V2_RUSTC_VERSION,
+          "nightly rustc version is not the supported exact nightly")
     inventory = json.loads(Path(backup_inventory).read_text(encoding="utf-8")) if isinstance(backup_inventory, (str, Path)) else backup_inventory
     _fail(inventory == owner._tree_inventory(backup), "source backup inventory differs")
     work = _directory(owner_work_root, "owner work root")

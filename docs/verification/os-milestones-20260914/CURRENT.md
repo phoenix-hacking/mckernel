@@ -10455,3 +10455,65 @@ fresh current-image diagnostic packets in serial startup, memory, files,
 threads/futexes, signals and separately reviewed shutdown order.  Old frozen
 diagnostic packets bind a different image and must not be reused.  No build or
 guest acceptance counter moves at this source/packet checkpoint.
+
+Continuation checkpoint 249, 2026-09-30: exportset-23 executed exactly once
+and closed the bundled-libdwarf configure blocker, but the subsequent Rust
+kernel compilation failed.  CMake configure exited 0 and produced the exact
+`MODULES_END` probe.  `mckernel.img -j4` exited 2 under the packet's
+authenticated but obsolete `rustc 1.60.0-nightly`; its 3,898 diagnostics are
+dominated by unsupported current-language surfaces (`offset_of!`, let-else,
+raw-address syntax and C-string literals), rather than a demonstrated lifetime
+defect.  Owner container `4f2b721b...e8fb3`, name
+`mckernel-image-15024d3e89c64409b2146ecc9d969645`, nonce
+`385793b1...54fab`, is retained exited/PID0/exit1/OOMfalse.  Its lease is absent
+and exportset-23's consumed exclusion remains.  Original receipt, stderr and
+provenance hashes are bound in
+`docs/verification/evidence/native-exact-mckernel-image-exportset23-failure-20260930.json`.
+No linked current image or guest resulted, and exportset-23 must not be repeated.
+
+The single bounded correction binds exact historical production compiler
+`rustc 1.95.0-nightly (c04308580 2026-02-18)`, commit
+`c043085801b7a884054add21a94882216df5971c`, LLVM 22.1.0 and matching rust-src.
+The retained no-symlink closure contains 2,465 files; rustc hashes to
+`70ebcbba...54e09`.  Owner/preparer now reject every other compiler identity
+for v1/v2, require request/manifest equality, and revalidate the complete
+mounted closure after admission and on terminal paths.  Combined owner/request
+tests pass 58/58 with log `08879d0e...895f4`; independent rereview returns
+`PASS_SOURCE_TOOLCHAIN`.  A one-CPU, 600-second-bounded compile of the exact
+current candidate Rust crate with the generated no-redzone/no-vectorization/
+SSE-AVX-disabled command exits 0 in 17.3 seconds, empty stdout, 37 retained
+warnings, and object `8ecb2043...ba004` (12,589,664 bytes).  This is compile
+compatibility evidence only, not a linked-image or runtime result.
+
+Fresh exportset-24 is prepared.  Inputs `a52770e8...e0915`, toolchain
+`de4bcafc...1cf83` and request `cdfbbf6b...c54c` bind the exact compiler,
+unchanged 132,191-entry retained host output, exact libdwarf closure, current
+owner `e03793c9...6bb6`, driver `fa3ea29e...62bd8` and attempt5 tool image.
+Work/owner roots are empty mode0700 at `1831:1721231` and `1831:1721232`;
+lease, exclusion and driver children are absent as required before atomic
+acquisition.  Independent decisions are `PASS_PACKET_EXPORTSET24` and
+`PASS_EXECUTION_EXPORTSET24` for exactly one serialized invocation after this
+checkpoint is pushed and fetched.  Exact preparation evidence is
+`docs/verification/evidence/native-exact-mckernel-image-rust195-exportset24-preparation-20260930.json`.
+
+Toolchain preparation temporarily crossed the 16-GiB host floor.  A wrong-date
+Rust closure plus duplicate exact closure (1,338,163,200 bytes) was recorded and
+removed while retaining the exact required closure; scratch trim discarded
+1,751,281,664 bytes.  System journal vacuum removed 1,632 MiB of archived
+segments while preserving 2.3 GiB current/recent journal data; those removed
+journals are not recoverable.  Post-preparation host/scratch free bytes are
+17,931,227,136/14,100,279,296 and MemAvailable is 30,375,432,192 bytes, above
+the enforced 16/12/16-GiB floors.  The exact closure/removal record is
+`docs/verification/evidence/native-exact-rust-nightly-closure-preparation-20260930.json`.
+
+Next commit, push and fetch-verify this exact source/packet checkpoint, then
+remeasure capacity and invoke exportset-24 exactly once.  On a linked image,
+authenticate artifact/symbol/no-SIMD evidence and prepare fresh independently
+reviewed diagnostic packets in startup, memory, files, threads/futexes, signals
+and shutdown order.  Diagnostic outputs remain separate from acceptance.  The
+current cursor has eight failed and one completed current-candidate build
+records, zero linked smallest-current `mckernel.img` artifacts, one exact
+current-crate compile, and zero real current-image diagnostic guest apps.
+Launcher wrapper/launcher/worker/server remain
+`1442141/1442142/1442145/1442149`, all started 2026-09-30 10:46:42 PDT; no
+QEMU, mcexec or image owner is live.
