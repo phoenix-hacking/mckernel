@@ -9805,3 +9805,41 @@ output plus hard reserve.  Full result is
 Next obtain fresh heavy-build review and run exactly one scratch-12 build under
 the pinned profile.  Current-candidate builds remain six failed and zero
 completed; real diagnostic guest applications remain zero.
+
+Continuation checkpoint 222, 2026-09-30: scratch-12 is the first completed
+current-candidate exact build in this repair loop.  Candidate
+`4e99a82c9b87a7cf3d6002b75ec380fef37af7a1` built the host `bzImage` and all
+three native Rust modules; the driver receipt is `PASS`/`complete`, and the
+owner returned 0.  Retained container `4d15b349...e4f86` exited 0 with PID 0
+and OOM false after running under CPUs 2-5, 12 GiB memory with no swap
+expansion, 512 PIDs and no network.  The exact output/evidence roots remain at
+identities `1831:6555351`/`1831:6555352` and occupy
+5,166,792,704/502,849,536 bytes.  The lease is absent after retirement;
+exportset-16 is retained at identity `1831:72288`.
+
+Artifact SHAs are `c995dfd1...985e` (`bzImage`), `b4dbf04c...dc9f`
+(`ihk.ko`), `268d6d3b...4bbb` (`ihk-smp-x86_64.ko`) and
+`d927bc44...019f` (`mcctrl.ko`).  Owner/driver/terminal receipt SHAs are
+`ceb5ee60...572b`, `9f0c9021...deae` and `96eb113a...6e6`.  Post-build
+host/scratch/memory availability is
+24,836,329,472/15,496,278,016/29,141,811,200 bytes.  Full compact evidence is
+`docs/verification/evidence/native-exact-build-scratch12-pass-20260930.json`.
+This is build-only evidence: no McKernel image, boot or guest application has
+yet run.  Current-candidate builds are six failed and one completed; real
+diagnostic guest applications remain zero.
+
+The attempted scratch9 image-admission repair remains rejected and untracked.
+After one bounded correction, independent adversarial review still reproduced
+invented receipt fields, incomplete provenance/inventory binding, alias and
+receipt-link bypasses, and a reservation written before validation with no
+actual owner consumer.  Do not use or commit packet SHA `fcecd6a0...6056` or
+test SHA `23a940df...1553`; this failure family now requires a fresh expert
+design against the actual build/image owner and driver schemas.
+
+Next preserve this successful build, design and independently review a fresh
+actual-schema image-preparation owner, then build/authenticate the smallest
+current `mckernel.img`.  After a separate one-shot root/guest release, run the
+real startup/HELLO diagnostic and capture exact stdout, exit 37, kernel/QMP
+logs, process retirement and teardown.  Continue with memory, file,
+thread/futex, signal and shutdown diagnostics in fresh attempts.  None of
+these diagnostic runs may be promoted to formal application acceptance.

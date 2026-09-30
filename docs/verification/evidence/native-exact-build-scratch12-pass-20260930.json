@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel-native-exact-build-checkpoint-v1",
+  "recorded_at": "2026-09-30T17:40:00Z",
+  "status": "PASS_BUILD_ONLY",
+  "scope": "Exact host-kernel and Rust module build. This is not a boot, guest, application, or production acceptance result.",
+  "source": {
+    "checkpoint_head": "bc7de4eacdc0f5644630a39aacb6ca5732abbfd7",
+    "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "candidate_identity": "1831:3693246",
+    "input_manifest_sha256": "4bc0a306ff903ad89db4a71ba5cce5687d548f40754ece9110acb10b5de673fa",
+    "request_sha256": "a2eb9345bc769a846a39cf24f31cb4d452fb80900bd901f25cc181f3bdd4b1b6"
+  },
+  "execution": {
+    "command": "/usr/bin/python3 -I -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-4e99a82c-scratch-12.json --launcher-aggregate-gib 16.2158",
+    "wrapper_pid": 1309351,
+    "wrapper_starttime": "99741200",
+    "returncode": 0,
+    "container_id": "4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86",
+    "container_name": "mckernel-exact-a97aabd626bd41f59032728f2c1b5282",
+    "container_started_at": "2026-09-30T17:00:15.942063997Z",
+    "container_finished_at": "2026-09-30T17:34:36.129077656Z",
+    "terminal_state": {"status": "exited", "exit_code": 0, "oom_killed": false, "pid": 0, "retained": true},
+    "profile": {"cpuset_cpus": "2-5", "memory_bytes": 12884901888, "memory_swap_bytes": 12884901888, "nano_cpus": 4000000000, "pids_limit": 512, "network_mode": "none"}
+  },
+  "roots": {
+    "output": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-output-4e99a82c-scratch-12", "identity": "1831:6555351", "allocated_bytes": 5166792704},
+    "evidence": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12", "identity": "1831:6555352", "allocated_bytes": 502849536},
+    "operational_exclusion": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json", "identity": "1831:72288", "sha256": "ddc0596d772be2a0b957c53be860b5ebc84911a8071c6c132d3d6871b2698518"},
+    "lease_absent_after_retirement": true
+  },
+  "receipts": {
+    "owner": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12/receipt.json", "identity": "1831:6641744", "size": 89352174, "sha256": "ceb5ee602b2c08a7eb9ef5ee3a4daf468e14dfc94a1a8183f4f0b41e5472572b"},
+    "driver": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12/build/receipt.json", "sha256": "9f0c902197c166b0bc4f79f8c622672a4d3d24972f56acfdd514bc768e3cdeae", "status": "PASS", "phase": "complete", "inventory_entries": 285806, "partial_output_entries": 132191},
+    "terminal_inspect": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-4e99a82c-scratch-12/inspect-terminal.json", "identity": "1831:6641738", "size": 9713, "sha256": "96eb113aaba4436105c411d522928a80d1023a5a0e4060ba010cd37db22b36e6"}
+  },
+  "artifacts": {
+    "bzImage": {"path": "build/arch/x86/boot/bzImage", "identity": "1831:7168554", "size": 16130048, "sha256": "c995dfd141a6c2fb64c293a7e5b37fc5954008d1dfceb3d778910aa76261985e"},
+    "ihk.ko": {"path": "build/drivers/misc/mckernel/ihk.ko", "identity": "1831:221691", "size": 1425960, "sha256": "b4dbf04c47c8b8175462982cfee6e833bd40a2b7d6cadd947d68d4612c97dc9f"},
+    "ihk-smp-x86_64.ko": {"path": "build/drivers/misc/mckernel/ihk-smp-x86_64.ko", "identity": "1831:221689", "size": 11075136, "sha256": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb"},
+    "mcctrl.ko": {"path": "build/drivers/misc/mckernel/mcctrl.ko", "identity": "1831:221690", "size": 1914824, "sha256": "d927bc4460d23c175660f0a23ad8d9dec79b9e5c144e4ae0c898091bcc98a019"}
+  },
+  "capacity_after_build": {"host_available_bytes": 24836329472, "scratch_available_bytes": 15496278016, "mem_available_bytes": 29141811200},
+  "counters": {"current_candidate_builds_completed": 1, "current_candidate_builds_failed": 6, "real_diagnostic_guest_applications": 0},
+  "blocked_image_packet": {
+    "status": "FAIL_SOURCE_AFTER_ONE_BOUNDED_CORRECTION",
+    "packet_sha256": "fcecd6a058a2bb6aa7f0158a2d92ce0daad1114f1ea132ac29fecee794716056",
+    "test_sha256": "23a940df21f6c9c2390e578d8eb46fc854f4cf7f92818ce4f362b89d40a72553",
+    "reason": "The draft still invents receipt fields, permits provenance and inventory bypasses, mishandles aliases and receipt links, and creates an unconsumed reservation before validation.",
+    "disposition": "Do not use or commit the rejected untracked packet. Escalate this failure family to a fresh expert design bound to the actual image driver and owner schemas."
+  },
+  "next": [
+    "Create and independently review a fresh image-preparation packet against the actual separate build and image owner/driver receipts; do not reuse the rejected scratch9 packet.",
+    "Build and authenticate the smallest current McKernel mckernel.img while retaining this exact build and source binding.",
+    "Obtain a fresh one-shot root/guest release and run the real startup/HELLO diagnostic with stdout, exit 37, logs, QMP transcript, retirement, and teardown captured.",
+    "Continue diagnostic memory, file, thread/futex, signal, and shutdown smokes in fresh attempts; diagnostic results do not count as formal application acceptance."
+  ]
+}
