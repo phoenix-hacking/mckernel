@@ -395,14 +395,39 @@ class OwnerTests(unittest.TestCase):
                                  "version": subprocess.check_output([str(target), "--version"], text=True).strip(),
                                  "rpm_nevra": name + "-0:fixture-1.el10.x86_64",
                                  "executable_version": subprocess.check_output([str(target), "--version"], text=True).strip()}
+        image_tools["cmake"]["rpm_nevra"] = owner.PINNED_CMAKE_RPM
         mounted = {"rustc": {"path": "/nightly/bin/rustc", "sha256": digest(nightly / "bin/rustc"),
                               "version": "rustc nightly fixture"}}
         closure_out = owner._closure_inventory(out, out, Path("/out"))
         closure_nightly = owner._closure_inventory(nightly, nightly, Path("/nightly"))
         receipt = self.root / "image-receipt.json"
+        # Match the producer's durable receipt rather than a hand-written
+        # admission stub: downstream validation must consume both observations
+        # and both container terminal inspections.
+        evidence = {}
+        for name in owner._PREPARATION_EVIDENCE:
+            payload = (b"same tool observation\n" if name in
+                       ("tool-observation.json", "offline-tool-observation.json")
+                       else name.encode() + b"\n")
+            path = self.root / name
+            path.write_bytes(payload)
+            evidence[name] = {"size": len(payload), "sha256": digest(path)}
+        packages = {descriptor["rpm_nevra"].split("-0:", 1)[0]: descriptor["rpm_nevra"]
+                    for descriptor in image_tools.values()}
+        packages.update(cmake=owner.PINNED_CMAKE_RPM, rust=owner.PINNED_RUST_RPM)
+        receipt_tools = json.loads(json.dumps(image_tools))
+        # Producer receipts retain observations for base-provided tools too;
+        # rpm is intentionally not an owner-consumed image tool here.
+        receipt_tools["rpm"] = {"rpm_nevra": "rpm-0:fixture-1.el10.x86_64",
+                                 "executable_version": "rpm fixture"}
+        lock_sha = "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
         receipt.write_text(json.dumps({"status": "PASS", "image_id": self.image,
+                                       "candidate_sha": self.candidate, "retired": True,
+                                       "base_image": owner.PREPARER_BASE_IMAGE,
+                                       "toolchain_lock_sha256": lock_sha,
                                        "source_free": True, "runtime_network": "none",
-                                       "tools": image_tools}, sort_keys=True))
+                                       "packages": packages, "tools": receipt_tools,
+                                       "evidence": evidence}, sort_keys=True))
         self.toolchain.write_text(json.dumps({
             "schema": driver.TOOLCHAIN_SCHEMA_V2,
             "kernel_binding": {"container_root": "/out", "container_kernel_dir": "/out/build",
@@ -418,6 +443,7 @@ class OwnerTests(unittest.TestCase):
         request = self.request()
         request.update(toolchain_manifest_sha256=digest(self.toolchain), image_receipt=str(receipt),
                        image_receipt_sha256=digest(receipt),
+                       toolchain_lock_sha256=lock_sha,
                        toolchain_roots=[{"host_path": str(out), "container_path": "/out", "inventory": closure_out},
                                         {"host_path": str(nightly), "container_path": "/nightly", "inventory": closure_nightly}],
                        path_dirs=json.loads(self.toolchain.read_text())["path_dirs"],
@@ -459,8 +485,44 @@ class OwnerTests(unittest.TestCase):
         receipt.write_text(json.dumps(receipt_data, sort_keys=True))
         request = self.request()
         request.update(image_receipt=str(receipt), image_receipt_sha256=digest(receipt),
-                       host_git={"path": str(self.tools / "git"), "sha256": digest(self.tools / "git")})
+                       host_git={"path": str(self.tools / "git"), "sha256": digest(self.tools / "git")},
+                       toolchain_lock_sha256=receipt_data["toolchain_lock_sha256"])
         with self.assertRaisesRegex(owner.OwnerError, "source-free and offline"):
+            owner._validate_v2_image_tools(request, data)
+        valid_receipt = json.loads(json.dumps(receipt_data))
+        valid_receipt["runtime_network"] = "none"
+        receipt.write_text(json.dumps(valid_receipt, sort_keys=True))
+        request.pop("toolchain_lock_sha256")
+        request["image_receipt_sha256"] = digest(receipt)
+        with self.assertRaisesRegex(owner.OwnerError, "toolchain lock differs"):
+            owner._validate_v2_image_tools(request, data)
+        request["toolchain_lock_sha256"] = "0" * 64
+        with self.assertRaisesRegex(owner.OwnerError, "toolchain lock differs"):
+            owner._validate_v2_image_tools(request, data)
+        request["toolchain_lock_sha256"] = valid_receipt["toolchain_lock_sha256"]
+        # Each of these mutations targets a producer assertion that a minimal
+        # handcrafted receipt used to omit.  Rebuild the receipt bytes and
+        # hash for each case so the check reaches receipt admission itself.
+        for field, value, message in (
+                ("candidate_sha", "0" * 40, "identity differs"),
+                ("retired", False, "identity differs"),
+                ("base_image", "rockylinux/rockylinux:10.2", "identity differs"),
+                ("packages", {}, "packages missing"),
+                ("evidence", {}, "evidence missing")):
+            mutated = json.loads(json.dumps(receipt_data))
+            mutated["runtime_network"] = "none"
+            mutated[field] = value
+            receipt.write_text(json.dumps(mutated, sort_keys=True))
+            request.update(image_receipt_sha256=digest(receipt))
+            with self.assertRaisesRegex(owner.OwnerError, message):
+                owner._validate_v2_image_tools(request, data)
+        consumed_package_mismatch = json.loads(json.dumps(receipt_data))
+        consumed_package_mismatch["runtime_network"] = "none"
+        consumed_package_mismatch["packages"] = dict(consumed_package_mismatch["packages"])
+        consumed_package_mismatch["packages"]["git"] = "git-0:wrong-1.el10.x86_64"
+        receipt.write_text(json.dumps(consumed_package_mismatch, sort_keys=True))
+        request.update(image_receipt_sha256=digest(receipt))
+        with self.assertRaisesRegex(owner.OwnerError, "package/tool identity differs"):
             owner._validate_v2_image_tools(request, data)
         bad_target = json.loads(json.dumps(data))
         bad_target["image_tools"]["ld"]["target"] = bad_target["image_tools"]["cc"]["target"]

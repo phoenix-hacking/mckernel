@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+"""Prepare one deterministic v2 image-owner request.
+
+This is deliberately a data-only boundary: it never builds, starts Docker, or
+changes the candidate/build roots.  All roots and receipts are authenticated
+before the two new JSON documents are published.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import stat
+import sys
+import tempfile
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import native_rust_exact_mckernel_image_container_owner as owner
+import native_rust_exact_mckernel_image_offline as driver
+
+
+class PreparationError(RuntimeError):
+    pass
+
+
+def _fail(ok, message):
+    if not ok:
+        raise PreparationError(message)
+
+
+def _digest(path):
+    return owner._sha256(Path(path))
+
+
+def _file(path, label):
+    path = Path(path)
+    _fail(path.is_absolute() and path.is_file() and not path.is_symlink(), label + " missing")
+    _fail(not any(part.is_symlink() for part in [path, *path.parents]), label + " has symlink parent")
+    return path
+
+
+def _directory(path, label):
+    path = Path(path)
+    _fail(path.is_absolute() and path.is_dir() and not path.is_symlink(), label + " missing")
+    _fail(not any(part.is_symlink() for part in path.parents), label + " has symlink parent")
+    return path
+
+
+def _fresh(path, label):
+    path = Path(path)
+    _fail(path.is_absolute() and not path.exists() and not path.is_symlink(), label + " must be fresh")
+    _directory(path.parent, label + " parent")
+    return path
+
+
+def _write_new(path, value):
+    path = _fresh(path, "manifest")
+    payload = (json.dumps(value, sort_keys=True, indent=2) + "\n").encode()
+    fd = path.open("xb")
+    try:
+        fd.write(payload); fd.flush()
+        os.fsync(fd.fileno())
+    finally:
+        fd.close()
+    owner._fsync_dir(path.parent)
+    return path
+
+
+def _publish(toolchain, final_toolchain, final_request, make_request, validate):
+    """Validate through private staging, then publish toolchain and request in order."""
+    stage_dir = Path(tempfile.mkdtemp(prefix=".mckernel-image-request-",
+                                     dir=str(final_toolchain.parent)))
+    staged_toolchain = stage_dir / "toolchain.json"
+    moved = False
+    try:
+        _write_new(staged_toolchain, toolchain)
+        staged_request = make_request(staged_toolchain)
+        validate(staged_request)
+        os.replace(staged_toolchain, final_toolchain)
+        moved = True
+        owner._fsync_dir(final_toolchain.parent)
+        request = make_request(final_toolchain)
+        validate(request)
+        _write_new(final_request, request)
+        return request
+    finally:
+        if staged_toolchain.exists():
+            staged_toolchain.unlink()
+        if stage_dir.exists():
+            os.rmdir(stage_dir)
+        # Once staged admission passed, retain an atomically published final
+        # toolchain if later validation/publication fails.  It is evidence, not
+        # runnable authority: the request is always published last.
+        if not moved:
+            _fail(not final_toolchain.exists(), "unvalidated toolchain was published")
+
+
+def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
+            image_receipt, image_id, nightly_root, host_git, driver_path,
+            provenance_path, host_owner_path, source_root, owner_work_root,
+            owner_evidence_root, output_root, evidence_root, attempt_root,
+            lease_path, common_exclusion_path=owner.COMMON_EXCLUSION,
+            toolchain_manifest=None, request_path=None, jobs=4, timeout=19800,
+            host_root=None, scratch_root=None, disk_admission=None):
+    """Return and optionally publish a validated REQUEST_SCHEMA v1 request."""
+    manifest = _file(candidate_manifest, "candidate/input manifest")
+    source = _directory(source_root, "source root")
+    backup = _directory(backup_root, "source backup")
+    out = _directory(build_output, "build output")
+    nightly = _directory(nightly_root, "nightly root")
+    fresh_output = _fresh(output_root, "output root")
+    fresh_evidence = _fresh(evidence_root, "evidence root")
+    receipt_path = _file(image_receipt, "tool-image receipt")
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    _fail(receipt.get("status") == "PASS", "tool-image receipt is not PASS")
+    _fail(receipt.get("source_free") is True, "tool-image receipt source_free is not true")
+    _fail(receipt.get("runtime_network") == "none", "tool-image receipt runtime_network differs")
+    _fail(receipt.get("image_id") == image_id, "tool-image receipt image differs")
+    _fail(re.fullmatch(r"sha256:[0-9a-f]{64}", str(image_id)) is not None, "image identity")
+    tools = receipt.get("tools")
+    _fail(isinstance(tools, dict), "tool-image receipt tools missing")
+    required = owner.REQUIRED_TOOLS
+    _fail(all(name in tools and isinstance(tools[name], dict) for name in required), "tool-image tools incomplete")
+    for name in required:
+        row = tools[name]
+        _fail(re.fullmatch(r"[0-9a-f]{64}", str(row.get("sha256"))) is not None, "tool hash: " + name)
+        _fail(isinstance(row.get("path"), str) and row["path"].startswith("/"), "tool path: " + name)
+    _fail(host_root is not None and scratch_root is not None or disk_admission is not None,
+          "explicit host/scratch roots or disk admission required")
+    nightly_version = __import__("subprocess").check_output([str(nightly / "bin/rustc"), "--version"], text=True).strip()
+    roots = [{"path": "/out", "inventory": owner._closure_inventory(out, out, Path("/out"))},
+             {"path": "/nightly", "inventory": owner._closure_inventory(nightly, nightly, Path("/nightly"))}]
+    toolchain = {
+        "schema": driver.TOOLCHAIN_SCHEMA_V2,
+        "kernel_binding": {"container_root": "/out", "container_kernel_dir": "/out/build",
+                            "closure_inventory": roots[0]["inventory"]},
+        "kernel_inventory": driver._tree_inventory(out / "build", visible_roots={"/out": out, "/nightly": nightly}, allow_visible_root=True),
+        "image_tools": {name: dict(tools[name]) for name in required if name != "rustc"},
+        "mounted_tools": {"rustc": {"path": "/nightly/bin/rustc", "sha256": _digest(nightly / "bin/rustc"),
+                                       "version": nightly_version}},
+        "toolchain_roots": roots, "path_dirs": ["/nightly/bin", "/usr/bin"],
+        "linux_probe": {"arch": "x86_64", "release": driver.REPRO_ENV["EXPECTED_KERNEL_RELEASE"], "kernel_dir": "/out/build"},
+        "environment": {},
+    }
+    _fail((nightly / "bin/rustc").is_file(), "nightly rustc missing")
+    _fail("nightly" in toolchain["mounted_tools"]["rustc"]["version"].lower(),
+          "nightly rustc version is not nightly")
+    inventory = json.loads(Path(backup_inventory).read_text(encoding="utf-8")) if isinstance(backup_inventory, (str, Path)) else backup_inventory
+    _fail(inventory == owner._tree_inventory(backup), "source backup inventory differs")
+    work = _directory(owner_work_root, "owner work root")
+    evidence_owner = _directory(owner_evidence_root, "owner evidence root")
+    _fail(not any(work.iterdir()), "owner work root must be empty")
+    _fail(not any(evidence_owner.iterdir()), "owner evidence root must be empty")
+    disk = disk_admission or {"host_root": str(host_root), "scratch_root": str(scratch_root),
+                              "host_device": Path(host_root).stat().st_dev, "scratch_device": Path(scratch_root).stat().st_dev,
+                              "host_free_floor": 16 * 2**30, "scratch_free_floor": 12 * 2**30}
+    source_doc = json.loads(manifest.read_text(encoding="utf-8"))
+    _fail(isinstance(source_doc, dict), "candidate/input manifest malformed")
+    _fail(receipt.get("candidate_sha") == source_doc.get("candidate_sha"), "tool-image receipt candidate differs")
+    _fail(receipt.get("retired") is True and receipt.get("base_image") == owner.PREPARER_BASE_IMAGE,
+          "tool-image receipt lifecycle/base differs")
+    _fail(toolchain_manifest is not None and request_path is not None,
+          "explicit toolchain and request publication paths required")
+    final_tc = _fresh(toolchain_manifest, "toolchain manifest")
+    final_request = _fresh(request_path, "request")
+    protected = (source, backup, out, nightly, work, evidence_owner, manifest,
+                 receipt_path, _file(driver_path, "driver"),
+                 _file(provenance_path, "provenance"),
+                 _file(host_owner_path, "host owner"))
+    try:
+        owner._disjoint((*protected, final_tc, final_request))
+    except owner.OwnerError as exc:
+        raise PreparationError("publication destination overlaps protected input") from exc
+
+    common = {
+        "schema": owner.REQUEST_SCHEMA, "candidate_sha": json.loads(manifest.read_text()).get("candidate_sha"),
+        "ihk_sha": json.loads(manifest.read_text()).get("ihk_sha"), "image_id": image_id,
+        "jobs": jobs, "timeout": timeout, "source_root": str(source), "source_identity": owner._identity(source),
+        "backup_root": str(backup), "backup_identity": owner._identity(backup), "backup_inventory": inventory,
+        "disk_identity": owner._identity(source), "source_manifest": str(manifest), "source_manifest_sha256": _digest(manifest),
+        "driver_path": str(_file(driver_path, "driver")), "driver_sha256": _digest(driver_path),
+        "provenance_path": str(_file(provenance_path, "provenance")), "provenance_sha256": _digest(provenance_path),
+        "host_owner_path": str(_file(host_owner_path, "host owner")), "host_owner_sha256": _digest(host_owner_path),
+        "toolchain_roots": [{"host_path": str(out), "container_path": "/out", "inventory": roots[0]["inventory"]},
+                             {"host_path": str(nightly), "container_path": "/nightly", "inventory": roots[1]["inventory"]}],
+        "path_dirs": toolchain["path_dirs"], "nightly": {"rustc_version": nightly_version},
+        "host_git": host_git, "image_receipt": str(receipt_path), "image_receipt_sha256": _digest(receipt_path),
+        "toolchain_lock_sha256": receipt.get("toolchain_lock_sha256"),
+        "mounts": {"source": "/src", "manifest": "/inputs.json", "toolchain": "/toolchain.json", "driver": "/driver.py", "provenance": "/native_rust_exact_build_offline.py", "work": "/work"},
+        "common_exclusion_path": common_exclusion_path, "lease_path": str(lease_path), "owner_evidence_root": str(evidence_owner),
+        "attempt_root": str(attempt_root), "work_root": str(work), "output_root": str(fresh_output),
+        "evidence_root": str(fresh_evidence), "launcher_aggregate_memory_gib": owner.LAUNCHER_AGGREGATE_GIB,
+        "memory_backed_bytes": 0, "aggregate_memory_required": owner.LIMITS["Memory"], "memory_allocation_roots": [str(source), str(backup)], "disk_admission": disk,
+    }
+    _fail(common["candidate_sha"] and common["ihk_sha"], "candidate manifest identities missing")
+
+    def make_request(bound_toolchain):
+        request = dict(common)
+        request["toolchain_manifest"] = str(bound_toolchain)
+        request["toolchain_manifest_sha256"] = _digest(bound_toolchain)
+        return request
+
+    # ImageOwner.validate is read-only: it authenticates the complete request
+    # but neither starts Docker nor publishes leases/receipts.
+    return _publish(toolchain, final_tc, final_request, make_request,
+                    lambda request: owner.ImageOwner(request).validate())
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("inputs", type=Path); parser.add_argument("--request", required=True)
+    args = parser.parse_args()
+    values = json.loads(args.inputs.read_text(encoding="utf-8")); values["request_path"] = args.request
+    try: prepare(**values)
+    except (PreparationError, OSError, ValueError, KeyError) as exc:
+        parser.error(str(exc))

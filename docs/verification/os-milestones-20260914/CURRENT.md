@@ -10043,3 +10043,42 @@ manifest and root/guest release; the frozen oracle remains stdout exactly
 attempts are two failed and one completed; current-candidate builds remain six
 failed and one completed; real current diagnostic guest applications remain
 zero.  This tool-image result earns no production, application or OS acceptance.
+
+Continuation checkpoint 229, 2026-09-30: launcher shutdown preserves the
+bounded v2 image-request admission/publication repair as reviewed-but-not-yet-
+released source WIP.  The first independent source review BLOCKed preparer SHA
+`25d06613...0a00` and owner SHA `82807b38...150e` because the final toolchain
+was written before full validation, destination confinement was incomplete,
+the receipt lock comparison was optional, and publication failure tests were
+missing.  The bounded correction now authenticates the actual PASS/retired
+tool-image receipt and exact lock digest, validates a privately staged
+toolchain before atomic publication/fsync, validates the final binding and
+publishes the request last.  It also includes both destinations in protected-
+root disjointness checks.
+
+Corrected owner/preparer/test SHAs are `74eb5f72...c3d`,
+`cad37c90...7ef`, `ee2713ec...09dc` and `22f07c4a...506`.  All 26 focused
+tests pass with `py_compile` and diff-check.  This corrected source has not
+received the required independent re-review.  Exact WIP evidence is
+`docs/verification/evidence/native-exact-image-request-preparation-wip-20260930.json`.
+No exportset-17 toolchain, request or lease was created; all three named fresh
+paths remain absent.  No Docker/root/image build, QEMU, mcexec or diagnostic
+application ran.
+
+All eight child lanes are closed.  No heavy process is active.  The preserved
+launcher wrapper/launcher/worker/server identities are
+1442141/1442142/1442145/1442149, started 2026-09-30 10:46:42 -0700.  The
+scratch12 backup/output identities remain `1831:6555350`/`1831:6555351` and
+tool-image attempt3 evidence remains `66306:45495354`.  Host/scratch free
+bytes are 20,073,394,176/15,496,278,016 and MemAvailable is 29,495,596 KiB.
+
+Next independently re-review the exact corrected source hashes.  Only after a
+PASS_SOURCE result, create fresh exportset-17, review its actual generated
+manifest/request and obtain an independent execution release before one
+serialized current `mckernel.img` build.  After authenticating that artifact,
+prepare a fresh root/guest packet for strict `baseline.core.memory`, then
+files, threads/futexes, signals and shutdown.  Current-candidate builds remain
+six failed and one completed; tool-image attempts remain two failed and one
+completed; real current diagnostic guest applications remain zero.  No
+acceptance bar moves, the OS goal remains incomplete, and this launcher pause
+is not permanent.

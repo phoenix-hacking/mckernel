@@ -59,6 +59,20 @@ LAUNCHER_AGGREGATE_GIB = "16.2158"
 LAUNCHER_AGGREGATE_BYTES = int(Decimal(LAUNCHER_AGGREGATE_GIB) * 2**30)
 REQUIRED_TOOLS = ("cmake", "cc", "rustc", "nm", "readelf", "make", "ld",
                   "objcopy", "ar", "ranlib", "git")
+# This is duplicated deliberately: the image preparer is authenticated
+# independently and the downstream owner must not import an unbound producer
+# module merely to learn the base-image identity.
+PREPARER_BASE_IMAGE = (
+    "rockylinux/rockylinux:10.2@sha256:"
+    "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
+)
+PINNED_CMAKE_RPM = "cmake-0:3.31.8-1.el10.x86_64"
+PINNED_RUST_RPM = "rust-0:1.92.0-1.el10.x86_64"
+_PREPARATION_EVIDENCE = (
+    "image-inspect.json", "inspect-before-start.json", "tool-observation.json",
+    "inspect-terminal.json", "offline-inspect-before-start.json",
+    "offline-tool-observation.json", "offline-inspect-terminal.json",
+)
 SUDO_DOCKER_PREFIX = ("/usr/bin/sudo", "-A", "/usr/bin/docker",
                       "--host=unix:///var/run/docker.sock")
 
@@ -413,10 +427,25 @@ def _validate_v2_image_tools(request, toolchain_doc):
           "image receipt hash binding")
     _fail(_sha256(receipt) == expected, "image receipt hash drift")
     document = _load_json(receipt, "image receipt")
-    _fail(document.get("status") == "PASS" and document.get("image_id") == request["image_id"],
+    _fail(document.get("status") == "PASS" and document.get("image_id") == request["image_id"] and
+          document.get("candidate_sha") == request.get("candidate_sha") and
+          document.get("retired") is True and
+          document.get("base_image") == PREPARER_BASE_IMAGE,
           "image receipt identity differs")
     _fail(document.get("source_free") is True and document.get("runtime_network") == "none",
           "image receipt is not source-free and offline")
+    lock_sha = document.get("toolchain_lock_sha256")
+    _fail(isinstance(lock_sha, str) and re.fullmatch(r"[0-9a-f]{64}", lock_sha),
+          "image receipt toolchain lock hash")
+    requested_lock_sha = request.get("toolchain_lock_sha256")
+    _fail(isinstance(requested_lock_sha, str) and
+          re.fullmatch(r"[0-9a-f]{64}", requested_lock_sha) and
+          requested_lock_sha == lock_sha, "image receipt toolchain lock differs")
+    packages = document.get("packages")
+    _fail(isinstance(packages, dict) and packages and
+          all(isinstance(name, str) and name and isinstance(value, str) and value
+              for name, value in packages.items()),
+          "image receipt packages missing")
     image_tools = toolchain_doc.get("image_tools")
     mounted_tools = toolchain_doc.get("mounted_tools")
     _fail(isinstance(image_tools, dict) and isinstance(mounted_tools, dict),
@@ -425,6 +454,28 @@ def _validate_v2_image_tools(request, toolchain_doc):
           not set(image_tools) & set(mounted_tools), "v2 tool partition overlaps")
     _fail("rustc" in mounted_tools and "rustc" not in image_tools,
           "nightly rustc must be mounted")
+    receipt_tools = document.get("tools")
+    _fail(isinstance(receipt_tools, dict) and receipt_tools,
+          "image receipt tools missing")
+    _fail(packages.get("cmake") == PINNED_CMAKE_RPM and
+          packages.get("rust") == PINNED_RUST_RPM,
+          "image receipt pinned CMake/Rust identity differs")
+    evidence = document.get("evidence")
+    _fail(isinstance(evidence, dict) and evidence, "image receipt evidence missing")
+    evidence_root = receipt.parent
+    for name in _PREPARATION_EVIDENCE:
+        row = evidence.get(name)
+        _fail(isinstance(row, dict) and
+              isinstance(row.get("sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) and
+              isinstance(row.get("size"), int) and row["size"] >= 0,
+              "image receipt evidence entry missing: " + name)
+        path = _safe_regular(evidence_root / name, "image receipt evidence")
+        _fail(path.stat().st_size == row["size"] and _sha256(path) == row["sha256"],
+              "image receipt evidence hash drift: " + name)
+    _fail(evidence["tool-observation.json"]["sha256"] ==
+          evidence["offline-tool-observation.json"]["sha256"],
+          "image receipt preparation/offline observations differ")
     for name, descriptor in image_tools.items():
         _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
               isinstance(descriptor.get("target"), str) and
@@ -432,11 +483,19 @@ def _validate_v2_image_tools(request, toolchain_doc):
               "image tool descriptor incomplete: " + name)
         _fail(re.fullmatch(r"[0-9a-f]{64}", str(descriptor.get("sha256", ""))),
               "image tool hash missing: " + name)
-        receipt_tools = document.get("tools", {})
         _fail(isinstance(receipt_tools, dict) and receipt_tools.get(name) == descriptor and
               isinstance(descriptor.get("rpm_nevra"), str) and
               isinstance(descriptor.get("executable_version"), str),
               "image receipt tool differs: " + name)
+        # Only tools consumed from the immutable image need package-owner
+        # authentication.  The producer may retain observations for
+        # base-provided tools (for example rpm) that are not part of this
+        # owner contract's image_tools partition.
+        rpm = descriptor["rpm_nevra"]
+        package_match = re.fullmatch(r"(.+)-\d+:[^-]+-.+\.[^.]+", rpm)
+        _fail(package_match is not None, "image receipt tool RPM identity malformed")
+        _fail(packages.get(package_match.group(1)) == rpm,
+              "image receipt package/tool identity differs")
     return image_tools, mounted_tools
 
 
