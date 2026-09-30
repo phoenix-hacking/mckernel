@@ -10119,3 +10119,35 @@ image/final-map identity and obtain its fresh root/guest release.  The frozen
 oracle remains stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit
 37/raw wait 9472.  Real current diagnostic guest applications remain zero and
 no acceptance bar moves.
+
+Continuation checkpoint 231, 2026-09-30: actual exportset-17 preparation now
+passes against the retained scratch12 build and the source-free attempt3 tool
+image.  The atomically published toolchain manifest is 80,765,577 bytes at
+SHA `471ed7e3...9d72` and identity `1831:1712398`; the request is 43,891,119
+bytes at SHA `36abddef...488` and identity `1831:1712400`.  Both are mode0600.
+The packet binds 140,053 `/out` closure entries, 35,973 nightly entries, 18,924
+kernel entries and 86 backup entries to candidate `4e99a82c...af7a1`, IHK
+`3114d9e7...2a1f`, image `sha256:5315d343...7080`, receipt
+`1ea38c33...af08` and lock `fd3d7a13...e6c802`.
+
+Independent packet audit returns `PASS_PACKET` after a real read-only
+`ImageOwner.validate()`.  Independent execution review returns
+`PASS_EXECUTION` for exactly one serialized command recorded in
+`docs/verification/evidence/native-exact-mckernel-image-exportset17-release-20260930.json`.
+It independently checks all 92 tool-image evidence files and the exact v2
+mount/resource boundary: CPUs2-5, four jobs, 12GiB/no swap expansion, 512 PIDs,
+network none, private IPC, caller uid/gid, read-only root, cap-drop ALL,
+no-new-privileges, `/work` as the sole writable bind and bounded `/tmp` tmpfs.
+
+Fresh output/evidence/attempt/lease/common-exclusion targets remain absent;
+work and owner-evidence roots are empty mode0700 at identities
+`1831:1704202`/`1831:1704601`.  Host/scratch free bytes are
+19,862,888,448/15,371,608,064 and MemAvailable is 30,057,872KiB.  No heavy
+owner, QEMU or mcexec is live.
+
+Next remeasure the same floors immediately before start, run the one released
+image-owner command, preserve its complete receipt/logs/container retirement,
+and do not retry automatically on failure.  If it passes, independently review
+the exact `mckernel.img`, then bind it into a fresh strict memory diagnostic
+packet/release.  Real current diagnostic guest applications remain zero and no
+acceptance bar moves.
