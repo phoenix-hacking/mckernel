@@ -9568,3 +9568,38 @@ exact-20 correction and rerun one build.  Current-candidate builds remain four
 failed and zero completed; one has a complete compiled artifact set but failed
 the now-corrected post-compile oracle.  Real diagnostic guest applications:
 zero.
+
+Continuation checkpoint 212, 2026-09-30: the stopped f021 expanded build-
+evidence tree is durably archived and retired.  The archive SHA is
+`ac7d2026...13d0`; its full map SHA is `23e418e1...fc2f9` and binds 286,318
+members: 285,811 regular files, 452 directories and 55 symlinks.  Audit-only
+execution verified every member before the separately released destructive
+run.  The canonical retirement result is identity `66306:47475584`, SHA
+`bd37b8cf...852f`, status `RETIRE_PASS`; source identity `1831:6684763` is
+absent.  Candidate, compiled output, request, original build failure and exited
+container `b34323f6...c001` remain protected.  Targeted trim returned
+3,785,367,552 bytes.  Post-trim host/scratch availability is
+36,719,865,856/23,786,360,832 bytes, preserving the unchanged reserve floors.
+
+Two original audit-only failures remain additive evidence.  The first rejected
+an unsupported Docker `inspect --no-trunc` flag before archive verification;
+the second exposed that archived regular-file rows include `allocated_bytes`
+while the live comparison initially omitted the field.  Neither attempt
+deleted a member or published a result.  The bounded corrections pass 22
+fault/integration tests, including nested retirement, partial-failure
+`RETIRE_PREPARED`, root/result replacement, short writes, exact stopped-
+container state and per-type archive schema controls.  Full evidence is
+`docs/verification/evidence/native-exact-f021bdee-evidence-retirement-result-20260930.json`.
+
+The downstream runtime oracle now binds the actual preserved consumer graph:
+SMP imports eight exact provider symbols, including create-v4 and
+with-kobject-v1; mcctrl imports the anchor plus six service/application
+symbols.  The complete digest cascade passes 170 pinned-Python-3.12 tests and
+real-ELF replay for ihk/SMP/mcctrl.  Existing FP/closure hardlink rejection and
+seven RS006 inventory mismatches remain non-waived.  Because this correction
+postdates frozen candidate `4197febb`, scratch-9 is retained as an unexecuted
+historical packet and must not be run.  Next issue a fresh scratch-10
+preparation packet bound to pushed runtime-corrected HEAD, remeasure the narrow
+scratch margin, prepare the candidate, and run the single exact build.  Current-
+candidate builds remain four failed and zero completed; real diagnostic guest
+applications remain zero.
