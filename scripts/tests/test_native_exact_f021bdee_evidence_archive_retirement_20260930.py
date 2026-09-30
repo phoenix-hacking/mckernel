@@ -1,5 +1,6 @@
 import importlib.util
 import os
+import tarfile
 from pathlib import Path
 import tempfile
 import pytest
@@ -31,6 +32,20 @@ def test_safe_symlink_roundtrip_and_bad_links_rejected(tmp_path,monkeypatch):
     with pytest.raises(SystemExit,match='escaping'): M.snapshot()
     (M.SOURCE/'escape').unlink(); (M.SOURCE/'dangling').symlink_to('missing')
     with pytest.raises(SystemExit,match='dangling'): M.snapshot()
+
+def test_reviewed_absolute_matrix_source_allowed_and_other_absolute_rejected(tmp_path,monkeypatch):
+    monkeypatch.setattr(M,'SOURCE',tmp_path/'evidence'); M.SOURCE.mkdir(); monkeypatch.setattr(M,'SOURCE_DEVICE',M.SOURCE.stat().st_dev)
+    p=M.SOURCE/'build/native-rust-kconfig-matrix/case-00'; p.mkdir(parents=True)
+    (p/'source').symlink_to(M.ALLOWED_MATRIX_SOURCE)
+    rows=M.snapshot(); link=next(r for r in rows if r['path'].endswith('/source')); assert link['linkname']==M.ALLOWED_MATRIX_SOURCE
+    (p/'source').unlink(); (p/'source').symlink_to('/out/source/other')
+    with pytest.raises(SystemExit,match='unreviewed absolute'): M.snapshot()
+
+def test_symlink_linkname_drift_rejected_by_archive_verifier(tmp_path):
+    archive=tmp_path/'x.tar.gz'; ti=tarfile.TarInfo('build/native-rust-kconfig-matrix/case-00/source'); ti.type=tarfile.SYMTYPE; ti.linkname=M.ALLOWED_MATRIX_SOURCE; ti.mode=0o777
+    with tarfile.open(archive,'w:gz') as tf: tf.addfile(ti)
+    rows=[{'path':ti.name,'type':'symlink','mode':0o777,'uid':0,'gid':0,'mtime_ns':0,'size':0,'linkname':'/out/source/drift'}]
+    with pytest.raises(SystemExit,match='symlink member mismatch'): M.verify(archive,rows)
 
 def test_archive_verifier_rejects_missing_or_changed_member(tmp_path):
     p=tmp_path/'x.tar.gz'; p.write_bytes(b'not an archive')

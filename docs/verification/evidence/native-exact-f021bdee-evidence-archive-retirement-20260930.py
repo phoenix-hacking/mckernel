@@ -14,6 +14,7 @@ FAILURE_SHA='2c40c821d23b0e79bba0eb2e151b47f8c99f5ffc60e36c1e93c97b692f1a59c6'
 OUTPUT=SCRATCH/'native-exact-build-output-f021bdee-scratch-8'; CANDIDATE=SCRATCH/'mckernel-exact-candidate-f021bdee-scratch-8'
 PROTECTED=(OUTPUT,CANDIDATE,SCRATCH/'native-exact-build-request-f021bdee-scratch-8.json',SCRATCH/'native-exact-inputs-f021bdee-scratch-8.json',SCRATCH/'native-exact-candidate-preparation-f021bdee-scratch-8-terminal.json',SCRATCH/'native-exact-candidate-preparation-f021bdee-scratch-8.log',SCRATCH/'native-exact-metadata-backup-f021bdee-scratch-8',SCRATCH/'native-exact-metadata-evidence-f021bdee-scratch-8',SCRATCH/'native-exact-candidate-operational-exclusion-selfdigest-13.json')
 CONTAINER={'id':'b34323f6c4352e8bae669d006e11076a64a5734ed165a6ce866bd4e7aa04c001','name':'mckernel-exact-d01624939ead44118fc2352bc4d83860','state':'exited','exit_code':1}
+ALLOWED_MATRIX_SOURCE='/out/source/linux-6.12.0-211.44.1.el10_2'
 
 def die(x): raise SystemExit('FAIL_CLOSED: '+x)
 def digest(p):
@@ -51,10 +52,14 @@ def guard():
 def snapshot():
     def linkrow(p):
         st=os.lstat(p); target=os.readlink(p)
-        if not target or os.path.isabs(target): die('absolute/empty symlink: '+str(p))
-        try: resolved=(p.parent/target).resolve(strict=True)
-        except OSError: die('dangling symlink: '+str(p))
-        if os.path.commonpath((str(SOURCE.resolve()),str(resolved))) != str(SOURCE.resolve()): die('escaping symlink: '+str(p))
+        rel=str(p.relative_to(SOURCE)); matrix_source=(p.name=='source' and 'native-rust-kconfig-matrix' in p.parts)
+        if not target: die('absolute/empty symlink: '+str(p))
+        if os.path.isabs(target):
+            if not (matrix_source and target==ALLOWED_MATRIX_SOURCE): die('unreviewed absolute symlink: '+str(p))
+        else:
+            try: resolved=(p.parent/target).resolve(strict=True)
+            except OSError: die('dangling symlink: '+str(p))
+            if os.path.commonpath((str(SOURCE.resolve()),str(resolved))) != str(SOURCE.resolve()): die('escaping symlink: '+str(p))
         return {'path':str(p.relative_to(SOURCE)),'type':'symlink','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':0,'linkname':target}
     rows=[]
     for d,dirs,files in os.walk(SOURCE,topdown=True,followlinks=False):
