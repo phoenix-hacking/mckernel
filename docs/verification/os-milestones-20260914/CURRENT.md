@@ -9704,6 +9704,31 @@ manifest/request identities, and then obtain a fresh heavy-build release.
 Current-candidate builds remain five failed and zero completed; real diagnostic
 guest applications remain zero.
 
+Continuation checkpoint 218, 2026-09-30: the first scratch-11 heavy-build
+review correctly blocked before execution because the measured prior output
+would leave scratch 195,735,552 bytes below the hard 12-GiB reserve and
+1,269,477,376 bytes below the retained emergency margin.  Request, manifest,
+empty outputs, absent lease/exportset-15 and profile all matched; no build ran.
+
+The older e1c5 candidate supplied the missing headroom.  Its independently
+reviewed sealed plan SHA is `e965f077...f06d`: 2,426 nlink-1 files were exact
+Git blobs, zero files differed, and targets occupied 9,100,566,528 bytes.
+Apply re-audited the plan and removed all targets.  Candidate identity
+`1831:4587522` remains and now occupies 134,430,720 bytes.  Both original
+failure archives, build output/evidence, metadata, request/manifest,
+preparation records, offlinecwd-6 exclusion, nested IHK delta and stopped
+container `f93945ad...ddf` remain.  The container still reports exited, status
+1, PID 0 and OOM false.  Twenty focused tests pass.
+
+Targeted trim reported 9,600,372,736 bytes.  Host/scratch availability is now
+38,233,141,248/26,956,496,896 bytes, providing more than the measured build
+output plus hard reserve and emergency margin.  Full result:
+`docs/verification/evidence/native-exact-retained-candidate-e1c5e4e2-source-evidence-cleanup-result-20260930.json`.
+Next repeat independent heavy review for unchanged scratch-11 request
+`002b13dc...9db0`, then run one exact build if live ownership/capacity pass.
+Current-candidate builds remain five failed and zero completed; real diagnostic
+guest applications remain zero.
+
 Continuation checkpoint 217, 2026-09-30: scratch-11 preparation passes for
 candidate `acd4197b6e1f53715f75cad6e2e7677d8ab24bc0`, which carries the
 postcheck executable-temp correction and fresh exportset-15 namespace.  The
