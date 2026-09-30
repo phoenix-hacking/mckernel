@@ -1,0 +1,51 @@
+{
+  "status": "APPLY_PASS",
+  "acceptance": "Storage maintenance only; no build, boot, guest, or application acceptance is claimed.",
+  "candidate": {
+    "commit": "e8bece7fd55a862599facb6c5e81e7597a4a5c0d",
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-e8bece7f-scratch-10",
+    "identity": "1831:5111900",
+    "allocated_bytes_after": 134848512
+  },
+  "sealed_plan": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-plan-20260930.json",
+    "identity": "66306:47496627",
+    "size": 1585372,
+    "sha256": "f169bed7338b4406d1aef2d2b85f56cd9ecec51b566156e322708817bfb70b35",
+    "targets": 2491,
+    "preserved_differences": 0,
+    "target_allocated_bytes": 9102626816
+  },
+  "apply": {
+    "log_path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-apply-20260930.log",
+    "log_identity": "66306:47496658",
+    "log_size": 1395629,
+    "log_sha256": "2d777996a861395dc4e2f9739529dea7b1b5484ccb33c576d25e5597761493d9",
+    "targets_absent": 2491,
+    "targets_total": 2491
+  },
+  "preserved": {
+    "build_evidence": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-e8bece7f-scratch-10",
+    "build_output": "/home/holden/mckernel-work/scratch/native-exact-build-output-e8bece7f-scratch-10",
+    "operational_exclusion": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-14.json",
+    "failure_record": "docs/verification/evidence/native-exact-build-scratch10-temp-environment-failure-20260930.json",
+    "container_id": "8c56b1377fc66808ed85b348d2c09df82222d1a8c246a056f154c620b5cb401a",
+    "container_terminal": "exited; exit 1; OOMKilled false; PID 0",
+    "nested_ihk_delta": true
+  },
+  "original_failure": {
+    "stage": "first audit",
+    "effect": "No plan published and no deletion performed.",
+    "cause": "Docker ps JSON exposes a short ID while the first packet compared it to the full ID.",
+    "log_path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-audit-20260930.log",
+    "log_identity": "66306:47495620",
+    "log_size": 39,
+    "log_sha256": "7062a9db6b529f992fab16efc34717e8f8c03849f87b60d4acaf3ac097f4ea0e"
+  },
+  "trim": {
+    "reported_bytes": 15358861312,
+    "host_free_bytes_after": 38553763840,
+    "scratch_free_bytes_after": 27096387584
+  },
+  "next": "Re-review and execute scratch-11 preparation for candidate acd4197b under fresh exclusion exportset-15, then checkpoint and obtain a new heavy-build release."
+}

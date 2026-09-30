@@ -9676,3 +9676,30 @@ Next commit/push this correction, prepare a fresh candidate and request bound
 to that commit, independently review it, and run exactly one new heavy build.
 Do not reuse scratch-10 or its attempt names.  Current-candidate builds are now
 five failed and zero completed; real diagnostic guest applications remain zero.
+
+Continuation checkpoint 216, 2026-09-30: scratch-10 storage maintenance
+recovered the source-clone headroom while retaining the failed build.  The
+sealed audit plan SHA is `f169bed7...0b35`; it selected 2,491 nlink-1 regular
+files under the candidate evidence subtree, all byte-identical to pinned Git
+blobs, with zero differing files and 9,102,626,816 allocated bytes.  Apply
+re-audited the plan and removed all 2,491 targets.  Candidate identity
+`1831:5111900` remains and now occupies 134,848,512 bytes.
+
+Scratch-10's 5.17-GB compiled output, 486-MB full build evidence, exportset-14,
+failure record, nested IHK delta and container `8c56b137...401a` remain.  The
+container is still exited with status 1, PID 0 and OOM false.  The first audit
+failed before plan publication or deletion because Docker's list formatter
+reported a short ID; its 39-byte failure is preserved, and the bounded fix adds
+independent exact terminal-state inspection.  Fourteen focused tests pass.
+Targeted trim reported 15,358,861,312 bytes, leaving host/scratch free space
+38,553,763,840/27,096,387,584 bytes.  Full result:
+`docs/verification/evidence/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-result-20260930.json`.
+
+The build and image owners now reserve fresh operational exclusion namespace
+exportset-15; 38 focused owner tests pass.  Scratch-11 preparation is bound to
+candidate `acd4197b6e1f53715f75cad6e2e7677d8ab24bc0` and packet SHA
+`662c8d19...f648`, with 41 tests passing.  Next re-review it against the new
+capacity and fetched release, execute preparation only, checkpoint its exact
+manifest/request identities, and then obtain a fresh heavy-build release.
+Current-candidate builds remain five failed and zero completed; real diagnostic
+guest applications remain zero.
