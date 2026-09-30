@@ -8618,3 +8618,33 @@ current McKernel image serially and run startup, memory, files,
 threads/futexes, signals and shutdown diagnostics.  Formal counters remain
 6/130, 350/10000 and 0/273 applications; no current-candidate build or real
 diagnostic app has yet run, and the OS remains incomplete.
+
+Continuation checkpoint 182, 2026-09-30: the first real disk-backed exact host
+build attempt reached the pinned, offline four-CPU container but failed before
+compilation in the source-only contract phase.  The exact command and request
+are retained in `native-exact-build-disk-build-2-failure-20260930.json`.
+Container `cc79cd696...cbd7` / full name
+`mckernel-exact-7d4e3858320e4797ab6d22ed89195e9c` exited 1 with PID 0 and remains
+owned by nonce `b3fcbace...19a1` for separately reviewed cleanup.  No kernel or
+module artifact was produced.  Owner receipt SHA is `302961af...bf8c6`, driver
+receipt SHA is `de23fa1a...bd17c`, driver-log SHA is `694ea916...08833`, and
+the preserved 204,800-byte failure archive SHA is `845bff31...ce3a7`.
+
+The observed deterministic error is `exact build workflow prebuild scope
+differs`.  The current workflow is SHA `e9cfb14d...91831`, size 95,063 and Git
+blob `4f8da595...2446`; its retained contract still names the older SHA
+`16fb3010...81e9`.  The two changed step bodies have independently reproduced
+source hashes, but the complete transitive workflow identities and checker
+self-digest must pass their existing full contract before a new build.  The
+first cleanup-packet drafts were rejected for Docker, release, and replacement
+race defects and were not executed.  Preserve the terminal container, common
+exclusion identity `1831:31517`, request, evidence and archive until a corrected
+packet receives independent execution release.
+
+Next finish and independently review the full source-bound identity correction,
+release and execute exact failed-build cleanup, then create a fresh scratch
+candidate from the fetched repaired commit.  Run one serialized host build;
+only after it produces exact `bzImage` and module artifacts may the current
+McKernel image build and diagnostic startup, memory, files, threads/futexes,
+signals and shutdown apps proceed.  Formal counters remain 6/130, 350/10000
+and 0/273; this prebuild failure is diagnostic evidence, not acceptance.

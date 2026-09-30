@@ -1747,6 +1747,26 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(["IHK-001", "SMP-001", "MCC-001"], summary["gate_ids"])
         self.assertEqual("tcg", summary["runtime"]["qemu_accelerator"])
 
+    def test_exact_build_workflow_step_hashes_match_source_and_contract(self) -> None:
+        workflow_path = REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-build.yml"
+        with workflow_path.open("r", encoding="utf-8", newline="") as stream:
+            workflow = stream.read()
+        exact_build_text = workflow.split("\n  fp0006-native-rust-capture:\n", 1)[0]
+        job_text = exact_build_text[exact_build_text.index("jobs:\n") :]
+        steps_marker = "    steps:\n"
+        steps_text = job_text[job_text.index(steps_marker) + len(steps_marker) :]
+        expected = evidence.EXPECTED_EXACT_BUILD_STEP_SHA256
+        steps = evidence._split_named_steps(steps_text, list(expected), "exact build")
+        self.assertEqual(
+            expected,
+            {
+                name: evidence._sha256_bytes(step.encode("utf-8"))
+                for name, step in steps.items()
+            },
+        )
+        evidence._validate_exact_build_workflow_v2(workflow)
+        evidence.validate_contract(REPO_ROOT)
+
     def test_contract_schema_version_is_an_exact_integer(self) -> None:
         for value in (True, 1.0):
             with self.subTest(value=value):
