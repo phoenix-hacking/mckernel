@@ -10155,6 +10155,31 @@ new packet and execution review, and run at most one corrected image attempt.
 Real current diagnostic guest applications remain zero and no acceptance bar
 moves.
 
+Continuation checkpoint 233, 2026-09-30: fresh exportset-18 is prepared and
+released for the one bounded image-tool correction attempt.  Its 80,765,577-
+byte toolchain remains byte-identical at SHA `471ed7e3...9d72`, while the fresh
+43,891,119-byte request is `ee41103c...643a` and binds corrected driver
+`c7d8956f...04fa`, owner `08e336b3...be33`, the active exportset-18 exclusion
+and entirely fresh roots.  Toolchain/request identities are
+`1831:1712448`/`1831:1712450`; fresh empty mode0700 work/owner-evidence roots
+are `1831:1712445`/`1831:1712446`.
+
+Actual read-only owner validation passes again over 140,053 `/out`, 35,973
+nightly, 18,924 kernel and 86 backup entries.  Independent results are
+`PASS_SOURCE_CORRECTION`, `PASS_PACKET`, capacity `GO` and
+`PASS_EXECUTION_CORRECTION` for exactly the command in
+`docs/verification/evidence/native-exact-mckernel-image-exportset18-release-20260930.json`.
+Review confirms the correction retains `/usr/bin/cc` for version, `CC` and
+CMake compiler arguments while canonical `/usr/bin/gcc` remains hash- and
+PATH-authenticated.  Exportset-17 remains immutable and retired.
+
+Host/scratch free bytes are 19,717,570,560/15,246,770,176 and MemAvailable is
+30,018,060KiB.  The fresh output/evidence/attempt/lease/exclusion targets are
+absent and no heavy owner is live.  Next remeasure immediately and run the one
+released corrected attempt with the unchanged isolation profile.  Preserve any
+new failure without retry.  Real current diagnostic guest applications remain
+zero and no acceptance bar moves.
+
 Continuation checkpoint 231, 2026-09-30: actual exportset-17 preparation now
 passes against the retained scratch12 build and the source-free attempt3 tool
 image.  The atomically published toolchain manifest is 80,765,577 bytes at
