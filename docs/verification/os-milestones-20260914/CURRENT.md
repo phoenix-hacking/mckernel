@@ -10549,7 +10549,8 @@ Shutdown handoff: all child agents are completed or closed and no new task was
 dispatched after the stop request.  No QEMU, mcexec, image owner or heavy build
 is live.  Launcher wrapper/launcher/worker/server identities remain
 `1442141/1442142/1442145/1442149`, started 2026-09-30 10:46:42 PDT; the active
-agent-log follower is PID `1970570`, started 2026-09-30 15:07:57 PDT.  Current
+agent-log follower PID `1970570`, started 2026-09-30 15:07:57 PDT, exited while
+the interrupted child lane closed and is no longer live.  Current
 host/scratch free bytes are 17,674,272,768/14,079,119,360 and MemAvailable is
 30,176,075,776 bytes.  The cursor now has nine failed and one completed
 current-candidate build records, zero linked smallest-current images, one exact
