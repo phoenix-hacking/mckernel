@@ -58,8 +58,23 @@ RESOURCE_ARGS = ("--cpus=4", "--cpuset-cpus=2-5", "--memory=12g",
 MAX_TIMEOUT = 19_800
 LAUNCHER_AGGREGATE_GIB = "16.2158"
 LAUNCHER_AGGREGATE_BYTES = int(Decimal(LAUNCHER_AGGREGATE_GIB) * 2**30)
-REQUIRED_TOOLS = ("cmake", "cc", "rustc", "nm", "readelf", "make", "ld",
-                  "objcopy", "ar", "ranlib", "git")
+REQUIRED_TOOLS = ("cmake", "cc", "clang", "ld.lld", "rustc", "nm", "readelf", "make", "ld",
+                  "objcopy", "ar", "ranlib", "git", "dd")
+REQUIRED_LIBRARIES = ("libnuma", "libbfd", "libiberty", "libudev")
+LIBRARY_SPECS = {
+    "libnuma": {"development_package": "numactl-devel",
+                "linker": {"path": "/usr/lib64/libnuma.so", "owner": "numactl-libs"},
+                "headers": {"/usr/include/numa.h": "numactl-devel"}},
+    "libbfd": {"development_package": "binutils-devel",
+               "linker": {"path": "/usr/lib64/libbfd.so", "owner": "binutils-devel"},
+               "headers": {"/usr/include/bfd.h": "binutils-devel"}},
+    "libiberty": {"development_package": "binutils-devel",
+                  "linker": {"path": "/usr/lib64/libiberty.a", "owner": "binutils-devel"},
+                  "headers": {"/usr/include/libiberty.h": "binutils-devel"}},
+    "libudev": {"development_package": "systemd-devel",
+                "linker": {"path": "/usr/lib64/libudev.so", "owner": "systemd-libs"},
+                "headers": {"/usr/include/libudev.h": "systemd-devel"}},
+}
 # This is duplicated deliberately: the image preparer is authenticated
 # independently and the downstream owner must not import an unbound producer
 # module merely to learn the base-image identity.
@@ -497,7 +512,56 @@ def _validate_v2_image_tools(request, toolchain_doc):
         _fail(package_match is not None, "image receipt tool RPM identity malformed")
         _fail(packages.get(package_match.group(1)) == rpm,
               "image receipt package/tool identity differs")
+    _validate_library_closure(document, toolchain_doc.get("libraries"), receipt.parent)
     return image_tools, mounted_tools
+
+
+def _validate_library_closure(document, expected, evidence_root=None):
+    """Bind CMake's immutable image library closure to both probe phases."""
+    libraries = document.get("libraries")
+    _fail(isinstance(libraries, dict) and set(libraries) == set(REQUIRED_LIBRARIES),
+          "image receipt libraries incomplete")
+    _fail(expected == libraries, "toolchain library closure differs from image receipt")
+    packages = document.get("packages")
+    _fail(isinstance(packages, dict), "image receipt packages missing")
+    evidence = document.get("evidence")
+    _fail(isinstance(evidence, dict), "image receipt evidence missing")
+    for name in REQUIRED_LIBRARIES:
+        row = libraries[name]
+        spec = LIBRARY_SPECS[name]
+        _fail(isinstance(row, dict) and row.get("development_package") == spec["development_package"] and
+              row["development_package"] in packages, "library development package missing: " + name)
+        linker = row.get("linker")
+        headers = row.get("headers")
+        _fail(isinstance(linker, dict) and isinstance(headers, dict) and headers,
+              "library artifacts incomplete: " + name)
+        _fail(isinstance(headers, dict) and set(headers) == set(spec["headers"]),
+              "library header set differs: " + name)
+        expected = [("linker", linker, spec["linker"]["path"], spec["linker"]["owner"])]
+        expected += [("header", headers[path], path, expected_owner)
+                     for path, expected_owner in spec["headers"].items()]
+        for label, artifact, expected_path, expected_owner in expected:
+            _fail(isinstance(artifact, dict) and isinstance(artifact.get("path"), str) and
+                  artifact["path"].startswith("/usr/") and
+                  isinstance(artifact.get("target"), str) and artifact["target"].startswith("/usr/") and
+                  isinstance(artifact.get("owner"), str) and artifact["owner"] and
+                  isinstance(artifact.get("rpm_nevra"), str) and
+                  re.fullmatch(r"[0-9a-f]{64}", str(artifact.get("sha256", ""))),
+                  "library " + label + " identity incomplete: " + name)
+            _fail(artifact["path"] == expected_path and artifact["owner"] == expected_owner,
+                  "library " + label + " role differs: " + name)
+            package_match = re.fullmatch(r"(.+)-\d+:[^-]+-.+\.[^.]+", artifact["rpm_nevra"])
+            _fail(package_match is not None and artifact["owner"] == package_match.group(1) and
+                  packages.get(package_match.group(1)) == artifact["rpm_nevra"],
+                  "library RPM identity differs: " + name)
+    if evidence_root is not None:
+        for filename in ("tool-observation.json", "offline-tool-observation.json"):
+            observed = _load_json(_safe_regular(Path(evidence_root) / filename,
+                                                "image receipt library evidence"),
+                                  "image receipt library evidence")
+            _fail(observed.get("libraries") == libraries,
+                  "preparation/offline library observation differs")
+    return libraries
 
 
 def _v2_host_git(request):

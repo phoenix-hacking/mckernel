@@ -15,6 +15,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import signal
 import stat
@@ -34,8 +35,15 @@ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-receipt.v1"
 IHK_HEAD = provenance.EXPECTED_IHK_HEAD
 MAX_JSON = 256 * 1024 * 1024
 MAX_TIMEOUT = 24 * 60 * 60
-REQUIRED_TOOLS = ("cmake", "cc", "rustc", "nm", "readelf", "make", "ld", "objcopy",
-                  "ar", "ranlib", "git")
+REQUIRED_TOOLS = ("cmake", "cc", "clang", "ld.lld", "rustc", "nm", "readelf", "make", "ld", "objcopy",
+                  "ar", "ranlib", "git", "dd")
+REQUIRED_LIBRARIES = ("libnuma", "libbfd", "libiberty", "libudev")
+LIBRARY_SPECS = {
+    "libnuma": {"development_package": "numactl-devel", "linker": {"path": "/usr/lib64/libnuma.so", "owner": "numactl-libs"}, "headers": {"/usr/include/numa.h": "numactl-devel"}},
+    "libbfd": {"development_package": "binutils-devel", "linker": {"path": "/usr/lib64/libbfd.so", "owner": "binutils-devel"}, "headers": {"/usr/include/bfd.h": "binutils-devel"}},
+    "libiberty": {"development_package": "binutils-devel", "linker": {"path": "/usr/lib64/libiberty.a", "owner": "binutils-devel"}, "headers": {"/usr/include/libiberty.h": "binutils-devel"}},
+    "libudev": {"development_package": "systemd-devel", "linker": {"path": "/usr/lib64/libudev.so", "owner": "systemd-libs"}, "headers": {"/usr/include/libudev.h": "systemd-devel"}},
+}
 # This diagnostic driver does not establish whole-image Rust ownership.  Its
 # receipt states only these symbol-presence and compile-database observations.
 PROOF_SCOPE = {
@@ -497,6 +505,29 @@ def _validate_toolchain(path, container_roots=None):
               "toolchain tools incomplete")
     _fail(all(isinstance(tools[name].get("version"), str) and tools[name]["version"]
               for name in REQUIRED_TOOLS), "toolchain tool versions incomplete")
+    libraries = data.get("libraries", {})
+    if v2:
+        _fail(isinstance(libraries, dict) and set(libraries) == set(REQUIRED_LIBRARIES),
+              "toolchain libraries incomplete")
+        for name in REQUIRED_LIBRARIES:
+            row = libraries[name]
+            spec = LIBRARY_SPECS[name]
+            _fail(isinstance(row, dict) and row.get("development_package") == spec["development_package"] and
+                  isinstance(row.get("linker"), dict) and isinstance(row.get("headers"), dict) and
+                  row["headers"], "toolchain library descriptor incomplete: " + name)
+            _fail(set(row["headers"]) == set(spec["headers"]), "toolchain library headers differ: " + name)
+            expected = [(row["linker"], spec["linker"]["path"], spec["linker"]["owner"])]
+            expected += [(row["headers"][path], path, expected_owner)
+                         for path, expected_owner in spec["headers"].items()]
+            for artifact, expected_path, expected_owner in expected:
+                _fail(isinstance(artifact, dict) and isinstance(artifact.get("path"), str) and
+                      artifact["path"].startswith("/usr/") and
+                      isinstance(artifact.get("target"), str) and artifact["target"].startswith("/usr/") and
+                      isinstance(artifact.get("rpm_nevra"), str) and
+                      re.fullmatch(r"[0-9a-f]{64}", str(artifact.get("sha256", ""))),
+                      "toolchain library artifact differs: " + name)
+                _fail(artifact["path"] == expected_path and artifact.get("owner") == expected_owner,
+                      "toolchain library role differs: " + name)
     if v2:
         bound = {}
         for name in REQUIRED_TOOLS:
@@ -639,6 +670,7 @@ def _validate_toolchain(path, container_roots=None):
     # library search paths and preloads outside the declared closure.
     _fail(not environment, "unreviewed toolchain environment")
     return {"manifest": data, "manifest_sha256": _sha256(path), "tools": bound,
+            "libraries": libraries,
             "kernel_dir": str(kernel_dir), "environment": dict(environment),
             "path": os.pathsep.join(str(directory) for directory in path_dirs)}
 
@@ -851,6 +883,119 @@ def _validate_image(build, toolchain, evidence):
     return artifacts
 
 
+def _validate_modules_end_probe(build, toolchain, evidence):
+    """Fail closed on the real configure-time external-module probe.
+
+    Older CMake sources did not propagate the nested make status.  Requiring
+    its produced module and independently extracting the initialized value
+    keeps a configure-only diagnostic from silently accepting that failure.
+    """
+    module = build / "tmp.resolve_MODULES_END/driver.ko"
+    _fail(module.is_file() and not module.is_symlink(),
+          "MODULES_END probe driver.ko missing after configure")
+    readelf = toolchain["tools"]["readelf"]["path"]
+    dd = toolchain["tools"]["dd"]["path"]
+    header = _bounded_output([readelf, "-h", str(module)], "MODULES_END probe ELF header",
+                             reject_stderr=True)
+    _fail("Class:" in header and re.search(r"Class:\s*ELF64\s*$", header, re.M) and
+          re.search(r"Data:\s*2's complement, little endian\s*$", header, re.M) and
+          re.search(r"Machine:\s*Advanced Micro Devices X86-64\s*$", header, re.M) and
+          re.search(r"Type:\s*REL(?:\s|$)", header) is not None,
+          "MODULES_END probe is not ELF64 little-endian x86-64")
+    sections = _bounded_output([readelf, "-W", "-S", str(module)],
+                               "MODULES_END probe readelf", reject_stderr=True)
+    section_rows = []
+    for match in re.finditer(r"^\s*\[\s*(\d+)\]\s+(\S+)\s+(\S+)\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+", sections, re.M):
+        section_rows.append({"index": int(match.group(1)), "name": match.group(2), "type": match.group(3),
+                             "address": int(match.group(4), 16), "offset": int(match.group(5), 16),
+                             "size": int(match.group(6), 16)})
+    data_rows = [row for row in section_rows if row["name"] == ".data"]
+    _fail(len(data_rows) == 1 and data_rows[0]["type"] == "PROGBITS",
+          "MODULES_END probe .data section malformed")
+    data = data_rows[0]
+    module_size = module.stat().st_size
+    _fail(data["size"] >= 8 and data["offset"] + data["size"] <= module_size,
+          "MODULES_END probe .data geometry malformed")
+    symbols = _bounded_output([readelf, "-W", "-s", str(module)],
+                              "MODULES_END probe symbol table", reject_stderr=True)
+    symbol_rows = []
+    for match in re.finditer(r"^\s*\d+:\s*([0-9A-Fa-f]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*$", symbols, re.M):
+        symbol_rows.append({"value": int(match.group(1), 16), "size": int(match.group(2)),
+                            "type": match.group(3), "bind": match.group(4), "visibility": match.group(5),
+                            "section": match.group(6), "name": match.group(7)})
+    named = [row for row in symbol_rows if row["name"] == "MAP_KERNEL_START"]
+    _fail(len(named) == 1, "MODULES_END probe MAP_KERNEL_START symbol missing or ambiguous")
+    symbol = named[0]
+    _fail(symbol["type"] == "OBJECT" and symbol["bind"] == "GLOBAL" and
+          symbol["visibility"] == "DEFAULT" and symbol["size"] == 8 and
+          symbol["section"] == str(data["index"]), "MODULES_END probe MAP_KERNEL_START symbol malformed")
+    offset = data["offset"] + symbol["value"] - data["address"]
+    _fail(offset >= data["offset"] and offset + 8 <= data["offset"] + data["size"] and
+          offset + 8 <= module_size, "MODULES_END probe MAP_KERNEL_START offset malformed")
+    value = _bounded_output([dd, "if=" + str(module), "bs=1", "skip=" + str(offset),
+                             "count=8", "status=none"],
+                            "MODULES_END probe dd", raw_bytes=True, reject_stderr=True)
+    _fail(len(value) == 8, "MODULES_END probe MAP_KERNEL_START bytes malformed")
+    map_kernel_start = int.from_bytes(value, byteorder="little")
+    _fail(0xffff800000000000 <= map_kernel_start <= 0xffffffffffffffff,
+          "MODULES_END probe MAP_KERNEL_START is not canonical x86_64")
+    value_hex = hex(map_kernel_start)
+    linker = build / "kernel/config/smp-x86.lds"
+    flags = build / "kernel/CMakeFiles/mckernel.img.dir/flags.make"
+    compile_commands = build / "compile_commands.json"
+    for path in (linker, flags, compile_commands):
+        _fail(path.is_file() and not path.is_symlink(), "MODULES_END probe consumer missing: " + str(path))
+    linker_text = linker.read_text(encoding="utf-8", errors="strict")
+    _fail(re.search(r"^\s*\.\s*=\s*" + re.escape(value_hex) + r"\s*\+\s*0x1000;\s*$", linker_text, re.M) is not None,
+          "MODULES_END probe linker consumer differs")
+    def definitions(text, label):
+        try:
+            tokens = shlex.split(text)
+        except ValueError as exc:
+            raise ImageBuildError("MODULES_END probe " + label + " compiler tokens malformed") from exc
+        expected = {"MAP_KERNEL_START": value_hex + "UL", "KERNEL_RAM_VADDR": value_hex}
+        found = {name: [] for name in expected}
+        index = 0
+        while index < len(tokens):
+            token = tokens[index]
+            if token in ("-D", "-U"):
+                _fail(index + 1 < len(tokens), "MODULES_END probe " + label + " compiler option missing argument")
+                kind, argument = token, tokens[index + 1]
+                index += 2
+            elif token.startswith("-D") or token.startswith("-U"):
+                kind, argument = token[:2], token[2:]
+                index += 1
+            else:
+                index += 1
+                continue
+            macro = argument.split("=", 1)[0]
+            if macro not in expected:
+                continue
+            _fail(kind == "-D" and "=" in argument and argument.split("=", 1)[1] == expected[macro],
+                  "MODULES_END probe " + label + " consumer differs")
+            found[macro].append(argument.split("=", 1)[1])
+        _fail(all(found[name] and set(found[name]) == {expected[name]} for name in expected),
+              "MODULES_END probe " + label + " consumer differs")
+        return found
+    flags_text = flags.read_text(encoding="utf-8", errors="strict")
+    compile = _json(compile_commands, "MODULES_END probe compile_commands")
+    _fail(isinstance(compile, list), "MODULES_END probe compile_commands malformed")
+    compile_text = "\n".join(str(row.get("command", "")) + " " + " ".join(row.get("arguments", []))
+                             for row in compile if isinstance(row, dict) and
+                             isinstance(row.get("arguments", []), list))
+    for text, label in ((flags_text, "flags"), (compile_text, "compile_commands")):
+        definitions(text, label)
+    observed = {"module": _artifact(module, "MODULES_END probe module"),
+                "data_offset": offset, "data_size": data["size"], "section_index": data["index"],
+                "map_kernel_start_hex": value_hex,
+                "consumers": {str(path.relative_to(build)): _artifact(path, "MODULES_END probe consumer")
+                              for path in (linker, flags, compile_commands)},
+                "readelf": readelf, "dd": dd}
+    _write_fsync(evidence / "modules-end-probe.json",
+                 json.dumps(observed, sort_keys=True, indent=2) + "\n")
+    return observed
+
+
 def run(*args, **kwargs):
     with SignalLatch():
         return _run(*args, **kwargs)
@@ -901,7 +1046,7 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
             "source": source, "manifest": {"path": str(manifest), "sha256": _sha256(manifest)},
             "toolchain": {"path": str(toolchain), "sha256": _sha256(toolchain),
                           "kernel_dir": tools["kernel_dir"], "tools": tools["tools"],
-                          "versions": versions},
+                          "libraries": tools["libraries"], "versions": versions},
             "environment": {key: env[key] for key in sorted(env)
                             if key not in ("PATH",)},
             "jobs": jobs, "timeout_seconds": timeout,
@@ -917,6 +1062,12 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
                      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON", "-DENABLE_RUST_KERNEL=ON",
                      "-DENABLE_RUST_IHK_MODULE_HELPERS=ON", "-DENABLE_RUST_USER_TOOLS=ON",
                      "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12"]
+        # CMake receives one cache list: the external-module probe
+        # must use the retained kernel's Clang/LLD pair, while CMake's own C
+        # project compilation remains independently bound to cc/GCC above.
+        if tools["libraries"]:
+            configure.append("-DKBUILD_MAKE_FLAGS=CC=" + tools["tools"]["clang"]["path"] +
+                             ";LD=" + tools["tools"]["ld.lld"]["path"])
         for key, name in (("MAKE_PROGRAM", "make"), ("LINKER", "ld"),
                           ("AR", "ar"), ("RANLIB", "ranlib"), ("NM", "nm"),
                           ("OBJCOPY", "objcopy"), ("READELF", "readelf")):
@@ -935,6 +1086,10 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
             row["exit_code"] = _run_process(command, source_root, env, stdout, stderr, timeout, phase)
             _atomic_json(evidence / "progress.json", progress)
             _fail(row["exit_code"] == 0, phase + " failed")
+            if phase == "configure":
+                progress["phase"] = "modules-end-probe"
+                _atomic_json(evidence / "progress.json", progress)
+                _validate_modules_end_probe(build, tools, evidence)
         progress["phase"] = "artifact-validation"
         _check_signal()
         _atomic_json(evidence / "progress.json", progress)

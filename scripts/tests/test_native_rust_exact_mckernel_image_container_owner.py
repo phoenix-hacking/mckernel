@@ -396,10 +396,28 @@ class OwnerTests(unittest.TestCase):
             self.assertTrue(lookup.exists(), name)
             target = lookup.resolve(strict=True)
             image_tools[name] = {"path": str(lookup), "target": str(target), "sha256": digest(target),
-                                 "version": subprocess.check_output([str(target), "--version"], text=True).strip(),
+                                 "version": subprocess.check_output([str(lookup), "--version"], text=True).strip(),
                                  "rpm_nevra": name + "-0:fixture-1.el10.x86_64",
-                                 "executable_version": subprocess.check_output([str(target), "--version"], text=True).strip()}
+                                 "executable_version": subprocess.check_output([str(lookup), "--version"], text=True).strip()}
         image_tools["cmake"]["rpm_nevra"] = owner.PINNED_CMAKE_RPM
+        def library(path, package):
+            return {"path": path, "target": path, "owner": package,
+                    "rpm_nevra": package + "-0:fixture-1.el10.x86_64",
+                    "sha256": "a" * 64}
+        libraries = {
+            "libnuma": {"development_package": "numactl-devel",
+                         "linker": library("/usr/lib64/libnuma.so", "numactl-libs"),
+                         "headers": {"/usr/include/numa.h": library("/usr/include/numa.h", "numactl-devel")}},
+            "libbfd": {"development_package": "binutils-devel",
+                        "linker": library("/usr/lib64/libbfd.so", "binutils-devel"),
+                        "headers": {"/usr/include/bfd.h": library("/usr/include/bfd.h", "binutils-devel")}},
+            "libiberty": {"development_package": "binutils-devel",
+                            "linker": library("/usr/lib64/libiberty.a", "binutils-devel"),
+                            "headers": {"/usr/include/libiberty.h": library("/usr/include/libiberty.h", "binutils-devel")}},
+            "libudev": {"development_package": "systemd-devel",
+                        "linker": library("/usr/lib64/libudev.so", "systemd-libs"),
+                        "headers": {"/usr/include/libudev.h": library("/usr/include/libudev.h", "systemd-devel")}},
+        }
         mounted = {"rustc": {"path": "/nightly/bin/rustc", "sha256": digest(nightly / "bin/rustc"),
                               "version": "rustc nightly fixture"}}
         closure_out = owner._closure_inventory(out, out, Path("/out"))
@@ -410,7 +428,7 @@ class OwnerTests(unittest.TestCase):
         # and both container terminal inspections.
         evidence = {}
         for name in owner._PREPARATION_EVIDENCE:
-            payload = (b"same tool observation\n" if name in
+            payload = (json.dumps({"libraries": libraries}, sort_keys=True).encode() + b"\n" if name in
                        ("tool-observation.json", "offline-tool-observation.json")
                        else name.encode() + b"\n")
             path = self.root / name
@@ -418,7 +436,10 @@ class OwnerTests(unittest.TestCase):
             evidence[name] = {"size": len(payload), "sha256": digest(path)}
         packages = {descriptor["rpm_nevra"].split("-0:", 1)[0]: descriptor["rpm_nevra"]
                     for descriptor in image_tools.values()}
-        packages.update(cmake=owner.PINNED_CMAKE_RPM, rust=owner.PINNED_RUST_RPM)
+        packages.update(cmake=owner.PINNED_CMAKE_RPM, rust=owner.PINNED_RUST_RPM,
+                        **{artifact["owner"]: artifact["rpm_nevra"]
+                           for row in libraries.values()
+                           for artifact in (row["linker"], *row["headers"].values())})
         receipt_tools = json.loads(json.dumps(image_tools))
         # Producer receipts retain observations for base-provided tools too;
         # rpm is intentionally not an owner-consumed image tool here.
@@ -430,7 +451,7 @@ class OwnerTests(unittest.TestCase):
                                        "base_image": owner.PREPARER_BASE_IMAGE,
                                        "toolchain_lock_sha256": lock_sha,
                                        "source_free": True, "runtime_network": "none",
-                                       "packages": packages, "tools": receipt_tools,
+                                       "packages": packages, "tools": receipt_tools, "libraries": libraries,
                                        "evidence": evidence}, sort_keys=True))
         self.toolchain.write_text(json.dumps({
             "schema": driver.TOOLCHAIN_SCHEMA_V2,
@@ -438,7 +459,7 @@ class OwnerTests(unittest.TestCase):
                                "closure_inventory": closure_out},
             "kernel_inventory": driver._tree_inventory(out / "build", visible_roots={"/out": out, "/nightly": nightly},
                                                          allow_visible_root=True),
-            "image_tools": image_tools, "mounted_tools": mounted,
+            "image_tools": image_tools, "mounted_tools": mounted, "libraries": libraries,
             "toolchain_roots": [{"path": "/out", "inventory": closure_out},
                                 {"path": "/nightly", "inventory": closure_nightly}],
             "path_dirs": ["/usr/bin", "/nightly/bin"],
@@ -528,6 +549,22 @@ class OwnerTests(unittest.TestCase):
         request.update(image_receipt_sha256=digest(receipt))
         with self.assertRaisesRegex(owner.OwnerError, "package/tool identity differs"):
             owner._validate_v2_image_tools(request, data)
+        missing_library = json.loads(json.dumps(receipt_data))
+        missing_library["runtime_network"] = "none"
+        missing_library["libraries"].pop("libudev")
+        receipt.write_text(json.dumps(missing_library, sort_keys=True))
+        request.update(image_receipt_sha256=digest(receipt))
+        with self.assertRaisesRegex(owner.OwnerError, "libraries incomplete"):
+            owner._validate_v2_image_tools(request, data)
+        drifted_library = json.loads(json.dumps(receipt_data))
+        drifted_library["runtime_network"] = "none"
+        drifted_library["libraries"]["libnuma"]["linker"]["owner"] = "wrong"
+        receipt.write_text(json.dumps(drifted_library, sort_keys=True))
+        request.update(image_receipt_sha256=digest(receipt))
+        drifted_toolchain = json.loads(json.dumps(data))
+        drifted_toolchain["libraries"] = drifted_library["libraries"]
+        with self.assertRaisesRegex(owner.OwnerError, "library linker role differs"):
+            owner._validate_v2_image_tools(request, drifted_toolchain)
         bad_target = json.loads(json.dumps(data))
         bad_target["image_tools"]["ld"]["target"] = bad_target["image_tools"]["cc"]["target"]
         self.toolchain.write_text(json.dumps(bad_target, sort_keys=True))

@@ -169,6 +169,17 @@ class RequestPrepareTests(unittest.TestCase):
         finally:
             fixture.tearDown()
 
+    def test_prepare_rejects_drifted_library_observation_evidence(self):
+        fixture, values = self._v2_prepare_fixture()
+        try:
+            (fixture.root / "tool-observation.json").write_text('{"libraries":{}}\n', encoding="utf-8")
+            with self.assertRaisesRegex(prepare.PreparationError, "evidence drift"):
+                prepare.prepare(**values)
+            self.assertFalse(Path(values["toolchain_manifest"]).exists())
+            self.assertFalse(Path(values["request_path"]).exists())
+        finally:
+            fixture.tearDown()
+
     def test_publication_destination_overlap_is_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); protected = root / "source"; protected.mkdir()

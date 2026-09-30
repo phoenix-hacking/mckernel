@@ -17,7 +17,7 @@ from native_rust_exact_build_container_owner import (
 )
 
 BASE_IMAGE = 'rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176'
-PACKAGES = tuple('bc binutils bison bindgen-cli bpftool cargo clang cmake cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd'.split())
+PACKAGES = tuple('bc binutils binutils-devel bison bindgen-cli bpftool cargo clang cmake coreutils cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel numactl-devel numactl-libs openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt systemd-devel systemd-libs tar which xz zstd'.split())
 EXPECTED_RUST = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
 # RPM's gpg-pubkey pseudo-packages report ``(none)`` as their architecture.
 # Keep this exception bounded to the architecture field of a full inventory
@@ -36,7 +36,25 @@ TOOLS = {'rustc': 'rust', 'clang': 'clang', 'ld.lld': 'lld', 'bindgen': 'bindgen
          'make': 'make', 'ld': 'binutils', 'objcopy': 'binutils', 'ar': 'binutils',
          'ranlib': 'binutils', 'git': 'git-core', 'openssl': 'openssl',
          'kmod': 'kmod', 'python3': 'python3', 'rpm': 'rpm', 'tar': 'tar',
-         'patch': 'patch', 'cpio': 'cpio'}
+         'patch': 'patch', 'cpio': 'cpio', 'dd': 'coreutils'}
+# These are the development/linker artifacts CMake resolves in this project.
+# The record binds the lookup spelling, resolved target, bytes and RPM owner
+# for each artifact, as well as the public headers needed by the consumers.
+# Keep this deliberately small: runtime has no host-library mount or fallback.
+LIBRARIES = {
+    'libnuma': {'development_package': 'numactl-devel',
+                'linker': {'path': '/usr/lib64/libnuma.so', 'owner': 'numactl-libs'},
+                'headers': {'/usr/include/numa.h': 'numactl-devel'}},
+    'libbfd': {'development_package': 'binutils-devel',
+               'linker': {'path': '/usr/lib64/libbfd.so', 'owner': 'binutils-devel'},
+               'headers': {'/usr/include/bfd.h': 'binutils-devel'}},
+    'libiberty': {'development_package': 'binutils-devel',
+                  'linker': {'path': '/usr/lib64/libiberty.a', 'owner': 'binutils-devel'},
+                  'headers': {'/usr/include/libiberty.h': 'binutils-devel'}},
+    'libudev': {'development_package': 'systemd-devel',
+                'linker': {'path': '/usr/lib64/libudev.so', 'owner': 'systemd-libs'},
+                'headers': {'/usr/include/libudev.h': 'systemd-devel'}},
+}
 
 
 class PreparationError(RuntimeError):
@@ -49,6 +67,7 @@ def output(a):
     return subprocess.check_output(a, text=True).strip()
 packages = json.loads(os.environ['EXPECTED_PACKAGES'])
 tools = json.loads(os.environ['EXPECTED_TOOLS'])
+libraries = json.loads(os.environ['EXPECTED_LIBRARIES'])
 data = {'arch': output(['uname','-m']), 'os_release': pathlib.Path('/etc/os-release').read_text(),
         'rustc': output(['/usr/bin/rustc','--version']), 'packages': {}, 'tools': {},
         'rpm_inventory': output(['rpm','-qa','--qf','%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n'])}
@@ -70,6 +89,19 @@ for name in tools:
         # unambiguous executable_version and rpm_nevra fields above.
         'version':output([path,'--version']),
         'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
+def artifact(path):
+    path = pathlib.Path(path)
+    if not path.is_file(): raise RuntimeError('missing library artifact ' + str(path))
+    target = path.resolve()
+    return {'path':str(path), 'target':str(target),
+            'owner':output(['rpm','-qf','--qf','%{NAME}',str(target)]),
+            'rpm_nevra':output(['rpm','-qf','--qf','%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}',str(target)]),
+            'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
+data['libraries'] = {}
+for name, spec in libraries.items():
+    data['libraries'][name] = {'development_package': spec['development_package'],
+        'linker': artifact(spec['linker']['path']),
+        'headers': {header: artifact(header) for header in spec['headers']}}
 verified = subprocess.run(['rpm', '-V', '--noconfig', *packages], text=True,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 data['rpm_verify'] = {'exit_code': verified.returncode,
@@ -119,6 +151,38 @@ def validate_probe(probe, pinned):
             raise PreparationError('tool ownership/path mismatch: ' + name)
     if probe['tools']['kmod']['sha256'] != KMOD_SHA:
         raise PreparationError('exact kmod executable differs')
+    libraries = probe.get('libraries')
+    if not isinstance(libraries, dict) or set(libraries) != set(LIBRARIES):
+        raise PreparationError('library observation incomplete')
+    def artifact(row, label):
+        if not isinstance(row, dict):
+            raise PreparationError('library artifact missing: ' + label)
+        nevra = row.get('rpm_nevra')
+        parse_nevra(nevra) if isinstance(nevra, str) else (_ for _ in ()).throw(
+            PreparationError('library RPM identity missing: ' + label))
+        if (not isinstance(row.get('path'), str) or not row['path'].startswith('/usr/') or
+                not isinstance(row.get('target'), str) or not row['target'].startswith('/usr/') or
+                not isinstance(row.get('owner'), str) or not row['owner'] or
+                nevra not in inventory_lines or parse_nevra(nevra)[0] != row['owner'] or
+                not re.fullmatch(r'[0-9a-f]{64}', str(row.get('sha256'))) or
+                row.get('sha256') == '0' * 64):
+            raise PreparationError('library ownership/path mismatch: ' + label)
+    for name, spec in LIBRARIES.items():
+        row = libraries[name]
+        if (not isinstance(row, dict) or row.get('development_package') != spec['development_package'] or
+                row['development_package'] not in probe['packages']):
+            raise PreparationError('library development package differs: ' + name)
+        linker = row.get('linker')
+        artifact(linker, name + ' linker')
+        if linker.get('path') != spec['linker']['path'] or linker.get('owner') != spec['linker']['owner']:
+            raise PreparationError('library linker role differs: ' + name)
+        headers = row.get('headers')
+        if not isinstance(headers, dict) or set(headers) != set(spec['headers']):
+            raise PreparationError('library headers incomplete: ' + name)
+        for header, expected_owner in spec['headers'].items():
+            artifact(headers[header], name + ' header')
+            if headers[header].get('path') != header or headers[header].get('owner') != expected_owner:
+                raise PreparationError('library header role differs: ' + name)
 
 
 def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_lock,
@@ -188,7 +252,8 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
                      'install', *packages], timeout=1800)
         docker.call(['exec', name, 'dnf', 'clean', 'all'])
         probe = json.loads(docker.call(['exec', '--env', 'EXPECTED_PACKAGES=' + json.dumps(PACKAGES),
-                     '--env', 'EXPECTED_TOOLS=' + json.dumps(TOOLS), name,
+                     '--env', 'EXPECTED_TOOLS=' + json.dumps(TOOLS),
+                     '--env', 'EXPECTED_LIBRARIES=' + json.dumps(LIBRARIES), name,
                      '/usr/bin/python3', '-I', '-c', PROBE]).stdout)
         atomic(evidence / 'tool-observation.json', probe)
         validate_probe(probe, pinned)
@@ -232,7 +297,8 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
         docker.call(['start', name])
         offline_probe = json.loads(docker.call(
             ['exec', '--env', 'EXPECTED_PACKAGES=' + json.dumps(PACKAGES),
-             '--env', 'EXPECTED_TOOLS=' + json.dumps(TOOLS), name,
+             '--env', 'EXPECTED_TOOLS=' + json.dumps(TOOLS),
+             '--env', 'EXPECTED_LIBRARIES=' + json.dumps(LIBRARIES), name,
              '/usr/bin/python3', '-I', '-c', PROBE]).stdout)
         atomic(evidence / 'offline-tool-observation.json', offline_probe)
         validate_probe(offline_probe, pinned)
@@ -245,7 +311,8 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
         attempted = False
         receipt.update(status='PASS', image_id=committed, source_free=True,
                        source_free_basis='no host mounts/copies; fixed bootstrap/probe command set',
-                       runtime_network='none', packages=probe['packages'], tools=probe['tools'])
+                       runtime_network='none', packages=probe['packages'], tools=probe['tools'],
+                       libraries=probe['libraries'])
     except BaseException as exc:
         receipt['error'] = str(exc)
     finally:

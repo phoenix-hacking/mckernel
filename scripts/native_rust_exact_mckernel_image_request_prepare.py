@@ -177,6 +177,24 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
         row = tools[name]
         _fail(re.fullmatch(r"[0-9a-f]{64}", str(row.get("sha256"))) is not None, "tool hash: " + name)
         _fail(isinstance(row.get("path"), str) and row["path"].startswith("/"), "tool path: " + name)
+    libraries = receipt.get("libraries")
+    evidence = receipt.get("evidence")
+    _fail(isinstance(evidence, dict), "tool-image receipt evidence missing")
+    for name in owner._PREPARATION_EVIDENCE:
+        row = evidence.get(name)
+        _fail(isinstance(row, dict) and isinstance(row.get("sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) and
+              isinstance(row.get("size"), int) and row["size"] >= 0,
+              "tool-image receipt evidence entry missing: " + name)
+        path = _file(receipt_path.parent / name, "tool-image receipt evidence")
+        _fail(path.stat().st_size == row["size"] and _digest(path) == row["sha256"],
+              "tool-image receipt evidence drift: " + name)
+    _fail(evidence["tool-observation.json"]["sha256"] ==
+          evidence["offline-tool-observation.json"]["sha256"],
+          "tool-image receipt preparation/offline observations differ")
+    # Validate the complete immutable closure before publishing anything.  The
+    # owner repeats this after binding the receipt and its evidence hashes.
+    owner._validate_library_closure(receipt, libraries, receipt_path.parent)
     _fail(host_root is not None and scratch_root is not None or disk_admission is not None,
           "explicit host/scratch roots or disk admission required")
     nightly_version = __import__("subprocess").check_output([str(nightly / "bin/rustc"), "--version"], text=True).strip()
@@ -188,6 +206,7 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
                             "closure_inventory": roots[0]["inventory"]},
         "kernel_inventory": driver._tree_inventory(out / "build", visible_roots={"/out": out, "/nightly": nightly}, allow_visible_root=True),
         "image_tools": {name: dict(tools[name]) for name in required if name != "rustc"},
+        "libraries": libraries,
         "mounted_tools": {"rustc": {"path": "/nightly/bin/rustc", "sha256": _digest(nightly / "bin/rustc"),
                                        "version": nightly_version}},
         "toolchain_roots": roots, "path_dirs": ["/nightly/bin", "/usr/bin"],

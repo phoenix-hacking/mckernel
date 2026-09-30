@@ -24,10 +24,20 @@ def probe_fixture():
                  'executable_version': n + ' fixture --version',
                  'sha256': 'd' * 64} for n, p in prep.TOOLS.items()}
     tools['kmod']['sha256'] = prep.KMOD_SHA
+    def artifact(path, package):
+        return {'path': path, 'target': path, 'owner': package,
+                'rpm_nevra': packages[package], 'sha256': 'e' * 64}
+    libraries = {}
+    for name, spec in prep.LIBRARIES.items():
+        package = spec['development_package']
+        libraries[name] = {'development_package': package,
+                           'linker': artifact(spec['linker']['path'], spec['linker']['owner']),
+                           'headers': {header: artifact(header, owner)
+                                       for header, owner in spec['headers'].items()}}
     return {'arch': 'x86_64', 'os_release': 'ID="rocky"\nVERSION_ID="10.2"\n',
             'rustc': prep.EXPECTED_RUST, 'packages': packages, 'tools': tools,
             'rpm_verify': {'exit_code': 0, 'stdout': '', 'stderr': ''},
-            'rpm_inventory': '\n'.join(inventory)}
+            'rpm_inventory': '\n'.join(inventory), 'libraries': libraries}
 
 
 class OfflineMismatchDocker(FakeDocker):
@@ -201,7 +211,12 @@ class PreparationTests(unittest.TestCase):
                      lambda p: p['tools']['cmake'].__setitem__('executable_version', ''),
                      lambda p: p['tools']['kmod'].__setitem__('sha256', '0' * 64),
                      lambda p: p['tools']['make'].__setitem__('path', '/tmp/make'),
-                     lambda p: p['tools']['make'].__setitem__('target', '/tmp/make')]
+                     lambda p: p['tools']['make'].__setitem__('target', '/tmp/make'),
+                     lambda p: p['libraries'].pop('libudev'),
+                     lambda p: p['libraries']['libnuma']['linker'].__setitem__('sha256', '0' * 64),
+                     lambda p: p['libraries']['libnuma']['linker'].__setitem__('path', '/usr/bin/cc'),
+                     lambda p: p['libraries']['libbfd']['headers'].pop('/usr/include/bfd.h'),
+                     lambda p: p['libraries']['libbfd']['headers'].__setitem__('/usr/include/numa.h', {'path': '/usr/include/numa.h', 'target': '/usr/include/numa.h', 'owner': 'numactl-devel', 'rpm_nevra': p['packages']['numactl-devel'], 'sha256': 'e' * 64})]
         for mutation in mutations:
             probe = probe_fixture()
             mutation(probe)

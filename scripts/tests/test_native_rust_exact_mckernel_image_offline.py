@@ -64,9 +64,13 @@ if [ "$1" = "-S" ]; then
     if [ "$1" = "-B" ]; then build="$2"; shift 2; continue; fi
     shift
   done
-  mkdir -p "$build/kernel/CMakeFiles/mckernel_rust_obj.dir" "$build/kernel/rust"
+  mkdir -p "$build/kernel/CMakeFiles/mckernel_rust_obj.dir" "$build/kernel/CMakeFiles/mckernel.img.dir" "$build/kernel/config" "$build/kernel/rust"
+  mkdir -p "$build/tmp.resolve_MODULES_END"
+  printf '0000000000000000000000000000000000000000000000000000000000000000\000\000\000\000\000\200\377\377' > "$build/tmp.resolve_MODULES_END/driver.ko"
   printf 'ENABLE_RUST_KERNEL:BOOL=ON\nMCKERNEL_HOST_IRQ_ABI:STRING=linux-6.12\n' > "$build/CMakeCache.txt"
-  printf '[{"file":"kernel/rust/native.rs","command":"rustc native.rs"}]\n' > "$build/compile_commands.json"
+  printf '. = 0xffff800000000000 + 0x1000;\n' > "$build/kernel/config/smp-x86.lds"
+  printf 'C_FLAGS = -DMAP_KERNEL_START=0xffff800000000000UL -DKERNEL_RAM_VADDR=0xffff800000000000\n' > "$build/kernel/CMakeFiles/mckernel.img.dir/flags.make"
+  printf '[{"file":"kernel/rust/native.rs","command":"rustc native.rs -DMAP_KERNEL_START=0xffff800000000000UL -DKERNEL_RAM_VADDR=0xffff800000000000"}]\n' > "$build/compile_commands.json"
   printf 'native_linux_irq_work_v6_12\n' > "$build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"
   exit 0
 fi
@@ -80,15 +84,18 @@ fi
 exit 2
 ''')
         self.cc = self._script("cc", "[ \"$1\" = \"--version\" ] && { echo 'cc fake 1'; exit 0; }; exit 2")
+        self.clang = self._script("clang", "[ \"$1\" = \"--version\" ] && { echo 'clang fake 1'; exit 0; }; exit 2")
+        self.ld_lld = self._script("ld.lld", "[ \"$1\" = \"--version\" ] && { echo 'ld.lld fake 1'; exit 0; }; exit 2")
         self.rustc = self._script("rustc", "[ \"$1\" = \"--version\" ] && { echo 'rustc 1.92.0-nightly (fixture)'; exit 0; }; exit 2")
         symbols = "\n".join("00000000 T " + name for name in driver.EXPECTED_SYMBOLS) + "\n"
         self.nm = self._script("nm", "[ \"$1\" = \"--version\" ] && { echo 'nm fake 1'; exit 0; }; cat <<'EOF'\n" + symbols + "EOF\n")
-        self.readelf = self._script("readelf", "[ \"$1\" = \"--version\" ] && { echo 'readelf fake 1'; exit 0; }; cat <<'EOF'\n  Class:                             ELF64\n  Type:                              EXEC (Executable file)\n  Machine:                           Advanced Micro Devices X86-64\nEOF\n")
+        self.readelf = self._script("readelf", "[ \"$1\" = \"--version\" ] && { echo 'readelf fake 1'; exit 0; }; [ \"$1\" = \"-h\" ] && { if [ \"${2##*/}\" = \"driver.ko\" ]; then TYPE=REL; else TYPE=EXEC; fi; cat <<EOF\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Type:                              $TYPE (Relocatable file)\n  Machine:                           Advanced Micro Devices X86-64\nEOF\nexit 0; }; [ \"$2\" = \"-S\" ] && { echo '  [ 1] .data PROGBITS 0000000000000000 000040 000008 00 WA 0 0 8'; exit 0; }; [ \"$2\" = \"-s\" ] && { echo '     1: 0000000000000000     8 OBJECT  GLOBAL DEFAULT    1 MAP_KERNEL_START'; exit 0; }; exit 2")
         self.make = self._script("make", "[ \"$1\" = \"--version\" ] && { echo 'make fake 1'; exit 0; }; exit 2")
         self.ld = self._script("ld", "[ \"$1\" = \"--version\" ] && { echo 'ld fake 1'; exit 0; }; exit 2")
         self.objcopy = self._script("objcopy", "[ \"$1\" = \"--version\" ] && { echo 'objcopy fake 1'; exit 0; }; exit 2")
         self.ar = self._script("ar", "[ \"$1\" = \"--version\" ] && { echo 'ar fake 1'; exit 0; }; exit 2")
         self.ranlib = self._script("ranlib", "[ \"$1\" = \"--version\" ] && { echo 'ranlib fake 1'; exit 0; }; exit 2")
+        self.dd = self._script("dd", "[ \"$1\" = \"--version\" ] && { echo 'dd fake 1'; exit 0; }; exec /bin/dd \"$@\"")
         self.git = self.tools / "git"
         shutil.copyfile("/usr/bin/git", self.git)
         self.git.chmod(0o755)
@@ -131,14 +138,16 @@ exit 2
             "repository_files": files,
         }, sort_keys=True))
         tools = {name: {"path": str(path), "sha256": sha(path)} for name, path in {
-            "cmake": self.cmake, "cc": self.cc, "rustc": self.rustc,
+            "cmake": self.cmake, "cc": self.cc, "clang": self.clang, "ld.lld": self.ld_lld, "rustc": self.rustc,
             "nm": self.nm, "readelf": self.readelf, "make": self.make,
             "ld": self.ld, "objcopy": self.objcopy, "ar": self.ar,
-            "ranlib": self.ranlib, "git": self.git,
+            "ranlib": self.ranlib, "git": self.git, "dd": self.dd,
         }.items()}
         tools.update({
             "cmake": {**tools["cmake"], "version": "cmake version 3.30.0"},
             "cc": {**tools["cc"], "version": "cc fake 1"},
+            "clang": {**tools["clang"], "version": "clang fake 1"},
+            "ld.lld": {**tools["ld.lld"], "version": "ld.lld fake 1"},
             "rustc": {**tools["rustc"], "version": "rustc 1.92.0-nightly (fixture)"},
             "nm": {**tools["nm"], "version": "nm fake 1"},
             "readelf": {**tools["readelf"], "version": "readelf fake 1"},
@@ -148,6 +157,7 @@ exit 2
             "ar": {**tools["ar"], "version": "ar fake 1"},
             "ranlib": {**tools["ranlib"], "version": "ranlib fake 1"},
             "git": {**tools["git"], "version": subprocess.check_output([str(self.git), "--version"], text=True).strip()},
+            "dd": {**tools["dd"], "version": "dd fake 1"},
         })
         release = driver.REPRO_ENV["EXPECTED_KERNEL_RELEASE"]
         self.toolchain.write_text(json.dumps({
@@ -195,6 +205,24 @@ exit 2
         data["linux_probe"]["kernel_dir"] = "/out/build"
         data["tools"] = {name: {**ref, "path": "/out/tools/" + name}
                           for name, ref in data["tools"].items()}
+        def library(path, package):
+            return {"path": path, "target": path, "owner": package,
+                    "rpm_nevra": package + "-0:fixture-1.el10.x86_64",
+                    "sha256": "a" * 64}
+        data["libraries"] = {
+            "libnuma": {"development_package": "numactl-devel",
+                         "linker": library("/usr/lib64/libnuma.so", "numactl-libs"),
+                         "headers": {"/usr/include/numa.h": library("/usr/include/numa.h", "numactl-devel")}},
+            "libbfd": {"development_package": "binutils-devel",
+                        "linker": library("/usr/lib64/libbfd.so", "binutils-devel"),
+                        "headers": {"/usr/include/bfd.h": library("/usr/include/bfd.h", "binutils-devel")}},
+            "libiberty": {"development_package": "binutils-devel",
+                            "linker": library("/usr/lib64/libiberty.a", "binutils-devel"),
+                            "headers": {"/usr/include/libiberty.h": library("/usr/include/libiberty.h", "binutils-devel")}},
+            "libudev": {"development_package": "systemd-devel",
+                        "linker": library("/usr/lib64/libudev.so", "systemd-libs"),
+                        "headers": {"/usr/include/libudev.h": library("/usr/include/libudev.h", "systemd-devel")}},
+        }
         self.toolchain.write_text(json.dumps(data, sort_keys=True))
         self.v2_roots = {"/out": host, "/nightly": host / "tools"}
         return host
@@ -203,6 +231,102 @@ exit 2
         self._write_v2_toolchain()
         result = self.execute()
         self.assertEqual(result["status"], "PASS", result)
+        configure = result["commands"][0]["argv"]
+        flags = "-DKBUILD_MAKE_FLAGS=CC=" + str(self.v2_roots["/out"] / "tools/clang") + ";LD=" + str(self.v2_roots["/out"] / "tools/ld.lld")
+        self.assertIn(flags, configure)
+        self.assertNotIn(flags.replace(";", r"\;"), configure)
+        probe = json.loads((self.root / "evidence/modules-end-probe.json").read_text())
+        self.assertEqual(probe["data_size"], 8)
+        self.assertEqual(probe["map_kernel_start_hex"], "0xffff800000000000")
+
+    def test_v2_missing_or_drifted_llvm_tool_rejected(self):
+        self._write_v2_toolchain()
+        data = json.loads(self.toolchain.read_text())
+        original = json.loads(json.dumps(data))
+        data["tools"].pop("clang")
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "tools incomplete"):
+            self.execute()
+        data = original
+        data["tools"]["ld.lld"]["sha256"] = "0" * 64
+        self.toolchain.write_text(json.dumps(data, sort_keys=True))
+        with self.assertRaisesRegex(driver.ImageBuildError, "hash drift"):
+            self.execute()
+
+    def test_modules_end_probe_missing_and_malformed_outputs_fail_closed(self):
+        tools = driver._validate_toolchain(self.toolchain)
+        with self.assertRaisesRegex(driver.ImageBuildError, "driver.ko missing"):
+            driver._validate_modules_end_probe(self.root / "missing-build", tools, self.root)
+        build = self.root / "malformed-build"
+        module = build / "tmp.resolve_MODULES_END/driver.ko"
+        module.parent.mkdir(parents=True)
+        module.write_bytes(b"short")
+        with self.assertRaisesRegex(driver.ImageBuildError, ".data geometry malformed"):
+            driver._validate_modules_end_probe(build, tools, self.root)
+
+    def test_modules_end_probe_rejects_bad_elf_sections_symbols_and_consumers(self):
+        self.execute()
+        tools = driver._validate_toolchain(self.toolchain)
+        def fake_readelf(section, symbol):
+            self.readelf.write_text("#!/bin/sh\n"
+                "[ \"$1\" = \"-h\" ] && { printf '%s\\n' '  Class: ELF64' \"  Data: 2's complement, little endian\" '  Type: REL (Relocatable file)' '  Machine: Advanced Micro Devices X86-64'; exit 0; }\n"
+                "[ \"$2\" = \"-S\" ] && { echo '" + section + "'; exit 0; }\n"
+                "[ \"$2\" = \"-s\" ] && { echo '" + symbol + "'; exit 0; }\nexit 2\n")
+            self.readelf.chmod(0o755)
+        good_symbol = "     1: 0000000000000000     8 OBJECT  GLOBAL DEFAULT    1 MAP_KERNEL_START"
+        cases = (
+            ("  [ 1] .data NOBITS 0000000000000000 000040 000008 00 WA 0 0 8", good_symbol, ".data section malformed"),
+            ("  [ 1] .data PROGBITS 0000000000000000 ffffff 000008 00 WA 0 0 8", good_symbol, ".data geometry malformed"),
+            ("  [ 1] .data PROGBITS 0000000000000000 000040 000008 00 WA 0 0 8", "     1: 0000000000000000     8 OBJECT  GLOBAL DEFAULT    1 WRONG", "symbol missing or ambiguous"),
+        )
+        for section, symbol, message in cases:
+            fake_readelf(section, symbol)
+            with self.subTest(message=message), self.assertRaisesRegex(driver.ImageBuildError, message):
+                driver._validate_modules_end_probe(self.root / "output/build", tools, self.root / "evidence")
+        # Restore the normal fixture readelf by rebuilding the test fixture's
+        # command path, then preserve the noncanonical and consumer cases.
+        self.readelf = self._script("readelf", "[ \"$1\" = \"-h\" ] && { cat <<'EOF'\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Type:                              REL (Relocatable file)\n  Machine:                           Advanced Micro Devices X86-64\nEOF\nexit 0; }; [ \"$2\" = \"-S\" ] && { echo '  [ 1] .data PROGBITS 0000000000000000 000040 000008 00 WA 0 0 8'; exit 0; }; [ \"$2\" = \"-s\" ] && { echo '     1: 0000000000000000     8 OBJECT  GLOBAL DEFAULT    1 MAP_KERNEL_START'; exit 0; }; exit 2")
+        tools["tools"]["readelf"]["path"] = str(self.readelf)
+        module = self.root / "output/build/tmp.resolve_MODULES_END/driver.ko"
+        with module.open("r+b") as stream:
+            stream.seek(64); stream.write(b"\0" * 8)
+        with self.assertRaisesRegex(driver.ImageBuildError, "MAP_KERNEL_START is not canonical"):
+            driver._validate_modules_end_probe(self.root / "output/build", tools, self.root / "evidence")
+        with module.open("r+b") as stream:
+            stream.seek(64); stream.write(b"\0\0\0\0\0\200\377\377")
+        (self.root / "output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make").write_text(
+            "C_FLAGS = -DMAP_KERNEL_START=0xffff800000000001UL -DKERNEL_RAM_VADDR=0xffff800000000000\n")
+        with self.assertRaisesRegex(driver.ImageBuildError, "flags consumer differs"):
+            driver._validate_modules_end_probe(self.root / "output/build", tools, self.root / "evidence")
+
+    def test_modules_end_probe_rejects_macro_overrides_stderr_and_nonrel_header(self):
+        self.execute()
+        tools = driver._validate_toolchain(self.toolchain)
+        build = self.root / "output/build"
+        flags = build / "kernel/CMakeFiles/mckernel.img.dir/flags.make"
+        compile = build / "compile_commands.json"
+        expected_map = "0xffff800000000000UL"
+        expected_ram = "0xffff800000000000"
+        # Both accepted spellings are deliberate: options may be joined or
+        # separated by generated make/compile-command serializers.
+        flags.write_text("C_FLAGS = -D MAP_KERNEL_START=" + expected_map + " -D KERNEL_RAM_VADDR=" + expected_ram + "\n")
+        compile.write_text(json.dumps([{"file": "kernel/rust/native.rs", "arguments": ["cc", "-D", "MAP_KERNEL_START=" + expected_map, "-D", "KERNEL_RAM_VADDR=" + expected_ram]}]))
+        driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        for suffix in (" -DMAP_KERNEL_START=0", " -DMAP_KERNEL_START", " -DMAP_KERNEL_START=", " -UMAP_KERNEL_START"):
+            flags.write_text("C_FLAGS = -DMAP_KERNEL_START=" + expected_map + " -DKERNEL_RAM_VADDR=" + expected_ram + suffix + "\n")
+            with self.subTest(suffix=suffix), self.assertRaisesRegex(driver.ImageBuildError, "flags consumer differs"):
+                driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        self.readelf.write_text("#!/bin/sh\n"
+            "[ \"$1\" = \"-h\" ] && { echo warning >&2; printf '%s\\n' '  Class: ELF64' \"  Data: 2's complement, little endian\" '  Type: REL (Relocatable file)' '  Machine: Advanced Micro Devices X86-64'; exit 0; }\nexit 2\n")
+        self.readelf.chmod(0o755)
+        tools["tools"]["readelf"]["path"] = str(self.readelf)
+        with self.assertRaisesRegex(driver.ImageBuildError, "unexpected stderr"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        self.readelf.write_text("#!/bin/sh\n"
+            "[ \"$1\" = \"-h\" ] && { printf '%s\\n' '  Class: ELF64' \"  Data: 2's complement, little endian\" '  Type: EXEC (Executable file)' '  Machine: Advanced Micro Devices X86-64'; exit 0; }\nexit 2\n")
+        self.readelf.chmod(0o755)
+        with self.assertRaisesRegex(driver.ImageBuildError, "not ELF64 little-endian x86-64"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
 
     def test_v2_image_tool_preserves_lookup_argv0(self):
         host = self._write_v2_toolchain()

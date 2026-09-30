@@ -10246,3 +10246,46 @@ launcher wrapper/launcher/worker/server identities are respectively
 left untouched for the launcher-controlled pause.  All child agents are
 completed.  Host/scratch free bytes are 19,711,766,528/15,243,829,248 and
 MemAvailable is 30,018,120 KiB.
+
+Continuation shutdown checkpoint 235, 2026-09-30: expert inventory and
+toolchain-contract work identifies exportset-18's configure failure precisely.
+The retained host kernel is a Clang/LLD 21 build (`LLVM=1` and
+`CONFIG_CC_IS_CLANG=y`); invoking its external-module probe with GCC caused the
+`-mretpoline-external-thunk` rejection.  The source-free image also lacked the
+required numactl development closure and its export manifest omitted the Clang
+identity.  This is a build-contract defect, not a kernel flag to suppress.
+
+The bounded source repair now seals Clang, LLD and exact libnuma/libbfd/
+libiberty/libudev roles, passes the matching compiler/linker into Kbuild, and
+requires an independently decoded ELF64 little-endian x86-64 `REL` probe with
+a unique initialized `.data` `MAP_KERNEL_START`.  It compares that value with
+the generated linker script, `flags.make` and `compile_commands`, rejects all
+conflicting/malformed/empty/undefined definitions, and rejects probe stderr.
+Coordinator reproduction passes `py_compile`, all 105 focused tests and
+`git diff --check`.  Exact source/test hashes and the review history are in
+`docs/verification/evidence/native-exact-mckernel-image-configure-repair-source-20260930.json`.
+
+This is source-only progress.  The earlier final source review blocked on the
+macro-override, ELF type and stderr gaps; the bounded correction and negative
+tests close those reported cases, but shutdown prohibited dispatching a fresh
+independent final review.  No Docker preparation, build or guest ran.  The
+top-level CMake nested-make status defect also remains a deliberate follow-up
+for a future source candidate because changing it now would invalidate the
+retained exact candidate and require a complete host-kernel rebuild.
+
+Next independently review the eight exact final hashes in that evidence file.
+Only after `PASS_SOURCE`, prepare a fresh source-free image-tool image and
+packet with the corrected package closure, obtain fresh packet/execution
+review, and run one serialized configure/build attempt.  Authenticate the
+resulting smallest current `mckernel.img` before the frozen memory diagnostic,
+then files, threads/futexes, signals and shutdown.  Preserve exportsets 17 and
+18 and all original failures; do not repeat either unchanged.  Current-
+candidate builds remain six failed and one completed, and real current
+diagnostic guest applications remain zero.
+
+Shutdown state: all eight child agents are completed.  No image owner, QEMU or
+mcexec is live.  Launcher wrapper/launcher/worker/server identities remain
+`1442141/1442142/1442145/1442149`, each started 2026-09-30 10:46:42 PDT and
+left untouched for the launcher-controlled pause.  Host/scratch free bytes are
+19,196,985,344/15,243,829,248 and MemAvailable is 29,881,408 KiB.  The OS goal
+remains incomplete and is not resumed or completed by this checkpoint.

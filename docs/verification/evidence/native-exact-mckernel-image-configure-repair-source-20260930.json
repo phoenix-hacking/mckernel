@@ -1,0 +1,51 @@
+{
+  "schema": "mckernel.native-exact-image-configure-repair-source.v1",
+  "timestamp": "2026-09-30T21:14:29-07:00",
+  "status": "SOURCE_TESTS_PASS_REVIEW_PENDING",
+  "acceptance_effect": "none",
+  "diagnostic_effect": "none",
+  "trigger_failure": "docs/verification/evidence/native-exact-mckernel-image-exportset18-failure-20260930.json",
+  "failure_family": "current-image configure toolchain and library closure",
+  "changes": [
+    "seal clang, ld.lld and dd identities in the source-free image tool contract",
+    "seal exact libnuma, libbfd, libiberty and libudev development/runtime paths and package owners",
+    "bind the external-module probe to the retained Clang/LLD kernel toolchain",
+    "require and independently decode a relocatable x86-64 ELF driver.ko MAP_KERNEL_START probe",
+    "compare the decoded value with generated linker, flags.make and compile_commands consumers",
+    "reject conflicting, malformed, empty or undefined protected macro options and all probe stderr"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "328de8ac4a0d6f82cbe9c44163a04777b2757d580910918f36b742f0150b0fda",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "36bd5453d642f002d6cd251e78abc3c14276b210dac48763dc0123c5a90c7f13",
+    "scripts/native_rust_exact_mckernel_image_request_prepare.py": "7acda323de2a3c9f0ebee22f0b2bd3f3188320a69bea63cc42c428ecd8204ae2",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "2201bddbfcf2ff6a4846e02ed4a3c40f57a7546169ba70909d13830f6069a051"
+  },
+  "test_sha256": {
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "d4b72474cb48c881bb8677400c086fbae48c478d99b0d9a06cdcba219414ad04",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "0a39c77869059c08e6caa62473abbe2ec97d8abc615c2e28f0328612e6081692",
+    "scripts/tests/test_native_rust_exact_mckernel_image_request_prepare.py": "ebbf06aae0e6dc950e1f93ab074615f3f8463a29baf0016dbdb1cb0220b26f7d",
+    "scripts/tests/test_native_rust_exact_mckernel_image_offline.py": "812e7fd03ff41057c23d1efd3cd9a5f97ac0b7b4b1bf620b00cc303a7db9393f"
+  },
+  "verification": {
+    "py_compile": "PASS",
+    "focused_unittest": "PASS 105/105",
+    "git_diff_check": "PASS"
+  },
+  "review_history": {
+    "prior_source_review": "BLOCKED_SOURCE on protected-macro override parsing, REL type and stderr handling",
+    "bounded_correction": "implemented with negative controls",
+    "final_independent_review": "pending because shutdown prohibited new dispatch"
+  },
+  "runtime": {
+    "docker_build": false,
+    "kernel_build": false,
+    "guest_run": false,
+    "real_current_diagnostic_apps": 0
+  },
+  "next": [
+    "independently review these exact final hashes",
+    "after PASS_SOURCE, prepare and review one fresh source-free image-tool packet containing the corrected package closure",
+    "run no heavy build until the fresh execution release and capacity check pass",
+    "then build and authenticate the smallest current mckernel.img before strict memory, files, threads/futexes, signals and shutdown diagnostics"
+  ]
+}
