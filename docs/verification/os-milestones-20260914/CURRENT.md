@@ -8539,3 +8539,48 @@ Only after its separately fetched root release passes may the two tmpfs roots
 be retired.  The disk build wrapper and image driver have additional source
 corrections in progress; no heavy build or guest has run.  Formal counters
 remain 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 180, 2026-09-30: the exact tmpfs retirement performed
+the intended deletion but failed closed in its post-delete observer.  The sole
+released root invocation from fetched commit
+`99fd0558dfce14c8f53c3fb2c0253129ccb25c60` removed both authenticated roots;
+the originals and both quarantine paths are absent, no retirement process
+survives, and tmpfs free space increased to 16,567,324,672 bytes.  The complete
+21,510-row journal ends with `terminal-prepared`, a PASS helper result and all
+four source/quarantine paths absent.  This is not accepted retirement because
+the packet terminal status is FAIL: `closure-1 callback failed`.
+
+The original root-owned 25-entry failure directory remains unchanged at
+`/dev/shm/.mckernel-retirement-evidence-76ae20b5-1`, identity `26:69508`.
+`packet.failure` SHA is
+`e1e629b6f43a9661fcfe255b7b0607be365acb0812b028de6f99075837c36ec1`.
+An independently verified no-atime archive at
+`/home/holden/mckernel-work/scratch/native-exact-candidate-retirement-76ae20b5-1-failed-evidence-20260930-1.tar`
+has SHA `9ecab3772c9b8a6e3a4b0257bce3136734e0bac0becf4b79157b35bb78ce9abe`,
+size 10,874,880, and an exact 25-entry comparable inventory SHA
+`74758565a5c6e4fc18381e23eeba61f7d279a986f4a9014465e30cbc4c0c4b77`.
+All five root-owned immutable exclusions remain intact; never clear or reuse
+them.
+
+The preserved first post-delete scan contains no target references, denials,
+incomplete observations or identity replacements.  Its 819 entry-churn rows
+all identify the observer's incorrect assumption that every task has its own
+`/proc/PID/task/TID/map_files`; the actual host exposes process-level
+`/proc/PID/map_files`.  The bounded correction now scans that fallback while
+binding and revalidating both leader and TID identities, never treating absence
+as an empty mapping set.  Twenty-seven tests and the self-test pass, independent
+source review passes, and fetched commit
+`6e5de06ac8dddf4a7e20bf5ccc8fb8ab84335450` preserves the correction and the
+original failed evidence.
+
+Next, finish and independently review a postflight-only root packet that binds
+the old baseline/FAIL/archive, the corrected observer, protected disk roots and
+all immutable tombstones.  It must perform three complete fresh scans into a
+new evidence namespace without retrying deletion or altering old evidence.
+Only a passing postflight may unlock a newly named build exclusion/request;
+the current wrapper's old exclusion path is permanently occupied.  Then build
+the disk-backed host candidate in the single 4-CPU/12-GiB lease, build the
+current McKernel image serially, and run startup, memory, files,
+threads/futexes, signals and shutdown diagnostics.  Formal counters remain
+6/130, 350/10000 and 0/273 applications; no current-candidate build or real
+diagnostic app has run, and the OS remains incomplete.
