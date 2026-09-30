@@ -8838,3 +8838,25 @@ to a fresh `-5` namespace, and prepare a new disk candidate from that frozen
 repair commit.  Do not retry the deterministic `scratch-2` request.  No
 artifact, boot or diagnostic app has passed, and formal counters remain 6/130,
 350/10000 and 0/273 applications.
+
+Continuation checkpoint 189, 2026-09-30: the detached runtime-source closure
+repair and exact second-build failure record are pushed and fetched at
+`defab4d281a0f00f9647ae5787ee0fbefc14053e`.  The independently reviewed
+wrapper successor is fetched at
+`740851854b53036d4834dfb86a5fc7fb0f3954e6`; it permits only fresh
+`runtimeclosure-5` and rejects every retired path through `closurefix-4` before
+owner invocation.  Nineteen focused tests pass.  This fetched commit is the
+frozen candidate for the next build.
+
+The `scratch-3` preparation packet independently passes source review.  Packet
+SHA is `af09e74e...93a0f`, test SHA is `b9c6fdb7...1a54c`, both current and
+prior suites pass 68 tests total, and both packets pass shell syntax.  It binds
+candidate `74085185...54e6`, eleven absent fresh paths, exact helpers,
+IHK/overlay/assets and only `runtimeclosure-5`; the future fetched packet
+release remains separate from the candidate commit.
+
+Next push/fetch this preparation release, reconcile processes, leases,
+containers and capacity, then execute the one unprivileged preparation and
+independently audit its generated request.  Only after that may a separately
+reviewed single host build run.  No current candidate artifact or diagnostic
+app has passed; formal counters remain unchanged.
