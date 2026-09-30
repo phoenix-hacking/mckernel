@@ -21,8 +21,8 @@ def helpers():
     end = next(i for i in range(start, len(lines)) if lines[i] == "def main():")
     tree = ast.parse("\n".join(lines[start:end]))
     wanted = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
-    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"durable", "under", "inventory", "equal_inventory", "mount_points", "proc_references", "privileged_references", "safe_remove"}]
-    ns = {"__name__": "fixture"}
+    wanted += [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in {"durable", "under", "inventory", "equal_inventory", "mount_points", "proc_references", "privileged_references", "validate_historical_leases", "safe_remove"}]
+    ns = {"__name__": "fixture", "SRC_DEV": 1831}
     exec(compile(ast.Module(body=wanted, type_ignores=[]), "relocation-fixture", "exec"), ns)
     return ns
 
@@ -49,6 +49,8 @@ def test_packet_is_bash_valid_and_all_frozen_inputs_are_bound():
     prep_path = "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-6.sh"
     assert text.count(prep_path) == 2
     assert "native-exact-candidate-preparation-scratch-20260930-7.sh" not in text
+    assert "native-exact-build-failure-8b5056f8-scratch-6-20260930.tar" in text
+    assert "native-exact-build-failure-8b5056f8-scratch-6-20260930-1.tar" not in text
     assert "native-exact-candidate-preparation-scratch-20260929-1.sh" not in text
 
 
@@ -144,3 +146,29 @@ def test_privileged_reference_census_distinguishes_clean_from_tool_failure():
                 assert str(exc) == "privileged-reference-census-failed"
             else:
                 raise AssertionError("sudo/lsof failure was accepted as a clean census")
+
+
+def test_historical_lease_tombstones_require_terminal_or_reused_owner():
+    h = helpers()
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td); proc = root / "proc"; lease = root / "lease.json"
+        boot = "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd"
+        def row(pid=123, start=77, **extra):
+            value = {"schema":"mckernel.retirement-build-owner-exclusion.v2", "state":"retirement-owned-immutable-one-shot-tombstone", "boot_id":boot, "filesystem_device":1831, "operational_exclusion":str(lease), "pid":pid, "starttime":start, "release_sha256":"a"*64}
+            value.update(extra); return value
+        def write(value): lease.write_text(__import__("json").dumps(value))
+        # Absent owner is terminal and accepted.
+        reader = lambda path: Path(path).read_text()
+        write(row()); h["validate_historical_leases"]([lease], boot, proc_root=proc, reader=reader)
+        # Reused PID has a different starttime and is accepted.
+        stat = proc / "123" / "stat"; stat.parent.mkdir(parents=True); stat.write_text("1 (reused) " + " ".join(["S"] + ["0"]*18 + ["78"]))
+        h["validate_historical_leases"]([lease], boot, proc_root=proc, reader=reader)
+        # Same PID/starttime is live and rejected.
+        stat.write_text("1 (live) " + " ".join(["S"] + ["0"]*18 + ["77"]))
+        try: h["validate_historical_leases"]([lease], boot, proc_root=proc, reader=reader)
+        except RuntimeError as exc: assert str(exc) == "active-lease-owner"
+        else: raise AssertionError("live lease owner accepted")
+        lease.write_text("not-json")
+        try: h["validate_historical_leases"]([lease], boot, proc_root=proc, reader=reader)
+        except RuntimeError as exc: assert str(exc) == "malformed-lease"
+        else: raise AssertionError("malformed lease accepted")

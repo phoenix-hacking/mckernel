@@ -11,7 +11,7 @@ readonly E="$SCRATCH/native-exact-build-evidence-8b5056f8-scratch-6"
 readonly DEST_PARENT=/home/holden/mckernel-work/retained-exact-candidates
 readonly DEST="$DEST_PARENT/mckernel-exact-candidate-8b5056f8-scratch-6"
 readonly FAILURE=/home/holden/mckernel/docs/verification/evidence/native-exact-build-8b5056f8-scratch6-runtime-workflow-failure-20260930.json
-readonly ARCHIVE="$SCRATCH/native-exact-build-failure-8b5056f8-scratch-6-20260930-1.tar"
+readonly ARCHIVE="$SCRATCH/native-exact-build-failure-8b5056f8-scratch-6-20260930.tar"
 readonly PREP_TERMINAL="$SCRATCH/native-exact-candidate-preparation-8b5056f8-scratch-6-terminal.json"
 readonly REQUEST="$SCRATCH/native-exact-build-request-8b5056f8-scratch-6.json"
 readonly MANIFEST="$SCRATCH/native-exact-inputs-8b5056f8-scratch-6.json"
@@ -144,6 +144,32 @@ def privileged_references(targets):
   if r.returncode not in (0,1) or r.stderr.strip() or (r.returncode==1 and r.stdout.strip()): raise RuntimeError('privileged-reference-census-failed')
   if r.returncode==0 and r.stdout.strip(): hits.append(target)
  return hits
+def validate_historical_leases(paths,boot_id,proc_root='/proc',reader=None):
+ if reader is None:
+  def reader(path):
+   r=subprocess.run(['/usr/bin/sudo','-A','/bin/cat',str(path)],check=False,text=True,capture_output=True)
+   if r.returncode or r.stderr.strip(): raise RuntimeError('lease-read-failed')
+   return r.stdout
+ for path in paths:
+  try: row=json.loads(reader(path))
+  except Exception as exc: raise RuntimeError('malformed-lease') from exc
+  if (row.get('schema')!='mckernel.retirement-build-owner-exclusion.v2' or
+      row.get('state')!='retirement-owned-immutable-one-shot-tombstone' or
+      row.get('boot_id')!=boot_id or row.get('filesystem_device')!=SRC_DEV or
+      row.get('operational_exclusion')!=str(path) or
+      not isinstance(row.get('pid'),int) or row['pid']<=0 or
+      not isinstance(row.get('starttime'),int) or row['starttime']<=0 or
+      not isinstance(row.get('release_sha256'),str) or not re.fullmatch(r'[0-9a-f]{64}',row['release_sha256'])):
+   raise RuntimeError('unknown-lease-identity')
+  stat_path=pathlib.Path(proc_root)/str(row['pid'])/'stat'
+  try:
+   fields=stat_path.read_text(errors='strict').rsplit(') ',1)[1].split()
+   current=int(fields[19])
+  except FileNotFoundError:
+   continue
+  except Exception as exc: raise RuntimeError('unreadable-owner-identity') from exc
+  if current==row['starttime']: raise RuntimeError('active-lease-owner')
+  # A different starttime proves PID reuse; the tombstone is terminal.
 def safe_remove(root,dev,ino):
  p=pathlib.Path(root); par=os.open(str(p.parent),os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW); fd=os.open(p.name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=par)
  try:
@@ -185,7 +211,7 @@ def fail_if_active():
  if any('mckernel-exact' in x for x in dp.stdout.splitlines()): raise RuntimeError('active-docker')
  lease_paths=[pathlib.Path('/run/lock/mckernel-build.lock'),pathlib.Path('/run/mckernel-build.lease'),pathlib.Path('/run/mckernel-build.lock'),pathlib.Path('/run/lock/mckernel-exact-build.lock')]
  lease_paths += list(pathlib.Path('/home/holden/mckernel-work/scratch').glob('native-exact-build-lease-*.json'))
- if any(os.path.lexists(p) for p in lease_paths): raise RuntimeError('active-lease')
+ validate_historical_leases(lease_paths, pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip())
 def git(*args):
  env=dict(os.environ,GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_NO_REPLACE_OBJECTS='1',GIT_TERMINAL_PROMPT='0',PATH='/usr/bin:/bin',HOME='/nonexistent')
  return subprocess.run(['/usr/bin/git','-C',REPO,*args],env=env,check=True,text=True,capture_output=True).stdout.strip()
