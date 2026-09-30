@@ -68,12 +68,14 @@ def snapshot():
    p=Path(d)/n; st=os.lstat(p); rel=str(p.relative_to(SOURCE))
    if stat.S_ISLNK(st.st_mode): rows.append({'path':rel,'type':'symlink','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':0,'linkname':os.readlink(p)}); continue
    if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1: die('special/hardlink member')
-   rows.append({'path':rel,'type':'file','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':st.st_size,'sha256':digest(p)})
+   rows.append({'path':rel,'type':'file','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':st.st_size,'sha256':digest(p),'allocated_bytes':st.st_blocks*512})
  return rows
 def verify():
  guard(); record=json.loads(bound_bytes(MAP,MAP_ID,MAP_SIZE,MAP_SHA)); rows=record.get('members',[])
  if record.get('status')!='ARCHIVE_PASS' or len(rows)!=286318: die('map release/member count')
  if sum(x.get('type')=='file' for x in rows)!=285811 or sum(x.get('type')=='dir' for x in rows)!=452 or sum(x.get('type')=='symlink' for x in rows)!=55: die('map type counts')
+ schemas={'dir':{'path','type','mode','uid','gid','mtime_ns','size'},'file':{'path','type','mode','uid','gid','mtime_ns','size','sha256','allocated_bytes'},'symlink':{'path','type','mode','uid','gid','mtime_ns','size','linkname'}}
+ if any(set(x)!=schemas[x.get('type')] for x in rows): die('map member schema')
  fresh=snapshot()
  if fresh!=rows: die('source differs from archived map')
  expected={x['path']:x for x in rows}
@@ -95,7 +97,7 @@ def live_identity():
   for p in [Path(d)]+[Path(d)/n for n in dirs+files]:
    st=os.lstat(p); rel='.' if p==SOURCE else str(p.relative_to(SOURCE)); row={'dev':st.st_dev,'ino':st.st_ino,'mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':st.st_size,'nlink':st.st_nlink,'type':'dir' if stat.S_ISDIR(st.st_mode) else 'symlink' if stat.S_ISLNK(st.st_mode) else 'file'}
    if row['type']=='symlink': row['linkname']=os.readlink(p)
-   if row['type']=='file': row['sha256']=digest(p)
+   if row['type']=='file': row['sha256']=digest(p); row['allocated_bytes']=st.st_blocks*512
    rows[rel]=row
  return rows
 def write_temp_result(result):
@@ -132,7 +134,7 @@ def retire():
   if r['type']=='dir' and not stat.S_ISDIR(st.st_mode): die('entry type: '+rel)
   if r['type']=='symlink' and (not stat.S_ISLNK(st.st_mode) or os.readlink(os.path.join('/proc/self/fd',str(fd),n))!=r['linkname']): die('symlink replacement: '+rel)
   if r['type']=='file':
-   if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1 or st.st_size!=r['size']: die('file replacement: '+rel)
+   if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1 or st.st_size!=r['size'] or st.st_blocks*512!=r['allocated_bytes']: die('file replacement: '+rel)
    q=os.open(n,os.O_RDONLY|os.O_NOFOLLOW,dir_fd=fd); h=hashlib.sha256()
    while True:
     b=os.read(q,1<<20)

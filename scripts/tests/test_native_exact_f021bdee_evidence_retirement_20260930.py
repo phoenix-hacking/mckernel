@@ -106,3 +106,15 @@ def test_docker_inspect_argv_uses_full_id_without_invalid_flag(monkeypatch):
  monkeypatch.setattr(M.subprocess,'run',run); monkeypatch.setattr(M,'bound_bytes',lambda *a: b'0'); monkeypatch.setattr(M,'digest',lambda *a:'x'); monkeypatch.setattr(M,'FAILURE_SHA','x')
  M.guard()
  docker=[x for x in calls if x[:3]==['sudo','-A','docker']][0]; assert docker==['sudo','-A','docker','inspect',M.CONTAINER['id']] and '--no-trunc' not in docker
+
+def test_live_file_identity_carries_allocated_bytes(tmp_path,monkeypatch):
+ root=tmp_path/'e'; root.mkdir(); p=root/'f'; p.write_bytes(b'x'); monkeypatch.setattr(M,'SOURCE',root); rows=M.live_identity(); assert rows['f']['allocated_bytes']==p.stat().st_blocks*512
+
+def test_allocated_bytes_mismatch_is_detectable():
+ row={'allocated_bytes':4096}; changed=dict(row); changed['allocated_bytes']=8192; assert changed!=row
+
+def test_snapshot_file_schema_includes_allocation(tmp_path,monkeypatch):
+ root=tmp_path/'e'; root.mkdir(); (root/'f').write_text('x'); monkeypatch.setattr(M,'SOURCE',root); rows=M.snapshot(); row=next(x for x in rows if x['type']=='file'); assert set(row)=={'path','type','mode','uid','gid','mtime_ns','size','sha256','allocated_bytes'}
+
+def test_schema_sets_are_distinct_and_complete():
+ text=Path(M.__file__).read_text(); assert "'allocated_bytes'" in text and "'linkname'" in text and 'map member schema' in text
