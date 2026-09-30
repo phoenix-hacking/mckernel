@@ -8860,3 +8860,23 @@ containers and capacity, then execute the one unprivileged preparation and
 independently audit its generated request.  Only after that may a separately
 reviewed single host build run.  No current candidate artifact or diagnostic
 app has passed; formal counters remain unchanged.
+
+Continuation checkpoint 190, 2026-09-30: the exact reviewed `scratch-3`
+preparation ran once from fetched release
+`328c757f9f795ab8736bad1dc4e799f57732993c` and independently passes
+postflight.  Terminal SHA is `9620f091...9472`, log SHA is
+`f7eb4c60...da5b`, and PID/starttime `120655/94864502` plus all descendants
+are absent.  Candidate `74085185...54e6` is identity `1831:3932163`; backup
+is `1831:5111810`; exact IHK, overlay and four gitlinks match.  Manifest SHA
+is `2e54c946...b77f` and request SHA is `c0fe30d7...6156`.
+
+Output identity `1831:5636110` and evidence identity `1831:4456450` are
+mode 0700 and empty.  The fresh lease and `runtimeclosure-5` exclusion are
+absent.  Owner validation passes with 9,236,512,768 allocated bytes, zero
+memory-backed/tmpfs allocation, the retained 2-5 CPU/12-GiB/no-network/512-task
+profile and 16.2158-GiB aggregate ceiling.
+
+Next checkpoint this preparation result, obtain an independent decision for
+the one exact host-build command, and execute no other heavy work.  Preserve
+the three prior stopped failure containers, exclusions and archives.  No
+artifact, boot or diagnostic application has yet passed.
