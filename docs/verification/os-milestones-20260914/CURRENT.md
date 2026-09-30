@@ -9281,3 +9281,52 @@ fresh independent execution release before the next exact build.  It must pass
 the two retained objtool diagnostics before image preparation or diagnostic
 startup/memory/files/threads/signals/teardown execution.  Diagnostic results
 remain separate from formal acceptance.
+
+Continuation checkpoint 205, 2026-09-30: the original `dce800af` objtool
+failure is now portable and the corrected retry candidate is prepared.  The
+335,902,720-byte failure archive has SHA `f8522be9...5952`; the complete
+4.81-GB output, 444-MB evidence, receipt/log hashes, consumed
+`lifecyclebinding-10` identity `1831:57580`, and stopped container
+`6efd149e8b8c...` remain unchanged.
+
+The first relocation attempt failed safely before rename or deletion because
+its cross-filesystem inventory compared filesystem-specific directory
+`st_size`.  Source and temporary copy both retained 10,725 entries and an
+independent checksum rsync was empty.  That failure is preserved in
+`native-exact-candidate-relocation-dce800af-copy-verification-failure-20260930.json`.
+The bounded resume normalized directory size only, retained regular hashes and
+sizes, symlink targets and hardlink topology, then passed complete independent
+source and execution review.  Resume terminal SHA is `b66a36b2...d8f52`;
+the candidate is now host identity `66306:47736554`, and the original scratch
+source is absent.  A targeted trim returned 12,436,381,696 bytes.
+
+Two separately reviewed exact duplicate-evidence cleanups removed only
+single-link files byte-identical to pinned Git blobs from retained source
+checkouts.  The first removed 2,422 files/9,100,673,024 allocated bytes from
+the `63235981` checkout; the second removed 2,437 files/9,100,873,728 bytes
+from relocated `dce800af`.  Both terminal plans and per-file Git restoration
+maps are committed as compressed evidence.  Neither cleanup touched build
+output/evidence, failure archives, stopped containers, differing files,
+directories or links.
+
+Fetched correction `8b5056f836ecd3e6916625696750c4dfadbaaf9f`
+was prepared once as scratch-6.  Preparation terminal/log SHAs are
+`dd243ae0...9b95`/`08e4004f...d76b`; candidate identity is `1831:5111816`,
+manifest/request SHAs are `c1ad79ea...d719`/`f234ca2c...00d4`, and empty
+output/evidence identities are `1831:6553623`/`1831:6553638`.  The lease and
+fresh `objtoolbinding-11` exclusion remain absent.  Independent build-source
+review confirms patch 0025 follows 0024 with `--fuzz=0`, both build commands
+remain fixed at `-j2`, and the reviewed container profile remains CPUs 2-5,
+12 GiB with no additional swap, network none and 512 PIDs.
+
+Post-cleanup host/scratch free space is 27,232,235,520/19,873,378,304 bytes,
+above the 16/12-GiB floors and the prior 5.25-GB partial-build footprint.
+Next obtain the refreshed one-heavy-lease execution decision and run exactly
+the scratch-6 wrapper request.  It must first pass both retained objtool
+diagnostics; if compilation completes, prepare a separately reviewed image
+request, then boot and run real startup, memory, files, threads/futexes,
+signals and controlled-shutdown diagnostic apps.  Current-candidate build
+attempts in this loop: one failed `dce800af` build and zero completed images.
+Real diagnostic guest applications in this loop: zero.  Formal counters remain
+6/130, 350/10000 and 0/273 applications; no cleanup, preparation or diagnostic
+result is acceptance credit.
