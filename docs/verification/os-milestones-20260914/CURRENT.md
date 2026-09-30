@@ -9772,3 +9772,20 @@ preparation result is
 `docs/verification/evidence/native-exact-candidate-preparation-scratch11-result-20260930.json`.
 Current-candidate builds remain five failed and zero completed; real diagnostic
 guest applications remain zero.
+
+Continuation checkpoint 220, 2026-09-30: scratch-11's Git-identical candidate
+evidence was retired after independent review without removing its failed build.
+Sealed plan SHA `d071cf3f...78b2` selected 2,499 nlink-1 exact Git blobs, zero
+differences, totaling 9,102,712,832 allocated bytes.  Apply re-audited and
+removed every target.  Candidate identity `1831:4063240` remains and occupies
+134,922,240 bytes.  Full build output/evidence, metadata, request/manifest,
+preparation records, exportset-15, failure record, nested IHK delta and stopped
+container `d1972570...d954` remain.  Twenty-eight focused cleanup tests pass.
+
+Targeted trim reported 13,299,142,656 bytes.  Host/scratch free space is now
+41,035,231,232/30,406,483,968 bytes.  Full result:
+`docs/verification/evidence/native-exact-retained-candidate-acd4197b-source-evidence-cleanup-result-20260930.json`.
+Next prepare scratch-12 from the pushed lifecycle-oracle correction, bind a
+fresh exclusion namespace, checkpoint it, then run one reviewed exact build.
+Current-candidate builds remain six failed and zero completed; real diagnostic
+guest applications remain zero.
