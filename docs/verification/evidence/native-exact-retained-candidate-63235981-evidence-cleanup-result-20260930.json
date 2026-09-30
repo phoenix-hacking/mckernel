@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.native-exact-retained-candidate-evidence-cleanup-result.v1",
+  "status": "PASS",
+  "scope": "Removal of exact committed duplicate evidence files from one retained source checkout only; no build, guest, runtime, or application acceptance",
+  "candidate": {
+    "commit": "6323598141241dc7f734f42bac78c939bf5ae292",
+    "root": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-63235981-scratch-2",
+    "head_after": "6323598141241dc7f734f42bac78c939bf5ae292",
+    "allocated_bytes_after": 142807040,
+    "evidence_directory_preserved": true
+  },
+  "released_packet": {
+    "commit": "153cc02bf6916098bc7af892b6c42cc57d52799b",
+    "path": "docs/verification/evidence/native-exact-retained-candidate-63235981-evidence-cleanup-20260930.py",
+    "sha256": "e2deafcb203ca575c56894d796fd5754ced68878f0f7ff88f22dc18f5c2ac25c",
+    "focused_tests": "5 passed",
+    "independent_source_review": "PASS_SOURCE",
+    "independent_execution_review": "PASS_EXECUTION"
+  },
+  "audit_plan": {
+    "sha256_before_apply": "eea45fd4cca6d38aa7270c2566b326b1ed97074853f6fdf819ce8373fef181cd",
+    "identity_before_apply": "1831:57582",
+    "size_before_apply": 1512076,
+    "target_count": 2422,
+    "unique_target_count": 2422,
+    "recorded_allocated_bytes": 9100673024,
+    "all_targets_contained": true
+  },
+  "apply": {
+    "exit_status": 0,
+    "terminal_status": "APPLY_PASS",
+    "removed_count": 2422,
+    "remaining_target_count": 0,
+    "terminal_plan_sha256": "4535a843cd5a1d01e1b4efd631c09cb4233216dc2d0bfff3629aeb16fcc24ce6",
+    "terminal_plan_identity": "1831:57583",
+    "terminal_plan_size": 1973725,
+    "host_free_bytes_before": 18821328896,
+    "host_free_bytes_after": 27859881984,
+    "host_free_bytes_delta": 9038553088
+  },
+  "portable_restoration_map": {
+    "path": "docs/verification/evidence/native-exact-retained-candidate-63235981-evidence-cleanup-map-20260930.json.gz",
+    "sha256": "f47d8f1911c415c2c7242f9e9d3af7db911f85aa66ee1c87bb40df7ac1fa1bc5",
+    "size": 234372,
+    "gzip_test": "PASS",
+    "contains_terminal_apply_plan": true
+  },
+  "preserved_active_process_identities": {
+    "launcher_wrapper_pid": 4055285,
+    "launcher_pid": 4055286,
+    "launcher_worker_pid": 4055294,
+    "launcher_server_pid": 4055298,
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd"
+  },
+  "notes": [
+    "Every removed file was a single-link regular file matching its exact blob at the pinned candidate commit.",
+    "The compressed terminal plan retains each original path, Git blob, content hash, metadata, and restoration path.",
+    "The current dce800af failed-build source, output, evidence, failure archive, stopped container, and original lifecyclebinding-10 exclusion were not changed."
+  ]
+}

@@ -18,7 +18,8 @@ readonly MANIFEST="$SCRATCH/native-exact-inputs-dce800af-scratch-5.json"
 readonly LOG="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930.log"
 readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930-terminal.json"
 readonly INTENT="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930-intent.json"
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
+readonly BUILD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation-dce800af-12.json"
 readonly LOCK="$SCRATCH/native-exact-candidate-relocation-dce800af-20260930.lock"
 readonly SRC_DEV=1831 DEST_DEV=66306
 readonly CANDIDATE_COMMIT=dce800af8c19d014ef509e102ca4f4b1c473e2ab
@@ -28,6 +29,7 @@ readonly ARCHIVE_SHA=f8522be9649def629b04a93d065f3ab79a5c7acdd7a2f2f221b7d759384
 readonly PREP_RELEASE=b13f7065cc16bff1608a6f3d89ff65870400c3c6
 readonly PREP_PACKET_SHA=c334449c9d1081911a0de951a3b130b4b06de24414da5755801687407698a996
 readonly PREP_TERMINAL_SHA=2788c195965f7a12f92f1463065f70074ce48f2875d406fce2cfa293c6c9dcd9
+readonly BUILD_EXCLUSION_SHA=ef89d2384f417e02c4ae41192726ac76601376e189f0325e1932384add02c7c6
 readonly PREP_PACKET_PATH=docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-5.sh
 readonly OVERLAY_SHA=cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7
 readonly RESULT_SHA=7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77
@@ -40,14 +42,15 @@ sha(){ /usr/bin/sha256sum -- "$1" | /usr/bin/awk '{print $1}'; }
 : "${RELOCATION_TEST_SHA256:?set reviewed relocation test blob hash}"
 [[ "$RELOCATION_RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || die release-format
 for p in "$LOG" "$TERMINAL" "$INTENT" "$EXCLUSION"; do [[ ! -e "$p" && ! -L "$p" ]] || die output-exists; done
-for p in "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
+for p in "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$BUILD_EXCLUSION"; do [[ -e "$p" && ! -L "$p" ]] || die missing-preserved-input; done
 [[ "$(sha "$FAILURE")" == "$FAILURE_SHA" ]] || die failure-hash
 [[ "$(sha "$ARCHIVE")" == "$ARCHIVE_SHA" ]] || die archive-hash
+[[ "$(sha "$BUILD_EXCLUSION")" == "$BUILD_EXCLUSION_SHA" ]] || die build-exclusion-hash
 exec 9>>"$LOCK"; /usr/bin/flock -n 9 || die relocation-busy
 exec 8>"$LOG"
-/usr/bin/python3 - "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$DEST_PARENT" "$DEST" "$LOG" "$TERMINAL" "$INTENT" "$EXCLUSION" <<'PY'
+/usr/bin/python3 - "$C" "$O" "$E" "$FAILURE" "$ARCHIVE" "$PREP_TERMINAL" "$REQUEST" "$MANIFEST" "$DEST_PARENT" "$DEST" "$LOG" "$TERMINAL" "$INTENT" "$BUILD_EXCLUSION" "$EXCLUSION" <<'PY'
 import ctypes, datetime, fcntl, hashlib, json, os, pathlib, re, shutil, stat, subprocess, sys
-C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,DEST_PARENT,DEST,LOG,TERMINAL,INTENT,EXCLUSION=sys.argv[1:]
+C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,DEST_PARENT,DEST,LOG,TERMINAL,INTENT,BUILD_EXCLUSION,EXCLUSION=sys.argv[1:]
 SRC_DEV,DEST_DEV=1831,66306
 REPO='/home/holden/mckernel'; CANDIDATE='dce800af8c19d014ef509e102ca4f4b1c473e2ab'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 PREP_PACKET_PATH='docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-5.sh'
@@ -192,7 +195,7 @@ def main():
  if hashlib.sha256(pathlib.Path(C+'/'+OVERLAY).read_bytes()).hexdigest()!=OVERLAY_SHA or hashlib.sha256(pathlib.Path(C+'/'+RESULT).read_bytes()).hexdigest()!=RESULT_SHA: raise RuntimeError('overlay-result-binding')
  if subprocess.run(['/usr/bin/git','-C',C,'rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=CANDIDATE or subprocess.run(['/usr/bin/git','-C',C+'/ihk','rev-parse','HEAD'],env=env,check=True,text=True,capture_output=True).stdout.strip()!=IHK: raise RuntimeError('commit-binding')
  if hashlib.sha256(subprocess.check_output(['/usr/bin/git','-C',C+'/ihk','show',IHK+':test/ihklib/whitebox/src/driver/mckernel/syscall.c'],env=env)).hexdigest()!=BASE_SHA: raise RuntimeError('base-binding')
- for p in (C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST):
+ for p in (C,O,E,FAILURE,ARCHIVE,PREP_TERMINAL,REQUEST,MANIFEST,BUILD_EXCLUSION):
   if pathlib.Path(p).is_symlink(): raise RuntimeError('preserved-input-symlink')
  scratch_path=str(pathlib.Path(C).parent)
  before_scratch=os.statvfs(scratch_path).f_bavail*os.statvfs(scratch_path).f_frsize

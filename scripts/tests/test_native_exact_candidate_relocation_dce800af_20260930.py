@@ -36,6 +36,7 @@ def test_packet_is_bash_valid_and_all_frozen_inputs_are_bound():
         "f8522be9649def629b04a93d065f3ab79a5c7acdd7a2f2f221b7d759384c5952",
         "c334449c9d1081911a0de951a3b130b4b06de24414da5755801687407698a996",
         "2788c195965f7a12f92f1463065f70074ce48f2875d406fce2cfa293c6c9dcd9",
+        "ef89d2384f417e02c4ae41192726ac76601376e189f0325e1932384add02c7c6",
         "cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7",
         "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77",
         "91fe5688f3282c1617a75f08c4b435a793200f2cf9beafe432cef7ad3ca0bd4c",
@@ -96,6 +97,9 @@ def test_mount_process_existing_destination_and_exclusion_guards_are_present():
 
 def test_packet_never_replaces_existing_exclusion_or_destination():
     text = source()
+    assert "native-exact-candidate-operational-exclusion-lifecyclebinding-10.json" in text
+    assert "native-exact-candidate-operational-exclusion-relocation-dce800af-12.json" in text
+    assert '"$BUILD_EXCLUSION_SHA"' in text
     assert "os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW" in text
     assert "if pathlib.Path(DEST).exists() or pathlib.Path(DEST).is_symlink()" in text
     assert "durable(INTENT" in text
