@@ -166,6 +166,61 @@ class RetirementPacketTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):M.OutputDir(Path(d)/'missing')
             self.assertEqual(before,set(os.listdir('/proc/self/fd')))
 
+    def test_real_memavailable_uses_fixed_nofollow_descriptor_snapshot(self):
+        opened=[];original=M.os.open
+        def tracked(path,flags,*args,**kwargs):
+            opened.append((path,flags,kwargs));return original(path,flags,*args,**kwargs)
+        with mock.patch.object(M.os,'open',side_effect=tracked):value=M.available_memory_bytes()
+        self.assertIs(type(value),int);self.assertGreater(value,0)
+        self.assertEqual([x[0] for x in opened],['/proc','meminfo'])
+        self.assertTrue(all(flags&os.O_NOFOLLOW for _,flags,_ in opened))
+        self.assertIn('dir_fd',opened[1][2])
+        total=int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemTotal:')))*1024
+        self.assertLessEqual(value,total)
+
+    def test_memavailable_parser_rejects_malformed_duplicate_missing_and_range(self):
+        self.assertEqual(M.parse_memavailable(b'MemTotal: 20 kB\nMemAvailable: 10 kB\n'),10240)
+        self.assertEqual(M.parse_memavailable(b'MemAvailable:\t0 kB\n'),0)
+        for raw in (b'',b'MemFree: 100000 kB\n',b'MemAvailable: 1 kB\nMemAvailable: 2 kB\n',b'MemAvailable: -1 kB\n',b'MemAvailable: 1.5 kB\n',b'MemAvailable: +1 kB\n',b'MemAvailable: 1 MB\n',b'MemAvailable: 01 kB\n',b'MemAvailable: 9007199254740992 kB\n',b'MemAvailable: 10000000000000000 kB\n',b' MemAvailable: 1 kB\n',b'MemAvailable: 1 kB\0',b'MemAvailable: 1 kB\xff',b'x'*65537,'MemAvailable: 1 kB\n'):
+            with self.subTest(raw=repr(raw)[:80]),self.assertRaises(M.Error):M.parse_memavailable(raw)
+
+    def test_resource_floor_rejects_low_memory_preserves_storage_floors(self):
+        paths={'/home':'host','/home/holden/mckernel-work/scratch':'scratch','/dev/shm':'tmpfs'}
+        for low in (None,'memory','host','scratch','tmpfs'):
+            values={k:v-(1 if k==low else 0) for k,v in M.FLOORS.items()}
+            with mock.patch.object(M,'available_memory_bytes',return_value=values['memory']),mock.patch.object(M,'free_bytes',side_effect=lambda p:values[paths[p]]):
+                if low is None:self.assertEqual(M.check_resource_floors(),values)
+                else:
+                    with self.subTest(low=low),self.assertRaisesRegex(M.Error,'resource floor'):M.check_resource_floors()
+
+    def test_meminfo_replacement_and_oversized_read_close_descriptors(self):
+        original=M.os.stat
+        def changed(path,*args,**kwargs):
+            result=original(path,*args,**kwargs)
+            if path=='meminfo':
+                values=list(result);values[1]+=1;return os.stat_result(values)
+            return result
+        before=set(os.listdir('/proc/self/fd'))
+        with mock.patch.object(M.os,'stat',side_effect=changed):
+            with self.assertRaisesRegex(M.Error,'identity changed'):M.available_memory_bytes()
+        self.assertEqual(before,set(os.listdir('/proc/self/fd')))
+        with mock.patch.object(M.os,'read',side_effect=lambda fd,count:b'x'*count):
+            with self.assertRaisesRegex(M.Error,'read bound'):M.available_memory_bytes()
+        self.assertEqual(before,set(os.listdir('/proc/self/fd')))
+
+    def test_low_memory_rejected_before_output_and_exclusions(self):
+        with mock.patch.object(M,'admit',return_value=({},{})),mock.patch.object(M,'check_resource_floors',side_effect=M.Error('resource floor')),mock.patch.object(M,'fresh_output') as output,mock.patch.object(M,'SharedExclusions') as exclusions:
+            with self.assertRaisesRegex(M.Error,'resource floor'):M.execute('unused')
+        output.assert_not_called();exclusions.assert_not_called()
+
+    def test_low_memory_rechecked_at_root_delete_and_rename_boundaries(self):
+        h=mock.Mock();remove=h.remove_root;rename=h.rename_noreplace
+        guard=mock.Mock(unsafe=True);M.bind_delete_boundary(h,guard)
+        with mock.patch.object(M,'check_resource_floors',side_effect=M.Error('resource floor')):
+            with self.assertRaisesRegex(M.Error,'resource floor'):h.remove_root({},None)
+            with self.assertRaisesRegex(M.Error,'resource floor'):h.rename_noreplace(1,'old','new')
+        remove.assert_not_called();rename.assert_not_called()
+
     def test_output_write_preserves_primary_and_close_failure(self):
         with tempfile.TemporaryDirectory() as d:
             output=M.OutputDir(Path(d));real_close=M.os.close

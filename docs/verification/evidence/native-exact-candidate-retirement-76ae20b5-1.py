@@ -14,7 +14,7 @@ SOURCE=Path('/home/holden/mckernel'); GIT=SOURCE/'.git'; IHK_GIT=GIT/'modules/ih
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-76ae20b5-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_76ae20b5.py'
 RELEASE_PATH='docs/verification/evidence/stability-native-exact-candidate-retirement-76ae20b5-1.release.json'
-RELEASE_SHA256='9e5d93b4e8030b8de19729900dac0b1bc1a9bc640ff6bef9d54fd5a042aa21ca'
+RELEASE_SHA256='RELEASE_HASH_REQUIRED'
 MAIN='76ae20b523f57dee8e0fb1fb834caf5443f9f671'; IHK='3114d9e7101ad52030eb3effa849a5c108972a1f'
 CANDIDATE='/dev/shm/mckernel-exact-candidate-76ae20b5-1'; BACKUP='/dev/shm/mckernel-exact-metadata-backup-76ae20b5-1'
 # These are source-bound facts from the completed copy validation.  The
@@ -769,6 +769,47 @@ def mechanical(release,fetched):
 def root(ino,size):return {'device':26,'inode':ino,'uid':1000,'gid':1000,'mode':0o755,'kind':'directory','size':size}
 def free_bytes(path):
  s=os.statvfs(path);return s.f_bavail*s.f_frsize
+def parse_memavailable(raw):
+ if type(raw) is not bytes or not raw or len(raw)>65536 or b'\0' in raw:bad('invalid meminfo snapshot')
+ try:lines=raw.decode('ascii','strict').splitlines()
+ except UnicodeError:bad('invalid meminfo encoding')
+ fields=[line for line in lines if line.lstrip().startswith('MemAvailable')]
+ if len(fields)!=1:bad('missing or duplicate MemAvailable')
+ match=re.fullmatch(r'MemAvailable:[ \t]+(0|[1-9][0-9]{0,15})[ \t]+kB',fields[0])
+ if match is None:bad('malformed MemAvailable')
+ kib=int(match.group(1))
+ if kib>((1<<63)-1)//1024:bad('MemAvailable range')
+ return kib*1024
+def available_memory_bytes():
+ """Read one bounded procfs snapshot through fixed, no-follow descriptors."""
+ parent=fd=None;failure=None;answer=None
+ def identity(st):return (st.st_dev,st.st_ino,st.st_mode,st.st_uid,st.st_gid)
+ try:
+  parent=os.open('/proc',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+  parent_before=os.fstat(parent)
+  fd=os.open('meminfo',os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent)
+  before=os.fstat(fd)
+  if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1:bad('invalid meminfo inode')
+  parts=[];size=0
+  while True:
+   part=os.read(fd,min(4096,65537-size))
+   if not part:break
+   size+=len(part)
+   if size>65536:bad('meminfo exceeds read bound')
+   parts.append(part)
+  if identity(before)!=identity(os.fstat(fd)) or identity(before)!=identity(os.stat('meminfo',dir_fd=parent,follow_symlinks=False)) or identity(parent_before)!=identity(os.fstat(parent)) or identity(parent_before)!=identity(os.lstat('/proc')):bad('meminfo identity changed')
+  answer=parse_memavailable(b''.join(parts))
+ except BaseException as e:failure=e
+ for opened in (fd,parent):
+  if opened is not None:
+   try:os.close(opened)
+   except BaseException as e:failure=combined(failure,e)
+ if failure is not None:raise failure
+ return answer
+def check_resource_floors():
+ floors={'host':free_bytes('/home'),'scratch':free_bytes('/home/holden/mckernel-work/scratch'),'tmpfs':free_bytes('/dev/shm'),'memory':available_memory_bytes()}
+ if any(floors[k]<FLOORS[k] for k in FLOORS):bad('resource floor')
+ return floors
 def raw_starttime(pid):return int((Path('/proc')/str(pid)/'stat').read_text().rsplit(')',1)[1].split()[19])
 def proc_starttime(pid):
  try:return raw_starttime(pid)
@@ -873,8 +914,7 @@ def post_delete_identity_scans(output,guard,observer_fd,release):
  return rows
 def live_gate(r,held_lease,output):
  """All mutable names stay absent until these exact live prerequisites hold."""
- floors={'host':free_bytes('/home'),'scratch':free_bytes('/home/holden/mckernel-work/scratch'),'tmpfs':free_bytes('/dev/shm'),'memory':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_AVPHYS_PAGES')}
- if any(floors[k]<FLOORS[k] for k in FLOORS):bad('resource floor')
+ check_resource_floors()
  try:boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
  except OSError:bad('boot id unavailable')
  if boot!=r['boot_id']:bad('current boot mismatch')
@@ -1366,6 +1406,7 @@ def bind_delete_boundary(h,lease):
  """The sealed helper cannot cross any root-delete boundary after lease loss."""
  original=h.remove_root
  def guarded(item,journal):
+  check_resource_floors()
   lease.assert_held()
   try:result=original(item,journal)
   except BaseException as primary:
@@ -1376,6 +1417,7 @@ def bind_delete_boundary(h,lease):
  h.remove_root=guarded
  original_rename=h.rename_noreplace
  def rename_noreplace(*args,**kwargs):
+  check_resource_floors()
   lease.assert_held()
   try:result=original_rename(*args,**kwargs)
   except BaseException as primary:
@@ -1417,6 +1459,7 @@ def execute(release_arg):
   # those session leaders without passing through the common retire path.
   for sig in old:signal.signal(sig,interrupted)
   r,sources=admit(release_arg)
+  check_resource_floors()
   b=fresh_output(r)
   # Reserve a descriptor-bound terminal writer before any work. Ordinary
   # output close errors must be captured before the terminal record is built.
