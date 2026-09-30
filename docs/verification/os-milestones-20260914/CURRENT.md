@@ -9196,3 +9196,37 @@ Next independently verify preparation postflight, push/fetch this checkpoint,
 and obtain release for exactly one generated build request.  Preserve the
 prior phase-0 failure unchanged.  No compiled current-candidate artifact,
 image, boot, guest app or shutdown result exists yet.
+
+Continuation checkpoint 202, 2026-09-30: the corrected mapping-contract build
+ran once and passed the prior IHK-007 binding.  It then failed in phase 0 at
+the next fail-closed source binding: `ihk-smp-native-lifecycle-check: SMP
+compiled dependency digest differs: host-kernel/native-rust/smp_memory.rs`.
+It stopped before compilation with zero artifacts and no runtime result.
+Container `a06adba2c333...` exited 1/PID 0 and remains retained; owner/build/log
+SHAs are `254f9d27...fb09`, `b5d19b52...c8e8` and `0f00ca5a...fb9d`.
+The consumed `mappingbinding-9` exclusion is identity `1831:57567`, SHA
+`54494d76...cf5a`.  A 1,433,600-byte, 49-member portable failure archive has
+SHA `8956c1cd...b5cf`.
+
+The bounded lifecycle correction updates only the `smp_memory.rs` dependency
+SHA in the lifecycle contract/checker.  Eighty-nine lifecycle/link-closure
+tests pass; independent review confirms no lifecycle, ownership, resource or
+oracle change.  To avoid another serial source-binding failure, a complete
+old-digest sweep also regenerated the unsafe/FFI ledger mechanically: 55
+inputs and 637 site IDs/annotations/policy remain unchanged, 63 repeated file
+hashes and 41 byte spans moved with the 26-byte source delta, 45 tests pass,
+and RS-011 remains `NOT_READY`.  The combined focused source run passes 182
+tests.  No acceptance credit is awarded.
+
+The consumed candidate is checksum-preserved at host identity
+`66306:47725821`; source inode `1831:6422529` is absent after atomic retirement
+and literal deletion.  Relocation recovered 9,235,443,712 scratch bytes and
+trim returned 19,715,186,688 bytes.  All request/preparation/failure evidence,
+exclusion and the stopped container remain retained.  Current build wrapper
+advances to fresh `lifecyclebinding-10` and rejects all history through
+`mappingbinding-9`; its 19 tests pass.
+
+Next push/fetch this complete source-binding correction, update the reviewed
+preparation template to `lifecyclebinding-10`, and prepare a fresh candidate.
+Do not reuse either failed scratch-5 request.  The next exact build remains the
+first compiler check; no diagnostic app has run.

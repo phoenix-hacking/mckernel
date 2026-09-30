@@ -29,8 +29,8 @@ readonly OVERLAY_RESULT_BLOB_SHA=7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f
 readonly IMAGE_ID=sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d
 readonly PLACEMENT="$SOURCE/scripts/native_exact_candidate_placement_observer_20260929.py"
 readonly TERMINAL="$SCRATCH/native-exact-candidate-preparation-${SHA:0:8}-scratch-5-terminal.json"
-# Fresh mapping-contract checkpoint bound by the reviewed mappingbinding-9 wrapper.
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-mappingbinding-9.json"
+# Fresh lifecycle-binding checkpoint bound by the reviewed lifecyclebinding-10 wrapper.
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
 readonly RELEASE="${PREPARATION_RELEASE_COMMIT:?independently reviewed fetched release commit required}"
 readonly RELEASE_REF=refs/remotes/origin/codex/local-native-staging-repair
 readonly CLOSURE="$SCRATCH/source-git-closure-observer-80b8c492-1.py"
