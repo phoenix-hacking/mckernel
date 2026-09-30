@@ -9022,3 +9022,22 @@ is 17,455,497,216 bytes, insufficient for another approximately 9.3-GB
 candidate while retaining the 12-GiB floor.  Preserve all five current stopped
 failure containers and original evidence identities.  Formal counters remain
 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 195, 2026-09-30: the independently reviewed wrapper
+successor permits only fresh `memorymap-7` and rejects every historical
+exclusion through `offlinecwd-6` before owner loading.  Nineteen focused tests
+pass; wrapper SHA is `13a6117f...5550` and test SHA is
+`65ade476...60fc`.  This wrapper commit will be the frozen source candidate
+after push/fetch.
+
+Capacity remains the immediate prerequisite.  Read-only retention audit found
+the minimum safe recovery candidate: only the superseded, fully archived
+scratch-1 candidate/output/evidence roots, totaling approximately 9.235 GB.
+The first cleanup packet was rejected before execution for broken embedded
+Python, incomplete content/restoration binding, stale release binding,
+insufficient concurrency/path checks and non-durable failure recording.  No
+path was removed.  One corrected packet and behavioral tests are in progress.
+
+Next push/fetch the wrapper checkpoint, complete independent cleanup source and
+execution review, recover the exact scratch-1 allocation, then prepare a fresh
+candidate from this correction.  Do not reuse scratch-4 or `offlinecwd-6`.

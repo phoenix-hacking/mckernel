@@ -34,14 +34,15 @@ EXPECTED_LIMITS = {
 # use the reviewed replacement so a stale exclusion can never be mistaken for
 # the current build's lease.
 RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
-# The failed -2, -3, closurefix-4, and runtimeclosure-5 attempts are retained
-# evidence, never reusable leases. Fresh requests are bound to the new
-# offline-cwd path below.
+# The failed -2, -3, closurefix-4, runtimeclosure-5, and offline-cwd-6
+# attempts are retained evidence, never reusable leases. Fresh requests are
+# bound to the new memory-map path below.
 REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
 SUPERSEDED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
 CLOSUREFIX_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-closurefix-4.json"
 RUNTIMECLOSURE_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeclosure-5.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-offlinecwd-6.json"
+OFFLINECWD_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-offlinecwd-6.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-memorymap-7.json"
 
 
 class AdmissionError(ValueError):
