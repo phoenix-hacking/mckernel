@@ -8917,35 +8917,6 @@ Preserve all four stopped failure containers, prior exclusions and archives.
 No current-candidate artifact or diagnostic application has passed; formal
 counters remain 6/130, 350/10000 and 0/273 applications.
 
-Continuation checkpoint 198, 2026-09-30: fetched checkpoint
-`61bfbb6cc059f5382b0b19361ff96bf51409620c` and its critical blobs match
-origin exactly.  A targeted trim returned 31,214,907,392 unused scratch bytes
-to the sparse backing file, increasing host free space from 25,586,978,816 to
-54,104,264,704 bytes before preparation.  This resolved the projected host
-floor failure without deleting additional evidence.
-
-The independently released scratch-5 preparation then ran exactly once and
-passes postflight.  Terminal SHA is `7644f647...8006`, log SHA is
-`f74877fc...241`, and PID/starttime `327206/95549247` is absent with no live
-children recorded.  Candidate `61bfbb6c...620c` is identity `1831:5505025`;
-backup is `1831:6684675`; candidate Git, IHK, overlay, gitlinks, wrapper,
-owner, provenance, image and asset bindings match.  Manifest SHA is
-`0030a7c0...e43` and request SHA is `a3eb1e6e...c5070`.
-
-Output identity `1831:5111813` and evidence identity `1831:6684676` are empty
-mode-0700 directories.  The fresh lease and `memorymap-relocated-8` exclusion
-remain absent.  Owner validation records 9,236,836,352 total allocated bytes,
-zero memory-backed allocation, postflight host free 44,842,901,504 bytes,
-scratch free 16,578,813,952 bytes and available memory 30,169,989,120 bytes.
-The additive record is
-`docs/verification/evidence/native-exact-candidate-preparation-61bfbb6c-scratch5-success-20260930.json`.
-
-Next checkpoint and fetched-blob verify this preparation result, then obtain
-independent release for exactly one invocation of the generated build request
-through the reviewed disk wrapper.  Recheck the heavy lease, stopped-container
-census and resource floors immediately before execution.  No current-candidate
-compiled artifact, boot, guest application or shutdown result exists yet.
-
 Continuation checkpoint 192, 2026-09-30: the independently reviewed wrapper
 successor now permits only the fresh absolute `offlinecwd-6` exclusion and
 rejects all five historical paths through `runtimeclosure-5` before loading or
@@ -9120,3 +9091,51 @@ compiles, prepare a distinct reviewed image request before the startup,
 memory, files, threads/futexes, signals and controlled-shutdown diagnostics.
 No current-candidate artifact or diagnostic application has passed; formal
 counters remain 6/130, 350/10000 and 0/273 applications.
+
+Continuation checkpoint 198, 2026-09-30: fetched checkpoint
+`61bfbb6cc059f5382b0b19361ff96bf51409620c` and its critical blobs match
+origin exactly.  A targeted trim returned 31,214,907,392 unused scratch bytes
+to the sparse backing file, increasing host free space from 25,586,978,816 to
+54,104,264,704 bytes before preparation.  This resolved the projected host
+floor failure without deleting additional evidence.
+
+The independently released scratch-5 preparation then ran exactly once and
+passes postflight.  Terminal SHA is `7644f647...8006`, log SHA is
+`f74877fc...241`, and PID/starttime `327206/95549247` is absent with no live
+children recorded.  Candidate `61bfbb6c...620c` is identity `1831:5505025`;
+backup is `1831:6684675`; candidate Git, IHK, overlay, gitlinks, wrapper,
+owner, provenance, image and asset bindings match.  Manifest SHA is
+`0030a7c0...e43` and request SHA is `a3eb1e6e...c5070`.
+
+Output identity `1831:5111813` and evidence identity `1831:6684676` are empty
+mode-0700 directories.  The fresh lease and `memorymap-relocated-8` exclusion
+remain absent.  Owner validation records 9,236,836,352 total allocated bytes,
+zero memory-backed allocation, postflight host free 44,842,901,504 bytes,
+scratch free 16,578,813,952 bytes and available memory 30,169,989,120 bytes.
+The additive record is
+`docs/verification/evidence/native-exact-candidate-preparation-61bfbb6c-scratch5-success-20260930.json`.
+
+Continuation checkpoint 199, 2026-09-30: the pre-build capacity gate found
+only 3,693,912,064 scratch bytes above the 12-GiB reserve, less than the prior
+failed build's measured 5,577,920,512-byte output/evidence footprint.  No build
+was started.  The complete superseded scratch-2 candidate was independently
+found relocation-eligible and copied to host storage.  Two recorded checksum
+comparisons plus a third live comparison were empty.  Atomic no-replace
+publication retained it at identity `66306:47582206`, Git
+`63235981...e292`, IHK `3114d9e7...2a1f`; source inode `1831:6160385` was
+then atomically retired and literally deleted after a fresh process, mount and
+running-container census.
+
+All scratch-2 output, evidence, archive, request, preparation, metadata and
+stopped container `340d3232f39b...` remain.  Operational terminal SHA is
+`d31458a9...2532`.  Relocation recovered 9,234,927,616 scratch bytes and the
+targeted trim returned 11,704,426,496 bytes to the host backing file.  Current
+host/scratch free measurements are 44,756,668,416/25,813,733,376 bytes, leaving
+12,928,831,488 scratch bytes above reserve.  The additive record is
+`docs/verification/evidence/native-exact-candidate-relocation-scratch2-terminal-20260930.json`.
+
+Next require an exact one-shot build execution decision using request SHA
+`a3eb1e6e...c5070`.  If it passes, invoke only the reviewed wrapper command,
+retain its exclusion/container/process identities and checkpoint its first
+compiler result.  No current-candidate artifact, boot or diagnostic application
+has passed.
