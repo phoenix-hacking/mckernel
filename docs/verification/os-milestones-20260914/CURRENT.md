@@ -10007,3 +10007,39 @@ shutdown.  Current-candidate builds remain six failed and one completed;
 tool-image attempts are two failed and zero completed; real current diagnostic
 guest applications remain zero.  No acceptance bar moves, and this launcher
 pause does not complete the OS goal.
+
+Continuation checkpoint 228, 2026-09-30: source-free tool-image attempt3
+passes its independently reviewed execution and result gates.  The exact
+receipt SHA is `1ea38c33...af08`; immutable Linux/amd64 image
+`sha256:5315d34307c6658907d3e74997b8e0b0637d237a26c070fe5dc5b03ee7667080`
+is retained at 1,665,096,208 bytes.  All 92 receipt inventory entries and 28
+captured Docker commands verify.  Networked and fresh offline observations are
+byte-identical at SHA `cb669ce8...80a4`, including 474 unique RPM lines,
+CMake `3.31.8-1.el10`, LLD 21.1.8 with the correct `ld.lld` lookup spelling,
+and exact Rust 1.92.0.  RPM payload verification exits zero with empty streams.
+
+Both phases ran on CPUs 2-5 with 12 GiB/no swap expansion and 512 PIDs, no
+host mounts and private IPC.  The sequential offline phase additionally proves
+network-none, read-only root, uid/gid 1000:1000 and all capabilities dropped.
+Both terminal inspections show exited 143, PID 0, OOM false after bounded
+retirement.  The shared container name is currently absent and the lease is
+absent.  Owner PID/starttime was 1548639/100458522; output/evidence identities
+are `66306:45495353`/`66306:45495354`.  Exact result evidence is
+`docs/verification/evidence/native-exact-tool-image-attempt3-success-20260930.json`.
+
+Post-run host/scratch free bytes are 20,115,988,480/15,496,278,016 and
+MemAvailable is 29,544,128 KiB.  The retained scratch12 build artifacts still
+match their checkpoint hashes, and its `/out` source symlink remains present;
+one cheap audit incorrectly resolved that container-relative link against the
+host and is not a blocker.  The earlier two failed tool-image containers and
+their original evidence remain preserved.
+
+Next create the v2 toolchain manifest and actual-schema current `mckernel.img`
+request from this exact receipt/image plus the retained scratch12 build and a
+fresh exportset-17.  Obtain independent execution review, then run one image
+build.  Once its artifact is authenticated, create a fresh strict memory
+manifest and root/guest release; the frozen oracle remains stdout exactly
+`NATIVE_CORE PASS memory\n`, stderr empty, exit 37/raw wait 9472.  Tool-image
+attempts are two failed and one completed; current-candidate builds remain six
+failed and one completed; real current diagnostic guest applications remain
+zero.  This tool-image result earns no production, application or OS acceptance.

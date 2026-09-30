@@ -1,0 +1,113 @@
+{
+  "schema": "mckernel.native-exact-tool-image-success.v1",
+  "recorded_at": "2026-09-30T12:03:00-07:00",
+  "base_commit": "d1cc2b6838d5f448e132d35877177a691ac2867d",
+  "status": "PASS_RESULT",
+  "scope": "source-free Rocky tool-image preparation attempt3 and sequential offline identity probe",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "bdc946109f96d5681a02c43542efa2036af5cb842c1d21e1f82e642c110af8c5"
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "3a43e305da551c549fe9ba6cbf2c863d562ad5034af22c6cd328138e22e59ba7",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "c2fdbaad9d4d69254aadfb60aaa95d813c809ec51ca05a8e9eb49eea254f3809",
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "host-kernel/rocky/toolchain-lock.json": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  },
+  "execution_review": {
+    "reviewer": "/root/tool_image_execution_review_231",
+    "before_run": "PASS_EXECUTION_CORRECTION",
+    "after_run": "PASS_RESULT"
+  },
+  "command": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_prepare.py",
+    "--candidate-sha", "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "--output-root", "/home/holden/mckernel-exact-image-f0a97d42-3",
+    "--evidence-root", "/home/holden/mckernel-exact-image-evidence-f0a97d42-3",
+    "--lease-path", "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-3.json",
+    "--toolchain-lock", "/home/holden/mckernel/host-kernel/rocky/toolchain-lock.json"
+  ],
+  "owner": {
+    "pid": 1548639,
+    "starttime": "100458522",
+    "nonce": "ce8b245978df439db4a1942ad5f9c4b1",
+    "container_name": "mckernel-tools-5fb2e0472fd840fab6d547de21642c71",
+    "exit_code": 0
+  },
+  "roots": {
+    "output": {
+      "path": "/home/holden/mckernel-exact-image-f0a97d42-3",
+      "identity": "66306:45495353",
+      "allocated_bytes": 0
+    },
+    "evidence": {
+      "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-3",
+      "identity": "66306:45495354",
+      "allocated_bytes": 638976
+    }
+  },
+  "receipt": {
+    "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-3/image-receipt.json",
+    "sha256": "1ea38c3372a34de11ed0ca23aa76a87706fe172617d2dcb3e955a0a65a7baf08",
+    "status": "PASS",
+    "source_free": true,
+    "runtime_network": "none",
+    "retired": true
+  },
+  "image": {
+    "id": "sha256:5315d34307c6658907d3e74997b8e0b0637d237a26c070fe5dc5b03ee7667080",
+    "size_bytes": 1665096208,
+    "architecture": "amd64",
+    "os": "linux",
+    "inspect_sha256": "370e1b8354ecc8b9c57957d83787b80be0cab9f1021eb3fb63195cf340c6ee04"
+  },
+  "observations": {
+    "networked_sha256": "cb669ce8e31f9b5b33453b6b5c5d9b4192ad9498bdd6e3656f4bfdbe937580a4",
+    "offline_sha256": "cb669ce8e31f9b5b33453b6b5c5d9b4192ad9498bdd6e3656f4bfdbe937580a4",
+    "exactly_equal": true,
+    "rpm_inventory_lines": 474,
+    "rpm_verify": "exit 0 with empty stdout and stderr",
+    "cmake_nevra": "cmake-0:3.31.8-1.el10.x86_64",
+    "lld_nevra": "lld-0:21.1.8-1.el10.x86_64",
+    "ld_lld_path": "/usr/bin/ld.lld",
+    "ld_lld_target": "/usr/bin/lld",
+    "ld_lld_sha256": "52029c7d731c74ab72a2eca8126d578547242b3192ba74e27c94c1b51be001f9",
+    "rust_nevra": "rust-0:1.92.0-1.el10.x86_64"
+  },
+  "profiles": {
+    "cpus": "2-5",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "host_mounts": 0,
+    "preparation_network": "bridge",
+    "offline_network": "none",
+    "offline_read_only": true,
+    "offline_uid_gid": "1000:1000",
+    "offline_capabilities": "drop ALL"
+  },
+  "terminal": {
+    "preparation_inspect_sha256": "139882dd211f192ccf20f55e750f61e34055593eeebb7bad5b2a1ee35bd26bb3",
+    "offline_inspect_sha256": "cf13c6e248509a11a086f9ae4c60c4d54ce526149bf1c0b1c582cd944f92f5b9",
+    "both": "exited 143, PID 0, OOM false after bounded stop",
+    "container_currently_absent": true,
+    "lease_currently_absent": true
+  },
+  "post_run": {
+    "host_free_bytes": 20115988480,
+    "scratch_free_bytes": 15496278016,
+    "memory_available_kib": 29544128
+  },
+  "counts": {
+    "tool_image_attempts_failed": 2,
+    "tool_image_attempts_completed": 1,
+    "current_candidate_builds_failed": 6,
+    "current_candidate_builds_completed": 1,
+    "current_candidate_diagnostic_guest_apps": 0
+  },
+  "next": "Build a v2 toolchain manifest and actual-schema current mckernel.img request from this exact receipt/image and retained scratch12 build, obtain independent execution review, then run one current-image build.",
+  "acceptance": "This accepts only the exact source-free build tool image and offline identity probe. It establishes no McKernel image, guest/application behavior, production packaging gate or OS acceptance."
+}
