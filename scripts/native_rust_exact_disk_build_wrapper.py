@@ -36,9 +36,9 @@ EXPECTED_LIMITS = {
 RETIRED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5.json"
 # The failed -2, -3, closurefix-4, runtimeclosure-5, offline-cwd-6, and
 # memory-map-7, relocated-memory-map-8, mapping-binding-9,
-# lifecycle-binding-10, and objtool-binding-11 attempts are retained evidence,
-# never reusable leases. Fresh requests are bound to the runtime-blob-12 path
-# below.
+# lifecycle-binding-10, objtool-binding-11, and runtime-blob-12 attempts are
+# retained evidence, never reusable leases. Fresh requests are bound to the
+# self-digest-13 path below.
 REVIEWED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-76ae20b5-2.json"
 SUPERSEDED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-97fb67a7-3.json"
 CLOSUREFIX_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-closurefix-4.json"
@@ -49,7 +49,8 @@ MEMORYMAP_RELOCATED_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scr
 MAPPINGBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-mappingbinding-9.json"
 LIFECYCLEBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-lifecyclebinding-10.json"
 OBJTOOLBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-objtoolbinding-11.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
+RUNTIMEBLOB_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
 
 
 class AdmissionError(ValueError):
