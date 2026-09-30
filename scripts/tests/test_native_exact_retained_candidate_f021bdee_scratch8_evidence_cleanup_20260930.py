@@ -1,4 +1,5 @@
 import importlib.util
+import os
 from pathlib import Path
 import pytest
 
@@ -49,3 +50,16 @@ def test_wrong_or_nested_mount_rejected():
         M.validate_census(census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/nvme0n1p2 ext4 259:2 /\n'))
     with pytest.raises(SystemExit,match='nested mount'):
         M.validate_census(census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n/dev/loop40 ext4 7:40 /nested\n'))
+
+def test_audit_adapter_rejects_wrong_binding():
+    with pytest.raises(SystemExit,match='wrong f021 audit binding'):
+        M.audit(M.CANDIDATE_ROOT,M.REPO,'0'*40)
+
+def test_base_apply_integration_has_no_signature_typeerror(monkeypatch,tmp_path):
+    target=tmp_path/'exact'; target.write_bytes(b'x'); st=target.stat()
+    row={"path":str(target),"restore_git_path":"docs/verification/evidence/x","blob":"a"*40,"mode":st.st_mode&0o7777,"mtime_ns":st.st_mtime_ns,"size":1,"sha256":M.BASE.sha(b'x'),"allocated_bytes":st.st_blocks*512,"dev":st.st_dev,"ino":st.st_ino}
+    plan={"schema":"mckernel.exact-evidence-cleanup.v1","status":"AUDIT_PASS","candidate_commit":M.CANDIDATE_COMMIT,"candidate_root":str(M.CANDIDATE_ROOT),"candidate_identity":M.CANDIDATE_IDENTITY,"targets":[row],"preserved":[],"safety_census":census_mount('SOURCE FSTYPE MAJ:MIN TARGET\n/dev/loop39 ext4 7:39 /home/holden/mckernel-work/scratch\n'),"recovery":"r","live_failure_untouched":"f","live_build_inputs_untouched":[],"protected_f021_runtime":{"paths":[str(p) for p in M.LIVE_PATHS],"container":M.PROTECTED_CONTAINER}}
+    fresh=dict(plan); fresh['safety_census']=plan['safety_census']
+    monkeypatch.setattr(M.BASE,'root_guard',lambda *args:None); monkeypatch.setattr(M.BASE,'evidence_base',lambda *args:(tmp_path,tmp_path)); monkeypatch.setattr(M,'_BASE_AUDIT',lambda root,repo,commit:fresh)
+    M.BASE.apply(plan)
+    assert not target.exists()

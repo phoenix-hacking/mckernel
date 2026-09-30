@@ -47,8 +47,10 @@ def validate_census(census):
     return _BASE_VALIDATE(shadow)
 BASE.validate_census=validate_census
 
-def audit():
-    result=_BASE_AUDIT(CANDIDATE_ROOT,REPO,CANDIDATE_COMMIT)
+def audit(root=CANDIDATE_ROOT,repo=REPO,commit=CANDIDATE_COMMIT):
+    if Path(root) != CANDIDATE_ROOT or Path(repo) != REPO or commit != CANDIDATE_COMMIT:
+        BASE.die('wrong f021 audit binding')
+    result=_BASE_AUDIT(root,repo,commit)
     result['protected_f021_runtime']={'paths':[str(p) for p in LIVE_PATHS],'container':PROTECTED_CONTAINER}
     return result
 BASE.audit=audit
