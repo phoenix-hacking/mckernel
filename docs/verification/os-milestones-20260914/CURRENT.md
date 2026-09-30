@@ -9365,3 +9365,48 @@ real startup/memory/files/threads/signals/shutdown diagnostics.  Current-
 candidate builds in this loop: two failed, zero completed.  Real diagnostic
 guest applications: zero; all diagnostic results remain separate from formal
 acceptance.
+
+Continuation checkpoint 207, 2026-09-30: scratch-6 failure retention and the
+fresh `runtimeblob-12` candidate are now complete.  A separately reviewed exact
+cleanup removed 2,433 single-link files byte-identical to pinned Git blobs from
+the retained `43e9dbbd` source checkout, recovering 9,100,791,808 allocated
+bytes.  Its immutable audit and complete Git restoration maps are committed;
+the checkout now uses 142,946,304 bytes.  No differing source, build output,
+failure evidence, archive or container was removed.
+
+The scratch-6 phase-0 failure is portable in a 1,413,120-byte, 47-member archive
+with SHA `73532685...e01f`; source is excluded.  The first relocation preflight
+failed before copy because absent fixed `/run` lease paths were passed to the
+privileged tombstone reader.  Its zero-byte log/lock identities and additive
+failure record remain.  The bounded retry accepts only seven well-formed
+terminal tombstones whose PID/starttime owners are absent or reused, while
+preserving every lease file.  It copied and fully verified 9,231,400,960 source
+bytes, atomically published host identity `66306:47727926`, then retired source
+identity `1831:5111816`.  Output/evidence/request/manifest/archive, stopped
+container and both relocation attempts remain.  Targeted scratch trim returned
+13,304,832,000 bytes; post-trim host/scratch availability was approximately
+35.7/29.1 GB.
+
+The first scratch-7 preparation cloned exact pushed candidate `c658175a` but
+failed closed before metadata conversion: its post-clone gate incorrectly
+budgeted a second 9.2-GB checkout.  Original terminal/log SHAs are
+`a9bf9967...f87b`/`47344ca5...982f`, and the full untouched clone remained at
+identity `1831:6684719`.  A fresh reviewed resume binds that original failure,
+the complete source closure and its own fetched packet, uses unique retry paths,
+and budgets only incremental metadata/emergency space.  Thirty-nine focused
+tests and independent source/execution reviews pass.
+
+Resume preparation now passes with manifest SHA `e63cd03b...70a3`, request SHA
+`7a0a654c...d826`, terminal/log SHAs `99e4f0bf...6ac4`/`6a0582b7...03c3`,
+empty output/evidence identities `1831:5111838`/`1831:5111853`, and absent lease
+and `runtimeblob-12` exclusion.  The request retains CPUs 2-5, 12 GiB, no
+additional swap, no network, 512 PIDs and fixed build limits.  Current
+host/scratch/memory availability is approximately 26.3/19.9/29.6 GB.
+
+Next obtain one fresh heavy-build execution release for request
+`7a0a654c...d826` and run only its exact wrapper.  It must pass the corrected
+runtime-workflow phase-0 binding and both retained objtool diagnostics before an
+image request is prepared.  Then regenerate source-bound startup/memory/files/
+threads/signals/shutdown diagnostic packets.  Current-candidate builds in this
+loop: two failed and zero completed.  Real diagnostic guest applications: zero;
+no retention or preparation result is acceptance credit.
