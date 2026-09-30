@@ -10082,3 +10082,40 @@ six failed and one completed; tool-image attempts remain two failed and one
 completed; real current diagnostic guest applications remain zero.  No
 acceptance bar moves, the OS goal remains incomplete, and this launcher pause
 is not permanent.
+
+Continuation checkpoint 230, 2026-09-30: the second independent source review
+BLOCKed checkpoint229's first bounded publication correction.  It found a
+TOCTOU overwrite at final toolchain publication, partial-final request exposure
+on interrupted direct writes, a receipt-derived rather than independently
+selected lock expectation, missing full preparation integration coverage, and
+overstated resource-profile authentication wording.  Because this was the
+second failure in the same family, the work escalated to the bounded expert
+lane `/root/image_publication_expert_repair_234` rather than another cheap
+retry.
+
+The expert repair privately stages and fsyncs both JSON documents, uses atomic
+same-filesystem hard links for no-replace publication, independently requires
+and compares the expected toolchain-lock SHA, and retains request-last
+semantics.  New tests cover competing publishers, incumbent preservation,
+short private writes, independent-lock mismatch and a complete successful
+`prepare()` to real `ImageOwner.validate()` path.  Coordinator reproduction
+passes all 52 combined tests plus `py_compile` and diff-check.  Final preparer
+and test SHAs are `0de9550b...9ba8` and `36d08f58...a600`; unchanged owner and
+test SHAs remain `74eb5f72...c3d` and `ee2713ec...09dc`.
+
+Independent re-review now returns `PASS_SOURCE` for those four exact hashes.
+The accepted scope is precise: owner admission hash-binds and preserves the
+exact independently reviewed producer evidence; it does not semantically
+reauthenticate that evidence's resource-profile contents.  This is source-only
+admission, not an execution release.  Fresh exportset-17 toolchain/request/
+lease paths remain absent and no Docker, build or guest ran.
+
+Next compute the actual scratch12 backup/build and nightly inventories while
+creating fresh work/evidence parents, publish the exportset-17 manifest and
+request once, and independently review that exact packet.  Then obtain a fresh
+image-owner execution release before one serialized current `mckernel.img`
+build.  After artifact authentication, rebind the strict memory diagnostic's
+image/final-map identity and obtain its fresh root/guest release.  The frozen
+oracle remains stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit
+37/raw wait 9472.  Real current diagnostic guest applications remain zero and
+no acceptance bar moves.

@@ -1,8 +1,8 @@
 {
   "schema": "mckernel.native-exact-image-request-preparation-wip.v1",
-  "recorded_at": "2026-09-30T12:19:24-07:00",
+  "recorded_at": "2026-09-30T12:29:41-07:00",
   "base_commit": "77f2a820d366b1e816ff7c95b396ad8227418d4d",
-  "status": "WIP_REVIEW_REQUIRED",
+  "status": "PASS_SOURCE",
   "scope": "v2 source-free tool-image receipt admission and deterministic current-image request publication",
   "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
   "policy_sha256": {
@@ -13,14 +13,14 @@
   },
   "source_sha256": {
     "scripts/native_rust_exact_mckernel_image_container_owner.py": "74eb5f720381be43eb581ed89919b44d598f35f004433350a6506849ba7e8c3d",
-    "scripts/native_rust_exact_mckernel_image_request_prepare.py": "cad37c90e0fac2895aa918c055ed8c7afc2ec422ed8fa7135f43994240cb57ef",
+    "scripts/native_rust_exact_mckernel_image_request_prepare.py": "0de9550ba2421e22271987bb5a6295ae5d5e1a54bb6fb609062112d55fd49ba8",
     "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "ee2713ecd3ced3ae13ef6fa3c53a599a6c418c1a60fea0cbada3cdda01009dc9",
-    "scripts/tests/test_native_rust_exact_mckernel_image_request_prepare.py": "22f07c4a88a6addb08354d5d7b7788207ee0a05dbc825354a99aca60edf15506"
+    "scripts/tests/test_native_rust_exact_mckernel_image_request_prepare.py": "36d08f58a672e8eaef4b67970f0891a60c8d81de84d582110776232749e0a600"
   },
   "changes": [
-    "v2 owner admission authenticates the actual PASS and retired tool-image receipt, base image, complete tool/evidence hashes, identical networked/offline observations, resource profile and exact toolchain-lock digest",
+    "v2 owner admission authenticates the actual PASS and retired tool-image receipt, base image, complete tool/evidence hashes, identical networked/offline observation hashes and exact toolchain-lock digest; it hash-binds and preserves rather than semantically reauthenticates the independently reviewed producer evidence",
     "preparer binds scratch12 build, backup and nightly inventories plus authenticated host helpers into the v2 request",
-    "toolchain publication is staged privately, validated before atomic rename and fsynced; the runnable request is validated and published last",
+    "toolchain and request JSON are privately staged and fsynced, then published atomically without replacement; the runnable request is validated and published last",
     "publication destinations are included in protected-root disjointness validation"
   ],
   "first_independent_review": {
@@ -34,11 +34,27 @@
       "toolchain_lock_sha256 admission was optional",
       "focused publication failure tests were missing"
     ],
-    "disposition": "bounded source correction applied; the corrected hashes have not received independent re-review"
+    "disposition": "first bounded correction remained blocked; expert escalation applied"
+  },
+  "expert_repair": {
+    "worker": "/root/image_publication_expert_repair_234",
+    "reason": "second failure in the same publication/trust family",
+    "result": "PASS_TESTS",
+    "changes": [
+      "same-filesystem hard-link publication makes both final names atomic and no-clobber",
+      "independently supplied expected toolchain-lock SHA is required and compared before publication",
+      "successful full prepare-to-real-owner validation and publication race/failure regressions added"
+    ]
+  },
+  "final_independent_review": {
+    "reviewer": "/root/image_request_source_review_233",
+    "result": "PASS_SOURCE",
+    "scope": "the four exact source/test hashes only; no execution release",
+    "remaining_limit": "actual scratch12 and nightly inventories were not scanned by the reviewer"
   },
   "checks": {
     "command": "python3 -B -m py_compile scripts/native_rust_exact_mckernel_image_container_owner.py scripts/native_rust_exact_mckernel_image_request_prepare.py scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py scripts/tests/test_native_rust_exact_mckernel_image_request_prepare.py && python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_mckernel_image_request_prepare && git diff --check -- scripts/native_rust_exact_mckernel_image_container_owner.py scripts/native_rust_exact_mckernel_image_request_prepare.py scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py scripts/tests/test_native_rust_exact_mckernel_image_request_prepare.py",
-    "tests": 26,
+    "tests": 52,
     "result": "PASS"
   },
   "preserved_inputs": {
@@ -56,9 +72,9 @@
     "all_absent_at_checkpoint": true
   },
   "resources": {
-    "host_free_bytes": 20073394176,
+    "host_free_bytes": 20024639488,
     "scratch_free_bytes": 15496278016,
-    "memory_available_kib": 29495596
+    "memory_available_kib": 29531628
   },
   "processes": {
     "launcher_wrapper_pid": 1442141,
@@ -77,6 +93,6 @@
     "current_candidate_builds_completed": 1,
     "current_candidate_diagnostic_guest_apps": 0
   },
-  "next": "Independently re-review the corrected source hashes. If and only if source review passes, create the fresh exportset-17 manifest/request, review the actual generated packet and obtain execution release before one serialized image build.",
-  "acceptance": "Source and local regression WIP only. No request was generated, no Docker/root/build/guest action ran, and no production, application or OS acceptance bar moves."
+  "next": "Create the fresh exportset-17 manifest/request from actual scratch12 and nightly inputs, independently review the generated packet and obtain execution release before one serialized image build.",
+  "acceptance": "Source admission and local regression only. No request was generated, no Docker/root/build/guest action ran, and no production, application or OS acceptance bar moves."
 }

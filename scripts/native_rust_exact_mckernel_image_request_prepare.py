@@ -69,33 +69,74 @@ def _write_new(path, value):
     return path
 
 
+def _publish_staged(staged, final, label):
+    """Publish a durable staged regular file without replacing an existing name.
+
+    ``link`` is the portable no-replace primitive available to this data-only
+    preparer: the destination appears as one complete inode or not at all.
+    Staging is deliberately in the destination parent, so this cannot silently
+    degrade into a cross-filesystem copy with a partially visible destination.
+    """
+    staged = _file(staged, label + " staging")
+    final = _fresh(final, label)
+    _fail(staged.parent.stat().st_dev == final.parent.stat().st_dev,
+          label + " staging filesystem differs")
+    try:
+        os.link(staged, final, follow_symlinks=False)
+    except FileExistsError as exc:
+        raise PreparationError(label + " already exists") from exc
+    owner._fsync_dir(final.parent)
+    return final
+
+
+def _staged_json(parent, prefix, value):
+    """Create one private, durable JSON inode in the final parent's filesystem."""
+    parent = _directory(parent, prefix + " parent")
+    stage_dir = Path(tempfile.mkdtemp(prefix="." + prefix + "-", dir=str(parent)))
+    try:
+        staged = _write_new(stage_dir / "document.json", value)
+    except BaseException:
+        # A write may have created a short private file before failing.  It
+        # must never escape the private staging name, and cleanup must not
+        # replace the write failure that explains the rejection.
+        try:
+            for item in stage_dir.iterdir():
+                item.unlink()
+            stage_dir.rmdir()
+        except OSError:
+            pass
+        raise
+    return stage_dir, staged
+
+
 def _publish(toolchain, final_toolchain, final_request, make_request, validate):
     """Validate through private staging, then publish toolchain and request in order."""
-    stage_dir = Path(tempfile.mkdtemp(prefix=".mckernel-image-request-",
-                                     dir=str(final_toolchain.parent)))
-    staged_toolchain = stage_dir / "toolchain.json"
-    moved = False
+    final_toolchain = _fresh(final_toolchain, "toolchain manifest")
+    final_request = _fresh(final_request, "request")
+    toolchain_stage = request_stage = None
     try:
-        _write_new(staged_toolchain, toolchain)
+        toolchain_stage, staged_toolchain = _staged_json(
+            final_toolchain.parent, "mckernel-image-toolchain", toolchain)
         staged_request = make_request(staged_toolchain)
         validate(staged_request)
-        os.replace(staged_toolchain, final_toolchain)
-        moved = True
-        owner._fsync_dir(final_toolchain.parent)
+        _publish_staged(staged_toolchain, final_toolchain, "toolchain manifest")
         request = make_request(final_toolchain)
         validate(request)
-        _write_new(final_request, request)
+        request_stage, staged_request = _staged_json(
+            final_request.parent, "mckernel-image-request", request)
+        _publish_staged(staged_request, final_request, "request")
         return request
     finally:
-        if staged_toolchain.exists():
-            staged_toolchain.unlink()
-        if stage_dir.exists():
-            os.rmdir(stage_dir)
+        for stage_dir in (toolchain_stage, request_stage):
+            if stage_dir is not None:
+                for item in stage_dir.iterdir():
+                    item.unlink()
+                stage_dir.rmdir()
         # Once staged admission passed, retain an atomically published final
         # toolchain if later validation/publication fails.  It is evidence, not
-        # runnable authority: the request is always published last.
-        if not moved:
-            _fail(not final_toolchain.exists(), "unvalidated toolchain was published")
+        # runnable authority: the request is always published last.  A failed
+        # contender may also observe another contender's final here; never
+        # mistake that independent publication for this call leaking a file.
 
 
 def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
@@ -104,7 +145,8 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
             owner_evidence_root, output_root, evidence_root, attempt_root,
             lease_path, common_exclusion_path=owner.COMMON_EXCLUSION,
             toolchain_manifest=None, request_path=None, jobs=4, timeout=19800,
-            host_root=None, scratch_root=None, disk_admission=None):
+            host_root=None, scratch_root=None, disk_admission=None,
+            expected_toolchain_lock_sha256=None):
     """Return and optionally publish a validated REQUEST_SCHEMA v1 request."""
     manifest = _file(candidate_manifest, "candidate/input manifest")
     source = _directory(source_root, "source root")
@@ -119,10 +161,17 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
     _fail(receipt.get("source_free") is True, "tool-image receipt source_free is not true")
     _fail(receipt.get("runtime_network") == "none", "tool-image receipt runtime_network differs")
     _fail(receipt.get("image_id") == image_id, "tool-image receipt image differs")
+    _fail(isinstance(expected_toolchain_lock_sha256, str) and
+          re.fullmatch(r"[0-9a-f]{64}", expected_toolchain_lock_sha256) is not None,
+          "expected toolchain lock hash")
+    _fail(receipt.get("toolchain_lock_sha256") == expected_toolchain_lock_sha256,
+          "tool-image receipt toolchain lock differs")
     _fail(re.fullmatch(r"sha256:[0-9a-f]{64}", str(image_id)) is not None, "image identity")
     tools = receipt.get("tools")
     _fail(isinstance(tools, dict), "tool-image receipt tools missing")
-    required = owner.REQUIRED_TOOLS
+    # v2 receipts attest only immutable image-provided tools.  ``rustc`` is
+    # authenticated independently from the mounted nightly closure below.
+    required = tuple(name for name in owner.REQUIRED_TOOLS if name != "rustc")
     _fail(all(name in tools and isinstance(tools[name], dict) for name in required), "tool-image tools incomplete")
     for name in required:
         row = tools[name]
@@ -188,7 +237,10 @@ def prepare(*, candidate_manifest, backup_root, backup_inventory, build_output,
                              {"host_path": str(nightly), "container_path": "/nightly", "inventory": roots[1]["inventory"]}],
         "path_dirs": toolchain["path_dirs"], "nightly": {"rustc_version": nightly_version},
         "host_git": host_git, "image_receipt": str(receipt_path), "image_receipt_sha256": _digest(receipt_path),
-        "toolchain_lock_sha256": receipt.get("toolchain_lock_sha256"),
+        # This was supplied by the reviewed caller, rather than copied from
+        # the receipt.  The equality above makes the receipt an assertion of
+        # the independently authenticated lock value, not its source.
+        "toolchain_lock_sha256": expected_toolchain_lock_sha256,
         "mounts": {"source": "/src", "manifest": "/inputs.json", "toolchain": "/toolchain.json", "driver": "/driver.py", "provenance": "/native_rust_exact_build_offline.py", "work": "/work"},
         "common_exclusion_path": common_exclusion_path, "lease_path": str(lease_path), "owner_evidence_root": str(evidence_owner),
         "attempt_root": str(attempt_root), "work_root": str(work), "output_root": str(fresh_output),
