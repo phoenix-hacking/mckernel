@@ -1,0 +1,41 @@
+{
+  "schema": "mckernel.candidate12-cleanup-source-review.v2",
+  "status": "PASS_SOURCE_INTEGRATION",
+  "recorded_at": "2026-09-30T16:49:00-07:00",
+  "base_commit": "e6390a03c008ebeb9ca36a8b5443c4d1d9546c78",
+  "trigger_failure": {
+    "receipt_sha256": "c0480b1d2d49be187057f965f8b028c35ffb0b2a2ff3af277c8609eb1831825d",
+    "error": "container-intersection",
+    "states": {"original": 2507},
+    "removed_files": 0
+  },
+  "tool": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+    "sha256": "dcb2a0d6fe662b2eb375bb55be7e2adfc6816050bcd1242e28d927f46adab712"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "sha256": "f543d60ece07984e55d83e716b0ebd7be5039a0c93af752a0ad31793df8a600a",
+    "result": "69 tests, PASS"
+  },
+  "live_read_only_census": {
+    "all_containers": 41,
+    "candidate_intersections": 6,
+    "result": "PASS"
+  },
+  "correction": {
+    "explicit_inventory_count": 6,
+    "proof_kinds": ["image_owner_receipt", "docker_inspect"],
+    "binds_owner_nonce": true,
+    "binds_restart_count": true,
+    "binds_complete_terminal_state": true,
+    "binds_complete_unordered_mounts": true,
+    "exact_intersection_set_checks": ["initial", "post_staging", "final"],
+    "automatic_new_container_admission": false
+  },
+  "execution_release": false,
+  "cleanup_executed_after_correction": false,
+  "diagnostic_acceptance": false,
+  "production_acceptance": false,
+  "os_complete": false
+}

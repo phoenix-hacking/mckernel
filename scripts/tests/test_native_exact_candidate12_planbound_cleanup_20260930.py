@@ -15,6 +15,7 @@ SPEC = importlib.util.spec_from_file_location('planbound_cleanup', PATH)
 m = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(m)
 REAL_GIT = m.git
+REAL_COLLECT_CENSUS = m.collect_census
 
 
 class Fixture(unittest.TestCase):
@@ -62,16 +63,27 @@ class Fixture(unittest.TestCase):
         self.seal()
         self.outputs = {k: str(self.base / (k + '.json')) for k in ('journal', 'receipt', 'status')}
         self.outputs['quarantine'] = str(self.root / '.planbound-cleanup-test')
-        self.container_bindings = {
-            m.CONTAINER: {'Name': m.CONTAINER_NAME, 'ExitCode': 1,
-                          'Mounts': [m.mount(str(self.root), '/src')]},
-            m.HOST_CONTAINER: {'Name': m.CONTAINER_BINDINGS[m.HOST_CONTAINER]['Name'], 'ExitCode': 0,
-                               'Mounts': [m.mount(str(self.root), '/src'),
-                                          m.mount(str(self.protected), '/driver.py')]},
-        }
+        self.container_bindings = copy.deepcopy(m.CONTAINER_BINDINGS)
+        for expected in self.container_bindings.values():
+            for row in expected['Mounts']:
+                source = row['Source']
+                if m.inside(source, m.BINDING['root']):
+                    source = str(self.root) + source[len(m.BINDING['root']):]
+                elif m.inside(source, m.SCRATCH):
+                    source = str(self.base) + source[len(m.SCRATCH):]
+                elif m.inside(source, str(m.REPO)):
+                    source = str(self.base / 'repo') + source[len(str(m.REPO)):]
+                else:
+                    source = str(self.base / 'nightly')
+                row['Source'] = source
         for cid, obj in self.census()['inspect'].items():
             p = self.base / ('proof-' + cid + '.json')
-            p.write_text(json.dumps({'terminal_container_info': obj} if cid == m.CONTAINER else obj))
+            expected = self.container_bindings[cid]
+            if expected['proof_kind'] == 'image_owner_receipt':
+                obj = {'terminal_container_info': obj, 'container_id': cid,
+                       'container_name': expected['Name'].lstrip('/'),
+                       'owner_nonce': expected['owner_nonce']}
+            p.write_text(json.dumps(obj))
             p.chmod(0o600)
             self.container_bindings[cid]['proof'] = {
                 'path': str(p), **m.metadata(p.stat()), 'sha256': m.sha(p.read_bytes())}
@@ -133,9 +145,9 @@ class Fixture(unittest.TestCase):
         for cid, expected in self.container_bindings.items():
             objects[cid] = {'Id': cid, 'Name': expected['Name'],
                            'Mounts': copy.deepcopy(expected['Mounts']),
-                           'State': {'Status': 'exited', 'Pid': 0, 'ExitCode': expected['ExitCode'],
-                                     'Running': False, 'Paused': False, 'Restarting': False,
-                                     'Dead': False, 'OOMKilled': False},
+                           'State': copy.deepcopy(expected['State']),
+                           'RestartCount': expected['RestartCount'],
+                           'Config': {'Labels': {'mckernel.owner': expected['owner_nonce']}},
                            'HostConfig': {'RestartPolicy': {'Name': 'no', 'MaximumRetryCount': 0},
                                           'AutoRemove': False}}
         return {'lsof': {'returncode': 1, 'stdout': '', 'stderr': ''},
@@ -558,11 +570,12 @@ class Fixture(unittest.TestCase):
     def test_execute_collects_two_censuses_before_delete(self):
         result, calls = self.execute_fixture(lambda root: self.census())
         self.assertEqual(result['status'], 'PASS')
-        self.assertEqual(calls, 2)
+        self.assertEqual(calls, 3)
         events = [e['event'] for e in self.events()]
         self.assertLess(events.index('staging-complete'), events.index('post-staging-census'))
         self.assertLess(events.index('post-staging-census'), events.index('irreversible-delete-admitted'))
         self.assertLess(events.index('irreversible-delete-admitted'), events.index('delete-intent'))
+        self.assertLess(max(i for i, name in enumerate(events) if name == 'deleted'), events.index('final-census'))
 
     def post_stage_drift(self, kind):
         calls = 0
@@ -635,7 +648,8 @@ class Fixture(unittest.TestCase):
             for key, value in [('Source', str(self.base)), ('Destination', '/wrong'),
                                ('RW', True), ('Type', 'volume')]:
                 c = self.census()
-                c['inspect'][cid]['Mounts'][0][key] = value
+                c['inspect'][cid]['Mounts'][0][key] = (
+                    not c['inspect'][cid]['Mounts'][0][key] if key == 'RW' else value)
                 with self.subTest(cid=cid, key=key), self.assertRaises(m.Refusal):
                     m.check_census(c, str(self.root))
             c = self.census()
@@ -748,7 +762,7 @@ class Fixture(unittest.TestCase):
              mock.patch.object(m.Journal, 'append', record):
             result, count = self.execute_fixture(collector)
         self.assertTrue(fired)
-        self.assertEqual(count, 2)
+        self.assertEqual(count, 3 if stage == 'complete' else 2)
         self.assertEqual(result['status'], 'FAIL')
         self.assertEqual(result['states'], expected)
         self.assertNotEqual(result['phase'], 'preflight')
@@ -794,7 +808,7 @@ class Fixture(unittest.TestCase):
             raise KeyboardInterrupt()
         with mock.patch.object(m, 'transact', side_effect=interrupted_return):
             result, count = self.execute_fixture(lambda root: self.census())
-        self.assertEqual(count, 2)
+        self.assertEqual(count, 3)
         self.assertEqual(result['states'], ['deleted'] * 3)
         self.assertEqual(result['phase'], 'complete')
         self.assertTrue(result['interrupted'])
@@ -811,6 +825,154 @@ class Fixture(unittest.TestCase):
         self.assertTrue(result['interrupted'])
         self.assert_originals()
         self.assertEqual(json.loads(Path(self.outputs['receipt']).read_text()), result)
+
+    def test_exact_six_inventory_passes_unordered_mounts(self):
+        self.assertEqual(len(self.container_bindings), 6)
+        self.assertEqual({r['proof_kind'] for r in self.container_bindings.values()},
+                         {'image_owner_receipt', 'docker_inspect'})
+        c = self.census()
+        for obj in c['inspect'].values(): obj['Mounts'].reverse()
+        m.check_census(c, str(self.root))
+        result, count = self.execute_fixture(lambda root: copy.deepcopy(c))
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(count, 3)
+        self.assertEqual(result['states'], ['deleted'] * 3)
+
+    def test_each_of_six_missing_is_rejected(self):
+        for cid in self.container_bindings:
+            c = self.census()
+            del c['inspect'][cid]
+            c['ids'].remove(cid)
+            c['ids_after'].remove(cid)
+            with self.subTest(cid=cid), self.assertRaisesRegex(m.Refusal, 'retained-container-absent'):
+                m.check_census(c, str(self.root))
+
+    def test_all_six_owner_nonce_and_restart_count_drift(self):
+        for cid in self.container_bindings:
+            for field, value in [('owner_nonce', 'unrecognized-owner'), ('RestartCount', 1),
+                                 ('RestartCount', False)]:
+                c = self.census()
+                if field == 'owner_nonce':
+                    c['inspect'][cid]['Config']['Labels']['mckernel.owner'] = value
+                else:
+                    c['inspect'][cid][field] = value
+                with self.subTest(cid=cid, field=field, value=value), self.assertRaises(m.Refusal):
+                    m.check_census(c, str(self.root))
+
+    def test_all_six_full_state_and_full_mount_drift(self):
+        for cid in self.container_bindings:
+            for field in ('StartedAt', 'FinishedAt', 'Error'):
+                c = self.census()
+                c['inspect'][cid]['State'][field] = 'changed'
+                with self.subTest(cid=cid, field=field), self.assertRaises(m.Refusal):
+                    m.check_census(c, str(self.root))
+            for field, value in [('Mode', 'rw'), ('Propagation', 'shared'), ('unexpected', True)]:
+                c = self.census()
+                c['inspect'][cid]['Mounts'][0][field] = value
+                with self.subTest(cid=cid, field=field), self.assertRaises(m.Refusal):
+                    m.check_census(c, str(self.root))
+            c = self.census()
+            c['inspect'][cid]['State']['unexpected'] = 'state'
+            with self.assertRaises(m.Refusal): m.check_census(c, str(self.root))
+
+    def test_seventh_candidate_intersection_rejected_unrelated_allowed(self):
+        c = self.census()
+        cid = 'e' * 64
+        c['inspect'][cid] = copy.deepcopy(c['inspect'][m.CONTAINER])
+        c['inspect'][cid]['Id'] = cid
+        c['ids'].append(cid)
+        c['ids_after'].append(cid)
+        with self.assertRaisesRegex(m.Refusal, 'container-intersection'):
+            m.check_census(c, str(self.root))
+        c['inspect'][cid]['Mounts'] = [m.mount(str(self.protected_dir), '/unrelated')]
+        m.check_census(c, str(self.root))
+
+    def test_generic_proof_loader_rejects_kind_and_owner_mismatch(self):
+        for cid, expected in self.container_bindings.items():
+            original_kind = expected['proof_kind']
+            expected['proof_kind'] = 'unsupported-kind'
+            with self.subTest(cid=cid), self.assertRaisesRegex(m.Refusal, 'container-proof-kind'):
+                m.validate_container_proofs()
+            expected['proof_kind'] = original_kind
+        cid = next(cid for cid, r in self.container_bindings.items()
+                   if cid != m.CONTAINER and r['proof_kind'] == 'image_owner_receipt')
+        expected = self.container_bindings[cid]
+        p = Path(expected['proof']['path'])
+        obj = json.loads(p.read_text())
+        obj['owner_nonce'] = 'mismatched-top-level-owner'
+        p.write_text(json.dumps(obj))
+        expected['proof'].update(m.metadata(p.stat()), sha256=m.sha(p.read_bytes()))
+        with self.assertRaisesRegex(m.Refusal, 'container-owner-proof'):
+            m.validate_container_proofs()
+
+    def test_all_six_proof_bytes_are_bound(self):
+        for cid, expected in self.container_bindings.items():
+            p = Path(expected['proof']['path'])
+            data, stamp = p.read_bytes(), p.stat().st_mtime_ns
+            p.write_bytes(b'x' * len(data))
+            os.utime(p, ns=(stamp, stamp))
+            with self.subTest(cid=cid), self.assertRaisesRegex(m.Refusal, 'file-content'):
+                m.validate_container_proofs()
+            p.write_bytes(data)
+            os.utime(p, ns=(stamp, stamp))
+
+    def test_collector_retains_only_owner_label_and_restart_count(self):
+        c = self.census()
+        def run(argv):
+            result = {'argv': argv, 'returncode': 0, 'stdout': '', 'stderr': ''}
+            if argv[2:5] == ['docker', 'ps', '-aq']:
+                result['stdout'] = '\n'.join(c['ids']) + '\n'
+            elif argv[2:4] == ['docker', 'inspect']:
+                obj = copy.deepcopy(c['inspect'][argv[-1]])
+                obj['Config']['Env'] = ['fixture-unrelated-env']
+                obj['Config']['Labels']['unrelated'] = 'fixture-unrelated-label'
+                result['stdout'] = json.dumps([obj])
+            elif 'lsof' in argv:
+                result['returncode'] = 1
+            elif argv[0] == 'findmnt':
+                result['stdout'] = 'fixture mount'
+            else:
+                self.fail('unexpected census command')
+            return result
+        with mock.patch.object(m, 'run', side_effect=run):
+            collected = REAL_COLLECT_CENSUS(str(self.root))
+        self.assertEqual(len(collected['inspect']), 6)
+        for cid, obj in collected['inspect'].items():
+            self.assertEqual(obj['Config'], {'Labels': {
+                'mckernel.owner': self.container_bindings[cid]['owner_nonce']}})
+            self.assertEqual(obj['RestartCount'], 0)
+        self.assertNotIn('fixture-unrelated', json.dumps(collected))
+
+    def test_final_current_census_rejects_changed_owner_preserving_deleted_states(self):
+        calls = 0
+        def collector(root):
+            nonlocal calls
+            calls += 1
+            c = self.census()
+            if calls == 3:
+                c['inspect'][m.CONTAINER]['Config']['Labels']['mckernel.owner'] = 'changed'
+            return c
+        result, count = self.execute_fixture(collector)
+        self.assertEqual(count, 3)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['phase'], 'deleting')
+        self.assertEqual(result['states'], ['deleted'] * 3)
+        self.assertEqual(result['error'], 'container-terminal-binding')
+        self.assertTrue(any(e['event'] == 'final-census' for e in self.events()))
+        self.assertEqual(json.loads(Path(self.outputs['receipt']).read_text()), result)
+
+    def test_sixth_container_drift_blocks_initial_preflight(self):
+        def collector(root):
+            c = self.census()
+            cid = next(k for k in c['ids'] if k not in (m.CONTAINER, m.HOST_CONTAINER))
+            c['inspect'][cid]['RestartCount'] = 1
+            return c
+        result, count = self.execute_fixture(collector)
+        self.assertEqual(count, 1)
+        self.assertEqual(result['phase'], 'preflight')
+        self.assertEqual(result['states'], ['original'] * 3)
+        self.assertFalse(Path(self.outputs['quarantine']).exists())
+        self.assert_originals()
 
 
 if __name__ == '__main__':

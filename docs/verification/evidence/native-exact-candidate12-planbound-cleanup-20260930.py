@@ -51,30 +51,66 @@ HOST_CONTAINER = '4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f
 
 
 def mount(source, destination, writable=False):
-    return {'Source': source, 'Destination': destination, 'RW': writable, 'Type': 'bind'}
+    return {'Source': source, 'Destination': destination, 'RW': writable, 'Type': 'bind',
+            'Mode': '', 'Propagation': 'rprivate'}
+
+
+def terminal_state(exit_code, started, finished):
+    return {'Dead': False, 'Error': '', 'ExitCode': exit_code, 'FinishedAt': finished,
+            'OOMKilled': False, 'Paused': False, 'Pid': 0, 'Restarting': False,
+            'Running': False, 'StartedAt': started, 'Status': 'exited'}
+
+
+def image_binding(export, name, nonce, proof_sha, proof_size, proof_ino, started, finished):
+    """Expand only explicit immutable inventory rows below; never discover users."""
+    prefix = SCRATCH + '/native-exact-mckernel-image-'
+    suffix = '-4e99a82c-exportset-' + str(export)
+    mounts = [mount(BINDING['root'], '/src'),
+              mount(SCRATCH + '/native-exact-inputs-4e99a82c-scratch-12.json', '/inputs.json'),
+              mount(prefix + 'toolchain' + suffix + '.json', '/toolchain.json'),
+              mount(str(REPO) + '/scripts/native_rust_exact_mckernel_image_offline.py', '/driver.py'),
+              mount(str(REPO) + '/scripts/native_rust_exact_build_offline.py', '/native_rust_exact_build_offline.py'),
+              mount(prefix + 'work' + suffix, '/work', True),
+              mount(SCRATCH + '/native-exact-build-output-4e99a82c-scratch-12', '/out'),
+              mount(SCRATCH + '/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu'
+                    if export == 24 else '/home/holden/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu', '/nightly')]
+    if export in (23, 24):
+        mounts += [mount(SCRATCH + '/native-exact-mckernel-gitlink-inputs-4e99a82c-exportset-23.json', '/libdwarf-inputs.json'),
+                   mount(SCRATCH + '/native-exact-mckernel-gitlink-libdwarf-4e99a82c-exportset-23', '/src/executer/user/lib/libdwarf/libdwarf')]
+    return {'Name': name, 'owner_nonce': nonce, 'RestartCount': 0,
+            'State': terminal_state(1, started, finished),
+            'proof_kind': 'image_owner_receipt',
+            'proof': {'path': prefix + 'owner-evidence' + suffix + '/owner-receipt.json',
+                      'sha256': proof_sha, 'size': proof_size, 'dev': 1831,
+                      'ino': proof_ino, 'mode': 0o600, 'nlink': 1},
+            'Mounts': mounts}
 
 
 CONTAINER_BINDINGS = {
-    CONTAINER: {
-        'Name': CONTAINER_NAME, 'ExitCode': 1,
-        'proof': {'path': SCRATCH + '/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-24/owner-receipt.json',
-                  'sha256': '4681bd9cdc65f62a1802cea888700437ba6c01b154cc8a094dd1719b0ec2080a',
-                  'size': 17574, 'dev': 1831, 'ino': 1721765, 'mode': 0o600, 'nlink': 1},
-        'Mounts': [
-            mount(BINDING['root'], '/src'),
-            mount(SCRATCH + '/native-exact-mckernel-gitlink-inputs-4e99a82c-exportset-23.json', '/libdwarf-inputs.json'),
-            mount(SCRATCH + '/native-exact-mckernel-image-toolchain-4e99a82c-exportset-24.json', '/toolchain.json'),
-            mount(str(REPO) + '/scripts/native_rust_exact_mckernel_image_offline.py', '/driver.py'),
-            mount(SCRATCH + '/native-exact-build-output-4e99a82c-scratch-12', '/out'),
-            mount(SCRATCH + '/native-exact-inputs-4e99a82c-scratch-12.json', '/inputs.json'),
-            mount(SCRATCH + '/native-exact-mckernel-gitlink-libdwarf-4e99a82c-exportset-23', '/src/executer/user/lib/libdwarf/libdwarf'),
-            mount(str(REPO) + '/scripts/native_rust_exact_build_offline.py', '/native_rust_exact_build_offline.py'),
-            mount(SCRATCH + '/native-exact-mckernel-image-work-4e99a82c-exportset-24', '/work', True),
-            mount(SCRATCH + '/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu', '/nightly'),
-        ],
-    },
+    CONTAINER: image_binding(24, CONTAINER_NAME, '09c96c3be751486ca7402481bb15b751',
+        '4681bd9cdc65f62a1802cea888700437ba6c01b154cc8a094dd1719b0ec2080a', 17574, 1721765,
+        '2026-09-30T22:05:50.737132162Z', '2026-09-30T22:07:04.669197043Z'),
+    '282dff5ea9f3775fe8a8e2cdf8d767f86ea81b0f5a9a516a0e6ff817d1d36dde': image_binding(
+        17, '/mckernel-image-2c383743e89540908f12dc9583e2847c', '44a459e57c534808bce9837596e1f125',
+        '0fc0386d22935c9310815421077698f784e514d4770b8a5f0c00d40617db5b56', 15335, 1712444,
+        '2026-09-30T19:39:28.64279337Z', '2026-09-30T19:40:24.157586738Z'),
+    'a6e3772f3470c79a55807d38a12e0b02e84f4e0b12771d17742b99f55f2cb0ae': image_binding(
+        18, '/mckernel-image-ce76ec9b4973421f8981f6cb63fa5af1', 'db5dfd5bfc7c461ba6ed28e9b4ea42ed',
+        '7929772081c18f6218c4e8c782005c33a6e209caca87d4797f73fd7edfa9558c', 15336, 1712508,
+        '2026-09-30T19:56:15.587595407Z', '2026-09-30T19:57:11.609545509Z'),
+    '4dc6377ec81950703c1f539bfb2f491f6d9a5344d8930cd4db9fb166c6412707': image_binding(
+        22, '/mckernel-image-d6f5a553c80b41c48f52ec26afb90439', 'c35d5f2a696c4a2d8f46d8be893337ba',
+        '6f35ae64ae3023d17b89b6bad2b0fa81658659f4f75855af72d00564bf0c0255', 15335, 1720263,
+        '2026-09-30T21:07:54.707069084Z', '2026-09-30T21:08:53.662880724Z'),
+    '4f2b721b552eba9da33d5dffd664ef525b6d92e4d4d53dbf2adb1aa9cb1e8fb3': image_binding(
+        23, '/mckernel-image-15024d3e89c64409b2146ecc9d969645', '385793b149644a3fa68cf1126ba54fab',
+        'f37f23c81b5e2f685fd51ccb4b2a9c01c84e45650f8273c36f9fd8c073934622', 17422, 1721226,
+        '2026-09-30T21:43:46.145094705Z', '2026-09-30T21:44:49.172326292Z'),
     HOST_CONTAINER: {
-        'Name': '/mckernel-exact-a97aabd626bd41f59032728f2c1b5282', 'ExitCode': 0,
+        'Name': '/mckernel-exact-a97aabd626bd41f59032728f2c1b5282',
+        'owner_nonce': 'e18ba6fe48b4442bab26c4c8cb63c391', 'RestartCount': 0,
+        'State': terminal_state(0, '2026-09-30T17:00:15.942063997Z', '2026-09-30T17:34:36.129077656Z'),
+        'proof_kind': 'docker_inspect',
         'proof': {'path': SCRATCH + '/native-exact-build-evidence-4e99a82c-scratch-12/inspect-terminal.json',
                   'sha256': '96eb113aaba4436105c411d522928a80d1023a5a0e4060ba010cd37db22b36e6',
                   'size': 9713, 'dev': 1831, 'ino': 6641738, 'mode': 0o600, 'nlink': 1},
@@ -419,7 +455,7 @@ def mount_set(mounts):
     result = []
     for row in mounts:
         require(isinstance(row['RW'], bool), 'container-mount-rw')
-        result.append((row['Source'], row['Destination'], row['RW'], row['Type']))
+        result.append(json.dumps(row, sort_keys=True))
     require(len(set(result)) == len(result), 'container-mount-duplicate')
     return sorted(result)
 
@@ -428,8 +464,11 @@ def verify_container(obj, expected):
     s, h = obj['State'], obj['HostConfig']
     require(obj['Name'] == expected['Name'] and
             mount_set(obj['Mounts']) == mount_set(expected['Mounts']) and
+            obj['Config']['Labels']['mckernel.owner'] == expected['owner_nonce'] and
+            type(obj['RestartCount']) is int and obj['RestartCount'] == expected['RestartCount'] == 0 and
+            json.dumps(s, sort_keys=True) == json.dumps(expected['State'], sort_keys=True) and
             s['Status'] == 'exited' and type(s['Pid']) is int and s['Pid'] == 0 and
-            type(s['ExitCode']) is int and s['ExitCode'] == expected['ExitCode'] and
+            type(s['ExitCode']) is int and s['ExitCode'] == expected['State']['ExitCode'] and
             all(s[k] is False for k in ('Running', 'Paused', 'Restarting', 'Dead', 'OOMKilled')) and
             h['RestartPolicy'] == {'Name': 'no', 'MaximumRetryCount': 0} and
             h['AutoRemove'] is False, 'container-terminal-binding')
@@ -439,8 +478,13 @@ def validate_container_proofs():
     for cid, expected in CONTAINER_BINDINGS.items():
         proof = expected['proof']
         obj, _ = read_json(proof['path'], proof)
-        if cid == CONTAINER:
+        if expected['proof_kind'] == 'image_owner_receipt':
+            require(obj['container_id'] == cid and
+                    '/' + obj['container_name'].lstrip('/') == expected['Name'] and
+                    obj['owner_nonce'] == expected['owner_nonce'], 'container-owner-proof')
             obj = obj['terminal_container_info']
+        else:
+            require(expected['proof_kind'] == 'docker_inspect', 'container-proof-kind')
         require(obj['Id'] == cid, 'container-proof-id')
         verify_container(obj, expected)
 
@@ -470,6 +514,7 @@ def check_census(census, root, owned=()):
     require(len(ids) == len(set(ids)) and set(ids) == set(census['inspect']) and
             ids == census['ids_after'], 'container-set-changed')
     retained = set()
+    intersections = set()
     for cid in ids:
         obj = census['inspect'][cid]
         require(obj['Id'] == cid and re.fullmatch('[a-f0-9]{64}', cid), 'container-id')
@@ -487,8 +532,10 @@ def check_census(census, root, owned=()):
             require(hits, 'retained-container-binding')
             verify_container(obj, CONTAINER_BINDINGS[cid])
         if hits:
+            intersections.add(cid)
             require(cid in CONTAINER_BINDINGS, 'container-intersection')
     require(retained == set(CONTAINER_BINDINGS), 'retained-container-absent')
+    require(intersections == set(CONTAINER_BINDINGS), 'container-intersection-set')
 
 
 def collect_census(root):
@@ -508,7 +555,9 @@ def collect_census(root):
         require(isinstance(obj, list) and len(obj) == 1, 'docker-inspect-schema')
         # Retain full Mounts/State/RestartPolicy, excluding unrelated environment.
         obj = obj[0]
-        inspections[cid] = {k: obj[k] for k in ('Id', 'Name', 'Mounts', 'State')}
+        inspections[cid] = {k: obj[k] for k in ('Id', 'Name', 'Mounts', 'State', 'RestartCount')}
+        inspections[cid]['Config'] = {'Labels': {
+            'mckernel.owner': (obj.get('Config', {}).get('Labels') or {}).get('mckernel.owner')}}
         inspections[cid]['HostConfig'] = {k: obj['HostConfig'][k]
                                         for k in ('RestartPolicy', 'AutoRemove')}
         commands.append(result['argv'])
@@ -784,6 +833,10 @@ def _transact(plan, outputs, journal, progress):
                 os.fsync(qfd)
                 states[i] = 'deleted'
                 journal.append({'event': 'deleted', 'index': i})
+            census = collect_census(root)
+            journal.append({'event': 'final-census', 'census': census,
+                            'owned_references': owned})
+            check_census(census, root, owned)
             attempted = progress['attempted'] = None
             result = {'status': 'PASS', 'phase': 'complete', 'attempted': attempted,
                       'states': states, 'restore_commit': plan['candidate_commit'],

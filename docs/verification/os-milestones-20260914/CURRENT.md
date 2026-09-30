@@ -10698,3 +10698,43 @@ execute cleanup once.  On a PASS receipt, verify restoration metadata, trim
 scratch, remeasure the 16/12/16-GiB floors, then separately release and run the
 scratch-13 preparation packet.  No acceptance bar changes at this source-only
 checkpoint; the OS goal remains incomplete.
+
+Continuation checkpoint 255, 2026-09-30: candidate-12 cleanup attempt 1 ran
+once from fetched release `e6390a03...6c78` and failed closed during preflight
+with `container-intersection`.  No target was staged or deleted: the receipt
+records all 2,507 states `original`, no delete intent, no quarantine and zero
+removed files.  The immutable receipt/journal/status hashes are
+`c0480b1d...825d`/`39a9b195...3f23e`/`6d01b09e...9fee`.
+
+The census found 41 stopped/retained containers and exactly six candidate-root
+intersections.  Release 1 bound exportset-24 plus the retained host build but
+omitted stopped exportsets 17, 18, 22 and 23.  Their exact owner receipts,
+terminal states, owner nonces and mount tuples are retained.  Because this is a
+repeat of the container-allowlist failure family, expert escalation requires a
+single explicit six-ID inventory, proof-kind generalization, owner-nonce and
+restart-count checks, and exact intersection-set equality.  Attempt 1 must not
+be retried unchanged.  Exact failure evidence is
+`docs/verification/evidence/native-exact-candidate12-planbound-cleanup-attempt1-failure-20260930.json`.
+
+Next independently review the coherent six-container correction, checkpoint
+it, then author a fresh release with new output paths.  Cleanup remains
+incomplete; scratch-13 preparation and the current image build remain pending.
+No diagnostic or acceptance result changes.
+
+Continuation checkpoint 256, 2026-09-30: the expert-escalated six-container
+cleanup correction independently passes source integration review.  Exact
+tool/test hashes are `dcb2a0d6...b712` and `f543d60e...600a`; 69/69 tests pass.
+A fresh read-only live census passes with 41 total containers and exactly six
+candidate intersections.  The tool now binds all five image owner receipts and
+the host Docker inspection by explicit proof kind, including exact ID, name,
+owner nonce, restart count, complete terminal state and complete unordered
+mount rows.  Unknown, missing or drifting intersections fail at initial,
+post-staging and final censuses.
+
+All earlier subtree, Git identity, protected-path, second-admission,
+no-replace staging, rollback and truthful unwind protections remain.  Attempt
+1 journal `39a9b195...3f23e` is unchanged.  Exact source-review evidence is
+`docs/verification/evidence/native-exact-candidate12-six-container-cleanup-source-review-20260930.json`.
+This is not an execution release; the corrected cleanup has not run.  Next
+checkpoint/fetch this source and author a new release with fresh attempt-2
+outputs.  The OS goal and current image/runtime work remain incomplete.
