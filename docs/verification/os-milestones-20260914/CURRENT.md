@@ -9789,3 +9789,19 @@ Next prepare scratch-12 from the pushed lifecycle-oracle correction, bind a
 fresh exclusion namespace, checkpoint it, then run one reviewed exact build.
 Current-candidate builds remain six failed and zero completed; real diagnostic
 guest applications remain zero.
+
+Continuation checkpoint 221, 2026-09-30: scratch-12 preparation passes for
+candidate `4e99a82c9b87a7cf3d6002b75ec380fef37af7a1`, carrying both current
+postcheck corrections and exportset-16.  Independently reviewed packet SHA is
+`f78ecf5e...490a`; 41 tests pass.  Candidate identity is `1831:3693246`.
+Manifest/request SHAs are `4bc0a306...73fa` and `a2eb9345...b1b6`;
+output/evidence identities `1831:6555351`/`1831:6555352` are empty, and lease
+and exportset-16 are absent.  PID 1304702/starttime 99709551 returned 0.
+
+Post-preparation host/scratch/memory availability is
+31,713,222,656/21,165,916,160/29,285,572,608 bytes, above the measured prior
+output plus hard reserve.  Full result is
+`docs/verification/evidence/native-exact-candidate-preparation-scratch12-result-20260930.json`.
+Next obtain fresh heavy-build review and run exactly one scratch-12 build under
+the pinned profile.  Current-candidate builds remain six failed and zero
+completed; real diagnostic guest applications remain zero.
